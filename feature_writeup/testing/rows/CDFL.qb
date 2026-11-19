@@ -18,10 +18,11 @@
 @@table
 ## SQ-CDFL-01 | CD alone: creativedelight: fluids, startup folder, swaps, effect swaps
 @group A (CD alone, no CB)
-@commands new OUT: `DROP="creativebrewing-*.jar" port_chain.sh server OUT cdfl1 A cooking`; boot; `shell grep -h "jar-startup\]\|\[swaps\]" logs/latest.log`; `> forge tags minecraft:fluid get forge:fluid/chorus_juice`; same for `forge:fluid/egg_solution`, `forge:fluid/frosting`, `forge:fluid/turnip_water`; `> kubejs dump_registry minecraft:fluid` (or `shell grep -o "creativedelight:[a-z_]*" logs/kubejs/server.log`)
+@commands `@modset port_chain cooking -creativebrewing-*.jar` (was `DROP="creativebrewing-*.jar" port_chain.sh server OUT cdfl1 A cooking`); boot; `shell grep -h "jar-startup\]\|\[swaps\]" logs/latest.log`; `> forge tags minecraft:fluid get forge:fluid/chorus_juice`; same for `forge:fluid/egg_solution`, `forge:fluid/frosting`, `forge:fluid/turnip_water`; `> kubejs dump_registry minecraft:fluid` (or `shell grep -o "creativedelight:[a-z_]*" logs/kubejs/server.log`)
 @pass no `Missing or unsupported`; `[jar-startup] creativedelight: N of N files loaded` with N one above the last CD boot's (effect_swaps.js moved in), same N twice; `[swaps]` line counts 66 more single ids than before; each tag lists `creativedelight:<name>`, none `creativeengineering:<name>`; the dump has the 33 fluids and 33 `creativedelight:flowing_*`; `kjsreject (Unknown|Invalid) fluid`; `kjsreject effect_swaps\.js`; `kjsexpect \[food values\] [0-9]+ effect swaps` (Climbing swap skipped without Vinery: count is the coffee rows only, with Farmer's Respite in the cooking set)
 @fails a fluid still `creativeengineering:`: a literal id outside `fluid_dict.js`; files not loaded: the folder move or the jar's `kubejs_startup/` tree; a Climbing error: the `global.has('neapolitan', ef.climbing)` guard in `effect_swaps.js`
 @from batches/r1106cbp/p5_cd_alone.qb passed
+@modset port_chain cooking +creativedevtools-*.jar -creativebrewing-*.jar
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
 shell grep -h "jar-startup\]\|\[swaps\]" logs/latest.log logs/kubejs/startup.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
 shell grep -h "jar-startup\] creativedelight" logs/latest.log logs/kubejs/startup.log | head -3
@@ -48,6 +49,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 @fails a recipe built from a literal fluid id string, or a tag that lost its entry
 @from batches/r1106cbp/p5_cd_alone.qb passed
 @reviewed 2026-11-16
+@modset port_chain cooking +creativedevtools-*.jar -creativebrewing-*.jar
 > cdevtest bytype create:filling max=3000
 > cdevtest bytype create:emptying max=3000
 sleep 3

@@ -7,6 +7,7 @@
 @@date 2026-11-06
 @@jars creativebrewing creativecommon creativedelight
 @@sources feature_writeup/plan_cb_publish.md
+@@modset port_chain chain +creativedevtools-*.jar
 @@text
 @@text Not run. Follows r1106cbb ([scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 3, open issues 2.2 #2 to #4). Needs the
 @@text 2026-11-06 13:17 builds of Creative Common, Creative Delight, Creative Engineering (full pack only) and Creative Brewing,
@@ -33,6 +34,7 @@ shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "not 
 @pass no `Empty array?` lines (r1106cbb: 81), no `grown_*`, `twig_nest`, `rope_to__air`, `canned_mulberry_pie_filling_pie` lines; total under 40 (was 230); record what is left; `[absent mods]` lines name absent mods (expected among them `quark`, `upgrade_aquatic`, `bushierflowers`)
 @fails an `Empty array?` left: a filter key other than `input` / `output`, or a list filter (left to KubeJS on purpose); no `[absent mods]` line at all: `absent_mods.js` listener not running (it now always prints one line)
 @from batches/r1106cbp/p2_cooking.qb
+@modset port_chain cooking +creativedevtools-*.jar
 shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | sed -E 's/[0-9]+//g' | sort | uniq -c | sort -rn | head -40
 shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | wc -l
 shell ! grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | grep -E "Empty array\?|grown_|twig_nest|rope_to__air|canned_mulberry_pie_filling_pie"
@@ -57,6 +59,7 @@ shell n=$(grep -oE "[0-9]+ failed" logs/kubejs/server.log | tail -1 | grep -oE "
 @fails a row lost in the move (compare both row lists with git)
 @from batches/r1106cbo/c4_full.qb
 @reviewed 2026-11-16
+@modset none
 shell grep -h "transition items" logs/kubejs/startup.log
 # judge-3, 2026-11-18: CD's list grew (104 on 2026-11-18); 89 or more
 shell grep -qE '\[creativedelight\] transition items \((89|9[0-9]|[1-9][0-9]{2})\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
@@ -72,10 +75,11 @@ look sequenced assembly count against 296 (2026-11-05 dump); [absent mods] never
 
 ## SQ-CBC-05
 @group A (chain)
-@commands new OUT: `NOUPSTREAM=vinery_upstream port_chain.sh server OUT cbc05 A chain`; boot; wait for `Stopping\|crash`
+@commands own step (`@modset ... noupstream=vinery_upstream`, was `NOUPSTREAM=vinery_upstream port_chain.sh server OUT cbc05 A chain`); boot; wait for `Stopping\|crash`
 @pass `bootexpect Vinery \(Creative Brewing\)` in the missing-jar message; no `Backport`
 @fails `UpstreamJars.verifyOrFail` label
 @reviewed 2026-11-16
+@modset port_chain chain +creativedevtools-*.jar noupstream=vinery_upstream
 # setup: NOUPSTREAM=vinery_upstream port_chain.sh server OUT cbc05 A chain; boot and wait for Stopping or a crash, not Done (as SQ-CBA-13)
 bootexpect missing: .*vinery_upstream
 bootexpect Vinery \(Creative Brewing\)
@@ -111,7 +115,7 @@ look incomplete items keep their names and tinted sprites; cod roll, omurice and
 @@phase worldgen
 @@date 2026-11-06
 @@jars creativeworldgen
-@@prep B: rm mods/GeophilicReforged-*.jar
+@@modset port_chain instance +creativedevtools-*.jar -GeophilicReforged-*.jar +creativeworldgen-*.jar
 @@text
 @@text The boot is meant to fail on the missing dependency (judge-14, r1118: own section so the rm reaches no other CBC row).
 @@text
@@ -119,7 +123,7 @@ look incomplete items keep their names and tinted sprites; cod roll, omurice and
 ## SQ-CBC-06
 @phase worldgen
 @group B (instance + Creative Worldgen)
-@commands new OUT with Creative Worldgen and its world generation mods but `DROP="GeophilicReforged-*.jar"`; boot
+@commands the section's mod set: instance + Creative Worldgen, Geophilic Reforged dropped (was `DROP="GeophilicReforged-*.jar"`); boot
 @pass `bootexpect Missing or unsupported mandatory dependencies`; `geophilic_reforged` listed for `creativeworldgen`
 @fails Worldgen `mods.toml` entry
 @reviewed 2026-11-16

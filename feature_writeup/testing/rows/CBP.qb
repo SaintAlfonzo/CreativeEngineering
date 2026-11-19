@@ -7,6 +7,7 @@
 @@date 2026-11-06
 @@jars creativebrewing creativecommon creativedelight creativeequipment
 @@sources feature_writeup/plan_cb_polish.md
+@@modset port_chain chain +creativedevtools-*.jar
 @@text
 @@text Not run. Built 2026-11-06 (Creative Common 1.1.0, Creative Equipment 1.0.0, Creative Brewing 1.0.0), NOT installed. Copy all
 @@text three (and the CD jar of SQ-CDFL) to `CEPortTesting/mods/` for the chain rows. The r1106cbo batches
@@ -17,7 +18,7 @@
 @@table
 ## SQ-CBP-01 | chain: absent-mods lines print, loot tables of absent mods parse
 @group B (chain)
-@commands `port_chain.sh server OUT cbp01 A chain`; boot; `grep -h "absent mods" logs/kubejs/server.log logs/latest.log`; `grep -cE "Couldn't parse loot table\|Can't find block" logs/latest.log`
+@commands `@@modset port_chain chain` (was `port_chain.sh server OUT cbp01 A chain`); boot; `grep -h "absent mods" logs/kubejs/server.log logs/latest.log`; `grep -cE "Couldn't parse loot table\|Can't find block" logs/latest.log`
 @pass one `[absent mods] loot tables: ...` line (counts per mod: fruitsdelight, moredelight, supplementaries, upgrade_aquatic, endersdelight among them); recipe and tag `[absent mods]` lines or `none skipped` printed after the recipe event (no longer missing); loot parse errors 0
 @fails `LootTablesOptionalModsMixin` not applied (mixin log) or the print still in `afterRecipes`
 @from batches/r1106cbp/p1_chain.qb
@@ -30,10 +31,11 @@ look the loot-table line names fruitsdelight, moredelight, supplementaries, upgr
 
 ## SQ-CBP-02 | cooking: no Empty array?, IE empty-output prune line, failures under 40
 @group B (cooking set)
-@commands `port_chain.sh server OUT cbp02 A cooking`; boot; `grep -h "Empty array" logs/kubejs/*.log logs/latest.log \| wc -l`; `grep -h "\[NCH\] removed" logs/kubejs/*.log`; failures total as in SQ-CBC-02
+@commands `@modset port_chain cooking` (was `port_chain.sh server OUT cbp02 A cooking`); boot; `grep -h "Empty array" logs/kubejs/*.log logs/latest.log \| wc -l`; `grep -h "\[NCH\] removed" logs/kubejs/*.log`; failures total as in SQ-CBC-02
 @pass 0 `Empty array?`; one `[NCH] removed N Immersive Engineering recipes whose output tag is empty` line naming `metalpress/*_zinc`, `*_brass` and similar; failures under 40
 @fails another IE output shape (read the recipe JSON; extend `_pruneEmptyIeOutputs`)
 @from batches/r1106cbp/p2_cooking.qb
+@modset port_chain cooking +creativedevtools-*.jar
 shell n=$(cat logs/kubejs/*.log logs/latest.log | grep -c "Empty array"); echo "empty_array=$n"; test "$n" = 0
 shell grep -qE '\[NCH\] removed [0-9]+ Immersive Engineering recipes whose output tag is empty' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
 shell grep -h "\[NCH\] removed" logs/kubejs/*.log | cut -c1-600
@@ -60,6 +62,7 @@ reject verb=\S+ .*done=0
 @pass no `[compost] values for items that do not exist` naming `immersive_weathering:<mod>/...`; a `[compost] skipped N values for items of absent mods` line
 @fails compat folder not read as a mod id
 @from batches/r1106cbp/p4_iw.qb passed
+@modset port_chain chain +creativedevtools-*.jar +immersive_weathering-*.jar +moonlight-*.jar
 shell ! grep -h "\[compost\] values for items that do not exist" logs/kubejs/startup.log logs/kubejs/server.log | grep "immersive_weathering:"
 shell grep -h "\[compost\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-400 | head -6
 shell grep -h "\[compost\] skipped [0-9]* values for items of absent mods" logs/kubejs/startup.log logs/kubejs/server.log
@@ -70,6 +73,7 @@ shell grep -h "\[compost\] skipped [0-9]* values for items of absent mods" logs/
 @pass `[absent mods]` printed once per load; no `[NCH] removed` line (or only recipes whose tag is empty in the full pack too); removed recipes 1328 as before
 @fails a full-pack recipe removed by the prune: check its tag
 @from batches/r1106cbp/p8_full_new.qb passed
+@modset none
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
 shell grep -h "absent mods\|\[NCH\] removed\|Empty array" logs/kubejs/*.log logs/latest.log | cut -c1-400 | sort | uniq -c | head
 shell n=$(grep -ch "\[absent mods\] \(skipped\|none\)" logs/kubejs/server.log); echo "absent lines=$n"
@@ -86,6 +90,7 @@ kjsexpect removed 1[0-9]{3} recipes
 @from batches/r1106cbp/p8_full_new.qb
 @reviewed 2026-11-16
 @superseded old save from 1.2.01, migration shipped in 1.2.02 (owner, 2026-11-18)
+@modset none
 shell ! grep -iE "missing.*creativebrewing:(resistance|magic_resistance)|creativebrewing:magic_resistance.*missing" logs/latest.log
 shell grep -h "\[swaps\]" logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | head
 > forceload add 0 0
@@ -120,6 +125,7 @@ reject verb=\S+ .*done=0
 @pass `[effects]` and `[magic_resistance]` in the Common file with the edited values; `[copper_poisoning]` in the Equipment file; CB's file keeps `[members]`, `[alcohol]` only; one `[swaps] config sections ... merged` line each
 @fails carry-over did not run (Common or Equipment file already had the section)
 @from batches/r1106cbp/p8_full_new.qb
+@modset none
 shell grep -h "\[swaps\] config sections" logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //'
 shell for f in creativecommon creativeequipment creativebrewing; do echo "$f: $(grep -o '^\[[a-z_]*\]' config/$f-common.toml | tr '\n' ' ')"; done
 shell grep -q "^\[effects\]" config/creativecommon-common.toml && grep -q "^\[magic_resistance\]" config/creativecommon-common.toml && grep -q "^\[copper_poisoning\]" config/creativeequipment-common.toml
@@ -133,6 +139,7 @@ look diff of the moved sections against configs_edited/root_config/creativebrewi
 @fails an Equipment script still reads a CB global
 @from batches/r1106cbp/p6_equipment.qb
 @reviewed 2026-11-16
+@modset port_chain chain +creativedevtools-*.jar -creativecalendar-*.jar -creativedelight-*.jar -creativebrewing-*.jar +creativeequipment-*.jar
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
 bootexpect \[creativeequipment\] loaded
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global\.CB" logs/kubejs/startup.log logs/kubejs/server.log
@@ -168,6 +175,7 @@ reject \[cbo\] leak
 @pass Long Reach, Phantom Bane, Magic Resistance potions and mixes present under `creativecommon:`; effect remap and removed rules still apply
 @fails `CommonPotions` or the effect mixins not applied from Common (mixin gate rows in `CommonMixinPlugin`)
 @draft no own steps: a rerun of SQ-CBO-12, -13 and -15 (CBO.qb, already on creativecommon: ids); run those rows by id
+@modset port_chain optional +creativedevtools-*.jar
 ## SQ-CBP-03b
 @group B (chain)
 @commands rerun of SQ-CBP-03 with the Common build of 2026-11-06 18:29 (`_stepHasEmptyFluid` unwraps `Either`): `bash tools/scratch_query/batches/r1106cbp/run_boots.sh '^p1$'` after copying Common into `CEPortTesting/mods/`
@@ -188,6 +196,7 @@ look shell: an [absent mods] skipped line counts the minecraft:empty (or Item.of
 @pass no `Error parsing recipe`; startup prints `[creativeequipment] end gear transition items (37)`; `[creativeequipment] mod data packs on: none; off (mod not loaded): [felsic_gear]` (p6) and `on: [felsic_gear]` (p6f); `[absent mods]` counts `sophisticatedbackpacks` (2 rows); the felsic ingot sequenced assembly loads in p6f
 @fails `global.NCH` not ready when Equipment's item event runs; `packs/felsic_gear/pack.mcmeta` missing from the jar
 @reviewed 2026-11-16
+@modset port_chain chain +creativedevtools-*.jar -creativecalendar-*.jar -creativedelight-*.jar -creativebrewing-*.jar +creativeequipment-*.jar
 # boot p6f of tools/scratch_query/batches/r1106cbp/run_boots.sh (Equipment without CB, felsic_gear present); p6 (felsic_gear absent) is the same row on the other boot: its pack line reads on: none; off (mod not loaded): [felsic_gear]
 bootexpect Done \(
 bootreject Error parsing recipe
@@ -205,6 +214,7 @@ look shell: transition items (37); pack line on: [felsic_gear] (p6f) or off (mod
 @fails a row left in Engineering (duplicate id); pack not added (`ModDataPacks` listener); ore missing: biome modifier path under `packs/felsic_gear/data/creativeengineering/forge/biome_modifier/`
 @from batches/r1115/p1_b1.qb
 @reviewed 2026-11-16
+@modset none
 shell grep -hE "transition items|end gear transition|mod data packs" logs/kubejs/startup.log logs/latest.log | cut -c1-220
 shell grep -qE "\[creativeequipment\] end gear transition items \(37\)" logs/kubejs/startup.log
 bootreject incomplete\('[^']*'\) not registered

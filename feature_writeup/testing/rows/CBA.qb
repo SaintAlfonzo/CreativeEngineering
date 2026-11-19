@@ -7,6 +7,10 @@
 @@date 2026-11-06
 @@jars creativebrewing creativecommon
 @@sources feature_writeup/creative_brewing.md feature_writeup/plan_cb_publish.md
+@@modset port_chain chain +creativedevtools-*.jar
+@@prep A: boot=2: toml creativebrewing-common.toml members vinery false
+@@prep A: boot=3: toml creativebrewing-common.toml members vinery true
+@@prep A: boot=3: toml creativebrewing-common.toml members brewinandchewin false
 @@text
 @@text Not run. Needs the Creative Brewing jar with MoreJS required and the Creative Delight jar with the culture and dough
 @@text block texture fix (both built 2026-11-06 late, see TODO `creativebrewing/publish #3`, `creativedelight/framework #14`),
@@ -192,11 +196,12 @@ bootreject (PackTime|WineTime).*(Exception|Error)
 
 ## SQ-CBA-11 | Vinery member off: scripts skip, member data stays
 @group A (chain)
-@commands stop; `qrun.py toml OUT/srv/config/creativebrewing-common.toml members vinery false`; boot
+@commands boot 2 (`@@prep boot=2:` sets `[members] vinery = false`)
 @pass `bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]` (the mod stays loaded); `kjsexpect server scripts ready, members on: brewinandchewin$` (the startup "core finished, members:" line lists the members whatever their switch); `kjsreject \[wandering trades\] winemaker`; `shell ! grep -nE "ReferenceError\|TypeError\|is not defined" logs/kubejs/*.log`; `> zq bytype vinery:wine_fermentation` still 1 or more (the member's own data stays)
 @fails a script row for Vinery without the `global.CB.on('vinery')` early return (the file in the error)
 @from batches/r1106cba/b2.qb passed
 @reviewed 2026-11-16
+@boot 2
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]
 # the startup "core finished, members:" line lists the nested members whatever their switch; the server line has the on-set
 kjsexpect server scripts ready, members on: brewinandchewin$
@@ -208,11 +213,12 @@ reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-CBA-12 | Brewin' member off: scripts skip, member data stays
 @group A (chain)
-@commands stop; `vinery true`, `brewinandchewin false` with `qrun.py toml`; boot
+@commands boot 3 (`@@prep boot=3:` sets `vinery = true`, `brewinandchewin = false`)
 @pass `kjsexpect server scripts ready, members on: vinery$`; no script error; `> zq bytype brewinandchewin:fermenting` still 20 or more
 @fails as SQ-CBA-11 for `brewinandchewin` (`brewinandchewin/alcohol.js`, `tooltips.js`)
 @from batches/r1106cba/b3.qb passed
 @reviewed 2026-11-16
+@boot 3
 kjsexpect server scripts ready, members on: vinery$
 shell ! grep -nE "ReferenceError|TypeError|is not defined" logs/kubejs/*.log
 > cdevtest bytype brewinandchewin:fermenting max=5
@@ -221,20 +227,22 @@ reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-CBA-13 | Vinery donor folder missing: startup stops with the message
 @group A (chain)
-@commands new OUT: `NOUPSTREAM=vinery_upstream port_chain.sh server OUT cba13 A chain`; boot; wait for `Stopping\|crash` instead of `Done (`
+@commands own step (`@modset ... noupstream=vinery_upstream`, was `NOUPSTREAM=vinery_upstream port_chain.sh server OUT cba13 A chain`); boot; wait for `Stopping\|crash` instead of `Done (`
 @pass `bootexpect missing: .*vinery_upstream/letsdo-vinery`; `bootexpect get it from`; `bootreject Done \(` (the server stops with the message, no world)
 @fails `DonorJars.verifyOrFail` not reached (Vinery `UpstreamJars`), or a different crash first (read the first `Caused by`)
 @from batches/r1106cba/b4.qb passed
+@modset port_chain chain +creativedevtools-*.jar noupstream=vinery_upstream
 bootexpect missing: .*vinery_upstream/letsdo-vinery
 bootexpect get it from
 bootreject Done \(
 
 ## SQ-CBA-14 | missing hard dependencies reported by FML
 @group A (chain)
-@commands new OUT: `DROP="kubejsdelight-*.jar SereneSeasons-*.jar morejs-forge-*.jar" port_chain.sh server OUT cba14 A chain`; boot
+@commands own step (`@modset ... -GLOB`, was `DROP="kubejsdelight-*.jar SereneSeasons-*.jar morejs-forge-*.jar" port_chain.sh server OUT cba14 A chain`; boot
 @pass `bootexpect Missing or unsupported mandatory dependencies`; the list names `kubejsdelight` (for `creativedelight`), `sereneseasons` (for `creativecalendar`) and `morejs` (for `creativebrewing`); no `creativebrewing` / `creativedelight` / `creativecalendar` stack frame before that list
 @fails a jar's `mods.toml` lacks the dependency (the mod then crashes in its own code instead)
 @from batches/r1106cba/b5.qb passed
+@modset port_chain chain +creativedevtools-*.jar -kubejsdelight-*.jar -SereneSeasons-*.jar -morejs-forge-*.jar
 bootexpect Missing or unsupported mandatory dependencies
 bootexpect kubejsdelight
 bootexpect sereneseasons
@@ -243,10 +251,11 @@ shell grep -nE "Missing or unsupported|Mod ID: '(kubejsdelight|sereneseasons|mor
 
 ## SQ-CBA-15 | instance boot: SQ-CBA-01 to -03 again
 @group B (instance)
-@commands new OUT: `port_chain.sh server OUT cba15 B instance`; boot; the SQ-CBA-01 to -03 checks again (`lava_vision.js` still the only skip)
+@commands own step (`@modset port_chain instance`, was `port_chain.sh server OUT cba15 B instance`); boot; the SQ-CBA-01 to -03 checks again (`lava_vision.js` still the only skip)
 @pass as SQ-CBA-01 to -03
 @fails the optional mod named in the error: its `global.has` guard (creative_brewing.md 2.4)
 @from batches/r1106cba/b6.qb
+@modset port_chain instance +creativedevtools-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
 bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Attempted to load class net/minecraft/client
@@ -263,6 +272,7 @@ shell test "$(grep -c 'Skipped creativebrewing:kubejs/' logs/kubejs/server.log)"
 @fails a guarded block in `potions.js` (Quark, Alex's Mobs, ...) checking the wrong mod id
 @from batches/r1106cba/b6.qb
 @reviewed 2026-11-16
+@modset port_chain instance +creativedevtools-*.jar
 shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes" logs/kubejs/startup.log
 > cdevtest potion minecraft:mundane minecraft:wither_rose
 > cdevtest potion minecraft:thick minecraft:amethyst_shard
@@ -277,6 +287,7 @@ look compare the mix count above with SQ-CBA-06's shell output (equal or higher)
 @pass count higher than in the chain boot (the Fruits Delight rows are in)
 @fails `vinery/wandering_trades.js` `global.has('fruitsdelight')` block
 @from batches/r1106cba/b6.qb
+@modset port_chain instance +creativedevtools-*.jar
 kjsexpect \[wandering trades\] winemaker [1-9]
 shell grep -oE "\[wandering trades\] winemaker [0-9]+[^\"]*" logs/kubejs/server.log | head -3
 look compare with SQ-CBA-10's winemaker count (higher)
@@ -287,6 +298,7 @@ look compare with SQ-CBA-10's winemaker count (higher)
 @pass LOOK: the list names only mods CEPortTesting lacks (no `quark`, `fruitsdelight`, `supplementaries`); no `creativebrewing` error line in `latest.log` (`bootreject ERROR.*creativebrewing`)
 @fails a guard checking the wrong mod id
 @from batches/r1106cba/b6.qb
+@modset port_chain instance +creativedevtools-*.jar
 shell grep -h "absent mods" logs/kubejs/server.log | head -20
 bootreject ERROR.*creativebrewing
 look the absent list names only mods CEPortTesting lacks (no quark, fruitsdelight, supplementaries)

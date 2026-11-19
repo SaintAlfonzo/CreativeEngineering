@@ -8,6 +8,7 @@
 @@jars creativebrewing creativecommon
 @@sources feature_writeup/creative_brewing.md
 @@prep A: copy tools/scratch_query/nch_guard_probe.js kubejs/server_scripts/zz_nch_guard_probe.js
+@@modset port_chain chain +creativedevtools-*.jar
 @@text
 @@text Not run. Follows r1106cba ([scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 1). Needs rebuilt Creative Common (NCH
 @@text `remove` guard, `f.dish_stuffed_bellpepper`, the moved tags), Creative Delight (optional cooking dependencies) and
@@ -96,6 +97,7 @@ reject \[cdevtest\] .*done=0
 @pass `[creativebrewing] members:` line; no `Missing or unsupported`; no script error; `lava_vision.js` still skipped (Alex's Mobs is IN the cooking set: expect it loaded now, so no skip line)
 @fails the optional mod named in the error: its guard in CD/CB
 @from batches/r1106cbb/c2.qb passed
+@modset port_chain cooking +creativedevtools-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
 bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)
@@ -112,6 +114,7 @@ kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
 @pass 51 of 51 (was 44; every drink set: N of N; Fruits Delight bellini, Engineer's Delight wodka present); winemaker 34 or more
 @fails `alcohol_drinks.js` ids, `vinery/wandering_trades.js`
 @from batches/r1106cbb/c2.qb passed
+@modset port_chain cooking +creativedevtools-*.jar
 # judge-3, 2026-11-18: the drink list grew (51 in the full pack 2026-11-18); every drink set = N of N
 shell grep -oE "\[alcohol\] food values set on [0-9]+ of [0-9]+[^\"]*" logs/kubejs/startup.log
 shell grep -qE "\[alcohol\] food values set on ([0-9]+) of \1 drinks" logs/kubejs/startup.log
@@ -125,6 +128,7 @@ shell n=$(grep -oE "\[wandering trades\] winemaker [0-9]+" logs/kubejs/server.lo
 @fails the script named in each NCH line
 @from batches/r1106cbb/c2.qb passed
 @reviewed 2026-11-16
+@modset port_chain cooking +creativedevtools-*.jar
 shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
 shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -lt 600
 shell grep -c "\[NCH\].*failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log; true
@@ -140,15 +144,17 @@ reject \[cdevtest\] .*done=0
 @pass count above 0 (Create Central Kitchen present)
 @fails `DragonBreathBrewing.build`
 @from batches/r1106cbb/c2.qb passed
+@modset port_chain cooking +creativedevtools-*.jar
 shell grep -h "re-added [0-9]* dragon-breath fluid brews" logs/kubejs/startup.log
 shell grep -qE "re-added [1-9][0-9]* dragon-breath fluid brews" logs/kubejs/startup.log
 
 ## SQ-CBB-10 | instance with Creative Worldgen: structure gate, datapacks load
 @group B (instance)
-@commands `port_chain.sh server OUT cbb10 B instance` (no DROP); boot
+@commands `@modset port_chain instance` (was `port_chain.sh server OUT cbb10 B instance`, no DROP); boot
 @pass `bootexpect structure gate: [0-9]+ set\(s\) and [0-9]+ structure\(s\) left out.*betterjungletemples`; `bootreject Failed to load datapacks\|Unknown registry key\|Unbound values`; `Done (`
 @fails `StructurePresence` (reflection on `DataPackEventJS.wrappedManager`: a WARN says it failed) or a structure set the gate missed (the key in the error)
 @from batches/r1106cbb/c3.qb
+@modset port_chain instance +creativedevtools-*.jar
 bootexpect structure gate: [0-9]+ set\(s\) and [0-9]+ structure\(s\) left out.*betterjungletemples
 bootreject Failed to load datapacks|Unknown registry key
 bootexpect Done \(
@@ -161,16 +167,18 @@ shell grep -h "meta_structures.*left out" logs/latest.log | head -10
 @pass no `nothing applied`; the tuning summary line present (groups applied without the absent members)
 @fails `resolveTags` / standalone / group rows still erroring on an absent id: add the `gate.absentIds` skip there
 @from batches/r1106cbb/c3.qb
+@modset port_chain instance +creativedevtools-*.jar
 shell grep -h "\[structures\]\|structure tuning\|nothing applied" logs/latest.log logs/kubejs/server.log | head -20
 bootreject nothing applied
 shell grep -qh "structure tuning" logs/latest.log logs/kubejs/server.log
 
 ## SQ-CBB-12 | full pack: removed count, no gate line, no refused remove
 @group B (full pack)
-@commands `prep_srv.sh OUT cbb12 B`; boot; `shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log`; `bootreject structure gate:`; `shell grep -c "remove refused" logs/kubejs/server.log`
+@commands full pack (`@modset none`, was `prep_srv.sh OUT cbb12 B`); boot; `shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log`; `bootreject structure gate:`; `shell grep -c "remove refused" logs/kubejs/server.log`
 @pass removed close to 1329 (2026-11-05); no gate line (every structure present in the full pack); 0 `remove refused`
 @fails a gate false positive: the structure file path (`data/<ns>/worldgen/structure/<path>.json`) for a namespace loaded another way
 @from batches/r1106cbb/c4.qb passed
+@modset none
 shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
 shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -gt 1100 -a "$n" -lt 1600
 bootreject structure gate:

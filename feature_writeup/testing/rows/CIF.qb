@@ -101,10 +101,11 @@ look Caffeinated and Phantom Bane durations equal (third field of each in the fi
 
 ## SQ-CIF-04 | Common + Compat boot: no Compat class missing in Common
 @group A (chain, CEPortTesting)
-@commands Common + Compat only, then Common + Compat + Equipment; boot each
+@commands Common + Compat + Calendar + Serene Seasons (`@modset cpp_chain compat`); boot. The Common + Compat + Equipment half has no mod set yet (cpp_chain forbids Equipment; r1118 R4 B1 note)
 @pass both boot; no Compat class missing in Common, no Equipment class asked for by Compat
 @fails a leftover cross-jar reference
 @from batches/r1113/c3_cc1.qb
+@modset cpp_chain compat
 bootexpect Done \(
 bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
 shell ls mods

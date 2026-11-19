@@ -66,6 +66,7 @@ look bottling REGULAR swiftness -> creativebrewing:iebottling/create_potion/mine
 @fails Brewing still relies on the subset match
 @reviewed 2026-11-16
 @from batches/r1108cge/b6_chain.qb
+@modset cpp_chain chain
 bootreject Mixin apply failed|InvalidMixinException
 bootreject Expected cookingtime
 bootexpect Done \(
@@ -85,6 +86,7 @@ look 0 parse errors naming creativebrewing; swiftness bottles; KubeJS ERRORs = r
 @fails Compat guard in `item_physics_tags.js`
 @reviewed 2026-11-16
 @from batches/r1108cge/b7_compat.qb
+@modset cpp_chain compat
 bootreject Mixin apply failed|InvalidMixinException
 bootreject ^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootexpect Done \(

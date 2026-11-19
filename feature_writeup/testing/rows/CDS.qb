@@ -36,6 +36,9 @@ look both syringes exist (sampling a cow is a client / bot-use check)
 @pass Same contents as before the move
 @fails CD tag script not loaded
 @from batches/r1101/cs4_boot3.qb
+# r1118 R5 (2026-11-18): a fresh dump first: the srv copy of kubejs/exported is the instance's (older than the 2026-11-09 renames)
+> dumptags
+waitlog \[dumptags\] wrote 120
 shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:oven_heat_sources block:farmersdelight:heat_sources block:minecraft:mineable/shovel block:creativeengineering:crops/farmland_soils item:creativeengineering:hoe_harvest/5x5 item:forge:storage_blocks/sourdough
 look same contents as boot 2 (heat_sources has the oven only after wave 4 if the oven moved: judge the diff)
 
@@ -45,6 +48,9 @@ look same contents as boot 2 (heat_sources has the oven only after wave 4 if the
 @pass Same contents as before
 @fails CD tag script not loaded, or Oceanic member off
 @from batches/r1101/cs4_boot3.qb
+# r1118 R5 (2026-11-18): a fresh dump first: the srv copy of kubejs/exported is the instance's (older than the 2026-11-09 renames)
+> dumptags
+waitlog \[dumptags\] wrote 120
 shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags fluid:forge:fluid/tea fluid:forge:fluid/honey block:creativeengineering:fishing_net/kelp
 look same contents as boot 2
 
@@ -54,6 +60,9 @@ look same contents as boot 2
 @pass One tier and one tool per listed block, as before (harvest.js now in CD)
 @fails Exclusive mineable ran before a pack add
 @from batches/r1101/cs4_boot3.qb
+# r1118 R5 (2026-11-18): a fresh dump first: the srv copy of kubejs/exported is the instance's (older than the 2026-11-09 renames)
+> dumptags
+waitlog \[dumptags\] wrote 120
 shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:needs_copper_tool block:minecraft:needs_iron_tool block:minecraft:needs_stone_tool block:minecraft:needs_diamond_tool
 look same contents as boot 2
 
