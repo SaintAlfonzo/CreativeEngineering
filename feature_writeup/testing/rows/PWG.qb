@@ -6748,3 +6748,15 @@ look solar output non-zero at noon; one controlled entity; record controller= (p
 @pass before `feed`: the arm is empty (`HeldItem` empty) and no loose part is on the belt; after the circuit arrives the arm takes 1 part per grab, Assembly goes 1/3 to 3/3; at the end the end depot holds only `powergrid:circuit_board x1 Schematic components=3` (no `wire_connector` or `resistor`); the two part depots together lose exactly the 3 parts that went into the board; stone x64; no loose part on the belt
 @fails a loose part on the belt or in the end depot: B39 not in the jar (wrong jar) or the item has no `ComponentRegistry` id (record which item); arm holds a part and the circuit rides past unlocked: lock window (SQ-PWG-82 failure column); the arm idles with a part while a circuit sits in the window: the window check (`handleCenteredProcessingOnAllItems(0.05)`) missed it
 @draft no batch holds this row yet; build it from batches/r1116/ps15_pwg.qb (SQ-PS15-14) with the -20 jar
+
+@@section 5
+@@title CQ-PWG Power Grid client on a server without it, 2026-11-18 ([plan_bugfix_1117.md](../plan_bugfix_1117.md) A1; TODO `largecontent/mod-additions #90`)
+@@date 2026-11-18
+@@jars powergrid
+@@table
+## CQ-PWG-67 | client with Power Grid joins a server without it: no crash in ElectroZapperRenderHandler
+@group client
+@commands Scratch client with the current `backportedPowerGrid-0.6.2-ce-19.2-20.jar`; scratch server with the pack minus `backportedPowerGrid-*` (and its dependents if any refuse to load). Join, wait 30 s in game holding any item, switch hotbar slots
+@pass the client either joins and plays or is refused by the handshake with a disconnect screen; `logs/latest.log` on the client has no `Registry entry not present: powergrid:electrozapper` and no crash report naming `ElectroZapperRenderHandler.appliesTo`
+@fails a crash in `ElectroZapperRenderHandler.appliesTo`: the `ELECTROZAPPER.isPresent()` guard is missing from the jar; a crash in another Power Grid client handler: the same pattern elsewhere (record the class)
+@draft no batch holds this row yet; needs a client (one game JVM at a time)
