@@ -17,6 +17,10 @@ spawns.json lists it, and the rest are listed as unverified (not a failure).
 Swap lists: development/*/src/main/resources/data/*/swaps/*.json (and members/), kubejs/data/*/swaps/*.json:
 `replaces` / `merges` (new id: [old ids]), `removed` [ids], `namespaces` {old namespace: new}. An old id passes when it
 exists now, is a `replaces` / `merges` source or `removed`, or its namespace is renamed and the renamed id exists.
+Conditional ids (owner ruling 2026-11-18): Display Delight dishes whose id prefix names a source mod the pack does not
+have are not ported (development/creativeDelight/members/display/tools/port_resources.py EXCLUDED_PREFIXES; upstream
+registers them only while that mod is loaded): an old id with such a prefix passes as conditional while its source mod
+has no ids now.
 Also checked: every `replaces` target exists now (a swap naming a missing target, R3 SQ-CDNS-06); `merges` files whose
 `requires` mod has no ids now are skipped.
 
@@ -133,6 +137,19 @@ def swaps(now):
 	return covered, nsmap, probs, unv
 
 
+DISPLAY_PORT = os.path.join(ROOT, "development/creativeDelight/members/display/tools/port_resources.py")
+
+
+def conditional_prefixes():
+	"""{'displaydelight:<prefix>': source mod id} from the Display Delight port's EXCLUDED_PREFIXES."""
+	try:
+		src = open(DISPLAY_PORT).read()
+	except OSError:
+		return {}
+	m = re.search(r"EXCLUDED_PREFIXES\s*=\s*\{(.*?)\}", src, re.S)
+	return {"displaydelight:" + k: v for k, v in re.findall(r"'([a-z_]+)'\s*:\s*'([a-z_]+)'", m.group(1))} if m else {}
+
+
 def check(verbose=False):
 	if not os.path.exists(BASE):
 		print(f"old_id_check: no baseline {os.path.relpath(BASE, ROOT)} (run --baseline)")
@@ -141,7 +158,9 @@ def check(verbose=False):
 		old = [(r["kind"], r["id"]) for r in csv.DictReader(f)]
 	now = now_sets()
 	covered, nsmap, probs, unverified = swaps(now)
-	fails, ok = [], 0
+	fails, ok, cond = [], 0, []
+	present_ns = {i.split(":")[0] for v in now.values() for i in v}
+	conds = conditional_prefixes()
 	for kind, i in old:
 		have = now.get(kind)
 		if kind == "block" and have is None:
@@ -160,6 +179,10 @@ def check(verbose=False):
 			if j in have or j in covered:
 				ok += 1
 				continue
+		hit = next((src for pre, src in conds.items() if i.startswith(pre)), None)
+		if hit and hit not in present_ns:
+			cond.append((kind, i, hit))
+			continue
 		if kind in ("block", "entity") and kind not in now:
 			unverified.append((kind, i, "not an item now; no current block / entity dump"))
 			continue
@@ -167,9 +190,11 @@ def check(verbose=False):
 	for p in probs:
 		fails.append(p)
 	kinds = ", ".join(k for k in KINDS if k in now or (k == "entity" and "entity_spawns" in now))
-	print(f"old_id_check: {len(old)} old ids, {ok} present or swapped, {len(unverified)} unverified, {len(fails)} "
-		  f"failure(s); current dumps: {kinds}")
+	print(f"old_id_check: {len(old)} old ids, {ok} present or swapped, {len(cond)} conditional (source mod absent), "
+		  f"{len(unverified)} unverified, {len(fails)} failure(s); current dumps: {kinds}")
 	if verbose:
+		for k, i, src in cond:
+			print(f"  conditional {k} {i}: registered only with {src}, which the pack does not have")
 		for k, i, why in unverified:
 			print(f"  unverified {k} {i}: {why}")
 	for x in fails:
