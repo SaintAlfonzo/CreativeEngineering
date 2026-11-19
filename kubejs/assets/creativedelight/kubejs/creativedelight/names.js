@@ -37,6 +37,13 @@ ClientEvents.lang('en_us', e => {
 	// Vintage Delight's cucumber noodles take more vegetables (dishes/meals #43); sprite recoloured to the zucchini's
 	// palette in kubejs/assets/vintagedelight/textures/item/cucumber_noodles.png
 	e.renameItem(global.item.cucumber_noodles, 'Veggie Noodles')
+	// and its dough is Veggie Dough (dishes/ingredients #33), the block too; ids unchanged
+	e.renameItem(global.item.cucumber_dough, 'Veggie Dough')
+	e.renameItem(global.item.cucumber_dough_block, 'Veggie Dough Block')
+	// Lasagnas (baking/baked-goods #21): Veggies Delight's Lasagna Pan is Lasagna, Brewin's Horror Lasagna is Crimson
+	// Lasagna (its placed Display Delight block: kubejs/assets/displaydelight/lang/en_us.json); ids unchanged
+	if (global.has('veggiesdelight')) e.renameItem(global.item.lasagna_pan, 'Lasagna')
+	if (global.has('brewinandchewin')) e.renameItem(global.item.horror_lasagna, 'Crimson Lasagna')
 	// Brewin's Pickled Pickles merged into the Pickled Sea Pickle (dishes/pickles-and-ferments #1): the can holds pickles
 	e.renameItem(global.item.canned_pickled_pickles, 'Canned Pickles')
 

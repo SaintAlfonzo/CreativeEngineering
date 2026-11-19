@@ -73,7 +73,7 @@ ServerEvents.recipes(e => {
 		var hopsOn = global.has('vinery')
 		if (hopsOn) F.saladCraft([i.hops, i.hops, i.cooking_oil, i.t_salts], i.hops_salad)
 		R.shapeless(i.hot_dog, [i.cooked_sausage, i.bread], e, 'hot_dog')
-		R.shapeless(i.trail_mix, [i.roasted_peanut, i.raisins, i.cocoa_beans, i.t_seeds], e, 'trail_mix')
+		R.shapeless(i.trail_mix, [i.roasted_peanut, i.raisins, i.cocoa_beans, i.t_edible_seeds], e, 'trail_mix')   // edible seeds (dishes/ingredients #40)
 		R.shapeless(n(i.paper, 3), [n(i.corn_husk, 3)], e, 'paper_from_corn_husks')
 		R.shapeless(n(i.canvas, 2), [n(i.corn_husk, 4)], e, 'canvas_from_corn_husks')
 

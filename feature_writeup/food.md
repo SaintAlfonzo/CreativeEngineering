@@ -810,6 +810,29 @@ row per `delightfulFoodValues` pair), the Bellini Cocktail (`fruits_foods.js`, `
 unless it has one, Nausea unless Tipsy), merged into the Bellini's row; it still logs `[alcohol] food values set on N
 of 44 drinks`. The `/dumpall` food dump diff must be empty (SQ-RFX-09, SQ-RFX-19).
 
+Rows added 2026-11-19 (plan_food_batch_1119.md; written as plain `{ absolute }` rows because these files load before
+the applier defines `absolute()`): `creativedelight/cheese_values.js` (dishes whose milk became cheese, 3.20),
+`creativedelight/edible_seeds.js` (3.21) and the warm drinks in `creativedelight/drinks.js`
+([creative_delight_drinks.md](creative_delight_drinks.md) 4.3).
+
+### 3.20 Cheese for milk (`dishes/meals #45`, 2026-11-19)
+
+Dishes whose milk stood for cheese take any cheese (`#forge:cheese`: flaxen wedge, cheese slice; Scarlet is not in
+it): Veggies Delight lasagna, Corn Delight nachos, FD stuffed potato (shapeless and assembly), Fungi truffle pasta, More
+Delight creamy pastas (and the Veggies compat copies), Brewin' fiery fondue pot, and the pack's grid routes for broccoli
+soup, pasta with broccoli, truffle pasta and the creamy pastas. Veggies' milk broccoli soup and pasta pot recipes are
+removed (its Vintage compat cheese versions stay). Mashed potatoes keep milk. Data: `creativedelight/cheese_for_milk.js`
+and the mods' grid lines. Values (R13 "compensate"): +3 hunger for a bowl dish, +1 per feast serving, modifier kept
+(the soup rule draft of `food/types-and-tuning #8`). Tests SQ-FF-03, SQ-FF-04.
+
+### 3.21 Edible seeds (`dishes/ingredients #40`, 2026-11-19)
+
+Sunflower seeds and corn kernels: 1 hunger, modifier 0.25 (0.5 saturation points); pumpkin, oat and mixed seeds: 1
+hunger, no saturation (owner R15). Tag `#creativedelight:edible_seeds` (the five; `i.t_edible_seeds`) replaces
+`#forge:seeds` in trail mix and Delightful's stuffed cantaloupe; no other food recipe took a seed (scan of every
+recipe jar, 2026-11-19; Create Crafts & Additions' seed oil and PneumaticCraft's vegetable oil keep `#forge:seeds`).
+Test SQ-FF-09.
+
 ## 4. Limits and decisions
 
 ### 4.1 Limits
