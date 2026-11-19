@@ -1,5 +1,5 @@
 {
-  "_comment": "Better Beacons potions, registered by Creative Brewing (potion/BetterBeaconsPotions) since 2026-11-07 (owner decision); creativecommon: from 2026-11-06, creativebrewing: before that, creativeengineering: earlier. Potion ids saved as NBT strings are mapped by Common's PotionByNameRemapMixin from this list. Never prune.",
+  "_comment": "Better Beacons potions, registered by Creative Brewing (potion/BetterBeaconsPotions) since 2026-11-07 (owner decision); creativecommon: from 2026-11-06, creativebrewing: before that, creativeengineering: earlier. Potion ids saved as NBT strings are mapped by Common's PotionByNameRemapMixin from this list. Never prune. Phantom Bane is levelless since the move to Creative Brewing (Better Beacons only tests hasEffect), so the old strong_phantom_bane maps to the base potion (found by tools/old_id_check.py, owner ruling 2026-11-18).",
   "replaces": {
     "creativebrewing:long_reach": [
       "creativecommon:long_reach",
@@ -15,7 +15,8 @@
     ],
     "creativebrewing:phantom_bane": [
       "creativecommon:phantom_bane",
-      "creativeengineering:phantom_bane"
+      "creativeengineering:phantom_bane",
+      "creativeengineering:strong_phantom_bane"
     ],
     "creativebrewing:long_phantom_bane": [
       "creativecommon:long_phantom_bane",

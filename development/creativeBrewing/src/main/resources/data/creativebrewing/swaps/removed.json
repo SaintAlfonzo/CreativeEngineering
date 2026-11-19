@@ -1,6 +1,7 @@
 {
-  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Brewin' and Chewin's kimchi: removed in favour of Vintage Delight's (merges/dishes #9, owner 2026-11-02); the item is still registered by the Brewin' port and hidden through Creative Delight's removed items, so this entry applies only once the port stops registering it.",
+  "_comment": "Ids dropped with no replacement (swap lists 'removed', SwapLists.java). Old worlds load them as missing without the warning; never converted. Never prune. Brewin' and Chewin's kimchi: removed in favour of Vintage Delight's (merges/dishes #9, owner 2026-11-02); the item is still registered by the Brewin' port and hidden through Creative Delight's removed items, so this entry applies only once the port stops registering it. Vinery jellie effect: unregistered 2026-10-31, Jellie Wine gives Regeneration, Absorption, Resistance and Fire Resistance instead (effects.md 2.7, EF-29); found by tools/old_id_check.py (owner ruling 2026-11-18).",
   "removed": [
-    "brewinandchewin:kimchi"
+    "brewinandchewin:kimchi",
+    "vinery:jellie"
   ]
 }
