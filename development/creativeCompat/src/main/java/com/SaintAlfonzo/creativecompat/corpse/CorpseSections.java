@@ -156,7 +156,7 @@ public final class CorpseSections {
 		return t;
 	}
 
-	/** The tag the server syncs: the curio slot cap and the cosmetic stacks shown on the model (item 6). */
+	/** The tag the server syncs: the curio slot cap, the cosmetic stacks shown on the model (item 6) and the curios worn on it (round 2). */
 	public static CompoundTag buildTag(CorpseEntity corpse) {
 		CompoundTag t = new CompoundTag();
 		int cap = !CompatConfig.SPEC.isLoaded() ? DEFAULT_CAP
@@ -174,6 +174,15 @@ public final class CorpseSections {
 			cos.add(c);
 		}
 		t.put("Cosmetic", cos);
+		// round 2: every tagged curio still in the corpse, for the model (not capped: the cap is the screen's)
+		ListTag curios = new ListTag();
+		for (ItemStack s : corpse.getDeath().getAdditionalItems()) {
+			if (s.isEmpty() || !isCurio(s)) continue;
+			CompoundTag c = s.getTag().getCompound(CURIO).copy();
+			c.put("Item", strip(s.copy()).save(new CompoundTag()));
+			curios.add(c);
+		}
+		if (!curios.isEmpty()) t.put("Curios", curios);
 		return t;
 	}
 

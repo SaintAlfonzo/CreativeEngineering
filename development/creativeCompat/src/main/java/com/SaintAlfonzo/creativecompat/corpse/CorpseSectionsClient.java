@@ -17,12 +17,22 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.SkeletonRenderer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
@@ -36,6 +46,10 @@ import java.util.WeakHashMap;
  * {@code RenderPlayerEvent.Pre} (HIGH) by player UUID, and the Corpse mod's dummy player carries the dead player's
  * UUID, so the corpse showed that player's current cosmetic armor. The NORMAL listener here writes the corpse's synced
  * cosmetic stacks (else its real armor) over that swap; Cosmetic Armor's own Post (LOW) restore still runs.</li>
+ * <li>Round 2: the same listener fills the dummy player's client curios handler from the synced curio list
+ * ({@link CorpseCuriosClient}), so Curios' own render layer and Elytra Slot's layer draw them as on the player. The
+ * skeleton gets the cosmetic armor through {@link #withCosmetics} and its curios through {@link CorpseSkeletonLayer},
+ * added here to the vanilla skeleton renderer (and by CorpseRender to its wither look).</li>
  * </ul>
  */
 public final class CorpseSectionsClient {
@@ -48,7 +62,8 @@ public final class CorpseSectionsClient {
 
 	private CorpseSectionsClient() {}
 
-	public static void register() {
+	public static void register(IEventBus modBus) {
+		modBus.addListener(EventPriority.NORMAL, false, EntityRenderersEvent.AddLayers.class, CorpseSectionsClient::onAddLayers);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, RenderPlayerEvent.Pre.class, CorpseSectionsClient::onRenderPre);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, RenderPlayerEvent.Post.class, CorpseSectionsClient::onRenderPost);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, ItemTooltipEvent.class, CorpseSectionsClient::onTooltip);
@@ -106,6 +121,85 @@ public final class CorpseSectionsClient {
 
 	// ---- model ----
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static void onAddLayers(EntityRenderersEvent.AddLayers event) {
+		LivingEntityRenderer renderer = event.getRenderer(EntityType.SKELETON);
+		if (renderer instanceof SkeletonRenderer skeleton) {
+			skeleton.addLayer(new CorpseSkeletonLayer<>(skeleton, event.getEntityModels()));
+		}
+	}
+
+	/** One curio worn by the corpse, from the synced list. */
+	public record Worn(String slot, int index, boolean cosmetic, boolean hidden, ItemStack stack) {}
+
+	private record WornCache(CompoundTag tag, List<Worn> all, List<Worn> shown) {}
+
+	private static final Map<CorpseEntity, WornCache> WORN = new WeakHashMap<>();
+
+	private static WornCache wornCache(CorpseEntity corpse) {
+		CompoundTag tag = sectionTag(corpse);
+		if (tag == null) return new WornCache(null, List.of(), List.of());
+		WornCache c = WORN.get(corpse);
+		if (c != null && c.tag() == tag) return c;
+		List<Worn> all = new ArrayList<>();
+		ListTag list = tag.getList("Curios", Tag.TAG_COMPOUND);
+		for (int i = 0; i < list.size(); i++) {
+			CompoundTag e = list.getCompound(i);
+			ItemStack stack = ItemStack.of(e.getCompound("Item"));
+			if (stack.isEmpty()) continue;
+			all.add(new Worn(e.getString("Slot"), e.getInt("Index"), e.getBoolean("Cosmetic"), e.getBoolean("Hidden"), stack));
+		}
+		// what the model shows per slot index, as Curios' own layer: the cosmetic stack over the real one, nothing when
+		// the player had that index's render toggled off
+		Map<String, Worn> shown = new LinkedHashMap<>();
+		Set<String> hidden = new HashSet<>();
+		for (Worn w : all) {
+			String key = w.slot() + "#" + w.index();
+			if (w.hidden()) hidden.add(key);
+			Worn had = shown.get(key);
+			if (had == null || (w.cosmetic() && !had.cosmetic())) shown.put(key, w);
+		}
+		shown.keySet().removeAll(hidden);
+		c = new WornCache(tag, List.copyOf(all), List.copyOf(shown.values()));
+		WORN.put(corpse, c);
+		return c;
+	}
+
+	/** Every curio stack the corpse holds, cosmetic and hidden ones included (fills the dummy player's handler). */
+	public static List<Worn> worn(CorpseEntity corpse) {
+		return wornCache(corpse).all();
+	}
+
+	/** The curios the corpse model shows: one per slot index, cosmetic first, render-toggled ones left out. */
+	public static List<Worn> shownCurios(CorpseEntity corpse) {
+		return wornCache(corpse).shown();
+	}
+
+	/** The synced section tag object (identity changes when the server resyncs it). */
+	static CompoundTag sectionTag(CorpseEntity corpse) {
+		return corpse instanceof CorpseState state ? state.creativecompat$sections() : null;
+	}
+
+	/** The equipment the skeleton wears: the real list with each armor slot shown as the corpse's cosmetic armor. */
+	public static NonNullList<ItemStack> withCosmetics(CorpseEntity corpse, NonNullList<ItemStack> equipment) {
+		Parsed p = parsed(corpse);
+		if (p == null) return equipment;
+		NonNullList<ItemStack> out = NonNullList.withSize(equipment.size(), ItemStack.EMPTY);
+		for (int i = 0; i < equipment.size(); i++) out.set(i, equipment.get(i));
+		for (int i = 0; i < CorpseSections.COSMETIC; i++) {
+			int ordinal = EquipmentSlot.byTypeAndIndex(EquipmentSlot.Type.ARMOR, i).ordinal();
+			if (ordinal < out.size()) out.set(ordinal, shown(corpse, p, i));
+		}
+		return out;
+	}
+
+	/** What armor slot {@code i} (0 feet to 3 head) shows: the cosmetic stack, nothing when skin-hidden, else the real one. */
+	private static ItemStack shown(CorpseEntity corpse, Parsed p, int i) {
+		if (p != null && p.skin()[i]) return ItemStack.EMPTY;
+		if (p != null && !p.stacks()[i].isEmpty()) return p.stacks()[i];
+		return real(corpse, i);
+	}
+
 	private static Parsed parsed(CorpseEntity corpse) {
 		if (!(corpse instanceof CorpseState state)) return null;
 		CompoundTag tag = state.creativecompat$sections();
@@ -130,12 +224,8 @@ public final class CorpseSectionsClient {
 		if (corpse == null) return;
 		Parsed p = parsed(corpse);
 		NonNullList<ItemStack> armor = dummy.getInventory().armor;
-		for (int i = 0; i < armor.size() && i < CorpseSections.COSMETIC; i++) {
-			ItemStack want = real(corpse, i);
-			if (p != null && p.skin()[i]) want = ItemStack.EMPTY;
-			else if (p != null && !p.stacks()[i].isEmpty()) want = p.stacks()[i];
-			armor.set(i, want);
-		}
+		for (int i = 0; i < armor.size() && i < CorpseSections.COSMETIC; i++) armor.set(i, shown(corpse, p, i));
+		if (CorpseSections.CURIOS) CorpseCuriosClient.fill(dummy, corpse);
 	}
 
 	private static void onRenderPost(RenderPlayerEvent.Post event) {

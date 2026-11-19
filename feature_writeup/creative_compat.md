@@ -106,7 +106,20 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   `CorpseContainerBaseMixin` (`m_7648_` HEAD, shift-click), `CorpseAdditionalContainerMixin` (`<init>` TAIL, filtered
   view and `setSlots(0)`), `CorpseGuisMixin` (redirect in `lambda$openCorpseGUI$1`, the button flag),
   `CorpseTransferMessageMixin` (`executeServerSide` before `transferItems`; also gated on `curios`) and the client
-  `CorpseScreenMixin` (`ScreenBase.m_7286_` TAIL). Round 2 (curios and cosmetic armor drawn on the models) is open.
+  `CorpseScreenMixin` (`ScreenBase.m_7286_` TAIL).
+- **Corpse models (round 2 of TODO `corpses #4`, [plan_corpses.md](plan_corpses.md) 3.6, rulings 4, 10, 35):** both
+  corpse models show the dead player's curios and cosmetic armor, following the contents. The synced section tag also
+  carries `Curios` (each curio-tagged stack still in the corpse: slot, index, cosmetic, `Hidden` when the player had its
+  render toggled off; recorded at death by `CorpseCurios`), rebuilt once a second. Player model: the Corpse mod's dummy
+  player is a client player with a Curios handler that is never synced; `CorpseCuriosClient.fill` (from the
+  `RenderPlayerEvent.Pre` listener) builds its slot types from the list, so Curios' own layer and Elytra Slot's layer
+  draw curios and a back-slot elytra as on the player. Skeleton (plain and wither look): `CorpseSkeletonLayer`, added
+  to the vanilla skeleton renderer (mod-bus `EntityRenderersEvent.AddLayers`) and to the wither look, acts only on the
+  Corpse mod's `DummySkeleton` while its corpse draws: each shown curio (cosmetic over real, one per slot index) through
+  its `ICurioRenderer` (a renderer that throws is skipped with one log warning), and an elytra in a curio slot with no
+  curio renderer through a vanilla elytra layer (vanilla wings texture). The skeleton is dressed with the cosmetic armor
+  over its real armor (`CorpseSectionsClient.withCosmetics`). Curios API calls only in `CorpseCurios` and
+  `CorpseCuriosClient`.
 - **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
   flower box models, `tags/items/physics/`, 13
   lang keys (MCA eyes, monster box), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
