@@ -605,6 +605,8 @@ All in Creative Common `src/main/java/com/SaintAlfonzo/creativeengineering/` unl
   `CosArmorKeepThroughDeath` (on) is the keep option; when off, its drops join `LivingDropsEvent` before Corpse
   collects at LOWEST, and Cosmetic Armor x Corpse Compat puts them back in the cosmetic slots. User decision: no
   second "corpse takes it anyway" option, keep the default. FX-28.
+- 2026-11-18: FX-28 superseded (owner): cosmetic armor goes into the corpse (`CosArmorKeepThroughDeath = false`, not
+  applied yet), shown on the corpse model and in its own corpse screen section; plan_corpses.md section 3.3, `corpses #4`.
 - 2026-10-22: 2.26 Ore Excavation undo rules (`gameplay/misc #12`): cooldown, denied-block tag, block-entity
   refusal, Auto Pickup on with drops inserted straight into the inventory, XP taken once, offline-player crash
   guard. Built, not run in game; FX-29 to FX-34.

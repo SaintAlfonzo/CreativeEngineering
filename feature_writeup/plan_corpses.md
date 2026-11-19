@@ -1,13 +1,14 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=a9019b2983e8 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=7ea7ad976e55 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `corpses #1` | Planned | S | Corpse decay on world time: skeleton after 7 days, empty corpse skeleton after 30 s and despawn after 5 min, shown armor follows contents (Creative Compat) |
 | `corpses #2` | Planned | S | Ancient corpses: skeletons on cave and ocean floors, about 1 per 32 chunks, worn lootable armor, loot rolled on first open (Creative Loot, only with Corpse loaded) |
 | `corpses #3` | Planned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
+| `corpses #4` | Planned | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, rulings in** (section 4); loot contents still to work out (section 5). Status lives in the TODO rows (section 6).
@@ -82,6 +83,29 @@ Jar: `corpse-forge-1.19.2-1.0.17.jar` (henkelmax, both sides; mod_sides.md). Rea
   `loot_config.json` tuning layer can reach them). Rate 1 per 32 chunks (ruling 6).
 - Name per item 9. Death history (`/corpse`) never lists ancient corpses (no Death record).
 
+### 3.3 Note: cosmetic armor and curios in the corpse (owner, chat 2026-11-18)
+
+> ensure all cosmetic armor and curios items transfer to the corpse appropriately, and automatically show the
+> contents of each of these inventories
+
+- **Curios:** Corpse Curios Compat 2.2.2 (`CorpseContainerMixin`) already collects curios into the corpse and puts
+  them back into curio slots on Transfer Items (`blacklisted_items = []`). To check: every curio slot type in the pack
+  (Botania, Charm of Undying, Elytra Slot, the trinket case), cosmetic curio slots, and that nothing lands in
+  "Additional Items" only because a slot type is missing.
+- **Cosmetic armor:** conflicts with FX-28 (owner, 2026-10-22, fixes_compat.md): `CosArmorKeepThroughDeath = true`
+  keeps cosmetic armor on the player, so it never reaches the corpse. Cosmetic Armor x Corpse Compat 1.0.0 puts it back
+  in the cosmetic slots when the keep option is off. Ruling 9: into the corpse; set `CosArmorKeepThroughDeath = false`
+  (copy to `configs_edited/`), replacing FX-28.
+- **Show the contents (ruling 10):** the corpse screen is laid out by where each item was on the player: hotbar, main
+  inventory, armor, offhand, curios (by slot type), cosmetic armor, all visible at once with labels; no Additional
+  Items button for these. The corpse and skeleton model also wear the cosmetic armor over the real armor and render
+  visible curios (back, belt, elytra slot), as the player looked. Shown items follow contents (ruling 4 applies).
+  Needs per-item origin slots stored at death (the Corpse mod keeps a main list and an additional list only), and a
+  client screen replacement for `CorpseInventoryScreen`; the model part reuses Curios' and Cosmetic Armor's render
+  layers on the dummy entities if they accept them. Look-check with a screenshot before polishing (intake section 5).
+- Checks with the decay build: an item in each inventory survives skeleton stage, decay and the 5 min empty despawn
+  (a corpse holding only curios or cosmetic items is not "empty"); Transfer Items puts each item back in its own slot.
+
 ## 4. Owner rulings
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |
@@ -94,6 +118,8 @@ Jar: `corpse-forge-1.19.2-1.0.17.jar` (henkelmax, both sides; mod_sides.md). Rea
 | 6 | spawn rate and placement (Q6) | open | About 1 per 32 chunks, configurable in `loot_config.json`; cave floors and ocean floors | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 7 | armor on ancient corpses (Q7) | open | Worn (damaged) wood (Immersive Armors `wooden_*`), leather (also dyed), chainmail, copper (Everything Is Copper `copper_*`), iron; rarely enchanted; lootable, stops showing when taken out | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 8 | looted ancient corpse (Q8) | open | Same as player corpses: despawns 5 min after it became empty | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 9 | cosmetic armor into the corpse (conflict with FX-28, fixes_compat.md 2026-10-22) | conflict | Into the corpse: keep option off; replaces FX-28 | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 10 | "automatically show the contents of each of these inventories" | open | Corpse screen in sections by inventory location; cosmetic armor and visible curios also shown on the corpse model | 2026-11-18 | AskUserQuestion 2026-11-18 |
 
 Agent defaults, unconfirmed (clear items only): the ancient corpse feature is skipped in biomes with no cave floor
 (none expected); per-slot armor chance about 40 percent, enchant chance about 5 percent, values in `loot_config.json`;
@@ -116,6 +142,7 @@ To work out with the owner before the loot tables are filled:
 
 - `corpses #1`: corpse decay (Creative Compat, items 1 to 4).
 - `corpses #2`: ancient corpses (Creative Loot, items 5 to 10).
+- `corpses #4`: cosmetic armor and curios into the corpse, sectioned corpse screen, cosmetic and curio rendering (section 3.3).
 - `corpses #3`: ancient corpse loot tables (section 5); `corpses #2` ships with placeholder tables until this is done.
 
 ## 7. Tests
@@ -126,3 +153,4 @@ build.
 ## History
 
 - 2026-11-18: plan written from the scratchpad block and chat; premise checks in section 1; rulings Q1 to Q8 recorded; rows `corpses #1` to `#3`.
+- 2026-11-18: section 3.3 added (cosmetic armor and curios); rulings 9 and 10; row `corpses #4`.
