@@ -31,6 +31,9 @@ public final class S2CState {
 	public int duration;
 	public int activeSlots;
 	public int stamp;
+	/** Foods a Change and a Drop would age out now (hover counts on the effect screen). */
+	public int changeAge;
+	public int dropAge;
 	public final List<SlotChoice> slots = new ArrayList<>();
 	/** Active flat bonuses: effect -> level. */
 	public final Map<ResourceLocation, Integer> flat = new LinkedHashMap<>();
@@ -51,6 +54,9 @@ public final class S2CState {
 		m.duration = EffectApplier.duration();
 		m.activeSlots = s.activeSlots;
 		m.stamp = d.stamp;
+		int[] age = com.SaintAlfonzo.solraspberrypie.logic.SlotActions.ageCounts(player, s);
+		m.changeAge = age[0];
+		m.dropAge = age[1];
 		m.slots.addAll(d.slots);
 		m.flat.putAll(s.flat);
 		m.applied.putAll(d.applied);
@@ -68,6 +74,8 @@ public final class S2CState {
 		buf.writeVarInt(m.duration);
 		buf.writeVarInt(m.activeSlots);
 		buf.writeVarInt(m.stamp);
+		buf.writeVarInt(m.changeAge);
+		buf.writeVarInt(m.dropAge);
 		buf.writeVarInt(m.slots.size());
 		for (SlotChoice c : m.slots) SlotChoice.write(buf, c);
 		writeMap(buf, m.flat);
@@ -87,6 +95,8 @@ public final class S2CState {
 		m.duration = buf.readVarInt();
 		m.activeSlots = buf.readVarInt();
 		m.stamp = buf.readVarInt();
+		m.changeAge = buf.readVarInt();
+		m.dropAge = buf.readVarInt();
 		int n = buf.readVarInt();
 		for (int i = 0; i < n; i++) m.slots.add(SlotChoice.read(buf));
 		readMap(buf, m.flat);

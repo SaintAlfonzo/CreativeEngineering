@@ -191,32 +191,53 @@ public final class SlotActions {
 		sim.slots = new ArrayList<>(d.slots);
 
 		if (change) {
-			int n = Math.min(RpConfig.SERVER.respecFoods.get(), oldest.size());
+			int n = changeCount(oldest.size());
 			sim.group = new ArrayList<>(oldest.subList(0, n));
 			sim.memory = new HashMap<>(original);
 			FoodWindow.moveOut(sim.memory, sim.group);
 			sim.slots.set(a.slot, new SlotChoice(a.effect, a.level));
 		} else {
 			int active = sim.sBefore.activeSlots;
-			sim.group = new ArrayList<>(oldest);
+			sim.group = new ArrayList<>(oldest.subList(0, dropCount(ladder, original, oldest, active)));
 			sim.memory = new HashMap<>(original);
 			FoodWindow.moveOut(sim.memory, sim.group);
-			for (int n = 1; n <= oldest.size(); n++) {
-				Map<FoodInstance, Integer> m = new HashMap<>(original);
-				List<FoodInstance> g = oldest.subList(0, n);
-				FoodWindow.moveOut(m, g);
-				if (ladder.activeSlots(FoodWindow.diversity(m)) < active) {
-					sim.group = new ArrayList<>(g);
-					sim.memory = m;
-					break;
-				}
-			}
 			for (int j = a.slot; j < active - 1; j++) sim.slots.set(j, sim.slots.get(j + 1));
 			sim.slots.set(active - 1, null);
 		}
 		sim.after = FoodWindow.diversity(sim.memory);
 		sim.sAfter = DietEngine.compute(ladder, sim.after, eaten, sim.slots);
 		return sim;
+	}
+
+	/** Foods a change ages out (5.2): {@code respecFoods}, capped at the foods in the window. */
+	static int changeCount(int inWindow) {
+		return Math.min(RpConfig.SERVER.respecFoods.get(), inWindow);
+	}
+
+	/**
+	 * Foods a drop ages out (5.2): from the oldest end of the window until the highest active slot is lost, or the
+	 * whole window when it never is. 0 with no active slot.
+	 */
+	static int dropCount(Ladder ladder, Map<FoodInstance, Integer> original, List<FoodInstance> oldest, int active) {
+		if (active <= 0) return 0;
+		for (int n = 1; n <= oldest.size(); n++) {
+			Map<FoodInstance, Integer> m = new HashMap<>(original);
+			FoodWindow.moveOut(m, oldest.subList(0, n));
+			if (ladder.activeSlots(FoodWindow.diversity(m)) < active) return n;
+		}
+		return oldest.size();
+	}
+
+	/**
+	 * The hover counts on the effect screen's Change and Drop buttons (plan_diet_books.md 1.10): {change, drop}, by the
+	 * same rules as the confirm panel, synced with the state instead of fetched by a preview.
+	 */
+	public static int[] ageCounts(ServerPlayer player, DietEngine.State s) {
+		Ladder ladder = Ladder.current;
+		if (ladder == null) return new int[]{0, 0};
+		Map<FoodInstance, Integer> original = FoodWindow.copy(FoodList.get(player));
+		List<FoodInstance> oldest = FoodWindow.windowOldestFirst(original);
+		return new int[]{changeCount(oldest.size()), dropCount(ladder, original, oldest, s.activeSlots)};
 	}
 
 	private SlotActions() {}

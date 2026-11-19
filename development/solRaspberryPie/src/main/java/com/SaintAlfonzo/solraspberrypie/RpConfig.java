@@ -34,7 +34,7 @@ public final class RpConfig {
 							"(death, /solrp reset, /foodlist clear); a food eaten twice counts once. If false, every food eaten counts (Apple Pie's own rule).")
 					.define("uniqueFoodsToActivate", true);
 			respecFoods = b.comment("Foods aged out of the decay window (oldest first) when a slot is changed to a different effect.")
-					.defineInRange("respecFoods", 8, 1, 256);
+					.defineInRange("respecFoods", 5, 1, 256);
 			effectDuration = b.comment("Duration in ticks of every diet effect instance (flat bonuses and slots).")
 					.defineInRange("effectDuration", 800, 100, 72000);
 			refreshInterval = b.comment("Every diet effect is re-added unconditionally this often, in ticks (staggered per player).",
@@ -53,23 +53,41 @@ public final class RpConfig {
 		public final ForgeConfigSpec.BooleanValue widgetLocked;
 		public final ForgeConfigSpec.IntValue widgetX;
 		public final ForgeConfigSpec.IntValue widgetY;
-		public final ForgeConfigSpec.IntValue progressAhead;
 		public final ForgeConfigSpec.DoubleValue bookScale;
-		public final ForgeConfigSpec.DoubleValue contentScale;
+		public final ForgeConfigSpec.IntValue extraWidth;
+		public final PageLayout diversityPage;
+		public final PageLayout mealsPage;
+		public final PageLayout ladderPage;
+		public final PageLayout milestonesPage;
+		public final ForgeConfigSpec.EnumValue<UneatenSort> uneatenSort;
+		public final ForgeConfigSpec.EnumValue<EatenSort> eatenSort;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> unlockIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> flatIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> slotIcon;
 
 		Client(ForgeConfigSpec.Builder b) {
 			b.push("dietLog");
-			progressAhead = b.comment("Diet Log progress bar: how many milestones ahead of the last one reached it shows.")
-					.defineInRange("progressAhead", 3, 1, 50);
 			bookScale = b.comment("Diet Log size: 1.4 draws the book at 140%. Shrinks to fit a small window, never below 100%",
 							"(or below this value when it is under 1.0).")
 					.defineInRange("bookScale", 1.4, 0.5, 3.0);
-			contentScale = b.comment("Diet Log text and icons on our pages, relative to the book: 0.85 draws them at 85% so they stay on the page",
-							"(the book itself is sized by bookScale). 1.0 = unscaled.")
-					.defineInRange("contentScale", 0.85, 0.5, 1.5);
+			extraWidth = b.comment("Diet Log background stretched sideways by this many pixels: the book's center column is repeated,",
+							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width.")
+					.defineInRange("extraWidth", 0, 0, 400);
+			b.comment("Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)",
+					"of each Diet Log page's content.").push("pages");
+			diversityPage = new PageLayout(b, "diversity", "Apple Pie's diversity page.", 0, 1.0);
+			mealsPage = new PageLayout(b, "meals", "The last meals list.", 0, 0.85);
+			ladderPage = new PageLayout(b, "ladder", "The Diet Ladder page (progress bar and key).", 10, 0.85);
+			milestonesPage = new PageLayout(b, "milestones", "The Milestones pages.", 10, 0.85);
+			b.pop();
+			b.pop();
+			b.push("foodDictionary");
+			uneatenSort = b.comment("Food Dictionary (Spice of Life: Carrot Edition) order of the uneaten foods: MOD_NAME (mod, then name),",
+							"NAME (A-Z), EASIEST (lowest Apple Pie complexity first, then nutrition), HARDEST (the reverse).")
+					.defineEnum("uneatenSort", UneatenSort.MOD_NAME);
+			eatenSort = b.comment("Food Dictionary order of the eaten foods, also set by the sort button on those pages: NEWEST_UNLOCK,",
+							"LATEST_EATEN (Apple Pie's meal memory), UNEATEN_ORDER (the uneatenSort order).")
+					.defineEnum("eatenSort", EatenSort.NEWEST_UNLOCK);
 			b.pop();
 			b.push("icons");
 			unlockIcon = b.comment("Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT",
@@ -77,7 +95,7 @@ public final class RpConfig {
 					.defineList("unlock", List.of("monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"), o -> o instanceof String);
 			flatIcon = b.comment("Diet Log icon for permanent buffs: the first of these items that is loaded.")
 					.defineList("permanentBuff", List.of("create_crush_everything:diamond_shard", "minecraft:diamond"), o -> o instanceof String);
-			slotIcon = b.comment("Diet Log icon for effect slots with no chosen effect (a slot with one shows that effect): the first of these items that is loaded.")
+			slotIcon = b.comment("Diet Log icon for effect slots (the Diet Log never shows the chosen effect): the first of these items that is loaded.")
 					.defineList("slot", List.of("suppsquared:metal_frame", "minecraft:item_frame"), o -> o instanceof String);
 			b.pop();
 			b.push("widget");
@@ -88,6 +106,31 @@ public final class RpConfig {
 			widgetX = b.comment("Bar position relative to the inventory's left edge.").defineInRange("x", 178, -2000, 2000);
 			widgetY = b.comment("Bar position relative to the inventory's top edge.").defineInRange("y", 0, -2000, 2000);
 			b.pop();
+		}
+	}
+
+	/** One Diet Log page type's content placement (plan_diet_books.md 1.4). */
+	public static final class PageLayout {
+		public final ForgeConfigSpec.IntValue x;
+		public final ForgeConfigSpec.IntValue y;
+		public final ForgeConfigSpec.DoubleValue scale;
+
+		PageLayout(ForgeConfigSpec.Builder b, String name, String what, int defaultY, double defaultScale) {
+			b.comment(what).push(name);
+			x = b.defineInRange("x", 0, -200, 200);
+			y = b.defineInRange("y", defaultY, -200, 200);
+			scale = b.defineInRange("scale", defaultScale, 0.25, 2.0);
+			b.pop();
+		}
+	}
+
+	public enum UneatenSort { MOD_NAME, NAME, EASIEST, HARDEST }
+
+	public enum EatenSort {
+		NEWEST_UNLOCK, LATEST_EATEN, UNEATEN_ORDER;
+
+		public EatenSort next() {
+			return values()[(ordinal() + 1) % values().length];
 		}
 	}
 

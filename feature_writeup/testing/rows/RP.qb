@@ -484,4 +484,93 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @commands Diet Ladder and Milestones pages with slot 1 filled (e.g. Speed), slot 2 empty but reached, slot 3 not reached; watch the key's Effect slot row for 5 seconds; hover the slot 1 rung (G11 `#24`)
 @pass slot 1's rung shows the chosen effect's sprite (not the metal frame) and its hover/list text reads "Effect Slot 1: Speed ..."; slot 2 shows the metal frame; slot 3 grayed; the key's Effect slot icon steps to the next slot-pool effect about once a second and loops; one-time unlocks and permanent buffs still show the lock and the diamond shard
 @fails `DietLogPages.slotIcon`, `chosen`, `legendSlotEffect` (`LEGEND[3]` identity), lang `solraspberrypie.dietlog.slot_chosen`
-@draft no batch holds this row yet
+@draft superseded by CQ-RPI-53 (plan_diet_books.md 1.8, 2026-11-19: slot rungs no longer show the chosen effect, the key no longer cycles)
+
+@@section 3
+@@title CQ-RPI Diet Log and effect screen polish, 2026-11-19 ([plan_diet_books.md](../plan_diet_books.md) phase 1; TODO `food-tuning #2` to `#11`)
+@@date 2026-11-19
+@@jars solraspberrypie
+@@sources feature_writeup/plan_diet_books.md feature_writeup/raspberry_pie.md
+@@text
+@@text Targets `solRaspberryPie-1.0.0.jar` built and installed 2026-11-19. Written before the owner's look-check
+@@text (plan_diet_books.md section 3): every row is a draft to refresh after it. Pack configs: Apple Pie `endDecay` 30
+@@text (defaultconfigs and the three local worlds), Raspberry Pie `respecFoods` 5, client `[dietLog.pages]` as installed.
+@@text CQ-RPI-53 supersedes CQ-RPI-46 (slot rungs no longer show the chosen effect).
+@@text
+@@table
+## SQ-RPI-09 | 30-meal window and respec 5 in a fresh world, Carrot mixins applied
+@group A
+@commands Fresh world: `grep -n "endDecay\|respecFoods" world/serverconfig/solapplepie-server.toml world/serverconfig/solraspberrypie-server.toml`; `grep -nE "solraspberrypie|Mixin.*(Carrot|FoodList)" logs/latest.log | grep -iE "error|skip|fail"`
+@pass `endDecay = 30`, `respecFoods = 5`; no mixin errors and no "skipped" line for CarrotFoodListMixin, CarrotFoodDataMixin, CarrotBookScreenMixin
+@fails defaultconfigs/solapplepie-server.toml; RpConfig respecFoods default; RpMixinPlugin solcarrot range `[1.19.2-1.14.0]`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-47
+@group client
+@commands Eat 33 meals with repeats (bread x3 in a row, then 30 others); open the Diet Log and page to the end; relog and reopen; then open `New World` (made before this jar) (plan 1.2)
+@pass Apple Pie's "Food Eaten" history pages are gone; the last page is "Last 30 Meals": 30 icons, newest first, bread shown once per meal eaten (duplicates listed) if still in the last 30; hovering an icon shows "N. Name"; relog keeps the list; `New World` shows the foods its memory has in the window (one per food, no duplicates), then fills normally
+@fails `FoodListMixin.solrp$countUnique` (meal log), `solrp$loadMeals` backfill, `DietLogPages.MealsPage`, `insert` (FoodListPage removed)
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-48
+@group client
+@commands Reach a diversity just under a whole value (e.g. 4.95 to 4.99: the Apple Pie diversity page shows the exact value); open the Diet Ladder page, the effect screen (P) and a Change confirm panel (plan 1.3)
+@pass Raspberry Pie prints the value rounded down to one decimal everywhere ("4.9", never "5"); the milestone at 5 is not reached and shows grayed
+@fails `Icons.diversity`; `DietLogPages.ProgressPage`, `EffectScreen.render` and `drawConfirm`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-49
+@group client
+@commands Diet Log with the default `[dietLog.pages]` (ladder and milestones `y = 10`); then set `[dietLog.pages.diversity] x = 10, scale = 0.8` and `[dietLog.pages.ladder] y = 20, scale = 1.0`, save, reopen the book (plan 1.4)
+@pass defaults: the Diet Ladder and Milestones content sits one line lower than the 2026-11-17 jar, at the old 85% size; after the edit the diversity page shrinks around its top center and moves right, the ladder page grows and moves down; hovers on bar icons and the key still land on their icons
+@fails `DietLogPages.Layout` (`begin`, `mapped`, `unmapX`), `FoodBookScreenMixin.solrp$drawPage`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-50
+@group client
+@commands Client config `[dietLog] extraWidth = 40`; open the Diet Log at GUI scale 2 and at GUI scale 4 (plan 1.5)
+@pass the book is 40 px wider: left half, the center column repeated, right half, no seam or gap; the page flip arrows sit 20 px further out each side; the pages use the wider frame; page flips, the Diet Bonuses button and hovers land; at GUI scale 4 the book still fits the window (bookScale shrinks); `extraWidth = 0` looks as before
+@fails `FoodBookScreenMixin.solrp$widen`, `solrp$drawBackground`, `solrp$addButton` (arrow move), `DietLogPages.bookScale`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it; extraWidth value is picked at the look-check
+
+## CQ-RPI-51
+@group client
+@commands Diet Log: scroll the mouse wheel down and up several notches, past the first and the last page (plan 1.6)
+@pass one page per notch (down = next), a page turn sound per flip, nothing happens past either end; arrows and the page number follow
+@fails `FoodBookScreenMixin.mouseScrolled` (m_6050_ after reobf)
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-52
+@group client
+@commands Diet Ladder page at diversity 0, mid-ladder (about 10) and above the last milestone (`/solrp` reset between, or a world per state) (plan 1.7)
+@pass at 0: "0" at the left, the first 5 milestone values evenly spaced, "..." under the right end; mid: the last reached milestone at the left end, the next 4 evenly spaced, "<" at the left; top: the last 5; each point labeled with its value; the green fill moves proportionally between neighboring points; the purple max mark sits between points the same way; no `progressAhead` key in a fresh client config
+@fails `DietLogPages.Window` (`of`, `pointX`, `x`)
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-53
+@group client
+@commands Diet Ladder and Milestones pages with a one-time unlock reached (e.g. haste) and one not reached, slot 1 filled (e.g. Speed), slot 2 reached and empty, slot 3 not reached; drop diversity below the reached unlock's value (respec); watch for 5 seconds (plan 1.8)
+@pass locked unlock: the lock item and the effect sprite alternate about once a second, gray frame, grayed; reached unlock: the effect sprite grayed inside a purple frame, also after diversity falls below it; slot rungs show the metal frame in a teal frame whether filled or not (grayed for slot 3), hover and list text "Effect Slot N" with no effect name; the key's Effect slot row shows the metal frame (no cycling), its One-time unlock row the lock
+@fails `DietLogPages.drawIcon`, `drawKindIcon`, `describe`, `Icons.dimInner`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-54
+@group client
+@commands Fresh world (unique gate on, minimum 10 in the pack): eat 7 different foods, open the Diet Log diversity page, the Diet Ladder page and the effect screen; eat 2 more and look again (plan 1.9)
+@pass "3 more unique foods to activate diet" on the Diet Ladder page and the effect screen, the diversity page reads "3 more unique foods" / "to activate diet"; at 1 left: "1 more unique food to activate diet" and "1 more unique food"
+@fails lang `solraspberrypie.screen.gate_unique(_one)`, `dietlog.min_unique(_one)`, `min_unique2`; `DietLogPages.gateText`; `DiversityPageMixin` ordinals 2 and 3
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-55
+@group client
+@commands Effect screen (P) with two active filled slots and 30 foods in the window: hover Change, hover Drop, then click Drop and read the confirm panel; cancel; eat a food and hover again (plan 1.10)
+@pass Change and Drop buttons keep their size, the labels are a little smaller; Change hover: "5 foods age out" (fewer when the window holds fewer); Drop hover: "N foods age out" with N equal to the food count on the Drop confirm panel; counts update after eating
+@fails `EffectScreen.TipButton`, `ageTip`; `SlotActions.ageCounts`, `dropCount`; `S2CState` changeAge/dropAge (network version 3)
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-RPI-56
+@group client
+@commands Fill the window with 30 different foods, fill a slot, then Change it to another effect; confirm; Change again (plan 1.1, writeup 5.3)
+@pass each Change ages out the 5 oldest foods of the window (confirm panel lists 5), each one costing more diversity than the last; the aged foods count again in full when eaten
+@fails `SlotActions.changeCount`, `FoodWindow` (endDecay 30)
+@draft written before the look-check (plan_diet_books.md 3); refresh after it

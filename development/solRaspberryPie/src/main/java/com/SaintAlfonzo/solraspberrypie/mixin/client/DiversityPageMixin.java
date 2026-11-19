@@ -9,8 +9,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 /**
- * Apple Pie's diversity page says "Need to eat N more times"; with the unique-food gate (12.4) it reads "N more
- * different foods" instead. The count itself comes from FoodBookScreenMixin.
+ * Apple Pie's diversity page says "Need to eat N more times" / "to activate benefits"; with the unique-food gate
+ * (12.4) it reads "N more unique food(s)" / "to activate diet" instead (plan_diet_books.md 1.9). The count itself
+ * comes from FoodBookScreenMixin.
  */
 @Mixin(value = DiversityPage.class, remap = false)
 public abstract class DiversityPageMixin {
@@ -21,7 +22,19 @@ public abstract class DiversityPageMixin {
 			ordinal = 2))
 	private String solrp$uniqueWording(String domain, String path, Object[] args) {
 		if ("food_book.stats.min_warning1".equals(path) && ClientState.state != null && ClientState.state.uniqueGate && args.length > 0) {
-			return I18n.get("solraspberrypie.dietlog.min_unique", args[0]);
+			boolean one = args[0] instanceof Number n && n.intValue() == 1;
+			return I18n.get(one ? "solraspberrypie.dietlog.min_unique_one" : "solraspberrypie.dietlog.min_unique", args[0]);
+		}
+		return Localization.localized(domain, path, args);
+	}
+
+	// ordinal 3 = the min_warning2 call (the second line).
+	@Redirect(method = "<init>", at = @At(value = "INVOKE",
+			target = "Lcom/tarinoita/solsweetpotato/lib/Localization;localized(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;",
+			ordinal = 3))
+	private String solrp$uniqueWording2(String domain, String path, Object[] args) {
+		if ("food_book.stats.min_warning2".equals(path) && ClientState.state != null && ClientState.state.uniqueGate) {
+			return I18n.get("solraspberrypie.dietlog.min_unique2");
 		}
 		return Localization.localized(domain, path, args);
 	}

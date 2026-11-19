@@ -11,31 +11,30 @@ Existing worlds (Workspace, Structures, New World) keep their old `serverconfig/
 `python3 tools/gen_sol_drink_blacklist.py --worlds` for the blacklist.
 
 Jar facts below were checked on 2026-11-11 in `solapplepie-1.19.2-2.2.0.jar` (package `com.tarinoita.solsweetpotato`)
-and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 0, `endDecay` 32,
+and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 0, `endDecay` 30 (32 before 2026-11-19),
 `minContribution` 0.0, `shouldForbiddenCount` true.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=85174e1fb6fd -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 15, Testing 8), 1 Complete.
+<!-- generated:status_index begin open_work sha1=0b6d00b2e9e7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, Testing 20), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food-tuning #2` | Planned | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
-| `food-tuning #3` | Planned | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
-| `food-tuning #4` | Planned | C | Diversity shown rounded down (4.97 showed 5 before milestone 5) |
-| `food-tuning #5` | Planned | C | Diet Log: per-page x, y, scale config; ladder and milestones one line lower |
-| `food-tuning #6` | Planned | C | Diet Log: book background stretched by repeating its center strip, configurable width |
-| `food-tuning #7` | Planned | C | Diet Log: mouse wheel flips pages |
-| `food-tuning #8` | Planned | C | Diet Ladder bar: even spacing, last achieved milestone + next 4 |
-| `food-tuning #9` | Planned | C | Diet Log icons: locked unlocks alternate lock/effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect |
-| `food-tuning #10` | Planned | C | Gate text: N more unique food(s) to activate diet |
-| `food-tuning #11` | Planned | C | Effect screen: smaller Change/Drop; hover shows how many foods age out |
-| `food-tuning #12` | Planned |  | Investigate Sophisticated Backpacks sort-type button for the Food Dictionary toggle |
-| `food-tuning #13` | Planned | C | Food Dictionary: uneaten sort configurable (mod+name, name, easiest, hardest) |
-| `food-tuning #14` | Planned | S C | Food Dictionary: eaten list 3-state sort button (newest unlock, latest eaten, uneaten order) |
 | `food-tuning #15` | Planned |  | Food Dictionary: hand-made type sort mirroring the JEI food family order (after that is done) |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
+| `food-tuning #2` | Testing | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
+| `food-tuning #3` | Testing | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
+| `food-tuning #4` | Testing | C | Diversity shown rounded down (4.97 showed 5 before milestone 5) |
+| `food-tuning #5` | Testing | C | Diet Log: per-page x, y, scale config; ladder and milestones one line lower |
+| `food-tuning #6` | Testing | C | Diet Log: book background stretched by repeating its center strip, configurable width |
+| `food-tuning #7` | Testing | C | Diet Log: mouse wheel flips pages |
+| `food-tuning #8` | Testing | C | Diet Ladder bar: even spacing, last achieved milestone + next 4 |
+| `food-tuning #9` | Testing | C | Diet Log icons: locked unlocks alternate lock/effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect |
+| `food-tuning #10` | Testing | C | Gate text: N more unique food(s) to activate diet |
+| `food-tuning #11` | Testing | C | Effect screen: smaller Change/Drop label text (buttons unchanged); hover shows how many foods age out |
+| `food-tuning #13` | Testing | C | Food Dictionary: uneaten sort configurable (mod+name, name, easiest, hardest) |
+| `food-tuning #14` | Testing | S C | Food Dictionary: eaten list 3-state sort button (newest unlock, latest eaten, uneaten order) |
 | `food/types-and-tuning #21` | Testing | S C P T | Spice of Life selectable unlock bonus |
 | `food/types-and-tuning #29` | Testing | C | Raspberry Pie item tooltip: "Doesn't run programs" |
 | `food/types-and-tuning #30` | Testing | S | Raspberry Pie: player reset command |
@@ -193,7 +192,7 @@ The only player choices are **which effect at which level in which slot.** Every
 |---|---|
 | Fill an empty active slot | free; lands in the lowest empty active slot (5.1) |
 | Change a slot's level (any unlocked level of the same effect) | free |
-| Change a slot to a different effect | age out the **8 oldest foods in the decay window** (configurable count; was 5) (6) |
+| Change a slot to a different effect | age out the **5 oldest foods in the decay window** (configurable `respecFoods`; 8 from 2026-11-13 to 2026-11-19, 5 before) (6) |
 | Drop (clear) a slot | age out foods from the oldest end of the window **until the highest active slot is lost**. The dropped effect is removed and the choices of the **active** slots above it shift down one slot to fill the gap; the vacated highest active slot is left **empty and grayed** (owner, 2026-11-11). Choices stored in grayed slots stay where they are (Q-B option b, 2026-11-12) |
 | Swap two slots | not possible |
 | Re-applying a regained slot's stored choice | automatic, free |
@@ -206,18 +205,21 @@ There is no XP cost: the diversity cost is always there.
 ### 5.3 Why the oldest, and why the cost climbs
 
 The newest foods are the easiest to replace (the player just had them), so the oldest go. With the pack's decay a food
-eaten k meals ago is worth `complexity x (1 - k/32)` (Apple Pie's `calculateTimePenalty`), so the oldest foods are
-worth little and the first respec is cheap. Aged-out foods have left the window, so the next respec takes the next 8
-oldest, which are newer and worth more. Example, 32 distinct complexity-1 foods in the window (diversity 16.5):
+eaten k meals ago is worth `complexity x (1 - k/30)` (Apple Pie's `calculateTimePenalty`), so the oldest foods are
+worth little and the first respec is cheap. Aged-out foods have left the window, so the next respec takes the next 5
+oldest, which are newer and worth more. Example, 30 distinct complexity-1 foods in the window (diversity 15.5;
+window 30 and respec 5 since 2026-11-19, plan_diet_books.md 1.1):
 
 | Respec (no eating between) | Foods aged out (meals ago) | Diversity lost | Left |
 |---|---|---|---|
-| 1st | 24-31 | 1.1 | 15.4 |
-| 2nd | 16-23 | 3.1 | 12.3 |
-| 3rd | 8-15 | 5.1 | 7.1 |
-| 4th | 0-7 | 7.1 | 0 |
+| 1st | 25-29 | 0.5 | 15.0 |
+| 2nd | 20-24 | 1.3 | 13.7 |
+| 3rd | 15-19 | 2.2 | 11.5 |
+| 4th | 10-14 | 3.0 | 8.5 |
+| 5th | 5-9 | 3.8 | 4.7 |
+| 6th | 0-4 | 4.7 | 0 |
 
-Eating refills the window from the new end, so the climb eases off over roughly 8 meals per respec. Repeated foods and
+Eating refills the window from the new end, so the climb eases off over roughly 5 meals per respec. Repeated foods and
 complexity weights change the numbers, not the shape. The first respec is meant to be a near-free correction;
 serial swapping is what costs. Small windows (decided 2026-11-12): the change is **allowed** even when the respec switches off the slot being changed; the new choice is stored in the now grayed slot and shown on the confirm panel as such.
 
@@ -239,15 +241,15 @@ Every paid action shows a confirm panel before anything happens: diversity now a
 Respecs and death move foods **out of the decay window** to the front of the out-of-window part of the food memory,
 instead of marking them gray (owner, 2026-11-11). A moved food:
 
-- has its "meals since last eaten" raised past `endDecay` (32), so it counts `minContribution` (0 in the pack);
-- keeps its order relative to the other moved foods: each moved food gets `k + (32 - smallest k in the group)`,
-  capped at 255. A respec of the foods at 24-31 puts them at 32-39; death (the whole window, 0-31) puts them at 32-63;
+- has its "meals since last eaten" raised past `endDecay` (30), so it counts `minContribution` (0 in the pack);
+- keeps its order relative to the other moved foods: each moved food gets `k + (30 - smallest k in the group)`,
+  capped at 255. A respec of the foods at 25-29 puts them at 30-34; death (the whole window, 0-29) puts them at 30-59;
 - shows in the Diet Log history in its new place, drawn like any other old food (no gray drawing);
 - counts in full again when eaten (a fresh eat resets its count to 0, as Apple Pie already does);
 - is forgotten by Apple Pie once it reaches 256 meals, like any food. Nothing extra is stored, so nothing needs
   pruning.
 
-"Oldest in the decay window" = the foods with the largest count still below 32. If fewer foods than needed are in the
+"Oldest in the decay window" = the foods with the largest count still below 30. If fewer foods than needed are in the
 window, all of them move.
 
 This relies on `minContribution` being 0: above 0, moved foods still count a little and every cost shrinks. Handling:
@@ -271,6 +273,9 @@ Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
   reached and the next few), icons as listed in 12.4 #37 and since 2026-11-17 in 12.5; Apple Pie's own benefit pages are removed.
 - **Single page, scaled** (12.5): the book is drawn at client config `[dietLog] bookScale` (default 1.25), shrunk to
   fit small windows. The double page view (12.4 #31) is removed.
+- **Since 2026-11-19** (12.6): pages diversity, Diet Ladder, Milestones, Last 30 Meals (Apple Pie's food history
+  pages removed); each page type placed and sized by client config `[dietLog.pages.*]`; the background stretchable by
+  `[dietLog] extraWidth`; the mouse wheel flips pages.
 
 ## 7. Liquid Diet Log
 
@@ -787,7 +792,33 @@ Plan: [plan_post_scratch_1115.md](plan_post_scratch_1115.md) G5 as amended by G6
   loaded pool effect it shows the slot item. Assumed (not ruled): the cycle period of 1 second, fixed in code (no
   config); the pool order is the ladder file's order; the slot item stays the icon for empty slots. Test CQ-RPI-46.
 
-### 12.6 Owner notes 2026-11-18 (planned)
+### 12.6 Owner notes 2026-11-18 (built 2026-11-19)
 
 Plan and rulings: [plan_diet_books.md](plan_diet_books.md) (window 30 meals, respec 5, last-30-meals list replaces the
-food history, even-spaced ladder of 5, Diet Log icon changes; Food Dictionary sorting). TODO `food-tuning #2` to `#15`.
+food history, even-spaced ladder of 5, Diet Log icon changes; Food Dictionary sorting). TODO `food-tuning #2` to `#15`
+(`#15` later). Choices made while building: plan section 5. Tests SQ-RPI-09, CQ-RPI-47 to -56 (drafts until the
+owner's look-check; CQ-RPI-53 supersedes CQ-RPI-46).
+
+- **Rules:** Apple Pie `endDecay` 30 (pack `defaultconfigs/`, the three local worlds); `respecFoods` default 5.
+- **Last meals:** Raspberry Pie keeps the last `endDecay` meals eaten, newest first, duplicates kept (NBT
+  `solrp_meals` on Apple Pie's FoodList; old saves backfilled from the memory). The Diet Log's last page lists them
+  as a 6 x 5 icon grid ("Last 30 Meals", hover "N. Name"); Apple Pie's "Food Eaten" history pages are removed.
+- **Diversity printed rounded down** to one decimal by Raspberry Pie (Diet Ladder page, effect screen, confirm
+  panel); Apple Pie's own diversity page keeps its two decimals.
+- **Page layout:** client config `[dietLog.pages.diversity|meals|ladder|milestones]` `x`, `y`, `scale`, replacing
+  `contentScale`. Defaults: diversity unscaled; meals 0.85; ladder and milestones 0.85, one line (10 px) lower.
+- **Wider book:** `[dietLog] extraWidth` (default 0): the background's center column is repeated, the pages widen,
+  the page arrows move out by half; the fit rule includes it.
+- **Mouse wheel** flips one page per notch (Diet Log and Food Dictionary).
+- **Ladder bar:** five evenly spaced milestone values: the last reached and the next four (the last five near the
+  top), or a 0 origin and the first five; fill and max mark proportional between neighbors; every point labeled.
+  `progressAhead` removed.
+- **Icons:** a locked one-time unlock alternates the lock item and the effect sprite each second (gray frame); a
+  reached one shows the effect sprite grayed in a purple frame whatever the current diversity. Slot rungs show the
+  metal frame item in the slot color (grayed when the slot is not active), hover "Effect Slot N" with no effect;
+  effects show in slots only on the effect screen and the inventory widget (reverses the 12.5 icon ruling). The key
+  is unchanged except the slot row stops cycling.
+- **Gate text:** "N more unique foods to activate diet" (singular for 1); the diversity page "N more unique
+  food(s)" / "to activate diet".
+- **Effect screen:** Change and Drop keep their 18 px buttons with labels at 0.85 scale; hover shows "N foods age
+  out" (Change: `respecFoods` capped at the window; Drop: the drop rule of 5.2), counts synced with the state.

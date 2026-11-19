@@ -31,7 +31,10 @@
   "solraspberrypie.screen.waiting": "Waiting for the server...",
   "solraspberrypie.screen.diversity": "Diversity %s (highest %s)",
   "solraspberrypie.screen.gate": "Eat %s more foods to activate diet bonuses",
-  "solraspberrypie.screen.gate_unique": "Eat %s more different foods to activate diet bonuses",
+  "solraspberrypie.screen.gate_unique": "%s more unique foods to activate diet",
+  "solraspberrypie.screen.gate_unique_one": "%s more unique food to activate diet",
+  "solraspberrypie.screen.age_out": "%s foods age out",
+  "solraspberrypie.screen.age_out_one": "%s food ages out",
   "solraspberrypie.screen.flat": "Permanent buffs",
   "solraspberrypie.screen.flat_tip": "Always on while your diversity stays high enough",
   "solraspberrypie.screen.none": "none yet",
@@ -64,7 +67,13 @@
   "solraspberrypie.dietlog.now": "Diversity now: %s",
   "solraspberrypie.dietlog.max": "Highest ever: %s",
   "solraspberrypie.dietlog.milestones": "Milestones",
-  "solraspberrypie.dietlog.min_unique": "Need %s more different foods",
+  "solraspberrypie.dietlog.min_unique": "%s more unique foods",
+  "solraspberrypie.dietlog.min_unique_one": "%s more unique food",
+  "solraspberrypie.dietlog.min_unique2": "to activate diet",
+  "solraspberrypie.dietlog.meals": "Last %s Meals",
+  "solraspberrypie.dietlog.meals_none": "No meals yet",
+  "solraspberrypie.dietlog.meals_order": "Newest first",
+  "solraspberrypie.dietlog.meal": "%s. %s",
   "solraspberrypie.dietlog.unlock": "Unlock %s",
   "solraspberrypie.dietlog.slot_chosen": "%s: %s",
   "solraspberrypie.dietlog.legend.health": "Hearts",
@@ -81,5 +90,10 @@
   "solraspberrypie.cmd.resumed": "Resumed diet bonuses for %s players",
   "solraspberrypie.cmd.none_paused": "No player has paused diet bonuses",
   "solraspberrypie.cmd.paused_list": "%s paused: %s",
-  "solraspberrypie.cmd.reset": "Reset the diet of %s players"
+  "solraspberrypie.cmd.reset": "Reset the diet of %s players",
+
+  "solraspberrypie.fooddict.sort.newest_unlock": "Sort: newest unlock first",
+  "solraspberrypie.fooddict.sort.latest_eaten": "Sort: latest eaten first",
+  "solraspberrypie.fooddict.sort.uneaten_order": "Sort: same order as uneaten foods",
+  "solraspberrypie.fooddict.sort.hint": "Click to change"
 }

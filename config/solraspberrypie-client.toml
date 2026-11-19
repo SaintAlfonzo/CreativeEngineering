@@ -12,13 +12,64 @@
 	y = 166
 
 [dietLog]
-	#Diet Log progress bar: how many milestones ahead of the last one reached it shows.
-	#Range: 1 ~ 50
-	progressAhead = 3
-	#Diet Log size: 1.25 draws the book at 125%. Shrinks to fit a small window, never below 100%
+	#Diet Log size: 1.4 draws the book at 140%. Shrinks to fit a small window, never below 100%
 	#(or below this value when it is under 1.0).
 	#Range: 0.5 ~ 3.0
-	bookScale = 1.25
+	bookScale = 1.4
+	#Diet Log background stretched sideways by this many pixels: the book's center column is repeated,
+	#the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width.
+	#Range: 0 ~ 400
+	extraWidth = 0
+
+	#Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)
+	#of each Diet Log page's content.
+	[dietLog.pages]
+
+		#Apple Pie's diversity page.
+		[dietLog.pages.diversity]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 0
+			#Range: 0.25 ~ 2.0
+			scale = 1.0
+
+		#The last meals list.
+		[dietLog.pages.meals]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 0
+			#Range: 0.25 ~ 2.0
+			scale = 0.85
+
+		#The Diet Ladder page (progress bar and key).
+		[dietLog.pages.ladder]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 10
+			#Range: 0.25 ~ 2.0
+			scale = 0.85
+
+		#The Milestones pages.
+		[dietLog.pages.milestones]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 10
+			#Range: 0.25 ~ 2.0
+			scale = 0.85
+
+[foodDictionary]
+	#Food Dictionary (Spice of Life: Carrot Edition) order of the uneaten foods: MOD_NAME (mod, then name),
+	#NAME (A-Z), EASIEST (lowest Apple Pie complexity first, then nutrition), HARDEST (the reverse).
+	#Allowed Values: MOD_NAME, NAME, EASIEST, HARDEST
+	uneatenSort = "MOD_NAME"
+	#Food Dictionary order of the eaten foods, also set by the sort button on those pages: NEWEST_UNLOCK,
+	#LATEST_EATEN (Apple Pie's meal memory), UNEATEN_ORDER (the uneatenSort order).
+	#Allowed Values: NEWEST_UNLOCK, LATEST_EATEN, UNEATEN_ORDER
+	eatenSort = "NEWEST_UNLOCK"
 
 [icons]
 	#Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT
@@ -26,6 +77,6 @@
 	unlock = ["monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"]
 	#Diet Log icon for permanent buffs: the first of these items that is loaded.
 	permanentBuff = ["create_crush_everything:diamond_shard", "minecraft:diamond"]
-	#Diet Log icon for effect slots: the first of these items that is loaded.
+	#Diet Log icon for effect slots (the Diet Log never shows the chosen effect): the first of these items that is loaded.
 	slot = ["suppsquared:metal_frame", "minecraft:item_frame"]
 

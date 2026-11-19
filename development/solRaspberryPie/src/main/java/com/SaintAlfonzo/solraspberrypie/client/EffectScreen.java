@@ -16,6 +16,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,6 +24,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 /**
  * The effect screen (11.2): flat bonuses (read only), then the slots side by side with a progress bar under them (G5c). Active slots: fill (free, lands in the
@@ -39,6 +41,8 @@ public class EffectScreen extends Screen {
 	private S2CPreview preview;
 	private int left, top, height0, panelW = MIN_W, cell = CELL_MAX;
 	private final List<Runnable> hoverTips = new ArrayList<>();
+	/** Buttons with a hover tooltip (Change and Drop: how many foods age out, plan_diet_books.md 1.10). */
+	private final List<TipButton> tipButtons = new ArrayList<>();
 
 	public EffectScreen() {
 		super(Component.translatable("solraspberrypie.screen.title"));
@@ -71,6 +75,7 @@ public class EffectScreen extends Screen {
 
 	private void rebuild() {
 		clearWidgets();
+		tipButtons.clear();
 		if (!ClientState.ready()) return;
 		Ladder ladder = ClientState.ladder;
 		S2CState s = ClientState.state;
@@ -124,13 +129,13 @@ public class EffectScreen extends Screen {
 			addRenderableWidget(minus);
 			addRenderableWidget(plus);
 			int bw = Math.min(44, (cell - 8) / 2);
-			addRenderableWidget(new Button(cx - bw - 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.change"), b -> {
+			tipButtons.add(addRenderableWidget(new TipButton(cx - bw - 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.change"), b -> {
 				mode = Mode.PICK_CHANGE;
 				pickSlot = slot;
 				rebuild();
-			}));
-			addRenderableWidget(new Button(cx + 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.drop"),
-					b -> send(C2SAction.Op.PREVIEW_DROP, slot, null, 0)));
+			}, () -> ageTip(ClientState.state.changeAge))));
+			tipButtons.add(addRenderableWidget(new TipButton(cx + 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.drop"),
+					b -> send(C2SAction.Op.PREVIEW_DROP, slot, null, 0), () -> ageTip(ClientState.state.dropAge))));
 		}
 	}
 
@@ -211,10 +216,10 @@ public class EffectScreen extends Screen {
 		fill(pose, left - 1, top - 1, left + panelW + 1, top + height0 + 1, 0xFF6B6B6B);
 		fill(pose, left, top, left + panelW, top + height0, 0xFF202020);
 		drawString(pose, font, title, left + 8, top + 8, 0xFFFFFF);
-		Component div = Component.translatable("solraspberrypie.screen.diversity", Icons.num(round(s.diversity)), Icons.num(round(s.maxDiversity)));
+		Component div = Component.translatable("solraspberrypie.screen.diversity", Icons.diversity(s.diversity), Icons.diversity(s.maxDiversity));
 		drawString(pose, font, div, left + 8, top + 20, 0xAAAAAA);
 		if (s.foodsEaten < s.minFoods) {
-			drawString(pose, font, Component.translatable(s.uniqueGate ? "solraspberrypie.screen.gate_unique" : "solraspberrypie.screen.gate", s.minFoods - s.foodsEaten), left + 8, top + 31, 0xFFAA55);
+			drawString(pose, font, DietLogPages.gateText(s), left + 8, top + 31, 0xFFAA55);
 		}
 		// Flat bonuses (read only).
 		Component flatLabel = Component.translatable("solraspberrypie.screen.flat");
@@ -236,6 +241,9 @@ public class EffectScreen extends Screen {
 			case CONFIRM -> drawConfirm(pose, mouseX, mouseY);
 		}
 		super.render(pose, mouseX, mouseY, partial);
+		for (TipButton b : tipButtons) {
+			if (b.visible && b.isMouseOver(mouseX, mouseY)) hoverTips.add(() -> renderComponentTooltip(pose, b.tip.get(), mouseX, mouseY));
+		}
 		for (Runnable r : hoverTips) r.run();
 	}
 
@@ -341,7 +349,7 @@ public class EffectScreen extends Screen {
 			drawString(pose, font, Component.translatable("solraspberrypie.confirm.stale"), left + 8, y, 0xFFFF55);
 			y += 12;
 		}
-		drawString(pose, font, Component.translatable("solraspberrypie.confirm.diversity", Icons.num(round(preview.before)), Icons.num(round(preview.after))), left + 8, y, 0xAAAAAA);
+		drawString(pose, font, Component.translatable("solraspberrypie.confirm.diversity", Icons.diversity(preview.before), Icons.diversity(preview.after)), left + 8, y, 0xAAAAAA);
 		y += 12;
 		drawString(pose, font, Component.translatable("solraspberrypie.confirm.aged", preview.aged.size()), left + 8, y, 0xAAAAAA);
 		y += 10;
@@ -375,7 +383,36 @@ public class EffectScreen extends Screen {
 		return mx >= x && mx < x + w && my >= y && my < y + h;
 	}
 
-	private static double round(double v) {
-		return Math.round(v * 10.0) / 10.0;
+	/** "N foods age out" (singular for one). */
+	private static List<Component> ageTip(int n) {
+		return List.of(Component.translatable(n == 1 ? "solraspberrypie.screen.age_out_one" : "solraspberrypie.screen.age_out", n).withStyle(ChatFormatting.RED));
+	}
+
+	/**
+	 * A button whose label is drawn smaller than vanilla's (plan_diet_books.md 1.10: the button keeps its size, the
+	 * text is {@link #LABEL_SCALE}), with a hover tooltip.
+	 */
+	private static final class TipButton extends Button {
+		private static final float LABEL_SCALE = 0.85F;
+		final Supplier<List<Component>> tip;
+
+		TipButton(int x, int y, int w, int h, Component label, OnPress press, Supplier<List<Component>> tip) {
+			super(x, y, w, h, label, press);
+			this.tip = tip;
+		}
+
+		@Override
+		public void renderButton(PoseStack pose, int mouseX, int mouseY, float partial) {
+			Component label = getMessage();
+			setMessage(Component.empty());
+			super.renderButton(pose, mouseX, mouseY, partial);
+			setMessage(label);
+			int color = (active ? 0xFFFFFF : 0xA0A0A0) | (Mth.ceil(alpha * 255F) << 24);
+			pose.pushPose();
+			pose.translate(x + width / 2F, y + (height - 8 * LABEL_SCALE) / 2F, 0);
+			pose.scale(LABEL_SCALE, LABEL_SCALE, 1F);
+			drawCenteredString(pose, Minecraft.getInstance().font, label, 0, 0, color);
+			pose.popPose();
+		}
 	}
 }
