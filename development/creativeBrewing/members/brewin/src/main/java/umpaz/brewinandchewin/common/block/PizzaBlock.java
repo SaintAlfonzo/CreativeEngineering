@@ -27,6 +27,9 @@ import umpaz.brewinandchewin.common.registry.BnCItems;
 
 public class PizzaBlock extends Block {
    public static final IntegerProperty SERVINGS = IntegerProperty.create("servings", 0, 3);
+   // Pack (TODO dishes/meals #5, plan_food_batch_1119.md C1, R18): every serving taken, by hand or knife, is 2 slices;
+   // a knife break gives 2 per serving left (BnCSlicingModifier).
+   public static final int SLICES_PER_SERVING = 2;
    protected static final VoxelShape[] SHAPES = new VoxelShape[]{
       Block.box(0.0, 0.0, 0.0, 8.0, 2.0, 8.0),
       Block.box(0.0, 0.0, 0.0, 16.0, 2.0, 8.0),
@@ -60,12 +63,14 @@ public class PizzaBlock extends Block {
    private InteractionResult takeServing(Level level, BlockPos pos, BlockState state, Player player, InteractionHand handIn) {
       int servings = state.getValue(SERVINGS);
       ItemStack heldStack = player.getItemInHand(handIn);
-      if (!heldStack.isEmpty() && !heldStack.getItem().equals(BnCItems.PIZZA_SLICE)) {
-         popResource(level, pos, new ItemStack(BnCItems.PIZZA_SLICE, 1));
-      } else if (heldStack.getItem().equals(BnCItems.PIZZA_SLICE) && heldStack.getCount() < heldStack.getMaxStackSize()) {
-         heldStack.setCount(heldStack.getCount() + 1);
+      // Pack: SLICES_PER_SERVING slices a serving (8 a pizza; TODO dishes/meals #5)
+      if (heldStack.isEmpty()) {
+         player.setItemInHand(handIn, new ItemStack(BnCItems.PIZZA_SLICE, SLICES_PER_SERVING));
+      } else if (heldStack.getItem().equals(BnCItems.PIZZA_SLICE)
+            && heldStack.getCount() + SLICES_PER_SERVING <= heldStack.getMaxStackSize()) {
+         heldStack.grow(SLICES_PER_SERVING);
       } else {
-         player.setItemInHand(handIn, new ItemStack(BnCItems.PIZZA_SLICE));
+         popResource(level, pos, new ItemStack(BnCItems.PIZZA_SLICE, SLICES_PER_SERVING));
       }
 
       level.playSound(null, pos, SoundEvents.SLIME_BLOCK_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);

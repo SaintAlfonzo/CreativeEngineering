@@ -262,7 +262,7 @@ block it works as bone meal x3. All ported as shipped.
 | Jar foods | 8 mason jar blocks (empty + 7 filled) and their 6 bottle forms (apple sauce, sweet berry jam, glow berry jam, nut mash, pepper jam, relish, vinegar; honey is the vanilla bottle) plus nut milk bottle |
 | Fermented | pickle, pickled beetroot, pickled egg, pickled onion, pickled pepper, kimchi, surströmming, century egg (any egg, §2.7), overnight oats |
 | Meals | oatmeal, pickle soup, ghostly chili, pad thai, cheese pasta, cucumber salad, cheese burger, "The Burger" (deluxe), stuffed burrito, PB & J, salted cod, salted salmon, 3 granola bars, oatmeal cookie |
-| Placeable food | cheese pizza, meat pizza (`PizzaBlock`, 4 slices by knife) and their slices |
+| Placeable food | cheese pizza, meat pizza and (pack addition 2026-11-19, `dishes/meals #27`) Tropical Pizza (`PizzaBlock`: 4 bites of 2 slices each, by hand or knife, `dishes/meals #5`; recipes `creativedelight/pizza.js`) and their slices |
 | Blocks (decor) | salt block, smooth salt block, salt bricks / slab / stairs / wall, mixed salt bricks / slab / stairs / wall, salt pillar, 17 salt lamps (light 15), oat bag, oat bale, cucumber / peanut / ghost pepper crates |
 | Blocks (working) | pickling jar, evaporator, salt layer, cheese mold, golden egg, 3 crops + ghost pepper crop, 4 wild plants |
 | Other | 16 chef hats, ghost charcoal; Mixed Seeds (not registered upstream; a pack addition since port `-10`, §2.3a) |
@@ -1046,3 +1046,8 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-03: Accepted 2026-11-03: these (otherwise frozen) jams get their interior from the forced-gradient swap, darkest color dropped (development/creativeDelight/members/vintage/tools/gen_jam_art.py)
 - 2026-11-04: Port fix (creativedelight members #37, plan_creative_delight.md I2; strict per slot 2026-11-04): for each ingredient entry, the input slot (0-5) it takes one item from, or null when the inputs do not make this recipe (development/creativeDelight/members/vintage/src/main/java/net/ribs/vintagedelight/recipe/FermentingRecipe.java)
 - 2026-11-04: Pieces made with even_swap (forced even gradient) instead of the plain swap, which skips non-monotonic palette entries (pepper's dark reds are darker than its browns' brightness rank): owner 2026-11-04 (development/creativeDelight/members/vintage/tools/gen_jam_art.py)
+- 2026-11-19 (plan_food_batch_1119.md C1, C2): `PizzaBlock` gives 2 slices a bite, by hand or knife (no eating from the
+  block); pizza break loot doubled (8/6/4/2). New Tropical Pizza (`vintagedelight:tropical_pizza`, slice 5 / 0.75 +
+  Nourishment, the cheese pizza's art copied; shaped recipe JSON, Fruits Delight condition; tooltip in
+  `assets/creativedelight/kubejs/vintagedelight/client.js`). Tests SQ-FF-11 to SQ-FF-13, CQ-FF-03.
+

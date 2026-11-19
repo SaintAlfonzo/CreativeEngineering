@@ -105,6 +105,9 @@ Pack interactions checked:
 
 ### 2.4 Removed and unused
 
+- `displaydelight:onion_soup` (unregistered 2026-11-19, `dishes/meals #54`): its source food, Farmer's Delight's onion
+  soup, does not exist on 1.19.2 (FD 1.2.4), so the block could never be placed. Creamy onion soup keeps
+  `bnc_creamy_onion_soup`. Test SQ-FF-14.
 - Three 1.2.0 block ids are gone in 1.7.0 (`ctd_small_plated_rice_ball`, `ed_plated_peanut_butter_honey_sandwich`,
   `pd_small_plated_pineapple_pie_slice`): all for mods not in the pack.
 - `glass_showcase` and `wood_showcase` ship a blockstate and model but are not registered: not copied.

@@ -108,6 +108,9 @@ public class ModItems {
     public static final RegistryObject<Item> MEAT_PIZZA_SLICE = ITEMS.register("meat_pizza_slice", () -> new ConsumableItem(props().food(ModFoods.MEAT_PIZZA_SLICE), true));
     public static final RegistryObject<Item> CHEESE_PIZZA = ITEMS.register("cheese_pizza", () -> new BlockItem(ModBlocks.CHEESE_PIZZA.get(), props()));
     public static final RegistryObject<Item> MEAT_PIZZA = ITEMS.register("meat_pizza", () -> new BlockItem(ModBlocks.MEAT_PIZZA.get(), props()));
+    // Pack addition (TODO dishes/meals #27): Tropical Pizza and its slice
+    public static final RegistryObject<Item> TROPICAL_PIZZA_SLICE = ITEMS.register("tropical_pizza_slice", () -> new ConsumableItem(props().food(ModFoods.TROPICAL_PIZZA_SLICE), true));
+    public static final RegistryObject<Item> TROPICAL_PIZZA = ITEMS.register("tropical_pizza", () -> new BlockItem(ModBlocks.TROPICAL_PIZZA.get(), props()));
 
     public static final RegistryObject<Item> BLACK_CHEF_HAT = hat("black");
     public static final RegistryObject<Item> BLUE_CHEF_HAT = hat("blue");
@@ -188,7 +191,7 @@ public class ModItems {
         l.add(RELISH_JAR); l.add(NUT_MASH_JAR); l.add(HONEY_JAR); l.add(VINEGAR_JAR); l.add(NUT_MILK); l.add(APPLE_SAUCE_BOTTLE);
         l.add(SWEET_BERRY_JAM_BOTTLE); l.add(GLOW_BERRY_JAM_BOTTLE); l.add(PEPPER_JAM_BOTTLE); l.add(RELISH_BOTTLE);
         l.add(NUT_MASH_BOTTLE); l.add(VINEGAR_BOTTLE); l.add(ORGANIC_MASH); l.add(CHEESE_CURDS); l.add(CHEESE_WHEEL);
-        l.add(CHEESE_SLICE); l.add(CHEESE_PIZZA); l.add(CHEESE_PIZZA_SLICE); l.add(MEAT_PIZZA); l.add(MEAT_PIZZA_SLICE);
+        l.add(CHEESE_SLICE); l.add(CHEESE_PIZZA); l.add(CHEESE_PIZZA_SLICE); l.add(MEAT_PIZZA); l.add(MEAT_PIZZA_SLICE); l.add(TROPICAL_PIZZA); l.add(TROPICAL_PIZZA_SLICE);
         l.add(PICKLE_SOUP); l.add(GHOSTLY_CHILI); l.add(PAD_THAI); l.add(CHEESE_PASTA); l.add(CUCUMBER_SALAD); l.add(PB_J);
         l.add(CHEESE_BURGER); l.add(DELUXE_BURGER); l.add(STUFFED_BURRITO);
         return l;

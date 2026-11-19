@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "P": { "item": "fruitsdelight:pineapple_slice" },
+    "B": { "item": "farmersdelight:cooked_bacon" },
+    "A": { "tag": "forge:cheese" },
+    "C": { "tag": "forge:dough" },
+    "E": { "item": "farmersdelight:tomato_sauce" }
+  },
+  "pattern": [
+    "PBP",
+    "AAA",
+    "CEC"
+  ],
+  "result": { "item": "vintagedelight:tropical_pizza" },
+  "conditions": [ { "type": "forge:mod_loaded", "modid": "fruitsdelight" } ]
+}

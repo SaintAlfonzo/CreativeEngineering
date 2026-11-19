@@ -8,14 +8,12 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=d21b2d6feaed -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 8, In Progress 4, Testing 9), 1 Complete.
+<!-- generated:status_index begin open_work sha1=dc7d43fe78cb -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 6, In Progress 4, Testing 11), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `dishes/ingredients #10` | Planned | S C P T | Fats and oils: animal fat, blubber, cooking oil |
-| `dishes/meals #27` | Planned | S C P | Pineapple pizza |
-| `dishes/meals #54` | Planned | S C P | Onion soup and creamy onion soup placeable |
 | `pickles-and-ferments #17` | Planned | S C P | Pickled garlic item |
 | `seasoning #25` | Planned | S C P | Rename the seasoning mechanic to Flavor |
 | `seasoning #26` | Planned | S C P | Flavor pairs: garlic + onion, salt + pepper, sugar + ghost pepper |
@@ -29,7 +27,9 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 | `baking/baked-goods #21` | Testing | S C P | Lasagna baking type |
 | `dishes/ingredients #33` | Testing | S C P | Rename cucumber dough to veggie dough |
 | `dishes/ingredients #40` | Testing | S P | Edible seed family: sunflower, pumpkin, oat, mixed, corn seeds |
+| `dishes/meals #27` | Testing | S C P | Pineapple pizza |
 | `dishes/meals #44` | Testing | S C P | Unify the two stuffed pumpkin recipes |
+| `dishes/meals #54` | Testing | S C P | Onion soup and creamy onion soup placeable |
 | `dishes/meals #60` | Testing | S P | Cucumber salad |
 | `food/drinks #14` | Testing | S P | Hot cocoa and apple cider review |
 | `food/types-and-tuning #6` | Testing | S P | Vanilla egg -> `#forge:eggs` in recipes |
@@ -171,3 +171,15 @@ Choices made while building, where the plan or a ruling left a gap (newest wave 
   - B4: Respite's long and strong apple cider stay out of `drink/warm` (the ruling names FD's cider only). Hot cocoa
     and strong hot cocoa were not foods; they become edible at the tea values, own effects kept.
   - B2: the Lasagna slice keeps its name (Lasagna Slice).
+- Wave C, 2026-11-19:
+  - C1: the slice rule is one pack script, `creativedelight/pizza.js` (cut 8, ring of 8, the mods' 4-cuts and 2x2 out),
+    not per-member JSON. Veggies' vegan pizza had no block loot (knife break through FD's pastry slicing modifier, 4 -
+    bites); it now has a block loot table like Vintage's (8/6/4/2 on any break) and its GLM entry is gone. Brewin's
+    Supreme Pizza keeps knife-only break loot (its slicing modifier, now 2 a serving left) and gives 2 slices a
+    serving by hand. Slice food values are unchanged (a pizza now feeds twice as much); owner question.
+  - C1: a hand use of a pizza no longer eats, so Apple Pie and the Food Dictionary skip it: new block tag
+    `#creativedelight:serves_slices` read by `PlacedFoodSol.afterUse` (CD Java).
+  - C2: Tropical Pizza art: exact copies of the cheese pizza's three PNGs (`tropical_pizza_top`, item, slice), row in
+    `texture_sources/sources.csv`. Its recipe JSON carries a `fruitsdelight` mod-loaded condition (pineapple slice).
+    Slice values = the meat pizza slice's (5 / 0.75, Nourishment 30 s): cheese pizza slice + 1 for the toppings.
+  - C3: the orphan block's assets (blockstate, models, texture, three lang keys) went with the registration.

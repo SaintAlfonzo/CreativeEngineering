@@ -29,7 +29,7 @@ final class DisplayFoods {
         DisplayItems.food(DisplayBlocks.food("baked_cod_stew"));
         DisplayItems.food(DisplayBlocks.food("noodle_soup"));
         DisplayItems.food(DisplayBlocks.food("bone_broth"));
-        DisplayItems.food(DisplayBlocks.food("onion_soup"));
+        // Pack: no onion_soup block (Farmer's Delight 1.2.4 has no onion soup; TODO dishes/meals #54)
         DisplayItems.food(DisplayBlocks.food("fruit_salad"));
         DisplayItems.food(DisplayBlocks.food("mixed_salad"));
         DisplayItems.food(DisplayBlocks.food("nether_salad"));

@@ -260,3 +260,70 @@ reject verb=\S+ .*done=0
 @pass Cucumber Dough and its block read Veggie Dough and Veggie Dough Block; the Lasagna Pan reads Lasagna; Horror Lasagna reads Crimson Lasagna, placed: Placed Crimson Lasagna
 @fails `assets/creativedelight/kubejs/creativedelight/names.js`; `kubejs/assets/displaydelight/lang/en_us.json`
 @draft names need a client lang read; the first client runner writes the steps
+
+@@section 4
+@@title Food batch 2026-11-19 wave C: pizza slices, Tropical Pizza, Display Delight onion soup ([plan_food_batch_1119.md](../plan_food_batch_1119.md) wave C, TODO `dishes/meals #5`, `#27`, `#54`)
+@@date 2026-11-19
+@@jars creativecommon creativedelight creativebrewing
+@@sources feature_writeup/plan_food_batch_1119.md kubejs/data/creativedelight/kubejs/creativedelight/pizza.js development/creativeDelight/members/vintage/src/main/java/net/ribs/vintagedelight/block/custom/PizzaBlock.java development/creativeDelight/members/veggies/src/main/java/net/mehdinoui/veggiesdelight/common/block/PizzaBlock.java development/creativeBrewing/members/brewin/src/main/java/umpaz/brewinandchewin/common/block/PizzaBlock.java development/creativeDelight/members/display/src/main/java/com/jkvin114/displaydelight/init/DisplayFoods.java
+@@text
+@@text Needs the Creative Common, Creative Delight and Creative Brewing jars of 2026-11-19 (wave C) installed. Group A.
+@@text
+@@table
+## SQ-FF-11 | pizza recipes: knife cut 8, ring of 8 recrafts, no 2x2
+@group A
+@commands rdetail of `_pizza_slices` and `_pizza_from_slices`; recipes probe of the mods' cut and 2x2 ids
+@pass for cheese, meat, tropical, vegan and Supreme (`brewinandchewin:pizza`) pizza: one knife cut `creativedelight:farmersdelightcutting/<name>_slices` giving 8 slices; one shaped `creativedelight:shaped/<name>_from_slices` (ring of 8, centre empty); no `vintagedelight:*_pizza_from_slices`, `veggiesdelight:vegan_pizza_from_slices`, `brewinandchewin:pizza_from_slices` or the mods' 4-slice cuts
+@fails `creativedelight/pizza.js`
+@absent vintagedelight:cheese_pizza_from_slices vintagedelight:meat_pizza_from_slices veggiesdelight:vegan_pizza_from_slices brewinandchewin:pizza_from_slices (removed recipe ids: negative test)
+> cdevtest rdetail pizza_slices
+> cdevtest rdetail pizza_from_slices
+> cdevtest recipes pizza_from_slices
+> cdevtest recipes cutting/pizza
+waitlog verb=recipes text=cutting/pizza n= 30
+count verb=rdetail id=creativedelight:farmersdelightcutting/\S+pizza_slices .*result=\S+pizza_slice\*8 == 5
+count verb=rdetail id=creativedelight:shaped/\S*pizza_from_slices\b == 5
+reject verb=recipes text=pizza_from_slices .*(vintagedelight|veggiesdelight|brewinandchewin):\S*pizza_from_slices
+reject verb=recipes text=cutting/pizza .*brewinandchewin:cutting/pizza\b
+reject verb=\S+ .*done=0
+
+## SQ-FF-12 | a placed pizza gives 2 slices a bite, by hand or knife; break loot 8/6/4/2
+@group A
+@commands place `vintagedelight:cheese_pizza`, `veggiesdelight:vegan_pizza`, `brewinandchewin:pizza`; a bot uses each once empty-handed and once with a knife; break a fresh and a twice-used cheese pizza and vegan pizza (vegan with a knife), and a Supreme with a knife
+@pass each use takes one bite (Supreme: one serving) and drops or hands 2 slice items; the bot's food level does not change on an empty-hand use; the 4th bite removes the block; break loot: fresh cheese 8, after 2 bites 4; vegan with a knife 8 / 4; Supreme with a knife 8; Apple Pie and the Food Dictionary record nothing for a hand use (`creativedelight:serves_slices` block tag)
+@fails Vintage / Veggies `PizzaBlock.cutSlice` / `consumeBite` (CD member Java); Brewin' `PizzaBlock.takeServing` and `BnCSlicingModifier` (Creative Brewing); loot tables `vintagedelight/loot_tables/blocks/*_pizza.json`, `veggiesdelight/loot_tables/blocks/vegan_pizza.json`; `PlacedFoodSol.afterUse`
+@draft needs bot use / break steps with a knife in hand; the first runner writes them with the /pbot verbs
+
+## SQ-FF-13 | Tropical Pizza: registered, recipe, slice values
+@group A
+@commands `cdevtest makes vintagedelight:tropical_pizza`; `cdevtest food vintagedelight:tropical_pizza_slice`
+@pass shaped `vintagedelight:tropical_pizza`: pineapple slice, cooked bacon, pineapple slice / 3 cheese / dough, tomato sauce, dough; slice nutrition 5 modifier 0.75, Nourishment
+@fails Vintage member `ModBlocks` / `ModItems` / `ModFoods` TROPICAL_PIZZA; `data/vintagedelight/recipes/tropical_pizza.json` (Fruits Delight condition)
+@absent vintagedelight:tropical_pizza vintagedelight:tropical_pizza_slice (new items, not in the dumps yet)
+> cdevtest makes vintagedelight:tropical_pizza
+> cdevtest rdetail vintagedelight:tropical_pizza
+> cdevtest food vintagedelight:tropical_pizza_slice
+waitlog verb=food item=vintagedelight:tropical_pizza_slice\S* 30
+expect verb=makes id=vintagedelight:tropical_pizza result=vintagedelight:tropical_pizza\*1
+expect verb=food item=vintagedelight:tropical_pizza_slice\S* food=true nutrition=5 modifier=0\.75
+reject verb=\S+ .*done=0
+
+## SQ-FF-14 | no Display Delight onion soup block; creamy onion soup still places
+@group A
+@commands registry probe for `displaydelight:onion_soup`; tag probe `displaydelight:displayable`
+@pass `displaydelight:onion_soup` not registered; `displaydelight:bnc_creamy_onion_soup` registered and `brewinandchewin:creamy_onion_soup` in `displaydelight:displayable`
+@fails Display member `DisplayFoods.java`, `tools/display_blocks.json`, `displayable.json`
+@absent displaydelight:onion_soup (removed block: negative test)
+> cdevtest reg block displaydelight:onion_soup
+> cdevtest reg block displaydelight:bnc_creamy_onion_soup
+> cdevtest tag item displaydelight:displayable
+waitlog verb=tag kind=item tag=displaydelight:displayable n= 30
+expect verb=tag kind=item tag=displaydelight:displayable n=\d+ ids=.*brewinandchewin:creamy_onion_soup
+look the reg lines: onion_soup absent, bnc_creamy_onion_soup present
+
+## CQ-FF-03 | Tropical Pizza looks and tooltip
+@group client
+@commands give `vintagedelight:tropical_pizza` and its slice; hover; place the pizza and take 2 bites
+@pass name Tropical Pizza / Tropical Pizza Slice, italic tooltip "Misnomer, invented in Canada" on both; the placed block and the bitten states show the cheese pizza art
+@fails Vintage member assets `tropical_pizza*`; `assets/creativedelight/kubejs/vintagedelight/client.js`
+@draft client look; the first client runner writes the steps

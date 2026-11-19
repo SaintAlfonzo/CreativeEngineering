@@ -5,7 +5,7 @@
 // cheese slice; Scarlet cheese is not in it). Slice & Dice's mixer copies follow the pot recipes. The pack's own grid
 // routes are changed where they are made (veggiesdelight/cooking.js, fungidelight/cooking.js, moredelight/recipes.js,
 // farmersdelight/recipes.js); the outputs' values went up for the dearer input (Creative Delight startup
-// creativedelight/cheese_values.js). Mashed potatoes keep milk (owner, 2026-11-19).
+// creativedelight/cheese_values.js). Mashed potatoes keep milk (owner ruling R13).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 	var i = global.item

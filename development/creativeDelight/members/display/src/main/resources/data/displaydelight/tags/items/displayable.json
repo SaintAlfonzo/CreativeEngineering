@@ -130,10 +130,6 @@
       "required": false
     },
     {
-      "id": "farmersdelight:onion_soup",
-      "required": false
-    },
-    {
       "id": "minecraft:mushroom_stew",
       "required": false
     },
