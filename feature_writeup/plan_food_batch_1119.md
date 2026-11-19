@@ -61,13 +61,17 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 | R15 | `dishes/ingredients #40` seed values | open | 0.5 hunger = 1 nutrition point. Sunflower seeds and corn kernels: 1 nutrition, 0.5 saturation points (modifier 0.25). Pumpkin, oat, mixed seeds: 1 nutrition, 0 saturation. Usable in recipes like trail mix that need a seed for an edible food (an edible-seed tag) | 2026-11-19 | chat + AskUserQuestion 2026-11-19 |
 | R16 | `food/types-and-tuning #6` eggs | premise | `#forge:eggs` already holds turtle and parrot eggs. Switch Create echo cake base and Create Factory cake paste to any egg. Fried egg stays vanilla egg (turtle has its own); dread nog keeps the turtle egg | 2026-11-19 | AskUserQuestion 2026-11-19 |
 | R17 | `dishes/ingredients #33` "veggie list for veggie pasta is good, ensure green bell pepper slice is usable" | clear | Keep `#creativedelight:veggie_noodle_veg`, add `rusticdelight:bell_pepper_slice_green`; rename Cucumber Dough (and its block) to Veggie Dough. Recolor texture not in this batch | 2026-11-19 | chat 2026-11-19 |
+| R18 | `dishes/meals #5` "eating a pizza from the block gives 2 slices as items" | clear | Right-click on a placed pizza without a knife takes a bite off and gives 2 slice items (no direct eating), for all 5 pizzas | 2026-11-19 | chat 2026-11-19 |
+| R19 | `dishes/ingredients #10` "any raw fish and any standard seed can be processed into oils" | clear | Any raw fish -> fish oil; any standard seed (`#forge:seeds`) -> seed oil (cooking oil) | 2026-11-19 | chat 2026-11-19 |
 
 **Agent readings, unconfirmed** (asked at the start of the wave that builds them):
 
-- A1 (R2): eating a pizza bite straight from the block gives the food of 2 slices (keeps 8 slices' worth per pizza).
+- A1 (R2): ruled 2026-11-19 (owner, chat): using the placed pizza (no knife) gives 2 slices as items instead of
+  eating a bite; see R18.
 - A2 (R3): Grilled's +2 saturation is replaced by its flavor-slot bonus (it does not keep both).
 - A3 (R13): "compensate" = re-derive the output's nutrition and saturation from the new ingredients under the food tuning rules (`food/types-and-tuning #8` style), raising the value.
-- A4 (R12): blubber knife-cut yield (2 animal fat), the seeds pressed into cooking oil (the edible seeds of R15 plus `#forge:seeds/sunflower`) and the fish cooked into fish oil are drafted in wave D and asked before build.
+- A4 (R12): blubber knife-cut yield (2 animal fat) is drafted in wave D and asked before build. Seeds and fish: ruled
+  2026-11-19, see R19.
 - A5 (R1): Tropical Pizza id namespace follows [ids-follow-owning-mod](agent_notes/README.md) for pack additions in the Vintage member.
 
 ## 2. Premise corrections found 2026-11-19
@@ -116,7 +120,7 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 
 | Order | Row | Build |
 |---|---|---|
-| C1 | `dishes/meals #5` | Every pizza block's cut gives 2 slices (Vintage and Veggies `PizzaBlock`, Brewin' `PizzaBlock` in the Brewing member: Creative Brewing rebuild too); loot tables 8/6/4/2 by bites; cutting recipes 8; 8-slice ring recraft per pizza, 2x2 removed; A1 for eating |
+| C1 | `dishes/meals #5` | Every pizza block's cut gives 2 slices (Vintage and Veggies `PizzaBlock`, Brewin' `PizzaBlock` in the Brewing member: Creative Brewing rebuild too); loot tables 8/6/4/2 by bites; cutting recipes 8; 8-slice ring recraft per pizza, 2x2 removed; using the block without a knife gives 2 slice items (R18) |
 | C2 | `dishes/meals #27` | Tropical Pizza block, item and slice in the Vintage member (copy of the cheese pizza registration and models; textures copied from `cheese_pizza_*`, rows in `sources.csv`); recipe per R1 in the Vintage mod-JSON style; name, tooltip "Misnomer, invented in Canada"; 8 slices per C1; item_dict keys; food values from the cheese pizza plus toppings |
 | C3 | `dishes/meals #54` | Unregister `displaydelight:onion_soup` (`DisplayFoods.java:32`, `display_blocks.json:21`, `displayable.json:133`); check creamy onion soup places |
 
@@ -125,7 +129,8 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 1. Blubber item (texture copy of `delightful:animal_fat`), dropped by the cachalot whale (global loot modifier; its loot table is empty), knife cut into animal fat, counts as fat in soap (`creativecompat/kubejs/other/misc_mods.js:20-24`).
 2. Whale oil item and fluid (texture copy of `rusticdelight:cooking_oil`): from blubber by Create mixing and a cauldron route (new NCH helper; Creative Common rebuild); whale oil fluid joins `#forge:lubricant`; soap.
 3. Animal fat cooks into cooking oil; cooking oil takes over `delightful:animal_oil_bottle`'s crafts.
-4. Seed oil: seeds pressed into cooking oil; fish oil (`alexsmobs:fish_oil`) counts as cooking oil, more fish cook down to it (manual craft stays, less efficient).
+4. Seed oil: any standard seed (`#forge:seeds`) pressed into cooking oil; fish oil (`alexsmobs:fish_oil`) counts as
+   cooking oil, and any raw fish cooks down to it (manual craft stays, less efficient) (R19).
 5. Config toggles in `creativedelight-common.toml` for each part (the "all configurable" ruling).
 
 ### Wave E: Flavor (`food/seasoning #3` and its new rows; CD Java, rebuild, restart)
