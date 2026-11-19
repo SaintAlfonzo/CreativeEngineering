@@ -314,3 +314,21 @@ look Stage: 0b and EmptiedAt: -1L
 @sources feature_writeup/plan_corpses.md
 @reviewed 2026-11-19
 @draft no batch holds this row yet; needs a client and a real death
+
+## CQ-CMP-21 | Corpse player model wears the corpse's curios and an Elytra Slot elytra (look-check with CQ-CMP-18)
+@group client
+@commands Survival client, same kit as CQ-CMP-18 plus an elytra in the Elytra Slot back slot and one curio with its render toggled off (the eye button on its Curios slot); die; look at the corpse from the front and the back, take a screenshot (F2); then take the elytra and one visible curio out of the corpse and look again after a second; done together with the CQ-CMP-18 screenshot look-check
+@pass LOOK (screenshot to the owner with CQ-CMP-18): the corpse's player model shows the curios that draw on the player (belt, necklace, back items) and the elytra on its back over the chestplate, as the player looked before death; the render-toggled curio does not show; after the items are taken (within a second) they no longer show; the living player's own curios are unaffected
+@fails no curios on the model: the dummy player's curios handler was not filled (no `Curios` list in the synced section tag, or the `RenderPlayerEvent.Pre` listener did not reach `CorpseCuriosClient.fill`); the elytra missing while curios show: Elytra Slot's layer reads another source; the toggled curio shows: the `Hidden` flag was not recorded at death; taken items still show: the fill is not redone on a resync
+@sources feature_writeup/plan_corpses.md
+@reviewed 2026-11-19
+@draft no batch holds this row yet; needs a client and a real death
+
+## CQ-CMP-22 | Corpse skeleton wears its curios, an Elytra Slot elytra and its cosmetic armor (look-check with CQ-CMP-18)
+@group client
+@commands Survival client, the CQ-CMP-21 kit plus a cosmetic gold helmet over an iron helmet; die; set `[corpses] skeletonTime = 200` in `config/creativecompat-common.toml` before the death (or wait 7 days) so the corpse turns skeleton; look at it, screenshot (F2); take the gold cosmetic helmet and the elytra out, look again; repeat once in the Nether so the corpse turns wither skeleton
+@pass LOOK (screenshot to the owner with CQ-CMP-18): the skeleton wears the gold helmet (cosmetic over real), the visible curios and the elytra on its back; the render-toggled curio does not show; after taking, the iron helmet shows and the elytra is gone within a second; the wither skeleton shows the same; no warning `curio renderer for ... failed on a corpse skeleton` in `logs/latest.log` (if one is there, name the item: its renderer is player-only and is skipped)
+@fails nothing on the skeleton: `CorpseSkeletonLayer` not added (the AddLayers listener on the mod bus did not run) or the corpse pointer is not set while the skeleton draws; the real helmet shows: `withCosmetics` not applied; the wither skeleton bare while the plain one is dressed: the layer was not added to the wither look
+@sources feature_writeup/plan_corpses.md
+@reviewed 2026-11-19
+@draft no batch holds this row yet; needs a client and a real death

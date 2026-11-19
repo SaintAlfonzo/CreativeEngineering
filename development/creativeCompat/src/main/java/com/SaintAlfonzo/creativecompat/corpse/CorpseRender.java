@@ -33,7 +33,9 @@ import java.util.WeakHashMap;
  * <li>A withered corpse ({@link CorpseState#FLAG_WITHERED}, Nether) draws the skeleton with the vanilla wither skeleton
  * texture at normal skeleton size (ruling 20), read from its vanilla path, so resource packs apply.</li>
  * <li>While the dummy player is drawn, {@link #renderingFor} names its corpse, so {@link CorpseSectionsClient} can
- * dress it in the corpse's own cosmetic armor (plan_corpses.md 3.6 item 6).</li>
+ * dress it in the corpse's own cosmetic armor (plan_corpses.md 3.6 item 6) and fill its curios (round 2).</li>
+ * <li>The skeleton wears the corpse's cosmetic armor over its real armor, and {@link CorpseSkeletonLayer} draws its
+ * curios and an elytra from a curio slot (plan_corpses.md 3.6 round 2).</li>
  * </ul>
  */
 public final class CorpseRender {
@@ -42,7 +44,7 @@ public final class CorpseRender {
 	private static final Map<CorpseEntity, DummyPlayer> PLAYERS = new WeakHashMap<>();
 	private static final Map<CorpseEntity, DummySkeleton> SKELETONS = new WeakHashMap<>();
 	private static SkeletonRenderer witherLook;
-	/** The corpse whose dummy player is being drawn (read by CorpseSectionsClient's render event listeners). */
+	/** The corpse whose dummy player or skeleton is being drawn (read by CorpseSectionsClient and CorpseSkeletonLayer). */
 	private static CorpseEntity rendering;
 
 	private CorpseRender() {}
@@ -55,6 +57,7 @@ public final class CorpseRender {
 				return WITHER_TEXTURE;
 			}
 		};
+		witherLook.addLayer(new CorpseSkeletonLayer<>(witherLook, context.getModelSet()));
 	}
 
 	public static void render(CorpseEntity corpse, float entityYaw, PoseStack pose, MultiBufferSource buffer, int light) {
@@ -71,12 +74,17 @@ public final class CorpseRender {
 		NonNullList<ItemStack> equipment = corpse.getEquipment();
 		if (corpse.isSkeleton()) {
 			DummySkeleton skeleton = SKELETONS.computeIfAbsent(corpse, c -> new DummySkeleton(c.level, c.getEquipment()));
-			dress(skeleton, equipment);
+			dress(skeleton, CorpseSectionsClient.withCosmetics(corpse, equipment));
 			boolean withered = corpse instanceof CorpseState s && s.creativecompat$has(CorpseState.FLAG_WITHERED);
-			if (withered && witherLook != null) {
-				witherLook.render(skeleton, entityYaw, 1.0F, pose, buffer, light);
-			} else {
-				mc.getEntityRenderDispatcher().getRenderer(skeleton).render(skeleton, entityYaw, 1.0F, pose, buffer, light);
+			rendering = corpse;
+			try {
+				if (withered && witherLook != null) {
+					witherLook.render(skeleton, entityYaw, 1.0F, pose, buffer, light);
+				} else {
+					mc.getEntityRenderDispatcher().getRenderer(skeleton).render(skeleton, entityYaw, 1.0F, pose, buffer, light);
+				}
+			} finally {
+				rendering = null;
 			}
 		} else {
 			DummyPlayer player = PLAYERS.computeIfAbsent(corpse, c -> new DummyPlayer((ClientLevel) c.level,
@@ -96,6 +104,12 @@ public final class CorpseRender {
 	public static CorpseEntity renderingFor(DummyPlayer dummy) {
 		CorpseEntity corpse = rendering;
 		return corpse != null && PLAYERS.get(corpse) == dummy ? corpse : null;
+	}
+
+	/** The corpse being drawn when {@code dummy} is its skeleton model, else null. */
+	public static CorpseEntity renderingFor(DummySkeleton dummy) {
+		CorpseEntity corpse = rendering;
+		return corpse != null && SKELETONS.get(corpse) == dummy ? corpse : null;
 	}
 
 	private static void dress(LivingEntity dummy, NonNullList<ItemStack> equipment) {

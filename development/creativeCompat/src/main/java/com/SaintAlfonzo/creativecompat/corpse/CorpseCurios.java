@@ -24,13 +24,13 @@ import java.util.WeakHashMap;
  * player's curios at NORMAL priority of {@link LivingDropsEvent} and the Corpse mod collects every unmatched drop into
  * its Additional Items at LOWEST, so the slot is lost. A HIGHEST listener snapshots each curio stack with its slot id,
  * index and cosmetic flag; a LOW listener tags the matching drops {@link CorpseSections#CURIO} {Slot, Index,
- * Cosmetic}. Transfer Items puts each tagged curio back into that exact slot when it is empty (before the Corpse mod
+ * Cosmetic, Hidden (render toggled off)}. Transfer Items puts each tagged curio back into that exact slot when it is empty (before the Corpse mod
  * and Corpse Curios Compat run; mixin/CorpseTransferMessageMixin); a curio whose slot is taken is left to them.
  * Only this class touches the Curios API; callers check {@link CorpseSections#CURIOS} first, so the class is never
  * loaded without Curios.
  */
 public final class CorpseCurios {
-	private record Entry(String slot, int index, boolean cosmetic, ItemStack stack) {}
+	private record Entry(String slot, int index, boolean cosmetic, boolean hidden, ItemStack stack) {}
 
 	private static final Map<LivingEntity, List<Entry>> SNAPSHOTS = new WeakHashMap<>();
 
@@ -46,17 +46,19 @@ public final class CorpseCurios {
 		List<Entry> out = new ArrayList<>();
 		CuriosApi.getCuriosHelper().getCuriosHandler(player).ifPresent(handler -> {
 			for (Map.Entry<String, ICurioStacksHandler> e : handler.getCurios().entrySet()) {
-				add(out, e.getKey(), false, e.getValue().getStacks());
-				add(out, e.getKey(), true, e.getValue().getCosmeticStacks());
+				add(out, e.getKey(), false, e.getValue().getStacks(), e.getValue());
+				add(out, e.getKey(), true, e.getValue().getCosmeticStacks(), e.getValue());
 			}
 		});
 		if (!out.isEmpty()) SNAPSHOTS.put(player, out);
 	}
 
-	private static void add(List<Entry> out, String slot, boolean cosmetic, IDynamicStackHandler stacks) {
+	private static void add(List<Entry> out, String slot, boolean cosmetic, IDynamicStackHandler stacks, ICurioStacksHandler type) {
 		for (int i = 0; i < stacks.getSlots(); i++) {
 			ItemStack s = stacks.getStackInSlot(i);
-			if (!s.isEmpty()) out.add(new Entry(slot, i, cosmetic, s.copy()));
+			// the player's render toggle for this slot index (Curios' eye button), so the corpse model hides it too
+			boolean hidden = i < type.getRenders().size() && !type.getRenders().get(i);
+			if (!s.isEmpty()) out.add(new Entry(slot, i, cosmetic, hidden, s.copy()));
 		}
 	}
 
@@ -74,6 +76,7 @@ public final class CorpseCurios {
 				t.putString("Slot", e.slot());
 				t.putInt("Index", e.index());
 				t.putBoolean("Cosmetic", e.cosmetic());
+				if (e.hidden()) t.putBoolean("Hidden", true);
 				d.getOrCreateTag().put(CorpseSections.CURIO, t);
 				break;
 			}

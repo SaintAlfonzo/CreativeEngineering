@@ -189,7 +189,7 @@ public class CreativeCompat {
 		// client's slot frames, tooltips and the corpse model's own cosmetic armor.
 		if (ModList.get().isLoaded("corpse")) {
 			if (com.SaintAlfonzo.creativecompat.corpse.CorpseSections.CURIOS) com.SaintAlfonzo.creativecompat.corpse.CorpseCurios.register();
-			if (FMLEnvironment.dist == Dist.CLIENT) com.SaintAlfonzo.creativecompat.corpse.CorpseSectionsClient.register();
+			if (FMLEnvironment.dist == Dist.CLIENT) com.SaintAlfonzo.creativecompat.corpse.CorpseSectionsClient.register(modEventBus);
 		}
 		// Beautify botanist workbench as a flower pot (compat/BotanistPot, mixin/BotanistWorkbenchPotMixin; flower_pots.md).
 		if (ModList.get().isLoaded("beautify")) {
