@@ -66,7 +66,7 @@ Design doc: [raspberry_pie.md](raspberry_pie.md) (sections 5, 6, 6.3, 12.4, 12.5
 | 4 | x more unique food(s) to activate diet | clear | Both strings become "%s more unique food(s) to activate diet" (singular "food" when 1; separate keys). | 2026-11-18 | agent default, unconfirmed |
 | 5, 6 | locked unlocks alternate lock / effect icon; unlocked = effect icon, gray, colored outline | clear | Locked: the lock item and the effect sprite alternate every 1 s (same clock as the key's slot cycle), gray frame. Unlocked: effect sprite grayed, frame in the unlock color, whatever the current diversity. Both pages. | 2026-11-18 | agent default, unconfirmed |
 | 8 | scroll through book pages | clear | Mouse wheel flips one page per notch in the Diet Log (and the Food Dictionary in phase 2). | 2026-11-18 | agent default, unconfirmed |
-| 9 | shrink change and drop | clear | Buttons 18 -> 14 px tall, label at 0.8 scale. | 2026-11-18 | agent default, unconfirmed |
+| 9 | shrink change and drop | clear | Buttons keep their size (18 px); only the label text is slightly smaller (about 0.85 scale). History: agent default 2026-11-18 was buttons 18 -> 14 px and label 0.8, replaced by the owner the same day. | 2026-11-18 | chat 2026-11-18 |
 | 13 | how many foods will drop out ... hover tooltip | clear | Hover on Change: "N foods age out" (respecFoods capped at the window); hover on Drop: the count from the server's drop preview. | 2026-11-18 | agent default, unconfirmed |
 | 17 | single button 3 state toggle | premise | Unlock order is stored from the first eat after the update; older unlocks have no order and sort after the ordered ones, in the uneaten order. "Latest eaten" uses Apple Pie's meal memory; foods past it sort last, in the uneaten order. The toggle state is a client config value. | 2026-11-18 | agent default, unconfirmed |
 
@@ -85,7 +85,7 @@ Order: rules first (server, testable headless), then the Diet Log layout, then i
 | 1.7 | 7 | Even-spaced ladder bar, window of 5 (last achieved + 4, or first 5); `progressAhead` removed. | `food-tuning #8` |
 | 1.8 | 5, 6, 14 | Icons: locked unlock alternates lock / effect; unlocked = grayed effect sprite, colored frame; slot rungs = metal frame item in the colored frame, grayed when inactive, hover "Effect Slot N" (no effect named). Key unchanged except the slot entry stops cycling effects. | `food-tuning #9` |
 | 1.9 | 4 | Gate strings. | `food-tuning #10` |
-| 1.10 | 9, 13 | Effect screen: smaller Change / Drop; hover tooltips with the aged-out food count. | `food-tuning #11` |
+| 1.10 | 9, 13 | Effect screen: smaller Change / Drop label text (buttons unchanged); hover tooltips with the aged-out food count. | `food-tuning #11` |
 
 Look-check (intake step 5): after 1.4, 1.5, 1.7 and 1.8, a client capture of the Diet Ladder, Milestones and meals
 pages goes to the owner before test rows are written.
@@ -106,5 +106,5 @@ Queue rows are written after the look-check (prefix `RPI-` for phase 1, `FDI-` f
 
 ## 6. Waiting on the owner
 
-- Unconfirmed agent defaults in section 2 (items 1, 3, 4, 5/6, 8, 9, 13, 17).
+- Unconfirmed agent defaults in section 2 (items 1, 3, 4, 5/6, 8, 13, 17).
 - `extraWidth` value: picked at the look-check.
