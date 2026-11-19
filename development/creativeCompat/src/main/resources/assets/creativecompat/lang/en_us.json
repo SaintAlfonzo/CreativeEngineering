@@ -127,5 +127,8 @@
   "creativecommon.wthit.yes": "Yes",
   "creativecommon.wthit.no": "No",
   "block.creativecompat.bamboo_leaves_full": "Bamboo Leaves",
-  "entity.creativecompat.falling_layer": "Falling Layer"
+  "entity.creativecompat.falling_layer": "Falling Layer",
+  "tooltip.creativecompat.corpse.curio": "Curio: %s",
+  "tooltip.creativecompat.corpse.curio_cosmetic": "Curio: %s (cosmetic)",
+  "tooltip.creativecompat.corpse.cosmetic": "Cosmetic armor"
 }

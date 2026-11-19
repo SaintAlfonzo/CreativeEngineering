@@ -1447,6 +1447,8 @@ public final class CompatConfig {
 			enabled = b.comment("Use these rules instead of the Corpse mod's own skeleton_time and despawn time.").define("enabled", true);
 			skeletonTime = b.comment("A corpse that still holds items turns into a skeleton this long after death (168000 = 7 days).")
 					.defineInRange("skeletonTime", 168000, 0, Integer.MAX_VALUE);
+		public final ForgeConfigSpec.BooleanValue sectionedScreen;
+		public final ForgeConfigSpec.IntValue curioCap;
 			emptySkeletonTime = b.comment("An emptied corpse turns into a skeleton this long after it became empty (600 = 30 s).")
 					.defineInRange("emptySkeletonTime", 600, 0, Integer.MAX_VALUE);
 			emptyDespawnTime = b.comment("An emptied corpse is removed this long after it became empty, in every dimension (6000 = 5 min).",
@@ -1477,6 +1479,10 @@ public final class CompatConfig {
 			return SPEC.isLoaded() && CORPSES.enabled.get();
 		}
 	}
+			sectionedScreen = b.comment("The corpse screen shows cosmetic armor in 4 slots on its top row and curios in a panel left of the",
+					"window, each item where it was worn, instead of on the Additional Items pages.").define("sectionedScreen", true);
+			curioCap = b.comment("Curio slots on the corpse screen (columns of 12). Curios past this count stay on the Additional Items pages.",
+					"Synced to clients through the corpse, so only the server's value counts.").defineInRange("curioCap", 24, 0, 48);
 
 	/** Developer switches; all off by default. */
 	public static final class Debug {

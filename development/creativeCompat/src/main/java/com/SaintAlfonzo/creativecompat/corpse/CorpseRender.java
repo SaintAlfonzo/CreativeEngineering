@@ -32,6 +32,8 @@ import java.util.WeakHashMap;
  * once, so armor taken out kept showing; ruling 4).</li>
  * <li>A withered corpse ({@link CorpseState#FLAG_WITHERED}, Nether) draws the skeleton with the vanilla wither skeleton
  * texture at normal skeleton size (ruling 20), read from its vanilla path, so resource packs apply.</li>
+ * <li>While the dummy player is drawn, {@link #renderingFor} names its corpse, so {@link CorpseSectionsClient} can
+ * dress it in the corpse's own cosmetic armor (plan_corpses.md 3.6 item 6).</li>
  * </ul>
  */
 public final class CorpseRender {
@@ -40,6 +42,8 @@ public final class CorpseRender {
 	private static final Map<CorpseEntity, DummyPlayer> PLAYERS = new WeakHashMap<>();
 	private static final Map<CorpseEntity, DummySkeleton> SKELETONS = new WeakHashMap<>();
 	private static SkeletonRenderer witherLook;
+	/** The corpse whose dummy player is being drawn (read by CorpseSectionsClient's render event listeners). */
+	private static CorpseEntity rendering;
 
 	private CorpseRender() {}
 
@@ -78,9 +82,20 @@ public final class CorpseRender {
 			DummyPlayer player = PLAYERS.computeIfAbsent(corpse, c -> new DummyPlayer((ClientLevel) c.level,
 					new GameProfile(c.getCorpseUUID().orElse(new UUID(0L, 0L)), c.getCorpseName()), c.getEquipment(), c.getCorpseModel()));
 			dress(player, equipment);
-			mc.getEntityRenderDispatcher().getRenderer(player).render(player, 0.0F, 1.0F, pose, buffer, light);
+			rendering = corpse;
+			try {
+				mc.getEntityRenderDispatcher().getRenderer(player).render(player, 0.0F, 1.0F, pose, buffer, light);
+			} finally {
+				rendering = null;
+			}
 		}
 		pose.popPose();
+	}
+
+	/** The corpse being drawn when {@code dummy} is its player model, else null. */
+	public static CorpseEntity renderingFor(DummyPlayer dummy) {
+		CorpseEntity corpse = rendering;
+		return corpse != null && PLAYERS.get(corpse) == dummy ? corpse : null;
 	}
 
 	private static void dress(LivingEntity dummy, NonNullList<ItemStack> equipment) {

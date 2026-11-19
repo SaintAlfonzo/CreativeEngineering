@@ -153,8 +153,8 @@ Design holes the questions close are listed with each item; rulings go in sectio
 
 Facts (read from the jars 2026-11-18; Corpse 1.0.17, Curios 5.1.6.4, Cosmetic Armor Reworked v1a, the two compat jars):
 - `CorpseInventoryContainer` (176x245, `corpse:textures/gui/inventory_corpse.png`): armor 4 `LockedSlot`s at
-  x 8 + i x 18, y 18 (helmet leftmost), offhand (152, 18), main rows y 40 / 58 / 76, hotbar y 98, player inventory
-  offset 79; `getInventorySize()` 41. The top row x 80 to 134 is free: exactly 4 slots.
+  x 8 + i x 18, y 18 (helmet leftmost), offhand (98, 18; corrected in the round 1 build notes), main rows y 40 / 58 / 76, hotbar y 98, player inventory
+  offset 79; `getInventorySize()` 41. The top row x 80, 116, 134 and 152 is free: 4 slots, contiguous once the offhand moves.
 - The client corpse holds an **empty** Death: slot contents arrive only by menu sync; synced entity data is ID, NAME,
   SKELETON, MODEL, EQUIPMENT. So the client cannot build slots from the Death; it must know the slot count up front.
 - Curios reach the corpse as unmatched drops (`CuriosEventHandler.playerDrops` adds them before the Corpse mod's
@@ -193,6 +193,29 @@ Design:
 Round 2 (later): curios on the DummyPlayer by filling its client curios handler from the synced list; a layer on the
 skeleton calling `ICurioRenderer.render`; cosmetic armor on the skeleton. Elytra Slot uses the `back` curio, covered by
 the same fill.
+
+Build notes, round 1 (2026-11-19; [creative_compat.md](creative_compat.md) Corpse screen sections; SQ-CMP-17, CQ-CMP-18
+to -20). Choices the design left open, for the owner to confirm:
+- **Offhand moved.** The jar has the offhand slot at (98, 18), not (152, 18): the free top-row spots were 80, 116, 134
+  and 152. To keep ruling 31 ("between the real armor and the offhand"), the offhand slot moves to x 152 and the
+  cosmetic slots take 80 to 134; the 4 cosmetic frames and the offhand frame are always drawn.
+- **Cap is synced, not read on each side.** `curioCap` reaches the client in a second synced corpse value (`Cap`, with
+  the 4 cosmetic stacks of item 6), so a client config cannot disagree with the server's slot count. History corpses
+  (never ticked) use the default 24 on both sides. `sectionedScreen = false` turns the sections and the Additional Items
+  filter off. Curios past the cap stay on the Additional Items pages.
+- **Cosmetic slots always active, curio slots once filled.** Empty cosmetic slots show the armor silhouettes; the
+  curio panel grows with the curios the menu sync delivers and keeps a slot after its item is taken.
+- **Item 6 listener order.** A HIGHEST listener cannot cancel Cosmetic Armor Reworked's HIGH swap (canceling the
+  event would hide the corpse), so a NORMAL listener writes the corpse's own cosmetic stacks over it and a Post
+  listener puts the real armor back before Cosmetic Armor's own LOW restore. A skin-hidden cosmetic slot (`Skin`)
+  shows no armor, as Cosmetic Armor does on the player.
+- **Curio return order.** The return to the exact slot runs in the Corpse mod's transfer packet, before
+  `transferItems`, so it precedes the two compat jars' HEAD hooks whatever their mixin order. Tags are stripped from the
+  player's inventory and curio slots after every Transfer Items, so a stack placed by the compat jars or the Corpse mod
+  never keeps them.
+- **Labels are tooltips.** A section stack's tooltip says "Curio: <slot type>" (with "(cosmetic)" for Curios' cosmetic
+  slots) or "Cosmetic armor"; the screen has no room for text labels above the top row. To revisit at the look-check.
+- **Curio cosmetic slots** (Curios' own cosmetic column) are recorded and returned too (`Cosmetic` in the tag).
 
 ## 4. Owner rulings
 
@@ -318,7 +341,8 @@ the rulings did not fix:
 
 Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for ancient corpses. Queue: SQ-CMP-10 to
 -13, CQ-CMP-14 (decay); SQ-LOOT-07 to -09, CQ-LOOT-10 (ancient corpses, remains); second phase SQ-LOOT-11, CQ-LOOT-12
-(held items), SQ-CMP-16 (sinking).
+(held items), SQ-CMP-16 (sinking); `corpses #4` round 1 SQ-CMP-17, CQ-CMP-18 (screenshot look-check), CQ-CMP-19,
+CQ-CMP-20.
 
 ## History
 
@@ -328,4 +352,5 @@ Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for 
 - 2026-11-18: built `corpses #1`, `#2`, `#5`, `#6`, `#7`; build notes in 6b.
 - 2026-11-18: second pass notes (3.5, items 25 to 34); rulings 24 to 27; rows `corpses #8`, `#9`; `#3` pinned on `loot/tables #1`.
 - 2026-11-18: second phase questions: ruling 25 offhand made independent; rulings 28 to 30.
+- 2026-11-19: built `corpses #4` round 1 (3.6 items 1 to 6); build notes under 3.6.
 - 2026-11-18: built `corpses #8`, `#9`; `#4` round 1 designed (3.6), rulings 31 to 34.

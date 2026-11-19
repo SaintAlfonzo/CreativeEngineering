@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativecompat.mixin;
 
 import com.SaintAlfonzo.creativecompat.CompatConfig;
 import com.SaintAlfonzo.creativecompat.corpse.CorpseDecay;
+import com.SaintAlfonzo.creativecompat.corpse.CorpseSections;
 import com.SaintAlfonzo.creativecompat.corpse.CorpseState;
 import de.maxhenkel.corpse.Main;
 import de.maxhenkel.corpse.entities.CorpseEntity;
@@ -29,7 +30,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * on; once a second (and on the first tick after load) the corpse asks {@link CorpseDecay#target} for its stage and
  * re-syncs the worn equipment from its contents. Adds one synced byte of {@link CorpseState} flags and saves its
  * state in the {@link CorpseDecay#TAG} compound. Also names ancient corpses ({@code m_5446_}) and makes skeleton-stage
- * corpses sink in water and lava ({@code [corpses] skeletonsSink}, ruling 27). Applied only with the
+ * corpses sink in water and lava ({@code [corpses] skeletonsSink}, ruling 27). A second synced value carries the
+ * corpse screen sections ({@link CorpseSections}; not saved, rebuilt from the contents). Applied only with the
  * Corpse mod (CompatMixinPlugin). SRG names, remap = false.
  */
 @Mixin(value = CorpseEntity.class, remap = false)
@@ -38,6 +40,9 @@ public abstract class CorpseDecayMixin implements CorpseState {
 	@Unique
 	private static final EntityDataAccessor<Byte> creativecompat$FLAGS =
 			SynchedEntityData.defineId(CorpseEntity.class, EntityDataSerializers.BYTE);
+	@Unique
+	private static final EntityDataAccessor<CompoundTag> creativecompat$SECTIONS =
+			SynchedEntityData.defineId(CorpseEntity.class, EntityDataSerializers.COMPOUND_TAG);
 
 	@Shadow
 	private int age;
@@ -61,6 +66,11 @@ public abstract class CorpseDecayMixin implements CorpseState {
 		return creativecompat$self().getEntityData().get(creativecompat$FLAGS);
 	}
 
+	@Override
+	public CompoundTag creativecompat$sections() {
+		return creativecompat$self().getEntityData().get(creativecompat$SECTIONS);
+	}
+
 	@Unique
 	private void creativecompat$setFlag(byte flag, boolean on) {
 		byte old = creativecompat$corpseFlags();
@@ -71,6 +81,20 @@ public abstract class CorpseDecayMixin implements CorpseState {
 	@Inject(method = "m_8097_", at = @At("TAIL"), remap = false)
 	private void creativecompat$defineFlags(CallbackInfo ci) {
 		creativecompat$self().getEntityData().define(creativecompat$FLAGS, (byte) 0);
+		creativecompat$self().getEntityData().define(creativecompat$SECTIONS, CorpseSections.defaultTag());
+	}
+
+	/**
+	 * Corpse screen sections (plan_corpses.md 3.6 items 2 and 6): once a second the server refreshes the synced section
+	 * tag (curio slot cap, the cosmetic stacks for the model), independent of {@code [corpses] enabled}.
+	 */
+	@Inject(method = "m_8119_", at = @At("TAIL"), remap = false)
+	private void creativecompat$sectionsTick(CallbackInfo ci) {
+		CorpseEntity corpse = creativecompat$self();
+		if (corpse.level.isClientSide || corpse.isRemoved()) return;
+		if (corpse.tickCount > 1 && (corpse.tickCount + corpse.getId()) % 20 != 0) return;
+		CompoundTag now = CorpseSections.buildTag(corpse);
+		if (!now.equals(creativecompat$sections())) corpse.getEntityData().set(creativecompat$SECTIONS, now);
 	}
 
 	@Redirect(method = "m_8119_", at = @At(value = "INVOKE",

@@ -116,6 +116,12 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),
 			Map.entry("JeiMissingSlotsErrorAccessor", List.of("jei")),
 			Map.entry("JeiRecipeLayoutTooltipMixin", List.of("jei")),
+			// Corpse screen sections: cosmetic armor and curio slots, Additional Items without them (plan_corpses.md 3.6)
+			Map.entry("CorpseInventoryContainerMixin", List.of("corpse")),
+			Map.entry("CorpseContainerBaseMixin", List.of("corpse")),
+			Map.entry("CorpseAdditionalContainerMixin", List.of("corpse")),
+			Map.entry("CorpseGuisMixin", List.of("corpse")),
+			Map.entry("CorpseScreenMixin", List.of("corpse")),
 			Map.entry("JeiFluidTankScaleMixin", List.of("jei")),
 			Map.entry("JeiRecipesGuiTooltipMixin", List.of("jei")),
 			Map.entry("JeiIngredientFilterAccessor", List.of("jei")),
@@ -183,6 +189,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 
 	public CompatMixinPlugin() {
 		super("[creativecompat]", NEEDS_MOD, MOD_RANGE);
+			// Transfer Items returns curios to their recorded slots (corpse/CorpseCurios, plan_corpses.md 3.6 item 4)
+			Map.entry("CorpseTransferMessageMixin", List.of("corpse", "curios")),
 	}
 
 	@Override
