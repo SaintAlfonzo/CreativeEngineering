@@ -16,7 +16,7 @@ import java.util.Map;
  * <ul>
  * <li>Main hand at {@code main_chance} (45%): a sword or pickaxe ({@code tool_weights}) of a material by
  * {@code material_weights} (wood, stone, copper 25, iron 8).</li>
- * <li>Offhand on its own roll at {@code offhand_chance} (20%; ruling 25 as answered 2026-11-18): the corpse kind's
+ * <li>Offhand on its own roll at {@code offhand_chance} (20%, ruling 25): the corpse kind's
  * supply ({@code offhand_supplies}: cave torches 1 to 6, ocean bread 1 to 3) at {@code offhand_supply_chance}, else a
  * tool, which copies the main hand tool's material at {@code same_material_chance} when there is one.</li>
  * <li>Tools are worn and rarely enchanted like the armor; copper follows the armor's copper rules and shares the
