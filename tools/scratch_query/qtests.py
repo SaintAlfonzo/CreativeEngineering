@@ -447,6 +447,115 @@ def ra1():
 	assert (out / 'boots.txt').read_text().count('boot') == 3 and not (out / 'srv/ran.txt').exists(), 'one more boot only'
 
 
+@case('R1118-B1 mod sets: manifests resolve (groups, -@group, extends), pack / CEPortTesting builds prune and pin '
+	  '(unlisted_ok), @@modset steps get their own key, boot=N: modset switches jars with the world kept')
+def rb1():
+	import qmodset
+	import qrows
+	for n in qmodset.manifests():
+		for v in sorted(qmodset.load(n).get('variants', {})) or [None]:
+			qmodset.resolve(qmodset.parse_spec(n + (' ' + v if v else '')))
+	r = qmodset.resolve(qmodset.parse_spec('cc_only full -@iw'))
+	assert 'immersive_weathering-*' not in r['keep'] and 'moonlight-*' in r['keep'] and 'heartstone-*' in r['keep'], r
+	assert qmodset.resolve(qmodset.parse_spec('cco_sets without_trims'))['m']['config'] == 'empty', 'extends cc_only'
+	assert qmodset.resolve(qmodset.parse_spec('port_chain optional'))['add'][:2] == ['alexsmobs-*.jar', 'citadel-*.jar']
+	for bad in ('nosuch', 'cc_only nosuchvariant', 'cc_only full -@nogroup', 'cc_only full kubejs=bogus', 'pack x'):
+		try:
+			qmodset.parse_spec(bad)
+			raise AssertionError('accepted ' + bad)
+		except ValueError:
+			pass
+	try:
+		qrows.prep_line_boot('modset cc_only full')
+		raise AssertionError('modset at boot 1 accepted')
+	except ValueError:
+		pass
+	assert qrows.prep_line_boot('boot=2: modset pack')[2:] == ('modset', ['pack'])
+	# fixtures: manifests, a fake prep_srv.sh / scratch_server.sh setup, a fake CEPortTesting
+	md, port = TMP / 'modsets', TMP / 'port'
+	md.mkdir()
+	(port / 'mods').mkdir(parents=True)
+	(port / 'kubejs/server_scripts').mkdir(parents=True)
+	(port / 'kubejs/server_scripts/example.js').write_text('//')
+	for j in ('xa-1.0.jar', 'xb-1.0.jar', 'xc-1.0.jar'):
+		(port / 'mods' / j).write_text(j)
+	(md / 'zpack.toml').write_text('source = "pack"\nkubejs = "probes"\nconfig = "empty"\ndefault = "v"\n'
+								   '[groups]\nkeep = ["ja-*", "jb-*"]\n[variants.v]\nkeep = ["@keep"]\n'
+								   '[variants.w]\nkeep = ["ja-*"]\n')
+	(md / 'zport.toml').write_text('source = "ceporttesting"\nkubejs = "source"\nunlisted_ok = true\n'
+								   'require = ["xa-*"]\n[variants.v]\nkeep = ["xa-*", "xb-*"]\n')
+	(md / 'zport2.toml').write_text('extends = "zport"\nunlisted_ok = false\n')
+	prep = TMP / 'fake_prep_m.sh'
+	prep.write_text('#!/usr/bin/env bash\nS="$1/srv"; mkdir -p "$S/mods" "$S/logs" "$S/config" "$S/kubejs/server_scripts" '
+					'"$S/kubejs/data/zq" "$S/kubejs/data/other"\nfor j in ja-1.0.jar jb-1.0.jar jc-1.0.jar; do '
+					'echo $j > "$S/mods/$j"; done\necho x > "$S/config/a.toml"\necho p > "$S/kubejs/server_scripts/zz_q_probe.js"\n'
+					'echo s > "$S/kubejs/server_scripts/pack.js"\necho level-name=$2 > "$S/server.properties"\n'
+					'python3 %s pin "$1"\n' % (HERE / 'qpin.py'))
+	setup = TMP / 'fake_setup.sh'
+	setup.write_text('#!/usr/bin/env bash\nS="$2/srv"; mkdir -p "$S/mods" "$S/logs" "$S/kubejs/server_scripts" "$S/config"\n'
+					 'echo l > "$S/kubejs/server_scripts/zz_cl_probe.js"\necho level-name=$3 > "$S/server.properties"\n')
+	env = dict(QMODSET_DIR=str(md), QDRIVE_PREP=str(prep), QMODSET_SETUP=str(setup), QMODSET_PORT=str(port),
+			   QDRIVE_NO_JVM_CHECK='1')
+	old = {k: os.environ.get(k) for k in env}
+	os.environ.update(env)
+	try:
+		import importlib
+		importlib.reload(qmodset)
+		out = TMP / 'om1'
+		rc, text = qmodset.build(out, 'lv', 'A', 'zpack')
+		assert rc == 0, text
+		srv = out / 'srv'
+		assert sorted(p.name for p in (srv / 'mods').glob('*.jar')) == ['ja-1.0.jar', 'jb-1.0.jar'], text
+		assert not list((srv / 'config').iterdir()) and (srv / 'defaultconfigs').is_dir(), 'config empty'
+		ss = sorted(p.name for p in (srv / 'kubejs/server_scripts').iterdir())
+		assert ss == ['zz_q_probe.js'] and (srv / 'kubejs/data/zq').is_dir() and not (srv / 'kubejs/data/other').exists(), ss
+		assert json.loads((out / 'modset.json').read_text())['spec'] == 'zpack'
+		out2 = TMP / 'om2'
+		rc, text = qmodset.build(out2, 'lv', 'B', 'zport v -xb-1.0.jar')
+		assert rc == 0, text
+		assert sorted(p.name for p in (out2 / 'srv/mods').glob('*.jar')) == ['xa-1.0.jar'], text
+		assert (out2 / 'srv/kubejs/server_scripts/example.js').exists(), 'kubejs from the source'
+		assert not (out2 / 'srv/kubejs/server_scripts/zz_cl_probe.js').exists(), 'Labels probe dropped without Labels'
+		assert 'level-seed=8675309' in (out2 / 'srv/server.properties').read_text(), 'group B props'
+		assert qpin.verify(out2) == [], qpin.verify(out2)
+		out3 = TMP / 'om3'
+		assert qmodset.build(out3, 'lv', 'A', 'zport2 v')[0] == 0
+		assert any('no mod_sides.md row' in x for x in qpin.verify(out3)), 'unlisted_ok false refuses'
+		assert qmodset.build(TMP / 'om4', 'lv', 'A', 'zport v -xa-1.0.jar')[0] == 1, 'require fails the build'
+		(srv / 'world').mkdir()
+		qmodset.switch(out, 'zpack w')
+		assert sorted(p.name for p in (srv / 'mods').glob('*.jar')) == ['ja-1.0.jar'] and (srv / 'world').is_dir()
+		# driver: a @@modset section and a @modset none row are two steps; the modset step builds through qmodset
+		for f in ROWS.glob('*.qb'):
+			f.unlink()
+		p = write_rows('ZM.qb', SECTION.replace('@@date', '@@modset zport v\n@@date') % ('jara', 'T2')
+					   + row('SQ-ZM-01', '> say m1\nexpect say m1') + row('SQ-ZM-02', '> say m2', '@modset none\n'))
+		rel = os.path.relpath(p, INST)
+		import qdrive
+		steps, _ = qdrive.build_steps([{'id': i, 'file': rel, 'section': 1, 'state': 'never', 'why': '', 'tier': 'T2',
+										'client': False} for i in ('SQ-ZM-01', 'SQ-ZM-02')])
+		assert [s.get('modset') for s in steps] == ['zport v', None] and steps[0]['key'].endswith('#modset=zport v'), steps
+		runner = TMP / 'RUNNER_m.md'
+		runner.write_text('# claim\n\n```\nState: idle\nUpdated: x\n\nLast run: none\n```\n')
+		pj = TMP / 'plan_m.json'
+		pj.write_text(json.dumps([{'id': 'SQ-ZM-01', 'file': rel, 'section': 1, 'state': 'never', 'why': '',
+								   'tier': 'T2', 'client': False}]))
+		r = subprocess.run(QRUN + ['drive', 'start', 'zmod', '--plan-json', str(pj)], capture_output=True, text=True,
+						   env=dict(os.environ, QDRIVE_RUNS=str(TMP / 'runs'), QDRIVE_RUNNER=str(runner)), timeout=300)
+		st = json.loads((TMP / 'runs/zmod/drive/state.json').read_text())
+		assert st['steps'][0]['status'] == 'done', (st['steps'][0]['status'],
+													(TMP / 'runs/zmod/drive/s00_qrun.txt').read_text()[-600:])
+		assert 'modset zport v' in (TMP / 'runs/zmod/drive/s00_prep.txt').read_text()
+		assert sorted(x.name for x in (Path(st['steps'][0]['out']) / 'srv/mods').glob('*.jar')) == ['xa-1.0.jar', 'xb-1.0.jar']
+	finally:
+		for k, v in old.items():
+			if v is None:
+				os.environ.pop(k, None)
+			else:
+				os.environ[k] = v
+		importlib.reload(qmodset)
+
+
 sys.path.insert(0, str(HERE.parent / 'client_capture'))
 sys.path.insert(0, str(HERE.parent / 'perf/eval'))
 

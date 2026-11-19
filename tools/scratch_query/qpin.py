@@ -8,7 +8,8 @@ A run tests the jars it was prepared with, and records which ones. prep_srv.sh c
 `qrun.py run` calls verify before the first row and refuses to start when:
   - OUT/pinned.json is missing (the server was not prepared by prep_srv.sh / pin);
   - an own jar is a link again, or its identity differs from pinned.json (swapped after prep);
-  - a jar in srv/mods has no mod_sides.md row (another session's work in progress; extras below are allowed).
+  - a jar in srv/mods has no mod_sides.md row (another session's work in progress; extras below are allowed; so are
+    the jars a modset with unlisted_ok took from its source, OUT/modset.json).
 Every verdict file then carries `stamps` (pinned identities), which qplan.py compares with mods/ to judge a row current.
 
     qpin.py pin OUT            copy-pin the own jars and write OUT/pinned.json
@@ -122,6 +123,13 @@ def verify(out):
 	if doc is None:
 		return ['%s/pinned.json missing: prepare the server with prep_srv.sh (or run qpin.py pin OUT)' % out]
 	names, ids = listed()
+	# a modset whose manifest sets unlisted_ok (deploy: owner ruling 3 of plan_rowfix_r1118; CEPortTesting: plan_rowfix_r1118
+	# section 5 B1) brings jars without a mod_sides.md row: those it took from its source pass (qmodset.py)
+	try:
+		ms = json.loads((Path(out) / 'modset.json').read_text())
+	except (OSError, ValueError):
+		ms = {}
+	from_source = set(ms.get('from_source', [])) if ms.get('unlisted_ok') else set()
 	seen = {}
 	for j in sorted(mods.glob('*.jar')):
 		info = own_info(j)
@@ -129,7 +137,8 @@ def verify(out):
 			seen[info[0]] = (j, info[1])
 			if linked(j):
 				probs.append('%s is a link, not a copy (pin it: qpin.py pin OUT)' % j.name)
-		if j.name not in names and not (info and info[0] in ids) and not any(x.search(j.name) for x in EXTRAS):
+		if j.name not in names and not (info and info[0] in ids) and not any(x.search(j.name) for x in EXTRAS) \
+				and j.name not in from_source:
 			probs.append('%s has no mod_sides.md row (another session\'s jar?); remove it or add the row' % j.name)
 	for key, p in doc['jars'].items():
 		if key not in seen:

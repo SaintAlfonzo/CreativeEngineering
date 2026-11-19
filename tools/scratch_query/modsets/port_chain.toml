@@ -1,0 +1,54 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Creative Brewing chain on its own, from the CEPortTesting instance (scratch_queue.md "SQ-CBA"; was port_chain.sh's
+# CHAIN / COOKING / OPTIONAL lists, moved here 2026-11-18, plan_rowfix_r1118.md R4 B1). Row specs:
+#   port_chain chain | cooking | optional | instance  [+GLOB ...] [-GLOB ...] [noupstream=vinery_upstream] [config=source]
+# (port_chain.sh's ADD= / DROP= / NOUPSTREAM= / KEEPCFG=1). port_chain.sh bare / restore / check read the same lists.
+description = "Creative Brewing chain from CEPortTesting (chain, cooking, optional, instance)"
+source = "ceporttesting"
+kubejs = "source"     # CEPortTesting's kubejs (examples only, no pack scripts) plus the probes below
+config = "empty"      # the jars write their defaults; config=source copies CEPortTesting's (KEEPCFG=1)
+upstream = "source"   # CEPortTesting's *_upstream donor folders
+unlisted_ok = true    # CEPortTesting jars have no mod_sides.md rows (plan section 5 B1)
+default = "chain"
+require = ["@chain"]   # port_chain.sh check: every chain jar in CEPortTesting
+copy = [["tools/scratch_query/zq_probe.js", "kubejs/server_scripts/zz_zq_probe.js"],
+        ["tools/scratch_query/cbo_probe.js", "kubejs/server_scripts/zz_cbo_probe.js"]]
+
+[groups]
+# Hard dependencies of Creative Brewing, all the way down (plan_cb_publish.md 1.2 and 14; nested members' mods.toml
+# checked: Vinery needs creativecalendar + foundation, Brewin' farmersdelight, both nested; MoreJS required by
+# Creative Brewing).
+chain = ["rhino-forge-*.jar", "architectury-*-forge.jar", "kubejs-forge-*.jar",
+         "create-1.19.2-*.jar", "kubejs-create-forge-*.jar", "kubejsdelight-*.jar", "lootjs-forge-*.jar",
+         "morejs-forge-*.jar", "SereneSeasons-*.jar",
+         "creativecommon-*.jar", "creativecompat-*.jar", "creativecalendar-*.jar", "creativedelight-*.jar",
+         "creativebrewing-*.jar"]
+# Cooking mods CD / CB integrate with but do not nest or repack (optional dependencies in creativedelight's
+# mods.toml), then their own required mods. Applied Cooking (AE2) is left out: no CD/CB rows use it.
+cooking = ["fruitsdelight-*.jar", "Hostile_Delight_*.jar", "moredelight-*.jar", "abnormals_delight-*.jar",
+           "alexsdelight-*.jar", "chefsdelight-*.jar", "cookingforblockheads-*.jar", "corn_delight-*.jar",
+           "create_central_kitchen-*.jar", "endersdelight-*.jar", "Engineers Delight *.jar", "FarmersRespite-*.jar",
+           "quark_delight_*.jar", "blueprint-*.jar", "alexsmobs-*.jar", "citadel-*.jar", "balm-forge-*.jar",
+           "mysterious_mountain_lib-*.jar", "ImmersiveEngineering-*.jar", "Quark-*.jar", "AutoRegLib-*.jar"]
+# Creative Brewing's optional dependencies (its mods.toml, mandatory=false) and their own required jars (SQ-CBO).
+# Taken from the pack's mods/ when CEPortTesting lacks them.
+optional = ["alexsmobs-*.jar", "citadel-*.jar", "appleskin-*.jar", "CerbonsBetterBeacons-*.jar", "Botania-*.jar",
+            "curios-forge-*.jar", "Patchouli-*.jar", "buzzier_bees-*.jar", "blueprint-*.jar",
+            "create_central_kitchen-*.jar", "create_deep_dark-*.jar", "dragonloot-*.jar", "everythingcopper-*.jar",
+            "FarmersRespite-*.jar", "Felsic Gear *.jar", "fruitsdelight-*.jar", "geodeforge-*.jar",
+            "immersive_armors-*.jar", "immersive_weathering-*.jar", "moonlight-*.jar", "ImmersiveEngineering-*.jar",
+            "jeed-*.jar", "jei-*.jar", "neapolitan-*.jar", "potionbundles-*.jar", "Quark-*.jar", "AutoRegLib-*.jar",
+            "supplementaries-*.jar", "Engineers Delight *.jar", "upgrade_aquatic-*.jar"]
+
+[variants.chain]
+keep = ["@chain"]
+
+[variants.cooking]
+keep = ["@chain", "@cooking"]
+
+[variants.optional]
+keep = ["@chain"]
+add = ["@optional"]
+
+[variants.instance]
+# every non-client jar CEPortTesting has (no keep list)
