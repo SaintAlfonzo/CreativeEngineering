@@ -1,6 +1,6 @@
 # Plan: Diet Log and Food Dictionary polish (Raspberry Pie, SoL Carrot)
 
-<!-- generated:status_index begin open_work sha1=be77b0d120fc -->
+<!-- generated:status_index begin open_work sha1=9c7023d508d9 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 14), 0 Complete.
 
 | Id | Status | Tests | Change |
@@ -14,7 +14,7 @@
 | `food-tuning #8` | Planned | C | Diet Ladder bar: even spacing, last achieved milestone + next 4 |
 | `food-tuning #9` | Planned | C | Diet Log icons: locked unlocks alternate lock/effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect |
 | `food-tuning #10` | Planned | C | Gate text: N more unique food(s) to activate diet |
-| `food-tuning #11` | Planned | C | Effect screen: smaller Change/Drop; hover shows how many foods age out |
+| `food-tuning #11` | Planned | C | Effect screen: smaller Change/Drop label text (buttons unchanged); hover shows how many foods age out |
 | `food-tuning #12` | Planned |  | Investigate Sophisticated Backpacks sort-type button for the Food Dictionary toggle |
 | `food-tuning #13` | Planned | C | Food Dictionary: uneaten sort configurable (mod+name, name, easiest, hardest) |
 | `food-tuning #14` | Planned | S C | Food Dictionary: eaten list 3-state sort button (newest unlock, latest eaten, uneaten order) |
@@ -67,7 +67,7 @@ Design doc: [raspberry_pie.md](raspberry_pie.md) (sections 5, 6, 6.3, 12.4, 12.5
 | 5, 6 | locked unlocks alternate lock / effect icon; unlocked = effect icon, gray, colored outline | clear | Locked: the lock item and the effect sprite alternate every 1 s (same clock as the key's slot cycle), gray frame. Unlocked: effect sprite grayed, frame in the unlock color, whatever the current diversity. Both pages. | 2026-11-18 | agent default, unconfirmed |
 | 8 | scroll through book pages | clear | Mouse wheel flips one page per notch in the Diet Log (and the Food Dictionary in phase 2). | 2026-11-18 | agent default, unconfirmed |
 | 9 | shrink change and drop | clear | Buttons keep their size (18 px); only the label text is slightly smaller (about 0.85 scale). History: agent default 2026-11-18 was buttons 18 -> 14 px and label 0.8, replaced by the owner the same day. | 2026-11-18 | chat 2026-11-18 |
-| 13 | how many foods will drop out ... hover tooltip | clear | Hover on Change: "N foods age out" (respecFoods capped at the window); hover on Drop: the count from the server's drop preview. | 2026-11-18 | agent default, unconfirmed |
+| 13 | how many foods will drop out ... hover tooltip | clear | Hover on Change: "N foods age out" (respecFoods capped at the window). Hover on Drop: only the number of foods that will age out, no preview content (no slots lost or shifted); the count is computed with the drop rule (5.2) and synced with the state, not fetched by a preview request. Clicking Drop still opens the confirm panel (5.4), unchanged. History: agent default 2026-11-18 showed the count from the server's drop preview; replaced by the owner. | 2026-11-19 | chat 2026-11-19 |
 | 17 | single button 3 state toggle | premise | Unlock order is stored from the first eat after the update; older unlocks have no order and sort after the ordered ones, in the uneaten order. "Latest eaten" uses Apple Pie's meal memory; foods past it sort last, in the uneaten order. The toggle state is a client config value. | 2026-11-18 | agent default, unconfirmed |
 
 ## 3. Phase 1: Raspberry Pie
@@ -106,5 +106,5 @@ Queue rows are written after the look-check (prefix `RPI-` for phase 1, `FDI-` f
 
 ## 6. Waiting on the owner
 
-- Unconfirmed agent defaults in section 2 (items 1, 3, 4, 5/6, 8, 13, 17).
+- Unconfirmed agent defaults in section 2 (items 1, 3, 4, 5/6, 8, 17).
 - `extraWidth` value: picked at the look-check.
