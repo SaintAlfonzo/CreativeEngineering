@@ -629,6 +629,8 @@ public final class CompatConfig {
 			// [surface.passthrough.layers] server side: falling layers (surface.FallingLayers, G7.5), leaf thorns and mob
 			// pathing (surface.LeafThorns, G7.13/G7.14), bamboo leaf drops (surface.BambooLeafDrops, G7.9)
 			public ForgeConfigSpec.BooleanValue layersFall;
+			// layers a placed block may replace (surface.SurfaceLayers.replaceable)
+			public ForgeConfigSpec.IntValue replaceMaxLayers;
 			public ForgeConfigSpec.DoubleValue thornChance;
 			public ForgeConfigSpec.IntValue thornLayers;
 			public ForgeConfigSpec.DoubleValue thornMinSpeed;
@@ -779,6 +781,12 @@ public final class CompatConfig {
 								"land). Tag creativecompat:falling_layers. Immersive Weathering's layers and Supplementaries",
 								"ash fall by their own code either way. Off: those blocks stay as before (server side).")
 								.define("layersFall", true);
+						parent.replaceMaxLayers = b.comment(
+								"Snow layers, leaf piles and Twigs bamboo leaves up to this many layers are replaced by a",
+								"block placed into them, like grass. Every other layer (sand, ash, salt, sawdust, fodder) is",
+								"never replaced; it only takes more of its own layers. 0 = nothing is replaced. Set the same",
+								"value on server and client.")
+								.defineInRange("replaceMaxLayers", 3, 0, 8);
 						parent.thornChance = b.comment(
 								"Chance per check that a player moving through a leaf pile is pricked (half a heart, sweet",
 								"berry bush damage). Lowered by a quarter for each armor piece worn; full armor never pricks.",

@@ -4,12 +4,13 @@ Test prefix **BR-** · Last updated **2026-11-15** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=675f8a09c53d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 1, In Progress 1, Testing 4), 1 Complete.
+<!-- generated:status_index begin open_work sha1=c1a1866bd870 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, In Progress 1, Testing 4), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `gameplay/blockrunner #9` | Planned | C P | Jello blocks behave like honey (jump factor, not bounce) |
+| `gameplay/blockrunner #14` | Planned |  | Ash: investigate past ash changes and burning; one ash family with a 9-ash Ash Block |
 | `gameplay/blockrunner #5` | In Progress | S C P T | Speed blocks on BlockRunner tiers |
 | `gameplay/blockrunner #7` | Testing | C P | Sinking: no bump between sunken blocks, items on top |
 | `gameplay/blockrunner #8` | Testing | C P | Visceral Heap flesh walk speeds |
@@ -662,28 +663,44 @@ no layer but leaves is exempt at one layer. Two kinds of layer block, each with 
   leaves. You wade through them; the slowdown grows with height (1 layer 1.0). Their on-top tier (snow, leaves) only
   applies when standing on them (leather boots, light mobs on snow). Unchanged.
 
-**Audit 2026-11-18** (every layer block in `kubejs/exported/passthrough_layers_dump.json`; copycat layers, Create
-Deco coin stacks and Copycats slices are building shapes, not ground, and stay out):
+Rulings 2026-11-19 (owner, on the audit below; TODO `gameplay/blockrunner #13`):
 
-| Block | Kind | Tier | Layers | Falls and stacks | Fall damage | Mobs path over | Notes |
-|---|---|---|---|---|---|---|---|
-| IW sand, red sand layer | surface | dust | 1-8 | own `FallingBlock` | x0.3 above 2 layers (IW) | IW: under 5 layers | step particles (IW) |
-| IW ash layer | surface | dust | 1-8 | own `FallingBlock` | x0.3 above 2 layers (IW) | IW: under 5 layers | |
-| Supplementaries ash | surface | dust | 1-8 | own `FallingBlock` | full | Supplementaries' rule | |
-| Vintage Delight salt | surface | dust | 1-8 | `FallingLayers` | full | vanilla snow rule: under 5 | melts snow and ice; place-from-inside cut; a single layer is replaceable (snow rule) |
-| IE sawdust | surface | dust | 1-9 | `FallingLayers` | full | IE's rule | 9 steps, not 8 |
-| Supplementaries fodder | surface | soft | 1-8 | `FallingLayers` | full | Supplementaries' rule | |
-| snow layer | walk-through | snow on top | 1-8 | `FallingLayers` | full | 3.10 (G11) | 8 becomes a snow block |
-| IW leaf piles | walk-through | leaves on top | 0-8 | own `FallingBlock` | full | 3.10 (G7.14) | thorns |
-| Twigs bamboo leaves | walk-through | leaves on top | 1-4 (+ full 5-8) | `FallingLayers` | full | 3.10 | |
+- **Fall damage:** no surface layer cushions a fall, unless its full block does and that block lies under the layer
+  or the pile is over half height (5+ of 8); then the full block's own fall rule applies
+  (`SurfaceLayers.fallDamage`). None of the full blocks (sand, red sand, Salt Block) cushions, so every layer takes
+  full damage. Before: IW sand, red sand and ash and Supplementaries ash took 0.3x above 2 layers.
+- **Full block:** sand, red sand and salt hold 8 layers; a 9th turns a full pile into the block, by hand (sand or red
+  sand layer item, salt dust), by dispenser (salt) or by a falling layer landing on it (`SurfaceLayers.settle`;
+  Vintage Delight `SaltLayerBlock.settle`, `SaltDustItem`; Salt member `Melting.placeSaltLayer`). 9 layers = 1 block:
+  recipes 1 sand <-> 9 sand layers (and red sand; upstream 3 sand -> 6 layers, 4 layers -> 1 sand); Salt Block <->
+  9 salt dust already. Ash is queued (TODO `gameplay/blockrunner #14`); sawdust and fodder have no full block. Salt's
+  own growth beside water still stops at 8 layers.
+- **Mining:** one item per layer, as before (sand, red sand, salt dust, sawdust); ash keeps its rate.
+- **Replacing:** a placed block replaces only snow layers, leaf piles and bamboo leaves (`creativecompat:
+  replaceable_layers` = the walk-through layers), up to `[surface.passthrough.layers] replaceMaxLayers` (default 3).
+  Every surface layer is never replaced (before: sand, ash, Supplementaries ash and salt were at 1 layer); a layer
+  still takes more of its own item.
 
-Consistent after this change: kind, tier, height rule, sink, speed at every count, falling and stacking (since
-G7.5). Still different, left for the owner (TODO row `gameplay/blockrunner #13`):
-1. Fall cushioning: only IW sand, red sand and ash take 0.3x fall damage above 2 layers.
-2. A full stack: snow becomes a snow block at 8; sand, red sand, ash, salt, sawdust and fodder stay a full layer
-   block (a full sand layer is not sand).
-3. Mob pathing over a pile follows each mod's own rule (under 5 layers for IW and salt).
-4. Single-layer replaceability: placing a block into 1 layer of snow or salt replaces it; the others don't.
+**Audit 2026-11-18, corrected 2026-11-19** (every layer block in `kubejs/exported/passthrough_layers_dump.json`;
+copycat layers, Create Deco coin stacks and Copycats slices are building shapes, not ground, and stay out). Columns
+show the state after the rulings above:
+
+| Block | Kind | Tier | Layers | Full block (9th layer) | Falls and stacks | Fall damage | Replaced by a block | Notes |
+|---|---|---|---|---|---|---|---|---|
+| IW sand, red sand layer | surface | dust | 1-8 | sand, red sand | own falling entity | full | never | step particles (IW) |
+| IW ash layer | surface | dust | 1-8 | queued (#14) | own falling entity | full | never | |
+| Supplementaries ash | surface | dust | 1-8 | queued (#14) | own falling entity | full | never | |
+| Vintage Delight salt | surface | dust | 1-8 | Salt Block | `FallingLayers` | full | never | melts snow and ice; place-from-inside cut |
+| IE sawdust | surface | dust | 1-9 | none | `FallingLayers` | full | never | 9 steps, not 8 |
+| Supplementaries fodder | surface | soft | 1-8 | none | `FallingLayers` | full | never | upstream loot table only matches `layers=16` (the block has 1-8): check what mining drops (CQ-SINK-09) |
+| snow layer | walk-through | snow on top | 1-8 | snow block at 8 | `FallingLayers` | full | up to 3 layers | |
+| IW leaf piles | walk-through | leaves on top | 0-8 | none | own falling entity | full | up to 3 layers | thorns |
+| Twigs bamboo leaves | walk-through | leaves on top | 1-4 (+ full 5-8) | none | `FallingLayers` | full | up to 3 layers | |
+
+**Mob pathing (same for every layer):** each mod uses vanilla snow's threshold. At 1 to 4 layers (up to 8 px) the pile
+counts as open ground for path planning, and mobs walk across it (under their 9.6 px step). At 5 to 7 layers (10 to 14 px)
+it counts as blocked: mobs treat it like a low solid block, jumping onto it or going around it, and won't plan a path
+into it. At full height it is a full block. The 2026-11-18 audit wrongly listed this as different per mod.
 
 ## 4. Limits and decisions
 
@@ -943,6 +960,9 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
 - [ ] **BR-89 Surface layer height:** on stone, place 1, 2, 4 and 7 layers each of IW sand, IW ash, Supplementaries ash, salt, sawdust and fodder side by side; `/data get entity @s Pos` standing on each -> the feet are 2 px per layer above the stone for every block at the same count (sawdust 2n-1 px); IW ash on ash holds you. Queue: CQ-SINK-04.
 - [ ] **BR-90 Surface layer sink:** first person, walk across the rows of BR-89 at each count and onto a sand block -> the view sinks the same at every block and count; no pop stepping from a layer onto sand. A dropped item lies on top of each. Queue: CQ-SINK-05.
 - [ ] **BR-91 Surface layer speed:** one layer of salt, sand, ash and sawdust on stone, WTHIT -> "0.85× (Dust)"; one fodder layer -> "0.88× (Soft)"; F3 speed or a timed 20-block walk on a 1-layer sand strip matches a sand block, not the stone. A 1-layer leaf pile and 1 snow layer stay unchanged (no line, walk-through). Queue: CQ-SINK-06.
+- [ ] **BR-92 Layer fall damage:** fall 10 blocks onto 4 and 8 layers each of sand, IW ash, Supplementaries ash and salt, and onto stone -> the same damage every time (no 0.3x). Queue: CQ-SINK-07.
+- [ ] **BR-93 Ninth layer:** a sand layer item on an 8-layer sand pile -> a sand block, nothing on top; red sand the same; salt dust on 8 salt layers -> a Salt Block; a dispenser with salt facing an 8-layer salt pile -> a Salt Block; a 3-layer sand pile falling onto 8 sand layers -> sand plus 2 layers on top; a 3-layer salt pile falling onto 8 salt -> Salt Block plus 2. Crafting: 1 sand -> 9 sand layers, 9 layers -> 1 sand (red sand too). Queue: CQ-SINK-08.
+- [ ] **BR-94 Replacing layers:** place cobblestone against 1 layer of sand, IW ash, Supplementaries ash, salt, sawdust and fodder -> it goes on top, the layer stays; against 1 and 3 layers of snow, a leaf pile and bamboo leaves -> it replaces them; 4 layers -> on top. `replaceMaxLayers = 0` -> nothing is replaced. More of a layer's own item still adds layers. Queue: CQ-SINK-09.
 
 **Server side (only when the dedicated server is back)**
 - [ ] **BR-27 Server parity:** with the new Creative Common jar on the server, repeat BR-11, BR-15 and BR-17 while connected. -> Same values, and no rubber-banding when walking across camo'd frames.
@@ -1038,6 +1058,7 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
   passthrough`); perf suite plan `passthrough.py`; `LeafPileSlowMixin` and `[leaf_piles]` replaced by the `leaf_pile`
   tier. Headless 203/203. BR-67..88 added. Jars built 2026-11-15 00:40, not installed; status built, untested.
 
+- **2026-11-19:** layer rulings (3.11): full fall damage on every surface layer, 9th layer -> sand, red sand, Salt Block (1 sand <-> 9 layers), only snow, leaf piles and bamboo leaves replaceable (up to `replaceMaxLayers` 3); audit corrected (Supplementaries ash cushioned too; mob pathing is the same for all). BR-92..94, CQ-SINK-07..09; ash queued as `gameplay/blockrunner #14`.
 - **2026-11-18:** layer blocks (3.11): surface layers (sand, ash, salt, sawdust, fodder) stand on their visible top, sink visually and walk at their tier at every layer count; salt joins dust; audit table. BR-89..91, CQ-SINK-04..06.
 
 Scratchpad 2026-11-13: jello blocks are in the very sticky tier; they still bounce (SlimeBlock). Honey's jump factor for them is TODO `gameplay/blockrunner #9`.

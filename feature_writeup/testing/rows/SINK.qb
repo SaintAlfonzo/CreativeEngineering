@@ -80,3 +80,24 @@ look items lie on the texture of wool, sand and slime. The tag-edit half (add sa
 @fails `SurfaceLayers.afterBlockRunner` (BlockRunnerBlockStateMixin), `RunSpeed.at` standable rule; salt not in `blockrunner:surface/dust`
 @owner true
 @draft WTHIT lines and walking time; WTHIT needs the client, the strip timing could be a bot walk
+## CQ-SINK-07
+@group client
+@commands BR-92: survival; fall 10 blocks onto 4 and 8 layers of sand, IW ash, Supplementaries ash, salt and onto stone (`/tp` above each, note health)
+@pass the same damage on every pile and on stone
+@fails `IwLayerRulesMixin` / `IwSandLayerFallMixin` / `SuppAshRulesMixin` redirect not applied (`require = 0`: check the mixin log); `SurfaceLayers.fallDamage`
+@owner true
+@draft health deltas per pile; a bot fall plus `data get entity @s Health` could read them
+## CQ-SINK-08
+@group client
+@commands BR-93: sand layer item on 8 sand layers; red sand the same; salt dust on 8 salt layers; dispenser with salt into 8 salt; break the support under 3 sand layers above 8 sand layers, and 3 salt over 8 salt; craft 1 sand and 9 sand layers
+@pass a full block each time, the rest (2 layers) on top for the falling cases; 1 sand -> 9 layers, 9 layers -> 1 sand
+@fails `SurfaceLayers.settle` (IW `onPlace` hook), Vintage Delight `SaltLayerBlock.settle` / `SaltDustItem`, Salt member `Melting.placeSaltLayer`; recipes: Creative Compat `misc_mods.js`
+@owner true
+@draft block results per case; `setblock` + `data get block`-style checks could automate most of it
+## CQ-SINK-09
+@group client
+@commands BR-94: place cobblestone against 1 layer of sand, IW ash, Supplementaries ash, salt, sawdust, fodder; against 1 and 3 layers of snow, a leaf pile, bamboo leaves; then 4 layers; break 5 layers of fodder and of sand
+@pass surface layers stay (block on top); walk-through layers of 1 and 3 replaced, 4 not; sand drops 5 layers; note what fodder drops
+@fails `SurfaceLayers.replaceable`, `#creativecompat:replaceable_layers`; salt `SaltLayerBlock.canBeReplaced`
+@owner true
+@draft placement outcomes; a person places blocks

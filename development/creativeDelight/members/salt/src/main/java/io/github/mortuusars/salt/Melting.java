@@ -66,7 +66,7 @@ public class Melting {
 
     /**
      * Creative Delight (B2): one salt layer at pos: a new layer on air where a layer can stand, or one more on a salt
-     * layer below 8. False (nothing placed) otherwise.
+     * layer below 8, or the Salt Block on a full pile of 8. False (nothing placed) otherwise.
      */
     public static boolean placeSaltLayer(ServerLevel level, BlockPos pos) {
         Block layer = saltLayer();
@@ -74,8 +74,10 @@ public class Melting {
         BlockState here = level.getBlockState(pos);
         if (here.is(layer)) {
             int n = here.getValue(SnowLayerBlock.LAYERS);
-            if (n >= 8) return false;
-            level.setBlockAndUpdate(pos, here.setValue(SnowLayerBlock.LAYERS, n + 1));
+            // a 9th salt on a full pile makes the Salt Block (9 salt), like salt dust by hand
+            Block block = ForgeRegistries.BLOCKS.getValue(SALT_BLOCK_ID);
+            if (n >= 8 && (block == null || block == Blocks.AIR)) return false;
+            level.setBlockAndUpdate(pos, n >= 8 ? block.defaultBlockState() : here.setValue(SnowLayerBlock.LAYERS, n + 1));
             level.playSound(null, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
             return true;
         }
@@ -86,6 +88,7 @@ public class Melting {
     }
 
     private static final ResourceLocation SALT_LAYER_ID = new ResourceLocation("vintagedelight", "salt");
+    private static final ResourceLocation SALT_BLOCK_ID = new ResourceLocation("salt", "salt_block");
 
     /**
      * Creative Delight: with Creative Common the click is Common's melting system (plan_bugfix_1114 3.8): its targets

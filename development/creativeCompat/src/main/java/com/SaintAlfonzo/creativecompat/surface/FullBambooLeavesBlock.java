@@ -113,6 +113,10 @@ public class FullBambooLeavesBlock extends Block implements SimpleWaterloggedBlo
 	@Override
 	public boolean canBeReplaced(BlockState state, BlockPlaceContext ctx) {
 		Block twigs = FallingLayers.twigsLeaves();
+		if (twigs == null || !ctx.getItemInHand().is(twigs.asItem())) {
+			Boolean other = SurfaceLayers.replaceable(state, ctx); // another block: up to replaceMaxLayers
+			if (other != null) return other;
+		}
 		return twigs != null && !ctx.isSecondaryUseActive() && ctx.getItemInHand().is(twigs.asItem())
 				&& state.getValue(LAYERS) < MAX;
 	}
