@@ -1233,6 +1233,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-14: H&H tilled end stone removed 2026-11-14 (3.2) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/block/HHBlocks.java)
 - 2026-11-14: The Stomping Basin takes only items that are an ingredient of some {@code hearthandharvest:stomping} recipe (owner, 2026-11-14, plan_bugfix_1114 3.10) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/machine/StompingInputs.java)
 - 2026-11-15: Salt on a full lick (B7, owner 2026-11-15): one salt layer on top of it, or one more on a layer already there (below 8) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/salt/SaltLick.java)
+- 2026-11-18: A carrying crow looks for a nest 16 blocks out and 8 up or down (was 3), and again every 20 ticks while it flees without one, so a crow that steals near the ground and flees upward still finds a tree-top nest under a short `carryTicks` (plan_bugfix_1117 A2, TODO `largecontent/mod-additions #68`; SQ-HH-501) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/crow/CrowSeekShinyGoal.java)
 
 
 ## Owner notes (scratchpad 2026-11-07)
