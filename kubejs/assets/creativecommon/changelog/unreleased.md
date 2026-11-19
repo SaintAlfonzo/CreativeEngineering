@@ -71,6 +71,10 @@
 - **Changed:** Sand, red sand, ash, salt, sawdust and fodder layers slow you and sink you in by the same amount at every height, like a full block of the same material [a single layer used the speed of the block below and only a full stack sank].
 - **Changed:** Salt layers walk at 0.85x [1x].
 - **Changed:** Ash, salt and sawdust layers hold you on their top like sand layers [ash at half its height and not at all on ash, salt and sawdust about one layer lower].
+- **Changed:** Sand, red sand and ash layers no longer soften falls [0.3x damage above 2 layers].
+- **New:** A 9th layer on a full pile of 8 sand, red sand or salt layers turns it into a Sand, Red Sand or Salt Block, by hand, dispenser or a falling layer.
+- **Changed:** 1 Sand makes 9 Sand Layers and 9 Sand Layers make 1 Sand [3 Sand -> 6 layers, 4 layers -> 1 Sand]; Red Sand the same.
+- **Changed:** Placing a block into snow layers, leaf piles or bamboo leaves replaces them up to 3 layers [1 layer]; sand, ash, salt, sawdust and fodder layers are never replaced [sand, ash and salt at 1 layer].
 
 ## Walking through plants and webs <!-- icon: minecraft:cobweb -->
 

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Immersive Weathering sand, red sand and ash layers stand on the layer's visible top, for every entity
- * ({@link com.SaintAlfonzo.creativecompat.surface.SurfaceLayers}, owner notes 2026-11-18): HEAD of
+ * ({@link com.SaintAlfonzo.creativecompat.surface.SurfaceLayers}): HEAD of
  * {@code getCollisionShape} ({@code m_5939_}) returns the block's outline shape. Before, ash stood living
  * entities on half its height and let them through ash over ash. Leaf piles (a subclass) keep their own. SRG names,
  * {@code remap = false}; applied only with the mod loaded.

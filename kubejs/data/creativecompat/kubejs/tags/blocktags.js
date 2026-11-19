@@ -60,6 +60,9 @@ ServerEvents.tags('block', e => {
 	// (creativecompat:passthrough_layers) instead.
 	t.add(e, 'creativecompat:surface_layers', [i.sand_layer_block, i.red_sand_layer_block, i.ash_layer_block, i.ash,
 		i.vintagedelight_salt, i.immersiveengineering_sawdust, i.fodder])
+	// Layers a placed block replaces like grass, up to [surface.passthrough.layers] replaceMaxLayers (surface/SurfaceLayers):
+	// the walk-through layers (snow, leaf piles, bamboo leaves). Every other layer is never replaced.
+	t.add(e, 'creativecompat:replaceable_layers', '#creativecompat:passthrough_layers')
 	// Honey's wall slide on blocks that aren't honey (surface/WallSlide; honey and Fruits Delight jelly blocks already
 	// slide, they extend HoneyBlock)
 	t.add(e, 'creativecompat:wall_slide', [b.porous_flesh, i.banana_slug_slime_block])

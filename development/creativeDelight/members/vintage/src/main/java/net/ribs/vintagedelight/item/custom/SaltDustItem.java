@@ -10,6 +10,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SnowLayerBlock;
+import net.ribs.vintagedelight.block.custom.SaltLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.ribs.vintagedelight.block.ModBlocks;
 
@@ -26,8 +27,10 @@ public class SaltDustItem extends Item {
       BlockState blockstate = world.getBlockState(blockpos);
       if (blockstate.is((Block)ModBlocks.SALT_LAYER.get())) {
          int i = (Integer)blockstate.getValue(SnowLayerBlock.LAYERS);
-         if (i < 8) {
-            world.setBlock(blockpos, (BlockState)blockstate.setValue(SnowLayerBlock.LAYERS, i + 1), 2);
+         if (i <= 8) {
+            // a 9th salt dust on a full pile makes the Salt Block (9 salt dust), not a layer above
+            world.setBlock(blockpos, i < 8 ? (BlockState)blockstate.setValue(SnowLayerBlock.LAYERS, i + 1)
+                  : SaltLayerBlock.fullBlock(), i < 8 ? 2 : 3);
             if (player == null || !player.getAbilities().instabuild) {
                itemstack.shrink(1);
             }

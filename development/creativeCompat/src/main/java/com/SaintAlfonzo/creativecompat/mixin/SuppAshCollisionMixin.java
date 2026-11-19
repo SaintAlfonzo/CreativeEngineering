@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Supplementaries ash layers stand on the layer's visible top, for every entity
- * ({@link com.SaintAlfonzo.creativecompat.surface.SurfaceLayers}, owner notes 2026-11-18): HEAD of
+ * ({@link com.SaintAlfonzo.creativecompat.surface.SurfaceLayers}): HEAD of
  * {@code getCollisionShape} ({@code m_5939_}) returns the block's outline shape. Before, living entities
  * stood one layer lower. SRG names,
  * {@code remap = false}; applied only with the mod loaded.

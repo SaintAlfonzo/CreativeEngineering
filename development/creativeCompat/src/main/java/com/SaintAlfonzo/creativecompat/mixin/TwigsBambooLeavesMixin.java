@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativecompat.mixin;
 
 import com.SaintAlfonzo.creativecompat.surface.FallingLayers;
 import com.SaintAlfonzo.creativecompat.surface.FullBambooLeavesBlock;
+import com.SaintAlfonzo.creativecompat.surface.SurfaceLayers;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -33,6 +34,17 @@ public abstract class TwigsBambooLeavesMixin {
 			if (FallingLayers.holdAndQueue(state, level, pos)) cir.setReturnValue(state);
 		} catch (Throwable ignored) {
 			// Twigs: an unsupported pile breaks
+		}
+	}
+
+	/** Another block replaces bamboo leaves up to {@code replaceMaxLayers} ({@link SurfaceLayers#replaceable}). */
+	@Inject(method = "m_6864_", at = @At("HEAD"), cancellable = true)
+	private void creativecompat$replace(BlockState state, BlockPlaceContext ctx, CallbackInfoReturnable<Boolean> cir) {
+		try {
+			Boolean r = SurfaceLayers.replaceable(state, ctx);
+			if (r != null) cir.setReturnValue(r);
+		} catch (Throwable ignored) {
+			// Twigs' answer
 		}
 	}
 

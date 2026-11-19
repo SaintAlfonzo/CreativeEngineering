@@ -9,6 +9,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
@@ -17,6 +21,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.ribs.vintagedelight.block.ModBlocks;
 import net.ribs.vintagedelight.item.ModItems;
 
 public class SaltLayerBlock extends SnowLayerBlock {
@@ -38,7 +44,35 @@ public class SaltLayerBlock extends SnowLayerBlock {
       // below sees an ordinary neighbour update.
       if (!world.isClientSide && state != oldState) {
          world.neighborChanged(pos.below(), this, pos);
+         settle(world, pos, state);
       }
+   }
+
+   // Full block (Creative Compat SurfaceLayers): 8 layers hold 8 salt dust, the Salt Block 9.
+   // A layer resting on a full pile (salt dust clicked on top, a dispenser, a falling layer) turns the pile into the
+   // Salt Block and gives up one layer; a full pile placed under a layer does the same.
+   private static void settle(Level world, BlockPos pos, BlockState state) {
+      BlockState below = world.getBlockState(pos.below());
+      if (below.is(state.getBlock()) && below.getValue(LAYERS) == 8) {
+         world.setBlock(pos.below(), fullBlock(), 3);
+         int n = state.getValue(LAYERS) - 1;
+         world.setBlock(pos, n > 0 ? state.setValue(LAYERS, n) : Blocks.AIR.defaultBlockState(), 3);
+      } else if (state.getValue(LAYERS) == 8) {
+         BlockState above = world.getBlockState(pos.above());
+         if (above.is(state.getBlock())) settle(world, pos.above(), above);
+      }
+   }
+
+   /** The Salt Block: The Salt's (Vintage Delight's merges into it), else Vintage Delight's own. */
+   public static BlockState fullBlock() {
+      Block salt = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("salt", "salt_block"));
+      return (salt == null || salt == Blocks.AIR ? ModBlocks.SALT_BLOCK.get() : salt).defaultBlockState();
+   }
+
+   // Never replaced by another block; salt dust adds layers through its own click.
+   @Override
+   public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
+      return false;
    }
 
    // Place from inside (food/seasoning #7): a layer grown under an entity that already stands in this block would

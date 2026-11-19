@@ -53,6 +53,11 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("IwLayerCollisionMixin", List.of("immersive_weathering")),
 			Map.entry("SuppAshCollisionMixin", SUPPLEMENTARIES),
 			Map.entry("IeSawdustCollisionMixin", List.of("immersiveengineering")),
+			// layer rules: replacing, full fall damage, 9th layer to the full block (surface/SurfaceLayers)
+			Map.entry("IwLayerRulesMixin", List.of("immersive_weathering")),
+			Map.entry("IwSandLayerFallMixin", List.of("immersive_weathering")),
+			Map.entry("IwLeafPileReplaceMixin", List.of("immersive_weathering")),
+			Map.entry("SuppAshRulesMixin", SUPPLEMENTARIES),
 			// MCA villagers avoid deep leaf piles (surface/LeafThorns, G7.14)
 			Map.entry("McaLeafPilePathMixin", List.of("mca")),
 			Map.entry("QuarkSortingHandlerMixin", QUARK),
