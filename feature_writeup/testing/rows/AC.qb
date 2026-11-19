@@ -19,11 +19,11 @@
 @from batches/r1031/a1_boot.qb passed
 bootreject (Mixin apply failed|InvalidInjectionException).*ArmorCapMixin
 
-## SQ-AC-02 | dragon set 36 armor, 18 toughness
+## SQ-AC-02 | dragon set 40 armor, 18 toughness
 @group server
 @commands Give a bot player the full dragon set (helmet, chestplate, leggings, boots) and equip it; `/attribute <bot> minecraft:generic.armor get`
-@pass 36 (was 30)
-@fails mixin not applied, or config `[dragon_gear] armorCap` below 36
+@pass 40 (dragonloot-common.toml protection 8 + 13 + 11 + 8; was 36), toughness 18.0
+@fails mixin not applied, config `[dragon_gear] armorCap` below 40, or `dragonloot-common.toml` `[dragonloot.armor]` values changed
 @from batches/r1101/p1_server.qb
 # self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
 > execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
@@ -35,8 +35,9 @@ sleep 3
 sleep 2
 > attribute qa minecraft:generic.armor get
 > attribute qa minecraft:generic.armor_toughness get
-expect for entity qa is 36
-expect armor_toughness for entity qa is 18
+# r1118 R1 (2026-11-18): 40 is right (dragonloot-common.toml 8/13/11/8, armorCap 50); the toughness line reads "Armor Toughness"
+expect Value of attribute Armor for entity qa is 40\.0
+expect Armor Toughness for entity qa is 18\.0
 > clear qa
 
 ## SQ-AC-03 | armor capped at 50
@@ -58,7 +59,7 @@ expect for entity qa is 50
 ## SQ-AC-04
 @group client
 @commands Wear the full dragon set
-@pass HUD armor bar shows 36 (one extra row past 20)
+@pass HUD armor bar shows 40 (one extra row past 20; dragonloot-common.toml 8/13/11/8, was 36)
 @fails client-side config or mixin
 @reviewed 2026-11-16
 > gamemode survival
@@ -68,7 +69,7 @@ expect for entity qa is 50
 > item replace entity @s armor.feet with dragonloot:dragon_boots
 do {"wait": 20}
 > attribute @s minecraft:generic.armor get
-expect is 36
+expect is 40
 shot hud_armor_bar
 > gamemode creative
-look the HUD armour bar shows 36 (one extra row past 20; Detail Armor Bar style)
+look the HUD armor bar shows 40 (one extra row past 20; Detail Armor Bar style)

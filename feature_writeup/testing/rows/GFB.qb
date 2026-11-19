@@ -41,28 +41,31 @@ sleep 10
 shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 $INST/tools/perf/eval/entity_census.py "$L" | grep -iE "falling_block|gravel" | head -10
 reject verb=\S+ .*done=0
 look shell: minecraft:falling_block near 0 (193 in the overall run); gravel item count lower than 21
-## SQ-GFB-03
-@group A
-@commands Find floating sand or gravel over a cave (or `/fill` sand over air in a freshly generated chunk with `/cdevplace`); break the block next to it, or place a block beside it
-@pass The block falls on that update, as vanilla
-@fails It never falls: the post-process flag stuck on (exception in postProcessGeneration?)
-@reviewed 2026-11-16
-> forceload add 300 300 310 310
-> fill 300 -60 300 306 -50 306 minecraft:air
-> cdevtest place 303 -55 303 minecraft:sand flags=18
-> cdevtest tickwarp 40
-waitlog verb=tickwarp end=done ticks=40 30
-> cdevtest state 303 -55 303
-> setblock 304 -55 303 minecraft:stone
+## SQ-GFB-03 | generated floating sand or gravel holds until a neighbor update, then falls as vanilla
+@group B
+@commands Normal world: `cdevtest floating` around spawn finds generated sand or gravel over air; it is still in place; `setblock` glass beside it; tick warp 60
+@pass the hit is still sand / gravel before the update; after it the block fell: its spot is air, or the air below it is filled (a stack at least as tall as the gap refills both)
+@fails it never falls: the post-process flag stuck on (exception in postProcessGeneration?); no floating hit (capture fails): widen the radius or move the center, not a game fault
+@reviewed 2026-11-18
+# r1118 R6 (2026-11-18): rewritten: setBlock runs FallingBlock.onPlace, which schedules the fall whatever the flags, so
+# a placed block can not show the hold; the hold is for blocks a generated chunk placed, so the row needs a normal world
+> forceload add -64 -64 63 63
+sleep 30
+> cdevtest floating 0 0 64
+capture F verb=floating block=\S+ pos=(-?\d+),(-?\d+),(-?\d+)
+> cdevtest state {F1} {F2} {F3}
+expect verb=state pos={F1},{F2},{F3} state="?minecraft:(sand|red_sand|gravel)\b
+> setblock {F1+1} {F2} {F3} minecraft:glass
 > cdevtest tickwarp 60
 waitlog verb=tickwarp end=done ticks=60 30
-> cdevtest state 303 -55 303
-> cdevtest state 303 -60 303
-expect verb=state pos=303,-55,303 state=minecraft:sand
-expect verb=state pos=303,-55,303 state=minecraft:air
-expect verb=state pos=303,-60,303 state=minecraft:sand
+> execute if block {F1} {F2} {F3} minecraft:air run say SQ-GFB-03-moved
+> execute unless block {F1} {F2-1} {F3} minecraft:air run say SQ-GFB-03-moved
+> cdevtest state {F1} {F2} {F3}
+> cdevtest state {F1} {F2-1} {F3}
+> setblock {F1+1} {F2} {F3} minecraft:air
+> forceload remove -64 -64 63 63
+expect SQ-GFB-03-moved$
 reject verb=\S+ .*done=0
-look the sand held over air without an update (flags 18), fell on the neighbour placement and landed at -60; generated floating sand in a real cave is the same check on a /cdevtest floating hit
 ## SQ-GFB-04
 @phase long
 @group A

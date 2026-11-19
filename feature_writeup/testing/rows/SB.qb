@@ -19,10 +19,11 @@
 ## SQ-SB-01 | spawn boxes load
 @group B
 @commands boot; `grep -E '\[spawn-boxes\]\|\[spawner-filter\]' logs/latest.log`
-@pass `15 box(es)`; after the first spawns `N structure(s) boxed` (about 75), no `is in box` warning, no `no pool` / `no entity type` (ST-321)
+@pass `17 box(es)` (15 until the end_tower and allay_temples boxes, 2026-11-06); after the first spawns `N structure(s) boxed` (about 75), no `is in box` warning, no `no pool` / `no entity type` (ST-321)
 @fails 0 boxes: `spawn_boxes.json` missing or unreadable (error line)
 @from batches/r1031/w2_metas_spawns.qb
-bootexpect \[spawn-boxes\].*15 box\(es\)
+# r1118 R1 (2026-11-18): 17 is intended: spawn_boxes.json gained end_tower (mobs/pillagers #2) and allay_temples (mobs/spawns #5)
+bootexpect \[spawn-boxes\].*17 box\(es\)
 bootreject \[spawn-boxes\].*(no pool|no entity type|is in box)
 > pbot spawn qa 0 120 0 minecraft:overworld creative
 > gamerule doDaylightCycle false
