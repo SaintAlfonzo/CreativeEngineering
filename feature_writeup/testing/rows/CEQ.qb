@@ -105,8 +105,8 @@ look one fluid (Create liquid experience); no Cycle, Stockpile, Recovery: checke
 > cdevtest tag item creativeequipment:dragon_gear
 > cdevtest tag item creativeequipment:elytra_chestplates
 > cdevtest tag item creativeequipment:bonemeal_charms
-expect verb=reg kind=item id=creativeequipment:copper_shield 
-expect verb=reg kind=item id=creativeequipment:dragon_shield 
+expect verb=reg kind=item id=creativeequipment:copper_shield
+expect verb=reg kind=item id=creativeequipment:dragon_shield
 expect verb=tag kind=item tag=creativeequipment:stepstools n=1[6-9]
 expect verb=tag kind=item tag=curios:feet .*ids=\S*creativeequipment:\w+_stepstool
 expect verb=tag kind=item tag=creativeequipment:dragon_gear n=[1-9]
@@ -189,10 +189,10 @@ shell grep -cE "\[tags\].*harvest|harvest\.js" logs/kubejs/server.log; grep -nE 
 > cdevtest break 342 -60 300 held=everythingcopper:copper_pickaxe
 > setblock 343 -60 300 creativeengineering:aluminum_plate_block
 > cdevtest break 343 -60 300 held=minecraft:wooden_pickaxe
-expect verb=tag kind=block tag=creativeequipment:needs_copper_tool n=14 
+expect verb=tag kind=block tag=creativeequipment:needs_copper_tool n=14
 count verb=break who=\S+ broken=true == 2
 expect verb=break drops=creativeengineering:aluminum_plate_block:1\b
-expect verb=break drops=- 
+expect verb=break drops=-
 look aluminum plate block: one tier tag (needs_copper_tool) and one tool tag (mineable/pickaxe); copper dust pile likewise (row's plate_block_iron does not exist: iron dust pile is the iron-tier member now); harvest.js line once; copper pickaxe break sums 1 aluminum_plate_block, wooden pickaxe sums 0
 reject verb=\S+ .*done=0
 

@@ -34,7 +34,7 @@ look the ingredients= list of each: the food then four gold entries (count them;
 > cdevtest recipes minecraft:glass_bottle
 expect verb=makes id=\S+ result=vintagedelight:empty_mason_jar\*4 serializer=minecraft:crafting_shaped
 expect verb=makes id=creativedelight:shaped/glass_bottle result=minecraft:glass_bottle\*4
-reject verb=(makes|recipes) id=minecraft:glass_bottle 
+reject verb=(makes|recipes) id=minecraft:glass_bottle
 reject verb=makes id=\S+ result=(minecraft:glass_bottle|vintagedelight:empty_mason_jar)\*3 serializer=minecraft:crafting
 look one shaped mason jar recipe giving 4; one shaped glass bottle recipe giving 4 under the creativedelight id
 

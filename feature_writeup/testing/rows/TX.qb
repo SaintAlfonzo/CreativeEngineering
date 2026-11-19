@@ -102,7 +102,7 @@ expect \[cdevtest\] verb=state error="unloaded 0,-60,4000
 expect \[cdevtest\] verb=state done=0
 expect \[cdevtest\] verb=count error="missing to x"
 expect \[cdevtest\] verb=count done=0
-reject Exception|\tat 
+reject Exception|\tat
 
 ## SQ-TX-02 | place, state, be
 @group A
@@ -247,8 +247,8 @@ expect output="minecraft:potion minecraft:swiftness"
 reject verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=0
 count verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=1 == 13
 expect verb=recipes id=minecraft:bread result=minecraft:bread\*1
-expect verb=food item=minecraft:bread\*1 food=true nutrition=5 modifier=0.6 
-expect verb=tag kind=item tag=minecraft:logs n=([2-9]\d|\d{3,}) 
+expect verb=food item=minecraft:bread\*1 food=true nutrition=5 modifier=0.6
+expect verb=tag kind=item tag=minecraft:logs n=([2-9]\d|\d{3,})
 expect verb=states states=\d+ ceiling=1048576 headroom=
 expect verb=attrs item=minecraft:diamond_sword\*1\S* n=([2-9]|\d\d)
 look spider eye gives awkward or nothing (the potion line for it)
@@ -441,7 +441,7 @@ look dump json: class=in_tag for snow 1-8, the IW leaf piles + azalea_flower_pil
 @from batches/r1116/tx.qb passed
 > cdevreload compat
 sleep 2
-expect \[cdevreload\] compat: 
+expect \[cdevreload\] compat:
 reject not loaded yet
 
 ## SQ-TX-19 | season (moved from /zq, Creative Calendar read reflectively)
@@ -460,7 +460,7 @@ expect verb=season biome=minecraft:snowy_plains type=\S+ enabled=
 expect verb=season biome=minecraft:jungle type=
 expect verb=season error="no biome minecraft:bogus"
 expect verb=season done=0
-reject Creative Calendar not loaded|Exception|\tat 
+reject Creative Calendar not loaded|Exception|\tat
 look desert type=ARID only if the arid tag line lists minecraft:desert; snowy_plains FROZEN or COLD
 
 ## SQ-TX-20 | floating (moved from /zq)
@@ -478,7 +478,7 @@ sleep 3
 expect verb=floating n=0 shown=0 skipped_columns=0
 expect verb=floating error="r out of range 0\.\.64: 65"
 expect verb=floating n=0 shown=0 skipped_columns=25
-reject Exception|\tat 
+reject Exception|\tat
 
 ## SQ-TX-21 | under: arguments and output form (moved from /zq)
 @reviewed 2026-11-17
@@ -495,7 +495,7 @@ expect verb=under starts=\d+ skipped_chunks=0
 expect verb=under error="rChunks out of range 0\.\.32: 40"
 expect verb=under starts=0 skipped_chunks=9
 expect verb=under error="dim given twice"
-reject Exception|\tat 
+reject Exception|\tat
 
 ## SQ-TX-22 | nbt (moved from /zq)
 @reviewed 2026-11-17
@@ -509,7 +509,7 @@ reject Exception|\tat
 expect verb=nbt item=minecraft:potion has_tag=true .*potion=minecraft:water
 expect verb=nbt item=minecraft:potion has_tag=true .*potion=minecraft:swiftness
 expect verb=nbt item=minecraft:stick has_tag=true .*potion=minecraft:water
-reject Exception|\tat 
+reject Exception|\tat
 
 ## SQ-TX-23 | under and floating on natural starts, efb_judge reads the new lines
 @reviewed 2026-11-17
@@ -524,7 +524,7 @@ waitlog verb=floating n= 60
 shell python3 "$INST/tools/scratch_query/efb_judge.py" under logs/latest.log | head -20
 expect verb=under .*done=1
 expect verb=floating .*done=1
-reject Exception|\tat 
+reject Exception|\tat
 look efb_judge 'under: N starts' matches the verb's starts= and ids; floating hits are real sand/gravel over air
 
 ## CQ-TXR-01

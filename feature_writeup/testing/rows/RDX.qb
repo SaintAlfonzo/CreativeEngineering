@@ -38,7 +38,7 @@ kjsreject (?i)\[NCH\].*warn
 waitlog \[cdevtest\] verb=reg done= 30
 expect \[cdevtest\] verb=reg kind=item regex="?\^rusticdelight:\(pancake\|fried_dough\)\$"? n=0
 expect \[cdevtest\] verb=reg kind=item regex="?\^rusticdelight:\\w\*pancake"? n=([6-9]|\d\d)
-expect \[cdevtest\] verb=reg kind=item id=supplementaries:pancake 
+expect \[cdevtest\] verb=reg kind=item id=supplementaries:pancake
 reject \[cdevtest\] .*(done=0|error=)
 look JEI half (client): no Rustic plain Pancake or Fried Dough in a "Pancake" / "Fried Dough" search; Supplementaries' item named "Pancake" with the gray "Stackable: place up to 8 ..." line
 ## SQ-RDX-03 | Rustic pancakes recipes
@@ -119,8 +119,8 @@ look rdetail lines: bacon ingredients cooked bacon + syrup + honey bottle; cooki
 > cdevtest tag item creativedelight:roasted_bell_pepper_slice
 > cdevtest uses minecraft:cooked_cod
 waitlog \[cdevtest\] verb=uses item=minecraft:cooked_cod 30
-expect \[cdevtest\] verb=rdetail id=creativedelight:\S*pizza_manual_only 
-expect \[cdevtest\] verb=tag kind=item tag=creativedelight:roasted_bell_pepper_slice n=9 
+expect \[cdevtest\] verb=rdetail id=creativedelight:\S*pizza_manual_only
+expect \[cdevtest\] verb=tag kind=item tag=creativedelight:roasted_bell_pepper_slice n=9
 reject \[cdevtest\] .*(done=0|error=)
 look cooked cod not in the pizza meat slot (no pizza id in the `verb=uses` lines for minecraft:cooked_cod, or only the fish slot)
 
@@ -171,9 +171,9 @@ reject \[cdevtest\] .*(done=0|error=)
 > cdevtest rdetail coffee_braised_beef_cooked_manual_only
 > cdevtest uses rusticdelight:calamari
 waitlog \[cdevtest\] verb=uses item=rusticdelight:calamari 30
-expect \[cdevtest\] verb=rdetail id=creativedelight:shapeless/bell_pepper_soup_cooked_manual_only 
-expect \[cdevtest\] verb=rdetail id=creativedelight:shapeless/calamari_soup_cooked_manual_only 
-expect \[cdevtest\] verb=rdetail id=creativedelight:shapeless/coffee_braised_beef_cooked_manual_only 
+expect \[cdevtest\] verb=rdetail id=creativedelight:shapeless/bell_pepper_soup_cooked_manual_only
+expect \[cdevtest\] verb=rdetail id=creativedelight:shapeless/calamari_soup_cooked_manual_only
+expect \[cdevtest\] verb=rdetail id=creativedelight:shapeless/coffee_braised_beef_cooked_manual_only
 reject \[cdevtest\] verb=uses id=\S*(createmixing|mixing)/\S*calamari_soup
 reject \[cdevtest\] .*(done=0|error=)
 
@@ -187,7 +187,7 @@ reject \[cdevtest\] .*(done=0|error=)
 > cdevtest makes rusticdelight:golden_coffee_beans
 > cdevtest rdetail golden_coffee_beans
 waitlog \[cdevtest\] verb=rdetail text=golden_coffee_beans n= 30
-reject \[cdevtest\] verb=(makes|rdetail) id=rusticdelight:golden_coffee_beans 
+reject \[cdevtest\] verb=(makes|rdetail) id=rusticdelight:golden_coffee_beans
 expect \[cdevtest\] verb=makes id=\S+ result=rusticdelight:golden_coffee_beans\S* serializer=create:mixing
 expect \[cdevtest\] verb=makes id=\S+ result=rusticdelight:golden_coffee_beans\S* serializer=immersiveengineering:arc_furnace
 reject \[cdevtest\] .*(done=0|error=)
@@ -204,7 +204,7 @@ look the crafting ring in the rdetail lines takes any gold nugget (raw or roaste
 > cdevtest rdetail glowing_calamari_slice_from_glowing_calamari
 waitlog \[cdevtest\] verb=rdetail text=glowing_calamari_slice_from_glowing_calamari n= 30
 count \[cdevtest\] verb=makes id=creativedelight:\S+ result=creativedelight:glowing_calamari_slice\*2\b == 1
-expect \[cdevtest\] verb=rdetail id=creativedelight:farmersdelightcutting/glowing_calamari_slice_from_glowing_calamari 
+expect \[cdevtest\] verb=rdetail id=creativedelight:farmersdelightcutting/glowing_calamari_slice_from_glowing_calamari
 reject \[cdevtest\] verb=(makes|rdetail) id=\S*fdcutting\S*glowing_calamari
 reject \[cdevtest\] .*(done=0|error=)
 

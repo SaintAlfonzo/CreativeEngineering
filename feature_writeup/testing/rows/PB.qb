@@ -27,7 +27,7 @@
 expect cdevperfbot ok
 expect bot1 joined the game
 expect bot1
-reject Exception|\tat 
+reject Exception|\tat
 look the join line is a normal one; no stack from Forge networking, FTB, KubeJS login handlers or Lightman's in the row log
 ## SQ-PFS-02
 @group A, `gamerule randomTickSpeed 3`

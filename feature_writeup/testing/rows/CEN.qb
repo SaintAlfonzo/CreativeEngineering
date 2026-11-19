@@ -73,7 +73,7 @@ look packs order creativecommon, then the pack folder, then the jars with creati
 @reviewed 2026-11-16
 > cdevtest recipes creativeengineering:sawmill/ max=500
 waitlog \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n= 30
-expect \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n=216 
+expect \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n=216
 reject \[cdevtest\] .*(done=0|error=)
 shell grep -cE "^creativeengineering:sawmill/" $INST/kubejs/exported/recipes/all.csv; true
 look 216 = 211 jar + 5 pack (and = the 2026-11-10 dump count from the shell line); removed-wood output check: no `verb=recipes` line outputs a removed wood item (global.removedWoods; max=500 lists them all)
@@ -91,7 +91,7 @@ look 216 = 211 jar + 5 pack (and = the 2026-11-10 dump count from the shell line
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=3 30
 > cdevtest entities 8 -60 8 24 type=creativeengineering:shrapnel
 waitlog \[cdevtest\] verb=entities done= 30
-expect \[cdevtest\] verb=entities n=12 
+expect \[cdevtest\] verb=entities n=12
 > kill @e[type=creativeengineering:shrapnel]
 > forceload remove 0 0 15 15
 reject \[cdevtest\] .*(done=0|error=)

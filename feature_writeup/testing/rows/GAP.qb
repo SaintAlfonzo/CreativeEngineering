@@ -25,7 +25,7 @@ reject \[cdevtest\] verb=rdetail id=\S+ serializer=farmersdelight:cooking result
 > zc4 cooktime jam
 waitlog \[zc4\] done 30
 > cdevtest item vintagedelight:cherry_jam_jar
-expect \[cdevtest\] verb=item item=vintagedelight:cherry_jam_jar .*max_stack=64 
+expect \[cdevtest\] verb=item item=vintagedelight:cherry_jam_jar .*max_stack=64
 look every fruitsdelight jam in the zc4 cook lines has time=400 (if none is listed, Fruits Delight jams are not Cooking Pot recipes in this build: record which serializer makes them)
 reject \[cdevtest\] verb=\S+ done=0
 

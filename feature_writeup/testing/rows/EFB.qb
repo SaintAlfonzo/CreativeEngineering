@@ -844,7 +844,7 @@ sleep 20
 > cdevtest under {UC1} {UC3} 4 undead_castle
 > cdevtest state {UC1} 100 {UC3}
 > forceload remove {UC1-64} {UC3-64} {UC1+64} {UC3+64}
-expect \[cdevtest\] verb=under id=eugene:undead_castle 
+expect \[cdevtest\] verb=under id=eugene:undead_castle
 reject \[cdevtest\] verb=(under|state) .*done=0
 reject \[cdevtest\] verb=state .*biome=\S*(highland|peaks|slopes)
 shell grep -oE 'verb=under id=eugene:undead_castle .*(air_max|over6)=[0-9]+' logs/latest.log | tail -3

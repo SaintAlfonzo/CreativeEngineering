@@ -72,7 +72,7 @@ sleep 2
 > cdevtest count 1400 -60 1422 1419 -60 1422 #minecraft:crops
 > data get entity mx SelectedItem
 expect Found no elements matching SelectedItem
-expect verb=count block=#minecraft:crops n=20 
+expect verb=count block=#minecraft:crops n=20
 reject verb=\S+ .*done=0
 # one more seed on grass (natural floor) and on stone: nothing planted, the seed kept
 > setblock 1403 -61 1426 minecraft:stone

@@ -21,8 +21,8 @@ shell test "$(grep -c "\[jeiOrder\] defined" logs/kubejs/startup.log)" = 1
 > cdevtest tag item creativecompat:jei/equipment/chainmail
 > cdevtest tag item creativecommon:jei/equipment/chainmail
 waitlog verb=tag kind=item tag=creativecommon:jei/equipment/chainmail n= 30
-expect verb=tag kind=item tag=creativecompat:jei/equipment/chainmail n=[1-9]\d* 
-expect verb=tag kind=item tag=creativecommon:jei/equipment/chainmail n=0 
+expect verb=tag kind=item tag=creativecompat:jei/equipment/chainmail n=[1-9]\d*
+expect verb=tag kind=item tag=creativecommon:jei/equipment/chainmail n=0
 reject \[cdevtest\] .*done=0
 look `[jeiOrder] defined N nodes` once (43 in the 2026-11-12 pack log); `item: N jei tags` (35). Tag copper had 0 members in the 2026-11-10 dump, so the row uses chainmail (6). The /reload of SQ-PA-02 has run before this row
 

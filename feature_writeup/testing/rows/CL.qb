@@ -32,8 +32,8 @@
 > cdevtest rdetail cardboard_box
 > cdevtest tagsof creativecompat:weathered_cardboard_box
 waitlog \[cdevtest\] verb=tagsof done= 30
-expect \[cdevtest\] verb=makes item=design_decor:cardboard_box n=1 
-expect \[cdevtest\] verb=makes item=creativecompat:weathered_cardboard_box n=1 
+expect \[cdevtest\] verb=makes item=design_decor:cardboard_box n=1
+expect \[cdevtest\] verb=makes item=creativecompat:weathered_cardboard_box n=1
 expect \[cdevtest\] verb=rdetail id=\S+ serializer=create:splashing result=design_decor:cardboard_box\*1 ingredients=dustrial_decor:cardboard_box
 expect \[cdevtest\] verb=rdetail id=\S+ serializer=create:splashing result=creativecompat:weathered_cardboard_box\*1 ingredients=design_decor:cardboard_box
 expect \[cdevtest\] verb=tagsof id=creativecompat:weathered_cardboard_box block_tags=\S*minecraft:mineable/axe

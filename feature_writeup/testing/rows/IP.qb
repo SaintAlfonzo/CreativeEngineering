@@ -183,7 +183,7 @@ sleep 2
 > execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new]
 > cdevtest state 1200 -60 1020
 > cdevtest state 1201 -59 1020
-expect \[cdevtest\] verb=state pos=1200,-60,1020 state=minecraft:obsidian 
+expect \[cdevtest\] verb=state pos=1200,-60,1020 state=minecraft:obsidian
 reject \[cdevtest\] verb=state pos=1201,-59,1020 state="?minecraft:nether_portal\b
 > execute in minecraft:the_nether run forceload add 0 0 32 32
 sleep 20

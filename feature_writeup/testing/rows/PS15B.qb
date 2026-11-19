@@ -117,28 +117,28 @@ sleep 3
 > zpth mod z03s3
 > zpth mod z03s4
 > zpth mod z03e
-expect \[zpth\] mod z03m0 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03s0 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03m1 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03s1 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03m2 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03s2 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03m3 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03s3 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03m4 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03s4 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z03c minecraft:zombie mod=-0\.250 
-expect \[zpth\] mod z03e minecraft:zombie mod=-0\.500 
+expect \[zpth\] mod z03m0 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03s0 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03m1 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03s1 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03m2 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03s2 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03m3 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03s3 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03m4 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03s4 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z03c minecraft:zombie mod=-0\.250
+expect \[zpth\] mod z03e minecraft:zombie mod=-0\.500
 > kill @e[tag=z03m2]
 > tp P 1002.5 -60 1152.5
 sleep 2
 > zpth player P
-expect \[zpth\] player P minecraft:player mod=-0\.500 
+expect \[zpth\] player P minecraft:player mod=-0\.500
 > kill @e[tag=z03c]
 > tp P 1000.5 -60 1150.5
 sleep 2
 > zpth player P
-expect \[zpth\] player P minecraft:player mod=-0\.250 
+expect \[zpth\] player P minecraft:player mod=-0\.250
 > tp P 1002.5 -60 1146.5 0 0
 > kill @e[tag=z03m0]
 > kill @e[tag=z03m1]
@@ -180,7 +180,7 @@ sleep 4
 > zpth mod z04x
 > zpth mod z04c
 > zpth mod z04o
-expect \[zpth\] mod z04x minecraft:zombie mod=-0\.650 
+expect \[zpth\] mod z04x minecraft:zombie mod=-0\.650
 > tp P 1031.5 -59 1180.5
 sleep 2
 > zpth player P
@@ -277,8 +277,8 @@ sleep 3
 sleep 3
 > zpth mod z07r
 > zpth mod z07s
-expect \[zpth\] mod z07r minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z07s minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z07r minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z07s minecraft:zombie mod=(none|-?0\.000)
 
 ## SQ-PS15B-08 | chunk border x 1007 / 1008: wheat field and web cube straddling it; same mods both sides; bot crosses; no moved wrongly
 @group A
@@ -308,12 +308,12 @@ sleep 3
 > zpth mod z08bl
 > zpth mod z08br
 > zpth mod z08c
-expect \[zpth\] mod z08wl minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z08wr minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z08cl minecraft:zombie mod=-0\.250 
-expect \[zpth\] mod z08cr minecraft:zombie mod=-0\.250 
-expect \[zpth\] mod z08bl minecraft:zombie mod=-0\.650 
-expect \[zpth\] mod z08br minecraft:zombie mod=-0\.650 
+expect \[zpth\] mod z08wl minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z08wr minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z08cl minecraft:zombie mod=-0\.250
+expect \[zpth\] mod z08cr minecraft:zombie mod=-0\.250
+expect \[zpth\] mod z08bl minecraft:zombie mod=-0\.650
+expect \[zpth\] mod z08br minecraft:zombie mod=-0\.650
 > tp P 1002.5 -60 1203.5 -90 0
 sleep 1
 > pbot moveto P 1013.5 1203.5 walk 400
@@ -506,59 +506,59 @@ sleep 4
 > zpth mod z10sawdust7
 > zpth mod z10sawdust8
 > zpth mod z10sawdust9
-expect \[zpth\] mod z10snow1 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10snow2 minecraft:zombie mod=-0\.100 
-expect \[zpth\] mod z10snow3 minecraft:zombie mod=-0\.200 
-expect \[zpth\] mod z10snow4 minecraft:zombie mod=-0\.300 
-expect \[zpth\] mod z10snow5 minecraft:zombie mod=-0\.400 
-expect \[zpth\] mod z10snow6 minecraft:zombie mod=-0\.500 
-expect \[zpth\] mod z10snow7 minecraft:zombie mod=-0\.600 
-expect \[zpth\] mod z10snow8 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10leaf1 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10leaf2 minecraft:zombie mod=-0\.057 
-expect \[zpth\] mod z10leaf3 minecraft:zombie mod=-0\.114 
-expect \[zpth\] mod z10leaf4 minecraft:zombie mod=-0\.171 
-expect \[zpth\] mod z10leaf5 minecraft:zombie mod=-0\.229 
-expect \[zpth\] mod z10leaf6 minecraft:zombie mod=-0\.286 
-expect \[zpth\] mod z10leaf7 minecraft:zombie mod=-0\.343 
-expect \[zpth\] mod z10leaf8 minecraft:zombie mod=-0\.400 
-expect \[zpth\] mod z10bamboo1 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10bamboo2 minecraft:zombie mod=-0\.133 
-expect \[zpth\] mod z10bamboo3 minecraft:zombie mod=-0\.267 
-expect \[zpth\] mod z10bamboo4 minecraft:zombie mod=-0\.400 
-expect \[zpth\] mod z10sand1 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sand2 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sand3 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sand4 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sand5 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sand6 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sand7 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sand8 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash1 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash2 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash3 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash4 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash5 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash6 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash7 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10ash8 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder1 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder2 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder3 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder4 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder5 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder6 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder7 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10fodder8 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust1 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust2 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust3 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust4 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust5 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust6 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust7 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust8 minecraft:zombie mod=(none|-?0\.000) 
-expect \[zpth\] mod z10sawdust9 minecraft:zombie mod=(none|-?0\.000) 
+expect \[zpth\] mod z10snow1 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10snow2 minecraft:zombie mod=-0\.100
+expect \[zpth\] mod z10snow3 minecraft:zombie mod=-0\.200
+expect \[zpth\] mod z10snow4 minecraft:zombie mod=-0\.300
+expect \[zpth\] mod z10snow5 minecraft:zombie mod=-0\.400
+expect \[zpth\] mod z10snow6 minecraft:zombie mod=-0\.500
+expect \[zpth\] mod z10snow7 minecraft:zombie mod=-0\.600
+expect \[zpth\] mod z10snow8 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10leaf1 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10leaf2 minecraft:zombie mod=-0\.057
+expect \[zpth\] mod z10leaf3 minecraft:zombie mod=-0\.114
+expect \[zpth\] mod z10leaf4 minecraft:zombie mod=-0\.171
+expect \[zpth\] mod z10leaf5 minecraft:zombie mod=-0\.229
+expect \[zpth\] mod z10leaf6 minecraft:zombie mod=-0\.286
+expect \[zpth\] mod z10leaf7 minecraft:zombie mod=-0\.343
+expect \[zpth\] mod z10leaf8 minecraft:zombie mod=-0\.400
+expect \[zpth\] mod z10bamboo1 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10bamboo2 minecraft:zombie mod=-0\.133
+expect \[zpth\] mod z10bamboo3 minecraft:zombie mod=-0\.267
+expect \[zpth\] mod z10bamboo4 minecraft:zombie mod=-0\.400
+expect \[zpth\] mod z10sand1 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sand2 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sand3 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sand4 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sand5 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sand6 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sand7 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sand8 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash1 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash2 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash3 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash4 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash5 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash6 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash7 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10ash8 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder1 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder2 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder3 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder4 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder5 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder6 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder7 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10fodder8 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust1 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust2 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust3 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust4 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust5 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust6 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust7 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust8 minecraft:zombie mod=(none|-?0\.000)
+expect \[zpth\] mod z10sawdust9 minecraft:zombie mod=(none|-?0\.000)
 > execute as @e[tag=z10snow5] run say z10snow5 y
 > data get entity @e[tag=z10snow5,limit=1] Pos[1]
 # a lone full snow layer: on a random tick it becomes a snow block

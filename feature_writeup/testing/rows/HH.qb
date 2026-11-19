@@ -1726,8 +1726,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > cdevtest rdetail creativedelight:smoking/cooked_sausage_from_raw_sausage
 > cdevtest rdetail creativedelight:campfirecooking/cooked_sausage_from_raw_sausage
 expect verb=rdetail id=\S*smelting/cooked_sausage_from_raw_sausage .*result="?[\w.-]+:cooked_sausage\*1\b .*ingredients="?hearthandharvest:raw_sausage
-expect verb=rdetail id=\S*smoking/cooked_sausage_from_raw_sausage 
-expect verb=rdetail id=\S*campfirecooking/cooked_sausage_from_raw_sausage 
+expect verb=rdetail id=\S*smoking/cooked_sausage_from_raw_sausage
+expect verb=rdetail id=\S*campfirecooking/cooked_sausage_from_raw_sausage
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1192 | log matches `shaped/pitchfork \{minecraft:crafting_shaped\} -> 1 pitch
@@ -2284,7 +2284,7 @@ sleep 1
 > pbot interact bot1 @e[tag=pl4,limit=1]
 sleep 1
 > cdevtest items 3000 -60 3050 3
-expect verb=items items=- 
+expect verb=items items=-
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1228 | log matches `interact bot1 pl5: \w+, hand minecraft:wheat_seeds x7`; l
@@ -2310,7 +2310,7 @@ sleep 1
 > cdevtest items 3048 -60 3050 3
 expect verb=pbot\.interact bot=bot1 .*result=\w+ held_after=minecraft:wheat_seeds\*7\b
 expect has the following entity data: [1-9]\d\d
-expect verb=items items=- 
+expect verb=items items=-
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1229 | log matches `pluck 400: feathers 400, damaged (7\d|8\d|9\d|1[0-2]\d|13
@@ -2420,7 +2420,7 @@ sleep 1
 > zhh1 skip 1210
 sleep 3
 > cdevtest items 3384 -60 3050 3
-expect verb=items items=- 
+expect verb=items items=-
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1236 | count `drops .*hearthandharvest:manure x1` == 1; count `drops .*: none
@@ -2501,8 +2501,8 @@ sleep 1
 sleep 3
 > cdevtest items 3054 -60 3098 3
 > cdevtest items 3042 -60 3098 3
-expect verb=items items=- 
-expect verb=items items=- 
+expect verb=items items=-
+expect verb=items items=-
 look log matches `verb=items items=- `; log matches `verb=items items=- ` (named cow, baby cow)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -2528,7 +2528,7 @@ sleep 1
 > zhh1 skip 1210
 sleep 3
 > cdevtest items 3096 -60 3098 3
-expect verb=items items=- 
+expect verb=items items=-
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1240 | log matches `Test failed`; log matches `bot1 has the following entity
@@ -2609,7 +2609,7 @@ sleep 3
 > cdevtest items 3288 -60 3096 4
 > cdevtest kill 3288 -60 3096 minecraft:cow n=20 held=hearthandharvest:iron_cleaver
 expect verb=kill type=minecraft:cow n=20 killed=20 who=
-expect verb=kill drops=minecraft:beef:(4[5-9]|[5-8]\d|90) 
+expect verb=kill drops=minecraft:beef:(4[5-9]|[5-8]\d|90)
 look log matches `verb=kill type=minecraft:cow n=20 killed=20 who=` and `verb=kill drops=minecraft:beef:(4[5-9]|[5-8]\d|90) `; log has no `kill minecraft:cow x20.*leather`
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -2642,7 +2642,7 @@ sleep 3
 > cdevtest items 3384 -60 3096 4
 > cdevtest kill 3384 -60 3096 minecraft:pig n=20 held=hearthandharvest:iron_cleaver
 expect verb=kill type=minecraft:pig n=20 killed=20 who=
-expect verb=kill drops=(farmersdelight:ham:\d+,)?minecraft:porkchop:\d+ 
+expect verb=kill drops=(farmersdelight:ham:\d+,)?minecraft:porkchop:\d+
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1246 | log matches `kill minecraft:sheep x20 .* dead 20: minecraft:mutton x(\
@@ -2657,7 +2657,7 @@ sleep 3
 > cdevtest items 3432 -60 3096 4
 > cdevtest kill 3432 -60 3096 minecraft:sheep n=20 held=hearthandharvest:iron_cleaver
 expect verb=kill type=minecraft:sheep n=20 killed=20 who=
-expect verb=kill drops=minecraft:mutton:\d+ 
+expect verb=kill drops=minecraft:mutton:\d+
 look log matches `verb=kill type=minecraft:sheep n=20 killed=20 who=` and `verb=kill drops=minecraft:mutton:\d+ `; log has no `kill minecraft:sheep x20.*wool`
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -2673,7 +2673,7 @@ sleep 3
 > cdevtest items 3000 -60 3144 4
 > cdevtest kill 3000 -60 3144 minecraft:chicken n=20 held=hearthandharvest:iron_cleaver
 expect verb=kill type=minecraft:chicken n=20 killed=20 who=
-expect verb=kill drops=minecraft:chicken:\d+ 
+expect verb=kill drops=minecraft:chicken:\d+
 look log matches `verb=kill type=minecraft:chicken n=20 killed=20 who=` and `verb=kill drops=minecraft:chicken:\d+ `; log has no `kill minecraft:chicken x20.*feather`
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -2689,7 +2689,7 @@ sleep 3
 > cdevtest items 3048 -60 3144 4
 > cdevtest kill 3048 -60 3144 minecraft:rabbit n=20 held=hearthandharvest:iron_cleaver
 expect verb=kill type=minecraft:rabbit n=20 killed=20 who=
-expect verb=kill drops=minecraft:rabbit:\d+ 
+expect verb=kill drops=minecraft:rabbit:\d+
 look log matches `verb=kill type=minecraft:rabbit n=20 killed=20 who=` and `verb=kill drops=minecraft:rabbit:\d+ `; log has no `kill minecraft:rabbit x20.*rabbit_(hide|foot)`
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -3839,7 +3839,7 @@ sleep 3
 > cdevtest useair as=bot1 hand=both
 > data get entity bot1 SelectedItem
 > execute if block 3192 -60 3384 minecraft:air
-expect verb=useair who=bot1 hand=main result=PASS 
+expect verb=useair who=bot1 hand=main result=PASS
 expect has the following entity data: \{(Count: 1b, id: "hearthandharvest:sap_bucket"|id: "hearthandharvest:sap_bucket", Count: 1b)\}
 expect Test passed
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -3859,7 +3859,7 @@ sleep 3
 > pbot hold bot1 hearthandharvest:brine_bucket
 > cdevtest useair as=bot1 hand=both
 > data get entity bot1 SelectedItem
-expect verb=useair who=bot1 hand=main result=PASS 
+expect verb=useair who=bot1 hand=main result=PASS
 expect has the following entity data: \{(Count: 1b, id: "hearthandharvest:brine_bucket"|id: "hearthandharvest:brine_bucket", Count: 1b)\}
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -4229,7 +4229,7 @@ sleep 1
 sleep 1
 > cdevtest items 3096 -60 3482 3
 expect verb=pbot\.interact bot=bot1 .*result=\w+ held_after=minecraft:glass_bottle\*1\b
-expect verb=items items=- 
+expect verb=items items=-
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1326 | log matches `drops .*: none`; log matches `litter minecraft:pig x100:
@@ -4252,7 +4252,7 @@ sleep 1
 sleep 3
 > cdevtest items 3144 -60 3482 3
 > zhh1 litter 3150 -60 3480 minecraft:pig 100
-expect verb=items items=- 
+expect verb=items items=-
 expect litter minecraft:pig x100: babies 100, extra 0$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -6362,7 +6362,7 @@ look `Placed structure` (flat ground is a valid site: `surface != floor` false, 
 @reviewed 2026-11-16
 > cdevtest ages 4130 -60 130 4230 -56 230 corn_delight:corn_crop
 > cdevtest count 4130 -60 130 4230 -59 230 corn_delight:corn_crop
-expect verb=ages block=corn_delight:corn_crop prop=age n=[1-9]\d* mean=7\.000 hist=7:\d+ 
+expect verb=ages block=corn_delight:corn_crop prop=age n=[1-9]\d* mean=7\.000 hist=7:\d+
 expect verb=count block=corn_delight:corn_crop n=[1-9]\d* on=(\S*,)?minecraft:farmland:[1-9]
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -6418,7 +6418,7 @@ capture M The nearest hearthandharvest:corn_maze is at \[(-?\d+), (~|-?\d+), (-?
 sleep 90
 > cdevtest under {M1} {M3} 2 corn_maze
 waitlog \[cdevtest\] verb=under (.* )?done=[01] 120
-expect \[cdevtest\] verb=under id=hearthandharvest:corn_maze 
+expect \[cdevtest\] verb=under id=hearthandharvest:corn_maze
 reject \[cdevtest\] verb=under .*done=0
 > zhh2 countset {M1-2} 50 {M3-2} {M1+36} 110 {M3+36} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest,lootr:lootr_chest
 > zhh2 chests {M1-2} 50 {M3-2} {M1+36} 110 {M3+36}
@@ -6710,18 +6710,18 @@ look UNPARSED CMD: hearthandharvest:crow ;; config/hearthandharvest-common.toml
 > cdevtest item hearthandharvest:crow_feather
 > cdevtest item hearthandharvest:crow_spawn_egg
 > cdevtest item salt:salt_block
-expect verb=item item=hearthandharvest:lightly_licked_salt_block class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:well_licked_salt_block class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:heavily_licked_salt_block class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:waxed_salt_block class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:waxed_lightly_licked_salt_block class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:waxed_well_licked_salt_block class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:waxed_heavily_licked_salt_block class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:scarecrow class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:nest class=\S*\.BlockItem 
-expect verb=item item=hearthandharvest:crow_feather class=net\.minecraft\.world\.item\.Item 
-expect verb=item item=hearthandharvest:crow_spawn_egg class=\S*\.ForgeSpawnEggItem 
-expect verb=item item=salt:salt_block class=\S*\.BlockItem 
+expect verb=item item=hearthandharvest:lightly_licked_salt_block class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:well_licked_salt_block class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:heavily_licked_salt_block class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:waxed_salt_block class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:waxed_lightly_licked_salt_block class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:waxed_well_licked_salt_block class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:waxed_heavily_licked_salt_block class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:scarecrow class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:nest class=\S*\.BlockItem
+expect verb=item item=hearthandharvest:crow_feather class=net\.minecraft\.world\.item\.Item
+expect verb=item item=hearthandharvest:crow_spawn_egg class=\S*\.ForgeSpawnEggItem
+expect verb=item item=salt:salt_block class=\S*\.BlockItem
 reject not found|unknown
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -6951,7 +6951,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > cdevtest makes hearthandharvest:nest
 > cdevtest rdetail hearthandharvest:scarecrow
 > cdevtest rdetail hearthandharvest:nest
-expect verb=rdetail id=\S*salt_lick_from_raw_rock_salt serializer=\S+ result=salt:salt_block\*1 
+expect verb=rdetail id=\S*salt_lick_from_raw_rock_salt serializer=\S+ result=salt:salt_block\*1
 expect verb=rdetail id=\S*salt_lick_from_raw_rock_salt .*ingredients=.*salt:raw_rock_salt
 expect verb=makes item=hearthandharvest:scarecrow n=1\b
 expect verb=makes item=hearthandharvest:nest n=1\b
@@ -7286,7 +7286,7 @@ sleep 8
 > pbot remove c424
 > kill @e[type=hearthandharvest:crow,x=20107,y=-62,z=3987,dx=26,dy=18,dz=26]
 > forceload remove 20107 3987 20133 4013
-expect verb=pbot\.attack bot=\S+ target=hearthandharvest:crow 
+expect verb=pbot\.attack bot=\S+ target=hearthandharvest:crow
 count alarm=([4-9]\d|1[01]\d|120) >= 1
 count alarm=0\b >= 1
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -7317,7 +7317,7 @@ waitlog \[zhh3\] watch a done 20
 > pbot remove c425
 > kill @e[type=hearthandharvest:crow,x=20155,y=-62,z=3975,dx=50,dy=18,dz=50]
 > forceload remove 20155 3975 20205 4025
-expect verb=pbot\.attack bot=\S+ target=hearthandharvest:crow 
+expect verb=pbot\.attack bot=\S+ target=hearthandharvest:crow
 expect \[zhh3\] seen a CrowFleeGoal yes
 expect \[zhh3\] assert a maxD=.* >= 14\.?0* PASS
 count target=set <= 1
@@ -7583,7 +7583,7 @@ waitlog \[zhh3\] watch a done 25
 > kill @e[type=hearthandharvest:crow,x=14027,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 14027 -13 14053 13
 expect \[zhh3\] seen a CrowEatDroppedFoodGoal yes
-expect verb=items items=- 
+expect verb=items items=-
 expect hp=[4-6]\.
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -7638,7 +7638,7 @@ waitlog \[zhh3\] watch a done 20
 > forceload remove 20287 3987 20313 4013
 expect \[zhh3\] cfg eatDroppedFood = false
 expect \[zhh3\] seen a CrowEatDroppedFoodGoal no
-expect verb=items items=corn_delight:corn:1 
+expect verb=items items=corn_delight:corn:1
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-438 | `expect \[zhh3\] tally crows=40 tamed=(?:[1-9]|1[0-4])\b`
@@ -8080,7 +8080,7 @@ sleep 1
 > pbot remove c453
 > kill @e[type=hearthandharvest:crow,x=20767,y=-62,z=3987,dx=26,dy=18,dz=26]
 > forceload remove 20767 3987 20793 4013
-expect verb=pbot\.attack bot=\S+ target=hearthandharvest:crow 
+expect verb=pbot\.attack bot=\S+ target=hearthandharvest:crow
 expect verb=entities type=minecraft:item (?=.*Age:-32768s)(?=.*Invulnerable:1b)(?=.*minecraft:diamond)
 expect \[zhh3\] log hearthandharvest:crow .*carry=false/0 .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -8111,7 +8111,7 @@ sleep 2
 > pbot remove b454
 > kill @e[type=hearthandharvest:crow,x=15167,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 15167 -13 15193 13
-expect verb=items items=- 
+expect verb=items items=-
 expect \[zhh3\] log hearthandharvest:crow .*carry=true.*main=minecraft:diamond x1
 look UNPARSED CMD: dropOnHurt
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -8231,7 +8231,7 @@ sleep 10
 > kill @e[type=hearthandharvest:crow,x=15407,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 15407 -13 15433 13
 expect verb=entities type=minecraft:item (?=.*Age:-32768s)(?=.*Invulnerable:1b)(?=.*minecraft:diamond)
-reject verb=items items=- 
+reject verb=items items=-
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-459 | r1112: a carrying crow does not despawn with the only player 700 blocks off (glass box, loot before the AI runs)
@@ -8316,7 +8316,7 @@ sleep 6
 > forceload remove 20947 3987 20973 4013
 expect has the following block data: \{.*Slot: 3,
 reject Slot: [4-9],
-expect verb=items items=[^,\s]+:1 
+expect verb=items items=[^,\s]+:1
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-462 | r1112: a hopper under a nest pulls nothing (clean area)
@@ -8469,7 +8469,7 @@ expect verb=state pos=15968,-60,3 state="?hearthandharvest:lightly_licked_salt_b
 expect verb=state pos=15968,-60,3 state="?hearthandharvest:well_licked_salt_block\b
 expect verb=state pos=15968,-60,3 state="?hearthandharvest:heavily_licked_salt_block\b
 expect verb=state pos=15968,-60,3 state="?minecraft:air\b
-expect verb=items items=(salt:salt|vintagedelight:salt_dust):1 
+expect verb=items items=(salt:salt|vintagedelight:salt_dust):1
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-468 | `expect \[zhh3\] block 16028 -60 3 salt:salt_block`
@@ -8769,7 +8769,7 @@ sleep 20
 expect \[zhh3\] seen a StayNearSaltGoal yes
 expect \[zhh3\] assert a minD=.* <= 3\.?0* PASS
 expect verb=state pos=21260,-60,4000 state="?minecraft:air\b
-expect verb=items items=[^,\s]+:1 
+expect verb=items items=[^,\s]+:1
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-480 | `expect \[zhh3\] block 16740 -60 0 minecraft:air`
@@ -9520,7 +9520,7 @@ look the three items lie in three corners of the nest (`NestClient` renderer)
 sleep 3
 > clear G
 > cdevtest player G
-expect verb=player name=G .*main=empty 
+expect verb=player name=G .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1501 | one shaped recipe, count 2, `minecraft:iron_nugget`; max stack 16, max
@@ -9535,7 +9535,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 look the shaped recipe takes `minecraft:iron_nugget` (makes lines show result and serializer only)
 expect verb=makes item=hearthandharvest:horseshoe n=1\b
 expect verb=makes id=\S+ result=hearthandharvest:horseshoe\*2 serializer=minecraft:crafting_shaped\b
-expect verb=item item=hearthandharvest:horseshoe .*max_damage=0 max_stack=16 
+expect verb=item item=hearthandharvest:horseshoe .*max_damage=0 max_stack=16
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1502 | `shod=true`; `speed` = `speedBase` x 1.25 (+/- 0.0001); mods holds `Ho
@@ -9551,7 +9551,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > zhh5 horse zh1
 > cdevtest player G
 look `shod=true`; `speed` = `speedBase` x 1.25 (+/- 0.0001); mods holds `Horseshoe=0.25`; `effects` holds `effect.minecraft.fire_resistance`; hand empty (HNH-20)
-expect verb=player name=G .*main=empty 
+expect verb=player name=G .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1503 | `shod=false`; hand count 1 (untamed refuses)
@@ -9841,7 +9841,7 @@ look `speed` shows all three at once: `Horseshoe=0.25`, the boost modifier, and 
 > cdevtest rdetail fertilizer_bag
 > cdevtest item hearthandharvest:fertilizer_bag
 look 9 inputs: 4 `minecraft:bone_meal`, 4 `hearthandharvest:manure`, one of tree bark / corn husk / straw; max damage 8 (HNH-70)
-expect verb=item item=hearthandharvest:fertilizer_bag .*max_damage=8 
+expect verb=item item=hearthandharvest:fertilizer_bag .*max_damage=8
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1518 | "Test passed"; `damage=1`
@@ -9929,7 +9929,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > item replace entity G weapon.mainhand with hearthandharvest:fertilizer_bag{Damage:7}
 > pbot use G 510 -60 500 up
 > cdevtest player G
-expect verb=player name=G .*main=empty 
+expect verb=player name=G .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1524 | farmer's hat recipe, stack, tag (4 hats)
@@ -9945,7 +9945,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 expect verb=tag kind=item tag=hearthandharvest:farmers_hats n=4\b
 reject farmers_hats .*summerhat
 look recipe wheat, hay block, wheat (makes lines show result and serializer only)
-expect verb=item item=hearthandharvest:farmers_hat .*max_damage=0 max_stack=1 
+expect verb=item item=hearthandharvest:farmers_hat .*max_damage=0 max_stack=1
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1525 | `xp=` 1 or 2; the head item has no Damage (HNH-86)
@@ -10306,7 +10306,7 @@ reject Exception
 # Hops rows: wet farmland (water source beside it), stone behind every lattice, autumn, randomTickSpeed 1000 (3000 put
 # the r1111 server 22 s behind). Growth checks poll, since hops never lose age or height once grown.
 expect verb=count block=minecraft:farmland n=2\b
-expect verb=player name=G .*main=empty 
+expect verb=player name=G .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1541 | console "Unknown enchantment" (HNH-94, N26-8)
@@ -10449,7 +10449,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > zhh5 horse zh7
 > cdevtest player G
 look `health=7`; hand empty (3.1)
-expect verb=player name=G .*main=empty 
+expect verb=player name=G .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1559 | `age=-23600` (ageUp 20 s); `temper=3` (untamed foal)
@@ -10469,7 +10469,7 @@ sleep 3
 > zhh5 horse r2h6
 > cdevtest player G
 look `age=-23600` (ageUp 20 s, give or take the ticks between summon and read); `temper=3` (untamed foal); hand empty
-expect verb=player name=G .*main=empty 
+expect verb=player name=G .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1560 | count 1: a full-health tame adult does not eat (J row)
@@ -10597,7 +10597,7 @@ sleep 3
 > execute unless block 511 -60 530 hearthandharvest:sunflower_stem[age=0]
 > execute if block 511 -60 530 hearthandharvest:sunflower_stem
 count Test passed >= 2
-expect verb=ages block=hearthandharvest:sunflower_stem prop=age n=1 mean=[234]\.000 
+expect verb=ages block=hearthandharvest:sunflower_stem prop=age n=1 mean=[234]\.000
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1567 | items `hearthandharvest:sunflower_seeds` 1; not in `forge:seeds` (J ro
@@ -10660,7 +10660,7 @@ look green stem with no missing texture at every age; right-clicking farmland wi
 look recipe input `fruitsdelight:blueberry` (makes lines show result and serializer only)
 expect verb=tag kind=item tag=forge:seeds/blueberry .*[=,]hearthandharvest:blueberry_pips\b
 expect Test passed
-expect verb=player name=G .*main=empty 
+expect verb=player name=G .*main=empty
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1569 | "Test passed"; hand count unchanged
@@ -11002,9 +11002,9 @@ look no HUD or inventory icon for Scared Still (HNH-82); no JEI or JEED page or 
 > cdevtest food hearthandharvest:macaroni_and_cheese
 > cdevtest food hearthandharvest:glazed_carrots
 > cdevtest food hearthandharvest:biscuits_and_gravy
-expect verb=food item=hearthandharvest:macaroni_and_cheese\*1 food=true nutrition=11 modifier=0\.75 
-expect verb=food item=hearthandharvest:glazed_carrots\*1 food=true nutrition=10 modifier=0\.75 
-expect verb=food item=hearthandharvest:biscuits_and_gravy\*1 food=true nutrition=10 modifier=0\.75 
+expect verb=food item=hearthandharvest:macaroni_and_cheese\*1 food=true nutrition=11 modifier=0\.75
+expect verb=food item=hearthandharvest:glazed_carrots\*1 food=true nutrition=10 modifier=0\.75
+expect verb=food item=hearthandharvest:biscuits_and_gravy\*1 food=true nutrition=10 modifier=0\.75
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1590 | food_type tags hold the H&H foods (creativedelight namespace)
@@ -12044,7 +12044,7 @@ expect verb=count block=supplementaries:stick n=0\b
 reject verb=use who=c6b hand=main action=block result=PASS
 expect verb=inv slot=0 item=minecraft:beef\*1\b
 expect verb=inv via=\S+ slots=\d+ filled=1\b
-expect verb=state pos=304,-59,372 state=minecraft:air 
+expect verb=state pos=304,-59,372 state=minecraft:air
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-SLK-01c | cow at 18 blocks: reaches the salt and licks it within 1600 ticks (interval 200, stage chance 1.0)

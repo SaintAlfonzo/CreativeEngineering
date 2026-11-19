@@ -64,7 +64,7 @@ expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/ancien
 expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/banana_jam_jar result=
 expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/mulberry_jam_jar result=
 expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/strawberry_jam_jar result=
-expect \[cdevtest\] verb=recipes text=upgrade_aquatic:mulberry_jam n=0 
+expect \[cdevtest\] verb=recipes text=upgrade_aquatic:mulberry_jam n=0
 expect \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=vintagedelight:mulberry_jam_jar\*
 expect \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=vintagedelight:mulberry_jam_block\*
 reject \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=upgrade_aquatic:mulberry_jam
@@ -85,8 +85,8 @@ reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 > cdevtest recipes _jam_block
 > cdevtest recipes _jello_block
 waitlog \[cdevtest\] verb=recipes text=_jello_block n= 30
-expect \[cdevtest\] verb=recipes text=_jam_jar_from_block n=10 
-expect \[cdevtest\] verb=recipes text=_jello_from_block n=10 
+expect \[cdevtest\] verb=recipes text=_jam_jar_from_block n=10
+expect \[cdevtest\] verb=recipes text=_jello_from_block n=10
 count verb=recipes id=creativedelight:shapeless/[a-z_]+_jam_block result= == 10
 count verb=recipes id=creativedelight:shapeless/[a-z_]+_jello_block result= == 10
 reject \[cdevtest\] verb=\S+ done=0

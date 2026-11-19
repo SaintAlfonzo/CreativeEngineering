@@ -41,7 +41,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 0 of 24: -
 look record the "effects items by namespace" line (reference for the single-mod boots)
@@ -146,7 +146,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 24 of 24
 # judge-3, 2026-11-18: the probe counts ITEM namespaces of the Armor / Tool Effects rows; since the gear rows moved to
@@ -333,7 +333,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: alexsmobs$
 kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
@@ -370,7 +370,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: appleskin$
 
@@ -387,7 +387,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: better_beacons$
 > cbo potions
@@ -413,7 +413,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: botania$
 # judge-3, 2026-11-18: no Armor / Tool Effects item is in botania's namespace any more (effects only, see SQ-CBO-10)
@@ -431,7 +431,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: buzzier_bees$
 > cdevtest potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust
@@ -454,7 +454,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: create_central_kitchen$
 shell grep -h "dragon-breath" logs/latest.log logs/kubejs/startup.log
@@ -473,7 +473,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: create_deep_dark$
 # judge-3, 2026-11-18: no Armor / Tool Effects item is in create_deep_dark's namespace any more (effects only, see SQ-CBO-10)
@@ -491,7 +491,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: dragonloot$
 expect effects items by namespace: .*\bdragonloot=
@@ -508,7 +508,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: everythingcopper$
 expect effects items by namespace: .*\beverythingcopper=
@@ -527,7 +527,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: farmersrespite$
 shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
@@ -549,7 +549,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: felsic_gear$
 expect effects items by namespace: .*\bfelsic_gear=
@@ -567,7 +567,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: fruitsdelight$
 shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "43 of 44"
@@ -599,7 +599,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: geode$
 > cdevtest potion minecraft:thick geode:wrappist_shard
@@ -620,7 +620,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: immersive_armors$
 expect effects items by namespace: .*\bimmersive_armors=
@@ -638,7 +638,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: immersive_weathering$
 shell ! grep -E "WARN.*immersive_weathering" logs/latest.log | grep -iE "creativebrewing|creativecommon"
@@ -656,7 +656,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: immersiveengineering$
 # judge-3, 2026-11-18: no Armor / Tool Effects item is in immersiveengineering's namespace any more (effects only, see SQ-CBO-10)
@@ -683,7 +683,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: jeed$
 kjsexpect jeed_providers.js: [1-9]
@@ -706,7 +706,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: jei$
 bootreject PotionMachinesJEI|PotionPagesJEI|mezz\.jei.*Exception
@@ -723,7 +723,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: neapolitan$
 shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
@@ -753,7 +753,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: potionbundles$
 bootreject PotionFluidHandlerMixin
@@ -771,7 +771,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: quark$
 > cdevtest potion quark:resilience minecraft:redstone,minecraft:glowstone_dust
@@ -804,7 +804,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: supplementaries$
 # judge-3, 2026-11-18: no Armor / Tool Effects item is in supplementaries's namespace any more (effects only, see SQ-CBO-10)
@@ -821,7 +821,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: immersiveengineering, tmted$
 shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "43 of 44"
@@ -839,7 +839,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: upgrade_aquatic$
 > forceload add 0 0
@@ -876,7 +876,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: better_beacons, geode$
 > cdevtest potion minecraft:thick geode:wrappist_shard,geode:celestite_shard
@@ -897,7 +897,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: alexsmobs, quark$
 > forceload add 0 0
@@ -927,7 +927,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: everythingcopper, immersiveengineering$
 > cbo effects
@@ -948,7 +948,7 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-reject \[cbo\] leak 
+reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: immersive_armors, immersiveengineering$
 > cbo effects

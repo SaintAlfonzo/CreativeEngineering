@@ -40,9 +40,9 @@ expect verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_onions
 expect verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_carrots
 expect verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_potatoes
 reject verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_rice
-expect verb=tag kind=item tag=blueprint:pig_food n=3 
-expect verb=tag kind=item tag=blueprint:cat_food n=2 
-expect verb=tag kind=item tag=blueprint:ocelot_food n=2 
+expect verb=tag kind=item tag=blueprint:pig_food n=3
+expect verb=tag kind=item tag=blueprint:cat_food n=2
+expect verb=tag kind=item tag=blueprint:ocelot_food n=2
 reject verb=tag kind=item tag=alexmobs:bison_breedables n=[1-9]
 look block flowers: no wild_ id other than wild_onions, wild_carrots, wild_potatoes; no botania:special_flowers member in the item flowers line (compare the two lines); JEI breeding pages and the "6 extra breeding page(s)" line are client (CQ)
 reject \[cdevtest\] .*done=0
