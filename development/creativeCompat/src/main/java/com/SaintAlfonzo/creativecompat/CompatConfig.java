@@ -1437,6 +1437,8 @@ public final class CompatConfig {
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> netherDimensions;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> noDecayDimensions;
 		public final ForgeConfigSpec.BooleanValue followContents;
+		public final ForgeConfigSpec.BooleanValue skeletonsSink;
+		public final ForgeConfigSpec.DoubleValue sinkSpeed;
 
 		private Corpses(ForgeConfigSpec.Builder b) {
 			b.comment("Corpse mod decay on world time (server side). Times are in ticks (20 = 1 second, 24000 = 1 in-game day)",
@@ -1463,6 +1465,10 @@ public final class CompatConfig {
 					.defineList("noDecayDimensions", List.of("minecraft:the_end"), o -> o instanceof String);
 			followContents = b.comment("The corpse and its skeleton show only the armor and held items still inside it.")
 					.define("followContents", true);
+			skeletonsSink = b.comment("Skeleton corpses (player, ancient and remains) sink in water and lava instead of floating up.",
+					"Corpses that still show the player model keep the Corpse mod's floating.").define("skeletonsSink", true);
+			sinkSpeed = b.comment("Top sinking speed of a skeleton corpse in water or lava, in blocks per tick (0.1 = 2 blocks a second).")
+					.defineInRange("sinkSpeed", 0.1, 0.01, 2.0);
 
 			b.pop(); // corpses
 		}

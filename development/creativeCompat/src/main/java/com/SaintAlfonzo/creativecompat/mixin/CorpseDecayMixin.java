@@ -18,6 +18,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -27,7 +28,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * skeleton switch and both despawns in {@code tick} (m_8119_) are redirected away while {@code [corpses] enabled} is
  * on; once a second (and on the first tick after load) the corpse asks {@link CorpseDecay#target} for its stage and
  * re-syncs the worn equipment from its contents. Adds one synced byte of {@link CorpseState} flags and saves its
- * state in the {@link CorpseDecay#TAG} compound. Also names ancient corpses ({@code m_5446_}). Applied only with the
+ * state in the {@link CorpseDecay#TAG} compound. Also names ancient corpses ({@code m_5446_}) and makes skeleton-stage
+ * corpses sink in water and lava ({@code [corpses] skeletonsSink}, ruling 27). Applied only with the
  * Corpse mod (CompatMixinPlugin). SRG names, remap = false.
  */
 @Mixin(value = CorpseEntity.class, remap = false)
@@ -104,7 +106,7 @@ public abstract class CorpseDecayMixin implements CorpseState {
 			return;
 		}
 
-		boolean empty = corpse.isEmpty() && !corpse.getPersistentData().getBoolean(SEALED);
+		boolean empty = corpse.isEmpty();
 		if (empty && creativecompat$emptiedAt < 0) creativecompat$emptiedAt = now;
 		else if (!empty) creativecompat$emptiedAt = -1L;
 
@@ -118,6 +120,20 @@ public abstract class CorpseDecayMixin implements CorpseState {
 		creativecompat$stage = Math.max(creativecompat$stage, r.target());
 		corpse.setIsSkeleton(creativecompat$stage >= CorpseDecay.SKELETON);
 		creativecompat$setFlag(FLAG_WITHERED, creativecompat$stage >= CorpseDecay.WITHERED);
+	}
+
+	/**
+	 * Ruling 27: the Corpse mod lifts a corpse in water or lava (y speed + 0.01 up to 0.03); a skeleton-stage corpse
+	 * instead accelerates down to {@code sinkSpeed}. Replaces the y argument of the one {@code setDeltaMovement} in tick.
+	 */
+	@ModifyArg(method = "m_8119_", at = @At(value = "INVOKE",
+			target = "Lde/maxhenkel/corpse/entities/CorpseEntity;m_20334_(DDD)V"), index = 1, remap = false)
+	private double creativecompat$sink(double y) {
+		CorpseEntity corpse = creativecompat$self();
+		if (!CompatConfig.Corpses.on() || !CompatConfig.CORPSES.skeletonsSink.get() || !corpse.isSkeleton()) return y;
+		if (!corpse.isInWater() && !corpse.isInLava()) return y;
+		double old = corpse.getDeltaMovement().y;
+		return Math.max(-CompatConfig.CORPSES.sinkSpeed.get(), Math.min(old, 0.0) - 0.02);
 	}
 
 	@Inject(method = "m_7380_", at = @At("TAIL"), remap = false)

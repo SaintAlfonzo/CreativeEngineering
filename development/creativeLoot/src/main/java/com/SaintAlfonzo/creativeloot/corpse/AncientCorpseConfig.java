@@ -35,6 +35,7 @@ public final class AncientCorpseConfig {
 	public final Ocean ocean;
 	public final Remains remains;
 	public final Armor armor;
+	public final Hands hands;
 
 	public record Cave(double chunkChance, int attempts, int search, int maxY, List<int[]> curveY, List<Double> curveWeight,
 			String lootTable) {}
@@ -51,6 +52,18 @@ public final class AncientCorpseConfig {
 			Map<String, Map<String, String>> items, double damageMin, double damageMax, double enchantChance,
 			int enchantLevelMin, int enchantLevelMax, double copperWaxChance, Map<String, Double> waxedStateWeights,
 			double waxedSameStateChance, double dyeSameColorChance, double dyeMinDistance) {}
+
+	/** An offhand supply stack: {@code min} to {@code max} of the item. */
+	public record Supply(String item, int min, int max) {}
+
+	/**
+	 * Held items (rulings 24 to 26, 28; TODO `corpses #8`). {@code items} = material -> tool type -> item id;
+	 * {@code supplies} = corpse kind ({@code cave}, {@code ocean}) -> offhand supply.
+	 */
+	public record Hands(double mainChance, double offhandChance, double offhandSupplyChance, Map<String, Supply> supplies,
+			boolean guaranteeTool, Map<String, Integer> toolWeights, Map<String, Integer> materialWeights,
+			Map<String, Map<String, String>> items, double sameMaterialChance, double damageMin, double damageMax,
+			double enchantChance, int enchantLevelMin, int enchantLevelMax) {}
 
 	private AncientCorpseConfig(JsonObject o) {
 		enabled = bool(o, "enabled", true);
@@ -158,6 +171,62 @@ public final class AncientCorpseConfig {
 				dblMap(cu, "waxed_state_weights", Map.of("unaffected", 0.5, "exposed", 1.0, "weathered", 1.0)),
 				dbl(cu, "waxed_same_state_chance", 0.5),
 				dbl(dy, "same_color_chance", 0.5), dbl(dy, "min_distance", 200.0));
+
+		hands = hands(obj(o, "hands"));
+	}
+
+	private static Hands hands(JsonObject h) {
+		Map<String, Supply> supplies = new LinkedHashMap<>();
+		if (h.has("offhand_supplies")) {
+			for (Map.Entry<String, JsonElement> e : h.getAsJsonObject("offhand_supplies").entrySet()) {
+				JsonObject d = e.getValue().getAsJsonObject();
+				if (!present(d)) continue;
+				supplies.put(e.getKey(), new Supply(str(d, "item", "minecraft:torch"), integer(d, "min", 1), integer(d, "max", integer(d, "min", 1))));
+			}
+		} else {
+			supplies.put("cave", new Supply("minecraft:torch", 1, 6));
+			supplies.put("ocean", new Supply("minecraft:bread", 1, 3));
+		}
+		Map<String, Integer> types = intMap(h, "tool_weights", Map.of("sword", 1, "pickaxe", 1));
+		Map<String, Integer> weights = new LinkedHashMap<>();
+		if (h.has("material_weights")) {
+			weights = intMap(h, "material_weights", Map.of());
+		} else {
+			weights.put("wood", 25);
+			weights.put("stone", 25);
+			weights.put("copper", 25);
+			weights.put("iron", 8);
+		}
+		Map<String, Map<String, String>> items = new LinkedHashMap<>();
+		if (h.has("items")) {
+			for (Map.Entry<String, JsonElement> e : h.getAsJsonObject("items").entrySet()) {
+				JsonObject set = e.getValue().getAsJsonObject();
+				if (!present(set)) continue; // the material's mod is not loaded: it never rolls
+				Map<String, String> m = new LinkedHashMap<>();
+				for (Map.Entry<String, JsonElement> t : set.entrySet()) if (!t.getKey().equals("requires")) m.put(t.getKey(), t.getValue().getAsString());
+				items.put(e.getKey(), m);
+			}
+		} else {
+			items.put("wood", Map.of("sword", "minecraft:wooden_sword", "pickaxe", "minecraft:wooden_pickaxe"));
+			items.put("stone", Map.of("sword", "minecraft:stone_sword", "pickaxe", "minecraft:stone_pickaxe"));
+			if (loaded("everythingcopper")) {
+				items.put("copper", Map.of("sword", "everythingcopper:copper_sword", "pickaxe", "everythingcopper:copper_pickaxe"));
+			}
+			items.put("iron", Map.of("sword", "minecraft:iron_sword", "pickaxe", "minecraft:iron_pickaxe"));
+		}
+		JsonArray dmg = h.has("damage") ? h.getAsJsonArray("damage") : null;
+		JsonArray lv = h.has("enchant_levels") ? h.getAsJsonArray("enchant_levels") : null;
+		return new Hands(dbl(h, "main_chance", 0.45), dbl(h, "offhand_chance", 0.2), dbl(h, "offhand_supply_chance", 0.5), supplies,
+				bool(h, "guarantee_tool", true), types, weights, items, dbl(h, "same_material_chance", 0.5),
+				dmg != null ? dmg.get(0).getAsDouble() : 0.3, dmg != null ? dmg.get(1).getAsDouble() : 0.9,
+				dbl(h, "enchant_chance", 0.05), lv != null ? lv.get(0).getAsInt() : 5, lv != null ? lv.get(1).getAsInt() : 15);
+	}
+
+	private static Map<String, Integer> intMap(JsonObject o, String k, Map<String, Integer> d) {
+		if (!o.has(k)) return d;
+		Map<String, Integer> out = new LinkedHashMap<>();
+		for (Map.Entry<String, JsonElement> e : o.getAsJsonObject(k).entrySet()) out.put(e.getKey(), e.getValue().getAsInt());
+		return out;
 	}
 
 	private static Map<String, String> set(String prefix) {

@@ -1,7 +1,6 @@
 package com.SaintAlfonzo.creativeloot.corpse;
 
 import com.SaintAlfonzo.creativecompat.corpse.CorpseDecay;
-import com.SaintAlfonzo.creativecompat.corpse.CorpseState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
@@ -12,6 +11,7 @@ import net.minecraft.tags.BiomeTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
@@ -39,10 +39,11 @@ import java.util.UUID;
  * <li><b>remains</b> (a {@code remains.biomes} biome at the spot, any dimension, any height).</li>
  * </ul>
  * A spot is a 3x3 ({@code footprint}) floor of full blocks at one height with {@code headroom} blocks of air (water
- * for ocean) above all of it (ruling 11). The corpse is built from NBT (no Corpse classes needed here): an empty Death
- * with the rolled armor (ruling 7), Compat's {@code Ancient} or {@code Remains} state, and in Forge persistent data the
- * unrolled loot table ({@link #LOOT_KEY}, rolled on first open, ruling 5) plus Compat's sealed mark, or for remains
- * {@link #REMAINS_KEY} (broken into {@code remains.drops}).
+ * for ocean) above all of it (ruling 11). The corpse is built from NBT (no Corpse classes needed here): a Death
+ * with the rolled armor (ruling 7) and held items ({@link AncientHands}, `corpses #8`; at least one item, so it is
+ * never empty before it is opened, ruling 24), Compat's {@code Ancient} or {@code Remains} state, and in Forge
+ * persistent data the unrolled loot table ({@link #LOOT_KEY}, rolled on first open, ruling 5), or for remains
+ * {@link #REMAINS_KEY} (broken into {@code remains.drops}). Ocean corpses keep gravity (ruling 27).
  */
 public class AncientCorpseFeature extends Feature<NoneFeatureConfiguration> {
 	/** Forge persistent data: the chest loot table rolled into the corpse when first opened. */
@@ -168,6 +169,12 @@ public class AncientCorpseFeature extends Feature<NoneFeatureConfiguration> {
 		return true;
 	}
 
+	private static CompoundTag slotted(ItemStack stack, int slot) {
+		CompoundTag st = stack.save(new CompoundTag());
+		st.putInt("Slot", slot);
+		return st;
+	}
+
 	private void spawn(WorldGenLevel level, BlockPos pos, AncientCorpseConfig c, RandomSource r, Kind kind) {
 		ServerLevel server = level.getLevel();
 		CompoundTag tag = new CompoundTag();
@@ -178,16 +185,36 @@ public class AncientCorpseFeature extends Feature<NoneFeatureConfiguration> {
 		death.putUUID("PlayerUuid", new UUID(0L, 0L));
 		death.putString("PlayerName", "");
 		ListTag armor = new ListTag();
+		ItemStack[] hands = {ItemStack.EMPTY, ItemStack.EMPTY};
 		if (kind != Kind.REMAINS) {
-			ItemStack[] rolled = AncientArmor.roll(c.armor, r);
+			String[][] wax = new String[1][];
+			ItemStack[] rolled = AncientArmor.roll(c.armor, r, wax);
+			boolean any = false;
 			for (int i = 0; i < rolled.length; i++) {
 				if (rolled[i].isEmpty()) continue;
-				CompoundTag st = rolled[i].save(new CompoundTag());
-				st.putInt("Slot", i);
-				armor.add(st);
+				any = true;
+				armor.add(slotted(rolled[i], i));
 			}
+			hands = AncientHands.roll(c.hands, c.armor, r, wax, kind == Kind.OCEAN ? "ocean" : "cave", any);
 		}
 		death.put("ArmorInventory", armor);
+		// main hand: hotbar slot 0 plus the death snapshot (Compat shows the snapshot's main hand while an equal stack is inside)
+		ListTag main = new ListTag();
+		if (!hands[0].isEmpty()) main.add(slotted(hands[0], 0));
+		death.put("MainInventory", main);
+		ListTag off = new ListTag();
+		if (!hands[1].isEmpty()) off.add(slotted(hands[1], 0));
+		death.put("OffHandInventory", off);
+		ListTag equipment = new ListTag();
+		for (EquipmentSlot slot : EquipmentSlot.values()) {
+			ItemStack shown = switch (slot) {
+				case MAINHAND -> hands[0];
+				case OFFHAND -> hands[1];
+				default -> ItemStack.EMPTY;
+			};
+			equipment.add(shown.save(new CompoundTag()));
+		}
+		death.put("Equipment", equipment);
 		death.putString("Dimension", server.dimension().location().toString());
 		death.putDouble("PosX", pos.getX() + 0.5);
 		death.putDouble("PosY", pos.getY());
@@ -205,10 +232,8 @@ public class AncientCorpseFeature extends Feature<NoneFeatureConfiguration> {
 			case OCEAN -> forge.putString(LOOT_KEY, c.ocean.lootTable());
 			case REMAINS -> forge.putBoolean(REMAINS_KEY, true);
 		}
-		if (kind != Kind.REMAINS) forge.putBoolean(CorpseState.SEALED, true);
 		tag.put("ForgeData", forge);
-		// the Corpse mod floats corpses up through water; ocean floor ones stay put
-		if (kind == Kind.OCEAN) tag.putBoolean("NoGravity", true);
+		// ocean corpses keep gravity: skeletons sink (Compat, ruling 27)
 
 		Entity e = EntityType.loadEntityRecursive(tag, server, ent -> {
 			ent.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, r.nextFloat() * 360.0F, 0.0F);

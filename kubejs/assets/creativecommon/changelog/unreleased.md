@@ -36,6 +36,8 @@
 - **New:** Ancient Corpses generate in new chunks: skeletons on flat cave floors below y48, most of them deep, and on ocean floors, more often in cold and deep oceans.
 - **New:** An Ancient Corpse's loot is rolled when it is first opened. Emptied ones disappear after 5 minutes.
 - **New:** Ancient Corpses can wear worn wooden, leather, dyed leather, copper, chainmail or iron armor, rarely enchanted. Copper pieces are fully oxidized unless waxed.
+- **New:** Ancient Corpses can hold a worn wooden, stone, copper or iron sword or pickaxe, and torches (caves) or bread (oceans) in the offhand. Every Ancient Corpse holds at least one item.
+- **Changed:** Skeleton corpses sink in water and lava [floated up]. Corpses still showing the player model float.
 - **New:** Ancient Remains generate in the Visceral Heap: empty skeletons that never decay. A hit breaks one into Bones, Bone Chunks, Cracked Bones and, at 25%, a Skeleton Skull.
 
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
