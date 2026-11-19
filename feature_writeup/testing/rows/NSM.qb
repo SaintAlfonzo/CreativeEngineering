@@ -12,13 +12,13 @@
 @@text
 @@table
 ## SQ-NSM-01 | seasonings after the move (static half; crafting, overlay, eat bonus and JEI page are client)
-@phase worldgen
-@group Old save (NSM fixture) and new world
-@commands Fixture copy: hover and eat a seasoned food from the old save. New world: season a food with each of the 5 seasonings (crafting), hover, eat; JEI Seasoning page
-@pass Old stack: loads with no error or log spam, no seasoning lines (accepted loss). New: tooltip lines, the overlay on the icon, the eat bonus and the JEI page all work; `/data get entity @s SelectedItem` shows `creativedelight:<seasoning>` in `Seasonings`
+@group A (no old save)
+@commands Season a food with each of the 5 seasonings (crafting), hover, eat; JEI Seasoning page (client); the server half reads the seasoning recipes and the seasonable tags
+@pass Tooltip lines, the overlay on the icon, the eat bonus and the JEI page all work; `/data get entity @s SelectedItem` shows `creativedelight:<seasoning>` in `Seasonings`; the server half: seasoning recipes and the pepper, chili and cheese seasonable tags are non-empty. An old seasoned stack losing its lines is an accepted loss (no row)
 @fails No overlay: `assets/creativedelight/models/item/seasoned/` missing from the Delight jar. No tag match: `#creativedelight:seasonable/<path>` not built (`seasoning_tags.js` reads the id)
 @from batches/r1113/c4_a.qb
-@reviewed 2026-11-16
+# r1118 R3 (2026-11-18): new-world half only; the old-stack half is dropped (loss accepted, owner ruling 1)
+@reviewed 2026-11-18
 > cdevtest bytype creativedelight:seasoning max=5
 > cdevtest tag item creativedelight:seasonable/pepper
 > cdevtest tag item creativedelight:seasonable/chili
@@ -90,16 +90,27 @@ look jar water kept (FluidHolder in the be line); nightstand items present and i
 @pass Both paintings keep their picture; Motive reads `creativecompat:paintings/...` after the save; the Datapacks page lists the modded and vanilla paintings once each; Bedspreads and Customizable Elytra show the modded pattern
 @fails Blank painting: `ImmersivePaintingMotiveAliasMixin` not applied (gated on `immersive_paintings`). Duplicate entries: an old `kubejs/data/creativeengineering/paintings/` copy left somewhere
 @draft the NSM fixture has no paintings or banner (nsm_fixture.js has no painting step; scratch_run_2026-11-15.md); a fixture with old-namespace paintings is needed first, and the picture and Datapacks page are client looks
-## SQ-NSM-05 | (rerun of the skin half) netherite lunchbox from the old save takes a skin in the smithing recipe
-@group Old save (NSM fixture)
-@commands Open the netherite lunchbox, eat from it; dye and skin it in the crafting grid
-@pass Contents intact; dye and skin recipes work on `creativedelight:netherite_lunchbox`; its model and skins render
-@fails Wrong model: `kubejs/assets/creativedelight/models/item/netherite_lunchbox.json`
+## SQ-NSM-05 | (skin half) a netherite lunchbox written under the old id takes a skin and a dye
+@group A (no old save)
+@commands Chest with `solapplepie:netherite_lunchbox` (old id in the NBT) reads back `creativedelight:netherite_lunchbox`; bot n5 holds one; skin and dye it in the smithing / crafting recipes (`zp9 skin`, `zp9 dye`)
+@pass the chest item is `creativedelight:netherite_lunchbox`; dye and skin recipes work on it; its model and skins render (client: CQ)
+@fails Chest item gone: `data/creativedelight/swaps/owner_namespace.json`; wrong model: `kubejs/assets/creativedelight/models/item/netherite_lunchbox.json`
 @from batches/r1115/p9_o2r.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+@absent solapplepie:netherite_lunchbox (old id written into the chest on purpose)
+# r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
+# old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
+> forceload add 288 192 303 207
+sleep 3
+> setblock 296 -60 200 chest{Items:[{Slot:0b,id:"solapplepie:netherite_lunchbox",Count:1b}]}
+> data get block 296 -60 200 Items
+expect has the following block data: .*creativedelight:netherite_lunchbox
+> pbot spawn n5 298 -60 202 minecraft:overworld survival
+sleep 3
+> clear n5
+> pbot hold n5 creativedelight:netherite_lunchbox 1
 > cdevtest player n5
 expect verb=player name=n5 .*main=creativedelight:netherite_lunchbox
-reject \[cdevtest\] verb=\S+ done=0
 > zp9 skin n5 solapplepie:golden_lunchbox
 waitlog \[zp9\] skin 20
 > zp9 skin n5 fantasyfurniture:decorations/berry_basket_empty
@@ -108,7 +119,10 @@ waitlog \[zp9\] skin .*berry 20
 waitlog \[zp9\] dye 20
 expect \[zp9\] skin creativedelight:netherite_lunchbox \+ solapplepie:golden_lunchbox recipe=
 expect \[zp9\] dye creativedelight:netherite_lunchbox \+ minecraft:red_dye recipe=
-look skin results carry the skin id (creativedelight skin tag) and keep the box; model and render are CQ (client)
+reject \[cdevtest\] verb=\S+ done=0
+> pbot remove n5
+> setblock 296 -60 200 minecraft:air
+look skin results carry the skin id (creativedelight skin tag) and keep the box; model and render are CQ (client); lunchbox contents across the move are the 1.2.02 upgrade section's
 
 ## SQ-NSM-06 | recipe dump: no air, no moved id left
 @phase worldgen
@@ -227,23 +241,54 @@ expect verb=inv slot=\d+ item="?creativelabels:sticky_note\*1\{.*chest note
 expect verb=inv slot=\d+ item="?creativelabels:eraser
 reject \[cdevtest\] verb=\S+ done=0
 look notes keep text, colour, special and layer order (Notes lists in the three wall lines); configs hold noteLength 20 and textDistance 10, old creative_labels files gone (count 0)
-## SQ-NSM-10
-@group Old save (NSM fixture)
-@commands Same fixture: a leather bag holding a camera and film, a dyed iron bag, a netherite bag in a chest; one bag on an older `creativeengineering:iron_camera_bag` id if the fixture has one; `exposure_extras-common.toml` `leatherSlots` 6. Boot; open each bag; `/data get block <chest>`
-@pass Bags read `exposureextras:*_camera_bag` with the same `CameraBag` contents and dye; the leather bag shows 6 slots; log `[exposureextras] config ... carried over`, `[swaps]` remap lines, nothing unresolved; bags accept `#exposureextras:camera_equipment` items
-@fails Bag missing: `data/exposureextras/swaps/` in the jar. creativeengineering bag missing: `ExposureExtras.remapOldIds`. Accepts nothing: the tag rewrite in kubejs
-@reviewed 2026-11-16
-# setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
-bootexpect \[exposureextras\] config .*carried over
-> forceload add 0 12 0 12
+## SQ-NSM-10 | camera bags written under the old ids keep contents and dye
+@group A (no old save)
+@commands Chest holding a leather bag with a camera and film in its `CameraBag` tag, a dyed iron bag, a netherite bag, under `exposure_extras:` ids, and one iron bag under `creativeengineering:iron_camera_bag`; `cdevtest inv` on the chest
+@pass Bags read `exposureextras:*_camera_bag` with the same `CameraBag` contents and dye; no `exposure_extras:` or `creativeengineering:` bag left; bags accept `#exposureextras:camera_equipment` items (client half: CQ). The `exposure_extras-common.toml` carry (`leatherSlots`) is the 1.2.02 upgrade section's
+@fails Bag missing: `data/exposureextras/swaps/` in the jar. creativeengineering bag missing: its `replaces` entry. Accepts nothing: the tag rewrite in kubejs
+@reviewed 2026-11-18
+@absent exposure_extras:leather_camera_bag exposure_extras:iron_camera_bag exposure_extras:netherite_camera_bag creativeengineering:iron_camera_bag (old ids written into the chest on purpose)
+# r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
+# old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
+> forceload add 0 0 15 15
+sleep 3
+> setblock 0 -60 12 chest{Items:[{Slot:0b,id:"exposure_extras:leather_camera_bag",Count:1b,tag:{CameraBag:{Items:[{Slot:0b,id:"exposure:camera",Count:1b},{Slot:1b,id:"exposure:black_and_white_film",Count:1b}]}}},{Slot:1b,id:"exposure_extras:iron_camera_bag",Count:1b,tag:{CameraBag:{},display:{color:11546150}}},{Slot:2b,id:"exposure_extras:netherite_camera_bag",Count:1b,tag:{CameraBag:{}}},{Slot:3b,id:"creativeengineering:iron_camera_bag",Count:1b,tag:{CameraBag:{}}}]}
 > cdevtest inv 0 -60 12
-shell grep -hE "^\s*leatherSlots" config/exposureextras-common.toml
 expect verb=inv slot=\d+ item="?exposureextras:leather_camera_bag\*1\{.*CameraBag:\{Items:\[.*exposure:camera
 expect verb=inv slot=\d+ item="?exposureextras:iron_camera_bag\*1\{.*display:\{color:
 expect verb=inv slot=\d+ item="?exposureextras:netherite_camera_bag
+count verb=inv slot=\d+ item="?exposureextras:iron_camera_bag >= 2
 reject item="?exposure_extras:|creativeengineering:\w*camera_bag
 reject \[cdevtest\] verb=\S+ done=0
-look leatherSlots 6; the leather bag shows 6 slots and accepts #exposureextras:camera_equipment items (client half: CQ)
+> setblock 0 -60 12 minecraft:air
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
+look the leather bag accepts #exposureextras:camera_equipment items (client half: CQ)
+
+## SQ-NSM-11 | (chest half of SQ-NSM-02) Equipment, Magic and lunchbox items written under the old ids read back under the new ones
+@group A (no old save)
+@commands Chest holding `creativeengineering:diamond_shield` (with `BlockEntityTag` patterns), `creativeengineering:red_stepstool`, `creativeengineering:echo_pickaxe`, `creativeengineering:air_brake`, `creativeengineering:felsic_scrap`, `creativeengineering:flint_and_terrasteel` and `solapplepie:netherite_lunchbox` (old ids in the NBT); `cdevtest inv` on the chest
+@pass every item reads back under `creativeequipment:` / `creativemagic:` / `creativedelight:netherite_lunchbox` with its NBT (the shield keeps its patterns); no old id left; no `[swaps] unresolved` line. Worn, Curios and dropped items stay in SQ-NSM-02 (1.2.02 upgrade section)
+@fails Item gone: the `replaces` entry missing from `data/<ns>/swaps/owner_namespace.json` in that jar
+@reviewed 2026-11-18
+@absent creativeengineering:diamond_shield creativeengineering:red_stepstool creativeengineering:echo_pickaxe creativeengineering:air_brake creativeengineering:felsic_scrap creativeengineering:flint_and_terrasteel solapplepie:netherite_lunchbox (old ids written into the chest on purpose)
+# r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
+# old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
+bootreject \[swaps\] .*unresolved
+> forceload add 16 0 31 15
+sleep 3
+> setblock 20 -60 12 chest{Items:[{Slot:0b,id:"creativeengineering:diamond_shield",Count:1b,tag:{BlockEntityTag:{Base:11,Patterns:[{Pattern:"cr",Color:0}]}}},{Slot:1b,id:"creativeengineering:red_stepstool",Count:1b},{Slot:2b,id:"creativeengineering:echo_pickaxe",Count:1b},{Slot:3b,id:"creativeengineering:air_brake",Count:1b},{Slot:4b,id:"creativeengineering:felsic_scrap",Count:3b},{Slot:5b,id:"creativeengineering:flint_and_terrasteel",Count:1b},{Slot:6b,id:"solapplepie:netherite_lunchbox",Count:1b}]}
+> cdevtest inv 20 -60 12
+expect verb=inv slot=\d+ item="?creativeequipment:diamond_shield\*1\{.*Patterns
+expect verb=inv slot=\d+ item="?creativeequipment:red_stepstool\*1
+expect verb=inv slot=\d+ item="?creativeequipment:echo_pickaxe\*1
+expect verb=inv slot=\d+ item="?creativeequipment:air_brake\*1
+expect verb=inv slot=\d+ item="?creativeequipment:felsic_scrap\*3
+expect verb=inv slot=\d+ item="?creativemagic:flint_and_terrasteel\*1
+expect verb=inv slot=\d+ item="?creativedelight:netherite_lunchbox\*1
+reject verb=inv slot=\d+ item="?(creativeengineering|solapplepie):
+reject \[cdevtest\] verb=\S+ done=0
+> setblock 20 -60 12 minecraft:air
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
 ## CQ-NSM-01
 @group Client
 @commands New world: JEI search `@creativeequipment`, `@creativemagic`, `@creativecompat`; hover each moved item; WTHIT on the box, Dark Fire, pot and a sticky note; the shield and canned golem colours

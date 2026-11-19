@@ -35,6 +35,7 @@ look Magic: up to 13 common mixins in its json, Equipment up to 23 (gated ones o
 @fails `ConfigRename.carrySections` not reached before Forge loads configs; a table name in `SECTIONS` misspelt
 @jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @from batches/r1113/c2_l1.qb
+@superseded legacy config from 1.2.01, migration shipped in 1.2.02 and already ran on both machines (owner, 2026-11-18)
 bootexpect \[swaps\] config sections \[botania\] carried over from creativeengineering-common.toml to creativemagic-common.toml
 bootexpect \[swaps\] config sections \[dragon_gear, air_brake, stepstool, crafting, armor_enchantability, shields, bonemeal_charm, bottled_air, backpackSkins\] carried over from creativeengineering-common.toml to creativeequipment-common.toml
 bootreject could not (carry|merge) config sections

@@ -262,6 +262,7 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 @pass the stack reads `creativebrewing:long_reach` only when Brewing is installed; with Common alone the old id is left untouched and not a crash (`PotionByNameRemapMixin` and `ItemMerges` `requires` gate)
 @fails swap list `requires`, `PotionByNameRemapMixin`
 @from batches/r1107cco/b5_gravity.qb
+@superseded old save from 1.2.01, migration shipped in 1.2.02 (owner, 2026-11-18)
 # The chest NBT is written the way an 2026-11-06 save holds it (as r1107cc SQ-CC-09); this `full` set has no Brewing.
 > setblock 6 71 6 minecraft:chest{Items:[{Slot:0b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativecommon:long_reach"}}]}
 sleep 2

@@ -133,5 +133,6 @@ look wine clock moves 8 days with the month
 @pass `[swaps] config sections [seasons, crop_seasons, time, perf, wthit] carried over from creativeengineering-common.toml to creativecalendar-common.toml`; the calendar file has `dayMinutes = 50`, `seasonsMeltIntervalTicks = 8`, `cropSeasons = false` with their comments, and not the unrelated `[perf]` key (Forge's correction dropped it); `/ccaltime` reports the 50-minute day; a second boot logs no carry line
 @fails defaults in the new file: `ConfigRename.carrySections` called after `registerConfig` or the section names wrong; the unrelated `[perf]` key still there: the file was not corrected (Forge logs `Configuration file ... is not correct`)
 @draft the config files must be written before boot; qrun has no pre-boot file step, the runner writes them by hand in OUT/srv/config
+@superseded legacy config from 1.1.06 (calendar sections in the CE file); both machines have had the calendar file since 1.2.00, so the carry never runs on an existing install (owner, 2026-11-18)
 shell grep -hE "\[swaps\] config sections" logs/latest.log
 shell grep -nE "dayMinutes|seasonsMeltIntervalTicks|cropSeasons" config/creativecalendar-common.toml

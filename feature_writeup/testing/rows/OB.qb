@@ -269,26 +269,31 @@ expect \[cdevtest\] verb=makes item=creativedelight:wooden_bucket n=[1-9]
 look the wooden bucket recipe (makes creativedelight:wooden_bucket) is from planks
 reject \[cdevtest\] verb=\S+ done=0
 
-## SQ-OB-11 | old creativeengineering wooden buckets load as Creative Delight wooden buckets
-@group Old save
-@commands Copy a save holding `creativeengineering:wooden_bucket` and `wooden_water_bucket` (chest and inventory); boot with the new jars
-@pass the `[swaps] minecraft:item: N id(s) remapped to their survivors` summary line (no per-id line), nothing unresolved; items load as Creative Delight wooden buckets
-@fails Swap list not read: `data/creativedelight/swaps/wooden_buckets.json`
+## SQ-OB-11 | old creativeengineering wooden buckets written into a chest load as Creative Delight wooden buckets
+@group A (no old save)
+@commands `setblock` a chest holding `creativeengineering:wooden_bucket` and `creativeengineering:wooden_water_bucket` (old ids in the NBT); `/data get block`; after `save-all flush` and a chunk reload, again
+@pass both read back as `creativedelight:wooden_bucket` / `creativedelight:wooden_water_bucket`, before and after the reload; no `[swaps] unresolved` line
+@fails Swap list not read: `data/creativedelight/swaps/wooden_buckets.json`; gone after the reload: the alias resolves only on load, not on save
 @from batches/r1115/p9_o2.qb
-bootexpect \[swaps\].*wooden_bucket
-bootexpect \[swaps\].*wooden_water_bucket
+@absent creativeengineering:wooden_bucket creativeengineering:wooden_water_bucket (old ids written into the chest on purpose)
+# r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
+# old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
 bootreject \[swaps\] unresolved .*wooden
-shell grep -nE "\[swaps\]" logs/latest.log | grep -iE "wooden|permanent|load report|unresolved" | cut -c1-260 | head -12
 > forceload add 192 192 223 223
-> forceload add -16 -16 63 63
-sleep 4
+sleep 3
+> setblock 200 -60 205 chest{Items:[{Slot:0b,id:"creativeengineering:wooden_bucket",Count:1b},{Slot:1b,id:"creativeengineering:wooden_water_bucket",Count:1b}]}
 > data get block 200 -60 205 Items
-> pbot spawn ob11 205 -60 207 minecraft:overworld survival
-sleep 4
-> data get entity ob11 Inventory
-sleep 1
-expect has the following block data: .*creativedelight:wooden_bucket.*creativedelight:wooden_water_bucket
-expect ob11 has the following entity data: .*creativedelight:wooden_bucket.*creativedelight:wooden_water_bucket|ob11 has the following entity data: .*creativedelight:wooden_water_bucket.*creativedelight:wooden_bucket
+> save-all flush
+waitlog Saved the game 120
+> forceload remove 192 192 223 223
+sleep 10
+> forceload add 192 192 223 223
+sleep 3
+> data get block 200 -60 205 Items
+count has the following block data: .*creativedelight:wooden_bucket.*creativedelight:wooden_water_bucket >= 2
+reject has the following block data: .*creativeengineering:wooden
+> setblock 200 -60 205 minecraft:air
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
 
 ## SQ-OB-12 | corn cutting
 @group B

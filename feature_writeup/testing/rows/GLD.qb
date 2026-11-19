@@ -166,6 +166,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass The dyed golem reads `11b`, the other `14b` (red default)
 @fails `CannedGolemDye.load` / `addAdditionalSaveData` not reached: check the reobfed `m_7378_` / `m_7380_` in the member jar
 @from batches/r1103/sA_2.qb passed
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 > data get entity @e[type=canned_goods:canned_golem,tag=sacngblue,limit=1] Color
 > data get entity @e[type=canned_goods:canned_golem,tag=sacngred,limit=1] Color
 expect has the following entity data: 11b
@@ -226,6 +227,7 @@ look both mod ids from repackedEnds-...-03 only; both enders_upstream packs list
 @pass No missing-id or remap lines for the 14 1.1.4 ids; blocks, items and the House look as before (LOOK)
 @fails Ids gone: `EABlocks` / `EAItems` namespace or the `enders_additions` mod did not construct (check the mod list)
 @from batches/r1103/sA_2.qb
+@superseded old save from 1.1.03, migration shipped in 1.2.00 (owner, 2026-11-18)
 shell ! grep -hiE "(missing|remap).*endersdelight:(amberveil|ethereal_saffron|chorus_flame|chorusflame|voidpepper|crushed_voidpepper|chicken_curry|steak_fries|veil_of_flames)" logs/latest.log
 shell grep -hiE "Missing|remap|endersdelight:" logs/latest.log | head -15 || true
 > execute if block {SAH1+30} {SAH2} {SAH3+10} endersdelight:amberveil_mushroom run say SA2 plant1 ok
@@ -386,6 +388,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Boots; "Golden Food upstream data: 24 files" (recipes only) logged (the assets line is client-only, absent on a dedicated server); "[swaps] minecraft:enchantment: 1 removed id(s) dropped" logged, no other missing-id or remap lines for goldenfood; both `execute if block` succeed; chest keeps every item (`/data get block <chest> Items` lists all ids); the book is still an enchanted book (its unknown StoredEnchantments id kept, no tooltip line)
 @fails A reset or missing cake: block ids in `GoldenBlocks`; missing items: `check_donor.py`; missing-registry warning for gf_enchantment: CD `swaps/removed.json` or an old Creative Common without `removed` support
 @from batches/r1103/sA_2.qb
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 bootexpect Golden Food upstream assets: \d+ files
 bootexpect data: 24 files
 bootexpect \[swaps\] minecraft:enchantment: 1 removed id\(s\) dropped
@@ -785,29 +788,29 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails -
 @draft no batch holds this row yet
 @superseded obsolete 2026-11-10: the golden stews were removed; replaced by SQ-GLD-16 (2026-11-16 P2.5, from the row text)
-## SQ-GLD-16 | old golden stews, cans and the jar fluid gone without warnings; /give fails; other golden foods intact
-@group A
-@commands Needs the CD and Common jars built 2026-11-10 and a full restart. Start on an old world that holds golden and enchanted golden stews, beetroot soups, rabbit stews and their cans (also a jar filled with one); `/give @p goldenfood:golden_mushroom_stew`; JEI search `golden stew`, `golden soup`, `canned golden`; `/dumpall`
-@pass the old stacks are gone with no missing-registry warning, the jar fluid is empty or cleared; `/give` fails (unknown item); JEI shows no golden or gilded stew, soup or can and no jar fill row; latest.log has no KubeJS error from `goldenfood` scripts; the other golden foods, cans and vanilla stews still eat and can; a vanilla stack of 3 mushroom stew still leaves one bowl
+## SQ-GLD-16 | removed golden stews and cans: old stacks in a chest gone without warnings; /give fails; other golden foods intact
+@group A (no old save)
+@commands A chest written with `goldenfood:golden_mushroom_stew`, `goldenfood:golden_beetroot_soup`, `creativedelight:canned_golden_mushroom_stew` (removed ids in the NBT) next to `goldenfood:golden_bread`, `creativedelight:canned_golden_bread` and `minecraft:mushroom_stew`; `/give @p goldenfood:golden_mushroom_stew`; JEI search `golden stew`, `golden soup`, `canned golden`
+@pass the removed stacks are gone from the chest with no missing-registry warning, the other three stay; `/give` fails (unknown item); JEI shows no golden or gilded stew, soup or can and no jar fill row; latest.log has no KubeJS error from `goldenfood` scripts; the other golden foods, cans and vanilla stews still eat and can; a vanilla stack of 3 mushroom stew still leaves one bowl. A jar filled with the removed fluid is the 1.2.02 upgrade section's
 @fails `soupItemList` and `removed.json` entries; a stale `i.golden_*_stew` key in a script
 @from batches/r1113/c1_g2.qb
-@reviewed 2026-11-16
-@absent creativedelight:canned_golden_mushroom_stew (removed; the row checks /give fails)
+@reviewed 2026-11-18
+@absent creativedelight:canned_golden_mushroom_stew goldenfood:golden_mushroom_stew goldenfood:golden_beetroot_soup (removed; written into the chest and given on purpose)
 bootexpect Done \(
 bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*goldenfood:(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
 bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*creativedelight:canned_(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
+# r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
+# old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
 > forceload add 1984 1984 2015 2015
-sleep 20
+sleep 3
+> setblock 2000 -60 2000 chest{Items:[{Slot:0b,id:"goldenfood:golden_mushroom_stew",Count:1b},{Slot:1b,id:"goldenfood:golden_beetroot_soup",Count:1b},{Slot:2b,id:"creativedelight:canned_golden_mushroom_stew",Count:1b},{Slot:3b,id:"goldenfood:golden_bread",Count:2b},{Slot:4b,id:"creativedelight:canned_golden_bread",Count:1b},{Slot:5b,id:"minecraft:mushroom_stew",Count:1b}]}
 > data get block 2000 -60 2000 Items
 reject has the following block data: .*golden_(mushroom_stew|beetroot_soup|rabbit_stew)
 expect has the following block data: .*goldenfood:golden_bread
 expect has the following block data: .*creativedelight:canned_golden_bread
 expect has the following block data: .*minecraft:mushroom_stew
-> data get block 2003 -60 2000
 > pbot spawn c1gj 2002 -60 2002 minecraft:overworld survival
 sleep 3
-> pbot inv c1gj get
-reject verb=pbot.inv bot=c1gj .*golden_(rabbit_stew|beetroot_soup)
 > give c1gj goldenfood:golden_mushroom_stew
 > give c1gj creativedelight:canned_golden_mushroom_stew
 # MinecraftServer only since r1118 (judge-8, 2026-11-18): KubeJS recipe parse warnings also say Unknown item
@@ -825,8 +828,10 @@ expect verb=makes item=creativedelight:canned_golden_bread n=[1-9]
 waitlog verb=pbot.useitem bot=c1gj end=finish item=minecraft:mushroom_stew 20
 > pbot inv c1gj get
 shell grep -h -i -E "error|exception" logs/kubejs/startup.log logs/kubejs/server.log | grep -i -E "golden|goldenfood" | head -10 | cut -c1-300; echo "golden script errors listed above (none = pass)"
-look jar data: no golden_mushroom_stew fluid (empty or cleared); the pbot inv after the eat shows 2 mushroom_stew and 1 bowl (or a bowl dropped: check the hotbar); the shell step lists no golden/goldenfood script error. A stack of 3 mushroom stew only exists if the pack stacks stews: if hold gave 1, judge "one bowl back" on that
+look the pbot inv after the eat shows 2 mushroom_stew and 1 bowl (or a bowl dropped: check the hotbar); the shell step lists no golden/goldenfood script error. A stack of 3 mushroom stew only exists if the pack stacks stews: if hold gave 1, judge "one bowl back" on that
 reject ^(?!.*KubeJS Recipe Event)(?!.*Unknown item '(goldenfood|creativedelight):canned_golden_mushroom_stew'|.*Unknown item 'goldenfood:golden_mushroom_stew').*(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+> pbot remove c1gj
+> setblock 2000 -60 2000 minecraft:air
 
 ## CQ-GLD-03
 @group client

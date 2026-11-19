@@ -11,13 +11,25 @@
 @@text
 @@text The hand `MissingMappingsEvent` in `ExposureExtras` is gone: `creativeengineering:<tier>_camera_bag` (before Creative Common 1.0.3) and `exposure_extras:*` are `replaces` entries in `data/exposureextras/swaps/owner_namespace.json`. Runs in boot 2 of SQ-RFX-25 (rows/RFX.qb section 6); the NBT alias half is SQ-RFX-27.
 @@table
-## SQ-EX-01 | camera bags load under exposureextras ids; no hand remap left
-@group A (old save, boot 2 of SQ-RFX-25)
-@commands `grep -E "\[swaps\]" logs/latest.log`; `> setblock 30 -61 0 chest{Items:[{Slot:0b,id:"creativeengineering:iron_camera_bag",Count:1b,tag:{CameraBag:{}}}]}`; `> data get block 30 -61 0 Items`; `> give @p exposureextras:leather_camera_bag`
-@pass the chest holds `exposureextras:iron_camera_bag` with its `CameraBag` tag; the give works; boot log has the `[swaps] ... list file(s)` line counting the Exposure Extras list and no `[exposureextras]` remap line; no missing-registry warning for any `camera_bag`
-@fails the bag gone: the `creativeengineering:` entries are missing from Exposure's swap list (Creative Common reads `data/exposureextras/swaps/`)
-> setblock 30 -61 0 chest{Items:[{Slot:0b,id:"creativeengineering:iron_camera_bag",Count:1b,tag:{CameraBag:{}}}]}
+## SQ-EX-01 | camera bags written under the old ids load under exposureextras ids; no hand remap left
+@group A (no old save)
+@commands `> setblock 30 -61 0 chest{Items:[...]}` with `creativeengineering:iron_camera_bag` and `exposure_extras:leather_camera_bag` (each with a `CameraBag` tag); `> data get block 30 -61 0 Items`; `> give @p exposureextras:leather_camera_bag`
+@pass the chest holds `exposureextras:iron_camera_bag` and `exposureextras:leather_camera_bag` with their `CameraBag` tags; the give works; no `[exposureextras]` remap line; no missing-registry warning for any `camera_bag`
+@fails the bag gone: the `creativeengineering:` / `exposure_extras:` entries are missing from Exposure's swap list (Creative Common reads `data/exposureextras/swaps/`)
+@absent creativeengineering:iron_camera_bag exposure_extras:leather_camera_bag (old ids written into the chest on purpose)
+# r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
+# old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
+> forceload add 16 -16 47 15
+sleep 2
+> setblock 30 -61 0 chest{Items:[{Slot:0b,id:"creativeengineering:iron_camera_bag",Count:1b,tag:{CameraBag:{}}},{Slot:1b,id:"exposure_extras:leather_camera_bag",Count:1b,tag:{CameraBag:{}}}]}
 > data get block 30 -61 0 Items
-expect exposureextras:iron_camera_bag
-shell ! grep -E "[Mm]issing.*camera_bag|Identifier .*camera_bag.* is missing" logs/latest.log
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+> pbot spawn ex01 32 -60 2 minecraft:overworld creative
+sleep 3
+> give ex01 exposureextras:leather_camera_bag
+expect exposureextras:iron_camera_bag.*CameraBag|CameraBag.*exposureextras:iron_camera_bag
+expect exposureextras:leather_camera_bag
+expect Gave 1 \[.*\] to ex01
+shell ! grep -E "[Mm]issing.*camera_bag|Identifier .*camera_bag.* is missing|\[exposureextras\] .*remap" logs/latest.log
+> pbot remove ex01
+> setblock 30 -61 0 minecraft:air
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)

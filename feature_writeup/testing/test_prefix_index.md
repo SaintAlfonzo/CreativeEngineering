@@ -210,6 +210,7 @@ same pass as the renames.
 | `TT-` | [tooltips.md](../tooltips.md) | CQ-TT (5) |  |  |
 | `TX-` | [plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md) | CQ-TX (4), SQ-TX (18) |  | not in the README index yet |
 | `UD-` | [unusual_delight.md](../unusual_delight.md) |  |  |  |
+| `UPG-` | [plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 4 | SQ-UPG (0) |  | new 2026-11-18: the 1.2.02 upgrade section (a world built on the 1.2.02 jars in `deploy/latest/mods/`, booted on the current jars; owner ruling 1); replaces the dev-jar old-save fixtures |
 | `VB-` | [alcohol_part_b.md](../alcohol_part_b.md) |  | briefs/alcohol_vineryport.md, alcohol.md |  |
 | `VD-` | [veggies_delight.md](../veggies_delight.md) |  |  |  |
 | `VH-` | [visceral_heap.md](../visceral_heap.md) | CQ-VH (5), SQ-VH (14) | plan_visceral_heap.md |  |
@@ -533,3 +534,4 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 - 2026-11-17: `RFX-` added for [plan_rules_fixes.md](../plan_rules_fixes.md) (P3 dump diffs and checks).
 - 2026-11-17: `LOOT-` added for [creative_loot.md](../creative_loot.md) (Creative Loot jar, plan_rules_fixes.md section 5b).
 - 2026-11-17: follow-up plan F3/F4: the 7 whole-copy queue rows merged to one (`tools/test_prefix_lint.py` passes, its accepted failure removed); `SQ-MB-` / `CQ-MB-` renamed (`SQ-MBX-`, `CQ-MBX-` monster box; `SQ-RW-00` to `-04` Mulberry run) and `SQ-CNS-` / `CQ-CNS-` of Common wave 9 renamed `SQ-CSN-` / `CQ-CSN-` (section 2) by `tools/test_prefix_rename.py --only`.
+- 2026-11-18: `UPG-` added for [plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 4 (1.2.02 upgrade section, rows `SQ-UPG-NN`).

@@ -23,6 +23,7 @@
 @pass No mixin apply error; the 14 common mixins apply on a server (the 11 client ones do not load); none listed twice
 @fails A compartment name not a mod id, or Creative Common still listing a moved mixin
 @from batches/r1101/cs4_boot3.qb
+@superseded CB section pinned to the pre-split CE 1.1.07 jars; the split shipped in 1.2.00; behavior covered on current jars by SMK-37 to -40, CBA-02, -07, -08, CBO-05, -13, -15, EFX-01, -08, -09 (owner, 2026-11-18)
 bootreject creativebrewing\.mixins\.json.*(Error|error|failed)
 shell grep -c "from creativebrewing.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativebrewing.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cb_mx.txt; wc -l < cb_mx.txt; cat cb_mx.txt | tr '\n' ' '; echo; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cb_mx.txt; rm -f cb_mx.txt
 look 14 common mixins (minus absent mods), none also from creativeengineering.mixins.json
@@ -33,6 +34,7 @@ look 14 common mixins (minus absent mods), none also from creativeengineering.mi
 @pass `merged from creativeengineering-common.toml into creativebrewing-common.toml` with the four sections; CB file has `quarkLine = false` and `reductionPerLevel = 0.3`; CE file no longer has them after the boot; second boot no WARN
 @fails `mergeSections` ran after config load, or the section names differ
 @from batches/r1101/cs4_boot3.qb
+@superseded legacy config from 1.1.06, migration shipped in 1.2.00 and already ran on both machines (owner, 2026-11-18)
 bootexpect \[swaps\] config sections .*alcohol.* merged from creativeengineering-common.toml into creativebrewing-common.toml
 shell grep -E "\[swaps\] config sections" logs/latest.log | cut -c60-300; grep -nE "^\s*\[|quarkLine|reductionPerLevel|intervalSeconds|chancePerPiece" config/creativebrewing-common.toml; echo CE:; grep -nE "^\[(alcohol|effects|magic_resistance|copper_poisoning)\]" config/creativeengineering-common.toml || echo "CE has none of the four"
 look CB file has [alcohol] quarkLine = false, [magic_resistance] reductionPerLevel = 0.3, copper 10 / 1.0; CE file lost the four
@@ -43,6 +45,7 @@ look CB file has [alcohol] quarkLine = false, [magic_resistance] reductionPerLev
 @pass Potion exists (CommonPotions registered from CB); dispenser places / splashes as before
 @fails `CommonPotions` or `PotionBucketDispenser` not registered (CB `commonSetup`)
 @from batches/r1101/cs4_boot3.qb
+@superseded CB section pinned to the pre-split CE 1.1.07 jars; the split shipped in 1.2.00; behavior covered on current jars by SMK-37 to -40, CBA-02, -07, -08, CBO-05, -13, -15, EFX-01, -08, -09 (owner, 2026-11-18)
 > give qa minecraft:potion{Potion:"creativeengineering:long_reach"}
 > setblock {H1-4} {H2} {H3} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativeengineering:potion_bucket",Count:1b,tag:{Potion:"minecraft:swiftness"}}]}
 > setblock {H1-4} {H2} {H3+1} minecraft:redstone_block
@@ -61,6 +64,7 @@ reject Unknown (item|potion)|Invalid
 @pass Insomnia refused, Agility swapped to `vinery:climbing_effect` ([effects] read from the CB file)
 @fails `LivingEntityEffectRemapMixin` not applied, or EffectRules reading the wrong config
 @from batches/r1101/cs4_boot3.qb
+@superseded CB section pinned to the pre-split CE 1.1.07 jars; the split shipped in 1.2.00; behavior covered on current jars by SMK-37 to -40, CBA-02, -07, -08, CBO-05, -13, -15, EFX-01, -08, -09 (owner, 2026-11-18)
 > effect give qa upgrade_aquatic:insomnia 30
 > effect give qa neapolitan:agility 30
 > data get entity qa ActiveEffects
@@ -72,6 +76,7 @@ look Insomnia refused, Agility swapped to vinery:climbing_effect (Id of that eff
 @pass Poison applied
 @fails `CopperPoisoningHandler` not registered
 @from batches/r1101/cs4_boot3.qb
+@superseded CB section pinned to the pre-split CE 1.1.07 jars; the split shipped in 1.2.00; behavior covered on current jars by SMK-37 to -40, CBA-02, -07, -08, CBO-05, -13, -15, EFX-01, -08, -09 (owner, 2026-11-18)
 > effect clear qa
 > item replace entity qa armor.head with everythingcopper:copper_helmet{state:"oxidized"}
 sleep 40
@@ -85,6 +90,7 @@ look poison (Id 19) applied within 40 s at interval 10, chance 1.0
 @pass No error; the lingerification list recipe loads from the CB jar (`creativeengineering:lingerification_list`)
 @fails `data/creativeengineering/recipes/lingerification_list.json` missing from the CB jar
 @from batches/r1101/cs4_boot3.qb
+@superseded CB section pinned to the pre-split CE 1.1.07 jars; the split shipped in 1.2.00; behavior covered on current jars by SMK-37 to -40, CBA-02, -07, -08, CBO-05, -13, -15, EFX-01, -08, -09 (owner, 2026-11-18)
 shell grep -E "DragonBreathBrewing|Lingerification|lingerification_list" logs/latest.log | grep -iE "error|fail|exception" | head -3; unzip -l mods/creativebrewing-1.0.0.jar | grep -c "data/creativeengineering/recipes/lingerification_list.json"
 look no error lines; the CB jar holds the lingerification list (1)
 
@@ -94,6 +100,7 @@ look no error lines; the CB jar holds the lingerification list (1)
 @pass Damage cut by 30 % (scratch value)
 @fails `MagicResistanceEffect` not on the FORGE bus
 @from batches/r1101/cs4_boot3.qb
+@superseded CB section pinned to the pre-split CE 1.1.07 jars; the split shipped in 1.2.00; behavior covered on current jars by SMK-37 to -40, CBA-02, -07, -08, CBO-05, -13, -15, EFX-01, -08, -09 (owner, 2026-11-18)
 > difficulty normal
 > summon minecraft:iron_golem {H1-12} {H2} {H3+4} {Tags:["mrC"],NoAI:1b,PersistenceRequired:1b}
 > summon minecraft:iron_golem {H1-12} {H2} {H3+8} {Tags:["mrB"],NoAI:1b,PersistenceRequired:1b}

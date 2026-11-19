@@ -32,6 +32,7 @@ look up to 27 common mixins from creativecompat.mixins.json; none also from crea
 @pass `[swaps] config sections [leaf_piles, moss, vine_shearing, campfire, monster_box, trash_slot] carried over`; Compat file holds the edited `rainOutTicks`; the CE file no longer has the six sections after the boot; second boot no WARN
 @fails `carrySections` ran after config load, or Forge did not correct the CE file
 @from batches/r1101/cs2_boot2.qb
+@superseded legacy config from 1.1.06, migration shipped in 1.2.00 and already ran on both machines (owner, 2026-11-18)
 bootexpect \[swaps\] config sections \[leaf_piles, moss, vine_shearing, campfire, monster_box, trash_slot\] carried over
 shell grep -n "rainOutTicks" config/creativecompat-common.toml; grep -nE "^\s*\[(leaf_piles|moss|vine_shearing|campfire|monster_box|trash_slot)\]" config/creativeengineering-common.toml || echo "CE has none of the six"
 look Compat file rainOutTicks = 200; CE file lost the six sections (restart half in cs2_boot2b)

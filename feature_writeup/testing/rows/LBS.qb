@@ -73,6 +73,7 @@ look the label drops are blank (no NBT), the note drops carry their Text
 @pass every note and label still in place with the same spots; face NBT has no `OffX`/`OffY`/`Size` keys until a host changes
 @fails `FaceContent.load` defaults (`Size` absent must read as 10)
 @from batches/r1103/sB_2.qb
+@superseded old save from Creative Labels 1.0.0 (pack 1.1.06), migration shipped in Creative Labels 1.0.1 (pack 1.2.00) (owner, 2026-11-18)
 > zlbs dump -4 -4 170 14
 waitlog \[zlbs\] DONE dump 60
 expect \[zlbs\] INFO dump \S+ \S+ \S+ \S+: [1-9]\d* face_paper block entities

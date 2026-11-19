@@ -24,6 +24,7 @@
 @fails Old jar set wrong
 @from batches/r1101/cs2_boot1.qb
 @absent creative_delight:treated_stick creative_delight:treated_stick_tomatoes (pre-rename ids, placed by the old-jar boot)
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 bootexpect Done \(
 > execute unless entity @e[type=minecraft:marker,tag=cshome] run summon minecraft:marker ~ ~ ~ {Tags:["cshome"]}
 sleep 2
@@ -85,6 +86,7 @@ reject creative_delight:
 @pass Farm places with the extra crops (village_farms.json share); no decode error; after `/save-all`, the chunk's start NBT names `creativedelight:village_farm_crops` (the alias is load-only)
 @fails Legacy alias `creative_delight:village_farm_crops` not registered
 @from batches/r1101/cs2_boot2.qb
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 > tp qa {V1} 200 {V3}
 sleep 45
 > save-all flush
@@ -98,6 +100,7 @@ look farm pieces placed with no decode error; region files name creativedelight:
 @pass `creativedelight-common.toml` and `creativebrewing-common.toml` hold the edited values; the underscore files are gone; log has `[swaps] config creative_delight-common.toml carried over` (and brewing)
 @fails `ConfigRename.carryOver` ran after the config was registered (defaults written)
 @from batches/r1101/cs2_boot2.qb
+@superseded legacy config from 1.1.06, migration shipped in 1.2.00 and already ran on both machines (owner, 2026-11-18)
 bootexpect \[swaps\] config creative_delight-common.toml carried over to creativedelight-common.toml
 bootexpect \[swaps\] config creative_brewing-common.toml carried over to creativebrewing-common.toml
 shell ls config/ | grep -i creative; grep -n "placeableTooltips" config/creativedelight-common.toml; head -2 config/creativebrewing-common.toml
