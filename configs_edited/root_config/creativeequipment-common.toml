@@ -1,6 +1,6 @@
 
 [dragon_gear]
-	#Most armor points an entity can have (mixin.ArmorCapMixin). Vanilla is 30; a full dragon set is 36.
+	#Most armor points an entity can have (mixin.ArmorCapMixin). Vanilla is 30; a full dragon set is 40 (Dragon Loot config).
 	#Damage reduction still tops out at 20 effective armor (80 %); armor past 20 holds that
 	#cap against bigger hits.
 	#Range: 30.0 ~ 1024.0

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
  * Raises the generic.armor attribute's ceiling from vanilla's 30 to {@code dragon_gear.armorCap}
- * (default 50), so the full dragon set (36 points) is no longer clamped. The field can't be
+ * (default 50), so the full dragon set (40 points with the Dragon Loot config) is no longer clamped. The field can't be
  * shadowed (no refmap), so its two readers are overridden instead: sanitizeValue (the clamp on
  * the attribute total) and getMaxValue. Before the config loads the default is used.
  */
