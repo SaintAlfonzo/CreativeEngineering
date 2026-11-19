@@ -32,6 +32,11 @@ public class CrowSeekShinyGoal extends Goal {
     private static final int CHASE_TICKS = 200;
     private static final int NEST_RADIUS = 16;
     private static final int NEST_WAIT = 20;
+    /** Fleeing climbs 3 to 5 blocks per leg ({@code CrowLogic.fleeTarget}), so a carrying crow is often about 6 above the
+     * block it stole at; the nest search covers that height above and below. */
+    private static final int NEST_VERTICAL = 8;
+    /** While fleeing without a nest, look again this often: the flight can bring a nest into range. */
+    private static final int NEST_RESEARCH_TICKS = 20;
     private static final double ESCAPE_FROM_SQR = 256.0D;
 
     private final CrowEntity crow;
@@ -208,6 +213,9 @@ public class CrowSeekShinyGoal extends Goal {
             nestSearched = true;
             nest = nearbyNest();
         }
+        if (nest == null && crow.tickCount % NEST_RESEARCH_TICKS == 0) {
+            nest = nearbyNest();
+        }
         if (nest != null) {
             if (!crow.level.getBlockState(nest).is(CrowTags.NESTS)) {
                 nest = null;
@@ -274,7 +282,7 @@ public class CrowSeekShinyGoal extends Goal {
         if (!CrowConfig.STASH_IN_NESTS.get()) {
             return null;
         }
-        return BlockPos.findClosestMatch(crow.blockPosition(), NEST_RADIUS, 3, pos -> crow.level.getBlockState(pos).is(CrowTags.NESTS)).map(BlockPos::immutable).orElse(null);
+        return BlockPos.findClosestMatch(crow.blockPosition(), NEST_RADIUS, NEST_VERTICAL, pos -> crow.level.getBlockState(pos).is(CrowTags.NESTS)).map(BlockPos::immutable).orElse(null);
     }
 
     private boolean validVictim(Player player) {

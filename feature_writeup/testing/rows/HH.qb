@@ -9414,6 +9414,7 @@ look UNPARSED CMD: CrowStash
 @from batches/r1113/rerun_a.qb
 @reviewed 2026-11-16
 @boot 2
+# bugfix_1117 A2 (2026-11-18): nest search +-8 vertically and again every 20 ticks while fleeing; with carryTicks 200 the crow now stashes (was the r1113 FAIL)
 > fill 30987 -61 29987 31013 -47 30013 minecraft:glass hollow
 > fill 30988 -60 29988 31012 -48 30012 minecraft:air
 > kill @e[type=!player,x=30987,y=-62,z=29987,dx=26,dy=17,dz=26]
