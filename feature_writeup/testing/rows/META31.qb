@@ -17,14 +17,14 @@
 ## SQ-META31-01 | metas take slots, replacements, no part errors
 @group B
 @commands boot; `grep 'meta structure(s) take slots\|replacement(s)\|failed to generate as a part' logs/latest.log`
-@pass metas 13 higher than the last run's count, `4 replacement(s)`, no share-above-100% warning, no part error (ST-306)
+@pass 40 metas take slots (r1118; 34 on 2026-10-30 plus later additions), `4 replacement(s)` in the JS structure-tuning line (the Java meta-structures line says 3: MetaSlots counts a replacement whose target is a meta as a meta), no share-above-100% warning, no part error (ST-306)
 @fails count short: a meta not in its group tag (structure_overrides report); part error for `ae2:meteorite`: AE2 jar changed
 @from batches/r1031/w2_metas_spawns.qb
 bootexpect meta structure\(s\) take slots
 bootexpect 4 replacement\(s\)
 bootreject (?i)share above 100
 bootreject failed to generate as a part
-look meta count 13 higher than the 2026-10-30 W30 boots (perf/sessions or the WG30 rows' logs)
+look meta count 40 or more (`meta structure(s) take slots` line); Java line `3 replacement(s)`
 
 ## SQ-META31-02 | sky metas: clouds, balloons, sky village islands
 @group B
@@ -123,18 +123,24 @@ look a witch respawned and its Pos is in the hut, none on the wagons (ST-317); n
 
 ## SQ-META31-09 | struck monument: guardians in the monument only
 @group B
-@commands `/locate` `meta/struck_monument`, `meta/pillager_tower_siege`; night, peaceful off, wait in each
-@pass guardians respawn in the monument but not out over the meteorite's water; pillagers in the tower and outworks (ST-319, ST-320)
+@commands `/locate` `meta/struck_monument`; night, peaceful off, wait
+@pass guardians respawn in the monument but not out over the meteorite's water (ST-319)
 @fails guardians across the meteorite area: the meta's `spawn_overrides` not empty (staged json)
 @from batches/r1031/w2_metas_spawns.qb
 # self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 b1_gameplay / w2_metas_spawns bot row
+# r1118 judge-15 (2026-11-18): own locate and capture SM (was set only by SQ-META31-06)
 > execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
 sleep 3
+> locate structure creativeworldgen:meta/struck_monument
+waitlog nearest creativeworldgen:meta/struck_monument is at|type "?creativeworldgen:meta/struck_monument|creativeworldgen:meta/struck_monument.*timed out 330
+capture SM is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SM1-32} {SM3-32} {SM1+32} {SM3+32}
 > tp qa {SM1} 70 {SM3}
 > difficulty normal
 sleep 240
 > execute positioned {SM1} 50 {SM3} if entity @e[type=minecraft:guardian,distance=..30]
 > execute positioned {SM1} 50 {SM3} as @e[type=minecraft:guardian,distance=..96] run data get entity @s Pos
+> forceload remove {SM1-32} {SM3-32} {SM1+32} {SM3+32}
 look guardians respawn inside the monument (first check passes) and none out over the meteorite's water (Pos list all within the monument box, ST-319)
 
 ## SQ-META31-08 | village sieges: ring and one-side camp

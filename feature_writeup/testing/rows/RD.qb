@@ -3418,6 +3418,19 @@ shell ls mods | grep -ci fruitsdelight; ! ls mods | grep -qi fruitsdelight
 shell grep -iE "fruitsdelight" logs/kubejs/server.log logs/kubejs/startup.log | head -8; true
 look the kubejs lines show the Fruits Delight scripts skipped by their "// requires: fruitsdelight" header (or no line at all), no error
 
+## SQ-FR-06 | Fruits Delight jellies cook 400 ticks in the Cooking Pot (setCookTime reaches the loaded recipe)
+@group A
+@commands `/cdevtest rdetail farmersdelight:cooking/bayberry_jelly` and `durian_jelly`
+@pass `getCookTime=400` on both (food family rule preserve/jam; Fruits Delight ships 200)
+@fails 200: NCH `setCookTime` without `r.changed = true` (r1118 B3), or the id regex in `fruitsdelight/recipes.js`
+@jars creativecommon creativedelight creativedevtools
+@from plan_bugfix_r1118.md B3
+> cdevtest rdetail farmersdelight:cooking/bayberry_jelly
+expect id=farmersdelight:cooking/bayberry_jelly part=numbers value=\S*getCookTime=400\b
+> cdevtest rdetail farmersdelight:cooking/durian_jelly
+expect id=farmersdelight:cooking/durian_jelly part=numbers value=\S*getCookTime=400\b
+reject \[cdevtest\] .*done=0
+
 @@text
 @@text #### SQ-RD: Rustic Delight 1.7.0 port in Creative Delight (added 2026-10-25)
 @@text
@@ -5016,6 +5029,16 @@ shell python3 -I $INST/tools/gen_compost_values.py --dump kubejs/exported/compos
 shell python3 -I $INST/tools/creative_delight_test/gen_cdtest_mirror.py --check; true
 look compost check exits 0 (shell step PASS); the mirror's stale report is expected (frozen, README)
 
+## SQ-CDF-09 | no stale [mod_names] override: boot log has no mod_names WARN
+@group A
+@commands boot; `grep "\[mod_names\]" logs/latest.log`
+@pass no WARN naming `incubation_additions` (dropped from the overrides 2026-11-18; the mod is not installed); SQ-CDF-07 still passes
+@fails the override is back in `config/creativecommon-common.toml` `[mod_names] overrides`
+@from plan_bugfix_r1118.md B5
+bootreject \[mod_names\].*incubation_additions
+shell grep -h "\[mod_names\]" logs/latest.log | cut -c1-200 | head -5; true
+look no stale-override line
+
 @@text
 @@text #### SQ-CN: Corn Delight 1.2.11 items and rules (added 2026-10-25)
 @@text
@@ -5643,18 +5666,22 @@ look the 3 bottles are in the buffer / leftover slots, the plating slot (3) is e
 @draft no batch holds this row yet
 ## SQ-RSP-09 | drink filling and draining recipes
 @group A
-@commands Spout over a glass bottle with Milk Coffee fluid (`/fluid` via creative tank), Item Drain with a Milk Coffee bottle; same for Lavender Tea, Matcha Latte, Coffee; Spout over a Copper Cup with water, drain a Water Cup
-@pass each gives its drink / 250 mB; cup <-> water; no `Error parsing recipe creativedelight:createfilling/` line in `logs/kubejs/server.log`
-@fails NCH `createBottle` ids `createfilling/<drink>`, fluid registered (`fluids.js`) **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
+@commands Spout over a glass bottle with Milk Coffee fluid (`/fluid` via creative tank), Item Drain with a Milk Coffee bottle; same for Lavender Tea, Matcha Latte, Coffee
+@pass each gives its drink / 250 mB (`part=fluids` amounts in rdetail); no `Error parsing recipe creativedelight:createfilling/` line in `logs/kubejs/server.log`
+@fails NCH `createBottle` ids `createfilling/<drink>`, fluid registered (`fluids.js`)
 @jars creativecommon creativedelight
 @from batches/r1101/p1_server.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+# r1118 R1 + bugfix B6 (2026-11-18): cup half dropped (cups removed 2026-11-02); the amounts from rdetail part=fluids
 kjsreject Error parsing recipe creativedelight:createfilling/
 > cdevtest rdetail createfilling/ max=1500
 > cdevtest rdetail createemptying/ max=1500
-> cdevtest rdetail cup
+expect part=fluids value=\S*in:\S*creativedelight:milk_coffee\S*@250mB
+expect part=fluids value=\S*out:creativedelight:milk_coffee@250mB
+expect part=fluids value=\S*in:\S*creativedelight:matcha_latte\S*@250mB
+expect part=fluids value=\S*out:creativedelight:matcha_latte@250mB
 reject verb=rdetail done=0
-look Milk Coffee, Lavender Tea, Matcha Latte, Coffee filling + emptying at 250 mB; copper cup <-> water; machine run is a client hand check
+look Milk Coffee, Lavender Tea, Matcha Latte, Coffee filling + emptying at 250 mB (part=fluids lines); machine run is a client hand check
 
 ## SQ-RSP-10 | dispenser: water bucket on a tea kettle stays; on an empty kettle fills to 4
 @group A
@@ -6469,6 +6496,14 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @fails After: `python3 tools/name_audit.py`
 @jars creativedelight creativeworldgen
 @draft no batch holds this row yet
+
+## CQ-MND-03 | Miner's Delight item names translated on a client (server /give feedback shows lang keys)
+@group client
+@commands client on the full pack; `/give @s miners_delight:cave_carrot`, `miners_delight:copper_pot`, `miners_delight:gossypium_seeds`; hover each in the inventory; JEI search `@miners`
+@pass every item shows its English name (Cave Carrot, Copper Pot, ...), no `item.miners_delight.` key; the chat feedback may show keys on a dedicated server (lang is client side)
+@fails lang only in the donor jar and not in Creative Delight's Miner's member: `unzip -l creativedelight*.jar | grep miners_delight/lang`
+@from plan_bugfix_r1118.md B7 (r1118 F2)
+@draft client row: the next client runner writes its steps
 @@text
 @@text #### CQ-CAT: Cozy's Improved Cats, client half (added 2026-11-01)
 @@text

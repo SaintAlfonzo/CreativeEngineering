@@ -6409,21 +6409,22 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `locate` finds a maze within 120 s from spawn on at least two of the three seeds (time and candidates recorded per seed; r1114 at weight 400 needed 424 s and 1681 candidates; if fewer than two, the owner picks a longer deadline or a higher rate); estimate group `remote` about 1 per 52x52 chunks of plains (`structure_group_estimates.md`); `corn_crop` above 100, `oak_fence: 16`, a chest with table `hearthandharvest:chests/corn_maze_center`; `under` reports no large air gaps under the built base (`over6=0`). HNH-22 maze half; the Lilliput Lane half is not built (J43, needs a substitution table), no row
 @fails `structure_groups.json` `remote`, `structure_tags.json`, `has_structure/corn_maze`, framework group build; a dead locate (`NamedSet...[[]]`) is the tag
 @from batches/r1115/p1_b1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+# r1118 judge-15 (2026-11-18): body moved to the centered box of @commands; under r 4
 > locate structure hearthandharvest:corn_maze
 waitlog (?:The nearest hearthandharvest:corn_maze is at|Could not find) 200
 shell grep -E "\[locate\].*corn_maze" logs/latest.log | tail -2 | cut -c1-260
 capture M The nearest hearthandharvest:corn_maze is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> forceload add {M1-16} {M3-16} {M1+47} {M3+47}
+> forceload add {M1-32} {M3-32} {M1+31} {M3+31}
 sleep 90
-> cdevtest under {M1} {M3} 2 corn_maze
+> cdevtest under {M1} {M3} 4 corn_maze
 waitlog \[cdevtest\] verb=under (.* )?done=[01] 120
-expect \[cdevtest\] verb=under id=hearthandharvest:corn_maze
+expect \[cdevtest\] verb=under id=hearthandharvest:corn_maze\b
 reject \[cdevtest\] verb=under .*done=0
-> zhh2 countset {M1-2} 50 {M3-2} {M1+36} 110 {M3+36} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest,lootr:lootr_chest
-> zhh2 chests {M1-2} 50 {M3-2} {M1+36} 110 {M3+36}
+> zhh2 countset {M1-20} 50 {M3-20} {M1+20} 110 {M3+20} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest,lootr:lootr_chest
+> zhh2 chests {M1-20} 50 {M3-20} {M1+20} 110 {M3+20}
 sleep 5
-> forceload remove {M1-16} {M3-16} {M1+47} {M3+47}
+> forceload remove {M1-32} {M3-32} {M1+31} {M3+31}
 expect The nearest hearthandharvest:corn_maze is at
 look locate time and candidates ([locate] line); corn_crop > 100, oak_fence 16, a chest with corn_maze_center; under line: over6=0 (no air gap over 6), air_max small
 

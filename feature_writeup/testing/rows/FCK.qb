@@ -889,6 +889,23 @@ expect pot fruitsdelight:botanypots/lemon: growthTicks 9600\b
 reject pot fruitsdelight:botanypots/lemon:.*half=upper
 look every state in display [...] carries half=lower
 
+## SQ-BOT-05 | Botany Pots recipe values reach the loaded recipes: wheat growthTicks 9600, Rich Soil Farmland 1.1
+@group A
+@commands `/cdevtest rdetail` on the wheat crop and the two Rich Soil pot soils (r1118 F12: the json edits were dropped, values at the mod's defaults)
+@pass wheat `getGrowthTicks=9600` (1200 x8); `botanypots:farmersdelight/soil/rich_soil` and `rich_soil_farmland` `getGrowthModifier=1.1`; the Fertile Soil soil `getGrowthModifier=1.2`
+@fails 1200 / 1.25: NCH `scaleRecipeInt` / `setRecipeNumber` without `r.changed = true`, or botany_pots.js did not run (`grep "\[botany_pots\]" logs/kubejs/server.log`)
+@jars creativecommon creativecompat creativedevtools
+@from plan_bugfix_r1118.md B3
+> cdevtest rdetail botanypots:minecraft/crop/wheat
+expect id=botanypots:minecraft/crop/wheat part=numbers value=\S*getGrowthTicks=9600\b
+> cdevtest rdetail botanypots:farmersdelight/soil/rich_soil
+expect id=botanypots:farmersdelight/soil/rich_soil_farmland part=numbers value=\S*getGrowthModifier=1\.1\b
+expect id=botanypots:farmersdelight/soil/rich_soil part=numbers value=\S*getGrowthModifier=1\.1\b
+> cdevtest rdetail fertile_soil
+expect part=numbers value=\S*getGrowthModifier=1\.2\b
+reject \[cdevtest\] .*done=0
+look the numbers lines; record the Fertile Soil soil id
+
 ## SQ-FCB-09 | survival break of cooking pot, copper pot, kettle keeps the contents in the item; leftover bottle drops loose (break half)
 @group A
 @commands Fake player in survival: `/setblock` a `farmersdelight:cooking_pot` with an ingredient in slot 0, bowls in slot 7, a meal in slot 6, a glass bottle in its remainder buffer; break it; repeat for `miners_delight:copper_pot` (bottle in slot 7) and `farmersrespite:kettle` (tank fluid, item in slot 0); then the sneak right-click pickup on each; place each item; break one in creative
