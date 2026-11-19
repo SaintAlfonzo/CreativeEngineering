@@ -32,6 +32,6 @@ ServerEvents.recipes(e => {
 			'steak_with_mushrooms_cooked_manual_only')
 		R.shapeless(i.stuffed_morels, [Item.of(i.morel_mushroom, 3), i.cooked_rice, i.tomato_sauce, i.cooked_chicken], e,
 			'stuffed_morels_cooked_manual_only')
-		R.shapeless(i.truffle_pasta, [i.pasta, Item.of(i.truffle, 2), i.milk, i.onion, i.bowl], e, 'truffle_pasta_cooked_manual_only')
+		R.shapeless(i.truffle_pasta, [i.pasta, Item.of(i.truffle, 2), i.any_cheese, i.onion, i.bowl], e, 'truffle_pasta_cooked_manual_only')
 	})
 })

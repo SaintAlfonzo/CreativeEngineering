@@ -21,7 +21,8 @@ ServerEvents.recipes(e => {
 			'veggiesdelight:compat/vintagedelight/stuffed_burrito'].forEach(id => R.remove({ id: id }, e))
 		// Nut Mash and Jam Sandwich (merges/dishes #7): any bread, any jam, a nut mash jar (the jars come back empty)
 		R.shapeless(i.pb_j, [i.t_bread, i.nut_mash_jar, i.t_forge_jams], e, 'pb_j_manual_only')   // any jam (dishes/jams #3)
-		R.shapeless(i.cucumber_salad, [i.salad_ingredients, i.pickled_beetroot, i.pickled_onion, i.cucumber, i.bowl], e, 'cucumber_salad_manual_only')
+		// Cucumber salad: each pickled slot also takes a pickle (TODO dishes/meals #60); the raw cucumber stays
+		R.shapeless(i.cucumber_salad, [i.salad_ingredients, [i.pickled_beetroot, i.pickle], [i.pickled_onion, i.pickle], i.cucumber, i.bowl], e, 'cucumber_salad_manual_only')
 		var VTD_BURRITO_PEPPER = [i.ghost_pepper, i.t_roasted_bell_pepper]
 		R.shapeless(i.stuffed_burrito, [i.t_tortilla, i.beef_patty, i.salad_ingredients, i.tomato, i.any_cheese, VTD_BURRITO_PEPPER], e,
 			'stuffed_burrito_manual_only')

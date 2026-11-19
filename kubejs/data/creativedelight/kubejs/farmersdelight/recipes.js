@@ -278,8 +278,13 @@ ServerEvents.recipes(e => {
 			i.cooked_mutton, i.onion, i.onion, i.bowl], e, 'shepherds_pie_manual_only')
 		F.assemble(i.bowl, [i.cooked_mutton, i.cooked_mutton, i.cooked_mutton, i.onion, i.onion, i.baked_potato, i.baked_potato,
 			i.t_cheese_wedge], i.shepherds_pie_block)
-		// Stuffed potato: FD's shapeless stays
-		F.assemble(i.baked_potato, [i.cooked_beef, { fill: Fluid.of(f.milk, 250) }], i.stuffed_potato)
+		// Stuffed pumpkin (TODO dishes/meals #44): one pot recipe in place of FD's and Corn Delight's, in a pumpkin
+		R.remove({ id: 'farmersdelight:cooking/stuffed_pumpkin_block' }, e)
+		if (global.has('corn_delight')) R.remove({ id: 'corn_delight:cooking/stuffed_pumpkin_from_cornbread' }, e)
+		R.fdCooking([i.tomato_sauce, [i.potato].concat(global.has(i.sweet_potato) ? [i.sweet_potato] : []), i.t_bread, i.t_berries,
+			i.mushrooms, i.vegetables], Item.of(i.stuffed_pumpkin_block, 1), e, 'stuffed_pumpkin_block', 2.0, 400, i.pumpkin)
+		// Stuffed potato: FD's shapeless stays, its milk is cheese (creativedelight/cheese_for_milk.js, TODO dishes/meals #45)
+		F.assemble(i.baked_potato, [i.cooked_beef, i.any_cheese], i.stuffed_potato)
 		// Steak and potatoes: shaped
 		R.remove({ id: 'farmersdelight:steak_and_potatoes' }, e)
 		R.shaped(i.steak_and_potatoes, ['ROP', ' B ', ' W '], { R: i.cooked_rice, O: i.onion, P: i.baked_potato, B: i.cooked_beef, W: i.bowl },

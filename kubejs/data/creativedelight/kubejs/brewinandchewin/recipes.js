@@ -54,17 +54,20 @@ ServerEvents.recipes(e => {
 		], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_smoked_ham_sequenced_assembly', 1)
 
 		// Quiche (merges/dishes #8, owner): baking type, oven only with a pie tin, no plating (the grid recipe and both
-		// sequenced assemblies are gone). Pie crust + cheese wedge + milk + any egg + one filling, one recipe each: any
+		// sequenced assemblies are gone). Pie crust + cheese wedge + milk + any egg + 2 filling (doubled, TODO baking/baked-goods
+		// #19; the zucchini quiche keeps its 2 cooked zucchini), one recipe each: any
 		// cooked meat, any fungus, or a leafy green (#forge:salad_ingredients: cabbage, cabbage leaf, dandelion leaf). Was:
 		// bacon or brown mushroom + cabbage + 2 milk + 2 eggs + 2 cheese on a crust in the grid, or the assemblies.
 		R.remove({ id: 'brewinandchewin:quiche_from_bacon' }, e)
 		R.remove({ id: 'brewinandchewin:quiche_from_mushroom' }, e)
 		var QUICHE = { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin }
 		;[['meat', i.t_food_cooked_meat], ['fungus', i.mushrooms], ['greens', i.salad_ingredients]].forEach(q => {
-			R.ceBaking([i.pie_crust, i.t_cheese_wedge, i.milk, i.eggs, q[1]], i.quiche, e, 'quiche_' + q[0], QUICHE)
+			R.ceBaking([i.pie_crust, i.t_cheese_wedge, i.milk, i.eggs, q[1], q[1]], i.quiche, e, 'quiche_' + q[0], QUICHE)
 		})
 
-		//Horror Lasagna
+		// Crimson Lasagna (the Horror Lasagna, renamed; TODO baking/baked-goods #21): Scarlet cheese only. The pot's generic
+		// cheese wedge slot takes Scarlet; the grid and the assembly already do.
+		R.replaceInput({ id: 'brewinandchewin:cooking/horror_lasagna' }, i.t_cheese_wedge, i.scarlet_cheese_wedge, e)
 		//Make cooked shapeless
 		R.shapeless(Item.of(i.horror_lasagna, 1), [i.scarlet_cheese_wedge, i.scarlet_cheese_wedge, i.beetroot_soup, i.tomato_sauce, i.tomato_sauce, i.pasta, i.cooked_horror_lasagna_meat, i.cooked_horror_lasagna_meat, i.bowl], e, 'horror_lasagna_cooked_manual_only')
 

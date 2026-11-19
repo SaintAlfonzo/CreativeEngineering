@@ -13,6 +13,6 @@ global.LOOT.rules(function (L) {
 			'minecraft:entities/pillager', 'minecraft:entities/evoker', 'minecraft:entities/vindicator'],
 		i.onion_farmersdelight, { chance: 0.02, looting: 0.01, killedByPlayer: true })
 
-	// A pumpkin broken with a knife (no Silk Touch) gives 4 Pumpkin Slices instead (scavenging_pumpkin)
-	L.swapDrop('minecraft:blocks/pumpkin', i.pumpkin, { item: i.pumpkin_slice, count: 4 }, { knife: true, silkTouch: false })
+	// A pumpkin broken with a knife (no Silk Touch) gives 8 Pumpkin Slices instead (scavenging_pumpkin; the knife cut, TODO fruit #3)
+	L.swapDrop('minecraft:blocks/pumpkin', i.pumpkin, { item: i.pumpkin_slice, count: 8 }, { knife: true, silkTouch: false })
 })

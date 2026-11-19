@@ -20,7 +20,7 @@ ServerEvents.recipes(e => {
 		//######################### Cantaloupe #########################
 		// Cantaloupe merge (item_merges.md 2.10): this Cantaloupe is the Mini Cantaloupe, its seeds the Mini Cantaloupe
 		// Seeds; the slice gives Fruits Delight's seeds. This popsicle is the one popsicle (fruitsdelight/item_merges.js)
-		R.shaped(i.cantaloupe, ['cc', 'cc'], { c: i.cantaloupe_slice }, e, 'mini_cantaloupe')
+		// whole from 4 slices and the knife cut: creativedelight/fruit_cuts.js (TODO fruit #3)
 		R.shapeless(i.cantaloupe_bread, [i.any_dough, i.t_fruits_cantaloupe, i.any_sweetener], e, 'cantaloupe_bread')
 		R.shapeless(i.wrapped_cantaloupe, [i.t_fruits_cantaloupe, i.cooked_bacon], e, 'wrapped_cantaloupe')
 		R.shaped(i.cantaloupe_popsicle, [' cc', 'icc', 'si '], { c: i.t_fruits_cantaloupe, i: i.t_ice_cubes, s: i.any_stick }, e, 'cantaloupe_popsicle')

@@ -24,6 +24,7 @@
 //   vintagedelight/vintage_items.js  absolute: ghost_charcoal
 //   Creative Brewing creativebrewing/alcohol_drinks.js  absolute: every alcoholic drink (global.alcohol)
 //   minecraft/food_values.js         glistering_melon_slice
+//   creativedelight/cheese_values.js absolute: the dishes whose milk became cheese (dishes/meals #45)
 // The effect swaps and Farmer's Respite cake slice effects: Creative Brewing's kubejs_startup/creativeengineering/
 // effect_swaps.js (moved from the pack's cooking/food_values.js).
 global.foodValueCopies = global.foodValueCopies || {}

@@ -90,3 +90,119 @@ shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').re
 reject \[cdevtest\] .*done=0
 look the five shell totals above 0 (each shell line fails on 0; skipped_columns 0: the bot loaded the box)
 sleep 3
+
+@@section 2
+@@title Food batch 2026-11-19 wave A: cheese, stuffed pumpkin, fruit cuts, quiche ([plan_food_batch_1119.md](../plan_food_batch_1119.md) wave A, TODO `dishes/meals #45`, `#44`, `#60`, `fruit #3`, `baking/baked-goods #19`, `#21`, `food/types-and-tuning #6`, `dishes/ingredients #33`)
+@@date 2026-11-19
+@@jars creativecommon creativedelight
+@@sources feature_writeup/plan_food_batch_1119.md kubejs/data/creativedelight/kubejs/creativedelight/cheese_for_milk.js kubejs/data/creativedelight/kubejs/creativedelight/fruit_cuts.js kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js
+@@text
+@@text Server scripts in the pack folder (`/reload` is enough for the recipe rows); SQ-FF-04's values need the Creative Delight jar with `creativedelight/cheese_values.js` (startup) installed. Group A.
+@@text
+@@table
+## SQ-FF-03 | cheesy dishes take cheese, not milk; the milk broccoli pot recipes are gone
+@group A
+@commands `cdevtest recipes` for the milk ids; `cdevtest rdetail` for each changed pot recipe
+@pass no `veggiesdelight:cooking/broccoli_soup` or `veggiesdelight:cooking/pasta_with_broccoli`; nachos, truffle pasta, both creamy pastas (and the Veggies compat copies), fiery fondue pot, lasagna pan and FD stuffed potato list a cheese, no milk; the grid routes for broccoli soup, pasta with broccoli, truffle pasta and the creamy pastas take a cheese
+@fails `creativedelight/cheese_for_milk.js` (replaceInput of `#forge:milk`); the grid lines in `veggiesdelight/cooking.js`, `fungidelight/cooking.js`, `moredelight/recipes.js`
+> cdevtest recipes veggiesdelight:cooking/broccoli_soup
+> cdevtest recipes veggiesdelight:cooking/pasta_with_broccoli
+> cdevtest rdetail corn_delight:cooking/nachos_block
+> cdevtest rdetail fungidelight:cooking/truffle_pasta
+> cdevtest rdetail moredelight:cooking/creamy_pasta
+> cdevtest rdetail veggiesdelight:compat/moredelight/cooking/creamy_pasta
+> cdevtest rdetail brewinandchewin:cooking/fiery_fondue_pot
+> cdevtest rdetail veggiesdelight:cooking/lasagna_pan
+> cdevtest rdetail farmersdelight:stuffed_potato
+> cdevtest rdetail _cooked_manual_only
+waitlog verb=rdetail text=_cooked_manual_only n= 30
+reject verb=recipes text=veggiesdelight:cooking/(broccoli_soup|pasta_with_broccoli) n=[1-9]
+reject verb=rdetail id=(corn_delight:cooking/nachos_block|fungidelight:cooking/truffle_pasta|\S*creamy_pasta\S*|brewinandchewin:cooking/fiery_fondue_pot|veggiesdelight:cooking/lasagna_pan|farmersdelight:stuffed_potato) .*ingredients=\S*milk
+reject verb=rdetail id=creativedelight:shapeless/(broccoli_soup|pasta_with_broccoli|truffle_pasta|creamy_pasta_with_chicken_cuts|creamy_pasta_with_ham)_cooked_manual_only .*ingredients=\S*milk
+look each changed recipe lists a cheese (flaxen cheese wedge or cheese slice) where the milk was
+reject verb=\S+ .*done=0
+
+## SQ-FF-04 | cheesy dishes' food values went up
+@group A
+@commands `cdevtest food` for each dish
+@pass broccoli soup 13 / 0.7, pasta with broccoli 15 / 0.8, stuffed potato 13 / 0.7, truffle pasta 15 / 0.8, both creamy pastas 15 / 0.8, nachos 13 / 1.0, lasagna slice 15 / 0.75, fiery fondue 15 / 0.75
+@fails CD startup `creativedelight/cheese_values.js` (CD jar not rebuilt, or the row loaded after `food_value_copies.js` read the list); `[food values]` warnings in latest.log
+> cdevtest food veggiesdelight:broccoli_soup
+> cdevtest food veggiesdelight:pasta_with_broccoli
+> cdevtest food farmersdelight:stuffed_potato
+> cdevtest food fungidelight:truffle_pasta
+> cdevtest food moredelight:creamy_pasta_with_chicken_cuts
+> cdevtest food moredelight:creamy_pasta_with_ham
+> cdevtest food corn_delight:nachos_bowl
+> cdevtest food veggiesdelight:lasagna_slice
+> cdevtest food brewinandchewin:fiery_fondue
+waitlog verb=food item=brewinandchewin:fiery_fondue\S* 30
+expect verb=food item=veggiesdelight:broccoli_soup\S* food=true nutrition=13 modifier=0\.7
+expect verb=food item=veggiesdelight:pasta_with_broccoli\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=farmersdelight:stuffed_potato\S* food=true nutrition=13 modifier=0\.7
+expect verb=food item=fungidelight:truffle_pasta\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=moredelight:creamy_pasta_with_chicken_cuts\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=moredelight:creamy_pasta_with_ham\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=corn_delight:nachos_bowl\S* food=true nutrition=13 modifier=1\.0
+expect verb=food item=veggiesdelight:lasagna_slice\S* food=true nutrition=15 modifier=0\.75
+expect verb=food item=brewinandchewin:fiery_fondue\S* food=true nutrition=15 modifier=0\.75
+reject verb=\S+ .*done=0
+
+## SQ-FF-05 | one stuffed pumpkin pot recipe
+@group A
+@commands `cdevtest makes farmersdelight:stuffed_pumpkin_block`; rdetail of the new recipe
+@pass exactly one Cooking Pot maker, `creativedelight:farmersdelightcooking/stuffed_pumpkin_block`: tomato sauce, potato or sweet potato, any bread, berries, mushrooms, vegetables, pumpkin container; FD's and Corn Delight's ids gone
+@fails `farmersdelight/recipes.js` "Stuffed pumpkin"
+> cdevtest makes farmersdelight:stuffed_pumpkin_block
+> cdevtest rdetail farmersdelightcooking/stuffed_pumpkin_block
+waitlog verb=rdetail text=farmersdelightcooking/stuffed_pumpkin_block n= 30
+expect verb=makes id=creativedelight:farmersdelightcooking/stuffed_pumpkin_block result=farmersdelight:stuffed_pumpkin_block\*
+reject verb=makes id=(farmersdelight:cooking/stuffed_pumpkin_block|corn_delight:cooking/stuffed_pumpkin_from_cornbread)\b
+look the rdetail ingredients: tomato sauce, potato/sweet potato, bread, berries, mushrooms, vegetables; container minecraft:pumpkin
+reject verb=\S+ .*done=0
+
+## SQ-FF-06 | cucumber salad pickles, veggie noodle pepper, any egg in echo cake base and cake paste
+@group A
+@commands rdetail of the cucumber salad, echo cake base and cake paste; tag probe of `creativedelight:veggie_noodle_veg`
+@pass the cucumber salad's pickled beetroot and pickled onion slots also take `vintagedelight:pickle`; the tag holds `rusticdelight:bell_pepper_slice_green`; echo cake base and cake paste take any `#forge:eggs` (turtle egg matches)
+@fails `vintagedelight/cooking.js` cucumber salad line; `vintagedelight/tags.js`; `create/recipes.js` "Any egg"
+@absent create_deep_dark:compacting_echo_cake_base create_factory:cake_paste (recipe ids, not items)
+> cdevtest rdetail cucumber_salad_manual_only
+> cdevtest rdetail create_deep_dark:compacting_echo_cake_base
+> cdevtest rdetail create_factory:cake_paste
+> cdevtest tag item creativedelight:veggie_noodle_veg
+waitlog verb=tag kind=item tag=creativedelight:veggie_noodle_veg n= 30
+expect verb=tag kind=item tag=creativedelight:veggie_noodle_veg n=\d+ ids=.*rusticdelight:bell_pepper_slice_green
+look the cucumber salad's two pickled slots list vintagedelight:pickle as an option; the egg slots of echo cake base and cake paste are a tag (or list turtle_egg)
+reject verb=\S+ .*done=0
+
+## SQ-FF-07 | fruit cuts and whole-from-slices
+@group A
+@commands `cdevtest makes` for each slice and whole; `cdevtest food`-free; rdetail of each `_from_whole` and `_from_slices`
+@pass knife: melon 8, pumpkin 8, hamimelon 8, lemon 5 + seeds, orange 5, pineapple 6 + sapling + 50% sapling, mini cantaloupe 4; Create saw the same for hamimelon, lemon, orange, pineapple (no 8-slice pineapple saw); whole from slices, shapeless only: melon 9, pumpkin 9, hamimelon 9, lemon 6, orange 6, pineapple 9, cantaloupe 4; no `minecraft:melon` 3x3, `farmersdelight:pumpkin_from_slices` or 2x2 cantaloupe; a pumpkin broken with a knife drops 8 slices
+@fails `creativedelight/fruit_cuts.js`; `farmersdelight/loot.js` (pumpkin knife break)
+@absent farmersdelight:pumpkin_from_slices fruitsdelight:cutting/pineapple_slice (removed recipe ids: negative test)
+> cdevtest rdetail _from_whole
+> cdevtest rdetail _from_slices
+> cdevtest recipes minecraft:melon
+> cdevtest recipes farmersdelight:pumpkin_from_slices
+> cdevtest recipes fruitsdelight:cutting/pineapple_slice
+waitlog verb=recipes text=fruitsdelight:cutting/pineapple_slice n= 30
+expect verb=rdetail id=creativedelight:farmersdelightcutting/melon_slice_from_whole .*result=minecraft:melon_slice\*8
+expect verb=rdetail id=creativedelight:farmersdelightcutting/pumpkin_slice_from_whole .*result=farmersdelight:pumpkin_slice\*8
+expect verb=rdetail id=creativedelight:shapeless/melon_from_slices .*result=minecraft:melon\*1
+reject verb=recipes text=(minecraft:melon|farmersdelight:pumpkin_from_slices|fruitsdelight:cutting/pineapple_slice) n=[1-9]
+look each _from_whole and _from_slices line against the pass column counts
+reject verb=\S+ .*done=0
+
+## SQ-FF-08 | quiche filling doubled; Crimson Lasagna takes Scarlet cheese only
+@group A
+@commands rdetail of `quiche_` baking recipes and `brewinandchewin:cooking/horror_lasagna`
+@pass each of `creativedelight:baking/quiche_meat`, `_fungus`, `_greens`: crust, cheese wedge, milk, egg and 2 of the filling (6 slots); the horror lasagna pot recipe lists 2 Scarlet cheese wedges, no other cheese
+@fails `brewinandchewin/recipes.js` quiche loop and the Crimson Lasagna replaceInput
+> cdevtest rdetail baking/quiche_
+> cdevtest rdetail brewinandchewin:cooking/horror_lasagna
+waitlog verb=rdetail text=brewinandchewin:cooking/horror_lasagna n= 30
+reject verb=rdetail id=brewinandchewin:cooking/horror_lasagna .*flaxen_cheese_wedge
+look quiche: 6 ingredients with the filling twice; horror lasagna: two scarlet_cheese_wedge
+reject verb=\S+ .*done=0
