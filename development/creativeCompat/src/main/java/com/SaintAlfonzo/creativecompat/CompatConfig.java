@@ -1447,6 +1447,8 @@ public final class CompatConfig {
 		public final ForgeConfigSpec.BooleanValue followContents;
 		public final ForgeConfigSpec.BooleanValue skeletonsSink;
 		public final ForgeConfigSpec.DoubleValue sinkSpeed;
+		public final ForgeConfigSpec.BooleanValue sectionedScreen;
+		public final ForgeConfigSpec.IntValue curioCap;
 
 		private Corpses(ForgeConfigSpec.Builder b) {
 			b.comment("Corpse mod decay on world time (server side). Times are in ticks (20 = 1 second, 24000 = 1 in-game day)",
@@ -1455,8 +1457,6 @@ public final class CompatConfig {
 			enabled = b.comment("Use these rules instead of the Corpse mod's own skeleton_time and despawn time.").define("enabled", true);
 			skeletonTime = b.comment("A corpse that still holds items turns into a skeleton this long after death (168000 = 7 days).")
 					.defineInRange("skeletonTime", 168000, 0, Integer.MAX_VALUE);
-		public final ForgeConfigSpec.BooleanValue sectionedScreen;
-		public final ForgeConfigSpec.IntValue curioCap;
 			emptySkeletonTime = b.comment("An emptied corpse turns into a skeleton this long after it became empty (600 = 30 s).")
 					.defineInRange("emptySkeletonTime", 600, 0, Integer.MAX_VALUE);
 			emptyDespawnTime = b.comment("An emptied corpse is removed this long after it became empty, in every dimension (6000 = 5 min).",
@@ -1479,6 +1479,10 @@ public final class CompatConfig {
 					"Corpses that still show the player model keep the Corpse mod's floating.").define("skeletonsSink", true);
 			sinkSpeed = b.comment("Top sinking speed of a skeleton corpse in water or lava, in blocks per tick (0.1 = 2 blocks a second).")
 					.defineInRange("sinkSpeed", 0.1, 0.01, 2.0);
+			sectionedScreen = b.comment("The corpse screen shows cosmetic armor in 4 slots on its top row and curios in a panel left of the",
+					"window, each item where it was worn, instead of on the Additional Items pages.").define("sectionedScreen", true);
+			curioCap = b.comment("Curio slots on the corpse screen (columns of 12). Curios past this count stay on the Additional Items pages.",
+					"Synced to clients through the corpse, so only the server's value counts.").defineInRange("curioCap", 24, 0, 48);
 
 			b.pop(); // corpses
 		}
@@ -1487,10 +1491,6 @@ public final class CompatConfig {
 			return SPEC.isLoaded() && CORPSES.enabled.get();
 		}
 	}
-			sectionedScreen = b.comment("The corpse screen shows cosmetic armor in 4 slots on its top row and curios in a panel left of the",
-					"window, each item where it was worn, instead of on the Additional Items pages.").define("sectionedScreen", true);
-			curioCap = b.comment("Curio slots on the corpse screen (columns of 12). Curios past this count stay on the Additional Items pages.",
-					"Synced to clients through the corpse, so only the server's value counts.").defineInRange("curioCap", 24, 0, 48);
 
 	/** Developer switches; all off by default. */
 	public static final class Debug {
