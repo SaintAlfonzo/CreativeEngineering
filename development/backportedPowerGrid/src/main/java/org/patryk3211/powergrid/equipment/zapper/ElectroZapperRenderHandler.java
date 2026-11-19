@@ -35,6 +35,10 @@ public class ElectroZapperRenderHandler extends ShootableGadgetRenderHandler {
 
     @Override
     protected boolean appliesTo(ItemStack stack) {
+        // Creative Engineering: on a server without Power Grid the registry entry is gone and get() throws
+        // from Create's render tick; treat a missing entry as "not a zapper" instead of crashing the client.
+        if (!ModdedItems.ELECTROZAPPER.isPresent())
+            return false;
         return ModdedItems.ELECTROZAPPER.get().isZapper(stack);
     }
 

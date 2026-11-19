@@ -1188,3 +1188,10 @@ Gate jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-20.jar` (`port_
   (D3, `-19`) seeing the refusal it does not grab a part at all until a circuit is in the window. Other items keep
   upstream's fallback. A player who wants loose components on a belt from an arm goes through a depot or chute.
   SQ-PWG-98.
+
+## 27. Client without a server copy: zapper render guard (2026-11-18, plan_bugfix_1117.md A1, TODO `largecontent/mod-additions #90`)
+
+- `ElectroZapperRenderHandler.appliesTo` returns false when `ModdedItems.ELECTROZAPPER` is not present. On a server
+  without Power Grid the client's registry entry is gone and Create's render tick called `get()`, which threw
+  "Registry entry not present: powergrid:electrozapper". Same jar name (`-20`); the handshake refusal is unchanged and
+  out of scope. CQ-PWG-67.
