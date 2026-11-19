@@ -81,6 +81,8 @@ public final class PassThrough {
 		static final Map<PassTier, TagKey<Block>> BLOCK = new EnumMap<>(PassTier.class);
 		static final Map<PassTier, TagKey<EntityType<?>>> EXEMPT = new EnumMap<>(PassTier.class);
 		static final TagKey<EntityType<?>> EXEMPT_ALL = entityTag("passthrough_exempt/all");
+		/** Exempt from the layers tier on leaf layers only (foxes and bees, plan_misc_1117.md 1); snow still slows them. */
+		static final TagKey<EntityType<?>> EXEMPT_LEAF_LAYERS = entityTag("passthrough_exempt/leaf_layers");
 		/** Leaf layer blocks, walk-through at every height (leaf piles, bamboo leaves; plan_post_scratch_1115.md G7.4). */
 		static final TagKey<Block> LAYERS_OPEN = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "passthrough_layers_open"));
 		static final TagKey<Block> GROWTH_ANY = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "passthrough_growth_any"));
@@ -109,6 +111,11 @@ public final class PassThrough {
 
 	public static TagKey<EntityType<?>> exemptAllTag() {
 		return Tags.EXEMPT_ALL;
+	}
+
+	/** Mobs exempt from leaf layers only ({@code creativecompat:passthrough_exempt/leaf_layers}). */
+	public static TagKey<EntityType<?>> exemptLeafLayersTag() {
+		return Tags.EXEMPT_LEAF_LAYERS;
 	}
 
 	// ---- block -> tier cache ----
@@ -200,7 +207,7 @@ public final class PassThrough {
 	private static boolean ownsFallReset(Entity e, Level level, BlockPos pos, BlockState state, PassValues values) {
 		if (state.is(BlockTags.CLIMBABLE)) return false; // ladder rules stay vanilla (plan 3.2)
 		PassTier tier = tierOf(state);
-		if (tier == null || exempt(e, tier, values.tier(tier))) return false;
+		if (tier == null || exempt(e, tier, values.tier(tier), state)) return false;
 		if (PassOwner.ownerPasses(level, pos, state, e)) return false;
 		return ownsFallReset(level, pos, state, values);
 	}
@@ -349,6 +356,16 @@ public final class PassThrough {
 		return v.depthStriderPasses() && e instanceof LivingEntity l && EnchantmentHelper.getDepthStrider(l) > 0;
 	}
 
+	/** {@link #exempt(Entity, PassTier, PassTier.Values)}, plus the leaf-layer-only exemption for this block. */
+	public static boolean exempt(Entity e, PassTier tier, PassTier.Values v, BlockState state) {
+		return exempt(e, tier, v) || leafLayerExempt(e, tier, state);
+	}
+
+	/** A leaf layer (leaf pile, bamboo leaves) and a mob in {@code passthrough_exempt/leaf_layers}: not slowed. */
+	public static boolean leafLayerExempt(Entity e, PassTier tier, BlockState state) {
+		return tier == PassTier.LAYERS && state.is(Tags.LAYERS_OPEN) && e.getType().is(Tags.EXEMPT_LEAF_LAYERS);
+	}
+
 	/** Rope climbing (plan 3.2): on a climbable block and moving up or down, sneaking, or off the ground. */
 	private static boolean climbing(Entity e) {
 		if (!(e instanceof LivingEntity l) || !l.onClimbable()) return false;
@@ -391,6 +408,7 @@ public final class PassThrough {
 						if (exempt(e, tier, v)) exemptSet |= bit;
 					}
 					if ((exemptSet & bit) != 0) continue;
+					if (leafLayerExempt(e, tier, state)) continue;
 					if (!touchesOutline(level, pos, state, e, box)) continue;
 					if (!grown(level, pos, state, tier, v)) continue;
 					double layerWalk = Double.NaN;

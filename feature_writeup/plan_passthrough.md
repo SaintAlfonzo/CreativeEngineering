@@ -282,7 +282,9 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   berry-bush node (`DAMAGE_OTHER`) for every mob, MCA villagers included; smaller piles path as before.
 - Leaf overlay (`surface/LeafOverlay`, client, `leafOverlay` on): in first person in a leaf pile, the leaf type's own
   texture tiled over the screen, biome tinted, opacity 0.7 x layers / max.
-- Exempt (`passthrough_exempt/layers`): foxes, bees, rabbits, cats (G7.14); the tag is per tier, so snow layers too.
+- Exempt (`passthrough_exempt/layers`): rabbits, cats (G7.14); the tag is per tier, so snow layers too. Foxes and bees
+  are exempt on leaf layers only (`passthrough_exempt/leaf_layers`, plan_misc_1117.md 1, 2026-11-18): snow slows them,
+  and a deep leaf pile (`pathBlockLayers`) is `BLOCKED` in their path search (foxes take `DAMAGE_OTHER` at no cost).
 - Falling layers (G7.5; `surface/FallingLayers`, `FallingLayerEntity`, tag `creativecompat:falling_layers`): snow,
   salt layers, Twigs bamboo leaves, the full bamboo leaves, IE sawdust and Supplementaries fodder fall when the block
   below is free and stack where they land (capped at the most layers, the rest on top, snow at 8 -> snow block, items
@@ -609,7 +611,8 @@ Open from plan_post_scratch_1115b.md (2026-11-15), waiting for owner:
   (`leaves`, 0.78) multiply with the height slowdown at 3 to H layers (BlockRunner registers from 3 layers). Snow
   layers were taken out of `snow` as the plan says; take these out of their surface tiers too, or keep both?
 - Foxes and bees were exempt from leaf piles; the exempt tag is per tier, so they now walk through every layered
-  block unslowed (snow, sand, ash too). Keep, or narrow it?
+  block unslowed (snow, sand, ash too). Keep, or narrow it? Settled (owner, 2026-11-17; built 2026-11-18): leaf layers only, movement only;
+  plan_misc_1117.md 1, SQ-PTH-21, -29, -30.
 
 ## 11. Projectile scan (2026-11-14, for reference)
 

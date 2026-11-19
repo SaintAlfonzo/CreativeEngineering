@@ -123,7 +123,7 @@ public final class WthitRunSpeed implements IWailaClientPlugin, IBlockComponentP
 		PassRule.Cell cell = PassThrough.cellAt(level, pos, state, values);
 		// a layer height block too high (acts whole) or too low to walk through: the normal Run Speed line
 		if (cell == null && tier.layered()) return false;
-		if (player != null && (PassThrough.exempt(player, tier, v) || PassOwner.ownerPasses(level, pos, state, player))) {
+		if (player != null && (PassThrough.exempt(player, tier, v, state) || PassOwner.ownerPasses(level, pos, state, player))) {
 			return true;
 		}
 		if (cell == null) return true;

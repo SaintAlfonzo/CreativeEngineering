@@ -128,13 +128,16 @@ ServerEvents.tags('entity_type', e => {
 	// Fantasy Furniture webs and barbed wire too; barbed wire still hurts them)
 	t.add(e, 'creativecompat:passthrough_exempt/cobweb', ['minecraft:spider', 'minecraft:cave_spider'])
 	t.add(e, 'creativecompat:passthrough_exempt/bush', ['minecraft:fox', 'minecraft:bee'])
-	// foxes and bees: Immersive Weathering's leaf pile rule, kept tier-wide (snow and the other layers too)
 	// rabbits and cats: G7.14 (exempt from the slowdown and the thorns; the deep-pile path block still applies)
-	t.add(e, 'creativecompat:passthrough_exempt/layers', ['minecraft:fox', 'minecraft:bee', 'minecraft:rabbit', 'minecraft:cat'])
+	t.add(e, 'creativecompat:passthrough_exempt/layers', ['minecraft:rabbit', 'minecraft:cat'])
+	// foxes and bees: Immersive Weathering's leaf pile rule, leaf layers only (plan_misc_1117.md 1): they move through
+	// leaf piles and bamboo leaves unslowed but never plan a path through a deep pile (surface/LeafThorns.pathType);
+	// snow layers slow them as any other mob
+	t.add(e, 'creativecompat:passthrough_exempt/leaf_layers', ['minecraft:fox', 'minecraft:bee'])
 	// Light mobs stand on top of snow layers whatever their size (plan_post_scratch_1115.md G11; surface/SnowLayers).
 	// Mobs with a hitbox under [surface.passthrough.layers] snowLightVolume count without the tag; vanilla's own
 	// powder snow walkers are listed so they still stand on top with the size rule off (snowLightVolume = 0).
-	// Light mobs stand on snow layers (G11). Owner 2026-11-17: cats, spiders, every bird (Alex's Mobs included);
+	// Light mobs stand on snow layers (G11). Owner ruling: cats, spiders, every bird (Alex's Mobs included);
 	// the rest are small modded mobs picked from the entity dump. Mobs of an absent mod are skipped by the helper.
 	t.add(e, 'creativecompat:snow_layer_light', ['minecraft:fox', 'minecraft:rabbit', 'minecraft:endermite',
 		'minecraft:silverfish', 'minecraft:cat', 'minecraft:ocelot', 'minecraft:spider', 'minecraft:cave_spider',
