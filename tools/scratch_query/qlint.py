@@ -29,8 +29,9 @@ Lint codes (E = the row will fail or mislead, W = risk; exit 1 when any E):
   W pipefail   set -o pipefail with grep -q (SIGPIPE reads as not found)
   W ugrep      grep with a {n,m} repeat over 99 (the system grep is ugrep and refuses it)
   E boot       @boot not a whole number >= 1 (rows files; the driver's boot phases, qdrive.py)
-  W boot       a row of a higher @boot before a row of a lower one in the same section and world group (the driver
-               runs boots in order, so the file reads out of run order)
+  W boot       a row of a higher @boot before a row of a lower one in the same driver step: section, world group,
+               effective @modset and @phase (the driver runs boots in order, so the file reads out of run order;
+               client, draft and superseded rows are skipped)
   E modset     @modset names no manifest, variant or group (tools/scratch_query/modsets/, qmodset.py); the section's
                @@modset and `@@prep boot=N: modset` lines are checked when the rows file loads (qrows.py)
   E restart    restart with an argument that is not seconds, restart in a client batch, or an edit line with no
@@ -186,15 +187,26 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 			if not re.fullmatch(r"[1-9]\d*", bv.strip()):
 				F.append(("E", "boot", rid, r["line"], f"@boot wants a whole number >= 1, got {bv!r}"))
 		b = int(bv) if bv and re.fullmatch(r"[1-9]\d*", bv.strip()) else 1
+		# the effective jar set is part of the key: the driver gives rows on another @modset their own step (qdrive.py
+		# build_steps), so their boots are not ordered against the section's (r1118 follow-up, generators-and-tests #25)
+		# and so is the row's @phase; client, draft and superseded rows and rows with no steps are not driver rows
+		meta = r.get("meta", {})
+		ms = (mv if mv is not None else r.get("section_modset", "")).strip()
+		ms = "" if ms == "none" else ms
+		driven = r.get("steps") and not r["id"].startswith("CQ-") and not any(
+			k in meta for k in ("draft", "superseded")) and meta.get("client", "false") != "true"
 		try:
 			from qdrive import world_letter
-			gk = (r.get("section"), world_letter(r.get("meta", {}).get("group")))
+			gk = (r.get("section"), world_letter(meta.get("group")), ms, meta.get("phase", ""))
 		except Exception:  # noqa: BLE001
-			gk = (r.get("section"), "A")
-		if b < top_boot.get(gk, 1):
+			gk = (r.get("section"), "A", ms, meta.get("phase", ""))
+		if not driven:
+			pass
+		elif b < top_boot.get(gk, 1):
 			F.append(("W", "boot", rid, r["line"], f"@boot {b} after a row of boot {top_boot[gk]} in this section and "
 												   f"world group: the driver runs it first (boots in order)"))
-		top_boot[gk] = max(top_boot.get(gk, 1), b)
+		if driven:
+			top_boot[gk] = max(top_boot.get(gk, 1), b)
 		if r.get("section") != section:
 			# a rows file (feature_writeup/testing/rows/*.qb) runs one section per driver step on a fresh world: another
 			# section's forceloads do not carry over (r1118 judge-9 / judge-10: the PWG setup-row forceloads were lost)

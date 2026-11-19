@@ -1,22 +1,20 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Test row fixes from scratch run r1118 (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=c3464722ac55 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 1, Testing 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=a8721a2bc616 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `generators-and-tests #25` | Planned | H | Scratch driver follow-ups from the r1118 row conversion: Devtools in cc_only and cpp_chain mod sets, perfBot jar source for release_1202, W boot lint false positive on @modset rows, toml for top-level keys |
-| `generators-and-tests #20` | Testing | H | Scratch driver: qrun restart verb (stop, wait, edits, boot, reset log offsets; deliberate stop is not a crash) |
-| `generators-and-tests #21` | Testing | H | Scratch driver: @boot N row key and @@prep run CMD (boot phases on one world, logged shell prep) |
-| `generators-and-tests #22` | Testing | H | Scratch driver: @@modset NAME manifests for chain and reduced jar sets (port_chain, cc_only, cpp_chain, cco_sets) |
+| `generators-and-tests #26` | Planned | H | Scratch rows the driver can not express: SQ-DEP-09b (ten boots, a Forge dependency refusal read as SKIP), SQ-WO-37 (server launched under strace), SQ-NSM-04 client half (client on the upgrade world) |
 | `generators-and-tests #23` | Testing | S | Scratch rows: 1.2.02 upgrade section; drop pre-1.2.02 old-save and legacy-config rows; item-id rows as fresh-world rows |
 | `generators-and-tests #24` | Testing | S | Scratch rows: r1118 correct-answer, lost-setup and tool fixes (plan_rowfix_r1118 R1, R2, R5, R6) |
 <!-- generated:status_index end open_work -->
 
 Status: **row text and driver built; R7 rerun open** (2026-11-18). R1, R2, R5, R6 and the R3 drops, rewrites and
-upgrade section (UPG.qb) are done, the R4 driver keys are built and their rows converted (section 8). Left: the R7
-rerun (owner says when), and the rows the driver still can not express (section 8, last note). Rows: TODO.
+upgrade section (UPG.qb) are done, the R4 driver keys are built and their rows converted, and the driver follow-ups are
+built (section 8). Left: the R7 rerun (owner says when), and three rows the driver still can not express (DEP-09b,
+WO-37, NSM-04 client half; section 8, last note). Rows: TODO.
 Source: [scratch_run_2026-11-18.md](testing/scratch_run_2026-11-18.md) section 10,
 the judge reports in [testing/r1118/](testing/r1118/), and the per-row classification
 [testing/r1118/classes.csv](testing/r1118/classes.csv) (469 non-PASS rows: id, result, bucket, status, note). Game bugs
@@ -254,3 +252,19 @@ changed; nothing booted. Every changed row carries an `r1118 R<n> (2026-11-18)` 
   macro path; `creativedevtools-*` is in the cc_only and cpp_chain base groups (the last note's Devtools block is gone);
   SQ-CMV-04 keeps only the config-default checks. SQ-GAP-04 has its block-tag check back (after bugfix B8) and SQ-RSP-09
   reads `part=fluids` amounts (after B6), so R1 is complete.
+- **Driver follow-ups, 2026-11-19** (`generators-and-tests #25`; headless qtests R1118-F25): (1) perfBot for
+  `release_1202`: a `deploy` mod set's release filter keeps `dev_keep` jars (new manifest field, default
+  `cdevperfbot-*.jar`), so prep_srv.sh's perfBot and its `-Dcdevperfbot.out` JVM arg stay and qpin verify passes; the
+  two UPG.qb `@@prep copy` lines of perfBot are gone and UPG section 1's config edits are `@@prep toml` lines.
+  (2) qlint W boot keys on the driver step (section, world group, effective `@modset`, `@phase`) and skips client, draft
+  and superseded rows: the CBO and CGE false positives are gone; the warnings left are real file-order cases (SQ-CWG-09,
+  -10; SQ-WO-37; 94 HH section 2 rows after the Boot F rows; not reordered). (3) `@@prep toml FILE - KEY VALUE` and
+  `qrun.py toml FILE - KEY VALUE` set a top-level key; SQ-TP-06's `edit` uses it instead of sed. CGE's
+  `biome_configs` stays a sed `@@prep run` (the world folder name is only known at run time). Rows made expressible:
+  SQ-CIF-04b (new; the Equipment half, `modsets/cif_equipment.toml`: cpp_chain base plus Equipment, which needs only
+  Common and Compat) and SQ-CMV-03 (own CMV section 2: `@@modset cc_only alone +@trims`, `@@prep run jar_modver.py`
+  rewrites the server copy of Armor Trims to report 1.4.0; a new file renamed over the hard link). Still not
+  expressible: SQ-DEP-09b (ten boots, one per removed jar, a Forge dependency refusal is a hand-recorded SKIP: ten
+  `@@prep rm` sections would run it, but a refused boot fails its step instead of reading SKIP), SQ-WO-37 (the server
+  launched under strace: no launch-wrapper key), SQ-NSM-04 client half (a client on the upgrade world). Tracked in
+  `generators-and-tests #26`.

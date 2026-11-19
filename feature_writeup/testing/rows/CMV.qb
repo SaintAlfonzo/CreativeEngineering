@@ -38,17 +38,6 @@ shell cat logs/kubejs/startup.log logs/kubejs/server.log | grep -E "\[ERROR\]" |
 reject NoClassDefFoundError|ClassNotFoundException
 look stop is clean (the runner's stop: no exception after "Stopping server" in latest.log). SQ-CCO-13 (r1107cco) passed the same set on the 2026-11-07 jar; this is the 2026-11-12 jar
 
-## SQ-CMV-03 | Armor Trims 1.4.0 outside [1.3.3,1.4): one WARN, its mixins off, boots clean
-@group B
-@commands SQ-CMV-02's folder plus a gated mod with no further dependencies (Armor Trims or Nock Enough Arrows; check its `mods.toml`) whose `mods.toml` `version` is rewritten above the range (for example `1.4.0` / `1.3.0`, a copy in the scratchpad, never the real jar); boot
-@pass one WARN `[creativecommon] <mod> <version> is outside the tested range ...: its mixins are off`; boots clean
-@fails `GatedMixinPlugin.tableModOn`
-@from batches/r1113/c3_co2.qb passed
-bootexpect Done \(
-bootexpect \[creativecommon\] armor_trims 1\.4\.0 is outside the tested range \[1\.3\.3,1\.4\): its mixins are off
-shell grep -c "is outside the tested range" logs/latest.log; test "$(grep -c "armor_trims 1.4.0 is outside the tested range" logs/latest.log)" = 1
-bootreject Mixin apply failed|InvalidMixinException|ArmorTrimsLargeItemListsMixin.*(fail|error)
-
 ## CQ-CMV-01
 @group client
 @commands Throwaway client with Iceberg but without Legendary Tooltips; hover items in the inventory and JEI
@@ -80,3 +69,25 @@ look shell.txt: advancements enabled = true, wandering_trader enabled = false wi
 @pass the pack's panorama shows (from `kubejs/assets/`); creative E opens the survival inventory; the file keeps `disabled = true`; no advancement or tutorial toasts; JEI list in pack order
 @fails panorama: KubeJS assets not ranked above vanilla; menu: `CreativeMenuDisableMixin` or the config key
 @draft no batch holds this row yet
+
+@@section 2
+@@title SQ-CMV Creative Common mixin version gate above the tested range: Common alone plus Armor Trims reporting 1.4.0, 2026-11-19 ([creative_engineering.md](../creative_engineering.md) 7.1; moved out of section 1 by plan_rowfix_r1118 R4)
+@@date 2026-11-05
+@@jars creativecommon
+@@sources feature_writeup/creative_engineering.md feature_writeup/plan_rowfix_r1118.md
+@@modset cc_only alone +@trims
+@@prep run python3 "$INST/tools/scratch_query/jar_modver.py" "mods/armortrims-*.jar" 1.4.0
+@@text
+@@table
+## SQ-CMV-03 | Armor Trims 1.4.0 outside [1.3.3,1.4): one WARN, its mixins off, boots clean
+@group B
+@commands Common alone plus Armor Trims (`@@modset cc_only alone +@trims`), the server's copy of the Armor Trims jar rewritten to report 1.4.0 (`@@prep run` jar_modver.py: a new file renamed over the hard link, never the pack's jar); boot
+@pass one WARN `[creativecommon] <mod> <version> is outside the tested range ...: its mixins are off`; boots clean
+@fails `GatedMixinPlugin.tableModOn`
+@from batches/r1113/c3_co2.qb passed
+@reviewed 2026-11-19
+# r1118 follow-up (2026-11-19, generators-and-tests #25): own section 2 (mod set and version rewrite as @@prep); was SQ-CMV-02's folder by hand
+bootexpect Done \(
+bootexpect \[creativecommon\] armor_trims 1\.4\.0 is outside the tested range \[1\.3\.3,1\.4\): its mixins are off
+shell grep -c "is outside the tested range" logs/latest.log; test "$(grep -c "armor_trims 1.4.0 is outside the tested range" logs/latest.log)" = 1
+bootreject Mixin apply failed|InvalidMixinException|ArmorTrimsLargeItemListsMixin.*(fail|error)

@@ -45,7 +45,11 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   and the driver builds the step from it; port_chain.sh, cc_only_srv.sh and cpp_chain_srv.sh are thin wrappers over
   the same build. A set's jars from CEPortTesting or deploy/latest pin without a mod_sides.md row only when its
   manifest sets `unlisted_ok` (OUT/modset.json; owner ruling 3, 2026-11-18). Enforced: `qrun.py lint` E modset and
-  the rows-file load (unknown manifest, variant, group or option); `require` / `forbid` fail the build.
+  the rows-file load (unknown manifest, variant, group or option); `require` / `forbid` fail the build. A `deploy`
+  set's release filter drops every jar not in the release except `dev_keep` (default `cdevperfbot-*.jar`: prep_srv.sh's
+  perfBot and its `-Dcdevperfbot.out` JVM arg stay); no `@@prep copy` of perfBot (r1118 follow-up, 2026-11-19).
+- Never edit a jar in `srv/mods/` in place: the build hard-links the pack's jars (link count in the hundreds), so a
+  `zip` or `sed` on it changes the pack's own jar. Write a new file and rename it over the link (`jar_modver.py`).
 - A port_chain set without Creative Delight must also drop `kubejsdelight-*.jar` (`-kubejsdelight-*.jar`; r1106cbp).
 - The cc_only set must keep the dev perfBot jar (bots) and drop the pack's `kubejs/data/`: that folder holds Terralith
   noise overrides and crashes world creation without Terralith ("unbound value ... density_function") (r1107cco).
@@ -77,7 +81,8 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   `qrun.py run` on the file runs every row on the one boot it is given, boot-2 rows included; run it per boot with
   `--rows` and `qrun.py prep FILE SECTION A --boot N --out OUT` between (r1118 R4 A1). A resumed multi-boot step
   needs its OUT from the earlier boots (the driver refuses when it is gone). Enforced: `qrun.py lint` E boot (not a
-  whole number), W boot (a lower boot after a higher one in the file); `@@prep` boot lines are checked when the rows
+  whole number), W boot (a lower boot after a higher one in the file, within one driver step: section, world group,
+  effective `@modset` and `@phase`; client, draft and superseded rows skipped); `@@prep` boot lines are checked when the rows
   file loads (UPPERCASE prep_srv.sh keys and `fresh` refused where they cannot work).
 - A restart inside a row is the `restart [SECS]` directive with `edit CMD` lines before it, not `> stop` and a
   shell boot: a sent `stop` ends the batch, the crash watch reads the exit as the end, a boot wipes `latest.log` (the
