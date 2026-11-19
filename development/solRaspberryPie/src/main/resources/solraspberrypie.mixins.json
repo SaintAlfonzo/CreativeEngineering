@@ -7,6 +7,7 @@
   "plugin": "com.SaintAlfonzo.solraspberrypie.RpMixinPlugin",
   "mixins": [
     "BenefitsHandlerMixin",
+    "CarrotFoodListMixin",
     "FleetFootedMixin",
     "FoodListAccessor",
     "FoodListMixin",
@@ -14,6 +15,8 @@
     "MobEffectInstanceAccessor"
   ],
   "client": [
+    "client.CarrotBookScreenMixin",
+    "client.CarrotFoodDataMixin",
     "client.DiversityPageMixin",
     "client.EffectRenderingInventoryScreenMixin",
     "client.FoodBookScreenAccessor",

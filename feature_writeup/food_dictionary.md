@@ -26,6 +26,25 @@ rename the two books.
 - Placed pie and cake bites unlock their slice in both books (plan P1, `PlacedFoodSol$CarrotBridge`). Unlock ignores
   Apple Pie's complexity config.
 
+## Sorting (Raspberry Pie, built 2026-11-19)
+
+Plan: [plan_diet_books.md](plan_diet_books.md) phase 2 (TODO `food-tuning #12` to `#15`). Code in Raspberry Pie
+(`development/solRaspberryPie`), mixins gated on `solcarrot` 1.19.2-1.14.0. Carrot itself sorts both lists by one
+fixed key (its own name lookup) and stores eaten foods without order.
+
+- **Uneaten foods:** client config `[foodDictionary] uneatenSort` in `solraspberrypie-client.toml`: `MOD_NAME`
+  (default: mod id, then name), `NAME` (A-Z), `EASIEST` (lowest Apple Pie complexity first, then lower nutrition),
+  `HARDEST` (the reverse).
+- **Eaten foods:** a sort button at the top right of the eaten-foods pages (after Sophisticated Backpacks' sort-type
+  button, own code: a click steps to the next state, the tooltip names it, an item icon per state): newest unlock
+  first (golden carrot), latest eaten first (clock; Apple Pie's meal memory, foods it no longer remembers last), or
+  the uneaten order (book). The state is `[foodDictionary] eatenSort`. Unlock order is stored from the first eat after
+  2026-11-19 (NBT `solrp_unlockOrder` on Carrot's list, synced and kept through death); older unlocks sort after the
+  ordered ones, in the uneaten order.
+- **Mouse wheel** flips one page per notch.
+- Later: a hand-made type sort mirroring the JEI food family order (`food-tuning #15`).
+- Tests: CQ-FDI-01 to -04 (drafts until the owner's look-check).
+
 ## Tests (prefix FDI)
 
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-FDI-03, -03b PASS (bitten vanilla and double cakes count as cake slices in both books), SQ-FDI-04 PASS (a bite from each lunchbox tastes the food); found: a lunchbox slot accepts vanilla pumpkin pie, not a food in this pack (owner TODO).
