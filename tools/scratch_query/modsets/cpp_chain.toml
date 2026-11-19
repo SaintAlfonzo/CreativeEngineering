@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# SQ-CPP rows: reduced servers from the pack's own jars (CEPortTesting is left alone); was cpp_chain_srv.sh's lists,
+# moved here 2026-11-18 (plan_rowfix_r1118.md R4 B1). Row specs: cpp_chain chain | compat [+GLOB ...] (EXTRA=).
+#   chain   SQ-CPP-04: Creative Brewing chain WITHOUT Creative Engineering
+#   compat  SQ-CPP-05: Common + Compat (+ Calendar, Serene Seasons) without Create Recycle or Create
+# Built on prep_srv.sh (group B normal world, hard links, newest dev builds swapped in), pruned to the keep list,
+# kubejs/ emptied but the zz_ probes and the zq data, config/ and defaultconfigs/ empty (every jar writes its defaults).
+description = "Pack-jar reduced sets for SQ-CPP (Brewing chain without Engineering, Common + Compat)"
+source = "pack"
+group = "B"
+kubejs = "probes"
+config = "empty"
+forbid = ["(?i)^creative(engineering|equipment|magic|devtools|worldgen|labels)-", "^create_crush_everything"]
+
+[groups]
+base = ["rhino-forge-*", "architectury-*", "kubejs-forge-*", "cdevperfbot-*", "creativecommon-*", "creativecompat-*",
+        "creativecalendar-*", "SereneSeasons-*"]
+chain = ["kubejs-create-forge-*", "kubejsdelight-*", "lootjs-forge-*", "morejs-forge-*", "create-1.19.2-*",
+         "ImmersiveEngineering-*", "fruitsdelight-*", "FarmersDelight-*", "creativedelight-*", "creativebrewing-*",
+         "l2library-*"]
+
+[variants.chain]
+keep = ["@base", "@chain"]
+
+[variants.compat]
+keep = ["@base"]

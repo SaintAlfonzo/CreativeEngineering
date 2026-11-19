@@ -1,0 +1,24 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# The SQ-CCO-12 / -13 sets (was cco_sets.sh's set arguments over cc_only_srv.sh, 2026-11-18, plan_rowfix_r1118.md R4
+# B1): one named variant per boot, so each set is its own row or `@@prep boot=N: modset cco_sets <variant>`.
+description = "SQ-CCO-12 / -13 sets: cc_only full without one mod group each, and alone"
+extends = "cc_only"
+default = "full"
+
+[variants.without_we]
+keep = ["@base", "@iw", "@trims", "@quark", "@gravity", "@nea", "@beacons", "@portals", "@heartstone", "@seasons"]
+
+[variants.without_iw]
+keep = ["@base", "@trims", "@we", "@quark", "@gravity", "@nea", "@beacons", "@portals", "@heartstone", "@seasons"]
+
+[variants.without_quark_gravity_nea]
+keep = ["@base", "@iw", "@trims", "@we", "@beacons", "@portals", "@heartstone", "@seasons"]
+
+[variants.without_beacons]
+keep = ["@base", "@iw", "@trims", "@we", "@quark", "@gravity", "@nea", "@portals", "@heartstone", "@seasons"]
+
+[variants.without_portals_heartstone_seasons]
+keep = ["@base", "@iw", "@trims", "@we", "@quark", "@gravity", "@nea", "@beacons"]
+
+[variants.without_trims]
+keep = ["@base", "@iw", "@we", "@quark", "@gravity", "@nea", "@beacons", "@portals", "@heartstone", "@seasons"]

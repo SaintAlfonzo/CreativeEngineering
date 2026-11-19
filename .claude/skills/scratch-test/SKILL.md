@@ -75,6 +75,10 @@ date", "collect queued tests".
      driver runs boots 1..N in order on one folder; a planned boot-N row brings its section's lower-boot rows along.
      `@@prep run CMD` is a logged shell step in `OUT/srv` (`$INST`, `$OUT`, `$SRV`, `$BOOT`), for fixtures a prep
      action cannot express (a `git archive` config tree, a jar swap). Format: `qrows.py` docstring.
+   - Reduced or chain jar sets: `@@modset NAME [VARIANT] [+GLOB|+@GROUP] [-GLOB|-@GROUP] [KEY=VALUE]` on the section
+     (`@modset SPEC` on a row, `@modset none` for the full pack; `@@prep boot=N: modset SPEC` switches sets between
+     boots, world kept). Manifests: `tools/scratch_query/modsets/*.toml` (`qmodset.py list`, `show SPEC`; format in the
+     qmodset.py docstring); a new set is a new manifest, not a new shell script.
 4. **Index it.** Test IDs into the feature writeup's test list; README status "built, scratch test queued"; the TODO
    row names the IDs. `qrun.py lint feature_writeup/testing/rows/<CODE>.qb` (batch lint plus stale rows and dead ids,
    `qrowlint.py`); fix every E. The rows file is the batch: no separate copy in `batches/`.

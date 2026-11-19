@@ -31,6 +31,8 @@ Lint codes (E = the row will fail or mislead, W = risk; exit 1 when any E):
   E boot       @boot not a whole number >= 1 (rows files; the driver's boot phases, qdrive.py)
   W boot       a row of a higher @boot before a row of a lower one in the same section and world group (the driver
                runs boots in order, so the file reads out of run order)
+  E modset     @modset names no manifest, variant or group (tools/scratch_query/modsets/, qmodset.py); the section's
+               @@modset and `@@prep boot=N: modset` lines are checked when the rows file loads (qrows.py)
   E restart    restart with an argument that is not seconds, restart in a client batch, or an edit line with no
                restart after it in the same row (qrun runs edit lines only at a restart)
 """
@@ -173,6 +175,12 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 	top_boot = {}   # (section, world group) -> highest @boot seen so far (W boot)
 	for r in rows:
 		rid = r["id"]
+		mv = r.get("meta", {}).get("modset")
+		if mv is not None:
+			import qrows
+			err = qrows.modset_error(mv)
+			if err:
+				F.append(("E", "modset", rid, r["line"], f"@modset {mv}: {err}"))
 		bv = r.get("meta", {}).get("boot")
 		if bv is not None:
 			if not re.fullmatch(r"[1-9]\d*", bv.strip()):

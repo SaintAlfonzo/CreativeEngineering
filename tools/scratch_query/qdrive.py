@@ -12,7 +12,9 @@ world: boot 1 as above with that boot's rows, then for each later boot: stop, th
 (props into server.properties, toml / copy / rm / run / fresh), boot, its rows, stop. A planned row of boot N brings the
 section's rows of lower boots (same world group) into the step: they build the world it reads. Steps without @boot rows
 run exactly as before (one boot). A resumed multi-boot step continues at the boot of its first row without a result,
-on the folder it left (that boot's prep is not applied twice). State lives in perf/runs/RUN/drive/state.json (written at every step boundary), so a killed
+on the folder it left (that boot's prep is not applied twice). Mod sets (B1): a row whose effective `@modset` / section
+`@@modset` names a manifest (modsets/NAME.toml) gets its own step (the spec is in the step key) built by qmodset.py
+build instead of prep_srv.sh; `@@prep boot=N: modset SPEC` switches the jar set before boot N, world kept. State lives in perf/runs/RUN/drive/state.json (written at every step boundary), so a killed
 or crashed driver resumes where it stopped: a step that was running is stopped (its server too) and continues from its
 first row without a result. RUNNER.md is claimed at start (State: running, Phase, ETA, Updated) and released at the end.
 A watchdog process stops the step's server when the driver dies (kill -9 included), so no server is left orphaned.
@@ -158,8 +160,14 @@ def build_steps(plan_rows):
 		g = world_letter(m.get('group'))
 		ph = x.get('phase', 'server')
 		key = '%s#%s#%s#%s' % (ph, x['file'], x['section'], g)   # plan --json is in run-phase order (qrows.PHASES)
-		steps.setdefault(key, {'key': key, 'file': x['file'], 'section': x['section'], 'group': g, 'phase': ph, 'rows': [],
-							   'status': 'pending', 'est': 0})['rows'].append(x['id'])
+		ms = m.get('modset') or ''
+		if ms:
+			key += '#modset=' + ms   # B1: rows of one section on different jar sets get their own steps
+		st = steps.setdefault(key, {'key': key, 'file': x['file'], 'section': x['section'], 'group': g, 'phase': ph,
+									'rows': [], 'status': 'pending', 'est': 0})
+		st['rows'].append(x['id'])
+		if ms:
+			st['modset'] = ms
 	out = list(steps.values())
 	for s in out:
 		boot_phases(s, meta, files)
@@ -200,7 +208,7 @@ def boot_phases(s, meta, files):
 			m = meta.get((s['file'], r['id']), {})
 			if r['id'] in boots or m.get('superseded') or m.get('draft') or m.get('client') == 'true':
 				continue
-			if not qrows.runnable(r) or world_letter(m.get('group')) != s['group']:
+			if not qrows.runnable(r) or world_letter(m.get('group')) != s['group'] or (m.get('modset') or '') != s.get('modset', ''):
 				continue
 			b = boot_of(m)
 			if b < top:
@@ -270,6 +278,14 @@ def prep_actions(out, prep, boot=1):
 			if r.returncode:
 				raise RuntimeError('@@prep run failed (exit %d): %s' % (r.returncode, args[0]))
 			mods = True
+			continue
+		if kind == 'modset':
+			sys.path.insert(0, str(HERE))
+			import qmodset
+			try:
+				log += qmodset.switch(out, args[0])
+			except (ValueError, RuntimeError) as e:
+				raise RuntimeError('@@prep modset %s failed: %s' % (args[0], e))
 			continue
 		if kind == 'fresh':
 			p = srv / 'server.properties'
@@ -401,7 +417,8 @@ def run_step(d, i, s):
 
 
 def prep_boot1(d, i, s, out, level):
-	"""prep_srv.sh with the section's (boot 1) @@prep, then its actions."""
+	"""prep_srv.sh (or, for a step with a mod set, qmodset.py build) with the section's (boot 1) @@prep, then its
+	actions."""
 	d.log('step %d: prep %s group %s' % (i + 1, out, s['group']))
 	try:
 		prep = section_prep(s['file'], s['section'], s['group'])
@@ -409,7 +426,17 @@ def prep_boot1(d, i, s, out, level):
 		raise RuntimeError('bad @@prep in %s section %s: %s' % (s['file'], s['section'], e))
 	if prep['lines']:
 		d.log('step %d: @@prep %s' % (i + 1, ' | '.join(prep['lines'])))
-	rc, text = prep_srv(out, level, s['group'], prep)
+	if s.get('modset'):
+		sys.path.insert(0, str(HERE))
+		import qmodset
+		d.log('step %d: mod set %s' % (i + 1, s['modset']))
+		try:
+			rc, text = qmodset.build(out, level, s['group'], s['modset'], prep['props'], prep['env'])
+		except ValueError as e:
+			rc, text = 1, 'bad mod set %s: %s\n' % (s['modset'], e)
+		text = ''.join('prep: %s\n' % t for t in prep['lines']) + text
+	else:
+		rc, text = prep_srv(out, level, s['group'], prep)
 	(d.dir / ('s%02d_prep.txt' % i)).write_text(text)
 	if rc:
 		raise RuntimeError('prep_srv.sh failed (s%02d_prep.txt)' % i)

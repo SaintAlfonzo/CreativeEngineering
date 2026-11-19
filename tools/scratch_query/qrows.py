@@ -18,6 +18,10 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
                                 (default), worldgen, long; client rows are phase client unless the row says otherwise.
                                 qrun.py plan orders a run priority, server, longwait (a long row a Testing TODO row's
                                 queue column cites), worldgen, client, long
+    @@modset SPEC             the section's jar set (qmodset.py docstring: modsets/NAME.toml, e.g. `cc_only full -@iw`,
+                              `port_chain cooking +"alexsmobs-*.jar"`): the driver builds the step's server from it
+                              instead of plain prep_srv.sh; part of the step key. A row overrides it with @modset SPEC
+                              (`@modset none` = the full pack)
     @@reviewed YYYY-MM-DD     the rows were last matched to their sources that day (default: @@date); qrowlint.py
                               flags a row whose sources changed later (stale)
     @@archived YYYY-MM-DD     every row PASSed on the jars still installed (qrun.py archive): the section is shown in
@@ -41,6 +45,9 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
                                                         $OUT, $SRV and $BOOT set, logged in sNN_prep.txt; a non-zero
                                                         exit fails the step; srv/mods is re-pinned after it
                                 fresh                   boot=N: only: a new world for boot N (level-name LEVEL_bN)
+                                modset SPEC             boot=N: only: switch srv/mods (and kubejs / config by the
+                                                        manifest) to mod set SPEC, world kept (qmodset.py switch);
+                                                        `modset pack` = back to the full pack
                               UPPERCASE keys are boot 1 only (prep_srv.sh runs once); boot=N: lowercase keys are set in
                               server.properties before boot N.
                               Only what every planned row of the section needs before its boot belongs here; a row that
@@ -56,6 +63,7 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @client true              needs a client (default: true for CQ- ids)
     @reviewed YYYY-MM-DD      as @@reviewed, for this row
     @from PATH [passed]       where the steps came from (a past batch; "passed" = a run with that text passed)
+    @modset SPEC              this row's jar set (overrides @@modset; `none` = the full pack)
     @boot N                   driver boot phase (default 1): the step runs boots 1..N in order on one server folder and
                               world, each boot's rows after its `@@prep boot=N:` lines (qdrive.py); a planned row of boot
                               N brings the section's rows of lower boots (same world group) into the step as setup
@@ -95,8 +103,8 @@ CELL_KEYS = ['id', 'group', 'commands', 'pass', 'fails']
 ROW_RE = re.compile(r'^\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-\S')
 CODE_RE = re.compile(r'\b(?:SQ|CQ)-([A-Za-z][A-Za-z0-9]*)(?=-[A-Za-z0-9])')
 BLOCK_BEGIN = re.compile(r'^<!-- generated:status_index begin (rows_(\w+?)_(\d+)) sha1=([0-9a-f]+) -->$')
-SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier', 'phase', 'archived')
-ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'phase', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded', 'absent', 'boot')
+SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier', 'phase', 'archived', 'modset')
+ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'phase', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded', 'absent', 'boot', 'modset')
 TIERS = ('T1', 'T2', 'T3')
 # run order (scratch-test skill step 6); longwait is never written, qplan.py derives it from long + a Testing TODO row
 PHASES = ('priority', 'server', 'longwait', 'worldgen', 'client', 'long')
@@ -176,6 +184,10 @@ def load(path, errors=None):
 				sec.setdefault('prep', []).append(rest.strip())
 			elif word in SECTION_META:
 				sec['meta'][word] = rest
+				if word == 'modset':
+					err = modset_error(rest)
+					if err:
+						bad(n, '@@modset: %s' % err)
 			else:
 				bad(n, 'unknown section field @@%s' % word)
 			continue
@@ -193,6 +205,10 @@ def load(path, errors=None):
 				bad(n, '@%s outside a row' % word)
 			elif word in ROW_META or re.fullmatch(r'c\d+', word):
 				row['meta'][word] = rest
+				if word == 'modset':
+					err = modset_error(rest)
+					if err:
+						bad(n, '@modset: %s' % err)
 				if word in CELL_KEYS or re.fullmatch(r'c\d+', word):
 					i = CELL_KEYS.index(word) if word in CELL_KEYS else int(word[1:]) - 1
 					row['ncells'] = max(row['ncells'], i + 1)
@@ -210,6 +226,21 @@ def load(path, errors=None):
 	return out
 
 
+def modset_error(text):
+	"""'' when TEXT is a valid mod-set spec (qmodset.py) or 'none', else the reason."""
+	if text.strip() == 'none':
+		return ''
+	sys.path.insert(0, str(Path(__file__).resolve().parent))
+	try:
+		import qmodset
+		qmodset.parse_spec(text)
+	except (ValueError, ImportError) as e:
+		return str(e)
+	except Exception as e:  # noqa: BLE001  (a TOML syntax error in a manifest)
+		return '%s: %s' % (type(e).__name__, e)
+	return ''
+
+
 def all_files():
 	return sorted(ROWS.glob('*.qb'))
 
@@ -225,6 +256,9 @@ def effective(sec, row):
 		if not m.get(k) and sec['meta'].get(k):
 			m[k] = sec['meta'][k]
 	m.setdefault('tier', 'T2')
+	# mod set (r1118 R4 B1): the row's @modset, else the section's @@modset; 'none' = the full pack
+	ms = (m.get('modset') or sec['meta'].get('modset') or '').strip()
+	m['modset'] = '' if ms == 'none' else ms
 	if 'client' not in m:
 		m['client'] = 'true' if row['id'].startswith('CQ-') else 'false'
 	if not m.get('phase'):
@@ -243,7 +277,7 @@ def tiers_of(path):
 
 
 PREP_ENV = ('NOSWAP', 'SKIPSWAP', 'COPYDEV', 'PGJAR')
-PREP_ACTIONS = {'toml': 4, 'copy': 2, 'rm': 1, 'run': 1, 'fresh': 0}
+PREP_ACTIONS = {'toml': 4, 'copy': 2, 'rm': 1, 'run': 1, 'fresh': 0, 'modset': 1}
 
 
 def prep_line(text):
@@ -277,6 +311,14 @@ def prep_line_boot(text):
 		if not rest:
 			raise ValueError('run takes a command')
 		return group, boot, 'run', [rest]
+	if word == 'modset':
+		rest = text[6:].strip()
+		if boot < 2:
+			raise ValueError('modset in @@prep is a boot=N: (N >= 2) action; boot 1 takes the section @@modset')
+		err = modset_error(rest) if rest != 'none' else 'modset none: name the set (modset pack = the full pack)'
+		if err:
+			raise ValueError(err)
+		return group, boot, 'modset', [rest]
 	if word == 'fresh':
 		if text.strip() != 'fresh':
 			raise ValueError('fresh takes no argument')
@@ -348,6 +390,8 @@ def render(sec):
 	out = ['## ' + sec['meta'].get('title', '')]
 	if sec.get('prep'):
 		out += ['', 'Driver prep (`@@prep`, applied before each boot): ' + '; '.join('`%s`' % t for t in sec['prep'])]
+	if sec['meta'].get('modset'):
+		out += ['', 'Driver mod set (`@@modset`, tools/scratch_query/modsets/): `%s`' % sec['meta']['modset']]
 	for kind, x in sec['items']:
 		out.append(x if kind == 'text' else row_line(x))
 	return out

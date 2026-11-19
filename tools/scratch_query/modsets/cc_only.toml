@@ -1,0 +1,37 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# SQ-CCO rows: Creative Common plus ONLY the optional mods it tweaks, none of the other Creative jars (was
+# cc_only_srv.sh's BASE / MODS / LIBS lists, moved here 2026-11-18, plan_rowfix_r1118.md R4 B1). Row specs:
+#   cc_only full | alone          full minus some mods: cc_only full -@iw -@quark   (cc_only_srv.sh without=iw,quark)
+# Built on prep_srv.sh (group B normal world, hard links, newest Common build swapped in, perfBot), then pruned to the
+# keep list; kubejs/ emptied but the zz_ probes and the zq data; config/ and defaultconfigs/ empty so Common writes its
+# own defaults (SQ-CCO-04). Pack config comparisons copy configs_edited/root_config/creativecommon-common.toml.
+description = "Creative Common with only the optional mods it tweaks (full, alone; -@KEY drops one)"
+source = "pack"
+group = "B"
+kubejs = "probes"
+config = "empty"
+default = "full"
+forbid = ["(?i)^creative(compat|calendar|engineering|equipment|magic|delight|brewing|devtools|worldgen|labels)-"]
+
+[groups]
+# always kept: Forge-side libraries of KubeJS (Common's hard dependency), Common itself, and the dev-only perfBot (bots)
+base = ["creativecommon-*", "kubejs-forge-*", "rhino-forge-*", "architectury-*", "cdevperfbot-*"]
+# one group per optional mod key, with the extra libraries that mod needs
+iw = ["immersive_weathering-*", "moonlight-*"]
+trims = ["armortrims-*"]
+we = ["worldedit-mod-*"]
+quark = ["Quark-3.4-*", "AutoRegLib-*"]
+# Create Gravity needs Create (flywheel and registrate are nested in 0.5.1)
+gravity = ["create_gravity-*", "create-1.19.2-*"]
+nea = ["nock_enough_arrows-*"]
+beacons = ["CerbonsBetterBeacons-*"]
+# Immersive Portals' core is nested in its jar
+portals = ["immersive-portals-*"]
+heartstone = ["heartstone-*", "moonlight-*"]
+seasons = ["SereneSeasons-*"]
+
+[variants.full]
+keep = ["@base", "@iw", "@trims", "@we", "@quark", "@gravity", "@nea", "@beacons", "@portals", "@heartstone", "@seasons"]
+
+[variants.alone]
+keep = ["@base"]

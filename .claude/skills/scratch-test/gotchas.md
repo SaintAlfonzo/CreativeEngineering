@@ -40,12 +40,19 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - No server boots without Creative Compat: 8 own jars, Devtools included, declare it mandatory (FML refuses at once)
   (r1116). The full pack cannot boot without Creative Delight (Farmer's Delight is nested in it), so a jar-out row for
   CD, Calendar or Compat belongs on the port chain, not the full pack (r1106spfx).
-- `port_chain.sh` boots without Creative Delight must also DROP `kubejsdelight-*.jar` (r1106cbp).
-- `cc_only_srv.sh` must keep the dev perfBot jar (bots) and drop the pack's `kubejs/data/`: that folder holds Terralith
+- Reduced and chain jar sets are manifests in `tools/scratch_query/modsets/` (qmodset.py; since r1118 R4 B1):
+  `@@modset NAME [VARIANT] [+GLOB] [-GLOB] [-@GROUP]` on the section (`@modset` on a row, `@modset none` = full pack)
+  and the driver builds the step from it; port_chain.sh, cc_only_srv.sh and cpp_chain_srv.sh are thin wrappers over
+  the same build. A set's jars from CEPortTesting or deploy/latest pin without a mod_sides.md row only when its
+  manifest sets `unlisted_ok` (OUT/modset.json; owner ruling 3, 2026-11-18). Enforced: `qrun.py lint` E modset and
+  the rows-file load (unknown manifest, variant, group or option); `require` / `forbid` fail the build.
+- A port_chain set without Creative Delight must also drop `kubejsdelight-*.jar` (`-kubejsdelight-*.jar`; r1106cbp).
+- The cc_only set must keep the dev perfBot jar (bots) and drop the pack's `kubejs/data/`: that folder holds Terralith
   noise overrides and crashes world creation without Terralith ("unbound value ... density_function") (r1107cco).
-  cc_only_srv.sh deletes every server script (it still spares a `zz_zq_probe.js`, which prep_srv.sh no longer copies).
+  `kubejs = "probes"` keeps only `server_scripts/zz_*_probe.js` and `data/zq`.
 - `scratch_server.sh setup` copies the Creative Labels probe (`zz_cl_probe.js`); in a reduced set without Labels it is a
-  KubeJS load error that trips `kjsreject error`. cpp_chain_srv.sh removes it since r1114.
+  KubeJS load error that trips `kjsreject error`. Fixed in qmodset.py (not a check): removed in every set without a
+  Labels jar (cpp_chain_srv.sh did it since r1114).
 - Third-party fix rows: `tools/scratch_query/tpf_srv.sh` builds the srv and writes the Packet Fixer and Debugify configs
   (header there) (r1114).
 - Moving Curios out of a full-pack srv takes its hard dependents (Botania and its addons, Charm of Undying, Corpse

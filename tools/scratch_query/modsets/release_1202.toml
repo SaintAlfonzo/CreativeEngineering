@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# The deployed 1.2.02 pack (client and server 2026-11-09, commit 40ed32be; deploy/DEPLOYED.json) for the 1.2.02
+# upgrade section (plan_rowfix_r1118.md section 4): the pack's jars without dev swaps, deploy/latest/mods laid over
+# them, every jar not in deploy/latest/verify/server.installed.sha1 dropped, kubejs / config / defaultconfigs from the
+# release commit (git archive; the zz_ probes and the zq data kept). Boot 1 builds the world on it; boot 2 switches
+# with `@@prep boot=2: modset pack`. Release jars may pin without a mod_sides.md row (owner ruling 3, 2026-11-18).
+# Replaces the dev-jar fixtures (nsm_fixture.sh's jar part).
+description = "Deployed 1.2.02 release jars, kubejs and config (upgrade section boot 1)"
+source = "deploy"
+kubejs = "release"
+config = "release"
+release_commit = "40ed32be"
+unlisted_ok = true
