@@ -52,8 +52,11 @@ Forge 1.19.2's `LootModifierManager.apply` reads every copy of `data/forge/loot_
 in the resource stack, but a copy with `"replace": true` clears every entry read before it, and the stack order is the
 mod load order. D14: design for the worst case, where only one copy counts.
 
-- `mixin/LootModifierManagerMixin` injects at the end of Forge's `apply` (SRG `m_5787_`, `remap = false`), so the merge
-  runs on the same reload, after Forge has built its map, and replaces that map.
+- `mixin/LootModifierManagerMixin` injects at the end of Forge's `apply(Map, ResourceManager, ProfilerFiller)`
+  (`remap = false`), so the merge runs on the same reload, after Forge has built its map, and replaces that map. Forge's
+  own method keeps the name `apply` in the production jar; only the erased bridge `m_5787_(Object, ...)` has the SRG
+  name. Until 2026-11-18 the target was `m_5787_(Map, ...)`, which matches nothing, so no jar fragment ran (r1118 F10,
+  `conventions #38`). `creativeloot.mixins.json` sets `injectors.defaultRequire 1`: a missed inject now fails at load.
 - `GlmMerge.merge` keeps Forge's entries in their order and appends every entry Forge's map lacks from (a) every copy of
   the Forge list (`ResourceManager.getResourceStack`) and (b) every fragment `data/<namespace>/glm_entries.json`
   (`{"entries": ["ns:name", ...]}`). Each is decoded from its definition `data/<ns>/loot_modifiers/<name>.json`.
