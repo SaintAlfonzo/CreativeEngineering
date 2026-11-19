@@ -66,6 +66,11 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 
 ## Boot and shutdown
 
+- A restart inside a row is the `restart [SECS]` directive with `edit CMD` lines before it, not `> stop` and a
+  shell boot: a sent `stop` ends the batch, the crash watch reads the exit as the end, a boot wipes `latest.log` (the
+  row's offsets go with it) and config edits made while the server runs are often missed (r1118 R4 A2, SQ-WO-10,
+  SQ-HH-274). Enforced: `qrun.py lint` E restart (an `edit` with no `restart` after it in the row, `restart` in a
+  client batch).
 - One game JVM at a time: `game_jvms.sh` empty before every boot. `scratch_server.sh stop` and `stop_wait.sh` can return
   while the JVM is still saving, and a boot then starts a second JVM that hangs in mod loading (2026-10-25, r1108cge2)
   (partly checked: prep_srv.sh and `qrun.py drive` refuse while a game JVM is up; a reboot of an existing OUT through
@@ -207,8 +212,9 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - Enforced: a waitlog that matches an earlier row's reply, incl. a `/locate` waitlog caught by an EARLIER locate's late
   reply (rerun_b's third corn maze search answered inside c4_b's savanna locate wait; r1114): `qrun.py lint` W waitlog.
   Make every locate waitlog name its own target (`The nearest <id> is at|Could not find a structure of type "<id>"`).
-- Enforced: the same waitlog pattern twice in one row (repeats return at once on the first's line; repeated counts need
-  distinct patterns; r1115): `qrun.py lint` W waitlog2.
+- Fixed in qrun (not a check): the same waitlog pattern twice in one row used to return at once on the first's line
+  (r1115); since r1118 (judge-14) a repeat waits for one more matching line than the earlier waitlog saw, so the
+  W waitlog2 lint is gone. Two replies landing before the first waitlog returns still leave the repeat waiting.
 - `bootreject` matches the whole log, including the replies to the batch's own commands (a `give` of an unknown item
   prints `Unknown item`): exclude the console reply with a lookahead, `^(?!.*MinecraftServer/\]: Unknown item 'x').*`
   (r1113).

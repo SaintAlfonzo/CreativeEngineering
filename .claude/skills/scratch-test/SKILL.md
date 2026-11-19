@@ -67,6 +67,9 @@ date", "collect queued tests".
    - Pass: checkable facts (log regex, count, value), so `qrun.py` can judge it. Things only a person can judge are
      written as a look ("LOOK: ...").
    - If it fails: the files and the likely cause, so a later session does not start cold.
+   - Restart inside a row: `edit CMD` lines (run in `OUT/srv` while the server is down: `qrun.py toml`, a jar swap),
+     then `restart [SECS]` (stop, edits, boot, wait for `Done (`; the row and the batch go on on the new boot; the old
+     log stays in `srv/logs/qrun_bootN.log`). Never `> stop` in a row that needs the server back: it ends the batch.
 4. **Index it.** Test IDs into the feature writeup's test list; README status "built, scratch test queued"; the TODO
    row names the IDs. `qrun.py lint feature_writeup/testing/rows/<CODE>.qb` (batch lint plus stale rows and dead ids,
    `qrowlint.py`); fix every E. The rows file is the batch: no separate copy in `batches/`.
