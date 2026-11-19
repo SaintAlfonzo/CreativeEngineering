@@ -42,3 +42,29 @@ look each ingredients= starts with the cinder flour; part=fields (if printed) sh
 > cdevtest rdetail thunder_detector
 expect verb=rdetail id=\S*thunder_detector\S* .*part=step\d+ serializer=create:filling
 look the filling step line names the mundane potion fluid; if the NBT is not printed, read the recipe JSON (/dumprecipes) for Bottle:"REGULAR"
+
+## SQ-RE-34 | Create basin and Vintage vibrating recipes over Create's displayed input/output count are loaded
+@group A
+@commands `/cdevtest rdetail` on each of the 9 recipes Create warns about at load (`more item inputs (N) than supported (9)`): ash to tuff compacting, deepslate bulk heated and superheated, andesite generation heated and superheated, basalt generation heated and superheated, sand vibrating to shells; then a client check that one heated mixing of each kind runs in a basin
+@pass every id is listed with its ingredients (16, 32, 10, 11 entries; 6 vibrating outputs); in a basin the recipe runs and gives its output
+@fails a recipe not loaded (rdetail n=0); in game the basin never starts: split the recipe into stacks of 9 or fewer inputs
+@from plan_bugfix_r1118.md B7 (r1118 F5)
+# r1118 B7 (2026-11-18): exact ids (the prefix andesite_generation_ also matches the unheated recipe); summary line verb=rdetail text=TEXT n= shown=
+> cdevtest rdetail creativeengineering:createcompacting/16_ash_to_1_tuff_by_compacting
+> cdevtest rdetail creativeengineering:createcompacting/deepslate_bulk_heated
+> cdevtest rdetail creativeengineering:createcompacting/deepslate_bulk_superheated
+> cdevtest rdetail creativeengineering:createmixing/andesite_generation_heated
+> cdevtest rdetail creativeengineering:createmixing/andesite_generation_superheated
+> cdevtest rdetail creativeengineering:createmixing/basalt_generation_heated
+> cdevtest rdetail creativeengineering:createmixing/basalt_generation_superheated
+> cdevtest rdetail creativeengineering:vivibrating/sand_vibrating_to_shells
+expect verb=rdetail text=creativeengineering:createcompacting/16_ash_to_1_tuff_by_compacting n=1
+expect verb=rdetail text=creativeengineering:createcompacting/deepslate_bulk_heated n=1
+expect verb=rdetail text=creativeengineering:createcompacting/deepslate_bulk_superheated n=1
+expect verb=rdetail text=creativeengineering:createmixing/andesite_generation_heated n=1
+expect verb=rdetail text=creativeengineering:createmixing/andesite_generation_superheated n=1
+expect verb=rdetail text=creativeengineering:createmixing/basalt_generation_heated n=1
+expect verb=rdetail text=creativeengineering:createmixing/basalt_generation_superheated n=1
+expect verb=rdetail text=creativeengineering:vivibrating/sand_vibrating_to_shells n=1
+reject \[cdevtest\] .*done=0
+look the ingredient lists (16, 32, 10, 11 entries; 6 vibrating outputs); the basin run is a client hand check (one per kind)

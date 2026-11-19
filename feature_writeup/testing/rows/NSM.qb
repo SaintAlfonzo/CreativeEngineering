@@ -131,6 +131,8 @@ look skin results carry the skin id (creativedelight skin tag) and keep the box;
 @pass No new `minecraft:air` outputs or inputs; no moved id left in any recipe; stepstool, shield, echo tool, felsic and air brake recipes resolve
 @fails A dict value or tag key missed: `python3 tools/owner_namespace_move.py --left`
 @from batches/r1111/a1.qb
+# r1118 judge-15 (2026-11-18): prep copies the instance dump in; stale by_mod files read as moved ids left behind
+shell rm -rf kubejs/exported/recipes/by_mod
 > dumprecipes
 sleep 30
 shell ls -la kubejs/exported/recipes 2>&1 | head -5; echo "files with air: $(grep -rl 'minecraft:air' kubejs/exported/recipes/by_mod | wc -l)"; grep -rl 'minecraft:air' kubejs/exported/recipes/by_mod | head -20; grep -rhoE '"creativeengineering:[a-z0-9_/]+"' kubejs/exported/recipes/by_mod | sort | uniq -c | sort -rn | head -40

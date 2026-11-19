@@ -108,24 +108,28 @@ reject \[cdevtest\] .*done=0
 ## SQ-HR-05 | wild raspberry patches in forest
 @phase worldgen
 @group B
-@commands New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/cdevtest tag biome creativedelight:wild_crops/raspberry` and a fully loaded 256-chunk `/cdevtest count`)
+@commands New world, seed 8675309; `/cdevtest tag biome creativedelight:wild_crops/raspberry`; `/locate biome minecraft:forest`, fly there; `/cdevtest count` and `ages` over a 57x76x57 box (under the 262144-block cap)
 @pass tag lists 26 biomes; ripe raspberry bush patches in forest / plains
 @fails `requires` skipped the rule; feature json invalid in 1.19.2
 @from batches/r1101/w2_worldgen.qb
-@reviewed 2026-11-16
-bootexpect \[wild-crops\].*raspberry
+@reviewed 2026-11-18
+# r1118 judge-15 (2026-11-18): bootexpect dropped (the [wild-crops] log names no rules, r1101), own bot spawn, box under the cap
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
+> cdevtest tag biome creativedelight:wild_crops/raspberry
+expect verb=tag kind=biome tag=creativedelight:wild_crops/raspberry n=[1-9]
 > locate biome minecraft:forest
 waitlog nearest minecraft:forest is at 300
 capture FO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {FO1} 150 {FO3}
 sleep 40
-> forceload add {FO1-64} {FO3-64} {FO1+64} {FO3+64}
+> forceload add {FO1-28} {FO3-28} {FO1+28} {FO3+28}
 sleep 30
-> cdevtest count {FO1-64} 50 {FO3-64} {FO1+64} 120 {FO3+64} hearthandharvest:raspberry_bush
+> cdevtest count {FO1-28} 55 {FO3-28} {FO1+28} 130 {FO3+28} hearthandharvest:raspberry_bush
 expect verb=count block=hearthandharvest:raspberry_bush n=[1-9]
-> cdevtest ages {FO1-64} 50 {FO3-64} {FO1+64} 120 {FO3+64} hearthandharvest:raspberry_bush
+> cdevtest ages {FO1-28} 55 {FO3-28} {FO1+28} 130 {FO3+28} hearthandharvest:raspberry_bush
 > forceload remove all
-look the [wild-crops] line lists rule raspberry (26 biomes); bushes counted in the forest square (> 0), ripe (age 3) ones among them (verb=ages hist 3:); record the count
+look the tag lists rule raspberry (26 biomes); bushes counted in the forest square (> 0), ripe (age 3) ones among them (verb=ages hist 3:); record the count
 reject \[cdevtest\] .*done=0
 
 ## CQ-HR-06 | raspberry bush ages and WTHIT growth line

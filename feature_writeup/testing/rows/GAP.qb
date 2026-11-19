@@ -64,11 +64,14 @@ look 5 files each with 1 forge:none; region census finds no bushierflowers: bloc
 @pass rose gold plate and wire in the gold tags; each gold-input recipe takes a gold tag (rose gold works), the golden apple, golden pickaxe, golden chestplate and golden carrot included; gold ingot (from nuggets) and gold block still take literal gold only
 @fails `metal/rose_gold_interchange.js` `goldOnly` forms list, tag json
 @from batches/r1115/p1_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
 > cdevtest tag item forge:plates/gold
 > cdevtest tag item forge:wires/gold
-# since r1118 (judge-8, 2026-11-18): recipes read the item tag (block tag holds gold only); pack recipe ids for rail, apple, carrot
+# r1118 B8 (2026-11-18, owner ruling): the rose gold block is in the block tag as well as the item tag
 > cdevtest tag item forge:storage_blocks/gold
+> cdevtest tag block forge:storage_blocks/gold
+> cdevtest rdetail golden_watering_can
+> cdevtest rdetail gold_sheet_metal_from_gold_block
 > cdevtest rdetail minecraft:clock
 > cdevtest rdetail creativeengineering:shaped/rail_to_6_powered_rail_by_shaped
 > cdevtest rdetail mechanical_crafter
@@ -83,7 +86,8 @@ waitlog \[cdevtest\] verb=makes item=minecraft:gold_block n= 30
 expect \[cdevtest\] verb=tag kind=item tag=forge:plates/gold n=\d+ ids=.*rose_gold
 expect \[cdevtest\] verb=tag kind=item tag=forge:wires/gold n=\d+ ids=.*rose_gold
 expect \[cdevtest\] verb=tag kind=item tag=forge:storage_blocks/gold n=\d+ ids=.*rose_gold
-look rdetail ingredients= of clock, rail (gold rods since the pack recipe), crafter, golden apple/pickaxe/chestplate/carrot: the gold ingredient lists several items (a tag holding rose gold); gold ingot (nuggets) and gold block recipes (makes ids, then rdetail) take literal gold only
+expect \[cdevtest\] verb=tag kind=block tag=forge:storage_blocks/gold n=\d+ ids=.*mca:rose_gold_block
+look rdetail ingredients= of clock, rail (gold rods since the pack recipe), crafter, golden apple/pickaxe/chestplate/carrot: the gold ingredient lists several items (a tag holding rose gold); gold ingot (nuggets) and gold block recipes (makes ids, then rdetail) take literal gold only; golden watering can smithing addition lists the gold block tag (2 or more items); Create Deco gold sheet metal stonecutting keeps the literal gold block
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GAP-05 | golden egg: falls, sinks in water like an ordinary item, in no floating tag

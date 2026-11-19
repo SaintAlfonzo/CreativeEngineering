@@ -104,6 +104,24 @@ sleep 20
 reject verb=\S+ .*done=0
 look the verb=count lines give n and on= (what each stands on); calcite and smooth basalt seen from the water (first block below water) should be about 0: fly 5 geode spots in the client block for the look (ST-305); prismarine geodes untouched. count reads loaded chunks only (skipped_columns 0 means the sample was loaded) Chunky while they are still loaded, else forceload the box first
 
+## SQ-TER-07 | ported structure datapacks stay in terrain_adaptation/soft and template_trim; absent-mods list drops them
+@phase worldgen
+@group A
+@commands boot; `/cdevtest tag structure creativeworldgen:terrain_adaptation/soft` and `creativeworldgen:template_trim`; `grep "\[absent mods\]" logs/kubejs/server.log`
+@pass both tags list `forest_ruins:ruin_1` (with the other ported datapacks: illager_siege_weapons, eugene, ...); no `[absent mods]` line names forest_ruins or illager_siege_weapons (r1118 F1: about 520 entries dropped as absent mods)
+@fails tag helper `_ents` dropped them: `global.has.datapack` false (Creative Common `DataNamespaces` empty: `ReloadableServerResourcesMixin` missed, or the namespace is not in the reload's resource manager)
+@jars creativecommon creativeworldgen creativedevtools
+@from plan_bugfix_r1118.md B2
+@absent creativeworldgen:template_trim (a structure tag, not a registry id)
+> cdevtest tag structure creativeworldgen:terrain_adaptation/soft
+expect verb=tag kind=structure tag=creativeworldgen:terrain_adaptation/soft n=[1-9]\d* ids=\S*forest_ruins:ruin_1
+> cdevtest tag structure creativeworldgen:template_trim
+expect verb=tag kind=structure tag=creativeworldgen:template_trim n=[1-9]\d* ids=\S*forest_ruins:ruin_1
+shell grep -h "\[absent mods\]" logs/kubejs/server.log | grep -E "forest_ruins|illager_siege_weapons|eugene" | cut -c1-200; true
+shell test "$(grep -h "\[absent mods\]" logs/kubejs/server.log | grep -cE "absent (forest_ruins|illager_siege_weapons|eugene)$")" = 0
+reject \[cdevtest\] .*done=0
+look both tags hold the ported structures; the absent-mods lines name only real absent mods
+
 @@section 2
 @@title Terrain beard footprint calibration (structures/terrain), 2026-10-30
 @@phase worldgen
