@@ -3529,19 +3529,19 @@
    "modifier": 0.25,
    "meat": true,
    "fast": false,
-   "always": true,
+   "always": false,
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:levitation",
-     "ticks": 80,
-     "amp": 1,
+     "effect": "minecraft:nausea",
+     "ticks": 200,
+     "amp": 0,
      "chance": 1
     }
    ],
    "sources": [
-    "shulker_meat",
-    "shulker_meat_slice"
+    "shulker_mollusk",
+    "shulker_filet"
    ],
    "recipes": [
     {
@@ -3549,10 +3549,10 @@
      "inputs": [
       {
        "any": [
-        "shulker_meat",
-        "shulker_meat_slice"
+        "shulker_mollusk",
+        "shulker_filet"
        ],
-       "n": 1
+       "n": 8
       }
      ]
     },
@@ -3561,10 +3561,10 @@
      "inputs": [
       {
        "any": [
-        "shulker_meat",
-        "shulker_meat_slice"
+        "shulker_mollusk",
+        "shulker_filet"
        ],
-       "n": 1
+       "n": 6
       },
       {
        "any": [
@@ -3580,10 +3580,10 @@
      "inputs": [
       {
        "any": [
-        "shulker_meat",
-        "shulker_meat_slice"
+        "shulker_mollusk",
+        "shulker_filet"
        ],
-       "n": 1
+       "n": 6
       },
       {
        "any": [

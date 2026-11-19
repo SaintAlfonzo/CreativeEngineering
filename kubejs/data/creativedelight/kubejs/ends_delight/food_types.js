@@ -90,10 +90,6 @@ if (global.CD) global.CD.genPut('food_types', 'ends_delight', {
   "canned_grilled_shulker": [
    "grilled_shulker"
   ],
-  "canned_shulker": [
-   "shulker_meat",
-   "shulker_meat_slice"
-  ],
   "canned_steamed_dragon_egg": [
    "steamed_dragon_egg"
   ]
