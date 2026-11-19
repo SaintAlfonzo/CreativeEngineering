@@ -4,8 +4,8 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=f07e44bf96ba -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 14, Pinned 1, In Progress 47, Testing 32), 3 Complete.
+<!-- generated:status_index begin open_work sha1=7cc67da5cbfe -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 13, Pinned 1, In Progress 47, Testing 33), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -18,7 +18,6 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/meals #14` | Planned | S C P T | Patty food type |
 | `dishes/meals #18` | Planned | S C P | Cheese in nachos |
 | `dishes/meals #20` | Planned | S C P | Feasts in ovens |
-| `dishes/meals #27` | Planned | S C P | Pineapple pizza |
 | `dishes/meals #37` | Planned | S C P | Pancake coverings review |
 | `dishes/pickles-and-ferments #5` | Planned | S C P | Enzymes from crushed or milled mushrooms |
 | `dishes/pickles-and-ferments #9` | Planned | S C P | Pickled egg for the century egg |
@@ -88,6 +87,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
 | `dishes/meals #12` | Testing | S C P T | Pancake food type |
 | `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
+| `dishes/meals #27` | Testing | S C P | Pineapple pizza |
 | `dishes/ocean #2` | Testing | S C P | Fish egg roll accepts eggs |
 | `dishes/ocean #4` | Testing | S+ C P | Remove tentacles; all tentacles to calamari |
 | `dishes/ocean #5` | Testing | C P | Salmon eggs become caviar |
@@ -239,7 +239,7 @@ One row per family and subfamily. A field a subfamily does not set is its parent
 | **Sauce and fat** `ingredient/sauce` | ingredient | Sauces, oils and fats. | as ingredient | as ingredient | as ingredient | as ingredient<br>Now: hunger 1 to 8 (median 3); saturation 1.2 to 11.2 (median 3); stack 64 x7; returns bowl 2, empty_mason_jar 1, glass_bottle 1<br>Used in: meal 4; candy 2; dessert 2; egg 2; feast 1; fish 1; hazard 1; lasagna 1; meat 1; nofamily 1; 8 more |
 | **Other ingredient** `ingredient/other` | ingredient | Leaves, beans, pods, mash, mince, raw pasta and noodles for other recipes. | as ingredient | as ingredient | as ingredient | as ingredient<br>Now: hunger 0 to 14 (median 2.5); saturation 0 to 14 (median 1.4); stack 64 x22; returns empty_mason_jar 3, bowl 1<br>Used in: meal 7; soup 7; drink 4; ingredient 4; cookie 3; lasagna 3; cake 2; dessert 2; egg 2; frozen 2; 11 more |
 | **Preserve** `preserve` | - | Fruit or vegetables kept in sugar, salt or brine. | **Rule:** Jams and sauces not canned (precedent); preserve section x1 x 4 (tomato sauce); per item, can parity 2.21 ([can_parity.md](can_parity.md)) | **Decision:** none required | **Decision:** Cooking Pot: fruit + sugar in a jar (Mixer mirrors it) | Now: hunger 2 to 12 (median 4); saturation 2.4 to 12.6 (median 2.4); stack 64 x47, 32 x1; returns empty_mason_jar 34, glass_bottle 1<br>Used in: sandwich 31; preserve 26; salad 24; candy 22; soup 6; meal 3; dessert 2; unsorted 2; ingredient 1 |
-| **Jam** `preserve/jam` | preserve | Fruit boiled with sugar, in a jar or bottle. | as preserve | **Rule:** Own block, while sneaking (Fruits Delight jams) ([placeable_food.md](placeable_food.md) 1) | **Decision:** Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)<br>**Rule:** Every jam cooks 400 ticks in the Cooking Pot (Fruits Delight 200 raised) (owner 2026-11-04)<br>**Planned:** Pot recipe: 4 fruit + 1 sugar + 1 lemon slice -> 2 jam ([TODO](todo/TODO.md) dishes/jams #2)<br>**Planned:** One jam item (Fruits Delight) and one jam block (Vintage Delight), always a mason jar recoloured to the jam; recipes take jam, never bottled jam or jelly ([TODO](todo/TODO.md) dishes/jams #1, dishes/jams #3) | Now: hunger 4 to 9 (median 4); saturation 2.4 to 12.6 (median 2.4); stack 64 x33; returns empty_mason_jar 32<br>Used in: sandwich 31; candy 22; preserve 22; salad 22; dessert 2 |
+| **Jam** `preserve/jam` | preserve | Fruit boiled with sugar, in a jar or bottle. | as preserve | **Rule:** Own block, while sneaking (Fruits Delight jams) ([placeable_food.md](placeable_food.md) 1) | **Decision:** Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)<br>**Rule:** Every jam cooks 400 ticks in the Cooking Pot (Fruits Delight 200 raised) (owner, 2026-11-04)<br>**Planned:** Pot recipe: 4 fruit + 1 sugar + 1 lemon slice -> 2 jam ([TODO](todo/TODO.md) dishes/jams #2)<br>**Planned:** One jam item (Fruits Delight) and one jam block (Vintage Delight), always a mason jar recoloured to the jam; recipes take jam, never bottled jam or jelly ([TODO](todo/TODO.md) dishes/jams #1, dishes/jams #3) | Now: hunger 4 to 9 (median 4); saturation 2.4 to 12.6 (median 2.4); stack 64 x33; returns empty_mason_jar 32<br>Used in: sandwich 31; candy 22; preserve 22; salad 22; dessert 2 |
 | **Spread** `preserve/spread` | preserve | A non-fruit spread in a jar (nut butter). | as preserve | as preserve | **Decision:** Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)<br>**Planned:** Nut butter and nut mash merge into one item ([TODO](todo/TODO.md) dishes/jams #5) | Now: block items only<br>Used in: none |
 | **Pickle** `preserve/pickle` | preserve | Vegetables fermented or pickled (kimchi, pickles). | as preserve | as preserve | **Decision:** Keg: vegetable + salt / brine<br>**Planned:** Recipes take real pickles only (not Brewin's pickled pickles or raw sea pickles); a Pickled Sea Pickle without honey ([TODO](todo/TODO.md) dishes/pickles-and-ferments #1, dishes/pickles-and-ferments #2)<br>**Planned:** Enzymes from crushed or milled mushrooms ([TODO](todo/TODO.md) dishes/pickles-and-ferments #5)<br>**Planned:** Kimchi: Vintage Delight's, any pickleable vegetable as the base ([TODO](todo/TODO.md) dishes/pickles-and-ferments #8)<br>**Planned:** Century egg takes a pickled egg ([TODO](todo/TODO.md) dishes/pickles-and-ferments #9) | Now: hunger 2 to 12 (median 6); saturation 2.4 to 9.8 (median 4); stack 64 x14, 32 x1; returns empty_mason_jar 2, glass_bottle 1<br>Used in: soup 6; preserve 4; meal 3; salad 2; unsorted 2; ingredient 1 |
 | **Jello** `jello` | - | A set gelatin dessert of one fruit (Fruits Delight jellos and the like). | **Rule:** Desserts section x1.25 x 8, + sugar; per item, can parity 2.22 ([can_parity.md](can_parity.md)) | **Decision:** Display Delight placed | **Decision:** Crafting: jam + gelatin in a bowl (Spout mirrors it) | **Planned:** Stack: bowl foods including jello 32 ([TODO](todo/TODO.md) food/stack-sizes #1)<br>Now: hunger 1 to 8 (median 1); saturation 0.6 to 11.2 (median 0.6); stack 32 x32, 8 x1, 64 x1; returns bowl 32<br>Used in: none |

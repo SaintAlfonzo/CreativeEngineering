@@ -7,12 +7,11 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=0e24e5b3221d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 33 open TODO rows (Planned 2, In Progress 9, Testing 22), 1 Complete.
+<!-- generated:status_index begin open_work sha1=2ecffae0c9f8 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 33 open TODO rows (Planned 1, In Progress 9, Testing 23), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `dishes/meals #27` | Planned | S C P | Pineapple pizza |
 | `dishes/meals #37` | Planned | S C P | Pancake coverings review |
 | `baking/baked-goods #22` | In Progress | S P | Chorus cookie from the uncanny cookie |
 | `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
@@ -36,6 +35,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | `dishes/meals #9` | Testing | S+ C P T | Gold food cheap in machines |
 | `dishes/meals #22` | Testing | S+ C P | Overnight oats |
 | `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
+| `dishes/meals #27` | Testing | S C P | Pineapple pizza |
 | `dishes/meals #32` | Testing | S~ C P | Remove mhadjeb |
 | `dishes/meals #36` | Testing | S+ C P | Cacciatore takes chicken cuts |
 | `food/drinks #9` | Testing | S C P | Bayberry soup becomes juice |
