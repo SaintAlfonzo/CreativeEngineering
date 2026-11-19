@@ -16,11 +16,25 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=01e5635f6e18 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 1, Testing 8), 1 Complete.
+<!-- generated:status_index begin open_work sha1=85174e1fb6fd -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 15, Testing 8), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `food-tuning #2` | Planned | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
+| `food-tuning #3` | Planned | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
+| `food-tuning #4` | Planned | C | Diversity shown rounded down (4.97 showed 5 before milestone 5) |
+| `food-tuning #5` | Planned | C | Diet Log: per-page x, y, scale config; ladder and milestones one line lower |
+| `food-tuning #6` | Planned | C | Diet Log: book background stretched by repeating its center strip, configurable width |
+| `food-tuning #7` | Planned | C | Diet Log: mouse wheel flips pages |
+| `food-tuning #8` | Planned | C | Diet Ladder bar: even spacing, last achieved milestone + next 4 |
+| `food-tuning #9` | Planned | C | Diet Log icons: locked unlocks alternate lock/effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect |
+| `food-tuning #10` | Planned | C | Gate text: N more unique food(s) to activate diet |
+| `food-tuning #11` | Planned | C | Effect screen: smaller Change/Drop; hover shows how many foods age out |
+| `food-tuning #12` | Planned |  | Investigate Sophisticated Backpacks sort-type button for the Food Dictionary toggle |
+| `food-tuning #13` | Planned | C | Food Dictionary: uneaten sort configurable (mod+name, name, easiest, hardest) |
+| `food-tuning #14` | Planned | S C | Food Dictionary: eaten list 3-state sort button (newest unlock, latest eaten, uneaten order) |
+| `food-tuning #15` | Planned |  | Food Dictionary: hand-made type sort mirroring the JEI food family order (after that is done) |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
 | `food/types-and-tuning #21` | Testing | S C P T | Spice of Life selectable unlock bonus |
 | `food/types-and-tuning #29` | Testing | C | Raspberry Pie item tooltip: "Doesn't run programs" |
@@ -772,3 +786,8 @@ Plan: [plan_post_scratch_1115.md](plan_post_scratch_1115.md) G5 as amended by G6
   cycles through the loaded slot-pool effects in pool order, one per second, looping (`legendSlotEffect`); with no
   loaded pool effect it shows the slot item. Assumed (not ruled): the cycle period of 1 second, fixed in code (no
   config); the pool order is the ladder file's order; the slot item stays the icon for empty slots. Test CQ-RPI-46.
+
+### 12.6 Owner notes 2026-11-18 (planned)
+
+Plan and rulings: [plan_diet_books.md](plan_diet_books.md) (window 30 meals, respec 5, last-30-meals list replaces the
+food history, even-spaced ladder of 5, Diet Log icon changes; Food Dictionary sorting). TODO `food-tuning #2` to `#15`.
