@@ -24,10 +24,11 @@ shell grep -qE "\[jar-startup\] creativecommon: ([0-9]+) of \1 files loaded" log
 
 ## SQ-CMV-02 | Common alone boots, reloads clean; no class or mixin error; no script error
 @group B
-@commands **Common alone**: fresh server folder with Forge, KubeJS, Rhino, Architectury and Common only, empty `kubejs/`; boot, `/reload`, stop
+@commands **Common alone** (`@modset cc_only alone`: Forge, KubeJS, Rhino, Architectury and Common, config empty, probe-only kubejs); boot, `/reload`, stop
 @pass boots and stops clean; no `NoClassDefFoundError`, `ClassNotFoundException` or mixin error in `latest.log`; no script error in `logs/kubejs/`
 @fails a mixin into another mod without a `NEEDS_MOD` row, or Java code reaching an optional mod's classes without a load check
 @from batches/r1113/c3_co.qb
+@modset cc_only alone
 bootexpect Done \(
 bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
 > reload
@@ -62,10 +63,11 @@ bootreject Mixin apply failed|InvalidMixinException|ArmorTrimsLargeItemListsMixi
 @draft no batch holds this row yet
 ## SQ-CMV-04 | Common's generated config keeps vanilla defaults; advancements load
 @group B
-@commands Vanilla defaults (2026-11-07, creative_engineering.md 7.1): in SQ-CMV-02's folder, delete `config/creativecommon-common.toml` before the boot; after it `grep -nE "^\s*(enabled|packOrder|tutorial|advancement|traderIntervalTicks|commonTrades|rareTrades|disabled) =" config/creativecommon-common.toml`; `/advancement grant @p only minecraft:story/root` as an operator
+@commands Vanilla defaults (2026-11-07, creative_engineering.md 7.1): on `@modset cc_only alone` (config empty, so Common writes its defaults; no pack advancement drop); after the boot `grep -nE "^\s*(enabled|packOrder|tutorial|advancement|traderIntervalTicks|commonTrades|rareTrades|disabled) =" config/creativecommon-common.toml`; `/advancement grant @p only minecraft:story/root` as an operator
 @pass the generated file has advancements enabled = true, wandering_trader enabled = false with 24000 / 5 / 1, packOrder = false, tutorial and advancement = true, creative_menu disabled = false; the grant succeeds (advancements load)
 @fails a default left at the pack value in `CommonConfig`
 @from batches/r1108cge/b5_cco.qb
+@modset cc_only alone
 shell grep -nE "^\s*(enabled|packOrder|tutorial|advancement|traderIntervalTicks|commonTrades|rareTrades|disabled|gravityLimitDimensions) =" config/creativecommon-common.toml
 > execute in minecraft:the_end run forceload add 0 0
 > pbot spawn cge06 0 75 0 minecraft:the_end survival

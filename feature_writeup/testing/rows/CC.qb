@@ -46,10 +46,11 @@ shell grep -qE "creativecommon: .* files loaded" logs/kubejs/startup.log
 shell test "$(grep -c "ERROR" logs/kubejs/startup.log)" = 0 && echo "0 startup errors"
 ## SQ-CC-03
 @group B (Common + Compat + Calendar only, fresh folder, empty `kubejs/`)
-@commands boot, `/reload`, stop; delete `config/creativecommon-common.toml` first
+@commands `@modset cpp_chain compat` (Common + Compat + Calendar + Serene Seasons, config empty, probe-only kubejs); boot, `/reload`, stop
 @pass boots and stops clean with Create, IE, Fruits Delight, Immersive Portals, Heartstone all absent; no class error, no script error under `logs/kubejs/`; the config is written
 @fails Java reaching an optional mod without a load check, a dict key without an absent-mod guard (extends SQ-CMV-02/-04)
 @reviewed 2026-11-16
+@modset cpp_chain compat
 bootexpect Done \(
 bootreject (?i)(ClassNotFoundException|NoClassDefFoundError|Mixin apply failed|InvalidMixinException)
 shell ls mods | grep -ciE "^(create-|immersiveengineering|fruitsdelight|immersive-portals|imm_ptl|heartstone)"; true
@@ -64,6 +65,7 @@ look the ls count above is 0 (Create, IE, Fruits Delight, Immersive Portals, Hea
 @pass `[mod_names] overrides = []`; `[effects] removed = []`; `[advancements] enabled = true`; `[creative_menu] disabled = false`; `[perf] gravityLimitDimensions = true`; no per-mod name lines left
 @fails defaults still carrying the pack's lists in `CommonConfig`
 @reviewed 2026-11-16
+@modset cpp_chain compat
 shell grep -nE "^\s*(overrides|removed|gravityLimitDimensions|enabled|disabled) =" config/creativecommon-common.toml | cut -c1-120
 shell grep -qE "^\s*overrides = \[\]" config/creativecommon-common.toml && grep -qE "^\s*removed = \[\]" config/creativecommon-common.toml && echo "empty lists"
 shell grep -A8 "^\[advancements\]" config/creativecommon-common.toml | grep -qE "^\s*enabled = true" && echo "advancements enabled = true"

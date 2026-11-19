@@ -161,25 +161,31 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-12 | Compat leaf pile slow and surface walk speed
 @group A
-@commands Compat, leaf piles and walk speed (moved from Engineering 2026-11-06): RERUN SQ-LP-00 to -06; bot walks 20 blocks on an asphalt / BlockRunner path and on grass, time each (`/data get entity bot Pos` before and after 40 ticks with `/execute as bot run ...` motion)
+@commands Compat, leaf piles and walk speed (moved from Engineering 2026-11-06): RERUN SQ-LP-00 to -06; bot walks 20 blocks on an asphalt / BlockRunner path and on grass, time each (`pbot moveto ... walk`, `speed_bps` of its end line; was `/data get entity bot Pos` before and after 40 ticks with `/execute as bot run ...` motion)
 @pass leaf pile slows from the configured layers; path walk faster by the `[surface]` value of `creativecompat-common.toml`
 @fails `LeafPileSlow` hook not set; `[surface]` still read from `CEConfig`
 @from batches/r1106spf/b1.qb
+# r1118 R5 (2026-11-18): perfBot `path` moves at a fixed rate whatever the surface (r1106spf); `moveto ... walk` uses the
+# server's physics and its end line reports speed_bps
+> execute unless entity qa run pbot spawn qa 0 -60 -70 minecraft:overworld survival
+sleep 3
 > fill 0 -61 -70 25 -61 -70 immersivepetroleum:asphalt
 > fill 0 -61 -74 25 -61 -74 minecraft:grass_block
-> tp qa 0 -60 -70
-> pbot path qa 25 -60 -70 1.0
-sleep 2
-> data get entity qa Pos
-> pbot path-stop qa
-> tp qa 0 -60 -74
-> pbot path qa 25 -60 -74 1.0
-sleep 2
-> data get entity qa Pos
-> pbot path-stop qa
+> fill 0 -60 -75 25 -58 -69 minecraft:air
+> tp qa 0.5 -60 -69.5
+sleep 1
+> pbot moveto qa 25.5 -69.5 walk 200
+waitlog verb=pbot\.moveto bot=qa end= 30
+capture SPA verb=pbot\.moveto bot=qa end=\S+ .*speed_bps=([0-9.]+)
+> tp qa 0.5 -60 -73.5
+sleep 1
+> pbot moveto qa 25.5 -73.5 walk 200
+waitlog verb=pbot\.moveto bot=qa end= 30
+capture SPG verb=pbot\.moveto bot=qa end=\S+ .*speed_bps=([0-9.]+)
+shell echo "asphalt {SPA} grass {SPG}" | awk '{printf "asphalt %s grass %s ratio %.3f\n", $2, $4, $2/$4}'
 > tp qa -20 -60 -24
 shell grep -A6 "^\[surface\]" config/creativecompat-common.toml | head -8
-look x after 2 s on asphalt is greater than on grass by about the [surface] factor (bot path speed uses the movement attribute)
+look rows/SQ-SPF-12.shell.txt: asphalt / grass speed_bps ratio about the asphalt `[surface.speed]` value (1.5); no surface effect at all (BlockRunner applies it client side): retire the row to CQ-SPF-02 with `@superseded`
 
 ## SQ-SPF-13 | Compat TNT shrapnel count
 @group A

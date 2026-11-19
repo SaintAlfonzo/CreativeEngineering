@@ -7,6 +7,7 @@
 @@date 2026-11-08
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/creative_engineering.md
+@@prep A: boot=2: run sed -i 's|^biome_configs = .*|biome_configs = ["#minecraft:is_end;;-1", "minecraft:plains;;"]|' "$(sed -n "s/^level-name=//p" server.properties)"/serverconfig/create_gravity-server.toml
 @@text
 @@text Not run. Targets `development/creativeCommon/build/libs/creativecommon-1.1.0.jar` of 2026-11-08 00:01 (newer than the 2026-11-07 20:28 jar in `mods/`; prep_srv.sh and `cc_only_srv.sh` swap it in, install it in `mods/` only with the game closed). New code: `CreateGravityEntitiesMixin` (gated on `create_gravity`; `require = 0`, so a wrong method name skips silently: SQ-CGE-02 is the real check). Servers: full pack for SQ-CGE-01 to -05, `bash tools/scratch_query/cc_only_srv.sh OUT LEVEL full` for SQ-CGE-06. Probe scripts go in `tools/scratch_query/` (`cge_probe.js` or `.qb` batch `batches/r1108cge/`).
 @@text Entity speed rows: `/forceload add 0 0`, summon at y 120 over the End main island (0, 120, 0) and over a flat overworld spot, read `Pos[1]` after 20 and 40 ticks with `data get entity @e[type=...,limit=1] Pos[1] 1000`; vanilla pull is -0.04 per tick, so 40 ticks drop about 27 blocks, and Create Gravity's default End factor -0.8 should leave about a fifth of that.
@@ -67,10 +68,13 @@ look item y stays 61.000 after landing (no climb), falling block removed=true an
 
 ## SQ-CGE-05 | factor -1 in the End, plains listed with the default factor, desert unlisted
 @group A (same boot)
-@commands factor -1 and a non-End biome: stop, set `biome_configs = ["#minecraft:is_end;;-1", "minecraft:plains;;"]` in `world/serverconfig/create_gravity-server.toml`, boot; repeat SQ-CGE-02 in the End and over plains
+@commands factor -1 and a non-End biome: boot 2 (`@@prep boot=2: run` sets `biome_configs = ["#minecraft:is_end;;-1", "minecraft:plains;;"]` in `<level>/serverconfig/create_gravity-server.toml`); repeat SQ-CGE-02 in the End and over plains
 @pass End block does not fall (Pos[1] unchanged after 40 ticks); plains block falls at a reduced rate (-0.8 default); a biome not listed (desert) falls at vanilla speed
 @fails the `factor >= 0.0` return, `BiomeConfig` default factor
 @from batches/r1108cge/b2_factor.qb
+@boot 2
+# r1118 R4 A1 (2026-11-18): boot 2 of the section; nothing loaded carries over a boot
+> execute in minecraft:the_end run forceload add 0 0
 > reload
 sleep 10
 > zgv cfg the_end 0 70 0
@@ -85,11 +89,12 @@ expect \[zgv\] cfg dim=minecraft:overworld biome=minecraft:plains factor=-0\.8
 look End t=40 drop 0 (no fall) for all three; plains (superflat = plains) drop about 25 percent of vanilla 24.6; desert half in SQ-CGE-05b
 
 ## SQ-CGE-06 | Create Gravity on living entities in the End with Common's dimension gate, no /reload
-@group CCO full set (`cc_only_srv.sh OUT LEVEL full`)
+@group CCO full set (`@modset cc_only full`, was `cc_only_srv.sh OUT LEVEL full`)
 @commands rerun SQ-CCO-08 with entity data: in the End `summon zombie 0 70 0 {NoAI:1b,PersistenceRequired:1b}`, `summon villager 5 70 0 {NoAI:1b}`, join a survival bot or player; `data get entity @e[type=zombie,limit=1] Attributes` and the same for the villager; `execute as @e[type=zombie,limit=1] at @s if biome ~ ~ ~ #minecraft:is_end run say IN_END`; do it with `gravityLimitDimensions` true, then `qrun.py toml srv/config/creativecommon-common.toml perf gravityLimitDimensions false` and reboot; also SQ-CGE-02 on this set
 @pass the zombie, villager and survivor each carry `forge:entity_gravity` with a modifier named "Low Gravity Biome" (-0.8) while IN_END prints; falling blocks as SQ-CGE-02. If the modifier is missing while IN_END prints: record the `biome_configs` the set wrote, `cache_time`, and `grep -i "gravity" logs/latest.log` (the finding for TODO `creativecommon/publish #3`; Common is not at fault unless it also fails with the mixin config switched off)
 @fails Create Gravity `ServerConfig.reloadConfig` timing (server started before tags), the entity's `fallFlying` / blacklist tag, then Common's gate
 @from batches/r1108cge/b5_cco.qb
+@modset cc_only full
 > difficulty normal
 > execute in minecraft:the_end run forceload add 0 0
 > pbot spawn cge06 0 75 0 minecraft:the_end survival
@@ -130,6 +135,9 @@ look End drops about 20 percent of the overworld's (4.9 vs 24.6 at t=40)
 @@date 2026-11-08
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/creative_engineering.md
+@@prep A: boot=2: run sed -i 's|^biome_configs = .*|biome_configs = ["#minecraft:is_end;;-1", "#minecraft:is_nether;;"]|' "$(sed -n "s/^level-name=//p" server.properties)"/serverconfig/create_gravity-server.toml
+@@prep A: boot=3: toml creativecommon-common.toml perf gravityDimensions ["minecraft:the_end", "minecraft:the_nether"]
+@@prep difficulty=normal
 @@text
 @@text Targets Common `creativecommon-1.1.0` and Compat `creativecompat-1.0.0` of 2026-11-08 15:08 (build/libs, NOT installed; install the two together: the new Common moves only files headed `// phase: helpers` ahead of `startup_scripts/`, and only the new Compat has that header on `jei_order.js`). New mixins `LowGravityPullMixin` (items, falling blocks, TNT, minecarts, Shulker bullets), `LowGravitySlowPullMixin` (XP orbs, fishing bobbers), `LowGravityArrowMixin`, `LowGravityLlamaSpitMixin`, `LowGravityBoatMixin` (out of water only), `LowGravityThrowableMixin`, `LowGravityItemPhysicMixin` (items under ItemPhysic), accessor `CreateGravityConfigAccessor`; all `require = 1`, so a wrong target crashes the boot (SQ-CGE-07 is the first row of the first boot).
 @@text
@@ -286,6 +294,7 @@ look shell.txt: log near the surface (>= 64.5), redstone on the floor (<= 61.5)
 @pass every type in the End drops under 0.01 blocks in 40 ticks
 @fails `LowGravity.pullScale` (1 + factor)
 @from batches/r1108cge2/b2_factor_nether.qb passed
+@boot 2
 > execute in minecraft:the_end run forceload add 0 0 6 18
 > forceload add 0 0 6 18
 > zgv cfg the_end 0 70 0
@@ -302,6 +311,7 @@ shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end o
 @pass cfg factor -0.8 printed, yet every Nether drop = overworld; villager 0.08
 @fails `LowGravity.dimensionAllowed`, `CreateGravityDimensionMixin`
 @from batches/r1108cge2/b2_factor_nether.qb
+@boot 2
 # clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
 > execute in minecraft:the_nether run forceload add -3 -3 9 21
 > execute in minecraft:the_nether run fill -3 80 -3 9 124 21 minecraft:air
@@ -322,6 +332,7 @@ look Nether drops = overworld (vanilla) and the Nether villager 0.08, although t
 @pass about 0.2 for every type; villager 0.016
 @fails as 09a
 @from batches/r1108cge2/b3_nether_allowed.qb passed
+@boot 3
 # clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
 > execute in minecraft:the_nether run forceload add -3 -3 9 21
 > execute in minecraft:the_nether run fill -3 80 -3 9 124 21 minecraft:air
@@ -341,6 +352,7 @@ expect Entity Gravity for entity .* is 0\.01599
 @fails Common's low gravity must not need Compat
 @reviewed 2026-11-16
 @from batches/r1108cge2/b4_common_only.qb
+@modset cc_only full
 bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
 shell grep -E "packs in order" logs/kubejs/startup.log | grep -v "_helpers" | grep -q "creativecommon, startup_scripts" && echo "order ok"
 shell test "$(grep -c '\[ERROR\]' logs/kubejs/startup.log)" = 0 && echo "0 startup errors"
@@ -356,11 +368,12 @@ expect verb=tag kind=item tag=create_gravity:backtanks n=2\b
 look order line without a _helpers pack; 9 types at about 0.2; backtanks = Create's two (Compat absent)
 
 ## SQ-CGE-16 | ItemPhysic without Create Gravity: boots, ticks items without an error, vanilla fall everywhere
-@group b5 (`cc_only_srv.sh without=gravity` + ItemPhysic, CreativeCore)
-@commands `cge2_run.sh b5`; dropall End (y 140) and overworld (y 200); judge `same`
+@group b5 (`@modset cc_only full -@gravity` + ItemPhysic, CreativeCore; was `cc_only_srv.sh without=gravity`)
+@commands boot; dropall End (y 140) and overworld (y 200); judge `same`
 @pass boots, no `LowGravity` or `NoClassDefFoundError` line, all 9 types at vanilla speed in both dimensions
 @fails gate on `LowGravityItemPhysicMixin` in `CommonMixinPlugin` (needs ItemPhysic and Create Gravity)
 @from batches/r1108cge2/b5_itemphysic_no_gravity.qb
+@modset cc_only full -@gravity +ItemPhysic_FORGE_*.jar +CreativeCore_FORGE_*.jar
 bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException|NoClassDefFoundError
 bootexpect Done \(
 > execute in minecraft:the_end run forceload add 0 0 6 18

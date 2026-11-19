@@ -151,10 +151,11 @@ look no diff lines (or only keys added since 2026-11-06) between the old Enginee
 
 ## SQ-ENGM-05 | chain boot as r1106cbp p1: CD transition items, failed recipes under 50, no new Compat / Delight script error
 @group A (chain, CEPortTesting)
-@commands `port_chain.sh` chain with the eight builds copied in; `run_boots.sh '^p1$'`
+@commands `@modset port_chain chain` with the eight builds copied into CEPortTesting (was `port_chain.sh` chain and `run_boots.sh '^p1$'`); boot
 @pass as r1106cbp p1; no new errors from Compat / Delight scripts
 @fails a moved script missing its `// requires:` guard
 @from batches/r1113/c3_ch1.qb
+@modset port_chain chain +creativedevtools-*.jar
 bootexpect Done \(
 shell grep -h "transition items" logs/kubejs/startup.log | cut -c1-200
 shell grep -qE "\[creativedelight\] transition items \([0-9]+\)" logs/kubejs/startup.log

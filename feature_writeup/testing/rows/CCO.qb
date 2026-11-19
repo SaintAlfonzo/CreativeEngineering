@@ -7,6 +7,7 @@
 @@date 2026-11-07
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/creative_engineering.md
+@@modset cc_only full
 @@text
 @@text Not run. Targets the newest `development/creativeCommon/build/libs/creativecommon-*.jar` (prep_srv.sh swaps it in when newer than `mods/`).
 @@text Every server is built with `bash tools/scratch_query/cc_only_srv.sh OUT LEVEL full|alone|without=<keys> [prop=value ...]`:
@@ -22,7 +23,7 @@
 @@table
 ## SQ-CCO-01 | no mixin or class error, every optional mod's mixins applied, no other Creative jar loaded
 @group `full`, B
-@commands `cc_only_srv.sh cco1 cco1 full spawn-monsters=true`, boot; batch b1_full.qb
+@commands the section's `@@modset cc_only full` (was `cc_only_srv.sh cco1 cco1 full spawn-monsters=true`), boot; batch b1_full.qb
 @pass no `Mixin apply failed`, class error or out-of-range WARN; the Immersive Weathering `callTick ... now calls IwGrowthFast.blockTick`, Immersive Portals `overwrites conform` and Heartstone priority lines are present; no Creative jar name in the log apart from Common; 0 KubeJS startup errors; `creativecommon: N files loaded`
 @fails `CommonMixinPlugin` tables, a dict key or startup file reaching a removed jar (Compat, Engineering)
 @from batches/r1107cco/b1_full.qb
@@ -228,12 +229,138 @@ reject (?i)exception|crash
 bootreject ^(?!.*Static binding violation).*cannot reduce visibilit|InvalidMixinException
 look conform count 1, Static binding violation count 1 (designed, MixinChunkMap_C upgraded); the Heartstone priority line is client-only (CQ-CCO-01)
 
-## SQ-CCO-12 | boots, reloads and stops clean with this set; absent mods' mixins skipped, effects still work
-@group `without=we`, `without=iw`, `without=quark,gravity,nea`, `without=beacons`, `without=portals,heartstone,seasons`, `without=trims` (six boots, B; reuse level cco1 for speed)
-@commands boot each; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
+## SQ-CCO-12 | (split into SQ-CCO-12a to -12f, one per mod set)
+@group B
+@superseded split into SQ-CCO-12a to -12f, one row per cco_sets variant (r1118 R4 B1, 2026-11-18): each set is its own step and world
+
+## SQ-CCO-12a | without_we: boots, reloads and stops clean; absent mods' mixins skipped, effects still work
+@group B (cco_sets without_we: cc_only full without we)
+@commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
 @pass each boots, reloads and stops clean; the skipped mod's mixins are not applied and not an error; only `without=beacons` logs `[CE potions] better_beacons not present - skipping` (if that row is guarded by it) and Phantom Bane is absent; the rest still work
 @fails missing `NEEDS_MOD` row, a Java or script path reaching the absent mod
 @from batches/r1107cco/b4_without.qb
+@modset cco_sets without_we
+# r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject (?i)creativecommon.*(exception|error)
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
+shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
+shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
+> pbot spawn s5pb1 0 120 0 minecraft:overworld creative
+> reload
+sleep 20
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+sleep 1
+reject (?i)/ERROR\].*creativecommon
+expect Applied effect Magic Resistance to s5pb1
+> pbot remove-all
+look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip line only when Better Beacons is out (and Phantom Bane give then fails as an unknown effect); Common mixins listed target only mods in the set
+
+## SQ-CCO-12b | without_iw: boots, reloads and stops clean; absent mods' mixins skipped, effects still work
+@group B (cco_sets without_iw: cc_only full without iw)
+@commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
+@pass each boots, reloads and stops clean; the skipped mod's mixins are not applied and not an error; only `without=beacons` logs `[CE potions] better_beacons not present - skipping` (if that row is guarded by it) and Phantom Bane is absent; the rest still work
+@fails missing `NEEDS_MOD` row, a Java or script path reaching the absent mod
+@from batches/r1107cco/b4_without.qb
+@modset cco_sets without_iw
+# r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject (?i)creativecommon.*(exception|error)
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
+shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
+shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
+> pbot spawn s5pb1 0 120 0 minecraft:overworld creative
+> reload
+sleep 20
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+sleep 1
+reject (?i)/ERROR\].*creativecommon
+expect Applied effect Magic Resistance to s5pb1
+> pbot remove-all
+look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip line only when Better Beacons is out (and Phantom Bane give then fails as an unknown effect); Common mixins listed target only mods in the set
+
+## SQ-CCO-12c | without_quark_gravity_nea: boots, reloads and stops clean; absent mods' mixins skipped, effects still work
+@group B (cco_sets without_quark_gravity_nea: cc_only full without quark, gravity, nea)
+@commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
+@pass each boots, reloads and stops clean; the skipped mod's mixins are not applied and not an error; only `without=beacons` logs `[CE potions] better_beacons not present - skipping` (if that row is guarded by it) and Phantom Bane is absent; the rest still work
+@fails missing `NEEDS_MOD` row, a Java or script path reaching the absent mod
+@from batches/r1107cco/b4_without.qb
+@modset cco_sets without_quark_gravity_nea
+# r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject (?i)creativecommon.*(exception|error)
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
+shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
+shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
+> pbot spawn s5pb1 0 120 0 minecraft:overworld creative
+> reload
+sleep 20
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+sleep 1
+reject (?i)/ERROR\].*creativecommon
+expect Applied effect Magic Resistance to s5pb1
+> pbot remove-all
+look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip line only when Better Beacons is out (and Phantom Bane give then fails as an unknown effect); Common mixins listed target only mods in the set
+
+## SQ-CCO-12d | without_beacons: boots, reloads and stops clean; absent mods' mixins skipped, effects still work
+@group B (cco_sets without_beacons: cc_only full without beacons)
+@commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
+@pass each boots, reloads and stops clean; the skipped mod's mixins are not applied and not an error; only `without=beacons` logs `[CE potions] better_beacons not present - skipping` (if that row is guarded by it) and Phantom Bane is absent; the rest still work
+@fails missing `NEEDS_MOD` row, a Java or script path reaching the absent mod
+@from batches/r1107cco/b4_without.qb
+@modset cco_sets without_beacons
+# r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject (?i)creativecommon.*(exception|error)
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
+shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
+shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
+> pbot spawn s5pb1 0 120 0 minecraft:overworld creative
+> reload
+sleep 20
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+sleep 1
+reject (?i)/ERROR\].*creativecommon
+expect Applied effect Magic Resistance to s5pb1
+> pbot remove-all
+look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip line only when Better Beacons is out (and Phantom Bane give then fails as an unknown effect); Common mixins listed target only mods in the set
+
+## SQ-CCO-12e | without_portals_heartstone_seasons: boots, reloads and stops clean; absent mods' mixins skipped, effects still work
+@group B (cco_sets without_portals_heartstone_seasons: cc_only full without portals, heartstone, seasons)
+@commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
+@pass each boots, reloads and stops clean; the skipped mod's mixins are not applied and not an error; only `without=beacons` logs `[CE potions] better_beacons not present - skipping` (if that row is guarded by it) and Phantom Bane is absent; the rest still work
+@fails missing `NEEDS_MOD` row, a Java or script path reaching the absent mod
+@from batches/r1107cco/b4_without.qb
+@modset cco_sets without_portals_heartstone_seasons
+# r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject (?i)creativecommon.*(exception|error)
+shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
+shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
+shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
+> pbot spawn s5pb1 0 120 0 minecraft:overworld creative
+> reload
+sleep 20
+> effect give s5pb1 creativecommon:magic_resistance 30 0
+> effect give s5pb1 better_beacons:phantom_bane 30 0
+sleep 1
+reject (?i)/ERROR\].*creativecommon
+expect Applied effect Magic Resistance to s5pb1
+> pbot remove-all
+look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip line only when Better Beacons is out (and Phantom Bane give then fails as an unknown effect); Common mixins listed target only mods in the set
+
+## SQ-CCO-12f | without_trims: boots, reloads and stops clean; absent mods' mixins skipped, effects still work
+@group B (cco_sets without_trims: cc_only full without trims)
+@commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|ClassNotFoundException\|NoClassDefFoundError\|outside the tested range" logs/latest.log`; `grep -c ERROR logs/kubejs/startup.log`; `/reload`; `/effect give <bot> creativecommon:magic_resistance 30 0`
+@pass each boots, reloads and stops clean; the skipped mod's mixins are not applied and not an error; only `without=beacons` logs `[CE potions] better_beacons not present - skipping` (if that row is guarded by it) and Phantom Bane is absent; the rest still work
+@fails missing `NEEDS_MOD` row, a Java or script path reaching the absent mod
+@from batches/r1107cco/b4_without.qb
+@modset cco_sets without_trims
+# r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootreject (?i)creativecommon.*(exception|error)
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
@@ -252,10 +379,11 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 
 ## SQ-CCO-13
 @group `alone`, B (fresh)
-@commands `cc_only_srv.sh cco2 cco2 alone`, boot, `/reload`, stop
+@commands `@modset cc_only alone` (was `cc_only_srv.sh cco2 cco2 alone`), boot, `/reload`, stop
 @pass boots with only Common and the KubeJS stack; no class or script error; config written; no optional-mod mixin applied (`grep "Mixin" logs/latest.log` lists only vanilla and Forge targets)
 @fails Java or KubeJS reaching an optional mod without a load check (extends SQ-CC-03 without Compat and Calendar)
 @draft no batch holds this row yet
+@modset cc_only alone
 ## SQ-CCO-14 | old potion id with Brewing absent: left untouched, no crash (emulated: no save from before the carve)
 @group `full`, old save
 @commands keep cco1's level, swap to a copy of the world saved before the carve if one exists (SQ-CC-09 setup) else skip; chest holding a `creativecommon:long_reach` potion
