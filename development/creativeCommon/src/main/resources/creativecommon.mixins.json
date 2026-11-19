@@ -33,6 +33,7 @@
     "LowGravityItemPhysicMixin",
     "BeehiveHoneycombMixin",
     "ServerAdvancementManagerMixin",
+    "ReloadableServerResourcesMixin",
     "LootTablesOptionalModsMixin",
     "PotionByNameRemapMixin",
     "SectionUpdateEncodeFixMixin",

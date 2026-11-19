@@ -131,6 +131,9 @@ and the offline estimate [structure_group_estimates.md](../kubejs/generation_scr
 - Terrain around a structure (3.15): the structure tags `creativeengineering:terrain_adaptation/{none,bury,beard_thin,beard_box,soft}`
   and `creativeengineering:template_trim` in `worldgen/terrain_adaptation.js`; pad / plant blocks: the
   `creativeengineering:template_trim/*` block tags in `blocktags.js`; soft skirt width: `[worldgen.terrain_adaptation] skirtBump`.
+  Entries for the structure datapacks ported into `kubejs/data/<ns>` (no mod of that id) stay in these tags through
+  `global.has.datapack(ns)` in the tag helper's absent-mod filter (worldgen tags only; plan_bugfix_r1118.md B2,
+  `terrain-adaptation #1`); before 2026-11-18 about 520 entries were dropped as absent mods.
 - Meta structures (3.16): definitions in `meta_structures.json` (`share` = the share of its anchors' slots a meta takes),
   who may take part in the `meta/*` tags of `structure_tags.json`; `[worldgen.systems] metaStructures`,
   `[worldgen.meta_structures] log`.

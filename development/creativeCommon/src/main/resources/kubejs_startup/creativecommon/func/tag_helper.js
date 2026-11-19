@@ -68,8 +68,12 @@ global.tags = {
 
 	// Entry list with ids of absent mods left out (plan_cb_publish.md M2 rule G5): an id is dropped when its
 	// namespace's mod is not loaded and the event's registry does not hold it (an id another mod registers under
-	// that namespace stays). Counted per mod in _absentCounts; Creative Common's server script _lib/absent_mods.js
-	// prints one line per mod. '#tags', '/regex/' and '*' globs pass through unchanged.
+	// that namespace stays). In a worldgen registry's tags an id also stays when a loaded pack ships data under its
+	// namespace (global.has.datapack): the structure datapacks ported into kubejs/data/<ns> are no mods, and the
+	// event's registry ids do not list their entries (plan_bugfix_r1118.md B2). Item, block and other tags keep the
+	// mod rule only: jars ship optional compat data under absent mods' namespaces. Counted per mod in _absentCounts;
+	// Creative Common's server script _lib/absent_mods.js prints one line per mod. '#tags', '/regex/' and '*' globs
+	// pass through unchanged.
 	_absentCounts: {},
 	_ents(event, v) {
 		const arr = this._arr(v)
@@ -82,7 +86,7 @@ global.tags = {
 			let keep = true
 			if (s !== '' && c !== '#' && c !== '/' && s.indexOf('*') < 0) {
 				let ns = global.has.namespace(s)
-				if (ns !== null && !global.has.mod(ns) && !this._inRegistry(event, s)) {
+				if (ns !== null && !global.has.mod(ns) && !this._inRegistry(event, s) && !(this._isWorldgen(event) && global.has.datapack(ns))) {
 					keep = false
 					this._absentCounts[ns] = (this._absentCounts[ns] || 0) + 1
 				}
@@ -91,6 +95,16 @@ global.tags = {
 			else if (keep && out !== null) out.push(arr[k])
 		}
 		return out === null ? arr : out
+	},
+	// whether the event tags a worldgen (datapack) registry, e.g. 'minecraft:worldgen/structure'; cached per event
+	_isWorldgen(event) {
+		if (this._wgEvent !== event) {
+			this._wgEvent = event
+			let t = ''
+			try { t = String(event.getType()) } catch (err) { /* a headless test stub without getType */ }
+			this._wgIs = t.indexOf('worldgen/') >= 0
+		}
+		return this._wgIs
 	},
 	_inRegistry(event, id) {
 		if (this._regEvent !== event) {
