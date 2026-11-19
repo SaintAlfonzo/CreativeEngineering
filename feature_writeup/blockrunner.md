@@ -4,8 +4,8 @@ Test prefix **BR-** · Last updated **2026-11-15** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5de1970def38 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, In Progress 1, Testing 3), 1 Complete.
+<!-- generated:status_index begin open_work sha1=675f8a09c53d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 1, In Progress 1, Testing 4), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -14,6 +14,7 @@ Test prefix **BR-** · Last updated **2026-11-15** · Overall status **DEPLOYED 
 | `gameplay/blockrunner #7` | Testing | C P | Sinking: no bump between sunken blocks, items on top |
 | `gameplay/blockrunner #8` | Testing | C P | Visceral Heap flesh walk speeds |
 | `gameplay/blockrunner #10` | Testing | S C P T | Pass-through blocks: walk-through and fall-through speed |
+| `gameplay/blockrunner #13` | Testing | C | Layer blocks: dust and fodder layers stand, sink and slow the same at every layer count; layer audit |
 <!-- generated:status_index end open_work -->
 
 Every block you walk on belongs to at most one speed tier (asphalt 1.50 down to very sticky 0.45).
@@ -124,7 +125,7 @@ blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.spe
 | `dirt` | 1.00 | 26 | Leftover `#minecraft:dirt` (added last) | grass block, dirt, rooted dirt, Botania grasses and enchanted soil, FD rich soil, dirt/grass/loam slabs |
 | `natural_rough` | 0.92 | 98 | Rough, crumbly ground | podzol, mycelium, nylium, netherrack, basalt, coral blocks, raw ore blocks, ancient debris, coal/charcoal/coke blocks, glowstone, mangrove roots, IW and Twigs silt, compost |
 | `soft` | 0.88 | 506 | Soft and fibrous | wool, sponge, hay, target, moss, mushroom blocks, sculk (not vein), every bed, pet beds, froglights, petal blocks, D&D velvet and padded rubber, padded and cardboard blocks, sacks/bags/bales, honeycomb and paraffin wax blocks, thatch |
-| `dust` | 0.85 | 67 | Loose powder | sand, red sand, concrete powder, gravisand, ash, IW sand layers, CE metal dust piles, flour and crushed-ore piles, powdered obsidian, gunpowder blocks, IE sawdust |
+| `dust` | 0.85 | 67 | Loose powder | sand, red sand, concrete powder, gravisand, ash, IW sand layers, CE metal dust piles, flour and crushed-ore piles, powdered obsidian, gunpowder blocks, IE sawdust, Vintage Delight salt layers (since 2026-11-18); layers count at every height (3.11) |
 | `confectionery` | 0.85 | 630 | Edible blocks | Create Confectionery chocolate/caramel/gingerbread, cake, pies, feasts (pizza, quiche, pancakes), ice cream blocks, FD ham/roast blocks, AP bread, sugar cube, melon, pumpkins, chorus fruit block, Golden Food's golden and enchanted golden cakes |
 | `tilled` | 0.80 | 5 | Crop fields | farmland, FD rich soil farmland, tilled end stone |
 | `leaves` | 0.78 | 71 | Canopy | all leaves, Quark hedges, Twigs bamboo leaves, IW leaf piles (on-top speed of the layer tier, 3.10; they have no collision, so it never registers) |
@@ -265,7 +266,9 @@ Soul sand's real sink is a lower collision box. That was rejected here (see 4), 
 only: collision, hitboxes, movement, mob AI and spawning are untouched.
 
 - **Where:** entities standing on the top face of a *full* block in `#creativecompat:sinking`
-  (soft, dust, spongy, very_sticky). Slabs, sensors, carpets on top and layer blocks don't sink.
+  (soft, dust, spongy, very_sticky). Slabs, sensors and carpets on top don't sink. Surface layers (3.11; sand, ash,
+  salt, sawdust, fodder) sink the same depth at every layer count, measured from the layer's top (since 2026-11-18;
+  before, only an 8-layer sand pile sank). Leaf piles, bamboo leaves and snow layers don't.
 - **Even depth (2026-11-10):** a sinking block that already sinks for real by up to the visual depth only adds the
   rest: honey (15/16) adds 1 px, mud (14/16) adds nothing at the default 2 px. Every sunken block looks equally deep,
   so slime to honey or wool to mud keeps the same eye height. (Before, honey showed only its own 1 px.)
@@ -365,6 +368,8 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 - **Which block counts** (same as BlockRunner, which reads 0.2 below your feet), decided from the
   block's collision shape for someone standing on top of it:
   - **Collision top 0.2 or higher:** the block's own speed.
+  - **Surface layer** (3.11: sand, red sand and ash layers, Supplementaries ash and fodder, salt, IE sawdust): its
+    own speed at every layer count, like movement (since 2026-11-18).
   - **Thin solid layer** (collision top under 0.2: carpets, 2 snow layers, lily pads) **or any
     1-2 layer snow**: the block beneath, noted "block below". A single snow layer has no collision at
     all but is still treated as a layer. Snow layers don't slow you in this pack (Immersive
@@ -635,6 +640,51 @@ in `cobweb` (its damage stays); Botania mystical, shiny and special flowers and 
 are solid, out); Supplementaries wild flax stays out. Display only: the sticky basket, mulberry jam, guardian spine
 and powdered sugar got `StuckInBlock` lines.
 
+### 3.11 Layer blocks: one rule per kind (Creative Compat, 2026-11-18)
+
+Owner notes 2026-11-18 ("layers"): every dust layer gets the dust slowdown and the sink equally at every layer count;
+no layer but leaves is exempt at one layer. Two kinds of layer block, each with one rule:
+
+- **Surface layers** (tag `creativecompat:surface_layers`, class `SurfaceLayers`): Immersive Weathering sand, red
+  sand and ash layers, Supplementaries ash, Vintage Delight salt (dust) and IE sawdust (dust), Supplementaries fodder
+  (soft). You stand on them.
+  - **Height:** collision = the visible layer (2 px per layer; sawdust its own 9 steps), for every entity. Full height
+    is a full block. Before: sand and fodder stood on the visible top; salt and Supplementaries ash one layer lower
+    (a single salt layer had no collision); sawdust 2 px lower; IW ash, for living entities, half its height and no
+    collision at all on ash over ash. So at the same count a player stood up to 8 px apart.
+  - **Sink:** visual, `depthPixels` (default 2) at every layer count (3.4). The visible result is the snow-like
+    "one layer lower" eye height everywhere, with the full-block rule: collision is the shape you see, the sink is a
+    render offset (owner, 2026-09-26). Items lie on top, like on full dust blocks.
+  - **Speed:** the layer's own tier (dust 0.85, fodder soft 0.88) at every layer count. BlockRunner reads 0.2 below
+    the feet, which missed 1-layer piles (1-2 for sawdust) and read the block beneath; `SurfaceLayers.afterBlockRunner`
+    puts the layer back. WTHIT follows (3.8). Salt had no tier at all; it is dust now.
+- **Walk-through layers** (tag `creativecompat:passthrough_layers`, 3.10): snow layers, leaf piles, Twigs bamboo
+  leaves. You wade through them; the slowdown grows with height (1 layer 1.0). Their on-top tier (snow, leaves) only
+  applies when standing on them (leather boots, light mobs on snow). Unchanged.
+
+**Audit 2026-11-18** (every layer block in `kubejs/exported/passthrough_layers_dump.json`; copycat layers, Create
+Deco coin stacks and Copycats slices are building shapes, not ground, and stay out):
+
+| Block | Kind | Tier | Layers | Falls and stacks | Fall damage | Mobs path over | Notes |
+|---|---|---|---|---|---|---|---|
+| IW sand, red sand layer | surface | dust | 1-8 | own `FallingBlock` | x0.3 above 2 layers (IW) | IW: under 5 layers | step particles (IW) |
+| IW ash layer | surface | dust | 1-8 | own `FallingBlock` | x0.3 above 2 layers (IW) | IW: under 5 layers | |
+| Supplementaries ash | surface | dust | 1-8 | own `FallingBlock` | full | Supplementaries' rule | |
+| Vintage Delight salt | surface | dust | 1-8 | `FallingLayers` | full | vanilla snow rule: under 5 | melts snow and ice; place-from-inside cut; a single layer is replaceable (snow rule) |
+| IE sawdust | surface | dust | 1-9 | `FallingLayers` | full | IE's rule | 9 steps, not 8 |
+| Supplementaries fodder | surface | soft | 1-8 | `FallingLayers` | full | Supplementaries' rule | |
+| snow layer | walk-through | snow on top | 1-8 | `FallingLayers` | full | 3.10 (G11) | 8 becomes a snow block |
+| IW leaf piles | walk-through | leaves on top | 0-8 | own `FallingBlock` | full | 3.10 (G7.14) | thorns |
+| Twigs bamboo leaves | walk-through | leaves on top | 1-4 (+ full 5-8) | `FallingLayers` | full | 3.10 | |
+
+Consistent after this change: kind, tier, height rule, sink, speed at every count, falling and stacking (since
+G7.5). Still different, left for the owner (TODO row `gameplay/blockrunner #13`):
+1. Fall cushioning: only IW sand, red sand and ash take 0.3x fall damage above 2 layers.
+2. A full stack: snow becomes a snow block at 8; sand, red sand, ash, salt, sawdust and fodder stay a full layer
+   block (a full sand layer is not sand).
+3. Mob pathing over a pile follows each mod's own rule (under 5 layers for IW and salt).
+4. Single-layer replaceability: placing a block into 1 layer of snow or salt replaces it; the others don't.
+
 ## 4. Limits and decisions
 
 **Limits**
@@ -719,12 +769,14 @@ and powdered sugar got `StuckInBlock` lines.
   `PassResult`, `PassMath`, `PassGrowth`, `PassState` / `PassHolder`, `PassOwner`, `PassValues` / `PassSync` /
   `PassSyncClient`, `PassFov` / `BlockRunnerFov`, `PassItems`, `PassProjectiles`, `PassGroup`, `PassArrows`,
   `PassSave`, `PassThroughFormat` (WTHIT), `LeafPileMigration`, `PassTiming` (`[debug.passthrough] timing`),
-  `SnowLayers` (snow layer collision and the full layer -> snow block, 2026-11-17)
+  `SnowLayers` (snow layer collision and the full layer -> snow block, 2026-11-17), `SurfaceLayers` (surface layers'
+  speed at every height, 3.11, 2026-11-18)
 - Pass-through mixins (Compat [mixin/](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/)):
   `InsideBlocksMixin` (was WallSlideMixin), `MakeStuckInBlockMixin`, `EntityPassMixin`, `LivingClimbMixin`,
   `ArrowPassMixin`, `FireworkPassMixin`, `ProjectilePassMixin`; gated `QuarkPickarangPassMixin`,
   `QuarkTorchArrowPickupMixin`, `BotaniaChakramPassMixin`; client `PassFovMixin`, `BlockRunnerFovMixin`;
-  `SnowLayerPassMixin` (2026-11-17)
+  `SnowLayerPassMixin` (2026-11-17); surface layer collision (3.11, 2026-11-18): `IwLayerCollisionMixin`,
+  `SuppAshCollisionMixin`, `IeSawdustCollisionMixin` (gated by mod), salt in Vintage Delight's `SaltLayerBlock`
 - Pass-through config: `config/creativecompat-common.toml` `[surface.passthrough]` (`enabled`, `arrowLifeTicks`,
   `arrowLongLifeCap`, one table per tier), `[surface.wthit] passThrough`, `[debug.passthrough] timing`
 - Pass-through tags: [passthrough_tags.js](../kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js) (copied
@@ -888,6 +940,10 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
 - [ ] **BR-87 WTHIT lines:** look at ripe wheat inside a field (walk, Neighbors), wheat at age 2 (no line), a lone web (`Walk Through: 0.50x`, `Fall Through: 0.85x`, `Neighbors: 0`), the center of a web cube (`Fall Through: stopped`), a vine ("while moving through"), a 3- and a 4-layer leaf pile (line only on the 4-layer one), powder snow (the old walking-through Run Speed line). Queue: CQ-PTH-04.
 - [ ] **BR-88 Performance:** `/cdevbench passthrough` -> the field and web-cube entity ticks under 1000 ns; then play a normal session (farm, village, a web build) with `[debug.passthrough] timing = true` and a JFR recording; `python3 tools/perf/passthrough_timing.py logs/latest.log` -> record the share of tick time in 3.10 Performance (decides whether the per-tick count cache is built). Queue: SQ-PTH-25 to -28, CQ-PTH-05.
 
+- [ ] **BR-89 Surface layer height:** on stone, place 1, 2, 4 and 7 layers each of IW sand, IW ash, Supplementaries ash, salt, sawdust and fodder side by side; `/data get entity @s Pos` standing on each -> the feet are 2 px per layer above the stone for every block at the same count (sawdust 2n-1 px); IW ash on ash holds you. Queue: CQ-SINK-04.
+- [ ] **BR-90 Surface layer sink:** first person, walk across the rows of BR-89 at each count and onto a sand block -> the view sinks the same at every block and count; no pop stepping from a layer onto sand. A dropped item lies on top of each. Queue: CQ-SINK-05.
+- [ ] **BR-91 Surface layer speed:** one layer of salt, sand, ash and sawdust on stone, WTHIT -> "0.85× (Dust)"; one fodder layer -> "0.88× (Soft)"; F3 speed or a timed 20-block walk on a 1-layer sand strip matches a sand block, not the stone. A 1-layer leaf pile and 1 snow layer stay unchanged (no line, walk-through). Queue: CQ-SINK-06.
+
 **Server side (only when the dedicated server is back)**
 - [ ] **BR-27 Server parity:** with the new Creative Common jar on the server, repeat BR-11, BR-15 and BR-17 while connected. -> Same values, and no rubber-banding when walking across camo'd frames.
 
@@ -981,5 +1037,7 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
   despawn, leaf piles and ropes, tags and tools, WTHIT lines, timing log) and Creative Devtools (`/cdevbench
   passthrough`); perf suite plan `passthrough.py`; `LeafPileSlowMixin` and `[leaf_piles]` replaced by the `leaf_pile`
   tier. Headless 203/203. BR-67..88 added. Jars built 2026-11-15 00:40, not installed; status built, untested.
+
+- **2026-11-18:** layer blocks (3.11): surface layers (sand, ash, salt, sawdust, fodder) stand on their visible top, sink visually and walk at their tier at every layer count; salt joins dust; audit table. BR-89..91, CQ-SINK-04..06.
 
 Scratchpad 2026-11-13: jello blocks are in the very sticky tier; they still bounce (SlimeBlock). Honey's jump factor for them is TODO `gameplay/blockrunner #9`.

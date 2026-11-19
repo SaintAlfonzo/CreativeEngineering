@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativecompat.mixin;
 
 import com.SaintAlfonzo.creativecompat.surface.CamoSpeed;
 import com.SaintAlfonzo.creativecompat.surface.StickyFacing;
+import com.SaintAlfonzo.creativecompat.surface.SurfaceLayers;
 
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -12,7 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Makes BlockRunner's per-block speeds blockstate / block-entity aware. Every time BlockRunner
  * (re)applies its speed modifier this runs {@link StickyFacing} (sticky pistons only count face
- * up) and {@link CamoSpeed} (framed / copycat blocks walk like their camo).
+ * up), {@link CamoSpeed} (framed / copycat blocks walk like their camo) and {@link SurfaceLayers} (a thin surface
+ * layer under the feet counts, not the block beneath).
  *
  * <p>The target, {@code blockrunner$tryAddBlockSpeed}, is not vanilla: BlockRunner's own
  * {@code fuzs.blockrunner.mixin.LivingEntityMixin} merges it into {@code LivingEntity} (it is
@@ -35,6 +37,11 @@ public abstract class BlockRunnerBlockStateMixin {
 		}
 		try {
 			CamoSpeed.afterBlockRunner(self);
+		} catch (Throwable ignored) {
+			// leave BlockRunner's modifier as it is
+		}
+		try {
+			SurfaceLayers.afterBlockRunner(self);
 		} catch (Throwable ignored) {
 			// leave BlockRunner's modifier as it is
 		}

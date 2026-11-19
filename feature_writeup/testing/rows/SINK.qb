@@ -49,3 +49,34 @@ do {"look": {"yaw": 0, "pitch": 35}}
 do {"wait": 40}
 shot items_on_blocks
 look items lie on the texture of wool, sand and slime. The tag-edit half (add sand to `creativecompat:sinking_hides_items` in blocktags.js, /reload, the sand item sinks in, revert) edits a pack script: do it by hand in the same session
+
+@@section 2
+@@title CQ-SINK Layer blocks stand, sink and slow the same at every layer count, 2026-11-18 ([blockrunner.md](../blockrunner.md) 3.11, TODO `gameplay/blockrunner #13`)
+@@date 2026-11-18
+@@jars creativecompat creativedelight
+@@sources feature_writeup/blockrunner.md
+@@text
+@@text Needs the 2026-11-18 Creative Compat and Creative Delight jars in `mods/` and `blocktags.js` as of 2026-11-18. Full restart (mixins, Java). Default `[surface.sinking] depthPixels = 2`.
+@@text
+@@table
+## CQ-SINK-04
+@group client
+@commands BR-89: on stone, rows of 1, 2, 4 and 7 layers of IW sand, IW ash, Supplementaries ash, salt, IE sawdust and fodder; stand on each, `/data get entity @s Pos`; then 2 layers of IW ash on a full ash layer stack
+@pass feet 2 px per layer above the stone for every block at the same count (sawdust 2n-1 px); IW ash over ash holds you
+@fails `IwLayerCollisionMixin`, `SuppAshCollisionMixin`, `IeSawdustCollisionMixin` not applied (CompatMixinPlugin gate, mod id); salt: Vintage Delight `SaltLayerBlock.getCollisionShape`
+@owner true
+@draft standing heights per block and count: a `tp` + `data get` loop could read them, the rows are hand-built
+## CQ-SINK-05
+@group client
+@commands BR-90: first person, walk slowly across the rows of CQ-SINK-04 and from a 7-layer sand onto a sand block; drop an item on each
+@pass LOOK: the same sink at every block and count, no pop at the seams; items lie on top
+@fails `SinkingRender.support` surface layer branch; `#creativecompat:surface_layers` or `#creativecompat:sinking` missing the block
+@owner true
+@draft view feel in motion; a person judges it
+## CQ-SINK-06
+@group client
+@commands BR-91: WTHIT on 1 layer of salt, sand, ash, sawdust, fodder on stone; a 1-layer leaf pile and 1 snow layer; walk a 20-block strip of 1-layer sand and one of sand blocks
+@pass "0.85× (Dust)" on salt, sand, ash, sawdust; "0.88× (Soft)" on fodder; leaf pile and snow unchanged; both strips take the same time
+@fails `SurfaceLayers.afterBlockRunner` (BlockRunnerBlockStateMixin), `RunSpeed.at` standable rule; salt not in `blockrunner:surface/dust`
+@owner true
+@draft WTHIT lines and walking time; WTHIT needs the client, the strip timing could be a bot walk

@@ -49,6 +49,10 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("BambooLeafDropMixin", List.of("twigs")),
 			Map.entry("IeSawdustFallMixin", List.of("immersiveengineering")),
 			Map.entry("SuppFodderFallMixin", SUPPLEMENTARIES),
+			// surface layers stand on their visible top (surface/SurfaceLayers)
+			Map.entry("IwLayerCollisionMixin", List.of("immersive_weathering")),
+			Map.entry("SuppAshCollisionMixin", SUPPLEMENTARIES),
+			Map.entry("IeSawdustCollisionMixin", List.of("immersiveengineering")),
 			// MCA villagers avoid deep leaf piles (surface/LeafThorns, G7.14)
 			Map.entry("McaLeafPilePathMixin", List.of("mca")),
 			Map.entry("QuarkSortingHandlerMixin", QUARK),

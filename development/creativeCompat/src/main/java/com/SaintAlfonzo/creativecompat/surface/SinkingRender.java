@@ -31,6 +31,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * walking from one sunken block to another keeps a steady eye height. Dropped items lie on top
  * at their real height unless the block is in {@link #HIDES_ITEMS}.
  *
+ * <p>Surface layers ({@link SurfaceLayers}: sand, ash, salt, sawdust, fodder) sink the same depth at every layer
+ * count, measured from the layer's top.
+ *
  * <p>Framed / copycat blocks (full ones) sink like their camo, the newest one in a hybrid
  * ({@link CamoSpeed#camo}), when CompatConfig {@code [surface.sinking] copyCamo} is on.
  *
@@ -141,6 +144,12 @@ public final class SinkingRender {
 		}
 		if (fullBlock) {
 			return full;
+		}
+		if (SurfaceLayers.is(state)) {
+			// a surface layer (sand, ash, salt, sawdust, fodder) sinks like a full block at every layer count; any real
+			// sink of its own below its visible top only adds the rest
+			double layerOwn = state.getShape(level, pos).max(Direction.Axis.Y) - top;
+			return Math.max(0, full - Math.max(0, layerOwn));
 		}
 		// own real sink (honey, mud); slabs, sensors and other low blocks sink deeper than this and stay put
 		double own = 1.0 - top;

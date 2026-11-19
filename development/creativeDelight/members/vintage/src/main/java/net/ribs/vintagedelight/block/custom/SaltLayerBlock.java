@@ -44,10 +44,12 @@ public class SaltLayerBlock extends SnowLayerBlock {
    // Place from inside (food/seasoning #7): a layer grown under an entity that already stands in this block would
    // shove it up. While the entity's box overlaps the block and its feet are below the layer's top, the collision is
    // cut at its feet, so it stays where it is. Anything outside the block (walking in from the side, landing from
-   // above) gets the full snow-like shape, so thick salt still steps up and holds weight.
+   // above) gets the full shape, so thick salt still steps up and holds weight.
+   // Height (Creative Compat SurfaceLayers): the full shape is the visible layer, like every
+   // other surface layer (sand, ash, sawdust), not snow's one layer lower; the sink is visual (dust tier).
    @Override
    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-      VoxelShape full = super.getCollisionShape(state, level, pos, context);
+      VoxelShape full = state.getShape(level, pos, context);
       if (full.isEmpty() || !(context instanceof EntityCollisionContext entityContext)) {
          return full;
       }
