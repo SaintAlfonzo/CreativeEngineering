@@ -46,7 +46,8 @@ A4 to A6 touch one jar, so one build. A5 needs the owner's reading of "game time
 Rulings (owner, 2026-11-17): B1 item damage 50%, entity cap 32, knockback kept; B2 let Immersive Portals adjust for sideways exits;
 A5 Tempad time is the in-world day clock. B3: salt hits ice and snow directly, a layer only on non-meltable blocks (BUILT 2026-11-17). B5: drop `powergrid_acid_in_water`; the salt recipe is already the Rock Salt Block catalyst mixing, so water-first no longer salts (BUILT 2026-11-17).
 
-1. B4: keep hop rarity as built?
+1. B4: keep hop rarity as built? Ruled (owner, 2026-11-18): keep rarity 96 and make the trunk search reliable, so the real
+   rate is 1 in 96 forest chunks; rerun SQ-HH-304, SQ-HOP-06.
 
 ## 4. Left out (cause unknown or needs in-game evidence first)
 
