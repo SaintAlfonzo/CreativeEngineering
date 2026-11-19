@@ -1,6 +1,6 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=4a75c749e97f -->
+<!-- generated:status_index begin open_work sha1=e4e6c4cdbcfa -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 7), 0 Complete.
 
 | Id | Status | Tests | Change |
@@ -11,7 +11,7 @@
 | `corpses #4` | Planned | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
 | `corpses #5` | Planned | S | Ancient corpse armor rolls: equip chains, 56/35/15/5 chances, material weights, oxidized or waxed copper, dyed leather colors (all configurable) |
 | `corpses #6` | Planned | S | Nether corpses wither (skeleton then wither skeleton corpse), End corpses keep the player model (Creative Compat) |
-| `corpses #7` | Planned | S | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and sometimes a skull |
+| `corpses #7` | Planned | S | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and a skeleton skull 25% of the time |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, rulings in** (section 4); loot contents still to work out (section 5). Status lives in the TODO rows (section 6).
