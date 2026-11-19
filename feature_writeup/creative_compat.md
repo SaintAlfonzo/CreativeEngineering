@@ -83,6 +83,30 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   Skeletons sink (`skeletonsSink`, `sinkSpeed` 0.1 blocks a tick; ruling 27, TODO `corpses #9`): a skeleton-stage
   corpse (player, ancient or remains) in water or lava speeds down to `sinkSpeed` instead of the Corpse mod's upward
   drift (a `@ModifyArg` on the y of its one `setDeltaMovement` in `tick`); player-model corpses keep floating.
+- **Corpse screen sections (round 1 of TODO `corpses #4`, [plan_corpses.md](plan_corpses.md) 3.6, rulings 10, 31, 32):**
+  `corpse/CorpseSections` (layout, tags, the server slot view), `CorpseCurios` (the only Curios API caller) and
+  `CorpseSectionsClient` (frames, tooltips, model). Cosmetic armor and curios stay in the Corpse mod's additional items
+  (so a corpse holding only them is not empty) but show in their own slots: 4 cosmetic slots on the top row between the
+  real armor and the offhand (helmet leftmost; the offhand slot moves from x 98 to x 152), and the curios in a
+  Curios-style panel left of the window, one column of 12, a second column further left past 12, in slot type, cosmetic,
+  index order. The Additional Items pages, their button and their auto-open leave those stacks out. Section slots are
+  take-only; taking (click, shift-click, hotbar swap, Transfer Items) strips the tags so the item stacks normally.
+  Curio origin: a `LivingDropsEvent` listener at HIGHEST snapshots the dead player's curio and cosmetic curio stacks,
+  one at LOW tags the matching drops `creativecompat:curio` {`Slot`, `Index`, `Cosmetic`} (Curios drops them at NORMAL,
+  the Corpse mod collects at LOWEST). Transfer Items first puts each tagged curio back into that exact slot when it is
+  empty, then the Corpse mod, Corpse Curios Compat (any free slot of the type) and Cosmetic Armor x Corpse Compat run as
+  before. The slot count is the same on both sides from a second synced corpse value (`Cap`, plus the 4 cosmetic stacks
+  for the model), since the client corpse holds no items. The corpse's player model wears its own cosmetic armor:
+  Cosmetic Armor Reworked dresses any player by UUID, and the Corpse mod's dummy player carries the dead player's UUID,
+  so the corpse showed the live player's current cosmetics; a `RenderPlayerEvent.Pre` listener at NORMAL (after that
+  swap) writes the corpse's own stacks, the Post listener puts the real armor back. Config `[corpses]`:
+  `sectionedScreen` (true), `curioCap` (24, 0 to 48; only the server's value counts). Mixins (gated on `corpse`):
+  `CorpseInventoryContainerMixin` (`<init>` TAIL adds the slots; redirects of `isAdditionalInventoryEmpty` in
+  `m_38946_` and of `NonNullList.isEmpty` in `transferItems`; `transferItems` RETURN strips the tags),
+  `CorpseContainerBaseMixin` (`m_7648_` HEAD, shift-click), `CorpseAdditionalContainerMixin` (`<init>` TAIL, filtered
+  view and `setSlots(0)`), `CorpseGuisMixin` (redirect in `lambda$openCorpseGUI$1`, the button flag),
+  `CorpseTransferMessageMixin` (`executeServerSide` before `transferItems`; also gated on `curios`) and the client
+  `CorpseScreenMixin` (`ScreenBase.m_7286_` TAIL). Round 2 (curios and cosmetic armor drawn on the models) is open.
 - **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
   flower box models, `tags/items/physics/`, 13
   lang keys (MCA eyes, monster box), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
@@ -120,7 +144,8 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 Scratch SQ-CMP-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)). In game: CMP-01 open a Supplementaries jar
 with two potions and read the WTHIT line; CMP-02 (campfire) moved to SQ-CFR / CQ-CFR-01 with the code; CMP-03 TrashSlot
 and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors and a Bedspreads / Elytra banner.
-Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16.
+Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16; corpse screen sections
+SQ-CMP-17 and CQ-CMP-18 (screenshot look-check), -19, -20.
 
 ## 5. History
 
@@ -156,6 +181,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/flowers.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/flowers.js)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/feature_ports.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/feature_ports.js)
 - 2026-11-01: Creative Compat: decor blocks with no system of their own (feature_writeup/creative_split.md 7.6); moved from kubejs/startup_scripts/items/decor_blocks.js on 2026-11-01 (development/creativeCompat/src/main/resources/kubejs_startup/creativecompat/decor_blocks.js)
+- 2026-11-19: corpse screen sections: cosmetic armor and curio slots, curio origin at death, Transfer Items to the exact curio slot, the corpse model's own cosmetic armor (plan_corpses.md 3.6, TODO `corpses #4` round 1; SQ-CMP-17, CQ-CMP-18 to -20) (corpse/CorpseSections, CorpseCurios, CorpseSectionsClient, six Corpse*Mixin, CompatConfig.Corpses)
 - 2026-11-18: skeleton corpses sink in water and lava (`[corpses] skeletonsSink`, `sinkSpeed`; TODO `corpses #9`; SQ-CMP-16); the sealed mark is gone (ruling 24)
 - 2026-11-18: corpse decay on world time with Nether and End rules, armor shown follows contents, wither skeleton look (plan_corpses.md 3.1, TODO `corpses #1`, `corpses #6`; SQ-CMP-10 to -13, CQ-CMP-14) (corpse/, CorpseDecayMixin, CorpseRendererMixin, CompatConfig.Corpses)
 - 2026-11-01: Creative Compat: Curios slot membership for the pack's own slots (data: kubejs/data/creativeengineering/curios/; feature_writeup/curios_slots.md); moved from kubejs/server_scripts/tags/curiostags.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/tags/curiostags.js)

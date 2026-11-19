@@ -33,6 +33,9 @@
 - **New:** Corpses in the Nether turn into skeletons after 1 day and into wither skeletons a day later; emptied ones after 15 and 45 seconds.
 - **New:** Corpses in the End keep the player model and never turn into skeletons.
 - **Changed:** Cosmetic armor goes into the corpse on death and back into the cosmetic slots when the corpse's items are transferred [kept on the player].
+- **Changed:** The corpse screen shows cosmetic armor in 4 slots between the armor and the offhand and curios in a panel left of the window, each item's tooltip naming its slot [on the Additional Items pages]. The offhand slot moved to the end of the top row.
+- **Changed:** Transferring a corpse's items puts each curio back into the slot it was worn in [any free slot of its type].
+- **Fixed:** A corpse showed the cosmetic armor its player wears now instead of the cosmetic armor inside it.
 - **New:** Ancient Corpses generate in new chunks: skeletons on flat cave floors below y48, most of them deep, and on ocean floors, more often in cold and deep oceans.
 - **New:** An Ancient Corpse's loot is rolled when it is first opened. Emptied ones disappear after 5 minutes.
 - **New:** Ancient Corpses can wear worn wooden, leather, dyed leather, copper, chainmail or iron armor, rarely enchanted. Copper pieces are fully oxidized unless waxed.

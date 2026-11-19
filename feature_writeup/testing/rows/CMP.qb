@@ -270,3 +270,47 @@ shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 @fails the helmet stays on the player: `CosArmorKeepThroughDeath` still true (config not copied to the client or server folder); it lands in the inventory, not the cosmetic slot: Cosmetic Armor x Corpse Compat missing
 @sources feature_writeup/plan_corpses.md config/cosmeticarmorreworked-common.toml
 @draft no batch holds this row yet; needs a client and a real death
+
+## SQ-CMP-17 | Corpse sections: mixins apply, config keys, a corpse holding only section items is not empty
+@group A
+@commands Any boot with Corpse, Curios and the current Compat jar; read `config/creativecompat-common.toml`; `forceload add 0 0`; summon a corpse whose only items are one curio-tagged and one cosmetic-tagged stack in its additional items (`Items`); wait 40 s (past the 30 s empty skeleton time); read its `Stage` and `EmptiedAt`
+@pass the five common section mixins apply (no mixin error); `[corpses]` has `sectionedScreen = true`, `curioCap = 24`; c17: `Stage: 0b`, `EmptiedAt: -1L` (it holds items, so neither the empty skeleton nor the 5 min rule runs)
+@fails Stage 1b: section stacks were left out of the empty check (only the Additional Items checks may skip them); a mixin error naming `lambda$openCorpseGUI$1`, `m_38946_`, `transferItems`, `m_7648_` or `executeServerSide`: the Corpse jar changed
+@absent creativecompat:corpse creativecompat:curio (NBT keys on the corpse and on stacks, not registry ids)
+bootreject Corpse(InventoryContainer|ContainerBase|AdditionalContainer|Guis|TransferMessage)Mixin.*(Error|error|failed)
+shell grep -nE "sectionedScreen|curioCap" config/creativecompat-common.toml
+look sectionedScreen = true and curioCap = 24
+> forceload add 0 0
+> summon corpse:corpse 8 -60 2 {Tags:["c17"],Death:{PlayerName:"Test",Items:[{id:"minecraft:diamond",Count:1b,tag:{"creativecompat:curio":{Slot:"ring",Index:0,Cosmetic:0b}}},{id:"minecraft:leather_helmet",Count:1b,tag:{CosmeticArmorItem:1b,CosmeticSlotIndex:3,CosmeticSkinArmor:0b}}]}}
+sleep 40
+> data get entity @e[tag=c17,limit=1] "creativecompat:corpse"
+look Stage: 0b and EmptiedAt: -1L
+@reviewed 2026-11-19
+@draft no batch holds this row yet
+
+## CQ-CMP-18 | Corpse screen sections look-check (screenshot)
+@group client
+@commands Survival client with a few curios worn (a ring, a necklace, a belt, a back item) and a cosmetic helmet and boots (Cosmetic Armor Reworked); die; open the corpse; take a screenshot (F2) with nothing hovered and one with a curio hovered; for the two-column case summon or die with more than 12 curios (or set `curioCap` and use a Curios slot-heavy kit)
+@pass LOOK (screenshot to the owner before any polish): top row = 4 armor slots, 4 cosmetic slots (helmet leftmost, empty ones show the armor silhouettes), offhand at the right end; a Curios-style panel hugs the window's left edge with one slot per curio worn, in slot type order, a second column further left past 12; a hovered curio's tooltip names its slot type ("Curio: Ring"), a cosmetic piece says "Cosmetic armor"; no Additional Items button when every extra item is in a section
+@fails offhand still at x 98 with a gap at the end: the `<init>` TAIL hook did not run; slots drawn but empty: the client cap differs from the server's (synced section tag missing); curio slots without the panel: `curios:textures/gui/inventory.png` moved; an Additional Items button that opens empty pages: the button flag redirect in `Guis` did not apply
+@sources feature_writeup/plan_corpses.md
+@reviewed 2026-11-19
+@draft no batch holds this row yet; needs a client and a real death
+
+## CQ-CMP-19 | Corpse sections: take, shift-click and Transfer Items put each item back where it was
+@group client
+@commands Survival client, same kit as CQ-CMP-18 plus a stack of extra items that go to Additional Items (a modded drop, for example a backpack's spill); die; (a) open the corpse, shift-click one curio, drag another into the inventory, press a hotbar number over a cosmetic piece; (b) die again with the full kit, put a different ring in the first ring slot, then open the corpse and press Transfer Items
+@pass (a) each taken item stacks with a fresh copy of the same item (no hidden tags; F3+H shows no `creativecompat:curio` or `Cosmetic*` keys); the section slot empties; Additional Items holds only the extra items; (b) every curio returns to the exact slot type and index it was in at death, the ring whose slot is taken goes to another ring slot or the inventory; cosmetic pieces go back to their cosmetic slots; nothing keeps a section tag
+@fails a curio in the wrong index of its type: the transfer packet hook ran after Corpse Curios Compat; a taken item does not stack: the tag strip missed a path (shift-click is `m_7648_`, hotbar swap is `onTake`); section items also on the Additional Items pages: the filtered view did not replace the container's inventory
+@sources feature_writeup/plan_corpses.md
+@reviewed 2026-11-19
+@draft no batch holds this row yet; needs a client and a real death
+
+## CQ-CMP-20 | The corpse model wears its own cosmetic armor, not the player's current one
+@group client
+@commands Survival client: wear a gold cosmetic helmet over an iron helmet, die; respawn and put a different cosmetic helmet (leather) in the cosmetic slot; look at the corpse; then take the gold cosmetic helmet out of the corpse and look again
+@pass the corpse wears the gold helmet (its own cosmetic stack), not the leather one the player wears now; after it is taken (within a second) the corpse shows the iron helmet; the living player still shows the leather cosmetic helmet
+@fails the corpse shows the leather helmet: Cosmetic Armor Reworked's UUID swap still wins (the NORMAL `RenderPlayerEvent.Pre` listener did not run or ran first); the living player shows the corpse's helmet: the Post restore missed
+@sources feature_writeup/plan_corpses.md
+@reviewed 2026-11-19
+@draft no batch holds this row yet; needs a client and a real death

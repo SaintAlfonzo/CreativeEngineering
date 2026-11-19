@@ -185,6 +185,12 @@ public class CreativeCompat {
 			WorldRows.provider(WorldTab.BURNING, BurnRows::rows);
 		}
 
+		// Corpse screen sections (corpse/CorpseSections, plan_corpses.md 3.6): curio origin tags at death, then the
+		// client's slot frames, tooltips and the corpse model's own cosmetic armor.
+		if (ModList.get().isLoaded("corpse")) {
+			if (com.SaintAlfonzo.creativecompat.corpse.CorpseSections.CURIOS) com.SaintAlfonzo.creativecompat.corpse.CorpseCurios.register();
+			if (FMLEnvironment.dist == Dist.CLIENT) com.SaintAlfonzo.creativecompat.corpse.CorpseSectionsClient.register();
+		}
 		// Beautify botanist workbench as a flower pot (compat/BotanistPot, mixin/BotanistWorkbenchPotMixin; flower_pots.md).
 		if (ModList.get().isLoaded("beautify")) {
 			BotanistPot.register(modEventBus);
