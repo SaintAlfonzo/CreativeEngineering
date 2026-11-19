@@ -11081,5 +11081,211 @@
         "wares:chests/village/taiga_warehouse": 90.0
       }
     }
+  },
+  "ancient_corpses": {
+    "_readme": {
+      "what": "Ancient corpses (Corpse mod skeletons in new chunks) and Visceral Heap remains, read by Creative Loot on server start and /reload; worldgen values apply to chunks generated afterwards. feature_writeup/plan_corpses.md.",
+      "chances": "chunk_chance = chance per chunk; ocean chance = base_chunk_chance x temperature_factor x depth_factor (cold_biomes / warm_biomes, others neutral; deep = #minecraft:is_deep_ocean).",
+      "cave.y_curve": "[y, weight] points of the height density (linear between points, 0 outside); cave corpses only at or below max_y and below sea level.",
+      "footprint": "Square floor of full blocks (footprint x footprint) at one height with headroom blocks of air (water on the ocean floor) above it.",
+      "armor": "One chain is picked; its slots roll at chances in order and the first miss stops. Pieces 1-2 roll material_weights, later pieces copy one of them. damage = share of durability used, min and max.",
+      "loot_table": "Chest loot rolled on first open (cave, ocean). Remains drop \"drops\" when broken: each row min to max of the item, or one at \"chance\".",
+      "requires": "A block with \"requires\": <mod id> is skipped when that mod is not loaded (an armor material, the remains, a drop)."
+    },
+    "enabled": true,
+    "footprint": 3,
+    "headroom": 3,
+    "cave": {
+      "chunk_chance": 0.03125,
+      "attempts": 12,
+      "search": 8,
+      "max_y": 48,
+      "y_curve": [
+        [
+          -64,
+          1.0
+        ],
+        [
+          -32,
+          0.85
+        ],
+        [
+          0,
+          0.65
+        ],
+        [
+          16,
+          0.5
+        ],
+        [
+          24,
+          0.3
+        ],
+        [
+          32,
+          0.04
+        ],
+        [
+          48,
+          0.01
+        ]
+      ],
+      "loot_table": "creativeloot:corpse/cave"
+    },
+    "ocean": {
+      "base_chunk_chance": 0.00347,
+      "temperature_factor": {
+        "warm": 1,
+        "neutral": 2,
+        "cold": 3
+      },
+      "depth_factor": {
+        "shallow": 1,
+        "deep": 6
+      },
+      "cold_biomes": [
+        "minecraft:cold_ocean",
+        "minecraft:deep_cold_ocean",
+        "minecraft:frozen_ocean",
+        "minecraft:deep_frozen_ocean"
+      ],
+      "warm_biomes": [
+        "minecraft:lukewarm_ocean",
+        "minecraft:deep_lukewarm_ocean",
+        "minecraft:warm_ocean"
+      ],
+      "attempts": 8,
+      "loot_table": "creativeloot:corpse/ocean"
+    },
+    "remains": {
+      "requires": "biomesoplenty",
+      "chunk_chance": 0.125,
+      "biomes": [
+        "biomesoplenty:visceral_heap"
+      ],
+      "attempts": 12,
+      "search": 24,
+      "drops": [
+        {
+          "item": "minecraft:bone",
+          "min": 1,
+          "max": 3
+        },
+        {
+          "item": "philipsruins:bone_chunk",
+          "min": 0,
+          "max": 1,
+          "requires": "philipsruins"
+        },
+        {
+          "item": "philipsruins:cracked_bone",
+          "min": 0,
+          "max": 2,
+          "requires": "philipsruins"
+        },
+        {
+          "item": "minecraft:skeleton_skull",
+          "chance": 0.25
+        }
+      ]
+    },
+    "armor": {
+      "chains": [
+        [
+          "feet",
+          "legs",
+          "chest",
+          "head"
+        ],
+        [
+          "head",
+          "chest",
+          "feet",
+          "legs"
+        ],
+        [
+          "chest",
+          "feet",
+          "legs",
+          "head"
+        ]
+      ],
+      "chances": [
+        0.56,
+        0.35,
+        0.15,
+        0.05
+      ],
+      "material_weights": {
+        "wood": 25,
+        "leather": 25,
+        "dyed_leather": 25,
+        "copper": 25,
+        "chain": 8,
+        "iron": 8
+      },
+      "items": {
+        "wood": {
+          "requires": "immersive_armors",
+          "head": "immersive_armors:wooden_helmet",
+          "chest": "immersive_armors:wooden_chestplate",
+          "legs": "immersive_armors:wooden_leggings",
+          "feet": "immersive_armors:wooden_boots"
+        },
+        "leather": {
+          "head": "minecraft:leather_helmet",
+          "chest": "minecraft:leather_chestplate",
+          "legs": "minecraft:leather_leggings",
+          "feet": "minecraft:leather_boots"
+        },
+        "dyed_leather": {
+          "head": "minecraft:leather_helmet",
+          "chest": "minecraft:leather_chestplate",
+          "legs": "minecraft:leather_leggings",
+          "feet": "minecraft:leather_boots"
+        },
+        "copper": {
+          "requires": "everythingcopper",
+          "head": "everythingcopper:copper_helmet",
+          "chest": "everythingcopper:copper_chestplate",
+          "legs": "everythingcopper:copper_leggings",
+          "feet": "everythingcopper:copper_boots"
+        },
+        "chain": {
+          "head": "minecraft:chainmail_helmet",
+          "chest": "minecraft:chainmail_chestplate",
+          "legs": "minecraft:chainmail_leggings",
+          "feet": "minecraft:chainmail_boots"
+        },
+        "iron": {
+          "head": "minecraft:iron_helmet",
+          "chest": "minecraft:iron_chestplate",
+          "legs": "minecraft:iron_leggings",
+          "feet": "minecraft:iron_boots"
+        }
+      },
+      "damage": [
+        0.3,
+        0.9
+      ],
+      "enchant_chance": 0.05,
+      "enchant_levels": [
+        5,
+        15
+      ],
+      "copper": {
+        "wax_chance": 0.1,
+        "waxed_state_weights": {
+          "unaffected": 0.5,
+          "exposed": 1,
+          "weathered": 1
+        },
+        "waxed_same_state_chance": 0.5
+      },
+      "dye": {
+        "same_color_chance": 0.5,
+        "min_distance": 200
+      }
+    }
   }
 }

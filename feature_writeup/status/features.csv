@@ -54,7 +54,7 @@ Creative Compat,creative_compat.md,"SQ-CMP, CMP-",BUILT,"creativecommon, creativ
 Creative Devtools,creative_devtools.md,CDV-,BUILT,"creativecommon, creativedevtools","CQ-TXR, SQ-CDV, SQ-TX","carved 2026-11-01, installed",,,
 Structure Catalog world type,plan_structure_catalogue.md,SCAT-,BUILT,creativedevtools,"CQ-SCAT, SQ-SCAT",client rows not run),,,
 Creative Worldgen,creative_worldgen.md,"SQ-CWG, CWG-",BUILT,"creativecommon, creativeworldgen","CQ-CWG, SQ-CWG",SQ-CWG-08 / -08o open (old-world rerun),,,
-Creative Loot,creative_loot.md,"SQ-LOOT, LOOT-",BUILT,"creativecommon, creativeloot",SQ-LOOT,split out of Creative Worldgen 2026-11-17 (plan_rules_fixes.md 5b); member fragments and the Delight drop rules since P3c; SQ-LOOT queued,,,
+Creative Loot,creative_loot.md,"SQ-LOOT, LOOT-",BUILT,"creativecommon, creativeloot","CQ-LOOT, SQ-LOOT",split out of Creative Worldgen 2026-11-17 (plan_rules_fixes.md 5b); member fragments and the Delight drop rules since P3c; SQ-LOOT queued,,,
 Creative Magic,creative_magic.md,"SQ-CMG (tests in nether_portal.md NP-, recipes_magic.md RA-)",BUILT,"creativecommon, creativemagic",,"built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted",,,
 Creative Equipment,creative_equipment.md,"SQ-CEQ, CQ-CEQ",BUILT,"creativecommon, creativeequipment","CQ-CEQ, SQ-CBP, SQ-CEQ","built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted",,,
 Creative Engineering and Creative Common,creative_engineering.md,"SQ-CEN, CQ-CEN, SQ-CC, SQ-CPP",BUILT,"creativecommon, creativeengineering","CQ-CC, CQ-CCB, CQ-CCO, CQ-CEN, CQ-CGE, CQ-CLOG, CQ-CMV, CQ-CPP, CQ-SPFX, SQ-CC, SQ-CC12, SQ-CCB, SQ-CCO, SQ-CEN, SQ-CGE, SQ-CMV, SQ-CPP, SQ-SPFX",carved and swapped 2026-11-04,,,

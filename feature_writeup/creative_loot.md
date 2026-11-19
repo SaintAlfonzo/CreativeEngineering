@@ -22,7 +22,8 @@ packed food, drops) is [loot.md](loot.md); this file is the jar.
 
 - Requires Creative Common, Creative Compat and LootJS (mandatory, AFTER). Required by Creative Worldgen (since
   2026-11-17); Creative Delight and Creative Brewing add the requirement with their next rebuild (plan P3, D25).
-- Registers nothing. No config: every knob is in `loot/loot_config.json`. Worldgen never had a `[loot]` config section,
+- Registers the ancient corpse feature, its configured and placed features and the `creativeloot:ancient_corpses`
+  biome modifier serializer (section 2c, since 2026-11-18); nothing else. No config file: every knob is in `loot/loot_config.json`. Worldgen never had a `[loot]` config section,
   so there was nothing to carry with `ConfigRename`.
 
 ## 1. What it holds
@@ -87,6 +88,55 @@ name)` (raw table edits: soil yield, bell pepper weights), `afterTables(fn)` (su
 table tests the breaking tool. Log: `[loot-drops] N drop pools and M shared entries in T tables` and `[loot-drops] S
 swaps and R table rewrites`. `_core/item_merges.js` (Common's item-merge runner) stays a LootJS modifier.
 
+## 2c. Ancient corpses and Visceral Heap remains (2026-11-18)
+
+[plan_corpses.md](plan_corpses.md) 3.2 and 3.4, TODO `corpses #2`, `#5`, `#7`. Only with the Corpse mod loaded; the
+decay, names and render are Creative Compat's ([creative_compat.md](creative_compat.md), Corpse decay).
+
+- **Java** `corpse/`: `AncientCorpseModifier` (the serializer, always registered; `data/creativeloot/forge/biome_modifier/ancient_corpses.json`
+  adds the placed feature `creativeloot:ancient_corpse` to `#minecraft:is_overworld` biomes and the remains biomes,
+  step underground decoration, only when `corpse` is loaded and `enabled`), `AncientCorpseFeature` (placement and
+  spawn), `HeightCurve`, `AncientArmor` (armor rolls), `AncientCorpseConfig` (reads the block below on server start and
+  /reload), `AncientCorpseEvents` and `CorpseHooks` (the only class touching Corpse classes; loaded only with the mod).
+- **Per chunk** (new chunks only): cave roll (`cave.chunk_chance` 1/32, overworld), ocean roll (chunk center biome in
+  `#minecraft:is_ocean`), remains roll (`remains.chunk_chance` 1/8; the spot's biome must be in `remains.biomes`).
+- **Spot** (ruling 11): a `footprint` x `footprint` (3x3) floor of full blocks at one height, `headroom` (3) blocks of
+  air above all of it (water on the ocean floor). Cave: a target height drawn from `cave.y_curve`, at most `max_y`
+  (48) and below sea level, below the surface; up to `attempts` (12) columns scanned `search` (8) blocks around it.
+  Ocean: the ocean floor heightmap under at least `headroom` blocks of water.
+- **Height curve** (ruling 12): points `[-64, 1.0] [-32, 0.85] [0, 0.65] [16, 0.5] [24, 0.3] [32, 0.04] [48, 0.01]`. Drawn
+  target heights (Java sampler, 200000 draws): 92.3% below y16, 78.4% below y0, 0.6% at y32 or above; density at
+  y-64 is 25x that at y32. Ruling 12 asked for about 80% below y16 (flexible) and the largest gap: a gap that large
+  leaves little room above y16, so the gap won. Actual corpses also depend on where caves have floors; the worldgen
+  survey row (SQ-LOOT-08) reports the real spread.
+- **Ocean rate** (ruling 13): `base_chunk_chance` 0.00347 (about 1/288) x `temperature_factor` (warm 1, neutral 2,
+  cold 3; cold and frozen oceans cold, lukewarm and warm oceans warm, plain and modded oceans neutral) x
+  `depth_factor` (shallow 1, deep 6): warm shallow about 1 per 288 chunks, cold deep about 1 per 16.
+- **The corpse** is built from NBT (`EntityType.loadEntityRecursive`, no Corpse classes): an empty Death with the
+  rolled armor, Compat's `creativecompat:corpse` compound (`Ancient` or `Remains`, stage skeleton) and Forge
+  persistent data: `creativeloot:corpse_loot` (the chest table rolled on first open, ruling 5) with Compat's
+  `creativecompat:corpse_sealed` (so an armorless unopened corpse does not start the 5 min empty despawn), or
+  `creativeloot:corpse_remains` for remains. Ocean corpses get `NoGravity` (the Corpse mod floats corpses up through water).
+- **First open** (`CorpseHooks.onInteract`): the table is rolled as chest loot (LootJS and the tuning layer apply) into
+  the main inventory, overflow into additional items; both keys are cleared. Tables `creativeloot:corpse/cave` and
+  `corpse/ocean` are placeholders (torches and bread; bread) until `corpses #3` fills them.
+- **Remains** (rulings 21, 22): plain skeletons, empty, never wither or despawn, named "Ancient Remains". A player's hit
+  drops `remains.drops` (1 to 3 bones, 0 to 1 bone chunk, 0 to 2 cracked bones, a skeleton skull at 25%; rolled in
+  Java, a missing item is skipped) and removes them; no other corpse can be broken.
+- **Armor** (`AncientArmor`, rulings 7, 14 to 17): one of `chains` at random, slots rolled at `chances` 56 / 35 / 15 /
+  5 % until the first miss; pieces 1 and 2 roll `material_weights` (wood, leather, dyed leather, copper 25; chain,
+  iron 8), later pieces copy one of them 50/50; `damage` 30% to 90% of durability used; `enchant_chance` 5% per piece
+  at level 5 to 15. Dyed leather: `same_color_chance` 50% one color for every dyed piece, else two colors at least
+  `min_distance` 200 apart in RGB, each piece taking one. Copper: unwaxed pieces fully oxidized; `wax_chance` 10%
+  waxed, a waxed piece unaffected (weight 0.5), exposed or weathered (1 each), one state for all waxed pieces or two
+  (`waxed_same_state_chance` 50%).
+- **Config** `loot_config.json` block `ancient_corpses` (every value above; `tools/gen_loot_config.py` keeps blocks it
+  does not own since 2026-11-18). Worldgen values apply to chunks generated after the change. A block with
+  `"requires": <mod id>` is skipped when the mod is absent (the remains on Biomes O' Plenty, the wood and copper armor
+  sets on Immersive Armors and Everything Is Copper, the bone chunk and cracked bone drops on Philip's Ruins), which
+  keeps `tools/optional_ref_audit.py` clean. Loot tables in the jar: `corpse/cave`, `corpse/ocean` only.
+- **Lang** `assets/creativeloot/lang/en_us.json`: `entity.creativeloot.ancient_corpse`, `entity.creativeloot.ancient_remains`.
+
 ## 3. Edges
 
 - `global.CWG.lootRules` is gone (no alias): the four Creative Delight callers (`miners_delight/loot.js`,
@@ -110,9 +160,16 @@ swaps and R table rewrites`. `_core/item_merges.js` (Common's item-merge runner)
   from the jar, same rule count. Queue SQ-LOOT-05 (replaces SQ-CWG-05).
 - [ ] **LOOT-06 Settings carried:** `loot_config.json` settings and the queued Creative Delight crate rules are the same
   as before (the file moved unchanged; Worldgen had no `[loot]` toml section). Queue SQ-LOOT-06.
+- [ ] **LOOT-07 Ancient corpse spawn:** a corpse summoned with the feature's NBT -> skeleton, "Ancient Corpse", armor
+  shown; first open rolls the cave table; looted, it is gone 5 min later. Queue SQ-LOOT-07, CQ-LOOT-10.
+- [ ] **LOOT-08 Worldgen survey:** pregenerate 64x64 chunks of a fresh world -> ancient corpses at about the configured
+  rates, cave ones below y48 and mostly deep, ocean ones on the floor. Queue SQ-LOOT-08.
+- [ ] **LOOT-09 Remains:** remains in the Visceral Heap -> a hit breaks them and drops bones; they never despawn. Queue
+  SQ-LOOT-09.
 
 ## 5. History
 
+- 2026-11-18: ancient corpses, their armor rolls and the Visceral Heap remains (section 2c; plan_corpses.md, TODO `corpses #2`, `#5`, `#7`; SQ-LOOT-07 to -09, CQ-LOOT-10).
 - 2026-11-17: P3c of plan_rules_fixes.md: every member list became a fragment, Delight and Brewing gate them (section 5);
   the drops engine gained the shapes of section 2b and Creative Delight's own loot rules moved into it (12d). Queue
   SQ-RFX-16 to -18, -21 to -23; SQ-LOOT-02 and SQ-MDL-01 updated.

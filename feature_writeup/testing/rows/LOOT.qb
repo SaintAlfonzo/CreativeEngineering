@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-LOOT Creative Loot split out of Creative Worldgen, 2026-11-17 ([creative_loot.md](../creative_loot.md) 4, LOOT-01 to LOOT-06; [plan_rules_fixes.md](../plan_rules_fixes.md) sections 5 and 5b, TODO `conventions #15`, `#16`)
 @@date 2026-11-17
-@@reviewed 2026-11-17
+@@reviewed 2026-11-18
 @@jars creativeloot creativeworldgen
 @@sources development/creativeLoot kubejs/data/creativeloot/kubejs development/creativeWorldgen/src/main/resources/META-INF/mods.toml kubejs/data/creativedelight/kubejs/miners_delight/loot.js kubejs/data/creativedelight/kubejs/rusticdelight/loot.js kubejs/data/creativedelight/kubejs/veggiesdelight/loot.js kubejs/data/creativedelight/kubejs/vintagedelight/loot.js
 @@text
@@ -37,11 +37,11 @@ look the N of both lines is the same; `added` and the skipped list (if any) reco
 ## SQ-LOOT-03 | /dumpall loot dump diff against the pre-split dump is empty
 @group A
 @commands `/dumpall`; diff `kubejs/exported/loot_tables/` and `loot_runtime_additions.json` against the baseline folder
-@pass Both diffs empty
+@pass Both diffs empty, except the two tables added 2026-11-18 under `creativeloot/corpse/` (cave, ocean: "Only in" lines, plan_corpses.md)
 @fails A table differs: compare its file; a mod update since 2026-11-15 also shows here (check `mods/` dates before blaming the split)
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
-shell diff -rq "$INST/kubejs/exported/baseline_loot_split_2026-11-17/loot_tables" kubejs/exported/loot_tables && echo LOOT_TABLES_SAME
+shell diff -rq "$INST/kubejs/exported/baseline_loot_split_2026-11-17/loot_tables" kubejs/exported/loot_tables | grep -v "corpse" ; echo LOOT_TABLES_CHECKED
 shell diff -q "$INST/kubejs/exported/baseline_loot_split_2026-11-17/loot_runtime_additions.json" kubejs/exported/loot_runtime_additions.json && echo ADDITIONS_SAME
 ## SQ-LOOT-04 | structure chest tables roll as before: no banned item, tuning active
 @group A
@@ -93,3 +93,57 @@ shell ! ls kubejs/data/creativeloot/kubejs/loot/loot_config.json kubejs/data/cre
 kjsreject \[loot-tuning\] (could not read|disabled: missing)
 kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
 @draft a boot of its own: move the two files out of OUT/srv/kubejs/data/creativeloot/kubejs/loot/ before the boot (no setup step for that yet); the steps above are the checks after it
+
+@@section 3
+@@title SQ-LOOT Ancient corpses and Visceral Heap remains, 2026-11-18 ([creative_loot.md](../creative_loot.md) 2c, LOOT-07 to -09; TODO `corpses #2`, `#5`, `#7`)
+@@date 2026-11-18
+@@jars creativeloot creativecompat
+@@sources feature_writeup/creative_loot.md feature_writeup/plan_corpses.md
+@@text
+@@text Rows 07 and 09 summon corpses with the NBT the feature writes (`AncientCorpseFeature.spawn`); row 08 needs a fresh world.
+@@text
+@@table
+## SQ-LOOT-07 | an ancient corpse: skeleton, sealed, unrolled loot
+@group A
+@commands `forceload add 0 0`; `summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave","creativecompat:corpse_sealed":1b}}`; wait 40 s; read its `creativecompat:corpse`; `loot spawn 3 -58 3 loot creativeloot:corpse/cave`
+@pass `Stage: 1b`, `Ancient: 1b`, `EmptiedAt: -1L` after 40 s (the sealed mark keeps it from the empty rules); the cave table spawns torches (and sometimes bread)
+@fails `EmptiedAt` set: Compat ignores `creativecompat:corpse_sealed`; the loot command fails: the tables are not in the jar
+@absent creativecompat:corpse creativecompat:corpse_sealed creativeloot:corpse_loot (NBT keys, not registry ids)
+> forceload add 0 0
+> summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave","creativecompat:corpse_sealed":1b}}
+sleep 40
+> data get entity @e[tag=l07,limit=1] "creativecompat:corpse"
+expect Stage: 1b
+expect EmptiedAt: -1L
+> loot spawn 3 -58 3 loot creativeloot:corpse/cave
+expect Dropped
+@draft no batch holds this row yet
+
+## SQ-LOOT-08 | worldgen survey: ancient corpses in a fresh world
+@group world
+@commands Fresh world (seed of the run); `chunky radius 512` then `chunky start` (64x64 chunks around 0 0); after it finishes, stop the server and count `corpse:corpse` entities in `world/entities/*.mca` with their y and biome (an offline region scan); grep `logs/latest.log` for `creativeloot`
+@pass about 4096 / 32 x (share of chunks with a cave floor spot) cave corpses, all at y48 or below, most below y16; ocean ones only on ocean floors, more in cold and deep oceans; no error line from `AncientCorpseFeature`; worldgen time not visibly slower than a run without the jar
+@fails none: the biome modifier did not apply (Corpse not loaded, or `ancient_corpses.enabled` false); far fewer than expected: the 3x3 check too strict for deepslate caves (raise `attempts` or `search`)
+@phase worldgen
+@draft needs an offline entity region scan step (no tool reads entities/*.mca yet)
+
+## SQ-LOOT-09 | Visceral Heap remains never decay or despawn
+@group A
+@commands `execute in minecraft:the_nether run forceload add 0 0`; `execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["l09"],NoGravity:1b,Death:{PlayerName:""},"creativecompat:corpse":{Remains:1b,Stage:1b},ForgeData:{"creativeloot:corpse_remains":1b}}`; wait 6 min; read it
+@pass still there after 6 min with `Stage: 1b` (not withered, not removed)
+@fails removed after 5 min: Compat applies the empty rules to remains; Stage 2b: the Nether wither rule reached remains
+@absent creativecompat:corpse creativeloot:corpse_remains (NBT keys, not registry ids)
+> execute in minecraft:the_nether run forceload add 0 0
+> execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["l09"],NoGravity:1b,Death:{PlayerName:""},"creativecompat:corpse":{Remains:1b,Stage:1b},ForgeData:{"creativeloot:corpse_remains":1b}}
+sleep 360
+> execute in minecraft:the_nether run data get entity @e[tag=l09,limit=1] "creativecompat:corpse".Stage
+expect 1b
+@phase long
+@draft no batch holds this row yet
+
+## CQ-LOOT-10 | ancient corpse look, first open, remains break
+@group client
+@commands Creative client near the SQ-LOOT-07 corpse (or `locate`-free: summon one as there with leather and copper armor): look at it, hover with WTHIT, open it, take everything, wait 5 min. In the Nether summon the SQ-LOOT-09 remains and hit them
+@pass LOOK: a skeleton wearing the boots; name "Ancient Corpse" on the nameplate and WTHIT; the first open shows torches (the placeholder cave table), a second open by another player shows the same items, not a new roll; emptied, it is gone 5 min later. The remains show "Ancient Remains", break on one hit with a bone sound and drop 1 to 3 bones, sometimes bone chunks, cracked bones and a skeleton skull
+@fails "Corpse" name: the lang key is missing from the Loot jar; empty on first open: `CorpseHooks` not registered (Corpse mod id check)
+@draft no batch holds this row yet; needs a client
