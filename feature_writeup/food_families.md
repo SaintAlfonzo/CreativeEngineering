@@ -4,8 +4,8 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=7cc67da5cbfe -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 13, Pinned 1, In Progress 47, Testing 33), 3 Complete.
+<!-- generated:status_index begin open_work sha1=8a03b123dd7e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 12, Pinned 1, In Progress 47, Testing 34), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -13,7 +13,6 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `baking/baked-goods #35` | Planned | none | Investigate brownie tray and adzuki bun family |
 | `baking/baked-goods #36` | Planned | S C P | Dessert cookware and recipe treatments |
 | `dishes/ingredients #9` | Planned | S C P T | Cheese |
-| `dishes/ingredients #10` | Planned | S C P T | Fats and oils: animal fat, blubber, cooking oil |
 | `dishes/ingredients #15` | Planned | S C P | Butter |
 | `dishes/meals #14` | Planned | S C P T | Patty food type |
 | `dishes/meals #18` | Planned | S C P | Cheese in nachos |
@@ -82,6 +81,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `cooking/kitchen #21` | Testing | S+ C P | Coaster tag: models or cuts |
 | `creativedelight/framework #11` | Testing | S+ | Move members from `global.foodFamily` to `global.CD.food` |
 | `creativedelight/framework #12` | Testing | S~ C | Hand-written family rows onto `global.CD.food` |
+| `dishes/ingredients #10` | Testing | S C P T | Fats and oils: animal fat, blubber, cooking oil |
 | `dishes/ingredients #18` | Testing | S C P | Cutting banana bunch |
 | `dishes/ingredients #20` | Testing | S~ C P | Sweet potato slices |
 | `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
