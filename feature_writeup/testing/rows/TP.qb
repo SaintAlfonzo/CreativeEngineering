@@ -824,3 +824,49 @@ look the macro reply lines; the pinned id in the settings reply
 @pass copy gets its own id (WTHIT shift line differs from the original's); no drops from the creative break; WTHIT shows the id, not blank, after the relog
 @fails `WthitPlugin` reading `marker.id`; client-side `adoptStoredId` branch
 @draft client Tempad screens: driver steps (click_widget, type_into, widgets readback, shot) need the widget labels from one live look; not written in the 2026-11-16 pass
+
+@@section 4
+@@title SQ-TP Tempad fixes: chronometers, timeline time, marker screen, 2026-11-18 ([plan_bugfix_1117.md](../plan_bugfix_1117.md) A4 to A6, TODO `gameplay/tnt-and-portal #29`, `#31`)
+@@date 2026-11-18
+@@jars tempad
+@@sources development/backportedTempad/PORT_NOTES.md
+@@text
+@@text Same setup as section 3 (donor in `tempad_upstream/`, `ztp_probe.js` copied in, bot `qa`).
+@@text
+@@table
+## SQ-TP-42 | two chronometers charge the Tempad: the first one found charges, the second is ignored (A4)
+@group A
+@commands Bot `t42` with a Tempad at 0 chronons in hotbar 0 and two chronometers at 0 in hotbar 1 and 2; `cdevtest tickwarp 2400`; `/ztp chr t42`
+@pass the Tempad has chronons after the warp (it was 0 with two chronometers before the fix); the hotbar 2 chronometer still holds 0 (ignored, and `auto_charge_blacklist` keeps it from being charged)
+@fails Tempad still 0: `ChronometerItem.isClashing` still stops both (each sees the other in `tempad:chronon_generators`); hotbar 2 above 0: the second chronometer charges itself (first-found check wrong) or is charged by the first (tag missing from the donor)
+@draft no batch holds this row yet
+> pbot spawn t42 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> clear t42
+> item replace entity t42 hotbar.0 with tempad:tempad
+> item replace entity t42 hotbar.1 with tempad:chronometer
+> item replace entity t42 hotbar.2 with tempad:chronometer
+> ztp setchr t42 0 0
+> ztp setchr t42 1 0
+> ztp setchr t42 2 0
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 120
+> ztp chr t42
+waitlog \[ztp\] chr end 20
+expect \[ztp\] chr slot 0 tempad:tempad [1-9]\d*/
+expect \[ztp\] chr slot 2 tempad:chronometer 0/
+> pbot remove t42
+
+## CQ-TP-17 | Timeline app shows the in-world day and clock (A5)
+@group client
+@commands Survival client: hold a Tempad, walk more than 8 blocks twice (logs two wandering entries), sleep through a night, walk again; open the Timeline app; compare with the clock in the Tempad's title bar; relog and open it again
+@pass each new entry's last line reads `Day N, HH:MM` (day 1 = the first day; the hours match the title bar clock at the time it was logged; the entry after sleeping has a higher day); no real-world date on new entries; entries survive a relog; entries from a save before the fix still show their real-world date
+@fails a real date on a new entry: `HistoricalLocation.dayTime` not recorded (`TravelHistoryAttachment.logLocation`) or not sent (`write` / `read` must both carry the long); a disconnect opening the app: the packet order of `HistoricalLocation.write` and `read` differs
+@draft no batch holds this row yet; needs a client
+
+## CQ-TP-18 | Timedoor Marker screen: name and color show at once; the color box follows the picker (A6)
+@group client
+@commands Place a Timedoor Marker, name it `Home` and pick a color, close; reopen the screen and look before clicking anything; click the color square, pick another color, close the picker
+@pass on reopen the name box shows `Home` and the color box the saved `#RRGGBB` without a click; after the picker closes the color box shows the new color's hex, and closing the screen saves that color (reopen to check)
+@fails empty boxes until clicked: `TextBox.withSize` scroll reset missing; old hex after the picker: `ColorPicker.input` refresh missing
+@draft no batch holds this row yet; needs a client

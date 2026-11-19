@@ -645,3 +645,19 @@ chronon bar on any chronon block; the six toggles appear in WTHIT's plugin confi
 - #12: `WorkstationBlock.playerWillDestroy` (creative) clears the terminal with UPDATE_ALL | UPDATE_KNOWN_SHAPE |
   UPDATE_SUPPRESS_DROPS, so the pad's updateShape no longer destroys it with drops. Upstream 3.0.4 not compared.
 - Checks: SQ-TP-31..39, CQ-TP-16.
+
+## 11. Fixes from plan_bugfix_1117 (2026-11-18; TODO `gameplay/tnt-and-portal #29`, `#31`)
+
+- **Chronometers (A4).** Upstream `ChronometerItem.isClashing` skipped a chronometer whenever any other
+  `tempad:chronon_generators` item was carried, so two chronometers stopped each other and nothing charged. Now only the
+  first generator `ContextRegistry.locate` finds charges and the rest are ignored (upstream's
+  `auto_charge_blacklist` already keeps a chronometer from being charged by another). SQ-TP-42.
+- **Timeline time (A5).** Timeline entries showed the real-world date (`new Date()` through ICU `DateFormat`).
+  `HistoricalLocation` carries a fourth field, `dayTime` (the level's day time when logged; NBT `day_time`, one more
+  long on the wire), and `TimelineEntry.gameTime` shows it as `Day N, HH:MM` with the title bar clock's formula.
+  The `Date` key stays the entry id and order. Entries saved before have no `day_time` (-1) and keep the real date.
+  CQ-TP-17.
+- **Marker screen (A6).** `TextBox`'s constructor set the value at width 0, which scrolled the text out of view until
+  the first click; `withSize` scrolls back to the start. `ColorPicker.input` kept its own text, so the color box
+  never showed the picker's color; it now reloads the state's color whenever it differs and the box is not focused.
+  CQ-TP-18.

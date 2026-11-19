@@ -57,6 +57,9 @@ public class TextBox extends EditBox {
     public TextBox withSize(int width, int height) {
         this.width = width;
         this.height = height;
+        // Creative Engineering (plan_bugfix_1117 A6): the constructor's setValue ran at width 0, which scrolls the whole
+        // text out of view until the first click; scroll back to the start now that the box has a width.
+        moveCursorToStart();
         return this;
     }
 

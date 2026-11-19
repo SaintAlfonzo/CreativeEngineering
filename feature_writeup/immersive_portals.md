@@ -222,3 +222,4 @@ TODO `gameplay/tnt-and-portal #27` to `#37`.
 ## 6. History
 
 - 2026-11-17: Owner notes renumbered 5 (was 6; plan_rules_fixes.md V-53).
+- 2026-11-18: Tempad fixes (plan_bugfix_1117 A4 to A6, TODO `gameplay/tnt-and-portal #29`, `#31`): two chronometers no longer stop each other (the first charges, extras are ignored); the Timeline app shows the in-world day and clock; the Timedoor Marker screen shows its name and color without a click and its color box follows the picker. Details: `development/backportedTempad/PORT_NOTES.md` 11; SQ-TP-42, CQ-TP-17, CQ-TP-18.

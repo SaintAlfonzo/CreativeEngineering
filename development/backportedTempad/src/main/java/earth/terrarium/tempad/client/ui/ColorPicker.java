@@ -136,24 +136,35 @@ public final class ColorPicker {
     }
 
     /**
-     * Widgets.colorInput: a text box over a String state that parses into the colour; it keeps its own text (the
-     * picker does not write back into it, as in Olympus).
+     * Widgets.colorInput: a text box over a String state that parses into the color. Olympus never wrote the picker's
+     * color back into the text; here (plan_bugfix_1117 A6) the box shows the state's color again whenever it differs
+     * and the box is not being typed in, so it refreshes after the picker closes.
      */
     public static TextBox input(State<Color> state, Consumer<TextBox> factory) {
-        TextBox box = new TextBox(new State<>() {
-            String temp = state.get().toString();
-
+        String[] temp = {state.get().toString()};
+        State<String> text = new State<>() {
             @Override
             public String get() {
-                return temp;
+                return temp[0];
             }
 
             @Override
             public void set(String value) {
                 state.set(Color.parse(value));
-                temp = value;
+                temp[0] = value;
             }
-        });
+        };
+        TextBox box = new TextBox(text) {
+            @Override
+            public void renderButton(PoseStack pose, int mouseX, int mouseY, float partialTick) {
+                String shown = state.get().toString();
+                if (!isFocused() && !shown.equals(Color.parse(temp[0]).toString())) {
+                    setValue(shown);
+                    moveCursorToStart();
+                }
+                super.renderButton(pose, mouseX, mouseY, partialTick);
+            }
+        };
         factory.accept(box);
         return box;
     }

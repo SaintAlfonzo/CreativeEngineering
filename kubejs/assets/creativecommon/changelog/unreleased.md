@@ -265,6 +265,12 @@
 - **Changed:** Datapacks that use the old Creative Delight recipe types need updating.
 - **Changed:** A world opened on this version loses these items and blocks if opened on an older version.
 
+## Tempad <!-- icon: tempad:tempad -->
+
+- **Fixed:** Carrying two or more chronometers stopped all of them from charging; the first one charges and the rest are ignored.
+- **Changed:** The Timeline app shows the in-world day and time of each entry [real-world date and time].
+- **Fixed:** The Timedoor Marker screen showed empty name and color boxes until clicked, and the color box did not show the color picked.
+
 ## Portals <!-- icon: portalgun:portal_gun -->
 
 - **Fixed:** The Immersive Portals portal block had no name.
