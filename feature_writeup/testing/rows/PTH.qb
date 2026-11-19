@@ -201,6 +201,10 @@ look every stone and the diamond at y -57..-56 within x 1000..1001 z 1120..1121,
 @fails `PassSave` (`EntityPassMixin` save/load), `PassItems.hold` / `release`
 @from batches/r1115/pth_b1.qb
 # self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+# r1118 R4 A2 (2026-11-18): the restart in the row (one in-row restart is enough: SQ-PTH-08 on sets up its own bot and web)
+> save-all flush
+sleep 5
+restart
 > forceload add 992 976 1231 1215
 sleep 3
 > zpth mod i06

@@ -635,8 +635,20 @@ waitlog \[zpwgg\] done 30
 waitlog \[zpwgg\] read 30
 > zpwgg wires 1000 -60 1000 8
 waitlog \[zpwgg\] wires 30
+# r1118 R4 A2 (2026-11-18): the restart in the row (was prose)
+> save-all flush
+sleep 5
+restart
+> forceload add 990 990 1060 1040
+sleep 3
+> zpwgg read 1000 -60 1000
+waitlog \[zpwgg\] done 30
+> zpwgg read 1000 -60 1010 24
+waitlog \[zpwgg\] read 30
+> zpwgg wires 1000 -60 1000 8
+waitlog \[zpwgg\] wires 30
 sleep 1
-expect \[zpwgg\] wires 5$
+count \[zpwgg\] wires 5$ >= 2
 bootreject (Failed to|Exception).*(powergrid|TransmissionLine)
 look compare with SQ-PWG-20a.log: same V, I (1 %), R and wire counts
 
@@ -711,6 +723,9 @@ look first and last read within 1 %; record chunk 63 blockTicking
 @fails `WorldNetworks.postTick` (`clientMirror` gate), `config/CCommon`
 @from batches/r1113pwg/pwgr3.qb
 # self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+# r1118 R4 A2 (2026-11-18): the config edit and restart in the row, the default back at the end
+edit sed -i 's/clientMirror = true/clientMirror = false/' config/powergrid-common.toml
+restart
 pace 0.3
 > forceload add 990 990 1060 1090
 > forceload add 1090 990 1140 1260
@@ -744,6 +759,8 @@ expect \[zpwgg\] read V=12(\.0)? I=1\.(19|2)\S* .*wires=5
 reject /ERROR\]
 shell grep -n -B3 'clientMirror' config/powergrid-common.toml
 look the config comment says the switch is read on the server
+edit sed -i 's/clientMirror = false/clientMirror = true/' config/powergrid-common.toml
+restart
 
 # from r1113/pwg2c.qb
 
@@ -6691,10 +6708,18 @@ sleep 5
 > forceload query
 > zpwg6 contraptions all 1380 -60 1510
 waitlog \[zpwg6\] (bearing|done) 20
+# r1118 R4 A2 (2026-11-18): the restart in the row (was prose)
+> save-all flush
+sleep 5
+restart
+> forceload add 1380 1500 1395 1515
+sleep 5
+> zpwg6 contraptions all 1380 -60 1510
+waitlog \[zpwg6\] (bearing|done) 20
 sleep 1
 > zpwg6 solar 1380 -60 1510
 sleep 1
-expect \[zpwg6\] controlled id=\d+ .*removed=false.*type=powergrid:solar_panel blocks=2 .*controller=\S+ attachedToBearing=true
+count \[zpwg6\] controlled id=\d+ .*removed=false.*type=powergrid:solar_panel blocks=2 .*controller=\S+ attachedToBearing=true >= 2
 expect \[zpwg6\] bearing at 1380 -60 1510 movedContraption=set
 expect \[zpwg6\] solar powergrid:solar_panel_bearing
 reject \[zpwg\w*\] error

@@ -296,6 +296,61 @@ reject \[cdevtest\] .*done=0
 @pass distance 3 melted, 4 not, for all six; sea lantern, redstone torch, jelly torch and unlit brazier ice unchanged; with the switch on the sea-lantern ice melts
 @fails a modded id missing from the tag: `melting_tags.js` globs / `has()`; sea lantern melting with the switch off: `VanillaLightMeltMixin` not applied (grep `latest.log` for the mixin)
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
+> forceload add 1984 1984 2143 2143
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+> setblock 2093 -61 2000 minecraft:ice
+> setblock 2086 -61 2000 minecraft:ice
+> setblock 2090 -61 2003 minecraft:snow
+> setblock 2090 -61 1996 minecraft:snow
+> setblock 2090 -61 2000 minecraft:torch
+> setblock 2093 -61 2012 minecraft:ice
+> setblock 2086 -61 2012 minecraft:ice
+> setblock 2090 -61 2015 minecraft:snow
+> setblock 2090 -61 2008 minecraft:snow
+> setblock 2090 -61 2012 minecraft:soul_torch
+> setblock 2093 -61 2024 minecraft:ice
+> setblock 2086 -61 2024 minecraft:ice
+> setblock 2090 -61 2027 minecraft:snow
+> setblock 2090 -61 2020 minecraft:snow
+> setblock 2090 -61 2024 minecraft:lantern
+> setblock 2093 -61 2036 minecraft:ice
+> setblock 2086 -61 2036 minecraft:ice
+> setblock 2090 -61 2039 minecraft:snow
+> setblock 2090 -61 2032 minecraft:snow
+> setblock 2090 -61 2036 supplementaries:sconce
+> setblock 2093 -61 2048 minecraft:ice
+> setblock 2086 -61 2048 minecraft:ice
+> setblock 2090 -61 2051 minecraft:snow
+> setblock 2090 -61 2044 minecraft:snow
+> setblock 2090 -61 2048 everythingcopper:copper_lantern
+> setblock 2093 -61 2060 minecraft:ice
+> setblock 2086 -61 2060 minecraft:ice
+> setblock 2090 -61 2063 minecraft:snow
+> setblock 2090 -61 2056 minecraft:snow
+> setblock 2090 -61 2060 minecraft:glowstone
+> setblock 2091 -61 2072 minecraft:ice
+> setblock 2090 -61 2072 minecraft:sea_lantern
+> setblock 2091 -61 2084 minecraft:ice
+> setblock 2090 -61 2084 minecraft:redstone_torch
+> setblock 2091 -61 2096 minecraft:ice
+> setblock 2090 -61 2096 upgrade_aquatic:blue_jelly_torch
+> setblock 2091 -61 2108 minecraft:ice
+> setblock 2090 -61 2108 decorative_blocks:brazier[lit=false]
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
 > execute if block 2093 -61 2000 minecraft:water run say SQ-MELT-06-torch_ice3_water
 > execute if block 2086 -61 2000 minecraft:ice run say SQ-MELT-06-torch_ice4_ice
 > execute if block 2090 -61 2003 minecraft:air run say SQ-MELT-06-torch_snow3_air
@@ -352,8 +407,25 @@ expect SQ-MELT-06-sealantern_ice1_ice$
 expect SQ-MELT-06-redstonetorch_ice1_ice$
 expect SQ-MELT-06-jellytorch_ice1_ice$
 expect SQ-MELT-06-brazierunlit_ice1_ice$
-look part 2 (vanillaLightMelting true) runs on the restart batch p3_a2.qb
-shell grep -hE "\[zmelt\] change m06_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
+# part 2 (r1118 R4 A2): vanillaLightMelting true needs a boot: edit and restart in the row, then a sea lantern case again
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml melting vanillaLightMelting true
+restart
+> forceload add 1984 1984 2143 2143
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+> setblock 2091 -61 2120 minecraft:ice
+> setblock 2090 -61 2120 minecraft:sea_lantern
+sleep 1
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
+> execute unless block 2091 -61 2120 minecraft:ice run say SQ-MELT-06-sealantern_on_melted
+expect SQ-MELT-06-sealantern_on_melted$
+# back to the default for the later rows
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml melting vanillaLightMelting false
+restart
 
 ## SQ-MELT-07 | sealed dark room: magma 3 blocks from ice melts it (source-driven)
 @group A
@@ -404,8 +476,12 @@ reject \[cdevtest\] .*done=0
 @fails the salt member's item click (Creative Delight, agent cd-a); it should call `Melting.meltStep`
 @from batches/r1115/p3_a1.qb
 @reviewed 2026-11-16
+# r1118 (2026-11-18): own forceload and bot (P3-00 setup lost); the retired zmelt probe dropped
+> forceload add 1984 1984 2143 2143
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
 > setblock 2048 -61 2072 minecraft:blue_ice
-> zmelt w m08_blue overworld 2048 -61 2072
 > clear m3
 > pbot hold m3 salt:salt 3
 > pbot use m3 2048 -61 2072 up
@@ -419,8 +495,7 @@ expect SQ-MELT-08-click2$
 expect SQ-MELT-08-click3$
 > pbot inv m3 get
 waitlog \[cdevtest\] verb=pbot\.inv bot=m3 filled= 20
-shell grep -hE "\[zmelt\] change m08_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
-look one change per click (three changes); the use replies; the verb=pbot.inv lines show the salt left
+look the use replies; the verb=pbot.inv lines show the salt left (one step per click is the three execute checks)
 reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 
 ## SQ-MELT-09 | Common + Compat: fire and lava melt as in -02 / -03; [melting] tags salt 0; no melting error or warning
@@ -429,9 +504,12 @@ reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 @pass fire and lava melt as in -02 / -03; `[melting] tags:` with salt 0; no error or warning naming melting
 @fails `melting_tags.js` touching an absent mod's id without `has()`; a Java reference to a Salt class
 @from batches/r1115/p3_c1.qb
+@modset cpp_chain compat
+# r1118 R4 B1 (2026-11-18): the Common + Compat set as a mod set (Common, Compat, Calendar, Serene Seasons, empty config,
+# probes-only kubejs; no Devtools); the retired zmelt probe dropped; the reject skips KubeJS recipe-parse warnings (judge-8)
 bootexpect \[melting\] tags: \d+ meltable, \d+ slow, 0 salt
 # Forge fills a fresh config with "Incorrect key melting... corrected" WARN lines (no config/ in this set): not a fault
-bootreject (?i)(ERROR|WARN)(?!.*Incorrect key).*melting|melting.*(Exception|NoClassDefFound)
+bootreject (?i)^(?!.*KubeJS Recipe Event)(?=.*(ERROR|WARN))(?!.*Incorrect key).*melting|melting.*(Exception|NoClassDefFound)
 shell grep -hiE "melting" logs/latest.log | sed -E 's/^.*\]: //' | cut -c1-300 | head -12
 shell ls mods
 > forceload add 0 0 63 31
@@ -458,18 +536,10 @@ sleep 3
 > setblock 35 199 10 minecraft:ice
 > setblock 35 200 10 minecraft:glass
 > setblock 40 199 10 minecraft:lava
-> zmelt w m09_fire_ice3 overworld 13 199 10
-> zmelt w m09_fire_ice4 overworld 6 199 10
-> zmelt w m09_fire_snow3 overworld 10 199 13
-> zmelt w m09_fire_snow4 overworld 10 199 6
-> zmelt w m09_lava_ice4 overworld 44 199 10
-> zmelt w m09_lava_ice5 overworld 35 199 10
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|zmelt\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command)
 > gamerule randomTickSpeed 1000
 sleep 90
 > gamerule randomTickSpeed 3
-> zmelt show
-waitlog \[zmelt\] show done 30
 > execute if block 13 199 10 minecraft:water run say SQ-MELT-09-fire_ice3_water
 > execute if block 6 199 10 minecraft:ice run say SQ-MELT-09-fire_ice4_ice
 > execute if block 10 199 13 minecraft:air run say SQ-MELT-09-fire_snow3_air
@@ -618,10 +688,13 @@ reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 @pass no `Error loading class: me/shedaniel/rareice/forge/blocks/RareIceBlock`; no line naming `RareIceLightMeltMixin`; the SQ-MELT-09 pass text otherwise; on a full-pack boot (Rare Ice present) the mixin still applies (no skip warning naming it)
 @fails the `NEEDS_MOD` row missing from the built jar (stale build); mod id not `rare_ice`
 @from batches/r1115/p5_c1.qb
+@modset cpp_chain compat
+# r1118 R4 B1 (2026-11-18): the Common + Compat set as a mod set (Common, Compat, Calendar, Serene Seasons, empty config,
+# probes-only kubejs; no Devtools); the retired zmelt probe dropped; the reject skips KubeJS recipe-parse warnings (judge-8)
 bootreject (?i)rareice|RareIceLightMeltMixin
 bootexpect \[melting\] tags: \d+ meltable, \d+ slow, 0 salt
 # Forge fills a fresh config with "Incorrect key melting... corrected" WARN lines (no config/ in this set): not a fault
-bootreject (?i)(ERROR|WARN)(?!.*Incorrect key).*melting|melting.*(Exception|NoClassDefFound)
+bootreject (?i)^(?!.*KubeJS Recipe Event)(?=.*(ERROR|WARN))(?!.*Incorrect key).*melting|melting.*(Exception|NoClassDefFound)
 shell grep -hiE "melting" logs/latest.log | sed -E 's/^.*\]: //' | cut -c1-300 | head -12
 shell ls mods; ls mods | grep -ci rare; grep -iE 'rare.?ice' logs/latest.log | head -3
 > forceload add 0 0 63 31
@@ -648,18 +721,10 @@ sleep 3
 > setblock 35 199 10 minecraft:ice
 > setblock 35 200 10 minecraft:glass
 > setblock 40 199 10 minecraft:lava
-> zmelt w m09_fire_ice3 overworld 13 199 10
-> zmelt w m09_fire_ice4 overworld 6 199 10
-> zmelt w m09_fire_snow3 overworld 10 199 13
-> zmelt w m09_fire_snow4 overworld 10 199 6
-> zmelt w m09_lava_ice4 overworld 44 199 10
-> zmelt w m09_lava_ice5 overworld 35 199 10
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|zmelt\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command)
 > gamerule randomTickSpeed 1000
 sleep 90
 > gamerule randomTickSpeed 3
-> zmelt show
-waitlog \[zmelt\] show done 30
 > execute if block 13 199 10 minecraft:water run say SQ-MELT-09b-fire_ice3_water
 > execute if block 6 199 10 minecraft:ice run say SQ-MELT-09b-fire_ice4_ice
 > execute if block 10 199 13 minecraft:air run say SQ-MELT-09b-fire_snow3_air

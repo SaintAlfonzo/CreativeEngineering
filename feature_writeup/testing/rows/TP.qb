@@ -46,28 +46,6 @@ shell grep -hE "verb=rdetail id=tempad:(tempad|chronon_cell|chronon_battery|chro
 look inputs use forge: tags (ender pearls, quartz, tinted glass) or items; no c: tags
 reject verb=\S+ .*done=0
 
-## SQ-TP-03 | locations and Teleport app after a restart
-@group A
-@commands `/give` a Tempad and a Creative Chronometer; use the Tempad; save a location with the New Location app; restart; open Teleport
-@pass the Teleport app opens; the location is listed after the restart
-@fails player capability save / clone (`TempadPlayerData`)
-@from batches/r1107tp/a2.qb passed
-@reviewed 2026-11-16
-bootexpect Done \(
-> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
-sleep 3
-> ztp locs qa
-waitlog \[ztp\] done 20
-expect \[ztp\] loc tempad:default .* "Home One" minecraft:overworld 0\.50 -60\.00 0\.50
-expect \[ztp\] loc tempad:default .* "Far East" minecraft:overworld 30\.50
-expect \[ztp\] loc tempad:default .* "Hell Spot" minecraft:the_nether 0\.50 120\.00
-> pbot hold qa tempad:tempad
-> cdevtest useair as=qa hand=both
-> ztp menu qa
-waitlog \[ztp\] menu 20
-expect \[ztp\] menu tempad:teleport
-reject verb=\S+ .*done=0
-
 ## SQ-TP-04
 @group A
 @commands Teleport to the saved location in the same dimension and in the Nether; check chronons before and after; use again at once
@@ -129,12 +107,44 @@ expect \[ztp\] door minecraft:overworld .* target minecraft:the_nether
 reject \[ztp\] (error|unknown subcommand)
 reject verb=\S+ .*done=0
 look the bot walked through the Far East door (player x near 30.5); the 40-tick cooldown on a second use is the item cooldown (cd true right after the door); a player use while cd is true is the client half
+
+## SQ-TP-03 | locations and Teleport app after a restart
+@group A
+@commands `/give` a Tempad and a Creative Chronometer; use the Tempad; save a location with the New Location app; restart; open Teleport
+@pass the Teleport app opens; the location is listed after the restart
+@fails player capability save / clone (`TempadPlayerData`)
+@from batches/r1107tp/a2.qb passed
+@reviewed 2026-11-18
+# r1118 R4 A2 (2026-11-18): moved after SQ-TP-04 (whose saves it reads) and restarts in the row
+> save-all flush
+sleep 5
+restart
+bootexpect Done \(
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
+> ztp locs qa
+waitlog \[ztp\] done 20
+expect \[ztp\] loc tempad:default .* "Home One" minecraft:overworld 0\.50 -60\.00 0\.50
+expect \[ztp\] loc tempad:default .* "Far East" minecraft:overworld 30\.50
+expect \[ztp\] loc tempad:default .* "Hell Spot" minecraft:the_nether 0\.50 120\.00
+> pbot hold qa tempad:tempad
+> cdevtest useair as=qa hand=both
+> ztp menu qa
+waitlog \[ztp\] menu 20
+expect \[ztp\] menu tempad:teleport
+reject verb=\S+ .*done=0
 ## SQ-TP-05 | pinned location + default macro, after restart and after a death
 @group A
 @commands pin a location, set it as default macro in Settings, shift-use the Tempad; die and respawn, shift-use again
 @pass the macro opens a door to the pinned location both times
 @fails favorites capability not cloned on respawn
 @from batches/r1107tp/a2.qb
+# r1118 R4 A2 (2026-11-18): the restart in the row (was prose)
+> save-all flush
+sleep 5
+restart
+> pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
+sleep 3
 > ztp pdata qa
 waitlog \[ztp\] pdata 20
 expect pinned_location:\{locationId:\[I;-191329597,-100384576,-1821537137,2007787117\],providerId:"tempad:default"\}
@@ -167,7 +177,10 @@ look perfBot relogs a dead bot (no PlayerEvent.Clone): the death half covers sav
 @pass New Location is missing without the upgrade, present with it; the upgrade item is in the creative tab and has its recipe
 @fails ConfigSyncPacket, `ModApps` new-location gate
 @from batches/r1107tp/a3.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+# r1118 R4 A2 (2026-11-18): the toml edit and the restart in the row; the key is top-level (no [section]), so sed, not qrun.py toml
+edit sed -i -E 's/^(require_location_upgrade[[:space:]]*=[[:space:]]*).*/\1true/' config/tempad-common.toml
+restart
 bootexpect Done \(
 shell grep -E "require_location_upgrade|cost_per_door|time_in_world" config/tempad-common.toml; grep -A2 "^\[tempad\]" config/tempad-common.toml
 > pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
@@ -189,6 +202,9 @@ waitlog verb=makes done=1 30
 expect .*new_location_upgrade
 look upgrade installed by NBT (the crafting of the upgrade into the Tempad is the tempad:upgrade recipe listed here); creative tab is a client check
 reject verb=\S+ .*done=0
+# back to the default for the later rows
+edit sed -i -E 's/^(require_location_upgrade[[:space:]]*=[[:space:]]*).*/\1false/' config/tempad-common.toml
+restart
 
 ## SQ-TP-07 | chronon generator charges a carried Tempad
 @group A

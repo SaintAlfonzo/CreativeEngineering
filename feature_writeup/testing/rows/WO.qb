@@ -7,6 +7,28 @@
 @@date 2026-11-09
 @@jars creativeworldgen
 @@sources feature_writeup/wise_oak.md
+@@prep B: run sed -i -E 's/^(tree_rarity[[:space:]]*=[[:space:]]*).*/\11/' config/mysticaloaktree-common.toml
+@@prep A: boot=2: toml creativeworldgen-common.toml wise_oak sleepDurationSeconds 5
+@@prep A: boot=2: toml creativeworldgen-common.toml wise_oak angerDurationSeconds 5
+@@prep A: boot=2: toml creativeworldgen-common.toml wise_oak angrySleepDurationSeconds 5
+@@prep A: boot=2: toml creativeworldgen-common.toml wise_oak.gifts chancePercent 100
+@@prep A: boot=2: toml creativeworldgen-common.toml wise_oak.gifts trustThreshold 75
+@@prep A: boot=3: toml creativeworldgen-common.toml wise_oak.gifts chancePercent 0
+@@prep A: boot=3: toml creativeworldgen-common.toml wise_oak.gifts trustThreshold 0
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts saplings ["minecraft:oak_sapling", "nope:bad"]
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts saplingCount 3
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts leaves ["minecraft:totem_of_undying"]
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts leavesCount 3
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts fruitSaplings []
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts fruit []
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts chancePercent 100
+@@prep A: boot=4: toml creativeworldgen-common.toml wise_oak.gifts trustThreshold 0
+@@prep A: boot=5: toml creativeworldgen-common.toml wise_oak.gifts saplings []
+@@prep A: boot=5: toml creativeworldgen-common.toml wise_oak.gifts leaves []
+@@prep A: boot=5: toml creativeworldgen-common.toml wise_oak.gifts fruitSaplings []
+@@prep A: boot=5: toml creativeworldgen-common.toml wise_oak.gifts fruit []
+@@prep A: boot=5: toml creativeworldgen-common.toml wise_oak.gifts chancePercent 100
+@@prep A: boot=5: toml creativeworldgen-common.toml wise_oak.gifts trustThreshold 0
 @@text
 @@text Targets Creative Worldgen 20:25 (installed in `mods/`). Reads go through Creative Devtools' `/cdevtest` (`state`, `items`, `entities`) and `/pbot punch` since 2026-11-16; the probe `tools/scratch_query/wo_probe.js` (`/zwo`) is still copied for `zwo skip` (game-time skip) and SQ-WO-27's `zwo drops` lines, which `wo_judge.py gifts` reads, and Creative Devtools' perfBot (`pbot`). Each row has its own tree at the X in its commands; X is unique per row, so rows in one boot do not interfere. G and H stand far from the trees so they do not pick drops up (`pbot use` needs no reach).
 @@text
@@ -237,7 +259,7 @@ look sleep_until = game + 12000 within 25 ticks, same value after time add; fina
 reject \[cdevtest\] .*done=0
 
 ## SQ-WO-10 | angry with no timer sleeps at once; save before the restart
-@group A1 (before the restart)
+@group A1
 @commands `time set noon`; `setblock 400 -60 300 mysticaloaktree:wise_oak[state=angry]`; `wiseoak trust 400 -60 300 G 40`; sleep 3; read `creativeworldgen_sleep_until`; `save-all flush`; restart; `forceload add 270 290 900 320`; `wiseoak trust 400 -60 300 G`; read `creativeworldgen_sleep_until` (ANGRY with no timer counts as expired; WO-09)
 @pass `state=sleeping` at once; the timer has the same value after the restart; trust 40
 @fails NBT save and load injects; `saveAdditional` must run for the chunk
@@ -249,10 +271,21 @@ reject \[cdevtest\] .*done=0
 sleep 3
 > cdevtest state 400 -60 300
 > data get block 400 -60 300 creativeworldgen_sleep_until
+capture T has the following block data: (-?\d+)L?
 > save-all flush
 sleep 5
+# r1118 R4 A2 (2026-11-18): the restart in the row (was prose only)
+restart
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+sleep 3
+> wiseoak trust 400 -60 300 G
+> data get block 400 -60 300 creativeworldgen_sleep_until
+waitlog has the following block data: {T}L?$ 30
 expect verb=state pos=400,-60,300 .*state=sleeping
-expect has the following block data
+expect Trust of G at .*: 40
+count has the following block data >= 2
 reject \[cdevtest\] .*done=0
 
 ## SQ-WO-11 | lightning grows an oak sapling into a Wise Oak
@@ -306,6 +339,13 @@ expect No blocks were filled
 @fails Tired roll and `sleepDurationSeconds`. The talk counter reset is not observable from the server; WO-04 covers it by hand
 @reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
+@boot 2
+# r1118 R4 A1 (2026-11-18): first row of boot 2: forceload and bots again (nothing carries over a boot)
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+> pbot spawn H 276 -60 280 minecraft:overworld survival
+sleep 3
 > setblock 440 -60 300 mysticaloaktree:wise_oak
 repeat 12
 > pbot use G 440 -60 300 up
@@ -331,6 +371,7 @@ reject \[cdevtest\] .*done=0
 @fails Wake requires `!night` in `creativeworldgen$endTimers`
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > time set noon
 > setblock 450 -60 300 mysticaloaktree:wise_oak[state=angry]
 sleep 3
@@ -353,6 +394,7 @@ reject \[cdevtest\] .*done=0
 @fails `onInteract` inject; stock `Relationship.decrease`
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > time set noon
 > setblock 460 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > wiseoak trust 460 -60 300 G 30
@@ -379,6 +421,7 @@ reject \[cdevtest\] .*done=0
 @pass Trust 0, not negative
 @fails Stock trust floor
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > setblock 470 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > wiseoak trust 470 -60 300 G 10
 > pbot use G 470 -60 300 up
@@ -393,6 +436,7 @@ expect Trust of G at .*: 0
 @fails Stock angry check; gift inject must see PASS
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > setblock 480 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > pbot use G 480 -60 300 up
 > wiseoak trust 480 -60 300 G 50
@@ -412,6 +456,7 @@ reject \[cdevtest\] .*done=0
 @fails `stopBlowing` TAIL inject. Probe: `onAttack` from Rhino
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > time set noon
 > tp G 488 -60 300
 > setblock 490 -60 300 mysticaloaktree:wise_oak
@@ -443,6 +488,7 @@ reject \[cdevtest\] .*done=0
 @fails Stock counter restart
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > tp G 498 -60 300
 > setblock 500 -60 300 mysticaloaktree:wise_oak
 > pbot punch G 500 -60 300
@@ -465,6 +511,7 @@ reject \[cdevtest\] .*done=0
 @fails A hit on a sleeper follows the stock blow
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > time set noon
 > tp G 508 -60 300
 > setblock 510 -60 300 mysticaloaktree:wise_oak[state=sleeping]
@@ -485,6 +532,7 @@ reject \[cdevtest\] .*done=0
 @fails Angry sleep must respect the night rule
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > time set midnight
 > setblock 520 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > pbot use G 520 -60 300 up
@@ -508,6 +556,7 @@ reject \[cdevtest\] .*done=0
 @pass Second use `PASS`, trust 55; after the skip trust 60
 @fails Stock 54-tick cooldown
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > time set noon
 > setblock 530 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 530 -60 300 G 50
@@ -529,6 +578,7 @@ expect Trust of G at .*: 60
 @fails Stock cap
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > setblock 540 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 540 -60 300 G 100
 > pbot use G 540 -60 300 up
@@ -545,6 +595,7 @@ reject \[cdevtest\] .*done=0
 @fails `getRelationship(player)` in the gift inject
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+@boot 2
 > setblock 550 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 550 -60 300 G 100
 > wiseoak trust 550 -60 300 H 0
@@ -565,6 +616,7 @@ reject \[cdevtest\] .*done=0
 @fails Threshold is `>=` on the trust after the talk
 @reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
+@boot 2
 > setblock 560 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 560 -60 300 G 65
 > pbot use G 560 -60 300 up
@@ -589,6 +641,7 @@ reject \[cdevtest\] .*done=0
 @pass Every `drops` line is one id with `x1`, `x1`, `x4` or `x16` matching its list (`CWGConfig.WiseOak`); all four lists seen; no river, lemon or ancient-leaves id
 @fails Even draw and counts in `WiseOakGifts.roll`
 @from batches/r1111wo/b2_short_timers.qb
+@boot 2
 # the tree sleeps after 2 gifts (r1110): a fresh tree every 2 rolls, 20 trees = 40 rolls
 > setblock 570 -60 300 minecraft:air
 > setblock 570 -60 300 mysticaloaktree:wise_oak
@@ -761,6 +814,7 @@ look wo_judge.py gifts on this row log: every drop one id, count matches its lis
 @fails `canSleep` and PASS checks in the gift inject
 @reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
+@boot 2
 > setblock 580 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > wiseoak trust 580 -60 300 G 100
 > pbot use G 580 -60 300 up
@@ -796,6 +850,7 @@ reject \[cdevtest\] .*done=0
 @fails `popResourceFromFace` with the `FACING` property
 @reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
+@boot 2
 > setblock 590 -60 300 mysticaloaktree:wise_oak[facing=north]
 > wiseoak trust 590 -60 300 G 100
 > pbot use G 590 -60 300 up
@@ -823,6 +878,7 @@ reject \[cdevtest\] .*done=0
 @fails Stock loot table; timers must stay out of the item
 @reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
+@boot 2
 > setblock 600 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 600 -60 300 G 80
 > loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe{Enchantments:[{id:"minecraft:silk_touch",lvl:1}]}
@@ -844,6 +900,7 @@ reject \[cdevtest\] .*done=0
 @fails `chancePercent` check
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a3.qb passed
+@boot 3
 > forceload add 270 290 900 320
 sleep 8
 > pbot spawn G 280 -60 280 minecraft:overworld survival
@@ -868,6 +925,7 @@ reject \[cdevtest\] .*done=0
 @fails `WiseOakGifts.add`; `defineListAllowEmpty` must keep the empty lists
 @reviewed 2026-11-16
 @from batches/r1111wo/b4_lists.qb
+@boot 4
 > forceload add 270 290 900 320
 sleep 8
 > pbot spawn G 280 -60 280 minecraft:overworld survival
@@ -933,6 +991,7 @@ reject \[cdevtest\] .*done=0
 @fails `categories.isEmpty()`
 @reviewed 2026-11-16
 @from batches/r1115/p9_wo_a5.qb passed
+@boot 5
 > forceload add 270 290 900 320
 sleep 8
 > pbot spawn G 280 -60 280 minecraft:overworld survival
@@ -955,6 +1014,7 @@ reject \[cdevtest\] .*done=0
 @fails Forge config watcher; if the file edit is not picked up the row is a BATCH-FAULT, not a gift bug
 @reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
+@boot 5
 shell echo "inotify instances: $(find /proc/*/fd -lname 'anon_inode:inotify' 2>/dev/null | wc -l) of $(cat /proc/sys/fs/inotify/max_user_instances)"; grep -nE "WatchService|inotify|Too many open files|FileWatcher" logs/debug.log | head -5
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml wise_oak.gifts saplings '["minecraft:oak_sapling"]'
 sleep 15
