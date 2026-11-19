@@ -149,6 +149,51 @@ Design holes the questions close are listed with each item; rulings go in sectio
 | 33 | "mark this as a cousin to the cave and underwater ruin/shipwreck loot tables" | clear | The overhaul designs the corpse kits next to the cave ruin, underwater ruin and shipwreck tables |
 | 34 | "fix the broken checks" | clear | check_all failures of 2026-11-18 (comment_dates, iso_dates_docs, status_index), fixed in this session |
 
+### 3.6 Round 1 design for the rest of `corpses #4` (rulings 31 to 34)
+
+Facts (read from the jars 2026-11-18; Corpse 1.0.17, Curios 5.1.6.4, Cosmetic Armor Reworked v1a, the two compat jars):
+- `CorpseInventoryContainer` (176x245, `corpse:textures/gui/inventory_corpse.png`): armor 4 `LockedSlot`s at
+  x 8 + i x 18, y 18 (helmet leftmost), offhand (152, 18), main rows y 40 / 58 / 76, hotbar y 98, player inventory
+  offset 79; `getInventorySize()` 41. The top row x 80 to 134 is free: exactly 4 slots.
+- The client corpse holds an **empty** Death: slot contents arrive only by menu sync; synced entity data is ID, NAME,
+  SKELETON, MODEL, EQUIPMENT. So the client cannot build slots from the Death; it must know the slot count up front.
+- Curios reach the corpse as unmatched drops (`CuriosEventHandler.playerDrops` adds them before the Corpse mod's
+  `LivingDropsEvent` at LOWEST), so they land in `additionalItems` with no origin. Cosmetic armor arrives the same way,
+  tagged `CosmeticArmorItem` / `CosmeticSlotIndex` / `CosmeticSkinArmor` by Cosmetic Armor x Corpse Compat.
+- Corpse Curios Compat and the cosmetic compat both hook `transferItems` at HEAD (remap = false).
+- Curios' own screen puts curio slots at x -18, y 12 + n x 18 (8 visible, then a scroll), panel from
+  `curios:textures/gui/inventory.png` (u0 v0, 27 wide; slot frame u138 v0 18x18).
+- Live bug: Cosmetic Armor Reworked swaps armor on `RenderPlayerEvent.Pre` by UUID only, so the corpse's DummyPlayer
+  already shows the dead player's **current** cosmetic armor.
+
+Design:
+1. **Curio origin at death** (ruling 32): a `LivingDropsEvent` listener at HIGHEST snapshots the player's curio
+   stacks (slot id, index, stack) before Curios clears them; a second at LOW (after Curios adds the drops, before the
+   Corpse mod at LOWEST) tags each matching drop `creativecompat:curio` {Slot, Index}. Curios API compileOnly
+   (jar already in `creativeCommon/libs`).
+2. **Section slots**: a mixin on `CorpseInventoryContainer.<init>` TAIL adds a fixed block of section slots on both
+   sides (4 cosmetic, `curioCap` curio, default 24, so client and server agree without a buffer change), backed by a
+   view of `additionalItems` indexed by tag (cosmetic by `CosmeticSlotIndex`, curio by our tag, in slot-id then index
+   order). Take-only; a slot is active while it has seen a stack this open (client lays out from the synced tags).
+   Taking strips our tag and the three cosmetic tags so the item stacks normally.
+3. **Additional Items** filtered: tagged stacks are left out of the Additional container's pages and of the
+   auto-open and button checks (mixins on `CorpseAdditionalContainer.setSlots` and the open trigger), so they appear
+   only in their sections. Open point: `setSlots` indexes the list directly, so it needs a filtered index map.
+4. **Transfer Items**: our HEAD hook runs first: each tagged curio goes back to its exact slot when empty (else it is
+   left to Corpse Curios Compat), cosmetic stacks as the cosmetic compat already does.
+5. **Screen** (client mixin on `CorpseInventoryScreen` `m_7286_`): draws the 4 cosmetic slot frames on the top row
+   (frames blitted from the same corpse texture's slot region, no new texture file) and the Curios panel left of the
+   window, one column of up to 12, a second column beside it past 12; tooltips name the curio slot type.
+6. **Cosmetic bug**: a `RenderPlayerEvent.Pre` listener at HIGHEST for the Corpse mod's `DummyPlayer` swaps in the
+   corpse's own cosmetic stacks (synced as a new entity data list, also needed by round 2) and cancels Cosmetic Armor
+   Reworked's swap for it.
+7. Checks: CQ rows for the screen (screenshot look-check before polish), each inventory surviving decay and the 5 min
+   rule (a corpse with only curios or cosmetic items is not empty), Transfer to the exact slot.
+
+Round 2 (later): curios on the DummyPlayer by filling its client curios handler from the synced list; a layer on the
+skeleton calling `ICurioRenderer.render`; cosmetic armor on the skeleton. Elytra Slot uses the `back` curio, covered by
+the same fill.
+
 ## 4. Owner rulings
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |
@@ -183,6 +228,10 @@ Design holes the questions close are listed with each item; rulings go in sectio
 | 28 | offhand stack sizes (Q27) | open | Torches 1 to 6, bread 1 to 3, configurable | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 29 | ancient corpses from the first build (sealed mark, NoGravity) (Q28) | open | No migration: new spawns only; test-world leftovers may despawn or float (nothing deployed) | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 30 | second phase scope (Q29) | open | `corpses #8`, `#9` and the rest of `#4` (sectioned screen, curio slot check, cosmetic and curio rendering) | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 31 | corpse screen layout (item 27 cannot be literal: the corpse screen has no crafting grid) | conflict | Cosmetic armor as 4 slots on the corpse's top row between the real armor and the offhand; curios in a Curios-style column left of the window (Curios' own panel art, drawn at runtime) | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 32 | curio slot origin | open | Recorded at death: each curio stack tagged with its slot type and index, tag removed when it leaves the corpse; Transfer Items returns it to that exact slot | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 33 | order of the rest of `#4` | open | Round 1: curio origin tags, sectioned screen, live cosmetic armor bug fix, screenshot look-check. Round 2: curio and cosmetic rendering on both models | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 34 | Compat clash with a parallel session (uncommitted surface-layer work) | open | Write the `#4` code now, commit only own files; build and install Compat only after the other work is committed | 2026-11-18 | AskUserQuestion 2026-11-18 |
 
 Armor rolls (ruling 15), share of ancient corpses by pieces worn:
 
@@ -279,3 +328,4 @@ Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for 
 - 2026-11-18: built `corpses #1`, `#2`, `#5`, `#6`, `#7`; build notes in 6b.
 - 2026-11-18: second pass notes (3.5, items 25 to 34); rulings 24 to 27; rows `corpses #8`, `#9`; `#3` pinned on `loot/tables #1`.
 - 2026-11-18: second phase questions: ruling 25 offhand made independent; rulings 28 to 30.
+- 2026-11-18: built `corpses #8`, `#9`; `#4` round 1 designed (3.6), rulings 31 to 34.
