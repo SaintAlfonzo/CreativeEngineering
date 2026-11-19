@@ -28,6 +28,9 @@ Lint codes (E = the row will fail or mislead, W = risk; exit 1 when any E):
   W cfgedit    shell edits a config file while the server runs (Forge often misses it; set it before the boot)
   W pipefail   set -o pipefail with grep -q (SIGPIPE reads as not found)
   W ugrep      grep with a {n,m} repeat over 99 (the system grep is ugrep and refuses it)
+  E boot       @boot not a whole number >= 1 (rows files; the driver's boot phases, qdrive.py)
+  W boot       a row of a higher @boot before a row of a lower one in the same section and world group (the driver
+               runs boots in order, so the file reads out of run order)
   E restart    restart with an argument that is not seconds, restart in a client batch, or an edit line with no
                restart after it in the same row (qrun runs edit lines only at a restart)
 """
@@ -167,8 +170,23 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 		except Exception:
 			pass
 	section = None
+	top_boot = {}   # (section, world group) -> highest @boot seen so far (W boot)
 	for r in rows:
 		rid = r["id"]
+		bv = r.get("meta", {}).get("boot")
+		if bv is not None:
+			if not re.fullmatch(r"[1-9]\d*", bv.strip()):
+				F.append(("E", "boot", rid, r["line"], f"@boot wants a whole number >= 1, got {bv!r}"))
+		b = int(bv) if bv and re.fullmatch(r"[1-9]\d*", bv.strip()) else 1
+		try:
+			from qdrive import world_letter
+			gk = (r.get("section"), world_letter(r.get("meta", {}).get("group")))
+		except Exception:  # noqa: BLE001
+			gk = (r.get("section"), "A")
+		if b < top_boot.get(gk, 1):
+			F.append(("W", "boot", rid, r["line"], f"@boot {b} after a row of boot {top_boot[gk]} in this section and "
+												   f"world group: the driver runs it first (boots in order)"))
+		top_boot[gk] = max(top_boot.get(gk, 1), b)
 		if r.get("section") != section:
 			# a rows file (feature_writeup/testing/rows/*.qb) runs one section per driver step on a fresh world: another
 			# section's forceloads do not carry over (r1118 judge-9 / judge-10: the PWG setup-row forceloads were lost)

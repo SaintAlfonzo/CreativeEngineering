@@ -6,7 +6,13 @@ prep_srv.sh (copies and pins the jars) -> the section's @@prep actions -> scratc
 qrun.py run on the step's rows -> scratch_server.sh stop. Section prep (`@@prep` lines, format in qrows.py's docstring) is
 read from the rows file when the step starts, so an edit reaches every later step of a running driver: its KEY=VALUE
 pairs become prep_srv.sh environment (NOSWAP, SKIPSWAP, COPYDEV, PGJAR) and server.properties props, then its toml /
-copy / rm actions edit OUT/srv before the boot (a change under mods/ re-pins: qpin.py pin). sNN_prep.txt logs both. State lives in perf/runs/RUN/drive/state.json (written at every step boundary), so a killed
+copy / rm / run actions edit OUT/srv before the boot (a change under mods/, or any run, re-pins: qpin.py pin). sNN_prep.txt
+logs both. Boot phases (r1118 R4 A1): a step whose rows carry `@boot N` runs boots 1..N in order on the same folder and
+world: boot 1 as above with that boot's rows, then for each later boot: stop, the section's `@@prep boot=N:` lines
+(props into server.properties, toml / copy / rm / run / fresh), boot, its rows, stop. A planned row of boot N brings the
+section's rows of lower boots (same world group) into the step: they build the world it reads. Steps without @boot rows
+run exactly as before (one boot). A resumed multi-boot step continues at the boot of its first row without a result,
+on the folder it left (that boot's prep is not applied twice). State lives in perf/runs/RUN/drive/state.json (written at every step boundary), so a killed
 or crashed driver resumes where it stopped: a step that was running is stopped (its server too) and continues from its
 first row without a result. RUNNER.md is claimed at start (State: running, Phase, ETA, Updated) and released at the end.
 A watchdog process stops the step's server when the driver dies (kill -9 included), so no server is left orphaned.
@@ -16,7 +22,7 @@ A watchdog process stops the step's server when the driver dies (kill -9 include
     qrun.py drive resume RUN       continue after a dead driver, a signal or a reboot
     qrun.py drive status RUN       steps, rows done, ETA
     qrun.py drive stop RUN         ask a running driver to stop after the current row (state stays resumable)
-    qrun.py prep FILE SECTION [A|B] [--out OUT --level LEVEL]   a section's @@prep: print it, or with --out run
+    qrun.py prep FILE SECTION [A|B] [--boot N] [--out OUT --level LEVEL]   a section's @@prep: print it, or with --out run
                                    prep_srv.sh and the actions as a driver step does (no boot)
 Start it detached so the session can end: setsid nohup python3 tools/scratch_query/qrun.py drive start RUN ... &
 Server rows only: client rows (CQ-) are planned but skipped here (scratch plan TX-01 to TX-05 drive clients).
@@ -135,9 +141,10 @@ def build_steps(plan_rows):
 	"""plan --json rows -> steps, one per (phase, file, section, group letter), in plan order; client rows skipped."""
 	sys.path.insert(0, str(HERE))
 	import qrows
-	meta = {}
+	meta, files = {}, {}
 	for p in qrows.all_files():
 		f = qrows.load(p)
+		files[os.path.relpath(p, INST)] = f
 		for sec in f['sections']:
 			for kind, r in sec['items']:
 				if kind == 'row':
@@ -154,22 +161,64 @@ def build_steps(plan_rows):
 		steps.setdefault(key, {'key': key, 'file': x['file'], 'section': x['section'], 'group': g, 'phase': ph, 'rows': [],
 							   'status': 'pending', 'est': 0})['rows'].append(x['id'])
 	out = list(steps.values())
+	for s in out:
+		boot_phases(s, meta, files)
 	import qlint
 	import qrun
 	for s in out:
 		ids = set(s['rows'])
 		s['est'] = int(sum(sum(qlint._est(r)) / 2 for r in qrun.parse(str(INST / s['file']), errors=[])
-						   if r['id'] in ids)) + 240   # boot and stop
+						   if r['id'] in ids)) + 240 * len(set((s.get('boots') or {'': 1}).values()))   # boot and stop
 	return out, skipped
 
 
-def section_prep(file, section, group):
-	"""The step's @@prep (qrows.prep_of), read from the rows file now. A file or section that is gone: no prep."""
+def boot_of(m):
+	"""A row's @boot (1 when absent or not a number; qlint E boot flags the bad ones)."""
+	v = str((m or {}).get('boot') or '1').strip()
+	return int(v) if v.isdigit() and int(v) >= 1 else 1
+
+
+def boot_phases(s, meta, files):
+	"""A1: when a step holds a row with @boot N > 1, add the section's runnable server rows of lower boots (same world
+	group) it lacks, sort the rows by boot (file order within a boot) and record s['boots'] = {row id: N}. A step with
+	only boot-1 rows is left exactly as it was."""
+	boots = {r: boot_of(meta.get((s['file'], r))) for r in s['rows']}
+	if all(b == 1 for b in boots.values()):
+		return
+	sys.path.insert(0, str(HERE))
+	import qrows
+	top = max(boots.values())
+	f = files.get(s['file'])
+	order = []
+	for sec in (f or {}).get('sections', []):
+		if str(sec['key']) != str(s['section']):
+			continue
+		for kind, r in sec['items']:
+			if kind != 'row':
+				continue
+			order.append(r['id'])
+			m = meta.get((s['file'], r['id']), {})
+			if r['id'] in boots or m.get('superseded') or m.get('draft') or m.get('client') == 'true':
+				continue
+			if not qrows.runnable(r) or world_letter(m.get('group')) != s['group']:
+				continue
+			b = boot_of(m)
+			if b < top:
+				boots[r['id']] = b
+				s.setdefault('setup', []).append(r['id'])
+	pos = {r: i for i, r in enumerate(order)}
+	s['rows'] = sorted(boots, key=lambda r: (boots[r], pos.get(r, 10 ** 6)))
+	s['boots'] = {r: boots[r] for r in s['rows']}
+
+
+def section_prep(file, section, group, boot=1):
+	"""The step's @@prep for boot BOOT (qrows.prep_of), read from the rows file now. A file or section that is gone: no
+	prep."""
 	sys.path.insert(0, str(HERE))
 	import qrows
 	path = Path(file) if Path(file).is_absolute() else INST / file
 	sec = qrows.section_of(path, section) if path.exists() else None
-	return qrows.prep_of(sec or {}, group)
+	return qrows.prep_of(sec or {}, group, boot)
 
 
 def prep_srv(out, level, group, prep):
@@ -183,14 +232,52 @@ def prep_srv(out, level, group, prep):
 	return r.returncode, head + r.stdout + r.stderr
 
 
-def prep_actions(out, prep):
-	"""Apply the prep's toml / copy / rm actions to OUT/srv (after prep_srv.sh, before the boot); log lines.
-	RuntimeError on a missing source."""
+def setprop(srv, key, value):
+	"""key=value in srv/server.properties (replaced or appended), as prep_srv.sh's setprop."""
+	p = Path(srv) / 'server.properties'
+	lines = p.read_text().split('\n') if p.exists() else []
+	for j, l in enumerate(lines):
+		if l.startswith(key + '='):
+			lines[j] = '%s=%s' % (key, value)
+			break
+	else:
+		if lines and lines[-1] == '':
+			lines.insert(len(lines) - 1, '%s=%s' % (key, value))
+		else:
+			lines.append('%s=%s' % (key, value))
+	p.write_text('\n'.join(lines))
+
+
+def prep_actions(out, prep, boot=1):
+	"""Apply the prep's toml / copy / rm / run / fresh actions to OUT/srv (after prep_srv.sh, before the boot; for boot
+	N > 1 before that boot, its props first); log lines. RuntimeError on a missing source or a failed run."""
 	import glob
 	import shutil
 	srv = Path(out) / 'srv'
 	log, mods = [], False
+	if boot > 1:
+		for kv in prep['props']:
+			k, _, v = kv.partition('=')
+			setprop(srv, k, v)
+			log.append('prop: %s' % kv)
 	for kind, args in prep['actions']:
+		if kind == 'run':
+			r = subprocess.run(['bash', '-c', args[0]], cwd=srv, capture_output=True, text=True, stdin=subprocess.DEVNULL,
+							   env=dict(os.environ, INST=str(INST), OUT=str(Path(out).resolve()), SRV=str(srv.resolve()),
+										BOOT=str(boot)))
+			log.append('run: %s (exit %d)%s' % (args[0], r.returncode, ''.join('\n  ' + x for x in
+																			  (r.stdout + r.stderr).strip().split('\n')[-20:] if x)))
+			if r.returncode:
+				raise RuntimeError('@@prep run failed (exit %d): %s' % (r.returncode, args[0]))
+			mods = True
+			continue
+		if kind == 'fresh':
+			p = srv / 'server.properties'
+			cur = re.search(r'^level-name=(.*)$', p.read_text(), re.M) if p.exists() else None
+			base = re.sub(r'_b\d+$', '', cur.group(1)) if cur else 'world'
+			setprop(srv, 'level-name', '%s_b%d' % (base, boot))
+			log.append('fresh: level-name %s_b%d' % (base, boot))
+			continue
 		if kind == 'toml':
 			f, section, key, value = args
 			path = srv / (f if '/' in f else 'config/' + f)
@@ -303,6 +390,18 @@ def run_step(d, i, s):
 		if game_jvms():
 			raise RuntimeError('a game JVM is still up; not booting a second one')
 	level = '%s_s%02d' % (d.run, i)
+	if s.get('boots'):
+		return run_boots(d, i, s, out, res, level, todo)
+	prep_boot1(d, i, s, out, level)
+	boot_and_run(d, i, s, out, res, todo)
+	left = first_unrun(res, s['rows'])
+	s['status'] = 'done' if not left else ('stopped' if STOP['flag'] else 'incomplete')
+	s['left'] = left
+	d.save()
+
+
+def prep_boot1(d, i, s, out, level):
+	"""prep_srv.sh with the section's (boot 1) @@prep, then its actions."""
 	d.log('step %d: prep %s group %s' % (i + 1, out, s['group']))
 	try:
 		prep = section_prep(s['file'], s['section'], s['group'])
@@ -317,6 +416,11 @@ def run_step(d, i, s):
 	if prep['actions']:
 		with open(d.dir / ('s%02d_prep.txt' % i), 'a') as f:
 			f.write('\n'.join(prep_actions(out, prep)) + '\n')
+
+
+def boot_and_run(d, i, s, out, res, todo, boot=None):
+	"""Boot OUT, wait for Done (or the failed boot the rows expect), qrun.py run on todo, stop (always)."""
+	tag = '' if boot is None else ' boot %d' % boot
 	# output to a file, never a pipe: the server's fifo feeder inherits the fds and holds a pipe open (r1118)
 	with open(d.dir / ('s%02d_boot.txt' % i), 'a') as bf:
 		subprocess.run(['bash', str(SCRATCH), 'boot', str(out)], stdout=bf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
@@ -324,14 +428,17 @@ def run_step(d, i, s):
 	s['watchdog'] = dog.pid
 	d.save()
 	try:
-		noboot = expects_failed_boot(s['file'], todo)
+		noboot = bool(todo) and expects_failed_boot(s['file'], todo)
 		if noboot:
 			if not wait_failed_boot(out):
 				raise RuntimeError('boot neither failed nor finished in 600 s (%s/srv/logs/latest.log)' % out)
-			d.log('step %d: rows expect a failed boot; running them on the log' % (i + 1))
+			d.log('step %d%s: rows expect a failed boot; running them on the log' % (i + 1, tag))
 		elif not wait_ready(out):
-			raise RuntimeError('server not ready in 600 s (%s/srv/logs/latest.log)' % out)
-		d.log('step %d: %d rows' % (i + 1, len(todo)))
+			raise RuntimeError('server not ready in 600 s (%s/srv/logs/latest.log)%s' % (out, tag))
+		if not todo:
+			d.log('step %d%s: no rows of this boot left; stopping' % (i + 1, tag))
+			return
+		d.log('step %d%s: %d rows' % (i + 1, tag, len(todo)))
 		cmd = [sys.executable, str(HERE / 'qrun.py'), 'run', str(out), str(INST / s['file']), str(res), '--rows',
 			   ','.join(todo)] + (['--no-watch', '--no-probes'] if noboot else [])
 		with open(d.dir / ('s%02d_qrun.txt' % i), 'a') as f:
@@ -340,9 +447,6 @@ def run_step(d, i, s):
 				if STOP['flag']:
 					p.send_signal(signal.SIGINT)
 				time.sleep(2)
-		left = first_unrun(res, s['rows'])
-		s['status'] = 'done' if not left else ('stopped' if STOP['flag'] else 'incomplete')
-		s['left'] = left
 	finally:
 		subprocess.run(['bash', str(SCRATCH), 'stop', str(out)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
 		try:
@@ -351,6 +455,52 @@ def run_step(d, i, s):
 			pass
 		s['ended'] = now()
 		d.save()
+
+
+def run_boots(d, i, s, out, res, level, todo):
+	"""A1: boots 1..N of a multi-boot step on one folder and world (qdrive docstring)."""
+	boots = s['boots']
+	left = set(todo)
+	need = sorted({boots.get(r, 1) for r in left})
+	first, last = need[0], need[-1]
+	srv = Path(out) / 'srv'
+	if first == 1 or not srv.is_dir():
+		if first > 1:
+			raise RuntimeError('resume at boot %d needs %s from the earlier boots; it is gone (rerun the step from boot '
+							   '1: drop its rows from s%02d_res/results.json)' % (first, srv, i))
+		prep_boot1(d, i, s, out, level)
+		s['prepped'] = 1
+		d.save()
+	for b in range(first, last + 1):
+		if STOP['flag']:
+			break
+		if b > first:
+			end = time.time() + 120
+			while game_jvms() and time.time() < end:   # stop can return while the JVM still saves
+				time.sleep(3)
+			if game_jvms():
+				raise RuntimeError('a game JVM is still up 120 s after the boot %d stop; not booting boot %d' % (b - 1, b))
+		if b > 1 and s.get('prepped', 0) < b:
+			try:
+				prep = section_prep(s['file'], s['section'], s['group'], b)
+			except (ValueError, SystemExit) as e:
+				raise RuntimeError('bad @@prep in %s section %s: %s' % (s['file'], s['section'], e))
+			d.log('step %d: before boot %d: %s' % (i + 1, b, ' | '.join(prep['lines']) or 'no @@prep boot=%d: lines' % b))
+			with open(d.dir / ('s%02d_prep.txt' % i), 'a') as f:
+				f.write('\n# before boot %d\n' % b + ''.join('prep: %s\n' % t for t in prep['lines'])
+						+ '\n'.join(prep_actions(out, prep, b)) + '\n')
+			s['prepped'] = b
+		s['boot'] = b
+		d.save()
+		rows_b = [r for r in s['rows'] if boots.get(r, 1) == b and r in left]
+		boot_and_run(d, i, s, out, res, rows_b, b)
+		if rows_b and first_unrun(res, rows_b) and not STOP['flag']:
+			d.log('step %d: boot %d left rows without a result; later boots skipped' % (i + 1, b))
+			break
+	left = first_unrun(res, s['rows'])
+	s['status'] = 'done' if not left else ('stopped' if STOP['flag'] else 'incomplete')
+	s['left'] = left
+	d.save()
 
 
 def drive(d):
@@ -402,26 +552,33 @@ def status(d):
 	print('%s: %s (driver %s); %s' % (d.run, st['status'], 'alive' if alive else 'not running', eta(d)))
 	for i, s in enumerate(st['steps']):
 		left = first_unrun(s['res'], s['rows']) if s.get('res') else s['rows']
-		print('  %2d %-11s %s section %s group %s: %d/%d rows%s' % (
+		print('  %2d %-11s %s section %s group %s: %d/%d rows%s%s' % (
 			i + 1, s['status'], Path(s['file']).name, s['section'], s['group'], len(s['rows']) - len(left),
-			len(s['rows']), ('  ' + s['error']) if s.get('error') else ''))
+			len(s['rows']), ' (boots 1-%d, at %d)' % (max(s['boots'].values()), s.get('boot', 1)) if s.get('boots')
+			else '', ('  ' + s['error']) if s.get('error') else ''))
 	if st.get('skipped'):
 		print('  client or draft rows not driven: %d' % len(st['skipped']))
 
 
 def main_prep(argv):
-	"""qrun.py prep FILE SECTION [A|B] [--out OUT --level LEVEL]"""
+	"""qrun.py prep FILE SECTION [A|B] [--boot N] [--out OUT --level LEVEL]   (--boot N > 1 with --out: only that boot's
+	actions on an existing OUT, as the driver applies them before boot N)"""
 	if len(argv) < 2:
 		sys.exit(main_prep.__doc__)
-	opt = {k: argv[argv.index(k) + 1] for k in ('--out', '--level') if k in argv}
-	pos = [a for j, a in enumerate(argv) if not a.startswith('--') and (j == 0 or argv[j - 1] not in ('--out', '--level'))]
+	keys = ('--out', '--level', '--boot')
+	opt = {k: argv[argv.index(k) + 1] for k in keys if k in argv}
+	pos = [a for j, a in enumerate(argv) if not a.startswith('--') and (j == 0 or argv[j - 1] not in keys)]
 	group = pos[2] if len(pos) > 2 else 'A'
-	prep = section_prep(pos[0], pos[1], group)
+	boot = int(opt.get('--boot', 1))
+	prep = section_prep(pos[0], pos[1], group, boot)
 	print(json.dumps(prep, indent=1))
 	if '--out' not in opt:
 		return 0
 	if game_jvms():
 		sys.exit('a game JVM is up: not preparing over it')
+	if boot > 1:
+		print('\n'.join(prep_actions(opt['--out'], prep, boot)))
+		return 0
 	rc, text = prep_srv(opt['--out'], opt.get('--level', Path(opt['--out']).name), group, prep)
 	print(text[-2000:])
 	if rc:

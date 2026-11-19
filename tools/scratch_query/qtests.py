@@ -382,6 +382,71 @@ def ra2():
 	assert 'ABORT: restart failed' in r.stdout, r.stdout[-400:]
 
 
+@case('R1118-A1 boot phases: @boot rows run on boots 1..N of one folder, @@prep boot=N: props / toml / run / fresh '
+	  'before boot N, lower-boot rows join as setup; C1 run gets $BOOT and $OUT; lint E / W boot')
+def ra1():
+	import qrows
+	import qlint
+	import qrun
+	for f in ROWS.glob('*.qb'):
+		f.unlink()
+	sec = SECTION % ('jara', 'T2') + ('@@prep boot=2: toml x.toml s k 5\n@@prep boot=2: run echo "$BOOT $OUT" > ran.txt\n'
+									  '@@prep boot=2: difficulty=hard\n@@prep boot=2: fresh\n')
+	p = write_rows('ZB.qb', sec + row('SQ-ZB-01', '> say b1\nexpect say b1')
+				   + row('SQ-ZB-02', '> say b2\nexpect say b2\nreject say b1\nshell grep -q "k = 5" config/x.toml\n'
+							'shell test -f ran.txt', '@boot 2\n')
+				   + row('SQ-ZB-03', '> say b1b\nexpect say b1b', '@boot 1\n'))
+	fs = qlint.lint_rows(qrun.parse(str(p)), qrun.parse(str(p)))
+	assert any(x[:3] == ('W', 'boot', 'SQ-ZB-03') for x in fs), fs
+	bad = write_rows('ZBX.qb', SECTION % ('jara', 'T2') + row('SQ-ZBX-01', '> say x', '@boot two\n'))
+	assert any(x[:2] == ('E', 'boot') for x in qlint.lint_rows(qrun.parse(str(bad)), qrun.parse(str(bad)))), 'E boot'
+	bad.unlink()
+	for txt, ok in (('boot=2: NOSWAP=1', False), ('fresh', False), ('boot=3: A: run true', True), ('B: boot=2: fresh', True)):
+		try:
+			qrows.prep_line_boot(txt)
+			assert ok, txt
+		except ValueError:
+			assert not ok, txt
+	sec1 = qrows.section_of(p, 1)
+	assert qrows.prep_of(sec1, 'A') == {'env': {}, 'props': [], 'actions': [], 'lines': []}, 'boot=2 lines stay out of boot 1'
+	assert [k for k, _ in qrows.prep_of(sec1, 'A', 2)['actions']] == ['toml', 'run', 'fresh']
+	prep = TMP / 'fake_prep_b.sh'
+	prep.write_text('#!/usr/bin/env bash\nmkdir -p "$1/srv/mods" "$1/srv/logs" "$1/srv/config"\n'
+					'echo level-name=$2 > "$1/srv/server.properties"\npython3 %s pin "$1"\n' % (HERE / 'qpin.py'))
+	runner = TMP / 'RUNNER_b.md'
+	runner.write_text('# claim\n\n```\nState: idle\nUpdated: x\n\nLast run: none\n```\n')
+	env = dict(os.environ, QDRIVE_PREP=str(prep), QDRIVE_RUNS=str(TMP / 'runs'), QDRIVE_RUNNER=str(runner),
+			   QDRIVE_NO_JVM_CHECK='1')
+	rel = os.path.relpath(p, INST)
+	pj = TMP / 'plan_b.json'
+	pj.write_text(json.dumps([{'id': 'SQ-ZB-02', 'file': rel, 'section': 1, 'state': 'never', 'why': '', 'tier': 'T2',
+							   'client': False}]))
+	r = subprocess.run(QRUN + ['drive', 'start', 'zboot', '--plan-json', str(pj)], capture_output=True, text=True,
+					   env=env, timeout=300)
+	st = json.loads((TMP / 'runs/zboot/drive/state.json').read_text())
+	s0 = st['steps'][0]
+	assert s0['rows'] == ['SQ-ZB-01', 'SQ-ZB-03', 'SQ-ZB-02'] and s0['setup'] == ['SQ-ZB-01', 'SQ-ZB-03'], s0
+	assert s0['status'] == 'done', (s0, r.stdout[-600:], r.stderr[-600:])
+	out = Path(s0['out'])
+	assert (out / 'boots.txt').read_text().count('boot') == 2, 'two boots'
+	assert (out / 'srv/ran.txt').read_text().split() == ['2', str(out.resolve())], (out / 'srv/ran.txt').read_text()
+	props = (out / 'srv/server.properties').read_text()
+	assert 'difficulty=hard' in props and 'level-name=zboot_s00_b2' in props, props
+	res = json.loads((Path(s0['res']) / 'results.json').read_text())
+	assert all(res[k]['result'] == 'PASS' for k in ('SQ-ZB-01', 'SQ-ZB-02', 'SQ-ZB-03')), res
+	# resume after boot 1: the boot-2 prep is applied once, boot 1 is not rerun
+	res.pop('SQ-ZB-02')
+	(Path(s0['res']) / 'results.json').write_text(json.dumps(res))
+	(out / 'srv/ran.txt').unlink()
+	s0['status'], s0['prepped'] = 'running', 2
+	st['status'], st['pid'] = 'running', 999999
+	(TMP / 'runs/zboot/drive/state.json').write_text(json.dumps(st))
+	r = subprocess.run(QRUN + ['drive', 'resume', 'zboot'], capture_output=True, text=True, env=env, timeout=300)
+	st = json.loads((TMP / 'runs/zboot/drive/state.json').read_text())
+	assert st['steps'][0]['status'] == 'done', (st['steps'][0], r.stdout[-500:])
+	assert (out / 'boots.txt').read_text().count('boot') == 3 and not (out / 'srv/ran.txt').exists(), 'one more boot only'
+
+
 sys.path.insert(0, str(HERE.parent / 'client_capture'))
 sys.path.insert(0, str(HERE.parent / 'perf/eval'))
 
