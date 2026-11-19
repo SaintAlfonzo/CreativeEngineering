@@ -194,3 +194,41 @@ look per box: the food line carrotHas=true applepieHas=true, the lunchbox line a
 @from batches/r1113/c4_a.qb
 shell for f in r1113c4a/serverconfig/solcarrot-server.toml r1113c4a/serverconfig/solapplepie-server.toml; do echo "== $f"; grep -n "blacklist" "$f" | cut -c1-300; done
 look both files list solapplepie:lunchbox, lunchbag, golden_lunchbox and creativedelight:netherite_lunchbox; book listing and the lunchbox tooltip are client (CQ)
+
+@@section 2
+@@title CQ-FDI Food Dictionary sorting, 2026-11-19 ([plan_diet_books.md](../plan_diet_books.md) phase 2; TODO `food-tuning #13`, `#14`)
+@@date 2026-11-19
+@@jars solraspberrypie
+@@sources feature_writeup/plan_diet_books.md feature_writeup/food_dictionary.md
+@@text
+@@text Targets `solRaspberryPie-1.0.0.jar` built and installed 2026-11-19 (Carrot mixins gated on solcarrot 1.19.2-1.14.0).
+@@text Written before the owner's look-check (plan_diet_books.md section 3): every row is a draft to refresh after it.
+@@text
+@@table
+## CQ-FDI-01
+@group client
+@commands Open the Food Dictionary uneaten pages with client config `[foodDictionary] uneatenSort` = MOD_NAME (default), then NAME, EASIEST, HARDEST (save, reopen the book each time) (plan 2.2)
+@pass MOD_NAME: grouped by mod id, A-Z by name inside; NAME: A-Z by name; EASIEST: lowest Apple Pie complexity first (simple foods such as apples before meals), ties by lower nutrition; HARDEST: the reverse
+@fails `FoodDictionarySort.uneaten`, `CarrotFoodDataMixin`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-FDI-02
+@group client
+@commands Food Dictionary: page through it; on an eaten-foods page click the sort button (top right) three times, hovering it each time (plan 2.3)
+@pass the button shows only on the eaten-foods pages; states cycle newest unlock (golden carrot), latest eaten (clock), uneaten order (book), back to newest unlock; the tooltip names the state; the list re-sorts in place on the same page; the state is saved in `[foodDictionary] eatenSort` and kept after closing the book
+@fails `CarrotBookScreenMixin` (`solrp$addSortButton`, `solrp$updateSortButton`, eaten page range), `FoodDictionarySort.cycleEaten`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-FDI-03
+@group client
+@commands In a world with foods unlocked before this jar: eat two new foods A then B; re-eat an old food C; check each sort state; relog; die and respawn (plan 2.3)
+@pass newest unlock: B, A first, then the older unlocks in the uneaten order; latest eaten: C first, then B, A, foods Apple Pie no longer remembers last in the uneaten order; uneaten order: the uneatenSort order; the order survives relog and death
+@fails `CarrotFoodListMixin` (NBT `solrp_unlockOrder`), `FoodDictionarySort.eaten`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+## CQ-FDI-04
+@group client
+@commands Food Dictionary: scroll the mouse wheel down and up past both ends (plan 2.3, as 1.6)
+@pass one page per notch with a page turn sound, nothing past either end; the sort button appears and hides with the page
+@fails `CarrotBookScreenMixin.mouseScrolled`
+@draft written before the look-check (plan_diet_books.md 3); refresh after it
