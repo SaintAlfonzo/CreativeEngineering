@@ -85,6 +85,7 @@ kjsexpect removed 1[0-9]{3} recipes
 @fails `PotionByNameRemapMixin` not applied, or the swap file not read (`[swaps]` log line)
 @from batches/r1106cbp/p8_full_new.qb
 @reviewed 2026-11-16
+@superseded old save from 1.2.01, migration shipped in 1.2.02 (owner, 2026-11-18)
 shell ! grep -iE "missing.*creativebrewing:(resistance|magic_resistance)|creativebrewing:magic_resistance.*missing" logs/latest.log
 shell grep -h "\[swaps\]" logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | head
 > forceload add 0 0

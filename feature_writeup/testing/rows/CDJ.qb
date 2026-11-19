@@ -46,6 +46,7 @@
 @pass five ERROR lines `[creativedelight] member <id> is loaded from backported...jar ..., not from the Creative Delight jar` (proves the old code ran); `Done (`; every block placed
 @fails No ERROR line: the displaced jar was not picked up (check `OUT/srv/mods/`); crash: a displaced jar needs a CD class that moved (record, then build the old world without that member)
 @from batches/r1102/b0_oldworld.qb
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 bootexpect Done \(
 bootexpect \[creativedelight\] members:
 count is loaded from backported.*not from the Creative Delight jar >= 0
@@ -163,6 +164,7 @@ look the break is a survival break by the Devtools fake player (BreakEvent, no t
 @pass `[display]` has `takeAll = false` (inverted) and the other eight keys; `displaydelight-common.toml.moved` exists, no `displaydelight-common.toml`; log `[creativedelight] config/displaydelight-common.toml carried into config/creativedelight-common.toml (N values) and renamed to displaydelight-common.toml.moved` once; no `could not carry` / `could not rename` (DDP-13 server half)
 @fails No line: `MemberConfigMove` did not see the file (name) or CD already had the key (Boot 0 ran the move: redo the Boot 1 config copy); `takeAll = true`: the `!display.takeAll` inversion in `CDConfig.MEMBER_FILES`
 @from batches/r1102/b1_main.qb
+@superseded legacy config from 1.1.06, migration shipped in 1.2.00 and already ran on both machines (owner, 2026-11-18)
 shell ls config | grep -iE 'displaydelight|vintagedelight'
 shell test -f config/displaydelight-common.toml.moved && test ! -f config/displaydelight-common.toml
 shell test "$(grep -c 'config/displaydelight-common.toml carried into config/creativedelight-common.toml' logs/latest.log)" = 1
@@ -172,35 +174,52 @@ shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[display\][[:space:]]*$/ &
 shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[display\][[:space:]]*$/ && /^[[:space:]]*takeAll[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
 look [display] in rows/SQ-DDP-06.shell.txt holds takeAll = false and the other eight keys
 
-## SQ-DDP-07 | (Boot 1 half, takeAll = false) bare-hand use of the Boot 0 cookie plate
-@group A (Boots 1 and 2)
-@commands Boot 1 (`takeAll = false`): the bot, sneaking with an empty hand, uses the plate of 3 cookies from SQ-CDJ-11 (or a fresh one); count cookies in its inventory and on the plate. Boot 2 (`takeAll = true`): same on a fresh plate of 3
-@pass Boot 1: 1 cookie taken, 2 stay; Boot 2: all 3 taken, the plate stays (DDP-13, DDP-05)
-@fails sneak half: `pbot sneak` not held during the use (bot shift flag); wrong count: `CdSettings.flag("display.takeAll")` read path in the Display member
+## SQ-DDP-07 | bare-hand use of a cookie plate: plain use takes 1; sneaking takes all with takeAll = true, 1 with takeAll = false
+@group A (no old save)
+@commands Bot, empty hand: plain use on a plate of 3 cookies; sneaking use with `takeAll = true` (the default); then `[display] takeAll = false` saved in place (Creative Common's config watcher reloads it), a fresh plate of 3, sneaking use; count cookies in the inventory and on the plate
+@pass plain use: 1 taken, 2 stay; sneak with takeAll true: the other 2 taken, the plate stays; sneak with takeAll false: 1 taken, 2 stay (DDP-13, DDP-05)
+@fails sneak half: `pbot sneak` not held during the use (bot shift flag); wrong count: `CdSettings.flag("display.takeAll")` read path in the Display member, or the flag cached at load (then the false half needs a restart: R4 `restart`); no reload line: the own config watcher does not cover creativedelight-common.toml
 @from batches/r1102/b1_main.qb
-@reviewed 2026-11-16
-# first the plain bare-hand use, which takes 1 whatever takeAll says (InterationManager.tryTakeItemWithBareHand); then the
-# sneaking bare-hand use with takeAll = false (Boot 1): 1 more taken, 1 stays
+@reviewed 2026-11-18
+# r1118 R3 (2026-11-18): rewritten on a world of its own with its own plate (it used SQ-CDJ-11's Boot 0 plate) and both
+# takeAll values in one boot through Creative Common's own config watcher (it was Boot 1 / Boot 2); the cfgedit lint
+# warning is expected: the watcher, not Forge, reloads the CD file
+> forceload add 3040 3008 3055 3023
+sleep 3
 > kill @e[type=minecraft:item]
-> pbot spawn ddp7 {H1+2} {H2} {H3-2} minecraft:overworld survival
-> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=3] run say DDP07 plate holds 3
-# the starter kit puts a copper pickaxe in slot 0 (main hand): empty the hand first (r1102 judge: "use PASS", nothing taken)
-> item replace entity ddp7 weapon.mainhand with minecraft:air
-> pbot use ddp7 {H1+2} {H2} {H3} up
-> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=2] run say DDP07 two left
-> data get entity ddp7 Inventory
+> setblock 3046 -60 3012 displaydelight:plated_cookie[stacks=3]
+> pbot spawn ddp7 3046.5 -60 3010.5 minecraft:overworld survival
+sleep 3
+> clear ddp7
+> execute if block 3046 -60 3012 displaydelight:plated_cookie[stacks=3] run say DDP07 plate holds 3
+> pbot use ddp7 3046 -60 3012 up
+> execute if block 3046 -60 3012 displaydelight:plated_cookie[stacks=2] run say DDP07 two left
 > pbot sneak ddp7 on
-> pbot use ddp7 {H1+2} {H2} {H3} up
+> pbot use ddp7 3046 -60 3012 up
 > pbot sneak ddp7 off
-> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=1] run say DDP07 sneak took one
+> cdevtest state 3046 -60 3012
 > pbot inv ddp7 get
 expect DDP07 plate holds 3
 expect DDP07 two left
-expect id: "minecraft:cookie"
+expect verb=pbot.inv bot=ddp7 slot=\d+ item=minecraft:cookie\*3$
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativedelight-common.toml display takeAll false
+waitlog \[creativecommon\] .*creativedelight-common\.toml reloaded 20
+> clear ddp7
+> setblock 3046 -60 3012 displaydelight:plated_cookie[stacks=3]
+> pbot sneak ddp7 on
+> pbot use ddp7 3046 -60 3012 up
+> pbot sneak ddp7 off
+> execute if block 3046 -60 3012 displaydelight:plated_cookie[stacks=2] run say DDP07 sneak took one
+> pbot inv ddp7 get
 expect DDP07 sneak took one
-expect verb=pbot.inv bot=ddp7 slot=\d+ item=minecraft:cookie\*2$
+expect verb=pbot.inv bot=ddp7 slot=\d+ item=minecraft:cookie\*1$
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativedelight-common.toml display takeAll true
+# restore only (no check after it): a sleep, not a second waitlog on the same reload line
+sleep 3
+> pbot remove ddp7
+> setblock 3046 -60 3012 minecraft:air
 reject \[cdevtest\] verb=pbot\.\S+ .*error=
-look Boot 2 (takeAll = true) sneak half: CQ-DDP-01 or a rerun of this row in Boot 2 expecting the plate gone to the pbot inv (3 cookies)
+look the cdevtest state after the takeAll-true sneak: the plate stays (an empty plate block or plate state), not air
 
 
 ## SQ-VTD8-01 | Vintage config carried; remainderBuffer = false drops the bottles on the jar

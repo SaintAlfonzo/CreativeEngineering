@@ -67,6 +67,7 @@ reject verb=\S+ .*done=0
 @pass boot log has no `missing` registry warning or `Identifier .* is missing` for `creativeengineering:carrot_juice` / `egg_solution` or their `flowing_` ids; tank reads `FluidName: "creativedelight:carrot_juice"`, Amount 4000; basin keeps 500 mB of `creativedelight:egg_solution`; the jar still holds `creativeengineering:shulker_soup` (soft fluid ids unchanged) with Count 4
 @fails fluid gone or `minecraft:empty`: `food_fluids.json` not read (`[swaps]` count) or not in the jar; a soft fluid emptied: the soft fluid JSON path in the CD jar (`data/creativeengineering/moonlight/soft_fluids/`)
 @from batches/r1106cbp/p8_full_new.qb passed
+@superseded old save from 1.2.01, migration shipped in 1.2.02 (owner, 2026-11-18)
 shell ! grep -E "Identifier .* is missing|[Mm]issing.*creativeengineering:(carrot_juice|egg_solution|flowing_)" logs/latest.log
 > data get block 0 -61 0 TankContent
 > data get block 0 -61 3 TankContent

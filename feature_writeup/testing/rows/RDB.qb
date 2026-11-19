@@ -111,16 +111,17 @@ reject \[cdevtest\] verb=\S+ done=0
 shell echo "missing-registry lines naming rusticdelight: $(grep -ciE '(missing|unidentified|unknown).*rusticdelight' logs/latest.log)"; grep -iE "(missing|unidentified|unknown).*rusticdelight" logs/latest.log | cut -c1-240 | head -8
 
 ## SQ-RDB-06 | old rustic_upstream folder beside mods/ is ignored
-@group A
-@commands Boot again with an old `rustic_upstream/` folder (the 1.7.0 jar) left beside `mods/`
+@group A (no old save)
+@commands Boot with the old `rustic_upstream/` folder (the 1.7.0 jar) beside `mods/`: the scratch setup links the instance's folder in by default (`scratch_server.sh` links every `*_upstream`); check it is there
 @pass Same as SQ-RDB-01: no duplicate pack, no error, folder ignored
-@fails A pack named `rustic_upstream_assets` in the pack list: an old jar still nested
+@fails A pack named `rustic_upstream_assets` in the pack list: an old jar still nested. The folder check fails: the scratch setup no longer links `*_upstream` folders (then add `@@prep copy rustic_upstream rustic_upstream`)
 @from batches/r1111/a2.qb
+# r1118 R3 (2026-11-18): rewritten for any world (no second boot): the default scratch setup already has the folder
 bootexpect Done \(
 bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:
 bootreject rustic_upstream_assets
 # grep -c exits 1 on 0 matches, the good outcome here (judge-11, 2026-11-18)
-shell ls -ld rustic_upstream; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")"; grep -ciE 'rustic_upstream' logs/latest.log; true
+shell test -e rustic_upstream/rusticdelight-forge-1.20.1-1.7.0.jar || { echo "rustic_upstream missing: the row did not test the folder"; exit 1; }; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")"
 
 ## CQ-RDB-01
 @group client

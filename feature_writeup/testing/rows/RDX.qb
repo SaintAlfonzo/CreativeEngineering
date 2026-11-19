@@ -215,6 +215,7 @@ reject \[cdevtest\] .*(done=0|error=)
 @fails remap behavior (no conversion wanted)
 @from batches/r1115/p9_o2.qb
 @reviewed 2026-11-16
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 > data get block 200 -60 205 Items
 > pbot spawn rx13 200 -60 202 minecraft:overworld survival
 sleep 4

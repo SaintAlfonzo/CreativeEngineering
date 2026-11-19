@@ -188,6 +188,47 @@ converting its rows -> R3 upgrade section (needs A1 + C1) -> R7.
 |---|---|---|---|---|---|
 | 1 | "drop old-save tests unless a good reason exists" | open | one 1.2.02 upgrade section (section 4 keep rows); item-id rows rewritten as fresh-world rows; the rest dropped with `@superseded` | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 2 | driver option order (section 5) | open | restart verb (A2) -> `@boot N` + `@@prep run` (A1 + C1) -> `@@modset` manifests (B1) | 2026-11-18 | AskUserQuestion 2026-11-18 |
-| 3 | release jars from `deploy/latest` as an accepted pin source for the upgrade section | open | pending | | |
-| 4 | trailing-space check lines | open | pending | | |
+| 3 | release jars from `deploy/latest` as an accepted pin source for the upgrade section | open | accept: a modset naming `deploy/latest` as its jar source may pin jars without a `mod_sides.md` row | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 4 | trailing-space check lines | open | strip the trailing spaces in the .qb files; `trail-space` lint stays an error | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 5 | SB-01 and FGD-00 counts: confirm the new values are intended before changing | clear | agent checks the code first | 2026-11-18 | this plan |
+
+## 8. Phase notes
+
+Row-text phases, 2026-11-18 (agent, row-text executor of the r1118 plans). Row edits only; no tool, skill or game file
+changed; nothing booted. Every changed row carries an `r1118 R<n> (2026-11-18)` comment line.
+
+- **R1 done** except SQ-GAP-04 (waits on bugfix B8) and SQ-RSP-09 (waits on B6), both left. AC-02 40 armor and the
+  `Armor Toughness ... 18.0` text (and CQ-side SQ-AC-04, the same 36 -> 40); the SALT.qb run-log copy of AC-02 deleted.
+  SB-01 15 -> 17: intended, `spawn_boxes.json` gained `end_tower` (mobs/pillagers #2) and `allay_temples` (mobs/spawns #5)
+  in the 2026-11-06 split. FGD-00 8 -> 9: intended, the 9th rule is Miner's Delight `cave_carrots` (cave mode, in
+  `mushroom_spawns.json` since 2026-10-24); bootexpects on `9 mushroom modifiers` and `9 mushroom tags` added. SLK-03 / -04
+  rewritten for Rock Salt (hand, waxed, dispenser) with the G6-10 negatives (layer and salt dust no longer refill); they
+  overlap SQ-SALT2-11, which already tests the same refill. CBB-07 51; IDS-02 old names `cetime` / `celocate`;
+  CDJ4-03 and CDFW-11 superseded.
+- **R2 done** except SQ-PTH-07 (multi-boot, R4). MELT-01 to -05, -07 and SALT2-06b self-contained (P3-00 setup and the
+  P3-01 build slice per row; bots `m3` / `m3n` spawned when absent; the retired zmelt probe dropped; MELT-04 watches blue0
+  every tick with `cdevtest watch` and checks its tier sequence in a shell step). MELT-P1 / -P1b: snow layers on a
+  snow_block course, both boxes cleared first, the cleanup fill split under 32768 blocks. MELT-08b got a `@draft` (no
+  steps; `qrows.py check` failed on it). FGD-13: the plan's premise was wrong, SQ-FGD-12 had no captures either (the
+  r1102 setup rows FGD-12a to -12e were not migrated): both rows now locate the five squares and pregenerate them.
+  Left in MELT.qb: MELT-06, -09, -09b (multi-boot, R4) and MELT-08 still send the retired `zmelt` commands.
+- **R6 done** for CS-04 (four 9x9 open fields measured as one box, n=320, own setup, shell prints the ratio) and GFB-03
+  (normal world: a generated floating hit from `cdevtest floating`, held, then falls after a neighbor update). Left:
+  SQ-CMV-04 for an R4 B1 Common-only modset (in the full pack the pack drops every advancement, so the grant can not
+  pass); **SQ-TP-04 for the Tempad owner**: `/ztp open` calls `openTimedoor` directly and leaves the item cooldown at 0
+  (`cd false percent 0`); r1107 saw the cooldown through the item use / macro path. Question for the owner: should an API
+  open set the cooldown? If not, the `cd true` check moves to a macro or item-use row (`/ztp macro` needs a pin).
+- **R3 drops and rewrites done; upgrade section and keep rows not started** (they need A1 + C1). `@superseded` with the
+  section 4 reason on CDNS-05, -06, CEN-02, CMG-02, CFR-03, -04, CMP-02, CDJ4-02, CBJ4-01 to -07, CAL-09, CDJ-11,
+  CDFL-03, CS2-01, -04, -05, PSU-08, CBP-06, CCO-14, LBS-05, GLD-01, ENM-02, CNG-03, RD-03, DF-07, CBJ-04, CDJ-07,
+  RDX-13, DDP-06, MDP-15 (versions from `deploy/history/*.json`: Common, Equipment and Magic jars first shipped in 1.2.02,
+  Creative Brewing in 1.1.06, Labels 1.0.1 in 1.2.00). CBJ4 behavior is covered on current jars by SMK-37 to -40, CBA-02,
+  -07, -08, CBO-05, -13, -15, EFX-01, -08, -09, so nothing was re-homed. Fresh-world rewrites: EX-01, OB-11, CDNS-02,
+  NSM-01, -05, -10, GLD-16, RDB-06, CDJ-05, DDP-01, DDP-07, and new SQ-NSM-11 (the chest half of keep row NSM-02).
+  RDB-06 relies on `scratch_server.sh` linking every `*_upstream` folder, so its folder is there by default; SQ-RDB-01
+  ("no rustic_upstream folder") therefore needs its own `@@prep rm rustic_upstream` section. Not superseded: SQ-CWG-08
+  (only its old-world half drops; the rest needs boot 1's captures, so the split goes with R4), and the CDNS step2
+  variants (they become the one upgrade-section row). Prefix `UPG-` added to test_prefix_index.md for the upgrade section.
+- **Tool findings for R5** (not changed): `qlint` `waitlog2` still warns that a repeated waitlog returns at once, but
+  qrun waits for a new line since judge-14; `cdevtest watch` lines carry no position, so two watches at once can not be
+  told apart (MELT-04 watches one block for that reason); SQ-CWG-08 still sends `ceperf` / `ceplace`.

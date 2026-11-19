@@ -2294,6 +2294,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass they read `vinegar_jar`, `apple_sauce_jar`, `pepper_jam_jar`, `fruitsdelight:sweetberry_jelly`
 @fails item merge inventory swap
 @from batches/r1102b/s5_A.qb
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 > pbot spawn s5mg {S5H1+18} {S5H2} {S5H3+54} minecraft:overworld survival
 sleep 1
 > give s5mg vintagedelight:vinegar_bottle 2

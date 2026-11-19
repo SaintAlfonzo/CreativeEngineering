@@ -33,6 +33,7 @@ look the moved common mixins apply from creativedelight.mixins.json, none also f
 @pass Merge line names the six sections and `perf`; CD file has `emptyCanChance = 0.5` and `[perf]` with only `troughMissCooldownTicks = 300`; CE file has none of them after the boot; second boot no WARN
 @fails `mergeSections` ran after config load, or Forge kept the other `[perf]` keys
 @from batches/r1101/cs4_boot3.qb
+@superseded legacy config from 1.1.06, migration shipped in 1.2.00 and already ran on both machines (owner, 2026-11-18)
 bootexpect \[swaps\] config sections .*canning.* merged from creativeengineering-common.toml into creativedelight-common.toml
 shell grep -E "\[swaps\] config sections" logs/latest.log | cut -c60-300; grep -nE "^\s*\[|emptyCanChance|troughMissCooldownTicks" config/creativedelight-common.toml; echo "CD [perf] keys:"; awk '/^\[perf\]/{f=1;next} /^\[/{f=0} f && /=/' config/creativedelight-common.toml; echo CE:; grep -nE "^\[(crop_growth|dandelion_maturing|crop_drops|stem_fruit|canning|cooking)\]" config/creativeengineering-common.toml || echo "CE has none of the six"; grep -n "troughMissCooldownTicks" config/creativeengineering-common.toml || echo "CE has no troughMissCooldownTicks"
 look merge names the six sections and perf; CD file emptyCanChance = 0.5, [perf] only troughMissCooldownTicks = 300; CE lost them

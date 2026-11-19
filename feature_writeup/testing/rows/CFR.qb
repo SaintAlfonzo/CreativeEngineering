@@ -43,6 +43,7 @@ look own boot with the Commands cell's two files written before it; the second b
 @pass `[swaps] config sections [campfire] carried over from creativecompat-common.toml to creativedelight-common.toml`, then the CD carve sections merged from `creativeengineering-common.toml` (if present); the CD file has `[members]`, `[campfire]` (100) and every other section after Forge's correction
 @fails `carrySections` wrote the file first and the second carry skipped: the merge branch must run
 @from batches/r1113/c2_l2.qb
+@superseded legacy config from 1.2.01, migration shipped in 1.2.02 and already ran on both machines (owner, 2026-11-18)
 bootexpect \[swaps\] config sections \[campfire\] carried over from creativecompat-common.toml to creativedelight-common.toml
 bootexpect \[swaps\] config sections \[crop_growth, dandelion_maturing, crop_drops, stem_fruit, canning, cooking, perf\] merged from creativeengineering-common.toml into creativedelight-common.toml
 bootreject could not (carry|merge) config sections
@@ -55,6 +56,7 @@ look the carry line comes before the merge line in the log; the CD file has [mem
 @pass `[swaps] config sections [campfire] merged from creativeengineering-common.toml into creativedelight-common.toml`; CD file `rainOutTicks = 120`
 @fails The fallback `mergeSections(OLD_FILE ...)` in `CreativeDelight` ran before the Compat one, or `campfireCarried` was true
 @from batches/r1113/c2_l1.qb
+@superseded legacy config from a pack that skipped 1.2.00: a skip path no machine took (both took every release from 1.2.00 on) (owner, 2026-11-18)
 bootexpect \[swaps\] config sections \[campfire\] merged from creativeengineering-common.toml into creativedelight-common.toml
 bootreject \[campfire\] carried over from creativecompat-common.toml
 shell grep -nE "^\[campfire\]|rainOutTicks *=" config/creativedelight-common.toml

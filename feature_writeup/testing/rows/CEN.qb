@@ -38,6 +38,7 @@ look jar list has creativecommon-1.1.0 and creativeengineering-2.0.0 (row said 1
 @pass Log `[swaps] config sections ... carried over` into `creativecommon-common.toml`; the edited `[toasts]`/`[jei]` value is there; `creativeengineering-swaps.toml` renamed to `creativecommon-swaps.toml`; after the restart the CE file holds only `[shrapnel]` (count 12), `[surface]` (format PERCENT) and `[vein_undo]`
 @fails `CommonConfig.SECTIONS` incomplete; carry ran after Forge read the file
 @from batches/r1113/c2_l1.qb
+@superseded legacy config from 1.2.01, migration shipped in 1.2.02 and already ran on both machines (owner, 2026-11-18)
 bootexpect \[swaps\] config sections \[changelog, damage_tags, perf, wandering_trader, advancements, mod_names\] carried over from creativeengineering-common.toml to creativecommon-common.toml
 bootexpect \[swaps\] config creativeengineering-swaps.toml carried over to creativecommon-swaps.toml
 bootexpect \[swaps\] config sections \[leaf_piles, moss, vine_shearing, monster_box, trash_slot\] carried over from creativeengineering-common.toml to creativecompat-common.toml

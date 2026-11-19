@@ -1050,6 +1050,7 @@ look the milk bucket + sugar + 2 cocoa inputs cook quarkdelight:cloud_latte (not
 @fails `UpstreamJars.verifyOrFail` list
 @jars creativedelight creativeworldgen
 @from batches/r1102/b4_wrongdonor.qb
+@superseded old donor layout from 1.1.06 (the 1.1.2 Miner's jar), the nested port shipped in 1.2.00 (owner, 2026-11-18)
 bootexpect Miner's Delight \(Creative Delight\) reads its textures, models and recipes from the original Miner's Delight jar, which must be in the folder 'miners_upstream' of the game directory \(not in mods/\):
 bootexpect missing: .*miners_upstream/miners_delight-1\.19\.2-1\.1\.2\.jar
 bootexpect get it from https://mediafilez\.forgecdn\.net/files/4738/272/miners_delight-1\.19\.2-1\.1\.2\.jar \(CurseForge
@@ -2203,44 +2204,73 @@ look other [kttest] FAILs (KT-01 to KT-16) belong to SQ-KT-01 / -25: list them i
 @fails Refmap or target name; check the overlay was reobfed
 @jars creativecommon creativedelight
 @draft needs its own boot with the Oceanic repack and the B7 overlay jar: a separate boot batch
-## SQ-CDJ-05 | Boot 0 blocks still there with their states and contents
-@group A, the Boot 0 world of SQ-CDJ5
-@commands (RERUN, rewritten 2026-11-02 for the nested jar: was "four ports and three repacks") Boot 1 of the SQ-CDJ5 plan on the world Boot 0 built with the five displaced standalone jars (Display plates, plated hamburger, beef stew, cake slice, a filled Pickling Jar, Cheese Wheel, Veggies and Vintage crops, Fungi colonies, a Copper Pot with contents, a Sticky Basket); `python3 -I tools/scratch_query/region_ids.py OUT/srv/<level>/region '(displaydelight|veggiesdelight|vintagedelight|fungidelight|miners_delight):[a-z_]+'` before and after Boot 1
-@pass All 20 member ids load once (`[creativedelight] members:` with 20 entries, no `NOT loaded`, no `is loaded from ... not from the Creative Delight jar`); no missing-registry or `Failed to set block association` warning; Vintage, Fungi and Miner's mixin configs applied (no mixin error); every placed block from Boot 0 still there with its state (region scan counts equal; the jar still holds its items); suites VD-, VTD-, FGD-, MND- unchanged (the reruns listed in SQ-CDJ5)
-@fails A block gone: compare the member's blockstate names with the displaced jar in `development/creativeDelight/jar_archive/displaced/`; a member missing: `bundle_members` / `CDConfig.MEMBERS`; a standalone jar line: `prep_srv.sh` nested-jar drop list
+## SQ-CDJ-05 | nested member blocks keep their states and block entities through a save and chunk reload
+@group A (no old save)
+@commands Place Display plates (cookie plate of 3, hamburger, beef stew, cake slice), a Pickling Jar, a Cheese Wheel, a Copper Pot, a Sticky Basket, a campfire, a Veggies crop and a Fungi colony; `save-all flush`; unload and reload the chunks; read every block and the three block entities back
+@pass All 20 member ids load once (no missing-registry or `Failed to set block association` warning, no mixin error from Vintage, Fungi, Miner's); every placed block reads back with its state after the reload (cookie plate 3 stacks, cheese wheel 0 bites, crop age 3); the jar, pot and basket keep a block entity. Blocks of a world built on the displaced standalone jars are the 1.2.02 upgrade section's (not needed: that move shipped in 1.2.00)
+@fails A block missing or a state lost: the member's blockstate names against `development/creativeDelight/jar_archive/displaced/`; no block entity: the member's BE type registration
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
+@reviewed 2026-11-18
 bootreject Failed to set block association
 bootreject (?i)(missing registry|unidentified mapping|registry .* missing)
 bootreject (?i)mixin apply failed.*(vintagedelight|fungidelight|minersdelight|displaydelight|veggiesdelight)
-> zcount {H1} {H2} {H3} {H1+10} {H2+1} {H3+6}
-waitlog \[zcount\] entities 30
-expect \[zcount\] blocks .*displaydelight:plated_cookie=1
-expect \[zcount\] blocks .*displaydelight:plated_hamburger=1
-expect \[zcount\] blocks .*displaydelight:beef_stew=1
-expect \[zcount\] blocks .*displaydelight:small_plated_cake_slice=1
-expect \[zcount\] blocks .*vintagedelight:fermenting_jar=1
-expect \[zcount\] blocks .*vintagedelight:cheese_wheel=1
-expect \[zcount\] blocks .*veggiesdelight:[a-z_]+=
-expect \[zcount\] blocks .*fungidelight:[a-z_]*colony=
-expect \[zcount\] blocks .*miners_delight:copper_pot=1
-expect \[zcount\] blocks .*miners_delight:sticky_basket=1
-expect \[zcount\] blocks .*minecraft:campfire=1
-> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=3] run say CDJ05 cookie plate holds 3
-> execute if block {H1+4} {H2} {H3+3} vintagedelight:cheese_wheel[bites=0] run say CDJ05 cheese wheel bites 0
-expect CDJ05 cookie plate holds 3
-expect CDJ05 cheese wheel bites 0
-> data get block {H1+2} {H2} {H3+3}
-> data get block {H1+2} {H2+1} {H3+6}
-> data get block {H1+4} {H2} {H3+6}
-expect has the following block data: .*inventory: \{.*Items: \[\{
-expect has the following block data: .*Inventory: \{.*Items: \[\{
+# r1118 R3 (2026-11-18): rewritten on a world of its own (it ran on the SQ-CDJ5 Boot 0 world built with the displaced
+# standalone jars, a migration shipped in 1.2.00): every nested member block placed, saved, its chunk reloaded and read back
+> forceload add 3008 3008 3039 3023
+sleep 3
+> fill 3008 -60 3008 3039 -56 3023 minecraft:air
+> setblock 3010 -60 3010 displaydelight:plated_cookie[stacks=3]
+> setblock 3012 -60 3010 displaydelight:plated_hamburger
+> setblock 3014 -60 3010 displaydelight:beef_stew
+> setblock 3016 -60 3010 displaydelight:small_plated_cake_slice
+> setblock 3018 -60 3010 vintagedelight:fermenting_jar
+> setblock 3020 -60 3010 vintagedelight:cheese_wheel[bites=0]
+> setblock 3022 -60 3010 miners_delight:copper_pot
+> setblock 3024 -60 3010 miners_delight:sticky_basket
+> setblock 3026 -60 3010 minecraft:campfire
+> setblock 3030 -61 3014 minecraft:farmland[moisture=7]
+> setblock 3030 -60 3014 veggiesdelight:zucchini_crop[age=3]
+> setblock 3032 -61 3014 minecraft:mycelium
+> setblock 3032 -60 3014 fungidelight:inky_cap_mushroom_colony
+sleep 2
 > save-all flush
 waitlog Saved the game 120
-# region scan after against the "before" file README Boot 1 writes; differences are judged by hand (the jar keeps
-# fermenting and the pot keeps cooking between boots, so item ids in their inventories may change legitimately)
-shell python3 -I $INST/tools/scratch_query/region_ids.py cdj5/region '(displaydelight|veggiesdelight|vintagedelight|fungidelight|miners_delight):[a-z_]+' > ../cdj05_after.txt; diff ../cdj05_before.txt ../cdj05_after.txt; true
-look the jar, pot and basket block data lines still hold the Boot 0 contents (or their cooked results); the region diff in rows/SQ-CDJ-05.shell.txt shows no block id lost (only jar / pot item ids may change); crops and colony ids as Boot 0 recorded them
+> forceload remove 3008 3008 3039 3023
+sleep 10
+> forceload add 3008 3008 3039 3023
+sleep 3
+> cdevtest state 3010 -60 3010
+> cdevtest state 3012 -60 3010
+> cdevtest state 3014 -60 3010
+> cdevtest state 3016 -60 3010
+> cdevtest state 3018 -60 3010
+> cdevtest state 3020 -60 3010
+> cdevtest state 3022 -60 3010
+> cdevtest state 3024 -60 3010
+> cdevtest state 3026 -60 3010
+> cdevtest state 3030 -60 3014
+> cdevtest state 3032 -60 3014
+> cdevtest be 3018 -60 3010
+> cdevtest be 3022 -60 3010
+> cdevtest be 3024 -60 3010
+expect verb=state pos=3010,-60,3010 state="?displaydelight:plated_cookie\[[^]]*stacks=3\b
+expect verb=state pos=3012,-60,3010 state="?displaydelight:plated_hamburger\b
+expect verb=state pos=3014,-60,3010 state="?displaydelight:beef_stew\b
+expect verb=state pos=3016,-60,3010 state="?displaydelight:small_plated_cake_slice\b
+expect verb=state pos=3018,-60,3010 state="?vintagedelight:fermenting_jar\b
+expect verb=state pos=3020,-60,3010 state="?vintagedelight:cheese_wheel\[[^]]*bites=0\b
+expect verb=state pos=3022,-60,3010 state="?miners_delight:copper_pot\b
+expect verb=state pos=3024,-60,3010 state="?miners_delight:sticky_basket\b
+expect verb=state pos=3026,-60,3010 state="?minecraft:campfire\b
+expect verb=state pos=3030,-60,3014 state="?veggiesdelight:zucchini_crop\[age=3
+expect verb=state pos=3032,-60,3014 state="?fungidelight:inky_cap_mushroom_colony\b
+reject \[cdevtest\] verb=\S+ .*done=0
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
+> fill 3008 -61 3008 3039 -61 3023 minecraft:grass_block
+> fill 3008 -60 3008 3039 -56 3023 minecraft:air
+> forceload remove 3008 3008 3039 3023
+look the three `verb=be` lines (fermenting jar, copper pot, sticky basket) show their block entities after the reload
 
 ## SQ-CDJ-06
 @group A
@@ -2256,6 +2286,7 @@ look the jar, pot and basket block data lines still hold the Boot 0 contents (or
 @fails Mixin missing: the manifest lost `MixinConfigs` (`mixin_configs` in the member's `gradle.properties`); a dependent refuses the version: re-run the range check in creative_delight.md 21.1
 @jars creativecommon creativedelight
 @from batches/r1102b/s1_A.qb
+@superseded old save from 1.1.06, migration shipped in 1.2.00 (owner, 2026-11-18)
 bootreject (?i)farmersdelight.*(missing.*dependenc|requires farmersdelight|is not installed)
 bootreject (?i)farmersdelight\.mixins\.json.*(error|failed)
 shell grep -m1 -o "Found valid mod file repackedFarmers[^ ]*" logs/debug.log; echo "FD mixins applied: $(grep -c 'from farmersdelight.mixins.json' logs/debug.log)"; ls mods | grep -i "^FarmersDelight" ; grep -c "farmersdelight-common.toml" logs/debug.log; true
@@ -2360,6 +2391,7 @@ look the three namespaces resolve (the item and recipe lines above)
 @fails Donor path or nested resource lookup broke: compare with the standalone `-06` jar
 @jars creativebrewing creativecommon
 @from batches/r1102b/s1_A.qb
+@superseded old save from 1.1.05, migration shipped in 1.1.06 (owner, 2026-11-18)
 bootreject (?i)(Unknown block|missing registry|unidentified mapping).*(vinery|foundation|brewinandchewin)
 bootreject (?i)vinery_upstream.*(missing|not found)
 > data get block {H1-26} {H2} {H3}
@@ -3424,6 +3456,7 @@ look the stop blames only Rustic Delight (Creative Delight); the message wording
 @pass Every block keeps its state (pancakes show 3), no missing-registry warning for `rusticdelight:`
 @fails A missing id: compare `RDBlocks` with the 1.3.0 blockstates
 @from batches/r1102b/s2_A.qb
+@superseded old save from 1.1.02 (Rustic 1.3.0), migration shipped in 1.1.03 (owner, 2026-11-18)
 bootexpect Done \(
 bootreject member rusticdelight is loaded from|member delightful is loaded from
 bootreject (?i)(missing registry|unidentified mapping).*rusticdelight
@@ -4428,6 +4461,7 @@ look cooked_nuts = Roasted Acorn + Roasted Peanut; hot_spices = blaze powder + t
 @pass loads, blocks intact
 @fails the repack dropped an upstream file (compare `jar_diff.py` against the 3.4.1 jar)
 @from batches/r1102b/s2_A.qb
+@superseded old save from 1.1.02 (Delightful 3.4.1), migration shipped in 1.1.03 (owner, 2026-11-18)
 bootreject (?i)(missing registry|unidentified mapping).*delightful
 > zcount {H1+2} {H2} {H3+3} {H1+14} {H2} {H3+3}
 waitlog \[zcount\] entities 30
@@ -5134,12 +5168,13 @@ look wanderer COMMON has corn, RARE the popcorn box (a few of the 5 rolls show t
 @@text
 @@table
 ## SQ-DDP-01 | Display member boots from the CD jar, no own config file
-@group A
-@commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) boot, grep `latest.log`
+@group A (no old save)
+@commands Boot on a world of its own (not the SQ-CDJ5 Boot 0 world), grep `latest.log`
 @pass `Done (`; no error naming `displaydelight`; no `Failed to set block association`; no missing-registry line; no new `config/displaydelight-common.toml` is written (the settings are CD `[display]`, SQ-DDP-06); `[creativedelight] members:` lists `displaydelight` (DDP-01)
 @fails Registry error: `DisplayFoods.java` out of step with `display_blocks.json`, rerun `port_resources.py`
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb passed
+# r1118 R3 (2026-11-18): any world of its own; the SQ-CDJ5 Boot 0 world (displaced standalone jars) is not needed: that move shipped in 1.2.00
 bootexpect Done \(
 bootreject (?i)\b(error|exception)\b.*displaydelight
 bootreject Failed to set block association
