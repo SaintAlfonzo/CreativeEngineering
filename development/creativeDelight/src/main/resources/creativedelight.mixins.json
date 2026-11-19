@@ -92,7 +92,7 @@
     "farmersrespite.KettleJeiBaseMixin",
     "farmersdelight.CookingPotMealTooltipMixin",
     "farmersrespite.KettleMealTooltipMixin",
-    "minecraft.SeasonedItemModelMixin",
+    "minecraft.FlavoredItemModelMixin",
     "create_central_kitchen.CckCookingGuideMealTooltipMixin",
     "create_central_kitchen.CckBrewingGuideMealTooltipMixin",
     "farmersdelight.CuttingBoardRendererOffsetMixin",

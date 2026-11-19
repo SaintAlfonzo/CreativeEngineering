@@ -315,6 +315,10 @@ i.bibimbap = 'barbequesdelight:bibimbap';
 i.cumin_powder = 'barbequesdelight:cumin_powder';
 i.pepper_powder = 'barbequesdelight:pepper_powder';
 i.chili_powder = 'barbequesdelight:chili_powder';
+// Milled powders, seasoning flavors (food/seasoning #28; CD kubejs_startup/creativedelight/flavors.js)
+i.onion_powder = 'creativedelight:onion_powder';
+i.garlic_powder = 'creativedelight:garlic_powder';
+i.ghost_pepper_powder = 'creativedelight:ghost_pepper_powder';
 i.honey_mustard_sauce = 'barbequesdelight:honey_mustard_sauce';
 i.buffalo_sauce = 'barbequesdelight:buffalo_sauce';
 i.barbeque_sauce = 'barbequesdelight:barbeque_sauce';
@@ -2396,7 +2400,7 @@ i.rice_pudding                 = 'largemeals:rice_pudding';
 i.t_mushrooms_brown            = '#forge:mushrooms/brown';                  // minecraft brown mushroom (CD largemeals/tags.js, B4)
 i.t_chopstick_foods            = '#creativedelight:chopstick_foods';    // read by the member's tooltip and Finish hook (3.3)
 i.t_crops_nether_wart          = '#forge:crops/nether_wart';
-// Food family tags (CD creativeengineering/seasoning_tags.js from food_families.json)
+// Food family tags (CD creativedelight/flavor_tags.js from food_families.json)
 i.t_food_family_fish_raw        = '#creativedelight:food_family/fish/raw';
 i.t_food_family_fish_raw_cut    = '#creativedelight:food_family/fish/raw_cut';
 i.t_food_family_fish_cooked     = '#creativedelight:food_family/fish/cooked';

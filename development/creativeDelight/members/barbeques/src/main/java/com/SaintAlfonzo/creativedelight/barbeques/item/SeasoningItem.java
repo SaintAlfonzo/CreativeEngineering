@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.barbeques.item;
 
-import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackFlavors;
 import com.SaintAlfonzo.creativedelight.barbeques.BBQLang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -32,7 +32,7 @@ public class SeasoningItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> list, TooltipFlag flag) {
         // The same line the food shows once seasoned (plan_meals_rolls_bbq.md C1); 1.3.0's info text only without CD
-        Component line = PackSeasonings.tooltipLine(seasoning.seasoningId());
+        Component line = PackFlavors.tooltipLine(seasoning.seasoningId());
         list.add(line != null ? line : seasoning.getInfo().withStyle(ChatFormatting.YELLOW));
         if (!seasoning.powder) {
             list.add(BBQLang.NO_SAUCE_RAW.get());

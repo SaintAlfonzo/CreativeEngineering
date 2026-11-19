@@ -24,14 +24,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * The Seasoning page: machine (crafting table or mixer) | food + seasoning(s) -> seasoned food. One page can stand for
+ * The Flavor page: machine (crafting table or mixer) | food + flavor(s) -> flavored food. One page can stand for
  * a whole tag (Salt's "any saltable food + salt"): the food and output slots cycle together through a focus link, so
  * "uses of cooked beef" shows the page fixed on cooked beef.
  */
 @ParametersAreNonnullByDefault
-public class SeasoningCategory implements IRecipeCategory<SeasoningCategory.Display> {
+public class FlavorCategory implements IRecipeCategory<FlavorCategory.Display> {
 
-	public static final RecipeType<Display> TYPE = RecipeType.create(CreativeDelight.MOD_ID, "seasoning", Display.class);
+	public static final RecipeType<Display> TYPE = RecipeType.create(CreativeDelight.MOD_ID, "flavor", Display.class);
 
 	/** Most input slots a page draws; longer crafts stay on the Crafting page. */
 	public static final int MAX_INPUTS = 3;
@@ -54,7 +54,7 @@ public class SeasoningCategory implements IRecipeCategory<SeasoningCategory.Disp
 	private final IDrawableStatic slot;
 	private final IDrawableStatic arrow;
 
-	public SeasoningCategory(IGuiHelper helper, ItemStack iconStack) {
+	public FlavorCategory(IGuiHelper helper, ItemStack iconStack) {
 		background = helper.createBlankDrawable(OUTPUT_X + 18, 36);
 		icon = helper.createDrawableIngredient(VanillaTypes.ITEM_STACK, iconStack);
 		slot = helper.getSlotDrawable();
@@ -68,7 +68,7 @@ public class SeasoningCategory implements IRecipeCategory<SeasoningCategory.Disp
 
 	@Override
 	public Component getTitle() {
-		return Component.translatable("creativeengineering.jei.seasoning");
+		return Component.translatable("creativedelight.jei.flavor");
 	}
 
 	@Override

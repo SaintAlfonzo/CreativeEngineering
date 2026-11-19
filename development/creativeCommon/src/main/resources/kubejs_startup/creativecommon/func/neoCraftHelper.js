@@ -1927,30 +1927,30 @@ global.NCH = {
 		e.custom(json).id(`${global.NCH.ns()}:ddsanding/${idSuffix}`)
 	},
 
-	// Seasoning craft (Creative Common food/SeasoningRecipe): food + one of each seasoning's item, shapeless, gives the same
-	// food with those seasonings added as NBT. seasonings: a global.seasoning key or an array of them
-	// (development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js, which holds each one's item, bonus and what it combines with). Ids
-	// shapeless/season/<keys>_on_<food>, so the Seasoning JEI page lists them.
-	season(food, seasonings, e, idOverride) {
-		if (!e) throw new Error('season called without event object!')
-		var keys = Array.isArray(seasonings) ? seasonings : [seasonings]
+	// Flavor craft (Creative Delight food/FlavorRecipe; renamed from seasoning, food/seasoning #25): food + one of each
+	// flavor's item, shapeless, gives the same food with those flavors added as NBT (Flavors). flavors: a global.flavor
+	// key or an array of them (Creative Delight's kubejs_startup/creativedelight/flavors.js, which holds each one's item,
+	// bonus and what it combines with). Ids shapeless/flavor/<keys>_on_<food>, so the Flavor JEI page lists them.
+	flavor(food, flavors, e, idOverride) {
+		if (!e) throw new Error('flavor called without event object!')
+		var keys = Array.isArray(flavors) ? flavors : [flavors]
 		var foodId = global.NCH._resolveIdCount(food).id
 		var idSuffix = idOverride ?? (keys.join('_') + '_on_' + String(foodId).replace(/^#/, '').replace(/[^a-zA-Z0-9_]/g, '_'))
-		var ctx = 'season ' + idSuffix
+		var ctx = 'flavor ' + idSuffix
 		var parts = []
 		for (var k = 0; k < keys.length; k++) {
-			var s = global.seasoning && global.seasoning[keys[k]]
+			var s = global.flavor && global.flavor[keys[k]]
 			if (!s) {
-				global.NCH._warn(ctx, 'unknown seasoning ' + keys[k])
+				global.NCH._warn(ctx, 'unknown flavor ' + keys[k])
 				return
 			}
-			parts.push({ seasoning: s.id, ingredient: global.NCH._itemJson(s.item, { countMode: 'none', context: ctx + ' ' + keys[k] }) })
+			parts.push({ flavor: s.id, ingredient: global.NCH._itemJson(s.item, { countMode: 'none', context: ctx + ' ' + keys[k] }) })
 		}
 		e.custom({
-			type: 'creativedelight:seasoning',
+			type: 'creativedelight:flavor',
 			food: global.NCH._itemJson(food, { countMode: 'none', context: ctx + ' food' }),
-			seasonings: parts
-		}).id(`${global.NCH.ns()}:shapeless/season/${idSuffix}`)
+			flavors: parts
+		}).id(`${global.NCH.ns()}:shapeless/flavor/${idSuffix}`)
 	},
 
 	// Backpack skins (Creative Common backpackskin/): smithing a block from the skin tag onto any Sophisticated Backpack

@@ -567,6 +567,8 @@ Salted items keep Salt's own "Salted: +N nutrition" tooltip, so the page adds no
 
 ### 3.12 Pack seasonings framework (BUILT 2026-10-23)
 
+**Renamed Flavor 2026-11-19** ([seasonings.md](seasonings.md) section 7, `food/seasoning #25`): read "flavor" for "seasoning" below; class, NBT, recipe, tag, lang and config names changed as listed there.
+
 `food/seasoning #3`'s mechanism, separate from Salt's `Salted`. A seasoning is NBT on the food,
 `Seasonings:["creativeengineering:garlic", ...]`, kept sorted so the order they went on doesn't split stacks.
 - **Definitions:** [seasonings.js](../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js) (`global.seasoning`, startup, both

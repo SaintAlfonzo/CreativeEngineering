@@ -55,8 +55,8 @@ global.cdtestMirror = [
 	{ file: 'cooking.js', line: 823, helper: 'campfireCooking' },
 	{ file: 'golden.js', line: 17, helper: 'ieArcFurnace' },
 	{ file: 'golden.js', line: 21, helper: 'ieArcFurnace' },
-	{ file: 'seasoning.js', line: 15, helper: 'season' },
-	{ file: 'seasoning.js', line: 16, helper: 'season' },
+	{ file: 'flavor.js', line: 15, helper: 'flavor' },
+	{ file: 'flavor.js', line: 16, helper: 'flavor' },
 ]
 
 ServerEvents.recipes(e => {
@@ -158,10 +158,10 @@ ServerEvents.recipes(e => {
 		R.ieArcFurnace(i.golden_carrot, i.carrot, e, 'golden_carrot_arc_gilding', [], [i.any_nugget_gold, i.any_nugget_gold, i.any_nugget_gold, i.any_nugget_gold, i.any_nugget_gold])
 		// golden.js:21
 		R.ieArcFurnace(i.golden_apple, i.apple, e, 'golden_apple_arc_gilding', [], [i.any_ingot_gold, i.any_ingot_gold, i.any_ingot_gold, i.any_ingot_gold, i.any_ingot_gold])
-		// seasoning.js:15
-		R.season(i.popcorn, 'cheese', e)
-		// seasoning.js:16
-		R.season(i.popcorn, 'onion', e)
+		// flavor.js:15
+		R.flavor(i.popcorn, 'cheese', e)
+		// flavor.js:16
+		R.flavor(i.popcorn, 'onion', e)
 	})
 	console.info('[cdtest] cooking mirror: ' + global.cdtestMirror.length + ' calls run under ' + R.ns() + ' after the block')
 })

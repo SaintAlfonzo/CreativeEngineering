@@ -28,17 +28,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /**
- * Seasoned food icons: the food's own model with one overlay per seasoning on top, salt first (Salt's
- * {@code salt:item/salted_overlay} when the stack carries {@code Salted}), then each {@link Seasonings} id in NBT order,
+ * Flavored food icons: the food's own model with one overlay per flavor on top, salt first (Salt's
+ * {@code salt:item/salted_overlay} when the stack carries {@code Salted}), then each {@link Flavors} id in NBT order,
  * overlay model {@code <ns>:item/seasoned/<path>} (textures from {@code textureswapper/seasoning/make_seasoning.py}). A
- * seasoning without an overlay model draws none. Hooked into {@code ItemRenderer.getModel} by
- * {@code mixin.SeasonedItemModelMixin}, so inventory, hand, dropped items and JEI all show it.
+ * flavor without an overlay model draws none. Hooked into {@code ItemRenderer.getModel} by
+ * {@code mixin.FlavoredItemModelMixin}, so inventory, hand, dropped items and JEI all show it.
  *
  * <p>Salt's own overlay must be off ({@code salt-client.toml SaltingOverlayEnabled = false}): Salt caches its layered
- * model per item, so with it on, the first seasoned stack it saw would be drawn for every salted stack of that item.
+ * model per item, so with it on, the first flavored stack it saw would be drawn for every salted stack of that item.
  */
 @Mod.EventBusSubscriber(modid = CreativeDelight.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-public final class SeasonedItemModel implements BakedModel {
+public final class FlavoredItemModel implements BakedModel {
 
 	private static final ResourceLocation SALT_OVERLAY = new ResourceLocation("salt", "item/salted_overlay");
 
@@ -50,18 +50,18 @@ public final class SeasonedItemModel implements BakedModel {
 	private final BakedModel base;
 	private final List<BakedModel> layers;
 
-	private SeasonedItemModel(BakedModel base, List<BakedModel> overlays) {
+	private FlavoredItemModel(BakedModel base, List<BakedModel> overlays) {
 		this.base = base;
 		this.layers = new ArrayList<>(overlays.size() + 1);
 		this.layers.add(base);
 		this.layers.addAll(overlays);
 	}
 
-	public static ResourceLocation overlayModel(ResourceLocation seasoning) {
-		return new ResourceLocation(seasoning.getNamespace(), "item/seasoned/" + seasoning.getPath());
+	public static ResourceLocation overlayModel(ResourceLocation flavor) {
+		return new ResourceLocation(flavor.getNamespace(), "item/seasoned/" + flavor.getPath());
 	}
 
-	/** {@code base} with the stack's seasoning overlays on top, or {@code base} itself when it has none. */
+	/** {@code base} with the stack's flavor overlays on top, or {@code base} itself when it has none. */
 	public static BakedModel resolve(ItemStack stack, BakedModel base) {
 		CompoundTag tag = stack.getTag();
 		if (base == null || tag == null || base.isCustomRenderer()) {
@@ -71,7 +71,7 @@ public final class SeasonedItemModel implements BakedModel {
 		if (tag.contains("Salted")) {
 			ids.add(SALT_OVERLAY);
 		}
-		for (ResourceLocation id : Seasonings.of(stack)) {
+		for (ResourceLocation id : Flavors.of(stack)) {
 			ids.add(overlayModel(id));
 		}
 		if (ids.isEmpty()) {
@@ -87,14 +87,14 @@ public final class SeasonedItemModel implements BakedModel {
 					overlays.add(overlay);
 				}
 			}
-			return overlays.isEmpty() ? key.base() : new SeasonedItemModel(key.base(), overlays);
+			return overlays.isEmpty() ? key.base() : new FlavoredItemModel(key.base(), overlays);
 		});
 	}
 
 	@SubscribeEvent
 	public static void onRegisterModels(ModelEvent.RegisterAdditional event) {
 		event.register(SALT_OVERLAY);
-		for (ResourceLocation id : Seasonings.ids()) {
+		for (ResourceLocation id : Flavors.ids()) {
 			event.register(overlayModel(id));
 		}
 	}

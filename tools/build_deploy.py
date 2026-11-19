@@ -350,7 +350,7 @@ KUBEJS_CLASSES = [
 	('generation_scripts/food/placeable.json', 'dev'),                  # tools/placeable_catalog.py record
 	('generation_scripts/food/mortar_catalog.json', 'dev'),             # tools/gen_mortar_catalog.py record
 	('generation_scripts/food/placed_food_slices.json', 'runtime'),    # PlacedFoodSol (Spice of Life bites of placed cakes)
-	('generation_scripts/food/food_families.json', 'runtime'),         # CD seasoning_tags.js (food family item tags)
+	('generation_scripts/food/food_families.json', 'runtime'),         # CD flavor_tags.js (food family item tags)
 	('generation_scripts/food/comfort_nourishment.json', 'runtime'),   # CD creativedelight/comfort_nourishment.js (tools/gen_comfort_nourishment.py)
 	('generation_scripts/food/food_tuning.json', 'runtime'),           # CD goldenfood/golden_values.js (golden and gilded multipliers)
 	('generation_scripts/food/food_dict_index.json', 'dev'),           # tools/food_dict.py lookup only
