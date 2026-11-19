@@ -11,8 +11,8 @@ ServerEvents.tags('item', e => {
 	t.storageBlock(e, 'chorus_fruit', i.chorus_fruit_crate)
 	// chorus pie slices of both mods, for whichever recipe picks a chorus pie
 	t.add(e, i.t_chorus_pie_slice, i.chorus_fruit_pie_slice)
-	// shulker meat: End's meat may stand in for Ender's in the pack's Ender's recipes (#endersdelight:shulker_loot)
-	t.add(e, i.shulker_loot, [i.shulker_meat, i.shulker_meat_slice])
+	// shulker meat: End's meat and slice merge onto Ender's mollusk and filet (plan_misc_1117.md 2), which are already
+	// #endersdelight:shulker_loot upstream
 	// fungi End's crimson fungus inputs accept (mod-additions #15): crimson, warped, Fungi Delight's edible ones
 	t.add(e, i.t_cookable_fungi, [i.crimson_fungus, i.warped_fungus])
 	if (global.CD.on('fungidelight')) t.add(e, i.t_cookable_fungi, [i.inky_cap_mushroom, i.morel_mushroom, i.truffle])

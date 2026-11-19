@@ -30,11 +30,11 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'endersdelight:chorus_fruit_from_crate' }, e)
 		R.shapeless(Item.of(i.chorus_fruit, 9), [i.t_storage_chorus_fruit], e, 'chorus_fruit_from_crate')
 
-		//######################### Shulker meat ######################### Ender's mollusk and filet are their own
-		// items (plan_meals_rolls_bbq.md C3, the End Skewer takes the mollusk only; not merged, dishes/ingredients #32).
-		// Ender's knife drop and its mollusk-to-filet cut are upstream's. Every other recipe
-		// keeps End's Delight meat: the stuffed shulker takes End's shulker meat in place of the mollusk.
-		R.replaceInput({ id: 'endersdelight:cooking/stuffed_shulker' }, i.shulker_mollusk, i.shulker_meat, e)
+		//######################### Shulker meat ######################### Ender's Shulker Mollusk and Filet are the
+		// shulker meat (plan_misc_1117.md 2; item_merges.md 2.14): End's meat and slice merge onto them (swap list
+		// merges_ends_delight.json). Ender's knife drop and its mollusk-to-filet cut are upstream's; End's knife drop is
+		// off and its machete drop gives the mollusk (repackedEnds overlay loot_modifiers); End's own cut is removed.
+		R.remove({ id: 'ends_delight:food/shulker_meat_slice' }, e)
 
 		//######################### Shulker bowls #########################
 		// One shulker shell -> 12 bowls (Ender's Delight's gave 8; TODO recipes/cooking #4)
@@ -69,7 +69,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'endersdelight:twisted_cereal_wood' }, e)
 		// (Quark's chorus fruit block removals: quark/recipes.js)
 		// Stuffed shulker shapeless
-		R.shapeless(Item.of(i.stuffed_shulker, 1), [i.tomato_sauce, i.tomato_sauce, i.cooked_rice, i.cooked_rice, i.brown_mushroom, i.chorus_fruit, i.shulker_meat, i.shulker_shell], e, 'stuffed_shulker_cooked_manual_only')
+		R.shapeless(Item.of(i.stuffed_shulker, 1), [i.tomato_sauce, i.tomato_sauce, i.cooked_rice, i.cooked_rice, i.brown_mushroom, i.chorus_fruit, i.shulker_mollusk, i.shulker_shell], e, 'stuffed_shulker_cooked_manual_only')
 		//Ender paella shapeless
 		R.shapeless(Item.of(i.ender_paella, 1), [i.cooked_rice, i.cooked_rice, i.shulker_loot, i.chorus_flower, i.chorus_flower, i.ender_sight, i.shulker_bowl], e, 'ender_paella_cooked_manual_only')
 		//Pearl pasta shapeless

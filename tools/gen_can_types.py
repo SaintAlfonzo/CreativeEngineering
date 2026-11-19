@@ -216,9 +216,9 @@ EXPLICIT = [
 	('raw_meat', 'canned_raw_mutton', 'Canned Raw Mutton', ['mutton'], False, dict(input=['raw_mutton'])),
 	('raw_meat', 'canned_raw_pork', 'Canned Raw Pork', ['porkchop'], False, dict(input=['raw_pork'])),
 	('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
-	# Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. End's Delight's meat and
-	# slice (Ender's mollusk and filet are merged into them, TODO dishes/ingredients #32)
-	('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_meat', 'shulker_meat_slice'], False,
+	# Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. Ender's Delight's mollusk
+	# and filet (End's Delight's meat and slice are merged onto them, plan_misc_1117.md 2)
+	('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False,
 	 dict(meal=(2, 1))),
 
 	# raw fish: sliced cuts share the whole fish's count

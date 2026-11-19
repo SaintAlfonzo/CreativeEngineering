@@ -322,6 +322,8 @@
 
 ## Food & Cooking
 
+- **Changed:** End's Delight Shulker Meat and Shulker Meat Slice become Ender's Delight Shulker Mollusk and Shulker Filet in recipes, loot and inventories [the reverse for most recipes].
+- **Changed:** A Shulker killed with a Knife drops one Shulker Mollusk; Stuffed Shulker and Canned Shulker Flesh take the Mollusk or Filet [Shulker Meat].
 - **New:** Two Cooking for Blockheads Fridges side by side, facing the same way, join into a double fridge with no gap or seal between them. A Fridge placed next to another opens the other way. Each keeps its own door and inventory.
 - **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
 - **Removed:** Golden and gilded mushroom stew, beetroot soup and rabbit stew, their cans and jar fluids. Existing ones in worlds are deleted.
