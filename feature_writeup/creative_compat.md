@@ -62,6 +62,24 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   | `[surface.wthit] passThrough` | true: Walk Through / Fall Through / Neighbors lines | client |
   | `[debug.passthrough] timing` | false; true logs a `[passthrough-timing]` line per side every 200 ticks (`tools/perf/passthrough_timing.py` reads them) | both, applies on save |
 
+- **Corpse decay (2026-11-18, [plan_corpses.md](plan_corpses.md) 3.1, TODO `corpses #1`, `corpses #6`):** `corpse/`
+  (`CorpseDecay` stage rules, `CorpseState` synced flags, `CorpseRender` client draw) with `CorpseDecayMixin` (common) and
+  `CorpseRendererMixin` (client), both gated on `corpse`. The Corpse mod's loaded-tick clock is switched off (its
+  `skeleton_time` and empty `despawn.time` are ignored while `[corpses] enabled`; `force_time` still applies, on world
+  time). Compat compares game time with the death and emptied times once a second, so unloaded corpses catch up on load.
+
+  | Rule | Normal | Nether (`netherDimensions`) | End (`noDecayDimensions`) |
+  |---|---|---|---|
+  | Holds items | skeleton 7 days after death (`skeletonTime` 168000) | skeleton after 1 day, wither skeleton 1 day later (`netherSkeletonTime`, `netherWitherTime` 24000) | player model, never despawns |
+  | Emptied | skeleton after 30 s (`emptySkeletonTime` 600), gone after 5 min (`emptyDespawnTime` 6000) | skeleton after 15 s, wither skeleton 30 s later, gone after 5 min | player model, gone after 5 min |
+
+  A stage never goes back; putting items back into an emptied corpse resets its 5 min. The model wears only the armor,
+  offhand and held item still inside (`followContents`; the client re-dresses its dummy each frame). The wither look
+  is the vanilla `textures/entity/skeleton/wither_skeleton.png` on the normal skeleton model, read from its vanilla
+  path (no copied file). State is saved in the entity compound `creativecompat:corpse` (`DeathTime`, `EmptiedAt`,
+  `Stage`, `Ancient`, `Remains`); corpses from before the change take `DeathTime` = now minus the mod's loaded age.
+  `Ancient` (skeleton from the start, "Ancient Corpse") and `Remains` (never decays or despawns, "Ancient Remains") are
+  set by Creative Loot through that compound (`corpses #2`, `#7`); their names are Creative Loot lang keys.
 - **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
   flower box models, `tags/items/physics/`, 13
   lang keys (MCA eyes, monster box), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
@@ -99,6 +117,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 Scratch SQ-CMP-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)). In game: CMP-01 open a Supplementaries jar
 with two potions and read the WTHIT line; CMP-02 (campfire) moved to SQ-CFR / CQ-CFR-01 with the code; CMP-03 TrashSlot
 and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors and a Bedspreads / Elytra banner.
+Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3).
 
 ## 5. History
 
@@ -134,6 +153,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/flowers.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/flowers.js)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/feature_ports.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/feature_ports.js)
 - 2026-11-01: Creative Compat: decor blocks with no system of their own (feature_writeup/creative_split.md 7.6); moved from kubejs/startup_scripts/items/decor_blocks.js on 2026-11-01 (development/creativeCompat/src/main/resources/kubejs_startup/creativecompat/decor_blocks.js)
+- 2026-11-18: corpse decay on world time with Nether and End rules, armor shown follows contents, wither skeleton look (plan_corpses.md 3.1, TODO `corpses #1`, `corpses #6`; SQ-CMP-10 to -13, CQ-CMP-14) (corpse/, CorpseDecayMixin, CorpseRendererMixin, CompatConfig.Corpses)
 - 2026-11-01: Creative Compat: Curios slot membership for the pack's own slots (data: kubejs/data/creativeengineering/curios/; feature_writeup/curios_slots.md); moved from kubejs/server_scripts/tags/curiostags.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/tags/curiostags.js)
 - 2026-11-01: cropSeasons, cropOutOfSeason: creativecalendar-common.toml [wthit] (Creative Calendar, 2026-11-01) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CompatConfig.java)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/economy/coin.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/economy/coin.js)

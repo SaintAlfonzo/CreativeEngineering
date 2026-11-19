@@ -104,6 +104,9 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("IPPortalRenderingAccessor", IMM_PTL),
 			Map.entry("IPPortalRenderLimitsMixin", IMM_PTL),
 			Map.entry("IPPortalFogMixin", IMM_PTL),
+			// Corpse decay, wither look and live equipment (corpse/, plan_corpses.md 3.1)
+			Map.entry("CorpseDecayMixin", List.of("corpse")),
+			Map.entry("CorpseRendererMixin", List.of("corpse")),
 			// interface mixins (JEI, tooltips, GUI titles, toasts, effect icons)
 			Map.entry("SubMenuConfigScreenMixin", List.of("create")),
 			Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),

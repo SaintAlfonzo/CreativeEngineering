@@ -25,6 +25,14 @@
 - **Changed:** Lava Walker burns like a Magma Block when standing on lava without Fire Resistance.
 - **Fixed:** Fleet-Footed stayed on for every player while one player sprint-jumped.
 
+## Corpses <!-- icon: minecraft:skeleton_skull -->
+
+- **Changed:** Corpses turn into skeletons 7 in-game days after death, counted in world time, also while the area is unloaded [1 hour of loaded time].
+- **Changed:** Emptied corpses turn into skeletons after 30 seconds and disappear after 5 minutes [disappeared after 30 seconds]. Putting items back restarts the 5 minutes.
+- **Changed:** A corpse shows only the armor and held items still inside it.
+- **New:** Corpses in the Nether turn into skeletons after 1 day and into wither skeletons a day later; emptied ones after 15 and 45 seconds.
+- **New:** Corpses in the End keep the player model and never turn into skeletons.
+
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
 
 - **New:** The Visceral Heap biome generates in the Nether, about 5% of its area, made entirely of flesh, with blood lakes, eyebulbs, hair and flesh tendons. Nether ores do not generate in it.
