@@ -21,6 +21,12 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
      "ticks": 200,
      "amp": 0,
      "chance": 1
+    },
+    {
+     "effect": "minecraft:levitation",
+     "ticks": 80,
+     "amp": 1,
+     "chance": 0.5
     }
    ],
    "sources": [
