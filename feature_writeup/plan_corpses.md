@@ -1,12 +1,12 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=d15a7e8c23f4 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, Testing 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=e72a5acaf395 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 1, In Progress 1, Testing 5), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `corpses #3` | Planned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
-| `corpses #4` | Planned | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
+| `corpses #4` | In Progress | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
 | `corpses #1` | Testing | S C | Corpse decay on world time: skeleton after 7 days, empty corpse skeleton after 30 s and despawn after 5 min, shown armor follows contents (Creative Compat) |
 | `corpses #2` | Testing | S C | Ancient corpses: skeletons on 3x3 flat cave floors (below y48, about 80% below y16) and ocean floors (cold and deep more common), about 1 per 32 chunks, loot rolled on first open (Creative Loot, only with Corpse loaded) |
 | `corpses #5` | Testing | S C | Ancient corpse armor rolls: equip chains, 56/35/15/5 chances, material weights, oxidized or waxed copper, dyed leather colors (all configurable) |
@@ -209,7 +209,9 @@ a tool or an inventory item in the main hand or offhand (shown on the model, loo
 ## 6b. Build notes (2026-11-18)
 
 Built: `corpses #1`, `#6` (Creative Compat, [creative_compat.md](creative_compat.md) Corpse decay), `#2`, `#5`, `#7`
-(Creative Loot, [creative_loot.md](creative_loot.md) 2c). Choices the rulings did not fix, for the owner to confirm:
+(Creative Loot, [creative_loot.md](creative_loot.md) 2c); of `corpses #4` only ruling 9 (`CosArmorKeepThroughDeath = false`,
+in `config/` and `configs_edited/`; CQ-CMP-15). Still open in `#4`: the curio slot check, the sectioned corpse screen
+and the cosmetic and curio rendering (3.3). Choices the rulings did not fix, for the owner to confirm:
 - **Sealed corpses.** An ancient corpse with no armor and its loot not yet rolled holds nothing, so the empty rule
   (ruling 8) would remove it 5 min after its chunk first ticks, before anyone finds it. It carries Compat's
   `creativecompat:corpse_sealed` mark until first opened and counts as full while sealed.

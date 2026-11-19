@@ -243,3 +243,11 @@ expect 0b
 @pass LOOK: within a second the corpse no longer wears the helmet or holds the sword, the rest of the armor stays; the Nether corpse is a normal-size skeleton with the dark wither skeleton texture, wearing the gold helmet
 @fails armor still shown: `followContents` off or the renderer still caches its dummy; wither corpse big: drawn with the wither skeleton renderer instead of the skeleton model
 @draft no batch holds this row yet; needs a client
+
+## CQ-CMP-15 | Cosmetic armor goes into the corpse and back
+@group client
+@commands Survival client: wear a cosmetic helmet (Cosmetic Armor Reworked slot) and a real chestplate, die; open the corpse; Transfer Items
+@pass the cosmetic helmet is not on the respawned player; the corpse holds it; after Transfer Items it is back in the cosmetic helmet slot, the chestplate in the armor slot; with Corpse Curios Compat, a curio worn at death returns to its curio slot the same way
+@fails the helmet stays on the player: `CosArmorKeepThroughDeath` still true (config not copied to the client or server folder); it lands in the inventory, not the cosmetic slot: Cosmetic Armor x Corpse Compat missing
+@sources feature_writeup/plan_corpses.md config/cosmeticarmorreworked-common.toml
+@draft no batch holds this row yet; needs a client and a real death
