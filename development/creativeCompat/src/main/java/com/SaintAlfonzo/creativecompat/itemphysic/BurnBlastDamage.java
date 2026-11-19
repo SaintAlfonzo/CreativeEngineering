@@ -1,5 +1,9 @@
 package com.SaintAlfonzo.creativecompat.itemphysic;
 
+import com.SaintAlfonzo.creativecompat.CompatConfig;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+
 import net.minecraft.world.damagesource.DamageSource;
 
 /**
@@ -14,9 +18,20 @@ import net.minecraft.world.damagesource.DamageSource;
  *
  * <p>The {@link DamageSource} constructor is {@code protected}, hence the subclass.
  */
-final class BurnBlastDamage extends DamageSource {
+public final class BurnBlastDamage extends DamageSource {
 
 	static final DamageSource INSTANCE = new BurnBlastDamage();
+
+	/**
+	 * Burning TNT items hurt at {@code [shrapnel] itemBlastDamageFactor} of the explosion damage (owner ruling: 50%).
+	 * {@code Explosion#explode} applies the knockback separately from {@code hurt}, so it is unchanged.
+	 */
+	@SubscribeEvent
+	public static void onHurt(LivingHurtEvent event) {
+		if (event.getSource() == INSTANCE) {
+			event.setAmount(event.getAmount() * (float) (double) CompatConfig.SHRAPNEL.itemBlastDamageFactor.get());
+		}
+	}
 
 	private BurnBlastDamage() {
 		super("explosion");

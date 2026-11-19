@@ -439,6 +439,9 @@ public final class CompatConfig {
 		public final ForgeConfigSpec.DoubleValue maxDistance;
 		public final ForgeConfigSpec.DoubleValue damage;
 		public final ForgeConfigSpec.ConfigValue<String> item;
+		public final ForgeConfigSpec.IntValue maxNearby;
+		public final ForgeConfigSpec.BooleanValue hitsNonLiving;
+		public final ForgeConfigSpec.DoubleValue itemBlastDamageFactor;
 
 		private Shrapnel(ForgeConfigSpec.Builder b) {
 			b.comment(
@@ -475,6 +478,21 @@ public final class CompatConfig {
 
 			item = b.comment("Item id rendered as the flying shrapnel piece.")
 					.define("item", "minecraft:iron_nugget");
+
+			maxNearby = b.comment(
+					"Chain cap: most shrapnel pieces in flight within 32 blocks of a new burst. A burst",
+					"fires only the pieces left under the cap, so a chain of TNT does not flood the level.",
+					"0 = no cap."
+			).defineInRange("maxNearby", 32, 0, 4096);
+
+			hitsNonLiving = b.comment(
+					"Shrapnel also hits minecarts, boats, item frames and armor stands (false: living",
+					"things only, so a burst no longer breaks nearby carts or turns TNT minecarts into items)."
+			).define("hitsNonLiving", false);
+
+			itemBlastDamageFactor = b.comment(
+					"Damage factor of the explosion of a burning TNT item (fire or lava); its knockback is unchanged."
+			).defineInRange("itemBlastDamageFactor", 0.5, 0.0, 1.0);
 
 			b.pop(); // shrapnel
 		}

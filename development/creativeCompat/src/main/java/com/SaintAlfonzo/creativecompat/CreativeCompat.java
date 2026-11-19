@@ -124,6 +124,7 @@ public class CreativeCompat {
 		// util.BurnBursts. Tuning: [shrapnel].
 		ShrapnelEntities.register(modEventBus);
 		MinecraftForge.EVENT_BUS.register(TntShrapnelHandler.class);
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.itemphysic.BurnBlastDamage.class);
 		// golem farm cooldown (plan_small_fixes_1116.md R2)
 		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.mobs.GolemCooldown::onDeath);
 		BurnBursts.register(ShrapnelSpawner::burst);
