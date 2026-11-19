@@ -71,14 +71,17 @@ date", "collect queued tests".
      then `restart [SECS]` (stop, edits, boot, wait for `Done (`; the row and the batch go on on the new boot; the old
      log stays in `srv/logs/qrun_bootN.log`). Never `> stop` in a row that needs the server back: it ends the batch.
    - Boot phases on one world: `@boot N` on the row (default 1) and `@@prep [A:|B:] boot=N: SPEC` section lines (props,
-     `toml`, `copy`, `rm`, `run CMD`, `fresh`) for the change before boot N; untagged `@@prep` lines are boot 1's. The
+     `toml`, `copy`, `rm`, `run CMD`, `fresh`) for the change before boot N; untagged `@@prep` lines are boot 1's
+     (`toml FILE - KEY VALUE` and `qrun.py toml FILE - KEY VALUE` set a top-level key, before the first `[section]`). The
      driver runs boots 1..N in order on one folder; a planned boot-N row brings its section's lower-boot rows along.
      `@@prep run CMD` is a logged shell step in `OUT/srv` (`$INST`, `$OUT`, `$SRV`, `$BOOT`), for fixtures a prep
      action cannot express (a `git archive` config tree, a jar swap). Format: `qrows.py` docstring.
    - Reduced or chain jar sets: `@@modset NAME [VARIANT] [+GLOB|+@GROUP] [-GLOB|-@GROUP] [KEY=VALUE]` on the section
      (`@modset SPEC` on a row, `@modset none` for the full pack; `@@prep boot=N: modset SPEC` switches sets between
      boots, world kept). Manifests: `tools/scratch_query/modsets/*.toml` (`qmodset.py list`, `show SPEC`; format in the
-     qmodset.py docstring); a new set is a new manifest, not a new shell script.
+     qmodset.py docstring); a new set is a new manifest, not a new shell script. A jar that must report another
+     version (a gate test) is rewritten by `@@prep run python3 "$INST/tools/scratch_query/jar_modver.py" "mods/X-*.jar" V`
+     (a copy renamed over the hard link; SQ-CMV-03).
 4. **Index it.** Test IDs into the feature writeup's test list; README status "built, scratch test queued"; the TODO
    row names the IDs. `qrun.py lint feature_writeup/testing/rows/<CODE>.qb` (batch lint plus stale rows and dead ids,
    `qrowlint.py`); fix every E. The rows file is the batch: no separate copy in `batches/`.

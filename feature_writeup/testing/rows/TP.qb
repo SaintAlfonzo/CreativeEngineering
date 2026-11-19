@@ -179,8 +179,9 @@ look perfBot relogs a dead bot (no PlayerEvent.Clone): the death half covers sav
 @fails ConfigSyncPacket, `ModApps` new-location gate
 @from batches/r1107tp/a3.qb
 @reviewed 2026-11-18
-# r1118 R4 A2 (2026-11-18): the toml edit and the restart in the row; the key is top-level (no [section]), so sed, not qrun.py toml
-edit sed -i -E 's/^(require_location_upgrade[[:space:]]*=[[:space:]]*).*/\1true/' config/tempad-common.toml
+# r1118 R4 A2 (2026-11-18): the toml edit and the restart in the row; the key is top-level (no [section]): qrun.py toml
+# section `-` (r1118 follow-up 2026-11-19, generators-and-tests #25)
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/tempad-common.toml - require_location_upgrade true
 restart
 bootexpect Done \(
 shell grep -E "require_location_upgrade|cost_per_door|time_in_world" config/tempad-common.toml; grep -A2 "^\[tempad\]" config/tempad-common.toml

@@ -4,7 +4,8 @@
 # them, every jar not in deploy/latest/verify/server.installed.sha1 dropped, kubejs / config / defaultconfigs from the
 # release commit (git archive; the zz_ probes and the zq data kept). Boot 1 builds the world on it; boot 2 switches
 # with `@@prep boot=2: modset pack`. Release jars may pin without a mod_sides.md row (owner ruling 3, 2026-11-18).
-# Replaces the dev-jar fixtures (nsm_fixture.sh's jar part).
+# Replaces the dev-jar fixtures (nsm_fixture.sh's jar part). prep_srv.sh's dev perfBot jar (and its -Dcdevperfbot.out
+# JVM arg) survives the release filter by the default dev_keep = ["cdevperfbot-*.jar"] (r1118 follow-up 2026-11-19).
 description = "Deployed 1.2.02 release jars, kubejs and config (upgrade section boot 1)"
 source = "deploy"
 kubejs = "release"

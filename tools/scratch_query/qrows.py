@@ -38,7 +38,8 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
                                 toml FILE SECTION KEY VALUE   qrun.py toml on OUT/srv/FILE after prep (FILE without '/'
                                                         is config/FILE; created when absent); VALUE is the rest of the
                                                         line, verbatim; a SECTION with spaces is quoted with its own
-                                                        quotes inside: '"Loading Protection Configuration"'
+                                                        quotes inside: '"Loading Protection Configuration"';
+                                                        SECTION `-` = a top-level key (before the first [section])
                                 copy SRC DEST           repo file or directory SRC -> OUT/srv/DEST (DEST ending in '/' = into)
                                 rm PATH                 delete OUT/srv/PATH (a glob; a jar the section runs without)
                                 run CMD                 bash CMD (the rest of the line, verbatim) in OUT/srv with $INST,

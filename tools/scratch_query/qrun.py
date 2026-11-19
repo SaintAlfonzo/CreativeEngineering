@@ -14,7 +14,8 @@
                                                                 lint findings inline, time estimate; no server
     qrun.py judge RES [...]                                     open LOOKs; fill one (qverdict.py docstring)
     qrun.py table RES [RES ...] [--ids ..] [--open]             run-doc verdict table from RES/verdicts/
-    qrun.py toml FILE SECTION KEY VALUE                         set KEY under [SECTION] (added if absent)
+    qrun.py toml FILE SECTION KEY VALUE                         set KEY under [SECTION] (added if absent); SECTION
+                                                                `-` (or '') = a top-level key, before the first [section]
     qrun.py plan [--jars a,b] [--never] [--failed] [--rewritten] [--all] [--release] ...   rows a run needs from jar stamps
                                                                 and sources (qplan.py docstring)
     qrun.py playtest [--out FILE] / qrun.py states              owner playtest checklist / row states per code
@@ -100,7 +101,7 @@ def parse(path, errors=None):
 	"""Rows of the batch. Each row: id, title, line (of its ## header), steps [(word, arg, pace)] and lines (the
     batch line of each step, parallel to steps; repeat copies keep the line of their source). errors: a list to
     collect format errors into instead of exiting (lint and dry)."""
-	rows, pace, cur, rep, section = [], 2.0, None, None, None
+	rows, pace, cur, rep, section, sec_modset = [], 2.0, None, None, None, ""
 
 	def bad(n, msg):
 		if errors is None:
@@ -117,7 +118,9 @@ def parse(path, errors=None):
 				# queue row file (feature_writeup/testing/rows/*.qb, qrows.py): section start and section text
 				word, _, rest = s[2:].partition(" ")
 				if word == "section":
-					section, cur = rest.strip(), None
+					section, cur, sec_modset = rest.strip(), None, ""
+				elif word == "modset":
+					sec_modset = rest.strip()   # the section's jar set (qlint W boot keys on the effective set)
 				continue
 			if s.startswith("@"):
 				if cur is not None:
@@ -127,7 +130,7 @@ def parse(path, errors=None):
 			if s.startswith("## "):
 				rid, _, title = s[3:].partition("|")
 				cur = {"id": rid.strip(), "title": title.strip(), "line": n, "steps": [], "lines": [], "meta": {},
-					   "section": section}
+					   "section": section, "section_modset": sec_modset}
 				rows.append(cur)
 				continue
 			if s.startswith("pace "):
@@ -671,6 +674,17 @@ def main():
 	if a[0] == "toml":
 		path, section, key, value = a[1:5]
 		lines = open(path).read().splitlines()
+		if section in ("", "-"):
+			# a top-level key (before the first [section]; r1118 follow-up, generators-and-tests #25)
+			first = next((i for i, l in enumerate(lines) if re.match(r"\s*\[[^\]]+\]\s*$", l)), len(lines))
+			hit = next((i for i in range(first) if re.match(rf"\s*{re.escape(key)}\s*=", lines[i])), None)
+			if hit is not None:
+				lines[hit] = re.sub(r"=.*", "= " + value, lines[hit], count=1)
+			else:
+				lines[first:first] = [f"{key} = {value}"] + ([""] if first < len(lines) else [])
+			open(path, "w").write("\n".join(lines) + "\n")
+			print(f"{path}: (top level) {key} = {value}")
+			return
 		sec, done, out, at_end = None, False, [], None
 		for i, l in enumerate(lines):
 			m = re.match(r"\s*\[([^\]]+)\]\s*$", l)

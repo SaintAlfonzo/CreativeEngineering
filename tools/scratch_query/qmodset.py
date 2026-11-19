@@ -20,7 +20,8 @@ Manifest fields (TOML; every field optional):
                    pack: prep_srv.sh (hard links, dev-jar swaps, perfBot, zq datapack, props), then the pick prunes it.
                    ceporttesting: ../CEPortTesting/mods and its disabledmods/cba_parked/ (scratch_server.sh setup only).
                    deploy: the pack's jars (prep_srv.sh with NOSWAP=1) with deploy/latest/mods laid over them (same jar
-                   stem replaced), then every jar not in deploy/latest/verify/server.installed.sha1 dropped
+                   stem replaced), then every jar not in deploy/latest/verify/server.installed.sha1 dropped except
+                   the dev_keep jars
     swap           pack: prep_srv.sh dev-jar swaps (default true; false = NOSWAP=1)
     group          "B" forces a normal world (seed 8675309) whatever the rows' group; default: the step's group
     kubejs         pack (default) | source (the source instance's kubejs/) | probes (empty but server_scripts/zz_*_probe.js
@@ -33,6 +34,8 @@ Manifest fields (TOML; every field optional):
     forbid         ["regex", ...]: a jar name in srv/mods matching one fails the build
     require        ["glob" or "@group", ...]: each must match a jar after the pick, else the build fails (a chain jar
                    missing from the source; port_chain.sh check)
+    dev_keep       deploy: globs of prep_srv.sh's dev-only jars kept through the release filter (default
+                   ["cdevperfbot-*.jar"]: perfBot with its -Dcdevperfbot.out JVM arg; [] = the release jars only)
     unlisted_ok    true: qpin accepts the source's jars without a mod_sides.md row (deploy: owner ruling 3,
                    2026-11-18; ceporttesting: plan section 5 B1); jars from the pack still need their row
     default        the variant a spec without one uses
@@ -71,7 +74,7 @@ SETUP = Path(os.environ.get('QMODSET_SETUP', INST / 'tools/creative_labels_test/
 PORT = Path(os.environ.get('QMODSET_PORT', INST.parent / 'CEPortTesting'))
 DEPLOY = Path(os.environ.get('QMODSET_DEPLOY', INST / 'deploy/latest'))
 FIELDS = ('description', 'extends', 'source', 'swap', 'group', 'kubejs', 'config', 'release_commit', 'upstream',
-		  'noupstream', 'copy', 'forbid', 'require', 'unlisted_ok', 'default', 'groups', 'variants')
+		  'noupstream', 'copy', 'forbid', 'require', 'unlisted_ok', 'dev_keep', 'default', 'groups', 'variants')
 OPTIONS = ('kubejs', 'config', 'upstream', 'noupstream')
 POLICY = {'source': ('pack', 'ceporttesting', 'deploy'), 'kubejs': ('pack', 'source', 'probes', 'release'),
 		  'config': ('pack', 'source', 'empty', 'release'), 'upstream': ('pack', 'source', 'none')}
@@ -311,8 +314,13 @@ def pick(out, m, r, src, text=''):
 		listed = DEPLOY / 'verify/server.installed.sha1'
 		if listed.exists():
 			names = {l.split('/')[-1].strip() for l in listed.read_text().split('\n') if l.strip()}
+			dev = m.get('dev_keep', ['cdevperfbot-*.jar'])
 			for j in sorted(mods.glob('*.jar')):
-				if j.name not in names:
+				if j.name in names:
+					continue
+				if _match(j.name, dev):
+					log.append('dev jar kept: %s' % j.name)   # prep_srv.sh's perfBot (r1118 follow-up)
+				else:
 					j.unlink()
 					log.append('not in the release: %s' % j.name)
 		if r['keep'] is not None:

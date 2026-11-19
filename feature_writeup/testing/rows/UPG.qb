@@ -10,21 +10,20 @@
 @@sources feature_writeup/plan_rowfix_r1118.md feature_writeup/namespace_move.md
 @@tier T3
 @@modset release_1202
-@@prep copy development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.1.0.jar mods/
 @@prep copy tools/scratch_query/nsm_fixture.js kubejs/server_scripts/zz_nsm_fixture.js
-@@prep run sed -i -E 's/^(\s*noteLength\s*=\s*).*/\120/' config/creative_labels-common.toml
-@@prep run sed -i -E 's/^(\s*textDistance\s*=\s*).*/\110.0/' config/creative_labels-client.toml
-@@prep run sed -i -E 's/^(\s*leatherSlots\s*=\s*).*/\16/' config/exposure_extras-common.toml
-@@prep run sed -i -E 's/^(\s*squidBabyChance\s*=\s*).*/\10.75/' config/baby_mobs-common.toml
-@@prep run sed -i -E 's/^(\s*regrowChance\s*=\s*).*/\10.6/' config/more_mooblooms-common.toml
+@@prep toml creative_labels-common.toml notes noteLength 20
+@@prep toml creative_labels-client.toml labels textDistance 10.0
+@@prep toml exposure_extras-common.toml camera_bag leatherSlots 6
+@@prep toml baby_mobs-common.toml spawns squidBabyChance 0.75
+@@prep toml more_mooblooms-common.toml moobloom regrowChance 0.6
 @@prep boot=2: modset pack
 @@prep boot=2: copy tools/scratch_query/nsm_probe.js kubejs/server_scripts/zz_nsm_probe.js
 @@text
 @@text Boot 1 runs the deployed 1.2.02 pack (`deploy/latest/mods`, kubejs and config of commit 40ed32be; owner ruling 3) plus the
-@@text dev perfBot jar (bots for worn gear and players in other dimensions; no Creative Devtools: boot-1 rows use vanilla commands
+@@text dev perfBot jar (kept by the manifest's `dev_keep`; bots for worn gear and players in other dimensions; no Creative Devtools: boot-1 rows use vanilla commands
 @@text and the KubeJS fixture probe `/nsmfix`). Boot 2 switches to the full current pack, world kept, and runs the old SQ-NSM,
 @@text SQ-HOP, SQ-RFX, SQ-BM, SQ-RDB and SQ-VH fixture checks. Old config edits (the r1111 NSM fixture's and SQ-RFX-25's) are
-@@text `@@prep run` lines before boot 1. Layout: NSM fixture x 0..16 z 0..30 (nsm_fixture.js), mooblooms and squid x 40,
+@@text `@@prep toml` lines before boot 1. Layout: NSM fixture x 0..16 z 0..30 (nsm_fixture.js), mooblooms and squid x 40,
 @@text painting x 60, hops x 620, Rustic blocks x 200..220 z 200.
 @@text
 @@table
@@ -350,7 +349,6 @@ look RECORD: locate answer and distance from 3000 3000; flesh present in the new
 @@sources feature_writeup/plan_cd_namespace.md feature_writeup/plan_rowfix_r1118.md
 @@tier T3
 @@modset release_1202
-@@prep copy development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.1.0.jar mods/
 @@prep run bash "$INST/tools/scratch_query/cdns_fixture.sh" "$OUT" "$INST/development/creativeDelight/src/main/resources/data/creativedelight/swaps/cd_namespace.json"
 @@prep boot=2: modset pack
 @@text

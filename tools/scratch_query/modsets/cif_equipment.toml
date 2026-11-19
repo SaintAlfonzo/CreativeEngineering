@@ -1,0 +1,14 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# SQ-CIF-04b: the Equipment half of SQ-CIF-04 (Creative Common interface carve, creative_split.md 7.19): Common + Compat
+# + Equipment, no other Creative content jar. Equipment's mandatory dependencies are Common and Compat only (its
+# mods.toml). The cpp_chain base and policies (group B, probe-only kubejs, empty config) with Equipment allowed;
+# cpp_chain's own forbid list stays as it is for SQ-CPP. Added 2026-11-19 (plan_rowfix_r1118 R4 follow-up,
+# generators-and-tests #25).
+extends = "cpp_chain"
+description = "Common + Compat + Equipment (SQ-CIF-04b, the Equipment half of the interface carve boot)"
+forbid = ["(?i)^creative(engineering|magic|worldgen|labels|delight|brewing)-", "^create_crush_everything"]
+default = "equipment"
+require = ["creativeequipment-*"]
+
+[variants.equipment]
+keep = ["@base", "creativeequipment-*"]

@@ -556,6 +556,68 @@ def rb1():
 		importlib.reload(qmodset)
 
 
+@case('R1118-F25 driver follow-ups: a deploy mod set keeps prep_srv.sh\'s perfBot (dev_keep) and pins clean; '
+	  'W boot keys on modset / phase and skips client and draft rows; qrun.py toml section - sets top-level keys')
+def rf25():
+	import importlib
+	import qlint
+	import qmodset
+	import qrun
+	# W boot: another @modset (row or section), a client row and a draft are not ordered against boot 2
+	p = write_rows('ZW.qb', SECTION % ('jara', 'T2') + row('SQ-ZW-01', '> say a', '@boot 2\n')
+				   + row('SQ-ZW-02', '> say b', '@modset other\n') + row('CQ-ZW-03', '> say c')
+				   + row('SQ-ZW-04', '> say d', '@draft x\n') + row('SQ-ZW-05', '> say e', '@phase worldgen\n')
+				   + row('SQ-ZW-06', '> say f')
+				   + SECTION.replace('@@section 1', '@@section 2').replace('@@date', '@@modset other\n@@date')
+				   % ('jara', 'T2') + row('SQ-ZW-11', '> say g', '@boot 2\n') + row('SQ-ZW-12', '> say h', '@modset none\n')
+				   + row('SQ-ZW-13', '> say i'))
+	rows = qrun.parse(str(p), errors=[])
+	w = sorted(x[2] for x in qlint.lint_rows(rows, rows) if x[:2] == ('W', 'boot'))
+	assert w == ['SQ-ZW-06', 'SQ-ZW-13'], w
+	p.unlink()
+	# toml section '-': replace a top-level key, insert one before the first [section], leave sections alone
+	t = TMP / 'top.toml'
+	t.write_text('# c\nfoo = 1\n\n[a]\n\tfoo = 2\n')
+	for k, v in (('foo', '5'), ('bar', 'true')):
+		subprocess.run(QRUN + ['toml', str(t), '-', k, v], check=True, capture_output=True)
+	assert t.read_text() == '# c\nfoo = 5\n\nbar = true\n\n[a]\n\tfoo = 2\n', t.read_text()
+	# deploy mod set: release jars over the pack, the release filter keeps perfBot unless dev_keep = []
+	md, dep = TMP / 'modsets_f25', TMP / 'deploy_f25'
+	md.mkdir()
+	(dep / 'mods').mkdir(parents=True)
+	(dep / 'verify').mkdir()
+	(dep / 'mods/ja-2.0.jar').write_text('ja2')
+	(dep / 'verify/server.installed.sha1').write_text('abc  mods/ja-2.0.jar\n')
+	(md / 'zdep.toml').write_text('source = "deploy"\nunlisted_ok = true\n')
+	(md / 'zdep0.toml').write_text('extends = "zdep"\ndev_keep = []\n')
+	prep = TMP / 'fake_prep_f25.sh'
+	prep.write_text('#!/usr/bin/env bash\nS="$1/srv"; mkdir -p "$S/mods" "$S/logs" "$S/config" "$S/kubejs/server_scripts"\n'
+					'for j in ja-1.0.jar jb-1.0.jar cdevperfbot-0.1.0.jar; do echo $j > "$S/mods/$j"; done\n'
+					'echo "-Dcdevperfbot.out=perf/bot" >> "$S/user_jvm_args.txt"\n'
+					'echo level-name=$2 > "$S/server.properties"\npython3 %s pin "$1"\n' % (HERE / 'qpin.py'))
+	env = dict(QMODSET_DIR=str(md), QDRIVE_PREP=str(prep), QMODSET_DEPLOY=str(dep), QDRIVE_NO_JVM_CHECK='1')
+	old = {k: os.environ.get(k) for k in env}
+	os.environ.update(env)
+	try:
+		importlib.reload(qmodset)
+		out = TMP / 'of25'
+		rc, text = qmodset.build(out, 'lv', 'A', 'zdep')
+		assert rc == 0, text
+		assert sorted(x.name for x in (out / 'srv/mods').glob('*.jar')) == ['cdevperfbot-0.1.0.jar', 'ja-2.0.jar'], text
+		assert 'dev jar kept: cdevperfbot-0.1.0.jar' in text and 'not in the release: jb-1.0.jar' in text, text
+		assert qpin.verify(out) == [], qpin.verify(out)
+		out0 = TMP / 'of25b'
+		assert qmodset.build(out0, 'lv', 'A', 'zdep0')[0] == 0
+		assert sorted(x.name for x in (out0 / 'srv/mods').glob('*.jar')) == ['ja-2.0.jar']
+	finally:
+		for k, v in old.items():
+			if v is None:
+				os.environ.pop(k, None)
+			else:
+				os.environ[k] = v
+		importlib.reload(qmodset)
+
+
 sys.path.insert(0, str(HERE.parent / 'client_capture'))
 sys.path.insert(0, str(HERE.parent / 'perf/eval'))
 

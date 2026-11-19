@@ -101,15 +101,30 @@ look Caffeinated and Phantom Bane durations equal (third field of each in the fi
 
 ## SQ-CIF-04 | Common + Compat boot: no Compat class missing in Common
 @group A (chain, CEPortTesting)
-@commands Common + Compat + Calendar + Serene Seasons (`@modset cpp_chain compat`); boot. The Common + Compat + Equipment half has no mod set yet (cpp_chain forbids Equipment; r1118 R4 B1 note)
-@pass both boot; no Compat class missing in Common, no Equipment class asked for by Compat
+@commands Common + Compat + Calendar + Serene Seasons (`@modset cpp_chain compat`); boot. The Common + Compat + Equipment half is SQ-CIF-04b
+@pass boots; no Compat class missing in Common, no Equipment class asked for by Compat
 @fails a leftover cross-jar reference
 @from batches/r1113/c3_cc1.qb
+@reviewed 2026-11-19
 @modset cpp_chain compat
 bootexpect Done \(
 bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
 shell ls mods
 look mods list: Common, Compat, Calendar, Serene Seasons, the KubeJS stack, perfBot only
+
+## SQ-CIF-04b | Common + Compat + Equipment boot: no Equipment class missing in Common or Compat
+@group A (chain)
+@commands Common + Compat + Equipment (+ Calendar, Serene Seasons, the KubeJS stack, perfBot, Devtools; `@modset cif_equipment`, config empty, probe-only kubejs); boot
+@pass boots; no class missing in Common or Compat that Equipment asks for, no mixin error
+@fails a leftover cross-jar reference from the carve (armor bar to Equipment)
+@from SQ-CIF-04 (its Equipment half)
+@reviewed 2026-11-19
+# r1118 follow-up (2026-11-19, generators-and-tests #25): the Equipment half of SQ-CIF-04 on its own mod set (modsets/cif_equipment.toml)
+@modset cif_equipment
+bootexpect Done \(
+bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
+shell ls mods; test "$(ls mods | grep -c '^creativeequipment-')" = 1 && test "$(ls mods | grep -ciE '^creative(engineering|magic|delight|brewing|worldgen|labels)-')" = 0
+look mods list: Common, Compat, Equipment, Calendar, Serene Seasons, Devtools, the KubeJS stack, perfBot only
 
 ## CQ-CIF-01
 @group client (full pack)
