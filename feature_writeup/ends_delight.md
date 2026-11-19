@@ -405,6 +405,15 @@ BUILT 2026-11-02 (food and cooking batch, [plan_food_cooking_batch.md](plan_food
 meat. End's own textures kept; the owner updates them later. Scratch r1102b: SQ-FCB-04e (knife kills: End's meat in 46
 of 50 rolls, never 2, no mollusk) and SQ-FCB-05 (old items in an inventory turn into the survivors) PASS. Not played.
 
+**Reversed 2026-11-18** (owner, 2026-11-17, [plan_misc_1117.md](plan_misc_1117.md) 2; the 2026-11-04 partial undo had
+left only the End Skewer on the mollusk): Ender's Shulker Mollusk and Filet are the shulker meat. End's `shulker_meat`
+merges onto `shulker_mollusk` and `shulker_meat_slice` onto `shulker_filet` (CD swap list `merges_ends_delight.json`;
+recipes, loot, tags and stacks in the world follow). Ender's knife drop and mollusk-to-filet cut stay; End's knife drop
+is off (overlay `loot_modifiers/add_shulker_meat.json`, a chance 0 condition), its Nether's Delight machete drop gives
+the mollusk (`nd_add_shulker_meat.json`), and End's meat-to-slice cut is removed. The stuffed shulker (pot and heatless)
+and Canned Shulker Flesh take the mollusk and filet; the can's values follow the mollusk's food (8 pieces a can [1],
+its Nausea chance [End's Levitation]). End's roasted shulker meat now cooks from the mollusk. SQ-BBQ2-08, SQ-FCB-05.
+
 ### 5.9 Ender's 1.1.4 content merged into the End's member (2026-11-02, plan_creative_delight.md J1, TODO `creativedelight/members #46`)
 
 BUILT 2026-11-02: `./gradlew :repackedEnds:build --offline` passes, `repackedEnds-1.19.2-2.1-ce-19.2-03.jar` (was `-02`).

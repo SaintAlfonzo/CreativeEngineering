@@ -248,7 +248,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 ## SQ-BBQ2-06 | the Shulker Mollusk cuts to 2 filets
 @group A
 @commands Bot kills a shulker with a knife (10 tries); cuts a Shulker Mollusk on a board; recipe dump `stuffed_shulker`
-@pass mollusk drops; 2 filets; stuffed shulker takes `ends_delight:shulker_meat` (BBQ-40)
+@pass mollusk drops; 2 filets; stuffed shulker takes `endersdelight:shulker_mollusk` (since 2026-11-18, plan_misc_1117.md 2; was End's meat, BBQ-40)
 @fails merge still active (old jar)
 @from batches/r1113/fix_c2a1.qb
 @reviewed 2026-11-16
@@ -273,3 +273,44 @@ look "in family skewer 18" (23 ids end in skewer/stick: the other 5 are upstream
 @draft no batch holds this row yet
 @@text
 @@text Results: not run yet.
+
+@@section 2
+@@title Shulker Mollusk is the shulker meat, 2026-11-18 ([plan_misc_1117.md](../plan_misc_1117.md) 2, TODO `dishes/ingredients #32`)
+@@date 2026-11-18
+@@jars creativecommon creativedelight
+@@sources feature_writeup/item_merges.md
+@@table
+## SQ-BBQ2-08 | shulkers drop one mollusk with a knife; End's meat recipes and cans take the mollusk
+@group A
+@commands 30 knife kills of a shulker through `loot spawn` by a knife bot; then recipe dumps: End's meat-to-slice cut gone, Ender's cut kept, the stuffed shulker (pot and heatless), Canned Shulker Flesh, End's roasted shulker meat
+@pass the dropped items are only `endersdelight:shulker_mollusk` (30, one per roll) and shulker shells, no `ends_delight:shulker_meat`; `ends_delight:food/shulker_meat_slice` not found; `endersdelight:cutting/shulker_filet` mollusk -> 2 filets; both stuffed shulker recipes, the canned shulker recipes and the roasted shulker meat smelting take the mollusk (or filet), none names End's meat
+@fails two items a roll: End's knife modifier still on (repackedEnds overlay `loot_modifiers/add_shulker_meat.json`); End's meat in a recipe: the merge list `merges_ends_delight.json` not read (`[swaps] ... item merge(s)` line) or a script still names `i.shulker_meat`
+> forceload add 2192 -16 2224 16
+> kill @e[type=minecraft:item]
+> pbot spawn q8k 2200.5 -60 0.5 minecraft:overworld survival
+sleep 2
+> pbot hold q8k farmersdelight:iron_knife 1
+> summon minecraft:shulker 2204 -60 2 {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["q8s"]}
+sleep 1
+repeat 30
+> execute as q8k run loot spawn 2206 -60 4 kill @e[type=minecraft:shulker,tag=q8s,limit=1]
+end
+sleep 3
+> cdevtest items 2206 -59 4 1.5 keep
+waitlog \[cdevtest\] verb=items done= 30
+expect \[cdevtest\] verb=items items=\S*\bendersdelight:shulker_mollusk:30\b
+reject \[cdevtest\] verb=items items=\S*ends_delight:shulker_meat
+> cdevtest rdetail ends_delight:food/shulker_meat_slice
+> cdevtest rdetail endersdelight:cutting/shulker_filet
+> cdevtest rdetail stuffed_shulker
+> cdevtest rdetail canned_shulker
+> cdevtest rdetail roasted_shulker_meat
+expect \[cdevtest\] verb=rdetail id=endersdelight:cutting/shulker_filet .*ingredients=\S*endersdelight:shulker_mollusk
+expect \[cdevtest\] verb=rdetail id=endersdelight:cooking/stuffed_shulker .*ingredients=\S*endersdelight:shulker_mollusk
+reject \[cdevtest\] verb=rdetail id=ends_delight:food/shulker_meat_slice serializer=
+reject \[cdevtest\] verb=rdetail .*ingredients=\S*ends_delight:shulker_meat\b
+look the stuffed_shulker_cooked_manual_only, canned_shulker and roasted shulker lines name the mollusk or filet
+> kill @e[tag=q8s]
+> kill @e[type=minecraft:item]
+> pbot remove q8k
+@draft no batch holds this row yet

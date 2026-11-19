@@ -1,0 +1,15 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6, 2.14): End's Delight's shulker meat and slice are purged onto Ender's Delight's Shulker Mollusk and Shulker Filet, the preferred shulker meat (owner, plan_misc_1117.md 2; reverses the 2026-11-02 direction of merges_endersdelight.json). Recipes, loot, tags and every stack in the world follow the survivor. Applied only while both mods are loaded. Never prune.",
+  "requires": [
+    "endersdelight",
+    "ends_delight"
+  ],
+  "merges": {
+    "endersdelight:shulker_mollusk": [
+      "ends_delight:shulker_meat"
+    ],
+    "endersdelight:shulker_filet": [
+      "ends_delight:shulker_meat_slice"
+    ]
+  }
+}

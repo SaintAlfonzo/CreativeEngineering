@@ -181,7 +181,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 ## SQ-FCB-04 | squid knife: exactly one Miner's squid
 @group A
 @commands 50 x `/loot spawn ~ ~ ~ kill @e[type=squid,limit=1]` with mainhand a knife (`/item replace entity` a fake player or use `/loot ... mainhand`), 50 bare; same for `glow_squid`; 50 x shulker with a knife
-@pass Every squid roll: exactly 1 `miners_delight:squid`, nothing else; glow squid: exactly 1 `miners_delight:glow_squid`; shulker with knife: 1 `ends_delight:shulker_meat` (plus the shell roll), never `endersdelight:shulker_mollusk` and never 2 meats
+@pass Every squid roll: exactly 1 `miners_delight:squid`, nothing else; glow squid: exactly 1 `miners_delight:glow_squid`; shulker with knife: 1 `endersdelight:shulker_mollusk` (plus the shell roll), never `ends_delight:shulker_meat` and never 2 (merge reversed 2026-11-18, plan_misc_1117.md 2; the shulker half is SQ-BBQ2-08)
 @fails LootJS `removeLoot(Ingredient.all)` on 2.9.1; `kubejs/data/endersdelight/loot_modifiers` override not loaded (pack data below the mod jar)
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb
@@ -205,23 +205,24 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 
 ## SQ-FCB-05 | merged items turn into their survivors in a player's inventory
 @group A
-@commands Give a fake player `endersdelight:shulker_mollusk`, `endersdelight:shulker_filet`, `oceanic_delight:caesar_salad`, `cookingforblockheads:spice_rack`, `tool_rack`, `fruit_basket`
-@pass Each turns into its survivor (`ends_delight:shulker_meat`, `shulker_meat_slice`, `veggiesdelight:cesar_salad`, the three `oak_` versions), same count
+@commands Give a fake player `ends_delight:shulker_meat`, `ends_delight:shulker_meat_slice`, `oceanic_delight:caesar_salad`, `cookingforblockheads:spice_rack`, `tool_rack`, `fruit_basket`
+@pass Each turns into its survivor (`endersdelight:shulker_mollusk`, `shulker_filet` since 2026-11-18, `veggiesdelight:cesar_salad`, the three `oak_` versions), same count
 @fails item merge group `creativedelight`; `CD.on('blockheads_additions')` false at startup
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb passed
 > pbot spawn s5m {S5H1+18} {S5H2} {S5H3+46} minecraft:overworld survival
 sleep 1
-> give s5m endersdelight:shulker_mollusk 2
-> give s5m endersdelight:shulker_filet 2
+# plan_misc_1117 2 (2026-11-18): the shulker merge runs the other way (End's meat and slice onto Ender's mollusk and filet)
+> give s5m ends_delight:shulker_meat 2
+> give s5m ends_delight:shulker_meat_slice 2
 > give s5m oceanic_delight:caesar_salad 2
 > give s5m cookingforblockheads:spice_rack 2
 > give s5m cookingforblockheads:tool_rack 2
 > give s5m cookingforblockheads:fruit_basket 2
 sleep 2
 > data get entity s5m Inventory
-expect s5m has the following entity data: (?=.*"ends_delight:shulker_meat", Count: 2b)(?=.*"ends_delight:shulker_meat_slice", Count: 2b)(?=.*"veggiesdelight:cesar_salad", Count: 2b)(?=.*oak_spice_rack", Count: 2b)(?=.*oak_tool_rack", Count: 2b)(?=.*oak_fruit_basket", Count: 2b)
-reject s5m has the following entity data: .*"(endersdelight:shulker_mollusk|endersdelight:shulker_filet|oceanic_delight:caesar_salad|cookingforblockheads:(spice_rack|tool_rack|fruit_basket))"
+expect s5m has the following entity data: (?=.*"endersdelight:shulker_mollusk", Count: 2b)(?=.*"endersdelight:shulker_filet", Count: 2b)(?=.*"veggiesdelight:cesar_salad", Count: 2b)(?=.*oak_spice_rack", Count: 2b)(?=.*oak_tool_rack", Count: 2b)(?=.*oak_fruit_basket", Count: 2b)
+reject s5m has the following entity data: .*"(ends_delight:shulker_meat|ends_delight:shulker_meat_slice|oceanic_delight:caesar_salad|cookingforblockheads:(spice_rack|tool_rack|fruit_basket))"
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-FCB-06 | Copper Pot plates a Farmer's Delight beef stew in a bowl, not a cup

@@ -1,0 +1,21 @@
+{
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:entities/shulker"
+    },
+    {
+      "condition": "minecraft:entity_properties",
+      "entity": "killer",
+      "predicate": {
+        "equipment": {
+          "mainhand": {
+            "tag": "nethersdelight:tools/machetes"
+          }
+        }
+      }
+    }
+  ],
+  "item": "endersdelight:shulker_mollusk",
+  "type": "ends_delight:shulker_meat"
+}

@@ -358,6 +358,25 @@ inventory turns into Fish and Chips).
 
 ### 2.14 Shulker meat (built 2026-11-02, scratch PASSED r1102b: SQ-FCB-04e, -05; not played; TODO `dishes/ingredients #32`; UNDONE 2026-11-04)
 
+**Reversed 2026-11-18** (owner, 2026-11-17, plan_misc_1117.md 2): the mollusk is the shulker meat. Pairs in CD swap list
+`merges_ends_delight.json` (`requires` both mods):
+
+| Purged | Survivor |
+|---|---|
+| `ends_delight:shulker_meat` | `endersdelight:shulker_mollusk` |
+| `ends_delight:shulker_meat_slice` | `endersdelight:shulker_filet` |
+
+Ender's knife drop and mollusk-to-filet cut stay on. End's knife loot modifier is off (repackedEnds overlay
+`data/ends_delight/loot_modifiers/add_shulker_meat.json`, a `random_chance` 0 condition), so a knife kill drops one
+mollusk; its machete modifier (`nd_add_shulker_meat.json`) gives the mollusk. End's meat-to-slice cut
+(`ends_delight:food/shulker_meat_slice`) is removed as a duplicate of Ender's cut. The stuffed shulker takes the mollusk again
+(the pot recipe's input swap removed, the heatless recipe rewritten) and Canned Shulker Flesh is generated from the
+mollusk and filet (`tools/gen_can_types.py`; values from the mollusk's food: 8 a can, its Nausea chance). Stack size and
+food values are the mollusk's (the survivor keeps its own; the food tuning tables have no shulker override). Stacks of End's meat in a world turn into
+mollusks. Tests: SQ-BBQ2-08, SQ-FCB-05 (reversed), SQ-FCB-04 pass text.
+
+The 2026-11-04 and 2026-11-02 text below is history.
+
 **Undone 2026-11-04** (plan_meals_rolls_bbq.md C3, owner: the End Skewer takes Ender's Shulker Mollusk only): both pairs
 removed from `merges_endersdelight.json`, the chance-0 knife loot override deleted (Ender's knife drop is upstream's again)
 and the mollusk-to-filet cut restored. Every other recipe keeps End's meat: the stuffed shulker (pot and heatless) takes End's
