@@ -310,6 +310,8 @@ expect \[cdevtest\] verb=rdetail id=endersdelight:cooking/stuffed_shulker .*ingr
 reject \[cdevtest\] verb=rdetail id=ends_delight:food/shulker_meat_slice serializer=
 reject \[cdevtest\] verb=rdetail .*ingredients=\S*ends_delight:shulker_meat\b
 look the stuffed_shulker_cooked_manual_only, canned_shulker and roasted shulker lines name the mollusk or filet
+# 2026-11-18: Canned Shulker Flesh effects (owner): Nausea 10 s plus a 50% chance of Levitation II 4 s
+look eat Canned Shulker Flesh about 6 times: Nausea every time, Levitation II on about half (AppleSkin / JEED tooltip lists both)
 > kill @e[tag=q8s]
 > kill @e[type=minecraft:item]
 > pbot remove q8k

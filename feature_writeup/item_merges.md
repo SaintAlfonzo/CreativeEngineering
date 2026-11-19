@@ -371,7 +371,7 @@ Ender's knife drop and mollusk-to-filet cut stay on. End's knife loot modifier i
 mollusk; its machete modifier (`nd_add_shulker_meat.json`) gives the mollusk. End's meat-to-slice cut
 (`ends_delight:food/shulker_meat_slice`) is removed as a duplicate of Ender's cut. The stuffed shulker takes the mollusk again
 (the pot recipe's input swap removed, the heatless recipe rewritten) and Canned Shulker Flesh is generated from the
-mollusk and filet (`tools/gen_can_types.py`; values from the mollusk's food: 8 a can, its Nausea chance). Stack size and
+mollusk and filet (`tools/gen_can_types.py`; values from the mollusk's food: 8 a can, its Nausea; the generator's `extra_fx` adds a 50% chance of End's Levitation II, 4 s, owner 2026-11-18). Stack size and
 food values are the mollusk's (the survivor keeps its own; the food tuning tables have no shulker override). Stacks of End's meat in a world turn into
 mollusks. Tests: SQ-BBQ2-08, SQ-FCB-05 (reversed), SQ-FCB-04 pass text.
 
