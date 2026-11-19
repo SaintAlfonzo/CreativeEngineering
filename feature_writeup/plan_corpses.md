@@ -1,11 +1,13 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=e72a5acaf395 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 1, In Progress 1, Testing 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=934efe9f9aab -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 2, Pinned 1, In Progress 1, Testing 5), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `corpses #3` | Planned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
+| `corpses #8` | Planned | S C | Ancient corpse held items: wood, stone, copper or iron sword or pickaxe in the main hand (45%) and offhand (20%, half torches or bread), worn, rarely enchanted, copper oxidized or waxed; a corpse that rolls nothing gets a main hand tool (Creative Loot) |
+| `corpses #9` | Planned | S | Skeleton corpses sink in water instead of floating; ocean corpses keep gravity (Creative Compat, Creative Loot) |
+| `corpses #3` | Pinned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
 | `corpses #4` | In Progress | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
 | `corpses #1` | Testing | S C | Corpse decay on world time: skeleton after 7 days, empty corpse skeleton after 30 s and despawn after 5 min, shown armor follows contents (Creative Compat) |
 | `corpses #2` | Testing | S C | Ancient corpses: skeletons on 3x3 flat cave floors (below y48, about 80% below y16) and ocean floors (cold and deep more common), about 1 per 32 chunks, loot rolled on first open (Creative Loot, only with Corpse loaded) |
@@ -132,6 +134,21 @@ Owner notes, split:
 
 Design holes the questions close are listed with each item; rulings go in section 4.
 
+### 3.5 Second pass notes (owner, chat 2026-11-18)
+
+| # | Item (owner's words) | Class | Notes |
+|---|---|---|---|
+| 25 | "cosmetic and curios should show on the corpse" | clear | Restates ruling 10 (model part of `corpses #4`) |
+| 26 | "spawned corpses should roll their armor and later held items first so they arent empty for deletion and show in world before open" | premise | Armor is rolled at spawn and shown before open already (creative_loot.md 2c); 44% roll none and are kept by the sealed mark (6b). Open: what a corpse that rolls nothing gets (ruling 24) |
+| 27 | "mirror current widget locations for curios and cosmetic armor when working on corpse screen, and always shown" | clear | Corpse screen (`corpses #4`): curio slots where the Curios inventory widget puts them, cosmetic armor slots where Cosmetic Armor Reworked puts them on the player inventory; visible without a toggle |
+| 28 | "for held items for now just roll a wood/stone/copper/iron sword/pickaxe with random durability enchants and waxing (on copper) to mirror armor rolls, without dye" | open | Premise: Everything Is Copper has `copper_sword` and `copper_pickaxe` with the same `state` / `waxed` NBT as its armor. Hands and weights: rulings 25, 26 |
+| 29 | "leave gravity on for the ocean corpses" | clear | Reverses the build choice in 6b (`NoGravity` on ocean corpses) |
+| 30 | "disable floating for all skeleton corpses, they sink instead" | clear | Compat: a skeleton-stage corpse (player, ancient or remains) sinks in water and lava; player-model corpses keep the Corpse mod's floating |
+| 31 | "keep current inventory rolls" | clear | The first-open placeholder tables stay (cave torches and bread, ocean bread) |
+| 32 | "defer the rest of the loot tables until the loot overhaul" | clear | `corpses #3` pinned on `loot/tables #1` |
+| 33 | "mark this as a cousin to the cave and underwater ruin/shipwreck loot tables" | clear | The overhaul designs the corpse kits next to the cave ruin, underwater ruin and shipwreck tables |
+| 34 | "fix the broken checks" | clear | check_all failures of 2026-11-18 (comment_dates, iso_dates_docs, status_index), fixed in this session |
+
 ## 4. Owner rulings
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |
@@ -159,6 +176,10 @@ Design holes the questions close are listed with each item; rulings go in sectio
 | 21 | Visceral Heap skeletons (Q21) | open | About 1 per 8 chunks in `biomesoplenty:visceral_heap`, same 3x3 check, any height; plain skeleton, empty, never wither or despawn; named "Ancient Remains" | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 22 | breaking (Q21b) | open | Only Visceral Heap skeletons can be broken; drops bones, bone chunk and cracked bones (Philip's Ruins), and a skeleton skull 25% of the time | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 23 | End corpses (Q22) | open | Never turn skeleton, keep the player model; never despawn while full, gone 5 min after emptied | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 24 | spawned corpse that rolls nothing (Q23, item 26) | open | Guarantee a held item: when the armor and hand rolls all miss, the main hand gets a tool, so no spawned corpse is empty; the sealed mark goes | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 25 | hand rolls (Q24, item 28) | open | Main hand 45%, offhand 20%; the offhand item is 50% torches underground or bread underwater, else a tool. Offhand rolled only when the main hand hit (chain, as the armor): agent reading, unconfirmed | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 26 | tool materials and copper (Q25, item 28) | open | Mirror armor: wood, stone, copper 25 each, iron 8; sword or pickaxe 50/50; unwaxed copper fully oxidized, 10% waxed with the armor's state rules; worn 30 to 90%; 5% enchant; a second tool copies the first one's material 50% of the time | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 27 | ocean corpse gravity, skeleton floating (items 29, 30) | clear | Ocean corpses keep gravity; every skeleton-stage corpse sinks instead of floating | 2026-11-18 | chat 2026-11-18 |
 
 Armor rolls (ruling 15), share of ancient corpses by pieces worn:
 
@@ -179,6 +200,8 @@ Agent defaults, unconfirmed (clear items only): the ancient corpse feature is sk
 ocean corpses only in `#minecraft:is_ocean` biomes (not rivers); cave corpses below the sea level only.
 
 ## 5. Note: ancient corpse loot (to work out)
+
+Deferred to the loot overhaul (`loot/tables #1`, items 32 and 33); the placeholder tables stay until then.
 
 Determine the loot for ancient corpses, a "dead player" kit: what an explorer would carry when they died there.
 To work out with the owner before the loot tables are filled:
@@ -205,6 +228,8 @@ a tool or an inventory item in the main hand or offhand (shown on the model, loo
 - `corpses #6`: Nether and End corpse rules, wither skeleton corpse, rulings 18 to 20 and 23 (Creative Compat).
 - `corpses #7`: Visceral Heap "Ancient Remains", breakable with bone drops, rulings 21 and 22.
 - `corpses #3`: ancient corpse loot tables (section 5); `corpses #2` ships with placeholder tables until this is done.
+  Pinned on the loot overhaul (`loot/tables #1`), a cousin of the cave ruin, underwater ruin and shipwreck tables (items 32, 33).
+- `corpses #8`: held items and the no-empty guarantee (rulings 24 to 26). `corpses #9`: skeletons sink, ocean corpses keep gravity (ruling 27).
 
 ## 6b. Build notes (2026-11-18)
 
@@ -212,7 +237,7 @@ Built: `corpses #1`, `#6` (Creative Compat, [creative_compat.md](creative_compat
 (Creative Loot, [creative_loot.md](creative_loot.md) 2c); of `corpses #4` only ruling 9 (`CosArmorKeepThroughDeath = false`,
 in `config/` and `configs_edited/`; CQ-CMP-15). Still open in `#4`: the curio slot check, the sectioned corpse screen
 and the cosmetic and curio rendering (3.3). Choices the rulings did not fix, for the owner to confirm:
-- **Sealed corpses.** An ancient corpse with no armor and its loot not yet rolled holds nothing, so the empty rule
+- **Sealed corpses** (replaced by ruling 24 in the second pass). An ancient corpse with no armor and its loot not yet rolled holds nothing, so the empty rule
   (ruling 8) would remove it 5 min after its chunk first ticks, before anyone finds it. It carries Compat's
   `creativecompat:corpse_sealed` mark until first opened and counts as full while sealed.
 - **Height curve** (ruling 12): the 25x density gap between y-64 and y32 leaves 92% of target heights below y16 (not
@@ -220,7 +245,7 @@ and the cosmetic and curio rendering (3.3). Choices the rulings did not fix, for
 - **Plain oceans** (`ocean`, `deep_ocean`, modded oceans) count as neutral, temperature factor 2, between warm 1 and cold 3.
 - **Wither look** (ruling 20): the renderer reads vanilla `textures/entity/skeleton/wither_skeleton.png` from its own
   path instead of a copy, so no new texture file and no sources.csv row; resource packs apply.
-- **Ocean corpses** have no gravity: the Corpse mod floats corpses up through water.
+- **Ocean corpses** have no gravity: the Corpse mod floats corpses up through water. Reversed by ruling 27 (second pass).
 - **Placeholder loot** until `corpses #3`: cave = 1 to 6 torches and sometimes bread; ocean = sometimes bread.
 - **Remains drops** are rows in `loot_config.json` (`remains.drops`), rolled in Java, not a loot table: a 1.19.2 loot
   table cannot be gated on Philip's Ruins. `philipsruins:cracked_bone` got no dict key (no script names it).
@@ -236,3 +261,4 @@ Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for 
 - 2026-11-18: section 3.4 added (placement, armor rolls, copper, dye, Nether, End, Visceral Heap); rulings 11 to 23; rows `corpses #5` to `#7`; `corpses #2` narrowed to placement.
 - 2026-11-18: section 3.3 added (cosmetic armor and curios); rulings 9 and 10; row `corpses #4`.
 - 2026-11-18: built `corpses #1`, `#2`, `#5`, `#6`, `#7`; build notes in 6b.
+- 2026-11-18: second pass notes (3.5, items 25 to 34); rulings 24 to 27; rows `corpses #8`, `#9`; `#3` pinned on `loot/tables #1`.
