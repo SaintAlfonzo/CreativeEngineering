@@ -1,17 +1,17 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Test row fixes from scratch run r1118 (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=3239e8ea2d84 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 3, Testing 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c3464722ac55 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 1, Testing 5), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `generators-and-tests #23` | Planned | S | Scratch rows: 1.2.02 upgrade section; drop pre-1.2.02 old-save and legacy-config rows; item-id rows as fresh-world rows |
-| `generators-and-tests #24` | Planned | S | Scratch rows: r1118 correct-answer, lost-setup and tool fixes (plan_rowfix_r1118 R1, R2, R5, R6) |
 | `generators-and-tests #25` | Planned | H | Scratch driver follow-ups from the r1118 row conversion: Devtools in cc_only and cpp_chain mod sets, perfBot jar source for release_1202, W boot lint false positive on @modset rows, toml for top-level keys |
 | `generators-and-tests #20` | Testing | H | Scratch driver: qrun restart verb (stop, wait, edits, boot, reset log offsets; deliberate stop is not a crash) |
 | `generators-and-tests #21` | Testing | H | Scratch driver: @boot N row key and @@prep run CMD (boot phases on one world, logged shell prep) |
 | `generators-and-tests #22` | Testing | H | Scratch driver: @@modset NAME manifests for chain and reduced jar sets (port_chain, cc_only, cpp_chain, cco_sets) |
+| `generators-and-tests #23` | Testing | S | Scratch rows: 1.2.02 upgrade section; drop pre-1.2.02 old-save and legacy-config rows; item-id rows as fresh-world rows |
+| `generators-and-tests #24` | Testing | S | Scratch rows: r1118 correct-answer, lost-setup and tool fixes (plan_rowfix_r1118 R1, R2, R5, R6) |
 <!-- generated:status_index end open_work -->
 
 Status: **row text and driver built; R7 rerun open** (2026-11-18). R1, R2, R5, R6 and the R3 drops, rewrites and

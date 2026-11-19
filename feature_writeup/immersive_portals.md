@@ -4,13 +4,11 @@ Owner notes of 2026-11-06, written down as the plan. Nothing is built or install
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=7ed87ba374b0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Bug 2, Planned 9, In Progress 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=bb7328089ff8 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Planned 9, In Progress 1, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `gameplay/tnt-and-portal #29` | Bug | S P | Tempad: time shown in game time; chronometers cancel chronitons charging |
-| `gameplay/tnt-and-portal #31` | Bug | C | Tempad: timedoor marker screen bugs |
 | `gameplay/tnt-and-portal #27` | Planned | C | Tempad: rename chronons to chronitons |
 | `gameplay/tnt-and-portal #28` | Planned | C P | Tempad: knowledge projector changes |
 | `gameplay/tnt-and-portal #30` | Planned | C | Tempad: bracelet Curios slot |
@@ -21,6 +19,8 @@ Owner notes of 2026-11-06, written down as the plan. Nothing is built or install
 | `gameplay/tnt-and-portal #36` | Planned | S P | Tempad on a server: chronomarker navigation of mining and resource dimensions |
 | `gameplay/tnt-and-portal #37` | Planned | S P | Portal Gun: portals may move within the same spot |
 | `gameplay/tnt-and-portal #8` | In Progress | S C P | Tempad, Immersive Portal Gun and limited Immersive Portals |
+| `gameplay/tnt-and-portal #29` | Testing | S P | Tempad: time shown in game time; chronometers cancel chronitons charging |
+| `gameplay/tnt-and-portal #31` | Testing | C | Tempad: timedoor marker screen bugs |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
