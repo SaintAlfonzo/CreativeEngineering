@@ -273,7 +273,7 @@ reject verb=\S+ .*done=0
 ## SQ-FF-11 | pizza recipes: knife cut 8, ring of 8 recrafts, no 2x2
 @group A
 @commands rdetail of `_pizza_slices` and `_pizza_from_slices`; recipes probe of the mods' cut and 2x2 ids
-@pass for cheese, meat, tropical, vegan and Supreme (`brewinandchewin:pizza`) pizza: one knife cut `creativedelight:farmersdelightcutting/<name>_slices` giving 8 slices; one shaped `creativedelight:shaped/<name>_from_slices` (ring of 8, centre empty); no `vintagedelight:*_pizza_from_slices`, `veggiesdelight:vegan_pizza_from_slices`, `brewinandchewin:pizza_from_slices` or the mods' 4-slice cuts
+@pass for cheese, meat, tropical, vegan and Supreme (`brewinandchewin:pizza`) pizza: one knife cut `creativedelight:farmersdelightcutting/<name>_slices` giving 8 slices; one shaped `creativedelight:shaped/<name>_from_slices` (ring of 8, center empty); no `vintagedelight:*_pizza_from_slices`, `veggiesdelight:vegan_pizza_from_slices`, `brewinandchewin:pizza_from_slices` or the mods' 4-slice cuts
 @fails `creativedelight/pizza.js`
 @absent vintagedelight:cheese_pizza_from_slices vintagedelight:meat_pizza_from_slices veggiesdelight:vegan_pizza_from_slices brewinandchewin:pizza_from_slices (removed recipe ids: negative test)
 > cdevtest rdetail pizza_slices

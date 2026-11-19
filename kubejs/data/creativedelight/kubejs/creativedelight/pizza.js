@@ -2,7 +2,7 @@
 // requires: farmersdelight
 // Pizza slices (TODO dishes/meals #5, plan_food_batch_1119.md C1, R2): a whole pizza is 8 slices. The Knife cut on the
 // board gives 8, the placed block 2 a bite (the blocks' Java, by hand or knife) and its break loot 8/6/4/2 by bites
-// left; 8 slices in a ring (centre empty) craft one back. The mods' 4-slice cuts and 2x2 recrafts go. The Tropical
+// left; 8 slices in a ring (center empty) craft one back. The mods' 4-slice cuts and 2x2 recrafts go. The Tropical
 // Pizza's own recipe is the Vintage member's JSON (vintagedelight:tropical_pizza).
 ServerEvents.recipes(e => {
 	if (!global.CD) return

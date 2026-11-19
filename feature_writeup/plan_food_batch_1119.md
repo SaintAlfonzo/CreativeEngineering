@@ -8,12 +8,12 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=dc7d43fe78cb -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 6, In Progress 4, Testing 11), 1 Complete.
+<!-- generated:status_index begin open_work sha1=377cb9a05445 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 6, In Progress 4, Testing 12), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `dishes/ingredients #10` | Planned | S C P T | Fats and oils: animal fat, blubber, cooking oil |
+| `dairy-fats-and-batter #2` | Planned | S C P | Whale oil cauldron route |
 | `pickles-and-ferments #17` | Planned | S C P | Pickled garlic item |
 | `seasoning #25` | Planned | S C P | Rename the seasoning mechanic to Flavor |
 | `seasoning #26` | Planned | S C P | Flavor pairs: garlic + onion, salt + pepper, sugar + ghost pepper |
@@ -25,6 +25,7 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 | `food/seasoning #3` | In Progress | S~ C P T | New seasonings |
 | `baking/baked-goods #19` | Testing | S C P | Quiche baking type |
 | `baking/baked-goods #21` | Testing | S C P | Lasagna baking type |
+| `dishes/ingredients #10` | Testing | S C P T | Fats and oils: animal fat, blubber, cooking oil |
 | `dishes/ingredients #33` | Testing | S C P | Rename cucumber dough to veggie dough |
 | `dishes/ingredients #40` | Testing | S P | Edible seed family: sunflower, pumpkin, oat, mixed, corn seeds |
 | `dishes/meals #27` | Testing | S C P | Pineapple pizza |
@@ -183,3 +184,16 @@ Choices made while building, where the plan or a ruling left a gap (newest wave 
     `texture_sources/sources.csv`. Its recipe JSON carries a `fruitsdelight` mod-loaded condition (pineapple slice).
     Slice values = the meat pizza slice's (5 / 0.75, Nourishment 30 s): cheese pizza slice + 1 for the toppings.
   - C3: the orphan block's assets (blockstate, models, texture, three lang keys) went with the registration.
+- Wave D, 2026-11-19:
+  - D2 premise gap: there is no cauldron recipe mechanic to hang an NCH helper on (the only cauldron boiling is Hearth
+    and Harvest's sap block, Java with its own block state and art). The manual whale oil route is a Cooking Pot recipe
+    (2 blubber + bottle -> 1, as Rustic's cooking oil); the cauldron route moved to `dairy-fats-and-batter #2`.
+  - Blubber and Whale Oil read Delightful's animal fat and Rustic's cooking oil sprites in place (no copied files); the
+    whale oil fluid uses Crafts & Additions' seed oil textures untinted. No colour was picked.
+  - Cachalot drop count 3-6 (not ruled); D3 merges Delightful's animal oil bottle into Cooking Oil (the survivor takes
+    over its crafts, R12); D4 "pressed" became the cooking oil ingredient tag (any seed in Rustic's pot and mixer
+    recipes) plus a Spout from Crafts & Additions' seed oil fluid; fish oil joins the cooking oil tag and the item
+    slots that took Cooking Oil take the tag.
+  - D5 switches: CDConfig `[fats]` (blubber, whaleOil, animalFatOil, seedOil, fishOil), default on; no hand-edited
+    config (Forge adds the section on load). The soap list in Compat's `other/misc_mods.js` reads them; the Compat
+    jar was not rebuilt (the pack folder copy loads; the corpses agent has uncommitted Compat Java).

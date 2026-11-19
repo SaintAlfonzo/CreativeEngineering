@@ -12,6 +12,7 @@
 //                                                  [compartments] switch on (read at startup, so safe at top level)
 //   global.CD.qol('compost')                       [qol] switch on (creative_delight.md 8); same timing rule
 //   global.CD.worldgen('wildCrops')                [worldgen] switch on (creative_delight.md 24); same timing rule
+//   global.CD.fats('blubber')                      [fats] switch on (dishes/ingredients #10); same timing rule
 //   global.CD.members()                            the nested members' mod ids
 console.info('[creativedelight] core starting')
 
@@ -40,6 +41,11 @@ global.CD = {
 
 	worldgen(id) {
 		return !!$CDConfig.worldgen(id)
+	},
+
+	// [fats] switch on (TODO dishes/ingredients #10): 'blubber', 'whaleOil', 'animalFatOil', 'seedOil', 'fishOil'
+	fats(id) {
+		return !!$CDConfig.fats(id)
 	},
 
 	recipes(fn) {

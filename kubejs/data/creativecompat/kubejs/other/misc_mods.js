@@ -16,11 +16,17 @@ var R = global.NCH.forPack('creativecompat')
 R.remove({id: 'supplementaries:pulley'}, e)
 
 // Soap
-// Replace pork with animal fat
-R.replaceInput({ id: 'supplementaries:soap' },
-	i.porkchop, [Item.of(i.animal_fat, 1), Item.of(i.animal_oil_bottle, 1), Item.of(i.fish_oil, 1), Item.of(i.tallow, 1)], e)
+// Replace pork with animal fat. Creative Delight's Blubber and Whale Oil count too, while its [fats] switches are on
+// (TODO dishes/ingredients #10); unloaded mods' fats drop out of the list.
+var SOAP_FAT = [i.animal_fat, i.animal_oil_bottle, i.fish_oil, i.tallow] // G5 (filtered by global.has below)
+if (global.CD && global.CD.fats) {
+	if (global.CD.fats('blubber')) SOAP_FAT.push(i.blubber)
+	if (global.CD.fats('whaleOil')) SOAP_FAT.push(i.whale_oil)
+}
+SOAP_FAT = SOAP_FAT.filter(id => id && global.has(id)).map(id => Item.of(id, 1))
+R.replaceInput({ id: 'supplementaries:soap' }, i.porkchop, SOAP_FAT, e)
 //Efficient heating
-if (global.has(i.soap, i.ash, i.animal_fat, i.animal_oil_bottle, i.fish_oil, i.tallow)) R.createMixing(Item.of(i.soap, 9), [[Item.of(i.animal_fat, 1), Item.of(i.animal_oil_bottle, 1), Item.of(i.fish_oil, 1), Item.of(i.tallow, 1)], Item.of(i.ash, 3), Fluid.of(f.water, 500)], e, 'soap_heated_mixing', 'heated')
+if (global.has(i.soap, i.ash) && SOAP_FAT.length) R.createMixing(Item.of(i.soap, 9), [SOAP_FAT, Item.of(i.ash, 3), Fluid.of(f.water, 500)], e, 'soap_heated_mixing', 'heated')
 if (global.has(i.soap, i.ash, f.plantoil)) R.createMixing(Item.of(i.soap, 2), [Item.of(i.ash, 2), Fluid.of(f.water, 250), Fluid.of(f.plantoil, 250)], e, 'soap_vegan_heated_mixing', 'heated')
 
 // Flax is removed (F1, merges/materials #2; item_merges.md 2.22). Flax is off in supplementaries-common.toml, so

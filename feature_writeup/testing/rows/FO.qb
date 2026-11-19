@@ -892,3 +892,66 @@ expect verb=recipes text=moredelight:omelette_smelting n=0\b
 expect verb=recipes text=alexsmobs:boiled_emu_egg n=0\b
 reject verb=recipes id=ends_delight:food_smelting/(fried_dragon_egg|shulker_omelette)
 look makes lines: the fried egg and the omelette still have a smoking and a campfire recipe
+
+@@section 3
+@@title Fats and oils, 2026-11-19 ([food.md](../food.md) 3.22, TODO `dishes/ingredients #10`, plan_food_batch_1119.md wave D)
+@@date 2026-11-19
+@@jars creativecommon creativedelight
+@@sources feature_writeup/food.md kubejs/data/creativedelight/kubejs/creativedelight/fats.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fats.js kubejs/data/creativecompat/kubejs/other/misc_mods.js
+@@text
+@@text Needs the Creative Common and Creative Delight jars of 2026-11-19 (wave D) and a restart; all `[fats]` switches on (default). Group A.
+@@text
+@@table
+## SQ-FO-08 | blubber: registered, cachalot drop, knife cut, animal fat tag, soap
+@group A
+@commands `cdevtest reg item creativedelight:blubber`; loot of `alexsmobs:entities/cachalot_whale`; rdetail of the blubber cut and the soap recipes; tag probe `forge:animal_fat`
+@pass the item exists (Delightful's animal fat sprite); a cachalot kill drops 3-6 blubber; knife cut gives 2 `delightful:animal_fat`; `#forge:animal_fat` holds blubber; `supplementaries:soap` and `creativecompat:createmixing/soap_heated_mixing` take blubber and whale oil
+@fails CD startup `creativedelight/fats.js`; data `creativedelight/fats.js` (tag, cut, `global.LOOT.rules`); Compat `other/misc_mods.js` SOAP_FAT
+@absent creativedelight:blubber creativedelight:whale_oil (new items, not in the dumps yet)
+> cdevtest reg item creativedelight:blubber
+> cdevtest rdetail animal_fat_from_blubber
+> cdevtest tag item forge:animal_fat
+> cdevtest rdetail supplementaries:soap
+> cdevtest rdetail soap_heated_mixing
+waitlog verb=rdetail text=soap_heated_mixing n= 30
+expect verb=rdetail id=creativedelight:farmersdelightcutting/animal_fat_from_blubber .*result=delightful:animal_fat\*2
+expect verb=tag kind=item tag=forge:animal_fat n=\d+ ids=.*creativedelight:blubber
+look the soap recipes list blubber and whale oil among the fats; a cachalot kill (`/summon alexsmobs:cachalot_whale`, kill as a player) drops 3-6 blubber
+reject verb=\S+ .*done=0
+
+## SQ-FO-09 | whale oil: mixer, pot, bottle and fluid, lubricant tag
+@group A
+@commands rdetail of `whale_oil`; fluid tag probe `forge:lubricant`
+@pass heated mixer 1 blubber -> 250 mB `creativedelight:whale_oil`; Cooking Pot 2 blubber + bottle -> 1 Whale Oil (`whale_oil_manual_only`, no Slice & Dice copy); Spout and Item Drain pair at 250 mB; `#forge:lubricant` (fluid) holds whale oil
+@fails data `creativedelight/fats.js` whaleOil block; Common fluid_dict `f.whale_oil`, `f.t_lubricant`
+> cdevtest rdetail whale_oil
+> cdevtest tag fluid forge:lubricant
+waitlog verb=tag kind=fluid tag=forge:lubricant n= 30
+expect verb=tag kind=fluid tag=forge:lubricant n=\d+ ids=.*creativedelight:whale_oil
+look mixing, pot, filling and emptying recipes for whale oil as in the pass column
+reject verb=\S+ .*done=0
+
+## SQ-FO-10 | cooking oil from animal fat, seeds and seed oil; fish oil counts and cooks from raw fish
+@group A
+@commands rdetail of `cooking_oil_from_animal_fat`, `cooking_oil_from_seed_oil`, `fish_oil_from_raw_fish`; tag probes `rusticdelight:cooking_oil`, `rusticdelight:cooking_oil_ingredients`; recipes probe `delightful:cooking/animal_oil_bottle`
+@pass 2 animal fat + bottle -> 1 Cooking Oil (pot); the animal oil bottle recipe is gone and `delightful:animal_oil_bottle` is merged into Cooking Oil; `cooking_oil_ingredients` holds `#forge:seeds` (wheat seeds match); Spout bottle + 250 mB seed oil -> Cooking Oil; `#rusticdelight:cooking_oil` holds `alexsmobs:fish_oil`; 2 raw fish + bottle -> 1 fish oil (pot); fried eggs, cultured meats, cider donut and hops salad take the oil tag
+@fails data `creativedelight/fats.js`; CD swaps `merges_delightful_oil.json`; the `i.t_cooking_oil` slots in `cultivated_meat.js`, `hearthandharvest/recipes.js`, `rusticdelight/recipes.js`
+@absent delightful:cooking/animal_oil_bottle (removed recipe id: negative test)
+> cdevtest rdetail cooking_oil_from_animal_fat
+> cdevtest rdetail cooking_oil_from_seed_oil
+> cdevtest rdetail fish_oil_from_raw_fish
+> cdevtest recipes delightful:cooking/animal_oil_bottle
+> cdevtest tag item rusticdelight:cooking_oil
+> cdevtest tag item rusticdelight:cooking_oil_ingredients
+waitlog verb=tag kind=item tag=rusticdelight:cooking_oil_ingredients n= 30
+expect verb=tag kind=item tag=rusticdelight:cooking_oil n=\d+ ids=.*alexsmobs:fish_oil
+expect verb=tag kind=item tag=rusticdelight:cooking_oil_ingredients n=\d+ ids=.*minecraft:wheat_seeds
+reject verb=recipes text=delightful:cooking/animal_oil_bottle n=[1-9]
+reject verb=\S+ .*done=0
+
+## SQ-FO-11 | [fats] switches off: parts drop out
+@group A
+@commands `qrun.py toml config/creativedelight-common.toml fats.blubber=false fats.whaleOil=false fats.animalFatOil=false fats.seedOil=false fats.fishOil=false`, `/reload`, the probes of SQ-FO-08 to -10
+@pass none of the new recipes, tag entries or the cachalot drop; the items stay registered
+@fails `CDConfig` [fats] section; `global.CD.fats` in cd_core.js
+@draft needs the toml edit and a /reload inside the row; the first runner writes the steps

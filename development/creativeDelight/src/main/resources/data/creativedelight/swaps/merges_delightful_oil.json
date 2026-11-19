@@ -1,0 +1,12 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6). Fats and oils (TODO dishes/ingredients #10, plan_food_batch_1119.md D3, owner R12): Delightful's Animal Oil Bottle goes into Rustic Delight's Cooking Oil, which takes over its crafts; animal fat now cooks into Cooking Oil (data creativedelight/kubejs/creativedelight/fats.js). Never prune.",
+  "requires": [
+    "delightful",
+    "rusticdelight"
+  ],
+  "merges": {
+    "rusticdelight:cooking_oil": [
+      "delightful:animal_oil_bottle"
+    ]
+  }
+}
