@@ -14,15 +14,6 @@
 @@text recipes in `recipes/all.csv`, items in `items_by_mod/rusticdelight.json`); copy them aside before the run's `/dumpall`.
 @@text
 @@table
-## SQ-RDB-01 | Rustic Delight with no rustic_upstream folder
-@group A
-@commands Boot with no `rustic_upstream/` folder (and no symlink) in the server dir; `grep -i "rustic\|Error occurred while handling event\|Couldn't parse\|Failed to load" logs/latest.log`
-@pass `Done (`; no Rustic error or parse error for a `rusticdelight:` file; `/dumpall` items_by_mod/rusticdelight.json lists the same ids as the baseline (160 port ids plus blocks)
-@fails A missing file: `bake_upstream.py --check`; a parse error: the bake rule for that folder
-@from batches/r1111/a1.qb passed
-bootexpect Done \(
-shell ls -d rustic_upstream 2>&1; grep -iE "rustic" logs/latest.log | grep -iE "error|exception|couldn't parse|failed to load" | head -20; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")" 
-bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:
 
 ## SQ-RDB-02 | /dumpall: Rustic recipes, tags, loot and items equal the 2026-11-10 baseline (kubejs/exported copied in by prep)
 @group A
@@ -85,6 +76,7 @@ look the wild pepper patch placed its plant and the giant patch only red, yellow
 @fails Ids did not change, so a loss is a registry bug, not the bake
 @from batches/r1115/p9_o2.qb passed
 @reviewed 2026-11-16
+@superseded by SQ-UPG-12 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 > cdevtest state 200 -60 200
 > cdevtest state 202 -60 200
 > cdevtest state 204 -60 200
@@ -144,3 +136,24 @@ do {"wait": "chunks"}
 shot placed
 shell grep -c "coaster/pancake" logs/latest.log; true
 look textures and names as before, the six pancake recolours, coaster pancakes (place each flavoured pancake on the coaster by hand) render without a magenta cube; the grep count 0
+
+@@section 2
+@@title SQ-RDB Rustic Delight with no rustic_upstream folder, 2026-11-10 ([plan_rustic_fold_in.md](../plan_rustic_fold_in.md) 7, [rustic_delight.md](../rustic_delight.md) 5.14; moved out of section 1 on 2026-11-18, plan_rowfix_r1118 R4)
+@@date 2026-11-10
+@@jars creativedelight
+@@sources feature_writeup/plan_rustic_fold_in.md feature_writeup/rustic_delight.md
+@@prep spawn-animals=true
+@@prep rm rustic_upstream
+@@text
+@@text scratch_server.sh setup links every `*_upstream` folder into the server; `rm` takes this section's link away (the donor folder in the instance stays).
+@@table
+## SQ-RDB-01 | Rustic Delight with no rustic_upstream folder
+@group A
+@commands Boot with no `rustic_upstream/` folder (and no symlink) in the server dir; `grep -i "rustic\|Error occurred while handling event\|Couldn't parse\|Failed to load" logs/latest.log`
+@pass `Done (`; no Rustic error or parse error for a `rusticdelight:` file; `/dumpall` items_by_mod/rusticdelight.json lists the same ids as the baseline (160 port ids plus blocks)
+@fails A missing file: `bake_upstream.py --check`; a parse error: the bake rule for that folder
+@from batches/r1111/a1.qb passed
+# r1118 R4 (2026-11-18): own section with @@prep rm rustic_upstream (the setup links the folder by default; SQ-RDB-06 needs it there)
+bootexpect Done \(
+shell ls -d rustic_upstream 2>&1; grep -iE "rustic" logs/latest.log | grep -iE "error|exception|couldn't parse|failed to load" | head -20; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")" 
+bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:

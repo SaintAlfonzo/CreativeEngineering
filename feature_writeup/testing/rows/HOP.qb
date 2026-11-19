@@ -15,27 +15,6 @@
 @@text superseded by SQ-HOP-07 to -11); SQ-HH-D09 (same).
 @@text
 @@table
-## SQ-HOP-01 | no Brewing: no hops item, salad, bag, wild hops or hops vine registered; no hearthandharvest:hops error
-@group A
-@commands Fold into SQ-DEP-02 (boot without `creativebrewing-*.jar`): `/zq items hearthandharvest:hops`, `/zq items hearthandharvest:hops_salad`, `/zq items hearthandharvest:hops_bag`, `/zq items hearthandharvest:wild_hops`, `/zq blocks hearthandharvest:hops_vine`
-@pass none registered; no `hearthandharvest:hops` error in `latest.log` (recipes, tags, trades, compost skip hops); Common's `[item_dict] Missing/invalid item IDs` WARN listing the hops ids is expected without Brewing
-@fails `HHBlocks.HOPS_ON`, the `has.mod('vinery')` guards in `hearthandharvest/recipes.js`, `tags.js`, `trades.js`, `compost.js`
-@from batches/r1115/p7_nb.qb
-@reviewed 2026-11-16
-> cdevtest reg item hearthandharvest:hops
-waitlog verb=reg kind=item regex=hearthandharvest:hops n= 20
-expect verb=reg kind=item regex=hearthandharvest:hops n=0
-reject verb=reg kind=item id=hearthandharvest:hops
-> cdevtest reg item hearthandharvest:wild_hops
-waitlog verb=reg kind=item regex=hearthandharvest:wild_hops n= 20
-expect verb=reg kind=item regex=hearthandharvest:wild_hops n=0
-reject verb=reg kind=item id=hearthandharvest:wild_hops
-> cdevtest reg block hearthandharvest:hops_vine
-waitlog verb=reg kind=block regex=hearthandharvest:hops_vine n= 20
-expect verb=reg kind=block regex=hearthandharvest:hops_vine n=0
-reject verb=reg kind=block id=hearthandharvest:hops_vine
-shell grep -nE "hearthandharvest:(hops|wild_hops)" logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log | cut -c1-260 | head -8; echo "hops lines: $(cat logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log | grep -cE 'hearthandharvest:(hops|wild_hops)')"
-look reg lists no hops item / block (hops_salad and hops_bag are covered by the hearthandharvest:hops text query); no hops error line
 
 ## SQ-HOP-02 | hops item on a log face places a hops vine (north=true, age 0); one hops used
 @group A
@@ -275,6 +254,7 @@ look hand still 3 hops after the pot; jungle "Test passed"; registry part in SQ-
 @fails `data/creativedelight/swaps/hearth_removals.json`, `LegacyLatticeStemBlock.restoreHops`
 @from batches/r1115/p5_a2.qb
 @reviewed 2026-11-16
+@superseded by SQ-UPG-07 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 bootexpect \[swaps\] minecraft:block: 2 id\(s\) remapped
 > gamerule randomTickSpeed
 > zmelt w hop11_620 overworld 620 -60 521
@@ -380,6 +360,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @fails `hearth_removals.json`
 @jars creativedelight powergrid
 @from batches/r1115/p5_a2.qb
+@superseded by SQ-UPG-08 (1.2.02 upgrade section; 1.2.02 shipped tilled end stone) (owner ruling 1, 2026-11-18)
 look HH1546b-ender-tes line in SQ-HOP-11
 
 ## SQ-HH-1546c | iron and diamond hoes leave end stone; netherite tills; tilling-enchanted area: diamond nothing, netherite 3x3
@@ -615,3 +596,35 @@ look the item tag lists the five fertilizers, the block tag the three rugs
 @pass the crack shows only within the block's 0 to 1 box on all three rugs, nothing on the fringe that hangs past the edge; the rugs still draw their fringe when not being mined; the stone's crack is unchanged; no `BreakOverlayClipMixin` error in latest.log
 @fails `BreakOverlayClipMixin` not applied (Forge `BlockRenderDispatcher.renderBreakingTexture` signature), `client/BreakOverlayClip` quad filter, block tag missing (SQ-HOP-14)
 @draft visual mid-break: the crack draws only while attack is held, and the driver releases held keys at the end of a walk step before any capture; needs a capture inside a held walk (driver feature) or the owner watching the three rugs
+
+@@section 3
+@@title SQ-HOP no Creative Brewing: hops content absent, 2026-11-14 ([plan_bugfix_1114.md](../plan_bugfix_1114.md) 3.1; [hearth_and_harvest.md](../hearth_and_harvest.md); moved out of section 1 on 2026-11-18, plan_rowfix_r1118 R4)
+@@date 2026-11-14
+@@jars creativedelight powergrid
+@@sources feature_writeup/plan_bugfix_1114.md feature_writeup/hearth_and_harvest.md
+@@prep rm mods/creativebrewing-*.jar
+@@text
+@@text The full pack without `creativebrewing-*.jar` (the boot of SQ-DEP-02): its own section so the `@@prep rm` runs for this row only.
+@@table
+## SQ-HOP-01 | no Brewing: no hops item, salad, bag, wild hops or hops vine registered; no hearthandharvest:hops error
+@group A
+@commands Fold into SQ-DEP-02 (boot without `creativebrewing-*.jar`): `/zq items hearthandharvest:hops`, `/zq items hearthandharvest:hops_salad`, `/zq items hearthandharvest:hops_bag`, `/zq items hearthandharvest:wild_hops`, `/zq blocks hearthandharvest:hops_vine`
+@pass none registered; no `hearthandharvest:hops` error in `latest.log` (recipes, tags, trades, compost skip hops); Common's `[item_dict] Missing/invalid item IDs` WARN listing the hops ids is expected without Brewing
+@fails `HHBlocks.HOPS_ON`, the `has.mod('vinery')` guards in `hearthandharvest/recipes.js`, `tags.js`, `trades.js`, `compost.js`
+@from batches/r1115/p7_nb.qb
+@reviewed 2026-11-16
+# r1118 R4 (2026-11-18): own section with @@prep rm mods/creativebrewing-*.jar (no mod-set manifest is the full pack minus one jar)
+> cdevtest reg item hearthandharvest:hops
+waitlog verb=reg kind=item regex=hearthandharvest:hops n= 20
+expect verb=reg kind=item regex=hearthandharvest:hops n=0
+reject verb=reg kind=item id=hearthandharvest:hops
+> cdevtest reg item hearthandharvest:wild_hops
+waitlog verb=reg kind=item regex=hearthandharvest:wild_hops n= 20
+expect verb=reg kind=item regex=hearthandharvest:wild_hops n=0
+reject verb=reg kind=item id=hearthandharvest:wild_hops
+> cdevtest reg block hearthandharvest:hops_vine
+waitlog verb=reg kind=block regex=hearthandharvest:hops_vine n= 20
+expect verb=reg kind=block regex=hearthandharvest:hops_vine n=0
+reject verb=reg kind=block id=hearthandharvest:hops_vine
+shell grep -nE "hearthandharvest:(hops|wild_hops)" logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log | cut -c1-260 | head -8; echo "hops lines: $(cat logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log | grep -cE 'hearthandharvest:(hops|wild_hops)')"
+look reg lists no hops item / block (hops_salad and hops_bag are covered by the hearthandharvest:hops text query); no hops error line

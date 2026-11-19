@@ -326,6 +326,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass boot 2 log: `[swaps] ... namespace move(s)` counts the list, `[swaps] minecraft:entity_type: 1 id(s) remapped` and the same for `minecraft:item`; `[swaps] config more_mooblooms-common.toml carried over to moremooblooms-common.toml` and the `baby_mobs` one; no `Identifier .* is missing` / missing registry entry naming `more_mooblooms` or `baby_mobs`; `config/` holds `moremooblooms-common.toml` (`regrowChance = 0.6`) and `babymobs-common.toml` (`squidBabyChance = 0.75`), the old files gone
 @fails ids missing: the swap list is not in the moreMooblooms member jar (`data/moremooblooms/swaps/`) or the world was opened once without it; a config at defaults: `CreativeWorldgen` did not call `carryOver` before Forge read the COMMON configs
 @draft boot 1 needs the archived jar swapped into OUT/srv/mods and a stop, config edit and restart in the middle; qrun has no step for a jar swap inside one row. Boot 2 checks below are runnable once the world exists
+@superseded by SQ-UPG-01 (boot 1) and SQ-UPG-09 (1.2.02 upgrade section; no jar_archive/p4_oldid jar) (owner ruling 1, 2026-11-18)
 shell ! grep -E "Identifier .* is missing|[Mm]issing.*(more_mooblooms|baby_mobs):" logs/latest.log
 shell grep -hE "\[swaps\]" logs/latest.log | head -12
 shell grep -n "regrowChance\|squidBabyChance" config/moremooblooms-common.toml config/babymobs-common.toml; ls config | grep -E "mooblooms|baby_?mobs"
@@ -334,6 +335,7 @@ shell grep -n "regrowChance\|squidBabyChance" config/moremooblooms-common.toml c
 @commands `/cdevtest entities 0 -60 6 8 type=moremooblooms:moobloom`; `> data get entity @e[type=moremooblooms:moobloom,tag=p4a,limit=1,sort=nearest] Variant` for each; `> data get block 0 -61 10 Items`; take one egg and use it on the ground at 4 -60 4; `> data get entity @e[type=moremooblooms:moobloom,limit=1,sort=nearest,x=4,y=-60,z=4] Variant`
 @pass three mooblooms load as `moremooblooms:moobloom` with `Variant: "moremooblooms:sunbloom"`, `"moremooblooms:rosebloom"`, `"moremooblooms:lilybloom"` (the calf still a calf), no `unknown variant` WARN; the chest holds 3 `moremooblooms:moobloom_spawn_egg`; the egg spawns a peonybloom
 @fails a moobloom gone: the entity type was not remapped (SQ-RFX-25); a plain `moremooblooms:moobloom` variant with an `unknown variant` WARN: `MoobloomVariants.legacy` not applied in `Moobloom.readAdditionalSaveData`; an egg giving a random variant: `MoobloomSpawnEggItem.variantOf`
+@superseded by SQ-UPG-10 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 > cdevtest entities 0 -60 6 8 type=moremooblooms:moobloom
 > data get block 0 -61 10 Items
 expect moremooblooms:moobloom_spawn_egg

@@ -22,34 +22,6 @@ shell grep -niE "CoasterRendererOffset|blockheads_additions|creativedelight.mixi
 bootreject creativedelight\.mixins\.json.*(rror|ailed)
 look no apply error or skip line; Blockheads Additions is a CD compartment since M8 (no blockheads_additions.mixins.json any more), and the coaster mixin is client-side, so on a server only the absence of errors is checked
 
-## SQ-DEP-02 | no Brewing: Done, no ERR line naming brewinandchewin or vinery, placed_vegetable_omelet absent, corn maze gives items
-@group A
-@commands Throwaway boot without `creativebrewing-*.jar` (CD and its deps only; expected to stop if something else needs Brewing, then note what)
-@pass no `CoasterBlockEntityRenderer` / `brewinandchewin` mixin error from Blockheads Additions; Forge does not list `brewinandchewin` as missing for `blockheads_additions`. Expected and not a FAIL: Create Central Kitchen's own optional `KegBlockEntityMixin` WARN, Common's `[item_dict] Missing/invalid item IDs` WARN (Brewing ids absent), the 8 grape bush wild-crops skip WARNs (TODO creativesplit/deps #27)
-@fails gate not applied (client list), optional dep written as mandatory
-@reviewed 2026-11-16
-@from batches/r1115/p7_nb.qb
-bootreject CoasterBlockEntityRenderer|CoasterRendererOffset.*(rror|ail)
-# Create Central Kitchen's own optional KegBlockEntityMixin logs a mixin 'Error loading class: umpaz/brewinandchewin/...'
-# WARN without Brewin' (third party, r1114 and r1115): not ours, excluded
-bootreject (?i)^(?!.*\[mixin/\]: Error loading class).*brewinandchewin.*(NoClassDefFoundError|ClassNotFoundException)
-bootreject @Mixin target umpaz\.brewinandchewin\.\S+ was not found (?!create_central_kitchen)
-bootreject Missing or unsupported mandatory
-shell test "$(ls mods | grep -c '^creativebrewing')" = 0 && echo "brewing jar gone"
-shell grep -nE "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -iE "brewinandchewin|vinery" | cut -c1-300 | head -8; echo "ERR lines naming brewinandchewin or vinery: $(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "brewinandchewin|vinery")"
-shell test "$(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "brewinandchewin|vinery")" = 0
-> setblock 100 -60 100 creativedelight:placed_vegetable_omelet
-> cdevtest reg block placed_vegetable_omelet
-expect verb=reg kind=block regex=placed_vegetable_omelet n=0\b
-reject verb=reg kind=block id=creativedelight:placed_vegetable_omelet
-> zhh2 lootroll hearthandharvest:chests/corn_maze 5
-waitlog \[zhh2\] done 30
-expect \[zhh2\] lootroll hearthandharvest:chests/corn_maze rolls 5, ids [1-9]
-shell grep -nE "vinery:[a-z_]*grape_bush" logs/latest.log | cut -c1-260 | head -5; echo "grape bush lines: $(grep -cE 'vinery:[a-z_]*grape_bush' logs/latest.log)"
-shell grep -nE "Unknown loot table called" logs/latest.log | cut -c1-260 | head -6
-shell grep -iE "error" logs/kubejs/server.log | grep -iE "brewin|vinery" | head -5 | cut -c1-240; true
-look the setblock fails (no such block); grape bush lines recorded for TODO creativesplit/deps #27 (not a FAIL)
-
 ## SQ-DEP-03 | Vinery loads after Creative Calendar, no dependency error
 @group A
 @commands Same full boot: `grep -iE "vinery.*creativecalendar\|creativecalendar.*vinery\|Missing.*creativecalendar" logs/latest.log`
@@ -247,3 +219,41 @@ reject \[cdevtest\] .*done=0
 @reviewed 2026-11-16
 @jars creativedelight powergrid
 @superseded SQ-CDW-03b in MIN.qb (the same rerun 5.2, with steps)
+
+@@section 3
+@@title SQ-DEP no Creative Brewing: the full pack without creativebrewing-*.jar, 2026-11-04 ([creative_split.md](../creative_split.md); moved out of section 1 on 2026-11-18, plan_rowfix_r1118 R4)
+@@date 2026-11-04
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@sources feature_writeup/creative_split.md
+@@prep rm mods/creativebrewing-*.jar
+@@text
+@@text Its own section so the `@@prep rm` applies to this boot only (SQ-HOP-01 runs the same set in HOP.qb section 3).
+@@table
+## SQ-DEP-02 | no Brewing: Done, no ERR line naming brewinandchewin or vinery, placed_vegetable_omelet absent, corn maze gives items
+@group A
+@commands Throwaway boot without `creativebrewing-*.jar` (CD and its deps only; expected to stop if something else needs Brewing, then note what)
+@pass no `CoasterBlockEntityRenderer` / `brewinandchewin` mixin error from Blockheads Additions; Forge does not list `brewinandchewin` as missing for `blockheads_additions`. Expected and not a FAIL: Create Central Kitchen's own optional `KegBlockEntityMixin` WARN, Common's `[item_dict] Missing/invalid item IDs` WARN (Brewing ids absent), the 8 grape bush wild-crops skip WARNs (TODO creativesplit/deps #27)
+@fails gate not applied (client list), optional dep written as mandatory
+@reviewed 2026-11-16
+@from batches/r1115/p7_nb.qb
+# r1118 R4 (2026-11-18): own section with @@prep rm mods/creativebrewing-*.jar (no manifest is the full pack minus one jar)
+bootreject CoasterBlockEntityRenderer|CoasterRendererOffset.*(rror|ail)
+# Create Central Kitchen's own optional KegBlockEntityMixin logs a mixin 'Error loading class: umpaz/brewinandchewin/...'
+# WARN without Brewin' (third party, r1114 and r1115): not ours, excluded
+bootreject (?i)^(?!.*\[mixin/\]: Error loading class).*brewinandchewin.*(NoClassDefFoundError|ClassNotFoundException)
+bootreject @Mixin target umpaz\.brewinandchewin\.\S+ was not found (?!create_central_kitchen)
+bootreject Missing or unsupported mandatory
+shell test "$(ls mods | grep -c '^creativebrewing')" = 0 && echo "brewing jar gone"
+shell grep -nE "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -iE "brewinandchewin|vinery" | cut -c1-300 | head -8; echo "ERR lines naming brewinandchewin or vinery: $(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "brewinandchewin|vinery")"
+shell test "$(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "brewinandchewin|vinery")" = 0
+> setblock 100 -60 100 creativedelight:placed_vegetable_omelet
+> cdevtest reg block placed_vegetable_omelet
+expect verb=reg kind=block regex=placed_vegetable_omelet n=0\b
+reject verb=reg kind=block id=creativedelight:placed_vegetable_omelet
+> zhh2 lootroll hearthandharvest:chests/corn_maze 5
+waitlog \[zhh2\] done 30
+expect \[zhh2\] lootroll hearthandharvest:chests/corn_maze rolls 5, ids [1-9]
+shell grep -nE "vinery:[a-z_]*grape_bush" logs/latest.log | cut -c1-260 | head -5; echo "grape bush lines: $(grep -cE 'vinery:[a-z_]*grape_bush' logs/latest.log)"
+shell grep -nE "Unknown loot table called" logs/latest.log | cut -c1-260 | head -6
+shell grep -iE "error" logs/kubejs/server.log | grep -iE "brewin|vinery" | head -5 | cut -c1-240; true
+look the setblock fails (no such block); grape bush lines recorded for TODO creativesplit/deps #27 (not a FAIL)

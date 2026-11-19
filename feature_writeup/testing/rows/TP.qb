@@ -49,9 +49,9 @@ reject verb=\S+ .*done=0
 ## SQ-TP-04
 @group A
 @commands Teleport to the saved location in the same dimension and in the Nether; check chronons before and after; use again at once
-@pass a timedoor opens, costs 1000 chronons, carries the player; a second door waits for the 40-tick cooldown; the door closes after 200 ticks
+@pass a timedoor opens, costs 1000 chronons, carries the player; the door closes after 200 ticks (an API open sets no cooldown, owner ruling 2026-11-18; the 40-tick cooldown is SQ-TP-41)
 @fails `TimedoorEntity`, `forge/Teleports`
-@reviewed 2026-11-16
+@reviewed 2026-11-18
 # makes the three locations later TP rows use (Home One, Far East, Hell Spot); bot qa holds the Tempad in slot 0
 > forceload add -16 -16 48 16
 > execute in minecraft:the_nether run forceload add -16 -16 16 16
@@ -79,9 +79,7 @@ expect \[ztp\] loc tempad:default .* "Hell Spot" minecraft:the_nether 0\.50 120\
 > ztp open qa tempad:default Far East
 waitlog \[ztp\] open .*Far 20
 expect \[ztp\] open .*"Far East".* -> message none chronons 6000 -> 5000
-> ztp cd qa
-waitlog \[ztp\] cd 20
-expect \[ztp\] cd true
+# owner ruling 6 (2026-11-18): API opens stay cooldown-free; the cooldown check is SQ-TP-41 (macro use)
 > ztp doors
 waitlog \[ztp\] doors total 20
 expect \[ztp\] door minecraft:overworld .* target minecraft:overworld \(30\.5, -60\.0, 0\.5\)
@@ -106,7 +104,7 @@ expect \[ztp\] door minecraft:overworld .* target minecraft:the_nether
 > kill @e[type=tempad:timedoor]
 reject \[ztp\] (error|unknown subcommand)
 reject verb=\S+ .*done=0
-look the bot walked through the Far East door (player x near 30.5); the 40-tick cooldown on a second use is the item cooldown (cd true right after the door); a player use while cd is true is the client half
+look the bot walked through the Far East door (player x near 30.5)
 
 ## SQ-TP-03 | locations and Teleport app after a restart
 @group A
@@ -776,6 +774,47 @@ look shell: the dropped-data line names no loot_table file (second number 0)
 @pass both copies get their own new id (`/ztp anchors` one entry each), the standing marker keeps its id and its cards still open to it
 @fails `SpatialAnchorItem.updateCustomBlockEntityTag` keeps the id chosen before the vanilla BlockEntityTag load
 @draft multi-step Tempad block flow (placement with shift, markerui / chronoui / card / anchors through ztp_probe.js, Tempad readers stay KubeJS); block ids of the workstation halves, positions and menu slots need one live look, so the first TP runner writes the steps (section text lists the probe calls)
+
+## SQ-TP-41 | the Tempad macro (item use path) opens a door and starts the 40-tick cooldown; a second use during it opens nothing
+@group A
+@commands Bot with a Tempad and 6000 chronons saves a location, pins it, sets the pinned-location macro; `/ztp macro` twice at once, then again after 45 ticks
+@pass first macro: a door to the pinned location, `[ztp] cd true`; second macro at once: still one door; after the cooldown: a second door (API opens through `/ztp open` stay cooldown-free, owner ruling 2026-11-18, SQ-TP-04)
+@fails no cooldown: the macro path does not call the item cooldown (`UseMacroPacket` handler); a second door at once: the cooldown is not checked
+@reviewed 2026-11-18
+# owner ruling 6 (2026-11-18): the cooldown check moved here from SQ-TP-04 (macro = the item-use path a player's shift-use takes)
+> forceload add -16 -16 48 16
+> pbot spawn t40 0.5 -60 4.5 minecraft:overworld survival
+sleep 3
+> clear t40
+> item replace entity t40 hotbar.0 with tempad:tempad
+> ztp setchr t40 0 6000
+> tp t40 30.5 -60 4.5 0 0
+> ztp save t40 Cool Spot
+> tp t40 0.5 -60 4.5 0 0
+sleep 2
+> ztp pin t40 tempad:default Cool Spot
+> ztp settings t40 tempad:teleport tempad:pinned_location
+> kill @e[type=tempad:timedoor]
+sleep 2
+> ztp macro t40
+> ztp cd t40
+waitlog \[ztp\] cd 20
+expect \[ztp\] cd true
+> ztp macro t40
+> ztp doors
+waitlog \[ztp\] doors total 20
+expect \[ztp\] doors total 1\b
+> cdevtest tickwarp 45
+waitlog verb=tickwarp end=done 30
+> kill @e[type=tempad:timedoor]
+> ztp macro t40
+> ztp doors
+count \[ztp\] door minecraft:overworld .* target minecraft:overworld \(30\.5, -60\.0, 4\.5\) >= 2
+> kill @e[type=tempad:timedoor]
+> pbot remove t40
+reject \[ztp\] (error|unknown subcommand)
+reject verb=\S+ .*done=0
+look the macro reply lines; the pinned id in the settings reply
 ## CQ-TP-16
 @group client
 @commands #11 / #12 from a client: creative ctrl + middle-click a named marker and place the copy; break a docked workstation pad in creative; WTHIT on a marker after a relog (shift for id)
