@@ -7,6 +7,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionResult;
@@ -48,6 +49,8 @@ public final class PlacedFoodSol {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	public static final String FILE = "kubejs/generation_scripts/food/placed_food_slices.json";
 	private static final TagKey<Item> KNIVES = ItemTags.create(new ResourceLocation("forge", "tools/knives"));
+	/** Placed foods a hand use takes slices from instead of eating (pizzas, TODO dishes/meals #5): never a bite. */
+	private static final TagKey<Block> SERVES_SLICES = BlockTags.create(new ResourceLocation("creativedelight", "serves_slices"));
 
 	private static Map<Block, Item> slices = Map.of();
 
@@ -88,7 +91,7 @@ public final class PlacedFoodSol {
 	/** After {@code ServerPlayerGameMode#useItemOn}; {@code before} is the state at {@code pos} before the use. */
 	public static void afterUse(ServerPlayer player, Level level, BlockPos pos, BlockState before, ItemStack held,
 								InteractionResult result) {
-		if (!result.consumesAction() || player instanceof FakePlayer || held.is(KNIVES)) return;
+		if (!result.consumesAction() || player instanceof FakePlayer || held.is(KNIVES) || before.is(SERVES_SLICES)) return;
 		BlockState after = level.getBlockState(pos);
 		if (after == before) return;
 

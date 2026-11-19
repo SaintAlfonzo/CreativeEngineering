@@ -148,6 +148,8 @@ public class ModBlocks {
     public static final RegistryObject<Block> MIXED_SALT_BRICK_WALL = registerBlock("mixed_salt_brick_wall", () -> new WallBlock(Properties.copy(Blocks.BRICK_WALL)));
     public static final RegistryObject<Block> CHEESE_PIZZA = BLOCKS.register("cheese_pizza", () -> new PizzaBlock(Properties.copy(Blocks.CAKE), ModItems.CHEESE_PIZZA_SLICE));
     public static final RegistryObject<Block> MEAT_PIZZA = BLOCKS.register("meat_pizza", () -> new PizzaBlock(Properties.copy(Blocks.CAKE), ModItems.MEAT_PIZZA_SLICE));
+    // Pack addition (TODO dishes/meals #27, plan_food_batch_1119.md C2): Tropical Pizza, the cheese pizza with pineapple and bacon
+    public static final RegistryObject<Block> TROPICAL_PIZZA = BLOCKS.register("tropical_pizza", () -> new PizzaBlock(Properties.copy(Blocks.CAKE), ModItems.TROPICAL_PIZZA_SLICE));
 
     private static Properties vineWood(MaterialColor color) {
         return Properties.of(Material.WOOD, color).strength(1.5F).sound(SoundType.WOOD);

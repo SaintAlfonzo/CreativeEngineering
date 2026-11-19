@@ -854,7 +854,7 @@ RULES = {
 	'preserve/jam': dict(place=[R('Own block, while sneaking (Fruits Delight jams)', PF,
 								  only_if(lambda m: m.row['mod'] == 'fruitsdelight', placed_on('sneak')))],
 						 recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
-								 R('Every jam cooks 400 ticks in the Cooking Pot (Fruits Delight 200 raised)', 'owner 2026-11-04'),
+								 R('Every jam cooks 400 ticks in the Cooking Pot (Fruits Delight 200 raised)', 'owner, 2026-11-04'),
 								 P('Pot recipe: 4 fruit + 1 sugar + 1 lemon slice -> 2 jam', T('dishes/jams #2')),
 								 P('One jam item (Fruits Delight) and one jam block (Vintage Delight), always a mason jar '
 								   'recoloured to the jam; recipes take jam, never bottled jam or jelly',

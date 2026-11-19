@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    { "id": "vintagedelight:cheese_pizza", "required": false },
+    { "id": "vintagedelight:meat_pizza", "required": false },
+    { "id": "vintagedelight:tropical_pizza", "required": false },
+    { "id": "veggiesdelight:vegan_pizza", "required": false },
+    { "id": "brewinandchewin:pizza", "required": false }
+  ]
+}

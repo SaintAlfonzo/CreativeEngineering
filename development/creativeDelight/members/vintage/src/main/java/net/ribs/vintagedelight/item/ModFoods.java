@@ -225,6 +225,13 @@ public class ModFoods {
        .fast()
        .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 600, 0), 1.0F)
        .build();
+    // Pack addition (TODO dishes/meals #27): the cheese pizza slice plus its toppings (pineapple, bacon), as the meat pizza slice
+    public static final FoodProperties TROPICAL_PIZZA_SLICE = new Builder()
+       .nutrition(5)
+       .saturationMod(0.75F)
+       .fast()
+       .effect(() -> new MobEffectInstance(ModEffects.NOURISHMENT.get(), 600, 0), 1.0F)
+       .build();
     public static final FoodProperties GHOSTLY_CHILI = new Builder()
        .nutrition(12)
        .saturationMod(0.8F)
