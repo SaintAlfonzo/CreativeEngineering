@@ -10,10 +10,10 @@ source = "pack"
 group = "B"
 kubejs = "probes"
 config = "empty"
-forbid = ["(?i)^creative(engineering|equipment|magic|devtools|worldgen|labels)-", "^create_crush_everything"]
+forbid = ["(?i)^creative(engineering|equipment|magic|worldgen|labels)-", "^create_crush_everything"]
 
 [groups]
-base = ["rhino-forge-*", "architectury-*", "kubejs-forge-*", "cdevperfbot-*", "creativecommon-*", "creativecompat-*",
+base = ["rhino-forge-*", "architectury-*", "kubejs-forge-*", "cdevperfbot-*", "creativecommon-*", "creativedevtools-*", "creativecompat-*",
         "creativecalendar-*", "SereneSeasons-*"]
 chain = ["kubejs-create-forge-*", "kubejsdelight-*", "lootjs-forge-*", "morejs-forge-*", "create-1.19.2-*",
          "ImmersiveEngineering-*", "fruitsdelight-*", "FarmersDelight-*", "creativedelight-*", "creativebrewing-*",

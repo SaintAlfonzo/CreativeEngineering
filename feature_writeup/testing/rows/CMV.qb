@@ -61,10 +61,10 @@ bootreject Mixin apply failed|InvalidMixinException|ArmorTrimsLargeItemListsMixi
 @pass new description; the website and issue tracker link to the repo; no dependency error screen
 @fails `mods.toml` template values
 @draft no batch holds this row yet
-## SQ-CMV-04 | Common's generated config keeps vanilla defaults; advancements load
+## SQ-CMV-04 | Common's generated config keeps vanilla defaults
 @group B
-@commands Vanilla defaults (2026-11-07, creative_engineering.md 7.1): on `@modset cc_only alone` (config empty, so Common writes its defaults; no pack advancement drop); after the boot `grep -nE "^\s*(enabled|packOrder|tutorial|advancement|traderIntervalTicks|commonTrades|rareTrades|disabled) =" config/creativecommon-common.toml`; `/advancement grant @p only minecraft:story/root` as an operator
-@pass the generated file has advancements enabled = true, wandering_trader enabled = false with 24000 / 5 / 1, packOrder = false, tutorial and advancement = true, creative_menu disabled = false; the grant succeeds (advancements load)
+@commands Vanilla defaults (2026-11-07, creative_engineering.md 7.1): on `@modset cc_only alone` (config empty, so Common writes its defaults; no pack advancement drop); after the boot `grep -nE "^\s*(enabled|packOrder|tutorial|advancement|traderIntervalTicks|commonTrades|rareTrades|disabled) =" config/creativecommon-common.toml`
+@pass the generated file has advancements enabled = true, wandering_trader enabled = false with 24000 / 5 / 1, packOrder = false, tutorial and advancement = true, creative_menu disabled = false (the config keys only; the advancement grant check was dropped, owner ruling 2026-11-18: the pack drops advancements)
 @fails a default left at the pack value in `CommonConfig`
 @from batches/r1108cge/b5_cco.qb
 @modset cc_only alone
@@ -72,8 +72,6 @@ shell grep -nE "^\s*(enabled|packOrder|tutorial|advancement|traderIntervalTicks|
 > execute in minecraft:the_end run forceload add 0 0
 > pbot spawn cge06 0 75 0 minecraft:the_end survival
 sleep 3
-> advancement grant cge06 only minecraft:story/root
-expect Granted the advancement
 look shell.txt: advancements enabled = true, wandering_trader enabled = false with 24000 / 5 / 1, packOrder = false, tutorial and advancement = true, creative_menu disabled = false
 
 ## CQ-CMV-03
