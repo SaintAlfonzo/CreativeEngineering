@@ -296,7 +296,9 @@ Each is documented where it belongs; one line each here.
   (Cross and Check were already empty). Chalk's `SymbolUnlocking.getUnlockedSymbols` adds a symbol whose advancement
   string is empty without asking for the advancement, so every symbol is on for everyone. The pack drops every
   advancement at load, so the four could never unlock before. Server side (the server sends the list), common config.
-- **Cosmetic armor on death** (`gameplay/misc #3`): checked, no change (history 2026-10-22, FX-28).
+- **Cosmetic armor on death** (`gameplay/misc #3`): checked, no change (history 2026-10-22, FX-28). Replaced 2026-11-18
+  (plan_corpses.md ruling 9, TODO `corpses #4`): `CosArmorKeepThroughDeath = false`, cosmetic armor goes into the corpse
+  and Cosmetic Armor x Corpse Compat puts it back in the cosmetic slots on Transfer Items (CQ-CMP-15).
 
 ### 2.28 Polymorph in the Sophisticated crafting upgrade
 
@@ -524,6 +526,7 @@ All in Creative Common `src/main/java/com/SaintAlfonzo/creativeengineering/` unl
 - [ ] **FX-28 Cosmetic armor kept on death:** (real player death, in game) wear a cosmetic helmet, die: it is still in the cosmetic slot after
   respawn, not in the corpse. Then set `CosArmorKeepThroughDeath = false`, restart, die: it is in the corpse and goes
   back to the cosmetic slot when the corpse is opened (no config change shipped; checks the existing setup).
+  Superseded 2026-11-18: the keep option is off (plan_corpses.md ruling 9); CQ-CMP-15 checks the new setup.
 - [ ] **FX-29 Drops into the inventory** (vein mining needs the client keybind: in game; Auto Pickup on: scratch server PASSED 2026-10-22,
   SQ-GM-08): vein-mine 20 stone or dirt with room in the inventory: every drop is in the
   inventory, none on the ground. With a full inventory: the drops lie at your feet.
