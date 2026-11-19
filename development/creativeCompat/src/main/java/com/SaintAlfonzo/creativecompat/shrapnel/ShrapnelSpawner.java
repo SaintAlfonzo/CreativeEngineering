@@ -4,6 +4,7 @@ import com.SaintAlfonzo.creativecompat.CompatConfig;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 /**
@@ -21,6 +22,12 @@ public final class ShrapnelSpawner {
 		if (level.isClientSide || !CompatConfig.SHRAPNEL.enabled.get()) return;
 
 		int count = CompatConfig.SHRAPNEL.count.get();
+		// Chain cap (tnt_shrapnel.md F2, owner ruling: 32): count the pieces still flying near this burst
+		int cap = CompatConfig.SHRAPNEL.maxNearby.get();
+		if (cap > 0) {
+			int flying = level.getEntities(ShrapnelEntities.SHRAPNEL.get(), AABB.ofSize(center, 64, 64, 64), e -> true).size();
+			count = Math.min(count, cap - flying);
+		}
 		if (count <= 0) return;
 
 		double speed = CompatConfig.SHRAPNEL.speed.get();

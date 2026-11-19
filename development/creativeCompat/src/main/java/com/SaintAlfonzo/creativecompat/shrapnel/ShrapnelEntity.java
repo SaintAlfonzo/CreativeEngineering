@@ -7,6 +7,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
@@ -94,7 +95,10 @@ public class ShrapnelEntity extends ThrowableItemProjectile {
 
 	@Override
 	protected boolean canHitEntity(Entity target) {
-		return super.canHitEntity(target) && target != this.getOwner();
+		if (!super.canHitEntity(target) || target == this.getOwner()) return false;
+		// Living things only unless configured (tnt_shrapnel.md 4, plan_bugfix_1117 B1): hits broke nearby carts and
+		// turned TNT minecarts into items instead of letting them chain
+		return CompatConfig.SHRAPNEL.hitsNonLiving.get() || (target instanceof LivingEntity && !(target instanceof ArmorStand));
 	}
 
 	@Override

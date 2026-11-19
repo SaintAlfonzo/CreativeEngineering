@@ -1,0 +1,89 @@
+# Scratch queue rows TN (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TN.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-TN TNT shrapnel fixes, 2026-11-18 ([tnt_shrapnel.md](../tnt_shrapnel.md) 4, [plan_bugfix_1117.md](../plan_bugfix_1117.md) B1, TODO `gameplay/tnt-and-portal #3`)
+@@date 2026-11-18
+@@jars creativecommon creativecompat
+@@sources feature_writeup/tnt_shrapnel.md
+@@text
+@@text Superflat world, open air (floor y -61). `[shrapnel]` at the defaults: count 24, maxNearby 32, hitsNonLiving false,
+@@text itemBlastDamageFactor 0.5. Each row uses its own area.
+@@text
+@@table
+## SQ-TN-11 | a TNT minecart burst no longer breaks nearby minecarts and armor stands; mobs still take hits
+@group A
+@commands Ring of 8 minecarts, 8 armor stands and 8 NoAI zombies 10 blocks from a TNT minecart at X 2000 (outside the blast, inside the 12-block shrapnel reach); the cart explodes (`TNTFuse:1`); count the survivors
+@pass 8 minecarts and 8 armor stands left; LOOK: some zombies below 20 health (hit); no `creativecompat:shrapnel` left after 2 s
+@fails fewer carts or stands: `ShrapnelEntity.canHitEntity` still hits non-living entities (or `hitsNonLiving` is true in the toml); no zombie hit: the filter drops living targets too
+> forceload add 1984 -16 2016 16
+> kill @e[x=1984,y=-64,z=-16,dx=32,dy=20,dz=32,type=!minecraft:player]
+> fill 1984 -60 -16 2016 -50 16 minecraft:air
+> execute positioned 2010.5 -60 0.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 1990.5 -60 0.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 2000.5 -60 10.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 2000.5 -60 -9.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 2007.5 -60 7.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 1993.5 -60 7.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 2007.5 -60 -6.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 1993.5 -60 -6.5 run summon minecraft:minecart ~ ~ ~
+> execute positioned 2009.5 -60 3.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 1991.5 -60 -2.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 2003.5 -60 9.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 1997.5 -60 -8.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 2009.5 -60 -2.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 1991.5 -60 3.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 1997.5 -60 9.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 2003.5 -60 -8.5 run summon minecraft:armor_stand ~ ~ ~
+> execute positioned 2009.5 -60 -4.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+> execute positioned 1991.5 -60 4.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+> execute positioned 2004.5 -60 -8.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+> execute positioned 1996.5 -60 9.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+> execute positioned 2010.5 -60 1.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+> execute positioned 1990.5 -60 -0.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+> execute positioned 2001.5 -60 10.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+> execute positioned 1999.5 -60 -9.5 run summon minecraft:zombie ~ ~ ~ {NoAI:1b,PersistenceRequired:1b}
+sleep 1
+> summon minecraft:tnt_minecart 2000.5 -60 0.5 {TNTFuse:1}
+sleep 3
+> execute if entity @e[type=minecraft:minecart,x=1984,y=-64,z=-16,dx=32,dy=20,dz=32]
+expect Test passed, count: 8$
+> execute if entity @e[type=minecraft:armor_stand,x=1984,y=-64,z=-16,dx=32,dy=20,dz=32]
+expect Test passed, count: 8$
+> execute if entity @e[type=minecraft:zombie,x=1984,y=-64,z=-16,dx=32,dy=20,dz=32,nbt=!{Health:20.0f}]
+look the zombie line: a count of 1 or more (hit zombies below 20 health); "Test failed" means none was hit
+> kill @e[x=1984,y=-64,z=-16,dx=32,dy=20,dz=32,type=!minecraft:player]
+@draft no batch holds this row yet
+
+## SQ-TN-12 | chain cap: five TNT going off in one tick fly at most 32 shrapnel pieces
+@group A
+@commands Five primed TNT summoned in one tick 20 blocks up at X 2100 (open air, so no piece stops on a block at once); count `creativecompat:shrapnel` while the pieces fly
+@pass every count reads 32 or fewer; at least one count above 24 (more than one burst fired, so the cap was what held it)
+@fails a count above 32: `ShrapnelSpawner` does not count the pieces in flight (`maxNearby`), or the config holds another value; every count 24 or fewer: only the first burst fired (look for a second explosion) or the count ran after the pieces were gone (timing)
+> forceload add 2084 -16 2116 16
+> kill @e[x=2084,y=-64,z=-16,dx=32,dy=60,dz=32,type=!minecraft:player]
+> summon minecraft:armor_stand 2100.5 -40 0.5 {NoGravity:1b,Invisible:1b,Tags:["tn12"]}
+> summon minecraft:armor_stand 2100.5 -40 0.5 {NoGravity:1b,Invisible:1b,Tags:["tn12"]}
+> summon minecraft:armor_stand 2100.5 -40 0.5 {NoGravity:1b,Invisible:1b,Tags:["tn12"]}
+> summon minecraft:armor_stand 2100.5 -40 0.5 {NoGravity:1b,Invisible:1b,Tags:["tn12"]}
+> summon minecraft:armor_stand 2100.5 -40 0.5 {NoGravity:1b,Invisible:1b,Tags:["tn12"]}
+sleep 1
+> execute as @e[type=minecraft:armor_stand,tag=tn12] at @s run summon minecraft:tnt ~ ~ ~ {Fuse:4}
+sleep 0.3
+> execute if entity @e[type=creativecompat:shrapnel]
+sleep 0.05
+> execute if entity @e[type=creativecompat:shrapnel]
+sleep 0.05
+> execute if entity @e[type=creativecompat:shrapnel]
+reject Test passed, count: (3[3-9]|[4-9]\d|\d{3,})$
+count Test passed, count: (2[5-9]|3[0-2])$ >= 1
+> kill @e[x=2084,y=-64,z=-16,dx=32,dy=60,dz=32,type=!minecraft:player]
+@draft no batch holds this row yet
+
+## CQ-TN-13 | a burning TNT item hurts about half as much and knocks back as before
+@group client
+@commands Survival, full health, no armor, Normal difficulty: throw one TNT into a lit campfire 2 blocks away and stand still; note the health lost and how far you are pushed; repeat with `[shrapnel] itemBlastDamageFactor = 1.0` (config screen) and compare
+@pass at 0.5 the health lost is about half of the 1.0 run (shrapnel hits come on top: stand on the far side of a wall from the ring, or set `count = 0` for both runs); the push looks the same
+@fails same damage: `BurnBlastDamage.onHurt` not registered (`CreativeCompat` event bus); no push: knockback depends on the damage (it should not, `Explosion#explode` applies it apart)
+@draft no batch holds this row yet; needs a client

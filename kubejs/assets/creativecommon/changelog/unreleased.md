@@ -383,6 +383,9 @@
 
 ## Gameplay
 
+- **Fixed:** TNT shrapnel broke nearby minecarts and armor stands and turned TNT minecarts into items; it now hits only living things.
+- **Changed:** A chain of TNT keeps at most 32 shrapnel pieces in the air at once [24 per TNT].
+- **Changed:** A TNT item exploding in fire or lava deals half damage; the knockback is unchanged.
 - **Changed:** Mending repairs gear from collected XP [only by an anvil and a Mending book].
 - **Changed:** Elytra fly in every dimension [the End only].
 - **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
