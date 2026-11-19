@@ -55,6 +55,7 @@ public final class RpConfig {
 		public final ForgeConfigSpec.IntValue widgetY;
 		public final ForgeConfigSpec.IntValue progressAhead;
 		public final ForgeConfigSpec.DoubleValue bookScale;
+		public final ForgeConfigSpec.DoubleValue contentScale;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> unlockIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> flatIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> slotIcon;
@@ -63,9 +64,12 @@ public final class RpConfig {
 			b.push("dietLog");
 			progressAhead = b.comment("Diet Log progress bar: how many milestones ahead of the last one reached it shows.")
 					.defineInRange("progressAhead", 3, 1, 50);
-			bookScale = b.comment("Diet Log size: 1.25 draws the book at 125%. Shrinks to fit a small window, never below 100%",
+			bookScale = b.comment("Diet Log size: 1.4 draws the book at 140%. Shrinks to fit a small window, never below 100%",
 							"(or below this value when it is under 1.0).")
-					.defineInRange("bookScale", 1.25, 0.5, 3.0);
+					.defineInRange("bookScale", 1.4, 0.5, 3.0);
+			contentScale = b.comment("Diet Log text and icons on our pages, relative to the book: 0.85 draws them at 85% so they stay on the page",
+							"(the book itself is sized by bookScale). 1.0 = unscaled.")
+					.defineInRange("contentScale", 0.85, 0.5, 1.5);
 			b.pop();
 			b.push("icons");
 			unlockIcon = b.comment("Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT",
