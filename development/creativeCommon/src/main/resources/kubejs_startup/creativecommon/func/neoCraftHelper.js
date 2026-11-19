@@ -891,10 +891,13 @@ global.NCH = {
 		global.NCH._pruneEmptyIeOutputs(e)
 		var n = 0
 		var ticks = Java.loadClass('com.google.gson.JsonParser').parseString(String(Math.round(time)))
-		e.forEachRecipe(filter, r => { r.json.add('cookingtime', ticks); n++ })
+		e.forEachRecipe(filter, r => { r.json.add('cookingtime', ticks); r.changed = true; n++ })
 		return n
 	},
 
+	// setCookTime (above), scaleRecipeInt and setRecipeNumber set r.changed after a json edit: KubeJS 1902.6 builds an
+	// unchanged recipe from its original Recipe object once anything parsed it (every { input } / { output } filter
+	// does, e.g. replaceItems), so an edit of r.json alone is dropped (plan_bugfix_r1118.md B3, TODO crops #58).
 	// Multiplies an integer field of every loaded recipe the filter matches (Botany Pots `growthTicks`). factor is a
 	// number or a function (recipe json) -> number; 1 (or 0 / null) leaves that recipe alone. The result is rounded,
 	// at least 1, and written as a parsed JSON integer for the same reason as setCookTime. Recipes without the field
@@ -911,6 +914,7 @@ global.NCH = {
 			if (!f || f === 1) return
 			var v = json.get(key).getAsDouble()
 			json.add(key, parser.parseString(String(Math.max(1, Math.round(v * f)))))
+			r.changed = true
 			n++
 		})
 		return n
@@ -925,6 +929,7 @@ global.NCH = {
 		e.forEachRecipe(filter, r => {
 			if (!r.json) return
 			r.json.add(key, num)
+			r.changed = true
 			n++
 		})
 		return n
