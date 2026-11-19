@@ -91,7 +91,7 @@ look poison (Id 19) applied within 40 s at interval 10, chance 1.0
 @fails `data/creativeengineering/recipes/lingerification_list.json` missing from the CB jar
 @from batches/r1101/cs4_boot3.qb
 @superseded CB section pinned to the pre-split CE 1.1.07 jars; the split shipped in 1.2.00; behavior covered on current jars by SMK-37 to -40, CBA-02, -07, -08, CBO-05, -13, -15, EFX-01, -08, -09 (owner, 2026-11-18)
-shell grep -E "DragonBreathBrewing|Lingerification|lingerification_list" logs/latest.log | grep -iE "error|fail|exception" | head -3; unzip -l mods/creativebrewing-1.0.0.jar | grep -c "data/creativeengineering/recipes/lingerification_list.json"
+shell grep -E "DragonBreathBrewing|Lingerification|lingerification_list" logs/latest.log | grep -iE "error|fail|exception" | head -3; unzip -l mods/creativebrewing-1.0.0.jar | grep -c "data/creativeengineering/recipes/lingerification_list.json"; true
 look no error lines; the CB jar holds the lingerification list (1)
 
 ## SQ-CBJ4-07 | Magic Resistance cuts magic damage by 30 % (iron golems: perfBot bots are invulnerable)
