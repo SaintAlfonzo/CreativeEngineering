@@ -107,7 +107,7 @@ public final class CEQConfig {
 		private DragonGear(ForgeConfigSpec.Builder b) {
 			b.push("dragon_gear");
 
-			armorCap = b.comment("Most armor points an entity can have (mixin.ArmorCapMixin). Vanilla is 30; a full dragon set is 36.",
+			armorCap = b.comment("Most armor points an entity can have (mixin.ArmorCapMixin). Vanilla is 30; a full dragon set is 40 (Dragon Loot config).",
 							"Damage reduction still tops out at 20 effective armor (80 %); armor past 20 holds that",
 							"cap against bigger hits.")
 					.defineInRange("armorCap", 50.0, 30.0, 1024.0);
