@@ -18,8 +18,11 @@ import net.minecraft.world.item.alchemy.Potion;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.UpgradeRecipe;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import java.lang.reflect.Field;
@@ -107,8 +110,9 @@ final class TestData {
 		c.emit(c.line().kv("text", text).kv("n", n).kv("shown", Math.min(n, max)));
 	}
 
-	/** rdetail TEXT [max=40]: serializer, result, ingredients; extra "part=" lines for rolled results, a sequenced
-	 * assembly's start and steps, and public tool / ingredient / side fields (CD skewering). */
+	/** rdetail TEXT [max=40]: serializer, result, ingredients (smithing base / addition and an IE sawmill input when
+	 * getIngredients is empty); extra "part=" lines for rolled results, fluids with amounts, number getters, a
+	 * sequenced assembly's start and steps, and public tool / ingredient / side fields (CD skewering). */
 	private static void rdetail(TestCtx c) {
 		String text = text(c);
 		int max = c.args.optInt("max", 40, 1, 10_000), n = 0;
@@ -122,8 +126,16 @@ final class TestData {
 			} catch (Throwable t) {
 				ins.add("error:" + t.getClass().getSimpleName());
 			}
+			if (ins.isEmpty()) ins.addAll(hiddenIngredients(r));
 			c.emit(c.line().kv("id", id).kv("serializer", serializer(r)).kv("result", result(r))
 					.kv("ingredients", ins.isEmpty() ? "-" : String.join(",", ins)));
+			String fluids = fluids(r);
+			if (fluids != null) c.emit(c.line().kv("id", id).kv("part", "fluids").kv("value", fluids));
+			List<String> nums = new ArrayList<>();
+			for (String g : NUMBER_GETTERS) {
+				if (call(r, g) instanceof Number v) nums.add(g + "=" + v);
+			}
+			if (!nums.isEmpty()) c.emit(c.line().kv("id", id).kv("part", "numbers").kv("value", String.join(",", nums)));
 			String rolls = rolls(r);
 			if (rolls != null) c.emit(c.line().kv("id", id).kv("part", "results").kv("value", rolls));
 			Object start = call(r, "getIngredient");
@@ -154,6 +166,61 @@ final class TestData {
 			}
 		}
 		c.emit(c.line().kv("text", text).kv("n", n).kv("shown", Math.min(n, max)));
+	}
+
+	/** Zero-argument number getters rdetail prints when a recipe has them (Botany Pots crop and soil, Farmer's Delight
+	 * cooking pot, Create processing). */
+	private static final String[] NUMBER_GETTERS = {"getGrowthTicks", "getGrowthModifier", "getCookTime", "getCookingTime",
+			"getProcessingDuration"};
+
+	/**
+	 * Inputs of recipes whose getIngredients() is empty: vanilla smithing ({@code UpgradeRecipe} base and addition,
+	 * private fields read by SRG name) and recipes with a public {@code input} Ingredient field (IE sawmill).
+	 */
+	private static List<String> hiddenIngredients(Recipe<?> r) {
+		List<String> out = new ArrayList<>();
+		if (r instanceof UpgradeRecipe up) {
+			for (String[] f : new String[][]{{"base", "f_44518_"}, {"addition", "f_44519_"}}) {
+				try {
+					Ingredient g = ObfuscationReflectionHelper.getPrivateValue(UpgradeRecipe.class, up, f[1]);
+					if (g != null) out.add(f[0] + ":" + ingredient(g));
+				} catch (Throwable t) {
+					out.add(f[0] + ":error:" + t.getClass().getSimpleName());
+				}
+			}
+			return out;
+		}
+		Object g = field(r, "input");
+		if (g instanceof Ingredient ing) out.add("input:" + ingredient(ing));
+		return out;
+	}
+
+	/**
+	 * Fluid inputs and outputs with amounts ("in:a/b@250mB,out:c@250mB"), or null when the recipe has none: Create
+	 * processing recipes (getFluidIngredients / getFluidResults) and emptying's getResultingFluid.
+	 */
+	private static String fluids(Recipe<?> r) {
+		List<String> parts = new ArrayList<>();
+		if (call(r, "getFluidIngredients") instanceof Collection<?> fis) {
+			for (Object fi : fis) {
+				Object amount = call(fi, "getRequiredAmount");
+				List<String> ids = new ArrayList<>();
+				if (call(fi, "getMatchingFluidStacks") instanceof Collection<?> stacks) {
+					for (Object st : stacks) {
+						if (st instanceof FluidStack fs && ids.size() < 3) ids.add(String.valueOf(ForgeRegistries.FLUIDS.getKey(fs.getFluid())));
+					}
+					if (stacks.size() > 3) ids.add("+" + (stacks.size() - 3));
+				}
+				parts.add("in:" + (ids.isEmpty() ? "?" : String.join("/", ids)) + "@" + amount + "mB");
+			}
+		}
+		List<FluidStack> outs = new ArrayList<>();
+		if (call(r, "getFluidResults") instanceof Collection<?> frs) {
+			for (Object fr : frs) if (fr instanceof FluidStack fs && !fs.isEmpty()) outs.add(fs);
+		}
+		if (outs.isEmpty() && call(r, "getResultingFluid") instanceof FluidStack fs && !fs.isEmpty()) outs.add(fs);
+		for (FluidStack fs : outs) parts.add("out:" + ForgeRegistries.FLUIDS.getKey(fs.getFluid()) + "@" + fs.getAmount() + "mB");
+		return parts.isEmpty() ? null : String.join(",", parts);
 	}
 
 	/** "N id @chance" of each rolled result (Create ProcessingOutput, Farmer's Delight ChanceResult), or null. */
@@ -313,8 +380,9 @@ final class TestData {
 			case "sound" -> Registry.SOUND_EVENT;
 			case "attribute" -> Registry.ATTRIBUTE;
 			case "biome" -> c.server.registryAccess().registryOrThrow(Registry.BIOME_REGISTRY);
+			case "structure" -> c.server.registryAccess().registryOrThrow(Registry.STRUCTURE_REGISTRY);
 			default -> throw new TestArgs.Bad("kind must be item, block, fluid, entity, block_entity_type, effect, potion, "
-					+ "enchantment, recipe_serializer, menu, sound, attribute or biome");
+					+ "enchantment, recipe_serializer, menu, sound, attribute, biome or structure");
 		};
 	}
 
