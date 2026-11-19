@@ -65,6 +65,9 @@
 - **Changed:** Coralstone, tooth and scute blocks and crystal clusters walk at 1.05x, coral blocks at 0.92x, kelpy cobblestone and mossy flower cobblestone at 1.15x, kelpy, tooth and mossy flower bricks, scute shingles and manure bricks at 1.25x, scute pavements and polished manure at 1.25x [1x].
 - **Changed:** Sleeping bags, hammocks, bedrolls, pet beds, nests, kelp and thatch blocks, licked salt blocks and cardboard boxes walk at 0.88x [1x].
 - **Changed:** Vintage Delight jam and jello blocks walk at 0.45x [1x]; crates of produce, eggs and animals and beehives at 1.1x [1x].
+- **Changed:** Sand, red sand, ash, salt, sawdust and fodder layers slow you and sink you in by the same amount at every height, like a full block of the same material [a single layer used the speed of the block below and only a full stack sank].
+- **Changed:** Salt layers walk at 0.85x [1x].
+- **Changed:** Ash, salt and sawdust layers hold you on their top like sand layers [ash at half its height and not at all on ash, salt and sawdust about one layer lower].
 
 ## Walking through plants and webs <!-- icon: minecraft:cobweb -->
 

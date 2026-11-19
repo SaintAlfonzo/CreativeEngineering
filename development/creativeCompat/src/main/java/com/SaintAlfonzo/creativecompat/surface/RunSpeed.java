@@ -38,7 +38,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Pass-through blocks (cobwebs, crops, leaf piles) get their own lines from {@link PassThroughFormat} instead.
  *
  * <p>Which block counts follows BlockRunner, which reads the block 0.2 below your feet: a block whose
- * collision top is under 0.2 (carpet, 1-2 snow layers) shows the block beneath it, and a block with no
+ * collision top is under 0.2 (carpet, 1-2 snow layers) shows the block beneath it, except a surface layer
+ * ({@link SurfaceLayers}: sand, ash, salt, sawdust, fodder), which counts at every height; a block with no
  * collision (plants) shows nothing unless it slows you from inside.
  *
  * <p>Cheap enough to call on every overlay refresh: one or two collision shapes, one map lookup for
@@ -105,7 +106,8 @@ public final class RunSpeed {
 	@Nullable
 	public static Info at(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
 		double top = standTop(level, pos, state, player);
-		boolean standable = top >= REGISTER_HEIGHT;
+		// a surface layer (sand, ash, salt, sawdust, fodder) counts at every height, like movement (SurfaceLayers)
+		boolean standable = top >= REGISTER_HEIGHT || (top > 0.0 && SurfaceLayers.is(state));
 		double stuck = StuckInBlock.horizontal(state, player, standable);
 		boolean inBlock = !Double.isNaN(stuck);
 

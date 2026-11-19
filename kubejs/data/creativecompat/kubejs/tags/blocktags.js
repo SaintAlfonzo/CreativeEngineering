@@ -55,6 +55,11 @@ ServerEvents.tags('block', e => {
 	// Dropped items lie on top of sinking blocks at their real height; blocks listed here swallow them
 	// (the item sinks like any other entity). Empty for now: every sinking block shows its items.
 	t.add(e, 'creativecompat:sinking_hides_items', [])
+	// Surface layers (surface/SurfaceLayers): layer blocks that walk at their own tier and sink
+	// like a full block at every layer count, on their visible top. Leaf piles, bamboo leaves and snow are walk-through
+	// (creativecompat:passthrough_layers) instead.
+	t.add(e, 'creativecompat:surface_layers', [i.sand_layer_block, i.red_sand_layer_block, i.ash_layer_block, i.ash,
+		i.vintagedelight_salt, i.immersiveengineering_sawdust, i.fodder])
 	// Honey's wall slide on blocks that aren't honey (surface/WallSlide; honey and Fruits Delight jelly blocks already
 	// slide, they extend HoneyBlock)
 	t.add(e, 'creativecompat:wall_slide', [b.porous_flesh, i.banana_slug_slime_block])

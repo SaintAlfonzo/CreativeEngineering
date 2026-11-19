@@ -67,7 +67,8 @@ ServerEvents.tags('block', e => {
 	// (the numbers below are the defaults, fastest -> slowest). Creative Common's SurfaceTier enum lists the
 	// tiers for that config, so a new tier needs an entry there too; blockrunner.json only keeps one-offs.
 	// BlockRunner reads the block ~0.2 below your feet (vanilla getOnPos), so carpets, pressure plates,
-	// IW leaf piles and snow layers walked through never register (the block under them does).
+	// IW leaf piles and snow layers walked through never register (the block under them does). Surface
+	// layers (sand, ash, salt, sawdust, fodder; #creativecompat:surface_layers) count at every height.
 	// A tiered block's native speed factor is replaced (IP asphalt's 1.2, honey's 0.4); soul sand/soil
 	// are left out on purpose: tiering them would stop Soul Speed from canceling the slowdown.
 	// One tier per block — BlockRunner picks a random one on each reload otherwise (see overlaps below).
@@ -354,6 +355,7 @@ ServerEvents.tags('block', e => {
 		item.t_sand, 'minecraft:*_concrete_powder', item.gravisand,
 		item.ash,
 		'/^immersive_weathering:(red_)?sand_layer_block$/', 'immersive_weathering:ash*',
+		item.vintagedelight_salt,   // salt layers (Vintage Delight); the full salt blocks are soft
 		'creativeengineering:*_dust_pile', 'create_compressed:*_flour_pile', item.immersiveengineering_sawdust,
 		'create_compressed:crushed_*_pile', item.powdered_obsidian_block,
 		item.create_things_and_misc_powdered_obsidian_block, 'oldguns:*_powder_block',
