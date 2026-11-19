@@ -116,17 +116,17 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			// Corpse decay, wither look and live equipment (corpse/, plan_corpses.md 3.1)
 			Map.entry("CorpseDecayMixin", List.of("corpse")),
 			Map.entry("CorpseRendererMixin", List.of("corpse")),
-			// interface mixins (JEI, tooltips, GUI titles, toasts, effect icons)
-			Map.entry("SubMenuConfigScreenMixin", List.of("create")),
-			Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),
-			Map.entry("JeiMissingSlotsErrorAccessor", List.of("jei")),
-			Map.entry("JeiRecipeLayoutTooltipMixin", List.of("jei")),
 			// Corpse screen sections: cosmetic armor and curio slots, Additional Items without them (plan_corpses.md 3.6)
 			Map.entry("CorpseInventoryContainerMixin", List.of("corpse")),
 			Map.entry("CorpseContainerBaseMixin", List.of("corpse")),
 			Map.entry("CorpseAdditionalContainerMixin", List.of("corpse")),
 			Map.entry("CorpseGuisMixin", List.of("corpse")),
 			Map.entry("CorpseScreenMixin", List.of("corpse")),
+			// interface mixins (JEI, tooltips, GUI titles, toasts, effect icons)
+			Map.entry("SubMenuConfigScreenMixin", List.of("create")),
+			Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),
+			Map.entry("JeiMissingSlotsErrorAccessor", List.of("jei")),
+			Map.entry("JeiRecipeLayoutTooltipMixin", List.of("jei")),
 			Map.entry("JeiFluidTankScaleMixin", List.of("jei")),
 			Map.entry("JeiRecipesGuiTooltipMixin", List.of("jei")),
 			Map.entry("JeiIngredientFilterAccessor", List.of("jei")),
@@ -189,13 +189,13 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("CreateBreakerMonsterBoxMixin", List.of("create", "quark")),
 			// Immersive Weathering's azalea flowers place Twigs' azalea flowers block (item_merges.md 2.21)
 			Map.entry("IwAzaleaFlowersPlaceMixin", List.of("immersive_weathering", "twigs")),
+			// Transfer Items returns curios to their recorded slots (corpse/CorpseCurios, plan_corpses.md 3.6 item 4)
+			Map.entry("CorpseTransferMessageMixin", List.of("corpse", "curios")),
 			// GeckoLib item in the hotbar flushing ImmediatelyFast's HUD item batch (plan_portal_gun.md 2)
 			Map.entry("GeckoItemHudBatchMixin", List.of("geckolib3", "immediatelyfast")));
 
 	public CompatMixinPlugin() {
 		super("[creativecompat]", NEEDS_MOD, MOD_RANGE);
-			// Transfer Items returns curios to their recorded slots (corpse/CorpseCurios, plan_corpses.md 3.6 item 4)
-			Map.entry("CorpseTransferMessageMixin", List.of("corpse", "curios")),
 	}
 
 	@Override
