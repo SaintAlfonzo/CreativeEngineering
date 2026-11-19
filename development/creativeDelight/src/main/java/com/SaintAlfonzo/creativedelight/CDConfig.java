@@ -736,36 +736,47 @@ public final class CDConfig {
 	}
 
 	/**
-	 * The pack seasoning cap ({@code food.Seasonings}, feature_writeup/seasonings.md 2): how many seasonings one food may
-	 * carry, and whether station seasonings ({@code grilled}, put on by the Barbeque's Delight Grill) count. Salt's
-	 * {@code Salted} is separate and never counts. Read live.
+	 * The pack flavor cap ({@code food.Flavors}, feature_writeup/seasonings.md 2): how many flavors one food may carry,
+	 * whether station flavors ({@code grilled}, put on by the Barbeque's Delight Grill) count, and the extra slots
+	 * Grilled gives. Salt's {@code Salted} is separate and never counts. Read live.
 	 */
 	public static final class Food {
-		private final ForgeConfigSpec.IntValue maxSeasonings;
+		private final ForgeConfigSpec.IntValue maxFlavors;
 		private final ForgeConfigSpec.BooleanValue grilledCountsTowardMax;
+		private final ForgeConfigSpec.IntValue grilledFlavorSlots;
 
 		private Food(ForgeConfigSpec.Builder b) {
-			b.comment("Pack seasonings (crafted onto food, feature_writeup/seasonings.md).").push("food");
+			b.comment("Pack flavors: seasonings and sauces put on food (feature_writeup/food.md 3.12; renamed from",
+					"seasonings, food/seasoning #25).").push("food");
 
-			maxSeasonings = b.comment(
-					"Most seasonings one food may carry. A seasoning craft that would go past it does not match.",
-					"Which pairs may share a food is still each seasoning's combines list. Salt does not count."
-			).defineInRange("maxSeasonings", 2, 1, 16);
+			maxFlavors = b.comment(
+					"Most flavors one food may carry. A flavor craft that would go past it does not match.",
+					"Which pairs may share a food is still each flavor's combines list. Salt does not count."
+			).defineInRange("maxFlavors", 2, 1, 16);
 
 			grilledCountsTowardMax = b.comment(
-					"On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxSeasonings, and the Grill",
+					"On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxFlavors, and the Grill",
 					"does not add it to a skewer that is already full. Off = it never counts."
 			).define("grilledCountsTowardMax", false);
+
+			grilledFlavorSlots = b.comment(
+					"Flavor slots Grilled adds: a grilled food may carry this many flavors past maxFlavors (Grilled gives",
+					"no saturation of its own; plan_food_batch_1119.md R3, R20)."
+			).defineInRange("grilledFlavorSlots", 2, 0, 16);
 
 			b.pop(); // food
 		}
 
-		public int maxSeasonings() {
-			return SPEC.isLoaded() ? maxSeasonings.get() : 2;
+		public int maxFlavors() {
+			return SPEC.isLoaded() ? maxFlavors.get() : 2;
 		}
 
 		public boolean grilledCountsTowardMax() {
 			return SPEC.isLoaded() && grilledCountsTowardMax.get();
+		}
+
+		public int grilledFlavorSlots() {
+			return SPEC.isLoaded() ? grilledFlavorSlots.get() : 2;
 		}
 	}
 

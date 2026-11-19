@@ -24,23 +24,23 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 /**
- * Crafting grid, shapeless: one food matching {@code food} plus one of each seasoning's ingredient gives the same food
- * (all NBT kept, count 1) with those seasonings added ({@link Seasonings}). It doesn't match if the food is outside
- * any of their seasonable tags ({@link Seasonings#seasonableTag}), already has one of them, or any two of the food's
- * seasonings don't combine, the food would go past the cap ({@code [food] maxSeasonings}), or a part is a station
- * seasoning ({@code grilled}). Type {@code creativedelight:seasoning}; emitted by
- * {@code global.NCH.season}. Shown on the Seasoning JEI page.
+ * Crafting grid, shapeless: one food matching {@code food} plus one of each flavor's ingredient gives the same food
+ * (all NBT kept, count 1) with those flavors added ({@link Flavors}). It doesn't match if the food is outside
+ * any of their flavorable tags ({@link Flavors#flavorableTag}), already has one of them, or any two of the food's
+ * flavors don't combine, the food would go past the cap ({@code [food] maxFlavors}), or a part is a station
+ * flavor ({@code grilled}). Type {@code creativedelight:flavor}; emitted by
+ * {@code global.NCH.flavor}. Shown on the Flavor JEI page.
  */
-public class SeasoningRecipe extends CustomRecipe {
+public class FlavorRecipe extends CustomRecipe {
 
-	/** One seasoning the recipe puts on and the item that carries it. */
-	public record Part(ResourceLocation seasoning, Ingredient ingredient) {
+	/** One flavor the recipe puts on and the item that carries it. */
+	public record Part(ResourceLocation flavor, Ingredient ingredient) {
 	}
 
 	private final Ingredient food;
 	private final List<Part> parts;
 
-	public SeasoningRecipe(ResourceLocation id, Ingredient food, List<Part> parts) {
+	public FlavorRecipe(ResourceLocation id, Ingredient food, List<Part> parts) {
 		super(id);
 		this.food = food;
 		this.parts = List.copyOf(parts);
@@ -54,8 +54,8 @@ public class SeasoningRecipe extends CustomRecipe {
 		return parts;
 	}
 
-	public List<ResourceLocation> seasonings() {
-		return parts.stream().map(Part::seasoning).toList();
+	public List<ResourceLocation> flavors() {
+		return parts.stream().map(Part::flavor).toList();
 	}
 
 	/** The food stack in the grid if the rest is exactly one of each part, else EMPTY. */
@@ -94,9 +94,9 @@ public class SeasoningRecipe extends CustomRecipe {
 	@Override
 	public boolean matches(CraftingContainer inv, Level level) {
 		ItemStack s = findFood(inv);
-		// station seasonings (grilled) are put on by their station only, never crafted
-		return !s.isEmpty() && seasonings().stream().noneMatch(Seasonings::isStation)
-				&& Seasonings.accepts(s, seasonings()) && Seasonings.canAdd(Seasonings.of(s), seasonings());
+		// station flavors (grilled) are put on by their station only, never crafted
+		return !s.isEmpty() && flavors().stream().noneMatch(Flavors::isStation)
+				&& Flavors.accepts(s, flavors()) && Flavors.canAdd(Flavors.of(s), flavors());
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class SeasoningRecipe extends CustomRecipe {
 		}
 		ItemStack out = s.copy();
 		out.setCount(1);
-		return Seasonings.with(out, seasonings());
+		return Flavors.with(out, flavors());
 	}
 
 	@Override
@@ -131,45 +131,45 @@ public class SeasoningRecipe extends CustomRecipe {
 	private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
 			DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.MOD_ID);
 
-	public static final RegistryObject<RecipeSerializer<?>> SERIALIZER = SERIALIZERS.register("seasoning", Serializer::new);
+	public static final RegistryObject<RecipeSerializer<?>> SERIALIZER = SERIALIZERS.register("flavor", Serializer::new);
 
 	public static void register(IEventBus modEventBus) {
 		SERIALIZERS.register(modEventBus);
 	}
 
-	/** {@code {"food": <ingredient>, "seasonings": [{"seasoning": "ns:id", "ingredient": <ingredient>}, ...]}} */
-	public static final class Serializer implements RecipeSerializer<SeasoningRecipe> {
+	/** {@code {"food": <ingredient>, "flavors": [{"flavor": "ns:id", "ingredient": <ingredient>}, ...]}} */
+	public static final class Serializer implements RecipeSerializer<FlavorRecipe> {
 		@Override
-		public SeasoningRecipe fromJson(ResourceLocation id, JsonObject json) {
+		public FlavorRecipe fromJson(ResourceLocation id, JsonObject json) {
 			List<Part> parts = new ArrayList<>();
-			for (JsonElement e : GsonHelper.getAsJsonArray(json, "seasonings")) {
+			for (JsonElement e : GsonHelper.getAsJsonArray(json, "flavors")) {
 				JsonObject o = e.getAsJsonObject();
-				parts.add(new Part(new ResourceLocation(GsonHelper.getAsString(o, "seasoning")),
+				parts.add(new Part(new ResourceLocation(GsonHelper.getAsString(o, "flavor")),
 						CraftingHelper.getIngredient(o.get("ingredient"))));
 			}
 			if (parts.isEmpty()) {
-				throw new IllegalArgumentException("seasoning recipe " + id + " has no seasonings");
+				throw new IllegalArgumentException("flavor recipe " + id + " has no flavors");
 			}
-			return new SeasoningRecipe(id, CraftingHelper.getIngredient(json.get("food")), parts);
+			return new FlavorRecipe(id, CraftingHelper.getIngredient(json.get("food")), parts);
 		}
 
 		@Override
-		public SeasoningRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+		public FlavorRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
 			Ingredient food = Ingredient.fromNetwork(buf);
 			int n = buf.readVarInt();
 			List<Part> parts = new ArrayList<>(n);
 			for (int k = 0; k < n; k++) {
 				parts.add(new Part(buf.readResourceLocation(), Ingredient.fromNetwork(buf)));
 			}
-			return new SeasoningRecipe(id, food, parts);
+			return new FlavorRecipe(id, food, parts);
 		}
 
 		@Override
-		public void toNetwork(FriendlyByteBuf buf, SeasoningRecipe recipe) {
+		public void toNetwork(FriendlyByteBuf buf, FlavorRecipe recipe) {
 			recipe.food.toNetwork(buf);
 			buf.writeVarInt(recipe.parts.size());
 			for (Part p : recipe.parts) {
-				buf.writeResourceLocation(p.seasoning());
+				buf.writeResourceLocation(p.flavor());
 				p.ingredient().toNetwork(buf);
 			}
 		}

@@ -66,8 +66,8 @@ public class CanPagesJEI implements IModPlugin {
 	private static final ResourceLocation EMPTY_CAN = new ResourceLocation("canned_goods", "empty_can");
 	private static final ResourceLocation CRUSHED_CAN = new ResourceLocation("canned_goods", "crushed_empty_can");
 	private static final TagKey<Item> CANS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(CreativeDelight.MOD_ID, "cans"));
-	/** Seasoning crafts have their own page ({@link SeasoningJEI}). */
-	private static final String SEASON_PREFIX = "shapeless/season/";
+	/** Flavor crafts have their own page ({@link FlavorJEI}). */
+	private static final String FLAVOR_PREFIX = "shapeless/flavor/";
 
 	/** Recipe ids now on these pages (set by the last reload). */
 	private Set<ResourceLocation> moved = Set.of();
@@ -123,7 +123,7 @@ public class CanPagesJEI implements IModPlugin {
 			for (CraftingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING)) {
 				ResourceLocation id = recipe.getId();
 				if (recipe.isSpecial() || recipe.getResultItem().isEmpty()
-						|| (id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(SEASON_PREFIX))) {
+						|| (id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(FLAVOR_PREFIX))) {
 					continue;
 				}
 				if (recipe.getResultItem().is(CANS) && !emptyCan.isEmpty() && takes(recipe, stack -> stack.is(emptyCan.getItem()))) {

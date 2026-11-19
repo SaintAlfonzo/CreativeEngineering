@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativedelight.barbeques.item;
 
 import com.SaintAlfonzo.creativedelight.barbeques.BBQLang;
-import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackFlavors;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 /**
  * A raw or cooked skewer (1.3.0 BBQSkewerItem). Eating returns the stick. Since the seasoning fold (food/seasoning #11)
- * its seasonings are the pack's ({@link PackSeasonings}): Creative Delight shows the tooltip lines and applies the
+ * its seasonings are the pack's ({@link PackFlavors}): Creative Delight shows the tooltip lines and applies the
  * on-eat bonuses; this item asks the framework for the fast, always-edible and effect-transform kinds. Names (O34):
  * seasonings with a prefix (Chili Flavored, Peppered, Garlic, Salted, ...) go in front of the name; Grilled is a
  * tooltip line only.
@@ -39,7 +39,7 @@ public class BBQSkewerItem extends FoodItem {
             prefix.append(BBQLang.SALTED.get());
             color = ChatFormatting.WHITE;
         }
-        for (ResourceLocation id : PackSeasonings.of(stack)) {
+        for (ResourceLocation id : PackFlavors.of(stack)) {
             BBQSeasoning s = BBQSeasoning.byId(id);
             if (s != null) {
                 prefix.append(s.getTitle());
@@ -55,7 +55,7 @@ public class BBQSkewerItem extends FoodItem {
     @Nullable
     @Override
     public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
-        return PackSeasonings.foodProperties(stack, super.getFoodProperties(stack, entity));
+        return PackFlavors.foodProperties(stack, super.getFoodProperties(stack, entity));
     }
 
     @Override

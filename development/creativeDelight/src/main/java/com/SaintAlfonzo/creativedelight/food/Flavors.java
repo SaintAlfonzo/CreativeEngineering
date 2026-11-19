@@ -42,29 +42,34 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Pack seasonings: a food carries the seasonings put on it as NBT {@code Seasonings:["ns:id", ...]} (sorted, so the
+ * Pack flavors: a food carries the flavors put on it as NBT {@code Flavors:["ns:id", ...]} (sorted, so the
  * order they went on doesn't split stacks), and eating it adds each one's bonus on top of the food. Definitions come
- * from KubeJS at startup ({@code development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/seasonings.js} -> {@link #define}), on both sides: the
- * server needs them to match {@link SeasoningRecipe} and apply the bonus, the client for {@link SeasoningTooltip}.
+ * from KubeJS at startup ({@code development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/flavors.js} -> {@link #define}), on both sides: the
+ * server needs them to match {@link FlavorRecipe} and apply the bonus, the client for {@link FlavorTooltip}.
  * Salt's {@code Salted} is its own mechanism and untouched.
  */
-public final class Seasonings {
+public final class Flavors {
 
 	private static final Logger LOGGER = LogUtils.getLogger();
-	public static final String TAG = "Seasonings";
+	public static final String TAG = "Flavors";
 
-	/** One effect a seasoning gives, duration in ticks. */
+	/** One effect a flavor gives, duration in ticks. */
 	public record Effect(ResourceLocation effect, int duration, int amplifier) {
 	}
 
 	/**
-	 * A seasoning's bonus: {@code nutrition} hunger points, {@code saturation} saturation points (absolute, capped at
-	 * the food level like vanilla), {@code heal} health points, timed effects. {@code combines}: the seasonings it may
+	 * A flavor's bonus: {@code nutrition} hunger points, {@code saturation} saturation points (absolute, capped at
+	 * the food level like vanilla), {@code heal} health points, timed effects. {@code combines}: the flavors it may
 	 * share a food with (either side listing the other is enough). {@code name}: the display name from the script, used
-	 * by the tooltip when the lang key {@code seasoning.<ns>.<path>} is missing (empty when the script gave none).
+	 * by the tooltip when the lang key {@code flavor.<ns>.<path>} is missing (empty when the script gave none).
 	 */
 	public record Definition(ResourceLocation id, int nutrition, float saturation, float heal, List<Effect> effects,
-							 Set<ResourceLocation> combines, String name, Kinds kinds) {
+							 Set<ResourceLocation> combines, String name, Kinds kinds, String kind) {
+		/** True for a sauce (the Barbeque's Delight sauces, chorus, glowing and ardent sauce, relish); else a seasoning. */
+		public boolean sauce() {
+			return "sauce".equals(kind);
+		}
+
 		/** True if the food's own properties change (eating speed, always edible, effect transform). */
 		public boolean changesFood() {
 			return kinds.fast() || kinds.alwaysEdible() || !kinds.transform().identity();
@@ -72,16 +77,29 @@ public final class Seasonings {
 	}
 
 	/**
-	 * The seasoning kinds added by the Barbeque's Delight fold (food/seasoning #11, barbeques_delight.md 4.1):
+	 * The flavor kinds added by the Barbeque's Delight fold (food/seasoning #11, barbeques_delight.md 4.1):
 	 * {@code fast} eating (16 ticks), {@code alwaysEdible} (eat when full), {@code damage} health points on eating of
 	 * {@code damageType} ("fire", "magic" or "generic"), an effect {@code transform} that rewrites the food's own effects,
 	 * {@code station} (put on by a station such as the Grill, never by a craft; counts toward the cap only if
-	 * {@code [food] grilledCountsTowardMax}) and {@code combinesAll} (shares a food with any seasoning).
+	 * {@code [food] grilledCountsTowardMax}) and {@code combinesAll} (shares a food with any flavor).
 	 */
 	public record Kinds(boolean fast, boolean alwaysEdible, float damage, String damageType, Transform transform,
-						boolean station, boolean combinesAll) {
-		static final Kinds NONE = new Kinds(false, false, 0f, "fire", Transform.IDENTITY, false, false);
+						boolean station, boolean combinesAll, boolean addsSlots) {
+		static final Kinds NONE = new Kinds(false, false, 0f, "fire", Transform.IDENTITY, false, false, false);
 	}
+
+	/**
+	 * A pair of flavors that gives {@code saturation} extra saturation points when both are on a food (owner R3:
+	 * garlic + onion, salt + pepper, sugar + ghost pepper, 0.5 a flavor). {@link #SALTED} stands for Salt's
+	 * {@code Salted} NBT, which is not a pack flavor.
+	 */
+	public record FlavorPair(ResourceLocation a, ResourceLocation b, float saturation) {
+	}
+
+	/** Pair id that means "the stack carries Salt's {@code Salted} tag". */
+	public static final ResourceLocation SALTED = new ResourceLocation("salt", "salted");
+
+	private static final List<FlavorPair> PAIRS = new ArrayList<>();
 
 	/** Each of the food's own effects: chance times {@code chance}, duration times {@code duration}, amplifier plus {@code amplifier}. */
 	public record Transform(float chance, float duration, int amplifier) {
@@ -94,9 +112,9 @@ public final class Seasonings {
 
 	private static final Map<ResourceLocation, Definition> DEFINITIONS = new LinkedHashMap<>();
 
-	private Seasonings() {}
+	private Flavors() {}
 
-	/** Registers (or replaces) one seasoning from its JSON; called by the KubeJS startup script. */
+	/** Registers (or replaces) one flavor from its JSON; called by the KubeJS startup script. */
 	public static void define(String json) {
 		try {
 			JsonObject o = JsonParser.parseString(json).getAsJsonObject();
@@ -127,37 +145,76 @@ public final class Seasonings {
 			Kinds kinds = new Kinds(bool(o, "fast"), bool(o, "alwaysEdible"),
 					o.has("damage") ? o.get("damage").getAsFloat() : 0f,
 					o.has("damageType") ? o.get("damageType").getAsString() : "fire",
-					transform, bool(o, "station"), bool(o, "combinesAll"));
+					transform, bool(o, "station"), bool(o, "combinesAll"), bool(o, "addsSlots"));
 			Definition def = new Definition(id,
 					o.has("nutrition") ? o.get("nutrition").getAsInt() : 0,
 					o.has("saturation") ? o.get("saturation").getAsFloat() : 0f,
 					o.has("heal") ? o.get("heal").getAsFloat() : 0f,
 					List.copyOf(effects), Set.copyOf(combines),
-					o.has("name") ? o.get("name").getAsString() : "", kinds);
+					o.has("name") ? o.get("name").getAsString() : "", kinds,
+					o.has("kind") ? o.get("kind").getAsString() : "seasoning");
 			DEFINITIONS.put(id, def);
-			LOGGER.info("[seasoning] defined {}", id);
+			LOGGER.info("[flavor] defined {}", id);
 		} catch (Exception e) {
-			LOGGER.error("[seasoning] bad definition {}", json, e);
+			LOGGER.error("[flavor] bad definition {}", json, e);
 		}
 	}
 
-	/** Every defined seasoning id, in definition order. */
+	/** Registers a flavor pair (both ids, extra saturation points); called by the KubeJS startup script. */
+	public static void pair(String a, String b, float saturation) {
+		PAIRS.removeIf(p -> (p.a().toString().equals(a) && p.b().toString().equals(b))
+				|| (p.a().toString().equals(b) && p.b().toString().equals(a)));
+		PAIRS.add(new FlavorPair(new ResourceLocation(a), new ResourceLocation(b), saturation));
+		LOGGER.info("[flavor] pair {} + {}: +{} saturation", a, b, saturation);
+	}
+
+	/** The pairs complete on {@code stack} (both flavors on it; {@link #SALTED} = Salt's Salted tag). */
+	public static List<FlavorPair> pairsOn(ItemStack stack) {
+		List<ResourceLocation> ids = of(stack);
+		if (ids.isEmpty()) {
+			return List.of();
+		}
+		CompoundTag tag = stack.getTag();
+		boolean salted = tag != null && tag.contains("Salted");
+		List<FlavorPair> out = new ArrayList<>();
+		for (FlavorPair p : PAIRS) {
+			if (has(ids, salted, p.a()) && has(ids, salted, p.b())) {
+				out.add(p);
+			}
+		}
+		return out;
+	}
+
+	private static boolean has(List<ResourceLocation> ids, boolean salted, ResourceLocation id) {
+		return SALTED.equals(id) ? salted : ids.contains(id);
+	}
+
+	/** Extra saturation points from the complete pairs on {@code stack}. */
+	public static float pairSaturation(ItemStack stack) {
+		float sum = 0f;
+		for (FlavorPair p : pairsOn(stack)) {
+			sum += p.saturation();
+		}
+		return sum;
+	}
+
+	/** Every defined flavor id, in definition order. */
 	public static List<ResourceLocation> ids() {
 		return List.copyOf(DEFINITIONS.keySet());
 	}
 
 	/**
-	 * The tag listing the foods a seasoning may go on, {@code #<ns>:seasonable/<path>}: built from food families plus
-	 * single adds and removals by Creative Delight's {@code creativedelight/seasoning_tags.js}.
+	 * The tag listing the foods a flavor may go on, {@code #<ns>:flavorable/<path>}: built from food families plus
+	 * single adds and removals by Creative Delight's {@code creativedelight/flavor_tags.js}.
 	 */
-	public static TagKey<Item> seasonableTag(ResourceLocation id) {
-		return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(id.getNamespace(), "seasonable/" + id.getPath()));
+	public static TagKey<Item> flavorableTag(ResourceLocation id) {
+		return TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(id.getNamespace(), "flavorable/" + id.getPath()));
 	}
 
-	/** True if the food is in the seasonable tag of every one of {@code adding}. */
+	/** True if the food is in the flavorable tag of every one of {@code adding}. */
 	public static boolean accepts(ItemStack food, List<ResourceLocation> adding) {
 		for (ResourceLocation id : adding) {
-			if (!food.is(seasonableTag(id))) {
+			if (!food.is(flavorableTag(id))) {
 				return false;
 			}
 		}
@@ -177,9 +234,9 @@ public final class Seasonings {
 	}
 
 	/**
-	 * True if every one of {@code adding} is defined, new to the food, every pair among the food's seasonings plus
-	 * {@code adding} combines, and the result is within the cap ({@code [food] maxSeasonings}; station seasonings such as
-	 * {@code grilled} count only with {@code [food] grilledCountsTowardMax}). Seasonings that are no longer defined
+	 * True if every one of {@code adding} is defined, new to the food, every pair among the food's flavors plus
+	 * {@code adding} combines, and the result is within the cap ({@code [food] maxFlavors}; station flavors such as
+	 * {@code grilled} count only with {@code [food] grilledCountsTowardMax}). Flavors that are no longer defined
 	 * count toward nothing.
 	 */
 	public static boolean canAdd(List<ResourceLocation> existing, List<ResourceLocation> adding) {
@@ -195,7 +252,19 @@ public final class Seasonings {
 			}
 			all.add(id);
 		}
-		return counted(all) <= CDConfig.FOOD.maxSeasonings();
+		return counted(all) <= cap(all);
+	}
+
+	/** The cap for a food carrying {@code ids}: {@code [food] maxFlavors}, plus {@code grilledFlavorSlots} when one of them adds slots (Grilled). */
+	public static int cap(List<ResourceLocation> ids) {
+		int cap = CDConfig.FOOD.maxFlavors();
+		for (ResourceLocation id : ids) {
+			Definition def = DEFINITIONS.get(id);
+			if (def != null && def.kinds().addsSlots()) {
+				return cap + CDConfig.FOOD.grilledFlavorSlots();
+			}
+		}
+		return cap;
 	}
 
 	/** How many of {@code ids} count toward the cap. */
@@ -211,7 +280,7 @@ public final class Seasonings {
 		return n;
 	}
 
-	/** True if the seasoning is defined and put on by a station only (no craft). */
+	/** True if the flavor is defined and put on by a station only (no craft). */
 	public static boolean isStation(ResourceLocation id) {
 		Definition def = DEFINITIONS.get(id);
 		return def != null && def.kinds().station();
@@ -255,7 +324,7 @@ public final class Seasonings {
 	}
 
 	/**
-	 * The food's properties with its seasonings' fast, always-edible and transform kinds applied ({@code base} itself
+	 * The food's properties with its flavors' fast, always-edible and transform kinds applied ({@code base} itself
 	 * when none of them changes the food). Items whose {@code getFoodProperties(stack, entity)} calls this get the
 	 * kinds: the Barbeque's Delight skewers and combos (through reflection). Transforms apply in NBT order.
 	 */
@@ -316,7 +385,7 @@ public final class Seasonings {
 		return o.has(key) && o.get(key).getAsBoolean();
 	}
 
-	/** The seasonings on a stack, in NBT order (empty if none). */
+	/** The flavors on a stack, in NBT order (empty if none). */
 	public static List<ResourceLocation> of(ItemStack stack) {
 		CompoundTag tag = stack.getTag();
 		if (tag == null || !tag.contains(TAG, Tag.TAG_LIST)) {
@@ -333,7 +402,7 @@ public final class Seasonings {
 		return out;
 	}
 
-	/** {@code stack} (modified) with {@code adding} added to its seasonings, the list kept sorted. */
+	/** {@code stack} (modified) with {@code adding} added to its flavors, the list kept sorted. */
 	public static ItemStack with(ItemStack stack, Collection<ResourceLocation> adding) {
 		Set<ResourceLocation> all = new TreeSet<>(Comparator.comparing(ResourceLocation::toString));
 		all.addAll(of(stack));
@@ -347,7 +416,7 @@ public final class Seasonings {
 	}
 
 	/**
-	 * Eating a seasoned food: each seasoning's bonus after the food's own. The event's stack is the copy taken before
+	 * Eating a flavored food: each flavor's bonus after the food's own. The event's stack is the copy taken before
 	 * the bite, so the NBT is still there.
 	 */
 	@SubscribeEvent
@@ -363,7 +432,7 @@ public final class Seasonings {
 	}
 
 	/**
-	 * Each seasoning's on-eat bonus for {@code stack}. Public for the Barbeque's Delight combos, which run it for every
+	 * Each flavor's on-eat bonus for {@code stack}. Public for the Barbeque's Delight combos, which run it for every
 	 * skewer they hold (through reflection).
 	 */
 	public static void applyEaten(Player player, ItemStack stack) {
@@ -372,6 +441,11 @@ public final class Seasonings {
 			if (def != null) {
 				apply(player, def);
 			}
+		}
+		float pairs = pairSaturation(stack);
+		if (pairs > 0) {
+			FoodData food = player.getFoodData();
+			food.setSaturation(Math.min(food.getFoodLevel(), food.getSaturationLevel() + pairs));
 		}
 	}
 

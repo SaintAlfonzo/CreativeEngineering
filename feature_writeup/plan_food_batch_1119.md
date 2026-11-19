@@ -8,17 +8,13 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=377cb9a05445 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 6, In Progress 4, Testing 12), 1 Complete.
+<!-- generated:status_index begin open_work sha1=e7a3d26efe11 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, In Progress 4, Testing 16), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `dairy-fats-and-batter #2` | Planned | S C P | Whale oil cauldron route |
 | `pickles-and-ferments #17` | Planned | S C P | Pickled garlic item |
-| `seasoning #25` | Planned | S C P | Rename the seasoning mechanic to Flavor |
-| `seasoning #26` | Planned | S C P | Flavor pairs: garlic + onion, salt + pepper, sugar + ghost pepper |
-| `seasoning #27` | Planned | S C P | Sauce flavors: chorus sauce, glowing sauce, ardent sauce, relish |
-| `seasoning #28` | Planned | S C P | Onion, garlic and ghost pepper powders, milled |
 | `baking/baked-goods #20` | In Progress | S C P | Pizza food type |
 | `dishes/meals #5` | In Progress | S C P T | Feasts |
 | `dishes/meals #45` | In Progress | S C P | Broccoli soup: milk to cheese |
@@ -35,6 +31,10 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 | `food/drinks #14` | Testing | S P | Hot cocoa and apple cider review |
 | `food/types-and-tuning #6` | Testing | S P | Vanilla egg -> `#forge:eggs` in recipes |
 | `fruit #3` | Testing | S C | Fruit slice yields and reassembly |
+| `seasoning #25` | Testing | S C P | Rename the seasoning mechanic to Flavor |
+| `seasoning #26` | Testing | S C P | Flavor pairs: garlic + onion, salt + pepper, sugar + ghost pepper |
+| `seasoning #27` | Testing | S C P | Sauce flavors: chorus sauce, glowing sauce, ardent sauce, relish |
+| `seasoning #28` | Testing | S C P | Onion, garlic and ghost pepper powders, milled |
 <!-- generated:status_index end open_work -->
 
 <!-- generated:status_index begin open_work -->
@@ -189,7 +189,7 @@ Choices made while building, where the plan or a ruling left a gap (newest wave 
     and Harvest's sap block, Java with its own block state and art). The manual whale oil route is a Cooking Pot recipe
     (2 blubber + bottle -> 1, as Rustic's cooking oil); the cauldron route moved to `dairy-fats-and-batter #2`.
   - Blubber and Whale Oil read Delightful's animal fat and Rustic's cooking oil sprites in place (no copied files); the
-    whale oil fluid uses Crafts & Additions' seed oil textures untinted. No colour was picked.
+    whale oil fluid uses Crafts & Additions' seed oil textures untinted. No color was picked.
   - Cachalot drop count 3-6 (not ruled); D3 merges Delightful's animal oil bottle into Cooking Oil (the survivor takes
     over its crafts, R12); D4 "pressed" became the cooking oil ingredient tag (any seed in Rustic's pot and mixer
     recipes) plus a Spout from Crafts & Additions' seed oil fluid; fish oil joins the cooking oil tag and the item
@@ -197,3 +197,21 @@ Choices made while building, where the plan or a ruling left a gap (newest wave 
   - D5 switches: CDConfig `[fats]` (blubber, whaleOil, animalFatOil, seedOil, fishOil), default on; no hand-edited
     config (Forge adds the section on load). The soap list in Compat's `other/misc_mods.js` reads them; the Compat
     jar was not rebuilt (the pack folder copy loads; the corpses agent has uncommitted Compat Java).
+- Wave E, 2026-11-19:
+  - E1: renamed in code, NBT, recipe type and ids, tags, lang keys, config key and player text (list in
+    [seasonings.md](seasonings.md) section 7). Not renamed: the overlay asset path `item/seasoned/` and
+    `textureswapper/seasoning/` (asset and tool paths, no player text), Barbeque's own seasoning items (they are
+    seasonings, a flavor kind), the TODO family `food/seasoning`, and Compat's `[jei] seasoningCategory` switch (Compat
+    config, another session's files; its comment still says "Seasoning page"). Old config `[food] maxSeasonings` is
+    replaced by `maxFlavors` (Forge resets it to the default 2; the pack value was the default).
+  - E2: `kind` is data only for now (no rule reads it); the four new sauces go on grilled skewers like Barbeque's
+    sauces (no foods were ruled; a flavor with no foods gets no craft).
+  - E3: "+2 saturation, replaces its nutrition/heal" read as: nutrition 0, heal 0, saturation 2 for every flavor; effects
+    (garlic's Speed) and the Barbeque kinds stay. Grilled: no saturation, `addsSlots` gives `[food]
+    grilledFlavorSlots` (default 2) past `maxFlavors`.
+  - E4: a pair's extra is 1 saturation point on eating (shown in AppleSkin and as a tooltip line); salt is Salt's
+    `Salted` tag. Sugar has no foods yet, so sugar + ghost pepper cannot happen until sugar gets foods.
+  - E5: the powders are flavor items for onion and garlic (the whole crops still work) and the item of a new Ghost
+    Pepper flavor (popcorn, combines with sugar). 2 powder from one crop by `R.foodGrinding` (crushing wheels,
+    millstone, mortar). Art by `palette_swap.py --invert` per R24; the crops' green stems came into the palettes
+    (previews in the hand-over), owner to judge.

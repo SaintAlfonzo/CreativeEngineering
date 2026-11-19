@@ -1,7 +1,7 @@
 package com.SaintAlfonzo.creativedelight.barbeques.block;
 
 import com.SaintAlfonzo.creativedelight.barbeques.BBQLang;
-import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackFlavors;
 import com.SaintAlfonzo.creativedelight.barbeques.recipe.GrillingRecipe;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQBlocks;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
@@ -242,7 +242,7 @@ public class GrillBlockEntity extends BlockEntity implements HeatableBlockEntity
                         stack.getOrCreateTag().merge(tag.copy());
                     }
                     // food/seasoning #13: grilling on the Grill (only here) adds the grilled seasoning
-                    PackSeasonings.addGrilled(stack);
+                    PackFlavors.addGrilled(stack);
                     be.inventoryChanged();
                 }
             }

@@ -15,9 +15,9 @@ import org.slf4j.Logger;
 
 import com.SaintAlfonzo.creativecommon.CommonConfig;
 import com.SaintAlfonzo.creativedelight.CreativeDelight;
-import com.SaintAlfonzo.creativedelight.compat.jei.SeasoningCategory.Display;
-import com.SaintAlfonzo.creativedelight.food.SeasoningRecipe;
-import com.SaintAlfonzo.creativedelight.food.Seasonings;
+import com.SaintAlfonzo.creativedelight.compat.jei.FlavorCategory.Display;
+import com.SaintAlfonzo.creativedelight.food.FlavorRecipe;
+import com.SaintAlfonzo.creativedelight.food.Flavors;
 import com.mojang.logging.LogUtils;
 
 import io.github.mortuusars.salt.Salting;
@@ -42,30 +42,30 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Moves seasoning crafts out of the Crafting and Mixing pages onto one Seasoning page ({@link SeasoningCategory}):
+ * Moves flavor crafts out of the Crafting and Mixing pages onto one Flavor page ({@link FlavorCategory}):
  * <ol>
  *   <li>Salt's {@code salt:salting} special craft (Salt shows it as a Crafting extension): one page, any
  *       {@code #salt:can_be_salted} food + salt, food and salted food cycling together;</li>
  *   <li>Create: The Salt's mixes (food + salt -> the same food with {@code Salted}): one page with the mixer;</li>
- *   <li>the pack's seasoning crafts ({@link SeasoningRecipe}, special, so never on the Crafting page) and crafting
- *       recipes with ids {@code creativedelight:shapeless/season/...}, a page each.</li>
+ *   <li>the pack's flavor crafts ({@link FlavorRecipe}, special, so never on the Crafting page) and crafting
+ *       recipes with ids {@code creativedelight:shapeless/flavor/...}, a page each.</li>
  * </ol>
  * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] seasoningCategory}; re-run on
  * every JEI reload.
  */
 @ParametersAreNonnullByDefault
 @JeiPlugin
-public class SeasoningJEI implements IModPlugin {
+public class FlavorJEI implements IModPlugin {
 
 	private static final Logger LOGGER = LogUtils.getLogger();
-	private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "seasoning");
+	private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "flavor");
 	private static final ResourceLocation SALT = new ResourceLocation("salt", "salt");
 	private static final ResourceLocation SALT_DUST = new ResourceLocation("vintagedelight", "salt_dust");
 	private static final ResourceLocation MIXER = new ResourceLocation("create", "mechanical_mixer");
 	private static final ResourceLocation CREATE_MIXING = new ResourceLocation("create", "mixing");
-	private static final String SEASON_PREFIX = "shapeless/season/";
+	private static final String FLAVOR_PREFIX = "shapeless/flavor/";
 
-	/** Recipe ids now on the Seasoning page, per page they came from (set by the last reload). */
+	/** Recipe ids now on the Flavor page, per page they came from (set by the last reload). */
 	private Set<ResourceLocation> movedCrafting = Set.of();
 	private Set<ResourceLocation> movedMixing = Set.of();
 
@@ -79,16 +79,16 @@ public class SeasoningJEI implements IModPlugin {
 		// The Salt's salt is merged into Vintage Delight's salt dust (food/seasoning #6)
 		ItemStack icon = stack(SALT_DUST);
 		if (icon.isEmpty()) icon = stack(SALT);
-		registration.addRecipeCategories(new SeasoningCategory(registration.getJeiHelpers().getGuiHelper(),
+		registration.addRecipeCategories(new FlavorCategory(registration.getJeiHelpers().getGuiHelper(),
 				icon.isEmpty() ? new ItemStack(Items.BREAD) : icon));
 	}
 
 	@Override
 	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-		registration.addRecipeCatalyst(new ItemStack(Items.CRAFTING_TABLE), SeasoningCategory.TYPE);
+		registration.addRecipeCatalyst(new ItemStack(Items.CRAFTING_TABLE), FlavorCategory.TYPE);
 		ItemStack mixer = stack(MIXER);
 		if (!mixer.isEmpty()) {
-			registration.addRecipeCatalyst(mixer, SeasoningCategory.TYPE);
+			registration.addRecipeCatalyst(mixer, FlavorCategory.TYPE);
 		}
 	}
 
@@ -108,11 +108,11 @@ public class SeasoningJEI implements IModPlugin {
 			boolean salt = CDConfig.member("salt");
 
 			for (CraftingRecipe recipe : manager.getAllRecipesFor(RecipeType.CRAFTING)) {
-				Display display = recipe instanceof SeasoningRecipe seasoning ? pack(seasoning, table) : null;
+				Display display = recipe instanceof FlavorRecipe flavor ? pack(flavor, table) : null;
 				if (display == null && salt) {
 					display = SaltPages.salting(recipe, table);
 				}
-				if (display == null && isPackSeasoning(recipe)) {
+				if (display == null && isPackFlavor(recipe)) {
 					display = plain(recipe, table);
 				}
 				if (display != null) {
@@ -128,15 +128,15 @@ public class SeasoningJEI implements IModPlugin {
 				}
 			}
 
-			registration.addRecipes(SeasoningCategory.TYPE, displays);
+			registration.addRecipes(FlavorCategory.TYPE, displays);
 			movedCrafting = crafting;
 			movedMixing = mixing;
-			LOGGER.info("[jei] Seasoning page: {} page(s), moved {} crafting and {} mixing recipe(s)",
+			LOGGER.info("[jei] Flavor page: {} page(s), moved {} crafting and {} mixing recipe(s)",
 					displays.size(), crafting.size(), mixing.size());
 		} catch (Throwable t) {
 			movedCrafting = Set.of();
 			movedMixing = Set.of();
-			LOGGER.warn("[jei] couldn't build the Seasoning page, leaving seasoning crafts where they are", t);
+			LOGGER.warn("[jei] couldn't build the Flavor page, leaving flavor crafts where they are", t);
 		}
 	}
 
@@ -160,9 +160,9 @@ public class SeasoningJEI implements IModPlugin {
 					hidden += hideById(recipes, type.get(), movedMixing);
 				}
 			}
-			LOGGER.info("[jei] hid {} seasoning recipe(s) from the Crafting and Mixing pages", hidden);
+			LOGGER.info("[jei] hid {} flavor recipe(s) from the Crafting and Mixing pages", hidden);
 		} catch (Throwable t) {
-			LOGGER.warn("[jei] couldn't hide seasoning recipes from the Crafting and Mixing pages", t);
+			LOGGER.warn("[jei] couldn't hide flavor recipes from the Crafting and Mixing pages", t);
 		}
 	}
 
@@ -177,30 +177,30 @@ public class SeasoningJEI implements IModPlugin {
 		return hide.size();
 	}
 
-	/** A pack seasoning craft: {@code creativedelight:shapeless/season/...}, short enough for the page. */
-	private static boolean isPackSeasoning(CraftingRecipe recipe) {
+	/** A pack flavor craft: {@code creativedelight:shapeless/flavor/...}, short enough for the page. */
+	private static boolean isPackFlavor(CraftingRecipe recipe) {
 		ResourceLocation id = recipe.getId();
 		int size = recipe.getIngredients().size();
-		return id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(SEASON_PREFIX)
-				&& size >= 2 && size <= SeasoningCategory.MAX_INPUTS;
+		return id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(FLAVOR_PREFIX)
+				&& size >= 2 && size <= FlavorCategory.MAX_INPUTS;
 	}
 
-	/** A {@link SeasoningRecipe} page: every food it takes, seasoned in step; null if it matches nothing or is too long. */
-	private static Display pack(SeasoningRecipe recipe, ItemStack machine) {
-		// a pair craft's food ingredient is the first seasoning's tag; keep the foods both take
+	/** A {@link FlavorRecipe} page: every food it takes, flavored in step; null if it matches nothing or is too long. */
+	private static Display pack(FlavorRecipe recipe, ItemStack machine) {
+		// a pair craft's food ingredient is the first flavor's tag; keep the foods both take
 		List<ItemStack> foods = Arrays.stream(recipe.getFood().getItems())
-				.filter(food -> Seasonings.accepts(food, recipe.seasonings())).toList();
-		if (foods.isEmpty() || recipe.getParts().size() + 1 > SeasoningCategory.MAX_INPUTS) {
+				.filter(food -> Flavors.accepts(food, recipe.flavors())).toList();
+		if (foods.isEmpty() || recipe.getParts().size() + 1 > FlavorCategory.MAX_INPUTS) {
 			return null;
 		}
 		List<List<ItemStack>> inputs = new ArrayList<>();
 		inputs.add(foods);
-		for (SeasoningRecipe.Part part : recipe.getParts()) {
+		for (FlavorRecipe.Part part : recipe.getParts()) {
 			inputs.add(Arrays.asList(part.ingredient().getItems()));
 		}
 		List<ItemStack> outputs = new ArrayList<>(foods.size());
 		for (ItemStack food : foods) {
-			outputs.add(Seasonings.with(food.copy(), recipe.seasonings()));
+			outputs.add(Flavors.with(food.copy(), recipe.flavors()));
 		}
 		return new Display(recipe.getId(), machine, inputs, outputs, true);
 	}
@@ -234,7 +234,7 @@ public class SeasoningJEI implements IModPlugin {
 			for (Ingredient ingredient : salting.getIngredients()) {
 				inputs.add(Arrays.asList(ingredient.getItems()));
 			}
-			if (inputs.size() > SeasoningCategory.MAX_INPUTS) {
+			if (inputs.size() > FlavorCategory.MAX_INPUTS) {
 				return null;
 			}
 			return new Display(recipe.getId(), machine, inputs, salted(foods), true);
@@ -261,27 +261,27 @@ public class SeasoningJEI implements IModPlugin {
 				}
 				ItemStack plain = new ItemStack(result.getItem());
 				Ingredient food = null;
-				Ingredient seasoning = null;
+				Ingredient flavor = null;
 				for (Ingredient ingredient : recipe.getIngredients()) {
 					if (food == null && ingredient.test(plain)) {
 						food = ingredient;
 					} else {
-						seasoning = ingredient;
+						flavor = ingredient;
 					}
 				}
-				if (food == null || seasoning == null) {
+				if (food == null || flavor == null) {
 					continue;
 				}
 				foods.add(plain);
 				if (salts.isEmpty()) {
-					salts = Arrays.asList(seasoning.getItems());
+					salts = Arrays.asList(flavor.getItems());
 				}
 				moved.add(recipe.getId());
 			}
 			if (foods.isEmpty()) {
 				return null;
 			}
-			return new Display(new ResourceLocation(CreativeDelight.MOD_ID, "seasoning/salt_mixing"), mixer,
+			return new Display(new ResourceLocation(CreativeDelight.MOD_ID, "flavor/salt_mixing"), mixer,
 					List.of(foods, salts), salted(foods), true);
 		}
 

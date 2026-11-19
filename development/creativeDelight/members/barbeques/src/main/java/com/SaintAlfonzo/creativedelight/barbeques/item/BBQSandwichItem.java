@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.barbeques.item;
 
-import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackFlavors;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -52,6 +52,6 @@ public class BBQSandwichItem extends FoodItem {
     @Nullable
     @Override
     public FoodProperties getFoodProperties(ItemStack stack, @Nullable LivingEntity entity) {
-        return PackSeasonings.foodProperties(stack, super.getFoodProperties(stack, entity));
+        return PackFlavors.foodProperties(stack, super.getFoodProperties(stack, entity));
     }
 }

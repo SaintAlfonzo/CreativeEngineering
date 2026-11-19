@@ -955,3 +955,66 @@ reject verb=\S+ .*done=0
 @pass none of the new recipes, tag entries or the cachalot drop; the items stay registered
 @fails `CDConfig` [fats] section; `global.CD.fats` in cd_core.js
 @draft needs the toml edit and a /reload inside the row; the first runner writes the steps
+
+@@section 4
+@@title Flavor (seasonings renamed), 2026-11-19 ([seasonings.md](../seasonings.md) section 7, TODO `food/seasoning #3`, `#25` to `#28`, plan_food_batch_1119.md wave E)
+@@date 2026-11-19
+@@jars creativecommon creativedelight
+@@sources feature_writeup/seasonings.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/flavors.js development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/food/Flavors.java kubejs/data/creativedelight/kubejs/creativedelight/flavor.js kubejs/data/creativedelight/kubejs/creativedelight/flavor_tags.js
+@@text
+@@text Needs the Creative Common and Creative Delight jars of 2026-11-19 (wave E) and a restart. Group A.
+@@text
+@@table
+## SQ-FO-12 | flavor crafts: type, ids, tags; no seasoning leftovers
+@group A
+@commands `cdevtest bytype creativedelight:flavor`; `cdevtest recipes shapeless/season/`; tag probe `creativedelight:flavorable/onion`; grep latest.log for `[flavor] defined` and `[flavor] pair`
+@pass flavor crafts exist with ids `creativedelight:shapeless/flavor/...` (cheese, onion, garlic, ghost_pepper, void_pepper, onion_garlic, the six BBQ ones and the four new sauces); no `shapeless/season/` recipe; `creativedelight:flavorable/onion` holds popcorn; latest.log lists 17 `[flavor] defined` and 3 `[flavor] pair` lines, no `[flavor] bad definition`
+@fails CD `food/FlavorRecipe` (serializer `flavor`), Common NCH `flavor()`, data `flavor.js`, `flavor_tags.js`; startup `flavors.js`
+@absent creativedelight:flavor (a recipe type, not an item)
+> cdevtest bytype creativedelight:flavor
+> cdevtest recipes shapeless/season/
+> cdevtest tag item creativedelight:flavorable/onion
+waitlog verb=tag kind=item tag=creativedelight:flavorable/onion n= 30
+expect verb=bytype .*n=[1-9]
+reject verb=recipes text=shapeless/season/ n=[1-9]
+expect verb=tag kind=item tag=creativedelight:flavorable/onion n=\d+ ids=.*corn_delight:popcorn
+shell test "$(grep -c "\[flavor\] defined" logs/latest.log)" -ge 17
+shell test "$(grep -c "\[flavor\] pair" logs/latest.log)" -ge 3
+shell ! grep -q "\[flavor\] bad definition" logs/latest.log
+reject verb=\S+ .*done=0
+
+## SQ-FO-13 | flavor values: +2 saturation each, pairs +1, Grilled slots
+@group A
+@commands as a bot: craft popcorn + onion + garlic (or give `corn_delight:popcorn{Flavors:["creativedelight:garlic","creativedelight:onion"]}`), set food 10 / saturation 0, eat; then a plain flavored popcorn; give a grilled skewer with Grilled and 4 flavors and check it holds them
+@pass onion + garlic popcorn: saturation rises by popcorn's own + 5 (2 + 2 + 1 pair), Speed 10 s; one flavor: +2; nutrition only the popcorn's; a food with Grilled takes up to 4 flavors (maxFlavors 2 + grilledFlavorSlots 2), without Grilled 2
+@fails `Flavors.applyEaten` / `pairSaturation` / `cap`; CDConfig `[food] maxFlavors`, `grilledFlavorSlots`
+@draft needs a bot eat with set food and saturation reads (/pbot eat, data get entity); the first runner writes the steps
+
+## SQ-FO-14 | milled powders
+@group A
+@commands `cdevtest reg item` for the three powders; rdetail `onion_powder`, `garlic_powder`, `ghost_pepper_powder`
+@pass the three items exist; Create crushing, millstone and mortar recipes give 2 powder from one onion, garlic and ghost pepper; the onion and garlic flavors take the powders as well as the crops; the ghost pepper flavor takes ghost pepper powder
+@fails startup `flavors.js` (registration, flavor items), data `flavor.js` (`R.foodGrinding`); Common item_dict powder keys
+@absent creativedelight:onion_powder creativedelight:garlic_powder creativedelight:ghost_pepper_powder (new items, not in the dumps yet)
+> cdevtest reg item creativedelight:onion_powder
+> cdevtest reg item creativedelight:garlic_powder
+> cdevtest reg item creativedelight:ghost_pepper_powder
+> cdevtest rdetail _powder
+waitlog verb=rdetail text=_powder n= 30
+expect verb=rdetail id=creativedelight:createmilling/onion_powder .*result=creativedelight:onion_powder\*2
+expect verb=rdetail id=creativedelight:mortar/garlic_powder .*result=creativedelight:garlic_powder\*2
+reject verb=\S+ .*done=0
+
+## SQ-FO-15 | old Seasonings NBT is dropped silently
+@group A
+@commands give `corn_delight:popcorn{Seasonings:["creativedelight:garlic"]}`, eat as a bot
+@pass no flavor tooltip line, no Speed, no error in latest.log; the stack is plain popcorn plus an unused tag (R4)
+@fails `Flavors.of` reads only the `Flavors` key
+@draft needs a bot eat; the first runner writes the steps
+
+## CQ-FO-62 | Flavor tooltip, JEI page and powder art
+@group client
+@commands JEI: open the Flavor page (crafting table catalyst); hover garlic + onion popcorn; look at the three powders
+@pass the JEI page is titled "Flavor"; tooltip lines "Garlic: +2 saturation, Speed (0:10)", "Onion: +2 saturation", "Onion + Garlic: +1 saturation"; the powders show their sprites (onion, garlic and ghost pepper colors on the chili powder shape)
+@fails CD `FlavorTooltip`, `flavor_lang.js`, lang `creativedelight.flavor.*`, `creativedelight.jei.flavor`
+@draft client look; the first client runner writes the steps

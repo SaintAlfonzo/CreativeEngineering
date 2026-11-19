@@ -29,7 +29,7 @@ import java.util.List;
  * client scripts under {@code data/} and {@code assets/creativedelight/kubejs/}) that call the pack's helpers, and
  * {@link CDConfig}.
  *
- * It also holds the kitchen and food Java (creative_delight.md 34): the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
+ * It also holds the kitchen and food Java (creative_delight.md 34): the oven, lunchboxes, the remainder buffer, cans, flavors, placed food, crops (stem fruit, crop
  * parity, dandelions, hoe area), salt ticks, troughs and the food mod compat (Corn Delight, Display Delight dishes,
  * Respite potted tea bush, AppleSkin; the Canned Goods golem dye lives in the repackedCannedGoods member).
  */
@@ -158,12 +158,12 @@ public class CreativeDelight {
 		// Multi-serving cans ([canning]): max-servings cache cleared on tag reload + the "Servings" tooltip line.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServings.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServingsTooltip.class);
-		// Pack seasonings (kubejs_startup/creativedelight/seasonings.js): the craft, the bonus and the tooltip lines.
-		com.SaintAlfonzo.creativedelight.food.SeasoningRecipe.register(modBus);
-		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.Seasonings.class);
-		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.SeasoningTooltip.class);
+		// Pack flavors (kubejs_startup/creativedelight/flavors.js): the craft, the bonus and the tooltip lines.
+		com.SaintAlfonzo.creativedelight.food.FlavorRecipe.register(modBus);
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.Flavors.class);
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.FlavorTooltip.class);
 		if (mods.isLoaded("appleskin")) {
-			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.compat.AppleSkinSeasonings.class);
+			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.compat.AppleSkinFlavors.class);
 		}
 		// Bites from placed pies and cakes count for Spice of Life (the bite is mixin.minecraft.ServerPlayerGameModePlacedFoodMixin).
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.PlacedFoodSol.class);

@@ -2,7 +2,7 @@ package com.SaintAlfonzo.creativedelight.barbeques.compat.jei;
 
 import com.SaintAlfonzo.creativedelight.barbeques.BBQLang;
 import com.SaintAlfonzo.creativedelight.barbeques.BarbequesDelight;
-import com.SaintAlfonzo.creativedelight.barbeques.compat.PackSeasonings;
+import com.SaintAlfonzo.creativedelight.barbeques.compat.PackFlavors;
 import com.SaintAlfonzo.creativedelight.barbeques.recipe.GrillingRecipe;
 import com.SaintAlfonzo.creativedelight.barbeques.recipe.SkeweringRecipe;
 import com.SaintAlfonzo.creativedelight.barbeques.registry.BBQItems;
@@ -109,7 +109,7 @@ public class BBQJeiPlugin implements IModPlugin {
             String perSide = String.valueOf(recipe.barbecuingTime / 2 / 20.0F).replaceAll("\\.0$", "");
             // the Grill adds grilled to what it finishes; show the same stack
             ItemStack out = recipe.output.copy();
-            PackSeasonings.addGrilled(out);
+            PackFlavors.addGrilled(out);
             builder.addSlot(RecipeIngredientRole.OUTPUT, 85, 22).addItemStack(out)
                     .addTooltipCallback((view, list) -> list.add(BBQLang.JEI_TIME.get(perSide)));
         }

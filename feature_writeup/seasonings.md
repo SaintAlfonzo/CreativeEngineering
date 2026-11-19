@@ -1,5 +1,8 @@
 # Seasonings and sauces: catalog
 
+**Renamed 2026-11-19: the mechanic is Flavor** (section 7, `food/seasoning #25`): a flavor is a *seasoning* (a dust or
+whole spice) or a *sauce*. Sections 1 to 6 keep their wording from before the rename.
+
 Written 2026-10-31. Every seasoning and sauce in the pack today, the ones Barbeque's Delight (BBQ) adds, and the one
 planned (`grilled`). Nothing here is built beyond what the Now columns say. Mechanism docs: [food.md](food.md) 3.12 (pack
 framework), [barbeques_delight.md](barbeques_delight.md) 3.3 and 4.1 (BBQ and the fold design), brief
@@ -127,3 +130,33 @@ Checked against the code 2026-11-04. "Built" items are in the CD jar installed 2
 | Grilled icon in JEI grilling | Built | `dishes/meals #62` |
 | Effect chances used more in skewers | Planned | `food/types-and-tuning #19` |
 | Grilled icon or line missing | In Progress: the line is built (`food/seasoning #13`), the icon is the salt placeholder | `food/seasoning #20` |
+
+## 7. Flavor (2026-11-19, plan_food_batch_1119.md wave E; `food/seasoning #3`, `#25` to `#28`)
+
+Owner rulings R3 to R7, R20, R24.
+
+- **Rename** (`#25`): Seasoning -> Flavor in player text (tooltips, JEI page "Flavor"), code (Creative Delight
+  `food/Flavors`, `FlavorRecipe`, `FlavorTooltip`, `FlavoredItemModel`, `AppleSkinFlavors`, JEI `FlavorCategory` /
+  `FlavorJEI`; Barbeque's member `compat/PackFlavors`), NBT (`Flavors:[...]`; the old `Seasonings` key is not read,
+  R4), recipe type `creativedelight:flavor` with ids `creativedelight:shapeless/flavor/<keys>`, `global.NCH.flavor`,
+  tags `#<ns>:flavorable/<path>`, lang keys `flavor.<ns>.<path>` and `creativedelight.flavor.*`, config `[food]
+  maxFlavors`. Scripts: CD startup `creativedelight/flavors.js` (`global.flavor`, `global.flavorPairs`), data
+  `creativedelight/flavor.js`, `flavor_tags.js`, assets `creativedelight/flavor_lang.js`. Kept: the overlay asset
+  path `<ns>:item/seasoned/<path>` and `textureswapper/seasoning/`, the TODO family `food/seasoning`, Barbeque's own
+  seasoning items (`SeasoningItem`, `BBQSeasoning`, its `seasoning.*` lang), and Compat's `[jei] seasoningCategory`
+  switch (Compat config, owned by another session).
+- **Kinds** (`kind`): sauces are Barbeque's honey mustard, buffalo and barbeque, plus End's Delight chorus sauce,
+  Hostile Delight glowing and ardent sauce and Vintage Delight relish (`#27`, on cooked skewers like the BBQ sauces);
+  everything else is a seasoning. Tomato sauce and apple sauce are not flavors.
+- **Values**: every flavor +2 saturation points, no nutrition or healing (cumin's heal, onion's and void pepper's
+  nutrition went); effects and kinds stay. Grilled gives no saturation and adds `[food] grilledFlavorSlots` (default 2)
+  slots past `[food] maxFlavors` (default 2) (R20).
+- **Pairs** (`#26`): garlic + onion, Salt's Salted + pepper, sugar + ghost pepper: +1 saturation point together (5 in
+  all), shown as a tooltip line "A + B: +1 saturation" and in AppleSkin. Sugar has no foods yet, so its pair waits.
+- **Powders** (`#28`): Onion Powder, Garlic Powder, Ghost Pepper Powder (`creativedelight:*_powder`), 2 from one crop by
+  the pack's food grinding (crushing wheels, millstone, mortar). Onion and garlic powder put on the onion and garlic
+  flavors (the whole crops still do); ghost pepper powder is the new Ghost Pepper flavor (popcorn for now). Art:
+  `palette_swap.py --invert` on Barbeque's chili powder with each crop's sprite (texture_sources/sources.csv); the
+  crops' green stems came into the palettes. Pepper powder stays trade-only (R7, `#12`).
+- Tests: SQ-FO-12 to SQ-FO-15, CQ-FO-62.
+
