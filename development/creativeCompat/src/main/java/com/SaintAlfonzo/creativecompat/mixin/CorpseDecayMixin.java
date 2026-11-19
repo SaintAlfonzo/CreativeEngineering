@@ -104,7 +104,7 @@ public abstract class CorpseDecayMixin implements CorpseState {
 			return;
 		}
 
-		boolean empty = corpse.isEmpty();
+		boolean empty = corpse.isEmpty() && !corpse.getPersistentData().getBoolean(SEALED);
 		if (empty && creativecompat$emptiedAt < 0) creativecompat$emptiedAt = now;
 		else if (!empty) creativecompat$emptiedAt = -1L;
 

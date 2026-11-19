@@ -12,6 +12,13 @@ public interface CorpseState {
 	byte FLAG_ANCIENT = 2;
 	byte FLAG_REMAINS = 4;
 
+	/**
+	 * Forge persistent data key (boolean): the corpse counts as holding items while set, so a corpse whose loot is
+	 * rolled later (Creative Loot's ancient corpses, rolled on first open) does not start its empty timers. The jar that
+	 * sets it clears it once the contents are in.
+	 */
+	String SEALED = "creativecompat:corpse_sealed";
+
 	byte creativecompat$corpseFlags();
 
 	default boolean creativecompat$has(byte flag) {

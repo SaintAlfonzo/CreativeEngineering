@@ -1,17 +1,17 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=621fcf40f3ae -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 5, In Progress 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=d15a7e8c23f4 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, Testing 5), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `corpses #2` | Planned | S | Ancient corpses: skeletons on 3x3 flat cave floors (below y48, about 80% below y16) and ocean floors (cold and deep more common), about 1 per 32 chunks, loot rolled on first open (Creative Loot, only with Corpse loaded) |
 | `corpses #3` | Planned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
 | `corpses #4` | Planned | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
-| `corpses #5` | Planned | S | Ancient corpse armor rolls: equip chains, 56/35/15/5 chances, material weights, oxidized or waxed copper, dyed leather colors (all configurable) |
-| `corpses #7` | Planned | S | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and a skeleton skull 25% of the time |
-| `corpses #6` | In Progress | S C | Nether corpses wither (skeleton then wither skeleton corpse), End corpses keep the player model (Creative Compat) |
 | `corpses #1` | Testing | S C | Corpse decay on world time: skeleton after 7 days, empty corpse skeleton after 30 s and despawn after 5 min, shown armor follows contents (Creative Compat) |
+| `corpses #2` | Testing | S C | Ancient corpses: skeletons on 3x3 flat cave floors (below y48, about 80% below y16) and ocean floors (cold and deep more common), about 1 per 32 chunks, loot rolled on first open (Creative Loot, only with Corpse loaded) |
+| `corpses #5` | Testing | S C | Ancient corpse armor rolls: equip chains, 56/35/15/5 chances, material weights, oxidized or waxed copper, dyed leather colors (all configurable) |
+| `corpses #6` | Testing | S C | Nether corpses wither (skeleton then wither skeleton corpse), End corpses keep the player model (Creative Compat) |
+| `corpses #7` | Testing | S C | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and a skeleton skull 25% of the time |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, rulings in** (section 4); loot contents still to work out (section 5). Status lives in the TODO rows (section 6).
@@ -206,13 +206,31 @@ a tool or an inventory item in the main hand or offhand (shown on the model, loo
 - `corpses #7`: Visceral Heap "Ancient Remains", breakable with bone drops, rulings 21 and 22.
 - `corpses #3`: ancient corpse loot tables (section 5); `corpses #2` ships with placeholder tables until this is done.
 
+## 6b. Build notes (2026-11-18)
+
+Built: `corpses #1`, `#6` (Creative Compat, [creative_compat.md](creative_compat.md) Corpse decay), `#2`, `#5`, `#7`
+(Creative Loot, [creative_loot.md](creative_loot.md) 2c). Choices the rulings did not fix, for the owner to confirm:
+- **Sealed corpses.** An ancient corpse with no armor and its loot not yet rolled holds nothing, so the empty rule
+  (ruling 8) would remove it 5 min after its chunk first ticks, before anyone finds it. It carries Compat's
+  `creativecompat:corpse_sealed` mark until first opened and counts as full while sealed.
+- **Height curve** (ruling 12): the 25x density gap between y-64 and y32 leaves 92% of target heights below y16 (not
+  80%); 78% are below y0. Taken as "gap first, 80% flexible". Real spread waits on the survey row SQ-LOOT-08.
+- **Plain oceans** (`ocean`, `deep_ocean`, modded oceans) count as neutral, temperature factor 2, between warm 1 and cold 3.
+- **Wither look** (ruling 20): the renderer reads vanilla `textures/entity/skeleton/wither_skeleton.png` from its own
+  path instead of a copy, so no new texture file and no sources.csv row; resource packs apply.
+- **Ocean corpses** have no gravity: the Corpse mod floats corpses up through water.
+- **Placeholder loot** until `corpses #3`: cave = 1 to 6 torches and sometimes bread; ocean = sometimes bread.
+- **Remains drops** are rows in `loot_config.json` (`remains.drops`), rolled in Java, not a loot table: a 1.19.2 loot
+  table cannot be gated on Philip's Ruins. `philipsruins:cracked_bone` got no dict key (no script names it).
+
 ## 7. Tests
 
-Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for ancient corpses. Rows written with the
-build.
+Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for ancient corpses. Queue: SQ-CMP-10 to
+-13, CQ-CMP-14 (decay); SQ-LOOT-07 to -09, CQ-LOOT-10 (ancient corpses, remains).
 
 ## History
 
 - 2026-11-18: plan written from the scratchpad block and chat; premise checks in section 1; rulings Q1 to Q8 recorded; rows `corpses #1` to `#3`.
 - 2026-11-18: section 3.4 added (placement, armor rolls, copper, dye, Nether, End, Visceral Heap); rulings 11 to 23; rows `corpses #5` to `#7`; `corpses #2` narrowed to placement.
 - 2026-11-18: section 3.3 added (cosmetic armor and curios); rulings 9 and 10; row `corpses #4`.
+- 2026-11-18: built `corpses #1`, `#2`, `#5`, `#6`, `#7`; build notes in 6b.

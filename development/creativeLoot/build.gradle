@@ -18,6 +18,8 @@ dependencies {
 	compileOnly project(':creativeCommon')
 	// Creative Compat: required by every Creative jar (creative_split.md 7.6).
 	compileOnly project(':creativeCompat')
+	// The Corpse mod (ancient corpses, corpse/CorpseHooks): the pack's jars shared with Creative Common (git-ignored libs/).
+	compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: 'corpse-forge-*.jar')
 }
 
 def scriptTrees = ['data/creativeloot/kubejs']
