@@ -217,8 +217,8 @@ EXPLICIT = [
 	('raw_meat', 'canned_raw_pork', 'Canned Raw Pork', ['porkchop'], False, dict(input=['raw_pork'])),
 	('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
 	# Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. Ender's Delight's mollusk
-	# and filet (End's Delight's meat and slice are merged onto them, plan_misc_1117.md 2)
-	# plus End's shulker meat's Levitation II (4 s) as a 50% chance (owner, 2026-11-18)
+	# and filet (End's Delight's meat and slice are merged onto them, plan_misc_1117.md 2) plus End's shulker meat's
+	# Levitation II (4 s) as a 50% chance (owner)
 	('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False,
 	 dict(meal=(2, 1), extra_fx=[('minecraft:levitation', 80, 1, 0.5)])),
 

@@ -485,7 +485,7 @@ public final class Melting {
 	/**
 	 * A tick of a target in a hot place (G11): no source needed. Rolls its chance, melts one stage as heat would, and
 	 * keeps its melt ticks coming every {@code hotMeltTickInterval}. The slow tier (packed ice, cryosol) rolls
-	 * {@code meltChance} here, not the low {@code slowMeltChance}, so it melts rapidly in the Nether (owner, 2026-11-17).
+	 * {@code meltChance} here, not the low {@code slowMeltChance}, so it melts rapidly in the Nether (owner).
 	 */
 	private static boolean hotTick(BlockState state, int f, ServerLevel level, BlockPos pos, RandomSource random, Values c) {
 		boolean melted = false;

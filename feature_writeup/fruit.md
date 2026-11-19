@@ -32,7 +32,7 @@ today (Vinery's cherry is only in `#c:berries` and `#forge:berries`).
 
 Fruits with a slice item: lemon, orange, pineapple (Fruits Delight), melon (vanilla), cantaloupe (Delightful), hamimelon
 (Fruits Delight); durian has its flesh. Every other fruit is used whole. Smoothies use only slices where a slice exists
-(owner 2026-11-18); the juice and tea rules accept whole or sliced ([creative_delight_drinks.md](creative_delight_drinks.md)).
+(owner, 2026-11-18); the juice and tea rules accept whole or sliced ([creative_delight_drinks.md](creative_delight_drinks.md)).
 Cut yields and slice -> whole crafts are being changed by TODO `fruit #3` (melon, pumpkin and cantaloupe to 8, lemon and
 orange to 5, pineapple 6 + 2 saplings).
 
@@ -125,7 +125,7 @@ Delightful's crimson and nightshade berry sacks exist, but their berries do not 
 ## 5. Notes
 
 - **Rage Aura** (idle mobs within 24 blocks target you) is mango's Fruits Delight effect and stays on mango foods and
-  the mango smoothies for now (owner 2026-11-18). Note: move it to a different food later; candidate the ghost pepper
+  the mango smoothies for now (owner, 2026-11-18). Note: move it to a different food later; candidate the ghost pepper
   (`vintagedelight:ghost_pepper`, no effect today). TODO `fruit` family row.
 - Coffee berries are a berry by name but not a fruit for recipes (caffeine, Wither chance).
 

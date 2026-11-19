@@ -374,6 +374,12 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-17: "4.1 Carve of 2026-11-06" made a subsection of 4 (plan_rules_fixes.md V-53).
 - 2026-11-17: Creative Common helpers from plan_rules_fixes.md P2 to P5: `global.NCH.forPack(ns)` and `global.reg.forPack(ns)` (scripts bind recipes and registrations to their folder's namespace), `global.effect.resolve`, tooltip `col` roles and `global.tooltips.code`, `NCH.cfgClass` / `cfgValue`, `global.trades.villager`, `NoRecipeUnlockMixin` (no recipe unlocks of any kind, section 12e), the `[tooltips] paletteDemo` switch, dict lines checked by `tools/dict_lint.py`; patcherMod text reads Creative Common, comments and config text in American spelling, tabs as indent (sections 13, 15b, 16). Queue SQ-AV-01, CQ-AV-01, -02, CQ-TT-04, -05, SQ-RFX-28.
 
+Lines moved out of code comments (2026-11-18, plan_rules_fixes.md section 17):
+
+- 2026-11-17: The slow tier (packed ice, cryosol) rolls {@code meltChance} here, not the low {@code slowMeltChance}, so it melts rapidly in the Nether (owner, 2026-11-17) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/melting/Melting.java)
+- 2026-11-17: Mod ids whose config files the watcher owns: the in-tree jars of development/ (the Creative jars, Sol: Raspberry Pie) and the in-tree ports and bundle members that keep their own config file in config/ (assumed list, 2026-11-17) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/config/OwnConfigLogic.java)
+
+
 
 ## 7. License audit: Creative Common (2026-11-04, plan_cb_publish.md Step 2)
 
