@@ -1377,10 +1377,12 @@
    "canned_goods:reef_cola",
    "canned_goods:soda",
    "ends_delight:dragon_breath_soda",
-   "farmersdelight:apple_cider",
    "farmersrespite:long_apple_cider",
    "farmersrespite:strong_apple_cider",
    "hostiledelight:soda"
+  ],
+  "drink/warm": [
+   "farmersdelight:apple_cider"
   ],
   "drink/other": [
    "corn_delight:creamy_corn_drink",
