@@ -1,14 +1,17 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=7ea7ad976e55 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 4), 0 Complete.
+<!-- generated:status_index begin open_work sha1=4a75c749e97f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `corpses #1` | Planned | S | Corpse decay on world time: skeleton after 7 days, empty corpse skeleton after 30 s and despawn after 5 min, shown armor follows contents (Creative Compat) |
-| `corpses #2` | Planned | S | Ancient corpses: skeletons on cave and ocean floors, about 1 per 32 chunks, worn lootable armor, loot rolled on first open (Creative Loot, only with Corpse loaded) |
+| `corpses #2` | Planned | S | Ancient corpses: skeletons on 3x3 flat cave floors (below y48, about 80% below y16) and ocean floors (cold and deep more common), about 1 per 32 chunks, loot rolled on first open (Creative Loot, only with Corpse loaded) |
 | `corpses #3` | Planned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
 | `corpses #4` | Planned | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
+| `corpses #5` | Planned | S | Ancient corpse armor rolls: equip chains, 56/35/15/5 chances, material weights, oxidized or waxed copper, dyed leather colors (all configurable) |
+| `corpses #6` | Planned | S | Nether corpses wither (skeleton then wither skeleton corpse), End corpses keep the player model (Creative Compat) |
+| `corpses #7` | Planned | S | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and sometimes a skull |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, rulings in** (section 4); loot contents still to work out (section 5). Status lives in the TODO rows (section 6).
@@ -80,7 +83,7 @@ Jar: `corpse-forge-1.19.2-1.0.17.jar` (henkelmax, both sides; mod_sides.md). Rea
 - The feature spawns a `CorpseEntity` with the skeleton flag set, no owner UUID, the ancient marker tag and an unrolled loot table id (rolled on first open, ruling 5) and its armor
   (ruling 7) already in the armor slots, so it shows on the model. Only new chunks get them (worldgen); existing explored areas get none.
 - Loot tables `creativeloot:corpse/cave` and `creativeloot:corpse/ocean` (data in Creative Loot, so the LootJS and
-  `loot_config.json` tuning layer can reach them). Rate 1 per 32 chunks (ruling 6).
+  `loot_config.json` tuning layer can reach them). Rate about 1 per 32 chunks (ruling 6), spread by height (ruling 12) and ocean type (ruling 13), flat check ruling 11.
 - Name per item 9. Death history (`/corpse`) never lists ancient corpses (no Death record).
 
 ### 3.3 Note: cosmetic armor and curios in the corpse (owner, chat 2026-11-18)
@@ -106,6 +109,29 @@ Jar: `corpse-forge-1.19.2-1.0.17.jar` (henkelmax, both sides; mod_sides.md). Rea
 - Checks with the decay build: an item in each inventory survives skeleton stage, decay and the 5 min empty despawn
   (a corpse holding only curios or cosmetic items is not "empty"); Transfer Items puts each item back in its own slot.
 
+### 3.4 Placement, armor rolls and dimensions (owner, chat 2026-11-18)
+
+Owner notes, split:
+
+| # | Item (owner's words) | Class |
+|---|---|---|
+| 11 | "only spawn in flat areas with no overhangs" | open (Q12: footprint and headroom) |
+| 12 | "only spawn below y48 (very rare at that height), slowly become more common as they approach y0, and more common below y0 approaching y-64 where most corpses are below y32" | open (Q9: y32 or y-32; Q10: curve) |
+| 13 | ocean floor corpses vs the y48 cap | open (Q11; most ocean floor is above y48) |
+| 14 | "copper armor on corpses should always be fully oxidized (or waxed? can they be waxed?)" | open (Q13). Premise: yes, Everything Is Copper armor stores `state` (unaffected, exposed, weathered, oxidized) and a `waxed` flag in item NBT, with its own armor textures per stage |
+| 15 | "subsequent roll mechanic for armor; equip order chains ... (boots-leg-chest-helmet, helmet-chest-boots-leg, chest-boots-legs-helmet), more common first roll but less common on each subsequent roll" | open (Q14: chances). Mechanic clear: pick one chain at random, roll slot 1; on success roll slot 2 at a lower chance, and so on; the first failure stops |
+| 16 | "the first 2 material types are random but any after are 1 of those 2" | clear: pieces 1 and 2 roll materials by weight; pieces 3 and 4 pick one of those two (50/50) |
+| 17 | "dyed leather armor is 50% the same color and 50% 2 very different colors" | open (Q16: color source; Q17: how the two colors split) |
+| 18 | "leather dyed-leather and copper armor common while iron and chain are rarer" | open (Q15: wood, ruled in ruling 7, is not in this list) |
+| 19 | "all of these features and values are configurable" | clear: every chance, weight, chain list, y curve point, footprint and timer in `loot_config.json` (Loot) or `creativecompat-common.toml` (Compat) |
+| 20 | "similar tool system, and a chance to hold a tool or inventory item in hands" | note only (section 5b), not designed now |
+| 21 | Nether: none spawn; player corpses "turn to skeletons on empty in 15 seconds", "wither to a wither skeleton corpse after 30 seconds, and decays after 5 minutes" | open (Q18: full Nether corpses; Q19: what the 5 min counts from) |
+| 22 | wither skeleton look "(shortened? palette swapped skeleton texture?)" | open (Q20). Texture rule: vanilla `wither_skeleton.png` is human art and may be copied; a palette swap needs the owner's source and palette |
+| 23 | "the flesh heap nether biome should uncommonly spawn empty skeletons that dont wither or despawn, but can be broken" | open (Q21: rate, name, drops). Biome: Biomes O' Plenty `biomesoplenty:visceral_heap`. Premise: corpses cannot be broken by players today (`hurt()` only reacts to lava, off in the pack), so breaking is new |
+| 24 | "player corpses in the end never turn to skeletons and remain the player model until they despawn" | open (Q22: when a full End corpse despawns; `force_time = -1` means never) |
+
+Design holes the questions close are listed with each item; rulings go in section 4.
+
 ## 4. Owner rulings
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |
@@ -120,9 +146,36 @@ Jar: `corpse-forge-1.19.2-1.0.17.jar` (henkelmax, both sides; mod_sides.md). Rea
 | 8 | looted ancient corpse (Q8) | open | Same as player corpses: despawns 5 min after it became empty | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 9 | cosmetic armor into the corpse (conflict with FX-28, fixes_compat.md 2026-10-22) | conflict | Into the corpse: keep option off; replaces FX-28 | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 10 | "automatically show the contents of each of these inventories" | open | Corpse screen in sections by inventory location; cosmetic armor and visible curios also shown on the corpse model | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 11 | "only spawn in flat areas with no overhangs" (Q12) | open | 3x3 floor of full solid blocks at one height, at least 3 blocks of air (water on the ocean floor) above all 9 | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 12 | height spread (Q9, Q10) | open | Cave corpses only below y48 (very rare there); target about 80% below y16 (flexible); tune the curve for the largest possible rate gap between y-64 and y32. Build tunes the curve points and reports the resulting shares | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 13 | ocean floor corpses (Q11) | open | On the ocean floor in clear space (same 3x3 check, water above); no y cap. Rate ratios warm 1 : cold 3, shallow 1 : deep 6 | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 14 | copper oxidation and wax (Q13, Q13b) | open | Unwaxed copper is always fully oxidized. 10% of copper pieces are waxed; a waxed piece takes any state but fully oxidized (unaffected, exposed, weathered), with a flat roll penalty on unaffected. Waxed states follow the dye rule: 50% all the same state, 50% two different states | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 15 | armor roll chances (Q14) | open | 56 / 35 / 15 / 5 % along the chosen chain; breakdown below | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 16 | material weights (Q15) | open | Wood, leather, dyed leather, copper 25 each; chain 8, iron 8 (ruling 7 kept: rarely enchanted, worn) | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 17 | dyed leather colors (Q16, Q17) | open | Any RGB. 50% all pieces one color, 50% two colors far apart in RGB distance (not opposite hues) | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 18 | full Nether corpse (Q18) | open | Skeleton 1 in-game day after death, wither skeleton 1 day after that (world time), never despawns while it holds items | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 19 | empty Nether corpse (Q19) | open | Skeleton 15 s after emptied, wither skeleton 30 s after that, gone 5 min after emptied | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 20 | wither skeleton corpse look (Q20) | open | Vanilla `wither_skeleton.png` (copied human art; sources.csv row) on the normal skeleton model and size | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 21 | Visceral Heap skeletons (Q21) | open | About 1 per 8 chunks in `biomesoplenty:visceral_heap`, same 3x3 check, any height; plain skeleton, empty, never wither or despawn; named "Ancient Remains" | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 22 | breaking (Q21b) | open | Only Visceral Heap skeletons can be broken; drops bones, bone chunk and cracked bones (Philip's Ruins), and a skeleton skull 25% of the time | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 23 | End corpses (Q22) | open | Never turn skeleton, keep the player model; never despawn while full, gone 5 min after emptied | 2026-11-18 | AskUserQuestion 2026-11-18 |
+
+Armor rolls (ruling 15), share of ancient corpses by pieces worn:
+
+| Pieces | Chance |
+|---|---|
+| 0 | 44.0% |
+| 1 | 36.4% (0.56 x 0.65) |
+| 2 | 16.7% (0.56 x 0.35 x 0.85) |
+| 3 | 2.79% (0.56 x 0.35 x 0.15 x 0.95) |
+| 4 (full set) | 0.0147%, about 1 in 6800 (0.56 x 0.35 x 0.15 x 0.05) |
+
+A full set of one material needs pieces 1 and 2 to roll the same material (pieces 3 and 4 then copy it): at the
+weights in ruling 16 that is 19.5% of full sets, about 1 in 35000 corpses for any one-material set and about 1 in 1.4
+million for full iron or full chain.
 
 Agent defaults, unconfirmed (clear items only): the ancient corpse feature is skipped in biomes with no cave floor
-(none expected); per-slot armor chance about 40 percent, enchant chance about 5 percent, values in `loot_config.json`;
+(none expected); enchant chance about 5 percent per piece; RGB "far apart" = distance of at least 200 (of 441); unaffected-copper penalty halves its weight; lukewarm and warm oceans count as warm, cold and frozen as cold; Visceral Heap drops 1 to 3 bones, 0 to 1 bone chunk, 0 to 2 cracked bones; `philipsruins:cracked_bone` gets a dict key (only `bone_chunk` has one), values in `loot_config.json`;
 ocean corpses only in `#minecraft:is_ocean` biomes (not rivers); cave corpses below the sea level only.
 
 ## 5. Note: ancient corpse loot (to work out)
@@ -138,11 +191,19 @@ To work out with the owner before the loot tables are filled:
 - Durability: worn items (random damage), no enchantments or light ones.
 - Use `loot_census.py` afterwards to check the new tables against the rest.
 
+### 5b. Note: corpse tools and held items (to design later)
+
+Ancient corpses get a tool system like the armor rolls (worn tools by material, configurable), and a chance to hold
+a tool or an inventory item in the main hand or offhand (shown on the model, lootable, follows contents).
+
 ## 6. TODO rows
 
 - `corpses #1`: corpse decay (Creative Compat, items 1 to 4).
 - `corpses #2`: ancient corpses (Creative Loot, items 5 to 10).
 - `corpses #4`: cosmetic armor and curios into the corpse, sectioned corpse screen, cosmetic and curio rendering (section 3.3).
+- `corpses #5`: ancient corpse armor rolls (chains, chances, materials, copper state and wax, dyed leather), rulings 14 to 17.
+- `corpses #6`: Nether and End corpse rules, wither skeleton corpse, rulings 18 to 20 and 23 (Creative Compat).
+- `corpses #7`: Visceral Heap "Ancient Remains", breakable with bone drops, rulings 21 and 22.
 - `corpses #3`: ancient corpse loot tables (section 5); `corpses #2` ships with placeholder tables until this is done.
 
 ## 7. Tests
@@ -153,4 +214,5 @@ build.
 ## History
 
 - 2026-11-18: plan written from the scratchpad block and chat; premise checks in section 1; rulings Q1 to Q8 recorded; rows `corpses #1` to `#3`.
+- 2026-11-18: section 3.4 added (placement, armor rolls, copper, dye, Nether, End, Visceral Heap); rulings 11 to 23; rows `corpses #5` to `#7`; `corpses #2` narrowed to placement.
 - 2026-11-18: section 3.3 added (cosmetic armor and curios); rulings 9 and 10; row `corpses #4`.
