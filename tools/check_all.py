@@ -90,6 +90,11 @@ LINTS = {
 															 'tools/test_prefix_lint.py'], 1, False),
 	'cleanup': (['python3', 'tools/cleanup_check.py'], ['feature_writeup/', 'tools/cleanup_check.py',
 														'tools/cleanup_thresholds.csv', '.claude/skills/'], 17, False),
+	# every pre-2026-11-09 id of our namespaces exists now or is in a swap list (plan_rowfix_r1118.md section 4, R5);
+	# inputs: the swap list folders only, not all of development/
+	'old_id_check': (['python3', 'tools/old_id_check.py'], ['tools/old_id_baseline/', 'kubejs/exported/items_by_mod/']
+					 + sorted({str(p.relative_to(ROOT)) for p in ROOT.glob('development/**/src/main/resources/data/*/swaps')
+							   if '/build/' not in str(p)}), 1, False),
 	'todo_rows': (['python3', 'tools/todo.py', 'lint', '--changed'], ['feature_writeup/todo/', 'feature_writeup/briefs/',
 																	 'tools/todo.py', 'tools/todo_rows.py'], 2, False),
 }

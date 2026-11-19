@@ -328,6 +328,30 @@ def t28():
 	assert 'SQ-ZD-02' in new and 'SQ-ZD-01 ...' not in new, new[-400:]
 
 
+@case('R1118-R5a install_probes: a non-_probe.js command file (ztrades.js) is found for its root (SQ-FGD-11)')
+def r5a():
+	import qrun
+	need, roots = qrun.probes_needed([{'id': 'x', 'steps': [('cmd', 'ztrades farmer 3 20', 0)], 'meta': {}}])
+	assert any(f.endswith('fungi_probe/ztrades.js') for f in need) and 'ztrades' in roots, (need, roots)
+
+
+@case('R1118-R5b tag_diff: a tag and its entries renamed on 2026-11-09 compare under the old or the new name')
+def r5b():
+	b, a = TMP / 'tb', TMP / 'ta'
+	b.mkdir()
+	a.mkdir()
+	(b / 'block_tags.json').write_text(json.dumps({'creativeengineering:oven_heat_sources': [
+		'minecraft:fire', 'creativeengineering:dark_fire'], 'minecraft:x': ['creativeengineering:sourdough_block']}))
+	(a / 'block_tags.json').write_text(json.dumps({'creativedelight:oven_heat_sources': [
+		'minecraft:fire', 'creativemagic:dark_fire'], 'minecraft:x': ['creativedelight:sourdough_block']}))
+	for spec in ('block:creativeengineering:oven_heat_sources', 'block:creativedelight:oven_heat_sources', 'block:minecraft:x'):
+		r = subprocess.run([sys.executable, str(HERE / 'tag_diff.py'), str(b), str(a), spec], capture_output=True, text=True)
+		assert ': same (' in r.stdout, (spec, r.stdout, r.stderr)
+	r = subprocess.run([sys.executable, str(HERE / 'tag_diff.py'), str(b), str(a), 'block:minecraft:x', '--no-rename'],
+					   capture_output=True, text=True)
+	assert 'only before' in r.stdout, r.stdout
+
+
 sys.path.insert(0, str(HERE.parent / 'client_capture'))
 sys.path.insert(0, str(HERE.parent / 'perf/eval'))
 
