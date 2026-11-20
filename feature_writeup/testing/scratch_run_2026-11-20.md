@@ -426,3 +426,63 @@ Open for the owner (not edited):
   perf/runs/r1120nv/rerun.plan.json`; SQ-DEP-02 needs its @modset (drops creativebrewing) before the rerun; then
   jar-changed and failed rows; B5 write-back and perf_session.sh stop r1120nv at the end. Open owner question: fix the
   WTHIT null guard (wthit #17) mid-run or not.
+- 14:40 wound down by the owner: `drive stop` at a row boundary in step 58 (HH.qb section 2, boot 1, 329 of 513 rows);
+  no JVM left; RUNNER.md idle; perf session r1120nv stopped and reported
+  ([summary](../../perf/sessions/r1120nv/summary.md), no `--prune`).
+
+### 9.3 Findings
+
+Scope run: steps 1 to 57 of 182 done (step 23 at 5 of 6), step 58 stopped at 329 of 513; steps 59 to 182 not started.
+Verdicts (`qrun.py table` over the result dirs):
+
+| Part | PASS | BATCH-FAULT | FAIL | LOOK open |
+|---|---|---|---|---|
+| Steps 1 to 57, judged (judges 1 to 3) | 131 | 95 | 15 | 6 |
+| Step 58, HH section 2, not judged | 187 | - | 28 | 114 |
+
+Real product bugs (TODO rows; fixes wait for the owner):
+
+| Rows | What is wrong | TODO |
+|---|---|---|
+| SQ-CCO-12a to -12f | `wthittags.js:32` reads `doc.required` with `doc` null when the generated silk touch list is absent (Common-only sets): TypeError at boot and on /reload | wthit #17 |
+| SQ-GLD2-03 | Golden and gilded pumpkin pie keep upstream values (4 / 1.2, 8 / 8.0; wanted 16 / 20): golden_values.js reads pumpkin pie after it became a placed pie | food-tuning #30 |
+| SQ-CFR-05 (SQ-CFR-06 PASS void) | Campfires stay lit in rain; suspect the isRainingAt gate in CD CampfireRain.java; SQ-DEP-05 (douse) did not reach its check | misc-gameplay #1 |
+| SQ-FF-04, SQ-FF-09 | Corn Delight items miss their foodValueCopies values (nachos bowl 12 not 13, corn seeds saturation 0.2 not 0.25) | meals #69 |
+| SQ-CNP-01 | `solraspberrypie:liquid_diet_log` takes a can without `_manual_only` | canning #22 |
+| SQ-FO-08 | Soap takes only cooking oil, not blubber or whale oil (Compat misc_mods.js SOAP_FAT) | mod-integration #1 |
+| SQ-GLD-03 | Golden milk leaves a fresh ~800 t Speed after clearing effects; source unproven | food-tuning #31 |
+| SQ-ROLL-12 | Roll Delight medley can recipes exist: open owner decision vs SQ-ROLL-27 | mod-additions #39 |
+| SQ-PCK-02 | Waffle makes the pancake tags hold 8, not 7: owner item in 9.2 | (9.2) |
+
+Low-priority tooling row: generators-and-tests #27 (`/cdevtest` bytype 500-line and rdetail 40-match caps).
+Owner looks: SQ-GAP-05 (golden egg sinks while a plain egg floats), SQ-GAP-07 (grape seeds stay planted on stone).
+Open LOOKs: SQ-AR-01, SQ-BBQ2-04 (client), SQ-BBQ2-08 (eating), SQ-CEQ-02, SQ-CFS-03, SQ-T1-01 (client lang dump).
+
+Batch faults (95): causes grouped in the judge lines of 9.1; most rows are fixed and on the rerun list (135 ids,
+`perf/runs/r1120nv/rerun.txt`; fixes by the parallel batch-fault session, section 9.2, and judge-3). Still to rewrite:
+SQ-CDJ-12 (stale member versions), SQ-ENM-04b, the not-simple causes in 9.1, the WG30 rows whose ids carry old results.
+
+Environment faults found and fixed in-run (tools committed f3f1cfc2, d64c746a, bad2bdd5, 965db4dc): port_chain mod set
+(pack jars, Creative Loot, require vs `-GLOB` drops, SQ-CBP-08 drops kubejsdelight); row ids with "/" crashed qrun;
+row ids with "," never ran; driver drops rows marked @superseded / @draft and rows in `drive/skip.txt` at step start.
+Not fixed: none outstanding. Gotchas added to the skill's gotchas.md.
+
+No player changelog bullet: a test run, nothing player-visible changed.
+
+### 9.4 Handover
+
+State: drive r1120nv stopped and resumable (`perf/runs/r1120nv/drive/state.json`); RUNNER.md idle; perf session closed.
+Next session, in order:
+1. Claim RUNNER.md, preflight (skill B1), new perf session; `python3 tools/scratch_query/qprescreen.py r1120nv`.
+2. Judge step 58's 329 rows (`perf/runs/r1120nv/s57_res`: PASS 187, FAIL 28, LOOK 114) as judges 1 to 3 did.
+3. `qrun.py drive resume r1120nv`: reruns step 23's SQ-VTD8-03 and continues step 58 at row 330, then steps 59 to 182
+   (server, then longwait, worldgen, long; about 45 h by the driver's estimate). Skipped by `drive/skip.txt`:
+   SQ-PROC-14 (release gate), SQ-FSD-02, SQ-VH-12, SQ-FTW-02 (on the rerun list).
+4. Before the rerun drive: SQ-DEP-02 needs an @modset that drops creativebrewing. Then
+   `python3 tools/scratch_query/qrerun.py perf/runs/r1120nv/rerun.txt` and
+   `qrun.py drive start r1120nvr --plan-json perf/runs/r1120nv/rerun.plan.json`.
+5. After the never-run pass: the jar-changed rows (336) and failed rows (`qrun.py plan --failed`), then the 317
+   never-run drafts need steps.
+6. Write-back (B5): Run log entry per drive; per-feature writeup test lists and README status words were not updated
+   in this session (too many features for the judged part; do it with the judged totals per feature).
+Owner question still open: fix the WTHIT null guard (wthit #17) before the resume, so later Common-only steps test it.

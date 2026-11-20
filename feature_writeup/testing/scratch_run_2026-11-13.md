@@ -356,3 +356,9 @@ waits for the owner to raise it.
    ch2 + ch2b, ch3, group B (c3_b1 + c1_b1, c3_b2, c3_cdw1 to 3, rerun_b + c4_b).
 5. P11 regression (section 9). Pending batch fixes listed in section 10 still apply (pwgr1.qb row fixes, c3_a3 SQ-CIF-01
    grep, SQ-PWG-90 files=57).
+
+## Queue banner lines
+
+Moved from scratch_queue.md 2026-11-20 (five newest runs kept there):
+
+- r1113 continuation (PAUSED 19:22; resume point section 12; STOPPED for a fresh agent: queue group A part and Power Grid gates P0 to P9d; resume point in [scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 10)
