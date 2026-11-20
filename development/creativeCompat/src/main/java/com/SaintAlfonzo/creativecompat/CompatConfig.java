@@ -643,8 +643,11 @@ public final class CompatConfig {
 			public ForgeConfigSpec.BooleanValue snowSunkPathing;
 			public ForgeConfigSpec.DoubleValue bambooLeafChance;
 			public ForgeConfigSpec.IntValue bambooLeafMaxLayers;
-			// [surface.passthrough.layers] client side: the leaf overlay (surface.LeafOverlay, G7.14)
-			public ForgeConfigSpec.BooleanValue leafOverlay;
+			// [surface.passthrough.layers] client side: leaf pile models (surface.LeafPileModels, plan_owner_notes_1119.md)
+			public ForgeConfigSpec.BooleanValue leafInsideFaces;
+			public ForgeConfigSpec.EnumValue<com.SaintAlfonzo.creativecompat.surface.LeafPileModels.TallTexture> leafTallTexture;
+			// [surface.passthrough.layers] dust particles (surface.DustParticles, plan_owner_notes_1119.md)
+			public ForgeConfigSpec.BooleanValue dustParticles;
 
 			/** The synced jump and fall values ({@link com.SaintAlfonzo.creativecompat.surface.LayerMotion}). */
 			public com.SaintAlfonzo.creativecompat.surface.LayerMotion motion() {
@@ -829,10 +832,19 @@ public final class CompatConfig {
 						parent.bambooLeafMaxLayers = b.comment(
 								"Dropped bamboo leaves pile up to this many layers (5 to 8 are the full bamboo leaves block).")
 								.defineInRange("bambooLeafMaxLayers", 4, 1, 8);
-						parent.leafOverlay = b.comment(
-								"Client: inside a leaf pile the screen edges show the pile's leaves, like the powder snow",
-								"frost overlay.")
-								.define("leafOverlay", true);
+						parent.leafInsideFaces = b.comment(
+								"Client: leaf piles (Immersive Weathering piles, Twigs and full bamboo leaves) also draw their",
+								"faces from the inside, so a head inside a pile sees its leaves. Applied at the next resource reload.")
+								.define("leafInsideFaces", true);
+						parent.leafTallTexture = b.comment(
+								"Client: texture of the tall Immersive Weathering piles, whose own 'heavy' texture has no",
+								"see-through pixels. MEDIUM = the pile's own medium texture, TREE = the leaves block's texture,",
+								"HEAVY = unchanged. Applied at the next resource reload.")
+								.defineEnum("leafTallTexture", com.SaintAlfonzo.creativecompat.surface.LeafPileModels.TallTexture.MEDIUM);
+						parent.dustParticles = b.comment(
+								"Client: blocks in the tag creativecompat:dust_particles puff dust colored like the block when",
+								"walked in or on, and burst when landed on (Supplementaries ash's rule).")
+								.define("dustParticles", true);
 						fall = b.comment("Multiplier on downward speed each tick inside a walk-through pile, and on fall",
 										"distance per block passed.")
 								.defineInRange("fall", d.fall(), 0.0, 1.0);

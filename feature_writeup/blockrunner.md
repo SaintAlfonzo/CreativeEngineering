@@ -732,7 +732,7 @@ into it. At full height it is a full block. The 2026-11-18 audit wrongly listed 
     onto snow is recomputed (at most once a second, vanilla's throttle). A sunk mob that walks into a block climbs at
     ladder speed (0.2 blocks per tick) until its feet leave the snow. Players do not climb (they keep the weak jump).
     `snowLightVolume` is read from each side's own toml, not synced (the client only moves the player, never light).
-  - Layers: jump and fall caps, leaf thorns, the leaf overlay, falling and stacking layers and the full bamboo leaves:
+  - Layers: jump and fall caps, leaf thorns, leaf pile inside faces, dust particles, falling and stacking layers and the full bamboo leaves:
     [plan_passthrough.md](plan_passthrough.md) 2.1.
   - Fast arrows can cross a single web in one tick and skip it (accepted). Items cannot: their path is clipped.
   - Cost scales with the cells an entity overlaps (a horse covers 2x2) and with neighbor counts; measured by

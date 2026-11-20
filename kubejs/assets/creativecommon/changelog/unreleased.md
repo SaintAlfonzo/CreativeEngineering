@@ -99,7 +99,8 @@
 - **Changed:** Jumping from inside 6 or more snow layers is as weak as in Powder Snow; from inside 5 or more leaf layers it is a little weaker but still reaches a block beside the pile.
 - **Changed:** Falling through snow layers is as slow as through Powder Snow; through leaf piles and Bamboo Leaves, twice as fast as that.
 - **New:** Walking through a full leaf pile, or sprinting through one of 6 or 7 layers, can prick players for half a heart; each armor piece worn lowers the chance, full armor prevents it.
-- **New:** Inside a leaf pile the screen edges show its leaves, like the Powder Snow frost.
+- **New:** Leaf piles and Bamboo Leaves can be seen from inside: with your head in a pile, its leaves show around you.
+- **Changed:** Leaf piles of 6 or more layers are see-through like lower piles [solid leaves].
 - **Changed:** Mobs do not walk through leaf piles of 6 or more layers.
 - **Changed:** Rabbits and cats are not slowed by snow layers, leaf piles or Bamboo Leaves, and are not pricked.
 - **Changed:** Foxes and bees are not slowed by leaf piles or Bamboo Leaves but are slowed by snow layers, and never route through leaf piles of 6 or more layers.
@@ -382,6 +383,7 @@
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
 - **Fixed:** The Weathered Cardboard Box showed its whole texture sheet on every face; it now looks like a taped box.
+- **New:** Walking in or on dust piles, Sawdust, ash, Powdered Sugar Blocks, Powdered Obsidian, Vinteum Dust Blocks and concrete powder raises dust in the block's color; landing on them raises more.
 - **Changed:** Cast Iron Block is named Cast Iron Plating.
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
 - **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.
