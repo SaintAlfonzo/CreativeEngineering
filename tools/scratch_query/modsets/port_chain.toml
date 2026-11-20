@@ -4,11 +4,12 @@
 #   port_chain chain | cooking | optional | instance  [+GLOB ...] [-GLOB ...] [noupstream=vinery_upstream] [config=source]
 # (port_chain.sh's ADD= / DROP= / NOUPSTREAM= / KEEPCFG=1). port_chain.sh bare / restore / check read the same lists.
 description = "Creative Brewing chain from CEPortTesting (chain, cooking, optional, instance)"
-source = "ceporttesting"
-kubejs = "source"     # CEPortTesting's kubejs (examples only, no pack scripts) plus the probes below
-config = "empty"      # the jars write their defaults; config=source copies CEPortTesting's (KEEPCFG=1)
-upstream = "source"   # CEPortTesting's *_upstream donor folders
-unlisted_ok = true    # CEPortTesting jars have no mod_sides.md rows (plan section 5 B1)
+# Jars from the pack since 2026-11-20 (r1120nv, owner): CEPortTesting's chain jars sit in its disabledmods/ since
+# 2026-11-13 (Common-only setup there), which blocked every port_chain step in r1118, r1119 and r1120nv.
+source = "pack"       # the pack's mods/ plus prep_srv.sh's build-jar swaps, pruned to the variant
+kubejs = "probes"     # no pack scripts: empty kubejs plus the zz_ probes below (was CEPortTesting's examples only)
+config = "empty"      # the jars write their defaults
+upstream = "pack"     # the pack's *_upstream donor folders
 default = "chain"
 require = ["@chain"]   # port_chain.sh check: every chain jar in CEPortTesting
 copy = [["tools/scratch_query/zq_probe.js", "kubejs/server_scripts/zz_zq_probe.js"],
@@ -22,7 +23,8 @@ chain = ["rhino-forge-*.jar", "architectury-*-forge.jar", "kubejs-forge-*.jar",
          "create-1.19.2-*.jar", "kubejs-create-forge-*.jar", "kubejsdelight-*.jar", "lootjs-forge-*.jar",
          "morejs-forge-*.jar", "SereneSeasons-*.jar",
          "creativecommon-*.jar", "creativecompat-*.jar", "creativecalendar-*.jar", "creativedelight-*.jar",
-         "creativebrewing-*.jar"]
+         "creativebrewing-*.jar", "creativeloot-*.jar"]
+# creativeloot added 2026-11-20 (r1120nv): Creative Delight and Creative Brewing declare it mandatory since the Loot carve.
 # Cooking mods CD / CB integrate with but do not nest or repack (optional dependencies in creativedelight's
 # mods.toml), then their own required mods. Applied Cooking (AE2) is left out: no CD/CB rows use it.
 cooking = ["fruitsdelight-*.jar", "Hostile_Delight_*.jar", "moredelight-*.jar", "abnormals_delight-*.jar",

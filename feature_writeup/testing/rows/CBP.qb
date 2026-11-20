@@ -139,7 +139,7 @@ look diff of the moved sections against configs_edited/root_config/creativebrewi
 @fails an Equipment script still reads a CB global
 @from batches/r1106cbp/p6_equipment.qb
 @reviewed 2026-11-16
-@modset port_chain chain +creativedevtools-*.jar -creativecalendar-*.jar -creativedelight-*.jar -creativebrewing-*.jar +creativeequipment-*.jar
+@modset port_chain chain +creativedevtools-*.jar -creativecalendar-*.jar -creativedelight-*.jar -creativebrewing-*.jar +creativeequipment-*.jar -kubejsdelight-*.jar
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
 bootexpect \[creativeequipment\] loaded
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global\.CB" logs/kubejs/startup.log logs/kubejs/server.log
@@ -196,7 +196,7 @@ look shell: an [absent mods] skipped line counts the minecraft:empty (or Item.of
 @pass no `Error parsing recipe`; startup prints `[creativeequipment] end gear transition items (37)`; `[creativeequipment] mod data packs on: none; off (mod not loaded): [felsic_gear]` (p6) and `on: [felsic_gear]` (p6f); `[absent mods]` counts `sophisticatedbackpacks` (2 rows); the felsic ingot sequenced assembly loads in p6f
 @fails `global.NCH` not ready when Equipment's item event runs; `packs/felsic_gear/pack.mcmeta` missing from the jar
 @reviewed 2026-11-16
-@modset port_chain chain +creativedevtools-*.jar -creativecalendar-*.jar -creativedelight-*.jar -creativebrewing-*.jar +creativeequipment-*.jar
+@modset port_chain chain +creativedevtools-*.jar -creativecalendar-*.jar -creativedelight-*.jar -creativebrewing-*.jar +creativeequipment-*.jar -kubejsdelight-*.jar
 # boot p6f of tools/scratch_query/batches/r1106cbp/run_boots.sh (Equipment without CB, felsic_gear present); p6 (felsic_gear absent) is the same row on the other boot: its pack line reads on: none; off (mod not loaded): [felsic_gear]
 bootexpect Done \(
 bootreject Error parsing recipe

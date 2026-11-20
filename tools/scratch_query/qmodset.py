@@ -348,7 +348,9 @@ def pick(out, m, r, src, text=''):
 			if fnmatch.fnmatchcase(j.name, gl):
 				j.unlink()
 				log.append('dropped: %s' % j.name)
-	missing = [gl for gl in r.get('require', []) if not any(fnmatch.fnmatchcase(j.name, gl) for j in mods.glob('*.jar'))]
+	# a require glob the spec drops on purpose (-GLOB) is not missing (r1120nv: port_chain chain -creativecalendar-*.jar)
+	missing = [gl for gl in r.get('require', []) if gl not in r['drop']
+		and not any(fnmatch.fnmatchcase(j.name, gl) for j in mods.glob('*.jar'))]
 	if missing:
 		raise RuntimeError('required jar(s) missing after the pick: %s (source %s)' % (', '.join(missing), src))
 	for rx in m.get('forbid', []):
