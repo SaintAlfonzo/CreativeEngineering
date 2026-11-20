@@ -356,10 +356,5 @@ public class CreativeCompat {
 					net.minecraft.client.renderer.entity.FallingBlockRenderer::new);
 		}
 
-		/** Leaf pile overlay (surface/LeafOverlay, plan_post_scratch_1115.md G7.14). */
-		@SubscribeEvent
-		public static void onRegisterOverlays(net.minecraftforge.client.event.RegisterGuiOverlaysEvent event) {
-			com.SaintAlfonzo.creativecompat.surface.LeafOverlay.register(event);
-		}
 	}
 }

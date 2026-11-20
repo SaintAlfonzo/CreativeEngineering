@@ -17,6 +17,14 @@ ServerEvents.tags('block', e => {
 	// modded blocks flat per block, so Vinery's grass slab came out a shade off next to grass. This tag opts it in.
 	t.add(e, b.t_blendable_blocks, i.grass_slab)
 
+	// Dust particles (surface/DustParticles, plan_owner_notes_1119.md ruling 2): walked in or on, these puff dust in the
+	// block's color like Supplementaries ash (ash itself has its own particles, so it is not listed). Dust layer piles,
+	// full powder blocks and the concrete powders.
+	t.addMatching(e, 'creativecompat:dust_particles', [
+		'creativeengineering:*_dust_pile', i.immersiveengineering_sawdust, i.ash_layer_block, i.ash_block,
+		i.powdered_obsidian_block, i.create_things_and_misc_powdered_obsidian_block, b.powdered_sugar_block,
+		'mna:vinteum_dust_block', 'minecraft:*_concrete_powder'])
+
 	// Campfire rain (campfire/CampfireRain.java, config [campfire]). Unlit Campfire burns campfires forever; rain puts
 	// out the ones in rain_douses unless the block below is in rain_proof_fuel.
 	// Soul campfires stay out of rain_douses; Tinted Campfires aren't CampfireBlocks, so never ticked.

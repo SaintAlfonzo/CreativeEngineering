@@ -280,8 +280,16 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   spectators never.
 - Mob pathing (`mixin/LeafPilePathMixin`, `McaLeafPilePathMixin`): a leaf pile of `pathBlockLayers` 6 or more is a
   berry-bush node (`DAMAGE_OTHER`) for every mob, MCA villagers included; smaller piles path as before.
-- Leaf overlay (`surface/LeafOverlay`, client, `leafOverlay` on): in first person in a leaf pile, the leaf type's own
-  texture tiled over the screen, biome tinted, opacity 0.7 x layers / max.
+- Leaf pile models (`surface/LeafPileModels`, client, at model bake; plan_owner_notes_1119.md rulings 3 to 5): every
+  leaf pile (IW piles incl. generated ones, Twigs bamboo leaves, full bamboo leaves) also draws each face from the
+  inside (reversed copy, inset 1/512, same cull face; `leafInsideFaces`), so a head inside a pile sees its leaves. IW's
+  tall piles (12 to 16 px) use a see-through texture instead of IW's opaque "heavy" one (`leafTallTexture`: MEDIUM =
+  the pile's medium texture, TREE = the leaves block's, HEAVY = IW's). The screen overlay (`LeafOverlay`) was removed
+  2026-11-19.
+- Dust particles (`surface/DustParticles`, client, `dustParticles` on; ruling 2): Supplementaries ash's rule for
+  `#creativecompat:dust_particles` (dust layer piles, full powder blocks, concrete powders): a living entity within 32
+  blocks of the camera that moved sideways in or on one puffs a dust particle at its feet at 1 in 2 ticks, in the
+  block's tint or map color; the local player landing on one bursts `min(12, fall x 1.4)`.
 - Exempt (`passthrough_exempt/layers`): rabbits, cats (G7.14); the tag is per tier, so snow layers too. Foxes and bees
   are exempt on leaf layers only (`passthrough_exempt/leaf_layers`, plan_misc_1117.md 1, 2026-11-18): snow slows them,
   and a deep leaf pile (`pathBlockLayers`) is `BLOCKED` in their path search (foxes take `DAMAGE_OTHER` at no cost).
