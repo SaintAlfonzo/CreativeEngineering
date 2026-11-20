@@ -273,8 +273,8 @@ Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
   reached and the next few), icons as listed in 12.4 #37 and since 2026-11-17 in 12.5; Apple Pie's own benefit pages are removed.
 - **Single page, scaled** (12.5): the book is drawn at client config `[dietLog] bookScale` (default 1.25), shrunk to
   fit small windows. The double page view (12.4 #31) is removed.
-- **Since 2026-11-19** (12.6): pages diversity, Diet Ladder, Milestones, Last 30 Meals (Apple Pie's food history
-  pages removed); each page type placed and sized by client config `[dietLog.pages.*]`; the background stretchable by
+- **Since 2026-11-19** (12.6): pages diversity (with the last 30 meals grid), Diet Ladder, Milestones (Apple Pie's
+  food history pages removed); each page type placed and sized by client config `[dietLog.pages.*]`; the background stretchable by
   `[dietLog] extraWidth`; the mouse wheel flips pages.
 
 ## 7. Liquid Diet Log
@@ -801,8 +801,20 @@ owner's look-check; CQ-RPI-53 supersedes CQ-RPI-46).
 
 - **Rules:** Apple Pie `endDecay` 30 (pack `defaultconfigs/`, the three local worlds); `respecFoods` default 5.
 - **Last meals:** Raspberry Pie keeps the last `endDecay` meals eaten, newest first, duplicates kept (NBT
-  `solrp_meals` on Apple Pie's FoodList; old saves backfilled from the memory). The Diet Log's last page lists them
-  as a 6 x 5 icon grid ("Last 30 Meals", hover "N. Name"); Apple Pie's "Food Eaten" history pages are removed.
+  `solrp_meals` on Apple Pie's FoodList; old saves backfilled from the memory). Since 2026-11-19
+  (plan_owner_notes_1119.md rulings 7 to 10) they are a 6 x 5 icon grid ("Last 30 Meals", newest top left) on the
+  first page, above the diversity line; the meals pages are gone. A meal shows only while its food is in the decay
+  window (memory count below `endDecay`), so a Change or Drop removes the aged foods' meals and the grid closes up.
+  Hover: "N. Name", this meal's contribution (Apple Pie's `calculateDiversityContribution` at the meal's log index,
+  struck through when it differs) and the food's total (at its memory count). Apple Pie's "Food Eaten" pages are
+  removed.
+- **Diversity icon** (ruling 12): Apple Pie's image left of "Current Food Diversity" is a food: share = diversity /
+  the ladder's top milestone; edible items ranked by Apple Pie complexity, band = the share +-0.05 quantiles; one
+  Carrot-eaten food of that band, picked by the diversity's tenth (stable). None: client config `[dietLog]
+  diversityIcons` ("minDiversity=item,item,..."; agent defaults, unconfirmed).
+- **Milestones and ladder** (rulings 6, 11): a reached one-time unlock is struck through in the Milestones list, black
+  while the current diversity is at or above it, gray below; the Diet Ladder bar leaves reached unlocks out (key
+  unchanged).
 - **Diversity printed rounded down** to one decimal by Raspberry Pie (Diet Ladder page, effect screen, confirm
   panel); Apple Pie's own diversity page keeps its two decimals.
 - **Page layout:** client config `[dietLog.pages.diversity|meals|ladder|milestones]` `x`, `y`, `scale`, replacing

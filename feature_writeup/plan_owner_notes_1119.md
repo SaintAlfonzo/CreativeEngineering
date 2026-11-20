@@ -1,10 +1,13 @@
 # Owner notes 2026-11-19: leaf piles, dust particles, Diet Log
 
-<!-- generated:status_index begin open_work sha1=13579fca76da -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=fe3975acf7a1 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Testing 6), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `food-tuning #17` | Testing | C | Diet Log: last 30 meals on the first page; hover shows diversity contribution; aged-out meals hidden |
+| `food-tuning #18` | Testing | C | Diet Log: reached unlocks struck through in Milestones, left off the ladder bar |
+| `food-tuning #19` | Testing | C | Diet Log: diversity icon is a food matching the diversity |
 | `gameplay/blockrunner #15` | Testing | C | Leaf piles drawn from inside; leaf screen overlay removed |
 | `gameplay/blockrunner #16` | Testing | C | Tall leaf piles see-through |
 | `gameplay/blockrunner #17` | Testing | C | Dust puffs when walking in or on dust blocks |
@@ -63,3 +66,17 @@ Creative Compat (rows `gameplay/blockrunner #15` to `#17`, queue CQ-PS15B-05, -0
   fall bursts `ceil(min(12, fall x 1.4))` at 0.12 up. Supplementaries ash is not in the tag (it has its own). Ash's
   rule only reaches entities the client moves, so in practice the player; ours reaches every nearby mob too (agent
   default, unconfirmed). Key `dustParticles` (true).
+
+Raspberry Pie (rows `food-tuning #6`, `#17` to `#19`, queue CQ-RPI-57 to -61; detail in raspberry_pie.md section 12):
+
+- Ruling 1: `extraWidth = 40` in `config/` and `configs_edited/root_config/` `solraspberrypie-client.toml`; the
+  RpConfig default stays 0.
+- Rulings 7 to 10: `DiversityPageMixin` redirects in Apple Pie's `DiversityPage` constructor. The 1 x 35 spacer under
+  the header becomes the meals grid: 15 px icons on a 16 px step, scaled by `[dietLog.pages.meals]` (reused for the
+  grid). The 1 x 10 spacer above the gate lines is dropped. Meals pages and the "Newest first" line are removed.
+  Hover contributions use Apple Pie's `FoodList.calculateDiversityContribution`.
+- Ruling 12: the `icon` redirect, 16 px food item. Band quantiles over all counted foods by complexity. The static
+  pool `[dietLog] diversityIcons` is an agent default, unconfirmed: 0 apple/bread/carrot/sweet berries; 10 baked
+  potato/cooked chicken/mushroom stew/cookie; 25, 40, 60, 80 Farmer's Delight meals rising; 100 enchanted golden
+  apple.
+- Open risk: under the gate, the two warning lines may reach the page number (look-check, CQ-RPI-57).
