@@ -123,7 +123,7 @@
 		if (key($PTReg.BLOCKS, level.getBlockState(at).getBlock()) != baseId(H.id)) { res.err = 'holder did not place'; return res }
 		let soil = H.kind == 'soil'
 		let before = sig(level, at, soil), empty = before
-		let g = guardThrowable(() => {
+		let g = global.guardThrowable(() => {
 			for (let k = 0; k < H.pts.length; k++) {
 				p.setItemInHand($PTHand.MAIN_HAND, Item.of(plant.item, 4))
 				let pt = H.pts[k]
@@ -151,7 +151,7 @@
 		else if (!H.ceiling && !upState.isAir()) res.placedAbove = String(upState)
 		killItems(level, at)
 		p.setItemInHand($PTHand.MAIN_HAND, Item.of('minecraft:diamond_pickaxe'))
-		guardThrowable(() => p.gameMode.destroyBlock(at))
+		global.guardThrowable(() => p.gameMode.destroyBlock(at))
 		res.drops = drops(level, at)
 		killItems(level, at)
 		for (let dy = -1; dy <= 3; dy++) air(level, pos(x, Y + dy, Z0))
@@ -209,7 +209,7 @@
 		let k = 0
 		let next = () => {
 			if (k >= list.length) {
-				writeExportJson('kubejs/exported/blocks/pot_probe.json', out)
+				global.writeExportJson('kubejs/exported/blocks/pot_probe.json', out)
 				log('INFO', 'PP-DONE', list.length + ' holders, wrote kubejs/exported/blocks/pot_probe.json')
 				return
 			}
