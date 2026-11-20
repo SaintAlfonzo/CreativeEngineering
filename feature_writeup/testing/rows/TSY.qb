@@ -19,7 +19,7 @@
 @commands boot the dedicated scratch server; join with the scratch client; grep the server log
 @pass `[trade sync] built N trade list(s), M listing(s) sampled` once (N = professions + 1), then `[trade sync] sent N trade list(s) to 1 player(s)`; no exception naming `TradeSync`; no hang at login (sampling skips map listings)
 @fails a hang: a listing's `getOffer(null, ...)` locates; add its class to the skip test in `TradeSync.sample`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootexpect \[trade sync\] built \d+ trade list\(s\), \d+ listing\(s\) sampled
 bootreject (?i)exception.*TradeSync|TradeSync.*exception
 shell n=$(grep -ac '\[trade sync\] built' logs/latest.log); echo "built lines $n"; grep -aE '\[trade sync\]' logs/latest.log | cut -c1-200 | head -6; [ "$n" = 1 ]

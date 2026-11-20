@@ -13,14 +13,14 @@
 @@text (food families, placeables, stack sizes), `python3 tools/food_families.py --check`. One group A boot covers every server row.
 @@text
 @@table
-## SQ-LGM-11 | pufferfish broth gives Comfort 1200 and Nausea 100, no poison
+## SQ-LGM-11 | pufferfish broth gives Comfort 2400 and Nausea 100, no poison
 @group A
 @commands Bot eats `largemeals:pufferfish_broth`; `/data get entity` the bot `ActiveEffects`
-@pass Comfort 1200 ticks and Nausea (`minecraft:nausea`) 100 ticks; no poison (LGM-22)
-@fails `MealItems.java` not in the nested jar
+@pass Comfort 2400 ticks (the comfort_nourishment R5 length for a bowl food under 10 hunger, 120 s; comfort_nourishment.md section 9, food dump 2026-11-19; the plan's A4 "Comfort 1 min" was the upstream value before that rule) and Nausea (`minecraft:nausea`) 100 ticks; no poison (LGM-22)
+@fails `MealItems.java` not in the nested jar. r1120nv batch fault: the row wanted Comfort 1200
 @jars creativedelight
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
 sleep 3
 > pbot hunger c2b 4
@@ -28,7 +28,7 @@ sleep 3
 > pbot eat c2b
 waitlog verb=pbot.useitem bot=c2b end=finish item=largemeals:pufferfish_broth 20
 > cdevtest player c2b
-expect verb=player name=c2b effects=\S*farmersdelight:comfort:0:1[12]\d\d\b
+expect verb=player name=c2b effects=\S*farmersdelight:comfort:0:2[34]\d\d\b
 expect verb=player name=c2b effects=\S*minecraft:nausea:0:\d+
 reject verb=player name=c2b effects=\S*minecraft:poison
 look Nausea about 100 ticks
@@ -42,7 +42,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails `largemeals` still in `AWAIT_DUMP`
 @jars creativedelight
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail canned_omurice
 > cdevtest rdetail canned_mushroom_pot_pie
 > cdevtest rdetail canned_roasted_mutton_rack
@@ -59,7 +59,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails name rule ahead of `FAMILY_OVERRIDE`; members filter in `food_families.py` main()
 @jars creativedelight
 @from batches/r1115/p1_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 shell python3 $INST/tools/scratch_query/c2_famcheck.py families largemeals:mushroom_pot_pie largemeals:mushroom_pot_pie_block largemeals:omurice largemeals:omurice_block largemeals:tomato_egg_soup largemeals:cod_deluxe largemeals:hearty_lunch
 > kubejs list_tag minecraft:item creativedelight:food_family/feast/whole
 > kubejs list_tag minecraft:item creativedelight:food_family/cake/whole
@@ -77,6 +77,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails DD link missing
 @jars creativedelight
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-20
 shell python3 $INST/tools/scratch_query/c2_famcheck.py lmplaceable
 look "lm blocks 13, not placeable 0"
 
@@ -87,7 +88,7 @@ look "lm blocks 13, not placeable 0"
 @fails `food_types.js` member script not regenerated
 @jars creativedelight
 @from batches/r1113/c2_a1.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest tag item creativedelight:food_type/cooked/veggie
 > cdevtest tag item creativedelight:food_type/ingredient
 > cdevtest recipes canned_cooked_nether_wart
@@ -103,7 +104,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails `PAIRS` skipped (mod id)
 @jars creativedelight
 @from batches/r1113/fix_c2a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
 sleep 3
 > effect clear c2b
@@ -141,7 +142,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails
 @jars creativedelight
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest makes roll_delight:golden_roll_slice
 > cdevtest recipes golden_roll
 > cdevtest recipes canned_ max=2000
@@ -156,7 +157,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass no script error; all 8 raw skewers exist under their mods' namespaces
 @fails `PackRawSkewers` not registered
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest reg item ^(farmersdelight:raw_barbecue_stick|hostiledelight:raw_caveskewer|endersdelight:raw_crispy_skewer|ends_delight:raw_end_barbecue_stick|miners_delight:raw_improvised_barbecue_stick|nethersdelight:raw_nether_skewer|oceanic_delight:raw_seafood_skewer|veggiesdelight:raw_turnip_mutton_skewer)$
 > reload
 sleep 25
@@ -165,21 +166,22 @@ expect verb=reg kind=item regex=\S+ n=8\b
 look no error / warn line from the shell grep (server.log restarted by the reload)
 reject \[cdevtest\] verb=\S+ .*error=
 
-## SQ-BBQ2-02 | every route of each pack skewer; Nether and Cave have no heatless craft; End raw and heatless shapeless
+## SQ-BBQ2-02 | every route of each pack skewer; Nether has no heatless craft, Cave has one with Miner's; End raw and heatless shapeless
 @group A
-@commands Recipe dump for each pack skewer: raw craft, `_from_smelting`, `_from_smoking`, `_from_campfire`, grilling, `_from_cooked_manual_only`, assembly
-@pass every route present; Nether and Cave have no heatless craft; End raw and heatless shapeless, 1 result; upstream crafts gone (BBQ-35)
-@fails id clash in the log
+@commands Recipe dump for each pack skewer: raw craft, `_from_smelting`, `_from_smoking`, `_from_campfire`, grilling, `_from_cooked_manual_only`, raw assembly
+@pass every route present; Nether has no heatless craft; Cave has its heatless `caveskewer_from_cooked_manual_only` (baked spider leg) with Miner's loaded (owner, 2026-11-17, `dishes/meals #58`, barbeques_delight.md); End raw and heatless shapeless, 1 result; upstream crafts gone (BBQ-35)
+@fails id clash in the log. r1120nv batch fault: the reject predated the #58 ruling
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest recipes barbecue_stick
 > cdevtest recipes caveskewer
 > cdevtest recipes nether_skewer
 > cdevtest recipes crispy_skewer
 > cdevtest recipes seafood_skewer
 > cdevtest recipes turnip_mutton_skewer
-reject verb=recipes id=creativedelight:\S*(caveskewer|nether_skewer)_from_cooked_manual_only
-look per skewer: raw craft (shaped/raw_*), _from_smelting, _from_smoking, _from_campfire, grilling, _from_cooked_manual_only (not Nether, not Cave), assembly; End: raw and heatless shapeless with 1 result; no upstream craft ids (endersdelight: / hostiledelight: / nethersdelight: / ends_delight: crafting of the cooked skewer)
+reject verb=recipes id=creativedelight:\S*nether_skewer_from_cooked_manual_only
+expect verb=recipes id=creativedelight:\S*caveskewer_from_cooked_manual_only\b
+look per skewer: raw craft (shaped/raw_*), _from_smelting, _from_smoking, _from_campfire, grilling, _from_cooked_manual_only (not Nether), raw assembly; End: raw and heatless shapeless with 1 result; no upstream craft ids (endersdelight: / hostiledelight: / nethersdelight: / ends_delight: crafting of the cooked skewer)
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ2-03 | the six dump skewer ids not seen live in c2a1 (past the 80 cut)
@@ -188,7 +190,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass identical ids and results (BBQ-39)
 @fails helper id naming
 @from batches/r1113/fix_c2a1.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest recipes creativedelight:campfirecooking/grilled_pork_sausage_skewer_from_campfire
 > cdevtest recipes creativedelight:grilling/grilled_rabbit_skewer
 > cdevtest recipes creativedelight:skewering/raw_chicken_skewer
@@ -204,7 +206,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass 18 raws in the tag; powder craft works, sauce refused (BBQ-36)
 @fails
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest tag item barbequesdelight:raw_skewers
 expect verb=tag kind=item tag=barbequesdelight:raw_skewers n=18\b
 look the powder vs sauce craft needs a crafting grid (client part of the row, CQ)
@@ -216,7 +218,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass shaped + assembly (wrap, sandwich), shapeless `_cooked_manual_only` (bibimbap), no `barbequesdelight:combine`; +10 / +16 / +16 hunger, no skewer effects (BBQ-38)
 @fails incomplete item missing (transition_items.js)
 @from batches/r1113/fix_c2a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
 sleep 3
 > effect clear c2b
@@ -251,7 +253,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass mollusk drops; 2 filets; stuffed shulker takes `endersdelight:shulker_mollusk` (since 2026-11-18, plan_misc_1117.md 2; was End's meat, BBQ-40)
 @fails merge still active (old jar)
 @from batches/r1113/fix_c2a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail shulker_filet
 look a cutting recipe (endersdelight:cutting/shulker_filet or a CD copy) with input endersdelight:shulker_mollusk and 2 endersdelight:shulker_filet (the part=results line)
 reject \[cdevtest\] verb=\S+ .*error=
@@ -262,6 +264,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass all 18 cooked skewers in `skewer`; no skewer can (BBQ-37)
 @fails
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-20
 shell python3 $INST/tools/scratch_query/c2_famcheck.py skewers
 look "in family skewer 18" (23 ids end in skewer/stick: the other 5 are upstream or pack extras, check they are the incomplete or non-food ones) and "skewer cans 0"
 
@@ -270,6 +273,7 @@ look "in family skewer 18" (23 ids end in skewer/stick: the other 5 are upstream
 @commands Hover the six seasonings and a skewer seasoned with each (BBQ-34); names of the 3 renamed skewers, their plated blocks and the 8 raws; Salmon Maki Roll Slice (ROLL-24); JEI pages of raws and combos; Large Meals placeable tooltips (LGM-21)
 @pass LOOK: the seasoning lines match; names as listed; raw cod texture on all raws
 @fails
+@reviewed 2026-11-20
 @draft no batch holds this row yet
 @@text
 @@text Results: not run yet.
@@ -285,6 +289,7 @@ look "in family skewer 18" (23 ids end in skewer/stick: the other 5 are upstream
 @commands 30 knife kills of a shulker through `loot spawn` by a knife bot; then recipe dumps: End's meat-to-slice cut gone, Ender's cut kept, the stuffed shulker (pot and heatless), Canned Shulker Flesh, End's roasted shulker meat
 @pass the dropped items are only `endersdelight:shulker_mollusk` (30, one per roll) and shulker shells, no `ends_delight:shulker_meat`; `ends_delight:food/shulker_meat_slice` not found; `endersdelight:cutting/shulker_filet` mollusk -> 2 filets; both stuffed shulker recipes, the canned shulker recipes and the roasted shulker meat smelting take the mollusk (or filet), none names End's meat
 @fails two items a roll: End's knife modifier still on (repackedEnds overlay `loot_modifiers/add_shulker_meat.json`); End's meat in a recipe: the merge list `merges_ends_delight.json` not read (`[swaps] ... item merge(s)` line) or a script still names `i.shulker_meat`
+@reviewed 2026-11-20
 > forceload add 2192 -16 2224 16
 > kill @e[type=minecraft:item]
 > pbot spawn q8k 2200.5 -60 0.5 minecraft:overworld survival

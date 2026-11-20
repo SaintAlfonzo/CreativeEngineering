@@ -8,6 +8,7 @@
 @@date 2026-11-02
 @@jars creativecommon creativedelight
 @@sources feature_writeup/plan_creative_delight.md feature_writeup/testing/scratch_run_2026-11-02.md
+@@prep B: spawn-animals=true
 @@text
 @@text Targets the installed `mods/creativedelight-1.0.0.jar` (Fungi `-02`). r1102 could not judge these: its mushroom-fields
 @@text square held 3 mushroom-fields chunks in ocean (the locate result is the nearest edge, not the middle), and five 300-radius
@@ -22,7 +23,26 @@
 @commands `/locate biome minecraft:mushroom_fields` (r1102: [-4272, -4430]); `forceload`/`tp` to it and read `/zq biometag`-style surface biomes around it with a probe, or run Chunky radius 100 at the located point and count the biome share with `region_blocks.py` (`chunks with a match by surface biome`); move the Chunky centre toward the biome interior until at least 300 chunks are mushroom_fields, then Chunky radius 150 around that centre; offline `region_blocks.py blocks` for inky / morel singles and `*_mushroom_block` (huge forms) with `--box` over the square
 @pass at least 300 mushroom_fields chunks in the square; huge inky in about 1 of 3 chunks and huge morel 1 of 4 ("chunks with a match by surface biome"); inky cap and morel singles present at the surface; colonies only over dirt / podzol
 @fails no mushroom_fields interior within 5000 blocks: try `level-seed=` of a mushroom-fields spawn seed in the srv properties; zero huge forms: `[mushroom-spawns]` log line, `mushroomSpawns` in CEConfig
+@reviewed 2026-11-20
 @from batches/r1103w/w_11_B.qb
+# own setup (r1120fix, 2026-11-20): {MF} came from the retired setup rows W-G1-MF / W-G1-GEN of batches/r1103w/w_11_B.qb;
+# rows run alone with --rows. /zqb is tools/scratch_query/zq_biomegrid.js (copied in by qrun as a probe)
+> locate biome minecraft:mushroom_fields
+waitlog (nearest minecraft:mushroom_fields is at|Could not find) 900
+capture ML nearest minecraft:mushroom_fields is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> zqb minecraft:mushroom_fields {ML1} {ML3} 1200 16 150
+waitlog \[zqb\] done 300
+capture MF \[zqb\] grid minecraft:mushroom_fields: .*best center (-?\d+) (-?\d+) with (\d+) of (\d+) points
+# MF1 = x, MF2 = z (this capture has no y group)
+> chunky shape square
+> chunky world minecraft:overworld
+> chunky center {MF1} {MF2}
+> chunky radius 150
+> chunky start
+waitlog Task finished 5400
+> save-all flush
+waitlog Saved the game 300
+shell [ {MF3} -ge 300 ] && echo "mushroom square centre {MF1} {MF2}: {MF3} of {MF4} chunk points"
 shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:(inky_cap|morel)_mushroom_block$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
 shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ '(fungidelight:(inky_cap|morel)_mushroom|minecraft:(brown|red)_mushroom)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
 shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:[a-z_]+_colony$' --near 'minecraft:(dirt|coarse_dirt|podzol|rooted_dirt|grass_block|mycelium|moss_block)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
@@ -35,7 +55,41 @@ look "chunks with a match by surface biome": mushroom_fields at least 300 chunks
 @commands animal census with enough animals: Chunky radius 150 over the mushroom_fields square and a dark forest and a mangrove swamp; the animals are only saved when generated, so also `/summon` 20 `minecraft:mooshroom` and 20 `fungidelight:inky_cap_cow` and `morel_cow` in each biome and `/save-all` (FGD-29: summoned and egg mooshrooms all red); `region_blocks.py entities` by biome and `Type` field
 @pass mushroom fields: at least 20 mooshrooms per sample and about 25 % brown among naturally generated ones; dark forest about 50 % brown; Fungi cows rare in dark forest, morel cows in swamps (r1102: 3 morel cows in the mangrove swamp, 0 elsewhere), both common in mushroom fields; summoned and egg mooshrooms all red
 @fails too few natural animals even after Chunky: judge only the summoned and egg half and the `SpawnTuning.brownChance` summary line (`[mob-spawns]`); wrong share: `SpawnTuning.brownChance`, `/dumpspawns` + `gen_spawn_table.py` with no "mod not loaded"
+@reviewed 2026-11-20
 @from batches/r1103w/w_11_B.qb
+# own setup (r1120fix, 2026-11-20): {MF}, {DF}, {MG} came from the retired setup rows W-G1-MF / -GEN / -DF / -MG of
+# batches/r1103w/w_11_B.qb; rows run alone with --rows. After SQ-FGD-12m on the same world the locates repeat and the
+# mushroom Chunky square is already generated (Task finished at once)
+> locate biome minecraft:mushroom_fields
+waitlog (nearest minecraft:mushroom_fields is at|Could not find) 900
+capture ML nearest minecraft:mushroom_fields is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> zqb minecraft:mushroom_fields {ML1} {ML3} 1200 16 150
+waitlog \[zqb\] done 300
+capture MF \[zqb\] grid minecraft:mushroom_fields: .*best center (-?\d+) (-?\d+) with (\d+) of (\d+) points
+# MF1 = x, MF2 = z (this capture has no y group)
+> chunky shape square
+> chunky world minecraft:overworld
+> chunky center {MF1} {MF2}
+> chunky radius 150
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:dark_forest
+waitlog (nearest minecraft:dark_forest is at|Could not find) 600
+capture DF nearest minecraft:dark_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {DF1} {DF3}
+> chunky radius 150
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:mangrove_swamp
+waitlog (nearest minecraft:mangrove_swamp is at|Could not find) 600
+capture MG nearest minecraft:mangrove_swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {MG1} {MG3}
+> chunky radius 150
+> chunky start
+waitlog Task finished 5400
+> save-all flush
+waitlog Saved the game 300
+shell for b in "MF {MF1} {MF2}" "DF {DF1} {DF3}" "MG {MG1} {MG3}"; do set -- $b; echo "== $1 square (natural, before any summon)"; python3 -I $INST/tools/scratch_query/region_blocks.py entities @ '^(minecraft:mooshroom|fungidelight:[a-z_]+_cow)$' --field Type --box $(($2-150)) $(($3-150)) $(($2+150)) $(($3+150)); done
 > forceload add {MF1-24} {MF2-24} {MF1+24} {MF2+24}
 sleep 10
 repeat 20

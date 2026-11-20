@@ -52,6 +52,7 @@ reject verb=\S+ .*done=0
 @pass a timedoor opens, costs 1000 chronons, carries the player; the door closes after 200 ticks (an API open starts the 40-tick Tempad cooldown, owner ruling 2026-11-18, reversing ruling 6; `[ztp] cd true` right after the open)
 @fails `TimedoorEntity`, `forge/Teleports`
 @reviewed 2026-11-18
+@absent tempad:default (Tempad app / macro / location-provider ids, not registry entries)
 # makes the three locations later TP rows use (Home One, Far East, Hell Spot); bot qa holds the Tempad in slot 0
 > forceload add -16 -16 48 16
 > execute in minecraft:the_nether run forceload add -16 -16 16 16
@@ -140,6 +141,7 @@ reject verb=\S+ .*done=0
 @pass the macro opens a door to the pinned location both times
 @fails favorites capability not cloned on respawn
 @from batches/r1107tp/a2.qb
+@absent tempad:default tempad:teleport (Tempad app / macro / location-provider ids, not registry entries)
 # r1118 R4 A2 (2026-11-18): the restart in the row (was prose)
 > save-all flush
 sleep 5
@@ -427,6 +429,7 @@ look debug log drops data/tempad/curios but keeps data/curios/tags; the second b
 @pass no door opens in any of the five cases, chronons unchanged; latest.log has no exception; the message text is checked in CQ-TP-12
 @fails `TimedoorEntity.getTimedoor` gates; dimension-type tag folder name on 1.19.2
 @reviewed 2026-11-16
+@absent tempad:default (Tempad app / macro / location-provider ids, not registry entries)
 # needs the SQ-TP-04 locations and bot qa; toml edits are written in place (cat >), which Forge's config watcher sees (a sed -i rename it misses)
 > pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
 sleep 3
@@ -515,6 +518,7 @@ look if the first two cases open a door (message none), the config watcher misse
 @pass every recipe loads, none with a missing tag; every item has a name (no `item.tempad.` key in a hover on the client, CQ-TP-15); with saving off the New Location app is gone from the app bar (and its hotkey opens nothing)
 @fails translator tag maps; `CommonConfig.allowLocationSaving` gate in `ModApps` / `NewLocationApp`
 @reviewed 2026-11-16
+@absent tempad:new_location (Tempad app / macro / location-provider ids, not registry entries)
 > pbot spawn qa 0 -60 0 minecraft:overworld creative
 sleep 3
 > cdevtest rdetail tempad: max=500
@@ -570,6 +574,7 @@ look shell: 0 recipe parse errors; reg n= equals the 21 given items plus any blo
 @pass the cell fills from the generator, then the Tempad fills from the cell / battery (cell drains); Creative Chronometer doors cost nothing and the bar shows infinite; the blacklisted Tempad stays empty
 @fails `ChrononItem.isChargable` / `ChrononHandler.move` inventory tick
 @reviewed 2026-11-16
+@absent tempad:default (Tempad app / macro / location-provider ids, not registry entries)
 # needs the SQ-TP-04 locations; bot qa
 > pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
 sleep 3
@@ -648,6 +653,7 @@ look chr reads in order: cell 0 then rising with the generator; Tempad rose from
 @fails `CommonConfig` key names against upstream's; sync packet
 @from batches/r1107tp/a3.qb
 @reviewed 2026-11-16
+@absent tempad:default (Tempad app / macro / location-provider ids, not registry entries)
 > ztp setchr qa 0 6000
 waitlog \[ztp\] setchr 20
 expect \[ztp\] setchr slot 0 tempad:tempad inserted 2000 now 2000
@@ -785,6 +791,7 @@ look shell: the dropped-data line names no loot_table file (second number 0)
 @pass first macro: a door to the pinned location, `[ztp] cd true`; second macro at once: still one door; after the cooldown: a second door (API opens through `/ztp open` also start the cooldown, owner ruling 2026-11-18, SQ-TP-04)
 @fails no cooldown: the macro path does not call the item cooldown (`UseMacroPacket` handler); a second door at once: the cooldown is not checked
 @reviewed 2026-11-18
+@absent tempad:default tempad:teleport tempad:pinned_location (Tempad app and macro ids, not registry entries: ModApps / macro ids)
 # owner ruling 6 reversed (2026-11-18): both paths start the cooldown; this row checks the macro path (the item-use path a player's shift-use takes)
 > forceload add -16 -16 48 16
 > pbot spawn t40 0.5 -60 4.5 minecraft:overworld survival
@@ -840,7 +847,6 @@ look the macro reply lines; the pinned id in the settings reply
 @commands Bot `t42` with a Tempad at 0 chronons in hotbar 0 and two chronometers at 0 in hotbar 1 and 2; `cdevtest tickwarp 2400`; `/ztp chr t42`
 @pass the Tempad has chronons after the warp (it was 0 with two chronometers before the fix); the hotbar 2 chronometer still holds 0 (ignored, and `auto_charge_blacklist` keeps it from being charged)
 @fails Tempad still 0: `ChronometerItem.isClashing` still stops both (each sees the other in `tempad:chronon_generators`); hotbar 2 above 0: the second chronometer charges itself (first-found check wrong) or is charged by the first (tag missing from the donor)
-@draft no batch holds this row yet
 > pbot spawn t42 0.5 -60 0.5 minecraft:overworld survival
 sleep 3
 > clear t42

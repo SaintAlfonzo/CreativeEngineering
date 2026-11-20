@@ -634,6 +634,13 @@ look line 1 (crimson) and 2 (warped): count > 0, standing on crimson_nylium / wa
 @from batches/r1102b/s1_A.qb
 shell f=kubejs/generation_scripts/worldgen/pool_tag_report.md; grep -c "veggiesdelight:village/houses/[a-z]*_depot_house" $f; grep "veggiesdelight:village/houses/[a-z]*_depot_house" $f | head -5 | cut -c1-160
 bootexpect \[pool-tuning\] \d+ pools / \d+ pieces
+# self-contained (r1120fix, 2026-11-20): own s1home capture (H was captured only by group A rows)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1+56} {H3+16} {H1+96} {H3+48}
+sleep 3
 > fill {H1+60} {H2} {H3+20} {H1+90} {H2+14} {H3+45} minecraft:air
 > place template veggiesdelight:village/houses/plains_depot_house {H1+64} {H2} {H3+24}
 sleep 5
@@ -725,6 +732,7 @@ bootreject (?i)(CopperPotBlockEntityMixin|StickyBasketBlockEntityMixin|StickyBas
 @fails `CopperPotBlockEntity.servedResult` or the cup table
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
+@superseded cup family removed 2026-11-02 (miners_delight.md "Copper cup family removed"); SQ-CUP-01 to -05 check the removal (owner request, 2026-11-20)
 # self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
 > execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
 sleep 2
@@ -967,6 +975,7 @@ look outputs print the potion registry id (long_ / strong_ forms included): reds
 @fails `UpstreamJars` reload hook **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
+@superseded cup family removed 2026-11-02 (miners_delight.md "Copper cup family removed"); SQ-CUP-01 to -05 check the removal (owner request, 2026-11-20)
 look rows/SQ-CDM-00.log: no error naming miners_delight after the /reload (a reject there); the cup table is gone since 2026-11-02 (judge-11, 2026-11-18)
 
 ## SQ-MDP-13 | Miner's foods have their recipes
@@ -1686,7 +1695,7 @@ look counts against the user's 2026-10-31 log (58 mixes, 2295 bottling recipes, 
 @jars creativecommon
 @from batches/r1102b/s1_A.qb
 > kill @e[type=minecraft:area_effect_cloud]
-> setblock {H1+30} {H2} {H3-10} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativeengineering:potion_bucket",Count:1b,tag:{Potion:"minecraft:swiftness"}}]}
+> setblock {H1+30} {H2} {H3-10} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativebrewing:potion_bucket",Count:1b,tag:{Potion:"minecraft:swiftness"}}]}
 > setblock {H1+30} {H2} {H3-9} minecraft:redstone_block
 sleep 1
 > execute positioned {H1+30} {H2} {H3-11} if entity @e[type=minecraft:area_effect_cloud,distance=..6] run say LE03 swiftness cloud
@@ -1746,7 +1755,7 @@ bootexpect \[structure-tuning\] \d+ groups
 sleep 10
 shell f=kubejs/exported/worldgen/structuregen.json; python3 -I -c "import json,sys; d=json.load(open(sys.argv[1])); s=d['structure_sets']['creativeworldgen:group/desert_temples']; p=s['placement']; print('spacing', p.get('spacing'), 'separation', p.get('separation'), 'structures', [x.get('structure', x) for x in s['structures']])" $f
 > execute positioned 0 70 0 run locate structure #creativeworldgen:group/desert_temples
-waitlog (The nearest|Could not find) 900
+waitlog (The nearest #?creativeworldgen:group/desert_temples|Could not find .*creativeworldgen:group/desert_temples) 900
 capture D is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > execute positioned {D1} 70 {D3} run locate structure #creativeworldgen:group/desert_temples
 > execute positioned {D1+400} 70 {D3} run locate structure #creativeworldgen:group/desert_temples
@@ -1800,24 +1809,25 @@ look shell: spacing 32, separation 20 and the four members (YUNG's temple, vanil
 @fails `seasoning_tags.js`, `generation_scripts/food/food_families.json` present
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
-## SQ-SNF-02 | (recheck after the namespace move) the five season recipes, type creativedelight:seasoning
+## SQ-SNF-02 | (recheck after the namespace move) the five season recipes, type creativedelight:flavor
 @group A
 @commands recipe probe (RecipeManager id dump)
-@pass Present, type `creativeengineering:seasoning`: `creativedelight:shapeless/season/{cheese,onion,garlic,void_pepper,garlic_onion}`; absent: any `..._on_corn_delight_popcorn`, any `sugar` season recipe
+@pass Present, type `creativedelight:flavor`: `creativedelight:shapeless/flavor/{cheese,onion,garlic,void_pepper,garlic_onion}`; absent: any `..._on_corn_delight_popcorn`, any `sugar` flavor recipe
 @fails `seasoning.js` generation, `NCH.season` with a tag food
 @jars creativecommon creativedelight
 @from batches/r1113/c1_a1.qb
 @reviewed 2026-11-16
 # id fix: serializer creativeengineering:seasoning -> creativedelight:seasoning (row text predates 2026-11-09)
-> cdevtest bytype creativedelight:seasoning
-waitlog verb=bytype serializer=creativedelight:seasoning n=\d+ 30
-expect verb=bytype id=creativedelight:shapeless/season/cheese result=
-expect verb=bytype id=creativedelight:shapeless/season/onion result=
-expect verb=bytype id=creativedelight:shapeless/season/garlic result=
-expect verb=bytype id=creativedelight:shapeless/season/void_pepper result=
-expect verb=bytype id=creativedelight:shapeless/season/garlic_onion result=
+# id fix (r1120fix, 2026-11-20): seasonings are Flavors (changelog "Flavors"): type creativedelight:flavor, ids shapeless/flavor/<key> (recipe dump 2026-11-19)
+> cdevtest bytype creativedelight:flavor
+waitlog verb=bytype serializer=creativedelight:flavor n=\d+ 30
+expect verb=bytype id=creativedelight:shapeless/flavor/cheese result=
+expect verb=bytype id=creativedelight:shapeless/flavor/onion result=
+expect verb=bytype id=creativedelight:shapeless/flavor/garlic result=
+expect verb=bytype id=creativedelight:shapeless/flavor/void_pepper result=
+expect verb=bytype id=creativedelight:shapeless/flavor/garlic_onion result=
 reject _on_corn_delight_popcorn
-reject shapeless/season/[a-z_]*sugar
+reject shapeless/(season|flavor)/[a-z_]*sugar
 look already PASS 2026-10-26 (queue Run log): this only rechecks it on the current jars
 
 ## SQ-SNF-03
@@ -1921,13 +1931,13 @@ expect verb=tag kind=item tag=forge:sugar n=\d+ ids=\S*creativedelight:powdered_
 
 ## SQ-PS-03 | powdered sugar block does not freeze
 @group A
-@commands `setblock ~ ~ ~2 creativeengineering:powdered_sugar_block`, `tp` a zombie into it, wait 20 s; `data get entity @e[type=zombie,limit=1] TicksFrozen`
+@commands `setblock ~ ~ ~2 creativedelight:powdered_sugar_block`, `tp` a zombie into it, wait 20 s; `data get entity @e[type=zombie,limit=1] TicksFrozen`
 @pass Block placed; TicksFrozen 0
 @fails `PowderedSugarBlock.entityInside` still sets the powder snow flag
 @jars creativecommon creativedelight
 @from batches/r1102b/s1_A.qb
-> setblock {H1+2} {H2} {H3-10} creativeengineering:powdered_sugar_block
-> execute if block {H1+2} {H2} {H3-10} creativeengineering:powdered_sugar_block run say PS03 placed
+> setblock {H1+2} {H2} {H3-10} creativedelight:powdered_sugar_block
+> execute if block {H1+2} {H2} {H3-10} creativedelight:powdered_sugar_block run say PS03 placed
 > time set 18000
 > summon minecraft:zombie {H1+2}.5 {H2} {H3-10}.5 {NoAI:1b,PersistenceRequired:1b,Tags:["ps03"]}
 sleep 20
@@ -2095,9 +2105,7 @@ bootreject (?i)BlockStateCounterTopperMixin.*(error|fail|exception)
 @fails KT-15a FAIL with `above: minecraft:air`: tag not filled (`/kubejs` errors in `blocktags.js`, `addMatching` wildcard `displaydelight:*plated_*`); KT-16 FAIL: the per-state cache never saw the tag (`CounterToppers.init` / `TagsUpdatedEvent`)
 @jars creativecommon creativedelight
 @reviewed 2026-11-16
-shell cp $INST/tools/kitchen_probe/cfb_kitchen_probe.js kubejs/server_scripts/zz_cfb_kitchen_probe.js
-> reload
-sleep 20
+# (r1120fix, 2026-11-20): no manual copy and /reload: qrun installs cfb_kitchen_probe.js (kttest) before the first row; the /reload here truncated the KubeJS log for later kjs rows
 > kttest
 waitlog \[kttest\] INFO done 120
 sleep 20
@@ -2975,6 +2983,7 @@ capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > fill {H1+53} {H2-1} {H3-12} {H1+64} {H2-1} {H3-8} minecraft:stone
 > kill @e[type=minecraft:item]
 > setblock {H1+62} {H2} {H3-10} farmersdelight:cutting_board
+# (r1120fix, 2026-11-20): the live placeAs edits are gone: the option needs a restart (FDBackportConfig comment, @pass), so a live edit could never pass the Delightful and Central Kitchen lanes; those need a boot per value (@boot rows, reported)
 shell grep -n "placeAs" config/farmersdelight-ce-common.toml
 > pbot remove fdb5
 sleep 1
@@ -2984,16 +2993,12 @@ sleep 2
 > pbot hold fdb5 minecraft:pumpkin_pie 8
 > pbot use fdb5 {H1+54} {H2-1} {H3-10}
 > pbot use fdb5 {H1+62} {H2} {H3-10}
-shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"DELIGHTFUL"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
 sleep 1
 > pbot use fdb5 {H1+56} {H2-1} {H3-10}
-shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"CREATE_CENTRAL_KITCHEN"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
 sleep 1
 > pbot use fdb5 {H1+58} {H2-1} {H3-10}
-shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"OFF"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
 sleep 1
 > pbot use fdb5 {H1+60} {H2-1} {H3-10}
-shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml pumpkin_pie placeAs '"FARMERSDELIGHT"'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
 > execute if block {H1+54} {H2} {H3-10} farmersdelight:pumpkin_pie run say FDB05 FD pie
 > execute if block {H1+56} {H2} {H3-10} delightful:pumpkin_pie run say FDB05 Delightful pie
 > execute if block {H1+58} {H2} {H3-10} create_central_kitchen:pumpkin_pie run say FDB05 Central Kitchen pie
@@ -3011,8 +3016,6 @@ sleep 1
 > data get entity fdb5 Inventory
 > zcount {H1+53} {H2} {H3-11} {H1+55} {H2+1} {H3-9}
 expect FDB05 FD pie
-expect FDB05 Delightful pie
-expect FDB05 Central Kitchen pie
 expect FDB05 nothing on the cutting board
 expect (?i)farmersdelight:pumpkin_pie_slice
 > pbot remove fdb5
@@ -3612,8 +3615,9 @@ look pasta and soup take 3 of #forge:vegetables/bell_pepper (several peppers lis
 > cdevtest rdetail maple_glazed_bacon
 > cdevtest rdetail brewinandchewin:pizza
 > cdevtest rdetail bell_pepper_pasta
-> cdevtest tag item creativeengineering:roasted_bell_pepper
-expect verb=tag kind=item tag=creativeengineering:roasted_bell_pepper n=9
+# id fix (r1120fix, 2026-11-20): tag creativeengineering:roasted_bell_pepper -> creativedelight: (tag dump 2026-11-19, 9 items)
+> cdevtest tag item creativedelight:roasted_bell_pepper
+expect verb=tag kind=item tag=creativedelight:roasted_bell_pepper n=9
 reject verb=rdetail id=\S*(syrup|coffee|cherry_blossom)_cookie serializer=minecraft:crafting
 reject verb=rdetail id=\S*_cheesecake serializer=minecraft:crafting_sha
 look cookies: dough + 2 flavour -> 12 in the oven only; cheesecakes: pie crust + 2 flavour + 2 sweet, oven only; maple cookie = dough + syrup + honey; bacon = cooked bacon + syrup; pizza = bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat, dough; heatless pasta takes 3 of #creativeengineering:roasted_bell_pepper
@@ -3655,6 +3659,7 @@ look 1-2 Calamari per kill (10 kills): about 10 to 20 in the merged zcount stack
 @pass Log `[creativedelight] village farm crops added to 5 farm processor lists`; some savanna farm crops are cotton; plains farms unchanged (no rule matches)
 @fails No line: `VillageFarmCrops.onServerAboutToStart`; reflection failed: the SRG field name `f_74422_` (`farm/VillageFarmCrops.onServerAboutToStart` in the CD jar)
 @from batches/r1113/c4_b.qb
+@absent minecraft:village_savanna (vanilla structure; the registry dump lists no structures)
 bootexpect \[creativedelight\] village farm crops added to \d+
 > locate structure minecraft:village_savanna
 waitlog (?:The nearest minecraft:village_savanna is at|Could not find a structure of type "minecraft:village_savanna") 300
@@ -4172,7 +4177,10 @@ look the three plates are gone (zcount blocks: no cheesecake left) and the slice
 @pass Giant patch puts red, yellow, green blocks on grass only (never on dirt or sand, never a rare color); wild patches place their plant; no Pale or Dark wilds in the bell pepper patch
 @fails Rare colours: `RusticTranslator.basePatch`; fails to place: rarity filter id or `configurable_rarity_filter` codec
 @from batches/r1113/c4_a.qb passed
+@absent rusticdelight:bell_pepper_block_patch (configured feature of the CD rustic member, development/creativeDelight/members/rustic worldgen data; the registry dump lists no configured features)
 @reviewed 2026-11-16
+> forceload add 40800 40060 40830 40090
+sleep 3
 > fill 40800 -60 40060 40830 -54 40090 minecraft:air
 > fill 40800 -61 40060 40830 -61 40090 minecraft:grass_block
 > fill 40800 -61 40060 40804 -61 40090 minecraft:dirt
@@ -4212,16 +4220,6 @@ expect \[zcount\] blocks .*rusticdelight:wild_cotton=
 reject \[zcount\] blocks .*rusticdelight:wild_(pale|dark)_bell_peppers
 reject Failed to place feature|Unknown|ERROR
 
-## SQ-RD-25
-@group A
-@commands After RD-01's boot: `grep -n "rusticdelight\|ERROR" logs/kubejs/startup.log logs/kubejs/server.log`; `/reload` once
-@pass No error from `rusticdelight/*.js` (recipes, tags, loot, trades) or `item_dict` lookups for new ids; same after `/reload`
-@fails Undefined key: a new id not in the CD dict (one place for items)
-@reviewed 2026-11-16
-shell ! grep -niE "rusticdelight/[a-z_]+\.js.*(error|exception)|item_dict.*rusticdelight.*(undefined|missing)" logs/kubejs/startup.log logs/kubejs/server.log
-> reload
-sleep 20
-kjsreject (?i)rusticdelight/[a-z_]+\.js.*(error|exception)
 ## SQ-RD-26 | Rustic wilds by climate; giant peppers rare, warm dry grassy only; none in the jungle
 @phase worldgen
 @group B
@@ -4270,6 +4268,7 @@ look jungle box (near 2500 -2500): wild bell peppers and wild coffee, no giant p
 @pass Savanna farms about 25% cotton among vanilla crops; other types vanilla only (today's rules). Record the list per type for the farm audit (`farming/crops #16`)
 @fails No change anywhere: RD-10 log line missing
 @from batches/r1102b/s2_B.qb
+@absent minecraft:village_desert minecraft:village_snowy minecraft:village_taiga (vanilla structures; the registry dump lists no structures)
 @reviewed 2026-11-16
 > locate structure minecraft:village_desert
 waitlog The nearest minecraft:village_desert 600
@@ -4306,6 +4305,13 @@ look per type (desert, snowy, taiga, in that order of the count lines) cotton n=
 @pass Dark seeds possible in ancient city chests, Pale in sky villages; jungle temple has no Rustic seeds or bean swap (translator dropped the chest modifiers)
 @fails Seeds in jungle temples: upstream loot modifiers not dropped
 @from batches/r1102b/s2_A.qb
+# self-contained (r1120fix, 2026-11-20): own s1home capture (H was captured only by group A rows)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1+56} {H3-8} {H1+64} {H3+8}
+sleep 3
 > kill @e[type=minecraft:item]
 repeat 40
 > loot spawn {H1+60} {H2} {H3} loot minecraft:chests/jungle_temple
@@ -4565,7 +4571,7 @@ kjsreject (?i)\[NCH\].*(warn|error)
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_A.qb
 shell grep -oE "\[dumpplaceable\] [0-9]+ candidates, [0-9]+ Display Delight links" logs/latest.log | tail -1
-shell python3 -I -c "import json,re,sys;a=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight']['placed'];ids=sorted(set(re.findall(r'creativeengineering:placed_[a-z_]+',json.dumps(a))));print(len(ids),ids);sys.exit(len(ids)<9)"
+shell python3 -I -c "import json,re,sys;a=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight']['placed'];ids=sorted(set(re.findall(r'creativedelight:placed_[a-z_]+',json.dumps(a))));print(len(ids),ids);sys.exit(len(ids)<9)"
 look the link count in rows/SQ-FF-02.shell.txt against the 2026-10-24 dump (+9 expected then; the CDJ5 run's count is the newer baseline), each placed_* block mapped to its food
 
 @@text
@@ -4722,6 +4728,7 @@ look per-namespace value counts in rows/SQ-CDQ-05.shell.txt (101 Farmer's, Fungi
 @fails file returns early: check `global.CD.on` for the port
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_A.qb passed
+@absent fungidelight:inky_cap_salad (removed upstream recipe the row checks is gone)
 @reviewed 2026-11-16
 > cdevtest recipes _manual_only
 > cdevtest recipes veggiesdelight:broccoli_salad
@@ -4907,6 +4914,7 @@ look the [food values] N foods copied line (2 when written) in latest.log or ser
 @fails a startup file did not load from the jar (`JarStartupScripts`)
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_A.qb
+@absent creativedelight:carrot_juice_bucket (guessed bucket id; the row only looks at it)
 @reviewed 2026-11-16
 # id fix: creativeengineering: -> creativedelight: (ids follow the owning jar since 2026-11-09; carrot_juice_bucket is not in the items dump under either namespace)
 > cdevtest item creativedelight:baking_sheet
@@ -5104,8 +5112,8 @@ look cutting gives 6 kernels; popsicle uses the ice cubes tag; the Create crushi
 @from batches/r1102b/s2_A.qb passed
 > dumpcompost
 sleep 5
-shell python3 -I -c "import json;d=json.load(open('kubejs/exported/compost/compost.json'));print('corncob', d['now'].get('creativeengineering:corncob'))"
-shell python3 -I -c "import json,sys;d=json.load(open('kubejs/exported/compost/compost.json'));sys.exit(0 if (d['now'].get('creativeengineering:corncob') or {}).get('chance')==0.3 else 1)"
+shell python3 -I -c "import json;d=json.load(open('kubejs/exported/compost/compost.json'));print('corncob', d['now'].get('creativedelight:corncob'))"
+shell python3 -I -c "import json,sys;d=json.load(open('kubejs/exported/compost/compost.json'));sys.exit(0 if (d['now'].get('creativedelight:corncob') or {}).get('chance')==0.3 else 1)"
 
 ## SQ-CORN-04 | knife on mature corn: about 10 cobs in 40; hand and age 3 none (loot run as a bot: LootJS matchMainHand)
 @group A
@@ -5128,7 +5136,7 @@ repeat 40
 end
 > zcount {R1+59} {R2-1} {R3-1} {R1+61} {R2+2} {R3+1}
 waitlog \[zcount\] entities 30
-expect \[zcount\] entities .*item:creativeengineering:corncob
+expect \[zcount\] entities .*item:creativedelight:corncob
 > kill @e[type=minecraft:item]
 > item replace entity cn4 weapon.mainhand with minecraft:air
 repeat 20
@@ -5140,7 +5148,7 @@ repeat 20
 end
 > zcount {R1+59} {R2-1} {R3-1} {R1+61} {R2+2} {R3+1}
 waitlog \[zcount\] entities 30
-> execute unless entity @e[type=minecraft:item,nbt={Item:{id:"creativeengineering:corncob"}}] run say CN04 no cob by hand or on age 3
+> execute unless entity @e[type=minecraft:item,nbt={Item:{id:"creativedelight:corncob"}}] run say CN04 no cob by hand or on age 3
 expect CN04 no cob by hand or on age 3
 > pbot remove cn4
 look first zcount: about 10 corncobs from the 40 knife rolls (merged stacks: add the counts); second zcount (hand on age 7, knife on age 3) has corn / seeds only
@@ -5243,7 +5251,7 @@ look one food per block in the entities line (edd_ / erd_ / fr_ / bnc_ / nd_ to 
 
 ## SQ-DDP-03 | placed shakshouka and omelette drop one food each
 @group A
-@commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Break `creativeengineering:placed_shakshouka` and `placed_omelette`
+@commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Break `creativedelight:placed_shakshouka` and `placed_omelette`
 @pass One food each (loot table only, no second drop) (DDP-09)
 @fails Two drops: the `getDrops` early return in `AbstractItemBlock`
 @jars creativecommon creativedelight
@@ -5256,8 +5264,8 @@ capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > forceload add {H1-32} {H3-56} {H1+96} {H3+48}
 sleep 3
 > kill @e[type=minecraft:item]
-> setblock {H1} {H2} {H3+12} creativeengineering:placed_shakshouka
-> setblock {H1+4} {H2} {H3+12} creativeengineering:placed_omelette
+> setblock {H1} {H2} {H3+12} creativedelight:placed_shakshouka
+> setblock {H1+4} {H2} {H3+12} creativedelight:placed_omelette
 reject Unknown block type
 > setblock {H1} {H2} {H3+12} minecraft:air destroy
 > setblock {H1+4} {H2} {H3+12} minecraft:air destroy
@@ -5420,7 +5428,14 @@ look counts as SQ-WCD-01 minus the fruitsdelight and farmersrespite rows (named 
 @fails the tag namespace in `VillageFarmCrops.rule`
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_B.qb
+@absent minecraft:village_savanna (vanilla structure; the registry dump lists no structures)
 @reviewed 2026-11-16
+# self-contained (r1120fix, 2026-11-20): own village locate (VS was never captured by any row)
+> locate structure minecraft:village_savanna
+waitlog (?:The nearest minecraft:village_savanna is at|Could not find a structure of type "minecraft:village_savanna") 600
+capture VS The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VS1-56} {VS3-56} {VS1+56} {VS3+56}
+sleep 60
 > cdevtest count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} rusticdelight:cotton
 waitlog verb=count block=rusticdelight:cotton n= 300
 expect verb=count block=rusticdelight:cotton n=[1-9]
@@ -5457,6 +5472,10 @@ look report: Grid spacing 16, separation 5, 6 members (acacia, birch, cherry, ju
 @jars creativecommon
 @from batches/r1102b/s2_B.qb
 @reviewed 2026-11-16
+# self-contained (r1120fix, 2026-11-20): own savanna locate (SV was captured only in SQ-RD-10 / SQ-RD-26, not in this step)
+> locate biome minecraft:savanna
+waitlog (The nearest minecraft:savanna|Could not find a biome of type "minecraft:savanna") 600
+capture SV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > execute positioned {SV1} 80 {SV3} run locate structure creativeworldgen:meta/deadwood_acacia
 waitlog The nearest creativeworldgen:meta/deadwood_acacia|Could not find 900
 capture DA The nearest creativeworldgen:meta/deadwood_acacia is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -6286,6 +6305,18 @@ reject item:cozys-improved-cats:ancient
 bootreject (?i)cozys?.?improved.?cats.*(invalid|incorrect|correct(ing|ed)|validation)
 shell grep -iE "cozys[-_]improved[-_]cats" logs/latest.log | grep -iE "config|toml" | head -5; true
 look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
+
+## SQ-RD-25
+@group A
+@commands After RD-01's boot: `grep -n "rusticdelight\|ERROR" logs/kubejs/startup.log logs/kubejs/server.log`; `/reload` once
+@pass No error from `rusticdelight/*.js` (recipes, tags, loot, trades) or `item_dict` lookups for new ids; same after `/reload`
+@fails Undefined key: a new id not in the CD dict (one place for items)
+@reviewed 2026-11-16
+# moved to the end of the group A rows (r1120fix, 2026-11-20): its /reload truncates logs/kubejs/server.log for every later kjs check
+shell ! grep -niE "rusticdelight/[a-z_]+\.js.*(error|exception)|item_dict.*rusticdelight.*(undefined|missing)" logs/kubejs/startup.log logs/kubejs/server.log
+> reload
+sleep 20
+kjsreject (?i)rusticdelight/[a-z_]+\.js.*(error|exception)
 
 @@text
 @@text Results: r1106spf 2026-11-06 night (run log). Row-text faults found there: SQ-SPF-111 (every Creative jar requires Compat, creative_split.md 7.6), -03 (MCA villagers), -14 (Cozy's cats), -52 (Curios feet slot), -73 / SQ-NM-01 (seed spawn is ocean; `zq count` takes no `~`).

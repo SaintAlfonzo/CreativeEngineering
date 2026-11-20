@@ -6,6 +6,7 @@
 @@title Sky Village addon houses (skyvillages #1), 2026-10-30
 @@phase worldgen
 @@date 2026-10-30
+@@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309
 @@text
 @@text Data only ([sky_village_addons.md](../sky_village_addons.md)): `kubejs/data/skyvillages` templates and pools, nothing to
 @@text install. Copy `kubejs/data/skyvillages/` to the scratch server, full restart. Looks (SVA-03 to SVA-05) are for the user in
@@ -68,9 +69,12 @@ look keg and wine press counts above 0; /data get block on one keg, press, shelf
 @fails pool weights in `skyvillage_houses.json`
 @from batches/r1031/w3_terrain.qb
 @reviewed 2026-11-16
+@absent skyvillages:skyvillage (structure id: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+# r1120fix (2026-11-20): own bot (the tp named qa, which no row of the step spawned)
+> execute unless entity qa run pbot spawn qa 0 150 0 minecraft:overworld creative
 > locate structure skyvillages:skyvillage
 waitlog nearest skyvillages:skyvillage is at|type "?skyvillages:skyvillage 330
-capture SVL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+capture SVL nearest skyvillages:skyvillage is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {SVL1} 200 {SVL3}
 sleep 25
 # 81 x 81 around the village in four y bands (the box limit is 262144 blocks)

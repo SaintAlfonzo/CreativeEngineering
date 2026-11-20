@@ -6,6 +6,8 @@
 @@title Farmer's Structures donor (farmers_structures.md section 5)
 @@phase worldgen
 @@jars creativecommon
+@@prep B: boot=2: fresh
+@@prep B: boot=2: run rm -f farmers_upstream && mkdir farmers_upstream
 @@text
 @@text Needs patcherMod rebuilt and installed (`:creativeCommon:installToMods`), the Creative Delight jar (hanging canvas sign), and `farmers_upstream/FarmersStructures-1.0.6-1.21.1_neoforge.jar` in the game folder.
 @@text
@@ -16,21 +18,6 @@
 @pass One `[farmers-donor] N files from Farmer's Structures 1.0.6 {...}` line; no `Could not translate`; the counts list `blocks mapped minecraft:pink_petals`, no `blocks to air` for a block you expect to exist (rope fence, gleaming salad, hanging canvas sign, basket)
 @fails Depends on: donor jar
 @draft no batch holds this row yet
-## SQ-FSD-02 | no donor jar: one warning, the game loads on Farmer's Structures 1.0.0 data
-@group B
-@commands Rename the donor jar, boot
-@pass One warning that it is missing; the game loads with the 1.0.0 structures only
-@fails Depends on: donor jar
-@from batches/r1102b/s3_A2.qb
-bootexpect Done \(
-bootexpect is missing: Farmer's Structures runs on its installed 1\.0\.0 data
-bootreject \[farmers-donor\] \d+ files from Farmer's Structures 1\.0\.6
-shell n=$(grep -c "is missing: Farmer's Structures runs on its installed 1.0.0 data" logs/latest.log); echo "warnings: $n"; [ "$n" -eq 1 ]
-> forceload add 96 96 127 127
-sleep 20
-> place structure farmers_structures:cooks 240 -60 600
-look the cook house places (1.0.0 pieces only; any "Empty or non-existent pool" line names a 1.0.6 piece)
-
 ## SQ-FSD-03
 @group B
 @commands `/place structure farmers_structures:aquacultures_cod` a few times (different spots)
@@ -61,9 +48,11 @@ look the cook house places (1.0.0 pieces only; any "Empty or non-existent pool" 
 @pass Group `remote` holds cod, cacaos, fishs_stew, ratatouilles, shepherd_farms, squids; no `aquacultures_carp`
 @fails
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): the group set moved to the Worldgen namespace (creativeworldgen:group/remote, structuregen.json)
 > dumpstructuregen
 waitlog structuregen\.json 300
-shell python3 -I $INST/tools/scratch_query/dumpq.py sset creativeengineering:group/remote +farmers_structures:aquacultures_cod +farmers_structures:cacaos +farmers_structures:fishs_stew +farmers_structures:ratatouilles +farmers_structures:shepherd_farms +farmers_structures:squids -farmers_structures:aquacultures_carp
+shell python3 -I $INST/tools/scratch_query/dumpq.py sset creativeworldgen:group/remote +farmers_structures:aquacultures_cod +farmers_structures:cacaos +farmers_structures:fishs_stew +farmers_structures:ratatouilles +farmers_structures:shepherd_farms +farmers_structures:squids -farmers_structures:aquacultures_carp
 shell python3 -I $INST/tools/scratch_query/dumpq.py sset any -farmers_structures:aquacultures_carp
 
 ## SQ-FSD-08 | cook_end_1_21 template has the hanging canvas sign (200 -60 540)
@@ -72,10 +61,35 @@ shell python3 -I $INST/tools/scratch_query/dumpq.py sset any -farmers_structures
 @pass The sign is present, hanging from a ceiling
 @fails Depends on: CD jar
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): own forceload over the template box (W unloaded)
+> forceload add 192 528 239 575
+sleep 10
 > place template farmers_structures:cook_houses/cook_end_1_21 200 -60 540
 expect Loaded template
 > cdevtest count 195 -64 535 235 -30 575 farmersdelight:hanging_canvas_sign
 expect verb=count block=farmersdelight:hanging_canvas_sign n=[1-9]
+> forceload remove 192 528 239 575
 look the sign hangs under a block (the count line's on= lists what is under it: air under a hanging sign is expected; the ceiling is the block above)
 reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-FSD-02 | no donor jar: one warning, the game loads on Farmer's Structures 1.0.0 data
+@group B
+@commands Rename the donor jar, boot
+@pass One warning that it is missing; the game loads with the 1.0.0 structures only
+@fails Depends on: donor jar
+@from batches/r1102b/s3_A2.qb
+@boot 2
+@absent farmers_structures:cooks (structure id: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+# r1120fix (2026-11-20): boot 2 of the step on a fresh world, section @@prep makes srv/farmers_upstream an empty folder
+# (the step booted with the donor in place); the forceload now covers the place spot (it was 96 96 127 127)
+bootexpect Done \(
+bootexpect is missing: Farmer's Structures runs on its installed 1\.0\.0 data
+bootreject \[farmers-donor\] \d+ files from Farmer's Structures 1\.0\.6
+shell n=$(grep -c "is missing: Farmer's Structures runs on its installed 1.0.0 data" logs/latest.log); echo "warnings: $n"; [ "$n" -eq 1 ]
+> forceload add 208 568 271 631
+sleep 20
+> place structure farmers_structures:cooks 240 -60 600
+sleep 5
+> forceload remove 208 568 271 631
+look the cook house places (1.0.0 pieces only; any "Empty or non-existent pool" line names a 1.0.6 piece)

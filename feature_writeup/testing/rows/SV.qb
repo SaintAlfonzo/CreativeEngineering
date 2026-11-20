@@ -15,16 +15,23 @@
 @commands End: `/execute in minecraft:the_end run tp` an armor stand to 300016 100 300016 (ST-232); then a pearl onto Myalite at a spire viaduct
 @pass The tp takes milliseconds, no "ticks behind", no region file at the target; the viaduct warp still works
 @fails
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # the region at 300016 / 300016 is r.585.585 in DIM1; the viaduct pearl half needs a located spire viaduct (look)
+# r1120lr batch fault: the tp selector found no armor stand ('No entity was found': summoned before the forceloaded chunk was in) and the "Can't keep up" line was the post-boot backlog, before the tp. The row now waits for the chunk, checks the stand, tps it as itself, and judges only lag lines after the tp
+sleep 20
 > execute in minecraft:the_end run forceload add 0 0
+sleep 3
 > execute in minecraft:the_end run summon minecraft:armor_stand 0 100 0 {Tags:["sv01"],NoGravity:1b}
-> execute in minecraft:the_end run tp @e[tag=sv01,limit=1] 300016 100 300016
+sleep 1
+> execute in minecraft:the_end if entity @e[type=minecraft:armor_stand,tag=sv01]
+expect Test passed
+> execute in minecraft:the_end as @e[type=minecraft:armor_stand,tag=sv01,limit=1] run tp @s 300016 100 300016
 > cdevtest tickwarp 40
 waitlog verb=tickwarp end=done ticks=40 60
 > execute in minecraft:the_end run kill @e[tag=sv01]
 > execute in minecraft:the_end run forceload remove 0 0
-reject Can't keep up|ticks behind
+reject No entity was found
+shell n=$(grep -n "Teleported .* to 300016" logs/latest.log | tail -1 | cut -d: -f1); echo "tp line $n"; test -n "$n" && ! tail -n +"$n" logs/latest.log | grep -E "Can't keep up|ticks behind"
 shell test -z "$(ls */DIM1/region/r.585.585.mca 2>/dev/null)"
 look the tp reply came at once (row log timestamps); the Myalite spire viaduct pearl warp is not in the batch: a located viaduct and a thrown pearl, record it as not run unless done by hand
 ## SQ-SV-02

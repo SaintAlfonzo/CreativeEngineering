@@ -1,0 +1,85 @@
+id,file,kind,action,detail
+SQ-HH-1180,feature_writeup/testing/rows/HH.qb,prefixed,@absent,dead-id warning on a deliberate negative test (removed or never-registered id)
+SQ-HH-410,feature_writeup/testing/rows/HH.qb,prefixed,@absent,dead-id warning on a deliberate negative test (removed or never-registered id)
+SQ-HH-1541,feature_writeup/testing/rows/HH.qb,prefixed,@absent,dead-id warning on a deliberate negative test (removed or never-registered id)
+SQ-HH-1584,feature_writeup/testing/rows/HH.qb,prefixed,@absent,dead-id warning on a deliberate negative test (removed or never-registered id)
+SQ-HH-318,feature_writeup/testing/rows/HH.qb,prefixed,@absent + forceload,"salt_cave feature / corn_maze structure exist (data/hearthandharvest/worldgen, exported/worldgen/structuregen.json) but are not in the registry dump; W unloaded (step 152): forceload 4464 80 4496 112 before the stone fills (also @absent above)"
+SQ-HH-319,feature_writeup/testing/rows/HH.qb,prefixed,@absent,"salt_cave feature / corn_maze structure exist (data/hearthandharvest/worldgen, exported/worldgen/structuregen.json) but are not in the registry dump"
+SQ-HH-320,feature_writeup/testing/rows/HH.qb,prefixed,@absent + rewrite,"salt_cave feature / corn_maze structure exist (data/hearthandharvest/worldgen, exported/worldgen/structuregen.json) but are not in the registry dump; config switches saltCaves/cornMaze false + restart were prose; now edit + restart in the row, switched back on + restart at the end so SQ-HH-323..329 still place the maze"
+SQ-HH-323,feature_writeup/testing/rows/HH.qb,prefixed,@absent + forceload,"salt_cave feature / corn_maze structure exist (data/hearthandharvest/worldgen, exported/worldgen/structuregen.json) but are not in the registry dump; forceload 4100 100 4260 260 over the maze box that SQ-HH-324/-325 read (also @absent above)"
+SQ-HH-328,feature_writeup/testing/rows/HH.qb,prefixed,@absent,"salt_cave feature / corn_maze structure exist (data/hearthandharvest/worldgen, exported/worldgen/structuregen.json) but are not in the registry dump"
+CQ-HH-301,feature_writeup/testing/rows/HH.qb,prefixed,@absent,"salt_cave feature / corn_maze structure exist (data/hearthandharvest/worldgen, exported/worldgen/structuregen.json) but are not in the registry dump"
+SQ-HH-1532,feature_writeup/testing/rows/HH.qb,prefixed,@absent,hearthandharvest:tilling is a registered enchantment (HHGearRegistry.TILLING); the dump lists no enchantments
+SQ-HH-1533,feature_writeup/testing/rows/HH.qb,prefixed,@absent,hearthandharvest:tilling is a registered enchantment (HHGearRegistry.TILLING); the dump lists no enchantments
+SQ-HH-1535,feature_writeup/testing/rows/HH.qb,prefixed,@absent,hearthandharvest:tilling is a registered enchantment (HHGearRegistry.TILLING); the dump lists no enchantments
+SQ-HH-1536,feature_writeup/testing/rows/HH.qb,prefixed,@absent,hearthandharvest:tilling is a registered enchantment (HHGearRegistry.TILLING); the dump lists no enchantments
+SQ-HH-1539,feature_writeup/testing/rows/HH.qb,prefixed,@absent,hearthandharvest:tilling is a registered enchantment (HHGearRegistry.TILLING); the dump lists no enchantments
+SQ-HH-1540,feature_writeup/testing/rows/HH.qb,prefixed,@absent,hearthandharvest:tilling is a registered enchantment (HHGearRegistry.TILLING); the dump lists no enchantments
+SQ-HH-1534,feature_writeup/testing/rows/HH.qb,prefixed,@absent + forceload,tilling @absent; forceload over 31056 30028 31072 30048 (row works far from the 470..620 box)
+SQ-HH-1257,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-1285,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-1286,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-1301,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-210,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-212,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-237,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-246,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-252,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-324,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-325,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-501,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-1502,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-1503,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded: forceload box over the row coordinates before the first block command, sleep 3"
+SQ-HH-303,feature_writeup/testing/rows/HH.qb,prefixed,forceload,W unloaded (step 152): forceload over the /place feature box
+SQ-HH-306,feature_writeup/testing/rows/HH.qb,prefixed,forceload,W unloaded (step 152): forceload over the /place feature box
+SQ-HH-312,feature_writeup/testing/rows/HH.qb,prefixed,forceload,W unloaded (step 152): forceload over the /place feature box
+SQ-HH-313,feature_writeup/testing/rows/HH.qb,prefixed,forceload,W unloaded (step 152): forceload over the /place feature box
+SQ-HH-1500,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,retired [zq] registered check dropped (zq probe retired); forceload 470 470 620 620 and gamerules moved from prose into steps (W unloaded)
+SQ-HH-401,feature_writeup/testing/rows/HH.qb,prefixed,text,prose named the retired zq probe (401 said prep_srv copies it; 1585 said the row needs /zq potion); qrun probe selection reads @commands
+SQ-HH-1585,feature_writeup/testing/rows/HH.qb,prefixed,text,prose named the retired zq probe (401 said prep_srv copies it; 1585 said the row needs /zq potion); qrun probe selection reads @commands
+SQ-HH-403,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-415,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-467,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-468,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-469,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-470,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-471,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-480,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-481,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-484,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-486,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-487,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-488,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-489,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-490,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-491,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-492,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+CQ-HH-402,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"lick stage 0 was salt:salt_block (Salt Dust Block, no lick since salt.md 8, built 2026-11-17); now hearthandharvest:placed_rock_salt_block in setblock and state checks"
+SQ-HH-478,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"stage 0 = placed Rock Salt Block; dispenser loaded with Rock Salt (salt:salt no longer refills, salt.md 8 Refill)"
+SQ-HH-477,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"dispenser with Rock Salt on a waxed worn stage now restores one stage and stays waxed (salt.md 8 Refill ""waxed or not"", SaltLick.refill); was ""no restore"" with salt:salt; expects waxed_lightly_licked + Count 1b"
+SQ-HH-479,feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,"setblock salt:raw_rock_salt_block becomes the placed lick (salt.md 8.1, every placement since G11); rows unchanged"
+SQ-HH-482,feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,"setblock salt:raw_rock_salt_block becomes the placed lick (salt.md 8.1, every placement since G11); rows unchanged"
+SQ-HH-485,feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,"setblock salt:raw_rock_salt_block becomes the placed lick (salt.md 8.1, every placement since G11); rows unchanged"
+SQ-SLK-01,feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,"setblock salt:raw_rock_salt_block becomes the placed lick (salt.md 8.1, every placement since G11); rows unchanged"
+SQ-SLK-01c,feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,"setblock salt:raw_rock_salt_block becomes the placed lick (salt.md 8.1, every placement since G11); rows unchanged"
+SQ-HH-1158,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,"hops salad takes #rusticdelight:cooking_oil since 2026-11-19 (e2fb0312); rdetail prints tags as items joined by /, oil slot matched loosely"
+SQ-HH-1154,feature_writeup/testing/rows/HH.qb,prefixed,rewrite,macaroni takes #forge:pasta since 2026-11-18 (b25cb1dc); ingredient regex loosened
+SQ-HH-1593,feature_writeup/testing/rows/HH.qb,reviewed,@reviewed + pass text,pot 8-sugar and fluid routes (#72b) noted as allowed; checks unchanged
+SQ-HH-304,feature_writeup/testing/rows/HH.qb,prefixed,waitlog,"locate waitlog and capture anchored on the target biome (W waitlog, steps 152/153)"
+SQ-HH-307,feature_writeup/testing/rows/HH.qb,prefixed,waitlog,"locate waitlog and capture anchored on the target biome (W waitlog, steps 152/153)"
+SQ-HH-314,feature_writeup/testing/rows/HH.qb,prefixed,waitlog,"locate waitlog and capture anchored on the target biome (W waitlog, steps 152/153)"
+SQ-HH-474,feature_writeup/testing/rows/HH.qb,superseded,@superseded,"salt dust no longer refills; SQ-SLK-03, SQ-SLK-04, SQ-SALT2-11"
+SQ-HH-475,feature_writeup/testing/rows/HH.qb,superseded,@superseded,"salt:salt no longer refills; dispenser Rock Salt refill is SQ-SLK-04, SQ-SALT2-11"
+SQ-HH-476,feature_writeup/testing/rows/HH.qb,superseded,@superseded,"salt dust dispenser refill removed by design; SQ-SLK-04, SQ-SALT2-11"
+SQ-HH-464,feature_writeup/testing/rows/HH.qb,superseded,@superseded,"ground nests and #creativedelight:has_crows removed 2026-11-10 (row text already said so); SQ-HCS-03, SQ-HCS-04"
+SQ-SPD-08,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded (section 3, not in a pending step)"
+SQ-BBQW-02t,feature_writeup/testing/rows/HH.qb,prefixed,forceload,"W unloaded (section 3, not in a pending step)"
+SQ-DEP-02 (rerun),feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,plan_bugfix_1114 2026-11-17 diff is spelling sweeps and the #72b note; rows untouched (step 58)
+SQ-MIN-03 (rerun),feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,plan_bugfix_1114 2026-11-17 diff is spelling sweeps and the #72b note; rows untouched (step 58)
+SQ-HH-1617,feature_writeup/testing/rows/HH.qb,reviewed,@reviewed,"recipes.js 2026-11-19 diff (oil tag, edible seeds, pasta, gold tag) does not touch syrup (step 59)"
+HH#2,feature_writeup/testing/rows/HH.qb,reviewed,@@reviewed 2026-11-20,"section 2: hh.md diffs (crow nest search, syrup only from sap, J87 and syrup to sugar) and recipes.js diffs grepped against every row; 373 row-level @reviewed bumped; affected rows rewritten above"
+HH#3,feature_writeup/testing/rows/HH.qb,reviewed,@@reviewed 2026-11-20,"section 3: plan_bugfix_1114 diff (spelling, #72b note) does not touch the rows; 16 row @reviewed bumped"
+HH#4,feature_writeup/testing/rows/HH.qb,reviewed,@@reviewed 2026-11-20,section 4: drafts SQ-HH-1613..1616 written from the same #72b change; 2026-11-19 recipes.js diff does not touch syrup
+HH#1,feature_writeup/testing/rows/HH.qb,unfixed,none,"section 1 (63 W stale, tranche 1-3 prose rows, no steps, not in a pending step): not reviewed"
+SQ-HH-459,feature_writeup/testing/rows/HH.qb,unfixed,none,W unloaded is the bot spawn 500 blocks away on purpose (HNH-88 far player); not a fault
+SQ-SLK-01,feature_writeup/testing/rows/HH.qb,candidate-supersede,none,SQ-SLK-01c rewrites the same 18-block trip with a lick check; SLK-01 only checks the reach

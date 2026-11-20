@@ -26,6 +26,7 @@
 @pass Server boots; `creativecommon` 1.0.0 and `creativeengineering` 2.0.0 in the list, no other jar missing its `creativecommon` dependency; Common's 74 and Engineering's 29 mixins apply (gated ones with their mod), no apply error
 @fails a jar still requires `creativeengineering [1.1.09,)`; package overlap between two jars; a gate id wrong (`EngineeringMixinPlugin`)
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-20
 bootreject Missing or unsupported mandatory dependencies
 bootreject (creativecommon|creativeengineering)\.mixins\.json.*(rror|ailed|could not)
 bootreject in both module|split package
@@ -53,7 +54,7 @@ look counts: shrapnel count = 12, [surface.wthit] format = "PERCENT", [toasts] t
 @pass Packs: `creativecommon` first, then the pack folder, then the jars (`creativeengineering` among them); no `global.CEN missing`, no NCH.cfg section miss; same item and block ids (components, coils, plates, dust piles, misc parts, wood pellets, amethyst dust and lens, every transition item)
 @fails `HELPERS_MOD_ID` not `creativecommon` (helpers load late, every jar script fails); Engineering startup pack not in the jar
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 shell grep -nE "startup script packs in order|global\.CEN missing|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log | head -10 | cut -c1-300
 > cdevtest reg item ^creativeengineering: max=1
 > cdevtest reg block ^creativeengineering: max=1
@@ -70,7 +71,7 @@ look packs order creativecommon, then the pack folder, then the jars with creati
 @pass Same recipe ids and count (moved scripts keep NCH's default namespace); 211 jar sawmill recipes plus the pack's 5; no purged-wood output and no duplicate oak-twin recipes
 @fails an Engineering script failed (server.log); `removed_woods.js` order vs `item_merges.js`
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest recipes creativeengineering:sawmill/ max=500
 waitlog \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n= 30
 expect \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n=216
@@ -80,19 +81,20 @@ look 216 = 211 jar + 5 pack (and = the 2026-11-10 dump count from the shell line
 
 ## SQ-CEN-05
 @group A
-@commands Same save: `/data get block` the chest; `/summon minecraft:tnt ~ ~ ~ {Fuse:1}` near the bot, then `/execute if entity @e[type=creativeengineering:shrapnel]` count over 5 ticks
-@pass Wooden water bucket, sawblade and sawdust keep their ids and NBT; 12 shrapnel pieces per TNT
-@fails Engineering registries not created (`CreativeEngineering` constructor); config not read
-@reviewed 2026-11-16
+@commands Same save: `/data get block` the chest; `/summon minecraft:tnt ~ ~ ~ {Fuse:1}` near the bot, then count `creativecompat:shrapnel` entities over 5 ticks
+@pass Wooden water bucket, sawblade and sawdust keep their ids and NBT; shrapnel pieces per TNT = `[shrapnel] count` in `creativecompat-common.toml` (24 in the pack config; 12 when the save prep set it)
+@fails Compat shrapnel registry not created (`ShrapnelEntities`); config not read. r1120nv batch fault: shrapnel moved to Creative Compat (`creativecompat:shrapnel`), the row counted `creativeengineering:shrapnel`
+@reviewed 2026-11-20
 > forceload add 0 0 15 15
 > fill 0 -60 0 15 -50 15 minecraft:air
 > summon minecraft:tnt 8 -60 8 {Fuse:1}
 > cdevtest tickwarp 3
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=3 30
-> cdevtest entities 8 -60 8 24 type=creativeengineering:shrapnel
+> cdevtest entities 8 -60 8 24 type=creativecompat:shrapnel
 waitlog \[cdevtest\] verb=entities done= 30
-expect \[cdevtest\] verb=entities n=12
-> kill @e[type=creativeengineering:shrapnel]
+shell c=$(awk '/^\[shrapnel\]/{f=1;next} /^\[/{f=0} f && $1=="count"{print $3}' config/creativecompat-common.toml); echo "config count=$c"; grep -qE "verb=entities n=$c( |$)" logs/latest.log
+reject \[cdevtest\] verb=entities n=0\b
+> kill @e[type=creativecompat:shrapnel]
 > forceload remove 0 0 15 15
 reject \[cdevtest\] .*(done=0|error=)
 look the carried chest (boot 1 save): `cdevtest inv X Y Z` at its position shows the wooden water bucket, sawblade and sawdust with their ids and NBT kept (position from the save prep)
@@ -101,12 +103,14 @@ look the carried chest (boot 1 save): `cdevtest inv X Y Z` at its position shows
 @commands Same save: an item on the belt under the dragon-head fan (dragon breathing recipe); the sawmill cutting a log; `grep -iE "FluidBridge\|liquid xp\|dragon_breathing" logs/latest.log`
 @pass Fan output as before; sawmill gives the routed sawdust with the precision blade; the XP bridge startup line names the CEI fluid; dragon breathing type registered once
 @fails fan type not registered (`DragonBreathingFanProcessingType::register` in Engineering setup); sawmill classes not pre-loaded (crash on first sawmill tick)
+@reviewed 2026-11-20
 @draft needs the carried save's machines (sawmill with a precision blade, dragon-head fan over a belt) at positions only the save prep knows; the grep half (`FluidBridge|liquid xp|dragon_breathing`) can go in once the save is built
 ## SQ-CEN-07
 @group A
 @commands Bot vein mines a small ore vein (Ore Excavation), `/undo_excavation`; then vein mine dirt, undo twice quickly
 @pass Ore undo refused (`vein_undo_denied`); dirt undo works, the second inside the 5 s cooldown refused
 @fails Ore Excavation mixins gated off (`oreexcavation` id)
+@reviewed 2026-11-20
 @draft Ore Excavation vein mining needs its keybind held by a real client (a bot break is a single block); run as a client row on the capture driver (key hold + click)
 ## SQ-CEN-08 | Creative Brewing armor effects read Common's config; mount effects tick
 @group A
@@ -114,6 +118,7 @@ look the carried chest (boot 1 save): `cdevtest inv X Y Z` at its position shows
 @pass No class-load error for `com.SaintAlfonzo.creativecommon.CommonConfig`; mount effects tick at `[perf] mountEffectIntervalTicks`
 @fails `armor_effects.js` still loads the old class (falls back to the default)
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-20
 shell grep -nE "ArmorFx|mountEffectInterval|CommonConfig" logs/kubejs/server.log | head -8 | cut -c1-240; grep -nE "mountEffectIntervalTicks" config/creativecommon-common.toml
 kjsreject NoClassDefFoundError.*CommonConfig|ClassNotFoundException.*CommonConfig
 look no class-load error for com.SaintAlfonzo.creativecommon.CommonConfig; the interval is read (horse with mount armor effect: client / CQ row)
@@ -123,6 +128,7 @@ look no class-load error for com.SaintAlfonzo.creativecommon.CommonConfig; the i
 @commands Client: WTHIT on asphalt (Run Speed line, percent format), on a 5-layer leaf pile with `[leaf_piles] slowFromLayers = 5` in Compat's file, on a framed block (camo line); stand in mud (sinking view); JEI dragon breathing category; names of the wooden bucket and the surface tiers; Common's lang (changelog button, WTHIT hive and campfire lines); Mods screen
 @pass LOOK: lines and names as before; leaf pile slows from 5 layers; Mods screen shows Creative Common and Creative Engineering with their descriptions
 @fails `LeafPileSlow` hook not set (Engineering constructor); a lang file at a shared path
+@reviewed 2026-11-20
 @draft no batch holds this row yet
 @@text
 @@text Results: not run yet.

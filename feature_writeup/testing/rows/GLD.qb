@@ -20,6 +20,7 @@
 @@table
 ## SQ-SLT-01 | Salt and Create: The Salt nested in Creative Delight
 @group A
+@reviewed 2026-11-20
 @commands Boot. `grep -nE "salt\|create__the_salt" srv/logs/latest.log \| grep -iE "error\|exception\|mixin"`; `ls srv/mods \| grep -iE "^salt-\|create_salt"`
 @pass Server reaches `Done`. latest.log lists mod `salt` version `1.2.4.1-ce-19.2-01` and `create__the_salt` version `1.19.2-1.1.0-ce-19.2-01` (Jar-in-Jar from the creativedelight jar); no `Mixin apply failed` / `InvalidMixinException` for `mixins.salt.json`; no `creativedelight.mixins.json` error naming `SaltRockNoDissolveMixin`; no duplicate-mod error for `salt` / `create__the_salt`; grep in `srv/mods` empty
 @fails Duplicate mod: the old upstream jars still in `mods/` (CD `replaces_jars` globs). Mixin error for `mixins.salt.json`: `mixin_configs` in `members/salt/gradle.properties`. `SaltRockNoDissolveMixin` missing class: stale `creativedelight.mixins.json`
@@ -34,6 +35,7 @@ look mod salt 1.2.4.1-ce-19.2-01 and create__the_salt 1.19.2-1.1.0-ce-19.2-01 li
 
 ## SQ-SLT-02 | Salt's access transformer reaches the nested jar
 @group A
+@reviewed 2026-11-20
 @commands Same boot. `grep -nE "IllegalAccessError\|f_60445_\|isRandomlyTicking\|m_182450_\|accesstransformer" srv/logs/latest.log`
 @pass No `IllegalAccessError` (Salt's common setup writes the final `BlockBehaviour.isRandomlyTicking` of the water cauldron, which needs its access transformer); `[salt] 30 Vintage salt blocks random tick like The Salt's` present
 @fails AT not applied to the nested jar: check `META-INF/accesstransformer.cfg` in `repackedSalt-*.jar` inside the CD jar, and whether FML reads ATs from Jar-in-Jar mods (salt.md 1.1)
@@ -45,6 +47,7 @@ shell grep -qhE "\[salt\] 30 Vintage salt blocks random tick like The Salt" logs
 
 ## SQ-SLT-03 | /salttest: raw rock salt stays, Salt Block dissolves
 @group A
+@reviewed 2026-11-20
 @commands Copy `tools/salt_probe/salt_probe.js` to `srv/kubejs/server_scripts/zz_salt_probe.js`, `/reload`, `/salttest`
 @pass `[salttest] PASS raw rock salt beside water stays`, `[salttest] PASS salt:salt_block beside water dissolves`, `PASS leftover vintagedelight:salt_block by water dissolves`, every other line as in SQ-SALT-05 / -06
 @fails Rock salt dissolves: the edited `Dissolving` is not in the jar (`replaced_classes` in `members/salt/gradle.properties`) or CD still built against the old member list. Salt Block no longer dissolves: the `isKept` check in `members/salt/src/main/java/io/github/mortuusars/salt/Dissolving.java`
@@ -64,6 +67,7 @@ look every other line as in SQ-SALT-05 / -06 (perf/runs/r1102b/r rows SQ-SALT-06
 @fails A changed count: diff against the pre-move dump; ids are taken from the upstream jars unchanged, so a difference points at a script or the member not loading
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+@absent salt:salt_from_raw_rock_salt (removed recipe id: negative test)
 > cdevtest bytype salt:salting
 > cdevtest tag item salt:can_be_salted
 > cdevtest recipes create__the_salt: max=500
@@ -86,13 +90,14 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-SLT-05 | Salt config read from salt-common.toml: DissolvingChance 1.0 dissolves the Salt Layer in 1 tick
 @group A
+@reviewed 2026-11-20
 @commands Stop, set `DissolvingChance` in `srv/config/salt-common.toml` to `1.0` (`qrun.py toml`), boot, `/salttest`
 @pass latest.log has no `salt-common.toml` parse error and no `creativedelight-common.toml` `[salt]` section is created; Salt Layer beside water becomes water within 1 tick (n = 1 on that line)
 @fails Config not read: Salt's `Configuration` registration (unchanged upstream class); the file name must stay `salt-common.toml` (salt.md 2.3)
 @from batches/r1103/sA_3.qb passed
 shell grep -nE "SaltDissolvingChance" config/salt-common.toml
 bootreject salt-common\.toml.*(ParsingException|parse|Failed loading|corrected)
-shell ! awk '/^\[/{print}' config/creativedelight-common.toml | grep -qE "^\[salt\]"
+shell ! grep -qE "^\[salt\]" config/creativedelight-common.toml
 > salttest
 waitlog \[salttest\] done 400
 expect \[salttest\] PASS Salt Layer beside water becomes water.* 1 ticks
@@ -100,12 +105,14 @@ reject (Unknown or incomplete command)
 
 ## CQ-SLT-01
 @group client
+@reviewed 2026-11-20
 @commands Throwaway client with the same mods. Mods screen; JEI: hover `salt:salt_block` and a `create__the_salt:` mixing recipe output; WTHIT on a placed `salt:salt_block`
 @pass LOOK: mod list shows "Salt (Creative Delight)" and "Create: The Salt (Creative Delight)" under Creative Delight's nested mods; JEI mod line and WTHIT say "Salt (Creative Delight)" and, for the mixing recipe's source, "Create: The Salt (Creative Delight)"
 @fails Old "Create: The Salt" name: the live `config/creativeengineering-common.toml` `[mod_names] overrides` still has the old value (Creative Common default changed only)
 @draft no batch holds this row yet
 ## CQ-SLT-02
 @group client
+@reviewed 2026-11-20
 @commands Creative player: campfire, water cauldron (level 3) on top, `gamerule randomTickSpeed 300`, wait 60 s next to it
 @pass Cauldron level drops and a salt cauldron fills (Salt's evaporation, which needs the access transformer's `CauldronBlock.shouldHandlePrecipitation` and cauldron random ticks); salt collected is salt dust (merge, SQ-SALT-03)
 @fails Same as SQ-SLT-02
@@ -122,6 +129,7 @@ reject (Unknown or incomplete command)
 @@table
 ## SQ-CNG-01 | Canned Goods repack nested in Creative Delight, no golem mixins
 @group A
+@reviewed 2026-11-20
 @commands Boot 2: `grep -E "canned_goods\|repackedCannedGoods\|creativedelight.mixins.json" logs/latest.log \| head -20`; `grep -i "canned_golem\|CannedGolem" logs/latest.log`
 @pass `repackedCannedGoods-1.19.2-3-ce-19.2-01` found by `JarInJarDependencyLocator`; mod `canned_goods` version `1.19.2-3-ce-19.2-01`; no mixin error, no `CannedGolemColorMixin` / `CannedGolemRendererMixin` line (removed); no "member canned_goods is loaded from CannedGoods-..." error
 @fails Stale `CannedGoods-*.jar` in `mods/` (`replaces_jars`), or CD built from a tree that still lists the mixins (double definition of the color data)
@@ -137,24 +145,31 @@ look canned_goods version 1.19.2-3-ce-19.2-01 in the debug.log mod list, found b
 ## SQ-CNG-02 | Canned Goods items exist, generated cans registered with servings
 @group A
 @commands Boot 2: `/give @p canned_goods:canned_beef`, `canned_goods:empty_can`, `canned_goods:crushed_empty_can`, one generated can (`creativeengineering:` id from `can_types.json`); `grep -E "\[cans\] registered" logs/kubejs/startup.log`; `/kubejs hand` on a Canned Goods can
-@pass Items exist; `[cans] registered 277` (r1103; or the current count); servings NBT and tags `#creativeengineering:cans/servings/*` on the held can
+@pass Items exist; `[cans] registered 277` (r1103; or the current count); servings NBT and tags `#creativedelight:cans/servings/*` on the held can
 @fails `canned_goods:` ids missing: member not nested or disabled in `creativedelight-common.toml` `[members]`
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+6} {SAH3+28} {SAH1+10} {SAH3+32}
+sleep 3
 > pbot spawn sacng {SAH1+8} {SAH2} {SAH3+30} minecraft:overworld survival
 sleep 2
 > clear sacng
 > give sacng canned_goods:canned_beef
 > give sacng canned_goods:empty_can
 > give sacng canned_goods:crushed_empty_can
-> give sacng creativeengineering:canned_beetroot
+> give sacng creativedelight:canned_beetroot
 > pbot inv sacng get
 > data get entity sacng Inventory
-> cdevtest tagsof creativeengineering:canned_beetroot
+> cdevtest tagsof creativedelight:canned_beetroot
 > cdevtest tagsof canned_goods:canned_beef
 expect verb=pbot.inv bot=sacng slot=\d+ item=canned_goods:canned_beef\*
-expect verb=pbot.inv bot=sacng slot=\d+ item=creativeengineering:canned_beetroot\*
-expect verb=tagsof id=creativeengineering:canned_beetroot .*item_tags=\S*creativeengineering:cans/servings/
+expect verb=pbot.inv bot=sacng slot=\d+ item=creativedelight:canned_beetroot\*
+expect verb=tagsof id=creativedelight:canned_beetroot .*item_tags=\S*creativedelight:cans/servings/
 shell grep -hE "\[cans\] registered" logs/kubejs/startup.log | head -3
 > pbot remove sacng
 look "[cans] registered N" (228 in r1102b, or the current count); servings NBT on the held cans in the Inventory line
@@ -175,10 +190,18 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 
 ## SQ-CNG-04 | a new golem: red default, dyed 5b (the restart, lightning and kill half: SQ-CNG-04b in sA_3.qb)
 @group A
+@reviewed 2026-11-20
 @commands Boot 2: `/summon canned_goods:canned_golem ~ ~ ~`; `/data get entity @e[type=canned_goods:canned_golem,limit=1,sort=nearest] Color`; `/data merge entity ... {Color:5b}`; save, restart, read again; `/summon lightning_bolt` on it; `/kill` it
 @pass New golem `14b`; `5b` survives the restart; lightning and death run the upstream procedures (no exception in `latest.log`, death drop as before)
 @fails The decompiled `CannedGolemEntity` lost an upstream call: diff a Vineflower decompile of the member class against the upstream one (cans.md 9)
 @from batches/r1103/sA_2.qb passed
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+12} {SAH3+8} {SAH1+16} {SAH3+12}
+sleep 3
 > summon canned_goods:canned_golem {SAH1+14} {SAH2} {SAH3+10} {PersistenceRequired:1b,NoAI:1b,Tags:["sacng4"]}
 sleep 2
 > data get entity @e[type=canned_goods:canned_golem,tag=sacng4,limit=1] Color
@@ -192,12 +215,14 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@table
 ## CQ-CNG-01
 @group client
+@reviewed 2026-11-20
 @commands Survival, real player: summon a golem, right-click with blue dye, then `#forge:dyes/green` item (any modded green dye); creative: right-click with red dye
 @pass LOOK: blue texture, then green; survival dye count drops by one each; creative keeps the dye; red returns to the mod's own texture; dye sound plays
 @fails `CannedGolemDye.interact` (server) or `CannedGolemRenderer.getTextureLocation` (client); textures at `creativeengineering:textures/entity/canned_golem/`
 @draft no batch holds this row yet
 ## CQ-CNG-02
 @group client
+@reviewed 2026-11-20
 @commands Mod list (Mods screen)
 @pass LOOK: "Canned Goods (Creative Delight)" `1.19.2-3-ce-19.2-01`, license line names AFL 3.0
 @fails `members/cannedgoods/src/main/resources/META-INF/mods.toml`
@@ -210,6 +235,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@table
 ## SQ-ENM-01 | End's member: ends_delight and enders_additions once, from repackedEnds
 @group A
+@reviewed 2026-11-20
 @commands Boot with the new CD jar and Ender's 1.2.2; `grep -nE "enders_additions\|ends_delight\|Duplicate\|DuplicateModsFound\|endersAdditions" logs/latest.log`; `/forge mods` or the log's mod list
 @pass `ends_delight` and `enders_additions` each loaded once, both from the repackedEnds nested jar; no `endersAdditions-` jar in the jarjar list; no duplicate-mod error; `enders_upstream_data` pack listed (the assets pack is client-only, absent on a dedicated server)
 @fails Duplicate mod: the old member still in CD `bundle_members` or `mods/` holds an old CD jar; only one mod listed: `members/ends/src/main/resources/META-INF/mods.toml` second `[[mods]]` entry
@@ -259,6 +285,13 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @reviewed 2026-11-16
 shell grep -nE "Error occurred while handling event|additions\.js|endersdelight" logs/latest.log | grep -iE "error|exception|missing" | head -10 || true
 shell ! grep -hE "(additions\.js|endersdelight/).*(rror|xception)" logs/kubejs/server.log logs/kubejs/startup.log
+# own home (r1120fix, 2026-11-20): {SBH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
+capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SBH1-4} {SBH3-4} {SBH1+14} {SBH3+10}
+sleep 3
 > pbot spawn saend {SBH1+8} 202 {SBH3+8} minecraft:overworld survival
 sleep 2
 > clear saend
@@ -307,6 +340,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails Config not read: `EAConfig` registered under the wrong mod container; recipes still there: `global.CD.on` / `CDConfig.isMember`
 @from batches/r1103/sA_3.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+28} {SAH3+28} {SAH1+40} {SAH3+36}
+sleep 3
 > fill {SAH1+30} {SAH2-1} {SAH3+30} {SAH1+38} {SAH2-1} {SAH3+30} minecraft:end_stone
 > setblock {SAH1+30} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
 > setblock {SAH1+32} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
@@ -330,7 +370,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @from batches/r1103/sA_3.qb
 @reviewed 2026-11-16
 > cdevtest uses endersdelight:voidpepper
-> cdevtest recipes creativedelight:endersdelight
+> cdevtest recipes voidpepper
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members enders_additions false && grep -nE "enders_additions" config/creativedelight-common.toml
 > reload
 waitlog (Reloaded|reload) 120
@@ -338,22 +378,28 @@ sleep 10
 > cdevtest uses endersdelight:voidpepper
 > cdevtest makes endersdelight:crushed_voidpepper
 > cdevtest makes endersdelight:amberveil_stew
-> cdevtest recipes creativedelight:endersdelight
+> cdevtest recipes voidpepper
+# restore the switch for the rows after this one in the same boot (the @commands "set it back to true")
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members enders_additions true && grep -nE "enders_additions" config/creativedelight-common.toml
+> reload
+waitlog (Reloaded|reload) 120
+sleep 10
 look before / after: the uses and recipes lines lose every creativedelight: Void Pepper recipe and the 1.1.4 meals (pot recipes of amberveil_stew etc.) after the switch; if nothing changes, the switch is read only at startup (note it; the row says /reload)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-05 | spice and End soil tags, with Ender's Delight 1.2.2 (the without half: SQ-ENM-05b in sA_4.qb)
 @group A
-@commands With and without Ender's 1.2.2 (both boots of SQ-ENM-03): `/kubejs` tag dump or `/dumptags`, look up `#creativeengineering:spices`, `#creativedelight:end_plant_soil_slow`, `#creativedelight:end_plant_soil_fast` (with Endercrop)
+@commands With and without Ender's 1.2.2 (both boots of SQ-ENM-03): `/kubejs` tag dump or `/dumptags`, look up `#creativedelight:spices`, `#creativedelight:end_plant_soil_slow`, `#creativedelight:end_plant_soil_fast` (with Endercrop)
 @pass Spices hold `endersdelight:voidpepper` and `crushed_voidpepper` in both boots; soil_slow holds `minecraft:end_stone`; soil_fast holds the tilled end stone
 @fails Missing without 1.2.2: the tag rows were not moved out of `endersdelight/tags.js`
 @from batches/r1103/sA_2.qb passed
-@reviewed 2026-11-16
-> cdevtest tag item creativeengineering:spices
+@reviewed 2026-11-20
+# spices tag is creativedelight:spices since the 2026-11-09 namespace move (tags dump: voidpepper, crushed_voidpepper)
+> cdevtest tag item creativedelight:spices
 > cdevtest tag block creativedelight:end_plant_soil_slow
 > cdevtest tag block creativedelight:end_plant_soil_fast
-expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:voidpepper(,|$)
-expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:crushed_voidpepper(,|$)
+expect verb=tag kind=item tag=creativedelight:spices .*ids=(\S*,)?endersdelight:voidpepper(,|$)
+expect verb=tag kind=item tag=creativedelight:spices .*ids=(\S*,)?endersdelight:crushed_voidpepper(,|$)
 expect verb=tag kind=block tag=creativedelight:end_plant_soil_slow .*ids=(\S*,)?minecraft:end_stone(,|$)
 expect verb=tag kind=block tag=creativedelight:end_plant_soil_fast .*ids=(\S*,)?endercrop:tilled_end_stone(,|$)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
@@ -364,12 +410,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Both boots: the slice brews Potion of Levitation (`kubejs:levitation`), lengthen and amplify steps work; the filet is not a reagent (merged into the slice); the shell brews nothing; no `[CE potions] mix skipped ... levitation` line
 @fails `mix skipped ... reagent not registered`: `ends_delight` member missing from the CD jar (then the shell is used instead, also logged)
 @from batches/r1103/sA_4.qb
-@reviewed 2026-11-16
-> cdevtest tag item creativeengineering:spices
+@reviewed 2026-11-20
+# spices tag is creativedelight:spices since the 2026-11-09 namespace move (tags dump: voidpepper, crushed_voidpepper)
+> cdevtest tag item creativedelight:spices
 > cdevtest tag block creativedelight:end_plant_soil_slow
 > cdevtest tag block creativedelight:end_plant_soil_fast
-expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:voidpepper(,|$)
-expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:crushed_voidpepper(,|$)
+expect verb=tag kind=item tag=creativedelight:spices .*ids=(\S*,)?endersdelight:voidpepper(,|$)
+expect verb=tag kind=item tag=creativedelight:spices .*ids=(\S*,)?endersdelight:crushed_voidpepper(,|$)
 expect verb=tag kind=block tag=creativedelight:end_plant_soil_slow .*ids=(\S*,)?minecraft:end_stone(,|$)
 expect verb=tag kind=block tag=creativedelight:end_plant_soil_fast .*ids=(\S*,)?endercrop:tilled_end_stone(,|$)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
@@ -413,6 +460,13 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails Wrong values: `GoldenItems.golden()` / `enchanted()`; carrot plain vanilla: the `minecraft` DeferredRegister (`VANILLA_ITEMS`) not registered
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+8} {SAH3+38} {SAH1+12} {SAH3+42}
+sleep 3
 > pbot spawn sagld {SAH1+10} {SAH2} {SAH3+40} minecraft:overworld survival
 sleep 2
 > clear sagld
@@ -540,6 +594,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails `GoldenCakeBlock.Slice`; no eating at full hunger is the expected upstream behavior, so a hunger check means vanilla `CakeBlock.use` ran (override missing)
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+18} {SAH3+40} {SAH1+26} {SAH3+46}
+sleep 3
 > setblock {SAH1+20} {SAH2} {SAH3+44} goldenfood:golden_cake
 > setblock {SAH1+24} {SAH2} {SAH3+44} goldenfood:enchanted_golden_cake
 > pbot spawn sagldc {SAH1+22} {SAH2} {SAH3+42} minecraft:overworld survival
@@ -577,6 +638,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails `minecraft:candle_cake` appears: the old `GoldenCakeBlock.use` candle branch is back (until TODO `baking/baked-goods #38`)
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+26} {SAH3+42} {SAH1+30} {SAH3+46}
+sleep 3
 > setblock {SAH1+28} {SAH2} {SAH3+44} goldenfood:golden_cake
 > clear sagldc
 > pbot hold sagldc minecraft:white_candle
@@ -592,6 +660,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-GLD-06 | no Golden Food enchantment: anvil gives nothing, /enchant refuses, not registered
 @group A
+@reviewed 2026-11-20
 @commands Anvil: `/give @p minecraft:enchanted_book{StoredEnchantments:[{id:"goldenfood:gf_enchantment",lvl:1s}]}`, `goldenfood:golden_bread`, `minecraft:golden_apple`; book left + bread right; bread left + book right; book + apple; hover the book; `/enchant @p goldenfood:gf_enchantment` with a sword in hand
 @pass No golden output in any order (the anvil route is removed); the book shows no enchantment line; `/enchant @p goldenfood:gf_enchantment` fails (unknown enchantment)
 @fails Output shown: an old `GoldenAnvil` class still loaded (stale portedGolden in the CD jar)
@@ -624,6 +693,13 @@ reject \[sa\] (error|no player)
 @fails `GoldenChorusFruitItem`; reach or cooldown arguments in `GoldenItems` chorus `pair(...)`
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+58} {SAH3+68} {SAH1+62} {SAH3+72}
+sleep 3
 > pbot spawn sachor {SAH1+60} {SAH2} {SAH3+70} minecraft:overworld survival
 sleep 2
 > clear sachor
@@ -679,6 +755,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails Botania / CC:Tweaked items present: `10_removals.js` not in the Worldgen jar (rebuild Creative Worldgen) or LootJS `@modid` filter not matching; book drops: the translator still serves `data/minecraft/loot_tables/chests/village/`
 @from batches/r1103/sA_4.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SBH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
+capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SBH1+34} {SBH3-2} {SBH1+46} {SBH3+10}
+sleep 3
 > fill {SBH1+36} 199 {SBH3} {SBH1+44} 199 {SBH3+8} minecraft:glass
 > kill @e[type=minecraft:item]
 repeat 20
@@ -698,18 +781,21 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-GLD-10
 @group A
+@reviewed 2026-11-20
 @commands Move `goldenfood_upstream/goldenfood-1.19.2-2.0.0.jar` away and start; then put any other jar there under that name and start; restore
 @pass Startup stops with "Golden Food (Creative Delight) reads its textures, models and recipes from the original Golden Food jar, which must be in the folder 'goldenfood_upstream' ... missing" and the source line; the second run says "wrong file ... expected 4109e4d6..."
 @fails Game starts: `UpstreamJars.verifyOrFail` is not the first call in `GoldenFoodMod`
 @draft no batch holds this row yet
 ## CQ-GLD-01
 @group client
+@reviewed 2026-11-20
 @commands Open the creative inventory "Golden Food!" tab; look at both cakes placed and part eaten, every golden and enchanted item in hand, the golden carrot and golden apple
 @pass LOOK: tab named "Golden Food!" with the golden cake icon; textures and slice models as before the swap (no purple-black); enchanted items and the enchanted cake item glint; golden carrot and both apples now sit in this tab (upstream behavior); cakes are not in the tab (upstream)
 @fails Missing art: resource pack list must have `goldenfood_upstream_assets`; tab name: lang key `itemGroup.gf_tab`
 @draft no batch holds this row yet
 ## CQ-GLD-02
 @group client
+@reviewed 2026-11-20
 @commands Eat a golden and an enchanted chorus fruit in front of a fox and with a second player watching
 @pass LOOK: chorus teleport sound plays twice (vanilla and golden jump); no client desync (player not rubber-banding)
 @fails `GoldenChorusFruitItem` runs only on the server; client position: `randomTeleport`
@@ -758,6 +844,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-GLD-14 | fresh world: no Golden Food Enchantment from /enchant, the table or librarians
 @group A
+@reviewed 2026-11-20
 @commands Fresh world: `/enchant`, enchanting table at 30 levels on 20 swords, a librarian trade reroll 20 times
 @pass No Golden Food Enchantment anywhere
 @fails Offered: the enchantment is registered again (`check_donor.py` "enchantments registered")
@@ -770,6 +857,13 @@ expect \[sa\] enchreg goldenfood:gf_enchantment: false
 expect \[sa\] enchtable minecraft:diamond_sword L30: 20 rolls, goldenfood 0
 expect \[sa\] enchtable minecraft:book L30: 20 rolls, goldenfood 0
 repeat 20
+# own home (r1120fix, 2026-11-20): {SBH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
+capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SBH1+26} {SBH3} {SBH1+34} {SBH3+8}
+sleep 3
 > summon minecraft:villager {SBH1+30} 201 {SBH3+4} {NoAI:1b,PersistenceRequired:1b,Tags:["salib"],VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
 end
 > fill {SBH1+28} 200 {SBH3+2} {SBH1+32} 200 {SBH3+6} minecraft:glass
@@ -835,6 +929,7 @@ reject ^(?!.*KubeJS Recipe Event)(?!.*Unknown item '(goldenfood|creativedelight)
 
 ## CQ-GLD-03
 @group client
+@reviewed 2026-11-20
 @commands JEI: open the sequenced assembly pages of 3 enchanted golden foods
 @pass LOOK: the incomplete items show the golden food's sprite tinted gray, not purple-black
 @fails Texture: the row's second column in `transition_items.js` (golden form's sprite path)
@@ -851,6 +946,7 @@ reject ^(?!.*KubeJS Recipe Event)(?!.*Unknown item '(goldenfood|creativedelight)
 @@table
 ## SQ-MDL-01 | Miner's drops on the pack loot engine (boot load; the /reload half is SQ-MDL-01b in sA_3.qb)
 @group A
+@reviewed 2026-11-20
 @commands boot, `/reload`; grep `logs/latest.log` and `logs/kubejs/server.log`
 @pass `[loot-drops] 26 drop pools and 2 shared entries in N tables` once per load (17 Miner's pools plus 9 Creative Delight pools moved into the engine 2026-11-17, SQ-RFX-21); no `[loot-drops]` warning; no `[miners_delight] the loot engine has no drop rules`; no loot modifier or `Error occurred while handling event` line naming `miners_delight`
 @fails the Worldgen jar lacks `09_drops.js` (error line from CD `miners_delight/loot.js`), or a rule warning (item id)
@@ -872,6 +968,13 @@ look one "[loot-drops] 17 drop pools ..." line per load (count 1 above); no [loo
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+28} {SAH3+60} {SAH1+44} {SAH3+94}
+sleep 3
 > summon minecraft:bat {SAH1+30} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["sambat"]}
 > summon minecraft:spider {SAH1+34} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["samspi"]}
 > summon minecraft:cave_spider {SAH1+38} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["samcsp"]}
@@ -930,6 +1033,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+28} {SAH3+68} {SAH1+52} {SAH3+90}
+sleep 3
 > summon minecraft:bat {SAH1+30} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfbat"]}
 > summon minecraft:spider {SAH1+34} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfspi"]}
 > summon minecraft:cave_spider {SAH1+38} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfcsp"]}
@@ -981,6 +1091,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+48} {SAH3+56} {SAH1+72} {SAH3+72}
+sleep 3
 > setblock {SAH1+50} {SAH2} {SAH3+58} minecraft:infested_stone
 > setblock {SAH1+54} {SAH2} {SAH3+58} minecraft:infested_stone_bricks
 > setblock {SAH1+58} {SAH2} {SAH3+58} minecraft:infested_cracked_stone_bricks
@@ -1027,6 +1144,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+76} {SAH3+60} {SAH1+86} {SAH3+82}
+sleep 3
 > fill {SAH1+78} {SAH2-3} {SAH3+78} {SAH1+80} {SAH2-1} {SAH3+80} minecraft:water
 > kill @e[type=minecraft:item]
 repeat 4000
@@ -1051,15 +1175,16 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@text ### Pancake family, 2026-11-02 ([writeup](../food_families.md) section 4.7, TODO `dishes/meals #12`, `creativedelight/members #30` R7)
 @@text
 @@text Targets a Creative Delight jar built after 2026-11-02 from the working tree with this change (new Display Delight dish
-@@text `creativeengineering:placed_sweet_potato_pancakes`, generated blockstate, model, loot table, `displayable` tag entry and
+@@text `creativedelight:placed_sweet_potato_pancakes`, generated blockstate, model, loot table, `displayable` tag entry and
 @@text name in CD resources) plus the pack's `item_dict.js`, `food_dict.js`, `food_types.json`, `food_families.json` and the CD
 @@text member `food_types.js` scripts. Startup change: full restart, no `/reload` test.
 @@text
 @@table
 ## SQ-PCK-01 | Pancake family: no food types or Display Delight dish warnings
 @group A
+@reviewed 2026-11-20
 @commands boot; `grep -n "Error occurred while handling event\|\[food types\]\|\[food families\]\|Display Delight dish\|placed_sweet_potato_pancakes" logs/latest.log logs/kubejs/server.log logs/kubejs/startup.log \| head -30`
-@pass `Done (`; no `[food types] no item_dict key i.t_food_sweet_pancake` warning; no `Display Delight dish placed_sweet_potato_pancakes: item ... not installed`; no missing-model or loot error for `creativeengineering:placed_sweet_potato_pancakes`; no error from `food_type_tags.js`, `seasoning_tags.js`
+@pass `Done (`; no `[food types] no item_dict key i.t_food_sweet_pancake` warning; no `Display Delight dish placed_sweet_potato_pancakes: item ... not installed`; no missing-model or loot error for `creativedelight:placed_sweet_potato_pancakes`; no error from `food_type_tags.js`, `seasoning_tags.js`
 @fails `i.t_food_sweet_pancake` or the Rustic keys missing in `item_dict.js` (startup); member scripts stale (`python3 tools/food_catalog.py --members`); CD jar not rebuilt (dish resources)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb passed
@@ -1070,38 +1195,45 @@ shell ! grep -hE "(food_type_tags|seasoning_tags)\.js.*(rror|xception)" logs/kub
 
 ## SQ-PCK-02 | pancake food type and family tags (runtime tags by /zq; the /dumptags file is written for the record)
 @group A
-@commands `/dumptags item`; in `kubejs/exported/tags/item_tags.json` read `creativeengineering:food_type/sweet/pancake`, `creativeengineering:food_type/sweet`, `creativeengineering:food_family/dessert/pancake`, `creativeengineering:food_family/dessert/pastry`
+@commands `/dumptags item`; in `kubejs/exported/tags/item_tags.json` read `creativedelight:food_type/sweet/pancake`, `creativedelight:food_type/sweet`, `creativedelight:food_family/dessert/pancake`, `creativedelight:food_family/dessert/pastry`
 @pass `food_type/sweet/pancake` and `food_family/dessert/pancake` each hold exactly `veggiesdelight:sweet_potato_pancakes` and `rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake` (7); all 7 also in `food_type/sweet`; `veggiesdelight:sweet_potato_pancakes` not in `food_family/dessert/pastry`
 @fails `food_types.json` / member `food_types.js` (`food_catalog.py --members`); `food_families.json` hand sync (`dessert/pancake` key); tag nesting in `food_type_tags.js`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
-> cdevtest tag item creativeengineering:food_type/sweet/pancake
-> cdevtest tag item creativeengineering:food_family/dessert/pancake
-> cdevtest tag item creativeengineering:food_type/sweet
-> cdevtest tag item creativeengineering:food_family/dessert/pastry
+> cdevtest tag item creativedelight:food_type/sweet/pancake
+> cdevtest tag item creativedelight:food_family/dessert/pancake
+> cdevtest tag item creativedelight:food_type/sweet
+> cdevtest tag item creativedelight:food_family/dessert/pastry
 > dumptags item
-expect verb=tag kind=item tag=creativeengineering:food_type/sweet/pancake n=7\b
-expect verb=tag kind=item tag=creativeengineering:food_family/dessert/pancake n=7\b
-expect verb=tag kind=item tag=creativeengineering:food_type/sweet/pancake .*ids=\S*veggiesdelight:sweet_potato_pancakes
-expect verb=tag kind=item tag=creativeengineering:food_type/sweet .*ids=\S*rusticdelight:coffee_pancake
-expect verb=tag kind=item tag=creativeengineering:food_type/sweet .*ids=\S*veggiesdelight:sweet_potato_pancakes
-reject verb=tag kind=item tag=creativeengineering:food_family/dessert/pastry .*ids=\S*veggiesdelight:sweet_potato_pancakes
+expect verb=tag kind=item tag=creativedelight:food_type/sweet/pancake n=7\b
+expect verb=tag kind=item tag=creativedelight:food_family/dessert/pancake n=7\b
+expect verb=tag kind=item tag=creativedelight:food_type/sweet/pancake .*ids=\S*veggiesdelight:sweet_potato_pancakes
+expect verb=tag kind=item tag=creativedelight:food_type/sweet .*ids=\S*rusticdelight:coffee_pancake
+expect verb=tag kind=item tag=creativedelight:food_type/sweet .*ids=\S*veggiesdelight:sweet_potato_pancakes
+reject verb=tag kind=item tag=creativedelight:food_family/dessert/pastry .*ids=\S*veggiesdelight:sweet_potato_pancakes
 look the 7: veggiesdelight:sweet_potato_pancakes and rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-PCK-03 | Sweet Potato Pancakes displayable; placed block registered, drops exactly one
 @group A
-@commands `/dumptags item` (`displaydelight:displayable`); `/setblock ~2 ~ ~ creativeengineering:placed_sweet_potato_pancakes`; `/setblock ~2 ~ ~ air destroy`; count item entities at the spot
+@commands `/dumptags item` (`displaydelight:displayable`); `/setblock ~2 ~ ~ creativedelight:placed_sweet_potato_pancakes`; `/setblock ~2 ~ ~ air destroy`; count item entities at the spot
 @pass tag holds `veggiesdelight:sweet_potato_pancakes`; the block places (registered); destroy drops exactly 1 Sweet Potato Pancakes and no Bowl
-@fails dish not in `displaydelight_dishes.json` of the installed CD jar; loot table `data/creativeengineering/loot_tables/blocks/placed_sweet_potato_pancakes.json`; double drop: `AbstractItemBlock.getDrops` guard (SQ-DDP-03)
+@fails dish not in `displaydelight_dishes.json` of the installed CD jar; loot table `data/creativedelight/loot_tables/blocks/placed_sweet_potato_pancakes.json`; double drop: `AbstractItemBlock.getDrops` guard (SQ-DDP-03)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
 > cdevtest tag item displaydelight:displayable
 > kill @e[type=minecraft:item]
-> setblock {SAH1+18} {SAH2} {SAH3+56} creativeengineering:placed_sweet_potato_pancakes
-> execute if block {SAH1+18} {SAH2} {SAH3+56} creativeengineering:placed_sweet_potato_pancakes run say SA2 pancakes placed
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+16} {SAH3+54} {SAH1+20} {SAH3+58}
+sleep 3
+> setblock {SAH1+18} {SAH2} {SAH3+56} creativedelight:placed_sweet_potato_pancakes
+> execute if block {SAH1+18} {SAH2} {SAH3+56} creativedelight:placed_sweet_potato_pancakes run say SA2 pancakes placed
 > setblock {SAH1+18} {SAH2} {SAH3+56} minecraft:air destroy
 sleep 2
 > cdevtest items {SAH1+18} {SAH2} {SAH3+56} 2
@@ -1113,15 +1245,16 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-PCK-04 | /dumpplaceable links Sweet Potato Pancakes to the placed block
 @group A
+@reviewed 2026-11-20
 @commands `/dumpplaceable`
-@pass the Display Delight placed map links `veggiesdelight:sweet_potato_pancakes` to `creativeengineering:placed_sweet_potato_pancakes`; placed-link count one higher than the last dump
+@pass the Display Delight placed map links `veggiesdelight:sweet_potato_pancakes` to `creativedelight:placed_sweet_potato_pancakes`; placed-link count one higher than the last dump
 @fails `DisplayDelightDishBlocks.onLevelLoad` did not link it (server level load) or the food lacks `#displaydelight:displayable`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 > dumpplaceable
 waitlog Display Delight links 120
 shell python3 -c "import json;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];print('placed', len(d['placed']), 'link', d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
-shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if d['placed'].get('veggiesdelight:sweet_potato_pancakes')=='creativeengineering:placed_sweet_potato_pancakes' else 1)"
+shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if d['placed'].get('veggiesdelight:sweet_potato_pancakes')=='creativedelight:placed_sweet_potato_pancakes' else 1)"
 shell cat "$INST/tools/scratch_query/batches/r1103/sA_baseline/placeable_dd_1030.txt"
 shell python3 -c "import json;d=json.load(open('${B0:-/tmp/claude-1000/-home-liam--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
 look placed-link count one higher than the 2026-10-30 baseline 135 (other links changed since: Boot 0 had 149 with the link present, so this row PASSes on the link and an equal count to Boot 0)
@@ -1145,6 +1278,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## CQ-PCK-01
 @group client
+@reviewed 2026-11-20
 @commands sneak + right click the top of a block with Sweet Potato Pancakes; look from 4 sides; WTHIT on it; empty-hand right click; place again and break it
 @pass LOOK: a Display Delight bowl with a pancake-colored food surface, facing the player, no missing texture; WTHIT "Placed Sweet Potato Pancakes"; empty hand gives the pancakes back; breaking drops one
 @fails model crop `[4, 3, 12, 8]` in `displaydelight_dishes.json` (rerun `tools/gen_dd_dishes.py`, rebuild CD); bowl texture `displaydelight:block/salad_bowl` from the Display Delight port
@@ -1152,6 +1286,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @draft no batch holds this row yet
 ## CQ-PCK-02
 @group client
+@reviewed 2026-11-20
 @commands after `/dumpall` and `python3 tools/placeable_catalog.py` (then CD rebuild if member scripts changed, restart): hover Sweet Potato Pancakes
 @pass tooltip line "Placeable" (sneak) as on Shakshouka
 @fails `placeable.json` not regenerated from a dump that has the link (SQ-PCK-04)
@@ -1169,6 +1304,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@table
 ## SQ-SWP-01 | swap lists: merge count, live in the world, swaps toml created
 @group A
+@reviewed 2026-11-20
 @commands Boot: `grep -E "\[swaps\]\|item merge" logs/latest.log logs/kubejs/startup.log`; `grep -E "\[itemMerges\] creativedelight" logs/kubejs/server.log`; `ls config/creativeengineering-swaps.toml`
 @pass `[swaps] n list file(s): ... 38 item merge(s)` (r1103: 43 merges on the sA boot, 45 on sAR; 38 below stands for the logged number; record it in item_merges.md 6.1); `[creativedelight] 38 item merge(s) from the swap lists` (fewer only if a `requires` mod is absent); `[swaps] 38 item merge(s) live in the world`; `[itemMerges] creativedelight: 38 merges, n recipes swapped` with n as on the last run; no `merged twice`, no `already merged`, no `Error occurred while handling event`; toml exists with `[swappers]` and five keys
 @fails `SwapLists.read` (`merges`/`requires` keys), `swap_merges.js` (class filter on `Java.loadClass`, Rhino `keySet().forEach`), `ItemMerges.pairs` (an id not registered)
@@ -1192,6 +1328,13 @@ look record the logged merge count (43 pairs in the 2026-11-03 swap lists; the r
 shell echo "jeiRemove lines: $(grep -c '\[jeiRemove\]' logs/kubejs/server.log || true)"
 shell grep -hE "\[jeiRemove\]" logs/kubejs/server.log | grep -E "farmersrespite:(coffee|long_coffee|strong_coffee|coffee_beans|coffee_berries)|alexsmobs:banana|delightful:nut_butter|moredelight:potato_salad|vintagedelight:(vinegar|nut_mash)_bottle" | head || true
 shell ! grep -hE "\[jeiRemove\].*(farmersrespite:(coffee|long_coffee|strong_coffee)|alexsmobs:banana|vintagedelight:vinegar_bottle)( |,|$)" logs/kubejs/server.log
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+6} {SAH3+32} {SAH1+10} {SAH3+36}
+sleep 3
 > pbot spawn saswp2 {SAH1+8} {SAH2} {SAH3+34} minecraft:overworld survival
 sleep 2
 > clear saswp2
@@ -1210,11 +1353,19 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-SWP-03 | /ceswap items rewrites a chest stack, keeps its name
 @group A
+@reviewed 2026-11-20
 @commands `/setblock ~ ~ ~1 chest`; `/data merge block ~ ~ ~1 {Items:[{Slot:0b,id:"alexsmobs:banana",Count:5b,tag:{display:{Name:'{"text":"Kept"}'}}}]}`; `/ccswap items`; `/data get block ~ ~ ~1 Items`
 @pass Command reports >= 1 stack rewritten; slot 0 is `neapolitan:banana`, Count 5b, name "Kept"
 @fails `ItemMerges.chunk` (chunk not in `LOADED`), `convert` (tag lost)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+20} {SAH3+48} {SAH1+24} {SAH3+52}
+sleep 3
 > setblock {SAH1+22} {SAH2} {SAH3+50} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:0b,id:"alexsmobs:banana",Count:5b,tag:{display:{Name:'{"text":"Kept"}'}}}]}
 > ceswap items
@@ -1234,6 +1385,13 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-16
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+20} {SAH3+50} {SAH1+24} {SAH3+54}
+sleep 3
 > setblock {SAH1+22} {SAH2} {SAH3+52} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+52} {Items:[{Slot:0b,id:"vintagedelight:vinegar_bottle",Count:64b}]}
 > cdevtest item vintagedelight:vinegar_jar
@@ -1249,11 +1407,19 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-SWP-05 | nested shulker box contents rewritten
 @group A
+@reviewed 2026-11-20
 @commands `/data merge block ~ ~ ~1 {Items:[{Slot:1b,id:"minecraft:shulker_box",Count:1b,tag:{BlockEntityTag:{Items:[{Slot:0b,id:"farmersrespite:coffee",Count:3b}]}}}]}`; `/ccswap items`; `/data get block ~ ~ ~1 Items[{Slot:1b}]`
 @pass Nested item is `rusticdelight:coffee`, Count 3b; the box id unchanged
 @fails `ItemMergeCore.rewriteNested`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+20} {SAH3+48} {SAH1+24} {SAH3+52}
+sleep 3
 > data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:1b,id:"minecraft:shulker_box",Count:1b,tag:{BlockEntityTag:{Items:[{Slot:0b,id:"farmersrespite:coffee",Count:3b}]}}}]}
 > ceswap items
 sleep 2
@@ -1265,11 +1431,19 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-SWP-06 | onPlayerDataLoad off: a player saved before the merge lists is rewritten once on login, then not again
 @group A
+@reviewed 2026-11-20
 @commands Give a bot/player `alexsmobs:banana` (`/give`, then `/data` check before the KubeJS swap runs is not possible: use the ender chest: `/item replace entity @p enderchest.0 with alexsmobs:banana 4`); qrun.py toml `creativeengineering-swaps.toml swappers.onPlayerDataLoad false`; rejoin; rejoin again
 @pass First rejoin: ender chest slot 0 is 4 `neapolitan:banana`, log `[swaps] <name>: 1 merged stack(s) rewritten`; second rejoin logs nothing for the player
 @fails `ItemMerges.onLogin` stamp (`PlayerPersisted` / `creativeengineering:swap_merges`)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_3.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+3} {SAH3+3} {SAH1+7} {SAH3+7}
+sleep 3
 > pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
 sleep 3
 > data get entity saswp6 EnderItems
@@ -1289,11 +1463,19 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-SWP-07 | a dropped old item becomes the survivor as it enters the world
 @group A
+@reviewed 2026-11-20
 @commands `/summon item ~ ~1 ~ {Item:{id:"alexsmobs:banana",Count:3b}}`; `/data get entity @e[type=item,limit=1,sort=nearest] Item`
 @pass `neapolitan:banana`, Count 3b
 @fails `ItemMerges.onEntityJoin` (both onWorldLoad and onceWhenUpdated off?)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb passed
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+24} {SAH3+48} {SAH1+28} {SAH3+52}
+sleep 3
 > summon minecraft:item {SAH1+26} {SAH2+1} {SAH3+50} {Item:{id:"alexsmobs:banana",Count:3b},PickupDelay:32767s,Tags:["saswp7"]}
 sleep 1
 > data get entity @e[type=minecraft:item,tag=saswp7,limit=1] Item
@@ -1304,11 +1486,19 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-SWP-08 | onCommand off: /ceswap items refused, nothing rewritten
 @group A
+@reviewed 2026-11-20
 @commands qrun.py toml `creativeengineering-swaps.toml swappers.onCommand false`; `/ccswap items`
 @pass Failure message naming `onCommand`; nothing rewritten
 @fails `ItemMerges.register`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_3.qb passed
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+20} {SAH3+52} {SAH1+24} {SAH3+56}
+sleep 3
 > setblock {SAH1+22} {SAH2} {SAH3+54} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+54} {Items:[{Slot:0b,id:"alexsmobs:banana",Count:2b}]}
 > ceswap items

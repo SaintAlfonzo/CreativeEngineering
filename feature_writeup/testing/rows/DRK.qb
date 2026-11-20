@@ -17,11 +17,18 @@
 @pass No error; no NCH warning naming a drink; no duplicate recipe id; startup registers the 14 items and 17 fluids (`/give @p creativeengineering:kiwi_tea`, `creativeengineering:peach_juice` work)
 @fails missing dict key (`item_dict.js` / `fluid_dict.js` not updated on the server), duplicate id with `kettle.js` or a member file
 @from batches/r1102b/s5_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 shell ! grep -iE '(error|exception).*(drinks|drink_tags|kettle|fluids)\.js' logs/kubejs/startup.log logs/kubejs/server.log
 shell ! (grep -n 'Error occurred while handling event' logs/latest.log | grep -qiE 'drink|kettle|tea|juice')
 kjsreject \[NCH\].*(?i:tea|juice|coffee|latte|nectar)
 kjsreject (?i)duplicate recipe id
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+16} {S5H3+28} {S5H1+20} {S5H3+32}
+sleep 3
 > pbot spawn s5g {S5H1+18} {S5H2} {S5H3+30} minecraft:overworld survival
 > give s5g creativedelight:kiwi_tea
 > give s5g creativedelight:turnip_tea
@@ -277,17 +284,22 @@ look rdetail: mixing = juice 250 mB + 2 tea leaves + extra + sugar-like; chorus 
 @pass each fills one bottle of the matching item and drains back to 250 mB
 @fails createBottle pair missing for that fluid
 @from batches/r1103/p2_R2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # r1103 p2: every spout line read "needs -1 mB, gives nothing" (no filling recipe matched) while the drain worked;
 # NCH createBottle makes the filling and emptying pair together. List both recipes and retry the spout.
 > cdevtest recipes kiwi_tea
 > cdevtest recipes lychee_juice
-> cdevtest bytype create:filling
+# r1120fix (2026-11-20): bytype create:filling stops at 500 shown lines (kiwi_tea not among them); the recipes lines
+# name the filling and emptying pair directly. The s5 spout probe reads "needs -1 mB" even for the water control
+# (r1120nv judge-2): its lines are diagnostic only until the probe is fixed.
+> cdevtest rdetail creativedelight:createfilling/kiwi_tea
 > s5 spout creativedelight:kiwi_tea 250 minecraft:glass_bottle
 > s5 spout minecraft:water 250 minecraft:glass_bottle
-expect \[cdevtest\] verb=bytype id=\S*filling\S*kiwi_tea\S* result=
-expect \[s5\] spout creativedelight:kiwi_tea 250 mB into minecraft:glass_bottle: can true, needs 250 mB, gives creativedelight:kiwi_tea x1
-look the water spout line is the probe control (vanilla potion fill); if it also reads -1, the probe is wrong, not the pack
+expect \[cdevtest\] verb=recipes id=creativedelight:createfilling/kiwi_tea result=creativedelight:kiwi_tea\*1
+expect \[cdevtest\] verb=recipes id=creativedelight:createemptying/kiwi_tea result=minecraft:glass_bottle\*1
+expect \[cdevtest\] verb=recipes id=creativedelight:createfilling/lychee_juice result=creativedelight:lychee_juice\*1
+expect \[cdevtest\] verb=recipes id=creativedelight:createemptying/lychee_juice result=minecraft:glass_bottle\*1
+look the rdetail of createfilling/kiwi_tea takes a glass bottle and 250 mB creativedelight:kiwi_tea; the two s5 spout lines are diagnostic (probe control reads -1 for water too: probe fault, not the pack)
 
 ## SQ-DRK-05 | coffee: roasted beans only, flavor tags, Kettle from the coffee tank, heated mixers
 @group A

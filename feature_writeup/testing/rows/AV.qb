@@ -13,19 +13,22 @@
 @@table
 ## SQ-AV-01 | /recipe give learns nothing; the book stays empty
 @group A
-@commands Fake player: `/recipe give rbk1 *`, then `/recipe give rbk1 minecraft:furnace`, then `/recipe take rbk1 *`
+@commands Fake player: `/recipe give rbk1 *`, then `/recipe give rbk1 minecraft:stick`, then `/recipe take rbk1 *`
 @pass both gives answer "No new recipes were learned"; the take answers "No recipes could be forgotten" (nothing was added); boot log has no mixin error naming NoRecipeUnlockMixin
 @fails mixin not applied (`bootexpect` on creativecommon.mixins.json, the SRG names m_7281_ / m_7902_), or Common older than 2026-11-17
+@reviewed 2026-11-20
 > pbot spawn rbk1 0 -60 0 minecraft:overworld survival
 sleep 2
 > recipe give rbk1 *
 waitlog No new recipes were learned 20
-> recipe give rbk1 minecraft:furnace
+# r1120nv s02 (2026-11-20): the server answered 'Unknown recipe: minecraft:furnace' (batch fault); the single-id give now names minecraft:stick
+> recipe give rbk1 minecraft:stick
 sleep 2
 count No new recipes were learned >= 2
 > recipe take rbk1 *
 waitlog No recipes could be forgotten 20
 reject Unlocked \d+ recipes? for
+reject Unknown recipe:
 bootreject NoRecipeUnlockMixin.*(InvalidInjectionException|could not find|failed)
 > pbot remove rbk1
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
@@ -35,12 +38,14 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @commands Fake player rbk2 with an empty recipe book; a Creative Delight Oven on a heat source bakes one recipe; take the result by hand (or break the Oven with the result inside)
 @pass XP orbs spawn at the player (or at the Oven when broken) as before; `/recipe take rbk2 *` answers "No recipes could be forgotten"; no `awardRecipes` in a stack trace
 @fails no XP: `OvenBlockEntity.popExperience` not called from `OvenResultSlot`; recipes learned: the Common mixin missing and the Oven still awarding (Delight older than 2026-11-17)
+@reviewed 2026-11-20
 @draft no driver step takes an Oven result slot by hand; owner LOOK, or break the Oven with a finished bake inside and count XP orbs
 ## SQ-AV-03 | Copper Pot: taking a meal pops XP, unlocks nothing
 @group A
 @commands As SQ-AV-02 with Miner's Delight's Copper Pot cooking one Farmer's Delight pot recipe
 @pass XP as before; no recipe learned; Create Central Kitchen's blaze stove still drives the pot (its mixin targets `setRecipeUsed`, kept)
 @fails as SQ-AV-02 (`CopperPotBlockEntity.popExperience`, `CopperPotResultSlot`); a mixin error naming `CopperPotBlockEntityMixin` (Central Kitchen): the method shape changed
+@reviewed 2026-11-20
 @draft no driver step takes a pot result slot by hand; owner LOOK
 ## SQ-AV-04 | Keg: taking a drink pops XP, unlocks nothing
 @group A
@@ -48,6 +53,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass XP orbs at the player (and at the Keg when it breaks) as before; `/recipe take rbk2 *` answers "No recipes could be forgotten"; no "new recipe" toast
 @fails no XP: `KegBlock` does not call `KegBlockEntity.popExperience` (Creative Brewing older than 2026-11-17); recipes learned: the Common mixin missing and the Keg still awarding
 @jars creativecommon creativebrewing
+@reviewed 2026-11-20
 @draft no driver step fills a tankard from a Keg; owner LOOK, or break the Keg with a finished drink inside and count XP orbs
 
 @@section 2

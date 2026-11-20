@@ -18,9 +18,17 @@
 @pass `FluidHolder` water, count 12; no `Error occurred` in latest.log
 @fails No capability: `JarFluidPipes.register` not reached (Supplementaries check) or the attach event filter
 @from batches/r1102b/s5_R_A.qb
+@reviewed 2026-11-20
 # layout at x+400 (forceloaded): tank T, pump P (small cog, axis x), jar J along +x; cogwheel above P, creative motor
 # above T facing east drives it at 64 RPM (ScrollValue 64; Speed read back). Create's flow direction depends on facing and rotation sign, so each phase is run
 # with the pump facing east and then west; one of them fills the jar (JFP-01), the next drains it back (JFP-02).
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
 > fill {S5H1+399} {S5H2} {S5H3-1} {S5H1+403} {S5H2+2} {S5H3+1} minecraft:air
 > setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
 sleep 2
@@ -48,6 +56,7 @@ look phase 1 or phase 2 (next row) ends with the jar FluidHolder water, count 12
 @pass Tank 3000 mB water, jar `FluidHolder` empty, `ForgeCaps` has no PendingMb
 @fails Drain returns the wrong fluid: `contents()` / `getForgeFluid`
 @from batches/r1102b/s5_R_A.qb
+@reviewed 2026-11-20
 > setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=west]
 sleep 60
 > say JFP phase 2 pump west
@@ -64,9 +73,17 @@ look across phases 1-3: one direction fills the jar to water 12 from the tank, t
 ## SQ-JFP-03 | motor stopped mid-fill: PendingMb kept over a chunk unload and reload
 @group same
 @commands Stop the motor mid-fill (between bottles); `/data get block <jar>`
-@pass `ForgeCaps.creativeengineering:jar_fluid_pipes.PendingMb` 1-249; after a save and reload it is still there
+@pass `ForgeCaps.creativecompat:jar_fluid_pipes.PendingMb` 1-249; after a save and reload it is still there
 @fails Buffer not saved: ForgeCaps serialization
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-20
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
 > setblock {S5H1+400} {S5H2+1} {S5H3} minecraft:air
 > setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
 sleep 2
@@ -106,7 +123,7 @@ sleep 5
 > data get block {S5H1+402} {S5H2} {S5H3+4}
 count has the following block data: .*PendingMb: (?:[1-9]\d?|1\d\d|2[0-4]\d)[,}] >= 2
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
-look the filling-direction jar shows ForgeCaps creativeengineering:jar_fluid_pipes PendingMb 1-249 before the unload and the same value after it (the other jar pulled nothing)
+look the filling-direction jar shows ForgeCaps creativecompat:jar_fluid_pipes PendingMb 1-249 before the unload and the same value after it (the other jar pulled nothing)
 
 ## SQ-JFP-04 | potion fluid keeps its NBT into the jar
 @group same
@@ -114,6 +131,14 @@ look the filling-direction jar shows ForgeCaps creativeengineering:jar_fluid_pip
 @pass Jar fluid `minecraft:potion` (soft fluid), tank NBT Potion swiftness
 @fails Wrong NBT keys: `preserved()`
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-20
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
 > setblock {S5H1+400} {S5H2} {S5H3} minecraft:air
 > setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
 sleep 2
@@ -141,6 +166,14 @@ look in the filling phase the jar FluidHolder is minecraft:potion (soft fluid) w
 @pass Jar unchanged
 @fails `canInteractWithSoftFluidTank` guard
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-20
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
 > setblock {S5H1+400} {S5H2} {S5H3} minecraft:air
 > setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
 sleep 2

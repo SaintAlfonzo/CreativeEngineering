@@ -7,8 +7,10 @@
 @@date 2026-11-01
 @@jars creativeworldgen
 @@sources feature_writeup/baby_mobs.md
+@@reviewed 2026-11-20
+@@prep A: spawn-animals=true
 @@text
-@@text Needs the Creative Delight jar nesting babyMobs 1.1.0 (built 2026-11-01, not yet installed). The remodels are client
+@@text Needs the Creative Worldgen jar nesting babyMobs 1.1.0 (moved from Creative Delight; mod id `babymobs` since 2026-11-17). The remodels are client
 @@text rendering only; the server half checks that nothing client-side loads on a dedicated server. BM-03 to BM-09 of
 @@text milestone 1 are still open in baby_mobs.md 7.
 @@text
@@ -16,11 +18,11 @@
 ## SQ-BM-01 | Baby Mobs on a dedicated server: members line, no client class
 @group A
 @commands Dedicated server boot with the CD jar; `grep -E "Baby Mobs\|babymobs\|BabyKit\|LivingEntityRendererBabyMixin" logs/latest.log logs/debug.log \| head -20`; `grep -c "Error occurred while handling event" logs/kubejs/server.log`
-@pass members line lists `babymobs`; no `Baby Mobs:` error, no client class (`BabyRender`, `net.minecraft.client`) named in a crash or mixin error; the client mixins (`mixin/client/*`) are not applied on the server
-@fails a client mixin not listed under `client` in `babymobs.mixins.json`; a common class importing `client/`
+@pass the Creative Common builds line lists `babymobs 1.1.0` (Baby Mobs moved to the Creative Worldgen bundle, so the `[creativedelight] members` line no longer names it); no `Baby Mobs:` error, no client class (`BabyRender`, `net.minecraft.client`) named in a crash or mixin error; the client mixins (`mixin/client/*`) are not applied on the server
+@fails a client mixin not listed under `client` in `babymobs.mixins.json`; a common class importing `client/`. r1120lr batch fault: the row read the Creative Delight members line
 @from batches/r1102b/s3_A.qb
 bootexpect Done \(
-bootexpect \[creativedelight\] members: \[.*\bbabymobs\b
+bootexpect \[creativecommon\] builds: .*\bbabymobs 1\.1\.0\b
 bootreject (?i)baby ?mobs:.*(error|exception)
 bootreject (?i)(BabyRender|BabyKit|LivingEntityRendererBabyMixin).*(error|exception|crash|not found)
 bootreject (?i)babymobs\S*(mixin|class).*(error|exception|invalid dist)
@@ -42,8 +44,8 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 @group A
 @commands `/summon minecraft:cow ~ ~ ~ {Age:-24000}` and the same for pig, sheep, chicken, wolf, `cozys-improved-cats:improved_cat` (Cozy's Improved Cats replaces the cat), horse, villager, zombie (`IsBaby:1`); `/data get entity @e[type=cow,limit=1,sort=nearest] Age`
 @pass each summons and keeps its age or baby flag; server does not crash or log a mixin error on any of them
-@fails a server-side use of a remodel class
-@reviewed 2026-11-16
+@fails a server-side use of a remodel class. Needs spawn-animals=true (section @@prep): with false, vanilla discards every Animal on its first tick (r1120lr s17 batch fault)
+@reviewed 2026-11-20
 @from batches/r1103/p2_R.qb
 # r1103 p2: at pace 2 the "5 s" reads came about 25 s after the summons, and the baby zombie burned to death in the
 # sun (onFire from 02:53:24, gone by 02:53:46): now night, a helmet on the zombie, pace 0.2 for the summons. The cat

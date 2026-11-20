@@ -92,17 +92,17 @@ look librarians offer enchanted books; Offers reset at a level change may need a
 
 ## SQ-ENC-02 | Lightman's Currency cashiers: no NEA enchantments
 @group B
-@commands summon several Lightman's Currency cashiers at levels 1 to 4
-@pass cashiers still offer enchanted books; none of the three NEA enchantments
+@commands `/dumptrades` on the server; read the `lightmanscurrency:cashier` profession in the server's `kubejs/exported/villager_trades.json`
+@pass the cashier profession is in the dump and none of its trades names `nock_enough_arrows:stockpile`, `recovery` or `cycle`
 @fails Depends on: `loot/tables #10`
 @jars creativedelight
 @from batches/r1101/w2_worldgen.qb
-@reviewed 2026-11-17
-> summon minecraft:villager 6 101 3 {Tags:["en2"],VillagerData:{profession:"lightmanscurrency:cashier",level:1,type:"minecraft:plains"}}
-sleep 2
-> execute as @e[tag=en2] run data get entity @s
-reject nock_enough_arrows:(stockpile|recovery|cycle)
-look cashiers still offer enchanted books; the cashier trader type may not use villager offers: record what data shows
+@reviewed 2026-11-20
+# 2026-11-20 (r1120fix, from the r1120lr batch fault of its duplicate SQ-EDL-02): a summoned cashier (y 101, no NoAI) is swapped by MCA (profession none) and falls; the row reads the profession's trade table from /dumptrades instead of a live villager's Offers
+> dumptrades
+sleep 5
+shell python3 -c "import json,re,sys;d=json.load(open('kubejs/exported/villager_trades.json'));c=d['professions'].get('lightmanscurrency:cashier');print('cashier in dump:',c is not None);t=json.dumps(c);bad=re.findall(r'nock_enough_arrows:(?:stockpile|recovery|cycle)',t);print('NEA hits:',len(bad));sys.exit(1 if c is None or bad else 0)"
+look the shell line: cashier in dump True, NEA hits 0; whether cashiers offer enchanted books at all is in the same dump
 
 ## SQ-META31-04b | meteorite desert pyramid never placed short
 @phase worldgen
@@ -148,11 +148,15 @@ look every biome false negative has a diagnosis string (regenerated point, biome
 @fails Depends on: `structures/earthfill #17`
 @jars creativecommon
 @from batches/r1101/w2_worldgen.qb
+@absent philipsruins:ancient_crypt (structure id: data/philipsruins/worldgen/structure/ancient_crypt.json in PhilipsRuins1.19.2-10.8.jar; the registry dumps list no structures)
 bootexpect \[terrain-adaptation\] world load
 bootreject ancient_crypt.*ignored
 > locate structure philipsruins:ancient_crypt
 waitlog nearest philipsruins:ancient_crypt is at|type "?philipsruins:ancient_crypt|philipsruins:ancient_crypt.*timed out 330
 capture AC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+# 2026-11-20 (r1120fix): no row spawned qa; the row spawns it before the tp
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > tp qa {AC1} 140 {AC3}
 sleep 25
 look load line: 7 sunk starts, no crypt warning; the crypt position goes to the client tour (sunk, not floating)
@@ -163,7 +167,10 @@ look load line: 7 sunk starts, no crypt warning; the crypt position goes to the 
 @pass board and slicer each give 3 Potato Slices and 3 Sliced Sweet Potatoes; no recipe error for `creativedelight:farmersdelightcutting/potato_slices` or `.../sliced_sweet_potato`
 @fails Depends on: `dishes/ingredients #20`
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 125 z 500 was not loaded and the clear named the old creativeengineering: id; ids follow the owning mod (creativedelight:sliced_sweet_potato)
+> forceload add 120 496 130 508
+sleep 3
 > cdevtest rdetail farmersdelightcutting/potato_slices
 > cdevtest rdetail farmersdelightcutting/sliced_sweet_potato
 > setblock 125 -60 500 farmersdelight:cutting_board
@@ -181,7 +188,7 @@ sleep 2
 > pbot use ssp 125 -60 500 up
 sleep 2
 > cdevtest items 125 -60 500 4
-> clear ssp creativeengineering:sliced_sweet_potato 0
+> clear ssp creativedelight:sliced_sweet_potato 0
 expect id=creativedelight:farmersdelightcutting/potato_slices serializer=
 expect id=creativedelight:farmersdelightcutting/sliced_sweet_potato serializer=
 reject (?i)(error|exception).*(potato_slices|sliced_sweet_potato)
@@ -191,30 +198,30 @@ reject verb=\S+ .*done=0
 
 ## SQ-SSP-02 | Sliced Sweet Potato tags
 @group A
-@commands `/dumptags`, grep `kubejs/exported/tags/item_tags_by_item.json` for `creativeengineering:sliced_sweet_potato`
-@pass lists `forge:sliced_potato`, `forge:sliced_potatoes`, `forge:vegetables/sweet_potato`, `forge:vegetables/potato`, `forge:vegetables`, `creativeengineering:food_type/raw/veggie/sliced`
-@fails Depends on: `dishes/ingredients #20`
+@commands `/dumptags`, grep `kubejs/exported/tags/item_tags_by_item.json` for `creativedelight:sliced_sweet_potato`
+@pass lists `forge:sliced_potato`, `forge:sliced_potatoes`, `forge:vegetables/sweet_potato`, `forge:vegetables/potato`, `forge:vegetables`, `creativedelight:food_type/raw/veggie/sliced`
+@fails Depends on: `dishes/ingredients #20`. r1120lr batch fault: stale namespace (tag dump 2026-11-19: creativedelight:sliced_sweet_potato in creativedelight:food_type/raw/veggie/sliced and all five forge: tags)
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-16
-> cdevtest tagsof creativeengineering:sliced_sweet_potato
-expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:sliced_potato\b
-expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:sliced_potatoes\b
-expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:vegetables/sweet_potato\b
-expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:vegetables/potato\b
-expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:vegetables\b
-expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bcreativeengineering:food_type/raw/veggie/sliced\b
+@reviewed 2026-11-20
+> cdevtest tagsof creativedelight:sliced_sweet_potato
+expect verb=tagsof id=creativedelight:sliced_sweet_potato .*item_tags=.*\bforge:sliced_potato\b
+expect verb=tagsof id=creativedelight:sliced_sweet_potato .*item_tags=.*\bforge:sliced_potatoes\b
+expect verb=tagsof id=creativedelight:sliced_sweet_potato .*item_tags=.*\bforge:vegetables/sweet_potato\b
+expect verb=tagsof id=creativedelight:sliced_sweet_potato .*item_tags=.*\bforge:vegetables/potato\b
+expect verb=tagsof id=creativedelight:sliced_sweet_potato .*item_tags=.*\bforge:vegetables\b
+expect verb=tagsof id=creativedelight:sliced_sweet_potato .*item_tags=.*\bcreativedelight:food_type/raw/veggie/sliced\b
 reject verb=\S+ .*done=0
 
 ## SQ-SSP-03 | Sliced Sweet Potato food and compost (JEI half: client)
 @group A
 @commands `/dumpfood`, `/dumpcompost`; client: JEI on the item
 @pass nutrition 1, modifier 0.3, compost 0.5; JEI shows the potato slices sprite, "Sliced Sweet Potato", uses in fries, More Delight potato dishes and Canned Sweet Potato
-@fails Depends on: `dishes/ingredients #20`, `dishes/meals #34`
+@fails Depends on: `dishes/ingredients #20`, `dishes/meals #34`. r1120lr batch fault: stale namespace (the item is creativedelight:sliced_sweet_potato; compost.json chance 0.5)
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-16
-> cdevtest food creativeengineering:sliced_sweet_potato
-expect verb=food item=creativeengineering:sliced_sweet_potato\*\d+ food=true nutrition=1 modifier=0.3
+@reviewed 2026-11-20
+> cdevtest food creativedelight:sliced_sweet_potato
+expect verb=food item=creativedelight:sliced_sweet_potato\*\d+ food=true nutrition=1 modifier=0.3
 > dumpcompost
 waitlog Dumped compost table 300
-shell python3 -I $INST/tools/scratch_query/dumpq.py compost creativeengineering:sliced_sweet_potato=0.5
+shell python3 -I $INST/tools/scratch_query/dumpq.py compost creativedelight:sliced_sweet_potato=0.5
 reject verb=\S+ .*done=0

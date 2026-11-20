@@ -17,6 +17,7 @@
 @pass `Done (`; `Miner's Delight upstream data:` line present (count lower than 182: cup recipes, Create fill/empty recipes, cup advancement and cup conversion gone); no `Cup conversions` line; no line naming a cup id; no `Unknown item` from `item_dict.js`, `food_dict.js`, `tool_dict.js`, `stack_sizes.js` or comfort_nourishment
 @fails a cup id still in `MinersTranslator.REMOVED`'s miss list, or a script key (`i.copper_cup` etc.) left in a dict or recipe script
 @from batches/r1103/sB_2.qb
+@reviewed 2026-11-20
 bootexpect Miner's Delight upstream data: \d+ files
 bootreject Cup conversions
 bootreject (?i)\bminers_delight:(copper|water|milk|powder_snow|beef_stew|onion_soup|[a-z_]+)_cup\b
@@ -25,13 +26,13 @@ kjsreject (?i)\bminers_delight:[a-z_]*_cup\b|cactus_soup_cup
 shell n=$(grep -oE "Miner's Delight upstream data: [0-9]+" logs/latest.log | grep -oE "[0-9]+$" | head -1); echo "upstream files $n (182 before)"; grep -nE "Unknown item" logs/kubejs/startup.log logs/kubejs/server.log | grep -iE "item_dict|food_dict|tool_dict|stack_sizes|comfort" | head; echo "handler errors: $(grep -c 'Error occurred while handling event' logs/latest.log)"; [ -n "$n" ] && [ "$n" -lt 182 ]
 look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes or comfort_nourishment; any handler error line is unrelated to cups
 
-## SQ-CUP-02 | no cup items: 50 miners_delight items, every cup /give unknown, cactus soup kept
+## SQ-CUP-02 | no cup items: 51 miners_delight items, every cup /give unknown, cactus soup kept
 @group A
 @commands probe: count registry items in namespace `miners_delight`; `/give @p miners_delight:copper_cup`, `water_cup`, `milk_cup`, `powder_snow_cup`, `beef_stew_cup`, `onion_soup_cup`, `delightful:cactus_soup_cup`
-@pass 50 `miners_delight` items; every `/give` fails with unknown item; `delightful:cactus_soup` still exists
+@pass 51 `miners_delight` items (50 at the cup removal plus one non-cup item added since; registry dump 2026-11-19 and r1120nv live count); every `/give` fails with unknown item; `delightful:cactus_soup` still exists
 @fails `MDItems` / `DelightfulBackportRegistry`
 @from batches/r1103/sB_2.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @absent miners_delight:copper_cup miners_delight:water_cup miners_delight:milk_cup miners_delight:powder_snow_cup miners_delight:beef_stew_cup miners_delight:onion_soup_cup delightful:cactus_soup_cup (removed; the row checks /give fails)
 > cdevtest reg item ^miners_delight: max=500
 > cdevtest reg item cup$
@@ -44,7 +45,8 @@ look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes 
 > give @p delightful:cactus_soup_cup
 > cdevtest item delightful:cactus_soup
 waitlog verb=item item=delightful:cactus_soup 30
-expect verb=reg kind=item regex=\^miners_delight: n=50\b
+# r1120nv batch fault: stale count 50; 51 live and in the 2026-11-19 dump (no cup among them)
+expect verb=reg kind=item regex=\^miners_delight: n=51\b
 reject verb=reg kind=item id=miners_delight:\S*cup
 reject verb=reg kind=item id=delightful:\S*cup
 count Unknown item >= 7
@@ -57,7 +59,10 @@ reject verb=\S+ .*done=0
 @pass the Copper Pot recipe exists, its center key is only `minecraft:water_bucket`; each soup comes out as its bowl item (count as the recipe) with container `minecraft:bowl`
 @fails `MinersTranslator.withoutRemovedAlternatives` (the recipe dropped whole if the patch missed), `CopperPotBlockEntity.servedResult`
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120nv batch fault: lane x 110..122 z 500 was not loaded; the row loads its own chunks
+> forceload add 106 496 126 506
+sleep 3
 > cdevtest rdetail miners_delight:copper_pot
 > zsb potnbt miners_delight:cave_soup
 > zsb potnbt miners_delight:bat_soup
@@ -104,7 +109,7 @@ look the copper_pot rdetail line: the centre ingredient is only minecraft:water_
 @pass neither tag names `miners_delight:milk_cup` (tags load without error); the jar fills from a bowl of Cave Soup and gives the bowl back
 @fails translator tag strip; `soft_fluids/cave_soup.json`
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # /reload fills Moonlight's soft-fluid item map (empty on a dedicated server until a player joins or a reload);
 # it truncates logs/kubejs/server.log, so this row is last
 > reload
@@ -115,6 +120,9 @@ sleep 10
 waitlog verb=tag kind=item tag=forge:milk/milk n= 30
 reject verb=tag kind=item tag=forge:milk(/milk)? n=\d+ ids=.*miners_delight:milk_cup
 reject (?i)(failed to load|couldn't load) tag.*milk
+# r1120nv batch fault: lane x 140 z 500 was not loaded (the jar was never placed); the row loads its own chunk
+> forceload add 136 496 144 506
+sleep 3
 > setblock 140 -60 500 supplementaries:jar
 > pbot spawn cup4 140.5 -60 502.5 minecraft:overworld survival
 > pbot hold cup4 miners_delight:cave_soup
@@ -134,6 +142,7 @@ reject verb=\S+ .*done=0
 @commands copy a pre-change world holding copper and soup cups (in a chest, in a copper pot container slot), boot, open the chest and pot
 @pass world loads; the cups are gone (missing-item drop), the pot keeps its meal and serves it in its bowl; no crash
 @fails Forge missing mappings for items; pot `Container` NBT reading an unknown item
+@reviewed 2026-11-20
 @draft needs a world copy saved before the cup removal with cups in a chest and in a copper pot; no such save is kept (no run doc names one): the runner makes or finds it, then reads the chest and pot with /cdevtest inv
 @@text
 @@text Client: CQ-CUP-01 JEI search "cup" shows no Miner's or Delightful cup; R on Beef Stew shows the Copper Pot category with a bowl container; Supplementaries jar JEI tab has no cup rows; the Copper Pot recipe in JEI shows only the Water Bucket.

@@ -21,8 +21,11 @@
 @pass Every station: the containers are all in its container slot (pot 7, copper pot 5, kettle 3, oven 8, jar 6) and no container in an ingredient slot; the carrots are all in ingredient slots and none in the container slot; both hoppers empty (from the top and from the side)
 @fails Slot rule: `StationSlotRule` / `forge.ItemStackHandlerSlotRuleMixin` (pot, kettle; log `Mixin apply failed`), `isItemValid` in `CopperPotBlockEntity`, `OvenBlockEntity.createHandler`, `FermentingJarBlockEntity`; faces: `CookingPotItemHandlerMixin`, `KettleItemHandlerMixin`, `CopperPotItemHandler.insertItem`, `FermentingJarItemHandler.insertRouted`. Empty container set: `StationContainers` built before recipes (check the generation bump)
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest recipes muffin
+# r1120fix (2026-11-20): forceload the lane (W unloaded when the row runs alone or first)
+> forceload add 296 316 320 324
+sleep 3
 > setblock 300 -60 320 minecraft:campfire[lit=true]
 > setblock 304 -60 320 minecraft:campfire[lit=true]
 > setblock 308 -60 320 minecraft:campfire[lit=true]
@@ -66,7 +69,11 @@ look stations (the first five `verb=inv` calls: slot lines, then the summary): c
 @pass Hopper (and the jar's side funnel) gets the outputs, then the leftover items; the container slot still holds its container on every station; the jar's ingredients are not pulled from below or the side
 @fails `RemainderOutputHandler` (pot, kettle, oven), `CopperPotItemHandler.extractItem`, `FermentingJarItemHandler.forSide` (SIDE_VIEW / OUTPUTS)
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@absent creativedelight:remainder_buffer (a capability key in ForgeCaps NBT, not a registry id)
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): forceload the lane (W unloaded when the row runs alone or first)
+> forceload add 296 326 320 334
+sleep 3
 > setblock 300 -59 330 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:7,id:"minecraft:bowl",Count:2b},{Slot:8,id:"farmersdelight:vegetable_soup",Count:2b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bucket",Count:1b}]}}}
 > setblock 304 -59 330 miners_delight:copper_pot{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:5,id:"minecraft:bowl",Count:2b},{Slot:6,id:"farmersdelight:vegetable_soup",Count:2b},{Slot:7,id:"minecraft:bucket",Count:1b}]}}
 > setblock 312 -59 330 creativedelight:oven[facing=north]{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:8,id:"minecraft:paper",Count:2b},{Slot:9,id:"minecraft:bread",Count:2b}]},Remainders:{Items:[{Slot:0,id:"minecraft:bucket",Count:1b}]}}
@@ -128,6 +135,7 @@ look (1) rdetail: pickle_from_fermenting inputs are 5 cucumbers + salt_dust (if 
 @pass First `BrewTimeTotal` 600 and the tea appears at about 600 ticks; after the change 300. The FD pot and the oven still read their own recipe times (an FD pot recipe's `CookTimeTotal` equals the recipe's `cookingtime`)
 @fails `KettleRecipeSerializerMixin.ce$cookingTime` fallback; NCH `frBrewing` must not write `cookingtime` (check a dumped recipe json)
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-20
 > setblock 80 -60 -60 minecraft:campfire[lit=true]
 > setblock 80 -59 -60 farmersrespite:kettle
 > data merge block 80 -59 -60 {Inventory:{Items:[{Slot:0b,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:1b,id:"farmersrespite:black_tea_leaves",Count:1b}]},FluidTank:{FluidName:"minecraft:water",Amount:1000}}
@@ -164,8 +172,11 @@ look three watch series (t=0..40, the pots at x 304, 306, 308): one bowl: in the
 @pass The container moves from slot 9 to slot 6 after about 10 ticks and progress starts counting
 @fails `FermentingJarBlockEntity.pullForNextBatch`
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail overnight_oats
+# r1120fix (2026-11-20): forceload the lane (W unloaded when the row runs alone or first)
+> forceload add 296 336 311 351
+sleep 3
 > setblock 308 -60 340 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"vintagedelight:raw_oats",Count:1b},{Slot:1,id:"minecraft:sweet_berries",Count:1b},{Slot:2,id:"minecraft:sweet_berries",Count:1b},{Slot:3,id:"farmersdelight:pumpkin_slice",Count:1b},{Slot:4,id:"minecraft:melon_slice",Count:1b},{Slot:5,id:"minecraft:apple",Count:1b},{Slot:9,id:"minecraft:bowl",Count:1b}]}}
 > cdevtest watch 308 -60 340 40 2 what=be
 waitlog \[cdevtest\] verb=watch end=done 30
@@ -178,6 +189,7 @@ look rdetail: overnight_oats fermenting with container bowl and these six inputs
 @pass Zero or more lines `[stations] <station>: also used as an ingredient, allowed in the ingredient slots: ...`; no exception mentioning `StationContainers`. Record the listed items in the run doc (each is a container that still goes in ingredient slots)
 @fails `StationContainers.build` (an `Ingredient.getItems()` that throws on an unbound tag)
 @from batches/r1106spf/b1.qb passed
+@reviewed 2026-11-20
 bootreject (?i)exception.*StationContainers
 shell grep "\[stations\]" logs/latest.log | head
 

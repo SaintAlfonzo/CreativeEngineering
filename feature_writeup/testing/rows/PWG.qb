@@ -224,6 +224,7 @@ look server tick under 50 ms with 40 bots (perf segment mean / p99); record the 
 @@sources feature_writeup/plan_power_grid.md feature_writeup/power_grid.md
 @@prep PGJAR=jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-20.jar spawn-animals=true spawn-npcs=true
 @@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
+@@prep run L=$(sed -n 's/^level-name=//p' server.properties); J=$(ls mods/backportedPowerGrid-*.jar | head -1); rm -rf "$OUT/pwgp" && mkdir -p "$OUT/pwgp" "$L/datapacks/pwgponder/data/pwgponder/structures" && unzip -o -q "$J" 'assets/powergrid/ponder/*' -d "$OUT/pwgp" && cp -r "$OUT/pwgp/assets/powergrid/ponder/." "$L/datapacks/pwgponder/data/pwgponder/structures/" && printf '{"pack":{"pack_format":10,"description":"PWG ponder structures, scratch only"}}' > "$L/datapacks/pwgponder/pack.mcmeta" && echo "pwgponder $(find "$L/datapacks/pwgponder" -name '*.nbt' | wc -l) structures from $J"
 @@text
 @@text **Priority: high (P0 gate; P1 waits on it).** Targets `development/backportedPowerGrid/build/libs/backportedPowerGrid-0.6.2-ce-19.2-01.jar`
 @@text (built 2026-11-13 00:52, port phase 0: registers nothing). **The PG jar is NOT in `mods/` and must not be put there**
@@ -239,10 +240,12 @@ look server tick under 50 ms with 40 bots (perf segment mean / p99); record the 
 @@table
 ## SQ-PWG-09 | Power Grid phase 1 jar loads, registers nothing, no command
 @group A
+@reviewed 2026-11-20
 @commands copy the jar into `OUT/srv/mods/`; boot; probe: count registry entries in namespace `powergrid` (blocks, items, entity types, block entity types, menus, recipe types, recipe serializers, sound events); `give @p powergrid:wire`; `powergrid` (console)
 @pass `Done (`; `powergrid` in the mod list with version `0.6.2-ce-19.2-01`; log line `Power grid starting, prepare to be electrocuted (1.19.2 port, phase 0)`; 0 registry entries in `powergrid`; `give` says unknown item; `powergrid` is an unknown command; no line matching `Mixin apply failed\|mixin.*powergrid\|powergrid.mixins.json` at WARN or ERROR; no `Couldn't load tag`, `Failed to load`, `Unknown item`, `Unknown tag` or `Error loading registry data` line naming `powergrid`; no EJML error from the jar-in-jar locator (EJML is unused at phase 0, only nested)
 @fails jar layout and mods.toml (`META-INF/jarjar/metadata.json`, Architectury `[6.5,7)` and Create `[0.5.1.f,0.5.2)` ranges); `src/main/resources/powergrid.mixins.json` (empty lists); a tag error means `tools/pg_phase_check.py` left an unported id in a tag (check `build/generated/phaseResources`)
 @from batches/r1113/pwg0.qb passed
+@superseded phase 1 gate of the -01/-02 jar (registers nothing), no longer pinned: the section runs -20; load gate SQ-PWG-90 (owner request, 2026-11-20)
 bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 1\)
 bootreject (WARN|ERROR).*(Mixin apply failed|mixin.*powergrid|powergrid\.mixins\.json)
 bootreject ^(?!.*MinecraftServer/\]: Unknown item 'powergrid:wire').*(Couldn't load tag|Failed to load|Unknown item|Unknown tag|Error loading registry data).*powergrid
@@ -261,6 +264,7 @@ expect Unknown or incomplete command
 
 ## SQ-PWG-10 | Power Grid config files and keys
 @group A
+@reviewed 2026-11-20
 @commands after SQ-PWG-09: `grep -A2 -E 'clientMirror|solverBackend|splittingsTransformers|generatorCommutatorInertia|TFMG|coldSweat' OUT/srv/config/powergrid-common.toml OUT/srv/<level-name>/serverconfig/powergrid-server.toml`
 @pass `powergrid-common.toml` has `clientMirror = true` with its comment; `powergrid-server.toml` has `solverBackend = "JAVA"`, the `splittingsTransformers` key, a comment above `generatorCommutatorInertia`, no `TFMGConnectorPower`, no Cold Sweat section; `powergrid-client.toml` is not written on a dedicated server
 @fails `config/CCommon`, `CSolver`, `CGenerator`, `CElectricity`, `CServer` in the port; `ModdedConfigs.register` / `PowerGridImpl` config events
@@ -270,6 +274,7 @@ look shell output: clientMirror = true with a comment above; solverBackend = "JA
 
 ## SQ-PWG-11 | Power Grid solver runs in game (EJML from jar-in-jar)
 @group A
+@reviewed 2026-11-20
 @commands after SQ-PWG-09 on the `-02` jar, with `tools/scratch_query/pg_solver_probe.js` copied to `OUT/srv/kubejs/server_scripts/zz_pg_solver_probe.js`: `pgsolve` (console)
 @pass log `[pgsolve] divider V=5.0... I=-5... converged=true` (V within 1e-6 of 5,
 @fails I
@@ -305,10 +310,12 @@ reject (NoClassDefFoundError|ClassNotFoundException).*(org\.ejml|org\.patryk3211
 @@table
 ## SQ-PWG-12 | P2 jar loads with the grid base registries, wire types, no mixin or data errors
 @group A
+@reviewed 2026-11-20
 @commands copy the `-03` jar into `OUT/srv/mods/` (remove any older `backportedPowerGrid-*.jar` there) and both probes into `OUT/srv/kubejs/server_scripts/`; boot; `zpwg ns powergrid`; `zpwg mods powergrid`; `give @p powergrid:wire`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-03`; log `Power grid starting, prepare to be electrocuted (1.19.2 port, phase 2)`; `[zpwg] ns powergrid block: 13`, `item: 21`, `entity_type: 3`, `block_entity_type: 11`, `menu: 2`, `recipe_type: 0`, `recipe_serializer: 0`, `fluid: 0`, `sound_event:` more than 0; log `Loaded 5 wire types`; no line matching `Mixin apply failed\|Mixin.*powergrid.*(error\|failed)\|InvalidInjectionException\|InvalidMixinException\|powergrid.mixins.json` at WARN or ERROR; no `Couldn't load tag`, `Failed to load`, `Couldn't parse`, `Unknown item`, `Unknown tag`, `Error loading registry data` or loot table error naming `powergrid`; no `Exception loading blockstate definition` naming `powergrid`; no `NoClassDefFoundError` naming `net/minecraft/client` (a client class reached from server code)
 @fails mixin target or signature on 1.19.2 / Create 0.5.1.i (`src/main/resources/powergrid.mixins.json`, refmap `powergrid.refmap.json` in the jar); a count off: `collections/Modded*` (P2 lists) or `phases.json` (`PortPhase.require` throws at load with the id); `Loaded 0 wire types`: `WireTypeReloadListener` path (`data/powergrid/powergrid/wire_types`); a client class on the server: the `PonderLevels` / `@OnlyIn` paths (PORT_NOTES 11)
 @from batches/r1113/pwg2a.qb passed
+@superseded phase 2 gate of the -03 jar (version, phase, counts), no longer pinned: the section runs -20; load gate SQ-PWG-90 (owner request, 2026-11-20)
 bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 2\)
 bootexpect Loaded 5 wire types
 bootreject (WARN|ERROR).*(Mixin apply failed|Mixin.*powergrid.*(error|failed)|InvalidInjectionException|InvalidMixinException|powergrid\.mixins\.json)
@@ -857,10 +864,12 @@ shell echo "recipe errors naming powergrid: $(grep -iE 'Error parsing recipe|Par
 @@table
 ## SQ-PWG-24 | P3 jar loads: registries, wire types, no mixin / data / recipe / client-class errors
 @group A
+@reviewed 2026-11-20
 @commands copy the `-04` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-03.jar` and older there) and the three probes into `OUT/srv/kubejs/server_scripts/`; boot; `zpwg ns powergrid`; `zpwg mods powergrid`; `give @p powergrid:battery`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-04`; log `Power grid starting, prepare to be electrocuted (1.19.2 port, phase 3)`; `[zpwg] ns powergrid block: 36`, `item: 45`, `entity_type: 3`, `block_entity_type: 31`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`, `fluid: 0`; log `Loaded 5 wire types`; no line matching `Mixin apply failed\|Mixin.*powergrid.*(error\|failed)\|InvalidInjectionException\|InvalidMixinException\|powergrid.mixins.json` at WARN or ERROR (`AirCurrentMixin` targets Create's `AirCurrent.rebuild`, `EntityMixin` vanilla `Entity.thunderHit`); no `Couldn't load tag`, `Failed to load`, `Couldn't parse`, `Unknown item`, `Unknown tag`, loot table error or `Exception loading blockstate definition` naming `powergrid`; no `Parsing error loading recipe powergrid:`; no `NoClassDefFoundError` naming `net/minecraft/client`
 @fails mixin target on 1.19.2 / Create 0.5.1.i (`powergrid.mixins.json`, refmap in the jar); a count off: `collections/ModdedBlocks`, `ModdedItems`, `ModdedBlockEntities` P3 entries or `phases.json` (`PortPhase.require` throws with the id); recipe type: `PowerGrid.registerRecipes` / `RECIPE_TYPES`; particle types: `ModdedParticles`
 @from batches/r1113/pwg3.qb passed
+@superseded phase 3 gate of the -04 jar (version, phase, counts), no longer pinned: the section runs -20; load gate SQ-PWG-90 (owner request, 2026-11-20)
 bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 3\)
 bootexpect Loaded 5 wire types
 bootreject (WARN|ERROR).*(Mixin apply failed|Mixin.*powergrid.*(error|failed)|InvalidInjectionException|InvalidMixinException|powergrid\.mixins\.json)
@@ -887,20 +896,21 @@ sleep 1
 
 ## SQ-PWG-25 | P3 recipes and config keys
 @group A
+@reviewed 2026-11-20
 @commands after SQ-PWG-24: `zpwg3 recipes powergrid`; `grep -n -A1 -E 'lightningMagnetizationChance|forgeEnergyPerWatt|forgeEnergyPerVolt|feInverterBufferSize|groundingMinimumBlocks|acidBatteryCapacity|transformerMutualInductanceMultiplier' OUT/srv/<level-name>/serverconfig/powergrid-server.toml`; `grep -n -A1 -E 'hv_switch|hv_breaker' OUT/srv/<level-name>/serverconfig/powergrid-server.toml`
-@pass `[zpwg3] recipes 22`; among them `powergrid:magnetization/andesite_alloy type=powergrid:magnetization output=1 magnet`, `powergrid:magnetization/crushed_raw_iron` (iron nugget), `powergrid:sequenced_assembly/transformer_core type=create:sequenced_assembly output=... transformer_core`, `powergrid:pressing/zinc_sheet`, `powergrid:crafting/thermometer`, `copper_coil`, `resistive_coil`, `grounding_rod`, `device_connector`, `hv_switch`, `potato_battery`; no `sequenced_assembly/battery` (needs acid, P9); config: `lightningMagnetizationChance = 0.05` with the comment naming andesite alloy (fix B7), `forgeEnergyPerWatt = 10.0`, `forgeEnergyPerVolt = 2.0`, `feInverterBufferSize = 20000`, `groundingMinimumBlocks = 10`, `acidBatteryCapacity = 120.0`; stress section has `hv_switch = 2.0` and `hv_breaker = 2.0`
+@pass `[zpwg3] recipes N` (22 on -04; the count on the current jar is SQ-PWG-90's); among them `powergrid:magnetization/andesite_alloy type=powergrid:magnetization output=1 magnet`, `powergrid:magnetization/crushed_raw_iron` (iron nugget), `powergrid:sequenced_assembly/transformer_core type=create:sequenced_assembly output=... transformer_core`, `powergrid:pressing/zinc_sheet`, `powergrid:crafting/thermometer`, `copper_coil`, `resistive_coil`, `grounding_rod`, `device_connector`, `hv_switch`, `potato_battery` (`sequenced_assembly/battery` exists since P9, SQ-PWG-83); config: `lightningMagnetizationChance = 0.05` with the comment naming andesite alloy (fix B7), `forgeEnergyPerWatt = 10.0`, `forgeEnergyPerVolt = 2.0`, `feInverterBufferSize = 20000`, `groundingMinimumBlocks = 10`, `acidBatteryCapacity = 120.0`; stress section has `hv_switch = 2.0` and `hv_breaker = 2.0`
 @fails a missing recipe: `tools/pg_phase_check.py` (recipe gate) or its JSON on Create 0.5.1 (sequenced assembly `results` / `transitionalItem`); `magnetization` missing: `TypeInfo` serializer; stress keys missing: `CStress.setImpact` on the P3 blocks
 @from batches/r1113/pwg3.qb
 > zpwg3 recipes powergrid
 waitlog \[zpwg3\] done 20
-shell s=pwg3/serverconfig/powergrid-server.toml; grep -n -B2 -A1 -E 'lightningMagnetizationChance|forgeEnergyPerWatt|forgeEnergyPerVolt|feInverterBufferSize|groundingMinimumBlocks|acidBatteryCapacity|transformerMutualInductanceMultiplier' $s; grep -n -A1 -E 'hv_switch|hv_breaker' $s
-expect \[zpwg3\] recipes 22$
+# r1120fix 2026-11-20: version-free on the pinned -20 jar (no count, no P9 absent check, level from the folder)
+shell s=$(ls */serverconfig/powergrid-server.toml | head -1); grep -n -B2 -A1 -E 'lightningMagnetizationChance|forgeEnergyPerWatt|forgeEnergyPerVolt|feInverterBufferSize|groundingMinimumBlocks|acidBatteryCapacity|transformerMutualInductanceMultiplier' $s; grep -n -A1 -E 'hv_switch|hv_breaker' $s
+expect \[zpwg3\] recipes \d+$
 expect recipe powergrid:magnetization/andesite_alloy type=powergrid:magnetization output=.*magnet
 expect recipe powergrid:magnetization/crushed_raw_iron .*iron_nugget
 expect recipe powergrid:sequenced_assembly/transformer_core type=create:sequenced_assembly .*transformer_core
 expect recipe powergrid:pressing/zinc_sheet
 expect recipe powergrid:crafting/thermometer
-reject recipe powergrid:sequenced_assembly/battery
 look recipes list also has copper_coil, resistive_coil, grounding_rod, device_connector, hv_switch, potato_battery; shell: chance 0.05 with andesite alloy comment, 10.0, 2.0, 20000, 10, 120.0, hv_switch = 2.0, hv_breaker = 2.0
 
 ## SQ-PWG-26 | small transformer 10:100, 10 V primary, 100 ohm load; then AC
@@ -1526,12 +1536,14 @@ look first current ~10/5001 A; after the copper fill current rises and test rod 
 @@table
 ## SQ-PWG-35 | P4 jar loads: registries, wire types, stress provider, display source, redstone converter, damage source
 @group A
+@reviewed 2026-11-20
 @commands copy the `-05` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-04.jar` and older there) and the four probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js`, `pwg_p4_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; boot; `zpwg ns powergrid`; `zpwg mods powergrid`; `zpwg4 check`; `give @p powergrid:electric_motor`
-@pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-05`; log `Power grid starting, prepare to be electrocuted (1.19.2 port, phase 4)`; `[zpwg] ns powergrid block: 49`, `item: 58`, `entity_type: 3`, `block_entity_type: 40`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`, `fluid: 0`; log `Loaded 5 wire types`; `[zpwg4] stress electric_motor capacity=64.0 ... rpm=0..256`, `constant_speed_motor` the same, `servo capacity=32.0 ... rpm=0..32`, `generator_clutch ... impact=32.0`, `generator_induction_rotor impact=32.0`, `generator_large_induction_rotor impact=128.0`, both commutators `impact=8.0`, `variac` and `rheostat` `impact=0.0 hasImpact=true`, `hv_switch impact=2.0 rpm=none`; `display clutch=true sources on generator_clutch=1`; `redstone converter clutch=true`; `damage spinning_rotor msgId=spinning_rotor bypassArmor=false`; no line matching `Mixin apply failed\|Mixin.*powergrid.*(error\|failed)\|InvalidInjectionException\|InvalidMixinException\|powergrid.mixins.json` at WARN or ERROR (`KineticBlockEntityAccessor` targets Create's `KineticBlockEntity.flickerTally`, `remap = false`); no `Couldn't load tag`, `Failed to load`, `Couldn't parse`, `Unknown item`, `Unknown tag`, loot table error or `Exception loading blockstate definition` naming `powergrid`; no `Parsing error loading recipe powergrid:`
+@pass (on the pinned -20 jar only the probe checks run; version, phase and counts: SQ-PWG-90) `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-05`; log `Power grid starting, prepare to be electrocuted (1.19.2 port, phase 4)`; `[zpwg] ns powergrid block: 49`, `item: 58`, `entity_type: 3`, `block_entity_type: 40`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`, `fluid: 0`; log `Loaded 5 wire types`; `[zpwg4] stress electric_motor capacity=64.0 ... rpm=0..256`, `constant_speed_motor` the same, `servo capacity=32.0 ... rpm=0..32`, `generator_clutch ... impact=32.0`, `generator_induction_rotor impact=32.0`, `generator_large_induction_rotor impact=128.0`, both commutators `impact=8.0`, `variac` and `rheostat` `impact=0.0 hasImpact=true`, `hv_switch impact=2.0 rpm=none`; `display clutch=true sources on generator_clutch=1`; `redstone converter clutch=true`; `damage spinning_rotor msgId=spinning_rotor bypassArmor=false`; no line matching `Mixin apply failed\|Mixin.*powergrid.*(error\|failed)\|InvalidInjectionException\|InvalidMixinException\|powergrid.mixins.json` at WARN or ERROR (`KineticBlockEntityAccessor` targets Create's `KineticBlockEntity.flickerTally`, `remap = false`); no `Couldn't load tag`, `Failed to load`, `Couldn't parse`, `Unknown item`, `Unknown tag`, loot table error or `Exception loading blockstate definition` naming `powergrid`; no `Parsing error loading recipe powergrid:`
 @fails mixin: field name on Create 0.5.1.i (`mixin/KineticBlockEntityAccessor`); counts off: `collections/ModdedBlocks` / `ModdedBlockEntities` P4 entries or `phases.json`; `rpm=none` on the motors: `CStress.setGeneratorSpeed` / the provider's `getGeneratedRPM` in `ModdedConfigs.register`; display or redstone entries: `ModdedDisplaySources.CLUTCH`, `RedstoneConverterRegistry.init`
 @from batches/r1113/pwg5.qb
+# r1120fix 2026-11-20: version, phase and registry counts dropped (the section pins -20; counts are SQ-PWG-90's); the zpwg4 checks stay
 bootexpect Done \(
-bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 4\)
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase
 bootexpect Loaded 5 wire types
 bootreject (WARN|ERROR).*(Mixin apply failed|Mixin.*powergrid.*(error|failed)|InvalidInjectionException|InvalidMixinException|powergrid\.mixins\.json)
 bootreject ^(?!.*MinecraftServer/\]: Unknown item).*(Couldn't load tag|Failed to load|Couldn't parse|Unknown item|Unknown tag|Error loading registry data).*powergrid
@@ -1546,15 +1558,6 @@ waitlog \[zpwg\] ns powergrid total 30
 sleep 2
 > give @p powergrid:electric_motor
 sleep 1
-expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-05
-expect \[zpwg\] ns powergrid block: 49\b
-expect \[zpwg\] ns powergrid item: 58\b
-expect \[zpwg\] ns powergrid entity_type: 3\b
-expect \[zpwg\] ns powergrid block_entity_type: 40\b
-expect \[zpwg\] ns powergrid menu: 2\b
-expect \[zpwg\] ns powergrid recipe_type: 1\b
-expect \[zpwg\] ns powergrid recipe_serializer: 1\b
-expect \[zpwg\] ns powergrid fluid: 0\b
 expect \[zpwg4\] stress electric_motor capacity=64(\.0)? .*rpm=0(\.0)?\.\.256(\.0)?$
 expect \[zpwg4\] stress constant_speed_motor capacity=64(\.0)? .*rpm=0(\.0)?\.\.256(\.0)?$
 expect \[zpwg4\] stress servo capacity=32(\.0)? .*rpm=0(\.0)?\.\.32(\.0)?$
@@ -1578,15 +1581,17 @@ reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
 @draft no batch holds this row yet
 ## SQ-PWG-36 | recipes (56 on -08: the 47 of P4 plus the 9 of P6) and P4 config keys (generator, motor, stress values)
 @group A
+@reviewed 2026-11-20
 @commands after SQ-PWG-35: `zpwg3 recipes powergrid`; `grep -n -A1 -E 'rotorKp|rotorKd|rotorRPMMax|rotorAssemblyMaxSize|dangerousGenerators|torqueForStress|motorDynamicResistance|motorMinimumLoad|windingCoilConstant|fieldSaturationCurrent' OUT/srv/<level-name>/serverconfig/powergrid-server.toml`; `grep -n -E '^\s*(electric_motor|constant_speed_motor|servo|generator_[a-z_]+|variac|rheostat) =' OUT/srv/<level-name>/serverconfig/powergrid-server.toml`
-@pass `[zpwg3] recipes 47`; among them `powergrid:mechanical_crafting/electric_motor` (`create:mechanical_crafting`), `mechanical_crafting/generator_induction_rotor`, `mechanical_crafting/generator_large_induction_rotor`, `item_application/conductive_casing` (`create:item_application`), `crafting/constant_speed_motor`, `crafting/generator_clutch`, `crafting/generator_housing`, `crafting/rheostat`, `crafting/variac`, `crafting/servo`, six `*_from_conversion` (the four housing and commutator conversions plus the P2 current and voltage gauge ones) and the P2 / P3 recipes that waited for the casing (`contactor`, `cord_junction`, `electromagnet`, `fuse_holder`, `hv_breaker`, `multimeter`, `mv_switch`, `power_resistor`, `socket`, `voltage_gauge`, `mechanical_crafting/carbon_pile_coil`); no `mechanical_crafting/generator_commutator` (needs `pins`, P9); config: `rotorKp = 0.85`, `rotorKd = 0.002`, `rotorRPMMax = 272`, `rotorAssemblyMaxSize = 8`, `dangerousGenerators = true`, `torqueForStress = 15.0`, `motorDynamicResistance = true`, `motorMinimumLoad = 0.05`, `windingCoilConstant = 5.0`, `fieldSaturationCurrent = 2.0`; stress keys: impact `generator_clutch = 32.0`, `generator_induction_rotor = 32.0`, `generator_large_induction_rotor = 128.0`, `generator_commutator = 8.0`, `generator_vertical_commutator = 8.0`, `variac = 0.0`, `rheostat = 0.0`; capacity `electric_motor = 64.0`, `constant_speed_motor = 64.0`, `servo = 32.0`
+@pass `[zpwg3] recipes N` (47 on -05, 56 on -08; the count on the current jar is SQ-PWG-90's); among them `powergrid:mechanical_crafting/electric_motor` (`create:mechanical_crafting`), `mechanical_crafting/generator_induction_rotor`, `mechanical_crafting/generator_large_induction_rotor`, `item_application/conductive_casing` (`create:item_application`), `crafting/constant_speed_motor`, `crafting/generator_clutch`, `crafting/generator_housing`, `crafting/rheostat`, `crafting/variac`, `crafting/servo`, six `*_from_conversion` (the four housing and commutator conversions plus the P2 current and voltage gauge ones) and the P2 / P3 recipes that waited for the casing (`contactor`, `cord_junction`, `electromagnet`, `fuse_holder`, `hv_breaker`, `multimeter`, `mv_switch`, `power_resistor`, `socket`, `voltage_gauge`, `mechanical_crafting/carbon_pile_coil`; `mechanical_crafting/generator_commutator` exists since P9, SQ-PWG-67); config: `rotorKp = 0.85`, `rotorKd = 0.002`, `rotorRPMMax = 272`, `rotorAssemblyMaxSize = 8`, `dangerousGenerators = true`, `torqueForStress = 15.0`, `motorDynamicResistance = true`, `motorMinimumLoad = 0.05`, `windingCoilConstant = 5.0`, `fieldSaturationCurrent = 2.0`; stress keys: impact `generator_clutch = 32.0`, `generator_induction_rotor = 32.0`, `generator_large_induction_rotor = 128.0`, `generator_commutator = 8.0`, `generator_vertical_commutator = 8.0`, `variac = 0.0`, `rheostat = 0.0`; capacity `electric_motor = 64.0`, `constant_speed_motor = 64.0`, `servo = 32.0`
 @fails a missing recipe: `tools/pg_phase_check.py` (recipe gate) or its JSON on Create 0.5.1 (mechanical crafting `pattern` / `key`, item application `results`); stress keys missing: `CStress.setImpact` / `setCapacity` on the P4 blocks; a recipe count above 47: a P9 override leaked
 @from batches/r1113/pwg8.qb
 > zpwg3 recipes powergrid
 waitlog \[zpwg3\] recipes \d+ 30
 sleep 1
-shell s=pwg8/serverconfig/powergrid-server.toml; grep -n -A1 -E 'rotorKp|rotorKd|rotorRPMMax|rotorAssemblyMaxSize|dangerousGenerators|torqueForStress|motorDynamicResistance|motorMinimumLoad|windingCoilConstant|fieldSaturationCurrent' $s; grep -n -E '^\s*(electric_motor|constant_speed_motor|servo|generator_[a-z_]+|variac|rheostat) =' $s; m=0; for k in 'rotorKp = 0.85' 'rotorKd = 0.002' 'rotorRPMMax = 272' 'rotorAssemblyMaxSize = 8' 'dangerousGenerators = true' 'torqueForStress = 15.0' 'motorDynamicResistance = true' 'motorMinimumLoad = 0.05' 'windingCoilConstant = 5.0' 'fieldSaturationCurrent = 2.0' 'generator_clutch = 32.0' 'generator_induction_rotor = 32.0' 'generator_large_induction_rotor = 128.0' 'generator_commutator = 8.0' 'generator_vertical_commutator = 8.0' 'variac = 0.0' 'rheostat = 0.0' 'electric_motor = 64.0' 'constant_speed_motor = 64.0' 'servo = 32.0'; do grep -qF -- "$k" $s || { echo "MISSING $k"; m=1; }; done; exit $m
-expect \[zpwg3\] recipes 56$
+# r1120fix 2026-11-20: version-free on the pinned -20 jar (no count, no P9 absent check, level from the folder)
+shell s=$(ls */serverconfig/powergrid-server.toml | head -1); grep -n -A1 -E 'rotorKp|rotorKd|rotorRPMMax|rotorAssemblyMaxSize|dangerousGenerators|torqueForStress|motorDynamicResistance|motorMinimumLoad|windingCoilConstant|fieldSaturationCurrent' $s; grep -n -E '^\s*(electric_motor|constant_speed_motor|servo|generator_[a-z_]+|variac|rheostat) =' $s; m=0; for k in 'rotorKp = 0.85' 'rotorKd = 0.002' 'rotorRPMMax = 272' 'rotorAssemblyMaxSize = 8' 'dangerousGenerators = true' 'torqueForStress = 15.0' 'motorDynamicResistance = true' 'motorMinimumLoad = 0.05' 'windingCoilConstant = 5.0' 'fieldSaturationCurrent = 2.0' 'generator_clutch = 32.0' 'generator_induction_rotor = 32.0' 'generator_large_induction_rotor = 128.0' 'generator_commutator = 8.0' 'generator_vertical_commutator = 8.0' 'variac = 0.0' 'rheostat = 0.0' 'electric_motor = 64.0' 'constant_speed_motor = 64.0' 'servo = 32.0'; do grep -qF -- "$k" $s || { echo "MISSING $k"; m=1; }; done; exit $m
+expect \[zpwg3\] recipes \d+$
 expect recipe powergrid:mechanical_crafting/electric_motor type=create:mechanical_crafting
 expect recipe powergrid:mechanical_crafting/generator_induction_rotor type=
 expect recipe powergrid:mechanical_crafting/generator_large_induction_rotor type=
@@ -1609,7 +1614,6 @@ expect recipe powergrid:\S*/power_resistor type=
 expect recipe powergrid:\S*/socket type=
 expect recipe powergrid:\S*/voltage_gauge type=
 expect recipe powergrid:mechanical_crafting/carbon_pile_coil type=
-reject recipe powergrid:mechanical_crafting/generator_commutator type=
 reject \[zpwg\w*\] error
 look shell output: config lines as listed (exit 0 = all 20 key = value pairs present)
 
@@ -1859,10 +1863,32 @@ look 1 ohm: current up (about EMF / 4, under 80 A), rotor rpm under 256, clutch 
 
 ## SQ-PWG-40 | spinning_rotor: large induction rotor at 256 RPM kills a husk in a glass pocket, control husk unhurt
 @group A
+@reviewed 2026-11-20
 @commands `spinning_rotor`, Z 1200 (Y -60): `zpwg3 place 1100 -60 1200 create:creative_motor facing=east`; `zpwg3 place 1101 -60 1200 powergrid:generator_clutch facing=west`; `zpwg3 place 1102 -60 1200 powergrid:generator_large_induction_rotor axis=x`; `zpwg3 scroll 1100 -60 1200 256`; wait 100; `zpwg4 kin 1102 -60 1200`; a glass pocket beside the rotor so the push cannot throw the mob clear: `fill 1101 -60 1201 1103 -58 1202 minecraft:glass`, `fill 1102 -60 1201 1102 -59 1201 minecraft:air`; `summon minecraft:husk 1102.5 -60 1201.5 {NoAI:1b,PersistenceRequired:1b,CustomName:'"rotortest"'}` and `summon minecraft:husk 1102.5 -60 1204.5 {NoAI:1b,PersistenceRequired:1b,CustomName:'"rotorcontrol"'}`; `zpwg4 hp rotortest` and `zpwg4 hp rotorcontrol` every 20 ticks for 200 ticks
 @pass rotor `rpm=` near 256; `rotortest` (center about 1.1 blocks from the axis: about 4.7 damage a hit) loses health and dies within the 200 ticks: log `Named entity ... died: rotortest was killed in a generator accident` (or the key `death.attack.spinning_rotor` if the server has no mod lang), then `hp count 0`; `rotorcontrol` (outside the 1.3-block radius) keeps full health; no ERROR
 @fails `RotorBehaviour.damageCalc` (radius 1.3 for the large rotor, `dangerousGenerators`), `ModdedDamageTypes.SPINNING_ROTOR` (message id); a husk pushed but unhurt: the speed term (`d = v / 0.16` must exceed 1)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained (r1120fix, 2026-11-20): area setup as SQ-PWG-39 (the step runs this row without -38 / -39)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
 # peaceful (scratch default) discards a summoned husk at once: easy for this row only
 > difficulty easy
 > zpwg3 place 1100 -60 1200 create:creative_motor facing=east
@@ -1893,10 +1919,61 @@ look rotor rpm near 256; rotortest health falls (about 4.7 a hit); rotorcontrol 
 
 ## SQ-PWG-41 | clutch motor mode on the -38 B line: 60 V on the commutator turns the rotor and a press; back to generator
 @group A
+@reviewed 2026-11-20
 @commands clutch motor mode on SQ-PWG-38 B (after SQ-PWG-39): `setblock 1100 -58 1180 minecraft:air` (creative motor away); `zpwg3 place 1100 -58 1180 create:shaft axis=x`; `zpwg3 place 1099 -58 1180 create:mechanical_press facing=east`; `zpwg4 clutch 1101 -58 1180 motor`; `setblock 1110 -60 1180 minecraft:air` (load resistor away, its wires drop); `zpwg3 src 1110 -60 1180 60`; wires `w 1107 -60 1180 1 1110 -60 1180 0`, `w 1110 -60 1180 1 1104 -58 1180 1`; wait 200 ticks; `zpwg4 kin` on 1101, 1102, 1104 (Y -58) and on the press 1099 -58 1180; then `zpwg4 clutch 1101 -58 1180 generator`, wait 100, `kin` 1101
 @pass motor mode: rotor `rpm=` rises and settles (back-EMF: about 60 V / (2 x rotor field x pi / 30), about 87 RPM at a 1 A field; record), clutch `generated=` = the rotor RPM (integer), the press `speed=` the same value, network `capacitySU` = 104 x RPM and `stressSU` = press k x RPM; commutator current flows from the source (current gauge non-zero); back to generator mode: clutch `generated=0` and the press stops; no block popped, no ERROR
 @fails `GeneratorClutchBlockEntity.lazyTick` (motor mode speed), `calculateAddedStressCapacity`, `changeMode` (network remove / add), Create 0.5.1 `GeneratingKineticBlockEntity.applyNewSpeed`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained (r1120fix, 2026-11-20): area setup as SQ-PWG-39 (the step runs this row without -38 / -39)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+# the SQ-PWG-38B generator line as SQ-PWG-39 builds it, then the state -39 leaves: 256 RPM, 36 (10 ohm) load
+> zpwg3 place 1100 -58 1180 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -58 1180 powergrid:generator_clutch facing=west
+> zpwg3 place 1102 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1103 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1104 -58 1180 powergrid:generator_commutator facing=east
+> zpwg4 wind 1102 -57 1180 1103 -57 1180 y
+> zpwg4 wind 1102 -59 1180 1103 -59 1180 y
+> zpwg3 place 1101 -57 1180 powergrid:device_connector facing=east
+> zpwg3 place 1101 -59 1180 powergrid:device_connector facing=east
+> zpwg3 be 1101 -57 1180
+> zpwg3 be 1101 -59 1180
+> zpwg3 src 1098 -58 1183 30
+> zpwg3 w 1098 -58 1183 0 1101 -57 1180 0
+> zpwg3 w 1101 -57 1180 1 1101 -59 1180 0
+> zpwg3 w 1101 -59 1180 1 1098 -58 1183 1
+> zpwg3 place 1107 -60 1180 powergrid:current_gauge
+> zpwg3 place 1110 -60 1180 powergrid:creative_resistor
+> zpwg3 res 1110 -60 1180 36
+> zpwg3 place 1110 -60 1182 powergrid:voltage_gauge
+> zpwg3 w 1104 -58 1180 0 1107 -60 1180 0
+> zpwg3 w 1107 -60 1180 1 1110 -60 1180 0
+> zpwg3 w 1110 -60 1180 1 1104 -58 1180 1
+> zpwg3 w 1110 -60 1180 0 1110 -60 1182 0
+> zpwg3 w 1110 -60 1180 1 1110 -60 1182 1
+sleep 2
+> zpwg3 scroll 1100 -58 1180 256
+sleep 5
 > setblock 1100 -58 1180 minecraft:air
 > zpwg3 place 1100 -58 1180 create:shaft axis=x
 waitlog \[zpwg3\] done 20
@@ -1932,10 +2009,32 @@ look motor mode: rotor rpm settles (about 87 at 1 A field), clutch generated = r
 
 ## SQ-PWG-42 | PWG-09 self-excited generator at Z 1210: field loop from the commutator through 100 ohm, 128 then 256 RPM
 @group A
+@reviewed 2026-11-20
 @commands PWG-09, Z 1210 (line Y -58): build SQ-PWG-38 B again at Z 1210 (creative motor, clutch, two rotors, commutator, both windings, both connectors) without the excitation source; field loop from the commutator: `zpwg3 place 1107 -60 1210 powergrid:creative_resistor`, `zpwg3 res 1107 -60 1210 45` (100 ohm), wires `w 1104 -58 1210 0 1101 -57 1210 0`, `w 1101 -57 1210 1 1101 -59 1210 0`, `w 1101 -59 1210 1 1107 -60 1210 0`, `w 1107 -60 1210 1 1104 -58 1210 1`; `zpwg3 scroll 1100 -58 1210 128`; wait 200; `zpwg4 kin` on 1102 -57 1210 (winding), 1102 and 1104 (Y -58); then `zpwg3 scroll 1100 -58 1210 256`; wait 200; the same reads; if nothing builds at 256, swap the two wires at the commutator (break and redo `w 1104 -58 1210 1 1101 -57 1210 0` and `w 1107 -60 1210 1 1104 -58 1210 0`) and repeat
 @pass at 128 RPM the field stays near the residual (winding `I` near 0: loop gain about 104 V per A against 131 ohm); at 256 RPM (gain about 208 V per A) the voltage builds without any source: winding `I` settles near 2 A, commutator `V=` near 250 V (record), with one wiring polarity only (record which); no overheat of the windings (about 30 W per block against 200 W); no ERROR
 @fails `WindingBlockEntity.fieldCalc` (residual 0.001, sign kept), `GeneratorCoupling` back-EMF residual; nothing builds either way: the residual sign or `Precalculated` updates (`InductionRotorBlockEntity.totalField`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained (r1120fix, 2026-11-20): area setup as SQ-PWG-39 (the step runs this row without -38 / -39)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
 > zpwg3 place 1100 -58 1210 create:creative_motor facing=east
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1101 -58 1210 powergrid:generator_clutch facing=west
@@ -2180,10 +2279,12 @@ look mean tick delta against SQ-PWG-01 under 0.2 ms; the 10 rpm= samples within 
 @@table
 ## SQ-PWG-45 | -06 loads (phase 5), same registries, no ponder classes on the server; 36 ponder structures load on 1.19.2
 @group A
+@reviewed 2026-11-20
 @commands copy the `-06` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-05.jar` and older there) and the five probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js`, `pwg_p4_probe.js`, `pwg_p5_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; scratch datapack from the jar before boot: `mkdir -p OUT/pwgp OUT/srv/<level-name>/datapacks/pwgponder/data/pwgponder/structures && unzip -o -q OUT/srv/mods/backportedPowerGrid-0.6.2-ce-19.2-06.jar 'assets/powergrid/ponder/*' -d OUT/pwgp && cp -r OUT/pwgp/assets/powergrid/ponder/. OUT/srv/<level-name>/datapacks/pwgponder/data/pwgponder/structures/ && printf '{"pack":{"pack_format":10,"description":"PWG ponder structures, scratch only"}}' > OUT/srv/<level-name>/datapacks/pwgponder/pack.mcmeta`; boot; `datapack list enabled`; `zpwg ns powergrid`; `zpwg mods powergrid`; `zpwg3 recipes powergrid`; `forceload add 1290 1290 1750 1320`; `zpwg5 list`; `zpwg5 nbtall 1300 -60 1300`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-06`; log `Power grid starting, prepare to be electrocuted (1.19.2 port, phase 5)`; the same counts as SQ-PWG-35: `[zpwg] ns powergrid block: 49`, `item: 58`, `entity_type: 3`, `block_entity_type: 40`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 47`; no `foundation.ponder`, `PonderWorld`, `powergrid.ponder` or `invalid dist` line in the server log (ponder is client-only); `datapack list` shows `file/pwgponder`; `[zpwg5] list 36`; 36 `[zpwg5] nbt` lines, each `size=ok`, `badName=[]`, `droppedProps=[]`, `rejectedValues=[]`, `missingBE=0`; `[zpwg5] nbt summary files=36 clean=27 quirk=9 bad=0 error=0` (the 9 quirk files: `gauges`, `contactor`, `motor`, `rheostat`, `variac`, `wire/voltage_drop`: `creative_voltage_source.axis`, and `power_resistor.axis_along_first#1` in `wire/voltage_drop`; r1113 found three more, upstream-same too: `device_connector` (`axis_along_first`, a property the block never had), `electromagnet` (`facing`; the block has no state properties), `generator/parallel_windings` (`winding.left=false` reads back true: `WindingBlock.updateCase` sets it once the neighbor is placed); PORT_NOTES.md 15). Superseded 2026-11-13 by SQ-PWG-47: since P6 the probe carries the 55 structures of `-08`, so run SQ-PWG-47 instead; no `Error` / `Exception` line between `nbtall` and its `done` (block entity data from the 1.20.1 files loads on Create 0.5.1); record `entities=` for `energy_meter` (8 hanging wires in the file) and `lightning_attractor` (1 super glue)
 @fails `badName`: a block id missing on 1.19.2 / Create 0.5.1 or a P6+ block in a shipped structure (`phases.json` `resources`, PORT_NOTES.md 15); `droppedProps` / `rejectedValues`: a property the 1.19.2 block lacks (the scene shows the default state; compare with the 1.20.1 block, decide per file); `missingBE` or exceptions: block entity NBT keys changed between Create 6 and 0.5.1 (`BlockEntity.load` of that block); `missing (datapack not loaded?)`: pack.mcmeta / path (`data/pwgponder/structures/<path>.nbt`); a ponder class on the server: something common references `ponder/*` or `PonderElectricNetwork` (only `PowerGridClientImpl.clientSetup` may)
 @from batches/r1113/pwg6.qb
+@superseded phase 5 gate of the -06 jar (version, phase, counts, 36 ponder files), no longer pinned: the section runs -20; load gate and ponder files SQ-PWG-90 (owner request, 2026-11-20)
 bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 5\)
 bootreject foundation\.ponder|PonderWorld|powergrid\.ponder|invalid dist.*(powergrid|patryk)
 > datapack list enabled
@@ -2250,10 +2351,12 @@ reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
 @@table
 ## SQ-PWG-46 | -08 loads (phase 6): registries, 56 recipes, fan types, solar contraption type, 0 overrides, config, six mixin targets
 @group A
+@reviewed 2026-11-20
 @commands copy the `-08` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-07.jar` and older there) and the six probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js`, `pwg_p4_probe.js`, `pwg_p5_probe.js`, `pwg_p6_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; the ponder datapack as in SQ-PWG-45 but from the `-08` jar (`unzip -o -q OUT/srv/mods/backportedPowerGrid-0.6.2-ce-19.2-08.jar 'assets/powergrid/ponder/*' -d OUT/pwgp`, then the same `cp` and `pack.mcmeta`); boot; `zpwg mods powergrid`; `zpwg ns powergrid`; `zpwg3 recipes powergrid`; `zpwg6 check`; `grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin' logs/latest.log`; `grep -n -E 'solar biome override' logs/latest.log`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-08`; log `(1.19.2 port, phase 6)`; `[zpwg] ns powergrid block: 58`, `item: 71`, `entity_type: 3`, `block_entity_type: 48`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 56`, the 9 new ones among them (`crafting/electric_fan`, `crafting/electric_pump`, `crafting/factory_light`, `crafting/growth_lamp`, `crafting/light_bulb`, `crafting/lv_light_bulb`, `crafting/neon_bulb`, `mechanical_crafting/basin_heater`, `sequenced_assembly/solar_panel`) and still no `crafting/heating_coil`, `crafting/light_fixture` (pins, P9), `crafting/solar_panel_bearing` (copper plating, P10); `zpwg6 check`: `fan types` lists `powergrid:heater_blasting(150)`, `powergrid:heater_smoking(250)` and `creativeengineering:dragon_breathing(500)` with Create's own types, `registered=true` for all three; `contraption type powergrid:solar_panel registered=true`; `solar biome overrides 0` and the log line `Loaded 0 solar biome overrides`; config `heaterFanProcessingSpeedMultiplier=0.75 growthLampRadius=2 growthLampChance=50 electricPumpRange=24 solarPanelMaxSize=25`, `clientMirror=true`; six `mixin target ... loaded` lines, no `error`; no `ERROR`, `InvalidInjectionException`, `InjectionError`, `Critical injection failure` or `@Redirect` conflict line naming `powergrid.mixins.json`
 @fails a crash at boot or at `check`: the stack names the mixin and the target method (descriptor changed in the pack's Create 0.5.1.i or Farmer's Delight 1.2.4 repack; another mod's `@Redirect` on the same `isHeated` call: Create Central Kitchen and Creative Delight touch the cooking pot, PORT_NOTES.md 16); counts off: `ModdedBlocks` / `ModdedItems` / `ModdedBlockEntities` P6 entries or `PortPhase` (port_phase 6); a heater type missing: `PowerGridImpl.commonSetup` did not run its `enqueueWork`; dragon_breathing missing: Creative Engineering, not Power Grid (compare a boot without the PG jar)
 @from batches/r1113/pwg8.qb
+@superseded phase 6 gate of the -08 jar (version, phase, counts, 56 recipes), no longer pinned: the section runs -20; load gate SQ-PWG-90, zpwg6 check SQ-PWG-55 (owner request, 2026-11-20)
 bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 6\)
 bootexpect Loaded 0 solar biome overrides
 bootreject InvalidInjectionException|InjectionError|Critical injection failure
@@ -2306,10 +2409,12 @@ look fan types line lists Create's own types too; shell output: mixin lines name
 
 ## SQ-PWG-47 | 55 ponder structures load on 1.19.2: summary clean=40 quirk=15 (or 39/16), bad=0, error=0
 @group A
+@reviewed 2026-11-20
 @commands after SQ-PWG-46: `forceload add 1290 1290 1970 1320`; `datapack list enabled`; `zpwg5 list`; `zpwg5 nbtall 1300 -60 1300`
 @pass `datapack list` shows `file/pwgponder`; `[zpwg5] list 55`; 55 `[zpwg5] nbt` lines, each `size=ok`, `badName=[]`, `droppedProps=[]`, `rejectedValues=[]`, `missingBE=0`; `[zpwg5] nbt summary files=55 clean=40 quirk=15 bad=0 error=0` (or `clean=39 quirk=16` if `generator/generator_3`'s windings read back changed, as `parallel_windings` did on r1113). Quirk files: the 9 of r1113 (`gauges`, `contactor`, `motor`, `rheostat`, `variac`, `wire/voltage_drop`: `creative_voltage_source.axis`, plus `power_resistor.axis_along_first#1` in `wire/voltage_drop`; `device_connector`: `device_connector.axis_along_first`; `electromagnet`: `electromagnet.facing`; `generator/parallel_windings`: `winding.left=false(got true)`) and 6 from P6: `lightbulb`, `wire/simple` (`creative_voltage_source.axis`), `switch` (`creative_voltage_source.axis`, `lv_switch.axis_along_first`), `solar_panel/solar_panel_conditions`, `solar_panel/solar_panel_power_creation`, `solar_panel_bearing` (`solar_panel.rotation`); all upstream-same (PORT_NOTES.md 15); record `entities=` for `electric_fan` (4 in the file), `factory_light/factory_light` (2), `factory_light/factory_light_tall` (2), `solar_panel/solar_panel_power_creation` (4); no `Error` / `Exception` line between `nbtall` and its `done`
 @fails as SQ-PWG-45; `badName` with a P6 id: the jar is not `-08` or `phases.json` `resources` ships a structure early; a new quirk kind: decide per file (PORT_NOTES.md 15 table)
 @from batches/r1113/pwg8.qb
+@superseded 55 ponder files of the -08 jar; the pinned -20 jar ships more: SQ-PWG-90 checks every file (zpwg5 nbtall, bad=0 error=0) (owner request, 2026-11-20)
 > forceload add 1290 1290 1970 1320
 sleep 12
 > datapack list enabled
@@ -3051,6 +3156,7 @@ look panel A noon terminals about 18 to 21 V across 7 ohm (pwg10 60 W), sky 15; 
 @@table
 ## SQ-PWG-55 | P7 glue on -10 (P7 part only; counts, version and phase in SQ-PWG-62): P7 recipes, movement behavior, zap source, Capacity, drill mixin, config
 @group A
+@reviewed 2026-11-20
 @commands copy the `-09` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-08.jar` and older there) and the seven probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js` to `pwg_p6_probe.js`, `pwg_p7_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; the ponder datapack as in SQ-PWG-46 but from the `-09` jar; boot; `forceload add 1095 1525 1115 1590`; `zpwg mods powergrid`; `zpwg ns powergrid`; `zpwg3 recipes powergrid`; `zpwg6 check`; `zpwg7 check`; `grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin|Mixin apply failed' logs/latest.log`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-09`; log `(1.19.2 port, phase 7)`; `[zpwg] ns powergrid block: 59`, `item: 77`, `entity_type: 4`, `block_entity_type: 49`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 61`, the 5 new ones among them (`crafting/portable_battery`, `mechanical_crafting/electrobaton`, `mechanical_crafting/electrozapper`, `mechanical_crafting/portable_drill`, `mechanical_crafting/portable_saw`) and still no `crafting/heating_coil`, `crafting/light_fixture`, `crafting/solar_panel_bearing`; `zpwg6 check` as in SQ-PWG-46; `zpwg7 check`: the 6 items, the block, block entity and `zap_projectile` `registered=true`; `lightning_rod movement behaviour=org.patryk3211.powergrid.equipment.thunder.LightningRodMovementBehaviour`; `damage source zap msgId=zap`; `canEnchant(portable_battery)=true` (Create's Capacity, `max level=3`); `battery maxCharge level0=20000 level1=40000 level3=80000`; `fake player PlayerDrillExtensions=true` (`PlayerDrillMixin` merged into `Player`); config defaults `drillEnergyPerUse=25 drillMineSpeedBase=6 drillMineSpeedBulk=16 sawEnergyPerUse=100 sawMineSpeed=6 batonEnergy=250 zapperEnergy=500 batteryBase=20000 batteryEnchant=20000`, `forgeEnergyPerVolt=2`; the grep shows no `Mixin apply failed` and no error naming `SheepMixin`, `PlayerDrillMixin` or `DrillBreakActionMixin` (the fake player of `zpwg7 check` loads `ServerPlayerGameMode`); no ERROR with `powergrid`
 @fails wrong counts: the jar is not `-09` or `port_phase` is not 7; movement behavior `none` or another class: `PowerGridImpl.commonSetup` (phase 7 `enqueueWork`) or a pack mod registering its own lightning rod behavior after ours (record which); `PlayerDrillExtensions=false`: the mixin config; a mixin error: target names (refmap `powergrid.refmap.json`; `getDigSpeed` is a Forge method, `remap = false`)
@@ -3545,11 +3651,13 @@ look shell output empty (no advancement line naming powergrid); no wool item nea
 @@table
 ## SQ-PWG-62 | -10 loads (phase 8): registries, 66 recipes, P8 blocks, items, block entities, menu, CRT encasing, CC bridge, module keys, ponder structures 55 + 5
 @group A
+@reviewed 2026-11-20
 @commands copy the `-10` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-09.jar` and older there) and the eight probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js` to `pwg_p8_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; the ponder datapack as in SQ-PWG-46 but from the `-10` jar (60 files now); boot; `forceload add 1095 1595 1160 1680`; `zpwg mods powergrid`; `zpwg ns powergrid`; `zpwg3 recipes powergrid`; `zpwg8 check`; `zpwg5 nbtall 1300 -60 1300` (as SQ-PWG-46; needs its forceload); `zpwg8 nbtall 1100 -60 1675`; `grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin|Mixin apply failed' logs/latest.log`; `grep -n -i -E 'computercraft.*(error|exception)|CCBridge|compat\.cc' logs/latest.log`
-@pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-10`; log `(1.19.2 port, phase 8)`; `[zpwg] ns powergrid block: 66`, `item: 85`, `entity_type: 4`, `block_entity_type: 54`, `menu: 3`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 66`, the 5 new ones among them (`crafting/alarm_bell`, `crafting/display_module`, `crafting/plotter`, `mechanical_crafting/crt`, `sequenced_assembly/punch_card`) and still no `crafting/modular_display`, `mechanical_crafting/punch_card_reader` (pins, P9); `zpwg8 check`: the 7 blocks `registered=true` with `item=true` except the two encased CRTs (`item=false`, upstream-same), the 3 items, 5 block entities and the menu `registered=true`; `crt encased variants=powergrid:andesite_encased_crt,powergrid:brass_encased_crt`; `computercraft loaded=true`; `display module types 0:powergrid.gui.modular_display.0 - 9 \| ... \| 5:powergrid.gui.modular_display.alphabet` (lang keys, not resolved text); `zpwg5` as SQ-PWG-46 (its 55 files; the 5 new ones are not in its list); `[zpwg8] nbt summary files=5 clean=5 bad=0 error=0`; no mixin error; no CC error line; no ERROR with `powergrid`
+@pass (on the pinned -20 jar only the probe checks run; version, phase and counts: SQ-PWG-90) `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-10`; log `(1.19.2 port, phase 8)`; `[zpwg] ns powergrid block: 66`, `item: 85`, `entity_type: 4`, `block_entity_type: 54`, `menu: 3`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 66`, the 5 new ones among them (`crafting/alarm_bell`, `crafting/display_module`, `crafting/plotter`, `mechanical_crafting/crt`, `sequenced_assembly/punch_card`) and still no `crafting/modular_display`, `mechanical_crafting/punch_card_reader` (pins, P9); `zpwg8 check`: the 7 blocks `registered=true` with `item=true` except the two encased CRTs (`item=false`, upstream-same), the 3 items, 5 block entities and the menu `registered=true`; `crt encased variants=powergrid:andesite_encased_crt,powergrid:brass_encased_crt`; `computercraft loaded=true`; `display module types 0:powergrid.gui.modular_display.0 - 9 \| ... \| 5:powergrid.gui.modular_display.alphabet` (lang keys, not resolved text); `zpwg5` as SQ-PWG-46 (its 55 files; the 5 new ones are not in its list); `[zpwg8] nbt summary files=5 clean=5 bad=0 error=0`; no mixin error; no CC error line; no ERROR with `powergrid`
 @fails wrong counts: the jar is not `-10` or `port_phase` is not 8; `computercraft loaded=false`: CC: Tweaked missing from the scratch mods; a CC error at boot: `PowerGridImpl` constructor (`CCBridge.register`, `ForgeComputerCraftAPI.registerPeripheralProvider` on CC: Tweaked 1.101.4); `nbt ... bad`: the palette entry it names (offline check said clean: PORT_NOTES.md section 19)
 @from batches/r1113/pwg10b.qb
-bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 8\)
+# r1120fix 2026-11-20: version, phase, registry and recipe counts and the P9 absent rejects dropped (the section pins -20; counts are SQ-PWG-90's); zpwg8 checks stay; ponder summary any file count
+bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase
 bootexpect Done \(
 bootreject InvalidInjectionException|InjectionError|Critical injection failure|Mixin apply failed
 bootreject ^(?!.*RuntimeDistCleaner).*(/ERROR\]|@Redirect|conflict).*powergrid\.mixins\.json
@@ -3573,22 +3681,11 @@ waitlog \[zpwg8\] nbt summary 120
 sleep 1
 shell grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin|Mixin apply failed' logs/latest.log | head -40
 shell grep -n -i -E 'computercraft.*(error|exception)|CCBridge|compat\.cc' logs/latest.log | head -20
-expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-10
-expect \[zpwg\] ns powergrid block: 66\b
-expect \[zpwg\] ns powergrid item: 85\b
-expect \[zpwg\] ns powergrid entity_type: 4\b
-expect \[zpwg\] ns powergrid block_entity_type: 54\b
-expect \[zpwg\] ns powergrid menu: 3\b
-expect \[zpwg\] ns powergrid recipe_type: 1\b
-expect \[zpwg\] ns powergrid recipe_serializer: 1\b
-expect \[zpwg3\] recipes 66$
 expect recipe powergrid:crafting/alarm_bell type=
 expect recipe powergrid:crafting/display_module type=
 expect recipe powergrid:crafting/plotter type=
 expect recipe powergrid:mechanical_crafting/crt type=
 expect recipe powergrid:sequenced_assembly/punch_card type=
-reject recipe powergrid:crafting/modular_display type=
-reject recipe powergrid:mechanical_crafting/punch_card_reader type=
 expect \[zpwg8\] block powergrid:plotter registered=true item=true$
 expect \[zpwg8\] block powergrid:alarm_bell registered=true item=true$
 expect \[zpwg8\] block powergrid:crt registered=true item=true$
@@ -3603,7 +3700,7 @@ expect \[zpwg8\] crt encased variants=(powergrid:andesite_encased_crt,powergrid:
 expect \[zpwg8\] computercraft loaded=true$
 expect \[zpwg8\] display module types 0:powergrid\.gui\.modular_display\.0 - 9 \| .* \| 5:powergrid\.gui\.modular_display\.alphabet$
 expect file/pwgponder
-expect \[zpwg5\] nbt summary files=55 (clean=40 quirk=15|clean=39 quirk=16) bad=0 error=0
+expect \[zpwg5\] nbt summary files=\d+ clean=\d+ quirk=\d+ bad=0 error=0
 reject \[zpwg5\] nbt \S+ (bad|error|missing|unknown)
 expect \[zpwg8\] nbt summary files=5 clean=5 bad=0 error=0
 count \[zpwg8\] nbt (?!summary)\S+ clean == 5
@@ -4067,10 +4164,12 @@ look periph maxRange / rangePercentage = 12 / range; current gauge current= the 
 @@table
 ## SQ-PWG-67 | -12 loads (phase 9.1): version, registries, 94 recipes, zpwg9 check (board, 19 items, 28 components, component_items, packets), ponder structures, reload
 @group A
+@reviewed 2026-11-20
 @commands copy the `-12` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-11.jar` and older there) and the nine probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js` to `pwg_p8_probe.js`, `pwg_p9a_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; the ponder datapack as in SQ-PWG-46 but from the `-12` jar (77 structure files now); boot; `forceload add 1090 1695 1130 1800`; `zpwg mods powergrid`; `zpwg ns powergrid`; `zpwg3 recipes powergrid`; `zpwg9 check`; `zpwg5 nbtall 1300 -60 1300` and `zpwg8 nbtall 1100 -60 1675` (as SQ-PWG-62); `grep -n -E 'component items\|Failed to parse component\|powergrid\.mixins\.json\|Mixin apply failed' logs/latest.log`; `reload`; the same grep
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-12`; log `(1.19.2 port, phase 9.1)`; `[zpwg] ns powergrid block: 67`, `item: 105`, `block_entity_type: 55`, `menu: 3`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 94`, among them the 17 component recipes (`crafting/resistor`, `crafting/diode`, ... `crafting/pins`), `sequenced_assembly/bjt_npn` and `bjt_pnp`, and the 11 that waited for pins (`crafting/energy_meter`, `crafting/fe_inverter`, `crafting/heating_coil`, `crafting/light_fixture`, `crafting/lv_button`, `crafting/lv_switch`, `crafting/modular_display`, `crafting/redstone_converter`, `crafting/spark_gap`, `mechanical_crafting/generator_commutator`, `mechanical_crafting/punch_card_reader`); still absent: `crafting/circuit_design_table`, `deploying/schematic_copy`, `sequenced_assembly/battery`, `sequenced_assembly/unetched_circuit_board`, `sequenced_assembly/electrical_gizmo`, `mixing/acid`, the four `deploying/*_boosting`; `zpwg9 check`: `circuit_board registered=true item=true blockEntity=true`, `items p9a=19/19`, `items of P9b to P9d registered=` empty, `components 28:` with `barretter_tube bjt_npn bjt_pnp button capacitor connector current_gauge diode display_module fuse_holder inductor label light_bulb neon_bulb pentode potentiometer redstone_relay regulator_tube relay relay_dpdt resistor switch thyratron triode varistor vfet via voltage_gauge`, `component_items 28:` with among them `via->create:copper_nugget [#forge:nuggets/copper]`, `light_bulb->powergrid:lv_light_bulb`, `connector->powergrid:wire_connector`, `switch->powergrid:lv_switch`, `button->powergrid:lv_button`, `inductor->powergrid:copper_coil`, `label->minecraft:paper`; `mismatches=0`; `copper nugget -> powergrid:via`; `tag powergrid:circuit_component size=27` with `missing=[create:copper_nugget]` (the jar's tag file has 28 entries; Creative Common's `removed_items.js` removes `create:copper_nugget` from the pack, so the tag loads 27 there: not a port fault but a fold-in point, power_grid.md section 4; answered 2026-11-13 from `[zpwg9] tag powergrid:circuit_component missing=[create:copper_nugget] extra=[]`); `packets` ends with `DISPLAY_BURNOUT UPDATE_COMPONENT COMPONENT_ITEMS` (consecutive ordinals); `zpwg5` / `zpwg8` as SQ-PWG-62; log `Loaded 28 component items` once per data load (boot and after `reload`), no `Failed to parse component item`, no mixin error; no ERROR with `powergrid`
 @fails wrong counts: the jar is not `-12` or `port_phase` is not 9.1 (`PortPhase.CURRENT`); `components 0`: `PowerGridImpl.newRegistry` (NewRegistryEvent) or `Components.register()` not called (`PowerGrid.register`); `component_items 0`: the reload listener (`PowerGridImpl.addReloadListeners`) or the folder `data/powergrid/powergrid/component_items` missing from the jar (`phases.json` resources glob); a missing recipe: `pg_phase_check.py` report (`phases.json` recipes overrides)
 @from batches/r1113/pwg12.qb
+@superseded phase 9.1 gate of the -12 jar (version, phase, counts, P9b-d items expected absent), no longer pinned: the section runs -20; zpwg9 check SQ-PWG-72, load gate SQ-PWG-90 (owner request, 2026-11-20)
 bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 9\.1\)
 bootexpect Done \(
 bootexpect Loaded 28 component items
@@ -4728,6 +4827,7 @@ look the server answered the last zpwg (no crash report in OUT/srv/crash-reports
 @@table
 ## SQ-PWG-72 | rerun of the P9b check on -17: zpwg9 check (SQ-PWG-67 tag), zpwg9b check, reload (version, phase, counts: SQ-PWG-90)
 @group A
+@reviewed 2026-11-20
 @commands copy the `-14` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-13.jar` and older there) and the ten probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js` to `pwg_p8_probe.js`, `pwg_p9a_probe.js`, `pwg_p9b_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; the ponder datapack as in SQ-PWG-67 (from the `-14` jar); boot; `forceload add 1090 1805 1130 1850`; `zpwg mods powergrid`; `zpwg ns powergrid`; `zpwg3 recipes powergrid`; `zpwg9 check`; `zpwg9b check`; `grep -n -E 'component items\|powergrid\.mixins\.json\|Mixin apply failed\|circuit_design\|CircuitDesign' logs/latest.log`; `reload`; `zpwg9b check`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-14`; log `(1.19.2 port, phase 9.2)`; `[zpwg] ns powergrid block: 68`, `item: 107`, `block_entity_type: 56`, `menu: 7`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 94` (still absent: `crafting/circuit_design_table`, `deploying/schematic_copy`, the P9c / P9d recipes); `zpwg9 check` as SQ-PWG-67 except `items of P9b to P9d registered=circuit_design_table,circuit_schematic`; `zpwg9b check`: `circuit_design_table registered=true item=true blockEntity=true`, `circuit_schematic registered=true class=CircuitSchematicItem maxStack=1`, `circuit_schematic_holder has circuit_schematic=true circuit_board=true`, `menus circuit_design_table=true circuit_design_table_edit=true circuit_design_table_load=true circuit_board_edit=true`, `items of P9c and P9d registered=` empty, `packets` ends with `UPDATE_COMPONENT COMPONENT_ITEMS CHANGE_SCREEN SAVE_SCHEMATIC` (consecutive ordinals); log `Loaded 28 component items` per data load; no mixin error; no ERROR with `powergrid`
 @fails wrong counts: the jar is not `-14` or `port_phase` is not 9.2; a menu false: `ModdedMenus` (P9b block); packets in another order: `ModdedPackets` (appended after `COMPONENT_ITEMS`, ids are ordinals)
@@ -5519,6 +5619,7 @@ look loop 2 step=6; a byproduct (conductive_casing, create:copper_sheet, zinc_sh
 @@table
 ## SQ-PWG-84 | rerun of the -16 checks on -17 (version, phase and counts: SQ-PWG-90): zpwg9b / zpwg9c / zpwg9d check with the fixed probes, RecipeApplierMixin boost branch
 @group A
+@reviewed 2026-11-20
 @commands copy the `-16` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-15.jar` and older there) and the twelve probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js` to `pwg_p8_probe.js`, `pwg_p9a_probe.js`, `pwg_p9b_probe.js`, `pwg_p9c_probe.js`, `pwg_p9d_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; the ponder datapack as in SQ-PWG-67 (from the `-16` jar); boot; `forceload add 1095 1920 1200 1990`; `zpwg mods powergrid`; `zpwg ns powergrid`; `zpwg3 recipes powergrid`; `zpwg9b check`; `zpwg9c check`; `zpwg9d check`; `grep -n -E 'powergrid\.mixins\.json\|Mixin apply failed\|InvalidInjection\|RecipeApplier\|PlayerDrill\|CustomItemUseEffects' logs/latest.log`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-16`; log `(1.19.2 port, phase 9.4)`; `[zpwg] ns powergrid block: 69`, `item: 114` (+ `integrated_circuit`, `incomplete_electrical_gizmo`), `fluid: 2`, `block_entity_type: 56`, `menu: 7`, `recipe_type: 1` (no new type; a `recipe_serializer` count, if listed, is one up); `[zpwg3] recipes 106` (still absent: only the P10 ones, `crafting/circuit_design_table`, `crafting/solar_panel_bearing`, the copper plating, ceiling tile and string light recipes); `zpwg9b check`: `items of P9c and P9d registered=` now with `integrated_circuit` and `incomplete_electrical_gizmo`; `zpwg9c check`: the line `recipes P9d (absent)` now shows all three `=true` (the label is P9c's), the rest as SQ-PWG-76; `zpwg9d check`: `item integrated_circuit BoostingChipItem chip=true maxStack=64`, `item incomplete_electrical_gizmo SequencedAssemblyItem seq=true`, `item electrical_gizmo ok`, `serializer powergrid:boost_recipe ok true`; `recipe mechanical_crafting/integrated_circuit class=MechanicalCraftingRecipe ... result=powergrid:integrated_circuit`, `recipe sequenced_assembly/electrical_gizmo class=SequencedAssemblyRecipe ... result=powergrid:electrical_gizmo`, the four `deploying/*_boosting` `class=BoostRecipe type=create:deploying serializer=powergrid:boost_recipe` with their tool as result; `tool portable_drill maxDamage=250 setBoosted -> Boosted=75 isBoosted=true findRecipe=powergrid:deploying/portable_drill_boosting`, saw 250 / 75 / `portable_saw_boosting`, baton 20 / 6 / `electrobaton_boosting`, zapper 50 / 15 / `electrozapper_boosting`; `findRecipe boosted drill=none`, `findRecipe stick=none`; `matches boosted drill=false`, `matches fresh drill=true`; `applier in powergrid:portable_drill x1 Boosted=none Damage=30/250 name=zpwg9d unbreaking=1 ProbeKeep=1`, `applier outputs 1`, `applier out powergrid:portable_drill x1 Boosted=75 Damage=30/250 name=zpwg9d unbreaking=1 ProbeKeep=1` (the tag carried over except Boosted; the recipe's `Damage: 0` is replaced by the input's: no repair, upstream-same); no mixin error lines; no ERROR with `powergrid`
 @fails boot stops at a mixin: the `InvalidInjectionException` line (`RecipeApplier.applyRecipeOn(ItemStack, Recipe)` is the same target as P9c); `applier out` without `name` / `unbreaking` / `ProbeKeep`: the `BoostRecipe` branch of `RecipeApplierMixin`; `Boosted=none` on the output: `BoostRecipe.rollResults`; `findRecipe=none` for a fresh tool: the recipe did not load (`zpwg3 recipes`, the log for `powergrid:boost_recipe` parse errors) or `ItemBoostUtilsImpl.findRecipe` (deploying type, slot 0 tool, slot 1 chip); wrong counts: the jar is not `-16` or `port_phase` is not 9.4

@@ -550,7 +550,7 @@ loot. Engineer's Delight's two crusher flour recipes stay off (`create/recipes.j
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-SALT-06, -08.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-SWP-06o, -01, -02, -03, -04, -05, -06, -07, -08, SQ-VTDA-12, SQ-SALT-06, -08.
 
-After a full restart, `logs/latest.log` first: `[itemMerges] 2 pack merges registered` (rocky dirt, azalea flowers) and the two
+After a full restart, `logs/latest.log` first: `[itemMerges] 4 pack merges registered` (rocky dirt, azalea flowers, the two Little Logistics components, 2.23) and the two
 recipe-event lines of 1.1 (SQ-IMS-01), `[food values] 5 effect swaps` with no
 `effect swap:` warning, no `Error occurred while handling event`
 from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply error for `JeiFluidHelperTooltipMixin` or

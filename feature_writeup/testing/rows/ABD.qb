@@ -12,15 +12,17 @@
 ## SQ-ABD-01
 @group B
 @commands Boot, then `/dumpall` and look up `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice`
-@pass Both gone; `creativedelight:smelting/cooked_perch_slice` and `.../cooked_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes unchanged; no error in `logs/latest.log`
-@fails Depends on: CD jar
-@reviewed 2026-11-16
+@pass Both gone; `creativedelight:smelting/cooked_perch_slice_from_perch_slice` and `.../cooked_pike_slice_from_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes (`creativedelight:smoking/...`, `creativedelight:campfirecooking/..._from_..._slice`) present; no error in `logs/latest.log`
+@fails Depends on: CD jar. Recipe ids renamed `smelting/cooked_<fish>_slice_from_<fish>_slice` (recipes/all.csv 2026-11-19; r1120nv batch fault)
+@reviewed 2026-11-20
 > cdevtest recipes abnormals_delight:upgrade_aquatic/cooked_
 > cdevtest rdetail cooked_perch_slice
 > cdevtest rdetail cooked_pike_slice
 expect verb=recipes text=abnormals_delight:upgrade_aquatic/cooked_ n=0\b
-expect verb=rdetail id=creativedelight:smelting/cooked_perch_slice serializer=minecraft:smelting\b
-expect verb=rdetail id=creativedelight:smelting/cooked_pike_slice serializer=minecraft:smelting\b
+expect verb=rdetail id=creativedelight:smelting/cooked_perch_slice_from_perch_slice serializer=minecraft:smelting\b
+expect verb=rdetail id=creativedelight:smelting/cooked_pike_slice_from_pike_slice serializer=minecraft:smelting\b
+expect verb=rdetail id=creativedelight:smoking/cooked_perch_slice_from_perch_slice serializer=minecraft:smoking\b
+expect verb=rdetail id=creativedelight:campfirecooking/cooked_pike_slice_from_pike_slice serializer=minecraft:campfire_cooking\b
 look experience 0.35 and cookingtime 200 are not printed (part=fields only for public fields): check the /dumpall recipe dump; the smoking and campfire lines unchanged
 reject \[cdevtest\] verb=\S+ .*error=
 
@@ -65,15 +67,15 @@ reject \[cdevtest\] verb=\S+ .*error=
 ## SQ-ABD-04 | pickerelweed tag and the two CD cooking recipes
 @group B
 @commands Same boot; `/dumptags` or the tag dump
-@pass `#creativeengineering:pickerelweed` = blue + purple; `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creativedelight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks
+@pass `#creativedelight:pickerelweed` = blue + purple (tag moved from `creativeengineering:`, ids follow the owning mod; tag dump 2026-11-19); `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creativedelight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks
 @fails Depends on: CD jar
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
-> cdevtest tag item creativeengineering:pickerelweed
+@reviewed 2026-11-20
+> cdevtest tag item creativedelight:pickerelweed
 > cdevtest rdetail pickerelweed_juice
 > cdevtest rdetail pike_with_beetroot
-expect verb=tag kind=item tag=creativeengineering:pickerelweed n=2 ids=\S*upgrade_aquatic:blue_pickerelweed
-expect verb=tag kind=item tag=creativeengineering:pickerelweed n=2 ids=\S*upgrade_aquatic:purple_pickerelweed
+expect verb=tag kind=item tag=creativedelight:pickerelweed n=2 ids=\S*upgrade_aquatic:blue_pickerelweed
+expect verb=tag kind=item tag=creativedelight:pickerelweed n=2 ids=\S*upgrade_aquatic:purple_pickerelweed
 reject verb=rdetail id=abnormals_delight:\S*pickerelweed_juice serializer=
 reject verb=rdetail id=abnormals_delight:\S*pike_with_beetroot serializer=
 expect verb=rdetail id=creativedelight:farmersdelightcooking/pickerelweed_juice(_manual_only)? serializer=\S+ result=\S+ ingredients=\S*pickerelweed\S*pickerelweed

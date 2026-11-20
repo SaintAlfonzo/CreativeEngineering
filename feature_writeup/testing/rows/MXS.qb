@@ -21,7 +21,7 @@
 @pass no error naming mixed_seeds; the plant tag holds wheat, beetroot, `farmersdelight:cabbage_seeds`, melon and pumpkin seeds; `forge:seeds` holds `vintagedelight:mixed_seeds`
 @fails Unknown item: the `-10` jar is not loaded; empty tag: CD `vintagedelight/tags.js` not loaded
 @from batches/r1102/b1_main.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootreject (?i)mixed_seeds.*(error|unknown)
 kjsreject (?i)mixed_seeds.*(error|unknown)
 kjsreject Error occurred while handling event.*mixed_seeds
@@ -41,7 +41,7 @@ reject verb=\S+ .*done=0
 @pass 20 crops planted, the stack empty, at least four of the five kinds (wheat, beetroots, cabbages, melon stem, pumpkin stem); grass and stone: nothing planted, seed kept (VTD-46)
 @fails All one kind: the shuffle failed; seeds kept after planting: shrink missing
 @from batches/r1102/b1_main.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (judge-10, 2026-11-18): fixed home 1400 -60 1400 (was {H}, the cdj5home marker capture of a CDJ5 boot 0 that this step never runs)
 > forceload add 1392 1408 1431 1439
 sleep 2
@@ -93,7 +93,14 @@ look the verb=count ids= map: 20 crops, at least four of wheat, beetroots, farme
 @pass some Mixed Seeds from the chest rolls (share 0.04, 1-4); about 6 from the 300 grass (2 %); none with shears (VTD-79)
 @fails none from grass: the LootJS modifier did not load (CD `vintagedelight/loot.js`)
 @from batches/r1102/b1_main.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# 2026-11-20 (r1120fix): {H} was never captured in this row (W var); the row makes its own home marker and loads its boxes
+> execute unless entity @e[type=minecraft:marker,tag=mxs3home] run summon minecraft:marker ~ ~ ~ {Tags:["mxs3home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=mxs3home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1+32} {H3+24} {H1+56} {H3+44}
+sleep 3
 > kill @e[type=minecraft:item]
 repeat 40
 > loot spawn {H1+40} {H2} {H3+30} loot minecraft:chests/village/village_plains_house
@@ -128,7 +135,7 @@ look the three verb=items lines in order: line 1 (chest rolls): some vintagedeli
 @pass 8 each (were 1 for the hats, 64 for the pizzas and wheel)
 @fails `stack_sizes.json` not regenerated or startup not restarted
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest item vintagedelight:red_chefs_hat
 > cdevtest item vintagedelight:cheese_pizza
 > cdevtest item vintagedelight:meat_pizza
@@ -138,20 +145,25 @@ reject verb=\S+ .*done=0
 
 ## SQ-VTD7-02 | BlockRunner surface tags for Vintage and salt blocks
 @group A
-@commands `/dumptags` (block): `blockrunner:surface/wood` has `vintagedelight:peanut_crate`; `soft` (0.88x) has `oat_bale`, `oat_bag`, `minecraft:hay_block`, `salt:salt_block`, `vintagedelight:salt_block` (owner decision 2026-11-02, kept 2026-11-03); `salt:raw_rock_salt_block` is in `natural_rough`, not `soft`; `constructed_brick` has `vintagedelight:salt_bricks`; `constructed_smooth` has `smooth_salt_block`; `confectionery` has `cheese_pizza`; log line `BlockRunner tier overlaps` reports 0
+@commands `/dumptags` (block): `blockrunner:surface/wood` has `vintagedelight:peanut_crate`; `blockrunner:surface/soft` (0.88x) has `oat_bale`, `oat_bag`, `minecraft:hay_block`, `salt:salt_block`, `vintagedelight:salt_block` (owner decision 2026-11-02, kept 2026-11-03); `salt:raw_rock_salt_block` is in `natural_rough`, not `soft`; `constructed_brick` has `vintagedelight:salt_bricks`; `constructed_smooth` has `smooth_salt_block`; `confectionery` has `cheese_pizza`; log line `BlockRunner tier overlaps` reports 0
 @pass all present, 0 overlaps
 @fails missing: `blocktags.js` not reloaded
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
 > cdevtest tag block blockrunner:surface/wood
-> cdevtest tag block blockrunner:surface/natural_smooth
+> cdevtest tag block blockrunner:surface/soft
+> cdevtest tag block blockrunner:surface/natural_rough
 > cdevtest tag block blockrunner:surface/constructed_brick
 > cdevtest tag block blockrunner:surface/constructed_smooth
 > cdevtest tag block blockrunner:surface/confectionery
 expect verb=tag kind=block tag=blockrunner:surface/wood n=\d+ ids=.*vintagedelight:peanut_crate
-expect verb=tag kind=block tag=blockrunner:surface/natural_smooth n=\d+ ids=.*vintagedelight:oat_bale
-expect verb=tag kind=block tag=blockrunner:surface/natural_smooth n=\d+ ids=.*salt:salt_block
+# r1120lr batch fault: the row's own @commands (and blocktags.js) put oat_bale and the salt blocks in soft, but the expects read natural_smooth; tag dump 2026-11-19: soft holds hay_block, oat_bale, oat_bag, salt:salt_block, vintagedelight:salt_block
+expect verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*vintagedelight:oat_bale
+expect verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*salt:salt_block
+expect verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*vintagedelight:salt_block
+expect verb=tag kind=block tag=blockrunner:surface/natural_rough n=\d+ ids=.*salt:raw_rock_salt_block
+reject verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*salt:raw_rock_salt_block
 expect verb=tag kind=block tag=blockrunner:surface/constructed_brick n=\d+ ids=.*vintagedelight:salt_bricks
 expect verb=tag kind=block tag=blockrunner:surface/constructed_smooth n=\d+ ids=.*vintagedelight:smooth_salt_block
 expect verb=tag kind=block tag=blockrunner:surface/confectionery n=\d+ ids=.*vintagedelight:cheese_pizza
@@ -162,7 +174,7 @@ reject verb=\S+ .*done=0
 @commands Mixed Seeds icon, name, tooltip "Plants a random crop", JEI info page; JEI shows it in `#forge:seeds` uses
 @pass as listed
 @fails model or lang missing from the `-10` jar
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 do {"wait": "jei"}
 do {"tooltip_text": "vintagedelight:mixed_seeds", "expect": "Plants a random crop"}
 do {"screen": "jei_recipes:vintagedelight:mixed_seeds"}

@@ -20,6 +20,8 @@
 @pass `enders_additions` and `ends_delight.ce.mixins.json` load; no missing model / texture for `endersdelight:` plants; no script error in `ends_delight/*.js`, `endersdelight/*.js`; wild-crops log lists the 5 End rules (EDL-16)
 @fails
 @from batches/r1101/w2_worldgen.qb
+@reviewed 2026-11-20
+@superseded duplicate of SQ-ENC-01 (rows/SSP.qb, same librarian NEA steps; the 2026-11-17 EN -> EDL/ENC prefix rename left this copy under EDL, its @pass cell is End's Delight EDL-01 text) (owner request, 2026-11-20)
 > forceload add -16 -16 16 16
 > setblock 2 100 2 minecraft:lectern
 > summon minecraft:villager 2 101 3 {VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"},NoAI:1b,Tags:["en1"]}
@@ -35,16 +37,17 @@ look librarians offer enchanted books; Offers reset at a level change may need a
 
 ## SQ-EDL-02 | Lightman's Currency cashiers: no NEA enchantments
 @group A
-@commands Break a Chorus Crate and an Endstone Stove (EDL-01)
-@pass Each drops itself
-@fails
+@commands `/dumptrades` on the server; read the `lightmanscurrency:cashier` profession in the server's `kubejs/exported/villager_trades.json`
+@pass the cashier profession is in the dump and none of its trades names `nock_enough_arrows:stockpile`, `recovery` or `cycle`
+@fails NEA enchantments not removed from the book pools the cashier draws on
 @from batches/r1101/w2_worldgen.qb
-@reviewed 2026-11-17
-> summon minecraft:villager 6 101 3 {Tags:["en2"],VillagerData:{profession:"lightmanscurrency:cashier",level:1,type:"minecraft:plains"}}
-sleep 2
-> execute as @e[tag=en2] run data get entity @s
-reject nock_enough_arrows:(stockpile|recovery|cycle)
-look cashiers still offer enchanted books; the cashier trader type may not use villager offers: record what data shows
+@reviewed 2026-11-20
+@superseded duplicate of SQ-ENC-02 (rows/SSP.qb, same cashier check, which carries this fix; the 2026-11-17 EN -> EDL/ENC prefix rename left this copy under EDL) (owner request, 2026-11-20)
+# r1120lr batch fault: the summoned cashier (y 101, no NoAI) was swapped by MCA (profession none) and fell to its death; the row now reads the profession's trade table from /dumptrades instead of a live villager's Offers
+> dumptrades
+sleep 5
+shell python3 -c "import json,re,sys;d=json.load(open('kubejs/exported/villager_trades.json'));c=d['professions'].get('lightmanscurrency:cashier');print('cashier in dump:',c is not None);t=json.dumps(c);bad=re.findall(r'nock_enough_arrows:(?:stockpile|recovery|cycle)',t);print('NEA hits:',len(bad));sys.exit(1 if c is None or bad else 0)"
+look the shell line: cashier in dump True, NEA hits 0; whether cashiers offer enchanted books at all is in the same dump
 
 ## SQ-EDL-03 | void pepper half: spreads then fruits; fruiting sprout drops 3, plain sprout 1 (soils / growth passed in r1102b s3)
 @group A
@@ -52,7 +55,7 @@ look cashiers still offer enchanted books; the cashier trader type may not use v
 @pass Only the two soils; faster on tilled; void pepper spreads then fruits, 3 / 1 drops
 @fails
 @from batches/r1103/p2_R.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # no bot here any more (randomtick needs no player), so the lane is forceloaded instead
 > forceload add 320 520 334 534
 sleep 2
@@ -93,6 +96,7 @@ count \[cbetest\] PASS dragon dragon (knife|machete): \+2 meat, \+1 tooth per ki
 @commands JEI and tooltips: the 10 drop items; Dragon Tooth Knife; the 5 dishes; Crushed Void Pepper; crate unpack; End's grid meals (EDL-08, EDL-09, EDL-11 to EDL-14)
 @pass As ends_delight.md 5.6
 @fails Depends on: SQ-EDL-01
+@reviewed 2026-11-20
 @draft no batch holds this row yet
 ## SQ-EDL-06 | Dragon Tooth Knife repairs with a Dragon Tooth
 @group A
@@ -100,6 +104,7 @@ count \[cbetest\] PASS dragon dragon (knife|machete): \+2 meat, \+1 tooth per ki
 @pass Repairs
 @fails
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-20
 > cbetest anvil
 waitlog \[cbetest\] done anvil 60
 expect \[cbetest\] PASS anvil dragon tooth knife repairs with a dragon tooth
@@ -109,16 +114,19 @@ expect \[cbetest\] PASS anvil dragon tooth knife repairs with a dragon tooth
 @commands New End world: `/locate structure endersdelight:end_house`, fly the highlands; earth fill log ALL (EDL-06, EDL-02, EDL-10)
 @pass Houses only in highlands / midlands, on ground, no chests; plants and succulent wild on end stone
 @fails Depends on: SQ-EDL-01
+@reviewed 2026-11-20
 @draft no batch holds this row yet
 ## SQ-EDL-08
 @group A
 @commands Look at the 25 retextured items; eat Stuffed Shulker with an empty hand (EDL-15)
 @pass New art; message names the Shulker Bowl
 @fails
+@reviewed 2026-11-20
 @draft no batch holds this row yet
 ## SQ-LR-01
 @group A
 @commands Set `debug.level_random.probe = true`, play a session with Distant Horizons generating and mobs near (Regrowth); `grep LevelRandomProbe logs/latest.log`
 @pass No crash; each `[LevelRandomProbe]` entry names the off-thread caller (or none appears, then DH FEATURES mode was not the cause). Reset to false after
 @fails
+@reviewed 2026-11-20
 @draft no batch holds this row yet

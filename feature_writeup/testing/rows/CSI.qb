@@ -16,30 +16,40 @@
 @group A
 @commands Boot; join a bot or player; `/curios list`
 @pass `hands`, `face`, `feet` listed alongside head, back, etc.; no IMC error naming creativeengineering in `logs/latest.log`
-@fails listener not added (check `CreativeEngineering` curios branch) or jar stale
+@fails listener not added (`CreativeEquipment` curios branch, `compat/CuriosSlots`) or jar stale
 @from batches/r1102b/s3_A.qb
-bootreject (?i)IMC.*creativeengineering.*(error|exception)
+@reviewed 2026-11-20
+# r1120lr batch fault: Curios 1.19.2's /curios list takes no player ('Incorrect argument'); the slot types come from /curios list, the bot's own slots from its ForgeCaps
+bootreject (?i)IMC.*creative(equipment|compat|engineering).*(error|exception)
+> forceload add 136 496 144 508
 > pbot spawn csi 140 -60 503 minecraft:overworld survival
 sleep 2
-> curios list csi
+> curios list
+> data get entity csi ForgeCaps."curios:inventory".Curios
 expect \bhands\b
 expect \bface\b
 expect \bfeet\b
-look rows/SQ-CSI-01.log: the three new slots listed alongside head, back and the rest
+expect has the following entity data: .*Identifier: "hands"
+reject Incorrect argument for command|Unknown or incomplete command|No entity was found
+look rows/SQ-CSI-01.log: the three new slots listed alongside head, back and the rest; the bot's ForgeCaps list hands, face and feet
 
 ## SQ-CSI-02
 @group A
 @commands `/curios list <bot>` on a bot that joined an existing world
 @pass the bot has 1 slot each of hands, face, feet
 @fails existing saves not getting new IMC slots (then note in curios_slots.md)
-@reviewed 2026-11-16
-# run on a later boot of the SQ-CSI-01 world: bot csi rejoins with its saved player data
+@reviewed 2026-11-20
+@boot 2
+# run on a later boot of the SQ-CSI-01 world (@boot 2: SQ-CSI-01 runs on boot 1 as setup): bot csi rejoins with its saved player data
+# r1120lr batch fault: '/curios list csi' (no player argument in Curios 1.19.2) and the same boot as SQ-CSI-01; the bot's slots are read from its ForgeCaps
+> forceload add 136 496 144 508
 > pbot remove csi
 > pbot spawn csi 140 -60 503 minecraft:overworld survival
 > cdevtest tickwarp 40
 waitlog verb=tickwarp end=done ticks=40 60
-> curios list csi
-expect \bhands\b
-expect \bface\b
-expect \bfeet\b
+> data get entity csi ForgeCaps."curios:inventory".Curios
+expect has the following entity data: .*Identifier: "hands"
+expect has the following entity data: .*Identifier: "face"
+expect has the following entity data: .*Identifier: "feet"
+reject Incorrect argument for command|Unknown or incomplete command|No entity was found
 look the world had SQ-CSI-01's bot csi saved on an earlier boot (else this is a first join and proves nothing): one slot each of hands, face, feet

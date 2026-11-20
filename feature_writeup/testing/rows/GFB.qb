@@ -7,6 +7,7 @@
 @@date 2026-10-27
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
+@@prep A: level-type=minecraft:normal generate-structures=true level-seed=-8188900049893920259
 @@text
 @@text Creative Common 1.1.03 (20:44) with `FallingBlockHoldMixin`, `ProtoChunkTicksFallingMixin`, `HolderReferenceUnboundMixin`
 @@text and the `SeasonTypes` cache. Group A, fresh world on the overall-run seed (-8188900049893920259) unless stated.
@@ -93,11 +94,16 @@ look shell: falling blocks back near vanilla counts (about 190); set the switch 
 @commands After a pregen (`chunky radius 200`), `grep "Holder with no registry key" logs/latest.log`
 @pass Up to 20 lines naming the unkeyed value classes; record them in perf.md 13.3
 @fails None: no unkeyed holders reached `is()` on this run; then the 558 samples came from elsewhere, recheck with JFR
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): cancel any pregen an earlier row of the step left running (GFB-02 after a timeout), so its
+# late finish line can not end this row's wait; the wait names the overworld task line
+> chunky cancel
+> chunky confirm
+sleep 5
 > chunky center 0 0
 > chunky radius 200
 > chunky start
-waitlog Task finished 1800
+waitlog \[Chunky\] Task finished for minecraft:overworld\. Processed 1800
 shell grep -h "Holder with no registry key" logs/latest.log | head -20; echo "lines=$(grep -c 'Holder with no registry key' logs/latest.log)"; true
 look record the unkeyed value classes (up to 20 lines) in perf.md 13.3; lines=0 means none reached is() on this run (then recheck with JFR)
 ## SQ-HRU-02

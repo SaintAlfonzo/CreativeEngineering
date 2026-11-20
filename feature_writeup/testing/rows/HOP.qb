@@ -315,7 +315,7 @@ look vine and lattice stages show the white jungle grape art tinted green, cutou
 @pass sum of the two counts at least 1 (vines on trunks, 1 in 96 chunks); `columns skipped: 0`
 @fails as SQ-HOP-06
 @jars creativedelight powergrid
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # setup/shell: prep_srv.sh OUT hhwb B (fresh world, seed 8675309, as SQ-HH-304); one countset per site counts the hops vine and the wild carrots (SQ-HOP-06 judges from these lines)
 > locate biome minecraft:forest
 waitlog (minecraft:forest is at \[|Could not find) 300
@@ -338,7 +338,9 @@ look sum of the two `countset hearthandharvest:hops_vine` lines at least 1 (vine
 @pass loot gives end stone; id in the mineable tag; "Test passed"
 @fails `hearthandharvest/tags.js` (`b.tilled_end_stone`, endercrop guard)
 @jars creativedelight powergrid
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+> forceload add 624 512 639 527
+sleep 3
 > setblock 628 -61 520 endercrop:tilled_end_stone
 > cdevtest loot 628 -61 520 tool=minecraft:diamond_pickaxe rolls=5
 > cdevtest tag block minecraft:mineable/pickaxe
@@ -410,7 +412,7 @@ look first countset (diamond, enchanted): end_stone 9, tilled 0; second (netheri
 @pass the fill/empty part as before; basin slots stay empty after the bucket, the dirt and the hopper (bot still holds them, hopper keeps them)
 @fails `StompingInputs.accepts`, `StompingBasinBlockEntity.insert` and `Items.isItemValid`
 @jars creativedelight powergrid
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
 > forceload add 160 192 335 223
 > execute unless entity hb1 run pbot spawn hb1 178 -60 204 minecraft:overworld survival
@@ -528,6 +530,7 @@ look `remainder 3`; basin slots empty both times; use PASS (or not SUCCESS) and 
 @commands per item a log at x -60 520 and `hearthandharvest:hops_vine[north=true,age=1]` at x -60 521; `/cdevtest use x -60 521 held=ITEM*2 face=north`; feather on an age 1 vine
 @pass each fertilizer: `main=ITEM*1`, state `age=2`; the feather: `main=minecraft:feather*2`, state still `age=1`; no hops item dropped
 @fails `HopsVineBlock.use` (`isFertilizer`, `#creativedelight:bonemeal_like`, `#hearthandharvest:bonemeal_substitutes`); tags not loaded: SQ-HOP-14
+@reviewed 2026-11-20
 > forceload add 650 500 680 540
 > setblock 660 -60 520 minecraft:oak_log
 > setblock 661 -60 520 minecraft:oak_log
@@ -562,6 +565,7 @@ look five fertilizers each used once and the vine one age up; the feather kept a
 @commands log + vine age 0 at 666, age 1 at 667, age 3 at 668; `/cdevtest use` with `minecraft:bone_meal*2`, `hearthandharvest:fertilizer_bag`, `create:tree_fertilizer*2`; `/cdevtest items 668 -60 521 2`
 @pass bone meal: `main=minecraft:bone_meal*1`, age 1 or more; bag: `main=hearthandharvest:fertilizer_bag*1{Damage:1}`, age 2; age 3: state `age=1`, `main=create:tree_fertilizer*2`, 1 or 2 `hearthandharvest:hops` on the ground
 @fails bone meal unchanged: the `BoneMealItem` pass (`held.getItem() instanceof BoneMealItem`) or `isValidBonemealTarget`; bag shrunk instead of damaged: `isDamageableItem` branch
+@reviewed 2026-11-20
 > setblock 666 -60 520 minecraft:oak_log
 > setblock 667 -60 520 minecraft:oak_log
 > setblock 668 -60 520 minecraft:oak_log
@@ -584,6 +588,7 @@ look bone meal used once and the vine grown; the bag damaged, not used up; the r
 @commands `/cdevtest tag item creativedelight:bonemeal_like`; `/cdevtest tag block creativedelight:clip_break_overlay`
 @pass item tag n=5 (`create:tree_fertilizer`, `botania:fertilizer`, `immersiveengineering:fertilizer`, `hearthandharvest:fertilizer_bag`, `vintagedelight:organic_mash`); block tag n=3 (`hearthandharvest:straw_rug`, `hearthandharvest:hay_rug`, `farmersdelight:canvas_rug`)
 @fails `hearthandharvest/tags.js` (`i.t_bonemeal_like`), `hearthandharvest/machine_tags.js` (`i.t_clip_break_overlay`); a missing mod drops its entry
+@reviewed 2026-11-20
 > cdevtest tag item creativedelight:bonemeal_like
 > cdevtest tag block creativedelight:clip_break_overlay
 expect verb=tag kind=item tag=creativedelight:bonemeal_like n=5\b

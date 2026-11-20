@@ -7,6 +7,7 @@
 @@date 2026-11-01
 @@jars creativecommon creativedelight
 @@sources feature_writeup/creative_delight.md
+@@prep A: spawn-animals=true
 @@text
 @@text Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): -01 crashed the server first (`MobCobPipeSlotMixin` on the wrong class), -05 / -06 FAILED (`NCH.cfg` returned undefined for moved sections); both fixed, then -01 to -07 PASS (-07 server half); -08 PARTIAL (nest id is `incubation_additions:emu_nest`; a baby squid needs `spawn-animals=true`). Client rows open.
 @@text
@@ -23,6 +24,7 @@
 @pass No mixin apply error; the 22 moved common mixins apply on a server (compartments `minecraft`, `quark`, `alexsmobs`, `immersive_weathering`, `farmersdelight`, `canned_goods`, `the_dirty_stuff`, `salt` with their mods loaded); none from `creativeengineering.mixins.json` for these names
 @fails A compartment name is not the mod id, or Creative Common still lists a moved mixin
 @from batches/r1101/cs4_boot3.qb
+@reviewed 2026-11-20
 bootreject creativedelight\.mixins\.json.*(Error|error|failed)
 shell grep -c "from creativedelight.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativedelight.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cd_mx.txt; wc -l < cd_mx.txt; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cd_mx.txt; rm -f cd_mx.txt
 look the moved common mixins apply from creativedelight.mixins.json, none also from creativeengineering.mixins.json
@@ -55,6 +57,7 @@ shell grep -E "\[creativedelight\] members" logs/latest.log | cut -c60-400; ls m
 @pass Block and block entity exist (`creativeengineering:oven`); no missing registry lines for `oven`, `powdered_sugar_block`, `placed_*`
 @fails `OvenRegistry` / `PowderedSugarRegistry` / `DisplayDelightDishes` not registered from CD
 @from batches/r1101/cs4_boot3.qb passed
+@reviewed 2026-11-20
 # self-contained since r1118 (judge-4, 2026-11-18): home marker capture {H} was never set; ids follow the owning mod since 2026-11-09 (creativeengineering: -> creativedelight:), bot qa spawned here (r1101 p1_server position)
 > forceload add 0 0 16 16
 > execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
@@ -74,6 +77,7 @@ shell grep -iE "missing.*(oven|powdered_sugar_block|placed_)|Registry Object not
 @pass No "no COOKING section" / "no CROP_DROPS section" warning; overridden values name `creativedelight:`
 @fails `cd_core.js` did not register CDConfig, or ran after the first `cfg` call
 @from batches/r1101/cs4_boot3.qb
+@reviewed 2026-11-20
 shell grep -E "NCH.cfg\] (no .*COOKING|no .*CROP_DROPS|creativedelight:)" logs/kubejs/server.log | head -5 | cut -c1-200; grep "creativedelight config class" logs/kubejs/server.log | head -2 | cut -c1-200; grep -cE "section in any registered config" logs/kubejs/server.log; true
 kjsreject no COOKING section|no CROP_DROPS section
 look no missing-section WARN; overrides name creativedelight:
@@ -84,6 +88,7 @@ look no missing-section WARN; overrides name creativedelight:
 @pass Soil yield and bell pepper tables built as before, no "no switch in CDConfig" warnings
 @fails `soil_yield.js` still loading CEConfig
 @from batches/r1101/cs4_boot3.qb
+@reviewed 2026-11-20
 > reload
 waitlog (Reloaded|reload) 180
 sleep 15
@@ -96,7 +101,7 @@ kjsreject no switch in CDConfig
 @pass Lunchbox serializers present (`LunchboxRecipes` registered from CD when Spice of Life is loaded)
 @fails Lunchbox registration guard or class path wrong
 @from batches/r1101/cs4_boot3.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (judge-4, 2026-11-18): lunchbox recipes are creativedelight:lunchbox/ and creativedelight:shaped/*lunchbox*; ids follow the owning mod since 2026-11-09 (creativeengineering: -> creativedelight:), bot qa spawned here (r1101 p1_server position)
 > forceload add 0 0 16 16
 > execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
@@ -112,24 +117,30 @@ reject verb=\S+ .*done=0
 
 ## SQ-CDJ4-08 | nested member content
 @group A
-@commands Same boot: `/summon minecraft:squid ~ ~ ~ {Age:-24000}`; `/give @p incubation_additions:emu_nest`
-@pass Baby squid exists; nest item exists
+@commands Same boot: `/give @p incubation_additions:emu_nest` (the baby squid half is SQ-CDJ4-08b)
+@pass nest item exists (Incubation Additions content, now CD compartments)
 @fails Member not nested or its mixin config missing in the nested jar
 @from batches/r1101/cs4_boot3.qb
-> fill {H1-1} {H2} {H3+9} {H1+1} {H2+1} {H3+11} minecraft:water
-> summon minecraft:squid {H1} {H2} {H3+10} {Age:-24000,Tags:["cdj4sq"],PersistenceRequired:1b}
-> data get entity @e[type=minecraft:squid,tag=cdj4sq,limit=1] Age
+@reviewed 2026-11-20
+# 2026-11-20 (r1120fix): the {H} home was never captured and qa never spawned; the squid half duplicated SQ-CDJ4-08b, so this row keeps the nest item only
+> forceload add 0 0 16 16
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > give qa incubation_additions:emu_nest
-reject Unknown item
-expect has the following entity data: -2
-look baby squid keeps its negative Age; nest item exists
+reject Unknown item|No player was found
+expect Gave 1 \[.*\] to qa
+> clear qa incubation_additions:emu_nest
 
 ## SQ-CDJ4-08b | baby squid keeps its age (spawn-animals=true; water at 130)
 @group A
 @commands Scratch server with `spawn-animals=true` (prep_srv.sh `spawn-animals=true`): `/summon minecraft:squid ~ ~ ~ {Age:-24000}` in water, `/data get entity @e[type=squid,limit=1,sort=nearest] Age`
-@pass Age stays negative (Baby Mobs from the CD jar); with `spawn-animals=false` vanilla discards the squid on its next tick
+@pass Age stays negative (Baby Mobs, nested in the Creative Worldgen jar); with `spawn-animals=false` vanilla discards the squid on its next tick
 @fails Baby Mobs member not nested
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-20
+# r1120lr batch fault: x 130 z 500 was not loaded and spawn-animals was false; the row loads its chunk, the section's @@prep sets spawn-animals=true
+> forceload add 124 494 136 506
+sleep 3
 > fill 129 -61 499 131 -61 501 minecraft:water
 > summon minecraft:squid 130 -61 500 {Age:-24000,Tags:["cdj408b"]}
 sleep 5
@@ -150,7 +161,9 @@ reject No entity was found
 @pass each pick gives 2 to 5 lemons (rerun after the 2026-11-02 mixin; r1102b gave 1 to 2) and resets the tree to age 2; each break 2 to 5 (more with Fortune); no mixin apply error
 @fails `farming/trees #3`, CD `LemonTreePickYieldMixin` (pick), `data/fruitsdelight/loot_tables/blocks/lemon_tree.json` (break)
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+> forceload add 128 496 140 506
+sleep 3
 > pbot spawn lem 135 -60 503 minecraft:overworld survival
 > pbot hold lem minecraft:air
 repeat 10
@@ -175,18 +188,20 @@ reject verb=\S+ .*done=0
 > pbot remove lem
 look pick: the verb=items fruitsdelight:lemon count plus the bot's "Found N" = 20 to 50 over 10 picks
 
-## SQ-LEM-02 | lemon cutting yields 8 slices
+## SQ-LEM-02 | lemon cutting yields 5 slices and seeds
 @group A
-@commands recipe probe (RecipeManager id dump) or JEI: `creative_delight:farmersdelightcutting/lemon_slice` (knife) and `creative_delight:createsaw/lemon_slice` (saw)
-@pass both give 8 Lemon Slices (knife also 1 Lemon Seeds); `fruitsdelight:lemon_cutting` and `fruitsdelight:cutting/lemon_slice` absent (remade 2026-11-02, r1102b gave 4)
-@fails `fruitsdelight/recipes.js` Lemon yield
+@commands recipe probe (RecipeManager id dump) or JEI: `creativedelight:farmersdelightcutting/lemon_slice_from_whole` (knife) and `creativedelight:createsaw/lemon_slice_from_whole` (saw)
+@pass knife gives 5 Lemon Slices and 1 Lemon Seeds (plan_food_batch_1119.md A6, 2026-11-19; was 8); the saw recipe present; `fruitsdelight:lemon_cutting` and `fruitsdelight:cutting/lemon_slice` absent
+@fails `creativedelight/fruit_cuts.js` lemon row (moved from `fruitsdelight/recipes.js`). r1120lr batch fault: the row predated A6
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail lemon_cutting
-> cdevtest rdetail cutting/lemon_slice
-expect id=fruitsdelight:lemon_cutting serializer=\S+ result=\S*lemon_slice\*8
-expect id=fruitsdelight:cutting/lemon_slice serializer=\S+ result=\S*lemon_slice\*8
-look knife recipe also gives 1 Lemon Seeds (second result, not printed by rdetail: recipe dump or JEI)
+> cdevtest rdetail lemon_slice_from_whole
+> cdevtest rdetail fruitsdelight:cutting/lemon_slice
+expect verb=rdetail id=creativedelight:farmersdelightcutting/lemon_slice_from_whole serializer=\S+ result=\S*lemon_slice\*5\b
+expect verb=rdetail id=creativedelight:createsaw/lemon_slice_from_whole serializer=
+reject verb=rdetail id=fruitsdelight:(lemon_cutting|cutting/lemon_slice) serializer=
+look knife recipe also gives 1 Lemon Seeds (second result: the part=results line, recipe dump or JEI); the saw's count per fruit_cuts.js
 reject verb=\S+ .*done=0
 
 ## SQ-JSL-01 | jams and jellies take slices; the old _from_slices recipes are gone
@@ -195,7 +210,7 @@ reject verb=\S+ .*done=0
 @pass each whole-fruit slot is `#forge:fruits/orange` or Orange Slice (lemon: `#forge:fruits/lemon` or Lemon Slice); the lemon recipes keep their separate Lemon Slice slot; pot container `vintagedelight:empty_mason_jar`; `creative_delight:farmersdelightcooking/{orange,lemon}_jam_from_slices`, `creative_delight:createmixing/{orange,lemon}_jam_from_slices` and their `sliceanddice:cooking/creative_delight/...` copies absent
 @fails `baking/sweets #6`, `dishes/jams #6`, CD `fruitsdelight/recipes.js` Jams take slices
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail farmersdelight:cooking/orange_jelly
 > cdevtest rdetail farmersdelight:cooking/lemon_jelly
 > cdevtest rdetail fruitsdelight:mixing/flowing_orange_jam
@@ -203,7 +218,8 @@ reject verb=\S+ .*done=0
 > cdevtest recipes jam_from_slices
 waitlog verb=recipes text=jam_from_slices n= 30
 expect verb=recipes text=jam_from_slices n=0
-count verb=rdetail text=\S+ n=[1-9]\d*$ == 4
+# r1120lr batch fault: the text lines end in ' shown=1', so the count is anchored on n= alone
+count verb=rdetail text=\S+ n=[1-9]\d*\b == 4
 look each whole-fruit slot lists the fruit (#forge:fruits/orange / lemon) and the slice; the lemon recipes keep a separate Lemon Slice slot; the pot recipes' container is vintagedelight:empty_mason_jar (rdetail+ fields)
 reject verb=\S+ .*done=0
 
@@ -213,7 +229,10 @@ reject verb=\S+ .*done=0
 @pass Orange Jam, then Lemon Jam, each in the mason jar
 @fails same
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 130-134 z 500 was not loaded; the row loads its own chunks
+> forceload add 124 494 140 506
+sleep 3
 > zsb potnbt fruitsdelight:orange_jelly
 > zsb potnbt fruitsdelight:lemon_jelly
 waitlog \[zsb\] potnbt fruitsdelight:lemon_jelly 30

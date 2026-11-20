@@ -137,7 +137,7 @@
 
 		// 2.4 diced potatoes (MG-11, MG-12 server half)
 		check('potato slices in #forge:sliced_potato', hasTag(Item.of('rusticdelight:potato_slices'), itemTag('forge:sliced_potato')), '')
-		check('Rustic potato cutting kept', recipe(rm, 'rusticdelight:cutting/potato_slices') != null, '')
+		check('potato cutting kept (Creative Delight id since the Rustic bake)', recipe(rm, 'creativedelight:farmersdelightcutting/potato_slices') != null, '')
 
 		// 2.5 rocky dirt (MG-14): pebbles make Pebble Dirt (Dave's), cobblestone makes Rocky Dirt (Twigs'), coarse x2
 		craftCheck(level, p, 'Pebble Dirt from dirt', ['minecraft:dirt', 'twigs:pebble', null, 'twigs:pebble', 'minecraft:dirt'],

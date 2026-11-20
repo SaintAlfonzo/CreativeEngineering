@@ -17,6 +17,7 @@
 @commands boot; read `config/creativecompat-common.toml` `[golems]`, `[boat_friction]`; `config/quark-common.toml` `[experimental.game_nerfs]`; grep debug.log for the two mixins
 @pass `[golems]` enabled true, deaths 5, window 12000, cooldown 24000; `[boat_friction]` blocks blue ice 0.98, packed ice 0.96, ice 0.94; no `[boat_friction] skipped`; Quark `"Game Nerfs" = true`, `Disable Iron Farms` false, `Disable Ice Roads` false, `Non Griefing Entities` only the enderman; `VillagerGolemCooldownMixin` and `BoatIceFrictionMixin` applied, no mixin error
 @fails `CompatConfig` spec; Quark config not copied; mixin target names (`m_35397_`, `m_38377_`)
+@reviewed 2026-11-20
 bootreject \[boat_friction\] skipped
 bootreject (Mixin apply.*failed|InvalidInjectionException).*(VillagerGolemCooldownMixin|BoatIceFrictionMixin)
 shell grep -A12 '^\[golems\]' config/creativecompat-common.toml | grep -E 'enabled|deaths|window|cooldown'
@@ -30,6 +31,7 @@ look the values as in the pass cell; the debug.log count is at least 2
 @commands `forceload add 760 700 800 740`; `/cdevtest kill 760 -60 700 minecraft:sheep n=10`; `/cdevtest kill 770 -60 700 minecraft:iron_golem n=3`; a 5 x 5 stone pad at 780 -61 700, `summon minecraft:creeper 780 -60 700 {Fuse:0s,ignited:1b}`, wait 2 s, `/cdevtest count 778 -61 698 782 -61 702 minecraft:stone`
 @pass sheep drops have mutton and no wool; golem drops have iron ingots; the stone pad has fewer than 25 stone left (the creeper is no longer in `Non Griefing Entities`)
 @fails `quark-common.toml` not the edited one; Quark GameNerfsModule not loaded
+@reviewed 2026-11-20
 > forceload add 760 700 800 740
 > cdevtest kill 760 -60 700 minecraft:sheep n=10
 > cdevtest kill 770 -60 700 minecraft:iron_golem n=3

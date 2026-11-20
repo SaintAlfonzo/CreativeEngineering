@@ -19,8 +19,9 @@
 @pass `falseNegatives` 0 in total, and 0 for `terralith:underground/old_refinery` and `mining_outpost` (were 4 and 6 at 162,270 / 157,199 / 240,325 and others); their `no.biome` drops by about that many; `built` per structure equal to `wgp_new` (generation unchanged); census time within noise of 424 s; no reflection error
 @fails A false negative still at `biome`: the tie set misses the generated biome (another biome source wraps the multi-noise one, or a mod changes `getNoiseBiome`); at another stage: a new bug, read its row; reflection error: the SRG name of `MultiNoiseBiomeSource.parameters`
 @from batches/r1103w/w_9_B.qb
+@reviewed 2026-11-20
 > cwglocate census 96 4000 4000
-waitlog \[celocate\] census done 2400
+waitlog \[(celocate|cwglocate)\] census done 2400
 shell mkdir -p $INST/perf/runs/r1103w/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1103w/w/f1_census_tie.json && echo copied f1_census_tie
 reject (?i)locate reflection
 bootreject (?i)locate reflection
@@ -40,6 +41,7 @@ look built per structure equal to wgp_new (generation unchanged; 6 structures di
 @pass Ascension item rises; Fleeting item pushes the mob away; no errors in latest.log
 @fails Mixin not applied (grep `ItemPhysicServerMixin`), or reflection failed (AllurementUtil method names)
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-20
 > forceload add 16 16 48 48
 sleep 3
 > summon minecraft:item 20 -55 20 {Tags:["ip15a"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:ascension_curse",lvl:1s}]}}}
@@ -65,6 +67,7 @@ look golem position against 40.5 / 40.5 (pushed away from the Fleeting item); th
 @pass Chat "Dumped N items (M survive lava)"; `kubejs/exported/physics/item_physics.json` exists, block-item rows carry `material` / `sound`; audit header says "dump yes", unclassified below 650, `minecraft:netherite_scrap` listed under `fire_resistant_item` (IP-21)
 @fails `[dumpphysics] skipped` lines in latest.log: a reflection name (Material / SoundType constant, `ForgeHooks.getBurnTime`, `ItemPhysic.CONFIG`) failed; fix in `_lib/dump_physics.js`
 @from batches/r1103w/w_8_A.qb
+@reviewed 2026-11-20
 > reload
 sleep 40
 > dumpphysics
@@ -163,7 +166,7 @@ look all ten edge-middle reads crying obsidian (corners stay obsidian: the conve
 @pass an IP Nether portal entity pair, no vanilla portal blocks; frame stays obsidian; the Nether side gets a generated frame with no crying obsidian; the L shape does not light; `qa` arrives in the Nether without a load screen (client: CQ-PRT-01)
 @fails `IPNetherPortalBridge.light` returned false (IP mode not `normal`, or no frame found: falls back to vanilla blocks, which is the old behavior)
 @from batches/r1113/c3_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
 > forceload add 1000 1000 1480 1080
 > execute unless entity qa run pbot spawn qa 1350 -60 1030 minecraft:overworld survival
@@ -185,7 +188,7 @@ sleep 2
 > cdevtest state 1201 -59 1020
 expect \[cdevtest\] verb=state pos=1200,-60,1020 state=minecraft:obsidian
 reject \[cdevtest\] verb=state pos=1201,-59,1020 state="?minecraft:nether_portal\b
-> execute in minecraft:the_nether run forceload add 0 0 32 32
+> execute in minecraft:the_nether run forceload add -16 -16 32 32
 sleep 20
 > execute in minecraft:the_nether run fill -2 99 -3 6 99 3 minecraft:obsidian
 > execute in minecraft:the_nether run fill -2 100 -3 6 106 3 minecraft:air
@@ -336,6 +339,7 @@ look 52 walls (29 #creativecompat:mirror_glass, 23 _panes, x 1200 to 1455 at z 1
 @pass portals gone at once on logout and on dimension change; after each a new shot places a fresh pair; after the respawn case they go within one heartbeat (10 s)
 @fails `PortalGunDissolve` not registered (portalgun absent at construct) or the record key differs; `/data get` the portal's `descriptor`
 @from batches/r1113/fix_c3a1.qb
+@reviewed 2026-11-20
 > fill 1340 -60 1040 1360 -50 1040 minecraft:stone
 > clear qa
 > give qa portalgun:portal_gun 1
@@ -383,6 +387,7 @@ look `portals:` sequence 4, 2 (after logout), 4, 2 (after the Nether tp), 4 (pg'
 @pass stay at 120; gone within 10 s at 140 (not before the beat); within 2 s with the shorter beat; never with 0; the saved portals of the absent owner go on their first beat
 @fails the heartbeat runs off `tickCount`; a portal whose owner is offline at load is meant to go
 @from batches/r1113/fix_c3a1.qb
+@reviewed 2026-11-20
 > zc3 portals
 > tp qa 1470 -60 1030
 sleep 12

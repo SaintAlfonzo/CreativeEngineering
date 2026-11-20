@@ -20,6 +20,7 @@
 @pass one line `[paintings] 445 of 445 modded painting variants built from <n> sources`, no `[paintings]` WARN, no `Couldn't load painting`
 @fails `paintings/PaintingPack` (registry or mod file lookup); WARN lines name the variant; old jar still in `mods/` (no line at all)
 @from batches/r1113/c3_a1.qb
+@reviewed 2026-11-20
 bootexpect \[paintings\] (\d+) of \1 modded painting variants built from \d+ sources
 bootreject WARN.*\[paintings\]
 bootreject Couldn't load painting
@@ -32,6 +33,7 @@ look count was 445 when the row was written; another number is fine if it is N o
 @pass 60 files; after `/reload` no second `[paintings] ... built` line (cached) and no painting error
 @fails prep_srv.sh copy of `kubejs/data`; cache in `PaintingPack.files()`
 @from batches/r1113/c3_a1.qb
+@reviewed 2026-11-20
 shell ls kubejs/data/creativecompat/paintings/minecraft | wc -l
 shell test "$(ls kubejs/data/creativecompat/paintings/minecraft | wc -l)" = 60
 > reload
@@ -47,6 +49,10 @@ look path moved: kubejs/data/creativecompat/paintings/minecraft (row said creati
 @pass `[paintings] art for toomanypaintings:afternoon from pa_test.zip (over toomanypaintings-...jar)`; WARN `extraSources no_such.zip: no such file or folder`; still 445 built
 @fails `PaintingPack.extraSources` path resolution (game folder = `srv/`)
 @from batches/r1113/c3_a2.qb
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): the stop, zip, toml edit and boot are steps now (the r1113 batch was its own boot)
+edit python3 "$INST/tools/scratch_query/painting_test_zip.py" pa_test.zip && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml paintings extraSources '["pa_test.zip", "no_such.zip"]'
+restart
 shell grep -n "extraSources" config/creativecompat-common.toml; ls -l pa_test.zip
 bootexpect \[paintings\] art for toomanypaintings:afternoon from pa_test\.zip \(over toomanypaintings
 bootexpect \[paintings\] extraSources no_such\.zip: no such file or folder
@@ -59,6 +65,10 @@ look WARN text is "extraSources no_such.zip: no such file or folder (<path>)" in
 @pass no `[paintings] ... built` line; boots clean
 @fails `CompatConfig.Paintings.enabled`
 @from batches/r1113/c3_a3.qb passed
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): the stop, toml edit and boot are steps now
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml paintings enabled false
+restart
 bootreject \[paintings\] .*modded painting variants built
 bootexpect Done \(
 shell grep -n -A3 "^\[paintings\]" config/creativecompat-common.toml | head -4

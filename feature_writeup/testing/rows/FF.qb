@@ -184,6 +184,8 @@ reject verb=\S+ .*done=0
 @absent farmersdelight:pumpkin_from_slices fruitsdelight:cutting/pineapple_slice (removed recipe ids: negative test)
 > cdevtest rdetail _from_whole
 > cdevtest rdetail _from_slices
+# rdetail _from_slices stops at 40 of 46 matches (r1120nv): pineapple asked by id
+> cdevtest rdetail creativedelight:shapeless/pineapple_from_slices
 > cdevtest recipes minecraft:melon
 > cdevtest recipes farmersdelight:pumpkin_from_slices
 > cdevtest recipes fruitsdelight:cutting/pineapple_slice
@@ -191,7 +193,10 @@ waitlog verb=recipes text=fruitsdelight:cutting/pineapple_slice n= 30
 expect verb=rdetail id=creativedelight:farmersdelightcutting/melon_slice_from_whole .*result=minecraft:melon_slice\*8
 expect verb=rdetail id=creativedelight:farmersdelightcutting/pumpkin_slice_from_whole .*result=farmersdelight:pumpkin_slice\*8
 expect verb=rdetail id=creativedelight:shapeless/melon_from_slices .*result=minecraft:melon\*1
-reject verb=recipes text=(minecraft:melon|farmersdelight:pumpkin_from_slices|fruitsdelight:cutting/pineapple_slice) n=[1-9]
+# recipes is a substring search (minecraft:melon also hits melon_seeds): reject the exact id line, not the count
+reject verb=recipes id=minecraft:melon result=
+reject verb=recipes text=(farmersdelight:pumpkin_from_slices|fruitsdelight:cutting/pineapple_slice) n=[1-9]
+expect verb=rdetail id=creativedelight:shapeless/pineapple_from_slices .*result=fruitsdelight:pineapple\*1
 look each _from_whole and _from_slices line against the pass column counts
 reject verb=\S+ .*done=0
 

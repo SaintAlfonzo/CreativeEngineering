@@ -7,6 +7,7 @@
 @@section 1
 @@title SQ-SMK Creative Common smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeCommon
 @@tier T1
 @@text Creative Common boots with its mixins and script pack, registers its potions and effect, and `/ccswap items` rewrites a merged stack.
@@ -70,6 +71,7 @@ reject Unknown or incomplete command
 @@section 2
 @@title SQ-SMK Creative Engineering smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeEngineering
 @@tier T1
 @@text Creative Engineering boots with its mixins and scripts, registers its items and blocks, carries its recipes and the dragon breathing type, and its blocks place and drop.
@@ -131,6 +133,7 @@ expect verb=break .*drops=creativeengineering:steel_plate_block:1
 @@section 3
 @@title SQ-SMK Creative Equipment smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeEquipment
 @@tier T1
 @@text Creative Equipment boots with its mixins and scripts, registers its gear with durability and attributes, and carries its recipes and stepstool tag.
@@ -182,6 +185,7 @@ expect verb=tag kind=item tag=creativeequipment:stepstools n=16\b
 @@section 4
 @@title SQ-SMK Creative Magic smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeMagic
 @@tier T1
 @@text Creative Magic boots with its mixins and script, carries its recipes, and Flint and Terrasteel lights Dark Fire.
@@ -232,6 +236,7 @@ expect verb=state pos=9018,-60,9010 state="?creativemagic:dark_fire
 @@section 5
 @@title SQ-SMK Creative Labels smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeLabels
 @@tier T1
 @@text Creative Labels boots with its mixins, registers its items and paper block, has its recipes, and a sticky note places as face paper.
@@ -281,6 +286,7 @@ expect verb=state pos=9024,-60,9010 state="?creativelabels:face_paper.* be=creat
 @@section 6
 @@title SQ-SMK Creative Compat smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeCompat
 @@tier T1
 @@text Creative Compat boots with its mixins, scripts, paintings and surface speeds, reloads its config, and its tags and block are in place.
@@ -330,6 +336,7 @@ expect verb=state pos=9030,-60,9010 state="?creativecompat:weathered_cardboard_b
 @@section 7
 @@title SQ-SMK Creative Calendar smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeCalendar
 @@tier T1
 @@text Creative Calendar boots with time, seasons and crop seasons, `/ccaltime` answers, and the season biome tags are filled.
@@ -374,6 +381,7 @@ expect verb=tag kind=biome tag=creativecalendar:seasons/frozen n=[1-9]
 @@section 8
 @@title SQ-SMK Creative Devtools smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeDevtools
 @@tier T1
 @@text Creative Devtools boots with its members and scripts, and `/cdevtest`, tick warp, perfBot and `/cdevgen` answer (every other smoke section relies on them).
@@ -452,6 +460,7 @@ reject Unknown or incomplete command
 @@section 9
 @@title SQ-SMK Creative Worldgen smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeWorldgen
 @@tier T1
 @@text Creative Worldgen boots with its data packs and members, its commands answer, Mooblooms summon, and its recipes and biome trims are in place.
@@ -515,6 +524,7 @@ expect verb=reg kind=biome regex=\S+ n=1\b
 @@section 10
 @@title SQ-SMK Creative Delight smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeDelight
 @@tier T1
 @@text Creative Delight boots with every member from its own jar, registers its items and recipes, the cooking pot works as a block, and its foods have food values.
@@ -586,6 +596,7 @@ expect verb=food item=farmersdelight:tomato_sauce\*1 food=true nutrition=[1-9]
 @@section 11
 @@title SQ-SMK Creative Brewing smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/creativeBrewing
 @@tier T1
 @@text Creative Brewing boots with Vinery and Brewin' from its own jar, brews its potions, carries its recipes, and the keg, wines and potion buckets work.
@@ -653,6 +664,7 @@ expect verb=item item=creativebrewing:potion_bucket class=
 @@section 12
 @@title SQ-SMK Exposure Backport smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/exposureBackport
 @@tier T1
 @@text Exposure Backport boots with its five mods and mixins, registers its items and recipes, and the lightroom places with its inventory.
@@ -702,10 +714,12 @@ expect verb=inv via=\S+ slots=[1-9]\d*
 @@section 13
 @@title SQ-SMK Backported Power Grid smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/backportedPowerGrid
 @@tier T1
 @@text Backported Power Grid boots with its wire types and components, its registries are filled, `/powergrid` answers, and a battery places.
 @@text prep_srv.sh drops the Power Grid jar unless `PGJAR=1` (newest build jar) or `PGJAR=<path>` is set: prepare this section's server with it.
+@@prep PGJAR=1
 @@text
 @@table
 ## SQ-SMK-44 | Power Grid boots: phase line, wire types, components, mixins
@@ -766,6 +780,7 @@ reject /ERROR\].*\b(powergrid|patryk3211)\b
 @@section 14
 @@title SQ-SMK Backported Tempad smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/backportedTempad
 @@tier T1
 @@text Backported Tempad boots with its translated upstream data, registers its items and recipes, and a metronome places.
@@ -809,6 +824,7 @@ expect verb=state pos=9078,-60,9010 state="?tempad:metronome
 @@section 15
 @@title SQ-SMK Storage Delight repack smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/repackedStorage
 @@tier T1
 @@text Storage Delight (repackedStorage) boots after Farmer's Delight, registers its cabinets and recipes, and a drawer holds items.
@@ -857,6 +873,7 @@ expect verb=inv slot=0 item=minecraft:apple\*3
 @@section 16
 @@title SQ-SMK Spice of Life: Raspberry Pie smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@sources development/solRaspberryPie
 @@tier T1
 @@text Raspberry Pie boots with its diet ladder and mixins, `/solrp` answers, and its diet log items and recipes are in place.

@@ -31,9 +31,9 @@ look shell lines: no InvalidInjectionException naming a CfbOven mixin (others in
 ## SQ-CFS-02 | a CfB oven is an FD heat source only while lit; the pot above cooks only then; oven slots kept through the toggles
 @group A
 @commands tag probe `#farmersdelight:heat_sources`; oven with no fuel, `farmersdelight:cooking_pot` above it with a fast recipe's inputs (`/data merge block`); wait 30 s; then put coal in the oven's fuel slot (`/data get block` first to see the fuel container's NBT key, then `/data merge block`, or a hopper into the fuel side); wait; let the fuel run out
-@pass tag lists `cookingforblockheads:oven`; no cooking while unlit; `lit=true` within a tick of burning, the pot finishes the meal; `lit=false` when the fuel runs out and the pot's progress stops; the oven's input, output and tool slots keep their items through each toggle
+@pass tag lists `cookingforblockheads:oven`; no cooking while unlit; `lit=true` within a tick of burning, the pot finishes the meal; `lit=false` when the fuel runs out and the pot's progress stops; the oven's items are kept through each toggle (the 3 potatoes end as 3 baked potatoes: the lit oven bakes them)
 @fails `CfbOvenLitSyncMixin` not at RETURN of the instance `serverTick`; tag script skipped (`global.CD.on('blockheads_additions')` false)
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1113/c2_a1.qb
 > cdevtest tag block farmersdelight:heat_sources
 > cdevtest rdetail farmersdelight:cooking/tomato_sauce
@@ -62,7 +62,8 @@ waitlog verb=tickwarp end=\S+ ticks=80 60
 expect verb=tag kind=block tag=farmersdelight:heat_sources .*cookingforblockheads:oven(,|$)
 expect verb=state pos=304,-60,310 state="\S*lit=true
 expect verb=state pos=304,-60,310 state="\S*lit=false
-expect verb=inv slot=0 item=minecraft:potato\*3
+# r1120nv batch fault: a lit CfB oven moves its input into the cooking slots and bakes it (slots 7-9 at placement, baked_potato*3 in slot 4 at the end); the 3 potatoes are kept as baked potatoes
+expect verb=inv slot=\d+ item=minecraft:baked_potato\*3
 reject \[cdevtest\] .*done=0
 look (1) the rdetail line gives tomato_sauce's inputs; if they are not 2 tomatoes the pot never starts: BATCH-FAULT, rerun with those inputs. (2) first pot be line (unlit, 200 ticks): CookTime 0. (3) after BurnTime 400 the oven reads lit=true; 240 ticks later the pot's CookTime > 0 or the sauce is in slot 6/8. (4) after the burn ran out (481 ticks after the merge) lit=false and the two last pot be lines 80 ticks apart show the same CookTime (no progress). (5) last oven inv still holds slot 0 potato x3 (checked). data get line: note the fuel slot index (ItemHandler) for the CQ / a rerun with real fuel
 

@@ -160,13 +160,14 @@ look if a pot did not cook, compare its inputs with the rdetail lines (VTD-57 / 
 @commands JEI: mhadjeb, potato noodle (RC-132, RC-133)
 @pass No mhadjeb or uncooked mhadjeb; Gnocchi and Creamy Gnocchi names; knife on sweet potato dough gives 2 gnocchi; Creamy Gnocchi takes milk, 2 gnocchi, onion / garlic / pickled onion
 @fails
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest makes veggiesdelight:mhadjeb
 > cdevtest makes veggiesdelight:uncooked_mhadjeb
 > cdevtest rdetail gnocchi
 expect verb=makes item=veggiesdelight:mhadjeb n=0\b
 expect verb=makes item=veggiesdelight:uncooked_mhadjeb n=0\b
-expect verb=rdetail id=\S*gnocchi\S* serializer=farmersdelight:cutting result=\S*gnocchi\*2\b ingredients=veggiesdelight:sweet_potato_dough
+# r1120lr batch fault: Gnocchi is a name only, the item id is veggiesdelight:potato_noodle (recipe creativedelight:farmersdelightcutting/gnocchi_from_sweet_potato_dough)
+expect verb=rdetail id=\S*gnocchi\S* serializer=farmersdelight:cutting result=veggiesdelight:potato_noodle\*2\b ingredients=veggiesdelight:sweet_potato_dough
 reject \[cdevtest\] .*done=0
 look Creamy Gnocchi's ingredients: milk, 2 gnocchi, onion / garlic / pickled onion; names and JEI hiding are client
 ## SQ-CDB-11
@@ -174,10 +175,11 @@ look Creamy Gnocchi's ingredients: milk, 2 gnocchi, onion / garlic / pickled oni
 @commands JEI: Bayberry Juice; heatless cacciatore (RC-D2, RC-136)
 @pass The bottle, the fluid and the can read Bayberry Juice; 12 bottles fill a jar (MJ-14); the cacciatore grid recipe cycles cooked chicken cuts
 @fails
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail cacciatore
-> cdevtest reg item bayberry_juice
-expect verb=reg kind=item regex=bayberry_juice n=[1-9]
+# r1120lr batch fault: Bayberry Juice is a rename of the name only, the ids stay bayberry_soup (fruits_delight.md, Bayberry Juice)
+> cdevtest reg item bayberry_soup
+expect verb=reg kind=item regex=bayberry_soup n=[1-9]
 reject \[cdevtest\] .*done=0
 look the cacciatore grid recipe slot lists several cooked chicken cuts (/+N); the Bayberry Juice names (bottle, fluid, can) and the 12-bottle jar fill are client (MJ-14)
 ## SQ-CDB-12

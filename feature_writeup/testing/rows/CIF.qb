@@ -25,6 +25,7 @@
 @pass boot reaches Done, no hits; Compat file has the six sections with the pack's edited values (e.g. `[jei]`, `[toasts]` as in `configs_edited/`), Equipment has `[armor_overflow]`; Common's file no longer has them after Forge corrects it
 @fails ConfigRename merge order in CreativeCompat / CreativeEquipment constructors
 @from batches/r1113/c3_a3.qb
+@superseded legacy config: the interface carve (2026-11-07) shipped in 1.2.02 (deploy.md, 2026-11-09), the same migration class the owner superseded in SQ-CFR-03, SQ-CMG-02, SQ-CEN-02 (owner, 2026-11-18); no step makes cif_old_common.toml / cif_old_eng.toml and no pre-carve world exists (r1120nv batch fault); the no-moved-class half is SQ-CIF-04 and -04b (owner request, 2026-11-20)
 bootreject Mixin apply failed|InvalidMixinException
 bootreject ClassNotFoundException.*creativecommon\.(compat|mixin)
 shell for s in jei gui_title toasts tooltips coaster wthit shrapnel surface vein_undo; do printf "%s compat=%s old=%s\n" $s "$(grep -c "^\[$s\]" config/creativecompat-common.toml)" "$(grep -c "^\[$s\]" cif_old_common.toml cif_old_eng.toml | awk -F: '{n+=$2} END {print n}')"; done
@@ -40,7 +41,7 @@ look the carry log line (`[swaps] config sections ... carried` or similar) in la
 @pass chest items read `creativebrewing:` ids; mixes present; drinking gives Better Beacons Phantom Bane
 @fails swap list not read (data/creativebrewing/swaps), PotionByNameRemapMixin
 @from batches/r1113/c3_b1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_b1 SQ-C3B-setup
 > forceload add 0 0
 > setblock 0 199 0 minecraft:stone
@@ -69,7 +70,7 @@ look old-world half (a chest with creativecommon:long_reach potions from an 2026
 @pass Caffeinated plus a hidden Phantom Bane of the same duration; rest stat not pushed to -24000; reset to 0 when Phantom Bane ends
 @fails CaffeinatedPhantomBane not registered (farmersrespite gate) or the mixin compartment gate
 @from batches/r1113/c3_b1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_b1 SQ-C3B-setup
 > forceload add 0 0
 > setblock 0 199 0 minecraft:stone
@@ -132,4 +133,5 @@ look mods list: Common, Compat, Equipment, Calendar, Serene Seasons, Devtools, t
 @pass all as before the carve; WTHIT toggles kept their old values; tint sheets draw (no purple-black)
 @fails moved client mixin not listed under `client` in creativecompat.mixins.json; tint path
 @owner true
+@reviewed 2026-11-20
 @draft a broad playtest sweep (JEI pages, WTHIT on many blocks, toggles screen, tooltips, toasts, armor bar, JEED, HUD icons, Create config screen, AE2 / FTB / LC tooltips): split into capture rows per item before automating; until then the owner's playtest list

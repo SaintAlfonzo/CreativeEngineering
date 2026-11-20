@@ -27,7 +27,12 @@
 @commands scratch toml `overrides = ["#creativeworldgen:type/village=-1,-1,-1"]`, `log = "ALL"`; Chunky the square; `grep '\[earth-fill\]' latest.log` for village ids
 @pass every village line ends `-> kept`, none `CANCELLED`, none says `too wet`, also lines whose footprint has water more than 1.5x ground (#9)
 @fails `EarthFill.earthCancelled` / `EarthCheck.cancels`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): the preset was never applied (no section prep; SQ-WG30-A03 in the same step needs other
+# overrides): the row sets it and a new world itself, then restarts
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.earth_fill overrides '["#creativeworldgen:type/village=-1,-1,-1"]' && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.earth_fill log '"ALL"' && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.debug structureDensity 4.0 && sed -i 's/^level-name=.*/level-name=wg30a01/' server.properties
+restart
+shell grep -nE '^\s*(overrides|log|structureDensity) = ' config/creativeworldgen-common.toml | head -8
 > chunky world minecraft:overworld
 > chunky center 2144 -2592
 > chunky radius 400
@@ -49,7 +54,12 @@ look village lines whose footprint has water more than 1.5x ground are kept too 
 @commands ST-54 at `log = "ALL"`: `overrides = ["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]` (village_savanna if no plains in the square)
 @pass the `-1,-1,-1` village is logged but never canceled; ruins cancel at any earth over water or air past the beard; exempt ids log nothing
 @fails as A01
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+@absent minecraft:village_plains minecraft:village_savanna philipsruins:ancient_ruins (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+# r1120fix (2026-11-20): the row sets its own preset and a new world (edit + restart), as SQ-WG30-A01 does with its own
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.earth_fill overrides '["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]' && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.earth_fill log '"ALL"' && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.debug structureDensity 4.0 && sed -i 's/^level-name=.*/level-name=wg30a03/' server.properties
+restart
+shell grep -nE '^\s*(overrides|log|structureDensity) = ' config/creativeworldgen-common.toml | head -8
 > chunky world minecraft:overworld
 > chunky center 2144 -2592
 > chunky radius 400
@@ -135,11 +145,13 @@ look the swap count line: 1412 in 105 on 2026-10-30; later swap rules raised it 
 @commands boot (switch off); `grep '\[structure-tuning\]' latest.log`
 @pass summary line has no `TEST OVERRIDES` and no ERROR line; `structure_tag_report.md` shows weight 100 for stripped members (e.g. `towns_and_towers:pillager_outpost_swamp`, `villager_flower_house:flower_house`), the Campsite camps 60 (fisher 15), witch wagon 200, cats 19, statues 26, bastille 34, camp 87; no `## Test overrides` section (ST-217)
 @fails a member with `tuned` changed: `strip_weights` in `gen_structure_groups.py`; unknown field `tuned`: old `structure_overrides.js`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): the report is the server copy's kubejs/generation_scripts/worldgen/structure_tag_report.md
+# (no feature_writeup/structure_tag_report.md exists)
 bootexpect \[structure-tuning\]
 bootreject \[structure-tuning\].*TEST OVERRIDES
 bootreject (?i)\[structure-tuning\].*ERROR
-shell grep -aE '\[structure-tuning\]' logs/latest.log | cut -c1-260 | head -10; grep -nE 'pillager_outpost_swamp|flower_house|witch_wagon|takesapillage:pillager_camp|## Test overrides' $INST/feature_writeup/structure_tag_report.md | head -12; true
+shell grep -aE '\[structure-tuning\]' logs/latest.log | cut -c1-260 | head -10; grep -nE 'pillager_outpost_swamp|flower_house|witch_wagon|takesapillage:pillager_camp|## Test overrides' kubejs/generation_scripts/worldgen/structure_tag_report.md | head -12; true
 look structure_tag_report.md: stripped members at weight 100 (swamp outpost, flower house), Campsite camps 60 (fisher 15), witch wagon 200, cats 19, statues 26, bastille 34, camp 87; no `## Test overrides` section (ST-217)
 ## SQ-WG30-C02 **PARTIAL 2026-10-30**: census done (100,616 slot chunks, 2,749 starts, 316 s, 5 false negatives: old refinery x4 and a mineshaft, reason biome); at density 1 the counts are too small to judge evenness (settlements 6 starts in 17 slots); counts in structure_tuning.md 3.27
 @group B
@@ -152,7 +164,11 @@ look structure_tag_report.md: stripped members at weight 100 (swamp outpost, flo
 @commands stop; scratch toml `[worldgen.debug] testOverrides = true`; new world; boot; `grep 'TEST OVERRIDES' latest.log`
 @pass exactly one `TEST OVERRIDES ACTIVE` warning listing 33 changes (towers weight 100, rare ruin frequency 0.25, fortified shares 0.45, town villages 0.1...); summary starts `TEST OVERRIDES (33)`; report has `## Test overrides`; no `REFUSED` line; for ST-221 the C01 boot is the switch-off half
 @fails no line: the jar lacks `WorldgenConfig.testOverrides` (old Creative Common) or the toml key did not reach the server copy
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): it shared SQ-WG30-C01's switch-off boot: the row sets testOverrides and a new world itself
+# (edit + restart); the switch stays on for the rows after it in the step (E03, D01 do not read it)
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.debug testOverrides true && sed -i 's/^level-name=.*/level-name=wg30c03/' server.properties
+restart
 bootexpect TEST OVERRIDES ACTIVE
 bootexpect TEST OVERRIDES \(\d+\)
 bootreject TEST OVERRIDES REFUSED

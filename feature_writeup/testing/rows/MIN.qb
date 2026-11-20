@@ -140,7 +140,7 @@ look none of the five lines; no ERR hit in the row list
 @commands JEI: open Create's mixing category, page through; grep `latest.log` for `Found a broken recipe`
 @pass no Creative Brewing `potion_mixing_dragonbreath_*` errors; without Create Central Kitchen those recipes do not exist, with it they show
 @fails `DragonBreathBrewing.build` guard
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # server half (recipes and the log); the JEI paging is CQ work
 bootreject Found a broken recipe.*potion_mixing_dragonbreath
 shell ls mods | grep -ci "central_kitchen"; true

@@ -1,0 +1,111 @@
+id,file,kind,action,detail
+SQ-BBQF-01,BBQF.qb,bf-fixed,rewritten,[flavor] defined lines in latest.log (wave E rename 1fd558bd); flavor ids @absent
+SQ-BBQF-02,BBQF.qb,bf-fixed,rewritten,cdevtest recipes lines; creativedelight:shapeless/flavor/<6 BBQ> == 6; grilled_*_skewer per route == 10 (2026-11-19 dump)
+SQ-BBQF-03,BBQF.qb,bf-fixed,rewritten,seasonable/* -> flavorable/* tags
+SQ-BBQF-04,BBQF.qb,bf-fixed,own home + rewritten,own sahome marker + forceload; vanilla and MCA butchers read by /sa offers (MCA replaces villagers)
+SQ-BBQF-05,BBQF.qb,bf-fixed,rewritten,maxFlavors = 2; grilledCountsTowardMax = false; grilledFlavorSlots = 2
+SQ-BBQF-06,BBQF.qb,bf-fixed,own home + rewritten,own sahome + forceload; NBT key Flavors (was Seasonings)
+SQ-BBQF-07,BBQF.qb,bf-fixed,own home,own sahome + forceload; reject Flavors too
+SQ-VTDA-10,BBQF.qb,bf-fixed,own home,own sbhome marker + forceload (group B)
+SQ-VTDA-11,BBQF.qb,bf-fixed,stale count,kimchi_from_ n=7 (6 pack pickling + upstream fermenting; recipes.js; dump) plus count of the 6 pickling ids
+SQ-VTDA-12,BBQF.qb,bf-fixed,own home,own sahome + forceload
+SQ-CDM2-03,BBQF.qb,bf-fixed,own home,own sahome + forceload
+SQ-CDM2-04,BBQF.qb,bf-fixed,own home,own sahome + forceload
+SQ-RD-22,BBQF.qb,bf-fixed,own home,own sahome + forceload
+SQ-VP-06,BBQF.qb,bf-fixed,own home,own sahome + forceload over the jar spots
+SQ-CDF-08,BBQF.qb,bf-fixed,check moved,dropped expect on the shell echo (shell exit code is the check)
+SQ-GLD2-02,BBQF.qb,bf-fixed,rewritten,rdetail of creativedelight:createsequencedassembly/enchanted_golden_{apple;carrot}_sequenced_assembly: part=step0 deploying gold ingot / step1 filling / step2 pressing; loops and 125 mB left as LOOK (not printed)
+SQ-SALT2-02,BBQF.qb,bf-fixed,forceload,forceload 1056 1024 1071 1039 + sleep 3
+SQ-SALT2-03,BBQF.qb,bf-fixed,rewritten,cdevtest rdetail format; mixing id createmixing/rock_salt_water_salt; fluids/results part lines; knife-cutting reject
+SQ-SALT2-04,BBQF.qb,bf-fixed,rewritten,verb=tagsof ... block_tags= regexes
+SQ-SALT2-07,BBQF.qb,bf-fixed,forceload,forceload 1088 1072 1103 1087 + reject 'no merchant'
+SQ-SALT2-08,BBQF.qb,bf-fixed,own fixture,edit: salt-common.toml from .moved with EvaporationChance 0.5 + [salt] tables dropped from creativedelight-common.toml (carry skips keys the target holds) then restart; pack file restored after
+SQ-NEST-01,BBQF.qb,prefixed,own home + ids,own sahome + forceload; creativedelight:nest_* features and creativedelight:*_egg_nest blocks (Incubation compartment in CD since M8); features @absent
+SQ-NEST-02,BBQF.qb,prefixed,ids,creativedelight:*_egg_nest blocks
+SQ-DNR-O-02,DNR.qb,bf-fixed,stale values,Comfort/Nourishment 4:00 (comfort_nourishment.json set 240 s); containers from useitem result lines
+SQ-DNR-O-05,DNR.qb,bf-fixed,own section + @@prep,"section 2: @@prep run makes srv/oceanic_upstream an empty folder; bootexpect DonorJars message lines; bootreject Done (failed-boot step); wrong-file half left to SQ-DNR-E-04 (same DonorJars code); parent fix 2026-11-20: @@prep run lines lost their outer single quotes (qdrive passes the rest of the line verbatim to bash -c, so the quoted form would fail the prep)"
+SQ-DNR-E-03,DNR.qb,bf-fixed,own section + @@prep,"section 3: empty srv/enders_upstream; bootexpect missing lines; bootreject Done; parent fix 2026-11-20: @@prep run lines lost their outer single quotes (qdrive passes the rest of the line verbatim to bash -c, so the quoted form would fail the prep)"
+SQ-DNR-E-04,DNR.qb,bf-fixed,own section + @@prep,"section 4: Oceanic donor jar copied in as endersdelight-1.1.4.jar; bootexpect wrong file ... expected d1541d70; bootreject Done; parent fix 2026-11-20: @@prep run lines lost their outer single quotes (qdrive passes the rest of the line verbatim to bash -c, so the quoted form would fail the prep)"
+SQ-DNR-O-04,DNR.qb,reviewed,@reviewed 2026-11-20,doc diffs since 2026-11-16 (campfire End; salt; shulker merge; generated blocks) do not touch it
+SQ-DNR-E-02,DNR.qb,reviewed,@reviewed 2026-11-20,same diffs; endersdelight:end_house exists (donor jar + structuregen dump): @absent
+SQ-DNR-O-01,DNR.qb,reviewed,@reviewed 2026-11-20,draft; diffs do not touch it
+SQ-DNR-O-03,DNR.qb,reviewed,@reviewed 2026-11-20,draft; diffs do not touch it
+SQ-DNR-E-01,DNR.qb,reviewed,@reviewed 2026-11-20,draft; diffs do not touch it
+SQ-SALT-05,SALT.qb,bf-fixed,melt half dropped,the 12 /salttest melt cases removed (moved to SQ-MELT-01/-04/-05); boot-line half kept (+ SaltRockNoDissolveMixin reject)
+SQ-SALT-06,SALT.qb,bf-fixed,rewritten,raw rock salt cases accept the probe's FAIL 'now hearthandharvest:placed_rock_salt_block' (placed twin; probe shared with GLD.qb so not edited)
+SQ-SALT-08,SALT.qb,bf-fixed,rewritten,config read from creativedelight-common.toml [salt.Dissolving] (+ configs_edited copy); weather rain + isRainingAt NOTE expect
+SQ-RW-04,SALT.qb,superseded,@superseded,run-log entry whose steps are a stray MB.qb moon-phase copy (tp qa; creativeengineering:phase); not the river tree check
+SQ-SALT-01,SALT.qb,prefixed,@absent,removed recipe ids the negative checks name
+SQ-SALT-04,SALT.qb,prefixed,@absent,vintagedelight:patch_salt feature exists in the Vintage member
+SQ-META31-04,SALT.qb,prefixed,@absent,already superseded; minecraft:desert_pyramid structure id
+SQ-CMP-11,CMP.qb,bf-fixed,own fixture,edit skeletonTime 200 + restart; tickwarp 300; DeathTime 1L (negative = unset sentinel); default restored after
+SQ-CMP-13,CMP.qb,bf-fixed,own fixture,edit netherSkeletonTime 200 / netherWitherTime 200 + restart; tickwarp 600; DeathTime {GT-300} / 1L; defaults restored after
+SQ-CMP-12,CMP.qb,reviewed,@reviewed 2026-11-20 + forceload,plan_corpses 2026-11-19 diffs (curios/sections) do not touch the empty-corpse timers; added forceload 0 0
+SQ-MIN-04,MIN.qb,reviewed,@reviewed 2026-11-20,creative_delight.md diffs do not touch dragon breath mixing
+SQ-FGD-12m,FGD.qb,prefixed,own setup,locate + /zqb best center + Chunky r150 inside the row (was retired W-G1 setup rows); @@prep B: spawn-animals=true
+SQ-FGD-15c,FGD.qb,prefixed,own setup,MF/DF/MG locates + Chunky inside the row; natural census before summons
+SQ-HRU-01,GFB.qb,prefixed,rewrote,cancel a pregen left by SQ-GFB-02 before its own chunky; waitlog names the overworld Task finished line (W waitlog: GFB-02's late reply); group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=-8188900049893920259 (pregen on natural terrain)
+SQ-TER-02,TER.qb,prefixed,rewrote,bot spawn guarded (execute unless entity qa) so later rows can repeat it; @absent for the two Farmer's Structures pond ids (in structures.json worldgen); group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (biome locates of windswept_hills / snowy_slopes find nothing on flat)
+SQ-TER-03,TER.qb,prefixed,rewrote,own guarded bot spawn so the row runs alone; @absent terralith:spire (structure id present in structures.json); group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (biome locates of windswept_hills / snowy_slopes find nothing on flat)
+SQ-TER-04,TER.qb,prefixed,rewrote,own bot and windswept_hills locate + HL capture (HL was SQ-TER-02's); @absent philipsruins:level_three_ruins; group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (biome locates of windswept_hills / snowy_slopes find nothing on flat)
+SQ-CWG-01,CWG.qb,prefixed,rewrote,stale: Creative Common json is creativecommon.mixins.json (not creativeengineering); mixin count 60 -> 71 common / 74 (creativeworldgen-1.0.0.jar json); @reviewed
+SQ-CWG-02,CWG.qb,superseded,@superseded,config carry out of creativeengineering-common.toml shipped in 1.2.00; plan_rowfix_r1118 section 4 ruling drops CE/Compat config migrations; fresh scratch copy has nothing to carry
+SQ-CWG-03,CWG.qb,reviewed,@reviewed 2026-11-20,"creative_worldgen.md diff (loot moved to Creative Loot, moremooblooms rename) leaves the checks valid"
+SQ-CWG-04,CWG.qb,superseded,@superseded,loot tuning + CD crate rules moved to Creative Loot 2026-11-17; SQ-LOOT-06 checks the same crate pairs (zloot probe row)
+SQ-CWG-06,CWG.qb,prefixed,@absent + @reviewed,structure ids pillager_outpost / village_plains exist (structures.json worldgen); checks unchanged by the doc diff; group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (outpost / village locates and placements need a normal world)
+SQ-CWG-07,CWG.qb,reviewed,@reviewed 2026-11-20,doc diff does not touch earth fill / ground match / soil / bubble column tags
+SQ-CWG-08a,CWG.qb,prefixed,@absent,minecraft:village_plains is a structure id (structures.json); group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (outpost / village locates and placements need a normal world)
+SQ-CWG-08,CWG.qb,prefixed,moved row,moved after SQ-CWG-10 so boot-1 rows 09/10 precede it in file order (W boot); no content change
+SQ-CWG-09,CWG.qb,prefixed,rewrote,"End forceload over the illager summon spot -30 75 30 (W unloaded); donor grep matched words not in the line: now [farmers-donor] N files from Farmer's Structures (current log, s48); @reviewed"
+SQ-CWG-10,CWG.qb,reviewed,@reviewed 2026-11-20,doc diff does not touch build_deploy donor / climate reader paths
+SQ-EFB-00,EFB.qb,reviewed,@reviewed 2026-11-20,structure_tuning.md 2026-11-18 diff (ported datapack entries kept in worldgen tags) does not touch the offline tool tests
+SQ-EFB-17,EFB.qb,reviewed,@reviewed 2026-11-20,same diff; offline EarthFillTest checks unchanged
+SQ-EFB-01,EFB.qb,prefixed,rewrote,"{S1} {S3} from a retired batch -> probe at 0 0 with its own forceload; section gets @@prep B: earth_fill log ALL (the rows' documented scratch toml; pack default is CANCELLED, bootexpect [earth-fill] / vslog need ALL)"
+SQ-EFB-10,EFB.qb,prefixed,rewrote,"PL / RV / DS came from long rows 02/05/08, which run in a later drive step (175 vs 146): own plains, river, desert biome locates; @absent #minecraft:village (structure tag)"
+SQ-EFB-11,EFB.qb,prefixed,rewrote,needed >= 20 under lines from 02-06 (later step): own plains locate + Chunky r300 + the 9 probe tiles of SQ-EFB-02
+SQ-EFB-12,EFB.qb,prefixed,rewrote,E var {PL1} (SQ-EFB-02): own plains locate + Chunky (instant when -11 generated it) before gone and census
+SQ-EFB-13,EFB.qb,prefixed,rewrote,needed pruned lines from 05/06 (later step): own river locate + Chunky r300 so wet villages get pruned this boot
+SQ-EFB-14,EFB.qb,prefixed,@absent,eugene:undead_castle is a structure id (structures.json); @reviewed
+SQ-EFB-15,EFB.qb,prefixed,rewrote,E var {RV1} (SQ-EFB-05): own river locate
+SQ-EFB-18,EFB.qb,reviewed,@reviewed 2026-11-20,doc diff does not touch waterReach config
+SQ-EFB-20,EFB.qb,reviewed,@reviewed 2026-11-20,doc diff is worldgen structure tags; sand_base is a block tag
+SQ-EFB-02 (air),EFB.qb,reviewed,@reviewed 2026-11-20,doc diff does not touch the probe checks; gains the section log ALL prep
+"SQ-EFB-03 (air, mounds)",EFB.qb,reviewed,@reviewed 2026-11-20,as SQ-EFB-02
+"SQ-EFB-04 (air, earthless pieces)",EFB.qb,reviewed,@reviewed 2026-11-20,as SQ-EFB-02
+"SQ-EFB-05 (water, lakes)",EFB.qb,reviewed,@reviewed 2026-11-20,as SQ-EFB-02
+"SQ-EFB-06 (water, coast)",EFB.qb,reviewed,@reviewed 2026-11-20,as SQ-EFB-02
+SQ-EFB-07 (water kept on purpose),EFB.qb,prefixed,@absent,Farmer's Structures pond ids are structure ids (structures.json); @reviewed
+"SQ-EFB-08 (earth, desert)",EFB.qb,prefixed,@absent,philipsruins:ancient_ruins is a structure id; @reviewed
+"SQ-EFB-09 (earth, other grounds)",EFB.qb,reviewed,@reviewed 2026-11-20,as SQ-EFB-02
+SQ-EFB-16 (switch off),EFB.qb,prefixed,rewrote,"shared 02-09's world with earthFill on, so its earthFill = false check failed: now @boot 2 with @@prep B: boot=2: fresh + toml worldgen.systems earthFill false; own river locate (E var {RV1}); moved after SQ-EFB-21 (W boot)"
+"SQ-EFB-21 (sand base, counted)",EFB.qb,prefixed,@absent,towns_and_towers:village_badlands is a structure id; @reviewed
+SQ-FSD-02,FSD.qb,prefixed,rewrote,needs a boot without the donor: now @boot 2 with @@prep B: boot=2: fresh + run that swaps srv/farmers_upstream for an empty folder (no @modset change); forceload moved over the place spot 240 600 (was 96 96 127 127); moved to section end (boot order); @absent farmers_structures:cooks; @@prep run without outer quotes (run is passed verbatim to bash -c)
+SQ-FSD-07,FSD.qb,prefixed,rewrote,group set id creativeengineering:group/remote -> creativeworldgen:group/remote (structuregen.json; dumpq PASS on the 2026-11-19 dump)
+SQ-FSD-08,FSD.qb,prefixed,rewrote,own forceload over the template box 200 -60 540 (W unloaded)
+SQ-FTW-02,FTW.qb,prefixed,rewrote,census copied the fixed world folder ftw_on (r1103w batch) and wrote into perf/runs/r1103w: now the srv level-name and a census file beside srv
+SQ-FTW-04,FTW.qb,prefixed,rewrote,bot spawn guarded (execute unless entity ftw) since -05/-06 spawn the same bot in the step
+SQ-FTW-05,FTW.qb,prefixed,rewrote,guarded bot spawn; perf.md diffs since 2026-10-27 do not touch first tick water: @reviewed; W unloaded is the bot's own tp (false positive)
+SQ-FTW-06,FTW.qb,prefixed,rewrote,windowTicks = 0 was never set in the step's boot (grep check would fail): edit qrun.py toml worldgen.first_tick_water windowTicks 0 + restart in the row; guarded bot spawn; @reviewed
+SQ-RING-01,RING.qb,prefixed,rewrote,"json read from the srv level-name (was world/); locate betterstrongholds:stronghold (vanilla stronghold replaced by YUNG's per the 2026-10-27 results, so capture would fail); waitlog names its target; group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (no stronghold ring on flat)"
+SQ-RING-02,RING.qb,prefixed,rewrote,"ran in RING-01's boot, so 'from the world's data' never showed: own locate + capture, in-row restart, then the boot checks and the same-position locate; group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (no stronghold ring on flat)"
+SQ-RING-03,RING.qb,prefixed,rewrote,"ran on the same world: edit sets a new level-seed and level-name, restart, then the computing/stored checks; group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (no stronghold ring on flat)"
+SQ-SCAT-07,SCAT.qb,prefixed,section @@prep,"section had no prep for the catalog world: @@prep level-type=creativedevtools:structure_catalogue (the documented setup; bootexpect [catalogue] needs it); plan diff (layout gaps, biome families) does not touch the preview check: @@reviewed"
+SQ-SCAT-06,SCAT.qb,prefixed,section @@prep,as SQ-SCAT-07 (its bootexpect [catalogue] new Structure Catalogue world needs the preset)
+SQ-SCAT-08,SCAT.qb,prefixed,section @@prep,as SQ-SCAT-07; runs alone in its long step and waits for the build from that boot
+SQ-SVA-03,SVA.qb,prefixed,rewrote,tp qa with no bot spawned in the step: guarded pbot spawn; capture anchored on the locate line; @absent skyvillages:skyvillage (structure id); W unloaded on the four execute-positioned locates is a false positive (locate needs no loaded chunk); group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (skyvillage locate finds nothing on flat)
+SQ-VH-01,VH.qb,reviewed,@reviewed 2026-11-20,"visceral_heap.md diffs since 2026-11-09 (all-flesh rule, recipes, run notes) do not touch the boot-error check"
+SQ-VH-12,VH.qb,prefixed,rewrote,"shared SQ-VH-01s boot with BOP installed (is_nether n=5 could not pass): now @boot 2 with section @@prep boot=2: fresh + rm mods/BiomesOPlenty-*.jar (prep, not @modset)"
+SQ-WG30-A01,WG30.qb,prefixed,rewrote,"preset (village override -1,-1,-1, log ALL, density 4) was never applied (no section prep) and A03 in the same step needs other overrides: in-row edit (qrun.py toml + new level-name) + restart"
+SQ-WG30-A03,WG30.qb,prefixed,rewrote,"own preset (village_plains -1 / ancient_ruins 0 overrides, log ALL, density 4) and new world via edit + restart; @absent for its structure ids"
+SQ-WG30-C01,WG30.qb,prefixed,rewrote,"shell read $INST/feature_writeup/structure_tag_report.md, which does not exist: now the server copy kubejs/generation_scripts/worldgen/structure_tag_report.md"
+SQ-WG30-C03,WG30.qb,prefixed,rewrote,shared C01's switch-off boot (TEST OVERRIDES ACTIVE could not appear): in-row edit testOverrides true + new level-name + restart
+SQ-WGE-06a (B1),WGE.qb,prefixed,rewrote,"report read from feature_writeup/pool_tag_report.md (does not exist): now the server copy kubejs/generation_scripts/worldgen/pool_tag_report.md that PoolTuner writes at boot, and the row fails when it is empty"
+SQ-WGE-05b (A5),WGE.qb,prefixed,@absent,village structure ids exist (structures.json worldgen); remaining W waitlog shared with SQ-WGE-14 only on a timeout
+SQ-WGE-09 (A7),WGE.qb,prefixed,@absent,Philip's Ruins Nether structure ids exist (structures.json worldgen); W unloaded on positioned locates is a false positive
+SQ-BLC-02,BLC.qb,prefixed,rewrote,"needed its own boot without the layout cache but shared SQ-BLC-01s boot: in-row edit deletes the srv cache file, restart, then the solve and cmp checks; section normal-world prep as SQ-BLC-01"
+SQ-GFB-02,GFB.qb,prefixed,section @@prep,group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=-8188900049893920259 (the overall-run seed the section names; the row needs natural sand/gravel)
+SQ-WGP-07,WGP.qb,prefixed,section @@prep,group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=-8188900049893920259 (eval seed; pregen time vs the 5:26 baseline is meaningless on flat)
+SQ-WGP-01,WGP.qb,prefixed,section @@prep,group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=-8188900049893920259; section @@prep copy of tools/worldgen_perf_probe/wgp_probe.js as zz_wgp_probe.js (eval_server.sh setup did this; prep_srv.sh does not)
+SQ-WGP-02,WGP.qb,prefixed,section @@prep,"/wgp cliffs and /wgp dims come from wgp_probe.js, never copied by the drive: section @@prep copy; normal-world prep as SQ-WGP-01"
+SQ-BLC-01,BLC.qb,prefixed,section @@prep,group A is superflat: section @@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 (the row locates a tuned rare biome)
+SQ-TER-07,TER.qb,prefixed,section @@prep,normal-world prep of the section (no change to its tag checks)

@@ -7,11 +7,14 @@
 @@date 2026-10-30
 @@jars creativecompat creativeworldgen
 @@sources feature_writeup/mob_block_tweaks.md
+@@reviewed 2026-11-20
+@@prep toml creativecompat-common.toml monster_box cooldownTicks 200
+@@prep boot=2: toml creativecompat-common.toml monster_box vaultMode false
 @@text
 @@text Needs Creative Common 1.1.04 from 2026-10-30 22:59 or later (`mobs/MonsterBoxVault`, `MonsterBoxBlockEntityMixin`,
 @@text `CreateBreakerMonsterBoxMixin`), the KubeJS block properties, block tags and reward table, and
 @@text `quark-common.toml` with `Enable Extra Loot Table = false`. Group A (superflat), Normal difficulty, a bot player.
-@@text For SQ-MBX-04 set `[monster_box] cooldownTicks = 200` in the scratch `creativeengineering-common.toml` before boot.
+@@text `[monster_box]` lives in `creativecompat-common.toml`: the section's @@prep sets `cooldownTicks = 200` for boot 1 (SQ-MBX-03, -04) and `vaultMode = false` for boot 2 (SQ-MBX-07). Each bot row spawns its own bot qa.
 @@text
 @@table
 ## SQ-MBX-01 | monster box mixins and reward table
@@ -29,6 +32,9 @@ bootreject (?i)monster.?box.*(missing|not found)
 @pass box still there; NBT has `creativeengineering:phase` 1b and a `creativeengineering:wave` list of 5-8 UUIDs
 @fails redirect not applied (box gone) or claim scan missed the mobs
 @from batches/r1106spf/b1.qb
+# r1120lr batch fault: no bot qa in the step ('tp qa -> No entity was found'); the row spawns it
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > difficulty normal
 > setblock 20 -60 -20 quark:monster_box
 > tp qa 18 -60 -20
@@ -48,6 +54,9 @@ look the wave list holds 5 to 8 UUIDs
 @from batches/r1106spf/b1.qb
 # scratch-only: no mob drops, so the item count is the reward alone; bot leaves at once so the 200-tick cooldown
 # does not re-arm the box with the bot beside it (SQ-MBX-04 needs phase 0 first) and the bot cannot pick up the reward
+# r1120lr batch fault: no bot qa in the step ('tp qa -> No entity was found'); the row spawns it
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > kill @e[type=minecraft:item]
 > gamerule doMobLoot false
 > tp qa 0 -60 0
@@ -63,10 +72,13 @@ look until = game time + 72000 normally; this boot has cooldownTicks 200, so unt
 
 ## SQ-MBX-04 | cooldown ends, a new wave starts (cooldownTicks 200)
 @group A
-@commands (cooldownTicks 200) after SQ-MBX-03 wait 11 s with the bot away, then bring it back
+@commands (cooldownTicks 200, section @@prep) after SQ-MBX-03 wait 11 s with the bot away, then bring it back
 @pass phase 0b, then a new wave and phase 1b
 @fails cooldown never ends
 @from batches/r1106spf/b1.qb passed
+# r1120lr batch fault: no bot qa in the step ('tp qa -> No entity was found'); the row spawns it
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > tp qa 0 -60 0
 > kill @e[type=item]
 sleep 12
@@ -105,10 +117,15 @@ look if the drill did not turn (motor facing wrong), set facing=east on the moto
 
 ## SQ-MBX-07 | vaultMode off: box breaks after spawning (Quark behavior)
 @group A
-@commands `[monster_box] vaultMode = false`, boot, repeat SQ-MBX-02
+@commands `[monster_box] vaultMode = false` in `creativecompat-common.toml` (boot 2), repeat SQ-MBX-02
 @pass box breaks after spawning (Quark behavior)
 @fails off switch
 @from batches/r1031/a2_variants.qb passed
+@boot 2
+# r1120lr batch fault: needs its own boot with vaultMode=false (boot 2, section @@prep) and bot qa
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
+> difficulty normal
 > setblock 20 -60 -24 quark:monster_box
 > tp qa 18 -60 -24
 sleep 5

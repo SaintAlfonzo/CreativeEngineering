@@ -19,6 +19,7 @@
 @pass members line lists `largemeals`; `Large Meals upstream assets: N files`; no `Item is not food: largemeals:`; no KubeJS recipe errors naming largemeals
 @fails missing dict key, jar missing/sha1 (LGM-01)
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
 bootexpect \[creativedelight\] members: \[.*\blargemeals\b
 bootexpect Found new data pack largemeals_upstream_data
 bootreject Item is not food: largemeals:
@@ -30,6 +31,7 @@ kjsreject (?i)(error|exception).*largemeals
 @pass 18 items, 3 blocks
 @fails registry (LGM-02)
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
 > dumpitemsbymod
 waitlog \[dumpitemsbymod\] wrote 300
 shell python3 -I $INST/tools/scratch_query/dumpq.py mod largemeals 18; python3 -I -c "import json;print(sorted(json.load(open('kubejs/exported/items_by_mod/largemeals.json'))['items']))"
@@ -41,6 +43,10 @@ look rows/SQ-LGM-02.shell.txt: 18 items plus the 3 feast blocks (omurice_block, 
 @pass Potato Soup out, bowl consumed; without a bowl the pot holds the meal (LGM-03)
 @fails recipe/container
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
 > setblock 180 -60 500 minecraft:campfire[lit=true]
 > setblock 180 -59 500 farmersdelight:cooking_pot
 > data merge block 180 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
@@ -72,7 +78,10 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass about half drop a Raw Rack of Mutton; burning ones the Cooked Rack; none with the sword (LGM-05, 06)
 @fails loot modifier (`data/forge/loot_modifiers`)
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
 > cdevtest kill 190 -60 500 minecraft:sheep n=20 held=farmersdelight:iron_knife
 > cdevtest kill 190 -60 500 minecraft:sheep n=20 held=farmersdelight:iron_knife fire
 > cdevtest kill 190 -60 500 minecraft:sheep n=20 held=minecraft:stone_sword
@@ -105,7 +114,10 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass 4 Bowl of Omurice, then the plate leftover; full drops the feast item, part-eaten a bowl (LGM-09, 10)
 @fails FeastBlock property names
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
 > setblock 200 -60 500 largemeals:omurice_block
 > pbot spawn lg7 200 -60 503 minecraft:overworld survival
 > pbot hold lg7 minecraft:bowl 5
@@ -131,7 +143,10 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass each gives the feast (LGM-17); grid craft listed `_manual_only`
 @fails pot ingredient limit 6
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
 > cdevtest recipes roasted_mutton_rack
 > setblock 205 -60 500 minecraft:campfire[lit=true]
 > setblock 205 -59 500 farmersdelight:cooking_pot
@@ -183,4 +198,5 @@ reject \[cdevtest\] verb=\S+ .*error=
 @commands LGM-11 Feast Plating tab (3 pages), LGM-12 both curries' names, LGM-14 and 20 Display Delight placement (13 blocks), LGM-15, 16 Spice of Life (Hearty Lunch complexity 6, servings counted from the placed feast and the hand), LGM-19 Knife and Machete Drops tab, tooltips on the racks
 @pass as the test list
 @fails
+@reviewed 2026-11-20
 @draft no batch holds this row yet

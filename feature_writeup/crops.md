@@ -1110,9 +1110,10 @@ Findings (2026-10-30):
   grapevine stem and lattice, Vinery apple and cherry leaves (`backportedVinery` `-06`), Ender's Delight chorus flame
   (CD member `endersAdditions` `-02`). Chorus succulent and sea pickle grow by bone meal only (tooltip only).
 - **Grasses** (`grass` type, BUILT 2026-11-02, TODO `farming/crops #28`): grass block, short grass, tall grass, fern,
-  large fern; owner rule 2026-11-03 (replaces winter off): summer off and both tropical seasons (wet and dry, arid
-  biomes too, which use the same wet/dry calendar) off, spring, autumn and winter neutral, so the tooltip and WTHIT
-  read "Offseason: Summer, Wet, Dry".
+  large fern; off in winter only, every other season (wet and dry included) neutral, as shipped in 1.2.02 ("grass-type
+  blocks that spread are off in winter only [summer and the wet and dry seasons]"; replaces the 2026-11-03 rule of
+  summer, wet and dry off). Grass, tall grass, ferns and large ferns show no growing seasons in tooltips and WTHIT.
+  Rows SQ-PST-03, -08, -09c, -10c, -11, -11b test winter at `grassOffPenalty` (r1120fix, 2026-11-20).
   Grass spreads without the crop-grow event, so Creative Calendar hooks it directly: `GrassSpreadSeasonMixin` on the
   vanilla grass-block random tick (spread onto dirt; a covered grass block still turns to dirt at full speed; mycelium
   and nylium share the class but are untyped) and `IWGrowthSeasonMixin` on Immersive Weathering's block growths (a

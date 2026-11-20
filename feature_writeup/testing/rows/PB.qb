@@ -19,7 +19,7 @@
 @commands Boot; `pbot status`; `pbot spawn bot1 ~ ~ ~`; `pbot list`; `forge tps`; grep latest.log for `bot1` and `Exception`
 @pass `cdevperfbot ok`; a normal join line, no exception from Forge networking, FTB, KubeJS login handlers or Lightman's; bot listed
 @fails NPE in a mod's login handler: that mod reads something `BotConnection` lacks (remote address, channel attribute); stack names it
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > pbot status
 > pbot spawn bot1 3000 -60 3000 minecraft:overworld survival
 > pbot list
@@ -34,7 +34,7 @@ look the join line is a normal one; no stack from Forge networking, FTB, KubeJS 
 @commands `fill` a 9 x 9 farmland + `wheat[age=0]` patch 10 blocks from spawn; `pbot spawn bot1` beside it; 5 min; `execute if block` count of age > 0; repeat with the bot removed
 @pass Wheat grows with the bot, none without
 @fails No growth: `BotPlayer.tick` chunk move not running, or the bot is in spectator
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # tickwarp replaces the 5 min (6000 ticks); the second field is forceloaded without a player, so it gets no random ticks
 > gamerule randomTickSpeed 3
 > fill 2995 -61 3005 3003 -61 3013 minecraft:farmland[moisture=7]
@@ -59,7 +59,7 @@ look first verb=ages line (bot beside the field) grew, second (no player) stayed
 @commands `pbot path bot1 <x+500> 200 <z> 1.5`; after 20 s grep `perf/bot/ticks-*.csv` for `path_done:bot1`; status lines' chunk column; `pbot census t`
 @pass `path_done` after about 334 ticks; loaded chunks follow; `perf/bot/census-t.json` written
 @fails Chunks don't follow: `ServerChunkCache.move` not reached
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # the path is 500 blocks at 1.5 b/t (about 334 ticks): a 400-tick warp replaces the 20 s
 > pbot path bot1 3500 200 3000 1.5
 > cdevtest tickwarp 400

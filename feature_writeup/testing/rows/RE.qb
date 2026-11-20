@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-RE engineering findings F4, F5, F9, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7; [recipes_engineering.md](../recipes_engineering.md) RE-31 to RE-33; TODO `recipes/engineering #3`)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/recipes_engineering.md kubejs/data/creativeengineering/kubejs/engineering/crystal.js kubejs/data/creativeengineering/kubejs/engineering/dust.js kubejs/data/creativeengineering/kubejs/engineering/redstone.js
 @@text

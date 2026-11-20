@@ -7,6 +7,7 @@
 @@phase worldgen
 @@date 2026-10-30
 @@jars creativeworldgen
+@@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309
 @@text
 @@text Creative Common built (compileJava); installed 2026-10-30 17:06 with the meta batch below (SQ-META31): `TemplateTrim#trimAir` + tag `template_trim/air`, `EarthFill`
 @@text `beardFootprint` (default off), `OceanGeodes` `floorPatch` (OFF / CUT / SWAP, default SWAP). Data: `kubejs/server_scripts/worldgen/terrain_adaptation.js`
@@ -30,7 +31,8 @@ look the world-load line: trimmed up by 4, "1 air-trimmed", sunk starts up by 1 
 @pass no square pad or air notch, the water stays in the pond, the rim flush with the slope; carp: no 4-block dip or plinth (ST-300)
 @fails pond spills: water fill override `#water_fill/ponds`; plinth: `TerrainAdaptation#sink`
 @from batches/r1031/w3_terrain.qb
-> pbot spawn qa 0 150 0 minecraft:overworld creative
+@absent farmers_structures:aquacultures_common farmers_structures:aquacultures_carp (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+> execute unless entity qa run pbot spawn qa 0 150 0 minecraft:overworld creative
 > execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
 waitlog nearest minecraft:windswept_hills is at 300
 capture HL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -48,6 +50,9 @@ look positions {HL1},{HL3} / +60 / -60: no square pad or air notch, water stays 
 @pass no 94x98 square cut into the hills round the base; snow on the upper ledges whole (ST-301)
 @fails bare stone ledges: the air trim dropped snow (should never: only air goes), check `TemplateTrim#apply` picked `trimAir`
 @from batches/r1031/w3_terrain.qb
+@absent terralith:spire (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+# r1120fix (2026-11-20): own bot, so the row runs alone
+> execute unless entity qa run pbot spawn qa 0 150 0 minecraft:overworld creative
 > execute positioned 2144 70 -2592 run locate biome minecraft:snowy_slopes
 waitlog nearest minecraft:snowy_slopes is at 300
 capture IC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -64,6 +69,14 @@ look no 94x98 square cut into the hills round the base, snow on the upper ledges
 @pass no grass slab around the walls; a large-ruins cluster with one as anchor looks the same (ST-302)
 @fails pad left: template_trim tag not bound (SQ-TER-01)
 @from batches/r1031/w3_terrain.qb
+@absent philipsruins:level_three_ruins (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+# r1120fix (2026-11-20): own bot and hillside capture (HL was SQ-TER-02's), so the row runs alone
+> execute unless entity qa run pbot spawn qa 0 150 0 minecraft:overworld creative
+> execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
+waitlog nearest minecraft:windswept_hills is at 300
+capture HL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {HL1} 200 {HL3+180}
+sleep 25
 > execute positioned {HL1} 120 {HL3+120} run place structure philipsruins:level_three_ruins
 > execute positioned {HL1+80} 120 {HL3+120} run place structure philipsruins:level_three_ruins
 > execute positioned {HL1} 120 {HL3+240} run place structure creativeworldgen:meta/ruin_cluster

@@ -53,6 +53,7 @@
 @commands Boot. `grep -nE "solraspberrypie\|Raspberry Pie\|Mixin apply.*solraspberrypie\|InvalidInjectionException" logs/latest.log` (RPI-01)
 @pass `Diet ladder: 38 rungs, 5 slots, 14 pool effects`; no mixin or injection error; no "Apple Pie still has its own benefits" warning; no "resetOnDeath is true" warning
 @fails mixin target names in `development/solRaspberryPie/.../mixin/` (Apple Pie `initPages`, `m_7856_`, `updateFoodList`, `addFood`); world copied an old `serverconfig/solapplepie-server.toml` (fresh world needed)
+@reviewed 2026-11-20
 @from batches/r1112/rp1.qb passed
 bootexpect Diet ladder: 38 rungs, 5 slots, 14 pool effects
 bootreject InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError
@@ -65,6 +66,7 @@ shell grep -nE "solraspberrypie|Raspberry Pie" logs/latest.log | cut -c1-300 | h
 @commands Same boot: `ls saves/<world>/serverconfig/solraspberrypie/ladder.json`; `diff` it with `defaultconfigs/solraspberrypie/ladder.json`
 @pass file exists, identical (seeded from defaultconfigs)
 @fails `LadderLoader.load` seeding path (`FMLPaths.GAMEDIR/defaultconfigs`)
+@reviewed 2026-11-20
 @from batches/r1112/rp1.qb passed
 bootexpect Seeded .*ladder\.json from .*defaultconfigs
 shell ls -l rp/serverconfig/solraspberrypie/ladder.json && diff rp/serverconfig/solraspberrypie/ladder.json defaultconfigs/solraspberrypie/ladder.json && echo IDENTICAL
@@ -74,6 +76,7 @@ shell ls -l rp/serverconfig/solraspberrypie/ladder.json && diff rp/serverconfig/
 @commands Stop. In the world's `ladder.json` add `{"threshold": 3, "type": "unlock", "effect": "nosuchmod:thing"}` and `{"threshold": 4, "type": "flat", "effect": "minecraft:absorption"}`; boot (RPI-20, RPI-35, V10)
 @pass exactly one line `skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3.0`; one `V10: flat minecraft:absorption` warning; still `Diet ladder: 38 rungs`
 @fails `LadderLoader.parse` skipped / warnings lists
+@reviewed 2026-11-20
 @from batches/r1112/rp2.qb
 bootexpect skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3\.0
 bootexpect V10: flat minecraft:absorption
@@ -86,6 +89,7 @@ look exactly one skipped line and one absorption V10 line (counts above both 1)
 @commands Stop. Break the world's `ladder.json` (delete a comma); boot (V13, Q-H)
 @pass `DIET LADDER FILE IS BROKEN OR MISSING` block; `Diet ladder` line absent but the server runs on the built-in ladder (`/solrp pause list` works)
 @fails `LadderLoader.load` catch path; `default_ladder.json` in the jar
+@reviewed 2026-11-20
 @from batches/r1112/rp3.qb passed
 bootexpect DIET LADDER FILE IS BROKEN OR MISSING
 bootreject Diet ladder: 38 rungs
@@ -97,6 +101,7 @@ expect rpb|paused
 @commands Restore the ladder. Console: `/solrp pause list`, then with a bot or player `<name>`: `/solrp pause <name>`, `/solrp pause list`, `/solrp resume <name>`, `/solrp pause list` (RPI-37 commands)
 @pass "No player has paused diet bonuses"; "Paused diet bonuses for 1 players"; list names the player; "Resumed ..."; list empty again. Stop and boot: list state survives
 @fails `RpCommands`, `PauseRegistry` (world `data/solraspberrypie_paused.dat`)
+@reviewed 2026-11-20
 @from batches/r1112/rp1.qb
 > pbot spawn rpb 0 -60 0 minecraft:overworld survival
 sleep 3
@@ -118,7 +123,7 @@ look none -> paused 1 -> list names rpb -> resumed -> empty -> paused again (lef
 @pass both Raspberry Pie recipes load; Apple Pie's `solapplepie:food_book` recipe is removed (0 matches), no NCH remove error
 @fails `data/solraspberrypie/recipes/`; `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js`
 @from batches/r1112/rp1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest bytype solraspberrypie:diet_book
 waitlog \[cdevtest\] verb=bytype done= 30
 > cdevtest recipes diet_log
@@ -316,7 +321,7 @@ look record whether a `verb=recipes id=solapplepie:food_book` line is still pres
 @pass "Reset the diet of 1 players"; the bot gets "Your diet was reset"; Apple Pie's food list has `foodsEaten` 0, an empty `foodList` and an empty `solrp_gateFoods`; Raspberry Pie's `diet` cap has `maxDiversity` 0 and empty `slots` and `drinks`
 @fails `RpCommands.reset`; `FoodListMixin.solrp$save`
 @from batches/r1115/p9_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > forceload add 0 990 40 1010
 > pbot spawn rp7 10 -60 1000 minecraft:overworld survival
 sleep 3
@@ -339,7 +344,7 @@ waitlog \[zc4\] sol rp7 20
 sleep 1
 > solrp reset rp7
 sleep 1
-expect Reset the diet of 1 players
+expect Reset the diet of 1 players|solraspberrypie\.cmd\.reset
 > zc4 sol rp7
 > data get entity rp7 ForgeCaps
 sleep 1
@@ -351,6 +356,7 @@ look ForgeCaps after the reset: Apple Pie food list foodsEaten 0, foodList [] an
 @commands Stop. In the world's `serverconfig/solapplepie-server.toml` set `thresholds = [0.0]`, `benefitsUnparsed = ["attribute,generic.max_health,4"]`, `minFoodsToActivate = 0`; boot; bot joins; `/attribute <name> minecraft:generic.max_health get`; `/data get entity <name> Attributes` (#33)
 @pass boot log has "Apple Pie still has its own benefits configured"; max health 20; no attribute modifier named `..._modifier_...` (Apple Pie would add 4 at login without the fix)
 @fails `BenefitsHandlerMixin` (`updateBenefits`, `tickBenefits`)
+@reviewed 2026-11-20
 @from batches/r1115/p9_a1b.qb
 bootexpect Apple Pie still has its own benefits configured
 shell grep -nE "thresholds|benefitsUnparsed|minFoodsToActivate" p9a/serverconfig/solapplepie-server.toml | grep -v "#"

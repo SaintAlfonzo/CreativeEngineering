@@ -19,6 +19,7 @@
 @pass members line lists `roll_delight`; `Roll Delight upstream assets: N files`; no `Failed to parse` / loot table error naming `roll_delight`; no error in `roll_delight/*.js` (ROLL-01)
 @fails donor missing or sha1 changed; generated loot JSON rejected (state range syntax)
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
 bootexpect \[creativedelight\] members: \[.*\broll_delight\b
 bootexpect Found new data pack roll_upstream_data
 bootreject (?i)(failed to parse|loot table).*roll_delight
@@ -31,7 +32,7 @@ shell echo "kubejs server.log Error lines: $(grep -c Error logs/kubejs/server.lo
 @pass all present
 @fails tag script not run / helper name
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest tag item creativedelight:chopstick_foods
 > cdevtest tag item roll_delight:nether_roll_meat
 expect \[cdevtest\] verb=tag kind=item tag=creativedelight:chopstick_foods n=\d+ ids=.*\broll_delight:rice_roll_slice\b
@@ -45,20 +46,22 @@ reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-03 | chopsticks lengthen the off-hand food's effects 1.5x (Glowing Calamari Roll; bot at 150)
 @group A
-@commands Bot: hunger 19 (`/effect give @p minecraft:hunger 2 255` then wait), main hand `roll_delight:chopsticks`, off hand `farmersdelight:cooked_rice`, use until eaten; `/data get entity @p foodLevel`; `/data get entity @p ActiveEffects`; `/data get entity @p SelectedItem`
+@commands Bot: hunger 19 (`pbot hunger <bot> 19`), main hand `roll_delight:chopsticks`, off hand `farmersdelight:cooked_rice`, use until eaten; `/data get entity @p foodLevel`; `/data get entity @p ActiveEffects`; `/data get entity @p SelectedItem`
 @pass hunger 20 (capped), no Comfort (cooked rice has none; use a Comfort food to check the 1.5x duration), chopsticks Damage 1 (ROLL-07)
 @fails Start/Finish hook: off-hand identity check, `getUsedItemHand`
 @from batches/r1103/p2_R.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # r1103 p2: cooked rice has had no Comfort since the 2026-11-02 Comfort / Nourishment rules (comfort_nourishment.json
 # "none"), so its read could not show the lengthening; hunger 19 -> 20 and chopsticks Damage 1 passed there
 > cdevtest food creativedelight:glowing_calamari_roll
 > pbot spawn rl3 150 -60 503 minecraft:overworld survival
 sleep 2
 > clear rl3
-> effect give rl3 minecraft:hunger 1 255
-sleep 3
+# r1120lr batch fault: effect hunger 1 255 left the bot at foodLevel 20, so the roll (not always-edible) could not be eaten; the bot's food is set to 19 directly
+> pbot hunger rl3 19
+sleep 1
 > data get entity rl3 foodLevel
+expect rl3 has the following entity data: 19$
 > pbot hold rl3 roll_delight:chopsticks
 > item replace entity rl3 weapon.offhand with creativedelight:glowing_calamari_roll
 > cdevtest useair as=rl3 hand=both
@@ -80,7 +83,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass no durability lost, nothing extra eaten (ROLL-08)
 @fails B5 regression
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > pbot spawn rl4 150 -60 506 minecraft:overworld survival
 > effect give rl4 minecraft:hunger 1 255
 sleep 3
@@ -110,7 +113,10 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass 3 mushroom slices, 3 Salmon Maki, 2 Tobiko in that order, then the plate stays (servings 0) and the 9th click breaks it for a bowl; held dirt places against it; chopsticks eat one serving in place, 1 damage (ROLL-10, ROLL-14, ROLL-18)
 @fails `use` override, FeastBlock super
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
 > setblock 155 -60 500 roll_delight:legendary_roll_medley
 > pbot spawn rl5 155 -60 503 minecraft:overworld survival
 repeat 9
@@ -149,7 +155,10 @@ look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, th
 @pass drops the 5 servings still on the plate (2 Nether Rolls, 3 Golden Roll Slices) and 1 bowl; at `[servings=8]` the medley itself (ROLL-11)
 @fails loot table generator
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
 > setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=5]
 > cdevtest break 160 -60 500
 > setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=8]
@@ -166,7 +175,10 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass 4 pairs, then 4 plain Chopsticks back and the block gone; breaking at 3 drops 3 Wrapped Chopsticks (ROLL-12)
 @fails `use`, set_count conditions
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
 > setblock 165 -60 500 roll_delight:wrapped_chopsticks
 > pbot spawn rl7 165 -60 503 minecraft:overworld survival
 > pbot hold rl7 roll_delight:wrapped_chopsticks 3
@@ -195,7 +207,10 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass shears: 1 frogspawn item; hand: nothing (ROLL-05)
 @fails BreakEvent hook
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
 > fill 169 -61 499 171 -61 501 minecraft:water
 > setblock 170 -60 500 minecraft:frogspawn
 > cdevtest break 170 -60 500 held=minecraft:shears
@@ -212,6 +227,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass Unbreaking applies (ROLL-16 server half)
 @fails enchant category / Apotheosis filter
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-20
 > pbot spawn rl9 175 -60 506 minecraft:overworld survival
 > pbot hold rl9 roll_delight:chopsticks
 > enchant rl9 minecraft:unbreaking 3
@@ -224,4 +240,5 @@ reject (?i)(can't|cannot) (be )?(enchant|apply)|does not support
 @commands ROLL-02, 03, 13, 15, 17, 19 to 22 (JEI recipes, names Salmon Maki Roll / Salmon Maki / Rice Roll Slice, golden gild page, tooltips on chopsticks and chopstick foods, Spice of Life count, anvil plank repair), medley and wrapped chopsticks models at every serving count and facing
 @pass as roll_delight.md 8
 @fails translator blockstate rewrite (servings = 8 - upstream blockstate; chopsticks = upstream + 1)
+@reviewed 2026-11-20
 @draft no batch holds this row yet

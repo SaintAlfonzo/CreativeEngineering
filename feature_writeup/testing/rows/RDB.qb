@@ -21,11 +21,12 @@
 @pass Same recipe ids (270), same tag members, same loot tables
 @fails Diff names the file; check its `bake_manifest.json` rules
 @from batches/r1113/c4_a.qb
+@reviewed 2026-11-20
 shell rm -rf rdb_base && cp -r kubejs/exported rdb_base && echo "baseline copied: $(grep -c '^rusticdelight:' rdb_base/recipes/all.csv) rusticdelight recipes"
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 shell python3 $INST/tools/scratch_query/rdb_compare.py rdb_base kubejs/exported rusticdelight
-look every [rdb] line SAME (recipes 270); a DIFF names the entry: check its bake_manifest.json rule. items_by_mod on a dedicated server may lack client-only names (ids still compare)
+look every [rdb] line SAME (recipes 267 in the 2026-11-19 pack dump, 270 on 2026-11-10; base and now both come from this run); a DIFF names the entry: check its bake_manifest.json rule. items_by_mod on a dedicated server may lack client-only names (ids still compare)
 
 ## SQ-RDB-03
 @group A
@@ -39,19 +40,22 @@ look every [rdb] line SAME (recipes 270); a DIFF names the entry: check its bake
 @commands New world; `/place feature rusticdelight:wild_bell_peppers_placed`, `wild_cotton_placed`, `wild_coffee_placed`, `bell_pepper_block_patch_placed` on grass; a jungle temple and village chest roll (loot tables `/loot spawn`) and a Wandering Trader
 @pass Patches place (peppers base colors only); chest seeds and trader seeds as in SQ-RD-24, -26
 @fails `base_patch` rule or a worldgen file missing
-@reviewed 2026-11-16
-# a grass platform at y 199 far from spawn (the placed features follow the heightmap onto it)
+@reviewed 2026-11-20
+@absent rusticdelight:wild_bell_peppers rusticdelight:wild_cotton rusticdelight:wild_coffee rusticdelight:bell_pepper_block_patch (configured features of the CD rustic member; the registry dump lists none)
+# a grass platform at y 199 far from spawn
+# r1120fix (2026-11-20): /place feature takes CONFIGURED feature ids in 1.19.2 (the _placed ids are placed features) and
+# answers Placed "<id>" at x, y, z (was counted as "Placed feature", which never matches)
 > forceload add 41000 41000 41047 41047
 > fill 41000 199 41000 41047 199 41047 minecraft:grass_block
-> place feature rusticdelight:wild_bell_peppers_placed 41008 200 41008
-> place feature rusticdelight:wild_cotton_placed 41038 200 41008
-> place feature rusticdelight:wild_coffee_placed 41008 200 41038
-> place feature rusticdelight:bell_pepper_block_patch_placed 41038 200 41038
+> place feature rusticdelight:wild_bell_peppers 41008 200 41008
+> place feature rusticdelight:wild_cotton 41038 200 41008
+> place feature rusticdelight:wild_coffee 41008 200 41038
+> place feature rusticdelight:bell_pepper_block_patch 41038 200 41038
 > cdevtest count 41000 200 41000 41047 202 41047 #minecraft:replaceable_plants
 > cdevtest count 41000 200 41000 41047 202 41047 rusticdelight:wild_cotton
 > cdevtest count 41000 200 41000 41047 202 41047 rusticdelight:wild_coffee
 > cdevtest count 41000 200 41000 41047 202 41047 rusticdelight:bell_pepper_red_block
-count Placed feature == 4
+count Placed "rusticdelight: == 4
 reject Failed to place feature
 expect verb=count block=rusticdelight:wild_cotton n=[1-9]
 expect verb=count block=rusticdelight:wild_coffee n=[1-9]

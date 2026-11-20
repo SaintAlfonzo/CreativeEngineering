@@ -8,6 +8,8 @@
 @@date 2026-11-09
 @@jars creativeworldgen
 @@sources feature_writeup/visceral_heap.md
+@@prep boot=2: fresh
+@@prep boot=2: rm mods/BiomesOPlenty-*.jar
 @@text
 @@text Targets Creative Worldgen and Creative Common 23:00 and `BiomesOPlenty-1.19.2-17.1.2.544.jar` (all installed in `mods/`). None of this has ever booted, so run SQ-VH-01 first. The worldgen rows need a fresh level. `<p>` is a Heap position from SQ-VH-04.
 @@text
@@ -18,6 +20,7 @@
 @pass `Done (` reached; grep prints nothing
 @fails Mixin targets: `mixin/visceralheap/`, `WorldgenMixinPlugin`. A missing dependency screen names the stub (`terrablenderStub` in `META-INF/jarjar/`). `Registry Object not present` means an eager read of a filtered entry: add a mixin (writeup section 3 has the pattern). `lowcodefml` was not used.
 @from batches/r1111/bw.qb passed
+@reviewed 2026-11-20
 bootexpect Done \(
 bootreject Mixin apply.*failed|Couldn't load tag.*biomesoplenty|Failed to load.*biomesoplenty|InvalidMixin|Critical injection failure
 > say vh01
@@ -243,7 +246,10 @@ look RECORD: locate answer and distance from 3000 3000; flesh present in the new
 @pass Boots; `biomesoplenty` listed under off; Nether has the 5 vanilla biomes
 @fails `isAbsent` in `BiomeLayoutTuner`; `kubejs/.../tags/visceral_heap.js` `requires` header. The offline solve already passed this logic (writeup section 4)
 @from batches/r1111/vh12.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+@boot 2
+# r1120fix (2026-11-20): it shared SQ-VH-01's boot with BOP in mods/; now boot 2 of the step on a fresh world, section
+# @@prep boot=2 removes the BOP jar (a removed-jar boot needs a world without BOP blocks)
 bootexpect Done \(
 shell grep -iE "mod data packs on|biomesoplenty" logs/latest.log | grep -iE "off|absent|skip|data packs" | head -5 | cut -c1-300
 > cdevtest tag biome minecraft:is_nether

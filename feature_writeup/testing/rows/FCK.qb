@@ -575,13 +575,18 @@ reject \[cdevtest\] .*done=0
 ## SQ-FCK-20 | idle random ticks: grown or finished states claim no random ticks; their growing states still do
 @group A
 @commands Row z 1200 (stopped): tomato vines age 3 (FD, Supplementaries rope and stick, treated stick), rice age 3 with panicles above, the six colonies age 3, hemp `growth=top0`, strawberry bush age 6, adzuki age 6, waxed stone lantern, fully mossed deepslate lantern, poppy and wither rose bushes; row z 1203 (growing): tomato age 2, rice without panicles, brown colony age 2, hemp `bottom4`, strawberry age 5, adzuki age 5, bare stone lantern; `cdevtest randomtick` once over each row; grep latest.log `[perf] idle random ticks`
-@pass stopped row `block_ticks=0`, growing row `block_ticks=7`; one `[perf] idle random ticks: 35 rules on 35 blocks` line, no `idleRandomTickRules: skipped` (random_tick_audit.md rows 1-7, 9, 11, 12)
+@pass stopped row `block_ticks=0`, growing row `block_ticks=7`; one `[perf] idle random ticks: 35 rules on 33 blocks` line, no `idleRandomTickRules: skipped` (random_tick_audit.md rows 1-7, 9, 11, 12)
 @fails stopped row ticks: Common jar without `IdleRandomTickMixin` or `[perf] idleRandomTicks` off; fewer than 35 rules: a block id or property renamed (the skipped line names it); growing row below 7: one of them never random-ticked (the audit's unconfirmed "flag" rows), note which in random_tick_audit.md
 @jars creativecommon
 @draft no batch holds this row yet
+@reviewed 2026-11-20
 shell grep -h "\[perf\] idle random ticks\|idleRandomTickRules: skipped" logs/latest.log | cut -c1-300
-shell grep -q "\[perf\] idle random ticks: 35 rules on 35 blocks" logs/latest.log
+# 35 rules on 33 blocks: redeco stone_lantern and deepslate_lantern carry two rules each (IdleTickRules defaults, rule 11)
+shell grep -q "\[perf\] idle random ticks: 35 rules on 33 blocks" logs/latest.log
 shell test "$(grep -c "idleRandomTickRules: skipped" logs/latest.log)" = 0
+# forceload (r1120fix, 2026-11-20): r1120nv batch fault, the row area was not loaded
+> forceload add 1196 1196 1240 1208
+sleep 3
 > setblock 1200 -60 1200 farmersdelight:tomatoes[age=3]
 > setblock 1202 -60 1200 supplementaries:rope_tomatoes[age=3]
 > setblock 1204 -60 1200 supplementaries:stick_tomatoes[age=3]
@@ -624,7 +629,11 @@ look the two randomtick lines come in command order: the first (stopped row) mus
 @fails rope stays: the +wake_above line missing from `idleRandomTickRules` or the updateShape hook not applied; picked vine `block_ticks=0`: the rule matches below age 3 (`age=max` lost)
 @jars creativecommon
 @draft no batch holds this row yet
+@reviewed 2026-11-20
 > time set noon
+# forceload (r1120fix, 2026-11-20): r1120nv batch fault, the row area was not loaded
+> forceload add 1246 1196 1258 1204
+sleep 3
 > setblock 1250 -61 1200 minecraft:farmland[moisture=7]
 > setblock 1250 -60 1200 farmersdelight:tomatoes[age=3]
 > setblock 1250 -59 1200 farmersdelight:rope
@@ -635,6 +644,10 @@ end
 expect verb=state pos=1250,-59,1200 state="?farmersdelight:tomatoes\[.*ropelogged=true
 > setblock 1254 -61 1200 minecraft:farmland[moisture=7]
 > setblock 1254 -60 1200 farmersdelight:tomatoes[age=3]
+# own bot (r1120fix): rows run alone, G may not exist; stand it within reach of the vine
+> execute unless entity G run pbot spawn G 1254 -60 1202 minecraft:overworld survival
+sleep 2
+> tp G 1254.5 -60 1202.5
 > clear G
 > pbot use G 1254 -60 1200 up
 > cdevtest state 1254 -60 1200
@@ -765,17 +778,18 @@ look the randomtick box is the bush only (the wheat stays age 3); items: Rustic 
 
 ## SQ-MG-23 | 2 pack merges; Twigs azalea flowers turn into IW flowers; no recipe makes Twigs' item
 @group A
-@commands Grep logs for `[itemMerges] 2 pack merges registered`, `IwAzaleaFlowersPlaceMixin`; recipe probe output `immersive_weathering:azalea_flowers` and any `twigs:azalea_flowers`; give 3 `twigs:azalea_flowers`
-@pass 2 pack merges; no mixin error; Twigs' flowering-azalea recipes make IW flowers; no recipe makes Twigs' item; the stack becomes 3 IW flowers
+@commands Grep logs for `[itemMerges] 4 pack merges registered`, `IwAzaleaFlowersPlaceMixin`; recipe probe output `immersive_weathering:azalea_flowers` and any `twigs:azalea_flowers`; give 3 `twigs:azalea_flowers`
+@pass 4 pack merges (rocky dirt, azalea flowers, two Little Logistics components); no mixin error; Twigs' flowering-azalea recipes make IW flowers; no recipe makes Twigs' item; the stack becomes 3 IW flowers
 @fails pair skipped (`already merged`); dict key changed
 @jars creativecommon creativedelight
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1113/c3_a1.qb
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
 > forceload add 1000 1000 1480 1080
 > execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
 sleep 3
-shell grep -qE "\[itemMerges\] 2 pack merges registered" logs/kubejs/startup.log
+# 4 pack merges since Little Logistics receiver and transmitter components -> create:redstone_link (Common _lib/item_merges.js)
+shell grep -qE "\[itemMerges\] 4 pack merges registered" logs/kubejs/startup.log
 bootreject IwAzaleaFlowersPlaceMixin.*(fail|error|Exception)
 > cdevtest makes immersive_weathering:azalea_flowers
 > cdevtest makes twigs:azalea_flowers
@@ -796,7 +810,7 @@ look the IW-flowers makes list holds Twigs' flowering-azalea recipes
 @pass no recipe uses or makes the flax items; rope only from 3 string, sack only wheat + string; no flax seeds in either table (MG-51)
 @fails Supplementaries reverted `[functional.flax]`; `misc_mods.js` not in the Compat jar
 @jars creativecommon creativedelight
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1113/c3_a1.qb
 > cdevtest uses supplementaries:flax
 > cdevtest uses supplementaries:flax_seeds
@@ -813,7 +827,9 @@ expect verb=uses item=supplementaries:flax_block alone=0 shared=0
 expect verb=makes item=supplementaries:flax_block n=0$
 expect verb=makes item=supplementaries:rope n=1$
 expect verb=makes item=supplementaries:sack n=1$
-expect verb=rdetail id=supplementaries:rope serializer=\S+ result=supplementaries:rope\*\d+ ingredients=minecraft:string,minecraft:string,minecraft:string$
+expect verb=rdetail id=supplementaries:rope serializer=\S+ result=supplementaries:rope\*\d+ ingredients=(?:empty,)*minecraft:string,(?:empty,)*minecraft:string,(?:empty,)*minecraft:string(?:,empty)*$
+> forceload add 1076 996 1084 1004
+sleep 3
 repeat 20
 > loot spawn 1080 -60 1000 loot minecraft:chests/pillager_outpost
 > loot spawn 1080 -60 1000 loot underground_bunkers:chests/underground_bunker/underground_bunker_treasure
@@ -883,11 +899,15 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass every display phase `half: lower`; growthTicks 9600
 @fails kubejs/data override not loaded
 @from batches/r1113/c3_a1.qb
+@reviewed 2026-11-20
 > zc3 pot fruitsdelight:botanypots/lemon
 waitlog \[c3\] pot fruitsdelight:botanypots/lemon 20
 expect pot fruitsdelight:botanypots/lemon: growthTicks 9600\b
-reject pot fruitsdelight:botanypots/lemon:.*half=upper
-look every state in display [...] carries half=lower
+# r1120fix (2026-11-20): zz_c3_probe prints the display as TransitionalDisplayState@hash (no block states), so a
+# half=upper reject passed vacuously. growthTicks 9600 (the override's 1200 x 8) proves the override loaded; the
+# phases are read from the same override file the server loaded
+shell python3 -I -c "import json,sys;d=json.load(open('kubejs/data/fruitsdelight/recipes/botanypots/lemon.json'));h=[p.get('properties',{}).get('half') for p in d['display']['phases']];print('lemon phases half:',h);sys.exit(0 if h and all(x=='lower' for x in h) else 1)"
+look the shell line lists only half=lower phases
 
 ## SQ-BOT-05 | Botany Pots recipe values reach the loaded recipes: wheat growthTicks 9600, Rich Soil Farmland 1.1
 @group A
@@ -1040,13 +1060,15 @@ look names half (Gelatin, Empty Terrarium) needs the client lang dump: leave for
 @pass rotten_meat = rotten flesh, rottenham, cookedrottenham; both hams in hazard only
 @fails hams still in the meat types (food_types.js stale)
 @jars creativedelight powergrid
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest tag item forge:rotten_meat
 > cdevtest tag item creativedelight:food_type/raw/meat
 > cdevtest tag item creativedelight:food_type/cooked/meat
 > cdevtest tag item creativedelight:food_type/hazard
 expect verb=tag kind=item tag=forge:rotten_meat n=3 ids=\S*hostiledelight:cookedrottenham,hostiledelight:rottenham,minecraft:rotten_flesh$
-expect verb=tag kind=item tag=creativedelight:food_type/hazard n=\d+ ids=\S*hostiledelight:cookedrottenham,hostiledelight:rottenham\b
+# each id on its own: hostiledelight:frozen_flesh sorts between them (r1120nv)
+expect verb=tag kind=item tag=creativedelight:food_type/hazard n=\d+ ids=(\S*,)?hostiledelight:cookedrottenham(,|$)
+expect verb=tag kind=item tag=creativedelight:food_type/hazard n=\d+ ids=(\S*,)?hostiledelight:rottenham(,|$)
 reject verb=tag kind=item tag=creativedelight:food_type/(raw|cooked)/meat .*hostiledelight:(cooked)?rottenham
 reject \[cdevtest\] .*done=0
 
@@ -1100,6 +1122,10 @@ look uses lines name recipe ids (the old probe printed results): a recipe whose 
 @fails stopped row ticks: Creative Brewing jar without the `isRandomlyTicking` override in PaleStemBlock / LegacyLatticeStemBlock; growing row below 3: the override matches below age 4 or with grape none
 @jars creativebrewing
 @draft no batch holds this row yet
+@reviewed 2026-11-20
+# forceload (r1120fix, 2026-11-20): r1120nv batch fault, the row area was not loaded
+> forceload add 1254 1236 1270 1248
+sleep 3
 > fill 1258 -60 1239 1266 -60 1239 minecraft:stone
 > fill 1258 -60 1241 1266 -60 1241 minecraft:stone
 > fill 1258 -60 1242 1266 -60 1242 minecraft:stone

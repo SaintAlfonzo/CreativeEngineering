@@ -763,6 +763,7 @@ look middle `Neighbors: 4 of 4`, corner `2 of 4`; web cube `Neighbors: 6 of 6` w
 @@text thornCooldownTicks 20, pathBlockLayers 6, bambooLeafChance 0.0005 / bambooLeafMaxLayers 4, leafOverlay true (removed 2026-11-19).
 @@table
 ## SQ-PS15B-13 | layers fall and stack: snow 3 onto 2 -> 5, snow 3 onto 7 -> snow block + 2 above, salt 2 onto 7 -> 8 + 1, bamboo 3 onto 3 -> full 6, sawdust onto air -> lands, snow into water -> snowballs
+@reviewed 2026-11-20
 @group A
 @commands Each pile sits on a stone block 4 above the ground (or over a water pool); the stone is removed and the pile falls onto the ground pile below
 @pass the merged states as in the title (one `say` line each); the water case leaves 3 snowballs as an item entity and no snow
@@ -853,11 +854,16 @@ expect ps15b13 water drop 3 snowballs
 @draft a boot with a cut-down mod set; the qrun boot profile has no jar-removal step yet
 
 ## SQ-PS15B-21 | /cdevbench passthrough, 14 cases: first in its cells on saved counts, recount cases unbudgeted
+@reviewed 2026-11-20
 @group A
 @commands As SQ-PTH-25c with this Devtools build: `/cdevbench passthrough` twice
 @pass `tick_field` and `tick_web_cube` under 1000 ns median (the per-tick table cleared, the chunk counts kept); `tick_field_recount` and `tick_web_cube_recount` recorded (full recount, no budget, white in chat); record all 14 in blockrunner.md 3.10
 @fails `PassBenchCommand.cold` (`PassCountCache.at` with a fresh key), `recount` (`PassCountCache.clear`)
 @jars creativedevtools
+# self-contained (r1120fix, 2026-11-20): forceload and bot P, as SQ-PTH-25c (the step runs it with SQ-PS15B-13 only)
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1150.5 -60 1150.5 minecraft:overworld survival
+sleep 3
 > tp P 1150.5 -60 1150.5
 sleep 2
 > execute as P at P run cdevbench passthrough
@@ -930,7 +936,7 @@ look tick_field and tick_web_cube medians under 1000; the two _recount rows pres
 @commands Boot line `config watcher on`; Compat `[debug.passthrough] timing` true by an in-place save (truncate + write, count 2: Forge missed it), then false by `sed -i` (rename); one appended blank line to Common's toml (a single write: Forge's own watcher would also have fired)
 @pass boot: `[creativecommon] config watcher on: N own config file(s)`; each save gives exactly one `[creativecommon] <file> reloaded` line within 3 s; `[passthrough-timing]` lines start after the first save and stop after the second; one line (not two) for Common's append
 @fails `OwnConfigWatcher.start` (FileWatcher.removeWatch, register MODIFY + CREATE), `OwnConfigLogic.Debounce`, `ConfigReload.reload` dispatch to the owning mod
-@reviewed 2026-11-17
+@reviewed 2026-11-20
 bootexpect \[creativecommon\] config watcher on: [0-9]+ own config file
 shell cp config/creativecompat-common.toml .ps15b26_compat.toml
 shell cp config/creativecommon-common.toml .ps15b26_common.toml
@@ -959,7 +965,7 @@ look `[passthrough-timing]` lines appear during the 400-tick warp and none after
 @commands `touch` Compat's toml; then a wrong value `timing = "maybe"` saved in place (Forge-style correction: backup, fix to the default, save); then one appended blank line to a third-party toml (JEI's or Quark's, whichever exists in config/)
 @pass touch: no reload line within 4 s; bad value: exactly one `[creativecommon] creativecompat-common.toml reloaded (1 value(s) corrected)` line and no second line within 5 s (the correction save is not reloaded again), the file reads `timing = false` and a `.bak` copy exists; third-party save: no `[creativecommon]` line for that file
 @fails `OwnConfigLogic.ContentGuard` (`OwnConfigWatcher.noteApplied` after the save), `OwnConfigLogic.isOwn`
-@reviewed 2026-11-17
+@reviewed 2026-11-20
 shell cp config/creativecompat-common.toml .ps15b27_compat.toml
 shell touch config/creativecompat-common.toml
 sleep 4

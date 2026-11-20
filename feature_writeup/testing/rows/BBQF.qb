@@ -12,100 +12,143 @@
 @@text vintage_delight.md VTD-80 to -86, item_merges.md 2.17 to 2.20, ocean_delight.md 8, golden_food.md 3.4a to 3.8, salt.md 5, nests.md 8.
 @@text
 @@table
-## SQ-BBQF-01 | six BBQ seasonings and grilled defined
+## SQ-BBQF-01 | six BBQ flavors and grilled defined
 @group A
-@commands Boot, grep `[seasoning]` in logs/kubejs/startup.log
-@pass `defined` lines for the 6 BBQ seasonings and `barbequesdelight:grilled`; no `bad definition`
-@fails CD `kubejs_startup/creativeengineering/seasonings.js`, BBQ `compat/PackSeasonings.java`; TODO `food/seasoning #11`
+@commands Boot, grep `[flavor]` in logs/latest.log
+@pass `[flavor] defined` lines for the 6 BBQ flavors and `barbequesdelight:grilled`; no `bad definition`
+@fails CD `food/Flavors.java`, `kubejs_startup/creativedelight/flavors.js`, BBQ `compat/PackFlavors.java`; TODO `food/seasoning #11`
+@reviewed 2026-11-20
+@absent barbequesdelight:cumin barbequesdelight:pepper barbequesdelight:chili barbequesdelight:honey_mustard barbequesdelight:buffalo barbequesdelight:barbeque barbequesdelight:grilled (flavor ids, not registry ids)
 @from batches/r1103/sA_2.qb
-shell grep -hE "\[seasoning\]" logs/kubejs/startup.log | head -20
-shell echo "defined lines: $(grep -hcE '\[seasoning\].*defined' logs/kubejs/startup.log || true)"
-shell grep -qhE "\[seasoning\].*defined.*barbequesdelight:grilled" logs/kubejs/startup.log
-shell ! grep -hE "\[seasoning\].*bad definition" logs/kubejs/startup.log
-look defined lines for the 6 BBQ seasonings (barbeque_sauce, buffalo_sauce, chili, cumin, honey_mustard, pepper) and barbequesdelight:grilled
+# r1120fix (2026-11-20): seasonings renamed Flavor (plan_food_batch_1119 wave E, 1fd558bd); the log tag is [flavor] from
+# Flavors.java in latest.log, no longer [seasoning] in kubejs startup.log
+shell grep -hE "\[flavor\] defined barbequesdelight:" logs/latest.log | head -20
+shell echo "BBQ defined lines: $(grep -hcE '\[flavor\] defined barbequesdelight:' logs/latest.log || true)"
+shell test "$(grep -hoE '\[flavor\] defined barbequesdelight:(barbeque|buffalo|chili|cumin|honey_mustard|pepper|grilled)\b' logs/latest.log | sort -u | wc -l)" -eq 7
+shell ! grep -hE "\[flavor\].*bad definition" logs/latest.log
+look defined lines for the 6 BBQ flavors (barbeque, buffalo, chili, cumin, honey_mustard, pepper) and barbequesdelight:grilled
 
-## SQ-BBQF-02 | BBQ seasoning crafts and cooking routes
+## SQ-BBQF-02 | BBQ flavor crafts and cooking routes
 @group A
-@commands Recipe dump / `cdevtest makes`
-@pass 6 `shapeless/season/<key>` crafts; 10 each of `_from_smelting`, `_from_smoking`, `_from_campfire`, `_from_cooked_manual_only`
-@fails BBQ `PackSeasonings.java`, `barbequesdelight/recipes.js`; TODO `#11`, `dishes/meals #46`, `#49`
-@reviewed 2026-11-16
+@commands Recipe dump / `cdevtest recipes`
+@pass 6 `creativedelight:shapeless/flavor/<key>` crafts for the BBQ flavors; 10 each of `grilled_*_skewer` `_from_smelting`, `_from_smoking`, `_from_campfire`, `_from_cooked_manual_only`
+@fails BBQ `PackFlavors.java`, `barbequesdelight/recipes.js`; TODO `#11`, `dishes/meals #46`, `#49`
+@reviewed 2026-11-20
 @from batches/r1103/sA_2.qb
-> cdevtest recipes season/ max=500
+# r1120fix (2026-11-20): season/ renamed flavor/ (wave E, 1fd558bd); the recipes live under creativedelight:, and
+# /cdevtest prints "verb=recipes id=X result=Y" (the zq "id -> result" format is retired). Counts from the 2026-11-19
+# recipe dump: 6 BBQ flavor crafts, 10 grilled skewers per route (other skewers, e.g. caveskewer, also match the suffix)
+> cdevtest recipes shapeless/flavor/ max=500
 > cdevtest recipes _from_smelting max=500
 > cdevtest recipes _from_smoking max=500
 > cdevtest recipes _from_campfire max=500
 > cdevtest recipes _from_cooked_manual_only max=500
-count barbequesdelight:[a-z_/]*season/[a-z_]+ -> == 6
-count barbequesdelight:[a-z_/]*_from_smelting -> == 10
-count barbequesdelight:[a-z_/]*_from_smoking -> == 10
-count barbequesdelight:[a-z_/]*_from_campfire -> == 10
-count barbequesdelight:[a-z_/]*_from_cooked_manual_only -> == 10
-look if a list is cut at 80 lines the counts can fall short: rerun that query with a barbequesdelight: prefix
-reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
+count verb=recipes id=creativedelight:shapeless/flavor/(barbeque|buffalo|chili|cumin|honey_mustard|pepper) result= == 6
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_smelting result= == 10
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_smoking result= == 10
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_campfire result= == 10
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_cooked_manual_only result= == 10
+reject (Unknown or incomplete command|\[cdevtest\] verb=recipes .*done=0)
 
-## SQ-BBQF-03 | seasonable tags: cumin takes raw and cooked skewers, honey mustard no raw skewer
+## SQ-BBQF-03 | flavorable tags: cumin takes raw and cooked skewers, honey mustard no raw skewer
 @group A
 @commands Tag check
-@pass `#barbequesdelight:seasonable/cumin` holds raw and cooked skewers; `seasonable/honey_mustard` holds no raw skewer
-@fails `creativedelight/seasoning_tags.js`, BBQ `PackSeasonings.java`; TODO `#11`, `#46`
-@reviewed 2026-11-16
+@pass `#barbequesdelight:flavorable/cumin` holds raw and cooked skewers; `flavorable/honey_mustard` holds no raw skewer
+@fails `creativedelight/seasoning_tags.js`, BBQ `PackFlavors.java`; TODO `#11`, `#46`
+@reviewed 2026-11-20
 @from batches/r1103/sA_2.qb passed
-> cdevtest tag item barbequesdelight:seasonable/cumin
-> cdevtest tag item barbequesdelight:seasonable/honey_mustard
-expect verb=tag kind=item tag=barbequesdelight:seasonable/cumin .*barbequesdelight:raw_beef_skewer
-expect verb=tag kind=item tag=barbequesdelight:seasonable/cumin .*barbequesdelight:grilled_beef_skewer
-reject verb=tag kind=item tag=barbequesdelight:seasonable/honey_mustard .*barbequesdelight:raw_[a-z_]+_skewer
-reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
+# r1120fix (2026-11-20): seasonable/* renamed flavorable/* (wave E, 1fd558bd); 2026-11-19 tag dump: cumin 28 entries
+# (raw and grilled beef skewer among them), honey_mustard 10 (grilled skewers only)
+> cdevtest tag item barbequesdelight:flavorable/cumin
+> cdevtest tag item barbequesdelight:flavorable/honey_mustard
+expect verb=tag kind=item tag=barbequesdelight:flavorable/cumin .*barbequesdelight:raw_beef_skewer
+expect verb=tag kind=item tag=barbequesdelight:flavorable/cumin .*barbequesdelight:grilled_beef_skewer
+expect verb=tag kind=item tag=barbequesdelight:flavorable/honey_mustard .*barbequesdelight:grilled_beef_skewer
+reject verb=tag kind=item tag=barbequesdelight:flavorable/honey_mustard .*barbequesdelight:raw_[a-z_]+_skewer
+reject (Unknown or incomplete command|\[cdevtest\] verb=tag .*done=0)
 
 ## SQ-BBQF-04 | level-1 butchers sell the six seasonings (12 emeralds, 64 powders / 16 sauces, maxUses 4, 4 XP)
 @group A
-@commands Summon a level-1 butcher, read offers
+@commands Summon level-1 butchers (vanilla and MCA), read offers
 @pass The six seasonings at 12 emeralds for 64 powders or 16 sauces, maxUses 4, 4 XP
 @fails BBQ trades in `BarbequesDelight.java`; TODO `food/seasoning #18`
+@reviewed 2026-11-20
 @from batches/r1103/sA_2.qb
-repeat 20
-> summon minecraft:villager {SAH1+80} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
-end
-> execute as @e[type=minecraft:villager,tag=sabbq] run data get entity @s Offers
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+64} {SAH3+64} {SAH1+96} {SAH3+96}
 sleep 3
-expect barbequesdelight:(cumin_powder|chili_powder|pepper_powder|barbeque_sauce|buffalo_sauce|honey_mustard_sauce)
-look each seasoning offer: buy 12 emerald, sell 64 (powder) or 16 (sauce), maxUses: 4, xp: 4
-> kill @e[type=minecraft:villager,tag=sabbq]
+# MCA replaces minecraft:villager (gotchas.md, r1113): summon both kinds, read the offers with the sA probe (as SQ-SALT2-07)
+repeat 10
+> summon minecraft:villager {SAH1+80} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+> summon mca:male_villager {SAH1+82} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+end
+sleep 3
+> sa offers sabbq
+waitlog \[sa\] done 60
+count \[sa\] offer \d+: 12 minecraft:emerald -> (64 barbequesdelight:(cumin|chili|pepper)_powder|16 barbequesdelight:(barbeque|buffalo|honey_mustard)_sauce), maxUses 4, xp 4 >= 1
+reject \[sa\] (error|offers sabbq: no merchant)
+look each seasoning offer: 12 emerald -> 64 (powder) or 16 (sauce), maxUses 4, xp 4; a level-1 butcher rolls 2 of its level-1 trades, so not all six show in every run
+> kill @e[tag=sabbq]
+> forceload remove {SAH1+64} {SAH3+64} {SAH1+96} {SAH3+96}
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
 
-## SQ-BBQF-05 | Creative Delight [food] seasoning keys
+## SQ-BBQF-05 | Creative Delight [food] flavor keys
 @group A
 @commands `config/creativedelight-common.toml`
-@pass `[food] maxSeasonings = 2`, `grilledCountsTowardMax = false`
+@pass `[food] maxFlavors = 2`, `grilledCountsTowardMax = false`, `grilledFlavorSlots = 2`
 @fails CD `CDConfig.java` `[food]`; TODO `#11`
+@reviewed 2026-11-20
 @from batches/r1103/sA_2.qb passed
-shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s && /(maxSeasonings|grilledCountsTowardMax)/' config/creativedelight-common.toml
-shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "maxSeasonings = 2"
+# r1120fix (2026-11-20): maxSeasonings renamed maxFlavors, grilledFlavorSlots added (wave E, 1fd558bd; pack config 2026-11-20)
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s && /(maxFlavors|grilledCountsTowardMax|grilledFlavorSlots)/' config/creativedelight-common.toml
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "maxFlavors = 2"
 shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "grilledCountsTowardMax = false"
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "grilledFlavorSlots = 2"
 
-## SQ-BBQF-06 | Grill adds the grilled seasoning to a seasoned skewer
+## SQ-BBQF-06 | Grill adds the grilled flavor to a flavored skewer
 @group A
-@commands Heated Grill, `/data merge` a raw beef skewer with `{Seasonings:["barbequesdelight:cumin"]}`, Flipped true, Time near Duration
-@pass Output has Seasonings [cumin, grilled]
-@fails BBQ `GrillBlockEntity.java`, CD `Seasonings.java`; TODO `food/seasoning #13`, `#46`
+@commands Heated Grill, `/data merge` a raw beef skewer with `{Flavors:["barbequesdelight:cumin"]}`, Flipped true, Time near Duration
+@pass Output has Flavors [cumin, grilled]
+@fails BBQ `GrillBlockEntity.java`, CD `Flavors.java`; TODO `food/seasoning #13`, `#46`
+@reviewed 2026-11-20
+@absent barbequesdelight:cumin barbequesdelight:grilled (flavor ids in the item NBT, not registry ids)
 @from batches/r1103/sA_2.qb
+# r1120fix (2026-11-20): the NBT key is Flavors (Flavors.TAG, wave E 1fd558bd), was Seasonings
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+40} {SAH1+31} {SAH3+63}
+sleep 3
 > setblock {SAH1+10} {SAH2} {SAH3+50} barbequesdelight:grill[has_campfire=true,lit=true]
-> data merge block {SAH1+10} {SAH2} {SAH3+50} {Entries:[{Item:{id:"barbequesdelight:raw_beef_skewer",Count:1b,tag:{Seasonings:["barbequesdelight:cumin"]}},Time:180,Duration:200,Flipped:1b,Burnt:0b},{}]}
+> data merge block {SAH1+10} {SAH2} {SAH3+50} {Entries:[{Item:{id:"barbequesdelight:raw_beef_skewer",Count:1b,tag:{Flavors:["barbequesdelight:cumin"]}},Time:180,Duration:200,Flipped:1b,Burnt:0b},{}]}
 sleep 3
 > data get block {SAH1+10} {SAH2} {SAH3+50} Entries[0].Item
 expect barbequesdelight:grilled_beef_skewer
-expect barbequesdelight:cumin
-expect barbequesdelight:grilled
-look Seasonings [cumin, grilled] on the grilled skewer (read before Time reaches 2 x Duration = burnt)
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
+expect Flavors: \[.*"barbequesdelight:cumin".*\]
+expect Flavors: \[.*"barbequesdelight:grilled".*\]
+look Flavors [cumin, grilled] on the grilled skewer (read before Time reaches 2 x Duration = burnt)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|That position is not loaded)
 
 ## SQ-BBQF-07 | raw skewer through a fueled furnace by hopper: plain Beef Skewer
 @group A
 @commands Raw beef skewer into a fuelled furnace by hopper
-@pass Beef Skewer, no Seasonings tag
+@pass Beef Skewer, no Flavors tag
 @fails `barbequesdelight/recipes.js` cooking rows, BBQ `BBQSkewerItem.java`; TODO `dishes/meals #49`
+@reviewed 2026-11-20
 @from batches/r1103/sA_2.qb passed
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+40} {SAH1+31} {SAH3+63}
+sleep 3
 > setblock {SAH1+14} {SAH2} {SAH3+50} minecraft:furnace
 > data merge block {SAH1+14} {SAH2} {SAH3+50} {Items:[{Slot:1b,id:"minecraft:coal",Count:8b}]}
 > setblock {SAH1+14} {SAH2+1} {SAH3+50} minecraft:hopper[facing=down]
@@ -113,8 +156,8 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 sleep 16
 > data get block {SAH1+14} {SAH2} {SAH3+50} Items
 expect Slot: 2b, id: "barbequesdelight:grilled_beef_skewer"|Slot:2b,id:"barbequesdelight:grilled_beef_skewer"
-reject Seasonings
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
+reject (Seasonings|Flavors)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|That position is not loaded)
 
 ## SQ-VTDA-10 | wild ghost peppers: only the crimson nylium one survives a neighbor update
 @group B
@@ -122,7 +165,15 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Only the nylium one survives
 @fails Vintage `GhostPepperWildCropBlock.java` (`mayPlaceOn`); TODO `ports/vintageport #7` (with SQ-VTD6-01)
 @jars creativecommon creativedelight
+@reviewed 2026-11-20
 @from batches/r1103/sA_4.qb
+# own home (r1120fix, 2026-11-20): {SBH} came from the retired r1103 setup row SA4-00; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
+capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SBH1+16} {SBH3-8} {SBH1+31} {SBH3+8}
+sleep 3
 > setblock {SBH1+20} 200 {SBH3} minecraft:grass_block
 > setblock {SBH1+22} 200 {SBH3} minecraft:moss_block
 > setblock {SBH1+24} 200 {SBH3} minecraft:mycelium
@@ -144,12 +195,12 @@ sleep 2
 > execute if block {SBH1+26} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper nylium survived
 expect SA4 pepper nylium survived
 reject SA4 pepper (grass|moss|mycelium) survived
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|That position is not loaded)
 
 ## SQ-VTDA-11 | one kimchi, one nut butter: no recipe makes or takes the removed items; the new ones exist
 @group A
 @commands Recipe dump
-@pass No recipe makes or takes Brewin' kimchi, nut butter, nut dough or the nut mash bottle; six `kimchi_from_*`, `nut_mash_jar`, `quiche_{meat,fungus,greens}`, `zucchini_quiche` exist
+@pass No recipe makes or takes Brewin' kimchi, nut butter, nut dough or the nut mash bottle; six pickling `kimchi_from_*` (plus upstream's fermenting one), `nut_mash_jar`, `quiche_{meat,fungus,greens}`, `zucchini_quiche` exist
 @fails `vintagedelight/recipes.js`, `brewinandchewin/recipes.js`, `delightful/recipes.js`; TODO `merges/dishes #7`, `#8`, `#9`
 @reviewed 2026-11-16
 @jars creativecommon creativedelight
@@ -176,7 +227,10 @@ expect verb=makes item=delightful:nut_dough n=0
 expect verb=uses item=delightful:nut_dough alone=0 shared=0
 expect verb=makes item=vintagedelight:nut_mash_bottle n=0
 expect verb=uses item=vintagedelight:nut_mash_bottle alone=0 shared=0
-expect verb=recipes text=kimchi_from_ n=6
+# r1120fix (2026-11-20): 6 pack pickling kimchi_from_* plus upstream's vintagedelight:fermenting/kimchi_from_fermenting
+# kept (vintagedelight/recipes.js; 2026-11-19 recipe dump n=7)
+expect verb=recipes text=kimchi_from_ n=7\b
+count verb=recipes id=creativedelight:pickling/kimchi_from_[a-z_]+ result= == 6
 expect verb=recipes text=nut_mash_jar n=[1-9]
 expect verb=recipes text=quiche_meat n=[1-9]
 expect verb=recipes text=quiche_fungus n=[1-9]
@@ -189,9 +243,16 @@ reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 @commands Give a nut butter bottle and a Delightful sandwich, relog
 @pass They become Nut Mash and `pb_j`; log shows the merge count (43 per the Vintage agent; recount with the potato salad pairs) and no `merged twice`
 @fails CD `swaps/merges_vintagedelight.json`, `merges_delightful.json`; Creative Common `swap/ItemMerges.java`; TODO `#7`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+32} {SAH1+15} {SAH3+47}
+sleep 3
 > pbot spawn savtd {SAH1+8} {SAH2} {SAH3+38} minecraft:overworld survival
 sleep 2
 > clear savtd
@@ -274,9 +335,16 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @commands Eat Globular Rice and Bowl of Paella; grep log
 @pass Globular Rice Nourishment 4:00, Bowl of Paella Comfort 4:00 (one effect each); log `277 ruled foods set` (8 Miner's cups dropped)
 @fails `generation_scripts/food/comfort_nourishment.json` (`tools/gen_comfort_nourishment.py`), CD `comfort_nourishment.js`; TODO `dishes/ocean #8`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+32} {SAH1+15} {SAH3+47}
+sleep 3
 > pbot spawn sacdm {SAH1+8} {SAH2} {SAH3+42} minecraft:overworld survival
 sleep 2
 > clear sacdm
@@ -305,13 +373,20 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @commands Recipes for `rusticdelight:potato_salad`; give `moredelight:potato_salad`
 @pass Pot, `_manual_only` and egg-solution mixing only; the given one becomes Rustic's
 @fails `rusticdelight/recipes.js`, CD `swaps/merges_moredelight.json`, `merges_oceanic_delight_potato.json`; TODO `merges/dishes #4`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 > cdevtest makes rusticdelight:potato_salad
 > cdevtest rdetail potato_salad
 > cdevtest makes moredelight:potato_salad
 > cdevtest makes oceanic_delight:potato_salad
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+40} {SAH1+15} {SAH3+55}
+sleep 3
 > pbot spawn sapot {SAH1+8} {SAH2} {SAH3+46} minecraft:overworld survival
 sleep 2
 > clear sapot
@@ -350,14 +425,21 @@ reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 @commands JEI / recipe dump for the gilded carrot and apple
 @pass 8 loops of gold ingot + 125 mB + press
 @fails `goldenfood/golden.js`, incomplete items in `startup_scripts/changes/transition_items.js`; TODO `#22`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1103/sA_2.qb
-> cdevtest rdetail enchanted_golden_apple
-> cdevtest rdetail goldenfood:enchanted_golden_carrot
-sleep 2
-expect rdetail\+ .*enchanted_golden_(apple|carrot).* step
-look steps: deploy gold ingot, spout 125 mB, press; loops 8 (the rdetail+ start / step lines)
-reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
+# r1120fix (2026-11-20): the assemblies are creativedelight:createsequencedassembly/enchanted_golden_{apple,carrot}_sequenced_assembly
+# (2026-11-19 recipe dump); /cdevtest rdetail prints part=start and part=stepN serializer=... lines (the zq "rdetail+ ... step"
+# format is retired); loops and the fill amount are not printed (golden_food.md 3.5: 8 loops, 125 mB liquid experience)
+> cdevtest rdetail enchanted_golden_apple_sequenced_assembly
+> cdevtest rdetail enchanted_golden_carrot_sequenced_assembly
+expect verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_apple_sequenced_assembly serializer=create:sequenced_assembly result=minecraft:enchanted_golden_apple\*1
+expect verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_carrot_sequenced_assembly serializer=create:sequenced_assembly result=\S*enchanted_golden_carrot\*1
+count verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step0 serializer=create:deploying value=\S*gold_ingot == 2
+count verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step1 serializer=create:filling == 2
+count verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step2 serializer=create:pressing == 2
+reject verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step3
+look loops 8 and 125 mB are not in the rdetail lines: JEI page in game (CQ-GLD2-04) or golden.js `global.CD.FOOD.gilded`; part=start names the golden apple / golden carrot
+reject (Unknown or incomplete command|\[cdevtest\] verb=rdetail .*done=0)
 
 ## SQ-GLD2-03 | golden values: 46 set, golden and gilded beef hunger
 @group A
@@ -399,8 +481,11 @@ reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 @commands Heated water cauldrons (campfire under) at 3, 2 and 1 levels, `randomTickSpeed 1000`, harvest each salt cauldron
 @pass 8, 5 and 3 salt dust
 @fails `kubejs/data/salt/loot_tables/cauldron_evaporation/`; [salt.md](../salt.md) 6 S1; TODO `food/seasoning #1`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1113/c1_a1.qb
+# r1120fix (2026-11-20): the lane was never forceloaded (r1120nv: "That position is not loaded", skipped_columns=7)
+> forceload add 1056 1024 1071 1039
+sleep 3
 > setblock 1060 -60 1030 minecraft:campfire[lit=true]
 > setblock 1063 -60 1030 minecraft:campfire[lit=true]
 > setblock 1066 -60 1030 minecraft:campfire[lit=true]
@@ -431,37 +516,47 @@ count Test passed == 3
 count verb=items items=vintagedelight:salt_dust:8 == 1
 count verb=items items=vintagedelight:salt_dust:5 == 1
 count verb=items items=vintagedelight:salt_dust:3 == 1
-reject (Unknown or incomplete command|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|That position is not loaded)
+> forceload remove 1056 1024 1071 1039
 look "Test failed" on a level = the water did not turn into a salt cauldron of the same level (100 random ticks per block = the old 20 s at randomTickSpeed 1000; rerun with more rounds before judging the loot)
 
-## SQ-SALT2-03 | water_salt mixing, raw rock salt crushing / milling / hammering, no knife cutting
+## SQ-SALT2-03 | rock_salt_water_salt mixing, raw rock salt crushing / milling / hammering, no knife cutting
 @group A
-@commands Recipe check: the `water_salt` mixing, the `raw_rock_salt_salt` crushing, milling and hammering recipes
-@pass Heated, 1000 mB water -> 2 salt dust; crushing and milling 4 + 1 at 0.5; Engineer's Hammer 4 on the cutting board (`farmersdelightcutting/raw_rock_salt_salt_hammering`) and in the grid (`shapeless/raw_rock_salt_salt_hammering`); no knife cutting recipe
+@commands Recipe check: the `rock_salt_water_salt` mixing, the `raw_rock_salt_salt` crushing, milling and hammering recipes
+@pass Heated, raw rock salt block + 1000 mB water -> block kept + 2 salt dust; crushing and milling 4 + 1 at 0.5; Engineer's Hammer 4 on the cutting board (`farmersdelightcutting/raw_rock_salt_salt_hammering`) and in the grid (`shapeless/raw_rock_salt_salt_hammering`); the plain hand craft `shapeless/raw_rock_salt_salt` (4, intended, salt.js); no knife cutting recipe
 @fails CD `creativedelight/salt.js`; salt.md 6 S2, S6
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1113/c1_a1.qb
-> cdevtest rdetail water_salt
+# r1120fix (2026-11-20): /cdevtest prints "verb=rdetail id=X serializer=Y result=Z*N ingredients=..." (the zq
+# "id {serializer} -> result" format is retired); the mixing id is creativedelight:createmixing/rock_salt_water_salt
+# (2026-11-19 recipe dump; its result line shows the first output, the salt dust in part=results)
+> cdevtest rdetail rock_salt_water_salt
 > cdevtest rdetail raw_rock_salt_salt
-expect water_salt \{create:mixing\} -> 2 salt_dust
-expect farmersdelightcutting/raw_rock_salt_salt_hammering \{farmersdelight:cutting\}
-expect shapeless/raw_rock_salt_salt_hammering \{
-expect raw_rock_salt_salt\S* \{create:crushing\}
-expect raw_rock_salt_salt\S* \{create:milling\}
-look mixing: heated, 1000 mB water -> 2 salt dust; crushing and milling rdetail+ results 4 salt dust + 1 at 0.5; hammering 4 on the board (tool = Engineer's Hammer) and in the grid; no other farmersdelight:cutting recipe for raw rock salt (knife)
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt serializer=create:mixing\b
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt part=fluids value=in:\S*minecraft:water\S*@1000mB
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt part=results value=\S*vintagedelight:salt_dust\*2@1
+expect verb=rdetail id=creativedelight:farmersdelightcutting/raw_rock_salt_salt_hammering serializer=farmersdelight:cutting result=vintagedelight:salt_dust\*4\b
+expect verb=rdetail id=creativedelight:shapeless/raw_rock_salt_salt_hammering serializer=\S+ result=vintagedelight:salt_dust\*4\b
+expect verb=rdetail id=creativedelight:createcrushing/raw_rock_salt_salt part=results value=vintagedelight:salt_dust\*4@1\S*,vintagedelight:salt_dust\*1@0\.5
+expect verb=rdetail id=creativedelight:createmilling/raw_rock_salt_salt part=results value=vintagedelight:salt_dust\*4@1\S*,vintagedelight:salt_dust\*1@0\.5
+reject verb=rdetail id=(?!\S*hammering)\S*raw_rock_salt\S* serializer=farmersdelight:cutting\b
+look the mixing is heated (JEI or salt.js; rdetail does not print heat) and keeps the block (part=results); the hammering cutting row's part=fields names the Engineer's Hammer as the tool
+reject (Unknown or incomplete command|\[cdevtest\] verb=rdetail .*done=0)
 
 ## SQ-SALT2-04 | raw rock salt block in natural_rough, not soft; Salt Block in soft
 @group A
 @commands Block tags of `salt:raw_rock_salt_block`, `salt:salt_block`
 @pass Raw rock salt block in `blockrunner:surface/natural_rough`, not `soft`; Salt Block in `soft`
 @fails `server_scripts/tags/blocktags.js`; salt.md 6 S3
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1113/c1_a1.qb passed
 > cdevtest tagsof salt:raw_rock_salt_block
 > cdevtest tagsof salt:salt_block
-expect block tags of salt:raw_rock_salt_block: .*blockrunner:surface/natural_rough
-reject block tags of salt:raw_rock_salt_block: .*blockrunner:surface/soft\b
-expect block tags of salt:salt_block: .*blockrunner:surface/soft\b
+# r1120fix (2026-11-20): /cdevtest tagsof prints "verb=tagsof id=X ... block_tags=a,b,..." (the zq "block tags of X:" format is retired)
+expect verb=tagsof id=salt:raw_rock_salt_block .*block_tags=\S*blockrunner:surface/natural_rough\b
+reject verb=tagsof id=salt:raw_rock_salt_block .*block_tags=\S*blockrunner:surface/soft\b
+expect verb=tagsof id=salt:salt_block .*block_tags=\S*blockrunner:surface/soft\b
+reject (Unknown or incomplete command|\[cdevtest\] verb=tagsof .*done=0)
 
 ## SQ-SALT2-05 | Create salting log line; calamari roll mix present; three create__the_salt mixes absent, baconandeggs present
 @group A
@@ -525,7 +620,11 @@ look SaltBlockMeltingEnabled = false (the salt member's own block melt off, so t
 @commands Trade dump or a new butcher's level 1 offers
 @pass 12 emeralds -> 64 salt dust, 4 uses; no `salt:salt` trade at any level
 @fails CD `kubejs/salt/trades.js`, `salt-common.toml` `ButcherSaltTradesEnabled = false`; salt.md 6 S9
+@reviewed 2026-11-20
 @from batches/r1113/c1_a1.qb
+# r1120fix (2026-11-20): the summon spot was never forceloaded (r1120nv: "no merchant with that tag")
+> forceload add 1088 1072 1103 1087
+sleep 3
 # MCA replaces minecraft:villager (r1103): summon both kinds; a level-1 butcher rolls 2 of its level-1 trades
 repeat 12
 > summon minecraft:villager 1090 -60 1080 {NoAI:1b,PersistenceRequired:1b,Tags:["c1salt"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
@@ -536,42 +635,61 @@ sleep 3
 waitlog \[sa\] done 60
 count \[sa\] offer \d+: 12 minecraft:emerald -> 64 vintagedelight:salt_dust, maxUses 4 >= 1
 reject \[sa\] offer \d+: .* -> \d+ salt:salt\b
-reject \[sa\] error
+reject \[sa\] (error|offers c1salt: no merchant)
 > kill @e[tag=c1salt]
+> forceload remove 1088 1072 1103 1087
 look every salt-dust offer reads 12 emerald -> 64 salt dust, maxUses 4; none at 0 is not a FAIL if few butchers rolled it (summon more)
 
 ## SQ-SALT2-08 | an edited salt-common.toml is carried into creativedelight-common.toml once, renamed .moved, not recreated
 @group A
-@commands Boot with an edited `config/salt-common.toml` (e.g. `EvaporationChance = 0.5`)
+@commands Restart with an edited `config/salt-common.toml` (`EvaporationChance = 0.5`) and no `[salt]` in `creativedelight-common.toml`
 @pass Log `config/salt-common.toml carried into config/creativedelight-common.toml (19 values)`; file renamed `.moved`; `[salt]` holds 0.5; no `salt-common.toml` recreated; a salted food listed in `SaltingFoodValues` gets that value (AppleSkin); `/reload` after editing `[salt]` applies
 @fails Salt member `Configuration` (`-03`), CD `compat/SaltConfigBridge`, `MemberConfigMove`; salt.md 6 S10
+@reviewed 2026-11-20
 @from batches/r1113/fix_c1a1.qb
+# r1120fix (2026-11-20): own fixture. The pack ships salt-common.toml.moved and a full [salt] in creativedelight-common.toml;
+# MemberConfigMove.carry skips a key the target already holds, so the edit restores salt-common.toml from the .moved copy
+# (EvaporationChance 0.3 -> 0.5) and drops every [salt] / [salt.*] table from creativedelight-common.toml (kept as .r1120bak),
+# then restarts. The row puts the pack copy back at the end (the running server keeps 0.5 until its next boot).
+edit cp config/creativedelight-common.toml config/creativedelight-common.toml.r1120bak && cp config/salt-common.toml.moved config/salt-common.toml && sed -i -E 's/^([[:space:]]*EvaporationChance = )0\.3[[:space:]]*$/\10.5/' config/salt-common.toml && grep -qE "EvaporationChance = 0\.5" config/salt-common.toml && awk '/^[[:space:]]*\[/{skip=($0 ~ /^[[:space:]]*\[salt(\.[^]]*)?\][[:space:]]*$/)} !skip' config/creativedelight-common.toml.r1120bak > config/creativedelight-common.toml && ! grep -qE "^[[:space:]]*\[salt" config/creativedelight-common.toml && rm config/salt-common.toml.moved
+restart
 bootexpect \[creativedelight\] config/salt-common.toml carried into config/creativedelight-common.toml \(19 values\)
 bootreject could not carry|could not rename
 shell grep -h "salt-common.toml carried" logs/latest.log | cut -c1-300
 shell ls config | grep -i "^salt-"; test -f config/salt-common.toml.moved && test ! -f config/salt-common.toml && echo SALT2-08-FILES-OK
-shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Evaporation\][[:space:]]*$/ && /EvaporationChance/' config/creativedelight-common.toml
-look carried line says 19 values; ls shows salt-client.toml and salt-common.toml.moved only, then SALT2-08-FILES-OK; [salt.Evaporation] EvaporationChance = 0.5
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Evaporation\][[:space:]]*$/ && /EvaporationChance/' config/creativedelight-common.toml | grep -E "EvaporationChance = 0\.5"
+shell cp config/creativedelight-common.toml config/creativedelight-common.toml.carried && cp config/creativedelight-common.toml.r1120bak config/creativedelight-common.toml
+look carried line says 19 values; ls shows salt-client.toml and salt-common.toml.moved only, then SALT2-08-FILES-OK; [salt.Evaporation] EvaporationChance = 0.5 (the carried file is kept as creativedelight-common.toml.carried)
 
 ## SQ-NEST-01 | placed nest features: duck, goose, emu nests with eggs and birds
 @phase worldgen
 @group A
-@commands `/place feature incubation_additions:nest_duck` (and `nest_goose`, `nest_emu`) on grass
+@commands `/place feature creativedelight:nest_duck` (and `nest_goose`, `nest_emu`) on grass
 @pass Nest with 2 to 4 eggs and birds
-@fails Incubation member `packs/<mod>/data/incubation_additions/worldgen/`; TODO `mobs/nests #3`
-@reviewed 2026-11-16
+@fails CD Incubation compartment `packs/incubation/<bird mod>/data/creativedelight/worldgen/`; TODO `mobs/nests #3`
+@reviewed 2026-11-20
+@absent creativedelight:nest_duck creativedelight:nest_goose creativedelight:nest_emu (configured features in the CD jar packs/incubation/<bird mod>/data/creativedelight/worldgen/; no feature dump)
 @from batches/r1103/sA_2.qb
-> place feature incubation_additions:nest_duck {SAH1+70} {SAH2} {SAH3+40}
-> place feature incubation_additions:nest_goose {SAH1+76} {SAH2} {SAH3+40}
-> place feature incubation_additions:nest_emu {SAH1+82} {SAH2} {SAH3+40}
+# r1120fix (2026-11-20): the nests moved into Creative Delight (nests.md 1, M8 2026-11-04): ids creativedelight:nest_* (features),
+# creativedelight:*_egg_nest (blocks); the incubation_additions: ids are only swap-list aliases now
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+64} {SAH3+32} {SAH1+95} {SAH3+63}
 sleep 3
-> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:duck_egg_nest
-> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:goose_egg_nest
-> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:emu_egg_nest
+> place feature creativedelight:nest_duck {SAH1+70} {SAH2} {SAH3+40}
+> place feature creativedelight:nest_goose {SAH1+76} {SAH2} {SAH3+40}
+> place feature creativedelight:nest_emu {SAH1+82} {SAH2} {SAH3+40}
+sleep 3
+> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} creativedelight:duck_egg_nest
+> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} creativedelight:goose_egg_nest
+> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} creativedelight:emu_egg_nest
 > cdevtest entities {SAH1+76} {SAH2} {SAH3+40} 16
-expect verb=count block=incubation_additions:duck_egg_nest n=[1-9]
-expect verb=count block=incubation_additions:goose_egg_nest n=[1-9]
-expect verb=count block=incubation_additions:emu_egg_nest n=[1-9]
+expect verb=count block=creativedelight:duck_egg_nest n=[1-9]
+expect verb=count block=creativedelight:goose_egg_nest n=[1-9]
+expect verb=count block=creativedelight:emu_egg_nest n=[1-9]
 expect verb=entities n=\d+ by_type=\S*untitledduckmod:duck:
 expect verb=entities n=\d+ by_type=\S*untitledduckmod:goose:
 expect verb=entities n=\d+ by_type=\S*alexsmobs:emu:
@@ -583,9 +701,10 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @group B
 @commands Fresh world: swamp, river, savanna
 @pass Nests here and there; no worldgen or biome-tag errors in the log
-@fails Incubation member `tags/worldgen/` and `forge/biome_modifier/`; TODO `#3`
-@reviewed 2026-11-16
+@fails CD Incubation compartment `packs/incubation/<bird mod>/data/creativedelight/tags/worldgen/` and `forge/biome_modifier/`; TODO `#3`
+@reviewed 2026-11-20
 @from batches/r1103/sA_4.qb
+# r1120fix (2026-11-20): nest blocks are creativedelight:*_egg_nest since M8 (nests.md 1)
 > locate biome minecraft:swamp
 waitlog The nearest minecraft:swamp 600
 capture SSW The nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -601,21 +720,21 @@ capture SSV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 sleep 120
 # a count box is at most 262144 blocks (64x64x64): each box runs as slices; the shell prints the summed n per block
 > say NEST02 begin
-> cdevtest count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3-19} incubation_additions:duck_egg_nest
-> cdevtest count {SSW1-56} 55 {SSW3-18} {SSW1+55} 110 {SSW3+19} incubation_additions:duck_egg_nest
-> cdevtest count {SSW1-56} 55 {SSW3+20} {SSW1+55} 110 {SSW3+55} incubation_additions:duck_egg_nest
-> cdevtest count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3-19} incubation_additions:goose_egg_nest
-> cdevtest count {SSW1-56} 55 {SSW3-18} {SSW1+55} 110 {SSW3+19} incubation_additions:goose_egg_nest
-> cdevtest count {SSW1-56} 55 {SSW3+20} {SSW1+55} 110 {SSW3+55} incubation_additions:goose_egg_nest
-> cdevtest count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3-19} incubation_additions:duck_egg_nest
-> cdevtest count {SRV1-56} 55 {SRV3-18} {SRV1+55} 110 {SRV3+19} incubation_additions:duck_egg_nest
-> cdevtest count {SRV1-56} 55 {SRV3+20} {SRV1+55} 110 {SRV3+55} incubation_additions:duck_egg_nest
-> cdevtest count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3-19} incubation_additions:goose_egg_nest
-> cdevtest count {SRV1-56} 55 {SRV3-18} {SRV1+55} 110 {SRV3+19} incubation_additions:goose_egg_nest
-> cdevtest count {SRV1-56} 55 {SRV3+20} {SRV1+55} 110 {SRV3+55} incubation_additions:goose_egg_nest
-> cdevtest count {SSV1-56} 55 {SSV3-56} {SSV1+55} 110 {SSV3-19} incubation_additions:emu_egg_nest
-> cdevtest count {SSV1-56} 55 {SSV3-18} {SSV1+55} 110 {SSV3+19} incubation_additions:emu_egg_nest
-> cdevtest count {SSV1-56} 55 {SSV3+20} {SSV1+55} 110 {SSV3+55} incubation_additions:emu_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3-19} creativedelight:duck_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3-18} {SSW1+55} 110 {SSW3+19} creativedelight:duck_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3+20} {SSW1+55} 110 {SSW3+55} creativedelight:duck_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3-19} creativedelight:goose_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3-18} {SSW1+55} 110 {SSW3+19} creativedelight:goose_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3+20} {SSW1+55} 110 {SSW3+55} creativedelight:goose_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3-19} creativedelight:duck_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-18} {SRV1+55} 110 {SRV3+19} creativedelight:duck_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3+20} {SRV1+55} 110 {SRV3+55} creativedelight:duck_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3-19} creativedelight:goose_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-18} {SRV1+55} 110 {SRV3+19} creativedelight:goose_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3+20} {SRV1+55} 110 {SRV3+55} creativedelight:goose_egg_nest
+> cdevtest count {SSV1-56} 55 {SSV3-56} {SSV1+55} 110 {SSV3-19} creativedelight:emu_egg_nest
+> cdevtest count {SSV1-56} 55 {SSV3-18} {SSV1+55} 110 {SSV3+19} creativedelight:emu_egg_nest
+> cdevtest count {SSV1-56} 55 {SSV3+20} {SSV1+55} 110 {SSV3+55} creativedelight:emu_egg_nest
 > say NEST02 end
 waitlog NEST02 end 300
 shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" NEST02
@@ -631,7 +750,14 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @commands Eat Calamari Soup
 @pass Comfort 4:00, no Nourishment (the rule, not a generator gap)
 @fails `comfort_nourishment.json` rule; TODO `creativedelight/members #43`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+40} {SAH1+15} {SAH3+55}
+sleep 3
 > pbot spawn sard {SAH1+8} {SAH2} {SAH3+50} minecraft:overworld survival
 sleep 2
 > clear sard
@@ -652,21 +778,28 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Exits 0
 @fails `/dumpcompost` output stale or missing; TODO `creativedelight/members #44`
 @jars creativecommon creativedelight
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > dumpcompost
 sleep 5
+# r1120fix (2026-11-20): the shell exit code is the check (its echo lands in the shell output, not the server log)
 shell test -s kubejs/exported/compost/compost.json && python3 "$INST/tools/gen_compost_values.py" --dump kubejs/exported/compost/compost.json --check && echo "compost check exit 0"
-expect compost check exit 0
 ## SQ-VP-06 (rerun)
 @group A
 @commands As SQ-VP-06; then fill a jar with pepper jam and one with relish and bottle each
 @pass SQ-VP-06 pass text; both fill a glass bottle (the stale pack copies of `pepper_jam.json` and `relish.json` are gone, the member copies are served)
 @fails Pack `kubejs/data/vintagedelight/moonlight/soft_fluids/` copies back (moved to `moved_code_backup/2026-11-02-vintage/`); TODO `ports/vintageport #1`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > vtdtest fluids
 waitlog \[vtdtest\] done fluids 120
 expect \[vtdtest\] done fluids: \d+ pass, 0 fail
 reject \[vtdtest\] FAIL
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+16} {SAH3+56} {SAH1+31} {SAH3+63}
+sleep 3
 > cdevtest place {SAH1+20} {SAH2} {SAH3+60} supplementaries:jar
 > cdevtest use {SAH1+20} {SAH2} {SAH3+60} held=vintagedelight:pepper_jam_jar hand=main
 > cdevtest be {SAH1+20} {SAH2} {SAH3+60}

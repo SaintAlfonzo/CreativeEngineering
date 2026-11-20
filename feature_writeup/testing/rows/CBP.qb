@@ -21,6 +21,7 @@
 @commands `@@modset port_chain chain` (was `port_chain.sh server OUT cbp01 A chain`); boot; `grep -h "absent mods" logs/kubejs/server.log logs/latest.log`; `grep -cE "Couldn't parse loot table\|Can't find block" logs/latest.log`
 @pass one `[absent mods] loot tables: ...` line (counts per mod: fruitsdelight, moredelight, supplementaries, upgrade_aquatic, endersdelight among them); recipe and tag `[absent mods]` lines or `none skipped` printed after the recipe event (no longer missing); loot parse errors 0
 @fails `LootTablesOptionalModsMixin` not applied (mixin log) or the print still in `afterRecipes`
+@reviewed 2026-11-20
 @from batches/r1106cbp/p1_chain.qb
 shell grep -h "absent mods" logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //'
 bootexpect \[absent mods\] loot tables: .* left out by forge:conditions
@@ -34,6 +35,7 @@ look the loot-table line names fruitsdelight, moredelight, supplementaries, upgr
 @commands `@modset port_chain cooking` (was `port_chain.sh server OUT cbp02 A cooking`); boot; `grep -h "Empty array" logs/kubejs/*.log logs/latest.log \| wc -l`; `grep -h "\[NCH\] removed" logs/kubejs/*.log`; failures total as in SQ-CBC-02
 @pass 0 `Empty array?`; one `[NCH] removed N Immersive Engineering recipes whose output tag is empty` line naming `metalpress/*_zinc`, `*_brass` and similar; failures under 40
 @fails another IE output shape (read the recipe JSON; extend `_pruneEmptyIeOutputs`)
+@reviewed 2026-11-20
 @from batches/r1106cbp/p2_cooking.qb
 @modset port_chain cooking +creativedevtools-*.jar
 shell n=$(cat logs/kubejs/*.log logs/latest.log | grep -c "Empty array"); echo "empty_array=$n"; test "$n" = 0
@@ -61,6 +63,7 @@ reject verb=\S+ .*done=0
 @commands as SQ-CBO-34
 @pass no `[compost] values for items that do not exist` naming `immersive_weathering:<mod>/...`; a `[compost] skipped N values for items of absent mods` line
 @fails compat folder not read as a mod id
+@reviewed 2026-11-20
 @from batches/r1106cbp/p4_iw.qb passed
 @modset port_chain chain +creativedevtools-*.jar +immersive_weathering-*.jar +moonlight-*.jar
 shell ! grep -h "\[compost\] values for items that do not exist" logs/kubejs/startup.log logs/kubejs/server.log | grep "immersive_weathering:"
@@ -72,6 +75,7 @@ shell grep -h "\[compost\] skipped [0-9]* values for items of absent mods" logs/
 @commands boot; `grep -h "absent mods\|\[NCH\] removed\|Empty array" logs/kubejs/*.log logs/latest.log`; `/dumpall`, recipe count; SQ-CBC-04
 @pass `[absent mods]` printed once per load; no `[NCH] removed` line (or only recipes whose tag is empty in the full pack too); removed recipes 1328 as before
 @fails a full-pack recipe removed by the prune: check its tag
+@reviewed 2026-11-20
 @from batches/r1106cbp/p8_full_new.qb passed
 @modset none
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
@@ -124,6 +128,7 @@ reject verb=\S+ .*done=0
 @commands boot with the current `config/`; diff `config/creativecommon-common.toml`, `config/creativeequipment-common.toml`, `config/creativebrewing-common.toml` against `configs_edited/root_config/`
 @pass `[effects]` and `[magic_resistance]` in the Common file with the edited values; `[copper_poisoning]` in the Equipment file; CB's file keeps `[members]`, `[alcohol]` only; one `[swaps] config sections ... merged` line each
 @fails carry-over did not run (Common or Equipment file already had the section)
+@reviewed 2026-11-20
 @from batches/r1106cbp/p8_full_new.qb
 @modset none
 shell grep -h "\[swaps\] config sections" logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //'
@@ -162,6 +167,7 @@ reject verb=\S+ .*done=0
 @commands rerun SQ-CBO-01 and the 22 rows that failed only on the echo leak
 @pass `effects leaks 0`; no echo or dragon rows in `effects items by namespace`
 @fails a gear row left in Common or CB
+@reviewed 2026-11-20
 @from batches/r1106cbp/p1_chain.qb passed
 > cbo effects
 waitlog \[cbo\] done 30
@@ -174,6 +180,7 @@ reject \[cbo\] leak
 @commands rerun SQ-CBO-12, -13, -15 (batches already use `creativecommon:`)
 @pass Long Reach, Phantom Bane, Magic Resistance potions and mixes present under `creativecommon:`; effect remap and removed rules still apply
 @fails `CommonPotions` or the effect mixins not applied from Common (mixin gate rows in `CommonMixinPlugin`)
+@reviewed 2026-11-20
 @draft no own steps: a rerun of SQ-CBO-12, -13 and -15 (CBO.qb, already on creativecommon: ids); run those rows by id
 @modset port_chain optional +creativedevtools-*.jar
 ## SQ-CBP-03b
@@ -194,8 +201,8 @@ look shell: an [absent mods] skipped line counts the minecraft:empty (or Item.of
 @group B (Equipment without CB)
 @commands rerun of SQ-CBP-08 with the Equipment, Engineering and Common builds of 18:35 (end gear and air brake transition rows, felsic data, shield and echo / air brake textures moved into Equipment; backpack skin recipes guarded): `run_boots.sh '^p6f?$'`
 @pass no `Error parsing recipe`; startup prints `[creativeequipment] end gear transition items (37)`; `[creativeequipment] mod data packs on: none; off (mod not loaded): [felsic_gear]` (p6) and `on: [felsic_gear]` (p6f); `[absent mods]` counts `sophisticatedbackpacks` (2 rows); the felsic ingot sequenced assembly loads in p6f
-@fails `global.NCH` not ready when Equipment's item event runs; `packs/felsic_gear/pack.mcmeta` missing from the jar
-@reviewed 2026-11-16
+@fails `global.NCH` not ready when Equipment's item event runs; `packs/felsic_gear/pack.mcmeta` missing from the jar. The row's @modset has no felsic gear jar, so only the p6 half runs; the p6f half needs a modset with the felsic gear mod (drive owner)
+@reviewed 2026-11-20
 @modset port_chain chain +creativedevtools-*.jar -creativecalendar-*.jar -creativedelight-*.jar -creativebrewing-*.jar +creativeequipment-*.jar -kubejsdelight-*.jar
 # boot p6f of tools/scratch_query/batches/r1106cbp/run_boots.sh (Equipment without CB, felsic_gear present); p6 (felsic_gear absent) is the same row on the other boot: its pack line reads on: none; off (mod not loaded): [felsic_gear]
 bootexpect Done \(
@@ -203,7 +210,9 @@ bootreject Error parsing recipe
 shell grep -hE "\[creativeequipment\] (end gear transition items|mod data packs on)" logs/kubejs/startup.log logs/latest.log | head -4; grep -hE "\[absent mods\].*sophisticatedbackpacks" logs/latest.log logs/kubejs/server.log | head -3
 shell grep -qE "\[creativeequipment\] end gear transition items \(37\)" logs/kubejs/startup.log logs/latest.log
 > cdevtest bytype create:sequenced_assembly
-expect verb=bytype id=\S*felsic\S* result=\S*felsic_ingot
+sleep 2
+# r1120nv batch fault: the felsic ingot assembly exists only on the p6f boot (felsic_gear loaded); on p6 the pack line reads off (mod not loaded). Checked only when the pack is on
+shell if grep -qE "\[creativeequipment\] mod data packs on: \[[^]]*felsic_gear" logs/kubejs/startup.log logs/latest.log; then grep -qE "verb=bytype id=[^ ]*felsic[^ ]* result=[^ ]*felsic_ingot" logs/latest.log; else echo "felsic_gear off on this boot: felsic ingot assembly not checked"; fi
 reject verb=\S+ .*done=0
 look shell: transition items (37); pack line on: [felsic_gear] (p6f) or off (mod not loaded): [felsic_gear] (p6); [absent mods] counts sophisticatedbackpacks (2 rows)
 ## SQ-CBP-11 | transitions in Equipment (37); felsic_gear pack on; no incomplete or duplicate error; felsic ore in End highlands; block drops 1-2 scrap

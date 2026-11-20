@@ -444,6 +444,8 @@ look names Copper Lunchbox, Iron Lunchbox, Netherite Lunchbox with copper / iron
 @fails `HHItems.can(..., fireResistant)` flag for the two tiers
 @jars creativedelight
 @from batches/r1103/sB_2.qb
+> forceload add 144 496 212 512
+sleep 3
 > setblock 176 -61 500 minecraft:lava
 > summon item 176.5 -60 500.5 {Item:{id:"hearthandharvest:netherite_watering_can",Count:1b},Tags:["wct6n"]}
 > summon item 176.5 -60 500.5 {Item:{id:"hearthandharvest:dragon_watering_can",Count:1b},Tags:["wct6d"]}
@@ -467,6 +469,8 @@ look the failed test is the golden can's (third execute)
 @fails `WateringCanItem.isTreeGrower` or the area loop skipping tree growers
 @jars creativedelight
 @from batches/r1103/sB_2.qb
+> forceload add 144 496 212 512
+sleep 3
 > setblock 184 -61 500 minecraft:dirt
 > setblock 184 -60 500 minecraft:oak_sapling
 > setblock 186 -61 500 minecraft:dirt
@@ -513,6 +517,8 @@ look the first SelectedItem line (after the five clicks) keeps 16 / 16; the whea
 @jars creativedelight
 @from batches/r1103/sB_R.qb
 @reviewed 2026-11-16
+> forceload add 144 496 212 512
+sleep 3
 > setblock 204 -60 500 minecraft:campfire[lit=true]
 > setblock 208 -60 500 minecraft:campfire[lit=true]
 > pbot spawn wct8 204.5 -60 502.5 minecraft:overworld survival
@@ -531,7 +537,7 @@ look the first SelectedItem line (after the five clicks) keeps 16 / 16; the whea
 count Test passed == 2
 expect wct8 has the following entity data: .*WaterLevel: 4\b
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|verb=\S+ .*done=0)
-look the two "[zq] useitem wct8" results: the first SUCCESS / CONSUME, the second PASS
+look the two "[cdevtest] verb=useair who=wct8" lines: the first result=SUCCESS / CONSUME, the second result=PASS
 
 @@text
 @@text ### SQ-SGF spout gun farmland, 2026-11-02 ([hearth_and_harvest.md](../hearth_and_harvest.md) section 8 HNH-47, TODO `farming/crops #32`)
@@ -546,6 +552,8 @@ look the two "[zq] useitem wct8" results: the first SUCCESS / CONSUME, the secon
 @fails entity id or the LOADED gate; a summoned shot with no owner may not move, so fire the water Spout Gun from a bot instead
 @jars creativedelight
 @from batches/r1103/sB_2.qb
+> forceload add 144 496 212 512
+sleep 3
 > fill 150 -61 499 152 -61 501 minecraft:farmland[moisture=0]
 > setblock 151 -60 500 minecraft:wheat[age=2]
 > summon create_things_and_misc:projectile_spout_gun_water 150.5 -57 499.5 {Motion:[0.0d,-1.5d,0.0d]}
@@ -566,6 +574,8 @@ look a summoned shot with no owner may not move (row fail note): then fire the w
 @fails the match is not by entity type
 @jars creativedelight
 @from batches/r1103/sB_2.qb
+> forceload add 144 496 212 512
+sleep 3
 > fill 156 -61 499 160 -61 501 minecraft:farmland[moisture=0]
 > summon create_things_and_misc:projectile_spout_gun_lava 157.5 -57 499.5 {Motion:[0.0d,-1.5d,0.0d]}
 > summon create_things_and_misc:projectile_spout_gun_honey 159.5 -57 500.5 {Motion:[0.0d,-1.5d,0.0d]}
@@ -591,7 +601,8 @@ look valid only if SQ-SGF-01 wet its farmland (same summon path)
 @jars creativedelight
 @from batches/r1103/sB_2.qb
 @reviewed 2026-11-16
-> forceload add 0 1000 200 1060
+@absent vintagedelight:magic_vine_tree (data-driven configured feature in the Vintage member jar, configured features are not in the registry dump)
+> forceload add -8 992 200 1060
 sleep 30
 > place feature vintagedelight:magic_vine_tree 0 -60 1000
 > place feature vintagedelight:magic_vine_tree 20 -60 1000
@@ -863,6 +874,7 @@ look furnace XP 0.35 on the perch and pike slices; Adzuki Curry grid recipe; mil
 @@table
 ## SQ-FO-06 | cooking pot: oil + 3 eggs -> 3 fried eggs, 4 fried eggs -> 4 omelettes; Rustic's oil fried egg and its Slice & Dice copy gone
 @group A
+@reviewed 2026-11-20
 @commands `/cdevtest rdetail fried_eggs_from_cooking_oil`; `/cdevtest rdetail omelettes_from_fried_eggs`; `/cdevtest recipes fried_egg_from_cooking_oil`
 @pass `creativedelight:farmersdelightcooking/fried_eggs_from_cooking_oil` result `farmersdelight:fried_egg*3`, ingredients cooking oil + 3 eggs; `creativedelight:farmersdelightcooking/omelettes_from_fried_eggs` result `moredelight:omelette*4`, 4 cooked egg ingredients; no recipe id containing `fried_egg_from_cooking_oil` (Rustic's and `sliceanddice:`)
 @fails `R.fdCooking` calls in CD `rusticdelight/recipes.js`, `moredelight/recipes.js`; the removal runs after Slice & Dice copied the pot recipe
@@ -876,6 +888,8 @@ look oil fried eggs give 3 with rusticdelight:cooking_oil and three minecraft:eg
 
 ## SQ-FO-07 | no furnace recipe for an egg dish; smoker and campfire forms stay
 @group A
+@reviewed 2026-11-20
+@absent moredelight:omelette_smelting (removed recipe id: negative test)
 @commands `/cdevtest bytype minecraft:smelting max=4000`, then grep the lines for fried egg, fried turtle egg, omelette, shulker omelette, fried dragon egg, boiled emu egg; `/cdevtest makes farmersdelight:fried_egg`; `/cdevtest makes moredelight:omelette`
 @pass no `minecraft:smelting` recipe makes `farmersdelight:fried_egg`, `moredelight:omelette`, `ends_delight:shulker_omelette`, `ends_delight:fried_dragon_egg`, `alexsmobs:boiled_emu_egg` or a fried turtle egg; `makes` lists smoking and campfire recipes for the fried egg and the omelette; ids `creativedelight:smelting/fried_egg_from_egg`, `moredelight:omelette_smelting`, `ends_delight:food_smelting/fried_dragon_egg`, `ends_delight:food_smelting/shulker_omelette`, `alexsmobs:boiled_emu_egg` absent
 @fails the CD egg cook family's furnace value (0), the removals in `moredelight/recipes.js`, `ends_delight/recipes.js`, `alexsmobs/recipes.js`
@@ -904,6 +918,7 @@ look makes lines: the fried egg and the omelette still have a smoking and a camp
 @@table
 ## SQ-FO-08 | blubber: registered, cachalot drop, knife cut, animal fat tag, soap
 @group A
+@reviewed 2026-11-20
 @commands `cdevtest reg item creativedelight:blubber`; loot of `alexsmobs:entities/cachalot_whale`; rdetail of the blubber cut and the soap recipes; tag probe `forge:animal_fat`
 @pass the item exists (Delightful's animal fat sprite); a cachalot kill drops 3-6 blubber; knife cut gives 2 `delightful:animal_fat`; `#forge:animal_fat` holds blubber; `supplementaries:soap` and `creativecompat:createmixing/soap_heated_mixing` take blubber and whale oil
 @fails CD startup `creativedelight/fats.js`; data `creativedelight/fats.js` (tag, cut, `global.LOOT.rules`); Compat `other/misc_mods.js` SOAP_FAT
@@ -921,6 +936,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-09 | whale oil: mixer, pot, bottle and fluid, lubricant tag
 @group A
+@reviewed 2026-11-20
 @commands rdetail of `whale_oil`; fluid tag probe `forge:lubricant`
 @pass heated mixer 1 blubber -> 250 mB `creativedelight:whale_oil`; Cooking Pot 2 blubber + bottle -> 1 Whale Oil (`whale_oil_manual_only`, no Slice & Dice copy); Spout and Item Drain pair at 250 mB; `#forge:lubricant` (fluid) holds whale oil
 @fails data `creativedelight/fats.js` whaleOil block; Common fluid_dict `f.whale_oil`, `f.t_lubricant`
@@ -933,6 +949,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-10 | cooking oil from animal fat, seeds and seed oil; fish oil counts and cooks from raw fish
 @group A
+@reviewed 2026-11-20
 @commands rdetail of `cooking_oil_from_animal_fat`, `cooking_oil_from_seed_oil`, `fish_oil_from_raw_fish`; tag probes `rusticdelight:cooking_oil`, `rusticdelight:cooking_oil_ingredients`; recipes probe `delightful:cooking/animal_oil_bottle`
 @pass 2 animal fat + bottle -> 1 Cooking Oil (pot); the animal oil bottle recipe is gone and `delightful:animal_oil_bottle` is merged into Cooking Oil; `cooking_oil_ingredients` holds `#forge:seeds` (wheat seeds match); Spout bottle + 250 mB seed oil -> Cooking Oil; `#rusticdelight:cooking_oil` holds `alexsmobs:fish_oil`; 2 raw fish + bottle -> 1 fish oil (pot); fried eggs, cultured meats, cider donut and hops salad take the oil tag
 @fails data `creativedelight/fats.js`; CD swaps `merges_delightful_oil.json`; the `i.t_cooking_oil` slots in `cultivated_meat.js`, `hearthandharvest/recipes.js`, `rusticdelight/recipes.js`
@@ -951,6 +968,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-11 | [fats] switches off: parts drop out
 @group A
+@reviewed 2026-11-20
 @commands `qrun.py toml config/creativedelight-common.toml fats.blubber=false fats.whaleOil=false fats.animalFatOil=false fats.seedOil=false fats.fishOil=false`, `/reload`, the probes of SQ-FO-08 to -10
 @pass none of the new recipes, tag entries or the cachalot drop; the items stay registered
 @fails `CDConfig` [fats] section; `global.CD.fats` in cd_core.js

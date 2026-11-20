@@ -20,65 +20,66 @@
 @pass mod `barbequesdelight` loads from the CD jar (`creativedelight_members.txt`); no recipe parse errors; no NCH warning for the 26 recipes; no compost warning for the 24 rows
 @fails `CampfireRainInfo` missing (Creative Common old); an unknown item key in `recipes.js`
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-20
 bootexpect \[creativedelight\] members: \[.*\bbarbequesdelight\b
 bootreject (?i)barbequesdelight.*(exception|failed to parse|missing)
 kjsreject (?i)(warn|error).*(barbequesdelight|bbqSkewering|bbqGrilling|bbqCombine)
 shell grep -hn "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log | grep -i "warn\|error" | head; true
 
-## SQ-BBQ-02 | Barbeque's recipes: 26, all creativedelight ids
+## SQ-BBQ-02 | Barbeque's recipes: 28 skewering and grilling, all creativedelight ids; no combine; basin and tray per wood
 @group A
-@commands Recipe lookup: types `barbequesdelight:skewering` (10), `barbequesdelight:grilling` (10), `barbequesdelight:combine` (3); ids `creativedelight:shaped/bbq_grill`, `creativedelight:stonecutting/bbq_basin_from_logs`, `bbq_tray_from_logs`
-@pass 26 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`)
-@fails NCH emitters missing (Creative Common jar not rebuilt)
+@commands Recipe lookup: types `barbequesdelight:skewering` (10), `barbequesdelight:grilling` (18 = 10 Barbeque's Delight lines + 8 pack raw skewers), no `barbequesdelight:combine` (plan_meals_rolls_bbq.md C8: combos are shaped / assembly recipes); ids `creativedelight:shaped/bbq_grill`, `creativedelight:stonecutting/bbq_<wood>_basin_from_logs` and `bbq_<wood>_tray_from_logs` (9 woods each, barbeques_delight.md 3.11)
+@pass 28 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); no combine recipe; 9 basin and 9 tray stonecutting recipes; skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`)
+@fails NCH emitters missing (Creative Common jar not rebuilt). Counts from kubejs/exported/recipes/all.csv 2026-11-19 (skewering 10, grilling 18, combine 0, 18 bbq_*_from_logs); r1120lr batch fault: row predated C8 and 3.11
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail creativedelight:skewering/
-> cdevtest rdetail creativedelight:grilling/
-> cdevtest rdetail creativedelight:combine/
+> cdevtest rdetail creativedelight:grilling/ max=100
+> cdevtest recipes creativedelight:combine/
 > cdevtest recipes barbequesdelight:
 > cdevtest rdetail bbq_grill
-> cdevtest rdetail bbq_basin_from_logs
-> cdevtest rdetail bbq_tray_from_logs
+> cdevtest rdetail _basin_from_logs max=50
+> cdevtest rdetail _tray_from_logs max=50
 count verb=rdetail id=creativedelight:skewering/\S+ serializer= == 10
-count verb=rdetail id=creativedelight:grilling/\S+ serializer= == 10
-count verb=rdetail id=creativedelight:combine/\S+ serializer= == 3
+count verb=rdetail id=creativedelight:grilling/\S+ serializer= == 18
+expect verb=recipes text=creativedelight:combine/ n=0\b
 expect verb=recipes text=barbequesdelight: n=0\b
 expect verb=rdetail id=creativedelight:shaped/bbq_grill serializer=
-expect verb=rdetail id=creativedelight:stonecutting/bbq_basin_from_logs serializer=
-expect verb=rdetail id=creativedelight:stonecutting/bbq_tray_from_logs serializer=
+count verb=rdetail id=creativedelight:stonecutting/bbq_[a-z_]+_basin_from_logs serializer= == 9
+count verb=rdetail id=creativedelight:stonecutting/bbq_[a-z_]+_tray_from_logs serializer= == 9
 look skewering inputs (ingredients=, item ids of each tag) are the forge: tags of barbeques_delight.md 3.1 (beef: 2 #forge:raw_beef + 2 #forge:crops/cabbage)
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ-03 | Barbeque's item and block tags
 @group A
-@commands `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativecommon:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativeengineering:food_type/handheld`, `/meal`, `/hazard`
-@pass 10 + 10 skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
-@fails `tags.js` not loaded (`global.CD.on`)
+@commands `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativecommon:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativedelight:food_type/handheld`, `/meal`, `/hazard`
+@pass 18 raw (10 Barbeque's Delight + 8 pack raws) + 10 grilled skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
+@fails `tags.js` not loaded (`global.CD.on`). Ids from the 2026-11-19 tag dump (food_type tags under `creativedelight:`, rain_douses under `creativecommon:`, raw_skewers 18); r1120lr batch fault: old namespaces
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
 > cdevtest tag item barbequesdelight:raw_skewers
 > cdevtest tag item barbequesdelight:grilled_skewers
-> cdevtest tag block creativeengineering:campfire/rain_douses
+> cdevtest tag block creativecommon:campfire/rain_douses
 > cdevtest tag block blockrunner:surface/metal
 > cdevtest tag block blockrunner:surface/wood
 > cdevtest tagsof barbequesdelight:grill
 > cdevtest tagsof barbequesdelight:basin
-> cdevtest tag item creativeengineering:food_type/handheld
-> cdevtest tag item creativeengineering:food_type/meal
-> cdevtest tag item creativeengineering:food_type/hazard
+> cdevtest tag item creativedelight:food_type/handheld
+> cdevtest tag item creativedelight:food_type/meal
+> cdevtest tag item creativedelight:food_type/hazard
 > cdevtest tagsof barbequesdelight:raw_beef_skewer
-expect verb=tag kind=item tag=barbequesdelight:raw_skewers n=10\b
+expect verb=tag kind=item tag=barbequesdelight:raw_skewers n=18\b
 expect verb=tag kind=item tag=barbequesdelight:grilled_skewers n=10\b
-expect verb=tag kind=block tag=creativeengineering:campfire/rain_douses .*ids=\S*minecraft:campfire\b
-expect verb=tag kind=block tag=creativeengineering:campfire/rain_douses .*ids=\S*barbequesdelight:grill\b
+expect verb=tag kind=block tag=creativecommon:campfire/rain_douses .*ids=\S*minecraft:campfire\b
+expect verb=tag kind=block tag=creativecommon:campfire/rain_douses .*ids=\S*barbequesdelight:grill\b
 expect verb=tag kind=block tag=blockrunner:surface/metal .*ids=\S*barbequesdelight:grill\b
 expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:basin\b
 expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:tray\b
-expect verb=tag kind=item tag=creativeengineering:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b
-expect verb=tag kind=item tag=creativeengineering:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b
-expect verb=tag kind=item tag=creativeengineering:food_type/meal .*ids=\S*barbequesdelight:bibimbap\b
-expect verb=tag kind=item tag=creativeengineering:food_type/hazard .*ids=\S*barbequesdelight:burnt_skewer\b
+expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b
+expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b
+expect verb=tag kind=item tag=creativedelight:food_type/meal .*ids=\S*barbequesdelight:bibimbap\b
+expect verb=tag kind=item tag=creativedelight:food_type/hazard .*ids=\S*barbequesdelight:burnt_skewer\b
 reject verb=tagsof id=barbequesdelight:raw_beef_skewer .*item_tags=\S*food_type
 look the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block_tags in the tagsof lines)
 reject \[cdevtest\] verb=\S+ .*error=
@@ -89,6 +90,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass raw 25 %, cooked 50 %, burnt 25 %, wrap 50 %, sandwich 75 %, bibimbap 100 %; the seasonings and blocks have no row
 @fails CD startup `barbequesdelight/compost.js` not in the jar
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
 > dumpcompost
 waitlog Dumped compost table 300
 shell python3 -I $INST/tools/scratch_query/dumpq.py compost barbequesdelight:raw_beef_skewer=0.25 barbequesdelight:grilled_beef_skewer=0.5 barbequesdelight:burnt_skewer=0.25 barbequesdelight:kebab_wrap=0.5 barbequesdelight:kebab_sandwich=0.75 barbequesdelight:bibimbap=1 barbequesdelight:chili_powder=absent barbequesdelight:barbeque_sauce=absent barbequesdelight:grill=absent barbequesdelight:basin=absent barbequesdelight:tray=absent
@@ -102,7 +104,10 @@ look the other 18 rows of barbeques_delight.md 3.7 by tier in kubejs/exported/co
 @pass state `has_campfire=true,lit=false` on placing; lit by flint and steel (light 15); out in rain after `rainOutTicks` (160) on stone; still lit on the coal block; breaking drops the grill and a campfire
 @fails rain rule: grill not in `rain_douses`, or Creative Compat not filling CampfireRainInfo
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
+> forceload add 208 496 232 506
+sleep 3
 > setblock 212 -61 500 minecraft:stone
 > setblock 216 -61 500 minecraft:coal_block
 > setblock 212 -60 500 minecraft:campfire[lit=false]
@@ -146,6 +151,10 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass flip allowed at 160; Cooked Beef Skewer at 320; the unflipped one becomes Burnt Skewer at 640; the burnt entry's Time keeps counting between reads (after the B1 fix) and no block update spam
 @fails tick order; entry time not saved
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
+# r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
+> forceload add 208 496 232 506
+sleep 3
 > setblock 220 -60 500 minecraft:campfire[lit=true]
 > pbot spawn bbq6 220 -60 503 minecraft:overworld survival
 > pbot hold bbq6 barbequesdelight:grill
@@ -169,6 +178,10 @@ look the two last reads (20 ticks apart) are the same burnt entry; no block-upda
 @pass right-click seasoning does nothing on the grill or the cutting board (use retired, BBQ-28), seasonings stack to 64; the shapeless craft gives the "Chili Flavored" skewer and the grilled one keeps the prefix
 @fails shapeless season recipes missing (seasoning framework fold, barbeques_delight.md 4.5); member `GrillBlock` still handling the click
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
+# r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
+> forceload add 208 496 232 506
+sleep 3
 > setblock 226 -60 500 minecraft:campfire[lit=true]
 > pbot spawn bbq7 227 -60 503 minecraft:overworld survival
 > pbot hold bbq7 barbequesdelight:grill
@@ -189,13 +202,14 @@ look the two last reads (20 ticks apart) are the same burnt entry; no block-upda
 > data get entity bbq7 SelectedItem
 > data get block 229 -60 500
 > pbot remove bbq7
-look sauce use on the raw skewer: no BBQSeasoning in the first grill read; chili powder: BBQSeasoning in the second; board: the cooked skewer gets the sauce, sauce Damage 1 (16 -> 15)
+look right-click seasoning is retired (BBQ-28): no BBQSeasoning in either grill read; board: the cooked skewer gets no sauce and the sauce stack is unchanged; the shapeless seasoning craft half is not automated
 
 ## SQ-BBQ-08
 @group A
 @commands Bot: craft Kebab Wrap from bread, a seasoned cooked beef skewer and cabbage; `/data get entity @p SelectedItem`; eat it
 @pass result has `Skewers:[{id:"barbequesdelight:grilled_beef_skewer",...,tag:{BBQSeasoning:...}}]`; a stick returned to the grid; eating applies Nourishment chance and the skewer's Strength (BBQ-13)
 @fails combine serializer not registered
+@superseded the combine recipe type and stored skewers were retired by plan_meals_rolls_bbq.md C8 (Kebab Wrap, Sandwich, Bibimbap are plain shaped / meal foods, no Skewers tag, no carried effects); the combos are in-game BBQ-38 and SQ-BBQ-02 checks no combine recipe is left (owner request, 2026-11-20)
 @draft no batch holds this row yet
 
 ## SQ-BBQ-09 | raw skewer sequenced assembly: 18 recipes on the stick (blaze rod for the Nether Skewer), 18 incomplete items
@@ -204,6 +218,7 @@ look sauce use on the raw skewer: no BBQSeasoning in the first grill read; chili
 @pass 18 `creativedelight:createsequencedassembly/raw_*_sequenced_assembly` recipes (10 Barbeque's Delight lines + 8 pack skewers, `raw_barbecue_stick` and `raw_caveskewer` included); beef deploys beef, cabbage, beef, cabbage; lamb 4 mutton; nether on a blaze rod; result the raw skewer x1; no `incomplete('raw_...') not registered` (barbeques_delight.md 4.5, dishes/meals #57)
 @fails `cd_transition_items.js` row missing (KubeJS error `incomplete(...) not registered`, the whole skewers.js block stops); CD jar old
 @jars creativedelight
+@reviewed 2026-11-20
 @draft no batch holds this row yet
 > cdevtest recipes raw_ max=500
 > cdevtest rdetail raw_beef_skewer_sequenced_assembly

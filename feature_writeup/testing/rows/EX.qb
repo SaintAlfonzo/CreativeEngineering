@@ -28,7 +28,7 @@ sleep 3
 > give ex01 exposureextras:leather_camera_bag
 expect exposureextras:iron_camera_bag.*CameraBag|CameraBag.*exposureextras:iron_camera_bag
 expect exposureextras:leather_camera_bag
-expect Gave 1 \[.*\] to ex01
+expect Gave 1\s+\[.*\] to ex01
 shell ! grep -E "[Mm]issing.*camera_bag|Identifier .*camera_bag.* is missing|\[exposureextras\] .*remap" logs/latest.log
 > pbot remove ex01
 > setblock 30 -61 0 minecraft:air
