@@ -235,6 +235,7 @@ average complexity `c` is `c x (k - k(k-1)/64)`):
 | 16 cans | 16 | 101.0 | **17 (all)** | about 8 (cans at their source's value) |
 
 So today the best way to max Spice of Life is to eat 16 different cans, and the second best is Golden Food.
+Re-measured 2026-11-20 (cans now take family values, Raspberry Pie's 30-meal window): [food_diversity_audit.md](food_diversity_audit.md).
 
 **Config is per world.** The server config lives in each world's `serverconfig/`. Until 2026-10-22 there was no pack
 copy in `defaultconfigs/`, so every new world got the mod defaults (since then: `defaultconfigs/solapplepie-server.toml`,
