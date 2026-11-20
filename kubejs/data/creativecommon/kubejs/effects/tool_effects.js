@@ -22,6 +22,8 @@
 // $MobEffectInstance" and knocked whichever of the two files loaded second out
 // entirely (see [[rhino-fieldandmethods-gotcha]]).
 const $ToolMobEffectInstance = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
+// Held effects are marked gear-held for the inventory effect list's permanent column (plan_diet_books_r2.md B2).
+const $ToolGearMarks = Java.loadClass('com.SaintAlfonzo.creativecommon.effect.GearEffectMarks')
 const HELD_REFRESH_TICKS = 40 // 2 sec — same buffer-against-a-tick-hiccup idiom as armor_effects.js
 
 EntityEvents.hurt(event => {
@@ -71,6 +73,7 @@ PlayerEvents.tick(event => {
 			var me = global.armorEffects._resolveEffect(spec.effect)
 			if (!me) return
 			player.addEffect(new $ToolMobEffectInstance(me, HELD_REFRESH_TICKS, spec.amplifier || 0, false, spec.visible === true))
+			$ToolGearMarks.mark(player, me)
 		})
 	})
 })

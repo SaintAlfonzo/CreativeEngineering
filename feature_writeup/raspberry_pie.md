@@ -11,26 +11,17 @@ Existing worlds (Workspace, Structures, New World) keep their old `serverconfig/
 `python3 tools/gen_sol_drink_blacklist.py --worlds` for the blacklist.
 
 Jar facts below were checked on 2026-11-11 in `solapplepie-1.19.2-2.2.0.jar` (package `com.tarinoita.solsweetpotato`)
-and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 0, `endDecay` 30 (32 before 2026-11-19),
+and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 0, `endDecay` 32 (30 from 2026-11-19 to 2026-11-20),
 `minContribution` 0.0, `shouldForbiddenCount` true.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=f8ee0eca8c1d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 31 open TODO rows (Planned 11, Testing 20), 2 Complete.
+<!-- generated:status_index begin open_work sha1=1688e849f840 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 30 open TODO rows (Planned 2, Testing 28), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food-tuning #15` | Planned |  | Food Dictionary: hand-made type sort mirroring the JEI food family order (after that is done) |
-| `food-tuning #20` | Planned | S C | Diet window back to 32 meals (endDecay 30 -> 32); meals grid 8 x 4 |
-| `food-tuning #21` | Planned | C | Diet Log meals grid: label centered; hover shows food total only when it differs, before the struck-through meal value |
-| `food-tuning #22` | Planned | C | Diet Log 50% wider by default; first-page diversity and gate text scaled to fit on one line each |
-| `food-tuning #23` | Planned | C | Diet Log freezes briefly on every open: measure and cache |
-| `food-tuning #24` | Planned | C | Liquid Diet Log pauses the game in single player |
-| `food-tuning #25` | Planned | S P | Effect unlocks (and their messages) wait until the unique-food gate first opens |
-| `food-tuning #26` | Planned | C | Diet Log diversity icon: eaten non-drink food closest to the window's average meal value (newest on a tie); else seeds, moss, rotten flesh, spider eye or dandelion leaf |
-| `food-tuning #28` | Planned | C | Food tooltip line Diversity: X (contributes Y); diversity printed with two decimals, rounded down, everywhere |
-| `food-tuning #29` | Planned |  | Merge the Raspberry Pie changelog bullets |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
 | `food-tuning #2` | Testing | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
 | `food-tuning #3` | Testing | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
@@ -44,6 +35,14 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food-tuning #11` | Testing | C | Effect screen: smaller Change/Drop label text (buttons unchanged); hover shows how many foods age out |
 | `food-tuning #13` | Testing | C | Food Dictionary: uneaten sort configurable (mod+name, name, easiest, hardest) |
 | `food-tuning #14` | Testing | S C | Food Dictionary: eaten list 3-state sort button (newest unlock, latest eaten, uneaten order) |
+| `food-tuning #20` | Testing | S C | Diet window back to 32 meals (endDecay 30 -> 32); meals grid 8 x 4 |
+| `food-tuning #21` | Testing | C | Diet Log meals grid: label centered; hover shows food total only when it differs, before the struck-through meal value |
+| `food-tuning #22` | Testing | C | Diet Log 50% wider by default; first-page diversity and gate text scaled to fit on one line each |
+| `food-tuning #23` | Testing | C | Diet Log freezes briefly on every open: measure and cache |
+| `food-tuning #24` | Testing | C | Liquid Diet Log pauses the game in single player |
+| `food-tuning #25` | Testing | S P | Effect unlocks (and their messages) wait until the unique-food gate first opens |
+| `food-tuning #26` | Testing | C | Diet Log diversity icon: eaten non-drink food closest to the window's average meal value (newest on a tie); else seeds, moss, rotten flesh, spider eye or dandelion leaf |
+| `food-tuning #28` | Testing | C | Food tooltip line Diversity: X (contributes Y); diversity printed with two decimals, rounded down, everywhere |
 | `food/types-and-tuning #21` | Testing | S C P T | Spice of Life selectable unlock bonus |
 | `food/types-and-tuning #29` | Testing | C | Raspberry Pie item tooltip: "Doesn't run programs" |
 | `food/types-and-tuning #30` | Testing | S | Raspberry Pie: player reset command |
@@ -285,6 +284,8 @@ Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
 - **Since 2026-11-19** (12.6): pages diversity (with the last 30 meals grid), Diet Ladder, Milestones (Apple Pie's
   food history pages removed); each page type placed and sized by client config `[dietLog.pages.*]`; the background stretchable by
   `[dietLog] extraWidth`; the mouse wheel flips pages.
+- **Since 2026-11-20** (12.7): the book 50% wider by default, the first page's diversity and gate lines fitted, an
+  8 x 4 grid of the last 32 meals, a new diversity icon rule, two-decimal diversity everywhere, one timing line per open.
 
 ## 7. Liquid Diet Log
 
@@ -460,6 +461,9 @@ A and C need an accessor mixin on vanilla's hidden-instance field.
   instance with a potion's longer time (case B) or a stronger potion on top (case A) does not match and shows normally.
 - This covers the vanilla HUD and the inventory's effect list. Other mods that draw their own effect HUD are not
   filtered.
+- **Permanent column (2026-11-20, 12.7):** with Creative Common loaded, diet effects (the same match as above) count
+  as permanent in Common's two-column inventory effect list (they show there when the widget is off). Registered by
+  reflection (`PermanentEffects.addSource`), so Raspberry Pie has no dependency on Common.
 - Widget on or off is a client setting only; the server sends the same effects either way.
 - **Flat effects (decided 2026-11-12):** never shown on the in-game HUD (top-right icons), at any time. In the
   inventory screen they show on the widget when it is enabled, and like any vanilla effect in the inventory's effect
@@ -808,27 +812,27 @@ food history, even-spaced ladder of 5, Diet Log icon changes; Food Dictionary so
 (`#15` later). Choices made while building: plan section 5. Tests SQ-RPI-09, CQ-RPI-47 to -56 (drafts until the
 owner's look-check; CQ-RPI-53 supersedes CQ-RPI-46).
 
-- **Rules:** Apple Pie `endDecay` 30 (pack `defaultconfigs/`, the three local worlds); `respecFoods` default 5.
+- **Rules:** Apple Pie `endDecay` 30 (pack `defaultconfigs/`, the three local worlds; back to 32 in 12.7); `respecFoods` default 5.
 - **Last meals:** Raspberry Pie keeps the last `endDecay` meals eaten, newest first, duplicates kept (NBT
   `solrp_meals` on Apple Pie's FoodList; old saves backfilled from the memory). Since 2026-11-19
-  (plan_owner_notes_1119.md rulings 7 to 10) they are a 6 x 5 icon grid ("Last 30 Meals", newest top left) on the
+  (plan_owner_notes_1119.md rulings 7 to 10) they are an icon grid (6 x 5 "Last 30 Meals"; 8 x 4 "Last 32 Meals" since 12.7, newest top left) on the
   first page, above the diversity line; the meals pages are gone. A meal shows only while its food is in the decay
   window (memory count below `endDecay`), so a Change or Drop removes the aged foods' meals and the grid closes up.
   Hover: "N. Name", this meal's contribution (Apple Pie's `calculateDiversityContribution` at the meal's log index,
   struck through when it differs) and the food's total (at its memory count). Apple Pie's "Food Eaten" pages are
   removed.
-- **Diversity icon** (ruling 12): Apple Pie's image left of "Current Food Diversity" is a food: share = diversity /
+- **Diversity icon** (ruling 12; replaced in 12.7): Apple Pie's image left of "Current Food Diversity" is a food: share = diversity /
   the ladder's top milestone; edible items ranked by Apple Pie complexity, band = the share +-0.05 quantiles; one
   Carrot-eaten food of that band, picked by the diversity's tenth (stable). None: client config `[dietLog]
   diversityIcons` ("minDiversity=item,item,..."; agent defaults, unconfirmed).
 - **Milestones and ladder** (rulings 6, 11): a reached one-time unlock is struck through in the Milestones list, black
   while the current diversity is at or above it, gray below; the Diet Ladder bar leaves reached unlocks out (key
   unchanged).
-- **Diversity printed rounded down** to one decimal by Raspberry Pie (Diet Ladder page, effect screen, confirm
+- **Diversity printed rounded down** (two decimals everywhere since 12.7) to one decimal by Raspberry Pie (Diet Ladder page, effect screen, confirm
   panel); Apple Pie's own diversity page keeps its two decimals.
 - **Page layout:** client config `[dietLog.pages.diversity|meals|ladder|milestones]` `x`, `y`, `scale`, replacing
   `contentScale`. Defaults: diversity unscaled; meals 0.85; ladder and milestones 0.85, one line (10 px) lower.
-- **Wider book:** `[dietLog] extraWidth` (default 0): the background's center column is repeated, the pages widen,
+- **Wider book:** `[dietLog] extraWidth` (default 0; 93 = 50% since 12.7): the background's center column is repeated, the pages widen,
   the page arrows move out by half; the fit rule includes it.
 - **Mouse wheel** flips one page per notch (Diet Log and Food Dictionary).
 - **Ladder bar:** five evenly spaced milestone values: the last reached and the next four (the last five near the
@@ -843,3 +847,48 @@ owner's look-check; CQ-RPI-53 supersedes CQ-RPI-46).
   food(s)" / "to activate diet".
 - **Effect screen:** Change and Drop keep their 18 px buttons with labels at 0.85 scale; hover shows "N foods age
   out" (Change: `respecFoods` capped at the window; Drop: the drop rule of 5.2), counts synced with the state.
+
+### 12.7 Owner notes 2026-11-19, round 2 (built 2026-11-20)
+
+Plan and rulings: [plan_diet_books_r2.md](plan_diet_books_r2.md) (intake of the scratchpad "rasp pie" block). TODO
+`food-tuning #20` to `#29`, `tooltips #19`, `#20`, `interface #24`. Queue rows follow the owner's look-check.
+
+- **Window back to 32 meals:** Apple Pie `endDecay` 32 (pack `defaultconfigs/`, `configs_edited/`, the three local
+  worlds); the meals grid is 8 x 4 ("Last 32 Meals"), 16 px cells, the meals page scale shrinks it if needed.
+- **Meals grid:** title (and "No meals yet") centered over the grid. Hover: "N. Name"; "Food total: X" only when it
+  differs from this meal (compared as printed); "This meal: Y", struck through when the total line is there.
+- **Width and first page:** `[dietLog] extraWidth` default 93 (half of Apple Pie's 186 px book; the pack's client config
+  set to 93, was 40). "Current Food Diversity" and the gate lines ("N more unique foods" / "to activate diet") are
+  swapped for `FitLabel`s after Apple Pie builds the page: one common text scale, the largest up to 0.85 at which every
+  one fits the page width less 20 px a side (divided by the diversity page's own scale); each stays on its own line.
+- **Diversity printed** with two decimals, rounded down (`Icons.diversity`, epsilon 1e-6 so 1.40 stays 1.40): Diet
+  Log (Apple Pie's own value too, via a redirect of its `String.format`), Diet Ladder page, effect screen ("Diversity:
+  X (highest Y)"), confirm panel ("Diversity: X -> Y"), meals hover, food tooltips.
+- **Diversity icon:** the average Apple Pie complexity (base diversity) of the meals in the window (the grid's meals,
+  repeats counted); the Carrot-eaten food that is not a drink with the closest complexity, ties by Apple Pie memory
+  count (most recently eaten), then id. No meal in the window, nothing eaten or no Carrot: one loaded item of client
+  config `[dietLog] diversityIconFallback` (pumpkin, mixed, oat, corn and sunflower seeds, Miner's moss, Immersive
+  Weathering moss clump, rotten flesh, spider eye, dandelion leaf), picked by the diversity's tenth. The old
+  `diversityIcons` key and its all-items complexity scan are gone (the key was renamed so old configs pick up the new
+  default; Forge drops the old key).
+- **Open timing:** each Diet Log open logs `Diet Log open: pages X ms (diversity icon Y ms, meals grid Z ms), first
+  frame W ms` at INFO in latest.log (`DietLogPages.OpenTiming`). The owner's log decides further caching.
+- **Liquid Diet Log** pauses the game in single player.
+- **Unlock gate:** saved flag `gateOpened` (RpData NBT). `maxDiversity` climbs only once the gate (Apple Pie's
+  minFoodsToActivate, unique foods) has been passed once; later gate closings (death resets Apple Pie's counter) do
+  not stop it. Unlocks and their messages follow `maxDiversity`, so they wait too. Old saves: missing flag = opened when
+  `maxDiversity` > 0. `/solrp reset` clears it.
+- **Food Dictionary sorts:** uneaten `MOD_NAME`, `NAME`, `EASIEST`, `HIGHEST_FOOD` (nutrition), `HIGHEST_SATURATION`
+  (nutrition x modifier x 2), `HIGHEST_DIVERSITY` (complexity), `CUSTOM`; eaten button `NEWEST_UNLOCK`,
+  `LATEST_EATEN`, `HIGHEST_FOOD`, `HIGHEST_SATURATION`, `HIGHEST_DIVERSITY`, `CUSTOM` (icons golden carrot, clock,
+  cooked beef, rabbit stew, suspicious stew, book and quill). Ties fall back to the uneaten order. `CUSTOM` reads
+  client config `[foodDictionary] customOrder` (item ids, listed first in order); the button skips it while the list
+  is empty (`food-tuning #15`). A config still on `HARDEST` or `UNEATEN_ORDER` resets to the default on load.
+- **Food tooltips** (`client/FoodTooltips`, GatherComponents at LOWEST): order name, AppleSkin's food row, the
+  diversity line, Quark's saturation word, the rest. Diversity line on every food Apple Pie counts (edible, not a
+  drink, `shouldCount`): "Diversity: X", or "Diversity: X (contributes Y)" while its memory count is inside the window.
+  Quark's shank row is off by config (`[client.improved_tooltips] "Food Tooltips" = false`, "Show Saturation" kept;
+  backed up in `configs_edited/`). AppleSkin's saturation icons sit on the shank row after the shanks
+  (`AppleSkinTooltipRendererMixin`, AppleSkin 2.4.2 only) unless client config `[tooltips] saturationOwnLine`.
+  Mechanics: [agent note](agent_notes/food-tooltip-rows.md).
+

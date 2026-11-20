@@ -37,7 +37,10 @@ prefix `ROLL-`.
 - **D13: the chopstick whitelist includes** cooked salmon / cod slices, cooked shrimp, calamari, spring rolls, egg rolls and
   noodle soups, on top of the 3.3 list.
 - **Chopstick tooltip on every chopstick food** (3.3): `Can be eaten in the offhand w/ chopsticks`, or, when the food has
-  effects, `Can be eaten in the offhand w/ chopsticks, lengthens effect length`.
+  effects, `Can be eaten in the offhand w/ chopsticks, lengthens effect length`. Added once per tooltip (2026-11-20,
+  plan_diet_books_r2.md B3, `tooltips #20`): a second tooltip pass over the same list appended a second line after Mod
+  Name Tooltip's name, and its duplicate check (last line only) then added the name again. Cause inferred, not
+  reproduced; the in-game check confirms it.
 - **D14: Cooked Nether Wart follows Cooked Rice** (4.1): stack 64, returns a bowl, canned. Type changed 2026-11-04
   (plan_meals_rolls_bbq.md B1): `ingredient` (family `ingredient/other`), no longer a cooked vegetable; the can stays.
 - **D15: a medley leaves its empty plate** at 0 servings.
@@ -49,15 +52,15 @@ asks for it by name. Upstream bugs are fixed (3.5).
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=47a9877f8ae1 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 2, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=cc64da09d4ed -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 1, Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food/types-and-tuning #20` | Planned | S P | Short effects for seafood |
-| `tooltips #20` | Planned | C | Chopsticks tooltip: double mod name label |
 | `largecontent/mod-additions #12` | Testing | none | Overlap analysis of five small farming mods, then per-mod ports |
 | `largecontent/mod-additions #39` | Testing | S~ C P T | Roll Delight 1.3.1 port |
+| `tooltips #20` | Testing | C | Chopsticks tooltip: double mod name label |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |

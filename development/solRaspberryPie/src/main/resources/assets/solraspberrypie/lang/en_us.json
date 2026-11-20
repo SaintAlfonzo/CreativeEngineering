@@ -29,7 +29,7 @@
 
   "solraspberrypie.screen.title": "Diet Bonuses",
   "solraspberrypie.screen.waiting": "Waiting for the server...",
-  "solraspberrypie.screen.diversity": "Diversity %s (highest %s)",
+  "solraspberrypie.screen.diversity": "Diversity: %s (highest %s)",
   "solraspberrypie.screen.gate": "Eat %s more foods to activate diet bonuses",
   "solraspberrypie.screen.gate_unique": "%s more unique foods to activate diet",
   "solraspberrypie.screen.gate_unique_one": "%s more unique food to activate diet",
@@ -56,7 +56,7 @@
   "solraspberrypie.confirm.change": "Change slot %s to %s?",
   "solraspberrypie.confirm.drop": "Drop slot %s?",
   "solraspberrypie.confirm.stale": "Your diet changed. Check the new cost.",
-  "solraspberrypie.confirm.diversity": "Diversity %s -> %s",
+  "solraspberrypie.confirm.diversity": "Diversity: %s -> %s",
   "solraspberrypie.confirm.aged": "%s foods age out of your diet:",
   "solraspberrypie.confirm.greyed": "This slot switches off; your new choice waits in it.",
   "solraspberrypie.confirm.lost": "You will lose:",
@@ -75,6 +75,8 @@
   "solraspberrypie.dietlog.meal": "%s. %s",
   "solraspberrypie.dietlog.meal_this": "This meal: %s diversity",
   "solraspberrypie.dietlog.meal_total": "Food total: %s diversity",
+  "solraspberrypie.tooltip.diversity": "Diversity: %s",
+  "solraspberrypie.tooltip.diversity_contributes": "Diversity: %s (contributes %s)",
   "solraspberrypie.dietlog.unlock": "Unlock %s",
   "solraspberrypie.dietlog.slot_chosen": "%s: %s",
   "solraspberrypie.dietlog.legend.health": "Hearts",
@@ -95,6 +97,9 @@
 
   "solraspberrypie.fooddict.sort.newest_unlock": "Sort: newest unlock first",
   "solraspberrypie.fooddict.sort.latest_eaten": "Sort: latest eaten first",
-  "solraspberrypie.fooddict.sort.uneaten_order": "Sort: same order as uneaten foods",
+  "solraspberrypie.fooddict.sort.highest_food": "Sort: highest food first",
+  "solraspberrypie.fooddict.sort.highest_saturation": "Sort: highest saturation first",
+  "solraspberrypie.fooddict.sort.highest_diversity": "Sort: highest diversity first",
+  "solraspberrypie.fooddict.sort.custom": "Sort: custom order",
   "solraspberrypie.fooddict.sort.hint": "Click to change"
 }

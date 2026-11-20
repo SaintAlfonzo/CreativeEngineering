@@ -54,6 +54,7 @@ public abstract class FoodBookScreenMixin extends Screen {
 	/** Widens the background before the pages take its frame (plan_diet_books.md 1.5). */
 	@Inject(method = "initPages", at = @At("HEAD"))
 	private void solrp$widen(CallbackInfo ci) {
+		DietLogPages.OpenTiming.pagesBegin();
 		int extra = DietLogPages.extraWidth();
 		if (extra <= 0) return;
 		UIImage bg = ((FoodBookScreenAccessor) (Object) this).solrp$background();
@@ -64,7 +65,11 @@ public abstract class FoodBookScreenMixin extends Screen {
 	@Inject(method = "initPages", at = @At("RETURN"))
 	private void solrp$addLadderPages(CallbackInfo ci) {
 		DietLogPages.insert((FoodBookScreen) (Object) this);
+		DietLogPages.OpenTiming.pagesEnd();
 	}
+
+	@Unique
+	private long solrp$frameStart;
 
 	@Inject(method = "m_7856_", at = @At("TAIL"))
 	private void solrp$addButton(CallbackInfo ci) {
@@ -135,6 +140,7 @@ public abstract class FoodBookScreenMixin extends Screen {
 
 	@Inject(method = "m_6305_", at = @At("HEAD"))
 	private void solrp$scaleBegin(PoseStack pose, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+		if (DietLogPages.OpenTiming.frameWanted()) solrp$frameStart = System.nanoTime();
 		float s = DietLogPages.bookScale(this.width, this.height);
 		PoseStack mv = RenderSystem.getModelViewStack();
 		mv.pushPose();
@@ -148,6 +154,7 @@ public abstract class FoodBookScreenMixin extends Screen {
 	private void solrp$scaleEnd(PoseStack pose, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
 		RenderSystem.getModelViewStack().popPose();
 		RenderSystem.applyModelViewMatrix();
+		if (DietLogPages.OpenTiming.frameWanted()) DietLogPages.OpenTiming.frameEnd(System.nanoTime() - solrp$frameStart);
 	}
 
 	/** Clicks land on the scaled page-flip and Diet Bonuses buttons (reobf renames this override to its SRG name). */

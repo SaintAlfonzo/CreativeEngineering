@@ -1,6 +1,7 @@
 // solRaspberryPie: Spice of Life: Raspberry Pie Addition (mod id solraspberrypie), feature_writeup/raspberry_pie.md.
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
-// libs/ (git-ignored): copy solapplepie-1.19.2-2.2.0.jar, SoL-Carrot-1.19.2-1.14.0.jar and jei-1.19.2-forge-11.8.1.1034.jar from the pack's mods/.
+// libs/ (git-ignored): copy solapplepie-1.19.2-2.2.0.jar, SoL-Carrot-1.19.2-1.14.0.jar, jei-1.19.2-forge-11.8.1.1034.jar and
+// appleskin-forge-mc1.19-2.4.2.jar from the pack's mods/.
 plugins {
 	id 'ce.forge-mod-refmap'
 }
@@ -12,4 +13,6 @@ dependencies {
 	compileOnly fg.deobf('local:SoL-Carrot-1.19.2:1.14.0')
 	// JEI: the inventory widget's exclusion area. Optional; the plugin class is only loaded by JEI.
 	compileOnly fg.deobf('local:jei-1.19.2-forge:11.8.1.1034')
+	// AppleSkin 2.4.2: the food tooltip row mixin (plan_diet_books_r2.md A11); gated on appleskin at that version.
+	compileOnly fg.deobf('local:appleskin-forge-mc1.19:2.4.2')
 }

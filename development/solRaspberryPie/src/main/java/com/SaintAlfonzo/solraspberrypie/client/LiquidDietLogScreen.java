@@ -50,9 +50,10 @@ public class LiquidDietLogScreen extends Screen {
 		addRenderableWidget(new Button(left + W - 64, top + H - 26, 56, 20, Component.translatable("gui.done"), b -> onClose()));
 	}
 
+	/** Pauses the game in single player, like the Diet Log (plan_diet_books_r2.md A5). */
 	@Override
 	public boolean isPauseScreen() {
-		return false;
+		return true;
 	}
 
 	@Override

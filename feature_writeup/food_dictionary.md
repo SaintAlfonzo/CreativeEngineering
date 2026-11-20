@@ -34,11 +34,17 @@ fixed key (its own name lookup) and stores eaten foods without order.
 
 - **Uneaten foods:** client config `[foodDictionary] uneatenSort` in `solraspberrypie-client.toml`: `MOD_NAME`
   (default: mod id, then name), `NAME` (A-Z), `EASIEST` (lowest Apple Pie complexity first, then lower nutrition),
-  `HARDEST` (the reverse).
+  `HIGHEST_FOOD` (nutrition), `HIGHEST_SATURATION` (saturation points: nutrition x modifier x 2), `HIGHEST_DIVERSITY`
+  (complexity; was `HARDEST`), `CUSTOM` (since 2026-11-20, plan_diet_books_r2.md A8). A config still on a removed value
+  resets to the default.
+- **Custom order:** `[foodDictionary] customOrder`, item ids listed first in their order, the rest after (uneaten
+  order; mod and name when that is `CUSTOM` too). Empty (default) = `CUSTOM` hidden: the button skips it and a config
+  on it sorts as the uneaten order. To be filled with the JEI food family order (`food-tuning #15`).
 - **Eaten foods:** a sort button at the top right of the eaten-foods pages (after Sophisticated Backpacks' sort-type
   button, own code: a click steps to the next state, the tooltip names it, an item icon per state): newest unlock
-  first (golden carrot), latest eaten first (clock; Apple Pie's meal memory, foods it no longer remembers last), or
-  the uneaten order (book). The state is `[foodDictionary] eatenSort`. Unlock order is stored from the first eat after
+  first (golden carrot), latest eaten first (clock; Apple Pie's meal memory, foods it no longer remembers last),
+  highest food (cooked beef), highest saturation (rabbit stew), highest diversity (suspicious stew), custom (book and
+  quill, only while configured); ties in the uneaten order. The old "uneaten order" state is gone (2026-11-20). The state is `[foodDictionary] eatenSort`. Unlock order is stored from the first eat after
   2026-11-19 (NBT `solrp_unlockOrder` on Carrot's list, synced and kept through death); older unlocks sort after the
   ordered ones, in the uneaten order.
 - **Mouse wheel** flips one page per notch.

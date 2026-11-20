@@ -100,6 +100,10 @@ public class CreativeCommon
 		// feature_writeup/trade_sync.md).
 		com.SaintAlfonzo.creativecommon.trader.TradeSync.register();
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.trader.TradeSync.class);
+		// Gear-held effects marked for the client (armor and tool scripts -> effect/GearEffectMarks), so the inventory
+		// effect list puts them in its permanent column (plan_diet_books_r2.md B2, mixin.EffectColumnsMixin).
+		com.SaintAlfonzo.creativecommon.effect.GearEffectMarks.register();
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.GearEffectMarks.class);
 		// Corn Delight cob pipe: Creative Delight. Swap lists (swap/, Common API): every jar's
 		// data/<modid>/swaps/*.json remaps ids it moved when a world loads.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.swap.SwapRemapper.class);
@@ -210,6 +214,7 @@ public class CreativeCommon
 			// Detail Armor Bar compat: Creative Equipment. Lunchbox looks, cob pipe renderer and
 			// the oven screen: Creative Delight.
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.trader.client.TradeSyncClient.class);
+			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.client.PermanentEffectsEvents.class);
 		}
 
 		// Stepstool key, tier shield item properties: Creative Equipment.

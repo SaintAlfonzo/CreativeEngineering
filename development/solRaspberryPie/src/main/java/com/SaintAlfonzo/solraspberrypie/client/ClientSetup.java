@@ -4,6 +4,8 @@ import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraft.client.Minecraft;
@@ -17,6 +19,8 @@ public final class ClientSetup {
 			e.register(RpKeys.LOCK);
 		});
 		MinecraftForge.EVENT_BUS.addListener(ClientSetup::tick);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, FoodTooltips::gather);
+		modBus.addListener((FMLClientSetupEvent e) -> e.enqueueWork(EffectFilter::registerPermanentSource));
 		MinecraftForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> ClientState.reset());
 		MinecraftForge.EVENT_BUS.addListener((ScreenEvent.Render.Post e) -> {
 			if (e.getScreen() instanceof InventoryScreen inv) InventoryWidget.render(inv, e.getPoseStack(), e.getMouseX(), e.getMouseY());

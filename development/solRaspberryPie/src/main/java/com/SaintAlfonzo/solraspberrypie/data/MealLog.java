@@ -24,7 +24,7 @@ public interface MealLog {
 		try {
 			return Math.max(1, SOLSweetPotatoConfig.endDecay());
 		} catch (RuntimeException e) { // Apple Pie's server config not loaded yet (client before login)
-			return 30;
+			return 32;
 		}
 	}
 }

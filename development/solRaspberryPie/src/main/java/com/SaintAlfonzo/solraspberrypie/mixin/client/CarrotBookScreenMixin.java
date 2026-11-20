@@ -87,7 +87,10 @@ public abstract class CarrotBookScreenMixin extends Screen {
 		return new ItemStack(switch (mode) {
 			case NEWEST_UNLOCK -> Items.GOLDEN_CARROT;
 			case LATEST_EATEN -> Items.CLOCK;
-			case UNEATEN_ORDER -> Items.BOOK;
+			case HIGHEST_FOOD -> Items.COOKED_BEEF;
+			case HIGHEST_SATURATION -> Items.RABBIT_STEW;
+			case HIGHEST_DIVERSITY -> Items.SUSPICIOUS_STEW;
+			case CUSTOM -> Items.WRITABLE_BOOK;
 		});
 	}
 

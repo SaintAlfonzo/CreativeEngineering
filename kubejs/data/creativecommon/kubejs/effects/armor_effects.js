@@ -14,6 +14,9 @@
 const $MobEffectInstance = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
 const $EquipmentSlot = Java.loadClass('net.minecraft.world.entity.EquipmentSlot')
 const $AbstractHorse = Java.loadClass('net.minecraft.world.entity.animal.horse.AbstractHorse')
+// Marks each effect applied to a player as gear-held, so the inventory effect list shows it in its permanent column
+// (plan_diet_books_r2.md B2; mark() ignores horses). Own name: all server scripts share one top-level scope.
+const $ArmorGearMarks = Java.loadClass('com.SaintAlfonzo.creativecommon.effect.GearEffectMarks')
 
 const ARMOR_SLOTS = [$EquipmentSlot.HEAD, $EquipmentSlot.CHEST, $EquipmentSlot.LEGS, $EquipmentSlot.FEET]
 const REFRESH_TICKS = 40 // 2 sec — reapplied every tick, just a buffer against a brief server hiccup
@@ -38,6 +41,7 @@ function applyEffects(target, effects, durationTicks) {
 		var me = global.armorEffects._resolveEffect(spec.effect)
 		if (!me) return
 		target.addEffect(new $MobEffectInstance(me, durationTicks || REFRESH_TICKS, spec.amplifier || 0, false, spec.visible === true))
+		$ArmorGearMarks.mark(target, me)
 	})
 	if (target.getHealth() < health) target.setHealth(Math.min(health, target.getMaxHealth()))
 }
