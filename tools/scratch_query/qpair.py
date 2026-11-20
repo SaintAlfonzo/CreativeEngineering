@@ -142,7 +142,7 @@ class MultiWatch:
 		for k, x in self.w.items():
 			_, g = x.collect(res, os.path.join(rid, k))
 			got += [f"{k}/{f}" for f in g]
-		return os.path.join("crash", rid), got
+		return os.path.join("crash", rid.replace("/", "_")), got
 
 
 class PairTarget:

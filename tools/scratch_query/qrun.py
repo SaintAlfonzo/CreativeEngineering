@@ -91,6 +91,11 @@ import subprocess
 import sys
 import time
 
+
+def fsid(rid):
+	"""A row id as a file name (qverdict.fsid): '/' in an id becomes '_' (r1120nv step 23)."""
+	return rid.replace("/", "_")
+
 INST = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 SCRATCH = os.environ.get("QRUN_SCRATCH", os.path.join(INST, "tools/creative_labels_test/scratch_server.sh"))
 PERF = os.path.join(INST, "tools/perf/session/perf_session.sh")
@@ -504,7 +509,7 @@ def run_row(t, row, res, checks=None):
 			secs = float(arg) if re.fullmatch(r"\d+(\.\d+)?", arg or "") else 600.0
 			os.makedirs(os.path.join(res, "rows"), exist_ok=True)
 			pre += t.log.since(off)
-			ok, detail, ran = t.restart(edits, secs, os.path.join(res, "rows", row["id"] + ".shell.txt"))
+			ok, detail, ran = t.restart(edits, secs, os.path.join(res, "rows", fsid(row["id"]) + ".shell.txt"))
 			for c, rc, outp in ran:
 				chk("edit", c, not rc, f"edit exit {rc}: {outp.strip()[:200]}" if rc else "exit 0", harness=bool(rc))
 			edits = []
@@ -518,7 +523,7 @@ def run_row(t, row, res, checks=None):
 							   text=True,
 							   env=dict(os.environ, INST=INST))
 			os.makedirs(os.path.join(res, "rows"), exist_ok=True)
-			with open(os.path.join(res, "rows", row["id"] + ".shell.txt"), "a") as so:
+			with open(os.path.join(res, "rows", fsid(row["id"]) + ".shell.txt"), "a") as so:
 				so.write(f"$ {arg}\n{r.stdout}{r.stderr}\n")
 			chk("shell", arg, not r.returncode,
 				f"shell exit {r.returncode}: {(r.stderr or r.stdout).strip()[:200]}" if r.returncode else "exit 0")
@@ -612,7 +617,7 @@ def run_row(t, row, res, checks=None):
 			else:
 				chk(word, arg, not hit, f"{name}: /{arg}/ matched: {hit[0].strip()[:200]}" if hit else "no match")
 	os.makedirs(os.path.join(res, "rows"), exist_ok=True)
-	with open(os.path.join(res, "rows", row["id"] + ".log"), "w") as f:
+	with open(os.path.join(res, "rows", fsid(row["id"]) + ".log"), "w") as f:
 		f.write("\n".join(segs[""]) + "\n")
 	with open(os.path.join(res, "timeline.tsv"), "a") as f:
 		f.write(f"{t0:.1f}\t{time.time():.1f}\t{t.kind}\t{row['id']}\n")
@@ -976,6 +981,10 @@ def run_batch(a, mode, t=None):
 			continue
 		if tiers and tier_of.get(row["id"], "T2") not in tiers:
 			continue
+		if row["meta"].get("superseded"):
+			# marked after a plan was made (drive steps keep their row lists): listed, never run
+			print(f"{row['id']} SUPERSEDED ({row['meta']['superseded'][:80]}); not run")
+			continue
 		if not row["steps"]:
 			# a queue row with no steps yet (@draft): the runner writes them into the .qb first
 			print(f"{row['id']} DRAFT (no steps: {row['meta'].get('draft', 'empty row')}); not run")
@@ -993,7 +1002,7 @@ def run_batch(a, mode, t=None):
 			if e.stopped:
 				print(f"ABORT: {e.reason}")
 				break
-			edir, got = t.watch.collect(res, row["id"])
+			edir, got = t.watch.collect(res, fsid(row["id"]))
 			crash = {"reason": e.reason, "evidence_dir": edir, "files": got}
 			r = {"result": "CRASH", "fails": [e.reason], "looks": [], "shots": [], "title": row["title"],
 				 "at": time.strftime("%Y-%m-%d %H:%M:%S"), "lines": 0, "started": t0, "ended": time.time()}

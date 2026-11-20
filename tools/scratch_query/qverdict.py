@@ -39,7 +39,7 @@ RANK = {"FAIL": 5, "BATCH-FAULT": 4, "INCONCLUSIVE": 3, "OWNER": 2, "PASS": 1}
 
 
 def path(res, rid):
-	return os.path.join(res, "verdicts", rid + ".json")
+	return os.path.join(res, "verdicts", fsid(rid) + ".json")
 
 
 def verdict_of(d):
@@ -77,14 +77,19 @@ def write(res, row, r, checks, batch, mode, crash=None, stamps=None):
 		 "started": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(r.get("started", time.time()))),
 		 "ended_at": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(r.get("ended", time.time()))),
 		 "checks": checks, "looks": looks, "shots": r.get("shots", []),
-		 "log": f"rows/{rid}.log" if os.path.exists(os.path.join(res, "rows", rid + ".log")) else None,
-		 "shell": f"rows/{rid}.shell.txt" if os.path.exists(os.path.join(res, "rows", rid + ".shell.txt")) else None,
+		 "log": f"rows/{fsid(rid)}.log" if os.path.exists(os.path.join(res, "rows", fsid(rid) + ".log")) else None,
+		 "shell": f"rows/{fsid(rid)}.shell.txt" if os.path.exists(os.path.join(res, "rows", fsid(rid) + ".shell.txt")) else None,
 		 "lines": r.get("lines"), "crash": crash, "previous": prev,
 		 # identities of the own jars the run pinned (qpin.py); qplan.py judges the row current against mods/
 		 "stamps": stamps}
 	d["verdict"] = verdict_of(d)
 	json.dump(d, open(p, "w"), indent=1)
 	return d
+
+
+def fsid(rid):
+	"""A row id as a file name: ids such as 'SQ-CDJ-05 / SQ-DDP-01 rerun (I1)' hold a slash (r1120nv step 23)."""
+	return rid.replace("/", "_")
 
 
 def load_all(res):
