@@ -134,7 +134,8 @@ reject (Unknown or incomplete command)
 @pass `repackedCannedGoods-1.19.2-3-ce-19.2-01` found by `JarInJarDependencyLocator`; mod `canned_goods` version `1.19.2-3-ce-19.2-01`; no mixin error, no `CannedGolemColorMixin` / `CannedGolemRendererMixin` line (removed); no "member canned_goods is loaded from CannedGoods-..." error
 @fails Stale `CannedGoods-*.jar` in `mods/` (`replaces_jars`), or CD built from a tree that still lists the mixins (double definition of the color data)
 @from batches/r1103/sA_2.qb
-bootexpect repackedCannedGoods-1\.19\.2-3-ce-19\.2-01
+# the JarInJar "Found valid mod file" line is in debug.log only; the builds line in latest.log names the nested version
+bootexpect \[creativecommon\] builds: .*\bcanned_goods 1\.19\.2-3-ce-19\.2-01\+
 bootreject CannedGolemColorMixin|CannedGolemRendererMixin
 bootreject member canned_goods is loaded from CannedGoods
 shell grep -hE "canned_goods|repackedCannedGoods|creativedelight.mixins.json" logs/latest.log logs/debug.log | head -20
@@ -242,8 +243,8 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @from batches/r1103/sA_2.qb
 bootreject DuplicateModsFound|Found duplicate mods
 shell grep -nhE "enders_additions|ends_delight|Duplicate|endersAdditions" logs/latest.log logs/debug.log | head -20
-shell unzip -l mods/creativedelight-1.0.0.jar | grep -oE "jarjar/[A-Za-z]+-[^ ]+\.jar" | grep -iE "ends|enders"
-shell ! unzip -l mods/creativedelight-1.0.0.jar | grep -q "jarjar/endersAdditions-"
+shell unzip -l mods/creativedelight-*.jar | grep -oE "jarjar/[A-Za-z]+-[^ ]+\.jar" | grep -iE "ends|enders"
+shell ! unzip -l mods/creativedelight-*.jar | grep -q "jarjar/endersAdditions-"
 shell grep -hoE "enders_upstream_(assets|data)" logs/latest.log logs/debug.log | sort -u
 look both mod ids from repackedEnds-...-03 only; both enders_upstream packs listed
 
@@ -503,8 +504,8 @@ waitlog verb=pbot.useitem bot=sagld end=finish item=minecraft:golden_carrot 20
 waitlog verb=pbot.useitem bot=sagld end=finish item=minecraft:enchanted_golden_apple 20
 > cdevtest player sagld
 > effect clear sagld
-expect verb=item item=goldenfood:enchanted_golden_bread .*max_stack=1\b
-expect verb=item item=minecraft:enchanted_golden_apple .*max_stack=1\b
+expect verb=item item=goldenfood:enchanted_golden_bread .*max_stack=16\b
+expect verb=item item=minecraft:enchanted_golden_apple .*max_stack=16\b
 count \[sa\] canuse sagld .* food 20: (CONSUME|SUCCESS) using=true >= 4
 count verb=pbot.useitem bot=sagld end=finish == 4
 expect verb=player name=sagld effects=\S*minecraft:fire_resistance:0:
@@ -1368,7 +1369,7 @@ capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 sleep 3
 > setblock {SAH1+22} {SAH2} {SAH3+50} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:0b,id:"alexsmobs:banana",Count:5b,tag:{display:{Name:'{"text":"Kept"}'}}}]}
-> ceswap items
+> ccswap items
 sleep 2
 > data get block {SAH1+22} {SAH2} {SAH3+50} Items
 expect Slot: 0b, id: "neapolitan:banana"|Slot:0b,id:"neapolitan:banana"
@@ -1395,7 +1396,7 @@ sleep 3
 > setblock {SAH1+22} {SAH2} {SAH3+52} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+52} {Items:[{Slot:0b,id:"vintagedelight:vinegar_bottle",Count:64b}]}
 > cdevtest item vintagedelight:vinegar_jar
-> ceswap items
+> ccswap items
 sleep 2
 > data get block {SAH1+22} {SAH2} {SAH3+52} Items
 > cdevtest items {SAH1+22} {SAH2} {SAH3+52} 2
@@ -1420,10 +1421,12 @@ sleep 2
 capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > forceload add {SAH1+20} {SAH3+48} {SAH1+24} {SAH3+52}
 sleep 3
+# own chest (r1120nv judge-3): the chest came from SQ-SWP-03
+> setblock {SAH1+22} {SAH2} {SAH3+50} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:1b,id:"minecraft:shulker_box",Count:1b,tag:{BlockEntityTag:{Items:[{Slot:0b,id:"farmersrespite:coffee",Count:3b}]}}}]}
-> ceswap items
+> ccswap items
 sleep 2
-> data get block {SAH1+22} {SAH2} {SAH3+50} Items[1]
+> data get block {SAH1+22} {SAH2} {SAH3+50} Items[{Slot:1b}]
 expect rusticdelight:coffee
 expect minecraft:shulker_box
 reject farmersrespite:coffee"

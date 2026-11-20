@@ -1,4 +1,5 @@
 id,family,table,status,priority,tests,work,change,details,decisions,writeup,feature,plan,source,queue,log,updated
+canning #22,Canning,,Bug,,SQ-CNP-01,,Raspberry Pie liquid diet log recipe takes a can without the manual-only guard,"solraspberrypie:liquid_diet_log crafting recipe takes canned_goods:oculemonade without _manual_only, the one can-guard violation in SQ-CNP-01. Suspect the recipe itself or the NCH can guard not covering mod recipes. Found r1120nv judge-3.",,,,,scratch run r1120nv,,,2026-11-20
 cooking/kitchen #35,Kitchen,,Bug,,P,KubeJS / Creative Common,Knife disappears on pickup from a cutting board,Scratchpad bug: the knife disappears when picked up from a cutting board.,none,scratchpad 2026-11-03,,,scratchpad 2026-11-03,,,2026-11-03
 cans/canning #10,Canning,,Planned,,C P,Creative Common / KubeJS,Cosmetic can opener,Makes a sound when a can is opened while in the inventory,none,"cooking plan canned, [brief](../briefs/cans_canning.md)",,,,,,
 cans/canning #19,Canning,,Planned,,S P,KubeJS / docs,Can additive audit,"Audit the additives in cans, e.g. sugar in the fruit salad can.",none,scratchpad 2026-11-02,,,scratchpad 2026-11-02,,,2026-11-02
