@@ -302,6 +302,9 @@ Rewritten 2026-11-12 (was alcohol only).
 - They are tracked in the Liquid Diet Log: a book item in Raspberry Pie with its own player data, **unique drinks**,
   the last 256 (like Apple Pie's own log, not a plain history of every sip), history only. It gives the player
   **nothing**: no health, no effects. The drinks keep their own effects (tipsy and so on).
+- Recipe `solraspberrypie:liquid_diet_log_manual_only`: a book and any drink in `#solraspberrypie:drinks`. The
+  tag holds canned drinks, so the id carries `_manual_only` (Create keeps it out of automation, the pack's can guard;
+  renamed 2026-11-20 from `liquid_diet_log`, r1120nv SQ-CNP-01, TODO `canning #22`).
 - Source list: the pack's drink tags (`#creativedelight:food_type/drink/...`, alcohol and the non-alcoholic ones;
   which tags cover tea, juice, potions and milk is to be checked when built, add any missing). A generator (listed in
   `tools/generators.json`) writes Apple Pie's blacklist from them, so the two never drift. Like `minFoodsToActivate`,

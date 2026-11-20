@@ -271,6 +271,10 @@ Differently (yellow) = tag `wthit/silk_touch_differs`, something else drops, Sil
 (red) = every other block, only with `[wthit] silkTouchShowFalse` (default off). The generator splits the two lists
 (`required` / `differs` in the JSON). Still hidden while the main hand has Silk Touch. Not done: the line sits at
 default body priority, not yet ordered between harvest level and run speed.
+- No list file (a Creative Common-only jar set): the script logs `[wthit-silk-touch] no list at ...` and adds no tags
+  (`JsonIO.readString` gives null for a missing file; it threw a TypeError at boot and on /reload until 2026-11-20,
+  r1120nv SQ-CCO-12a to -12f, TODO `wthit #17`).
+
 
 ### 2.12 Crop seasons
 

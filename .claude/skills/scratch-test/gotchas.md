@@ -402,6 +402,10 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   menus open (check `containerMenu`). FakePlayer does not tick, so `startUsingItem` never completes: eat with
   `finishUsingItem` + `ForgeEventFactory.onItemUseFinish` (`tools/kitchen_probe/serve_items_probe.js`).
 
+- A bot that has eaten 7 or more different foods carries Raspberry Pie diet effects (800 t, ambient, no particles; flat
+  Speed at 7 in the default ladder), re-added the tick after milk or `/effect clear` by design (raspberry_pie.md 9.3).
+  Rows that check "no effects" after a cure use their own fresh bot that has eaten nothing (r1120nv SQ-GLD-03).
+
 ## Rhino and KubeJS probes
 
 - NEVER load an ungenerated chunk from a KubeJS command (`getChunkAt`, `getBiome`, `getHeight` on new land): the server

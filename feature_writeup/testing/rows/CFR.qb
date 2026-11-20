@@ -71,6 +71,11 @@ look CD file [campfire] rainOutTicks = 120
 @fails `CampfireRain` not ticking (mixin not applied) or `CDConfig.CAMPFIRE` not read; tags `#creativeengineering:campfire/rain_douses` / `rain_proof_fuel` (blocktags.js)
 @reviewed 2026-11-20
 @from batches/r1106spf/b1.qb
+# r1120nv FAIL (TODO misc-gameplay #1, cause unproven): forceload so the block entities tick for sure, and the
+# `cdevtest rain` probe (Devtools) prints every input of CampfireRain's gate at the open-sky campfire before and after
+# the warp. rainingAt=true with rainTicks=0 after the warp: the tick is not reached; rainingAt=false: read which input.
+> forceload add 88 -42 101 -29
+sleep 3
 > fill 90 -61 -40 100 -61 -30 minecraft:stone
 > setblock 90 -60 -40 minecraft:campfire[lit=true]
 > setblock 93 -61 -40 minecraft:coal_block
@@ -79,8 +84,13 @@ look CD file [campfire] rainOutTicks = 120
 > setblock 99 -60 -40 minecraft:campfire[lit=true]
 > fill 98 -57 -41 100 -57 -39 minecraft:stone
 > weather rain
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=\S+ ticks=40 60
+> cdevtest rain 90 -60 -40
 > cdevtest tickwarp 220
 waitlog verb=tickwarp end=\S+ ticks=220 60
+> cdevtest rain 90 -60 -40
+expect verb=rain pos=90,-60,-40 .*raining=true .*rainingAt=true .*blockTicking=true
 > execute if block 90 -60 -40 minecraft:campfire[lit=false]
 > execute if block 93 -60 -40 minecraft:campfire[lit=true]
 > execute if block 96 -60 -40 minecraft:soul_campfire[lit=true]

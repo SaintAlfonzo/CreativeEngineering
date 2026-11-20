@@ -18,7 +18,12 @@ R.remove({id: 'supplementaries:pulley'}, e)
 // Soap
 // Replace pork with animal fat. Creative Delight's Blubber and Whale Oil count too, while its [fats] switches are on
 // (TODO dishes/ingredients #10); unloaded mods' fats drop out of the list.
-var SOAP_FAT = [i.animal_fat, i.animal_oil_bottle, i.fish_oil, i.tallow] // G5 (filtered by global.has below)
+// Delightful's Animal Oil Bottle is merged into Rustic Delight's Cooking Oil when both are loaded (CD swaps
+// merges_delightful_oil.json). A merge runs replaceInput over every recipe, and KubeJS swaps the WHOLE ingredient that
+// holds the merged item, so naming the bottle here collapsed the soap fats to Cooking Oil alone (r1120nv SQ-FO-08,
+// TODO mod-integration #1). Name Cooking Oil in its place while the merge applies.
+var oilMerged = Platform.isLoaded('delightful') && Platform.isLoaded('rusticdelight')
+var SOAP_FAT = [i.animal_fat, oilMerged ? i.cooking_oil : i.animal_oil_bottle, i.fish_oil, i.tallow] // G5 (filtered by global.has below)
 if (global.CD && global.CD.fats) {
 	if (global.CD.fats('blubber')) SOAP_FAT.push(i.blubber)
 	if (global.CD.fats('whaleOil')) SOAP_FAT.push(i.whale_oil)

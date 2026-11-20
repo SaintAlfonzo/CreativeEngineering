@@ -36,6 +36,15 @@ ItemEvents.modification(e => {
 		minecraft_bread: 'bread', cookie: 'cookie', pumpkin_pie: 'pumpkin_pie',
 		honey_bottle: 'honey_bottle',
 	}
+	// A vanilla input the pack made a non-food (Pumpkin Pie is a placed pie, eaten as slices) keeps its vanilla
+	// values for the golden math: read net.minecraft.world.food.Foods (PUMPKIN_PIE = 8 / 0.3). A missing static
+	// field throws in Rhino, hence the try.
+	var $GoldenFoods = Java.loadClass('net.minecraft.world.food.Foods')
+	var vanillaFood = inputId => {
+		var parts = String(inputId).split(':')
+		if (parts[0] != 'minecraft') return null
+		try { return $GoldenFoods[parts[1].toUpperCase()] || null } catch (err) { return null }
+	}
 	var done = 0
 	var apply = (inputId, targetKey, mult) => {
 		var id = i[targetKey]
@@ -43,6 +52,7 @@ ItemEvents.modification(e => {
 		e.modify(id, item => {
 			var src = $GoldenRegistries.ITEMS.getValue(new $GoldenRL(inputId))
 			var food = src ? src.getFoodProperties() : null
+			if (!food) food = vanillaFood(inputId)
 			if (!food) { console.warn('[golden values] ' + inputId + ' is not a food'); return }
 			var hunger = Math.min(cfg.maxHunger, Math.round(food.getNutrition() * mult))
 			var modifier = food.getSaturationModifier()
