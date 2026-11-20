@@ -14,6 +14,7 @@
     "IwServerLevelTickMixin",
     "ArmorTrimsLargeItemListsMixin",
     "MobEffectTickContextMixin",
+    "MobEffectInstanceLevelCapMixin",
     "KubeJSVirtualDataPackListMixin",
     "HolderReferenceUnboundMixin",
     "LevelThreadSafeRandomMixin",

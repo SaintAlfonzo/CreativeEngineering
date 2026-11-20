@@ -291,3 +291,48 @@ look the dragon-set Fire Resistance ShowIcon:0b half is SQ-EFX-04's read (worn a
 @pass Haste with `ShowIcon:1b`; boot log has no `CreateTeaPipeIconMixin` warning
 @fails `require = 0` let it miss: constructor descriptor `(MobEffect;IIZZZ)V` in `TeaEffectHandler#applyEffects`
 @draft needs a powered Create fluid line (creative motor, mechanical pump, pipe, open-ended pipe, a tank of Builder's Tea) never scripted here: block states and tank NBT unverified; the first runner builds it once by hand and records the setblock lines (bot qe under the open end, then data get ActiveEffects)
+
+@@section 2
+@@title SQ-EFX level caps, 2026-11-19 ([effects.md](../effects.md) 2.1 Max lv, 3 Level caps)
+@@date 2026-11-19
+@@jars creativecommon creativebrewing
+@@sources feature_writeup/effects.md
+@@text
+@@text Creative Common `MobEffectInstanceLevelCapMixin` (`getAmplifier()` and `update()` capped) and the `levelCaps` line in
+@@text `LivingEntityEffectRemapMixin`; config `[effects] levelCaps` (87 effects at level I). Tooltips are in-game check EF-33.
+@@text
+@@table
+## SQ-EFX-15 | level-cap mixin applies
+@group A
+@commands Boot; grep latest.log for `MobEffectInstanceLevelCapMixin` and `Mixin apply`
+@pass `Done (`; no apply error
+@fails SRG names (`m_19564_` getAmplifier, `m_19558_` update, `f_19504_` amplifier)
+bootreject (Mixin apply failed|InvalidInjectionException).*MobEffectInstanceLevelCapMixin
+## SQ-EFX-16 | capped effect stored at level I; uncapped one keeps its level
+@group A
+@commands `/effect give <bot> minecraft:fire_resistance 30 2`; `/effect give <bot> minecraft:speed 30 2`; `/data get entity <bot> ActiveEffects`
+@pass Fire Resistance (Id 12) at Amplifier 0b; Speed (Id 1) at Amplifier 2b
+@fails `LivingEntityEffectRemapMixin` cap line, or `levelCaps` not read (config not loaded)
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
+> effect clear qe
+> effect give qe minecraft:fire_resistance 30 2
+> effect give qe minecraft:speed 30 2
+> data get entity qe ActiveEffects
+expect Id: 12, Amplifier: 0b
+expect Id: 1, Amplifier: 2b
+> effect clear qe
+## SQ-EFX-17 | a higher capped level does not cut a longer duration
+@group A
+@commands `/effect give <bot> minecraft:fire_resistance 60 0`, then `/effect give <bot> minecraft:fire_resistance 5 2`; `/data get entity <bot> ActiveEffects`
+@pass Fire Resistance Amplifier 0b with Duration above 1000 (the 60 s one kept)
+@fails `update()` cap missing: Duration near 100 means the level III replaced the longer level I
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
+> effect clear qe
+> effect give qe minecraft:fire_resistance 60 0
+> effect give qe minecraft:fire_resistance 5 2
+> data get entity qe ActiveEffects
+expect Id: 12, Amplifier: 0b
+look Duration about 1180 (60 s less the ticks since); about 100 is the failure
+> effect clear qe
