@@ -49,12 +49,13 @@ asks for it by name. Upstream bugs are fixed (3.5).
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=16363138ef5a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=47a9877f8ae1 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 2, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food/types-and-tuning #20` | Planned | S P | Short effects for seafood |
+| `tooltips #20` | Planned | C | Chopsticks tooltip: double mod name label |
 | `largecontent/mod-additions #12` | Testing | none | Overlap analysis of five small farming mods, then per-mod ports |
 | `largecontent/mod-additions #39` | Testing | S~ C P T | Roll Delight 1.3.1 port |
 <!-- generated:status_index end open_work -->
