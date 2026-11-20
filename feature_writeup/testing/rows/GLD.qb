@@ -1177,15 +1177,16 @@ shell ! grep -hE "(food_type_tags|seasoning_tags)\.js.*(rror|xception)" logs/kub
 ## SQ-PCK-02 | pancake food type and family tags (runtime tags by /zq; the /dumptags file is written for the record)
 @group A
 @commands `/dumptags item`; in `kubejs/exported/tags/item_tags.json` read `creativedelight:food_type/sweet/pancake`, `creativedelight:food_type/sweet`, `creativedelight:food_family/dessert/pancake`, `creativedelight:food_family/dessert/pastry`
-@pass `food_type/sweet/pancake` and `food_family/dessert/pancake` each hold exactly `veggiesdelight:sweet_potato_pancakes` and `rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake` (7); all 7 also in `food_type/sweet`; `veggiesdelight:sweet_potato_pancakes` not in `food_family/dessert/pastry`
+@pass `food_type/sweet/pancake` and `food_family/dessert/pancake` each hold exactly `veggiesdelight:sweet_potato_pancakes` and `rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake` (7); all 7 also in `food_type/sweet`; `veggiesdelight:sweet_potato_pancakes` not in `food_family/dessert/pastry`; `hearthandharvest:waffle` is in `food_type/baked` and `food_family/dessert/pastry`, in neither pancake tag (misc baked like Adzuki Bun, owner 2026-11-20)
 @fails `food_types.json` / member `food_types.js` (`food_catalog.py --members`); `food_families.json` hand sync (`dessert/pancake` key); tag nesting in `food_type_tags.js`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest tag item creativedelight:food_type/sweet/pancake
 > cdevtest tag item creativedelight:food_family/dessert/pancake
 > cdevtest tag item creativedelight:food_type/sweet
 > cdevtest tag item creativedelight:food_family/dessert/pastry
+> cdevtest tag item creativedelight:food_type/baked
 > dumptags item
 expect verb=tag kind=item tag=creativedelight:food_type/sweet/pancake n=7\b
 expect verb=tag kind=item tag=creativedelight:food_family/dessert/pancake n=7\b
@@ -1193,6 +1194,8 @@ expect verb=tag kind=item tag=creativedelight:food_type/sweet/pancake .*ids=\S*v
 expect verb=tag kind=item tag=creativedelight:food_type/sweet .*ids=\S*rusticdelight:coffee_pancake
 expect verb=tag kind=item tag=creativedelight:food_type/sweet .*ids=\S*veggiesdelight:sweet_potato_pancakes
 reject verb=tag kind=item tag=creativedelight:food_family/dessert/pastry .*ids=\S*veggiesdelight:sweet_potato_pancakes
+expect verb=tag kind=item tag=creativedelight:food_family/dessert/pastry .*ids=\S*hearthandharvest:waffle
+expect verb=tag kind=item tag=creativedelight:food_type/baked .*ids=\S*hearthandharvest:waffle
 look the 7: veggiesdelight:sweet_potato_pancakes and rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
