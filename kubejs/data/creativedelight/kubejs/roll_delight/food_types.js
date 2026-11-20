@@ -28,16 +28,6 @@ if (global.CD) global.CD.genPut('food_types', 'roll_delight', {
  "canned": {
   "canned_cooked_nether_wart": [
    "cooked_nether_wart"
-  ],
-  "canned_legendary_roll_medley": [
-   "amazing_salmon_roll_slice",
-   "mushroom_roll_slice",
-   "tobiko_roll"
-  ],
-  "canned_mythical_roll_medley": [
-   "golden_roll_slice",
-   "ancient_roll_slice",
-   "nether_roll"
   ]
  }
 })
