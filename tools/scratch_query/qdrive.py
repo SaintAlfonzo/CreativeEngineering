@@ -422,10 +422,15 @@ def run_step(d, i, s):
 	res = d.dir.parent / ('s%02d_res' % i)
 	s.update({'out': str(out), 'res': str(res), 'status': 'running', 'started': s.get('started') or now()})
 	retired = retired_rows(s)   # r1120nv: rows marked @superseded / @draft after planning drop out at step start
+	try:   # drive/skip.txt: one row id per line (# comments), rows to leave out of a running drive without a restart
+		skip = {l.split('#')[0].strip() for l in open(d.dir / 'skip.txt')} - {''}
+	except OSError:
+		skip = set()
+	retired |= set(s['rows']) & skip
 	if retired:
 		s['rows'] = [r for r in s['rows'] if r not in retired]
 		s['dropped'] = sorted(set(s.get('dropped', [])) | retired)
-		d.log('step %d: dropped (now @superseded or @draft in the rows file): %s' % (i + 1, ', '.join(sorted(retired))))
+		d.log('step %d: dropped (@superseded / @draft in the rows file, or drive/skip.txt): %s' % (i + 1, ', '.join(sorted(retired))))
 	d.save()
 	runner_write({'Updated': now(), 'Phase': 'step %d/%d %s section %s group %s (%d rows)' % (
 		i + 1, len(d.state['steps']), Path(s['file']).name, s['section'], s['group'], len(s['rows'])), 'ETA': eta(d)})
