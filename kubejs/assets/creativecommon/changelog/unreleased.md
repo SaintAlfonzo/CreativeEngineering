@@ -421,6 +421,8 @@
 
 ## Gameplay
 
+- **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
+- **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
 - **Fixed:** TNT shrapnel broke nearby minecarts and armor stands and turned TNT minecarts into items; it now hits only living things.
 - **Changed:** A chain of TNT keeps at most 32 shrapnel pieces in the air at once [24 per TNT].
 - **Changed:** A TNT item exploding in fire or lava deals half damage; the knockback is unchanged.
