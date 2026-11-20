@@ -597,22 +597,26 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @commands Eat food A, food B, food A; hover each grid cell
 @pass newest A: "1. A", two equal contribution lines, none struck; older A: "3. A", "This meal" line struck, "Food total" equals the newest A's; B: equal lines
 @fails `FoodList.calculateDiversityContribution` call at the log index and at the memory count
+@draft client shots (hover tooltips)
 
 ## CQ-RPI-59 | Change / Drop hides aged-out meals, grid closes up
 @group client
 @commands Note the grid; use Change on the effect screen (5 foods age out); reopen the book
 @pass every meal of the 5 aged foods is gone and the remaining meals close up from the top left; the title count stays "Last 30 Meals"
 @fails window filter (memory count < `endDecay`)
+@draft client shots; steps written by the first client runner
 
 ## CQ-RPI-60 | Milestones strikethrough on reached unlocks; Diet Ladder hides them
 @group client
 @commands Reach a one-time unlock; open Milestones and the Diet Ladder; then lower diversity below it (Change)
 @pass Milestones: the unlock row is struck through, black at or above it, gray after dropping below; Ladder bar: the reached unlock has no point or icon, unreached unlocks still show; key unchanged
 @fails `DietLogPages.ListPage` render, ladder rung filter
+@draft client shots; steps written by the first client runner
 
 ## CQ-RPI-61 | diversity icon follows the diversity
 @group client
 @commands Fresh player: open the book; eat foods until diversity rises past 10, 25; reopen each time
 @pass the icon is a food (hover names it), from the `diversityIcons` pool when no eaten food falls in the band, from eaten foods once one does; same diversity tenth = same icon
 @fails `DiversityPageMixin` icon redirect, band quantiles, `[dietLog] diversityIcons` parse
+@draft client shots; steps written by the first client runner
 
