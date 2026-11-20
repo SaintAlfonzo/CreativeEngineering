@@ -2,11 +2,12 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=8b48a2e77000 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Planned 4, In Progress 3, Testing 17), 2 Complete.
+<!-- generated:status_index begin open_work sha1=9d1c14ab74b7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 5, In Progress 3, Testing 17), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `interface #24` | Planned | C | Inventory effect list: permanent effects (armor, charm, beacon, diet) in a second column right of the timed ones |
 | `potions/effects #15` | Planned | S P | Pipe Builder's Tea: Haste lasts 20 seconds |
 | `potions/effects #16` | Planned | S P | Open-ended pipe drinking for more fluids |
 | `potions/potions #7` | Planned | S P | Potions for unbrewable effects |

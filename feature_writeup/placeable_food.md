@@ -6,14 +6,15 @@ without errors in single player 2026-10-11)
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=a3292716d076 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 3, In Progress 1, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=91ca8323634a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 4, In Progress 1, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `baking/baked-goods #38` | Planned | S C P | Full candle integration with every cake |
 | `food/placeable #4` | Planned | S C P | Dough blocks for every dough |
 | `tooling/generators-and-tests #10` | Planned | C | `gen_dd_dishes.py` full run rewrites 9 older dish models onto the newer bowl |
+| `tooltips #19` | Planned | C | Food tooltip order: AppleSkin hunger and saturation at the top, Quark shank row removed, diversity line before Quark's saturation word |
 | `food/placeable #2` | In Progress | none | Placeable catalog review pass |
 | `creativedelight/qol #2` | Testing | C | QoL-2 Placeable-food tooltip lines |
 | `food/placeable #1` | Testing | C P | Placeable tooltip lines and coaster line |
