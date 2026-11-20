@@ -419,3 +419,10 @@ Open for the owner (not edited):
   and `dim=` probes; SQ-PWG-90 still expects the -17 jar; SQ-MOB-N6, -N8 (WGE) unset captures, not in a pending step.
 - 13:17 ENV FIX step 23 (5/6): SQ-VTD8-03 (Vintage -18, strict per slot) never ran: its id holds a comma and the driver's --rows list is comma-joined, so the id split and matched nothing (silent skip). qrun.py picked() and qlint.select now pick an id when every comma part is in the set. Step 23 reruns that row on the post-drive resume.
 - 13:35 judge-3 (steps 46 to 57 + step 23's 5 rows, 92 rows): PASS 47, BATCH-FAULT 40, FAIL 5; 19 rows fixed and queued (rerun.txt 135). TODO: SQ-FF-09 joins meals #69 (Corn Delight items miss foodValueCopies values); SQ-CNP-01 -> canning #22; SQ-FO-08 -> mod-integration #1; SQ-GLD-03 -> food-tuning #31; SQ-PCK-02 is the owner item in 9.2. CDJ.qb SQ-CDJ-12 shells now glob mods/creativedelight-*.jar (rest of the row still stale, not queued).
+- 14:17 handover point (main session): drive alive at step 58 (HH.qb section 2, 274/513). To continue in a new session:
+  `qrun.py drive status r1120nv`; judge finished steps from s57_res on (judges 1 to 3 covered s00 to s56, s22); after
+  the drive ends: `qrun.py drive resume r1120nv` (step 23's SQ-VTD8-03 and any incomplete steps), then the rerun drive
+  `python3 tools/scratch_query/qrerun.py perf/runs/r1120nv/rerun.txt` -> `qrun.py drive start r1120nvr --plan-json
+  perf/runs/r1120nv/rerun.plan.json`; SQ-DEP-02 needs its @modset (drops creativebrewing) before the rerun; then
+  jar-changed and failed rows; B5 write-back and perf_session.sh stop r1120nv at the end. Open owner question: fix the
+  WTHIT null guard (wthit #17) mid-run or not.
