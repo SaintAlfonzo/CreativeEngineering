@@ -1,0 +1,131 @@
+diversity,id,name,nutrition,saturationModifier
+0.0,botania:mana_cookie,Biscuit of Totality,0,0.1
+0.0,everythingcopper:copper_nugget,Copper Nugget,0,0
+0.0,hostiledelight:refinedgelatin,Refined Gelatin,0,0.2
+0.0,immersive_weathering:azalea_flowers,Azalea Flowers,0,0
+0.0,immersive_weathering:ice_sickle,Ice Sickle,0,0
+0.0,immersive_weathering:icicle,Icicle,0,0
+0.0,immersive_weathering:pond_water,Pond Water,0,0
+0.0,neapolitan:ice_cubes,Ice Cubes,0,0
+0.0,supplementaries:soap,Soap,0,0.1
+0.0,vintagedelight:ghost_charcoal,Ghost Charcoal,0,0
+0.1,abnormals_delight:yucca_gateau_slice,Slice of Yucca Gateau,1,0
+0.1,minecraft:pumpkin_seeds,Pumpkin Seeds,1,0
+0.1,vintagedelight:mixed_seeds,Mixed Seeds,1,0
+0.1,vintagedelight:oat_seeds,Oat Seeds,1,0
+0.105,miners_delight:bat_cookie,Bat Cookie,1,0.05
+0.105,miners_delight:moss,Moss,1,0.05
+0.105,miners_delight:silverfish_eggs,Silverfish Eggs,1,0.05
+0.105,miners_delight:tentacles,Tentacles,1,0.05
+0.11,abnormals_delight:adzuki_cake_slice,Slice of Adzuki Cake,1,0.1
+0.11,abnormals_delight:banana_cake_slice,Slice of Banana Cake,1,0.1
+0.11,abnormals_delight:chocolate_cake_slice,Slice of Chocolate Cake,1,0.1
+0.11,abnormals_delight:mint_cake_slice,Slice of Mint Cake,1,0.1
+0.11,abnormals_delight:strawberry_cake_slice,Slice of Strawberry Cake,1,0.1
+0.11,abnormals_delight:vanilla_cake_slice,Slice of Vanilla Cake,1,0.1
+0.11,corn_delight:tortilla_chip,Tortilla Chip,1,0.1
+0.11,create_central_kitchen:aloe_cake_slice,Slice of Aloe Cake,1,0.1
+0.11,create_central_kitchen:passionfruit_cake_slice,Slice of Passionfruit Cake,1,0.1
+0.11,create_central_kitchen:pumpkin_cake_slice,Slice of Pumpkin Cake,1,0.1
+0.11,create_central_kitchen:sweet_berry_cake_slice,Slice of Sweet Berry Cake,1,0.1
+0.11,create_central_kitchen:yucca_cake_slice,Slice of Yucca Cake,1,0.1
+0.11,creativedelight:canned_golden_glow_berries,Canned Golden Glow Berries,1,0.1
+0.11,creativedelight:canned_golden_sweet_berries,Canned Golden Sweet Berries,1,0.1
+0.11,creativedelight:canned_powdered_milk,Canned Powdered Milk,1,0.1
+0.11,creativedelight:glowing_calamari_slice,Glowing Calamari Slice,1,0.1
+0.11,delightful:green_tea_leaf,Green Tea Leaves,1,0.1
+0.11,endersdelight:mite_crust,Mite Crust,1,0.1
+0.11,endersdelight:shulker_filet,Shulker Filet,1,0.1
+0.11,endersdelight:shulker_mollusk,Shulker Mollusk,1,0.1
+0.11,farmersdelight:cod_slice,Raw Cod Slice,1,0.1
+0.11,farmersdelight:salmon_slice,Raw Salmon Slice,1,0.1
+0.11,hearthandharvest:charred_marshmallow_stick,Charred Marshmallow,1,0.1
+0.11,hostiledelight:candiedslime,Candied Slime,1,0.1
+0.11,hostiledelight:rawendermite,Raw Endermite,1,0.1
+0.11,minecraft:pufferfish,Pufferfish,1,0.1
+0.11,minecraft:tropical_fish,Tropical Fish,1,0.1
+0.11,miners_delight:bat_wing,Bat Wing,1,0.1
+0.11,oceansdelight:cut_tentacles,Cut Tentacles,1,0.1
+0.11,oceansdelight:elder_guardian_slice,Slice of Elder Guardian,1,0.1
+0.11,oceansdelight:fugu_slice,Fugu Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_black,Black Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_blue,Blue Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_green,Green Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_orange,Orange Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_pink,Pink Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_purple,Purple Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_red,Red Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_white,White Bell Pepper Slice,1,0.1
+0.11,rusticdelight:bell_pepper_slice_yellow,Yellow Bell Pepper Slice,1,0.1
+0.11,rusticdelight:calamari_slice,Raw Calamari Slice,1,0.1
+0.11,veggiesdelight:cauliflower_floret,Cauliflower Floret,1,0.1
+0.11,veggiesdelight:dandelion_leaf,Dandelion Leaf,1,0.1
+0.11,veggiesdelight:garlic_clove,Garlic Clove,1,0.1
+0.115,creativedelight:canned_golden_dried_kelp,Canned Golden Dried Kelp,1,0.15
+0.115,neapolitan:dried_vanilla_pods,Dried Vanilla Pods,1,0.15
+0.12,abnormals_delight:perch_slice,Raw Perch Slice,1,0.2
+0.12,alexsdelight:raw_catfish_slice,Raw Catfish Slice,1,0.2
+0.12,alexsmobs:maggot,Maggot,1,0.2
+0.12,alexsmobs:rainbow_jelly,Rainbow Jelly,1,0.2
+0.12,corn_delight:corn_seeds,Corn Kernel,1,0.2
+0.12,corn_delight:cornbread_batter,Cornbread Batter,1,0.2
+0.12,corn_delight:tortilla_raw,Raw Tortilla,1,0.2
+0.12,immersive_weathering:moss_clump,Moss Clump,1,0.2
+0.12,supplementaries:candy,Candy,1,0.2
+0.12,vintagedelight:vinegar_bottle,Vinegar Bottle,1,0.2
+0.125,creativedelight:canned_bayberry_soup,Canned Bayberry Juice,1,0.25
+0.125,hearthandharvest:sunflower_seeds,Sunflower Seeds,1,0.25
+0.13,abnormals_delight:pike_slice,Raw Pike Slice,1,0.3
+0.13,abnormals_delight:venison_shanks,Raw Venison Shanks,1,0.3
+0.13,creativedelight:canned_enchanted_golden_dried_kelp,Canned Gilded Dried Kelp,1,0.3
+0.13,creativedelight:canned_golden_beetroot,Canned Golden Beetroot,1,0.3
+0.13,creativedelight:canned_golden_cookie,Canned Golden Cookie,1,0.3
+0.13,creativedelight:canned_golden_melon_slice,Canned Golden Melon Slice,1,0.3
+0.13,creativedelight:sliced_sweet_potato,Sliced Sweet Potato,1,0.3
+0.13,delightful:venison_chops,Raw Venison Chops,1,0.3
+0.13,domesticationinnovation:sinister_carrot,Sinister Carrot,1,0.3
+0.13,farmersdelight:chicken_cuts,Raw Chicken Cuts,1,0.3
+0.13,farmersdelight:mutton_chops,Raw Mutton Chops,1,0.3
+0.13,farmersdelight:tomato,Tomato,1,0.3
+0.13,fruitsdelight:apple_jello,Apple Jello,1,0.3
+0.13,fruitsdelight:bayberry_cookie,Bayberry Cookie,1,0.3
+0.13,fruitsdelight:bayberry_jello,Bayberry Jello,1,0.3
+0.13,fruitsdelight:blueberry_jello,Blueberry Jello,1,0.3
+0.13,fruitsdelight:chorus_jello,Chorus Jello,1,0.3
+0.13,fruitsdelight:cranberry_cookie,Cranberry Cookie,1,0.3
+0.13,fruitsdelight:cranberry_jello,Cranberry Jello,1,0.3
+0.13,fruitsdelight:durian_jello,Durian Jello,1,0.3
+0.13,fruitsdelight:fig_jello,Fig Jello,1,0.3
+0.13,fruitsdelight:glowberry_jello,Glowberry Jello,1,0.3
+0.13,fruitsdelight:hamimelon_jello,Cantaloupe Jello,1,0.3
+0.13,fruitsdelight:hawberry_jello,Hawberry Jello,1,0.3
+0.13,fruitsdelight:kiwi_jello,Kiwi Jello,1,0.3
+0.13,fruitsdelight:lemon_cookie,Lemon Cookie,1,0.3
+0.13,fruitsdelight:lemon_jello,Lemon Jello,1,0.3
+0.13,fruitsdelight:lychee_jello,Lychee Jello,1,0.3
+0.13,fruitsdelight:mango_jello,Mango Jello,1,0.3
+0.13,fruitsdelight:mangosteen_jello,Mangosteen Jello,1,0.3
+0.13,fruitsdelight:melon_jello,Melon Jello,1,0.3
+0.13,fruitsdelight:orange_jello,Orange Jello,1,0.3
+0.13,fruitsdelight:peach_jello,Peach Jello,1,0.3
+0.13,fruitsdelight:pear_jello,Pear Jello,1,0.3
+0.13,fruitsdelight:persimmon_cookie,Persimmon Cookie,1,0.3
+0.13,fruitsdelight:persimmon_jello,Persimmon Jello,1,0.3
+0.13,fruitsdelight:pineapple_jello,Pineapple Jello,1,0.3
+0.13,fruitsdelight:sweetberry_jello,Sweetberry Jello,1,0.3
+0.13,minecraft:dried_kelp,Dried Kelp,1,0.3
+0.13,minecraft:potato,Potato,1,0.3
+0.13,quark:crab_leg,Raw Crab Leg,1,0.3
+0.13,rusticdelight:potato_slices,Potato Slices,1,0.3
+0.13,vintagedelight:ancient_fruit_jello,Ancient Fruit Jello,1,0.3
+0.13,vintagedelight:banana_jello,Banana Jello,1,0.3
+0.13,vintagedelight:cherry_jello,Cherry Jello,1,0.3
+0.13,vintagedelight:green_grape_jello,Green Grape Jello,1,0.3
+0.13,vintagedelight:mulberry_jello,Mulberry Jello,1,0.3
+0.13,vintagedelight:pepper_jello,Pepper Jello,1,0.3
+0.13,vintagedelight:raspberry_jello,Raspberry Jello,1,0.3
+0.13,vintagedelight:red_grape_jello,Red Grape Jello,1,0.3
+0.13,vintagedelight:salmonberry_jello,Salmonberry Jello,1,0.3
+0.13,vintagedelight:strawberry_jello,Strawberry Jello,1,0.3
+0.135,delightful:chopped_clover,Chopped Clover,1,0.35
+0.14,farmersdelight:cabbage_leaf,Cabbage Leaf,1,0.4
