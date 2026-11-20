@@ -92,6 +92,12 @@ import sys
 import time
 
 
+def picked(rid, only):
+	"""--rows ID,ID,...: an id holding a comma ('SQ-VTD8-03 (Vintage -18, strict per slot)') arrives split; it is
+	picked when every comma part is in the set (r1120nv step 23)."""
+	return rid in only or all(part in only for part in rid.split(","))
+
+
 def fsid(rid):
 	"""A row id as a file name (qverdict.fsid): '/' in an id becomes '_' (r1120nv step 23)."""
 	return rid.replace("/", "_")
@@ -961,7 +967,7 @@ def run_batch(a, mode, t=None):
 	allrows = parse(batch)
 	CAPTURES.update(arg.split(" ", 1)[0] for r in allrows for w, arg, _ in r["steps"] if w.endswith("capture"))
 	if mode == "server" and a[0] == "run" and "--no-probes" not in a:
-		sel = [r for r in allrows if (not only or r["id"] in only) and (not sections or r["section"] in sections)]
+		sel = [r for r in allrows if (not only or picked(r["id"], only)) and (not sections or r["section"] in sections)]
 		try:
 			install_probes(t, sel)
 		except (OSError, RuntimeError) as e:
@@ -975,7 +981,7 @@ def run_batch(a, mode, t=None):
 			started = row["id"] == start
 			if not started:
 				continue
-		if only and row["id"] not in only:
+		if only and not picked(row["id"], only):
 			continue
 		if sections and row["section"] not in sections:
 			continue

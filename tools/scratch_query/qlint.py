@@ -66,7 +66,7 @@ def select(rows, only, start):
 			started = r["id"] == start
 			if not started:
 				continue
-		if only and r["id"] not in only:
+		if only and r["id"] not in only and not all(x in only for x in r["id"].split(",")):   # ids holding a comma (r1120nv)
 			continue
 		out.append(r)
 	return out
