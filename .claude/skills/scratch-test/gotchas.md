@@ -74,6 +74,12 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   Compare counts with the full pack (`Found N tags, added X objects`, `removed N recipes`) rather than only checking for
   errors (r1106cbb).
 - `/` can be nearly full: check `df -h /`; JFR is capped per boot (`JFR_MAX`).
+- A mod-set manifest that takes jars from another instance breaks when that instance changes (r1120nv: port_chain read
+  CEPortTesting, whose chain jars moved to disabledmods/ 2026-11-13; it blocked every port_chain step in r1118, r1119 and
+  r1120nv). port_chain now uses `source = "pack"`. A chain group also goes stale when an own jar gains a mandatory
+  dependency (Creative Loot after its carve): check `mods.toml` mandatory deps of each own jar in a set. qmodset `require`
+  skips globs the spec drops on purpose (it used to fail every `-GLOB` of a chain jar). A spec that drops creativedelight
+  must also drop kubejsdelight (needs Farmer's Delight, nested in Creative Delight) (r1120nv SQ-CBP-08).
 
 ## Boot and shutdown
 
@@ -157,6 +163,9 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - Tick stalls: a srv-only tick timer script + `jstack <scratch pid>` shows what the server thread waits on.
 - `set -o pipefail` with `| grep -q`: grep exits at the first match, the writer dies on SIGPIPE, the pipeline reads as
   "not found". Capture the output first (r1108cge2) (partly checked: qlint W pipefail, batch shell steps only).
+- `qrun.py drive stop` during a boot ends the step "failed: server not ready in 600 s" (the stop shuts the booting
+  server down); `drive resume` resets failed and incomplete steps to pending and reruns them first. A driver code change
+  needs a stop and resume to load; qrun changes reach the next step without one (r1120nv).
 
 ## Configs and /reload
 
@@ -228,6 +237,16 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   `cdj5home` in CDJ.qb) (checked: qlint W var, `qprescreen.py` class likely).
 - Marking a row `@superseded` after a drive was planned: the step keeps the id in its row list; qrun prints
   `SUPERSEDED ... not run` and qdrive drops it, so the step does not end `incomplete` (r1120fix).
+- Lint every planned section with the drive's own row selection before starting (`qprescreen.py RUN`, or `qrun.py lint
+  FILE --rows ...`): a never-only plan drops rows that ran before, and rows that read `{SAH*}` / `{SBH*}` from the old r1103
+  home batches never get them (r1120nv: 20 rows HARNESS).
+- Enforced: row ids holding "/" (`SQ-CDJ-05 / SQ-DDP-01 rerun (I1)`) crashed qrun on the per-row file name, and ids holding
+  "," (`SQ-VTD8-03 (Vintage -18, strict per slot)`) never matched the comma-joined `--rows` (silent skip); qrun's fsid() and
+  picked() handle both since r1120nv. Keep new ids plain anyway; never put a result in a row id (WG30 rows).
+- A row's `@modset`, `@boot` or `@group` changed after the drive was planned does not reach the step (the step key and
+  boot phases were fixed at plan time): put the id in `perf/runs/RUN/drive/skip.txt` (read at each step start) and on the
+  rerun list (`qrerun.py --add`), whose fresh plan picks up the change (r1120nv SQ-FSD-02, SQ-VH-12, SQ-FTW-02).
+  `@superseded` and `@draft` marks are dropped at step start without that.
 
 ## Regexes and log matching
 
