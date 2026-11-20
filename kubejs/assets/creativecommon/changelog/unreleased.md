@@ -17,6 +17,11 @@
 - **New:** Diet Log icons: a lock for effect unlocks, a diamond shard for permanent buffs, a metal frame for empty effect slots. A filled effect slot shows its effect's icon and name. The key lists knockback resistance, and its effect slot icon cycles through the slot effects.
 - **New:** The Diet Log is drawn at 125% size, smaller on small windows (client setting).
 - **Changed:** The Diet Log is crafted from a book and any food that is not a drink [book and potato].
+- **Changed:** The Diet Log's last 30 meals are a grid on its first page, above the diversity [own pages, newest first]. Meals of foods aged out by a Change or Drop are left out.
+- **New:** Hovering a meal in the Diet Log shows its diversity contribution and the food's total; the meal's value is struck through when an older repeat no longer counts it.
+- **New:** The Diet Log's diversity icon is a food that changes with your diversity [potato].
+- **Changed:** Reached effect unlocks are struck through in the Diet Log's Milestones and left off its progress bar.
+- **Changed:** The Diet Log is wider.
 - **New:** Liquid Diet Log, a book (book + any drink) listing every drink you have had. No bonuses.
 - **Changed:** Drinks, potions and milk no longer count toward food diversity or push foods out of your diet.
 - **New:** New players start with a Diet Log and a Liquid Diet Log.

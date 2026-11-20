@@ -57,6 +57,7 @@ public final class RpConfig {
 		public final ForgeConfigSpec.IntValue extraWidth;
 		public final PageLayout diversityPage;
 		public final PageLayout mealsPage;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> diversityIcons;
 		public final PageLayout ladderPage;
 		public final PageLayout milestonesPage;
 		public final ForgeConfigSpec.EnumValue<UneatenSort> uneatenSort;
@@ -73,10 +74,21 @@ public final class RpConfig {
 			extraWidth = b.comment("Diet Log background stretched sideways by this many pixels: the book's center column is repeated,",
 							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width.")
 					.defineInRange("extraWidth", 0, 0, 400);
+			diversityIcons = b.comment("Diet Log Overview: foods shown left of the diversity value when no food you have eaten fits the",
+							"current diversity. Each entry is \"minimum diversity=item,item,...\"; the entry with the highest minimum at or",
+							"below the diversity is used, one of its loaded items shown.")
+					.defineList("diversityIcons", List.of(
+							"0=minecraft:apple,minecraft:bread,minecraft:carrot,minecraft:sweet_berries",
+							"10=minecraft:baked_potato,minecraft:cooked_chicken,minecraft:mushroom_stew,minecraft:cookie",
+							"25=minecraft:cooked_beef,farmersdelight:mixed_salad,farmersdelight:vegetable_soup,farmersdelight:bacon_and_eggs",
+							"40=farmersdelight:beef_stew,farmersdelight:fruit_salad,farmersdelight:ratatouille,minecraft:rabbit_stew",
+							"60=farmersdelight:steak_and_potatoes,farmersdelight:pasta_with_meatballs,farmersdelight:roast_chicken,minecraft:golden_carrot",
+							"80=farmersdelight:honey_glazed_ham,farmersdelight:shepherds_pie,farmersdelight:stuffed_pumpkin,minecraft:golden_apple",
+							"100=minecraft:enchanted_golden_apple"), o -> o instanceof String);
 			b.comment("Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)",
 					"of each Diet Log page's content.").push("pages");
 			diversityPage = new PageLayout(b, "diversity", "Apple Pie's diversity page.", 0, 1.0);
-			mealsPage = new PageLayout(b, "meals", "The last meals list.", 0, 0.85);
+			mealsPage = new PageLayout(b, "meals", "The last meals grid on the Overview page (x, y move it from its place above the diversity line).", 0, 0.85);
 			ladderPage = new PageLayout(b, "ladder", "The Diet Ladder page (progress bar and key).", 10, 0.85);
 			milestonesPage = new PageLayout(b, "milestones", "The Milestones pages.", 10, 0.85);
 			b.pop();

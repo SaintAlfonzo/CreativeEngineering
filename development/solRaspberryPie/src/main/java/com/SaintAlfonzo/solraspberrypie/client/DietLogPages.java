@@ -14,10 +14,17 @@ import com.tarinoita.solsweetpotato.client.gui.BenefitsPage;
 import com.tarinoita.solsweetpotato.client.gui.FoodBookScreen;
 import com.tarinoita.solsweetpotato.client.gui.FoodListPage;
 import com.tarinoita.solsweetpotato.client.gui.elements.UIElement;
+import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
+import com.tarinoita.solsweetpotato.client.gui.elements.UIImage;
+import com.tarinoita.solsweetpotato.tracking.FoodInstance;
 import com.tarinoita.solsweetpotato.tracking.FoodList;
+import com.SaintAlfonzo.solraspberrypie.logic.FoodWindow;
+import net.minecraftforge.fml.ModList;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -27,14 +34,18 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
 /**
  * Raspberry Pie's pages in Apple Pie's Diet Log (6.3, 12.4, plan_diet_books.md phase 1): the Diet Ladder (an
- * even-spaced bar over a window of five milestones with an icon per rung, then the key), the Milestones list and the
- * last meals list. Apple Pie's own benefit and food history pages are removed. The whole book is drawn at
+ * even-spaced bar over a window of five milestones with an icon per rung, then the key) and the Milestones list; the
+ * last meals grid and the diversity food icon on Apple Pie's Overview page. Apple Pie's own benefit and food history
+ * pages are removed. The whole book is drawn at
  * {@link #bookScale} (G5b); each page type's content at its own position and scale ({@link Layout}, client config
  * {@code [dietLog.pages]}).
  */
@@ -44,7 +55,7 @@ public final class DietLogPages {
 	private static final int ICON = 9;
 	/** Bar window: the last milestone reached and the next four, or the first five (plan_diet_books.md 1.7). */
 	private static final int WINDOW = 5;
-	private static final int MEAL_COLS = 6, MEALS_PER_PAGE = 30, MEAL_STEP = 18;
+	private static final int MEAL_COLS = 6;
 	/** Apple Pie's book page size, and how far the Diet Bonuses button reaches below the screen center. */
 	public static final int BOOK_W = 186, BOOK_H = 192, BUTTON_BOTTOM = 118;
 
@@ -130,7 +141,10 @@ public final class DietLogPages {
 		}
 	}
 
-	/** Rebuilds the page list after Apple Pie's initPages: diversity, Diet Ladder, Milestones, last meals. */
+	/**
+	 * Rebuilds the page list after Apple Pie's initPages: diversity (with the last meals grid, {@link #mealsGrid}), Diet
+	 * Ladder, Milestones (plan_owner_notes_1119.md ruling 8: the meals pages are gone).
+	 */
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static void insert(FoodBookScreen screen) {
 		FoodBookScreenAccessor acc = (FoodBookScreenAccessor) (Object) screen;
@@ -147,11 +161,6 @@ public final class DietLogPages {
 			for (int i = 0; i < rungs.size(); i += ROWS_PER_PAGE) {
 				ours.add(new ListPage(list.virtual(frame), list, rungs.subList(i, Math.min(rungs.size(), i + ROWS_PER_PAGE))));
 			}
-		}
-		Layout meals = Layout.meals();
-		List<ResourceLocation> log = mealLog();
-		for (int i = 0; i == 0 || i < log.size(); i += MEALS_PER_PAGE) {
-			ours.add(new MealsPage(meals.virtual(frame), meals, log, i, log.size()));
 		}
 		pages.addAll(Math.min(1, pages.size()), ours);
 	}
@@ -299,9 +308,9 @@ public final class DietLogPages {
 	 * neighboring points.
 	 */
 	record Window(List<Double> values, boolean origin, boolean before, boolean after) {
-		static Window of(Ladder l, double diversity) {
+		static Window of(List<Rung> rungs, double diversity) {
 			TreeSet<Double> t = new TreeSet<>();
-			for (Rung r : l.rungs) t.add(r.threshold);
+			for (Rung r : rungs) t.add(r.threshold);
 			List<Double> ts = new ArrayList<>(t);
 			if (ts.isEmpty()) return new Window(List.of(), true, false, false);
 			int last = -1;
@@ -365,11 +374,12 @@ public final class DietLogPages {
 			this.layout = layout;
 			Ladder l = ClientState.ladder;
 			var s = ClientState.state;
-			window = Window.of(l, s.diversity);
+			List<Rung> bar = barRungs(l);
+			window = Window.of(bar, s.diversity);
 			int x0 = frame.x + 10, x1 = frame.x + frame.width - 10;
 			int barY = frame.y + BAR_DY;
 			Map<Integer, Integer> stack = new HashMap<>();
-			for (Rung r : l.rungs) {
+			for (Rung r : bar) {
 				int idx = window.indexOf(r.threshold);
 				if (idx < 0) continue;
 				int x = window.pointX(idx, x0, x1);
@@ -433,6 +443,18 @@ public final class DietLogPages {
 		}
 	}
 
+	private static Component styled(String text, boolean struck) {
+		MutableComponent c = Component.literal(text);
+		return struck ? c.withStyle(ChatFormatting.STRIKETHROUGH) : c;
+	}
+
+	/** The Diet Ladder bar leaves out reached one-time unlocks (plan_owner_notes_1119.md ruling 11). */
+	static List<Rung> barRungs(Ladder l) {
+		List<Rung> out = new ArrayList<>();
+		for (Rung r : l.rungs) if (!(r.kind == Rung.Kind.UNLOCK && reached(r))) out.add(r);
+		return out;
+	}
+
 	private static final class ListPage extends UIElement {
 		private final Layout layout;
 		private final List<Rung> rungs;
@@ -451,9 +473,13 @@ public final class DietLogPages {
 			for (Rung r : rungs) {
 				boolean got = reached(r);
 				drawIcon(pose, r, frame.x + 7, y, got);
-				fontRenderer.draw(pose, Icons.num(r.threshold), frame.x + 20, y + 1, got ? 0x1E6B2A : 0x777777);
+				// A reached one-time unlock is struck through; its color follows the current diversity
+				// (plan_owner_notes_1119.md ruling 6). Every other row: black reached, gray not.
+				boolean struck = r.kind == Rung.Kind.UNLOCK && got;
+				boolean dark = struck ? r.threshold <= ClientState.state.diversity : got;
 				String text = fontRenderer.plainSubstrByWidth(describe(r).getString(), frame.width - 46);
-				fontRenderer.draw(pose, text, frame.x + 40, y + 1, got ? 0x000000 : 0x777777);
+				fontRenderer.draw(pose, styled(Icons.num(r.threshold), struck), frame.x + 20, y + 1, dark ? 0x1E6B2A : 0x777777);
+				fontRenderer.draw(pose, styled(text, struck), frame.x + 40, y + 1, dark ? 0x000000 : 0x777777);
 				y += 12;
 			}
 			Layout.end();
@@ -461,51 +487,272 @@ public final class DietLogPages {
 		}
 	}
 
-	/**
-	 * The last meals eaten, newest first, duplicates shown (plan_diet_books.md 1.2): a grid of item icons, hover for
-	 * the place and name. Replaces Apple Pie's food history pages.
-	 */
-	private static final class MealsPage extends UIElement {
-		private final Layout layout;
-		private final List<ItemStack> stacks = new ArrayList<>();
-		private final int first, total;
-		private final int gridX;
+	// ---- Overview page: last meals grid and the diversity food icon (plan_owner_notes_1119.md rulings 7 to 10, 12) --
 
-		MealsPage(Rectangle frame, Layout layout, List<ResourceLocation> log, int first, int total) {
-			super(frame);
+	private static final int MEAL_ROWS = 5, GRID_STEP = 16, GRID_ICON = 15, GRID_TITLE = 11;
+
+	/** A meal on the grid: the item and its age in meals (0 = newest), which is Apple Pie's memory count for it. */
+	private record Meal(Item item, ResourceLocation id, int age) {}
+
+	/**
+	 * The last meals grid on Apple Pie's Overview page, in place of its top spacer (DiversityPageMixin): a "Last 30
+	 * Meals" title and a 6 x 5 icon grid, newest at the top left, drawn at the {@code [dietLog.pages.meals]} offset and
+	 * scale. A meal shows only while its food is in the decay window, so foods a Change or Drop aged out leave the grid
+	 * (ruling 9). Hover: "N. Name", this meal's diversity contribution (struck through when it differs from the
+	 * food's), the food's contribution (ruling 10).
+	 */
+	public static UIElement mealsGrid() {
+		return new MealsGrid(Layout.meals());
+	}
+
+	/** The meals shown: the log, newest first, without meals whose food is out of Apple Pie's decay window. */
+	private static List<Meal> shownMeals(Map<FoodInstance, Integer> memory, int end) {
+		List<ResourceLocation> log = mealLog();
+		List<Meal> out = new ArrayList<>();
+		for (int i = 0; i < log.size() && out.size() < MEAL_COLS * MEAL_ROWS; i++) {
+			Item item = ForgeRegistries.ITEMS.getValue(log.get(i));
+			if (item == null || item == Items.AIR) continue;
+			if (memory != null) {
+				Integer k = memory.get(new FoodInstance(item));
+				if (k == null || k >= end) continue;
+			}
+			out.add(new Meal(item, log.get(i), i));
+		}
+		return out;
+	}
+
+	private static Map<FoodInstance, Integer> clientMemory() {
+		var player = Minecraft.getInstance().player;
+		if (player == null) return null;
+		try {
+			return FoodWindow.copy(FoodList.get(player));
+		} catch (RuntimeException e) {
+			return null;
+		}
+	}
+
+	private static double contribution(Item item, int age) {
+		try {
+			return FoodList.calculateDiversityContribution(new FoodInstance(item), age);
+		} catch (RuntimeException e) {
+			return 0;
+		}
+	}
+
+	private static String two(double v) {
+		return String.format(Locale.ROOT, "%.2f", v);
+	}
+
+	private static final class MealsGrid extends UIElement {
+		private final Layout layout;
+		private final List<Meal> meals;
+		private final List<UIElement> cells = new ArrayList<>();
+
+		MealsGrid(Layout layout) {
+			super(new Rectangle(0, 0, Math.round(MEAL_COLS * GRID_STEP * layout.scale()),
+					Math.round((GRID_TITLE + MEAL_ROWS * GRID_STEP) * layout.scale())));
 			this.layout = layout;
-			this.first = first;
-			this.total = total;
-			gridX = frame.x + (frame.width - MEAL_COLS * MEAL_STEP) / 2;
-			for (int i = first; i < Math.min(log.size(), first + MEALS_PER_PAGE); i++) {
-				Item item = ForgeRegistries.ITEMS.getValue(log.get(i));
-				ItemStack stack = item == null ? ItemStack.EMPTY : new ItemStack(item);
-				stacks.add(stack);
-				int k = i - first;
-				int x = gridX + (k % MEAL_COLS) * MEAL_STEP + 1, y = frame.y + 20 + (k / MEAL_COLS) * MEAL_STEP;
-				String name = stack.isEmpty() ? log.get(i).toString() : stack.getHoverName().getString();
-				children.add(new Hover(layout.mapped(frame, x, y, 16, 16),
-						Component.translatable("solraspberrypie.dietlog.meal", i + 1, name).getString()));
+			Map<FoodInstance, Integer> memory = clientMemory();
+			int end = MealLog.length();
+			meals = shownMeals(memory, end);
+			for (int n = 0; n < meals.size(); n++) {
+				Meal m = meals.get(n);
+				ItemStack stack = new ItemStack(m.item());
+				double mine = contribution(m.item(), m.age());
+				Integer k = memory == null ? null : memory.get(new FoodInstance(m.item()));
+				double total = k == null ? mine : contribution(m.item(), k);
+				MutableComponent first = Component.translatable("solraspberrypie.dietlog.meal_this", two(mine)).withStyle(ChatFormatting.GRAY);
+				if (Math.abs(mine - total) > 1e-6) first = first.withStyle(ChatFormatting.STRIKETHROUGH);
+				List<Component> lines = List.of(
+						Component.translatable("solraspberrypie.dietlog.meal", n + 1, stack.getHoverName()),
+						first,
+						Component.translatable("solraspberrypie.dietlog.meal_total", two(total)).withStyle(ChatFormatting.GRAY));
+				UIElement cell = new MealCell(stack, lines);
+				cells.add(cell);
+				children.add(cell);
 			}
 		}
 
 		@Override
 		protected void render(PoseStack pose) {
-			layout.begin(frame);
-			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.meals", MealLog.length()), frame.x + 6, frame.y + 4, 0x000000);
-			if (total == 0) {
-				fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.meals_none"), frame.x + 6, frame.y + 20, 0x777777);
+			float s = layout.scale();
+			int px = frame.x + layout.x(), py = frame.y + layout.y();
+			for (int n = 0; n < cells.size(); n++) {
+				int lx = (n % MEAL_COLS) * GRID_STEP, ly = GRID_TITLE + (n / MEAL_COLS) * GRID_STEP;
+				cells.get(n).frame = new Rectangle(px + Math.round(lx * s), py + Math.round(ly * s),
+						Math.max(1, Math.round(GRID_ICON * s)), Math.max(1, Math.round(GRID_ICON * s)));
 			}
-			for (int k = 0; k < stacks.size(); k++) {
-				int x = gridX + (k % MEAL_COLS) * MEAL_STEP + 1, y = frame.y + 20 + (k / MEAL_COLS) * MEAL_STEP;
-				if (!stacks.get(k).isEmpty()) Icons.item(stacks.get(k), x, y, 16);
+			layout.begin(frame.x, frame.y);
+			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.meals", MealLog.length()), frame.x, frame.y, 0x000000);
+			if (meals.isEmpty()) {
+				fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.meals_none"), frame.x, frame.y + GRID_TITLE + 2, 0x777777);
 			}
-			if (total > 0) {
-				String hint = Component.translatable("solraspberrypie.dietlog.meals_order").getString();
-				fontRenderer.draw(pose, hint, frame.x + 6, frame.y + 24 + 5 * MEAL_STEP, 0x777777);
+			for (int n = 0; n < meals.size(); n++) {
+				int x = frame.x + (n % MEAL_COLS) * GRID_STEP, y = frame.y + GRID_TITLE + (n / MEAL_COLS) * GRID_STEP;
+				Icons.item(new ItemStack(meals.get(n).item()), x, y, GRID_ICON);
 			}
 			Layout.end();
 			super.render(pose);
+		}
+	}
+
+	/** A meal's hover target: an item tooltip with the contribution lines. Draws nothing itself. */
+	private static final class MealCell extends UIElement {
+		private final ItemStack stack;
+		private final List<Component> lines;
+
+		MealCell(ItemStack stack, List<Component> lines) {
+			super(new Rectangle(0, 0, 1, 1));
+			this.stack = stack;
+			this.lines = lines;
+		}
+
+		@Override
+		protected boolean hasTooltip() {
+			return true;
+		}
+
+		@Override
+		protected void renderTooltip(PoseStack pose, int mouseX, int mouseY) {
+			renderTooltip(pose, stack, lines, mouseX, mouseY);
+		}
+
+		@Override
+		protected void render(PoseStack pose) {}
+	}
+
+	/**
+	 * The icon left of "Current Food Diversity" (ruling 12): a food eaten (Spice of Life: Carrot's list) whose Apple Pie
+	 * complexity sits in the band of all foods' complexities that the current diversity reaches as a share of the
+	 * ladder's top milestone (a 10% band of the complexity ranking). None eaten in the band, or no Carrot: the
+	 * {@code [dietLog] diversityIcons} pool for the diversity. The pick is stable while the diversity (to 0.1) is
+	 * unchanged. Returns null when nothing fits (Apple Pie's own image stays).
+	 */
+	public static UIImage diversityIcon(UIImage.Image fallback) {
+		double div = currentDiversity();
+		List<Item> pool = List.of();
+		double top = topMilestone();
+		if (top > 0 && ModList.get().isLoaded("solcarrot")) {
+			try {
+				pool = band(Math.max(0, Math.min(1, div / top)), CarrotEaten.items());
+			} catch (RuntimeException | LinkageError e) {
+				pool = List.of();
+			}
+		}
+		if (pool.isEmpty()) pool = staticPool(div);
+		if (pool.isEmpty()) return null;
+		int seed = (int) Math.floor(div * 10);
+		Item item = pool.get(Math.floorMod(seed * 0x9E3779B1, pool.size()));
+		return new FoodIcon(fallback, new ItemStack(item));
+	}
+
+	private static double currentDiversity() {
+		var player = Minecraft.getInstance().player;
+		try {
+			if (player != null) return FoodList.get(player).foodDiversity();
+		} catch (RuntimeException ignored) {
+		}
+		return ClientState.state == null ? 0 : ClientState.state.diversity;
+	}
+
+	private static double topMilestone() {
+		if (!ClientState.ready()) return 0;
+		double top = 0;
+		for (Rung r : ClientState.ladder.rungs) top = Math.max(top, r.threshold);
+		return top;
+	}
+
+	private static double complexity(Item item) {
+		try {
+			return FoodList.getComplexity(new FoodInstance(item));
+		} catch (RuntimeException e) {
+			return -1;
+		}
+	}
+
+	/** Eaten foods whose complexity lies in the band of the complexity ranking around {@code share}, by id. */
+	private static List<Item> band(double share, Set<Item> eaten) {
+		if (eaten.isEmpty()) return List.of();
+		List<Double> all = new ArrayList<>();
+		for (Item item : ForgeRegistries.ITEMS.getValues()) {
+			if (!item.isEdible()) continue;
+			try {
+				if (!SOLSweetPotatoConfig.shouldCount(item)) continue;
+			} catch (RuntimeException e) {
+				continue;
+			}
+			double c = complexity(item);
+			if (c >= 0) all.add(c);
+		}
+		if (all.isEmpty()) return List.of();
+		all.sort(Double::compare);
+		double lo = all.get((int) Math.floor(Math.max(0, share - 0.05) * (all.size() - 1)));
+		double hi = all.get((int) Math.ceil(Math.min(1, share + 0.05) * (all.size() - 1)));
+		List<Item> out = new ArrayList<>();
+		for (Item item : eaten) {
+			double c = complexity(item);
+			if (c >= lo - 1e-9 && c <= hi + 1e-9) out.add(item);
+		}
+		out.sort((a, b) -> String.valueOf(ForgeRegistries.ITEMS.getKey(a)).compareTo(String.valueOf(ForgeRegistries.ITEMS.getKey(b))));
+		return out;
+	}
+
+	/** The configured pool with the highest minimum diversity at or below {@code div}; loaded items only. */
+	private static List<Item> staticPool(double div) {
+		if (!RpConfig.CLIENT_SPEC.isLoaded()) return List.of();
+		double best = -1;
+		List<Item> out = List.of();
+		for (String entry : RpConfig.CLIENT.diversityIcons.get()) {
+			int eq = entry.indexOf('=');
+			if (eq <= 0) continue;
+			double min;
+			try {
+				min = Double.parseDouble(entry.substring(0, eq).trim());
+			} catch (NumberFormatException e) {
+				continue;
+			}
+			if (min > div || min <= best) continue;
+			List<Item> items = new ArrayList<>();
+			for (String id : entry.substring(eq + 1).split(",")) {
+				ResourceLocation rl = ResourceLocation.tryParse(id.trim());
+				if (rl == null || !ForgeRegistries.ITEMS.containsKey(rl)) continue;
+				items.add(ForgeRegistries.ITEMS.getValue(rl));
+			}
+			if (items.isEmpty()) continue;
+			best = min;
+			out = items;
+		}
+		return out;
+	}
+
+	/** Spice of Life: Carrot's eaten foods; only loaded with Carrot present. */
+	private static final class CarrotEaten {
+		static Set<Item> items() {
+			var player = Minecraft.getInstance().player;
+			Set<Item> out = new HashSet<>();
+			if (player == null) return out;
+			for (com.cazsius.solcarrot.tracking.FoodInstance f : com.cazsius.solcarrot.tracking.FoodList.get(player).getEatenFoods()) {
+				if (f.item != null) out.add(f.item);
+			}
+			return out;
+		}
+	}
+
+	/** Apple Pie's stat icon slot showing a food item (16 px), hover names it. */
+	private static final class FoodIcon extends UIImage {
+		private final ItemStack stack;
+
+		FoodIcon(UIImage.Image image, ItemStack stack) {
+			super(image);
+			this.stack = stack;
+			setWidth(16);
+			setHeight(16);
+			tooltip = stack.getHoverName().getString();
+		}
+
+		@Override
+		protected void render(PoseStack pose) {
+			Icons.item(stack, frame.x, frame.y, 16);
 		}
 	}
 

@@ -574,3 +574,45 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass each Change ages out the 5 oldest foods of the window (confirm panel lists 5), each one costing more diversity than the last; the aged foods count again in full when eaten
 @fails `SlotActions.changeCount`, `FoodWindow` (endDecay 30)
 @draft written before the look-check (plan_diet_books.md 3); refresh after it
+
+@@section 4
+@@title CQ-RPI-57 to -61 Diet Log: meals on the first page, unlock strikethrough, diversity icon, 2026-11-19 ([plan_owner_notes_1119.md](../plan_owner_notes_1119.md) rulings 1, 6 to 12)
+@@date 2026-11-19
+@@jars solraspberrypie
+@@sources feature_writeup/plan_owner_notes_1119.md feature_writeup/raspberry_pie.md
+@@text
+@@text `solRaspberryPie-1.0.0.jar` installed 2026-11-19; client `[dietLog] extraWidth = 40`. Supersedes the meals-page
+@@text parts of the section 3 rows. A full restart is needed.
+@@text
+@@table
+## CQ-RPI-57 | first page: Last 30 Meals grid above the diversity line, fits the stretched book
+@group client
+@commands Open the Diet Log on a player with 30+ meals, past the gate; then on a new player still under the gate
+@pass page 1: "Last 30 Meals", 6 x 5 icons (newest top left), the food icon with the diversity value, "Current Food Diversity"; no meals pages, no "Newest first"; the book is wider (extraWidth 40); under the gate the two warning lines do not overlap the page number or flip buttons
+@fails `DiversityPageMixin` redirects (`addChild` ordinals 0 and 2), `DietLogPages` grid, `[dietLog.pages.meals]` scale
+@draft client shots; under-gate overlap is a known risk (fork report 2026-11-19)
+
+## CQ-RPI-58 | meal hover: this meal and food total, strikethrough on a differing duplicate
+@group client
+@commands Eat food A, food B, food A; hover each grid cell
+@pass newest A: "1. A", two equal contribution lines, none struck; older A: "3. A", "This meal" line struck, "Food total" equals the newest A's; B: equal lines
+@fails `FoodList.calculateDiversityContribution` call at the log index and at the memory count
+
+## CQ-RPI-59 | Change / Drop hides aged-out meals, grid closes up
+@group client
+@commands Note the grid; use Change on the effect screen (5 foods age out); reopen the book
+@pass every meal of the 5 aged foods is gone and the remaining meals close up from the top left; the title count stays "Last 30 Meals"
+@fails window filter (memory count < `endDecay`)
+
+## CQ-RPI-60 | Milestones strikethrough on reached unlocks; Diet Ladder hides them
+@group client
+@commands Reach a one-time unlock; open Milestones and the Diet Ladder; then lower diversity below it (Change)
+@pass Milestones: the unlock row is struck through, black at or above it, gray after dropping below; Ladder bar: the reached unlock has no point or icon, unreached unlocks still show; key unchanged
+@fails `DietLogPages.ListPage` render, ladder rung filter
+
+## CQ-RPI-61 | diversity icon follows the diversity
+@group client
+@commands Fresh player: open the book; eat foods until diversity rises past 10, 25; reopen each time
+@pass the icon is a food (hover names it), from the `diversityIcons` pool when no eaten food falls in the band, from eaten foods once one does; same diversity tenth = same icon
+@fails `DiversityPageMixin` icon redirect, band quantiles, `[dietLog] diversityIcons` parse
+
