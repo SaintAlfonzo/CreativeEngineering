@@ -323,6 +323,45 @@ first pass; jar-changed and failed rows follow as their own drives once it ends.
 - 11:33 judge-2 (steps 36 to 45, 54 rows): PASS 38, BATCH-FAULT 14, FAIL 1, LOOK 1 open (SQ-T1-01 names need a client lang dump). SQ-FF-04 -> TODO meals #69. Note: SQ-DEP-05 (campfire rain douse) unloaded, so campfire rain is still untested beside SQ-CFR-05.
 - 11:44 qdrive.py reads drive/skip.txt at each step start (rows left out of a running drive without a restart); SQ-PROC-14 (step 83) skipped: T3 release gate needing an install-mode payload, deploy/latest is the 2026-11-09 update payload; runs at release. Driver restarted to load it. Parallel session's rerun list perf/runs/r1120nv/rerun.txt holds 83 fixed rows for a rerun drive after r1120nv.
 - 11:53 skip.txt + rerun.txt: SQ-FSD-02 (step 149) and SQ-VH-12 (step 169) gained @boot 2 after planning; SQ-FTW-02 (step 151) had @group same -> A, now @group B (FTW.qb line 33, same world kind as SQ-FTW-01). All three run in the rerun drive. Worldgen sections GFB, WGP, BLC, CWG, RING, SVA, TER now prep group A as normal worlds (batch-fault session): longer boots there.
+- 2026-11-20 13:45 judge-3 real FAIL SQ-FF-09: `corn_delight:corn_seeds` reads 1 / 0.2, wanted 1 / 0.25 (`creativedelight/edible_seeds.js` row
+  `['corn_seeds', 1, 0.25]`); sunflower 0.25 and the pumpkin / oat / mixed seeds 0 applied. Same `foodValueCopies` absolute
+  path as SQ-FF-04's `corn_delight:nachos_bowl`: Corn Delight items are not reached (suspect the applier or a later Corn Delight writer).
+- 2026-11-20 13:45 judge-3 real FAIL SQ-CNP-01: `[zsb] cans: 22 recipes take a pack can, 1 violations`: Raspberry Pie's own
+  `solraspberrypie:liquid_diet_log` (crafting_shapeless) takes `canned_goods:oculemonade` without `_manual_only` (suspect that recipe,
+  or the NCH can guard not covering mod recipes); no Create / IE / AE2 route takes a can.
+- 2026-11-20 13:45 judge-3 real FAIL SQ-FO-08: `supplementaries:soap` and `creativecompat:createmixing/soap_heated_mixing` take only
+  `rusticdelight:cooking_oil`, not blubber or whale oil (pass: both take them; Compat `other/misc_mods.js` lines 21-29 `SOAP_FAT`
+  collapses to one item; Compat jar 2611200015 holds the 2026-11-19 change). Blubber item, cut and tag right; cachalot drop untested.
+- 2026-11-20 13:45 judge-3 real FAIL SQ-GLD-03 (milk half): after `effect give speed 60` both golden and enchanted milk leave
+  `minecraft:speed:0:792`, not effects=- (golden_food.md 3.1: milk clears every effect, `ShinyItems.GoldenMilk` / `Milk`). The 1200 t Speed
+  was gone, a fresh ~800 t Speed was there (honey lines also showed Speed 780 / 650): source not proven, rerun with a probe before fixing.
+  Stew half stale (stews removed 2026-11-10), honey stack 16 per the doc (row says 8 / 4); honey cures Poison.
+- 2026-11-20 13:45 judge-3 FAIL SQ-PCK-02 (known, 9.2 owner item): the pancake tags hold 8 (the seven plus `hearthandharvest:waffle`).
+- 2026-11-20 13:45 judge-3 BATCH-FAULT (steps 46 to 57 and step 23's 5 rows; causes in each verdict). Fixed and queued (below): SQ-FF-11,
+  SQ-FFH-02, SQ-CNS-03, SQ-CORN-04b, SQ-FO-02, -04, -07, -14, SQ-FFB-04 (look PASS, namespace), SQ-PS-06, SQ-VNG-01, SQ-STD-03,
+  SQ-CNG-01, SQ-ENM-01, SQ-GLD-02, SQ-SWP-03, -04, -05, SQ-GAP-05. For later (not simple): SQ-CDJ-05/DDP-01 rerun (I1) and
+  SQ-CDJ-12 (I8) (2026-11-02 swap lists on the Boot 0 world; jar now creativedelight-1.1.0.jar, members newer, row stale per lint);
+  SQ-FFB-02 (owner: keep Oceanic's sponge_cake_from_slices? then n=2 and serializer creativedelight:baking); SQ-FO-01 (32 food types with
+  sweet/pancake, food.md still 31); SQ-CF-02 (Spice of Life config reset by plan_diet_books_r2: row obsolete); SQ-ENM-03 (needs @modset
+  without Ender's 1.2.2 and 60 rounds), SQ-ENM-04 (toml + restart missing), SQ-ENM-04b (reject hits /reload recipe warnings, waitlog
+  matched 'Reloading!'; lint W cfgedit); SQ-GLD-05 (bot from SQ-GLD-04; expect the pass column), SQ-GLD-08, -11 (stale looks: creativedelight:
+  ids, 8 ingot loops), SQ-GLD-12 (21 after the stew removal, Boot 0 shell), SQ-GLD-14 (reject hits the probe line, librarian offers
+  unread), SQ-MDL-01 (27 drop pools since the blubber rule), SQ-PCK-04, SQ-SLT-04 (retired r1103 Boot 0 path), SQ-SLT-03 (salt probe:
+  melting moved to Common 2026-11-14, placed_rock_salt_block), SQ-SLT-05 (config is `[salt]` in creativedelight-common.toml since
+  S10), SQ-SWP-01, -08 (creativecommon-swaps.toml, item_merges.md 6 still names creativeengineering-swaps.toml), SQ-SWP-06 (setup row
+  SQ-SWP-06o not run), SQ-HCS-07 (feature nest from the r1113 c4_a world). Real results PASS where tested (SQ-ENM-03 chorusflame growth inconclusive).
+- 2026-11-20 13:45 judge-3 owner looks / records: SQ-GAP-05 the golden egg sinks to the water bottom (-63.0) while a plain egg floats
+  (-60.02) (row wants the same depth; item-physics #5); SQ-GAP-07 grape seeds stay on stone (unlisted cell, for the writeup).
+  Pre-screen hint: `mods/creativedelight-1.0.0.jar` (now 1.1.0) is still named in 17 .qb files and `> ceswap` in IDS.qb (3).
+- 2026-11-20 13:45 judge-3 BF-FIX (rule 11, rerun in perf/runs/r1120nv/rerun.txt, now 135 ids): SQ-FF-11 `\S+pizza_slices` -> `\S*`;
+  SQ-FFH-02 look follows the oven-only muffins; SQ-CNS-03, SQ-CORN-04b, SQ-FO-02, SQ-FFB-04, SQ-PS-06, SQ-VNG-01 ids moved to
+  `creativedelight:` (SQ-FO-02 carrot reject -> expect, per its pass); SQ-FO-04 reject only an S&D copy of the seed `_manual_only`;
+  SQ-FO-07 `reject verb=recipes id=alexsmobs:boiled_emu_egg result=`; SQ-FO-14 one rdetail per powder; SQ-STD-03 BurnTime 120 to 300
+  (read 8 s into the burn); SQ-CNG-01 bootexpect on the builds line; SQ-ENM-01 `creativedelight-*.jar`; SQ-GLD-02 max_stack 16;
+  SQ-SWP-03, -04, -05 `/ccswap` (SQ-SWP-05 places its own chest, reads `Items[{Slot:1b}]`); SQ-GAP-05 `.*item_tags=`. SQ-FF-09's
+  `modifier=0\.0` regexes take `modifier=0` too (row stays FAIL, not queued). Lint clean for each.
+- 13:46 judge-3 (steps 46 to 57 + step 23's 5 rows, 92 rows): PASS 47, BATCH-FAULT 40, FAIL 5 (SQ-FF-09, SQ-CNP-01, SQ-FO-08, SQ-GLD-03,
+  SQ-PCK-02 known), no LOOK open.
 
 ### 9.2 r1120fix: batch-fault fixes, pre-screen and fixed rows waiting for rerun
 
@@ -378,3 +417,5 @@ Open for the owner (not edited):
   (no row depends on either now); `salt_probe.js` should accept `hearthandharvest:placed_rock_salt_block`; qrowlint
   calls structure ids dead (read `kubejs/exported/structures.json`); qlint W unloaded fires on bot teleports, locates
   and `dim=` probes; SQ-PWG-90 still expects the -17 jar; SQ-MOB-N6, -N8 (WGE) unset captures, not in a pending step.
+- 13:17 ENV FIX step 23 (5/6): SQ-VTD8-03 (Vintage -18, strict per slot) never ran: its id holds a comma and the driver's --rows list is comma-joined, so the id split and matched nothing (silent skip). qrun.py picked() and qlint.select now pick an id when every comma part is in the set. Step 23 reruns that row on the post-drive resume.
+- 13:35 judge-3 (steps 46 to 57 + step 23's 5 rows, 92 rows): PASS 47, BATCH-FAULT 40, FAIL 5; 19 rows fixed and queued (rerun.txt 135). TODO: SQ-FF-09 joins meals #69 (Corn Delight items miss foodValueCopies values); SQ-CNP-01 -> canning #22; SQ-FO-08 -> mod-integration #1; SQ-GLD-03 -> food-tuning #31; SQ-PCK-02 is the owner item in 9.2. CDJ.qb SQ-CDJ-12 shells now glob mods/creativedelight-*.jar (rest of the row still stale, not queued).

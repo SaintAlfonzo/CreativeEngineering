@@ -55,9 +55,9 @@ reject verb=\S+ .*done=0
 @from batches/r1103/sB_2.qb
 @reviewed 2026-11-16
 > cdevtest tag item forge:bread
-> cdevtest tag item creativeengineering:food_family/bread
-waitlog verb=tag kind=item tag=creativeengineering:food_family/bread n= 30
-reject verb=tag kind=item tag=(forge:bread|creativeengineering:food_family/bread) n=\d+ ids=.*\b(buzzier_bees:honey_bread|upgrade_aquatic:mulberry_bread|hostiledelight:glowbread|fruitsdelight:jelly_bread)\b
+> cdevtest tag item creativedelight:food_family/bread
+waitlog verb=tag kind=item tag=creativedelight:food_family/bread n= 30
+reject verb=tag kind=item tag=(forge:bread|creativedelight:food_family/bread) n=\d+ ids=.*\b(buzzier_bees:honey_bread|upgrade_aquatic:mulberry_bread|hostiledelight:glowbread|fruitsdelight:jelly_bread)\b
 expect verb=tag kind=item tag=forge:bread n=[1-9]
 look forge:bread holds garlic, banana and cantaloupe bread, the bread slice and toast
 reject verb=\S+ .*done=0
@@ -143,7 +143,7 @@ look the "cans by serializer" line; any create:mixing / mechanical_crafting / IE
 > cdevtest uses vintagedelight:vinegar_jar
 > cdevtest uses vintagedelight:vinegar_bottle
 > cdevtest makes creativedelight:canned_apple
-waitlog verb=makes item=creativeengineering:canned_apple n= 30
+waitlog verb=makes item=creativedelight:canned_apple n= 30
 expect verb=uses item=vintagedelight:vinegar_bottle alone=0 shared=0
 expect verb=uses id=creativedelight:shapeless/canned_\S+_vinegar
 capture VNGID id=(creativedelight:shapeless/canned_apple_vinegar\S*) result=creativedelight:canned_apple\*
@@ -179,8 +179,8 @@ reject \[zsb\] (error|unknown|rem \S+: no such recipe)
 @reviewed 2026-11-16
 > cdevtest rdetail sugar_powdered_sugar
 waitlog verb=rdetail text=sugar_powdered_sugar n= 30
-expect verb=rdetail id=creativedelight:createcrushing/sugar_powdered_sugar part=results value=creativeengineering:powdered_sugar\*1@1(\.0)?,creativeengineering:powdered_sugar\*1@0\.5
-expect verb=rdetail id=creativedelight:createmilling/sugar_powdered_sugar part=results value=creativeengineering:powdered_sugar\*1@1(\.0)?,creativeengineering:powdered_sugar\*1@0\.5
+expect verb=rdetail id=creativedelight:createcrushing/sugar_powdered_sugar part=results value=creativedelight:powdered_sugar\*1@1(\.0)?,creativedelight:powdered_sugar\*1@0\.5
+expect verb=rdetail id=creativedelight:createmilling/sugar_powdered_sugar part=results value=creativedelight:powdered_sugar\*1@1(\.0)?,creativedelight:powdered_sugar\*1@0\.5
 reject verb=\S+ .*done=0
 
 @@text
@@ -212,10 +212,10 @@ look N about 1016 or more and M about 252 in the [food types] line; any item_dic
 > cdevtest tagsof minecraft:carrot
 > cdevtest tagsof neapolitan:strawberries
 > cdevtest tag item creativedelight:food_type/meal/feast
-waitlog verb=tag kind=item tag=creativeengineering:food_type/meal/feast n= 30
+waitlog verb=tag kind=item tag=creativedelight:food_type/meal/feast n= 30
 expect verb=tagsof id=farmersdelight:bacon .*item_tags=(?=.*\bcreativedelight:food_type/raw/meat/sliced\b)(?=.*\bcreativedelight:food_type/raw/meat(,|\s|$))(?=.*\bcreativedelight:food_type/raw(,|\s|$))(?=.*\bcreativedelight:food_type(,|\s|$))
 expect verb=tagsof id=minecraft:cooked_porkchop .*item_tags=(?=.*\bcreativedelight:food_type/cooked/meat\b)(?=.*\bcreativedelight:canned_source\b)
-reject verb=tagsof id=minecraft:carrot .*item_tags=.*\bcreativedelight:canned_source\b
+expect verb=tagsof id=minecraft:carrot .*item_tags=.*\bcreativedelight:canned_source\b
 expect verb=tagsof id=neapolitan:strawberries .*item_tags=.*\bcreativedelight:food_type/raw/fruit\b
 expect verb=tag kind=item tag=creativedelight:food_type/meal/feast n=[1-9]
 reject verb=\S+ .*done=0
@@ -251,7 +251,7 @@ reject verb=\S+ .*done=0
 waitlog verb=recipes text=fried_chicken n= 30
 expect verb=recipes text=incubation:fried_egg n=0
 expect verb=tagsof id=minecraft:pumpkin_seeds .*item_tags=.*\brusticdelight:cooking_oil_ingredients\b
-reject id=sliceanddice:\S*cooking_oil\S* serializer=
+reject id=sliceanddice:\S*cooking_oil_manual_only serializer=
 kjsreject \[NCH\].*cooking_oil
 look fried egg from minecraft:egg: smoking 100 t, campfire 600 t, no smelting (2026-11-16); one FD cooking _manual_only (3 + 3 seeds -> 2 rusticdelight:cooking_oil) and one heated mixing (3 seeds + glass bottle -> 1); the Slice & Dice fried chicken mixing still listed
 reject verb=\S+ .*done=0
@@ -319,12 +319,12 @@ look rows/SQ-CF-02.shell.txt: generic.movement_speed,0.01 and no generic.speed,2
 > cdevtest food creativedelight:canned_bone_broth
 > cdevtest food farmersdelight:beef_stew
 > cdevtest food creativedelight:canned_beef_stew
-waitlog verb=food item=creativeengineering:canned_beef_stew\S* 30
+waitlog verb=food item=creativedelight:canned_beef_stew\S* 30
 expect verb=food item=creativedelight:canned_noodle_soup\S* .*farmersdelight:nourishment
 reject verb=food item=creativedelight:canned_bone_broth\S* .*farmersdelight:(nourishment|comfort)
 expect verb=food item=creativedelight:canned_beef_stew\S* .*farmersdelight:comfort
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|not a food|\[(zsb|zlbs)\] (error|unknown)|verb=\S+ .*done=0)
-look the canned noodle soup's nourishment ticks equal the noodle soup's; the canned beef stew's comfort ticks equal the beef stew's
+look the canned noodle soup's nourishment ticks are the noodle soup's x 0.75 (4800 -> 3600); the canned beef stew's comfort ticks are the beef stew's x 0.75 (pass column, plan_scratch_bugfix_1103 7.9)
 # removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): # the cans moved to creativedelight: (namespace move 2026-11-10)
 # removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): expect verb=food item=creativedelight:canned_noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:
 # removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject verb=food item=creativedelight:canned_bone_broth\S* .*effects=\S*farmersdelight:(nourishment|comfort)
@@ -668,7 +668,7 @@ look the 15 egg fills come first (all "No blocks were filled" = no golden egg); 
 ## SQ-CORN-04b | corn knife harvest by a player: corncobs from age 7 with a knife only (x 100..106)
 @group A
 @commands `setblock` farmland + `corn_delight:corn_crop[age=7,upper=false]` / `[age=7,upper=true]`, and an age 3 crop beside it; `pbot spawn cn4 <2 blocks away> minecraft:overworld survival`; `pbot hold cn4 farmersdelight:iron_knife`; 40 times: re-set the age 7 crop, `execute as cn4 run loot spawn <pos> mine <crop pos> mainhand`; `zcount`; then 20 rolls with `pbot hold cn4 minecraft:air`, and 20 knife rolls on the age 3 crop
-@pass about 10 `creativeengineering:corncob` from 40 knife rolls (accept 4 to 18); 0 with an empty hand; 0 from age 3
+@pass about 10 `creativedelight:corncob` from 40 knife rolls (accept 4 to 18); 0 with an empty hand; 0 from age 3
 @fails LootJS `matchMainHand` still sees no player (THIS_ENTITY not set by `execute as`): check by hand in the client
 @from batches/r1103/sB_R.qb
 @reviewed 2026-11-16
@@ -707,8 +707,8 @@ sleep 3
 > cdevtest items 100 -59 506 4
 > pbot remove cn4
 count verb=items items= == 3
-expect verb=items items=\S*creativeengineering:corncob:([4-9]|1[0-8])\b
-count verb=items items=\S*creativeengineering:corncob: == 1
+expect verb=items items=\S*creativedelight:corncob:([4-9]|1[0-8])\b
+count verb=items items=\S*creativedelight:corncob: == 1
 reject verb=\S+ done=0
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No player was found|no such bot|no such item|\[cdevtest\] .*error=)
 look the three verb=items lines in order: knife on age 7 (about 10 corncobs of 40), empty hand (0), knife on age 3 (0); if the first is 0 too, LootJS matchMainHand sees no player (the row's fail note: check by hand in the client)
@@ -739,13 +739,14 @@ reject verb=\S+ .*done=0
 > data merge block 168 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:oak_cabinet_with_polished_tuff_countertop",Count:1b}]}
 > data merge block 170 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:warped_cabinet_with_stone_bricks_countertop",Count:1b}]}
 sleep 2
+# commands run 2 s apart: BurnTime is read about 8 s (160 t) after the merge, so a 300 t fuel reads about 140
 > data get block 166 -60 500 BurnTime
 > data get block 168 -60 500 BurnTime
 > data get block 170 -60 500 BurnTime
 > data get block 166 -60 500 Items
 > data get block 170 -60 500 Items
-expect 166, -60, 500 has the following block data: (2[5-9]\d|300)s?$
-expect 168, -60, 500 has the following block data: (2[5-9]\d|300)s?$
+expect 166, -60, 500 has the following block data: (1[2-9]\d|2\d\d|300)s?$
+expect 168, -60, 500 has the following block data: (1[2-9]\d|2\d\d|300)s?$
 expect 170, -60, 500 has the following block data: 0s?$
 expect 170, -60, 500 has the following block data: \[.*Slot: 1b, id: "storagedelight:warped_cabinet_with_stone_bricks_countertop"
 reject 166, -60, 500 has the following block data: \[.*Slot: 1b
@@ -903,7 +904,7 @@ look oil fried eggs give 3 with rusticdelight:cooking_oil and three minecraft:eg
 reject verb=bytype id=\S+ result=(farmersdelight:fried_egg|moredelight:omelette|ends_delight:shulker_omelette|ends_delight:fried_dragon_egg|alexsmobs:boiled_emu_egg|\S*fried_?turtle_?egg)\*
 expect verb=recipes text=creativedelight:smelting/fried_egg_from_egg n=0\b
 expect verb=recipes text=moredelight:omelette_smelting n=0\b
-expect verb=recipes text=alexsmobs:boiled_emu_egg n=0\b
+reject verb=recipes id=alexsmobs:boiled_emu_egg result=
 reject verb=recipes id=ends_delight:food_smelting/(fried_dragon_egg|shulker_omelette)
 look makes lines: the fried egg and the omelette still have a smoking and a campfire recipe
 
@@ -1017,10 +1018,13 @@ reject verb=\S+ .*done=0
 > cdevtest reg item creativedelight:onion_powder
 > cdevtest reg item creativedelight:garlic_powder
 > cdevtest reg item creativedelight:ghost_pepper_powder
-> cdevtest rdetail _powder
-waitlog verb=rdetail text=_powder n= 30
-expect verb=rdetail id=creativedelight:createmilling/onion_powder .*result=creativedelight:onion_powder\*2
-expect verb=rdetail id=creativedelight:mortar/garlic_powder .*result=creativedelight:garlic_powder\*2
+> cdevtest rdetail onion_powder
+> cdevtest rdetail garlic_powder
+> cdevtest rdetail ghost_pepper_powder
+waitlog verb=rdetail text=ghost_pepper_powder n= 30
+expect verb=rdetail id=creativedelight:\S*onion_powder\S* .*result=creativedelight:onion_powder\*2
+expect verb=rdetail id=creativedelight:\S*garlic_powder\S* .*result=creativedelight:garlic_powder\*2
+expect verb=rdetail id=creativedelight:\S*ghost_pepper_powder\S* .*result=creativedelight:ghost_pepper_powder\*2
 reject verb=\S+ .*done=0
 
 ## SQ-FO-15 | old Seasonings NBT is dropped silently

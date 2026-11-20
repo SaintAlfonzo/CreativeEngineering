@@ -38,7 +38,7 @@ count verb=recipes id=creativedelight:farmersdelightcutting/[a-z_]+_from_culture
 reject verb=recipes id=\S*culture_\S*_by_fdcutting
 count verb=recipes id=\S*(smelting|smoking|campfirecooking)/cooked_calamari(_slice)?_from_glowing_calamari(_slice)? result= == 6
 expect verb=recipes text=cooked_glowing_calamari n=0\b
-look muffin lines: one farmersdelightcooking/ (Cooking Pot) recipe per muffin
+look muffin lines: oven creativedelight:baking/ recipes only, no farmersdelightcooking/ (Cooking Pot) muffin recipe (muffins bake in the oven only, creative_delight.md 2026-10-29)
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-FFH-03 | zucchini quiche sequenced assembly parses

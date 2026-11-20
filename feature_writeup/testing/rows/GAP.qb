@@ -103,8 +103,8 @@ sleep 3
 > fill 40310 -63 40000 40310 -61 40002 minecraft:lava
 > cdevtest tagsof vintagedelight:golden_egg
 waitlog \[cdevtest\] verb=tagsof done=1 20
-expect \[cdevtest\] verb=tagsof id=vintagedelight:golden_egg item_tags=
-reject \[cdevtest\] verb=tagsof id=vintagedelight:golden_egg item_tags=\S*creativecompat:physics/floats
+expect \[cdevtest\] verb=tagsof id=vintagedelight:golden_egg .*item_tags=
+reject \[cdevtest\] verb=tagsof id=vintagedelight:golden_egg .*item_tags=\S*creativecompat:physics/floats
 > kill @e[type=minecraft:item,x=40290,y=-64,z=39990,dx=40,dy=20,dz=20]
 > summon minecraft:item 40300.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["gew"]}
 > summon minecraft:item 40300.5 -55 40002.5 {Item:{id:"minecraft:egg",Count:1b},Tags:["cew"]}

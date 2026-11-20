@@ -319,8 +319,8 @@ look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id a
 bootexpect \[creativedelight\] members: \[([a-z_]+, ){20}[a-z_]+\]$
 bootreject NOT loaded|not nested
 shell grep -nE "\[creativedelight\] members:|NOT loaded|not nested" logs/latest.log | head -5
-shell unzip -l mods/creativedelight-1.0.0.jar | grep jarjar/backported
-shell J=mods/creativedelight-1.0.0.jar; for m in backportedVeggies-1.9.2-ce-19.2-05 backportedVintage-0.1.6-ce-19.2-12 backportedFungi-1.3-ce-19.2-02 backportedMiners-1.4.5-ce-19.2-04 backportedDisplay-1.7.0-ce-19.2-03; do unzip -l $J | grep -q "$m" || { echo "missing $m"; exit 1; }; done
+shell unzip -l $(ls mods/creativedelight-*.jar | head -1) | grep jarjar/backported
+shell J=$(ls mods/creativedelight-*.jar | head -1); for m in backportedVeggies-1.9.2-ce-19.2-05 backportedVintage-0.1.6-ce-19.2-12 backportedFungi-1.3-ce-19.2-02 backportedMiners-1.4.5-ce-19.2-04 backportedDisplay-1.7.0-ce-19.2-03; do unzip -l $J | grep -q "$m" || { echo "missing $m"; exit 1; }; done
 shell echo "errors: $(grep -c ERROR logs/latest.log)"; true
 look error count not above the r1102 Boot 1 (run doc); a newer nested member build than the pass cell names is fine (note it)
 

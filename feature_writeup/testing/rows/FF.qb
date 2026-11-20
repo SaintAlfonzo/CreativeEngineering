@@ -238,9 +238,9 @@ reject verb=\S+ .*done=0
 waitlog verb=rdetail text=stuffed_cantaloupe n= 30
 expect verb=food item=hearthandharvest:sunflower_seeds\S* food=true nutrition=1 modifier=0\.25
 expect verb=food item=corn_delight:corn_seeds\S* food=true nutrition=1 modifier=0\.25
-expect verb=food item=minecraft:pumpkin_seeds\S* food=true nutrition=1 modifier=0\.0
-expect verb=food item=vintagedelight:oat_seeds\S* food=true nutrition=1 modifier=0\.0
-expect verb=food item=vintagedelight:mixed_seeds\S* food=true nutrition=1 modifier=0\.0
+expect verb=food item=minecraft:pumpkin_seeds\S* food=true nutrition=1 modifier=0(\.0)?\s
+expect verb=food item=vintagedelight:oat_seeds\S* food=true nutrition=1 modifier=0(\.0)?\s
+expect verb=food item=vintagedelight:mixed_seeds\S* food=true nutrition=1 modifier=0(\.0)?\s
 expect verb=tag kind=item tag=creativedelight:edible_seeds n=5\b
 look trail mix and stuffed cantaloupe list an edible seed slot (no wheat or beetroot seeds)
 reject verb=\S+ .*done=0
@@ -286,7 +286,7 @@ reject verb=\S+ .*done=0
 > cdevtest recipes pizza_from_slices
 > cdevtest recipes cutting/pizza
 waitlog verb=recipes text=cutting/pizza n= 30
-count verb=rdetail id=creativedelight:farmersdelightcutting/\S+pizza_slices .*result=\S+pizza_slice\*8 == 5
+count verb=rdetail id=creativedelight:farmersdelightcutting/\S*pizza_slices .*result=\S+pizza_slice\*8 == 5
 count verb=rdetail id=creativedelight:shaped/\S*pizza_from_slices\b == 5
 reject verb=recipes text=pizza_from_slices .*(vintagedelight|veggiesdelight|brewinandchewin):\S*pizza_from_slices
 reject verb=recipes text=cutting/pizza .*brewinandchewin:cutting/pizza\b
