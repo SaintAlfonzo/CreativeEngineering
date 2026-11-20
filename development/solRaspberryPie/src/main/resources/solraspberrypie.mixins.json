@@ -15,6 +15,7 @@
     "MobEffectInstanceAccessor"
   ],
   "client": [
+    "client.AppleSkinTooltipRendererMixin",
     "client.CarrotBookScreenMixin",
     "client.CarrotFoodDataMixin",
     "client.DiversityPageMixin",
@@ -22,7 +23,8 @@
     "client.FoodBookScreenAccessor",
     "client.FoodBookScreenMixin",
     "client.GuiAccessor",
-    "client.GuiMixin"
+    "client.GuiMixin",
+    "client.UIElementAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -19,7 +19,7 @@
 	#Diet Log background stretched sideways by this many pixels: the book's center column is repeated,
 	#the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width.
 	#Range: 0 ~ 400
-	extraWidth = 40
+	extraWidth = 93
 
 	#Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)
 	#of each Diet Log page's content.
@@ -34,7 +34,7 @@
 			#Range: 0.25 ~ 2.0
 			scale = 1.0
 
-		#The last meals list.
+		#The last meals grid on the Overview page (x, y move it from its place above the diversity line).
 		[dietLog.pages.meals]
 			#Range: -200 ~ 200
 			x = 0

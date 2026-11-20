@@ -113,8 +113,11 @@ public final class DietEngine {
 		FoodList fl = FoodList.get(player);
 		double div = fl.foodDiversity();
 		double oldMax = d.maxDiversity;
-		if (div > d.maxDiversity) d.maxDiversity = div;
 		State s = compute(ladder, div, GateFoods.count(fl), d.slots);
+		// Unlocks wait for the first gate opening (plan_diet_books_r2.md A6); after it the highest diversity climbs
+		// even while the gate is closed again.
+		if (s.gate) d.gateOpened = true;
+		if (d.gateOpened && div > d.maxDiversity) d.maxDiversity = div;
 		if (announce && !d.paused) announce(player, ladder, d, s, oldMax);
 		d.activeKeys = new HashSet<>(s.active.keySet());
 		if (!d.paused) apply(player, d, s);

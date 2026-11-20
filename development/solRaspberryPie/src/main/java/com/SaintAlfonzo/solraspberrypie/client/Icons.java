@@ -106,11 +106,12 @@ public final class Icons {
 	}
 
 	/**
-	 * A diversity value as printed by Raspberry Pie: rounded down to one decimal (plan_diet_books.md 1.3), so 4.97
-	 * shows 4.9 and never reads as a milestone of 5 not reached yet.
+	 * A diversity value as printed by Raspberry Pie: two decimals, rounded down (plan_diet_books_r2.md ruling 4,
+	 * superseding one decimal), so 4.999 shows 4.99 and never reads as a milestone of 5 not reached yet. The small
+	 * epsilon keeps 1.40 stored as 1.3999999 at 1.40.
 	 */
 	public static String diversity(double v) {
-		return num(Math.floor(v * 10 + 1e-9) / 10.0);
+		return String.format(Locale.ROOT, "%.2f", Math.floor(v * 100 + 1e-6) / 100.0);
 	}
 
 	/** Grays out a {@code size} square without covering a frame drawn around it. */

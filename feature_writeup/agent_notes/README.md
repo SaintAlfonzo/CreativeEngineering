@@ -41,6 +41,7 @@ Rules: status (built, deployed, tested, versions) lives in [README.md](../README
 - [Shields](shields.md); [damage types](damage-types.md); [armor/tool effect frameworks](armor-tool-effects.md); [dragon gear](dragon-gear-notes.md); [echo gear](echo-tier-gear.md); [Magic Resistance](magic-resistance-effect.md); [Air Brake](air-brake-item.md)
 - [Effects writeup](effects-writeup.md); [JEED text](jeed-effect-descriptions.md); [bubble column](bubble-column-immunity.md); [camera bags](camera-bag-design.md); [campfire rain](campfire-rain.md); [Forgiving Void](forgiving-void-origin-pull.md)
 ## UI, JEI, WTHIT, data catalogs
+- [Food tooltip rows](food-tooltip-rows.md) — AppleSkin/Quark row mechanics, Raspberry Pie's LOWEST reorder and one-row AppleSkin mixin, Mod Name Tooltip dedupe
 - [crop growth line](wthit-crop-growth-line.md); [armor bar](armor-bar-compat.md); [GUI plaque](gui-title-plaque-stretch.md); [Legendary Tooltips](legendary-tooltips-separator-fix.md); [toasts](toast-filter.md); [banner patterns](banner-pattern-compat-fix.md)
 - [JEI coverage](jei-coverage-catalog.md); [JEI craftable-first](jei-craftable-first.md); [names audit](missing-names-catalog.md); [stack sizes](stack-sizes-catalog.md) + [policy](stack-size-policy.md); [paintings](immersive-paintings-all-variants.md) (modded built at load by Compat; old ids aliased on load); [loot](loot-system.md)
 ## Ports and own mods (state: feature_writeup/README.md)

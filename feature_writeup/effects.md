@@ -2,12 +2,11 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=9d1c14ab74b7 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 5, In Progress 3, Testing 17), 2 Complete.
+<!-- generated:status_index begin open_work sha1=744eaefe8b75 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 4, In Progress 3, Testing 18), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `interface #24` | Planned | C | Inventory effect list: permanent effects (armor, charm, beacon, diet) in a second column right of the timed ones |
 | `potions/effects #15` | Planned | S P | Pipe Builder's Tea: Haste lasts 20 seconds |
 | `potions/effects #16` | Planned | S P | Open-ended pipe drinking for more fluids |
 | `potions/potions #7` | Planned | S P | Potions for unbrewable effects |
@@ -16,6 +15,7 @@
 | `potions/potions #8` | In Progress | S P | Total-overlap effect groups |
 | `ui/effects #1` | In Progress | C | JEED descriptions for 11 effects |
 | `alcohol/vineryport #27` | Testing | S C P | Jellie Wine: the enchanted golden apple set |
+| `interface #24` | Testing | C | Inventory effect list: permanent effects (armor, charm, beacon, diet) in a second column right of the timed ones |
 | `potions/effects #8` | Testing | C | Intoxicated visible in game; audit auto-hidden effects |
 | `potions/effects #9` | Testing | S+ C P | Effect swaps and removals |
 | `potions/effects #10` | Testing | S+ C P | Compound effects |
@@ -474,6 +474,23 @@ it?
 | No WM Cave Maps `xaeroworldmap:no_cave_maps_harmful` | Xaero's World Map | HARMFUL | red | | Server switch; Xaero ships a neutral and a harmful twin on purpose |
 | No World Map `xaeroworldmap:no_world_map` | Xaero's World Map | NEUTRAL | blue | | Server switch; Xaero ships a neutral and a harmful twin on purpose |
 | No World Map `xaeroworldmap:no_world_map_harmful` | Xaero's World Map | HARMFUL | red | | Server switch; Xaero ships a neutral and a harmful twin on purpose |
+
+### 2.4b Inventory list: permanent column (2026-11-20, plan_diet_books_r2.md B2, `interface #24`)
+
+The inventory's effect list (wide mode) draws timed effects in the first column and permanent ones in a second
+column 120 px to its right, each column with vanilla's row spacing for its own count (Creative Common
+`mixin/EffectColumnsMixin`: redirects of `renderBackgrounds`, `renderIcons`, `renderLabels` inside `renderEffects`;
+the `getActiveEffects` call stays Raspberry Pie's filter). One column (vanilla) when the list is compact, when less
+than 240 px is free, or when every effect is timed or every effect is permanent.
+
+Permanent (`client/PermanentEffects.isPermanent`): ambient instances (beacon, conduit); gear effects: the armor and
+held-tool scripts (`kubejs/data/creativecommon/kubejs/effects/armor_effects.js`, `tool_effects.js`) call
+`effect/GearEffectMarks.mark(entity, effect)` after each refresh, the server compares each player's set at the end of
+the tick and sends `creativecommon:gear_effects` only when it changed; an instance of a marked effect with at most
+100 ticks left counts (a longer potion of the same effect stays timed); sources added with
+`PermanentEffects.addSource(Predicate)` (Raspberry Pie: diet flat buffs and slot effects). No charm rows exist yet, so
+charms mark nothing. Taking gear off: its effect shows as timed for up to 2 s until it runs out. Just Enough Effect
+Descriptions hovers work in both columns; JEI's exclusion area covers only the first column.
 
 ### 2.5 HUD icons: auto-hidden effects (audit 2026-10-31, TODO `potions/effects #8`)
 

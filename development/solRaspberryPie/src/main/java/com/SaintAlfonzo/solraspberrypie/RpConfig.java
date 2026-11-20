@@ -57,7 +57,9 @@ public final class RpConfig {
 		public final ForgeConfigSpec.IntValue extraWidth;
 		public final PageLayout diversityPage;
 		public final PageLayout mealsPage;
-		public final ForgeConfigSpec.ConfigValue<List<? extends String>> diversityIcons;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> diversityIconFallback;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> customOrder;
+		public final ForgeConfigSpec.BooleanValue saturationOwnLine;
 		public final PageLayout ladderPage;
 		public final PageLayout milestonesPage;
 		public final ForgeConfigSpec.EnumValue<UneatenSort> uneatenSort;
@@ -72,19 +74,15 @@ public final class RpConfig {
 							"(or below this value when it is under 1.0).")
 					.defineInRange("bookScale", 1.4, 0.5, 3.0);
 			extraWidth = b.comment("Diet Log background stretched sideways by this many pixels: the book's center column is repeated,",
-							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width.")
-					.defineInRange("extraWidth", 0, 0, 400);
-			diversityIcons = b.comment("Diet Log Overview: foods shown left of the diversity value when no food you have eaten fits the",
-							"current diversity. Each entry is \"minimum diversity=item,item,...\"; the entry with the highest minimum at or",
-							"below the diversity is used, one of its loaded items shown.")
-					.defineList("diversityIcons", List.of(
-							"0=minecraft:apple,minecraft:bread,minecraft:carrot,minecraft:sweet_berries",
-							"10=minecraft:baked_potato,minecraft:cooked_chicken,minecraft:mushroom_stew,minecraft:cookie",
-							"25=minecraft:cooked_beef,farmersdelight:mixed_salad,farmersdelight:vegetable_soup,farmersdelight:bacon_and_eggs",
-							"40=farmersdelight:beef_stew,farmersdelight:fruit_salad,farmersdelight:ratatouille,minecraft:rabbit_stew",
-							"60=farmersdelight:steak_and_potatoes,farmersdelight:pasta_with_meatballs,farmersdelight:roast_chicken,minecraft:golden_carrot",
-							"80=farmersdelight:honey_glazed_ham,farmersdelight:shepherds_pie,farmersdelight:stuffed_pumpkin,minecraft:golden_apple",
-							"100=minecraft:enchanted_golden_apple"), o -> o instanceof String);
+							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width; 93 = 50% wider.")
+					.defineInRange("extraWidth", 93, 0, 400);
+			diversityIconFallback = b.comment("Diet Log Overview: the icon left of the diversity value is the eaten food (Food Dictionary) closest",
+							"in base diversity to the average of the meals in the diet window, never a drink. With nothing eaten it is one of",
+							"these items (loaded ones only).")
+					.defineList("diversityIconFallback", List.of("minecraft:pumpkin_seeds", "vintagedelight:mixed_seeds",
+							"vintagedelight:oat_seeds", "corn_delight:corn_seeds", "hearthandharvest:sunflower_seeds", "miners_delight:moss",
+							"immersive_weathering:moss_clump", "minecraft:rotten_flesh", "minecraft:spider_eye", "veggiesdelight:dandelion_leaf"),
+							o -> o instanceof String);
 			b.comment("Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)",
 					"of each Diet Log page's content.").push("pages");
 			diversityPage = new PageLayout(b, "diversity", "Apple Pie's diversity page.", 0, 1.0);
@@ -95,11 +93,17 @@ public final class RpConfig {
 			b.pop();
 			b.push("foodDictionary");
 			uneatenSort = b.comment("Food Dictionary (Spice of Life: Carrot Edition) order of the uneaten foods: MOD_NAME (mod, then name),",
-							"NAME (A-Z), EASIEST (lowest Apple Pie complexity first, then nutrition), HARDEST (the reverse).")
+							"NAME (A-Z), EASIEST (lowest base diversity first, then food), HIGHEST_FOOD (hunger restored),",
+							"HIGHEST_SATURATION (saturation points restored), HIGHEST_DIVERSITY (base diversity), CUSTOM (customOrder;",
+							"only while customOrder is not empty).")
 					.defineEnum("uneatenSort", UneatenSort.MOD_NAME);
 			eatenSort = b.comment("Food Dictionary order of the eaten foods, also set by the sort button on those pages: NEWEST_UNLOCK,",
-							"LATEST_EATEN (Apple Pie's meal memory), UNEATEN_ORDER (the uneatenSort order).")
+							"LATEST_EATEN (Apple Pie's meal memory), HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM (as for",
+							"uneatenSort; the button skips it while customOrder is empty).")
 					.defineEnum("eatenSort", EatenSort.NEWEST_UNLOCK);
+			customOrder = b.comment("The CUSTOM sort: item ids in the order wanted; foods not listed follow in the uneatenSort order",
+							"(MOD_NAME when that is CUSTOM too). Empty = the CUSTOM sort is hidden.")
+					.defineList("customOrder", List.of(), o -> o instanceof String);
 			b.pop();
 			b.push("icons");
 			unlockIcon = b.comment("Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT",
@@ -109,6 +113,11 @@ public final class RpConfig {
 					.defineList("permanentBuff", List.of("create_crush_everything:diamond_shard", "minecraft:diamond"), o -> o instanceof String);
 			slotIcon = b.comment("Diet Log icon for effect slots (the Diet Log never shows the chosen effect): the first of these items that is loaded.")
 					.defineList("slot", List.of("suppsquared:metal_frame", "minecraft:item_frame"), o -> o instanceof String);
+			b.pop();
+			b.push("tooltips");
+			saturationOwnLine = b.comment("Food tooltips: AppleSkin's saturation icons on their own line under the shanks (AppleSkin's own layout).",
+							"Off: on the shank row, after the shanks.")
+					.define("saturationOwnLine", false);
 			b.pop();
 			b.push("widget");
 			widgetEnabled = b.comment("Show the diet bonus bar on the survival inventory. When off, diet effects show like any other effect.")
@@ -136,13 +145,16 @@ public final class RpConfig {
 		}
 	}
 
-	public enum UneatenSort { MOD_NAME, NAME, EASIEST, HARDEST }
+	/** A config value no longer listed (HARDEST, UNEATEN_ORDER) resets to the default when the config loads. */
+	public enum UneatenSort { MOD_NAME, NAME, EASIEST, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM }
 
 	public enum EatenSort {
-		NEWEST_UNLOCK, LATEST_EATEN, UNEATEN_ORDER;
+		NEWEST_UNLOCK, LATEST_EATEN, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM;
 
-		public EatenSort next() {
-			return values()[(ordinal() + 1) % values().length];
+		/** The next mode; CUSTOM only while it is configured (plan_diet_books_r2.md A8). */
+		public EatenSort next(boolean customConfigured) {
+			EatenSort n = values()[(ordinal() + 1) % values().length];
+			return n == CUSTOM && !customConfigured ? values()[0] : n;
 		}
 	}
 

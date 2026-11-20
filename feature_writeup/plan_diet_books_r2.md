@@ -1,23 +1,22 @@
 # Plan: Diet Log round 2, food tooltips, permanent effects column
 
-<!-- generated:status_index begin open_work sha1=c75510cbcb9d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 13), 0 Complete.
+<!-- generated:status_index begin open_work sha1=1f83f3683408 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Testing 12), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food-tuning #20` | Planned | S C | Diet window back to 32 meals (endDecay 30 -> 32); meals grid 8 x 4 |
-| `food-tuning #21` | Planned | C | Diet Log meals grid: label centered; hover shows food total only when it differs, before the struck-through meal value |
-| `food-tuning #22` | Planned | C | Diet Log 50% wider by default; first-page diversity and gate text scaled to fit on one line each |
-| `food-tuning #23` | Planned | C | Diet Log freezes briefly on every open: measure and cache |
-| `food-tuning #24` | Planned | C | Liquid Diet Log pauses the game in single player |
-| `food-tuning #25` | Planned | S P | Effect unlocks (and their messages) wait until the unique-food gate first opens |
-| `food-tuning #26` | Planned | C | Diet Log diversity icon: eaten non-drink food closest to the window's average meal value (newest on a tie); else seeds, moss, rotten flesh, spider eye or dandelion leaf |
-| `food-tuning #27` | Planned | C | Food Dictionary sorts: highest food, highest saturation, highest diversity (was hardest), custom (hidden until configured) on both lists |
-| `food-tuning #28` | Planned | C | Food tooltip line Diversity: X (contributes Y); diversity printed with two decimals, rounded down, everywhere |
-| `food-tuning #29` | Planned |  | Merge the Raspberry Pie changelog bullets |
-| `interface #24` | Planned | C | Inventory effect list: permanent effects (armor, charm, beacon, diet) in a second column right of the timed ones |
-| `tooltips #19` | Planned | C | Food tooltip order (Raspberry Pie pass): AppleSkin hunger and saturation at the top (option: saturation on its own line), Quark shank row removed (config first), diversity line before Quark's saturation word |
-| `tooltips #20` | Planned | C | Chopsticks tooltip: double mod name label |
+| `food-tuning #20` | Testing | S C | Diet window back to 32 meals (endDecay 30 -> 32); meals grid 8 x 4 |
+| `food-tuning #21` | Testing | C | Diet Log meals grid: label centered; hover shows food total only when it differs, before the struck-through meal value |
+| `food-tuning #22` | Testing | C | Diet Log 50% wider by default; first-page diversity and gate text scaled to fit on one line each |
+| `food-tuning #23` | Testing | C | Diet Log freezes briefly on every open: measure and cache |
+| `food-tuning #24` | Testing | C | Liquid Diet Log pauses the game in single player |
+| `food-tuning #25` | Testing | S P | Effect unlocks (and their messages) wait until the unique-food gate first opens |
+| `food-tuning #26` | Testing | C | Diet Log diversity icon: eaten non-drink food closest to the window's average meal value (newest on a tie); else seeds, moss, rotten flesh, spider eye or dandelion leaf |
+| `food-tuning #27` | Testing | C | Food Dictionary sorts: highest food, highest saturation, highest diversity (was hardest), custom (hidden until configured) on both lists |
+| `food-tuning #28` | Testing | C | Food tooltip line Diversity: X (contributes Y); diversity printed with two decimals, rounded down, everywhere |
+| `interface #24` | Testing | C | Inventory effect list: permanent effects (armor, charm, beacon, diet) in a second column right of the timed ones |
+| `tooltips #19` | Testing | C | Food tooltip order (Raspberry Pie pass): AppleSkin hunger and saturation at the top (option: saturation on its own line), Quark shank row removed (config first), diversity line before Quark's saturation word |
+| `tooltips #20` | Testing | C | Chopsticks tooltip: double mod name label |
 <!-- generated:status_index end open_work -->
 
 Source: owner notes, `todo/scratchpad.md` block "rasp pie" and the four bullets after it (intake 2026-11-19). Follows
@@ -106,3 +105,30 @@ tooltip and the inventory effect list goes to the owner before queue rows are wr
   complete; nothing to configure before then (owner, 2026-11-20).
 - Queue rows: round 1's draft rows (plan_diet_books.md section 6) are refreshed together with this round's rows,
   after this round's look-check.
+
+## 5. Build notes (2026-11-20)
+
+Built and installed 2026-11-20: solRaspberryPie 1.0.0 (A1 to A11), creativecommon 1.2.0 (B2), creativedelight 1.1.0
+(B3). Descriptions: [raspberry_pie.md](raspberry_pie.md) 12.7, [effects.md](effects.md) 2.4b,
+[food_dictionary.md](food_dictionary.md), [tooltips.md](tooltips.md) 3, [roll_delight.md](roll_delight.md). Choices
+made while building, for the look-check:
+
+1. **AppleSkin "saturation on its own line" (item 20, 21):** AppleSkin already draws saturation as a second row under
+   the shanks. Read as: default one row (saturation after the shanks, 4 px gap), the client option
+   `[tooltips] saturationOwnLine` restores AppleSkin's own two rows. Mixin limited to AppleSkin 2.4.2.
+2. **Fallback icon config:** renamed `diversityIcons` -> `diversityIconFallback` (flat list) so existing client
+   configs take the new default instead of keeping the old per-diversity pools.
+3. **First-page text (item 3):** one common scale for "Current Food Diversity" and both gate lines (not one per
+   line), page width less 20 px a side.
+4. **Meal hover "differs"** compares the printed values (two decimals rounded down), so a 0.004 difference shows one
+   line.
+5. **Diversity icon tie:** most recently eaten by Apple Pie's memory count, then item id; the fallback item is picked
+   by the diversity's tenth, as before.
+6. **Unlock gate, old saves:** a save without the new flag counts as opened when it already has a highest diversity.
+7. **B2 permanent:** gear marks are per effect (the two gear scripts tick separately) and count for instances with
+   at most 100 ticks left; no charm effect rows exist, so charms mark nothing. Diet effects come from Raspberry Pie by
+   reflection. JEI's exclusion area covers only the first column.
+8. **B3 cause** not reproduced: the fix makes Roll's chopstick line idempotent, which removes the only path found to a
+   second Mod Name Tooltip line. Check in game.
+9. **Custom sort** (`[foodDictionary] customOrder`, item ids) built and hidden while empty.
+10. **Open timing** logs pages, icon, meals grid and the first frame per open.

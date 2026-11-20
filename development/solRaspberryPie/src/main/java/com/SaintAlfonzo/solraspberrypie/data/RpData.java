@@ -35,6 +35,12 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 
 	// ---- saved ----
 	public double maxDiversity;
+	/**
+	 * The diet gate (Apple Pie's minFoodsToActivate) has been passed at least once (plan_diet_books_r2.md A6): until
+	 * then maxDiversity does not climb, so no one-time unlock (or its message) happens before the diet is active.
+	 * Apple Pie's counter resetting later (death) does not clear it; /solrp reset does.
+	 */
+	public boolean gateOpened;
 	/** Index = slot number; null = empty. Sized to the ladder's slot count at evaluation (V8). */
 	public final List<SlotChoice> slots = new ArrayList<>();
 	public long regenAnchor = -1;
@@ -93,6 +99,7 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 
 	public void copyFrom(RpData o) {
 		maxDiversity = o.maxDiversity;
+		gateOpened = o.gateOpened;
 		slots.clear();
 		slots.addAll(o.slots);
 		regenAnchor = -1;
@@ -112,6 +119,7 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 	public CompoundTag serializeNBT() {
 		CompoundTag t = new CompoundTag();
 		t.putDouble("maxDiversity", maxDiversity);
+		t.putBoolean("gateOpened", gateOpened);
 		ListTag sl = new ListTag();
 		for (SlotChoice c : slots) {
 			CompoundTag s = new CompoundTag();
@@ -140,6 +148,8 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 	@Override
 	public void deserializeNBT(CompoundTag t) {
 		maxDiversity = t.getDouble("maxDiversity");
+		// Saves from before the flag keep what they have: any highest diversity counts as an opened gate.
+		gateOpened = t.contains("gateOpened") ? t.getBoolean("gateOpened") : maxDiversity > 0;
 		slots.clear();
 		for (Tag el : t.getList("slots", Tag.TAG_COMPOUND)) {
 			CompoundTag s = (CompoundTag) el;

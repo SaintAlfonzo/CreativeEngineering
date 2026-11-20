@@ -4,15 +4,15 @@ Test prefix **TT-** · Last updated **2026-11-02** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=ec4096d99653 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, Testing 4), 1 Complete.
+<!-- generated:status_index begin open_work sha1=0db0e32397a3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, Testing 5), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `tooltips #19` | Planned | C | Food tooltip order (Raspberry Pie pass): AppleSkin hunger and saturation at the top (option: saturation on its own line), Quark shank row removed (config first), diversity line before Quark's saturation word |
 | `ui/tooltips #2` | Planned | C | Tooltips to add (items) |
 | `ui/tooltips #3` | Planned | C | Tooltips to add (mods) |
 | `alcohol/vineryport #16` | Testing | C~ P | Vinery tooltips |
+| `tooltips #19` | Testing | C | Food tooltip order (Raspberry Pie pass): AppleSkin hunger and saturation at the top (option: saturation on its own line), Quark shank row removed (config first), diversity line before Quark's saturation word |
 | `ui/tooltips #4` | Testing | C~ P | AppleSkin bars in more screens |
 | `ui/tooltips #5` | Testing | C | Large tooltips run off the bottom |
 | `ui/tooltips #12` | Testing | C | Growth season tooltip on tree fruits |
@@ -119,6 +119,12 @@ Examples:
 - IE copper wire -> solder note (eng)
 
 ## 3. What the pack changes about other mods' tooltips
+
+**Food rows (2026-11-20, plan_diet_books_r2.md A9, A11; [raspberry_pie.md](raspberry_pie.md) 12.7):** Raspberry Pie
+orders the food rows as the last GatherComponents listener: name, AppleSkin's hunger and saturation row (saturation on
+the shank row; client config `[tooltips] saturationOwnLine` for AppleSkin's own second row), "Diversity: X
+(contributes Y)", Quark's saturation word, the rest. Quark's own shank row is off by config ("Food Tooltips" = false,
+"Show Saturation" = true). Mechanics: [agent note](agent_notes/food-tooltip-rows.md).
 
 **Removed**
 - **Immersive Petroleum asphalt, slab, stairs:** "Increases walking speed by 20.0%" (`desc.immersivepetroleum.flavour.asphalt`).

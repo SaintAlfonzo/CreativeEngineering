@@ -71,6 +71,7 @@ public final class RpCommands {
 			fl.resetFoodsEaten();
 			RpData data = RpData.get(p);
 			data.maxDiversity = 0;
+			data.gateOpened = false;
 			data.slots.clear();
 			data.drinks.clear();
 			data.regenAnchor = -1;

@@ -1,6 +1,8 @@
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
+import com.SaintAlfonzo.solraspberrypie.SolRaspberryPie;
+import com.SaintAlfonzo.solraspberrypie.logic.Drinks;
 import com.SaintAlfonzo.solraspberrypie.data.MealLog;
 import com.SaintAlfonzo.solraspberrypie.ladder.Ladder;
 import com.SaintAlfonzo.solraspberrypie.ladder.Rung;
@@ -14,7 +16,6 @@ import com.tarinoita.solsweetpotato.client.gui.BenefitsPage;
 import com.tarinoita.solsweetpotato.client.gui.FoodBookScreen;
 import com.tarinoita.solsweetpotato.client.gui.FoodListPage;
 import com.tarinoita.solsweetpotato.client.gui.elements.UIElement;
-import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
 import com.tarinoita.solsweetpotato.client.gui.elements.UIImage;
 import com.tarinoita.solsweetpotato.tracking.FoodInstance;
 import com.tarinoita.solsweetpotato.tracking.FoodList;
@@ -55,7 +56,7 @@ public final class DietLogPages {
 	private static final int ICON = 9;
 	/** Bar window: the last milestone reached and the next four, or the first five (plan_diet_books.md 1.7). */
 	private static final int WINDOW = 5;
-	private static final int MEAL_COLS = 6;
+	private static final int MEAL_COLS = 8;
 	/** Apple Pie's book page size, and how far the Diet Bonuses button reaches below the screen center. */
 	public static final int BOOK_W = 186, BOOK_H = 192, BUTTON_BOTTOM = 118;
 
@@ -489,20 +490,25 @@ public final class DietLogPages {
 
 	// ---- Overview page: last meals grid and the diversity food icon (plan_owner_notes_1119.md rulings 7 to 10, 12) --
 
-	private static final int MEAL_ROWS = 5, GRID_STEP = 16, GRID_ICON = 15, GRID_TITLE = 11;
+	private static final int MEAL_ROWS = 4, GRID_STEP = 16, GRID_ICON = 15, GRID_TITLE = 11;
 
 	/** A meal on the grid: the item and its age in meals (0 = newest), which is Apple Pie's memory count for it. */
 	private record Meal(Item item, ResourceLocation id, int age) {}
 
 	/**
-	 * The last meals grid on Apple Pie's Overview page, in place of its top spacer (DiversityPageMixin): a "Last 30
-	 * Meals" title and a 6 x 5 icon grid, newest at the top left, drawn at the {@code [dietLog.pages.meals]} offset and
-	 * scale. A meal shows only while its food is in the decay window, so foods a Change or Drop aged out leave the grid
-	 * (ruling 9). Hover: "N. Name", this meal's diversity contribution (struck through when it differs from the
-	 * food's), the food's contribution (ruling 10).
+	 * The last meals grid on Apple Pie's Overview page, in place of its top spacer (DiversityPageMixin): a "Last 32
+	 * Meals" title centered over an 8 x 4 icon grid (plan_diet_books_r2.md A1, A2), newest at the top left, drawn at the
+	 * {@code [dietLog.pages.meals]} offset and scale. A meal shows only while its food is in the decay window, so foods
+	 * a Change or Drop aged out leave the grid (ruling 9). Hover: "N. Name", the food's diversity contribution only when
+	 * it differs from this meal's, then this meal's (struck through when the food's is shown).
 	 */
 	public static UIElement mealsGrid() {
-		return new MealsGrid(Layout.meals());
+		long t0 = System.nanoTime();
+		try {
+			return new MealsGrid(Layout.meals());
+		} finally {
+			OpenTiming.grid = System.nanoTime() - t0;
+		}
 	}
 
 	/** The meals shown: the log, newest first, without meals whose food is out of Apple Pie's decay window. */
@@ -539,10 +545,6 @@ public final class DietLogPages {
 		}
 	}
 
-	private static String two(double v) {
-		return String.format(Locale.ROOT, "%.2f", v);
-	}
-
 	private static final class MealsGrid extends UIElement {
 		private final Layout layout;
 		private final List<Meal> meals;
@@ -561,12 +563,14 @@ public final class DietLogPages {
 				double mine = contribution(m.item(), m.age());
 				Integer k = memory == null ? null : memory.get(new FoodInstance(m.item()));
 				double total = k == null ? mine : contribution(m.item(), k);
-				MutableComponent first = Component.translatable("solraspberrypie.dietlog.meal_this", two(mine)).withStyle(ChatFormatting.GRAY);
-				if (Math.abs(mine - total) > 1e-6) first = first.withStyle(ChatFormatting.STRIKETHROUGH);
-				List<Component> lines = List.of(
-						Component.translatable("solraspberrypie.dietlog.meal", n + 1, stack.getHoverName()),
-						first,
-						Component.translatable("solraspberrypie.dietlog.meal_total", two(total)).withStyle(ChatFormatting.GRAY));
+				// plan_diet_books_r2.md A2: the food total only when it differs from this meal, then this meal
+				// (struck through when the total is there).
+				boolean differs = !Icons.diversity(mine).equals(Icons.diversity(total));
+				List<Component> lines = new ArrayList<>();
+				lines.add(Component.translatable("solraspberrypie.dietlog.meal", n + 1, stack.getHoverName()));
+				if (differs) lines.add(Component.translatable("solraspberrypie.dietlog.meal_total", Icons.diversity(total)).withStyle(ChatFormatting.GRAY));
+				MutableComponent self = Component.translatable("solraspberrypie.dietlog.meal_this", Icons.diversity(mine)).withStyle(ChatFormatting.GRAY);
+				lines.add(differs ? self.withStyle(ChatFormatting.STRIKETHROUGH) : self);
 				UIElement cell = new MealCell(stack, lines);
 				cells.add(cell);
 				children.add(cell);
@@ -583,9 +587,13 @@ public final class DietLogPages {
 						Math.max(1, Math.round(GRID_ICON * s)), Math.max(1, Math.round(GRID_ICON * s)));
 			}
 			layout.begin(frame.x, frame.y);
-			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.meals", MealLog.length()), frame.x, frame.y, 0x000000);
+			// Labels centered over the grid (plan_diet_books_r2.md A2).
+			int gridW = MEAL_COLS * GRID_STEP - (GRID_STEP - GRID_ICON);
+			Component title = Component.translatable("solraspberrypie.dietlog.meals", MealLog.length());
+			fontRenderer.draw(pose, title, frame.x + (gridW - fontRenderer.width(title)) / 2F, frame.y, 0x000000);
 			if (meals.isEmpty()) {
-				fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.meals_none"), frame.x, frame.y + GRID_TITLE + 2, 0x777777);
+				Component none = Component.translatable("solraspberrypie.dietlog.meals_none");
+				fontRenderer.draw(pose, none, frame.x + (gridW - fontRenderer.width(none)) / 2F, frame.y + GRID_TITLE + 2, 0x777777);
 			}
 			for (int n = 0; n < meals.size(); n++) {
 				int x = frame.x + (n % MEAL_COLS) * GRID_STEP, y = frame.y + GRID_TITLE + (n / MEAL_COLS) * GRID_STEP;
@@ -622,28 +630,60 @@ public final class DietLogPages {
 	}
 
 	/**
-	 * The icon left of "Current Food Diversity" (ruling 12): a food eaten (Spice of Life: Carrot's list) whose Apple Pie
-	 * complexity sits in the band of all foods' complexities that the current diversity reaches as a share of the
-	 * ladder's top milestone (a 10% band of the complexity ranking). None eaten in the band, or no Carrot: the
-	 * {@code [dietLog] diversityIcons} pool for the diversity. The pick is stable while the diversity (to 0.1) is
-	 * unchanged. Returns null when nothing fits (Apple Pie's own image stays).
+	 * The icon left of "Current Food Diversity" (plan_diet_books_r2.md A7): the average base diversity value (Apple Pie
+	 * complexity) of the meals in the diet window, repeats counted, and the eaten food (Spice of Life: Carrot's list)
+	 * that is not a drink whose base value is closest to it; on a tie the one eaten most recently. With no meal in the
+	 * window, nothing eaten or no Carrot: one of the {@code [dietLog] diversityIconFallback} items, stable while the
+	 * diversity (to 0.1) is unchanged. Returns null when nothing fits (Apple Pie's own image stays).
 	 */
 	public static UIImage diversityIcon(UIImage.Image fallback) {
-		double div = currentDiversity();
-		List<Item> pool = List.of();
-		double top = topMilestone();
-		if (top > 0 && ModList.get().isLoaded("solcarrot")) {
-			try {
-				pool = band(Math.max(0, Math.min(1, div / top)), CarrotEaten.items());
-			} catch (RuntimeException | LinkageError e) {
-				pool = List.of();
+		long t0 = System.nanoTime();
+		try {
+			Item item = closestEaten();
+			if (item == null) item = fallbackItem(currentDiversity());
+			return item == null ? null : new FoodIcon(fallback, new ItemStack(item));
+		} finally {
+			OpenTiming.icon = System.nanoTime() - t0;
+		}
+	}
+
+	private static Item closestEaten() {
+		if (!ModList.get().isLoaded("solcarrot")) return null;
+		Map<FoodInstance, Integer> memory = clientMemory();
+		List<Meal> window = shownMeals(memory, MealLog.length());
+		if (window.isEmpty()) return null;
+		Map<Item, Double> base = new HashMap<>();
+		double sum = 0;
+		for (Meal m : window) sum += base.computeIfAbsent(m.item(), DietLogPages::complexity);
+		double avg = sum / window.size();
+		Set<Item> eaten;
+		try {
+			eaten = CarrotEaten.items();
+		} catch (RuntimeException | LinkageError e) {
+			return null;
+		}
+		Item best = null;
+		double bestGap = Double.MAX_VALUE;
+		int bestAge = Integer.MAX_VALUE;
+		String bestId = "";
+		for (Item item : eaten) {
+			if (Drinks.isDrink(item)) continue;
+			double c = base.computeIfAbsent(item, DietLogPages::complexity);
+			if (c < 0) continue;
+			double gap = Math.abs(c - avg);
+			Integer k = memory == null ? null : memory.get(new FoodInstance(item));
+			int age = k == null ? Integer.MAX_VALUE : k;
+			String id = String.valueOf(ForgeRegistries.ITEMS.getKey(item));
+			boolean better = gap < bestGap - 1e-9
+					|| (Math.abs(gap - bestGap) <= 1e-9 && (age < bestAge || (age == bestAge && id.compareTo(bestId) < 0)));
+			if (better) {
+				best = item;
+				bestGap = gap;
+				bestAge = age;
+				bestId = id;
 			}
 		}
-		if (pool.isEmpty()) pool = staticPool(div);
-		if (pool.isEmpty()) return null;
-		int seed = (int) Math.floor(div * 10);
-		Item item = pool.get(Math.floorMod(seed * 0x9E3779B1, pool.size()));
-		return new FoodIcon(fallback, new ItemStack(item));
+		return best;
 	}
 
 	private static double currentDiversity() {
@@ -655,13 +695,6 @@ public final class DietLogPages {
 		return ClientState.state == null ? 0 : ClientState.state.diversity;
 	}
 
-	private static double topMilestone() {
-		if (!ClientState.ready()) return 0;
-		double top = 0;
-		for (Rung r : ClientState.ladder.rungs) top = Math.max(top, r.threshold);
-		return top;
-	}
-
 	private static double complexity(Item item) {
 		try {
 			return FoodList.getComplexity(new FoodInstance(item));
@@ -670,59 +703,17 @@ public final class DietLogPages {
 		}
 	}
 
-	/** Eaten foods whose complexity lies in the band of the complexity ranking around {@code share}, by id. */
-	private static List<Item> band(double share, Set<Item> eaten) {
-		if (eaten.isEmpty()) return List.of();
-		List<Double> all = new ArrayList<>();
-		for (Item item : ForgeRegistries.ITEMS.getValues()) {
-			if (!item.isEdible()) continue;
-			try {
-				if (!SOLSweetPotatoConfig.shouldCount(item)) continue;
-			} catch (RuntimeException e) {
-				continue;
-			}
-			double c = complexity(item);
-			if (c >= 0) all.add(c);
+	/** One loaded item of the configured fallback list, picked by the diversity (to 0.1). */
+	private static Item fallbackItem(double div) {
+		if (!RpConfig.CLIENT_SPEC.isLoaded()) return null;
+		List<Item> items = new ArrayList<>();
+		for (String id : RpConfig.CLIENT.diversityIconFallback.get()) {
+			ResourceLocation rl = ResourceLocation.tryParse(id.trim());
+			if (rl != null && ForgeRegistries.ITEMS.containsKey(rl)) items.add(ForgeRegistries.ITEMS.getValue(rl));
 		}
-		if (all.isEmpty()) return List.of();
-		all.sort(Double::compare);
-		double lo = all.get((int) Math.floor(Math.max(0, share - 0.05) * (all.size() - 1)));
-		double hi = all.get((int) Math.ceil(Math.min(1, share + 0.05) * (all.size() - 1)));
-		List<Item> out = new ArrayList<>();
-		for (Item item : eaten) {
-			double c = complexity(item);
-			if (c >= lo - 1e-9 && c <= hi + 1e-9) out.add(item);
-		}
-		out.sort((a, b) -> String.valueOf(ForgeRegistries.ITEMS.getKey(a)).compareTo(String.valueOf(ForgeRegistries.ITEMS.getKey(b))));
-		return out;
-	}
-
-	/** The configured pool with the highest minimum diversity at or below {@code div}; loaded items only. */
-	private static List<Item> staticPool(double div) {
-		if (!RpConfig.CLIENT_SPEC.isLoaded()) return List.of();
-		double best = -1;
-		List<Item> out = List.of();
-		for (String entry : RpConfig.CLIENT.diversityIcons.get()) {
-			int eq = entry.indexOf('=');
-			if (eq <= 0) continue;
-			double min;
-			try {
-				min = Double.parseDouble(entry.substring(0, eq).trim());
-			} catch (NumberFormatException e) {
-				continue;
-			}
-			if (min > div || min <= best) continue;
-			List<Item> items = new ArrayList<>();
-			for (String id : entry.substring(eq + 1).split(",")) {
-				ResourceLocation rl = ResourceLocation.tryParse(id.trim());
-				if (rl == null || !ForgeRegistries.ITEMS.containsKey(rl)) continue;
-				items.add(ForgeRegistries.ITEMS.getValue(rl));
-			}
-			if (items.isEmpty()) continue;
-			best = min;
-			out = items;
-		}
-		return out;
+		if (items.isEmpty()) return null;
+		int seed = (int) Math.floor(div * 10);
+		return items.get(Math.floorMod(seed * 0x9E3779B1, items.size()));
 	}
 
 	/** Spice of Life: Carrot's eaten foods; only loaded with Carrot present. */
@@ -735,6 +726,42 @@ public final class DietLogPages {
 				if (f.item != null) out.add(f.item);
 			}
 			return out;
+		}
+	}
+
+	/**
+	 * Timing of one Diet Log open (plan_diet_books_r2.md A4): the page build, its diversity icon and meals grid, and
+	 * the first frame. One line per open in latest.log, so the owner's log shows what freezes.
+	 */
+	public static final class OpenTiming {
+		static long icon, grid;
+		private static long pagesStart, pagesTook;
+		private static boolean pendingFrame;
+
+		public static void pagesBegin() {
+			icon = 0;
+			grid = 0;
+			pagesStart = System.nanoTime();
+		}
+
+		public static void pagesEnd() {
+			pagesTook = System.nanoTime() - pagesStart;
+			pendingFrame = true;
+		}
+
+		public static boolean frameWanted() {
+			return pendingFrame;
+		}
+
+		public static void frameEnd(long took) {
+			if (!pendingFrame) return;
+			pendingFrame = false;
+			SolRaspberryPie.LOG.info("Diet Log open: pages {} ms (diversity icon {} ms, meals grid {} ms), first frame {} ms",
+					ms(pagesTook), ms(icon), ms(grid), ms(took));
+		}
+
+		private static String ms(long nanos) {
+			return String.format(Locale.ROOT, "%.1f", nanos / 1e6);
 		}
 	}
 

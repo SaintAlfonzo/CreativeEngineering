@@ -70,7 +70,8 @@
     "BlockUpdateNullStateMixin",
     "CreativePickBlockSyncMixin",
     "ChatOpenArmMixin",
-    "ChatOpenCharDropMixin"
+    "ChatOpenCharDropMixin",
+    "EffectColumnsMixin"
   ],
   "server": []
 }

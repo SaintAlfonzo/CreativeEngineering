@@ -95,7 +95,7 @@
 	#
 	#
 	#Range: 0 ~ 1000
-	endDecay = 30
+	endDecay = 32
 	#
 	# How many meals in the past should the diversity time penalty start to apply.
 	# **Needs to be less than queueSize and less than or equal to endDecay!!!**
