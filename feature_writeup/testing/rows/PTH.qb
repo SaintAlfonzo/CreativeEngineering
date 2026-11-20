@@ -1503,6 +1503,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @@sources feature_writeup/plan_passthrough.md
 @@table
 ## SQ-PTH-29 | foxes and bees: leaf piles do not slow them, snow layers do; a zombie is slowed by both
+@reviewed 2026-11-20
 @group A
 @commands Speed-0 fox, bee and zombie each standing in a 5-layer oak leaf pile; the same three in 5 snow layers; read the pass-through modifier with `zpth mod`
 @pass leaf pile: fox and bee `mod=none`, zombie a negative modifier; snow layers: fox, bee and zombie each a negative modifier
@@ -1537,9 +1538,9 @@ expect \[zpth\] mod b29s .* mod=-
 expect \[zpth\] mod z29s .* mod=-
 look a light mob standing on top of 5 snow layers (snow_layer_light: fox, bee) reads none because it is not inside the layers: if so, rerun the snow half at 3 layers, where every mob is inside
 > kill @e[tag=pth]
-@draft no batch holds this row yet
 
 ## SQ-PTH-30 | a fox does not plan a path across deep leaf piles
+@reviewed 2026-11-20
 @group A
 @commands A 1x9 pen of glass, 3 tall, at Z 1200; X 1004 a wall of 8-layer oak leaf piles (deeper than `pathBlockLayers` 6) across the pen; one fox on the west side; `cdevtest tickwarp 1200`; read the fox's position
 @pass the fox is still west of the leaf pile wall (X below 1004); LOOK: it wandered on its side (its X changed)
@@ -1557,4 +1558,3 @@ waitlog verb=tickwarp end=done ticks=1200 120
 expect has the following entity data: \[100[0-3]\.
 > kill @e[tag=pth]
 > fill 999 -61 1199 1009 -57 1201 minecraft:air
-@draft no batch holds this row yet

@@ -8,6 +8,8 @@
 @@date 2026-11-09
 @@jars creativedevtools
 @@sources feature_writeup/plan_structure_catalogue.md
+@@reviewed 2026-11-20
+@@prep level-type=creativedevtools:structure_catalogue
 @@text
 @@text Targets Creative Devtools 22:58 (installed in `mods/`). Needs a fresh level on the new preset: in `OUT/srv/server.properties` set `level-type=creativedevtools\:structure_catalogue` and a new `level-name`. The rule file is read from `kubejs/generation_scripts/worldgen/structure_world.json`. The IDs follow the plan's SCAT numbers; SCAT-01 to -04 are offline (`tools/test_worldgen_tools.sh` 2b). SQ-SCAT-07, -06 and -08 share one first boot: preview works while the build runs.
 @@text

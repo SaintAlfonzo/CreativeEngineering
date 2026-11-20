@@ -17,11 +17,11 @@
 ## SQ-MG-21 | Cod 'n' Chips merged into Fish and Chips
 @group A
 @commands Boot; `grep -n "itemMerges\|cod_n_chips" logs/kubejs/server.log \| head`; `/kubejs dump recipes` or the recipe probe for outputs `veggiesdelight:fish_and_chips` and `pneumaticcraft:cod_n_chips`; `/give @p pneumaticcraft:cod_n_chips` then check the inventory
-@pass no recipe makes or uses Cod 'n' Chips; Fish and Chips has only `creativedelight:cooking/fish_and_chips` (container bowl; the Fries grid route left with the Fries 2026-11-01); no `veggiesdelight:cooking/fish_and_chips` or its More Delight compat; the given stack becomes Fish and Chips (MG-48, VD-47)
+@pass no recipe makes or uses Cod 'n' Chips; Fish and Chips has only `creativedelight:farmersdelightcooking/fish_and_chips` plus its Slice & Dice mirror and the salting recipe (3 in all; container bowl; the Fries grid route left with the Fries 2026-11-01); no `veggiesdelight:cooking/fish_and_chips` or its More Delight compat; the given stack becomes Fish and Chips (MG-48, VD-47)
 @fails pair not loaded (startup `pneumaticcraft/item_merges.js` requires both mods); `already merged` warning
 @jars creativecommon creativedelight
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest makes pneumaticcraft:cod_n_chips
 > cdevtest uses pneumaticcraft:cod_n_chips
 > cdevtest makes veggiesdelight:fish_and_chips
@@ -32,8 +32,9 @@ sleep 3
 > clear mg21 pneumaticcraft:cod_n_chips 0
 expect verb=makes item=pneumaticcraft:cod_n_chips n=0
 expect verb=uses item=pneumaticcraft:cod_n_chips alone=0 shared=0
-expect verb=makes item=veggiesdelight:fish_and_chips n=[12]$
-expect creativedelight:\S*cooking/fish_and_chips ->
+# r1120lr batch fault: n=3 = creativedelight:farmersdelightcooking/fish_and_chips + its Slice & Dice mirror + the salting recipe (recipes/all.csv 2026-11-19); verb=makes prints id= result=, not '->'
+expect verb=makes item=veggiesdelight:fish_and_chips n=3\b
+expect verb=makes id=creativedelight:farmersdelightcooking/fish_and_chips result=
 reject veggiesdelight:cooking/fish_and_chips
 reject veggiesdelight:compat/moredelight\S*fish_and_chips
 expect Found 2 matching item
@@ -48,6 +49,7 @@ reject verb=\S+ .*done=0
 @pass no error from the edited files; no missing incomplete item for vegan_pizza, stuffed_zucchini_boat, stuffed_zucchinis, turnip_mutton_skewer, vegetarian_burger
 @fails transition_items.js row missing (startup, needs restart)
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-20
 kjsreject (?i)error.*(veggiesdelight/|moredelight/recipes|pneumaticcraft/recipes|creativeengineering/recipes)
 shell ! grep -n "no incomplete item registered" logs/kubejs/*.log
 
@@ -57,7 +59,7 @@ shell ! grep -n "no incomplete item registered" logs/kubejs/*.log
 @pass Mashed Potatoes: pot `creativedelight:...mashed_potatoes` (potato or potato slices x2, milk, bowl) and grid `mashed_potatoes_cooked_manual_only`; Mashed Sweet Potatoes: pot `mashed_sweet_potatoes` (sweet potato or sliced sweet potato x2, milk, bowl) and grid `mashed_sweet_potatoes_cooked_manual_only` (3 baked sweet potatoes); no `moredelight:cooking/mashed_potatoes`, `veggiesdelight:cooking/mashed_potatoes` or its Vintage version (VD-48)
 @fails ids differ: check the CD id prefix
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest makes moredelight:mashed_potatoes
 > cdevtest makes veggiesdelight:mashed_potatoes
 > cdevtest rdetail mashed_
@@ -77,7 +79,8 @@ reject verb=\S+ .*done=0
 @pass no recipe for either stuffed pepper item; no tags; the three bread ids absent; `creativedelight:...bread_from_dough_*` still list sweet potato dough via `#forge:dough` (VD-49, VD-50)
 @fails removedItems push in the startup file
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+@absent veggiesdelight:bread_from_ (a recipe id prefix the row checks is gone, not an item id)
 > cdevtest makes veggiesdelight:stuffed_bellpeppers_block
 > cdevtest makes veggiesdelight:stuffed_bellpepper
 > cdevtest recipes veggiesdelight:bread_from_
@@ -86,7 +89,8 @@ reject verb=\S+ .*done=0
 > cdevtest rdetail bread_from_dough
 expect verb=makes item=veggiesdelight:stuffed_bellpeppers_block n=0$
 expect verb=makes item=veggiesdelight:stuffed_bellpepper n=0$
-expect verb=recipes text=veggiesdelight:bread_from_ n=0$
+# r1120lr batch fault: verb=recipes prints 'n=0 shown=0', so the count is anchored on n= alone
+expect verb=recipes text=veggiesdelight:bread_from_ n=0\b
 expect verb=tagsof id=veggiesdelight:stuffed_bellpeppers_block .*item_tags=-$
 expect verb=tagsof id=veggiesdelight:stuffed_bellpepper .*item_tags=-$
 expect id=creativedelight:\S*bread_from_dough\S* serializer=.*sweet_potato_dough
@@ -99,7 +103,7 @@ reject verb=\S+ .*done=0
 @pass quiche: oven only (no grid or assembly recipe); pizza: one shaped `vegan_pizza_manual_only` (row 2 dough, sauce, dough) + one assembly on `#forge:dough`; boat and bowl: one assembly each on the roasted zucchini beside their grid / pot recipes; no `veggiesdelight:zucchini_quiche`, `compat/vintagedelight/zucchini_quiche`, `vegan_pizza` ids (VD-51, VD-52)
 @fails `F.assemble` needs Create; array step
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail zucchini_quiche
 > cdevtest rdetail vegan_pizza
 > cdevtest rdetail stuffed_zucchini
@@ -107,8 +111,10 @@ reject verb=\S+ .*done=0
 reject id=veggiesdelight:zucchini_quiche serializer=
 reject veggiesdelight:compat/vintagedelight/zucchini_quiche
 reject id=veggiesdelight:vegan_pizza serializer=
-count id=creativedelight:\S*zucchini_quiche_manual_only serializer= == 1
-count id=creativedelight:\S*zucchini_quiche\S*sequenced_assembly serializer= == 1
+# r1120lr batch fault: these two counts wanted 1 against the row's own @pass (quiche is oven only: creativedelight:baking/zucchini_quiche, recipes/all.csv 2026-11-19)
+count id=creativedelight:\S*zucchini_quiche\S*manual_only serializer= == 0
+count id=creativedelight:\S*zucchini_quiche\S*sequenced_assembly serializer= == 0
+expect id=creativedelight:baking/zucchini_quiche serializer=
 count id=creativedelight:\S*vegan_pizza_manual_only serializer= == 1
 count id=creativedelight:\S*vegan_pizza\S*sequenced_assembly serializer= == 1
 count id=creativedelight:\S*stuffed_zucchini_boat\S*sequenced_assembly serializer= == 1
@@ -123,7 +129,7 @@ reject verb=\S+ .*done=0
 @pass skewer and burger: shaped `_manual_only` + one assembly each, no shapeless; the patty from furnace, smoker and campfire (CD ids); the three More Delight burgers' shaped recipes accept the vegetarian patty; no `veggiesdelight:compat/moredelight/*hamburger*` (VD-53)
 @fails Platform check in creativedelight/recipes.js
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest rdetail turnip_mutton_skewer
 > cdevtest rdetail vegetarian_burger
 > cdevtest makes veggiesdelight:cooked_vegetarian_patty
@@ -131,7 +137,8 @@ reject verb=\S+ .*done=0
 reject verb=rdetail id=\S*turnip_mutton_skewer\S* serializer=minecraft:crafting_shapeless
 reject verb=rdetail id=\S*vegetarian_burger\S* serializer=minecraft:crafting_shapeless
 count id=creativedelight:\S*turnip_mutton_skewer\S*manual_only serializer= == 1
-count id=creativedelight:\S*turnip_mutton_skewer\S*sequenced_assembly serializer= == 1
+# r1120lr batch fault: the loose regex also matched raw_turnip_mutton_skewer_sequenced_assembly (BBQ raw skewer assembly, plan_meals_rolls_bbq C4 / barbeques_delight.md 4.8); the cooked skewer has one
+count id=creativedelight:createsequencedassembly/turnip_mutton_skewer_sequenced_assembly serializer= == 1
 count id=creativedelight:\S*vegetarian_burger\S*manual_only serializer= == 1
 count id=creativedelight:\S*vegetarian_burger\S*sequenced_assembly serializer= == 1
 expect verb=makes item=veggiesdelight:cooked_vegetarian_patty n=[3-9]
@@ -144,36 +151,38 @@ reject verb=\S+ .*done=0
 
 ## SQ-VDF-06 | fermented garlic honey in the pickle preserve family
 @group A
-@commands `/dumptags` item `creativeengineering:food_family/preserve/pickle`
+@commands `/dumptags` item `creativedelight:food_family/preserve/pickle` (moved from `creativeengineering:`)
 @pass holds `veggiesdelight:fermented_garlic_honey` (VD-54)
 @fails seasoning_tags.js read of food_families.json
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-16
-> cdevtest tag item creativeengineering:food_family/preserve/pickle
-expect verb=tag kind=item tag=creativeengineering:food_family/preserve/pickle n=\d+ ids=.*veggiesdelight:fermented_garlic_honey
+@reviewed 2026-11-20
+# r1120lr batch fault: stale namespace; the creativeengineering: tag is empty
+> cdevtest tag item creativedelight:food_family/preserve/pickle
+expect verb=tag kind=item tag=creativedelight:food_family/preserve/pickle n=\d+ ids=.*veggiesdelight:fermented_garlic_honey
 reject verb=\S+ .*done=0
 
 ## SQ-VDF-07 | Chips gone: no recipes, no tags, no Canned Chips
 @group A
-@commands Recipe lookup by output and input `pneumaticcraft:chips`, `creativeengineering:canned_chips`; `/give @p pneumaticcraft:chips`; JEI search "Chips"
+@commands Recipe lookup by output and input `pneumaticcraft:chips`, `creativedelight:canned_chips`; `/give @p pneumaticcraft:chips`; JEI search "Chips"
 @pass no recipe makes or uses Chips (no `creativedelight:cooking/fries`); Canned Chips does not exist (unknown item); Chips hidden in JEI; `/dumptags` lists no tag on Chips (owner, 2026-11-01, `merges/dishes #1`)
 @fails startup `pneumaticcraft/pneumatic_items.js` not loaded (requires line)
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
-@absent creativeengineering:canned_chips (removed; the row checks it is unknown)
+@reviewed 2026-11-20
+@absent creativedelight:canned_chips (removed; the row checks it is unknown)
 > cdevtest makes pneumaticcraft:chips
 > cdevtest uses pneumaticcraft:chips
 > cdevtest recipes creativedelight:cooking/fries
 > cdevtest tagsof pneumaticcraft:chips
-> give @a creativeengineering:canned_chips
-> cdevtest item creativeengineering:canned_chips
-expect verb=makes item=pneumaticcraft:chips n=0$
+> give @a creativedelight:canned_chips
+> cdevtest item creativedelight:canned_chips
+# r1120lr batch fault: 'n=0 shown=0' vs n=0$, and the expected unknown-item verb=item line ends done=0, which the old reject caught; cans are creativedelight: since the namespace move
+expect verb=makes item=pneumaticcraft:chips n=0\b
 expect verb=uses item=pneumaticcraft:chips alone=0 shared=0
-expect verb=recipes text=creativedelight:cooking/fries n=0$
+expect verb=recipes text=creativedelight:cooking/fries n=0\b
 expect verb=tagsof id=pneumaticcraft:chips .*item_tags=-$
-expect verb=item error="?no such item creativeengineering:canned_chips
+expect verb=item error="?no such item creativedelight:canned_chips
 look Chips hidden in JEI is the client half
-reject verb=\S+ .*done=0
+reject verb=(?!item )\S+ .*done=0
 
 ## SQ-VDF-08 | salting mashed potatoes (both mods)
 @group A
@@ -181,7 +190,7 @@ reject verb=\S+ .*done=0
 @pass both give a salted dish; the tag holds both (`merges/dishes #2`)
 @fails `i.t_can_be_salted` missing in item_dict, or `moredelight/tags.js` not loaded
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest tag item salt:can_be_salted
 > cdevtest uses moredelight:mashed_potatoes
 > cdevtest uses veggiesdelight:mashed_potatoes
@@ -192,29 +201,31 @@ reject verb=\S+ .*done=0
 
 ## SQ-VDF-09 | canning recipes for the new cans; no Canned Mhadjeb
 @group A
-@commands Recipe lookup by output: `creativeengineering:canned_mashed_potatoes`, `canned_mashed_sweet_potatoes`, `canned_bat_soup`, `canned_cave_soup`, `canned_insect_stew`, `canned_golden_nutritional_bar`; `/give @p creativeengineering:canned_mhadjeb`
-@pass each can has its canning recipe (the soups also `_broth`; the golden bar with honey); Canned Mhadjeb is unknown; CNS-08 rides on the same boot (Canned Noodle Soup Nourishment, Canned Bone Broth none)
+@commands Recipe lookup by output: `creativedelight:canned_mashed_potatoes`, `canned_mashed_sweet_potatoes`, `canned_bat_soup`, `canned_cave_soup`, `canned_insect_stew`, `canned_golden_nutritional_bar`; `/give @p creativedelight:canned_mhadjeb`
+@pass each can (`creativedelight:canned_*`, recipes `creativedelight:shapeless/canned_*` and `_broth`, recipes/all.csv) has its canning recipe (the soups also `_broth`; the golden bar with honey); Canned Mhadjeb is unknown; CNS-08 rides on the same boot (Canned Noodle Soup Nourishment, Canned Bone Broth none)
 @fails gen_can_types.py output not in the jar's cans.js read (restart)
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-16
-> cdevtest makes creativeengineering:canned_mashed_potatoes
-> cdevtest makes creativeengineering:canned_mashed_sweet_potatoes
-> cdevtest makes creativeengineering:canned_bat_soup
-> cdevtest makes creativeengineering:canned_cave_soup
-> cdevtest makes creativeengineering:canned_insect_stew
-> cdevtest makes creativeengineering:canned_golden_nutritional_bar
-> cdevtest item creativeengineering:canned_mhadjeb
-> cdevtest food creativeengineering:canned_noodle_soup
-> cdevtest food creativeengineering:canned_bone_broth
-expect verb=makes item=creativeengineering:canned_mashed_potatoes n=[1-9]
-expect verb=makes item=creativeengineering:canned_mashed_sweet_potatoes n=[1-9]
-expect verb=makes item=creativeengineering:canned_bat_soup n=[2-9]
-expect verb=makes item=creativeengineering:canned_cave_soup n=[2-9]
-expect verb=makes item=creativeengineering:canned_insect_stew n=[2-9]
-expect verb=makes item=creativeengineering:canned_golden_nutritional_bar n=[1-9]
-expect verb=item error="?no such item creativeengineering:canned_mhadjeb
+@reviewed 2026-11-20
+@absent creativedelight:canned_mhadjeb (never generated: the row checks it is unknown)
+# r1120lr batch fault: stale namespace (cans moved to creativedelight:); the unknown-item verb=item line ends done=0 on purpose, so the done=0 reject skips verb=item
+> cdevtest makes creativedelight:canned_mashed_potatoes
+> cdevtest makes creativedelight:canned_mashed_sweet_potatoes
+> cdevtest makes creativedelight:canned_bat_soup
+> cdevtest makes creativedelight:canned_cave_soup
+> cdevtest makes creativedelight:canned_insect_stew
+> cdevtest makes creativedelight:canned_golden_nutritional_bar
+> cdevtest item creativedelight:canned_mhadjeb
+> cdevtest food creativedelight:canned_noodle_soup
+> cdevtest food creativedelight:canned_bone_broth
+expect verb=makes item=creativedelight:canned_mashed_potatoes n=[1-9]
+expect verb=makes item=creativedelight:canned_mashed_sweet_potatoes n=[1-9]
+expect verb=makes item=creativedelight:canned_bat_soup n=[2-9]
+expect verb=makes item=creativedelight:canned_cave_soup n=[2-9]
+expect verb=makes item=creativedelight:canned_insect_stew n=[2-9]
+expect verb=makes item=creativedelight:canned_golden_nutritional_bar n=[1-9]
+expect verb=item error="?no such item creativedelight:canned_mhadjeb
 look CNS-08: canned noodle soup lists Nourishment, canned bone broth none; the golden bar can recipe uses honey; soups have a _broth recipe
-reject verb=\S+ .*done=0
+reject verb=(?!item )\S+ .*done=0
 
 ## SQ-VDF-10 | doughs compost at 85 %
 @group A
@@ -222,6 +233,7 @@ reject verb=\S+ .*done=0
 @pass each adds a layer at 85 % (owner, 2026-11-01); cucumber noodles unchanged
 @fails `doughs` category order in CD `compost_rules.js`
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
 > dumpcompost
 waitlog Dumped compost table 300
 shell python3 -I $INST/tools/scratch_query/dumpq.py compost create:dough=0.85 vintagedelight:oat_dough=0.85 vintagedelight:cucumber_dough=0.85 veggiesdelight:sweet_potato_dough=0.85 farmersdelight:wheat_dough=0.85

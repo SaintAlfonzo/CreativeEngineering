@@ -1,0 +1,184 @@
+W feature_writeup/testing/rows/BBQF.qb:89 SQ-BBQF-06: dead id: barbequesdelight:cumin not in the registry dump
+W feature_writeup/testing/rows/BBQF.qb:557 SQ-NEST-01: dead id: incubation_additions:nest_duck not in the registry dump
+W feature_writeup/testing/rows/BBQF.qb:558 SQ-NEST-01: dead id: incubation_additions:nest_goose not in the registry dump
+W feature_writeup/testing/rows/BBQF.qb:559 SQ-NEST-01: dead id: incubation_additions:nest_emu not in the registry dump
+W feature_writeup/testing/rows/CWG.qb:94 SQ-CWG-06: dead id: minecraft:pillager_outpost not in the registry dump
+W feature_writeup/testing/rows/CWG.qb:96 SQ-CWG-06: dead id: minecraft:village_plains not in the registry dump
+W feature_writeup/testing/rows/CWG.qb:170 SQ-CWG-08a: dead id: minecraft:village_plains not in the registry dump
+W feature_writeup/testing/rows/DNR.qb:151 SQ-DNR-E-02: dead id: endersdelight:end_house not in the registry dump
+W feature_writeup/testing/rows/EFB.qb:506 SQ-EFB-07 (water kept on purpose): dead id: farmers_structures:aquacultures_common not in the registry dump
+W feature_writeup/testing/rows/EFB.qb:507 SQ-EFB-07 (water kept on purpose): dead id: farmers_structures:aquacultures_carp not in the registry dump
+W feature_writeup/testing/rows/EFB.qb:537 SQ-EFB-08 (earth, desert): dead id: philipsruins:ancient_ruins not in the registry dump
+W feature_writeup/testing/rows/EFB.qb:538 SQ-EFB-08 (earth, desert): dead id: philipsruins:ancient_ruins not in the registry dump
+W feature_writeup/testing/rows/EFB.qb:751 SQ-EFB-10 (earth, the beard band): dead id: #minecraft:village not in the tag dump
+W feature_writeup/testing/rows/EFB.qb:765 SQ-EFB-10 (earth, the beard band): dead id: #minecraft:village not in the tag dump
+W feature_writeup/testing/rows/EFB.qb:779 SQ-EFB-10 (earth, the beard band): dead id: #minecraft:village not in the tag dump
+W feature_writeup/testing/rows/EFB.qb:834 SQ-EFB-14 (undead castle, new air limit): dead id: eugene:undead_castle not in the registry dump
+W feature_writeup/testing/rows/EFB.qb:1009 SQ-EFB-21 (sand base, counted): dead id: towns_and_towers:village_badlands not in the registry dump
+W feature_writeup/testing/rows/FO.qb:588 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:589 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:590 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:591 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:592 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:593 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:594 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:595 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:596 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:597 SQ-VTD9-01: dead id: vintagedelight:magic_vine_tree not in the registry dump
+W feature_writeup/testing/rows/FO.qb:882 SQ-FO-07: dead id: moredelight:omelette_smelting not in the registry dump
+W feature_writeup/testing/rows/FSD.qb:26 SQ-FSD-02: dead id: farmers_structures:cooks not in the registry dump
+W feature_writeup/testing/rows/GLD.qb:67 SQ-SLT-04: dead id: salt:salt_from_raw_rock_salt not in the registry dump
+W feature_writeup/testing/rows/GLD.qb:327 SQ-ENM-04b: dead id: creativedelight:endersdelight not in the registry dump
+W feature_writeup/testing/rows/GLD.qb:335 SQ-ENM-04b: dead id: creativedelight:endersdelight not in the registry dump
+W feature_writeup/testing/rows/GLD.qb:346 SQ-ENM-05: dead id: creativeengineering:spices not in the registry dump
+W feature_writeup/testing/rows/GLD.qb:362 SQ-ENM-05b: dead id: creativeengineering:spices not in the registry dump
+W feature_writeup/testing/rows/HCS.qb:83 SQ-HCS-04: dead id: minecraft:village_plains not in the registry dump
+W feature_writeup/testing/rows/HCS.qb:86 SQ-HCS-04: dead id: minecraft:village_plains not in the registry dump
+W feature_writeup/testing/rows/HCS.qb:89 SQ-HCS-04: dead id: minecraft:village_desert not in the registry dump
+W feature_writeup/testing/rows/HCS.qb:92 SQ-HCS-04: dead id: minecraft:village_savanna not in the registry dump
+W feature_writeup/testing/rows/HCS.qb:95 SQ-HCS-04: dead id: minecraft:village_taiga not in the registry dump
+W feature_writeup/testing/rows/HCS.qb:98 SQ-HCS-04: dead id: minecraft:village_snowy not in the registry dump
+W feature_writeup/testing/rows/HH.qb:1564 SQ-HH-1180: dead id: hearthandharvest:cherry_half_cabinet not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6275 SQ-HH-318: dead id: hearthandharvest:salt_cave not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6292 SQ-HH-319: dead id: hearthandharvest:salt_cave not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6310 SQ-HH-320: dead id: hearthandharvest:salt_cave not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6311 SQ-HH-320: dead id: hearthandharvest:corn_maze not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6356 SQ-HH-323: dead id: hearthandharvest:corn_maze not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6417 SQ-HH-328: dead id: hearthandharvest:corn_maze not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6457 CQ-HH-301: dead id: hearthandharvest:corn_maze not in the registry dump
+W feature_writeup/testing/rows/HH.qb:6936 SQ-HH-410: dead id: creativedelight:has_crows not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10167 SQ-HH-1532: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10186 SQ-HH-1533: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10216 SQ-HH-1534: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10243 SQ-HH-1535: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10265 SQ-HH-1536: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10325 SQ-HH-1539: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10347 SQ-HH-1540: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10370 SQ-HH-1541: dead id: hearthandharvest:harvesting not in the registry dump
+W feature_writeup/testing/rows/HH.qb:10934 SQ-HH-1584: dead id: hearthandharvest:long_bad_omen not in the registry dump
+W feature_writeup/testing/rows/HOP.qb:384 SQ-HH-1546c: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/HOP.qb:388 SQ-HH-1546c: dead id: hearthandharvest:tilling not in the registry dump
+W feature_writeup/testing/rows/NSM.qb:16 SQ-NSM-01: dead id: creativedelight:seasoning not in the registry dump
+W feature_writeup/testing/rows/NSM.qb:204 SQ-NSM-08: dead id: creativeworldgen:sky_island not in the registry dump
+W feature_writeup/testing/rows/OB.qb:89 SQ-OB-06: dead id: corn_delight:corn_cob not in the registry dump
+W feature_writeup/testing/rows/OB.qb:245 SQ-OB-10: dead id: creativedelight:wooden_ not in the registry dump
+W feature_writeup/testing/rows/PJL.qb:50 SQ-PJL-02: dead id: upgrade_aquatic:mulberry_jam not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:74 SQ-FCB-01: dead id: farmersdelight:cabbage_from_leaves not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:90 SQ-FCB-01: dead id: hostiledelight:ppicklerecp not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:129 SQ-FCB-02: dead id: creativeengineering:patty not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:156 SQ-FCB-03: dead id: creativeengineering:sweeteners not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:164 SQ-FCB-03: dead id: creativeengineering:counter_toppers not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:166 SQ-FCB-03: dead id: creativeengineering:hammer_no_rotate not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:862 SQ-PSD-03: dead id: upgrade_aquatic:river_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:863 SQ-PSD-03: dead id: upgrade_aquatic:river_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:864 SQ-PSD-03: dead id: upgrade_aquatic:river_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:865 SQ-PSD-03: dead id: upgrade_aquatic:river_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:866 SQ-PSD-03: dead id: upgrade_aquatic:river_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:890 SQ-PSD-04: dead id: minecraft:azalea_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:891 SQ-PSD-04: dead id: minecraft:azalea_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:892 SQ-PSD-04: dead id: minecraft:azalea_tree not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:935 SQ-PSD-06: dead id: minecraft:village_savanna not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:1431 SQ-PSM-05: dead id: unwrecked_ships:ship not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:1446 SQ-PSM-05: dead id: eugene:witch_wagon not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:1461 SQ-PSM-05: dead id: minecraft:swamp_hut not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2010 SQ-PSW-02 (ST-294): dead id: philipsruins:lost_soul_city not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2018 SQ-PSW-02 (ST-294): dead id: philipsruins:lost_soul_dungeon not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2026 SQ-PSW-02 (ST-294): dead id: philipsruins:rare_ruin not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2034 SQ-PSW-02 (ST-294): dead id: philipsruins:start_nether_ruin not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2042 SQ-PSW-02 (ST-294): dead id: philipsruins:lost_soul_city not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2044 SQ-PSW-02 (ST-294): dead id: philipsruins:lost_soul_dungeon not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2046 SQ-PSW-02 (ST-294): dead id: philipsruins:rare_ruin not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2048 SQ-PSW-02 (ST-294): dead id: philipsruins:start_nether_ruin not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2136 SQ-PSU-02: dead id: curios:mouth not in the registry dump
+W feature_writeup/testing/rows/PSU.qb:2138 SQ-PSU-02: dead id: creativeengineering:trimmable_armor not in the registry dump
+W feature_writeup/testing/rows/PWG.qb:3270 SQ-PWG-58: dead id: minecraft:oak not in the registry dump
+W feature_writeup/testing/rows/RDB.qb:40 SQ-RDB-04: dead id: rusticdelight:wild_bell_peppers_placed not in the registry dump
+W feature_writeup/testing/rows/RDB.qb:41 SQ-RDB-04: dead id: rusticdelight:wild_cotton_placed not in the registry dump
+W feature_writeup/testing/rows/RDB.qb:42 SQ-RDB-04: dead id: rusticdelight:wild_coffee_placed not in the registry dump
+W feature_writeup/testing/rows/RDB.qb:43 SQ-RDB-04: dead id: rusticdelight:bell_pepper_block_patch_placed not in the registry dump
+W feature_writeup/testing/rows/RD.qb:811 SQ-MDP-06: dead id: farmersdelight:onion_soup not in the registry dump
+W feature_writeup/testing/rows/RD.qb:927 SQ-MDP-10: dead id: miners_delight:copper_cup not in the registry dump
+W feature_writeup/testing/rows/RD.qb:1805 SQ-SNF-02: dead id: creativedelight:seasoning not in the registry dump
+W feature_writeup/testing/rows/RD.qb:3609 SQ-RD-07: dead id: creativeengineering:roasted_bell_pepper not in the registry dump
+W feature_writeup/testing/rows/RD.qb:3653 SQ-RD-10: dead id: minecraft:village_savanna not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4173 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4174 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4175 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4176 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4177 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4178 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4179 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4180 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4181 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4182 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4183 SQ-RD-24: dead id: rusticdelight:bell_pepper_block_patch not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4267 SQ-RD-27: dead id: minecraft:village_desert not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4270 SQ-RD-27: dead id: minecraft:village_snowy not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4273 SQ-RD-27: dead id: minecraft:village_taiga not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4722 SQ-CDQ-06: dead id: fungidelight:inky_cap_salad not in the registry dump
+W feature_writeup/testing/rows/RD.qb:4919 SQ-CDF-01: dead id: creativedelight:carrot_juice_bucket not in the registry dump
+W feature_writeup/testing/rows/RING.qb:22 SQ-RING-01: dead id: minecraft:stronghold not in the registry dump
+W feature_writeup/testing/rows/RING.qb:35 SQ-RING-02: dead id: minecraft:stronghold not in the registry dump
+W feature_writeup/testing/rows/SALT.qb:331 SQ-META31-04: dead id: minecraft:desert_pyramid not in the registry dump
+W feature_writeup/testing/rows/SALT.qb:1167 SQ-SALT-01: dead id: salt:salt_packing not in the registry dump
+W feature_writeup/testing/rows/SALT.qb:1168 SQ-SALT-01: dead id: vintagedelight:salt_block_deconstruct not in the registry dump
+W feature_writeup/testing/rows/SALT.qb:1169 SQ-SALT-01: dead id: vintagedelight:salt_from_smelting not in the registry dump
+W feature_writeup/testing/rows/SALT.qb:1170 SQ-SALT-01: dead id: vintagedelight:salt_bucket_to_salt not in the registry dump
+W feature_writeup/testing/rows/SALT.qb:1240 SQ-SALT-04: dead id: vintagedelight:patch_salt not in the registry dump
+W feature_writeup/testing/rows/STD.qb:18 SQ-STD-01: dead id: storagedelight:bamboo_ not in the registry dump
+W feature_writeup/testing/rows/STN.qb:64 SQ-STN-02: dead id: creativedelight:remainder_buffer not in the registry dump
+W feature_writeup/testing/rows/STN.qb:143 SQ-STN-06: dead id: creativedelight:remainder_buffer not in the registry dump
+W feature_writeup/testing/rows/STN.qb:146 SQ-STN-06: dead id: creativedelight:remainder_buffer not in the registry dump
+W feature_writeup/testing/rows/STN.qb:149 SQ-STN-06: dead id: creativedelight:remainder_buffer not in the registry dump
+W feature_writeup/testing/rows/SVA.qb:65 SQ-SVA-03: dead id: skyvillages:skyvillage not in the registry dump
+W feature_writeup/testing/rows/SVA.qb:84 SQ-SVA-03: dead id: skyvillages:skyvillage not in the registry dump
+W feature_writeup/testing/rows/SVA.qb:85 SQ-SVA-03: dead id: skyvillages:skyvillage not in the registry dump
+W feature_writeup/testing/rows/SVA.qb:86 SQ-SVA-03: dead id: skyvillages:skyvillage not in the registry dump
+W feature_writeup/testing/rows/SVA.qb:87 SQ-SVA-03: dead id: skyvillages:skyvillage not in the registry dump
+W feature_writeup/testing/rows/TER.qb:34 SQ-TER-02: dead id: farmers_structures:aquacultures_common not in the registry dump
+W feature_writeup/testing/rows/TER.qb:35 SQ-TER-02: dead id: farmers_structures:aquacultures_carp not in the registry dump
+W feature_writeup/testing/rows/TER.qb:51 SQ-TER-03: dead id: terralith:spire not in the registry dump
+W feature_writeup/testing/rows/TER.qb:52 SQ-TER-03: dead id: terralith:spire not in the registry dump
+W feature_writeup/testing/rows/TER.qb:62 SQ-TER-04: dead id: philipsruins:level_three_ruins not in the registry dump
+W feature_writeup/testing/rows/TER.qb:63 SQ-TER-04: dead id: philipsruins:level_three_ruins not in the registry dump
+W feature_writeup/testing/rows/TP.qb:74 SQ-TP-04: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:96 SQ-TP-04: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:147 SQ-TP-05: dead id: tempad:teleport not in the registry dump
+W feature_writeup/testing/rows/TP.qb:147 SQ-TP-05: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:447 SQ-TP-22: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:452 SQ-TP-22: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:460 SQ-TP-22: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:466 SQ-TP-22: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:472 SQ-TP-22: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:555 SQ-TP-27: dead id: tempad:new_location not in the registry dump
+W feature_writeup/testing/rows/TP.qb:611 SQ-TP-28: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:650 SQ-TP-30: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:794 SQ-TP-41: dead id: tempad:default not in the registry dump
+W feature_writeup/testing/rows/TP.qb:795 SQ-TP-41: dead id: tempad:teleport not in the registry dump
+W feature_writeup/testing/rows/TP.qb:795 SQ-TP-41: dead id: tempad:pinned_location not in the registry dump
+W feature_writeup/testing/rows/TX.qb:450 SQ-TX-19: dead id: minecraft:bogus not in the registry dump
+W feature_writeup/testing/rows/VH.qb:97 SQ-VH-06b: dead id: minecraft:block not in the registry dump
+W feature_writeup/testing/rows/VH.qb:197 SQ-VH-09: dead id: betterfortresses:fortress not in the registry dump
+W feature_writeup/testing/rows/VH.qb:199 SQ-VH-09: dead id: minecraft:bastion_remnant not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:236 SQ-WGE-05b (A5): dead id: minecraft:village_plains not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:245 SQ-WGE-05b (A5): dead id: minecraft:village_desert not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:253 SQ-WGE-05b (A5): dead id: minecraft:village_savanna not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:261 SQ-WGE-05b (A5): dead id: minecraft:village_snowy not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:269 SQ-WGE-05b (A5): dead id: minecraft:village_taiga not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:278 SQ-WGE-05b (A5): dead id: minecraft:village_plains not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:286 SQ-WGE-05b (A5): dead id: minecraft:village_desert not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:294 SQ-WGE-05b (A5): dead id: minecraft:village_savanna not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:302 SQ-WGE-05b (A5): dead id: minecraft:village_snowy not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:310 SQ-WGE-05b (A5): dead id: minecraft:village_taiga not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:398 SQ-WGE-09 (A7): dead id: philipsruins:lost_soul_city not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:400 SQ-WGE-09 (A7): dead id: philipsruins:lost_soul_dungeon not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:402 SQ-WGE-09 (A7): dead id: philipsruins:rare_ruin not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:404 SQ-WGE-09 (A7): dead id: philipsruins:start_nether_ruin not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:406 SQ-WGE-09 (A7): dead id: philipsruins:lost_soul_city not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:408 SQ-WGE-09 (A7): dead id: philipsruins:lost_soul_dungeon not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:410 SQ-WGE-09 (A7): dead id: philipsruins:rare_ruin not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:412 SQ-WGE-09 (A7): dead id: philipsruins:start_nether_ruin not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:532 SQ-MOB-N6: dead id: minecraft:pillager_outpost not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:537 SQ-MOB-N6: dead id: minecraft:pillager_outpost not in the registry dump
+W feature_writeup/testing/rows/WGE.qb:542 SQ-MOB-N6: dead id: minecraft:pillager_outpost not in the registry dump
+qrowlint: 69 file(s), 0 error(s), 2073 warning(s)

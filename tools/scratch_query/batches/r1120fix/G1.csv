@@ -1,0 +1,91 @@
+id,file,kind,action,detail
+SQ-WCT-06,feature_writeup/testing/rows/FO.qb,prefixed,forceload add 144 496 212 512 + sleep 3,"W unloaded: the batch forceload sits in SQ-CF-02 (group B, another step)"
+SQ-WCT-07,feature_writeup/testing/rows/FO.qb,prefixed,forceload add 144 496 212 512 + sleep 3,"W unloaded: the batch forceload sits in SQ-CF-02 (group B, another step)"
+SQ-SGF-01,feature_writeup/testing/rows/FO.qb,prefixed,forceload add 144 496 212 512 + sleep 3,"W unloaded: the batch forceload sits in SQ-CF-02 (group B, another step)"
+SQ-SGF-02,feature_writeup/testing/rows/FO.qb,prefixed,forceload add 144 496 212 512 + sleep 3,"W unloaded: the batch forceload sits in SQ-CF-02 (group B, another step)"
+SQ-WCT-08,feature_writeup/testing/rows/FO.qb,prefixed,forceload added; look line rewritten,"W unloaded; look named the retired ""[zq] useitem"" output, now ""[cdevtest] verb=useair who=wct8 ... result="""
+SQ-VTD9-01,feature_writeup/testing/rows/FO.qb,prefixed,forceload widened to -8 992 200 1060; @absent for the feature id,fills reach x -3 / z 997 (W unloaded); vintagedelight:magic_vine_tree is a data-driven configured feature in the Vintage member (not in the registry dump)
+SQ-FO-06,feature_writeup/testing/rows/FO.qb,reviewed,@reviewed 2026-11-20,"sources: oil input became #rusticdelight:cooking_oil (wave D), food.md only gained an audit link; expectations unaffected"
+SQ-FO-07,feature_writeup/testing/rows/FO.qb,prefixed,@reviewed 2026-11-20; @absent moredelight:omelette_smelting,dead-id was a removed recipe id in a negative test (n=0)
+SQ-FO-08,feature_writeup/testing/rows/FO.qb,reviewed,@reviewed 2026-11-20,food.md 2026-11-20 change is one audit link line
+SQ-FO-09,feature_writeup/testing/rows/FO.qb,reviewed,@reviewed 2026-11-20,food.md 2026-11-20 change is one audit link line
+SQ-FO-10,feature_writeup/testing/rows/FO.qb,reviewed,@reviewed 2026-11-20,food.md 2026-11-20 change is one audit link line
+SQ-FO-11,feature_writeup/testing/rows/FO.qb,reviewed,@reviewed 2026-11-20,food.md 2026-11-20 change is one audit link line
+SQ-SLT-04,feature_writeup/testing/rows/GLD.qb,prefixed,@absent salt:salt_from_raw_rock_salt,"removed recipe id in a negative test (n=0), not a dead id"
+SQ-SLT-05,feature_writeup/testing/rows/GLD.qb,prefixed,"awk {print} -> grep -qE ""^\[salt\]""; @reviewed 2026-11-20",W var {print} (awk braces read as a placeholder)
+SQ-CNG-02,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload; ids creativeengineering:canned_beetroot and cans/servings -> creativedelight:,{SAH} unset; ids moved (dump: creativedelight:canned_beetroot in creativedelight:cans/servings/2)
+SQ-CNG-04,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset when the row runs alone; @reviewed 2026-11-20
+SQ-ENM-04,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset when the row runs alone
+SQ-GLD-02,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset when the row runs alone
+SQ-GLD-04,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset when the row runs alone
+SQ-GLD-05,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset when the row runs alone
+SQ-GLD-07,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset when the row runs alone
+SQ-GLD-14,feature_writeup/testing/rows/GLD.qb,prefixed,own sbhome home + forceload; @reviewed 2026-11-20,{SBH} unset when run alone
+SQ-ENM-03,feature_writeup/testing/rows/GLD.qb,prefixed,own sbhome home + forceload,"{SBH1,3} unset; W unloaded"
+SQ-GLD-09,feature_writeup/testing/rows/GLD.qb,prefixed,own sbhome home + forceload,"{SBH1,3} unset (step 55)"
+SQ-MDL-02,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset (step 176)
+SQ-MDL-03,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset (step 176)
+SQ-MDL-04,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset (step 176)
+SQ-MDL-05,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset (step 176)
+SQ-ENM-04b,feature_writeup/testing/rows/GLD.qb,prefixed,recipes search creativedelight:endersdelight -> voidpepper; switch restored to true + /reload at row end,no recipe id has that prefix (ids are by type folder now); row left enders_additions=false for the rest of the boot. W cfgedit kept: the row tests /reload behavior by design
+SQ-ENM-05,feature_writeup/testing/rows/GLD.qb,prefixed,#creativeengineering:spices -> #creativedelight:spices; @reviewed 2026-11-20,"tag moved 2026-11-09 (dump: creativedelight:spices holds voidpepper, crushed_voidpepper)"
+SQ-ENM-05b,feature_writeup/testing/rows/GLD.qb,prefixed,same spices tag move; @reviewed 2026-11-20,see candidate-supersede note in report
+SQ-PCK-03,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload; placed_sweet_potato_pancakes -> creativedelight:,not in the drive
+SQ-PCK-01,feature_writeup/testing/rows/GLD.qb,prefixed,creativeengineering:placed_sweet_potato_pancakes / food tags -> creativedelight:; @reviewed 2026-11-20,ids moved; not in the drive
+SQ-PCK-04,feature_writeup/testing/rows/GLD.qb,prefixed,creativeengineering:placed_sweet_potato_pancakes / food tags -> creativedelight:; @reviewed 2026-11-20,ids moved; not in the drive
+SQ-PCK-02,feature_writeup/testing/rows/GLD.qb,suspected-product,tags rewritten to creativedelight:food_type/sweet/pancake etc.; n=7 left,dump has 8 in food_type/sweet/pancake and food_family/dessert/pancake: hearthandharvest:waffle added; row says exactly 7; intent unknown
+SQ-SWP-02,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset; not in the drive
+SQ-SWP-04,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload,{SAH} unset; not in the drive
+SQ-SWP-03,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload; @reviewed 2026-11-20,{SAH} unset; plan diff text-only
+SQ-SWP-05,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload; @reviewed 2026-11-20,{SAH} unset; plan diff text-only
+SQ-SWP-06,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload; @reviewed 2026-11-20,{SAH} unset; plan diff text-only
+SQ-SWP-07,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload; @reviewed 2026-11-20,{SAH} unset; plan diff text-only
+SQ-SWP-08,feature_writeup/testing/rows/GLD.qb,prefixed,own sahome home + forceload; @reviewed 2026-11-20,{SAH} unset; plan diff text-only
+SQ-SWP-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md changes since 2026-11-02 are renames, spelling, ISO dates, generated Open work block"
+SQ-SLT-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-SLT-02,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-SLT-03,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-CNG-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-ENM-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-GLD-06,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-MDL-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-GLD-10,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-SLT-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-SLT-02,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-CNG-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-CNG-02,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-GLD-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-GLD-02,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-GLD-03,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-PCK-01,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+CQ-PCK-02,feature_writeup/testing/rows/GLD.qb,reviewed,@reviewed 2026-11-20,"plan_creative_delight.md diff is text-only (patcherMod -> Creative Common, spelling, dates, prefixes)"
+SQ-HCS-04,feature_writeup/testing/rows/HCS.qb,prefixed,@absent for the five vanilla village structure ids; @reviewed 2026-11-20,"structure ids missing from the registry dump, not dead"
+SQ-HCS-01,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-HCS-02,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-HCS-03,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-HCS-05,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-HCS-06,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-HCS-08,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-HCS-09,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-HCS-10,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+CQ-HCS-01,feature_writeup/testing/rows/HCS.qb,reviewed,@reviewed 2026-11-20,"plan_hearth_crow_swap.md diff: spelling, dates, generated block, a PASS note"
+SQ-FF-03,feature_writeup/testing/rows/FF.qb,unfixed,none,step 44 was running when work started; lint showed no warnings for it anyway
+SQ-FF-04,feature_writeup/testing/rows/FF.qb,unfixed,none,step 44 was running when work started; lint showed no warnings for it anyway
+SQ-FF-05,feature_writeup/testing/rows/FF.qb,unfixed,none,step 44 was running when work started; lint showed no warnings for it anyway
+SQ-FF-06,feature_writeup/testing/rows/FF.qb,unfixed,none,step 44 was running when work started; lint showed no warnings for it anyway
+SQ-FF-07,feature_writeup/testing/rows/FF.qb,unfixed,none,step 44 was running when work started; lint showed no warnings for it anyway
+SQ-FF-08,feature_writeup/testing/rows/FF.qb,unfixed,none,step 44 was running when work started; lint showed no warnings for it anyway
+SQ-DEP-05,feature_writeup/testing/rows/DEP.qb,bf-fixed,forceload add 328 296 336 304 + sleep 3; @reviewed 2026-11-20,campfire area not loaded
+SQ-DRK-01,feature_writeup/testing/rows/DRK.qb,bf-fixed,own s5home marker + capture S5H + forceload; @reviewed 2026-11-20,{S5H*} unset (old r1103 batch)
+SQ-DRK-04,feature_writeup/testing/rows/DRK.qb,bf-fixed,bytype create:filling dropped; expects on the recipes lines for createfilling/createemptying kiwi_tea and lychee_juice; rdetail createfilling/kiwi_tea added; s5 spout lines kept as diagnostic look; @reviewed 2026-11-20,"bytype capped at 500 lines; s5 spout probe reads -1 mB for the water control too. Probe NOT edited: s5_probe.js is also used by CCO.qb, RB.qb, PSU.qb (spout verb only by DRK)"
+SQ-EX-01,feature_writeup/testing/rows/EX.qb,bf-fixed,expect Gave 1\s+\[,server pads the count
+SQ-BOT-04,feature_writeup/testing/rows/FCK.qb,bf-fixed,reject half=upper dropped; shell reads the phases of kubejs/data/fruitsdelight/recipes/botanypots/lemon.json (all half=lower); growthTicks 9600 (= the override 1200 x 8) proves the override loaded; @reviewed 2026-11-20,zz_c3_probe prints TransitionalDisplayState@hash; c3_probe.js not edited (CCO.qb also uses it)
+SQ-FCK-20,feature_writeup/testing/rows/FCK.qb,bf-fixed,forceload add 1196 1196 1240 1208; log count 35 rules on 33 blocks (IdleTickRules: two rules each on redeco stone_lantern and deepslate_lantern); @reviewed 2026-11-20,area not loaded; stale count
+SQ-FCK-21,feature_writeup/testing/rows/FCK.qb,bf-fixed,forceload add 1246 1196 1258 1204; own bot G spawned and tp to 1254.5 -60 1202.5 before the pick; @reviewed 2026-11-20,area not loaded; bot G came from another row
+SQ-FCK-23,feature_writeup/testing/rows/FCK.qb,bf-fixed,forceload add 1254 1236 1270 1248; @reviewed 2026-11-20,area not loaded
+SQ-MG-23,feature_writeup/testing/rows/FCK.qb,bf-fixed,"count 2 -> 4 pack merges (Common _lib/item_merges.js: rocky dirt, azalea flowers, two Little Logistics components -> create:redstone_link); @reviewed 2026-11-20",stale count; item_merges.md line 553 still says 2 (doc not in my files)
+SQ-MG-24,feature_writeup/testing/rows/FCK.qb,bf-fixed,"rope regex allows empty grid slots: (?:empty,)*string x3 (?:,empty)*$; forceload over the loot spawn spot 1080 -60 1000; @reviewed 2026-11-20",shaped grid printed with empty slots
+SQ-T1-02,feature_writeup/testing/rows/FCK.qb,bf-fixed,hazard tag: cookedrottenham and rottenham each checked on their own; @reviewed 2026-11-20,hostiledelight:frozen_flesh sorts between them
+SQ-FDI-05,feature_writeup/testing/rows/FDI.qb,bf-fixed,world dir from level-name in server.properties; @reviewed 2026-11-20,hardcoded r1113c4a dir
+SQ-FF-07,feature_writeup/testing/rows/FF.qb,bf-fixed,reject the exact id line verb=recipes id=minecraft:melon result= instead of the count; rdetail creativedelight:shapeless/pineapple_from_slices asked by id with expect result=fruitsdelight:pineapple*1,substring search hit melon_seeds; rdetail _from_slices capped at 40 of 46
+SQ-DEP-02,feature_writeup/testing/rows/DEP.qb,unfixed,none,needs an @modset change: drive owner takes it (coordinator)

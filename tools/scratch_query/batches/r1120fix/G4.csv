@@ -1,0 +1,157 @@
+id,file,kind,action,detail
+SQ-RB-21,RB.qb,prefixed,own s5home marker + S5H capture + forceload; @reviewed 2026-11-20,{S5H1..3} unset when run alone (r1102b boot capture); remainder_buffer.md diff since 2026-11-16 is wording only
+SQ-RB-22,RB.qb,prefixed,own s5home marker + S5H capture + forceload; @reviewed 2026-11-20,same as SQ-RB-21
+SQ-RC-01,RC.qb,reviewed,@@reviewed 2026-11-20,sources since 2026-11-16: forPack binding and comments; arc gold 4 unchanged; dump ids match
+SQ-RC-02,RC.qb,reviewed,@@reviewed 2026-11-20,creativedelight:shaped/glass_bottle and vintagedelight:mason_jar in dump 2026-11-19
+SQ-RC-03,RC.qb,prefixed,recipe id fdcutting/ -> farmersdelightcutting/,dump 2026-11-19 has creativedelight:farmersdelightcutting/banana_bunch; old id would fail both expects
+SQ-RD-28,RD.qb,prefixed,own s1home marker + H capture + forceload,E var {H1}: H captured only in group A rows; step 92 is group B
+SQ-VP-16,RD.qb,prefixed,own s1home marker + H capture + forceload,E var {H1} in worldgen step 161 (group B)
+SQ-DW-02,RD.qb,prefixed,own locate biome savanna + SV capture,E var {SV1}: captured only in SQ-RD-10 / SQ-RD-26 (not in step 161)
+SQ-WCD-07,RD.qb,prefixed,own locate structure village_savanna + VS capture + forceload + sleep 60; @absent village_savanna,W var {VS1}/{VS3} never captured by any row
+SQ-RD-24,RD.qb,prefixed,forceload add 40800 40060 40830 40090 + sleep 3; @absent bell_pepper_block_patch,W unloaded at 40800; configured feature id is real (CD rustic member worldgen data)
+SQ-SNF-02,RD.qb,prefixed,type creativedelight:seasoning -> creativedelight:flavor; ids shapeless/season/ -> shapeless/flavor/,seasonings renamed Flavors (changelog Flavors); recipe dump 2026-11-19 has 16 creativedelight:flavor recipes incl. cheese/onion/garlic/void_pepper/garlic_onion
+SQ-RD-07,RD.qb,prefixed,tag creativeengineering:roasted_bell_pepper -> creativedelight:roasted_bell_pepper,tag dump 2026-11-19: creativedelight:roasted_bell_pepper holds 9 items
+SQ-KT-01,RD.qb,prefixed,removed manual probe copy + /reload,qrun installs cfb_kitchen_probe.js (kttest) itself; the /reload truncated server.log for SQ-FR-05 (W kjs)
+SQ-RD-25,RD.qb,prefixed,moved to the end of the group A rows (after SQ-CAT-05),its intended /reload truncated server.log before SQ-DF-03 / SQ-FF-00 / SQ-FFB-00 kjs checks
+SQ-FR-05,RD.qb,prefixed,no edit (fixed by SQ-KT-01 change),W kjs cleared
+SQ-DF-03,RD.qb,prefixed,no edit (fixed by SQ-RD-25 move),W kjs cleared
+SQ-FF-00,RD.qb,prefixed,no edit (fixed by SQ-RD-25 move),W kjs cleared
+SQ-FFB-00,RD.qb,prefixed,no edit (fixed by SQ-RD-25 move),W kjs cleared
+SQ-FDB-05,RD.qb,prefixed,dropped the live placeAs toml edits and the Delightful / Central Kitchen expects,placeAs needs a restart (FDBackportConfig comment and the row's own @pass); live lanes could never pass. Row now checks the default FD pie + board + slice; the DELIGHTFUL / CREATE_CENTRAL_KITCHEN / OFF cases need a boot per value (@boot rows; not added: changes the step)
+SQ-FDB-07,RD.qb,reviewed,no change,W cfgedit: farmlandBlocks is read on ModConfigEvent.Reloading (live by design); only the pre-edit secondary_job_site is an expect
+SQ-LE-06,RD.qb,prefixed,waitlog names #creativeworldgen:group/desert_temples,W waitlog: an older locate reply could satisfy the bare (The nearest|Could not find)
+SQ-LE-03,RD.qb,prefixed,creativeengineering:potion_bucket -> creativebrewing:potion_bucket,items dump: only creativebrewing:potion_bucket (and IE's)
+SQ-PS-03,RD.qb,prefixed,creativeengineering:powdered_sugar_block -> creativedelight:,block dump has creativedelight:powdered_sugar_block only
+SQ-CORN-03,RD.qb,prefixed,compost key creativeengineering:corncob -> creativedelight:corncob,items dump: creativedelight:corncob
+SQ-CORN-04,RD.qb,prefixed,creativeengineering:corncob -> creativedelight:corncob,items dump: creativedelight:corncob
+SQ-DDP-03,RD.qb,prefixed,creativeengineering:placed_* -> creativedelight:placed_*,not in a pending step; block dump has creativedelight:placed_shakshouka / placed_omelette
+SQ-FF-02,RD.qb,prefixed,placeable regex creativeengineering:placed_ -> creativedelight:placed_,placeable.json 2026-11-19 maps 10 creativedelight:placed_* blocks (>= 9 still holds)
+SQ-RD-27,RD.qb,reviewed,@absent vanilla village ids,dead-id false positive (vanilla structures not in the registry dump)
+SQ-RD-10,RD.qb,reviewed,@absent minecraft:village_savanna,dead-id false positive
+SQ-CDQ-06,RD.qb,reviewed,@absent fungidelight:inky_cap_salad,negative check (expects n=0)
+SQ-CDF-01,RD.qb,reviewed,@absent creativedelight:carrot_juice_bucket,row only looks at the guessed id; fluid creativedelight:carrot_juice exists
+SQ-MDP-03,RD.qb,superseded,@superseded,cup family removed 2026-11-02 (miners_delight.md); SQ-CUP-01 to -05
+SQ-MDP-12,RD.qb,superseded,@superseded,cup table removed with the cups 2026-11-02; SQ-CUP-01 to -05
+SQ-MDP-06,RD.qb,candidate-supersede,none,mostly cup serving (bat/insect/bone broth/onion soup cups removed 2026-11-02); takoyaki and no-onion_soup checks still valid: rewrite or split
+SQ-MDP-10,RD.qb,candidate-supersede,none,copper cup on water/cow half tests removed items (miners_delight:copper_cup); feasts and sticky basket halves still valid: rewrite
+SQ-MDP-01,RD.qb,candidate-supersede,none,@pass expects "Cup conversions: 15 bowl foods" boot line; CupConversions removed 2026-11-02: drop that part
+SQ-WCD-04,RD.qb,unfixed,none,needs [worldgen] wildCrops=false and a new level but sits in worldgen step 161 with SQ-WCD-02 (wildCrops on): bootexpect "off" can never match. Needs @boot 2 + @@prep B: boot=2: toml creativedelight-common.toml worldgen wildCrops false + fresh (changes the step; drive owner)
+SQ-RDB-02,RDB.qb,reviewed,@reviewed 2026-11-20; look text recipe count 270 -> 267,writeup diffs since 2026-11-10 are history and table wording; the row compares base and now from the same run
+SQ-RDB-04,RDB.qb,prefixed,/place feature uses configured ids (dropped _placed); count Placed "rusticdelight: == 4; @absent,1.19.2 /place feature takes configured features and prints Placed "<id>" (cf. CWG salt_cave row); not in a pending step
+SQ-RE-31,RE.qb,reviewed,@@reviewed 2026-11-20,source diffs since 2026-11-16: forPack('creativeengineering') binding + indentation; ids in recipe dump 2026-11-19 unchanged (creativeengineering:createfilling/cinder_*; createcompacting/*; thunder_detector sequenced assembly)
+SQ-RE-32,RE.qb,reviewed,@@reviewed 2026-11-20,source diffs since 2026-11-16: forPack('creativeengineering') binding + indentation; ids in recipe dump 2026-11-19 unchanged (creativeengineering:createfilling/cinder_*; createcompacting/*; thunder_detector sequenced assembly)
+SQ-RE-33,RE.qb,reviewed,@@reviewed 2026-11-20,source diffs since 2026-11-16: forPack('creativeengineering') binding + indentation; ids in recipe dump 2026-11-19 unchanged (creativeengineering:createfilling/cinder_*; createcompacting/*; thunder_detector sequenced assembly)
+SQ-RE-34,RE.qb,reviewed,@@reviewed 2026-11-20,source diffs since 2026-11-16: forPack('creativeengineering') binding + indentation; ids in recipe dump 2026-11-19 unchanged (creativeengineering:createfilling/cinder_*; createcompacting/*; thunder_detector sequenced assembly)
+SQ-RFX-01,RFX.qb,prefixed,kjsexpect [itemMerges] pack -> bootexpect; @reviewed 2026-11-20,item_merges.js is a startup script: the line is in startup.log/latest.log only (r1120nv s03); sources since 2026-11-17 do not touch the log lines
+SQ-RFX-02,RFX.qb,prefixed,added pack-dump comparison shell + look; @reviewed,baseline 2026-11-15 vs the 2026-11-19 pack dump already differs by 221 recipe ONLY_ lines (later intended changes); new shell shows only lines the server adds beyond the pack dump's own diff (offline: 0)
+SQ-RFX-03,RFX.qb,prefixed,added pack-dump comparison shell + look; @reviewed,pack dump vs baseline already differs in 120 tag lines
+SQ-RFX-04,RFX.qb,reviewed,@reviewed 2026-11-20,trades shell (exit code) now passes offline after the dump_diff listing fix
+SQ-RFX-05,RFX.qb,reviewed,@reviewed 2026-11-20,CL/ and CCM/ log names still built by NCH.forPack (neoCraftHelper.js); 99_debug.js still has the commented enableLogging()
+SQ-RFX-07,RFX.qb,prefixed,kjsexpect core finished / [itemMerges] creativedelight -> bootexpect; @reviewed,both are startup-script lines (startup.log/latest.log only; r1120nv s03); [salt] line still in SaltBlockTicks.java
+SQ-RFX-08,RFX.qb,prefixed,added pack-dump comparison shell + look; @reviewed,146 creativedelight ONLY_ lines vs the old baseline in the pack dump alone
+SQ-RFX-09,RFX.qb,prefixed,expect FOOD_SAME -> shell exit on the row's own foods (Delightful / Bellini / Ghost Charcoal); @reviewed,expect never sees shell output (always FAIL); 52 later intended food changes vs the 2026-11-15 baseline; none in the row's foods (offline)
+SQ-RFX-10,RFX.qb,prefixed,removed expect TRADES_SAME (shell exit is the check); @reviewed,expect never sees shell output; dump_diff trades compared the volatile listing identity (farmer/botanist always DIFFERS): tool fixed
+SQ-RFX-11,RFX.qb,prefixed,added pack-dump comparison shell + look; @reviewed,as SQ-RFX-03
+SQ-RFX-13,RFX.qb,reviewed,@reviewed 2026-11-20,sources since 2026-11-17 do not touch the tmted flour merge
+SQ-RFX-16,RFX.qb,prefixed,GlmMerge fragments 56 -> 55 entries; drop pools 26 -> 27; [alcohol] 44 -> (\d+) of \1 drinks as bootexpect; @reviewed,values from r1120nv s03 logs; 635c0777 (End's knife drop off) and 1c879d09 (Display Delight onion soup) changed the fragments; 51 drinks = alcohol_drinks.js list incl. 7 Hearth and Harvest wines; the [alcohol] line is startup-script (not server.log)
+SQ-RFX-19,RFX.qb,prefixed,expect FOOD_SAME -> shell exit on the 51 Intoxication drinks; pack-dump comparison shells for recipes and tags; @reviewed,expect never sees shell output; offline drinks unchanged vs baseline
+SQ-RFX-24,RFX.qb,reviewed,@reviewed 2026-11-20,source diffs (DrinkBlockItem, RollClient, flavor.js) do not touch the vintage clock
+SQ-RFX-28,RFX.qb,suspected-product,@reviewed 2026-11-20 (row unchanged),CompatConfig.java added config comments with British "colour" (line 112 moss grass colour; line 1426 gun portal disc colour): the row's comment grep of creativecompat-common.toml will FAIL (DR-L4b)
+SQ-RFX-30,RFX.qb,prefixed,added tag pack-dump comparison shell + look,pack dump 2026-11-19 already shows physics/floats + planter/flower box additions vs the baseline; look said no line for the eight tags
+SQ-RPI-01,RP.qb,reviewed,@reviewed 2026-11-20,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-RPI-02,RP.qb,reviewed,@reviewed 2026-11-20,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-RPI-03,RP.qb,reviewed,@reviewed 2026-11-20,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-RPI-04,RP.qb,reviewed,@reviewed 2026-11-20,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-RPI-05,RP.qb,reviewed,@reviewed 2026-11-20,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-RPI-06,RP.qb,reviewed,@reviewed 2026-11-20,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-RPI-07,RP.qb,reviewed,@reviewed 2026-11-20; expect accepts the lang key solraspberrypie.cmd.reset,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-RPI-08,RP.qb,reviewed,@reviewed 2026-11-20,raspberry_pie.md diffs since 2026-11-12 are Diet Log / effect screen UI and gate rulings; ladder 38 rungs / 5 slots / 14 pool unchanged (defaultconfigs ladder.json); every logged string still in the jar source
+SQ-SMK-01,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-02,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-03,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-04,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-05,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-06,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-07,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-08,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-09,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-10,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-11,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-15,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-16,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-17,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-18,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-19,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-20,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-21,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-22,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-23,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-24,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-25,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-26,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-27,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-28,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-29,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-30,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-31,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-32,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-33,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-34,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-35,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-36,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-37,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-38,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-39,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-40,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-41,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-42,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-43,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-44,SMK.qb,prefixed,section 13 @@prep PGJAR=1; @@reviewed 2026-11-20,prep_srv.sh removes every Power Grid jar unless PGJAR is set: the Power Grid boot lines were absent from every r1120nv log; PGJAR=1 copies the newest build jar (backportedPowerGrid-0.6.2-ce-19.2-20 = mods/)
+SQ-SMK-45,SMK.qb,prefixed,section 13 @@prep PGJAR=1; @@reviewed 2026-11-20,prep_srv.sh removes every Power Grid jar unless PGJAR is set: the Power Grid boot lines were absent from every r1120nv log; PGJAR=1 copies the newest build jar (backportedPowerGrid-0.6.2-ce-19.2-20 = mods/)
+SQ-SMK-46,SMK.qb,prefixed,section 13 @@prep PGJAR=1; @@reviewed 2026-11-20,prep_srv.sh removes every Power Grid jar unless PGJAR is set: the Power Grid boot lines were absent from every r1120nv log; PGJAR=1 copies the newest build jar (backportedPowerGrid-0.6.2-ce-19.2-20 = mods/)
+SQ-SMK-47,SMK.qb,prefixed,section 13 @@prep PGJAR=1; @@reviewed 2026-11-20,prep_srv.sh removes every Power Grid jar unless PGJAR is set: the Power Grid boot lines were absent from every r1120nv log; PGJAR=1 copies the newest build jar (backportedPowerGrid-0.6.2-ce-19.2-20 = mods/)
+SQ-SMK-48,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-49,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-50,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-54,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-55,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-SMK-56,SMK.qb,reviewed,@@reviewed 2026-11-20 (section),stale sources are build files / notes / code not behind the checks; every bootexpect matched today's r1120nv logs (s00-s09) and the other literals are in the jar sources or dumps
+SQ-ST-01,ST.qb,reviewed,@@reviewed 2026-11-20,structure_tuning.md change since 2026-11-16 (505d869a datapack tag entries) does not touch the waystone swap
+SQ-ST-02,ST.qb,reviewed,@@reviewed 2026-11-20,as SQ-ST-01
+SQ-STD-01,STD.qb,reviewed,@absent storagedelight:bamboo_,dead-id false positive (regex prefix); 140 blocks matches the 2026-11-19 items dump
+SQ-STD-02,STD.qb,prefixed,forceload add 96 496 108 508 + sleep 3,W unloaded: the lane at x 100 z 500 was not loaded in group B
+SQ-STN-01,STN.qb,prefixed,forceload add 296 316 320 324 + sleep 3; @reviewed 2026-11-20,W unloaded at 300 -60 320; remainder_buffer.md since 2026-11-03 holds the 2026-11-03 leftover rule the row was written for
+SQ-STN-02,STN.qb,prefixed,forceload add 296 326 320 334 + sleep 3; @absent creativedelight:remainder_buffer; @reviewed,W unloaded at 300 -59 330; remainder_buffer is a ForgeCaps key
+SQ-STN-07,STN.qb,prefixed,forceload add 296 336 311 351 + sleep 3; @reviewed,W unloaded at 308 -60 340 (the forceload sat in SQ-STN-03 / -06, not in this step)
+SQ-STN-04,STN.qb,reviewed,@reviewed 2026-11-20,kettleBrewTicks default still 600 (CDConfig)
+SQ-STN-05,STN.qb,reviewed,@reviewed 2026-11-20,writeup changes do not touch the [stations] line
+SQ-SWL-02,SWL.qb,reviewed,@@reviewed 2026-11-20 (section 2),the only source change (merges_delightful_oil.json: animal oil -> cooking oil merge) does not touch the phantom bane / removed-id entries
+SQ-TP-41,TP.qb,reviewed,@absent tempad:default / teleport / pinned_location,dead-id false positives: Tempad app and macro ids (ModApps.TELEPORT); probe ztp_probe.js auto-installed
+SQ-TP-42,TP.qb,reviewed,no change,lint clean; note: row still carries "@draft no batch holds this row yet" although it has steps and the drive planned it (step 126)
+SQ-TP-04,TP.qb,reviewed,@absent Tempad ids,dead-id false positives (Tempad app / macro ids); not in a pending step
+SQ-TP-05,TP.qb,reviewed,@absent Tempad ids,dead-id false positives (Tempad app / macro ids); not in a pending step
+SQ-TP-22,TP.qb,reviewed,@absent Tempad ids,dead-id false positives (Tempad app / macro ids); not in a pending step
+SQ-TP-27,TP.qb,reviewed,@absent Tempad ids,dead-id false positives (Tempad app / macro ids); not in a pending step
+SQ-TP-28,TP.qb,reviewed,@absent Tempad ids,dead-id false positives (Tempad app / macro ids); not in a pending step
+SQ-TP-30,TP.qb,reviewed,@absent Tempad ids,dead-id false positives (Tempad app / macro ids); not in a pending step
+SQ-TSY-01,TSY.qb,unfixed,@reviewed 2026-11-20 only,"TradeSync builds only in onDatapackSync for a remote client with the channel (TradeSync.java 88-110): a server-only step (bots are not remote clients) never logs [trade sync] built, so the bootexpect FAILs. Needs the scratch client joined (row @commands say so): mark it @client true / move to a CQ row, or run it in a client session (step change: drive owner)"
+SQ-TX-19,TX.qb,reviewed,@absent minecraft:bogus,negative case (no such biome)
+SQ-TX-20,TX.qb,prefixed,own forceload add 960 864 1007 927 + sleep 3,W unloaded at 985 -60 893 (the section-text forceload is not a step)
+SQ-TX-21,TX.qb,prefixed,own forceload add 960 864 1007 927 + sleep 3,expects skipped_chunks=0 at 985 900: needs the site loaded when run alone
+SQ-UPG-01,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-02,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-03,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-04,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-05,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-06,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-07,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-08,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-09,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-10,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-11,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-12,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-13,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml); W unloaded at 3000 64 3000 is a locate origin (positioned), no load needed
+SQ-UPG-14,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-15,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-UPG-16,UPG.qb,reviewed,@@reviewed 2026-11-20 (section),plan_rowfix_r1118.md change 26d0bc26 (driver follow-ups) edited UPG.qb in the same commit (perfBot copy lines dropped; config edits as @@prep toml)
+SQ-VN-01,VN.qb,reviewed,@reviewed 2026-11-20,LegacyLatticeStemBlock change c7e23e21 only stops random ticks on ripe lattices; bone meal / harvest path unchanged; vinery.md diff is wording

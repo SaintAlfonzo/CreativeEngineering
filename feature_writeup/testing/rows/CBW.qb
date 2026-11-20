@@ -17,7 +17,7 @@
 @pass No log line; 8 wood recipes (2 sticks + 4 of that wood's planks) plus the spruce board's on `#creativedelight:cutting_board_planks`; that tag holds spruce and modded / vertical / polished planks but none of the 8 vanilla planks; the 8 boards in the three block tags
 @fails `allowExtraBoards` not run; `addMatching` except not applied (the tag then still has oak planks: two recipes match oak)
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootreject could not add the stone and wood cutting boards|invalid for block
 > cdevtest recipes _cutting_board
 > cdevtest recipes farmersdelight:cutting_board
@@ -28,7 +28,8 @@ bootreject could not add the stone and wood cutting boards|invalid for block
 > cdevtest tag block creativedelight:counter_toppers
 > cdevtest tag block creativedelight:hammer_no_rotate
 waitlog verb=tag kind=block tag=creativedelight:hammer_no_rotate n= 20
-count creativedelight:shaped/(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_cutting_board -> >= 8
+# r1120nv batch fault: the count used the retired zq 'id ->' format; cdevtest prints verb=recipes id=... result=...
+count verb=recipes id=creativedelight:shaped/(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_cutting_board result= >= 8
 expect verb=recipes text=farmersdelight:cutting_board n=0
 reject verb=tag kind=item tag=creativedelight:cutting_board_planks n=\d+ ids=.*minecraft:(oak|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_planks
 look oak board = 2 sticks + 4 oak planks (each wood's own planks); shaped/cutting_board (spruce board) on #creativedelight:cutting_board_planks, which holds spruce and modded / vertical / polished planks; the 8 wood boards in mineable/axe, counter_toppers and hammer_no_rotate (tags moved from creativeengineering: to creativedelight:). Spruce board's own id is the plain farmersdelight:cutting_board

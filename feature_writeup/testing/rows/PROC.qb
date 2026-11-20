@@ -27,6 +27,7 @@
 @@text
 @@table
 ## SQ-PROC-10 | prep_srv.sh pins the own jars: copies, not links; pinned.json verifies
+@reviewed 2026-11-20
 @group A
 @commands After `prep_srv.sh OUT LEVEL A`: `python3 tools/scratch_query/qpin.py verify OUT`; `python3 tools/scratch_query/qpin.py show OUT`
 @pass verify prints `qpin: OK`; `pinned.json` lists every own jar of `srv/mods` (Creative jars, exposure, power grid only with PGJAR) with its stamp, or `sha1:` for a jar built before stamping; no own jar in `srv/mods` has a link count above 1
@@ -35,6 +36,7 @@ shell python3 "$INST/tools/scratch_query/qpin.py" verify ..
 shell python3 "$INST/tools/scratch_query/qpin.py" show ..
 
 ## SQ-PROC-11 | the boot builds line names the pinned stamps
+@reviewed 2026-11-20
 @group A
 @commands Boot; `grep "\[creativecommon\] builds:" logs/latest.log`; compare with `qpin.py show OUT`
 @pass every stamped own jar in the builds line has the stamp pinned.json holds for it
@@ -45,6 +47,7 @@ shell python3 "$INST/tools/scratch_query/qpin.py" show ..
 look the stamps in the builds line (shell output) equal the pinned ids of the same jars
 
 ## SQ-PROC-12 | verdict files carry the pinned stamps
+@reviewed 2026-11-20
 @group A
 @commands Any row run by `qrun.py run` on this server, then read `RES/verdicts/<ID>.json`
 @pass the verdict file has `stamps` equal to `pinned.json` `jars` ids; `qrun.py states --code PROC` shows the row `current` while mods/ holds the same jars
@@ -72,6 +75,7 @@ look after the run: RES/verdicts/SQ-PROC-12.json has stamps equal to OUT/pinned.
 @@text
 @@table
 ## SQ-PROC-14 | the staged payload boots as a dedicated server; its own jars are the staged ones
+@reviewed 2026-11-20
 @group A
 @commands Prepare as above; boot; `grep` latest.log for `Done (`, `builds:`, mixin and class errors naming own mods; `python3 tools/jarstamp.py diff OUT/srv/mods deploy/latest/mods`
 @pass `Done (` within 10 min; no mixin apply failure or class loading error naming an own mod; the builds line lists every own jar of the payload; `jarstamp.py diff` reports no difference

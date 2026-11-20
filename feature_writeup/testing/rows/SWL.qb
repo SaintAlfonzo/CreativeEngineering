@@ -33,6 +33,7 @@
 @@section 2
 @@title SQ-SWL old_id_check swap entries: strong Phantom Bane and four removed ids, 2026-11-18 ([plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 7 ruling 8; [creative_split.md](../creative_split.md) 7.7)
 @@date 2026-11-18
+@@reviewed 2026-11-20
 @@jars creativebrewing creativecommon creativedelight creativedevtools
 @@sources development/creativeBrewing/src/main/resources/data/creativebrewing/swaps development/creativeDelight/src/main/resources/data/creativedelight/swaps
 @@text

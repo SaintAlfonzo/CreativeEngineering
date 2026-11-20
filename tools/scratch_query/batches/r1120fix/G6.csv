@@ -1,0 +1,177 @@
+id,file,kind,action,detail
+SQ-ABD-01,ABD.qb,bf-fixed,expect ids renamed,smelting/cooked_<fish>_slice_from_<fish>_slice (recipes/all.csv); added smoking and campfire expects on the new ids
+SQ-ABD-04,ABD.qb,bf-fixed,tag namespace,creativeengineering:pickerelweed -> creativedelight:pickerelweed (tag dump: blue + purple)
+SQ-AC-01,AC.qb,reviewed,@reviewed 2026-11-20,gear_tuning.md diffs since 2026-10-30 are renames (patcherMod -> Creative Common; creativeequipment tags) and spelling; armor cap unchanged
+SQ-AC-02,AC.qb,reviewed,@reviewed 2026-11-20,same diff; dragon set 40 and toughness 18 unchanged
+SQ-AC-03,AC.qb,reviewed,@reviewed 2026-11-20,same diff; cap 50 unchanged
+SQ-AC-04,AC.qb,bf-fixed,@client true,client row (@s/do/shot) had no @client flag so a server-only boot ran it; no split: its server half (attribute 40) is SQ-AC-02; rerun on a client
+SQ-AV-01,AV.qb,bf-fixed,single-id give -> minecraft:stick; reject Unknown recipe; @reviewed,"r1120nv s02 answered 'Unknown recipe: minecraft:furnace'; mixins.json diff since 2026-11-17 only adds other mixins (NoRecipeUnlockMixin kept). Side note: the 2026-11-19 recipes/all.csv lists minecraft:furnace, so the full-pack server missing it may be a product issue worth a look"
+SQ-AV-02,AV.qb,reviewed,@reviewed 2026-11-20,mixins.json diff adds unrelated mixins; draft row unchanged
+SQ-AV-03,AV.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-AV-04,AV.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-BBQ-01,BBQ.qb,reviewed,@reviewed 2026-11-20,barbeques_delight.md diff since 2026-11-16: Cave Skewer on Miner's (4.x table), 4.8 raw skewer assembly, test list to bullet form, spelling; members line and boot checks unchanged
+SQ-BBQ-02,BBQ.qb,bf-fixed,counts and ids rewritten,"grilling 18 (10 + 8 pack raws), combine 0 (C8), stonecutting bbq_<wood>_basin/tray_from_logs counted 9 + 9 (all.csv 2026-11-19)"
+SQ-BBQ-03,BBQ.qb,bf-fixed,tag namespaces and raw count,"rain_douses -> creativecommon:, food_type/* -> creativedelight:, raw_skewers 18 (tag dump 2026-11-19)"
+SQ-BBQ-04,BBQ.qb,reviewed,@reviewed 2026-11-20,doc diff does not touch compost tiers
+SQ-BBQ-05,BBQ.qb,bf-fixed,forceload 208 496 232 506 + sleep 3,lane z 500 was not loaded
+SQ-BBQ-06,BBQ.qb,bf-fixed,forceload 208 496 232 506 + sleep 3,lane z 500 was not loaded
+SQ-BBQ-07,BBQ.qb,bf-fixed,forceload + look line matched to @pass,lane z 500 not loaded; look line still described the retired right-click seasoning (BBQ-28)
+SQ-BBQ-08,BBQ.qb,superseded,@superseded,combine type and stored Skewers NBT retired by plan_meals_rolls_bbq.md C8; combos in-game BBQ-38; SQ-BBQ-02 checks no combine left
+SQ-BBQ-09,BBQ.qb,reviewed,@reviewed 2026-11-20,row already matches 4.8 (18 raw assemblies)
+SQ-LGM-11,BBQ2.qb,bf-fixed,Comfort 1200 -> 2400,"comfort_nourishment.md R5 (bowl food under 10 hunger: 120 s) and the 2026-11-19 food dump give 2400; plan A4's 'Comfort 1 min' was the upstream value. If the owner meant 1 min to win over R5 this is a product question, not a fault"
+SQ-BBQ2-02,BBQ2.qb,bf-fixed,Cave heatless craft now expected,owner ruling 2026-11-17 (dishes/meals #58): Cave Skewer heatless craft with Miner's; reject kept for Nether only; @reviewed
+SQ-LGM-12,BBQ2.qb,reviewed,@reviewed 2026-11-20,plan_meals_rolls_bbq.md diff since 2026-11-16: #58 Cave Skewer, #59 Nether wart, #57 raw assembly build notes; cans unaffected
+SQ-LGM-13,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff; families unaffected
+SQ-LGM-14,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff; placeables unaffected
+SQ-ROLL-10,BBQ2.qb,reviewed,@reviewed 2026-11-20,#59 moves Cooked Nether Wart into Nether's Delight recipes; its tag and can unchanged
+SQ-ROLL-11,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff; golden roll values unaffected
+SQ-ROLL-12,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-BBQ2-01,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff; 8 raw ids unchanged
+SQ-BBQ2-03,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff; ten BBQ line ids unchanged
+SQ-BBQ2-04,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff; raw_skewers 18 (tag dump)
+SQ-BBQ2-05,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff; combos unchanged since C8
+SQ-BBQ2-06,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-BBQ2-07,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff
+CQ-BBQ2-01,BBQ2.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-BBQW-01,BBQW.qb,bf-fixed,reject alternation parenthesized,the stem branch matched any line naming a crimson stem (rdetail of bbq_crimson_tray_from_logs); @reviewed
+SQ-BBQW-02,BBQW.qb,reviewed,@reviewed 2026-11-20,barbeques_delight.md diff since 2026-11-16 does not touch basins or trays
+SQ-BBQW-03,BBQW.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-BM-01,BM.qb,bf-fixed,bootexpect on the Creative Common builds line,"Baby Mobs moved to the Creative Worldgen bundle, so [creativedelight] members no longer lists it; now expects '[creativecommon] builds: ... babymobs 1.1.0'"
+SQ-BM-02,BM.qb,bf-fixed,section @@prep A: spawn-animals=true,"s17 had spawn-animals=false, so vanilla discarded the animals on their first tick; the cat-gone reject follows from the same cause"
+CQ-BM-01,BM.qb,reviewed,@@reviewed 2026-11-20 (section 1),baby_mobs.md diff since 2026-11-01: mod id rename babymobs and comment lines moved in; client checks unchanged
+CQ-BM-02,BM.qb,reviewed,@@reviewed 2026-11-20 (section 1),same diff
+CQ-BM-03,BM.qb,reviewed,@@reviewed 2026-11-20 (section 1),same diff
+CQ-BM-04,BM.qb,reviewed,@@reviewed 2026-11-20 (section 1),same diff
+CQ-BM-05,BM.qb,reviewed,@@reviewed 2026-11-20 (section 1),same diff
+CQ-BM-06,BM.qb,reviewed,@@reviewed 2026-11-20 (section 1),same diff
+CQ-BM-07,BM.qb,reviewed,@@reviewed 2026-11-20 (section 1),same diff (config file already babymobs-common.toml)
+SQ-CBP-08b,CBP.qb,bf-fixed,felsic assembly check made conditional on the felsic_gear pack line,"p6 boot has no felsic gear mod, so the felsic ingot assembly cannot exist; @modset untouched. The p6f half never runs on this @modset: needs a modset with the felsic gear jar (drive owner)"
+SQ-CBP-01,CBP.qb,reviewed,@reviewed 2026-11-20,plan_cb_polish.md diff since 2026-11-06: r1114 note on SQ-CBP-11 felsic drops and path renames; absent-mods checks unchanged
+SQ-CBP-02,CBP.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CBP-04,CBP.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CBP-05,CBP.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CBP-07,CBP.qb,candidate-supersede,@reviewed 2026-11-20,config carry-over CB -> Common/Equipment is the legacy 1.2.01 -> 1.2.02 migration class the owner superseded for SQ-CBP-06 and SQ-CFR-03 (2026-11-18); left runnable
+SQ-CBP-09,CBP.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CBP-10,CBP.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CBW-01,CBW.qb,bf-fixed,count regex to cdevtest format,retired zq 'id ->' -> 'verb=recipes id=... result='
+SQ-CDB-10,CDB.qb,bf-fixed,result id potato_noodle,Gnocchi is the name of veggiesdelight:potato_noodle; cutting recipe gnocchi_from_sweet_potato_dough gives potato_noodle*2
+SQ-CDB-11,CDB.qb,bf-fixed,reg regex bayberry_soup,Bayberry Juice rename is name-only; ids stay bayberry_soup (fruits_delight.md)
+SQ-CDFW-01,CDFW.qb,bf-fixed,counts,"food types 32 (food_catalog.md), can servings any 3-digit count (344 on 2026-11-20) cited in the row"
+SQ-CDFW-06,CDFW.qb,bf-fixed,Hostile Delight ids,"grilled_ghast/cooked_rotten_ham/fried_turtle_egg -> hostiledelight:grilledghast, cookedrottenham, friedturtleegg"
+SQ-CDFW-02,CDFW.qb,prefixed,tag namespaces,creativeengineering:food_type/canned_source/cans/servings -> creativedelight: (tag dump); creative_delight.md diff otherwise campfire End/torch and comment moves
+SQ-CDFW-03,CDFW.qb,prefixed,tag namespace,creativeengineering:placeable -> creativedelight:placeable
+SQ-CDFW-04,CDFW.qb,reviewed,@reviewed 2026-11-20,creative_delight.md diff since 2026-11-16: campfire End and torch rules plus code comments moved in; mortar crafts unaffected
+SQ-CDFW-05,CDFW.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CDFW-07,CDFW.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CDFW-08,CDFW.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CDFW-09,CDFW.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CDJ4-08b,CDJ4.qb,bf-fixed,forceload 124 494 136 506 + section @@prep A: spawn-animals=true,water fill was 'not loaded' and spawn-animals=false let vanilla discard the squid
+SQ-LEM-02,CDJ4.qb,bf-fixed,ids and count,"plan_food_batch_1119 A6: creativedelight:farmersdelightcutting/lemon_slice_from_whole, 5 slices + seeds; saw createsaw/lemon_slice_from_whole present (all.csv)"
+SQ-JSL-01,CDJ4.qb,bf-fixed,count anchor,n=[1-9]\d*$ -> n=[1-9]\d*\b (lines end in ' shown=1')
+SQ-JSL-02,CDJ4.qb,bf-fixed,forceload 124 494 140 506 + sleep 3,x 130-134 z 500 not loaded
+SQ-CDJ4-08,CDJ4.qb,prefixed,nest item only; own qa and forceload,"{H} home never captured and qa never spawned (W var); squid half duplicated SQ-CDJ4-08b, so it points there"
+SQ-LEM-01,CDJ4.qb,prefixed,forceload 128 496 140 506,lane z 500 load not guaranteed before the first setblock; @reviewed
+SQ-CDJ4-01,CDJ4.qb,reviewed,@reviewed 2026-11-20,"creative_delight.md since 2026-11-01: namespace moves (2026-11-09), member moves, campfire End/torch, salt; mixin check unchanged"
+SQ-CDJ4-04,CDJ4.qb,reviewed,@reviewed 2026-11-20,already rewritten r1118 to creativedelight:oven
+SQ-CDJ4-05,CDJ4.qb,reviewed,@reviewed 2026-11-20,same diff; NCH.cfg check unchanged
+SQ-CDJ4-06,CDJ4.qb,reviewed,@reviewed 2026-11-20,same diff; W kjs is intended (row reads the post-reload log)
+SQ-CDJ4-07,CDJ4.qb,reviewed,@reviewed 2026-11-20,already rewritten r1118 to creativedelight lunchbox ids
+SQ-CEN-05,CEN.qb,bf-fixed,shrapnel id and count,"type creativecompat:shrapnel; count compared with [shrapnel] count in creativecompat-common.toml (pack 24, was 12 from the save prep); chest half still needs the carried save"
+SQ-CEN-01,CEN.qb,reviewed,@reviewed 2026-11-20,"creative_engineering.md / creative_split.md since 2026-11-04: patcherMod -> Creative Common text, forPack helpers, rules-fixes renames; look line already notes the newer versions and counts"
+SQ-CEN-03,CEN.qb,reviewed,@reviewed 2026-11-20,same diff; startup pack order and registry checks unchanged
+SQ-CEN-04,CEN.qb,reviewed,@reviewed 2026-11-20,same diff; sawmill n=216 still matches (all.csv and r1120nv s23)
+SQ-CEN-06,CEN.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-CEN-07,CEN.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-CEN-08,CEN.qb,reviewed,@reviewed 2026-11-20,same diff; CommonConfig class unchanged
+CQ-CEN-01,CEN.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-CMG-04,CEQ.qb,bf-fixed,portal check via Immersive Portals log and entities,"lit frame becomes an Immersive Portals portal entity with air inside; expects 'Portal Generation Attempted minecraft:overworld 371 -60 300' (r1120nv s24 evidence), rejects it for the failed frame, entities read in the frame"
+SQ-CEQ-04,CEQ.qb,bf-fixed,waitlog to cdevtest format,retired zq 'recipes matching camera_bag' -> 'verb=recipes text=camera_bag n='; the fill-step mB half stays a look (no part=fluids line)
+SQ-CMG-01,CEQ.qb,reviewed,@reviewed 2026-11-20,"creative_magic.md / creative_equipment.md since 2026-11-04: carve notes, [botania] and XP bridge mixins into Magic (2026-11-17), comment moves; look line already allows 'up to' counts"
+SQ-CMG-03,CEQ.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CMG-05,CEQ.qb,reviewed,@reviewed 2026-11-20 + @absent minecraft:fluid,same diff; dead-id was the /forge tags registry argument
+SQ-CEQ-03,CEQ.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-CEQ-06,CEQ.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-CFR-02,CFR.qb,superseded,@superseded,Compat -> CD [campfire] carry is the 1.2.01 -> 1.2.02 migration class the owner superseded for sibling SQ-CFR-03 (2026-11-18); no step wrote its pre-boot files; CD [campfire] now 3 keys not 7. Owner may veto: then it needs a @@prep for its files and a rewrite to 3 keys
+SQ-CFR-07,CFR.qb,bf-fixed,row spawns bot qa,qa was never spawned in the step; reject No entity was found added
+SQ-CFR-01,CFR.qb,reviewed,@reviewed 2026-11-20,creative_split.md since 2026-11-04: patcherMod -> Creative Common text and generated blocks; campfire mixin location unchanged
+SQ-CFR-05,CFR.qb,reviewed,@reviewed 2026-11-20 (expectations untouched),real FAIL per BRIEF; doc diff does not touch the rain rule (its @fails text still names the old creativeengineering: tag path)
+SQ-CFR-06,CFR.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-CFR-08,CFR.qb,reviewed,@reviewed 2026-11-20,same diff (stoves include text renamed only)
+CQ-CFR-01,CFR.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-CFS-02,CFS.qb,bf-fixed,final inv expect,potato*3 in slot 0 -> baked_potato*3 in any slot (a lit CfB oven moves and bakes its input; r1120nv evidence slot 4)
+SQ-CIF-01,CIF.qb,superseded,@superseded,interface carve config carry shipped in 1.2.02 (2026-11-09): same legacy-migration class the owner superseded in SQ-CFR-03/CMG-02/CEN-02; no step builds cif_old_*.toml and no pre-carve world; class-error half is SQ-CIF-04/-04b. Owner may veto (then it needs a @@prep copying the pre-carve configs). Judge's side note: check whether Common's [tooltips] section is Common's own
+SQ-CIF-02,CIF.qb,reviewed,@reviewed 2026-11-20,creative_split.md diff since 2026-11-16: text renames and r1114 note; potion swap unchanged
+SQ-CIF-03,CIF.qb,reviewed,@reviewed 2026-11-20,same diff
+CQ-CIF-01,CIF.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-CSI-01,CSI.qb,bf-fixed,'/curios list' without player + ForgeCaps read + forceload,"Curios 1.19.2 /curios list takes no player; bot slots read from ForgeCaps.""curios:inventory"".Curios Identifier; IMC bootreject widened to creativeequipment (CuriosSlots moved there); NBT path assumed, check on the rerun"
+SQ-CSI-02,CSI.qb,bf-fixed,@boot 2 + ForgeCaps read,ran on the same boot as SQ-CSI-01; now @boot 2 so SQ-CSI-01 is boot 1 setup and csi rejoins a saved world; slots read from ForgeCaps
+SQ-CUP-02,CUP.qb,bf-fixed,count 50 -> 51,51 miners_delight items in the 2026-11-19 dump and live (one non-cup item added); no cup id
+SQ-CUP-03,CUP.qb,bf-fixed,forceload 106 496 126 506 + sleep 3,lane x 110..122 z 500 not loaded; cooking half not run before
+SQ-CUP-04,CUP.qb,bf-fixed,forceload 136 496 144 506 + sleep 3,jar at 140 -60 500 never placed (not loaded)
+SQ-CUP-01,CUP.qb,reviewed,@reviewed 2026-11-20,miners_delight.md since 2026-11-02: test list to bullet form and the V-14 note; cup removal checks unchanged
+SQ-CUP-05,CUP.qb,candidate-supersede,@reviewed 2026-11-20,"draft needing a pre-removal world with cups; the cup removal shipped long ago (old-save migration class), no such save is kept"
+SQ-EDL-02,EN.qb,superseded,@superseded (steps also rewritten),"duplicate of SQ-ENC-02 in SSP.qb (EN -> EDL/ENC rename left a copy); the dumptrades cashier fix for its r1120lr batch fault is applied to SQ-ENC-02, which needs the rerun instead"
+SQ-EDL-01,EN.qb,superseded,@superseded,"duplicate of SQ-ENC-01 in SSP.qb (same librarian steps); its @pass cell is End's Delight EDL-01 text (crate and stove drop themselves), which has no scratch row now: candidate for a new row"
+SQ-EDL-03,EN.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-EDL-05,EN.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-EDL-06,EN.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-EDL-07,EN.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-EDL-08,EN.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-LR-01,EN.qb,reviewed,@reviewed 2026-11-20,draft; same diff
+SQ-IMS-01,IMS.qb,bf-fixed,count per recipe event,harness /reload 3 s after Done doubled the lines (correct behavior); shell now checks pack and creativedelight lines equal and >= 1
+SQ-IMS-03,IMS.qb,bf-fixed,allows the one stale probe FAIL,"'Rustic potato cutting kept' is stale (rusticdelight:cutting/potato_slices removed on purpose, now creativedelight:farmersdelightcutting/potato_slices); probe tools/item_merges_probe/merge_core_probe.js:140 needs the new id but SALT.qb uses /mgcore too, so not edited"
+SQ-IMS-02,IMS.qb,reviewed,@reviewed 2026-11-20,item_merges.md since 2026-11-16: shulker mollusk merge (2026-11-18) and renames; timing row unchanged
+SQ-IMS-04,IMS.qb,reviewed,@reviewed 2026-11-20,same diff; purged ids unchanged
+SQ-IPO-03,IPO.qb,bf-fixed,reject narrowed to a post state,"state=""?immersiveposts: matched the plain silver fence block the pass allows; now immersiveposts:\S*post"
+SQ-LGM-03,LGM.qb,bf-fixed,forceload 175 495 215 510 + sleep 3,x 180-210 z 500 not loaded
+SQ-LGM-05,LGM.qb,bf-fixed,forceload 175 495 215 510 + sleep 3,same
+SQ-LGM-07,LGM.qb,bf-fixed,forceload 175 495 215 510 + sleep 3,same
+SQ-LGM-08,LGM.qb,bf-fixed,forceload 175 495 215 510 + sleep 3,same
+SQ-LGM-01,LGM.qb,reviewed,@reviewed 2026-11-20,large_meals.md since 2026-11-01: test table to bullet form and generated blocks only
+SQ-LGM-02,LGM.qb,reviewed,@reviewed 2026-11-20,same diff
+CQ-LGM-11,LGM.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-MBX-02,MB.qb,bf-fixed,row spawns bot qa,no bot qa in s14 (tp qa -> No entity was found)
+SQ-MBX-03,MB.qb,bf-fixed,row spawns qa; section @@prep cooldownTicks 200,follows MBX-02; boot had cooldownTicks 72000; [monster_box] is in creativecompat-common.toml (row text named creativeengineering-common.toml)
+SQ-MBX-04,MB.qb,bf-fixed,row spawns qa; section @@prep cooldownTicks 200,boot had cooldownTicks 72000 and no qa
+SQ-MBX-07,MB.qb,bf-fixed,@boot 2 with @@prep boot=2 vaultMode false; spawns qa,needed its own boot with vaultMode=false (s14 had true) and bot qa
+SQ-MBX-01,MB.qb,reviewed,@@reviewed 2026-11-20 (section),mob_block_tweaks.md since 2026-10-30: renames (patcherMod -> Creative Common) and spelling; monster box rules unchanged
+SQ-MBX-05,MB.qb,reviewed,@@reviewed 2026-11-20 (section),same diff
+SQ-MBX-06,MB.qb,reviewed,@@reviewed 2026-11-20 (section),same diff
+CQ-MBX-08,MB.qb,reviewed,@@reviewed 2026-11-20 (section),same diff
+SQ-VTD7-02,MXS.qb,bf-fixed,expects moved to blockrunner:surface/soft,row's own @commands and blocktags.js put oat_bale and salt blocks in soft (0.88x); tag dump confirms; raw rock salt block checked in natural_rough
+SQ-MXS-03,MXS.qb,prefixed,own home marker mxs3home + forceload,{H} never captured in the row (W var)
+SQ-MXS-01,MXS.qb,reviewed,@reviewed 2026-11-20,vintage_delight.md since 2026-11-16: pizza bites (2 slices) and Tropical Pizza (plan_food_batch_1119 C1/C2) and bullet-form test list; mixed seeds unaffected
+SQ-MXS-02,MXS.qb,reviewed,@reviewed 2026-11-20,same diff
+CQ-MXS-04,MXS.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-VTD7-01,MXS.qb,reviewed,@reviewed 2026-11-20,same diff; stack_sizes.json still lists cheese pizza 8
+SQ-ROLL-03,ROLL.qb,bf-fixed,pbot hunger rl3 19 + expect foodLevel 19,effect hunger 1 255 left the bot at 20 so the roll could not be eaten
+SQ-ROLL-05,ROLL.qb,bf-fixed,forceload 145 495 175 510 + sleep 3,x 150-170 z 500 not loaded
+SQ-ROLL-06,ROLL.qb,bf-fixed,forceload 145 495 175 510 + sleep 3,same
+SQ-ROLL-07,ROLL.qb,bf-fixed,forceload 145 495 175 510 + sleep 3,same
+SQ-ROLL-08,ROLL.qb,bf-fixed,forceload 145 495 175 510 + sleep 3,same
+SQ-ROLL-01,ROLL.qb,reviewed,@reviewed 2026-11-20,roll_delight.md since 2026-11-01: chopstick tooltip added once (B3; client) and the test table to bullet form; server checks unchanged
+SQ-ROLL-02,ROLL.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-ROLL-04,ROLL.qb,reviewed,@reviewed 2026-11-20,"same diff. Note: it uses the same 'effect hunger 1 255' as ROLL-03 (bot likely stays at 20), so its rejects can pass vacuously; left as is because food 19 would let vanilla start eating the off-hand bread"
+SQ-ROLL-09,ROLL.qb,reviewed,@reviewed 2026-11-20,same diff
+CQ-ROLL-10,ROLL.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-ENC-02,SSP.qb,prefixed,rewritten to read the cashier profession from /dumptrades,same MCA-swap fault as its duplicate SQ-EDL-02 (r1120lr); now dumptrades + python check of the cashier profession
+SQ-SSP-01,SSP.qb,bf-fixed,forceload 120 496 130 508 + creativedelight id,x 125 z 500 not loaded; clear named creativeengineering:sliced_sweet_potato
+SQ-SSP-02,SSP.qb,bf-fixed,namespace creativedelight:,item creativedelight:sliced_sweet_potato in creativedelight:food_type/raw/veggie/sliced and the five forge: tags (tag dump)
+SQ-SSP-03,SSP.qb,bf-fixed,namespace creativedelight:,food and compost queries on creativedelight:sliced_sweet_potato (compost.json 0.5)
+SQ-TER-01b,SSP.qb,prefixed,@absent structure id + row spawns qa,"dead-id philipsruins:ancient_crypt is a structure in the PhilipsRuins jar (not in dumps); the row tp'd qa without spawning it"
+SQ-STK-01,STK.qb,bf-fixed,count 1341 -> 1398,stack_sizes.json now 1398 entries (515x8 53x16 434x32 396x64; regenerated 2026-11-06 and 2026-11-11); boot printed 1398
+SQ-STK-05,STK.qb,reviewed,@reviewed 2026-11-20,food_stack-sizes.md since 2026-11-01: status line and r1102b results; draft unchanged
+SQ-SV-01,SV.qb,bf-fixed,settle wait + chunk wait + stand check + tp as @s + lag judged after the tp only,"no armor stand found (summoned before the End chunk loaded); the Can't keep up line was the post-boot backlog 8 s after Done"
+SQ-MG-21,VDF.qb,bf-fixed,count n=3 and cdevtest id= format,"fish_and_chips n=3 = creativedelight:farmersdelightcooking/fish_and_chips + Slice & Dice mirror + salting; verb=makes prints id= result= not '->'"
+SQ-VDF-03,VDF.qb,bf-fixed,n=0$ -> n=0\b + @absent,verb=recipes prints 'n=0 shown=0'; dead-id was a recipe prefix
+SQ-VDF-04,VDF.qb,bf-fixed,quiche counts == 0 + baking id expected,row contradicted its own @pass (quiche oven only: creativedelight:baking/zucchini_quiche)
+SQ-VDF-05,VDF.qb,bf-fixed,assembly count anchored on createsequencedassembly/turnip_mutton_skewer_,loose regex matched raw_turnip_mutton_skewer_sequenced_assembly (raw skewer assembly)
+SQ-VDF-06,VDF.qb,bf-fixed,namespace creativedelight:food_family/preserve/pickle,creativeengineering: tag is empty; creativedelight: one holds fermented_garlic_honey
+SQ-VDF-07,VDF.qb,bf-fixed,n=0\b; done=0 reject skips verb=item; can id creativedelight:,'n=0 shown=0' and the expected unknown-item line ends done=0
+SQ-VDF-09,VDF.qb,bf-fixed,cans creativedelight:canned_*; done=0 reject skips verb=item; @absent canned_mhadjeb,stale namespace; unknown-item line is expected
+SQ-VDF-01,VDF.qb,reviewed,@reviewed 2026-11-20,veggies_delight.md since 2026-11-01: test list to bullet form and later port notes; boot and incomplete-item checks unchanged
+SQ-VDF-02,VDF.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-VDF-08,VDF.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-VDF-10,VDF.qb,reviewed,@reviewed 2026-11-20,same diff; dough compost 85 % unchanged
+SQ-WE-02,WE.qb,bf-fixed,@client true; steps as player // commands; server half pinned in SQ-WE-03,"WorldEdit ignores the perfBot session; no new id: the row became the client // check (kept @group A: a group change is the drive owner's) and SQ-WE-03 now expects the /wetest 'PASS SQ-WE-02 set|replace|undo' lines (API path)"
+SQ-BBQ2-08,BBQ2.qb,reviewed,@reviewed 2026-11-20,item_merges.md uncommitted change (pack merges registered 2 -> 4: Little Logistics components) does not touch the shulker mollusk merge

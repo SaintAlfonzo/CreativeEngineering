@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-RC arc gilding, jars and bottles, banana bunch, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P2; [recipes_cooking.md](../recipes_cooking.md) 2.6, RC-186 to RC-188; TODO `food/types-and-tuning #27`, `items/jars #12`, `dishes/ingredients #18`)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@jars creativecommon creativedelight
 @@sources feature_writeup/recipes_cooking.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js kubejs/data/creativedelight/kubejs/minecraft/recipes.js kubejs/data/creativedelight/kubejs/neapolitan/recipes.js development/creativeDelight/members/vintage/src/main/resources/data/vintagedelight/recipes/mason_jar.json
 @@text
@@ -40,10 +41,10 @@ look one shaped mason jar recipe giving 4; one shaped glass bottle recipe giving
 
 ## SQ-RC-03 | banana bunch on the cutting board gives 6 bananas
 @group A
-@commands `/cdevtest rdetail fdcutting/banana_bunch`
-@pass `creativedelight:fdcutting/banana_bunch`, Farmer's Delight cutting, ingredient `neapolitan:banana_bunch`, a knife tool, result 6 `neapolitan:banana`
+@commands `/cdevtest rdetail creativedelight:farmersdelightcutting/banana_bunch`
+@pass `creativedelight:farmersdelightcutting/banana_bunch` (recipe dump 2026-11-19; the type prefix was `fdcutting/` before the 2026-11-17 forPack binding), Farmer's Delight cutting, ingredient `neapolitan:banana_bunch`, a knife tool, result 6 `neapolitan:banana`
 @fails `R.fdCutting` in CD `neapolitan/recipes.js`; `i.banana_bunch` key
-> cdevtest rdetail fdcutting/banana_bunch
-expect verb=rdetail id=creativedelight:fdcutting/banana_bunch serializer=farmersdelight:cutting
-expect verb=rdetail id=creativedelight:fdcutting/banana_bunch .*ingredients=neapolitan:banana_bunch
+> cdevtest rdetail creativedelight:farmersdelightcutting/banana_bunch
+expect verb=rdetail id=creativedelight:farmersdelightcutting/banana_bunch serializer=farmersdelight:cutting
+expect verb=rdetail id=creativedelight:farmersdelightcutting/banana_bunch .*ingredients=neapolitan:banana_bunch
 look result 6 neapolitan:banana (cutting results show as rolled part=results lines)

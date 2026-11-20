@@ -239,6 +239,7 @@ look toml frequency 60 and forceSpawnInVillages true; the shell's summed count o
 @pass at least 8 of 10 villages have one, near the center (accepted 2026-11-03: r1103w found 8 of 10, none at -240 1120 and 2496 -1488); each waystone is registered (right-click shows a name)
 @fails fewer than 8 (list the villages without one): `forceSpawnInVillages` not read, or a village mod (Towns and Towers, Villages and Pillages) without the waystone piece, list which
 @reviewed 2026-11-16
+@absent minecraft:village_plains minecraft:village_desert minecraft:village_savanna minecraft:village_snowy minecraft:village_taiga (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
 > execute in minecraft:overworld positioned 0 70 0 run locate structure minecraft:village_plains
 waitlog (The nearest minecraft:village_plains is at|Could not find|timed out after) 600
 capture VA The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -335,10 +336,12 @@ look the villages with n=0 (accepted 2026-11-03: 8 of 10); right-click one wayst
 @commands boot with the new `pool_config.json`; `grep -i 'piece order changed\|changed this edited piece\|PoolTuner' OUT/srv/logs/latest.log`; read `pool_tag_report.md` "Retuned pools"
 @pass no `piece order changed` warning (no duplicate is edited); the retuned list has only the vinery / beautify / tech pools (the 9 village pieces), down from 39
 @fails warnings for unedited duplicates: `mergeCurrent` not in the jar; extra retuned pools: reset list incomplete
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootreject (?i)piece order changed
 shell grep -aiE 'piece order changed|changed this edited piece|PoolTuner' logs/latest.log | cut -c1-300 | head -20
-shell cd $INST && awk '/Retuned pools/,0' feature_writeup/pool_tag_report.md 2>/dev/null | head -30; true
+# r1120fix (2026-11-20): PoolTuner writes the report into the server copy's kubejs/generation_scripts/worldgen/ at boot
+# (feature_writeup/pool_tag_report.md does not exist, so the shell printed nothing)
+shell awk '/Retuned pools/,0' kubejs/generation_scripts/worldgen/pool_tag_report.md | head -30; test -s kubejs/generation_scripts/worldgen/pool_tag_report.md
 look the Retuned pools list holds only the vinery / beautify / tech pools (the 9 village pieces), down from 39
 ## SQ-WGE-06b (B1)
 @group A
@@ -401,6 +404,7 @@ look rows/<ID>.shell.txt: 1514 swaps in 117 templates (more is fine when later r
 @pass none found in the Overworld; each found in the Nether in its biomes (soul sand valley; crimson / warped forest; wastes / deltas) at y 33 (ruins), 12 (dungeon), 5 (city); soul fire inside them kept (no swap: the generator skips Nether-owned templates); ruin cluster still found
 @fails found in the Overworld: the jar json override in `kubejs/data/philipsruins/` not loaded; soul fire swapped: template also owned by an Overworld structure
 @reviewed 2026-11-16
+@absent philipsruins:lost_soul_city philipsruins:lost_soul_dungeon philipsruins:rare_ruin philipsruins:start_nether_ruin (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
 > execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:lost_soul_city
 waitlog (The nearest philipsruins:lost_soul_city is at|Could not find|timed out after) 600
 > execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:lost_soul_dungeon

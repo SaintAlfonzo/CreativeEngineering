@@ -24,6 +24,7 @@
 @fails a mixin left in or missing from a json; package rename missed
 @jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-20
 bootreject (creativemagic|creativeequipment)\.mixins\.json.*(rror|ailed|could not)
 shell grep -cE "from (mixins\.)?creativemagic\.mixins\.json" logs/debug.log; grep -cE "from (mixins\.)?creativeequipment\.mixins\.json" logs/debug.log; grep -E "creativeengineering\.mixins\.json" logs/debug.log | grep -oE "Mixing \S+" | sort -u | head -30
 look Magic: up to 13 common mixins in its json, Equipment up to 23 (gated ones only with their mod; a mixin with several targets counts more than once); the creativeengineering list holds only Engineering's own mixins (17 common), none of Magic's or Equipment's class names
@@ -49,6 +50,7 @@ look trinketCaseAnyItem = false and wearThreshold = 4.5 in the new files (Forge'
 @fails `cmg_core.js` / `ceq_core.js` not in the jar; `registerConfig` class name wrong
 @jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-20
 shell grep -nE "startup script packs in order|creativemagic|creativeequipment|NCH.cfg|global\.(CMG|CEQ) missing|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log | head -30 | cut -c1-260
 kjsreject global\.(CMG|CEQ) missing|section in any registered config
 look packs line lists creativemagic and creativeequipment after the pack folder; no script error lines for either
@@ -59,7 +61,7 @@ look packs line lists creativemagic and creativeequipment after the pack folder;
 @pass Ordinary flame fails and the frame turns to crying obsidian; Dark Fire opens the portal; existing portal blocks still there; Flint and Terrasteel, Ender Storage, CEI machine and sculk recipes exist under `creativemagic:`
 @fails `PortalFailureHandler` subscriber not registered (modid); `DARK_FIRE` not registered
 @jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > forceload add 352 288 384 304
 # two obsidian frames (inside 2 x 3), one per igniter
 > fill 360 -61 300 363 -56 300 minecraft:obsidian
@@ -71,15 +73,19 @@ sleep 1
 > cdevtest state 361 -60 300
 > cdevtest count 360 -61 300 363 -56 300 minecraft:crying_obsidian
 > cdevtest use 371 -61 300 held=creativemagic:flint_and_terrasteel face=up
+# r1120nv batch fault: Immersive Portals is in the pack, so a lit frame becomes a portal entity with air inside, never a nether_portal block; the row reads Immersive Portals' generation line and the entities in the frame
+waitlog Portal Generation Attempted minecraft:overworld 371 -60 300 20
 sleep 1
 > cdevtest state 371 -60 300
+> cdevtest entities 371 -59 300 3
 > cdevtest recipes creativemagic: max=400
 expect verb=count block=minecraft:crying_obsidian n=[1-9]
 reject verb=state pos=361,-60,300 state="?minecraft:nether_portal
-expect verb=state pos=371,-60,300 state="?minecraft:nether_portal
+reject Portal Generation Attempted minecraft:overworld 361 -60 300
+expect Portal Generation Attempted minecraft:overworld 371 -60 300
 expect verb=recipes id=creativemagic:\S*flint_and_terrasteel
 reject verb=\S+ .*done=0
-look recipes list has Ender Storage, CEI machine and sculk recipes under creativemagic:; portal blocks of the old save (same save as SQ-CMG-01) still standing is checked by the runner where that save's portal was
+look the entities line at 371 -59 300 lists an immersive_portals portal entity (by_type); recipes list has Ender Storage, CEI machine and sculk recipes under creativemagic:; portal blocks of the old save (same save as SQ-CMG-01) still standing is checked by the runner where that save's portal was
 ## SQ-CMG-05 | Trinket Case probe, experience fluid tag
 @group A
 @commands Same boot: `trinket_case_probe.js` (SQ-TC-01 config, then SQ-TC-02 with the `false` from the carry); `/dumptags` fluid `forge:experience`; MoreJS enchanted book trades
@@ -87,6 +93,8 @@ look recipes list has Ender Storage, CEI machine and sculk recipes under creativ
 @fails Trinket mixins gated off (botania id); fluid tag script not in the jar tree
 @jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-20
+@absent minecraft:fluid (the registry key argument of /forge tags, not an item or block id)
 > tcprobe
 waitlog \[tcprobe\] done 60
 expect \[tcprobe\] done: 0 fail
@@ -155,6 +163,7 @@ reject verb=\S+ .*done=0
 @commands Bot: equip a stepstool in the feet slot, send the step-up packet (or `perfBot` step command); stand on it, move
 @pass Player raised one block, steps off on move; no `creativeengineering:stepstool` channel mismatch on join
 @fails channel not registered (`Stepstool.register`)
+@reviewed 2026-11-20
 @draft the step-up comes from the client's key packet; no /pbot or /cdevtest verb sends it (a client row, or a pbot step verb first)
 ## SQ-CEQ-04 | Equipment recipes under creativeequipment:, felsic assembly reads its potion mB from the Equipment toml
 @group A
@@ -162,13 +171,14 @@ reject verb=\S+ .*done=0
 @pass All present under `creativeequipment:` ids; felsic assembly reads its potion mB from `creativeequipment-common.toml`
 @fails `CEQ.recipes` wrapper broken; `NCH.cfg` falls back to defaults
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > cdevtest recipes creativeequipment:
 > cdevtest rdetail felsic
 > cdevtest recipes stepstool
 > cdevtest recipes shield
 > cdevtest recipes camera_bag
-waitlog recipes matching camera_bag 30
+# r1120nv batch fault: the waitlog waited for the retired zq 'recipes matching' line
+waitlog verb=recipes text=camera_bag n= 30
 shell grep -nE "felsic|potion" config/creativeequipment-common.toml | grep -vE "^\s*[0-9]+:\s*#" | head -8
 expect verb=recipes text=creativeequipment: n=\d{3}
 look count about 167 (r1106 SPF-50); felsic assembly (sequenced) has a create:filling step whose fluid amount equals the toml's felsic potion mB; end gear, shields, stepstools, archery, bullets, camera bag, backpack skin recipes present under creativeequipment:
@@ -201,6 +211,7 @@ reject verb=\S+ .*done=0
 @commands Dedicated server boot with Nock Enough Arrows; bot joins
 @pass No `DecoderException: readerIndex` kick (NockRecipeBookSync still runs from Equipment's common setup)
 @fails `commonSetup` listener not added
+@reviewed 2026-11-20
 @draft the readerIndex kick is a client decode on a network join; perfBot bots have no connection, so only a real client joining the dedicated server shows it (client pass)
 ## SQ-CEQ-07
 @group A

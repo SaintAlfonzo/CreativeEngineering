@@ -192,7 +192,8 @@ look per box: the food line carrotHas=true applepieHas=true, the lunchbox line a
 @pass no lunchbox listed in the Food Dictionary; lunchbox still accepts foods; lunchbox tooltip says it does not contribute to food diversity
 @fails blacklist hits the container slots: drop it and filter the book list instead
 @from batches/r1113/c4_a.qb
-shell for f in r1113c4a/serverconfig/solcarrot-server.toml r1113c4a/serverconfig/solapplepie-server.toml; do echo "== $f"; grep -n "blacklist" "$f" | cut -c1-300; done
+@reviewed 2026-11-20
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); for f in "$L"/serverconfig/solcarrot-server.toml "$L"/serverconfig/solapplepie-server.toml; do echo "== $f"; grep -n "blacklist" "$f" | cut -c1-300; done
 look both files list solapplepie:lunchbox, lunchbag, golden_lunchbox and creativedelight:netherite_lunchbox; book listing and the lunchbox tooltip are client (CQ)
 
 @@section 2

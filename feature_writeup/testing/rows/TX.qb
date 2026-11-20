@@ -451,6 +451,7 @@ reject not loaded yet
 @commands `cdevtest season minecraft:plains,minecraft:desert,minecraft:snowy_plains`; `cdevtest season minecraft:plains minecraft:jungle`; `cdevtest season minecraft:bogus`; `cdevtest tag biome creativecalendar:seasons/arid`
 @pass one line per biome `verb=season biome=<id> type=<TEMPERATE|COLD|TROPICAL|DRY|ARID|FROZEN|PERMANENT_*|null> enabled=true` (3 lines, then 2 for the space form); bogus `error="no biome minecraft:bogus"` `done=0`; desert `type=ARID` exactly when the arid tag lists minecraft:desert; the types match what `/zq season` printed in older run docs
 @fails `TestJudges.season`: `error="Creative Calendar not loaded"` with Calendar in mods = the class name `com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes` moved; `enabled=false` and every type null = Calendar seasons switched off in the scratch toml
+@absent minecraft:bogus (the negative case: no such biome)
 > cdevtest season minecraft:plains,minecraft:desert,minecraft:snowy_plains
 > cdevtest season minecraft:plains minecraft:jungle
 > cdevtest season minecraft:bogus
@@ -469,6 +470,9 @@ look desert type=ARID only if the arid tag line lists minecraft:desert; snowy_pl
 @commands `setblock 985 -60 893 minecraft:sand` (on grass); `setblock 987 -57 893 minecraft:gravel` (over air, falls); `sleep 3`; `cdevtest floating 985 893 4`; `cdevtest floating 985 893 65`; `cdevtest floating 985 893 2 dim=minecraft:the_nether`
 @pass the 9x9 square after the gravel landed: `n=0 shown=0 skipped_columns=0` (sand on grass does not count); r 65 `error="r out of range 0..64: 65"` `done=0`; Nether (chunks not loaded) `n=0 shown=0 skipped_columns=25`; a real floating hit is checked in SQ-TX-23
 @fails `GroundJudge.floats` (harness: cdevtest_harness/run.sh); n>0 here: an earlier row left sand or gravel over air near 985 893 (read the `block= pos=` lines)
+# r1120fix (2026-11-20): own forceload of the site (W unloaded: the section header forceload does not run with --rows)
+> forceload add 960 864 1007 927
+sleep 3
 > setblock 985 -60 893 minecraft:sand
 > setblock 987 -57 893 minecraft:gravel
 sleep 3
@@ -486,6 +490,9 @@ reject Exception|\tat
 @commands `cdevtest under 985 900 1 -`; `cdevtest under 985 900 1 village`; `cdevtest under 985 900 40`; `cdevtest under 985 900 1 - minecraft:the_nether`; `cdevtest under 985 900 1 - minecraft:overworld dim=minecraft:the_end`
 @pass the forceloaded site: `verb=under starts=<n> skipped_chunks=0` (superflat may have no starts; then 0), with each start line in the form `id= chunk= box= pieces= cols= unloaded_cols= air_below= air_max= over6= water_below= water_max= base_water= base_earth= ring= foreign=`; rChunks 40 `error="rChunks out of range 0..32: 40"`; Nether positional `starts=0 skipped_chunks=9`; positional dim plus dim= `error="dim given twice"`
 @fails `TestJudges.under` / `GroundJudge.under` (harness); skipped_chunks>0 at the site: forceload from the section header not run
+# r1120fix (2026-11-20): own forceload of the site (W unloaded: the section header forceload does not run with --rows)
+> forceload add 960 864 1007 927
+sleep 3
 > cdevtest under 985 900 1 -
 > cdevtest under 985 900 1 village
 > cdevtest under 985 900 40

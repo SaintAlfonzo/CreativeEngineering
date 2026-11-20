@@ -98,8 +98,18 @@ def trades(base, new, professions):
 	a = json.loads((Path(base) / 'villager_trades.json').read_text(encoding='utf-8'))['professions']
 	b = json.loads((Path(new) / 'villager_trades.json').read_text(encoding='utf-8'))['professions']
 	ok = True
+
+	def stable(x):
+		# "listing" holds the listing object's identity ("58092/0x0000000805b57160"), new on every JVM run
+		# (otherwise farmer and botanist trades always differ on it)
+		if isinstance(x, dict):
+			return {k: stable(v) for k, v in x.items() if k != 'listing'}
+		if isinstance(x, list):
+			return [stable(v) for v in x]
+		return x
+
 	for prof in professions:
-		same = a.get(prof) == b.get(prof)
+		same = stable(a.get(prof)) == stable(b.get(prof))
 		print(f'{prof}: {"same" if same else "DIFFERS"}')
 		ok = ok and same
 	print('TRADES_SAME' if ok else 'TRADES_DIFFER')

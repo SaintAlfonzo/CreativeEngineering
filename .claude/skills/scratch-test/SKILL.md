@@ -8,7 +8,8 @@ description: Scratch server and client testing - write or refresh scratch queue 
 Files: queue [scratch_queue.md](../../../feature_writeup/testing/scratch_queue.md), run docs
 `feature_writeup/testing/scratch_run_<date>.md`, runner claim [RUNNER.md](../../../feature_writeup/testing/RUNNER.md),
 gotchas [gotchas.md](gotchas.md) (read its "Before the first boot" section before booting, and the rest when anything
-odd happens). Tools: `tools/scratch_query/` (prep_srv.sh, qrun.py, game_jvms.sh, sp_world.py; `zq_probe.js` is retired since 2026-11-16 and no longer copied, its verbs are `/cdevtest` verbs),
+odd happens). Tools: `tools/scratch_query/` (prep_srv.sh, qrun.py, game_jvms.sh, sp_world.py, qprescreen.py (probable batch
+faults in a plan or drive), qrerun.py (rerun list -> drive plan); `zq_probe.js` is retired since 2026-11-16 and no longer copied, its verbs are `/cdevtest` verbs),
 **`/cdevtest` and the `/pbot` test verbs** (Creative Devtools, in every prep_srv server: block, inventory, tank, box
 count and ages, use / break / kill / loot as a player or fake player, entity and player reads, recipe and tag data,
 `tickwarp`, `randomtick`, `watch`, `layerdump`, season types, floating sand, the earth fill `under` judge, item NBT; `/cdevreload compat` re-reads Compat's toml; bots attack, interact, eat with a real ticked use, sneak, look, walk with physics,
@@ -87,6 +88,8 @@ date", "collect queued tests".
    `qrowlint.py`); fix every E. The rows file is the batch: no separate copy in `batches/`.
 5. **Refresh** ("is the queue up to date"): compare `kubejs/assets/creativecommon/changelog/unreleased.md`,
    recently changed writeups and the latest run doc with the queue. Every player-visible bullet has a row;
+   `python3 tools/scratch_query/qprescreen.py --plan-json PLAN` sorts a plan's rows into probable batch faults,
+   risks and stale rows (fix the probable ones first);
    `python3 tools/scratch_query/qrowlint.py` lists rows whose sources changed after they were reviewed (rewrite them,
    then set `@reviewed <date>` on the row or `@@reviewed` on the section) and ids gone from the dumps; superseded rows
    get `@superseded <replacement>`; ids a row names on purpose although the dumps lack them (a negative test's
@@ -101,11 +104,21 @@ everything below is the default unless the prompt says otherwise.
 
 ### Run defaults
 
-1. **Debug blockers as they come up**: probes, batch regexes, tooling, boot crashes. Fix tooling freely (in
-   `tools/`).
-2. **No gameplay changes to make a row pass.** A temporary change for a test (config value, scratch datapack, srv-only
-   script) lives in the scratch `srv/` only, or is reverted before the run ends. A real bug fix that changes
-   behavior is a finding: report it and add a TODO row; fix it only if the user said to.
+1. **Environment faults stop the run; fix them, then resume.** An environment fault is a defect in the test setup,
+   not in the feature: tooling, batch steps or regexes, prep, jar set or pinning, world or fixture, boot, perf
+   capture, or a verb that misbehaves. When one would invalidate or fail other rows (same cause likely to hit the
+   next rows), stop at the row boundary instead of running on, and do not judge the affected rows FAIL. Then: find
+   the cause from the logs, fix it, record it in the run notes (cause, fix, which rows to rerun), rerun the affected
+   rows, and continue. A fault confined to one row: `BATCH-FAULT` (B4), carry on. Same fault twice after fixes:
+   stop and report.
+2. **Fix only the environment; analyze the rest later.** Allowed edits: `tools/` (scratch tooling), the row steps in
+   `.qb` and run batches, and the scratch `srv/`/`OUT` (props, tomls, jars, world). Not allowed to make a row pass or
+   to clear a blocker: anything under `development/`, `kubejs/`, `data/`, `configs_edited/`, tracked `config/`, or
+   any other pack code or content. A product bug (wrong behavior, a FAIL with the environment sound, a boot crash
+   from our jars) is a finding: log it with evidence (test ID, log lines, suspected file), add a TODO row, run the
+   rows that do not depend on it, and leave analysis and the fix to a later session unless the user said to fix it.
+   A temporary test change (config value, scratch datapack, srv-only script) lives in `srv/` only, or is reverted
+   before the run ends. When unsure whether a fault is environment or product, treat it as product: report, do not edit.
 3. **Unclear next step**: do what the latest run doc that did the same kind of step did (run docs in
    `feature_writeup/testing/`, newest first), and note the choice.
 4. **Perf capture on** for every bulk run: `perf_session.sh start <run id>` before the first boot, JFR on (never
@@ -126,7 +139,30 @@ everything below is the default unless the prompt says otherwise.
    instead of sleeping. 1.19.2 has no `/tick` command (tickwarp replaces it).
 9. **Notes as you go**: append to the run doc's "Run notes" at every boot, batch end, FAIL and decision, with clock
    times. Enough for a fresh session to resume if this one stops.
-10. **Stop and report** on a boot failure caused by our jars that you cannot fix inside the run defaults.
+10. **Stop and report** on a boot failure caused by our jars (a product bug, never patched in-run), or an
+    environment fault you cannot fix within rule 2. Report: symptom, evidence, rows blocked, rows safe to run.
+11. **Fix a simple batch fault and rerun it in-run** (owner, 2026-11-20). The runner, or a judge agent working for
+    it, fixes a `BATCH-FAULT` row on the spot when the fix is simple, then reruns the row in the same run; the row
+    keeps its id and the rerun is verdict history. **Simple** means all of: the cause is proven from the row's own log
+    in about 10 minutes; the fix stays inside the row's steps in its `.qb` (regex or anchor, coordinates, a
+    `forceload`, a capture moved into the row, an id renamed to the one in the dumps, a count or value taken from the
+    dump or writeup, a wait length) or a few lines of a probe only that row's file uses; the expected behavior is
+    the documented one (writeup, plan ruling, changelog), so the edit follows the docs and never just the observed
+    output; and `qrun.py lint FILE --rows ID` is clean after it. **Not simple**, judge `BATCH-FAULT`, write the cause
+    and carry on: a change to `@modset` / `@@modset`, `@@phase`, `@group` or a section's `@@prep` that other rows
+    share; a new probe or a tool change outside the row; docs and code that disagree (that is a product finding,
+    rule 2); a second fault on the same row after one fix.
+    Rerun: when the step's server is still up (a hand-driven `qrun.py run`), `qrun.py run OUT FILE RES --rows ID` on
+    it right away. Under a drive (the server stops at the step's end), `qrerun.py --add perf/runs/RUN/rerun.txt ID`;
+    at a step boundary, or at the end of the drive, `qrerun.py perf/runs/RUN/rerun.txt` writes a plan, then
+    `qrun.py drive start RUNr --plan-json ...` runs it (stop the main drive at a row boundary first, `drive resume`
+    it after). Log each fix in the run notes: `BF-FIX ID: cause -> fix; rerun RESULT`. The same fix applies to
+    later rows that will hit the same cause: fix those before the drive reaches them (`qprescreen.py RUN`). A row
+    that cannot run in this drive at all (a release gate, a missing payload): append its id to
+    `perf/runs/RUN/drive/skip.txt` (read at each step start, no restart) and say why in the run notes.
+    Parallel sessions: one owner per `.qb` file at a time (say which files in the run notes or by message); never
+    edit the rows of the drive step that is running (`state.json` status `running`), and tell the drive owner
+    before any change to a row's `@modset`, since the step key holds it.
 
 ### B1. Claim and preflight
 
@@ -140,6 +176,11 @@ everything below is the default unless the prompt says otherwise.
   prep, or lack a mod_sides.md row. `--no-pin` only with the owner's OK; it is recorded in every verdict file.
 - Read the queue header (pinned notes, newest additions), its "World groups" and setup notes, and the latest run
   doc's notes.
+- **Pre-screen the plan before the first boot**: `qprescreen.py --plan-json PLAN` (or `qprescreen.py RUN` for a
+  drive already planned) lints every step with its own row selection and sorts findings into likely (unset
+  captures, unloaded coordinates, dead ids, retired `/zq` output, any E), risk and stale. Fix the likely rows first
+  (run default 11's fixes, in the `.qb`); stale rows near the front of the plan get their source diff read and are
+  rewritten or marked `@reviewed`. r1120nv skipped this and lost 20 rows to unset home captures in its first 10 steps.
 
 ### B2. Plan
 
@@ -203,8 +244,9 @@ everything below is the default unless the prompt says otherwise.
 ### B4. Judge
 
 Turn every LOOK into PASS or FAIL from `RES/rows/<ID>.log`, `rows/<ID>.shell.txt` and `shots/`. A failure caused by
-the batch (wrong regex, wrong coordinates) is `BATCH-FAULT`: fix the row's steps in its .qb and rerun when cheap
-(the row keeps its id: reruns are verdict history, no new `-NNb` ids). qrun itself marks a row `HARNESS` when a regex
+the batch (wrong regex, wrong coordinates) is `BATCH-FAULT`: when the fix is simple, fix it and rerun it in-run
+(run default 11); otherwise write the cause for a later rewrite pass (the row keeps its id: reruns are verdict
+history, no new `-NNb` ids). qrun itself marks a row `HARNESS` when a regex
 does not compile, a capture was left unset by a skipped row, or a shell exit code is the only failure while the log
 checks passed. A FAILed row found to be a batch fault: `qrun.py judge RES ID --reclassify BATCH-FAULT --cause "who,
 when, why"` (the failed checks stay recorded). Verdict table in the

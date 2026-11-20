@@ -7,17 +7,19 @@
 @@date 2026-11-01
 @@sources feature_writeup/briefs/food_stack-sizes.md
 @@text
-@@text Needs `kubejs/generation_scripts/stacks/stack_sizes.json` from this tree (1341 entries, 2026-11-01). Startup data: full
+@@text Needs `kubejs/generation_scripts/stacks/stack_sizes.json` from this tree (1398 entries since 2026-11-11; 1341 on 2026-11-01). Startup data: full
 @@text restart. Group A.
 @@text
 @@table
 ## SQ-STK-01 | stack sizes applied, no missing dict key
 @group A
 @commands Boot; `grep -nE "\[stack_sizes\]\|no item_dict key" logs/latest.log logs/kubejs/startup.log \| head`
-@pass `set 1341 stack sizes`, no `no item_dict key` warning
+@pass `set 1398 stack sizes` (the entries of `stack_sizes.json`, regenerated 2026-11-06 and 2026-11-11: 515 x 8, 53 x 16, 434 x 32, 396 x 64; was 1341), no `no item_dict key` warning
 @fails count differs: the JSON in the instance is not the regenerated one
 @from batches/r1102b/s3_A.qb passed
-bootexpect \[stack_sizes\] set 1341 stack sizes
+@reviewed 2026-11-20
+# r1120lr batch fault: stale count 1341; the boot set 1398 with no warning
+bootexpect \[stack_sizes\] set 1398 stack sizes
 bootreject no item_dict key
 kjsreject no item_dict key
 
@@ -78,6 +80,7 @@ look brew_flask and potion against the instance's kubejs/exported/stacks/stack_s
 @commands After the restart: `/dumpstacks`, then `python3 tools/stack_sizes.py` (`food/stack-sizes #2`)
 @pass stack_sizes.md dated today, the items above at their new sizes
 @fails none
+@reviewed 2026-11-20
 @draft not a scratch check: tools/stack_sizes.py reads only the instance's kubejs/exported/stacks (no input option) and writes feature_writeup/stack_sizes.md; run /dumpstacks in the owner's game, then the tool (the sizes themselves are read live by SQ-STK-02 to -04 and -06)
 ## SQ-STK-06 | Syrup stacks to 64; 3 cucumbers + 2 zucchini + salt pickle; cabbage cutting gives 4 leaves
 @group A

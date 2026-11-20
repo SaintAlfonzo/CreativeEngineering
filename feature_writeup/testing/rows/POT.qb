@@ -44,20 +44,21 @@ expect \[pottest\] PASS PP-02
 count \[pottest\] FAIL PP-0[12]: == 0
 shell grep -aE '\[pottest\] .*PP-SUM' logs/latest.log | cut -c1-200 | head -30
 look PP-SUM per-holder counts close to flower_pots.md section 1 (probe copied fresh from tools/flower_pot_test/pot_probe.js)
-## SQ-POT-03 | /pottest all: no exception except the Another Furniture planter box (F1)
+## SQ-POT-03 | /pottest all: no PP-03 exception on any holder (F1 struck: the Another Furniture planter box passes too)
 @group same run (probe copied fresh from `tools/flower_pot_test/pot_probe.js`)
 @commands grep `PP-03`; for any FAIL read the `stack` field of that row in `kubejs/exported/blocks/pot_probe.json`
 @pass `PASS PP-03` for every holder, 0 `minecraft:hanging_roots` exceptions (Immersive Weathering wall roots no longer get `facing=up`: hanging roots against the top of a holder do nothing); planter box and fungi caps pass (F1 struck)
 @fails `Cannot set property ... facing ... to up` again: `WallRootsVerticalFaceMixin` (CD `mixin/immersive_weathering`) not applied, check the boot log for the CD mixin config; another exception: its frames are in `stack`
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
 > dumppots
 waitlog Dumped \d+ potted blocks 300
 > pottest all
 waitlog \[pottest\] INFO PP-DONE 900
-count \[pottest\] FAIL PP-03: == 1
-expect \[pottest\] FAIL PP-03: another_furniture:oak_planter_box .*ClassCastException
-expect \[pottest\] FAIL PP-03: another_furniture:oak_planter_box .*fungidelight:cleaned_cap
-look the server is still running after the planter box (the next row answers); the four Fungi ids named
+# r1120fix (2026-11-20): F1 is struck (r1120lr: all 12 holders PASS PP-03), so no FAIL line is expected any more
+count \[pottest\] FAIL PP-03: == 0
+count \[pottest\] PASS PP-03: >= 12
+reject (?i)\[pottest\] .*ClassCastException
 
 ## SQ-POT-04 | accepted plants come back when the holder breaks
 @group same run
@@ -65,9 +66,14 @@ look the server is still running after the planter box (the next row answers); t
 @pass `PASS PP-04` for every `pot` holder: an accepted plant comes back when the holder breaks; `beautify:hanging_pot` rows carry `toggle: true` (the second click takes the plant back, the probe replants once) and drop the pot plus the plant
 @fails `beautify:hanging_pot` drops only the pot without `toggle`: old probe copied (r1103 broke an empty pot after plant, take back, plant, take back); another holder eating the plant: new finding in flower_pots.md 3
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-20
 > pottest all
 waitlog \[pottest\] INFO PP-DONE 900
-count \[pottest\] FAIL PP-04: == 0
+# r1120fix (2026-11-20): floralench:large_pot drops the filled pot item with the plant kept inside it
+# (flower_pots.md section 1 records that as its drop; large pots hidden since 2026-10-31), so its PP-04 FAIL line is
+# accepted when every lost entry is one floralench:large_*_pot item; any other holder failing, or an empty drop, still fails
+count \[pottest\] FAIL PP-04: (?!floralench:large_pot ) == 0
+reject \[pottest\] FAIL PP-04: floralench:large_pot .*\[(?!1x floralench:large_\w+_pot\])[^\]]*\]
 count \[pottest\] PASS PP-04: >= 1
 
 ## SQ-POT-04v | hand check: vanilla flower pot with Gossypium and IE hemp seed gives the plant back on a survival break
@@ -76,7 +82,9 @@ count \[pottest\] PASS PP-04: >= 1
 @pass Each break drops `minecraft:flower_pot` plus the plant (gossypium, or the IE hemp seed); the explosion drops what survives it, not air
 @fails Nothing drops: the pack tables `kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json` / `kubejs/data/immersiveengineering/loot_tables/blocks/potted_hemp.json` not loaded (`/reload`, check for a datapack error)
 @from batches/r1102b/r_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+> forceload add 288 496 296 508
+sleep 3
 > setblock 290 -60 500 minecraft:flower_pot
 > setblock 292 -60 500 minecraft:flower_pot
 > pbot spawn pot4 291 -60 504 minecraft:overworld survival
@@ -166,6 +174,7 @@ look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, 
 @commands `/cdevtest tag item creativecompat:not_in_flower_boxes`; `/cdevtest tag item another_furniture:planter_box_banned`; `/cdevtest tag item creativecompat:flower_box_plants`; a `supplementaries:flower_box`, an `another_furniture:oak_planter_box` and a `vinery:flower_box` at 860 -60 700 / 862 / 864; `/cdevtest use` each with `minecraft:melon` and `minecraft:poppy`, `/cdevtest be` each
 @pass ban tag n=8 with the six new ids and both azaleas; planter_box_banned holds them; flower_box_plants holds none of them; after the melon clicks no box's block entity lists `minecraft:melon` (a melon block may be placed next to it by the item's own use); the poppy goes into each
 @fails `misctags.js` `not_in_flower_boxes`; `SuppFlowerBoxPlantsMixin`; Vinery `LegacyFlowerBoxBlock` reading `flower_box_plants`
+@reviewed 2026-11-20
 > forceload add 840 680 880 720
 > cdevtest tag item creativecompat:not_in_flower_boxes
 > cdevtest tag item another_furniture:planter_box_banned

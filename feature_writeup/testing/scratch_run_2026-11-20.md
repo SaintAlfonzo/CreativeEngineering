@@ -239,3 +239,142 @@ SQ-MBX-06, SQ-CDFW-07, SQ-POT-01 (rerun).
 | SQ-VDF-09 | BATCH-FAULT | reclassified from FAIL: judge-3, 2026-11-20, stale namespace: cans are creativedelight:canned_* (recipes creativedelight:shapeless/canned_* and _broth in recipes/all.csv); canned_mhadjeb unknown; done=0 is the expected unknown-item line; no line matches /verb=makes item=creativeengineering:canned_mashed_potatoes n=[1-9]/; no line matches /verb=makes item=creativeengineering:canned_mashed_sweet_potatoes n=[1-9]/; no line matches /verb=makes item=creativeengineering:canned_bat_soup n=[2-9]/; no line matches /verb=makes item=creativeengineering:canned_cave_soup n=[2-9]/; no line matches /verb=makes item=creativeengineering:canned_insect_stew n=[2-9]/; no line matches /verb=makes item=creativeengineering:canned_golden_nutritional_bar n=[1-9]/; /verb=\S+ .*done=0/ matched: [20Nov2026 02:25:29.224] [Server thread/INFO] [com.SaintAlfonzo.creativedevtools.test.TestCtx/]: [cdevtest] verb=item done=0; PASS: creativedelight:canned_noodle_soup effects=farmersdelight:nourishment, canned_bone_broth effects=-; _broth recipes for bat/cave soup and insect stew in recipes/all.csv; golden bar can inputs include honey_bottle (miners_delight/can_types.js) |
 | SQ-VDF-10 | PASS | vintagedelight:cucumber_noodles not in compost now in the run or instance dump (unchanged, not compostable) |
 | SQ-VDF-11 | PASS | farmersdelightcutting and createmixing garlic_clove_from_* give garlic_clove*5; sliceanddice:creativedelight_farmersdelightcutting/garlic_clove_from_cutting *5 |
+
+## 9. r1120nv: every never-run row
+
+Owner request (2026-11-20): execute the scratch test queue, starting with the never-run rows. This section is that
+first pass; jar-changed and failed rows follow as their own drives once it ends.
+
+- Scope taken: every never-run row with steps, server-side (`qrun.py plan --never --json` filtered to state `never`):
+  1249 rows in 138 sections; phases server 1105, longwait 7, worldgen 108, long 29, in skill order. Plan file
+  `perf/runs/r1120nv/plan_never.json`.
+- Not taken: 317 never-run drafts (no steps; 270 server, 47 worldgen), client rows (pinned until wave 8), jar-changed
+  (336) and failed rows (next drives), owner rows.
+- Perf: session `r1120nv` (collector pid 915413).
+- Jars, preflight 2026-11-20: `check_all.py --fast` 37 run, 0 failed. `jarstamp.py pending`: creativeBrewing
+  (2611192245), creativeCalendar, creativeCompat, creativeLoot (2611200015) built, not installed; prep_srv.sh swaps them
+  in. Per-step stamps in `perf/runs/r1120nv/sNN/pinned.json`. Disk 54 GB free.
+
+### 9.1 Run notes
+
+- 08:56 drive r1120nv started detached (182 steps, 1336 rows incl. lower-boot rows pulled in by @boot N rows), driver ETA about 3102 min; RUNNER.md claimed by the drive.
+- 09:27 after steps 1 to 10 (49 rows: PASS 5, FAIL 20, LOOK 15, HARNESS 9): 9 HARNESS rows had {SAH1..3} / {SBH1,3}
+  unset. Cause (ENV, batch): those rows use home coordinates from the r1103 home batches (`batches/r1103/sA_*.qb`
+  capture SAH / SBH), never captured in their own rows file; the never-only selection is not the cause. Missed in
+  preflight: no per-section `qrun.py lint --rows` was run before the drive. Drive stopped at 09:28 (step 11 had reached
+  Done; the stop shut it down, no fault). Lint of every planned section with the same selection
+  (`perf/runs/r1120nv/lint_bad.json`): 20 rows affected, a bounded fault, so they are judged BATCH-FAULT and the
+  drive goes on. Rows to rewrite with their own home marker and capture, then rerun: SQ-BBQF-04, SQ-CNG-02, SQ-DRK-01, SQ-DW-02, SQ-EFB-01, SQ-EFB-15, SQ-EFB-16, SQ-ENM-03, SQ-FCB-00, SQ-FGD-12m, SQ-FGD-15c, SQ-JFP-01, SQ-PSD-06, SQ-PSM-06, SQ-PSM-07, SQ-PSM-08, SQ-RB-21, SQ-SLT-05, SQ-VTDA-10, SQ-WCD-07.
+  Other lint warnings over the plan: W stale 945 (row sources changed after the rows were written: expect more
+  batch faults on old sections), W boot 68, W waitlog 50, W unloaded 46.
+- 09:30 drive resumed at step 11.
+- 09:35 judging steps 1 to 10: SQ-SALT2-03, -04 are BATCH-FAULT (regexes expect the retired zq_probe output, e.g.
+  "block tags of X:", where /cdevtest prints `verb=tagsof id=X block_tags=...`; the data itself is right). Decision (run
+  default 3, as r1120): the drive goes on; stale-format rows are judged from their log evidence and reclassified
+  BATCH-FAULT with the real result in the cause, then rewritten after the run. Not stopping to rewrite the 945 stale
+  rows first.
+- 09:34 steps 13, 14 FAILED in prep: modset port_chain (source ceporttesting) finds its chain jars missing (moved to CEPortTesting disabledmods/ 2026-11-13; r1119 note 20:52, r1118 handover 5). Not fixable here (another instance); the driver skips them, rows blocked; owner blocker stands.
+- 10:0x ENV FIX port_chain (owner: these rows must run, fix in-run). Two causes: (1) the manifest took its jars from
+  CEPortTesting, whose chain jars are in disabledmods/ since 2026-11-13 (Common-only setup there, left as is);
+  `modsets/port_chain.toml` now uses source pack (pack mods/ plus build-jar swaps), kubejs probes (empty plus the zz_
+  probes, as CEPortTesting's examples-only kubejs was), upstream pack. (2) qmodset.py checked `require` after the
+  spec's -GLOB drops, so a spec that drops a chain jar on purpose (step 14: -creativecalendar -creativedelight
+  -creativebrewing) failed even with every jar present; a require glob the spec drops is no longer missing. Test build
+  of step 14's spec: 13 jars, drops applied, pinned. Drive stopped at a row boundary and resumed: resume resets the
+  failed steps 13, 14 to pending and reruns them first. Clears the r1118 handover 5 / r1119 handover 3 blocker.
+- 10:00 step 13 rerun crashed at FML load: creativedelight and creativebrewing require creativeloot (carved after the manifest was written; not in the chain group). Checked the mandatory deps of every own jar in the chain (mods.toml): only creativeloot was missing (Farmer's Delight is nested in Creative Delight). Added creativeloot-*.jar to port_chain.toml's chain group; crash report kept in perf/runs/r1120nv/crash_s12_loot/. Stopped and resumed at 10:01.
+- 10:03 step 14 crashed at FML load: `kubejsdelight requires farmersdelight`. The spec of SQ-CBP-08 and its rerun row (CBP.qb section 1, Equipment without CB) drops creativedelight, which nests Farmer's Delight, but kept kubejsdelight from the chain group; never booted before (never-run row). Row fix: both @modset lines add `-kubejsdelight-*.jar`; step 14's stored modset and key in drive/state.json updated to match (backup state.before_cbp_fix.json). Crash report in perf/runs/r1120nv/crash_s13_kjsdelight/. Resumed 10:14.
+- 2026-11-20 11:02 judge-1 real FAIL SQ-CCO-12a..f (all six Common-only sets): `creativecommon:kubejs/tags/wthittags.js#32`
+  throws `TypeError: Cannot read property "required" from null` at boot and on /reload. The sets have no
+  `kubejs/generation_scripts/wthit/silk_touch_blocks.json`; `JsonIO.readString` returns null, `JSON.parse` gives null
+  and the script reads `doc.required` (no null guard, no jar fallback as `global.genText` gives others). Everything else
+  in the six rows passed (startup ERROR count 0, Magic Resistance applied, Phantom Bane unknown only without beacons).
+- 2026-11-20 11:02 judge-1 real FAIL SQ-GLD2-03: `[golden values] minecraft:pumpkin_pie is not a food` (x2): the
+  golden and gilded pumpkin pie keep upstream 4 / 1.2 and 8 / 8.0 (2026-11-19 food dump) instead of golden_food.md 3.6's
+  16 / 20; `goldenfood/golden_values.js` reads Pumpkin Pie's food after the pack made it a placed pie (log_warnings.md
+  S16, no TODO row seen). Count line now reads 41 queued (row's 46 is stale); beef values right (16, 20).
+- 2026-11-20 11:02 judge-1 FAIL SQ-CFR-05 (cause not proven): after `/weather rain` and 220 warped ticks
+  (rainOutTicks 160) the open-sky campfire on stone and the fixture campfire stay lit; coal-block, soul and roofed ones
+  lit as expected. Mixin applied (SQ-CFR-01), `creativecommon:campfire/rain_douses` filled, season clock early spring,
+  plains. SQ-CFR-06 (stays lit) passed only because nothing douses. Suspect `CampfireRain.tick`'s `isRainingAt` gate
+  (CD `campfire/CampfireRain.java`); rerun with a rain probe at the campfire before fixing.
+- 2026-11-20 11:02 judge-1 FAIL SQ-ROLL-12 (known): Roll Delight medley cans (`canned_legendary_roll_medley`,
+  `canned_mythical_roll_medley`) exist: the open SQ-ROLL-12 vs SQ-ROLL-27 owner pick (TODO `largecontent/mod-additions #39`).
+- 11:04 judge-1 (steps 1 to 35, 101 rows): PASS 46, BATCH-FAULT 41, FAIL 9, LOOK 5 open. Real FAILs to TODO: SQ-CCO-12a..f -> wthit #17; SQ-GLD2-03 -> food-tuning #30; SQ-CFR-05 (-06 PASS void) -> misc-gameplay #1; SQ-ROLL-12 is the open owner decision mod-additions #39. Batch-fault causes grouped in judge-1's lines above, for one rewrite pass after the run.
+- 11:20 qdrive.py: a step now re-reads its rows file at start and drops rows marked @superseded or @draft since planning (logged 'dropped'); for the parallel batch-fault session (Scratch test batch faults [688943]), which edits .qb rows from the front of the pending list. Driver stopped and resumed to load it.
+- 11:27 ENV FIX step 23 (CDJ.qb section 1, incomplete 1/6): qrun crashed with FileNotFoundError on RES/rows/'SQ-CDJ-05 / SQ-DDP-01 rerun (I1)'.shell.txt (a '/' in the row id); the 10:14 and 11:20 reruns of the step died the same way. qrun.py, qverdict.py, qlint.py, qpair.py now use a file-name form of the id (fsid: '/' -> '_') for rows/, verdicts/ and crash/ paths; qtests 20/21 (PROC-20 = queue render behind the parallel session's .qb edits, not this change). Step 23's 5 rows rerun by drive resume after the drive ends. Parallel session added skill run default 11 (simple BATCH-FAULT fixed and rerun in-run; rows in its owned files go to it).
+- 2026-11-20 11:32 judge-2 real FAIL SQ-FF-04: `corn_delight:nachos_bowl` reads 12 / 1.0, wanted 13 / 1.0 (the cheese
+  rule, `creativedelight/cheese_values.js` row `['nachos_bowl', 13, 1.0]`); the other eight dishes of the same list
+  applied (broccoli soup 13 / 0.7 ... fiery fondue 15 / 0.75), no `[food values]` error. Suspect the
+  `food_value_copies.js` `absolute()` modify does not reach the Corn Delight item (stack-sensitive food or a later writer).
+- 2026-11-20 11:32 judge-2 BATCH-FAULT (steps 36 to 45, s35_res..s44_res; causes in each verdict): SQ-DEP-05: no forceload
+  at 330,300 (campfire douse untested, tag right); SQ-DEP-02 (rerun 5.2): no @modset dropping creativebrewing, full pack
+  booted; SQ-DRK-01: {S5H*} home capture (09:27 group); SQ-DRK-04: bytype create:filling capped at 500 lines and the s5
+  spout probe reads -1 mB for the water control too (createfilling/kiwi_tea exists); SQ-EX-01: `Gave 1 \[` vs padded
+  `Gave 1    [`; SQ-BOT-04: zz_c3_probe prints TransitionalDisplayState@hash, no states; SQ-FCK-20: no forceload at
+  1200..1234,1200 and '35 rules on 35 blocks' should be 33 blocks (two lantern blocks have two rules); SQ-FCK-21,
+  SQ-FCK-23: no forceload (1250,1200; 1260,1240); SQ-MG-23: itemMerges count 2 -> 4 (Little Logistics components;
+  item_merges.md line 553 stale too); SQ-MG-24: rope rdetail prints the shaped grid with `empty` slots; SQ-T1-02: regex
+  wants cookedrottenham,rottenham adjacent, frozen_flesh sorts between; SQ-FDI-05: shell reads world dir r1113c4a/, the
+  step world is r1120nv_<step>; SQ-FF-07: `recipes minecraft:melon` substring hits melon_seeds, rdetail _from_slices
+  capped at 40 of 46. Real results of all 14 PASS where tested.
+- 11:32 judge-2 (steps 36 to 45, 54 rows): PASS 38, BATCH-FAULT 14, FAIL 1 (SQ-FF-04), LOOK 1 open (SQ-T1-01 names
+  half, client lang).
+- 11:33 judge-2 (steps 36 to 45, 54 rows): PASS 38, BATCH-FAULT 14, FAIL 1, LOOK 1 open (SQ-T1-01 names need a client lang dump). SQ-FF-04 -> TODO meals #69. Note: SQ-DEP-05 (campfire rain douse) unloaded, so campfire rain is still untested beside SQ-CFR-05.
+- 11:44 qdrive.py reads drive/skip.txt at each step start (rows left out of a running drive without a restart); SQ-PROC-14 (step 83) skipped: T3 release gate needing an install-mode payload, deploy/latest is the 2026-11-09 update payload; runs at release. Driver restarted to load it. Parallel session's rerun list perf/runs/r1120nv/rerun.txt holds 83 fixed rows for a rerun drive after r1120nv.
+- 11:53 skip.txt + rerun.txt: SQ-FSD-02 (step 149) and SQ-VH-12 (step 169) gained @boot 2 after planning; SQ-FTW-02 (step 151) had @group same -> A, now @group B (FTW.qb line 33, same world kind as SQ-FTW-01). All three run in the rerun drive. Worldgen sections GFB, WGP, BLC, CWG, RING, SVA, TER now prep group A as normal worlds (batch-fault session): longer boots there.
+
+### 9.2 r1120fix: batch-fault fixes, pre-screen and fixed rows waiting for rerun
+
+Owner request (2026-11-20 11:10, session "Scratch test batch faults"): fix the r1120 and r1120nv batch faults, fix
+pending rows that would probably batch-fault before the drive reaches them, mark unneeded rows superseded, and add a
+skill rule for fixing and rerunning simple batch faults in-run. Six subagents owned the `.qb` files by drive position
+(G1 FF..HCS and the judge-2 files DEP, DRK, EX, FCK, FDI, FF; G2 HH; G3 HOP..PWG; G4 RB..VN; G5 the worldgen and long
+files; G6 files with no pending step). Drive owner ("Scratch tests breakdown") kept the drive, state.json, qdrive.py and
+judging; no edit touched a running step. Brief, inputs and per-group results:
+`tools/scratch_query/batches/r1120fix/` (BRIEF.md, G1..G6.csv: one line per test id, kind and fix).
+
+- Counts (G1..G6.csv): bf-fixed 112 (already ran, rerun), prefixed 288 (pending, fixed before running), reviewed 325
+  (stale, source diff read, no change), superseded 24, supersede candidates 6, suspected product 4, unfixed 13.
+- Pre-screen (`qprescreen.py r1120nv`), pending steps: before, about 300 likely findings (E var 7, W var 54, W unloaded 61,
+  dead ids 184 including structure ids the dumps lack) and 778 stale rows; after, 20 likely, all W unloaded on bot
+  spawns, teleports, locate origins or generator probes (checked, intended), 2 stale.
+- Main causes fixed: home captures from the retired r1103 batches (SAH, SBH, S5H: each row now places its own marker);
+  captures read from rows the selection skips; missing forceloads; ids moved to `creativedelight:` / `creativecommon:` /
+  `creativebrewing:` / `creativeworldgen:`; retired `/zq` output; stale counts (merges 4, idle-tick rules 35 on 33
+  blocks, stack sizes); salt licks now the placed Rock Salt Block (18 HH rows); stale `@draft` lines on rows with steps
+  (the drive drops them: SQ-LOOT-07, -09, SQ-PTH-29, -30, SQ-TP-42); worldgen group A sections that need terrain now
+  boot normal worlds (`@@prep A: level-type=minecraft:normal ...`); rows needing their own boot got `@boot 2` or
+  `edit` + `restart`; `expect` used on shell output (reads the log only).
+- Superseded (24): SQ-BBQ-08, SQ-CFR-02, SQ-CIF-01, SQ-CWG-02, -04, SQ-EDL-01, -02, SQ-HH-464, -474, -475, -476,
+  SQ-MDP-03, -12, SQ-PST-06, -09, -10, SQ-PWG-09, -12, -24, -45, -46, -47, -67, SQ-RW-04 (reasons on each row).
+- Tooling: qrun.py lists `@superseded` rows and runs none; qdrive.py drops them (drive owner merged); new
+  `qprescreen.py`, `qrerun.py`; `merge_core_probe.js` checks the Creative Delight potato cutting id;
+  `dump_diff.py` trades mode ignores the listing object hash. Skill run default 11 (fix and rerun), B1 pre-screen,
+  gotchas (r1103 home captures, superseded rows in a planned drive).
+- Docs: crops.md "Grasses" follows the shipped 1.2.02 rule (winter off only); item_merges.md expects 4 pack merges.
+
+Fixed rows waiting for rerun: `perf/runs/r1120nv/rerun.txt` (116 ids: the bf-fixed rows plus SQ-FSD-02, SQ-VH-12,
+SQ-FTW-02 skipped in r1120nv after their @boot / @group changed). The drive owner runs
+`qrerun.py perf/runs/r1120nv/rerun.txt` and `qrun.py drive start <RUNr> --plan-json perf/runs/r1120nv/rerun.plan.json`
+after r1120nv. Skipped in r1120nv (`drive/skip.txt`): SQ-PROC-14 (release gate), SQ-TSY-01 (needs a remote client),
+SQ-WCD-04 (needs its own fresh level, rewrite after the drive).
+
+Open for the owner (not edited):
+- Suspected product: SQ-PCK-02 (8 pancakes in the pancake tags since the Hearth & Harvest waffle; row expects 7);
+  SQ-PST-12 (row expects jungle grass slowed, code makes tropical seasons neutral); SQ-PSU-09 (steps expect
+  Nourishment from vinegar, pass text says Nausea only); SQ-RFX-28 (British "colour" in Compat config comments, TODO
+  `conventions #39`); SQ-AV-01 ("Unknown recipe: minecraft:furnace" on a full-pack scratch server, though the dump
+  lists it; row now uses a stick).
+- Expectations changed to follow the docs, veto if the docs are wrong: SQ-LGM-11 Comfort 120 s (R5, dump; plan A4 said
+  1 min); SQ-HH-477 Rock Salt dispenser keeps a waxed lick waxed (salt.md 8); SQ-PST-03, -08, -09c, -10c, -11, -11b
+  grass winter only (1.2.02).
+- Supersede candidates: SQ-ENM-05b (duplicate commands of SQ-ENM-05), SQ-SLK-01 (SQ-SLK-01c covers it), SQ-CBP-07
+  (legacy config carry), SQ-CUP-05 (needs a save from before the cup removal), SQ-MDP-01, -06, -10 (half removed cups,
+  half valid: split or rewrite).
+- Unfixed: SQ-FF-03..08 ran before the fix (no fault found in lint); SQ-PROC-14, SQ-TSY-01, SQ-WCD-04 (skipped above);
+  SQ-PSW-03 waitlog shares text with SQ-PSM-04 (only bites on a locate timeout); SQ-DEP-02 (@modset, drive owner).
+- Tool follow-ups: `s5_probe.js` spout reads -1 mB even for water; `c3_probe.js` pot prints TransitionalDisplayState@hash
+  (no row depends on either now); `salt_probe.js` should accept `hearthandharvest:placed_rock_salt_block`; qrowlint
+  calls structure ids dead (read `kubejs/exported/structures.json`); qlint W unloaded fires on bot teleports, locates
+  and `dim=` probes; SQ-PWG-90 still expects the -17 jar; SQ-MOB-N6, -N8 (WGE) unset captures, not in a pending step.

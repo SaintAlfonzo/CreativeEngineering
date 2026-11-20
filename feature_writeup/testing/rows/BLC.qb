@@ -7,6 +7,7 @@
 @@phase worldgen
 @@date 2026-10-27
 @@jars creativecommon creativeworldgen
+@@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309
 @@text
 @@text Creative Common 1.1.03 (installed 17:25) with the `BiomeLayoutTuner` disk cache and the KubeJS `biome_overrides.js` log
 @@text change (TODO server #19, perf.md 11.2 #3). Group A. Fresh world folder; the instance's
@@ -30,12 +31,16 @@ look under 2 s between the biome_overrides.js line and the next KubeJS line; the
 @commands Delete `biome_layout_cache.json.gz`, boot; then `/reload`
 @pass Boot: the `override` lines (a solve, about 10 s) and the file written again, byte-identical to the instance's copy (`cmp`); `/reload`: `(memory)`
 @fails File not written: look for `could not write` in the messages; differs: the solve is not deterministic
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): it shared SQ-BLC-01's boot (cache in place, so no solve): the row deletes the server copy's
+# cache file and restarts itself
+edit rm -f kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz && test ! -e kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz
+restart
 bootexpect \[biome-tuning\] override minecraft:overworld
 shell test -s kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz && cmp kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz "$INST/kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz" && echo "cache rewritten, identical"
 > reload
 waitlog \[biome-tuning\] inputs unchanged, reusing the last solve \(memory\) 120
-look own boot with srv/kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz deleted first: the override lines (a solve, about 10 s) on the boot
+look the in-row restart with srv/kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz deleted: the override lines (a solve, about 10 s) on the boot
 ## SQ-BLC-03
 @group A
 @commands Change one biome multiplier in `biome_config.json`, boot

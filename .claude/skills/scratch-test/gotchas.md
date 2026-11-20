@@ -222,6 +222,12 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   air. Send both under `pace 0`. Same for a 40-tick `/cdevtest watch` (2 s): the change must go in under `pace 0` with a
   short `sleep` (r1116).
 - `latest.log` rolls over at midnight; the qrun row running then gets an empty segment (r1108hh).
+- Rows written for the r1103 slice batches use `{SAH1..3}` / `{SBH1,3}` home captures that only
+  `tools/scratch_query/batches/r1103/sA_*.qb` / `sB_*.qb` set: in a rows-file run they are never set (r1120nv, 20 rows
+  HARNESS in the first 10 steps). Each row summons and captures its own `sahome` / `sbhome` marker (model:
+  `cdj5home` in CDJ.qb) (checked: qlint W var, `qprescreen.py` class likely).
+- Marking a row `@superseded` after a drive was planned: the step keeps the id in its row list; qrun prints
+  `SUPERSEDED ... not run` and qdrive drops it, so the step does not end `incomplete` (r1120fix).
 
 ## Regexes and log matching
 

@@ -17,6 +17,7 @@
 @@table
 ## SQ-HCS-01 | fresh normal world boots past spawn prep with no crow scan errors
 @group B
+@reviewed 2026-11-20
 @commands Fresh normal world (default type, random seed); boot to `Done`; `shell grep -c "out of bound" logs/latest.log`; `shell grep -c "Exception generating new chunk" logs/latest.log`; `shell grep -c "CrowEvents" logs/latest.log`
 @pass Reaches `Done`; all three counts 0
 @fails Crash report under `crash-reports/`; a scan left in `hearth/crow/CrowEvents` or `nest/`
@@ -31,6 +32,7 @@ bootreject CrowEvents
 ## SQ-HCS-02 | 40 new chunks of forest and plains by bot, no long tick naming crow code
 @phase worldgen
 @group B
+@reviewed 2026-11-20
 @commands Same boot: `/tp` through 40 new chunks of forest and plains (`zq` path or 40 `tp` steps of 128 blocks); watch tick times
 @pass No crash; no tick over 200 ms naming `Crow`, `Nest` or `RoofNests` in the log or a JFR hot method
 @fails `RoofNests.decorate` or `NestCrows` in the profile: the structure-start read or an entity query is too wide
@@ -61,6 +63,7 @@ look no Can't keep up during the walk worth attention; no crow / nest exception 
 ## SQ-HCS-03 | Chunky 30 x 30 chunks of forest: nests on leaves, about 1 in 6 chunks
 @phase long
 @group B
+@reviewed 2026-11-20
 @commands Chunky 30 x 30 chunks in `minecraft:forest` (seed with a large forest); then a script or `/cdevfind hearthandharvest:nest` count over the area
 @pass Every nest sits on leaves with nothing above; count near 150 (1 in 6 chunks, about 100 to 200); none on grass or the ground
 @fails No nests: biome tag `creativedelight:crow_nest_forests` empty or modifier `nest_tree_top` not loaded (`/cdevplace` the placed feature); nests on the ground: heightmap in `placed_feature/nest_tree_top.json`
@@ -79,10 +82,12 @@ look nest count about 100 to 200 over the 900 chunks of the forest square, every
 ## SQ-HCS-04 | villages: a quarter of houses carry one roof nest
 @phase worldgen
 @group B
+@reviewed 2026-11-20
 @commands `/place structure minecraft:village_plains` x 5 at spread positions (and one each of desert, savanna, taiga, snowy); look at every house roof
 @pass About a quarter of houses carry one nest, on a full block on the roof, never two on one house, none in a street or on a lamp post
 @fails None at all: mixin `ChunkGeneratorCrowNestMixin` not applied (log `hearthandharvest.ce.mixins.json`), or `/place` skips `applyBiomeDecoration` (then test with Chunky over a seed with villages); far below a quarter: the middle-third column misses sloped roofs, widen `ROOF_DEPTH` in `nest/RoofNests`
 @from batches/r1111/b1.qb
+@absent minecraft:village_plains minecraft:village_desert minecraft:village_savanna minecraft:village_taiga minecraft:village_snowy (vanilla structure ids; structures are not in the registry dump)
 # each forceload box generates its 169 chunks inside the console command: wait for each village before the next line,
 # so the region scan runs after them and the console is free when the row ends (judge-14, r1118)
 > forceload add 6000 6000 6200 6200
@@ -111,6 +116,7 @@ look nests on roofs (depth 0, above the ground band), never two per house, none 
 
 ## SQ-HCS-05 | generated nest refills one crow per 5 game minutes up to 3, none with the player 60 away
 @group A
+@reviewed 2026-11-20
 @commands New world; `/place feature hearthandharvest:nest_tree_top` on a tree until one places (or find one from SQ-HCS-03); count crows within 24; kill them; stay within 48 blocks for 6 minutes of game time (`/time add` does not advance random ticks: wait, or `/gamerule randomTickSpeed 300` for 30 s)
 @pass 2 to 3 crows at the nest after generation; after the kill, crows come back one at a time, never more than 3 within 24 blocks; with the player 60 blocks away none come back
 @fails No refill: `NestBlock.isRandomlyTicking` false for `generated=true`; too many: cap in `NestCrows.tick`
@@ -150,6 +156,7 @@ look the five counts rise one at a time (1, 2, 3, 3, 3) and never pass 3; last c
 
 ## SQ-HCS-06 | hand-placed nest makes no crows; summon and egg do
 @group A
+@reviewed 2026-11-20
 @commands Place a nest by hand; `/gamerule randomTickSpeed 300` for 60 s within 10 blocks; `/summon hearthandharvest:crow`; use `hearthandharvest:crow_spawn_egg`
 @pass The hand-placed nest makes no crows; summon and egg both make a crow
 @fails Player nest spawns: `playerNestsSpawnCrows` true in config, or `GENERATED` set on placement
@@ -239,6 +246,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-HCS-08 | no natural Alex's Mobs crow; summon works
 @group B
+@reviewed 2026-11-20
 @commands 20 minutes (or Chunky plus a walk) in plains and forest; `zq` entity count `alexsmobs:crow`; `/summon alexsmobs:crow`
 @pass No natural `alexsmobs:crow`; the summon works; JEI hides `alexsmobs:spawn_egg_crow`
 @fails AM crows still spawning: rule `no_alexsmobs_crow` in `mob_spawns.json` not applied (log `[mob_spawns]`), `crowSpawnWeight` not 0
@@ -258,12 +266,14 @@ look region census: alexsmobs:crow 0 saved in chunks, hearthandharvest:crow pres
 
 ## SQ-HCS-09
 @group A
+@reviewed 2026-11-20
 @commands 1.2.02 fixture save: boot; find both AM crows and the ground nest; stand near the nest 6 minutes (or random tick speed up)
 @pass Boots without errors; both AM crows still there, the tamed one still owned, the carrier still holding; the ground nest starts producing `hearthandharvest:crow`; no log line about `crow_wariness` beyond Forge's unknown-capability notice
 @fails Error on the AM crows: a leftover reference to `CrowAccess` or the removed mixin
 @draft no batch holds this row yet
 ## SQ-HCS-10
 @group A
+@reviewed 2026-11-20
 @commands H&H crow mechanics: the rewritten SQ-HH-401 to -502
 @pass All pass
 @fails The row's own failure note
@@ -326,6 +336,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## CQ-HCS-01
 @group client
+@reviewed 2026-11-20
 @commands Watch a crow walk, idle, take off, fly, glide, sit (tame, right-click), ride a shoulder; give it an item
 @pass Each pose animates; flight banks and tilts; the held item shows in the beak; the shoulder crow renders on both skins; sounds play (squawk, hurt) with subtitles
 @fails Missing model: layer `hearthandharvest:crow#main` not registered (`CrowClient`); silent: `sounds.json` entries

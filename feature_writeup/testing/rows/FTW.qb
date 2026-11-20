@@ -8,6 +8,7 @@
 @@date 2026-10-27
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
+@@prep B: level-seed=-8188900049893920259
 @@text
 @@text Target: Creative Common 1.1.03 installed in `mods/` 2026-10-27 13:22 (also carries the Armor Trims cache above); copy it into
 @@text the scratch `mods/`. Two fresh group B worlds on the eval seed -8188900049893920259 (`tools/perf/eval/eval_server.sh setup`
@@ -30,7 +31,7 @@ bootreject (?i)(WARN|ERROR).*(FlowingFluidSettleMixin|LevelChunkFirstTickWaterMi
 shell grep -A4 "first_tick_water" config/creativeworldgen-common.toml | grep -E "windowTicks"; grep -oE "Done \([0-9.]+s\)" logs/latest.log
 look windowTicks = 600 under [worldgen.first_tick_water] (the section moved to creativeworldgen-common.toml); the Done time against 212-225 s on this machine (no startup cost)
 ## SQ-FTW-02 | ftw_on: item entities after the spawn chunks ticked 120 s
-@group same, then `ftw_off`
+@group B (eval seed: cave items; was "same", which resolved to the superflat A world, r1120nv), then `ftw_off`
 @commands After `Done` `/cdevtest tickwarp 2400` (was a 120 s wait: the spawn chunks tick), `save-all flush`, census
 @pass `ftw_on`: item entities below y 50 near 0 (moss carpet, seeds, azalea, glow berries, torches, cocoa, Miner's Delight plants each under 10); `ftw_off`: about the eval's 672. Falling blocks may stay in both
 @fails Still hundreds in `ftw_on`: note which items and their y; sugar cane / cactus / bamboo are expected leftovers (scheduled support ticks, perf.md 10.6); others lying near no water point to a second cause
@@ -41,7 +42,9 @@ bootexpect Done \(
 waitlog verb=tickwarp end=done 240
 > save-all flush
 waitlog Saved the game 300
-shell mkdir -p $INST/perf/runs/r1103w/w; rm -rf ../ftw_on_snap; mkdir ../ftw_on_snap && cp -r ftw_on/entities ../ftw_on_snap/ && python3 -I $INST/tools/perf/eval/entity_census.py ../ftw_on_snap > $INST/perf/runs/r1103w/w/ftw_on_census.txt 2>&1; head -40 $INST/perf/runs/r1103w/w/ftw_on_census.txt
+# r1120fix (2026-11-20): the world folder is the scratch server's level-name (was the fixed ftw_on of the r1103w batch);
+# the census goes beside srv, not into the old run folder
+shell L=$(grep -E "^level-name=" server.properties | cut -d= -f2); rm -rf ../ftw_on_snap; mkdir ../ftw_on_snap && cp -r $L/entities ../ftw_on_snap/ && python3 -I $INST/tools/perf/eval/entity_census.py ../ftw_on_snap > ../ftw_on_census.txt 2>&1; head -40 ../ftw_on_census.txt
 look item entities near 0 (moss carpet, seeds, azalea, glow berries, torches, cocoa, Miner's plants each under 10; sugar cane / cactus / bamboo expected leftovers); the ftw_off half is w_10_B.qb; baseline 672 items (perf.md 10.2 #5)
 
 ## SQ-FTW-03
@@ -73,7 +76,7 @@ look cave plant items (moss carpet, azalea, glow berries, Miner's Delight plants
 @fails Torch washed with no item: the window never closed (purge or `windowTicks` check)
 @reviewed 2026-11-16
 # spawn chunks are older than windowTicks 600 after this warp: vanilla washing (the torch always drops)
-> pbot spawn ftw 0 -60 0 minecraft:overworld creative
+> execute unless entity ftw run pbot spawn ftw 0 -60 0 minecraft:overworld creative
 > cdevtest tickwarp 1200
 waitlog verb=tickwarp end=done 120
 > kill @e[type=minecraft:item]
@@ -91,7 +94,8 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass Torch washed away, no torch item (inside the window, perf.md 10.6 side effect)
 @fails Torch item present: the chunk window is not opened (`postProcessGeneration` hook or `InhabitedTime` test)
 @from batches/r1103w/w_5_A.qb
-> pbot spawn ftw 0 -60 0 minecraft:overworld creative
+@reviewed 2026-11-20
+> execute unless entity ftw run pbot spawn ftw 0 -60 0 minecraft:overworld creative
 sleep 3
 > tp ftw 2000 -60 2000
 sleep 4
@@ -113,8 +117,13 @@ reject FTW05 item present
 @pass The torch item drops (no window)
 @fails No item: the 0 value is not read (`WorldgenConfig.firstTickWaterWindowTicks`)
 @from batches/r1103w/w_6_A.qb
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): the row sets windowTicks = 0 itself (edit + restart; it shared the step's boot with the
+# default 600); the last row of its step, so the value is not put back
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.first_tick_water windowTicks 0
+restart
 shell grep -nE '^\s*windowTicks = 0' config/creativeworldgen-common.toml
-> pbot spawn ftw 0 -60 0 minecraft:overworld creative
+> execute unless entity ftw run pbot spawn ftw 0 -60 0 minecraft:overworld creative
 sleep 3
 > tp ftw -2000 -60 -2000
 sleep 4

@@ -15,6 +15,7 @@
 @pass No `storagedelight` error in `logs/latest.log`; 140 `storagedelight:` blocks, 50 of them new; the 50 recipes load (`storagedelight:` recipe ids for the 36 stone countertops and 14 bamboo blocks)
 @fails Depends on: repackedStorage jar
 @reviewed 2026-11-16
+@absent storagedelight:bamboo_ (a registry regex prefix, not an id)
 bootexpect Done \(
 bootreject (?i)(ERROR|Exception).*storagedelight
 > cdevtest reg block ^storagedelight: max=1
@@ -32,6 +33,9 @@ look recipe count at least the 50 new rows (36 stone countertops and 14 bamboo b
 @fails Depends on: repackedStorage jar
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
+# r1120fix (2026-11-20): forceload the lane (W unloaded: nothing else loads x 100 z 500 in group B)
+> forceload add 96 496 108 508
+sleep 3
 > setblock 100 -60 500 storagedelight:bamboo_drawer
 > setblock 102 -60 500 storagedelight:oak_cabinet_with_polished_tuff_countertop
 > setblock 104 -60 500 storagedelight:warped_cabinet_with_stone_bricks_countertop

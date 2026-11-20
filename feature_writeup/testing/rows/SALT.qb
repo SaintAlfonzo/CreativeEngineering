@@ -327,6 +327,7 @@ look the four counts sum to about 25 (not 70); the farthest monster within about
 @phase worldgen
 @group FAIL: `meta/meteorite_desert_pyramid` placed with "0/1 desert_pyramid, short" = crater with no pyramid (MetaStructure keepShortParts: a replacement meta should fail when its first part is short)
 @superseded run-log copy of the row in META31.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
+@absent minecraft:desert_pyramid (structure id, not in the registry dump)
 @jars creativecommon
 @from batches/r1031/w2_metas_spawns.qb
 > locate structure creativeworldgen:meta/meteorite_village
@@ -995,6 +996,7 @@ look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tag
 ## SQ-RW-04 | river tree through the holder: trees_river grows the Mulberry override
 @phase worldgen
 @group PASS through the holder: UA's `trees_river` grows the override (90 river leaves, 21 oak logs, 0 river logs). Worldgen itself gave no river tree at three rivers: the feature needs dry land inside the river biome and the samples had none (0 dry columns in 25 x 25)
+@superseded run-log entry (r1106spf verdict PASS) whose steps are a stray copy of an MB.qb moon-phase row (`tp qa`, `creativeengineering:phase`), not the river tree check; the P2.1 migration left them in this Run log, so the driver would run them on a world without player qa (owner request, 2026-11-20)
 @from batches/r1106spf/b1.qb passed
 @reviewed 2026-11-16
 > tp qa 0 -60 0
@@ -1161,6 +1163,7 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 @commands latest.log: `[itemMerges]` counts include the two salt pairs, no script error; no loaded recipe takes or makes the items `salt:salt`, `vintagedelight:salt_block` or `vintagedelight:salt_bucket`. The recipe id `vintagedelight:salt_block` stays on purpose (item_merges.md 2.9: any `#forge:salt` x9 -> `salt:salt_block`; the 2026-10-27 FAIL read the id as the item); `salt:salt_packing`, `vintagedelight:salt_block_deconstruct`, `vintagedelight:salt_from_smelting`, `vintagedelight:salt_bucket_to_salt`, `salt:salt_lamp` gone; `creativedelight:shaped/large_salt_lamp` present
 @pass Existing test: MG-30, MG-31
 @reviewed 2026-11-16
+@absent salt:salt_packing vintagedelight:salt_block_deconstruct vintagedelight:salt_from_smelting vintagedelight:salt_bucket_to_salt salt:salt_lamp (removed recipe ids the row checks are gone)
 kjsexpect \[itemMerges\] \S+: \d+ merges, \d+ recipes swapped
 kjsreject \[itemMerges\] .*(already merged|already ran|unknown group)
 > cdevtest makes salt:salt
@@ -1236,6 +1239,7 @@ reject \[cdevtest\] .*done=0
 @commands `/place feature vintagedelight:patch_salt` on a beach 10 times: layers on `salt:raw_rock_salt_block`, no `salt:salt_block` / `vintagedelight:salt_block`; after 5 min at `randomTickSpeed 300` no rock salt next to water is gone
 @pass Existing test: MG-34
 @reviewed 2026-11-16
+@absent vintagedelight:patch_salt (configured feature in the CD Vintage member data/vintagedelight/worldgen/; no feature dump)
 # randomtick replaces 5 min at randomTickSpeed 300: 300 rounds over the patch box (no player needed)
 > locate biome minecraft:beach
 waitlog The nearest minecraft:beach 600
@@ -1261,42 +1265,36 @@ reject \[cdevtest\] .*done=0
 look the raw rock salt count after the 300 random-tick rounds (second count line) is still {RR0}: none beside water dissolved; place lines say the feature placed (a beach without sand at y 63 places nothing: rerun at the beach's surface y)
 ## SQ-SALT-05
 @group same
-@commands patcherMod 23:36 jar. latest.log: `[salt] 30 Vintage salt blocks random tick`, no mixin error for `SaltBlockRandomTickMixin` / `SaltLayerRandomTickMixin` / `SaltRockNoDissolveMixin`. Block half: copy `tools/salt_probe/salt_probe.js` into `srv/kubejs/server_scripts/zz_salt_probe.js`, `/salttest`: `[salttest] PASS ... melts minecraft:snow` and `minecraft:ice` for salt bricks, brick stairs, a Vintage lamp, a Salt Layer, raw rock salt and The Salt's Salt Block
-@pass Existing test: MG-36
-@reviewed 2026-11-16
+@commands latest.log: `[salt] 30 Vintage salt blocks random tick`, no mixin error for `SaltBlockRandomTickMixin` / `SaltLayerRandomTickMixin` / `SaltRockNoDissolveMixin`. The block melt half (`/salttest` melts snow and ice) moved to Creative Common's melting system (salt.md 2026-11-14, melting.md 2): SQ-MELT-01 (salt sources), SQ-MELT-05 (Nether), SQ-MELT-04 (blue ice)
+@pass Existing test: MG-36 (log half); melt half: SQ-MELT-01
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): the 12 "/salttest ... melts" cases are dropped (owner request 2026-11-20: melt cases moved to SQ-MELT):
+# since 2026-11-17 a salt source's tick only schedules the target's melt tick (melting.md 2), so direct randomTicks cannot melt
 bootexpect \[salt\] 30 Vintage salt blocks random tick
 bootreject (ERROR|Error|error).*Salt(Block|Layer)RandomTickMixin
-> salttest
-waitlog \[salttest\] done \d+ pass 600
-expect \[salttest\] PASS vintagedelight:salt_bricks melts minecraft:snow
-expect \[salttest\] PASS vintagedelight:salt_bricks melts minecraft:ice
-expect \[salttest\] PASS vintagedelight:salt_brick_stairs melts minecraft:snow
-expect \[salttest\] PASS vintagedelight:salt_brick_stairs melts minecraft:ice
-expect \[salttest\] PASS vintagedelight:salt_lamp_default melts minecraft:snow
-expect \[salttest\] PASS vintagedelight:salt_lamp_default melts minecraft:ice
-expect \[salttest\] PASS vintagedelight:salt melts minecraft:snow
-expect \[salttest\] PASS vintagedelight:salt melts minecraft:ice
-expect \[salttest\] PASS salt:raw_rock_salt_block melts minecraft:snow
-expect \[salttest\] PASS salt:raw_rock_salt_block melts minecraft:ice
-expect \[salttest\] PASS salt:salt_block melts minecraft:snow
-expect \[salttest\] PASS salt:salt_block melts minecraft:ice
-reject \[salttest\] FAIL .* melts minecraft:
+bootreject (ERROR|Error|error).*SaltRockNoDissolveMixin
+
 ## SQ-SALT-06 | /salttest dissolving with rain set before the probe (rain cases need isRainingAt true)
 @group same
-@commands same `/salttest` run (it calls `randomTick` itself: forceloaded chunks get no random ticks without a player, 2026-10-27): Salt Layer beside a water source becomes water, Salt Layer in rain in open sky stays (rain dissolving is off since 2026-10-28, `SaltDissolvingInRain = false`; the NOTE line names the biome), layer by a torch stays; raw rock salt beside water and in rain stays; Evaporator by water grows layers to 8; `vintagedelight:salt_block` by water dissolves and grows no layer
+@commands same `/salttest` run (it calls `randomTick` itself: forceloaded chunks get no random ticks without a player, 2026-10-27): Salt Layer beside a water source becomes water, Salt Layer in rain in open sky stays (rain dissolving is off since 2026-10-28, `SaltDissolvingInRain = false`; the NOTE line names the biome), layer by a torch stays; raw rock salt (read back as its placed twin `hearthandharvest:placed_rock_salt_block`) beside water and in rain stays; Evaporator by water grows layers to 8; `vintagedelight:salt_block` by water dissolves and grows no layer
 @pass Existing test: MG-35, MG-37
+@reviewed 2026-11-20
 @from batches/r1102b/r_A.qb passed
+# r1120fix (2026-11-20): a Rock Salt Block set after world generation is swapped for its placed twin
+# hearthandharvest:placed_rock_salt_block (salt.md 8 "Placed twin", 2026-11-17), so the shared probe reads the placed twin back
+# and prints FAIL "now hearthandharvest:placed_rock_salt_block": the block stayed, which is this row's pass. The probe's melt
+# FAIL lines are SQ-SALT-05's retired half (SQ-MELT)
 > weather rain 6000
 sleep 5
 > salttest
 waitlog \[salttest\] done \d+ pass 600
 expect \[salttest\] PASS Salt Layer beside water becomes water
 expect \[salttest\] PASS Salt Layer by a torch stays
-expect \[salttest\] PASS raw rock salt beside water stays
+expect \[salttest\] (PASS raw rock salt beside water stays|FAIL raw rock salt beside water stays: now hearthandharvest:placed_rock_salt_block$)
 expect \[salttest\] PASS leftover vintagedelight:salt_block by water dissolves, no layer
 expect \[salttest\] PASS Evaporator by water grows layers to 8
 expect \[salttest\] PASS vintagedelight:salt in rain, open sky, stays
-expect \[salttest\] PASS salt:raw_rock_salt_block in rain, open sky, stays
+expect \[salttest\] (PASS salt:raw_rock_salt_block in rain, open sky, stays|FAIL salt:raw_rock_salt_block in rain, open sky, stays: now hearthandharvest:placed_rock_salt_block after)
 expect \[salttest\] NOTE rain cases: .*isRainingAt true
 > weather clear 100000
 
@@ -1310,11 +1308,18 @@ waitlog \[salttest\] done \d+ pass 600
 expect \[salttest\] PASS salt brick random tick under 0.1 % of server time at 10 000 bricks
 ## SQ-SALT-08 | rain dissolving off: nothing dissolves in rain, water still dissolves
 @group A
-@commands `config/salt-common.toml` `SaltDissolvingInRain = false` (and the `configs_edited/root_config/` copy): `/weather rain`, `randomTickSpeed 300`, a Salt Block, a Salt Layer, salt ore and a Vintage salt brick in open sky (not a snowing biome) for 2 min; then beside a water source
+@commands `config/creativedelight-common.toml` `[salt.Dissolving] SaltDissolvingInRain = false` (and the `configs_edited/root_config/` copy; salt-common.toml was carried there, salt.md 6 S10): `/weather rain`, `randomTickSpeed 300`, a Salt Block, a Salt Layer, salt ore and a Vintage salt brick in open sky (not a snowing biome) for 2 min; then beside a water source
 @pass Existing test: None dissolve in rain; the layer and the Salt Block beside water still dissolve
 @fails MG-35
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb passed
-shell grep -q "SaltDissolvingInRain = false" config/salt-common.toml && grep -q "SaltDissolvingInRain = false" $INST/configs_edited/root_config/salt-common.toml
+# r1120fix (2026-11-20): config/salt-common.toml moved into creativedelight-common.toml [salt] (salt.md 6 S10); the row
+# sets rain itself (r1120lr: no rain, so the rain cases reported no rain); the melt FAIL lines of the shared probe are not
+# this row's (SQ-MELT)
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Dissolving\][[:space:]]*$/ && /SaltDissolvingInRain/' config/creativedelight-common.toml | grep -q "SaltDissolvingInRain = false"
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Dissolving\][[:space:]]*$/ && /SaltDissolvingInRain/' $INST/configs_edited/root_config/creativedelight-common.toml | grep -q "SaltDissolvingInRain = false"
+> weather rain 6000
+sleep 5
 > salttest
 waitlog \[salttest\] done \d+ pass 600
 expect \[salttest\] PASS salt:salt_block in rain, open sky, stays
@@ -1323,6 +1328,8 @@ expect \[salttest\] PASS vintagedelight:salt_bricks in rain, open sky, stays
 expect \[salttest\] PASS vintagedelight:salt in rain, open sky, stays
 expect \[salttest\] PASS Salt Layer beside water becomes water
 expect \[salttest\] PASS salt:salt_block beside water dissolves
+expect \[salttest\] NOTE rain cases: .*isRainingAt true
+> weather clear 100000
 
 @@section 3
 @@title Salt redesign, 2026-11-17 ([salt.md](../salt.md) 8, plan_post_scratch_1115 G2, G7.6, G7.7; TODO `tooling/scratch-1115-follow-ups #21`, `#6`, 1115b `#12`)

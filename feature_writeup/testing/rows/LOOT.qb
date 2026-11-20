@@ -109,6 +109,7 @@ kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
 @pass `Stage: 1b`, `Ancient: 1b`, `EmptiedAt: -1L` after 40 s (it holds the boots); the cave table spawns torches (and sometimes bread)
 @fails `EmptiedAt` set: Compat counts the armor slots as empty; the loot command fails: the tables are not in the jar
 @absent creativecompat:corpse creativeloot:corpse_loot (NBT keys, not registry ids)
+@reviewed 2026-11-20
 > forceload add 0 0
 > summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave"}}
 sleep 40
@@ -117,7 +118,6 @@ expect Stage: 1b
 expect EmptiedAt: -1L
 > loot spawn 3 -58 3 loot creativeloot:corpse/cave
 expect Dropped
-@draft no batch holds this row yet
 
 ## SQ-LOOT-08 | worldgen survey: ancient corpses in a fresh world
 @group world
@@ -133,13 +133,13 @@ expect Dropped
 @pass still there after 6 min with `Stage: 1b` (not withered, not removed)
 @fails removed after 5 min: Compat applies the empty rules to remains; Stage 2b: the Nether wither rule reached remains
 @absent creativecompat:corpse creativeloot:corpse_remains (NBT keys, not registry ids)
+@reviewed 2026-11-20
 > execute in minecraft:the_nether run forceload add 0 0
 > execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["l09"],NoGravity:1b,Death:{PlayerName:""},"creativecompat:corpse":{Remains:1b,Stage:1b},ForgeData:{"creativeloot:corpse_remains":1b}}
 sleep 360
 > execute in minecraft:the_nether run data get entity @e[tag=l09,limit=1] "creativecompat:corpse".Stage
 expect 1b
 @phase long
-@draft no batch holds this row yet
 
 ## SQ-LOOT-11 | ancient corpse held items and the no-empty guarantee
 @group world

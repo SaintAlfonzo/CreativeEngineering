@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-ST waystone glowstone swap, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P5 R16; [structure_tuning.md](../structure_tuning.md) ST-336; TODO `structures/contents #9`)
 @@date 2026-11-16
+@@reviewed 2026-11-20
 @@jars creativeworldgen
 @@sources feature_writeup/structure_tuning.md kubejs/generation_scripts/worldgen/misc_block_swaps.json development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/worldgen/TemplateBlockSwaps.java
 @@text

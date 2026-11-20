@@ -14,44 +14,48 @@
 ## SQ-CDFW-01 | CD framework counts at boot
 @group A
 @commands Boot; `grep -n "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log \| head -20`; `grep -n "Error occurred while handling event" logs/latest.log \| head`
-@pass `[cans] registered 276 generated cans`; `[food types] ... in 31 types`; `[placeable]` counts; `[can servings] 313 cans` (less any whose mod is absent); `[mortar] 6 of 6 catalog crafts`; no "no ... member scripts loaded" error
+@pass `[cans] registered N generated cans` (307 on r1120lr); `[food types] ... in 32 types` (food_catalog.md); `[placeable]` counts; `[can servings] N cans` (344 on r1120lr 2026-11-20, after the post-2026-11-01 can additions; less any whose mod is absent); `[mortar] 6 of 6 catalog crafts`; no "no ... member scripts loaded" error
 @fails a member script did not load: check its `// requires:` mod id and that the jar loader honors `requires`; rerun `tools/test_gen_members.py`
+@reviewed 2026-11-20
+# r1120lr batch fault: stale counts (row wanted 31 types and 31x servings); 32 types per food_catalog.md, servings 344 on 2026-11-20
 @from batches/r1102b/s3_A.qb
 bootexpect \[cans\] registered \d+ generated cans
-bootexpect \[food types\] \d+ foods in 31 types
+bootexpect \[food types\] \d+ foods in 32 types
 bootexpect \[placeable\]
-bootexpect \[can servings\] 31\d cans
+bootexpect \[can servings\] [1-9]\d\d cans
 bootexpect \[mortar\] 6 of 6 catalog crafts
 bootreject (?i)no .* member scripts loaded
 shell grep -hn "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log | head -20; true
-look [can servings] is 313 less cans of absent mods (rows/SQ-CDFW-01.shell.txt); a different [cans] count after a later generator run is not a fail by itself
+look [can servings] is 344 (2026-11-20) less cans of absent mods (rows/SQ-CDFW-01.shell.txt); a different [cans] count after a later generator run is not a fail by itself
 
 ## SQ-CDFW-02 | food type, canned source and servings tags unchanged
 @group A
-@commands `/dumptags item`; compare `creativeengineering:food_type/*`, `creativeengineering:canned_source`, `creativeengineering:cans/servings/*` sizes with `python3 tools/test_gen_members.py` (46 tags, 2724 entries)
+@commands `/dumptags item`; compare `creativedelight:food_type/*`, `creativedelight:canned_source`, `creativedelight:cans/servings/*` sizes (moved from `creativeengineering:`, ids follow the owning mod) with `python3 tools/test_gen_members.py` (46 tags, 2724 entries)
 @pass same members as before the change (sizes equal to the last dump less items of absent mods)
 @fails genMerge lost a part: compare the merged data with the JSON records
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb
 > dumptags item
 waitlog \[dumptags\] wrote 600
-shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativeengineering:food_type creativeengineering:canned_source creativeengineering:cans/servings
-look sizes equal to the 2026-10-30 instance dump except items of absent mods and the 2026-11-01 additions (test_gen_members.py: 46 tags, 2724 entries offline)
+shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativedelight:food_type creativedelight:canned_source creativedelight:cans/servings
+look sizes equal to the instance dump (kubejs/exported, 2026-11-19) except items of absent mods and the 2026-11-01 additions (test_gen_members.py: 46 tags, 2724 entries offline)
 
 ## SQ-CDFW-03 | placeable tags unchanged (tooltips: client)
 @group A
 @commands `/dumptags item` placeable tags; hover a Farmer's Delight pie and a Vinery wine bottle
-@pass `#creativeengineering:placeable`, `/sneak`, `_on_plate`, `_on_small_plate`, `_on_coaster` as before; tooltip lines shown
+@pass `#creativedelight:placeable` (was `creativeengineering:`), `/sneak`, `_on_plate`, `_on_small_plate`, `_on_coaster` as before; tooltip lines shown
 @fails placeable member scripts or reader
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb
-shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativeengineering:placeable
-look #creativeengineering:placeable, /sneak, _on_plate, _on_small_plate, _on_coaster as in the instance dump (reads SQ-CDFW-02's /dumptags)
+shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativedelight:placeable
+look #creativedelight:placeable, /sneak, _on_plate, _on_small_plate, _on_coaster as in the instance dump (reads SQ-CDFW-02's /dumptags)
 
 ## SQ-CDFW-04 | mortar crafts (can servings tooltip: client)
 @group A
 @commands Recipe lookup: `creativedelight:shapeless/*` mortar crafts (create_wheat, create_sugar_cane, farmersdelight rice x2, cocoa powder, garlic clove); craft one canned food and one Canned Goods can, check the Servings line
 @pass 6 mortar crafts; cans craft, servings bar and tooltip as before
 @fails canning.js / can_tags.js reader
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb
 > cdevtest rdetail creativedelight:shapeless/ max=500
 > cdevtest recipes mortar max=500
@@ -63,7 +67,7 @@ look 6 mortar crafts (create wheat, create sugar cane, farmersdelight rice x2, c
 @commands Recipe lookup for outputs Baked Durian, Baked Pear, Dried Persimmon
 @pass exactly one furnace, one smoker and one campfire recipe each, all `creativedelight:`, 0.35 xp, 200 / 100 / 600 ticks; no `fruitsdelight:*_smoking` / `*_campfire` left
 @fails the family removal does not match a tag input: add id removals or fix `_cook`'s filter
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb passed
 > cdevtest makes fruitsdelight:baked_durian
 > cdevtest makes fruitsdelight:baked_pear
@@ -80,11 +84,12 @@ reject \[cdevtest\] .*done=0
 @commands Same lookup for Grilled Ghast, Cooked Rotten Ham, Fried Turtle Egg, Cooked Arthropod, Cooked Duck Fillet, Cooked Perch / Pike Slice, Roasted Acorn, Farmer's Delight Fried Egg
 @pass three recipes each, `creativedelight:`, 0.35 xp, 200 / 100 / 600; no `hostiledelight:cghast_*`, `cookrothamrecp*`, `fteggrecp*`, `miners_delight:cooked_arthropod`, `abnormals_delight:upgrade_aquatic/cooked_*_slice*`
 @fails family removal missed a mod recipe
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb
-> cdevtest makes grilled_ghast
-> cdevtest makes cooked_rotten_ham
-> cdevtest makes fried_turtle_egg
+# r1120lr batch fault: Hostile Delight ids have no underscores (grilledghast, cookedrottenham, friedturtleegg)
+> cdevtest makes hostiledelight:grilledghast
+> cdevtest makes hostiledelight:cookedrottenham
+> cdevtest makes hostiledelight:friedturtleegg
 > cdevtest makes miners_delight:cooked_arthropod
 > cdevtest makes cooked_duck_fillet
 > cdevtest makes cooked_perch_slice
@@ -102,7 +107,7 @@ look each item: three creativedelight: smelting / smoking / campfirecooking line
 @commands Cutting board with a knife: raw catfish, salmon, cod; `#forge:raw_duck` item
 @pass catfish 6 slices + bone meal; salmon / cod 6 + bone meal; Untitled Duck raw duck 2 fillets; a duck fillet has no cutting recipe (no fillet -> fillet loop, plan_scratch_bugfix_1103 2.1); no `alexsdelight:cutting/raw_catfish_slice`, `farmersdelight:cutting/salmon`, `/cod`
 @fails `_board` removal
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb
 > cdevtest uses alexsmobs:raw_catfish
 > cdevtest uses minecraft:salmon
@@ -122,7 +127,7 @@ look yields (catfish 6 slices + bone meal, salmon / cod 6 + bone meal, duck 2 fi
 @commands Craft a Golden Apple from 8 rose gold ingots + apple, and a Golden Carrot; recipe lookup `creativedelight:shaped/golden_apple`, `golden_carrot`, `createmixing/golden_*_gilding`, `iearcfurnace/golden_*_arc_gilding`, `createsequencedassembly/enchanted_golden_apple_sequenced_assembly`
 @pass both craft; no `minecraft:golden_apple` / `minecraft:golden_carrot` shaped recipe; mixer 6, arc 5, assembly 4 loops
 @fails goldenGild / goldenEnchant
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb
 > cdevtest rdetail golden_apple max=200
 > cdevtest rdetail golden_carrot max=200
@@ -142,7 +147,7 @@ look the shaped ring accepts rose gold ingots (ring slot /+N); mixer 6, arc 5, a
 @commands Recipe lookup: Farmer's assemblies (`barbecue_stick_`, `grilled_salmon_`, `bacon_and_eggs_`, `salmon_roll_`, `cod_roll_`, `kelp_roll_`, `rice_roll_medley_block_`, `roasted_mutton_chops_`, `shepherds_pie_block_`, `stuffed_potato_`, `steak_and_potatoes_`, `mutton_wrap_`, `fruit_salad_sequenced_assembly`); heatless `*_cooked_manual_only` of Farmer's, Fruits, Alex's, Abnormals, Delightful
 @pass all present with the old steps and loops (rolls make 3, fruit salad 2); heatless rows unchanged; `logs/kubejs/server.log` no "incomplete(... not registered"
 @fails incKey picked the wrong transition item key
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1102b/s3_A.qb
 > cdevtest recipes barbecue_stick_ max=500
 > cdevtest recipes grilled_salmon_ max=500

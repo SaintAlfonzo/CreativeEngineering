@@ -8,6 +8,8 @@
 @@date 2026-10-27
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
+@@prep A: level-type=minecraft:normal generate-structures=true level-seed=-8188900049893920259
+@@prep copy tools/worldgen_perf_probe/wgp_probe.js kubejs/server_scripts/zz_wgp_probe.js
 @@text
 @@text Target: Creative Common built 2026-10-27 with `DimensionFilter`, the shared terrain cache and `sampleGrid` 4 (NOT yet in
 @@text `mods/`: install it first, `./gradlew :creativeCommon:build --offline` then `:creativeCommon:installToMods`, game closed), plus

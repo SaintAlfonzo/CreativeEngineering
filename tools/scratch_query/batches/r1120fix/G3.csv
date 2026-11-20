@@ -1,0 +1,157 @@
+id,file,kind,action,detail
+SQ-HH-1546 (rewritten),HOP.qb,prefixed,forceload added; @reviewed 2026-11-20,forceload add 624 512 639 527 before the setblocks (W unloaded); source diffs since 2026-11-16 are syrup/crow/spelling/helper-key refactors only
+SQ-HH-266 (rerun),HOP.qb,reviewed,@reviewed 2026-11-20,hearth_and_harvest.md / plan_bugfix_1114.md diffs (syrup fluid
+SQ-HH-304 (rewritten),HOP.qb,reviewed,@reviewed 2026-11-20,same diffs; hops_vine id still in the dumps
+SQ-HOP-12,HOP.qb,reviewed,@reviewed 2026-11-20,tags.js / machine_tags.js changes since 2026-11-16 are literal tag -> helper key refactors (same tags)
+SQ-HOP-13,HOP.qb,reviewed,@reviewed 2026-11-20,same refactor-only diff
+SQ-HOP-14,HOP.qb,reviewed,@reviewed 2026-11-20,bonemeal_like and clip_break_overlay lines unchanged since added
+SQ-TIE-01,IP.qb,prefixed,waitlog prefix; @reviewed 2026-11-20,census done line is [cwglocate] since the worldgen split (LocateCommand.java:338); waitlog now \[(celocate|cwglocate)\]; locate.md diffs since 2026-10-27 are generated/spelling only
+SQ-IP-15,IP.qb,reviewed,@reviewed 2026-11-20,locate.md diff unrelated (generated blocks/spelling); mixin classes still in creativecompat
+SQ-IP-16,IP.qb,reviewed,@reviewed 2026-11-20,locate.md diff unrelated; dump_physics.js still prints Dumped N items (M survive lava)
+SQ-PRT-02,IP.qb,prefixed,Nether forceload widened; @reviewed 2026-11-20,Nether frame at x -2..6 z -3..3 was outside forceload 0 0 32 32 (W unloaded); now -16 -16 32 32
+SQ-PRT-04,IP.qb,reviewed,@reviewed 2026-11-20,plan_portal_changes.md diff = id renames/spelling/r1114 PASS note only
+SQ-PRT-05,IP.qb,reviewed,@reviewed 2026-11-20,"same diff; W unloaded at 1490 is the bot tp (bot loads it); W cfgedit x3 kept on purpose: the row tests the live heartbeat/despawn config edit, passed this way in r1114 (SQ-IP-05)"
+SQ-JFP-01,JFP.qb,prefixed,own s5home marker + capture S5H + forceload; @reviewed 2026-11-20,{S5H} was set only by the retired r1102b home batch (r1120nv 9.1 SAH class); mixed_jars.md diffs since 2026-11-02 are namespace/spelling only
+SQ-JFP-02,JFP.qb,reviewed,@reviewed 2026-11-20,continues JFP-01's layout (group same); mixed_jars.md diff unrelated
+SQ-JFP-03,JFP.qb,prefixed,own home capture; pass/look text cap id creativecompat:jar_fluid_pipes; @reviewed 2026-11-20,capability id is CreativeCompat.NS since the split (JarFluidPipes.java:48); regex matches PendingMb only so unchanged
+SQ-JFP-04,JFP.qb,prefixed,own home capture; @reviewed 2026-11-20,same {S5H} fix so it runs alone
+SQ-JFP-05,JFP.qb,prefixed,own home capture; @reviewed 2026-11-20,same {S5H} fix so it runs alone
+SQ-KT-29,KT.qb,reviewed,no change,lint clean; both mixins still in creativedelight.mixins.json
+SQ-LBS-00,LBS.qb,prefixed,bootrejects match creative_?labels; pass/fails text new id; @reviewed 2026-11-20,mod id creative_labels -> creativelabels (2026-11-10 namespace move): old bootreject could never fire
+SQ-LBS-01,LBS.qb,prefixed,forceload add 296 16 351 47; @reviewed 2026-11-20,zlbs_probe.js places hosts at x 300..348 z 20..44; the old r1103 home batch forceloaded them
+SQ-LBS-02,LBS.qb,prefixed,same forceload; @reviewed 2026-11-20,sticky_notes.md diff since 2026-11-02 = namespace rename/spelling; probe already on creativelabels ids
+SQ-LBS-03,LBS.qb,prefixed,same forceload; @reviewed 2026-11-20,same
+SQ-LBS-04,LBS.qb,prefixed,same forceload; @reviewed 2026-11-20,same
+SQ-LOOT-07,LOOT.qb,prefixed,removed stale @draft line; @reviewed 2026-11-20,"row has full steps but kept '@draft no batch holds this row yet', so qdrive would drop it at step start (retired_rows); plan_corpses.md diff (corpse screen / curios rounds 1-2) does not touch ancient corpses; NBT keys checked in CorpseDecayMixin / AncientCorpseFeature"
+SQ-LOOT-09,LOOT.qb,prefixed,removed stale @draft line; @reviewed 2026-11-20,same as SQ-LOOT-07 (remains key creativeloot:corpse_remains unchanged)
+SQ-LOOT-01,LOOT.qb,reviewed,no change,lint clean for step 66
+SQ-LOOT-05,LOOT.qb,reviewed,no change,lint clean for step 67
+SQ-MRD-01,MRD.qb,reviewed,no change,lint clean for step 69
+SQ-MRD-02,MRD.qb,reviewed,no change,lint clean for step 69
+SQ-MT-01,MT.qb,reviewed,@reviewed 2026-11-20,quark-common.toml changes since 2026-11-16: Food Tooltips off and a moremooblooms id in Ignored Items; Game Nerfs values the row checks unchanged
+SQ-MT-02,MT.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-NSM-01,NSM.qb,prefixed,@absent creativedelight:seasoning,dead-id warning is the recipe serializer id (in the recipe dumps); steps unchanged
+SQ-NSM-11,NSM.qb,reviewed,no change,lint clean for step 71
+SQ-OB-12,OB.qb,reviewed,no change,lint clean for step 72
+SQ-OB-01,OB.qb,reviewed,no change,lint clean for step 158
+SQ-PA-01,PA.qb,reviewed,@reviewed 2026-11-20,immersive_paintings.md diffs since 2026-11-05 are spelling / generated blocks / cegen->cdevgen; the N of N regex is count-free
+SQ-PA-02,PA.qb,reviewed,@reviewed 2026-11-20,same diff; 60 files in kubejs/data/creativecompat/paintings/minecraft confirmed
+SQ-PA-03,PA.qb,prefixed,edit (painting_test_zip.py + qrun.py toml extraSources) + restart before the bootexpects; @reviewed 2026-11-20,"steps were split from r1113 c3_a2 (its own boot) and had no stop/boot, so its bootexpects read the step's first boot and would batch-fault"
+SQ-PA-04,PA.qb,prefixed,edit (qrun.py toml paintings enabled false) + restart; @reviewed 2026-11-20,same cause (from c3_a3 own boot)
+SQ-PERFCFG-01,PERFCFG.qb,reviewed,no change,lint clean for step 75
+SQ-PERFCFG-02,PERFCFG.qb,reviewed,no change,lint clean for step 75
+SQ-PFS-01,PB.qb,reviewed,@reviewed 2026-11-20,"perf_suite.md diffs since 2026-11-16 = PB->PFS rename, run-doc rename, spelling; W unloaded at 3000 -60 3000 is the bot spawn (the bot loads its chunks), passed this way as SQ-PB-01 2026-10-28"
+SQ-PFS-02,PB.qb,reviewed,@reviewed 2026-11-20,"same diff; field sits beside bot1 on purpose (growth with a player, then forceload without one): a blanket forceload would break the second half"
+SQ-PFS-03,PB.qb,reviewed,@reviewed 2026-11-20,same diff; path target loaded by the moving bot
+SQ-PF-01,PF.qb,reviewed,no change,lint clean for step 76
+SQ-PF-02,PF.qb,reviewed,no change,lint clean for step 76
+SQ-PF-05,PF.qb,reviewed,no change,lint clean for step 76
+SQ-PF-03,PF.qb,reviewed,no change,W unloaded is on purpose: the bot teleports into unexplored land to record chunk waits
+SQ-PG-02,PG.qb,reviewed,@reviewed 2026-11-20,plan_portal_gun.md diffs since 2026-11-07 = spelling and the 2026-11-15 exit-lift amendment; dye recipe rules unchanged
+SQ-PJL-01,PJL.qb,reviewed,@reviewed 2026-11-20,recipes_cooking.md diffs since 2026-11-16 (spelling; garlic/cat food/syrup rows; generated blocks) do not touch the pack jam line
+SQ-PJL-02,PJL.qb,prefixed,@absent upgrade_aquatic:mulberry_jam; @reviewed 2026-11-20,dead-id is the negative recipe-text search; UA bottle/block still registered and in the swap list
+SQ-PJL-03,PJL.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-PJL-05,PJL.qb,reviewed,@reviewed 2026-11-20,same diff
+SQ-POT-02,POT.qb,bf-fixed,no row change (rerun),"real FAIL per coordinator, expectations kept; pot_probe.js guardThrowable fixed by the orchestrator 2026-11-20; rerun after the drive (r1120lr BATCH-FAULT)"
+SQ-POT-03,POT.qb,bf-fixed,FAIL PP-03 count 1 -> 0; dropped the two F1 ClassCastException expects; PASS PP-03 >= 12; reject ClassCastException; title,F1 struck: r1120lr shows all 12 holders PASS PP-03; @pass already said so
+SQ-POT-04,POT.qb,bf-fixed,FAIL PP-04 count excludes floralench:large_pot; reject a floralench lost entry that is not one floralench:large_*_pot item,flower_pots.md section 1: Floral large pot drops the filled pot item (plant kept inside); regexes checked against the r1120lr log (0 hits) and a synthetic empty-drop line (hit)
+SQ-POT-04v,POT.qb,bf-fixed,forceload add 288 496 296 508 + sleep 3 first,r1120lr: both setblocks 'That position is not loaded'
+SQ-POT-05,POT.qb,bf-fixed,no row change (rerun with SQ-POT-02),"inputs come from the POT-02 probe run; audit predictions (vpot/vbox, Supplementaries hanging pot face) live in tools/flower_pot_audit.py, not changed (see report)"
+SQ-POT-09,POT.qb,reviewed,@reviewed 2026-11-20,"misctags.js / flower_world.js since 2026-11-16: tab indent, tag literals -> dict keys (same tags), the R12 ban list the row was written for; checks unchanged"
+SQ-PROC-10,PROC.qb,reviewed,@reviewed 2026-11-20,qpin.py unlisted_ok allowance and qdrive/prep_srv changes do not touch the verify/show checks
+SQ-PROC-11,PROC.qb,reviewed,@reviewed 2026-11-20,builds line vs pinned stamps unchanged by the qpin/qdrive/prep_srv diffs
+SQ-PROC-12,PROC.qb,reviewed,@reviewed 2026-11-20,verdict stamps check unchanged by the diffs
+SQ-PROC-14,PROC.qb,unfixed,@reviewed 2026-11-20 only,"T3 release gate: needs an install-mode payload in deploy/latest (NOSWAP prep, srv/mods replaced); deploy/latest is the 2026-11-09 update payload (14 jars), so a plain drive step compares the full pack with it and fails; run at release, or skip in r1120nv"
+SQ-PS15B-13,PS15B.qb,reviewed,@reviewed 2026-11-20,plan_passthrough 2026-11-19 (overlay removed; dust; inside faces) and 1115b 2026-11-18 (fox/bee leaf-only exempt) do not touch falling layers
+SQ-PS15B-21,PS15B.qb,prefixed,forceload 992 976 1231 1215 + pbot spawn P (as SQ-PTH-25c); @reviewed 2026-11-20,"bot P and the area came from other rows; the step runs it with -13 only (W unloaded, ""No entity was found"")"
+SQ-PS15B-26,PS15B.qb,reviewed,@reviewed 2026-11-20,W cfgedit is intended: the row tests Common's live config watcher (in-place and rename saves while running); no qlint opt-out exists
+SQ-PS15B-27,PS15B.qb,reviewed,@reviewed 2026-11-20,W cfgedit intended (loop guard under live saves); config/quark-common.toml present for the third-party case
+SQ-PTH-29,PTH.qb,prefixed,removed stale @draft; @reviewed 2026-11-20,"row had full steps but '@draft no batch holds this row yet': qdrive drops @draft rows at step start, so it would never run; 2026-11-19 plan change (overlay, dust) does not touch it"
+SQ-PTH-30,PTH.qb,prefixed,removed stale @draft; @reviewed 2026-11-20,same as SQ-PTH-29
+SQ-PWG-09,PWG.qb,superseded,@superseded,phase 1 gate (-01/-02 registers nothing); section pins -20; load gate SQ-PWG-90
+SQ-PWG-10,PWG.qb,reviewed,@reviewed 2026-11-20,config-key shell is version-free; 2026-11-17 doc diffs (memory names
+SQ-PWG-11,PWG.qb,reviewed,@reviewed 2026-11-20,pg_solver_probe classes all present in the -20 jar
+SQ-PWG-12,PWG.qb,superseded,@superseded,P2 gate of -03 (version/phase/counts); load gate SQ-PWG-90
+SQ-PWG-24,PWG.qb,superseded,@superseded,P3 gate of -04; load gate SQ-PWG-90
+SQ-PWG-25,PWG.qb,prefixed,rewritten version-free; @reviewed 2026-11-20,"recipes 22 -> any count (SQ-PWG-90's); dropped reject sequenced_assembly/battery (in the -20 jar since P9, SQ-PWG-83); config path pwg3/ hardcoded level -> */serverconfig; all expected recipe ids checked in the -20 jar"
+SQ-PWG-35,PWG.qb,prefixed,version/phase/registry counts dropped; @reviewed 2026-11-20,phase 4 bootexpect -> phase-free; zpwg4 stress/display/damage checks kept
+SQ-PWG-36,PWG.qb,prefixed,rewritten version-free; @reviewed 2026-11-20,recipes 56 -> any count; dropped reject generator_commutator (exists since P9); config path pwg8/ -> */serverconfig; 6 _from_conversion recipes confirmed in -20
+SQ-PWG-40,PWG.qb,prefixed,area setup of SQ-PWG-39 added; @reviewed 2026-11-20,W unloaded at 1100 -60 1200
+SQ-PWG-41,PWG.qb,prefixed,area setup + SQ-PWG-38B line build (as -39) + 256 RPM added; @reviewed 2026-11-20,"row ran on the B line -38/-39 left; the step runs it without them (W unloaded, missing build)"
+SQ-PWG-42,PWG.qb,prefixed,area setup of SQ-PWG-39 added; @reviewed 2026-11-20,W unloaded at 1100 -58 1210
+SQ-PWG-45,PWG.qb,superseded,@superseded,phase 5 gate of -06 (36 ponder files); SQ-PWG-90
+SQ-PWG-46,PWG.qb,superseded,@superseded,phase 6 gate of -08; SQ-PWG-90 load gate; zpwg6 check also in SQ-PWG-55
+SQ-PWG-47,PWG.qb,superseded,@superseded,55 ponder files of -08; -20 ships 79; SQ-PWG-90 runs zpwg5 nbtall over all
+SQ-PWG-55,PWG.qb,reviewed,@reviewed 2026-11-20,steps are version-free (pass cell names -09 counts but the checks are zpwg6/zpwg7 and recipe ids)
+SQ-PWG-62,PWG.qb,prefixed,version/phase/counts and P9 absent rejects dropped; ponder summary any count; @reviewed 2026-11-20,rejects modular_display / punch_card_reader recipes would fail on -20; zpwg8 checks kept; needs file/pwgponder (now from section @@prep)
+SQ-PWG-67,PWG.qb,superseded,@superseded,phase 9.1 gate of -12 (expects P9b-d items absent); zpwg9 check rerun in SQ-PWG-72; load gate SQ-PWG-90
+SQ-PWG-72,PWG.qb,prefixed,section 2 @@prep run builds the pwgponder datapack from the pinned jar; @reviewed 2026-11-20,"expects file/pwgponder, which no prep made (79 structures from -20, tested offline); 28 component items confirmed in -20"
+SQ-PWG-84,PWG.qb,reviewed,@reviewed 2026-11-20,steps version-free; probe item list fixed
+SQ-FCB-00,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload; ids creativeengineering:kelp_encrusted_cod/canned_ratatouille -> creativedelight: (items_by_mod dump); dropped bootexpect Cup conversions (no code logs it since copper cups were removed)
+SQ-FCB-01,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",@absent for the two removed recipe ids it rejects (dead-id warnings)
+SQ-FCB-02,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","tag creativeengineering:patty -> creativedelight:patty (item_tags dump: beef, vegan, cooked vegetarian patty); title and pass follow"
+SQ-FCB-03,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",tags creativeengineering:sweeteners/counter_toppers/hammer_no_rotate -> creativedelight: (tag dumps hold the 3 stone boards)
+SQ-FCB-04,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own home; bot spawned as s5bh but used as s5knf (no such bot) -> spawn s5knf; squid needs spawn-animals (section @@prep)
+SQ-FCB-05,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-FCB-06,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-FCB-07,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PST-01,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",kjsreject after FCB-07 /reload (W kjs) -> shell grep over startup and server KubeJS logs
+SQ-PST-02,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PST-03,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; grass rule per changelog 1.2.02 and CropSeasons GRASS (off in winter only, grassOffPenalty 0.5): s5_ratio range 0.35-0.85 (was default 0.6-0.9), @pass/@commands rewritten; crops.md Grasses still says summer/wet/dry off"
+SQ-PST-06,feature_writeup/testing/rows/PSU.qb,superseded,@superseded,"ModdedGrassSpreadSeasonMixin gone (per-target hooks); hook rows SQ-PST-08, -09c, -10c, -11, -11b"
+SQ-PST-07,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PST-08,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; grass rule per changelog 1.2.02 and CropSeasons GRASS (off in winter only, grassOffPenalty 0.5): s5_ratio range 0.35-0.85 (was default 0.6-0.9), @pass/@commands rewritten; crops.md Grasses still says summer/wet/dry off"
+SQ-PST-09,feature_writeup/testing/rows/PSU.qb,superseded,@superseded,duplicate of SQ-PST-09c (VineryGrassSlabSeasonMixin deleted 2026-11-17)
+SQ-PST-09c,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; grass rule per changelog 1.2.02 and CropSeasons GRASS (off in winter only, grassOffPenalty 0.5): s5_ratio range 0.35-0.85 (was default 0.6-0.9), @pass/@commands rewritten; crops.md Grasses still says summer/wet/dry off"
+SQ-PST-10,feature_writeup/testing/rows/PSU.qb,superseded,@superseded,duplicate of SQ-PST-10c (VintageLushGrassSeasonMixin deleted 2026-11-17)
+SQ-PST-10c,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; grass rule per changelog 1.2.02 and CropSeasons GRASS (off in winter only, grassOffPenalty 0.5): s5_ratio range 0.35-0.85 (was default 0.6-0.9), @pass/@commands rewritten; crops.md Grasses still says summer/wet/dry off"
+SQ-PST-11,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; grass rule per changelog 1.2.02 and CropSeasons GRASS (off in winter only, grassOffPenalty 0.5): s5_ratio range 0.35-0.85 (was default 0.6-0.9), @pass/@commands rewritten; crops.md Grasses still says summer/wet/dry off"
+SQ-PST-11b,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; grass rule per changelog 1.2.02 and CropSeasons GRASS (off in winter only, grassOffPenalty 0.5): s5_ratio range 0.35-0.85 (was default 0.6-0.9), @pass/@commands rewritten; crops.md Grasses still says summer/wet/dry off"
+SQ-PST-12,feature_writeup/testing/rows/PSU.qb,suspected-product,waitlog narrowed only; expectation left,"pass expects jungle wet and dry at 0.35-0.70 of temperate spring; CropSeasons GRASS wetDry {N,N} and changelog 1.2.02 say neutral, crops.md says off; r1114 measured 0.97 summer, 0.76 winter; owner row, left stale"
+CQ-PST-04,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+CQ-PST-05,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-PSD-01,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSD-02,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSD-03,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; @absent upgrade_aquatic:river_tree (code-registered configured feature, placed fine in r1116)"
+SQ-PSD-04,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; @absent minecraft:azalea_tree (vanilla configured feature, no feature dump)"
+SQ-PSD-06,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",capture S5V1 renamed S5VS ({S5V11} read as an unset var); @absent minecraft:village_savanna (in structuregen.json)
+CQ-PSD-08,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+CQ-PSD-09,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-PSM-01,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",cespawnbox -> cwgspawnbox (command renamed in Creative Worldgen; output text unchanged)
+SQ-PSM-02,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",cespawnbox -> cwgspawnbox
+SQ-PSM-03,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",cespawnbox -> cwgspawnbox
+SQ-PSM-04,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",cespawnbox -> cwgspawnbox
+SQ-PSM-05,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",cespawnbox -> cwgspawnbox; @absent unwrecked_ships:ship eugene:witch_wagon minecraft:swamp_hut (in structuregen.json)
+SQ-PSM-06,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","{S5SM} never captured: row now locates creativeworldgen:meta/struck_monument, save-all, restart 900, adds the s5n objective; cespawnbox -> cwgspawnbox; monsters need the new @@prep B difficulty=normal spawn-monsters=true"
+SQ-PSM-07,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","{S5LM} never captured: row now locates minecraft:monument; adds s5n objective; cespawnbox -> cwgspawnbox, ceperf -> cdevperf; @absent minecraft:monument"
+SQ-PSM-08,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",captures S5Q0..S5Q3 renamed S5QA..S5QD ({S5Q01} read as unset var); squid/whale need spawn-animals (@@prep B)
+SQ-PSM-09,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","E var {S5O1}: row now locates minecraft:deep_ocean, captures S5O and forceloads before the setblock; ceperf -> cdevperf; squid/dolphin need spawn-animals (@@prep B)"
+SQ-PSF-01,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSF-02,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSF-03,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSF-04,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSF-05,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSF-06,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSF-07,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+SQ-PSF-08,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","own home; setup row SQ-PSF-08a (stems, ../s5f8_t0 timer) was never in the rows file: setup added to the row; fertileSoilBoost false via @@prep A"
+SQ-PSF-09,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)
+CQ-PSF-01,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-PSW-00,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-PSW-01,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-PSW-02 (ST-294),feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",@absent the four philipsruins structure ids (in structuregen.json)
+SQ-PSW-03 (ST-295),feature_writeup/testing/rows/PSU.qb,unfixed,none,W waitlog: pillager_camp_ruin locate reply pattern equals SQ-PSM-04 in the same step 160; only a 900 s timeout in PSM-04 makes it bite; no distinct reply text to anchor on
+SQ-PSW-04 (NW-21),feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","waitlogs name their target: Task finished for minecraft:overworld, locate gothic_church:church"
+SQ-PSW-05 (ST-335),feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",waitlog Task finished for minecraft:the_end; Saved the game$
+SQ-PSU-01,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-PSU-02,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20","ids creativeengineering:cob_pipe -> creativedelight:cob_pipe, creativeengineering:trimmable_armor -> creativecommon:trimmable_armor (50 items, iron chestplate and IE steel chest in it); curios:mouth probe dropped (no such tag in the dump)"
+SQ-PSU-03,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-PSU-04,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches); not in a pending r1120nv step
+SQ-PSU-05,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own home; creativeengineering:potion_bucket/DispenserOwner -> creativebrewing: (PotionBucketDispenser OWNER_KEY); pig needs spawn-animals (@@prep A)
+SQ-PSU-08,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches); not in a pending r1120nv step
+SQ-PSU-09,feature_writeup/testing/rows/PSU.qb,suspected-product,none,"step expects nourishment in the vinegar_jar food line (dump: Nourishment 180 s + Nausea 10 s) while @pass and plan_scratch_bugfix_1103 5.5 say drinking gives Nausea only, no Nourishment; cannot tell whether the strip is static or at eat time"
+CQ-PSU-01,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+CQ-PSU-02,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+CQ-PSU-03,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+CQ-PSU-04,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+CQ-PSU-05,feature_writeup/testing/rows/PSU.qb,reviewed,@reviewed 2026-11-20,"plan_food_cooking_batch.md diff since review (namespace move of patties/kitchen_tags, r1114 PST-12 note, doc moves) touches no check of this row"
+SQ-FCB-08,feature_writeup/testing/rows/PSU.qb,prefixed,"rewritten, @reviewed 2026-11-20",own s5home marker + S5H capture + gamerules + forceload over the row boxes (S5H came from the retired r1102b/r1103 home batches)

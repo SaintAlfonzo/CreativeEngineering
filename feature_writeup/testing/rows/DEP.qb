@@ -51,8 +51,11 @@ look no hit naming com.SaintAlfonzo, ce.shared or one of our mixin configs (thir
 @commands Same boot: `/setblock` a `minecraft:campfire` under open sky and one on a `minecraft:coal_block` beside it, `/weather thunder`, wait 400 ticks, then `/execute if block <pos> minecraft:campfire[lit=false]` for each; `/dumpall`, `grep -c "creativecommon:campfire/rain_douses" kubejs/exported/tags/block_tags.json`
 @pass open-sky campfire out, the one on coal lit; tag present (1)
 @fails Common's `CampfireRainInfo` namespace vs `block_dict.js` `t_campfire_rain_*` (7.17 item 1)
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 @from batches/r1113/c2_a1.qb
+# forceload (r1120fix, 2026-11-20): r1120nv batch fault, the campfire area was not loaded
+> forceload add 328 296 336 304
+sleep 3
 > setblock 330 -61 300 minecraft:stone
 > setblock 330 -60 300 minecraft:campfire[lit=true]
 > setblock 332 -61 300 minecraft:coal_block

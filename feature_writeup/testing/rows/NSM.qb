@@ -19,6 +19,7 @@
 @from batches/r1113/c4_a.qb
 # r1118 R3 (2026-11-18): new-world half only; the old-stack half is dropped (loss accepted, owner ruling 1)
 @reviewed 2026-11-18
+@absent creativedelight:seasoning (recipe serializer id, listed in the recipe dumps, not an item)
 > cdevtest bytype creativedelight:seasoning max=5
 > cdevtest tag item creativedelight:seasonable/pepper
 > cdevtest tag item creativedelight:seasonable/chili

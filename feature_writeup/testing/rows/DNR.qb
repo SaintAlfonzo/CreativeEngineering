@@ -18,13 +18,14 @@
 @commands Scratch server and client with the new CD jar plus both donor folders; load a copy of a 1.1.03+ world that has a placed paella plate (part eaten), a stuffed pufferfish, a sponge cake with bites, a sea grape column with fruit, wild sea grape and both crates; `grep -iE "oceanic_upstream\|Missing\|remap\|oceanic_delight" logs/latest.log`
 @pass Boots; "Oceanic Delight upstream assets/data: N files" logged; no missing-id or remap lines; every block keeps its state and texture; creative tab "Oceanic Delight" lists the items
 @fails Missing art: check `/datapack list` and the resource pack list for `oceanic_upstream_*`; a reset state: compare the property names in `ServingPlateBlock` / `SeaGrapePlantBlock`
+@reviewed 2026-11-20
 @draft needs a copy of a 1.1.03+ world with the placed blocks of the Commands cell as the boot level (none in the scratch kit); the reads are cdevtest state / be at their positions and bootreject on Missing / remap lines
 ## SQ-DNR-O-02
 @group A
 @commands Eat Shrimp Stew, Bowl of Paella, Sea Grape, Sea Grape Juice and Nautilus Juice; use the paella and pufferfish with and without a bowl; knife the sponge cake, then eat from it; bone meal a sea grape plant; brew Awkward + Elder Guardian Eye, then + redstone, + glowstone
-@pass Bowls, bottle and shell come back; Comfort 5:00, Nourishment 5:00, Instant Breath (air full) apply, with blue tooltip lines; no bowl gives "You need a Bowl to eat this."; the empty paella pan is picked up (pan + skillet); a slice drops; bone meal adds a plant; the three Mining Fatigue potions brew and JEI shows them
+@pass Bowls, bottle and shell come back; Comfort 4:00 (paella), Nourishment 4:00 (shrimp stew) by the pack rule (upstream 5:00), Instant Breath (air full) apply, with blue tooltip lines; no bowl gives "You need a Bowl to eat this."; the empty paella pan is picked up (pan + skillet); a slice drops; bone meal adds a plant; the three Mining Fatigue potions brew and JEI shows them
 @fails Compare with ocean_delight.md 5.6; missing effect: Farmer's Delight effect id lookup in `OceanicFood.farmers`
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > forceload add 2592 2592 2616 2616
 > pbot spawn dnr2 2600 -60 2600 minecraft:overworld survival
 sleep 3
@@ -61,11 +62,14 @@ sleep 4
 > cdevtest player dnr2
 > pbot inv dnr2 get
 count verb=pbot.useitem bot=dnr2 end=finish == 5
-expect verb=player name=dnr2 effects=\S*farmersdelight:comfort:0:5\d\d\d\b
-expect verb=player name=dnr2 effects=\S*farmersdelight:nourishment:0:5\d\d\d\b
-expect verb=pbot.inv bot=dnr2 slot=\d+ item=minecraft:bowl\*
-expect verb=pbot.inv bot=dnr2 slot=\d+ item=minecraft:glass_bottle\*
-expect verb=pbot.inv bot=dnr2 slot=\d+ item=minecraft:nautilus_shell\*
+# r1120fix (2026-11-20): the pack Comfort / Nourishment rule (comfort_nourishment.md 10; comfort_nourishment.json set:
+# shrimp_stew nourishment 240 s, bowl_of_paella comfort 240 s) gives 4:00, not upstream 5:00; the containers are read
+# from the useitem result (each pbot hold overwrites slot 0, so the inventory keeps only the last one)
+expect verb=player name=dnr2 effects=\S*farmersdelight:comfort:0:4[5-8]\d\d\b
+expect verb=player name=dnr2 effects=\S*farmersdelight:nourishment:0:4[5-8]\d\d\b
+count verb=pbot.useitem bot=dnr2 end=finish item=oceanic_delight:(shrimp_stew|bowl_of_paella)\S* result=minecraft:bowl == 2
+expect verb=pbot.useitem bot=dnr2 end=finish item=oceanic_delight:sea_grape_juice\S* result=minecraft:glass_bottle
+expect verb=pbot.useitem bot=dnr2 end=finish item=oceanic_delight:nautilus_juice\S* result=minecraft:nautilus_shell
 > pbot remove dnr2
 > cdevtest place 2604 -60 2604 oceanic_delight:paella_plate
 > cdevtest use 2604 -60 2604 held=minecraft:bowl hand=main
@@ -85,12 +89,13 @@ expect verb=potion potion=minecraft:awkward ingredient=oceanic_delight:elder_gua
 expect verb=potion potion=oceanic_delight:mining_fatigue ingredient=minecraft:redstone output="minecraft:potion oceanic_delight:mining_fatigue_extended"
 expect verb=potion potion=oceanic_delight:mining_fatigue ingredient=minecraft:glowstone_dust output="minecraft:potion oceanic_delight:mining_fatigue_two"
 reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|Unknown item|No player was found)
-look the five player lines: Comfort 5:00, Nourishment 5:00, Instant Breath (air=300) after the right food; the sea grape count above 1 after the bone meal; the empty paella pan pick-up (pan + skillet), the "You need a Bowl" message, the blue tooltip lines and JEI are client (CQ)
+look the five player lines: Comfort 4:00, Nourishment 4:00, Instant Breath (air=300) after the right food; the sea grape count above 1 after the bone meal; the empty paella pan pick-up (pan + skillet), the "You need a Bowl" message, the blue tooltip lines and JEI are client (CQ)
 ## SQ-DNR-O-03
 @group A
 @commands Rerun DA-01, DA-02, DA-09, DA-10 and DA-11 (ocean_delight.md 6)
 @pass Same results as before; drops come from `creativedelight:gameplay/fishing_net/*`; Upgrade Aquatic kelps and pickerelweed work through the tags; no loot parse error
 @fails Nothing drops: the CD jar is missing `data/creativedelight/loot_tables`; a block ignored: the tag fill in `oceanic_delight/fishing_net_tags.js`
+@reviewed 2026-11-20
 @draft reruns DA-01, DA-02, DA-09 to -11 (ocean_delight.md 6): fishing-net catch rows whose steps live in the DA rows of the ocean rows file; run those rows on this boot instead of copying their steps here
 ## SQ-DNR-O-04
 @phase worldgen
@@ -98,7 +103,7 @@ look the five player lines: Comfort 5:00, Nourishment 5:00, Instant Breath (air=
 @commands Kill a salmon with a knife, an elder guardian, a squid; `/loot` a shipwreck supply and a buried treasure chest; fresh warm ocean
 @pass Salmon eggs and elder eye drop as upstream (squid: one squid item, no tentacles); chests can hold salmon or ancient fish eggs; wild sea grape patches generate
 @fails Modifier error in the log: codec `oceanic_delight:oceanic_delight_loot_modifier` not registered
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootreject (?i)oceanic_delight:oceanic_delight_loot_modifier.*(not registered|unknown|error)
 > forceload add 0 0 15 15
 > fill 0 199 0 15 199 15 minecraft:glass
@@ -129,19 +134,12 @@ shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').re
 expect verb=count block=oceanic_delight:wild_sea_grape n=[1-9]
 reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 look the chest items line may hold salmon or ancient fish eggs over the 20 rolls (chance-based: record, not judged); the squid kill drops one squid item; the warm ocean count above 0 (patches generate)
-## SQ-DNR-O-05
-@group A
-@commands Move `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` away and start; then put any other jar there under that name and start; restore
-@pass Startup stops with the "reads its textures, models and recipes from the original Oceanic Delight jar ... folder 'oceanic_upstream' ... missing" message and the Modrinth URL; the second run says "wrong file ... expected 91fd8842..."
-@fails Game starts: `UpstreamJars.verifyOrFail` is not the first call of the constructor
-@reviewed 2026-11-16
-bootexpect (?i)original Oceanic Delight jar.*oceanic_upstream.*missing|oceanic_upstream.*missing.*modrinth
-look own boot with oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar moved away: startup stops with the missing message and the Modrinth URL; a second boot with another jar under that name stops with "wrong file ... expected 91fd8842..." (bootexpect wrong file .*91fd8842 on that boot); restore the jar after
 ## SQ-DNR-E-01
 @group old world
 @commands Same boot; load a 1.1.03+ world that has the four End plants, a Void Pepper vine (plain and fruiting), a Chorus Crate and an End House; `grep -i "enders_upstream\|enders_additions\|Missing" logs/latest.log`
 @pass No missing-id or remap lines; every 1.1.4 block and item keeps its texture and model; 1.2.2 items look as before
 @fails Missing textures: check that `enders_upstream_assets` is listed; 1.2.2 art changed: a translator path collides with 1.2.2
+@reviewed 2026-11-20
 @draft needs a copy of a 1.1.03+ world with the placed blocks of the Commands cell as the boot level (none in the scratch kit); the reads are cdevtest state / be at their positions and bootreject on Missing / remap lines
 ## SQ-DNR-E-02
 @phase worldgen
@@ -149,7 +147,8 @@ look own boot with oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar moved
 @commands `/loot spawn ~ ~ ~ loot endersdelight:blocks/chorus_crate`; break `chorus_flame_block` age 2 and a fruiting `voidpepper_block`; `/locate structure endersdelight:end_house` in the End
 @pass Crate drops itself; plants drop as in EDL-01 / EDL-02; the End House is located and placed
 @fails Compare `EndersTranslator.DATA` with `/datapack list` (`enders_upstream_data`)
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+@absent endersdelight:end_house (structure id: in the Ender's 1.1.4 donor jar data/endersdelight/worldgen/structure/end_house.json and kubejs/exported/worldgen/structuregen.json, not in the registry dump)
 > forceload add 2592 2592 2616 2616
 > loot spawn 2600 -58 2600 loot endersdelight:blocks/chorus_crate
 > cdevtest place 2602 -60 2600 endersdelight:chorus_flame_block[age=2] flags=18
@@ -161,19 +160,78 @@ expect verb=loot state="?endersdelight:chorus_flame_block\[age=2\]"? .*drops=\S+
 expect nearest endersdelight:end_house
 reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|Unknown item|No player was found)
 look the chorus flame drops as in EDL-01; the fruiting voidpepper_block half (its fruiting state name) is EDL-02's
+
+@@section 2
+@@title SQ-DNR Oceanic donor jar missing, 2026-11-20 (own failed-boot step; [creative_delight.md](../creative_delight.md) 36, [ocean_delight.md](../ocean_delight.md))
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/creative_delight.md feature_writeup/ocean_delight.md feature_writeup/ends_delight.md
+@@reviewed 2026-11-20
+@@prep run rm -f oceanic_upstream && mkdir oceanic_upstream
+@@text
+@@text Split out of section 1 (r1120fix, 2026-11-20): the row needs its own boot with the donor folder changed, and the server stops at
+@@text startup (every row of the step has `bootreject Done \(`, so the driver waits for the stop instead of Done). The donor folder in
+@@text the scratch server is a symlink to the instance's folder (scratch_server.sh setup); the prep replaces the symlink with a
+@@text scratch folder and never touches the instance's donor jars.
+@@table
+## SQ-DNR-O-05
+@group A
+@commands Move `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` away and start; then put any other jar there under that name and start; restore
+@pass Startup stops with the "reads its textures, models and recipes from the original Oceanic Delight jar ... folder 'oceanic_upstream' ... missing" message and the Modrinth URL; the second run says "wrong file ... expected 91fd8842..."
+@fails Game starts: `UpstreamJars.verifyOrFail` is not the first call of the constructor
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): own step, section @@prep makes srv/oceanic_upstream an empty folder (r1120lr booted with the donor in
+# place, so no message). Message format: development/shared/upstream/ce/shared/DonorJars.java (one line per part). The wrong-file
+# half is the same shared DonorJars check, tested on the Ender's pin by SQ-DNR-E-04
+bootexpect Oceanic Delight \(Creative Delight\) reads its textures, models and recipes from the original Oceanic Delight jar, which must be in the folder 'oceanic_upstream'
+bootexpect missing: \S*oceanic_upstream/oceanic_delight-1\.0\.1-forge-1\.19\.2\.jar
+bootexpect get it from https://cdn\.modrinth\.com/\S+/oceanic_delight-1\.0\.1-forge-1\.19\.2\.jar
+bootreject Done \(
+look the wrong-file half ("wrong file ... expected 91fd8842") is not run here: same DonorJars code as SQ-DNR-E-04
+
+@@section 3
+@@title SQ-DNR Ender's donor jar missing, 2026-11-20 (own failed-boot step; [creative_delight.md](../creative_delight.md) 36, [ends_delight.md](../ends_delight.md))
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/creative_delight.md feature_writeup/ocean_delight.md feature_writeup/ends_delight.md
+@@reviewed 2026-11-20
+@@prep run rm -f enders_upstream && mkdir enders_upstream
+@@text
+@@text Split out of section 1 (r1120fix, 2026-11-20): the row needs its own boot with the donor folder changed, and the server stops at
+@@text startup (every row of the step has `bootreject Done \(`, so the driver waits for the stop instead of Done). The donor folder in
+@@text the scratch server is a symlink to the instance's folder (scratch_server.sh setup); the prep replaces the symlink with a
+@@text scratch folder and never touches the instance's donor jars.
+@@table
 ## SQ-DNR-E-03
 @group A
 @commands Move `enders_upstream/endersdelight-1.1.4.jar` away and start; restore
 @pass Startup stops with the "Ender's Delight Additions (Creative Delight) ... folder 'enders_upstream' ... missing" message
 @fails `verifyOrFail` is not running first
-@reviewed 2026-11-16
-bootexpect (?i)Ender's Delight Additions.*enders_upstream.*missing
-look own boot with enders_upstream/endersdelight-1.1.4.jar moved away: startup stops with the missing message; restore the jar after
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): own step, section @@prep makes srv/enders_upstream an empty folder (r1120lr booted with the donor in place)
+bootexpect Ender's Delight Additions \(Creative Delight\) reads its textures, models and recipes from the original Ender's Delight 1\.1\.4 jar, which must be in the folder 'enders_upstream'
+bootexpect missing: \S*enders_upstream/endersdelight-1\.1\.4\.jar
+bootreject Done \(
+
+@@section 4
+@@title SQ-DNR Ender's donor jar wrong file, 2026-11-20 (own failed-boot step; [creative_delight.md](../creative_delight.md) 36, [ends_delight.md](../ends_delight.md))
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/creative_delight.md feature_writeup/ocean_delight.md feature_writeup/ends_delight.md
+@@reviewed 2026-11-20
+@@prep run rm -f enders_upstream && mkdir enders_upstream && cp "$INST/oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar" enders_upstream/endersdelight-1.1.4.jar
+@@text
+@@text Split out of section 1 (r1120fix, 2026-11-20): the row needs its own boot with the donor folder changed, and the server stops at
+@@text startup (every row of the step has `bootreject Done \(`, so the driver waits for the stop instead of Done). The donor folder in
+@@text the scratch server is a symlink to the instance's folder (scratch_server.sh setup); the prep replaces the symlink with a
+@@text scratch folder and never touches the instance's donor jars.
+@@table
 ## SQ-DNR-E-04
 @group A
 @commands Put another jar there under the same name and start; restore
 @pass Stops with "wrong file ... expected d1541d70..."
 @fails The sha1 pin is not checked
-@reviewed 2026-11-16
-bootexpect (?i)wrong file.*d1541d70
-look own boot with another jar under enders_upstream/endersdelight-1.1.4.jar: startup stops with the sha1 message; restore the jar after
+@reviewed 2026-11-20
+# r1120fix (2026-11-20): own step, section @@prep puts the Oceanic donor jar into a scratch srv/enders_upstream under Ender's name
+bootexpect wrong file: \S*enders_upstream/endersdelight-1\.1\.4\.jar \(sha1 [0-9a-f]+, expected d1541d70
+bootreject Done \(

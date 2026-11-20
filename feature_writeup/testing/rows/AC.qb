@@ -17,6 +17,7 @@
 @pass No mixin apply error
 @fails SRG name wrong for `RangedAttribute.sanitizeValue` / `getMaxValue`
 @from batches/r1031/a1_boot.qb passed
+@reviewed 2026-11-20
 bootreject (Mixin apply failed|InvalidInjectionException).*ArmorCapMixin
 
 ## SQ-AC-02 | dragon set 40 armor, 18 toughness
@@ -25,6 +26,7 @@ bootreject (Mixin apply failed|InvalidInjectionException).*ArmorCapMixin
 @pass 40 (dragonloot-common.toml protection 8 + 13 + 11 + 8; was 36), toughness 18.0
 @fails mixin not applied, config `[dragon_gear] armorCap` below 40, or `dragonloot-common.toml` `[dragonloot.armor]` values changed
 @from batches/r1101/p1_server.qb
+@reviewed 2026-11-20
 # self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
 > execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
 sleep 3
@@ -46,6 +48,7 @@ expect Armor Toughness for entity qa is 18\.0
 @pass 50 (the cap), not 100
 @fails sanitizeValue inject missing
 @from batches/r1031/a1_world.qb passed
+@reviewed 2026-11-20
 # self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
 > execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
 sleep 3
@@ -58,9 +61,10 @@ expect for entity qa is 50
 
 ## SQ-AC-04
 @group client
+@client true
 @commands Wear the full dragon set
 @pass HUD armor bar shows 40 (one extra row past 20; dragonloot-common.toml 8/13/11/8, was 36)
-@fails client-side config or mixin
+@fails client-side config or mixin. Client row (`@s`, `do`, `shot`): r1120lr ran it on a server-only boot (batch fault); the server half (attribute 40) is SQ-AC-02
 @reviewed 2026-11-16
 > gamemode survival
 > item replace entity @s armor.head with dragonloot:dragon_helmet

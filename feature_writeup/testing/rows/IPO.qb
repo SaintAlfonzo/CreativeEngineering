@@ -58,14 +58,15 @@ look the 2705 -58 state is the arm; the truss blocks between the posts at y -57 
 @commands Use a silver fence, a gold fence and a nether brick fence on a post base
 @pass Nothing happens (fence places as a normal block or the click is ignored), no exception in the log
 @fails Exception from `getPostState`: `isValidItem` was not redirected at that call site
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 > forceload add 2696 2696 2720 2720
 > setblock 2712 -60 2704 immersiveposts:postbase
 > cdevtest use 2712 -60 2704 held=immersiveposts:fence_silver hand=main
 > cdevtest use 2712 -60 2704 held=immersiveposts:fence_gold hand=main
 > cdevtest use 2712 -60 2704 held=minecraft:nether_brick_fence hand=main
 > cdevtest state 2712 -59 2704
-reject verb=state pos=2712,-59,2704 state="?immersiveposts:
+# r1120lr batch fault: the reject also matched immersiveposts:fence_silver, the plain fence block the pass allows; only a post state is a fail
+reject verb=state pos=2712,-59,2704 state="?immersiveposts:\S*post
 reject (?i)exception
 reject \[cdevtest\] .*done=0
 look the three use lines: the click is ignored or the fence places as a plain block

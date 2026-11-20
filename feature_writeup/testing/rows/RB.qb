@@ -18,7 +18,14 @@
 @pass First case: slot 6 holds the plated meal, slots 5 and 7 empty, no item entity near the pot. Second (rule of 2026-11-03, remainder_buffer.md 3.8): recycled bowls stack in slot 5 up to 64, slot 7 holds only non-bowl leftovers; every bowl accounted for (bowls before = slot 5 + slot 7 + meals plated)
 @fails `CopperPotBlockEntity.recycleRoom` / `storeOrThrowLeftover`; `getContainer()` empty because `mealContainerStack` was not set before the leftovers
 @from batches/r1102b/s5_R_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# self-contained since r1120fix (2026-11-20): own s5home marker and S5H capture (was the r1102b boot's S5H, never captured when the row runs alone)
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+44} {S5H3+12} {S5H1+60} {S5H3+28}
+sleep 3
 > s5 potrecipe
 waitlog \[s5\] potrecipe: \d+ found 30
 capture S5PA \[s5\] potnbt1 \S+ (\{.*\})$
@@ -46,7 +53,14 @@ look tick warp {S5PC}+300 ticks replaces the old real-time wait (cook time + 15 
 @pass 3 outputs in slot 7; slot 6 holds 1 container; slot 9 empty or holding only the extra leftovers; no item entity on the jar. No such recipe in the pack: note it, the row is N/A
 @fails `FermentingJarBlockEntity.recycleRoom` (container taken before the leftovers); `remaindersFit` stalls when slot 9 is full
 @from batches/r1102b/s5_R_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# self-contained since r1120fix (2026-11-20): own s5home marker and S5H capture (was the r1102b boot's S5H, never captured when the row runs alone)
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+44} {S5H3+12} {S5H1+60} {S5H3+28}
+sleep 3
 > s5 jarrecipe
 waitlog \[s5\] jarrecipe: \d+ found 30
 capture S5JA \[s5\] jarnbt3 \S+ (\{.*\})$

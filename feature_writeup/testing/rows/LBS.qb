@@ -14,11 +14,12 @@
 ## SQ-LBS-00 | Creative Labels 1.0.1: centre_note tag loads, no creative_labels error
 @group A
 @commands boot
-@pass `latest.log` has no `Couldn't load tag creative_labels:paper/centre_note` and no `creative_labels` error
-@fails tag JSON `data/creative_labels/tags/blocks/paper/centre_note.json` (optional entries; `#botanypots:all_botany_pots` id)
+@pass `latest.log` has no `Couldn't load tag creativelabels:paper/centre_note` and no `creativelabels` error (mod id `creativelabels` since 2026-11-10)
+@fails tag JSON `data/creativelabels/tags/blocks/paper/centre_note.json` (optional entries; `#botanypots:all_botany_pots` id)
 @from batches/r1103/sB_2.qb passed
-bootreject Couldn't load tag creative_labels:paper/centre_note
-bootreject (?i)(ERROR|Exception).*creative_labels
+@reviewed 2026-11-20
+bootreject Couldn't load tag creative_?labels:paper/centre_note
+bootreject (?i)(ERROR|Exception).*creative_?labels
 shell ls mods | grep -i creativeLabels; ls mods | grep -q "creativeLabels-1.0.1"
 
 ## SQ-LBS-01 | labels by surface: face Place per host (zlbs labels)
@@ -27,6 +28,10 @@ shell ls mods | grep -i creativeLabels; ls mods | grep -q "creativeLabels-1.0.1"
 @pass `[cltest] PASS` per host; face values: jar 0.1875/0/0/10, sack 0.125/0/-1/10, trash cans 0.125/0/0/10, Pickling Jar 0.203/0/0/10, botany pot 0.125/0/-4/8, cauldron and composter 0/0/0/10, stone 0/0/0/10, chest 0.0625/0/0/10
 @fails `Spots.labelSurface` (headless `SpotsTest` "labels: surface test" passes, so the live shape differs: log `host.getShape` boxes) or `placeLabel` not reached (sneak needed on usable hosts)
 @from batches/r1103/sB_2.qb
+@reviewed 2026-11-20
+# probe hosts at x 300..348, z 20..44 (zlbs_probe.js); forceload added r1120fix 2026-11-20
+> forceload add 296 16 351 47
+sleep 3
 > zlbs labels
 waitlog \[zlbs\] DONE labels 60
 count \[zlbs\] PASS labels == 12
@@ -39,6 +44,10 @@ look on a FAIL, the line's place (inset/offX/offY/size) against the wanted value
 @pass `[cltest] PASS` per host: no `face_paper` in the cell, label count unchanged
 @fails `Spots.fit` class order (stairs/slabs before the surface test; door/trapdoor check; collision-shape check)
 @from batches/r1103/sB_2.qb passed
+@reviewed 2026-11-20
+# probe hosts at x 300..348, z 20..44 (zlbs_probe.js); forceload added r1120fix 2026-11-20
+> forceload add 296 16 351 47
+sleep 3
 > zlbs refused
 waitlog \[zlbs\] DONE refused 60
 count \[zlbs\] PASS refused == 9
@@ -50,6 +59,10 @@ reject \[zlbs\] FAIL
 @pass first note on spot C with offY jar -1, sack -2, trash cans -1.25, Pickling Jar -1.25, botany pot -4; second note refused; top note accepted on the jar and the Pickling Jar (one note centered on the lid; owner 2026-11-03, tag `creative_labels:paper/note_on_top`) and refused on the sack, the 4 trash cans and the botany pot (`FAIL` result, note count unchanged)
 @fails host missing from `creative_labels:paper/centre_note` or `paper/note_on_top` (tag not loaded or id wrong), Labels jar older than 2026-11-03 (sack top accepted), or `Spots.centreNoteFit`
 @from batches/r1103/sB_2.qb
+@reviewed 2026-11-20
+# probe hosts at x 300..348, z 20..44 (zlbs_probe.js); forceload added r1120fix 2026-11-20
+> forceload add 296 16 351 47
+sleep 3
 > zlbs centre
 waitlog \[zlbs\] DONE centre 60
 count \[zlbs\] PASS centre == 24
@@ -61,6 +74,10 @@ reject \[zlbs\] FAIL
 @pass control: a torch drops; every host: the label (blank) and the note (with its Text) drop as item entities at the cell, the cell is air (20 of 20); piston line PASS (note dropped with Text, cell air); survival break drops the label
 @fails control drops nothing too: every block drop is skipped (Creative Worldgen `FirstTickWater` flag; needs the 2026-11-03 Worldgen jar, which clears it each level tick); control drops but paper does not: `FacePaperInteractions.hostChanged` / `refit`
 @from batches/r1103/sB_2.qb
+@reviewed 2026-11-20
+# probe hosts at x 300..348, z 20..44 (zlbs_probe.js); forceload added r1120fix 2026-11-20
+> forceload add 296 16 351 47
+sleep 3
 > zlbs refit
 waitlog \[zlbs\] DONE refit 60
 count \[zlbs\] PASS refit == 20

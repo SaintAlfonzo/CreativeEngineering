@@ -16,9 +16,9 @@
 @group A
 @commands Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|missing\|invalid for block" \| head`; recipe dump `creativedelight:stonecutting/bbq_*_from_logs`; tag probe `#creativedelight:bbq_oak_logs`, `#minecraft:mineable/axe`, `#blockrunner:surface/wood`
 @pass No log line; 18 stonecutter recipes (9 basin x2, 9 tray x4), each wood's on its own log tag, oak's on `#creativedelight:bbq_oak_logs`; that tag holds oak logs and modded logs, no spruce/birch/jungle/acacia/dark oak/mangrove logs or crimson/warped stems; the 18 blocks in both block tags; no `bbq_basin_from_logs` / `bbq_tray_from_logs`
-@fails unknown dict key in `recipes.js` / `tags.js`; `addMatching` warning
+@fails unknown dict key in `recipes.js` / `tags.js`; `addMatching` warning. r1120nv batch fault: the log-tag reject had an unparenthesized alternation that matched the crimson tray's rdetail line
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 bootreject (?i)barbequesdelight.*(error|exception|invalid for block)
 > cdevtest rdetail _from_logs
 > cdevtest tag item creativedelight:bbq_oak_logs
@@ -27,7 +27,7 @@ bootreject (?i)barbequesdelight.*(error|exception|invalid for block)
 waitlog verb=tag kind=block tag=blockrunner:surface/wood n= 20
 count id=creativedelight:stonecutting/bbq_[a-z_]+_from_logs serializer= == 18
 reject stonecutting/bbq_(basin|tray)_from_logs
-reject verb=tag kind=item tag=creativedelight:bbq_oak_logs n=\d+ ids=.*minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove)_log|minecraft:(crimson|warped)_stem
+reject verb=tag kind=item tag=creativedelight:bbq_oak_logs n=\d+ ids=.*minecraft:((spruce|birch|jungle|acacia|dark_oak|mangrove)_log|(crimson|warped)_stem)\b
 look basins x2 and trays x4 output; each wood's on its own log tag, oak's on #creativedelight:bbq_oak_logs (oak logs and modded logs); the 18 blocks in mineable/axe and blockrunner:surface/wood
 reject verb=\S+ .*done=0
 
@@ -37,7 +37,7 @@ reject verb=\S+ .*done=0
 @pass One `barbequesdelight:basin` / `tray` block entity type on every wood; skewering works on the warped basin; each drops itself both ways
 @fails block entity type built with the oak block only
 @from batches/r1115/p6_a1.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p6_a1 (row before SQ-BBQW-02)
 > forceload add 296 356 316 376
 > execute unless entity c6b run pbot spawn c6b 303.5 -60 366.5 minecraft:overworld survival
@@ -62,7 +62,7 @@ reject verb=\S+ .*done=0
 @pass Mixed trays stack (`support=true` on the upper two); removing the base drops the whole stack
 @fails `TrayBlock` still checks `is(this)`
 @from batches/r1113/fix_c2a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
 > forceload add 296 290 360 380
 > execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
