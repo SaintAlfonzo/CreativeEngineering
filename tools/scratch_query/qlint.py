@@ -411,7 +411,7 @@ def load(batch, opts):
 	if opts.get("res") and os.path.isdir(os.path.join(opts["res"], "rows")):
 		logs = {}
 		for r in rows:
-			p = os.path.join(opts["res"], "rows", r["id"] + ".log")
+			p = os.path.join(opts["res"], "rows", r["id"].replace("/", "_") + ".log")
 			if os.path.exists(p):
 				logs[r["id"]] = open(p, errors="replace").read().splitlines()
 	return rows, sel, vars0, logs, perr

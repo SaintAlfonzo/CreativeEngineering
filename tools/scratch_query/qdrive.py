@@ -378,22 +378,58 @@ def watchdog(pid, out):
 							start_new_session=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
-def first_unrun(res, rows):
+def superseded_now(file):
+	"""Row ids of FILE marked @superseded now (a mark set after the plan; qrun.py lists them and runs none)."""
+	sys.path.insert(0, str(HERE))
+	import qrows
+	try:
+		f = qrows.load(INST / file)
+	except Exception:  # a rows file mid-edit: run what the plan says
+		return set()
+	return {r['id'] for sec in f.get('sections', []) for kind, r in sec['items']
+			if kind == 'row' and qrows.effective(sec, r).get('superseded')}
+
+
+def first_unrun(res, rows, file=None):
 	try:
 		done = json.loads((Path(res) / 'results.json').read_text())
 	except (OSError, ValueError):
 		done = {}
-	return [r for r in rows if r not in done]
+	gone = superseded_now(file) if file else set()
+	return [r for r in rows if r not in done and r not in gone]
+
+
+def retired_rows(s):
+	"""Ids of the step's rows that the rows file now marks @superseded or @draft (read fresh at step start, so a .qb
+	edit made while the driver runs reaches pending steps)."""
+	sys.path.insert(0, str(HERE))
+	import qrows
+	try:
+		doc = qrows.load(str(INST / s['file']))
+	except Exception:
+		return set()
+	want = set(s['rows'])
+	out = set()
+	for sec in doc['sections']:
+		for kind, r in sec['items']:
+			if kind == 'row' and r.get('id') in want and ('superseded' in r['meta'] or 'draft' in r['meta']):
+				out.add(r['id'])
+	return out
 
 
 def run_step(d, i, s):
 	out = d.dir.parent / ('s%02d' % i)
 	res = d.dir.parent / ('s%02d_res' % i)
 	s.update({'out': str(out), 'res': str(res), 'status': 'running', 'started': s.get('started') or now()})
+	retired = retired_rows(s)   # r1120nv: rows marked @superseded / @draft after planning drop out at step start
+	if retired:
+		s['rows'] = [r for r in s['rows'] if r not in retired]
+		s['dropped'] = sorted(set(s.get('dropped', [])) | retired)
+		d.log('step %d: dropped (now @superseded or @draft in the rows file): %s' % (i + 1, ', '.join(sorted(retired))))
 	d.save()
 	runner_write({'Updated': now(), 'Phase': 'step %d/%d %s section %s group %s (%d rows)' % (
 		i + 1, len(d.state['steps']), Path(s['file']).name, s['section'], s['group'], len(s['rows'])), 'ETA': eta(d)})
-	todo = first_unrun(res, s['rows'])
+	todo = first_unrun(res, s['rows'], s['file'])
 	if not todo:
 		s['status'] = 'done'
 		d.save()
@@ -410,7 +446,7 @@ def run_step(d, i, s):
 		return run_boots(d, i, s, out, res, level, todo)
 	prep_boot1(d, i, s, out, level)
 	boot_and_run(d, i, s, out, res, todo)
-	left = first_unrun(res, s['rows'])
+	left = first_unrun(res, s['rows'], s['file'])
 	s['status'] = 'done' if not left else ('stopped' if STOP['flag'] else 'incomplete')
 	s['left'] = left
 	d.save()
@@ -521,10 +557,10 @@ def run_boots(d, i, s, out, res, level, todo):
 		d.save()
 		rows_b = [r for r in s['rows'] if boots.get(r, 1) == b and r in left]
 		boot_and_run(d, i, s, out, res, rows_b, b)
-		if rows_b and first_unrun(res, rows_b) and not STOP['flag']:
+		if rows_b and first_unrun(res, rows_b, s['file']) and not STOP['flag']:
 			d.log('step %d: boot %d left rows without a result; later boots skipped' % (i + 1, b))
 			break
-	left = first_unrun(res, s['rows'])
+	left = first_unrun(res, s['rows'], s['file'])
 	s['status'] = 'done' if not left else ('stopped' if STOP['flag'] else 'incomplete')
 	s['left'] = left
 	d.save()
@@ -578,7 +614,7 @@ def status(d):
 		pass
 	print('%s: %s (driver %s); %s' % (d.run, st['status'], 'alive' if alive else 'not running', eta(d)))
 	for i, s in enumerate(st['steps']):
-		left = first_unrun(s['res'], s['rows']) if s.get('res') else s['rows']
+		left = first_unrun(s['res'], s['rows'], s['file']) if s.get('res') else s['rows']
 		print('  %2d %-11s %s section %s group %s: %d/%d rows%s%s' % (
 			i + 1, s['status'], Path(s['file']).name, s['section'], s['group'], len(s['rows']) - len(left),
 			len(s['rows']), ' (boots 1-%d, at %d)' % (max(s['boots'].values()), s.get('boot', 1)) if s.get('boots')
