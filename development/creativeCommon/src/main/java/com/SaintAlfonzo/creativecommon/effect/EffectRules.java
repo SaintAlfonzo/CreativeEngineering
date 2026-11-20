@@ -17,7 +17,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * CommonConfig {@code [effects]} {@code remap}, {@code removed}, {@code forceHudIcon} and {@code forceHudIconItems}
+ * CommonConfig {@code [effects]} {@code remap}, {@code removed}, {@code levelCaps}, {@code forceHudIcon} and {@code forceHudIconItems}
  * ({@code potions/effects #8, #9}).
  * Read by {@code mixin/LivingEntityEffectRemapMixin} (every {@code addEffect}), Creative Delight's {@code FruitsDelightEffectFuncMixin}
  * and the client {@code mixin/GuiEffectIconMixin}. Each list is re-parsed when the config hands back a new list (Create's
@@ -134,6 +134,42 @@ public final class EffectRules {
 		}
 		ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
 		return id != null && (iconItemEntries.contains(id.getNamespace()) || iconItemEntries.contains(id.toString()));
+	}
+
+	private static volatile List<? extends String> capSource;
+	private static volatile Map<ResourceLocation, Integer> capLevels = Map.of();
+
+	/**
+	 * The amplifier lowered to the effect's {@code [effects] levelCaps} entry (level N = amplifier N-1), or the amplifier
+	 * itself when the effect has no cap. Read by {@code mixin/MobEffectInstanceLevelCapMixin} on every
+	 * {@code getAmplifier()}, so it stays a map lookup once the list is parsed.
+	 */
+	public static int capAmplifier(@Nullable MobEffect effect, int amplifier) {
+		if (effect == null || amplifier <= 0) return amplifier;
+		List<? extends String> raw;
+		try {
+			raw = CommonConfig.EFFECTS.levelCaps.get();
+		} catch (IllegalStateException notLoaded) {
+			return amplifier;
+		}
+		if (raw != capSource) {
+			Map<ResourceLocation, Integer> parsed = new HashMap<>();
+			for (String entry : raw) {
+				int eq = entry.indexOf('=');
+				if (eq < 0) continue;
+				ResourceLocation id = ResourceLocation.tryParse(entry.substring(0, eq).trim());
+				try {
+					int level = Integer.parseInt(entry.substring(eq + 1).trim());
+					if (id != null && level >= 1) parsed.put(id, level - 1);
+				} catch (NumberFormatException ignored) {
+				}
+			}
+			capLevels = parsed;
+			capSource = raw;
+		}
+		if (capLevels.isEmpty()) return amplifier;
+		Integer max = capLevels.get(ForgeRegistries.MOB_EFFECTS.getKey(effect));
+		return max == null ? amplifier : Math.min(amplifier, max);
 	}
 
 	private static Set<ResourceLocation> parseIds(List<? extends String> raw) {

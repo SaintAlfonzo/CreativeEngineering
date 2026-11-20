@@ -419,10 +419,14 @@
 - **Changed:** The Golden Watering Can can be made with a Rose Gold Block [Block of Gold only].
 - **Changed:** Gold Sheet Metal, Gold Boilers and Large Gold Boilers are cut only from Blocks of Gold [also Rose Gold Blocks].
 
-## Gameplay
+## Effects <!-- icon: minecraft:potion -->
 
+- **Changed:** Effects that work the same at every level (87, e.g. Fire Resistance, Water Breathing, Night Vision, Nausea, Blindness) are capped at level I from every source; tooltips show level I [up to VI].
 - **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
 - **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
+
+## Gameplay
+
 - **Fixed:** TNT shrapnel broke nearby minecarts and armor stands and turned TNT minecarts into items; it now hits only living things.
 - **Changed:** A chain of TNT keeps at most 32 shrapnel pieces in the air at once [24 per TNT].
 - **Changed:** A TNT item exploding in fire or lava deals half damage; the knockback is unchanged.

@@ -103,8 +103,10 @@ public class DrinkBlockItem extends BlockItem {
         WineEffects.WineEffect wineEffect = WineEffects.get(this);
         if (wineEffect != null && level != null) {
             int amplifier = amplifier(stack, level, wineEffect);
-            String amplifierRoman = amplifier > 0 ? " " + toRoman(amplifier + 1) : "";
             for (MobEffect effect : wineEffect.effects()) {
+                // Read through an instance so Creative Common's [effects] levelCaps lowers the shown level as it does the applied one.
+                int shown = new MobEffectInstance(effect, 1, amplifier).getAmplifier();
+                String amplifierRoman = shown > 0 ? " " + toRoman(shown + 1) : "";
                 String effectName = effect.getDisplayName().getString();
                 String tooltipText = effect.isInstantenous()
                         ? effectName + amplifierRoman
