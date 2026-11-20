@@ -4,8 +4,6 @@
 // Servings per can, roll_delight part. Readers merge every part with global.CD.genMerge('can_servings') (creative_delight.md 28.2).
 if (global.CD) global.CD.genPut('can_servings', 'roll_delight', {
  "servings": {
-  "canned_cooked_nether_wart": 4,
-  "canned_legendary_roll_medley": 6,
-  "canned_mythical_roll_medley": 6
+  "canned_cooked_nether_wart": 4
  }
 })

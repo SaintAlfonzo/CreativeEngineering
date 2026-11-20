@@ -13267,7 +13267,7 @@ i.salt_melt                     = 'salt:salt_melt';     // 64 uses, melts ice an
 i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
 i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow
 // ===== BEGIN GENERATED CANS (tools/gen_can_types.py, do not edit) =====
-// 313 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
+// 311 cans: raw veggie/fruit/meat/fish, hazard, special, cookies, cooked, bread, salad, soup, meal, pie, feast, drink, golden, dairy, preserve, dessert (kubejs/generation_scripts/food/can_types.json)
 i.canned_beetroot                           = 'creativedelight:canned_beetroot';
 i.canned_cabbage                            = 'creativedelight:canned_cabbage';
 i.canned_carrot                             = 'creativedelight:canned_carrot';
@@ -13448,8 +13448,6 @@ i.canned_fake_meatloaf                      = 'creativedelight:canned_fake_meatl
 i.canned_glazed_arachnid_limbs              = 'creativedelight:canned_glazed_arachnid_limbs';
 i.canned_stuffed_squid                      = 'creativedelight:canned_stuffed_squid';
 i.canned_guardian_soup                      = 'creativedelight:canned_guardian_soup';
-i.canned_legendary_roll_medley              = 'creativedelight:canned_legendary_roll_medley';
-i.canned_mythical_roll_medley               = 'creativedelight:canned_mythical_roll_medley';
 i.canned_bell_pepper_medley                 = 'creativedelight:canned_bell_pepper_medley';
 i.canned_pale_bell_pepper_medley            = 'creativedelight:canned_pale_bell_pepper_medley';
 i.canned_dark_bell_pepper_medley            = 'creativedelight:canned_dark_bell_pepper_medley';

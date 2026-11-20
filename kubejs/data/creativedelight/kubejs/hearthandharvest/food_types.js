@@ -27,6 +27,7 @@ if (global.CD) global.CD.genPut('food_types', 'hearthandharvest', {
   ],
   "baked": [
    "croissant",
+   "hh_waffle",
    "raspberry_scone"
   ],
   "dairy": [
@@ -41,9 +42,6 @@ if (global.CD) global.CD.genPut('food_types', 'hearthandharvest', {
    "raisin_cookie",
    "raspberry_pie_slice",
    "trail_mix"
-  ],
-  "sweet/pancake": [
-   "hh_waffle"
   ],
   "handheld": [
    "hot_dog",
