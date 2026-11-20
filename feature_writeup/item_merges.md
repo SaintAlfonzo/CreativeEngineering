@@ -792,6 +792,12 @@ read-only item handlers, containers in chunks that never load.
 
 The KubeJS inventory swap of 1.1 still runs for both groups (it drops NBT; the Java login and open triggers keep it).
 
+**Merges collapse mixed ingredients.** A merge runs `replaceInput(purged -> survivor)` over every recipe, and KubeJS
+replaces the whole ingredient that matches the purged item, not just that item: an any-of ingredient naming a purged
+item becomes the survivor alone. Soap's six-fat ingredient (Compat `misc_mods.js`) named Delightful's Animal Oil Bottle
+and became Cooking Oil only (r1120nv SQ-FO-08, TODO `mod-integration #1`, fixed 2026-11-20 by naming the survivor).
+Scripts that build any-of ingredients name the survivor, never a purged id.
+
 ### 6.1 Tests (SWP-)
 
 Offline (2026-11-02): `./gradlew :creativeCommon:build --offline` compiles; harness `MergeCoreTest` (scratchpad, plain

@@ -22,6 +22,9 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -72,6 +75,7 @@ final class TestWorld {
 		TestCommand.add("loot", TestWorld::loot);
 		TestCommand.add("player", TestWorld::player);
 		TestCommand.add("chunk", TestWorld::chunk);
+		TestCommand.add("rain", TestWorld::rain);
 	}
 
 	static String blockId(BlockState st) {
@@ -567,5 +571,42 @@ final class TestWorld {
 		ChunkPos cp = new ChunkPos(x >> 4, z >> 4);
 		c.emit(c.line().kv("chunk", cp.x + "," + cp.z).kv("loaded", level.hasChunk(cp.x, cp.z))
 				.kv("debug", level.getChunkSource().getChunkDebugData(cp)));
+	}
+
+	/**
+	 * rain X Y Z [dim=]: every input of the campfire rain-out gate (Creative Delight campfire.CampfireRain) for a
+	 * campfire at X Y Z, read at the block above it as the gate does: raining (level), rainLevel, sky, heightmap
+	 * (MOTION_BLOCKING y), biome, precipitation, warm, rainingAt (Level.isRainingAt, the gate itself); blockTicking
+	 * (block entities tick in that chunk); rainTicks (the campfire's counter, "-" when the block entity has none).
+	 * Added for r1120nv SQ-CFR-05 (TODO misc-gameplay #1).
+	 */
+	private static void rain(TestCtx c) {
+		ServerLevel level = c.level();
+		int[] a = c.args.xyz("pos");
+		c.args.end();
+		c.args.checkOpts("dim");
+		BlockPos pos = new BlockPos(a[0], a[1], a[2]);
+		BlockPos up = pos.above();
+		Holder<Biome> biome = level.getBiome(up);
+		Object ticks = "-";
+		BlockEntity be = level.getBlockEntity(pos);
+		if (be != null) {
+			try {
+				ticks = be.getClass().getMethod("ce$getRainTicks").invoke(be);
+			} catch (ReflectiveOperationException | RuntimeException ignored) {
+				// not a campfire with the rain counter
+			}
+		}
+		c.emit(c.line().kv("pos", a[0] + "," + a[1] + "," + a[2]).kv("block", blockId(level.getBlockState(pos)))
+				.kv("raining", level.isRaining())
+				.kv("rainLevel", String.format(java.util.Locale.ROOT, "%.2f", level.getRainLevel(1.0F)))
+				.kv("sky", level.canSeeSky(up))
+				.kv("heightmap", level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, up).getY())
+				.kv("biome", biome.unwrapKey().map(k -> k.location().toString()).orElse("?"))
+				.kv("precipitation", biome.value().getPrecipitation())
+				.kv("warm", biome.value().warmEnoughToRain(up))
+				.kv("rainingAt", level.isRainingAt(up))
+				.kv("blockTicking", level.shouldTickBlocksAt(ChunkPos.asLong(pos)))
+				.kv("rainTicks", ticks));
 	}
 }

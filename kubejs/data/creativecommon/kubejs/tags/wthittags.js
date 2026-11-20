@@ -24,6 +24,11 @@
 			console.error('[wthit-silk-touch] could not read ' + LIST_PATH + ', no Silk Touch tags: ' + err)
 			return
 		}
+		// JsonIO.readString gives null for a missing file (Common-only jar sets ship no list): JSON.parse('null') is null.
+		if (!doc || typeof doc !== 'object') {
+			console.info('[wthit-silk-touch] no list at ' + LIST_PATH + ', no Silk Touch tags')
+			return
+		}
 		function registered(list) {
 			var present = list.filter(function (id) { return ForgeRegistries.BLOCKS.containsKey(new ResourceLocation(id)) })
 			if (present.length != list.length) console.info('[wthit-silk-touch] ' + (list.length - present.length) + ' listed blocks are not registered (rerun the generator)')

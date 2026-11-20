@@ -486,3 +486,7 @@ Next session, in order:
 6. Write-back (B5): Run log entry per drive; per-feature writeup test lists and README status words were not updated
    in this session (too many features for the judged part; do it with the judged totals per feature).
 Owner question still open: fix the WTHIT null guard (wthit #17) before the resume, so later Common-only steps test it.
+
+Post-run fixes (2026-11-20, jars installed): wthit #17, food-tuning #30, meals #69, canning #22, mod-integration #1
+built; food-tuning #31 was a row fault (diet ladder Speed), SQ-GLD-03 rewritten; misc-gameplay #1 still unproven, SQ-CFR-05
+now forceloads and runs the new `cdevtest rain` probe. The 13 rows are appended to `perf/runs/r1120nv/rerun.txt`.

@@ -512,80 +512,60 @@ expect verb=player name=sagld effects=\S*minecraft:fire_resistance:0:
 look the four effects lines in order (golden bread, enchanted bread, golden carrot, enchanted apple): golden bread: Regeneration amp 1 100t, Absorption amp 0 2400t; enchanted bread and enchanted apple: Regeneration amp 1 400t, Resistance amp 0 6000t, Fire Resistance 6000t, Absorption amp 3 2400t; golden carrot as golden bread. Glint: client
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
-## SQ-GLD-03 | golden stews, honey (cures Poison), milk (clears effects, no food effects); containers and stack sizes
+## SQ-GLD-03 | golden honey (cures Poison), milk (clears effects, no food effects); containers and stack sizes
 @group A
-@commands On a fresh bot away from other rows' blocks, `effect clear` first: eat golden and enchanted mushroom stew, beetroot soup, rabbit stew; drink golden and enchanted honey with Poison on; `effect give @s minecraft:speed 60`, drink golden milk, then again with enchanted milk; check returned items and stack sizes (`/give ... 64` of honey)
-@pass Stews give their effects and return a bowl; honey removes Poison, gives its food effects (golden: Regeneration II 5 s, Absorption 2 min; enchanted: the enchanted set), returns a glass bottle, both honeys stack to 16; each milk clears every effect (Speed gone), gives no food effects (upstream), returns a bucket; no Haste / Speed II / Strength / Luck / Regeneration I 280 t bundle at any step
-@fails Speed stays after golden milk: `ShinyItems.GoldenMilk` not used (cures as a vanilla milk bucket); the 280 t bundle again: note the bot position and nearby blocks, r1103 showed it refreshed at 279 t across three drinks 8 s apart (milk has no food effects), so it is not from the drinks
+@commands Own fresh bot `sagldm` that has eaten nothing (Raspberry Pie's diet ladder re-adds its 800 t effects the tick after milk, raspberry_pie.md 9.3; r1120nv's ~800 t Speed came from the 8 foods `sagld` had eaten). Milk first: `effect give @s minecraft:speed 60`, drink golden milk, again with enchanted milk; then golden and enchanted honey with Poison on; returned items and stack sizes
+@pass each milk clears every effect (Speed gone), gives no food effects (upstream), returns a bucket; honey removes Poison, gives its food effects (golden: Regeneration II 5 s, Absorption 2 min; enchanted: the enchanted set), returns a glass bottle; both honeys stack to 16
+@fails Speed stays after golden milk: `ShinyItems.GoldenMilk` not used (cures as a vanilla milk bucket); a Speed of 800 t or less on a milk line: the bot had eaten (diet ladder), not a milk fault
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-20
+# r1120nv fix (2026-11-20): golden stews removed 2026-11-10 (golden_food.md 0); honey stacks to 16; fresh bot so no diet effects
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+12} {SAH3+38} {SAH1+16} {SAH3+42}
+sleep 3
+> pbot spawn sagldm {SAH1+14} {SAH2} {SAH3+40} minecraft:overworld survival
+sleep 2
+> clear sagldm
+> effect clear sagldm
 > cdevtest item goldenfood:golden_honey_bottle
 > cdevtest item goldenfood:enchanted_golden_honey_bottle
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:golden_mushroom_stew
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_mushroom_stew 20
-> cdevtest player sagld
-> effect clear sagld
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:enchanted_golden_mushroom_stew
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_mushroom_stew 20
-> effect clear sagld
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:golden_beetroot_soup
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_beetroot_soup 20
-> effect clear sagld
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:enchanted_golden_beetroot_soup
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_beetroot_soup 20
-> effect clear sagld
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:golden_rabbit_stew
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_rabbit_stew 20
-> effect clear sagld
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:enchanted_golden_rabbit_stew
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_rabbit_stew 20
-> effect clear sagld
-> effect give sagld minecraft:poison 30
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:golden_honey_bottle
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_honey_bottle 20
-> cdevtest player sagld
-> effect clear sagld
-> effect give sagld minecraft:poison 30
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:enchanted_golden_honey_bottle
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_honey_bottle 20
-> cdevtest player sagld
-> effect clear sagld
-> effect give sagld minecraft:speed 60
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:golden_milk_bucket
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_milk_bucket 20
-> cdevtest player sagld
-> effect give sagld minecraft:speed 60
-> pbot hunger sagld 10
-> pbot hold sagld goldenfood:enchanted_golden_milk_bucket
-> pbot eat sagld
-waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_milk_bucket 20
-> cdevtest player sagld
-expect verb=item item=goldenfood:golden_honey_bottle .*max_stack=8\b
-expect verb=item item=goldenfood:enchanted_golden_honey_bottle .*max_stack=4\b
-count verb=pbot.useitem bot=sagld end=finish item=\S+ result=minecraft:bowl >= 6
-count verb=pbot.useitem bot=sagld end=finish item=goldenfood:\S*honey_bottle result=minecraft:glass_bottle == 2
-count verb=pbot.useitem bot=sagld end=finish item=goldenfood:\S*milk_bucket result=minecraft:bucket == 2
-reject verb=player name=sagld effects=\S*minecraft:poison
-count verb=player name=sagld effects=- == 2
-look effects lines: the first (golden mushroom stew) shows its effects; the two honey lines show the honey effects with Poison gone; the two milk lines are empty (effects=-)
+> effect give sagldm minecraft:speed 60
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:golden_milk_bucket
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:golden_milk_bucket 20
+> cdevtest player sagldm
+> effect give sagldm minecraft:speed 60
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:enchanted_golden_milk_bucket
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:enchanted_golden_milk_bucket 20
+> cdevtest player sagldm
+> effect clear sagldm
+> effect give sagldm minecraft:poison 30
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:golden_honey_bottle
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:golden_honey_bottle 20
+> cdevtest player sagldm
+> effect clear sagldm
+> effect give sagldm minecraft:poison 30
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:enchanted_golden_honey_bottle
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:enchanted_golden_honey_bottle 20
+> cdevtest player sagldm
+> pbot remove sagldm
+expect verb=item item=goldenfood:golden_honey_bottle .*max_stack=16\b
+expect verb=item item=goldenfood:enchanted_golden_honey_bottle .*max_stack=16\b
+count verb=pbot.useitem bot=sagldm end=finish item=goldenfood:\S*honey_bottle result=minecraft:glass_bottle == 2
+count verb=pbot.useitem bot=sagldm end=finish item=goldenfood:\S*milk_bucket result=minecraft:bucket == 2
+reject verb=player name=sagldm effects=\S*minecraft:poison
+count verb=player name=sagldm effects=- == 2
+look effects lines: the two milk lines are empty (effects=-); the two honey lines show the honey effects with Poison gone
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-04 | golden cake slices at full hunger, 7 slices, no drop

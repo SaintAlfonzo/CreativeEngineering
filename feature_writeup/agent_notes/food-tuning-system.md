@@ -33,3 +33,8 @@ First 1.0.2 feature (started 2026-09-28). **Everything is in `feature_writeup/fo
 - Open: decisions D1-D6 in food.md 4.3 before building the tuning layer.
 
 Related: memory `centralize-recipes-tags-items`, memory `item-dict-mechanics`, memory `feature-writeup-pattern`, memory `scratch-server-verify`.
+- **Mysterious Mountain Lib food items ignore KubeJS food values** (2026-11-20, TODO `meals #69`): its `ItemFoodBase`
+  (and `ItemDrinkBase`) and `ItemFoodSeeds` (Corn Delight's dishes and kernels) override `getFoodProperties()` and build
+  it from their own FoodInfo each call, so `item.setFoodProperties` / food_value_copies.js wrote a field nobody read.
+  CD mixin `mysterious_mountain_lib.MmlibFoodPropertiesMixin` returns Item's `foodProperties` field when KubeJS set it.
+  Any other mod whose items override `getFoodProperties()` needs the same before a pack value applies.
