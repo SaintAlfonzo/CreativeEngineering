@@ -16,12 +16,21 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=0b6d00b2e9e7 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, Testing 20), 2 Complete.
+<!-- generated:status_index begin open_work sha1=96eff0474022 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 31 open TODO rows (Planned 11, Testing 20), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food-tuning #15` | Planned |  | Food Dictionary: hand-made type sort mirroring the JEI food family order (after that is done) |
+| `food-tuning #20` | Planned | S C | Diet window back to 32 meals (endDecay 30 -> 32); meals grid 8 x 4 |
+| `food-tuning #21` | Planned | C | Diet Log meals grid: label centered; hover shows food total only when it differs, before the struck-through meal value |
+| `food-tuning #22` | Planned | C | Diet Log 50% wider by default; first-page diversity and gate text scaled to fit on one line each |
+| `food-tuning #23` | Planned | C | Diet Log freezes briefly on every open: measure and cache |
+| `food-tuning #24` | Planned | C | Liquid Diet Log pauses the game in single player |
+| `food-tuning #25` | Planned | S P | Effect unlocks (and their messages) wait until the unique-food gate is passed |
+| `food-tuning #26` | Planned | C | Diet Log diversity icon: eaten non-drink food closest to the window's average meal value; else an owner-picked list of foods under 0.15 |
+| `food-tuning #28` | Planned | C | Food tooltip line: diversity value and contribution while in the diet window |
+| `food-tuning #29` | Planned |  | Merge the Raspberry Pie changelog bullets |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
 | `food-tuning #2` | Testing | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
 | `food-tuning #3` | Testing | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
