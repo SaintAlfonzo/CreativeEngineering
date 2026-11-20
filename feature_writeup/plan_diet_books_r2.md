@@ -21,7 +21,7 @@
 <!-- generated:status_index end open_work -->
 
 Source: owner notes, `todo/scratchpad.md` block "rasp pie" and the four bullets after it (intake 2026-11-19). Follows
-[plan_diet_books.md](plan_diet_books.md) (round 1, built 2026-11-19, look-check pending). Design docs:
+[plan_diet_books.md](plan_diet_books.md) (round 1, built 2026-11-19; its look-check, done by the owner 2026-11-19, produced these notes). Design docs:
 [raspberry_pie.md](raspberry_pie.md), [food_dictionary.md](food_dictionary.md). TODO rows: listed per step (section 3).
 
 ## 1. Intake
@@ -62,7 +62,7 @@ Source: owner notes, `todo/scratchpad.md` block "rasp pie" and the four bullets 
 | 19 | permanent effects ... new column | open | The inventory effect list only (not the HUD icons): timed effects in the first column, permanent ones in a second column to its right; with only permanent effects they stay in the first column. | 2026-11-19 | AskUserQuestion 2026-11-19 |
 | 19 | what counts as permanent | open | Beacon and conduit (vanilla ambient flag), effects held by Creative Equipment's armor, tool and charm specs, Raspberry Pie flat buffs and slot effects. Long-duration effects from other sources stay timed. The server marks the gear and diet effects for the client (small sync); ambient is read from the instance. History: agent default 2026-11-19, confirmed 2026-11-20. | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | 10, 11 | diversity icon ... closest in value ... otherwise a pufferfish | open | The average base diversity value of the meals in the diet window (repeats count); the icon is the eaten (Food Dictionary) non-drink food whose base value is closest; on a tie the most recently eaten. Nothing eaten: one of the owner's list (replaces the pufferfish and the `diversityIcons` pool). | 2026-11-20 | AskUserQuestion 2026-11-19, 2026-11-20 |
-| 10 | nothing-eaten list | open | "seeds, moss, rotten flesh, spider eye, dandelion leaf only". Read as: `minecraft:pumpkin_seeds`, `vintagedelight:mixed_seeds`, `vintagedelight:oat_seeds`, `corn_delight:corn_seeds`, `hearthandharvest:sunflower_seeds`, `miners_delight:moss`, `immersive_weathering:moss_clump`, `minecraft:rotten_flesh`, `minecraft:spider_eye`, `veggiesdelight:dandelion_leaf` (plain seeds and moss only; golden, canned and stew variants left out: agent reading, unconfirmed). The candidate CSV is kept only as the record of the 0.15 search. | 2026-11-20 | AskUserQuestion 2026-11-20 |
+| 10 | nothing-eaten list | open | "seeds, moss, rotten flesh, spider eye, dandelion leaf only". Read as: `minecraft:pumpkin_seeds`, `vintagedelight:mixed_seeds`, `vintagedelight:oat_seeds`, `corn_delight:corn_seeds`, `hearthandharvest:sunflower_seeds`, `miners_delight:moss`, `immersive_weathering:moss_clump`, `minecraft:rotten_flesh`, `minecraft:spider_eye`, `veggiesdelight:dandelion_leaf` (every edible seed, plain moss only; golden, canned and stew variants left out, owner 2026-11-20). The candidate CSV is kept only as the record of the 0.15 search. | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | 17, 18 | sort carrot options ... custom | open | Eaten button cycles newest unlock, latest eaten, highest food, highest saturation, highest diversity, custom. The uneaten config gets the same three plus custom. "Hardest" becomes "highest diversity" (one mode); "easiest" stays. Highest saturation = saturation points restored (hunger x modifier x 2). Custom = the hand-made order (`food-tuning #15`), hidden until it is configured; a TODO note says to configure it. | 2026-11-20 | AskUserQuestion 2026-11-19, 2026-11-20 (saturation) |
 | 15 | include pancakes ... in world eaten foods | premise | Skipped. | 2026-11-19 | AskUserQuestion 2026-11-19 |
 | 2 | expand food log horizontally by 50% | clear | `extraWidth` default = half of Apple Pie's book background width. | 2026-11-20 | AskUserQuestion 2026-11-20 (accepted) |
@@ -101,7 +101,8 @@ tooltip and the inventory effect list goes to the owner before queue rows are wr
 
 ## 4. Waiting on the owner
 
-- Confirm the reading of "seeds" and "moss" in the nothing-eaten list (ruling 10).
-- Configure the custom Food Dictionary order (`food-tuning #15`) before "custom" shows.
 - Open the Diet Log a few times after the A4 build so the timing lines land in `latest.log`.
-- Round 1 look-check (plan_diet_books.md section 7) is still open; this round's look-check can share the capture.
+- Not waiting: the custom Food Dictionary order stays hidden until `food-tuning #15` (the JEI food family order) is
+  complete; nothing to configure before then (owner, 2026-11-20).
+- Queue rows: round 1's draft rows (plan_diet_books.md section 6) are refreshed together with this round's rows,
+  after this round's look-check.

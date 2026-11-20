@@ -151,11 +151,11 @@ where the rulings left a gap:
 
 ## 6. Tests
 
-Queue rows written 2026-11-19 before the look-check, all marked as drafts to refresh after it: SQ-RPI-09,
+Queue rows written 2026-11-19 before the look-check, all marked as drafts to refresh after it (refreshed with round 2, plan_diet_books_r2.md): SQ-RPI-09,
 CQ-RPI-47 to -56 (RP.qb section 3; CQ-RPI-53 supersedes CQ-RPI-46) and CQ-FDI-01 to -04 (FDI.qb section 2).
 
 ## 7. Waiting on the owner
 
-- Look-check (section 3): a client capture of the Diet Ladder, Milestones and meals pages (and the Food Dictionary
-  sort button) after this build; then refresh the draft rows.
-- `extraWidth` value: picked at the look-check.
+Nothing. The look-check (section 3) was done by the owner on 2026-11-19; its findings became round 2,
+[plan_diet_books_r2.md](plan_diet_books_r2.md) (which also sets `extraWidth`, ruling 2 there). The draft queue rows
+(section 6) are refreshed with round 2's rows.
