@@ -422,10 +422,8 @@ EXPLICIT = [
 	 dict(input=['glazed_arachnid_limbs'])),
 	('feast', 'canned_stuffed_squid', 'Canned Stuffed Squid', ['bowl_of_stuffed_squid'], False, dict(input=['stuffed_squid'])),
 	('feast', 'canned_guardian_soup', 'Canned Guardian Soup', ['bowl_of_guardian_soup'], False, dict(input=['guardian_soup'])),
-	('feast', 'canned_legendary_roll_medley', 'Canned Legendary Roll Medley',
-	 ['amazing_salmon_roll_slice', 'mushroom_roll_slice', 'tobiko_roll'], False, dict(input=['legendary_roll_medley'])),
-	('feast', 'canned_mythical_roll_medley', 'Canned Mythical Roll Medley',
-	 ['golden_roll_slice', 'ancient_roll_slice', 'nether_roll'], False, dict(input=['mythical_roll_medley'])),
+	# No Legendary or Mythical Roll Medley can: no Roll Delight roll, slice or medley is canned (owner ruling, TODO
+	# largecontent/mod-additions #39, roll_delight.md ROLL-27); the two shipped 1.2.02 ids are in CD swaps/removed.json.
 	('feast', 'canned_bell_pepper_medley', 'Canned Bell Pepper Medley',
 	 ['stuffed_bell_pepper_red', 'stuffed_bell_pepper_green', 'stuffed_bell_pepper_yellow'], False, dict(input=['bell_pepper_medley'])),
 	('feast', 'canned_pale_bell_pepper_medley', 'Canned Pale Bell Pepper Medley',

@@ -529,7 +529,7 @@ Blocking a build: none. All of D1 to D17 are settled. No question remains on the
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-ROLL-01, -02, -05, -06, -07, -08, -09; rerun pending (batch fault) SQ-ROLL-03, -04.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-ROLL-03, -04.
 
-Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-ROLL-11 PASS (golden roll 20, slice 10, refused at full); SQ-ROLL-12b FAIL: live roll medley can recipes exist, so SQ-ROLL-12 and SQ-ROLL-27 conflict; owner picks (TODO `largecontent/mod-additions #39`).
+Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-ROLL-11 PASS (golden roll 20, slice 10, refused at full); SQ-ROLL-12b FAIL: live roll medley can recipes exist, so SQ-ROLL-12 and SQ-ROLL-27 conflict; owner picks (TODO `largecontent/mod-additions #39`). Ruling (owner, 2026-11-20): no roll, slice or medley is canned; the Legendary and Mythical Roll Medley cans (shipped in 1.2.02) are removed from `gen_can_types.py` and their ids (`creativedelight:` and `creativeengineering:` forms) moved from `cd_namespace.json` to `swaps/removed.json`, so old worlds delete them. Canned Rice Roll Medley (Farmer's Delight's) and Canned Rice Roll Royale stay.
 
 Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/judged.md`): SQ-ROLL-01 (real PASS: the asset line is client-only,
 the server loads `roll_upstream_data` clean), -02, -05 to -09 PASS: server half of ROLL-01, 05, 10, 11, 12, 16, 18, 22.

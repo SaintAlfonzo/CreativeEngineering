@@ -681,7 +681,6 @@
    "neapolitan:vanilla_pudding"
   ],
   "dessert/pancake": [
-   "hearthandharvest:waffle",
    "rusticdelight:cherry_blossom_pancake",
    "rusticdelight:chocolate_pancake",
    "rusticdelight:coffee_pancake",
@@ -694,6 +693,7 @@
    "creativedelight:canned_adzuki_bun",
    "endersdelight:strange_eclair",
    "hearthandharvest:raspberry_scone",
+   "hearthandharvest:waffle",
    "neapolitan:adzuki_bun",
    "neapolitan:strawberry_scones"
   ],
