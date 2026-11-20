@@ -4,11 +4,12 @@ Test prefix **TT-** · Last updated **2026-11-02** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=34c80bf9c59c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 2, Testing 4), 1 Complete.
+<!-- generated:status_index begin open_work sha1=ec4096d99653 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, Testing 4), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `tooltips #19` | Planned | C | Food tooltip order (Raspberry Pie pass): AppleSkin hunger and saturation at the top (option: saturation on its own line), Quark shank row removed (config first), diversity line before Quark's saturation word |
 | `ui/tooltips #2` | Planned | C | Tooltips to add (items) |
 | `ui/tooltips #3` | Planned | C | Tooltips to add (mods) |
 | `alcohol/vineryport #16` | Testing | C~ P | Vinery tooltips |
