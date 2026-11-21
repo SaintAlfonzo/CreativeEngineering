@@ -31,7 +31,7 @@
 | `tooling/dictionaries #2` | Testing | S | Block, fluid and NCH fluid tags not validated |
 <!-- generated:status_index end open_work -->
 
-Status: **planned, nothing built**. The owner picked 28 TODO rows on 2026-11-20 (chat), mostly small ones. The
+Status: **G0 to G6 built and installed 2026-11-21, G7 not started** (owner paused it; `farming/crops #3` log lists what is left). Per-row state is in the TODO rows. The owner picked 28 TODO rows on 2026-11-20 (chat), mostly small ones. The
 premise checks came from three read-only passes on 2026-11-20, and the owner answered the open items in four
 AskUserQuestion rounds the same day. Status lives in the TODO rows; this plan holds the rulings, the lanes and the order.
 
@@ -192,3 +192,4 @@ Mark `largecontent/mod-additions #2` as skipped (R13).
 ## History
 
 - 2026-11-20: written from the owner's list and four AskUserQuestion rounds. Nothing built.
+- 2026-11-21: G0 to G6 built, installed and committed by phase agents (commits 5d44d014 to 322149de); live checks queued. G7 paused by the owner before it started. Open owner questions: gingerbread furnace and smoker recipes, water plants in Botany Pots, gating vanilla fungus, roots, vines and the Ender Crop, Mixed Seeds and propelplant pot drops, plain donut art (D15).
