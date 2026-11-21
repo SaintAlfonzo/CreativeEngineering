@@ -2,14 +2,15 @@
 console.log('entity tags starting')
 
 var t = global.tags
+var en = global.entity   // entity ids: Creative Common _lib/entity_dict.js (mobs/tweaks #4)
 
 ServerEvents.tags('entity_type', e => {
 	// Bubble columns don't push these (Creative Common BubbleColumnImmunityMixin).
 	// Upgrade Aquatic's nautilus and thrasher already ignore bubble columns on their own.
 	t.add(e, 'creativeworldgen:bubble_column_immune', [
-		'minecraft:squid', 'minecraft:glow_squid','minecraft:dolphin','minecraft:turtle',
-		'alexsmobs:orca', 'alexsmobs:cachalot_whale','alexsmobs:seal',
-		'alexsmobs:giant_squid', 'alexsmobs:giant_squid_part',
-		'alexsmobs:hammerhead_shark', 'alexsmobs:frilled_shark',
+		en.squid, en.glow_squid, en.dolphin, en.turtle,
+		en.orca, en.cachalot_whale, en.seal,
+		en.giant_squid, en.giant_squid_part,
+		en.hammerhead_shark, en.frilled_shark,
 	])
 })

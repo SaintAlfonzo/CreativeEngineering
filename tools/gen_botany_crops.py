@@ -41,8 +41,8 @@ DIMENSIONS = ('nether', 'end')
 SCRIPT_SOILS = {'creativecompat:botany_soil/fertile_soil': ['dirt', 'farmland']}
 # --report: crop-growth blocks that are not pot plantables (trees, leaves, moss and sand spread, decor with an age).
 NOT_PLANTABLE = re.compile(r'Leaves|LeafPile|Sapling|Propagule|Mossable|Mossy|Sandy|Trellis|Grass|Lantern|Cheese|'
-                           r'Basket|Pot|Jar|Residue|Spray|Ivy|Weeds|Lattice|Stem|Wall|Slab|Stairs|'
-                           r'VineBush|DoubleFruitBush|FruitBush|Chorus(Flower)?Block$')
+						   r'Basket|Pot|Jar|Residue|Spray|Ivy|Weeds|Lattice|Stem|Wall|Slab|Stairs|'
+						   r'VineBush|DoubleFruitBush|FruitBush|Chorus(Flower)?Block$')
 
 _BLOCK_ASSIGN = re.compile(r"""^[ \t]*b\.(\w+)[ \t]*=[ \t]*(?:'([^'\n]*)'|"([^"\n]*)")""", re.M)
 
@@ -85,7 +85,7 @@ class Recipes:
 	def _index(self, names, opener):
 		for n in names:
 			if n.endswith('.json') and (('/blockstates/' in n and n.startswith('assets/')) or
-			                            (n.startswith('data/') and '/recipes/' in n and 'botanypots' in n)):
+										(n.startswith('data/') and '/recipes/' in n and 'botanypots' in n)):
 				self.jars.setdefault(n, opener)
 
 	def _read(self, rel):
@@ -356,11 +356,11 @@ def build(args):
 		if not drops:
 			errors.append(f'{name}: no drops')
 		recipe = {'type': 'botanypots:crop', 'seed': {'item': seed}, 'categories': cats, 'growthTicks': ticks,
-		          'display': display, 'drops': drops}
+				  'display': display, 'drops': drops}
 		if 'lightLevel' in base:
 			recipe['lightLevel'] = base['lightLevel']
 		recipe = {'conditions': [{'type': 'forge:mod_loaded', 'modid': 'botanypots'}] +
-		                        [{'type': 'forge:mod_loaded', 'modid': ns} for ns in namespaces(recipe)], **recipe}
+								[{'type': 'forge:mod_loaded', 'modid': ns} for ns in namespaces(recipe)], **recipe}
 		errors += schema_errors(name, recipe, schema, recipes)
 		out[OUT_RECIPES / f'{name}.json'] = recipe
 	for d in DIMENSIONS:

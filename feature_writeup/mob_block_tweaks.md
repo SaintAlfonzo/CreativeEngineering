@@ -5,12 +5,11 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5d5937bfdcb1 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 1, Testing 8), 0 Complete.
+<!-- generated:status_index begin open_work sha1=9fa2c11ef669 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Testing 8), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `mobs/tweaks #4` | Planned | S | Entity dictionary |
 | `farming/trees #1` | Testing | S+ P T | Leaf life distance + decay timing + Fast Leaf Decay port |
 | `flowers #3` | Testing | S P | Bushier Flowers worldgen off file by file |
 | `mobs/tweaks #1` | Testing | S~ P | Mob and block tweaks |
@@ -611,6 +610,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   MT-50 untested, SQ-MBX queued.
 - 2026-11-16: iron golem farm cooldown (2.11), boat-only ice friction (2.12), Quark game nerfs on (2.13); Creative Compat built and installed, Quark config edited (plan_small_fixes_1116.md R1 to R3). MT-52 to MT-55; queue SQ-MT-01 to -03, CQ-MT-01. Not run.
 - 2026-11-20: entity dictionary `global.entity` (Creative Common `_lib/entity_dict.js`, `mobs/tweaks #4`, F1); consumers switch in G2 / G6 of plan_owner_rows_1120.md.
+- 2026-11-21: `entitytags.js` reads `global.entity` (11 keys); headless check: the tag list equals the old literal list. Both consumers switched, F1 closed.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

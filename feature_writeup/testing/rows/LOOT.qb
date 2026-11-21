@@ -163,3 +163,33 @@ expect 1b
 @pass LOOK: a skeleton wearing the boots; name "Ancient Corpse" on the nameplate and WTHIT; the first open shows torches (the placeholder cave table), a second open by another player shows the same items, not a new roll; emptied, it is gone 5 min later. The remains show "Ancient Remains", break on one hit with a bone sound and drop 1 to 3 bones, sometimes bone chunks, cracked bones and a skeleton skull
 @fails "Corpse" name: the lang key is missing from the Loot jar; empty on first open: `CorpseHooks` not registered (Corpse mod id check)
 @draft no batch holds this row yet; needs a client
+
+@@section 4
+@@title SQ-LOOT Lexica Botania out of loot, 2026-11-21 ([loot.md](../loot.md) 10, TODO `loot/tables #18`)
+@@date 2026-11-21
+@@jars creativeloot
+@@sources kubejs/data/creativeloot/kubejs/loot/loot_config.json kubejs/data/creativeloot/kubejs/loot/07_rules.js
+@@text
+@@text `botania:lexicon` has `"remove": true` in `loot_config.json`; the pre-roll framework edits the Botania `inject/simple_dungeon` and `inject/spawn_bonus_chest` tables.
+@@text
+@@table
+## SQ-LOOT-13 | no Lexica Botania in a dungeon chest or the spawn bonus chest
+@group A
+@commands `/loot spawn` `minecraft:chests/simple_dungeon` 30 times and `minecraft:chests/spawn_bonus_chest` 10 times at a cleared spot, then `/cdevtest items` there
+@pass items rolled; no `botania:lexicon` among them; the other Botania inject items (mana bottle and the rest) still roll
+@fails a lexicon shows: the jar predates 2026-11-21 (old `loot_config.json`), or the item became post-roll only (check `loot_index.json`)
+> forceload add 3300 3300 3316 3316
+> fill 3300 -60 3300 3310 -50 3310 minecraft:air
+repeat 30
+> loot spawn 3305 -58 3305 loot minecraft:chests/simple_dungeon
+end
+repeat 10
+> loot spawn 3305 -58 3305 loot minecraft:chests/spawn_bonus_chest
+end
+sleep 2
+> cdevtest items 3305 -58 3305 6
+waitlog verb=items 30
+expect verb=items .*stacks=[1-9]
+reject verb=items .*botania:lexicon
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look the item list holds dungeon and spawn bonus chest loot, Botania mana bottles may show, no lexicon
