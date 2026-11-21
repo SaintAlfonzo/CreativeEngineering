@@ -1,0 +1,42 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "vinery"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "vinery:savanna_grape_seeds_white"
+  },
+  "categories": [
+    "dirt"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "vinery:savanna_grape_bush_white"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "vinery:savanna_grapes_white"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "vinery:savanna_grape_seeds_white"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

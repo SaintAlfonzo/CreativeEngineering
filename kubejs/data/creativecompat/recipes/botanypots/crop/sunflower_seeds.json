@@ -1,0 +1,35 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "hearthandharvest"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "hearthandharvest:sunflower_seeds"
+  },
+  "categories": [
+    "dirt",
+    "farmland"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "hearthandharvest:sunflower_stem"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "hearthandharvest:sunflower_seeds"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "veggiesdelight"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "veggiesdelight:garlic_clove"
+  },
+  "categories": [
+    "dirt",
+    "farmland"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "veggiesdelight:garlic_crop"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "veggiesdelight:garlic"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.15,
+      "output": {
+        "item": "veggiesdelight:garlic_clove"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

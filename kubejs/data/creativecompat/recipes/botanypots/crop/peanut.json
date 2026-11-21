@@ -1,0 +1,43 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "vintagedelight"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "vintagedelight:peanut"
+  },
+  "categories": [
+    "dirt",
+    "farmland"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "vintagedelight:peanut_crop"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "vintagedelight:peanut"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.15,
+      "output": {
+        "item": "vintagedelight:peanut"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

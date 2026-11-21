@@ -1,0 +1,42 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "fungidelight"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "fungidelight:morel_mushroom_colony"
+  },
+  "categories": [
+    "mushroom"
+  ],
+  "growthTicks": 1400,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "fungidelight:morel_mushroom_colony"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "fungidelight:morel_mushroom"
+      },
+      "minRolls": 1,
+      "maxRolls": 3
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "fungidelight:morel_mushroom"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

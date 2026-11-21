@@ -22,11 +22,12 @@ load time (sha1-pinned), and everything the port ships is our own GPLv3 code. Se
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=02425193b8c0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Pinned 1, In Progress 1, Testing 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=7e9ac4da6eef -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 1, Pinned 1, In Progress 1, Testing 5), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `effects #25` | Planned | S P | Copper Carrot brews Night Vision like the golden carrot |
 | `potions/effects #17` | Pinned | S P T | One Creative Engineering Haste effect, shared by every haste source |
 | `largecontent/mod-additions #7` | In Progress | S~ C P T | Miner's Delight: merged backport (1.1.2 + 1.4.5 in one 1.19.2 jar, Vinery donor-jar method) |
 | `creativedelight/members #31` | Testing | C P | Miner's Delight: newer art for four textures |

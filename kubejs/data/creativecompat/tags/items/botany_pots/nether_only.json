@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "minecraft:nether_wart",
+      "required": false
+    },
+    {
+      "id": "nethersdelight:crimson_fungus_colony",
+      "required": false
+    },
+    {
+      "id": "nethersdelight:propelplant_cane",
+      "required": false
+    },
+    {
+      "id": "nethersdelight:warped_fungus_colony",
+      "required": false
+    }
+  ]
+}

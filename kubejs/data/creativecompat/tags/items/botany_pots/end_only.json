@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "endersdelight:chorusflame",
+      "required": false
+    },
+    {
+      "id": "ends_delight:chorus_succulent",
+      "required": false
+    },
+    {
+      "id": "minecraft:chorus_fruit",
+      "required": false
+    }
+  ]
+}

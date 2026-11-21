@@ -1,0 +1,62 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "the_dirty_stuff"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "the_dirty_stuff:tobacco_seeds"
+  },
+  "categories": [
+    "dirt",
+    "farmland"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:transitional",
+    "phases": [
+      {
+        "block": "the_dirty_stuff:tobacco_seeds",
+        "properties": {
+          "blockstate": 0
+        }
+      },
+      {
+        "block": "the_dirty_stuff:tobacco_seeds",
+        "properties": {
+          "blockstate": 3
+        }
+      },
+      {
+        "block": "the_dirty_stuff:tobacco_seeds",
+        "properties": {
+          "blockstate": 7
+        }
+      }
+    ]
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "the_dirty_stuff:tobacco_leafs"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "the_dirty_stuff:tobacco_seeds"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

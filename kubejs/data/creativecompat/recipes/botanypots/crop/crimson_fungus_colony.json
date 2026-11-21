@@ -1,0 +1,42 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "nethersdelight"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "nethersdelight:crimson_fungus_colony"
+  },
+  "categories": [
+    "crimson_nylium"
+  ],
+  "growthTicks": 1400,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "nethersdelight:crimson_fungus_colony"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "minecraft:crimson_fungus"
+      },
+      "minRolls": 1,
+      "maxRolls": 3
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "minecraft:crimson_fungus"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}
