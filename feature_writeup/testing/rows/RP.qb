@@ -69,7 +69,7 @@ shell grep -nE "solraspberrypie|Raspberry Pie" logs/latest.log | cut -c1-300 | h
 @reviewed 2026-11-20
 @from batches/r1112/rp1.qb passed
 bootexpect Seeded .*ladder\.json from .*defaultconfigs
-shell ls -l rp/serverconfig/solraspberrypie/ladder.json && diff rp/serverconfig/solraspberrypie/ladder.json defaultconfigs/solraspberrypie/ladder.json && echo IDENTICAL
+shell L=$(sed -n 's/^level-name=//p' server.properties); ls -l "$L"/serverconfig/solraspberrypie/ladder.json && diff "$L"/serverconfig/solraspberrypie/ladder.json defaultconfigs/solraspberrypie/ladder.json && echo IDENTICAL
 
 ## SQ-RPI-03 | unregistered and unsafe entries skipped, ladder still 38 rungs
 @group A
@@ -131,10 +131,10 @@ waitlog \[cdevtest\] verb=recipes done= 30
 > cdevtest recipes food_book
 waitlog \[cdevtest\] verb=recipes done= 30
 expect \[cdevtest\] verb=bytype serializer=solraspberrypie:diet_book n=[1-9]
-# liquid_diet_log is a plain crafting_shapeless recipe (only diet_log uses the solraspberrypie:diet_book serializer)
+# liquid_diet_log_manual_only (renamed 2026-11-20, raspberry_pie.md) is a plain crafting_shapeless recipe (only diet_log uses the solraspberrypie:diet_book serializer)
 expect \[cdevtest\] verb=bytype id=solraspberrypie:diet_log result=
 expect \[cdevtest\] verb=recipes id=solraspberrypie:diet_log result=
-expect \[cdevtest\] verb=recipes id=solraspberrypie:liquid_diet_log result=
+expect \[cdevtest\] verb=recipes id=solraspberrypie:liquid_diet_log_manual_only result=solraspberrypie:liquid_diet_log
 reject \[cdevtest\] .*(done=0|error=)
 shell grep -n "solapplepie:food_book" logs/kubejs/server.log | head; grep -cE "NCH.*(error|fail)" logs/kubejs/server.log; true
 look record whether a `verb=recipes id=solapplepie:food_book` line is still present (expected until the CD rebuild; the recipes food_book call lists it)
@@ -330,10 +330,12 @@ sleep 3
 > pbot inv rp7 select 0
 > pbot eat rp7
 waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:apple 30
+> pbot hunger rp7 2
 > pbot inv rp7 set 0 minecraft:bread 1
 > pbot inv rp7 select 0
 > pbot eat rp7
 waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:bread 30
+> pbot hunger rp7 2
 > pbot inv rp7 set 0 minecraft:cooked_beef 1
 > pbot inv rp7 select 0
 > pbot eat rp7
