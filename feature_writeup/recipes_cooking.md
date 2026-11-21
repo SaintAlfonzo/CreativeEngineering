@@ -159,6 +159,15 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
   sugar + 2 milk -> 2); compacting 250 mB -> 1 frosting (fluid-only, like Create's chocolate bar); spout 750 mB on a
   baked cake base -> plain cake (`cake_frosting_spout`, beside the chocolate cake spout). Flavored cakes stay on the
   item. Beetroot soup as an efficient beetroot was deferred to `ingredients #13` (the user, 2026-10-22).
+- **Bone broth fluid** (2026-11-20, TODO `dishes/ingredients #36`, owner R10): `creativedelight:bone_broth` (CD
+  `fluids.js`, no bucket, no block; `f.bone_broth`, `#forge:fluid/bone_broth` in CD `fluid_tags.js`). Spout bowl + 250
+  mB -> Bone Broth, Item Drain the reverse (`createfilling/bone_broth`, `createemptying/bone_broth`, CD
+  `farmersdelight/recipes.js`). Every `soupCraft` soup (`cd_food.js`; 15 soups and stews: FD's beef, cod, noodle,
+  chicken, vegetable and pumpkin, Large Meals' four, Rustic's two, Alex's two, fig chicken stew) also gets an unheated
+  Create basin recipe: 250 mB bone broth + bowl + the grid's ingredients (`createmixing/<soup>_bone_broth_mixing`). No
+  spout route for soups (several ingredients). The Moonlight soft fluid stays for jars; the Forge fluid uses that soft
+  fluid's sprites (Moonlight `soft_fluids/soup_liquid`, `potion_flow`) and its tint `#c8b48a` (KubeJS thin texture in
+  the same tint without Moonlight). Tests SQ-CDFL-05, CQ-CDFL-02, RC-192.
 - **Berry matcha latte** (TODO `food/drinks #5`): with Farmer's Respite loaded Delightful drops its grid lattes, so the
   berry latte had only `food/berry_matcha_latte_from_matcha_latte_neapolitan` (bottle + latte + berries + ice), which
   ate an extra bottle. Removed. New: kettle tier `farmersrespitebrewing/berry_matcha_latte` (latte +
@@ -508,6 +517,9 @@ None.
 - [ ] **RC-67 Squid ink pasta mixing:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game) heated basin with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw cod, 2
   bowls -> 2 squid ink pasta.
 - [ ] **RC-191 Garlic cloves:** a garlic crafts into 2 cloves, cuts into 5 on a board (knife) and in Slice and Dice, mixes into 5 in a Create mixer; 6 cloves craft into a garlic; JEI shows no 3-clove recipe.
+- [ ] **RC-192 Bone broth fluid:** (ids: SQ-CDFL-05; client: CQ-CDFL-02) a Spout over an empty bowl with 250 mB bone broth
+  -> Bone Broth; an Item Drain empties it back; a basin with 250 mB bone broth, a bowl, cooked beef, a carrot and a baked
+  potato mixes Beef Stew (no heat). JEI lists the Bone Broth fluid with the soup look.
 - [ ] **RC-190 Cat food:** both recipes craft cat food (dog food sprite, name Cat Food); eating it gives a bowl back; used on a tamed cat it heals fully, gives Speed, Strength and Resistance for 5 minutes and hands back a bowl; an untamed cat is unaffected.
 - [ ] **RC-68 Dog food:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-11; crafting and JEI: in game) rotten flesh + bone meal + 2 cooked meat + cooked rice crafts dog food; not in an unheated basin.
 - [ ] **RC-69 Frying:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-10; crafting and JEI: in game) JEI shows no Thermopneumatic chips or tempura and no plant-oil tempura mixing; names read Fish
@@ -692,3 +704,5 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
   SQ-RCO-01, -02.
 - 2026-11-16: Arc Furnace gilding takes 4 gold (was 5); mason jar and glass bottle crafts give 4 (were 3); banana bunch on the
   Cutting Board -> 6 bananas (2.6). RC-186 to RC-188; queue SQ-RC-01 to -03 (plan_small_fixes_1116.md). Not run.
+- 2026-11-20: bone broth fluid, 250 mB per bowl both ways, soups in the Create basin (2.2 Bone broth fluid;
+  plan_owner_rows_1120.md G2b). RC-192, SQ-CDFL-05, CQ-CDFL-02. Needs the CD jar.

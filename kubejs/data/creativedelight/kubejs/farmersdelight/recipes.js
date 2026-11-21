@@ -114,7 +114,9 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'farmersdelight:cooking/bone_broth' }, e)
 		R.fdCooking([[i.bone, i.bonemeal], [i.glow_berries, i.mushrooms, i.hanging_roots, i.glow_lichen]], Item.of(i.bone_broth, 2), e, undefined, 1, 200, i.bowl)
 		R.shapeless(Item.of(i.bone_broth, 1), [[i.bone, i.bonemeal], [i.glow_berries, i.hanging_roots, i.glow_lichen, i.mushrooms], i.bowl], e, 'bone_broth_manual_only')
-		// Stews with bone broth (heatless meal rule: see "Meals" below; soupCraft adds the broth)
+		// Bone broth fluid (dishes/ingredients #36): Spout fills a bowl with 250 mB, the Item Drain empties it
+		if (f.bone_broth) R.createBottle(i.bone_broth, f.bone_broth, e, 'bone_broth', { container: i.bowl })
+		// Stews with bone broth (heatless meal rule: see "Meals" below; soupCraft adds the broth, or the fluid in a basin)
 		F.soupCraft([i.cooked_beef, i.carrot, i.baked_potato], i.beef_stew)
 		F.soupCraft([i.cooked_cod, i.cooked_eggs, i.baked_potato, i.tomato_sauce], i.baked_cod_stew)
 		F.soupCraft([i.cooked_pork, i.cooked_eggs, i.pasta, i.dried_kelp], i.noodle_soup)

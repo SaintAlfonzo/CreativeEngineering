@@ -182,7 +182,14 @@ global.CD.food = function (e) {
 		// main ingredient than the pot. _manual_only keeps Create's basin and mechanical crafter off it.
 		// Returns the recipe, so a caller can add an ingredient action (nethersdelight/recipes.js consumes a bowl food whole).
 		mealCraft(inputs, output) { return R.shapeless(output, inputs, e, suffix(output, '_cooked_manual_only')) },
-		soupCraft(inputs, output) { R.shapeless(output, [i.bone_broth].concat(inputs), e, suffix(output, '_cooked_manual_only')) },
+		// The grid takes a Bone Broth bowl; the Create basin takes 250 mB of bone broth fluid and an empty bowl instead
+		// (dishes/ingredients #36). No spout route: a soup has several ingredients.
+		soupCraft(inputs, output) {
+			R.shapeless(output, [i.bone_broth].concat(inputs), e, suffix(output, '_cooked_manual_only'))
+			var fl = global.fluid
+			if (fl.t_bone_broth && Platform.isLoaded('create'))
+				R.createMixing(output, [R.createFluidTag(fl.t_bone_broth, 250), i.bowl].concat(inputs), e, suffix(output, '_bone_broth_mixing'))
+		},
 		saladCraft(inputs, output) { R.shapeless(output, inputs.concat([i.bowl]), e, suffix(output, '_manual_only')) },
 
 		//######################### Hand food #########################

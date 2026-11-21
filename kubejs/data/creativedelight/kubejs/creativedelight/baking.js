@@ -84,7 +84,7 @@ ServerEvents.recipes(e => {
 			['blazecookie', i.blaze_rod], ['ghastcookie', i.ghasttentacle], ['guardiancookie', i.guardianfillet],
 			['magicbuttercookie', i.magicalbutter], ['magmacookie', i.magma_cream], ['mitecookie', i.rawendermite],
 			['pearlcookie', i.ender_pearl],                  // Hostile Delight's seven
-			// Create Confectionery's Gingerbread Man (was pressed from gingerdough); Gingerbread itself is a dessert
+			// Create Confectionery's Gingerbread Man (was pressed from gingerdough); Gingerbread itself is a bread (below)
 			['gingerbread_man', i.gingerdough, i.any_sweetener],
 
 		]
@@ -95,6 +95,17 @@ ServerEvents.recipes(e => {
 		// The table rows are swept by their family call.
 		var REMOVED_OUTPUTS = [i.cake, i.neapolitan_chocolate_cake, i.cake_base, i.cake_base_baked, i.pie_crust] // G5 (R.remove filters)
 		REMOVED_OUTPUTS.forEach(id => R.remove({ output: id, not: [{ id: /_from_slices$/ }, { mod: 'creativeengineering' }] }, e))
+
+		//######################### Gingerbread #########################
+		// Gingerbread is a bread (baking/baked-goods #39, food_families.md): gingerdough bakes into it like a dough into
+		// bread (farmersdelight/recipes.js "Bread from dough"), 1 / 3 / 6 on a baking sheet. Gingerdough is not in
+		// #forge:dough, so it never bakes into plain bread. The upstream furnace and smoker recipes stay.
+		if (Platform.isLoaded('create_confectionery')) {
+			;[1, 3, 6].forEach(k => {
+				R.ceBaking([k > 1 ? n(i.gingerdough, k) : i.gingerdough], Item.of(i.gingerbread, k), e, 'gingerbread_' + k,
+					{ exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet })
+			})
+		}
 
 		//######################### Bases #########################
 		// Cake base: crafted raw by hand, baked in the oven.

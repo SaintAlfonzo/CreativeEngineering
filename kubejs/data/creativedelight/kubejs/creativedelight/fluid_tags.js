@@ -28,6 +28,7 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/egg_solution', f.egg_solution],
 		['forge:fluid/frosting', f.frosting],
 		['forge:fluid/syrup', f.syrup],
+		['forge:fluid/bone_broth', f.bone_broth],
 		['forge:fluid/milk_coffee', f.milk_coffee],
 		['forge:fluid/honey_coffee', f.honey_coffee],
 		['forge:fluid/chocolate_coffee', f.chocolate_coffee],
@@ -40,5 +41,5 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/berry_matcha_latte', f.berry_matcha_latte],
 		['forge:fluid/yeast_culture', f.yeast_culture],
 		// G5 end
-	].forEach(([tag, fluid]) => { if (fluid) t.addFluid(e, tag, fluid) })  // f.syrup is absent until Common's dict has it
+	].forEach(([tag, fluid]) => { if (fluid) t.addFluid(e, tag, fluid) })  // f.syrup, f.bone_broth are absent until Common's dict has them
 })

@@ -153,3 +153,95 @@ waitlog verb=rdetail text=guardian_soup n= 30
 expect verb=rdetail id=creativedelight:farmersdelightcooking/guardian_soup
 reject verb=rdetail id=oceansdelight:cooking/guardian_soup
 reject verb=\S+ .*done=0
+
+@@section 4
+@@title SQ-CP, SQ-FF, SQ-CDFL owner rows G2b: compost rot and dirt slots, misc baked and gingerbread, bone broth fluid, 2026-11-20 ([composting.md](../composting.md) 3, [food_families.md](../food_families.md), [oven.md](../oven.md), [recipes_cooking.md](../recipes_cooking.md), TODO `farming/composting #5`, `#6`, `baking/baked-goods #39`, `dishes/ingredients #36`)
+@@date 2026-11-20
+@@jars creativecommon creativedelight
+@@sources feature_writeup/composting.md feature_writeup/food_families.md feature_writeup/oven.md feature_writeup/recipes_cooking.md kubejs/data/creativedelight/kubejs/creativedelight/compost_tags.js kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js development/creativeDelight/src/main/resources/kubejs_startup/vintagedelight/compost.js kubejs/data/creativedelight/kubejs/creativedelight/baking.js tools/food_families.py development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js kubejs/data/creativedelight/kubejs/creativedelight/fluid_tags.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js
+@@text
+@@text Targets the Creative Delight jar installed 2026-11-20 (phase G2b). Full pack, group A superflat. The dirt slot of
+@@text the Organic Compost recipes reads the new tag only after G3 (Creative Engineering `wood/sawdust.js`); SQ-CP-02
+@@text checks the tag itself.
+@@text
+@@table
+## SQ-CP-02 | rot slot takes rotten tomato, rotten cherry and organic mash; the compost dirt tag; Vintage Delight's mash compost recipes gone
+@group A
+@commands `cdevtest tag item forge:mulch/waste`, `cdevtest tag item creativedelight:compost_dirt`; rdetail the two Vintage Delight mash compost ids and the tree fertilizer
+@pass `forge:mulch/waste` holds rotten flesh, spider eye, poisonous potato, `farmersdelight:rotten_tomato`, `vinery:rotten_cherry`, `vintagedelight:organic_mash` (6); `creativedelight:compost_dirt` holds dirt, coarse dirt, rooted dirt, podzol, moss block, mud, `immersive_weathering:humus`, `twigs:silt` (8), no grass block or mycelium; `vintagedelight:organic_compost_from_rotten_flesh_mash` and `..._from_tree_bark_mash` gone; `vintagedelight:organic_compost_tree_fertilizer` stays
+@fails `i.rotten_cherry` unresolved (Creative Brewing not loaded); the removals not inside `global.CD.recipes`
+> cdevtest tag item forge:mulch/waste
+> cdevtest tag item creativedelight:compost_dirt
+> cdevtest rdetail organic_compost_from_rotten_flesh_mash
+> cdevtest rdetail organic_compost_from_tree_bark_mash
+> cdevtest rdetail organic_compost_tree_fertilizer
+waitlog verb=rdetail text=organic_compost_tree_fertilizer n= 30
+expect verb=tag kind=item tag=forge:mulch/waste n=6 ids=.*vintagedelight:organic_mash
+expect verb=tag kind=item tag=forge:mulch/waste n=6 ids=.*vinery:rotten_cherry
+expect verb=tag kind=item tag=forge:mulch/waste n=6 ids=.*farmersdelight:rotten_tomato
+expect verb=tag kind=item tag=creativedelight:compost_dirt n=8 ids=.*twigs:silt
+reject verb=tag kind=item tag=creativedelight:compost_dirt n=\d+ ids=.*minecraft:(grass_block|mycelium)\b
+reject verb=rdetail id=vintagedelight:organic_compost_from_(rotten_flesh|tree_bark)_mash\b
+expect verb=rdetail id=vintagedelight:organic_compost_tree_fertilizer
+reject verb=\S+ .*done=0
+
+## SQ-CP-03 | organic mash composts at 0.5
+@group A
+@commands `/dumpcompost`; read `kubejs/exported/compost/compost.json` `now` for `vintagedelight:organic_mash`
+@pass `vintagedelight:organic_mash` in `now` at 0.5 (category plant_matter, from a value); no `[compost]` warning naming it in `logs/kubejs/startup.log`
+@fails `[qol] compost` off in the Creative Delight config (the row is skipped); `i.organic_mash` unresolved
+> dumpcompost
+sleep 3
+shell grep -A3 '"vintagedelight:organic_mash"' kubejs/exported/compost/compost.json | head -12
+shell grep -h 'compost' logs/kubejs/startup.log | grep -i 'organic_mash' | head -5; true
+look organic_mash at 0.5 in `now`, no warning line
+
+## SQ-FF-15 | misc baked family tag and gingerbread baked from gingerdough in the oven
+@group A
+@commands `cdevtest tag item creativedelight:food_family/baked/misc`, `.../bread/loaf`; rdetail `gingerbread_1`, `gingerbread_3`, `gingerbread_6`
+@pass `food_family/baked/misc` holds the 10: croissant, raspberry scone, strawberry scones, adzuki bun, cider donut, honey bread, mulberry bread, glow bread, strange eclair, Hearth and Harvest waffle; `food_family/baked` holds the same; `food_family/bread/loaf` holds `create_confectionery:gingerbread`; `creativedelight:baking/gingerbread_1`, `_3`, `_6` exist, gingerdough x1 / x3 / x6 -> gingerbread x1 / x3 / x6 on the baking sheet; the upstream smelting and smoking recipes stay
+@fails `kubejs/generation_scripts/food/food_families.json` stale in the jar; `create_confectionery` not loaded
+> cdevtest tag item creativedelight:food_family/baked/misc
+> cdevtest tag item creativedelight:food_family/bread/loaf
+> cdevtest rdetail creativedelight:baking/gingerbread_1
+> cdevtest rdetail creativedelight:baking/gingerbread_3
+> cdevtest rdetail creativedelight:baking/gingerbread_6
+> cdevtest rdetail create_confectionery:gingerbread_recipe
+waitlog verb=rdetail text=create_confectionery:gingerbread_recipe n= 30
+expect verb=tag kind=item tag=creativedelight:food_family/baked/misc n=10 ids=.*hostiledelight:glowbread
+expect verb=tag kind=item tag=creativedelight:food_family/baked/misc n=10 ids=.*hearthandharvest:cider_donut
+expect verb=tag kind=item tag=creativedelight:food_family/bread/loaf n=\d+ ids=.*create_confectionery:gingerbread\b
+expect verb=rdetail id=creativedelight:baking/gingerbread_1 .*ingredients=\S*create_confectionery:gingerdough
+expect verb=rdetail id=creativedelight:baking/gingerbread_6
+expect verb=rdetail id=create_confectionery:gingerbread_recipe
+reject verb=\S+ .*done=0
+
+## SQ-CDFL-05 | bone broth fluid: registered, tagged, 250 mB per bowl both ways, soups in the basin
+@group A
+@commands `cdevtest reg fluid ^creativedelight:bone_broth`; `cdevtest tag fluid forge:fluid/bone_broth`; rdetail the spout, drain and two basin soups; grep the dict tag check
+@pass fluid `creativedelight:bone_broth` registered (no bucket item, no block); `forge:fluid/bone_broth` holds it; `creativedelight:createfilling/bone_broth` bowl + 250 mB -> Bone Broth and `createemptying/bone_broth` Bone Broth -> bowl + 250 mB; `creativedelight:createmixing/beef_stew_bone_broth_mixing` and `..._chicken_soup_bone_broth_mixing`: 250 mB `#forge:fluid/bone_broth` + bowl + the grid's ingredients, no heat; `[dict_tag_check]` no longer lists `t_bone_broth`
+@fails `f.bone_broth` missing from the installed Creative Common's fluid dict (the fluid is skipped); Moonlight soft fluid sprite missing from the block atlas (client: CQ-CDFL-02)
+> cdevtest reg fluid ^creativedelight:bone_broth
+> cdevtest reg item ^creativedelight:bone_broth_bucket$
+> cdevtest tag fluid forge:fluid/bone_broth
+> cdevtest rdetail creativedelight:createfilling/bone_broth
+> cdevtest rdetail creativedelight:createemptying/bone_broth
+> cdevtest rdetail beef_stew_bone_broth_mixing
+> cdevtest rdetail chicken_soup_bone_broth_mixing
+waitlog verb=rdetail text=chicken_soup_bone_broth_mixing n= 30
+expect verb=reg kind=fluid regex=\^creativedelight:bone_broth n=[12]$
+expect verb=reg kind=item regex=\^creativedelight:bone_broth_bucket\$ n=0$
+expect verb=tag kind=fluid tag=forge:fluid/bone_broth n=\d+ ids=.*creativedelight:bone_broth
+expect verb=rdetail id=creativedelight:createfilling/bone_broth
+expect verb=rdetail id=creativedelight:createemptying/bone_broth
+expect verb=rdetail id=creativedelight:createmixing/beef_stew_bone_broth_mixing
+shell grep -h 'dict_tag_check' logs/latest.log logs/kubejs/server.log 2>/dev/null | grep -i bone_broth | head -3; true
+look no dict_tag_check line for t_bone_broth
+reject verb=\S+ .*done=0
+
+## CQ-CDFL-02 | bone broth fluid looks like the jar's soup in JEI, a tank and a basin
+@group A
+@commands client: JEI search Bone Broth (fluids); a Create Spout over a Basin with bone broth fluid; fill a bowl
+@pass JEI lists the Bone Broth fluid with the soup sprite tinted tan (as in a Supplementaries jar), not purple-black; JEI shows the spout and drain recipes at 250 mB; the basin shows the fluid; a Spout fills an empty bowl into Bone Broth
+@fails missing-texture fluid (the Moonlight sprites are not in the block atlas: switch to KubeJS's thin texture in `fluids.js`)
+look hand: the fluid's look in JEI, the basin and a fluid tank

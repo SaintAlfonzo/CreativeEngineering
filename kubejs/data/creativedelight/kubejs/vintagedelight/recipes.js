@@ -11,6 +11,12 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Compost #########################
+		// Organic mash is in #forge:mulch/waste (creativedelight/compost_tags.js), so the pack's Organic Compost recipes
+		// take it; the port's two mash compost recipes go (farming/composting #6). The tree fertilizer stays.
+		R.remove({ id: 'vintagedelight:organic_compost_from_rotten_flesh_mash' }, e)
+		R.remove({ id: 'vintagedelight:organic_compost_from_tree_bark_mash' }, e)
+
 		//######################### Pickling Jar #########################
 		// No slime block from the jar (vintageport #17); slime comes from Create (create/slime.js).
 		R.remove({ id: 'vintagedelight:fermenting/slime_block_from_fermenting' }, e)

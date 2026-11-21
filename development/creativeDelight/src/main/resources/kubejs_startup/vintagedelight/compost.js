@@ -37,4 +37,7 @@
 		[i.century_egg,                        0.9],
 		[i.magic_peanut,                       0.85],
 	], ON)
+	C.values('plant_matter', [   // the jam -> vinegar leftover, not compostable upstream (farming/composting #6)
+		[i.organic_mash,                       0.5],
+	], ON)
 })()

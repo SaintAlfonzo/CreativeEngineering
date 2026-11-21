@@ -19,6 +19,19 @@ StartupEvents.registry('fluid', e => {
 	// Cooking fluids (TODO dishes/ingredients #2): egg solution stands in for egg + milk, frosting for the frosting item
 	reg.fluid(e, f.egg_solution).displayName('Egg Solution').thinTexture(0xF3D97A).bucketColor(0xF3D97A).noBucket().noBlock()
 	reg.fluid(e, f.frosting).displayName('Frosting').thinTexture(0xFFF4F0).bucketColor(0xFFF4F0).noBucket().noBlock()
+	// Bone broth (dishes/ingredients #36): Farmer's Delight's Bone Broth bowl as a fluid, 250 mB a bowl (Spout and Item
+	// Drain in Creative Delight's farmersdelight/recipes.js); the soupCraft basin recipes take it (cd_food.js). The
+	// Moonlight soft fluid stays for jars; this one uses that soft fluid's own textures and tint (Moonlight's soup and
+	// potion sprites, in the block atlas). Skipped until Creative Common's fluid dict has f.bone_broth.
+	// Without Moonlight it falls back to KubeJS's thin texture in the same tint.
+	if (f.bone_broth) {
+		var broth = reg.fluid(e, f.bone_broth).displayName('Bone Broth').bucketColor(0xC8B48A).noBucket().noBlock()
+		if (Platform.isLoaded('moonlight')) {
+			broth.stillTexture('moonlight:soft_fluids/soup_liquid').flowingTexture('moonlight:soft_fluids/potion_flow').color(0xC8B48A)
+		} else {
+			broth.thinTexture(0xC8B48A)
+		}
+	}
 	// Syrup (largecontent/mod-additions #72b): Rustic Delight's Syrup bottle as a fluid, 250 mB a bottle. Hearth and Harvest
 	// 1.4.1's own syrup fluid textures, untinted (copied into the hearthandharvest member). Recipes in Creative Delight's
 	// hearthandharvest/recipes.js. Skipped until Creative Common's fluid dict has f.syrup.

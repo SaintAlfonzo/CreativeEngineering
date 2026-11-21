@@ -2173,6 +2173,7 @@ i.t_seeds = '#forge:seeds';
 i.t_seeds_c = '#c:seeds';
 i.t_seeds_rice = '#forge:seeds/rice';
 i.t_millable_seeds = '#creativedelight:millable_seeds';   // seeds the millstone turns into bone meal (composting #4)
+i.t_compost_dirt = '#creativedelight:compost_dirt';   // dirt slot of the Organic Compost recipes (composting #5)
 i.t_saplings = '#minecraft:saplings';
 i.t_leaves = '#minecraft:leaves';
 i.t_flowers = '#minecraft:flowers';

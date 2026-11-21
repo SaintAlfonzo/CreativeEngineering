@@ -34,6 +34,7 @@ global.NCH = {
 	'createFilling', 'createCompacting', 'hammering', 'ieArcFurnace', 'createSequencedAssembly', 'replaceInput', 'replaceOutput',
 	'ieSqueezing', 'ieBottling', 'ieMixer', 'ieMetalPress', 'createEmptying', 'createBottle', 'smithing', 'mortar'].forEach(function (m) { global.NCH[m] = __rec(m) });
 // forPack(ns) as Common's: the same recording helpers (the namespace is fixed to creativedelight in this stub)
+global.NCH.createFluidTag = function (tag, amount) { return { fluidTag: String(tag).replace(/^#/, ''), amount: amount || 1000 } };
 global.NCH.forPack = function () { return global.NCH };
 global.NCH.logName = function (name) { return 'CD/' + name };
 var __run = function (name) {

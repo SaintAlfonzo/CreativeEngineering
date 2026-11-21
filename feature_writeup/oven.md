@@ -315,6 +315,12 @@ renamed from Sweet Potato Cupcake 2026-10-29): 2 baked sweet potato, the same re
 
 **Tarts** (baking sheet, 2 per bake): `lemon_tart`, `fig_tart`: fruit, pie crust, egg, sugar, milk bottle.
 
+**Gingerbread** (baking sheet; 2026-11-20, TODO `baking/baked-goods #39`, owner R9): Create Confectionery's Gingerbread
+is a bread (`bread/loaf`, [food_families.md](food_families.md)), so its gingerdough bakes like a dough into bread
+(`bread_from_dough`): 1 / 3 / 6 gingerdough -> 1 / 3 / 6 gingerbread, 200 ticks, 0.1 xp (`baking.js`,
+`creativedelight:baking/gingerbread_1`, `_3`, `_6`). Gingerdough is not in `#forge:dough`, so it never bakes into plain
+bread. Create Confectionery's furnace and smoker recipes stay. Test SQ-FF-15, OV-38.
+
 Not touched: the golden cookie / cake / pumpkin pie (gold around a finished item), Botania's mana cookie, the blaze,
 echo and slime "cakes" (not baked goods), shepherd's pie (savoury, a feast), cans of cookies / cakes, tarts. No
 recipes yet for pies or cookies whose items have no live source: CCK cherry / truffle pies (no whole item), the
@@ -580,6 +586,8 @@ Needs a Creative Common build in `mods/`.
   mixing recipe; the oven (muffin tin, paper) recipe is there for each. Sweet potato muffin also shows its grid craft.
 - [ ] **OV-37 Sweet Potato Muffin name:** the item formerly Sweet Potato Cupcake reads Sweet Potato Muffin in the
   inventory, JEI and the WTHIT line; no item is named Cupcake. (Texture still the cupcake sprite, retexture open.)
+- [ ] **OV-38 Gingerbread in the oven:** (recipe half: SQ-FF-15) gingerdough + baking sheet in the oven -> gingerbread;
+  6 gingerdough -> 6; JEI on gingerbread shows the oven, furnace and smoker recipes.
 - [ ] **OV-14 Server:** the same on a dedicated server with a client (menu opens, slots sync, JEI page present).
 
 ## 8. History
@@ -644,6 +652,8 @@ Needs a Creative Common build in `mods/`.
   swaps, table in 2.6; textures/food #3). OV-34.
 - 2026-10-25: dough blocks for ginger, cookie, sweet potato, oat, cucumber and sourdough doughs (baked-goods #27). OV-35.
 - 2026-10-29: muffins out of the Cooking Pot (oven only); Sweet Potato Cupcake renamed Sweet Potato Muffin. OV-36, OV-37.
+- 2026-11-20: gingerdough -> gingerbread on the baking sheet, 1 / 3 / 6 (2.6 Gingerbread; baked-goods #39,
+  plan_owner_rows_1120.md G2b). OV-38, SQ-FF-15. Needs the CD jar.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

@@ -59,6 +59,12 @@
 - **Changed:** In Botany Pots, Rich Soil and Rich Soil Farmland grow plants 10% faster [Rich Soil Farmland 25%] and Fertile Soil is a pot soil that grows them 20% faster. No soil changes pot yield.
 - **Fixed:** A ripe Cucumber or Ghost Pepper dropped no seeds when broken; it now drops 1 to 4.
 
+## Composting <!-- icon: farmersdelight:organic_compost -->
+
+- **Changed:** Organic Compost and Fertile Soil recipes take Rotten Tomatoes, Rotten Cherries and Organic Mash in the rotten slot [Rotten Flesh, Spider Eye, Poisonous Potato].
+- **Removed:** Vintage Delight's two Organic Compost recipes from Organic Mash. Organic Mash goes in the pack's Organic Compost recipes.
+- **New:** Organic Mash goes in a Composter, 50% per item.
+
 ## Corn <!-- icon: corn_delight:corn -->
 
 - **Changed:** Maize is named Corn.
@@ -182,6 +188,9 @@
 - **Changed:** Trail Mix and Stuffed Cantaloupe take an edible seed [any seed].
 - **Changed:** Hot Cocoa, Strong Hot Cocoa and Apple Cider restore 1 hunger and 0.4 saturation, like teas, and can be drunk when full [no hunger].
 - **Removed:** Canned Legendary Roll Medley and Canned Mythical Roll Medley. Existing ones in worlds are deleted.
+- **New:** Gingerdough bakes into Gingerbread in the Oven on a Baking Sheet, 1, 3 or 6 at a time.
+- **New:** Bone Broth fluid. A Spout fills a bowl with 250 mB into Bone Broth; an Item Drain empties it.
+- **New:** Soups and stews crafted with Bone Broth can be mixed in a Create Basin from 250 mB of Bone Broth fluid, a bowl and the same ingredients.
 
 ## Golden Food <!-- icon: minecraft:golden_apple -->
 
