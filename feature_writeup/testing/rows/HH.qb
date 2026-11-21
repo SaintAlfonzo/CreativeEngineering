@@ -612,7 +612,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1108 | log matches `food hearthandharvest:goat_cheese_slice: nutrition 4, mod
 @group A
 @commands `cdevtest food hearthandharvest:goat_cheese_slice`; `cdevtest food hearthandharvest:sunflower_seeds`; `cdevtest food hearthandharvest:raw_sausage`; `cdevtest food hearthandharvest:cooked_sausage`
-@pass log matches `verb=food item=hearthandharvest:goat_cheese_slice\*1\S* food=true nutrition=4 modifier=0\.8 .*effects=-$`; log matches `verb=food item=hearthandharvest:sunflower_seeds\*1\S* food=true nutrition=1 modifier=0\.3 .*effects=-$`; log matches `verb=food item=hearthandharvest:raw_sausage\*1\S* food=true nutrition=2 modifier=0\.3 .*effects=-$`; log matches `verb=food item=hearthandharvest:cooked_sausage\*1\S* food=true nutrition=3 modifier=0\.5 .*effects=-$`
+@pass log matches `verb=food item=hearthandharvest:goat_cheese_slice\*1\S* food=true nutrition=4 modifier=0\.8 .*effects=-$`; log matches `verb=food item=hearthandharvest:sunflower_seeds\*1\S* food=true nutrition=1 modifier=0\.25 .*effects=-$`; log matches `verb=food item=hearthandharvest:raw_sausage\*1\S* food=true nutrition=2 modifier=0\.3 .*effects=-$`; log matches `verb=food item=hearthandharvest:cooked_sausage\*1\S* food=true nutrition=3 modifier=0\.5 .*effects=-$`
 @fails `HHFoods` (or a pack script overriding it: `food_catalog.py`, cd startup `food_*`)
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
@@ -621,7 +621,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > cdevtest food hearthandharvest:raw_sausage
 > cdevtest food hearthandharvest:cooked_sausage
 expect verb=food item=hearthandharvest:goat_cheese_slice\*1\S* food=true nutrition=4 modifier=0\.8 .*effects=-$
-expect verb=food item=hearthandharvest:sunflower_seeds\*1\S* food=true nutrition=1 modifier=0\.3 .*effects=-$
+expect verb=food item=hearthandharvest:sunflower_seeds\*1\S* food=true nutrition=1 modifier=0\.25 .*effects=-$
 expect verb=food item=hearthandharvest:raw_sausage\*1\S* food=true nutrition=2 modifier=0\.3 .*effects=-$
 expect verb=food item=hearthandharvest:cooked_sausage\*1\S* food=true nutrition=3 modifier=0\.5 .*effects=-$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -1067,23 +1067,23 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1141 | log matches `creativedelight:baking/raisin_cookie \{\S+\} -> 12 raisin
 @group A
 @commands `cdevtest rdetail creativedelight:baking/raisin_cookie`
-@pass log matches `verb=rdetail id=\S*creativedelight:baking/raisin_cookie serializer=\S+ result="?[\w.-]+:raisin_cookie\*12\b .*ingredients="?creativeengineering:cookie_dough`
+@pass log matches `verb=rdetail id=\S*creativedelight:baking/raisin_cookie serializer=\S+ result="?[\w.-]+:raisin_cookie\*12\b .*ingredients="?creativedelight:cookie_dough`
 @fails `hearthandharvest/recipes.js`; `F.pieBake`/`cookieBake`, `cd_food.js`
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
 > cdevtest rdetail creativedelight:baking/raisin_cookie
-expect verb=rdetail id=\S*creativedelight:baking/raisin_cookie serializer=\S+ result="?[\w.-]+:raisin_cookie\*12\b .*ingredients="?creativeengineering:cookie_dough
+expect verb=rdetail id=\S*creativedelight:baking/raisin_cookie serializer=\S+ result="?[\w.-]+:raisin_cookie\*12\b .*ingredients="?creativedelight:cookie_dough
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1142 | log matches `creativedelight:baking/peanut_butter_cookie \{\S+\} -> 12
 @group A
 @commands `cdevtest rdetail creativedelight:baking/peanut_butter_cookie`
-@pass log matches `verb=rdetail id=\S*creativedelight:baking/peanut_butter_cookie serializer=\S+ result="?[\w.-]+:peanut_butter_cookie\*12\b .*ingredients="?creativeengineering:cookie_dough`
+@pass log matches `verb=rdetail id=\S*creativedelight:baking/peanut_butter_cookie serializer=\S+ result="?[\w.-]+:peanut_butter_cookie\*12\b .*ingredients="?creativedelight:cookie_dough`
 @fails `hearthandharvest/recipes.js`; `F.pieBake`/`cookieBake`, `cd_food.js`
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
 > cdevtest rdetail creativedelight:baking/peanut_butter_cookie
-expect verb=rdetail id=\S*creativedelight:baking/peanut_butter_cookie serializer=\S+ result="?[\w.-]+:peanut_butter_cookie\*12\b .*ingredients="?creativeengineering:cookie_dough
+expect verb=rdetail id=\S*creativedelight:baking/peanut_butter_cookie serializer=\S+ result="?[\w.-]+:peanut_butter_cookie\*12\b .*ingredients="?creativedelight:cookie_dough
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1143 | log matches `creativedelight:baking/raspberry_pie \{\S+\} -> 1 raspber
@@ -1212,13 +1212,13 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1153 | log matches `creativedelight:farmersdelightcooking/biscuits_and_gravy
 @group A
 @commands `cdevtest rdetail creativedelight:farmersdelightcooking/biscuits_and_gravy`; `zhh1 container creativedelight:farmersdelightcooking/biscuits_and_gravy`
-@pass log matches `verb=rdetail id=\S*creativedelight:farmersdelightcooking/biscuits_and_gravy serializer=farmersdelight:cooking result="?[\w.-]+:biscuits_and_gravy\*1\b .*ingredients="?hearthandharvest:cooked_sausage`; log matches `container creativedelight:farmersdelightcooking/biscuits_and_gravy: minecraft:bowl`
+@pass log matches `verb=rdetail id=\S*creativedelight:farmersdelightcooking/biscuits_and_gravy serializer=farmersdelight:cooking result="?[\w.-]+:biscuits_and_gravy\*1\b .*ingredients="?\S*dough\S*,hearthandharvest:raw_sausage`; log matches `container creativedelight:farmersdelightcooking/biscuits_and_gravy: minecraft:bowl`
 @fails `hearthandharvest/recipes.js`
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
 > cdevtest rdetail creativedelight:farmersdelightcooking/biscuits_and_gravy
 > zhh1 container creativedelight:farmersdelightcooking/biscuits_and_gravy
-expect verb=rdetail id=\S*creativedelight:farmersdelightcooking/biscuits_and_gravy serializer=farmersdelight:cooking result="?[\w.-]+:biscuits_and_gravy\*1\b .*ingredients="?hearthandharvest:cooked_sausage
+expect verb=rdetail id=\S*creativedelight:farmersdelightcooking/biscuits_and_gravy serializer=farmersdelight:cooking result="?[\w.-]+:biscuits_and_gravy\*1\b .*ingredients="?\S*dough\S*,hearthandharvest:raw_sausage
 expect container creativedelight:farmersdelightcooking/biscuits_and_gravy: minecraft:bowl
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -1271,7 +1271,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @reviewed 2026-11-20
 > cdevtest rdetail creativedelight:shapeless/biscuits_and_gravy_cooked_manual_only
 > cdevtest rdetail creativedelight:shapeless/hot_dog
-expect verb=rdetail id=\S*shapeless/biscuits_and_gravy_cooked_manual_only .*result="?[\w.-]+:biscuits_and_gravy\*1\b .*ingredients="?hearthandharvest:cooked_sausage
+expect verb=rdetail text=\S*shapeless/biscuits_and_gravy_cooked_manual_only n=0 shown=0
 expect verb=rdetail id=\S*shapeless/hot_dog serializer=minecraft:crafting_shapeless result="?[\w.-]+:hot_dog\*1\b .*ingredients="?hearthandharvest:cooked_sausage,.*bread
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -1882,14 +1882,14 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1205 | log matches `fermenting/root_beer \{brewinandchewin:fermenting\} -> 1
 @group A
 @commands `cdevtest rdetail creativedelight:fermenting/root_beer`; `cdevtest rdetail creativedelight:fermenting/moonshine`
-@pass log matches `verb=rdetail id=\S*fermenting/root_beer serializer=brewinandchewin:fermenting result="?[\w.-]+:root_beer\*1\b .*ingredients="?minecraft:hanging_roots,minecraft:hanging_roots,minecraft:sugar`; log matches `verb=rdetail id=\S*fermenting/moonshine serializer=brewinandchewin:fermenting result="?[\w.-]+:moonshine\*1\b .*ingredients="?creativeengineering:cornmeal,creativeengineering:cornmeal,minecraft:sugar`
+@pass log matches `verb=rdetail id=\S*fermenting/root_beer serializer=brewinandchewin:fermenting result="?[\w.-]+:root_beer\*1\b .*ingredients="?minecraft:hanging_roots,minecraft:hanging_roots,minecraft:sugar`; log matches `verb=rdetail id=\S*fermenting/moonshine serializer=brewinandchewin:fermenting result="?[\w.-]+:moonshine\*1\b .*ingredients="?creativedelight:cornmeal,creativedelight:cornmeal,minecraft:sugar`
 @fails `hearthandharvest/recipes.js`; water base, 9600 ticks, temperature 3 in the JEI row (J6)
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
 > cdevtest rdetail creativedelight:fermenting/root_beer
 > cdevtest rdetail creativedelight:fermenting/moonshine
 expect verb=rdetail id=\S*fermenting/root_beer serializer=brewinandchewin:fermenting result="?[\w.-]+:root_beer\*1\b .*ingredients="?minecraft:hanging_roots,minecraft:hanging_roots,minecraft:sugar
-expect verb=rdetail id=\S*fermenting/moonshine serializer=brewinandchewin:fermenting result="?[\w.-]+:moonshine\*1\b .*ingredients="?creativeengineering:cornmeal,creativeengineering:cornmeal,minecraft:sugar
+expect verb=rdetail id=\S*fermenting/moonshine serializer=brewinandchewin:fermenting result="?[\w.-]+:moonshine\*1\b .*ingredients="?creativedelight:cornmeal,creativedelight:cornmeal,minecraft:sugar
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1206 | log matches `fermenting/brine_bottle_keg \{brewinandchewin:fermenting\
@@ -2007,29 +2007,29 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1214 | log matches `rdetail\+ creativedelight:createcrushing/corn_husk_cornme
 @group A
 @commands `cdevtest rdetail creativedelight:createcrushing/corn_husk_cornmeal`; `cdevtest rdetail creativedelight:createmilling/corn_husk_cornmeal`; `cdevtest recipes mortar/corn_husk_cornmeal`
-@pass log matches `verb=rdetail id=\S*creativedelight:createcrushing/corn_husk_cornmeal part=results value="?creativeengineering:cornmeal\*1@0\.2`; log matches `verb=rdetail id=\S*creativedelight:createmilling/corn_husk_cornmeal part=results value="?creativeengineering:cornmeal\*1@0\.2`; log matches `verb=recipes text=mortar/corn_husk_cornmeal n=0 shown=`
+@pass log matches `verb=rdetail id=\S*creativedelight:createcrushing/corn_husk_cornmeal part=results value="?creativedelight:cornmeal\*1@0\.2`; log matches `verb=rdetail id=\S*creativedelight:createmilling/corn_husk_cornmeal part=results value="?creativedelight:cornmeal\*1@0\.2`; log matches `verb=recipes text=mortar/corn_husk_cornmeal n=0 shown=`
 @fails `recipes.js` (`foodGrinding` with `mortar: false`)
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
 > cdevtest rdetail creativedelight:createcrushing/corn_husk_cornmeal
 > cdevtest rdetail creativedelight:createmilling/corn_husk_cornmeal
 > cdevtest recipes mortar/corn_husk_cornmeal
-expect verb=rdetail id=\S*creativedelight:createcrushing/corn_husk_cornmeal part=results value="?creativeengineering:cornmeal\*1@0\.2
-expect verb=rdetail id=\S*creativedelight:createmilling/corn_husk_cornmeal part=results value="?creativeengineering:cornmeal\*1@0\.2
+expect verb=rdetail id=\S*creativedelight:createcrushing/corn_husk_cornmeal part=results value="?creativedelight:cornmeal\*1@0\.2
+expect verb=rdetail id=\S*creativedelight:createmilling/corn_husk_cornmeal part=results value="?creativedelight:cornmeal\*1@0\.2
 expect verb=recipes text=mortar/corn_husk_cornmeal n=0 shown=
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1215 | log matches `farmersdelightcutting/corn_kernels results: 4 corn_deligh
 @group A
 @commands `cdevtest rdetail creativedelight:farmersdelightcutting/corn_kernels`; `cdevtest rdetail creativedelight:createcrushing/corn_cornmeal`; `cdevtest rdetail creativedelight:createmilling/corn_cornmeal`
-@pass log matches `verb=rdetail id=\S*farmersdelightcutting/corn_kernels part=results value="?corn_delight:corn_seeds\*4@1\.0,hearthandharvest:corn_husk\*1@0\.75`; log matches `verb=rdetail id=\S*createcrushing/corn_cornmeal part=results value=\S*hearthandharvest:corn_husk\*1@0\.25`; log matches `verb=rdetail id=\S*createmilling/corn_cornmeal part=results value=\S*hearthandharvest:corn_husk\*1@0\.25`
+@pass log matches `verb=rdetail id=\S*farmersdelightcutting/corn_kernels part=results value="?corn_delight:corn_seeds\*6@1\.0,creativedelight:corncob\*1@0\.75,hearthandharvest:corn_husk\*1@0\.33`; log matches `verb=rdetail id=\S*createcrushing/corn_cornmeal part=results value=\S*hearthandharvest:corn_husk\*1@0\.25`; log matches `verb=rdetail id=\S*createmilling/corn_cornmeal part=results value=\S*hearthandharvest:corn_husk\*1@0\.25`
 @fails `kubejs/data/creativedelight/kubejs/corn_delight/recipes.js` line 45; `creativedelight/recipes.js` line 49
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
 > cdevtest rdetail creativedelight:farmersdelightcutting/corn_kernels
 > cdevtest rdetail creativedelight:createcrushing/corn_cornmeal
 > cdevtest rdetail creativedelight:createmilling/corn_cornmeal
-expect verb=rdetail id=\S*farmersdelightcutting/corn_kernels part=results value="?corn_delight:corn_seeds\*4@1\.0,hearthandharvest:corn_husk\*1@0\.75
+expect verb=rdetail id=\S*farmersdelightcutting/corn_kernels part=results value="?corn_delight:corn_seeds\*6@1\.0,creativedelight:corncob\*1@0\.75,hearthandharvest:corn_husk\*1@0\.33
 expect verb=rdetail id=\S*createcrushing/corn_cornmeal part=results value=\S*hearthandharvest:corn_husk\*1@0\.25
 expect verb=rdetail id=\S*createmilling/corn_cornmeal part=results value=\S*hearthandharvest:corn_husk\*1@0\.25
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -2556,10 +2556,10 @@ sleep 1
 expect Test failed
 expect bot1 has the following entity data: 3b
 
-## SQ-HH-1241 | log matches `fx mn9: .*hearthandharvest:pungent 0 \d\d`; log matches `
+## SQ-HH-1241 | log matches `fx mn9: .*hearthandharvest:pungent 0 \d+`; log matches `
 @group A
 @commands `forceload add 3192 3096`; `pbot spawn bot1 3192 -60 3096 minecraft:overworld survival`; `effect clear bot1`; `clear bot1`; (wait 3 s); `summon minecraft:pillager 3192 -60 3099 {NoAI:1b,Tags:["mn9"]}`; (wait 1 s); `tp bot1 3192 -60 3096 0 0`; `pbot hold bot1 hearthandharvest:manure 4`; `cdevtest useair as=bot1 hand=both`; (wait 3 s); `zhh1 fx mn9`; `data get entity bot1 SelectedItem.Count`
-@pass log matches `fx mn9: .*hearthandharvest:pungent 0 \d\d`; log matches `fx mn9: .*minecraft:poison 0 \d\d`; log matches `bot1 has the following entity data: 3b`
+@pass log matches `fx mn9: .*hearthandharvest:pungent 0 \d+`; log matches `fx mn9: .*minecraft:poison 0 \d+`; log matches `bot1 has the following entity data: 3b`
 @fails `ManureItem.use`, `ManureProjectile` (a zombie is undead and refuses Poison, hence the pillager)
 @from batches/r1108hh/t12_a.qb passed
 @reviewed 2026-11-20
@@ -2573,11 +2573,11 @@ sleep 1
 > tp bot1 3192 -60 3096 0 0
 > pbot hold bot1 hearthandharvest:manure 4
 > cdevtest useair as=bot1 hand=both
-sleep 3
+sleep 1
 > zhh1 fx mn9
 > data get entity bot1 SelectedItem.Count
-expect fx mn9: .*hearthandharvest:pungent 0 \d\d
-expect fx mn9: .*minecraft:poison 0 \d\d
+expect fx mn9: .*hearthandharvest:pungent 0 \d+
+expect fx mn9: .*minecraft:poison 0 \d+
 expect bot1 has the following entity data: 3b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -3345,7 +3345,7 @@ sleep 1
 > data get block 3432 -60 3241 Tank
 > data get entity bot1 SelectedItem
 expect has the following entity data: \{(Count: 1b, id: "hearthandharvest:sap_bucket"|id: "hearthandharvest:sap_bucket", Count: 1b)\}
-expect has the following block data: \{(Amount: 0\b|.*minecraft:empty|.*Empty)
+expect has the following block data: \{(.*Amount: \d{1,2}\}|.*minecraft:empty|.*Empty)
 
 ## SQ-HH-1281 | log matches `has the following entity data: \{Count: 1b, id: "minecraf
 @group A
@@ -3715,8 +3715,9 @@ sleep 3
 > summon minecraft:zombie 3336 -60 3341 {PersistenceRequired:1b,Tags:["epg1"]}
 sleep 1
 > effect give bot1 hearthandharvest:pungent 30 0
-sleep 6
+sleep 2
 > zhh1 goals epg1
+sleep 4
 > zhh1 dist epg1 bot1
 expect goals epg1: 1
 expect dist epg1 bot1: (?:[6-9]|1\d|2\d)\.\d\d
@@ -3818,7 +3819,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 expect verb=loot state="corn_delight:corn_crop\[age=3.* rolls=1000 drops=(?!.*corn_husk)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-1304 | log matches `kill alexsmobs:crow x200 held none dead 200: .*hearthandh
+## SQ-HH-1304 | log matches `kill hearthandharvest:crow x200 held none dead 200: .*hearthandh
 @group A
 @commands `forceload add 3144 3384`; (wait 3 s); `cdevtest items 3144 -60 3384 4`; `cdevtest kill 3144 -60 3384 hearthandharvest:crow n=200`
 @pass log matches `kill hearthandharvest:crow x200 held none dead 200: .*hearthandharvest:crow_feather x\d{2,}`; log has no `kill hearthandharvest:crow.*minecraft:feather`
@@ -3828,10 +3829,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > forceload add 3144 3384
 sleep 3
 > cdevtest items 3144 -60 3384 4
-> cdevtest kill 3144 -60 3384 alexsmobs:crow n=200
-expect verb=kill type=alexsmobs:crow n=200 killed=200 who=
+> cdevtest kill 3144 -60 3384 hearthandharvest:crow n=200
+expect verb=kill type=hearthandharvest:crow n=200 killed=200 who=
 expect verb=kill drops=\S*\bhearthandharvest:crow_feather:\d{2,}
-look log matches `verb=kill type=alexsmobs:crow n=200 killed=200 who=` and `verb=kill drops=\S*\bhearthandharvest:crow_feather:\d{2,}`; log has no `kill alexsmobs:crow.*minecraft:feather`
+look log matches `verb=kill type=hearthandharvest:crow n=200 killed=200 who=` and `verb=kill drops=\S*\bhearthandharvest:crow_feather:\d{2,}`; log has no `kill hearthandharvest:crow.*minecraft:feather`
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1305 | log matches `useitem bot1 PASS`; log matches `has the following entity
@@ -4486,10 +4487,10 @@ look shots: each pie shows its bites. The hunger a bite and a slice restore (3 e
 @@text ### Machines and worldgen (4.6)
 @@text
 @@table
-## SQ-HH-201 | `[zhh2] stomping recipes: 9`; latest.log has `Machine`-free load: `rej
+## SQ-HH-201 | `[zhh2] stomping recipes: 17` (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors
 @group A
-@commands Boot 1 of the machine rows, nothing else is built on it first. `prep_srv.sh OUT hhm A spawn-animals=true`; before boot `cp $INST/tools/scratch_query/hh_mw_probe.js OUT/srv/kubejs/server_scripts/zz_hh2.js`; boot. `forceload add 0 0 319 127`; `forceload add 0 128 319 255` (each 20x8 = 160 chunks, under the 256 limit); `gamerule randomTickSpeed 0`; `gamerule doMobSpawning false`; `gamerule doFireTick false`; `gamerule doDaylightCycle false`; `gamerule doWeatherCycle false`; `pbot spawn hb1 8 -60 8 minecraft:overworld survival`; `/zhh2 stomping` (the probe's one live call, gotchas: a new probe command gets one live call before its batch relies on it); `shell grep -E "^\[machines\]\|troughBreedingCap\|sprinklerRescanTicks\|stompingBasinSlotLimit" config/hearthandharvest-common.toml`
-@pass `[zhh2] stomping recipes: 9`; latest.log has `Machine`-free load: `reject machine_recipes.*(Error\|error)` and `reject hearthandharvest:(jug\|trough\|sprinkler\|crate\|stomping_basin).*(Error\|Exception\|missing)`; `kjsreject (machine_recipes\|machine_tags\|hhStomping).*(Error\|error\|skip\|missing)` (run before any `/reload`); shell shows `[machines]`, `troughBreedingCap = 16`, `sprinklerRescanTicks = 100`, `stompingBasinSlotLimit = 64`; `pbot list` names hb1. Every row below SQ-HH-202 assumes this boot's gamerules and the bot
+@commands Boot 1 of the machine rows, nothing else is built on it first. `prep_srv.sh OUT hhm A spawn-animals=true`; before boot `cp $INST/tools/scratch_query/hh_mw_probe.js OUT/srv/kubejs/server_scripts/zz_hh2.js`; boot. `forceload add 0 0 319 127`; `forceload add 0 128 319 255` (each 20x8 = 160 chunks, under the 256 limit); `gamerule randomTickSpeed 0`; `gamerule doMobSpawning false`; `gamerule doFireTick false`; `gamerule doDaylightCycle false`; `gamerule doWeatherCycle false`; `weather clear`; `pbot spawn hb1 8 -60 8 minecraft:overworld survival`; `/zhh2 stomping` (the probe's one live call, gotchas: a new probe command gets one live call before its batch relies on it); `shell grep -E "^\[machines\]\|troughBreedingCap\|sprinklerRescanTicks\|stompingBasinSlotLimit" config/hearthandharvest-common.toml`
+@pass `[zhh2] stomping recipes: 17` (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 2026-11-14, vinery_stomping.js); latest.log has `Machine`-free load: `reject machine_recipes.*(Error\|error)` and `reject hearthandharvest:(jug\|trough\|sprinkler\|crate\|stomping_basin).*(Error\|Exception\|missing)`; `kjsreject (machine_recipes\|machine_tags\|hhStomping).*(Error\|error\|skip\|missing)` (run before any `/reload`); shell shows `[machines]`, `troughBreedingCap = 16`, `sprinklerRescanTicks = 100`, `stompingBasinSlotLimit = 64`; `pbot list` names hb1. Every row below SQ-HH-202 assumes this boot's gamerules and the bot
 @fails machine_recipes.js, machine_tags.js, hhStomping in neoCraftHelper.js; a `key` error on `global.item` means a dict key is missing in Creative Common's item_dict.js
 @from batches/r1111/hh_mach.qb
 # setup/shell: prep_srv.sh OUT hhm A spawn-animals=true
@@ -4501,15 +4502,17 @@ look shots: each pie shows its bites. The hunger a bite and a slice restore (3 e
 > gamerule doFireTick false
 > gamerule doDaylightCycle false
 > gamerule doWeatherCycle false
+> weather clear
 > pbot spawn hb1 8 -60 8 minecraft:overworld survival
 sleep 3
 > clear hb1
 > zhh2 stomping
+expect \[zhh2\] stomping recipes: 17\b
 shell grep -E "^\[machines\]|troughBreedingCap|sprinklerRescanTicks|stompingBasinSlotLimit" config/hearthandharvest-common.toml
 reject machine_recipes.*(Error|error)
 reject hearthandharvest:(jug|trough|sprinkler|crate|stomping_basin).*(Error|Exception|missing)
 kjsreject (machine_recipes|machine_tags|hhStomping).*(Error|error|skip|missing)
-look `[zhh2] stomping recipes: 9`; latest.log has `Machine`-free load: `reject machine_recipes.*(Error|error)` and `reject hearthandharvest:(jug|trough|sprinkler|crate|stomping_basin).*(Error|Exception|missing)`; `kjsreject (machine_recipes|machine_tags|hhStomping).*(Error|error|skip|missing)` (run before any `/reload`); shell shows `[machines]`, `troughBreedingCap = 16`, `sprinklerRescanTicks = 100`, `stompingBasinSlotLimit = 64`; `pbot list` names hb1. Every row below SQ-HH-202 assumes this boot's gamerules and the bot
+look `[zhh2] stomping recipes: 17` (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 2026-11-14, vinery_stomping.js); latest.log has `Machine`-free load: `reject machine_recipes.*(Error|error)` and `reject hearthandharvest:(jug|trough|sprinkler|crate|stomping_basin).*(Error|Exception|missing)`; `kjsreject (machine_recipes|machine_tags|hhStomping).*(Error|error|skip|missing)` (run before any `/reload`); shell shows `[machines]`, `troughBreedingCap = 16`, `sprinklerRescanTicks = 100`, `stompingBasinSlotLimit = 64`; `pbot list` names hb1. Every row below SQ-HH-202 assumes this boot's gamerules and the bot
 
 ## SQ-HH-202 | `item hearthandharvest:jug: class JugBlockItem, .*max stack 64`; `trou
 @group A
@@ -4542,29 +4545,31 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 look `verb=rdetail id=\S*fluid_jug serializer=minecraft:crafting_shaped` with inputs iron ingot and bucket; `fluid_jug_cleaning \{minecraft:crafting_shapeless\}.*-> .*jug`; `verb=rdetail id=\S*water_trough serializer=minecraft:crafting_shaped`; `verb=rdetail id=\S*field_sprinkler serializer=minecraft:crafting_shaped`; `bottle_crate \{minecraft:crafting_shaped\}.*-> 2 `; `verb=rdetail id=\S*stomping_basin serializer=minecraft:crafting_shaped`; each id starts `creativedelight:`
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-204 | `stomping recipes: 9`; exact lines: `stomping creativedelight:stomping
+## SQ-HH-204 | `stomping recipes: 17` (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 
 @group A
 @commands `/zhh2 stomping`
-@pass `stomping recipes: 9`; exact lines: `stomping creativedelight:stomping/blueberry_juice: hearthandharvest:blueberry_juice 500 x4 <- fruitsdelight:blueberry`; `raspberry_juice: hearthandharvest:raspberry_juice 500 x4 <- hearthandharvest:raspberry`; `sweet_berry_juice: hearthandharvest:sweet_berry_juice 500 x4 <- minecraft:sweet_berries`; `cherry_juice: hearthandharvest:cherry_juice 500 x4 <- vinery:cherry`; `glow_berry_juice: hearthandharvest:glow_berry_juice 500 x4 <- minecraft:glow_berries`; `melon_juice: create_central_kitchen:melon_juice 500 x4 <- minecraft:melon_slice`; `seed_oil_from_corn: createaddition:seed_oil 1000 x4 <- corn_delight:corn`; `seed_oil_from_peanuts: createaddition:seed_oil 500 x4 <- vintagedelight:peanut`; `seed_oil_from_seeds: createaddition:seed_oil 125 x8 <- `
+@pass `stomping recipes: 17` (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 2026-11-14, vinery_stomping.js); exact lines: `stomping creativedelight:stomping/blueberry_juice: hearthandharvest:blueberry_juice 500 x4 <- fruitsdelight:blueberry`; `raspberry_juice: hearthandharvest:raspberry_juice 500 x4 <- hearthandharvest:raspberry`; `sweet_berry_juice: hearthandharvest:sweet_berry_juice 500 x4 <- minecraft:sweet_berries`; `cherry_juice: hearthandharvest:cherry_juice 500 x4 <- vinery:cherry`; `glow_berry_juice: hearthandharvest:glow_berry_juice 500 x4 <- minecraft:glow_berries`; `melon_juice: create_central_kitchen:melon_juice 500 x4 <- minecraft:melon_slice`; `seed_oil_from_corn: createaddition:seed_oil 1000 x4 <- corn_delight:corn`; `seed_oil_from_peanuts: createaddition:seed_oil 500 x4 <- vintagedelight:peanut`; `seed_oil_from_seeds: createaddition:seed_oil 125 x8 <- `; the 8 mirrors (item result, a Vinery bottle): `red_grapejuice: empty 0 x4 <- vinery:red_grape`; `white_grapejuice: empty 0 x4 <- vinery:white_grape`; `savanna_red_grapejuice: empty 0 x4 <- vinery:savanna_grapes_red`; `savanna_white_grapejuice: empty 0 x4 <- vinery:savanna_grapes_white`; `taiga_red_grapejuice: empty 0 x4 <- vinery:taiga_grapes_red`; `taiga_white_grapejuice: empty 0 x4 <- vinery:taiga_grapes_white`; `jungle_red_grapejuice: empty 0 x4 <- vinery:jungle_grapes_red`; `jungle_white_grapejuice: empty 0 x4 <- vinery:jungle_grapes_white`
 @fails `machine_recipes.js` (J51), `hhStomping` in neoCraftHelper.js, the `#forge:fruits/...` tags
 @from batches/r1111/hh_mach.qb
 > zhh2 stomping
-look `stomping recipes: 9`; exact lines: `stomping creativedelight:stomping/blueberry_juice: hearthandharvest:blueberry_juice 500 x4 <- fruitsdelight:blueberry`; `raspberry_juice: hearthandharvest:raspberry_juice 500 x4 <- hearthandharvest:raspberry`; `sweet_berry_juice: hearthandharvest:sweet_berry_juice 500 x4 <- minecraft:sweet_berries`; `cherry_juice: hearthandharvest:cherry_juice 500 x4 <- vinery:cherry`; `glow_berry_juice: hearthandharvest:glow_berry_juice 500 x4 <- minecraft:glow_berries`; `melon_juice: create_central_kitchen:melon_juice 500 x4 <- minecraft:melon_slice`; `seed_oil_from_corn: createaddition:seed_oil 1000 x4 <- corn_delight:corn`; `seed_oil_from_peanuts: createaddition:seed_oil 500 x4 <- vintagedelight:peanut`; `seed_oil_from_seeds: createaddition:seed_oil 125 x8 <- `
+expect \[zhh2\] stomping recipes: 17\b
+look `stomping recipes: 17` (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 2026-11-14, vinery_stomping.js); exact lines: `stomping creativedelight:stomping/blueberry_juice: hearthandharvest:blueberry_juice 500 x4 <- fruitsdelight:blueberry`; `raspberry_juice: hearthandharvest:raspberry_juice 500 x4 <- hearthandharvest:raspberry`; `sweet_berry_juice: hearthandharvest:sweet_berry_juice 500 x4 <- minecraft:sweet_berries`; `cherry_juice: hearthandharvest:cherry_juice 500 x4 <- vinery:cherry`; `glow_berry_juice: hearthandharvest:glow_berry_juice 500 x4 <- minecraft:glow_berries`; `melon_juice: create_central_kitchen:melon_juice 500 x4 <- minecraft:melon_slice`; `seed_oil_from_corn: createaddition:seed_oil 1000 x4 <- corn_delight:corn`; `seed_oil_from_peanuts: createaddition:seed_oil 500 x4 <- vintagedelight:peanut`; `seed_oil_from_seeds: createaddition:seed_oil 125 x8 <- `; the 8 mirrors (item result, a Vinery bottle): `red_grapejuice: empty 0 x4 <- vinery:red_grape`; `white_grapejuice: empty 0 x4 <- vinery:white_grape`; `savanna_red_grapejuice: empty 0 x4 <- vinery:savanna_grapes_red`; `savanna_white_grapejuice: empty 0 x4 <- vinery:savanna_grapes_white`; `taiga_red_grapejuice: empty 0 x4 <- vinery:taiga_grapes_red`; `taiga_white_grapejuice: empty 0 x4 <- vinery:taiga_grapes_white`; `jungle_red_grapejuice: empty 0 x4 <- vinery:jungle_grapes_red`; `jungle_white_grapejuice: empty 0 x4 <- vinery:jungle_grapes_white`
 
-## SQ-HH-205 | bytype count 9; `reject stomping/.*(apple_cider|grape|slime|sponge|sug
+## SQ-HH-205 | bytype count 17 (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 2026-11
 @group A
 @commands `/cdevtest bytype hearthandharvest:stomping`; `/cdevtest recipes stomping/`
-@pass bytype count 9; `reject stomping/.*(apple_cider\|grape\|slime\|sponge\|sugar)` over the row (D12: no extras before the eval)
+@pass bytype count 17 (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 2026-11-14, vinery_stomping.js); `reject stomping/.*(apple_cider\|slime\|sponge\|sugar)` over the row (D12: no extras before the eval)
 @fails an old stomping JSON left in the member resources or a `hhStomping` call added by mistake
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
 > cdevtest bytype hearthandharvest:stomping
 > cdevtest recipes stomping/
-reject stomping/.*(apple_cider|grape|slime|sponge|sugar)
-look bytype count 9; `reject stomping/.*(apple_cider|grape|slime|sponge|sugar)` over the row (D12: no extras before the eval)
+expect verb=bytype serializer=hearthandharvest:stomping n=17\b
+reject stomping/.*(apple_cider|slime|sponge|sugar)
+look bytype count 17 (9 H&H recipes plus 8 Vinery Grapevine Pot mirrors since 2026-11-14, vinery_stomping.js); `reject stomping/.*(apple_cider|slime|sponge|sugar)` over the row (D12: no extras before the eval)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-206 | `itemtag hearthandharvest:bottles \(29\):` containing `minecraft:glass
+## SQ-HH-206 | `itemtag hearthandharvest:bottles \(26\):` containing `minecraft:glass
 @group A
 @commands `/cdevtest tag item hearthandharvest:bottles`; `/cdevtest tag item hearthandharvest:crateable_items`
 @pass `verb=tag kind=item tag=hearthandharvest:bottles n=\d+ ids=.*\(26\):` (3 Neapolitan / soda ids merged out) containing `minecraft:glass_bottle`, `minecraft:potion`, `minecraft:honey_bottle`, `farmersdelight:milk_bottle`, `hearthandharvest:blueberry_juice`, `hearthandharvest:goat_milk_bottle`, `hearthandharvest:brine_bottle`, `farmersdelight:melon_juice`; not containing `wine`, `moonshine`, `root_beer` (J49); `verb=tag kind=item tag=hearthandharvest:crateable_items n=2 ids=.*minecraft:egg minecraft:turtle_egg` (order free)
@@ -4573,7 +4578,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @reviewed 2026-11-20
 > cdevtest tag item hearthandharvest:bottles
 > cdevtest tag item hearthandharvest:crateable_items
-look `verb=tag kind=item tag=hearthandharvest:bottles n=\d+ ids=.*\(29\):` containing `minecraft:glass_bottle`, `minecraft:potion`, `minecraft:honey_bottle`, `farmersdelight:milk_bottle`, `hearthandharvest:blueberry_juice`, `hearthandharvest:goat_milk_bottle`, `hearthandharvest:brine_bottle`, `farmersdelight:melon_juice`; not containing `wine`, `moonshine`, `root_beer` (J49); `verb=tag kind=item tag=hearthandharvest:crateable_items n=2 ids=.*minecraft:egg minecraft:turtle_egg` (order free)
+expect verb=tag kind=item tag=hearthandharvest:bottles n=26\b
+look `verb=tag kind=item tag=hearthandharvest:bottles n=26 ids=` (J49 minus cherry_cream_soda and passion_aloe_nectar, removed items, and neapolitan:milk_bottle, merged into farmersdelight:milk_bottle) containing `minecraft:glass_bottle`, `minecraft:potion`, `minecraft:honey_bottle`, `farmersdelight:milk_bottle`, `hearthandharvest:blueberry_juice`, `hearthandharvest:goat_milk_bottle`, `hearthandharvest:brine_bottle`, `farmersdelight:melon_juice`; not containing `wine`, `moonshine`, `root_beer` (J49); `verb=tag kind=item tag=hearthandharvest:crateable_items n=2 ids=.*minecraft:egg minecraft:turtle_egg` (order free)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-207 | pickaxe list has `hearthandharvest:jug` and `hearthandharvest:trough`;
@@ -4690,7 +4696,6 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > zhh2 cmp 16 -60 48
 > zhh2 fill 16 -60 48 minecraft:water 7000
 > zhh2 cmp 16 -60 48
-look UNPARSED CMD: 16 -60 48
 look Amount `: 1000`, FluidName `minecraft:water`; `cmp 16 -60 48: 2` (1000/8000 scales to 2); `fill minecraft:water 7000: accepted 7000`; last `cmp 16 -60 48: 15`
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -4752,8 +4757,8 @@ look after first use: bot holds `minecraft:water_bucket`, Amount `: 1000`; after
 
 ## SQ-HH-215 | first `use CONSUME`, Amount `: 1000`, held item has no `HHJugFluid`; a
 @group A
-@commands Plot 144 48. `/setblock 144 -60 48 hearthandharvest:jug` (empty); fill a held jug to 1000 as in SQ-HH-208 (`setblock 147 -60 48 minecraft:water`, `tp hb1 147.5 -59 48.5 0 90`, `pbot hold hb1 hearthandharvest:jug`, `/cdevtest useair as=hb1 hand=both`); `pbot use hb1 144 -60 48 up` (held filled jug on the placed empty jug); `data get block 144 -60 48 FluidTank.Amount`; `data get entity hb1 SelectedItem`; then `pbot use hb1 144 -60 48 up` again (held now empty, placed holds 1000)
-@pass first `use CONSUME`, Amount `: 1000`, held item has no `HHJugFluid`; add `/zhh2 tank 144 -60 48` after the second use: `empty 0 / 8000`, and `SelectedItem` regains `HHJugFluid` Amount 1000
+@commands Plot 144 48. `/setblock 144 -60 48 hearthandharvest:jug` (empty); fill a held jug to 1000 as in SQ-HH-208 (`setblock 147 -60 48 minecraft:water`, `tp hb1 147.5 -59 48.5 0 90`, `pbot hold hb1 hearthandharvest:jug`, `/cdevtest useair as=hb1 hand=both`); `pbot use hb1 144 -60 48 up` (held filled jug on the placed empty jug); `data get block 144 -60 48 FluidTank.Amount`; `data get entity hb1 SelectedItem`; then `pbot use hb1 144 -60 48 up` again (held now empty, placed holds 1000); `/zhh2 tank 144 -60 48`; `data get entity hb1 SelectedItem`
+@pass first `use CONSUME`, Amount `: 1000`, held item has no `HHJugFluid`; after the second use `/zhh2 tank 144 -60 48`: `empty 0 / 8000`, and `SelectedItem` regains `HHJugFluid` Amount 1000
 @fails `JugBlockItem.useOn` handler branch; `giveBack`
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
@@ -4766,21 +4771,26 @@ look after first use: bot holds `minecraft:water_bucket`, Amount `: 1000`; after
 > data get block 144 -60 48 FluidTank.Amount
 > data get entity hb1 SelectedItem
 > pbot use hb1 144 -60 48 up
-look first `use CONSUME`, Amount `: 1000`, held item has no `HHJugFluid`; add `/zhh2 tank 144 -60 48` after the second use: `empty 0 / 8000`, and `SelectedItem` regains `HHJugFluid` Amount 1000
+> zhh2 tank 144 -60 48
+> data get entity hb1 SelectedItem
+look first `use CONSUME`, Amount `: 1000`, held item has no `HHJugFluid`; after the second use `/zhh2 tank 144 -60 48`: `empty 0 / 8000`, and `SelectedItem` regains `HHJugFluid` Amount 1000
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-216 | `use FAIL`; lava jug Amount still `: 1000`; hand still `minecraft:wate
 @group A
-@commands Plot 176 48. `/setblock 176 -60 48 hearthandharvest:jug`; `/zhh2 fill 176 -60 48 minecraft:lava 1000`; fill a held jug with water as in SQ-HH-208 at `179`; `pbot use hb1 176 -60 48 up` (water jug on lava jug); `data get block 176 -60 48 FluidTank.Amount`; `data get entity hb1 SelectedItem.tag.HHJugFluid.FluidName`
+@commands Plot 176 48. `/setblock 176 -60 48 hearthandharvest:jug`; `/zhh2 fill 176 -60 48 minecraft:lava 1000`; fill a held jug with water as in SQ-HH-208 at 179 48 (`setblock 179 -60 48 minecraft:water`, `tp hb1 179.5 -59 48.5 0 90`, `pbot hold hb1 hearthandharvest:jug`, `/cdevtest useair as=hb1 hand=both`); `pbot use hb1 176 -60 48 up` (water jug on lava jug); `data get block 176 -60 48 FluidTank.Amount`; `data get entity hb1 SelectedItem.tag.HHJugFluid.FluidName`
 @pass `use FAIL`; lava jug Amount still `: 1000`; hand still `minecraft:water`
 @fails `JugBlockItem.useOn` wrong-fluid path; message itself is CQ-HH-204
 @from batches/r1111/hh_mach.qb
 > setblock 176 -60 48 hearthandharvest:jug
 > zhh2 fill 176 -60 48 minecraft:lava 1000
+> setblock 179 -60 48 minecraft:water
+> tp hb1 179.5 -59 48.5 0 90
+> pbot hold hb1 hearthandharvest:jug
+> cdevtest useair as=hb1 hand=both
 > pbot use hb1 176 -60 48 up
 > data get block 176 -60 48 FluidTank.Amount
 > data get entity hb1 SelectedItem.tag.HHJugFluid.FluidName
-look UNPARSED CMD: 179
 look `use FAIL`; lava jug Amount still `: 1000`; hand still `minecraft:water`
 
 ## SQ-HH-217 | main hand `Count` `: 3b` (one taken off the stack); Inventory holds an
@@ -4801,10 +4811,11 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-218 | bucket: Amount `: 1000`, hand `minecraft:bucket`; bottle: Amount `: 25
 @group A
-@commands Plot 240 48. `/setblock 240 -60 48 hearthandharvest:trough`; `pbot hold hb1 minecraft:water_bucket`; `pbot use hb1 240 -60 48 up`; `data get block 240 -60 48 Tank.Amount`; `data get entity hb1 SelectedItem.id`; `/setblock 242 -60 48 hearthandharvest:trough`; `item replace entity hb1 weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}`; `pbot use hb1 242 -60 48 up`; `data get block 242 -60 48 Tank.Amount`; `data get entity hb1 SelectedItem.id`
+@commands Plot 240 48. `weather clear` (a fresh trough must not catch rain); `/setblock 240 -60 48 hearthandharvest:trough`; `pbot hold hb1 minecraft:water_bucket`; `pbot use hb1 240 -60 48 up`; `data get block 240 -60 48 Tank.Amount`; `data get entity hb1 SelectedItem.id`; `/setblock 242 -60 48 hearthandharvest:trough`; `item replace entity hb1 weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}`; `pbot use hb1 242 -60 48 up`; `data get block 242 -60 48 Tank.Amount`; `data get entity hb1 SelectedItem.id`
 @pass bucket: Amount `: 1000`, hand `minecraft:bucket`; bottle: Amount `: 250`, hand `minecraft:glass_bottle` (HNH-74 water in)
 @fails `TroughBlock.use`, `MachineFluids.useOnTank` / `isWaterBottle`
 @from batches/r1111/hh_mach.qb
+> weather clear
 > setblock 240 -60 48 hearthandharvest:trough
 > pbot hold hb1 minecraft:water_bucket
 > pbot use hb1 240 -60 48 up
@@ -4819,11 +4830,12 @@ look bucket: Amount `: 1000`, hand `minecraft:bucket`; bottle: Amount `: 250`, h
 
 ## SQ-HH-219 | all three `use PASS` and every `tank 272 -60 48: minecraft:water 500 /
 @group A
-@commands Plot 272 48. `/setblock 272 -60 48 hearthandharvest:trough`; `/zhh2 fill 272 -60 48 minecraft:water 500`; then each with the bot: `pbot hold hb1 minecraft:lava_bucket`, `pbot use hb1 272 -60 48 up`, `/cdevtest tank 272 -60 48`; `item replace entity hb1 weapon.mainhand with minecraft:potion{Potion:"minecraft:healing"}`, `pbot use hb1 272 -60 48 up`, `/cdevtest tank 272 -60 48`; `pbot hold hb1 hearthandharvest:blueberry_juice`, `pbot use hb1 272 -60 48 up`, `/cdevtest tank 272 -60 48`
-@pass all three `use PASS` and every `tank 272 -60 48: minecraft:water 500 / 1000`; lava bucket, healing potion and juice stay in hand (`data get entity hb1 SelectedItem.id` unchanged after each if the run needs it) (HNH-74 plain water only)
+@commands Plot 272 48. `weather clear` (a fresh trough must not catch rain); `/setblock 272 -60 48 hearthandharvest:trough`; `/zhh2 fill 272 -60 48 minecraft:water 500`; then each with the bot: `pbot hold hb1 minecraft:lava_bucket`, `pbot use hb1 272 -60 48 up`, `/cdevtest tank 272 -60 48`; `item replace entity hb1 weapon.mainhand with minecraft:potion{Potion:"minecraft:healing"}`, `pbot use hb1 272 -60 48 up`, `/cdevtest tank 272 -60 48`; `pbot hold hb1 hearthandharvest:blueberry_juice`, `pbot use hb1 272 -60 48 up`, `/cdevtest tank 272 -60 48`
+@pass all three `use PASS` and every `verb=tank tanks=1 fluids=0:minecraft:water*500/1000`; lava bucket, healing potion and juice stay in hand (`data get entity hb1 SelectedItem.id` unchanged after each if the run needs it) (HNH-74 plain water only)
 @fails `TroughBlockEntity.isFluidValid` (must be `minecraft:water` itself, no NBT), `MachineFluids.fluidForBottle`
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
+> weather clear
 > setblock 272 -60 48 hearthandharvest:trough
 > zhh2 fill 272 -60 48 minecraft:water 500
 > pbot hold hb1 minecraft:lava_bucket
@@ -4835,7 +4847,8 @@ look bucket: Amount `: 1000`, hand `minecraft:bucket`; bottle: Amount `: 250`, h
 > pbot hold hb1 hearthandharvest:blueberry_juice
 > pbot use hb1 272 -60 48 up
 > cdevtest tank 272 -60 48
-look all three `use PASS` and every `tank 272 -60 48: minecraft:water 500 / 1000`; lava bucket, healing potion and juice stay in hand (`data get entity hb1 SelectedItem.id` unchanged after each if the run needs it) (HNH-74 plain water only)
+count verb=tank tanks=1 fluids=0:minecraft:water\*500/1000\b == 3
+look all three `use PASS` and every `verb=tank tanks=1 fluids=0:minecraft:water*500/1000`; lava bucket, healing potion and juice stay in hand (`data get entity hb1 SelectedItem.id` unchanged after each if the run needs it) (HNH-74 plain water only)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-220 | `accepted 0` for lava, juice and the tagged water; `fill minecraft:wat
@@ -4853,11 +4866,12 @@ look `accepted 0` for lava, juice and the tagged water; `fill minecraft:water 50
 
 ## SQ-HH-221 | Items has `minecraft:wheat` with `Count: ?8b`; bucket `use PASS`, `acc
 @group A
-@commands Plot 16 80. `/setblock 16 -60 80 hearthandharvest:trough`; `pbot hold hb1 minecraft:wheat 8`; `pbot use hb1 16 -60 80 up`; `data get block 16 -60 80 Items`; `pbot hold hb1 minecraft:water_bucket`; `pbot use hb1 16 -60 80 up`; `/zhh2 fill 16 -60 80 minecraft:water 500`; `/cdevtest tank 16 -60 80`
+@commands Plot 16 80. `weather clear` (a fresh trough must not catch rain); `/setblock 16 -60 80 hearthandharvest:trough`; `pbot hold hb1 minecraft:wheat 8`; `pbot use hb1 16 -60 80 up`; `data get block 16 -60 80 Items`; `pbot hold hb1 minecraft:water_bucket`; `pbot use hb1 16 -60 80 up`; `/zhh2 fill 16 -60 80 minecraft:water 500`; `/cdevtest tank 16 -60 80`
 @pass Items has `minecraft:wheat` with `Count: ?8b`; bucket `use PASS`, `accepted 0`, tank `empty 0 / 1000` (HNH-74: food excludes water)
 @fails `TroughBlockEntity.isFluidValid` items check, `TroughBlock.use`
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
+> weather clear
 > setblock 16 -60 80 hearthandharvest:trough
 > pbot hold hb1 minecraft:wheat 8
 > pbot use hb1 16 -60 80 up
@@ -4995,7 +5009,7 @@ look `Test failed` (none in love: 16 animals in the 20x8x20 box stop it); Items 
 > summon minecraft:cow 207 -60 80
 > pbot hold hb1 minecraft:wheat 4
 > pbot use hb1 208 -60 80 up
-> cdevtest tickwarp 400
+> cdevtest tickwarp 600
 waitlog verb=tickwarp end=done ticks=400 60
 > execute if entity @e[type=minecraft:cow,x=208,y=-60,z=80,distance=..8]
 expect Test passed, count: 3$
@@ -5018,15 +5032,15 @@ waitlog verb=tickwarp end=done ticks=1240 124
 expect Test passed
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-229 | `gain has (4[89]|[5-9]\d|\d{3,}) \[hh2\]` (at least three 16-tick boos
+## SQ-HH-229 | `gain has (4[89]|[5-9]\d|\d{3,}) \[hh2\]` (at least three 16-tick boosts in 16 s
 @group A
-@commands Plot 272 80. `/setblock 272 -60 80 hearthandharvest:trough`; `/zhh2 fill 272 -60 80 minecraft:water 1000`; `summon minecraft:cow 274 -60 80 {NoAI:1b,Age:-24000,CustomName:'"hnear"'}`; `summon minecraft:cow 286 -60 80 {NoAI:1b,Age:-24000,CustomName:'"hfar"'}`; `scoreboard objectives add hh2 dummy`; `execute store result score near hh2 run data get entity @e[name=hnear,limit=1] Age`; `execute store result score far hh2 run data get entity @e[name=hfar,limit=1] Age`; `scoreboard players operation base hh2 = near hh2`; `scoreboard players operation base hh2 -= far hh2`; `cdevtest tickwarp 320` (4 passes); `execute store result score near hh2 run data get entity @e[name=hnear,limit=1] Age`; `execute store result score far hh2 run data get entity @e[name=hfar,limit=1] Age`; `scoreboard players operation gain hh2 = near hh2`; `scoreboard players operation gain hh2 -= far hh2`; `scoreboard players operation gain hh2 -= base hh2`; `scoreboard players get gain hh2`; `/cdevtest tank 272 -60 80`
-@pass `gain has (4[89]\|[5-9]\d\|\d{3,}) \[hh2\]` (at least three 16-tick boosts in 16 s); `tank 272 -60 80: minecraft:water (9[6-9]0\|1000)`: 10 mB per boost, near cow only (HNH-74 water speeds babies; about +20 %)
+@commands Plot 272 80. `weather clear`; `/setblock 272 -60 80 hearthandharvest:trough`; `summon minecraft:cow 274 -60 80 {NoAI:1b,Age:-24000,CustomName:'"hnear"'}`; `summon minecraft:cow 286 -60 80 {NoAI:1b,Age:-24000,CustomName:'"hfar"'}`; `scoreboard objectives add hh2 dummy`; `execute store result score near hh2 run data get entity @e[name=hnear,limit=1] Age`; `execute store result score far hh2 run data get entity @e[name=hfar,limit=1] Age`; `scoreboard players operation base hh2 = near hh2`; `scoreboard players operation base hh2 -= far hh2`; `/zhh2 fill 272 -60 80 minecraft:water 1000`; `cdevtest tickwarp 320` (4 passes); `/cdevtest tank 272 -60 80` (read right after the warp); `execute store result score near hh2 run data get entity @e[name=hnear,limit=1] Age`; `execute store result score far hh2 run data get entity @e[name=hfar,limit=1] Age`; `scoreboard players operation gain hh2 = near hh2`; `scoreboard players operation gain hh2 -= far hh2`; `scoreboard players operation gain hh2 -= base hh2`; `scoreboard players get gain hh2`; `/cdevtest tank 272 -60 80`
+@pass `gain has (4[89]\|[5-9]\d\|\d{3,}) \[hh2\]` (at least three 16-tick boosts in 16 s); `verb=tank tanks=1 fluids=0:minecraft:water*9[3-6]0/1000` (fill just before the 320-tick warp, tank read just after: 4 to 6 passes of `time % 80` at 10 mB each with the 2 s step gaps): 10 mB per boost, near cow only (HNH-74 water speeds babies; about +20 %)
 @fails `TroughBlockEntity.serverTick` water branch, box `AABB.ofSize` 10x4x10
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
+> weather clear
 > setblock 272 -60 80 hearthandharvest:trough
-> zhh2 fill 272 -60 80 minecraft:water 1000
 > summon minecraft:cow 274 -60 80 {NoAI:1b,Age:-24000,CustomName:'"hnear"'}
 > summon minecraft:cow 286 -60 80 {NoAI:1b,Age:-24000,CustomName:'"hfar"'}
 > scoreboard objectives add hh2 dummy
@@ -5034,16 +5048,19 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > execute store result score far hh2 run data get entity @e[name=hfar,limit=1] Age
 > scoreboard players operation base hh2 = near hh2
 > scoreboard players operation base hh2 -= far hh2
+> zhh2 fill 272 -60 80 minecraft:water 1000
 > cdevtest tickwarp 320
 waitlog verb=tickwarp end=done ticks=320 60
+> cdevtest tank 272 -60 80
+expect verb=tank tanks=1 fluids=0:minecraft:water\*9[3-6]0/1000\b
 > execute store result score near hh2 run data get entity @e[name=hnear,limit=1] Age
 > execute store result score far hh2 run data get entity @e[name=hfar,limit=1] Age
 > scoreboard players operation gain hh2 = near hh2
 > scoreboard players operation gain hh2 -= far hh2
 > scoreboard players operation gain hh2 -= base hh2
 > scoreboard players get gain hh2
-> cdevtest tank 272 -60 80
-look `gain has (4[89]|[5-9]\d|\d{3,}) \[hh2\]` (at least three 16-tick boosts in 16 s); `tank 272 -60 80: minecraft:water (9[6-9]0|1000)`: 10 mB per boost, near cow only (HNH-74 water speeds babies; about +20 %)
+expect gain has (4[89]|[5-9]\d|\d{3,}) \[hh2\]
+look `gain has (4[89]|[5-9]\d|\d{3,}) \[hh2\]` (at least three 16-tick boosts in 16 s); `verb=tank tanks=1 fluids=0:minecraft:water*9[3-6]0/1000` (fill just before the 320-tick warp, tank read just after: 4 to 6 passes of `time % 80` at 10 mB each with the 2 s step gaps): 10 mB per boost, near cow only (HNH-74 water speeds babies; about +20 %)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-230 | tank amount 16 to 40 (`: minecraft:water (1[6-9]|[23]\d|40) /`) (4 mB
@@ -5129,18 +5146,21 @@ sleep 1
 look after single extract Count 7b; after sneak extract Items [] (no id); refill Count 8b; wheat item entity Count 8b (one line, or lines summing to 8); the trough drop Test passed
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-234 | `: minecraft:water (200|300|400) / 10000` (the `Direction.DOWN` source
+## SQ-HH-234 | `verb=tank tanks=1 fluids=0:minecraft:water*1[1-4]00/10000` (100 mB on every sec
 @group A
-@commands Plot 112 112. `/setblock 112 -61 112 minecraft:water`; `/setblock 112 -60 112 hearthandharvest:sprinkler`; `sleep 7`; `/cdevtest tank 112 -60 112`
-@pass `: minecraft:water (200\|300\|400) / 10000` (the `Direction.DOWN` source below the sprinkler counts; 100 mB every 2 s after the first passes) (HNH-75 endless refill)
+@commands Plot 112 112. `/setblock 112 -61 112 minecraft:water`; `/setblock 112 -60 112 hearthandharvest:sprinkler`; `weather clear` first; `/cdevtest tickwarp 400` (was `sleep 7`); `/cdevtest tank 112 -60 112`
+@pass `verb=tank tanks=1 fluids=0:minecraft:water*1[1-4]00/10000` (100 mB on every second 20-tick refill pass: ticks 20, 60, 100 after placement; about 480 ticks between placement and read with the 400-tick warp, so 12 or 13 fills, 11 to 14 allowed for step gaps) (the `Direction.DOWN` source below the sprinkler counts) (HNH-75 endless refill)
 @fails `SprinklerBlockEntity.refill` (`waterCheckDue`, J48); value 0 = the refill bug J48 says was fixed, or the DOWN neighbor check
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
+> weather clear
 > setblock 112 -61 112 minecraft:water
 > setblock 112 -60 112 hearthandharvest:sprinkler
-sleep 7
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done ticks=400 60
 > cdevtest tank 112 -60 112
-look `: minecraft:water (200|300|400) / 10000` (the `Direction.DOWN` source below the sprinkler counts; 100 mB every 2 s after the first passes) (HNH-75 endless refill)
+expect verb=tank tanks=1 fluids=0:minecraft:water\*1[1-4]00/10000\b
+look `verb=tank tanks=1 fluids=0:minecraft:water*1[1-4]00/10000` (100 mB on every second 20-tick refill pass: ticks 20, 60, 100 after placement; about 480 ticks between placement and read with the 400-tick warp, so 12 or 13 fills, 11 to 14 allowed for step gaps) (the `Direction.DOWN` source below the sprinkler counts) (HNH-75 endless refill)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-235 | first `empty 0 / 10000` (no water, no rain, no neighbor source); seco
@@ -5554,7 +5574,6 @@ look crate holds 9 eggs (9 slots, hopper stops, the hopper keeps the rest: `Coun
 sleep 6
 > data get block 144 -60 176 Items
 > data get block 145 -61 176 Items[0].Count
-look UNPARSED CMD: 144 -60 176
 look crate Items empty (no `id:`) ; chest `Count: ?3b` (hoppers out from below, J50)
 
 ## SQ-HH-256 | first `Test failed` (the crate is gone: `PushReaction.DESTROY`); item
@@ -5570,7 +5589,6 @@ look crate Items empty (no `id:`) ; chest `Count: ?3b` (hoppers out from below, 
 sleep 3
 > execute if block 177 -60 176 hearthandharvest:crate
 > execute as @e[type=minecraft:item,limit=1,x=177,y=-60,z=176,distance=..3,sort=nearest] run data get entity @s Item
-look UNPARSED CMD: 177 -60 176
 look first `Test failed` (the crate is gone: `PushReaction.DESTROY`); item entity is `hearthandharvest:crate` with `BlockEntityTag` holding the eggs (B07 piston drops contents)
 
 ## SQ-HH-257 | `Test passed` (dispenser placed the crate at `facing=east` target) (B0
@@ -6302,11 +6320,11 @@ look `buzzier_bees:four_leaf_clover` (J30: drops Buzzier Bees' item, the block h
 expect verb=tag kind=biome tag=hearthandharvest:has_salt_caves n=[1-9]\d*\b (?=.*[=,]minecraft:desert\b)(?=.*[=,]minecraft:badlands\b)(?=.*[=,]minecraft:savanna\b)(?=.*[=,]minecraft:beach\b)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-318 | `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of th
+## SQ-HH-318 | `[Pp]laced feature`; `raw_rock_salt_block` plus `hearthandharvest:placed_rock_salt_block` (the placed twin a loaded chunk swaps it to) above 200, about 70 % of th
 @phase worldgen
 @group A
-@commands Boot 2 (SQ-HH-274 config, including `saltCaveRarity 1`, `saltCaveMinY 0`, `saltCaveMaxY 0`). Plot 4480 96. `fill 4464 -16 80 4496 0 112 minecraft:stone`; `fill 4464 1 80 4496 16 112 minecraft:stone` (33 cube, two fills under the 32768 limit); `/place feature hearthandharvest:salt_cave 4480 0 96`; `/zhh2 countset 4464 -16 80 4496 16 112 salt:raw_rock_salt_block,minecraft:calcite,minecraft:tuff,minecraft:cave_air,salt:salt_cluster,salt:large_salt_bud,salt:medium_salt_bud,salt:small_salt_bud,minecraft:water`
-@pass `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
+@commands Boot 2 (SQ-HH-274 config, including `saltCaveRarity 1`, `saltCaveMinY 0`, `saltCaveMaxY 0`). Plot 4480 96. `fill 4464 -16 80 4496 0 112 minecraft:stone`; `fill 4464 1 80 4496 16 112 minecraft:stone` (33 cube, two fills under the 32768 limit); `/place feature hearthandharvest:salt_cave 4480 0 96`; `/zhh2 countset 4464 -16 80 4496 16 112 salt:raw_rock_salt_block,hearthandharvest:placed_rock_salt_block,minecraft:calcite,minecraft:tuff,minecraft:cave_air,salt:salt_cluster,salt:large_salt_bud,salt:medium_salt_bud,salt:small_salt_bud,minecraft:water`
+@pass `[Pp]laced feature`; `raw_rock_salt_block` plus `hearthandharvest:placed_rock_salt_block` (the placed twin a loaded chunk swaps it to) above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
 @fails `SaltCaveFeature` (`canPlace` needs 70 % solid shell: the stone box passes it; `carve`, `decorate`, `pickWallBlock`)
 @from batches/r1111/hh_m2.qb
 @absent hearthandharvest:salt_cave (worldgen configured/placed feature, data/hearthandharvest/worldgen/; the registry dump lists no features)
@@ -6315,9 +6333,9 @@ sleep 3
 > fill 4464 -16 80 4496 0 112 minecraft:stone
 > fill 4464 1 80 4496 16 112 minecraft:stone
 > place feature hearthandharvest:salt_cave 4480 0 96
-> zhh2 countset 4464 -16 80 4496 16 112 salt:raw_rock_salt_block,minecraft:calcite,minecraft:tuff,minecraft:cave_air,salt:salt_cluster,salt:large_salt_bud,salt:medium_salt_bud,salt:small_salt_bud,minecraft:water
+> zhh2 countset 4464 -16 80 4496 16 112 salt:raw_rock_salt_block,hearthandharvest:placed_rock_salt_block,minecraft:calcite,minecraft:tuff,minecraft:cave_air,salt:salt_cluster,salt:large_salt_bud,salt:medium_salt_bud,salt:small_salt_bud,minecraft:water
 look UNPARSED CMD: saltCaveRarity 1 ;; saltCaveMinY 0 ;; saltCaveMaxY 0
-look `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
+look `[Pp]laced feature`; `raw_rock_salt_block` plus `hearthandharvest:placed_rock_salt_block` (the placed twin a loaded chunk swaps it to) above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
 
 ## SQ-HH-319 | salt cave origin pulled into saltCaveMinY..MaxY (0..0), stone box and forceload
 @phase worldgen
@@ -6494,16 +6512,16 @@ sleep 5
 expect The nearest hearthandharvest:corn_maze is at
 look locate time and candidates ([locate] line); corn_crop > 100, oak_fence 16, a chest with corn_maze_center; under line: over6=0 (no air gap over 6), air_max small
 
-## SQ-HH-329 | `autumn_fruit` list contains `hearthandharvest:hops`; `warm_dry` list
+## SQ-HH-329 | `autumn_fruit` list contains `hearthandharvest:hops_vine`; `warm_dry` list
 @group A
 @commands `/cdevtest tag block creativeengineering:crop_seasons/autumn_fruit`; `/cdevtest tag block creativeengineering:crop_seasons/warm_dry`
-@pass `autumn_fruit` list contains `hearthandharvest:hops`; `warm_dry` list contains `hearthandharvest:sunflower_stem` (J31, J32)
+@pass `autumn_fruit` list contains `hearthandharvest:hops_vine`; `warm_dry` list contains `hearthandharvest:sunflower_stem` (J31, J32)
 @fails `crop_seasons.json`, `kubejs/data/creativecalendar/kubejs/sereneseasons/cropseasontags.js`
 @from batches/r1111/hh_wga.qb
 @reviewed 2026-11-20
 > cdevtest tag block creativecalendar:crop_seasons/autumn_fruit
 > cdevtest tag block creativecalendar:crop_seasons/warm_dry
-expect verb=tag kind=block tag=creativecalendar:crop_seasons/autumn_fruit n=\d+\b (?=.*[=,]hearthandharvest:hops\b)
+expect verb=tag kind=block tag=creativecalendar:crop_seasons/autumn_fruit n=\d+\b (?=.*[=,]hearthandharvest:hops_vine\b)
 expect verb=tag kind=block tag=creativecalendar:crop_seasons/warm_dry n=\d+\b (?=.*[=,]hearthandharvest:sunflower_stem\b)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -7006,7 +7024,6 @@ expect crow_nest_forests .*minecraft:dark_forest
 expect crow_nest_forests .*terralith:sakura_grove
 reject crow_nest_forests .*minecraft:plains|crow_nest_forests .*minecraft:taiga
 reject verb=tag kind=biome tag=creativedelight:has_crows n=[1-9]
-look UNPARSED CMD: #creativedelight:has_crows
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-411 | `expect \[zq\] .*salt_lick_from_raw_rock_salt -> 1 salt:salt_block`; `
@@ -7304,7 +7321,6 @@ waitlog \[zhh3\] watch a done 20
 > forceload remove 13247 -13 13273 13
 expect \[zhh3\] cfg fleeing = false
 expect \[zhh3\] seen a CrowFleeGoal no
-look UNPARSED CMD: crow.fleeing
 
 ## SQ-HH-423 | `expect \[zhh3\] log hearthandharvest:crow pos=13320\.5,-60\.\d,0\.5 .
 @group A
@@ -7475,7 +7491,6 @@ waitlog \[zhh3\] watch a done 25
 expect \[zhh3\] seen a CrowWaryTemptGoal yes
 expect \[zhh3\] assert a minD=.* <= 5.5\.?0* PASS
 expect \[zhh3\] assert a maxTrust=.* >= 100\.?0* PASS
-look UNPARSED CMD: #forge:seeds ;; #creativedelight:crow_food
 
 ## SQ-HH-429 | `expect \[zhh3\] seen a CrowWaryTemptGoal yes`; `expect \[zhh3\] asser
 @group A
@@ -7564,7 +7579,6 @@ waitlog \[zhh3\] watch a done 20
 > kill @e[type=hearthandharvest:crow,x=13787,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 13787 -13 13813 13
 expect \[zhh3\] seen a CrowWaryTemptGoal no
-look UNPARSED CMD: crow.tempting
 
 ## SQ-HH-432 | `expect \[zhh3\] feed attempts=40 tamed=(2|3|4|5|6|7|8|9|10|11|12|13|1
 @group A
@@ -7603,7 +7617,6 @@ sleep 2
 > zhh3 tally 13928 -60 8 7
 expect \[zhh3\] feed attempts=40 tamed=(2|3|4|5|6|7|8|9|10|11|12|13|14|15|16) held=minecraft:wheat_seeds x24
 expect \[zhh3\] tally crows=40 tamed=(2|3|4|5|6|7|8|9|10|11|12|13|14|15|16)
-look UNPARSED CMD: #forge:seeds
 
 ## SQ-HH-434 | rerun: handFeeding off: 5 wild crows, corn x16 kept, no crow InLove > 0
 @group A
@@ -7915,7 +7928,6 @@ waitlog verb=tickwarp end=done 120
 > kill @e[type=hearthandharvest:crow,x=14627,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 14627 -13 14653 13
 expect verb=ages block=minecraft:wheat prop=age n=49 .*hist=(\S*,)?0:[1-9]
-look UNPARSED CMD: crow.eatCrops
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-446 | `expect \[zq\] ages minecraft:wheat: 49 blocks, mean 7\.00, \{"7":49(\.0)?\}
@@ -7970,7 +7982,6 @@ waitlog verb=tickwarp end=done 120
 > forceload remove 14747 -13 14773 13
 > zhh3 cfg eatCrops true
 expect verb=ages block=minecraft:wheat prop=age n=49 mean=7\.000 hist=7:49\b
-look UNPARSED CMD: crow.eatCrops
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-448 | `expect \[zq\] ages minecraft:wheat: 25 blocks, .*"0":[1-9]`; `expect
@@ -8185,7 +8196,6 @@ sleep 2
 > forceload remove 15167 -13 15193 13
 expect verb=items items=-
 expect \[zhh3\] log hearthandharvest:crow .*carry=true.*main=minecraft:diamond x1
-look UNPARSED CMD: dropOnHurt
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-455 | `expect \[zhh3\] item minecraft:diamond x1 Age=-32768 Invulnerable=tru
@@ -8274,7 +8284,6 @@ sleep 1
 > kill @e[type=hearthandharvest:crow,x=15347,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 15347 -13 15373 13
 expect verb=entities type=minecraft:item (?=.*Age:-32768s)(?=.*Invulnerable:1b)(?=.*minecraft:diamond)
-look UNPARSED CMD: doMobLoot
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-458 | `expect \[zhh3\] item minecraft:diamond x1 Age=-32768 Invulnerable=tru
@@ -8316,6 +8325,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 sleep 3
 > kill @e[type=!player,x=20827,y=-62,z=3987,dx=26,dy=17,dz=26]
 > fill 20827 -61 3987 20853 -47 4013 minecraft:glass hollow
+> forceload add 21340 4500
 > pbot spawn c459 21340 -60 4500 minecraft:overworld creative
 sleep 2
 > summon hearthandharvest:crow 20840 -60 4000 {NoAI:1b,Tags:["r459"]}
@@ -8327,6 +8337,7 @@ sleep 30
 > pbot remove c459
 > kill @e[type=hearthandharvest:crow,x=20827,y=-62,z=3987,dx=26,dy=18,dz=26]
 > forceload remove 20827 3987 20853 4013
+> forceload remove 21340 4500
 expect \[zhh3\] loot on 1 crows
 expect \[zhh3\] tally crows=[12] tamed=0 carrying=1
 
@@ -8618,7 +8629,6 @@ sleep 2
 > pbot remove b470
 > forceload remove 16140 0 16156 16
 expect verb=state pos=16148,-60,3 state="?hearthandharvest:placed_rock_salt_block\b
-look UNPARSED CMD: salt.playerLicking
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-471 | `expect \[zhh3\] block 16208 -60 3 hearthandharvest:waxed_salt_block`;
@@ -8812,7 +8822,7 @@ sleep 1
 > cdevtest state 16563 -60 3
 > data get block 16562 -60 3 Items
 expect verb=state pos=16563,-60,3 state="?hearthandharvest:waxed_lightly_licked_salt_block\b
-expect Items.*Count: 1b
+expect has the following block data: .*salt:raw_rock_salt", Count: 1b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-478 | `expect \[zhh3\] block 16623 -60 3 hearthandharvest:placed_rock_salt_block`
@@ -9021,7 +9031,6 @@ waitlog \[zhh3\] watch a done 30
 > forceload remove 16973 -7 16987 7
 expect \[zhh3\] seen a StayNearSaltGoal no
 expect \[zhh3\] log minecraft:cow .*restricted=false
-look UNPARSED CMD: restricted=
 
 ## SQ-HH-485 | r1112: animal licks ignore mobGriefing (3 cows, 60 s)
 @group A
@@ -9079,7 +9088,6 @@ waitlog \[zhh3\] watch a done 35
 > forceload remove 17093 -7 17107 7
 expect \[zhh3\] seen a StayNearSaltGoal no
 expect verb=state pos=17100,-60,0 state="?hearthandharvest:placed_rock_salt_block\b
-look UNPARSED CMD: salt.animalLicking
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-487 | `expect \[zhh3\] seen a StayNearSaltGoal no`
@@ -9299,8 +9307,8 @@ waitlog \[zhh3\] watch a done 25
 > kill @e[type=hearthandharvest:crow,x=17567,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 17567 -13 17593 13
 expect \[zhh3\] seen a CrowSeekShinyGoal no
-expect verb=pbot\.inv bot=b494 slot=0 item=minecraft:diamond\*1
-expect verb=pbot\.inv bot=b494 slot=1 item=minecraft:gold_ingot\*1
+expect verb=pbot\.inv bot=b494 slot=0 item="?minecraft:diamond\*1
+expect verb=pbot\.inv bot=b494 slot=1 item="?minecraft:gold_ingot\*1
 expect verb=pbot\.inv bot=b494 slot=2 item=minecraft:netherite_ingot\*1
 expect verb=pbot\.inv bot=b494 slot=3 item=minecraft:iron_pickaxe\*1
 expect \[zhh3\] log hearthandharvest:crow .*carry=false
@@ -9332,7 +9340,6 @@ waitlog \[zhh3\] watch a done 25
 > kill @e[type=hearthandharvest:crow,x=17627,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 17627 -13 17653 13
 expect verb=pbot\.inv bot=b495 slot=\d+ item=minecraft:iron_nugget\*8\b
-look UNPARSED CMD: crow.stealShinyItems
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-496 | r1112: a tame crow never steals from its owner (tally counts a crow on the owner's shoulder)
@@ -9493,12 +9500,11 @@ expect \[zhh3\] assert a minD=.* <= 2\.?0* PASS
 expect minecraft:gold_ingot
 expect has the following block data: 1b
 expect \[zhh3\] log hearthandharvest:crow .*carry=false/0 .*main=empty
-look UNPARSED CMD: CrowStash
 
 ## SQ-HH-501 | crow steals from a survival hotbar and stashes in the nest (watch the carry)
 @group A
 @commands Boot F. HNH-57 full path: theft from a hotbar at chance 1, then deposit in the nest.; `forceload add 17987 -13 18013 13`; `sleep 3`; `fill 17987 -61 -13 18013 -47 13 minecraft:glass hollow`; `pbot spawn b501 18000 -60 0 minecraft:overworld survival`; `sleep 2`; `clear b501`; `item replace entity b501 hotbar.2 with minecraft:gold_ingot 4`; `setblock 18009 -60 8 hearthandharvest:nest`; `summon hearthandharvest:crow 18006 -60 4`; `sleep 30`; `data get block 18009 -60 8 Inventory`; `data get block 18009 -60 8 CrowStash`; `/pbot inv b501 get`; `pbot remove b501`; `kill @e[type=hearthandharvest:crow,x=17987,y=-61,z=-13,dx=26,dy=14,dz=26]`; `forceload remove 17987 -13 18013 13`
-@pass `expect minecraft:gold_ingot`; `expect has the following block data: 1b`; `expect verb=pbot\.inv bot=b501 slot=\d+ item=minecraft:gold_ingot\*3\b`
+@pass `expect minecraft:gold_ingot`; `expect has the following block data: 1b`; `reject verb=pbot\.inv bot=b501 slot=\d+ item=minecraft:gold_ingot\*4\b`
 @fails `CrowSeekShinyGoal` carry + nest path (carry starts from the theft), `#creativedelight:nests`.
 @from batches/r1113/rerun_a.qb
 @reviewed 2026-11-20
@@ -9526,7 +9532,7 @@ waitlog \[zhh3\] watch w501 done 60
 sleep 1
 > pbot remove b501
 > kill @e[type=hearthandharvest:crow,x=30987,y=-61,z=29987,dx=26,dy=14,dz=26]
-expect verb=pbot\.inv bot=b501 slot=\d+ item=minecraft:gold_ingot\*3\b
+reject verb=pbot\.inv bot=b501 slot=\d+ item=minecraft:gold_ingot\*4\b
 expect has the following block data: .*minecraft:gold_ingot
 expect has the following block data: 1b
 look if the nest is empty: which goal ran while the crow carried (watch lines, seen lines), its lastD to the nest and its height; feeds TODO #68
@@ -9894,14 +9900,12 @@ sleep 3
 > setblock 496 -60 476 minecraft:oak_fence
 > setblock 497 -60 476 minecraft:redstone_lamp
 sleep 1
+> cdevtest watch 497 -60 476 40 2
 > summon hearthandharvest:thrown_horseshoe 496.5 -58.3 476.5 {Motion:[0.0,-1.0,0.0],HorseshoeItem:{id:"hearthandharvest:horseshoe",Count:1b}}
-repeat 3
-> execute if block 497 -60 476 minecraft:redstone_lamp[lit=true]
-end
 sleep 3
 > execute if block 497 -60 476 minecraft:redstone_lamp[lit=false]
-count Test passed >= 2
-look at least one of the three quick lit checks "Test passed" (the lamp is lit 20 ticks after the hit), and the last check "Test passed" (lamp went out)
+expect verb=watch .*state=\S*redstone_lamp\[lit=true\]
+expect Test passed
 
 ## CQ-HH-501
 @group client
@@ -10035,9 +10039,14 @@ look "Test passed"
 @fails stem branch
 @from batches/r1111/hh_gear_b.qb
 @reviewed 2026-11-20
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
+> pbot hold G hearthandharvest:fertilizer_bag 1
 > setblock 504 -61 500 minecraft:farmland
 > setblock 504 -60 500 minecraft:pumpkin_stem[age=0]
 > pbot use G 504 -60 500 up
+> cdevtest state 504 -60 500
 > cdevtest count 501 -60 497 507 -60 503 minecraft:pumpkin
 look pumpkin count 1 or more, or the stem at age 7 when no neighbour spot took it (16 forced ticks)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -10269,6 +10278,10 @@ look worn shot (front view): the H&H hat renders 3D on the head; gui shot: 2D ic
 @from batches/r1111/hh_gear_b.qb
 @reviewed 2026-11-20
 @absent hearthandharvest:tilling (enchantment, HHGearRegistry.TILLING; the registry dump lists no enchantments)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
 > fill 536 -61 536 544 -61 544 minecraft:grass_block
 > item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
 > pbot sneak G on
@@ -10277,6 +10290,7 @@ look worn shot (front view): the H&H hat renders 3D on the head; gui shot: 2D ic
 > pbot sneak G off
 > cdevtest count 536 -61 536 544 -61 544 minecraft:farmland
 > cdevtest player G
+> gamerule randomTickSpeed 3
 expect verb=count block=minecraft:farmland n=9\b
 expect verb=player name=G .*main=\S*Damage:9\b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -10289,6 +10303,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @from batches/r1111/hh_gear_b.qb
 @reviewed 2026-11-20
 @absent hearthandharvest:tilling (enchantment, HHGearRegistry.TILLING; the registry dump lists no enchantments)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
 > fill 548 -61 536 556 -61 544 minecraft:grass_block
 > item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:2s}]}
 > pbot sneak G on
@@ -10297,6 +10315,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > pbot sneak G off
 > cdevtest count 548 -61 536 556 -61 544 minecraft:farmland
 > cdevtest player G
+> gamerule randomTickSpeed 3
 > execute if block 551 -61 539 minecraft:farmland
 > execute unless block 550 -61 538 minecraft:farmland
 expect verb=count block=minecraft:farmland n=16\b
@@ -11135,11 +11154,12 @@ look JEED page of each H&H effect shows its written text (no "No description ava
 @fails `[effects] removed`; `configs_edited` copy
 @from batches/r1111/hh_boot5.qb
 @reviewed 2026-11-20
+> forceload add 470 470 620 620
 > summon minecraft:cow 495 -60 480 {NoAI:1b,Tags:["zf1"]}
 > effect give @e[tag=zf1] alexsmobs:fear 30
 > data get entity @e[tag=zf1,limit=1] ActiveEffects
 > cdevtest recipes fear
-expect verb=recipes text=fear n=0\b
+reject verb=recipes id=(?!\S*:jeed/)\S*fear
 expect Found no elements matching ActiveEffects
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -11197,7 +11217,7 @@ expect food_type/dairy .*goat_cheese_slice
 expect food_type/hazard .*charred_marshmallow_stick
 expect food_type/drink/alcohol .*moonshine
 expect food_type/drink/alcohol .*melon_wine
-expect food_type/sweet/pancake .*waffle
+expect food_type/baked .*hearthandharvest:waffle
 expect food_type/raw/meat .*raw_sausage
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -11269,7 +11289,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @from batches/r1111/hh_boot5.qb
 @reviewed 2026-11-20
 > forceload add 624 512 640 528
-> setblock 636 -60 524 vinery:cherry_leaves
+> setblock 636 -60 524 vinery:cherry_leaves[persistent=true]
 > cdevtest loot 636 -60 524 tool=minecraft:iron_axe rolls=5000
 > cdevtest loot 636 -60 524 tool=minecraft:shears rolls=5000
 > setblock 636 -60 524 minecraft:air

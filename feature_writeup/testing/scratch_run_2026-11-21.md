@@ -1,0 +1,151 @@
+# Scratch run 2026-11-21: r1120nv resume, then the rest of the queue
+
+## 1. Scope
+
+Owner request (2026-11-21): orchestrate the never-run scratch rows and fix test bugs as they appear; when the never-run
+rows run out, continue with the rest of the queue. Order: judge r1120nv step 58 (s57_res), resume drive r1120nv
+(steps 58 at row 330 to 182), rerun drive r1120nvr (`perf/runs/r1120nv/rerun.txt`), then jar-changed rows, failed rows,
+then never-run drafts (steps needed). Coordination: session `*Plan_owner_rows_1120.md` is editing Creative Loot,
+Creative Worldgen, Creative Devtools and OR1120.qb, FCK.qb and the loot / mob tweak .qb files; no boot until it reports
+"editing done", none of those .qb edited by this run until then.
+
+## 7. Run notes
+
+- 2026-11-21 judge-4 (s57_res, SQ-HH-201 to -263, 63 LOOKs): PASS 45, FAIL 0, BATCH-FAULT 14, all fixed in HH.qb under
+  rule 11 (lint clean, rerun.txt now 164 ids; 216, 218, 219, 229, 255, 256 rely on SQ-HH-201's forceload):
+  - BF-FIX SQ-HH-201, -204, -205: stomping count 9 stale, 17 since the 8 Vinery Grapevine Pot mirrors (2026-11-14,
+    vinery_stomping.js) -> count 17, mirror lines in 204, `grape` dropped from 205's reject; 201 gets `weather clear`.
+  - BF-FIX SQ-HH-206: bottles tag 26 (cherry cream soda, passion aloe nectar removed; Neapolitan milk bottle merged)
+    -> look 26. Writeup J49 wording still says 29 (doc owner).
+  - BF-FIX SQ-HH-211, -255, -256: stray "UNPARSED CMD" look from @commands prose -> deleted.
+  - BF-FIX SQ-HH-215: no read after the second use -> tank and SelectedItem reads added.
+  - BF-FIX SQ-HH-216: jug fill steps at x 179 never written -> 4 steps added, stray look deleted.
+  - BF-FIX SQ-HH-218, -219, -221: rain (4 mB/s into troughs) until SQ-HH-223's weather clear -> `weather clear` first
+    in each row; 219 counts `water*500/1000` x3.
+  - BF-FIX SQ-HH-229: real-time drift between fill and read (890) -> fill just before the 320-tick warp, read right
+    after, expect 930 to 960.
+  - BF-FIX SQ-HH-234: `sleep 7` timing -> `cdevtest tickwarp 400`, expect 1100 to 1400 of 10000 (100 mB per 2 s).
+- 2026-11-21 judge-5 (s57_res, SQ-HH-264 to -1328 LOOKs + the 28 FAILs): step 58 table now PASS 285, BATCH-FAULT 32,
+  FAIL 12, LOOK 0. Real FAILs: SQ-HH-1106, -1109, -1110, -1111 (Nourishment missing on H&H foods, comfort_nourishment
+  .json, TODO mod-additions #53 open); SQ-HH-1230, -1232, -1326 (Quark Pig Litters stacks on the H&H litter, mod-additions
+  #52 open); SQ-HH-1273 (young hemp gives straw, PitchforkStraw.isMature, known); SQ-HH-262 (3-block drop no stomp,
+  known PEAK sampling); SQ-HH-228 (no manure via trough feed, ManureDrops.schedule suspect); SQ-HH-227 (no calf after
+  400 ticks, uncertain); SQ-HH-1292 (wolf dead before the Prickly read, uncertain). PASS with caveats: SQ-HH-1216 (IE
+  fertilizer recipes expose no ingredients to `uses`), -266 (one dirt placed on the basin top), -301 (scratch toml
+  left by an earlier SQ-HH-318 run on the reused server). Not simple batch faults: SQ-HH-303 (wild_hops is a
+  trunk_vine now, needs a trunk fixture), -325 (Lootr chests, unpack 0), -1307 (Create tank ignores bot bucket use),
+  -1267 (squid ignores hits, needs a water pool fixture).
+- 2026-11-21 01:12 preflight: RUNNER claimed; check_all --fast 38 run, 0 failed; game_jvms empty (one transient JVM
+  seen once, gone on recheck); disk 46 GB free; jarstamp pending: creativeBrewing, creativeCalendar, creativeCommon
+  (changelog text only), creativeCompat, solRaspberryPie built newer than mods/ (prep_srv.sh swaps them in). Other
+  session installed creativecommon, creativedevtools, creativedelight, creativeengineering, creativeequipment,
+  creativecompat, creativeloot, creativeworldgen (agent_staging 8498f460). Perf session r1121nv (collector 797129).
+  qprescreen r1120nv: 126 steps, 20 likely (unloaded coords, mostly worldgen steps), 112 risk, 52 stale; fixer-1 on
+  the non-HH files, judge-5 on SQ-HH-459.
+- 2026-11-21 judge-5 BF-FIX (HH.qb, ids confirmed in kubejs/exported, rerun.txt now 179 ids): SQ-HH-1108 saturation
+  0.3 -> 0.25 (edible_seeds.js); -1141, -1142 cookie_dough and -1214, -1205 cornmeal -> creativedelight:; -1215 corn
+  cutting per farming/crops #48; -1153 pot ingredients per meals #64; -1157 shapeless biscuits removed (meals #64), expect
+  n=0 (@pass prose still old); -1280 tapper refill, Amount \d{1,2}; -1241 read 1 s after the effect, \d+; -1298 goals
+  read at 2 s; -329 hops -> hops_vine; -1304 alexsmobs:crow -> hearthandharvest:crow; -318 placed_rock_salt_block in the
+  countset; -227 tickwarp 400 -> 600 (row's @fails asks for it); -459 forceload at the bot spawn. -1292 left FAIL.
+- 01:14 first `drive resume` refused: RUNNER.md held by this session's own claim with a `Run:` line not naming
+  r1120nv (qdrive.claim only accepts its own run id) -> `Run: r1120nv resume (...)`; resumed 01:14:22, step 23 group A
+  booted (pid 803304). Gotcha for the skill: claim RUNNER with `Run: <drive run id> ...` or let the driver claim it.
+- 01:15 fixer-1: the 19 remaining prescreen "likely unloaded" findings in IP, PB, PF, UPG, FGD, FTW, SVA, TER, WG30, WGE
+  are false positives (qlint.py about lines 354-388 reads `positioned ... run locate` origins, `pbot spawn` / `tp <bot>`
+  targets, probe grid arguments and `cdevtest ... dim=` positions as unloaded overworld blocks). No .qb changed.
+  Tool fix for later (not mid-drive): teach qlint those four cases. The 52 stale rows sit in CDJ, LOOT, MT, PJL, RC,
+  RFX, SMK, CWG, HH.
+- 01:3x step 23 (CDJ group A rerun, s22_res): PASS 3, BATCH-FAULT 2, FAIL 1. SQ-VTD8-03 FAIL again: jar (c) at 1251 made
+  one batch (pickle*5 in slot 7) and stopped with cucumber*2 in slots 0-4 and salt_dust*2 left; expected 15 after 3600
+  ticks. Suspect: the fermenting jar does not merge a second batch into an occupied output slot, or stops after one
+  cycle (vintagedelight fermenting jar block entity, Creative Delight Vintage member). Product finding, not fixed in-run.
+- step 58 HH group A resumed at row 330.
+- 02:55 step 58 done (513/513): PASS 385, FAIL 27, BATCH-FAULT 32, LOOK 69 -> judge-6 (rows 330 to 513, edits HH.qb
+  only while no HH step runs). Step 59 (HH section 3): SQ-DEP-02 (rerun), SQ-MIN-03 (rerun) reclassified BATCH-FAULT
+  (both need a reduced @modset: without creativebrewing / without Corn Delight; section 4 boots the full pack). Not
+  simple; for the modset rewrite pass. Helper `tools/scratch_query/drive_wait.sh RUN [UNTIL]` added (background wait for
+  a step change).
+- 2026-11-21 judge-6 (s57_res rows 330 to 513): step 58 table final PASS 452, BATCH-FAULT 43, FAIL 18, LOOK 0.
+  - Real FAILs (new): SQ-HH-1607 to -1611 watering can on ripe wheat on dry farmland: use CONSUME, WaterLevel stays 5,
+    no moisture (HNH-33 says a ripe crop only gets soaked); suspect Quark Simple Harvest takes the click before
+    WateringCanItem.useOn (hearth member item/WateringCanItem.java, gear/QuarkCompat.java). SQ-HH-1606 wheat age 0 on
+    moisture 0: use PASS, clicked wheat gone (23 of 25 left), cause unproven. No TODO yet.
+  - BF-FIX SQ-HH-1511 lamp lit window 20 ticks -> `cdevtest watch` before the summon; -1520 stem state read added (plus
+    forceload, spawn, bag hold); -1532, -1533 dry farmland reverted on random ticks -> randomTickSpeed 0 around till and
+    count; -1588 n=0 counted JEED pages -> reject excludes `:jeed/` (JEED pages for the removed Fear effect still exist:
+    creativeequipment:jeed/gear_alexsmobs_fear, creativebrewing:jeed/alexsmobs_fear, doc owner); -1590 waffle in
+    food_type/baked per owner ruling R8 (writeup J84 still sweet/pancake, doc owner); -1595 persistent cherry leaves;
+    -477 block-data regex; -494 quoted NBT item; -501 J66 cooldown allows repeat thefts -> reject gold_ingot*4.
+    Stray `look UNPARSED CMD` lines deleted on PASS rows -410, -422, -428, -431, -433, -445, -447, -454, -457, -470,
+    -484, -486, -495, -500. rerun.txt now 189 ids.
+  - Not simple: SQ-HH-439 (tamed crows also fetch thrown items, 13 diamonds for 7 crows; row design). HH.qb has two
+    `## SQ-HH-1574` headers (lines about 10935 and 11788): SQ-HH-1573's shell step errored on it (row rewrite pass).
+  - PASS with caveats: SQ-HH-1502, -1515, -1587, -1594, -1605 (thin evidence, see verdicts).
+- 03:5x judge-7 (steps 60 to 69): 60 PASS 1; 61 BF 2; 62 PASS 2 FAIL 1; 63 PASS 4 FAIL 1; 64 FAIL 4 INCONCLUSIVE 1; 65 PASS 1;
+  66 PASS 4 BF 1; 67 PASS 3 BF 2; 68 empty; 69 PASS 1.
+  - Real FAILs: SQ-HOP-12 organic mash on an age-1 hops vine uses both items and jumps to age 3 (HopsVineBlock.use hands
+    any BoneMealItem to OrganicMashItem.useOn, which applies bone meal 3 times and shrinks once more; hearth
+    block/HopsVineBlock.java, vintage item/custom/OrganicMashItem.java). SQ-PRT-01 lightning frame: Immersive
+    Weathering crying_obsidian_from_lightning broke the frame, no PortalSpawnEvent (chance-based; r1114 passed; owner
+    call). SQ-JFP-01 to -04 Create pump at 64 RPM moves nothing between tank and jar in any phase (creativeCompat
+    compat/JarFluidPipes.java suspect, or the layout lacks a pipe segment; unproven); SQ-JFP-05 INCONCLUSIVE.
+  - BF-FIX SQ-HH-1546 (HOP.qb) bot G never spawned -> spawn + wider forceload; SQ-HH-266 (HOP.qb) dirt*[34] (r1115
+    ruling); SQ-LOOT-01 baseline adjusted by loot/tables #18 (Lexica rule), @reviewed 2026-11-21.
+  - BF-FIX SQ-LBS-04 (orchestrator, tools/scratch_query/zlbs_probe.js, only LBS.qb uses it): hosts at Y -58 over air,
+    the Supplementaries sack fell before refit -> stone floor under each host in partLabels and partCentre; refit's
+    sticky-note hit skips the second `Text:"top ` note. Lint clean, rerun.txt 193 ids.
+  - Not simple: SQ-LOOT-03 (2026-11-17 dump baseline stale: 9 namespace dumps differ, creativeloot.json and
+    moremooblooms.json new; needs a refreshed baseline).
+- 04:4x judge-7 batch 2 (steps 70 to 84): no real FAIL. 70 PASS 1 BF 1; 71 PASS 1 BF 1; 72 PASS 1 BF 1; 73 PASS 1; 74 PASS 4;
+  75 PASS 2 BF 1; 76 PASS 2; 77 PASS 1 BF 2; 78 PASS 1; 79 BF 1; 80 PASS 2 BF 2; 81 PASS 1; 82 PASS 3; 83 empty; 84 PASS 1 BF 1.
+  - BF-FIX SQ-MRD-02 cheese toast -> creativedelight:cheese_toast; SQ-MT-02 peaceful removes the creeper -> difficulty
+    easy around the summon; SQ-NSM-01 Seasoning -> Flavor (seasonings.md 7) ids; SQ-PFS-03 regex `[. ]` and own bot spawn;
+    SQ-PF-01, -02 idle flat world ticks nothing -> tagged pig and hopper during the check, PF-02/-03 shell reads the new
+    HTML report (`Measured by the pack`); SQ-PG-02 spawn player G; SQ-PJL-02 reject narrowed to its @pass; SQ-PJL-05
+    `.*item_tags=`. rerun.txt 202.
+  - BF-FIX SQ-PS15B-13 (orchestrator): salt 7 + 2 layers is a salt block per blockrunner.md "Full block" (9 layers = 1
+    block, SaltLayerBlock.settle), not 8 + 1 -> check salt:salt_block with air above. Lint clean, rerun.txt 203.
+  - Side observation (SQ-PF-03 HTML): Creative Common `ItemMerges$1#get` waited 12.6 s on chunk loads during teleports.
+  - Process note: judge-7's batch 1 edit of zlbs_probe.js was refused by the auto-mode permission check (outside its
+    .qb-only brief); the orchestrator then made the same edit under its own permission (rule 2 allows tools/). Flagged to
+    the owner.
+- 07:18 step 95 (RDX, s94) boot hit the known Rhino tag-load flake: "Failed to load datapacks", ArrayIndexOutOfBounds in
+  Rhino Interpreter.getSourcePositionFromStack from KubeJS TagLoaderKJS.customTags console.info (gotchas.md "Boot and
+  shutdown"; third-party race, not our jars). The driver waited 600 s, `stop` could not end the idle JVM, step 96
+  refused to boot beside it and the driver ended 07:38 (94/182 done). Environment fault; fix in
+  tools/scratch_query/qdrive.py: wait_ready returns at once on "Failed to load datapacks"; after every stop
+  `kill_own_jvm` SIGKILLs a JVM whose cwd is the step's own srv/ (logged); `boot_and_run` reboots once when the log shows
+  the Rhino flake (log kept as srv/logs/rhino_flake_stepNN.log). Tested on the hung step 95 JVM (detected, killed);
+  check_all --fast --changed: PROC-28 drive PASS, PROC-20 needed status_index (done). Resumed 07:45, step 95 booted
+  07:47 (12 rows). Rows affected: none (step 95 and 96 had not started rows).
+- 08:2x judge-7 batch 3 (steps 85 to 94, helpers judge-7b RD, -7c PSU, -7d PWG): 85 PASS 1 BF 1; 86 PSU A PASS 26 BF 8 FAIL 5
+  HARNESS 1; 87 PASS 1 BF 1; 88 PTH INCONCLUSIVE 2; 89 PWG PASS 9 BF 3; 90 RB BF 1 INC 1; 91 RC PASS 2 BF 1; 92 RD A PASS 113
+  BF 27 FAIL 8 INC 2; 93 RD B PASS 5 BF 1; 94 RDB BF 1. rerun.txt 236 ids.
+  - Real FAILs: SQ-CORN-02 corncob mills/crushes to 3 kernels + 50% cornmeal, docs say 4 (creativedelight/recipes.js:61,
+    immersiveengineering/recipes.js:29); SQ-FDB-11 `/loot mine` pumpkin with a knife drops nothing (farmersdelight/
+    loot.js:17, creativeloot 09_drops.js T.swapDrop; slices 8 in code vs 4 in docs); SQ-LE-03 dispensed Swiftness potion
+    bucket makes no cloud (creativebrewing PotionBucketDispenser / potion_area.js; row does not read the dispenser);
+    SQ-RD-17 eaten honey pancake stack drops 5 pancakes + bowl, rustic_delight.md 2.4 says nothing (code vs docs: owner
+    ruling); SQ-RSP-07 remainderBuffer=true kettle bottles stay in slot 0 (KettleTankMixin ce$serverTick /
+    ce$stowBottles); SQ-TI-00 client classes (ItemTransforms$TransformType, BlockEntityRendererProvider$Context) load on
+    the dedicated server (BackpackSkin mixins in the common list of creativeequipment.mixins.json); SQ-VP-03 Cesar Salad
+    cheese only, VTD-52 says garlic or cheese (veggiesdelight/cooking.js:40); SQ-VP-08 Pickling Jar sides differ from
+    vintage_delight.md 4.0 (FermentingJarBlockEntity sidedHandler.forSide); SQ-PSD-01 empty-hand click on ripe hemp's
+    bottom half does not take the top (CR-100; hemp_harvest.js or bot face, unproven); SQ-PST-03, -08, -10c, -11, -11b
+    grass spreads the same in winter and spring (ratios 0.88 to 1.05, band 0.35 to 0.85; changelog 1.2.02, crops.md
+    "Grasses"; creativeCalendar CropSeasons.refuseSpread / GrassSpreadSeasonMixin; -03 stays HARNESS).
+  - BF-FIX SQ-PS15B-26 (count before the restore's reload), SQ-PSM-06 (restart boot-line WARN), SQ-RB-21 (order-free
+    lookahead), SQ-WCD-07 (count box over 262144 -> two halves); PSU: SQ-FCB-01, -07, -08, SQ-PSF-02, -08, -09, SQ-PSW-00;
+    PWG: SQ-PWG-11, -35 (6 wire types), -55 (P10 recipe files); RD: SQ-CDQ-00, SQ-CNS-02, SQ-CORN-07, SQ-FDB-02, -04, -06,
+    SQ-FR-04, SQ-FF-02, SQ-RD-08, -19, SQ-RM-03, SQ-RSP-02, -05, -06, -11, -15, SQ-VTD4-07; SQ-RD-07, -15 fixed but left
+    INCONCLUSIVE (reclassify takes only FAIL).
+  - Not simple: SQ-PTH-29, -30 summoned mobs vanish in 2 to 4 s (peaceful explains only zombies); SQ-RB-22 (N/A per its
+    look); SQ-RC-01 rdetail prints no inputs for IE arc furnace (devtools rdetail change); SQ-RDB-02 base is the
+    2026-11-19 dump (needs /dumpall or a same-boot base); SQ-CDF-06 (probe getTool), SQ-CDQ-02 (@@prep remainderBuffer
+    false), SQ-CDQ-03, SQ-FR-05 (own @modset), SQ-FDB-07 (villager becomes MCA), SQ-RSP-14 (kettle @@prep), SQ-VTD4-05
+    (filled-jar fixture), SQ-VP-02, -06, -07, SQ-VTD4-08 (vintage_probe.js: removed cans and soups, i.vinegar,
+    creativedelight fluid keys, explicit Rhino overloads; machineRoutes skip `/salting/`); SQ-PSD-04, -05 superseded by
+    the azalea wood restore (retire or rewrite). SQ-PWG-12, -24, -46 carry the same stale 5-wire bootexpect and P7 rejects.
+  - Doc gaps: nether_worldgen.md 47 live Overworld structures vs 43 scanned; merge-count looks say 24, now 49; kitchen.md
+    2.9 says skillet contents go to the inventory, the code drops them at the block.

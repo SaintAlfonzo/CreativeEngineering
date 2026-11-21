@@ -16,12 +16,15 @@
 @commands Boot on the installed jars; read startup.log, the KubeJS server log and latest.log
 @pass `[creativeloot] core finished` once in startup.log; `[creativeloot] loaded` in latest.log; `global.LOOT ready`; the `[loot-tuning] N rules -> rewrote M tables (...)` line equals the baseline log's line; no `global.LOOT missing`, no `could not read`, no `queued loot rules failed`, no mixin error on LootModifierManagerMixin
 @fails Line differs: a rule file did not load from the new pack (`// requires: creativeloot`), or the CD `loot.js` queue never ran (`global.LOOT.rules` vs the CD jar copy). `global.LOOT missing`: the startup script is not in the jar. Mixin error: SRG name `m_5787_`
+@reviewed 2026-11-21
 shell test "$(grep -c '\[creativeloot\] core finished' logs/kubejs/startup.log)" = 1
 bootexpect \[creativeloot\] loaded
 bootreject LootModifierManagerMixin.*(InvalidInjectionException|could not find|failed)
 kjsexpect global\.LOOT ready
 kjsreject global\.LOOT missing|\[loot-tuning\] (could not read|disabled: missing)|queued loot rules failed
-shell a=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' logs/kubejs/server.log | tail -1); b=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' "$INST/kubejs/exported/baseline_loot_split_2026-11-17/server_2026-11-16.log" | tail -1); echo "now:  $a"; echo "base: $b"; [ "$a" = "$b" ]
+# baseline + loot/tables #18 (2026-11-20, botania:lexicon removed from both Botania inject tables): +1 rule, +2 tables,
+# +2 entries removed, +2 pools reweighted, the rest unchanged (judge-7, r1120nv, 2026-11-21)
+shell a=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' logs/kubejs/server.log | tail -1); b=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' "$INST/kubejs/exported/baseline_loot_split_2026-11-17/server_2026-11-16.log" | tail -1 | sed 's/5 rules -> rewrote 184 tables (40 entries removed, 109 pools/6 rules -> rewrote 186 tables (42 entries removed, 111 pools/'); echo "now:  $a"; echo "want: $b"; [ "$a" = "$b" ]
 ## SQ-LOOT-02 | GlmMerge: one line per reload, nothing lost
 @group A
 @commands Same boot: grep latest.log for `[GlmMerge]`; `/reload`; grep again

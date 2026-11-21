@@ -39,7 +39,8 @@ capture S5PC \[s5\] potrecipe \S+ cook (\d+)
 waitlog verb=tickwarp end=done ticks={S5PC+300} 120
 > data get block {S5H1+50} {S5H2+1} {S5H3+20}
 > cdevtest items {S5H1+50} {S5H2+1} {S5H3+20} 2
-expect has the following block data: .*\{(?=[^{}]*Slot: 6b?\b)[^{}]*\}.*miners_delight:copper_pot
+# data get prints the block id before Inventory: order-free match (judge-7, r1120nv, 2026-11-21)
+expect has the following block data: (?=.*miners_delight:copper_pot).*\{(?=[^{}]*Slot: 6b?\b)[^{}]*\}
 reject has the following block data: .*\{[^{}]*Slot: [57]b?\b[^{}]*\}.*miners_delight:copper_pot
 expect verb=items items=- stacks=0\b
 reject \[cdevtest\] verb=\S+ .*error=

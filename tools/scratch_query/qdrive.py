@@ -333,12 +333,48 @@ def wait_ready(out, secs=600):
 	end = time.time() + secs
 	while time.time() < end and not STOP['flag']:
 		try:
-			if 'Done (' in log.read_text(errors='replace'):
+			t = log.read_text(errors='replace')
+			if 'Done (' in t:
 				return True
+			if 'Failed to load datapacks' in t:   # the JVM sits idle after this; no point waiting out the cap (r1121)
+				time.sleep(5)
+				return False
 		except OSError:
 			pass
 		time.sleep(3)
 	return False
+
+
+def rhino_flake(out):
+	"""Known third-party boot flake (gotchas.md, Boot and shutdown): "Failed to load datapacks" caused in Rhino
+	Interpreter.getSourcePositionFromStack (NPE `frame is null` or ArrayIndexOutOfBounds) from KubeJS
+	TagLoaderKJS.customTags console.info on a worker thread. Clean on reboot (r1115 phase 4, r1121 step 95)."""
+	try:
+		t = (Path(out) / 'srv/logs/latest.log').read_text(errors='replace')
+	except OSError:
+		return False
+	return 'Failed to load datapacks' in t and 'getSourcePositionFromStack' in t and 'TagLoaderKJS' in t
+
+
+def kill_own_jvm(d, out, wait=60):
+	"""After a stop: a JVM whose cwd is OUT/srv that is still up (a failed boot never reads the fifo, so stop does not
+	end it) is this drive's own; kill it so the next step can boot (gotchas.md, Boot and shutdown)."""
+	srv = os.path.realpath(str(Path(out) / 'srv'))
+	end = time.time() + wait
+	while True:
+		pids = [ln.split()[0] for ln in game_jvms().splitlines()
+				if len(ln.split()) > 1 and os.path.realpath(ln.split(None, 1)[1]) == srv]
+		if not pids or time.time() >= end:
+			break
+		time.sleep(3)
+	for pid in pids:
+		try:
+			os.kill(int(pid), signal.SIGKILL)
+			d.log('killed own JVM %s (%s) still up after stop' % (pid, srv))
+		except (OSError, ValueError):
+			pass
+	if pids:
+		time.sleep(5)
 
 
 def wait_failed_boot(out, secs=600):
@@ -486,9 +522,27 @@ def prep_boot1(d, i, s, out, level):
 			f.write('\n'.join(prep_actions(out, prep)) + '\n')
 
 
-def boot_and_run(d, i, s, out, res, todo, boot=None):
-	"""Boot OUT, wait for Done (or the failed boot the rows expect), qrun.py run on todo, stop (always)."""
+def boot_and_run(d, i, s, out, res, todo, boot=None, retry=1):
+	"""Boot OUT, wait for Done (or the failed boot the rows expect), qrun.py run on todo, stop (always). A boot that
+	hits the known Rhino tag-load flake is stopped, its JVM killed and booted again, `retry` times."""
 	tag = '' if boot is None else ' boot %d' % boot
+	try:
+		_boot_and_run(d, i, s, out, res, todo, boot, tag)
+	except RuntimeError:
+		if retry > 0 and rhino_flake(out):
+			log = Path(out) / 'srv/logs/latest.log'
+			keep = Path(out) / 'srv/logs/rhino_flake_step%02d.log' % (i + 1)
+			try:
+				keep.write_bytes(log.read_bytes())
+			except OSError:
+				pass
+			d.log('step %d%s: known Rhino tag-load flake (Failed to load datapacks); rebooting once (log kept as %s)'
+				  % (i + 1, tag, keep.name))
+			return boot_and_run(d, i, s, out, res, todo, boot, retry - 1)
+		raise
+
+
+def _boot_and_run(d, i, s, out, res, todo, boot, tag):
 	# output to a file, never a pipe: the server's fifo feeder inherits the fds and holds a pipe open (r1118)
 	with open(d.dir / ('s%02d_boot.txt' % i), 'a') as bf:
 		subprocess.run(['bash', str(SCRATCH), 'boot', str(out)], stdout=bf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
@@ -517,6 +571,7 @@ def boot_and_run(d, i, s, out, res, todo, boot=None):
 				time.sleep(2)
 	finally:
 		subprocess.run(['bash', str(SCRATCH), 'stop', str(out)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
+		kill_own_jvm(d, out)
 		try:
 			os.kill(dog.pid, signal.SIGTERM)
 		except OSError:
