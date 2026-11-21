@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=0048fec0acbf -->
+<!-- generated:status_index begin readme sha1=d3eacca276ea -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-BRA r1119 2026-11-19: 2 PASS, 1 LOOK; SQ-PTH r1118 2026-11-18: 8 PASS, 17 BATCH-FAULT; CQ-PTH r1116 2026-11-16: 1 DEFERRED | creativecompat pending, creativedevtools installed 2026-11-20, creativedelight installed 2026-11-20 | DEPLOYED, in-game test pending |
@@ -141,7 +141,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Names | [names.md](names.md) | `NM-` | BUILT | none | creativecommon pending | audit DEPLOYED with 1.1.01 (436 fixes |
 | JEI coverage gaps | [jei_coverage.md](jei_coverage.md) | `JC-` | BUILT | none | creativecompat pending, kubejs | part 1 (crafting) generated, regenerate with `python3 tools/jei_coverage.py` after `/dumpcraftingaudit` |
 | JEI world-interaction tabs | [jei_world_tabs.md](jei_world_tabs.md) | `JW-` | BUILT | none | creativecompat pending | DEPLOYED with 1.1.01 |
-| Wandering Trader + Wandering Winemaker | [wandering_trader.md](wandering_trader.md) | `WT-` | BUILT | none | creativecommon pending, creativebrewing pending | DEPLOYED with 1.0.4 |
+| Wandering Trader + Wandering Winemaker | [wandering_trader.md](wandering_trader.md) | `WT-` | BUILT | SQ-WT r1118 2026-11-18: 1 BATCH-FAULT | creativecommon pending, creativebrewing pending | DEPLOYED with 1.0.4 |
 | Trade sync | [trade_sync.md](trade_sync.md) | `TS-` | BUILT | none | creativecommon pending | BUILT 2026-11-03 (patcherMod, installed in `mods/`, not booted |
 | Wandering Trader catalog | [wandering_trader_catalog.md](wandering_trader_catalog.md) | none | reference | none |  | reference, regenerate with `python3 tools/wandering_trader_report.py` after `/dumptrades` |
 | Shields | [shields.md](shields.md) | `SH-` | BUILT | none | creativeequipment installed 2026-11-18 | DEPLOYED, in-game test pending (SH-06 passed) |
