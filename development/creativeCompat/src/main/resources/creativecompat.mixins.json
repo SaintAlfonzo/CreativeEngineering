@@ -27,6 +27,7 @@
     "BlockItemOwnStackFillMixin",
     "StructureTemplateBotanistPotMixin",
     "BotanistWorkbenchPotMixin",
+    "BotanyPotDimensionMixin",
     "FramedFlowerPotUnframedMixin",
     "SiltPotSoilMixin",
     "QuarkSortingHandlerMixin",

@@ -205,7 +205,9 @@ out (it copies ~300 jars). Entries added 2026-10-27 (pack_hygiene 44): `nether_s
 `nether_blocks_scan`, `nether_worldgen_scan`, `wood_mismatch_scan`, `loot_breakdown`, `jei_coverage`,
 `stack_size_rules` (`gen_stack_sizes.py`), `stack_sizes`, `food_catalog`, `can_audit`, `flower_pot_audit`,
 `wandering_trader_report`, `texture_audit`, `jei_order_report`. Earlier: `soup_soft_fluids`
-([veggies_delight.md](veggies_delight.md)) and `jei_world` ([jei_world_tabs.md](jei_world_tabs.md)).
+([veggies_delight.md](veggies_delight.md)) and `jei_world` ([jei_world_tabs.md](jei_world_tabs.md)). Added 2026-11-21: `botany_crops`
+(`gen_botany_crops.py`, pot crops and the Nether / End only tags from `botany_pot_crops.csv`;
+[botany_pots.md](botany_pots.md) 3).
 
 **Shared Python module** [tools/pack_paths.py](../tools/pack_paths.py) (standard library only, cheap to import):
 `INSTANCE`, `MODS`, `ITEM_DICT`; `parse_item_dict()` (source, key -> value with the last assignment winning, id ->

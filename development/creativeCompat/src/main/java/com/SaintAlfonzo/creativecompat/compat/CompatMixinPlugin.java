@@ -42,6 +42,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("ItemDisplayTileAccessor", List.of("moonlight")),
 			Map.entry("ItemPhysicServerMixin", List.of("itemphysic")),
 			Map.entry("BotanistWorkbenchPotMixin", List.of("beautify")),
+			// Nether / End crops grow only in their dimension (BotanyPotDimensionMixin, botany_pots.md 3)
+			Map.entry("BotanyPotDimensionMixin", List.of("botanypots")),
 			Map.entry("FramedFlowerPotUnframedMixin", List.of("framedblocks")),
 			Map.entry("SiltPotSoilMixin", List.of("twigs")),
 			// falling and stacking layers, bamboo leaf drops (surface/FallingLayers, BambooLeafDrops; G7.5, G7.9)

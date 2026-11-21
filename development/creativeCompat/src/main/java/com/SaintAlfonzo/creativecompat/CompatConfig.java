@@ -109,7 +109,7 @@ public final class CompatConfig {
 			).define("biomeTint", true);
 
 			tintStrength = b.comment(
-					"How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves",
+					"How far moss follows the grass color. 1.0 = shifts as much as grass does from Lush Caves",
 					"grass (where moss keeps its vanilla green); 0.0 = vanilla green everywhere. Chunks pick up",
 					"a change when they re-render (F3+A)."
 			).defineInRange("tintStrength", 1.0, 0.0, 1.0);
@@ -1423,7 +1423,7 @@ public final class CompatConfig {
 			b.comment("Portal Gun portals.").push("portalgun");
 
 			opaquePortals = b.comment(
-					"Client side. Gun portals are not rendered through: each shows a flat disc in its colour. Walking",
+					"Client side. Gun portals are not rendered through: each shows a flat disc in its color. Walking",
 					"through still works."
 			).define("opaquePortals", false);
 			despawnDistance = b.comment(

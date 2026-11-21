@@ -53,11 +53,17 @@
   - Nether Wart (Fertile Soul Soil only), Ghost Peppers.
   - Picked Propelpearls (Rich Soul Soil under the lowest stem).
   - Fungus Colonies, broken ripe or sheared.
-- **New:** Rich Soil, Rich Soil Farmland and Fertile Soil show their Botany Pots growth speed in the tooltip.
 - **Changed:** Fortune no longer changes the drops of any crop, berry bush or wild crop except melons.
 - **Changed:** The better-soil extra is sized on each crop's average harvest rounded to the nearest half. Carrots, Potatoes, Onions and Peanuts average 4.87 on Rich Soil Farmland and 6.02 on Fertile Soil [4.93 and 6.16]; Tobacco, Sweet Potato, Zucchini, Garlic, Hemp and Bell Peppers move by under 0.2.
-- **Changed:** In Botany Pots, Rich Soil and Rich Soil Farmland grow plants 10% faster [Rich Soil Farmland 25%] and Fertile Soil is a pot soil that grows them 20% faster. No soil changes pot yield.
 - **Fixed:** A ripe Cucumber or Ghost Pepper dropped no seeds when broken; it now drops 1 to 4.
+
+## Botany Pots <!-- icon: botanypots:terracotta_botany_pot -->
+
+- **New:** Botany Pots grow the seeds and pips of Veggie Delight, Vintage Delight (Mixed Seeds included), Vinery, Hearth and Harvest, Berry Good, Neapolitan, Delightful, Rustic Delight and The Dirty Stuff on their usual soils.
+- **New:** Botany Pots grow Garlic, Sweet Potato, Peanut, Hops, Cave Carrot, Flax, Mulberry, Propelplant, Chorusflame, Chorus Succulent and the Inky Cap, Morel, Crimson and Warped Fungus Colonies.
+- **New:** Rich Soil, Rich Soil Farmland and Fertile Soil show their Botany Pots growth speed in the tooltip.
+- **Changed:** In Botany Pots, Nether Wart, Propelplant and the Crimson and Warped Fungus Colonies grow only in the Nether, and Chorus Fruit, Chorusflame and Chorus Succulent only in the End [any dimension].
+- **Changed:** In Botany Pots, Rich Soil and Rich Soil Farmland grow plants 10% faster [Rich Soil Farmland 25%] and Fertile Soil is a pot soil that grows them 20% faster. No soil changes pot yield.
 
 ## Composting <!-- icon: farmersdelight:organic_compost -->
 

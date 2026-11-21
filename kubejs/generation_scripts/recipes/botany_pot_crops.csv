@@ -1,0 +1,57 @@
+# Botany Pots crops the pack adds (farming/crops #36, owner ruling R11 in plan_owner_rows_1120.md; botany_pots.md 3).
+# Read by tools/gen_botany_crops.py, which writes kubejs/data/creativecompat/recipes/botanypots/crop/<name>.json and
+# the dimension tags kubejs/data/creativecompat/tags/items/botany_pots/{nether_only,end_only}.json.
+# kind: new = write a crop recipe; gate = an existing pot crop (seed given) that only joins a dimension tag.
+# seed and drop items are item_dict keys. like = an existing pot crop recipe id: its categories, display, drops,
+#   growthTicks and lightLevel are copied, and any field filled on this row replaces the copied one.
+# categories: soil categories joined with |; each must be a category of a loaded pot soil.
+# drops: key@chance or key@chance x min-max, joined with |  (e.g. broccoli@1x1-2|broccoli_seeds@0.05x1-2).
+# display: empty = the block the seed places, from the crop growth dump (aging when it has an age property);
+#   otherwise block ids or block_dict keys joined with > for transitional phases, each with optional [prop=value,...].
+#   mix:<tag key> = the main drop of each tag member's pot crop at chance 1/n, the first member's display.
+# growth_ticks: base value before botany_pots.js scales every pot crop (1200 like wheat and carrot, 1400 colonies).
+# dimension: nether or end = the crop grows only there (Creative Compat BotanyPotDimensionMixin reads the tags).
+name,kind,seed,like,categories,drops,growth_ticks,display,dimension,note
+glow_berry_pips,new,glow_berry_pips,botanypots:minecraft/crop/glow_berry_bush,,,,,,Berry Good pips plant cave vines
+sweet_berry_pips,new,sweet_berry_pips,botanypots:minecraft/crop/sweet_berry_bush,,,,,,Berry Good pips plant the sweet berry bush
+cantaloupe_seeds,new,cantaloupe_seeds,,dirt|farmland,cantaloupe@1|cantaloupe_seeds@0.05,1200,,,like the melon pot crop
+salmonberry_pips,new,salmonberry_pips,botanypots:delightful/crop/salmonberries,,,,,,
+blueberry_pips,new,blueberry_pips,fruitsdelight:botanypots/blueberry,,,,,,Hearth and Harvest pips plant the Fruits Delight bush
+raspberry_pips,new,raspberry_pips,,dirt,raspberry@1|raspberry@0.05,1200,,,like the sweet berry pot crop
+sunflower_seeds,new,sunflower_seeds,,dirt|farmland,sunflower_seeds@1x1-2,1200,sunflower_stem,,Hearth and Harvest sunflower stem
+strawberry_pips,new,strawberry_pips,botanypots:neapolitan/crop/strawberries,,,,,,
+dark_bell_pepper_seeds,new,dark_bell_pepper_seeds,,dirt,bell_pepper_blue@1x1-2|bell_pepper_black@0.15|bell_pepper_purple@0.15|dark_bell_pepper_seeds@0.05x1-3,1200,,,like the red bell pepper pot crop
+pale_bell_pepper_seeds,new,pale_bell_pepper_seeds,,dirt,bell_pepper_orange@1x1-2|bell_pepper_pink@0.15|bell_pepper_white@0.15|pale_bell_pepper_seeds@0.05x1-3,1200,,,like the red bell pepper pot crop
+tobacco_seeds,new,tobacco_seeds,,dirt|farmland,tobacco_leafs@1x1-2|tobacco_seeds@0.05x1-2,1200,the_dirty_stuff:tobacco_seeds[blockstate=0]>the_dirty_stuff:tobacco_seeds[blockstate=3]>the_dirty_stuff:tobacco_seeds[blockstate=7],,growth property is not named age
+broccoli_seeds,new,broccoli_seeds,,dirt|farmland,broccoli@1x1-2|broccoli_seeds@0.05x1-2,1200,,,
+cauliflower_seeds,new,cauliflower_seeds,,dirt|farmland,cauliflower@1x1-2|cauliflower_seeds@0.05x1-2,1200,,,
+turnip_seeds,new,turnip_seeds,,dirt|farmland,turnip@1x1-2|turnip_seeds@0.05x1-2,1200,,,
+zucchini_seeds,new,zucchini_seeds,,dirt|farmland,zucchini@1x1-2|zucchini_seeds@0.05x1-2,1200,,,
+garlic_clove,new,garlic_clove,,dirt|farmland,garlic@1x1-2|garlic_clove@0.15x1-2,1200,,,
+sweet_potato,new,sweet_potato,,dirt|farmland,sweet_potato@1x1-2|sweet_potato@0.15x1-2,1200,,,like the potato pot crop
+grape_seeds_red,new,grape_seeds_red,,dirt,red_grape@1x1-2|grape_seeds_red@0.05x1-2,1200,,,
+grape_seeds_white,new,grape_seeds_white,,dirt,white_grape@1x1-2|grape_seeds_white@0.05x1-2,1200,,,
+grape_seeds_red_savanna,new,grape_seeds_red_savanna,,dirt,savanna_grapes_red@1x1-2|grape_seeds_red_savanna@0.05x1-2,1200,,,
+grape_seeds_white_savanna,new,grape_seeds_white_savanna,,dirt,savanna_grapes_white@1x1-2|grape_seeds_white_savanna@0.05x1-2,1200,,,
+grape_seeds_red_taiga,new,grape_seeds_red_taiga,,dirt,taiga_grapes_red@1x1-2|grape_seeds_red_taiga@0.05x1-2,1200,,,
+grape_seeds_white_taiga,new,grape_seeds_white_taiga,,dirt,taiga_grapes_white@1x1-2|grape_seeds_white_taiga@0.05x1-2,1200,,,
+grape_seeds_red_jungle,new,grape_seeds_red_jungle,,dirt,jungle_grapes_red@1x1-2|grape_seeds_red_jungle@0.05x1-2,1200,,,
+grape_seeds_white_jungle,new,grape_seeds_white_jungle,,dirt,jungle_grapes_white@1x1-2|grape_seeds_white_jungle@0.05x1-2,1200,,,
+cucumber_seeds,new,cucumber_seeds,,dirt|farmland,cucumber@1x1-2|cucumber_seeds@0.05x1-2,1200,,,
+ghost_pepper_seeds,new,ghost_pepper_seeds,,dirt|farmland,ghost_pepper@1x1-2|ghost_pepper_seeds@0.05x1-2,1200,,,
+oat_seeds,new,oat_seeds,,dirt|farmland,oat@1x1-2|oat_seeds@0.05x1-2,1200,,,
+mixed_seeds,new,mixed_seeds,,dirt|farmland,,1200,mix:t_mixed_seeds_plants,,one of the Mixed Seeds plants per harvest on average
+peanut,new,peanut,,dirt|farmland,peanut@1x1-2|peanut@0.15x1-2,1200,,,like the carrot pot crop
+hops,new,hops,,dirt|farmland,hops@1x1-2|hops@0.05x1-2,1200,,,
+cave_carrot,new,cave_carrot,,dirt|farmland|stone,cave_carrot@1x1-2|cave_carrot@0.15x1-2,1200,,,grows on stone like the wild cave carrot
+flax_seeds,new,flax_seeds,,dirt|farmland,flax@1x1-2|flax_seeds@0.05x1-2,1200,,,
+mulberry,new,mulberry,,dirt,mulberry@1|mulberry@0.05,1200,,,like the glow berry pot crop
+inky_cap_mushroom_colony,new,inky_cap_mushroom_colony,,mushroom,inky_cap_mushroom@1x1-3|inky_cap_mushroom@0.05x1-2,1400,,,like the red mushroom colony
+morel_mushroom_colony,new,morel_mushroom_colony,,mushroom,morel_mushroom@1x1-3|morel_mushroom@0.05x1-2,1400,,,like the red mushroom colony
+crimson_fungus_colony,new,crimson_fungus_colony,,crimson_nylium,crimson_fungus@1x1-3|crimson_fungus@0.05x1-2,1400,,nether,
+warped_fungus_colony,new,warped_fungus_colony,,warped_nylium,warped_fungus@1x1-3|warped_fungus@0.05x1-2,1400,,nether,
+propelplant_cane,new,propelplant_cane,,nether,propelpearl@1x1-2|propelplant_cane@0.25,1200,nethersdelight:propelplant_cane>nethersdelight:propelplant_berry_stem[pearl=false]>nethersdelight:propelplant_berry_stem[pearl=true],nether,
+chorusflame,new,chorusflame,,end_stone,chorusflame@1x1-2|chorusflame@0.05,1200,endersdelight:chorus_flame_block,end,like the chorus pot crop
+chorus_succulent,new,chorus_succulent,,end_stone,chorus_succulent@1x1-2,1200,ends_delight:chorus_succulent[succulent=1]>ends_delight:chorus_succulent[succulent=2]>ends_delight:chorus_succulent[succulent=3],end,growth property is not named age
+nether_wart,gate,nether_wart,botanypots:minecraft/crop/nether_wart,,,,,nether,Botany Pots' own recipe
+chorus_fruit,gate,chorus_fruit,botanypots:minecraft/crop/chorus,,,,,end,Botany Pots' own recipe

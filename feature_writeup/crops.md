@@ -1243,6 +1243,11 @@ Soil yield (extra produce on better soil, built 2026-10-28, off per crop by defa
 - **Crop parity layer (built 2026-10-02, Creative Common 1.0.4, DEPLOYED with 1.0.4):** tobacco gets farmland
   soils, right-click and hoe replant and the hoe area break. See §2.6 for the tags, the Quark config line
   and the four mixins.
+- **Botany Pots (built 2026-11-21, farming/crops #36, owner ruling R11):** every seed, planted produce and colony that
+  had no pot crop gets one on its soil (41: pips, Veggie Delight, Vinery grape, Vintage Delight seeds, garlic, sweet
+  potato, peanut, hops, cave carrot, flax, mulberry, the four colonies, propelplant, chorusflame, chorus succulent);
+  Nether crops (nether wart, propelplant, crimson and warped fungus colonies) grow in a pot only in the Nether, End
+  crops (chorus fruit, chorusflame, chorus succulent) only in the End. [botany_pots.md](botany_pots.md) 3.
 
 ## 4. Limits and decisions
 
@@ -1791,6 +1796,8 @@ PASSED r1031 (2026-10-31; SQ-CS-03 to -05 on a plains superflat), including the 
   greenhouse glass defined (§2.12.1: the rule, the block list, panes and modded glass added, WTHIT greenhouse line). CR-99.
   Then (owner): a greenhouse removes season fertility both ways (fertile and off become neutral), glass doors and
   trapdoors count, WTHIT green "preventing offseason debuff" / red "preventing fertile season buff".
+- 2026-11-21: Botany Pots crops for the 41 plantables without one and the Nether / End only rule (§3, farming/crops #36,
+  plan_owner_rows_1120.md G5; botany_pots.md 3).
 
 ## Owner ideas (scratchpad 2026-10-26)
 

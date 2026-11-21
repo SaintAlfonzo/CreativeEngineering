@@ -108,7 +108,7 @@ Crops,crops.md,CR-,BUILT,"creativedelight, creativecalendar","CQ-CS, CQ-PSF, SQ-
 Crop yields,"crop_yields.md, plan_crop_yields_wave2.md",SY-,BUILT,creativedelight,"CQ-SY, SQ-SY","BUILT 2026-10-28, reworked 2026-11-03 (installed)",,,
 Crops by biome,crops_by_biome.md,,reference,,,"reference, regenerate with `python3 tools/gen_crop_worldgen_table.py`",,,
 Crop growth seasons audit,crop_seasons_audit.md,,reference,,,reference regenerated 2026-11-02 (grasses typed,,,
-Botany Pots,botany_pots.md,BP-,BUILT,creativecommon,,BUILT 2026-11-07 (script + data,,,
+Botany Pots,botany_pots.md,BOT-,BUILT,"creativecommon, creativecompat","CQ-BOT, SQ-BOT",BUILT 2026-11-07 (script + data,,,
 Wild flowers,flowers.md,FL-,BUILT,creativeworldgen,"CQ-FF, SQ-FCK",DEPLOYED with 1.0.6 (2026-10-14,,,
 Flowers by biome,flowers_by_biome.md,,reference,,,"reference, regenerate with `python3 tools/gen_wild_flowers.py`",,,
 Flower pots and planters,"flower_pots.md, flower_pots_matrix.md",POT-,BUILT,"creativecompat, creativebrewing, creativedevtools","CQ-POT, SQ-POT",audit 2026-10-27 (static),,,
