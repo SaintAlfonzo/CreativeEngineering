@@ -256,7 +256,8 @@ public final class DietLogPages {
 	 * The rung's icon at {@code (x, y)}, {@link #ICON} pixels, on the bar and the Milestones list (plan_diet_books.md
 	 * 1.8). A slot rung is the slot item; a locked one-time unlock alternates the lock item and the effect sprite each
 	 * second in a gray frame; an unlocked one shows the effect sprite grayed in the unlock color's frame, whatever the
-	 * current diversity. A permanent buff not reached alternates the same way (its diamond shard and the effect).
+	 * current diversity. A permanent buff alternates its diamond shard and the effect the same way, reached or not
+	 * (kind-colored frame when reached, gray and grayed when not).
 	 * Every other rung: kind-colored frame, grayed when not reached.
 	 */
 	static void drawIcon(PoseStack pose, Rung r, int x, int y, boolean got) {
@@ -273,11 +274,11 @@ public final class DietLogPages {
 			Icons.dim(pose, x, y, ICON);
 			return;
 		}
-		if (r.kind == Rung.Kind.FLAT && !got && effectLoaded(r.id)) {
+		if (r.kind == Rung.Kind.FLAT && effectLoaded(r.id)) {
 			if ((System.currentTimeMillis() / ALTERNATE_MS) % 2 == 1) Icons.effect(pose, r.id, x, y, ICON);
 			else kindIcon(pose, RpConfig.CLIENT.flatIcon.get(), r, x, y);
-			Icons.frame(pose, x, y, ICON, GREY);
-			Icons.dim(pose, x, y, ICON);
+			Icons.frame(pose, x, y, ICON, got ? color(r) : GREY);
+			if (!got) Icons.dim(pose, x, y, ICON);
 			return;
 		}
 		drawKindIcon(pose, r, x, y);
@@ -430,8 +431,9 @@ public final class DietLogPages {
 			int filled = window.x(s.diversity, x0, x1);
 			GuiComponent.fill(pose, x0, barY, filled, barY + 4, 0xFF3FA34D);
 			if (window.contains(s.maxDiversity)) {
+				// 2 px wide, 3 px above and below the bar: at the 0.85 page scale a 1 px mark was lost at many positions.
 				int maxX = window.x(s.maxDiversity, x0, x1);
-				GuiComponent.fill(pose, maxX, barY - 1, maxX + 1, barY + 5, 0xFF7A3FA3);
+				GuiComponent.fill(pose, maxX - 1, barY - 3, maxX + 1, barY + 7, 0xFF7A3FA3);
 			} else if (s.maxDiversity > window.hi()) {
 				fontRenderer.draw(pose, ">", x1 + 2, barY - 2, 0x7A3FA3);
 			}
@@ -500,7 +502,7 @@ public final class DietLogPages {
 				boolean struck = r.kind == Rung.Kind.UNLOCK && got;
 				boolean dark = struck ? r.threshold <= ClientState.state.diversity : got;
 				String text = fontRenderer.plainSubstrByWidth(describe(r).getString(), right(frame) - (tx + 34));
-				fontRenderer.draw(pose, styled(Icons.num(r.threshold), struck), tx + 14, y + 1, dark ? 0x1E6B2A : 0x777777);
+				fontRenderer.draw(pose, Icons.num(r.threshold), tx + 14, y + 1, dark ? 0x1E6B2A : 0x777777);
 				// Active buffs (reached rungs other than one-time unlocks) in green (owner notes, round 3).
 				int textColor = !dark ? 0x777777 : r.kind != Rung.Kind.UNLOCK ? 0x1E6B2A : 0x000000;
 				fontRenderer.draw(pose, styled(text, struck), tx + 34, y + 1, textColor);
@@ -522,8 +524,9 @@ public final class DietLogPages {
 	 * The last meals grid on Apple Pie's Overview page, in place of its top spacer (DiversityPageMixin): a "Last 32
 	 * Meals" title centered over an 8 x 4 icon grid (plan_diet_books_r2.md A1, A2), newest at the top left, drawn at the
 	 * {@code [dietLog.pages.meals]} offset and scale. A meal shows only while its food is in the decay window, so foods
-	 * a Change or Drop aged out leave the grid (ruling 9). Hover: "N. Name", the food's diversity contribution only when
-	 * it differs from this meal's, then this meal's (struck through when the food's is shown).
+	 * a Change or Drop aged out leave the grid (ruling 9). Hover: "N. Name", "Full meal" (the food's base diversity),
+	 * the food's diversity contribution only when it differs from this meal's, then this meal's (struck through when
+	 * the food's is shown).
 	 */
 	public static UIElement mealsGrid() {
 		long t0 = System.nanoTime();
@@ -591,6 +594,8 @@ public final class DietLogPages {
 				boolean differs = !Icons.diversity(mine).equals(Icons.diversity(total));
 				List<Component> lines = new ArrayList<>();
 				lines.add(Component.translatable("solraspberrypie.dietlog.meal", n + 1, stack.getHoverName()));
+				double full = complexity(m.item());
+				if (full >= 0) lines.add(Component.translatable("solraspberrypie.dietlog.meal_full", Icons.diversity(full)).withStyle(ChatFormatting.GRAY));
 				if (differs) lines.add(Component.translatable("solraspberrypie.dietlog.meal_total", Icons.diversity(total)).withStyle(ChatFormatting.GRAY));
 				MutableComponent self = Component.translatable("solraspberrypie.dietlog.meal_this", Icons.diversity(mine)).withStyle(ChatFormatting.GRAY);
 				lines.add(differs ? self.withStyle(ChatFormatting.STRIKETHROUGH) : self);

@@ -23,7 +23,8 @@ import java.util.UUID;
 /**
  * /solrp pause &lt;players&gt;, /solrp resume &lt;players&gt;, /solrp pause list (12.3), /solrp reset &lt;players&gt;
  * (12.4: clears the player's whole diet: Apple Pie's food memory and counter, the unique-food count, highest
- * diversity and so every one-time unlock, slot choices and the Liquid Diet Log; pause state and books are kept). Same
+ * diversity and so every one-time unlock, slot choices and the Liquid Diet Log; pause state and books are kept; with no
+ * player it resets the player running it). Same
  * permission level as
  * vanilla /effect. A pause stops Raspberry Pie applying anything for that player; data keeps updating; slot actions are
  * refused. It removes nothing by itself (use /effect clear after it). Resume re-evaluates at once with the gain lines.
@@ -37,7 +38,8 @@ public final class RpCommands {
 				.then(Commands.literal("resume")
 						.then(Commands.argument("players", EntityArgument.players()).executes(c -> setPaused(c, false))))
 				.then(Commands.literal("reset")
-						.then(Commands.argument("players", EntityArgument.players()).executes(RpCommands::reset))));
+						.executes(c -> reset(c, java.util.List.of(c.getSource().getPlayerOrException())))
+						.then(Commands.argument("players", EntityArgument.players()).executes(c -> reset(c, EntityArgument.getPlayers(c, "players"))))));
 	}
 
 	private static int setPaused(CommandContext<CommandSourceStack> c, boolean pause) throws CommandSyntaxException {
@@ -63,8 +65,8 @@ public final class RpCommands {
 		return count;
 	}
 
-	private static int reset(CommandContext<CommandSourceStack> c) throws CommandSyntaxException {
-		Collection<ServerPlayer> players = EntityArgument.getPlayers(c, "players");
+	/** {@code /solrp reset} with no player resets the player running it. */
+	private static int reset(CommandContext<CommandSourceStack> c, Collection<ServerPlayer> players) {
 		for (ServerPlayer p : players) {
 			FoodList fl = FoodList.get(p);
 			fl.clearFood();

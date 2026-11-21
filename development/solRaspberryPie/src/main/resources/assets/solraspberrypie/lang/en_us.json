@@ -73,6 +73,7 @@
   "solraspberrypie.dietlog.meals": "Last %s Meals",
   "solraspberrypie.dietlog.meals_none": "No meals yet",
   "solraspberrypie.dietlog.meal": "%s. %s",
+  "solraspberrypie.dietlog.meal_full": "Full meal: %s diversity",
   "solraspberrypie.dietlog.meal_this": "This meal: %s diversity",
   "solraspberrypie.dietlog.meal_total": "Food total: %s diversity",
   "solraspberrypie.tooltip.diversity": "Diversity: %s",
