@@ -2953,3 +2953,42 @@ look each SelectedItem line after a pickup shows the block's item (pot items car
 @@text normal. WTHIT shows 'Punch to toggle handle' on the pots, 'Punch to toggle lid' on the kettle, nothing on the skillet.
 @@text CQ-FCB-04b: place a cooking pot, copper pot and kettle on the floor, on a wall and against the underside of a block:
 @@text the handle shows only on the ones placed under a block.
+
+@@section 2
+@@title CQ-FCB Stone cutting boards read the polished stone texture, 2026-11-21 ([kitchen.md](../kitchen.md) 2.8; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R9, R15; TODO `cooking/kitchen #25`)
+@@date 2026-11-21
+@@jars creativedelight
+@@sources feature_writeup/kitchen.md development/creativeDelight/members/farmers/src/main/resources/assets/farmersdelight/models/block
+@@text
+@@text Targets the Creative Delight jar of 2026-11-21: the three boards use `farmersdelight:block/stone_cutting_board` (FD's board model, every face reading the vanilla `polished_<stone>` texture with UVs inside 1..15); the derived PNGs are gone. Replaces the art half of CQ-FCB-02 for the boards.
+@@text
+@@table
+## CQ-FCB-07 | look: granite, andesite and diorite cutting boards show the polished stone with no block edge
+@group client
+@commands platform at 0 100 0; the three stone boards and an oak cutting board side by side, an item on one board; shots from above and from the side; the three in the hotbar
+@pass LOOK: each board shows its polished stone (granite, andesite, diorite) on the top, the sides and the handle, no 1 px border line of the stone block, no stretched strip on the east edge; same shape as the oak board; the hotbar icons match
+@fails `models/block/stone_cutting_board.json` UVs (column 0 strip shifted to 1) and the three child models' `texture` keys in the repackedFarmers member; a missing `minecraft:block/polished_<stone>` reference
+> fill 0 100 0 10 100 10 minecraft:stone
+> fill 0 101 0 10 104 10 minecraft:air
+> setblock 2 101 4 farmersdelight:granite_cutting_board[facing=north]
+> setblock 4 101 4 farmersdelight:andesite_cutting_board[facing=north]
+> setblock 6 101 4 farmersdelight:diorite_cutting_board[facing=north]
+> setblock 8 101 4 farmersdelight:cutting_board[facing=north]
+> item replace entity @s hotbar.0 with farmersdelight:granite_cutting_board
+> item replace entity @s hotbar.1 with farmersdelight:andesite_cutting_board
+> item replace entity @s hotbar.2 with farmersdelight:diorite_cutting_board
+> item replace entity @s hotbar.3 with minecraft:carrot
+do {"slot": 3}
+do {"look": {"from": "4.5 103 6.5", "at": "4.5 101 4.5"}}
+do {"use": "block"}
+do {"look": {"from": "5.0 103.5 1.0", "at": "5.0 101 4.5"}}
+do {"wait": "chunks"}
+shot boards_above
+do {"look": {"from": "9.5 101.4 4.5", "at": "1.5 101.1 4.5"}}
+shot boards_side_east
+do {"look": {"from": "4.0 101.6 6.5", "at": "4.0 101.0 4.5"}}
+shot andesite_close
+do {"slot": 0}
+shot hotbar_boards
+bootreject Missing texture.*farmersdelight:block/\w*cutting_board
+look shots: polished stone on every face of the three, no dark edge line or stretched strip; the carrot sits on the andesite board

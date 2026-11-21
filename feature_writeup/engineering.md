@@ -2,14 +2,13 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=99990989cd58 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 10, Testing 3), 3 Complete.
+<!-- generated:status_index begin open_work sha1=939d88700e4f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 9, Testing 4), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `engineering/dreams-and-desires #7` | Planned | S P T | Tune milkshake lava generation |
 | `engineering/dreams-and-desires #8` | Planned | S P T | Tune sulfuric acid lava generation |
-| `engineering/sawmill-and-components #2` | Planned | S | Sawmill recipes off the manual pipeline |
 | `engineering/sawmill-and-components #3` | Planned | C P | JEI doesn't show the sawmill blade |
 | `engineering/sawmill-and-components #4` | Planned | S P | One center per component |
 | `engineering/sawmill-and-components #8` | Planned | S P | Metal component chains generated |
@@ -19,13 +18,14 @@
 | `engineering/sawmill-and-components #13` | Planned | S P T | Gates and Project Red |
 | `engineering/dreams-and-desires #3` | Testing | S C P T | Rose quartz sand blasting |
 | `engineering/sawmill-and-components #1` | Testing | S C P | Engineering features |
+| `engineering/sawmill-and-components #2` | Testing | S | Sawmill recipes off the manual pipeline |
 | `tooling/conventions #1` | Testing | S | Raw `e.custom` and `e.add` against the helper rule |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|
 | IE Sawmill picks its recipe by the installed blade: `creativeengineering:precision_sawblade` with a `{Profile}` (stairs, door, fence, ...) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); the crash fix (late class load) never explicitly checked in game |
-| 12 precision-sawblade blueprints; 211 profiled sawmill recipes from a manual generator pipeline | DEPLOYED; generator still manual (F1) |
+| 12 precision-sawblade blueprints; 211 profiled sawmill recipes | DEPLOYED as jar JSONs; since 2026-11-21 written at load by [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js) (NCH `sawmillRaw`), built, in-game check EN- queue row (F1) |
 | Create fan processing "Dragon Breathing" (dragon head in front of an encased fan), 14 recipes, JEI page | DEPLOYED, in-game test pending |
 | 15 components (IE iron and steel plus 13 pack ones) by crafting, sequenced assembly and blueprint, with disassembly | DEPLOYED |
 | Wire coils and coil blocks for 12 metals plus the HV coil, by crafting, assembly and blueprint, with disassembly | DEPLOYED |
@@ -37,7 +37,7 @@
   r1031 2026-10-31; EN-19, EN-20 and the EN-21 JEI look in game). EN-01 to EN-18 have never been run. Findings F1 to F8 (section 4) are
   open; F2 and F4 need your call.
 - **Files to open:** [sawmill/SawbladeRouting.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/SawbladeRouting.java),
-  [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js),
+  [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js) (sawmill recipes),
   [fan/DragonBreathingFanProcessingType.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/DragonBreathingFanProcessingType.java),
   [components.js](../kubejs/data/creativeengineering/kubejs/engineering/components.js),
   [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js) lines 687-760 (coils),
@@ -74,8 +74,8 @@
   blue dye and paper, or over an empty schematic): IE sawblade + a shape reference (any `#minecraft:wooden_stairs`,
   `#creativeengineering:vertical_planks`, `#creativeengineering:railings`, ...) + 2 steel plates -> precision sawblade
   with that profile. 12 recipes, one per profile.
-- **Recipes:** 211 sawmill JSONs in Creative Common's `data/creativeengineering/recipes/sawmill/` (800 RF, sawdust
-  secondary, optional `"blade"`), plus 2 non-wood ones in `kubejs/data/creativeengineering/recipes/sawmill/` (layered
+- **Recipes:** 211 sawmill recipes `creativeengineering:sawmill/<input>-<output>` (800 RF, sawdust
+  secondary, optional `"blade"`), written at load by [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js), plus 2 non-wood ones in `kubejs/data/creativeengineering/recipes/sawmill/` (layered
   obsidian, rose quartz).
 
 ### 2.2 Dragon Breathing (Create fan processing)
@@ -169,9 +169,13 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
     recipe.
   - The routing classes are force-loaded at startup (`CreativeEngineering.java` lines 262-269): the mixin applies on the
     first sawmill tick, and a late class load there once crashed.
-- **Sawmill recipes:** [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js) is a node script that
-  writes JSONs into `generation_scripts/recipes/sawmill/`, copied by hand into Creative Common and rebuilt. They're JSON, not
-  `NCH.ieSawmill`, because kubejs-immersive-engineering's sawmill schema breaks secondaries.
+- **Sawmill recipes:** [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js) walks its species table in `ServerEvents.highPriorityData` and calls NCH `sawmillRaw`
+  (Creative Common), which adds each recipe as raw datapack JSON (`creativeengineering:recipes/sawmill/<input>-<output>.json`,
+  with `forge:mod_loaded` conditions). Raw JSON, not the recipe event, because kubejs-immersive-engineering's sawmill schema
+  breaks secondaries and the `blade` field. Logs and wood: 6 planks, 1600 RF, bark (stripping) plus sawdust (nether: roots);
+  stripped: 6 planks, 800 RF; planks: one recipe per form, blade profile from the form (`sawBlades`); vanilla-shaped species
+  keep IE's own planks -> slab. Replaced the node generator `generation_scripts/sawmill.js` and its 211 jar JSONs on
+  2026-11-21 (Rhino harness: 211 of 211 identical).
 - **Fan type:** ported from Create: Halitosis. `DragonBreathingFanProcessingType` registers into Create's
   `FanProcessingTypeRegistry` at common setup; `DragonBreathingRecipe` / `DragonBreathingRecipeType` are a
   `ProcessingRecipe` type `creativeengineering:dragon_breathing`; `CatalystUtils` reads the skull's direction.
@@ -216,8 +220,8 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
 
 ### Findings (2026-10-18)
 
-- **F1. The sawmill recipes are on a manual pipeline.** `node sawmill.js` -> hand copy into Creative Common -> jar rebuild,
-  211 copies. The file's TODO plans an NCH helper adding them as raw JSON from `ServerEvents.highPriorityData`.
+- **F1. The sawmill recipes were on a manual pipeline.** `node sawmill.js` -> hand copy -> jar rebuild, 211 copies. Moved
+  2026-11-21 to NCH `sawmillRaw` in `ServerEvents.highPriorityData` (section 3); in-game check pending (blade and secondaries).
   In [TODO](todo/TODO.md) `engineering/sawmill-and-components #2`.
 - **F2. JEI probably can't tell which blade a sawmill recipe needs. Your call.** The `"blade"` field is the pack's; IE's
   JEI page shows input and output only, so oak planks shows a dozen outputs with no hint which blade makes which.
@@ -288,7 +292,7 @@ Brief: [briefs/engineering_dreams-and-desires.md](briefs/engineering_dreams-and-
 
 ## 5. File map
 
-- Sawmill: Creative Common [sawmill/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, `data/creativeengineering/recipes/sawmill/` (211); [generation_scripts/sawmill.js](../kubejs/generation_scripts/sawmill.js); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
+- Sawmill: Creative Common [sawmill/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/sawmill/) (`SawbladeRouting`, `duck/SawmillProcessExt`, `duck/SawmillRecipeExt`), mixins `SawmillProcessMixin`, `SawmillRecipeMixin`, `SawmillRecipeSerializerMixin`, [item/PrecisionSawbladeItem.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/item/PrecisionSawbladeItem.java), `data/forge/tags/items/sawblades.json`, [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js) (sawmill recipes, NCH `sawmillRaw`); `kubejs/data/creativeengineering/recipes/{blueprint,sawmill}/`; [blueprints.js](../kubejs/data/creativeengineering/kubejs/engineering/blueprints.js) (blueprint item); [tooltips.js](../kubejs/client_scripts/tooltips.js) line 446.
 - Fan: Creative Common [fan/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/), [compat/DragonBreathingJEI.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/compat/DragonBreathingJEI.java), `data/creativeengineering/tags/blocks/fan_processing_catalysts/dragon_breathing.json`; [dragon_breathing.js](../kubejs/data/creativemagic/kubejs/magic/dragon_breathing.js); `NCH.dragonBreathing`.
 - Components and coils: [items/components.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/components.js), [items/coil_blocks.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js), [components.js](../kubejs/data/creativeengineering/kubejs/engineering/components.js), [metal_base_materials.js](../kubejs/data/creativeengineering/kubejs/metal/metal_base_materials.js), [transition_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/changes/transition_items.js).
 - Exclusive outputs: Creative Common [fan/ExclusiveResults.java](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/fan/ExclusiveResults.java), `fan/duck/ProcessingRecipeExt`, mixins `ProcessingRecipeMixin`, `ProcessingRecipeSerializerMixin`; `NCH.ddSanding`; rose quartz recipe in [redstone.js](../kubejs/data/creativeengineering/kubejs/engineering/redstone.js).
@@ -297,8 +301,7 @@ Brief: [briefs/engineering_dreams-and-desires.md](briefs/engineering_dreams-and-
 
 ## 6. Offline checks
 
-None scripted. `node kubejs/generation_scripts/sawmill.js` regenerates the sawmill JSONs; diff them against
-Creative Common's copies to see whether the jar is current.
+None scripted. The sawmill recipes are written at load (no generated files to diff).
 
 ## 7. In-game test suite
 
@@ -346,6 +349,15 @@ Creative Common's copies to see whether the jar is current.
   ore still outputs all of it; a crushing wheel or saw placed before the update loads with its items; no `[result-pools]`
   line or Create "has more outputs" warning in `latest.log`.
 
+Sawmill recipes written at load (F1, 2026-11-21):
+
+- [ ] **EN-25 Raw sawmill recipes survive kubejs-immersive-engineering:** `latest.log` has `[wood] 211 IE sawmill recipes
+  written` and no NCH error from `sawmillRaw`; `/kubejs reload server_scripts` or `/reload` keeps them. IE Sawmill with a
+  plain sawblade: oak log -> 6 oak planks, oak bark and sawdust, stripped oak log as the stripped stage; crimson stem ->
+  crimson scales and crimson roots; ancient planks -> 2 ancient planks slabs. A `button` precision sawblade on twisted
+  planks -> twisted button, a `vertical_slab` blade on oak planks -> 2 oak vertical slabs. JEI on oak planks (U) lists the
+  `creativeengineering:sawmill/` recipes with their sawdust secondary. Queue SQ-EN-25 (Create saw rows included), CQ-EN-25.
+
 ## 8. History
 
 - By 2026-09-27 (initial git commit): sawblade routing (with the late-class-load crash fix), precision sawblades, the
@@ -361,6 +373,9 @@ Creative Common's copies to see whether the jar is current.
 - 2026-10-30: exclusive chance outputs for Create processing recipes and rose quartz sand blasting
   (`engineering/dreams-and-desires #3`); tests EN-19 to EN-21. Creative Common 1.1.04 built, not installed.
 - 2026-11-21: F5 fixed: component tier comments read Light / Heavy (plan_owner_rows_1120.md D2). No recipe change.
+- 2026-11-21: F1: sawmill recipes written at load by `wood_types.js` through NCH `sawmillRaw` (`engineering/sawmill-and-components #2`,
+  plan_wood_bucket_batch_1121.md P2 item 4); `generation_scripts/sawmill.js` and the 211 jar JSONs deleted. Rhino harness: 211 of
+  211 recipes identical to the old JSONs. Create saw rows gained twisted button and pressure plate. Test EN-25.
 
 ## Owner notes (scratchpad 2026-11-07)
 

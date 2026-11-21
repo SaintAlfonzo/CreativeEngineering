@@ -213,3 +213,36 @@ rotate and take-out logic and the empty-sack tag (SB-01, SB-03, SB-04 server hal
   (client).
 - [ ] **SB-09 World:** place the sack, right-click it: its screen opens with the rotated order. Dedicated server:
   repeat SB-01 and SB-03 (packet and mixin on both sides).
+
+## 7. Sack pickup (TODO `items/storage-and-item-loss #12`)
+
+Owner (scratchpad 2026-11-09): "pick up Supplementaries sacks like backpacks and Farmer's Delight stations". BUILT
+2026-11-21 in Creative Common (plan_wood_bucket_batch_1121.md P2 item 2).
+
+- **Already upstream (Supplementaries 2.4.20, checked in the jar):** a sack broken by hand keeps its contents like a
+  shulker box. `SackBlock.getDrops` adds the dynamic `contents` drop and the loot table
+  (`supplementaries:blocks/sack`, the same in Supplementaries Squared's 16 `sack_<color>` tables) runs `copy_name`,
+  `copy_nbt` (Lock, LootTable, LootTableSeed) and `set_contents` into `BlockEntityTag.Items`; placing the item restores
+  them (vanilla `BlockItem`). In creative, `playerWillDestroy` drops a filled sack the same way. `onRemove` never
+  spills items. Every sack item already stacks to 1 (stack_sizes.md), filled or empty, so D6 needs nothing.
+- **Added: sneak pickup.** Sneak right-click with an empty main hand on a block in `#creativecommon:sneak_pickup`
+  puts it in the hand as its normal player-break drop (contents kept), as a placed Sophisticated Backpack picks up
+  and as Creative Delight's cookware pickup does (`cooking/CookwareHandling`). The sack's screen does not open then.
+  Break protection respected (a `BreakEvent` is posted); an unopened structure sack rolls its loot table first; any
+  other drop of the table goes to the inventory; a table that does not give the block back leaves the block in place.
+  Creative Common `storage/SneakPickup`; tag filled by Common's server script `tags/sneak_pickup_tags.js` (`b.sack`,
+  `b.suppsquared_sacks`). No config switch (the tag is the switch).
+
+### Tests
+
+Queue: SQ-SNP-01 (SB-10), -02 (SB-11), -03 (SB-12), -04 (SB-13, spawn protection in place of a claim), -05 (SB-14);
+CQ-SNP-01 (tooltip, screen, FTB Chunks claim). The queue prefix is SNP, not SB: SQ-SB-01 to -08 are spawn boxes.
+
+- [ ] **SB-10 Sneak pickup:** a placed sack with 3 kinds of items; sneak and right-click it with an empty hand -> the sack
+  is in the hand, the block is gone, the tooltip lists the 3 kinds; place it -> the same contents inside.
+- [ ] **SB-11 Dyed sack and name:** rename a Supplementaries Squared red sack in an anvil, fill and place it; sneak pickup
+  -> red sack with its name and contents.
+- [ ] **SB-12 Not empty-handed:** sneak right-click with an item in the main hand -> vanilla behavior (the item is used or
+  placed); without sneaking -> the sack's screen opens.
+- [ ] **SB-13 Protection:** in an FTB Chunks claim of another team -> nothing happens, the sack stays.
+- [ ] **SB-14 Break by hand:** break a filled sack in survival -> the drop keeps the contents (upstream).

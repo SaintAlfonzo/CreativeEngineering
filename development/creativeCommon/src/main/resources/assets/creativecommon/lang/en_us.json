@@ -24,5 +24,17 @@
   "item.minecraft.splash_potion.effect.strong_magic_resistance": "Splash Potion of Magic Resistance",
   "item.minecraft.tipped_arrow.effect.magic_resistance": "Arrow of Magic Resistance",
   "item.minecraft.tipped_arrow.effect.long_magic_resistance": "Arrow of Magic Resistance",
-  "item.minecraft.tipped_arrow.effect.strong_magic_resistance": "Arrow of Magic Resistance"
+  "item.minecraft.tipped_arrow.effect.strong_magic_resistance": "Arrow of Magic Resistance",
+  "block.creativecommon.spruce_composter": "Spruce Composter",
+  "block.creativecommon.birch_composter": "Birch Composter",
+  "block.creativecommon.dark_oak_composter": "Dark Oak Composter",
+  "block.creativecommon.jungle_composter": "Jungle Composter",
+  "block.creativecommon.acacia_composter": "Acacia Composter",
+  "block.creativecommon.mangrove_composter": "Mangrove Composter",
+  "block.creativecommon.twisted_composter": "Twisted Composter",
+  "block.creativecommon.ancient_composter": "Ancient Composter",
+  "block.creativecommon.blossom_composter": "Blossom Composter",
+  "block.creativecommon.azalea_composter": "Azalea Composter",
+  "block.creativecommon.crimson_composter": "Crimson Composter",
+  "block.creativecommon.warped_composter": "Warped Composter"
 }

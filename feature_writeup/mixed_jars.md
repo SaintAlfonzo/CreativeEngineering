@@ -2,17 +2,17 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=bf686a348e1e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 5, Testing 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=bfa48a8430a7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 4, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `items/jars #1` | Planned | S C P T | Jar capacity rework |
 | `items/jars #2` | Planned | C P | New jar contents |
 | `items/jars #3` | Planned | S C P | More foods in jars |
-| `items/jars #4` | Planned | C P | Soups and stews take 1 jar space |
 | `items/jars #5` | Planned | S C P | Pickled veg storage |
 | `baking/baked-goods #11` | Testing | S+ C P | Mixed cookie jars |
+| `items/jars #4` | Testing | C P | Soups and stews take 1 jar space |
 | `items/jars #6` | Testing | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
 | `items/jars #7` | Testing | S+ P | Create pump does not fill the Supplementaries jar |
 <!-- generated:status_index end open_work -->
@@ -202,9 +202,9 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 ## 9. Soups and stews in jars
 
 Supplementaries jars hold liquids as Moonlight *soft fluids*, data files at
-`data/<ns>/moonlight/soft_fluids/<name>.json`. A bowl of soup on a jar pours in 2 units (a jar holds 12, so 6 bowls);
-an empty bowl on the jar takes one bowl (2 units) back out. In and out move the same amount, so a jar
-cannot duplicate soup (a bottle soup is 1 unit both ways). Moonlight and Supplementaries ship 11 soups (beetroot soup, mushroom,
+`data/<ns>/moonlight/soft_fluids/<name>.json`. A bowl of soup on a jar pours in 1 unit (a jar holds 12, so 12 bowls;
+2 units and 6 bowls before 2026-11-21, `items/jars #4`); an empty bowl on the jar takes one bowl (1 unit) back out. In
+and out move the same amount, so a jar cannot duplicate soup (a bottle soup is 1 unit both ways). Moonlight and Supplementaries ship 11 soups (beetroot soup, mushroom,
 rabbit and suspicious stew; beef stew, baked cod stew, chicken soup, fish stew, pumpkin soup, vegetable soup, sopa de
 macaco). The pack adds the other 24, so every item in `#creativedelight:food_type/soup` and every Golden Food
 soup and stew goes in a jar:
@@ -220,11 +220,16 @@ soup and stew goes in a jar:
 
 Bottled drinks of the two ports are hand-written files in the same folder, kept by the generator (`HAND_WRITTEN`):
 Vintage's Nut Milk, Veggies' Carrot Juice, Dandelion Juice and Turnip Water (their tank fluids count as the same
-liquid, `equivalent_fluids`) and Fermented Garlic Honey. Vintage's own jar contents ship in its jar.
+liquid, `equivalent_fluids`; nut milk's Forge fluid `creativedelight:nut_milk` since 2026-11-21) and Fermented Garlic Honey. Vintage's own jar contents ship in its jar.
 
 **Generator:** `python3 tools/gen_soup_soft_fluids.py` (`/cdevgen run soup_soft_fluids`, reads `/dumpfood`'s
 foods.json for each item's empty container) writes one json per uncovered soup and deletes stale ones; the folder is
-the tool's, except the `HAND_WRITTEN` drink files. A soup a mod already covers is skipped (its color stays the mod's). New soups: put the key in the soup
+the tool's, except the `HAND_WRITTEN` drink files. A soup a mod already covers keeps the mod's json (its color stays the
+mod's), but the tool writes a copy with the pack's bowl capacity to `kubejs/data/<ns>/moonlight/soft_fluids/` (KubeJS
+data outranks the jars; 11 files, listed in `kubejs/generation_scripts/food/soup_soft_fluid_overrides.txt` so a rerun
+removes only its own). The jar space a serving fills is a value in the tool: `BOWL_SPACES` (1) and `SPACES` (bottle 1)
+times `JAR_UNIT` (1 while a jar holds 12; `items/jars #1` capacity 60 sets it to 5 and nothing else changes). No glint
+on enchanted soups in the jar (dropped, plan_wood_bucket_batch_1121.md R6). New soups: put the key in the soup
 type in food_types.json and rerun. Applies on `/reload`.
 
 **Colour:** each soup its own, decided 2026-10-22 (not one shared soup color). The tool takes the largest
@@ -264,6 +269,11 @@ Tests (in game; server half in the scratch queue, SQ-JFP-):
   nothing.
 - [ ] **MJ-19 Lone-cookie row wording (`items/jars #6`):** JEI, Jar Storage tab, the row of cookies in no family ->
   the note reads "These don't mix: one kind per jar." Queue: CQ-JC-03.
+- [ ] **MJ-20 One space per bowl (`items/jars #4`, 2026-11-21):** 12 bowls of Corn Soup fill an empty jar, a 13th stays in
+  the hand; each pour gives the bowl back and an empty bowl takes one serving out. Farmer's Delight pumpkin soup (a
+  mod-shipped soup, the pack's KubeJS copy) the same. Queue SQ-MJ-03.
+- [ ] **MJ-21 Nut milk by pipe (2026-11-21):** a Create pump moves `creativedelight:nut_milk` from a tank into an empty jar
+  (the Nut Milk soft fluid). Queue SQ-MJ-04 (after SQ-JFP-01b, TODO `jars #15`).
 
 r1120nv (2026-11-21): SQ-JFP-01 to -04 moved no water either way with the pump touching the jar; the code shows no
 defect (capability attached, pump turning). Diagnostic rows SQ-JFP-01b (a pipe segment between pump and jar) and

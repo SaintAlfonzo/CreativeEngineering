@@ -391,6 +391,8 @@ global.removedItems = [
 	// Alex's Mobs' crow does not spawn: Hearth and Harvest's crow replaces it (plan_hearth_crow_swap.md 6.3; spawn rule
 	// no_alexsmobs_crow in mob_spawns.json, crowSpawnWeight 0). Crows already in saves stay.
 	i.spawn_egg_crow,
+	// Barbeque's Delight's Bibimbap is dropped from the pack (plan_wood_bucket_batch_1121.md R18).
+	i.bibimbap,
 ];
 
 // Floral Enchantment's 31 large pots (empty and filled) are hidden; a pack pot replaces them (flower_pots.md 3.2.9).

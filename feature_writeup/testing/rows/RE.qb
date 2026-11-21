@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-RE engineering findings F4, F5, F9, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7; [recipes_engineering.md](../recipes_engineering.md) RE-31 to RE-33; TODO `recipes/engineering #3`)
 @@date 2026-11-16
-@@reviewed 2026-11-20
+@@reviewed 2026-11-21
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/recipes_engineering.md kubejs/data/creativeengineering/kubejs/engineering/crystal.js kubejs/data/creativeengineering/kubejs/engineering/dust.js kubejs/data/creativeengineering/kubejs/engineering/redstone.js
 @@text
@@ -71,3 +71,380 @@ expect verb=rdetail text=creativeengineering:createmixing/basalt_generation_supe
 expect verb=rdetail text=creativeengineering:vivibrating/sand_vibrating_to_shells n=1
 reject \[cdevtest\] .*done=0
 look the ingredient lists (16, 32, 10, 11 entries; 6 vibrating outputs); the basin run is a client hand check (one per kind)
+
+@@section 2
+@@title SQ-RE Wooden cauldron, wooden buckets on cauldrons and dispensers, goat and nut milk buckets, 2026-11-21 ([recipes_engineering.md](../recipes_engineering.md) 2.8, RE-40 to RE-44; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R1, R10, R11, D3, D4, D9; TODO `recipes/engineering #10`, `#8`, `blocks/new #15`, `engineering-recipes #1`)
+@@date 2026-11-21
+@@jars creativecommon creativedelight
+@@sources feature_writeup/recipes_engineering.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/bucket kubejs/data/creativedelight/kubejs/creativedelight/recipes.js
+@@text
+@@text Targets the Creative Delight jar of 2026-11-21 (`farm/bucket/`: `WoodenCauldronBlock`, `WoodenBucketBehaviors`, goat and nut milk buckets) with the Creative Common jar of the same day (dicts). Group A (superflat), area x 5200 to 5260, z 5200 to 5215, forceloaded by each row. The fake player of `/cdevtest use` holds the `held=` item; the `main=` field is what the hand holds after the click.
+@@text
+@@table
+## SQ-RE-40 | wooden cauldron: recipe; every wooden and iron bucket of water, milk, goat milk, nut milk, honey pours in and scoops out; sap, lava and a second fluid refused
+@group A
+@commands `/cdevtest makes creativedelight:wooden_cauldron`; a wooden cauldron; `/cdevtest use` with each filled bucket (wooden water, milk, goat milk, nut milk, honey; iron water, milk, Hearth and Harvest goat milk, Create honey), `/cdevtest tank`, then `/cdevtest use` with the matching empty bucket; sap and lava bucket on an empty one; milk onto a water-filled one
+@pass a shaped recipe makes the cauldron; each pour gives `level=3` and the empty bucket in hand, the tank 1000 mB of that fluid; each scoop gives the filled bucket of that fluid and `level=0`; sap, lava and milk-on-water leave the bucket in hand and the level unchanged
+@fails `WoodenCauldronBlock.use` / `WoodenCauldronBlockEntity` (fluid list R10: water, cow, goat, nut milk, Create honey); a fluid id absent from the pack (`fluid_dict.js`); recipe in CD `creativedelight/recipes.js`
+@absent creativedelight:wooden_cauldron creativedelight:wooden_goat_milk_bucket creativedelight:wooden_nut_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
+> forceload add 5200 5200 5215 5215
+> fill 5200 -61 5200 5215 -61 5215 minecraft:stone
+> fill 5200 -60 5200 5215 -56 5215 minecraft:air
+sleep 2
+> cdevtest makes creativedelight:wooden_cauldron
+expect verb=makes id=\S+ result=creativedelight:wooden_cauldron\*1
+> setblock 5201 -60 5201 creativedelight:wooden_cauldron
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_water_bucket face=up
+> cdevtest tank 5201 -60 5201
+expect verb=tank tanks=1 fluids=0:minecraft:water\*1000/1000
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_water_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_milk_bucket face=up
+> cdevtest tank 5201 -60 5201
+expect verb=tank tanks=1 fluids=0:minecraft:milk\*1000/1000
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_milk_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_goat_milk_bucket face=up
+> cdevtest tank 5201 -60 5201
+expect verb=tank tanks=1 fluids=0:hearthandharvest:goat_milk\*1000/1000
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_goat_milk_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_nut_milk_bucket face=up
+> cdevtest tank 5201 -60 5201
+expect verb=tank tanks=1 fluids=0:creativedelight:nut_milk\*1000/1000
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_nut_milk_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_honey_bucket face=up
+> cdevtest tank 5201 -60 5201
+expect verb=tank tanks=1 fluids=0:create:honey\*1000/1000
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_honey_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+count verb=use main=creativedelight:wooden_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=3\] >= 5
+# iron buckets (any bucket item with a fluid handler)
+> cdevtest use 5201 -60 5201 held=minecraft:water_bucket face=up
+> cdevtest use 5201 -60 5201 held=minecraft:bucket face=up
+expect verb=use main=minecraft:water_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=minecraft:milk_bucket face=up
+> cdevtest use 5201 -60 5201 held=minecraft:bucket face=up
+expect verb=use main=minecraft:milk_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=hearthandharvest:goat_milk_bucket face=up
+> cdevtest use 5201 -60 5201 held=minecraft:bucket face=up
+expect verb=use main=hearthandharvest:goat_milk_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=create:honey_bucket face=up
+> cdevtest use 5201 -60 5201 held=minecraft:bucket face=up
+expect verb=use main=create:honey_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+count verb=use main=minecraft:bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=3\] >= 4
+# refused: sap, lava, a second fluid
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_sap_bucket face=up
+expect verb=use main=creativedelight:wooden_sap_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=minecraft:lava_bucket face=up
+expect verb=use main=minecraft:lava_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=0\]
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_water_bucket face=up
+> cdevtest use 5201 -60 5201 held=creativedelight:wooden_milk_bucket face=up
+expect verb=use main=creativedelight:wooden_milk_bucket\*1 off=empty state="?creativedelight:wooden_cauldron\[level=3\]
+> cdevtest tank 5201 -60 5201
+count verb=tank tanks=1 fluids=0:minecraft:water\*1000/1000 >= 2
+reject \[cdevtest\] .*done=0
+look the makes line's recipe is the cauldron shape in 7 spruce planks (`/cdevtest rdetail` its id if the ingredients are not shown)
+
+## SQ-RE-41 | wooden cauldron: rain adds water, comparator reads the level, drops itself with an axe
+@group A
+@commands a whole chunk (x 5216 to 5231, z 5200 to 5215) of wooden cauldrons under the open sky, a bot nearby (chunks tick only near a player), `/weather rain`, `/cdevtest tickwarp 6400`, `/cdevtest ages` on the level; a comparator reading a cauldron filled then emptied by bucket; `/cdevtest loot` with an iron axe
+@pass rain: mean level above 0 (about 20 levels over the 256 at vanilla's 5 % per precipitation tick, `hist` shows only 0 and 1 mostly); comparator `OutputSignal:3` when full, `0` after the scoop; loot one wooden cauldron
+@fails `WoodenCauldronBlock.handlePrecipitation` (D9; water only, empty or water cauldron); `getAnalogOutputSignal`; loot table `creativedelight:blocks/wooden_cauldron`; a mean of 0 with the bot present = the chunk did not tick (check `/cdevtest chunk 5224 5208`)
+@absent creativedelight:wooden_cauldron (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
+> forceload add 5200 5192 5231 5215
+> fill 5216 -61 5200 5231 -61 5215 minecraft:stone
+> fill 5216 -60 5200 5231 -50 5215 minecraft:air
+> fill 5216 -60 5200 5231 -60 5215 creativedelight:wooden_cauldron
+> pbot spawn re41 5224.5 -60 5196.5 minecraft:overworld survival
+> gamerule doWeatherCycle false
+> weather rain 1000000
+sleep 3
+> cdevtest tickwarp 6400
+waitlog verb=tickwarp .*end=done 600
+> cdevtest ages 5216 -60 5200 5231 -60 5215 creativedelight:wooden_cauldron prop=level
+expect verb=ages .*n=256\b
+expect verb=ages .*mean=(?!0(\.0+)?\b)\d
+> weather clear 1000000
+> pbot remove re41
+# comparator: facing points at its input
+> fill 5202 -60 5204 5204 -60 5204 minecraft:air
+> setblock 5203 -60 5204 creativedelight:wooden_cauldron
+> setblock 5204 -60 5204 minecraft:comparator[facing=west]
+> cdevtest use 5203 -60 5204 held=creativedelight:wooden_water_bucket face=up
+> cdevtest tickwarp 6
+waitlog verb=tickwarp .*end=done 60
+> cdevtest be 5204 -60 5204
+expect verb=be .*OutputSignal:3\b
+> cdevtest use 5203 -60 5204 held=creativedelight:wooden_bucket face=up
+> cdevtest tickwarp 6
+waitlog verb=tickwarp .*end=done 60
+> cdevtest be 5204 -60 5204
+expect verb=be .*OutputSignal:0\b
+> cdevtest loot 5203 -60 5204 tool=minecraft:iron_axe
+expect verb=loot .*drops=creativedelight:wooden_cauldron:1\b
+reject \[cdevtest\] .*done=0
+look the ages hist line: levels 1 (and maybe 2) only where rain fell, no level from any other fluid
+
+## SQ-RE-42 | wooden buckets on the vanilla cauldron: fill, scoop a full one, a partial and a lava cauldron refused
+@group A
+@commands `/cdevtest use` on `minecraft:cauldron`, `water_cauldron[level=1]`, `water_cauldron[level=3]` and `lava_cauldron` with the wooden water and the empty wooden bucket
+@pass wooden water on empty -> `water_cauldron[level=3]`, empty wooden bucket in hand; empty wooden on that full one -> `minecraft:cauldron`, wooden water bucket; wooden water on a level-1 water cauldron -> level 3; empty wooden on level 1 -> nothing; lava cauldron ignores both
+@fails `WoodenBucketBehaviors` cauldron interaction maps (`CauldronInteraction.EMPTY` / `WATER`), registered at common setup
+> forceload add 5232 5200 5247 5215
+> fill 5232 -61 5200 5247 -61 5215 minecraft:stone
+> fill 5232 -60 5200 5247 -56 5215 minecraft:air
+sleep 2
+> setblock 5233 -60 5201 minecraft:cauldron
+> cdevtest use 5233 -60 5201 held=creativedelight:wooden_water_bucket face=up
+expect verb=use main=creativedelight:wooden_bucket\*1 off=empty state="?minecraft:water_cauldron\[level=3\]
+> cdevtest use 5233 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_water_bucket\*1 off=empty state="?minecraft:cauldron"?(\s|$)
+> setblock 5235 -60 5201 minecraft:water_cauldron[level=1]
+> cdevtest use 5235 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_bucket\*1 off=empty state="?minecraft:water_cauldron\[level=1\]
+> cdevtest use 5235 -60 5201 held=creativedelight:wooden_water_bucket face=up
+count verb=use main=creativedelight:wooden_bucket\*1 off=empty state="?minecraft:water_cauldron\[level=3\] >= 2
+> setblock 5237 -60 5201 minecraft:lava_cauldron
+> cdevtest use 5237 -60 5201 held=creativedelight:wooden_water_bucket face=up
+expect verb=use main=creativedelight:wooden_water_bucket\*1 off=empty state="?minecraft:lava_cauldron
+> cdevtest use 5237 -60 5201 held=creativedelight:wooden_bucket face=up
+expect verb=use main=creativedelight:wooden_bucket\*1 off=empty state="?minecraft:lava_cauldron
+reject \[cdevtest\] .*done=0
+
+## SQ-RE-43 | dispenser: wooden water bucket places and comes back empty, the empty one scoops, other buckets drop as items
+@group A
+@commands dispensers facing east with (a) a wooden water bucket, (b) 3 empty wooden buckets and a water source in front, (c) a wooden milk bucket, (d) an empty wooden bucket and air in front; a redstone block above each fires it; (a) is fired a second time at its own water
+@pass (a) water in front, slot 0 the empty wooden bucket; second fire: front air, slot 0 the wooden water bucket; (b) 2 empty wooden buckets and 1 wooden water bucket inside, front air; (c) and (d) the bucket lies on the ground as an item, the front block unchanged
+@fails `DispenserBlock.registerBehavior` in `WoodenBucketBehaviors` (D4); a stack that cannot fit the filled one drops it (writeup 2.8)
+> forceload add 5232 5200 5247 5215
+> fill 5240 -61 5204 5246 -61 5214 minecraft:stone
+> fill 5240 -60 5204 5246 -56 5214 minecraft:air
+sleep 2
+> kill @e[type=minecraft:item,x=5243,y=-60,z=5209,distance=..8]
+# each water front cell is walled in stone so no flow reaches the other dispensers or the dropped items
+> fill 5240 -60 5204 5242 -60 5209 minecraft:stone
+> setblock 5241 -60 5205 minecraft:air
+> setblock 5241 -60 5208 minecraft:air
+> setblock 5240 -60 5205 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"creativedelight:wooden_water_bucket",Count:1b}]}
+> setblock 5240 -59 5205 minecraft:redstone_block
+> cdevtest tickwarp 10
+waitlog verb=tickwarp .*end=done 60
+> cdevtest state 5241 -60 5205
+expect verb=state .*state="?minecraft:water\[level=0\]
+> cdevtest inv 5240 -60 5205
+expect verb=inv slot=0 item=creativedelight:wooden_bucket\*1
+> setblock 5240 -59 5205 minecraft:air
+> cdevtest tickwarp 4
+waitlog verb=tickwarp .*end=done 60
+> setblock 5240 -59 5205 minecraft:redstone_block
+> cdevtest tickwarp 10
+waitlog verb=tickwarp .*end=done 60
+> cdevtest state 5241 -60 5205
+expect verb=state .*state="?minecraft:air
+> cdevtest inv 5240 -60 5205
+expect verb=inv slot=0 item=creativedelight:wooden_water_bucket\*1
+# (b) a stack of empties: the filled one goes to a free slot
+> setblock 5240 -60 5208 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"creativedelight:wooden_bucket",Count:3b}]}
+> setblock 5241 -60 5208 minecraft:water
+> setblock 5240 -59 5208 minecraft:redstone_block
+> cdevtest tickwarp 10
+waitlog verb=tickwarp .*end=done 60
+> cdevtest inv 5240 -60 5208
+expect verb=inv slot=0 item=creativedelight:wooden_bucket\*2
+count verb=inv slot=\d+ item=creativedelight:wooden_water_bucket\*1 >= 2
+# (c) milk and (d) empty with nothing to scoop: dropped as items
+> setblock 5240 -60 5211 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"creativedelight:wooden_milk_bucket",Count:1b}]}
+> setblock 5240 -59 5211 minecraft:redstone_block
+> setblock 5240 -60 5214 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"creativedelight:wooden_bucket",Count:1b}]}
+> setblock 5240 -59 5214 minecraft:redstone_block
+> cdevtest tickwarp 10
+waitlog verb=tickwarp .*end=done 60
+> cdevtest items 5242 -60 5211 2 keep
+expect verb=items .*creativedelight:wooden_milk_bucket:1\b
+> cdevtest items 5242 -60 5214 2 keep
+expect verb=items .*creativedelight:wooden_bucket:1\b
+> cdevtest state 5241 -60 5211
+reject verb=state .*state="?minecraft:milk
+reject \[cdevtest\] .*done=0
+
+## SQ-RE-44 | goat and cow milking into the wooden bucket; drinking wooden goat and nut milk clears effects and returns the bucket
+@group A
+@commands bot `re44` with an empty wooden bucket interacts with a NoAI goat, then a cow; `/effect give re44 minecraft:speed 120`, hold the wooden goat milk bucket, `pbot useitem re44 main 40`, `/cdevtest player re44`; again with the wooden nut milk bucket
+@pass goat -> `creativedelight:wooden_goat_milk_bucket`, cow -> `creativedelight:wooden_milk_bucket`; after each drink no Speed effect and the main hand holds `creativedelight:wooden_bucket*1`
+@fails `WoodenBucketMilking` (goat branch, Hearth and Harvest goat milk fluid); the drink use in `WoodenBucketItem` (milk ids R11)
+@absent creativedelight:wooden_goat_milk_bucket creativedelight:wooden_nut_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
+> forceload add 5248 5200 5263 5215
+> fill 5248 -61 5200 5263 -61 5215 minecraft:stone
+> fill 5248 -60 5200 5263 -56 5215 minecraft:air
+sleep 2
+> pbot spawn re44 5250.5 -60 5202.5 minecraft:overworld survival
+sleep 2
+> summon minecraft:goat 5252 -60 5202 {NoAI:1b,Age:0,Tags:["re44g"]}
+> summon minecraft:cow 5252 -60 5205 {NoAI:1b,Age:0,Tags:["re44c"]}
+sleep 1
+> pbot hold re44 creativedelight:wooden_bucket 1
+> pbot interact re44 @e[tag=re44g,limit=1]
+expect verb=pbot\.interact bot=re44 .*result=(CONSUME|SUCCESS) held_after=creativedelight:wooden_goat_milk_bucket\*1\b
+> pbot hold re44 creativedelight:wooden_bucket 1
+> pbot interact re44 @e[tag=re44c,limit=1]
+expect verb=pbot\.interact bot=re44 .*result=(CONSUME|SUCCESS) held_after=creativedelight:wooden_milk_bucket\*1\b
+> effect give re44 minecraft:speed 120
+> pbot hold re44 creativedelight:wooden_goat_milk_bucket 1
+> pbot useitem re44 main 40
+waitlog verb=pbot.useitem bot=re44 end=finish item=creativedelight:wooden_goat_milk_bucket 30
+> cdevtest player re44
+> effect give re44 minecraft:speed 120
+> pbot hold re44 creativedelight:wooden_nut_milk_bucket 1
+> pbot useitem re44 main 40
+waitlog verb=pbot.useitem bot=re44 end=finish item=creativedelight:wooden_nut_milk_bucket 30
+> cdevtest player re44
+count verb=player name=re44 .*main=creativedelight:wooden_bucket\*1 >= 2
+reject verb=player name=re44 .*effects=\S*minecraft:speed
+> kill @e[tag=re44g]
+> kill @e[tag=re44c]
+> pbot remove re44
+reject \[cdevtest\] .*done=0
+
+@@section 3
+@@title SQ-RE Any milk: the forge:milk tag, nut milk fluid, milk buckets as recipe inputs, 2026-11-21 ([creative_delight_drinks.md](../creative_delight_drinks.md) 10; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R1, R11, D8; TODO `engineering-recipes #1`, `recipes/engineering #8`)
+@@date 2026-11-21
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight_drinks.md kubejs/data/creativedelight/kubejs/creativedelight/milk.js kubejs/data/creativedelight/kubejs/creativedelight/drinks.js kubejs/data/creativedelight/kubejs/farmersrespite/kettle.js
+@@text
+@@text Targets the 2026-11-21 Creative Delight jar (nut milk fluid, wooden goat and nut milk buckets, `SliceAndDiceMilkTagMixin`) and CD's server scripts `creativedelight/milk.js`, `drinks.js`, `farmersrespite/kettle.js`. Group A. Recipe ids are `creativedelight:<type>/<suffix>`. The machine runs (Kettle, mixer, Cooking Pot, grid) are hand checks in CQ-RE-02.
+@@text
+@@table
+## SQ-RE-45 | forge:milk fluid and item tags; nut milk bottle fills and drains at 250 mB (Item Drain live)
+@group A
+@commands `/cdevtest tag fluid forge:milk`; `/cdevtest tag item forge:milk`; `/cdevtest tag item creativedelight:milk_buckets`; `/cdevtest rdetail creativedelight:createfilling/nut_milk` and `createemptying/nut_milk`; an Item Drain given a Nut Milk bottle, `/cdevtest tickwarp 100`, `/cdevtest tank`
+@pass fluid tag lists `minecraft:milk`, `hearthandharvest:goat_milk`, `creativedelight:nut_milk`; item tag `forge:milk` holds the three wooden milk buckets; `creativedelight:milk_buckets` holds `minecraft:milk_bucket` and the wooden milk buckets; filling and emptying recipes exist; the drain tank holds 250 mB nut milk
+@fails `milk.js` tags and `R.createBottle(i.nut_milk_bottle, ...)` (needs Vintage Delight); the nut milk fluid in CD startup `fluids.js`; `hearthandharvest/tags.js` for goat milk
+@absent creativedelight:milk_buckets (an item tag added 2026-11-21, not a registry id)
+> forceload add 5264 5200 5279 5215
+> fill 5264 -61 5200 5279 -61 5215 minecraft:stone
+> fill 5264 -60 5200 5279 -56 5215 minecraft:air
+sleep 2
+> cdevtest tag fluid forge:milk
+expect verb=tag kind=fluid tag=forge:milk n=\d+ ids=(?=\S*minecraft:milk\b)(?=\S*hearthandharvest:goat_milk\b)(?=\S*creativedelight:nut_milk\b)
+> cdevtest tag item forge:milk
+expect verb=tag kind=item tag=forge:milk n=\d+ ids=(?=\S*creativedelight:wooden_milk_bucket)(?=\S*creativedelight:wooden_goat_milk_bucket)(?=\S*creativedelight:wooden_nut_milk_bucket)
+> cdevtest tag item creativedelight:milk_buckets
+expect verb=tag kind=item tag=creativedelight:milk_buckets n=\d+ ids=(?=\S*minecraft:milk_bucket)(?=\S*creativedelight:wooden_milk_bucket)
+> cdevtest rdetail creativedelight:createfilling/nut_milk
+expect verb=rdetail id=creativedelight:createfilling/nut_milk serializer=create:filling result=vintagedelight:nut_milk_bottle\*1
+> cdevtest rdetail creativedelight:createemptying/nut_milk
+expect verb=rdetail id=creativedelight:createemptying/nut_milk serializer=create:emptying
+> setblock 5265 -60 5201 create:item_drain
+> cdevtest use 5265 -60 5201 held=vintagedelight:nut_milk_bottle face=up
+> cdevtest tickwarp 100
+waitlog verb=tickwarp .*end=done 60
+> cdevtest tank 5265 -60 5201
+expect verb=tank tanks=\d+ fluids=0:creativedelight:nut_milk\*250/
+reject \[cdevtest\] .*done=0
+look the emptying recipe's part=fields line shows 250 mB nut milk out of one bottle
+
+## SQ-RE-46 | milk recipes take any milk: heated coffee mixing, Kettle once per milk, wooden buckets in milk recipes, golden milk bucket stays iron only
+@group A
+@commands `/cdevtest rdetail creativedelight:createmixing/milk_coffee`; `rdetail` the three hot cocoa Kettle ids (`farmersrespitebrewing/hot_cocoa`, `_goat_milk`, `_nut_milk`); `/cdevtest uses creativedelight:wooden_milk_bucket max=400`, the same for the wooden goat milk bucket; `/cdevtest uses minecraft:milk_bucket max=400`; `rdetail hostiledelight:mbutterrecp`
+@pass milk coffee is a heated `create:mixing` taking `#forge:milk`; three `farmersrespite:brewing` hot cocoa recipes; the wooden milk buckets are used by Farmer's Delight cooking recipes, Hostile Delight's magical butter and Canned Powdered Milk, never by a Golden Milk Bucket recipe; the iron milk bucket still makes the Golden Milk Bucket
+@fails `drinks.js` `milk()` (`R.createFluidTag(f.t_milk, 250)`); `kettle.js` MILKS base list (NCH `frBrewing` base array); `milk.js` `replaceInput` list; the Canned Powdered Milk row in `tools/gen_can_types.py` (rerun the generator); golden.js must keep `i.minecraft_milk_bucket`
+@absent creativedelight:wooden_goat_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall); hostiledelight:mbutterrecp (a recipe id)
+> cdevtest rdetail creativedelight:createmixing/milk_coffee
+expect verb=rdetail id=creativedelight:createmixing/milk_coffee serializer=create:mixing
+> cdevtest rdetail creativedelight:farmersrespitebrewing/hot_cocoa
+expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa serializer=farmersrespite:brewing result=farmersdelight:hot_cocoa\*1
+expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa_goat_milk serializer=farmersrespite:brewing
+expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa_nut_milk serializer=farmersrespite:brewing
+> cdevtest uses creativedelight:wooden_milk_bucket max=400
+expect verb=uses id=\S+ serializer=farmersdelight:cooking
+expect verb=uses id=hostiledelight:mbutterrecp\b
+expect verb=uses id=\S*canned_powdered_milk\b
+reject verb=uses id=\S*golden_milk_bucket
+> cdevtest uses creativedelight:wooden_goat_milk_bucket max=400
+expect verb=uses id=\S*canned_powdered_milk\b
+> cdevtest uses minecraft:milk_bucket max=400
+expect verb=uses id=\S*golden_milk_bucket\b
+> cdevtest rdetail hostiledelight:mbutterrecp
+reject \[cdevtest\] .*done=0
+look milk_coffee's part=fields (or the ingredients) names the `forge:milk` fluid tag and the heat requirement `heated`; the three hot cocoa recipes differ only in the base fluid (milk, goat milk, nut milk)
+
+## SQ-RE-47 | Slice & Dice mixer copies of milk pot recipes take the tag (no mixin error)
+@group A
+@commands Boot log; `/cdevtest recipes sliceanddice max=400`
+@pass no mixin error naming `SliceAndDiceMilkTagMixin` in latest.log (it is `require = 0`, so a success prints nothing); Slice & Dice recipes are listed; the JEI check of a hot cocoa mixer copy with goat milk is CQ-RE-02
+@fails `mixin/sliceanddice/SliceAndDiceMilkTagMixin` target `LazyMixingRecipe.resolve` moved in the Slice & Dice jar (the redirect silently not applied: compare the class in the jar)
+bootreject (?i)mixin.*SliceAndDiceMilkTagMixin.*(fail|error|exception|not found)
+> cdevtest recipes sliceanddice max=400
+reject \[cdevtest\] .*done=0
+look the recipes summary line (n=) is above 0 or says why S&D builds its mixer copies lazily (then the JEI half of CQ-RE-02 is the only check)
+
+@@section 4
+@@title CQ-RE Wooden cauldron and buckets client half, milk machine runs, 2026-11-21 (same plan; [recipes_engineering.md](../recipes_engineering.md) RE-29, RE-40 to RE-44; [creative_delight_drinks.md](../creative_delight_drinks.md) 10; TODO `textures/art #9`, `blocks/new #15`)
+@@date 2026-11-21
+@@jars creativecommon creativedelight
+@@sources feature_writeup/recipes_engineering.md feature_writeup/creative_delight_drinks.md development/creativeDelight/src/main/resources/assets/creativedelight
+@@text
+@@text Client (instance mods, capture driver). Textures are human art or the owner's tools only (sources.csv rows); the looks go to the owner as shots.
+@@text
+@@table
+## CQ-RE-01 | look: wooden cauldron in world with each fluid, the filled wooden buckets in hand and inventory
+@group client
+@commands platform at 0 100 0; five wooden cauldrons filled with water, milk, goat milk, nut milk, honey (bucket clicks) and one empty; hotbar with the wooden bucket and its six filled buckets; shots of the cauldrons and the hotbar
+@pass LOOK: the cauldron shows spruce wood (painted onto the vanilla cauldron shape), the feet gap as vanilla's; each fluid's surface at full height with its own color (water biome-tinted); each bucket shows its own fill (milk from vanilla's milk bucket, sap from Hearth and Harvest's, honey from Create's, goat milk from Hearth and Harvest's goat milk bucket, nut milk the bottle's color), none the water bucket; no missing-texture log line
+@fails CD `assets/creativedelight/textures/block/wooden_cauldron_*`, `textures/item/wooden_*_bucket`; the block entity renderer in `farm/bucket/client/` (fluid still sprite and tint)
+@reviewed 2026-11-21
+@absent creativedelight:wooden_cauldron creativedelight:wooden_goat_milk_bucket creativedelight:wooden_nut_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
+> fill 0 100 0 10 100 10 minecraft:stone
+> fill 0 101 0 10 104 10 minecraft:air
+> setblock 1 101 4 creativedelight:wooden_cauldron
+> setblock 3 101 4 creativedelight:wooden_cauldron
+> setblock 5 101 4 creativedelight:wooden_cauldron
+> setblock 7 101 4 creativedelight:wooden_cauldron
+> setblock 9 101 4 creativedelight:wooden_cauldron
+> setblock 5 101 7 creativedelight:wooden_cauldron
+> item replace entity @s hotbar.0 with creativedelight:wooden_water_bucket
+> item replace entity @s hotbar.1 with creativedelight:wooden_milk_bucket
+> item replace entity @s hotbar.2 with creativedelight:wooden_goat_milk_bucket
+> item replace entity @s hotbar.3 with creativedelight:wooden_nut_milk_bucket
+> item replace entity @s hotbar.4 with creativedelight:wooden_honey_bucket
+> item replace entity @s hotbar.5 with creativedelight:wooden_sap_bucket
+> item replace entity @s hotbar.6 with creativedelight:wooden_bucket
+> item replace entity @s hotbar.7 with creativedelight:wooden_cauldron
+do {"slot": 0}
+do {"look": {"from": "1.5 103 2.5", "at": "1.5 101 4.5"}}
+do {"use": "block"}
+do {"slot": 1}
+do {"look": {"from": "3.5 103 2.5", "at": "3.5 101 4.5"}}
+do {"use": "block"}
+do {"slot": 2}
+do {"look": {"from": "5.5 103 2.5", "at": "5.5 101 4.5"}}
+do {"use": "block"}
+do {"slot": 3}
+do {"look": {"from": "7.5 103 2.5", "at": "7.5 101 4.5"}}
+do {"use": "block"}
+do {"slot": 4}
+do {"look": {"from": "9.5 103 2.5", "at": "9.5 101 4.5"}}
+do {"use": "block"}
+> item replace entity @s hotbar.0 with creativedelight:wooden_water_bucket
+> item replace entity @s hotbar.1 with creativedelight:wooden_milk_bucket
+> item replace entity @s hotbar.2 with creativedelight:wooden_goat_milk_bucket
+> item replace entity @s hotbar.3 with creativedelight:wooden_nut_milk_bucket
+> item replace entity @s hotbar.4 with creativedelight:wooden_honey_bucket
+do {"look": {"from": "5.5 104 0.5", "at": "5.5 101 5.5"}}
+do {"wait": "chunks"}
+shot cauldrons_filled
+do {"look": {"from": "5.5 102 9.5", "at": "5.5 101 7.5"}}
+shot cauldron_empty_close
+do {"slot": 0}
+shot hotbar_buckets
+bootreject Missing texture.*creativedelight:(block|item)/wooden_
+look shots: spruce cauldron body, five fluid colors at full height, the empty one shows its inner floor; hotbar: seven distinct bucket sprites and the cauldron item
+
+## CQ-RE-02 | hand: Create pipes on the wooden cauldron, milk in machines and grids return the wooden bucket, S&D tag in JEI
+@group client
+@commands creative world on the instance mods: (1) Create fluid tank of water -> pump -> pipe -> wooden cauldron, then reverse the pump; (2) Cooking Pot recipe taking milk (JEI `@farmersdelight` U on the wooden milk bucket) with a wooden milk bucket; (3) Hostile Delight magical butter in the grid with a wooden milk bucket; (4) Canned Powdered Milk with wooden milk buckets; (5) the Golden Milk Bucket recipe with a wooden milk bucket in the grid; (6) heated mixer: coffee + goat milk, then coffee + nut milk; (7) Kettle on a heat source with goat milk, then nut milk, cocoa beans and sugar; (8) JEI on a Slice & Dice mixing copy of hot cocoa
+@pass (1) the pipe fills the cauldron step by step and the reversed pump drains it; (2) to (4) the dish is made and an empty wooden bucket comes back; (5) no output; (6) Milk Coffee both times; (7) Hot Cocoa both times; (8) the milk slot cycles cow, goat and nut milk (the tag)
+@fails (1) the fluid-handler capability of `WoodenCauldronBlockEntity`; (2) to (4) the wooden bucket's crafting remainder (`WoodenBucketItem`) or the `milk.js` swaps; (5) golden.js; (6) `drinks.js` milk(); (7) `kettle.js` MILKS; (8) `SliceAndDiceMilkTagMixin`
+@draft hand checks across machines and grids: the first runner writes driver steps (or keeps it a hand list) once the server rows SQ-RE-40 to -47 have passed

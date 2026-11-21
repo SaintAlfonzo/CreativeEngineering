@@ -14,6 +14,7 @@
 //    leaf + one sugar-like (2.2), or + one more of its own ingredient where 2.3 says so.
 // 3  Lattes: cloud latte, matcha latte, ice berry matcha.
 // 4  Coffee: roasted beans only; Kettle flavors straight from the plain coffee tank; heated mixing for every coffee.
+// 5  Lemonade (food/drinks #1): plain, blue and pink; mixer and Kettle.
 // Tags the rules read: creativedelight/drink_tags.js.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
@@ -29,6 +30,7 @@ ServerEvents.recipes(e => {
 	var pot = (input, output, id, container) => R.fdCooking(input, output, e, id, 0.35, 200, container || bottle)
 	var mixHot = (output, input, id) => R.createMixing(output, input, e, id, 'heated')
 	var mb = (fluid) => global.CD.fluidOf(fluid, 250)   // an absent fluid skips the NCH call (G5)
+	var milk = () => R.createFluidTag(f.t_milk, 250)    // any milk: cow, goat, nut (plan_wood_bucket_batch_1121.md R11)
 	var x = (ing, n) => { var a = []; for (var k = 0; k < n; k++) a.push(ing); return a }
 
 	global.CD.recipes(() => {
@@ -170,7 +172,7 @@ ServerEvents.recipes(e => {
 			var chorusPick = [i.chorus_fruit, i.chorus_fruit_grain, i.dried_chorus_flower]
 			R.remove({ id: 'ends_delight:food/chorus_fruit_milk_tea' }, e)
 			pot([i.milk, chorusPick, i.dried_chorus_flower], i.chorus_fruit_milk_tea, 'chorus_fruit_milk_tea_manual_only')
-			mixHot(mb(f.chorus_fruit_milk_tea), [mb(f.milk), chorusPick, leaf, sweet], 'chorus_fruit_milk_tea')
+			mixHot(mb(f.chorus_fruit_milk_tea), [milk(), chorusPick, leaf, sweet], 'chorus_fruit_milk_tea')
 			// Chorus Fruit Bubble Tea (was Bubble Tea): the milk tea + 2 ender pearl grain in the heated mixer; the pot
 			// recipe (milk tea craft with ender pearl grain) and the Kettle (milk tea tank + grain) stay
 			mixHot(mb(f.chorus_fruit_bubble_tea), [mb(f.chorus_fruit_milk_tea), i.ender_pearl_grain, i.ender_pearl_grain], 'chorus_fruit_bubble_tea')
@@ -225,13 +227,34 @@ ServerEvents.recipes(e => {
 			// milk; a flavor branches off milk coffee or straight off coffee (+ milk), never off another flavor
 			mixHot(mb(f.coffee), x(beans, 5).concat([mb(f.water)]), 'coffee')
 			mixHot(mb(f.dark_coffee), x(beans, 5).concat([mb(f.coffee)]), 'dark_coffee')
-			mixHot(mb(f.milk_coffee), [mb(f.coffee), mb(f.milk)], 'milk_coffee')
+			mixHot(mb(f.milk_coffee), [mb(f.coffee), milk()], 'milk_coffee')
 			FLAVOURS.forEach(c => {
 				kettle([i.milk, c[3]], c[1], c[0] + '_coffee_from_coffee', f.coffee)
 				mixHot(mb(c[2]), [mb(f.milk_coffee), c[3]], c[0] + '_coffee')
-				mixHot(mb(c[2]), [mb(f.coffee), mb(f.milk), c[3]], c[0] + '_coffee_from_coffee')
+				mixHot(mb(c[2]), [mb(f.coffee), milk(), c[3]], c[0] + '_coffee_from_coffee')
 			})
 			// G5 end
 		}
+
+		//######################### 5. Lemonade (food/drinks #1) #########################
+		// Plain: 250 mB lemon juice + 250 mB water + a sugar-like in the mixer -> 500 mB (2 bottles); the Kettle brews one
+		// bottle from a lemon and a sugar-like on water (2 lemons on water stay lemon juice). Blue and pink: one blueberry
+		// or strawberry per bottle on lemonade, in the mixer or the Kettle (lemonade in the tank). Unheated: a cold drink.
+		// Every variant has its bottle pair (Spout, Item Drain, Kettle pour and fill).
+		// G5 begin: NCH calls through kettle and R; mb skips an absent fluid
+		if (on('fruitsdelight')) {
+			R.createMixing(Fluid.of(f.lemonade, 500), [mb(f.lemon_juice), mb(f.water), sweet], e, 'lemonade')
+			kettle([i.t_drink_fruits_lemon, sweet], i.lemonade, 'lemonade', f.water)
+			R.createBottle(i.lemonade, f.lemonade, e, 'lemonade')
+			;[
+				['blue_lemonade', i.blue_lemonade, f.blue_lemonade, i.t_fruits_blueberry],
+				['pink_lemonade', i.pink_lemonade, f.pink_lemonade, i.t_fruits_strawberry],
+			].forEach(v => {
+				R.createMixing(Fluid.of(v[2], 500), [Fluid.of(f.lemonade, 500), v[3], v[3]], e, v[0])
+				kettle([v[3]], v[1], v[0], f.lemonade)
+				R.createBottle(v[1], v[2], e, v[0])
+			})
+		}
+		// G5 end
 	})
 })

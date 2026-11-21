@@ -506,9 +506,11 @@
 			"script": "tools/gen_soup_soft_fluids.py",
 			"groups": ["food"],
 			"dumps": ["dumpfood"],
-			"outputs": ["development/creativeDelight/src/main/resources/data/creativedelight/moonlight/soft_fluids"],
+			"outputs": ["development/creativeDelight/src/main/resources/data/creativedelight/moonlight/soft_fluids",
+				"kubejs/data/moonlight/moonlight/soft_fluids", "kubejs/data/supplementaries/moonlight/soft_fluids",
+				"kubejs/generation_scripts/food/soup_soft_fluid_overrides.txt"],
 			"warnExit": [1],
-			"apply": ":creativeDelight: rebuild + install, then restart (the soft fluids ship in the CD jar)"
+			"apply": ":creativeDelight: rebuild + install, then restart (the soft fluids ship in the CD jar); the covered-soup overrides in kubejs/data apply on /reload"
 		},
 		{
 			"id": "can_audit",

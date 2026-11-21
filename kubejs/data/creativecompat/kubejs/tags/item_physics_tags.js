@@ -111,6 +111,7 @@ ServerEvents.tags('item', e => {
 		i.any_wooden_pressure_plates, i.t_fence_gates_wooden,
 		i.any_sign, i.t_boats, i.any_banner,
 		i.wooden_chest, i.any_stick,
+		i.t_composters,   // vanilla and the 12 wood composters (crimson and warped float like the nether planks)
 		// plant / organic
 		i.t_saplings, i.t_leaves, i.t_flowers,
 		// textile / fibre / hide

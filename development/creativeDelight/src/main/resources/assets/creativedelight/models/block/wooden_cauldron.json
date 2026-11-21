@@ -1,0 +1,10 @@
+{
+	"parent": "minecraft:block/cauldron",
+	"textures": {
+		"particle": "creativedelight:block/wooden_cauldron_side",
+		"top": "creativedelight:block/wooden_cauldron_top",
+		"bottom": "creativedelight:block/wooden_cauldron_bottom",
+		"side": "creativedelight:block/wooden_cauldron_side",
+		"inside": "creativedelight:block/wooden_cauldron_inner"
+	}
+}

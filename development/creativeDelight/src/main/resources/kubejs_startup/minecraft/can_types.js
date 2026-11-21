@@ -1804,7 +1804,7 @@ if (global.CD) global.CD.genPut('can_types', 'minecraft', {
    "effects": [],
    "clear_effects": true,
    "sources": [
-    "minecraft_milk_bucket"
+    "t_milk_buckets"
    ],
    "recipes": [
     {

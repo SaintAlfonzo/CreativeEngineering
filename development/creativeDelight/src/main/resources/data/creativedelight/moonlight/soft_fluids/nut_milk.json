@@ -16,6 +16,9 @@
       "capacity": 1
     }
   ],
+  "equivalent_fluids": [
+    "creativedelight:nut_milk"
+  ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
     "divider": 1,

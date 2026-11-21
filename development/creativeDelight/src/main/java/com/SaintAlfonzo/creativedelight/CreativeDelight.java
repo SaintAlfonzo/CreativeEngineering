@@ -221,6 +221,13 @@ public class CreativeDelight {
 			}
 		}
 
+		/** Wooden cauldron fluid surface (farm/bucket/). */
+		@SubscribeEvent
+		public static void onRegisterRenderers(net.minecraftforge.client.event.EntityRenderersEvent.RegisterRenderers event) {
+			event.registerBlockEntityRenderer(com.SaintAlfonzo.creativedelight.farm.bucket.WoodenBuckets.CAULDRON_BLOCK_ENTITY.get(),
+					com.SaintAlfonzo.creativedelight.farm.bucket.client.WoodenCauldronRenderer::new);
+		}
+
 		@SubscribeEvent
 		public static void onItemColors(RegisterColorHandlersEvent.Item event) {
 			if (ModList.get().isLoaded("solapplepie")) {

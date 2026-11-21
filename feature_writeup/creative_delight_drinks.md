@@ -225,3 +225,54 @@ Not built:
 
 Tests: SQ-DRK-01 to -06, CQ-DRK-01 ([scratch_queue.md](testing/scratch_queue.md)); Bayberry Juice (the renamed `fruitsdelight:bayberry_soup`, TODO `food/drinks #9`): SQ-DRK-07, CQ-DRK-02.
 
+
+## 9. Lemonade (`food/drinks #1`, built 2026-11-21, plan_wood_bucket_batch_1121.md R7, R13, D5)
+
+Three drinks with a fluid each: Lemonade, Blue Lemonade, Pink Lemonade (`creativedelight:lemonade`, `blue_lemonade`,
+`pink_lemonade`; item and fluid ids are the same). Drink values (1 hunger, 0.2 modifier, always drinkable, 32 per stack,
+the bottle back) plus effects, amplifier I:
+
+| Drink | Effects | Made from |
+|---|---|---|
+| Lemonade | Haste 30 s (lemon juice's 10 s x3) | mixer: 250 mB lemon juice + 250 mB water + a sugar-like -> 500 mB (unheated); Kettle: a lemon + a sugar-like on water |
+| Blue Lemonade | Haste 30 s, Night Vision 20 s | mixer: 500 mB lemonade + 2 blueberries -> 500 mB; Kettle: a blueberry on lemonade |
+| Pink Lemonade | Haste 30 s, Jump Boost 20 s | mixer: 500 mB lemonade + 2 strawberries -> 500 mB; Kettle: a strawberry on lemonade |
+
+Every variant has its bottle pair (Spout, Item Drain, and so the Kettle pours and fills it). Two lemons on water in the
+Kettle stay lemon juice; the lemonade Kettle recipe takes one lemon and a sugar-like instead. Fruits Delight's Refreshing
+and Brightening effects from the brief are not used (R7).
+
+| Part | Where |
+|---|---|
+| Items and fluids | CD `kubejs_startup/creativedelight/drinks.js`; ids `item_dict.js` (`i.lemonade` ...), `fluid_dict.js` (`f.lemonade` ...), food dict `drink_lemonade` ..., food type `drink` |
+| Recipes | `kubejs/data/creativedelight/kubejs/creativedelight/drinks.js` section 5 |
+| Art | Fruits Delight's lemon juice glass with each fluid tint painted into its liquid (`combine_tex.py --mode paint`, `creativedelight:item/<name>`; sources.csv row). Tints plain 0xF3E99A, blue 0x8FB4E6, pink 0xF2A7B8, owner-approved 2026-11-21 |
+
+Pending in game: `/dumpfood` -> `tools/food_catalog.py`, `tools/gen_stack_sizes.py`, Display Delight names (`food/placeable #3`).
+Tests: SQ-DRK-09 (recipes), SQ-DRK-10 (Item Drain), SQ-DRK-11 (effects, bottle, stack), CQ-DRK-03 (art, mixer and Kettle by hand).
+
+## 10. Any milk (plan_wood_bucket_batch_1121.md R1, R11, built 2026-11-21)
+
+Cow, goat and nut milk are all milk. Nut milk is a fluid now (`creativedelight:nut_milk`, color of the Nut Milk bottle's
+liquid, D8), 250 mB per Vintage Delight Nut Milk bottle (Spout and Item Drain), no iron bucket (the wooden nut milk
+bucket and the wooden cauldron carry it), and the Nut Milk jar soft fluid takes it from a pipe.
+
+- Fluid tag `#forge:milk` (`f.t_milk`): cow, goat, nut. Pack recipes that took milk fluid take the tag: heated coffee
+  and chorus milk tea mixing (`creativedelight/drinks.js`), egg solution, frosting, ruby chocolate, cornbread batter,
+  pancakes, the stuffed zucchini boat's milk step, Brewin's flaxen cheese keg.
+- Kettle: the tank matches one fluid exactly, so its milk recipes (hot cocoa, Builder's Tea from leaves, matcha latte,
+  chorus fruit milk tea) come once per milk (`frBrewing` base list, ids `<id>`, `<id>_goat_milk`, `<id>_nut_milk`).
+- Slice & Dice's mixer copies of pot recipes (51 took cow milk only) take the tag through Creative Delight's
+  `mixin/sliceanddice/SliceAndDiceMilkTagMixin`.
+- Item tag `#forge:milk` holds the three wooden milk buckets (every pot, grid, Kettle and basin recipe with a milk item
+  slot); `#forge:buckets/milk` and `#creativedelight:cow_milk` the wooden cow milk bucket. A wooden bucket comes back
+  empty (its crafting remainder).
+- Recipes that named the vanilla Milk Bucket take `#creativedelight:milk_buckets` (any full milk bucket, iron or
+  wooden): Cooking for Blockheads' milk jar, Engineer's Decor's milking machine, Hostile Delight's magical butter,
+  Vintage Delight's cheese curds (and its Slice & Dice copy), Canned Powdered Milk (generator row). Splash Milk's
+  bottles take cow milk only (`#forge:buckets/milk`). The Golden Milk Bucket recipes stay vanilla bucket only: the
+  bucket itself becomes the golden bucket.
+- Files: `kubejs/data/creativedelight/kubejs/creativedelight/milk.js` (tags, nut milk bottle pair, bucket swaps).
+
+Tests: SQ-RE-45 (tags, nut milk bottle, Item Drain), SQ-RE-46 (milk recipe inputs, golden milk bucket), SQ-RE-47 (Slice &
+Dice mixin), CQ-RE-02 (machine and grid runs by hand); jar by pipe SQ-MJ-04.

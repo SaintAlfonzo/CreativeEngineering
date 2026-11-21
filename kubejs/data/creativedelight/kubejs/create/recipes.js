@@ -28,7 +28,7 @@ ServerEvents.recipes(e => {
 		// Tank-only, so every use is a Create recipe; the grid and pot recipes keep their eggs. The uses are in the folder
 		// of the food they make (corn_delight, supplementaries, rusticdelight, incubation, farmersdelight, fruitsdelight,
 		// neapolitan); Brewin' and Chewin's omelet and quiche stay in the pack's cooking.js.
-		R.createMixing(Fluid.of(f.egg_solution, 500), [i.eggs, Fluid.of(f.milk, 250)], e, 'egg_solution', 'n/a')
+		R.createMixing(Fluid.of(f.egg_solution, 500), [i.eggs, R.createFluidTag(f.t_milk, 250)], e, 'egg_solution', 'n/a')
 		R.createMixing(Item.of(i.in_dough, 6), [i.flour, i.flour, i.flour, Fluid.of(f.egg_solution, 250)], e, 'dough_egg_solution', 'n/a')
 
 		//######################### Flour, dough, bread

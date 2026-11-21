@@ -106,6 +106,17 @@ removed.
 - **Chain** ×4 by assembly from an iron ingot (nugget, ingot, nugget). **Steel wool** from 6 steel wire, or 4 by mixing.
 - Wind vane takes an iron rod instead of redstone; Supplementaries Squared's metal frame an iron rod instead of nuggets.
 
+### 2.6 Create Deco craftability (audit 2026-11-21)
+
+TODO `recipes/materials #5`. Every Create Deco item in the item dump (`kubejs/exported/items_by_mod/createdeco.json`, 615
+items) checked against the recipe output dump (`kubejs/exported/food/recipes.json`, all recipe types, plus the crafting
+results in `recipes/crafting_audit.json`; dumps of 2026-11-19): 614 have at least one recipe making them, and none of
+those recipes needs a Create Deco item that nothing makes. The one without a recipe, Zinc Sheet (`createdeco:zinc_sheet`),
+stays uncraftable on purpose: it is unified into Creative Engineering's zinc plate (`removed_items.js`), and Create Deco's
+own recipes take `#forge:plates/zinc`. Pearl bricks need nothing: Create Deco's own recipes (8 bricks around light gray
+dye, 2x2 pearl brick) are live (owner, 2026-11-21, R4 of plan_wood_bucket_batch_1121.md). No recipes added. Rerun after a
+`/dumpall` with the script in this section's history line.
+
 ## 3. What the pack changes
 
 All through `global.NCH`, largely with `R.bulk(helper, rows)`: `remove`, `replaceInput` / `replaceOutput` by mod or by
@@ -204,3 +215,4 @@ None.
 - 2026-10-18: this writeup; findings F1 to F7; tests RM-01 to RM-14. No code changed.
 - 2026-10-19: F2 (9 copper plates -> plate block), F3 (IE zinc hammer-crushing removed) and the `EVENT:` log lines of F7 fixed ([plan_1.0.9.md](plan_1.0.9.md)). Header audit items 4 and 5 marked done.
 - 2026-11-21: polished iron bars made by Create sandpaper polishing of iron bars (`metal_building.js`, NCH `createSandpaperPolishing`; TODO `recipes/metal #5`, plan_owner_rows_1120.md G3); Create Deco's stonecutting recipe stays removed. RM-15.
+- 2026-11-21: Create Deco craftability audit (section 2.6): 614 of 615 items craftable, Zinc Sheet removed on purpose; nothing added. Check: for each id in `items_by_mod/createdeco.json`, look for it in the `out` ids of `food/recipes.json` and the `result` of `recipes/crafting_audit.json`.

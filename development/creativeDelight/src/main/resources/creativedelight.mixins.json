@@ -82,7 +82,8 @@
     "farmersdelight.CookingPotKeepContentsMixin",
     "farmersrespite.KettleKeepContentsMixin",
     "minecraft.ItemStackCookwareGlintMixin",
-    "farmersrespite.CoffeeBushRemovedMixin"
+    "farmersrespite.CoffeeBushRemovedMixin",
+    "sliceanddice.SliceAndDiceMilkTagMixin"
   ],
   "client": [
     "minecraft.BreakOverlayClipMixin",

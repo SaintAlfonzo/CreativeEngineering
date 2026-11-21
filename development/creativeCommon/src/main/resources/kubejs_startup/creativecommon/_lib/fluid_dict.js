@@ -28,6 +28,9 @@ f.t_water = '#forge:fluid/water';
 
 f.lava = 'minecraft:lava';
 f.milk = 'minecraft:milk';
+// Any milk: cow, goat and nut milk (plan_wood_bucket_batch_1121.md R11; tag contents: Creative Delight
+// creativedelight/milk.js). Milk fluid inputs take this tag, never f.milk alone.
+f.t_milk = '#forge:milk';
 
 //Create
 f.chocolate = 'create:chocolate';
@@ -116,6 +119,12 @@ f.cherry_blossom_coffee = 'creativedelight:cherry_blossom_coffee';
 f.lavender_tea = 'creativedelight:lavender_tea';
 f.matcha_latte = 'creativedelight:matcha_latte';
 f.berry_matcha_latte = 'creativedelight:berry_matcha_latte';
+// Vintage Delight's Nut Milk bottle as a fluid, 250 mB a bottle; in #forge:milk (plan_wood_bucket_batch_1121.md R11)
+f.nut_milk = 'creativedelight:nut_milk';
+// Lemonade (food/drinks #1): plain, blue and pink (Creative Delight kubejs_startup/creativedelight/drinks.js)
+f.lemonade = 'creativedelight:lemonade';
+f.blue_lemonade = 'creativedelight:blue_lemonade';
+f.pink_lemonade = 'creativedelight:pink_lemonade';
 // Drink rules (feature_writeup/creative_delight_drinks.md 6, food/drinks #15): new teas and juices, chorus tea, the
 // sea juices the sea pickle tea brews on (Creative Delight kubejs_startup/creativedelight/drinks.js)
 f.kiwi_tea = 'creativedelight:kiwi_tea';

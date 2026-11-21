@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "creativedelight:treated_stick"
+    "creativedelight:treated_stick",
+    "creativedelight:wooden_cauldron"
   ]
 }

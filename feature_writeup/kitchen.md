@@ -242,9 +242,10 @@ water".
   `CuttingBoardBlock` registered by the repackedFarmers member (`FDBackportRegistry.STONE_CUTTING_BOARDS`, -03), stone
   material and sound, hardness 1.5. Common setup adds them to the cutting board block entity type's valid blocks
   (`allowStoneBoards`, as the CfB wood racks do), so they cut, render and hammer bakeware like the wooden board.
-- Model: FD's `cutting_board` model as parent with the texture swapped. Art: `members/farmers/tools/stone_cutting_boards.py`
-  paints the polished stone's inside (its 1 px block edge left out) onto FD's board texture, keeping the board's seams,
-  rim and handle slot.
+- Model (owner 2026-11-21: the polished stone painted on the model): `farmersdelight:block/stone_cutting_board`, a copy of
+  FD's `cutting_board` model whose faces read the vanilla `polished_<stone>` block texture directly (every UV inside 1..15,
+  so the stone's 1 px block edge is left out; the one east strip at column 0 is shifted to column 1). No derived PNG.
+  Look check CQ-FCB-07.
 - Recipe (CD `farmersdelight/stone_cutting_boards.js`): FD's shape, 2 sticks and 4 of the polished stone. Block tags:
   pickaxe, counter toppers (blockheads_additions), hammer no-rotate.
 - 2.7 update 2026-11-02: CfB's own Spice Rack, Tool Rack and Fruit Basket are merged into the oak versions

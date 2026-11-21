@@ -2,8 +2,6 @@
 
 ## Hearth and Harvest <!-- icon: hearthandharvest:butter -->
 
-- **New:** Wooden buckets hold sap, milk and honey; the Tree Tapper fills them with sap.
-- **New:** A wooden bucket milks cows and goats; a Wooden Milk Bucket is drunk like a milk bucket.
 - **New:** Raspberry Pie and its slices have the tooltip "Doesn't run programs".
 - **New:** The Cooking Pot and a heated Create mixer turn 1 Syrup into 8 Sugar and give the bottle back.
 - **New:** Syrup fluid: a heated Create mixer turns 1000 mB Sap into 250 mB Syrup and 250 mB Syrup into 8 Sugar; Spouts fill and Item Drains empty Syrup bottles at 250 mB.
@@ -26,6 +24,22 @@
 - **Fixed:** Syrup had two crafting recipes into sugar; only the one giving 4 sugar is left.
 - **Fixed:** A watering can with water used on a ripe crop harvested it instead of watering the soil.
 - **Removed:** The Cooking Pot Syrup recipe from sugar and apple or beetroot; Syrup comes only from Sap.
+
+## Wooden Buckets <!-- icon: creativedelight:wooden_bucket -->
+
+- **New:** Wooden buckets hold sap, milk and honey; the Tree Tapper fills them with sap.
+- **New:** A wooden bucket milks cows and goats; Wooden Milk, Goat Milk and Nut Milk Buckets are drunk like a milk bucket.
+- **New:** Wooden Cauldron, crafted from 7 spruce planks in the cauldron shape. It holds water, milk, goat milk, nut milk or honey, takes and gives whole buckets, fills with rain and connects to Create pipes.
+- **New:** Wooden Goat Milk and Wooden Nut Milk Buckets. An empty wooden bucket milks goats into a Wooden Goat Milk Bucket [Wooden Milk Bucket].
+- **New:** Wooden water buckets fill and empty vanilla cauldrons.
+- **New:** Dispensers place water from a wooden water bucket and scoop water with an empty wooden bucket.
+- **Changed:** Filled wooden buckets show their own fluid [the water bucket picture].
+- **Changed:** Wooden milk buckets work in every recipe that takes a milk bucket and come back empty.
+
+## Milk <!-- icon: minecraft:milk_bucket -->
+
+- **New:** Nut Milk is a fluid: Spouts fill and Item Drains empty Nut Milk bottles at 250 mB.
+- **Changed:** Goat milk and nut milk work in every recipe that takes milk: Create mixing, Cooking Pot, Kettle and Keg [cow milk only].
 
 ## Hops <!-- icon: hearthandharvest:hops -->
 
@@ -73,6 +87,8 @@
 ## Composting <!-- icon: farmersdelight:organic_compost -->
 
 - **New:** Organic Mash goes in a Composter, 50% per item.
+- **New:** Composters in spruce, birch, dark oak, jungle, acacia, mangrove, crimson, warped, twisted, ancient, blossom and azalea wood, each from 7 slabs of its wood; they work like the Composter.
+- **New:** A wood composter crafts back into a Composter. Seven slabs of one wood offer both composters through Polymorph.
 - **Changed:** Organic Compost and Fertile Soil recipes take Rotten Tomatoes, Rotten Cherries and Organic Mash in the rotten slot [Rotten Flesh, Spider Eye, Poisonous Potato].
 - **Changed:** Organic Compost recipes take dirt, coarse dirt, rooted dirt, podzol, moss block, mud, humus or silt in the dirt slot [dirt].
 - **Removed:** Vintage Delight's two Organic Compost recipes from Organic Mash. Organic Mash goes in the pack's Organic Compost recipes.
@@ -113,10 +129,11 @@
 - **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. The books show "N more unique foods to activate diet".
 - **Changed:** Food tooltips show hunger and saturation at the top, on one row (client setting: saturation on its own line), then the diversity, then the meal word ("Hearty Meal") [a second shank row under the name, hunger and saturation at the bottom].
 - **Removed:** The Spice of Life bonus and food history pages, and the separate "Food Diversity" tooltip line.
-- **Changed:** Food diversity follows food tiers: dragon dishes up to 11, gilded food up to 10, feasts up to 8, golden food up to 7, other filling food up to 6, mid-sized food up to 3, light snacks up to 1 [enchanted golden apple 10, golden cans under 1].
+- **Changed:** Food diversity follows food tiers: dragon dishes up to 11, gilded food 6.78 to 10, feasts up to 8, golden food 5.25 to 7, other filling food up to 6, mid-sized food up to 3, light snacks up to 1 [enchanted golden apple 10, golden cans under 1].
 - **Changed:** A can gives 80% of the diversity of the food in it.
 - **Changed:** Cooked meat and fish diversity follows the vanilla meats by hunger and saturation [cooked bison and smoked dragon leg above steak]. Cooked dragon meat scores above other meat and below dragon dishes.
-- **Changed:** Baked food, crafted dishes and coated food get the diversity of a Cooking Pot dish with the same ingredients.
+- **Changed:** Baked food and crafted dishes get the diversity of a Cooking Pot dish with the same ingredients; a baked food can reach one tier above its own.
+- **Changed:** Coated food and candies give at most 3 diversity, never less than the food inside [up to 3.91].
 - **Changed:** A dish never gives less diversity than its best ingredient.
 - **Changed:** Bell peppers count as one food per color group (red, yellow and green; pink, white and orange; black, purple and blue), separately for raw, sliced, roasted, roasted slices, stuffed and rolls.
 - **Changed:** Chocolate-coated apples, waffles, rolls, glazed berries and glazed marshmallows count as one food each whatever the chocolate (milk, dark, ruby or white); chocolate-filled candies count as one food, caramel candies as another. Honey and caramel coatings count separately.
@@ -160,6 +177,7 @@
 
 - **Changed:** 4 Mason Jars per craft [3].
 - **Changed:** 4 Glass Bottles per craft [3].
+- **Changed:** A bowl of soup or stew fills 1 jar space [2].
 
 ## Lunchboxes <!-- icon: solapplepie:lunchbox -->
 
@@ -248,6 +266,7 @@
 
 ## Food & Cooking
 
+- **New:** Lemonade, Blue Lemonade and Pink Lemonade, made in a Create mixer or a Kettle. Lemonade gives Haste for 30 s; Blue adds Night Vision and Pink adds Jump Boost for 20 s.
 - **New:** Two Cooking for Blockheads Fridges side by side, facing the same way, join into a double fridge with no gap or seal between them. A Fridge placed next to another opens the other way. Each keeps its own door and inventory.
 - **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
 - **New:** The Food Dictionary's untasted foods sort by mod, name, easiest, highest food, highest saturation or highest diversity (client setting); a button sorts tasted foods by newest unlock, latest eaten, highest food, highest saturation or highest diversity.
@@ -278,12 +297,14 @@
 - **Changed:** Sunflower Seeds, Pumpkin Seeds, Oat Seeds, Mixed Seeds and Corn Kernels can be eaten: 1 hunger each; Sunflower Seeds and Corn Kernels also give 0.5 saturation [Sunflower Seeds 0.6, Corn Kernels 0.4; the others not edible].
 - **Changed:** Trail Mix and Stuffed Cantaloupe take an edible seed [any seed].
 - **Changed:** Hot Cocoa, Strong Hot Cocoa and Apple Cider restore 1 hunger and 0.4 saturation, like teas, and can be drunk when full [no hunger].
+- **Changed:** Granite, Andesite and Diorite Cutting Boards show the polished stone itself [a stone-colored wooden board].
 - **Fixed:** Flavored Rustic Delight pancakes placed on a coaster showed a missing model.
 - **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
 - **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
 - **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
 - **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
 - **Removed:** Canned Legendary Roll Medley and Canned Mythical Roll Medley. Existing ones in worlds are deleted.
+- **Removed:** Bibimbap and its recipe. Existing ones in worlds stay.
 - **New:** Cooking Pot recipes for the chocolate, caramel and honey coated foods and the Create Confectionery candies: 2 foods and 3 coating items make 2.
 
 ## Corpses <!-- icon: minecraft:skeleton_skull -->
@@ -420,6 +441,8 @@
 
 - **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
 - **New:** The potions, fluid amounts and loop counts of the echo, felsic ingot, dragon and Air Brake assembly recipes can be changed in the Creative Equipment config.
+- **New:** Glass blocks and panes from every mod break into shards of their color without Silk Touch: blocks 1 to 3, panes 1 to 2. Tinted glass gives dirty shards.
+- **New:** Sneak and right-click a placed sack with an empty hand to pick it up with its contents.
 - **Changed:** The Saturation effect and its potions and arrows are renamed Satiated [Saturation]; its description reads "Keeps the player fed."
 - **Changed:** A chain of TNT keeps at most 32 shrapnel pieces in the air at once [24 per TNT].
 - **Changed:** A TNT item exploding in fire or lava deals half damage; the knockback is unchanged.
@@ -480,6 +503,7 @@
 
 ## Engineering Recipes <!-- icon: immersiveengineering:workbench -->
 
+- **New:** The Create saw cuts twisted planks into twisted buttons and twisted pressure plates.
 - **New:** One Cinder Flour filled with 25 mB of Strength, Night Vision or Harming potion makes Redstone Dust, Glowstone Dust or Gunpowder.
 - **Changed:** 8 Blocks of Coal make a Diamond in the Pressure Chamber [9].
 - **Fixed:** Engineer's Workbench recipes that list an input twice could not be crafted (spectral and split arrows, dropper, observer, piston, thunder detector, note block, jukebox).

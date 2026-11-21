@@ -357,8 +357,7 @@ KUBEJS_CLASSES = [
 	('generation_scripts/stacks/stack_sizes.json', 'runtime'),          # changes/stack_sizes.js
 	('generation_scripts/names/name_fixes.json', 'client'),             # client_scripts/name_fixes.js (tools/name_audit.py)
 	('generation_scripts/names/name_rules.json', 'dev'),                # tools/name_audit.py input
-	('generation_scripts/recipes/*', 'dev'),                            # sawmill.js output (copied into the jar)
-	('generation_scripts/sawmill.js', 'dev'),                           # node generator
+	('generation_scripts/recipes/*', 'dev'),                            # botany_pot_crops.csv
 ]
 # Every file under config/ (path inside config/, fnmatch, first match wins) is one of:
 #   functional  pack behaviour: gameplay, worldgen, recipes, server rules, technical/mixin toggles. Always ships.

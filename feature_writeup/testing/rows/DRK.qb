@@ -453,3 +453,141 @@ expect verb=uses id=creativedelight:[a-z_]+/sea_pickle_tea_on_
 waitlog \[cdevtest\] verb=rdetail text= 30
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look rdetail: the pickle ingredient is #creativedelight:sea_pickles (three of them), not #forge:sea_pickles
+
+@@section 4
+@@title SQ-DRK Lemonade, Blue Lemonade, Pink Lemonade, 2026-11-21 ([creative_delight_drinks.md](../creative_delight_drinks.md) 9; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R7, R13, R22, D5; TODO `food/drinks #1`)
+@@date 2026-11-21
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight_drinks.md kubejs/data/creativedelight/kubejs/creativedelight/drinks.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/drinks.js
+@@text
+@@text Targets the 2026-11-21 Creative Delight jar (startup `creativedelight/drinks.js`: 3 items, 3 fluids) and Creative Common (dicts: `i.lemonade`, `f.lemonade` ...), full restart; recipes in CD's server `creativedelight/drinks.js` section 5. Group A, area x 5280 to 5295, z 5200 to 5215.
+@@text
+@@table
+## SQ-DRK-09 | lemonade recipes: unheated mixer, Kettle on water and on lemonade, bottle pairs, two lemons stay lemon juice
+@group A
+@commands `/cdevtest rdetail` on `creativedelight:createmixing/lemonade`, `blue_lemonade`, `pink_lemonade`; `farmersrespitebrewing/lemonade`, `blue_lemonade`, `pink_lemonade`; `createfilling/` and `createemptying/` of each; `/cdevtest makes fruitsdelight:lemon_juice`
+@pass three `create:mixing` recipes (lemonade from 250 mB lemon juice + 250 mB water + a sweetener -> 500 mB, no heat; blue and pink from 500 mB lemonade + 2 blueberries / 2 strawberries -> 500 mB); three `farmersrespite:brewing` recipes giving the bottle (lemonade on water with a lemon and a sweetener; blue and pink on lemonade with one berry); filling and emptying for each; a Kettle lemon juice recipe still exists
+@fails CD server `creativedelight/drinks.js` section 5 (`R.createMixing`, `kettle(...)`, `R.createBottle`); a fluid missing from `fluid_dict.js`; the Kettle juice rule (two lemons on water) in the juice section of the same file
+@absent creativedelight:lemonade creativedelight:blue_lemonade creativedelight:pink_lemonade (registered 2026-11-21, after the last /dumpall)
+> cdevtest rdetail creativedelight:createmixing/lemonade
+expect verb=rdetail id=creativedelight:createmixing/lemonade serializer=create:mixing
+> cdevtest rdetail creativedelight:createmixing/blue_lemonade
+expect verb=rdetail id=creativedelight:createmixing/blue_lemonade serializer=create:mixing
+> cdevtest rdetail creativedelight:createmixing/pink_lemonade
+expect verb=rdetail id=creativedelight:createmixing/pink_lemonade serializer=create:mixing
+> cdevtest rdetail creativedelight:farmersrespitebrewing/lemonade
+expect verb=rdetail id=creativedelight:farmersrespitebrewing/lemonade serializer=farmersrespite:brewing result=creativedelight:lemonade\*1
+> cdevtest rdetail creativedelight:farmersrespitebrewing/blue_lemonade
+expect verb=rdetail id=creativedelight:farmersrespitebrewing/blue_lemonade serializer=farmersrespite:brewing result=creativedelight:blue_lemonade\*1
+> cdevtest rdetail creativedelight:farmersrespitebrewing/pink_lemonade
+expect verb=rdetail id=creativedelight:farmersrespitebrewing/pink_lemonade serializer=farmersrespite:brewing result=creativedelight:pink_lemonade\*1
+> cdevtest rdetail creativedelight:createfilling/lemonade
+expect verb=rdetail id=creativedelight:createfilling/lemonade serializer=create:filling result=creativedelight:lemonade\*1
+> cdevtest rdetail creativedelight:createfilling/blue_lemonade
+expect verb=rdetail id=creativedelight:createfilling/blue_lemonade serializer=create:filling result=creativedelight:blue_lemonade\*1
+> cdevtest rdetail creativedelight:createfilling/pink_lemonade
+expect verb=rdetail id=creativedelight:createfilling/pink_lemonade serializer=create:filling result=creativedelight:pink_lemonade\*1
+> cdevtest rdetail creativedelight:createemptying/lemonade
+expect verb=rdetail id=creativedelight:createemptying/lemonade serializer=create:emptying
+> cdevtest rdetail creativedelight:createemptying/blue_lemonade
+expect verb=rdetail id=creativedelight:createemptying/blue_lemonade serializer=create:emptying
+> cdevtest rdetail creativedelight:createemptying/pink_lemonade
+expect verb=rdetail id=creativedelight:createemptying/pink_lemonade serializer=create:emptying
+> cdevtest makes fruitsdelight:lemon_juice
+expect verb=makes id=\S+ serializer=farmersrespite:brewing result=fruitsdelight:lemon_juice\*1
+reject \[cdevtest\] .*done=0
+look mixing part=fields: lemonade 250 lemon juice + 250 water -> 500 lemonade and no heat requirement; blue / pink 500 lemonade + 2 berries -> 500; the Kettle lemonade base is water with one lemon, the blue / pink base is lemonade; the lemon juice Kettle recipe takes two lemons on water
+
+## SQ-DRK-10 | lemonade bottles drain 250 mB each in an Item Drain (live)
+@group A
+@commands three Item Drains; `/cdevtest use` each with a Lemonade / Blue Lemonade / Pink Lemonade bottle; `/cdevtest tickwarp 100`; `/cdevtest tank` each
+@pass each drain tank holds 250 mB of its own fluid (`creativedelight:lemonade`, `blue_lemonade`, `pink_lemonade`)
+@fails `R.createBottle` pairs (emptying recipe); Create's drain reads the emptying recipe, so a missing one leaves the bottle in the drain
+@absent creativedelight:lemonade creativedelight:blue_lemonade creativedelight:pink_lemonade (registered 2026-11-21, after the last /dumpall)
+> forceload add 5280 5200 5295 5215
+> fill 5280 -61 5200 5295 -61 5215 minecraft:stone
+> fill 5280 -60 5200 5295 -56 5215 minecraft:air
+sleep 2
+> setblock 5281 -60 5201 create:item_drain
+> setblock 5283 -60 5201 create:item_drain
+> setblock 5285 -60 5201 create:item_drain
+> cdevtest use 5281 -60 5201 held=creativedelight:lemonade face=up
+> cdevtest use 5283 -60 5201 held=creativedelight:blue_lemonade face=up
+> cdevtest use 5285 -60 5201 held=creativedelight:pink_lemonade face=up
+> cdevtest tickwarp 100
+waitlog verb=tickwarp .*end=done 60
+> cdevtest tank 5281 -60 5201
+expect verb=tank tanks=\d+ fluids=0:creativedelight:lemonade\*250/
+> cdevtest tank 5283 -60 5201
+expect verb=tank tanks=\d+ fluids=0:creativedelight:blue_lemonade\*250/
+> cdevtest tank 5285 -60 5201
+expect verb=tank tanks=\d+ fluids=0:creativedelight:pink_lemonade\*250/
+reject \[cdevtest\] .*done=0
+
+## SQ-DRK-11 | drinking: Haste 30 s, blue adds Night Vision 20 s, pink adds Jump Boost 20 s; bottle back; stacks to 32
+@group A
+@commands `/cdevtest item` and `/cdevtest food` on the three; bot `drk11` drinks each (`pbot useitem drk11 main 40`), `/cdevtest player drk11` after each, `/effect clear` between
+@pass `max_stack=32` for each; food 1 hunger, always edible; after each drink the main hand holds `minecraft:glass_bottle*1`; lemonade: Haste I about 600 ticks; blue: Haste and Night Vision I about 400 ticks; pink: Haste and Jump Boost I about 400 ticks
+@fails CD startup `creativedelight/drinks.js` effects (R7, D5); stack size from `gen_stack_sizes.py` / the item builder; the bottle remainder in the drink builder
+@absent creativedelight:lemonade creativedelight:blue_lemonade creativedelight:pink_lemonade (registered 2026-11-21, after the last /dumpall)
+> forceload add 5280 5200 5295 5215
+> cdevtest item creativedelight:lemonade
+expect verb=item item=creativedelight:lemonade .*max_stack=32\b
+> cdevtest item creativedelight:blue_lemonade
+expect verb=item item=creativedelight:blue_lemonade .*max_stack=32\b
+> cdevtest item creativedelight:pink_lemonade
+expect verb=item item=creativedelight:pink_lemonade .*max_stack=32\b
+> cdevtest food creativedelight:lemonade
+expect verb=food item=creativedelight:lemonade\S* food=true nutrition=1 .*always=true
+> pbot spawn drk11 5290.5 -60 5210.5 minecraft:overworld survival
+sleep 2
+> pbot hunger drk11 10
+> effect clear drk11
+> pbot hold drk11 creativedelight:lemonade 1
+> pbot useitem drk11 main 40
+waitlog verb=pbot.useitem bot=drk11 end=finish item=creativedelight:lemonade 30
+> cdevtest player drk11
+expect verb=player name=drk11 .*effects=\S*minecraft:haste:0:(5[6-9]\d|600)\b
+> effect clear drk11
+> pbot hold drk11 creativedelight:blue_lemonade 1
+> pbot useitem drk11 main 40
+waitlog verb=pbot.useitem bot=drk11 end=finish item=creativedelight:blue_lemonade 30
+> cdevtest player drk11
+expect verb=player name=drk11 .*effects=\S*minecraft:night_vision:0:(3[6-9]\d|400)\b
+> effect clear drk11
+> pbot hold drk11 creativedelight:pink_lemonade 1
+> pbot useitem drk11 main 40
+waitlog verb=pbot.useitem bot=drk11 end=finish item=creativedelight:pink_lemonade 30
+> cdevtest player drk11
+expect verb=player name=drk11 .*effects=\S*minecraft:jump_boost:0:(3[6-9]\d|400)\b
+count verb=player name=drk11 .*effects=\S*minecraft:haste:0:(5[6-9]\d|600)\b >= 3
+count verb=player name=drk11 .*main=minecraft:glass_bottle\*1 >= 3
+> pbot remove drk11
+reject \[cdevtest\] .*done=0
+
+@@section 5
+@@title CQ-DRK Lemonade client half, 2026-11-21 (same section; TODO `food/drinks #1`)
+@@date 2026-11-21
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight_drinks.md development/creativeDelight/src/main/resources/assets/creativedelight
+@@text
+@@table
+## CQ-DRK-03 | look: lemonade art and names; hand: the mixer and Kettle make them
+@group client
+@commands hotbar with the three drinks and Fruits Delight's lemon juice; tooltips; then by hand: unheated mixer 250 lemon juice + 250 water + sugar; the 500 mB lemonade + 2 blueberries, + 2 strawberries; Kettle on water with a lemon and sugar, on lemonade with a blueberry and with a strawberry, on water with two lemons
+@pass LOOK: each drink is Fruits Delight's lemon juice glass with its tint in the liquid (plain pale yellow F3E99A, blue 8FB4E6, pink F2A7B8), names "Lemonade", "Blue Lemonade", "Pink Lemonade", effect lines on the tooltip; hand: 500 mB lemonade, then blue and pink; the Kettle gives lemonade, blue and pink, and two lemons still give lemon juice
+@fails art `assets/creativedelight/textures/item/{lemonade,blue_lemonade,pink_lemonade}.png` (sources.csv row, R22); lang in the CD jar; recipes as SQ-DRK-09
+@absent creativedelight:lemonade creativedelight:blue_lemonade creativedelight:pink_lemonade (registered 2026-11-21, after the last /dumpall)
+> item replace entity @s hotbar.0 with creativedelight:lemonade
+> item replace entity @s hotbar.1 with creativedelight:blue_lemonade
+> item replace entity @s hotbar.2 with creativedelight:pink_lemonade
+> item replace entity @s hotbar.3 with fruitsdelight:lemon_juice
+do {"tooltip_text": "creativedelight:lemonade", "expect": "Lemonade"}
+do {"tooltip_text": "creativedelight:blue_lemonade", "expect": "Blue Lemonade"}
+do {"tooltip_text": "creativedelight:pink_lemonade", "expect": "Pink Lemonade"}
+do {"slot": 0}
+shot hotbar_lemonades
+do {"tooltip": "creativedelight:blue_lemonade", "shift": true}
+shot blue_lemonade_tooltip
+bootreject Missing texture.*creativedelight:item/(blue_|pink_)?lemonade
+look shots: three tinted lemon juice glasses beside the lemon juice; the mixer and Kettle runs stay hand checks (the runner notes each output)

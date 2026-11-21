@@ -52,4 +52,9 @@ StartupEvents.registry('fluid', e => {
 	drink(f.lavender_tea, 'Lavender Tea', 0xA98CCB)
 	drink(f.matcha_latte, 'Matcha Latte', 0x9DBE78)
 	drink(f.berry_matcha_latte, 'Ice Berry Matcha', 0xBF6E8C)   // renamed (food/drinks #15)
+	// Nut milk (plan_wood_bucket_batch_1121.md R11, D8): Vintage Delight's Nut Milk bottle as a fluid, 250 mB a bottle
+	// (Spout and Item Drain in Creative Delight's creativedelight/milk.js), in #forge:milk with cow and goat milk. The color
+	// is the bottle texture's liquid (the jar soft fluid's too). No iron bucket: the wooden nut milk bucket and the wooden
+	// cauldron carry it (Java, farm/bucket/).
+	if (f.nut_milk) drink(f.nut_milk, 'Nut Milk', 0xF5E7C2)
 })

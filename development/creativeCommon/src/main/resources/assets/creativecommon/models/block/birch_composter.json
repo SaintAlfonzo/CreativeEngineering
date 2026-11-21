@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/composter",
+  "textures": {
+    "particle": "creativecommon:block/birch_composter_side",
+    "top": "creativecommon:block/birch_composter_top",
+    "bottom": "creativecommon:block/birch_composter_bottom",
+    "side": "creativecommon:block/birch_composter_side",
+    "inside": "creativecommon:block/birch_composter_bottom"
+  }
+}

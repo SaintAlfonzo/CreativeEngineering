@@ -9,8 +9,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
-/** An empty wooden bucket milks adult cows (mooshrooms too) and goats into a wooden milk bucket, as vanilla's bucket does. */
+/**
+ * An empty wooden bucket milks adult cows (mooshrooms too) into a wooden milk bucket, as vanilla's bucket does, and adult
+ * goats into a wooden goat milk bucket (a wooden milk bucket when Hearth and Harvest's goat milk fluid is absent).
+ */
 public final class WoodenBucketMilking {
 
 	private WoodenBucketMilking() {}
@@ -30,7 +34,8 @@ public final class WoodenBucketMilking {
 		player.playSound(goat ? SoundEvents.GOAT_MILK : SoundEvents.COW_MILK, 1.0F, 1.0F);
 		if (!event.getLevel().isClientSide) {
 			player.setItemInHand(event.getHand(),
-					ItemUtils.createFilledResult(held, player, new ItemStack(WoodenBuckets.MILK.get())));
+					ItemUtils.createFilledResult(held, player, new ItemStack(goat && ForgeRegistries.FLUIDS.containsKey(WoodenBuckets.GOAT_MILK_ID)
+							? WoodenBuckets.GOAT_MILK.get() : WoodenBuckets.MILK.get())));
 		}
 		event.setCancellationResult(InteractionResult.sidedSuccess(event.getLevel().isClientSide));
 		event.setCanceled(true);

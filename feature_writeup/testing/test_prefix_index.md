@@ -127,6 +127,7 @@ same pass as the renames.
 | `FX-` | [fixes_compat.md](../fixes_compat.md) |  | briefs/recipes_magic.md |  |
 | `GLD-` | [golden_food.md](../golden_food.md) | CQ-GLD (3), SQ-GLD (16) |  |  |
 | `GR-` | [gear_tuning.md](../gear_tuning.md) |  | briefs/gear_tuning.md |  |
+| `GSH-` | [glass_shards.md](../glass_shards.md) | SQ-GSH (7) | plan_wood_bucket_batch_1121.md |  |
 | `HNH-` | [hearth_and_harvest.md](../hearth_and_harvest.md) |  | plan_hearth_crow_salt.md |  |
 | `HTD-` | [hostile_delight.md](../hostile_delight.md) |  |  |  |
 | `IM-` | [plan_1.0.3.md](../plan_1.0.3.md) |  |  | not in the README index yet |
@@ -319,6 +320,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `CQ-SG-` | 1 | [hearth_and_harvest.md](../hearth_and_harvest.md) |  |
 | `CQ-SINK-` | 3 | [blockrunner.md](../blockrunner.md) |  |
 | `CQ-SLK-` | 1 | [plan_bugfix_1114.md](../plan_bugfix_1114.md) |  |
+| `CQ-SNP-` | 1 | [storage_audit.md](../storage_audit.md) | new 2026-11-21: sack sneak pickup client half (SB-10 to SB-14); queue SQ-SB is taken by spawn boxes (`rows/SB.qb`), so the sack rows take SNP |
 | `CQ-SPC-` | 1 | none found | no doc names it: the first lint run assigns an owner |
 | `CQ-SPD-` | 1 | [plan_bugfix_1114.md](../plan_bugfix_1114.md) |  |
 | `CQ-SPF-` | 2 | [creative_split.md](../creative_split.md) |  |
@@ -490,6 +492,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `SQ-SK-` | 3 | [perf_suite.md](../perf_suite.md) |  |
 | `SQ-SLK-` | 5 | [plan_bugfix_1114.md](../plan_bugfix_1114.md) |  |
 | `SQ-SNF-` | 4 | [food.md](../food.md) |  |
+| `SQ-SNP-` | 5 | [storage_audit.md](../storage_audit.md) | new 2026-11-21: sack sneak pickup (SB-10 to SB-14, `rows/SNP.qb`); SQ-SB-01 to -08 are spawn boxes, a collision with the writeup prefix SB-, so the sack rows do not use SQ-SB |
 | `SQ-SPC-` | 2 | none found | no doc names it: the first lint run assigns an owner |
 | `SQ-SPD-` | 9 | [plan_bugfix_1114.md](../plan_bugfix_1114.md) |  |
 | `SQ-SPF-` | 38 | [creative_split.md](../creative_split.md) |  |
@@ -535,3 +538,4 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 - 2026-11-17: `LOOT-` added for [creative_loot.md](../creative_loot.md) (Creative Loot jar, plan_rules_fixes.md section 5b).
 - 2026-11-17: follow-up plan F3/F4: the 7 whole-copy queue rows merged to one (`tools/test_prefix_lint.py` passes, its accepted failure removed); `SQ-MB-` / `CQ-MB-` renamed (`SQ-MBX-`, `CQ-MBX-` monster box; `SQ-RW-00` to `-04` Mulberry run) and `SQ-CNS-` / `CQ-CNS-` of Common wave 9 renamed `SQ-CSN-` / `CQ-CSN-` (section 2) by `tools/test_prefix_rename.py --only`.
 - 2026-11-18: `UPG-` added for [plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 4 (1.2.02 upgrade section, rows `SQ-UPG-NN`).
+- 2026-11-21: queue series `SQ-SNP-` / `CQ-SNP-` added for the sack pickup rows of [storage_audit.md](../storage_audit.md) section 7 (SB-10 to SB-14). Collision found: `SQ-SB-01` to `-08` (`rows/SB.qb`) are spawn-box rows, not storage_audit.md's `SB-` tests; left as is, the owner decides on a rename.

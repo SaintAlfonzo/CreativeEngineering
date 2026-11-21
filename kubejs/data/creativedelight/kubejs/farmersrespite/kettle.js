@@ -18,6 +18,8 @@ ServerEvents.recipes(e => {
 	var i = global.item
 	var f = global.fluid
 	var R = global.NCH.forPack('creativedelight')
+	// Any milk in the tank (plan_wood_bucket_batch_1121.md R11): cow, goat or nut milk, one recipe each (frBrewing)
+	var MILKS = [f.milk, f.goat_milk, f.nut_milk]
 	var kettle = (removeId, input, output, id, base, opts) => {
 		if (removeId) R.remove({ id: removeId }, e)
 		R.frBrewing(input, output, e, id, Object.assign({ base: base }, opts || {}))
@@ -35,7 +37,7 @@ ServerEvents.recipes(e => {
 		kettle('farmersrespite:brewing/purulent_tea', [i.nether_wart, i.fermented_spider_eye], i.purulent_tea, 'purulent_tea', f.water)
 		kettle('farmersrespite:brewing/apple_cider', [i.apple, i.any_sweetener_drink], i.farmersdelight_apple_cider, 'apple_cider', f.water)
 		// 2.0 used a milk bottle as the container; the milk is now the base and the cocoa is bottled in glass
-		kettle('farmersrespite:brewing/hot_cocoa', [i.cocoa_beans, i.any_sweetener_drink], i.hot_cocoa, 'hot_cocoa', f.milk)
+		kettle('farmersrespite:brewing/hot_cocoa', [i.cocoa_beans, i.any_sweetener_drink], i.hot_cocoa, 'hot_cocoa', MILKS)
 
 		// Tiers: [tier item, base fluid] per drink. Long: + milk. Strong: + honey bottle (its bottle goes to the
 		// leftover slots).
@@ -65,15 +67,15 @@ ServerEvents.recipes(e => {
 		// (tea leaves + leaves, milk-bottle container -> milk base)
 		// G5 begin: kettle rows (NCH frBrewing; the remove ids are recipe ids)
 		kettle('create_central_kitchen:brewing/builders_tea', [i.t_respite_tea_leaves, i.milk], Item.of(i.builders_tea, 2), 'builders_tea', f.water)
-		kettle('create:fr/tea', [i.t_tea_leaves, i.t_leaves], i.builders_tea, 'builders_tea_from_leaves', f.milk)
+		kettle('create:fr/tea', [i.t_tea_leaves, i.t_leaves], i.builders_tea, 'builders_tea_from_leaves', MILKS)
 		// lavender tea: the drink rules (creativedelight/drinks.js)
 		// matcha latte: honey is any sugar-like (food/drinks #15)
-		kettle('delightful:food/kettle/matcha_latte', [i.matcha, i.any_sweetener_drink], i.matcha_latte, 'matcha_latte', f.milk)
+		kettle('delightful:food/kettle/matcha_latte', [i.matcha, i.any_sweetener_drink], i.matcha_latte, 'matcha_latte', MILKS)
 		// the pack's berry latte (TODO food/drinks #5): berries on the Matcha Latte in the tank
 		kettle(null, [i.t_fruits_berries], i.berry_matcha_latte, 'berry_matcha_latte', f.matcha_latte)
 		kettle('ends_delight:brewing/chorus_flower_tea', [i.ghast_tear, i.dried_chorus_flower], i.chorus_flower_tea, 'chorus_flower_tea', f.water)
 		// chorus fruit, its grain or a dried chorus flower (food/drinks #15)
-		kettle('ends_delight:brewing/chorus_fruit_milk_tea', [[i.chorus_fruit, i.chorus_fruit_grain, i.dried_chorus_flower]], i.chorus_fruit_milk_tea, 'chorus_fruit_milk_tea', f.milk)
+		kettle('ends_delight:brewing/chorus_fruit_milk_tea', [[i.chorus_fruit, i.chorus_fruit_grain, i.dried_chorus_flower]], i.chorus_fruit_milk_tea, 'chorus_fruit_milk_tea', MILKS)
 		kettle('ends_delight:brewing/bubble_tea', [i.ender_pearl_grain], i.bubble_tea, 'bubble_tea', f.chorus_fruit_milk_tea)
 		// G5 end
 

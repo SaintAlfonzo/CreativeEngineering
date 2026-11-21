@@ -404,6 +404,20 @@ global.NCH = {
 		return v != null ? v : d
 	},
 
+	// JSON text of plain JS data for raw datapack files (ServerEvents.highPriorityData). KubeJS's Rhino JSON.stringify
+	// is Gson-backed and writes every number as a double (800 -> 800.0); this keeps integers integral.
+	_jsonText(v) {
+		if (v === null || v === undefined) return 'null'
+		if (Array.isArray(v)) return '[' + v.map(x => global.NCH._jsonText(x)).join(',') + ']'
+		if (typeof v === 'number') {
+			if (!isFinite(v)) throw new Error('_jsonText: non-finite number ' + v)
+			return v === Math.floor(v) && Math.abs(v) < 1e15 ? String(Math.round(v)) : String(v)
+		}
+		if (typeof v === 'boolean') return String(v)
+		if (typeof v === 'object') return '{' + Object.keys(v).map(k => JSON.stringify(String(k)) + ':' + global.NCH._jsonText(v[k])).join(',') + '}'
+		return JSON.stringify(String(v))
+	},
+
 	// Resolves any accepted fluid-like shape (string, Fluid.of() stack, {fluid}/{tag} object) to {id, amount}
 	_resolveFluidAmount(v, defaultAmount) {
 		var amt = global.NCH._or(defaultAmount, 1000)
@@ -1517,13 +1531,22 @@ global.NCH = {
 	// 250 mB unit; default water; 'none' for a brew that uses no fluid), container (default glass bottle), time (ticks;
 	// left out = Creative Delight's [cooking] kettleBrewTicks, default 600 = 30 s), exp (0.35), tab ('drinks') }. One brew makes one result. A drink
 	// tier like Respite's long / strong teas is the tea's fluid as base plus one ingredient.
+	// base may also be a list of fluids (any milk: cow, goat, nut): the tank holds one fluid and matches it exactly, not
+	// by tag, so each gets its own recipe, the first under the id and the others under <id>_<fluid path>. A fluid of an
+	// absent mod skips its copy only (plan_wood_bucket_batch_1121.md R11).
 	//   R.frBrewing([i.t_fruits_berries], i.berry_matcha_latte, e, 'berry_matcha_latte', { base: f.matcha_latte })
+	//   R.frBrewing([i.cocoa_beans, sweet], i.hot_cocoa, e, 'hot_cocoa', { base: [f.milk, f.goat_milk, f.nut_milk] })
 	frBrewing(input, output, e, idOverride, opts) {
 		if (!global.has('farmersrespite')) return global.NCH._skip('farmersrespite')
 		if (!e) throw new Error('frBrewing called without event object!')
 		opts = opts || {}
 		var inputs = Array.isArray(input) ? input : [input]
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, 'frbrewing')
+		if (Array.isArray(opts.base)) {
+			opts.base.forEach((b, n) => global.NCH.frBrewing(input, output, e,
+				n === 0 ? idSuffix : idSuffix + '_' + String(b).split(':').pop(), Object.assign({}, opts, { base: b })))
+			return
+		}
 		var ctx = 'frBrewing ' + idSuffix
 		if (inputs.length < 1 || inputs.length > 2) global.NCH._warn(ctx, 'the kettle takes 1-2 ingredients')
 		if (opts.needWater !== undefined) global.NCH._warn(ctx, 'needWater is gone: give base (a fluid, or \'none\')')
@@ -2987,6 +3010,42 @@ global.NCH = {
 			input: global.NCH._itemJson(input, { context: ctx + ' input' }),
 			growthModifier: global.NCH._or(growthModifier, 1.25)
 		}).id(`${global.NCH.ns()}:iefertilizer/${idSuffix}`)
+	},
+
+	// IE Sawmill as a raw datapack JSON, written in ServerEvents.highPriorityData (e = that event), not the recipe event:
+	// kubejs-immersive-engineering's sawmill schema drops the secondaries and the precision-blade "blade" field
+	// (Creative Common's SawmillRecipeSerializerMixin reads it), and datapack JSON bypasses that schema the way jar
+	// recipes do. Item ids only. opts: count (1), energy (800), secondaries [[id, stripping], ...] (none), stripped
+	// (id given by the stripping step), blade (precision sawblade profile; omitted = the plain sawblade's default),
+	// id (suffix; default '<input path>-<output path>', '/' -> '_'). The recipe also carries forge:mod_loaded for every
+	// namespace it names, and is skipped when one is missing. Id: <ns>:sawmill/<id>.
+	//   R.sawmillRaw(i.planks_oak, i.log_oak, e, { count: 6, energy: 1600, secondaries: [[i.bark_oak, true], [i.sawdust, false]], stripped: i.log_oak_stripped })
+	sawmillRaw(output, input, e, opts) {
+		opts = opts || {}
+		if (!e || typeof e.add !== 'function') throw new Error('sawmillRaw needs the ServerEvents.highPriorityData event')
+		var secondaries = opts.secondaries || []
+		var ids = [input, output].concat(secondaries.map(s => s[0]))
+		if (opts.stripped) ids.push(opts.stripped)
+		if (!global.has('immersiveengineering', ids)) return global.NCH._skip.apply(null, ['immersiveengineering']
+			.concat(ids.map(id => global.has.namespace(id))))
+		var path = (id) => String(id).substring(String(id).indexOf(':') + 1).replace(/\//g, '_')
+		var idSuffix = opts.id || (path(input) + '-' + path(output))
+		var mods = { immersiveengineering: true }
+		ids.forEach(id => {
+			var ns = global.has.namespace(id)
+			if (ns !== 'minecraft' && ns !== 'forge') mods[ns] = true
+		})
+		var json = {
+			type: 'immersiveengineering:sawmill',
+			conditions: Object.keys(mods).sort().map(m => ({ type: 'forge:mod_loaded', modid: m })),
+			energy: global.NCH._or(opts.energy, 800),
+			input: { item: String(input) },
+			result: { item: String(output), count: global.NCH._or(opts.count, 1) },
+			secondaries: secondaries.map(s => ({ output: { item: String(s[0]) }, stripping: s[1] === true }))
+		}
+		if (opts.stripped) json.stripped = { item: String(opts.stripped) }
+		if (opts.blade) json.blade = String(opts.blade)
+		e.add(global.NCH.ns() + ':recipes/sawmill/' + idSuffix + '.json', global.NCH._jsonText(json))
 	},
 
 	// IE Bottling Machine. NBT-aware like ieBlueprint: a result may be Item.of(id, '{nbt}'), an input

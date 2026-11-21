@@ -10406,7 +10406,7 @@
    "effects": [],
    "clear_effects": true,
    "sources": [
-    "minecraft_milk_bucket"
+    "t_milk_buckets"
    ],
    "recipes": [
     {

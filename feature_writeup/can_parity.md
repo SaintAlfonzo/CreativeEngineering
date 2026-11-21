@@ -599,7 +599,7 @@ three stuffed hoglin plates share one Hoglin Feast can (block nethersdelight:stu
 ### 2.15 Drinks <a id="drink"></a>
 
 Placeholder goal: 4 -> 4 servings. Honey reuses Canned Goods' can (its code clears poison); Canned Powdered Milk takes 4
-milk buckets, 1 hunger, always edible, clears every effect.
+milk buckets (any milk, iron or wooden, since 2026-11-21), 1 hunger, always edible, clears every effect.
 
 | Want | Item | Can | Input (basic / +additive) | Alt input (sliced) | Impl | Texture | Recipe | Food audit | Effects | Food h/s | Craft sum h/s | Canned h/s | In -> out | Out vs target |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -639,6 +639,9 @@ milk buckets, 1 hunger, always edible, clears every effect.
 | / | Kiwi Juice `fruitsdelight:kiwi_juice` | Canned Kiwi Juice | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
 | / | Lavender Tea `delightful:lavender_tea` | Canned Lavender Tea | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
 | / | Lemon Juice `fruitsdelight:lemon_juice` | Canned Lemon Juice | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
+| / | Lemonade `creativedelight:lemonade` | Canned Lemonade | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
+| / | Blue Lemonade `creativedelight:blue_lemonade` | Canned Blue Lemonade | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
+| / | Pink Lemonade `creativedelight:pink_lemonade` | Canned Pink Lemonade | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
 | / | Lychee Cherry Tea `fruitsdelight:lychee_cherry_tea` | Canned Lychee Cherry Tea | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
 | / | Mango Milkshake `fruitsdelight:mango_milkshake` | Canned Mango Milkshake | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
 | / | Mango Tea `fruitsdelight:mango_tea` | Canned Mango Tea | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |

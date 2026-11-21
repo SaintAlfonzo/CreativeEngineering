@@ -440,8 +440,9 @@ EXPLICIT = [
 
 	# drinks: honey clears poison in Canned Goods' code; milk is not a food, the can clears effects itself
 	('drink', 'canned_honey_bottles', None, ['honey_bottle'], True, dict(code_fx=True)),
+	# any full milk bucket, iron or wooden, cow, goat or nut milk (plan_wood_bucket_batch_1121.md R1, R11)
 	('drink', 'canned_powdered_milk', 'Canned Powdered Milk', ['minecraft_milk_bucket'], False,
-	 dict(values=dict(hunger=1, modifier=0.1, always=True, clear_effects=True))),
+	 dict(input=['t_milk_buckets'], values=dict(hunger=1, modifier=0.1, always=True, clear_effects=True))),
 
 	# cheese wedges: 4 in a Cooking Pot, the empty can in its container slot
 	('dairy', 'canned_flaxen_cheese', 'Canned Flaxen Cheese', ['flaxen_cheese_wedge'], False),

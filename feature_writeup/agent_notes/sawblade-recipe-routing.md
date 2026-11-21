@@ -7,7 +7,7 @@ Moved from agent memory 2026-11-16 (last edited there 2026-09-07). Repo status d
 The IE Sawmill can run **different recipes for the same input** depending on which sawblade
 is installed. `minecraft:oak_planks` -> stairs / door / fence / … is chosen by the blade.
 
-**Why it was needed:** `kubejs/generation_scripts/sawmill.js` emits many `immersiveengineering:sawmill`
+**Why it was needed:** the pack's sawmill recipes (now written by `wood_types.js`) are many `immersiveengineering:sawmill`
 recipes that share one input; IE's `SawmillRecipe.findRecipe` returns only the first input
 match (non-deterministic map order), so all but one were dead. Routing fixes that and makes
 selection deterministic.
@@ -37,9 +37,11 @@ selection deterministic.
 
 ## Data
 
-- `kubejs/generation_scripts/sawmill.js` — `profileFor(outputId)` regex classifies the output
-  shape; `createSawmillSimpleRecipeFile` auto-derives `blade` from the output. Regenerate with
-  `node sawmill.js`, then copy `recipes/sawmill/*.json` -> `creativeCommon/src/main/resources/data/creativeengineering/recipes/sawmill/`.
+- `kubejs/data/creativeengineering/kubejs/wood/wood_types.js` (since 2026-11-21) — `ServerEvents.highPriorityData` walks the
+  species table and calls NCH `sawmillRaw` (raw datapack JSON, ids `creativeengineering:sawmill/<input>-<output>`); the
+  blade comes from the form (`sawBlades`). Replaced the node script `generation_scripts/sawmill.js` and its 211 jar JSONs
+  (Rhino harness parity 211/211). Gotcha: KubeJS's Rhino `JSON.stringify` writes numbers as doubles (800.0), so
+  `sawmillRaw` uses NCH `_jsonText`.
 - Default per planks input: IE's own `immersiveengineering:sawmill/<species>_slab` (9 vanilla/nether,
   still live) or the generated `*_slab` (4 modded woods). `wood_types.js` unchanged.
 - Blueprint recipes: `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_*.json`
@@ -52,7 +54,7 @@ selection deterministic.
     upstream tag exists for **vertical planks** or **railings**, so those two use pack tags
     `creativeengineering:vertical_planks` / `creativeengineering:railings` defined in
     `server_scripts/tags/engineeringtags.js` (13 quark vertical-plank + 13 AP/everycomp railing
-    items — keep in sync with `generation_scripts/sawmill.js` outputs). Fixed 2026-09-07: both
+    items — keep in sync with the `wood_types.js` species table). Fixed 2026-09-07: both
     recipes previously hard-coded the *oak* item only (`quark:vertical_oak_planks` /
     `architects_palette:oak_railing`), so no other wood could craft that blade.
 - Blueprint item + category name: `blueprints.js` (`{blueprint:"precision_sawblades"}` + added to
@@ -73,6 +75,6 @@ Any future mixin that's applied lazily and references a Creative Common class ne
 
 Status: see feature_writeup/ (sawmill/sawblade rows in todo/TODO.md).
 
-## TODO (earmarked 2026-09-26): make the sawmill recipes dynamic
+## Done 2026-11-21: the sawmill recipes are dynamic
 
-The user wants these off the manual pipeline (node `kubejs/generation_scripts/sawmill.js` -> `recipes/sawmill/*.json` -> hand-copied into `creativeCommon/src/main/resources/data/creativeengineering/recipes/sawmill/` (211 files, identical to the node output as of 2026-09-26) -> jar rebuild). Plan (also written at the top of sawmill.js): an NCH helper that adds the raw recipe JSON from `ServerEvents.highPriorityData` (`event.add`, which skips kjs-ie's broken secondaries schema like datapack JSON does), driven by the species table in `server_scripts/wood/wood_types.js` (item_dict keys). Then delete sawmill.js, recipes/sawmill/ and the jar copies. Must verify in game that `blade` + secondaries survive kjs-ie's interception of all `immersiveengineering:*` recipes. Same pattern as [structure-gen-framework](structure-gen-framework.md)'s runtime migration.
+The node pipeline (sawmill.js -> 211 hand-copied jar JSONs) is gone; see Data above. Still to verify in game that `blade` and the secondaries survive kubejs-immersive-engineering's interception of `immersiveengineering:*` recipes (queue row, EN-).

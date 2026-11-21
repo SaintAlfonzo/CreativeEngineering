@@ -126,7 +126,7 @@ ServerEvents.recipes(e => {
 		R.shapeless(Item.of(i.frosting, 2), [i.any_sweetener, i.milk, i.milk], e, 'frosting_manual_only')
 		// Frosting fluid (TODO dishes/ingredients #2): the Create route. Heated mixer sugar + 250 mB milk -> 500 mB, the
 		// grid's 2 frosting; the compactor presses 250 mB into 1 frosting; a spout tops a baked base with 750 mB (below).
-		R.createMixing(Fluid.of(global.fluid.frosting, 500), [i.any_sweetener, Fluid.of(global.fluid.milk, 250)], e, 'frosting', 'heated')
+		R.createMixing(Fluid.of(global.fluid.frosting, 500), [i.any_sweetener, R.createFluidTag(global.fluid.t_milk, 250)], e, 'frosting', 'heated')
 		R.createCompacting(i.frosting, [Fluid.of(global.fluid.frosting, 250)], e, 'frosting')
 		R.shapeless(i.cookie_dough, [i.any_dough, i.any_sweetener, i.any_sweetener], e, 'cookie_dough_manual_only')
 

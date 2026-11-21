@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/composter",
+  "textures": {
+    "particle": "creativecommon:block/mangrove_composter_side",
+    "top": "creativecommon:block/mangrove_composter_top",
+    "bottom": "creativecommon:block/mangrove_composter_bottom",
+    "side": "creativecommon:block/mangrove_composter_side",
+    "inside": "creativecommon:block/mangrove_composter_bottom"
+  }
+}

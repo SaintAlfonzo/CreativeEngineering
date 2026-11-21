@@ -1,0 +1,81 @@
+# Scratch queue rows MJ (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MJ.qb RES [--section KEY] [--rows ID,...]
+# SQ-MJ-01 and -02 (2026-10-22) are run-log entries in SALT.qb; new MJ rows live here.
+
+@@section 1
+@@title SQ-MJ Soups take 1 jar space, nut milk into a jar by pipe, 2026-11-21 ([mixed_jars.md](../mixed_jars.md) 9, MJ-20, MJ-21; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R6, R11; TODO `items/jars #4`, `engineering-recipes #1`)
+@@date 2026-11-21
+@@jars creativecommon creativedelight
+@@sources feature_writeup/mixed_jars.md tools/gen_soup_soft_fluids.py development/creativeDelight/src/main/resources/data/creativedelight/moonlight/soft_fluids kubejs/data/supplementaries/moonlight/soft_fluids
+@@text
+@@text Targets the soft fluids regenerated 2026-11-21 (`BOWL_SPACES` 1: the CD jar's `data/creativedelight/moonlight/soft_fluids/` and the 11 KubeJS overrides of mod-shipped soups) and the nut milk soft fluid tied to `creativedelight:nut_milk`. Group A, area x 5296 to 5311, z 5200 to 5215. Moonlight's soft-fluid map is empty until a player has joined, so each row spawns a bot first (SQ-MJ-02, 2026-10-22).
+@@text
+@@table
+## SQ-MJ-03 | 12 bowls of a pack soup fill a jar (1 space each), a 13th is refused; a bowl takes one back; Farmer's Delight pumpkin soup (KubeJS override) the same
+@group A
+@commands bot online; `supplementaries:jar`; `/cdevtest use` it 13 times with `corn_delight:corn_soup`, then once with `minecraft:bowl`; `/data get block` the jar; a second jar with 12 + 1 `farmersdelight:pumpkin_soup`
+@pass each of the first 12 clicks leaves an empty bowl in the hand, the 13th leaves the soup; the bowl click gives `corn_delight:corn_soup*1`; the jar NBT `FluidHolder` count 11 after it (12 before); pumpkin soup the same
+@fails `tools/gen_soup_soft_fluids.py` `BOWL_SPACES` / `JAR_UNIT` (rerun `/cdevgen run soup_soft_fluids`, then `/reload`); the override copy `kubejs/data/supplementaries/moonlight/soft_fluids/pumpkin_soup.json` (`capacity` 1); a stale CD jar still holding capacity 2
+> forceload add 5296 5200 5311 5215
+> fill 5296 -61 5200 5311 -61 5215 minecraft:stone
+> fill 5296 -60 5200 5311 -56 5215 minecraft:air
+> pbot spawn mj03 5304.5 -60 5210.5 minecraft:overworld survival
+sleep 3
+> setblock 5297 -60 5201 supplementaries:jar
+repeat 12
+> cdevtest use 5297 -60 5201 held=corn_delight:corn_soup face=up
+end
+> cdevtest use 5297 -60 5201 held=corn_delight:corn_soup face=up
+count verb=use main=minecraft:bowl\*1 off=empty state="?supplementaries:jar >= 12
+expect verb=use main=corn_delight:corn_soup\*1 off=empty state="?supplementaries:jar
+> data get block 5297 -60 5201 FluidHolder
+> cdevtest use 5297 -60 5201 held=minecraft:bowl face=up
+expect verb=use main=corn_delight:corn_soup\*1 off=empty state="?supplementaries:jar
+> data get block 5297 -60 5201 FluidHolder
+> setblock 5299 -60 5201 supplementaries:jar
+repeat 12
+> cdevtest use 5299 -60 5201 held=farmersdelight:pumpkin_soup face=up
+end
+> cdevtest use 5299 -60 5201 held=farmersdelight:pumpkin_soup face=up
+count verb=use main=minecraft:bowl\*1 off=empty state="?supplementaries:jar >= 24
+expect verb=use main=farmersdelight:pumpkin_soup\*1 off=empty state="?supplementaries:jar
+> data get block 5299 -60 5201 FluidHolder
+> pbot remove mj03
+reject \[cdevtest\] .*done=0
+look the three FluidHolder lines: corn soup count 12, then 11 after the bowl; pumpkin soup count 12 (field name `count` or `Count`, Moonlight 1.19.2)
+
+## SQ-MJ-04 | a pump moves nut milk from a Create tank into a jar
+@group A
+@commands bot online; the SQ-JFP-01b layout at x 5300 (tank of 4000 mB `creativedelight:nut_milk`, pump, one pipe, jar), creative motor 64 RPM; pump east 40 s, then west 40 s; `/data get block` the jar and the tank after each
+@pass after one direction the jar `FluidHolder` holds nut milk (Vintage Delight's nut milk soft fluid, `equivalent_fluids` names `creativedelight:nut_milk`) and the tank is below 4000 mB
+@fails the soft fluid's `equivalent_fluids` in CD `data/creativedelight/moonlight/soft_fluids/nut_milk.json`; Compat's `JarFluidPipes` (TODO `jars #15`: SQ-JFP-01 to -04 moved no water on r1120nv, plan_scratch_findings_1121 F7). Run after SQ-JFP-01b: if that also moves nothing, this row is blocked, not failed
+> forceload add 5296 5200 5311 5215
+> fill 5296 -61 5200 5311 -61 5215 minecraft:stone
+> fill 5299 -60 5204 5305 -58 5206 minecraft:air
+> pbot spawn mj04 5304.5 -60 5212.5 minecraft:overworld survival
+sleep 3
+> setblock 5300 -60 5205 create:fluid_tank
+sleep 2
+> data merge block 5300 -60 5205 {TankContent:{FluidName:"creativedelight:nut_milk",Amount:4000}}
+> setblock 5303 -60 5205 supplementaries:jar
+> setblock 5302 -60 5205 create:fluid_pipe[east=true,west=true,north=false,south=false,up=false,down=false]
+> setblock 5301 -60 5205 create:mechanical_pump[facing=east]
+> setblock 5301 -59 5205 create:cogwheel[axis=x]
+> setblock 5300 -59 5205 create:creative_motor[facing=east]{ScrollValue:64}
+sleep 2
+> data get block 5301 -60 5205 Speed
+sleep 38
+> say MJ04 phase 1 pump east
+> data get block 5303 -60 5205
+> data get block 5300 -60 5205 TankContent
+> setblock 5301 -60 5205 create:mechanical_pump[facing=west]
+sleep 40
+> say MJ04 phase 2 pump west
+> data get block 5303 -60 5205
+> data get block 5300 -60 5205 TankContent
+> setblock 5300 -59 5205 minecraft:air
+> pbot remove mj04
+count has the following block data: -?64\.0f$ >= 1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|Invalid (block state|tag))
+look one phase ends with the jar FluidHolder nut milk (count up to 12) and the tank below 4000 mB; compare with SQ-JFP-01b on the same boot

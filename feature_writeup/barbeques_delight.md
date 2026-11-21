@@ -11,12 +11,11 @@ asks for it by name. Upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=ca5529c0608d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 3, Pinned 2, In Progress 2, Testing 12), 0 Complete.
+<!-- generated:status_index begin open_work sha1=d7d31a3f2e59 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 2, Pinned 2, In Progress 2, Testing 13), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `dishes/meals #48` | Planned | S C P | Integrate Kebab Sandwich and Bibimbap |
 | `food/seasoning #20` | Planned | C | Own seasoned icons for the Barbeque's Delight seasonings and `grilled` |
 | `food/types-and-tuning #19` | Planned | S P | Barbeque's Delight skewers: food and saturation investigation |
 | `food/placeable #5` | Pinned | C P | Barbeque's Delight placeables: model recolor review |
@@ -24,6 +23,7 @@ asks for it by name. Upstream bugs are fixed.
 | `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `food/seasoning #12` | In Progress | S P | Seasoning sources and villager trades |
 | `dishes/meals #47` | Testing | S+ P | Kebab Wrap on a tortilla |
+| `dishes/meals #48` | Testing | S C P | Integrate Kebab Sandwich (Bibimbap dropped) |
 | `dishes/meals #49` | Testing | S P | Decide: smelt or smoke raw skewers |
 | `dishes/meals #50` | Testing | S C P T | Raw versions of the pack skewers |
 | `dishes/meals #62` | Testing | C P | Skewering QoL: basin grab, input tags, JEI, wood variants |
@@ -740,6 +740,14 @@ raw cod skewer sprite as their models do).
 - Option `rawSteps` on the helper overrides the steps (`false` for none). The cooked assemblies of the Barbecue, Turnip
   Mutton and Crispy Skewers are unchanged; the ten BBQ lines still have no cooked assembly (family recipes later).
 
+### 4.9 Kebab Sandwich kept, Bibimbap dropped (2026-11-21, `dishes/meals #48`, plan_wood_bucket_batch_1121.md R18)
+
+- Kebab Sandwich: already met the sandwich rule since 4.7 (shaped `[' C ', 'KOK', ' B ']` on whole bread,
+  `_manual_only`, plus one Create sequenced assembly on bread). No change.
+- Bibimbap: dropped from the pack (owner, 2026-11-21). `i.bibimbap` is in Creative Common's `removed_items.js` (hidden,
+  its recipes removed) and its heatless grid recipe is gone from `recipes.js`. The item stays registered by the member,
+  so ones already in saves are kept.
+
 ### 4.6 Owner fixes (2026-11-03, after the 1.2.00 play)
 
 - Seasoned icons: the seven new seasonings (`cumin`, `pepper`, `chili`, `honey_mustard`, `buffalo`, `barbeque`, `grilled`)
@@ -852,6 +860,7 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
 
 ## 9. History
 
+- 2026-11-21 (`dishes/meals #48`, 4.9): Bibimbap dropped from the pack (removed items); Kebab Sandwich unchanged.
 - 2026-11-17 (`dishes/meals #57`, 4.8): sequenced assembly for all 18 raw skewers; BBQ-41, SQ-BBQ-09.
 - 2026-11-04 (plan_meals_rolls_bbq.md C, 4.7): `F.skewer` for all 18 skewer lines, eight raw pack skewers, shulker mollusk merge undone, plain combos with static values, seasoning item tooltip, Skewer renames; BBQ-34..40.
 - 2026-10-30: investigation written (jar decompiled to `DecompiledMods/barbequesdelight-1.3.0/`), nothing built.

@@ -85,13 +85,16 @@ i.ce_dragon_shield = 'creativeequipment:dragon_shield';
 i.ce_potion_bucket = 'creativebrewing:potion_bucket';
 i.ce_splash_potion_bucket = 'creativebrewing:splash_potion_bucket';
 i.ce_lingering_potion_bucket = 'creativebrewing:lingering_potion_bucket';
-// Wooden buckets - water-only, early game. Java items: Creative Common bucket/ package | recipe: server_scripts/engineering/process.js
-// (not the Myrtrees latex block myrtrees:wooden_bucket)
+// Wooden buckets and the wooden cauldron, early game farm fluids. Java: Creative Delight farm/bucket/ | recipes:
+// kubejs/data/creativedelight/kubejs/creativedelight/recipes.js (not the Myrtrees latex block myrtrees:wooden_bucket)
 i.wooden_bucket = 'creativedelight:wooden_bucket';
 i.wooden_water_bucket = 'creativedelight:wooden_water_bucket';
 i.wooden_sap_bucket = 'creativedelight:wooden_sap_bucket';
 i.wooden_milk_bucket = 'creativedelight:wooden_milk_bucket';
 i.wooden_honey_bucket = 'creativedelight:wooden_honey_bucket';
+i.wooden_goat_milk_bucket = 'creativedelight:wooden_goat_milk_bucket';
+i.wooden_nut_milk_bucket = 'creativedelight:wooden_nut_milk_bucket';
+i.wooden_cauldron = 'creativedelight:wooden_cauldron';
 // Watering cans - Hearth and Harvest's (copper keeps the upstream id; iron to dragon are pack tiers), Creative Delight
 // member hearthandharvest (hearth_and_harvest.md 4.0). Recipes and fertilizer tag: kubejs/data/creativedelight/kubejs/hearthandharvest/
 i.watering_can = 'hearthandharvest:watering_can';
@@ -2203,6 +2206,10 @@ i.hawberry_juice = 'creativedelight:hawberry_juice';
 i.mango_juice = 'creativedelight:mango_juice';
 i.mangosteen_juice = 'creativedelight:mangosteen_juice';
 i.peach_juice = 'creativedelight:peach_juice';
+// Lemonade (food/drinks #1): plain, blue (blueberry) and pink (strawberry)
+i.lemonade = 'creativedelight:lemonade';
+i.blue_lemonade = 'creativedelight:blue_lemonade';
+i.pink_lemonade = 'creativedelight:pink_lemonade';
 i.t_fruits_kiwi = '#forge:fruits/kiwi';
 i.t_fruits_orange = '#forge:fruits/orange';
 i.t_azalea_flowers = '#creativedelight:azalea_flowers';         // Twigs' and Immersive Weathering's (flowers #5)
@@ -2640,6 +2647,21 @@ i.command_block = 'minecraft:command_block';
 i.command_block_minecart = 'minecraft:command_block_minecart';
 i.compass = 'minecraft:compass';
 i.composter = 'minecraft:composter';
+// Wood composters (Creative Common composter/WoodComposters, farming/composting #3); oak is i.composter
+i.composter_oak = i.composter;
+i.composter_spruce = 'creativecommon:spruce_composter';
+i.composter_birch = 'creativecommon:birch_composter';
+i.composter_dark_oak = 'creativecommon:dark_oak_composter';
+i.composter_jungle = 'creativecommon:jungle_composter';
+i.composter_acacia = 'creativecommon:acacia_composter';
+i.composter_mangrove = 'creativecommon:mangrove_composter';
+i.composter_twisted = 'creativecommon:twisted_composter';
+i.composter_ancient = 'creativecommon:ancient_composter';
+i.composter_blossom = 'creativecommon:blossom_composter';
+i.composter_azalea = 'creativecommon:azalea_composter';
+i.composter_crimson = 'creativecommon:crimson_composter';
+i.composter_warped = 'creativecommon:warped_composter';
+i.t_composters = '#creativecommon:composters';             // minecraft:composter and the 12 wood composters (block + item)
 i.conduit = 'minecraft:conduit';
 i.cookie = 'minecraft:cookie';
 i.cornflower = 'minecraft:cornflower';
@@ -12744,6 +12766,11 @@ i.tortilla_chip      = 'corn_delight:tortilla_chip';
 i.incomplete_chorus_flower_pie = 'create_central_kitchen:incomplete_chorus_flower_pie';
 i.incomplete_chorus_fruit_pie  = 'create_central_kitchen:incomplete_chorus_fruit_pie';
 
+// ===== creativedelight (3) =====
+i.canned_legendary_roll_medley = 'creativedelight:canned_legendary_roll_medley';
+i.canned_mythical_roll_medley  = 'creativedelight:canned_mythical_roll_medley';
+i.netherite_lunchbox           = 'creativedelight:netherite_lunchbox';  // registered by Creative Common lunchbox/
+
 // ===== ends_delight (47) =====
 i.assorted_salad                = 'ends_delight:assorted_salad';
 i.bubble_tea                    = 'ends_delight:bubble_tea';
@@ -12913,7 +12940,7 @@ i.pineapple_pie                = 'fruitsdelight:pineapple_pie';
 i.sweetberry_jello             = 'fruitsdelight:sweetberry_jello';
 i.sweetberry_jelly             = 'fruitsdelight:sweetberry_jelly';
 
-// ===== goldenfood (45) =====
+// ===== goldenfood (39) =====
 i.enchanted_golden_baked_potato    = 'goldenfood:enchanted_golden_baked_potato';
 i.enchanted_golden_beetroot        = 'goldenfood:enchanted_golden_beetroot';
 i.enchanted_golden_bread           = 'goldenfood:enchanted_golden_bread';
@@ -13114,7 +13141,7 @@ i.strider_slice                 = 'nethersdelight:strider_slice';
 i.stuffed_hoglin                = 'nethersdelight:stuffed_hoglin';  // feast block (canned hoglin feast input)
 i.warped_moldy_meat             = 'nethersdelight:warped_moldy_meat';
 
-// ===== oceansdelight (20) =====
+// ===== oceansdelight (21) =====
 i.baked_tentacle_on_a_stick      = 'oceansdelight:baked_tentacle_on_a_stick';
 i.bowl_of_guardian_soup          = 'oceansdelight:bowl_of_guardian_soup';
 i.braised_sea_pickle             = 'oceansdelight:braised_sea_pickle';
@@ -15289,6 +15316,9 @@ i.boatload_warped_boat             = 'boatload:warped_boat';
 i.boatload_crimson_chest_boat      = 'boatload:crimson_chest_boat';
 i.boatload_warped_chest_boat       = 'boatload:warped_chest_boat';
 i.t_pickerelweed                   = '#creativedelight:pickerelweed';  // blue and purple (1.21 Upgrade Aquatic has one)
+// Any full bucket of milk: cow, goat or nut milk, iron or wooden (plan_wood_bucket_batch_1121.md R1, R11). A recipe that
+// took the vanilla Milk Bucket takes this; a wooden one hands back the empty wooden bucket. Contents: CD creativedelight/milk.js
+i.t_milk_buckets                   = '#creativedelight:milk_buckets';
 i.t_buckets_milk                   = '#forge:buckets/milk';
 i.raw_pike                         = '#forge:raw_fishes/pike';
 

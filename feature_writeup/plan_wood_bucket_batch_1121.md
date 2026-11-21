@@ -1,24 +1,24 @@
 # Wooden bucket, composter and small-feature batch (written 2026-11-21)
 
-<!-- generated:status_index begin open_work sha1=fd3ebd64994c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 13, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=83ce88b818ca -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Testing 14), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `blocks/new #15` | Planned | S C P | Wooden cauldron holds only water |
-| `dishes/meals #48` | Planned | S C P | Integrate Kebab Sandwich and Bibimbap |
-| `engineering-recipes #1` | Planned | S C P | Goat milk and nut milk in wooden buckets and cauldrons |
-| `engineering/sawmill-and-components #2` | Planned | S | Sawmill recipes off the manual pipeline |
-| `farming/composting #3` | Planned | S C P | Composters in more wood types |
-| `food/drinks #1` | Planned | S C P T | Lemonade |
-| `gameplay/misc #22` | Planned | S P | All glass drops color shards |
-| `items/jars #4` | Planned | C P | Soups and stews take 1 jar space |
-| `items/storage-and-item-loss #12` | Planned | S C | Pick up Supplementaries sacks like backpacks and Farmer's Delight stations |
-| `recipes/engineering #8` | Planned | S C P | Wooden buckets hold milk |
-| `recipes/engineering #10` | Planned | S P | Wooden buckets interact with containers |
-| `recipes/materials #5` | Planned | S P | Create Deco craftability audit |
-| `textures/art #9` | Planned | C | Wooden Sap, Milk and Honey Bucket textures |
+| `blocks/new #15` | Testing | S C P | Wooden cauldron holds only water |
 | `cooking/kitchen #25` | Testing | S~ C P | Stone cutting boards |
+| `dishes/meals #48` | Testing | S C P | Integrate Kebab Sandwich (Bibimbap dropped) |
+| `engineering-recipes #1` | Testing | S C P | Goat milk and nut milk in wooden buckets and cauldrons |
+| `engineering/sawmill-and-components #2` | Testing | S | Sawmill recipes off the manual pipeline |
+| `farming/composting #3` | Testing | S C P | Composters in more wood types |
+| `food/drinks #1` | Testing | S C P T | Lemonade |
+| `gameplay/misc #22` | Testing | S P | All glass drops color shards |
+| `items/jars #4` | Testing | C P | Soups and stews take 1 jar space |
+| `items/storage-and-item-loss #12` | Testing | S C | Pick up Supplementaries sacks like backpacks and Farmer's Delight stations |
+| `recipes/engineering #8` | Testing | S C P | Wooden buckets hold milk |
+| `recipes/engineering #10` | Testing | S P | Wooden buckets interact with containers |
+| `recipes/materials #5` | Testing | S P | Create Deco craftability audit |
+| `textures/art #9` | Testing | C | Wooden Sap, Milk and Honey Bucket textures |
 <!-- generated:status_index end open_work -->
 
 Source: owner chat 2026-11-21 (a pick of 11 Planned rows from the "ready to build" list), taken in with the `intake`
@@ -157,3 +157,17 @@ queue rows written in the same session as each build (default per CLAUDE.md; boo
 - Changelog bullets are added at build (Buckets, Composting, Jars, Glass, Drinks, Sandwiches); none now (plan only).
 - Waiting on the owner: the look-check screenshots after P0. D1 to D6 and
   the R7 order are confirmed (R13).
+
+## Look-check rulings (2026-11-21)
+
+| # | Item (owner's words) | Ruling |
+|---|---|---|
+| R14 | "the space in between the cauldron feet should be transparent" | Already so in game: the wooden cauldron's model parents `minecraft:block/cauldron`, whose feet are separate elements; vanilla's side texture is opaque there too. No change |
+| R15 | "id like the polished stone textures painted on the cutting board models" | The three stone boards use `farmersdelight:block/stone_cutting_board` (FD's board model with every face reading the vanilla `polished_<stone>` texture, UVs inside 1..15, one column-0 strip shifted). The derived PNGs and their `sources.csv` rows are removed; the paint mode stays for the cauldron and buckets |
+| R16 | "the buckets look good" | Bucket textures approved |
+| R17 | "any composter should be craftable into the vanilla composter in a 1-1" | Each of the 12 wood composters crafts shapeless into `minecraft:composter` |
+| R18 | "drop bibimbap" | Bibimbap leaves the pack: `i.bibimbap` in `removed_items.js`, its grid recipe deleted; the item stays registered so saves keep it. The Cooking Pot route and bowl remainder built earlier the same day are reverted. `dishes/meals #48` keeps only the Kebab Sandwich (no change needed) |
+| R19 | "if there is a tinted shard, tinted glass should drop to this w/o silk touch. if not, drop to dirty glass" | No tinted shard exists (Quark has clear, dirty and the 16 colors): tinted glass blocks and panes lose their self-drop and give Quark's dirty shard, same counts as other glass |
+| R20 | "mixed wooden slabs should craft the vanilla composter, and polymorph should allow selecting between a wood type and vanilla (show wood type first)" | Replaces part of R17: vanilla's `minecraft:composter` recipe on `#minecraft:wooden_slabs` stays; one species' slabs match both recipes and Polymorph lists the wood composter first (it sorts by translation key, `block.creativecommon.*` before `block.minecraft.*`) |
+| R21 | "add the tools in the texture swapper to the git includes, but not all the images" | `.gitignore` allows `textureswapper/*.py` and `wooden_bucket/masks/derive_masks.py`; images stay untracked |
+| R22 | "put the lemonade in the same glass as the lemon juice"; "love em" | Tints F3E99A / 8FB4E6 / F2A7B8 approved; the three items use Fruits Delight's lemon juice glass with the tint painted into the liquid (`creativedelight:item/<name>`), fluids keep the same tints |

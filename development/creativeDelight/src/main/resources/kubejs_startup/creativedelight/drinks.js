@@ -16,10 +16,12 @@ const $DrinkUseAnim = Java.loadClass('net.minecraft.world.item.UseAnim')
 var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
 	var i = global.item
-	var drink = (id, name) => reg.item(e, id).displayName(name).maxStackSize(32)
+	// effects: optional [effect id, seconds] rows, amplifier 0, always applied
+	var drink = (id, name, effects) => reg.item(e, id).displayName(name).maxStackSize(32)
 		.useAnimation($DrinkUseAnim.DRINK)
 		.food(f => {
 			f.hunger(1).saturation(0.2).alwaysEdible(true)
+			;(effects || []).forEach(x => f.effect(x[0], x[1] * 20, 0, 1.0))
 			f.eaten(ev => {
 				var p = ev.player
 				if (p && !p.isCreative()) p.give(i.glass_bottle)
@@ -32,6 +34,14 @@ StartupEvents.registry('item', e => {
 		[i.lychee_juice, 'Lychee Juice'], [i.hawberry_juice, 'Hawberry Juice'], [i.mango_juice, 'Mango Juice'],
 		[i.mangosteen_juice, 'Mangosteen Juice'], [i.peach_juice, 'Peach Juice'],
 	].forEach(d => drink(d[0], d[1]))
+
+	// Lemonade (food/drinks #1, plan_wood_bucket_batch_1121.md R7, D5): the drink values above plus Haste for lemon juice's
+	// 10 s x3; blue adds Night Vision, pink Jump Boost, 20 s each. Art: Fruits Delight's lemon juice glass with the
+	// fluid tint painted into its liquid (combine_tex.py --mode paint; plan_wood_bucket_batch_1121.md R22, texture_sources rows).
+	var ef = global.effect
+	drink(i.lemonade, 'Lemonade', [[ef.haste, 30]]).texture('creativedelight:item/lemonade')
+	drink(i.blue_lemonade, 'Blue Lemonade', [[ef.haste, 30], [ef.night_vision, 20]]).texture('creativedelight:item/blue_lemonade')
+	drink(i.pink_lemonade, 'Pink Lemonade', [[ef.haste, 30], [ef.jump_boost, 20]]).texture('creativedelight:item/pink_lemonade')
 })
 
 StartupEvents.registry('fluid', e => {
@@ -56,6 +66,10 @@ StartupEvents.registry('fluid', e => {
 	fluid(f.chorus_tea, 'Chorus Tea', 0x9F7FB5)
 	fluid(f.sea_grape_juice, 'Sea Grape Juice', 0x6FAF5A)
 	fluid(f.pickerelweed_juice, 'Pickerelweed Juice', 0x6C7FD0)
+	// Lemonade (food/drinks #1): pale yellow; blue and pink after their fruit
+	fluid(f.lemonade, 'Lemonade', 0xF3E99A)
+	fluid(f.blue_lemonade, 'Blue Lemonade', 0x8FB4E6)
+	fluid(f.pink_lemonade, 'Pink Lemonade', 0xF2A7B8)
 })
 
 // Warm drinks (TODO food/drinks #14, plan_food_batch_1119.md R11; family drink/warm in food_families.py): hot cocoa,

@@ -1,0 +1,171 @@
+# Scratch queue rows SNP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SNP.qb RES [--section KEY] [--rows ID,...]
+# Queue prefix SNP (sack sneak pickup) for storage_audit.md SB-10 to SB-14: SQ-SB-01 to -08 in SB.qb are spawn boxes
+# (a collision with the writeup prefix SB-), so these rows take their own queue prefix (test_prefix_index.md section 4).
+
+@@section 1
+@@title SQ-SNP Sneak pickup of Supplementaries sacks, 2026-11-21 ([storage_audit.md](../storage_audit.md) 7, SB-10 to SB-14; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) P2 item 2, D6; TODO `items/storage-and-item-loss #12`)
+@@date 2026-11-21
+@@jars creativecommon
+@@sources feature_writeup/storage_audit.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/storage/SneakPickup.java kubejs/data/creativecommon/kubejs/tags/sneak_pickup_tags.js
+@@text
+@@text Targets the Creative Common jar of 2026-11-21 (`storage/SneakPickup`, tag `#creativecommon:sneak_pickup` from Common's server script `tags/sneak_pickup_tags.js`). Supplementaries and Supplementaries Squared from the pack. Group A, area x 5360 to 5375, z 5200 to 5215; SQ-SNP-04 works at spawn (spawn protection 16, an op online). `data get entity BOT SelectedItem` prints the held stack with its `BlockEntityTag`.
+@@text
+@@table
+## SQ-SNP-01 | sneak right-click with an empty hand picks up a filled sack with its contents; placing it restores them
+@group A
+@commands `/cdevtest tag block creativecommon:sneak_pickup`; a `supplementaries:sack` holding apples, sticks, cobblestone; bot `snp1` sneaking, empty main hand, `pbot use`; `data get entity snp1 SelectedItem`; bot stops sneaking and places it on the stone beside; `/cdevtest inv` the new sack
+@pass the tag lists `supplementaries:sack` and the Supplementaries Squared sacks; after the click the sack block is air, no item entity on the ground, the hand holds the sack with `BlockEntityTag.Items` of the 3 kinds; the placed sack's inventory has apple 3, stick 5, cobblestone 7
+@fails `SneakPickup` (RightClickBlock handler: sneaking, empty main hand, tag match, `BreakEvent`, the player-break drop into the hand); the tag script; a drop with no contents = the sack's loot table (`copy_nbt` / `set_contents`) not run with the block entity
+@absent creativecommon:sneak_pickup (a block tag added 2026-11-21, after the last /dumpall)
+> forceload add 5360 5200 5375 5215
+> fill 5360 -61 5200 5375 -61 5215 minecraft:stone
+> fill 5360 -60 5200 5375 -56 5215 minecraft:air
+sleep 2
+> cdevtest tag block creativecommon:sneak_pickup
+expect verb=tag kind=block tag=creativecommon:sneak_pickup n=\d+ ids=(?=\S*supplementaries:sack\b)(?=\S*suppsquared:sack_red\b)
+> kill @e[type=minecraft:item,x=5363,y=-60,z=5203,distance=..8]
+> setblock 5363 -60 5203 supplementaries:sack{Items:[{Slot:0b,id:"minecraft:apple",Count:3b},{Slot:1b,id:"minecraft:stick",Count:5b},{Slot:2b,id:"minecraft:cobblestone",Count:7b}]}
+> pbot spawn snp1 5363.5 -60 5205.5 minecraft:overworld survival
+sleep 2
+> pbot inv snp1 clear
+> pbot sneak snp1 on
+expect \[cdevtest\] verb=pbot\.sneak bot=snp1 shift=true
+> pbot use snp1 5363 -60 5203 up
+sleep 1
+> execute if block 5363 -60 5203 minecraft:air run say SNP01 sack picked up
+expect SNP01 sack picked up
+> data get entity snp1 SelectedItem
+expect snp1 has the following entity data: \{.*id: "supplementaries:sack"(?=.*minecraft:apple)(?=.*minecraft:stick)(?=.*minecraft:cobblestone)
+> cdevtest items 5363 -60 5203 2 keep
+expect verb=items items=-
+> pbot sneak snp1 off
+> pbot use snp1 5363 -61 5207 up
+sleep 1
+> cdevtest inv 5363 -60 5207
+expect verb=inv slot=\d+ item=minecraft:apple\*3\b
+expect verb=inv slot=\d+ item=minecraft:stick\*5\b
+expect verb=inv slot=\d+ item=minecraft:cobblestone\*7\b
+> pbot remove snp1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|Invalid (block state|tag))
+reject \[cdevtest\] .*done=0
+
+## SQ-SNP-02 | a renamed Supplementaries Squared red sack keeps its color, name and contents
+@group A
+@commands `suppsquared:sack_red` with `CustomName` "Pantry" and two kinds inside; bot `snp2` sneaking, empty hand, `pbot use`; `data get entity snp2 SelectedItem`
+@pass the hand holds `suppsquared:sack_red` with the display name Pantry and both kinds in `BlockEntityTag.Items`
+@fails the Squared sack loot tables (`copy_name`, 16 `sack_<color>` tables); `b.suppsquared_sacks` in the tag script
+> forceload add 5360 5200 5375 5215
+> setblock 5366 -60 5203 suppsquared:sack_red{CustomName:'{"text":"Pantry"}',Items:[{Slot:0b,id:"minecraft:carrot",Count:4b},{Slot:1b,id:"minecraft:potato",Count:6b}]}
+> pbot spawn snp2 5366.5 -60 5205.5 minecraft:overworld survival
+sleep 2
+> pbot inv snp2 clear
+> pbot sneak snp2 on
+> pbot use snp2 5366 -60 5203 up
+sleep 1
+> execute if block 5366 -60 5203 minecraft:air run say SNP02 red sack picked up
+expect SNP02 red sack picked up
+> data get entity snp2 SelectedItem
+expect snp2 has the following entity data: \{.*id: "suppsquared:sack_red"(?=.*Pantry)(?=.*minecraft:carrot)(?=.*minecraft:potato)
+> pbot remove snp2
+reject \[cdevtest\] .*done=0
+
+## SQ-SNP-03 | an item in the main hand, or no sneaking: no pickup
+@group A
+@commands a filled sack; bot `snp3` sneaking with a stick in the main hand, `pbot use`; then sneaking with cobblestone, `pbot use` on the sack's top; then not sneaking, empty hand, `pbot use`
+@pass the sack stays after all three; the bot keeps the stick; the cobblestone is placed on the sack (vanilla placing); the unsneaked click opens the sack (its screen: a client check, CQ-SNP-01) and picks nothing up
+@fails `SneakPickup` must return early when the main hand is not empty or the player is not sneaking
+> forceload add 5360 5200 5375 5215
+> setblock 5369 -60 5203 supplementaries:sack{Items:[{Slot:0b,id:"minecraft:apple",Count:3b}]}
+> pbot spawn snp3 5369.5 -60 5205.5 minecraft:overworld survival
+sleep 2
+> pbot inv snp3 clear
+> pbot hold snp3 minecraft:stick 1
+> pbot sneak snp3 on
+> pbot use snp3 5369 -60 5203 up
+sleep 1
+> execute if block 5369 -60 5203 supplementaries:sack run say SNP03 stick kept the sack
+expect SNP03 stick kept the sack
+> pbot hold snp3 minecraft:cobblestone 1
+> pbot use snp3 5369 -60 5203 up
+sleep 1
+> execute if block 5369 -60 5203 supplementaries:sack run say SNP03 cobblestone kept the sack
+expect SNP03 cobblestone kept the sack
+> setblock 5369 -59 5203 minecraft:air
+> pbot sneak snp3 off
+> pbot inv snp3 clear
+> pbot use snp3 5369 -60 5203 up
+sleep 1
+> execute if block 5369 -60 5203 supplementaries:sack run say SNP03 unsneaked kept the sack
+expect SNP03 unsneaked kept the sack
+> pbot remove snp3
+reject \[cdevtest\] .*done=0
+look the cobblestone click: a cobblestone block on the sack (cleared after), or a vanilla no-op; never a pickup
+
+## SQ-SNP-04 | spawn protection: a non-op's sneak pickup does nothing (stands in for another team's FTB Chunks claim: the same BreakEvent)
+@group A
+@commands home marker at spawn; an op bot online (vanilla protection is active only with an op); non-op bot `snp4` sneaking, empty hand, `pbot use` on a sack 2 blocks from spawn
+@pass the sack stays and the bot's hand is empty
+@fails `SneakPickup` posts `BlockEvent.BreakEvent` and stops when it is canceled; the FTB Chunks claim case is the hand half of CQ-SNP-01
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1-8} {S5H3-8} {S5H1+8} {S5H3+8}
+sleep 3
+> pbot spawn snpop {S5H1-6} {S5H2} {S5H3-6} minecraft:overworld survival
+> op snpop
+> pbot spawn snp4 {S5H1+2} {S5H2} {S5H3+4} minecraft:overworld survival
+sleep 2
+> setblock {S5H1+2} {S5H2-1} {S5H3+2} minecraft:stone
+> setblock {S5H1+2} {S5H2} {S5H3+2} supplementaries:sack{Items:[{Slot:0b,id:"minecraft:apple",Count:3b}]}
+> pbot inv snp4 clear
+> pbot sneak snp4 on
+> pbot use snp4 {S5H1+2} {S5H2} {S5H3+2} up
+sleep 1
+> execute if block {S5H1+2} {S5H2} {S5H3+2} supplementaries:sack run say SNP04 protected sack kept
+expect SNP04 protected sack kept
+> data get entity snp4 SelectedItem
+reject snp4 has the following entity data: \{.*supplementaries:sack
+> setblock {S5H1+2} {S5H2} {S5H3+2} minecraft:air
+> deop snpop
+> pbot remove snpop
+> pbot remove snp4
+reject \[cdevtest\] .*done=0
+
+## SQ-SNP-05 | breaking a filled sack by hand drops it with its contents (upstream)
+@group A
+@commands a filled sack; bot `snp5` (survival) breaks it; `data get entity` the dropped item
+@pass one item entity `supplementaries:sack` whose `BlockEntityTag.Items` holds the apples; no loose apples on the ground
+@fails Supplementaries' `SackBlock.getDrops` / loot table (upstream, storage_audit.md 7); a pack loot change to `supplementaries:blocks/sack`
+> forceload add 5360 5200 5375 5215
+> kill @e[type=minecraft:item,x=5372,y=-60,z=5203,distance=..8]
+> setblock 5372 -60 5203 supplementaries:sack{Items:[{Slot:0b,id:"minecraft:apple",Count:3b}]}
+> pbot spawn snp5 5372.5 -60 5205.5 minecraft:overworld survival
+sleep 2
+> pbot pickup snp5 off
+> pbot inv snp5 clear
+> pbot break snp5 5372 -60 5203
+sleep 2
+> cdevtest items 5372 -60 5203 3 keep
+expect verb=items .*supplementaries:sack:1\b
+reject verb=items .*minecraft:apple
+> data get entity @e[type=minecraft:item,x=5372,y=-60,z=5203,distance=..3,limit=1] Item
+expect has the following entity data: \{.*id: "supplementaries:sack".*minecraft:apple
+> pbot remove snp5
+reject \[cdevtest\] .*done=0
+
+@@section 2
+@@title CQ-SNP Sack pickup client half, 2026-11-21 (same section)
+@@date 2026-11-21
+@@jars creativecommon
+@@sources feature_writeup/storage_audit.md
+@@text
+@@table
+## CQ-SNP-01 | hand: tooltip of a picked-up sack, the screen opens without sneaking, another team's FTB Chunks claim
+@group client
+@commands survival in a client: fill a sack with 3 kinds, sneak right-click it empty-handed, hover the item; right-click a placed sack without sneaking; on a dedicated server with a second player's FTB Chunks claim, sneak right-click a sack inside it
+@pass the tooltip lists the 3 kinds; the unsneaked click opens the sack's screen; in the foreign claim nothing happens and the sack stays
+@fails Supplementaries' sack tooltip reads `BlockEntityTag`; `SneakPickup` must leave the unsneaked click alone; FTB Chunks cancels the `BreakEvent`
+@draft needs a real client (the claim half needs two players on a dedicated server): a hand check unless the runner writes driver steps for the first two

@@ -62,7 +62,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'corn_delight:integration/create/mixing/cornbread_batter_from_mixing' }, e)
 		R.shapeless(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), i.milk, i.eggs], e, 'cornbread_batter')
 		if (Platform.isLoaded('create')) {
-			R.createMixing(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), Fluid.of(f.milk, 250), i.eggs], e,
+			R.createMixing(Item.of(i.cornbread_batter, 3), [Item.of(i.cornmeal, 2), R.createFluidTag(f.t_milk, 250), i.eggs], e,
 				'cornbread_batter', 'n/a')
 		}
 

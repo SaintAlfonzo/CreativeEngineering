@@ -27,7 +27,7 @@ R.remove({ id: 'brewinandchewin:fermenting/pickled_pickles_from_honey' }, e)
 //######################### Keg fermenting #########################
 // Flaxen Cheese: 2.0's shape (brown mushroom x2, sugar)
 R.remove({ id: 'brewinandchewin:fermenting/flaxen_cheese_from_milk' }, e)
-R.bncFermenting(Fluid.of(f.flaxen_cheese, 1000), [i.brown_mushroom, i.brown_mushroom, i.any_sweetener_brewing], f.milk, e, 'flaxen_cheese_from_milk',
+R.bncFermenting(Fluid.of(f.flaxen_cheese, 1000), [i.brown_mushroom, i.brown_mushroom, i.any_sweetener_brewing], f.t_milk, e, 'flaxen_cheese_from_milk',
 	{ temperature: 4, category: 'meals' })
 
 // Pale Jane: any bark, not just Farmer's Delight's

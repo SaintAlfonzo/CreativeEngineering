@@ -33,12 +33,11 @@ ServerEvents.recipes(e => {
 		// Combos (plan_meals_rolls_bbq.md C8, dishes/meals #48): ordinary recipes from cooked skewers, shaped plus one
 		// assembly as every sandwich; no combine recipe, so no stored skewers and no carried skewer effects (values are
 		// the items' own, BBQItems.java). Wrap on a tortilla (dishes/meals #47), sandwich on a whole bread (the long-roll
-		// sandwich family), bibimbap a rice meal (heatless meal craft; cooked rice brings the bowl)
+		// sandwich family). Bibimbap is dropped (removed_items.js, plan_wood_bucket_batch_1121.md R18)
 		var F = global.CD.food(e)
 		F.sandwichAssemble(['C', 'K', 'T'], { C: i.cabbage, K: i.t_grilled_skewers, T: i.t_tortilla }, i.kebab_wrap,
 			[i.t_grilled_skewers, i.cabbage], i.t_tortilla)
 		F.sandwichAssemble([' C ', 'KOK', ' B '], { C: i.cabbage, O: i.onion, K: i.t_grilled_skewers, B: i.t_bread },
 			i.kebab_sandwich, [i.t_grilled_skewers, i.t_grilled_skewers, i.cabbage, i.onion])
-		F.mealCraft([i.cooked_rice, i.onion, i.carrot, i.t_grilled_skewers, i.t_grilled_skewers, i.t_grilled_skewers], i.bibimbap)
 	})
 })

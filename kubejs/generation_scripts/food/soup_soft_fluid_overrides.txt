@@ -1,0 +1,11 @@
+moonlight/moonlight/soft_fluids/beetroot_soup.json
+moonlight/moonlight/soft_fluids/mushroom_stew.json
+moonlight/moonlight/soft_fluids/rabbit_stew.json
+moonlight/moonlight/soft_fluids/suspicious_stew.json
+supplementaries/moonlight/soft_fluids/baked_cod_stew.json
+supplementaries/moonlight/soft_fluids/beef_stew.json
+supplementaries/moonlight/soft_fluids/chicken_soup.json
+supplementaries/moonlight/soft_fluids/fish_stew.json
+supplementaries/moonlight/soft_fluids/pumpkin_soup.json
+supplementaries/moonlight/soft_fluids/sopa_de_macaco.json
+supplementaries/moonlight/soft_fluids/vegetable_soup.json

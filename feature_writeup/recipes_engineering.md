@@ -170,6 +170,42 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
 | `vibrating.js` | vibrating sand: four seashells 22.5 % each, nautilus shell 9 %, heart of the sea 1 % |
 | `laser_cutting.js` | glass -> 3 bottles |
 
+### 2.8 Wooden buckets and the wooden cauldron (Creative Delight `farm/bucket/`)
+
+Java in Creative Delight since 2026-11-09 (`WoodenBuckets`, `WoodenBucketItem`, `WoodenBucketMilking`); cauldron,
+vanilla cauldron and dispenser hooks added 2026-11-21 ([plan_wood_bucket_batch_1121.md](plan_wood_bucket_batch_1121.md)
+R1, R10, R11, D2 to D4, D9). Recipes in CD `kubejs/data/creativedelight/kubejs/creativedelight/recipes.js`.
+
+- **Buckets.** `creativedelight:wooden_bucket` (3 planks, stacks to 16) and one filled bucket per fluid:
+  water, sap (`hearthandharvest:sap`), milk (`minecraft:milk`), honey (`create:honey`), goat milk
+  (`hearthandharvest:goat_milk`) and nut milk (`creativedelight:nut_milk`, a KubeJS fluid). Fluids are matched by id; a
+  missing mod's fluid never fills. The empty one scoops only water sources by hand; the water one places water. Cow,
+  goat and nut milk are drunk like a milk bucket (clear effects, return the empty wooden bucket). Sap and honey do
+  nothing on right-click. Fluid-handler use (tanks, pipes, spouts) goes through a wrapper that stays wooden.
+- **Milking.** Empty wooden bucket on an adult cow or mooshroom -> wooden milk bucket; on an adult goat -> wooden goat
+  milk bucket (wooden milk bucket when Hearth and Harvest's goat milk fluid is absent).
+- **Vanilla cauldron.** Wooden water bucket on an empty or water cauldron -> full water cauldron, empty wooden bucket
+  back. Empty wooden bucket on a full water cauldron -> wooden water bucket. Lava and powder snow cauldrons ignore
+  wooden buckets.
+- **Dispenser.** Wooden water bucket places water in front and stays in the dispenser as the empty wooden bucket. The
+  empty wooden bucket scoops a water source in front (a stack of them puts the filled one in a free slot, or drops it).
+  No water source in front, or any other filled wooden bucket: the item is dropped as an item.
+- **Wooden cauldron** (`creativedelight:wooden_cauldron`, block, item, block entity). Recipe: vanilla cauldron shape in
+  spruce planks (7). Vanilla cauldron model with `creativedelight:block/wooden_cauldron_{top,side,bottom,inner}`
+  textures. Holds one fluid at a time: water, cow milk, goat milk, nut milk or Create honey; not sap, lava or powder
+  snow. A 1000 mB tank shown as `level` 0 to 3 (333, 666, 1000 mB; comparator reads the level). Any bucket item with a
+  fluid handler (wooden or iron, Hearth and Harvest goat milk bucket, Create honey bucket) pours a whole bucket in when
+  the cauldron is empty or holds the same fluid (tops it up to full, as vanilla does) and scoops a bucket out of a full
+  cauldron; a partly filled cauldron gives nothing to a bucket. Create pipes fill and drain any amount through the
+  fluid-handler capability on every side. Rain adds one level of water at vanilla's chance (5 % per precipitation tick)
+  when empty or holding water. Not a `CauldronBlock`: no vanilla cauldron interactions (dye washing, banners), no salt
+  or campfire evaporation. Axe tool, drops itself, not flammable.
+- **Render.** A block entity renderer draws one quad of the fluid's still texture and tint (biome water color for
+  water) inside the walls at vanilla's content heights (9, 12, 15 / 16 for 1, 2, 3 levels), scaled by the exact
+  amount. One renderer covers every fluid, including KubeJS ones, with no per-fluid models; the blockstate `level`
+  variants all use the one cauldron model.
+- Not here: the `forge:milk` fluid tag, milk buckets as recipe inputs and the nut milk fluid (fluids work of the same plan).
+
 ## 3. What the pack changes
 
 - Everything goes through `global.NCH` (`R.remove`, `R.replaceInput`, `R.shaped`, `R.createSequencedAssembly` with
@@ -273,8 +309,9 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - [ ] **RE-21 Obsidian generator:** heated mixer with 250 mB water + 250 mB lava -> 1 obsidian, both fluids used up;
   unheated -> nothing.
 - [ ] **RE-28 Iron bucket [scratch]:** *PASS r1031 (2026-10-31, SQ-RE-28; JEI look in game).* JEI `minecraft:bucket` -> only `shaped/bucket_from_plates` (3 iron plates, V shape).
-- [ ] **RE-29 Wooden bucket [scratch]:** craft from 3 planks; scoops and places water only (lava, a cow's milk do nothing);
-  placing returns the wooden bucket; texture and names show.
+- [ ] **RE-29 Wooden bucket [scratch]:** craft from 3 planks; scoops and places water only (lava does nothing); on an adult
+  cow or mooshroom it fills with milk (wooden milk bucket, since 2026-11-09; goats in RE-44); placing returns the wooden
+  bucket; texture and names show. Queue: milking in SQ-RE-44.
 - [ ] **RE-30 Wooden bucket in machines [scratch]:** Create spout / basin / FD cooking pot drain the wooden water bucket
   and return the empty one; it fills from water only.
 - [ ] **RE-31 Coal blocks (F4 fixed, brief RE-24) [scratch]:** 9 coal blocks in a pressure chamber at 8 bar -> a diamond
@@ -283,6 +320,22 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
   potion onto one cinder flour -> 1 redstone / glowstone dust / gunpowder. Queue SQ-RE-32.
 - [ ] **RE-33 Thunder detector NBT (F9 fixed, brief RE-26) [scratch]:** the assembly's filling step lists the regular
   mundane potion only; a spout with splash mundane potion fluid does not advance it, regular mundane does. Queue SQ-RE-33.
+- [ ] **RE-40 Wooden cauldron buckets [scratch]:** craft from 7 spruce planks (cauldron shape); pour a wooden water,
+  milk, goat milk, nut milk and honey bucket in turn (scoop out between) -> each shows its fluid at full height and the
+  empty wooden bucket comes back; an iron water / milk bucket works the same; a wooden sap bucket and a lava bucket do
+  nothing; a different fluid into a filled cauldron does nothing. Queue SQ-RE-40, look CQ-RE-01.
+- [ ] **RE-41 Wooden cauldron rain and pipes [scratch]:** an empty wooden cauldron in rain gains water one level at a
+  time; a comparator reads 0 to 3; a Create pipe from a water tank fills it, a pump out drains it; it drops itself when
+  broken with an axe. Queue SQ-RE-41 (pipes: CQ-RE-02).
+- [ ] **RE-42 Wooden bucket on vanilla cauldron [scratch]:** wooden water bucket on an empty cauldron -> full water
+  cauldron, empty wooden bucket in hand; empty wooden bucket on that full cauldron -> wooden water bucket; on a
+  level-1 water cauldron -> nothing. Queue SQ-RE-42.
+- [ ] **RE-43 Wooden bucket dispenser [scratch]:** a dispenser with a wooden water bucket places water and keeps an empty
+  wooden bucket; fired again at the source it scoops it back into a wooden water bucket; a wooden milk bucket is
+  dropped as an item. Queue SQ-RE-43.
+- [ ] **RE-44 Goat and nut milk buckets [scratch]:** empty wooden bucket on an adult goat -> wooden goat milk bucket;
+  drinking a wooden goat milk or nut milk bucket clears effects and returns the empty wooden bucket; their textures
+  show (not the water bucket). Queue SQ-RE-44, look CQ-RE-01.
 - [ ] **RE-14 Ore stone:** compact 6 iron nuggets + 2 gravel + 250 mB lava -> crimsite; IE crush -> 5 iron nuggets.
 - [ ] **RE-15 Cinder flour:** 8 cinder flour + a strength potion -> 8 redstone and a glass bottle; a pile in the Bottler
   with 180 mB strength -> 9 redstone.
@@ -312,3 +365,6 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - 2026-11-16: F4 (8 coal blocks per diamond), F5 (single cinder flour fillings at 25 mB), F8 (comments, step ids), F9
   (thunder detector filling needs the regular mundane potion) fixed (`recipes/engineering #3`, plan_small_fixes_1116.md).
   RE-31 to RE-33 (the brief's RE-24 to RE-26, renumbered after RE-30); queue SQ-RE-31 to -33. Not run.
+- 2026-11-21: wooden cauldron, vanilla cauldron and dispenser hooks, wooden goat milk and nut milk buckets, goat milking
+  into the goat milk bucket, filled bucket models pointed at their own textures (section 2.8,
+  plan_wood_bucket_batch_1121.md P1 item 1). Tests RE-40 to RE-44. Not run.

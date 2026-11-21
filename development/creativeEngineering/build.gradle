@@ -7,8 +7,8 @@
 //       kubejs/assets/creativeengineering/kubejs/  -> assets/creativeengineering/kubejs/  (client scripts)
 //     The startup scripts live in this project (src/main/resources/kubejs_startup/creativeengineering/), loaded from
 //     the jar by Creative Common's startup loader.
-//   - the 211 generated sawmill recipes (src/main/resources/data/creativeengineering/recipes/sawmill/, written by
-//     tools/gen_sawmill_recipes.py through /cdevgen).
+//   The IE sawmill recipes are written at load by data/creativeengineering/kubejs/wood/wood_types.js (NCH sawmillRaw,
+//   ServerEvents.highPriorityData); no generated recipe JSONs ship.
 // Build: ./gradlew :creativeEngineering:build --offline   Install: ./gradlew :creativeEngineering:installToMods
 plugins {
 	id 'ce.forge-mod'

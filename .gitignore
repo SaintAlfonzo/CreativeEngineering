@@ -24,6 +24,16 @@
 !/feature_writeup/
 !/todo/
 !/tools/
+
+# --- texture tools (owner 2026-11-21): the scripts only, not the source or output images ---
+!/textureswapper/
+/textureswapper/*
+!/textureswapper/*.py
+!/textureswapper/wooden_bucket/
+/textureswapper/wooden_bucket/*
+!/textureswapper/wooden_bucket/masks/
+/textureswapper/wooden_bucket/masks/*
+!/textureswapper/wooden_bucket/masks/derive_masks.py
 !/.claude/
 
 # --- pack content ---

@@ -1,9 +1,10 @@
 // requires: creativeengineering
 // Creative Engineering.
-ServerEvents.recipes(e => {
-
-console.log('Hello! The wood type event has started!')
-
+// The species table drives both the recipe event (Create saw rows, IE / Quark Engineering removals) and the IE
+// sawmill JSONs written in ServerEvents.highPriorityData below. Logs, wood, stripped forms and bark come from the
+// dict keys log_<name>, wood_<name>, log_<name>_stripped, wood_<name>_stripped, bark_<name>.
+// Wrapped in a function: the pack's scripts share one scope, so no top-level names.
+;(function () {
 var i = global.item
 var R = global.NCH.forPack('creativeengineering')
 
@@ -15,13 +16,17 @@ var species = [
 	{ name: 'jungle', planks: i.planks_jungle, slab: i.slab_jungle, vslab: i.vslab_jungle, vplanks: i.vplanks_jungle, stairs: i.stairs_jungle, fence: i.fence_jungle, fencegate: i.fencegate_jungle, door: i.door_jungle, trapdoor: i.trapdoor_jungle, ladder: i.ladder_jungle, button: i.button_jungle, pressureplate: i.pressureplate_jungle, sign: i.sign_jungle, railing: i.railing_jungle, sawmill: true },
 	{ name: 'acacia', planks: i.planks_acacia, slab: i.slab_acacia, vslab: i.vslab_acacia, vplanks: i.vplanks_acacia, stairs: i.stairs_acacia, fence: i.fence_acacia, fencegate: i.fencegate_acacia, door: i.door_acacia, trapdoor: i.trapdoor_acacia, ladder: i.ladder_acacia, button: i.button_acacia, pressureplate: i.pressureplate_acacia, sign: i.sign_acacia, railing: i.railing_acacia, sawmill: true },
 	{ name: 'mangrove', planks: i.planks_mangrove, slab: i.slab_mangrove, vslab: i.vslab_mangrove, vplanks: i.vplanks_mangrove, stairs: i.stairs_mangrove, fence: i.fence_mangrove, fencegate: i.fencegate_mangrove, door: i.door_mangrove, trapdoor: i.trapdoor_mangrove, ladder: i.ladder_mangrove, button: i.button_mangrove, pressureplate: i.pressureplate_mangrove, sign: i.sign_mangrove, railing: i.railing_mangrove, sawmill: true },
-	{ name: 'crimson', planks: i.planks_crimson, slab: i.slab_crimson, vslab: i.vslab_crimson, vplanks: i.vplanks_crimson, stairs: i.stairs_crimson, fence: i.fence_crimson, fencegate: i.fencegate_crimson, door: i.door_crimson, trapdoor: i.trapdoor_crimson, ladder: i.ladder_crimson, button: i.button_crimson, pressureplate: i.pressureplate_crimson, sign: i.sign_crimson, railing: i.railing_crimson, sawmill: true },
-	{ name: 'warped', planks: i.planks_warped, slab: i.slab_warped, vslab: i.vslab_warped, vplanks: i.vplanks_warped, stairs: i.stairs_warped, fence: i.fence_warped, fencegate: i.fencegate_warped, door: i.door_warped, trapdoor: i.trapdoor_warped, ladder: i.ladder_warped, button: i.button_warped, pressureplate: i.pressureplate_warped, sign: i.sign_warped, railing: i.railing_warped, sawmill: true },
-	{ name: 'twisted', planks: i.planks_twisted, slab: i.slab_twisted, vslab: i.vslab_twisted, vplanks: i.vplanks_twisted, stairs: i.stairs_twisted, fence: i.fence_twisted, fencegate: i.fencegate_twisted, door: i.door_twisted, trapdoor: i.trapdoor_twisted, ladder: i.ladder_twisted, button: i.button_twisted, pressureplate: i.pressureplate_twisted, sign: i.sign_twisted, railing: i.railing_twisted, sawmill: false },
+	{ name: 'crimson', sawSecondary: i.crimson_roots, planks: i.planks_crimson, slab: i.slab_crimson, vslab: i.vslab_crimson, vplanks: i.vplanks_crimson, stairs: i.stairs_crimson, fence: i.fence_crimson, fencegate: i.fencegate_crimson, door: i.door_crimson, trapdoor: i.trapdoor_crimson, ladder: i.ladder_crimson, button: i.button_crimson, pressureplate: i.pressureplate_crimson, sign: i.sign_crimson, railing: i.railing_crimson, sawmill: true },
+	{ name: 'warped', sawSecondary: i.warped_roots, planks: i.planks_warped, slab: i.slab_warped, vslab: i.vslab_warped, vplanks: i.vplanks_warped, stairs: i.stairs_warped, fence: i.fence_warped, fencegate: i.fencegate_warped, door: i.door_warped, trapdoor: i.trapdoor_warped, ladder: i.ladder_warped, button: i.button_warped, pressureplate: i.pressureplate_warped, sign: i.sign_warped, railing: i.railing_warped, sawmill: true },
+	{ name: 'twisted', planks: i.planks_twisted, slab: i.slab_twisted, vslab: i.vslab_twisted, vplanks: i.vplanks_twisted, stairs: i.stairs_twisted, fence: i.fence_twisted, fencegate: i.fencegate_twisted, door: i.door_twisted, trapdoor: i.trapdoor_twisted, ladder: i.ladder_twisted, button: i.twisted_button, pressureplate: i.twisted_pressure_plate, sign: i.sign_twisted, railing: i.railing_twisted, sawmill: false },
 	{ name: 'ancient', planks: i.planks_ancient, slab: i.slab_ancient, vslab: i.vslab_ancient, vplanks: i.vplanks_ancient, stairs: i.stairs_ancient, fence: i.fence_ancient, fencegate: i.fencegate_ancient, door: i.door_ancient, trapdoor: i.trapdoor_ancient, ladder: i.ladder_ancient, button: i.button_ancient, pressureplate: i.pressureplate_ancient, sign: i.sign_ancient, railing: i.railing_ancient, quarkSawmill: true },
 	{ name: 'blossom', planks: i.planks_blossom, slab: i.slab_blossom, vslab: i.vslab_blossom, vplanks: i.vplanks_blossom, stairs: i.stairs_blossom, fence: i.fence_blossom, fencegate: i.fencegate_blossom, door: i.door_blossom, trapdoor: i.trapdoor_blossom, ladder: i.ladder_blossom, button: i.button_blossom, pressureplate: i.pressureplate_blossom, sign: i.sign_blossom, railing: i.railing_blossom, quarkSawmill: true },
 	{ name: 'azalea', planks: i.planks_azalea, slab: i.slab_azalea, vslab: i.vslab_azalea, vplanks: i.vplanks_azalea, stairs: i.stairs_azalea, fence: i.fence_azalea, fencegate: i.fencegate_azalea, door: i.door_azalea, trapdoor: i.trapdoor_azalea, ladder: i.ladder_azalea, button: i.button_azalea, pressureplate: i.pressureplate_azalea, sign: i.sign_azalea, railing: i.railing_azalea, quarkSawmill: true },
 ]
+
+ServerEvents.recipes(e => {
+
+console.log('Hello! The wood type event has started!')
 
 // forms that output a single item (createSaw(output, input, e))
 var singleForms = ['vplanks', 'stairs', 'fence', 'fencegate', 'door', 'trapdoor', 'ladder', 'button', 'pressureplate', 'sign', 'railing']
@@ -57,3 +62,37 @@ R.bulk('remove', species.filter(s => s.quarkSawmill).reduce((acc, s) => acc.conc
 
 console.log('The wood type event has finished!')
 })
+
+// IE sawmill (engineering/sawmill-and-components #2): raw JSON through R.sawmillRaw, ids creativeengineering:sawmill/...
+// Logs and wood: 6 planks, bark (stripping) and sawdust (nether: roots). Planks: one recipe per form, routed by the
+// precision sawblade profile below; the vanilla-shaped species (sawmill: true) keep IE's own planks -> slab.
+// Blade and secondaries survive only because this is datapack JSON (kubejs-immersive-engineering's schema drops them).
+var sawBlades = {
+	slab: '', vslab: 'vertical_slab', vplanks: 'vertical_planks', stairs: 'stairs', fence: 'fence', fencegate: 'fence_gate',
+	door: 'door', trapdoor: 'trapdoor', ladder: 'ladder', button: 'button', pressureplate: 'pressure_plate', sign: 'sign',
+	railing: 'railing',
+}
+var sawCounts = { slab: 2, vslab: 2 }
+
+ServerEvents.highPriorityData(e => {
+	var n = 0
+	species.forEach(s => {
+		var dust = s.sawSecondary || i.sawdust
+		;['log', 'wood'].forEach(kind => {
+			var raw = i[kind + '_' + s.name], stripped = i[kind + '_' + s.name + '_stripped']
+			R.sawmillRaw(s.planks, raw, e, { count: 6, energy: 1600,
+				secondaries: [[i['bark_' + s.name], true], [dust, false]], stripped: stripped })
+			R.sawmillRaw(s.planks, stripped, e, { count: 6, secondaries: [[dust, false]] })
+			n += 2
+		})
+		Object.keys(sawBlades).forEach(form => {
+			if (form === 'slab' && s.sawmill) return
+			if (s[form] === i.na) return
+			R.sawmillRaw(s[form], s.planks, e, { count: sawCounts[form] || 1, secondaries: [[i.sawdust, false]],
+				blade: sawBlades[form] })
+			n++
+		})
+	})
+	console.log('[wood] ' + n + ' IE sawmill recipes written')
+})
+})()

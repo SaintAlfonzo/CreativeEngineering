@@ -118,7 +118,7 @@ in `mods/`.
 | A19 seasoning names | Testing | CD Java `food/Seasonings` (name field), `food/SeasoningTooltip` (literal name when the lang key is missing), startup `seasonings.js` passes `name`. Root cause of the missing key not reproduced offline: check CQ-FCB-01 |
 | A20 canned ratatouille | Testing | `gen_can_types.py` soup row; Large Meals added to `AWAIT_DUMP` (its 4 cans blocked every run: foods not in the 2026-10-30 dump) |
 | `dishes/jams #7` | Testing | Vintage port -13 `src/own/` (two jars, placeholder recolours of the cherry jar, tags, lang, soft fluids), Java `ModItems`/`ModBlocks`/`ClientSetup`, `port_resources.py` rerun; CD `vintagedelight/jams.js` |
-| `cooking/kitchen #25` | Testing | repackedFarmers -03 `FDBackportRegistry` (three `CuttingBoardBlock`s, added to the cutting board BE type in common setup), assets/loot/lang; art `members/farmers/tools/stone_cutting_boards.py`; CD `farmersdelight/stone_cutting_boards.js` |
+| `cooking/kitchen #25` | Testing | repackedFarmers -03 `FDBackportRegistry` (three `CuttingBoardBlock`s, added to the cutting board BE type in common setup), assets/loot/lang; art: the model reads the vanilla polished stone texture directly (2026-11-21, plan_wood_bucket_batch_1121); CD `farmersdelight/stone_cutting_boards.js` |
 | `dishes/ocean #7` | Testing | CD startup `farmersdelight/ocean_dishes.js`, `farmersdelight/recipes.js`, sprite + notice in `kubejs/assets/creativeengineering/textures/item/` |
 | `dishes/meals #40` | Pinned | Owner 2026-11-02: no sushi medleys for now |
 | `food/stack-sizes #2` | Planned | Not run: needs a fresh `/dumpstacks` (the 2026-10-30 dump predates the 2026-11-01 stack rules) |

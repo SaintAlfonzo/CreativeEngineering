@@ -1,0 +1,8 @@
+{
+  "type": "creativecommon:glass_shards",
+  "conditions": [],
+  "block_min": 1,
+  "block_max": 3,
+  "pane_min": 1,
+  "pane_max": 2
+}

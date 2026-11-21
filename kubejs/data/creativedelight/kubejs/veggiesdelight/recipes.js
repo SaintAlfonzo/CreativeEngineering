@@ -98,7 +98,7 @@ ServerEvents.recipes(e => {
 		// Stuffed family rule (food_families.md `stuffed`; creativedelight/members #30 R6): both VD stuffed zucchinis are one
 		// family, crafting (cooking.js, heatless) plus one assembly on the roasted zucchini, as the Stuffed Potato. The boat:
 		// meat, then milk (as the stuffed potato). The bowl: 2 more roasted zucchini, meat, tomato sauce (its bowl is the dish's).
-		F.assemble(fd.veggie_cooked_zucchini, [VD_COOKED_MEAT, { fill: Fluid.of(f.milk, 250) }], fd.dish_stuffed_zucchini_boat)
+		F.assemble(fd.veggie_cooked_zucchini, [VD_COOKED_MEAT, { fill: R.createFluidTag(f.t_milk, 250) }], fd.dish_stuffed_zucchini_boat)
 		F.assemble(fd.veggie_cooked_zucchini, [fd.veggie_cooked_zucchini, fd.veggie_cooked_zucchini, VD_COOKED_MEAT, fd.sauce_tomato], fd.dish_stuffed_zucchinis)
 
 		//######################### Veggie patty #########################

@@ -1,0 +1,117 @@
+# Scratch queue rows GSH (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/GSH.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-GSH Every glass block and pane breaks into shards, 2026-11-21 ([glass_shards.md](../glass_shards.md) 7, GSH-01 to GSH-07; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R3, R19, D1; TODO `gameplay/misc #22`)
+@@date 2026-11-21
+@@jars creativecommon creativeloot
+@@sources feature_writeup/glass_shards.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/loot/GlassShardsModifier.java development/creativeCommon/src/main/resources/data/creativecommon/loot_modifiers/glass_shards.json development/creativeCommon/src/main/resources/data/creativecommon/glm_entries.json
+@@text
+@@text Targets the Creative Common jar of 2026-11-21 (global loot modifier `creativecommon:glass_shards`, read by Creative Loot's GlmMerge) with Quark's Glass Shard module on. `/cdevtest loot X Y Z [tool=ITEM] rolls=20` runs the block's own table (and the loot modifiers) 20 times and sums the drops, so 1 to 3 shards per break reads 20 to 60, 1 to 2 reads 20 to 40, Quark's 2 to 4 reads 40 to 80. Tinted glass gives the dirty shard (R19). Group A, area x 5344 to 5359, z 5200 to 5215.
+@@text
+@@table
+## SQ-GSH-01 | GlmMerge reads the glass_shards fragment entry
+@group A
+@commands boot; grep latest.log for `[GlmMerge]`
+@pass the `[GlmMerge] N entries (lists: ..., fragments: ...)` line is there with no `could not read`; no `skipped:` line names `creativecommon:glass_shards`
+@fails `data/creativecommon/glm_entries.json` (the fragment) or the definition `loot_modifiers/glass_shards.json`; the codec registration in `CreativeCommon.java` (`GLOBAL_LOOT_MODIFIER_SERIALIZERS`)
+bootexpect \[GlmMerge\] \d+ entries \(lists:
+bootreject \[GlmMerge\] skipped:.*creativecommon:glass_shards
+bootreject \[GlmMerge\] could not read
+look the fragments count in the GlmMerge line is one more than the last run doc's (SQ-LOOT-02) before 2026-11-21
+
+## SQ-GSH-02 | modded pane: a Create Framed red stained framed glass pane gives 1 to 2 red shards
+@group A
+@commands `createframed:red_stained_framed_glass_pane`; `/cdevtest loot` no tool, rolls 20
+@pass red shards 20 to 40 in total; the pane itself not dropped
+@fails color read: `#forge:glass_panes/red` or the color word in the id (`GlassShardsModifier`); the pane missing from `#forge:glass_panes`
+> forceload add 5344 5200 5359 5215
+> fill 5344 -61 5200 5359 -61 5215 minecraft:stone
+> fill 5344 -60 5200 5359 -56 5215 minecraft:air
+sleep 2
+> setblock 5345 -60 5201 createframed:red_stained_framed_glass_pane
+> cdevtest loot 5345 -60 5201 rolls=20
+expect verb=loot .*rolls=20 drops=\S*quark:red_shard:(2\d|3\d|40)\b
+reject verb=loot .*rolls=20 drops=\S*createframed:red_stained_framed_glass_pane
+reject \[cdevtest\] .*done=0
+
+## SQ-GSH-03 | modded block without a color: Create framed glass and Botania mana glass give 1 to 3 clear shards
+@group A
+@commands `create:framed_glass`, `botania:mana_glass`; `/cdevtest loot` each, rolls 20
+@pass clear shards 20 to 60 each, unless that block's own table already drops the block (then the block and no shards: writeup 2 rule 3, note which)
+@fails `#forge:glass` membership of the block or its item; clear-shard fallback
+> forceload add 5344 5200 5359 5215
+> setblock 5347 -60 5201 create:framed_glass
+> setblock 5349 -60 5201 botania:mana_glass
+> cdevtest loot 5347 -60 5201 rolls=20
+> cdevtest loot 5349 -60 5201 rolls=20
+count verb=loot .*rolls=20 drops=\S*(quark:clear_shard:([2-5]\d|60)\b|create:framed_glass:20\b|botania:mana_glass:20\b) >= 2
+reject \[cdevtest\] .*done=0
+look each loot line: clear shards 20 to 60, or the block 20 times (self-dropping glass is left as it is)
+
+## SQ-GSH-04 | vanilla panes: blue stained pane 1 to 2 blue shards, plain pane clear shards
+@group A
+@commands `minecraft:blue_stained_glass_pane`, `minecraft:glass_pane`; `/cdevtest loot` each, rolls 20
+@pass blue shards 20 to 40; clear shards 20 to 40
+@fails vanilla panes are in `#forge:glass_panes` and have empty tables without Silk Touch; the modifier's pane count `pane_min` / `pane_max`
+> forceload add 5344 5200 5359 5215
+> setblock 5351 -60 5201 minecraft:blue_stained_glass_pane
+> setblock 5353 -60 5201 minecraft:glass_pane
+> cdevtest loot 5351 -60 5201 rolls=20
+expect verb=loot .*rolls=20 drops=\S*quark:blue_shard:(2\d|3\d|40)\b
+> cdevtest loot 5353 -60 5201 rolls=20
+expect verb=loot .*rolls=20 drops=\S*quark:clear_shard:(2\d|3\d|40)\b
+reject \[cdevtest\] .*done=0
+
+## SQ-GSH-05 | vanilla glass keeps Quark's 2 to 4 shards only, no second stack
+@group A
+@commands `minecraft:glass`, `minecraft:red_stained_glass`; `/cdevtest loot` each, rolls 20
+@pass clear shards 40 to 80 and red shards 40 to 80, each the only drop (one id per line)
+@fails rule 3 of the writeup (drops already holding a `#quark:shards` item are left); a doubled stack means the shard check missed Quark's items
+> forceload add 5344 5200 5359 5215
+> setblock 5345 -60 5204 minecraft:glass
+> setblock 5347 -60 5204 minecraft:red_stained_glass
+> cdevtest loot 5345 -60 5204 rolls=20
+expect verb=loot .*rolls=20 drops=quark:clear_shard:([4-7]\d|80)(\s|$)
+> cdevtest loot 5347 -60 5204 rolls=20
+expect verb=loot .*rolls=20 drops=quark:red_shard:([4-7]\d|80)(\s|$)
+reject \[cdevtest\] .*done=0
+
+## SQ-GSH-06 | Silk Touch: every glass above drops itself, no shards
+@group A
+@commands `/cdevtest loot` with a Silk Touch diamond pickaxe, rolls 20, on the blocks of SQ-GSH-02 to -05 and tinted glass
+@pass each line is the block itself 20 times and no `_shard`
+@fails Silk Touch check in `GlassShardsModifier` (match tool predicate); a self-drop removed for tinted glass under Silk Touch
+> forceload add 5344 5200 5359 5215
+> setblock 5345 -60 5207 createframed:red_stained_framed_glass_pane
+> setblock 5347 -60 5207 create:framed_glass
+> setblock 5349 -60 5207 minecraft:blue_stained_glass_pane
+> setblock 5351 -60 5207 minecraft:glass
+> setblock 5353 -60 5207 minecraft:tinted_glass
+> cdevtest loot 5345 -60 5207 tool=minecraft:diamond_pickaxe{Enchantments:[{id:'minecraft:silk_touch',lvl:1s}]} rolls=20
+expect verb=loot .*rolls=20 drops=createframed:red_stained_framed_glass_pane:20(\s|$)
+> cdevtest loot 5347 -60 5207 tool=minecraft:diamond_pickaxe{Enchantments:[{id:'minecraft:silk_touch',lvl:1s}]} rolls=20
+expect verb=loot .*rolls=20 drops=create:framed_glass:20(\s|$)
+> cdevtest loot 5349 -60 5207 tool=minecraft:diamond_pickaxe{Enchantments:[{id:'minecraft:silk_touch',lvl:1s}]} rolls=20
+expect verb=loot .*rolls=20 drops=minecraft:blue_stained_glass_pane:20(\s|$)
+> cdevtest loot 5351 -60 5207 tool=minecraft:diamond_pickaxe{Enchantments:[{id:'minecraft:silk_touch',lvl:1s}]} rolls=20
+expect verb=loot .*rolls=20 drops=minecraft:glass:20(\s|$)
+> cdevtest loot 5353 -60 5207 tool=minecraft:diamond_pickaxe{Enchantments:[{id:'minecraft:silk_touch',lvl:1s}]} rolls=20
+expect verb=loot .*rolls=20 drops=minecraft:tinted_glass:20(\s|$)
+reject verb=loot .*rolls=20 drops=\S*_shard
+reject \[cdevtest\] .*done=0
+
+## SQ-GSH-07 | tinted glass and a Create Framed tinted pane give dirty shards, not themselves
+@group A
+@commands `minecraft:tinted_glass`, `createframed:tinted_framed_glass_pane`; `/cdevtest loot` no tool, rolls 20
+@pass tinted glass: dirty shards 20 to 60, no tinted glass; tinted pane: dirty shards 20 to 40, no pane
+@fails tinted exception (R19: `#forge:glass/tinted`, `#forge:glass_panes/tinted` or `tinted` in the id) in `GlassShardsModifier`; Quark's dirty shard id `quark:dirty_shard`
+> forceload add 5344 5200 5359 5215
+> setblock 5345 -60 5210 minecraft:tinted_glass
+> setblock 5347 -60 5210 createframed:tinted_framed_glass_pane
+> cdevtest loot 5345 -60 5210 rolls=20
+expect verb=loot .*rolls=20 drops=quark:dirty_shard:([2-5]\d|60)(\s|$)
+> cdevtest loot 5347 -60 5210 rolls=20
+expect verb=loot .*rolls=20 drops=quark:dirty_shard:(2\d|3\d|40)(\s|$)
+reject \[cdevtest\] .*done=0

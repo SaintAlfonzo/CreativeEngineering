@@ -117,6 +117,20 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   `wood/sawdust.js` takes it in the dirt slot of its two crafting and two Create mixing Organic Compost recipes (G3, 2026-11-21). Organic mash composts at 0.5 (plant matter; a hand row in
   CD `vintagedelight/compost.js`; it was not compostable). Tests SQ-CP-02, SQ-CP-03, SQ-CP-04.
 
+- **Wood composters (2026-11-21, TODO `farming/composting #3`, [brief](briefs/farming_composting.md) "composting #3"):**
+  Creative Common registers `creativecommon:<wood>_composter` for spruce, birch, dark oak, jungle, acacia, mangrove,
+  twisted, ancient, blossom, azalea, crimson and warped (`composter/WoodComposters`); oak stays `minecraft:composter`.
+  Each is a `ComposterBlock` subclass, so the shared table above, hoppers, the comparator, the level-7 -> 8 tick and
+  bone meal are vanilla's; WTHIT's level line registers on the `ComposterBlock` class and covers them. Fire 5 / 20 and
+  fuel 300 ticks like vanilla, none for crimson and warped; map color from the wood's planks. Loot: itself (explosion
+  decay) plus 1 bone meal at level 8. Model: vanilla's composter parent with `creativecommon:block/<wood>_composter_{side,top,bottom}`
+  (palette swaps, plan R8), vanilla fill models. Recipes (Common's server script `recipes/composters.js`): that wood's 7
+  slabs in the vanilla shape. Vanilla's `minecraft:composter` recipe (`#minecraft:wooden_slabs`, mixed species too) stays,
+  so one species' slabs match both and Polymorph offers the choice, the wood composter listed first (Polymorph sorts by
+  translation key; owner 2026-11-21). Each wood composter crafts back into the vanilla one, shapeless 1 to 1. Tags
+  `#creativecommon:composters` (block and item, vanilla's and the 12; in the Compat item physics floats list), the 12
+  in `#minecraft:mineable/axe`. Dict keys `i.composter_<wood>`, `i.t_composters`.
+
 ## 4. Limits and decisions
 
 ### Findings (2026-10-18)
@@ -135,6 +149,11 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 
 ### Known limits
 
+- **Wood composters are not job sites:** the farmer's POI (`PoiTypes.FARMER`) holds only `Blocks.COMPOSTER` states
+  and `WorkAtComposter` checks `Blocks.COMPOSTER`, so a villager does not take a wood composter as a farmer job site or
+  compost into one. Kept as in the brief's recommendation (2026-11-21); it would take mixins on the POI states and on
+  `WorkAtComposter`. Other mods that test `Blocks.COMPOSTER` by identity (not the class) skip them too.
+- **Mixed slabs:** a grid of two species' slabs makes the vanilla composter.
 - **Composter only:** the rules decide the composter chance, not any other mod's composting machine with its own recipe
   list.
 - **Excluded means never:** an excluded item can't be made compostable by a value row.
@@ -150,6 +169,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - [server_scripts/_lib/dump_compost.js](../kubejs/server_scripts/_lib/dump_compost.js) (`/dumpcompost`).
 - [tools/gen_compost_values.py](../tools/gen_compost_values.py).
 - Related recipes: [wood/sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js) (compost, fertile soil, mulch).
+- Wood composters: [composter/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/composter/WoodComposters.java) (Creative Common), [recipes/composters.js](../kubejs/data/creativecommon/kubejs/recipes/composters.js) (recipes, tags).
 
 ## 6. Offline checks
 
@@ -173,6 +193,19 @@ Use a composter and watch its level; or read `/dumpcompost`.
   the fill (no desync), same as the server.
 - [ ] **CM-09 Compost dirt slot:** JEI on Organic Compost -> the dirt slot of the two crafting and two mixing recipes
   cycles dirt, coarse dirt, rooted dirt, podzol, moss block, mud, humus and silt; podzol crafts one (SQ-CP-04).
+- [ ] **CM-10 Wood composter recipe:** 7 spruce slabs in the composter shape -> Spruce Composter; 7 oak or bamboo slabs
+  -> Composter; 7 spruce slabs -> Polymorph button lists Spruce Composter first, then Composter, and either can be
+  picked; mixed spruce and birch slabs -> Composter; a Spruce Composter alone in the grid -> Composter. Queue SQ-CM-37
+  (recipes), CQ-CM-37 (Polymorph).
+- [ ] **CM-11 Same table:** fill a Warped Composter with wheat seeds and a pie -> same chances as CM-02 / CM-04; at level 7
+  it turns ready after a moment; right-click -> 1 bone meal. Queue SQ-CM-38.
+- [ ] **CM-12 Hopper and comparator:** hopper on top feeds seeds in; hopper below pulls the bone meal out at level 8;
+  comparator output rises with the level. Queue SQ-CM-39.
+- [ ] **CM-13 Drops:** break a Birch Composter at level 8 with an axe -> the composter and 1 bone meal; at level 3 -> only the
+  composter. Queue SQ-CM-40.
+- [ ] **CM-14 Look and WTHIT:** each of the 12 shows its wood, the fill and the ready texture; WTHIT shows the level line. Queue CQ-CM-42.
+- [ ] **CM-15 Fire and fuel:** a lit Acacia Composter burns away, a Crimson Composter does not; an Acacia Composter
+  smelts 1.5 items in a furnace, a Crimson Composter is not fuel. Queue SQ-CM-41.
 
 ## 8. History
 
@@ -190,3 +223,5 @@ Use a composter and watch its level; or read `/dumpcompost`.
   jar; the dirt slot swap is G3.
 - 2026-11-21: Organic Compost dirt slot swapped to `#creativedelight:compost_dirt` in Creative Engineering's `wood/sawdust.js`
   (plan_owner_rows_1120.md G3). Needs the Creative Engineering jar. SQ-CP-04.
+- 2026-11-21: wood composters built (plan_wood_bucket_batch_1121.md P2 item 1): Creative Common blocks, assets, loot,
+  recipes and tags (section 3); CM-10 to CM-15. Needs the Creative Common jar and the texture PNGs.

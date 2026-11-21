@@ -33,8 +33,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 /**
  * One wooden bucket item per fluid ({@code fluidId} null = empty). The empty one scoops only a water source (also from
  * waterlogged blocks); the water one places water and hands back the empty wooden bucket. Sap and honey only move
- * through tanks, pipes and the tree tapper (right-click does nothing, so nothing is lost into the air). The milk one
- * is drunk like a milk bucket. Fluid-handler interactions go through {@link Wrapper}, which stays wooden and refuses
+ * through tanks, pipes, the wooden cauldron and the tree tapper (right-click does nothing, so nothing is lost into the
+ * air). The cow, goat and nut milk ones are drunk like a milk bucket. Fluid-handler interactions go through {@link Wrapper}, which stays wooden and refuses
  * every fluid outside {@link WoodenBuckets#BY_FLUID}.
  */
 public class WoodenBucketItem extends BucketItem {
@@ -63,7 +63,7 @@ public class WoodenBucketItem extends BucketItem {
 			}
 			return result;
 		}
-		if (is(WoodenBuckets.MILK_ID)) {
+		if (WoodenBuckets.drinkable(fluidId)) {
 			return ItemUtils.startUsingInstantly(level, player, hand);
 		}
 		return InteractionResultHolder.pass(stack);
@@ -95,21 +95,21 @@ public class WoodenBucketItem extends BucketItem {
 		return InteractionResultHolder.sidedSuccess(result, level.isClientSide());
 	}
 
-	// Milk: drunk like vanilla's MilkBucketItem.
+	// Milks: drunk like vanilla's MilkBucketItem.
 
 	@Override
 	public int getUseDuration(ItemStack stack) {
-		return is(WoodenBuckets.MILK_ID) ? 32 : 0;
+		return WoodenBuckets.drinkable(fluidId) ? 32 : 0;
 	}
 
 	@Override
 	public UseAnim getUseAnimation(ItemStack stack) {
-		return is(WoodenBuckets.MILK_ID) ? UseAnim.DRINK : UseAnim.NONE;
+		return WoodenBuckets.drinkable(fluidId) ? UseAnim.DRINK : UseAnim.NONE;
 	}
 
 	@Override
 	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-		if (!is(WoodenBuckets.MILK_ID)) {
+		if (!WoodenBuckets.drinkable(fluidId)) {
 			return stack;
 		}
 		if (!level.isClientSide) {

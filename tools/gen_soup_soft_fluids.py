@@ -8,14 +8,18 @@ development/creativeDelight/src/main/resources/data/creativedelight/moonlight/so
 Creative Delight jar since 2026-11-06, plan_cb_polish.md 4; the soft fluid ids are creativedelight since plan_cd_namespace.md (2026-11-10; before that creativeengineering,
 kept then because Moonlight has no alias for a renamed soft fluid), Supplementaries' pumpkin soup as the
 template: its empty container is the item's remainder from kubejs/exported/food/foods.json (/dumpfood;
-bowl when it has none), capacity 2 for a bowl and 1 for a bottle, the same both ways (a bowl in and a bowl
-out move the same amount). Items in removed_items.js are left out (Ender's Delight's wooden-bowl stews), so
+bowl when it has none), one jar space for a bowl or a bottle (items/jars #4, 2026-11-21; a bowl was 2), the same
+both ways (a bowl in and a bowl out move the same amount). Items in removed_items.js are left out (Ender's Delight's wooden-bowl stews), so
 the shulker bowl is the only container for the Chorus and Endermite Stew fluids.
 
 The color is the average of the item texture's pixels that are not the empty container's own colors,
 so the bowl drops out and the soup is left. COLOR_OVERRIDE wins over that. The output folder belongs to
 this tool: a json there that no longer matches a soup is deleted, except the hand-written drink fluids in
 HAND_WRITTEN.
+
+Soups a mod already covers (Supplementaries' and Moonlight's 11) keep the mod's json except the bowl's capacity: an
+override with the pack's bowl value goes to kubejs/data/<ns>/moonlight/soft_fluids/<name>.json (KubeJS data outranks
+the jars), listed in COVERED_OVERRIDES_LIST so a later run removes only its own files.
 
   python3 tools/gen_soup_soft_fluids.py [--dry-run]
 """
@@ -42,7 +46,19 @@ OUT = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativede
 OWN_PREFIX = 'data/creativedelight/moonlight/soft_fluids/'
 VANILLA = pack_paths.vanilla_jar()
 SOFT_FLUID_RE = re.compile(r'^data/[^/]+/moonlight/soft_fluids/.+\.json$')
-CAPACITY = {'minecraft:glass_bottle': 1}   # everything else is a bowl: 2 per item, as Supplementaries' soups
+# Jar spaces one serving fills (items/jars #4: a bowl of soup or stew is 1 space; mixed_jars.md 9). JAR_UNIT is
+# the soft fluid units of one space: 1 while a jar holds 12 (Supplementaries [functional.jar] capacity). items/jars #1
+# (capacity 60) rescales JAR_UNIT only (to 5); the spaces stay the rule.
+JAR_UNIT = 1
+BOWL_SPACES = 1
+SPACES = {'minecraft:glass_bottle': 1}   # every other container is a bowl
+# covered soups: their bowl capacity is overridden in the KubeJS data tree (see the docstring)
+COVERED_OUT = INSTANCE / 'kubejs/data'
+COVERED_OVERRIDES_LIST = INSTANCE / 'kubejs/generation_scripts/food/soup_soft_fluid_overrides.txt'
+
+
+def capacity(empty):
+	return SPACES.get(empty, BOWL_SPACES) * JAR_UNIT
 # Forge fluids of the same soup: the jar takes them from a bucket or a pipe as this soft fluid
 EQUIVALENT = {}
 # hand-written soft fluids for bottled drinks in the same folder: never written or deleted by this tool
@@ -147,6 +163,47 @@ def soup_colour(jars, item, empty):
 	return '#%02x%02x%02x' % tuple(avg)
 
 
+def write_covered_overrides(jars, paths, dry_run):
+	"""A copy of each covering mod json with every bowl container at the pack's capacity (and the food divider to
+	match), in the KubeJS data tree. Files this tool wrote before and no longer needs are removed."""
+	done = []
+	for path in sorted(paths):
+		raw = read(jars, path)
+		if raw is None:
+			continue
+		d = json.loads(raw)
+		changed = False
+		for c in d.get('containers', []):
+			if c.get('empty') not in SPACES and c.get('capacity') != capacity(c.get('empty')):
+				c['capacity'] = capacity(c.get('empty'))
+				changed = True
+		food = d.get('food')
+		if isinstance(food, dict):
+			for c in d.get('containers', []):
+				if food.get('item') in c.get('filled', []) and food.get('divider') != c['capacity']:
+					food['divider'] = c['capacity']
+					changed = True
+		if not changed:
+			continue
+		rel = path[len('data/'):]
+		out = COVERED_OUT / rel
+		done.append(rel)
+		text = json.dumps(d, indent=2) + '\n'
+		print(f'  override {rel}')
+		if not dry_run and (not out.exists() or out.read_text() != text):
+			out.parent.mkdir(parents=True, exist_ok=True)
+			out.write_text(text)
+	old = COVERED_OVERRIDES_LIST.read_text().split() if COVERED_OVERRIDES_LIST.exists() else []
+	for rel in old:
+		if rel not in done and (COVERED_OUT / rel).exists():
+			print(f'  removed override {rel}')
+			if not dry_run:
+				(COVERED_OUT / rel).unlink()
+	if not dry_run:
+		COVERED_OVERRIDES_LIST.write_text(''.join(r + '\n' for r in done))
+	return done
+
+
 def main():
 	ap = argparse.ArgumentParser()
 	ap.add_argument('--dry-run', action='store_true')
@@ -172,10 +229,12 @@ def main():
 
 	OUT.mkdir(parents=True, exist_ok=True)
 	written, skipped, problems = set(), [], []
+	covered_paths = set()
 	for base, items in fluids.items():
 		done = [i for i in items if i in have]
 		if done:
 			skipped.append(f'{base} ({have[done[0]].split("/")[1]})')
+			covered_paths.add(have[done[0]])
 			if len(done) < len(items):
 				problems.append(f'{base}: {set(items) - set(done)} not in the covering fluid')
 			continue
@@ -184,7 +243,7 @@ def main():
 		containers = []
 		for it in items:
 			empty = remainder.get(it) or 'minecraft:bowl'
-			containers.append({'filled': [it], 'empty': empty, 'capacity': CAPACITY.get(empty, 2)})
+			containers.append({'filled': [it], 'empty': empty, 'capacity': capacity(empty)})
 		colour = COLOR_OVERRIDE.get(first) or soup_colour(jars, first, containers[0]['empty'])
 		if not colour:
 			problems.append(f'{base}: no texture for {first}, color left gray')
@@ -214,7 +273,9 @@ def main():
 			print(f'  removed {p.name}')
 			if not a.dry_run:
 				p.unlink()
+	overrides = write_covered_overrides(jars, covered_paths, a.dry_run)
 	print(f'{len(written)} soft fluids; already covered by a mod: {", ".join(skipped)}')
+	print(f'{len(overrides)} covered soups with the pack bowl capacity ({COVERED_OUT.relative_to(INSTANCE)})')
 	for p in problems:
 		print('WARNING', p)
 	return 1 if problems else 0

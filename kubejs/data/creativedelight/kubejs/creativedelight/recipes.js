@@ -17,6 +17,8 @@ ServerEvents.recipes(e => {
 
 		// Wooden bucket, a farm tool: water, sap, milk, honey
 		R.shaped(Item.of(i.wooden_bucket, 1), ['P P', ' P '], { P: i.planks }, e, 'wooden_bucket')
+		// Wooden cauldron: the vanilla cauldron shape in spruce planks (water, milks, honey; plan_wood_bucket_batch_1121 D3)
+		R.shaped(Item.of(i.wooden_cauldron, 1), ['P P', 'P P', 'PPP'], { P: i.planks_spruce }, e, 'wooden_cauldron')
 
 		//######################### Dough blocks #########################
 		// Dough block for every other dough (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/baking_ingredients.js, TODO baking/baked-goods #27):
