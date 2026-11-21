@@ -633,3 +633,10 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass the book is about a quarter wider than Apple Pie's (narrower than the earlier 50%); on the Ladder and Milestones pages the title, diversity lines, bar, key and rows start and end about a sixth of the page width in from each side, with no text over the book edges or the page arrows; long milestone rows are cut short inside the bounds; bar and key hovers land on their icons; first-page meal icons about 20% larger than before, the grid still on the page; the meal hover shows as a plain text tooltip ("N. Name", contribution lines; food-tuning #21); Milestones rows of active buffs (hearts, toughness, knockback, permanent buffs, effect slots) have green text, unreached rows gray, reached one-time unlocks struck through in black; a permanent buff's icon alternates the diamond shard and the effect sprite each second on the Milestones list and the ladder bar, gray and grayed before it is reached, in its colored frame after; the meal hover reads "N. Name", "Full meal: X diversity", then the total/this-meal lines; a reached one-time unlock's milestone number is not struck through (its text is); the purple highest-diversity mark is visible on the bar at every diversity (also when equal to the current one); `/solrp reset` with no argument resets the player running it
 @fails `DietLogPages.left/right` (SIDE_INSET), `RpConfig` extraWidth default, `MealCell.renderTooltip`, `ListPage` text color, `drawIcon` FLAT branch
 @draft client shots
+
+## CQ-RPI-63 | food tooltip: one diversity line, Apple Pie's bottom line gone
+@group client
+@commands Hover an uneaten food, a food eaten recently, and a food Apple Pie does not count, in the inventory and in JEI
+@pass uneaten: "Diversity: X" under the hunger row, no "Food Diversity: X" at the bottom; eaten: "Diversity: X (contributes Y)", no "Diversity Contribution: X" at the bottom, "Last eaten: N meals ago" still there; uncounted food: "This food does not contribute to food diversity." still there
+@fails `FoodTooltips.dropApplePieDiversity` (label prefix match), listener order (GatherComponents LOWEST)
+@draft client shots

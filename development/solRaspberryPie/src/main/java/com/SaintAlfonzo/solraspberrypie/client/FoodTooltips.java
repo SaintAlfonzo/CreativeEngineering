@@ -9,6 +9,7 @@ import com.tarinoita.solsweetpotato.tracking.FoodInstance;
 import com.tarinoita.solsweetpotato.tracking.FoodList;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.network.chat.contents.TranslatableContents;
@@ -25,7 +26,8 @@ import java.util.List;
  * ("Diversity: 1.40", plus "(contributes 0.85)" while the food is in the diet window), Quark's saturation word
  * ("Hearty Meal"), then everything else. Quark's own shank row is off by its config ("Food Tooltips" = false, "Show
  * Saturation" = true). AppleSkin's saturation shares the shank row unless {@code [tooltips] saturationOwnLine}
- * (AppleSkinTooltipRendererMixin).
+ * (AppleSkinTooltipRendererMixin). Apple Pie's own "Food Diversity: X" / "Diversity Contribution: X" line at the
+ * bottom is removed (the diversity line covers it); its "Last eaten" line stays.
  */
 public final class FoodTooltips {
 	private static final String APPLESKIN = "squeek.appleskin.client.TooltipOverlayHandler$FoodTooltip";
@@ -33,6 +35,7 @@ public final class FoodTooltips {
 	public static void gather(RenderTooltipEvent.GatherComponents e) {
 		List<Either<FormattedText, TooltipComponent>> list = e.getTooltipElements();
 		if (list.isEmpty()) return;
+		dropApplePieDiversity(list);
 		Component diversity = diversityLine(e.getItemStack());
 		Either<FormattedText, TooltipComponent> apple = null, word = null;
 		for (int i = list.size() - 1; i >= 1; i--) {
@@ -48,6 +51,20 @@ public final class FoodTooltips {
 		if (apple != null) list.add(Math.min(at++, list.size()), apple);
 		if (diversity != null) list.add(Math.min(at++, list.size()), Either.left(diversity));
 		if (word != null) list.add(Math.min(at, list.size()), word);
+	}
+
+	private static final String AP_LABELS = "gui.solapplepie.food_book.queue.tooltip.";
+
+	/** Apple Pie's TooltipHandler line: its label (uneaten or contribution) followed by the value. */
+	private static void dropApplePieDiversity(List<Either<FormattedText, TooltipComponent>> list) {
+		String uneaten = I18n.get(AP_LABELS + "uneaten_contribution_label");
+		String contribution = I18n.get(AP_LABELS + "contribution_label");
+		for (int i = list.size() - 1; i >= 1; i--) {
+			var left = list.get(i).left();
+			if (left.isEmpty()) continue;
+			String text = left.get().getString();
+			if (text.startsWith(uneaten) || text.startsWith(contribution)) list.remove(i);
+		}
 	}
 
 	private static boolean isQuarkWord(FormattedText text) {

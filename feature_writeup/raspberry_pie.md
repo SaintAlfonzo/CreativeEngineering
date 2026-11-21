@@ -901,6 +901,8 @@ Plan and rulings: [plan_diet_books_r2.md](plan_diet_books_r2.md) (intake of the 
 - **Food tooltips** (`client/FoodTooltips`, GatherComponents at LOWEST): order name, AppleSkin's food row, the
   diversity line, Quark's saturation word, the rest. Diversity line on every food Apple Pie counts (edible, not a
   drink, `shouldCount`): "Diversity: X", or "Diversity: X (contributes Y)" while its memory count is inside the window.
+  Apple Pie's own bottom line ("Food Diversity: X" uneaten, "Diversity Contribution: X" eaten) is removed by its
+  localized label prefix (since 2026-11-20, owner); its "Last eaten: N meals ago" and "does not contribute" lines stay.
   Quark's shank row is off by config (`[client.improved_tooltips] "Food Tooltips" = false`, "Show Saturation" kept;
   backed up in `configs_edited/`). AppleSkin's saturation icons sit on the shank row after the shanks
   (`AppleSkinTooltipRendererMixin`, AppleSkin 2.4.2 only) unless client config `[tooltips] saturationOwnLine`.
