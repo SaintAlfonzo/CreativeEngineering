@@ -24,9 +24,9 @@
 > cdevtest place 641 -59 521 vinery:grapevine_lattice[facing=south] flags=18
 > cdevtest place 642 -59 521 vinery:grapevine_lattice[facing=south] flags=18
 > cdevtest use 640 -59 521 held=vinery:jungle_grape_seeds_white hand=main
-> cdevtest use 642 -59 521 held=vinery:jungle_grape_seeds_white hand=main
-> cdevtest use 642 -59 521 held=minecraft:bone_meal hand=main
-> cdevtest use 642 -59 521 held=minecraft:bone_meal hand=main
+# judge-8 2026-11-21: bone meal adds a random 2-5 stages (StemBlock.performBonemeal), so two single uses can grow and then
+# harvest; the stage-3 lattice is placed directly
+> cdevtest place 642 -59 521 vinery:grapevine_lattice[facing=south,age=3,grape=jungle_white] flags=18
 > cdevtest state 640 -59 521
 > cdevtest state 642 -59 521
 expect verb=state pos=640,-59,521 state="vinery:grapevine_lattice\[age=1,

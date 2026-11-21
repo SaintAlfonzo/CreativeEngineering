@@ -259,9 +259,9 @@ expect UPG08-ender-tes$
 @pass boot 2 log: `[swaps] ... namespace move(s)` counts the list, `[swaps] minecraft:entity_type: 1 id(s) remapped` and the same for `minecraft:item`; `[swaps] config more_mooblooms-common.toml carried over to moremooblooms-common.toml` and the `baby_mobs` one; no `Identifier .* is missing` / missing registry entry naming `more_mooblooms` or `baby_mobs`; `config/` holds `moremooblooms-common.toml` (`regrowChance = 0.6`) and `babymobs-common.toml` (`squidBabyChance = 0.75`), the old files gone
 @fails ids missing: the swap list is not in the moreMooblooms member jar (`data/moremooblooms/swaps/`) or the world was opened once without it; a config at defaults: `CreativeWorldgen` did not call `carryOver` before Forge read the COMMON configs
 @from rows/RFX.qb SQ-RFX-25 (r1118 R3: was its fixture copy)
-shell ! grep -E "Identifier .* is missing|[Mm]issing.*(more_mooblooms|baby_mobs):" logs/latest.log
+shell ! grep -E "Identifier .* is missing|[Mm]issing.*(more_mooblooms|baby_mobs):" logs/latest.log | grep -v "Missing data pack"
 shell grep -hE "\[swaps\]" logs/latest.log | head -12
-shell grep -n "regrowChance\|squidBabyChance" config/moremooblooms-common.toml config/babymobs-common.toml; ls config | grep -E "mooblooms|baby_?mobs"
+shell grep -n "regrowChance\|squidBabyChance" config/moremooblooms-common.toml config/babymobs-common.toml; ls config | grep -E "mooblooms|baby_?mobs"; grep -qE "regrowChance = 0\.6$" config/moremooblooms-common.toml && grep -qE "squidBabyChance = 0\.75$" config/babymobs-common.toml
 
 ## SQ-UPG-10 | mooblooms keep their variants, eggs keep theirs
 @group A

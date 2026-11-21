@@ -174,3 +174,35 @@ Creative Worldgen, Creative Devtools and OR1120.qb, FCK.qb and the loot / mob tw
     row that diffs against the pack dump runs its own `/dumpall`.
 - 09:0x Plan_owner_rows_1120 session took the end_gear.js bug; it will report when the fixed creativeequipment jar is installed. Later steps pick up the new jar at their prep (prep_srv pins per step); queue SQ-SMK-09, -11, SQ-RFX-02, -19 for rerun then.
 - 09:1x fixed creativeequipment installed by the other session (installed.csv 2026-11-21T08:50:13, commit 9f48f07f); SQ-SMK-09, -11, SQ-RFX-02, -19 added to rerun.txt. Steps prepped after 08:50 run on the fixed jar.
+- 09:3x judge-8 batch 2 (steps 110 to 125): 110 to 112 PASS 3, 3, 5; 113 PASS 3 FAIL 1; 114 to 120 PASS 4, 4, 3, 4, 3, 3, 3;
+  121 PASS 1; 122 PASS 2; 123 STN PASS 4 BF 1; 124 PASS 1; 125 empty. Steps 110 to 115 ran on the old end_gear.js jar, no
+  Equipment-recipe row failed. rerun.txt 254.
+  - FAIL (uncertain) SQ-SMK-31: a summoned NoAI moobloom is gone in under 4 s on the flat peaceful world (forceloaded;
+    type registered). Same pattern as SQ-PTH-29, -30 (summoned foxes, bees, zombies gone in 2 to 4 s): possibly one
+    shared despawn cause on scratch worlds (a join or tick remover) rather than three features. Look together before
+    any fix; suspects Moobloom.java (creativeWorldgen mooblooms member) or another mod's join remover.
+  - BF-FIX SQ-STN-04: Farmer's Respite 1.19-2.0 keeps kettle water in the `water_level` blockstate, not FluidTank NBT;
+    x 80 z -60 not forceloaded -> forceload, `kettle[water_level=4]`, FluidTank dropped (600 from kettleBrewTicks).
+  - PASS with caveats: SQ-STN-02 (extract rights read from the hopper result; `cdevtest inv face=` prints no flags),
+    SQ-STN-07 (bowl already out at t=0), SQ-STD-01 (two bamboo blocks lack the `bamboo_` prefix; look wording).
+- 10:3x judge-8 batch 3 (steps 126 to 139, helper judge-8d UPG): 126 TP BF 1; 127 TP BF 1; 128 empty; 129 TX PASS 4; 130 PASS 1;
+  131 UPG PASS 9 BF 4; 132 UPG PASS 2 BF 1; 133 VN BF 1; 134 GFB PASS 1 FAIL 1; 135 LOOT PASS 1; 136 PSU B INCONCLUSIVE 1;
+  137 RD A BF 1; 138 TER B INCONCLUSIVE 1; 139 WGP PASS 1. rerun.txt 257.
+  - Vanishing summoned mobs explained (environment): vanilla ServerLevel discards Animal / WaterAnimal entities when
+    spawn-animals=false, the prep default on many steps. SQ-SMK-31 reclassified BATCH-FAULT; SQ-UPG-10, -11 entity half
+    the same; SQ-PTH-29, -30 probably. Not simple (section @@prep spawn-animals=true, shared). Tool follow-up: a qlint W
+    for `summon` of an animal or water animal in a section without spawn-animals=true.
+  - Real FAIL: SQ-GFB-02 holdGeneratedFallingBlocks=true on a normal world: after pregen, a 2400-tick warp and a save, 96
+    falling_block entities and 37 gravel items remain (Pass near 0 / under 21); Creative Worldgen falling-block hold or
+    pregen chunks that never tick again; row design unproven.
+  - BF-FIX SQ-TP-41 macro id `tempad:default` (ModMacros.java:14); SQ-TP-42 chronometer capacity 0, setchr lines dropped
+    (one generator ~67 chronons per 2400 ticks observed, A4 holds); SQ-VN-01 bone meal adds 2 to 5 stages, lattice placed
+    at age 3; SQ-UPG-09 regex skips vanilla "Missing data pack more_mooblooms:" (not rerun until the switch fix).
+  - Not simple: SQ-FN-03 needs group B (superflat has no river); SQ-UPG-06, -09, -11 config half: `qmodset.py switch`
+    replaces srv/config with the pack's, deleting the boot-1 old-name tomls (tool fix: keep boot-1 files the pack lacks);
+    SQ-UPG-14 own forceload collides with the fixture's, and Storage Delight absent on boot 1 (release_1202 filter drops
+    repackedStorage-02, -01 not in deploy/latest/mods).
+  - INCONCLUSIVE: SQ-PSM-09 (12000 ticks deep ocean: squid 0, glow squid 8, dolphin 0; `cdevperf mobcap` prints no
+    per-category cap); SQ-TER-06 (no geode in the 128x128 sample).
+  - PASS with caveats: SQ-WGP-07 (2:57 vs a 5:26 baseline measured with Distant Horizons on); SQ-HRU-01 (20 unkeyed classes
+    ask about create:copycat_base; perf.md 13.3 entry for the doc owner).

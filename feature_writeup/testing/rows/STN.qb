@@ -136,9 +136,12 @@ look (1) rdetail: pickle_from_fermenting inputs are 5 cucumbers + salt_dust (if 
 @fails `KettleRecipeSerializerMixin.ce$cookingTime` fallback; NCH `frBrewing` must not write `cookingtime` (check a dumped recipe json)
 @from batches/r1106spf/b1.qb
 @reviewed 2026-11-20
+# judge-8 2026-11-21: the 1.19 kettle holds water in its water_level blockstate (no tank NBT); forceload so it ticks
+> forceload add 80 -60 80 -60
+sleep 3
 > setblock 80 -60 -60 minecraft:campfire[lit=true]
-> setblock 80 -59 -60 farmersrespite:kettle
-> data merge block 80 -59 -60 {Inventory:{Items:[{Slot:0b,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:1b,id:"farmersrespite:black_tea_leaves",Count:1b}]},FluidTank:{FluidName:"minecraft:water",Amount:1000}}
+> setblock 80 -59 -60 farmersrespite:kettle[water_level=4]
+> data merge block 80 -59 -60 {Inventory:{Items:[{Slot:0b,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:1b,id:"farmersrespite:black_tea_leaves",Count:1b}]}}
 sleep 1
 > data get block 80 -59 -60
 look BrewTimeTotal 600 (kettleBrewTicks default)

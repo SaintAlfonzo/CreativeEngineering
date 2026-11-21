@@ -407,6 +407,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - A bot that has eaten 7 or more different foods carries Raspberry Pie diet effects (800 t, ambient, no particles; flat
   Speed at 7 in the default ladder), re-added the tick after milk or `/effect clear` by design (raspberry_pie.md 9.3).
   Rows that check "no effects" after a cure use their own fresh bot that has eaten nothing (r1120nv SQ-GLD-03).
+- Farmer's Respite 1.19-2.0 kettle water is the `water_level` blockstate (`farmersrespite:kettle[water_level=4]`), not a FluidTank NBT merge; a dry kettle never brews (r1120nv SQ-STN-04).
 
 ## Rhino and KubeJS probes
 

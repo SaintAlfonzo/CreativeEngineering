@@ -804,7 +804,8 @@ sleep 3
 > tp t40 0.5 -60 4.5 0 0
 sleep 2
 > ztp pin t40 tempad:default Cool Spot
-> ztp settings t40 tempad:teleport tempad:pinned_location
+# judge-8 2026-11-21: the pinned-location macro id is tempad:default (ModMacros.TELEPORT_TO_PINNED)
+> ztp settings t40 tempad:teleport tempad:default
 > kill @e[type=tempad:timedoor]
 sleep 2
 > ztp macro t40
@@ -854,14 +855,13 @@ sleep 3
 > item replace entity t42 hotbar.1 with tempad:chronometer
 > item replace entity t42 hotbar.2 with tempad:chronometer
 > ztp setchr t42 0 0
-> ztp setchr t42 1 0
-> ztp setchr t42 2 0
 > cdevtest tickwarp 2400
 waitlog verb=tickwarp end=done ticks=2400 120
 > ztp chr t42
 waitlog \[ztp\] chr end 20
 expect \[ztp\] chr slot 0 tempad:tempad [1-9]\d*/
-expect \[ztp\] chr slot 2 tempad:chronometer 0/
+# judge-8 2026-11-21: chronometer capacity 0 (no chronon store, nothing to read); one generator at generation_rate 36 gives about 67 in 2400 ticks, two about 133
+expect \[ztp\] chr slot 0 tempad:tempad [1-9]\d?/
 > pbot remove t42
 
 ## CQ-TP-17 | Timeline app shows the in-world day and clock (A5)
