@@ -26,5 +26,11 @@ ServerEvents.recipes(e => {
 		F.meatCook(i.ghasttentacle, i.grilledghast)
 		F.meatCook(i.rottenham, i.cookedrottenham)
 		F.eggCook(i.turtle_egg, i.friedturtleegg)
+
+		//######################### Green Eggs and Ham ######################### (largecontent/mod-additions #49, D11)
+		// Suspicious Bacon and Eggs, shown as Green Eggs and Ham: a sequenced assembly like Farmer's Delight's bacon and
+		// eggs (farmersdelight/recipes.js), bowl + cooked rotten ham + fried turtle egg, twice. Hostile's shapeless
+		// recipe stays, as Farmer's Delight's does.
+		F.assemble(i.bowl, [i.cookedrottenham, i.friedturtleegg], i.suspiciousbaconandaggs, 2)
 	})
 })

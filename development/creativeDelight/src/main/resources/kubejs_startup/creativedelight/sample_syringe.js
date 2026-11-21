@@ -20,14 +20,15 @@ console.log('sample_syringe func loading')
 	// Sampleable passive mobs. Keyed by entity type id -> { name, filledId }.
 	// Written out one entry per line on purpose - add more as they're needed.
 	const SAMPLES = {}
-	SAMPLES['minecraft:cow'] = { name: 'Cow', filledId: i.cow_sample_syringe }
-	if (global.has('moremooblooms')) SAMPLES['moremooblooms:moobloom'] = { name: 'Moobloom', filledId: i.cow_sample_syringe }
-	SAMPLES['minecraft:pig'] = { name: 'Pig', filledId: i.pig_sample_syringe }
-	SAMPLES['minecraft:chicken'] = { name: 'Chicken', filledId: i.chicken_sample_syringe }
-	SAMPLES['minecraft:sheep'] = { name: 'Sheep', filledId: i.sheep_sample_syringe }
-	SAMPLES['minecraft:rabbit'] = { name: 'Rabbit', filledId: i.rabbit_sample_syringe }
-	SAMPLES['minecraft:cod'] = { name: 'Cod', filledId: i.cod_sample_syringe }
-	SAMPLES['minecraft:salmon'] = { name: 'Salmon', filledId: i.salmon_sample_syringe }
+	const en = global.entity   // entity ids: Creative Common _lib/entity_dict.js (mobs/tweaks #4)
+	SAMPLES[en.cow] = { name: 'Cow', filledId: i.cow_sample_syringe }
+	if (global.has('moremooblooms')) SAMPLES[en.moobloom] = { name: 'Moobloom', filledId: i.cow_sample_syringe }
+	SAMPLES[en.pig] = { name: 'Pig', filledId: i.pig_sample_syringe }
+	SAMPLES[en.chicken] = { name: 'Chicken', filledId: i.chicken_sample_syringe }
+	SAMPLES[en.sheep] = { name: 'Sheep', filledId: i.sheep_sample_syringe }
+	SAMPLES[en.rabbit] = { name: 'Rabbit', filledId: i.rabbit_sample_syringe }
+	SAMPLES[en.cod] = { name: 'Cod', filledId: i.cod_sample_syringe }
+	SAMPLES[en.salmon] = { name: 'Salmon', filledId: i.salmon_sample_syringe }
 
 	global.sampleSyringe = {
 		ITEM_ID: EMPTY_ID,

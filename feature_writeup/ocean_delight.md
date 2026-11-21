@@ -19,14 +19,12 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=54f16d4d8598 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 5, Pinned 1, In Progress 4, Testing 12), 0 Complete.
+<!-- generated:status_index begin open_work sha1=9cecc185ff83 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 3, Pinned 1, In Progress 4, Testing 14), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `dishes/ocean #6` | Planned | S C P | Caviar use audit |
-| `dishes/ocean #11` | Planned | S C P | Guardian Shell: guardian drop and cutting |
-| `dishes/ocean #12` | Planned | S P | Guardian Soup recipe |
 | `dishes/ocean #13` | Planned | S P | Fugu poisoning chance |
 | `largecontent/mod-additions #14` | Planned | S C P | Rolls Delight, when added |
 | `dishes/ocean #14` | Pinned | S C | Elder guardian chunk source |
@@ -41,6 +39,8 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 | `dishes/ocean #5` | Testing | C P | Salmon eggs become caviar |
 | `dishes/ocean #7` | Testing | S+ C P T | Kelp Encrusted Cod |
 | `dishes/ocean #8` | Testing | C | Oceanic Delight JEED Nourishment list |
+| `dishes/ocean #11` | Testing | S C P | Guardian Shell: guardian drop and cutting |
+| `dishes/ocean #12` | Testing | S P | Guardian Soup recipe |
 | `dishes/pickles-and-ferments #4` | Testing | S+ C P | Braised sea pickle accepts slices |
 | `farming/crops #27` | Testing | S P | Sea grape plant mineable with a hoe |
 | `farming/wild-crops #6` | Testing | S P T | Wild sea grape under the pack's placement system |
@@ -390,14 +390,30 @@ Install: `portedOceanic-1.0.1-ce-19.2-02` and the CD scripts are in the CD jar i
 
 ## 9. Planned (scratchpad 2026-11-04)
 
-Owner notes for both mods, together with the Hostile Delight notes ([hostile_delight.md](hostile_delight.md) 5.1). None built
-(checked 2026-11-04: Hostile Delight's own guardian loot table is still live, no guardian, fugu or guardian soup code in the pack).
+Owner notes for both mods, together with the Hostile Delight notes ([hostile_delight.md](hostile_delight.md) 5.1). Guardian
+Shell and Guardian Soup built 2026-11-20 (marked below); the rest not built (checked 2026-11-04: Hostile Delight's own guardian loot table is still live, no guardian, fugu or guardian soup code in the pack).
 
 - **Guardian Shell** ([TODO](todo/TODO.md) `dishes/ocean #11`): guardians drop Ocean's whole guardian item, renamed Guardian
   Shell; Prismarine Shards and Crystals still drop. Cutting the shell gives 1 to 3 raw guardian fillets and a chance of a
   Prismarine Shard. Replaces D3's "3 fillets" in hostile_delight.md 5.
+  Ruled 2026-11-20 (owner, plan_owner_rows_1120.md R6): Hostile's `guardianfillet` is the one raw guardian fillet; Ocean's
+  `guardian_tail` merges onto it. **Built 2026-11-20 (G2a, D12):**
+  - Drop: Hostile's whole-table `minecraft:entities/guardian` (2 rolls) keeps its Prismarine Shard 1-4 and Crystals 0-2
+    entries; its fillet entry (1-3) is now 1 Guardian Shell (CD `oceansdelight/loot.js`, Creative Loot `L.rewrite`, pre-roll).
+    Ocean's `farmersdelight:guardian_drop` loot modifier is left out of the repack's global list (members/oceans overlay
+    `data/forge/loot_modifiers/global_loot_modifiers.json`, `replaced_resources`, version `-ce-19.2-02`), so no second shell.
+    Elder guardians are untouched.
+  - Name: `oceansdelight:guardian` shows as Guardian Shell (CD `assets/creativedelight/kubejs/oceansdelight/names.js`); id and
+    sprite stay; dict key `i.guardian_shell` (Common).
+  - Cutting (CD `oceansdelight/recipes.js`): shell + knife -> 1 fillet, 2 more at 50% each (1 to 3) and a 30% Prismarine
+    Shard; Ocean's tail and bone meal cut is removed.
+  - Merge (`swaps/merges_oceansdelight.json`, item_merges.md 2.24): `guardian_tail` -> `guardianfillet` and
+    `cooked_guardian_tail` -> `cookedguardianfillet` (the cooked pair added so the furnace has one result per input); Ocean's
+    three cooked tail recipes are removed, Hostile's fillet cooks in all three.
 - **Guardian Soup** (`dishes/ocean #12`): Ocean's soup only (Hostile's removed), from a Guardian Shell, 2 guardian fillets, a
-  tomato, an onion and an Elder Guardian Eye.
+  tomato, an onion and an Elder Guardian Eye. **Built 2026-11-20 (G2a, D13):** cooking pot, those six and a bowl -> the
+  Guardian Soup feast block (CD `oceansdelight/recipes.js`, upstream's shell + onion + 2 eggs + 2 tomatoes removed; only with
+  Oceanic Delight, which has the eye).
 - **Fugu** (`dishes/ocean #13`): eating any fugu food has a 0.5% chance of Wither III and Poison III for 10 s.
 - **Elder guardian chunk** (`dishes/ocean #14`, open): a source for the elder guardian chunk; the mob-drop JEI tab updated with it.
 

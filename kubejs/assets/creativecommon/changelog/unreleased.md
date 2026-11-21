@@ -119,6 +119,22 @@
 - **New:** 4 Fried Eggs make 4 Omelettes in the Cooking Pot.
 - **Changed:** Cooking Oil and 3 eggs make 3 Fried Eggs in the Cooking Pot [1 egg, 1 Fried Egg].
 - **Removed:** Furnace recipes for Fried Eggs, Fried Turtle Eggs, Omelettes, Fried Dragon Eggs, Shulker Omelettes and Boiled Emu Eggs. The Smoker, campfires and the Skillet still cook them.
+- **Changed:** Duck and Goose Eggs fry into Fried Eggs like chicken eggs, also with Cooking Oil [chicken eggs only]. Parrot, turtle, crocodile, terrapin and emu eggs do not.
+
+## Hostile Delight <!-- icon: hostiledelight:rottenham -->
+
+- **Changed:** Rotten Ham, Cooked Rotten Ham, Rotten Pie, Green Pie, Fried Turtle Egg and Green Eggs and Ham have a 20% chance of Poison II for 5 seconds [no effect].
+- **Changed:** Suspicious Bacon and Eggs is named Green Eggs and Ham.
+- **New:** Green Eggs and Ham in a Create sequenced assembly: a bowl, then Cooked Rotten Ham and a Fried Turtle Egg, twice.
+- **Removed:** Salting Rotten Pie, Green Pie and Green Eggs and Ham.
+- **Changed:** Magma Brownie and Slime Brownie are named Magma Gummy and Slime Gummy.
+
+## Guardians <!-- icon: oceansdelight:guardian -->
+
+- **Changed:** Guardians drop Guardian Shells in place of Guardian Fillets [1 to 3 Guardian Fillets, plus one whole Guardian]. Prismarine Shards and Crystals drop as before.
+- **Changed:** Ocean's Delight's Guardian is named Guardian Shell. On a Cutting Board it gives 1 to 3 Guardian Fillets and a 30% chance of a Prismarine Shard [a Guardian Tail and Bone Meal].
+- **Changed:** Guardian Tails and Cooked Guardian Tails turn into Guardian Fillets and Cooked Guardian Fillets in recipes, loot and inventories.
+- **Changed:** Guardian Soup takes a Guardian Shell, 2 Guardian Fillets, a tomato, an onion and an Elder Guardian Eye [a Guardian, an onion, 2 eggs and 2 tomatoes].
 
 ## Jars <!-- icon: vintagedelight:empty_mason_jar -->
 

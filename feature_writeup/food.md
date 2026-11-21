@@ -10,8 +10,8 @@ wrong today and how tuning will work.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=e0d5f666fb57 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, Pinned 1, In Progress 4, Testing 15), 0 Complete.
+<!-- generated:status_index begin open_work sha1=0566bb12c74c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 2, Pinned 1, In Progress 4, Testing 16), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -37,6 +37,7 @@ wrong today and how tuning will work.
 | `food/types-and-tuning #22` | Testing | S C P | Golden food and gilded food recipes |
 | `food/types-and-tuning #23` | Testing | C P | Call enchanted golden food gilded in language |
 | `merges/dishes #7` | Testing | S C P | Merge nut butter and nut mash |
+| `rice-egg-and-sushi #1` | Testing | S P | Bird eggs fry into the fried egg; parrot, turtle and reptile eggs do not |
 <!-- generated:status_index end open_work -->
 
 The pack has **1030 edible items** from 40 mods (plus 139 food blocks: placed cakes, pies, feasts and jelly bottles, and 33
@@ -497,6 +498,16 @@ oil recipes keep their Slice & Dice copies.
 `creativedelight:smelting/fried_egg_from_egg`, no `..._friedturtleegg_from_turtle_egg`), and
 `moredelight:omelette_smelting`, `ends_delight:food_smelting/fried_dragon_egg`, `ends_delight:food_smelting/shulker_omelette`
 and Alex's Mobs' `alexsmobs:boiled_emu_egg` are removed. Smoker and campfire forms stay. FO-62 (FO-23 rewritten).
+
+**2026-11-20 (`rice-egg-and-sushi #1`, [plan_owner_rows_1120.md](plan_owner_rows_1120.md) R4, D19; built, not run).** Every
+bird egg fries into the Farmer's Delight fried egg: new tag `#creativedelight:eggs/fryable` (`i.t_eggs_fryable`; chicken,
+duck and goose eggs; CD `farmersdelight/tags.js`). The egg cook family (smoker and campfire, `farmersdelight/recipes.js`,
+ids `creativedelight:smoking|campfirecooking/fried_egg_from_eggs/fryable`) and the oil batch (cooking oil + 3 eggs) take the
+tag. Parrot, turtle, crocodile and terrapin eggs do not fry; the emu egg keeps only its Boiled Emu Egg; the turtle egg keeps
+Hostile's Fried Turtle Egg. Rustic Delight's `#rusticdelight:raw_cooked_eggs` (upstream: all of `#forge:eggs` plus
+`#forge:cooked_eggs`) is rebuilt as the fryable eggs plus `#forge:cooked_eggs`. The dict key is in Creative Common's
+source: until a Creative Common jar with `i.t_eggs_fryable` is installed, the recipes fall back to the vanilla egg alone.
+SQ-FO-16.
 
 ### 3.8 Vanilla egg -> `#forge:eggs` migration (TODO, not built)
 

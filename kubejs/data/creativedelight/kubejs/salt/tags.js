@@ -40,9 +40,10 @@ ServerEvents.tags('item', e => {
 		i.mutton_chops_with_truffle, i.pork_marsala_with_mushrooms, i.rabbit_with_morels, i.steak_with_mushrooms,
 		i.stuffed_morels,
 		// hostiledelight
+		// (Rotten Pie, Green Pie and Green Eggs and Ham are not saltable: largecontent/mod-additions #48)
 		i.aurorasoup, i.carrotmite, i.cookedguardianfillet, i.cookedrottenham, i.cookendermite, i.glimmeringchowder,
-		i.glowpasta, i.greenpie, i.grilledghast, i.guardianburger, i.guardianross, i.guardiansandwich, i.guardiansashimi,
-		i.guardiansoup, i.guardiantartar, i.miteymeal, i.rottenpie, i.suspiciousbaconandaggs,
+		i.glowpasta, i.grilledghast, i.guardianburger, i.guardianross, i.guardiansandwich, i.guardiansashimi,
+		i.guardiansoup, i.guardiantartar, i.miteymeal,
 		// miners_delight
 		i.baked_spider_leg, i.bat_rolls, i.bat_soup, i.cave_hamburger, i.cooked_arthropod, i.glow_ink_pasta,
 		i.insect_sandwich, i.insect_stew, i.insect_wrap, i.seasoned_arthropods, i.squid_sandwich,
@@ -56,7 +57,7 @@ ServerEvents.tags('item', e => {
 		i.pasta_with_eyeball, i.seafood_skewer, i.shrimp_chips, i.shrimp_rice, i.shrimp_roll, i.shrimp_stew,
 		i.steamed_beef,
 		// oceansdelight
-		i.cabbage_wrapped_elder_guardian, i.cooked_elder_guardian_slice, i.cooked_guardian_tail, i.cooked_stuffed_cod,
+		i.cabbage_wrapped_elder_guardian, i.cooked_elder_guardian_slice, i.cooked_stuffed_cod,
 		i.elder_guardian_roll, i.fugu_roll,
 		// quarkdelight
 		i.cooked_whole_crab, i.crab_pasta, i.miso_with_bamboo_sprouts,

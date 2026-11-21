@@ -1040,3 +1040,30 @@ reject verb=\S+ .*done=0
 @pass the JEI page is titled "Flavor"; tooltip lines "Garlic: +2 saturation, Speed (0:10)", "Onion: +2 saturation", "Onion + Garlic: +1 saturation"; the powders show their sprites (onion, garlic and ghost pepper colors on the chili powder shape)
 @fails CD `FlavorTooltip`, `flavor_lang.js`, lang `creativedelight.flavor.*`, `creativedelight.jei.flavor`
 @draft client look; the first client runner writes the steps
+
+@@section 5
+@@title Bird eggs fry, 2026-11-20 ([food.md](../food.md) 3.7, TODO `rice-egg-and-sushi #1`, plan_owner_rows_1120.md R4, D19)
+@@date 2026-11-20
+@@jars creativecommon creativedelight
+@@sources feature_writeup/food.md kubejs/data/creativedelight/kubejs/farmersdelight/tags.js kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js
+@@text
+@@text Needs the Creative Delight jar of 2026-11-20 (G2a) and a Creative Common jar with the `t_eggs_fryable` dict key (source
+@@text edited in G2a, not yet built); with an older Common jar the recipes fall back to the vanilla egg and this row fails
+@@text on the tag input. Group A.
+@@text
+@@table
+## SQ-FO-16 | chicken, duck and goose eggs fry; parrot, turtle and reptile eggs do not
+@group A
+@commands `cdevtest tag item creativedelight:eggs/fryable`; `cdevtest tag item rusticdelight:raw_cooked_eggs`; rdetail `fried_egg_from_eggs` and `fried_eggs_from_cooking_oil`
+@pass fryable holds exactly `minecraft:egg`, `untitledduckmod:duck_egg`, `untitledduckmod:goose_egg`; raw_cooked_eggs holds those three and the `#forge:cooked_eggs` members, no turtle, parrot, crocodile, terrapin or emu egg; smoker and campfire fried egg recipes take `#creativedelight:eggs/fryable`; the oil batch takes the tag three times; Fried Turtle Egg still cooks from the turtle egg
+@fails `i.t_eggs_fryable` missing (Common jar older than G2a's dict edit: recipes on `minecraft:egg`); `wipeTag` left the upstream `#forge:eggs` reference
+> cdevtest tag item creativedelight:eggs/fryable
+> cdevtest tag item rusticdelight:raw_cooked_eggs
+> cdevtest rdetail fried_egg_from_eggs
+> cdevtest rdetail fried_eggs_from_cooking_oil
+waitlog verb=rdetail text=fried_eggs_from_cooking_oil n= 30
+expect verb=tag kind=item tag=creativedelight:eggs/fryable n=3 ids=
+reject verb=tag kind=item tag=rusticdelight:raw_cooked_eggs n=\d+ ids=.*(turtle_egg|egg_parrot|crocodile_egg|terrapin_egg|emu_egg)
+expect verb=rdetail id=creativedelight:smoking/fried_egg_from_eggs/fryable
+look the oil batch rdetail line takes #creativedelight:eggs/fryable three times
+reject verb=\S+ .*done=0

@@ -28,6 +28,28 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'oceansdelight:seagrass_salad' }, e)
 		R.shapeless(i.seagrass_salad, [i.seagrass, i.seagrass, i.bowl], e, 'seagrass_salad')
 
+		//######################### Guardian Shell #########################
+		// dishes/ocean #11 (plan_owner_rows_1120.md R6, D12): a guardian drops the Guardian Shell (Ocean's whole guardian,
+		// renamed; oceansdelight/loot.js). Cutting it gives 1 to 3 of Hostile Delight's raw guardian fillets (one sure,
+		// two at 50%) and a 30% Prismarine Shard, in place of Ocean's guardian tail and bone meal. Ocean's guardian tail
+		// and cooked tail merge onto Hostile's fillet and cooked fillet (swaps/merges_oceansdelight.json), so their
+		// smelting, smoking and campfire recipes go: Hostile's fillet already cooks in all three.
+		if (global.CD.on('hostiledelight')) {
+			R.remove({ id: 'oceansdelight:cutting/guardian' }, e)
+			R.fdCutting(i.guardian_shell, i.any_knife, [i.guardianfillet, Item.of(i.guardianfillet).withChance(0.5),
+				Item.of(i.guardianfillet).withChance(0.5), Item.of(i.prismarine_shard).withChance(0.3)], e, 'guardianfillet_from_guardian_shell')
+			;['', '_from_campfire_cooking', '_from_smoking'].forEach(s => R.remove({ id: 'oceansdelight:cooked_guardian_tail' + s }, e))
+
+			//######################### Guardian Soup ######################### dishes/ocean #12 (D13)
+			// Cooking pot: Guardian Shell, 2 fillets, tomato, onion and an Elder Guardian Eye, in a bowl -> the Guardian
+			// Soup feast block (upstream: shell, onion, 2 eggs, 2 tomatoes). Without Oceanic Delight (no eye) upstream's stays.
+			if (global.CD.on('oceanic_delight')) {
+				R.remove({ id: 'oceansdelight:cooking/guardian_soup' }, e)
+				R.fdCooking([i.guardian_shell, i.guardianfillet, i.guardianfillet, i.tomato, i.onion, i.elder_guardian_eye],
+					i.guardian_soup, e, 'guardian_soup', 0.35, 200, i.bowl)
+			}
+		}
+
 		//######################### Tentacles to calamari #########################
 		// The tentacle items of Ocean's, Oceanic and Miner's Delight are removed (startup_scripts/_lib/removed_items.js,
 		// dishes/ocean #4): their own recipes go and every dish that used one takes calamari. The three mods' cooking

@@ -295,8 +295,10 @@ ServerEvents.recipes(e => {
 		//Egg
 		// Abnormals Delight overrides Farmer's Delight's three fried egg recipes with copies that don't load when
 		// Incubation is installed, which left only the cooking oil recipe. The egg cooking trio puts all three back
-		// (Incubation's own fried egg recipes are removed in incubation/recipes.js).
-		F.eggCook(i.minecraft_egg, i.farmersdelight_fried_egg)
+		// (Incubation's own fried egg recipes are removed in incubation/recipes.js). Every bird egg fries
+		// (#creativedelight:eggs/fryable, farmersdelight/tags.js; rice-egg-and-sushi #1); the vanilla egg alone while
+		// the Creative Common jar has no t_eggs_fryable dict key.
+		F.eggCook(i.t_eggs_fryable || i.minecraft_egg, i.farmersdelight_fried_egg)
 
 		//Fish
 		// Fish slice family (CD.FOOD: 6 slices and a bone meal; FD: 2), replacing FD's cuts (Alex's Delight's catfish:

@@ -52,7 +52,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'tmted:crusher/wheat_flour_from_bale' }, e)
 		R.shapeless(Item.of(i.dough, 1), [i.flour, i.water_bucket], e)
 		if (Platform.isLoaded('immersiveengineering')) {
-			R.ieBottling(i.dough, f.t_water, i.flour, e, undefined, 250)
+			R.ieBottling(i.in_dough, f.t_water, i.flour, e, undefined, 250)
 			if (Platform.isLoaded('create_compressed')) {
 				R.ieBottling(i.dough_block, f.t_water, i.wheat_flour_pile, e, undefined, 1000)
 			}

@@ -117,7 +117,8 @@ FAMILIES = OrderedDict([
 	('dessert/other', ('Other dessert', 'A sweet or baked food that fits no other family.')),
 	('candy', ('Candy', 'Sugar or chocolate confections.')),
 	('candy/bar', ('Chocolate bar', 'A bar of chocolate or caramel.')),
-	('candy/piece', ('Candy piece', 'A bite of candy, fudge, gummy, coin or leather.')),
+	('candy/piece', ('Candy piece', 'A bite of candy, fudge, coin or leather.')),
+	('candy/gummy', ('Gummy', 'A chewy gummy: fruit, slime or magma set with a sweetener (owner, 2026-11-20).')),
 	('candy/coated', ('Coated fruit', 'A fruit or nut dipped in chocolate, caramel, honey or sugar.')),
 	('candy/marshmallow', ('Marshmallow', 'Marshmallows, on a stick or in a s\'more.')),
 	('frozen', ('Frozen dessert', 'Served frozen.')),
@@ -187,7 +188,9 @@ FAMILY_OVERRIDE = {'oceanic_delight:sponge_cake': 'pie/whole', 'oceanic_delight:
 				   'barbequesdelight:bibimbap': 'meal/rice',
 				   # Large Meals (plan_meals_rolls_bbq.md A2, A5): the pot pie is a feast, not a pie; plate meals
 				   'largemeals:mushroom_pot_pie_block': 'feast/whole', 'largemeals:mushroom_pot_pie': 'feast/serving',
-				   'largemeals:cod_deluxe': 'meal/plate', 'largemeals:hearty_lunch': 'meal/plate'}
+				   'largemeals:cod_deluxe': 'meal/plate', 'largemeals:hearty_lunch': 'meal/plate',
+				   # Hostile's brownies, renamed Magma Gummy and Slime Gummy (largecontent/mod-additions #46, R5)
+				   'hostiledelight:magmabrownie': 'candy/gummy', 'hostiledelight:slimebrownie': 'candy/gummy'}
 # Sweet or baked one-offs that fit no other family: the dessert catchall, ahead of the special-type no-family rule
 # Warm drinks (food/drinks #14, plan_food_batch_1119.md R11): by id, as the names alone would put the cider in drink/soda
 # and the cocoa (not a food before the rule) nowhere.
@@ -297,6 +300,8 @@ def classify(r):
 		return 'golden'
 	if t == 'hazard':
 		return 'hazard'
+	if has(n, 'gummy'):
+		return 'candy/gummy'
 	if r['id'] in DESSERT_OTHER:
 		return 'dessert/other'
 	# Fermented garlic honey: a vegetable fermented in the Pickling Jar (creativedelight/members #30 R8)
@@ -716,7 +721,8 @@ placed_any = placed_on(*PLACE_ANY)
 cured = lambda m: m.name_has('jerky', 'kipper', 'smoked', 'glazed', 'dried', 'century', 'surstr')
 own_station = lambda m: cured(m) and bool(m.stations())
 # Cuts that a mob drops (Nether's Delight knife drops, Hostile and Oceanic Delight drops): no board recipe.
-DROPPED = {'nethersdelight:hoglin_ear', 'nethersdelight:strider_slice', 'hostiledelight:guardianfillet',
+# Hostile's guardian fillet left the set: it is cut from the Guardian Shell (dishes/ocean #11).
+DROPPED = {'nethersdelight:hoglin_ear', 'nethersdelight:strider_slice',
 		   'oceanic_delight:squid_tentacles', 'oceanic_delight:glow_squid_tentacles'}
 dropped = lambda m: m.id in DROPPED
 
@@ -964,6 +970,9 @@ RULES = {
 				P('Gummies for most fruits (slime balls and kelp allowed): a manual craft plus a more efficient pot / Create '
 				  'craft', T('baking/sweets #1')),
 				P('4 or 5 more rock candy variants from corundum; rose quartz kept', T('baking/sweets #2'))]),
+	'candy/gummy': dict(
+		recipe=[D('Today each gummy keeps its mod\'s recipe (food_families.md 4.8 lists the six patterns)'),
+				P('One gummy recipe pattern for every gummy, applied later (owner, 2026-11-20)', T('baking/sweets #1'))]),
 	'candy/bar': dict(recipe=[D('Press + Basin: the fluid into a bar', lambda m: m.at('Press + Basin'))]),
 	'frozen': dict(
 		can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
