@@ -98,6 +98,10 @@ f.egg_solution = 'creativedelight:egg_solution';
 f.t_egg_solution = '#forge:fluid/egg_solution';
 f.frosting = 'creativedelight:frosting';
 f.t_frosting = '#forge:fluid/frosting';
+// Bone broth (dishes/ingredients #36, plan_owner_rows_1120.md R10): a Forge fluid next to the Moonlight soft fluid of
+// the same id (jars keep the soft fluid). 250 mB per bowl; spout and basin input for soupCraft.
+f.bone_broth = 'creativedelight:bone_broth';
+f.t_bone_broth = '#forge:fluid/bone_broth';
 // Whale oil (dishes/ingredients #10): rendered from blubber, a lubricant
 f.whale_oil = 'creativedelight:whale_oil';
 f.t_lubricant = '#forge:lubricant';
@@ -307,9 +311,7 @@ StartupEvents.postInit(() => {
  // are used: neither is a dict error (scratch r1106spf).
  if (id.indexOf('*') >= 0 || !global.has(id)) continue;
  if (id.startsWith('#')) {
- // Tag-based fluid entries aren't validated yet — verify these manually.
- // Forge fluid tag validation requires a TagKey<Fluid> lookup that hasn't
- // been implemented/tested here; flagging rather than guessing at it.
+ // Tag entries are checked after the server starts (server script _lib/dict_tag_check.js, tooling/dictionaries #2).
  tagEntries++;
  continue;
  }
@@ -317,7 +319,7 @@ StartupEvents.postInit(() => {
  missing.push(key + ' -> ' + id);
  }
  }
- if (tagEntries > 0) console.info('[fluid_dict] ' + tagEntries + ' tag entries not checked (tags load after startup)');
+ if (tagEntries > 0) console.info('[fluid_dict] ' + tagEntries + ' tag entries checked after server start (dict_tag_check)');
  if (missing.length > 0) {
  console.warn('[fluid_dict] Missing/invalid fluid IDs:\n' + missing.join('\n'));
  }

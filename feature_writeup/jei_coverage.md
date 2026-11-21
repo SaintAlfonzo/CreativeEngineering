@@ -6,18 +6,18 @@ that no recipe describes. Each gap gets a suggested fix so the list can be worke
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=6a8f5710776b -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, Testing 4), 2 Complete.
+<!-- generated:status_index begin open_work sha1=0c6a395f00b4 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, Testing 5), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `jei/jei-coverage #2` | Planned | C | Part 2, rest of part 3 |
-| `jei/jei-coverage #29` | Planned | C | Maple bacon and cookies missing from JEI |
 | `jei/jei-coverage #30` | Planned | C | JEI `@` shortcuts, starting with `@mca` |
 | `jei/jei-coverage #1` | Testing | C P | Part 1 fixes (hidden crafting recipes) |
 | `jei/jei-coverage #4` | Testing | C P | Bulk recipe sets on their own pages |
 | `jei/jei-coverage #15` | Testing | C | Better JEI screens for Vintage Delight |
 | `jei/jei-coverage #24` | Testing | C P | Update the JEI arrow in potion tipping, seasoning and potion buckets |
+| `jei/jei-coverage #29` | Testing | C | Maple bacon and cookies missing from JEI |
 <!-- generated:status_index end open_work -->
 
 | Part | Scope | Status |
@@ -499,6 +499,48 @@ so the JEI order report still counts them as hidden by the pack ([jei_ordering.m
 
 Leave visible: the generated cans (208, real food), potion buckets (already 3 entries), dust piles, coils, components.
 
+### 5.4 Items with no creative tab (`jei/jei-coverage #29`, BUILT 2026-11-20)
+
+JEI's item list is the creative tabs' contents ([jei_ordering.md](jei_ordering.md) 9.5), so an item its mod registers
+with no tab is in neither creative mode, its search nor JEI, without being on any hide list. Abnormals Delight does this
+for its compat items when the parent mod (Autumnity, Environmental, Neapolitan...) is absent; five of them have pack
+recipes.
+
+- **Fix (owner ruling R12, plan_owner_rows_1120.md):** Creative Common `mixin/ItemOrphanTabMixin` on
+  `Item.getItemCategory()` asks `util/OrphanTabs` when the item's own category is null.
+- **Allow rule, not an exclusion list:** only ids in `config/creativecommon-common.toml` `[creative_menu]
+  orphanTabItems` get a tab. Default: `abnormals_delight:maple_glazed_bacon`, `cherry_cookie`, `duck_fillet`,
+  `cooked_duck_fillet`, `duck_noodles`. Every other orphan stays hidden: `escargot` (stays hidden by ruling) and
+  `maple_cookie` (left to its merge into the Syrup Cookie, `food/types-and-tuning #10`) are simply not listed. An
+  "every orphan" rule would also show the technical items mods leave out of tabs on purpose. Takes effect on the next
+  game start.
+- **Which tab:** Creative Common has no creative tab of its own, so a listed item goes into the tab most other items of
+  its mod use (the Abnormals Delight items land in Farmer's Delight's tab, next to their siblings), falling back to
+  vanilla Food (edible) or Miscellaneous when the mod has no tabbed item. No new tab.
+- **Dump and report:** `/dumpnotab` (Creative Devtools, in `/dumpall`) writes `kubejs/exported/items/no_tab.json`: every
+  orphan and every listed item with its tab. `python3 tools/no_tab_report.py` (`/cdevgen run no_tab_report`) reads it with
+  `crafting_audit.json`, the loot dumps and `recipes/all.csv`, and writes the table below; `--check` exits 1 when a hidden
+  orphan has a crafting or loot source and no keep-hidden reason (`KEEP_HIDDEN` in the tool). Until `/dumpnotab` has
+  run, the table covers only the allow list and the keep-hidden list.
+
+<!-- BEGIN GENERATED: no_tab -->
+
+`kubejs/exported/items/no_tab.json` is missing (run `/dumpnotab` in game, then rerun this): the table covers only the allow list and the keep-hidden list, so other orphans are not checked yet.
+
+Allow list from OrphanTabs.DEFAULTS (config not written yet): 5 items. Sources: crafting results (crafting_audit.json), loot entries (loot_tables/), and recipe ids naming the item when no crafting result matches (all.csv; a hint, the recipe type has no result column).
+
+| Item | State | Crafting | Loot | Other recipe ids |
+|---|---|---|---|---|
+| `abnormals_delight:cherry_cookie` | shown |  |  | `creativedelight:baking/cherry_cookie` |
+| `abnormals_delight:cooked_duck_fillet` | shown |  |  | `creativedelight:createmixing/salting/abnormals_delight_cooked_duck_fillet` |
+| `abnormals_delight:duck_fillet` | shown |  |  |  |
+| `abnormals_delight:duck_noodles` | shown | `creativedelight:shapeless/duck_noodles_cooked_manual_only` |  |  |
+| `abnormals_delight:escargot` | hidden: stays hidden (R12): salting recipe only, no clear source |  |  | `creativedelight:createmixing/salting/abnormals_delight_escargot` |
+| `abnormals_delight:maple_cookie` | hidden: left to its merge into the Syrup Cookie (food/types-and-tuning #10) |  |  | `creativedelight:baking/maple_cookie` |
+| `abnormals_delight:maple_glazed_bacon` | shown | `creativedelight:shapeless/maple_glazed_bacon` |  |  |
+
+<!-- END GENERATED: no_tab -->
+
 ### Planned from the scratchpad (2026-10-24)
 
 Briefs: [briefs/jei_jei-coverage.md](briefs/jei_jei-coverage.md). World-tab rows of this batch are in
@@ -593,6 +635,11 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
   Sweet Berries and Sweet Berry Pips as two entries; "glow berries" shows Glow Berries and Glow Berry Pips. The
   creative Food tab has Sweet Berries and Glow Berries once each (no doubled pips). Wheat Seeds, Carrot, Potato, Melon
   Seeds still show once.
+- [ ] **JC-33 orphan items shown (2026-11-20, `jei/jei-coverage #29`):** restart with the new Creative Common jar. JEI
+  and the Farmer's Delight creative tab show Maple Glazed Bacon, Cherry Cookie, Duck Fillet, Cooked Duck Fillet and Duck
+  Noodles; Escargot and Maple Cookie are in neither. Queue: CQ-JC-02.
+- [ ] **JC-34 `/dumpnotab` (2026-11-20):** writes `kubejs/exported/items/no_tab.json`; the five above have `listed` true
+  and a tab; `python3 tools/no_tab_report.py` rewrites section 5.4's table from it. Queue: SQ-JC-01.
 
 ## 8. History
 
@@ -624,3 +671,6 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
   Creative Common `BlockItemOwnStackFillMixin` (exact `ItemNameBlockItem` whose block's item is another item adds itself).
   Not a JEI hide: the blacklist, KubeJS hides (`global.removedItems`, 735 ids checked) and every JEI plugin's runtime
   removals were ruled out. JC-32.
+- 2026-11-20: items with no creative tab (section 5.4, `jei/jei-coverage #29`, owner ruling R12): Creative Common
+  `ItemOrphanTabMixin` + `util/OrphanTabs` with the `[creative_menu] orphanTabItems` allow list (5 Abnormals Delight
+  foods), `/dumpnotab` (Creative Devtools) and `tools/no_tab_report.py`. JC-33, JC-34.

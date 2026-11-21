@@ -275,7 +275,7 @@ def cookie_rows(pack, cap):
 	alone = [m for m in pack.item_tags.get('supplementaries:cookies', []) if m not in in_family and pack.ok(m)]
 	if alone:
 		rows.append(row([items(alone), item(JAR)], [item(JAR)],
-						notes=[f'Up to {cap}, one per layer.', 'Only one kind per jar.']))
+						notes=[f'Up to {cap}, one per layer.', "These don't mix: one kind per jar."]))
 	return rows
 
 

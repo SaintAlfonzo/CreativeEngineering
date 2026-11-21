@@ -59,7 +59,8 @@
     "VanillaLightMeltMixin",
     "RareIceLightMeltMixin",
     "EndFireMixin",
-    "NoRecipeUnlockMixin"
+    "NoRecipeUnlockMixin",
+    "ItemOrphanTabMixin"
   ],
   "client": [
     "KubeJSClientResourceScriptsMixin",

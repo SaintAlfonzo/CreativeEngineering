@@ -6,18 +6,18 @@ the feature-specific uses. Deploy tooling is in [deploy.md](deploy.md), the perf
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5aefd516b4db -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 3, Testing 5), 1 Complete.
+<!-- generated:status_index begin open_work sha1=29d9c51db6d0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 2, Testing 6), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `tooling/dictionaries #2` | Planned | S | Block, fluid and NCH fluid tags not validated |
 | `tooling/generators-and-tests #2` | Planned | none | Headless tests need this machine's caches |
 | `tooling/generators-and-tests #3` | Planned | S | Removed items keep their recipes |
 | `tooling/conventions #1` | Testing | S | Raw `e.custom` and `e.add` against the helper rule |
 | `tooling/conventions #2` | Testing | S | Define-once violations |
 | `tooling/conventions #6` | Testing | S C | Test recipes shipped |
 | `tooling/dictionaries #1` | Testing | S~ | item_dict tag check runs before tags load |
+| `tooling/dictionaries #2` | Testing | S | Block, fluid and NCH fluid tags not validated |
 | `tooling/generators-and-tests #1` | Testing | S | More tools in `/cdevgen` |
 <!-- generated:status_index end open_work -->
 
@@ -64,8 +64,10 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
 | File | Global | Holds | Validation (`StartupEvents.postInit`) |
 |---|---|---|---|
 | `item_dict.js` | `global.item` (`i`) | item ids, `#tag` strings, and object ingredients (NBT matchers such as `i.water_bottle`) | missing items logged as `[item_dict] Missing/invalid item IDs`; tag keys checked too, probably too early (F1) |
-| `block_dict.js` | `global.blocks` (`b`) | block ids and block tags | missing blocks logged; tag keys only warned "not validated" |
+| `block_dict.js` | `global.blocks` (`b`) | block ids and block tags (a few biome tags) | missing blocks logged; tag keys checked after server start (below) |
 | `fluid_dict.js` | `global.fluid` (`f`) | fluid ids and fluid tags | same as blocks |
+| `entity_dict.js` | `global.entity` (`en`) | entity type ids (`mobs/tweaks #4`, template `profession_dict.js`): the 11 bubble-column mobs of Creative Worldgen's `entitytags.js` and the 8 sample syringe mobs of Creative Delight's `sample_syringe.js`; those scripts switch to it in G6 / G2 of plan_owner_rows_1120.md | none |
+| `profession_dict.js` | `global.profession` (`pr`) | villager profession ids | none |
 | `effect_dict.js`, `multiblock_dict.js` | | effect ids; IE / Create multiblock ids | |
 | `removed_items.js` (priority -10000) | `global.removedItems` | items the pack takes out | see below |
 
@@ -83,6 +85,14 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
 - **State:** 12,511 item keys (2026-10-18 count); an "Unsorted (Possible
   duplicates)" section near the top; 911 candidate entries and 689 unmapped ids still in
   [startup_scripts/todo/](../kubejs/startup_scripts/todo/) ([TODO](todo/TODO.md) `tooling/dictionaries #3`).
+- **Dict tag check (`tooling/dictionaries #2`, 2026-11-20):** block and fluid tags are bound after startup and after the
+  recipe load, so the dicts' own postInit checks skip them and NCH only records the fluid tags recipes pass
+  (`global.NCH._fluidTagsSeen`, no more "not validated" warnings). Creative Common's server script
+  [dict_tag_check.js](../kubejs/data/creativecommon/kubejs/_lib/dict_tag_check.js) runs on `ServerEvents.loaded` (every tag
+  bound) and logs `[dict_tag_check] <dict key> -> #tag (... tag is empty)` or `(no ... tag of that name)`, then a summary
+  line. Block dict tags are tried as block, then biome, then item tags. A tag of an absent mod is skipped. Once per
+  server start; a `/reload` does not rerun it. (D9 asked for a lowest-priority `ServerEvents.tags` capture; Creative
+  Delight's tag scripts run in a later script pack than Common's, so a capture in Common would miss their adds.)
 - **Removed items:** hidden in JEI and given a red "REMOVED ITEM: DO NOT USE" line
   ([jeichanges.js](../kubejs/client_scripts/jeichanges.js)), stripped of every item tag, and every recipe still naming
   one can be listed by [recipe_scan.js](../kubejs/server_scripts/_lib/recipe_scan.js) (`/recipescan`, or once per
@@ -93,14 +103,23 @@ config, the Java dump and dev commands, and its jar is built by the root Gradle 
 - **Shape:** `R.<type>(output, input(s), e, idOverride?, ...)`. Every recipe gets the id
   `creativeengineering:<type>/<idSuffix>`; the suffix is derived from output and input (`toId`) unless given.
 - **Validation:** every item, tag and fluid is checked (`_validateAny`). An unknown item, an empty tag or an unset dict
-  key (`undefined`) throws with the recipe's context while `strict` is true (default), else warns. Fluid tags aren't
-  validated (F2).
+  key (`undefined`) throws with the recipe's context while `strict` is true (default), else warns. Fluid tags are
+  checked after server start (dict tag check, 2.1).
+- **Tag results refused (`creativebrewing/publish #25`, 2026-11-20):** a bare tag string in a result slot (any
+  `_itemJson` call with `allowTag: false`) throws `tag "#x" in a result slot`, so the safety net skips that helper call
+  and logs `[NCH] <helper> failed and was skipped`. It used to write `{item: "#x"}`, which the game rejects at parse.
+  `Item.of(tag, n)` is unaffected (KubeJS resolves it to the tag's first item). Scan when it was added: the only bare
+  tag result in the pack was Creative Delight's IE Bottling dough (`create/recipes.js` `i.dough`, swapped in G2).
+  Headless test: `tools/test_nch_blueprint.sh` (`nch_test/result_tag_test.js`).
+- **Amounts as arguments (`gear/tuning #12`):** `echoAssembly(out, base, key, e, potionA, potionB, lavaMb, potionAMb,
+  potionBMb, loops)` and `dragonAssembly(out, base, key, e, potion, mb, loops, breathMb)`; each amount left undefined
+  keeps the old value (250 mB fills, 1 loop).
 - **Types covered:** vanilla (shaped, shapeless with damaged-ingredient and can-servings options, smelting, blasting,
   smoking, campfire, stonecutting, smithing), Farmer's Delight (cooking, cutting), the pack's own (`ceBaking`,
   `dragonBreathing`, `elytraDuplication`, the echo / felsic / dragon assemblies), Nock Enough Arrows fletching, Create
   (crushing, milling, pressing, compacting, mixing, saw, deploying, item application, haunting, splashing, filling,
   mechanical crafting, sequenced assembly + incomplete items), Create Crafts & Additions (rolling, charging),
-  Create: Vintage Improvements (vibrating, laser cutting, polishing), extruding, IE (metal press, crusher, alloy, arc
+  `createSandpaperPolishing` (`recipes/metal #5`), Create: Vintage Improvements (vibrating, laser cutting, polishing), extruding, IE (metal press, crusher, alloy, arc
   furnace, squeezer, bottling, blueprint, sawmill), PneumaticCraft (pressure chamber, explosion crafting, thermo
   plant), Farmer's Respite kettle (`frBrewing`), hammering, mortar and food grinding, Sophisticated Backpacks skin
   smithing (`backpackSkin`, `backpackSkinClear`).
@@ -152,6 +171,7 @@ folders through Creative Common because KubeJS can't).
 | `/dumpbiomes`, `/dumpclimate`, `/dumpclimatecaves`, `/dumpspawns`, `/dumpstructures`, `/dumpstructuregen` | biome, climate, spawn and structure data ([weather.md](weather.md), [mob_spawns.md](mob_spawns.md), [structure_tuning.md](structure_tuning.md)) |
 | `/dumpitemsbymod`, `/dumptags`, `/dumprecipes`, `/dumpcraftingaudit`, `/dumpfluids`, `/dumppotions`, `/dumpnames` | registries, tags, recipes, names ([jei_coverage.md](jei_coverage.md), [names.md](names.md)) |
 | `/dumpworldjei` | world-interaction JEI facts (Creative Common `devtools/WorldJeiDump`; feeds `tools/gen_jei_world.py`, [jei_world_tabs.md](jei_world_tabs.md)) |
+| `/dumpnotab` | items with no creative tab, and the `[creative_menu] orphanTabItems` ones with their tab (Creative Devtools; feeds `tools/no_tab_report.py`, [jei_coverage.md](jei_coverage.md) 5.4) |
 | `/dumpgear`, `/dumpstacks`, `/dumpfood`, `/dumpplaceable`, `/dumpcropgrowth`, `/dumpcompost`, `/dumppaintings` | per-feature tables ([gear_tuning.md](gear_tuning.md), [stack_sizes.md](stack_sizes.md), [food.md](food.md), ...) |
 | `/dumploot`, `/dumptrades`, `/loottuning` | loot and trades ([loot.md](loot.md), [wandering_trader.md](wandering_trader.md)) |
 | `/dumpbeenests [reset]` | measured nests per biome ([bee_nests.md](bee_nests.md)); **not** in `/dumpall` (a session that generated nothing would overwrite a measurement) |
@@ -401,6 +421,10 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   moves the old jar to `jar_archive/displaced/`.
 - [ ] **TL-16 `_manual_only`:** JEI on cooking oil -> the cooking-pot recipe (2 oil from 6 ingredients) and a separate
   heated mixing recipe (1 oil from 3 + a bottle); no mixer copy of the pot recipe.
+- [ ] **TL-17 Dict tag check:** boot -> one `[dict_tag_check] N dict and NCH tags checked` line, problem lines only for
+  tags that are really empty or unknown; no "fluid tag ... is not validated" lines. Queue: SQ-TL-10.
+- [ ] **TL-18 Tag result refused:** boot -> a bare tag in a result slot logs `in a result slot` and the recipe is skipped;
+  after Creative Delight's dough swap (G2) none are left. Queue: SQ-NCH-02. Headless: `tools/test_nch_blueprint.sh`.
 
 ## 8. History
 
@@ -440,6 +464,11 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
 - 2026-11-17: tab sweep of plan_rules_fixes.md P5 (section 16): `tools/tab_indent.py` converted 235 Python, 173 JS,
   1032 Java, 31 Gradle and 58 JSON files, one commit per language; lint `tab_indent` fails in check_all. Upstream donor
   trees (a `NOTICE-upstream-*` file), generated files and JSON outside the own namespaces keep their style.
+- 2026-11-20: owner rows G1 (plan_owner_rows_1120.md): `global.entity` (`_lib/entity_dict.js`), the dict tag check
+  (`_lib/dict_tag_check.js` server script, `tooling/dictionaries #2`), NCH refuses a tag in a result slot
+  (`creativebrewing/publish #25`), `createSandpaperPolishing` (`recipes/metal #5`), echo and dragon assembly amounts as
+  arguments (`gear/tuning #12`), `/dumpnotab` and `tools/no_tab_report.py` (`jei/jei-coverage #29`), fluid keys
+  `f.bone_broth` / `f.t_bone_broth` and item key `i.guardian_shell`.
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 

@@ -506,6 +506,7 @@
 - **Fixed:** Extra armor bar rows no longer show in creative mode.
 - **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).
 
+- **Fixed:** Maple Glazed Bacon, Cherry Cookie, Duck Fillet, Cooked Duck Fillet and Duck Noodles were missing from JEI and the creative tabs.
 ## Loading screen tips
 
 - **Changed:** The loading screen tip bar also shows while reading world data, creating a world, connecting to a server and joining [world loading and terrain screens only].

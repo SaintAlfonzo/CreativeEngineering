@@ -1,0 +1,68 @@
+# Scratch queue rows OR1120 (plan_owner_rows_1120.md, owner rows 2026-11-20). Data: the queue table in scratch_queue.md is
+# generated from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/OR1120.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-JC, SQ-TL, SQ-NCH owner rows G1: orphan tabs, dict tag check, tag results, 2026-11-20 ([jei_coverage.md](../jei_coverage.md) 5.4, [pack_tooling.md](../pack_tooling.md), TODO `jei/jei-coverage #29`, `tooling/dictionaries #2`, `creativebrewing/publish #25`)
+@@date 2026-11-20
+@@jars creativecommon creativedevtools
+@@sources feature_writeup/jei_coverage.md feature_writeup/pack_tooling.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/OrphanTabs.java development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemOrphanTabMixin.java kubejs/data/creativecommon/kubejs/_lib/dict_tag_check.js kubejs/data/creativedevtools/kubejs/dump/dump_notab.js development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js
+@@text
+@@text Targets the Creative Common and Creative Devtools jars installed 2026-11-20 (phase G1). Full pack, group A
+@@text superflat. SQ-NCH-02's pass changes once G2 swaps the Creative Delight dough results (see the row).
+@@text
+@@table
+## SQ-JC-01 | /dumpnotab writes the orphan list; the 5 Abnormals Delight foods are listed with a tab, escargot and maple cookie hidden
+@group A
+@commands boot; `/dumpnotab`; read `kubejs/exported/items/no_tab.json`; then on the instance: `python3 tools/no_tab_report.py`
+@pass chat "Dumped N hidden and 5 listed"; `abnormals_delight:maple_glazed_bacon`, `cherry_cookie`, `duck_fillet`, `cooked_duck_fillet`, `duck_noodles` have `listed` true and `tab` `farmersdelight` (or the tab most Abnormals Delight items use); `escargot` and `maple_cookie` have `tab` null; no `ItemOrphanTabMixin` apply error
+@fails `ItemOrphanTabMixin` (`Item.m_41471_`) not applied; `[creative_menu] orphanTabItems` missing from `config/creativecommon-common.toml` (config spec); Rhino cannot call `getRecipeFolderName`
+bootreject (Mixin apply.*failed|InvalidInjectionException).*ItemOrphanTabMixin
+> dumpnotab
+sleep 3
+shell grep -A3 -E '"id": "abnormals_delight:(maple_glazed_bacon|cherry_cookie|duck_fillet|cooked_duck_fillet|duck_noodles|escargot|maple_cookie)"' kubejs/exported/items/no_tab.json
+shell grep -n 'orphanTabItems' config/creativecommon-common.toml
+look the five listed with a tab, escargot and maple_cookie with tab null
+
+## SQ-TL-10 | dict tag check runs after start and names only real problems
+@group A
+@commands boot; grep `logs/kubejs/server.log` (and `latest.log`) for `[dict_tag_check]`
+@pass one summary line `[dict_tag_check] N dict and NCH tags checked, M empty or unknown` with N about 80 or more; every problem line names a tag that is really empty or unknown (until G2 builds Creative Delight's bone broth fluid, `fluid_dict t_bone_broth -> #forge:fluid/bone_broth` is expected); no script error from `dict_tag_check.js`; the startup log no longer has `fluid tag ... is not validated`
+@fails `Registry.BIOME_REGISTRY` / `registryOrThrow` through Rhino; a block dict biome tag reported as unknown (the block -> biome -> item fallback); NCH `_fluidTagsSeen` empty (recipes ran in another script pack scope: check `global.NCH`)
+waitlog \[dict_tag_check\] \d+ dict and NCH tags checked 120
+shell grep -h 'dict_tag_check' logs/latest.log logs/kubejs/server.log 2>/dev/null | head -40
+shell grep -c 'is not validated (tag support' logs/kubejs/startup.log; true
+look the summary line, and each problem line is a real empty or unknown tag
+
+## SQ-NCH-02 | a tag in a result slot is refused with a log line, not written as an item
+@group A
+@commands boot; grep `logs/kubejs/startup.log` for `in a result slot`
+@pass before G2: exactly one line, `[NCH] ieBottling failed and was skipped: ieBottling ... result ...: tag "#forge:dough/wheat" in a result slot` (Creative Delight's IE bottling dough); after G2 (dough results swapped to `create:dough`): no such line; no `Unknown item '#` recipe parse error in latest.log
+@fails `_itemJson` guard (neoCraftHelper.js); a new script passing a bare tag as a result (fix the script: pass the item key)
+shell grep -c 'in a result slot' logs/kubejs/startup.log; true
+shell grep -h 'in a result slot' logs/kubejs/startup.log | head -5
+shell grep -c "Unknown item '#" logs/latest.log; true
+look one dough line before G2, none after; no parse error
+
+@@section 2
+@@title CQ-JC owner rows G1: orphan items in JEI and the jar storage wording, 2026-11-20 ([jei_coverage.md](../jei_coverage.md) 5.4, [jei_world_tabs.md](../jei_world_tabs.md), TODO `jei/jei-coverage #29`, `items/jars #6`)
+@@date 2026-11-20
+@@jars creativecommon
+@@sources feature_writeup/jei_coverage.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/OrphanTabs.java tools/jei_world/tab_drops.py kubejs/assets/creativecommon/jei_world/jar_storage/generated.json
+@@text
+@@text Targets the Creative Common jar installed 2026-11-20 (phase G1). Client, full pack.
+@@text
+@@table
+## CQ-JC-02 | the 5 Abnormals Delight foods show in JEI and the creative tab; escargot and maple cookie do not
+@group client
+@commands JEI search `maple glazed`, `cherry cookie`, `duck fillet`, `duck noodles`, `escargot`, `maple cookie`; creative mode (with `[creative_menu] disabled = false`): Farmer's Delight tab and the search tab
+@pass Maple Glazed Bacon, Cherry Cookie, Duck Fillet, Cooked Duck Fillet, Duck Noodles are in JEI with their recipes (R and U) and in the Farmer's Delight tab and creative search; Escargot and Maple Cookie are in neither
+@fails `ItemOrphanTabMixin` not applied on the client; JEI caches its list: restart the client, not F3+T
+look hand: JEI and creative tab show the five, not escargot or maple cookie
+
+## CQ-JC-03 | Jar Storage JEI row for lone cookies reads the new wording
+@group client
+@commands JEI: uses of a Supplementaries jar, the Jar Storage tab, the row of cookies that are not in a cookie family
+@pass the note reads "These don't mix: one kind per jar." (was "Only one kind per jar.")
+@fails `kubejs/assets/creativecommon/jei_world/jar_storage/generated.json` not regenerated (`python3 tools/gen_jei_world.py`) or the Common jar is older
+look hand: the lone-cookie row's note reads "These don't mix: one kind per jar."
