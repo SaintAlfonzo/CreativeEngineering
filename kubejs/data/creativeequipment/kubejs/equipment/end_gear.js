@@ -25,8 +25,8 @@ global.CEQ.recipes(() => {
 	]
 	// out base key event potion A potion B lavaMb potionAMb potionBMb loops
 	R.bulk('echoAssembly', echoRows.map(([out, base, key, potionB]) => {
-		const c = R.cfg({potionA: 'creativecommon:darkness', potionB: potionB, lavaMb: 250, potionAMb: 250, potionBMb: 250, loops: 1}, 'CRAFTING.' + key.toUpperCase())
-		return [out, base, key, e, c.potionA, c.potionB, c.lavaMb, c.potionAMb, c.potionBMb, c.loops]
+		var echoCfg = R.cfg({potionA: 'creativecommon:darkness', potionB: potionB, lavaMb: 250, potionAMb: 250, potionBMb: 250, loops: 1}, 'CRAFTING.' + key.toUpperCase())
+		return [out, base, key, e, echoCfg.potionA, echoCfg.potionB, echoCfg.lavaMb, echoCfg.potionAMb, echoCfg.potionBMb, echoCfg.loops]
 	}))
 
 	R.bulk('remove', [
@@ -52,14 +52,14 @@ global.CEQ.recipes(() => {
 	// Felsic Gear's ingot and Central Kitchen's dragon breath fluid: without either the steps would be built with air
 	// or the empty fluid (scratch r1106spf, SQ-CBP-08b), so the assembly needs both mods.
 	if (global.has(i.ingot_felsic, f.dragon_breath)) {
-		const felsicIngot = R.cfg({breathMb: 250, loops: 4}, 'CRAFTING.FELSIC_INGOT')
-		const incFelsicIngot = R.incomplete('ingot_felsic')
+		var felsicIngotCfg = R.cfg({breathMb: 250, loops: 4}, 'CRAFTING.FELSIC_INGOT')
+		var incFelsicIngot = R.incomplete('ingot_felsic')
 		R.createSequencedAssembly(Item.of(i.ingot_felsic, 1), i.plate_netherite, [
 			e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.scrap_felsic]),
 			e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.ingot_brass]),
-			e.recipes.create.filling(incFelsicIngot, [incFelsicIngot, Fluid.of(f.dragon_breath, felsicIngot.breathMb)]),
+			e.recipes.create.filling(incFelsicIngot, [incFelsicIngot, Fluid.of(f.dragon_breath, felsicIngotCfg.breathMb)]),
 			e.recipes.create.pressing(incFelsicIngot, incFelsicIngot)
-		], ['ingot_felsic'], e, 'felsic_ingot_sequenced_assembly', felsicIngot.loops)
+		], ['ingot_felsic'], e, 'felsic_ingot_sequenced_assembly', felsicIngotCfg.loops)
 	}
 
 	// Remove existing felsic smithing
@@ -156,8 +156,8 @@ global.CEQ.recipes(() => {
 	]
 	// out base key event potion mb loops breathMb
 	R.bulk('dragonAssembly', dragonRows.map(([out, base, key, potion, loops]) => {
-		const c = R.cfg({potion: potion, breathMb: 250, mb: 250, loops: loops}, 'CRAFTING.' + key.toUpperCase())
-		return [out, base, key, e, c.potion, c.mb, c.loops, c.breathMb]
+		var dragonCfg = R.cfg({potion: potion, breathMb: 250, mb: 250, loops: loops}, 'CRAFTING.' + key.toUpperCase())
+		return [out, base, key, e, dragonCfg.potion, dragonCfg.mb, dragonCfg.loops, dragonCfg.breathMb]
 	}))
 
 	console.log('end gear done')
