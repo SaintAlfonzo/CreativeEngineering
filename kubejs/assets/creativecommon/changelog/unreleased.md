@@ -64,6 +64,7 @@
 - **Changed:** Organic Compost and Fertile Soil recipes take Rotten Tomatoes, Rotten Cherries and Organic Mash in the rotten slot [Rotten Flesh, Spider Eye, Poisonous Potato].
 - **Removed:** Vintage Delight's two Organic Compost recipes from Organic Mash. Organic Mash goes in the pack's Organic Compost recipes.
 - **New:** Organic Mash goes in a Composter, 50% per item.
+- **Changed:** Organic Compost recipes take dirt, coarse dirt, rooted dirt, podzol, moss block, mud, humus or silt in the dirt slot [dirt].
 
 ## Corn <!-- icon: corn_delight:corn -->
 
@@ -466,6 +467,8 @@
 - **Changed:** 8 Blocks of Coal make a Diamond in the Pressure Chamber [9].
 - **Fixed:** Engineer's Workbench recipes that list an input twice could not be crafted (spectral and split arrows, dropper, observer, piston, thunder detector, note block, jukebox).
 - **Fixed:** Splash and lingering Mundane Potion fluid worked in the Thunder Detector assembly.
+- **Fixed:** Polished Iron Bars had no recipe, so iron catwalks and supports could not be crafted. They are made by sandpaper polishing Iron Bars.
+- **Fixed:** Stripped vanilla logs showed two identical Sawmill recipes in JEI.
 
 ## Tempad <!-- icon: tempad:tempad -->
 

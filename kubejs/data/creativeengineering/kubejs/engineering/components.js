@@ -17,11 +17,11 @@ ServerEvents.recipes(e=>{
 	const incComponentZinc = R.incomplete('component_zinc') // Zinc Mechanical (Intermediate Create)
 	const incComponentNetherite = R.incomplete('component_netherite') // Netherite Thermal
 
-	const incComponentAluminum = R.incomplete('component_aluminum') // Aluminum  --- Light? ---
+	const incComponentAluminum = R.incomplete('component_aluminum') // Aluminum  --- Light ---
 	const incComponentSilver = R.incomplete('component_silver') // Silver
 	const incComponentNickel = R.incomplete('component_nickel') // Nickel
 
-	const incComponentUranium = R.incomplete('component_uranium') // Uranium     --- Dense? ---
+	const incComponentUranium = R.incomplete('component_uranium') // Uranium     --- Heavy ---
 	const incComponentLead = R.incomplete('component_lead') // Lead
 
 	const incComponentBrass = R.incomplete('component_brass') // Brass Mechanical (Advanced Create)

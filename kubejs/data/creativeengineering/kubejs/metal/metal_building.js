@@ -24,6 +24,9 @@ R.bulk('remove', [
 	[{id:'createdeco:netherite_bars_from_netherite_ingot_stonecutting'}, e],
 ]);
 
+// Polished iron bars: out of stonecutting (removed above), made by sandpaper polishing iron bars instead
+R.createSandpaperPolishing(i.polished_iron_bars, i.iron_bars, e, 'polished_iron_bars')
+
 //Bars
 //Copper, 3 variants
 R.viLaserCutting(Item.of(i.copper_bars, 64),i.block_copper, e, 'copper_bar_laser_cutting', 16000, 800)

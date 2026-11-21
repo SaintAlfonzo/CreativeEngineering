@@ -6,17 +6,17 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5dd93ad64f32 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 2, In Progress 1, Testing 6), 0 Complete.
+<!-- generated:status_index begin open_work sha1=d0389720f3c8 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 1, In Progress 1, Testing 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `recipes/materials #7` | Planned | S P | Fern, grass and leaf parity in crafts |
-| `recipes/wood #1` | Planned | S P | Twisted wood duplicate |
 | `structures/contents #2` | In Progress | S P | River tree and driftwood cleanup |
 | `engineering/dreams-and-desires #1` | Testing | S C P | Smoked wood recipe |
 | `engineering/dreams-and-desires #4` | Testing | S C P | Extra woods |
 | `engineering/dreams-and-desires #10` | Testing | S C P | Smokable shape tags too wide |
+| `recipes/wood #1` | Testing | S P | Twisted wood duplicate |
 | `recipes/wood #2` | Testing | S P | Leftover comments |
 | `recipes/wood #3` | Testing | S+ C P | River wood -> oak, Mulberry tree |
 | `recipes/wood #4` | Testing | S P | Leather from fermenting bark |
@@ -199,7 +199,9 @@ are NCH's generated ones, so they ignore counts (F1).
   here"), and it has no sawmill removal (`sawmill: false`); check JEI for a duplicate. Jar check 2026-10-21: no mod
   in the pack ships a twisted cutting-board recipe and IE has no twisted sawmill recipe, so there is no duplicate; the
   real one is IE's 7 vanilla `stripped_<x>_log` sawmill recipes next to the pack's identical ones
-  ([briefs/recipes_wood.md](briefs/recipes_wood.md) #1).
+  ([briefs/recipes_wood.md](briefs/recipes_wood.md) #1). FIXED 2026-11-21 (TODO `recipes/wood #1`): the 7 IE ids join the
+  sawmill removal list in `bark.js` (the pack's `creativeengineering:sawmill/stripped_<x>_log-<x>_planks` JSONs give the
+  same 6 planks + wood dust, so nothing loses a recipe); the twisted comment is rewritten. RW-32.
 - **F5.** FIXED 2026-10-23 (TODO `recipes/wood #2`): stairs removal added, driftwood bark done, comments rewritten;
   the `sawdust.js` note stays with `farming/composting #2`. **Leftover comments:** `wood_types.js` "(whatever the 4th line is below this)" (it is Quark Engineering's
   `sawmill/<name>/<name>_stairs`, still not removed); `sawdust.js` "Integrate nulch,
@@ -248,6 +250,7 @@ None.
 - [ ] **RW-05 Reattach:** mangrove bark + stripped mangrove log -> mangrove log; oak bark + stripped oak log -> nothing.
 - [ ] **RW-06 Creosote sawdust:** spout 250 mB creosote on sawdust -> creosote sawdust; mix 4 + 4 -> 6 wood pellets.
 - [ ] **RW-07 Soils:** mixer recipe for compost and fertile soil ×6 -> as 2.3.
+- [ ] **RW-32 One stripped-log sawmill recipe (F4):** JEI on a stripped oak or mangrove log in the IE sawmill -> one recipe (6 planks + wood dust), not two (SQ-RW-32).
 - [ ] **RW-31 Rich soil to fertile soil:** 3 Rich Soil anywhere in the crafting grid -> 1 Fertile Soil; JEI shows it beside the mulch recipes.
 - [ ] **RW-08 Saw shapes:** blossom planks on the saw with a filter -> each shape in JEI, slabs ×2.
 - [ ] **RW-09 Soot:** scrape a dirty brick chimney with an axe 20 times -> about 15 soot.
@@ -319,3 +322,4 @@ None.
   and the six tracks dropped, rows back in the wood scripts, azalea racks back in Creative Delight). Items already turned
   into oak stay oak (owner Q11). RW-29 rewritten; not run in game.
 - 2026-11-07: 3 Rich Soil craft 1 Fertile Soil, shapeless, hand only (`sawdust.js`, `farming/crops #41`, plan_farming_cooking_batch A7). RW-31.
+- 2026-11-21: F4 fixed: IE's 7 vanilla stripped-log sawmill recipes removed, twisted cutting-board comment corrected (`bark.js`); Organic Compost dirt slot = `#creativedelight:compost_dirt` (`sawdust.js`, `farming/composting #5`). plan_owner_rows_1120.md G3. RW-32.
