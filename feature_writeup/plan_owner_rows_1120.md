@@ -1,7 +1,7 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=207c9fc188bf -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 28 open TODO rows (Planned 28), 0 Complete.
+<!-- generated:status_index begin open_work sha1=4733cf25f0be -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 27 open TODO rows (Planned 24, Testing 3), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -23,16 +23,15 @@
 | `largecontent/mod-additions #46` | Planned | S P | Hostile Delight: Magma and Slime Brownies |
 | `largecontent/mod-additions #48` | Planned | S P | Hostile Delight: rotten foods hunger type, not saltable |
 | `largecontent/mod-additions #49` | Planned | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
-| `licence/cd #4` | Planned | S | Rewrite the Miner's Delight potted gossypium loot table |
 | `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
-| `loot/trader #2` | Planned | S P | Fewer Wares trades |
 | `mobs/tweaks #4` | Planned | S | Entity dictionary |
-| `pack/release #8` | Planned | none | Public pack notes: wild food in nearly every biome; Botany Pots nerfed |
-| `potions/enchanting #1` | Planned | S P | Enchanted books out of villager trades |
 | `recipes/metal #5` | Planned | S P | Polished iron bars stonecutting removed |
 | `recipes/wood #1` | Planned | S P | Twisted wood duplicate |
 | `rice-egg-and-sushi #1` | Planned | S P | Bird eggs fry into the fried egg; parrot, turtle and reptile eggs do not |
 | `tooling/dictionaries #2` | Planned | S | Block, fluid and NCH fluid tags not validated |
+| `licence/cd #4` | Testing | S | Rewrite the Miner's Delight potted gossypium loot table |
+| `loot/trader #2` | Testing | S P | Fewer Wares trades |
+| `potions/enchanting #1` | Testing | S P | Enchanted books out of villager trades |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, nothing built**. The owner picked 28 TODO rows on 2026-11-20 (chat), mostly small ones. The
