@@ -24,12 +24,12 @@ Rate is the placed feature's attempts per chunk; nested features keep their own 
 
 | Feature | Source | Nether blocks | Rate | Height | Biomes | Notes |
 |---|---|---|---|---|---|---|
-| `terralith:cave/fuck_art_just_need_performance/blackstone` | Terralith | blackstone (T2) | 256 per chunk | Y bottom+32 to 0 | cave/mantle_caves 1.323% |  |
-| `terralith:cave/mantle/basalt_strip` | Terralith | blackstone (T2) | 140 per chunk | Y bottom to 64 | cave/mantle_caves 1.323% | scans for a ceiling/floor |
-| `terralith:cave/mantle/magma_strip` | Terralith | blackstone (T2), magma_block (T3) | 140 per chunk | Y bottom to 64 | cave/mantle_caves 1.323% | scans for a ceiling/floor |
-| `terralith:cave/mantle/replacer` | Terralith | blackstone (T2) | 250 per chunk | Y bottom to 30 | cave/mantle_caves 1.323% |  |
-| `terralith:cave/thermal/surface/floor` | Terralith | blackstone (T2) | variable | surface (feature finds it) | cave/thermal_caves 1.144% | noise-based count |
-| `terralith:cave/thermal/surface/floor_low` | Terralith | blackstone (T2) | variable | surface (feature finds it) | cave/thermal_caves 1.144% | noise-based count |
+| `terralith:cave/fuck_art_just_need_performance/blackstone` | Terralith | blackstone (T2) | 256 per chunk | Y bottom+32 to 0 | cave/mantle_caves 1.196% |  |
+| `terralith:cave/mantle/basalt_strip` | Terralith | blackstone (T2) | 140 per chunk | Y bottom to 64 | cave/mantle_caves 1.196% | scans for a ceiling/floor |
+| `terralith:cave/mantle/magma_strip` | Terralith | blackstone (T2), magma_block (T3) | 140 per chunk | Y bottom to 64 | cave/mantle_caves 1.196% | scans for a ceiling/floor |
+| `terralith:cave/mantle/replacer` | Terralith | blackstone (T2) | 250 per chunk | Y bottom to 30 | cave/mantle_caves 1.196% |  |
+| `terralith:cave/thermal/surface/floor` | Terralith | blackstone (T2) | variable | surface (feature finds it) | cave/thermal_caves 1.173% | noise-based count |
+| `terralith:cave/thermal/surface/floor_low` | Terralith | blackstone (T2) | variable | surface (feature finds it) | cave/thermal_caves 1.173% | noise-based count |
 | `terralith:cliffs/basalt/basalt_column` | Terralith | basalt (T2) | 200 per chunk | Y 75 to 75 | basalt_cliffs 0.3% | scans for a ceiling/floor |
 | `terralith:cliffs/basalt/basalt_column_upper` | Terralith | basalt (T2) | 100 per chunk | Y 180 to 180 | basalt_cliffs 0.3% | scans for a ceiling/floor |
 | `terralith:cliffs/basalt/basaltifier` | Terralith | basalt (T2) | 700 per chunk | Y 62 to 164 | basalt_cliffs 0.3% |  |
@@ -38,17 +38,17 @@ Rate is the placed feature's attempts per chunk; nested features keep their own 
 | `terralith:volcano/lava_flow` | Terralith | blackstone (T2) | 80 per chunk | surface (feature finds it) | volcanic_crater 0.15% |  |
 | `terralith:volcano/magma_barrier` | Terralith | blackstone (T2) | 2048 per chunk | WORLD_SURFACE | volcanic_crater 0.15% |  |
 | `terralith:yellowstone/acid_black` | Terralith | blackstone (T2) | 228 per chunk | Y 61 to 63 | yellowstone 4.275% |  |
-| `volcanic_caverns:basalt_pillar` | Java | basalt (T2) | 4 per chunk | Y bottom+9 to bottom+24 | cave/deep_caves 18.765%, lush_caves 12.011%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, ocean 5.135%, cave/andesite_caves 4.966%, deep_dark 4.657% (+137 more) | pillar from cave floor to ceiling; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
-| `volcanic_caverns:basalt_spike` | Java | basalt (T2) | 2 to 8 per chunk | Y bottom+2 to bottom+28 | cave/deep_caves 18.765%, lush_caves 12.011%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, ocean 5.135%, cave/andesite_caves 4.966%, deep_dark 4.657% (+137 more) | large dripstone-shaped spikes; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
+| `volcanic_caverns:basalt_pillar` | Java | basalt (T2) | 4 per chunk | Y bottom+9 to bottom+24 | cave/deep_caves 18.01%, lush_caves 12.02%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, cave/andesite_caves 5.976%, ocean 5.135%, yellowstone 4.275% (+137 more) | pillar from cave floor to ceiling; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
+| `volcanic_caverns:basalt_spike` | Java | basalt (T2) | 2 to 8 per chunk | Y bottom+2 to bottom+28 | cave/deep_caves 18.01%, lush_caves 12.02%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, cave/andesite_caves 5.976%, ocean 5.135%, yellowstone 4.275% (+137 more) | large dripstone-shaped spikes; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
 | `yungsextras:desert/obelisks/desert_obelisk_rare` | YungsExtras | blackstone (T2), blackstone_stairs (T2), gilded_blackstone (T2), polished_blackstone (T2), polished_blackstone_brick_stairs (T2), polished_blackstone_bricks (T2) | 1 in 3000 chunks | surface | lush_desert 1.355%, desert_canyon 0.57%, desert 0.315%, desert_spires 0.205%, desert_oasis 0.16%, sandstone_valley 0.095% | via `yungsextras:desert/obelisks/desert_obelisk_rare (template yungsextras:desert/obelisk/obelisk_rare)` |
-| `terralith:cave/frostfire/frostfire_ceiling` | Terralith | soul_lantern (T3) | 12 per chunk | Y bottom to 30 | cave/frostfire_caves 0.844% | scans for a ceiling/floor |
-| `terralith:cave/frostfire/frostfire_patch` | Terralith | soul_fire (T3) | 17 per chunk | Y bottom to 30 | cave/frostfire_caves 0.844% | scans for a ceiling/floor |
-| `terralith:cave/thermal/surface/ceiling` | Terralith | magma_block (T3) | 512 per chunk | Y -64 to 192 | cave/thermal_caves 1.144% | scans for a ceiling/floor |
-| `terralith:cave/thermal/surface/ceiling_low` | Terralith | magma_block (T3) | 512 per chunk | Y -64 to 192 | cave/thermal_caves 1.144% | scans for a ceiling/floor |
+| `terralith:cave/frostfire/frostfire_ceiling` | Terralith | soul_lantern (T3) | 12 per chunk | Y bottom to 30 | cave/frostfire_caves 0.861% | scans for a ceiling/floor |
+| `terralith:cave/frostfire/frostfire_patch` | Terralith | soul_fire (T3) | 17 per chunk | Y bottom to 30 | cave/frostfire_caves 0.861% | scans for a ceiling/floor |
+| `terralith:cave/thermal/surface/ceiling` | Terralith | magma_block (T3) | 512 per chunk | Y -64 to 192 | cave/thermal_caves 1.173% | scans for a ceiling/floor |
+| `terralith:cave/thermal/surface/ceiling_low` | Terralith | magma_block (T3) | 512 per chunk | Y -64 to 192 | cave/thermal_caves 1.173% | scans for a ceiling/floor |
 | `terralith:yellowstone/magma` | Terralith | magma_block (T3) | 2.5 per chunk | surface (feature finds it) | yellowstone 4.275%, caldera 0.305% |  |
 | `upgrade_aquatic:underwater_canyon` | Java carver | magma_block (T3) | 1 in 30 chunks starts one |  | deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, ocean 5.135%, deep_frozen_ocean 3.245%, lukewarm_ocean 3.235%, cold_ocean 3.015%, warm_ocean 2.99% (+1 more) | canyon Y 38 to 58; where it reaches Y 10 the floor is 25% magma, 75% obsidian (UnderwaterCanyonWorldCarver, Upgrade Aquatic 5.1.0) |
-| `volcanic_caverns:delta` | Java | magma_block (T3) | 6 per chunk | Y bottom+8 to bottom+18, biased low | cave/deep_caves 18.765%, lush_caves 12.011%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, ocean 5.135%, cave/andesite_caves 4.966%, deep_dark 4.657% (+137 more) | lava delta (vanilla delta feature) with a magma rim; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
-| `volcanic_caverns:underground_magma` | Java | magma_block (T3) | 10 per chunk | Y bottom+8 to bottom+15, biased low | cave/deep_caves 18.765%, lush_caves 12.011%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, ocean 5.135%, cave/andesite_caves 4.966%, deep_dark 4.657% (+137 more) | ore blob size 33 in natural stone; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
+| `volcanic_caverns:delta` | Java | magma_block (T3) | 6 per chunk | Y bottom+8 to bottom+18, biased low | cave/deep_caves 18.01%, lush_caves 12.02%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, cave/andesite_caves 5.976%, ocean 5.135%, yellowstone 4.275% (+137 more) | lava delta (vanilla delta feature) with a magma rim; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
+| `volcanic_caverns:underground_magma` | Java | magma_block (T3) | 10 per chunk | Y bottom+8 to bottom+15, biased low | cave/deep_caves 18.01%, lush_caves 12.02%, deep_ocean 8.5%, deep_cold_ocean 6.645%, deep_lukewarm_ocean 6.305%, cave/andesite_caves 5.976%, ocean 5.135%, yellowstone 4.275% (+137 more) | ore blob size 33 in natural stone; Volcanic Caverns 1.2.2 (VCPlacedFeatures / VCConfiguredFeatures) |
 | `terralith:volcano/magma_veins` OFF | Terralith | blackstone (T2), magma_block (T3) | 0 | WORLD_SURFACE | volcanic_crater 0.15% |  |
 
 ### Json-less mod features (checked by jar)

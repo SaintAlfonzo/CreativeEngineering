@@ -72,10 +72,10 @@
 
 ## Composting <!-- icon: farmersdelight:organic_compost -->
 
-- **New:** Organic Mash goes in a Composter, 50% per item.
 - **Changed:** Organic Compost and Fertile Soil recipes take Rotten Tomatoes, Rotten Cherries and Organic Mash in the rotten slot [Rotten Flesh, Spider Eye, Poisonous Potato].
-- **Changed:** Organic Compost recipes take dirt, coarse dirt, rooted dirt, podzol, moss block, mud, humus or silt in the dirt slot [dirt].
 - **Removed:** Vintage Delight's two Organic Compost recipes from Organic Mash. Organic Mash goes in the pack's Organic Compost recipes.
+- **New:** Organic Mash goes in a Composter, 50% per item.
+- **Changed:** Organic Compost recipes take dirt, coarse dirt, rooted dirt, podzol, moss block, mud, humus or silt in the dirt slot [dirt].
 
 ## Corn <!-- icon: corn_delight:corn -->
 
@@ -87,32 +87,39 @@
 
 ## Diet Bonuses <!-- icon: solapplepie:food_book -->
 
-- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of 8 hearts, 3 armor toughness tiers, knockback resistance, 10% walk speed, permanent Speed I at diversity 20, 5 effect slots and effect unlocks [fixed Apple Pie bonuses]. Applies to new worlds.
+- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor toughness, knockback resistance, permanent buffs, effect slots and effect unlocks. Applies to new worlds.
 - **New:** Effect slots hold an unlocked effect of your choice: Speed, Haste, Strength, Jump Boost, Night Vision, Water Breathing, Luck, Regeneration, Shrinking, Long Reach, Patrol Nullifier, Phantom Bane, Fleet-Footed or Lava Walker.
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.
-- **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice. Unlocks, and their messages, wait until the diet first activates.
+- **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice.
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
-- **New:** Lava Walker burns like a Magma Block when standing on lava without Fire Resistance.
 - **New:** Diet bonus messages show on the action bar, one at a time.
-- **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it. The screen shows the effect slots side by side over a progress bar marked with each slot's diversity.
+- **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it.
+- **New:** The Diet Bonuses screen shows the effect slots side by side over a progress bar marked with each slot's diversity.
+- **New:** The Diet Log's progress bar shows the last milestone reached and the next 4, evenly spaced, with an icon for each bonus. The Spice of Life bonus and food history pages are gone.
 - **New:** The Diet Log's first page shows your last 32 meals as a grid of large icons above the diversity, newest first, repeats included. Meals of foods aged out by a Change or Drop are left out.
-- **New:** Hovering a meal in the Diet Log shows the food's full diversity and its contribution. When an older repeat no longer counts it, the food's total comes first and the meal's value is struck through.
-- **New:** The Diet Log's progress bar shows the last milestone reached and the next 4, evenly spaced, with an icon for each bonus.
-- **New:** Diet Log icons: effect unlocks alternate a lock and the effect until unlocked, then show the effect grayed in a colored frame; permanent buffs alternate a diamond shard and the effect; effect slots have a metal frame. The key lists knockback resistance.
-- **New:** The Diet Log's Milestones list active bonuses in green and strike through reached effect unlocks, except their milestone number.
-- **New:** The Diet Log's diversity icon is the food you have eaten, not a drink, closest in diversity to the average of your recent meals; before that, seeds, moss, rotten flesh, a spider eye or a dandelion leaf.
-- **New:** Diversity is shown with two decimals, rounded down, in the books, the Diet Bonuses screen and tooltips.
+- **Changed:** Diversity is shown with two decimals, rounded down, in the books, the Diet Bonuses screen and tooltips.
 - **New:** The mouse wheel flips pages in the Diet Log and the Food Dictionary.
-- **New:** The Diet Log is drawn at 140% size (smaller on small windows) and 25% wider; its text and icons are drawn at 85% so they stay on the page. The book size, its width and each page's position and size are client settings.
+- **New:** Diet Log icons: effect unlocks alternate a lock and the effect until unlocked, then show the effect grayed in a colored frame; permanent buffs alternate a diamond shard and the effect until reached; a metal frame for effect slots. The key lists knockback resistance.
+- **Changed:** Active bonuses are listed in green in the Diet Log's Milestones.
+- **New:** Hovering a meal in the Diet Log shows its diversity contribution. When an older repeat no longer counts it, the food's total comes first and the meal's value is struck through.
+- **Changed:** The Diet Log's diversity icon is the food you have eaten, not a drink, closest in diversity to the average of your recent meals; before that, seeds, moss, rotten flesh, a spider eye or a dandelion leaf [carrot].
+- **Changed:** Reached effect unlocks are struck through in the Diet Log's Milestones and left off its progress bar.
 - **New:** Liquid Diet Log, a book (book + any drink) listing every drink you have had. No bonuses. Pauses the game in single player.
 - **New:** New players start with a Diet Log and a Liquid Diet Log.
-- **New:** Food tooltips show the food's diversity, and what it contributes while it counts toward your diet: "Diversity: 1.40 (contributes 0.85)".
-- **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button. It is crafted from a book and any food that is not a drink [book and potato].
+- **Changed:** The pack's diet bonuses are 8 hearts, 3 armor toughness tiers, knockback resistance, 10% walk speed, permanent Speed I at diversity 20 and 5 effect slots [fixed Apple Pie bonuses].
+- **Changed:** The Diet Log is drawn at 140% size (smaller on small windows) and 25% wider; its text and icons are drawn at 85% so they stay on the page.
+- **Changed:** The Diet Ladder and Milestones pages keep their text clear of the page edges. The book size, its width and each page's position and size are client settings.
+- **Changed:** The diversity and "more unique foods" lines on the Diet Log's first page are drawn smaller to fit, one line each.
+- **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button.
+- **Changed:** The Diet Log is crafted from a book and any food that is not a drink [book and potato].
 - **Changed:** Drinks, potions and milk no longer count toward food diversity or push foods out of your diet.
 - **Changed:** Dying ages every recent food out of your diet and resets the foods-eaten count; bonuses return as you eat [the diet was cleared].
-- **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. The books show "N more unique foods to activate diet".
+- **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. Applies to new worlds. The books show "N more unique foods to activate diet".
+- **New:** Effect unlocks, and their messages, wait until the diet first activates.
+- **Changed:** Lava Walker burns like a Magma Block when standing on lava without Fire Resistance.
+- **New:** Food tooltips show the food's diversity, and what it contributes while it counts toward your diet: "Diversity: 1.40 (contributes 0.85)".
 - **Changed:** Food tooltips show hunger and saturation at the top, on one row (client setting: saturation on its own line), then the diversity, then the meal word ("Hearty Meal") [a second shank row under the name, hunger and saturation at the bottom].
-- **Removed:** The Spice of Life bonus and food history pages, and the separate "Food Diversity" tooltip line.
+- **Fixed:** Fleet-Footed stayed on for every player while one player sprint-jumped.
 
 ## Stomping Basin <!-- icon: hearthandharvest:stomping_basin -->
 
@@ -129,16 +136,16 @@
 
 - **New:** 4 Fried Eggs make 4 Omelettes in the Cooking Pot.
 - **Changed:** Cooking Oil and 3 eggs make 3 Fried Eggs in the Cooking Pot [1 egg, 1 Fried Egg].
-- **Changed:** Duck and Goose Eggs fry into Fried Eggs like chicken eggs, also with Cooking Oil [chicken eggs only]. Parrot, turtle, crocodile, terrapin and emu eggs do not.
 - **Removed:** Furnace recipes for Fried Eggs, Fried Turtle Eggs, Omelettes, Fried Dragon Eggs, Shulker Omelettes and Boiled Emu Eggs. The Smoker, campfires and the Skillet still cook them.
+- **Changed:** Duck and Goose Eggs fry into Fried Eggs like chicken eggs, also with Cooking Oil [chicken eggs only]. Parrot, turtle, crocodile, terrapin and emu eggs do not.
 
 ## Hostile Delight <!-- icon: hostiledelight:rottenham -->
 
-- **New:** Green Eggs and Ham in a Create sequenced assembly: a bowl, then Cooked Rotten Ham and a Fried Turtle Egg, twice.
 - **Changed:** Rotten Ham, Cooked Rotten Ham, Rotten Pie, Green Pie, Fried Turtle Egg and Green Eggs and Ham have a 20% chance of Poison II for 5 seconds [no effect].
 - **Changed:** Suspicious Bacon and Eggs is named Green Eggs and Ham.
-- **Changed:** Magma Brownie and Slime Brownie are named Magma Gummy and Slime Gummy.
+- **New:** Green Eggs and Ham in a Create sequenced assembly: a bowl, then Cooked Rotten Ham and a Fried Turtle Egg, twice.
 - **Removed:** Salting Rotten Pie, Green Pie and Green Eggs and Ham.
+- **Changed:** Magma Brownie and Slime Brownie are named Magma Gummy and Slime Gummy.
 
 ## Guardians <!-- icon: oceansdelight:guardian -->
 
@@ -158,6 +165,45 @@
 - **Changed:** The lunchbox tooltip reads Food slots [Slots].
 - **Fixed:** Lunchboxes filled other than through their screen accepted items that are not food.
 
+## Food & Cooking
+
+- **New:** Two Cooking for Blockheads Fridges side by side, facing the same way, join into a double fridge with no gap or seal between them. A Fridge placed next to another opens the other way. Each keeps its own door and inventory.
+- **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
+- **New:** The Food Dictionary's untasted foods sort by mod, name, easiest, highest food, highest saturation or highest diversity (client setting); a button sorts tasted foods by newest unlock, latest eaten, highest food, highest saturation or highest diversity.
+- **New:** A Banana Bunch cuts into 6 Bananas on a Cutting Board.
+- **New:** Every raw skewer can be built on its stick in a Create sequenced assembly from the same ingredients as its basin or crafting recipe.
+- **New:** 6 Garlic Cloves craft into a Garlic.
+- **New:** Cat Food, cooked in the Cooking Pot from a raw fish, a cooked fish, raw meat and rice, or crafted from a raw fish, a cooked fish, 2 cooked meats and cooked rice. Fed to a tamed cat it restores full health and gives Speed, Strength and Resistance for 5 minutes.
+- **Changed:** End's Delight Shulker Meat and Shulker Meat Slice become Ender's Delight Shulker Mollusk and Shulker Filet in recipes, loot and inventories [the reverse for most recipes].
+- **Changed:** A Shulker killed with a Knife drops one Shulker Mollusk; Stuffed Shulker and Canned Shulker Flesh take the Mollusk or Filet [Shulker Meat].
+- **Changed:** Canned Shulker Flesh gives Nausea and a 50% chance of Levitation [Levitation every time].
+- **Changed:** Vinegar ferments from 3 Apple Mash and any mushroom in the Pickling Jar [any jam and a mushroom].
+- **Changed:** Fruit pies and cheesecakes take 3 fruit [2].
+- **Changed:** Engineer's Delight Wheat Flour turns into Create Wheat Flour in inventories, chests and loot.
+- **Changed:** The raw Cave Skewer takes a Spider Leg [Spider Eye], Glow Berries and Rotten Flesh; with a Baked Spider Leg it is crafted cooked.
+- **Changed:** Strider Moss Stew in the Cooking Pot takes Nether Wart [a second Warped Fungus]; it can also be crafted from Cooked Nether Wart, Warped and Crimson Fungus, Crimson Roots and 2 raw Strider, with no bowl handed back.
+- **Changed:** Warped Moldy Meat takes Cooked Nether Wart [a bowl]; no bowl is handed back.
+- **Changed:** Garlic gives 5 Garlic Cloves on a Cutting Board and in a Create mixer [3], and 2 when crafted [3].
+- **Changed:** The Fish Egg Roll takes Salmon Eggs or Ancient Fish Eggs [Salmon Eggs only].
+- **Fixed:** Flavored Rustic Delight pancakes placed on a coaster showed a missing model.
+- **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
+- **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
+- **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
+- **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
+- **Changed:** Stuffed Pumpkin has one Cooking Pot recipe: tomato sauce, a potato or sweet potato, any bread, berries, a mushroom and a vegetable, in a pumpkin [two recipes, one with rice and onion, one with cornbread].
+- **Changed:** Cucumber Salad takes a Pickle in place of the Pickled Beetroot or the Pickled Onion.
+- **Changed:** Echo Cake Base and Create Factory Cake Paste take any egg [chicken egg].
+- **Changed:** Quiche takes 2 of its filling in the oven [1].
+- **Changed:** Veggie Noodles take Green Bell Pepper Slices.
+- **Changed:** Cucumber Dough and its block are named Veggie Dough and Veggie Dough Block.
+- **Changed:** Sunflower Seeds, Pumpkin Seeds, Oat Seeds, Mixed Seeds and Corn Kernels can be eaten: 1 hunger each; Sunflower Seeds and Corn Kernels also give 0.5 saturation [Sunflower Seeds 0.6, Corn Kernels 0.4; the others not edible].
+- **Changed:** Trail Mix and Stuffed Cantaloupe take an edible seed [any seed].
+- **Changed:** Hot Cocoa, Strong Hot Cocoa and Apple Cider restore 1 hunger and 0.4 saturation, like teas, and can be drunk when full [no hunger].
+- **Removed:** Canned Legendary Roll Medley and Canned Mythical Roll Medley. Existing ones in worlds are deleted.
+- **New:** Gingerdough bakes into Gingerbread in the Oven on a Baking Sheet, 1, 3 or 6 at a time.
+- **New:** Bone Broth fluid. A Spout fills a bowl with 250 mB into Bone Broth; an Item Drain empties it.
+- **New:** Soups and stews crafted with Bone Broth can be mixed in a Create Basin from 250 mB of Bone Broth fluid, a bowl and the same ingredients.
+
 ## Golden Food <!-- icon: minecraft:golden_apple -->
 
 - **Changed:** Golden food in the Arc Furnace takes 4 gold [5].
@@ -166,22 +212,22 @@
 
 ## Flavors <!-- icon: barbequesdelight:chili_powder -->
 
-- **New:** Garlic with Onion, Salt with Pepper, and Sugar with Ghost Pepper on one food give 1 more saturation together.
-- **New:** Chorus Sauce, Glowing Sauce, Ardent Sauce and Relish are sauce flavors for grilled skewers.
-- **New:** Onion Powder, Garlic Powder and Ghost Pepper Powder, 2 from one crop by crushing wheels, a millstone or a mortar and pestle. Onion and Garlic Powder flavor like the whole crop; Ghost Pepper Powder is a new flavor for popcorn.
 - **Changed:** Seasonings are called Flavors: a flavor is a seasoning or a sauce. The JEI page is named Flavor [Seasoning].
 - **Changed:** Every flavor adds 2 saturation and no hunger or healing [Onion 2 hunger, Void Pepper 2 hunger and 0.4 saturation, Cumin 1 heart, Sugar 1 hunger, Garlic nothing besides Speed]. Their effects stay.
 - **Changed:** Grilled adds no saturation [2]; a grilled food takes 2 more flavors.
+- **New:** Garlic with Onion, Salt with Pepper, and Sugar with Ghost Pepper on one food give 1 more saturation together.
+- **New:** Chorus Sauce, Glowing Sauce, Ardent Sauce and Relish are sauce flavors for grilled skewers.
+- **New:** Onion Powder, Garlic Powder and Ghost Pepper Powder, 2 from one crop by crushing wheels, a millstone or a mortar and pestle. Onion and Garlic Powder flavor like the whole crop; Ghost Pepper Powder is a new flavor for popcorn.
 - **Removed:** Food seasoned before this version loses its seasonings.
 
 ## Fats and Oils <!-- icon: rusticdelight:cooking_oil -->
 
 - **New:** Blubber, dropped by Cachalot Whales (3 to 6). A Knife cuts it into 2 Animal Fat; it counts as animal fat and makes Soap.
 - **New:** Whale Oil, rendered from Blubber: a heated Create mixer makes 250 mB from 1 Blubber, the Cooking Pot 1 bottle from 2. Spouts and Item Drains fill and empty bottles at 250 mB; the fluid counts as lubricant. It makes Soap.
-- **New:** Each part above can be turned off in the Creative Delight config.
 - **Changed:** 2 Animal Fat and a bottle cook into Cooking Oil. The Animal Oil Bottle is merged into Cooking Oil.
 - **Changed:** Any seed makes Cooking Oil [Pumpkin and Cotton Seeds]; a Spout fills a bottle with 250 mB Seed Oil into Cooking Oil.
 - **Changed:** Fish Oil counts as Cooking Oil; 2 raw fish and a bottle cook into Fish Oil.
+- **New:** Each part above can be turned off in the Creative Delight config.
 
 ## Cheese <!-- icon: brewinandchewin:flaxen_cheese_wedge -->
 
@@ -202,11 +248,11 @@
 
 ## Fruit Slices <!-- icon: fruitsdelight:orange_slice -->
 
-- **New:** 6 Lemon or Orange Slices, or 9 Pineapple Slices, craft back into the whole fruit.
 - **Changed:** A Knife cuts a Melon into 8 slices [9], a Pumpkin into 8 [4], a Hamimelon into 8 [9], a Cantaloupe into 4 [6], a Lemon into 5 and seeds [8 and seeds] and an Orange into 5 [4]. The Create saw gives the same.
 - **Changed:** A Pumpkin broken with a Knife drops 8 Pumpkin Slices [4].
 - **Changed:** The Create saw cuts a Pineapple into 6 slices and its saplings, as the Knife does [8 slices].
 - **Changed:** Slices craft back into the whole fruit, shapeless: 9 Melon, Pumpkin or Hamimelon Slices, 4 Cantaloupe Slices [shaped 3x3 and 2x2].
+- **New:** 6 Lemon or Orange Slices, or 9 Pineapple Slices, craft back into the whole fruit.
 
 ## Horseshoes <!-- icon: hearthandharvest:horseshoe -->
 
@@ -237,45 +283,6 @@
 - **Changed:** Botania special flowers, the flower crown and azalea leaf and flower piles no longer breed bees or feed hummingbirds.
 - **Changed:** Wild plants still float in water and go in planter and flower boxes, and structures still clear them as plants.
 
-## Food & Cooking
-
-- **New:** Two Cooking for Blockheads Fridges side by side, facing the same way, join into a double fridge with no gap or seal between them. A Fridge placed next to another opens the other way. Each keeps its own door and inventory.
-- **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
-- **New:** The Food Dictionary's untasted foods sort by mod, name, easiest, highest food, highest saturation or highest diversity (client setting); a button sorts tasted foods by newest unlock, latest eaten, highest food, highest saturation or highest diversity.
-- **New:** A Banana Bunch cuts into 6 Bananas on a Cutting Board.
-- **New:** Every raw skewer can be built on its stick in a Create sequenced assembly from the same ingredients as its basin or crafting recipe.
-- **New:** 6 Garlic Cloves craft into a Garlic.
-- **New:** Cat Food, cooked in the Cooking Pot from a raw fish, a cooked fish, raw meat and rice, or crafted from a raw fish, a cooked fish, 2 cooked meats and cooked rice. Fed to a tamed cat it restores full health and gives Speed, Strength and Resistance for 5 minutes.
-- **New:** Gingerdough bakes into Gingerbread in the Oven on a Baking Sheet, 1, 3 or 6 at a time.
-- **New:** Bone Broth fluid. A Spout fills a bowl with 250 mB into Bone Broth; an Item Drain empties it.
-- **New:** Soups and stews crafted with Bone Broth can be mixed in a Create Basin from 250 mB of Bone Broth fluid, a bowl and the same ingredients.
-- **Changed:** End's Delight Shulker Meat and Shulker Meat Slice become Ender's Delight Shulker Mollusk and Shulker Filet in recipes, loot and inventories [the reverse for most recipes].
-- **Changed:** A Shulker killed with a Knife drops one Shulker Mollusk; Stuffed Shulker and Canned Shulker Flesh take the Mollusk or Filet [Shulker Meat].
-- **Changed:** Canned Shulker Flesh gives Nausea and a 50% chance of Levitation [Levitation every time].
-- **Changed:** Vinegar ferments from 3 Apple Mash and any mushroom in the Pickling Jar [any jam and a mushroom].
-- **Changed:** Fruit pies and cheesecakes take 3 fruit [2].
-- **Changed:** Engineer's Delight Wheat Flour turns into Create Wheat Flour in inventories, chests and loot.
-- **Changed:** The raw Cave Skewer takes a Spider Leg [Spider Eye], Glow Berries and Rotten Flesh; with a Baked Spider Leg it is crafted cooked.
-- **Changed:** Strider Moss Stew in the Cooking Pot takes Nether Wart [a second Warped Fungus]; it can also be crafted from Cooked Nether Wart, Warped and Crimson Fungus, Crimson Roots and 2 raw Strider, with no bowl handed back.
-- **Changed:** Warped Moldy Meat takes Cooked Nether Wart [a bowl]; no bowl is handed back.
-- **Changed:** Garlic gives 5 Garlic Cloves on a Cutting Board and in a Create mixer [3], and 2 when crafted [3].
-- **Changed:** The Fish Egg Roll takes Salmon Eggs or Ancient Fish Eggs [Salmon Eggs only].
-- **Changed:** Stuffed Pumpkin has one Cooking Pot recipe: tomato sauce, a potato or sweet potato, any bread, berries, a mushroom and a vegetable, in a pumpkin [two recipes, one with rice and onion, one with cornbread].
-- **Changed:** Cucumber Salad takes a Pickle in place of the Pickled Beetroot or the Pickled Onion.
-- **Changed:** Echo Cake Base and Create Factory Cake Paste take any egg [chicken egg].
-- **Changed:** Quiche takes 2 of its filling in the oven [1].
-- **Changed:** Veggie Noodles take Green Bell Pepper Slices.
-- **Changed:** Cucumber Dough and its block are named Veggie Dough and Veggie Dough Block.
-- **Changed:** Sunflower Seeds, Pumpkin Seeds, Oat Seeds, Mixed Seeds and Corn Kernels can be eaten: 1 hunger each; Sunflower Seeds and Corn Kernels also give 0.5 saturation [Sunflower Seeds 0.6, Corn Kernels 0.4; the others not edible].
-- **Changed:** Trail Mix and Stuffed Cantaloupe take an edible seed [any seed].
-- **Changed:** Hot Cocoa, Strong Hot Cocoa and Apple Cider restore 1 hunger and 0.4 saturation, like teas, and can be drunk when full [no hunger].
-- **Fixed:** Flavored Rustic Delight pancakes placed on a coaster showed a missing model.
-- **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
-- **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
-- **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
-- **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
-- **Removed:** Canned Legendary Roll Medley and Canned Mythical Roll Medley. Existing ones in worlds are deleted.
-
 ## Corpses <!-- icon: minecraft:skeleton_skull -->
 
 - **New:** Corpses in the Nether turn into skeletons after 1 day and into wither skeletons a day later; emptied ones after 15 and 45 seconds.
@@ -285,19 +292,18 @@
 - **New:** Ancient Corpses can wear worn wooden, leather, dyed leather, copper, chainmail or iron armor, rarely enchanted. Copper pieces are fully oxidized unless waxed.
 - **New:** Ancient Corpses can hold a worn wooden, stone, copper or iron sword or pickaxe, and torches (caves) or bread (oceans) in the offhand. Every Ancient Corpse holds at least one item.
 - **New:** Ancient Remains generate in the Visceral Heap: empty skeletons that never decay. A hit breaks one into Bones, Bone Chunks, Cracked Bones and, at 25%, a Skeleton Skull.
-- **New:** A corpse and its skeleton show the curios and cosmetic armor inside it, including an elytra in the back slot; curios hidden on the player stay hidden.
 - **Changed:** Corpses turn into skeletons 7 in-game days after death, counted in world time, also while the area is unloaded [1 hour of loaded time].
 - **Changed:** Emptied corpses turn into skeletons after 30 seconds and disappear after 5 minutes [disappeared after 30 seconds]. Putting items back restarts the 5 minutes.
 - **Changed:** A corpse shows only the armor and held items still inside it.
 - **Changed:** Cosmetic armor goes into the corpse on death and back into the cosmetic slots when the corpse's items are transferred [kept on the player].
 - **Changed:** The corpse screen shows cosmetic armor in 4 slots between the armor and the offhand and curios in a panel left of the window, each item's tooltip naming its slot [on the Additional Items pages]. The offhand slot moved to the end of the top row.
 - **Changed:** Transferring a corpse's items puts each curio back into the slot it was worn in [any free slot of its type].
-- **Changed:** Skeleton corpses sink in water and lava [floated up]. Corpses still showing the player model float.
+- **New:** A corpse and its skeleton show the curios and cosmetic armor inside it, including an elytra in the back slot; curios hidden on the player stay hidden.
 - **Fixed:** A corpse showed the cosmetic armor its player wears now instead of the cosmetic armor inside it.
+- **Changed:** Skeleton corpses sink in water and lava [floated up]. Corpses still showing the player model float.
 
 ## Walk Speed <!-- icon: minecraft:honey_block -->
 
-- **New:** A 9th layer on a full pile of 8 sand, red sand or salt layers turns it into a Sand, Red Sand or Salt Block, by hand, dispenser or a falling layer.
 - **Changed:** Standing on a Honey Block shows the same sink depth as wool or sand [smaller].
 - **Changed:** Dropped items lie on top of sinking blocks instead of sinking into them.
 - **Changed:** Banana Slug Slime Blocks slide you down their sides like a Honey Block, with no fall damage.
@@ -309,6 +315,7 @@
 - **Changed:** Salt layers walk at 0.85x [1x].
 - **Changed:** Ash, salt and sawdust layers hold you on their top like sand layers [ash at half its height and not at all on ash, salt and sawdust about one layer lower].
 - **Changed:** Sand, red sand and ash layers no longer soften falls [0.3x damage above 2 layers].
+- **New:** A 9th layer on a full pile of 8 sand, red sand or salt layers turns it into a Sand, Red Sand or Salt Block, by hand, dispenser or a falling layer.
 - **Changed:** 1 Sand makes 9 Sand Layers and 9 Sand Layers make 1 Sand [3 Sand -> 6 layers, 4 layers -> 1 Sand]; Red Sand the same.
 - **Changed:** Placing a block into snow layers, leaf piles or bamboo leaves replaces them up to 3 layers [1 layer]; sand, ash, salt, sawdust and fodder layers are never replaced [sand, ash and salt at 1 layer].
 - **Fixed:** The view popped up for a moment when walking from one sinking block to another, or onto a Honey Block, Mud or a path from one.
@@ -319,8 +326,8 @@
 
 - **New:** Walking through a full leaf pile, or sprinting through one of 6 or 7 layers, can prick players for half a heart; each armor piece worn lowers the chance, full armor prevents it.
 - **New:** Leaf piles and Bamboo Leaves can be seen from inside: with your head in a pile, its leaves show around you.
-- **New:** WTHIT shows Walk Through, Fall Through and Neighbors lines on these blocks; the walk speed includes the block underneath.
 - **Changed:** Leaf piles of 6 or more layers are see-through like lower piles [solid leaves].
+- **New:** WTHIT shows Walk Through, Fall Through and Neighbors lines on these blocks; the walk speed includes the block underneath.
 - **Changed:** Planted crops slow walking to 0.75x once half grown [no slowdown]; tall crops slow on both blocks once the lower block is half grown.
 - **Changed:** Corn, hemp, rice, oats, wheat and tomatoes slow walking to 0.50x with the same crop on 3 or 4 of their 4 sides [no slowdown]; newly planted crops count as neighbours. Swimming in a rice paddy is not slowed.
 - **Changed:** Wild crops, tall grass, large ferns and tall flowers slow walking to 0.75x [no slowdown].
@@ -401,18 +408,18 @@
 
 ## Effects <!-- icon: minecraft:potion -->
 
-- **New:** The inventory's effect list shows permanent effects (beacon, conduit, armor, held tools, diet bonuses) in a second column right of the timed ones; a narrow window keeps one column.
 - **Changed:** Effects that work the same at every level (87, e.g. Fire Resistance, Water Breathing, Night Vision, Nausea, Blindness) are capped at level I from every source; tooltips show level I [up to VI].
+- **New:** The inventory's effect list shows permanent effects (beacon, conduit, armor, held tools, diet bonuses) in a second column right of the timed ones; a narrow window keeps one column.
 - **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
 - **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
 
 ## Gameplay
 
-- **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
-- **New:** The potions, fluid amounts and loop counts of the echo, felsic ingot, dragon and Air Brake assembly recipes can be changed in the Creative Equipment config.
 - **Changed:** The Saturation effect and its potions and arrows are renamed Satiated [Saturation]; its description reads "Keeps the player fed."
+- **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
 - **Changed:** A chain of TNT keeps at most 32 shrapnel pieces in the air at once [24 per TNT].
 - **Changed:** A TNT item exploding in fire or lava deals half damage; the knockback is unchanged.
+- **New:** The potions, fluid amounts and loop counts of the echo, felsic ingot, dragon and Air Brake assembly recipes can be changed in the Creative Equipment config.
 - **Changed:** Mending repairs gear from collected XP [only by an anvil and a Mending book].
 - **Changed:** Elytra fly in every dimension [the End only].
 - **Changed:** Campfires cannot be lit in the End: torches, flint and steel and fire charges hiss and are kept, and a campfire lit any other way goes out at once. Soul campfires still light.
@@ -421,16 +428,16 @@
 - **Changed:** Items can no longer be frozen into Rare Ice; Rare Ice comes only from world generation [right-click ice with an item].
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
 - **Changed:** Little Logistics receiver and transmitter components in an inventory turn into Redstone Links.
-- **Changed:** A Wandering Trader carries about 2 Wares delivery agreements [about 5].
 - **Fixed:** TNT shrapnel broke nearby minecarts and armor stands and turned TNT minecarts into items; it now hits only living things.
 - **Fixed:** Rubber trees did not generate in jungles.
 - **Fixed:** Grass below height 32 spread as fast in winter as in spring.
 - **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
 - **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
+- **Changed:** A Wandering Trader carries about 2 Wares delivery agreements [about 5].
 - **Removed:** Villagers no longer sell enchanted books: librarians, Lightman's Currency cashiers and bankers (Money Mending) and Domestication Innovation animal tamers (Charisma). Master librarians no longer exchange Ancient Tomes. Villagers that already offer a book keep it.
-- **Removed:** Lexica Botania no longer appears in chest loot, the spawn bonus chest included.
 
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
+- **Removed:** Lexica Botania no longer appears in chest loot, the spawn bonus chest included.
 
 - **New:** The Visceral Heap biome generates in the Nether, about 5% of its area, made entirely of flesh, with blood lakes, eyebulbs, hair and flesh tendons. Nether ores do not generate in it.
 - **New:** Flesh slows walking to 0.6x. Porous Flesh slows walking to 0.45x, halves jump height and slides you down its sides, like a Honey Block.
@@ -540,9 +547,9 @@
 - **Changed:** Recipes are no longer unlocked in the recipe book by crafting or cooking.
 - **Changed:** Fertile Soil's farmer villager tooltip line is green, as on Rich Farmland [dark blue].
 - **Fixed:** Extra armor bar rows no longer show in creative mode.
-- **Fixed:** Maple Glazed Bacon, Cherry Cookie, Duck Fillet, Cooked Duck Fillet and Duck Noodles were missing from JEI and the creative tabs.
 - **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).
 
+- **Fixed:** Maple Glazed Bacon, Cherry Cookie, Duck Fillet, Cooked Duck Fillet and Duck Noodles were missing from JEI and the creative tabs.
 ## Loading screen tips
 
 - **Changed:** The loading screen tip bar also shows while reading world data, creating a world, connecting to a server and joining [world loading and terrain screens only].

@@ -90,12 +90,6 @@
 	#mods); JEI's cheat mode covers item browsing. Default false (vanilla); the pack sets true.
 	#Takes effect the next time the inventory opens.
 	disabled = true
-	#Items that have no creative tab (so creative mode, its search and JEI never list them) but should be
-	#listed. Each goes into the tab most other items of its mod use (vanilla Food or Miscellaneous when the
-	#mod has none). Only items listed here change; an orphan left out stays hidden on purpose. The default
-	#is the Abnormals Delight compat foods that have pack recipes while their parent mods are absent.
-	#/dumpnotab lists every orphan with its recipe and loot sources. Takes effect on the next game start.
-	orphanTabItems = ["abnormals_delight:maple_glazed_bacon", "abnormals_delight:cherry_cookie", "abnormals_delight:duck_fillet", "abnormals_delight:cooked_duck_fillet", "abnormals_delight:duck_noodles"]
 
 #Mod display names (client side: JEI's mod line and @ search, WTHIT, the Mods screen).
 [mod_names]
