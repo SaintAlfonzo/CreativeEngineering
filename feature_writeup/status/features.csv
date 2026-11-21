@@ -9,7 +9,7 @@ Locate,locate.md,LO-,BUILT,creativeworldgen,SQ-TIE,"DEPLOYED with 1.0.6 as part 
 Loot,loot.md,LT-,BUILT,"creativeloot, creativedelight, creativecommon",,"DEPLOYED, in-game test pending (LT-01, LT-06 passed",,,
 Loot catalog,loot_catalog/README.md,,reference,,,"reference, regenerate with `python3 tools/loot_breakdown.py`",,,
 Food,food.md,FO-,BUILT,"creativecommon, creativedelight","CQ-FDI, CQ-FO, SQ-CF, SQ-FDI, SQ-FO, SQ-PS, SQ-SN, SQ-SNF","BUILT/DEPLOYED parts, see its status block (FO-01 passed",,,
-Performance,perf.md,PF-,BUILT,"creativecommon, creativeworldgen","CQ-ATC, CQ-PNE, CQ-XAC, SQ-ATC, SQ-BLC, SQ-CL, SQ-FTW, SQ-GFB, SQ-HRU, SQ-HT, SQ-IMS, SQ-IPO, SQ-IWF, SQ-MCL, SQ-PERFCFG, SQ-PF, SQ-PF16, SQ-STC, SQ-WE, SQ-WGP","DEPLOYED (report tooling with 1.0.3, hot-spot fixes with 1.0.4), PF-01 to PF-12 pending",,,
+Performance,perf.md,PF-,BROKEN,"creativecommon, creativeworldgen","CQ-ATC, CQ-PNE, CQ-XAC, SQ-ATC, SQ-BLC, SQ-CL, SQ-FTW, SQ-GFB, SQ-HRU, SQ-HT, SQ-IMS, SQ-IPO, SQ-IWF, SQ-MCL, SQ-PERFCFG, SQ-PF, SQ-PF16, SQ-STC, SQ-WE, SQ-WGP","DEPLOYED (report tooling with 1.0.3, hot-spot fixes with 1.0.4), PF-01 to PF-12 pending",,,
 Perf suite,perf_suite.md,"PFS-, G, C, W",BUILT,creativedevtools,"SQ-PFS, SQ-SK, SQ-SV",C- and W- await the owner's veto,,,
 Resource pack bench,perf_rpack.md,RPB-,BUILT,tools,CQ-RPB,BUILT 2026-10-29,,,
 Curios slots,curios_slots.md,CS-,BUILT,"creativeequipment, creativecompat",SQ-CSI,BUILT,,,
@@ -148,7 +148,7 @@ JEI ordering,jei_ordering.md,JO-,BUILT,creativecompat,CQ-JO,"steps 1 to 3 DEPLOY
 JEI craftable-first port map,jei_craftable_first_port.md,,reference,,,reference + implementation,reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Loot table islands,loot_islands.md,,reference,,,"analysis only, 2026-10-03",reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Loot tuning system,loot_tiers.md,,planned,,,"design only, 2026-11-01, nothing built",,,
-Nests and egg crates,nests.md,NE-,BUILT,creativedelight,SQ-NEST,"2026-11-03: wild duck, goose and emu nests (2.4) BUILT, CD jar installed 2026-11-03 00:08, not booted",,,
+Nests and egg crates,nests.md,NE-,BROKEN,creativedelight,SQ-NEST,"2026-11-03: wild duck, goose and emu nests (2.4) BUILT, CD jar installed 2026-11-03 00:08, not booted",,,
 Mooblooms,mooblooms.md,MB-,BUILT,creativeworldgen,,More Mooblooms 1.0.0 DEPLOYED with 1.0.6 (first release,,,
 Mob spawns by biome,mob_spawns.md,MS-,BUILT,creativeworldgen,SQ-MOB,DEPLOYED with 1.0.6: 12 tuning rules + 3 spawn conditions + spawn ground,,,
 Animal breeding item and bee flower audit,breeding_audit.md,SQ-BREED-,reference,,SQ-BREED,audit DONE 2026-11-10 (static),reference,audit 2026-11-16: reference document; its TODO rows belong to other features,2026-11-16
