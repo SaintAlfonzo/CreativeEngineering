@@ -1,0 +1,15 @@
+{
+  "_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. One raw guardian fillet: Ocean's Delight's guardian tail goes, Hostile Delight's fillet stays, and the cooked forms follow (item_merges.md 2.24, dishes/ocean #11).",
+  "requires": [
+    "oceansdelight",
+    "hostiledelight"
+  ],
+  "merges": {
+    "hostiledelight:guardianfillet": [
+      "oceansdelight:guardian_tail"
+    ],
+    "hostiledelight:cookedguardianfillet": [
+      "oceansdelight:cooked_guardian_tail"
+    ]
+  }
+}

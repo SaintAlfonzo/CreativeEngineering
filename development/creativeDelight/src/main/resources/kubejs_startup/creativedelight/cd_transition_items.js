@@ -105,7 +105,8 @@ StartupEvents.registry('item', e => {
 		['kebab_wrap'],                                               // Barbeque's Delight combos (plan_meals_rolls_bbq.md C8)
 		['kebab_sandwich'],
 		['crawling_sandwich'],
-		['steak_and_potatoes']
+		['steak_and_potatoes'],
+		['suspiciousbaconandaggs',       'hostiledelight:items/gren_bacon_and_eggs']    // Green Eggs and Ham, CD hostiledelight/recipes.js
 	]
 	// G5 end
 	SEQUENCED_ASSEMBLIES.forEach(([key, texture, color]) => R.registerIncomplete(e, key, texture, color))

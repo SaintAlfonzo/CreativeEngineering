@@ -518,6 +518,14 @@ Creative Delight jar, requires `tmted` and `create`). Until now `create/recipes.
 outputs by hand and Common's `removed_items.js` hid it; the merge does both and also converts stacks in the world and
 loot. Engineer's Delight's two crusher flour recipes stay off (`create/recipes.js`, `R.remove`, V-20).
 
+### 2.24 Guardian fillet (built 2026-11-20, not run; SQ-OCN-11; TODO `dishes/ocean #11`)
+
+Ocean's Delight's `oceansdelight:guardian_tail` merges into Hostile Delight's `hostiledelight:guardianfillet`, and
+`oceansdelight:cooked_guardian_tail` into `hostiledelight:cookedguardianfillet` (`swaps/merges_oceansdelight.json` in the
+Creative Delight jar, requires `oceansdelight` and `hostiledelight`; owner 2026-11-20, plan_owner_rows_1120.md R6, the
+cooked pair added so a fillet has one furnace result). Ocean's three cooked tail recipes are removed
+(`oceansdelight/recipes.js`); the Guardian Shell is cut into fillets ([ocean_delight.md](ocean_delight.md) 9).
+
 ## 3. Known limits
 
 - A Neapolitan milk bottle can't be poured back into a milk cauldron (only Neapolitan's own bottle fits, and it no

@@ -20,6 +20,15 @@ ServerEvents.tags('item', e => {
 	// folder). flour / dough cleanup (the PneumaticCraft flour: pneumaticcraft/tags.js)
 	t.clearAll(e, i.out_dough)
 
+	// Bird eggs fry into the fried egg (rice-egg-and-sushi #1, plan_owner_rows_1120.md R4): chicken, duck and goose.
+	// Parrot, turtle, crocodile and terrapin eggs do not; the emu egg keeps only its Boiled Emu Egg. Rustic Delight's
+	// raw_cooked_eggs (upstream: all of #forge:eggs plus #forge:cooked_eggs) follows the same set (D19).
+	t.add(e, 'creativedelight:eggs/fryable', [i.minecraft_egg, i.duck_egg, i.goose_egg])
+	if (global.CD.on('rusticdelight')) {
+		t.wipeTag(e, 'rusticdelight:raw_cooked_eggs')
+		t.add(e, 'rusticdelight:raw_cooked_eggs', ['#creativedelight:eggs/fryable', i.cooked_eggs])
+	}
+
 	// cooked meat
 	t.add(e, 'forge:cooked_meat', [
 		i.beef_patty,

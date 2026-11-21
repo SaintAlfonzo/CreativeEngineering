@@ -23,21 +23,21 @@ This file has three parts, as asked:
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=b5c57a4beb30 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 8, In Progress 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=b8cc0be53d6e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 5, In Progress 1, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `largecontent/mod-additions #43` | Planned | C P | Hostile Delight: no native tooltips, eaten effects on every food |
 | `largecontent/mod-additions #44` | Planned | S C P | Hostile Delight: remove items |
 | `largecontent/mod-additions #45` | Planned | S C P | Hostile Delight: Blazing Apple, Blazing Sauce, Blazing Cookie |
-| `largecontent/mod-additions #46` | Planned | S P | Hostile Delight: Magma and Slime Brownies |
-| `largecontent/mod-additions #48` | Planned | S P | Hostile Delight: rotten foods hunger type, not saltable |
-| `largecontent/mod-additions #49` | Planned | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
 | `largecontent/mod-additions #50` | Planned | S P | Hostile Delight: guardian dishes |
 | `largecontent/mod-additions #51` | Planned | S P | Hostile Delight: Spiked Tartare, Slime Syrup, Candied Salad |
 | `largecontent/mod-additions #6` | In Progress | S C P T | Integrate Hostile Delight |
+| `largecontent/mod-additions #46` | Testing | S P | Hostile Delight: Magma and Slime Brownies |
 | `largecontent/mod-additions #47` | Testing | S P | Hostile Delight: rotten ham tags |
+| `largecontent/mod-additions #48` | Testing | S P | Hostile Delight: rotten foods hunger type, not saltable |
+| `largecontent/mod-additions #49` | Testing | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -480,7 +480,7 @@ before step 6 (recipes name the survivors).
 ### 5.1 Owner notes (scratchpad 2026-11-04)
 
 Translated into the `## Hostile Delight` table of [TODO](todo/TODO.md) (`largecontent/mod-additions #6`, `#43` to `#51`).
-Nothing below is built yet (checked 2026-11-04: only `hostiledelight/recipes.js`, the generated food types, `hostile_items.js`
+Built since: `#46`, `#48`, `#49` (2026-11-20, marked below). The rest was not built (checked 2026-11-04: only `hostiledelight/recipes.js`, the generated food types, `hostile_items.js`
 removing the prepared sea pickle, the cookie and pie rebuilds in CD `baking.js` and the Cave Skewer line in
 `barbequesdelight/skewers.js` exist).
 
@@ -510,19 +510,33 @@ Notes, as rows:
   blaze-powder-efficient route than the apple. Emitting Cookie renamed Blazing Cookie, Blaze Rod swapped for Blaze Powder
   (today `baking.js:84` rebuilds it on dough with a rod).
 - **Brownies (`#46`):** Magma Brownie baking only, carrot swapped for any nether fungus, effects shown and balanced. Slime
-  Brownie oven only, recipe kept. Both join the brownie unification.
+  Brownie oven only, recipe kept. Both join the brownie unification. Superseded 2026-11-20 (owner, plan_owner_rows_1120.md
+  R5): they are gummies. **Built 2026-11-20 (G2a):** renamed Magma Gummy and Slime Gummy (lang only, CD
+  `assets/creativedelight/kubejs/hostiledelight/names.js`; ids and sprites stay) and sorted into the new `candy/gummy` family
+  with the Glow, Salmonberry, Cantaloupe and Matcha gummies (food_families.md 4.8, which records the six recipe patterns;
+  none changed yet).
 - **Rotten foods (`#47`, `#48`):** Rotten Ham and Cooked Rotten Ham leave the normal meat tags for new raw and cooked rotten
   meat tags; the raw one counts as rotten flesh, the cooked one as meat in dog food (`dishes/meals #8`). Every rotten food and
   the Green Pie get the hunger food type with a 20% chance of Poison II for 5 s. Rotten Pie, Green Pie and Suspicious Bacon and
-  Eggs are not saltable (today they are in the salt tag, `food/seasoning #4`).
-- **Assembly (`#49`):** Suspicious Bacon and Eggs follows the bacon and eggs sequenced assembly.
+  Eggs are not saltable (today they are in the salt tag, `food/seasoning #4`). Ruled 2026-11-20 (owner, R1 to R3): there is
+  no hunger type; Rotten Ham, Cooked Rotten Ham, Rotten Pie, Green Pie, Fried Turtle Egg and Suspicious Bacon and Eggs are
+  `hazard`, like rotten flesh and the rotten apple, and Suspicious Bacon and Eggs is renamed Green Eggs and Ham. **Built
+  2026-11-20 (G2a):** the six moved to `hazard` in `food_types.json` (CD `hostiledelight/food_types.js` regenerated); each has a
+  20% chance of Poison II for 5 s (CD startup `hostiledelight/hostile_items.js`, hunger and saturation unchanged); the rename is
+  lang only (`names.js`); Rotten Pie, Green Pie and Green Eggs and Ham left the salt list (CD `salt/tags.js`; Cooked Rotten Ham
+  stays saltable). Their food families follow the hazard type at the next `/dumpall` and `food_families.py` run.
+- **Assembly (`#49`):** Suspicious Bacon and Eggs follows the bacon and eggs sequenced assembly. **Built 2026-11-20 (G2a,
+  D11):** `F.assemble(i.bowl, [i.cookedrottenham, i.friedturtleegg], i.suspiciousbaconandaggs, 2)` in CD
+  `hostiledelight/recipes.js`, incomplete item `kubejs:incomplete_suspiciousbaconandaggs` on Hostile's sprite
+  (`cd_transition_items.js`); the upstream shapeless recipe stays.
 - **Guardian dishes (`#50`):** Guardian Roll gets a recipe in line with the roll family; Guardian Ratty takes raw guardian fillet
   for every meat input; Guardian Ross and Sashimi keep their recipes, a more complex and rewarding craft later.
 - **Recipe tweaks (`#51`):** Spiked Tartare takes any cactus steak; Slime Syrup cooking gives 2x; Candied Salad swaps ferns for
   any cabbage-leaf-like green (dandelion included).
 - **Elsewhere:** Refined Gelatin renamed Gelatin, new texture (`dishes/ingredients #30`); Cave Skewer in the skewer family (built
   2026-11-04, `dishes/meals #50`), merge with Miner's Delight (`dishes/meals #58`); guardian shell, soup and fugu notes in
-  [ocean_delight.md](ocean_delight.md) 9.
+  [ocean_delight.md](ocean_delight.md) 9. Hostile's guardian table now drops the Guardian Shell in place of its fillets, and
+  Ocean's guardian tail merged onto Hostile's guardian fillet (built 2026-11-20, ocean_delight.md 9).
 
 ## 6. File map (planned)
 
