@@ -1,22 +1,22 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=cf6d075341f9 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 5, In Progress 1, Testing 19), 3 Complete.
+<!-- generated:status_index begin open_work sha1=856f39b405b6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 3, In Progress 1, Testing 21), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #39` | Planned | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
 | `farming/crops #3` | Planned | S P | Harvest and replant audit for new crops |
-| `farming/crops #36` | Planned | S P | Every seed in the Botany Pots |
 | `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
 | `mobs/tweaks #4` | Planned | S | Entity dictionary |
 | `baking/baked-goods #39` | In Progress | S | Baked families: croissant to misc baked, plain donut beside the cider donut |
+| `conventions #39` | Testing | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
 | `creativebrewing/publish #25` | Testing | S | Delight's IE Bottling dough recipe writes a tag as its result |
 | `dishes/ingredients #36` | Testing | S C P | Bone broth as a fluid |
 | `dishes/ocean #11` | Testing | S C P | Guardian Shell: guardian drop and cutting |
 | `dishes/ocean #12` | Testing | S P | Guardian Soup recipe |
 | `farming/composting #5` | Testing | S P | Expand organic compost |
 | `farming/composting #6` | Testing | S P | Merge the organic mash compost recipe |
+| `farming/crops #36` | Testing | SQ-BOT-06 SQ-BOT-07 CQ-BOT-01 | Every seed in the Botany Pots |
 | `gear/tuning #12` | Testing | S | End gear recipes configurable |
 | `items/jars #6` | Testing | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
 | `jei/jei-coverage #29` | Testing | C | Maple bacon and cookies missing from JEI |

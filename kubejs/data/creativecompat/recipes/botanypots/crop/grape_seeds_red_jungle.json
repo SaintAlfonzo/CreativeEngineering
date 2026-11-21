@@ -1,0 +1,42 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "vinery"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "vinery:jungle_grape_seeds_red"
+  },
+  "categories": [
+    "dirt"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "vinery:jungle_grape_bush_red"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "vinery:jungle_grapes_red"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "vinery:jungle_grape_seeds_red"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

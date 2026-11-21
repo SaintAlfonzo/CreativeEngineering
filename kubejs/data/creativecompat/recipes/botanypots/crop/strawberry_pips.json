@@ -1,0 +1,33 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "neapolitan"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "neapolitan:strawberry_pips"
+  },
+  "categories": [
+    "dirt",
+    "farmland"
+  ],
+  "growthTicks": 1500,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "neapolitan:strawberry_bush"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "neapolitan:strawberries"
+      }
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "nethersdelight"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "nethersdelight:propelplant_cane"
+  },
+  "categories": [
+    "nether"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:transitional",
+    "phases": [
+      {
+        "block": "nethersdelight:propelplant_cane"
+      },
+      {
+        "block": "nethersdelight:propelplant_berry_stem",
+        "properties": {
+          "pearl": false
+        }
+      },
+      {
+        "block": "nethersdelight:propelplant_berry_stem",
+        "properties": {
+          "pearl": true
+        }
+      }
+    ]
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "nethersdelight:propelpearl"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.25,
+      "output": {
+        "item": "nethersdelight:propelplant_cane"
+      }
+    }
+  ]
+}

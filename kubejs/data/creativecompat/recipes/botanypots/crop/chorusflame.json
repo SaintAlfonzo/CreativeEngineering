@@ -1,0 +1,40 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "endersdelight"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "endersdelight:chorusflame"
+  },
+  "categories": [
+    "end_stone"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "endersdelight:chorus_flame_block"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "endersdelight:chorusflame"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "endersdelight:chorusflame"
+      }
+    }
+  ]
+}

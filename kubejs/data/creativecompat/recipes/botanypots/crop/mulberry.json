@@ -1,0 +1,38 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "upgrade_aquatic"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "upgrade_aquatic:mulberry"
+  },
+  "categories": [
+    "dirt"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "upgrade_aquatic:mulberry_vine"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "upgrade_aquatic:mulberry"
+      }
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "upgrade_aquatic:mulberry"
+      }
+    }
+  ]
+}

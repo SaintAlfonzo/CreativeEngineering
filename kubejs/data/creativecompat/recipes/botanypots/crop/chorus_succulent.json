@@ -1,0 +1,53 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "ends_delight"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "ends_delight:chorus_succulent"
+  },
+  "categories": [
+    "end_stone"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:transitional",
+    "phases": [
+      {
+        "block": "ends_delight:chorus_succulent",
+        "properties": {
+          "succulent": 1
+        }
+      },
+      {
+        "block": "ends_delight:chorus_succulent",
+        "properties": {
+          "succulent": 2
+        }
+      },
+      {
+        "block": "ends_delight:chorus_succulent",
+        "properties": {
+          "succulent": 3
+        }
+      }
+    ]
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "ends_delight:chorus_succulent"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "hearthandharvest"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "hearthandharvest:hops"
+  },
+  "categories": [
+    "dirt",
+    "farmland"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "hearthandharvest:hops_vine"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "hearthandharvest:hops"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "hearthandharvest:hops"
+      },
+      "minRolls": 1,
+      "maxRolls": 2
+    }
+  ]
+}

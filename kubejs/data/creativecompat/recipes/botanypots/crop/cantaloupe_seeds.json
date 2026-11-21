@@ -1,0 +1,39 @@
+{
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "botanypots"
+    },
+    {
+      "type": "forge:mod_loaded",
+      "modid": "delightful"
+    }
+  ],
+  "type": "botanypots:crop",
+  "seed": {
+    "item": "delightful:cantaloupe_seeds"
+  },
+  "categories": [
+    "dirt",
+    "farmland"
+  ],
+  "growthTicks": 1200,
+  "display": {
+    "type": "botanypots:aging",
+    "block": "delightful:cantaloupe_plant"
+  },
+  "drops": [
+    {
+      "chance": 1.0,
+      "output": {
+        "item": "delightful:cantaloupe"
+      }
+    },
+    {
+      "chance": 0.05,
+      "output": {
+        "item": "delightful:cantaloupe_seeds"
+      }
+    }
+  ]
+}
