@@ -149,3 +149,28 @@ Creative Worldgen, Creative Devtools and OR1120.qb, FCK.qb and the loot / mob tw
     the azalea wood restore (retire or rewrite). SQ-PWG-12, -24, -46 carry the same stale 5-wire bootexpect and P7 rejects.
   - Doc gaps: nether_worldgen.md 47 live Overworld structures vs 43 scanned; merge-count looks say 24, now 49; kitchen.md
     2.9 says skillet contents go to the inventory, the code drops them at the block.
+- 08:5x judge-8 (steps 95 to 109, helpers judge-8b RFX, -8c RP): 95 RDX PASS 10 BF 1 OWNER 1 (SQ-RDX-02 client JEI half);
+  96 RE PASS 3 BF 1; 97 RFX PASS 4 FAIL 1; 98 PASS 4 BF 2; 99 PASS 1 BF 1 HARNESS 1; 100 FAIL 1; 101 FAIL 1; 102 PASS 1;
+  103 BF 3; 104 RP PASS 2 BF 6; 105 SMK PASS 3 BF 1; 106 PASS 2 BF 2; 107 PASS 1 FAIL 2; 108 PASS 3; 109 PASS 3. rerun.txt 250.
+  - Real FAIL, high impact: SQ-SMK-09, -11, SQ-RFX-02, -19: end_gear.js:55 "TypeError: redeclaration of var felsicIngot"
+    since commit be78080c (Owner rows 1120 G4, 2026-11-21 00:26); NCH skips the namespace, 27 creativeequipment
+    sequenced-assembly recipes (dragon, felsic, echo, air brake) missing, upstream dragonloot / felsic_gear recipes back.
+    On every boot from s96 on: Equipment-recipe rows in later steps fail for this cause. Reported to the session that
+    made the commit (Plan_owner_rows_1120); not fixed in-run.
+  - Real FAILs: SQ-RFX-27 exposureextras:camera_bag unregistered (only leather / iron / netherite tiers), swap alias in
+    exposureBackport extras swaps/owner_namespace.json unresolved, the stack is lost (owner: pick a target or the row
+    is wrong); SQ-RFX-28 UK spellings of "behavior" and "color" in config comments (CommonConfig.java:104, CDConfig.java:447,
+    CWGConfig.java:359).
+  - BF-FIX SQ-RDX-06 salting recipe in the count -> `\*\d+ serializer=`; SQ-RE-31 PneumaticCraft `result=empty` -> bytype
+    ids (crystal.js:38-39); SQ-SMK-06 package `.items.`; SQ-SMK-07 floor 1300 (1394 in the 2026-11-19 dump); SQ-RFX-09, -19
+    name/tag-only CHANGED lines ignored; SQ-RFX-13 `data get entity ... Inventory`; SQ-RFX-24 `10 day`; SQ-RFX-30 own
+    `/dumpall` before the diff; SQ-RFX-31, -32 `n=[1-9]`; SQ-RPI-02 world from level-name; SQ-RPI-06
+    liquid_diet_log_manual_only; SQ-RPI-07 `pbot hunger` before each eat.
+  - Not simple: SQ-SMK-01 (SwapReport logs only on ServerStoppingEvent, needs a check after stop); SQ-RPI-03, -04, -08
+    (each needs its own reboot with config; lost batch prep, no @boot lines; -08 path still p9a/).
+  - Tool gaps: rdetail / bytype print no result for PneumaticCraft recipes and no step fluid in sequenced assembly;
+    qverdict cannot turn a HARNESS row into FAIL; qlint does not flag @commands that say restart/boot without @boot.
+    Gotcha: dedicated-server dumps carry raw lang keys, so rows comparing names with the client pack dump see noise; a
+    row that diffs against the pack dump runs its own `/dumpall`.
+- 09:0x Plan_owner_rows_1120 session took the end_gear.js bug; it will report when the fixed creativeequipment jar is installed. Later steps pick up the new jar at their prep (prep_srv pins per step); queue SQ-SMK-09, -11, SQ-RFX-02, -19 for rerun then.
+- 09:1x fixed creativeequipment installed by the other session (installed.csv 2026-11-21T08:50:13, commit 9f48f07f); SQ-SMK-09, -11, SQ-RFX-02, -19 added to rerun.txt. Steps prepped after 08:50 run on the fixed jar.

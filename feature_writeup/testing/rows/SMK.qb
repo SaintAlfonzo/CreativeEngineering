@@ -101,17 +101,17 @@ shell echo "mixins $(grep -c 'from creativeengineering.mixins.json' logs/debug.l
 > cdevtest item creativeengineering:precision_sawblade
 expect verb=reg kind=item regex=\S+ n=([7-9]\d|[1-9]\d{2,})\b
 expect verb=reg kind=block regex=\S+ n=(3[5-9]|[4-9]\d|[1-9]\d{2,})\b
-expect verb=item item=creativeengineering:precision_sawblade class=com\.SaintAlfonzo\.creativeengineering\.item\.PrecisionSawbladeItem
+expect verb=item item=creativeengineering:precision_sawblade class=com\.SaintAlfonzo\.creativeengineering\.items\.PrecisionSawbladeItem
 
 ## SQ-SMK-07 | Engineering recipes and the dragon breathing type
 @group A
 @commands `/cdevtest recipes creativeengineering: max=1`; `/cdevtest bytype creativeengineering:dragon_breathing max=1`; `/cdevtest makes creativeengineering:iron_wire`
-@pass 1500 or more `creativeengineering` recipes (1804 on 2026-11-15); 10 or more dragon breathing recipes (14); at least one recipe makes iron wire
+@pass 1300 or more `creativeengineering` recipes (1394 in the 2026-11-19 dump; 1804 before the 2026-11-17 namespace binding moved recipes to their owning jars); 10 or more dragon breathing recipes (14); at least one recipe makes iron wire
 @fails Server scripts not in the jar (`data/creativeengineering/kubejs/`), the dragon breathing serializer not registered
 > cdevtest recipes creativeengineering: max=1
 > cdevtest bytype creativeengineering:dragon_breathing max=1
 > cdevtest makes creativeengineering:iron_wire
-expect verb=recipes text=creativeengineering: n=(1[5-9]\d\d|[2-9]\d{3}|\d{5,})\b
+expect verb=recipes text=creativeengineering: n=(1[3-9]\d\d|[2-9]\d{3}|\d{5,})\b
 expect verb=bytype serializer=creativeengineering:dragon_breathing n=([1-9]\d+)\b
 expect verb=makes item=creativeengineering:iron_wire n=[1-9]\d*\b
 

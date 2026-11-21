@@ -19,7 +19,9 @@
 @fails `crystal.js` `Item.of(i.coal_block, 8)`
 > cdevtest makes minecraft:diamond
 > cdevtest bytype pneumaticcraft:pressure_chamber max=400
-expect verb=makes id=\S+ result=minecraft:diamond\*1 serializer=pneumaticcraft:pressure_chamber
+# judge-8 2026-11-21: cdevtest prints result=empty for PneumaticCraft recipes; the NCH id carries the count
+expect verb=bytype id=creativeengineering:pcpressurechamber/8_coal_block_to_diamond_by_pressure
+expect verb=bytype id=creativeengineering:pcpressurechamber/4_coal_block_to_diamond_shard_by_pressure
 look the coal block count of the diamond recipe is 8 (rdetail the id from the makes line; part=fields or the dumped JSON)
 
 ## SQ-RE-32 | single cinder flour Create filling: redstone, glowstone dust, gunpowder at 25 mB

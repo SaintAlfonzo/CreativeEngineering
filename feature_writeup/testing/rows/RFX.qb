@@ -175,7 +175,7 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 @reviewed 2026-11-20
 # r1120fix, 2026-11-20: expect reads the log, never shell output, so "expect FOOD_SAME" could not pass; and the 2026-11-15 baseline predates
 # 52 intended food changes (2026-11-19 pack dump). The shell exit checks the row's own foods: Delightful, Bellini, Ghost Charcoal
-shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx09_food.txt; tail -25 rfx09_food.txt; ! grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) (delightful:[a-z_]+|fruitsdelight:bellini_cocktail|vintagedelight:ghost_charcoal)\b' rfx09_food.txt
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx09_food.txt; tail -25 rfx09_food.txt; ! grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) (delightful:[a-z_]+|fruitsdelight:bellini_cocktail|vintagedelight:ghost_charcoal)\b' rfx09_food.txt | grep -vE '^CHANGED [^ ]+: (name|tags)(, (name|tags))*$'
 ## SQ-RFX-10 | villager trades: the Delight trades unchanged through global.trades.villager
 @group A
 @commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py trades $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported minecraft:farmer minecraft:butcher beautify:botanist`
@@ -213,7 +213,7 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 sleep 2
 > give wfl1 tmted:wheat_flour 5
 sleep 3
-> cdevtest inventory wfl1
+> data get entity wfl1 Inventory
 sleep 1
 expect create:wheat_flour
 > pbot remove wfl1
@@ -295,7 +295,7 @@ shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline
 shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -15
 # r1120fix, 2026-11-20: expect reads the log, not shell output, and the baseline predates 52 intended food changes: the shell exit checks the drinks
 # (foods with Intoxication in the new dump; 51 in the 2026-11-19 pack dump) against the baseline
-shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx19_food.txt; tail -15 rfx19_food.txt; python3 -I -c "import json,re,sys;d=json.load(open('kubejs/exported/food/foods.json'))['foods'];k={f['id'] for f in d if any(e.get('effect')=='brewinandchewin:intoxication' for e in (f.get('effects') or []))};t=open('rfx19_food.txt').read();c=sorted(i for i in k if re.search(r'^(CHANGED|ONLY_BASE|ONLY_NEW) '+re.escape(i)+r'\b',t,re.M));print('RFX19 drink changed',c) if c else print('RFX19 drinks same n=%d'%len(k));sys.exit(1 if c or not k else 0)"
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx19_food.txt; tail -15 rfx19_food.txt; python3 -I -c "import json,re,sys;d=json.load(open('kubejs/exported/food/foods.json'))['foods'];k={f['id'] for f in d if any(e.get('effect')=='brewinandchewin:intoxication' for e in (f.get('effects') or []))};t=open('rfx19_food.txt').read();c=sorted({i for i in k for l in t.splitlines() if re.match(r'(CHANGED|ONLY_BASE|ONLY_NEW) '+re.escape(i)+r'\b',l) and not re.fullmatch(r'CHANGED \S+: (name|tags)(, (name|tags))*',l)});print('RFX19 drink changed',c) if c else print('RFX19 drinks same n=%d'%len(k));sys.exit(1 if c or not k else 0)"
 # r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the instance's 2026-11-19 pack dump already differs from it
 # by 221 recipe ONLY_ lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
 shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" recipes "$B" "$1" --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(ONLY_|moved)' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "recipe lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
@@ -335,12 +335,12 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 @fails `no wine clock registered`: the Vinery port's `PackTime.registerDateMoves` did not run (Creative Brewing older than 2026-11-17)
 @reviewed 2026-11-20
 > wine time
-> ccaltime date add 10 days
+> ccaltime date add 10 day
 > ccaltime date set 1 early_spring 1 6:00 am
 expect wine clock moved back
 > wine time
 look the two `/wine time` lines: the second clock value smaller by the move
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|no wine clock registered)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|no wine clock registered|Unknown unit)
 
 @@section 5
 @@title CQ-RFX Rules fixes P3c on a client: the Brewin' coaster offset from its own renderer, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 12f step 4; TODO `conventions #28`)
@@ -474,6 +474,9 @@ look `/datapack list` output: the three packs absent, `buzzier_bees/disable_moob
 @commands `/dumpall`; `python3 $INST/tools/dump_diff.py tags $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/` (or against the dump of the commit c65c5871 jars)
 @pass `TAGS_SAME` for `creativecompat:physics/floats`, `creativecompat:flower_box_plants`, `another_furniture:planter_box_placeables`, `minecraft:flowers`, `minecraft:small_flowers`, `minecraft:tall_flowers`, `creativeloot:loot/chalk` and `creativeloot:loot/golden_food`; any other tag line is explained in the run doc
 @fails a flower tag still holding a `wild_` item or a Botania special flower: Compat's `flower_tags.js` ran before a script that fills the flower tags (load order between script packs), or the jar is not installed; floats missing the wild plants: the same order problem, or `t.add` ran after the removal
+# judge-8b, 2026-11-21: no dumpall in the row, so kubejs/exported was the copied pack dump (r1120nv s102, 0 lines beyond)
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | grep -E "physics/floats|flower_box_plants|planter_box_placeables|minecraft:(small_|tall_)?flowers|loot/(chalk|golden_food)|TAGS_SAME" | tail -20
 look the grep output: no ONLY_ or changed line for the eight tags
 # r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the 2026-11-19 pack dump already differs from it in
@@ -487,7 +490,7 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 @fails floats without the wild plants: `flower_tags.js` did not run or read the flower tag after the removal; flowers still holding wild plants: the removal did not run (script error in the log, search `flower_tags`)
 > cdevtest tag item creativecompat:physics/floats
 > cdevtest tag item minecraft:flowers
-waitlog verb=tag kind=item tag=creativecompat:physics/floats n= [1-9]\d*
+waitlog verb=tag kind=item tag=creativecompat:physics/floats n=[1-9]\d*
 reject verb=tag kind=item tag=minecraft:flowers n=\d+ ids=.*:wild_
 shell ! grep -nE "(ERROR|Error).*flower_tags" logs/kubejs/server.log
 look the floats tag member list (wild plants, special flowers, crown, piles) and the flowers list without them
@@ -499,6 +502,6 @@ look the floats tag member list (wild plants, special flowers, crown, piles) and
 > cdevtest tag item creativeloot:loot/chalk
 > cdevtest tag item creativeloot:loot/golden_food
 > cdevtest tag item creativeworldgen:loot/chalk
-waitlog verb=tag kind=item tag=creativeloot:loot/chalk n= [1-9]\d*
-reject verb=tag kind=item tag=creativeworldgen:loot/chalk n= [1-9]\d*
+waitlog verb=tag kind=item tag=creativeloot:loot/chalk n=[1-9]\d*
+reject verb=tag kind=item tag=creativeworldgen:loot/chalk n=[1-9]\d*
 look the two creativeloot lists are full and the worldgen id has no members

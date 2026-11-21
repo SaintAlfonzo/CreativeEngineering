@@ -248,6 +248,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   boot phases were fixed at plan time): put the id in `perf/runs/RUN/drive/skip.txt` (read at each step start) and on the
   rerun list (`qrerun.py --add`), whose fresh plan picks up the change (r1120nv SQ-FSD-02, SQ-VH-12, SQ-FTW-02).
   `@superseded` and `@draft` marks are dropped at step start without that.
+- Dedicated-server dumps carry raw lang keys (517 food names untranslated), so a row comparing names with the client-made pack dump in `kubejs/exported/` sees noise; a row that diffs against a dump runs its own `/dumpall` first (r1120nv SQ-RFX-09, -30).
 
 ## Regexes and log matching
 

@@ -103,7 +103,7 @@ reject \[cdevtest\] .*(done=0|error=)
 > cdevtest rdetail maple_glazed_bacon
 > cdevtest rdetail maple_cookie
 waitlog \[cdevtest\] verb=rdetail text=maple_cookie n= 30
-count \[cdevtest\] verb=makes id=\S+ result=abnormals_delight:maple_glazed_bacon\*\d+ == 1
+count \[cdevtest\] verb=makes id=\S+ result=abnormals_delight:maple_glazed_bacon\*\d+ serializer= == 1
 reject \[cdevtest\] .*(done=0|error=)
 look rdetail lines: bacon ingredients cooked bacon + syrup + honey bottle; cookie one Oven recipe, cookie dough + syrup + honey bottle -> `*12`, no recipe with 2 syrups
 
