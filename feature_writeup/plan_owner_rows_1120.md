@@ -1,14 +1,13 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=c6806b9915c6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 6, In Progress 1, Testing 18), 3 Complete.
+<!-- generated:status_index begin open_work sha1=cf6d075341f9 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 5, In Progress 1, Testing 19), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `conventions #39` | Planned | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
 | `farming/crops #3` | Planned | S P | Harvest and replant audit for new crops |
 | `farming/crops #36` | Planned | S P | Every seed in the Botany Pots |
-| `gear/tuning #12` | Planned | S | End gear recipes configurable |
 | `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
 | `mobs/tweaks #4` | Planned | S | Entity dictionary |
 | `baking/baked-goods #39` | In Progress | S | Baked families: croissant to misc baked, plain donut beside the cider donut |
@@ -18,6 +17,7 @@
 | `dishes/ocean #12` | Testing | S P | Guardian Soup recipe |
 | `farming/composting #5` | Testing | S P | Expand organic compost |
 | `farming/composting #6` | Testing | S P | Merge the organic mash compost recipe |
+| `gear/tuning #12` | Testing | S | End gear recipes configurable |
 | `items/jars #6` | Testing | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
 | `jei/jei-coverage #29` | Testing | C | Maple bacon and cookies missing from JEI |
 | `largecontent/mod-additions #46` | Testing | S P | Hostile Delight: Magma and Slime Brownies |
