@@ -431,6 +431,7 @@
 - **Removed:** Villagers no longer sell enchanted books: librarians, Lightman's Currency cashiers and bankers (Money Mending) and Domestication Innovation animal tamers (Charisma). Master librarians no longer exchange Ancient Tomes. Villagers that already offer a book keep it.
 
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
+- **Removed:** Lexica Botania no longer appears in chest loot, the spawn bonus chest included.
 
 - **New:** The Visceral Heap biome generates in the Nether, about 5% of its area, made entirely of flesh, with blood lakes, eyebulbs, hair and flesh tendons. Nether ores do not generate in it.
 - **New:** Flesh slows walking to 0.6x. Porous Flesh slows walking to 0.45x, halves jump height and slides you down its sides, like a Honey Block.

@@ -6,8 +6,8 @@ offline sim but are untested in game)
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=e0d44e8ddd51 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 11, In Progress 2, Testing 1), 2 Complete.
+<!-- generated:status_index begin open_work sha1=072664f4b0ac -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 10, In Progress 2, Testing 2), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -20,11 +20,11 @@ offline sim but are untested in game)
 | `loot/tables #11` | Planned | S P | Enchanted book tiers in loot |
 | `loot/tables #14` | Planned | S P | Seed, crate and raw food loot by biome |
 | `loot/tables #17` | Planned | S P | Remove Exposure filters from chest loot except specific places |
-| `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
 | `loot/tables #19` | Planned | S P | Gun loot: lower the note rate, full guns, more ammo |
 | `loot/lootjs-layer #1` | In Progress | S P | LootJS-only scripts |
 | `loot/lootjs-layer #2` | In Progress | none | Legacy loot dump |
 | `loot/tables #7` | Testing | S P | Coins and PneumaticCraft loot |
+| `loot/tables #18` | Testing | S P | Remove Lexica Botania from loot |
 <!-- generated:status_index end open_work -->
 
 The pack has about 12,400 loot tables, but only 384 matter for chest loot. The rest are block drops (11,682)
@@ -868,5 +868,5 @@ Revert every temporary edit and `/reload` afterwards.
 TODO `loot/tables #17` to `#19`.
 
 - Remove Exposure and Exposure Expanded filter sub-tables from chests except in named instances (GLM pulls them in, see the section 2 inventory).
-- Remove the Lexica Botania book from loot (Botania `inject/` pools).
+- Remove the Lexica Botania book from loot (Botania `inject/` pools). Built 2026-11-21 (`loot/tables #18`): `"remove": true` on `botania:lexicon` in `loot_config.json`, so the pre-roll framework drops it from `botania:inject/simple_dungeon` and `inject/spawn_bonus_chest`; `gen_loot_config.py` keeps the flag (an edited entry survives regeneration). Test SQ-LOOT-13.
 - Guns: lower the "gun note" rate, keep full gun rates, raise ammo rates. Wording unclear; confirm before building.

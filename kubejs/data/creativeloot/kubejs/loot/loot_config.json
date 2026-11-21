@@ -298,7 +298,7 @@
       }
     },
     "botania:lexicon": {
-      "remove": false,
+      "remove": true,
       "frequency": 1,
       "chests": 3,
       "where": {
