@@ -1,7 +1,7 @@
 key,file,test prefix,status word,jars,queue codes,note,override,override_reason,override_date
 BlockRunner walk speed by surface,blockrunner.md,BR-,BUILT,"creativecompat, creativedevtools, creativedelight","CQ-BRA, CQ-PTH, CQ-SINK, SQ-BRA, SQ-PTH","DEPLOYED, in-game test pending",,,
 Tooltips,tooltips.md,TT-,BUILT,"creativecompat, creativecommon",CQ-TT,"DEPLOYED (new removals), in-game test pending",,,
-Structure tuning,structure_tuning.md,ST-,BROKEN,creativeworldgen,"SQ-DW, SQ-EF, SQ-EFB, SQ-META31, SQ-PSM, SQ-RING, SQ-SB, SQ-ST, SQ-TER, SQ-WG30","DEPLOYED, in-game test pending (plans 7.1 to 7.4 went out INCOMPLETE with 1.0.6",,,
+Structure tuning,structure_tuning.md,ST-,BUILT,creativeworldgen,"SQ-DW, SQ-EF, SQ-EFB, SQ-META31, SQ-PSM, SQ-RING, SQ-SB, SQ-ST, SQ-TER, SQ-WG30","DEPLOYED, in-game test pending (plans 7.1 to 7.4 went out INCOMPLETE with 1.0.6",,,
 Structure testing log,testing/structures/00_plan.md,"ST-, LO-",reference,,,"scratch run 8.0.1 to 8.0.10 done 2026-10-19 (M1 build, M2, Phases 3 to 10), 11 (1.0.8 fixes) and 12 (earth ...",,,
 Structures by biome,structures_by_biome.md,,reference,,,"reference, regenerate with `python3 tools/gen_structure_biome_table.py`",,,
 Biome fits,biome_fits.md,,reference,,,reference,,,
@@ -9,7 +9,7 @@ Locate,locate.md,LO-,BUILT,creativeworldgen,SQ-TIE,"DEPLOYED with 1.0.6 as part 
 Loot,loot.md,LT-,BUILT,"creativeloot, creativedelight, creativecommon",,"DEPLOYED, in-game test pending (LT-01, LT-06 passed",,,
 Loot catalog,loot_catalog/README.md,,reference,,,"reference, regenerate with `python3 tools/loot_breakdown.py`",,,
 Food,food.md,FO-,BUILT,"creativecommon, creativedelight","CQ-FDI, CQ-FO, SQ-CF, SQ-FDI, SQ-FO, SQ-PS, SQ-SN, SQ-SNF","BUILT/DEPLOYED parts, see its status block (FO-01 passed",,,
-Performance,perf.md,PF-,BROKEN,"creativecommon, creativeworldgen","CQ-ATC, CQ-PNE, CQ-XAC, SQ-ATC, SQ-BLC, SQ-CL, SQ-FTW, SQ-GFB, SQ-HRU, SQ-HT, SQ-IMS, SQ-IPO, SQ-IWF, SQ-MCL, SQ-PERFCFG, SQ-PF, SQ-PF16, SQ-STC, SQ-WE, SQ-WGP","DEPLOYED (report tooling with 1.0.3, hot-spot fixes with 1.0.4), PF-01 to PF-12 pending",,,
+Performance,perf.md,PF-,BUILT,"creativecommon, creativeworldgen","CQ-ATC, CQ-PNE, CQ-XAC, SQ-ATC, SQ-BLC, SQ-CL, SQ-FTW, SQ-GFB, SQ-HRU, SQ-HT, SQ-IMS, SQ-IPO, SQ-IWF, SQ-MCL, SQ-PERFCFG, SQ-PF, SQ-PF16, SQ-STC, SQ-WE, SQ-WGP","DEPLOYED (report tooling with 1.0.3, hot-spot fixes with 1.0.4), PF-01 to PF-12 pending",,,
 Perf suite,perf_suite.md,"PFS-, G, C, W",BUILT,creativedevtools,"SQ-PFS, SQ-SK, SQ-SV",C- and W- await the owner's veto,,,
 Resource pack bench,perf_rpack.md,RPB-,BUILT,tools,CQ-RPB,BUILT 2026-10-29,,,
 Curios slots,curios_slots.md,CS-,BUILT,"creativeequipment, creativecompat",SQ-CSI,BUILT,,,
