@@ -1,0 +1,29 @@
+# Scratch queue rows MND (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MND.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-MND Potted gossypium loot table rewritten, 2026-11-20 ([miners_delight.md](../miners_delight.md) 6, TODO `licence/cd #4`)
+@@date 2026-11-20
+@@jars creativedelight
+@@sources kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json
+@@text
+@@text Pack data file only (`kubejs/data/miners_delight/`); `/reload` or a plain boot. Any world.
+@@text
+@@table
+## SQ-MND-18 | potted gossypium drops the pot and the gossypium
+@group any
+@commands place `miners_delight:potted_gossypium`, break it with `/setblock ... air destroy`; count the item entities
+@pass one `minecraft:flower_pot` and one `miners_delight:gossypium` drop; no loot table parse error for `miners_delight:blocks/potted_gossypium` in the log
+@fails `kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json` (one pool, one `minecraft:group` entry with both items; a plain two-entry pool would drop only one of them)
+> forceload add -16 -16 16 16
+> setblock 4 100 4 minecraft:stone
+> setblock 4 101 4 miners_delight:potted_gossypium
+> setblock 4 101 4 minecraft:air destroy
+sleep 1
+> execute if entity @e[type=item,nbt={Item:{id:"minecraft:flower_pot"}},x=4,y=101,z=4,distance=..3]
+> execute if entity @e[type=item,nbt={Item:{id:"miners_delight:gossypium"}},x=4,y=101,z=4,distance=..3]
+reject Couldn't parse loot table.*potted_gossypium
+reject Test failed
+look both execute lines "Test passed"
+> kill @e[type=item]

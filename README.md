@@ -32,8 +32,10 @@ The pack's own code is split into focused jars. Every one is GPLv3.
 
 - **Food:** a single tuning system covers every food mod: consistent saturation and nourishment, comfort effects,
   placeable dishes, generated per-type cans, multi-serving cans, four-tier lunchboxes (copper through netherite, with
-  skins, dye and soap, and contents kept when upgrading), a salt economy, and wild crops and flowers that generate by
-  biome and season.
+  skins, dye and soap, and contents kept when upgrading), a salt economy, and wild food in nearly every biome: wild
+  crops and flowers that generate by biome and season.
+- **Farming:** Botany Pots are nerfed: crops grow eight times slower in a pot than the mod's default and bone meal
+  does nothing there, so pots are useful for flowers, not great for crops.
 - **Engineering:** extra Create and Immersive Engineering processing chains, treated sticks and sawdust, TNT
   shrapnel, and surface-based movement speed.
 - **Brewing and alcohol:** wine, beer and cocktails with intoxication, automated potion mixing, potion buckets and

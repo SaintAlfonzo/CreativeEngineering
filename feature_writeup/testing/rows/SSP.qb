@@ -73,7 +73,7 @@ reject verb=\S+ .*done=0
 ## SQ-ENC-01 | librarians: no Nock Enough Arrows enchantments in trades
 @group B
 @commands `/dumptrades`; summon a librarian with a lectern, step `VillagerData.level` 1 to 5 (reset offers each level)
-@pass librarians still offer enchanted books; no offer or dump entry holds `nock_enough_arrows:stockpile`, `:recovery` or `:cycle`
+@pass no offer or dump entry holds `nock_enough_arrows:stockpile`, `:recovery` or `:cycle`
 @fails Depends on: `loot/tables #10` (NEA mixins isTradeable)
 @jars creativedelight
 @from batches/r1101/w2_worldgen.qb
@@ -88,7 +88,8 @@ sleep 2
 sleep 5
 reject nock_enough_arrows:(stockpile|recovery|cycle)
 shell ! grep -rqE "nock_enough_arrows:(stockpile|recovery|cycle)" kubejs/exported/villager_trades.json
-look librarians offer enchanted books; Offers reset at a level change may need a trade-up; record what the level-5 librarian offered
+# 2026-11-20: librarians sell no enchanted books since potions/enchanting #1 (book checks: SQ-ENC-03, -04, rows/ENC.qb); the NEA check still holds
+look Offers reset at a level change may need a trade-up; record what the level-5 librarian offered
 
 ## SQ-ENC-02 | Lightman's Currency cashiers: no NEA enchantments
 @group B

@@ -22,18 +22,18 @@ load time (sha1-pinned), and everything the port ships is our own GPLv3 code. Se
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=be4c66032b4d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 1, Pinned 1, In Progress 1, Testing 4), 0 Complete.
+<!-- generated:status_index begin open_work sha1=02425193b8c0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Pinned 1, In Progress 1, Testing 5), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `licence/cd #4` | Planned | S | Rewrite the Miner's Delight potted gossypium loot table |
 | `potions/effects #17` | Pinned | S P T | One Creative Engineering Haste effect, shared by every haste source |
 | `largecontent/mod-additions #7` | In Progress | S~ C P T | Miner's Delight: merged backport (1.1.2 + 1.4.5 in one 1.19.2 jar, Vinery donor-jar method) |
 | `creativedelight/members #31` | Testing | C P | Miner's Delight: newer art for four textures |
 | `creativedelight/members #38` | Testing | S | Cave Hamburger has no recipe |
 | `creativedelight/members #51` | Testing | S | Miner's loot rebuilt on the pack loot system |
 | `dishes/meals #53` | Testing | S C P | Remove the copper cup and every cup food |
+| `licence/cd #4` | Testing | S | Rewrite the Miner's Delight potted gossypium loot table |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -275,6 +275,7 @@ rule (`forge:none`); it is skipped without the mod.
 | `development/creativeDelight/members/miners/.../upstream/` | Donor view: sha1 pin (`UpstreamJars`), translator (nothing upstream in the jar); the jar reading and the in-memory packs are the shared `DonorJars` / `BuiltInPacks` / `MemoryPackResources` ([pack_tooling.md](pack_tooling.md) 2.8), registered in `MinersDelightMod` |
 | `miners_upstream/` | The donor jar (server and client), like `vinery_upstream/` |
 | CD `kubejs/data/creativedelight/kubejs/miners_delight/loot.js`, Creative Worldgen `loot/09_drops.js` | Miner's drops as pack loot rules (D8, §8.1) |
+| `kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json` | Pack-written (GPL-3.0-only) potted gossypium drops: one pool, one `minecraft:group` entry (flower pot + gossypium), survives explosions. Rewritten 2026-11-20 (`licence/cd #4`) because the old file was about 62% the upstream ARR file; the only Miner's loot table in `kubejs/data` (SQ-MND-18) |
 | `settings.gradle` | Include |
 | `kubejs/startup_scripts/_lib/item_dict.js` | Keys |
 | `kubejs/server_scripts/` (via `global.NCH`, `global.tags`) | Recipes and tags the integration needs |
@@ -433,6 +434,9 @@ CD jar again 2026-11-03 00:08); not booted. Live rows SQ-MDL-01 to -05 (queue se
   condition and 5 dangling global loot modifier entries (both handled in the translator), and the cup conversion data
   path (`cup_conversion/` at the namespace root).
 - **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedMiners-1.4.5-ce-19.2-03` inside the CD jar, "Miner's Delight (Creative Delight)" (also in the donor-missing message); folder stays `development/creativeDelight/members/miners`. `miners_upstream/` is unchanged (both jars, next to `mods/` on server and clients); `build_deploy.py` now ties it to the CD jar. `miners_delight-*.jar` moved to CD's `replaces_jars`.
+
+- 2026-11-20: potted gossypium loot table rewritten as our own file (`licence/cd #4`, plan_owner_rows_1120.md D7): same
+  drops, one pool with a group entry instead of upstream's two pools. Queue SQ-MND-18.
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 

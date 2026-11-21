@@ -1,0 +1,47 @@
+# Scratch queue rows ENC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/ENC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-ENC Enchanted books out of villager trades, 2026-11-20 ([brief](../briefs/potions_enchanting.md) enchanting #1, TODO `potions/enchanting #1`)
+@@date 2026-11-20
+@@jars creativecommon
+@@sources kubejs/server_scripts/economy/trades.js config/trades/lightmanscurrency/custom_cashier_trades.json config/trades/lightmanscurrency/custom_banker_trades.json config/quark-common.toml feature_writeup/briefs/potions_enchanting.md
+@@text
+@@text `trades.js` drops vanilla's `EnchantBookForEmeralds` (all professions, so Dynamic Villager Trades and MCA too) and
+@@text Domestication Innovation's Charisma book; Lightman's Currency cashier books and banker Money Mending books are out of
+@@text `config/trades/lightmanscurrency/`; Quark `Librarians Exchange Ancient Tomes` = false. Full restart (Quark config and
+@@text the LC trade files are read at start). Already-spawned villagers keep their offers (D6), so test fresh villagers.
+@@text
+@@table
+## SQ-ENC-03 | no enchanted book or tome exchange in any profession's trade table
+@group any
+@commands boot; `/dumptrades`; search every profession in `kubejs/exported/villager_trades.json` for `minecraft:enchanted_book` and `quark:ancient_tome`; `logs/kubejs/server.log` (or `latest.log`) for the trades.js count line
+@pass 0 hits for both ids in `professions`; the log has `[trades] enchanted book listings removed: N` with N at least 6 (librarian levels 1 to 5 plus the animal tamer); paper, bookshelf, compass, clock still in the librarian table
+@fails `trades.js` removal block (class names: `VillagerTrades$EnchantBookForEmeralds`, DI `SellingEnchantedBook`); LC hits: `config/trades/lightmanscurrency/*.json` reset by the mod (compare with `configs_edited/root_config/trades/`); tome hit: `quark-common.toml` "Librarians Exchange Ancient Tomes"
+> dumptrades
+sleep 5
+shell grep -hoE "\[trades\] enchanted book listings removed: [0-9]+" logs/kubejs/server.log logs/latest.log | tail -1
+shell python3 -c "import json,sys;p=json.load(open('kubejs/exported/villager_trades.json'))['professions'];bad=[(k,x) for k,v in p.items() for x in ('minecraft:enchanted_book','quark:ancient_tome') if x in json.dumps(v)];print('hits',bad);lib=json.dumps(p.get('minecraft:librarian'));print('librarian keeps',[x for x in ('minecraft:paper','minecraft:bookshelf','minecraft:compass','minecraft:clock') if x in lib]);sys.exit(1 if bad else 0)"
+look the shell line: hits [] and the librarian keeps its four items
+
+## SQ-ENC-04 | a fresh librarian at every level offers no book
+@group B
+@commands summon a librarian with a lectern (NoAI), step `VillagerData.level` 1 to 5 with offers reset; read `Offers`
+@pass no offer at any level has `minecraft:enchanted_book` as its result or cost; at level 5 no `quark:ancient_tome` offer
+@fails Dynamic Villager Trades builds librarian books from the vanilla listing (brief enchanting #1 Now): the removal in `trades.js` did not reach `VillagerTrades.TRADES`, or DVT cached offers (restart)
+> forceload add -16 -16 16 16
+> setblock 2 100 2 minecraft:lectern
+> setblock 2 99 3 minecraft:stone
+> summon minecraft:villager 2 100 3 {VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"},NoAI:1b,Tags:["enc4"]}
+sleep 2
+> data get entity @e[tag=enc4,limit=1] Offers
+> data merge entity @e[tag=enc4,limit=1] {VillagerData:{level:3},Offers:{}}
+sleep 2
+> data get entity @e[tag=enc4,limit=1] Offers
+> data merge entity @e[tag=enc4,limit=1] {VillagerData:{level:5},Offers:{}}
+sleep 2
+> data get entity @e[tag=enc4,limit=1] Offers
+reject minecraft:enchanted_book
+reject quark:ancient_tome
+look Offers may stay empty after a reset until a level-up refill: then record that and lean on SQ-ENC-03 (the table the refill draws from)

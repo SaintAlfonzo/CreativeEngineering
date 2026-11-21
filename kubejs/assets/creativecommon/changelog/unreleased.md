@@ -394,6 +394,8 @@
 - **Fixed:** Rubber trees did not generate in jungles.
 - **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
 - **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
+- **Changed:** A Wandering Trader carries about 2 Wares delivery agreements [about 5].
+- **Removed:** Villagers no longer sell enchanted books: librarians, Lightman's Currency cashiers and bankers (Money Mending) and Domestication Innovation animal tamers (Charisma). Master librarians no longer exchange Ancient Tomes. Villagers that already offer a book keep it.
 
 ## Visceral Heap <!-- icon: biomesoplenty:flesh -->
 
