@@ -1,0 +1,35 @@
+
+[widget]
+	#Show the diet bonus bar on the survival inventory. When off, diet effects show like any other effect.
+	enabled = true
+	#Locked: the bar stays put and a click opens the diet bonus screen. Toggle in game with Shift+T.
+	locked = true
+	#Bar position relative to the inventory's left edge.
+	#Range: -2000 ~ 2000
+	x = 0
+	#Bar position relative to the inventory's top edge.
+	#Range: -2000 ~ 2000
+	y = 166
+
+[dietLog]
+	#Diet Log progress bar: how many milestones ahead of the last one reached it shows.
+	#Range: 1 ~ 50
+	progressAhead = 3
+	#Diet Log size: 1.25 draws the book at 125%. Shrinks to fit a small window, never below 100%
+	#(or below this value when it is under 1.0).
+	#Range: 0.5 ~ 3.0
+	bookScale = 1.4
+	#Diet Log text and icons on our pages, relative to the book: 0.85 draws them at 85% so they stay on the page
+	#(the book itself is sized by bookScale). 1.0 = unscaled.
+	#Range: 0.5 ~ 1.5
+	contentScale = 0.85
+
+[icons]
+	#Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT
+	#in braces, e.g. minecraft:potion{Potion:"minecraft:awkward"}.
+	unlock = ["monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"]
+	#Diet Log icon for permanent buffs: the first of these items that is loaded.
+	permanentBuff = ["create_crush_everything:diamond_shard", "minecraft:diamond"]
+	#Diet Log icon for effect slots with no chosen effect (a slot with one shows that effect): the first of these items that is loaded.
+	slot = ["suppsquared:metal_frame", "minecraft:item_frame"]
+

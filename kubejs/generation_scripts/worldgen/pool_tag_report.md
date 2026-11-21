@@ -1,6 +1,6 @@
 # Pool tuning report
 
-Rewritten by patcherMod `worldgen/PoolTuner` at every world load from `pool_config.json` + `pool_tags.json`. Don't edit.
+Rewritten by Creative Common `worldgen/PoolTuner` at every world load from `pool_config.json` + `pool_tags.json`. Don't edit.
 
 - 1426 pools, 7273 pieces
 - 13 pool(s) retuned

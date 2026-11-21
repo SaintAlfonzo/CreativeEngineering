@@ -138,9 +138,9 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 | Cave Carrot | `creativeworldgen:wild/cave_carrots/deep` | 1.6 per chunk | Y -64 to -25 | 146 | overworld 59.6% | 953.2 |
 | Cave Carrot | `creativeworldgen:wild/cave_carrots/high` | 1 per chunk | Y 25 to 44 | 146 | overworld 59.6% | 595.7 |
 | Cherry (Vinery tree) | `vinery:tree_cherry` | 1 in 100 chunks | surface or sea floor | 15 | overworld 3.6% | 0.4 |
-| Chorus Fruit | `nullscape:chorus_quadratic` | variable | surface (feature finds it) | 1 | the_end 63.1% | - |
-| Chorus Fruit | `nullscape:chorus_variation` | variable | surface (feature finds it) | 1 | the_end 63.1% | - |
-| Chorus Succulent | `creativedelight:wild/chorus_succulent` | 1 in 8.0 chunks | surface | 1 | the_end 63.1% | 78.9 |
+| Chorus Fruit | `nullscape:chorus_quadratic` | variable | surface (feature finds it) | 1 | the_end 61.1% | - |
+| Chorus Fruit | `nullscape:chorus_variation` | variable | surface (feature finds it) | 1 | the_end 61.1% | - |
+| Chorus Succulent | `creativedelight:wild/chorus_succulent` | 1 in 8.0 chunks | surface | 1 | the_end 61.1% | 76.3 |
 | Chorusflame | `creativedelight:wild/end_chorusflame` | 1 in 15 chunks | surface | 5 | the_end 90.1% | 60.1 |
 | Cocoa | `creativedelight:wild/cocoa_jungle_tree` | 1 in 3.0 chunks (trees) | surface or sea floor | 3 | overworld 1.3% | 4.2 trees |
 | Cocoa | `minecraft:trees_jungle` | 50.1 per chunk (trees) | surface (feature finds it) | 2 | overworld 0.3% | 162.8 trees |
@@ -155,7 +155,7 @@ Overworld patch attempts per 1000 chunks, all of the crop's features together (c
 | Cranberry | `fruitsdelight:cranberry_bush` | 1 in 32 chunks | surface | 5 | overworld 6.0% | 1.9 |
 | Cucumbers | `vintagedelight:patch_wild_cucumbers` | 1 in 75 chunks | surface | 54 | overworld 28.5% | 3.8 |
 | Durian (tree) | `fruitsdelight:tree/durian_tree` | 1 in 200 chunks | surface or sea floor | 3 | overworld 1.9% | 0.1 |
-| Ethereal Saffron | `creativedelight:wild/end_saffron` | 1 in 25 chunks | surface | 5 | the_end 90.1% | 36.1 |
+| Ethereal Saffron | `creativedelight:wild/end_saffron` | 1 in 25 chunks | surface | 5 | the_end 90.1% | 36.0 |
 | Fig (tree) | `fruitsdelight:tree/fig_tree` | 1 in 20 chunks | surface or sea floor | 10 | overworld 9.0% | 4.5 |
 | Garlic | `veggiesdelight:patch_wild_garlic` | 1 in 240 chunks | surface | 25 | overworld 11.6% | 0.5 |
 | Giant Bell Peppers | `rusticdelight:bell_pepper_block_patch_placed` | 1 in 64 chunks | surface | 12 | overworld 6.7% | 1.0 |
@@ -341,7 +341,7 @@ Same biome words and clause rules; `surface` mode skips ocean and cave biomes, `
 - Rate 1 in 10 chunks, height: surface
 - Ender's Delight 1.1.4's patch (10 tries, spread 3), 1 in 10 chunks, on end stone only. Rebuilt in the enders_additions member; 1.1.4's biome modifiers are not shipped. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes.
 - Added by: wild_crops.json end_amberveil
-- 5 biomes: end_highlands (63.12%), small_end_islands (underground), nullscape:crystal_peaks (9.21%), nullscape:shadowlands (13.96%), nullscape:void_barrens (3.85%)
+- 5 biomes: end_highlands (61.08%), small_end_islands (underground), nullscape:crystal_peaks (7.01%), nullscape:shadowlands (14.15%), nullscape:void_barrens (7.87%)
 
 ### `vinery:tree_apple` (Apple (Vinery tree))
 
@@ -529,28 +529,28 @@ Same biome words and clause rules; `surface` mode skips ocean and cave biomes, `
 - Rate variable, height: surface (feature finds it)
 - noise-based count
 - Added by: biome json (Nullscape)
-- 1 biomes: end_highlands (63.12%)
+- 1 biomes: end_highlands (61.08%)
 
 ### `nullscape:chorus_variation` (Chorus Fruit)
 
 - Rate variable, height: surface (feature finds it)
 - noise-based count
 - Added by: biome json (Nullscape)
-- 1 biomes: end_highlands (63.12%)
+- 1 biomes: end_highlands (61.08%)
 
 ### `creativedelight:wild/chorus_succulent` (Chorus Succulent)
 
 - Rate 1 in 8.0 chunks, height: surface
 - End's Delight 2.1 places it from Java (its placed feature ends_delight:chorus_succulent: 1 in 8 chunks, 20 tries, 1 to 3 per block) in the End Highlands only; same feature and biome here, its modifier off (ends_delight.md 3.1, mod-additions #15: kept).
 - Added by: wild_crops.json chorus_succulent
-- 1 biomes: end_highlands (63.12%)
+- 1 biomes: end_highlands (61.08%)
 
 ### `creativedelight:wild/end_chorusflame` (Chorusflame)
 
 - Rate 1 in 15 chunks, height: surface
 - 1.1.4's patch, ages 0 to 2 mixed, 1 in 15 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes.
 - Added by: wild_crops.json end_chorusflame
-- 5 biomes: end_highlands (63.12%), small_end_islands (underground), nullscape:crystal_peaks (9.21%), nullscape:shadowlands (13.96%), nullscape:void_barrens (3.85%)
+- 5 biomes: end_highlands (61.08%), small_end_islands (underground), nullscape:crystal_peaks (7.01%), nullscape:shadowlands (14.15%), nullscape:void_barrens (7.87%)
 
 ### `creativedelight:wild/cocoa_jungle_tree` (Cocoa)
 
@@ -647,7 +647,7 @@ Same biome words and clause rules; `surface` mode skips ocean and cave biomes, `
 - Rate 1 in 25 chunks, height: surface
 - 1.1.4's patch (4 tries, spread 1), 1 in 25 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes.
 - Added by: wild_crops.json end_saffron
-- 5 biomes: end_highlands (63.12%), small_end_islands (underground), nullscape:crystal_peaks (9.21%), nullscape:shadowlands (13.96%), nullscape:void_barrens (3.85%)
+- 5 biomes: end_highlands (61.08%), small_end_islands (underground), nullscape:crystal_peaks (7.01%), nullscape:shadowlands (14.15%), nullscape:void_barrens (7.87%)
 
 ### `fruitsdelight:tree/fig_tree` (Fig (tree))
 
@@ -1135,7 +1135,7 @@ Same biome words and clause rules; `surface` mode skips ocean and cave biomes, `
 - Rate 1 in 15 chunks, height: surface
 - 1.1.4's patch, spreading sprouts on the ground, 1 in 15 chunks, on end stone only; they spread and fruit by random tick. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes.
 - Added by: wild_crops.json end_voidpepper
-- 5 biomes: end_highlands (63.12%), small_end_islands (underground), nullscape:crystal_peaks (9.21%), nullscape:shadowlands (13.96%), nullscape:void_barrens (3.85%)
+- 5 biomes: end_highlands (61.08%), small_end_islands (underground), nullscape:crystal_peaks (7.01%), nullscape:shadowlands (14.15%), nullscape:void_barrens (7.87%)
 
 ### `creativedelight:wild/wild_hops` (Wild Hops)
 
@@ -1303,11 +1303,11 @@ Every overworld land biome, with its traits from `biome_traits.json`, plus other
 | terralith:yellowstone | overworld 4.28% | cold coniferous forest grassy wet | Brown Mushroom Colony (1 in 15 chunks), Cave Carrot (1 per chunk), Cave Carrot (1.6 per chunk), Cave Carrot (4 per chunk), Cranberry (1 in 32 chunks), Cucumbers (1 in 75 chunks), Fig (tree) (1 in 20 chunks), Grapes: taiga red (1 in 22 chunks), Grapes: taiga white (1 in 22 chunks), Hawberry (tree) (1 in 20 chunks), Inky Cap (1 in 128 chunks), Inky Cap (1 in 15 chunks), Inky Cap Colony (1 in 15 chunks), Morel (1 in 128 chunks), Morel (1 in 15 chunks), Morel Colony (1 in 15 chunks), Oats (1 in 100 chunks), Potato (1 in 100 chunks), Pumpkin (1 in 300 chunks), Red Mushroom Colony (1 in 15 chunks), Rooted Dirt (truffle ground) (1 in 3.0 chunks), Salmonberries (1 in 35 chunks), Sweet Berries (1 in 32 chunks), Truffle Dirt (5 per chunk) |
 | terralith:yosemite_cliffs | overworld 0.19% | grassy mountain rocky temperate | Broccoli (1 in 240 chunks), Brown Mushroom Colony (1 in 15 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cave Carrot (1 per chunk), Cave Carrot (1.6 per chunk), Cave Carrot (4 per chunk), Cucumbers (1 in 75 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Inky Cap (1 in 128 chunks), Inky Cap (1 in 15 chunks), Inky Cap Colony (1 in 15 chunks), Morel (1 in 128 chunks), Morel (1 in 15 chunks), Morel Colony (1 in 15 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Raspberry (1 in 62 chunks), Red Mushroom Colony (1 in 15 chunks) |
 | terralith:yosemite_lowlands | overworld 0.12% | coniferous forest grassy oak temperate | Adzuki Beans (1 in 128 chunks), Apple (Vinery tree) (1 in 100 chunks), Broccoli (1 in 240 chunks), Brown Mushroom Colony (1 in 15 chunks), Carrot (1 in 120 chunks), Cauliflower (1 in 240 chunks), Cave Carrot (1 per chunk), Cave Carrot (1.6 per chunk), Cave Carrot (4 per chunk), Cucumbers (1 in 75 chunks), Garlic (1 in 240 chunks), Grapes: red (1 in 22 chunks), Grapes: white (1 in 22 chunks), Inky Cap (1 in 128 chunks), Inky Cap (1 in 15 chunks), Inky Cap Colony (1 in 15 chunks), Morel (1 in 128 chunks), Morel (1 in 15 chunks), Morel Colony (1 in 15 chunks), Oats (1 in 100 chunks), Onion (1 in 120 chunks), Raspberry (1 in 62 chunks), Red Mushroom Colony (1 in 15 chunks), Wild Hops (1 in 96 chunks) |
-| end_highlands | the_end 63.12% | - | Amberveils (1 in 10 chunks), Chorus Fruit (variable), Chorus Succulent (1 in 8.0 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
+| end_highlands | the_end 61.08% | - | Amberveils (1 in 10 chunks), Chorus Fruit (variable), Chorus Succulent (1 in 8.0 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
 | small_end_islands | the_end underground | - | Amberveils (1 in 10 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
-| nullscape:crystal_peaks | the_end 9.21% | - | Amberveils (1 in 10 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
-| nullscape:shadowlands | the_end 13.96% | - | Amberveils (1 in 10 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
-| nullscape:void_barrens | the_end 3.85% | - | Amberveils (1 in 10 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
+| nullscape:crystal_peaks | the_end 7.01% | - | Amberveils (1 in 10 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
+| nullscape:shadowlands | the_end 14.15% | - | Amberveils (1 in 10 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
+| nullscape:void_barrens | the_end 7.87% | - | Amberveils (1 in 10 chunks), Chorusflame (1 in 15 chunks), Ethereal Saffron (1 in 25 chunks), Void Pepper (1 in 15 chunks) |
 | crimson_forest | the_nether 15.00% | - | Propelplant (8 per chunk) |
 
 ## 6. Coverage checks

@@ -9,7 +9,7 @@ Locate,locate.md,LO-,BUILT,creativeworldgen,SQ-TIE,"DEPLOYED with 1.0.6 as part 
 Loot,loot.md,LT-,BUILT,"creativeloot, creativedelight, creativecommon",,"DEPLOYED, in-game test pending (LT-01, LT-06 passed",,,
 Loot catalog,loot_catalog/README.md,,reference,,,"reference, regenerate with `python3 tools/loot_breakdown.py`",,,
 Food,food.md,FO-,BUILT,"creativecommon, creativedelight","CQ-FDI, CQ-FO, SQ-CF, SQ-FDI, SQ-FO, SQ-PS, SQ-SN, SQ-SNF","BUILT/DEPLOYED parts, see its status block (FO-01 passed",,,
-Performance,perf.md,PF-,BUILT,"creativecommon, creativeworldgen","CQ-ATC, CQ-PNE, CQ-XAC, SQ-ATC, SQ-BLC, SQ-CL, SQ-FTW, SQ-GFB, SQ-HRU, SQ-HT, SQ-IMS, SQ-IPO, SQ-IWF, SQ-MCL, SQ-PERFCFG, SQ-PF, SQ-PF16, SQ-STC, SQ-WE, SQ-WGP","DEPLOYED (report tooling with 1.0.3, hot-spot fixes with 1.0.4), PF-01 to PF-12 pending",,,
+Performance,perf.md,PF-,BROKEN,"creativecommon, creativeworldgen","CQ-ATC, CQ-PNE, CQ-XAC, SQ-ATC, SQ-BLC, SQ-CL, SQ-FTW, SQ-GFB, SQ-HRU, SQ-HT, SQ-IMS, SQ-IPO, SQ-IWF, SQ-MCL, SQ-PERFCFG, SQ-PF, SQ-PF16, SQ-STC, SQ-WE, SQ-WGP","DEPLOYED (report tooling with 1.0.3, hot-spot fixes with 1.0.4), PF-01 to PF-12 pending",,,
 Perf suite,perf_suite.md,"PFS-, G, C, W",BUILT,creativedevtools,"SQ-PFS, SQ-SK, SQ-SV",C- and W- await the owner's veto,,,
 Resource pack bench,perf_rpack.md,RPB-,BUILT,tools,CQ-RPB,BUILT 2026-10-29,,,
 Curios slots,curios_slots.md,CS-,BUILT,"creativeequipment, creativecompat",SQ-CSI,BUILT,,,
