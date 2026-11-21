@@ -68,11 +68,11 @@ ServerEvents.recipes(e => {
 	R.createMixing(Item.of(i.wood_pellets, 6), [Item.of(i.sawdust, 4), Item.of(i.creosote_sawdust, 4)], e, 'wood_pellets_mixing', 'n/a')
 
 	//Compost & fertile soil crafts
-	R.shaped(Item.of(i.compost, 1), ['DWO', 'WOR', 'ORR'], { D: i.dirt, R: i.mulch_brown, O: i.mulch_bone, W: i.mulch_waste }, e, 'compost_manual_only')
-	R.shaped(Item.of(i.compost, 1), ['DWO', 'WOB', 'OBB'], { D: i.dirt, B: i.any_bark, O: i.mulch_bone, W: i.mulch_waste }, e, 'compost_bark_manual_only')
+	R.shaped(Item.of(i.compost, 1), ['DWO', 'WOR', 'ORR'], { D: i.t_compost_dirt, R: i.mulch_brown, O: i.mulch_bone, W: i.mulch_waste }, e, 'compost_manual_only')
+	R.shaped(Item.of(i.compost, 1), ['DWO', 'WOB', 'OBB'], { D: i.t_compost_dirt, B: i.any_bark, O: i.mulch_bone, W: i.mulch_waste }, e, 'compost_bark_manual_only')
 
-	R.createMixing(Item.of(i.compost, 1), [Item.of(i.dirt, 1), i.mulch_brown, i.mulch_brown, i.mulch_bone, i.mulch_bone, i.mulch_waste, i.mulch_waste], e, 'compost_mixing', 'n/a')
-	R.createMixing(Item.of(i.compost, 1), [Item.of(i.dirt, 1), i.any_bark, i.any_bark, i.mulch_bone, i.mulch_bone, i.mulch_waste, i.mulch_waste], e, 'compost_mixing_bark', 'n/a')
+	R.createMixing(Item.of(i.compost, 1), [i.t_compost_dirt, i.mulch_brown, i.mulch_brown, i.mulch_bone, i.mulch_bone, i.mulch_waste, i.mulch_waste], e, 'compost_mixing', 'n/a')
+	R.createMixing(Item.of(i.compost, 1), [i.t_compost_dirt, i.any_bark, i.any_bark, i.mulch_bone, i.mulch_bone, i.mulch_waste, i.mulch_waste], e, 'compost_mixing_bark', 'n/a')
 
 	R.shaped(Item.of(i.fertile_soil, 6), ['SSS', 'ROW', 'GFZ'], { S: i.rich_soil, R: i.mulch_brown, O: i.mulch_bone, W: i.mulch_waste, G: i.mulch_green, F: i.mulch_fungus, Z: i.mulch_fertilizer }, e, 'fertile_soil_var_manual_only')
 	R.shaped(Item.of(i.fertile_soil, 6), ['SSS', 'ROW', 'GFZ'], { S: i.rich_soil, R: i.any_bark, O: i.mulch_bone, W: i.mulch_waste, G: i.mulch_green, F: i.mulch_fungus, Z: i.mulch_fertilizer }, e, 'fertile_soil_var_bark_manual_only')

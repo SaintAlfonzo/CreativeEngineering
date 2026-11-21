@@ -245,3 +245,54 @@ reject verb=\S+ .*done=0
 @pass JEI lists the Bone Broth fluid with the soup sprite tinted tan (as in a Supplementaries jar), not purple-black; JEI shows the spout and drain recipes at 250 mB; the basin shows the fluid; a Spout fills an empty bowl into Bone Broth
 @fails missing-texture fluid (the Moonlight sprites are not in the block atlas: switch to KubeJS's thin texture in `fluids.js`)
 look hand: the fluid's look in JEI, the basin and a fluid tank
+
+@@section 5
+@@title SQ-RM, SQ-RW, SQ-CP owner rows G3: polished iron bars polishing, IE stripped-log sawmill duplicates, compost dirt slot, 2026-11-21 ([recipes_metal.md](../recipes_metal.md), [recipes_wood.md](../recipes_wood.md) F4, [composting.md](../composting.md) 3, TODO `recipes/metal #5`, `recipes/wood #1`, `farming/composting #5`)
+@@date 2026-11-21
+@@jars creativecommon creativedelight creativeengineering
+@@sources feature_writeup/recipes_metal.md feature_writeup/recipes_wood.md feature_writeup/composting.md kubejs/data/creativeengineering/kubejs/metal/metal_building.js kubejs/data/creativeengineering/kubejs/wood/bark.js kubejs/data/creativeengineering/kubejs/wood/sawdust.js
+@@text
+@@text Targets the Creative Engineering jar installed 2026-11-21 (phase G3). Full pack, group A superflat.
+@@text
+@@table
+## SQ-RM-15 | polished iron bars come from sandpaper polishing iron bars; the stonecutting recipe stays removed
+@group A
+@commands rdetail the polishing id and the removed Create Deco stonecutting id
+@pass `creativeengineering:createsandpaperpolishing/polished_iron_bars` exists (serializer `create:sandpaper_polishing`, iron bars -> polished iron bars); `createdeco:polished_iron_bars_from_iron_ingot_stonecutting` gone
+@fails `createSandpaperPolishing` missing from NCH (Creative Common older than G1); `kubejs_create` lacks `sandpaper_polishing`
+> cdevtest rdetail createsandpaperpolishing/polished_iron_bars
+> cdevtest rdetail polished_iron_bars_from_iron_ingot_stonecutting
+waitlog verb=rdetail text=polished_iron_bars_from_iron_ingot_stonecutting n= 30
+expect verb=rdetail id=creativeengineering:createsandpaperpolishing/polished_iron_bars serializer=create:sandpaper_polishing result=createdeco:polished_iron_bars\b
+reject verb=rdetail id=createdeco:polished_iron_bars_from_iron_ingot_stonecutting\b
+reject verb=\S+ .*done=0
+
+## SQ-RW-32 | IE's 7 vanilla stripped-log sawmill recipes removed, the pack's own stay
+@group A
+@commands rdetail `immersiveengineering:sawmill/stripped_oak_log` and `stripped_mangrove_log`, and the pack's `creativeengineering:sawmill/stripped_oak_log-oak_planks`
+@pass the two IE ids gone; the pack's stripped oak log -> 6 oak planks + wood dust recipe present; JEI shows one sawmill recipe for a stripped oak log
+@fails a recipe-removal error in `logs/kubejs/server.log` naming `bark.js`
+> cdevtest rdetail immersiveengineering:sawmill/stripped_oak_log
+> cdevtest rdetail immersiveengineering:sawmill/stripped_mangrove_log
+> cdevtest rdetail stripped_oak_log-oak_planks
+waitlog verb=rdetail text=stripped_oak_log-oak_planks n= 30
+reject verb=rdetail id=immersiveengineering:sawmill/stripped_(oak|mangrove)_log\b
+expect verb=rdetail id=creativeengineering:sawmill/stripped_oak_log-oak_planks serializer=immersiveengineering:sawmill result=minecraft:oak_planks\*6\b
+reject verb=\S+ .*done=0
+
+## SQ-CP-04 | Organic Compost recipes take any compost dirt block in the dirt slot
+@group A
+@commands rdetail the four Organic Compost ids; client: JEI recipes for Organic Compost
+@pass the two crafting and two Create mixing recipes exist; their dirt slot cycles dirt, coarse dirt, rooted dirt, podzol, moss block, mud, humus and silt in JEI; crafting one with podzol works
+@fails `i.t_compost_dirt` unresolved (Creative Common older than G2b); the tag empty (Creative Delight older than G2b)
+> cdevtest rdetail compost_manual_only
+> cdevtest rdetail compost_bark_manual_only
+> cdevtest rdetail compost_mixing
+> cdevtest rdetail compost_mixing_bark
+waitlog verb=rdetail text=compost_mixing_bark n= 30
+expect verb=rdetail id=\S*compost_manual_only\b
+expect verb=rdetail id=\S*compost_bark_manual_only\b
+expect verb=rdetail id=\S*compost_mixing\b
+expect verb=rdetail id=\S*compost_mixing_bark\b
+reject verb=\S+ .*done=0
+look hand: JEI dirt slot cycles the 8 blocks; craft one with podzol

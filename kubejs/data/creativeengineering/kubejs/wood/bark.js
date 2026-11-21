@@ -60,8 +60,7 @@ R.bulk('remove', fdSpecies.map(s => [{ id: s.fdWood }, e]))
 R.bulk('fdCutting', fdSpecies.map(s => [s.log, R.AXE, [s.strippedLog, Item.of(s.bark).withChance(0.50)], e]))
 R.bulk('fdCutting', fdSpecies.map(s => [s.wood, R.AXE, [s.strippedWood, Item.of(s.bark).withChance(0.75)], e]))
 
-// Twisted uses farmersdelight-style fdCutting too, but has no matching removal id in the original
-// (kept as-is; note the original also had a bug here, see caveat below)
+// Twisted: no mod ships a cutting-board recipe for its log or wood, so there is nothing to remove; these add the only ones
 R.fdCutting(i.log_twisted, R.AXE, [i.log_twisted_stripped, Item.of(i.bark_twisted).withChance(0.50)], e)
 R.fdCutting(i.wood_twisted, R.AXE, [i.wood_twisted_stripped, Item.of(i.bark_twisted).withChance(0.75)], e)
 
@@ -91,7 +90,8 @@ R.bulk('fdCutting', hollowSpecies.map((log, idx) => [log, R.AXE, hollowBark[idx]
 R.bulk('remove', [
 	'oak_log', 'spruce_log', 'birch_log', 'dark_oak_log', 'jungle_log',
 	'acacia_log', 'mangrove_log', 'crimson_log', 'warped_log',
-	'stripped_crimson_log', 'stripped_warped_log',
+	'stripped_oak_log', 'stripped_spruce_log', 'stripped_birch_log', 'stripped_dark_oak_log', 'stripped_jungle_log',
+	'stripped_acacia_log', 'stripped_mangrove_log', 'stripped_crimson_log', 'stripped_warped_log',
 ].map(name => [{ id: 'immersiveengineering:sawmill/' + name }, e]))
 
 // ── FD's tree bark: its paper recipe removed; every cutting-board stripping recipe now gives Immersive

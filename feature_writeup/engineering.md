@@ -2,8 +2,8 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=92253107440f -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 11, Testing 3), 2 Complete.
+<!-- generated:status_index begin open_work sha1=99990989cd58 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 10, Testing 3), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -12,7 +12,6 @@
 | `engineering/sawmill-and-components #2` | Planned | S | Sawmill recipes off the manual pipeline |
 | `engineering/sawmill-and-components #3` | Planned | C P | JEI doesn't show the sawmill blade |
 | `engineering/sawmill-and-components #4` | Planned | S P | One center per component |
-| `engineering/sawmill-and-components #6` | Planned | none | Tier names in comments |
 | `engineering/sawmill-and-components #8` | Planned | S P | Metal component chains generated |
 | `engineering/sawmill-and-components #9` | Planned | S P | Wire alternatives by conductivity |
 | `engineering/sawmill-and-components #11` | Planned | S P | Electron and vacuum tube tag |
@@ -232,7 +231,8 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
   take an electrum one. Pick one center each. The comments are off too ("4 plates around a copper ingot", "deploy 3
   plates onto a copper ingot", "2 plates + 1 copper ingot"). Owner asked for more info 2026-10-30 (brief recommends the copper rod and the electrum
   component).
-- **F5. Component tier names are decided in the item names but not in the code comments.** `components.js` lines 18 and
+- **F5.** FIXED 2026-11-21 (TODO `engineering/sawmill-and-components #6`, plan_owner_rows_1120.md D2): the comments in
+  `kubejs/data/creativeengineering/kubejs/engineering/components.js` read `--- Light ---` / `--- Heavy ---`. Was: **Component tier names are decided in the item names but not in the code comments.** `components.js` lines 18 and
   22 still say `--- Light? ---` / `--- Dense? ---`; the items are already "Aluminum Light Component" and "Uranium Heavy
   Component". [TODO](todo/TODO.md) `engineering/sawmill-and-components #6` lists this as undecided; it can be closed by deleting the comments, or the
   names changed. DECIDED 2026-10-29: rename to Light / Heavy when usage becomes clear, keeping the adjective order
@@ -360,6 +360,7 @@ Creative Common's copies to see whether the jar is current.
   sprite from `i.wire_coil_<metal>` (`transition_items.js`). No recipe change.
 - 2026-10-30: exclusive chance outputs for Create processing recipes and rose quartz sand blasting
   (`engineering/dreams-and-desires #3`); tests EN-19 to EN-21. Creative Common 1.1.04 built, not installed.
+- 2026-11-21: F5 fixed: component tier comments read Light / Heavy (plan_owner_rows_1120.md D2). No recipe change.
 
 ## Owner notes (scratchpad 2026-11-07)
 

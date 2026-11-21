@@ -4,14 +4,14 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=a9bea68cd731 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 1, In Progress 1, Testing 2), 1 Complete.
+<!-- generated:status_index begin open_work sha1=8cf060597fab -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 1, Testing 3), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `farming/composting #2` | Planned | S P T | Fertile Soul Soil (Nulch) recipe: review, then move into the compost file |
-| `farming/composting #5` | In Progress | S P | Expand organic compost |
 | `farming/composting #4` | Testing | S+ P T | Seed milling to bone meal |
+| `farming/composting #5` | Testing | S P | Expand organic compost |
 | `farming/composting #6` | Testing | S P | Merge the organic mash compost recipe |
 <!-- generated:status_index end open_work -->
 
@@ -114,8 +114,8 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   (`vintagedelight/recipes.js`; its tree fertilizer stays). The dirt slot tag `#creativedelight:compost_dirt`
   (`i.t_compost_dirt`) = dirt, coarse dirt, rooted dirt, podzol, moss block, mud, Immersive Weathering humus and Twigs
   silt (owner R7: no grass block or mycelium, silk touch only; no rich soil, an output tier); Creative Engineering's
-  `wood/sawdust.js` swaps its `D` slot to it in phase G3. Organic mash composts at 0.5 (plant matter; a hand row in
-  CD `vintagedelight/compost.js`; it was not compostable). Tests SQ-CP-02, SQ-CP-03.
+  `wood/sawdust.js` takes it in the dirt slot of its two crafting and two Create mixing Organic Compost recipes (G3, 2026-11-21). Organic mash composts at 0.5 (plant matter; a hand row in
+  CD `vintagedelight/compost.js`; it was not compostable). Tests SQ-CP-02, SQ-CP-03, SQ-CP-04.
 
 ## 4. Limits and decisions
 
@@ -171,6 +171,8 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - [ ] **CM-07 Hopper:** a hopper feeding seeds into a composter -> accepted at the same chance.
 - [ ] **CM-08 Client agrees:** on the dedicated server, right-click a composter with a modded crop -> the client shows
   the fill (no desync), same as the server.
+- [ ] **CM-09 Compost dirt slot:** JEI on Organic Compost -> the dirt slot of the two crafting and two mixing recipes
+  cycles dirt, coarse dirt, rooted dirt, podzol, moss block, mud, humus and silt; podzol crafts one (SQ-CP-04).
 
 ## 8. History
 
@@ -186,3 +188,5 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - 2026-11-20: Organic Compost rot slot (+ rotten tomato, rotten cherry, organic mash), the `compost_dirt` tag, Vintage
   Delight's mash compost recipes removed, organic mash at 0.5 (section 3; plan_owner_rows_1120.md G2b). Needs the CD
   jar; the dirt slot swap is G3.
+- 2026-11-21: Organic Compost dirt slot swapped to `#creativedelight:compost_dirt` in Creative Engineering's `wood/sawdust.js`
+  (plan_owner_rows_1120.md G3). Needs the Creative Engineering jar. SQ-CP-04.

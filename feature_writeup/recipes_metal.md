@@ -195,6 +195,7 @@ None.
 - [ ] **RM-12 Bars:** laser cut an iron block -> 64 iron bars; 6 iron rods -> 9.
 - [ ] **RM-13 Rust:** wash an iron block with a fan through water -> rusty iron block.
 - [ ] **RM-14 Red electrum:** heated mixer, electrum + 4 redstone -> red electrum ingot.
+- [ ] **RM-15 Polished iron bars:** sandpaper polishing iron bars (held sandpaper or a deployer) -> polished iron bars; no stonecutter recipe for them; an iron catwalk crafts (SQ-RM-15).
 
 ## 8. History
 
@@ -202,3 +203,4 @@ None.
   The folder hasn't changed in git since.
 - 2026-10-18: this writeup; findings F1 to F7; tests RM-01 to RM-14. No code changed.
 - 2026-10-19: F2 (9 copper plates -> plate block), F3 (IE zinc hammer-crushing removed) and the `EVENT:` log lines of F7 fixed ([plan_1.0.9.md](plan_1.0.9.md)). Header audit items 4 and 5 marked done.
+- 2026-11-21: polished iron bars made by Create sandpaper polishing of iron bars (`metal_building.js`, NCH `createSandpaperPolishing`; TODO `recipes/metal #5`, plan_owner_rows_1120.md G3); Create Deco's stonecutting recipe stays removed. RM-15.

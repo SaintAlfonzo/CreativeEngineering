@@ -173,11 +173,11 @@ Third-party bug fixes,thirdparty_fixes.md,"SQ-TPF, CQ-TPF",planned,creativecommo
 Jar handle leak,jar_handle_leak.md,CQ-FDR-,VERIFIED,creativecommon,CQ-FDR,BUILT and installed 2026-11-14,,,
 Log warnings,"log_warnings.md, log_warnings_lists.md",LW-,reference,,,written 2026-10-24,reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Cans,cans.md,CN-,BUILT,creativedelight,"CQ-CNG, CQ-CNP, SQ-CNG, SQ-CNP, SQ-VNG","2026-11-02 night: Canned Goods repacked as a CD member (9) BUILT, CD jar installed 2026-11-02 23:16, not ...",,,
-Composting,composting.md,CM-,BUILT,"creativedelight, creativecommon, creativebrewing",SQ-CP,"DEPLOYED (since 1.0.3), CM-01 to CM-08 pending",,,
+Composting,composting.md,CM-,BUILT,"creativedelight, creativecommon, creativebrewing, creativeengineering",SQ-CP,"DEPLOYED (since 1.0.3), CM-01 to CM-08 pending",,,
 Camera bags,camera_bags.md,CB-,BUILT,exposure,,"DEPLOYED (1.0.3, moved 1.0.4), never tested in game",,,
 TNT shrapnel,tnt_shrapnel.md,TN-,BUILT,creativecompat,"CQ-TN, SQ-TN","DEPLOYED (1.0.3 jar), TN-01 to TN-10 pending",,,
 Engineering recipes,recipes_engineering.md,RE-,BUILT,creativeengineering,SQ-RE,"DEPLOYED (since 1.0.3), RE-01 to RE-20 pending",,,
-Metal recipes,recipes_metal.md,RM-,BUILT,creativeengineering,,"DEPLOYED (since 1.0.3), RM-01 to RM-14 pending",,,
+Metal recipes,recipes_metal.md,RM-,BUILT,creativeengineering,SQ-RM,"DEPLOYED (since 1.0.3), RM-01 to RM-14 pending",,,
 Wood recipes,recipes_wood.md,RW-,BUILT,creativeengineering,"CQ-RW, SQ-RW","DEPLOYED (since 1.0.3), RW-01 to RW-10 pending",,,
 Cooking recipes,recipes_cooking.md,RC-,BUILT,creativedelight,"SQ-BJ, SQ-PJL, SQ-RC, SQ-RCO",DEPLOYED (since 1.0.3),,,
 Magic recipes,recipes_magic.md,RA-,planned,creativemagic,,"DEPLOYED (since 1.0.3), RA-01 to RA-08 pending",,,
