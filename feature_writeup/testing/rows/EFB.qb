@@ -775,7 +775,9 @@ shell n=$(cat ../efb_vl_vpl.n 2>/dev/null || echo 0); for i in $(seq 600); do [ 
 capture VPL nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {VPL1-64} {VPL3-64} {VPL1+64} {VPL3+64}
 sleep 15
+# judge-9 (2026-11-21): the capture ran before the probe printed (the forceload held the server thread); wait for done= first
 > cdevtest under {VPL1} {VPL3} 2 village
+waitlog \[cdevtest\] verb=under (.* )?done=[01] 120
 capture VPLB verb=under id=\S*village\S* chunk=\S+ box=(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+)
 > cdevtest count {VPLB1} {VPLB2-8} {VPLB3} {VPLB4} {VPLB2-1} {VPLB6} minecraft:stone
 > cdevtest count {VPLB1} {VPLB2-8} {VPLB3} {VPLB4} {VPLB2-1} {VPLB6} minecraft:dirt
@@ -794,6 +796,7 @@ capture VRV nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {VRV1-64} {VRV3-64} {VRV1+64} {VRV3+64}
 sleep 15
 > cdevtest under {VRV1} {VRV3} 2 village
+waitlog \[cdevtest\] verb=under (.* )?done=[01] 120
 capture VRVB verb=under id=\S*village\S* chunk=\S+ box=(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+)
 > cdevtest count {VRVB1} {VRVB2-8} {VRVB3} {VRVB4} {VRVB2-1} {VRVB6} minecraft:stone
 > cdevtest count {VRVB1} {VRVB2-8} {VRVB3} {VRVB4} {VRVB2-1} {VRVB6} minecraft:dirt
@@ -812,6 +815,7 @@ capture VDS nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {VDS1-64} {VDS3-64} {VDS1+64} {VDS3+64}
 sleep 15
 > cdevtest under {VDS1} {VDS3} 2 village
+waitlog \[cdevtest\] verb=under (.* )?done=[01] 120
 capture VDSB verb=under id=\S*village\S* chunk=\S+ box=(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+)
 > cdevtest count {VDSB1} {VDSB2-8} {VDSB3} {VDSB4} {VDSB2-1} {VDSB6} minecraft:stone
 > cdevtest count {VDSB1} {VDSB2-8} {VDSB3} {VDSB4} {VDSB2-1} {VDSB6} minecraft:dirt

@@ -108,7 +108,8 @@ bootreject (?i)oceanic_delight:oceanic_delight_loot_modifier.*(not registered|un
 > forceload add 0 0 15 15
 > fill 0 199 0 15 199 15 minecraft:glass
 > cdevtest kill 4 200 4 minecraft:salmon n=5 held=farmersdelight:flint_knife
-> cdevtest kill 8 200 4 minecraft:elder_guardian
+# judge-9 (2026-11-21): upstream elder_eye_loot_modifier rolls scavenging_elder_eye, which needs a knife in the killer's main hand
+> cdevtest kill 8 200 4 minecraft:elder_guardian held=farmersdelight:flint_knife
 > cdevtest kill 12 200 4 minecraft:squid held=farmersdelight:flint_knife
 repeat 10
 > loot spawn 4 200 12 loot minecraft:chests/shipwreck_supply
@@ -153,7 +154,9 @@ look the chest items line may hold salmon or ancient fish eggs over the 20 rolls
 > loot spawn 2600 -58 2600 loot endersdelight:blocks/chorus_crate
 > cdevtest place 2602 -60 2600 endersdelight:chorus_flame_block[age=2] flags=18
 > cdevtest loot 2602 -60 2600 rolls=1
-> execute in minecraft:the_end run locate structure endersdelight:end_house
+# judge-9 (2026-11-21): from (0, 0) the search hit searchTimeoutSeconds 120 (2712 of 7301 candidates); the End House stands only in
+# end_highlands / end_midlands, so the search starts out there
+> execute in minecraft:the_end positioned 1200 64 0 run locate structure endersdelight:end_house
 waitlog (nearest endersdelight:end_house|Could not find) 300
 expect Dropped [1-9]
 expect verb=loot state="?endersdelight:chorus_flame_block\[age=2\]"? .*drops=\S+

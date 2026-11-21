@@ -62,8 +62,9 @@ shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/late
 shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/latest.log | grep -q creativeworldgen
 shell ! grep -hE "global\.CWG missing|section in any registered config|\[loot-tuning\] could not read" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
 shell grep -hE "creativeworldgen|NCH\.cfg|loot-tuning" logs/kubejs/startup.log logs/kubejs/server.log | head -30
-shell find kubejs -path kubejs/exported -prune -o -type f -newer eula.txt -print | grep -vE "\.log$" | head -30
-look reports written this boot (structure, bee nest, wild flower, mushroom, mob spawn) appear in the find list
+# judge-9 (2026-11-21): WorldgenFiles.writeText writes only when the content differs, so an unchanged report keeps its copied time
+shell cd kubejs/generation_scripts/worldgen && for f in *.md *.json; do if [ "$f" -nt ../../../eula.txt ]; then echo "rewritten $f"; elif cmp -s "$f" "$INST/kubejs/generation_scripts/worldgen/$f"; then echo "unchanged $f"; else echo "differs, not rewritten $f"; fi; done
+look every worldgen report (structure_tag_report.md, pool_tag_report.md and the other generated files) is rewritten or unchanged (writeText skips equal content); none "differs, not rewritten"
 
 ## SQ-CWG-04 | loot tuning lists the Creative Delight crate rules
 @group A
@@ -116,11 +117,15 @@ waitlog (The nearest creativeworldgen:meta/pillager_camp_ruin|Could not find) 90
 > forceload add {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
 sleep 45
 > forceload remove {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
-> forceload add 3008 3008 3135 3135
+# judge-9 (2026-11-21): 3072 3072 was not desert: the core part (minecraft:desert_pyramid) passes its own biome list, so the place failed
+> execute positioned 3072 70 3072 run locate biome minecraft:desert
+waitlog (The nearest minecraft:desert|Could not find) 600
+capture SDS The nearest minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SDS1-64} {SDS3-64} {SDS1+63} {SDS3+63}
 sleep 60
-> place structure creativeworldgen:meta/meteorite_desert_pyramid 3072 100 3072
+> place structure creativeworldgen:meta/meteorite_desert_pyramid {SDS1} 100 {SDS3}
 sleep 10
-> forceload remove 3008 3008 3135 3135
+> forceload remove {SDS1-64} {SDS3-64} {SDS1+63} {SDS3+63}
 > execute in creativeworldgen:autumnsky run say SA4 dim autumnsky
 > execute in creativeworldgen:desert run say SA4 dim desert
 > execute in creativeworldgen:flowergrove run say SA4 dim flowergrove
@@ -182,7 +187,8 @@ capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > summon minecraft:mooshroom {SAH1+44} {SAH2} {SAH3+11} {Type:"red",PersistenceRequired:1b,Tags:["sacwgm","sacwgred"]}
 > summon minecraft:cow {SAH1+50} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacwgc"]}
 > summon minecraft:cow {SAH1+52} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacwgc"]}
-> forceload add {SAH1+112} {SAH3-48} {SAH1+208} {SAH3+48}
+# judge-9 (2026-11-21): the village's pieces reach past the old 7x7 chunk box (place answered "That position is not loaded")
+> forceload add {SAH1+64} {SAH3-96} {SAH1+256} {SAH3+96}
 sleep 30
 > place structure minecraft:village_plains {SAH1+160} {SAH2} {SAH3}
 sleep 10
@@ -214,11 +220,14 @@ sleep 10
 sleep 20
 > data get entity safv Pos
 > data get entity safv Dimension
+# judge-9 (2026-11-21): difficulty is peaceful on the scratch server, which removes the summoned pillager and witch
+> difficulty easy
 > execute in minecraft:the_end run summon minecraft:pillager -30 75 30 {PersistenceRequired:1b,Tags:["saendp"]}
 > execute in minecraft:the_end run summon minecraft:witch -28 75 30 {PersistenceRequired:1b,Tags:["saendp"]}
 sleep 4
 > execute in minecraft:the_end run data get entity @e[type=minecraft:pillager,tag=saendp,limit=1] ArmorItems
 > execute in minecraft:the_end run data get entity @e[type=minecraft:witch,tag=saendp,limit=1] ArmorItems
+> difficulty peaceful
 expect create:copper_diving_helmet
 shell grep -nhE "\[farmers-donor\]" logs/latest.log | cut -c1-200 | head -5
 shell grep -qhE "\[farmers-donor\] [0-9]+ files from Farmer's Structures" logs/latest.log

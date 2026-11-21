@@ -206,3 +206,32 @@ Creative Worldgen, Creative Devtools and OR1120.qb, FCK.qb and the loot / mob tw
     per-category cap); SQ-TER-06 (no geode in the 128x128 sample).
   - PASS with caveats: SQ-WGP-07 (2:57 vs a 5:26 baseline measured with Distant Horizons on); SQ-HRU-01 (20 unkeyed classes
     ask about create:copycat_base; perf.md 13.3 entry for the doc owner).
+- 11:36 owner wind-down: `qrun.py drive stop r1120nv`, stopped at step 147 (EFB group B) after row 3 of 9; no JVM left;
+  RUNNER idle (driver release); perf session r1121nv stopped, report interrupted by the owner (not run).
+- 12:0x judge-9 (steps 140 to 147): 140 INCONCLUSIVE 2 (SQ-CDM2-02, SQ-NEST-02); 141 BF 1; 142 INC 1 BF 1; 143 CWG PASS 2 BF 5
+  FAIL 1; 144 BF 1; 145 BF 1; 146 PASS 2; 147 PASS 1 BF 1 INC 1, SQ-EFB-12 cut off by the stop (no verdict).
+  - Real FAIL: SQ-CWG-10 `build_deploy.py --dry-run` exits 1 at preflight: no KUBEJS_CLASSES rule covers
+    kubejs/generation_scripts/worldgen/misc_block_swaps.json and vanilla_nether_noise_settings.json.
+  - BF-FIX SQ-DNR-O-04 knife for scavenging_elder_eye; SQ-DNR-E-02 locate from 1200 64 0 (search timeout); SQ-CWG-03
+    unchanged files reported as unchanged; SQ-CWG-06 place the meteorite pyramid in a located desert; SQ-CWG-09
+    difficulty easy around the summon; SQ-EFB-10 waitlog after each `cdevtest under` (qrerun cannot resolve its header,
+    rerun with `--rows "SQ-EFB-10 (earth, the beard band)"`); SQ-CWG-08a forceload widened (needs spawn-animals). rerun.txt 263.
+  - Not simple: SQ-NEST-01, SQ-CWG-08, -08a spawn-animals=false; SQ-BLC-02 deleting the server cache falls back to the
+    jar copy (WorldgenFiles.existing), needs another way to force a solve; SQ-CWG-09 Forgiving Void never lifted the pbot
+    in the End (fake players may skip its player tick, unproven); SQ-EFB-11 Chunky stalled at 32.68 % for 29 min while
+    ticking (IOWorker "Failed to read chunk [-35, 37]"; a rerun needs a thread dump); SQ-CDM2-02, SQ-NEST-02, SQ-BLC-01
+    and the sea grape half of SQ-DNR-O-04 prove nothing (scan size, biome edges).
+
+## 8. Handover
+
+State: drive r1120nv stopped and resumable at step 147 row 4 (`qrun.py drive resume r1120nv`, steps 147 to 182: worldgen
+then long); RUNNER.md idle; perf session r1121nv closed, report not run (`perf_session.sh report r1121nv`, no `--prune`).
+Product findings -> [plan_scratch_findings_1121.md](../plan_scratch_findings_1121.md) with owner rulings 2026-11-21.
+Next scratch session, in order:
+1. Resume r1120nv (36 steps left), judge as steps land.
+2. Rerun drive: `python3 tools/scratch_query/qrerun.py perf/runs/r1120nv/rerun.txt`, then
+   `qrun.py drive start r1120nvr --plan-json perf/runs/r1120nv/rerun.plan.json` (SQ-EFB-10 by hand, see above).
+3. Row rewrite pass for the not-simple batch faults in section 7 (spawn-animals=true sections, @modset rows, qmodset switch
+   keeps boot-1 config, qlint false positives, rows needing their own reboot).
+4. Then the rest of the queue (owner, 2026-11-21): jar-changed rows, failed rows, never-run drafts.
+Client rows were not run.
