@@ -6,12 +6,12 @@
         "largemeals:pufferfish_broth"
       ],
       "empty": "minecraft:bowl",
-      "capacity": 2
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
-    "divider": 2,
+    "divider": 1,
     "item": "largemeals:pufferfish_broth"
   },
   "from_mod": "largemeals",

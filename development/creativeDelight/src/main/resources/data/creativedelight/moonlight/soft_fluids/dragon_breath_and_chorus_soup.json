@@ -6,12 +6,12 @@
         "ends_delight:dragon_breath_and_chorus_soup"
       ],
       "empty": "minecraft:bowl",
-      "capacity": 2
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
-    "divider": 2,
+    "divider": 1,
     "item": "ends_delight:dragon_breath_and_chorus_soup"
   },
   "from_mod": "ends_delight",

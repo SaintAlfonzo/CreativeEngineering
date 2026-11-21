@@ -6,12 +6,12 @@
         "oceanic_delight:glow_squid_stew"
       ],
       "empty": "minecraft:bowl",
-      "capacity": 2
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
-    "divider": 2,
+    "divider": 1,
     "item": "oceanic_delight:glow_squid_stew"
   },
   "from_mod": "oceanic_delight",

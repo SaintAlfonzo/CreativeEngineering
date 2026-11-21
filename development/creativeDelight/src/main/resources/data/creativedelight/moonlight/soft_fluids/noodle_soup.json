@@ -6,12 +6,12 @@
         "farmersdelight:noodle_soup"
       ],
       "empty": "minecraft:bowl",
-      "capacity": 2
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
-    "divider": 2,
+    "divider": 1,
     "item": "farmersdelight:noodle_soup"
   },
   "from_mod": "farmersdelight",

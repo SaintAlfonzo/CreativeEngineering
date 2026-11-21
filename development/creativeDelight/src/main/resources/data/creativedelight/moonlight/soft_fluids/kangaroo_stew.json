@@ -6,12 +6,12 @@
         "alexsdelight:kangaroo_stew"
       ],
       "empty": "minecraft:bowl",
-      "capacity": 2
+      "capacity": 1
     }
   ],
   "flowing_texture": "moonlight:soft_fluids/potion_flow",
   "food": {
-    "divider": 2,
+    "divider": 1,
     "item": "alexsdelight:kangaroo_stew"
   },
   "from_mod": "alexsdelight",
