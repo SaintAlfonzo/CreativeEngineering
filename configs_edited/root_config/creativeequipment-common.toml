@@ -249,6 +249,402 @@
 		#Range: 0 ~ 64
 		hammerBlows = 8
 
+	[crafting.felsic_ingot]
+		#mB of Dragon's Breath fluid used in the filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 4
+
+	[crafting.echo_sword]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:weakness"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_pickaxe]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:weakness"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_axe]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:weakness"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_shovel]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:weakness"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_hoe]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:weakness"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_helmet]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:night_vision"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_chestplate]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:night_vision"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_leggings]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:night_vision"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_boots]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:night_vision"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.echo_shield]
+		#Potion id of the first potion fill.
+		potionA = "creativecommon:darkness"
+		#Potion id of the second (last) potion fill.
+		potionB = "minecraft:night_vision"
+		#mB of lava used in the first filling step.
+		#Range: 1 ~ 10000
+		lavaMb = 250
+		#mB of the first potion's fluid.
+		#Range: 1 ~ 10000
+		potionAMb = 250
+		#mB of the second potion's fluid.
+		#Range: 1 ~ 10000
+		potionBMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.dragon_helmet]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "creativecommon:long_magic_resistance"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 2
+
+	[crafting.dragon_chestplate]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "creativecommon:long_resistance"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 4
+
+	[crafting.dragon_leggings]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:long_fire_resistance"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 3
+
+	[crafting.dragon_boots]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "alexsmobs:long_knockback_resistance"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 2
+
+	[crafting.dragon_sword]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 3
+
+	[crafting.dragon_pickaxe]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 3
+
+	[crafting.dragon_axe]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 2
+
+	[crafting.dragon_shovel]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.dragon_hoe]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 1
+
+	[crafting.dragon_crossbow]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 2
+
+	[crafting.dragon_bow]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 3
+
+	[crafting.dragon_horse_armor]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 3
+
+	[crafting.dragon_trident]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_regeneration"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 2
+
+	[crafting.dragon_anvil]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "creativecommon:long_resistance"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 6
+
+	[crafting.dragon_shield]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "creativecommon:long_resistance"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 5
+
+	[crafting.air_brake]
+		#Potion id of the lingering potion fill (the last step).
+		potion = "minecraft:strong_slowness"
+		#mB of Dragon's Breath fluid used in the first filling step.
+		#Range: 1 ~ 10000
+		breathMb = 250
+		#mB of the potion's fluid used in the last filling step.
+		#Range: 1 ~ 10000
+		potionMb = 250
+		#Number of times the sequenced assembly repeats.
+		#Range: 1 ~ 64
+		loops = 2
+
 #Enchantment-value (enchantability) overrides for whole armor materials that
 #KubeJS's tune_armor.js can't reach (ArmorMaterial#getEnchantmentValue() has no
 #kjs$ accessor). Entries are "materialName:value" - materialName matches

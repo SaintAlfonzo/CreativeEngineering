@@ -497,7 +497,9 @@ Diving helmet, backtank and boots for the echo, felsic and dragon tiers, made by
 ---
 
 ## tuning #12: End gear recipes configurable
-Status **Planned** · Work: KubeJS / config · id `gear/tuning #12` (checked 2026-10-31: only the felsic pieces read CEConfig)
+Built 2026-11-21 (plan_owner_rows_1120.md G4; status in the TODO row) · Work: KubeJS / config · id `gear/tuning #12`. As built: the
+config is `CEQConfig` (Creative Equipment), NCH takes trailing amount args (no `opts` object), echo has separate
+`potionAMb` / `potionBMb`, the air brake section is `crafting.air_brake`; no `_potionExists` warning. Test GR-45.
 
 ### Goal
 Every recipe above netherite reads its numbers from CEConfig through `R.cfg`, like the felsic assemblies.

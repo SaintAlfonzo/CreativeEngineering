@@ -46,8 +46,10 @@
   - Stats: code in the two tune files; edit and **restart** (`/reload` doesn't re-run `ItemEvents.modification`).
   - `config/creativeengineering-common.toml`, live through Create's config screen:
     `[dragon_gear.autorepair]` (enabled, intervalTicks 200, amountPerInterval 50), `[air_brake]` (11 keys, 2.9),
-    `[armor_enchantability] overrides`, `[crafting.felsic_<piece>]` (potion, potionMb, loops, hammerBlows; needs
-    `/reload` to rebuild the recipes).
+    `[armor_enchantability] overrides`, `[crafting.felsic_<piece>]` (potion, potionMb, reachPotionMb, loops,
+    hammerBlows), `[crafting.felsic_ingot]` (breathMb, loops), `[crafting.echo_<piece>]` (potionA, potionB, lavaMb,
+    potionAMb, potionBMb, loops), `[crafting.dragon_<piece>]` and `[crafting.air_brake]` (potion, breathMb, potionMb,
+    loops); the `crafting` keys need `/reload` to rebuild the recipes.
 - **How to measure:** `/dumpgear` writes every armor and tool stat to `kubejs/exported/gear/` (`armor.csv`,
   `armor_sets.csv`, `tools.csv`; not committed). F3+H shows durability.
 
@@ -245,9 +247,16 @@ unknown until checked (GR-44). Appearance of the kept sets was not checked in a 
 - **Recipes:** `end_gear.js` only calls NCH helpers: `R.bulk('echoAssembly' | 'felsicAssembly' | 'dragonAssembly', ...)`,
   `R.createSequencedAssembly` for the felsic ingot, `R.elytraDuplication`, `R.bulk('remove', ...)`. Each assembly has
   its own transitional item from `transition_items.js` (`R.incomplete(key)`).
-- **Felsic config:** `R.cfg(defaults, 'CRAFTING.FELSIC_<PIECE>')` reads `CEConfig.CRAFTING.<PIECE>.{potion, mb, loops,
-  blows}` (Java field names) and logs each value that differs from the default. A missing section or field falls back
+- **Felsic config:** `R.cfg(defaults, 'CRAFTING.FELSIC_<PIECE>')` reads `CEQConfig.CRAFTING.<PIECE>.{potion, mb, reachMb,
+  loops, blows}` (Java field names) and logs each value that differs from the default. A missing section or field falls back
   to the default with a warning.
+- **End gear config (2026-11-21, `gear/tuning #12`):** every End tier assembly reads `CEQConfig.Crafting` the same way:
+  `CRAFTING.ECHO_<PIECE>` (`EchoPiece`: potionA, potionB, lavaMb, potionAMb, potionBMb, loops; 10 pieces),
+  `CRAFTING.FELSIC_INGOT` (`FelsicIngot`: breathMb, loops), `CRAFTING.DRAGON_<PIECE>` and `CRAFTING.AIR_BRAKE`
+  (`DragonPiece`: potion, breathMb, mb, loops; 16 rows). The section name is the recipe key upper-cased (`echo_sword` ->
+  `ECHO_SWORD`). Defaults equal the old hardcoded values (250 mB everywhere, echo 1 loop, felsic ingot 4 loops, dragon
+  loops per row); a headless comparison of the old and new `end_gear.js` rows gave no difference. NCH `echoAssembly` and
+  `dragonAssembly` take the amounts as trailing arguments.
 - **NBT carry:** `@Inject` at `RETURN` of Create's `SequencedAssemblyRecipe#advance(ItemStack)`, `remap = false`.
 - **Armor enchantability:** `ArmorMaterialEnchantabilityMixin` injects at the head of `ArmorItem#getEnchantmentValue`
   (`m_6473_`) and returns the `[armor_enchantability]` value for the item's material name (`echo_armor`, `felsic`).
@@ -359,7 +368,7 @@ unknown until checked (GR-44). Appearance of the kept sets was not checked in a 
 - [server_scripts/_lib/dump_gear.js](../kubejs/server_scripts/_lib/dump_gear.js): `/dumpgear`.
 - patcherMod: [gear/AirBrakeHandler.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/AirBrakeHandler.java), [gear/ElytraDuplicationRecipe.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/ElytraDuplicationRecipe.java), [gear/ElytraDuplicationSerializers.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/gear/ElytraDuplicationSerializers.java), [util/ElytraChestplates.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/ElytraChestplates.java), [util/ArmorEnchantabilityBridge.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/ArmorEnchantabilityBridge.java).
 - Mixins: [SequencedAssemblyRecipeMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/SequencedAssemblyRecipeMixin.java), [ArmorMaterialEnchantabilityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ArmorMaterialEnchantabilityMixin.java), [EasyElytraTakeoffHelperMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EasyElytraTakeoffHelperMixin.java), [EasyElytraTakeoffGroundCheckMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/EasyElytraTakeoffGroundCheckMixin.java).
-- `CEConfig.DragonGear`, `AirBrake`, `Crafting` (+ `FelsicPiece`), `ArmorEnchant` in [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java).
+- `CEQConfig.DragonGear`, `AirBrake`, `Crafting` (+ `FelsicPiece`, `FelsicIngot`, `EchoPiece`, `DragonPiece`), `ArmorEnchant` in [CEQConfig.java](../development/creativeEquipment/src/main/java/com/SaintAlfonzo/creativeequipment/CEQConfig.java) (Creative Equipment since 2026-11-04).
 - Not here: Customizable Elytra's banner-pattern fix (`CustomizableElytraBannerPatternMixin`, backlog row 10 "banner
   patterns"); effects on this gear ([armor_effects.md](armor_effects.md)); shields ([shields.md](shields.md)).
 
@@ -448,6 +457,10 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
   (note any set where it does not).
 - [ ] **GR-44 Old trims (2.10):** a piece outside the list trimmed before the change: it still loads; note whether the
   trim draws and whether the untrimming recipe takes it.
+- [ ] **GR-45 End gear config (`gear/tuning #12`):** `/reload` with the shipped toml -> no `[NCH.cfg] no ... ECHO_`,
+  `DRAGON_`, `FELSIC_INGOT` or `AIR_BRAKE` warning and no `overridden` line for them. Set `[crafting.dragon_helmet]
+  loops = 3` and `[crafting.echo_sword] lavaMb = 500`, `/reload` -> two `overridden` lines; JEI shows 3 loops and
+  500 mB lava. Put them back (SQ-GR-45).
 
 ## 8. History
 
@@ -468,6 +481,8 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 - 2026-11-02: armor trims limited to standard armor (2.10, `gear/tuning #14`): tag `creativecommon:trimmable_armor`,
   filter in Creative Common `ArmorTrimsItemCache` (built, not installed). GR-43, GR-44.
 - 2026-11-04: `tuneTools` / `tuneArmor`, armor enchantability, the armor cap, the copper tier and the gear scripts moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)); config tables now in `config/creativeequipment-common.toml`. Same behaviour.
+- 2026-11-21: End gear recipes configurable (`gear/tuning #12`, plan_owner_rows_1120.md G4 / D8): `EchoPiece`, `DragonPiece`,
+  `FelsicIngot` in `CEQConfig.Crafting`, `end_gear.js` reads them through `R.cfg` (section 3). Creative Equipment jar installed. GR-45.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

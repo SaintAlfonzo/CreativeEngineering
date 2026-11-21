@@ -10,19 +10,24 @@ global.CEQ.recipes(() => {
 
 	// ============================== Echo ==============================
 
-	// out base key event potion A potion B
-	R.bulk('echoAssembly', [
-		[i.echo_sword, i.netherite_sword, 'echo_sword', e, 'creativecommon:darkness', global.effect.weakness],
-		[i.echo_pickaxe, i.netherite_pickaxe, 'echo_pickaxe', e, 'creativecommon:darkness', global.effect.weakness],
-		[i.echo_axe, i.netherite_axe, 'echo_axe', e, 'creativecommon:darkness', global.effect.weakness],
-		[i.echo_shovel, i.netherite_shovel, 'echo_shovel', e, 'creativecommon:darkness', global.effect.weakness],
-		[i.echo_hoe, i.netherite_hoe, 'echo_hoe', e, 'creativecommon:darkness', global.effect.weakness],
-		[i.echo_helmet, i.netherite_helmet, 'echo_helmet', e, 'creativecommon:darkness', global.effect.night_vision],
-		[i.echo_chestplate, i.netherite_chestplate, 'echo_chestplate', e, 'creativecommon:darkness', global.effect.night_vision],
-		[i.echo_leggings, i.netherite_leggings, 'echo_leggings', e, 'creativecommon:darkness', global.effect.night_vision],
-		[i.echo_boots, i.netherite_boots, 'echo_boots', e, 'creativecommon:darkness', global.effect.night_vision],
-		[i.ce_echo_shield, i.ce_netherite_shield, 'echo_shield', e, 'creativecommon:darkness', global.effect.night_vision]
-	])
+	// Defaults + config override (CEQConfig CRAFTING.<KEY>, e.g. ECHO_SWORD): [out, base, key, potion B]
+	const echoRows = [
+		[i.echo_sword, i.netherite_sword, 'echo_sword', global.effect.weakness],
+		[i.echo_pickaxe, i.netherite_pickaxe, 'echo_pickaxe', global.effect.weakness],
+		[i.echo_axe, i.netherite_axe, 'echo_axe', global.effect.weakness],
+		[i.echo_shovel, i.netherite_shovel, 'echo_shovel', global.effect.weakness],
+		[i.echo_hoe, i.netherite_hoe, 'echo_hoe', global.effect.weakness],
+		[i.echo_helmet, i.netherite_helmet, 'echo_helmet', global.effect.night_vision],
+		[i.echo_chestplate, i.netherite_chestplate, 'echo_chestplate', global.effect.night_vision],
+		[i.echo_leggings, i.netherite_leggings, 'echo_leggings', global.effect.night_vision],
+		[i.echo_boots, i.netherite_boots, 'echo_boots', global.effect.night_vision],
+		[i.ce_echo_shield, i.ce_netherite_shield, 'echo_shield', global.effect.night_vision]
+	]
+	// out base key event potion A potion B lavaMb potionAMb potionBMb loops
+	R.bulk('echoAssembly', echoRows.map(([out, base, key, potionB]) => {
+		const c = R.cfg({potionA: 'creativecommon:darkness', potionB: potionB, lavaMb: 250, potionAMb: 250, potionBMb: 250, loops: 1}, 'CRAFTING.' + key.toUpperCase())
+		return [out, base, key, e, c.potionA, c.potionB, c.lavaMb, c.potionAMb, c.potionBMb, c.loops]
+	}))
 
 	R.bulk('remove', [
 		[{ id: 'create_deep_dark:sequences_assembly_sword_filling' }, e],
@@ -47,13 +52,14 @@ global.CEQ.recipes(() => {
 	// Felsic Gear's ingot and Central Kitchen's dragon breath fluid: without either the steps would be built with air
 	// or the empty fluid (scratch r1106spf, SQ-CBP-08b), so the assembly needs both mods.
 	if (global.has(i.ingot_felsic, f.dragon_breath)) {
+		const felsicIngot = R.cfg({breathMb: 250, loops: 4}, 'CRAFTING.FELSIC_INGOT')
 		const incFelsicIngot = R.incomplete('ingot_felsic')
 		R.createSequencedAssembly(Item.of(i.ingot_felsic, 1), i.plate_netherite, [
 			e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.scrap_felsic]),
 			e.recipes.create.deploying(incFelsicIngot, [incFelsicIngot, i.ingot_brass]),
-			e.recipes.create.filling(incFelsicIngot, [incFelsicIngot, Fluid.of(f.dragon_breath, 250)]),
+			e.recipes.create.filling(incFelsicIngot, [incFelsicIngot, Fluid.of(f.dragon_breath, felsicIngot.breathMb)]),
 			e.recipes.create.pressing(incFelsicIngot, incFelsicIngot)
-		], ['ingot_felsic'], e, 'felsic_ingot_sequenced_assembly', 4)
+		], ['ingot_felsic'], e, 'felsic_ingot_sequenced_assembly', felsicIngot.loops)
 	}
 
 	// Remove existing felsic smithing
@@ -117,36 +123,42 @@ global.CEQ.recipes(() => {
 		[{ id: 'dragonloot:dragon_horse_armor' }, e]
 	])
 
-	// out base key event potion mb loops
-	R.bulk('dragonAssembly', [
+	// Defaults + config override (CEQConfig CRAFTING.<KEY>: DRAGON_HELMET ... DRAGON_SHIELD, AIR_BRAKE):
+	// [out, base, key, potion, loops]
+	const dragonRows = [
 		// Armor, unique potions
-		[i.dragon_helmet, i.felsic_helmet, 'dragon_helmet', e, 'creativecommon:long_magic_resistance', 250, 2],
-		[i.dragon_chestplate, i.felsic_chestplate, 'dragon_chestplate', e, 'creativecommon:long_resistance', 250, 4],
-		[i.dragon_leggings, i.felsic_leggings, 'dragon_leggings', e, 'minecraft:long_fire_resistance', 250, 3],
-		[i.dragon_boots, i.felsic_boots, 'dragon_boots', e, 'alexsmobs:long_knockback_resistance', 250, 2],
+		[i.dragon_helmet, i.felsic_helmet, 'dragon_helmet', 'creativecommon:long_magic_resistance', 2],
+		[i.dragon_chestplate, i.felsic_chestplate, 'dragon_chestplate', 'creativecommon:long_resistance', 4],
+		[i.dragon_leggings, i.felsic_leggings, 'dragon_leggings', 'minecraft:long_fire_resistance', 3],
+		[i.dragon_boots, i.felsic_boots, 'dragon_boots', 'alexsmobs:long_knockback_resistance', 2],
 
 		// Tools, regen
-		[i.dragon_sword, i.felsic_sword, 'dragon_sword', e, 'minecraft:strong_regeneration', 250, 3],
-		[i.dragon_pickaxe, i.felsic_pickaxe, 'dragon_pickaxe', e, 'minecraft:strong_regeneration', 250, 3],
-		[i.dragon_axe, i.felsic_axe, 'dragon_axe', e, 'minecraft:strong_regeneration', 250, 2],
-		[i.dragon_shovel, i.felsic_shovel, 'dragon_shovel', e, 'minecraft:strong_regeneration', 250, 1],
-		[i.dragon_hoe, i.felsic_hoe, 'dragon_hoe', e, 'minecraft:strong_regeneration', 250, 1],
+		[i.dragon_sword, i.felsic_sword, 'dragon_sword', 'minecraft:strong_regeneration', 3],
+		[i.dragon_pickaxe, i.felsic_pickaxe, 'dragon_pickaxe', 'minecraft:strong_regeneration', 3],
+		[i.dragon_axe, i.felsic_axe, 'dragon_axe', 'minecraft:strong_regeneration', 2],
+		[i.dragon_shovel, i.felsic_shovel, 'dragon_shovel', 'minecraft:strong_regeneration', 1],
+		[i.dragon_hoe, i.felsic_hoe, 'dragon_hoe', 'minecraft:strong_regeneration', 1],
 
 		// Special tools, regen
-		[i.dragon_crossbow, i.crossbow, 'dragon_crossbow', e, 'minecraft:strong_regeneration', 250, 2],
-		[i.dragon_bow, i.bow, 'dragon_bow', e, 'minecraft:strong_regeneration', 250, 3],
-		[i.dragon_horse_armor, i.diamond_horse_armor, 'dragon_horse_armor', e, 'minecraft:strong_regeneration', 250, 3],
-		[i.dragon_trident, i.trident, 'dragon_trident', e, 'minecraft:strong_regeneration', 250, 2],
+		[i.dragon_crossbow, i.crossbow, 'dragon_crossbow', 'minecraft:strong_regeneration', 2],
+		[i.dragon_bow, i.bow, 'dragon_bow', 'minecraft:strong_regeneration', 3],
+		[i.dragon_horse_armor, i.diamond_horse_armor, 'dragon_horse_armor', 'minecraft:strong_regeneration', 3],
+		[i.dragon_trident, i.trident, 'dragon_trident', 'minecraft:strong_regeneration', 2],
 
 		// Anvil, 6x scales, resistance
-		[i.dragon_anvil, i.anvil, 'dragon_anvil', e, 'creativecommon:long_resistance', 250, 6],
+		[i.dragon_anvil, i.anvil, 'dragon_anvil', 'creativecommon:long_resistance', 6],
 
 		// Shield, resistance
-		[i.ce_dragon_shield, i.ce_felsic_shield, 'dragon_shield', e, 'creativecommon:long_resistance', 250, 5],
+		[i.ce_dragon_shield, i.ce_felsic_shield, 'dragon_shield', 'creativecommon:long_resistance', 5],
 
 		// Air brake, slowness
-		[i.air_brake, i.plate_netherite, 'air_brake', e, 'minecraft:strong_slowness', 250, 2]
-	])
+		[i.air_brake, i.plate_netherite, 'air_brake', 'minecraft:strong_slowness', 2]
+	]
+	// out base key event potion mb loops breathMb
+	R.bulk('dragonAssembly', dragonRows.map(([out, base, key, potion, loops]) => {
+		const c = R.cfg({potion: potion, breathMb: 250, mb: 250, loops: loops}, 'CRAFTING.' + key.toUpperCase())
+		return [out, base, key, e, c.potion, c.mb, c.loops, c.breathMb]
+	}))
 
 	console.log('end gear done')
 })
