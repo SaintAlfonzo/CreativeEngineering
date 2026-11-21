@@ -288,7 +288,9 @@ Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
   8 x 4 grid of the last 32 meals, a new diversity icon rule, two-decimal diversity everywhere, one timing line per open.
   Later the same day (owner notes): the book 25% wider instead of 50%, Ladder and Milestones content 17.5% in from
   each side, meals grid icons 20% larger, active buffs green in the Milestones list, permanent buffs alternate their
-  icon with the effect until reached, meal hover drawn as plain text (fixes the missing hover).
+  icon with the effect until reached, meal hover drawn as plain text (fixes the missing hover). Then: permanent buffs
+  cycle reached too, "Full meal" hover line, a wider max-diversity mark, reached unlock numbers not struck,
+  `/solrp reset` with no player resets the caller.
 
 ## 7. Liquid Diet Log
 
@@ -832,7 +834,7 @@ owner's look-check; CQ-RPI-53 supersedes CQ-RPI-46).
   Carrot-eaten food of that band, picked by the diversity's tenth (stable). None: client config `[dietLog]
   diversityIcons` ("minDiversity=item,item,..."; agent defaults, unconfirmed).
 - **Milestones and ladder** (rulings 6, 11): active buffs (reached rungs other than one-time unlocks) have green row
-  text; a reached one-time unlock is struck through in the Milestones list, black
+  text; a reached one-time unlock's text is struck through in the Milestones list (its milestone number is not), black
   while the current diversity is at or above it, gray below; the Diet Ladder bar leaves reached unlocks out (key
   unchanged).
 - **Diversity printed rounded down** (two decimals everywhere since 12.7) to one decimal by Raspberry Pie (Diet Ladder page, effect screen, confirm
@@ -846,7 +848,7 @@ owner's look-check; CQ-RPI-53 supersedes CQ-RPI-46).
   top), or a 0 origin and the first five; fill and max mark proportional between neighbors; every point labeled.
   `progressAhead` removed.
 - **Icons:** a locked one-time unlock alternates the lock item and the effect sprite each second (gray frame), and so
-  does a permanent buff not reached yet (diamond shard and effect, grayed); a
+  does a permanent buff, reached (its colored frame) or not (gray frame, grayed), with the diamond shard and the effect; a
   reached one shows the effect sprite grayed in a purple frame whatever the current diversity. Slot rungs show the
   metal frame item in the slot color (grayed when the slot is not active), hover "Effect Slot N" with no effect;
   effects show in slots only on the effect screen and the inventory widget (reverses the 12.5 icon ruling). The key
@@ -863,7 +865,8 @@ Plan and rulings: [plan_diet_books_r2.md](plan_diet_books_r2.md) (intake of the 
 
 - **Window back to 32 meals:** Apple Pie `endDecay` 32 (pack `defaultconfigs/`, `configs_edited/`, the three local
   worlds); the meals grid is 8 x 4 ("Last 32 Meals"), 18 px icons on a 19 px step (20% up from 15 / 16), the meals page scale shrinks it if needed.
-- **Meals grid:** title (and "No meals yet") centered over the grid. Hover: "N. Name"; "Food total: X" only when it
+- **Meals grid:** title (and "No meals yet") centered over the grid. Hover: "N. Name"; "Full meal: X diversity" (the
+  food's base diversity, Apple Pie complexity); "Food total: X" only when it
   differs from this meal (compared as printed); "This meal: Y", struck through when the total line is there. Drawn
   as a plain text tooltip (no item stack): with the stack it went through the item tooltip handlers (Legendary
   Tooltips, AppleSkin, Raspberry Pie's food rows) and was not drawn at all on the Overview page.
