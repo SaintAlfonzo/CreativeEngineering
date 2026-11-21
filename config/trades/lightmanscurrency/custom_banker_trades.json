@@ -237,21 +237,6 @@
       "MaxTrades": 12,
       "XP": 20,
       "PriceMult": 0.05
-    },
-    {
-      "Type": "lightmanscurrency:simple",
-      "Price": {
-        "ID": "lightmanscurrency:coin_diamond",
-        "Count": 15
-      },
-      "Sell": {
-        "ID": "minecraft:enchanted_book",
-        "Count": 1,
-        "Tag": "{StoredEnchantments:[{id:\"lightmanscurrency:money_mending\",lvl:1s}]}"
-      },
-      "MaxTrades": 12,
-      "XP": 20,
-      "PriceMult": 0.05
     }
   ],
   "TradesLevel5": [
@@ -315,21 +300,6 @@
         "Count": 5
       },
       "SellTag": "lightmanscurrency:trader_interface",
-      "MaxTrades": 12,
-      "XP": 30,
-      "PriceMult": 0.05
-    },
-    {
-      "Type": "lightmanscurrency:simple",
-      "Price": {
-        "ID": "lightmanscurrency:coin_diamond",
-        "Count": 10
-      },
-      "Sell": {
-        "ID": "minecraft:enchanted_book",
-        "Count": 1,
-        "Tag": "{StoredEnchantments:[{id:\"lightmanscurrency:money_mending\",lvl:1s}]}"
-      },
       "MaxTrades": 12,
       "XP": 30,
       "PriceMult": 0.05

@@ -2,13 +2,13 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=8482a6f2ed22 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 2, Testing 1), 1 Complete.
+<!-- generated:status_index begin open_work sha1=ac1333a68a0b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `loot/trader #2` | Planned | S P | Fewer Wares trades |
 | `loot/trader #3` | Planned | S P | Lightman's Currency with Wares |
+| `loot/trader #2` | Testing | S P | Fewer Wares trades |
 | `loot/trader #4` | Testing | S P T | Rustic pepper seeds from the wandering trader (rare) |
 <!-- generated:status_index end open_work -->
 
@@ -94,8 +94,10 @@ From `/dumptrades` on the scratch server, 2026-10-03:
 | Rare | 39 | 37 | 5 | about 12.8% |
 | Winemaker | 35 | 35 | 8 | 22.9% |
 
-Weight: Wares' two delivery agreement listings are in the common pool 20 times each (40 of 205 entries), so a
-trader carries about 4.9 agreements (scratch server: 1 to 9, average 4.9). Supplementaries registers its globe and
+Weight: Wares' two delivery agreement listings were in the common pool 20 times each (40 of 205 entries), so a
+trader carried about 4.9 agreements (scratch server: 1 to 9, average 4.9). Since 2026-11-20 they are in 8 times
+each (16 of about 196 entries: the last dump had 220 with the old 40), about 2.0 agreements per trader (expected,
+not yet dumped; SQ-WT-02). Supplementaries registers its globe and
 flax seeds twice in the rare pool; the rare picker skips an item already on the trader, so it never shows twice.
 
 ### 2.3 What changed in the stock
@@ -106,7 +108,7 @@ All in [wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.j
 |---|---|---|
 | Removed | CC: Tweaked advanced turtle, Advanced Peripherals peripheral casing, Lightman's Currency ATM / cash register / terminal / display case / armor display | both pools |
 | Removed (Nether) | glowstone; Architect's Palette sunstone (basalt) and moonstone (sunstone warped in a portal) | common |
-| Moved, weight 20 each | Wares sealed delivery agreement: regular (6 emeralds) and the former rare one (12) | rare to common |
+| Moved, weight 8 each (20 until 2026-11-20) | Wares sealed delivery agreement: regular (6 emeralds) and the former rare one (12) | rare to common |
 | Saplings | azalea, flowering azalea, the 6 Quark blossom saplings, Upgrade Aquatic river sapling, Myrtrees rubberwood sapling | common, 5 emeralds, 8 uses |
 | Saplings | Quark ancient sapling (ancient cities only) | rare, 8, 3 uses |
 | Tall flowers | lilac, peony, rose bush, sunflower, Upgrade Aquatic flowering rush | common, 1, 8 uses |
@@ -174,8 +176,9 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   and can't be targeted cleanly; a config value is reliable, and the startup warning covers a reset config.
 - **Removals by sampled result, not MoreJS filters.** MoreJS's `removeTrades` only matches vanilla and Forge
   listing classes; CC/AP's `VillagerTrade` and Lightman's `SimpleTrade` are neither.
-- **Wares: both listings x20.** "Move it to the common pool" read as the rare agreement moving, "20x" applied to
-  each. That is about 4.9 agreements per trader; `weight` in `t.move` changes it.
+- **Wares: both listings x8.** "Move it to the common pool" read as the rare agreement moving, the weight applied
+  to each. Was x20 (about 4.9 agreements per trader); the owner set x8 on 2026-11-20 (`loot/trader #2`, replacing
+  the 2026-10-30 "3x less" ruling), about 2.0 per trader. `weight` in `t.move` changes it.
 - **Golden food tag of its own.** `#creativeloot:loot/golden_food` includes golden chorus fruit (End), so
   trades use `#creativecommon:trades/golden_food` (same set minus it), in
   [tradetags.js](../kubejs/server_scripts/tags/tradetags.js).

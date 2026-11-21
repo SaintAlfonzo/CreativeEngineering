@@ -15,6 +15,25 @@ MoreJSEvents.villagerTrades((e) => {
 	var t = global.trades
 	var pr = global.profession
 
+	// Enchanted books off every villager, MCA's included (they use these tables): enchantments come from loot, the
+	// table and the CEI printer (potions/enchanting #1). Removing vanilla's listing
+	// also stops Dynamic Villager Trades, which builds its librarian book offers from it. Domestication Innovation's
+	// animal tamer Charisma book goes too. Lightman's Currency books are removed in config/trades/lightmanscurrency/, Quark's
+	// tome exchange in quark-common.toml. Offers already saved on a villager stay.
+	var bookListings = [
+		'net.minecraft.world.entity.npc.VillagerTrades$EnchantBookForEmeralds',
+		'com.github.alexthe668.domesticationinnovation.server.misc.trades.SellingEnchantedBook',
+	]
+	var booksRemoved = 0
+	e.forEachTrades((listings, level, profession) => {
+		listings.removeIf(listing => {
+			if (bookListings.indexOf(String(listing.getClass().getName())) < 0) return false
+			booksRemoved++
+			return true
+		})
+	})
+	console.info("[trades] enchanted book listings removed: " + booksRemoved)
+
 	// Mechanical Engineer
 	e.removeModdedTrades([pr.mechanical_engineer], allLevels)
 	// Level 1

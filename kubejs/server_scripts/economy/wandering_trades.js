@@ -15,8 +15,8 @@ MoreJSEvents.wandererTrades(e => {
 	// Nether-gated: glowstone; Architect's Palette sunstone (basalt) and moonstone (sunstone warped in a portal)
 	t.remove(e, [t.COMMON, t.RARE], [i.glowstone_block, i.sunstone, i.moonstone])
 
-	// Wares delivery agreements: both listings (regular 6 emeralds, rare 12) into COMMON at 20x weight each
-	t.move(e, [t.COMMON, t.RARE], [i.sealed_delivery_agreement], t.COMMON, 20)
+	// Wares delivery agreements: both listings (regular 6 emeralds, rare 12) into COMMON at 8x weight each (loot/trader #2)
+	t.move(e, [t.COMMON, t.RARE], [i.sealed_delivery_agreement], t.COMMON, 8)
 
 	// ---------- COMMON ----------
 	// saplings not sold yet (Fruits Delight goes to the Winemaker; Architect's Palette twisted sapling is Nether)

@@ -88,6 +88,29 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
 - Other book trades the row should decide on: LC banker Money Mending (levels 4, 5), Domestication Innovation animal
   tamer pet books (level 5), Quark tome exchange.
 
+### Built 2026-11-20 (plan_owner_rows_1120.md G0; R14, R15, D6)
+- [trades.js](../../kubejs/server_scripts/economy/trades.js), top of `MoreJSEvents.villagerTrades`: one
+  `e.forEachTrades((listings, level, profession) => ...)` over every profession removes listings whose class is
+  `VillagerTrades$EnchantBookForEmeralds` or Domestication Innovation's `SellingEnchantedBook`, and logs
+  `[trades] enchanted book listings removed: N`. Class-name strings, like the butcher Canned Food removal below it.
+- **MCA uses the vanilla tables** (checked 2026-11-20, MCA 7.5.20 forge classes): `VillagerEntityMCA extends Villager` and
+  does not override `updateTrades` (`m_7604_`), so it rolls from `VillagerTrades.TRADES`; MCA's own professions are
+  put into that map (`TradeOffersMCA`).
+- **Domestication Innovation** (1.6.1, `CommonProxy.onVillagerTrades`): the animal tamer has one book listing, Charisma
+  at level 5 (`SellingEnchantedBook`); the other pet enchantments come only from loot. Its three `EnchantItemTrade`
+  listings sell enchanted collar tags, not books, and stay (like the enchanted tools and armor).
+- **Lightman's Currency:** the four cashier `enchanted_book_for_coins` entries (levels 1 to 4) and the two banker Money
+  Mending books (levels 4 and 5, `lightmanscurrency:simple` selling an enchanted book) are deleted from
+  `config/trades/lightmanscurrency/custom_cashier_trades.json` / `custom_banker_trades.json`; backups in
+  `configs_edited/root_config/trades/lightmanscurrency/`. Cashier enchanted items stay.
+- **Quark tome exchange off:** `"Librarians Exchange Ancient Tomes" = false` (quark-common.toml:512, backed up),
+  replacing the Decisions recommendation below. Over-leveled books come only from the anvil route.
+- Already-spawned villagers keep their saved offers (D6); step 3 (`playerStartTrading`) is not built.
+- `filterEnchantedBookTrade` in Creative Magic's `enchants.js` is left as it is (a fallback; no book listing reaches it now).
+- Tests: SQ-ENC-03 (dump of every profession), SQ-ENC-04 (fresh librarian levels 1 to 5), rows/ENC.qb. ENC-02 is
+  dropped with D6; ENC-03's tome half no longer applies.
+- Needs a full restart (Quark config, LC trade files); the trades.js half also runs on `/reload`.
+
 ### Build
 1. In [trades.js](../../kubejs/server_scripts/economy/trades.js), inside `MoreJSEvents.villagerTrades` (line 12), add
    near the top (before the per-profession sections; all professions, so a mod villager that reuses the vanilla

@@ -509,7 +509,7 @@
 		"Deepslate Tweak" = true
 		"Deepslate Tweak Needs Haste2" = true
 		#Master Librarians will offer to exchange Ancient Tomes, provided you give them a max-level Enchanted Book of the Tome's enchantment too.
-		"Librarians Exchange Ancient Tomes" = true
+		"Librarians Exchange Ancient Tomes" = false
 		#Applying a tome will also randomly curse your item
 		"Curse Gear" = false
 		#Allows combining tomes with normal books

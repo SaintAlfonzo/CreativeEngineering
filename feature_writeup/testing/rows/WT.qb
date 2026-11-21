@@ -1,0 +1,22 @@
+# Scratch queue rows WT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/WT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-WT Wares agreements at weight 8, 2026-11-20 ([wandering_trader.md](../wandering_trader.md) 2.2, 4.1, TODO `loot/trader #2`)
+@@date 2026-11-20
+@@jars creativecommon
+@@sources kubejs/server_scripts/economy/wandering_trades.js feature_writeup/wandering_trader.md
+@@text
+@@text Script-only change (`wandering_trades.js`, weight 20 -> 8); `/reload` or a plain boot. Any world.
+@@text
+@@table
+## SQ-WT-02 | Wares delivery agreements in the common pool 16 times
+@group any
+@commands `/dumptrades`; count `wares:sealed_delivery_agreement` listings in `wandering_trader.pool_1` of `kubejs/exported/villager_trades.json`
+@pass 16 agreement listings in pool_1 (8 per price), none in pool_2; pool_1 about 196 entries
+@fails `t.move` weight in `kubejs/server_scripts/economy/wandering_trades.js` (Wares section); a stale dump (dump time)
+> dumptrades
+sleep 5
+shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/villager_trades.json'))['wandering_trader'];n1=json.dumps(d['pool_1']).count('sealed_delivery_agreement');n2=json.dumps(d['pool_2']).count('sealed_delivery_agreement');print('pool_1',len(d['pool_1']),'agreements',n1,'pool_2 agreements',n2);sys.exit(0 if n1==16 and n2==0 else 1)"
+look the shell line: agreements 16 in pool_1, 0 in pool_2
