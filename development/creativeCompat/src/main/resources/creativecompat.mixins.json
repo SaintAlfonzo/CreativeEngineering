@@ -127,6 +127,7 @@
     "IcebergTitleBreakMixin",
     "ContainerTitlePlaqueMixin",
     "ToastFilterMixin",
+    "ScreenBackgroundDimMixin",
     "RenderSystemShaderTextureMixin",
     "PrettyPipesTerminalTooltipMixin",
     "FtbTooltipListAccessor",

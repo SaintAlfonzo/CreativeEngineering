@@ -4,7 +4,7 @@
 	#On: moss block and moss carpet take the biome's grass color, like grass blocks.
 	#Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it.
 	biomeTint = true
-	#How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves
+	#How far moss follows the grass color. 1.0 = shifts as much as grass does from Lush Caves
 	#grass (where moss keeps its vanilla green); 0.0 = vanilla green everywhere. Chunks pick up
 	#a change when they re-render (F3+A).
 	#Range: 0.0 ~ 1.0
@@ -1136,7 +1136,7 @@
 
 #Portal Gun portals.
 [portalgun]
-	#Client side. Gun portals are not rendered through: each shows a flat disc in its colour. Walking
+	#Client side. Gun portals are not rendered through: each shows a flat disc in its color. Walking
 	#through still works.
 	opaquePortals = false
 	#Server side. A gun portal dissolves when its owner is farther than this many blocks from it
