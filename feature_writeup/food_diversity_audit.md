@@ -35,6 +35,95 @@ registered with Canned Goods' broken modifiers (28 and 3).
 The top 30 overall are 13 golden, 10 canned and 5 meals. Rung 100 is out of reach for every diet. Golden Food
 alone reaches 84, against 91.7 for the best possible diet.
 
+### 1.1 Ceiling by rotation size, exclusions and food tier at memory 32 (2026-11-20)
+
+The table above is window 30 (the dump's era). The live config is `endDecay = 32`, `startDecay = 0`
+(`defaultconfigs/solapplepie-server.toml`), so a food eaten k meals ago is worth `complexity x (1 - k/32)`. A
+rotation of N distinct foods, eaten in a loop, holds those N at ages 0 to N-1, so its steady-state diversity is
+`mean complexity x (N - N(N-1)/64)`. Each row takes the N highest-complexity foods left after the exclusion (same
+`/dumpfood` export, foods in the Diet Log only, drinks score 0). Values are the rotation average; the peak (best
+foods newest, the instant after eating the last one) is at most 5 above it and equal at 2 foods and 1 food.
+
+- **Golden** is the food type `golden` (48 items, enchanted included). Golden cans stay in: they score 0.5 to 0.9
+  (section 3.4), so removing them changes nothing at any size. Without golden the top food is Large Meals hearty
+  lunch (config value 6), then cans at 5.4.
+- **Dragon** is every food whose id contains `dragon` (17, including Ender's Delight dishes, the two dragon-egg cans
+  and the drink-type soda and tonic). **Feasts** are the food family `feast` plus the food type `meal/feast` (23).
+  Neither group reaches the top 32 once golden is gone, so the dragon and feasts columns differ from the golden column by 0.1 or less.
+- **Reading the table:** the 1-food row is the top complexity (10 for the enchanted golden apple, 6 without golden).
+  Golden adds 7 to 8 at every size from 4 to 32; once it is gone, the ceiling of a full 32-food diet is 85.
+- **Bigger is not always better:** each extra food is worth its complexity times a shrinking age factor, and it lowers
+  the others' factors. The curve peaks at 30 to 32 foods with
+  nothing excluded (91.9), for high only (84.9), mid only (15.8) and mid and high (51.6), but earlier in the tier columns: high excluded 26.5 at
+  22 to 24, low only 22.1 at 6 to 8, mid and low 24.9 at 14 to 18. Past the peak the extra foods are weaker than the
+  mean and cost more in age factor than they add.
+
+**Tier columns.** Golden, dragon and feasts are always excluded in them, and drinks (`#solraspberrypie:drinks`, which
+score 0) are left out too. Foods are split by their value, `q = hunger x (1 + saturation modifier) / 2` (the quantity behind
+the complexity formula, section 1):
+
+- **High tier (594 foods):** gives the Nourishment effect (47 of these are below q 5), or q 5 or more.
+- **Mid tier (420):** q 2 to under 5, no Nourishment.
+- **Low tier (343):** q under 2, no Nourishment.
+
+These cut-offs are my reading of "nourishment, high food and saturation"; they are one line in the script to move.
+A mix is half the rotation from each tier (the odd food goes to the higher tier), best foods of each.
+
+Each cell is the steady-state diversity of the best N foods under that column's exclusion (rotation N down the
+side). Columns are sorted from highest to lowest value at 32 foods. Golden, Golden dragon and G, D, feasts remove
+those groups cumulatively (golden; then dragon; then feasts). High, mid and low only are single tiers (after the
+three exclusions); "Excl. high" is the mid and low pool; the two mixes take half the rotation from each tier. Foods
+left per column: 1588, 1540, 1523, 1502 for the first four, then 594 high, 420 mid, 343 low, 763 mid and low, 1014
+mid and high.
+
+| Rotation | None | Golden | Golden, dragon | G, D, feasts | High only | Mix mid+high | Excl. high (mid+low pool) | Mix mid+low | Low only | Mid only |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 10.0 | 6.0 | 6.0 | 6.0 | 6.0 | 6.0 | 4.0 | 1.0 | 4.0 | 1.0 |
+| 2 | 16.8 | 11.2 | 11.2 | 11.2 | 11.2 | 6.9 | 7.9 | 4.9 | 7.9 | 1.9 |
+| 3 | 23.3 | 16.2 | 16.2 | 16.2 | 16.2 | 12.0 | 11.6 | 5.8 | 11.6 | 2.9 |
+| 4 | 28.6 | 21.0 | 21.0 | 21.0 | 21.0 | 12.8 | 15.2 | 9.5 | 15.2 | 3.7 |
+| 5 | 33.4 | 25.6 | 25.6 | 25.6 | 25.6 | 17.6 | 18.8 | 10.3 | 18.8 | 4.6 |
+| 6 | 38.0 | 30.1 | 30.1 | 30.1 | 30.1 | 18.2 | 22.1 | 13.8 | 22.1 | 5.4 |
+| 8 | 46.7 | 38.4 | 38.4 | 38.4 | 38.4 | 23.1 | 23.1 | 17.7 | 22.1 | 6.9 |
+| 10 | 54.3 | 46.1 | 46.1 | 46.1 | 46.1 | 27.7 | 24.0 | 21.4 | 22.0 | 8.3 |
+| 12 | 61.1 | 53.1 | 53.1 | 53.1 | 53.1 | 31.8 | 24.7 | 24.7 | 21.8 | 9.6 |
+| 14 | 67.3 | 59.3 | 59.3 | 59.3 | 59.3 | 35.6 | 25.3 | 24.9 | 21.6 | 10.8 |
+| 16 | 72.8 | 64.9 | 64.8 | 64.8 | 64.8 | 38.9 | 25.8 | 24.9 | 21.4 | 11.8 |
+| 18 | 77.6 | 69.7 | 69.6 | 69.6 | 69.6 | 41.9 | 26.1 | 24.9 | 21.1 | 12.7 |
+| 20 | 81.7 | 73.8 | 73.8 | 73.8 | 73.8 | 44.5 | 26.4 | 24.8 | 20.7 | 13.6 |
+| 22 | 85.1 | 77.4 | 77.3 | 77.3 | 77.3 | 46.7 | 26.5 | 24.6 | 20.3 | 14.2 |
+| 24 | 87.9 | 80.2 | 80.1 | 80.1 | 80.1 | 48.5 | 26.5 | 24.3 | 19.9 | 14.8 |
+| 26 | 89.9 | 82.4 | 82.3 | 82.3 | 82.3 | 49.9 | 26.4 | 23.9 | 19.4 | 15.3 |
+| 28 | 91.3 | 84.0 | 83.9 | 83.9 | 83.9 | 50.8 | 26.1 | 23.5 | 18.8 | 15.6 |
+| 30 | 91.9 | 84.9 | 84.7 | 84.7 | 84.7 | 51.4 | 25.8 | 23.0 | 18.2 | 15.8 |
+| 32 | 91.9 | 85.1 | 85.0 | 84.9 | 84.9 | 51.6 | 25.3 | 22.3 | 17.6 | 15.8 |
+
+Highest foods in each column (complexity). The top 8 are the same at every rotation size of 8 or more. For the mixes,
+the 8 are the top 4 of each tier in the mix, since the top 8 overall would all come from the higher tier:
+
+| Column | Top 8 foods used |
+|---|---|
+| None | enchanted_golden_apple 10.00, enchanted_golden_milk_bucket 7.02, enchanted_golden_pumpkin_pie 7.02, hearty_lunch 6.00, enchanted_golden_cooked_beef 5.58, enchanted_golden_cooked_mutton 5.58, enchanted_golden_cooked_porkchop 5.58, enchanted_golden_cooked_salmon 5.58 |
+| Golden | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
+| Golden, dragon | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
+| G, D, feasts | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
+| High only | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
+| Mix mid+high | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, cooked_lobster_tail 0.99, pickled_egg 0.99, sea_pickle_roll_slice 0.98, maggot_salad 0.96 |
+| Excl. high (mid+low pool) | apple_pie_slice 4.00, cake_slice 4.00, chocolate_pie_slice 4.00, sweet_berry_cheesecake_slice 4.00, coffee_cake_slice 4.00, rose_hip_pie_slice 4.00, cooked_lobster_tail 0.99, pickled_egg 0.99 |
+| Mix mid+low | cooked_lobster_tail 0.99, pickled_egg 0.99, sea_pickle_roll_slice 0.98, maggot_salad 0.96, apple_pie_slice 4.00, cake_slice 4.00, chocolate_pie_slice 4.00, sweet_berry_cheesecake_slice 4.00 |
+| Low only | apple_pie_slice 4.00, cake_slice 4.00, chocolate_pie_slice 4.00, sweet_berry_cheesecake_slice 4.00, coffee_cake_slice 4.00, rose_hip_pie_slice 4.00, cooked_catfish_slice 0.39, canned_carrots 0.39 |
+| Mid only | cooked_lobster_tail 0.99, pickled_egg 0.99, sea_pickle_roll_slice 0.98, maggot_salad 0.96, grilled_potato_skewer 0.96, chocolate_apple 0.96, canned_nether_wart_sourdough 0.96, canned_roasted_peanut 0.96 |
+
+- **The six slices carry the low tier.** They have hunger 2 to 3 and modifier 0.1 to 0.3 (q 0.5 to 1.2) but Apple Pie's
+  config sets 4 (section 2.1). Six foods at 4 are 24 of the 34.1 total complexity of the low-only rotation; the other
+  26 low foods average 0.39. Without the override, the low-only ceiling at 32 would be about 6.
+- **Mid tier is flat.** Its best food scores 0.99 and its 32nd 0.90, so a mid diet is about the same food 32 times.
+  That is why excluding high and the mid-low mix have the same top foods and the mix falls behind below 12 foods.
+- **Rows 1 and 2 match at 4 foods and under** (15.2, 7.9, 4.0): both pick the same slices. They split from 8 up,
+  where row 1 adds mid foods at 0.99 and row 2 adds low foods at 0.39.
+- **Mid and high** holds 100.1 total complexity in 32 foods: 16 high foods at 5 to 6 (the pack's best cans and meals
+  once golden, dragon and feasts are gone) and 16 mid foods near 0.95.
+
 ## 2. Food values
 
 ### 2.1 Config overrides out of line (16)

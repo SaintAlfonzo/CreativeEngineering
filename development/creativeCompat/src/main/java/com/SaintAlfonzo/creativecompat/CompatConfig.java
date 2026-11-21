@@ -34,6 +34,7 @@ public final class CompatConfig {
 	public static final Jei JEI;
 	public static final GuiTitle GUI_TITLE;
 	public static final Toasts TOASTS;
+	public static final Screens SCREENS;
 	public static final Tooltips TOOLTIPS;
 	public static final Coaster COASTER;
 	public static final Wthit WTHIT;
@@ -80,6 +81,7 @@ public final class CompatConfig {
 		JEI = new Jei(builder);
 		GUI_TITLE = new GuiTitle(builder);
 		TOASTS = new Toasts(builder);
+		SCREENS = new Screens(builder);
 		TOOLTIPS = new Tooltips(builder);
 		COASTER = new Coaster(builder);
 		WTHIT = new Wthit(builder);
@@ -1123,6 +1125,23 @@ public final class CompatConfig {
 			).define("advancement", true);
 
 			b.pop(); // toasts
+		}
+	}
+
+	/** Screen look (client side): {@code mixin/ScreenBackgroundDimMixin}. */
+	public static final class Screens {
+		public final ForgeConfigSpec.BooleanValue dimWorldBehindScreens;
+
+		private Screens(ForgeConfigSpec.Builder b) {
+			b.comment("Screen look (client side).").push("screens");
+
+			dimWorldBehindScreens = b.comment(
+					"On: vanilla's dark overlay over the world behind the inventory and other container screens.",
+					"Off: the world stays undimmed. Menus outside a world (title screen) are unchanged.",
+					"Takes effect the next time a screen draws."
+			).define("dimWorldBehindScreens", true);
+
+			b.pop(); // screens
 		}
 	}
 

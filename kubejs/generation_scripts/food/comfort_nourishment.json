@@ -33,6 +33,10 @@
 			"effect": "comfort",
 			"seconds": 60
 		},
+		"rainbow_jelly": {
+			"effect": "none",
+			"seconds": 0
+		},
 		"sopa_de_macaco": {
 			"effect": "none",
 			"seconds": 0
@@ -733,6 +737,22 @@
 			"effect": "nourishment",
 			"seconds": 120
 		},
+		"biscuits_and_gravy": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"glazed_carrots": {
+			"effect": "comfort",
+			"seconds": 240
+		},
+		"hops_salad": {
+			"effect": "none",
+			"seconds": 0
+		},
+		"macaroni_and_cheese": {
+			"effect": "comfort",
+			"seconds": 240
+		},
 		"enchanted_golden_moss_clump": {
 			"effect": "nourishment",
 			"seconds": 240
@@ -1314,6 +1334,8 @@
 		"twisted_cereal_wood",
 		"dragon_leg_with_sauce",
 		"mango_salad",
+		"pickled_carrots",
+		"pickled_potatoes",
 		"moredelight_potato_salad",
 		"plate_of_stuffed_hoglin_ham",
 		"plate_of_stuffed_hoglin_roast",
@@ -1384,6 +1406,21 @@
 		"orange_juice",
 		"peach_tea",
 		"pear_juice",
+		"blueberry_juice",
+		"blueberry_wine",
+		"cherry_juice",
+		"chocolate_milk_bottle",
+		"glow_berry_juice",
+		"glow_berry_wine",
+		"goat_milk_bottle",
+		"lemon_wine",
+		"melon_wine",
+		"moonshine",
+		"raspberry_juice",
+		"raspberry_wine",
+		"root_beer",
+		"sweet_berry_juice",
+		"sweet_berry_wine",
 		"sweet_berry_custard",
 		"honey_bottle",
 		"adzuki_milkshake",
