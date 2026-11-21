@@ -76,23 +76,24 @@ expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cornbread_stuffing r
 > cdevtest recipes kelp_encrusted_cod
 expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/kelp_encrusted_cod result=
 > cdevtest recipes lemon_jam_from_slices
-expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/lemon_jam_from_slices result=
+# judge-7c 2026-11-21: no separate 5-slice lemon jam since the 2026-11-02 rework (RC-79, fruitsdelight/recipes.js): the pot slots take slices
+reject \[cdevtest\] verb=recipes id=\S+/lemon_jam_from_slices result=
 > cdevtest recipes vinegar_from
 expect \[cdevtest\] verb=recipes id=creativedelight:pickling/vinegar_from_apple_mash result=
 reject \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/vinegar_from_jam result=
 > cdevtest recipes kebab_wrap
-expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/kebab_wrap result=
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/kebab_wrap_(manual_only|sequenced_assembly) result=
 > cdevtest recipes cesar_salad_manual_only
 expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cesar_salad_manual_only result=
 count \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cabbage_leaves result= >= 2
-count \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/lemon_jam_from_slices result= >= 2
 > cdevtest makes vintagedelight:salmonberry_jam_jar
 > cdevtest makes vintagedelight:raspberry_jam_jar
 > cdevtest makes vintagedelight:green_grape_jam_jar
 > cdevtest makes vintagedelight:red_grape_jam_jar
 > cdevtest makes vintagedelight:cherry_jam_jar
 count \[cdevtest\] verb=makes id=\S+ result=vintagedelight:(salmonberry|raspberry|green_grape|red_grape|cherry)_jam_jar\*1\b >= 5
-reject \[cdevtest\] verb=makes id=\S+ result=vintagedelight:(salmonberry|raspberry|green_grape|red_grape|cherry)_jam_jar\*([2-9]|\d\d)
+# judge-7c 2026-11-21: a jam block crafts back to 8 jars (RC-181), so the _from_block recipes are left out
+reject \[cdevtest\] verb=makes id=(?!\S*_from_block\b)\S+ result=vintagedelight:(salmonberry|raspberry|green_grape|red_grape|cherry)_jam_jar\*([2-9]|\d\d)
 > cdevtest makes farmersdelight:granite_cutting_board
 > cdevtest makes farmersdelight:andesite_cutting_board
 > cdevtest makes farmersdelight:diorite_cutting_board
@@ -114,7 +115,10 @@ reject \[cdevtest\] verb=recipes id=vintagedelight:fermenting/vinegar_from_jam_b
 > cdevtest recipes oceanic_delight:caesar_salad
 reject \[cdevtest\] verb=recipes id=oceanic_delight:caesar_salad result=
 > cdevtest recipes endersdelight:cutting/shulker_filet
-reject \[cdevtest\] verb=recipes id=endersdelight:cutting/shulker_filet result=
+# judge-7c 2026-11-21: Ender's mollusk-to-filet cut stays since the 2026-11-18 reversal (item_merges.md 2.14); End's cut is the removed one
+expect \[cdevtest\] verb=recipes id=endersdelight:cutting/shulker_filet result=
+> cdevtest recipes ends_delight:food/shulker_meat_slice
+reject \[cdevtest\] verb=recipes id=ends_delight:food/shulker_meat_slice result=
 > cdevtest recipes hostiledelight:ppicklerecp
 reject \[cdevtest\] verb=recipes id=hostiledelight:ppicklerecp result=
 > cdevtest recipes pneumaticcraft:thermo_plant/salmon_tempura
@@ -332,6 +336,8 @@ reject (?i)invalid for block
 > cdevtest uses minecraft:carrot
 sleep 2
 > pbot spawn s5cb {S5H1+397} {S5H2} {S5H3+10} minecraft:overworld survival
+# judge-7c 2026-11-21: the starter kit puts a copper shield in the offhand; the board passes a non-block main-hand item (beef) to a full offhand
+> item replace entity s5cb weapon.offhand with minecraft:air
 > pbot hold s5cb minecraft:carrot
 > pbot use s5cb {S5H1+400} {S5H2} {S5H3+10} up
 sleep 1
@@ -1772,6 +1778,7 @@ look the ship line: box unwrecked_pillager_ships (boat pool) for a pillager-crew
 @jars creativecommon
 @from batches/r1102b/s5_B2.qb
 @reviewed 2026-11-20
+# the restart puts boot lines in the row log: KubeJS "does not have required mod" plugin WARN excluded (judge-7, r1120nv, 2026-11-21)
 # own capture (r1120fix 2026-11-20; was s5_B.qb's SQ-PSM-06a before a separate boot): locate, no tp, then restart
 > locate structure creativeworldgen:meta/struck_monument
 waitlog (The nearest creativeworldgen:meta/struck_monument is at|Could not find a structure of type "?creativeworldgen:meta/struck_monument) 1800
@@ -1793,7 +1800,7 @@ sleep 2
 waitlog PSM06 struck counted 180
 expect #struck_elders has 3 \[s5n\]
 reject could not be rebuilt
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)(?! required mod)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 expect \[spawn-boxes\] .*box spawn_overrides of creativeworldgen:meta/struck_monument, part minecraft:monument -> \[minecraft:guardian 1 \(2-4\)\]
 look prismarine brick count well above 0 = interior rooms present (compare with the lone monument's count in SQ-PSM-06b)
 > pbot remove s5mstruck
@@ -1992,15 +1999,15 @@ sleep 2
 > tp s5tm {S5H1+21} {S5H2} {S5H3+54}
 sleep 2
 # age check per vine (block ids differ per column, so one test per position)
-> execute if block {S5H1+20} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+20} {S5H2+1} {S5H3+60} supplementaries:rope_tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+20} {S5H2+2} {S5H3+60} supplementaries:rope_tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+21} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+21} {S5H2+1} {S5H3+60} supplementaries:stick_tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+21} {S5H2+2} {S5H3+60} supplementaries:stick_tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+22} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+22} {S5H2+1} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset
-> execute if block {S5H1+22} {S5H2+2} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset
+> execute if block {S5H1+20} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset x20 y+0
+> execute if block {S5H1+20} {S5H2+1} {S5H3+60} supplementaries:rope_tomatoes[age=0] run say PSF02 vine reset x20 y+1
+> execute if block {S5H1+20} {S5H2+2} {S5H3+60} supplementaries:rope_tomatoes[age=0] run say PSF02 vine reset x20 y+2
+> execute if block {S5H1+21} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset x21 y+0
+> execute if block {S5H1+21} {S5H2+1} {S5H3+60} supplementaries:stick_tomatoes[age=0] run say PSF02 vine reset x21 y+1
+> execute if block {S5H1+21} {S5H2+2} {S5H3+60} supplementaries:stick_tomatoes[age=0] run say PSF02 vine reset x21 y+2
+> execute if block {S5H1+22} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset x22 y+0
+> execute if block {S5H1+22} {S5H2+1} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset x22 y+1
+> execute if block {S5H1+22} {S5H2+2} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset x22 y+2
 > cdevtest items {S5H1+21} {S5H2+1} {S5H3+60} 2.5 keep
 waitlog \[cdevtest\] verb=items done= 30
 > data get entity s5tm SelectedItem
@@ -2010,7 +2017,8 @@ look tomatoes = cdevtest items drops plus any in s5tm Inventory (the hoe holder 
 expect \[cdevtest\] verb=items items=\S*\bfarmersdelight:tomato:\d+
 reject \[cdevtest\] verb=items items=\S*\b(minecraft:stick|supplementaries:rope|farmersdelight:rope|farmersdelight:tomato_seeds|creativedelight:treated_stick):\d+
 # r1102b judge: pack config/quark-common.toml "Harvesting Costs Durability" = false, the harvest code follows it: no hoe damage
-expect s5tm has the following entity data: \{.*id: "minecraft:iron_hoe".*Damage: 0\b
+# judge-7c 2026-11-21: an area hoe costs 1 durability per harvesting click since 2026-11-03 (crops.md, QuarkHoeAreaHarvestMixin); says labeled per vine
+expect s5tm has the following entity data: \{.*id: "minecraft:iron_hoe".*Damage: 1\b
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look tomatoes 9..18 in total (1 to 2 per vine)
 
@@ -2287,6 +2295,8 @@ shell grep -n 'fertileSoilBoost' config/creativedelight-common.toml
 > setblock {S5H1+44} {S5H2-1} {S5H3+66} immersive_weathering:mulch_block[moisture=7]
 > setblock {S5H1+44} {S5H2} {S5H3+66} minecraft:melon_stem[age=0]
 > fill {S5H1+47} {S5H2-1} {S5H3+65} {S5H1+49} {S5H2} {S5H3+67} minecraft:stone
+# judge-7c 2026-11-21: the stone fill covered the stem cell, so the farmland had a solid block above and turned to dirt (FarmBlock updateShape UP; r1103 SQ-PSF-08a): clear the cell first
+> setblock {S5H1+48} {S5H2} {S5H3+66} minecraft:air
 > setblock {S5H1+48} {S5H2-1} {S5H3+66} minecraft:farmland[moisture=7]
 > setblock {S5H1+48} {S5H2} {S5H3+66} minecraft:melon_stem[age=0]
 > setblock {S5H1+49} {S5H2-1} {S5H3+66} minecraft:water
@@ -2370,7 +2380,8 @@ sleep 3
 > setblock {S5H1+52} {S5H2+1} {S5H3+40} well:well[axis=x,half=upper]
 sleep 2
 > data get block {S5H1+52} {S5H2} {S5H3+40}
-> data merge block {S5H1+52} {S5H2} {S5H3+40} {Tank:{FluidName:"minecraft:water",Amount:50000}}
+# judge-7c 2026-11-21: the well keeps FluidName and Amount at the top level of its block entity (no Tank compound; r1120nv data get)
+> data merge block {S5H1+52} {S5H2} {S5H3+40} {FluidName:"minecraft:water",Amount:50000}
 > data get block {S5H1+52} {S5H2} {S5H3+40}
 > pbot spawn s5wc {S5H1+50} {S5H2} {S5H3+40} minecraft:overworld survival
 > item replace entity s5wc weapon.mainhand with hearthandharvest:iron_watering_can{WaterLevel:0}
@@ -2403,7 +2414,8 @@ look the first data get shows the well's real tank keys; if they are not Tank/Fl
 @fails a new mod or kubejs override since 2026-11-02: read the scan row that names it
 @from batches/r1103w/w_1_B.qb
 @reviewed 2026-11-20
-shell (cd $INST && python3 tools/check_worldgen_json.py) > ../cwj.txt 2>&1; r1=$?; tail -8 ../cwj.txt; (cd $INST && python3 tools/nether_worldgen_scan.py) 2>&1 | tail -8; n=$(grep -c glowstone $INST/feature_writeup/nether_worldgen_scan.md || true); echo "check_worldgen_json rc $r1, glowstone lines $n"; [ "$r1" = 0 ] && [ "$n" = 0 ]
+# judge-7c 2026-11-21: the scan's mod-processor note names glowstone dust as Better Nether Fortresses item-frame items (not blocks, Nether only; in the committed scan since 2026-11-06): not counted
+shell (cd $INST && python3 tools/check_worldgen_json.py) > ../cwj.txt 2>&1; r1=$?; tail -8 ../cwj.txt; (cd $INST && python3 tools/nether_worldgen_scan.py) 2>&1 | tail -8; n=$(grep glowstone $INST/feature_writeup/nether_worldgen_scan.md | grep -vc 'item_frame_processor' || true); echo "check_worldgen_json rc $r1, glowstone lines $n"; [ "$r1" = 0 ] && [ "$n" = 0 ]
 look check_worldgen_json: 0 problems; the scan prints 47 structures and a processor count
 
 ## SQ-PSW-01 | nether fits and lost soul dungeon: no unknown-biome / missing-tag / still lists warning
@@ -2893,9 +2905,11 @@ sleep 2
 count FCB08 (cooking_pot|copper_pot|kettle|skillet) picked up >= 4
 expect s5ck has the following entity data: \{.*id: "farmersdelight:cooking_pot".*beef_stew
 expect s5ck has the following entity data: \{.*id: "miners_delight:copper_pot".*cave_soup\b
-expect s5ck has the following entity data: \{.*id: "farmersrespite:kettle"
+expect s5ck has the following entity data: \{.*id: "farmersrespite:kettle".*minecraft:carrot
 expect s5ck has the following entity data: \{.*id: "farmersdelight:skillet"
-count \[cdevtest\] verb=items items=\S*\bminecraft:carrot:\d+ >= 2
+# judge-7c 2026-11-21: since QoL-8 (kitchen.md 2.12, 2026-11-07) the pots and the kettle keep their slots in the item, so the carrot rides in BlockEntityTag instead of dropping
+expect s5ck has the following entity data: \{.*id: "farmersdelight:cooking_pot".*minecraft:carrot
+expect s5ck has the following entity data: \{.*id: "miners_delight:copper_pot".*minecraft:carrot
 > setblock {S5H1+62} {S5H2} {S5H3+34} minecraft:stone
 > setblock {S5H1+62} {S5H2+1} {S5H3+34} farmersdelight:cooking_pot[support=none]
 > s5 lclick s5ck {S5H1+62} {S5H2+1} {S5H3+34}
@@ -2905,14 +2919,15 @@ sleep 1
 sleep 1
 > execute if block {S5H1+62} {S5H2+1} {S5H3+34} farmersdelight:cooking_pot[support=none] run say FCB08 cooking_pot handle off
 > setblock {S5H1+66} {S5H2} {S5H3+34} minecraft:stone
-> setblock {S5H1+66} {S5H2+1} {S5H3+34} farmersrespite:kettle[support=none]
+> setblock {S5H1+66} {S5H2+1} {S5H3+34} farmersrespite:kettle[support=none,lid=true]
 > s5 lclick s5ck {S5H1+66} {S5H2+1} {S5H3+34}
 sleep 1
-> execute if block {S5H1+66} {S5H2+1} {S5H3+34} farmersrespite:kettle[support=handle] run say FCB08 kettle handle on
+> execute if block {S5H1+66} {S5H2+1} {S5H3+34} farmersrespite:kettle[lid=false] run say FCB08 kettle lid off
 > s5 lclick s5ck {S5H1+66} {S5H2+1} {S5H3+34}
 sleep 1
-> execute if block {S5H1+66} {S5H2+1} {S5H3+34} farmersrespite:kettle[support=none] run say FCB08 kettle handle off
-count FCB08 (cooking_pot|kettle) handle (on|off) == 4
+> execute if block {S5H1+66} {S5H2+1} {S5H3+34} farmersrespite:kettle[lid=true] run say FCB08 kettle lid on
+# judge-7c 2026-11-21: a punch on the kettle toggles its lid, not the handle (kitchen.md 2.9)
+count FCB08 (cooking_pot handle|kettle lid) (on|off) == 4
 reject \[s5\] lclick .*block now minecraft:air
 # spawn protection: an op online makes vanilla protection active (spawn-protection=16 in server.properties)
 > pbot spawn s5op {S5H1-6} {S5H2} {S5H3-6} minecraft:overworld survival

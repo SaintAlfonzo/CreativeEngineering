@@ -19,7 +19,14 @@
 @fails
 @reviewed 2026-11-16
 bootreject Mixin apply failed.*(?i:perf)
+# an idle flat world has no ticking entity or block entity, so those two hooks never ran (judge-7, r1120nv, 2026-11-21)
+> forceload add 0 0
+> summon minecraft:pig 0 -60 0 {Tags:["pf01"]}
+> setblock 1 -60 0 minecraft:hopper
+sleep 3
 > cdevperf status
+> kill @e[tag=pf01]
+> setblock 1 -60 0 minecraft:air
 expect recording '
 expect hooks: (all have run|not run yet: [^,]*chunk[^,]*;)
 expect [1-9]\d* KubeJS handlers wrapped
@@ -30,15 +37,23 @@ look the recorded list holds all 10 events (no "not recorded:" line); a hooks li
 @commands After 2 min, `/cdevperf dump smoke`; copy the file here, `python3 tools/perf/perf_report.py <file>` (PF-15)
 @pass Chat says saved; the report's "Measured by the pack's hooks" has ticks, a row per dimension, handlers as `server_scripts:<file>:<line>`, entity and block entity types
 @fails Depends on: SQ-PF-01
-@reviewed 2026-11-16
+@reviewed 2026-11-21
 @from batches/r1102b/s3_A.qb
+# judge-7, r1120nv, 2026-11-21: a pig and a hopper tick during the recording (the idle flat world has none); the report is
+# HTML now (perf/reports/, path on the `report:` line), so the shell prints its text
+> forceload add 0 0
+> summon minecraft:pig 0 -60 0 {Tags:["pf02"]}
+> setblock 1 -60 0 minecraft:hopper
+sleep 5
 > cdevperf status
 expect recording '
 > cdevperf dump smoke
 waitlog \[cdevperf\] recording saved to 300
 capture PFF recording saved to (\S+)
-shell python3 -I $INST/tools/perf/perf_report.py {PFF} > ../pf02_report.txt 2>&1; echo "exit $?"; grep -n -A25 "Measured by the pack" ../pf02_report.txt | head -60
-look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as server_scripts:<file>:<line>, entity and block entity types
+shell python3 -I $INST/tools/perf/perf_report.py {PFF} > ../pf02_report.txt 2>&1; echo "exit $?"; cat ../pf02_report.txt; r=$(grep -o "report: .*" ../pf02_report.txt | cut -d" " -f2); python3 -I -c "import re,sys,html; t=open(sys.argv[1]).read(); t=re.sub(r'<script.*?</script>|<style.*?</style>','',t,flags=re.S); t=re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>',' ',t))); i=t.find('Measured by the pack'); print(t[i:i+5000])" "$r"
+> kill @e[tag=pf02]
+> setblock 1 -60 0 minecraft:air
+look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as <script pack>:<file>:<line> (jar scripts since the carve), entity and block entity types (the pig, the hopper)
 
 ## SQ-PF-03
 @group B
@@ -62,7 +77,8 @@ sleep 20
 waitlog \[cdevperf\] recording saved to 300
 capture PFT recording saved to (\S+)
 > pbot remove pf3
-shell python3 -I $INST/tools/perf/perf_report.py {PFT} > ../pf03_report.txt 2>&1; echo "exit $?"; grep -n -i -A20 "chunk wait" ../pf03_report.txt | head -40
+# the report is HTML now (perf/reports/, path on the `report:` line); judge-7, r1120nv, 2026-11-21
+shell python3 -I $INST/tools/perf/perf_report.py {PFT} > ../pf03_report.txt 2>&1; echo "exit $?"; cat ../pf03_report.txt; r=$(grep -o "report: .*" ../pf03_report.txt | cut -d" " -f2); python3 -I -c "import re,sys,html; t=open(sys.argv[1]).read(); t=re.sub(r'<script.*?</script>|<style.*?</style>','',t,flags=re.S); t=re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>',' ',t))); i=t.find('Chunk waits'); print(t[i:i+2500])" "$r"
 look rows/SQ-PF-03.shell.txt: chunk waits over 1 ms with a caller and phase; totals non-zero
 ## SQ-PF-04
 @group B

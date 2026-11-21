@@ -61,6 +61,9 @@ look first verb=ages line (bot beside the field) grew, second (no player) stayed
 @fails Chunks don't follow: `ServerChunkCache.move` not reached
 @reviewed 2026-11-20
 # the path is 500 blocks at 1.5 b/t (about 334 ticks): a 400-tick warp replaces the 20 s
+# bot1 spawned here too so the row reruns alone (judge-7, r1120nv, 2026-11-21)
+> execute unless entity bot1 run pbot spawn bot1 3000 -60 3000 minecraft:overworld survival
+sleep 3
 > pbot path bot1 3500 200 3000 1.5
 > cdevtest tickwarp 400
 waitlog verb=tickwarp end=done ticks=400 120
@@ -69,7 +72,7 @@ waitlog verb=tickwarp end=done ticks=400 120
 shell grep -l "path_done:bot1" perf/bot/ticks-*.csv
 shell test -s perf/bot/census-t.json
 expect census t entities \d+ block_entities \d+
-expect verb=player name=bot1 .*x=3(4[89]\d|500)\.
+expect verb=player name=bot1 .*x=3(4[89]\d|500)[. ]
 reject \[cdevtest\] .*done=0
 look the status lines' chunk column follows the bot (perf/bot/ticks-*.csv); path_done near tick 334 of the path
 ## SQ-PFS-04

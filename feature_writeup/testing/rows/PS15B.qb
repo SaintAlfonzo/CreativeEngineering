@@ -762,7 +762,7 @@ look middle `Neighbors: 4 of 4`, corner `2 of 4`; web cube `Neighbors: 6 of 6` w
 @@text leafJumpLayers 5 / leafJumpFactor 0.9 / leafFallSpeed 0.24, thornChance 0.25 / thornLayers 6 / thornMinSpeed 1.0 /
 @@text thornCooldownTicks 20, pathBlockLayers 6, bambooLeafChance 0.0005 / bambooLeafMaxLayers 4, leafOverlay true (removed 2026-11-19).
 @@table
-## SQ-PS15B-13 | layers fall and stack: snow 3 onto 2 -> 5, snow 3 onto 7 -> snow block + 2 above, salt 2 onto 7 -> 8 + 1, bamboo 3 onto 3 -> full 6, sawdust onto air -> lands, snow into water -> snowballs
+## SQ-PS15B-13 | layers fall and stack: snow 3 onto 2 -> 5, snow 3 onto 7 -> snow block + 2 above, salt 2 onto 7 -> salt block (9 layers = 1 block), bamboo 3 onto 3 -> full 6, sawdust onto air -> lands, snow into water -> snowballs
 @reviewed 2026-11-20
 @group A
 @commands Each pile sits on a stone block 4 above the ground (or over a water pool); the stone is removed and the pile falls onto the ground pile below
@@ -791,13 +791,13 @@ sleep 1
 sleep 4
 > execute if block 1300 -60 1300 minecraft:snow[layers=5] run say ps15b13 snow 2+3 = 5
 > execute if block 1303 -60 1300 minecraft:snow_block if block 1303 -59 1300 minecraft:snow[layers=2] run say ps15b13 snow 7+3 = block + 2
-> execute if block 1306 -60 1300 vintagedelight:salt[layers=8] if block 1306 -59 1300 vintagedelight:salt[layers=1] run say ps15b13 salt 7+2 = 8 + 1
+> execute if block 1306 -60 1300 salt:salt_block if block 1306 -59 1300 minecraft:air run say ps15b13 salt 7+2 = block
 > cdevtest state 1309 -60 1300
 > execute if block 1312 -60 1300 immersiveengineering:sawdust[layers=4] run say ps15b13 sawdust landed
 > execute if entity @e[type=minecraft:item,x=1314,y=-62,z=1299,dx=3,dy=3,dz=3,nbt={Item:{id:"minecraft:snowball",Count:3b}}] run say ps15b13 water drop 3 snowballs
 expect ps15b13 snow 2\+3 = 5
 expect ps15b13 snow 7\+3 = block \+ 2
-expect ps15b13 salt 7\+2 = 8 \+ 1
+expect ps15b13 salt 7\+2 = block
 expect verb=state pos=1309,-60,1300 state="?creativecompat:bamboo_leaves_full\[.*layers=6
 expect ps15b13 sawdust landed
 expect ps15b13 water drop 3 snowballs
@@ -952,8 +952,8 @@ sleep 4
 waitlog verb=tickwarp end=done ticks=401 120
 shell printf '\n' >> config/creativecommon-common.toml
 sleep 4
-count \[creativecommon\] creativecompat-common.toml reloaded == 2
-count \[creativecommon\] creativecommon-common.toml reloaded == 1
+# counts read before the restore: the row-log count also took the restore's own reload of the Common toml (judge-7, r1120nv, 2026-11-21)
+shell n=$(grep -c '\[creativecommon\] creativecompat-common.toml reloaded' logs/latest.log); m=$(grep -c '\[creativecommon\] creativecommon-common.toml reloaded' logs/latest.log); echo "compat $n common $m"; [ "$n" = 2 ] && [ "$m" = 1 ]
 shell cp .ps15b26_compat.toml config/creativecompat-common.toml
 shell cp .ps15b26_common.toml config/creativecommon-common.toml
 sleep 4

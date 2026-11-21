@@ -1307,7 +1307,7 @@ look the net loot half (salmon_eggs from the river net) is SQ-FN-03 in the group
 ## SQ-RM-03 | orange jam from slices: pot and heated mixer; Fruits Delight's 2-orange recipes stay
 @group A
 @commands `/reload` and boot; `grep` `server.log` for `Orange Jam`/`orange_jam` recipes; probe `createmixing` and the cooking pot recipes
-@pass `orange_jam_from_slices` pot recipe takes 4 Orange Slices + 1 Lemon Slice + sugar; the mixer recipe is heated and takes 100 mB of water, gives 125 mB of jam; the 2-orange recipes still exist (changelog: "stay")
+@pass no `orange_jam_from_slices` recipe (removed in 1.2.00, changelog); the 2-orange recipes still exist
 @fails `cooking.js` orange jam rows; `fluids.js` (`f.orange_jam`)
 @jars creativecommon creativedelight
 @from batches/r1102b/s1_A.qb
@@ -1315,11 +1315,10 @@ look the net loot half (salmon_eggs from the river net) is SQ-FN-03 in the group
 > cdevtest rdetail orange_jam_from_slices
 > cdevtest makes fruitsdelight:orange_jelly
 > cdevtest recipes flowing_orange_jam
-expect verb=rdetail id=creativedelight:farmersdelightcooking/orange_jam_from_slices serializer=farmersdelight:cooking result=.*orange_jelly.* ingredients=.*fruitsdelight:orange_slice
-expect verb=rdetail id=creativedelight:createmixing/orange_jam_from_slices serializer=create:mixing
+expect verb=rdetail text=orange_jam_from_slices n=0
 expect verb=makes id=farmersdelight:cooking/orange_jelly
 expect verb=recipes id=fruitsdelight:mixing/flowing_orange_jam
-look pot recipe inputs: 4 x orange_slice, lemon_slice, a sweetener; mixer: the same plus water (fluid ingredients are not listed by rdetail; heated and 100 mB in / 125 mB out are judged from the script, kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js)
+look the slice recipes are gone (changelog 1.2.00: "Removed: Orange Jam from 4 Orange Slices, in the Cooking Pot and the heated Mixer"); the 2-orange pot, crafting and mixing recipes remain in the makes lines
 
 ## SQ-RM-04
 @group A
@@ -1876,7 +1875,8 @@ look the ruled count is 269 (row text) or the current comfort_nourishment.json c
 expect verb=food item=farmersdelight:noodle_soup\*1 .*effects=\S*farmersdelight:nourishment:0:4800:
 expect verb=food item=farmersdelight:beef_stew\*1 .*effects=\S*farmersdelight:comfort:0:4800:
 reject verb=food item=farmersdelight:bone_broth\*1 .*(comfort|nourishment)
-expect verb=food item=farmersdelight:dog_food\*1 .*effects=\S*farmersdelight:comfort:0:1200:
+# r1120nv judge-7b: dog food is formless, no effect (comfort_nourishment.json set dog_food none; writeup 11.7, owner 2026-11-02); was expect comfort:0:1200
+reject verb=food item=farmersdelight:dog_food\*1 .*(comfort|nourishment)
 expect verb=food item=minecraft:golden_carrot\*1 .*effects=\S*farmersdelight:nourishment:0:2400:
 expect verb=food item=minecraft:enchanted_golden_apple\*1 .*effects=\S*farmersdelight:nourishment:0:4800:
 expect verb=food item=minecraft:enchanted_golden_apple\*1 .*effects=\S*minecraft:absorption
@@ -2825,6 +2825,12 @@ expect \[zcount\] entities item:vintagedelight:vine_tile x1=1$
 > loottuning
 > zloot packs vintagedelight
 > zloot adds vintagedelight
+# judge-7b fix (2026-11-21): the bell pepper crates and seed bag are rusticdelight: ids (item_dict, veggiesdelight/loot.js); list them here
+> zloot packs rusticdelight
+expect \[zloot\] pack rusticdelight:bell_pepper_red_crate
+expect \[zloot\] pack rusticdelight:bell_pepper_green_crate
+expect \[zloot\] pack rusticdelight:bell_pepper_yellow_crate
+expect \[zloot\] pack rusticdelight:bell_pepper_seeds_bag
 expect \[zloot\] pack vintagedelight:oat_bale
 expect \[zloot\] pack vintagedelight:oat_bag
 expect \[zloot\] pack vintagedelight:peanut_crate
@@ -2876,7 +2882,7 @@ look shell: placeAs = "FARMERSDELIGHT", sneakToPlace = false, farmlandBlocks = t
 ## SQ-FDB-02 | FD 1.3.4 backport items
 @group A
 @commands `/give @p farmersdelight:rope_fence 3`, `farmersdelight:rope_fence_gate`, `farmersdelight:gleaming_salad_block`, `farmersdelight:gleaming_salad`, `farmersdelight:pumpkin_pie_slice`; `/setblock ~ ~ ~ farmersdelight:pumpkin_pie`
-@pass All exist; `/data get` on a held salad bowl shows max stack 16; KubeJS `item_dict` postInit warns about none of the 5 new keys
+@pass All exist; `/data get` on a held salad bowl shows max stack 32 (pack bowl-salad policy, stack_sizes.md); KubeJS `item_dict` postInit warns about none of the 5 new keys
 @fails Missing: `FDBackportRegistry` not registered (init mixin)
 @from batches/r1102b/s1_A.qb
 @reviewed 2026-11-16
@@ -2893,7 +2899,7 @@ sleep 2
 > cdevtest item farmersdelight:gleaming_salad
 count Gave \d+ +\[ >= 5
 expect FDB02 pie placed
-expect verb=item item=farmersdelight:gleaming_salad .*max_stack=16
+expect verb=item item=farmersdelight:gleaming_salad .*max_stack=32
 reject verb=item done=0
 reject Unknown item|Unknown block
 
@@ -2968,7 +2974,7 @@ waitlog \[zcount\] entities 30
 > cdevtest food farmersdelight:gleaming_salad
 expect Found 4 matching item
 expect \[zcount\] entities .*item:minecraft:bowl x1
-expect verb=food item=farmersdelight:gleaming_salad\*1 food=true nutrition=14 .*effects=\S*farmersdelight:nourishment:0:6000:
+expect verb=food item=farmersdelight:gleaming_salad\*1 food=true nutrition=14 .*effects=\S*farmersdelight:nourishment:0:2400:
 look servings state at 0 (leftover) before the break; the block light 12 -> 0 per serving is not readable from a command (client F3 or WTHIT: CQ)
 
 ## SQ-FDB-05 | vanilla Pumpkin Pie placed as FD / Delightful / Central Kitchen pie by config, live (edits the toml)
@@ -3036,6 +3042,8 @@ capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > fill {H1+53} {H2-1} {H3-17} {H1+58} {H2-1} {H3-15} minecraft:stone
 > setblock {H1+54} {H2-1} {H3-16} farmersdelight:rich_soil_farmland
 > setblock {H1+57} {H2-1} {H3-16} minecraft:farmland
+# judge-7b 2026-11-21: control farmland not trampled in r1120nv (scratch world gamerule unknown); mobGriefing gates mob trampling
+> gamerule mobGriefing true
 > summon minecraft:iron_golem {H1+54}.5 {H2+6} {H3-16}.5 {Tags:["fdb6"]}
 > summon minecraft:iron_golem {H1+57}.5 {H2+6} {H3-16}.5 {Tags:["fdb6"]}
 sleep 4
@@ -3400,7 +3408,7 @@ expect verb=food item=fruitsdelight:bellini_cocktail\S* .*effects=\S*minecraft:n
 > cdevtest tag item forge:storage_blocks/peach
 > cdevtest tag block forge:storage_blocks/peach
 > cdevtest tag block forge:storage_blocks
-expect verb=rdetail id=fruitsdelight:fig_pudding .*ingredients=.*_egg/[a-z_:]+/[a-z_:]+/\+\d+
+expect verb=rdetail id=fruitsdelight:fig_pudding .*ingredients=\S*egg[a-z_]*/[a-z_:]+/[a-z_:]+/\+\d+
 count verb=tag kind=item tag=forge:jams n=(2[4-9]|[3-9]\d)\b >= 1
 expect verb=tag kind=item tag=forge:storage_blocks/peach n=\d+ ids=\S*fruitsdelight:peach_crate
 expect verb=tag kind=block tag=forge:storage_blocks/peach n=\d+ ids=\S*fruitsdelight:peach_crate
@@ -3613,14 +3621,14 @@ look pasta and soup take 3 of #forge:vegetables/bell_pepper (several peppers lis
 > cdevtest rdetail cheesecake
 > cdevtest rdetail maple_cookie
 > cdevtest rdetail maple_glazed_bacon
-> cdevtest rdetail brewinandchewin:pizza
+> cdevtest rdetail pizza_manual_only
 > cdevtest rdetail bell_pepper_pasta
 # id fix (r1120fix, 2026-11-20): tag creativeengineering:roasted_bell_pepper -> creativedelight: (tag dump 2026-11-19, 9 items)
 > cdevtest tag item creativedelight:roasted_bell_pepper
 expect verb=tag kind=item tag=creativedelight:roasted_bell_pepper n=9
 reject verb=rdetail id=\S*(syrup|coffee|cherry_blossom)_cookie serializer=minecraft:crafting
 reject verb=rdetail id=\S*_cheesecake serializer=minecraft:crafting_sha
-look cookies: dough + 2 flavour -> 12 in the oven only; cheesecakes: pie crust + 2 flavour + 2 sweet, oven only; maple cookie = dough + syrup + honey; bacon = cooked bacon + syrup; pizza = bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat, dough; heatless pasta takes 3 of #creativeengineering:roasted_bell_pepper
+look cookies: dough + 2 flavour -> 12 in the oven only; cheesecakes: pie crust + 3 flavour + 2 sweet, oven only (changelog: 3 fruit [2]); maple cookie = dough + syrup + honey; bacon = cooked bacon + syrup + honey; Supreme Pizza (creativedelight:shaped/pizza_manual_only): dough, sauce, dough on the bottom row with cheese, cooked meat, cooked fish, mushroom, pepper, onion (item_merges.md, brewinandchewin/recipes.js); heatless pasta takes 3 of #creativedelight:roasted_bell_pepper
 
 ## SQ-RD-08 | squid half: Calamari from a squid killed by a player (loot as the bot)
 @group A
@@ -3630,7 +3638,7 @@ look cookies: dough + 2 flavour -> 12 in the oven only; cheesecakes: pie crust +
 @from batches/r1113/c4_a.qb
 > forceload add 40790 39990 40920 40100
 sleep 3
-> summon minecraft:squid 40860 -60 40008 {NoAI:1b,PersistenceRequired:1b,Tags:["rd8sq"]}
+> summon minecraft:squid 40860 -60 40008 {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["rd8sq"]}
 > pbot spawn rd8 40856 -60 40008 minecraft:overworld survival
 sleep 2
 > clear rd8
@@ -3641,10 +3649,12 @@ end
 > zcount 40859 -61 39999 40861 -58 40001
 waitlog \[zcount\] entities 30
 reject No entity was found
-expect item:rusticdelight:calamari
+expect item:miners_delight:squid
+reject item:rusticdelight:calamari
+reject item:minecraft:ink_sac
 > kill @e[tag=rd8sq]
 > pbot remove rd8
-look 1-2 Calamari per kill (10 kills): about 10 to 20 in the merged zcount stacks, ink sacs beside them
+look exactly 1 miners_delight:squid per kill (10 kills): the merged zcount stacks add up to 10, no Calamari or ink sac (rustic_delight.md, miners_delight/loot.js)
 
 ## SQ-RD-09
 @group B
@@ -3783,9 +3793,9 @@ reject Could not set the block|Invalid block state|Unknown block property
 > setblock {H1+9} {H2} {H3+30} rusticdelight:cotton[age=4]
 > setblock {H1+10} {H2} {H3+30} rusticdelight:bell_peppers[age=8]
 count does not accept .* for age property >= 3
-# drops: 10 base, 10 Pale, 10 Dark, 10 coffee, 10 cotton (loot rolls on the ripe blocks; the block stays)
+# drops: 60 base (enough to read the 1:1:1 roll), 10 Pale, 10 Dark, 10 coffee, 10 cotton (loot rolls on the ripe blocks; the block stays)
 > kill @e[type=minecraft:item]
-repeat 10
+repeat 60
 > loot spawn {H1+60} {H2} {H3} mine {H1+2} {H2} {H3+30}
 end
 > zcount {H1+59} {H2-1} {H3-1} {H1+61} {H2+2} {H3+1}
@@ -4000,7 +4010,7 @@ look 3 feast recipes listed; all 9 stuffed peppers have a pot recipe from their 
 ## SQ-RD-19 | syrup line and syrup ingredients
 @group A
 @commands Syrup line: dump syrup (bottle + `#rusticdelight:syrup_ingredients` + sugar), `sugar_from_syrup`, Syrup Coffee (from Coffee and from Milk Coffee), Sweet Salad, Syrup Sandwich, Syrup Cookie, Syrup Cheesecake; `/tag` list of `syrup_ingredients`; the pack's maple foods
-@pass Apple and beetroot in the tag; syrup -> 3 sugar; Sweet Salad takes honey or syrup; maple foods read syrup (5.2); cookie oven only
+@pass Apple and beetroot in the tag; syrup -> 4 sugar by hand, 8 in the pot (owner, 2026-11-17, #72b); Sweet Salad takes honey or syrup; maple foods read syrup (5.2); cookie oven only
 @fails Missing item recipe: dropped by the translator (item not registered)
 @from batches/r1102b/s2_A.qb
 @reviewed 2026-11-16
@@ -4010,8 +4020,10 @@ look 3 feast recipes listed; all 9 stuffed peppers have a pot recipe from their 
 > cdevtest rdetail sweet_salad
 expect verb=tag kind=item tag=rusticdelight:syrup_ingredients n=\d+ ids=\S*minecraft:apple
 expect verb=tag kind=item tag=rusticdelight:syrup_ingredients n=\d+ ids=\S*minecraft:beetroot
-expect verb=rdetail id=\S*sugar_from_syrup serializer=\S+ result=minecraft:sugar\*3
-look syrup = bottle + #syrup_ingredients + sugar; Syrup Coffee from Coffee and from Milk Coffee; Sweet Salad takes honey or syrup; the pack's maple foods are in the uses list; syrup cookie only in the oven
+expect verb=rdetail id=\S*shapeless/sugar_from_syrup serializer=minecraft:crafting_shapeless result=minecraft:sugar\*4
+expect verb=rdetail id=\S*farmersdelightcooking/sugar_from_syrup serializer=farmersdelight:cooking result=minecraft:sugar\*8
+reject verb=rdetail id=rusticdelight:syrup serializer=
+look syrup only from sap (heated Create mixing; Rustic pot syrup removed, hearth_and_harvest.md 3.4 / #41); Syrup Coffee from Coffee and from Milk Coffee; Sweet Salad takes honey or syrup; the pack's maple foods are in the uses list; syrup cookie only in the oven
 
 ## SQ-RD-20 | coffees: Caffeinated and one-effect clearing
 @group A
@@ -4570,6 +4582,9 @@ kjsreject (?i)\[NCH\].*(warn|error)
 @fails Links missing: `DisplayDelightDishBlocks.onLevelLoad` did not run (server level load) or the food is not in `#displaydelight:displayable`
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_A.qb
+# judge-7b 2026-11-21: r1120nv never ran the dump (grep empty, shell read a stale file)
+> dumpplaceable
+waitlog Display Delight links 120
 shell grep -oE "\[dumpplaceable\] [0-9]+ candidates, [0-9]+ Display Delight links" logs/latest.log | tail -1
 shell python3 -I -c "import json,re,sys;a=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight']['placed'];ids=sorted(set(re.findall(r'creativedelight:placed_[a-z_]+',json.dumps(a))));print(len(ids),ids);sys.exit(len(ids)<9)"
 look the link count in rows/SQ-FF-02.shell.txt against the 2026-10-24 dump (+9 expected then; the CDJ5 run's count is the newer baseline), each placed_* block mapped to its food
@@ -4618,7 +4633,8 @@ kjsreject (?i)\[NCH\].*error
 @jars creativecommon creativedelight
 @reviewed 2026-11-16
 bootexpect Done \(
-bootreject InvalidInjectionException|@Mixin target .* not found
+# r1120nv judge-7b: scoped to creativedelight.mixins.json (copycats, create_central_kitchen, treechop compat misses matched the unscoped regex)
+bootreject (InvalidInjectionException|@Mixin target .* not found).*creativedelight\.mixins\.json
 bootreject Error occurred while handling event.*(cooking|compost)\.js
 bootreject (?i)(/cooking|/compost)\.js.*(error|exception)
 ## SQ-CDQ-01 | remainder buffer (server half): pot keeps a milk bottle's glass bottle; kettle keeps honey's
@@ -5181,9 +5197,10 @@ look the counts in the log line include corn (CornDelightCompat now lives in Cre
 @pass level 1: 24 corn -> 1 emerald; level 2: 8 emeralds -> 8 cornbread, 8 tortillas; wanderer COMMON has corn, RARE has the popcorn box
 @fails `corn_delight/trades.js`
 @from batches/r1102b/s2_A.qb
-> ztrades farmer 1 3
-> ztrades farmer 2 3
-> ztrades wandering 0 5
+# r1120nv judge-7b: more rolls (were 3, 3, 5): a fresh farmer gets 2 random L2 trades from a pool of about a dozen, so 3 villagers missed cornbread and tortilla
+> ztrades farmer 1 12
+> ztrades farmer 2 20
+> ztrades wandering 0 20
 expect \[ztrades\] farmer L1 .*24 corn_delight:corn -> 1 minecraft:emerald
 expect \[ztrades\] farmer L2 .*8 minecraft:emerald -> 8 corn_delight:cornbread
 expect \[ztrades\] farmer L2 .*8 minecraft:emerald -> 8 corn_delight:tortilla
@@ -5436,7 +5453,9 @@ waitlog (?:The nearest minecraft:village_savanna is at|Could not find a structur
 capture VS The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {VS1-56} {VS3-56} {VS1+56} {VS3+56}
 sleep 60
-> cdevtest count {VS1-56} 40 {VS3-56} {VS1+56} 160 {VS3+56} rusticdelight:cotton
+# box was 1.5M blocks (cdevtest count caps at 262144): two halves, y 58 to 95 (judge-7, r1120nv, 2026-11-21)
+> cdevtest count {VS1-56} 58 {VS3-56} {VS1} 95 {VS3+56} rusticdelight:cotton
+> cdevtest count {VS1+1} 58 {VS3-56} {VS1+56} 95 {VS3+56} rusticdelight:cotton
 waitlog verb=count block=rusticdelight:cotton n= 300
 expect verb=count block=rusticdelight:cotton n=[1-9]
 > cdevtest tag biome creativedelight:wild_crops/cotton
@@ -5549,11 +5568,11 @@ bootreject (?i)(Parsing error|Couldn't parse|Failed to parse).*farmersrespite:br
 > cdevtest rdetail farmersrespitebrewing/
 > cdevtest rdetail farmersrespite:brewing/
 > cdevtest rdetail gamblers_tea
-expect verb=rdetail text=farmersrespitebrewing/ n=4\d\b
+expect verb=rdetail text=farmersrespitebrewing/ n=84\b
 expect verb=rdetail text=farmersrespite:brewing/ n=0\b
-look the count is 48 (n= on the "verb=rdetail text=farmersrespitebrewing/" end line counts every match; shown= is capped at 40); all creativedelight:farmersrespitebrewing/ except gambler's tea (creativeengineering:); needwater is checked by the brews working in SQ-RSP-05/06/15
+look the count is 84 (farmersrespite:brewing in kubejs/exported/recipes/recipe_types.json, 2026-11-19, with the drinks juices and teas; n= on the end line counts every match, shown= is capped at 40); all creativedelight:farmersrespitebrewing/, gambler's tea included (ids follow the owning mod); needwater is checked by the brews working in SQ-RSP-05/06/15
 > cdevtest recipes farmersrespitebrewing/
-expect verb=recipes text=farmersrespitebrewing/ n=[4-9]\d\b
+expect verb=recipes text=farmersrespitebrewing/ n=84\b
 
 ## SQ-RSP-03 | Kettle: water bucket to level 4, tea bottle refused
 @group A
@@ -5636,7 +5655,7 @@ expect RSP05 tea level 2
 > data merge block {R1+2} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"minecraft:honey_bottle",Count:1b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
 > data get block {R1+2} {R2+1} {R3+106} Inventory
 expect has the following block data: \{.*minecraft:honey_bottle
-sleep 12
+sleep 35
 > data get block {R1+2} {R2+1} {R3+106}
 > execute if block {R1+2} {R2+1} {R3+106} farmersrespite:kettle[water_level=1] run say RSP05 level 1
 > pbot remove rsp5
@@ -5653,8 +5672,8 @@ look honey's glass bottle sits in a leftover slot or the remainder buffer (block
 @from batches/r1103/p2_R.qb
 > setblock {R1+6} {R2} {R3+106} minecraft:campfire[lit=true]
 > setblock {R1+6} {R2+1} {R3+106} farmersrespite:kettle[water_level=4]
-> data merge block {R1+6} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"farmersrespite:black_tea_leaves",Count:2b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
-sleep 15
+> data merge block {R1+6} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:1,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
+sleep 35
 > data get block {R1+6} {R2+1} {R3+106}
 > execute if block {R1+6} {R2+1} {R3+106} farmersrespite:kettle[water_level=3] run say RSP06 level 3
 expect farmersrespite:black_tea"
@@ -5742,13 +5761,12 @@ expect \[\{Slot: 0b, id: "minecraft:bucket", Count: 1b\}\]
 @reviewed 2026-11-16
 > setblock {H1+10} {H2} {H3+112} minecraft:campfire[lit=true]
 > setblock {H1+10} {H2+1} {H3+112} farmersrespite:kettle[water_level=3]
-> kill @e[type=minecraft:item]
-> setblock {H1+10} {H2+1} {H3+112} minecraft:air destroy
-sleep 1
-> data get entity @e[type=minecraft:item,limit=1,sort=nearest,x={H1+10},y={H2+1},z={H3+112}] Item
 > pbot spawn rsp11 {H1+10} {H2+1} {H3+110} minecraft:overworld survival
 sleep 2
 > clear rsp11
+> kill @e[type=minecraft:item]
+> setblock {H1+10} {H2+1} {H3+112} minecraft:air destroy
+> data get entity @e[type=minecraft:item,limit=1,sort=nearest,x={H1+10},y={H2+1},z={H3+112}] Item
 > tp @e[type=minecraft:item,x={H1+10},y={H2+1},z={H3+112},distance=..3] rsp11
 sleep 2
 > pbot inv rsp11 get
@@ -5817,23 +5835,23 @@ expect farmersrespite:green_tea
 expect RSP14 brewed one
 look the data get line shows the brewed Green Tea in slot 4 (or 2 waiting); if Green Tea needs 2 leaves the level stays 3: judge from the recipe line of SQ-RSP-02
 
-## SQ-RSP-15 | BrewTimeTotal 200; no tea at 8 s, one by 12 s
+## SQ-RSP-15 | BrewTimeTotal 600; no tea at 8 s, one by 32 s
 @group A
 @commands heated Kettle with water: 1 black tea leaf in each of slots 0 and 1 + glass bottle; `/data get block ~ ~ ~ BrewTimeTotal` after 1 s, then check at 8 s and 12 s
-@pass `BrewTimeTotal` 200 (not 0); no tea at 8 s, one Black Tea by 12 s
+@pass `BrewTimeTotal` 600 (not 0; 30 s, owner 2026-11-03, farmers_respite.md); no tea at 8 s, one Black Tea by 32 s
 @fails NCH `frBrewing` `_or` default (Creative Common 1.1.06+; 1.1.04's `opts.time ?? 200` gave 0, a 1-tick brew), `KettleRecipeSerializerMixin` reading `cookingtime`
 @jars creativecommon creativedelight
 @from batches/r1103/p2_R.qb
 > setblock {R1+10} {R2} {R3+106} minecraft:campfire[lit=true]
 > setblock {R1+10} {R2+1} {R3+106} farmersrespite:kettle[water_level=4]
-> data merge block {R1+10} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"farmersrespite:black_tea_leaves",Count:2b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
+> data merge block {R1+10} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:1,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
 sleep 1
 > data get block {R1+10} {R2+1} {R3+106} BrewTimeTotal
-expect has the following block data: 200
+expect has the following block data: 600
 sleep 6
 > execute if block {R1+10} {R2+1} {R3+106} farmersrespite:kettle[water_level=4] run say RSP15 not yet at 8 s
 expect RSP15 not yet at 8 s
-sleep 5
+sleep 25
 > data get block {R1+10} {R2+1} {R3+106} Inventory
 expect farmersrespite:black_tea"
 

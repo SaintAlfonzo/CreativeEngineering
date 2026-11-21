@@ -138,6 +138,8 @@
 		LABEL_HOSTS.forEach((h, i) => {
 			let hp = labelHost(i)
 			air(level, cellOf(hp, 'north'))
+			// a floor so falling hosts (Supplementaries sack) stay put until refit (r1120nv SQ-LBS-04)
+			setSpec(level, pos(hp.getX(), Y - 1, hp.getZ()), 'minecraft:stone')
 			setSpec(level, hp, h[0])
 			let r = click(p, level, hp, 'north', Item.of('creativelabels:label', 4), true)
 			let fc = faceOf(level, hp, 'north')
@@ -183,6 +185,8 @@
 		CENTRE_HOSTS.forEach((h, i) => {
 			let hp = centreHost(i)
 			air(level, cellOf(hp, 'north'))
+			// a floor so falling hosts (Supplementaries sack) stay put until refit (r1120nv SQ-LBS-04)
+			setSpec(level, pos(hp.getX(), Y - 1, hp.getZ()), 'minecraft:stone')
 			air(level, cellOf(hp, 'up'))
 			setSpec(level, hp, h[0])
 			let r1 = click(p, level, hp, 'north', note('centre ' + i), true)
@@ -209,7 +213,7 @@
 			killDrops(level, cell)
 			air(level, hp)
 			let d = drops(level, cell), cid = blockId(level, cell)
-			let hit = d.filter(s => s.indexOf(want) >= 0 && (want != 'creativelabels:sticky_note' || s.indexOf('Text') >= 0))
+			let hit = d.filter(s => s.indexOf(want) >= 0 && (want != 'creativelabels:sticky_note' || (s.indexOf('Text') >= 0 && s.indexOf('Text:"top ') < 0)))
 			let blank = want != 'creativelabels:label' || hit.every(s => s.indexOf('{') < 0)
 			check('refit', host, had.indexOf('face_paper') >= 0 && hit.length == 1 && blank && cid == 'minecraft:air',
 				'cell before ' + had + ', after ' + cid + ', drops ' + (d.join(' | ') || 'none'))

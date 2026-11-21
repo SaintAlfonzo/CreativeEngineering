@@ -44,7 +44,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass `creativedelight:fdcooking/{ancient_fruit,banana,mulberry,strawberry}_jam_jar`; no `upgrade_aquatic:mulberry_jam_*` or Central Kitchen bottle / mixing ids; given items become `vintagedelight:mulberry_jam_jar` / `mulberry_jam_block`
 @fails CD `vintagedelight/jams.js` "Pack jam line"; swaps `merges_upgrade_aquatic_jams.json`
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 @absent upgrade_aquatic:mulberry_jam (recipe id text searched for n=0 on purpose)
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
 > forceload add 296 290 360 380
@@ -69,7 +69,8 @@ expect \[cdevtest\] verb=recipes text=upgrade_aquatic:mulberry_jam n=0
 expect \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=vintagedelight:mulberry_jam_jar\*
 expect \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=vintagedelight:mulberry_jam_block\*
 reject \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=upgrade_aquatic:mulberry_jam
-reject \[cdevtest\] verb=recipes id=create_central_kitchen:\S*mulberry_jam
+# narrowed to the @pass (bottle / mixing ids); CCK's mulberry jam bucket, filling and compacting recipes stay (judge-7, r1120nv, 2026-11-21)
+reject \[cdevtest\] verb=recipes id=create_central_kitchen:(\S*mulberry_jam_bottle|mixing/\S*mulberry_jam)
 > clear c2b
 reject \[cdevtest\] verb=\S+ done=0
 reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
@@ -142,7 +143,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass `fdcooking/nut_milk_jar`, `nut_milk_jar_from_bottle`, `nut_milk_bottle_from_jar`; nut milk jar in `#forge:milk`; new jars in `#forge:jams`, new jellos in `#fruitsdelight:jello`; every soft fluid container `capacity` 1
 @fails `jams.js`, `port_resources.py` `convert_soft_fluid`
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 > cdevtest recipes nut_milk
 > cdevtest tagsof vintagedelight:nut_milk_jar
 > cdevtest tag item forge:jams
@@ -152,7 +153,8 @@ shell python3 $INST/tools/scratch_query/c2_famcheck.py softfluids $(ls mods/crea
 expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/nut_milk_jar result=
 expect \[cdevtest\] verb=recipes id=creativedelight:shapeless/nut_milk_jar_from_bottle result=
 expect \[cdevtest\] verb=recipes id=creativedelight:shapeless/nut_milk_bottle_from_jar result=
-expect \[cdevtest\] verb=tagsof id=vintagedelight:nut_milk_jar item_tags=\S*forge:milk\b
+# tagsof prints block_tags= before item_tags= (judge-7, r1120nv, 2026-11-21)
+expect \[cdevtest\] verb=tagsof id=vintagedelight:nut_milk_jar .*item_tags=\S*forge:milk\b
 expect \[cdevtest\] verb=tag kind=item tag=forge:jams n=\d+ ids=\S*vintagedelight:ancient_fruit_jam_jar\S*vintagedelight:banana_jam_jar
 expect \[cdevtest\] verb=tag kind=item tag=forge:jams n=\d+ ids=\S*vintagedelight:mulberry_jam_jar\S*vintagedelight:strawberry_jam_jar
 look fruitsdelight:jello ids= holds the new jellos; shell: every soft fluid container line is "capacity 1" (no other capacity line)

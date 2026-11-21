@@ -31,14 +31,17 @@ look the values as in the pass cell; the debug.log count is at least 2
 @commands `forceload add 760 700 800 740`; `/cdevtest kill 760 -60 700 minecraft:sheep n=10`; `/cdevtest kill 770 -60 700 minecraft:iron_golem n=3`; a 5 x 5 stone pad at 780 -61 700, `summon minecraft:creeper 780 -60 700 {Fuse:0s,ignited:1b}`, wait 2 s, `/cdevtest count 778 -61 698 782 -61 702 minecraft:stone`
 @pass sheep drops have mutton and no wool; golem drops have iron ingots; the stone pad has fewer than 25 stone left (the creeper is no longer in `Non Griefing Entities`)
 @fails `quark-common.toml` not the edited one; Quark GameNerfsModule not loaded
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 > forceload add 760 700 800 740
 > cdevtest kill 760 -60 700 minecraft:sheep n=10
 > cdevtest kill 770 -60 700 minecraft:iron_golem n=3
 > fill 778 -61 698 782 -61 702 minecraft:stone
+# scratch servers run peaceful, which removes the creeper at once (judge-7, r1120nv, 2026-11-21)
+> difficulty easy
 > summon minecraft:creeper 780 -60 700 {Fuse:0s,ignited:1b}
 sleep 2
 > cdevtest count 778 -61 698 782 -61 702 minecraft:stone
+> difficulty peaceful
 expect verb=kill drops=.*minecraft:mutton
 reject verb=kill drops=.*minecraft:\w+_wool
 expect verb=kill drops=.*minecraft:iron_ingot

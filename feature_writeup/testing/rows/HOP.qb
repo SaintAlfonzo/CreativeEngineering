@@ -339,7 +339,9 @@ look sum of the two `countset hearthandharvest:hops_vine` lines at least 1 (vine
 @fails `hearthandharvest/tags.js` (`b.tilled_end_stone`, endercrop guard)
 @jars creativedelight powergrid
 @reviewed 2026-11-20
-> forceload add 624 512 639 527
+> forceload add 608 512 639 527
+# bot G spawned in the row since r1120nv (judge-7, 2026-11-21): the rewritten row ran with no G
+> execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
 sleep 3
 > setblock 628 -61 520 endercrop:tilled_end_stone
 > cdevtest loot 628 -61 520 tool=minecraft:diamond_pickaxe rolls=5
@@ -445,7 +447,8 @@ expect verb=tank tanks=\d+ fluids=0:minecraft:water\*1000/
 expect verb=player name=hb1 .*main=minecraft:water_bucket\*1
 expect verb=tank tanks=\d+ fluids=0:empty/
 expect verb=player name=hb1 .*main=minecraft:bucket\*1
-expect verb=player name=hb1 .*main=minecraft:dirt\*4
+# dirt use places one dirt block above the basin (block item, ruled PASS in r1115); judge-7, 2026-11-21
+expect verb=player name=hb1 .*main=minecraft:dirt\*[34]
 expect verb=inv slot=\d+ item=minecraft:dirt\*4
 expect verb=inv slot=\d+ item=minecraft:bucket\*1
 expect verb=inv .*slots=5 filled=2

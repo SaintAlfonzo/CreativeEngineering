@@ -18,18 +18,19 @@
 @fails No overlay: `assets/creativedelight/models/item/seasoned/` missing from the Delight jar. No tag match: `#creativedelight:seasonable/<path>` not built (`seasoning_tags.js` reads the id)
 @from batches/r1113/c4_a.qb
 # r1118 R3 (2026-11-18): new-world half only; the old-stack half is dropped (loss accepted, owner ruling 1)
-@reviewed 2026-11-18
-@absent creativedelight:seasoning (recipe serializer id, listed in the recipe dumps, not an item)
-> cdevtest bytype creativedelight:seasoning max=5
-> cdevtest tag item creativedelight:seasonable/pepper
-> cdevtest tag item creativedelight:seasonable/chili
-> cdevtest tag item creativedelight:seasonable/cheese
-expect verb=bytype serializer=creativedelight:seasoning n=[1-9]
-expect verb=tag kind=item tag=creativedelight:seasonable/pepper n=[1-9]
-expect verb=tag kind=item tag=creativedelight:seasonable/chili n=[1-9]
-expect verb=tag kind=item tag=creativedelight:seasonable/cheese n=[1-9]
+@reviewed 2026-11-21
+# ids per seasonings.md 7 (Seasoning -> Flavor, 2026-11-19): serializer creativedelight:flavor, tags #<ns>:flavorable/<path> (judge-7, r1120nv)
+@absent creativedelight:flavor (recipe serializer id, listed in the recipe dumps, not an item)
+> cdevtest bytype creativedelight:flavor max=5
+> cdevtest tag item barbequesdelight:flavorable/pepper
+> cdevtest tag item barbequesdelight:flavorable/chili
+> cdevtest tag item creativedelight:flavorable/cheese
+expect verb=bytype serializer=creativedelight:flavor n=[1-9]
+expect verb=tag kind=item tag=barbequesdelight:flavorable/pepper n=[1-9]
+expect verb=tag kind=item tag=barbequesdelight:flavorable/chili n=[1-9]
+expect verb=tag kind=item tag=creativedelight:flavorable/cheese n=[1-9]
 reject \[cdevtest\] verb=\S+ done=0
-reject seasonable.*creativeengineering:
+reject flavorable.*creativeengineering:
 
 ## SQ-NSM-02
 @group Old save (NSM fixture)

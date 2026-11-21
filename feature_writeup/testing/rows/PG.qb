@@ -74,6 +74,10 @@ look the pg pair at x 1290-1310 z 1040 shows the same adjust values as the last 
 @fails `PortalGunDyeRecipe` (column rule or `mix`); missing output on every case: the recipe JSON did not load (`portal_gun_dye` in the log)
 @from batches/r1113/c3_a1.qb
 @reviewed 2026-11-20
+# zc3 craft needs a player G; the row never spawned one (judge-7, r1120nv, 2026-11-21)
+> forceload add 0 0
+> execute unless entity G run pbot spawn G 0 -60 0 minecraft:overworld survival
+sleep 3
 > zc3 craft G minecraft:blue_dye|portalgun:portal_gun|-|-|-|-|-|-|-
 waitlog \[c3\] craft 20
 expect craft: recipe .* -> 1 portalgun:portal_gun nbt .*CustomPortalColors:\{blue:

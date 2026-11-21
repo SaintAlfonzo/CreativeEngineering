@@ -28,7 +28,7 @@ shell python3 -I $INST/tools/scratch_query/dumpq.py gear moredelight:wooden_knif
 @from batches/r1102b/s3_A.qb passed
 > dumpfood
 waitlog Dumped \d+ foods 600
-shell python3 -I $INST/tools/scratch_query/dumpq.py food moredelight:toast fast=True moredelight:toast_with_chocolate fast=True moredelight:toast_with_egg fast=True moredelight:toast_with_glow_berries fast=True moredelight:toast_with_honey fast=True moredelight:toast_with_sweet_berries fast=True oceanic_delight:caviar_toast fast=True creativeengineering:cheese_toast fast=True nutrition=5 saturationModifier=0.7
+shell python3 -I $INST/tools/scratch_query/dumpq.py food moredelight:toast fast=True moredelight:toast_with_chocolate fast=True moredelight:toast_with_egg fast=True moredelight:toast_with_glow_berries fast=True moredelight:toast_with_honey fast=True moredelight:toast_with_sweet_berries fast=True oceanic_delight:caviar_toast fast=True creativedelight:cheese_toast fast=True nutrition=5 saturationModifier=0.7
 
 ## SQ-MRD-03 | cheese toast, sliced potato tags
 @group B
