@@ -157,9 +157,24 @@ too (GitHub, the IDE preview). A missing icon item draws no icon and logs one wa
   then on. Do this in the same session; do not wait for a cleanup pass.
 - Bullets about one thing stay together even when they come from different systems (a lunchbox bullet under mobs
   belongs in `## Lunchboxes`). Group by what the player sees, not by what the code touched.
-- Catch-all headings stay at the end of the file, feature families first (biggest or most-played first).
+- Within its category (below), a catch-all heading sits after the feature families, which go biggest or most-played first.
 - A family may be one bullet only while it is the thing's whole story; otherwise merge it back into a catch-all.
 - Optional icon on feature families: `<!-- icon: namespace:id -->`.
+
+**Order of the file (owner, 2026-11-19).** Two levels; apply both to `unreleased.md` and to every new version file.
+1. **Families go in category order**, whatever their size (a family belongs to the category of what the player sees):
+   1. Farming, then cooking, then homesteading (animals, salt, bees, household).
+   2. World interaction (how blocks, items, fire, walking, death and exploits behave).
+   3. Worldgen (biomes, structures, generated things).
+   4. Mobs.
+   5. Content mods (a large added mod, or several small ones of one kind; engineering, magic, gear, `## Mods Added & Removed`).
+   6. Performance and stability.
+   7. Bug fixes that fit no category above (`## Vanilla Bug Fixes`).
+   8. Appearance and meta (interface, tips, names, mod ids, version-wide notices).
+2. **Bullets inside a family go in label order**: New, Changed, Fixed, Removed. Keep the original order within a
+   label, and keep a bullet's sub-bullets with it. A bullet that refers to another ("the new ...") stays after it.
+
+When a change adds a family, place it by category; when it adds a bullet, place it under its label.
 
 ### 3.6 Writing rules (the part that matters most)
 

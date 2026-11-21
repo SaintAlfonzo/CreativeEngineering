@@ -44,6 +44,17 @@
 	#this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval.
 	#Range: 1 ~ 1200
 	mountEffectIntervalTicks = 100
+	#Block states that can no longer change on a random tick (full-grown colonies, waxed lanterns,
+	#Floral Enchantment flower bushes) stop asking for random ticks, so chunk sections holding only
+	#such blocks are skipped. Off: every block keeps its mod's own setting. Restart to apply.
+	idleRandomTicks = true
+	#Which states stop. One line per rule: '<block id> [<property>=<value> | <property>!=<value> ...]
+	#[+wake_above]'. All conditions of a line must hold; several lines for one block are alternatives;
+	#no condition stops every state. 'max' / 'min' is the highest / lowest value of a number property.
+	#+wake_above: a stopped block runs its own random tick a few more times when a block is placed
+	#right above it (a grown tomato vine still climbs a rope placed later). Lines for blocks that are
+	#not installed are ignored. Restart to apply.
+	idleRandomTickRules = ["farmersdelight:tomatoes age=max +wake_above", "supplementaries:rope_tomatoes age=max +wake_above", "supplementaries:stick_tomatoes age=max +wake_above", "creativedelight:treated_stick_tomatoes age=max +wake_above", "farmersdelight:rice age=max supporting=true", "farmersdelight:brown_mushroom_colony age=max", "farmersdelight:red_mushroom_colony age=max", "fungidelight:inky_cap_mushroom_colony age=max", "fungidelight:morel_mushroom_colony age=max", "nethersdelight:crimson_fungus_colony age=max", "nethersdelight:warped_fungus_colony age=max", "immersiveengineering:hemp growth=top0", "neapolitan:strawberry_bush age=max", "neapolitan:adzuki_sprouts age=max", "redeco:stone_lantern waxed!=0", "redeco:stone_lantern mossing=max", "redeco:deepslate_lantern waxed!=0", "redeco:deepslate_lantern mossing=max", "floralench:allium_bush", "floralench:azure_bluet_bush", "floralench:blue_orchid_bush", "floralench:cornflower_bush", "floralench:dandelion_bush", "floralench:lilac_bush", "floralench:lily_of_the_valley_bush", "floralench:orange_tulip_bush", "floralench:oxeye_daisy_bush", "floralench:peony_bush", "floralench:pink_tulip_bush", "floralench:poppy_bush", "floralench:red_tulip_bush", "floralench:rose_bush_bush", "floralench:sunflower_bush", "floralench:white_tulip_bush", "floralench:wither_rose_bush"]
 
 #Wandering Trader spawning and offer counts (the Wandering Winemaker: vinery-common.toml [trader]).
 #The spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
@@ -113,6 +124,11 @@
 	#Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed
 	#by KubeJS (Creative Brewing's potions.js). Server side, read live.
 	removed = ["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]
+	#Highest level an effect can have, "namespace:effect=LEVEL" (1 = level I). A higher level from any
+	#source (food, drink, wine, potion, mob, command) is lowered to it when applied, and every tooltip
+	#and the effect list show the capped level. The defaults are the effects that do the same at every
+	#level (feature_writeup/effects.md 2.1, Leveled N). Client and server, read live.
+	levelCaps = ["minecraft:nausea=1", "minecraft:fire_resistance=1", "minecraft:water_breathing=1", "minecraft:invisibility=1", "minecraft:blindness=1", "minecraft:night_vision=1", "minecraft:glowing=1", "minecraft:slow_falling=1", "minecraft:dolphins_grace=1", "minecraft:darkness=1", "alexsmobs:bug_pheromones=1", "alexsmobs:clinging=1", "alexsmobs:earthquake=1", "alexsmobs:fear=1", "alexsmobs:fleet_footed=1", "alexsmobs:lava_vision=1", "alexsmobs:oiled=1", "alexsmobs:poison_resistance=1", "alexsmobs:power_down=1", "alexsmobs:sunbird_blessing=1", "alexsmobs:sunbird_curse=1", "alexsmobs:tigers_blessing=1", "better_beacons:patrol_nullifier=1", "better_beacons:phantom_bane=1", "botania:allure=1", "botania:bloodthirst=1", "botania:clear=1", "botania:emptiness=1", "botania:feather_feet=1", "botania:soul_cross=1", "brewinandchewin:intoxication=1", "buzzier_bees:sunny=1", "create_confectionery:rest=1", "create_confectionery:stimulation=1", "createaddition:shocking=1", "endersdelight:phasing=1", "farmersdelight:comfort=1", "farmersdelight:nourishment=1", "fruitsdelight:alienating=1", "fruitsdelight:appetizing=1", "fruitsdelight:astringent=1", "fruitsdelight:brightening=1", "fruitsdelight:chorus=1", "fruitsdelight:digesting=1", "fruitsdelight:disgusted=1", "fruitsdelight:leaf_piercing=1", "fruitsdelight:rage_aura=1", "fruitsdelight:recovering=1", "fruitsdelight:refreshing=1", "fruitsdelight:shrinking=1", "fruitsdelight:sliding=1", "fruitsdelight:suspicious_smell=1", "fruitsdelight:sweetening=1", "fungidelight:weak_stomach=1", "hearthandharvest:clarity=1", "hearthandharvest:pinned=1", "hostiledelight:collapsing=1", "hostiledelight:dioxide=1", "immersiveengineering:concrete_feet=1", "immersiveengineering:slippery=1", "immersiveengineering:stunned=1", "immersivepetroleum:anti_fire=1", "neapolitan:agility=1", "neapolitan:harmony=1", "neapolitan:slipping=1", "neapolitan:vanilla_scent=1", "oceanic_delight:instant_breath=1", "untitledduckmod:intimidation=1", "via_romana:travellers_fatigue=1", "vinery:climbing_effect=1", "vinery:lava_walker=1", "vinery:party_effect=1", "vinery:teleport=1", "vinery:trippy=1", "vinery:water_walker=1", "xaerominimap:no_cave_maps=1", "xaerominimap:no_cave_maps_harmful=1", "xaerominimap:no_entity_radar=1", "xaerominimap:no_entity_radar_harmful=1", "xaerominimap:no_minimap=1", "xaerominimap:no_minimap_harmful=1", "xaerominimap:no_waypoints=1", "xaerominimap:no_waypoints_harmful=1", "xaeroworldmap:no_cave_maps=1", "xaeroworldmap:no_cave_maps_harmful=1", "xaeroworldmap:no_world_map=1", "xaeroworldmap:no_world_map_harmful=1"]
 
 #Tuning for creativecommon:magic_resistance's damage reduction against
 #the creativecommon:magic damage tag (the same tag the shields' MAGIC column
@@ -225,8 +241,8 @@
 	#Range: 0.0 ~ 1.0
 	sluggishMeltFactor = 0.25
 	#Hot places: in an ultra-warm dimension (the Nether) every target but the lava_only ones (blue ice,
-	#permafrost), and in a creativecommon:melting/hot biome (arid and tropical) ice, snow and frozen decor, take a
-	#melt tick this often with no source needed, rolling their chance each time. 0 = off.
+	#permafrost), and in a creativecommon:melting/hot biome (arid, dry and tropical) ice, snow and frozen decor, take a
+	#melt tick this often with no source needed, rolling meltChance each time (the slow tier too). 0 = off.
 	#Range: 0 ~ 12000
 	hotMeltTickInterval = 20
 	#The End: every source (salt, fire, magma, lava) melts only the blocks touching it; no reach, no magma

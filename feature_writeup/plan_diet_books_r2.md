@@ -1,13 +1,13 @@
 # Plan: Diet Log round 2, food tooltips, permanent effects column
 
-<!-- generated:status_index begin open_work sha1=1f83f3683408 -->
+<!-- generated:status_index begin open_work sha1=c1ac3322f62a -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Testing 12), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food-tuning #20` | Testing | S C | Diet window back to 32 meals (endDecay 30 -> 32); meals grid 8 x 4 |
 | `food-tuning #21` | Testing | C | Diet Log meals grid: label centered; hover shows food total only when it differs, before the struck-through meal value |
-| `food-tuning #22` | Testing | C | Diet Log 50% wider by default; first-page diversity and gate text scaled to fit on one line each |
+| `food-tuning #22` | Testing | C | Diet Log 25% wider by default (was 50%); Ladder and Milestones content 17.5% in from each side; meals grid icons 20% larger; first-page diversity and gate text scaled to fit on one line each |
 | `food-tuning #23` | Testing | C | Diet Log freezes briefly on every open: measure and cache |
 | `food-tuning #24` | Testing | C | Liquid Diet Log pauses the game in single player |
 | `food-tuning #25` | Testing | S P | Effect unlocks (and their messages) wait until the unique-food gate first opens |

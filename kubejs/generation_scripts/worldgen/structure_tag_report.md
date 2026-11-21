@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-11-16 23:27:32 UTC at world load by `kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js` (Creative Worldgen). Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-11-20 23:48:44 UTC at world load by `kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js` (Creative Worldgen). Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Biome rules
 
@@ -95,7 +95,7 @@ No hostile structure starts with a piece within this many chunks (square, XZ) of
 
 ## Groups
 
-Members of a group share one grid: at most one structure per grid slot, and no two members start closer than separation + 1 chunks. "Alone: 1 per N" = one per N x N chunks where it is the only member that fits the biome (sharing a biome splits the slots by weight). 114 frequencies below 1 are rolled by patcherMod.
+Members of a group share one grid: at most one structure per grid slot, and no two members start closer than separation + 1 chunks. "Alone: 1 per N" = one per N x N chunks where it is the only member that fits the biome (sharing a biome splits the slots by weight). 114 frequencies below 1 are rolled by Creative Common.
 
 ### `settlements` -> `creativeworldgen:group/settlements`
 
@@ -529,7 +529,7 @@ Grid: spacing 24, separation 12, salt 419617315. Members never start closer than
 
 ## Meta structures
 
-Our structures built from other structures and features (`meta_structures.json`, patcherMod MetaStructure). They generate only through their group. `#creativeworldgen:meta/*` = the `meta/*` tags below.
+Our structures built from other structures and features (`meta_structures.json`, Creative Common MetaStructure). They generate only through their group. `#creativeworldgen:meta/*` = the `meta/*` tags below.
 
 ### `creativeworldgen:meta/village_towers`
 

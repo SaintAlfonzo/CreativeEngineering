@@ -17,9 +17,13 @@
 	#Range: 0.5 ~ 3.0
 	bookScale = 1.4
 	#Diet Log background stretched sideways by this many pixels: the book's center column is repeated,
-	#the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width.
+	#the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width; 47 = 25% wider.
 	#Range: 0 ~ 400
 	extraWidth = 47
+	#Diet Log Overview: the icon left of the diversity value is the eaten food (Food Dictionary) closest
+	#in base diversity to the average of the meals in the diet window, never a drink. With nothing eaten it is one of
+	#these items (loaded ones only).
+	diversityIconFallback = ["minecraft:pumpkin_seeds", "vintagedelight:mixed_seeds", "vintagedelight:oat_seeds", "corn_delight:corn_seeds", "hearthandharvest:sunflower_seeds", "miners_delight:moss", "immersive_weathering:moss_clump", "minecraft:rotten_flesh", "minecraft:spider_eye", "veggiesdelight:dandelion_leaf"]
 
 	#Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)
 	#of each Diet Log page's content.
@@ -63,13 +67,19 @@
 
 [foodDictionary]
 	#Food Dictionary (Spice of Life: Carrot Edition) order of the uneaten foods: MOD_NAME (mod, then name),
-	#NAME (A-Z), EASIEST (lowest Apple Pie complexity first, then nutrition), HARDEST (the reverse).
-	#Allowed Values: MOD_NAME, NAME, EASIEST, HARDEST
+	#NAME (A-Z), EASIEST (lowest base diversity first, then food), HIGHEST_FOOD (hunger restored),
+	#HIGHEST_SATURATION (saturation points restored), HIGHEST_DIVERSITY (base diversity), CUSTOM (customOrder;
+	#only while customOrder is not empty).
+	#Allowed Values: MOD_NAME, NAME, EASIEST, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM
 	uneatenSort = "MOD_NAME"
 	#Food Dictionary order of the eaten foods, also set by the sort button on those pages: NEWEST_UNLOCK,
-	#LATEST_EATEN (Apple Pie's meal memory), UNEATEN_ORDER (the uneatenSort order).
-	#Allowed Values: NEWEST_UNLOCK, LATEST_EATEN, UNEATEN_ORDER
+	#LATEST_EATEN (Apple Pie's meal memory), HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM (as for
+	#uneatenSort; the button skips it while customOrder is empty).
+	#Allowed Values: NEWEST_UNLOCK, LATEST_EATEN, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM
 	eatenSort = "NEWEST_UNLOCK"
+	#The CUSTOM sort: item ids in the order wanted; foods not listed follow in the uneatenSort order
+	#(MOD_NAME when that is CUSTOM too). Empty = the CUSTOM sort is hidden.
+	customOrder = []
 
 [icons]
 	#Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT
@@ -79,4 +89,9 @@
 	permanentBuff = ["create_crush_everything:diamond_shard", "minecraft:diamond"]
 	#Diet Log icon for effect slots (the Diet Log never shows the chosen effect): the first of these items that is loaded.
 	slot = ["suppsquared:metal_frame", "minecraft:item_frame"]
+
+[tooltips]
+	#Food tooltips: AppleSkin's saturation icons on their own line under the shanks (AppleSkin's own layout).
+	#Off: on the shank row, after the shanks.
+	saturationOwnLine = false
 

@@ -1,6 +1,6 @@
 # Plan: Diet Log and Food Dictionary polish (Raspberry Pie, SoL Carrot)
 
-<!-- generated:status_index begin open_work sha1=0e79bc7b378a -->
+<!-- generated:status_index begin open_work sha1=6a45f24b43d7 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 1, Testing 12), 1 Complete.
 
 | Id | Status | Tests | Change |
@@ -13,7 +13,7 @@
 | `food-tuning #6` | Testing | C | Diet Log: book background stretched by repeating its center strip, configurable width |
 | `food-tuning #7` | Testing | C | Diet Log: mouse wheel flips pages |
 | `food-tuning #8` | Testing | C | Diet Ladder bar: even spacing, last achieved milestone + next 4 |
-| `food-tuning #9` | Testing | C | Diet Log icons: locked unlocks alternate lock/effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect |
+| `food-tuning #9` | Testing | C | Diet Log icons: locked unlocks and unreached permanent buffs alternate their icon and the effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect; active buffs green in Milestones |
 | `food-tuning #10` | Testing | C | Gate text: N more unique food(s) to activate diet |
 | `food-tuning #11` | Testing | C | Effect screen: smaller Change/Drop label text (buttons unchanged); hover shows how many foods age out |
 | `food-tuning #13` | Testing | C | Food Dictionary: uneaten sort configurable (mod+name, name, easiest, hardest) |

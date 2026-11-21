@@ -396,15 +396,20 @@
 	#Shift right-click takes all items at once.
 	takeAll = true
 
-#Pack seasonings (crafted onto food, feature_writeup/seasonings.md).
+#Pack flavors: seasonings and sauces put on food (feature_writeup/food.md 3.12; renamed from
+#seasonings, food/seasoning #25).
 [food]
-	#Most seasonings one food may carry. A seasoning craft that would go past it does not match.
-	#Which pairs may share a food is still each seasoning's combines list. Salt does not count.
-	#Range: 1 ~ 16
-	maxSeasonings = 2
-	#On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxSeasonings, and the Grill
+	#On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxFlavors, and the Grill
 	#does not add it to a skewer that is already full. Off = it never counts.
 	grilledCountsTowardMax = false
+	#Most flavors one food may carry. A flavor craft that would go past it does not match.
+	#Which pairs may share a food is still each flavor's combines list. Salt does not count.
+	#Range: 1 ~ 16
+	maxFlavors = 2
+	#Flavor slots Grilled adds: a grilled food may carry this many flavors past maxFlavors (Grilled gives
+	#no saturation of its own; plan_food_batch_1119.md R3, R20).
+	#Range: 0 ~ 16
+	grilledFlavorSlots = 2
 
 #A lit campfire in #creativecommon:campfire/rain_douses (the plain campfire; not soul or
 #Tinted campfires) goes out in open rain, unless it sits on a block in
@@ -499,4 +504,18 @@
 	#Does nothing without Untitled Duck Mod and Vintage Delight.
 	#Range: 0 ~ 1000000
 	goldenEggChance = 1000
+
+#Fats and oils (TODO dishes/ingredients #10, plan_food_batch_1119.md wave D): one switch per part. Scripts
+#read them on /reload. Off: that part's recipes, drops and tags are not added (the items stay registered).
+[fats]
+	#Blubber: dropped by the Alex's Mobs cachalot whale, cut into animal fat, soap fat.
+	blubber = true
+	#Whale oil: rendered from blubber (Create mixer, Cooking Pot), its fluid a lubricant, soap fat.
+	whaleOil = true
+	#Animal fat cooks into cooking oil (in place of Delightful's animal oil bottle).
+	animalFatOil = true
+	#Any standard seed (#forge:seeds) makes cooking oil; seed oil fluid fills cooking oil bottles.
+	seedOil = true
+	#Alex's Mobs fish oil counts as cooking oil; any raw fish cooks down to fish oil.
+	fishOil = true
 

@@ -21,6 +21,8 @@
   "effect.immersiveengineering.sticky.description": "Heavily slows down the target and impedes jumping.",
   "effect.immersivepetroleum.anti_fire.description": "TODO: write a description for immersivepetroleum:anti_fire.",
   "effect.minecraft.absorption.description": "Adds some damage-absorbing hearts (which can't be regenerated); higher levels give more absorption.",
+  "effect.minecraft.saturation": "Satiated",
+  "effect.minecraft.saturation.description": "Keeps the player fed.",
   "effect.minecraft.health_boost.description": "Increases maximum health; higher levels give more additional hearts.",
   "effect.quark.resilience.description": "Gives 50% knockback resistance per level; at level II and above you ignore knockback entirely.",
   "effect.via_romana.travellers_fatigue.description": "Prevents fast travel.",
