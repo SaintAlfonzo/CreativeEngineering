@@ -1,7 +1,7 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=4733cf25f0be -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 27 open TODO rows (Planned 24, Testing 3), 1 Complete.
+<!-- generated:status_index begin open_work sha1=a6b4fb553ce6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 27 open TODO rows (Planned 21, Testing 6), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -18,8 +18,6 @@
 | `farming/crops #36` | Planned | S P | Every seed in the Botany Pots |
 | `fruit #4` | Planned | none | Fruit food variant audit |
 | `gear/tuning #12` | Planned | S | End gear recipes configurable |
-| `items/jars #6` | Planned | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
-| `jei/jei-coverage #29` | Planned | C | Maple bacon and cookies missing from JEI |
 | `largecontent/mod-additions #46` | Planned | S P | Hostile Delight: Magma and Slime Brownies |
 | `largecontent/mod-additions #48` | Planned | S P | Hostile Delight: rotten foods hunger type, not saltable |
 | `largecontent/mod-additions #49` | Planned | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
@@ -28,10 +26,12 @@
 | `recipes/metal #5` | Planned | S P | Polished iron bars stonecutting removed |
 | `recipes/wood #1` | Planned | S P | Twisted wood duplicate |
 | `rice-egg-and-sushi #1` | Planned | S P | Bird eggs fry into the fried egg; parrot, turtle and reptile eggs do not |
-| `tooling/dictionaries #2` | Planned | S | Block, fluid and NCH fluid tags not validated |
+| `items/jars #6` | Testing | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
+| `jei/jei-coverage #29` | Testing | C | Maple bacon and cookies missing from JEI |
 | `licence/cd #4` | Testing | S | Rewrite the Miner's Delight potted gossypium loot table |
 | `loot/trader #2` | Testing | S P | Fewer Wares trades |
 | `potions/enchanting #1` | Testing | S P | Enchanted books out of villager trades |
+| `tooling/dictionaries #2` | Testing | S | Block, fluid and NCH fluid tags not validated |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, nothing built**. The owner picked 28 TODO rows on 2026-11-20 (chat), mostly small ones. The
