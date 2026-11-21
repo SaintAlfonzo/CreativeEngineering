@@ -41,6 +41,12 @@
 			"minecraft:nether_wart": 0.2, "minecraft:kelp": 0.15, "minecraft:dragon_breath": 0.5
 		}
 	},
+	"coated": {
+		"_": "Create filling outputs (found from recipes) plus these candies get mid-tier diversity, never below their best food input (owner, 2026-11-21)",
+		"tier": "mid",
+		"items": ["create_confectionery:honey_candy", "create_confectionery:candy_cane", "create:sweet_roll"],
+		"skip": []
+	},
 	"families": {
 		"_peppers": "built by the tool: per form (bell_pepper, bell_pepper_slice, bell_pepper_roll, roasted_bell_pepper, roasted_bell_pepper_slice, stuffed_bell_pepper) and medley group",
 		"pepperGroups": [["red", "yellow", "green"], ["pink", "white", "orange"], ["black", "purple", "blue"]],

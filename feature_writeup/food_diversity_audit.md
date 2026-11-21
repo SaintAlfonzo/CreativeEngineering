@@ -1,292 +1,231 @@
-# Food diversity audit (2026-11-20)
+# Food diversity audit (2026-11-20, values updated 2026-11-21)
 
-This audit finds foods whose Spice of Life diversity is out of line with their hunger and saturation, and processes
-that add too much or too little diversity. It is investigation only: nothing was changed. The audit measured the
-`/dumpfood` export of 2026-11-19 18:28 (`kubejs/exported/food/foods.json`, 1697 foods; `recipes.json`). Per-food
-flags are in [food_diversity_audit.csv](food_diversity_audit.csv) (one row per flag, columns `flag, id, name, type,
-nutrition, saturationModifier, diversity, formula, note`).
+This audit measured each food's Spice of Life diversity against its hunger and saturation, and the processes that add
+too much or too little. The owner's rulings on it (chat 2026-11-21) are built as Raspberry Pie's diversity table:
+[plan_food_diversity_1121.md](plan_food_diversity_1121.md) (rulings, design, open items). **The values in this file are
+the table's (generator `tools/food_diversity.py`, 2026-11-21) unless marked "was"**; "was" is the 2026-11-19 state
+(Apple Pie's formula plus its config list). Source: the `/dumpfood` export of 2026-11-19 18:28
+(`kubejs/exported/food/foods.json`, 1697 foods; `recipes.json`). The 2026-11-19 per-food flags stay in
+[food_diversity_audit.csv](food_diversity_audit.csv) (columns `flag, id, name, type, nutrition, saturationModifier,
+diversity, formula, note`) as the record of what was found.
 
-**Follow-up (2026-11-21):** the owner's rulings on these findings are built as Raspberry Pie's diversity table,
-[plan_food_diversity_1121.md](plan_food_diversity_1121.md); its section 6 has the new rotation table (golden and gilded split).
-The values below are the 2026-11-19 state.
+Removed items (`canned_goods:canned_food`, `canned_goods:hot_hot_hotpot`) are left out.
 
-Removed items (`canned_goods:canned_food` at 9.92, `canned_goods:hot_hot_hotpot`) are left out. Both are still
-registered with Canned Goods' broken modifiers (28 and 3).
+## 1. How diversity is valued
 
-## 1. How diversity is valued today
+**Was:** no pack layer. Every food outside Apple Pie's 22-entry config list followed `q = hunger x (1 + modifier) /
+2`, complexity `q / 5` below q 5, else `1 + 4 x log10(q - 4)`, with a 9x jump in slope at q 5.
 
-- **No pack tuning layer is live.** All 1675 foods outside Apple Pie's config list match its formula exactly:
-  `q = hunger x (1 + modifier) / 2`, complexity `q / 5` below q 5, else `1 + 4 x log10(q - 4)`. The planned
-  `sol_complexity.js` layer ([food.md](food.md) 3.5) is not built. Because complexity grows with hunger and modifier,
-  every mismatch below comes from (a) the 22 config overrides, (b) the drinks tag, (c) the curve's shape, or
-  (d) type and process design, not from per-food randomness.
-- **Raspberry Pie:** drinks (`#solraspberrypie:drinks`, 157 items) give 0 diversity. Window 30 meals, penalty
-  `1 - age/30`; a 30-food rotation averages `mean complexity x 15.5`. The ladder runs from 2 to 100.
-- **Medians by type** (complexity): raw 0.26, sweet 0.54, cooked 0.72, canned 0.90, salad 2.52, handheld 3.03,
-  golden 3.41, soup 3.61, meal 4.33.
+**Now:** Raspberry Pie's table sets all 1658 foods (`/solraspberrypie/diversity.json`; Apple Pie's config list is
+empty). Each food takes the first rule that fits:
 
-**What 30-food rotations reach** (steady state, best 30 of each set):
+1. Drinks (`#solraspberrypie:drinks`) and no-diet foods (`#solraspberrypie:no_diet`, the chocolate coins): 0, outside
+   the diet.
+2. Cans: 80% of the food inside.
+3. Cooked meat and fish heated from a raw source: the vanilla meats' fit, 0.569 x q.
+4. Cooking Pot dishes: the pack curve, never below the best food input + 0.1.
+5. Baking: the best ingredient + the pot's median boost (2.97), scaled by the batch's input value, capped one tier above
+   the food's own.
+6. Create filling, and shaped, shapeless or assembled crafts that are no raw food's cooked version: the pot rule,
+   1.69 x the inputs' value per output item (crafts only when that is higher than the curve).
+7. Everything else: the pack curve, `q` 0-2 -> 0-1, 2-5 -> 1-3, 5-12 -> 3-6, 12-30 -> 6-9 (no knee).
 
-| Diet | Diversity |
-|---|---:|
-| Best 30 foods in the pack | 91.7 |
-| Golden Food items only (42 items) | 84.0 |
-| Best 30 meals / soups / handhelds | 78.2 / 70.9 / 69.3 |
-| Three dishes in color and number variants (section 3.6) | 49.5 |
-| Best 30 raw | 34.9 |
-| Vanilla 5 (steak, baked potato, bread, chicken, apple) | 4.8 |
+Then the tiers: dragon, gilded, feast and golden get multipliers that lift each tier's third-best food to its top
+(golden and gilded on their source food). Golden is floored at the average high-tier meal (5.25) and gilded at the
+average feast (6.78). Low, mid and high are capped at their tops. Coated food and candies are capped at the mid top
+(3), never below their best food input. Families share one diet entry and their best member's value.
 
-The top 30 overall are 13 golden, 10 canned and 5 meals. Rung 100 is out of reach for every diet. Golden Food
-alone reaches 84, against 91.7 for the best possible diet.
+**Tiers** (food tier by `q`, Nourishment counts as high): dragon (id contains `dragon`), gilded (enchanted golden),
+feasts (`meal/feast` or the feast family), golden, high (q 5 or more, or Nourishment), mid (q 2 to 5), low (q under 2).
 
-### 1.1 Ceiling by rotation size, exclusions and food tier at memory 32 (2026-11-20)
+| Tier | Top | Foods (cans counted in their source's tier, a family once) |
+|---|---:|---:|
+| Dragon | 11 | 15 |
+| Gilded | 10 | 45 |
+| Feasts | 8 | 37 |
+| Golden | 7 (floor 5.25) | 53 |
+| High | 6 | 483 |
+| Mid | 3 | 413 |
+| Low | 1 | 375 |
 
-The table above is window 30 (the dump's era). The live config is `endDecay = 32`, `startDecay = 0`
-(`defaultconfigs/solapplepie-server.toml`), so a food eaten k meals ago is worth `complexity x (1 - k/32)`. A
-rotation of N distinct foods, eaten in a loop, holds those N at ages 0 to N-1, so its steady-state diversity is
-`mean complexity x (N - N(N-1)/64)`. Each row takes the N highest-complexity foods left after the exclusion (same
-`/dumpfood` export, foods in the Diet Log only, drinks score 0). Values are the rotation average; the peak (best
-foods newest, the instant after eating the last one) is at most 5 above it and equal at 2 foods and 1 food.
+**Medians by type** (diversity), was -> now: raw 0.26 -> 0.65, sweet 0.54 -> 2.23, cooked 0.72 -> 2.07, canned 0.90 ->
+2.40, baked -> 2.82, salad 2.52 -> 3.60, handheld 3.03 -> 5.12, golden 3.41 -> 6.78, soup 3.61 -> 4.39, meal 4.33 -> 5.49.
 
-- **Golden** is the food type `golden` (48 items, enchanted included). Golden cans stay in: they score 0.5 to 0.9
-  (section 3.4), so removing them changes nothing at any size. Without golden the top food is Large Meals hearty
-  lunch (config value 6), then cans at 5.4.
-- **Dragon** is every food whose id contains `dragon` (17, including Ender's Delight dishes, the two dragon-egg cans
-  and the drink-type soda and tonic). **Feasts** are the food family `feast` plus the food type `meal/feast` (23).
-  Neither group reaches the top 32 once golden is gone, so the dragon and feasts columns differ from the golden column by 0.1 or less.
-- **Reading the table:** the 1-food row is the top complexity (10 for the enchanted golden apple, 6 without golden).
-  Golden adds 7 to 8 at every size from 4 to 32; once it is gone, the ceiling of a full 32-food diet is 85.
-- **Bigger is not always better:** each extra food is worth its complexity times a shrinking age factor, and it lowers
-  the others' factors. The curve peaks at 30 to 32 foods with
-  nothing excluded (91.9), for high only (84.9), mid only (15.8) and mid and high (51.6), but earlier in the tier columns: high excluded 26.5 at
-  22 to 24, low only 22.1 at 6 to 8, mid and low 24.9 at 14 to 18. Past the peak the extra foods are weaker than the
-  mean and cost more in age factor than they add.
+### 1.1 Ceiling by rotation size, memory 32
 
-**Tier columns.** Golden, dragon and feasts are always excluded in them, and drinks (`#solraspberrypie:drinks`, which
-score 0) are left out too. Foods are split by their value, `q = hunger x (1 + saturation modifier) / 2` (the quantity behind
-the complexity formula, section 1):
+Live config `endDecay = 32`: a food eaten k meals ago is worth `diversity x (1 - k/32)`, so a loop of N distinct foods
+averages `mean diversity x (N - N(N-1)/64)`. Each cell takes the N best entries (a family counts once, drinks and
+no-diet foods are out). The peak (best foods newest) is at most 5 above the average.
 
-- **High tier (594 foods):** gives the Nourishment effect (47 of these are below q 5), or q 5 or more.
-- **Mid tier (420):** q 2 to under 5, no Nourishment.
-- **Low tier (343):** q under 2, no Nourishment.
+**Cumulative** (each column removes one more group, in the owner's order dragon, gilded, feasts, golden). Each step
+lowers the ceiling at every rotation size. Foods left: 1423, 1408, 1363, 1326, 1271.
 
-These cut-offs are my reading of "nourishment, high food and saturation"; they are one line in the script to move.
-A mix is half the rotation from each tier (the odd food goes to the higher tier), best foods of each.
+| Rotation | None | No dragon | No dragon, gilded | No D, G, feasts | No D, G, F, golden |
+|---:|---:|---:|---:|---:|---:|
+| 1 | 11.0 | 10.0 | 8.0 | 7.0 | 6.0 |
+| 2 | 21.7 | 19.7 | 15.8 | 13.8 | 11.8 |
+| 3 | 32.0 | 29.1 | 23.2 | 20.3 | 17.4 |
+| 4 | 41.0 | 36.5 | 30.4 | 26.6 | 22.9 |
+| 5 | 49.7 | 43.8 | 37.4 | 31.8 | 28.1 |
+| 6 | 58.1 | 50.4 | 44.0 | 36.8 | 33.2 |
+| 8 | 72.6 | 62.9 | 56.7 | 46.2 | 42.8 |
+| 10 | 84.4 | 74.5 | 68.2 | 54.9 | 51.6 |
+| 12 | 94.6 | 85.0 | 77.7 | 62.8 | 59.6 |
+| 14 | 103.8 | 94.4 | 86.1 | 70.0 | 66.9 |
+| 16 | 112.0 | 102.8 | 93.4 | 76.5 | 73.5 |
+| 18 | 119.1 | 110.2 | 99.3 | 82.2 | 79.3 |
+| 20 | 125.2 | 116.2 | 104.1 | 87.1 | 84.4 |
+| 22 | 130.3 | 120.7 | 108.0 | 91.3 | 88.7 |
+| 24 | 134.3 | 124.2 | 111.1 | 94.7 | 92.2 |
+| 26 | 137.2 | 126.7 | 113.3 | 97.4 | 95.1 |
+| 28 | 138.6 | 128.3 | 114.6 | 99.4 | 97.1 |
+| 30 | 139.0 | 128.8 | 115.0 | 100.6 | 98.4 |
+| 32 | 138.3 | 128.5 | 114.6 | 101.0 | 99.0 |
 
-Each cell is the steady-state diversity of the best N foods under that column's exclusion (rotation N down the
-side). Columns are sorted from highest to lowest value at 32 foods. Golden, Golden dragon and G, D, feasts remove
-those groups cumulatively (golden; then dragon; then feasts). High, mid and low only are single tiers (after the
-three exclusions); "Excl. high" is the mid and low pool; the two mixes take half the rotation from each tier. Foods
-left per column: 1588, 1540, 1523, 1502 for the first four, then 594 high, 420 mid, 343 low, 763 mid and low, 1014
-mid and high.
+**One tier only**, in the owner's order. At one food each column is its tier top. Small tiers run out of foods:
+dragon (15) stops rising at 14 and falls under gilded from 12 foods; golden (53) falls under high from 12.
 
-| Rotation | None | Golden | Golden, dragon | G, D, feasts | High only | Mix mid+high | Excl. high (mid+low pool) | Mix mid+low | Low only | Mid only |
-|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 10.0 | 6.0 | 6.0 | 6.0 | 6.0 | 6.0 | 4.0 | 1.0 | 4.0 | 1.0 |
-| 2 | 16.8 | 11.2 | 11.2 | 11.2 | 11.2 | 6.9 | 7.9 | 4.9 | 7.9 | 1.9 |
-| 3 | 23.3 | 16.2 | 16.2 | 16.2 | 16.2 | 12.0 | 11.6 | 5.8 | 11.6 | 2.9 |
-| 4 | 28.6 | 21.0 | 21.0 | 21.0 | 21.0 | 12.8 | 15.2 | 9.5 | 15.2 | 3.7 |
-| 5 | 33.4 | 25.6 | 25.6 | 25.6 | 25.6 | 17.6 | 18.8 | 10.3 | 18.8 | 4.6 |
-| 6 | 38.0 | 30.1 | 30.1 | 30.1 | 30.1 | 18.2 | 22.1 | 13.8 | 22.1 | 5.4 |
-| 8 | 46.7 | 38.4 | 38.4 | 38.4 | 38.4 | 23.1 | 23.1 | 17.7 | 22.1 | 6.9 |
-| 10 | 54.3 | 46.1 | 46.1 | 46.1 | 46.1 | 27.7 | 24.0 | 21.4 | 22.0 | 8.3 |
-| 12 | 61.1 | 53.1 | 53.1 | 53.1 | 53.1 | 31.8 | 24.7 | 24.7 | 21.8 | 9.6 |
-| 14 | 67.3 | 59.3 | 59.3 | 59.3 | 59.3 | 35.6 | 25.3 | 24.9 | 21.6 | 10.8 |
-| 16 | 72.8 | 64.9 | 64.8 | 64.8 | 64.8 | 38.9 | 25.8 | 24.9 | 21.4 | 11.8 |
-| 18 | 77.6 | 69.7 | 69.6 | 69.6 | 69.6 | 41.9 | 26.1 | 24.9 | 21.1 | 12.7 |
-| 20 | 81.7 | 73.8 | 73.8 | 73.8 | 73.8 | 44.5 | 26.4 | 24.8 | 20.7 | 13.6 |
-| 22 | 85.1 | 77.4 | 77.3 | 77.3 | 77.3 | 46.7 | 26.5 | 24.6 | 20.3 | 14.2 |
-| 24 | 87.9 | 80.2 | 80.1 | 80.1 | 80.1 | 48.5 | 26.5 | 24.3 | 19.9 | 14.8 |
-| 26 | 89.9 | 82.4 | 82.3 | 82.3 | 82.3 | 49.9 | 26.4 | 23.9 | 19.4 | 15.3 |
-| 28 | 91.3 | 84.0 | 83.9 | 83.9 | 83.9 | 50.8 | 26.1 | 23.5 | 18.8 | 15.6 |
-| 30 | 91.9 | 84.9 | 84.7 | 84.7 | 84.7 | 51.4 | 25.8 | 23.0 | 18.2 | 15.8 |
-| 32 | 91.9 | 85.1 | 85.0 | 84.9 | 84.9 | 51.6 | 25.3 | 22.3 | 17.6 | 15.8 |
+| Rotation | Dragon | Gilded | Feasts | Golden | High | Mid | Low |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 11.0 | 10.0 | 8.0 | 7.0 | 6.0 | 3.0 | 1.0 |
+| 2 | 21.7 | 19.7 | 15.8 | 13.8 | 11.8 | 5.9 | 2.0 |
+| 3 | 32.0 | 29.1 | 23.2 | 20.3 | 17.4 | 8.7 | 2.9 |
+| 4 | 40.6 | 36.5 | 30.4 | 26.6 | 22.9 | 11.4 | 3.8 |
+| 5 | 48.3 | 43.8 | 37.4 | 31.4 | 28.1 | 14.1 | 4.7 |
+| 6 | 54.9 | 50.4 | 44.0 | 35.9 | 33.2 | 16.6 | 5.5 |
+| 8 | 66.3 | 62.9 | 56.7 | 44.3 | 42.8 | 21.4 | 7.1 |
+| 10 | 75.7 | 73.8 | 68.2 | 51.8 | 51.6 | 25.8 | 8.6 |
+| 12 | 81.0 | 82.8 | 77.7 | 58.6 | 59.6 | 29.8 | 9.9 |
+| 14 | 83.0 | 90.5 | 85.6 | 64.8 | 66.9 | 33.5 | 11.2 |
+| 16 | 82.4 | 97.3 | 92.0 | 70.3 | 73.5 | 36.8 | 12.2 |
+| 18 | 82.4 | 103.3 | 97.5 | 75.1 | 79.3 | 39.7 | 13.2 |
+| 20 | 82.4 | 108.4 | 102.3 | 79.3 | 84.4 | 42.2 | 14.1 |
+| 22 | 82.4 | 112.7 | 106.2 | 82.8 | 88.7 | 44.3 | 14.8 |
+| 24 | 82.4 | 116.2 | 109.1 | 85.7 | 92.2 | 46.1 | 15.4 |
+| 26 | 82.4 | 118.7 | 110.8 | 87.9 | 95.1 | 47.5 | 15.8 |
+| 28 | 82.4 | 120.0 | 111.3 | 89.5 | 97.1 | 48.6 | 16.2 |
+| 30 | 82.4 | 119.9 | 110.6 | 89.9 | 98.4 | 49.2 | 16.4 |
+| 32 | 82.4 | 118.7 | 109.1 | 89.1 | 99.0 | 49.5 | 16.5 |
 
-Highest foods in each column (complexity). The top 8 are the same at every rotation size of 8 or more. For the mixes,
-the 8 are the top 4 of each tier in the mix, since the top 8 overall would all come from the higher tier:
+Was (2026-11-19, window 32): None 91.9, golden excluded 85.1, high only 84.9, mid only 15.8, low only 17.6. The
+enchanted golden apple (10) was the top food, and six cake and pie slices at a config value of 4 carried the low tier.
 
-| Column | Top 8 foods used |
+**Top 8 per tier** (the same at every rotation of 8 or more):
+
+| Tier | Top 8 |
 |---|---|
-| None | enchanted_golden_apple 10.00, enchanted_golden_milk_bucket 7.02, enchanted_golden_pumpkin_pie 7.02, hearty_lunch 6.00, enchanted_golden_cooked_beef 5.58, enchanted_golden_cooked_mutton 5.58, enchanted_golden_cooked_porkchop 5.58, enchanted_golden_cooked_salmon 5.58 |
-| Golden | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
-| Golden, dragon | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
-| G, D, feasts | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
-| High only | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, pasta_with_eyeball 5.28, canned_baked_cod_stew 5.25, canned_cacciatore 5.25, canned_chicken_soup 5.25 |
-| Mix mid+high | hearty_lunch 6.00, canned_surstromming 5.41, canned_glazed_porkchop 5.35, shrimp_fried_rice 5.32, cooked_lobster_tail 0.99, pickled_egg 0.99, sea_pickle_roll_slice 0.98, maggot_salad 0.96 |
-| Excl. high (mid+low pool) | apple_pie_slice 4.00, cake_slice 4.00, chocolate_pie_slice 4.00, sweet_berry_cheesecake_slice 4.00, coffee_cake_slice 4.00, rose_hip_pie_slice 4.00, cooked_lobster_tail 0.99, pickled_egg 0.99 |
-| Mix mid+low | cooked_lobster_tail 0.99, pickled_egg 0.99, sea_pickle_roll_slice 0.98, maggot_salad 0.96, apple_pie_slice 4.00, cake_slice 4.00, chocolate_pie_slice 4.00, sweet_berry_cheesecake_slice 4.00 |
-| Low only | apple_pie_slice 4.00, cake_slice 4.00, chocolate_pie_slice 4.00, sweet_berry_cheesecake_slice 4.00, coffee_cake_slice 4.00, rose_hip_pie_slice 4.00, cooked_catfish_slice 0.39, canned_carrots 0.39 |
-| Mid only | cooked_lobster_tail 0.99, pickled_egg 0.99, sea_pickle_roll_slice 0.98, maggot_salad 0.96, grilled_potato_skewer 0.96, chocolate_apple 0.96, canned_nether_wart_sourdough 0.96, canned_roasted_peanut 0.96 |
+| Dragon | roasted_dragon_steak 11.00, fried_dragon_egg 11.00, dragon_breath_and_chorus_soup 11.00, liquid_dragon_egg 9.61, steamed_dragon_egg 8.92, dragon_leg_with_sauce 8.07, dragon_meat_stew 7.69, canned_steamed_dragon_egg 7.13 |
+| Gilded | enchanted_golden_honey_bottle 10.00, enchanted_golden_cooked_porkchop 10.00, enchanted_golden_cooked_beef 10.00, enchanted_golden_cooked_salmon 8.33, enchanted_golden_cooked_mutton 8.33, canned_enchanted_golden_honey_bottle 8.00, canned_enchanted_golden_cooked_porkchop 8.00, canned_enchanted_golden_cooked_beef 8.00 |
+| Feasts | bowl_of_guardian_soup 8.00, plate_of_stuffed_hoglin_snout 8.00, bowl_of_pineapple_fried_rice 8.00, roasted_mutton_rack 7.92, stuffed_pumpkin 7.92, shepherds_pie 7.92, roast_chicken 7.92, honey_glazed_ham 7.92 |
+| Golden | golden_roll_slice 7.00, golden_roll 7.00, golden_nutritional_bar 7.00, golden_apple 6.87, canned_golden_nutritional_bar 5.60, canned_golden_apple 5.50, canned_golden_apples 5.50, golden_cooked_porkchop 5.29 |
+| High | stuffed_burrito 6.00, pickle_soup 6.00, pb_j 6.00, overnight_oats 6.00, deluxe_burger 6.00, cucumber_salad 6.00, cheese_burger 6.00, vegetarian_burger 6.00 |
+| Mid | oatmeal_cookie 3.00, coffee_cookie 3.00, vanilla_ice_cream 3.00, vanilla_chocolate_fingers 3.00, strawberry_ice_cream 3.00, strawberry_bean_bonbons 3.00, mint_ice_cream 3.00, mint_chocolate 3.00 |
+| Low | strawberry_jello 1.00, salmonberry_jello 1.00, red_grape_jello 1.00, raspberry_jello 1.00, pepper_jello 1.00, mulberry_jello 1.00, green_grape_jello 1.00, cherry_jello 1.00 |
 
-- **The six slices carry the low tier.** They have hunger 2 to 3 and modifier 0.1 to 0.3 (q 0.5 to 1.2) but Apple Pie's
-  config sets 4 (section 2.1). Six foods at 4 are 24 of the 34.1 total complexity of the low-only rotation; the other
-  26 low foods average 0.39. Without the override, the low-only ceiling at 32 would be about 6.
-- **Mid tier is flat.** Its best food scores 0.99 and its 32nd 0.90, so a mid diet is about the same food 32 times.
-  That is why excluding high and the mid-low mix have the same top foods and the mix falls behind below 12 foods.
-- **Rows 1 and 2 match at 4 foods and under** (15.2, 7.9, 4.0): both pick the same slices. They split from 8 up,
-  where row 1 adds mid foods at 0.99 and row 2 adds low foods at 0.39.
-- **Mid and high** holds 100.1 total complexity in 32 foods: 16 high foods at 5 to 6 (the pack's best cans and meals
-  once golden, dragon and feasts are gone) and 16 mid foods near 0.95.
+## 2. Food values (2026-11-19 findings, then now)
 
-## 2. Food values
+### 2.1 Apple Pie's config overrides
 
-### 2.1 Config overrides out of line (16)
+Was: 16 out of line (slices at 4, steak and porkchop lowered to 2, golden carrot raised to 2, golden apple 4,
+enchanted golden apple 10, Large Meals 5 to 6, blazing chili 5, coffee 3 as a zero-hunger non-drink).
+**Now:** the list is empty. Cake slice 0.55; steak and porkchop 4.10; golden carrot 5.25 (golden floor); golden apple
+6.87; enchanted golden apple 6.78 (gilded floor; its source is an apple); Hearty Lunch 5.49; mushroom pot pie 7.19
+(feast); blazing chili 3.86; Farmer's Respite coffee is a drink.
 
-Apple Pie's default `complexityUnparsed` list still applies:
+### 2.2 Drinks that fill (honey jar, lattes, bubble tea, garlic honey)
 
-| Food | Hunger / mod | Config | Formula | Issue |
-|---|---|---:|---:|---|
-| Farmer's Delight cake, apple, chocolate and cheesecake slices; Farmer's Respite rose hip and coffee cake slices | 2-3 / 0.1-0.3 | 4 | 0.22-0.39 | 10 to 18x the formula. Other mods' cake slices score 0.11 |
-| `farmersrespite:coffee` | 0 / 0 | 3 | 0 | **No food type and not in the drinks tag**, so a zero-hunger drink scores 3 |
-| Steak, cooked porkchop | 8 / 0.8 | 2 | 3.02 | Lowered: top vanilla meats score below a one-step exotic meat (3.1) |
-| Golden carrot | 6 / 0.6 | 2 | 0.96 | Raised |
-| Golden apple / enchanted golden apple | 8 / 0.3, 16 / 0.3 | 4 / 10 | 1.32 / 4.22 | Enchanted golden apple is the single highest food (10) |
-| Large Meals: hearty lunch, mushroom pot pie, pufferfish broth, sweet berry custard | 7-12 | 5-6 | 1.82-4.33 | Raised over every other meal |
-| Blazing chili | 10 / 0.4 | 5 | 2.91 | Raised |
+Unchanged: still drinks at 0. Open: whether honey jar and fermented garlic honey are drinks at all.
 
-The five config teas are drinks, so they score 0 whatever the list says.
+### 2.3 High saturation modifier, low hunger
 
-### 2.2 High hunger, zero diversity: drinks that fill (9)
-
-Honey jar (10 hunger), berry matcha latte and bubble tea (8), fermented garlic honey (7), matcha latte, chorus milk
-tea, soothing hot chocolate, honey bottle and honey coffee (6). A drink that fills like a meal adds nothing to the
-diet. The open question is whether honey jar and garlic honey are drinks at all; they read as spreads or preserves.
-
-### 2.3 Low hunger, high diversity: the saturation modifier
-
-The formula weights the modifier as heavily as hunger, so foods with a high modifier score far above their hunger:
-
-- Canned enchanted golden milk bucket and canned enchanted golden pumpkin pie: 2 hunger, modifier 8, **3.80**.
-- Enchanted golden milk bucket and enchanted golden pumpkin pie: 8 hunger, modifier 8, **7.02** (second only to the
-  enchanted golden apple).
-- `oceanic_delight:ancient_fish_eggs`: raw, 7 hunger, modifier 3, **5.00**, the highest raw food by double.
-- `nethersdelight:magma_gelatin` (1 / 6, 0.70) and `delightful:animal_fat` (1 / 2) are the small cases.
+Was: enchanted golden milk bucket and pumpkin pie 7.02, their cans 3.80, ancient fish eggs 5.00. **Now:** gilded
+values follow the source food (milk bucket and pumpkin pie 7.05, cans 5.64). Ancient fish eggs are capped at the high
+top (6): still the highest raw food. Open.
 
 ### 2.4 The curve's knee at q 5
 
-The slope jumps about 9x at q 5 (0.2 per q below, 1.74 just above). Foods next to it differ a lot for a small change
-in value: cooked chicken (6 / 0.6) scores 0.96, maple glazed bacon and the sweet roll (6 / 0.8) score 1.58. In the
-pack, 68 foods sit just below the knee (q 4.5-5) and 42 just above (q 5-5.6). Any value change near 6 hunger moves
-diversity sharply.
+**Fixed:** the pack curve has no knee (slope 0.5 per q below q 2, 0.67 up to q 5, 0.43 up to q 12). Cooked chicken 2.73 against maple
+glazed bacon 3.46.
 
 ### 2.5 Type inversions
 
-- **Raw above 1.5 (15):** dragon leg and raw dragon meat 2.52, elder guardian eye 2.59, elder guardian slab 2.45,
-  wrapped cantaloupe 3.32, ancient fish eggs 5.00, and 9 Rustic Delight bell pepper rolls at 2.45. The rolls and the
-  wrapped cantaloupe are prepared dishes, so their raw type looks wrong.
-- **Dishes below 1 (35 meals, soups and salads):** mostly Ender's Delight at 4 hunger (chorus stew, endermite stew,
-  amberveil stew 0.56-0.60; ender paella and pearl pasta 0.56), slabdish 0.48, caramel popcorn 0.80 (typed meal),
-  kelp encrusted cod 0.80, sopa de macaco 0.70, maggot salad 0.96. They cost meal-grade effort and score like a
-  cooked vegetable.
+- Raw above 1.5: dragon leg and raw dragon meat 3.60 (curve, below the cooked meat's 6.84); the bell pepper rolls 3.56
+  (still typed raw, one entry per color group now).
+- Dishes below 1: the Ender's Delight 4-hunger stews are now 1.67 (curve 4 hunger, mid tier); caramel popcorn 3.06
+  (feast).
 
 ### 2.6 Untyped foods (107)
 
-107 edible items have no food type (full list in the CSV under `untyped`). Two groups count as extra foods:
-
-- **13 edible Create Central Kitchen intermediates** (`incomplete_hamburger`, `incomplete_*_pie`, ...): unfinished
-  sequenced-assembly items, 0.24-0.80 each.
-- **Ender's Delight `*_wood` bowls** (chorus stew, endermite stew, paella...): a second item for the same dish,
-  counted as a separate food.
-
-The rest look like a stale catalog: venison and duck dishes (Abnormals Delight, up to 4.87), the Delightful nut
-butter and jelly line, goat. They need a `food_catalog.py` pass.
+Unchanged; they take the pack curve. They still need a `food_catalog.py` pass.
 
 ## 3. Processes
 
-Each recipe with a food output was compared with its best food input (the median member for a tag). The median
-change in diversity by step:
+Median change of the output against its best food input (the median member for a tag), now:
 
 | Process | Recipes | Median change | Outputs below the best input (< -0.5) | Big gains (>= +2) |
 |---|---:|---:|---:|---:|
-| Cooking Pot (`farmersdelight:cooking`) | 323 | +2.36 | 10 | 167 |
-| Shaped crafting | 75 | +1.52 | 1 | 34 |
-| Create filling | 95 | +1.40 | 0 | 30 |
-| Smoking / campfire / smelting | 109 / 106 / 102 | +0.46 to +0.48 | 0 | 12-15 each |
-| Shapeless crafting (includes canning) | 877 | +0.44 | 87 | 172 |
-| Baking (Creative Delight) | 42 | +0.20 | 1 | 1 |
-| Create mixing | 625 | 0.00 | 6 | 182 |
-| Cutting | 91 | -0.31 | 23 | 0 |
-| Brewing, fermenting, wine | 17-64 | -0.22 to -0.26 | 1-7 | 0 |
+| Cooking Pot | 275 | +3.07 | 3 | 191 |
+| Shaped crafting | 74 | +2.98 | 1 | 51 |
+| Baking (Creative Delight) | 39 | +2.73 | 1 | 31 |
+| Create filling | 95 | +1.20 | 0 | 35 |
+| Smoking | 109 | +1.35 | 2 | 36 |
+| Campfire | 106 | +1.34 | 0 | 34 |
+| Smelting | 102 | +1.34 | 1 | 33 |
+| Shapeless crafting (includes canning, slicing) | 839 | -0.28 | 312 | 146 |
+| Create mixing | 597 | +0.00 | 5 | 211 |
+| Cutting | 95 | -0.67 | 51 | 0 |
+| Vintage Delight fermenting (pickles) | 16 | +1.05 | 1 | 2 |
 
-Cooking Pot dishes earn their diversity. The outliers are below.
+Was: Cooking Pot +2.36, shaped +1.52, filling +1.40, heat +0.46 to +0.48, shapeless +0.44, baking +0.20, mixing 0,
+cutting -0.31, brewing and fermenting -0.22 to -0.26. Brewing, wine and keg recipes are missing from the table now:
+their outputs are all drinks (0, Liquid Diet Log only). Heat steps went up because the meat fit raises vanilla meats
+(steak 2 -> 4.10); shapeless went down because cans are 80% of their source.
 
-### 3.1 Too much: one cooking step on an exotic meat
+### 3.1 One cooking step on an exotic meat
 
-Cooking a single raw meat outscores the vanilla steak (2): cooked bison **4.11** (from 0.60), cooked kangaroo 3.13,
-cooked goose 3.41, cooked crab leg 3.02 (from 0.13), cooked pike 3.02, cooked mutton rack 3.80, smoked ham 3.80,
-smoked dragon leg and roasted dragon meat 4.61. That is meal level from one furnace step, because the source mods give
-these meats 8-10 hunger at modifier 0.8-1.0.
+Was: cooked bison 4.11, smoked dragon leg 4.61 against steak 2. **Now:** every cooked meat and fish follows 0.569 x q,
+the vanilla fit (beef and porkchop 4.10, salmon 3.07, chicken 2.73). Cooked dragon meat (roasted, smoked leg) 6.84,
+between the high top and the lowest dragon dish (7.69).
 
-### 3.2 Too much: Create filling (one fluid dip)
+### 3.2 Create filling
 
-- Apple to honeyed, chocolate or white chocolate apple: 0.52 -> 3.02; ruby chocolate apple 3.41.
-- Waffle (0.56) to ruby, white, dark, plain or caramel chocolate waffle: 3.02-3.91.
-- Sweet berries (0.22) to five glazed-berry variants: 2.45 each.
-- A chocolate bar (0.78) to 16 chocolate candies: 2.79 each.
+Was: chocolate apples 3.02 to 3.41, waffles 3.02 to 3.91, glazed berries 2.45, candies 2.79. **Now:** coated food and
+candies are capped at the mid top, 3 (never below their food input: glazed porkchop 4.20 over cooked porkchop 4.10).
+Each coating also has a Cooking Pot recipe (2 bases + 3 coating items -> 2).
 
-### 3.3 Too much: Golden Food
+### 3.3 Golden Food
 
-Eight gold nuggets plus a steak make a golden steak at **5.07** (+3.07). The enchanted versions (sequenced assembly)
-score 5.3-7.0. 28 golden items score 3 or more, and 42 golden items reach 84 in rotation, almost the best possible
-diet. The gold-dip step adds two new high-value foods for every vanilla food.
+Was: golden steak 5.07, gilded 5.3 to 10. **Now:** golden = source x 1.29, at least 5.25, at most 7; gilded = source x
+2.71, at least 6.78, at most 10.
 
-### 3.4 Both ways: canning
+### 3.4 Canning
 
-292 cans have a food source. The median change is +0.3, but the spread is wide (51 gain 1 or more, 42 lose 1 or
-more):
+Was: median +0.3, 51 cans gaining 1 or more, golden cans losing up to 9.5. **Now:** every can is 80% of its source
+(canned beef 3.28, canned golden cooked beef 4.24, canned enchanted golden apple 5.42). A can is still its own diet
+entry.
 
-- **Gains:** a can serving is source hunger x the section multiplier, and the log curve rewards bigger portions.
-  Cooked beef (2) -> canned beef 5.07; cooked chicken 0.96 -> 3.99; cooked salmon and mutton 1.58 -> 4.33; canned
-  soups at 18 hunger score 5.25 against about 3.6 for the soup. Ten of the pack's top 30 foods are cans.
-- **Losses:** golden cans use family values, so canning a golden food throws its value away: enchanted golden apple
-  10 -> 0.52, enchanted golden steaks 5.58 -> 0.90, golden steaks 5.07 -> 0.72.
-- **Count:** each can is a second distinct food beside its source, so canning doubles the entries a player can
-  rotate.
+### 3.5 Dishes worth less than an ingredient
 
-### 3.5 Too little: dishes worth less than an ingredient
+Was: guardian sandwich 0.96 from a 2.79 fillet, bell pepper soup 0.96, 202 flat multi-input recipes. **Now:** a Cooking
+Pot dish never scores below its best food input + 0.1, and non-food inputs count in the pot rule (ice, mushrooms,
+blaze powder 0.25; bone meal, sugar 0.15; others 0.1; containers and gold 0). Bell pepper soup 2.87, hamimelon
+shaved ice 1.00 (low cap). Pot recipes below the best input: 3 (was 10).
 
-- Guardian sandwich 0.96 from cooked guardian fillet 2.79; cave skewer 1.17 from baked spider leg 2.20; bell pepper
-  soup 0.96 and cooked rice 0.84 from recipes that use bone broth (2.79).
-- Multi-ingredient outputs that stay flat (3 or more food inputs, output no more than 0.3 above the best input; 202
-  recipes, mostly cans): cantaloupe and salmonberry gummies 0.20, hamimelon shaved ice 0.12 (5 food inputs),
-  cantaloupe popsicle 0.36, crawling sandwich 0.36 (4 food inputs), fish oil 0.
+### 3.6 Color and number variants
 
-### 3.6 Too much by count: color and number variants
+**Fixed by families** (25): bell peppers per form and color group (standard red, yellow, green; pale pink, white,
+orange; dark black, purple, blue), so 18 pepper entries instead of 54, and each form counts on its own; chocolate
+coatings per base food (apples, waffles, rolls, glazed berries, glazed marshmallows); chocolate-filled candies (12)
+and caramel candies (4). Honey and caramel coatings stay separate foods. The chocolate coins are out of the diet.
 
-73 extra foods come from families that differ only by a color or number, with identical values:
+## 4. Levers: done and open
 
-| Family | Variants | Each |
-|---|---:|---:|
-| Rustic Delight stuffed bell pepper | 9 | 3.61 |
-| Rustic Delight bell pepper roll | 9 | 2.45 |
-| Create Confectionery chocolate candy (`_1`/`_2`/`_3`, 4 chocolates) | 16 | 2.79 |
-| Rustic Delight bell pepper, slice, roasted, roasted slice | 9 each | 0.11-0.90 |
-| Lightman's Currency chocolate coins | 6 | 0.22 |
-| Create Confectionery bars, glazed berries, glazed marshmallows | 3 each | 0.78-2.45 |
-
-Three dishes (stuffed peppers, rolls and candies: 34 items) rotate to **49.5**, rung 45. That is half the best
-possible diet from three recipes, and above any raw or cooked diet.
-
-## 4. Levers (for a decision, not decided)
-
-Most findings are one design question: should diversity follow food value (today's formula), food type, or effort?
-
-1. **Build the planned type layer** ([food.md](food.md) 3.5): complexity per food type, item overrides on top. That
-   fixes 2.3-2.5, 3.1-3.3 and the cans in one place, and the curve's knee stops mattering.
-2. **Clear Apple Pie's default config list** (2.1) or replace it with pack values; fix coffee's type.
-3. **Count a can as its source** (or give cans the source's value): stops canning doubling entries and repairs the
-   golden can losses.
-4. **Alias variant families** to one diet entry (one food per family): stuffed peppers, rolls, candies, coins,
-   Ender's `*_wood` bowls. Raspberry Pie already holds a per-item hook (the drinks tag); a `#solraspberrypie:same_food/<family>`
-   tag would fit beside it.
-5. **Drop edible intermediates** from the diet (Central Kitchen `incomplete_*`), or make them inedible.
-6. **Review drinks that fill** (2.2): give the latte group a small value, or move honey jar and garlic honey out of
-   drinks.
-7. **Golden Food:** score golden versions at their source's value plus a fixed bonus, rather than through the
-   modifier.
+- Done: the type and process layer (lever 1, as Raspberry Pie's table), Apple Pie's config list cleared (2), cans at
+  80% of the source (3, as a separate entry), variant families (4), golden on the source value (7).
+- Open: Central Kitchen `incomplete_*` intermediates are still edible foods (5); drinks that fill (6); the Diet Log
+  ladder (rungs 2 to 100) against a 138 ceiling (plan O1).
 
 ## 5. Reproducing
 
-The analysis script is session scratch, not a pack tool. Rerun it on a fresh `/dumpall` export: the formula, the
-drinks tag (`solraspberrypie:drinks`), the food types (`creativedelight:food_type/*` tags) and the recipe `in`/`out`
-fields in `recipes.json` are all it reads.
+`/dumpfood`, then `python3 tools/food_diversity.py --report` (tier tops, fits, rotation table). The 2026-11-19 analysis
+script was session scratch; the tables in section 1.1 come from the generator's table.

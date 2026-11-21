@@ -50,6 +50,10 @@ status lives in the rows.
 | R6 | Covering families (I13) | open | Milk, dark, ruby and white chocolate are one family (like a pepper group); honey, caramel and any other non-chocolate covering are separate foods. Reading applied (agent default, unconfirmed): per base food, all chocolate coverings = 1 entry (apples, waffles, rolls, glazed berries, glazed marshmallows); candies: the 12 chocolate-filled = 1 entry, the 4 caramel-filled = 1 entry | 2026-11-21 | AskUserQuestion 2026-11-21 (owner text) |
 | R7 | "Same boost as the cooking pot" (I4, I6, I9) | open | Pot rule, same curve: fit the pot's output against the sum of its inputs and apply it to baking, cooked crafts without a raw version and the mirrored filling dishes | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R8 | Apple Pie default overrides (I16) | open | Clear the list; the table sets every food (slices fall to the low tier, steak follows the meat rule, coffee becomes a drink) | 2026-11-21 | AskUserQuestion 2026-11-21 |
+| R10 | Pepper groups (owner, follow-up) | clear | Standard (red, yellow, green), pale (pink, white, orange) and dark (black, purple, blue) peppers count separately, and so does each form (raw, slice, roasted, roasted slice, stuffed, roll): 18 families. Already built that way | 2026-11-21 | chat 2026-11-21 |
+| R11 | Golden and gilded floors | clear | Golden at least the average high-tier meal (5.25), gilded at least the average feast (6.78) | 2026-11-21 | chat 2026-11-21 |
+| R12 | Coated food and candies | clear | Lowered to mid-tier diversity: capped at the mid top (3), never below the best food input (replaces O2) | 2026-11-21 | chat 2026-11-21 |
+| R13 | Baking vs tier caps | open | Bake by batch value: best ingredient + the pot's median boost (2.97), scaled by the batch's input value (scale fitted so the median matches; it saturates), capped one tier above the food's own; a food lifted past its tier's top moves up a tier. Baking median +2.73 (pot +3.07, same measure) | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R9 | Small values for non-food inputs (I11) | clear | Generator-only input values (ice, bone meal, mushrooms, blaze powder and similar about 0.1 to 0.25); a dish never scores below its best food input | 2026-11-21 | agent default, unconfirmed |
 
 ## 3. Design
@@ -120,7 +124,8 @@ Columns remove dragon, gilded, feasts and golden cumulatively, the audit's 1.1 l
 - D1 Pack curve instead of Apple Pie's formula, to meet the mid and low tops: q 0-2 -> 0-1, 2-5 -> 1-3, 5-12 -> 3-6,
   12-30 -> 6-9 (the tail only matters before tier caps and multipliers). Each tier is capped at its top.
 - D2 Golden and gilded score as their source food x a fitted multiplier (food.md 3.16's input-multiplier idea), not
-  through their 1.2 modifier. Enchanted golden apple 10 -> 3.80 (its source is an apple); gilded meats reach 10.
+  through their 1.2 modifier, then the R11 floors. Enchanted golden apple 10 -> 6.78 (its source is an apple, so the
+  gilded floor sets it); gilded meats reach 10.
 - D3 Cooked dragon meat sits halfway between the high top (6) and the lowest dragon dish: roasted dragon meat and
   smoked dragon leg 6.84 (dragon dishes 7.69 to 11). Raw dragon meat keeps the curve.
 - D4 Non-food inputs: 0.1 by default, ice, mushrooms, blaze powder 0.25, bone meal and sugar 0.15; containers and
@@ -130,7 +135,6 @@ Columns remove dragon, gilded, feasts and golden cumulatively, the audit's 1.1 l
 - D6 Family meals show in the Diet Log as the family head (red pepper, milk chocolate), not the color eaten.
 
 **Open for the owner:**
-- O1 The ladder (rungs 2 to 100) now tops out early: a 32-food diet reaches 138.3 and high-tier food alone 99
+- O1 The ladder (rungs 2 to 100) now tops out early: a 32-food diet reaches 138.3 (single-tier and cumulative tables: food_diversity_audit.md 1.1) and high-tier food alone 99
   (best diet was 91.9 before). Rescale the rungs, or lower the tier tops?
-- O2 Coated sweets under the pot rule: caramel and honey apples, waffles and the candies reach the high cap 6 (one
-  sweet = one Hearty Lunch). Keep, or cap coated food lower?
+- O2 (ruled R12) Coated sweets reached the high cap 6; now capped at 3.

@@ -172,18 +172,21 @@ class Table:
 	# ---- the pot fit (R7)
 	def fit_pot(self):
 		self._fitting = True
-		xs, ys = [], []
+		xs, ys, gs = [], [], []
 		for fid, rs in self.by_out.items():
 			if self.tier(fid) in ('none', 'canned'):
 				continue
 			for r in rs:
 				if r['type'] in self.rules['potTypes']:
-					s, _, _ = self.inputs(r, 0)
+					s, b, _ = self.inputs(r, 0)
 					xs.append(s)
 					ys.append(self.base(fid))
+					gs.append(self.base(fid) - b)
 		self._fitting = False
 		# median ratio of a dish to the sum of its inputs (per output item): scales with what goes in
 		self.pot = (statistics.median(y / x for x, y in zip(xs, ys) if x > 0), len(xs))
+		self.pot_inputs = statistics.median(xs)
+		self.pot_gain = statistics.median(gs) if gs else 0.0
 
 	def pot_value(self, s):
 		return self.pot[0] * s
@@ -333,6 +336,59 @@ class Table:
 				val[fid] = min(self.final[fid], tops[tier[fid]])
 			elif tier[fid] == 'none':
 				val[fid] = 0.0
+		# baking (plan_food_diversity_1121.md R13): best ingredient + the pot's median boost, scaled by the whole batch's input value
+		# against a typical pot recipe's, capped one tier above the food's own (low -> mid top, mid -> high top)
+		up = {'low': 'mid', 'mid': 'high', 'high': 'high'}
+		cand = {}
+		for fid in ids:
+			if tier[fid] not in up or any(r['type'] in self.rules['potTypes'] for r in self.by_out.get(fid, [])):
+				continue
+			bakes = []
+			for r in self.by_out.get(fid, []):
+				if r['type'] == 'creativedelight:baking':
+					per, best, _ = self.inputs(r, 0)
+					n = max(1, sum(o.get('n', 1) for o in r['out'] if o['id'] == fid))
+					bakes.append((per * n / self.pot_inputs if self.pot_inputs else 1.0, best))
+			if bakes:
+				cand[fid] = bakes
+
+		def baked(k):
+			out = {}
+			for fid, bakes in cand.items():
+				v = max(best + self.pot_gain * min(1.0, k * sh) for sh, best in bakes)
+				out[fid] = min(max(v, val[fid]), tops[up[tier[fid]]])
+			return out
+
+		def gain(out):
+			return statistics.median(out[f] - max(b for _, b in cand[f]) for f in out) if out else 0.0
+		lo, hi = 0.0, 50.0  # batch-share scale fitted so baking's median boost matches the pot's
+		for _ in range(40):
+			k = (lo + hi) / 2
+			lo, hi = (k, hi) if gain(baked(k)) < self.pot_gain else (lo, k)
+		self.bake_k = (lo + hi) / 2
+		for fid, v in baked(self.bake_k).items():
+			if v != val[fid]:
+				val[fid] = v
+				self.why[fid] = 'baking: best input + %.2f x batch share' % self.pot_gain
+				if v > tops[tier[fid]]:
+					tier[fid] = up[tier[fid]]
+		# floors (plan R11): golden at least the average high-tier meal, gilded at least the average feast
+		meals = [val[f] for f in ids if tier[f] == 'high' and self.has_type(f, 'meal')]
+		floors = {'golden': statistics.mean(meals), 'gilded': statistics.mean(val[f] for f in feasts)}
+		self.floors = floors
+		for fid in ids:
+			t = tier[fid]
+			if t in floors and val[fid] < floors[t]:
+				val[fid] = floors[t]
+				self.why[fid] += ', floored at %.2f' % floors[t]
+		# coated food and candies (plan R12): mid-tier diversity, never below the best food input
+		cap = tops[self.rules['coated']['tier']]
+		for fid in self.coated(ids):
+			best = max([b for _, b, _ in (self.inputs(r, 0) for r in self.by_out.get(fid, []) if r['type'] in ('create:filling', 'farmersdelight:cooking'))] or [0.0])
+			v = min(val[fid], max(cap, best + self.rules['dishFloorStep']))
+			if v < val[fid]:
+				val[fid] = v
+				self.why[fid] = 'coated: capped at %.2f' % v
 		for fid in ids:
 			if tier[fid] == 'canned':
 				srcs = [s for s in self.cans.get(fid, []) if s in val]
@@ -350,6 +406,20 @@ class Table:
 					val[mm] = top
 		self.val = {k: round(v, 4) for k, v in sorted(val.items())}
 		self.tiers = tier
+
+	def coated(self, ids):
+		"""Food made by a Create filling (a dip or coating) plus the listed candies; drinks and dragon, golden tiers excluded."""
+		c = self.rules['coated']
+		out = set(i for i in c['items'] if i in self.foods)
+		for fid in ids:
+			for r in self.by_out.get(fid, []):
+				# a coating dips a food; a filling into a bowl, bottle, jar or cake base is not one
+				if r['type'] == 'create:filling' and any(
+						a.get('item') in self.foods or (a.get('tag') in self.tag_members)
+						for x in r.get('in', []) for a in parse_in(x)):
+					out.add(fid)
+		skip = set(c.get('skip', []))
+		return sorted(f for f in out if f not in skip and self.tier(f) in ('high', 'mid', 'low', 'feast'))
 
 	def build_families(self):
 		fam = {}
@@ -411,6 +481,8 @@ def report(t):
 	for n in (1, 2, 4, 8, 16, 24, 32):
 		row = [rotation([v for v, tr in ent.values() if sel[c](tr)], n) for c in cols]
 		print('| %d | ' % n + ' | '.join('%.1f' % x for x in row) + ' |')
+	print('baking: + %.2f (pot median gain) x min(1, %.2f x batch inputs / %.2f pot median inputs)' % (t.pot_gain, t.bake_k, t.pot_inputs))
+	print('floors: golden %.2f (average high meal), gilded %.2f (average feast)' % (t.floors['golden'], t.floors['gilded']))
 	print('Top 5 per tier:')
 	for tr in order:
 		top = sorted(((v, f) for f, (v, x) in ent.items() if x == tr), reverse=True)[:5]
