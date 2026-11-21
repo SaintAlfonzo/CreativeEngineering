@@ -1,16 +1,13 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=a6b4fb553ce6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 27 open TODO rows (Planned 21, Testing 6), 1 Complete.
+<!-- generated:status_index begin open_work sha1=9d42ab6ad0ff -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 27 open TODO rows (Planned 14, Testing 13), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `baking/baked-goods #39` | Planned | S | Baked families: croissant to misc baked, plain donut beside the cider donut |
 | `conventions #39` | Planned | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
-| `creativebrewing/publish #25` | Planned | S | Delight's IE Bottling dough recipe writes a tag as its result |
 | `dishes/ingredients #36` | Planned | S C P | Bone broth as a fluid |
-| `dishes/ocean #11` | Planned | S C P | Guardian Shell: guardian drop and cutting |
-| `dishes/ocean #12` | Planned | S P | Guardian Soup recipe |
 | `engineering/sawmill-and-components #6` | Planned | none | Tier names in comments |
 | `farming/composting #5` | Planned | S P | Expand organic compost |
 | `farming/composting #6` | Planned | S P | Merge the organic mash compost recipe |
@@ -18,19 +15,22 @@
 | `farming/crops #36` | Planned | S P | Every seed in the Botany Pots |
 | `fruit #4` | Planned | none | Fruit food variant audit |
 | `gear/tuning #12` | Planned | S | End gear recipes configurable |
-| `largecontent/mod-additions #46` | Planned | S P | Hostile Delight: Magma and Slime Brownies |
-| `largecontent/mod-additions #48` | Planned | S P | Hostile Delight: rotten foods hunger type, not saltable |
-| `largecontent/mod-additions #49` | Planned | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
 | `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
 | `mobs/tweaks #4` | Planned | S | Entity dictionary |
 | `recipes/metal #5` | Planned | S P | Polished iron bars stonecutting removed |
 | `recipes/wood #1` | Planned | S P | Twisted wood duplicate |
-| `rice-egg-and-sushi #1` | Planned | S P | Bird eggs fry into the fried egg; parrot, turtle and reptile eggs do not |
+| `creativebrewing/publish #25` | Testing | S | Delight's IE Bottling dough recipe writes a tag as its result |
+| `dishes/ocean #11` | Testing | S C P | Guardian Shell: guardian drop and cutting |
+| `dishes/ocean #12` | Testing | S P | Guardian Soup recipe |
 | `items/jars #6` | Testing | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
 | `jei/jei-coverage #29` | Testing | C | Maple bacon and cookies missing from JEI |
+| `largecontent/mod-additions #46` | Testing | S P | Hostile Delight: Magma and Slime Brownies |
+| `largecontent/mod-additions #48` | Testing | S P | Hostile Delight: rotten foods hunger type, not saltable |
+| `largecontent/mod-additions #49` | Testing | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
 | `licence/cd #4` | Testing | S | Rewrite the Miner's Delight potted gossypium loot table |
 | `loot/trader #2` | Testing | S P | Fewer Wares trades |
 | `potions/enchanting #1` | Testing | S P | Enchanted books out of villager trades |
+| `rice-egg-and-sushi #1` | Testing | S P | Bird eggs fry into the fried egg; parrot, turtle and reptile eggs do not |
 | `tooling/dictionaries #2` | Testing | S | Block, fluid and NCH fluid tags not validated |
 <!-- generated:status_index end open_work -->
 

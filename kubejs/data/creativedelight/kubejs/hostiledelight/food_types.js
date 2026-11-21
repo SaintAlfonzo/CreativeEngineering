@@ -23,9 +23,6 @@ if (global.CD) global.CD.genPut('food_types', 'hostiledelight', {
   "cooked/fish/sliced": [
    "cookedguardianfillet"
   ],
-  "egg": [
-   "friedturtleegg"
-  ],
   "baked": [
    "glowbread"
   ],
@@ -38,7 +35,6 @@ if (global.CD) global.CD.genPut('food_types', 'hostiledelight', {
    "ghastpudding",
    "glowgummy",
    "glowwaxshuffle",
-   "greenpie",
    "guardiancookie",
    "magicbuttercookie",
    "magmabrownie",
@@ -47,7 +43,6 @@ if (global.CD) global.CD.genPut('food_types', 'hostiledelight', {
    "mitecookie",
    "pearlcookie",
    "popsiclime",
-   "rottenpie",
    "slimebrownie"
   ],
   "handheld": [
@@ -73,8 +68,7 @@ if (global.CD) global.CD.genPut('food_types', 'hostiledelight', {
    "guardianross",
    "guardiansashimi",
    "guardiantartar",
-   "miteymeal",
-   "suspiciousbaconandaggs"
+   "miteymeal"
   ],
   "drink": [
    "blazingale",
@@ -96,8 +90,12 @@ if (global.CD) global.CD.genPut('food_types', 'hostiledelight', {
   ],
   "hazard": [
    "cookedrottenham",
+   "friedturtleegg",
    "frozen_flesh",
-   "rottenham"
+   "greenpie",
+   "rottenham",
+   "rottenpie",
+   "suspiciousbaconandaggs"
   ],
   "special": [
    "blazingapple",

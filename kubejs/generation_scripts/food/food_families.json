@@ -278,7 +278,6 @@
    "oceanic_delight:salmon_eggs",
    "oceanic_delight:shrimp",
    "oceansdelight:elder_guardian_slab",
-   "oceansdelight:guardian_tail",
    "quark:crab_leg",
    "rusticdelight:calamari",
    "upgrade_aquatic:lionfish",
@@ -306,7 +305,6 @@
    "minecraft:cooked_cod",
    "minecraft:cooked_salmon",
    "miners_delight:baked_squid",
-   "oceansdelight:cooked_guardian_tail",
    "quark:cooked_crab_leg",
    "rusticdelight:cooked_calamari",
    "rusticdelight:fried_fish",
@@ -664,8 +662,6 @@
   ],
   "dessert": [],
   "dessert/brownie": [
-   "hostiledelight:magmabrownie",
-   "hostiledelight:slimebrownie",
    "veggiesdelight:beetroot_brownie",
    "veggiesdelight:beetroot_brownie_tray"
   ],
@@ -681,6 +677,7 @@
    "neapolitan:vanilla_pudding"
   ],
   "dessert/pancake": [
+   "hearthandharvest:waffle",
    "rusticdelight:cherry_blossom_pancake",
    "rusticdelight:chocolate_pancake",
    "rusticdelight:coffee_pancake",
@@ -693,7 +690,6 @@
    "creativedelight:canned_adzuki_bun",
    "endersdelight:strange_eclair",
    "hearthandharvest:raspberry_scone",
-   "hearthandharvest:waffle",
    "neapolitan:adzuki_bun",
    "neapolitan:strawberry_scones"
   ],
@@ -754,10 +750,7 @@
    "create_confectionery:white_chocolate_candy_1",
    "create_confectionery:white_chocolate_candy_2",
    "create_confectionery:white_chocolate_candy_3",
-   "delightful:cantaloupe_gummy",
-   "delightful:matcha_gummy",
    "delightful:rock_candy",
-   "delightful:salmonberry_gummy",
    "fruitsdelight:hawberry_roll",
    "fruitsdelight:hawberry_sheet",
    "fruitsdelight:hawberry_stick",
@@ -765,7 +758,6 @@
    "hearthandharvest:cider_donut",
    "hearthandharvest:trail_mix",
    "hostiledelight:candiedslime",
-   "hostiledelight:glowgummy",
    "hostiledelight:glowwaxshuffle",
    "neapolitan:mint_candies",
    "neapolitan:strawberry_bean_bonbons",
@@ -775,6 +767,14 @@
    "vintagedelight:deluxe_granola_bar",
    "vintagedelight:fruity_granola_bar",
    "vintagedelight:honey_roasted_peanut"
+  ],
+  "candy/gummy": [
+   "delightful:cantaloupe_gummy",
+   "delightful:matcha_gummy",
+   "delightful:salmonberry_gummy",
+   "hostiledelight:glowgummy",
+   "hostiledelight:magmabrownie",
+   "hostiledelight:slimebrownie"
   ],
   "candy/coated": [
    "create:chocolate_glazed_berries",
@@ -975,7 +975,8 @@
    "brewinandchewin:pizza",
    "veggiesdelight:vegan_pizza",
    "vintagedelight:cheese_pizza",
-   "vintagedelight:meat_pizza"
+   "vintagedelight:meat_pizza",
+   "vintagedelight:tropical_pizza"
   ],
   "pizza/slice": [
    "brewinandchewin:pizza_slice",
@@ -985,7 +986,8 @@
    "creativedelight:canned_vegan_pizza",
    "veggiesdelight:vegan_pizza_slice",
    "vintagedelight:cheese_pizza_slice",
-   "vintagedelight:meat_pizza_slice"
+   "vintagedelight:meat_pizza_slice",
+   "vintagedelight:tropical_pizza_slice"
   ],
   "quiche": [],
   "quiche/whole": [
@@ -1382,7 +1384,9 @@
    "hostiledelight:soda"
   ],
   "drink/warm": [
-   "farmersdelight:apple_cider"
+   "farmersdelight:apple_cider",
+   "farmersdelight:hot_cocoa",
+   "farmersrespite:strong_hot_cocoa"
   ],
   "drink/other": [
    "corn_delight:creamy_corn_drink",
