@@ -25,8 +25,12 @@ public class OrganicMashItem extends BoneMealItem {
          boolean success = false;
          int numberOfApplications = 3;
 
+         // Each successful applyBonemeal shrinks the stack it gets; apply on a copy so one use costs exactly one mash
+         // (plan_scratch_findings_1121 F4, R5).
+         ItemStack applied = itemStack.copy();
+         applied.setCount(numberOfApplications);
          for (int i = 0; i < numberOfApplications; i++) {
-            success |= BoneMealItem.applyBonemeal(itemStack, level, blockpos, player);
+            success |= BoneMealItem.applyBonemeal(applied, level, blockpos, player);
          }
 
          if (success) {

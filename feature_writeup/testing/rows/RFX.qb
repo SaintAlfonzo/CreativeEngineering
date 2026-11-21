@@ -390,19 +390,19 @@ look each moobloom's Variant reads the moremooblooms: id it was summoned with; t
 ## SQ-RFX-27 | old ids in NBT on a fresh world resolve through the aliases (mooblooms, camera bags)
 @group A
 @commands Fresh world, new jars: `> setblock 20 -61 0 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:1b},{Slot:1b,id:"creativeengineering:leather_camera_bag",Count:1b},{Slot:2b,id:"creativeengineering:iron_camera_bag",Count:1b},{Slot:3b,id:"creativeengineering:netherite_camera_bag",Count:1b},{Slot:4b,id:"exposure_extras:camera_bag",Count:1b}]}`; `> data get block 20 -61 0 Items`; `> setblock 22 -61 0 spawner{SpawnData:{entity:{id:"more_mooblooms:moobloom"}}}`; `> data get block 22 -61 0 SpawnData`
-@pass the chest lists `moremooblooms:moobloom_spawn_egg`, `exposureextras:leather_camera_bag`, `exposureextras:iron_camera_bag`, `exposureextras:netherite_camera_bag`, `exposureextras:camera_bag` (5 stacks, none `minecraft:air`); the spawner keeps a moobloom; boot log: `[swaps] N permanent alias(es) in the active registries` (N counts these 6 ids among the rest)
-@fails a camera bag gone: the `creativeengineering:` ids are not `replaces` entries in Exposure's `owner_namespace.json` (V-06); the egg gone: the moremooblooms `replaces` entry
+@pass the chest lists `moremooblooms:moobloom_spawn_egg`, `exposureextras:leather_camera_bag`, `exposureextras:iron_camera_bag`, `exposureextras:netherite_camera_bag`, and in slot 4 a second `exposureextras:leather_camera_bag` from the old plain `exposure_extras:camera_bag` (owner R2 2026-11-21) (5 stacks, none `minecraft:air`); the spawner keeps a moobloom; boot log: `[swaps] N permanent alias(es) in the active registries` (N counts these 6 ids among the rest)
+@fails slot 4 gone or `[swaps] unresolved exposure_extras:camera_bag` in the log: its `replaces` entry under leather_camera_bag; a camera bag gone: the `creativeengineering:` ids are not `replaces` entries in Exposure's `owner_namespace.json` (V-06); the egg gone: the moremooblooms `replaces` entry
 > setblock 20 -61 0 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:1b},{Slot:1b,id:"creativeengineering:leather_camera_bag",Count:1b},{Slot:2b,id:"creativeengineering:iron_camera_bag",Count:1b},{Slot:3b,id:"creativeengineering:netherite_camera_bag",Count:1b},{Slot:4b,id:"exposure_extras:camera_bag",Count:1b}]}
 > data get block 20 -61 0 Items
 expect moremooblooms:moobloom_spawn_egg
 expect exposureextras:leather_camera_bag
 expect exposureextras:iron_camera_bag
 expect exposureextras:netherite_camera_bag
-expect exposureextras:camera_bag
+expect Slot: 4b, id: "exposureextras:leather_camera_bag"
 > setblock 22 -61 0 spawner{SpawnData:{entity:{id:"more_mooblooms:moobloom"}}}
 > data get block 22 -61 0 SpawnData
 expect moremooblooms:moobloom
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[swaps\] unresolved exposure_extras:camera_bag)
 
 @@section 7
 @@title CQ-RFX Rules fixes P4 on a client: renamed lang namespaces and textures, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 14; TODO `conventions #30`)

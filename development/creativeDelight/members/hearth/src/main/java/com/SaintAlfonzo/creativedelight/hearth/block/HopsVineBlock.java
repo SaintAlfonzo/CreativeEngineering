@@ -70,9 +70,11 @@ public class HopsVineBlock extends VineBlock implements BonemealableBlock {
         }
         int age = state.getValue(AGE);
         if (age < MAX_AGE) {
-            // R5 (plan_small_fixes_1116.md): no harvest before age 3. A real BoneMealItem passes to its own useOn (vanilla
-            // bone meal, BonemealEvent); every other bone-meal-like item grows the vine one age here; anything else passes.
-            if (held.getItem() instanceof BoneMealItem || !isFertilizer(held)) {
+            // R5 (plan_small_fixes_1116.md): no harvest before age 3. Vanilla bone meal passes to its own useOn
+            // (BonemealEvent); every other bone-meal-like item grows the vine one age here, BoneMealItem subclasses in the
+            // tags too (Organic Mash would otherwise apply bone meal 3 times: plan_scratch_findings_1121 F4); anything
+            // else passes.
+            if (held.getItem().getClass() == BoneMealItem.class || !isFertilizer(held)) {
                 return InteractionResult.PASS;
             }
             if (!level.isClientSide) {

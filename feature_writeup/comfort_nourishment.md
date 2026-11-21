@@ -234,6 +234,9 @@ Scratch server: SQ-CNS in [testing/scratch_queue.md](testing/scratch_queue.md): 
   inputs, Nourishment 8+ / 4+, 109 of 191 bowls unchanged. Non-bowl foods with an effect listed in appendix C.
 - 2026-10-26: audit done on the 2026-10-24 dump. No value cutoff; FD picks the effect by dish form and the duration by
   value tier. Options R1 to R4 and decisions CN-D1 to CN-D5 written for the owner.
+- 2026-11-21: Hearth and Harvest foods run through the rules (owner R7, plan_scratch_findings_1121 F5): Biscuits and
+  Gravy, Macaroni and Cheese and Glazed Carrots Comfort 240 s, Hops Salad none, the two pickles kept, H&H bottles
+  stripped, every other H&H food default. Rules 6 (jellies) and 7 (pins) added.
 
 ## 9. Ingredient rule (R5, investigated 2026-10-27)
 
@@ -261,6 +264,14 @@ Owner idea: decide the effect from the **recipe inputs**, not the dish form. Bow
    replaces Comfort: a golden soup gives Nourishment only.
 5. **Light Comfort** (added 2026-10-27, later): a food left with Comfort that restores **7 or less** gets 60 s. This
    covers ruled bowls, jars and cups and the foods outside the ruled forms that keep their Comfort (C.5).
+6. **Jellies** (owner, 2026-11-21): a food whose id ends in `_jelly` never gives Comfort or Nourishment.
+7. **Pins** (owner, 2026-11-21): every food in `kubejs/generation_scripts/food/comfort_nourishment_pins.csv` keeps the
+   treatment written there (Comfort or Nourishment with its seconds, none, keep, strip, or default = not listed), so a
+   rerun on a newer dump never moves an existing food. The table was taken from the 2026-11-10 output and the
+   2026-11-19 dump, Hearth and Harvest left out: a rerun had moved 29 foods whose recipes changed (jellies to Comfort
+   60 s; pumpkin soup, omurice, mushroom pot pie, steak with mushrooms and chicken curry from Nourishment to Comfort;
+   creamed corn, steak fries and potato salad losing Comfort), and the owner held those back. The rules decide only
+   foods that are not pinned (a newly added mod's foods); `--pin-current --unpinned NS` rewrites the table.
 
 Order of tests, first match wins:
 

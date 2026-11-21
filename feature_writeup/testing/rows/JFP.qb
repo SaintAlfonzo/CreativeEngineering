@@ -196,3 +196,78 @@ sleep 20
 expect has the following block data: .*minecraft:cookie
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
 look the jar holds the 3 cookies in every reading and no water (FluidHolder empty or absent); tank stays 4000
+
+## SQ-JFP-01b | diagnostic: pump with a pipe segment between it and the jar moves water (plan_scratch_findings_1121 F7)
+@group A
+@commands Tank T (4000 mB water), mechanical pump P, one fluid pipe, jar J along +x at x+410; cogwheel above P, creative motor above T at 64 RPM; pump east 40 s, then west 40 s; `/data get block` the jar and the tank after each
+@pass after one direction the jar `FluidHolder` holds water and the tank is below 4000 mB; after the other the jar is empty again
+@fails a pipe segment changes nothing: `JarFluidPipes` fill / capability side (TODO `jars #15`); compare SQ-JFP-01c (no jar) to rule out the harness
+@reviewed 2026-11-21
+# F7 first step: SQ-JFP-01 to -04 had the pump touching the jar directly and moved nothing in either direction.
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> fill {S5H1+409} {S5H2} {S5H3-1} {S5H1+414} {S5H2+2} {S5H3+1} minecraft:air
+> setblock {S5H1+410} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+410} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+413} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+412} {S5H2} {S5H3} create:fluid_pipe[east=true,west=true,north=false,south=false,up=false,down=false]
+> setblock {S5H1+411} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+> setblock {S5H1+411} {S5H2+1} {S5H3} create:cogwheel[axis=x]
+> setblock {S5H1+410} {S5H2+1} {S5H3} create:creative_motor[facing=east]{ScrollValue:64}
+sleep 2
+> data get block {S5H1+411} {S5H2} {S5H3} Speed
+sleep 38
+> say JFP01b phase 1 pump east
+> data get block {S5H1+413} {S5H2} {S5H3}
+> data get block {S5H1+410} {S5H2} {S5H3} TankContent
+> setblock {S5H1+411} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 40
+> say JFP01b phase 2 pump west
+> data get block {S5H1+413} {S5H2} {S5H3}
+> data get block {S5H1+410} {S5H2} {S5H3} TankContent
+> setblock {S5H1+410} {S5H2+1} {S5H3} minecraft:air
+count has the following block data: -?64\.0f$ >= 1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|Invalid (block state|tag))
+look one phase ends with jar FluidHolder water (count up to 12) and the tank below 4000; the other drains the jar; note which pump facing fills
+
+## SQ-JFP-01c | control: the same pump layout moves water from tank to tank (no jar)
+@group A
+@commands As SQ-JFP-01b one row south (z+6), with a second, empty Create fluid tank in place of the jar
+@pass after one direction the far tank holds water and the near one is below 4000 mB
+@fails nothing moves tank to tank either: the row layout (setblock pump, cog, motor) is the problem, not the jar; fix SQ-JFP-01 to -04 and 01b before judging `jars #15`
+@reviewed 2026-11-21
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> fill {S5H1+409} {S5H2} {S5H3+5} {S5H1+414} {S5H2+2} {S5H3+7} minecraft:air
+> setblock {S5H1+410} {S5H2} {S5H3+6} create:fluid_tank
+> setblock {S5H1+413} {S5H2} {S5H3+6} create:fluid_tank
+sleep 2
+> data merge block {S5H1+410} {S5H2} {S5H3+6} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+412} {S5H2} {S5H3+6} create:fluid_pipe[east=true,west=true,north=false,south=false,up=false,down=false]
+> setblock {S5H1+411} {S5H2} {S5H3+6} create:mechanical_pump[facing=east]
+> setblock {S5H1+411} {S5H2+1} {S5H3+6} create:cogwheel[axis=x]
+> setblock {S5H1+410} {S5H2+1} {S5H3+6} create:creative_motor[facing=east]{ScrollValue:64}
+sleep 2
+> data get block {S5H1+411} {S5H2} {S5H3+6} Speed
+sleep 38
+> say JFP01c phase 1 pump east
+> data get block {S5H1+413} {S5H2} {S5H3+6} TankContent
+> data get block {S5H1+410} {S5H2} {S5H3+6} TankContent
+> setblock {S5H1+411} {S5H2} {S5H3+6} create:mechanical_pump[facing=west]
+sleep 40
+> say JFP01c phase 2 pump west
+> data get block {S5H1+413} {S5H2} {S5H3+6} TankContent
+> data get block {S5H1+410} {S5H2} {S5H3+6} TankContent
+> setblock {S5H1+410} {S5H2+1} {S5H3+6} minecraft:air
+count has the following block data: -?64\.0f$ >= 1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|Invalid (block state|tag))
+look one phase ends with the far tank holding water; if neither does, the layout is at fault

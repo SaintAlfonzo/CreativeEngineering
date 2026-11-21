@@ -18,9 +18,13 @@
 - **Changed:** The Tree Tapper can be crafted with a wooden bucket.
 - **Changed:** Corn Mazes generate twice as often.
 - **Changed:** Mums go in flower pots, planter boxes and flower boxes, and spread with bone meal like other small flowers.
+- **Changed:** Breeding pigs or rabbits gives 1 to 3 babies, 2 on average [1, with one extra baby in 1 of 3 breedings]; Quark's Pig Litters is off [pigs got both litters].
+- **Changed:** Pigs bred with a truffle roll their litter twice and keep the larger one [one extra baby in 2 of 3 breedings].
+- **Changed:** Biscuits and Gravy, Macaroni and Cheese and Glazed Carrots give Comfort for 4 minutes [no Comfort].
 - **Fixed:** Goat Milk Bottles and Chocolate Milk Bottles showed no tooltip.
 - **Fixed:** Thrown cleavers and pitchforks had no names.
 - **Fixed:** Syrup had two crafting recipes into sugar; only the one giving 4 sugar is left.
+- **Fixed:** A watering can with water used on a ripe crop harvested it instead of watering the soil.
 - **Removed:** The Cooking Pot Syrup recipe from sugar and apple or beetroot; Syrup comes only from Sap.
 
 ## Hops <!-- icon: hearthandharvest:hops -->
@@ -32,6 +36,7 @@
 - **Changed:** Wild hops hang on tree trunks in temperate forests, 1 in 96 chunks [ground patches, 1 in 120 chunks].
 - **Changed:** Hops, Hops Salad, Bags of Hops and Wild Hops exist only with Creative Brewing installed.
 - **Fixed:** Hops never grew: the lattice dried the farmland under it.
+- **Fixed:** Organic Mash used up more than one item per use.
 
 ## Tilled End Stone <!-- icon: minecraft:end_stone -->
 
@@ -425,6 +430,7 @@
 - **Changed:** Little Logistics receiver and transmitter components in an inventory turn into Redstone Links.
 - **Fixed:** TNT shrapnel broke nearby minecarts and armor stands and turned TNT minecarts into items; it now hits only living things.
 - **Fixed:** Rubber trees did not generate in jungles.
+- **Fixed:** Grass below height 32 spread as fast in winter as in spring.
 - **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
 - **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
 - **Changed:** A Wandering Trader carries about 2 Wares delivery agreements [about 5].
@@ -489,6 +495,7 @@
 - **Fixed:** The Immersive Portals portal block had no name.
 - **Fixed:** Walking out of a Portal Gun portal on a wall still lifted the player one block, and Nether and End portals did the same. Only portals in a floor lift the player now.
 - **Fixed:** Falling from a floor portal into a wall portal left the player stuck in the floor in front of the wall.
+- **Fixed:** Lightning striking a Nether portal frame turned a frame block into crying obsidian, so the frame never tried to light.
 
 ## Rose Gold <!-- icon: mca:rose_gold_ingot -->
 
@@ -563,3 +570,4 @@
 - **Changed:** JEI bookmarks and other player files outside the world lose the moved items.
 - **Changed:** Datapacks that use the old Creative Delight recipe types need updating.
 - **Changed:** A world opened on this version loses these items and blocks if opened on an older version.
+- **Fixed:** The old plain Camera Bag disappeared when a world loaded; it becomes a Leather Camera Bag with its contents.

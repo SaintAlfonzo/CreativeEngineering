@@ -264,3 +264,8 @@ Tests (in game; server half in the scratch queue, SQ-JFP-):
   nothing.
 - [ ] **MJ-19 Lone-cookie row wording (`items/jars #6`):** JEI, Jar Storage tab, the row of cookies in no family ->
   the note reads "These don't mix: one kind per jar." Queue: CQ-JC-03.
+
+r1120nv (2026-11-21): SQ-JFP-01 to -04 moved no water either way with the pump touching the jar; the code shows no
+defect (capability attached, pump turning). Diagnostic rows SQ-JFP-01b (a pipe segment between pump and jar) and
+SQ-JFP-01c (the same layout tank to tank) come first (plan_scratch_findings_1121 F7, TODO `jars #15`).
+

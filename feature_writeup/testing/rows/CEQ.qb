@@ -267,5 +267,17 @@ do {"slot": 0}
 do {"walk": 10, "keys": "use"}
 shot shield_block
 look shield renders and blocks; tooltips as before; the skinned backpack, the Step Up (Stepstool) key in Controls, Dark Fire animation and the Cycle red line by hand
+
+## CQ-CEQ-02 | backpack skins render in hand, worn and placed after their mixins moved to the client list
+@group client
+@commands Client: give a Sophisticated backpack with `{CESkin:"minecraft:oak_log"}`; look at it in the hotbar and in hand; wear it (back slot or chestplate with `allowEquip`) and look in third person; place it and look at the block
+@pass LOOK: the backpack shows the oak log skin in the hotbar, in hand, on the player's back and placed; no missing-texture checker; latest.log has no mixin error naming BackpackSkin
+@fails a client mixin no longer applied: `BackpackSkinItemRendererMixin`, `BackpackSkinBakedModelMixin`, `BackpackSkinWornMixin` in the `client` list of creativeequipment.mixins.json (plan_scratch_findings_1121 F1, TODO `mod-integration #2`)
+@reviewed 2026-11-21
+> clear @s
+> give @s sophisticatedbackpacks:backpack{CESkin:"minecraft:oak_log"}
+do {"slot": 0}
+shot backpack_skin_hand
+look skin in hand and hotbar; then wear and place it by hand and look (third person, placed block)
 @@text
 @@text Results: not run yet.

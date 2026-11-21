@@ -35,7 +35,9 @@ earlier ([creative_magic.md](creative_magic.md)).
 - **Mixins:** `creativeequipment.mixins.json`, 20 common, none client, SRG with `remap = false`, member prefixes still
   `creativeengineering$`: the 20 sweep B Equipment rows (stepstool 2, shields 6, backpack skins 6, Easy Elytra Takeoff 2,
   copper pickaxe, armor enchantability, armor cap, bone meal charm). Gated on their mod: Sophisticated Backpacks,
-  Easy Elytra Takeoff, Everything Copper. The rest target vanilla.
+  Easy Elytra Takeoff, Everything Copper. The rest target vanilla. The three backpack skin mixins that target client
+  classes (item renderer, baked model, worn layer) are in the `client` list since 2026-11-21: in the common list the
+  dedicated server tried to load `ItemTransforms$TransformType` (r1120nv SQ-TI-00, plan_scratch_findings_1121 F1).
 - **Config:** `config/creativeequipment-common.toml` (`CEQConfig`): `[dragon_gear]`, `[air_brake]`, `[stepstool]`,
   `[crafting]` (felsic assembly values), `[armor_enchantability]`, `[shields]` with every subtable, `[bonemeal_charm]`,
   `[bottled_air]`, `[backpackSkins]`. Keys, comments, defaults and field names unchanged. First boot: Common's

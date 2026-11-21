@@ -27,7 +27,7 @@ import net.minecraftforge.event.entity.living.BabyEntitySpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
-/** Goat and bottle milking, chicken plucking, pig and rabbit litters (hearth_and_harvest.md 2.2, 3.2). */
+/** Goat and bottle milking, chicken plucking, pig and rabbit litters of 1 to 3 (hearth_and_harvest.md 2.2, 3.2; plan_scratch_findings_1121 R4). */
 public final class AnimalEvents {
     private static final String PLUCK_READY = "hearthandharvestPluckReady";
     private static final int PLUCK_COOLDOWN = 600;
@@ -101,12 +101,15 @@ public final class AnimalEvents {
         boolean rabbits = a instanceof Rabbit && b instanceof Rabbit;
         if ((!pigs && !rabbits) || !HHConfig.LITTERS.get() || !(a.level instanceof ServerLevel level)) return;
         boolean truffle = pigs && (a.getPersistentData().getBoolean(TRUFFLE_BRED) || b.getPersistentData().getBoolean(TRUFFLE_BRED));
-        double chance = truffle ? HHConfig.TRUFFLE_LITTER_CHANCE.get() : HHConfig.LITTER_CHANCE.get();
-        if (a.getRandom().nextDouble() >= chance) return;
-        AgeableMob baby = ((Animal) a).getBreedOffspring(level, (AgeableMob) b);
-        if (baby == null) return;
-        baby.setBaby(true);
-        baby.moveTo(a.getX(), a.getY(), a.getZ(), 0.0F, 0.0F);
-        level.addFreshEntityWithPassengers(baby);
+        int max = HHConfig.LITTER_MAX_EXTRA.get();
+        int extra = a.getRandom().nextInt(max + 1);
+        if (truffle && HHConfig.TRUFFLE_LITTER_BOOST.get()) extra = Math.max(extra, a.getRandom().nextInt(max + 1));
+        for (int i = 0; i < extra; i++) {
+            AgeableMob baby = ((Animal) a).getBreedOffspring(level, (AgeableMob) b);
+            if (baby == null) return;
+            baby.setBaby(true);
+            baby.moveTo(a.getX(), a.getY(), a.getZ(), 0.0F, 0.0F);
+            level.addFreshEntityWithPassengers(baby);
+        }
     }
 }

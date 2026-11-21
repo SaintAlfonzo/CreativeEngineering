@@ -361,11 +361,13 @@ public final class CropSeasons {
 	 * ({@code GrassSpreadSeasonMixin}) and Immersive Weathering's block growths ({@code IWGrowthSeasonMixin}) ask here
 	 * before each try. True = skip it: a seasonal type that is off where the block stands refuses {@code offPenalty}
 	 * ({@code grassOffPenalty} for the grass type) of its spreads, like the crop-grow rule. Fertile seasons add nothing here (the grass type has none).
+	 * The season is read one block up: a grass block is solid, so its own position never sees the sky, and below Serene
+	 * Seasons' {@code underground_fertility_level} that made every season neutral (plan_scratch_findings_1121 F2).
 	 */
 	public static boolean refuseSpread(ServerLevel level, BlockPos pos, @Nullable Type type) {
 		if (type == null || !type.seasonal() || !enabled()) return false;
 		double penalty = type == Type.GRASS ? CalendarConfig.CROP_SEASONS.grassOffPenalty.get() : CalendarConfig.CROP_SEASONS.offPenalty.get();
-		return level.random.nextDouble() < penalty && fertility(level, pos, type) == O;
+		return level.random.nextDouble() < penalty && fertility(level, pos.above(), type) == O;
 	}
 
 	@SubscribeEvent

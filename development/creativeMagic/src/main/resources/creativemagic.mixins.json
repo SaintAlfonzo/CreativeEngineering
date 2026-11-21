@@ -17,7 +17,8 @@
     "XpHelperMixin",
     "XpPumpUpgradeWrapperMixin",
     "XPFluidManagerMixin",
-    "IPFireGateMixin"
+    "IPFireGateMixin",
+    "IWLightningPortalFrameMixin"
   ],
   "client": [],
   "server": []

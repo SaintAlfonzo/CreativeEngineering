@@ -34,7 +34,9 @@ public class MagicMixinPlugin extends GatedMixinPlugin {
 			Map.entry("XpHelperMixin", SOPHISTICATED),
 			Map.entry("XpPumpUpgradeWrapperMixin", SOPHISTICATED),
 			// Immersive Portals: ordinary fire builds no portals, Dark Fire does (plan_portal_changes.md 1)
-			Map.entry("IPFireGateMixin", List.of("imm_ptl_core")));
+			Map.entry("IPFireGateMixin", List.of("imm_ptl_core")),
+			// Lightning on a portal frame: Immersive Weathering's crying obsidian growth skipped (PortalFrameGuard)
+			Map.entry("IWLightningPortalFrameMixin", List.of("immersive_weathering")));
 
 	public MagicMixinPlugin() {
 		super("[creativemagic]", NEEDS_MOD);

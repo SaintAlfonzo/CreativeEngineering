@@ -22,11 +22,19 @@ applier does that at runtime for every food not listed here); a kept Comfort at 
 60 s. Cans are skipped: they copy their source food through
 tools/gen_can_types.py, which applies this file to the source's effects.
 
+Jellies (id ending in _jelly) never give Comfort or Nourishment (owner, 2026-11-21).
+Pins (owner, 2026-11-21): every food listed in comfort_nourishment_pins.csv keeps the treatment written there
+(set effect and seconds, keep, strip, or default = not listed), whatever the rules above say, so a rerun on a newer
+dump never moves an existing food. The rules decide only foods that are not pinned (a newly added mod's foods).
+--pin-current rewrites the pin table from the JSON as it is now plus every other food of the dump (as default),
+leaving out the namespaces named with --unpinned.
+
 The rules never look at a food's current Comfort / Nourishment, so the output does not shift after the game has
 applied it. Restart the game after a run.
 
     python3 tools/gen_comfort_nourishment.py            write the JSON, print a summary
     python3 tools/gen_comfort_nourishment.py --list     also print every ruled food with its inputs
+    python3 tools/gen_comfort_nourishment.py --pin-current [--unpinned NS ...]   rewrite the pin table, then exit
 
 Source data (all under kubejs/exported/, from /dumpall): food/foods.json, food/recipes.json, food/food_blocks.json,
 tags/item_tags.json; kubejs/generation_scripts/food/food_types.json (golden types).
@@ -39,11 +47,15 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import pack_paths  # noqa: E402
+import table_io  # noqa: E402
 
 INSTANCE = pack_paths.INSTANCE
 EXPORT = INSTANCE / 'kubejs/exported'
 OUT = INSTANCE / 'kubejs/generation_scripts/food/comfort_nourishment.json'
 FOOD_TYPES = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
+PINS = INSTANCE / 'kubejs/generation_scripts/food/comfort_nourishment_pins.csv'
+PIN_HEADER = ['key', 'treatment', 'seconds']
+PIN_TREATMENTS = ('comfort', 'nourishment', 'none', 'keep', 'strip', 'default')
 COMFORT = 'farmersdelight:comfort'
 NOURISHMENT = 'farmersdelight:nourishment'
 
@@ -216,6 +228,10 @@ def build():
 			ruled[fid] = dict(effect='nourishment', seconds=golden[fid], inputs=0, input_hunger=0,
 							  output=f['nutrition'], now=current(f), recipe='golden', feast=False, name=f.get('name'))
 			continue
+		if fid.split(':')[1].endswith('_jelly'):
+			ruled[fid] = dict(effect=None, seconds=0, inputs=0, input_hunger=0, output=f['nutrition'],
+							  now=current(f), recipe='jelly', feast=False, name=f.get('name'))
+			continue
 		if rem == BOTTLE:
 			bottles.append(fid)
 			continue
@@ -237,14 +253,83 @@ def build():
 	return ruled, keep, bottles, by_id
 
 
+def read_pins():
+	"""key -> (treatment, seconds) from the pin table; empty when there is none."""
+	pins = OrderedDict()
+	for row in table_io.read_dicts(PINS):
+		t = row['treatment']
+		if t not in PIN_TREATMENTS:
+			sys.exit('%s line %d: unknown treatment %r' % (PINS.name, row['_line'], t))
+		pins[row['key']] = (t, int(row['seconds'] or 0))
+	return pins
+
+
+def pin_current(by_id, key, unpinned):
+	"""Write the pin table from the JSON as it is now; dump foods not in it are pinned as default."""
+	cur = json.loads(OUT.read_text(encoding='utf-8'))
+	rows = OrderedDict()
+	for k, v in cur['set'].items():
+		rows[k] = [k, v['effect'], v['seconds']]
+	for k in cur['keep']:
+		rows[k] = [k, 'keep', 0]
+	for k in cur['strip']:
+		rows[k] = [k, 'strip', 0]
+	for fid in sorted(by_id):
+		ns = fid.split(':')[0]
+		if ns in CAN_NAMESPACES or ns in unpinned:
+			continue
+		rows.setdefault(key(fid), [key(fid), 'default', 0])
+	for k in list(rows):
+		fid = k if ':' in k else None
+		if fid and fid.split(':')[0] in unpinned:
+			del rows[k]
+	table_io.write(PINS, PIN_HEADER, list(rows.values()), comments=(
+		'# Comfort / Nourishment pins (owner, 2026-11-21): tools/gen_comfort_nourishment.py gives each listed food this',
+		'# treatment instead of its rules. treatment: comfort | nourishment | none (set, with seconds) | keep | strip |',
+		'# default (not listed: the runtime removes Nourishment, keeps Comfort). Keys as in comfort_nourishment.json.'))
+	print('wrote %s: %d pins (unpinned namespaces: %s)' % (PINS.relative_to(INSTANCE), len(rows),
+														   ', '.join(sorted(unpinned)) or 'none'))
+
+
 def main():
 	ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
 	ap.add_argument('--list', action='store_true', help='print every ruled food with its inputs')
+	ap.add_argument('--pin-current', action='store_true', help='rewrite the pin table from the current JSON, then exit')
+	ap.add_argument('--unpinned', nargs='*', default=[], help='with --pin-current: namespaces left to the rules')
 	args = ap.parse_args()
 
 	ruled, keep, bottles, by_id = build()
 	first_key = pack_paths.item_dict_first_keys(pack_paths.item_dict_text(), tags=False, skip_keys=('na', 'none'))
 	key = lambda fid: first_key.get(fid, fid)
+	if args.pin_current:
+		pin_current(by_id, key, set(args.unpinned))
+		return
+
+	# pins win over the rules (jellies excepted: never Comfort or Nourishment)
+	pins = read_pins()
+	pinned = 0
+	for fid in list(by_id):
+		k = key(fid)
+		if k not in pins or fid.split(':')[1].endswith('_jelly'):
+			continue
+		t, seconds = pins[k]
+		ruled.pop(fid, None)
+		if fid in keep:
+			keep.remove(fid)
+		if fid in bottles:
+			bottles.remove(fid)
+		if t in ('comfort', 'nourishment', 'none'):
+			ruled[fid] = dict(effect=None if t == 'none' else t, seconds=seconds, inputs=0, input_hunger=0,
+							  output=by_id[fid]['nutrition'], now=current(by_id[fid]), recipe='pinned', feast=False,
+							  name=by_id[fid].get('name'))
+		elif t == 'keep':
+			keep.append(fid)
+		elif t == 'strip':
+			bottles.append(fid)
+		pinned += 1
+	ruled = OrderedDict(sorted(ruled.items()))
+	keep.sort()
+	bottles.sort()
 
 	out = OrderedDict()
 	out['_readme'] = ('Generated by python3 tools/gen_comfort_nourishment.py; edit the rules there, not this file. '
@@ -266,8 +351,8 @@ def main():
 	for d in ruled.values():
 		k = (d['now'] or '-', d['effect'] or '-')
 		counts[k] = counts.get(k, 0) + 1
-	print('%d ruled foods (%d unchanged), %d kept (no recipe found), %d bottles stripped'
-		  % (len(ruled), sum(1 for d in ruled.values() if d['now'] == d['effect']), len(keep), len(bottles)))
+	print('%d ruled foods (%d unchanged), %d kept (no recipe found), %d bottles stripped, %d pinned'
+		  % (len(ruled), sum(1 for d in ruled.values() if d['now'] == d['effect']), len(keep), len(bottles), pinned))
 	for (now, rule), n in sorted(counts.items()):
 		print('  %-11s -> %-11s %3d' % (now, rule, n))
 	others = [f for f in by_id.values() if f['id'] not in ruled and f['id'] not in keep and f.get('remainder') != BOTTLE

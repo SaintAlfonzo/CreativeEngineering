@@ -8,8 +8,8 @@ public final class HHConfig {
     public static final ForgeConfigSpec.BooleanValue BOTTLE_MILKING;
     public static final ForgeConfigSpec.BooleanValue CHICKEN_PLUCKING;
     public static final ForgeConfigSpec.BooleanValue LITTERS;
-    public static final ForgeConfigSpec.DoubleValue LITTER_CHANCE;
-    public static final ForgeConfigSpec.DoubleValue TRUFFLE_LITTER_CHANCE;
+    public static final ForgeConfigSpec.IntValue LITTER_MAX_EXTRA;
+    public static final ForgeConfigSpec.BooleanValue TRUFFLE_LITTER_BOOST;
     public static final ForgeConfigSpec.BooleanValue MANURE_FROM_FED_ANIMALS;
     public static final ForgeConfigSpec.DoubleValue TAPPER_CHANCE;
     public static final ForgeConfigSpec.DoubleValue CORN_HUSK_HARVEST_CHANCE;
@@ -28,10 +28,11 @@ public final class HHConfig {
         b.push("animals");
         BOTTLE_MILKING = b.comment("A glass bottle milks cows and goats.").define("bottleMilking", true);
         CHICKEN_PLUCKING = b.comment("Sneak-use on a chicken plucks a feather.").define("chickenPlucking", true);
-        LITTERS = b.comment("Breeding pigs and rabbits can give one extra baby.").define("litters", true);
-        LITTER_CHANCE = b.comment("Chance of an extra baby.").defineInRange("litterChance", 1.0D / 3.0D, 0.0D, 1.0D);
-        TRUFFLE_LITTER_CHANCE = b.comment("Chance of that extra baby when pigs were bred with a truffle (on top of Fungi Delight's own extra piglets).")
-                .defineInRange("truffleLitterChance", 2.0D / 3.0D, 0.0D, 1.0D);
+        LITTERS = b.comment("Breeding pigs and rabbits can give extra babies (a litter).").define("litters", true);
+        LITTER_MAX_EXTRA = b.comment("Each breeding adds 0 to this many extra babies, evenly (2: litters of 1 to 3, 2 on average).")
+                .defineInRange("litterMaxExtra", 2, 0, 4);
+        TRUFFLE_LITTER_BOOST = b.comment("Pigs bred with a truffle roll their extra babies twice and keep the higher roll (on top of Fungi Delight's own extra piglets).")
+                .define("truffleLitterBoost", true);
         MANURE_FROM_FED_ANIMALS = b.comment("Animals drop manure 30 to 60 s after being fed or, for sheep, after grazing.").define("manureFromFedAnimals", true);
         b.pop();
         b.push("farming");

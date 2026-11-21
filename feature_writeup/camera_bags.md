@@ -153,3 +153,6 @@ Also R4-04 (remap), R4-05 (basics), R4-06 (slot count), R4-11 (dye) in [plan_1.0
 - 2026-10-18: this writeup; findings F1 to F4; tests CB-01 to CB-10. No code changed.
 - 2026-10-22: F4, flashes added to the bag tag; CB-11.
 - 2026-10-22 (second bulk run): SQ-GM-03 PASS on the scratch server; the CB-11 click stays in game.
+- 2026-11-21: the old plain `exposure_extras:camera_bag` (no `exposureextras` twin: only the three tiers are registered)
+  loads as a Leather Camera Bag with its contents; stacks past the leather bag's slots spill on open (`spillOverflow`).
+  Owner ruling R2, plan_scratch_findings_1121 F9; row SQ-RFX-27.

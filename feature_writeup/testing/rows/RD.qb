@@ -3917,10 +3917,10 @@ look the sand row (second zcount) has no wild plant; hand drops are seeds (wild 
 ## SQ-RD-17 | pancake stacks: pot recipes, servings, drops, serving effects
 @group A
 @commands Pancakes, all 7 stacks (plain, honey, chocolate, cherry blossom, vegetable, pumpkin, coffee): each pot recipe in the dump; `/give` and place each; take 2 servings, break the stack; place another, break it full; eat each serving
-@pass Each stack comes from the pot; serving items are plain / honey / chocolate / cherry blossom / vegetable / pumpkin / coffee Pancake; a stack with servings taken drops nothing, an untouched one drops itself (upstream loot); serving effects: honey and chocolate Speed 900, vegetable Haste 600
-@fails Partial stack drops: pancake loot tables; wrong serving: `RDBlocks.pancakes` supplier order
+@pass Each stack comes from the pot; serving items are plain / honey / chocolate / cherry blossom / vegetable / pumpkin / coffee Pancake; a stack with servings taken drops the pancakes left and a bowl (owner R1, 2026-11-21), an untouched one drops itself; serving effects: honey and chocolate Speed 900, vegetable Haste 600
+@fails Partial stack drops the wrong count or no bowl: pancake loot tables; wrong serving: `RDBlocks.pancakes` supplier order
 @from batches/r1102b/s2_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-21
 > cdevtest rdetail pancakes max=300
 > cdevtest food rusticdelight:honey_pancake
 > cdevtest food rusticdelight:chocolate_pancake
@@ -3959,6 +3959,8 @@ expect verb=pbot.inv bot=rd17 slot=\d+ item=rusticdelight:coffee_pancake\*
 > setblock {H1+4} {H2} {H3+44} minecraft:air destroy
 > zcount {H1+3} {H2-1} {H3+43} {H1+5} {H2+2} {H3+45}
 waitlog \[zcount\] entities 30
+expect item:rusticdelight:honey_pancake x5\b
+expect item:minecraft:bowl x1\b
 > setblock {H1+16} {H2} {H3+44} minecraft:air destroy
 > zcount {H1+15} {H2-1} {H3+43} {H1+17} {H2+2} {H3+45}
 waitlog \[zcount\] entities 30
@@ -3970,7 +3972,7 @@ expect item:rusticdelight:honey_pancakes x1
 waitlog verb=pbot.useitem bot=rd17 end=finish item=rusticdelight:honey_pancake\b 30
 > cdevtest player rd17
 expect verb=player name=rd17 effects=\S*minecraft:speed:0:(8[0-9]\d|900)\b
-look first zcount (stack with a serving taken, broken) shows no pancake item; the pot recipes for all 7 stacks are listed
+look first zcount (stack with a serving taken, broken) shows 5 Honey Pancakes and a bowl; the pot recipes for all 7 stacks are listed
 
 ## SQ-RD-18 | Pale and Dark Bell Pepper Medleys
 @group A

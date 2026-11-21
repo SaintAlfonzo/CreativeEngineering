@@ -26,7 +26,7 @@ Rules: status (built, deployed, tested, versions) lives in [README.md](../README
 - Locate: [dead-set hang](dead-structure-locate-hang.md); [map-trade hang](lc-map-trade-locate-hang.md); [locate writeup](locate-writeup.md)
 - [Biome lookup ties](biome-lookup-ties.md) — RTree keeps the thread's last result on ties (deep_caves/deep_dark); predictions use TiedBiomes.any
 - [First-tick water](first-tick-postprocess-water.md) — postProcessGeneration floods caves when a chunk first ticks; FirstTickWater = no drops in a settling window
-- [Biome frequency](biome-frequency-tuning.md); [nether decisions](nether-worldgen-decisions.md); [season types](weather-by-biome.md); [time master](time-master.md)
+- [Biome frequency](biome-frequency-tuning.md); [nether decisions](nether-worldgen-decisions.md); [season types](weather-by-biome.md) (solid blocks never see the sky: read seasons one block up below y 32); [time master](time-master.md)
 - Plants/animals: [wild crops](vegetation-worldgen-system.md) (in Creative Delight since 2026-10-25), [wild flowers](wild-flowers-system.md), [IW soils](iw-soil-wild-plants.md), [bee nests](bee-nests-system.md), [Bushier Flowers off](bushier-flowers-disabled.md), [leaf decay](leaf-decay-range.md), [mob spawns](mob-spawns-system.md), [Moobloom](moobloom-variants.md), [wandering trader](wandering-trader.md)
 - [MCA villager pathing](mca-villager-pathing.md) — own node maker (VillagerLandPathNodeMaker); WalkNodeEvaluator mixins miss MCA villagers
 ## Food, cans, cooking

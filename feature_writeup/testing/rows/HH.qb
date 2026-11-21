@@ -575,19 +575,19 @@ expect verb=food item=hearthandharvest:peanut_butter_cookie\*1\S* food=true nutr
 expect verb=food item=hearthandharvest:croissant\*1\S* food=true nutrition=4 modifier=0\.5 .*effects=-$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-1106 | log matches `food hearthandharvest:raspberry_scone: nutrition 6, modif
+## SQ-HH-1106 | raspberry scone, cider donut, baked apple, candy corn: no Comfort or Nourishment (pack rule)
 @group A
 @commands `cdevtest food hearthandharvest:raspberry_scone`; `cdevtest food hearthandharvest:cider_donut`; `cdevtest food hearthandharvest:baked_apple`; `cdevtest food hearthandharvest:candy_corn`
-@pass log matches `verb=food item=hearthandharvest:raspberry_scone\*1\S* food=true nutrition=6 modifier=0\.3 .*effects=-$`; log matches `verb=food item=hearthandharvest:cider_donut\*1\S* food=true nutrition=5 modifier=0\.5 .*effects=farmersdelight:nourishment:0:200:1\.0$`; log matches `verb=food item=hearthandharvest:baked_apple\*1\S* food=true nutrition=4 modifier=0\.3 .*effects=-$`; log matches `verb=food item=hearthandharvest:candy_corn\*1\S* food=true nutrition=4 modifier=0\.35 .*effects=-$`
-@fails `HHFoods` (or a pack script overriding it: `food_catalog.py`, cd startup `food_*`)
+@pass log matches `verb=food item=hearthandharvest:raspberry_scone\*1\S* food=true nutrition=6 modifier=0\.3 .*effects=-$`; log matches `verb=food item=hearthandharvest:cider_donut\*1\S* food=true nutrition=5 modifier=0\.5 .*effects=-$`; log matches `verb=food item=hearthandharvest:baked_apple\*1\S* food=true nutrition=4 modifier=0\.3 .*effects=-$`; log matches `verb=food item=hearthandharvest:candy_corn\*1\S* food=true nutrition=4 modifier=0\.35 .*effects=-$`
+@fails Comfort / Nourishment applier (creativedelight comfort_nourishment.js) or its JSON from tools/gen_comfort_nourishment.py (owner R7 2026-11-21: pack rule stands for H&H)
 @from batches/r1108hh/t12_a.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 > cdevtest food hearthandharvest:raspberry_scone
 > cdevtest food hearthandharvest:cider_donut
 > cdevtest food hearthandharvest:baked_apple
 > cdevtest food hearthandharvest:candy_corn
 expect verb=food item=hearthandharvest:raspberry_scone\*1\S* food=true nutrition=6 modifier=0\.3 .*effects=-$
-expect verb=food item=hearthandharvest:cider_donut\*1\S* food=true nutrition=5 modifier=0\.5 .*effects=farmersdelight:nourishment:0:200:1\.0$
+expect verb=food item=hearthandharvest:cider_donut\*1\S* food=true nutrition=5 modifier=0\.5 .*effects=-$
 expect verb=food item=hearthandharvest:baked_apple\*1\S* food=true nutrition=4 modifier=0\.3 .*effects=-$
 expect verb=food item=hearthandharvest:candy_corn\*1\S* food=true nutrition=4 modifier=0\.35 .*effects=-$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -626,52 +626,52 @@ expect verb=food item=hearthandharvest:raw_sausage\*1\S* food=true nutrition=2 m
 expect verb=food item=hearthandharvest:cooked_sausage\*1\S* food=true nutrition=3 modifier=0\.5 .*effects=-$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-1109 | log matches `food hearthandharvest:hot_dog: nutrition 10, modifier 0\.
+## SQ-HH-1109 | hot dog, marshmallow stick, biscuits and gravy (Comfort 4 min), hops salad: pack Comfort / Nourishment rule
 @group A
 @commands `cdevtest food hearthandharvest:hot_dog`; `cdevtest food hearthandharvest:charred_marshmallow_stick`; `cdevtest food hearthandharvest:biscuits_and_gravy`; `cdevtest food hearthandharvest:hops_salad`
-@pass log matches `verb=food item=hearthandharvest:hot_dog\*1\S* food=true nutrition=10 modifier=0\.7 .*effects=-$`; log matches `verb=food item=hearthandharvest:charred_marshmallow_stick\*1\S* food=true nutrition=1 modifier=0\.1 .*effects=minecraft:poison:0:200:1\.0$`; log matches `verb=food item=hearthandharvest:biscuits_and_gravy\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=farmersdelight:nourishment:0:3600:1\.0$`; log matches `verb=food item=hearthandharvest:hops_salad\*1\S* food=true nutrition=6 modifier=0\.6 .*effects=minecraft:regeneration:0:100:1\.0$`
-@fails `HHFoods` (or a pack script overriding it: `food_catalog.py`, cd startup `food_*`)
+@pass log matches `verb=food item=hearthandharvest:hot_dog\*1\S* food=true nutrition=10 modifier=0\.7 .*effects=-$`; log matches `verb=food item=hearthandharvest:charred_marshmallow_stick\*1\S* food=true nutrition=1 modifier=0\.1 .*effects=minecraft:poison:0:200:1\.0$`; log matches `verb=food item=hearthandharvest:biscuits_and_gravy\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=farmersdelight:comfort:0:4800:1\.0$`; log matches `verb=food item=hearthandharvest:hops_salad\*1\S* food=true nutrition=6 modifier=0\.6 .*effects=minecraft:regeneration:0:100:1\.0$`
+@fails Comfort / Nourishment applier (creativedelight comfort_nourishment.js) or its JSON from tools/gen_comfort_nourishment.py (owner R7 2026-11-21: pack rule stands for H&H)
 @from batches/r1108hh/t12_a.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 > cdevtest food hearthandharvest:hot_dog
 > cdevtest food hearthandharvest:charred_marshmallow_stick
 > cdevtest food hearthandharvest:biscuits_and_gravy
 > cdevtest food hearthandharvest:hops_salad
 expect verb=food item=hearthandharvest:hot_dog\*1\S* food=true nutrition=10 modifier=0\.7 .*effects=-$
 expect verb=food item=hearthandharvest:charred_marshmallow_stick\*1\S* food=true nutrition=1 modifier=0\.1 .*effects=minecraft:poison:0:200:1\.0$
-expect verb=food item=hearthandharvest:biscuits_and_gravy\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=farmersdelight:nourishment:0:3600:1\.0$
+expect verb=food item=hearthandharvest:biscuits_and_gravy\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=farmersdelight:comfort:0:4800:1\.0$
 expect verb=food item=hearthandharvest:hops_salad\*1\S* food=true nutrition=6 modifier=0\.6 .*effects=minecraft:regeneration:0:100:1\.0$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-1110 | log matches `food hearthandharvest:tamale: nutrition 7, modifier 0\.(6
+## SQ-HH-1110 | tamale, street corn, trail mix, macaroni and cheese (Comfort 4 min): pack Comfort / Nourishment rule
 @group A
 @commands `cdevtest food hearthandharvest:tamale`; `cdevtest food hearthandharvest:street_corn`; `cdevtest food hearthandharvest:trail_mix`; `cdevtest food hearthandharvest:macaroni_and_cheese`
-@pass log matches `verb=food item=hearthandharvest:tamale\*1\S* food=true nutrition=7 modifier=0\.6 .*effects=farmersdelight:nourishment:0:3600:1\.0$`; log matches `verb=food item=hearthandharvest:street_corn\*1\S* food=true nutrition=10 modifier=0\.8 .*effects=farmersdelight:nourishment:0:1200:1\.0,minecraft:haste:1:600:1\.0$`; log matches `verb=food item=hearthandharvest:trail_mix\*1\S* food=true nutrition=5 modifier=0\.5 .*effects=minecraft:speed:0:3600:1\.0,minecraft:regeneration:0:100:1\.0$`; log matches `verb=food item=hearthandharvest:macaroni_and_cheese\*1\S* food=true nutrition=11 modifier=0\.75 .*effects=farmersdelight:nourishment:0:1200:1\.0$`
-@fails `HHFoods` (or a pack script overriding it: `food_catalog.py`, cd startup `food_*`)
+@pass log matches `verb=food item=hearthandharvest:tamale\*1\S* food=true nutrition=7 modifier=0\.6 .*effects=-$`; log matches `verb=food item=hearthandharvest:street_corn\*1\S* food=true nutrition=10 modifier=0\.8 .*effects=minecraft:haste:1:600:1\.0,minecraft:fire_resistance:0:600:1\.0$`; log matches `verb=food item=hearthandharvest:trail_mix\*1\S* food=true nutrition=5 modifier=0\.5 .*effects=minecraft:speed:0:3600:1\.0,minecraft:regeneration:0:100:1\.0$`; log matches `verb=food item=hearthandharvest:macaroni_and_cheese\*1\S* food=true nutrition=11 modifier=0\.75 .*effects=farmersdelight:comfort:0:4800:1\.0$`
+@fails Comfort / Nourishment applier (creativedelight comfort_nourishment.js) or its JSON from tools/gen_comfort_nourishment.py (owner R7 2026-11-21: pack rule stands for H&H)
 @from batches/r1108hh/t12_a.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 > cdevtest food hearthandharvest:tamale
 > cdevtest food hearthandharvest:street_corn
 > cdevtest food hearthandharvest:trail_mix
 > cdevtest food hearthandharvest:macaroni_and_cheese
-expect verb=food item=hearthandharvest:tamale\*1\S* food=true nutrition=7 modifier=0\.6 .*effects=farmersdelight:nourishment:0:3600:1\.0$
-expect verb=food item=hearthandharvest:street_corn\*1\S* food=true nutrition=10 modifier=0\.8 .*effects=farmersdelight:nourishment:0:1200:1\.0,minecraft:haste:1:600:1\.0$
+expect verb=food item=hearthandharvest:tamale\*1\S* food=true nutrition=7 modifier=0\.6 .*effects=-$
+expect verb=food item=hearthandharvest:street_corn\*1\S* food=true nutrition=10 modifier=0\.8 .*effects=minecraft:haste:1:600:1\.0,minecraft:fire_resistance:0:600:1\.0$
 expect verb=food item=hearthandharvest:trail_mix\*1\S* food=true nutrition=5 modifier=0\.5 .*effects=minecraft:speed:0:3600:1\.0,minecraft:regeneration:0:100:1\.0$
-expect verb=food item=hearthandharvest:macaroni_and_cheese\*1\S* food=true nutrition=11 modifier=0\.75 .*effects=farmersdelight:nourishment:0:1200:1\.0$
+expect verb=food item=hearthandharvest:macaroni_and_cheese\*1\S* food=true nutrition=11 modifier=0\.75 .*effects=farmersdelight:comfort:0:4800:1\.0$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-1111 | log matches `food hearthandharvest:glazed_carrots: nutrition 10, modif
+## SQ-HH-1111 | glazed carrots (Comfort 4 min), pickled carrots and potatoes (kept), chocolate milk: pack Comfort / Nourishment rule
 @group A
 @commands `cdevtest food hearthandharvest:glazed_carrots`; `cdevtest food hearthandharvest:pickled_carrots`; `cdevtest food hearthandharvest:pickled_potatoes`; `cdevtest food hearthandharvest:chocolate_milk_bottle`
-@pass log matches `verb=food item=hearthandharvest:glazed_carrots\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=-$`; log matches `verb=food item=hearthandharvest:pickled_carrots\*1\S* food=true nutrition=4 modifier=0\.5 .*effects=farmersdelight:nourishment:0:1200:1\.0$`; log matches `verb=food item=hearthandharvest:pickled_potatoes\*1\S* food=true nutrition=4 modifier=0\.5 .*effects=minecraft:health_boost:0:1200:1\.0$`; log matches `verb=food item=hearthandharvest:chocolate_milk_bottle\*1\S* food=true nutrition=0 modifier=0 .*effects=minecraft:speed:0:600:1\.0$`
-@fails `HHFoods` (or a pack script overriding it: `food_catalog.py`, cd startup `food_*`)
+@pass log matches `verb=food item=hearthandharvest:glazed_carrots\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=farmersdelight:comfort:0:4800:1\.0$`; log matches `verb=food item=hearthandharvest:pickled_carrots\*1\S* food=true nutrition=4 modifier=0\.5 .*effects=farmersdelight:nourishment:0:1200:1\.0$`; log matches `verb=food item=hearthandharvest:pickled_potatoes\*1\S* food=true nutrition=4 modifier=0\.5 .*effects=minecraft:health_boost:0:1200:1\.0$`; log matches `verb=food item=hearthandharvest:chocolate_milk_bottle\*1\S* food=true nutrition=0 modifier=0 .*effects=minecraft:speed:0:600:1\.0$`
+@fails Comfort / Nourishment applier (creativedelight comfort_nourishment.js) or its JSON from tools/gen_comfort_nourishment.py (owner R7 2026-11-21: pack rule stands for H&H)
 @from batches/r1108hh/t12_a.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 > cdevtest food hearthandharvest:glazed_carrots
 > cdevtest food hearthandharvest:pickled_carrots
 > cdevtest food hearthandharvest:pickled_potatoes
 > cdevtest food hearthandharvest:chocolate_milk_bottle
-expect verb=food item=hearthandharvest:glazed_carrots\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=-$
+expect verb=food item=hearthandharvest:glazed_carrots\*1\S* food=true nutrition=10 modifier=0\.75 .*effects=farmersdelight:comfort:0:4800:1\.0$
 expect verb=food item=hearthandharvest:pickled_carrots\*1\S* food=true nutrition=4 modifier=0\.5 .*effects=farmersdelight:nourishment:0:1200:1\.0$
 expect verb=food item=hearthandharvest:pickled_potatoes\*1\S* food=true nutrition=4 modifier=0\.5 .*effects=minecraft:health_boost:0:1200:1\.0$
 expect verb=food item=hearthandharvest:chocolate_milk_bottle\*1\S* food=true nutrition=0 modifier=0 .*effects=minecraft:speed:0:600:1\.0$
@@ -2332,38 +2332,38 @@ sleep 3
 > zhh1 pluck bot1 3096 -60 3051 400
 expect pluck 400: feathers 400, damaged (7\d|8\d|9\d|1[0-2]\d|130)
 
-## SQ-HH-1230 | log matches `litter minecraft:pig x300: babies \d+, extra (7[5-9]|[89]
+## SQ-HH-1230 | pig litters: 300 pairs give 258 to 342 extra babies (litters of 1 to 3)
 @group A
 @commands `forceload add 3144 3048`; (wait 3 s); `zhh1 litter 3144 -60 3048 minecraft:pig 300`
-@pass log matches `litter minecraft:pig x300: babies \d+, extra (7[5-9]\|[89]\d\|1[01]\d\|12[0-5])$`
-@fails `AnimalEvents.onBabySpawn`; `litterChance` 1/3 of 300 pairs is 100 extra (3 sd 75 to 125)
+@pass log matches `litter minecraft:pig x300: babies \d+, extra (25[89]\|2[6-9]\d\|3[0-3]\d\|34[0-2])$`
+@fails `AnimalEvents.onBabySpawn`; `litterMaxExtra` 2: 0 to 2 extra per pair, mean 1, so 300 extra (3 sd 258 to 342; owner R4 2026-11-21)
 @from batches/r1108hh/t12_a.qb
 > forceload add 3144 3048
 sleep 3
 > zhh1 litter 3144 -60 3048 minecraft:pig 300
-expect litter minecraft:pig x300: babies \d+, extra (7[5-9]|[89]\d|1[01]\d|12[0-5])$
+expect litter minecraft:pig x300: babies \d+, extra (25[89]|2[6-9]\d|3[0-3]\d|34[0-2])$
 
-## SQ-HH-1231 | log matches `litter minecraft:rabbit x300: babies \d+, extra (7[5-9]|[
+## SQ-HH-1231 | rabbit litters: 300 pairs give 258 to 342 extra babies (litters of 1 to 3)
 @group A
 @commands `forceload add 3192 3048`; (wait 3 s); `zhh1 litter 3192 -60 3048 minecraft:rabbit 300`
-@pass log matches `litter minecraft:rabbit x300: babies \d+, extra (7[5-9]\|[89]\d\|1[01]\d\|12[0-5])$`
-@fails `AnimalEvents.onBabySpawn`; `litterChance` 1/3 of 300 pairs is 100 extra (3 sd 75 to 125)
+@pass log matches `litter minecraft:rabbit x300: babies \d+, extra (25[89]\|2[6-9]\d\|3[0-3]\d\|34[0-2])$`
+@fails `AnimalEvents.onBabySpawn`; `litterMaxExtra` 2: 0 to 2 extra per pair, mean 1, so 300 extra (3 sd 258 to 342; owner R4 2026-11-21)
 @from batches/r1108hh/t12_a.qb passed
 > forceload add 3192 3048
 sleep 3
 > zhh1 litter 3192 -60 3048 minecraft:rabbit 300
-expect litter minecraft:rabbit x300: babies \d+, extra (7[5-9]|[89]\d|1[01]\d|12[0-5])$
+expect litter minecraft:rabbit x300: babies \d+, extra (25[89]|2[6-9]\d|3[0-3]\d|34[0-2])$
 
-## SQ-HH-1232 | log matches `litter minecraft:pig x300 truffle: babies \d+, extra (33[
+## SQ-HH-1232 | truffle pig litters: 300 pairs give 564 to 663 extra babies
 @group A
 @commands `forceload add 3240 3048`; (wait 3 s); `zhh1 litter 3240 -60 3048 minecraft:pig 300 truffle`
-@pass log matches `litter minecraft:pig x300 truffle: babies \d+, extra (33[5-9]\|3[4-9]\d\|4[01]\d\|42[0-5])$`
-@fails Truffle pigs: mean 2/3 (H&H, `truffleLitterChance`) plus 0.6 (Fungi Delight: 40 % one, 10 % two) per pair; 1.267 x 300 = 380, 3 sd 335 to 425. `FD_TruffleBred` read at HIGH in `AnimalEvents.onBabySpawn`; `fungi/ModEntitiesEvents.onBabySpawn`
+@pass log matches `litter minecraft:pig x300 truffle: babies \d+, extra (56[4-9]\|5[7-9]\d\|6[0-5]\d\|66[0-3])$`
+@fails Truffle pigs: mean 13/9 (H&H `truffleLitterBoost`: higher of two 0 to 2 rolls) plus 0.6 (Fungi Delight: 40 % one, 10 % two) per pair; 2.044 x 300 = 613, 3 sd 564 to 663. `FD_TruffleBred` read at HIGH in `AnimalEvents.onBabySpawn`; `fungi/ModEntitiesEvents.onBabySpawn`
 @from batches/r1108hh/t12_a.qb
 > forceload add 3240 3048
 sleep 3
 > zhh1 litter 3240 -60 3048 minecraft:pig 300 truffle
-expect litter minecraft:pig x300 truffle: babies \d+, extra (33[5-9]|3[4-9]\d|4[01]\d|42[0-5])$
+expect litter minecraft:pig x300 truffle: babies \d+, extra (56[4-9]|5[7-9]\d|6[0-5]\d|66[0-3])$
 
 ## SQ-HH-1233 | log matches `litter minecraft:sheep x100: babies 100, extra 0$`
 @group A

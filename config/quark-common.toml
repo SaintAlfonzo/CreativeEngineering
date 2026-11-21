@@ -540,7 +540,7 @@
 	"Renewable Spore Blossoms" = true
 	"Coral On Cactus" = true
 	"Glass Shard" = true
-	"Pig Litters" = true
+	"Pig Litters" = false
 	"Campfires Boost Elytra" = true
 	"Dyeable Item Frames" = true
 	"Slabs To Blocks" = true

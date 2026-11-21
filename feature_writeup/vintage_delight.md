@@ -184,8 +184,10 @@ This file has three parts:
 - **Golden Egg** (block). Breaking it drops 8 to 32 gold nuggets, 1 to 15 gold ingots, 0 to 7 golden apples and 2 to 16
   golden carrots; table unchanged. Falls like sand when unsupported (port change 2026-10-25, `GoldenEggBlock` extends
   `FallingBlock`). Sources: the magic vine tree top (80 %, test set, S1) and the goose (§2.5).
-- **Organic Mash** (bone meal x3 per use): secondary output of the vinegar pickling recipes, input to the organic compost
-  recipes (§2.3a); ported as shipped.
+- **Organic Mash** (bone meal x3 per use, one mash used up per use): secondary output of the vinegar pickling recipes,
+  input to the organic compost recipes (§2.3a). Upstream shrank the stack on each successful application and once more;
+  the port applies on a copy (plan_scratch_findings_1121 F4, R5). On a hops vine it grows one age like the other
+  fertilizers (`HopsVineBlock`).
 - **Lush Grass** (block). Bone meal places flower forest, meadow and grass features; a hoe turns it straight into FD Rich
   Soil Farmland. Two mixins (`KeepLushGrassTreeMixin`, `KeepLushGrassGiantTreeMixin`: `Feature.isGrassOrDirt`,
   `TrunkPlacer.setDirtAt`) stop trees turning it to dirt. All kept, with KOTS's config switch for the tree's grass

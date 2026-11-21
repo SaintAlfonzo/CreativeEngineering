@@ -1120,6 +1120,9 @@ Findings (2026-10-30):
   growth whose owner is typed and that places a block of the owner's type: grass sprouting on grass blocks, grass
   growing tall, ferns growing large; frost, soot and moss growths untouched). Off skips `grassOffPenalty` (50 %, Creative
   Calendar `[crop_seasons]`; other types keep `offPenalty` 25 %) of those tries; spreading has no fertile bonus. Greenhouse glass makes grass under it neutral like any crop.
+  The season is read one block above the spreading block (`CropSeasons.refuseSpread`): a grass block is solid, so its
+  own position never sees the sky, and below Serene Seasons' `underground_fertility_level` (32) that made every season
+  neutral (r1120nv SQ-PST-03, -08, -10c, -11, -11b on the y -61 scratch pad; plan_scratch_findings_1121 F2).
   Modded grasses (owner 2026-11-02: slowed too) are typed `grass` as well: Immersive Weathering rooted grass block,
   Vinery grass slab, Vintage Delight lush grass block, Botania's six grasses (dry, golden, vivid, scorched, infused,
   mutated). Their spread does not all run through the vanilla tick, so one Pseudo mixin per target (2026-11-03, was one

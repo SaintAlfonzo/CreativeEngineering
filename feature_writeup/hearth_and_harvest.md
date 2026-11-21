@@ -599,7 +599,7 @@ Everything here is in the member (`backportedHearth-1.4.1-ce-19.2-03`) unless na
 |---|---|
 | Milking | Bucket or bottle on an adult goat gives goat milk; bottle on an adult cow or mooshroom gives Farmer's Delight's milk bottle (config `bottleMilking`). Upstream milked baby cows; fixed |
 | Plucking | Sneak-use on a chicken: 1 feather, 30 s cooldown saved on the chicken, shears lose 1 durability and do no damage, otherwise 25 % for 1 damage. Sneak-use with food in hand still feeds |
-| Litters | Pigs and rabbits: **one in three breedings** gives one extra baby. Upstream 1.4.1's code differs from the plan: it gives 1 to 3 extras on every breeding. The plan's figure is built; owner to confirm. Truffle-bred pigs: 2 in 3 (`truffleLitterChance`, on top of Fungi Delight's own 40 % / 10 % piglets); **the number is the build's choice for "boost the truffle effect" (N3)** |
+| Litters | Pigs and rabbits: every breeding adds 0 to 2 extra babies, evenly (`litterMaxExtra` 2), so litters of 1 to 3, 2 on average (owner R4, plan_scratch_findings_1121, 2026-11-21; pigs and rabbits both, owner, 2026-11-21). Quark's Pig Litters is off (`config/quark-common.toml`), so pigs get this litter only. Truffle-bred pigs roll twice and keep the higher (`truffleLitterBoost`, 13/9 extra on average), on top of Fungi Delight's own 40 % / 10 % piglets |
 | Manure | Drops 30 to 60 s after a successful feeding (not on an animal on breeding cooldown: upstream gave free manure) or sheep grazing (mixin `SheepAteMixin`). Not chickens or AM crows, named or baby animals. A pending drop is held in memory, so an unload or restart loses it. By-hand bone meal through vanilla's path, thrown in the air (Pungent and Poison 5 s), fuel 200 ticks, watering can fertilizer (tag), compost 0.85 (bag 1.0). **Not ported:** fly particles |
 | Cleavers | Flint, iron, golden, diamond, netherite (smithing). Knives on the cutting board. Butchering (5 animals, `#hearthandharvest:can_be_butchered`) drops only meat (`food_type/raw/meat`) plus 50 %. Thrown (charge 5 ticks), Loyalty returns it. **Fixed against upstream:** a thrown kill now butchers (upstream's damage source lost it). **Dropped:** the speed compensation while charging, so charging slows like a trident. Raw sausage recipes (beef 3, pork and mutton 2, chicken and rabbit 1) and cooked sausage |
 | Pitchfork | 250 durability, 3D in hand, flat in GUI. Instant on hay, straw, rugs, manure block, crops, leaves. Grass and ferns give 2 to 4 straw instead of their drops; mature wheat, rice, oats and hemp give straw **on top of** normal drops (N23-17, B8). Thrown: hits up to 3 entities; Pinned 10 s, 3 s on players; bosses, flying and swimming mobs exempt (N25, `#hearthandharvest:pinned_immune` for the ones class checks miss); melee applies nothing |
@@ -618,8 +618,8 @@ Choices the build made where the plan, an owner note or upstream did not settle 
 
 | # | Call | Alternative | Where |
 |---|---|---|---|
-| J1 | Litters: one in three breedings gives one extra baby (the plan's figure) | Upstream: 1 to 3 extras on every breeding | `HHConfig` `litterChance` |
-| J2 | Truffle-bred pigs: 2 in 3 for the extra baby, on top of Fungi Delight's own 40 % / 10 % | Any other boost (N3 gave no number) | `truffleLitterChance` |
+| J1 | Litters: 0 to 2 extra babies per breeding, litters of 1 to 3 (owner R4, 2026-11-21; was one extra in 1 of 3) | Upstream: 1 to 3 extras on every breeding | `HHConfig` `litterMaxExtra` |
+| J2 | Truffle-bred pigs: two rolls, the higher kept, on top of Fungi Delight's own 40 % / 10 % (2026-11-21; was 2 in 3 for one extra) | Any other boost (N3 gave no number) | `truffleLitterBoost` |
 | J3 | Corn Husk chances: harvest 25 % (config), milling and crushing 25 %, cutting board 75 % with the 4 kernels | N23-1 left the numbers open | `cornHuskHarvestChance`; `corn_delight/recipes.js`; `creativedelight/recipes.js` |
 | J4 | Juice on the Apple Press: 1 fruit and a glass bottle per bottle | Upstream cost 2 fruit a bottle; the press takes one item | `hearthandharvest/recipes.js` |
 | J5 | Wines in Vinery's Fermentation Barrel: 3 fruit + 15 juice units + wine bottle. Red juice for blueberry, raspberry and sweet berry; white for glow berry, melon and lemon. The recipes use Vinery's grape juice, not the H&H juices | Take the H&H juice items as input; other red / white split | `recipes.js` |
@@ -1012,7 +1012,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 | HNH-30 | Use the can until water and fertilizer are both 0: bar gone, fertilizer kind cleared (another fertilizer loads again) | |
 | HNH-31 | Can with water, no fertilizer, on young wheat over dry farmland (3x3): farmland in the 3x3 turns wet, splash, water -1; again at once spends nothing | server half PASSED r1031 (SQ-WC-05: 3x3 farmland and mulch soaked, water -1 once) |
 | HNH-32 | Same on dry Fertile Soil under a crop and on the soil block itself: soaked texture in the 3x3, water -1; stays soaked after a few minutes away from heat | |
-| HNH-33 | Charged can on young wheat over dry farmland: crops grow and soil soaks for 1 water and 1 fertilizer total; on grown wheat over dry soil: soaks for 1 water, no fertilizer spent | |
+| HNH-33 | Charged can on young wheat over dry farmland: crops grow and soil soaks for 1 water and 1 fertilizer total; on grown wheat over dry soil: soaks for 1 water, no fertilizer spent, and the wheat is not harvested (a can holding water cancels Quark's Simple Harvest: gear/QuarkCompat, plan_scratch_findings_1121 F3) | |
 | HNH-34 | Raspberry Pips from 1 raspberry (crafting grid); pick block on the bush gives the pips; both in Farmer's Delight's tab | |
 | HNH-35 | Walking through the bush slows, never hurts; a fox walks through freely and picks a ripe bush (raspberry in its mouth, bush to age 1) | fox half: server PASSED r1101 (SQ-HR-04) |
 | HNH-36 | WTHIT on the bush shows the growth line, "Mature" at age 3; the pips tooltip shows the temperate season line | client PASSED r1101 (CQ-HR-06) |
@@ -1050,7 +1050,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 | HNH-93 | Tilling I / II / III (N26-8): sneak-use tills 3x3 / 4x4 / 5x5 including modded dirts and end stone, 1 durability per block; log for the eval | |
 | HNH-94 | Harvesting enchantment (N26-8) does not exist in JEI, the enchanting table or loot; hoe harvest areas are unchanged | |
 | HNH-95 | Clarity (N26-9): refuses and clears Blindness and Darkness; compare with Brightening for the eval | |
-| HNH-97 | Pigs and rabbits bred 30 times each: about a third of litters have one extra baby; truffle-fed pigs more often, on top of Fungi Delight's extra piglets | |
+| HNH-97 | Pigs and rabbits bred 30 times each: litters of 1 to 3, about 2 on average, never a Quark litter on top; truffle-fed pigs larger on average, on top of Fungi Delight's extra piglets | |
 | HNH-98 | Corn Husk from harvesting mature corn (about 1 in 4), cutting corn (about 3 in 4), milling corn; a husk ground to cornmeal 1 in 5 | |
 | HNH-99 | Alex's Mobs crow drops Crow Feathers, not feathers | |
 | HNH-100 | Waffle with Syrup shows its syrup model at each stack size | |
@@ -1223,6 +1223,7 @@ Rows are in the "SQ-HH full suite" section of [scratch_queue.md](testing/scratch
 - 2026-11-15 (fix-2, r1115): seed pouch and bundle dispensers plant in the dispenser's own dimension (Nether wart in the Nether, SQ-SPD-08); the lick goal licks once the animal's body is within 1 block of the block (SQ-SLK-01b). CD built 03:19, not installed; reruns SQ-SPD-08b, SQ-SLK-01c.
 - 2026-11-14 (cd-b): hops as a vine and a Vinery lattice grape type, gated on Creative Brewing; wild hops on tree trunks; H&H tilled end stone removed, end stone tills with a netherite hoe into Ender Crop's; stomping basin takes valid items only and mirrors the Grapevine Pot (4.8); CD and Brewing built and installed; not run.
 - 2026-11-16: hops vine picked at age 3 only, fertilizer items (`#creativedelight:bonemeal_like`) grow it at ages 0 to 2; rug crack overlay clipped to the block box (4.9); HNH-101, HNH-102; queue SQ-HOP-12 to -14, CQ-HOP-02, SQ-HOP-04 rewritten (plan_small_fixes_1116.md). Built and installed; not run.
+- 2026-11-21 (plan_scratch_findings_1121): litters of 1 to 3 for pigs and rabbits, Quark Pig Litters off (R4); H&H foods follow the pack Comfort / Nourishment rule (R7): Biscuits and Gravy, Macaroni and Cheese and Glazed Carrots give Comfort 240 s, the pickles keep their effects, every other H&H food has neither; a watering can holding water cancels Quark's Simple Harvest; Organic Mash grows a hops vine one age and costs one mash.
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 

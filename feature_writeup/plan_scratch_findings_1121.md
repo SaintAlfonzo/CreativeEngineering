@@ -1,19 +1,20 @@
 # Plan: scratch findings 2026-11-21 (r1120nv)
 
-<!-- generated:status_index begin open_work sha1=03b7516a7c12 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Bug 8, Planned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=8c8251b0a719 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Bug 1, Testing 9), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-calendar #1` | Bug | SQ-PST-03 SQ-PST-08 SQ-PST-10c SQ-PST-11 SQ-PST-11b | Grass spreads as fast in winter as in spring |
 | `jars #15` | Bug | SQ-JFP-01 SQ-JFP-02 SQ-JFP-03 SQ-JFP-04 SQ-JFP-05 | Create pump moves no fluid between a tank and a jar |
-| `largecontent/mod-additions #52` | Bug |  | Hearth and Harvest: pigs get both Quark's and H&H's litters |
-| `largecontent/mod-additions #53` | Bug |  | Hearth and Harvest foods lose Nourishment |
-| `mod-integration #2` | Bug | SQ-TI-00 | Backpack skin mixins load client classes on the dedicated server |
-| `tnt-and-portal #40` | Bug | SQ-PRT-01 | Lightning-lit portal broken by Immersive Weathering's crying obsidian rule |
-| `vintage-delight-port #1` | Bug | SQ-HOP-12 | Organic mash consumes extra items on each use |
-| `watering-and-soil #1` | Bug | SQ-HH-1606 SQ-HH-1607 SQ-HH-1608 SQ-HH-1609 SQ-HH-1610 SQ-HH-1611 | Watering can does nothing on ripe crops (Quark Simple Harvest takes the click) |
-| `rustic-delight-member #1` | Planned | SQ-RD-17 | Pancake stack drops: doc says nothing drops |
+| `camera-bags #5` | Testing | SQ-RFX-27 | Old plain camera bag lost on load |
+| `creative-calendar #1` | Testing | SQ-PST-03 SQ-PST-08 SQ-PST-10c SQ-PST-11 SQ-PST-11b | Grass spreads as fast in winter as in spring |
+| `largecontent/mod-additions #52` | Testing |  | Hearth and Harvest: pigs get both Quark's and H&H's litters |
+| `largecontent/mod-additions #53` | Testing |  | Hearth and Harvest foods lose Nourishment |
+| `mod-integration #2` | Testing | SQ-TI-00 | Backpack skin mixins load client classes on the dedicated server |
+| `rustic-delight-member #1` | Testing | SQ-RD-17 | Pancake stack drops: doc says nothing drops |
+| `tnt-and-portal #40` | Testing | SQ-PRT-01 | Lightning-lit portal broken by Immersive Weathering's crying obsidian rule |
+| `vintage-delight-port #1` | Testing | SQ-HOP-12 | Organic mash consumes extra items on each use |
+| `watering-and-soil #1` | Testing | SQ-HH-1606 SQ-HH-1607 SQ-HH-1608 SQ-HH-1609 SQ-HH-1610 SQ-HH-1611 | Watering can does nothing on ripe crops (Quark Simple Harvest takes the click) |
 <!-- generated:status_index end open_work -->
 
 Source: the real FAILs of scratch run r1120nv (resume 2026-11-21, steps 58 to 147), listed to the owner as "Product
@@ -47,6 +48,10 @@ TODO rows: see the Rows column; status lives in the rows.
 | R4 | F6 pig litters | open | H&H litter only, Quark Pig Litters off; average litter 2, range 1 to 3 | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R5 | F4 organic mash strength | clear | Keep upstream's 3 bone-meal applications per use, consume exactly 1 mash | 2026-11-21 | agent default, unconfirmed |
 | R6 | F1 mixin side | clear | Move the client-only BackpackSkin mixins to the `"client"` list; keep in common only what touches server classes | 2026-11-21 | agent default, unconfirmed |
+| R7 | F5 H&H Nourishment | open | Pack rule stands for Hearth and Harvest foods; rows rewritten to the rule's result | 2026-11-21 | AskUserQuestion 2026-11-21 |
+| R8 | F5 drift of 29 non-H&H foods on rerun | open | Hold them back: jellies never give Comfort; every existing food's current treatment is pinned (comfort_nourishment_pins.csv) | 2026-11-21 | AskUserQuestion 2026-11-21 |
+| R9 | F6 rabbits | open | Rabbits get the same litters as pigs (1 to 3, average 2); truffle pigs roll twice, keep the higher | 2026-11-21 | AskUserQuestion 2026-11-21 |
+| R10 | F4 mash on hops | clear | On a hops vine Organic Mash grows one age like the other fertilizers (hops rule, SQ-HOP-12, changelog); 3 applications elsewhere (R5) | 2026-11-21 | agent default, unconfirmed |
 
 ## 3. Work, in order
 
@@ -70,7 +75,22 @@ TODO rows: see the Rows column; status lives in the rows.
 
 Each code change: changelog bullet (player-visible), writeup and test list, rerun rows queued.
 
-## 4. Other real FAILs from the same run (not in this plan; take in at a later intake)
+## 4. Built 2026-11-21
+
+| # | Change | Jar | Rows to run |
+|---|---|---|---|
+| F1 | BackpackSkinItemRenderer, BakedModel and Worn mixins to the `client` list (BlockEntity mixin stays common: Forge `ModelData` only) | Creative Equipment | SQ-TI-00, CQ-CEQ-02 (new) |
+| F2 | Cause: `refuseSpread` read the season at the grass block, which never sees the sky; below Serene Seasons `underground_fertility_level` 32 (scratch pad y -61) every season was neutral. Now reads one block up | Creative Calendar | SQ-PST-03, -08, -10c, -11, -11b |
+| F3 | `QuarkCompat` cancels Quark's SimpleHarvestEvent (right-click) when the hand holds a watering can with water; the run had logged `use CONSUME`, Quark's result. SQ-HH-1606 passed because the clicked wheat was already gone (2 of 25 missing before the use): still to prove by hand | Creative Delight | SQ-HH-1606 to -1611 |
+| F4 | Organic Mash applies bone meal on a copy, one mash per use (R5); hops vine grows one age for it (R10) | Creative Delight | SQ-HOP-12 |
+| F5 | Generator: pins (R8) and jelly rule; rerun adds H&H only (3 Comfort 240 s, hops salad none, 2 kept, 15 bottles stripped) | data (instance file, CD jar copy) | SQ-HH-1106, -1109, -1110, -1111 (rewritten) |
+| F6 | Quark Pig Litters off; H&H `litterMaxExtra` 2, `truffleLitterBoost` (R4, R9) | Creative Delight, configs | SQ-HH-1230, -1231, -1232 (rewritten), -1326 |
+| F7 | No defect found by reading; diagnostic rows with a pipe segment and a tank-to-tank control | none | SQ-JFP-01b, -01c (new), then -01 to -05 |
+| F8 | rustic_delight.md 2.4 states the built loot | none | SQ-RD-17 (rewritten) |
+| F9 | `exposure_extras:camera_bag` -> `exposureextras:leather_camera_bag` | exposureBackport | SQ-RFX-27 (rewritten) |
+| F10 | Creative Magic `IWLightningPortalFrameMixin` + `PortalFrameGuard`: no IW growth on frame obsidian | Creative Magic | SQ-PRT-01 |
+
+## 5. Other real FAILs from the same run (not in this plan; take in at a later intake)
 
 SQ-HH-228 (no manure via trough feed), -227 (no calf, uncertain), -1292 (Prickly too strong, uncertain), -1273 (young
 hemp gives straw), -262 (3-block drop no stomp); SQ-VTD8-03 (fermenting jar stops after one batch); SQ-CORN-02 (corncob 3

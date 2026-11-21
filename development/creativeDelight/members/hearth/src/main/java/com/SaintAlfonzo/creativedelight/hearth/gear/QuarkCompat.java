@@ -5,7 +5,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
+import com.SaintAlfonzo.creativedelight.hearth.item.WateringCanItem;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,6 +27,7 @@ public final class QuarkCompat {
     }
 
     public static void init() {
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, QuarkCompat::keepWateringCanClick);
         MinecraftForge.EVENT_BUS.addListener(QuarkCompat::onSimpleHarvest);
         MinecraftForge.EVENT_BUS.addListener(QuarkCompat::onPickup);
     }
@@ -32,6 +35,18 @@ public final class QuarkCompat {
     /** The pouch plants a 5x5 (up to 25) through {@link SeedContainerDispense}; it stays in the dispenser. */
     public static void registerDispenser() {
         SeedContainerDispense.register(SeedPouchModule.seed_pouch, QuarkCompat::plantFromPouch);
+    }
+
+    /**
+     * A watering can holding water soaks the soil under a ripe crop (HNH-33); without this Quark's Simple Harvest takes
+     * the right-click first and harvests instead (plan_scratch_findings_1121 F3). An empty can leaves the click to Quark.
+     */
+    private static void keepWateringCanClick(SimpleHarvestEvent event) {
+        if (event.player == null || event.hand == null || event.getInteractionSource() != SimpleHarvestEvent.Source.RIGHT_CLICK) return;
+        var held = event.player.getItemInHand(event.hand);
+        if (held.getItem() instanceof WateringCanItem can && can.getWater(held) > 0) {
+            event.setCanceled(true);
+        }
     }
 
     private static void onSimpleHarvest(SimpleHarvestEvent event) {

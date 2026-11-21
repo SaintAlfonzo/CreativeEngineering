@@ -54,6 +54,12 @@ Crying obsidian isn't obsidian, so the frame can't be lit again; it has to be re
 This covers every way vanilla lights a frame: flint and steel, fire charge, dispenser, lightning, fire spreading into
 the frame, lava lighting the frame interior.
 
+Lightning with Immersive Weathering: its `crying_obsidian_from_lightning` growth turns a struck obsidian into crying
+obsidian before the bolt's fire lands, which broke the frame and skipped the attempt (r1120nv SQ-PRT-01). Creative
+Magic's `IWLightningPortalFrameMixin` skips every Immersive Weathering growth on obsidian that borders a portal block or
+the inside of a whole, empty frame (`dimension/PortalFrameGuard`), so the bolt's fire reaches the frame and fails like
+any ordinary fire (owner ruling R3, plan_scratch_findings_1121 F10, 2026-11-21). Lone obsidian still weathers.
+
 ### 2.2 Dark Fire (works)
 
 | | |
@@ -181,3 +187,5 @@ Survival, Overworld, a fresh obsidian frame (4 × 5, corners optional) each time
 - 2026-11-04: Dark Fire, Flint and Terrasteel and `PortalFailureHandler` moved to Creative Magic ([creative_magic.md](creative_magic.md)); ids unchanged. Same behaviour.
 - 2026-11-07: Immersive Portals interplay fixed (section 3): ordinary fire fails again with IP loaded, Dark Fire builds the IP
   portal. Built and installed 16:44; scratch SQ-PRT-01, -02 queued.
+- 2026-11-21: lightning on a frame no longer turns it to crying obsidian first (Immersive Weathering growth skipped on
+  frame obsidian, section 2.1); SQ-PRT-01 rerun queued.

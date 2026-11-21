@@ -116,7 +116,7 @@ config conditions on every recipe, biome tags in place of `#minecraft:is_jungle`
 | Wandering Trader sells Pale and Dark seeds | only with section 3 |
 | Wild plants: shears or silk touch give the plant only; seeds otherwise, red pepper only when not sheared | skip (behavior almost the same) |
 | Wild patches read `rusticdelight:has_wild_*` biome tags [`#minecraft:is_jungle` / `is_forest`] | skip (pack overrides the features already, crops.md V7) |
-| Pancake stack block loot: a partial stack drops nothing, a full one drops itself | only with section 3 |
+| Pancake stack block loot: a full stack drops itself; a partly eaten one drops the pancakes left and the bowl (owner R1, 2026-11-21: the built loot stands; upstream drops nothing from a partial stack) | built with section 3 |
 
 ### 2.5 Tags, names, other
 
