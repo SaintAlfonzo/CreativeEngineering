@@ -74,8 +74,8 @@ public final class RpConfig {
 							"(or below this value when it is under 1.0).")
 					.defineInRange("bookScale", 1.4, 0.5, 3.0);
 			extraWidth = b.comment("Diet Log background stretched sideways by this many pixels: the book's center column is repeated,",
-							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width; 93 = 50% wider.")
-					.defineInRange("extraWidth", 93, 0, 400);
+							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width; 47 = 25% wider.")
+					.defineInRange("extraWidth", 47, 0, 400);
 			diversityIconFallback = b.comment("Diet Log Overview: the icon left of the diversity value is the eaten food (Food Dictionary) closest",
 							"in base diversity to the average of the meals in the diet window, never a drink. With nothing eaten it is one of",
 							"these items (loaded ones only).")
