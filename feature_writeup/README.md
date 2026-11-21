@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=b0c3dd4c57a5 -->
+<!-- generated:status_index begin readme sha1=0048fec0acbf -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-BRA r1119 2026-11-19: 2 PASS, 1 LOOK; SQ-PTH r1118 2026-11-18: 8 PASS, 17 BATCH-FAULT; CQ-PTH r1116 2026-11-16: 1 DEFERRED | creativecompat pending, creativedevtools installed 2026-11-20, creativedelight installed 2026-11-20 | DEPLOYED, in-game test pending |
@@ -120,7 +120,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Storage audit | [storage_audit.md](storage_audit.md) | none | BUILT | none | creativecompat pending, creativecommon pending | audit 2026-10-19, decisions open |
 | Backpack skins | [backpack_skins.md](backpack_skins.md) | `BP-` | BUILT | none | creativeequipment installed 2026-11-18 | DEPLOYED with 1.1.01, untested in game |
 | Lunchboxes | [lunchboxes.md](lunchboxes.md) | `LB-` | BUILT | SQ-LB r1118 2026-11-18: 1 PASS, 1 BATCH-FAULT; CQ-LB r1101 2026-11-01: 1 PASS | creativedelight installed 2026-11-20 |  |
-| Raspberry Pie | [raspberry_pie.md](raspberry_pie.md) | `RPI-` | BUILT | none | creativedelight installed 2026-11-20, creativebrewing pending, solraspberrypie installed 2026-11-20 | 12.6 diet books polish BUILT 2026-11-19 (plan_diet_books.md, look-check pending); 12.4 owner notes BUILT 2026-11-13 (unique-food gate, reset command, windowed bar with icons, double page, ... |
+| Raspberry Pie | [raspberry_pie.md](raspberry_pie.md) | `RPI-` | BUILT | none | creativedelight installed 2026-11-20, creativebrewing pending, solraspberrypie pending | 12.6 diet books polish BUILT 2026-11-19 (plan_diet_books.md, look-check pending); 12.4 owner notes BUILT 2026-11-13 (unique-food gate, reset command, windowed bar with icons, double page, ... |
 | Unused textures | [unused_textures.md](unused_textures.md) | none | reference | none |  | audit 2026-10-22, nothing added yet |
 | Crops | [crops.md](crops.md) | `CR-` | BUILT | SQ-CS r1118 2026-11-18: 5 PASS, 2 BATCH-FAULT, 1 INCONCLUSIVE | creativedelight installed 2026-11-20, creativecalendar pending | reference + tobacco parity, per-hoe areas and wild-crop placement DEPLOYED with 1.0.4 |
 | Crop yields | [crop_yields.md](crop_yields.md), [plan_crop_yields_wave2.md](plan_crop_yields_wave2.md) | `SY-` | BUILT | SQ-SY r1118 2026-11-18: 1 FAIL, 7 BATCH-FAULT; CQ-SY r1115 2026-11-15: 1 PASS | creativedelight installed 2026-11-20 | BUILT 2026-10-28, reworked 2026-11-03 (installed) |
