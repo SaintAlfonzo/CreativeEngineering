@@ -12,5 +12,8 @@ RHINO="$(ls mods/rhino-forge-*.jar | head -1)"; GSON="$L/com/google/code/gson/gs
 javac -proc:none -cp "$RHINO:$GSON" -d "$T" tools/nch_test/NchRun.java
 C=development/creativeCommon/src/main/resources/kubejs_startup/creativecommon
 OUT="$(java -cp "$T:$RHINO:$GSON" NchRun "$ROOT" tools/nch_test/prelude.js "$C/func/has.js" "$C/func/neoCraftHelper.js" tools/nch_test/blueprint_test.js)"
+# creativebrewing/publish #25: a tag in a result slot is refused (fresh scope, same stubs)
+OUT="$OUT
+$(java -cp "$T:$RHINO:$GSON" NchRun "$ROOT" tools/nch_test/prelude.js "$C/func/has.js" "$C/func/neoCraftHelper.js" tools/nch_test/result_tag_test.js)"
 echo "$OUT"
 case "$OUT" in *FAIL*) exit 1;; esac

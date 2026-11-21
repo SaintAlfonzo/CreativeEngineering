@@ -373,7 +373,11 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 
 - **F1. Entity ids are literals.** `entitytags.js` names the immune mobs as raw ids; there's no entity dictionary
   next to `item_dict.js` / `block_dict.js` / `fluid_dict.js`. Fine for one tag; worth an `entity_dict.js` if more entity
-  tags come.
+  tags come. Dict built 2026-11-20 (`mobs/tweaks #4`): Creative Common `_lib/entity_dict.js`, `global.entity` (`en`),
+  19 keys: the 11 bubble-column mobs (`squid`, `glow_squid`, `dolphin`, `turtle`, `orca`, `cachalot_whale`, `seal`,
+  `giant_squid`, `giant_squid_part`, `hammerhead_shark`, `frilled_shark`) and the 8 sample syringe mobs (`cow`,
+  `moobloom`, `pig`, `chicken`, `sheep`, `rabbit`, `cod`, `salmon`). `entitytags.js` reads it in G6 and Creative
+  Delight's `sample_syringe.js` in G2 of plan_owner_rows_1120.md; until then both still hold literals.
 - **F2. Bushier Flowers worldgen is turned off file by file.** Only the 5 modifier files the mod ships today are
   replaced. If an update adds or renames one, its bushes generate again. [flowers.md](flowers.md) lists Bushier
   Flowers as off.
@@ -606,6 +610,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   tags, Quark `Enable Extra Loot Table` off. Creative Common 1.1.04 rebuilt into `mods/`. MT-34 to MT-37, MT-47 to
   MT-50 untested, SQ-MBX queued.
 - 2026-11-16: iron golem farm cooldown (2.11), boat-only ice friction (2.12), Quark game nerfs on (2.13); Creative Compat built and installed, Quark config edited (plan_small_fixes_1116.md R1 to R3). MT-52 to MT-55; queue SQ-MT-01 to -03, CQ-MT-01. Not run.
+- 2026-11-20: entity dictionary `global.entity` (Creative Common `_lib/entity_dict.js`, `mobs/tweaks #4`, F1); consumers switch in G2 / G6 of plan_owner_rows_1120.md.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

@@ -353,9 +353,7 @@ StartupEvents.postInit(() => {
 		// are used: neither is a dict error (scratch r1106spf).
 		if (id.indexOf('*') >= 0 || !global.has(id)) continue;
 		if (id.startsWith('#')) {
-			// Tag-based block entries aren't validated yet — verify these manually.
-			// Forge block tag validation requires a TagKey<Block> lookup that hasn't
-			// been implemented/tested here; flagging rather than guessing at it.
+			// Tag entries are checked after the server starts (server script _lib/dict_tag_check.js, tooling/dictionaries #2).
 			tagEntries++;
 			continue;
 		}
@@ -363,7 +361,7 @@ StartupEvents.postInit(() => {
 			missing.push(key + ' -> ' + id);
 		}
 	}
-	if (tagEntries > 0) console.info('[block_dict] ' + tagEntries + ' tag entries not checked (tags load after startup)');
+	if (tagEntries > 0) console.info('[block_dict] ' + tagEntries + ' tag entries checked after server start (dict_tag_check)');
 	if (missing.length > 0) {
 		console.warn('[block_dict] Missing/invalid block IDs:\n' + missing.join('\n'));
 	}

@@ -27,6 +27,7 @@
 		'dumpcraftingaudit',
 		'dumpgear',
 		'dumpstacks',
+		'dumpnotab',       // items with no creative tab (tools/no_tab_report.py, jei/jei-coverage #29)
 		'dumpphysics',
 		'dumpcropgrowth',
 		'dumpfood',

@@ -2,8 +2,8 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=cf6ab2e7436e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 6, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=bf686a348e1e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 5, Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -12,8 +12,8 @@
 | `items/jars #3` | Planned | S C P | More foods in jars |
 | `items/jars #4` | Planned | C P | Soups and stews take 1 jar space |
 | `items/jars #5` | Planned | S C P | Pickled veg storage |
-| `items/jars #6` | Planned | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
 | `baking/baked-goods #11` | Testing | S+ C P | Mixed cookie jars |
+| `items/jars #6` | Testing | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
 | `items/jars #7` | Testing | S+ P | Create pump does not fill the Supplementaries jar |
 <!-- generated:status_index end open_work -->
 
@@ -124,7 +124,9 @@ Brief: [briefs/items_jars.md](briefs/items_jars.md). Nothing here is built.
   ones glint in the jar. Open: 1 of 12 or 5 of 60 once `#1` lands.
 - [TODO](todo/TODO.md) `items/jars #5`: storage for pickled veg: a crate or large jars. Open: recommended a crate.
 - [TODO](todo/TODO.md) `items/jars #6`: why hyperxp and toast look like a family: they are in `#supplementaries:cookies` but in no family; the Jar Storage
-  tab's last "one kind per jar" row cycles every such item. Reword that row.
+  tab's last "one kind per jar" row cycles every such item. Reword that row. Built 2026-11-20: the row's note now reads
+  "These don't mix: one kind per jar." (`tools/jei_world/tab_drops.py` `cookie_rows`, regenerated into Creative Common's
+  `jei_world/jar_storage/generated.json`). Test MJ-19, queue CQ-JC-03.
 
 ## 5. File map
 
@@ -182,6 +184,7 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 
 ## 8. History
 
+- 2026-11-20: Jar Storage lone-cookie row reworded ("These don't mix: one kind per jar.", was "Only one kind per jar."), `items/jars #6`.
 - 2026-10-24: planned from the scratchpad: capacity 60, new contents, more foods, soup space, pickle storage, the toast / hyperxp row (`items/jars #1` to `#6`). No code changed.
 - 2026-10-23: 8 more soup fluids (Veggies, Vintage) and 5 hand-written drink fluids; the generator keeps the
   hand-written ones (its delete pass would have removed `nut_milk.json`). Not run in game (VTD-53).
@@ -259,3 +262,5 @@ Tests (in game; server half in the scratch queue, SQ-JFP-):
   Swiftness; a jar filled with Swiftness by hand also takes the piped Swiftness.
 - [ ] **MJ-18 Refused:** jar holding cookies next to a pumping pipe -> nothing goes in; jar of soup -> a pump pulls
   nothing.
+- [ ] **MJ-19 Lone-cookie row wording (`items/jars #6`):** JEI, Jar Storage tab, the row of cookies in no family ->
+  the note reads "These don't mix: one kind per jar." Queue: CQ-JC-03.

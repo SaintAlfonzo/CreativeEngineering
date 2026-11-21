@@ -365,6 +365,15 @@
 			"apply": "report only: add the UNCOVERED entries it names to tools/jei_coverage.py"
 		},
 		{
+			"id": "no_tab_report",
+			"script": "tools/no_tab_report.py",
+			"groups": ["reports", "jei"],
+			"dumps": ["dumpnotab", "dumpcraftingaudit", "dumploot", "dumprecipes"],
+			"outputs": ["feature_writeup/jei_coverage.md"],
+			"warnExit": [1],
+			"apply": "report only: a hidden orphan with a source goes on [creative_menu] orphanTabItems or into KEEP_HIDDEN in the tool"
+		},
+		{
 			"id": "stack_size_rules",
 			"script": "tools/gen_stack_sizes.py",
 			"groups": ["pack", "stacks"],

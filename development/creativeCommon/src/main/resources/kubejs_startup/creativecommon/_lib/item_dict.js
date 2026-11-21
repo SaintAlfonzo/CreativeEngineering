@@ -13125,6 +13125,7 @@ i.elder_guardian_slab            = 'oceansdelight:elder_guardian_slab';
 i.elder_guardian_slice           = 'oceansdelight:elder_guardian_slice';
 i.fugu_roll                      = 'oceansdelight:fugu_roll';
 i.fugu_slice                     = 'oceansdelight:fugu_slice';
+i.guardian_shell                 = 'oceansdelight:guardian';  // shown as Guardian Shell (dishes/ocean #11)
 i.guardian_tail                  = 'oceansdelight:guardian_tail';
 i.honey_fried_kelp               = 'oceansdelight:honey_fried_kelp';
 i.seagrass_salad                 = 'oceansdelight:seagrass_salad';

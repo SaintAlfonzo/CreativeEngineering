@@ -511,7 +511,9 @@ global.NCH = {
 		}
 	},
 
-	_warnedFluidTags: {},
+	// tooling/dictionaries #2: fluid tags NCH was given, tag -> first context. Fluid tags are not bound while recipes
+	// load, so Creative Common's server script _lib/dict_tag_check.js checks these once the server has started.
+	_fluidTagsSeen: {},
 
 	_checkFluid(id, context) {
 		if (!id) {
@@ -521,10 +523,7 @@ global.NCH = {
 		if (id === 'minecraft:empty') global.NCH._absent(id, context)
 		if (global.NCH._isTag(id)) {
 		// once per tag: the potion bottling loop alone passes #forge:fluid/potion hundreds of times
-		if (!global.NCH._warnedFluidTags[id]) {
-			global.NCH._warnedFluidTags[id] = true
-			console.warn('[NCH] ' + context + ': fluid tag "' + id + '" is not validated (tag support not yet implemented)')
-		}
+		if (!global.NCH._fluidTagsSeen[id]) global.NCH._fluidTagsSeen[id] = String(context)
 		return true
 	}
 		if (!global.NCH._fluidExists(id)) {
@@ -604,6 +603,11 @@ global.NCH = {
 		var context = opts.context || 'unnamed NCH call'
 
 		var resolved = global.NCH._resolveIdCount(v)
+		// creativebrewing/publish #25: a result slot (allowTag false) given a bare tag string used to write
+		// {item:"#tag"}, which the game rejects at parse time. Refuse it here instead: the safety net at the end of
+		// this file skips the whole helper call and logs it. Item.of(tag) is fine (KubeJS resolves it to an item).
+		if (!allowTag && global.NCH._isTag(resolved.id))
+			throw new Error(context + ': tag "' + resolved.id + '" in a result slot; results must be one item (pass the item key, not the tag)')
 		global.NCH._checkItem(resolved.id, context)
 
 		var isTag = allowTag && global.NCH._isTag(resolved.id)
@@ -1867,6 +1871,21 @@ global.NCH = {
 		e.recipes.create.splashing(output,input).id(`${global.NCH.ns()}:createsplashing/${idSuffix}`)
 	},
 
+	// Create sandpaper polishing (create:sandpaper_polishing: hold sandpaper in the off hand and use it, or a Deployer
+	// holding sandpaper). One input, outputs with chances like splashing. recipes/metal #5:
+	//   R.createSandpaperPolishing(i.polished_iron_bars, i.iron_bars, e)
+	createSandpaperPolishing(output, input, e, idOverride) {
+		if (!global.has('create', 'kubejs_create')) return global.NCH._skip('create', 'kubejs_create')
+		if (!e) throw new Error('createSandpaperPolishing called without event object!')
+		var idSuffix = idOverride ?? global.NCH.toId(output, input, 'sandpaperpolishing')
+		var ctx = 'createSandpaperPolishing ' + idSuffix
+
+		global.NCH._validateAny(output, ctx + ' output')
+		global.NCH._validateAny(input, ctx + ' input')
+
+		e.recipes.create.sandpaper_polishing(output, input).id(`${global.NCH.ns()}:createsandpaperpolishing/${idSuffix}`)
+	},
+
 	dragonBreathing(output, input, e, idOverride) {
 		if (!e) throw new Error('dragonBreathing called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "dragonbreathing")
@@ -2038,18 +2057,20 @@ global.NCH = {
 		}).id(`${global.NCH.ns()}:elytraduplication/${idSuffix}`)
 	},
 
-	echoAssembly(out, base, key, e, potionA, potionB) {
+	// gear/tuning #12: the amounts are arguments so Creative Equipment's config can drive them. Each one left undefined
+	// keeps the old value: lavaMb 250, potionAMb 250, potionBMb 250 (mB), loops 1.
+	echoAssembly(out, base, key, e, potionA, potionB, lavaMb, potionAMb, potionBMb, loops) {
 		if (!global.has('create', 'vintageimprovements')) return global.NCH._skip('create', 'vintageimprovements')
 		if (!e) throw new Error('echoAssembly called without event object!')
 		var inc = global.NCH.incomplete(key)
 		global.NCH.createSequencedAssembly(Item.of(out, 1), base, [
-			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.lava, 250)]),
+			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.lava, global.NCH._or(lavaMb, 250))]),
 			e.recipes.create.deploying(inc, [inc, global.item.echo_ingot]),
 			e.recipes.create.deploying(inc, [inc, global.item.amethyst_dust]),
 			e.custom({ type: 'vintageimprovements:vibrating', ingredients: [{ item: inc }], results: [{ item: inc }] }),
-			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, 250, '{Potion:"' + potionA + '"}')]),
-			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, 250, '{Potion:"' + potionB + '"}')])
-		], [key], e, key + '_sequenced_assembly', 1)
+			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, global.NCH._or(potionAMb, 250), '{Potion:"' + potionA + '"}')]),
+			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, global.NCH._or(potionBMb, 250), '{Potion:"' + potionB + '"}')])
+		], [key], e, key + '_sequenced_assembly', global.NCH._or(loops, 1))
 	},
 
 	// mb: the last fill (potion); reachMb: the first fill (Long Reach), mb when not given. CommonConfig
@@ -2067,12 +2088,16 @@ global.NCH = {
 		], [key], e, key + '_sequenced_assembly', loops)
 	},
 
-	dragonAssembly(out, base, key, e, potion, mb, loops) {
+	// gear/tuning #12: mb is the last fill (potion), breathMb the first (Dragon's Breath). Undefined keeps the old
+	// value: mb 250, loops 1, breathMb 250.
+	dragonAssembly(out, base, key, e, potion, mb, loops, breathMb) {
 		if (!global.has('create', 'vintageimprovements')) return global.NCH._skip('create', 'vintageimprovements')
 		if (!e) throw new Error('dragonAssembly called without event object!')
 		var inc = global.NCH.incomplete(key)
+		mb = global.NCH._or(mb, 250)
+		loops = global.NCH._or(loops, 1)
 		global.NCH.createSequencedAssembly(Item.of(out, 1), base, [
-			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.dragon_breath, 250)]),
+			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.dragon_breath, global.NCH._or(breathMb, 250))]),
 			e.recipes.create.deploying(inc, [inc, global.item.dragon_scale]),
 			e.custom({ type: 'vintageimprovements:laser_cutting', ingredients: [{ item: inc }], results: [{ item: inc }] }),
 			e.recipes.create.filling(inc, [inc, Fluid.of(global.fluid.create_potion, mb, '{Bottle:"LINGERING",Potion:"' + potion + '"}')])

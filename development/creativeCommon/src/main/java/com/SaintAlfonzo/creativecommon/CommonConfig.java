@@ -282,6 +282,7 @@ public final class CommonConfig {
 	/** {@code mixin/CreativeMenuDisableMixin}: creative players get the survival inventory (client side). */
 	public static final class CreativeMenu {
 		public final ForgeConfigSpec.BooleanValue disabled;
+		public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> orphanTabItems;
 
 		private CreativeMenu(ForgeConfigSpec.Builder b) {
 			b.comment("Creative inventory (client side).").push("creative_menu");
@@ -291,6 +292,13 @@ public final class CommonConfig {
 					"mods); JEI's cheat mode covers item browsing. Default false (vanilla); the pack sets true.",
 					"Takes effect the next time the inventory opens."
 			).define("disabled", false);
+			orphanTabItems = b.comment(
+					"Items that have no creative tab (so creative mode, its search and JEI never list them) but should be",
+					"listed. Each goes into the tab most other items of its mod use (vanilla Food or Miscellaneous when the",
+					"mod has none). Only items listed here change; an orphan left out stays hidden on purpose. The default",
+					"is the Abnormals Delight compat foods that have pack recipes while their parent mods are absent.",
+					"/dumpnotab lists every orphan with its recipe and loot sources. Takes effect on the next game start."
+			).defineList("orphanTabItems", com.SaintAlfonzo.creativecommon.util.OrphanTabs.DEFAULTS, o -> o instanceof String);
 			b.pop();
 		}
 	}
