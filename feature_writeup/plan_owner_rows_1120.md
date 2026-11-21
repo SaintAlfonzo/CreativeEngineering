@@ -42,7 +42,7 @@ AskUserQuestion rounds the same day. Status lives in the TODO rows; this plan ho
 
 | # | Row | Owner's words (2026-11-20) | Class | Premise check (2026-11-20) |
 |---|---|---|---|---|
-| 1 | `conventions #39` | (row as written) | clear | Holds. `CompatConfig.java:112` "grass colour", `:1426` "in its colour". "neighbours" (`:703`, `:727`, `:865`, `:868`, `:902`) is a toml key, a Java field and `PassTier.Neighbours`. |
+| 1 | `conventions #39` | (row as written) | clear | Holds. `CompatConfig.java:112` and `:1426` spell color the British way. "neighbours" (`:703`, `:727`, `:865`, `:868`, `:902`) is a toml key, a Java field and `PassTier.Neighbours`. |
 | 2 | `engineering/sawmill-and-components #6` | (row) | clear | Holds. The lines moved to `kubejs/data/creativeengineering/kubejs/engineering/components.js:20` (`Light?`) and `:24` (`Dense?`). |
 | 3 | `creativebrewing/publish #25` | (row) | clear | Holds, plus a second instance. `kubejs/data/creativedelight/kubejs/create/recipes.js:52` and `:54` both take `i.dough` (`#forge:dough/wheat`, `item_dict.js:2129`) as a result. The concrete item is `i.in_dough` (`create:dough`, `item_dict.js:2013`). `_itemJson` (NCH `:603-611`) writes a tag as `{item:"#..."}` even with allowTag false. |
 | 4 | `items/jars #6` | (row) | clear | Holds. The text "Only one kind per jar." comes from `tools/jei_world/tab_drops.py:278` (`cookie_rows`), which writes it to `kubejs/assets/creativecommon/jei_world/jar_storage/generated.json`. It is not a lang key. |
@@ -186,7 +186,7 @@ Mark `largecontent/mod-additions #2` as skipped (R13).
 - Player changelog bullets for: trader weight, enchanted books, Lexica, polished iron bars, rotten foods and Green Eggs
   and Ham, frying eggs, gummies, Guardian Shell and soup, compost, baked/misc (if visible in JEI groups), bone broth
   fluid, Botany Pots crops and dimension rule, the 5 newly shown JEI items, and End gear config. No bullet for
-  conventions #39, the component comments, #25 (the full pack never hit it), the licence rewrite, entity dict, dict
+  conventions #39, the component comments, #25 (the full pack never hit it), the gossypium loot rewrite, entity dict, dict
   check, fruit audit, harvest audit tool, or pack notes.
 - Writeups touched: hostile_delight.md 5.1, ocean_delight.md 9, composting.md, food_families.md, oven.md (gingerbread),
   wandering_trader.md, loot.md 10, jei_coverage.md, crops.md, fruit.md, mob_block_tweaks.md, pack_tooling.md,
