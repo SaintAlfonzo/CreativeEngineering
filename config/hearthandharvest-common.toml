@@ -11,6 +11,9 @@
 	litterMaxExtra = 2
 	#Pigs bred with a truffle roll their extra babies twice and keep the higher roll (on top of Fungi Delight's own extra piglets).
 	truffleLitterBoost = true
+	#Extra babies added to that roll for pigs bred with a truffle.
+	#Range: 0 ~ 4
+	truffleLitterBonus = 1
 	#Animals drop manure 30 to 60 s after being fed or, for sheep, after grazing.
 	manureFromFedAnimals = true
 

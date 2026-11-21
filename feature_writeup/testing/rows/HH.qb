@@ -2354,16 +2354,16 @@ sleep 3
 > zhh1 litter 3192 -60 3048 minecraft:rabbit 300
 expect litter minecraft:rabbit x300: babies \d+, extra (25[89]|2[6-9]\d|3[0-3]\d|34[0-2])$
 
-## SQ-HH-1232 | truffle pig litters: 300 pairs give 564 to 663 extra babies
+## SQ-HH-1232 | truffle pig litters: 300 pairs give 864 to 963 extra babies
 @group A
 @commands `forceload add 3240 3048`; (wait 3 s); `zhh1 litter 3240 -60 3048 minecraft:pig 300 truffle`
-@pass log matches `litter minecraft:pig x300 truffle: babies \d+, extra (56[4-9]\|5[7-9]\d\|6[0-5]\d\|66[0-3])$`
-@fails Truffle pigs: mean 13/9 (H&H `truffleLitterBoost`: higher of two 0 to 2 rolls) plus 0.6 (Fungi Delight: 40 % one, 10 % two) per pair; 2.044 x 300 = 613, 3 sd 564 to 663. `FD_TruffleBred` read at HIGH in `AnimalEvents.onBabySpawn`; `fungi/ModEntitiesEvents.onBabySpawn`
+@pass log matches `litter minecraft:pig x300 truffle: babies \d+, extra (86[4-9]\|8[7-9]\d\|9[0-5]\d\|96[0-3])$`
+@fails Truffle pigs: mean 22/9 (H&H `truffleLitterBoost`: higher of two 0 to 2 rolls, `truffleLitterBonus` +1) plus 0.6 (Fungi Delight: 40 % one, 10 % two) per pair; 3.044 x 300 = 913, 3 sd 864 to 963. `FD_TruffleBred` read at HIGH in `AnimalEvents.onBabySpawn`; `fungi/ModEntitiesEvents.onBabySpawn`
 @from batches/r1108hh/t12_a.qb
 > forceload add 3240 3048
 sleep 3
 > zhh1 litter 3240 -60 3048 minecraft:pig 300 truffle
-expect litter minecraft:pig x300 truffle: babies \d+, extra (56[4-9]|5[7-9]\d|6[0-5]\d|66[0-3])$
+expect litter minecraft:pig x300 truffle: babies \d+, extra (86[4-9]|8[7-9]\d|9[0-5]\d|96[0-3])$
 
 ## SQ-HH-1233 | log matches `litter minecraft:sheep x100: babies 100, extra 0$`
 @group A

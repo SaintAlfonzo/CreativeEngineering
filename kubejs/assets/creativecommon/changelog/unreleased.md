@@ -19,7 +19,7 @@
 - **Changed:** Corn Mazes generate twice as often.
 - **Changed:** Mums go in flower pots, planter boxes and flower boxes, and spread with bone meal like other small flowers.
 - **Changed:** Breeding pigs or rabbits gives 1 to 3 babies, 2 on average [1, with one extra baby in 1 of 3 breedings]; Quark's Pig Litters is off [pigs got both litters].
-- **Changed:** Pigs bred with a truffle roll their litter twice and keep the larger one [one extra baby in 2 of 3 breedings].
+- **Changed:** Pigs bred with a truffle roll their litter twice, keep the larger one and get one more baby [one extra baby in 2 of 3 breedings].
 - **Changed:** Biscuits and Gravy, Macaroni and Cheese and Glazed Carrots give Comfort for 4 minutes [no Comfort].
 - **Fixed:** Goat Milk Bottles and Chocolate Milk Bottles showed no tooltip.
 - **Fixed:** Thrown cleavers and pitchforks had no names.

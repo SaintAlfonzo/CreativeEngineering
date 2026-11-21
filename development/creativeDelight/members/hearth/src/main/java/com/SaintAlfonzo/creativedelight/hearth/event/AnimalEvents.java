@@ -104,6 +104,7 @@ public final class AnimalEvents {
         int max = HHConfig.LITTER_MAX_EXTRA.get();
         int extra = a.getRandom().nextInt(max + 1);
         if (truffle && HHConfig.TRUFFLE_LITTER_BOOST.get()) extra = Math.max(extra, a.getRandom().nextInt(max + 1));
+        if (truffle) extra += HHConfig.TRUFFLE_LITTER_BONUS.get();
         for (int i = 0; i < extra; i++) {
             AgeableMob baby = ((Animal) a).getBreedOffspring(level, (AgeableMob) b);
             if (baby == null) return;

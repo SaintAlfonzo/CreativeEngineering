@@ -50,7 +50,7 @@ TODO rows: see the Rows column; status lives in the rows.
 | R6 | F1 mixin side | clear | Move the client-only BackpackSkin mixins to the `"client"` list; keep in common only what touches server classes | 2026-11-21 | agent default, unconfirmed |
 | R7 | F5 H&H Nourishment | open | Pack rule stands for Hearth and Harvest foods; rows rewritten to the rule's result | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R8 | F5 drift of 29 non-H&H foods on rerun | open | Hold them back: jellies never give Comfort; every existing food's current treatment is pinned (comfort_nourishment_pins.csv) | 2026-11-21 | AskUserQuestion 2026-11-21 |
-| R9 | F6 rabbits | open | Rabbits get the same litters as pigs (1 to 3, average 2); truffle pigs roll twice, keep the higher | 2026-11-21 | AskUserQuestion 2026-11-21 |
+| R9 | F6 rabbits | open | Rabbits get the same litters as pigs (1 to 3, average 2); truffle pigs roll twice, keep the higher, +1 (owner chat 2026-11-21) | 2026-11-21 | AskUserQuestion 2026-11-21, chat |
 | R10 | F4 mash on hops | clear | On a hops vine Organic Mash grows one age like the other fertilizers (hops rule, SQ-HOP-12, changelog); 3 applications elsewhere (R5) | 2026-11-21 | agent default, unconfirmed |
 
 ## 3. Work, in order

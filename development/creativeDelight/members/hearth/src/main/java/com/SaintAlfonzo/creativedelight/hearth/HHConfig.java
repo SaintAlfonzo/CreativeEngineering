@@ -10,6 +10,7 @@ public final class HHConfig {
     public static final ForgeConfigSpec.BooleanValue LITTERS;
     public static final ForgeConfigSpec.IntValue LITTER_MAX_EXTRA;
     public static final ForgeConfigSpec.BooleanValue TRUFFLE_LITTER_BOOST;
+    public static final ForgeConfigSpec.IntValue TRUFFLE_LITTER_BONUS;
     public static final ForgeConfigSpec.BooleanValue MANURE_FROM_FED_ANIMALS;
     public static final ForgeConfigSpec.DoubleValue TAPPER_CHANCE;
     public static final ForgeConfigSpec.DoubleValue CORN_HUSK_HARVEST_CHANCE;
@@ -33,6 +34,8 @@ public final class HHConfig {
                 .defineInRange("litterMaxExtra", 2, 0, 4);
         TRUFFLE_LITTER_BOOST = b.comment("Pigs bred with a truffle roll their extra babies twice and keep the higher roll (on top of Fungi Delight's own extra piglets).")
                 .define("truffleLitterBoost", true);
+        TRUFFLE_LITTER_BONUS = b.comment("Extra babies added to that roll for pigs bred with a truffle.")
+                .defineInRange("truffleLitterBonus", 1, 0, 4);
         MANURE_FROM_FED_ANIMALS = b.comment("Animals drop manure 30 to 60 s after being fed or, for sheep, after grazing.").define("manureFromFedAnimals", true);
         b.pop();
         b.push("farming");
