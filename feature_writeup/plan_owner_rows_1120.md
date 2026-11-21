@@ -1,25 +1,22 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=5cc48ef0e5ff -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 26 open TODO rows (Planned 9, In Progress 2, Testing 15), 2 Complete.
+<!-- generated:status_index begin open_work sha1=c6806b9915c6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 6, In Progress 1, Testing 18), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `conventions #39` | Planned | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
-| `engineering/sawmill-and-components #6` | Planned | none | Tier names in comments |
 | `farming/crops #3` | Planned | S P | Harvest and replant audit for new crops |
 | `farming/crops #36` | Planned | S P | Every seed in the Botany Pots |
 | `gear/tuning #12` | Planned | S | End gear recipes configurable |
 | `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
 | `mobs/tweaks #4` | Planned | S | Entity dictionary |
-| `recipes/metal #5` | Planned | S P | Polished iron bars stonecutting removed |
-| `recipes/wood #1` | Planned | S P | Twisted wood duplicate |
 | `baking/baked-goods #39` | In Progress | S | Baked families: croissant to misc baked, plain donut beside the cider donut |
-| `farming/composting #5` | In Progress | S P | Expand organic compost |
 | `creativebrewing/publish #25` | Testing | S | Delight's IE Bottling dough recipe writes a tag as its result |
 | `dishes/ingredients #36` | Testing | S C P | Bone broth as a fluid |
 | `dishes/ocean #11` | Testing | S C P | Guardian Shell: guardian drop and cutting |
 | `dishes/ocean #12` | Testing | S P | Guardian Soup recipe |
+| `farming/composting #5` | Testing | S P | Expand organic compost |
 | `farming/composting #6` | Testing | S P | Merge the organic mash compost recipe |
 | `items/jars #6` | Testing | C | Reword the Jar Storage "one kind per jar" JEI row (hyperxp and toast) |
 | `jei/jei-coverage #29` | Testing | C | Maple bacon and cookies missing from JEI |
@@ -29,6 +26,8 @@
 | `licence/cd #4` | Testing | S | Rewrite the Miner's Delight potted gossypium loot table |
 | `loot/trader #2` | Testing | S P | Fewer Wares trades |
 | `potions/enchanting #1` | Testing | S P | Enchanted books out of villager trades |
+| `recipes/metal #5` | Testing | S P | Polished iron bars stonecutting removed |
+| `recipes/wood #1` | Testing | S P | Twisted wood duplicate |
 | `rice-egg-and-sushi #1` | Testing | S P | Bird eggs fry into the fried egg; parrot, turtle and reptile eggs do not |
 | `tooling/dictionaries #2` | Testing | S | Block, fluid and NCH fluid tags not validated |
 <!-- generated:status_index end open_work -->
