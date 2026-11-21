@@ -353,9 +353,9 @@
   "bread": [],
   "bread/loaf": [
    "corn_delight:cornbread",
+   "create_confectionery:gingerbread",
    "delightful:cantaloupe_bread",
    "farmersrespite:nether_wart_sourdough",
-   "hearthandharvest:croissant",
    "minecraft:bread",
    "neapolitan:banana_bread",
    "pneumaticcraft:sourdough_bread",
@@ -368,6 +368,19 @@
   ],
   "bread/flat": [
    "corn_delight:tortilla"
+  ],
+  "baked": [],
+  "baked/misc": [
+   "buzzier_bees:honey_bread",
+   "endersdelight:strange_eclair",
+   "hearthandharvest:cider_donut",
+   "hearthandharvest:croissant",
+   "hearthandharvest:raspberry_scone",
+   "hearthandharvest:waffle",
+   "hostiledelight:glowbread",
+   "neapolitan:adzuki_bun",
+   "neapolitan:strawberry_scones",
+   "upgrade_aquatic:mulberry_bread"
   ],
   "ingredient": [],
   "ingredient/dough": [
@@ -677,7 +690,6 @@
    "neapolitan:vanilla_pudding"
   ],
   "dessert/pancake": [
-   "hearthandharvest:waffle",
    "rusticdelight:cherry_blossom_pancake",
    "rusticdelight:chocolate_pancake",
    "rusticdelight:coffee_pancake",
@@ -687,11 +699,7 @@
    "veggiesdelight:sweet_potato_pancakes"
   ],
   "dessert/pastry": [
-   "creativedelight:canned_adzuki_bun",
-   "endersdelight:strange_eclair",
-   "hearthandharvest:raspberry_scone",
-   "neapolitan:adzuki_bun",
-   "neapolitan:strawberry_scones"
+   "creativedelight:canned_adzuki_bun"
   ],
   "dessert/waffle": [
    "create_factory:caramel_waffle",
@@ -712,11 +720,7 @@
    "create_factory:white_chocolate_roll"
   ],
   "dessert/other": [
-   "botania:mana_cookie",
-   "buzzier_bees:honey_bread",
-   "create_confectionery:gingerbread",
-   "hostiledelight:glowbread",
-   "upgrade_aquatic:mulberry_bread"
+   "botania:mana_cookie"
   ],
   "candy": [],
   "candy/bar": [
@@ -755,7 +759,6 @@
    "fruitsdelight:hawberry_sheet",
    "fruitsdelight:hawberry_stick",
    "hearthandharvest:candy_corn",
-   "hearthandharvest:cider_donut",
    "hearthandharvest:trail_mix",
    "hostiledelight:candiedslime",
    "hostiledelight:glowwaxshuffle",
