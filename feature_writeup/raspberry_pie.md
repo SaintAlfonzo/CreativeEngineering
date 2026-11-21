@@ -16,7 +16,7 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=1688e849f840 -->
+<!-- generated:status_index begin open_work sha1=801c633beb5d -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 30 open TODO rows (Planned 2, Testing 28), 3 Complete.
 
 | Id | Status | Tests | Change |
@@ -30,14 +30,14 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food-tuning #6` | Testing | C | Diet Log: book background stretched by repeating its center strip, configurable width |
 | `food-tuning #7` | Testing | C | Diet Log: mouse wheel flips pages |
 | `food-tuning #8` | Testing | C | Diet Ladder bar: even spacing, last achieved milestone + next 4 |
-| `food-tuning #9` | Testing | C | Diet Log icons: locked unlocks alternate lock/effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect |
+| `food-tuning #9` | Testing | C | Diet Log icons: locked unlocks and unreached permanent buffs alternate their icon and the effect; unlocked effect gray with colored frame; slot rungs metal frame, no effect; active buffs green in Milestones |
 | `food-tuning #10` | Testing | C | Gate text: N more unique food(s) to activate diet |
 | `food-tuning #11` | Testing | C | Effect screen: smaller Change/Drop label text (buttons unchanged); hover shows how many foods age out |
 | `food-tuning #13` | Testing | C | Food Dictionary: uneaten sort configurable (mod+name, name, easiest, hardest) |
 | `food-tuning #14` | Testing | S C | Food Dictionary: eaten list 3-state sort button (newest unlock, latest eaten, uneaten order) |
 | `food-tuning #20` | Testing | S C | Diet window back to 32 meals (endDecay 30 -> 32); meals grid 8 x 4 |
 | `food-tuning #21` | Testing | C | Diet Log meals grid: label centered; hover shows food total only when it differs, before the struck-through meal value |
-| `food-tuning #22` | Testing | C | Diet Log 50% wider by default; first-page diversity and gate text scaled to fit on one line each |
+| `food-tuning #22` | Testing | C | Diet Log 25% wider by default (was 50%); Ladder and Milestones content 17.5% in from each side; meals grid icons 20% larger; first-page diversity and gate text scaled to fit on one line each |
 | `food-tuning #23` | Testing | C | Diet Log freezes briefly on every open: measure and cache |
 | `food-tuning #24` | Testing | C | Liquid Diet Log pauses the game in single player |
 | `food-tuning #25` | Testing | S P | Effect unlocks (and their messages) wait until the unique-food gate first opens |
@@ -286,6 +286,9 @@ Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
   `[dietLog] extraWidth`; the mouse wheel flips pages.
 - **Since 2026-11-20** (12.7): the book 50% wider by default, the first page's diversity and gate lines fitted, an
   8 x 4 grid of the last 32 meals, a new diversity icon rule, two-decimal diversity everywhere, one timing line per open.
+  Later the same day (owner notes): the book 25% wider instead of 50%, Ladder and Milestones content 17.5% in from
+  each side, meals grid icons 20% larger, active buffs green in the Milestones list, permanent buffs alternate their
+  icon with the effect until reached, meal hover drawn as plain text (fixes the missing hover).
 
 ## 7. Liquid Diet Log
 
@@ -828,20 +831,22 @@ owner's look-check; CQ-RPI-53 supersedes CQ-RPI-46).
   the ladder's top milestone; edible items ranked by Apple Pie complexity, band = the share +-0.05 quantiles; one
   Carrot-eaten food of that band, picked by the diversity's tenth (stable). None: client config `[dietLog]
   diversityIcons` ("minDiversity=item,item,..."; agent defaults, unconfirmed).
-- **Milestones and ladder** (rulings 6, 11): a reached one-time unlock is struck through in the Milestones list, black
+- **Milestones and ladder** (rulings 6, 11): active buffs (reached rungs other than one-time unlocks) have green row
+  text; a reached one-time unlock is struck through in the Milestones list, black
   while the current diversity is at or above it, gray below; the Diet Ladder bar leaves reached unlocks out (key
   unchanged).
 - **Diversity printed rounded down** (two decimals everywhere since 12.7) to one decimal by Raspberry Pie (Diet Ladder page, effect screen, confirm
   panel); Apple Pie's own diversity page keeps its two decimals.
 - **Page layout:** client config `[dietLog.pages.diversity|meals|ladder|milestones]` `x`, `y`, `scale`, replacing
   `contentScale`. Defaults: diversity unscaled; meals 0.85; ladder and milestones 0.85, one line (10 px) lower.
-- **Wider book:** `[dietLog] extraWidth` (default 0; 93 = 50% since 12.7): the background's center column is repeated, the pages widen,
+- **Wider book:** `[dietLog] extraWidth` (default 0; 93 = 50% in 12.7, 47 = 25% since 2026-11-20): the background's center column is repeated, the pages widen,
   the page arrows move out by half; the fit rule includes it.
 - **Mouse wheel** flips one page per notch (Diet Log and Food Dictionary).
 - **Ladder bar:** five evenly spaced milestone values: the last reached and the next four (the last five near the
   top), or a 0 origin and the first five; fill and max mark proportional between neighbors; every point labeled.
   `progressAhead` removed.
-- **Icons:** a locked one-time unlock alternates the lock item and the effect sprite each second (gray frame); a
+- **Icons:** a locked one-time unlock alternates the lock item and the effect sprite each second (gray frame), and so
+  does a permanent buff not reached yet (diamond shard and effect, grayed); a
   reached one shows the effect sprite grayed in a purple frame whatever the current diversity. Slot rungs show the
   metal frame item in the slot color (grayed when the slot is not active), hover "Effect Slot N" with no effect;
   effects show in slots only on the effect screen and the inventory widget (reverses the 12.5 icon ruling). The key
@@ -857,11 +862,14 @@ Plan and rulings: [plan_diet_books_r2.md](plan_diet_books_r2.md) (intake of the 
 `food-tuning #20` to `#29`, `tooltips #19`, `#20`, `interface #24`. Queue rows follow the owner's look-check.
 
 - **Window back to 32 meals:** Apple Pie `endDecay` 32 (pack `defaultconfigs/`, `configs_edited/`, the three local
-  worlds); the meals grid is 8 x 4 ("Last 32 Meals"), 16 px cells, the meals page scale shrinks it if needed.
+  worlds); the meals grid is 8 x 4 ("Last 32 Meals"), 18 px icons on a 19 px step (20% up from 15 / 16), the meals page scale shrinks it if needed.
 - **Meals grid:** title (and "No meals yet") centered over the grid. Hover: "N. Name"; "Food total: X" only when it
-  differs from this meal (compared as printed); "This meal: Y", struck through when the total line is there.
-- **Width and first page:** `[dietLog] extraWidth` default 93 (half of Apple Pie's 186 px book; the pack's client config
-  set to 93, was 40). "Current Food Diversity" and the gate lines ("N more unique foods" / "to activate diet") are
+  differs from this meal (compared as printed); "This meal: Y", struck through when the total line is there. Drawn
+  as a plain text tooltip (no item stack): with the stack it went through the item tooltip handlers (Legendary
+  Tooltips, AppleSkin, Raspberry Pie's food rows) and was not drawn at all on the Overview page.
+- **Width and first page:** `[dietLog] extraWidth` default 47 (a quarter of Apple Pie's 186 px book; the pack's client
+  config set to 47, was 93, before that 40). Ladder and Milestones content (titles, bar, key, rows) keeps 17.5% of the
+  page width free on each side (`DietLogPages.SIDE_INSET`), so it stays off the book's edges. "Current Food Diversity" and the gate lines ("N more unique foods" / "to activate diet") are
   swapped for `FitLabel`s after Apple Pie builds the page: one common text scale, the largest up to 0.85 at which every
   one fits the page width less 20 px a side (divided by the diversity page's own scale); each stays on its own line.
 - **Diversity printed** with two decimals, rounded down (`Icons.diversity`, epsilon 1e-6 so 1.40 stays 1.40): Diet

@@ -59,6 +59,17 @@ public final class DietLogPages {
 	private static final int MEAL_COLS = 8;
 	/** Apple Pie's book page size, and how far the Diet Bonuses button reaches below the screen center. */
 	public static final int BOOK_W = 186, BOOK_H = 192, BUTTON_BOTTOM = 118;
+	/** Share of the page width kept free of Ladder and Milestones content on each side. */
+	private static final float SIDE_INSET = 0.175F;
+
+	/** Left and right content bounds of a Ladder or Milestones page: the frame less {@link #SIDE_INSET} a side. */
+	static int left(Rectangle frame) {
+		return frame.x + Math.round(frame.width * SIDE_INSET);
+	}
+
+	static int right(Rectangle frame) {
+		return frame.x + frame.width - Math.round(frame.width * SIDE_INSET);
+	}
 
 	/**
 	 * The scale the book is drawn at (G5b): the configured {@code bookScale}, shrunk to fit the window with a 4 px
@@ -245,7 +256,8 @@ public final class DietLogPages {
 	 * The rung's icon at {@code (x, y)}, {@link #ICON} pixels, on the bar and the Milestones list (plan_diet_books.md
 	 * 1.8). A slot rung is the slot item; a locked one-time unlock alternates the lock item and the effect sprite each
 	 * second in a gray frame; an unlocked one shows the effect sprite grayed in the unlock color's frame, whatever the
-	 * current diversity. Every other rung: kind-colored frame, grayed when not reached.
+	 * current diversity. A permanent buff not reached alternates the same way (its diamond shard and the effect).
+	 * Every other rung: kind-colored frame, grayed when not reached.
 	 */
 	static void drawIcon(PoseStack pose, Rung r, int x, int y, boolean got) {
 		if (r.kind == Rung.Kind.UNLOCK && effectLoaded(r.id)) {
@@ -257,6 +269,13 @@ public final class DietLogPages {
 			}
 			if ((System.currentTimeMillis() / ALTERNATE_MS) % 2 == 1) Icons.effect(pose, r.id, x, y, ICON);
 			else kindIcon(pose, RpConfig.CLIENT.unlockIcon.get(), r, x, y);
+			Icons.frame(pose, x, y, ICON, GREY);
+			Icons.dim(pose, x, y, ICON);
+			return;
+		}
+		if (r.kind == Rung.Kind.FLAT && !got && effectLoaded(r.id)) {
+			if ((System.currentTimeMillis() / ALTERNATE_MS) % 2 == 1) Icons.effect(pose, r.id, x, y, ICON);
+			else kindIcon(pose, RpConfig.CLIENT.flatIcon.get(), r, x, y);
 			Icons.frame(pose, x, y, ICON, GREY);
 			Icons.dim(pose, x, y, ICON);
 			return;
@@ -377,7 +396,7 @@ public final class DietLogPages {
 			var s = ClientState.state;
 			List<Rung> bar = barRungs(l);
 			window = Window.of(bar, s.diversity);
-			int x0 = frame.x + 10, x1 = frame.x + frame.width - 10;
+			int x0 = left(frame) + 4, x1 = right(frame) - 10;
 			int barY = frame.y + BAR_DY;
 			Map<Integer, Integer> stack = new HashMap<>();
 			for (Rung r : bar) {
@@ -392,7 +411,7 @@ public final class DietLogPages {
 			}
 			int ly = frame.y + LEGEND_DY;
 			for (int i = 0; i < LEGEND_NAMES.length; i++) {
-				children.add(new Hover(layout.mapped(frame, frame.x + 8, ly + i * 11, ICON, ICON),
+				children.add(new Hover(layout.mapped(frame, left(frame) + 2, ly + i * 11, ICON, ICON),
 						Component.translatable("solraspberrypie.dietlog.legend." + LEGEND_NAMES[i]).getString()));
 			}
 		}
@@ -401,11 +420,12 @@ public final class DietLogPages {
 		protected void render(PoseStack pose) {
 			layout.begin(frame);
 			var s = ClientState.state;
-			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.ladder"), frame.x + 6, frame.y + 4, 0x000000);
-			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.now", Icons.diversity(s.diversity)), frame.x + 6, frame.y + 16, 0x333333);
-			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.max", Icons.diversity(s.maxDiversity)), frame.x + 6, frame.y + 26, 0x333333);
+			int tx = left(frame);
+			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.ladder"), tx, frame.y + 4, 0x000000);
+			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.now", Icons.diversity(s.diversity)), tx, frame.y + 16, 0x333333);
+			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.max", Icons.diversity(s.maxDiversity)), tx, frame.y + 26, 0x333333);
 
-			int x0 = frame.x + 10, x1 = frame.x + frame.width - 10, barY = frame.y + BAR_DY;
+			int x0 = tx + 4, x1 = right(frame) - 10, barY = frame.y + BAR_DY;
 			GuiComponent.fill(pose, x0, barY, x1, barY + 4, 0xFF8A8A8A);
 			int filled = window.x(s.diversity, x0, x1);
 			GuiComponent.fill(pose, x0, barY, filled, barY + 4, 0xFF3FA34D);
@@ -432,12 +452,12 @@ public final class DietLogPages {
 
 			int ly = frame.y + LEGEND_DY;
 			for (int i = 0; i < LEGEND_NAMES.length; i++) {
-				drawKindIcon(pose, LEGEND[i], frame.x + 8, ly + i * 11);
-				Icons.frame(pose, frame.x + 8, ly + i * 11, ICON, color(LEGEND[i]));
-				fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.legend." + LEGEND_NAMES[i]), frame.x + 22, ly + i * 11 + 1, 0x333333);
+				drawKindIcon(pose, LEGEND[i], tx + 2, ly + i * 11);
+				Icons.frame(pose, tx + 2, ly + i * 11, ICON, color(LEGEND[i]));
+				fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.legend." + LEGEND_NAMES[i]), tx + 16, ly + i * 11 + 1, 0x333333);
 			}
 			if (s.foodsEaten < s.minFoods) {
-				fontRenderer.draw(pose, gateText(s), frame.x + 6, ly + LEGEND_NAMES.length * 11 + 2, 0x8A4A00);
+				fontRenderer.draw(pose, gateText(s), tx, ly + LEGEND_NAMES.length * 11 + 2, 0x8A4A00);
 			}
 			Layout.end();
 			super.render(pose);
@@ -469,18 +489,21 @@ public final class DietLogPages {
 		@Override
 		protected void render(PoseStack pose) {
 			layout.begin(frame);
-			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.milestones"), frame.x + 6, frame.y + 4, 0x000000);
+			int tx = left(frame);
+			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.milestones"), tx, frame.y + 4, 0x000000);
 			int y = frame.y + 18;
 			for (Rung r : rungs) {
 				boolean got = reached(r);
-				drawIcon(pose, r, frame.x + 7, y, got);
+				drawIcon(pose, r, tx + 1, y, got);
 				// A reached one-time unlock is struck through; its color follows the current diversity
 				// (plan_owner_notes_1119.md ruling 6). Every other row: black reached, gray not.
 				boolean struck = r.kind == Rung.Kind.UNLOCK && got;
 				boolean dark = struck ? r.threshold <= ClientState.state.diversity : got;
-				String text = fontRenderer.plainSubstrByWidth(describe(r).getString(), frame.width - 46);
-				fontRenderer.draw(pose, styled(Icons.num(r.threshold), struck), frame.x + 20, y + 1, dark ? 0x1E6B2A : 0x777777);
-				fontRenderer.draw(pose, styled(text, struck), frame.x + 40, y + 1, dark ? 0x000000 : 0x777777);
+				String text = fontRenderer.plainSubstrByWidth(describe(r).getString(), right(frame) - (tx + 34));
+				fontRenderer.draw(pose, styled(Icons.num(r.threshold), struck), tx + 14, y + 1, dark ? 0x1E6B2A : 0x777777);
+				// Active buffs (reached rungs other than one-time unlocks) in green (owner notes, round 3).
+				int textColor = !dark ? 0x777777 : r.kind != Rung.Kind.UNLOCK ? 0x1E6B2A : 0x000000;
+				fontRenderer.draw(pose, styled(text, struck), tx + 34, y + 1, textColor);
 				y += 12;
 			}
 			Layout.end();
@@ -490,7 +513,7 @@ public final class DietLogPages {
 
 	// ---- Overview page: last meals grid and the diversity food icon (plan_owner_notes_1119.md rulings 7 to 10, 12) --
 
-	private static final int MEAL_ROWS = 4, GRID_STEP = 16, GRID_ICON = 15, GRID_TITLE = 11;
+	private static final int MEAL_ROWS = 4, GRID_STEP = 19, GRID_ICON = 18, GRID_TITLE = 11;
 
 	/** A meal on the grid: the item and its age in meals (0 = newest), which is Apple Pie's memory count for it. */
 	private record Meal(Item item, ResourceLocation id, int age) {}
@@ -571,7 +594,7 @@ public final class DietLogPages {
 				if (differs) lines.add(Component.translatable("solraspberrypie.dietlog.meal_total", Icons.diversity(total)).withStyle(ChatFormatting.GRAY));
 				MutableComponent self = Component.translatable("solraspberrypie.dietlog.meal_this", Icons.diversity(mine)).withStyle(ChatFormatting.GRAY);
 				lines.add(differs ? self.withStyle(ChatFormatting.STRIKETHROUGH) : self);
-				UIElement cell = new MealCell(stack, lines);
+				UIElement cell = new MealCell(lines);
 				cells.add(cell);
 				children.add(cell);
 			}
@@ -604,14 +627,12 @@ public final class DietLogPages {
 		}
 	}
 
-	/** A meal's hover target: an item tooltip with the contribution lines. Draws nothing itself. */
+	/** A meal's hover target: the name and contribution lines. Draws nothing itself. */
 	private static final class MealCell extends UIElement {
-		private final ItemStack stack;
 		private final List<Component> lines;
 
-		MealCell(ItemStack stack, List<Component> lines) {
+		MealCell(List<Component> lines) {
 			super(new Rectangle(0, 0, 1, 1));
-			this.stack = stack;
 			this.lines = lines;
 		}
 
@@ -620,9 +641,13 @@ public final class DietLogPages {
 			return true;
 		}
 
+		/**
+		 * Drawn as plain text, like the ladder hovers: with the food's stack the tooltip went through the item tooltip
+		 * handlers (Legendary Tooltips, AppleSkin, Raspberry Pie's food rows) and was not drawn on the Overview page.
+		 */
 		@Override
 		protected void renderTooltip(PoseStack pose, int mouseX, int mouseY) {
-			renderTooltip(pose, stack, lines, mouseX, mouseY);
+			renderTooltip(pose, ItemStack.EMPTY, lines, mouseX, mouseY);
 		}
 
 		@Override
@@ -733,6 +758,44 @@ public final class DietLogPages {
 	 * Timing of one Diet Log open (plan_diet_books_r2.md A4): the page build, its diversity icon and meals grid, and
 	 * the first frame. One line per open in latest.log, so the owner's log shows what freezes.
 	 */
+	/**
+	 * TEMPORARY hover debug (Overview hovers missing): at most twice a second, while the mouse
+	 * moves on the Overview page, logs the mouse in page coordinates and every element under it with its frame and
+	 * whether it carries a tooltip. Remove once the cause is found.
+	 */
+	public static final class HoverDebug {
+		private static long last;
+		private static int lastX = Integer.MIN_VALUE, lastY;
+
+		public static void log(UIElement page, int rawX, int rawY, int x, int y) {
+			long now = System.currentTimeMillis();
+			if (now - last < 500 || (x == lastX && y == lastY)) return;
+			last = now;
+			lastX = x;
+			lastY = y;
+			StringBuilder sb = new StringBuilder();
+			sb.append("[RP hover debug] mouse raw ").append(rawX).append(',').append(rawY).append(" page ").append(x).append(',').append(y)
+					.append(" pageFrame ").append(str(page.frame)).append(" |");
+			walk(page, x, y, 0, sb);
+			SolRaspberryPie.LOG.info(sb.toString());
+		}
+
+		private static void walk(UIElement e, int x, int y, int depth, StringBuilder sb) {
+			boolean tip = e instanceof MealCell || e.tooltip != null;
+			if (e.frame != null && e.frame.contains(x, y)) {
+				sb.append(' ').append(depth).append(':').append(e.getClass().getSimpleName()).append(str(e.frame)).append(tip ? "[tip]" : "");
+			}
+			for (UIElement c : ((com.SaintAlfonzo.solraspberrypie.mixin.client.UIElementAccessor) e).solrp$children()) walk(c, x, y, depth + 1, sb);
+			if (e instanceof MealsGrid g && !g.cells.isEmpty()) {
+				sb.append(" grid").append(str(g.frame)).append(" cell0").append(str(g.cells.get(0).frame));
+			}
+		}
+
+		private static String str(Rectangle r) {
+			return r == null ? "null" : "(" + r.x + "," + r.y + " " + r.width + "x" + r.height + ")";
+		}
+	}
+
 	public static final class OpenTiming {
 		static long icon, grid;
 		private static long pagesStart, pagesTook;

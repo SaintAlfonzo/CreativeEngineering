@@ -117,6 +117,7 @@ public abstract class FoodBookScreenMixin extends Screen {
 		DietLogPages.Layout l = DietLogPages.Layout.diversity();
 		int px = page.getCenterX(), py = page.getMinY();
 		l.begin(px, py);
+		DietLogPages.HoverDebug.log(page, mouseX, mouseY, l.unmapX(mouseX, px), l.unmapY(mouseY, py));
 		UIElement.render(pose, page, l.unmapX(mouseX, px), l.unmapY(mouseY, py));
 		DietLogPages.Layout.end();
 	}

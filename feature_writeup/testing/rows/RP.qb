@@ -626,3 +626,10 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @fails `DiversityPageMixin` icon redirect, band quantiles, `[dietLog] diversityIcons` parse
 @draft client shots; steps written by the first client runner
 
+
+## CQ-RPI-62 | Diet Log 25% wider, page bounds, larger meal icons, meal hover, green active buffs, permanent buff icon
+@group client
+@commands Client config `[dietLog] extraWidth = 47` (the default); open the Diet Log at GUI scale 2 and 4; page to the Diet Ladder and every Milestones page; hover a bar icon, a key icon and a meal on the first page; have one permanent buff reached and one not, plus a filled effect slot
+@pass the book is about a quarter wider than Apple Pie's (narrower than the earlier 50%); on the Ladder and Milestones pages the title, diversity lines, bar, key and rows start and end about a sixth of the page width in from each side, with no text over the book edges or the page arrows; long milestone rows are cut short inside the bounds; bar and key hovers land on their icons; first-page meal icons about 20% larger than before, the grid still on the page; the meal hover shows as a plain text tooltip ("N. Name", contribution lines; food-tuning #21); Milestones rows of active buffs (hearts, toughness, knockback, permanent buffs, effect slots) have green text, unreached rows gray, reached one-time unlocks struck through in black; an unreached permanent buff's icon alternates the diamond shard and the effect sprite each second on the Milestones list and the ladder bar, a reached one shows the shard in its colored frame
+@fails `DietLogPages.left/right` (SIDE_INSET), `RpConfig` extraWidth default, `MealCell.renderTooltip`, `ListPage` text color, `drawIcon` FLAT branch
+@draft client shots
