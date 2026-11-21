@@ -259,6 +259,33 @@ public final class CEQConfig {
 		public final FelsicPiece FELSIC_SHOVEL;
 		public final FelsicPiece FELSIC_HOE;
 		public final FelsicPiece FELSIC_SHIELD;
+		public final FelsicIngot FELSIC_INGOT;
+		public final EchoPiece ECHO_SWORD;
+		public final EchoPiece ECHO_PICKAXE;
+		public final EchoPiece ECHO_AXE;
+		public final EchoPiece ECHO_SHOVEL;
+		public final EchoPiece ECHO_HOE;
+		public final EchoPiece ECHO_HELMET;
+		public final EchoPiece ECHO_CHESTPLATE;
+		public final EchoPiece ECHO_LEGGINGS;
+		public final EchoPiece ECHO_BOOTS;
+		public final EchoPiece ECHO_SHIELD;
+		public final DragonPiece DRAGON_HELMET;
+		public final DragonPiece DRAGON_CHESTPLATE;
+		public final DragonPiece DRAGON_LEGGINGS;
+		public final DragonPiece DRAGON_BOOTS;
+		public final DragonPiece DRAGON_SWORD;
+		public final DragonPiece DRAGON_PICKAXE;
+		public final DragonPiece DRAGON_AXE;
+		public final DragonPiece DRAGON_SHOVEL;
+		public final DragonPiece DRAGON_HOE;
+		public final DragonPiece DRAGON_CROSSBOW;
+		public final DragonPiece DRAGON_BOW;
+		public final DragonPiece DRAGON_HORSE_ARMOR;
+		public final DragonPiece DRAGON_TRIDENT;
+		public final DragonPiece DRAGON_ANVIL;
+		public final DragonPiece DRAGON_SHIELD;
+		public final DragonPiece AIR_BRAKE;
 
 		private Crafting(ForgeConfigSpec.Builder b) {
 			b.push("crafting");
@@ -273,6 +300,34 @@ public final class CEQConfig {
 			FELSIC_SHOVEL = new FelsicPiece(b, "felsic_shovel", magicResistance, 250, 1, 3);
 			FELSIC_HOE = new FelsicPiece(b, "felsic_hoe", magicResistance, 250, 1, 3);
 			FELSIC_SHIELD = new FelsicPiece(b, "felsic_shield", magicResistance, 250, 1, 8);
+			FELSIC_INGOT = new FelsicIngot(b, "felsic_ingot", 250, 4);
+			String darkness = "creativecommon:darkness"; // Creative Common's potion id
+			ECHO_SWORD = new EchoPiece(b, "echo_sword", darkness, "minecraft:weakness", 250, 250, 250, 1);
+			ECHO_PICKAXE = new EchoPiece(b, "echo_pickaxe", darkness, "minecraft:weakness", 250, 250, 250, 1);
+			ECHO_AXE = new EchoPiece(b, "echo_axe", darkness, "minecraft:weakness", 250, 250, 250, 1);
+			ECHO_SHOVEL = new EchoPiece(b, "echo_shovel", darkness, "minecraft:weakness", 250, 250, 250, 1);
+			ECHO_HOE = new EchoPiece(b, "echo_hoe", darkness, "minecraft:weakness", 250, 250, 250, 1);
+			ECHO_HELMET = new EchoPiece(b, "echo_helmet", darkness, "minecraft:night_vision", 250, 250, 250, 1);
+			ECHO_CHESTPLATE = new EchoPiece(b, "echo_chestplate", darkness, "minecraft:night_vision", 250, 250, 250, 1);
+			ECHO_LEGGINGS = new EchoPiece(b, "echo_leggings", darkness, "minecraft:night_vision", 250, 250, 250, 1);
+			ECHO_BOOTS = new EchoPiece(b, "echo_boots", darkness, "minecraft:night_vision", 250, 250, 250, 1);
+			ECHO_SHIELD = new EchoPiece(b, "echo_shield", darkness, "minecraft:night_vision", 250, 250, 250, 1);
+			DRAGON_HELMET = new DragonPiece(b, "dragon_helmet", "creativecommon:long_magic_resistance", 250, 250, 2);
+			DRAGON_CHESTPLATE = new DragonPiece(b, "dragon_chestplate", "creativecommon:long_resistance", 250, 250, 4);
+			DRAGON_LEGGINGS = new DragonPiece(b, "dragon_leggings", "minecraft:long_fire_resistance", 250, 250, 3);
+			DRAGON_BOOTS = new DragonPiece(b, "dragon_boots", "alexsmobs:long_knockback_resistance", 250, 250, 2);
+			DRAGON_SWORD = new DragonPiece(b, "dragon_sword", "minecraft:strong_regeneration", 250, 250, 3);
+			DRAGON_PICKAXE = new DragonPiece(b, "dragon_pickaxe", "minecraft:strong_regeneration", 250, 250, 3);
+			DRAGON_AXE = new DragonPiece(b, "dragon_axe", "minecraft:strong_regeneration", 250, 250, 2);
+			DRAGON_SHOVEL = new DragonPiece(b, "dragon_shovel", "minecraft:strong_regeneration", 250, 250, 1);
+			DRAGON_HOE = new DragonPiece(b, "dragon_hoe", "minecraft:strong_regeneration", 250, 250, 1);
+			DRAGON_CROSSBOW = new DragonPiece(b, "dragon_crossbow", "minecraft:strong_regeneration", 250, 250, 2);
+			DRAGON_BOW = new DragonPiece(b, "dragon_bow", "minecraft:strong_regeneration", 250, 250, 3);
+			DRAGON_HORSE_ARMOR = new DragonPiece(b, "dragon_horse_armor", "minecraft:strong_regeneration", 250, 250, 3);
+			DRAGON_TRIDENT = new DragonPiece(b, "dragon_trident", "minecraft:strong_regeneration", 250, 250, 2);
+			DRAGON_ANVIL = new DragonPiece(b, "dragon_anvil", "creativecommon:long_resistance", 250, 250, 6);
+			DRAGON_SHIELD = new DragonPiece(b, "dragon_shield", "creativecommon:long_resistance", 250, 250, 5);
+			AIR_BRAKE = new DragonPiece(b, "air_brake", "minecraft:strong_slowness", 250, 250, 2);
 			b.pop();
 		}
 
@@ -313,6 +368,75 @@ public final class CEQConfig {
 				blows = b.comment("Hammer blows required by the hammering step.")
 						.defineInRange("hammerBlows", defaultBlows, 0, 64);
 
+				b.pop();
+			}
+		}
+
+		/**
+		 * Tuning for one echo piece's sequenced-assembly recipe (end_gear.js, {@code R.cfg(..., 'CRAFTING.ECHO_<PIECE>')},
+		 * NCH {@code echoAssembly}): lava fill, echo ingot, amethyst dust, vibrating, then two potion fills.
+		 */
+		public static final class EchoPiece {
+			public final ForgeConfigSpec.ConfigValue<String> potionA;
+			public final ForgeConfigSpec.ConfigValue<String> potionB;
+			public final ForgeConfigSpec.IntValue lavaMb;
+			public final ForgeConfigSpec.IntValue potionAMb;
+			public final ForgeConfigSpec.IntValue potionBMb;
+			public final ForgeConfigSpec.IntValue loops;
+
+			private EchoPiece(ForgeConfigSpec.Builder b, String tomlSection, String defaultPotionA, String defaultPotionB,
+							  int defaultLavaMb, int defaultPotionAMb, int defaultPotionBMb, int defaultLoops) {
+				b.push(tomlSection);
+				potionA = b.comment("Potion id of the first potion fill.").define("potionA", defaultPotionA);
+				potionB = b.comment("Potion id of the second (last) potion fill.").define("potionB", defaultPotionB);
+				lavaMb = b.comment("mB of lava used in the first filling step.")
+						.defineInRange("lavaMb", defaultLavaMb, 1, 10000);
+				potionAMb = b.comment("mB of the first potion's fluid.")
+						.defineInRange("potionAMb", defaultPotionAMb, 1, 10000);
+				potionBMb = b.comment("mB of the second potion's fluid.")
+						.defineInRange("potionBMb", defaultPotionBMb, 1, 10000);
+				loops = b.comment("Number of times the sequenced assembly repeats.")
+						.defineInRange("loops", defaultLoops, 1, 64);
+				b.pop();
+			}
+		}
+
+		/**
+		 * Tuning for one dragon piece's (and the air brake's) sequenced-assembly recipe (end_gear.js,
+		 * {@code R.cfg(..., 'CRAFTING.DRAGON_<PIECE>')}, NCH {@code dragonAssembly}): Dragon's Breath fill, dragon scale,
+		 * laser cutting, then a lingering potion fill.
+		 */
+		public static final class DragonPiece {
+			public final ForgeConfigSpec.ConfigValue<String> potion;
+			public final ForgeConfigSpec.IntValue breathMb;
+			public final ForgeConfigSpec.IntValue mb;
+			public final ForgeConfigSpec.IntValue loops;
+
+			private DragonPiece(ForgeConfigSpec.Builder b, String tomlSection, String defaultPotion,
+								int defaultBreathMb, int defaultMb, int defaultLoops) {
+				b.push(tomlSection);
+				potion = b.comment("Potion id of the lingering potion fill (the last step).").define("potion", defaultPotion);
+				breathMb = b.comment("mB of Dragon's Breath fluid used in the first filling step.")
+						.defineInRange("breathMb", defaultBreathMb, 1, 10000);
+				mb = b.comment("mB of the potion's fluid used in the last filling step.")
+						.defineInRange("potionMb", defaultMb, 1, 10000);
+				loops = b.comment("Number of times the sequenced assembly repeats.")
+						.defineInRange("loops", defaultLoops, 1, 64);
+				b.pop();
+			}
+		}
+
+		/** Felsic ingot sequenced assembly (end_gear.js, {@code R.cfg(..., 'CRAFTING.FELSIC_INGOT')}). */
+		public static final class FelsicIngot {
+			public final ForgeConfigSpec.IntValue breathMb;
+			public final ForgeConfigSpec.IntValue loops;
+
+			private FelsicIngot(ForgeConfigSpec.Builder b, String tomlSection, int defaultBreathMb, int defaultLoops) {
+				b.push(tomlSection);
+				breathMb = b.comment("mB of Dragon's Breath fluid used in the filling step.")
+						.defineInRange("breathMb", defaultBreathMb, 1, 10000);
+				loops = b.comment("Number of times the sequenced assembly repeats.")
+						.defineInRange("loops", defaultLoops, 1, 64);
 				b.pop();
 			}
 		}

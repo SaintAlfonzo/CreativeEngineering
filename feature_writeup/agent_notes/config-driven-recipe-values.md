@@ -56,3 +56,9 @@ per-field or separate-file versions.
   found 2026-09-15, initially left as toml-and-`/reload`-only by user's call; later that same
   session a real fix was built - see [create-config-string-widget](create-config-string-widget.md) (Creative Common mixin +
   custom widget class) - so `potion` fields now get a proper in-game text field too.
+- **Users and keys (Creative Equipment `CEQConfig.Crafting` since the 2026-11-04 carve):** `FelsicPiece` (10 felsic
+  pieces: potion, potionMb, reachPotionMb, loops, hammerBlows), `FelsicIngot` (`felsic_ingot`: breathMb, loops),
+  `EchoPiece` (10 `echo_<piece>`: potionA, potionB, lavaMb, potionAMb, potionBMb, loops), `DragonPiece` (15
+  `dragon_<piece>` plus `air_brake`: potion, breathMb, potionMb, loops). end_gear.js derives the section from the recipe
+  key (`'CRAFTING.' + key.toUpperCase()`); keep a row's first element the output item, `tools/shield_check.py` greps
+  `[i.<shield>,` (gear/tuning #12, gear_tuning.md 3).

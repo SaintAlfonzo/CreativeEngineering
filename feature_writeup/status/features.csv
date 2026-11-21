@@ -128,7 +128,7 @@ Trade sync,trade_sync.md,TS-,BUILT,creativecommon,SQ-TSY,"BUILT 2026-11-03 (patc
 Wandering Trader catalog,wandering_trader_catalog.md,,reference,,,"reference, regenerate with `python3 tools/wandering_trader_report.py` after `/dumptrades`",,,
 Shields,shields.md,SH-,BUILT,creativeequipment,,"DEPLOYED, in-game test pending (SH-06 passed)",,,
 Armor and tool effects,armor_effects.md,AE-,BUILT,"creativecommon, creativeequipment",SQ-EFX,DEPLOYED (since 1.0.3,,,
-Gear tuning,gear_tuning.md,GR-,BUILT,creativeequipment,SQ-AC,"DEPLOYED (since 1.0.3), in-game test pending (GR-01 to GR-30)",,,
+Gear tuning,gear_tuning.md,GR-,BUILT,creativeequipment,"SQ-AC, SQ-GR","DEPLOYED (since 1.0.3), in-game test pending (GR-01 to GR-30)",,,
 Potions and brewing,potions.md,PO-,BUILT,"creativebrewing, creativecommon",,"DEPLOYED (built 2026-09-06 to 2026-09-08, shipped since 1.0.3), in-game test pending (PO-01 to PO-26)",,,
 Potion buckets and tipped arrows,potion_buckets.md,PB-,BUILT,creativebrewing,SQ-LE,"DEPLOYED (since 1.0.3), in-game test pending (PB-01 to PB-20)",,,
 Effects,effects.md,EF-,reference,,,"reference, written 2026-10-19 (140 effects)",reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
