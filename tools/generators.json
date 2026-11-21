@@ -573,6 +573,14 @@
 			"apply": "report only (crop season type per crop from crop_seasons.json, grow-event check; crops.md section 2.12.1)"
 		},
 		{
+			"id": "botany_crops",
+			"script": "tools/gen_botany_crops.py",
+			"groups": ["food"],
+			"dumps": ["dumprecipes", "dumpcropgrowth", "dumptags"],
+			"outputs": ["kubejs/data/creativecompat/recipes/botanypots/crop", "kubejs/data/creativecompat/tags/items/botany_pots"],
+			"apply": "/reload (pack datapack: pot crops from botany_pot_crops.csv and the Nether / End only tags; botany_pots.md 3)"
+		},
+		{
 			"id": "guard_check",
 			"script": "tools/guard_check.py",
 			"groups": ["checks"],
