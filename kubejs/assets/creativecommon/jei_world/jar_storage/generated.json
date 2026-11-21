@@ -4,7 +4,7 @@
   {
    "requires": [
     "alexsdelight",
-    "creativeengineering"
+    "creativedelight"
    ],
    "inputs": [
     {
@@ -17,7 +17,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:acacia_blossom_soup\",Count:2,CachedColor:-2700384}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:acacia_blossom_soup\",Count:2,CachedColor:-2700384}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -30,7 +30,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "neapolitan"
    ],
    "inputs": [
@@ -44,7 +44,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:adzuki_stew\",Count:2,CachedColor:-7983825}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:adzuki_stew\",Count:2,CachedColor:-7983825}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -57,7 +57,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "endersdelight"
    ],
    "inputs": [
@@ -71,7 +71,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:amberveil_stew\",Count:2,CachedColor:-14728140}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:amberveil_stew\",Count:2,CachedColor:-14728140}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -84,7 +84,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "hostiledelight"
    ],
    "inputs": [
@@ -98,7 +98,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:aurorasoup\",Count:2,CachedColor:-4091649}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:aurorasoup\",Count:2,CachedColor:-4091649}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -111,7 +111,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "miners_delight"
    ],
    "inputs": [
@@ -125,7 +125,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bat_soup\",Count:2,CachedColor:-12504785}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:bat_soup\",Count:2,CachedColor:-12504785}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -138,7 +138,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "fruitsdelight"
    ],
    "inputs": [
@@ -152,7 +152,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bayberry_soup\",Count:1,CachedColor:-8185793}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:bayberry_soup\",Count:1,CachedColor:-8185793}}}",
      "label": "1 of 12 filled"
     },
     {
@@ -170,7 +170,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "rusticdelight"
    ],
    "inputs": [
@@ -184,7 +184,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bell_pepper_soup\",Count:2,CachedColor:-8577010}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:bell_pepper_soup\",Count:2,CachedColor:-8577010}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -197,7 +197,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "farmersrespite"
    ],
    "inputs": [
@@ -211,7 +211,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:blazing_chili\",Count:2,CachedColor:-6673390}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:blazing_chili\",Count:2,CachedColor:-6673390}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -224,7 +224,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "farmersdelight"
    ],
    "inputs": [
@@ -238,7 +238,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:bone_broth\",Count:2,CachedColor:-3623798}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:bone_broth\",Count:2,CachedColor:-3623798}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -251,7 +251,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -265,7 +265,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:broccoli_soup\",Count:2,CachedColor:-5389691}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:broccoli_soup\",Count:2,CachedColor:-5389691}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -278,7 +278,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -292,7 +292,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cacciatore\",Count:2,CachedColor:-4571904}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:cacciatore\",Count:2,CachedColor:-4571904}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -305,7 +305,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "delightful"
    ],
    "inputs": [
@@ -319,7 +319,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cactus_chili\",Count:2,CachedColor:-7007208}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:cactus_chili\",Count:2,CachedColor:-7007208}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -332,7 +332,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "delightful"
    ],
    "inputs": [
@@ -346,7 +346,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cactus_soup\",Count:2,CachedColor:-10791401}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:cactus_soup\",Count:2,CachedColor:-10791401}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -359,7 +359,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "rusticdelight"
    ],
    "inputs": [
@@ -373,7 +373,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:calamari_soup\",Count:2,CachedColor:-14726294}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:calamari_soup\",Count:2,CachedColor:-14726294}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -386,7 +386,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -400,14 +400,14 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:carrot_juice\",Count:1,CachedColor:-1013212}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:carrot_juice\",Count:1,CachedColor:-1013212}}}",
      "label": "1 of 12 filled"
     },
     {
      "item": "minecraft:glass_bottle"
     },
     {
-     "fluid": "creativeengineering:carrot_juice",
+     "fluid": "creativedelight:carrot_juice",
      "amount": 250,
      "label": "Same fluid as this"
     }
@@ -418,7 +418,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "moredelight"
    ],
    "inputs": [
@@ -432,7 +432,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:carrot_soup\",Count:2,CachedColor:-1735679}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:carrot_soup\",Count:2,CachedColor:-1735679}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -445,7 +445,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -459,7 +459,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cauliflower_soup\",Count:2,CachedColor:-2507624}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:cauliflower_soup\",Count:2,CachedColor:-2507624}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -472,7 +472,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "miners_delight"
    ],
    "inputs": [
@@ -486,7 +486,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cave_soup\",Count:2,CachedColor:-11781334}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:cave_soup\",Count:2,CachedColor:-11781334}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -499,7 +499,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "quarkdelight"
    ],
    "inputs": [
@@ -513,7 +513,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:cavern_explorer_stew\",Count:2,CachedColor:-13865884}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:cavern_explorer_stew\",Count:2,CachedColor:-13865884}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -526,7 +526,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "endersdelight"
    ],
    "inputs": [
@@ -540,7 +540,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:chorus_stew\",Count:2,CachedColor:-6657376}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:chorus_stew\",Count:2,CachedColor:-6657376}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -554,7 +554,7 @@
   {
    "requires": [
     "corn_delight",
-    "creativeengineering"
+    "creativedelight"
    ],
    "inputs": [
     {
@@ -567,7 +567,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:corn_soup\",Count:2,CachedColor:-932019}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:corn_soup\",Count:2,CachedColor:-932019}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -580,7 +580,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "fungidelight"
    ],
    "inputs": [
@@ -594,7 +594,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:creamy_morel_soup\",Count:2,CachedColor:-11517912}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:creamy_morel_soup\",Count:2,CachedColor:-11517912}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -608,7 +608,7 @@
   {
    "requires": [
     "brewinandchewin",
-    "creativeengineering"
+    "creativedelight"
    ],
    "inputs": [
     {
@@ -621,7 +621,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:creamy_onion_soup\",Count:2,CachedColor:-3437020}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:creamy_onion_soup\",Count:2,CachedColor:-3437020}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -634,7 +634,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -648,14 +648,14 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:dandelion_juice\",Count:1,CachedColor:-1061062}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:dandelion_juice\",Count:1,CachedColor:-1061062}}}",
      "label": "1 of 12 filled"
     },
     {
      "item": "minecraft:glass_bottle"
     },
     {
-     "fluid": "creativeengineering:dandelion_juice",
+     "fluid": "creativedelight:dandelion_juice",
      "amount": 250,
      "label": "Same fluid as this"
     }
@@ -666,7 +666,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "ends_delight"
    ],
    "inputs": [
@@ -680,7 +680,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:dragon_breath_and_chorus_soup\",Count:2,CachedColor:-10668708}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:dragon_breath_and_chorus_soup\",Count:2,CachedColor:-10668708}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -693,7 +693,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "ends_delight"
    ],
    "inputs": [
@@ -707,7 +707,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:enderman_gristle_stew\",Count:2,CachedColor:-12306820}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:enderman_gristle_stew\",Count:2,CachedColor:-12306820}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -720,7 +720,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "endersdelight"
    ],
    "inputs": [
@@ -734,7 +734,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:endermite_stew\",Count:2,CachedColor:-11912612}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:endermite_stew\",Count:2,CachedColor:-11912612}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -747,7 +747,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -761,7 +761,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:fermented_garlic_honey\",Count:1,CachedColor:-1858756}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:fermented_garlic_honey\",Count:1,CachedColor:-1858756}}}",
      "label": "1 of 12 filled"
     },
     {
@@ -774,7 +774,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "fruitsdelight"
    ],
    "inputs": [
@@ -788,7 +788,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:fig_chicken_stew\",Count:2,CachedColor:-6920366}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:fig_chicken_stew\",Count:2,CachedColor:-6920366}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -801,7 +801,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "oceanic_delight"
    ],
    "inputs": [
@@ -815,7 +815,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:fish_egg_noodle_soup\",Count:2,CachedColor:-11041506}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:fish_egg_noodle_soup\",Count:2,CachedColor:-11041506}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -828,7 +828,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -842,7 +842,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:garlic_chicken_stew\",Count:2,CachedColor:-4620471}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:garlic_chicken_stew\",Count:2,CachedColor:-4620471}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -855,7 +855,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "vintagedelight"
    ],
    "inputs": [
@@ -869,7 +869,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:ghostly_chili\",Count:2,CachedColor:-11659764}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:ghostly_chili\",Count:2,CachedColor:-11659764}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -882,7 +882,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "hostiledelight"
    ],
    "inputs": [
@@ -896,7 +896,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:glimmeringchowder\",Count:2,CachedColor:-10013600}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:glimmeringchowder\",Count:2,CachedColor:-10013600}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -909,7 +909,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "oceanic_delight"
    ],
    "inputs": [
@@ -923,7 +923,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:glow_squid_stew\",Count:2,CachedColor:-14849980}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:glow_squid_stew\",Count:2,CachedColor:-14849980}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -936,7 +936,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "hostiledelight"
    ],
    "inputs": [
@@ -950,7 +950,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:guardiansoup\",Count:2,CachedColor:-11706279}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:guardiansoup\",Count:2,CachedColor:-11706279}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -963,7 +963,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "miners_delight"
    ],
    "inputs": [
@@ -977,7 +977,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:insect_stew\",Count:2,CachedColor:-12631748}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:insect_stew\",Count:2,CachedColor:-12631748}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -991,7 +991,7 @@
   {
    "requires": [
     "alexsdelight",
-    "creativeengineering"
+    "creativedelight"
    ],
    "inputs": [
     {
@@ -1004,7 +1004,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:kangaroo_stew\",Count:2,CachedColor:-8895183}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:kangaroo_stew\",Count:2,CachedColor:-8895183}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1017,7 +1017,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "quarkdelight"
    ],
    "inputs": [
@@ -1031,7 +1031,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:miso_with_bamboo_sprouts\",Count:2,CachedColor:-10189511}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:miso_with_bamboo_sprouts\",Count:2,CachedColor:-10189511}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1044,7 +1044,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "farmersdelight"
    ],
    "inputs": [
@@ -1058,7 +1058,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:noodle_soup\",Count:2,CachedColor:-3828941}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:noodle_soup\",Count:2,CachedColor:-3828941}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1071,7 +1071,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "vintagedelight"
    ],
    "inputs": [
@@ -1085,7 +1085,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:nut_milk\",Count:1,CachedColor:-661566}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:nut_milk\",Count:1,CachedColor:-661566}}}",
      "label": "1 of 12 filled"
     },
     {
@@ -1098,7 +1098,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "vintagedelight"
    ],
    "inputs": [
@@ -1112,7 +1112,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:nut_milk\",Count:1,CachedColor:-661566}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:nut_milk\",Count:1,CachedColor:-661566}}}",
      "label": "1 of 12 filled"
     },
     {
@@ -1125,7 +1125,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "vintagedelight"
    ],
    "inputs": [
@@ -1139,7 +1139,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:oatmeal\",Count:2,CachedColor:-5072260}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:oatmeal\",Count:2,CachedColor:-5072260}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1152,7 +1152,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "vintagedelight"
    ],
    "inputs": [
@@ -1166,7 +1166,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:pickle_soup\",Count:2,CachedColor:-1851532}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:pickle_soup\",Count:2,CachedColor:-1851532}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1179,7 +1179,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "largemeals"
    ],
    "inputs": [
@@ -1193,7 +1193,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:potato_soup\",Count:2,CachedColor:-2258944}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:potato_soup\",Count:2,CachedColor:-2258944}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1206,7 +1206,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "largemeals"
    ],
    "inputs": [
@@ -1220,7 +1220,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:pufferfish_broth\",Count:2,CachedColor:-4226529}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:pufferfish_broth\",Count:2,CachedColor:-4226529}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1233,7 +1233,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "largemeals"
    ],
    "inputs": [
@@ -1247,7 +1247,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:red_soup\",Count:2,CachedColor:-6086383}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:red_soup\",Count:2,CachedColor:-6086383}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1260,7 +1260,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "oceanic_delight"
    ],
    "inputs": [
@@ -1274,7 +1274,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:shrimp_stew\",Count:2,CachedColor:-5149377}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:shrimp_stew\",Count:2,CachedColor:-5149377}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1287,7 +1287,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "ends_delight"
    ],
    "inputs": [
@@ -1301,7 +1301,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:shulker_soup\",Count:2,CachedColor:-6205952}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:shulker_soup\",Count:2,CachedColor:-6205952}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1314,7 +1314,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "delightful"
    ],
    "inputs": [
@@ -1328,7 +1328,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:sinigang\",Count:2,CachedColor:-5736898}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:sinigang\",Count:2,CachedColor:-5736898}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1341,7 +1341,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "hostiledelight"
    ],
    "inputs": [
@@ -1355,7 +1355,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:slimestew\",Count:2,CachedColor:-10913977}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:slimestew\",Count:2,CachedColor:-10913977}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1368,7 +1368,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "nethersdelight"
    ],
    "inputs": [
@@ -1382,7 +1382,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:strider_moss_stew\",Count:2,CachedColor:-10081230}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:strider_moss_stew\",Count:2,CachedColor:-10081230}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1395,7 +1395,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "largemeals"
    ],
    "inputs": [
@@ -1409,7 +1409,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:tomato_egg_soup\",Count:2,CachedColor:-2258927}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:tomato_egg_soup\",Count:2,CachedColor:-2258927}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1422,7 +1422,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -1436,7 +1436,7 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:turnip_beef_stew\",Count:2,CachedColor:-11655399}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:turnip_beef_stew\",Count:2,CachedColor:-11655399}}}",
      "label": "2 of 12 filled"
     },
     {
@@ -1449,7 +1449,7 @@
   },
   {
    "requires": [
-    "creativeengineering",
+    "creativedelight",
     "veggiesdelight"
    ],
    "inputs": [
@@ -1463,14 +1463,14 @@
    "outputs": [
     {
      "item": "supplementaries:jar",
-     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativeengineering:turnip_water\",Count:1,CachedColor:-1845786}}}",
+     "nbt": "{BlockEntityTag:{FluidHolder:{Fluid:\"creativedelight:turnip_water\",Count:1,CachedColor:-1845786}}}",
      "label": "1 of 12 filled"
     },
     {
      "item": "minecraft:glass_bottle"
     },
     {
-     "fluid": "creativeengineering:turnip_water",
+     "fluid": "creativedelight:turnip_water",
      "amount": 250,
      "label": "Same fluid as this"
     }
@@ -2885,7 +2885,7 @@
    ],
    "notes": [
     "Up to 12, one per layer.",
-    "Only one kind per jar."
+    "These don't mix: one kind per jar."
    ]
   },
   {
