@@ -1,13 +1,11 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=856f39b405b6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 3, In Progress 1, Testing 21), 3 Complete.
+<!-- generated:status_index begin open_work sha1=9b545847e1e4 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Planned 1, In Progress 1, Testing 22), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `farming/crops #3` | Planned | S P | Harvest and replant audit for new crops |
-| `loot/tables #18` | Planned | S P | Remove Lexica Botania from loot |
-| `mobs/tweaks #4` | Planned | S | Entity dictionary |
 | `baking/baked-goods #39` | In Progress | S | Baked families: croissant to misc baked, plain donut beside the cider donut |
 | `conventions #39` | Testing | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
 | `creativebrewing/publish #25` | Testing | S | Delight's IE Bottling dough recipe writes a tag as its result |
@@ -24,6 +22,7 @@
 | `largecontent/mod-additions #48` | Testing | S P | Hostile Delight: rotten foods hunger type, not saltable |
 | `largecontent/mod-additions #49` | Testing | S P | Hostile Delight: Suspicious Bacon and Eggs assembly |
 | `licence/cd #4` | Testing | S | Rewrite the Miner's Delight potted gossypium loot table |
+| `loot/tables #18` | Testing | S P | Remove Lexica Botania from loot |
 | `loot/trader #2` | Testing | S P | Fewer Wares trades |
 | `potions/enchanting #1` | Testing | S P | Enchanted books out of villager trades |
 | `recipes/metal #5` | Testing | S P | Polished iron bars stonecutting removed |
