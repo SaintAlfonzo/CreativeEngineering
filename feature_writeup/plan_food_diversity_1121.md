@@ -1,15 +1,15 @@
 # Plan: food diversity rework 2026-11-21
 
-<!-- generated:status_index begin open_work sha1=19c26e770580 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=b997ae9ff270 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Testing 5), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food-tuning #32` | Planned | S C | Diversity table in Raspberry Pie: per-food values override Apple Pie, family members share one diet entry, no-diet tag; Apple Pie's default override list cleared |
-| `food-tuning #33` | Planned | P | Diversity generator: tier tops dragon 12, gilded 10, feasts 8, golden 7, high 6, mid 3, low 1; cans 80% of input; vanilla meat fit for cooked meats; pot curve for baking, cooked crafts and filling dishes; small values for non-food inputs |
-| `food-tuning #34` | Planned | S C | Pepper and covering families: medley color groups merge per form; chocolate coverings merge per base food; candies chocolate-filled and caramel-filled |
-| `food-tuning #35` | Planned | S | Brewing, fermenting and wine outputs are drinks (0 diversity, Liquid Diet Log only); chocolate coins out of the diet |
-| `food-tuning #36` | Planned | S P | Cooking Pot versions of the Create filling food recipes (coating as items, about 1.5x the spout) |
+| `food-tuning #32` | Testing | S C | Diversity table in Raspberry Pie: per-food values override Apple Pie, family members share one diet entry, no-diet tag; Apple Pie's default override list cleared |
+| `food-tuning #33` | Testing | P | Diversity generator: tier tops dragon 12, gilded 10, feasts 8, golden 7, high 6, mid 3, low 1; cans 80% of input; vanilla meat fit for cooked meats; pot curve for baking, cooked crafts and filling dishes; small values for non-food inputs |
+| `food-tuning #34` | Testing | S C | Pepper and covering families: medley color groups merge per form; chocolate coverings merge per base food; candies chocolate-filled and caramel-filled |
+| `food-tuning #35` | Testing | S | Brewing, fermenting and wine outputs are drinks (0 diversity, Liquid Diet Log only); chocolate coins out of the diet |
+| `food-tuning #36` | Testing | S P | Cooking Pot versions of the Create filling food recipes (coating as items, about 1.5x the spout) |
 <!-- generated:status_index end open_work -->
 
 Source: owner notes on [food_diversity_audit.md](food_diversity_audit.md) (chat 2026-11-21), rulings from two
@@ -43,7 +43,7 @@ status lives in the rows.
 | # | Item | Class | Ruling | Date | Source |
 |---|---|---|---|---|---|
 | R1 | Where values and families live | open | Raspberry Pie table: `tools/food_diversity.py` computes every food's value from the dumps and rules into a table shipped in solRaspberryPie; Raspberry Pie overrides Apple Pie's complexity and maps family members to one diet entry. Tooltips, Diet Log and Food Dictionary read the same value | 2026-11-21 | AskUserQuestion 2026-11-21 |
-| R2 | Top food per tier (I1, I2, I10) | open | Dragon 12, gilded 10, feasts 8, golden 7, high 6, mid 3, low 1. Tier multipliers are fitted so each tier's best food lands there | 2026-11-21 | AskUserQuestion 2026-11-21 (owner typed values) |
+| R2 | Top food per tier (I1, I2, I10) | open | Dragon 11 (was 12, owner chat 2026-11-21: "drop dragon boost average to 11"), gilded 10, feasts 8, golden 7, high 6, mid 3, low 1. Tier multipliers are fitted so each tier's best food lands there | 2026-11-21 | AskUserQuestion 2026-11-21 (owner typed values) |
 | R3 | Pot mirror of filling recipes (I9) | open | Coating as items at about 1.5x the spout's fluid, batched to whole items (example 2 apples + 3 chocolate bars -> 2 chocolate apples) | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R4 | Cans (I3) | open | A can scores 80% of its input food (golden and gilded cans included). Cans stay a separate diet entry | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R5 | Pepper families (I12) | open | Within a medley group the colors merge and the forms stay separate: red, yellow and green stuffed peppers are one food; orange, white and pink roasted slices are one food; same for slices, raw, roasted. Rolls follow the same rule (agent default, unconfirmed) | 2026-11-21 | AskUserQuestion 2026-11-21 (owner text) |
@@ -93,3 +93,44 @@ Neapolitan and Buzzier Bees food fillings), coating as items at about 1.5x the s
 ## 5. TODO rows
 
 `food-tuning #32` (P1), `#33` (P2), `#34` (families, P1 + P2), `#35` (P3), `#36` (P4).
+
+## 6. Built 2026-11-21
+
+| Phase | What | Files |
+|---|---|---|
+| P1 | `Diversity` loads `/solraspberrypie/diversity.json` from the jar on first use (both sides, no sync); `FoodListMixin` overrides `getComplexity` for listed foods and maps family members to the family head in `addFood` (both), `simulateFoodAdd`, `getLastEaten`, `hasEaten`; `#solraspberrypie:no_diet` joins drinks in `Drinks.isOutOfDiet` (skipped by memory, counters, Diet Log; not in the Liquid Diet Log). Apple Pie's `complexityUnparsed` emptied (defaultconfigs + configs_edited); world copies no longer matter, the table lists every food | `logic/Diversity.java`, `mixin/FoodListMixin.java`, `logic/Drinks.java`, `defaultconfigs/solapplepie-server.toml` |
+| P2 | `tools/food_diversity.py` (in generators.json, group food) with rules in `food_diversity.json`; 1658 values, 25 families | `tools/food_diversity.py`, `kubejs/generation_scripts/food/food_diversity.json`, `solRaspberryPie/.../diversity.json` |
+| P3 | Hot cocoa, strong hot cocoa, Farmer's Respite coffee typed `drink`. Every other brewing, fermenting and wine output that is a drink was already in `#solraspberrypie:drinks`; the foods those recipes make (pickles, kimchi, jerky, kippers, fudge, century egg) are foods and stay in the diet. Chocolate coins in `#solraspberrypie:no_diet` | `food_types.json`, `kubejs/data/creativedelight/kubejs/solapplepie/no_diet.js` |
+| P4 | 44 Cooking Pot mirrors: 2 bases + 3 coating items (bar or honey bottle; the spout uses 250 mB = 1 item per dish) -> 2 dishes. Sweet roll (milk) and jelly bread are fills, not coatings, and stay spout only | `kubejs/data/creativedelight/kubejs/create/filling_pot_mirrors.js` |
+
+**Fitted values** (`--report`, dump of 2026-11-19): pot rule = 1.69 x the inputs' value per output (median of
+270 pot recipes); meat fit = 0.569 x q (cooked beef 4.10, chicken 2.73, cod 2.28). Dragon top lowered 12 -> 11 the same day (R2). Tier multipliers lift each
+tier's third-best food to its top and cap the rest (`topRank`), so one outlier does not set the scale.
+
+| Rotation | None | -Dragon | -Gilded | -Feasts | -Golden | High only | Mid only | Low only |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 11.0 | 10.0 | 8.0 | 7.0 | 6.0 | 6.0 | 3.0 | 1.0 |
+| 8 | 72.6 | 62.9 | 56.7 | 46.2 | 42.8 | 42.8 | 21.4 | 7.1 |
+| 16 | 112.0 | 102.8 | 93.4 | 76.5 | 73.5 | 73.5 | 36.8 | 12.2 |
+| 32 | 138.3 | 128.2 | 114.6 | 101.0 | 99.0 | 99.0 | 49.5 | 16.5 |
+
+Columns remove dragon, gilded, feasts and golden cumulatively, the audit's 1.1 layout with golden and gilded split.
+
+**Agent defaults, unconfirmed** (add to section 2 when ruled):
+- D1 Pack curve instead of Apple Pie's formula, to meet the mid and low tops: q 0-2 -> 0-1, 2-5 -> 1-3, 5-12 -> 3-6,
+  12-30 -> 6-9 (the tail only matters before tier caps and multipliers). Each tier is capped at its top.
+- D2 Golden and gilded score as their source food x a fitted multiplier (food.md 3.16's input-multiplier idea), not
+  through their 1.2 modifier. Enchanted golden apple 10 -> 3.80 (its source is an apple); gilded meats reach 10.
+- D3 Cooked dragon meat sits halfway between the high top (6) and the lowest dragon dish: roasted dragon meat and
+  smoked dragon leg 6.84 (dragon dishes 7.69 to 11). Raw dragon meat keeps the curve.
+- D4 Non-food inputs: 0.1 by default, ice, mushrooms, blaze powder 0.25, bone meal and sugar 0.15; containers and
+  gold 0. A Cooking Pot dish never scores below its best food input + 0.1.
+- D5 Pepper rolls follow R5 (one food per color group); a family's value is its best member, capped at the lowest
+  member tier's top.
+- D6 Family meals show in the Diet Log as the family head (red pepper, milk chocolate), not the color eaten.
+
+**Open for the owner:**
+- O1 The ladder (rungs 2 to 100) now tops out early: a 32-food diet reaches 138.3 and high-tier food alone 99
+  (best diet was 91.9 before). Rescale the rungs, or lower the tier tops?
+- O2 Coated sweets under the pot rule: caramel and honey apples, waffles and the candies reach the high cap 6 (one
+  sweet = one Hearty Lunch). Keep, or cap coated food lower?

@@ -1,0 +1,61 @@
+{
+	"_readme": [
+		"Rules for tools/food_diversity.py (plan_food_diversity_1121.md section 3). The tool writes every food's diversity",
+		"into solRaspberryPie's diversity.json (values + families); a jar rebuild applies it.",
+		"q = hunger x (1 + saturation modifier) / 2. curve: [q, value] anchors, linear between, flat past the last.",
+		"topRank: the multiplier lifts the tier's (topRank+1)-th best food to the top, so one outlier does not set it; above it values cap.",
+		"tierTops: best food of each tier (R2). Tiers low / mid / high are by q (lowMax, midMax) or Nourishment = high;",
+		"their values are capped at the top. dragon, gilded, feast, golden get a multiplier fitted to the top.",
+		"canShare: a can scores this share of its source (R4). nonFood: value of a non-food recipe input (R9);",
+		"containers score 0. families: members share one diet entry and one value (R5, R6)."
+	],
+	"curve": [[0, 0], [2, 1], [5, 3], [12, 6], [30, 9]],
+	"topRank": 2,
+	"lowMax": 2,
+	"midMax": 5,
+	"tierTops": { "dragon": 11, "gilded": 10, "feast": 8, "golden": 7, "high": 6, "mid": 3, "low": 1 },
+	"canShare": 0.8,
+	"fillingCoating": { "item": "create:bar_of_chocolate", "share": 1.5 },
+	"dishFloorStep": 0.1,
+	"vanillaMeats": ["minecraft:cooked_beef", "minecraft:cooked_porkchop", "minecraft:cooked_chicken", "minecraft:cooked_mutton",
+		"minecraft:cooked_rabbit", "minecraft:cooked_cod", "minecraft:cooked_salmon"],
+	"heatTypes": ["minecraft:smelting", "minecraft:smoking", "minecraft:campfire_cooking", "barbequesdelight:grilling",
+		"immersiveengineering:arc_furnace", "minecraft:blasting"],
+	"potTypes": ["farmersdelight:cooking"],
+	"potRuleTypes": ["creativedelight:baking", "create:filling", "minecraft:crafting_shaped", "minecraft:crafting_shapeless",
+		"kubejs:shapeless", "create:sequenced_assembly"],
+	"potRuleReplace": ["creativedelight:baking", "create:filling"],
+	"craftSkipTypes": ["raw", "ingredient", "drink", "canned", "golden", "hazard", "special"],
+	"dragonIdPart": "dragon",
+	"dragonCookedTypes": ["cooked/meat", "cooked/meat/sliced"],
+	"nonFood": {
+		"default": 0.1,
+		"zero": ["minecraft:bowl", "minecraft:glass_bottle", "minecraft:bucket", "minecraft:water_bucket", "minecraft:stick",
+			"minecraft:paper", "brewinandchewin:tankard", "vintagedelight:empty_mason_jar", "minecraft:gold_nugget",
+			"minecraft:gold_ingot", "minecraft:gold_block"],
+		"items": {
+			"minecraft:ice": 0.25, "minecraft:packed_ice": 0.25, "minecraft:snowball": 0.15, "minecraft:bone_meal": 0.15,
+			"minecraft:brown_mushroom": 0.25, "minecraft:red_mushroom": 0.25, "minecraft:crimson_fungus": 0.25,
+			"minecraft:warped_fungus": 0.25, "minecraft:blaze_powder": 0.25, "minecraft:sugar": 0.15, "minecraft:cocoa_beans": 0.2,
+			"minecraft:wheat": 0.2, "minecraft:egg": 0.3, "minecraft:milk_bucket": 0.3, "minecraft:honey_bottle": 0.3,
+			"minecraft:nether_wart": 0.2, "minecraft:kelp": 0.15, "minecraft:dragon_breath": 0.5
+		}
+	},
+	"families": {
+		"_peppers": "built by the tool: per form (bell_pepper, bell_pepper_slice, bell_pepper_roll, roasted_bell_pepper, roasted_bell_pepper_slice, stuffed_bell_pepper) and medley group",
+		"pepperGroups": [["red", "yellow", "green"], ["pink", "white", "orange"], ["black", "purple", "blue"]],
+		"pepperForms": ["bell_pepper", "bell_pepper_slice", "bell_pepper_roll", "roasted_bell_pepper", "roasted_bell_pepper_slice", "stuffed_bell_pepper"],
+		"lists": {
+			"chocolate_apple": ["create_factory:chocolate_apple", "create_factory:dark_chocolate_apple", "create_factory:ruby_chocolate_apple", "create_factory:white_chocolate_apple"],
+			"chocolate_waffle": ["create_factory:chocolate_waffle", "create_factory:dark_chocolate_waffle", "create_factory:ruby_chocolate_waffle", "create_factory:white_chocolate_waffle"],
+			"chocolate_roll": ["create_factory:chocolate_roll", "create_factory:dark_chocolate_roll", "create_factory:ruby_chocolate_roll", "create_factory:white_chocolate_roll"],
+			"chocolate_glazed_berries": ["create:chocolate_glazed_berries", "create_confectionery:black_chocolate_glazed_berries", "create_confectionery:ruby_chocolate_glazed_berries", "create_confectionery:white_chocolate_glazed_berries"],
+			"chocolate_glazed_marshmallow": ["create_confectionery:chocolate_glazed_marshmallow", "create_confectionery:black_chocolate_glazed_marshmallow", "create_confectionery:ruby_chocolate_glazed_marshmallow", "create_confectionery:white_chocolate_glazed_marshmallow"],
+			"caramel_candy": ["create_confectionery:chocolate_candy", "create_confectionery:black_chocolate_candy", "create_confectionery:ruby_chocolate_candy", "create_confectionery:white_chocolate_candy"],
+			"chocolate_candy": ["create_confectionery:chocolate_candy_1", "create_confectionery:chocolate_candy_2", "create_confectionery:chocolate_candy_3",
+				"create_confectionery:black_chocolate_candy_1", "create_confectionery:black_chocolate_candy_2", "create_confectionery:black_chocolate_candy_3",
+				"create_confectionery:ruby_chocolate_candy_1", "create_confectionery:ruby_chocolate_candy_2", "create_confectionery:ruby_chocolate_candy_3",
+				"create_confectionery:white_chocolate_candy_1", "create_confectionery:white_chocolate_candy_2", "create_confectionery:white_chocolate_candy_3"]
+		}
+	}
+}

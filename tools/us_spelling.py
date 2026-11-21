@@ -274,6 +274,8 @@ def code_spans(path, text):
 
 def process_code(path, apply):
 	"""Comments, and string literals that read as prose (two or more words), in a code file."""
+	if not path.exists():
+		return []  # tracked but deleted in the working tree (a generator removed it)
 	text = path.read_text(encoding='utf-8')
 	edits, changes = [], []
 	keep_lines = {i for i, l in enumerate(text.split('\n'), 1) if 'spelling: keep' in l}

@@ -18,8 +18,18 @@ import net.minecraftforge.registries.ForgeRegistries;
 public final class Drinks {
 	public static final TagKey<Item> TAG = ItemTags.create(new ResourceLocation(SolRaspberryPie.MOD_ID, "drinks"));
 
+	/** Foods out of the diet without a log (plan_food_diversity_1121.md I15): 0 diversity, never counted. */
+	public static final TagKey<Item> NO_DIET = ItemTags.create(new ResourceLocation(SolRaspberryPie.MOD_ID, "no_diet"));
+
 	public static boolean isDrink(Item item) {
 		return item != null && new ItemStack(item).is(TAG);
+	}
+
+	/** A drink or a no-diet food: skipped by the food memory, the counters and the Diet Log. */
+	public static boolean isOutOfDiet(Item item) {
+		if (item == null) return false;
+		ItemStack s = new ItemStack(item);
+		return s.is(TAG) || s.is(NO_DIET);
 	}
 
 	public static void onDrink(ServerPlayer player, ItemStack stack) {

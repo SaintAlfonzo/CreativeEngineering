@@ -6,6 +6,10 @@ that add too much or too little diversity. It is investigation only: nothing was
 flags are in [food_diversity_audit.csv](food_diversity_audit.csv) (one row per flag, columns `flag, id, name, type,
 nutrition, saturationModifier, diversity, formula, note`).
 
+**Follow-up (2026-11-21):** the owner's rulings on these findings are built as Raspberry Pie's diversity table,
+[plan_food_diversity_1121.md](plan_food_diversity_1121.md); its section 6 has the new rotation table (golden and gilded split).
+The values below are the 2026-11-19 state.
+
 Removed items (`canned_goods:canned_food` at 9.92, `canned_goods:hot_hot_hotpot`) are left out. Both are still
 registered with Canned Goods' broken modifiers (28 and 3).
 

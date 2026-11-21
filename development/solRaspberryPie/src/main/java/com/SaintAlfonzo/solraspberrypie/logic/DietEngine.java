@@ -85,7 +85,7 @@ public final class DietEngine {
 
 	public static void onFoodEaten(ServerPlayer player, Item item) {
 		RpData d = RpData.get(player);
-		if (!Drinks.isDrink(item)) d.stamp++;
+		if (!Drinks.isOutOfDiet(item)) d.stamp++;
 		evaluate(player, true);
 	}
 

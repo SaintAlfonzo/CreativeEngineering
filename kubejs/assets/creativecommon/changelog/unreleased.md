@@ -113,6 +113,15 @@
 - **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. The books show "N more unique foods to activate diet".
 - **Changed:** Food tooltips show hunger and saturation at the top, on one row (client setting: saturation on its own line), then the diversity, then the meal word ("Hearty Meal") [a second shank row under the name, hunger and saturation at the bottom].
 - **Removed:** The Spice of Life bonus and food history pages, and the separate "Food Diversity" tooltip line.
+- **Changed:** Food diversity follows food tiers: dragon dishes up to 11, gilded food up to 10, feasts up to 8, golden food up to 7, other filling food up to 6, mid-sized food up to 3, light snacks up to 1 [enchanted golden apple 10, golden cans under 1].
+- **Changed:** A can gives 80% of the diversity of the food in it.
+- **Changed:** Cooked meat and fish diversity follows the vanilla meats by hunger and saturation [cooked bison and smoked dragon leg above steak]. Cooked dragon meat scores above other meat and below dragon dishes.
+- **Changed:** Baked food, crafted dishes and coated food get the diversity of a Cooking Pot dish with the same ingredients.
+- **Changed:** A dish never gives less diversity than its best ingredient.
+- **Changed:** Bell peppers count as one food per color group (red, yellow and green; pink, white and orange; black, purple and blue), separately for raw, sliced, roasted, roasted slices, stuffed and rolls.
+- **Changed:** Chocolate-coated apples, waffles, rolls, glazed berries and glazed marshmallows count as one food each whatever the chocolate (milk, dark, ruby or white); chocolate-filled candies count as one food, caramel candies as another. Honey and caramel coatings count separately.
+- **Changed:** Hot cocoa, strong hot cocoa and Farmer's Respite coffee are drinks.
+- **Changed:** Lightman's chocolate coins give no diversity and do not count toward the diet.
 
 ## Stomping Basin <!-- icon: hearthandharvest:stomping_basin -->
 
@@ -275,6 +284,7 @@
 - **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
 - **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
 - **Removed:** Canned Legendary Roll Medley and Canned Mythical Roll Medley. Existing ones in worlds are deleted.
+- **New:** Cooking Pot recipes for the chocolate, caramel and honey coated foods and the Create Confectionery candies: 2 foods and 3 coating items make 2.
 
 ## Corpses <!-- icon: minecraft:skeleton_skull -->
 

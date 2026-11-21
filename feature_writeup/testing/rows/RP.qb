@@ -642,3 +642,45 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass uneaten: "Diversity: X" under the hunger row, no "Food Diversity: X" at the bottom; eaten: "Diversity: X (contributes Y)", no "Diversity Contribution: X" at the bottom, "Last eaten: N meals ago" still there; uncounted food: "This food does not contribute to food diversity." still there
 @fails `FoodTooltips.dropApplePieDiversity` (label prefix match), listener order (GatherComponents LOWEST)
 @draft client shots
+
+## SQ-RPI-10 | diversity table loads; tier values (plan_food_diversity_1121.md, food-tuning #32 #33)
+@group A
+@commands Boot; `grep -n "Diversity table" logs/latest.log`; eat an enchanted golden apple, a cooked beef and a cake slice, reading the diversity after each (`/solrp` status or the Diet Log)
+@pass log line "Diversity table: 1658 values, ... family members" (no "No /solraspberrypie/diversity.json"); each food adds its diversity.json value (enchanted golden apple 3.79, cooked beef 4.09, cake slice 0.55, shown rounded down), not Apple Pie's config values (10, 2, 4)
+@fails `Diversity.load` (path, JSON), `FoodListMixin.solrp$tableValue` (static inject on getComplexity), defaultconfigs complexityUnparsed not cleared
+@draft written with the build 2026-11-21
+
+## SQ-RPI-11 | families share one diet entry (food-tuning #34)
+@group A
+@commands Eat a red stuffed bell pepper, then a green one, then a white one; eat a chocolate apple then a ruby chocolate apple, then a caramel apple
+@pass green after red counts as a repeat (diversity unchanged, the family entry renewed); white counts as a new food; ruby after chocolate is a repeat; caramel is new
+@fails `Diversity.head` (families in diversity.json), `FoodListMixin.solrp$familyAdd` ModifyVariable on addFood(Item)
+@draft written with the build 2026-11-21
+
+## SQ-RPI-12 | chocolate coins out of the diet; hot cocoa and coffee are drinks (food-tuning #35)
+@group A
+@commands `/give @s lightmanscurrency:coin_chocolate_gold`, eat it; drink hot cocoa and Farmer's Respite coffee; `/kubejs reload server_scripts` not needed (tags load at boot)
+@pass the coin changes nothing in the Diet Log (no meal, diversity and counter unchanged) and is not in the Liquid Diet Log; hot cocoa and coffee land in the Liquid Diet Log, not the Diet Log
+@fails `#solraspberrypie:no_diet` (kubejs solapplepie/no_diet.js), `Drinks.isOutOfDiet`, food_types drink list (hot_cocoa, strong_hot_cocoa, farmersrespite_coffee)
+@draft written with the build 2026-11-21
+
+## SQ-RPI-13 | Cooking Pot coating recipes (food-tuning #36)
+@group A
+@commands `grep -c "farmersdelightcooking/pot_mirror" ` on a `/kubejs export` or check JEI on the client: Cooking Pot recipes for chocolate apple, caramel waffle, honey roll, chocolate_candy_1, glazed porkchop; cook 2 apples + 3 chocolate bars
+@pass 2 apples + 3 bars of chocolate make 2 chocolate apples; 44 pot_mirror recipes with Create Factory, Create Confectionery and Buzzier Bees loaded; no "Error occurred while handling event" for create/filling_pot_mirrors.js
+@fails `create/filling_pot_mirrors.js` rows, `NCH.fdCooking` (Item.of count)
+@draft written with the build 2026-11-21
+
+## CQ-RPI-64 | tooltips and books show the table's diversity
+@group client
+@commands Hover an enchanted golden apple, a canned enchanted golden apple, a stuffed bell pepper (red, then green after eating red), a chocolate coin; open the Food Dictionary sorted by highest diversity
+@pass enchanted golden apple "Diversity: 3.79", the can 3.03 (80%); green stuffed pepper shows "(contributes ...)" after eating red; the coin shows no diversity line; the Food Dictionary's top entries are dragon dishes at 11
+@fails `FoodTooltips` (calls getComplexity, inject applies on the client), `Diversity` read on the client side
+@draft written with the build 2026-11-21
+
+## CQ-RPI-65 | Diet Log after families
+@group client
+@commands Eat red, yellow, green roasted pepper slices; open the Diet Log meals grid
+@pass three meals shown as the head item of the family (red); hover diversity is the family's value; no crash on hover
+@fails meal log records the family head (`solrp$countUnique` reads the modified arg)
+@draft written with the build 2026-11-21; open question for the owner: show the eaten color instead of the head

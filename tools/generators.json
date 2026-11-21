@@ -426,6 +426,16 @@
 			"highlight": ["^\\s*new ", "PROBLEM"]
 		},
 		{
+			"id": "food_diversity",
+			"script": "tools/food_diversity.py",
+			"groups": ["food"],
+			"dumps": ["dumpfood"],
+			"outputs": [
+				"development/solRaspberryPie/src/main/resources/solraspberrypie/diversity.json"
+			],
+			"apply": "rebuild and install solRaspberryPie (./gradlew :solRaspberryPie:build --offline, then :solRaspberryPie:installToMods), restart; --report prints the tier tops and rotation table"
+		},
+		{
 			"id": "coaster_models",
 			"script": "tools/gen_coaster_models.py",
 			"groups": ["client", "food"],

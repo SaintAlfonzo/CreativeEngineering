@@ -42,6 +42,7 @@ if (global.CD) global.CD.genPut('food_types', 'farmersrespite', {
    "strong_black_tea",
    "strong_coffee",
    "strong_green_tea",
+   "strong_hot_cocoa",
    "strong_purulent_tea",
    "strong_rose_hip_tea",
    "strong_yellow_tea",

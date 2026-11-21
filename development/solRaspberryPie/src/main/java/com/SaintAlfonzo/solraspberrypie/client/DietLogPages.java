@@ -697,7 +697,7 @@ public final class DietLogPages {
 		int bestAge = Integer.MAX_VALUE;
 		String bestId = "";
 		for (Item item : eaten) {
-			if (Drinks.isDrink(item)) continue;
+			if (Drinks.isOutOfDiet(item)) continue;
 			double c = base.computeIfAbsent(item, DietLogPages::complexity);
 			if (c < 0) continue;
 			double gap = Math.abs(c - avg);

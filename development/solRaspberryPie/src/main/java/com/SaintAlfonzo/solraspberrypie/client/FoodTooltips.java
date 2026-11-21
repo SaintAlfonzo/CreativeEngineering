@@ -77,7 +77,7 @@ public final class FoodTooltips {
 	static Component diversityLine(ItemStack stack) {
 		if (stack.isEmpty()) return null;
 		Item item = stack.getItem();
-		if (!item.isEdible() || Drinks.isDrink(item)) return null;
+		if (!item.isEdible() || Drinks.isOutOfDiet(item)) return null;
 		try {
 			if (!SOLSweetPotatoConfig.shouldCount(item)) return null;
 			FoodInstance food = new FoodInstance(item);

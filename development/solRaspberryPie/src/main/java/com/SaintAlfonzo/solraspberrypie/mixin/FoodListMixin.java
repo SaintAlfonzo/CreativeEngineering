@@ -2,6 +2,7 @@ package com.SaintAlfonzo.solraspberrypie.mixin;
 
 import com.SaintAlfonzo.solraspberrypie.data.GateFoods;
 import com.SaintAlfonzo.solraspberrypie.data.MealLog;
+import com.SaintAlfonzo.solraspberrypie.logic.Diversity;
 import com.SaintAlfonzo.solraspberrypie.logic.Drinks;
 import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
 import com.tarinoita.solsweetpotato.tracking.FoodInstance;
@@ -18,6 +19,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -41,6 +43,10 @@ import java.util.Set;
  * And the meal log ({@link MealLog}, plan_diet_books.md 1.2): the last {@code endDecay} counted meals, newest first,
  * duplicates kept (key {@code solrp_meals}); cleared with Apple Pie's food memory. A list saved before the key existed is
  * backfilled from the memory (one entry per food still in the window, so no duplicates).
+ * <p>
+ * And the diversity table ({@link Diversity}, plan_food_diversity_1121.md R1): a listed food's value replaces Apple
+ * Pie's formula and config list; a family member is handled as its family head in every per-item method, so the whole
+ * family is one diet entry.
  */
 @Mixin(value = FoodList.class, remap = false)
 public abstract class FoodListMixin implements GateFoods, MealLog {
@@ -78,9 +84,40 @@ public abstract class FoodListMixin implements GateFoods, MealLog {
 		return solrp$gate;
 	}
 
+	@Inject(method = "getComplexity", at = @At("HEAD"), cancellable = true)
+	private static void solrp$tableValue(FoodInstance food, CallbackInfoReturnable<Double> cir) {
+		Double v = food == null ? null : Diversity.value(food.getItem());
+		if (v != null) cir.setReturnValue(v);
+	}
+
+	@ModifyVariable(method = "addFood(Lnet/minecraft/world/item/Item;)V", at = @At("HEAD"), argsOnly = true)
+	private Item solrp$familyAdd(Item item) {
+		return Diversity.head(item);
+	}
+
+	@ModifyVariable(method = "addFood(Lnet/minecraft/world/item/Item;Ljava/util/Map;)V", at = @At("HEAD"), argsOnly = true)
+	private Item solrp$familyAddTo(Item item) {
+		return Diversity.head(item);
+	}
+
+	@ModifyVariable(method = "simulateFoodAdd", at = @At("HEAD"), argsOnly = true)
+	private Item solrp$familySimulate(Item item) {
+		return Diversity.head(item);
+	}
+
+	@ModifyVariable(method = "getLastEaten", at = @At("HEAD"), argsOnly = true)
+	private Item solrp$familyLastEaten(Item item) {
+		return Diversity.head(item);
+	}
+
+	@ModifyVariable(method = "hasEaten", at = @At("HEAD"), argsOnly = true)
+	private Item solrp$familyHasEaten(Item item) {
+		return Diversity.head(item);
+	}
+
 	@Inject(method = "addFood(Lnet/minecraft/world/item/Item;)V", at = @At("HEAD"), cancellable = true)
 	private void solrp$skipDrinks(Item item, CallbackInfo ci) {
-		if (Drinks.isDrink(item)) ci.cancel();
+		if (Drinks.isOutOfDiet(item)) ci.cancel();
 	}
 
 	@Inject(method = "addFood(Lnet/minecraft/world/item/Item;)V", at = @At("RETURN"))

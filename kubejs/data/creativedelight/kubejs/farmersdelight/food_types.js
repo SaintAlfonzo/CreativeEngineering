@@ -108,7 +108,8 @@ if (global.CD) global.CD.genPut('food_types', 'farmersdelight', {
    "stuffed_pumpkin"
   ],
   "drink": [
-   "farmersdelight_apple_cider"
+   "farmersdelight_apple_cider",
+   "hot_cocoa"
   ],
   "ingredient": [
    "out_dough",
