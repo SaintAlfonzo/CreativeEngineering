@@ -1,11 +1,10 @@
 # Plan: Creative Common CurseForge update (1.3.0)
 
-<!-- generated:status_index begin open_work sha1=42193374a448 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, In Progress 2, Testing 2), 2 Complete.
+<!-- generated:status_index begin open_work sha1=26efcb638616 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 2, In Progress 2, Testing 2), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-common-publish #7` | Planned |  | P6 build and install Common 1.3.0 then the dependents; jarstamp pending empty for the upload set |
 | `creative-common-publish #8` | Planned | S C | P7 tests: CC13 run block (solo, optional-mod, full pack sets) and new client rows |
 | `creative-common-publish #9` | Planned |  | P8 release: tag creativecommon-1.3.0, upload Common first, then the dependents |
 | `creative-common-publish #3` | In Progress |  | P2 texture sources: no row missing since 1.2.0; owner look-check of the 12 wood composters (rows status=confirm) |

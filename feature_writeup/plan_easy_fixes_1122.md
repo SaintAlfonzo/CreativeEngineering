@@ -17,12 +17,11 @@ reason for none), writeup line and queue rows in the same session.
 
 ## 0. Decisions (owner, 2026-11-22)
 
-<!-- generated:status_index begin open_work sha1=daca5b208cad -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Bug 3, Planned 7, In Progress 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=fb836845e370 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Bug 2, Planned 7, In Progress 1, Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `blockrunner #18` | Bug | SQ-CC-03 SQ-CC12-02 SQ-CPP-05 | Sand and red sand layer recipes error when Immersive Weathering is absent |
 | `generators-and-tests #28` | Bug | CCO-12 | creativedevtools sequence_assembly_processes.js line 58 logs 'Failed to create custom JSON recipe' |
 | `mod-updates #3` | Bug | SQ-SPFX-06 | Item dict still lists the dropped legendary and mythical roll medley cans |
 | `alcohol/vineryport #24` | Planned | S | Ripe stem shearing may duplicate seeds |
@@ -33,6 +32,7 @@ reason for none), writeup line and queue rows in the same session.
 | `ui/tooltips #16` | Planned | C | Tooltip language: spyglass and bell lines |
 | `worldgen/biomes #15` | Planned | S P | Broken bone and bone chunk: pressing, milling and crushing |
 | `dishes/ingredients #28` | In Progress | S P | Sliced potato tag |
+| `blockrunner #18` | Testing | SQ-CC-03 SQ-CC12-02 SQ-CPP-05 | Sand and red sand layer recipes error when Immersive Weathering is absent |
 <!-- generated:status_index end open_work -->
 
 | # | Row | Ruling |
