@@ -33,19 +33,19 @@ Options:
                 Use this when you want the outline of the item to be the darkest color.
     --drop      Comma-separated color classes to leave out of the palette
                 before mapping: brown, white (see DROP_CLASSES). Ignored for a
-                palette where it would leave no colours.
+                palette where it would leave no colors.
     --drop-darkest N
                 Leave the N darkest colors out of the palette (e.g. an item's
                 outline, so a soft block template stays soft). Ignored when it
-                would leave no colours.
+                would leave no colors.
     --drop-lightest N
                 The same for the N lightest colors (applied after --drop-darkest).
     --interpolate
                 When the palette has fewer unique colors than the image being
-                recoloured, force an even gradient: the source shades, ranked by
+                recolored, force an even gradient: the source shades, ranked by
                 brightness, are spaced evenly from the palette's first color to
                 its last, blending between neighboring palette colors, instead
-                of several source shades snapping onto one palette colour. Keeps
+                of several source shades snapping onto one palette color. Keeps
                 shading from a near-uniform palette or a gradient. When the
                 palette has as many colors as the source or more (no effect
                 before 2026-11-22), it is split into one run per source
@@ -61,6 +61,26 @@ Options:
                 skipped, also colors whose hue breaks the brightness order.
                 Without --even and --interpolate the legacy mapping is unchanged.
     --preview   Also save a 160x160 upscaled preview alongside each output.
+
+Mapping options (2026-11-22, plan_texture_tools_gui.md section 3; every default keeps the legacy output):
+    --mode M    rank (default, legacy), even (same as --even), role (hue family, then
+                lightness rank inside it), nearest (closest palette color in Lab),
+                ramp (source lightness fitted onto the palette sorted by lightness)
+    --interp W  off (default), smaller (blend only when the palette has fewer colors
+                than the source), always (same as --interpolate)
+    --interp-amount F   0..1, how far toward the blended color (default 1)
+    --interp-space S    rgb (default), hsv, lab
+    --palette-alpha N   ignore palette pixels with alpha below N (default 1 = every
+                non-transparent pixel; 255 = opaque only)
+    --palette-exclude C,C   palette colors to leave out (#rrggbb, comma separated)
+    --palette-tol N     also leave out colors within N per channel of those
+    --keep-source C,C   source colors left untouched (outlines, eyes)
+    --keep-tol N        tolerance for --keep-source
+    --hue-shift DEG, --sat-shift F, --val-shift F   shift the palette first (F in -1..1)
+    --preserve F        0..1, blend the result back toward the source
+    --stretch           contrast stretch the source lightness (nearest, ramp)
+    --alpha A           palette (default, legacy: alpha from the palette color) or source
+    --dither D          none (default) or ordered (only where the palette is smaller)
 
 Examples:
     python palette_swap.py wire_aluminum.png ingot_silver.png silver_wire.png --invert
@@ -81,7 +101,8 @@ from PIL import Image
 from texturetools.core.palette import *  # noqa: F401,F403 (the old module's names, for importers)
 from texturetools.core.palette import DROP_CLASSES, get_colors_by_brightness, load_palette_colors
 from texturetools.core.swap import *  # noqa: F401,F403
-from texturetools.core.swap import IMAGE_EXTENSIONS, process_one
+from texturetools.core.swap import (ALPHA_SOURCES, DITHERS, INTERPOLATE, MODES, SPACES, IMAGE_EXTENSIONS, SwapOptions,
+									 _save, load_rgba_u8, prepare_palette, process_one, swap_colors)
 
 # ---------------------------------------------------------------------------
 # Bulk mode folders -- edit these to point at your own source/output folders.
@@ -101,6 +122,82 @@ def parse_drops(value):
 	return names
 
 
+def parse_color_list(value):
+	from texturetools.core.palette import parse_color
+	out = []
+	for part in value.split(","):
+		part = part.strip()
+		if part:
+			try:
+				parse_color(part)
+			except ValueError as e:
+				raise argparse.ArgumentTypeError(str(e))
+			out.append(part)
+	return out
+
+
+def add_mode_args(parser):
+	"""The P1 mapping flags (shared by single and --bulk). The usage line stays the legacy one (error output is
+	part of the T1 parity); -h lists the new flags."""
+	parser.usage = parser.format_usage()[len("usage: "):].rstrip("\n")
+	parser.add_argument("--mode", choices=MODES, default="rank", help="Mapping mode (default rank, the legacy map)")
+	parser.add_argument("--interp", choices=INTERPOLATE, default="off", help="Blend between palette neighbors")
+	parser.add_argument("--interp-amount", type=float, default=1.0, metavar="F", help="0..1 toward the blend")
+	parser.add_argument("--interp-space", choices=SPACES, default="rgb", help="Blend space")
+	parser.add_argument("--palette-alpha", type=int, default=1, metavar="N",
+						help="Ignore palette pixels with alpha below N (1 = legacy, 255 = opaque only)")
+	parser.add_argument("--palette-exclude", type=parse_color_list, default=[], metavar="C,C",
+						help="Palette colors to leave out (#rrggbb, comma separated)")
+	parser.add_argument("--palette-tol", type=int, default=0, metavar="N", help="Tolerance for --palette-exclude")
+	parser.add_argument("--keep-source", type=parse_color_list, default=[], metavar="C,C",
+						help="Source colors left untouched (#rrggbb, comma separated)")
+	parser.add_argument("--keep-tol", type=int, default=0, metavar="N", help="Tolerance for --keep-source")
+	parser.add_argument("--hue-shift", type=float, default=0.0, metavar="DEG", help="Shift palette hue")
+	parser.add_argument("--sat-shift", type=float, default=0.0, metavar="F", help="Shift palette saturation (-1..1)")
+	parser.add_argument("--val-shift", type=float, default=0.0, metavar="F", help="Shift palette value (-1..1)")
+	parser.add_argument("--preserve", type=float, default=0.0, metavar="F", help="0..1 blend back toward the source")
+	parser.add_argument("--stretch", action="store_true", help="Contrast stretch source lightness (nearest, ramp)")
+	parser.add_argument("--alpha", choices=ALPHA_SOURCES, default="palette", help="Output alpha source")
+	parser.add_argument("--dither", choices=DITHERS, default="none", help="Ordered dither for smaller palettes")
+
+
+def options_from_args(args):
+	"""SwapOptions from parsed args; --even / --interpolate fold into --mode even / --interp always."""
+	mode = "even" if args.even and args.mode == "rank" else args.mode
+	interp = "always" if args.interpolate and args.interp == "off" else args.interp
+	return SwapOptions(
+		mode=mode, interpolate=interp, interp_amount=args.interp_amount, interp_space=args.interp_space,
+		invert=args.invert, drops=list(args.drop), drop_darkest=args.drop_darkest, drop_lightest=args.drop_lightest,
+		palette_alpha=args.palette_alpha, palette_exclude=list(args.palette_exclude),
+		palette_exclude_tol=args.palette_tol, source_keep=list(args.keep_source), source_keep_tol=args.keep_tol,
+		hue_shift=args.hue_shift, sat_shift=args.sat_shift, val_shift=args.val_shift, preserve=args.preserve,
+		stretch=args.stretch, alpha=args.alpha, dither=args.dither).validate()
+
+
+def print_new_options(opts):
+	"""One line for the non-default P1 options (nothing for a legacy run, so legacy stdout is unchanged)."""
+	d = SwapOptions()
+	extra = ["{0}={1}".format(k, v) for k, v in opts.to_dict().items()
+			 if k not in ("invert", "drops", "drop_darkest", "drop_lightest") and v != getattr(d, k)]
+	if extra and not opts.is_legacy():
+		print("Options: {0}".format(", ".join(extra)))
+
+
+def swap_one(pal_path, opts):
+	"""Load one palette; returns (palette image, palette colors, run(src_arr, out_path, preview)). The legacy
+	calls when opts is legacy, else the P1 engine."""
+	if opts.is_legacy():
+		pal_img, palette_colors, palette_counts = load_palette_colors(
+			pal_path, opts.invert, opts.drops, opts.drop_darkest, opts.drop_lightest, with_counts=True)
+		return pal_img, palette_colors, lambda src_arr, out_path, preview: process_one(
+			src_arr, palette_colors, out_path, preview, opts.interpolate == "always", opts.mode == "even",
+			palette_counts)
+	pal_img = Image.open(pal_path).convert("RGBA")
+	palette_colors, palette_counts = prepare_palette(np.array(pal_img), opts)
+	return pal_img, palette_colors, lambda src_arr, out_path, preview: _save(
+		swap_colors(src_arr, palette_colors, opts, palette_counts), out_path, preview)
+
+
 def run_single(args):
 	src_path, pal_path, out_path = args.source, args.palette, args.output
 
@@ -111,8 +208,12 @@ def run_single(args):
 		sys.stderr.write("Error: palette file not found: {0}\n".format(pal_path))
 		sys.exit(1)
 
-	pal_img, palette_colors, palette_counts = load_palette_colors(
-		pal_path, args.invert, args.drop, args.drop_darkest, args.drop_lightest, with_counts=True)
+	try:
+		opts = options_from_args(args)
+	except ValueError as e:
+		sys.stderr.write("Error: {0}\n".format(e))
+		sys.exit(1)
+	pal_img, palette_colors, run = swap_one(pal_path, opts)
 	src_img = Image.open(src_path).convert("RGBA")
 	src_arr = np.array(src_img)
 
@@ -134,10 +235,10 @@ def run_single(args):
 		print("Even:    on (even rank spacing; a larger palette is sampled in even runs)")
 	if args.drop:
 		print("Drop:    {0}".format(", ".join(args.drop)))
+	print_new_options(opts)
 
 	try:
-		out_path, preview_path = process_one(src_arr, palette_colors, out_path, args.preview, args.interpolate,
-											 args.even, palette_counts)
+		out_path, preview_path = run(src_arr, out_path, args.preview)
 	except ValueError as e:
 		sys.stderr.write("Error: {0}\n".format(e))
 		sys.exit(1)
@@ -180,6 +281,12 @@ def run_bulk(args, src_dir=None, out_dir=None):
 		print("Even:    on (even rank spacing; a larger palette is sampled in even runs)")
 	if args.drop:
 		print("Drop:    {0}".format(", ".join(args.drop)))
+	try:
+		opts = options_from_args(args)
+	except ValueError as e:
+		sys.stderr.write("Error: {0}\n".format(e))
+		sys.exit(1)
+	print_new_options(opts)
 
 	# Don't treat the shape file itself as one of the palette-providing items,
 	# in case it happens to also live in src_dir.
@@ -209,10 +316,8 @@ def run_bulk(args, src_dir=None, out_dir=None):
 		try:
 			# Each item in the folder supplies its OWN palette, which gets
 			# applied onto the fixed shape's pixels.
-			_, palette_colors, palette_counts = load_palette_colors(
-				item_path, args.invert, args.drop, args.drop_darkest, args.drop_lightest, with_counts=True)
-			saved_path, preview_path = process_one(shape_arr, palette_colors, out_path, args.preview, args.interpolate,
-												   args.even, palette_counts)
+			_, _, run = swap_one(item_path, opts)
+			saved_path, preview_path = run(shape_arr, out_path, args.preview)
 			msg = "  OK    {0} -> {1}".format(fname, saved_path)
 			if preview_path:
 				msg += " (+ preview)"
@@ -277,6 +382,7 @@ def main(argv=None, bulk_source_dir=None, bulk_output_dir=None):
 			action="store_true",
 			help="Also save a 160x160 upscaled preview alongside each output.",
 		)
+		add_mode_args(parser)
 		args = parser.parse_args(argv)
 		run_bulk(args, bulk_source_dir, bulk_output_dir)
 		return
@@ -321,6 +427,7 @@ def main(argv=None, bulk_source_dir=None, bulk_output_dir=None):
 		action="store_true",
 		help="Also save a 160x160 upscaled preview alongside each output.",
 	)
+	add_mode_args(parser)
 	args = parser.parse_args(argv)
 	run_single(args)
 
