@@ -218,6 +218,7 @@ move here when they get a family.
 - [Creative Mods](#creative-mods)
   - [Creative Brewing](#creative-brewing)
   - [Creative Calendar](#creative-calendar)
+  - [Creative Common Publish](#creative-common-publish)
   - [Creative Split](#creative-split)
 - [Tooling](#tooling)
   - [Performance and Server](#performance-and-server)
@@ -959,6 +960,12 @@ Creative Brewing (built 2026-10-31, [creative_brewing.md](../creative_brewing.md
 A future own mod, Creative Calendar, for the calendar, day and night cycle, seasons and weather / effects by biome; Creative Delight and Creative Brewing will both depend on it (owner, 2026-10-31). Reserved only: nothing moves until a plan is written.
 
 <?todo rows Creative Calendar?>
+
+## Creative Common Publish
+
+Creative Common 1.3.0 CurseForge update ([plan_cc_publish_1_3.md](../plan_cc_publish_1_3.md)); the 1.2.0-era rows are `creativecommon/publish #1` to `#5` under Creative Brewing.
+
+<?todo rows Creative Common Publish?>
 
 ## Creative Split
 

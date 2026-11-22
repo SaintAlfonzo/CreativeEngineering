@@ -247,6 +247,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `CQ-CBP-` | 2 | [plan_cb_polish.md](../plan_cb_polish.md) |  |
 | `CQ-CBS-` | 1 | [plan_cb_publish.md](../plan_cb_publish.md) |  |
 | `CQ-CCB-` | 3 | [creative_engineering.md](../creative_engineering.md) |  |
+| `CQ-CC13-` | 4 | [creative_engineering.md](../creative_engineering.md) | Creative Common 1.3.0 publish client rows |
 | `CQ-CCO-` | 3 | [creative_engineering.md](../creative_engineering.md) |  |
 | `CQ-CDFL-` | 1 | [plan_cb_polish.md](../plan_cb_polish.md) |  |
 | `CQ-CDFO-` | 1 | [nests.md](../nests.md) |  |
@@ -367,6 +368,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `SQ-CBS-` | 2 | [plan_cb_publish.md](../plan_cb_publish.md) |  |
 | `SQ-CBW-` | 4 | [kitchen.md](../kitchen.md) |  |
 | `SQ-CC12-` | 3 | [creative_engineering.md](../creative_engineering.md) |  |
+| `SQ-CC13-` | 6 | [creative_engineering.md](../creative_engineering.md) | Creative Common 1.3.0 publish run sets (rerun existing rows) |
 | `SQ-CCB-` | 1 | [jei_ordering.md](../jei_ordering.md) |  |
 | `SQ-CCO-` | 16 | [creative_engineering.md](../creative_engineering.md) |  |
 | `SQ-CDB-` | 20 | [ocean_delight.md](../ocean_delight.md) |  |
