@@ -6,14 +6,14 @@ is the build.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=59378e2d7a1f -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 15 open TODO rows (Planned 1, In Progress 1, Testing 13), 1 Complete.
+<!-- generated:status_index begin open_work sha1=a549bca912ad -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 15 open TODO rows (In Progress 1, Testing 14), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `alcohol/vineryport #24` | Planned | S | Ripe stem shearing may duplicate seeds |
 | `jei/jei-coverage #6` | In Progress | S | Mod bugs found by the tabs |
 | `alcohol/vineryport #23` | Testing | C P | JEI tab for grape planting types |
+| `alcohol/vineryport #24` | Testing | SQ-VN-02 | Ripe stem shearing may duplicate seeds |
 | `jei/jei-coverage #5` | Testing | C P | World-interaction tabs |
 | `jei/jei-coverage #16` | Testing | C P | Stripping tab cycles through logs |
 | `jei/jei-coverage #17` | Testing | C P | Soap Washing tab cycles dyed glass and all copper |

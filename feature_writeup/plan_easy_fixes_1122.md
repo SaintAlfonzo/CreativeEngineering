@@ -17,22 +17,22 @@ reason for none), writeup line and queue rows in the same session.
 
 ## 0. Decisions (owner, 2026-11-22)
 
-<!-- generated:status_index begin open_work sha1=fb836845e370 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Bug 2, Planned 7, In Progress 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=12f09057900b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Planned 1, In Progress 1, Testing 9), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `generators-and-tests #28` | Bug | CCO-12 | creativedevtools sequence_assembly_processes.js line 58 logs 'Failed to create custom JSON recipe' |
-| `mod-updates #3` | Bug | SQ-SPFX-06 | Item dict still lists the dropped legendary and mythical roll medley cans |
-| `alcohol/vineryport #24` | Planned | S | Ripe stem shearing may duplicate seeds |
-| `blocks/framed-and-decor #2` | Planned | C | Copycat resource pack keeps the framed block name |
-| `engineering/sawmill-and-components #3` | Planned | C P | JEI doesn't show the sawmill blade |
 | `farming/wild-crops #9` | Planned | S | Wild carrots and adzuki missing from forest boxes |
-| `performance-and-server #2` | Planned | S | Immersive Posts: iron fence on a post base no longer grows the post |
-| `ui/tooltips #16` | Planned | C | Tooltip language: spyglass and bell lines |
-| `worldgen/biomes #15` | Planned | S P | Broken bone and bone chunk: pressing, milling and crushing |
 | `dishes/ingredients #28` | In Progress | S P | Sliced potato tag |
+| `alcohol/vineryport #24` | Testing | SQ-VN-02 | Ripe stem shearing may duplicate seeds |
 | `blockrunner #18` | Testing | SQ-CC-03 SQ-CC12-02 SQ-CPP-05 | Sand and red sand layer recipes error when Immersive Weathering is absent |
+| `blocks/framed-and-decor #2` | Testing | CQ-TT-06 | Copycat resource pack keeps the framed block name |
+| `engineering/sawmill-and-components #3` | Testing | CQ-EN-26 | JEI doesn't show the sawmill blade |
+| `generators-and-tests #28` | Testing | SQ-CCO-12a SQ-CCO-12b SQ-CCO-12c SQ-CCO-12d SQ-CCO-12e SQ-CCO-12f | creativedevtools sequence_assembly_processes.js line 58 logs 'Failed to create custom JSON recipe' |
+| `mod-updates #3` | Testing | SQ-SPFX-06 | Item dict still lists the dropped legendary and mythical roll medley cans |
+| `performance-and-server #2` | Testing | SQ-IPO-02 | Immersive Posts: iron fence on a post base no longer grows the post |
+| `ui/tooltips #16` | Testing | CQ-LTP-16 | Tooltip language: spyglass and bell lines |
+| `worldgen/biomes #15` | Testing | SQ-VH-13 | Broken bone and bone chunk: pressing, milling and crushing |
 <!-- generated:status_index end open_work -->
 
 | # | Row | Ruling |

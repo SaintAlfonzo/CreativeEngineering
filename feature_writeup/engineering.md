@@ -2,14 +2,13 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=939d88700e4f -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 9, Testing 4), 3 Complete.
+<!-- generated:status_index begin open_work sha1=fdbdf3dffaa4 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 8, Testing 5), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `engineering/dreams-and-desires #7` | Planned | S P T | Tune milkshake lava generation |
 | `engineering/dreams-and-desires #8` | Planned | S P T | Tune sulfuric acid lava generation |
-| `engineering/sawmill-and-components #3` | Planned | C P | JEI doesn't show the sawmill blade |
 | `engineering/sawmill-and-components #4` | Planned | S P | One center per component |
 | `engineering/sawmill-and-components #8` | Planned | S P | Metal component chains generated |
 | `engineering/sawmill-and-components #9` | Planned | S P | Wire alternatives by conductivity |
@@ -19,6 +18,7 @@
 | `engineering/dreams-and-desires #3` | Testing | S C P T | Rose quartz sand blasting |
 | `engineering/sawmill-and-components #1` | Testing | S C P | Engineering features |
 | `engineering/sawmill-and-components #2` | Testing | S | Sawmill recipes off the manual pipeline |
+| `engineering/sawmill-and-components #3` | Testing | CQ-EN-26 | JEI doesn't show the sawmill blade |
 | `tooling/conventions #1` | Testing | S | Raw `e.custom` and `e.add` against the helper rule |
 <!-- generated:status_index end open_work -->
 

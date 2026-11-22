@@ -134,7 +134,7 @@ Potion buckets and tipped arrows,potion_buckets.md,PB-,BUILT,creativebrewing,SQ-
 Effects,effects.md,EF-,reference,,,"reference, written 2026-10-19 (140 effects)",reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Enchantment power,enchant_power.md,EP-,reference,,,"audit written 2026-10-31, nothing built",,,
 Wise Oak,wise_oak.md,WO-,BUILT,creativeworldgen,"CQ-WO, SQ-WO","built 2026-11-09 with high-trust gifts and `/wiseoak trust`, Creative Worldgen installed in `mods/`, scratch ...",,,
-Visceral Heap,visceral_heap.md,VH-,planned,creativeworldgen,"CQ-FLR, CQ-VH, SQ-FLR, SQ-VH","2026-11-14: all flesh (plan_bugfix_1114.md 6.4) BUILT, Creative Worldgen installed",,,
+Visceral Heap,visceral_heap.md,VH-,BUILT,creativeworldgen,"CQ-FLR, CQ-VH, SQ-FLR, SQ-VH","2026-11-14: all flesh (plan_bugfix_1114.md 6.4) BUILT, Creative Worldgen installed",,,
 Archery and bullets,archery.md,AR-,BUILT,"creativeequipment, creativecommon","CQ-AR, SQ-AR","DEPLOYED (since 1.0.3), in-game test pending (AR-01 to AR-18)",,,
 Pack tooling,pack_tooling.md,TL-,BUILT,"creativedevtools, creativecommon","SQ-INV, SQ-TL, SQ-NCH",in use,,,
 Client capture,client_capture.md,CC-,BUILT,creativedevtools,CQ-TXC,"BUILT 2026-11-15 (driver, runner, cropper, channel, qrun driver transport, first specs), scratch test queued ...",,,

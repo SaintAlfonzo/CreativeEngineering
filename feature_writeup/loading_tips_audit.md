@@ -8,8 +8,8 @@ and [plan_loading_tips_screens.md](plan_loading_tips_screens.md). First audit (2
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=f61f45c8ea25 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, In Progress 1, Testing 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=75c26921b996 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 1, In Progress 1, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -18,6 +18,7 @@ and [plan_loading_tips_screens.md](plan_loading_tips_screens.md). First audit (2
 | `ui/loadingtips #1` | Testing | S C | Loading screen tip bar and tip packs |
 | `ui/loadingtips #4` | Testing | C | Audit Loading Tips against pack changes |
 | `ui/loadingtips #5` | Testing | C | Tip ids, override packs, tips on every loading screen |
+| `ui/tooltips #16` | Testing | CQ-LTP-16 | Tooltip language: spyglass and bell lines |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |

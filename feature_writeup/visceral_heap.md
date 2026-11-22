@@ -7,13 +7,13 @@ Status: BUILT and installed 2026-11-09. Never booted; every live check is queued
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=cc74d2ddb52c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=aebe5b894205 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `worldgen/biomes #13` | Planned | C | Eyebulb animation: slower, offset per block |
-| `worldgen/biomes #15` | Planned | S P | Broken bone and bone chunk: pressing, milling and crushing |
+| `worldgen/biomes #15` | Testing | SQ-VH-13 | Broken bone and bone chunk: pressing, milling and crushing |
 <!-- generated:status_index end open_work -->
 
 ## 1. What it is

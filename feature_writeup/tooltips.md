@@ -4,14 +4,15 @@ Test prefix **TT-** · Last updated **2026-11-02** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=0db0e32397a3 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, Testing 5), 1 Complete.
+<!-- generated:status_index begin open_work sha1=bcadc1f657d1 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 2, Testing 6), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `ui/tooltips #2` | Planned | C | Tooltips to add (items) |
 | `ui/tooltips #3` | Planned | C | Tooltips to add (mods) |
 | `alcohol/vineryport #16` | Testing | C~ P | Vinery tooltips |
+| `blocks/framed-and-decor #2` | Testing | CQ-TT-06 | Copycat resource pack keeps the framed block name |
 | `tooltips #19` | Testing | C | Food tooltip order (Raspberry Pie pass): AppleSkin hunger and saturation at the top (option: saturation on its own line), Quark shank row removed (config first), diversity line before Quark's saturation word |
 | `ui/tooltips #4` | Testing | C~ P | AppleSkin bars in more screens |
 | `ui/tooltips #5` | Testing | C | Large tooltips run off the bottom |
