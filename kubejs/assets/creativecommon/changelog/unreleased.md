@@ -549,6 +549,7 @@
 - **Fixed:** Engineer's Workbench recipes that list an input twice could not be crafted (spectral and split arrows, dropper, observer, piston, thunder detector, note block, jukebox).
 - **Fixed:** Splash and lingering Mundane Potion fluid worked in the Thunder Detector assembly.
 - **Fixed:** Polished Iron Bars had no recipe, so iron catwalks and supports could not be crafted. They are made by sandpaper polishing Iron Bars.
+- **New:** JEI information pages on the Sawblade and the Precision Sawblade say which Sawmill cuts each blade makes.
 - **Fixed:** Stripped vanilla logs showed two identical Sawmill recipes in JEI.
 
 ## Tempad <!-- icon: tempad:tempad -->

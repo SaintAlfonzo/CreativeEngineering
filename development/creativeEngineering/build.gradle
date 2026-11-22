@@ -25,7 +25,7 @@ dependencies {
 	compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
-def scriptTrees = ['data/creativeengineering/kubejs']
+def scriptTrees = ['data/creativeengineering/kubejs', 'assets/creativeengineering/kubejs']
 
 tasks.named('processResources', ProcessResources).configure {
 	scriptTrees.each { tree ->
@@ -40,7 +40,7 @@ tasks.named('processResources', ProcessResources).configure {
 tasks.named('jar', Jar).configure {
 	doLast {
 		def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
-		['kubejs_startup/creativeengineering/', 'data/creativeengineering/kubejs/'].each { dir ->
+		['kubejs_startup/creativeengineering/', 'data/creativeengineering/kubejs/', 'assets/creativeengineering/kubejs/'].each { dir ->
 			if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
 				throw new GradleException("creativeengineering jar has no scripts under ${dir}")
 			}
