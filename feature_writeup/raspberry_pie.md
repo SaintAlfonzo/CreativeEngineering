@@ -641,6 +641,10 @@ Fix: a mixin on the effect's tick/removal code that keeps the "last duration" pe
 tag on the effect instance) and treats a refresh as a normal step, so state is no longer shared. Tested by RPI-33. It
 is in the default pool once the mixin is in.
 
+Versions tested: Alex's Mobs 1.21.1 (the pack's jar; `EffectFleetFooted` with `lastDuration`, `removeEffectAfter`,
+`m_6742_`). Since 2026-11-21 (12.9 P6) the fix checks the loaded class's members instead of a version range, so a
+later Alex's Mobs with the same members keeps it and one with different members turns it off with one warning.
+
 ## 13. Implementation hurdles (largest first)
 
 Not decisions; effort notes for planning.
@@ -991,4 +995,11 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   give no warning. `minFoodsToActivate` 0 opens the gate at once (the unique-food counter is then unused). Headless
   test: a respec of the two oldest window foods and a death on the default settings cost exactly what those foods
   contributed.
+- **Fleet-Footed guard (P6).** `FleetFootedMixin` stays gated on `alexsmobs`. `RpMixinPlugin` also reads the target
+  class (`MixinService` bytecode provider) and applies the mixin only when `EffectFleetFooted` has the int field
+  `lastDuration` (shadowed) and `applyEffectTick(LivingEntity, int)` (`m_6742_`, the injection point); otherwise one
+  warning names what is missing and the fix is off. The injection keeps `require = 0`, and the handler runs in a try:
+  a failure logs one warning, flags the fix off and hands every later tick back to Alex's Mobs' own code (the tick is
+  cancelled only after the per-entity logic succeeded). Tested with Alex's Mobs 1.21.1 (12.2). An Alex's Mobs update
+  can only turn the fix off, never crash the boot or a tick.
 
