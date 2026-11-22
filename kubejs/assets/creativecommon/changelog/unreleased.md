@@ -466,6 +466,7 @@
 - **Fixed:** Pistons could duplicate TNT and other blocks.
 - **Fixed:** Growing mushrooms replaced blocks.
 - **Fixed:** Tripwire hooks could be duplicated.
+- **Fixed:** Shearing a grape stem stepped it back one stage, so a ripe stem could be sheared for seeds several times; shears now empty the stem.
 
 ## Effects <!-- icon: minecraft:potion -->
 

@@ -115,9 +115,9 @@ pipe-spill collisions; Farmer's Delight bark (cutting board only); candle-skull 
   edited world config shows the pack default.
 - **Mod behavior found while building** (shown as it really behaves, not fixed): Salt's melting places water only in
   ultra-warm dimensions, elsewhere the block becomes air (its config comment says water); two IW growths use
-  `sky_access`, not a valid tick source; Backported Vinery: shearing a ripe stem drops seed and grapes but only steps
-  the stem back one stage, so repeated shearing may duplicate seeds (1.3.10 emptied it). TODO rows open: `jei/jei-coverage #6`
-  (salt, IW), `alcohol/vineryport #24` (stem shearing). The salt rework in 1.1.04 (salt no longer melts ice or snow when
+  `sky_access`, not a valid tick source; Backported Vinery's stem shearing stepped the stem back one
+  stage, so repeated shearing duplicated seeds: since 2026-11-22 shears drop grapes (ripe) and seeds and empty the stem, as
+  upstream 1.3.10 (`alcohol/vineryport #24`). TODO row open: `jei/jei-coverage #6` (salt, IW). The salt rework in 1.1.04 (salt no longer melts ice or snow when
   used or dispensed) may change the salt half: recheck before fixing.
 - Unverified details (check in game): concrete now sets after 30 s (32 s before the mixin, by the javap reading); DnD milkshake-lava pairing order and chances;
   powder snow per faucet pull; bed and framed-sign soap behavior; whether Create seats and valve handles use the dye;

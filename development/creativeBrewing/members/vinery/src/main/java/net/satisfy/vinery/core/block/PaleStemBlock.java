@@ -89,10 +89,8 @@ public class PaleStemBlock extends StemBlock {
                 dropGrapes(level, state, pos, hit.getDirection());
             }
             dropGrapeSeeds(level, state, pos, hit.getDirection());
-            BlockState sheared = withAge(state, Math.max(0, age - 1), state.getValue(GRAPE));
-            if (sheared.getValue(AGE) == 0) {
-                sheared = sheared.setValue(LEAVES_PENDING, false);
-            }
+            // Pack (alcohol/vineryport #24, upstream 1.3.10): shearing empties the stem, so one ripe stem gives seeds once
+            BlockState sheared = withAge(state, 0, state.getValue(GRAPE)).setValue(LEAVES_PENDING, false);
             level.setBlock(pos, sheared, 3);
             level.playSound(player, pos, SoundEvents.SWEET_BERRY_BUSH_BREAK, SoundSource.AMBIENT, 1.0F, 1.0F);
             return ItemInteractionResult.sidedSuccess(level.isClientSide);
