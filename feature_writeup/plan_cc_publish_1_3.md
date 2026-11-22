@@ -1,13 +1,12 @@
 # Plan: Creative Common CurseForge update (1.3.0)
 
-<!-- generated:status_index begin open_work sha1=26efcb638616 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 2, In Progress 2, Testing 2), 3 Complete.
+<!-- generated:status_index begin open_work sha1=ace2d1884dbd -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 2, In Progress 1, Testing 2), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creative-common-publish #8` | Planned | S C | P7 tests: CC13 run block (solo, optional-mod, full pack sets) and new client rows |
 | `creative-common-publish #9` | Planned |  | P8 release: tag creativecommon-1.3.0, upload Common first, then the dependents |
-| `creative-common-publish #3` | In Progress |  | P2 texture sources: no row missing since 1.2.0; owner look-check of the 12 wood composters (rows status=confirm) |
 | `creative-common-publish #4` | In Progress |  | P3 ISO dates and spelling: fixer, 9 unresolved on the owner list, spelling_docs |
 | `creative-common-publish #5` | Testing |  | P4 writeups: creative_engineering.md 7.6 Update to 1.3.0, 7.5 closed, touched writeups, project page |
 | `creative-common-publish #6` | Testing |  | P5 changelogs: CurseForge file changelog for Common, pack bullets, changelog_lint |

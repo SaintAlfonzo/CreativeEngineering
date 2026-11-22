@@ -4,14 +4,12 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=7a2ce2a9b50d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 10, Pinned 1, In Progress 46, Testing 37), 3 Complete.
+<!-- generated:status_index begin open_work sha1=23487aa73406 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 8, Pinned 2, In Progress 46, Testing 38), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `baking/baked-goods #34` | Planned | S C P | Every cake as a sequenced assembly |
-| `baking/baked-goods #35` | Planned | none | Investigate brownie tray and adzuki bun family |
-| `dishes/ingredients #15` | Planned | S C P | Butter |
 | `dishes/meals #14` | Planned | S C P T | Patty food type |
 | `dishes/meals #18` | Planned | S C P | Cheese in nachos |
 | `dishes/meals #20` | Planned | S C P | Feasts in ovens |
@@ -20,6 +18,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/pickles-and-ferments #9` | Planned | S C P | Pickled egg for the century egg |
 | `tooling/generators-and-tests #11` | Planned | S | `food_families.py` reports 94 unsorted foods |
 | `creativedelight/qol #3` | Pinned | S | QoL-3 Food types and the Quark saturation word |
+| `dishes/ingredients #15` | Pinned | S C P | Butter |
 | `baking/baked-goods #2` | In Progress | S C P T | Muffins as a decent food source |
 | `baking/baked-goods #4` | In Progress | S P | Pie sequenced assembly and chorus pie |
 | `baking/baked-goods #5` | In Progress | S C P T | Cakes |
@@ -70,11 +69,12 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `baking/baked-goods #18` | Testing | S C P | Brownie and cupcake baking types |
 | `baking/baked-goods #19` | Testing | S C P | Quiche baking type |
 | `baking/baked-goods #21` | Testing | S C P | Lasagna baking type |
-| `baking/baked-goods #22` | Testing | S C | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #22` | Testing | SQ-FF-22 OV-39 | Chorus cookie from the uncanny cookie |
 | `baking/baked-goods #24` | Testing | C | No shapeless pie-to-crust recipes |
 | `baking/baked-goods #25` | Testing | S~ C P | Sponge cake becomes sponge pie |
 | `baking/baked-goods #26` | Testing | S~ P | Honey cake honey and comb split |
 | `baking/baked-goods #27` | Testing | S+ C P | Dough block for every dough |
+| `baking/baked-goods #35` | Testing | SQ-FF-25 OV-42 | Investigate brownie tray and adzuki bun family |
 | `baking/baked-goods #37` | Testing | S+ P | Zucchini quiche sequenced assembly fails to load |
 | `cans/canning #17` | Testing | S P | All feasts cannable |
 | `cooking/kitchen #21` | Testing | S+ C P | Coaster tag: models or cuts |

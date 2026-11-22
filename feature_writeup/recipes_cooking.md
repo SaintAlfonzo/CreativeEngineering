@@ -7,7 +7,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=65454818a015 -->
+<!-- generated:status_index begin open_work sha1=308aa18e668e -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 33 open TODO rows (Planned 1, In Progress 8, Testing 24), 1 Complete.
 
 | Id | Status | Tests | Change |
@@ -21,7 +21,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | `dishes/meals #31` | In Progress | S C P | Nut butter sandwich |
 | `merges/dishes #5` | In Progress | S C P | Merge cheesy pastas |
 | `merges/dishes #8` | In Progress | S C P | Pizza and quiche |
-| `baking/baked-goods #22` | Testing | S C | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #22` | Testing | SQ-FF-22 OV-39 | Chorus cookie from the uncanny cookie |
 | `baking/baked-goods #24` | Testing | C | No shapeless pie-to-crust recipes |
 | `baking/baked-goods #25` | Testing | S~ C P | Sponge cake becomes sponge pie |
 | `baking/baked-goods #26` | Testing | S~ P | Honey cake honey and comb split |
