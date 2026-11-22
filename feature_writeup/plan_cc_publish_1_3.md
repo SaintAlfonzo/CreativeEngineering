@@ -1,5 +1,19 @@
 # Plan: Creative Common CurseForge update (1.3.0)
 
+<!-- generated:status_index begin open_work sha1=42193374a448 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, In Progress 2, Testing 2), 2 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creative-common-publish #7` | Planned |  | P6 build and install Common 1.3.0 then the dependents; jarstamp pending empty for the upload set |
+| `creative-common-publish #8` | Planned | S C | P7 tests: CC13 run block (solo, optional-mod, full pack sets) and new client rows |
+| `creative-common-publish #9` | Planned |  | P8 release: tag creativecommon-1.3.0, upload Common first, then the dependents |
+| `creative-common-publish #3` | In Progress |  | P2 texture sources: no row missing since 1.2.0; owner look-check of the 12 wood composters (rows status=confirm) |
+| `creative-common-publish #4` | In Progress |  | P3 ISO dates and spelling: fixer, 9 unresolved on the owner list, spelling_docs |
+| `creative-common-publish #5` | Testing |  | P4 writeups: creative_engineering.md 7.6 Update to 1.3.0, 7.5 closed, touched writeups, project page |
+| `creative-common-publish #6` | Testing |  | P5 changelogs: CurseForge file changelog for Common, pack bullets, changelog_lint |
+<!-- generated:status_index end open_work -->
+
 Source: owner request (chat 2026-11-21): update Creative Common on CurseForge so the Creative jars that require it can
 be uploaded; bump the version, list the client rows, fix texture sources, writeups, project page, ISO and spelling
 checks, mod sides, ship the whole change set since the last tag, then run the solo and optional-mod tests. Earlier gate
@@ -16,7 +30,7 @@ Status lives in TODO rows (created in P0), not here.
 | I4 | Texture rows | clear | the 36 wood composter textures are covered by one glob row in `sources.csv` (status `confirm`, owner look-check pending); no missing row |
 | I5 | ISO dates | clear | `iso_dates_docs`: 11 auto-fixable `(owner 2026-11-21` -> `(owner, 2026-11-21` (glass_shards.md, food_rules.csv); 9 unresolved on the owner list; 45 ambiguous left as is |
 | I6 | Spelling | premise | `spelling_docs` passed on 2026-11-21 22:40 (earlier FAIL was one pending word, now gone); recheck at the end |
-| I7 | Dedicated-server rows | clear | stay dropped from the gate (owner 2026-11-08) |
+| I7 | Dedicated-server rows | clear | stay dropped from the gate (owner, 2026-11-08) |
 | I8 | CurseForge changelog | clear | deferred 2026-11-13; written in P5 |
 
 ## 2. Owner rulings
