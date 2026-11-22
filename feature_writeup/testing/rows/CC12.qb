@@ -21,13 +21,14 @@
 @from batches/r1114cc12/cc12_01.qb
 @modset cc_only full
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
-bootreject creativecompat|creativecalendar|creativeengineering|creativeequipment|creativemagic|creativedelight|creativebrewing
+bootreject (creativecompat|creativecalendar|creativeengineering|creativeequipment|creativemagic|creativedelight|creativebrewing)(?!:)
 bootreject (?i)(ChatOpen|SwapReport|SwapCapabilityKeys).*(error|exception|fail)
 bootreject (?i)(m_188230_|m_41712_|m_91326_|m_90893_|m_90889_).*(error|fail|not found|could not)
 bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
 bootexpect \[compat\] Immersive Portals overwrites conform to target visibility
 bootexpect \[swaps\] \d+ list file\(s\): .* \d+ capability key\(s\)
-kjsreject (?i)error
+# judge-cc r1122cc (2026-11-22): the scratch creativedevtools jar's own create/ scripts error on recipe types this set lacks (same filter as CCO.qb line 37); bootreject above ignores the (?!:) ids in the default idleRandomTickRules list
+kjsreject ^(?!.*creativedevtools:kubejs/create/).*(?i:error)
 shell ls mods | grep -i creative; grep -m1 -E "\[swaps\] [0-9]+ list file" logs/latest.log | cut -c1-260; grep -c "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -cE "\[ERROR\]" logs/kubejs/startup.log; true
 shell grep -iE "mixin.*(client|Minecraft|Screen|ChatScreen)" logs/latest.log | grep -iE "creativecommon" | grep -viE "skipp|not loaded|dist" | head -5; true
 look mods: creativecommon-1.2.0 only; swap summary with capability keys; Common startup files loaded, 0 startup errors; no client mixin applied on the server

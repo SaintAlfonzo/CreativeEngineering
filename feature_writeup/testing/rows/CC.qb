@@ -27,10 +27,10 @@
 @pass the first command prints nothing; every mixin named in the json has a class in the jar; `mods.toml` lists no `create`, `immersiveengineering`, `fruitsdelight` dependency and does list `immersive_portals` and `heartstone` (optional, `ordering="NONE"`: the Heartstone-before-IP order is set in `CommonMixinPlugin`)
 @fails a moved file left behind (git status shows it staged as deleted), a json entry for a class that moved
 @reviewed 2026-11-16
-shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | head -1); test -z "$(unzip -l "$J" | grep -E "DrinkFluidEffects|FluidTagInputMixin|SequencedAssemblyRecipeMixin|CreateTeaPipeIconMixin|FruitsDelightEffectFuncMixin|resourcepacks/creative_tips|data/create/tags")" && echo "no moved file in the jar"
-shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | head -1); python3 -c "import zipfile,json,sys; z=zipfile.ZipFile(sys.argv[1]); j=json.loads(z.read('creativecommon.mixins.json')); n=set(z.namelist()); p=j['package'].replace('.','/'); m=[c for k in ('mixins','client','server') for c in j.get(k,[]) if p+'/'+c.replace('.','/')+'.class' not in n]; print('mixins without a class:', m); sys.exit(1 if m else 0)" "$J"
-shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | head -1); unzip -p "$J" META-INF/mods.toml | grep -E "modId|ordering"; ! unzip -p "$J" META-INF/mods.toml | grep -qE 'modId *= *"(create|immersiveengineering|fruitsdelight)"'
-shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | head -1); unzip -p "$J" META-INF/mods.toml | grep -qE 'modId *= *"immersive_portals"' && unzip -p "$J" META-INF/mods.toml | grep -qE 'modId *= *"heartstone"' && echo "IP and Heartstone listed"
+shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | sort -V | tail -1); test -z "$(unzip -l "$J" | grep -E "DrinkFluidEffects|FluidTagInputMixin|SequencedAssemblyRecipeMixin|CreateTeaPipeIconMixin|FruitsDelightEffectFuncMixin|resourcepacks/creative_tips|data/create/tags")" && echo "no moved file in the jar"
+shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | sort -V | tail -1); python3 -c "import zipfile,json,sys; z=zipfile.ZipFile(sys.argv[1]); j=json.loads(z.read('creativecommon.mixins.json')); n=set(z.namelist()); p=j['package'].replace('.','/'); m=[c for k in ('mixins','client','server') for c in j.get(k,[]) if p+'/'+c.replace('.','/')+'.class' not in n]; print('mixins without a class:', m); sys.exit(1 if m else 0)" "$J"
+shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | sort -V | tail -1); unzip -p "$J" META-INF/mods.toml | grep -E "modId|ordering"; ! unzip -p "$J" META-INF/mods.toml | grep -qE 'modId *= *"(create|immersiveengineering|fruitsdelight)"'
+shell J=$(ls "$INST"/development/creativeCommon/build/libs/creativecommon-*.jar | sort -V | tail -1); unzip -p "$J" META-INF/mods.toml | grep -qE 'modId *= *"immersive_portals"' && unzip -p "$J" META-INF/mods.toml | grep -qE 'modId *= *"heartstone"' && echo "IP and Heartstone listed"
 look the mods.toml lines: immersive_portals and heartstone optional with ordering="NONE"
 ## SQ-CC-02
 @group A (full pack)
@@ -100,7 +100,7 @@ kjsexpect \[ccdict\] item any_bark = #creativecommon:bark
 kjsexpect \[ccdict\] item t_metal_dusts = #creativecommon:metal_dusts
 kjsexpect \[ccdict\] block t_mirror_glass = #creativecompat:mirror_glass
 kjsexpect \[ccdict\] block t_mirror_glass_panes = #creativecompat:mirror_glass_panes
-kjsreject \[ccdict\] .*(rror|xception)
+kjsreject (?i)\[ccdict\] .*\b(error|exception)\b
 shell grep "\[ccdict\]" logs/kubejs/server.log | cut -c1-200
 > cdevtest tag item creativecommon:bark
 > cdevtest tag item creativecommon:metal_dusts
@@ -156,27 +156,28 @@ reject (Unknown or incomplete command|Incorrect argument for command|No player w
 @fails `effect/EffectRules`, `LivingEntityEffectRemapMixin`, Better Beacons mixin gate
 @reviewed 2026-11-16
 # judge-4 r1118 (2026-11-18): villagers -> cows (MCA overwriteOriginalVillagers replaced them: No entity was found, entities n=0); cow 10 HP survives 160 ticks of Poison II / Wither II
+# judge-cc r1122cc (2026-11-22): cows -> iron golems: the prep_srv server has spawn-animals=false, so ServerLevel discards every Animal a tick after the summon (No entity was found, entities n=0; gotchas.md); golems survive, 100 HP, box ceiling raised for their height
 > forceload add 2384 2384 2416 2416
-> fill 2398 -60 2398 2416 -57 2402 minecraft:glass hollow
-> summon minecraft:cow 2400 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrp"'}
-> summon minecraft:cow 2404 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plp"'}
-> summon minecraft:cow 2408 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrw"'}
-> summon minecraft:cow 2412 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plw"'}
-> effect give @e[type=minecraft:cow,name=mrp] creativecommon:magic_resistance 60 0
-> effect give @e[type=minecraft:cow,name=mrw] creativecommon:magic_resistance 60 0
-> effect give @e[type=minecraft:cow,name=mrp] minecraft:poison 10 1
-> effect give @e[type=minecraft:cow,name=plp] minecraft:poison 10 1
-> effect give @e[type=minecraft:cow,name=mrw] minecraft:wither 10 1
-> effect give @e[type=minecraft:cow,name=plw] minecraft:wither 10 1
+> fill 2398 -60 2398 2416 -54 2402 minecraft:glass hollow
+> summon minecraft:iron_golem 2400 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrp"'}
+> summon minecraft:iron_golem 2404 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plp"'}
+> summon minecraft:iron_golem 2408 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrw"'}
+> summon minecraft:iron_golem 2412 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plw"'}
+> effect give @e[type=minecraft:iron_golem,name=mrp] creativecommon:magic_resistance 60 0
+> effect give @e[type=minecraft:iron_golem,name=mrw] creativecommon:magic_resistance 60 0
+> effect give @e[type=minecraft:iron_golem,name=mrp] minecraft:poison 10 1
+> effect give @e[type=minecraft:iron_golem,name=plp] minecraft:poison 10 1
+> effect give @e[type=minecraft:iron_golem,name=mrw] minecraft:wither 10 1
+> effect give @e[type=minecraft:iron_golem,name=plw] minecraft:wither 10 1
 > cdevtest tickwarp 160
 waitlog verb=tickwarp end= 60
-> cdevtest entities 2406 -59 2400 8 type=minecraft:cow
-capture HMRP verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=mrp
-capture HPLP verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=plp
-capture HMRW verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=mrw
-capture HPLW verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=plw
+> cdevtest entities 2406 -59 2400 8 type=minecraft:iron_golem
+capture HMRP verb=entities type=minecraft:iron_golem .*health=([\d.]+) max=\S+ name=mrp
+capture HPLP verb=entities type=minecraft:iron_golem .*health=([\d.]+) max=\S+ name=plp
+capture HMRW verb=entities type=minecraft:iron_golem .*health=([\d.]+) max=\S+ name=mrw
+capture HPLW verb=entities type=minecraft:iron_golem .*health=([\d.]+) max=\S+ name=plw
 shell python3 -c "import sys; print('poison', {HMRP}, 'vs', {HPLP}, 'wither', {HMRW}, 'vs', {HPLW}); sys.exit(0 if {HMRP} > {HPLP} and {HMRW} > {HPLW} else 1)"
-> kill @e[type=minecraft:cow,x=2406,y=-59,z=2400,distance=..10]
+> kill @e[type=minecraft:iron_golem,x=2406,y=-59,z=2400,distance=..10]
 look the Better Beacons phantom half (a second bot still gets phantoms beside a Phantom Bane holder) stays in batches/r1107cc/b1_phantom.qb (cc_phantom_probe.js, night, spawn-monsters)
 reject \[cdevtest\] .*done=0
 
@@ -187,6 +188,8 @@ reject \[cdevtest\] .*done=0
 @fails `EffectRules` list parsing
 @reviewed 2026-11-16
 bootreject (?i)creativecommon-common\.toml.*(error|invalid|parse)
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecommon-common.toml effects removed '["minecraft:slowness"]'
+sleep 4
 shell grep -qE '^\s*removed = \["minecraft:slowness"\]' config/creativecommon-common.toml && echo "removed = slowness"
 > forceload add 2400 2400 2416 2416
 > pbot spawn cc11 2404 -60 2404 minecraft:overworld survival

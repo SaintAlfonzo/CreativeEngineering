@@ -535,13 +535,13 @@ def boot_and_run(d, i, s, out, res, todo, boot=None, retry=1, keep=False):
 	except RuntimeError:
 		if retry > 0 and rhino_flake(out):
 			log = Path(out) / 'srv/logs/latest.log'
-			keep = Path(out) / 'srv/logs/rhino_flake_step%02d.log' % (i + 1)
+			kept = Path(out) / ('srv/logs/rhino_flake_step%02d.log' % (i + 1))
 			try:
-				keep.write_bytes(log.read_bytes())
+				kept.write_bytes(log.read_bytes())
 			except OSError:
 				pass
 			d.log('step %d%s: known Rhino tag-load flake (Failed to load datapacks); rebooting once (log kept as %s)'
-				  % (i + 1, tag, keep.name))
+				  % (i + 1, tag, kept.name))
 			return boot_and_run(d, i, s, out, res, todo, boot, retry - 1, keep)
 		raise
 

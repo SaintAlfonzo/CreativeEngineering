@@ -72,15 +72,15 @@ look the create:kjs_ and zz_probe recipe lines: no loose create:kjs_ filling rec
 @draft eight jar-out restarts (jx_run.sh OUT magic equipment worldgen plus Brewing, Delight, Engineering, Calendar, Compat sets), one boot each: a runner loop, not one batch; per boot bootreject "Error occurred while handling event|ReferenceError" on logs/kubejs and bootexpect the Skipped ... is not loaded lines
 ## SQ-SPFX-06 | dict validators clean
 @group A
-@commands full pack boot: `grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log`; `grep -c "is not validated" logs/latest.log`; `grep "tag entries not checked" logs/latest.log`
-@pass no `Missing/invalid` list from any of the three dicts (or only ids whose mod is loaded and that a writeup expects); 0 `is not validated` lines; one `[block_dict] N tag entries not checked` and one `[fluid_dict] ...` info line
+@commands full pack boot: `grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log`; `grep -c "is not validated" logs/latest.log`; `grep "tag entries checked" logs/latest.log`
+@pass no `Missing/invalid` list from any of the three dicts (or only ids whose mod is loaded and that a writeup expects); 0 `is not validated` lines; one `[block_dict] N tag entries checked after server start` and one `[fluid_dict] ...` info line
 @fails a dict id whose item is gone (remove it, and its uses); the validators' `global.has` / glob skip
 @from batches/r1106spfx/a1.qb
 bootreject \[(item|block|fluid)_dict\] Missing
 # judge-12, 2026-11-18: the NCH fluid-tag 'is not validated' warnings are not dict lines (r1106spfx: row text too wide)
 bootreject \[(item|block|fluid)_dict\].*is not validated
-shell grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log | head -40; echo "notvalidated=$(grep -c 'is not validated' logs/latest.log)"; grep "tag entries not checked" logs/latest.log | head
-look one [block_dict] and one [fluid_dict] 'tag entries not checked' info line, nothing else
+shell grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log | head -40; echo "notvalidated=$(grep -c 'is not validated' logs/latest.log)"; grep "tag entries checked" logs/latest.log | head
+look one [block_dict] and one [fluid_dict] 'tag entries checked' info line, nothing else
 
 ## SQ-SPFX-07 | sky island generates
 @phase worldgen

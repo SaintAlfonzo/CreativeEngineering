@@ -144,6 +144,7 @@ holds only the textures. Hand-made JSONs for these ids in the jar are ignored (t
 ## 5. Tests
 
 Scratch SQ-CEN-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)); SQ-CMG and SQ-CEQ run on the same jars.
+Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md) 8, Common 1.3.0 23c5050d): SQ-CC, SQ-CC12, SQ-CCO, SQ-CGE, SQ-CMV, SQ-CPP, SQ-SPFX pending rows PASS except SQ-CC-03, SQ-CC12-02, SQ-CPP-05 (sand layers, TODO `blockrunner #18`), SQ-SPFX-06 (stale roll medley can ids, TODO `mod-updates #3`) FAIL; SQ-CC-10, SQ-SPFX-01, -03 INCONCLUSIVE (unscripted halves).
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CEN-02, -02b, -05s PASS (legacy config carry and merge, shrapnel kill); SQ-CMV-02, -03 PASS (Common alone, Armor Trims outside the tested range warns once).
 Common with only its optional mods (no Compat, Calendar or other Creative jar): SQ-CCO-01 to -16, CQ-CCO-01 to -03 (server from `tools/scratch_query/cc_only_srv.sh`, batches `r1107cco/`); scratch r1107cco 2026-11-07: SQ-CCO-01..07, -09..16 PASS, SQ-CCO-08 PARTIAL (Create Gravity inert on the Common-only set, TODO `creativecommon/publish #3`), CQ-CCO-01..03 not run ([scratch_run_2026-11-07.md](testing/scratch_run_2026-11-07.md) 4).
 In game: the 37 KubeJS blocks (dust piles, plate blocks, coil blocks) show textures; CQ-CEN-01 (WTHIT Run Speed, leaf piles, camo, sinking, JEI dragon breathing, names), pinned with the other

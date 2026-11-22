@@ -16,8 +16,9 @@ forbid = ["(?i)^creative(engineering|equipment|magic|worldgen|labels)-", "^creat
 base = ["rhino-forge-*", "architectury-*", "kubejs-forge-*", "cdevperfbot-*", "creativecommon-*", "creativedevtools-*", "creativecompat-*",
         "creativecalendar-*", "SereneSeasons-*"]
 chain = ["kubejs-create-forge-*", "kubejsdelight-*", "lootjs-forge-*", "morejs-forge-*", "create-1.19.2-*",
-         "ImmersiveEngineering-*", "fruitsdelight-*", "FarmersDelight-*", "creativedelight-*", "creativebrewing-*",
+         "ImmersiveEngineering-*", "fruitsdelight-*", "FarmersDelight-*", "creativedelight-*", "creativebrewing-*", "creativeloot-*",
          "l2library-*"]
+# creativeloot added 2026-11-22 (r1122cc): Creative Delight and Creative Brewing require it (step 24 boot refused).
 
 [variants.chain]
 keep = ["@base", "@chain"]

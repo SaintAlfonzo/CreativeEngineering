@@ -58,11 +58,14 @@ look judged from SQ-CGE-02c lines of the item and TNT types
 @pass the item stays at its Y (no upward drift); the landed block becomes a block or drops as an item and does not float; no entity left hovering above the floor
 @fails the `isOnGround` guard, `hurtMarked`
 @from batches/r1108cge/b1_full.qb
+> execute in minecraft:the_end run forceload add -2 -2 10 2
 > execute in minecraft:the_end run fill -2 60 -2 10 60 2 minecraft:obsidian
 > execute in minecraft:the_end run fill -2 61 -2 10 70 2 minecraft:air
 > zgv watch the_end 0 63 0 180
 waitlog \[zgv\] watch done dim=minecraft:the_end 20
-> execute in minecraft:the_end run data get block 0 61 0
+# data get block fails on sand (not a block entity): test the block itself
+> execute in minecraft:the_end if block 0 61 0 minecraft:sand run say CGE04 sand landed at 0 61 0
+expect CGE04 sand landed at 0 61 0
 > execute in minecraft:the_end run kill @e[tag=zgv]
 look item y stays 61.000 after landing (no climb), falling block removed=true and block 0 61 0 is sand; tnt rests on 61
 
@@ -86,7 +89,7 @@ waitlog \[zgv\] drop done dim=minecraft:the_end 20
 waitlog \[zgv\] drop done dim=minecraft:overworld 20
 expect \[zgv\] cfg dim=minecraft:the_end .*factor=-1(\.0)?\b
 expect \[zgv\] cfg dim=minecraft:overworld biome=minecraft:plains factor=-0\.8
-look End t=40 drop 0 (no fall) for all three; plains (superflat = plains) drop about 25 percent of vanilla 24.6; desert half in SQ-CGE-05b
+look End t=40 drop 0 (no fall) for all three; the overworld drop stays vanilla 24.6 (gravityLimitDimensions = true: only the End is gated, creative_engineering.md 7.4), while the cfg line shows plains at -0.8
 
 ## SQ-CGE-06 | Create Gravity on living entities in the End with Common's dimension gate, no /reload
 @group CCO full set (`@modset cc_only full`, was `cc_only_srv.sh OUT LEVEL full`)
@@ -149,7 +152,7 @@ look End drops about 20 percent of the overworld's (4.9 vs 24.6 at t=40)
 @@text
 @@table
 ## SQ-CGE-07 | boots; every LowGravity mixin applied; startup order with the helper phase
-@group b1 (A, full pack)
+@group A b1 (A, full pack)
 @commands boot; batch `b1_full.qb`
 @pass no mixin / injection error; startup order `creativecommon, creativecompat_helpers, startup_scripts, ... creativecompat`; `creativecompat: 1 helper file(s) run before startup_scripts`; `[jeiOrder] defined`; 0 startup errors
 @fails the constant in the failing `LowGravity*Mixin` (javap the target), `JarStartupScripts.splitHelpers`, the header in Compat's `jei_order.js`
@@ -164,7 +167,7 @@ shell test "$(grep -c '\[ERROR\]' logs/kubejs/startup.log)" = 0 && echo "0 start
 look shell.txt holds the four ok lines (each shell step exits 1 when its check fails)
 
 ## SQ-CGE-08 | every fixed-pull type falls at 20 percent of vanilla in the End, overworld vanilla, no /reload
-@group b1, no /reload
+@group A b1, no /reload
 @commands `/zgv dropall the_end 0 120 0`, `/zgv dropall overworld 0 120 0`; judge `low`
 @pass 9 entities each; every type about 0.2
 @fails that type's mixin; `LowGravity.serverFactor`; `perf.gravityDimensions`
@@ -184,7 +187,7 @@ shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end o
 look shell.txt: 9 types ok (falling_block, item, tnt, experience_orb, arrow, snowball, boat, minecart, llama_spit), ratio about 0.2
 
 ## SQ-CGE-13 | boats in water float at vanilla height in the End (buoyancy untouched)
-@group b1
+@group A b1
 @commands boats on two glass water tubs at the same height, End and overworld
 @pass boat heights within 0.05 blocks (buoyancy untouched in water)
 @fails `LowGravityBoatMixin` water guard
@@ -207,7 +210,7 @@ shell python3 -c "import re,sys;v=[int(m) for m in re.findall(r'Pos\[1\] on Boat
 look shell.txt: the two boat heights (End, overworld) within 0.05 blocks, both at the water surface (about 65.9)
 
 ## SQ-CGE-10 | End oxygen: air runs out without a backtank; a Create Goggles backtank supplies air; tag sizes
-@group b1
+@group A b1
 @commands survival bot in the End (chest slot cleared), `Air` at 2 s and 12 s later
 @pass Air 300, then 288, 292 or 296 (Create Gravity removes 4 air about every 4 s; bots are invulnerable: damage is CQ-CGE-04)
 @fails Create Gravity `handleOxygen`, the dimension limit
@@ -226,7 +229,7 @@ expect cge10 has the following entity data: (288|292|296)s
 look Air 300 at first, then 4 lower per 5 s (296 or 292 after 12 s) without a backtank
 
 ## SQ-CGE-10b | a Create Goggles backtank supplies air in the End; every backtank and goggle helmet is in Create Gravity's tags
-@group b1
+@group A b1
 @commands same bot with a Create Goggles leather backtank `{Air:900}`; tag counts
 @pass Air back above 0, the backtank's Air NBT 880-899 after 6 s; `create_gravity:backtanks` 7, `diving_helmets` 4
 @fails Compat `tags/misctags.js`; `full_set` (false: backtank alone is enough)
@@ -246,7 +249,7 @@ expect verb=tag kind=item tag=create_gravity:diving_helmets n=4\b
 look with the leather backtank Air climbs back (2-3 digits, positive) and the backtank's Air NBT falls from 900 by about 1 a second
 
 ## SQ-CGE-11 | no oxygen loss and vanilla gravity in the overworld
-@group b1
+@group A b1
 @commands survival bot in the overworld
 @pass Air 300, gravity 0.08
 @fails dimension limit
@@ -260,7 +263,7 @@ expect cge11 has the following entity data: 300s
 expect Entity Gravity for entity cge11 is 0\.08
 
 ## SQ-CGE-12 | physics tags renamed to creativecompat:, item physics still floats and sinks
-@group b1
+@group A b1
 @commands `/zq itemtag creativecompat:physics/*`, `burn/to_ash`, the four old `creativeengineering:physics/*` tags; acacia log and redstone items in the overworld tub
 @pass floats 3+ digits, sinks non-empty, all four old tags empty; startup line names `creativecompat:physics/floats`; log at the surface (>= 64.5), redstone on the floor (<= 61.5)
 @fails Compat `item_physics_tags.js`, `ItemPhysicSplit.TAG_NS`, `item_physics.js`
@@ -289,7 +292,7 @@ shell python3 -c "import re,sys;v=[int(m) for m in re.findall(r'Pos\[1\] on (?:A
 look shell.txt: log near the surface (>= 64.5), redstone on the floor (<= 61.5)
 
 ## SQ-CGE-14 | factor -1 holds every type still in the End
-@group b2 (End -1)
+@group A b2 (End -1)
 @commands dropall End and overworld; judge `zero`
 @pass every type in the End drops under 0.01 blocks in 40 ticks
 @fails `LowGravity.pullScale` (1 + factor)
@@ -306,7 +309,7 @@ waitlog \[zgv\] drop done dim=minecraft:overworld 20
 shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld zero
 
 ## SQ-CGE-09a | dimension limit: a gravity biome in the Nether is ignored while the Nether is not in gravityDimensions
-@group b2 (Nether listed, limit = End)
+@group A b2 (Nether listed, limit = End)
 @commands clear a Nether column, `/zgv cfg the_nether`, dropall; judge `same`; Nether villager gravity
 @pass cfg factor -0.8 printed, yet every Nether drop = overworld; villager 0.08
 @fails `LowGravity.dimensionAllowed`, `CreateGravityDimensionMixin`
@@ -315,6 +318,8 @@ shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end o
 # clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
 > execute in minecraft:the_nether run forceload add -3 -3 9 21
 > execute in minecraft:the_nether run fill -3 80 -3 9 124 21 minecraft:air
+# r1122cc: dropall ran while the forceloaded Nether chunks were still generating (entities=0); wait first
+sleep 15
 > zgv cfg the_nether 0 100 0
 expect \[zgv\] cfg dim=minecraft:the_nether .*factor=-0\.8
 > zgv dropall the_nether 0 120 0
@@ -327,7 +332,7 @@ expect Entity Gravity for entity .* is 0\.08
 look Nether drops = overworld (vanilla) and the Nether villager 0.08, although the Nether biome is listed
 
 ## SQ-CGE-09b | with the Nether allowed, its listed biome lowers gravity for every type and for mobs
-@group b3 (limit End + Nether)
+@group A b3 (limit End + Nether)
 @commands dropall Nether and overworld; judge `low`; the same villager
 @pass about 0.2 for every type; villager 0.016
 @fails as 09a
@@ -346,7 +351,7 @@ shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_nethe
 expect Entity Gravity for entity .* is 0\.01599
 
 ## SQ-CGE-15 | Common without Compat: no helper pack, low gravity for every type, Create Gravity's own tags only
-@group b4 (Common without Compat)
+@group A b4 (Common without Compat)
 @commands order line, startup errors, dropall End (y 140) and overworld (y 200); judge `low`; backtanks tag
 @pass no `_helpers` pack, `creativecommon, startup_scripts`; 0 startup errors; about 0.2; backtanks 2 (Create's own)
 @fails Common's low gravity must not need Compat
@@ -368,7 +373,7 @@ expect verb=tag kind=item tag=create_gravity:backtanks n=2\b
 look order line without a _helpers pack; 9 types at about 0.2; backtanks = Create's two (Compat absent)
 
 ## SQ-CGE-16 | ItemPhysic without Create Gravity: boots, ticks items without an error, vanilla fall everywhere
-@group b5 (`@modset cc_only full -@gravity` + ItemPhysic, CreativeCore; was `cc_only_srv.sh without=gravity`)
+@group A b5 (`@modset cc_only full -@gravity` + ItemPhysic, CreativeCore; was `cc_only_srv.sh without=gravity`)
 @commands boot; dropall End (y 140) and overworld (y 200); judge `same`
 @pass boots, no `LowGravity` or `NoClassDefFoundError` line, all 9 types at vanilla speed in both dimensions
 @fails gate on `LowGravityItemPhysicMixin` in `CommonMixinPlugin` (needs ItemPhysic and Create Gravity)

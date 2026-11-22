@@ -81,6 +81,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   skips globs the spec drops on purpose (it used to fail every `-GLOB` of a chain jar). A spec that drops creativedelight
   must also drop kubejsdelight (needs Farmer's Delight, nested in Creative Delight) (r1120nv SQ-CBP-08).
 - A hand claim of RUNNER.md blocks `qrun.py drive start|resume`: `qdrive.claim` accepts a held claim only when its `Run:` line starts with the drive's run id. Write `Run: <run id> ...` in the claim, or leave RUNNER idle and let the driver claim it (2026-11-21).
+- A `@group` text starting with B is world group B (`qdrive.world_letter`), even a batch label like `b1`; the section's `@@prep A:` lines are then skipped. Start such groups with the world letter (`A b1 ...`) (r1122cc, SQ-CGE section 2).
 
 ## Boot and shutdown
 

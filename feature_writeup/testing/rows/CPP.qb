@@ -19,7 +19,7 @@
 ## SQ-CPP-01 | mixin and tag checks, tags, Common config pack values
 @group A (full pack)
 @commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|outside the tested range\|ClassNotFoundException.*(creativecommon\|creativeengineering)" logs/latest.log`; `grep -c "Failed to load tag\|Couldn't load tag" logs/latest.log`; `/zq itemtag creativecommon:metal_dusts`, `creativecommon:bark` (KubeJS 1902 has no `/kubejs dump_tag`); `grep -n "removed\|overrides" config/creativecommon-common.toml \| cut -c1-80`
-@pass no mixin errors; 0 tag load failures; metal_dusts lists the IE dusts and zinc grit, bark lists the Immersive Weathering barks (as the old `creativeengineering:bark`; no FD tree bark); the config still holds the 3 removed effects and the name list
+@pass no mixin errors; no tag load failures except creategoggles' Mekanism reference (third party); metal_dusts lists the IE dusts and zinc grit, bark lists the Immersive Weathering barks (as the old `creativeengineering:bark`; no FD tree bark); the config still holds the removed effects (3 plus `alexsmobs:fear`, N22) and the name list
 @fails mixin or tag file moves, config defaults
 @reviewed 2026-11-16
 @from batches/r1108cge/b1_full.qb
@@ -33,7 +33,7 @@ expect verb=tag kind=item tag=creativecommon:bark n=[1-9]
 reject \[cdevtest\] .*done=0
 shell grep -c "Failed to load tag\|Couldn't load tag" logs/latest.log; true
 shell grep -n "removed\|overrides" config/creativecommon-common.toml | cut -c1-100
-look metal_dusts lists IE dusts and zinc grit; bark lists IW barks; 0 tag load failures; config holds the 3 removed effects and the name list
+look metal_dusts lists IE dusts and zinc grit; bark lists IW barks; no tag load failure except creategoggles' `mekanism:mekasuit_helmet` (third party, Mekanism not installed); config holds the removed effects (3 plus `alexsmobs:fear`, N22) and the name list
 
 ## SQ-CPP-02 | sequenced assembly keeps enchantments and name; potion recipes load
 @group A (same boot)
