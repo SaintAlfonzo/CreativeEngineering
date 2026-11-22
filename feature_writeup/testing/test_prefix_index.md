@@ -187,6 +187,7 @@ same pass as the renames.
 | `RP-` | [recipe_progression.md](../recipe_progression.md) |  | briefs/recipes_progression.md | queue CQ-RP splits: the bench rows (CQ-RP-01 to -03) to CQ-RPB, the Raspberry Pie rows to CQ-RPI |
 | `RPB-` | [perf_rpack.md](../perf_rpack.md) | CQ-RPB (3) |  | new 2026-11-16, was RP- (collided with recipe_progression.md); queue CQ-RP-01 to -03 in the bench section become CQ-RPB |
 | `RPI-` | [raspberry_pie.md](../raspberry_pie.md) | CQ-RPI (40), SQ-RPI (8) |  | new 2026-11-16, was RP- (README only); queue SQ-RP and the Raspberry Pie CQ-RP rows become SQ-RPI, CQ-RPI |
+| `RPS-` | [plan_rp_standalone.md](../plan_rp_standalone.md) | CQ-RPS (3), SQ-RPS (5) |  | new 2026-11-21 (D8): isolation tests for Raspberry Pie standalone, Forge + solRaspberryPie only; rows in `rows/RPS.qb`; features of the mod keep `RPI-` |
 | `RSP-` | [farmers_respite.md](../farmers_respite.md) | CQ-RSP (1), SQ-RSP (15) |  |  |
 | `RW-` | [recipes_wood.md](../recipes_wood.md) | CQ-RW (1), SQ-RW (14) | briefs/recipes_wood.md |  |
 | `SB-` | [storage_audit.md](../storage_audit.md) | SQ-SB (10) |  | not in the README index yet |

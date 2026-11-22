@@ -1,0 +1,28 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# SQ-RPS rows (plan_rp_standalone.md section 6): Raspberry Pie standalone, Forge plus the solRaspberryPie jar only (Apple
+# Pie and Carrot nested in it). Row specs:
+#   rps only | loose | alex   [+GLOB ...] [-GLOB ...]
+#   only   RPS-01, -03, -05: no other mod jar
+#   loose  RPS-04: plus a loose Apple Pie 2.2.0 jar beside the nested copy
+#   alex   RPS-06: plus Alex's Mobs and its library (Fleet-Footed mixin target)
+description = "Raspberry Pie standalone: Forge + solRaspberryPie only (only, loose Apple Pie, Alex's Mobs)"
+source = "pack"
+group = "B"
+kubejs = "probes"
+config = "empty"
+default = "only"
+require = ["solRaspberryPie-*"]
+
+[groups]
+base = ["solRaspberryPie-*"]
+apple = ["solapplepie-*"]
+alex = ["alexsmobs-*", "citadel-*"]
+
+[variants.only]
+keep = ["@base"]
+
+[variants.loose]
+keep = ["@base", "@apple"]
+
+[variants.alex]
+keep = ["@base", "@alex"]
