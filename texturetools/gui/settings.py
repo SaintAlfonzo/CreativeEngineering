@@ -3,7 +3,8 @@
 
 One JSON file in the user config dir: $TEXTURETOOLS_CONFIG_DIR, else $XDG_CONFIG_HOME/texturetools, else
 ~/.config/texturetools. Holds recent folders, the project folder, dev mode (off by default; shipped builds have no
-repo knowledge) and small UI state. Presets live next to it in presets/<screen>/ (core/presets.py).
+repo knowledge), provenance_csv (dev mode: the sources.csv to append to; empty = found from the output path, the
+project folder or the package location) and small UI state. Presets live next to it in presets/<screen>/ (core/presets.py).
 
 This is app config only: it never writes into a project or texture folder.
 """
@@ -14,6 +15,7 @@ DEFAULTS = {
 	"recent_folders": [],
 	"project_folder": "",
 	"dev_mode": False,
+	"provenance_csv": "",
 	"last_screen": "",
 }
 MAX_RECENT = 12

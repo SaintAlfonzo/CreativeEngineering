@@ -100,7 +100,8 @@ Stack file form:
     "opacity": 1, "offset": [0, 0], "offset_mode": "clip", "anchor": "center", "scale": null, "size": null,
     "trim": false, "mask": null, "mask_invert": false, "visible": true}, ...], "canvas": "base",
     "background": null, "lcm": false, "fit": "any", "vary": [1]}. Relative paths resolve against the json's
-    folder. With no "vary" slot <output> is a file; with vary slots each such layer's "image" is a folder and
+    folder. --stack may also be the JSON text itself (starts with "{"; relative paths resolve against the
+    current folder; the GUI's Copy as CLI writes this form). With no "vary" slot <output> is a file; with vary slots each such layer's "image" is a folder and
     <output> is a folder: one slot runs every file, two or more run every combination (cartesian), which needs
     --yes when more than one slot varies (--count prints the number of outputs and exits).
     Pattern placeholders in the stack form: {name} (varying stems joined with _), {ext}, {name<slot>},
@@ -244,7 +245,7 @@ def _skip_text(r):
 def stack_main(argv):
 	"""--stack recipe.json <output>: run a stack preset once, or as a bulk run over its varying slots."""
 	parser = argparse.ArgumentParser(description="Run a combine layer-stack preset (json).")
-	parser.add_argument("--stack", required=True, help="Stack preset json")
+	parser.add_argument("--stack", required=True, help="Stack preset json file, or the JSON itself")
 	parser.add_argument("output", help="Output file, or folder when the stack has varying slots")
 	parser.add_argument("--pattern", default="{name}.png", help="Bulk output name (default {name}.png)")
 	parser.add_argument("--yes", action="store_true", help="Run a cartesian (two or more varying slots) bulk run")
@@ -252,9 +253,13 @@ def stack_main(argv):
 	_add_bulk_args(parser)
 	args = parser.parse_args(argv)
 	try:
-		with open(args.stack) as fh:
-			data = json.load(fh)
-		layers, opts = stack_from_dict(data, os.path.dirname(os.path.abspath(args.stack)))
+		if args.stack.lstrip().startswith("{"):  # inline stack JSON (the GUI's Copy as CLI, P6)
+			data, base_dir = json.loads(args.stack), os.getcwd()
+		else:
+			with open(args.stack) as fh:
+				data = json.load(fh)
+			base_dir = os.path.dirname(os.path.abspath(args.stack))
+		layers, opts = stack_from_dict(data, base_dir)
 	except (OSError, ValueError, TypeError) as e:
 		_fail("cannot read stack {0}: {1}".format(args.stack, e))
 	vary = opts.pop("vary")

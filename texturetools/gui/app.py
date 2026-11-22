@@ -6,7 +6,8 @@ TextureToolsApp(settings=None, start_screen=None)
 	screens           {tool_name: screen instance}
 	switch_to(name)   show a screen; current_tool() -> the visible screen
 	open_in_editor(arr, name="")   hand an RGBA array to the editor screen and switch to it
-	provenance_hook   None in P5; P6 sets fn(screen, params, outputs), called after Run / Save as in dev mode
+	provenance_hook   fn(screen, params, outputs), called after Run / Save as in dev mode: offers the sources.csv
+	                  row (gui/provenance_ui.py); provenance_popup = the last popup it opened
 Keys: Ctrl+Z undo, Ctrl+Y or Ctrl+Shift+Z redo, Ctrl+S save shortcut, Ctrl+1..9 switch screen (all to the current
 screen). Files dropped outside any slot go to the current screen's handle_drop(paths).
 
@@ -29,6 +30,7 @@ from kivy.uix.togglebutton import ToggleButton  # noqa: E402
 
 from .. import __version__  # noqa: E402
 from . import registry, screens as screen_pkg  # noqa: E402
+from .provenance_ui import offer_provenance  # noqa: E402
 from .settings import Settings  # noqa: E402
 from .widgets.fileslot import DropRouter  # noqa: E402
 
@@ -42,7 +44,8 @@ class TextureToolsApp(App):
 		self.start_screen = start_screen
 		self.screens = {}
 		self.nav_buttons = {}
-		self.provenance_hook = None
+		self.provenance_popup = None
+		self.provenance_hook = lambda screen, params, outputs: offer_provenance(self, screen, params, outputs)
 
 	def build(self):
 		screen_pkg.load_all()

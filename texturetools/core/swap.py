@@ -707,3 +707,91 @@ def _save(result_arr, out_path, preview):
 		result_img.convert("RGBA").resize((160, 160), Image.NEAREST).save(preview_path)
 		return out_path, preview_path
 	return out_path, None
+
+
+# ================================================================ P6: hand-built palettes, batch kind, bulk jobs
+
+COLORS_PREFIX = "colors:"
+
+
+def palette_array(colors):
+	"""1xN opaque RGBA uint8 palette image from a hand-built swatch strip (hex strings or (r, g, b) tuples)."""
+	px = [tuple(parse_color(c)) + (255,) for c in colors or ()]
+	if not px:
+		raise ValueError("the swatch strip is empty")
+	return np.array([px], dtype=np.uint8)
+
+
+def colors_spec(colors):
+	"""'colors:#rrggbb,#rrggbb': a swatch strip written where a palette path goes (CLI and bulk jobs)."""
+	return COLORS_PREFIX + ",".join(_hex(c) for c in colors)
+
+
+def is_colors_spec(spec):
+	return isinstance(spec, str) and spec.startswith(COLORS_PREFIX)
+
+
+def load_palette_source(spec):
+	"""RGBA uint8 array from a palette path or a colors: spec."""
+	if is_colors_spec(spec):
+		return palette_array([c for c in spec[len(COLORS_PREFIX):].split(",") if c.strip()])
+	return load_rgba_u8(spec)
+
+
+def _swap_worker(job):
+	"""Job kind "swap": inputs source and palette (path, colors: spec or array), params options (SwapOptions dict).
+	An engine ValueError (no opaque pixels, empty palette) becomes a Skip."""
+	from texturetools.core import batch
+	opts = SwapOptions.from_dict(job.params.get("options"))
+	src, pal = job.inputs["source"], job.inputs["palette"]
+	src_arr = load_rgba_u8(src) if isinstance(src, str) else np.asarray(src)
+	pal_arr = load_palette_source(pal) if isinstance(pal, str) else np.asarray(pal)
+	try:
+		return swap_image(src_arr, pal_arr, opts)
+	except ValueError as e:
+		raise batch.Skip(str(e))
+
+
+def save_swap(arr, out_path):
+	"""batch saver with swap_file's save rules (JPEG flattened), no preview."""
+	_save(np.asarray(arr, dtype=np.uint8), out_path, False)
+
+
+def _stem(spec):
+	return "swatches" if is_colors_spec(spec) else os.path.splitext(os.path.basename(spec))[0]
+
+
+def swap_jobs(fixed, folder, reverse=False, opts=None, pattern="{name}.png", include=None, exclude=None,
+			  recursive=False):
+	"""Bulk swap jobs (kind "swap"; run with batch.run_batch(..., saver=save_swap)).
+
+	reverse False (legacy --bulk): fixed is the shape (source) and every image in folder supplies a palette.
+	reverse True: fixed is the palette (path or colors: spec) and every image in folder is a source.
+	folder: a folder (scanned with include / exclude globs) or a list of paths. The fixed file itself is left out.
+	Name fields: {name} the varying file's stem, {ext}, {shape} source stem, {palette} palette stem, {n}."""
+	from texturetools.core import batch
+	files = batch.scan_folder(folder, include, exclude, recursive) if isinstance(folder, str) else list(folder)
+	fixed_abs = None if is_colors_spec(fixed) else os.path.abspath(fixed)
+	files = [f for f in files if os.path.abspath(f) != fixed_abs]
+	params = {"options": (opts or SwapOptions()).to_dict()}
+	jobs = []
+	for n, path in enumerate(files, 1):
+		f = batch.name_fields(path)
+		f["n"] = n
+		if reverse:
+			inputs = {"source": path, "palette": fixed}
+			f["shape"], f["palette"] = f["name"], _stem(fixed)
+		else:
+			inputs = {"source": fixed, "palette": path}
+			f["shape"], f["palette"] = _stem(fixed), f["name"]
+		jobs.append(batch.Job(inputs=inputs, params=dict(params), pattern=pattern, fields=f, kind="swap",
+							  label=os.path.basename(path)))
+	return jobs
+
+
+def _register_kind():
+	from texturetools.core import batch
+	batch.register_kind("swap", _swap_worker)
+
+
+_register_kind()

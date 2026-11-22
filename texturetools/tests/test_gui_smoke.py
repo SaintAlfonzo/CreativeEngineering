@@ -225,7 +225,7 @@ def child():
 			check(app.manager.current == name, "switch to " + name)
 			if not isinstance(scr, ToolScreen):
 				continue
-			if "source" in scr.slots:
+			if "source" in scr.slots and scr.placeholder:  # real screens: test_gui_swap_combine.py
 				scr.slots["source"].set_paths([src])
 				t0 = time.time()
 				while scr.preview.array is None and time.time() - t0 < 5:
@@ -266,7 +266,10 @@ def child():
 		scr.apply_preset("smoke")
 		yield 0.05
 		check(scr.params["source"] == src2 and slot.path == src2, "preset restores params and slots")
-		check(scr.copy_cli() is None, "copy as CLI without a builder says so")
+		check(scr.copy_cli() is not None, "swap: copy as CLI gives a command")
+		ph = [n for n, x in app.screens.items() if getattr(x, "placeholder", False)]
+		if ph:
+			check(app.screens[ph[0]].copy_cli() is None, "copy as CLI without a builder says so")
 		# open in editor
 		scr.result_array = arr
 		scr.open_in_editor()

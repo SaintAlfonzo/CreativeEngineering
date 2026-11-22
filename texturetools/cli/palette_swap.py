@@ -82,6 +82,14 @@ Mapping options (2026-11-22, plan_texture_tools_gui.md section 3; every default 
     --alpha A           palette (default, legacy: alpha from the palette color) or source
     --dither D          none (default) or ordered (only where the palette is smaller)
 
+Texture Tools GUI options (2026-11-22, P6; "Copy as CLI" emits them):
+    palette     may be colors:#rrggbb,#rrggbb (a hand-built swatch strip) instead of a file
+    --bulk with --in-dir DIR / --out-dir DIR    the bulk folders instead of the constants below
+    --reverse           bulk: <shape> is the palette, every image in the folder is a source
+    --pattern P         bulk output name, fields {name} {ext} {shape} {palette} {n}
+    --overwrite W       replace (default), skip or rename an existing output
+    --include G, --exclude G   bulk globs (repeatable); --dry-run lists outputs, writes nothing
+
 Examples:
     python palette_swap.py wire_aluminum.png ingot_silver.png silver_wire.png --invert
     python palette_swap.py gold_nugget.png rose_gold_ingot.png rose_gold_nugget.png --invert
@@ -102,7 +110,8 @@ from texturetools.core.palette import *  # noqa: F401,F403 (the old module's nam
 from texturetools.core.palette import DROP_CLASSES, get_colors_by_brightness, load_palette_colors
 from texturetools.core.swap import *  # noqa: F401,F403
 from texturetools.core.swap import (ALPHA_SOURCES, DITHERS, INTERPOLATE, MODES, SPACES, IMAGE_EXTENSIONS, SwapOptions,
-									 _save, load_rgba_u8, prepare_palette, process_one, swap_colors)
+									 _save, is_colors_spec, load_palette_source, load_rgba_u8, prepare_palette,
+									 process_one, save_swap, swap_colors, swap_jobs)
 
 # ---------------------------------------------------------------------------
 # Bulk mode folders -- edit these to point at your own source/output folders.
@@ -185,7 +194,12 @@ def print_new_options(opts):
 
 def swap_one(pal_path, opts):
 	"""Load one palette; returns (palette image, palette colors, run(src_arr, out_path, preview)). The legacy
-	calls when opts is legacy, else the P1 engine."""
+	calls when opts is legacy, else the P1 engine. pal_path may be a colors:#rrggbb,... swatch strip (P6)."""
+	if is_colors_spec(pal_path):
+		pal_arr = load_palette_source(pal_path)
+		palette_colors, palette_counts = prepare_palette(pal_arr, opts)
+		return Image.fromarray(pal_arr, "RGBA"), palette_colors, lambda src_arr, out_path, preview: _save(
+			swap_colors(src_arr, palette_colors, opts, palette_counts), out_path, preview)
 	if opts.is_legacy():
 		pal_img, palette_colors, palette_counts = load_palette_colors(
 			pal_path, opts.invert, opts.drops, opts.drop_darkest, opts.drop_lightest, with_counts=True)
@@ -204,7 +218,7 @@ def run_single(args):
 	if not os.path.exists(src_path):
 		sys.stderr.write("Error: source file not found: {0}\n".format(src_path))
 		sys.exit(1)
-	if not os.path.exists(pal_path):
+	if not os.path.exists(pal_path) and not is_colors_spec(pal_path):
 		sys.stderr.write("Error: palette file not found: {0}\n".format(pal_path))
 		sys.exit(1)
 
@@ -334,6 +348,53 @@ def run_bulk(args, src_dir=None, out_dir=None):
 		sys.exit(1)
 
 
+def add_bulk_batch_args(parser):
+	"""P6 bulk flags (the GUI's Copy as CLI). --in-dir / --out-dir alone keep the legacy bulk run; any other flag
+	here runs the bulk through core/batch.py (name pattern, overwrite policy, globs, dry run, reversed roles)."""
+	parser.add_argument("--in-dir", help="Bulk folder (default BULK_SOURCE_DIR)")
+	parser.add_argument("--out-dir", help="Bulk output folder (default BULK_OUTPUT_DIR)")
+	parser.add_argument("--reverse", action="store_true",
+						help="Reverse roles: <shape> is the palette (file or colors:#rrggbb,...), every image in the folder is a source")
+	parser.add_argument("--pattern", help="Output name; fields {name} {ext} {shape} {palette} {n} (default {name}.png)")
+	parser.add_argument("--overwrite", choices=("replace", "skip", "rename"), help="Existing output (default replace)")
+	parser.add_argument("--include", action="append", help="Only files matching this glob (repeatable)")
+	parser.add_argument("--exclude", action="append", help="Leave out files matching this glob (repeatable)")
+	parser.add_argument("--dry-run", action="store_true", help="List outputs, write nothing")
+
+
+def uses_batch(args):
+	return bool(args.reverse or args.pattern or args.overwrite or args.include or args.exclude or args.dry_run)
+
+
+def run_bulk_batch(args, src_dir, out_dir):
+	"""The bulk run through core/batch.py (P6 flags)."""
+	from texturetools.core import batch
+	if not os.path.exists(args.shape) and not is_colors_spec(args.shape):
+		sys.stderr.write("Error: file not found: {0}\n".format(args.shape))
+		sys.exit(1)
+	if not os.path.isdir(src_dir):
+		sys.stderr.write("Error: bulk folder is not a directory: {0}\n".format(src_dir))
+		sys.exit(1)
+	try:
+		opts = options_from_args(args)
+	except ValueError as e:
+		sys.stderr.write("Error: {0}\n".format(e))
+		sys.exit(1)
+	jobs = swap_jobs(args.shape, src_dir, args.reverse, opts, args.pattern or "{name}.png", args.include, args.exclude)
+
+	def show(r):
+		if r.status in ("skipped", "exists", "error"):
+			print("  SKIP  {0}: {1}".format(r.job.label, r.reason))
+		else:
+			print("  {0}  {1} -> {2}".format("OK  " if r.status == "written" else "DRY ", r.job.label, r.output))
+
+	report = batch.run_batch(jobs, out_dir, dry_run=args.dry_run, overwrite=args.overwrite or "replace",
+							 on_result=show, saver=save_swap)
+	c = report.counts()
+	print("Done. {0} {1}, {2} skipped.".format(c.get("dry", 0) + c.get("written", 0),
+		"would be written" if args.dry_run else "written", len(report.skipped) + len(report.errors)))
+
+
 def main(argv=None, bulk_source_dir=None, bulk_output_dir=None):
 	"""argv defaults to sys.argv[1:]; the bulk folders to BULK_SOURCE_DIR / BULK_OUTPUT_DIR (the textureswapper shim
 	passes its own constants)."""
@@ -383,8 +444,14 @@ def main(argv=None, bulk_source_dir=None, bulk_output_dir=None):
 			help="Also save a 160x160 upscaled preview alongside each output.",
 		)
 		add_mode_args(parser)
+		add_bulk_batch_args(parser)
 		args = parser.parse_args(argv)
-		run_bulk(args, bulk_source_dir, bulk_output_dir)
+		src_dir = args.in_dir or bulk_source_dir
+		out_dir = args.out_dir or bulk_output_dir
+		if uses_batch(args):
+			run_bulk_batch(args, src_dir or BULK_SOURCE_DIR, out_dir or BULK_OUTPUT_DIR)
+			return
+		run_bulk(args, src_dir, out_dir)
 		return
 
 	parser = argparse.ArgumentParser(

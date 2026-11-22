@@ -10,8 +10,14 @@ Subclass, set tool_name / title / order, decorate with @register_screen, and ove
 	show_preview(self, result)          main thread; default shows result / result["preview"] in self.preview and
 	                                    keeps it as self.result_array (what Save as and Open in Editor use)
 	run_job(self, params, progress)     WORKER THREAD, only from the explicit Run button: writes outputs, returns the
-	                                    list of written paths; progress(fraction, message). None = no Run button
+	                                    list of written paths (or {"outputs": [...], "status": text});
+	                                    progress(fraction, message). None = no Run button
 	validate(self, params) -> str|None  message blocking Run (and preview) when params are incomplete
+	validate_run(self, params) -> str|None   extra message blocking only Run (an output path missing, a cartesian
+	                                    run not confirmed); the preview still runs
+	run_params(self) -> dict            the params Run hands to run_job (default self.params; screens add transient
+	                                    GUI state such as the unticked preview-all tiles here, kept out of presets)
+	provenance_inputs(self, params)     input paths for the dev-mode provenance row (default: every slot's paths)
 	cli_argv(self, params) -> list|None argv for Copy as CLI (or presets.register_cli_builder(tool_name, fn))
 	handle_drop(self, paths)            files dropped outside any slot (default: first slot that accepts them)
 	load_array(self, arr, name)         receive an image from another screen (Open in Editor handoff)
@@ -78,6 +84,18 @@ class ToolScreen(Screen):
 
 	def validate(self, params):
 		return None
+
+	def validate_run(self, params):
+		return None
+
+	def run_params(self):
+		return self.params
+
+	def provenance_inputs(self, params):
+		out = []
+		for slot in self.slots.values():
+			out.extend(slot.paths)
+		return out
 
 	def cli_argv(self, params):
 		return presets.cli_argv(self.tool_name, params)
@@ -260,7 +278,7 @@ class ToolScreen(Screen):
 	def run(self):
 		if self.run_job is None:
 			return
-		msg = self.validate(self.params)
+		msg = self.validate(self.params) or self.validate_run(self.params)
 		if msg:
 			self.set_status(msg)
 			return
@@ -268,13 +286,17 @@ class ToolScreen(Screen):
 			self._run_worker = Worker(latest_only=False, name="tt-run-" + self.tool_name)
 		self.run_button.disabled = True
 		self.set_status("running ...")
-		self._run_worker.submit(self.run_job, self.params, on_done=self._run_done, on_error=self._run_error,
+		self._run_worker.submit(self.run_job, self.run_params(), on_done=self._run_done, on_error=self._run_error,
 			on_progress=lambda f, m: self.set_status("{0:.0f}% {1}".format(f * 100, m)))
 
 	def _run_done(self, outputs):
 		self.run_button.disabled = False
+		status = None
+		if isinstance(outputs, dict):  # {"outputs": [...], "status": "..."}
+			status = outputs.get("status")
+			outputs = outputs.get("outputs")
 		outputs = list(outputs or [])
-		self.set_status("wrote {0} file(s)".format(len(outputs)))
+		self.set_status(status or "wrote {0} file(s)".format(len(outputs)))
 		self.after_run(self.params, outputs)
 
 	def _run_error(self, exc, tb):
@@ -282,7 +304,7 @@ class ToolScreen(Screen):
 		self._error(exc, tb)
 
 	def after_run(self, params, outputs):
-		"""Dev mode hook (plan section 8): P6 offers the provenance row here; shipped builds skip it."""
+		"""Dev mode hook (plan section 8): app.provenance_hook offers the provenance row; shipped builds skip it."""
 		app = App.get_running_app()
 		if outputs and app is not None and getattr(app, "settings", None) is not None and app.settings.dev_mode:
 			hook = getattr(app, "provenance_hook", None)
