@@ -59,3 +59,12 @@ expect READ tooltip_text minecraft:white_concrete \d+: .*Light Purple
 do {"tooltip_text": "minecraft:white_wool", "reject": "Legendary"}
 do {"tooltip_text": "minecraft:white_concrete", "reject": "Light Purple"}
 kjsreject \[NCH\.cfg\] no creativecommon:TOOLTIPS
+
+## CQ-TT-06 | Copycat Framed Block pack on: framed blocks show their Framed Blocks names
+@group client
+@commands Resource pack `Copycat Framed Block` enabled (it is in the pack's default list); F3+T; hover a Framed Slab, a Framed Chest and the Framed Hammer in JEI; place a Framed Chest and open it
+@pass names read Framed Slab, Framed Chest, Framed Hammer (no "Copycat" in any framed name or the chest title); the framed blocks still wear the Copycat textures
+@fails `resourcepacks/Copycat Framed Block.zip` still holds `assets/framedblocks/lang/en_us.json` (TODO `blocks/framed-and-decor #2`, D4), or another pack in the list renames them
+@draft JEI hover and a GUI title by hand
+@reviewed 2026-11-22
+look the three names and the chest title as the pass says; textures unchanged

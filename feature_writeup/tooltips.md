@@ -29,7 +29,7 @@ keeps its own writeup.
 | Remove IP asphalt's "Increases walking speed by 20.0%" | tooltips.js `removeTooltipKey` | DEPLOYED 2026-09-27 |
 | Remove Create Compressed crushed-pile compatibility line | tooltips.js `removeTooltips` | VERIFIED (long-standing) |
 | Framed / copycat lines: schematics save the block or not, and hybrid blocks | tooltips.js "Framed / Copycat Blocks" section | DEPLOYED 2026-09-27 |
-| FramedBlocks renamed "Framed Copycat …" | edited resource pack `Copycat Framed Block.zip` | DEPLOYED 2026-09-27; F3+T |
+| FramedBlocks keep their own names under the Copycat pack (was "Framed Copycat …") | `Copycat Framed Block.zip` without its lang file | 2026-11-22 (D4, plan_easy_fixes_1122.md); F3+T; CQ-TT-06 |
 | BlockRunner "Speed Multiplier" line, rewritten on camouflage blocks | BlockRunner + Creative Common `CamoSpeedTooltip` | DEPLOYED (incl. the "no matter its camo" and "newest camo sets walk behaviors for hybrid blocks" wording) |
 | Framework tooltips: armor effects, tool effects, potion buckets | dedicated client scripts | VERIFIED per their own memories |
 | Stepstools: "Stand still and hold Sprint + Jump to step up", "Move, crouch or jump to step off" (the slot is Curios' "Slot: Feet"; the pack's "Worn in the Feet slot" line dropped 2026-11-02) | tooltips.js Tools section ([stepstool.md](stepstool.md)) | BUILT 2026-10-29; STL-02 |
@@ -147,6 +147,9 @@ the shank row; client config `[tooltips] saturationOwnLine` for AppleSkin's own 
   The pack's own lang file was edited: "Copycat" -> "Framed Copycat" in every block name and chest title
   (177 entries), and the two gate doors the pack missed were added. Tools keep their pack names
   ("Copycat Hammer" etc.) because nothing duplicates them.
+  Since 2026-11-22 (owner ruling D4, [plan_easy_fixes_1122.md](plan_easy_fixes_1122.md), TODO `blocks/framed-and-decor #2`)
+  the pack ships without that lang file (the other 60 entries byte-identical): every framed block and tool shows the
+  Framed Blocks jar's name (and the pack's own overrides); the pack only retextures. Test CQ-TT-06.
 
 **Added (Java)**
 - **"Saltable" (2026-11-17):** a gray line (`col.norm` role) on every block item whose block is in

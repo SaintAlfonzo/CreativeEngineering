@@ -251,6 +251,8 @@ look conform count 1, Static binding violation count 1 (designed, MixinChunkMap_
 # r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootreject (?i)creativecommon.*(exception|error)
+# generators-and-tests #28 (2026-11-22): the Devtools sequenced assembly test recipe adds each mod's steps only when it is loaded
+kjsreject sequence_assembly_processes\.js#\d+: Failed
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
 shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
 shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
@@ -275,6 +277,8 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 # r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootreject (?i)creativecommon.*(exception|error)
+# generators-and-tests #28 (2026-11-22): the Devtools sequenced assembly test recipe adds each mod's steps only when it is loaded
+kjsreject sequence_assembly_processes\.js#\d+: Failed
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
 shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
 shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
@@ -299,6 +303,8 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 # r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootreject (?i)creativecommon.*(exception|error)
+# generators-and-tests #28 (2026-11-22): the Devtools sequenced assembly test recipe adds each mod's steps only when it is loaded
+kjsreject sequence_assembly_processes\.js#\d+: Failed
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
 shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
 shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
@@ -323,6 +329,8 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 # r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootreject (?i)creativecommon.*(exception|error)
+# generators-and-tests #28 (2026-11-22): the Devtools sequenced assembly test recipe adds each mod's steps only when it is loaded
+kjsreject sequence_assembly_processes\.js#\d+: Failed
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
 shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
 shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
@@ -347,6 +355,8 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 # r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootreject (?i)creativecommon.*(exception|error)
+# generators-and-tests #28 (2026-11-22): the Devtools sequenced assembly test recipe adds each mod's steps only when it is loaded
+kjsreject sequence_assembly_processes\.js#\d+: Failed
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
 shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
 shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true
@@ -371,6 +381,8 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 # r1118 R4 B1 (2026-11-18): one of the six SQ-CCO-12 sets; its own step and world (the old "reuse level cco1" does not hold)
 bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
 bootreject (?i)creativecommon.*(exception|error)
+# generators-and-tests #28 (2026-11-22): the Devtools sequenced assembly test recipe adds each mod's steps only when it is loaded
+kjsreject sequence_assembly_processes\.js#\d+: Failed
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -c "ERROR" logs/kubejs/startup.log || true
 shell grep -E "\[CE potions\]|\[perf\]|\[compat\]" logs/latest.log | sed -E 's/^.*\]: //' | head -10
 shell grep -oE "Mixing [A-Za-z_.]+ from creativecommon[^ ]* into [A-Za-z_.$]+" logs/debug.log 2>/dev/null | awk '{print $2}' | sort -u | head -40 || true

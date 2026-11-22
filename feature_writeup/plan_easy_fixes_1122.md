@@ -55,6 +55,10 @@ Delete dict lines 12777-12778 (`canned_legendary_roll_medley`, `canned_mythical_
 `BEGIN/END GENERATED CANS` block (13299-13606), so `tools/gen_can_types.py` does not write them; grep the repo for both keys
 first and drop any other reader. Check: `check_all.py --fast --changed`; boot has no `[item_dict] Missing/invalid` WARN
 (SQ-SPFX-06). Bundle with 1.5 into one Common rebuild. No changelog bullet (log line only, no player-visible change).
+Changed from the plan (2026-11-22): two more readers, `kubejs/generation_scripts/food/food_types.json` (`raw/veggie`) and its
+generated `creativedelight/food_types.js`, lost both keys (`food_catalog.py --members`), so Creative Delight was rebuilt with
+Common; 1.5 needed no rebuild, so this Common rebuild holds 1.2 only. Dump-derived files (food_families, food_dict_index,
+the Raspberry Pie diversity data) clear on the next `/dumpall` + `/cdevgen`; FCK.qb 255-258 still name the two cans.
 
 ### 1.3 `dishes/ingredients #28` Sliced potato tag (no build)
 Nothing to build (tags full since 2026-11-07). Close the row once the client check CQ-FF-04 passes; no other work.
@@ -69,12 +73,18 @@ builders fail (`create:pressing with 2 arguments not found`). Guards:
 - the step array is then passed to `R.createSequencedAssembly` as today (no change to the recipe id).
 Check: full pack still makes the nether star sequence with all 13 steps (JEI or `/kubejs` recipe dump); CCO-12a and -12e
 logs have no `sequence_assembly_processes.js#58` ERROR. Dev-only: no changelog bullet.
+Changed from the plan (2026-11-22): the vintageimprovements block is 10 steps (viPolishing plus 9 `e.custom`), all guarded;
+the full chain is 15 steps (4 + 1 + 10). SQ-CCO-12a to -12f gained `kjsreject sequence_assembly_processes\.js#\d+: Failed`.
 
 ### 1.5 `ui/tooltips #16` Spyglass and bell loading tips (C)
 Add the two D1 lines to `development/creativeCommon/src/main/resources/resourcepacks/loading_tips/assets/loading_tips/loading_tips/tips.json`
 in the file's existing format and order rules ([loading_tips.md](loading_tips.md)); add both to
 [loading_tips_audit.md](loading_tips_audit.md) if it lists tips one by one. No guard (vanilla items). Changelog: one bullet
 under the loading tips family. Same Common rebuild as 1.2.
+Changed from the plan (2026-11-22): the tips shown in game are the Creative Tips override
+`kubejs/assets/creative_tips/loading_tips/tips.json` (left the jar 2026-11-07); the two merged tips there
+(`spyglasses_zoom_in_on_the_horizon`, `bells_alert_villagers_to_raids`) took the D1 texts, F3+T, no rebuild. The audit
+table (loading_tips_audit.md 2.1) and `tools/loading_tips_audit_1114/audit_decisions.py` match. Bullet: the bell tip fix.
 
 ### 1.6 `blocks/framed-and-decor #2` Copycat pack keeps Framed Blocks names (A)
 `resourcepacks/Copycat Framed Block.zip` holds `assets/framedblocks/lang/en_us.json` (309 keys; it renames 128 names to
@@ -102,6 +112,10 @@ SQ-IPO-02 passed 2026-10-27 and failed 2026-11-20 (fence use returns SUCCESS, fe
 3. Fix in the mixin; guard stays `IPostMaterial`-based (IPO is a hard dependency of the mixin targets, the mixin config
    already skips when IPO is absent: confirm).
 Check: SQ-IPO-02 rerun. Changelog: fix bullet under the Immersive Posts family if one exists, else the catch-all.
+Changed from the plan (2026-11-22): the suspect was wrong. The four files are unchanged since the passing 463d2342 (git
+diff -w: one comment word). `cdevtest use` put its fake player on top of the clicked block, and IPO's `PostBaseBlock.use`
+skips the post when the player stands in the target block. Fix in the test harness: `cdevtest use ... stand=x,y,z`
+(Devtools, built with 1.4) and SQ-IPO-02 stands off the post column. No product change, no changelog bullet.
 
 ### 2.2 `alcohol/vineryport #24` Shearing a ripe stem (G)
 `development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/block/PaleStemBlock.java` 86-98:
@@ -127,6 +141,10 @@ New client script `kubejs/assets/creativeengineering/kubejs/engineering/jei_info
 saying the sawmill takes it and which output families it cuts. Confirm the Engineering jar copies `kubejs/assets/creativeengineering/`
 (as CD does for its tree); if not, put the file where Engineering's client scripts live. Writeup: [engineering.md](engineering.md)
 F2 and EN-04. Changelog: bullet under the Sawmill family.
+Changed from the plan (2026-11-22): the Engineering jar did not copy `kubejs/assets/creativeengineering/kubejs/`;
+`build.gradle` scriptTrees (and the jar check) now include it. Two blades only: the plain sawblade (logs, wood, slabs) and the
+precision sawblade with 12 NBT Profiles; JEI has no subtype interpreter for it, so one page lists all 12. Test CQ-EN-26;
+bullet under Engineering Recipes (no Sawmill family).
 
 ### 2.5 `farming/wild-crops #9` No wild carrots or adzuki in forest boxes (D if data)
 `kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json`: carrot `where: temperate grassy !swamp` with
@@ -135,6 +153,9 @@ without building: the `grassy` / `temperate` traits of the three r1115 forest bi
 `kubejs/generation_scripts/worldgen/biome_traits.json`, then both placed features' rarity (`kubejs/data/neapolitan/worldgen/`,
 the FD jar and FD's config chance). If a trait is missing, fix the trait; if rarity alone explains zero in about 740 chunks,
 log the numbers on the row and ask the owner before changing rarity. Changelog only if worldgen changes.
+Result (2026-11-22): traits fine; FD wild carrots rarity 120 (config) on the motion-blocking heightmap, Neapolitan adzuki
+rarity 128 on world surface and grass only: about 4 and 1.8 attempts in the counted boxes, most landing on forest canopy.
+Item left the plan; numbers and the owner question are on the row.
 
 ## 3. Order and commits
 

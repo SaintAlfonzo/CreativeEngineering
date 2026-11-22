@@ -186,3 +186,12 @@ look the rdetail part=fields lines (or a /dumprecipes JSON): oak log result 6 oa
 @pass oak log -> 6 oak planks + oak bark + sawdust (the stripped stage shows on the belt); crimson stem -> crimson planks + scales + roots; ancient planks -> 2 slabs; twisted button; 2 oak vertical slabs; JEI lists the `creativeengineering:sawmill/` recipes with the sawdust secondary
 @fails as SQ-EN-25 (fields lost by kubejs-immersive-engineering); the precision blades come from IE's own items
 @draft a powered multiblock and blade swaps: a hand check until a runner writes the steps
+
+## CQ-EN-26 | JEI information pages on the sawblade and the precision sawblade (F2, D5)
+@group client
+@commands JEI: U (or the info tab) on `immersiveengineering:sawblade`, then on `creativeengineering:precision_sawblade` (any Profile); `grep jei_info logs/kubejs/client.log`
+@pass an Information page on each: the sawblade page (logs and wood -> 6 planks with bark and sawdust, planks -> 2 slabs, other shapes need a precision sawblade); the precision page lists the 12 shapes and the Engineer's Workbench recipe; no script error for `engineering/jei_info.js`
+@fails the Engineering jar lacks `assets/creativeengineering/kubejs/` (`build.gradle` scriptTrees), or a `requires` header names an absent mod; TODO `engineering/sawmill-and-components #3`
+@draft JEI screen by hand
+@reviewed 2026-11-22
+look both pages present and worded as the pass says

@@ -584,7 +584,7 @@
 - **Changed:** Village waystones have Yellow Corundum in their base [Glowstone].
 - **Fixed:** The Weathered Cardboard Box showed its whole texture sheet on every face; it now looks like a taped box.
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
-- **Changed:** With the Copycat Framed Block resource pack on, framed blocks keep their Framed Blocks names [128 renamed to Copycat names].
+- **Changed:** With the Copycat Framed Block resource pack on, framed blocks and their tools keep their Framed Blocks names [Framed Copycat names, Copycat Hammer].
 
 ## Mods Added & Removed
 

@@ -108,3 +108,12 @@
 @pass Log line as CQ-LTP-10 (213 tips, 0 unmatched); every tip shown is in loading_tips_list.md and none is cut off in the bar
 @fails A merged-away or removed tip shows: Creative Tips not reloaded
 @draft no batch holds this row yet
+
+## CQ-LTP-16 | spyglass and bell tips read as ruled (D1)
+@group client
+@commands F3+T; `grep -n "zoom in on distant things\|by hand or with a projectile" kubejs/assets/creative_tips/loading_tips/tips.json`; load a world a few times and watch the tips (or the tip list screen if it is on)
+@pass tips.json has "Spyglasses, made from amethyst and copper, can be used to zoom in on distant things" and "Ring a bell, by hand or with a projectile, to send villagers indoors and make nearby raiders glow"; when either shows in the bar it is that text, never "Bells can be rung with arrows"
+@fails Creative Tips not reloaded, or `bells_can_be_rung_with_arrows` dropped from its `remove` list (TODO `ui/tooltips #16`)
+@draft a tip shows at random: the grep is the firm half
+@reviewed 2026-11-22
+look the grep prints both lines; any spyglass or bell tip seen in the bar matches

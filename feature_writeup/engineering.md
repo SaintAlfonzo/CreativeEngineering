@@ -229,7 +229,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
   Ruling (owner, 2026-11-22, plan_easy_fixes_1122.md D5): a JEI info page per blade, no tooltip line. Built 2026-11-22:
   `kubejs/assets/creativeengineering/kubejs/engineering/jei_info.js` (pages on the sawblade and the precision sawblade; JEI
   shows every Profile as one item, so one page lists all 12 shapes); the Engineering jar now copies that client tree
-  (`build.gradle` scriptTrees). Test CQ-EN-04.
+  (`build.gradle` scriptTrees). Test CQ-EN-26.
 - **F3. Raw JSON and literal ids:** the 12 blueprint recipes are hand-written files in
   `kubejs/data/creativeengineering/recipes/blueprint/`, and the `vertical_planks` / `railings` shape tags in
   [engineeringtags.js](../kubejs/data/creativeengineering/kubejs/tags/engineeringtags.js) list literal ids, against the NCH /
@@ -314,7 +314,7 @@ None scripted. The sawmill recipes are written at load (no generated files to di
   plates), install it, feed oak planks -> oak stairs. Tooltip says "Sawmill profile: Stairs".
 - [ ] **EN-03 Fallback:** install a `sign` blade, feed something with no sign recipe but a default (e.g. a log) -> the
   default output.
-- [ ] **EN-04 JEI (F2):** JEI on oak planks (U) -> note whether the sawmill pages say which blade each output needs. Since 2026-11-22 the answer is the blade info pages: CQ-EN-04.
+- [ ] **EN-04 JEI (F2):** JEI on oak planks (U) -> note whether the sawmill pages say which blade each output needs. Since 2026-11-22 the answer is the blade info pages: CQ-EN-26.
 - [ ] **EN-05 Client matches:** watch items in the running sawmill with a door blade -> the item shown on the saw is the
   door path's, and the output is a door.
 - [ ] **EN-06 Reload mid-cut:** `/reload` (or leave and rejoin) while planks are in a profiled sawmill -> they finish as

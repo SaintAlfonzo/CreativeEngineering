@@ -42,3 +42,23 @@ expect verb=use main=minecraft:bone_meal\*4 off=\S+ state="vinery:grapevine_latt
 expect verb=items items=\S*vinery:jungle_grapes_white:2\b
 reject \[cdevtest\] .*done=0
 look if the 642 lattice is not at age 3 after the two single bone meals (growth per use differs), the harvest lines do not apply: rerun with a third single bone meal; the state lines give the grape property name for later rows
+
+## SQ-VN-02 | shearing a ripe grapevine stem drops grapes and seeds once and empties it
+@group A
+@commands a ripe red grapevine stem (age 4) on grass; shear it standing off the block; read its state and the items around it; shear it again
+@pass first shear: red grapes and 1 red grape seeds drop, the stem is age 0; second shear: no new drop (an age 0 stem ignores shears), still age 0
+@fails `PaleStemBlock.useItemOn` shear branch (D3: `withAge(state, 0, ...)`, TODO `alcohol/vineryport #24`)
+@reviewed 2026-11-22
+> forceload add 652 516 664 524
+> setblock 656 -61 520 minecraft:grass_block
+> cdevtest place 656 -60 520 vinery:grapevine_stem[age=4,grape=red] flags=18
+> cdevtest use 656 -60 520 held=minecraft:shears face=north hand=main stand=656,-60,518
+> cdevtest state 656 -60 520
+> cdevtest items 656 -60 520 3
+> cdevtest use 656 -60 520 held=minecraft:shears face=north hand=main stand=656,-60,518
+> cdevtest state 656 -60 520
+> cdevtest items 656 -60 520 3
+expect verb=state pos=656,-60,520 state="vinery:grapevine_stem\[age=0,
+reject verb=state pos=656,-60,520 state="vinery:grapevine_stem\[age=[1-4],
+reject \[cdevtest\] .*done=0
+look the two items lines: red grapes (2 to 5) and 1 red grape seeds after the first shear; the second line the same counts (nothing new)

@@ -259,6 +259,27 @@ expect verb=tag kind=biome tag=minecraft:is_nether n=5 ids=minecraft:basalt_delt
 reject \[cdevtest\] verb=\S+ done=0
 look boots; biomesoplenty under off; is_nether holds the 5 vanilla biomes only
 
+## SQ-VH-13 | Broken Bone and Bone Chunk recipes: milling, crushing, IE Crusher, bone pressing
+@group A
+@commands `/cdevtest rdetail` on the seven `creativeworldgen:` bone recipes; `/cdevtest uses minecraft:bone`
+@pass createmilling broken bone -> 2 bone meal, bone chunk -> 1; createcrushing the same plus 1 bone meal at 25 %; iecrushing the same with a 25 % secondary; createpressing bone -> broken bone; no other pressing recipe takes a bone
+@fails `kubejs/data/creativeworldgen/kubejs/recipes/broken_bones.js` (`// requires: philipsruins`), NCH helpers skipping (Create, kubejs_create, IE); TODO `worldgen/biomes #15`, D2
+@reviewed 2026-11-22
+> cdevtest rdetail creativeworldgen:createmilling/bones/
+> cdevtest rdetail creativeworldgen:createcrushing/bones/
+> cdevtest rdetail creativeworldgen:iecrushing/bones/
+> cdevtest rdetail creativeworldgen:createpressing/bones/bone
+> cdevtest uses minecraft:bone max=200
+expect verb=rdetail text=creativeworldgen:createmilling/bones/ n=2\b
+expect verb=rdetail text=creativeworldgen:createcrushing/bones/ n=2\b
+expect verb=rdetail text=creativeworldgen:iecrushing/bones/ n=2\b
+expect verb=rdetail id=creativeworldgen:createpressing/bones/bone serializer=create:pressing result=philipsruins:broken_bone\*1\b
+expect verb=rdetail id=creativeworldgen:createmilling/bones/broken_bone .*result=minecraft:bone_meal\*2\b
+expect verb=rdetail id=creativeworldgen:createmilling/bones/bone_chunk .*result=minecraft:bone_meal\*1\b
+reject verb=uses id=(?!creativeworldgen:createpressing/bones/bone)\S+ .*serializer=create:pressing
+reject \[cdevtest\] .*done=0
+look the crushing part=results lines carry the 25 % extra bone meal; the iecrushing secondaries line 0.25 bone meal
+
 ## CQ-VH-01
 @group client
 @commands Launch to the main menu; same grep as SQ-VH-01 on the client log
