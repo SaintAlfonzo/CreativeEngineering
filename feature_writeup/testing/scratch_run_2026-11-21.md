@@ -287,7 +287,7 @@ possible. Scope taken: handover item 2, the r1120nv rerun list (`perf/runs/r1120
     never eats"). ShinyItems.GoldenMilk / Milk only cure; suspect a use-finish handler or the drink food rules
     (food_types.js). TODO food-tuning #31.
   - BF-FIX SQ-FF-04 cdevtest prints `modifier=1` -> regex `modifier=1(\.0)? saturation=`; SQ-PCK-02 waffle moved to
-    `food_family/baked/misc` (owner 2026-11-20, food_families.md 4.9) -> row queries and expects that tag.
+    `food_family/baked/misc` (owner, 2026-11-20, food_families.md 4.9) -> row queries and expects that tag.
   - INCONCLUSIVE SQ-FO-08: no cachalot kill step, the blubber drop is untested (rewrite pass). PASS caveats: SQ-FO-04 cook
     times not printed by rdetail; SQ-JFP-05 look text says 3 cookies, setup inserts 1.
 - 18:36 step 3 (bundle A3) done; judge-3: PASS 23, BATCH-FAULT 9, FAIL 4, INCONCLUSIVE 3.
@@ -351,3 +351,34 @@ possible. Scope taken: handover item 2, the r1120nv rerun list (`perf/runs/r1120
 - 21:30 rerun drive r1121br: perf/runs/r1121b/rerun.txt (33 ids) plus SQ-BM-01 (forceload fixture for SQ-BM-02),
   bundled by qbundle.py into tools/scratch_query/batches/r1121br/ (bundle A1 19 rows, B1 3 rows) plus 7 sections: 9
   steps, 34 rows, ETA 23:23. The group fix in qdrive.py is in this drive (bundle B1 resolves to group B).
+- 22:14 rerun drive r1121br 9/9 steps done. judge-8: PASS 24, BATCH-FAULT 7, INCONCLUSIVE 2, FAIL 1 (no .qb edited).
+  - The stall did not recur: SQ-PS15B-13 PASS in 61 s; SQ-RB-21, SQ-RE-31 and the group B rows SQ-ABD-01, -04,
+    SQ-VTDA-10 PASS with the qdrive group fix.
+  - FAIL (uncertain) SQ-HH-227: cow count 1 of 3 after the 600-tick warp; the bot's trough use returned PASS (not
+    CONSUME) and it spawns about 200 blocks from the trough (208, 80): rule out reach first (r1120nv failed it too).
+  - Second faults, not edited (rewrite pass): SQ-LBS-04 prep now makes 22 hosts, @pass says 20; SQ-PS15B-26 counts
+    CMP-13's toml reset in the shared boot (count a delta); SQ-BM-02 reject hits the opening cleanup kill (guard it);
+    SQ-HH-1511 lamp lit only 20 ticks, summon and watch 40 ticks apart (pace 0); SQ-MBX-06 the box is placed by
+    SQ-MBX-01 (add the setblock); SQ-PSM-06 struck elders 2 of 3, server 578 ticks behind at the restart, `sleep 20`
+    in wall time (tickwarp and recount; still 2 = product finding); SQ-TI-00 bootreject hits create_dd's client-class
+    ClassNotFoundException (anchor on MossTint / xaero).
+  - INCONCLUSIVE SQ-CEN-05 (chest half needs the boot-1 legacy save), SQ-RFX-19 (371 recipe / 153 tag lines; owner).
+- 22:3x owner: close testing gracefully. Perf session r1121q stopped and reported (no `--prune`):
+  perf/sessions/r1121q/summary.md. No JVM left. Disk 2.2 GB free at the close (this run's server folders:
+  perf/runs/r1121b 6.8 GB, r1121br 2.0 GB, r1121q 0.2 GB; recordings perf/sessions/r1121q 1.4 GB); nothing deleted.
+
+### 9.2 Handover
+
+Counts: main drive r1121b (36 steps, 277 rows): PASS 224, BATCH-FAULT 33, FAIL 11, INCONCLUSIVE 6, 3 rerun on the
+right world. Rerun r1121br (34 rows): PASS 24, BATCH-FAULT 7, INCONCLUSIVE 2, FAIL 1. No LOOK left open; client rows
+not run.
+Real FAILs (TODO rows logged or added by the doc pass, process #11 owner checks, process #12 rewrite pass):
+SQ-GLD-03 (food-tuning #31), SQ-LGM-07 (mod-updates #1), SQ-POT-02, -04, -04v (blocks/framed-and-decor #6),
+SQ-HH-1232 (largecontent/mod-additions #52), SQ-HH-1608 (watering-and-soil #1), SQ-PSF-09 (farming/crops #30),
+SQ-PST-11b (creative-calendar #1), SQ-FDB-06 (largecontent/mod-additions #18), SQ-RSP-02 (mod-updates #2), SQ-HH-227
+(uncertain). Dev-tools ERRORs: generators-and-tests #28.
+Next scratch session: (1) rewrite pass for the 7 second faults above plus the not-simple list in 9.1 (process #12), then
+rerun them bundled (`qbundle.py`); (2) the r1120nv worldgen / long steps (r1120nv handover item 1); (3) client rows.
+Free disk first (about 10 GB needed).
+Tools added: tools/scratch_query/qbundle.py (bundle plain plan rows into shared boots); qdrive.py reads row metadata
+from the run batches a plan names (bundle rows kept their group).
