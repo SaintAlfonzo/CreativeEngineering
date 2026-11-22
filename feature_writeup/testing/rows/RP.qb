@@ -674,7 +674,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## CQ-RPI-64 | tooltips and books show the table's diversity
 @group client
 @commands Hover an enchanted golden apple, a canned enchanted golden apple, a stuffed bell pepper (red, then green after eating red), a chocolate coin; open the Food Dictionary sorted by highest diversity
-@pass enchanted golden apple "Diversity: 5.67", the can 4.54 (80%); a chocolate apple and a candy "Diversity: 2.22"; green stuffed pepper shows "(contributes ...)" after eating red; the coin shows no diversity line; the Food Dictionary's top entries are dragon dishes at 10.92
+@pass enchanted golden apple "Diversity: 4.57", the can 3.65 (80%); a chocolate apple and a candy "Diversity: 2.22"; green stuffed pepper shows "(contributes ...)" after eating red; the coin shows no diversity line; the Food Dictionary's top entries are dragon dishes at 9.38
 @fails `FoodTooltips` (calls getComplexity, inject applies on the client), `Diversity` read on the client side
 @draft written with the build 2026-11-21
 

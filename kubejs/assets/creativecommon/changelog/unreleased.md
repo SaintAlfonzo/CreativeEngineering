@@ -129,8 +129,8 @@
 - **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. The books show "N more unique foods to activate diet".
 - **Changed:** Food tooltips show hunger and saturation at the top, on one row (client setting: saturation on its own line), then the diversity, then the meal word ("Hearty Meal") [a second shank row under the name, hunger and saturation at the bottom].
 - **Removed:** The Spice of Life bonus and food history pages, and the separate "Food Diversity" tooltip line.
-- **Changed:** Food diversity follows food tiers: dragon dishes up to 10.9, gilded food 5.7 to 8.4, feasts up to 6.0, golden food 4.1 to 5.4, other filling food up to 3.2, mid-sized food up to 2.2, light snacks up to 1.2 [enchanted golden apple 10, golden cans under 1].
-- **Changed:** Eating 30 or so of the best different foods reaches about 120 diversity [about 92].
+- **Changed:** Food diversity follows food tiers: dragon dishes up to 9.4, gilded food 4.6 to 6.7, feasts up to 5.0, golden food 3.5 to 4.7, other filling food up to 3.2, mid-sized food up to 2.2, light snacks up to 1.2 [enchanted golden apple 10, golden cans under 1].
+- **Changed:** Eating 30 or so of the best different foods reaches about 100 diversity [about 92]. Without dragon and gilded food the best diet reaches about 72, without golden food as well about 69.
 - **Changed:** A can gives 80% of the diversity of the food in it.
 - **Changed:** Cooked meat and fish diversity follows the vanilla meats by hunger and saturation [cooked bison and smoked dragon leg above steak]. Cooked dragon meat scores above other meat and below dragon dishes.
 - **Changed:** Baked food and crafted dishes get the diversity of a Cooking Pot dish with the same ingredients; a baked food can reach one tier above its own.

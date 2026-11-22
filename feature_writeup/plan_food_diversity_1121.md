@@ -55,6 +55,7 @@ status lives in the rows.
 | R12 | Coated food and candies | clear | Lowered to mid-tier diversity: capped at the mid top (3), never below the best food input (replaces O2) | 2026-11-21 | chat 2026-11-21 |
 | R13 | Baking vs tier caps | open | Bake by batch value: best ingredient + the pot's median boost (2.97), scaled by the batch's input value (scale fitted so the median matches; it saturates), capped one tier above the food's own; a food lifted past its tier's top moves up a tier. Baking median +2.73 (pot +3.07, same measure) | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R14 | Ceiling scale | clear | Full cumulative table from no restrictions to low only (none, no dragon, no gilded, no feasts, no golden, mid and low, low only); every tier scaled so the top ceiling is 120 and the columns step evenly to low only. Low-only ceiling 20 (agent default, unconfirmed; was 16.5), so 120, 103.3, 86.7, 70, 53.3, 36.7, 20. Scales: low 1.212, mid 0.741, high 0.539, golden 0.777, feast 0.752, gilded 0.838, dragon 0.993; tops after it dragon 10.93, gilded 8.38, feasts 6.01, golden 5.44, high 3.23, mid 2.22, low 1.21. Table: food_diversity_audit.md 1.1 | 2026-11-21 | chat 2026-11-21 |
+| R15 | Ceiling targets (replaces R14's even steps) | clear | Chain low, mid, high, golden, feasts, gilded, dragon (golden below feasts: golden is the cheaper tier). Targets of the cumulative columns, best rotation: 20, 36.7, 53.3, 60, 72, 84, 100 (option B of four, feasts and golden swapped). High meals and feasts reach about 3/4 of the new ladder's unlocks (section 7); gilded and dragon food unlock the last quarter. Ladder top and satiated at 100 | 2026-11-21 | AskUserQuestion 2026-11-21 (owner text) |
 | R9 | Small values for non-food inputs (I11) | clear | Generator-only input values (ice, bone meal, mushrooms, blaze powder and similar about 0.1 to 0.25); a dish never scores below its best food input | 2026-11-21 | agent default, unconfirmed |
 
 ## 3. Design
@@ -143,3 +144,31 @@ hardest (0.539).
 - O1 The ladder (rungs 2 to 100) against the 120 ceiling (R14; before it 138.3) (single-tier and cumulative tables: food_diversity_audit.md 1.1) and high-tier food alone 99
   (best diet was 91.9 before). Rescale the rungs, or lower the tier tops?
 - O2 (ruled R12) Coated sweets reached the high cap 6; now capped at 3.
+
+## 7. Round 4 (2026-11-21): ceiling targets and the new ladder
+
+**Built:** `ceilings.targets` in `food_diversity.json` (R15); `fit_ceilings` takes the list, falling back to R14's even
+steps. Scales: low 1.212, mid 0.741, high 0.538 (unchanged), golden 0.665, feasts 0.621, gilded 0.674, dragon 0.853.
+Tops: dragon 9.38, gilded 6.74, feasts 4.97, golden 4.66, high 3.23, mid 2.22, low 1.21. Golden floor 3.49, gilded
+floor 4.57. Best diet 100 [120]; high meals and feasts without golden 69.2; average sets about 5 to 15 under each
+ceiling (food_diversity_audit.md 1.1).
+
+**New ladder layout** (owner list in todo/scratchpad.md "rp changes", ruled 2026-11-21: unlockables span 0 to 100,
+permanent effects from early-mid diversity up to Satiated as the final unlock, stat increases as listed). Not built:
+`ladder.json` still holds the old 38 rungs. Positions this round measured against:
+
+| Sub-ladder | Count | Positions |
+|---|---:|---|
+| Hearts (+1 heart each, max 20 hearts) | 10 | every 100/11: 9.1, 18.2, 27.3, 36.4, 45.5, 54.5, 63.6, 72.7, 81.8, 90.9 (the gap after the last heart equals the gap before the first) |
+| Toughness 1 + knockback resistance 0.1, paired | 3 | 16.7, 50, 83.3 (1/6, 1/2, 5/6) |
+| Permanent effects | 12 | 40 to 100, every 5.45 (start 40 = "early-mid", agent default, unconfirmed): Luck I, Speed I, Night Vision, Phantom Bane, Speed II, Regeneration I, Long Reach I, Strength I, Luck II, Invisibility (3rd highest), Double Jump (2nd highest), Satiated (100) |
+| Unlockables (a grouped heading = one slot) | 39 | every 2.5: 2.5 to 97.5, in the scratchpad's order |
+
+At the high-and-feasts ceiling (72): 28 of 39 unlockables (72%), 7 of 10 hearts, 2 of 3 pairs, 6 of 12 permanent
+effects. Luck II moved before Invisibility so those two sit 3rd and 2nd highest as listed.
+
+**Open for the owner:**
+- O3 Build the new ladder: needs effect ids for the scratchpad's new effects (Leaf Piercing, Steady, Prickly, Magnet,
+  Double Jump, the immunity groups, toggles), and whether effect slots stay and where.
+- O4 Start of the permanent effects (40 assumed).
+

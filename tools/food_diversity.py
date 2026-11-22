@@ -440,7 +440,7 @@ class Table:
 			return {}
 		ent = self.entries(val, tier)
 		chain = c['chain']  # tiers added from the bottom: low, mid, high, golden, feast, gilded, dragon
-		targets = [c['low'] + (c['top'] - c['low']) * i / (len(chain) - 1) for i in range(len(chain))]
+		targets = c.get('targets') or [c['low'] + (c['top'] - c['low']) * i / (len(chain) - 1) for i in range(len(chain))]
 		scales = {}
 		for k, t in enumerate(chain):
 			inside = set(chain[:k + 1])
@@ -504,9 +504,11 @@ def report(t):
 	r, n = t.pot
 	print('pot fit: value = %.3f x inputs per output (median of %d pot recipes); meat fit: value = %.3f x q' % (r, n, t.meat_k))
 	chain = t.rules['ceilings']['chain'][::-1]  # dragon .. low
-	names = ['None', 'No dragon', 'No dragon, gilded', 'No D, G, feasts', 'No D, G, F, golden', 'Mid and low', 'Low only']
+	names = ['None', 'No dragon', 'No dragon, gilded', 'No D, G, feasts', 'No D, G, F, golden', 'Mid and low', 'Low only',
+		'High and feasts, no golden']
 	ent = t.entries(t.val, t.tiers)
 	pools = [[v for v, tr in ent if tr in chain[i:]] for i in range(len(chain))]
+	pools.append([v for v, tr in ent if tr in ('feast', 'high', 'mid', 'low')])
 	print('scales: ' + ', '.join('%s %.3f' % (k, v) for k, v in t.scales.items()))
 	print('| Rotation | ' + ' | '.join(names) + ' |')
 	print('|---:|' + '---:|' * len(names))
