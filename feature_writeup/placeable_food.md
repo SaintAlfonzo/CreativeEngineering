@@ -1,6 +1,6 @@
 # Placeable food
 
-Test prefix **PL-** · Last updated **2026-10-30** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game; 2026-10-25 produce on the coaster and 9 Display Delight egg dishes shipped with 1.1.03 (2026-10-26); coaster contents limited to modeled items 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`)** (catalog rerun on the 2026-10-24 live `/dumpplaceable`; a newer `placeable.json` export came with the 2026-10-30 00:42 `/dumpall`, catalog not rerun)
+Test prefix **PL-** · Last updated **2026-11-22** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game; 2026-10-25 produce on the coaster and 9 Display Delight egg dishes shipped with 1.1.03 (2026-10-26); coaster contents limited to modeled items 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`)** (catalog rerun on the 2026-10-24 live `/dumpplaceable`; a newer `placeable.json` export came with the 2026-10-30 00:42 `/dumpall`, catalog not rerun)
 live `/dumpplaceable` export of 2026-10-18, rerun 2026-10-20; the tags and client script loaded
 without errors in single player 2026-10-11)
 
@@ -97,6 +97,14 @@ Data flow: `/dumpplaceable` -> `kubejs/exported/food/placeable.json` -> `tools/p
   the `raw/*`, `cooked/*`, `egg` and `dairy` food types had joined `#creativedelight:placeable_on_coaster` and the ones
   without a coaster model lay flat on the tray; that step was cut from `tools/placeable_catalog.py` the same day, so the
   tag holds the Brewin' port's and the pack's coaster models only (152). Adding models for the produce stays open.
+- **Other mods' tableware on the coaster** (owner, 2026-11-21, ruling R2 of
+  [plan_unblocked_batch_1121.md](plan_unblocked_batch_1121.md), TODO `food/placeable #6`): 26 non-food items, Handcrafted's
+  cups and bowls (10), Fantasy's Furniture's chalices, tea cups, tankards, bowls and bottles (15) and Supplementaries'
+  goblet, go on a coaster drawn as their own block model (`COASTER_TABLEWARE` in `tools/placeable_catalog.py`, coaster
+  files from `tools/gen_coaster_models.py`, no new art). They get only `#creativedelight:placeable_on_coaster` ("Placeable on a
+  coaster"), never the placeable tags. Plates, platters and trays stay off the coaster: every other mod's non-food plate,
+  cup, bowl and tray is listed for the owner in [non_food_tableware_review.csv](non_food_tableware_review.csv)
+  (`placeable-food #1`, `owner_decision` column; nothing removed). No other mod adds a coaster.
 - **Display Delight blocks for foods DD has none for** (Creative Common `compat/DisplayDelightDishes`, list
   `creativeengineering/displaydelight_dishes.json` in the jar): 9 egg dishes (Vegetable Omelet, Shulker Omelette, Inky
   Cap Scrambled Eggs, Suspicious Bacon And Eggs, Diced Potatoes with Egg and Tomato, Omelet, Cauliflower Kuku, Dandelion
@@ -153,8 +161,17 @@ Restart the game (new item_dict keys, new client script). Hover items in JEI or 
 - [ ] **PL-07 Jam:** hover Apple Jam. -> "Placeable (while sneaking)", and Fruits Delight's "Shift right click to place down" is gone.
 - [ ] **PL-08 Not tagged:** hover a Handcrafted plate and the Food Plate item. -> No placeable line; the Food Plate still shows its name. Carrot and Sweet Berries show only "Placeable on a coaster" (2026-10-25).
 - [ ] **PL-09 Dump:** run `/dumpplaceable`. -> Chat reports about 50 + 29 + 11 = 90 Display Delight links. Then `python3 tools/placeable_catalog.py` prints `[dump]` and the catalog's source line says "/dumpplaceable (live)". Review the "Review" section.
+- [ ] **PL-10 Tableware on a coaster (2026-11-22):** put a Wood Cup, Milk Tankards, a Goblet and Venthyr Tea Cups on a
+  coaster. -> Each shows as its own small 3D model, four to a coaster, and a right click takes them back. A Wood Cup's
+  tooltip has "Placeable on a coaster"; a Handcrafted plate has no placeable line and the coaster refuses it. Queue
+  SQ-PL-01 (tags), CQ-PL-02.
 
 ## 8. History
+
+- **2026-11-22:** other mods' non-food cups, bowls, tankards, chalices, bottles and the goblet on the coaster (26, own
+  block models, `COASTER_TABLEWARE`); review list of other mods' non-food tableware in
+  [non_food_tableware_review.csv](non_food_tableware_review.csv). Catalog rerun on the current dump: 469 items, 365 on a
+  coaster. Test PL-10, queue SQ-PL-01, CQ-PL-02.
 
 - **2026-10-25:** every raw, cooked, egg and dairy food on the coaster (`add_coaster_produce()`), and 9 Display Delight
   egg-dish blocks in Creative Common (`compat/DisplayDelightDishes`, `tools/gen_dd_dishes.py`), for the produce family rule

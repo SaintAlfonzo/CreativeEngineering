@@ -1,5 +1,11 @@
 # Scratchpad
 
+## Open plans, dont touch
+
+feature_writeup/plan_unblocked_batch_1121.md
+feature_writeup/plan_cc_publish_1_3.md
+feature_writeup/plan_texture_tools_gui.md
+
 ## Prompt scratchpad, dont touch
 
 id like dragon food and feasts to have a multiplier on their diversity to bring their top foods to the stairstep pattern the table expects, but with dragon food better than golden food. add a multiplier to golden if needed at the same time. canned food should provide slightly less diversity than the input food. baking should give on average the same boost to diversity that the cooking pot does. brewing and fermenting things into drinks should destroy the diversity it has and turn it to a drink that only contributes to the drink log. cooked shaped/shapeless/assemble crafts that dont have a raw version should not get a diversity penalty and be about the same boost as cooking pot. modded cooked meats should follow the vanilla meats diversity in terms of hunger/saturation ratio. cooked dragon meat gets significant boost but not as high as dragon meat/egg in meals. mirror create filling recipes (ruby chocolate on apple/waffle, etc) in the cooking pot (slightly more expensive in cooking vs spout, adjust ratios ) and base the diversity off the cooking pot value. keep golden foods diversity lower and gilden higher, split golden and gilded in table, so the order is dragon, gilded, feasts, golden, high, mid, low. 

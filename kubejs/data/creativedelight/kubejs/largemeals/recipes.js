@@ -25,8 +25,8 @@ ServerEvents.recipes(e => {
 		R.fdCutting(i.cooked_mutton_rack, i.any_knife, Item.of(i.cooked_mutton_chops, 4), e, 'cooked_mutton_rack')
 
 		//######################### Soups and meals (Cooking Pot, bowl from the meal's remainder) #########################
-		R.fdCooking([i.pufferfish, i.potato, i.beetroot, i.onion, i.milk], i.pufferfish_broth, e, 'pufferfish_broth', 1, 200)
-		R.fdCooking([i.potato, i.potato, i.onion, i.milk], i.potato_soup, e, 'potato_soup', 1, 200)
+		R.fdCooking([i.pufferfish, i.any_potato, i.beetroot, i.onion, i.milk], i.pufferfish_broth, e, 'pufferfish_broth', 1, 200)
+		R.fdCooking([i.any_potato, i.any_potato, i.onion, i.milk], i.potato_soup, e, 'potato_soup', 1, 200)
 		R.fdCooking([i.tomato, i.beetroot, i.onion], i.red_soup, e, 'red_soup', 1, 200)
 		R.fdCooking([i.tomato, i.eggs, i.onion], i.tomato_egg_soup, e, 'tomato_egg_soup', 1, 200)
 		R.fdCooking([i.t_raw_cod, i.beetroot, i.rice, i.tomato], i.cod_deluxe, e, 'cod_deluxe', 1, 200)
@@ -46,17 +46,17 @@ ServerEvents.recipes(e => {
 		// Roasted Rack of Mutton (D7, Q2, Q3): the pot takes 6 ingredients, so the base recipe is the raw rack with 2 cooked
 		// rice, 2 carrots and a baked potato (6), the dearer one the cooked rack with a cooked rice, 2 carrots and 2 baked
 		// potatoes (6). Both give the same feast; the grid craft below is the heatless route.
-		R.fdCooking([i.raw_mutton_rack, i.cooked_rice, i.cooked_rice, i.carrot, i.carrot, i.baked_potato], i.roasted_mutton_rack_block, e,
+		R.fdCooking([i.raw_mutton_rack, i.cooked_rice, i.cooked_rice, i.carrot, i.carrot, i.t_baked_potatoes], i.roasted_mutton_rack_block, e,
 			'roasted_mutton_rack_block', 1.5, 250, i.bowl)
-		R.fdCooking([i.cooked_mutton_rack, i.cooked_rice, i.carrot, i.carrot, i.baked_potato, i.baked_potato],
+		R.fdCooking([i.cooked_mutton_rack, i.cooked_rice, i.carrot, i.carrot, i.t_baked_potatoes, i.t_baked_potatoes],
 			i.roasted_mutton_rack_block, e, 'roasted_mutton_rack_block_cooked', 1.5, 250, i.bowl)
 
 		//######################### Heatless routes (_manual_only: Create's basin and crafters skip them) #########################
 		// Soups: bone broth brings the bowl; cooked forms of the raw main ingredients, one more main ingredient than the pot
-		F.soupCraft([i.baked_potato, i.baked_potato, i.baked_potato, i.onion, i.milk], i.potato_soup)
+		F.soupCraft([i.t_baked_potatoes, i.t_baked_potatoes, i.t_baked_potatoes, i.onion, i.milk], i.potato_soup)
 		F.soupCraft([i.tomato_sauce, i.tomato_sauce, i.beetroot, i.onion], i.red_soup)
 		F.soupCraft([i.tomato_sauce, i.tomato_sauce, i.cooked_eggs, i.onion], i.tomato_egg_soup)
-		F.soupCraft([i.pufferfish, i.baked_potato, i.baked_potato, i.beetroot, i.onion, i.milk], i.pufferfish_broth)
+		F.soupCraft([i.pufferfish, i.t_baked_potatoes, i.t_baked_potatoes, i.beetroot, i.onion, i.milk], i.pufferfish_broth)
 		// Meals and desserts: the bowl (or bottle) is in the grid
 		R.shapeless(i.cod_deluxe, [i.cooked_cod, i.cooked_cod, i.beetroot, i.cooked_rice, i.tomato_sauce, i.bowl], e, 'cod_deluxe_cooked_manual_only')
 		R.shapeless(i.hearty_lunch, [i.cooked_bacon, i.cooked_bacon, i.cooked_bacon, i.cooked_rice, i.cabbage, i.carrot, i.onion, i.bowl], e,
@@ -75,12 +75,12 @@ ServerEvents.recipes(e => {
 			i.pie_crust, i.bowl], e, 'mushroom_pot_pie_block_cooked_manual_only')
 		// Upstream's grid craft, kept as the heatless route (B3)
 		R.shapeless(i.roasted_mutton_rack_block, [i.cooked_rice, i.cooked_rice, i.cooked_rice, i.carrot, i.carrot, i.cooked_mutton_rack,
-			i.baked_potato, i.baked_potato, i.bowl], e, 'roasted_mutton_rack_block_manual_only')
+			i.t_baked_potatoes, i.t_baked_potatoes, i.bowl], e, 'roasted_mutton_rack_block_manual_only')
 
 		//######################### Sequenced assemblies on a bowl (one per feast) #########################
 		F.assemble(i.bowl, [i.cooked_rice, i.cooked_chicken, i.cooked_chicken, i.cooked_eggs, i.carrot, i.cabbage], i.omurice_block)
 		F.assemble(i.bowl, [i.pie_crust, i.brown_mushroom_colony, i.cooked_chicken, i.cooked_chicken, i.carrot, i.cabbage], i.mushroom_pot_pie_block)
-		F.assemble(i.bowl, [i.cooked_rice, i.cooked_rice, i.cooked_rice, i.cooked_mutton_rack, i.carrot, i.carrot, i.baked_potato, i.baked_potato],
+		F.assemble(i.bowl, [i.cooked_rice, i.cooked_rice, i.cooked_rice, i.cooked_mutton_rack, i.carrot, i.carrot, i.t_baked_potatoes, i.t_baked_potatoes],
 			i.roasted_mutton_rack_block)
 	})
 })

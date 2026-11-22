@@ -69,7 +69,7 @@ look CD file [campfire] rainOutTicks = 120
 @commands Default config. `/weather rain`; `/setblock` stone, a lit `minecraft:campfire` on it under open sky; second lit campfire on `minecraft:coal_block`; a lit `minecraft:soul_campfire` on stone; a lit campfire on stone under a 3-block roof; wait 200 ticks; `/data get block` / block state of each
 @pass Only the open-sky one on stone is `lit=false` (after 160 ticks; fizz sound, food on it stays); coal-block, soul and roofed ones stay `lit=true`; `/weather clear` + relight: stays lit
 @fails `CampfireRain` not ticking (mixin not applied) or `CDConfig.CAMPFIRE` not read; tags `#creativeengineering:campfire/rain_douses` / `rain_proof_fuel` (blocktags.js)
-@reviewed 2026-11-20
+@reviewed 2026-11-22
 @from batches/r1106spf/b1.qb
 # r1120nv FAIL (TODO misc-gameplay #1, cause unproven): forceload so the block entities tick for sure, and the
 # `cdevtest rain` probe (Devtools) prints every input of CampfireRain's gate at the open-sky campfire before and after
@@ -83,6 +83,9 @@ sleep 3
 > setblock 96 -60 -40 minecraft:soul_campfire[lit=true]
 > setblock 99 -60 -40 minecraft:campfire[lit=true]
 > fill 98 -57 -41 100 -57 -39 minecraft:stone
+# r1121b process #12 rewrite 2026-11-22: own copy of the SQ-SPF-81 fixture (open sky, on grass), absent in a bundle boot
+> setblock 91 -61 -32 minecraft:grass_block
+> setblock 91 -60 -32 minecraft:campfire[lit=true]
 > weather rain
 > cdevtest tickwarp 40
 waitlog verb=tickwarp end=\S+ ticks=40 60
@@ -96,9 +99,9 @@ expect verb=rain pos=90,-60,-40 .*raining=true .*rainingAt=true .*blockTicking=t
 > execute if block 96 -60 -40 minecraft:soul_campfire[lit=true]
 > execute if block 99 -60 -40 minecraft:campfire[lit=true]
 count Test passed == 4
-> execute if block -25 -60 -35 minecraft:campfire[lit=false]
+> execute if block 91 -60 -32 minecraft:campfire[lit=false] run say cfr05 grass campfire out
 > weather clear
-look the fixture campfire (open sky, grass) also out: SQ-SPF-81 thunder half
+look the grass campfire at 91 -60 -32 (the SQ-SPF-81 fixture's setup) also out: the log has `cfr05 grass campfire out`
 
 ## SQ-CFR-06 | rainDouses = false: open-sky campfire stays lit
 @group A

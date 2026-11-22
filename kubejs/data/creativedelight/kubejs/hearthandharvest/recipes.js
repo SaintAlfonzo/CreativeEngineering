@@ -36,6 +36,8 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.brine_bottle, [i.water_bottle, i.t_salts], e, 'brine_bottle_from_water_bottle')
 		R.bncFermenting(i.unripe_goat_cheese_wheel, [i.t_salts], f.goat_milk, e, 'unripe_goat_cheese_wheel', { temperature: 4 })
 		R.fdCutting(i.goat_cheese_wheel, i.any_knife, n(i.goat_cheese_slice, 4), e, 'goat_cheese_wheel')
+		// 4 slices back to the wheel, as Brewin's and Vintage Delight's cheeses (TODO dishes/ingredients #9)
+		R.shaped(i.goat_cheese_wheel, ['SS', 'SS'], { S: i.goat_cheese_slice }, e, 'goat_cheese_wheel_from_slices')
 
 		// Fruit and pickles
 		F.fruitCook(i.apple, i.baked_apple)
@@ -43,7 +45,7 @@ ServerEvents.recipes(e => {
 		F.fruitCook(i.t_white_grapes, i.raisins)
 		R.fdCutting(i.sunflower, i.any_knife, n(i.sunflower_seeds, 2), e, 'sunflower_seeds')
 		R.vdPickling(i.pickled_carrots, [F.slot(i.carrot, 5), i.t_salts], e, 'pickled_carrots')
-		R.vdPickling(i.pickled_potatoes, [F.slot(i.potato, 5), i.t_salts], e, 'pickled_potatoes')
+		R.vdPickling(i.pickled_potatoes, [F.slot(i.any_potato, 5), i.t_salts], e, 'pickled_potatoes')
 
 		// Oven (cookies, pies, pastry)
 		F.cookieBake(i.raisins, i.raisin_cookie)

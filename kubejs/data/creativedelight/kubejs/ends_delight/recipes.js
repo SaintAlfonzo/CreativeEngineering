@@ -53,7 +53,7 @@ ServerEvents.recipes(e => {
 			i.chorus_fruit], e, 'dragon_breath_and_chorus_soup_cooked_manual_only')
 		// feasts: the half dragon egg shell is the container, as in the pot
 		R.shapeless(i.dragon_meat_stew_block, [i.half_dragon_egg_shell, i.roasted_dragon_meat, i.roasted_dragon_meat, i.chorus_fruit,
-			i.chorus_succulent, i.carrot, i.baked_potato, i.tomato_sauce], e, 'dragon_meat_stew_block_cooked_manual_only')
+			i.chorus_succulent, i.carrot, i.t_baked_potatoes, i.tomato_sauce], e, 'dragon_meat_stew_block_cooked_manual_only')
 		R.shapeless(i.steamed_dragon_egg_block, [i.half_dragon_egg_shell, i.liquid_dragon_egg, i.roasted_shulker_meat, i.roasted_shulker_meat,
 			i.chorus_fruit, i.brown_mushroom, i.chorus_succulent, i.onion], e, 'steamed_dragon_egg_block_cooked_manual_only')
 	})

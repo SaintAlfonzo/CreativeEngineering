@@ -406,6 +406,13 @@ i.fish_oil = 'alexsmobs:fish_oil';
 // Fats and oils (dishes/ingredients #10; CD kubejs_startup/creativedelight/fats.js)
 i.blubber = 'creativedelight:blubber';
 i.whale_oil = 'creativedelight:whale_oil';
+// Produce (plan_unblocked_batch_1121.md P2; CD kubejs_startup/creativedelight/produce.js)
+i.potato_dough = 'creativedelight:potato_dough';             // dishes/ingredients #27, mirrors Veggies' sweet potato dough
+i.tofu = 'creativedelight:tofu';                             // dishes/ingredients #17
+i.t_veggie_patty = '#creativedelight:veggie_patty';          // Veggies' cooked vegetarian patty and tofu (CD creativedelight/patties.js)
+i.t_baked_potatoes = '#creativedelight:baked_potatoes';      // baked potato and baked sweet potato (dishes/ingredients #21)
+i.t_animal_milk_buckets = '#creativedelight:animal_milk_buckets'; // full milk buckets without nut milk: cheese (dishes/ingredients #35)
+i.t_buckets_water = '#forge:buckets/water';                 // any full water bucket (Forge tag; potato dough)
 i.t_raw_fishes = '#forge:raw_fishes';
 i.flax_block = 'supplementaries:flax_block';
 i.rice_bale = 'farmersdelight:rice_bale';
@@ -14261,16 +14268,41 @@ i.sealed_delivery_agreement = 'wares:sealed_delivery_agreement';
 // Placeable foods that had no key elsewhere, plus the placeable tag keys
 // (data/creativedelight/kubejs/creativedelight/placeable_tags.js, assets/creativedelight/kubejs/_qol/placeable_tooltip.js). Re-run the tool to add more.
 
-i.chorus_fruit_pie         = 'ends_delight:chorus_fruit_pie';
-i.dragon_meat_stew_block   = 'ends_delight:dragon_meat_stew_block';
-i.grilled_shulker_block    = 'ends_delight:grilled_shulker_block';
-i.steamed_dragon_egg_block = 'ends_delight:steamed_dragon_egg_block';
-i.enchanted_golden_cake    = 'goldenfood:enchanted_golden_cake';
-i.golden_cake              = 'goldenfood:golden_cake';
-i.guardian_soup            = 'oceansdelight:guardian_soup';
-i.bell_pepper_medley       = 'rusticdelight:bell_pepper_medley';
-i.dark_bell_pepper_medley  = 'rusticdelight:dark_bell_pepper_medley';
-i.pale_bell_pepper_medley  = 'rusticdelight:pale_bell_pepper_medley';
+i.chorus_fruit_pie                   = 'ends_delight:chorus_fruit_pie';
+i.dragon_meat_stew_block             = 'ends_delight:dragon_meat_stew_block';
+i.grilled_shulker_block              = 'ends_delight:grilled_shulker_block';
+i.steamed_dragon_egg_block           = 'ends_delight:steamed_dragon_egg_block';
+i.decorations_bone_skeleton_chalices = 'fantasyfurniture:decorations/bone_skeleton_chalices';
+i.decorations_bone_wither_chalices   = 'fantasyfurniture:decorations/bone_wither_chalices';
+i.decorations_bowl_beetroot_soup     = 'fantasyfurniture:decorations/bowl_beetroot_soup';
+i.decorations_bowl_empty             = 'fantasyfurniture:decorations/bowl_empty';
+i.decorations_bowl_mushroom_stew     = 'fantasyfurniture:decorations/bowl_mushroom_stew';
+i.decorations_nordic_mead_bottles    = 'fantasyfurniture:decorations/nordic_mead_bottles';
+i.decorations_potion_bottles         = 'fantasyfurniture:decorations/potion_bottles';
+i.decorations_potion_bottles_dyeable = 'fantasyfurniture:decorations/potion_bottles_dyeable';
+i.decorations_royal_chalices         = 'fantasyfurniture:decorations/royal_chalices';
+i.decorations_tankards_empty         = 'fantasyfurniture:decorations/tankards_empty';
+i.decorations_tankards_honeymead     = 'fantasyfurniture:decorations/tankards_honeymead';
+i.decorations_tankards_milk          = 'fantasyfurniture:decorations/tankards_milk';
+i.decorations_tankards_sweetberry    = 'fantasyfurniture:decorations/tankards_sweetberry';
+i.decorations_venthyr_chalices       = 'fantasyfurniture:decorations/venthyr_chalices';
+i.decorations_venthyr_tea_cups       = 'fantasyfurniture:decorations/venthyr_tea_cups';
+i.enchanted_golden_cake              = 'goldenfood:enchanted_golden_cake';
+i.golden_cake                        = 'goldenfood:golden_cake';
+i.blue_bowl                          = 'handcrafted:blue_bowl';
+i.blue_cup                           = 'handcrafted:blue_cup';
+i.terracotta_bowl                    = 'handcrafted:terracotta_bowl';
+i.terracotta_cup                     = 'handcrafted:terracotta_cup';
+i.white_bowl                         = 'handcrafted:white_bowl';
+i.white_cup                          = 'handcrafted:white_cup';
+i.wood_bowl                          = 'handcrafted:wood_bowl';
+i.wood_cup                           = 'handcrafted:wood_cup';
+i.yellow_bowl                        = 'handcrafted:yellow_bowl';
+i.yellow_cup                         = 'handcrafted:yellow_cup';
+i.guardian_soup                      = 'oceansdelight:guardian_soup';
+i.bell_pepper_medley                 = 'rusticdelight:bell_pepper_medley';
+i.dark_bell_pepper_medley            = 'rusticdelight:dark_bell_pepper_medley';
+i.pale_bell_pepper_medley            = 'rusticdelight:pale_bell_pepper_medley';
 
 i.t_placeable                = '#creativedelight:placeable';
 i.t_placeable_sneak          = '#creativedelight:placeable/sneak';

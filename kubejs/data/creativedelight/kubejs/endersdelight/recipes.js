@@ -29,6 +29,8 @@ ServerEvents.recipes(e => {
 		// One unpack route for both chorus crates (#forge:storage_blocks/chorus_fruit: this mod's and End's; ends_delight.md 3.1)
 		R.remove({ id: 'endersdelight:chorus_fruit_from_crate' }, e)
 		R.shapeless(Item.of(i.chorus_fruit, 9), [i.t_storage_chorus_fruit], e, 'chorus_fruit_from_crate')
+		// Machine unpacking (TODO dishes/ingredients #8): Vintage Improvements' Vibrating Table shakes a crate into 9 fruit
+		R.viVibrating(Item.of(i.chorus_fruit, 9), i.t_storage_chorus_fruit, e, 'chorus_fruit_from_crate')
 
 		//######################### Shulker meat ######################### Ender's Shulker Mollusk and Filet are the
 		// shulker meat (plan_misc_1117.md 2; item_merges.md 2.14): End's meat and slice merge onto them (swap list

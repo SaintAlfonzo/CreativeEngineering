@@ -30,6 +30,9 @@ Contact sheets: [swap and redo](texture_sources/sheet_swap_redo.png),
 source found), [confirm, clean recolours](texture_sources/sheet_confirm_recolour.png) (a human sprite in new
 colors, tool unknown).
 
+Owner questions per item (source, palette, tool), for `textures/tools #2` to `#4`:
+[owner_questions.csv](texture_sources/owner_questions.csv) (2026-11-22; the ledger now has 21 redo and 385 confirm rows).
+
 No texture in the pack is image-model output. The session logs show no freehand drawing into a texture: every AI
 hand on a texture was a script that recoloured, shifted, grayed or split a human sprite. Shape-drawing calls in the logs
 were preview and contact sheets only.

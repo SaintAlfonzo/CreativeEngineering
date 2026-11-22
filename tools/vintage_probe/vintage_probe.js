@@ -417,14 +417,13 @@
 	}
 
 	// ================================================================ fluids (SQ-VP-06: soft fluids)
+	// the 6 goldenfood stews left the soup list 2026-11-10 (they are no longer soft fluids): 18 old + 8 new = 26
 	const OLD_SOUPS = ['alexsdelight:acacia_blossom_soup', 'neapolitan:adzuki_stew', 'fruitsdelight:bayberry_soup',
 		'rusticdelight:bell_pepper_soup', 'farmersrespite:blazing_chili', 'farmersdelight:bone_broth', 'moredelight:carrot_soup',
 		'quarkdelight:cavern_explorer_stew', 'endersdelight:chorus_stew', 'corn_delight:corn_soup',
-		'brewinandchewin:creamy_onion_soup', 'goldenfood:enchanted_golden_beetroot_soup',
-		'goldenfood:enchanted_golden_mushroom_stew', 'goldenfood:enchanted_golden_rabbit_stew', 'endersdelight:endermite_stew',
-		'fruitsdelight:fig_chicken_stew', 'goldenfood:golden_beetroot_soup', 'goldenfood:golden_mushroom_stew',
-		'goldenfood:golden_rabbit_stew', 'alexsdelight:kangaroo_stew', 'quarkdelight:miso_with_bamboo_sprouts',
-		'farmersdelight:noodle_soup', 'delightful:sinigang', 'nethersdelight:strider_moss_stew']
+		'brewinandchewin:creamy_onion_soup', 'endersdelight:endermite_stew', 'fruitsdelight:fig_chicken_stew',
+		'alexsdelight:kangaroo_stew', 'quarkdelight:miso_with_bamboo_sprouts', 'farmersdelight:noodle_soup', 'delightful:sinigang',
+		'nethersdelight:strider_moss_stew']
 	const NEW_SOUPS = [VT + 'pickle_soup', VT + 'ghostly_chili', VT + 'oatmeal', VG + 'broccoli_soup', VG + 'cacciatore',
 		VG + 'cauliflower_soup', VG + 'garlic_chicken_stew', VG + 'turnip_beef_stew']
 	const JAR_CONTENTS = ['apple_sauce', 'glow_berry_jam', 'nut_mash', 'pepper_jam', 'relish', 'sweet_berry_jam', 'vinegar']

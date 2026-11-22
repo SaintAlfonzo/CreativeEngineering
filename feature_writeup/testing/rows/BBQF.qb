@@ -443,12 +443,12 @@ reject verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_
 look loops 8 and 125 mB are not in the rdetail lines: JEI page in game (CQ-GLD2-04) or golden.js `global.CD.FOOD.gilded`; part=start names the golden apple / golden carrot
 reject (Unknown or incomplete command|\[cdevtest\] verb=rdetail .*done=0)
 
-## SQ-GLD2-03 | golden values: 46 set, golden and gilded beef hunger
+## SQ-GLD2-03 | golden values: 41 set, golden and gilded beef hunger
 @group A
 @commands Log + `/dumpfood`
-@pass `[golden values] 46`; golden beef 16 hunger at the input modifier, gilded beef 20
+@pass `[golden values] 41` (18 goldenfood pairs, golden / gilded apple and carrot, Golden Roll); golden beef 16 hunger at the input modifier, gilded beef 20
 @fails CD `kubejs_startup/goldenfood/golden_values.js`; TODO `#3`
-@reviewed 2026-11-16
+@reviewed 2026-11-22
 @from batches/r1103/sA_2.qb
 shell grep -hE "\[golden values\]" logs/kubejs/startup.log logs/latest.log | head -3
 shell grep -qhE "\[golden values\] 46" logs/kubejs/startup.log logs/latest.log

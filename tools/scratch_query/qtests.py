@@ -724,6 +724,50 @@ def tx05():
 		x.wait()
 
 
+@case('PROC-29 forceload release plan: a box goes after its last user row; overlaps, placeholders and ~ hold it')
+def t29():
+	import qforceload
+	mk = lambda i, cmds: {'id': i, 'section': '1', 'meta': {}, 'steps': [('cmd', c, 0) for c in cmds]}  # noqa: E731
+	rows = [mk('A', ['forceload add 0 0 31 31', 'setblock 5 -60 5 stone']), mk('B', ['setblock 20 -60 20 dirt']),
+			mk('C', ['execute in minecraft:the_end run forceload add 1000 1000']), mk('D', ['say x'])]
+	rel, dims = qforceload.plan(rows)
+	assert rel == {'B': ['forceload remove 0 0 31 31'],
+				   'C': ['execute in minecraft:the_end run forceload remove 1000 1000']}, rel
+	assert dims == {'minecraft:overworld', 'minecraft:the_end'}, dims
+	rows[3] = mk('D', ['setblock {HX} {HY} {HZ} stone'])
+	assert qforceload.plan(rows)[0].get('D') == ['forceload remove 0 0 31 31'], 'placeholder did not hold the box'
+	rows[3] = mk('D', ['forceload add 16 16 40 40'])
+	assert qforceload.plan(rows)[0].get('D') == ['forceload remove 0 0 31 31', 'forceload remove 16 16 40 40'], \
+		'overlapping boxes not released together'
+	rows[3] = mk('D', ['forceload add {X} {Z}'])
+	rel = qforceload.plan(rows)[0]
+	assert 'D' not in rel and rel.get('C') and 'B' not in rel, 'placeholder box: %r' % rel
+	rows.append(mk('E', ['forceload add 900 900', 'setblock 900 -60 900 stone']))
+	assert 'E' not in qforceload.plan(rows)[0], 'a box after a placeholder box was released'
+	rows[3] = mk('D', ['forceload remove all'])
+	assert 'B' not in qforceload.plan(rows)[0], 'remove all did not end the box'
+
+
+@case('PROC-29b qrun run releases forceloads: remove after the last user row, remove all at the end; --keep-forceloads')
+def t29b():
+	p = write_rows('ZFL.qb', SECTION % ('zjar', 'T2')
+				   + row('SQ-ZFL-01', '> forceload add 0 0 31 31\n> setblock 5 -60 5 stone')
+				   + row('SQ-ZFL-02', '> setblock 20 -60 20 dirt')
+				   + row('SQ-ZFL-03', '> say last'))
+	for name, extra, want in (('o29b', [], True), ('o29c', ['--keep-forceloads'], False)):
+		out = fake_out(name)
+		subprocess.run(QRUN + ['run', str(out), str(p), str(TMP / ('r' + name)), '--no-watch'] + extra,
+					   capture_output=True, text=True)
+		log = (out / 'srv/logs/latest.log').read_text().splitlines()
+		cmds = [ln.split('[fake] ', 1)[1] for ln in log if '[fake] ' in ln]
+		if not want:
+			assert not any('remove' in c for c in cmds), cmds
+			continue
+		i_rm = cmds.index('forceload remove 0 0 31 31')
+		assert cmds.index('setblock 20 -60 20 dirt') < i_rm < cmds.index('say last'), cmds
+		assert cmds[-1] == 'forceload remove all', cmds
+
+
 def main():
 	try:
 		for name, ok, why in results:

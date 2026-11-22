@@ -788,9 +788,9 @@ look shell: the dropped-data line names no loot_table file (second number 0)
 ## SQ-TP-41 | the Tempad macro (item use path) opens a door and starts the 40-tick cooldown; a second use during it opens nothing
 @group A
 @commands Bot with a Tempad and 6000 chronons saves a location, pins it, sets the pinned-location macro; `/ztp macro` twice at once, then again after 45 ticks
-@pass first macro: a door to the pinned location, `[ztp] cd true`; second macro at once: still one door; after the cooldown: a second door (API opens through `/ztp open` also start the cooldown, owner ruling 2026-11-18, SQ-TP-04)
+@pass first macro: a door to the pinned location (a linked pair of timedoor entities, one with original true and one with false: `doors total 2`), `[ztp] cd true`; second macro at once: still `doors total 2`; after the cooldown: a second door (API opens through `/ztp open` also start the cooldown, owner ruling 2026-11-18, SQ-TP-04)
 @fails no cooldown: the macro path does not call the item cooldown (`UseMacroPacket` handler); a second door at once: the cooldown is not checked
-@reviewed 2026-11-21
+@reviewed 2026-11-22
 @absent tempad:default tempad:teleport tempad:pinned_location (Tempad app and macro ids, not registry entries: ModApps / macro ids)
 # owner ruling 6 reversed (2026-11-18): both paths start the cooldown; this row checks the macro path (the item-use path a player's shift-use takes)
 > forceload add -16 -16 48 16

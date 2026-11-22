@@ -39,7 +39,7 @@
 ## Milk <!-- icon: minecraft:milk_bucket -->
 
 - **New:** Nut Milk is a fluid: Spouts fill and Item Drains empty Nut Milk bottles at 250 mB.
-- **Changed:** Goat milk and nut milk work in every recipe that takes milk: Create mixing, Cooking Pot, Kettle and Keg [cow milk only].
+- **Changed:** Goat milk and nut milk work in every recipe that takes milk: Create mixing, Cooking Pot, Kettle and Keg [cow milk only]. Cheese takes cow or goat milk, not nut milk.
 
 ## Hops <!-- icon: hearthandharvest:hops -->
 
@@ -161,6 +161,7 @@
 
 - **New:** Cutting a cave carrot gives 2 raw veggie patties; a baked cave carrot gives 2 cooked ones.
 - **Changed:** Vegetarian Patties are named Veggie Patties.
+- **New:** Tofu, cooked in the Cooking Pot from 2 mushrooms and Nut Milk. It fills the Veggie Patty slot in recipes.
 
 ## Eggs <!-- icon: farmersdelight:fried_egg -->
 
@@ -223,6 +224,7 @@
 
 ## Cheese <!-- icon: brewinandchewin:flaxen_cheese_wedge -->
 
+- **New:** 4 Goat Cheese Slices craft into a Goat Cheese Wheel.
 - **Changed:** Broccoli Soup, Pasta with Broccoli, Stuffed Potato, Truffle Pasta and both Creamy Pastas take any cheese [milk] and restore 3 more hunger.
 - **Changed:** Nachos and Fiery Fondue take any cheese [milk]; each serving restores 1 more hunger.
 - **Changed:** The Stuffed Potato sequenced assembly deploys a cheese [250 mB milk].
@@ -275,8 +277,21 @@
 - **Changed:** Botania special flowers, the flower crown and azalea leaf and flower piles no longer breed bees or feed hummingbirds.
 - **Changed:** Wild plants still float in water and go in planter and flower boxes, and structures still clear them as plants.
 
+## Coasters <!-- icon: brewinandchewin:coaster -->
+
+- **New:** Handcrafted cups and bowls, Fantasy's Furniture chalices, tea cups, tankards, bowls and bottles, and the Supplementaries goblet can be put on a coaster, shown as their own small models.
+- **Fixed:** Flavored Rustic Delight pancakes placed on a coaster showed a missing model.
+
+## Potatoes <!-- icon: minecraft:potato -->
+
+- **New:** Potato Dough: 2 potatoes, wheat flour and an egg or a water bucket make 3. A knife cuts it into 2 Gnocchi.
+- **Changed:** Dishes that take a potato or a baked potato also take a sweet potato or a baked sweet potato.
+
 ## Food & Cooking
 
+- **New:** A Vibrating Table shakes a Chorus Fruit Crate into 9 Chorus Fruit.
+- **New:** Cake Base crafts from 3 Batter and 2 sweeteners.
+- **Changed:** Melon Juice in the Create mixer takes 2 Melon Slices and 250 mB water, heated [3 slices and a sweetener].
 - **New:** Lemonade, Blue Lemonade and Pink Lemonade, made in a Create mixer or a Kettle. Lemonade gives Haste for 30 s; Blue adds Night Vision and Pink adds Jump Boost for 20 s.
 - **New:** Two Cooking for Blockheads Fridges side by side, facing the same way, join into a double fridge with no gap or seal between them. A Fridge placed next to another opens the other way. Each keeps its own door and inventory.
 - **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
@@ -309,7 +324,6 @@
 - **Changed:** Trail Mix and Stuffed Cantaloupe take an edible seed [any seed].
 - **Changed:** Hot Cocoa, Strong Hot Cocoa and Apple Cider restore 1 hunger and 0.4 saturation, like teas, and can be drunk when full [no hunger].
 - **Changed:** Granite, Andesite and Diorite Cutting Boards show the polished stone itself [a stone-colored wooden board].
-- **Fixed:** Flavored Rustic Delight pancakes placed on a coaster showed a missing model.
 - **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
 - **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
 - **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
@@ -541,12 +555,16 @@
 - **Changed:** The Golden Watering Can can be made with a Rose Gold Block [Block of Gold only].
 - **Changed:** Gold Sheet Metal, Gold Boilers and Large Gold Boilers are cut only from Blocks of Gold [also Rose Gold Blocks].
 
+## Flower Pots <!-- icon: minecraft:flower_pot -->
+
+- **New:** Two Flower Pots fit in one block, like candles: use a Flower Pot on a placed one. The second pot is 2 pixels taller, and each pot holds its own plant.
+- **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.
+
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
 - **New:** Supplementaries Doormat is crafted from 2 Straw in a row.
 - **New:** Walking in or on dust piles, Sawdust, ash, Powdered Sugar Blocks, Powdered Obsidian, Vinteum Dust Blocks and concrete powder raises dust in the block's color; landing on them raises more.
 - **Changed:** Cast Iron Block is named Cast Iron Plating.
-- **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.
 - **Changed:** Village waystones have Yellow Corundum in their base [Glowstone].
 - **Fixed:** The Weathered Cardboard Box showed its whole texture sheet on every face; it now looks like a taped box.
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.

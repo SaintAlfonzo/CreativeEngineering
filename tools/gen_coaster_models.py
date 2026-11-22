@@ -13,6 +13,8 @@ coaster JSON would lie flat as its item sprite, so only items with a real block 
     Which block, best first: the food set down on its own (placed), then on a Small Food Plate, then on a Food Plate.
   * Other mods' placed drinks and jars (OWN_BLOCKS): the edible block items whose block class is listed there
     (Vinery's wine bottles, Vintage Delight's mason jars), pointing at their own block's default-state model.
+  * Other mods' non-food cups, bowls, tankards and bottles (placeable_catalog.COASTER_TABLEWARE, owner 2026-11-21,
+    TODO food/placeable #6): their own block's default-state model, read from the jar the table names.
   * BORROW: a food whose item sprite is the same picture as a modeled food's (tools: feature_writeup/
     coaster_model_candidates.md) takes that food's coaster models, optionally with the enchantment glint.
 
@@ -165,7 +167,7 @@ def entry_for(item_id, assets, block):
 
 
 def file_name(item_id):
-	return item_id.replace(':', '__') + '.json'
+	return item_id.replace(':', '__').replace('/', '_') + '.json'
 
 
 def jars_for(patterns):
@@ -186,7 +188,7 @@ def build():
 	ported = {json.loads(p.read_text())['item']: json.loads(p.read_text()) for p in pc.COASTER_DIR.glob('*.json')}
 	if not ported:
 		print('WARNING no port coaster models in %s' % pc.COASTER_DIR)
-	out, problems, counts = {}, [], {'dd': 0, 'own': 0, 'borrow': 0}
+	out, problems, counts = {}, [], {'dd': 0, 'own': 0, 'tableware': 0, 'borrow': 0}
 
 	def wanted(item_id):
 		return item_id in present and item_id not in ported and not pc.excluded(item_id)
@@ -231,6 +233,27 @@ def build():
 				continue
 			out[file_name(item_id)] = entry
 			counts['own'] += 1
+
+	# Other mods' non-food cups, bowls, tankards and bottles (pc.COASTER_TABLEWARE), from their own block models
+	tableware_assets = {}
+	for item_id, patterns in sorted(pc.COASTER_TABLEWARE.items()):
+		if item_id not in present or item_id in ported:
+			continue
+		ns, path = item_id.split(':', 1)
+		key = (ns, patterns)
+		if key not in tableware_assets:
+			jars = jars_for(patterns)
+			tableware_assets[key] = Assets(ns, jars) if jars else None
+			if not jars:
+				problems.append('%s: none of %s found' % (item_id, ', '.join(patterns)))
+		if tableware_assets[key] is None:
+			continue
+		entry = entry_for(item_id, tableware_assets[key], path)
+		if entry is None:
+			problems.append('%s: no default model for its block' % item_id)
+			continue
+		out[file_name(item_id)] = entry
+		counts['tableware'] += 1
 
 	# Same picture as a modeled food
 	for item_id, (ref, glint) in sorted(BORROW.items()):
@@ -279,8 +302,8 @@ def main():
 	for n in extra:
 		(OUT / n).unlink()
 		print('  removed %s' % n)
-	print('%s: %d coaster files (%d Display Delight, %d own block models, %d borrowed); wrote %d, removed %d under %s'
-		  % (jar, len(out), counts['dd'], counts['own'], counts['borrow'], len(stale), len(extra),
+	print('%s: %d coaster files (%d Display Delight, %d own block models, %d tableware, %d borrowed); wrote %d, removed %d under %s'
+		  % (jar, len(out), counts['dd'], counts['own'], counts['tableware'], counts['borrow'], len(stale), len(extra),
 			 OUT.relative_to(lang_index.INSTANCE)))
 	return 0
 

@@ -1,0 +1,33 @@
+# Scratch queue rows PL (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PL.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-PL Other mods' tableware on the coaster, 2026-11-22 ([placeable_food.md](../placeable_food.md) 3, 7 PL-10, TODO `food/placeable #6`)
+@@date 2026-11-22
+@@jars creativebrewing creativecommon creativedelight
+@@sources feature_writeup/placeable_food.md tools/placeable_catalog.py tools/gen_coaster_models.py
+@@text
+@@text Needs Creative Common rebuilt (25 new item_dict keys) and Creative Brewing rebuilt (26 new coaster files) from the
+@@text 2026-11-22 tree. 26 non-food items from Handcrafted (cups, bowls), Fantasy's Furniture (chalices, tea cups, tankards,
+@@text bowls, bottles) and Supplementaries (goblet) join `#creativedelight:placeable_on_coaster` and through it
+@@text `#brewinandchewin:placeable_on_coaster`, each with a coaster file pointing at its own block model.
+@@text
+@@table
+## SQ-PL-01 | tableware in the coaster tags
+@group A
+@commands Boot; `/dumptags item`; check `brewinandchewin:placeable_on_coaster` and `creativedelight:placeable_on_coaster` hold `handcrafted:wood_cup`, `fantasyfurniture:decorations/tankards_milk`, `supplementaries:goblet`; `[placeable]` line in the server log
+@pass all three in both tags; `[placeable] ... placeable_on_coaster=365` (2026-11-22 catalog, less items of absent mods) and no `not item ids` warning
+@fails member scripts for handcrafted / fantasyfurniture / supplementaries not loaded (requires header), or the item_dict keys missing (Creative Common not rebuilt)
+> dumptags item
+waitlog \[dumptags\] wrote
+shell python3 -I -c "import json; d=json.load(open('kubejs/exported/tags/item_tags.json')); ids=('handcrafted:wood_cup','fantasyfurniture:decorations/tankards_milk','supplementaries:goblet'); [print(t, [i for i in ids if i in d.get(t, [])]) for t in ('brewinandchewin:placeable_on_coaster','creativedelight:placeable_on_coaster')]"
+shell grep -h "\[placeable\]" logs/kubejs/server.log | tail -3; true
+look both tags list all three items; the [placeable] counts line has placeable_on_coaster near 365 and no warning
+
+## CQ-PL-02 | cup, tankard and goblet drawn on a coaster
+@group A
+@commands Place a Brewin' coaster; right click it with a Wood Cup, Milk Tankards, a Goblet and a Venthyr Tea Cups; hover a Wood Cup and a Handcrafted plate
+@pass each sits on the coaster as its own small 3D model (not a flat sprite), four slots; right click takes them back; Wood Cup tooltip says "Placeable on a coaster"; the plate has no placeable line and the coaster refuses it
+@fails flat sprite = coaster file not in the Creative Brewing jar; refused = tag missing; no tooltip line = placeable tooltip reader
+@draft client row: steps written by the next client runner

@@ -646,9 +646,10 @@ reject (Unknown or incomplete command|Incorrect argument for command|That positi
 look the by_type lines per biome (spring, summer, autumn, winter in order): spring no plain cows and the 7 spring variants about equal; summer sunbloom / moobloom / oxeyebloom about even; autumn moobloom / sunbloom / rosebloom about even; winter plain cows with goats and sheep. (mooblooms by their entity ids in the untyped line)
 ## CQ-WGE-17 (N11)
 @group client
-@commands `structures/testing #1`: the client list structure_tuning.md 8.0.11; `structures/testing #3`: create a Superflat world in single player, then `/time` across a season change with Serene Seasons' clock item in hand
-@pass 8.0.11 items as written there; Superflat world loads and plays without errors; the seasons clock shows the Calendar's season (`SereneSeasonsClientClockMixin` applied, no mixin error)
+@commands `structures/testing #1`: in the owner's client world, the structure_tuning.md 8.0.11 items ST-27, ST-29, ST-43, ST-45, ST-62, ST-63, ST-64, ST-66, ST-68, ST-68 b, ST-70, ST-71, ST-73, ST-88, ST-89, ST-90, ST-10, ST-110, ST-111, ST-116, ST-122, ST-123, ST-126, ST-137, ST-138, ST-139, ST-146, ST-147, ST-151, ST-152, ST-155, ST-156, LO-09, LO-11 (each item's steps are in that writeup); `structures/testing #3`: create a Superflat world in single player (cheats on), fly 2 min, then hold Serene Seasons' season clock and SeasonHUD in view: `/time add 6000` four times, then `/ccaltime date set 1 early_summer 1 6:00 pm` (a sub-season change) and wait 1 min
+@pass each listed ST / LO item passes as written there; the Superflat world loads, generates and plays without errors in latest.log; the clock and SeasonHUD day move once per step and never run ahead then snap back; at the sub-season change the world re-tints once; no `SereneSeasonsClientClockMixin` apply error in latest.log
 @fails Superflat crash: worldgen classes reading the overworld noise settings; clock wrong: mixin target moved
+@reviewed 2026-11-22
 @draft no batch holds this row yet
 ## CQ-WGE-18 (N7)
 @group client

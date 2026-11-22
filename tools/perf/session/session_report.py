@@ -121,7 +121,18 @@ def summarize(d):
 			ended = 'crash: ' + f['crash']
 		else:
 			ended = 'no clean stop in the log'
-		boot = {'boot': os.path.basename(b), 'level': m.get('LEVEL'), 'type': m.get('TYPE'), 'jars': m.get('JARS'), 'ended': ended,
+		# host CPU and power state (host_state.sh; older boots have none)
+		mhz = []
+		hp = os.path.join(b, 'host.tsv')
+		if os.path.exists(hp):
+			for r in open(hp, encoding='utf8').readlines()[1:]:
+				p = r.rstrip('\n').split('\t')
+				if len(p) >= 2 and p[1].isdigit():
+					mhz.append(int(p[1]))
+		host = {'governor': m.get('CPU_GOVERNOR'), 'epp': m.get('CPU_EPP'), 'max_khz': m.get('CPU_MAX_KHZ'),
+				'profile': m.get('PLATFORM_PROFILE'), 'ac': m.get('AC_ONLINE'), 'host_boot': m.get('HOST_BOOT'),
+				'mhz_median': sorted(mhz)[len(mhz) // 2] if mhz else None} if 'CPU_GOVERNOR' in m else None
+		boot = {'boot': os.path.basename(b), 'level': m.get('LEVEL'), 'type': m.get('TYPE'), 'jars': m.get('JARS'), 'ended': ended, 'host': host,
 				'wall_to_done_s': round(f['done'] - start, 1) if 'done' in f else None, 'done_s': f.get('done_s'),
 				'recipe_event_s': round(f['recipes_z'] - f['recipes_a'], 1) if 'recipes_a' in f and 'recipes_z' in f else None,
 				'uptime_min': round((end - start) / 60, 1), 'rss_max_mb': max((r[2] for r in proc), default=None),
@@ -167,11 +178,17 @@ def write_md(d, s, base):
 	L = ['# Perf session %s' % s['session'], '']
 	if base:
 		L += ['Baseline: %s (segments matched by name; change = this run minus baseline).' % base['session'], '']
-	L += ['## Boots', '', '| Boot | Type | Jars | Launch to Done (s) | `Done (` (s) | Recipe event (s) | Up (min) | RSS max (MB) | Ended | Report |',
-		  '|---|---|---|---|---|---|---|---|---|---|']
+	L += ['## Boots', '', '| Boot | Type | Jars | Launch to Done (s) | `Done (` (s) | Recipe event (s) | Up (min) | RSS max (MB) | Host CPU | Ended | Report |',
+		  '|---|---|---|---|---|---|---|---|---|---|---|']
 	for b in s['boots']:
-		L.append('| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |' % (b['boot'], b['type'], b['jars'], fmt(b['wall_to_done_s']), fmt(b['done_s']),
-				 fmt(b['recipe_event_s']), fmt(b['uptime_min']), fmt(b['rss_max_mb'], 0), b['ended'], b['report'] or 'not processed'))
+		h = b.get('host')
+		hs = ('%s/%s, max %s MHz, AC %s, clock med %s MHz, host boot %s' % (
+			h['governor'], h['epp'], int(h['max_khz']) // 1000 if (h['max_khz'] or '').isdigit() else '-', h['ac'],
+			h['mhz_median'] if h['mhz_median'] is not None else '-',
+			datetime.datetime.fromtimestamp(int(h['host_boot'])).strftime('%Y-%m-%d %H:%M') if (h['host_boot'] or '').isdigit() else '-')
+			  if h else 'not recorded')
+		L.append('| %s | %s | %s | %s | %s | %s | %s | %s | %s | %s | %s |' % (b['boot'], b['type'], b['jars'], fmt(b['wall_to_done_s']), fmt(b['done_s']),
+				 fmt(b['recipe_event_s']), fmt(b['uptime_min']), fmt(b['rss_max_mb'], 0), hs, b['ended'], b['report'] or 'not processed'))
 	L += ['', '## Segments', '', '| Boot | Segment | s | Ticks | Median ms | p95 ms | Max ms | Over 50 ms | Busy % | CPU cores | RSS max | Chunk wait ms | Slow KubeJS |',
 		  '|---|---|---|---|---|---|---|---|---|---|---|---|---|']
 	for g in s['segments']:

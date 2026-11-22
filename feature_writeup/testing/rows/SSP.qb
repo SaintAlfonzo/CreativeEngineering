@@ -126,9 +126,10 @@ look every placed line 1/1 minecraft:desert_pyramid plus a meteorite; short ones
 @phase long
 @group C
 @commands new world, Chunky square, `/cwglocate census 96 <x> <z>`; read `falseNegativeAt` in `kubejs/exported/worldgen/locate_census.json`
-@pass every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece center); record which case it shows
+@pass every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece center); the run doc quotes every `falseNegativeAt` string verbatim and names its case: point moved (point more than 16 blocks from the start-piece center), tied pass (a `+` entry under nearest), or neither (both point and biome match; a new cause)
 @fails Depends on: `structures/rates-and-groups #13`
-@jars creativecommon
+@jars creativeworldgen
+@reviewed 2026-11-22
 @from batches/r1101/w2_worldgen.qb
 > tp qa 2144 200 -2592
 > chunky center 2144 -2592
@@ -139,7 +140,7 @@ waitlog (?i)\[Chunky\].*(task finished|finished generating|complete) 3000
 > cwglocate census 96 2144 -2592
 waitlog (?i)census.*(done|finished|written) 2400
 shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/worldgen/locate_census.json')); s=json.dumps(d); sys.exit(0 if 'falseNegativeAt' in s else 1)"
-look every biome false negative has a diagnosis string (regenerated point, biome, nearest-distance entries, start-piece centre); copy the census json into RES
+look every biome false negative has a diagnosis string (regenerated point, biome, nearest-distance entries, start-piece center); copy the census json into RES and quote each string in the run doc
 
 ## SQ-TER-01b | ancient crypt sunk without warning; places on its own projection
 @phase worldgen

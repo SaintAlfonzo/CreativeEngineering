@@ -167,7 +167,7 @@ same pass as the renames.
 | `PF-` | [perf.md](../perf.md) | SQ-PF (13) | plan_1.0.3.md |  |
 | `PFS-` | [perf_suite.md](../perf_suite.md) | SQ-PFS (7) |  | new 2026-11-16, was PB- (collided with potion_buckets.md); queue SQ-PB becomes SQ-PFS |
 | `PH-` | [pack_hygiene.md](../pack_hygiene.md) |  |  | PH-01 to PH-04 are mirrored as queue rows (allowed: the queue may restate an owner test) |
-| `PL-` | [placeable_food.md](../placeable_food.md) |  |  |  |
+| `PL-` | [placeable_food.md](../placeable_food.md) | CQ-PL (1), SQ-PL (1) |  |  |
 | `PO-` | [potions.md](../potions.md) |  | briefs/potions_potions.md |  |
 | `POT-` | [flower_pots.md](../flower_pots.md) | SQ-POT (8) |  |  |
 | `PROC-` | [plan_process_overhaul.md](../plan_process_overhaul.md) | SQ-PROC (7), CQ-PROC (1) |  | new 2026-11-16 (the plan drafted PO-, owned by potions.md); process tooling, no writeup; offline tests PROC-20 to -28 (`tools/test_queue_rows.sh`) |

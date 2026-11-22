@@ -255,6 +255,7 @@ global.food = {}
 	f.dough_oat                                    = i.oat_dough;
 	f.dough_pie_crust                              = i.pie_crust;
 	f.dough_sourdough                              = i.sourdough;
+	f.dough_potato                                 = i.potato_dough;
 	f.dough_sweet_potato                           = i.sweet_potato_dough;
 	f.dough_tortilla                               = i.tortilla_raw;
 	f.dough_waffle                                 = i.uncooked_waffle;

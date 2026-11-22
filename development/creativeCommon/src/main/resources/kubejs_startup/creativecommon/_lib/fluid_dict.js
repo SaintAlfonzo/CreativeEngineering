@@ -121,6 +121,8 @@ f.matcha_latte = 'creativedelight:matcha_latte';
 f.berry_matcha_latte = 'creativedelight:berry_matcha_latte';
 // Vintage Delight's Nut Milk bottle as a fluid, 250 mB a bottle; in #forge:milk (plan_wood_bucket_batch_1121.md R11)
 f.nut_milk = 'creativedelight:nut_milk';
+// Cow and goat milk, no nut milk: cheese takes it (dishes/ingredients #35; CD creativedelight/milk.js)
+f.t_animal_milk = '#creativedelight:animal_milk';
 // Lemonade (food/drinks #1): plain, blue and pink (Creative Delight kubejs_startup/creativedelight/drinks.js)
 f.lemonade = 'creativedelight:lemonade';
 f.blue_lemonade = 'creativedelight:blue_lemonade';

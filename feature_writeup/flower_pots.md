@@ -6,27 +6,27 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=24d5ccebfc20 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 13, In Progress 1, Testing 4), 1 Complete.
+<!-- generated:status_index begin open_work sha1=7fc0f9e40a9b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 1, In Progress 2, Testing 15), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `blocks/flower-pots #1` | Planned | S C P | Flower pots placeable like candles |
-| `blocks/flower-pots #2` | Planned | C P | Pottable tooltip and Contains line on every flower pot |
-| `blocks/flower-pots #3` | Planned | S P | Remove Handcrafted flower pots from the flower pot world |
-| `blocks/flower-pots #4` | Planned | S C P | Framed pots accept flowers before framing |
-| `blocks/flower-pots #5` | Planned | S C P | Beautify hanging pot becomes lush hanging pot |
-| `blocks/flower-pots #7` | Planned | C | Vinery flower box centered on the ground |
-| `blocks/flower-pots #8` | Planned | C | 'Can be placed on walls' tooltip on flower boxes |
-| `blocks/flower-pots #11` | Planned | S C P | Another Furniture flower boxes: missing plants |
-| `blocks/flower-pots #12` | Planned | S C P | Floral Enchantment large pot and Vinery flower box: missing models |
-| `blocks/flower-pots #13` | Planned | C | Silt pot and Vinery pot models |
-| `blocks/flower-pots #15` | Planned | C | Glow berries: missing flower box models |
-| `blocks/flower-pots #16` | Planned | C | Glow lichen: missing pot and box models |
 | `blocks/framed-and-decor #11` | Planned | C P | Random flower block position |
+| `blocks/flower-pots #2` | In Progress | C P | Pottable tooltip and Contains line on every flower pot |
 | `blocks/flower-pots #10` | In Progress | S C P | Hanging pots place as wall lanterns: remove |
+| `blocks/flower-pots #1` | Testing | S C P | Flower pots placeable like candles |
+| `blocks/flower-pots #3` | Testing | S P | Remove Handcrafted flower pots from the flower pot world |
+| `blocks/flower-pots #4` | Testing | S C P | Framed pots accept flowers before framing |
+| `blocks/flower-pots #5` | Testing | S C P | Beautify hanging pot becomes lush hanging pot |
 | `blocks/flower-pots #6` | Testing | C | Rename the Supplementaries flower box to large flower box |
+| `blocks/flower-pots #7` | Testing | C | Vinery flower box centered on the ground |
+| `blocks/flower-pots #8` | Testing | C | 'Can be placed on walls' tooltip on flower boxes |
 | `blocks/flower-pots #9` | Testing | S P | Exclude melon, moss and pumpkin blocks from the flower pot world |
+| `blocks/flower-pots #11` | Testing | S C P | Another Furniture flower boxes: missing plants |
+| `blocks/flower-pots #12` | Testing | S C P | Floral Enchantment large pot and Vinery flower box: missing models |
+| `blocks/flower-pots #13` | Testing | C | Silt pot and Vinery pot models |
+| `blocks/flower-pots #15` | Testing | C | Glow berries: missing flower box models |
+| `blocks/flower-pots #16` | Testing | C | Glow lichen: missing pot and box models |
 | `blocks/framed-and-decor #5` | Testing | S C P | Botanist workbench as a flower pot |
 | `blocks/framed-and-decor #6` | Testing | S~ C P | Flower potting audit |
 <!-- generated:status_index end open_work -->
@@ -39,6 +39,7 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 | Matrix generator `tools/flower_pot_audit.py` -> [flower_pots_matrix.md](flower_pots_matrix.md) | BUILT 2026-10-27; regenerated from both dumps 2026-10-27 evening | stale since the 3.2 tweaks (2026-10-31, 1.1.06 changed planter box, Vinery box / pot and silt pot lists): rerun `/dumppots`, `/pottest all`, the audit (deep scan 2026-11-02) |
 | Botanist workbench as a flower pot (section 3.1, TODO `#5`) | BUILT 2026-10-29, installed 2026-10-29 (Creative Common 1.1.04), shipped 1.1.05; r1031 (2026-10-31): mixins and own block entity PASSED (SQ-POT-06b), a placed bench holds no plant; the flower in the house benches not read, SQ-POT-06 open (client check pending) | POT-08, SQ-POT-06, CQ-POT-02 |
 | Flower pot tweaks (section 3.2: framed pot before framing, Rich Hanging Pot, Large Flower Box, wall tooltips, WTHIT "Contains", box plant lists and models, silt pot and Vinery pot as planters, Vinery box centered on floors) | BUILT 2026-10-31 (Creative Common 1.1.04, backportedVinery `-07`), shipped 1.1.06 (Flower Pots bullets, with the Flower Test world type: SQ-POT-07 PASS); SQ-POT-08 PASSED r1101 (tags, recipe); in game not seen (deep scan 2026-11-02) | POT-10 to POT-16, SQ-POT-08; Floral pot rebuild planned (3.2.8) |
+| Two flower pots in one block (section 3.4, TODO `#1`) | BUILT 2026-11-22 (Creative Compat) | POT-20, SQ-POT-10, CQ-POT-04 (look-check of the model) |
 | Bugs found (section 3) | F12 and F13 fixed 2026-11-03 (plan_scratch_bugfix_1103 2.4, 2.5; CD jar 19:43 and pack loot tables, not installed); F14 was a probe fault, not a bug; F1 struck (did not reproduce in r1102b) | rerun SQ-POT-03, -04, -04v; decisions D1 to D5 |
 | Tooltip labels, "every pot distinct", "pots hold every flower" | not started | decisions D1, D2, D6 |
 
@@ -195,6 +196,32 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
    on walls; the column only shows what that looks like with each plant. No placement change. The owner looks and rules
    keep or remove (POT-19).
 
+### 3.4 Two flower pots in one block (2026-11-22, [plan_unblocked_batch_1121.md](plan_unblocked_batch_1121.md) P1)
+
+TODO `blocks/flower-pots #1`; rulings R3 (owner 2026-11-21: the second pot is 2 px taller) and R4 (agent default,
+unconfirmed: two offset vanilla pot cuboids, no new art, height a constant). Creative Compat `compat/DoublePot`,
+`DoublePotBlock`, `DoublePotBlockEntity`, `DoublePotClient`.
+
+1. **Making one.** A flower pot item used on a placed flower pot of the vanilla family (the vanilla pot or any mod's
+   `potted_*` on the vanilla empty pot; not while sneaking) turns that block into `creativecompat:double_flower_pot`
+   ("Flower Pots"), like a second candle. The old pot and its plant become pot A (vanilla height, x/z 2-8); pot B
+   (x/z 8-14) is `DoublePot.TALL_RISE_PX` = 2 px taller. One pot item is used (none in creative). A third pot does
+   not join: the item then places against the block as usual. A pot holding a plant the vanilla map no longer lists
+   is left alone (its plant would be lost).
+2. **Plants.** Each pot takes its own plant by the vanilla pot's rules (the live `getFullPotsView()` map, glow lichen
+   as in the botanist workbench); the clicked half of the block (split along the diagonal) picks the pot. Empty hand
+   or a non-plant item on a full pot takes its plant back; a click that changes nothing passes.
+3. **Look.** Model `creativecompat:block/double_flower_pot`: pot A is the vanilla pot's elements moved 3 px toward
+   -x -z; pot B is the same elements moved 3 px toward +x +z on a 2 px base of the pot's own side texture (bottom
+   rows), so both use only `minecraft:block/flower_pot` and `dirt`. Plants are drawn like the botanist workbench's
+   (3.1): the potted model's quads minus the pot and dirt sprites, moved onto each pot (pot B 2 px up); fern and grass
+   keep their tint (tint index +1000 pot A, +2000 pot B). Retuning the height: change `TALL_RISE_PX` and pot B's y
+   values in the model together.
+4. **Break and pick.** Breaking drops 2 flower pots (loot table, survives-explosion rule as the vanilla pot) and both
+   plants. Pick block gives the plant of the half looked at, else a flower pot. WTHIT "Contains:" lists both plants
+   (`PottedPlantHolder.plants()`). No item, so nothing in JEI or creative search.
+5. **Not covered:** `/dumppots`, `/pottest` and the Flower Test world have no column for it; structures never place it.
+
 ## 4. Decisions (open, owner)
 
 - **D1 "pots hold every flower":** which plants get a vanilla `potted_*` block (map entry + model)? Options: (a) all
@@ -235,6 +262,9 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
 - [flower_pots_matrix.md](flower_pots_matrix.md): generated matrix
 - Botanist workbench pot: Creative Common `compat/BotanistPot.java`, `BotanistPotBlockEntity.java`, `BotanistPotClient.java`,
   `mixin/BotanistWorkbenchPotMixin.java`, `mixin/StructureTemplateBotanistPotMixin.java`
+- Two flower pots in one block: Creative Compat `compat/DoublePot.java`, `DoublePotBlock.java`, `DoublePotBlockEntity.java`,
+  `DoublePotClient.java`; `assets/creativecompat/models/block/double_flower_pot.json`, loot table
+  `data/creativecompat/loot_tables/blocks/double_flower_pot.json` (3.4)
 - Pack code touching pots: Creative Common `compat/RespitePottedTeaBush.java`, CD rustic `logic/RDEvents.java`, backportedMiners
   `logic/MDSetup.java`, backportedVinery `core/registry/ObjectRegistry.java` (F2), `legacy/block/LegacyFlowerPotBlock.java`
 
@@ -284,6 +314,12 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - [ ] **POT-19 wall-hung Rich Hanging Pot (owner):** (3.3, CQ-POT-03) in a fresh Flower Test world, the column after the
   Rich Hanging Pot holds a wall lantern on glass with the same plant in every row that took one; the owner rules keep
   (a wall placement for the pot) or remove.
+- [ ] **POT-20 two flower pots in one block:** (3.4, SQ-POT-10, CQ-POT-04) place a flower pot with a poppy, use a
+  flower pot on it -> one block with two pots, the poppy in the short pot, the second pot 2 px taller and empty; one
+  pot item used; click the taller half with a dandelion and the short half with a fern -> each goes in its own pot
+  (fern green); empty hand on each half takes that plant back; a third flower pot places beside the block instead;
+  sneaking with a pot places it against the pot as before; WTHIT says "Flower Pots" and "Contains: Poppy, Dandelion";
+  break it -> 2 flower pots and both plants drop; F3+T keeps both plants drawn.
 - [ ] **POT-16 silt pot as soil:** fill a silt pot with rooted dirt; wheat seeds, an oak sapling, sugar cane, cactus and
   a poppy each plant on top and stay after a block update; an unfilled silt pot takes none.
 - [ ] **POT-01 vanilla pot map:** with the matrix open, put 10 plants marked Y in a flower pot and 5 marked blank -> Y ones
@@ -339,3 +375,4 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - 2026-11-01: the Flower Test world builder, its preset and lang key moved to Creative Devtools (dev only,
   creative_devtools.md 2); players no longer get the world type.
 - 2026-11-16: melon, pumpkin, carved pumpkin, jack o'lantern, moss block and moss carpet refused by every box (`#creativecompat:not_in_flower_boxes`); Flower Test world column of wall-hung Rich Hanging Pots for the owner (3.3; `blocks/flower-pots #9`, `#10`, `#14` closed as built). POT-18, POT-19; queue SQ-POT-09, CQ-POT-03 (plan_small_fixes_1116.md). Not run.
+- 2026-11-22: two flower pots in one block, like candles (3.4; `blocks/flower-pots #1`): Creative Compat built (`jarstamp.py pending`; its working-tree mods.toml needs Creative Common 1.3.0, so it waits for that jar). POT-20; queue SQ-POT-10, CQ-POT-04. Rows `#3` to `#5`, `#7`, `#8`, `#11` to `#13`, `#15`, `#16` were the 2026-10-31 tweaks already built (3.2): set to Testing. `#2`: the pottable tooltip waits on D2.

@@ -525,12 +525,13 @@ def prep_boot1(d, i, s, out, level):
 			f.write('\n'.join(prep_actions(out, prep)) + '\n')
 
 
-def boot_and_run(d, i, s, out, res, todo, boot=None, retry=1):
+def boot_and_run(d, i, s, out, res, todo, boot=None, retry=1, keep=False):
 	"""Boot OUT, wait for Done (or the failed boot the rows expect), qrun.py run on todo, stop (always). A boot that
-	hits the known Rhino tag-load flake is stopped, its JVM killed and booted again, `retry` times."""
+	hits the known Rhino tag-load flake is stopped, its JVM killed and booted again, `retry` times. keep: qrun keeps
+	the forceloads (--keep-forceloads), for a boot whose world a later boot of the step reuses (qforceload.py)."""
 	tag = '' if boot is None else ' boot %d' % boot
 	try:
-		_boot_and_run(d, i, s, out, res, todo, boot, tag)
+		_boot_and_run(d, i, s, out, res, todo, boot, tag, keep)
 	except RuntimeError:
 		if retry > 0 and rhino_flake(out):
 			log = Path(out) / 'srv/logs/latest.log'
@@ -541,11 +542,11 @@ def boot_and_run(d, i, s, out, res, todo, boot=None, retry=1):
 				pass
 			d.log('step %d%s: known Rhino tag-load flake (Failed to load datapacks); rebooting once (log kept as %s)'
 				  % (i + 1, tag, keep.name))
-			return boot_and_run(d, i, s, out, res, todo, boot, retry - 1)
+			return boot_and_run(d, i, s, out, res, todo, boot, retry - 1, keep)
 		raise
 
 
-def _boot_and_run(d, i, s, out, res, todo, boot, tag):
+def _boot_and_run(d, i, s, out, res, todo, boot, tag, keep=False):
 	# output to a file, never a pipe: the server's fifo feeder inherits the fds and holds a pipe open (r1118)
 	with open(d.dir / ('s%02d_boot.txt' % i), 'a') as bf:
 		subprocess.run(['bash', str(SCRATCH), 'boot', str(out)], stdout=bf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
@@ -565,7 +566,7 @@ def _boot_and_run(d, i, s, out, res, todo, boot, tag):
 			return
 		d.log('step %d%s: %d rows' % (i + 1, tag, len(todo)))
 		cmd = [sys.executable, str(HERE / 'qrun.py'), 'run', str(out), str(INST / s['file']), str(res), '--rows',
-			   ','.join(todo)] + (['--no-watch', '--no-probes'] if noboot else [])
+			   ','.join(todo)] + (['--no-watch', '--no-probes'] if noboot else []) + (['--keep-forceloads'] if keep else [])
 		with open(d.dir / ('s%02d_qrun.txt' % i), 'a') as f:
 			p = subprocess.Popen(cmd, stdout=f, stderr=subprocess.STDOUT)
 			while p.poll() is None:
@@ -619,7 +620,8 @@ def run_boots(d, i, s, out, res, level, todo):
 		s['boot'] = b
 		d.save()
 		rows_b = [r for r in s['rows'] if boots.get(r, 1) == b and r in left]
-		boot_and_run(d, i, s, out, res, rows_b, b)
+		# forced chunks are saved with the world: a boot before the step's last keeps them for the next boot's rows
+		boot_and_run(d, i, s, out, res, rows_b, b, keep=b < last)
 		if rows_b and first_unrun(res, rows_b, s['file']) and not STOP['flag']:
 			d.log('step %d: boot %d left rows without a result; later boots skipped' % (i + 1, b))
 			break

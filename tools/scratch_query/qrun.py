@@ -31,6 +31,9 @@ checked before every step and every second of a waitlog or sleep; the row ends C
 goes on with the next row once --ready REGEX (default server 'Done \(', client 'joined the game') shows in latest.log
 within --ready-secs (600); at most --max-relaunch (2) times. Without --relaunch a crash ends the batch. A row that
 sends "stop" ends the batch without a CRASH; a row that needs the server back uses `restart` instead (r1118 R4 A2).
+run (server): forceloads are released (qforceload.py): each `forceload add` box after the last selected row whose
+coordinates fall inside it, every forceloaded dimension cleared with `forceload remove all` at the batch end, so a world
+reused across boots does not keep earlier rows' chunks ticking; --keep-forceloads turns this off.
 run (server): before the first row, the scratch KubeJS probes (tools/**/*_probe.js and any other tools/**/*.js that
 registers a server command, qrun.probe_files) whose commands the selected rows use
 are copied into srv/kubejs/server_scripts as zz_<file> and the server is /reloaded once (--no-probes skips it).
@@ -972,6 +975,18 @@ def run_batch(a, mode, t=None):
 			install_probes(t, sel)
 		except (OSError, RuntimeError) as e:
 			print(f"probes: not installed ({e})", flush=True)
+	# forceload release (qforceload.py): each box goes after the last selected row that uses it, the rest at the end
+	fl_release, fl_dims = {}, set()
+	if mode == "server" and a[0] == "run" and "--keep-forceloads" not in a:
+		import qforceload
+		sel_ids, on = [], start is None
+		for r in allrows:
+			on = on or r["id"] == start
+			if on and (not only or picked(r["id"], only)) and (not sections or r["section"] in sections) \
+					and (not tiers or tier_of.get(r["id"], "T2") in tiers) and not r["meta"].get("superseded") and r["steps"]:
+				sel_ids.append(r)
+		fl_release, fl_dims = qforceload.plan(sel_ids)
+	fl_sent = 0
 	for row in allrows:
 		if crashdir and os.path.isdir(crashdir) and set(os.listdir(crashdir)) - crashes0:
 			# the server died: later rows would only time out (r1102b 19:03, a probe crashed the tick loop)
@@ -1019,6 +1034,8 @@ def run_batch(a, mode, t=None):
 		with open(vp, "w") as f:
 			json.dump(VARS, f, indent=1)
 		print(r["result"], "; ".join(r["fails"])[:200])
+		if row["id"] in fl_release and not crash:
+			fl_sent += qforceload.send(t, fl_release[row["id"]], sub)
 		if getattr(t, "broken", None):
 			print(f"ABORT: restart failed ({t.broken})")
 			break
@@ -1039,6 +1056,10 @@ def run_batch(a, mode, t=None):
 			w = t.watch
 			t = make_target(mode, target)
 			t.watch = w
+	if fl_dims:
+		n = qforceload.clear_all(t, fl_dims)
+		print(f"forceload: {fl_sent} box(es) released after their last row; "
+			  + (f"forceload remove all in {len(fl_dims)} dimension(s) at the end" if n else "end clear skipped (server down)"))
 	write_results(res, results)
 	n = {}
 	for r in results.values():

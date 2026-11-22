@@ -25,10 +25,15 @@ R.remove({ id: 'brewinandchewin:fermenting/kimchi' }, e)
 R.remove({ id: 'brewinandchewin:fermenting/pickled_pickles_from_honey' }, e)
 
 //######################### Keg fermenting #########################
-// Flaxen Cheese: 2.0's shape (brown mushroom x2, sugar)
+// Flaxen Cheese: 2.0's shape (brown mushroom x2, sugar). Both cheeses take cow or goat milk, not nut milk
+// (#creativedelight:animal_milk, TODO dishes/ingredients #35; Creative Delight creativedelight/milk.js)
 R.remove({ id: 'brewinandchewin:fermenting/flaxen_cheese_from_milk' }, e)
-R.bncFermenting(Fluid.of(f.flaxen_cheese, 1000), [i.brown_mushroom, i.brown_mushroom, i.any_sweetener_brewing], f.t_milk, e, 'flaxen_cheese_from_milk',
+R.bncFermenting(Fluid.of(f.flaxen_cheese, 1000), [i.brown_mushroom, i.brown_mushroom, i.any_sweetener_brewing], f.t_animal_milk, e, 'flaxen_cheese_from_milk',
 	{ temperature: 4, category: 'meals' })
+// Scarlet Cheese: upstream's ingredients (crimson fungus, nether wart, sugar), animal milk
+R.remove({ id: 'brewinandchewin:fermenting/scarlet_cheese_from_milk' }, e)
+R.bncFermenting(Fluid.of(f.scarlet_cheese, 1000), [i.crimson_fungus, i.nether_wart, i.sugar], f.t_animal_milk, e, 'scarlet_cheese_from_milk',
+	{ temperature: 5, category: 'meals' })
 
 // Pale Jane: any bark, not just Farmer's Delight's
 R.remove({ id: 'brewinandchewin:fermenting/pale_jane_from_rice_wine' }, e)

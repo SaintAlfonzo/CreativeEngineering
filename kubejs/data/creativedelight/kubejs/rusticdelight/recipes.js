@@ -91,8 +91,8 @@ ServerEvents.recipes(e => {
 		// stuffed peppers and pancakes keep the pot only: frying and stuffing need the heat.
 		F.soupCraft([i.t_roasted_bell_pepper, i.t_roasted_bell_pepper, i.t_roasted_bell_pepper, i.t_roasted_bell_pepper],
 			i.bell_pepper_soup)   // pot: 3 peppers
-		F.soupCraft([i.t_cooked_calamari, i.t_cooked_calamari, i.baked_potato, i.onion, i.milk], i.calamari_soup)   // pot: calamari, potato, onion, milk
-		F.mealCraft([i.cooked_beef, i.cooked_beef, i.t_coffee_food_ingredients, i.carrot, i.baked_potato, i.bowl],
+		F.soupCraft([i.t_cooked_calamari, i.t_cooked_calamari, i.t_baked_potatoes, i.onion, i.milk], i.calamari_soup)   // pot: calamari, potato, onion, milk
+		F.mealCraft([i.cooked_beef, i.cooked_beef, i.t_coffee_food_ingredients, i.carrot, i.t_baked_potatoes, i.bowl],
 			i.coffee_braised_beef)   // pot: raw beef, a coffee, carrot, potato
 
 		//######################### Roll assemblies #########################

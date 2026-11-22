@@ -38,7 +38,7 @@ ServerEvents.recipes(e => {
 		R.shapeless(fd.salad_broccoli, [fd.veggie_broccoli, i.tomato, i.onion, i.bowl], e, 'broccoli_salad_manual_only')
 		// The one Caesar Salad (TODO merges/dishes #6; Oceanic's merged into it): lettuce (cabbage), tomato, cheese, bread
 		R.shapeless(fd.salad_cesar, [i.cabbage, i.tomato, i.any_cheese, i.t_bread, i.bowl], e, 'cesar_salad_manual_only')
-		R.shapeless(fd.salad_coleslaw, [fd.veggie_zucchini, i.potato, i.carrot, i.cabbage, i.bowl], e, 'coleslaw_manual_only')
+		R.shapeless(fd.salad_coleslaw, [fd.veggie_zucchini, i.any_potato, i.carrot, i.cabbage, i.bowl], e, 'coleslaw_manual_only')
 		R.shapeless(fd.salad_turnip, [i.salad_ingredients, fd.veggie_turnip, i.bowl], e, 'turnip_salad_manual_only')
 		R.shapeless(fd.dish_steak_and_broccoli, [i.cooked_beef, fd.veggie_broccoli, fd.grain_cooked_rice], e, 'steak_and_broccoli_cooked_manual_only')
 		R.shapeless(fd.dish_garlic_rice_with_cauliflower, [fd.veggie_cooked_garlic_clove, Item.of(fd.veggie_cooked_cauliflower_floret, 2), fd.grain_cooked_rice], e,

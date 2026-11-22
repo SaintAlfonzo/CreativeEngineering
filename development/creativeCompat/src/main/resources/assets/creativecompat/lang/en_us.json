@@ -127,6 +127,7 @@
   "creativecommon.wthit.yes": "Yes",
   "creativecommon.wthit.no": "No",
   "block.creativecompat.bamboo_leaves_full": "Bamboo Leaves",
+  "block.creativecompat.double_flower_pot": "Flower Pots",
   "entity.creativecompat.falling_layer": "Falling Layer",
   "tooltip.creativecompat.corpse.curio": "Curio: %s",
   "tooltip.creativecompat.corpse.curio_cosmetic": "Curio: %s (cosmetic)",

@@ -919,7 +919,7 @@ look makes lines: the fried egg and the omelette still have a smoking and a camp
 @@table
 ## SQ-FO-08 | blubber: registered, cachalot drop, knife cut, animal fat tag, soap
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-22
 @commands `cdevtest reg item creativedelight:blubber`; loot of `alexsmobs:entities/cachalot_whale`; rdetail of the blubber cut and the soap recipes; tag probe `forge:animal_fat`
 @pass the item exists (Delightful's animal fat sprite); a cachalot kill drops 3-6 blubber; knife cut gives 2 `delightful:animal_fat`; `#forge:animal_fat` holds blubber; `supplementaries:soap` and `creativecompat:createmixing/soap_heated_mixing` take blubber and whale oil
 @fails CD startup `creativedelight/fats.js`; data `creativedelight/fats.js` (tag, cut, `global.LOOT.rules`); Compat `other/misc_mods.js` SOAP_FAT
@@ -932,7 +932,14 @@ look makes lines: the fried egg and the omelette still have a smoking and a camp
 waitlog verb=rdetail text=soap_heated_mixing n= 30
 expect verb=rdetail id=creativedelight:farmersdelightcutting/animal_fat_from_blubber .*result=delightful:animal_fat\*2
 expect verb=tag kind=item tag=forge:animal_fat n=\d+ ids=.*creativedelight:blubber
-look the soap recipes list blubber and whale oil among the fats; a cachalot kill (`/summon alexsmobs:cachalot_whale`, kill as a player) drops 3-6 blubber
+# r1121b process #12 rewrite 2026-11-22: the cachalot drop had no kill step (INCONCLUSIVE); 3 player kills, 9 to 18 blubber
+> forceload add 96 96
+> cdevtest kill 104 -60 104 alexsmobs:cachalot_whale n=3
+waitlog verb=kill type=alexsmobs:cachalot_whale 30
+expect verb=kill type=alexsmobs:cachalot_whale n=3 killed=3 who=
+expect verb=kill drops=\S*\bcreativedelight:blubber:([9]|1[0-8])\b
+> forceload remove 96 96
+look the soap recipes list blubber and whale oil among the fats
 reject verb=\S+ .*done=0
 
 ## SQ-FO-09 | whale oil: mixer, pot, bottle and fluid, lubricant tag

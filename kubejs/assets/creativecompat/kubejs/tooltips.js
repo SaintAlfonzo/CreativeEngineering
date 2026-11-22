@@ -233,7 +233,7 @@ ItemEvents.tooltip(e => {
 
 // ############################## Flower Pots ##############################
 
-	// Wall-mountable plant boxes (feature_writeup/flower_pots.md 3.4)
+	// Wall-mountable plant boxes (feature_writeup/flower_pots.md 3.2.7)
 	addTooltips(e,
 		[i.flower_box, ['Can be placed on walls', col.norm]]
 	);

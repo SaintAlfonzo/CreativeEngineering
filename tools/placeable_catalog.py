@@ -106,6 +106,23 @@ EXCLUDE = {
 	'vintagedelight:glow_berry_jam_jar': 'removed (dishes/jams, 2026-10-29): Fruits Delight has the glow berry jam',
 }
 
+# Other mods' non-food cups, bowls, tankards and bottles that go on a coaster (owner, 2026-11-21, ruling R2 of
+# plan_unblocked_batch_1121.md, TODO food/placeable #6). Item -> jar patterns its own block model is read from;
+# tools/gen_coaster_models.py writes a coaster file for each, and add_coaster() tags them although EXCLUDE names
+# their namespace (EXCLUDE keeps them out of the placeable tags). Non-food plates and platters stay off the coaster
+# and are listed for the owner in feature_writeup/non_food_tableware_review.csv (placeable-food #1).
+_HANDCRAFTED = ('mods/handcrafted-forge-*.jar',)
+_FANTASY = ('mods/fantasyfurniture-*.jar',)
+COASTER_TABLEWARE = {}
+for _color in ('blue', 'terracotta', 'white', 'wood', 'yellow'):
+	for _kind in ('cup', 'bowl'):
+		COASTER_TABLEWARE['handcrafted:%s_%s' % (_color, _kind)] = _HANDCRAFTED
+for _name in ('bone_skeleton_chalices', 'bone_wither_chalices', 'royal_chalices', 'venthyr_chalices', 'venthyr_tea_cups',
+			  'tankards_empty', 'tankards_honeymead', 'tankards_milk', 'tankards_sweetberry', 'bowl_empty',
+			  'bowl_beetroot_soup', 'bowl_mushroom_stew', 'nordic_mead_bottles', 'potion_bottles', 'potion_bottles_dyeable'):
+	COASTER_TABLEWARE['fantasyfurniture:decorations/' + _name] = _FANTASY
+COASTER_TABLEWARE['supplementaries:goblet'] = ('mods/supplementaries-*.jar',)
+
 VANILLA_STEWS = {'minecraft:mushroom_stew', 'minecraft:rabbit_stew', 'minecraft:beetroot_soup'}
 DD_KIND_LABEL = {'placed': 'placed', 'plate': 'Food Plate', 'small_plate': 'Small Food Plate'}
 
@@ -249,9 +266,22 @@ def classify(rows, dd):
 	return out, plants, skipped
 
 
+def display_names():
+	"""Item id -> English name from the /dumpall display-name export, for coaster items not in the food dump."""
+	try:
+		data = json.loads((INSTANCE / 'kubejs/exported/display_names.json').read_text())
+	except (OSError, ValueError):
+		return {}
+	names = {}
+	for kind in ('block', 'item'):
+		for e in data.get('entries', {}).get(kind, []):
+			names.setdefault(e['id'], e.get('name') or e['id'])
+	return names
+
+
 def add_coaster(entries, rows, installed):
 	"""Adds placeable_on_coaster to the items with a coaster model, the port's and the pack's."""
-	modelled, from_dd = set(), set()
+	modelled, from_dd, names = set(), set(), None
 	for p in COASTER_DIR.glob('*.json'):
 		modelled.add(json.loads(p.read_text())['item'])
 	if not modelled:
@@ -262,11 +292,14 @@ def add_coaster(entries, rows, installed):
 		print(f'warning: no pack coaster models in {PACK_COASTER_DIR} (run tools/gen_coaster_models.py)')
 	for item_id in sorted(modelled | from_dd):
 		present = item_id in rows or item_id in installed or item_id.startswith('minecraft:')
-		if not present or excluded(item_id):
+		if not present or (excluded(item_id) and item_id not in COASTER_TABLEWARE):
 			continue
 		entry = entries.get(item_id)
 		if entry is None:
 			r = rows.get(item_id, {})
+			if 'name' not in r and item_id in COASTER_TABLEWARE:
+				names = names if names is not None else display_names()
+				r = {'name': names.get(item_id, item_id)}
 			entry = {'id': item_id, 'name': r.get('name', item_id), 'mod': item_id.split(':', 1)[0],
 					 'kinds': set(), 'how': [], 'dd': {}}
 			entries[item_id] = entry

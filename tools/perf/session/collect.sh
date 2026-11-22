@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # Perf session collector (started by perf_session.sh start; perf.md 14). Every 5 s:
 # - a scratch server JVM it has not seen (cwd holds server.properties, not the instance itself = the user's game)
-#   gets boots/NN_<level>/ with meta.env (pid, cwd, start, level, type, JVM args, jar list hash);
+#   gets boots/NN_<level>/ with meta.env (pid, cwd, start, level, type, JVM args, jar list hash, and the host CPU
+#   and power state from host_state.sh meta: governor, EPP, max clock, platform profile, AC, machine boot time);
+# - each watched JVM gets a host.tsv row (host_state.sh row: core clock median and max, load, temperature, AC);
 # - each watched JVM gets a proc.tsv row: time, CPU seconds used, RSS MB, threads; logs/latest.log is copied
 #   every 30 s;
 # - a JVM that is gone gets its exit recording (perf/exit/hotspot-pid-PID-*.jfr) MOVED into the boot folder,
@@ -60,7 +62,9 @@ while :; do
         echo "START=$((bt + st / HZ))"
         echo "JARS=$(ls -l --time-style=+%s "$c/mods/" 2>/dev/null | awk '{print $5, $6, $7}' | sha1sum | cut -c1-12)"
         echo "JVMARGS='$(tr '\n' ' ' < "$c/user_jvm_args.txt" 2>/dev/null)'"
+        bash "$INST/tools/perf/session/host_state.sh" meta
       } > "$b/meta.env"
+      bash "$INST/tools/perf/session/host_state.sh" header > "$b/host.tsv"
       ls -l --time-style=+%m-%d_%H:%M "$c/mods/" 2>/dev/null | grep -E 'creativeengineering|creativedelight|modernfix' > "$b/key_jars.txt"
       printf 'time\tcpu_s\trss_mb\tthreads\n' > "$b/proc.tsv"
       BOOT[$p]=$b; CWD[$p]=$c
@@ -72,6 +76,7 @@ while :; do
       rss=$(awk '/^VmRSS/{print int($2/1024)}' /proc/$p/status)
       th=$(awk '/^Threads/{print $2}' /proc/$p/status)
       printf '%s\t%s\t%s\t%s\n' "$(date +%s)" "$cpu" "$rss" "$th" >> "$b/proc.tsv"
+      bash "$INST/tools/perf/session/host_state.sh" row >> "$b/host.tsv"
     fi
     [ $((tick % 6)) = 0 ] && [ -f "$c/logs/latest.log" ] && cp "$c/logs/latest.log" "$b/latest.log"
   done < <(bash "$INST/tools/scratch_query/game_jvms.sh" 2>/dev/null)

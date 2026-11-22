@@ -66,9 +66,14 @@ ServerEvents.recipes(e => {
 
 		//######################### Gnocchi #########################
 		// Potato noodle is Gnocchi and potato noodles are Creamy Gnocchi (namechanges.js; TODO dishes/meals #33). Gnocchi:
-		// the potato pot recipe as before, or 2 from sweet potato dough on the board (there is no potato dough yet).
+		// the potato pot recipe as before, or 2 from sweet potato dough or potato dough on the board.
 		// Creamy Gnocchi: milk, 2 gnocchi and onion, garlic or pickled onion; Vintage's cheese variant stays.
 		R.fdCutting(fd.dough_sweet_potato, i.any_knife, Item.of(fd.grain_potato_noodle, 2), e, 'gnocchi_from_sweet_potato_dough')
+		// Potato Dough (TODO dishes/ingredients #27; item: CD startup creativedelight/produce.js): the sweet potato dough's
+		// two grid recipes with potatoes (2 potatoes + wheat flour + egg or water bucket -> 3), cut into 2 gnocchi
+		R.shapeless(Item.of(fd.dough_potato, 3), [i.potato, i.potato, i.flour, i.eggs], e, 'potato_dough_from_eggs')
+		R.shapeless(Item.of(fd.dough_potato, 3), [i.potato, i.potato, i.flour, i.t_buckets_water], e, 'potato_dough_from_water')
+		R.fdCutting(fd.dough_potato, i.any_knife, Item.of(fd.grain_potato_noodle, 2), e, 'gnocchi_from_potato_dough')
 		R.remove({ id: 'veggiesdelight:cooking/potato_noodles' }, e)
 		R.fdCooking([i.milk, fd.grain_potato_noodle, fd.grain_potato_noodle, [i.onion, i.t_crops_garlic, fd.veggie_pickled_onion]], fd.dish_potato_noodles, e,
 			'creamy_gnocchi', 1.0, 200, i.bowl)
@@ -113,8 +118,9 @@ ServerEvents.recipes(e => {
 		// Burger rule (creativedelight/recipes.js): shaped, toppings on top, patty in the middle, bread at the bottom,
 		// plus one assembly. Started on the patty, as the egg burger: assemblies on bread need a first step of their own.
 		R.remove({ id: 'veggiesdelight:vegetarian_burger' }, e)
-		F.burgerAssemble(['C T', ' P ', ' B '], { C: i.cabbage, T: i.tomato, P: fd.veggie_cooked_vegetarian_patty, B: i.t_bread },
-			fd.sandwich_burger_vegetarian, [i.cabbage, i.tomato, i.t_bread], fd.veggie_cooked_vegetarian_patty)
+		// The patty slot takes tofu too (#creativedelight:veggie_patty, TODO dishes/ingredients #17; creativedelight/patties.js)
+		F.burgerAssemble(['C T', ' P ', ' B '], { C: i.cabbage, T: i.tomato, P: i.t_veggie_patty, B: i.t_bread },
+			fd.sandwich_burger_vegetarian, [i.cabbage, i.tomato, i.t_bread], i.t_veggie_patty)
 		// VD's shapeless More Delight burgers on its patty go; the patty is in their shaped recipes and assemblies instead
 		;['simple_hamburger', 'hamburger_with_egg', 'loaded_hamburger'].forEach(b =>
 			R.remove({ id: 'veggiesdelight:compat/moredelight/' + b }, e))

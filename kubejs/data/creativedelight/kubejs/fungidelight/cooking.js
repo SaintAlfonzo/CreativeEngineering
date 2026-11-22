@@ -22,7 +22,7 @@ ServerEvents.recipes(e => {
 			'inky_cap_scrambled_eggs_manual_only')
 		R.shapeless(i.truffle_ice_cream, [i.truffle_slice, i.snowball, i.any_sweetener, i.milk, i.bowl], e, 'truffle_ice_cream_manual_only')   // placeholder (sweets #4)
 		R.shapeless(i.creamy_morel_soup, [i.bone_broth, Item.of(i.morel_mushroom, 3), i.milk, i.onion], e, 'creamy_morel_soup_cooked_manual_only')
-		R.shapeless(i.mutton_chops_with_truffle, [i.cooked_mutton, i.cooked_mutton, i.truffle, i.baked_potato, i.onion, i.bowl], e,
+		R.shapeless(i.mutton_chops_with_truffle, [i.cooked_mutton, i.cooked_mutton, i.truffle, i.t_baked_potatoes, i.onion, i.bowl], e,
 			'mutton_chops_with_truffle_cooked_manual_only')
 		R.shapeless(i.pork_marsala_with_mushrooms, [i.cooked_pork, i.cooked_pork, i.onion, Item.of(i.red_mushroom, 2), i.tomato_sauce], e,
 			'pork_marsala_with_mushrooms_cooked_manual_only')

@@ -112,6 +112,10 @@ ServerEvents.recipes(e => {
 		R.shapeless(i.cake_base, [i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.t_flour_or_cornmeal, i.eggs, i.eggs, i.any_sweetener, i.any_sweetener], e,
 			'cake_base_flour_manual_only')
 		R.shapeless(i.cake_base, [i.any_dough, i.any_dough, i.any_dough, i.eggs, i.any_sweetener, i.any_sweetener], e, 'cake_base_dough_manual_only')
+		// Batter (flour and egg already in it; TODO dishes/ingredients #7): 3 batter + 2 sweetener, the bowls come back
+		if (global.CD.on('rusticdelight')) {
+			R.shapeless(i.cake_base, [i.batter, i.batter, i.batter, i.any_sweetener, i.any_sweetener], e, 'cake_base_batter_manual_only')
+		}
 		R.ceBaking([n(i.t_flour_or_cornmeal, 2), n(i.eggs, 2), n(i.any_sweetener, 2)], Item.of(i.cake_base_baked, 1), e,
 			'cake_base_baked_flour', CAKE)
 		R.ceBaking([n(i.any_dough, 2), i.eggs, n(i.any_sweetener, 2)], Item.of(i.cake_base_baked, 1), e,

@@ -181,15 +181,16 @@ hunger = input hunger x 2, a gilded food's = input x 4, both capped at 20; the s
 (so saturation points scale with hunger). Multipliers and cap: `kubejs/generation_scripts/food/food_tuning.json`
 `golden` (`golden`, `gilded`, `maxHunger`; the file is new, the rest of food.md 3.5 is not built; deploy class
 `runtime`). The input's current properties are read at modification time. Effects, always-edible and stacks kept.
-Covered: golden / gilded apple and carrot plus the 21 goldenfood pairs with a food input (46 items). Not covered:
+Covered: golden / gilded apple and carrot plus the 18 goldenfood pairs with a food input, and the Golden Roll (41 items;
+the three stew pairs left the list 2026-11-11). Not covered:
 golden and gilded milk bucket (milk is no food; their values never apply), the two cakes (slice values in
 `GoldenCakeBlock`, Java; the cake's input slice is 2 / 0.1, which would make the golden slice 4 / 0.1: owner call),
-and the pack's other golden foods (glistering melon slice, golden moss clump, nutritional bar, roll, coffee beans).
+and the pack's other golden foods (glistering melon slice, golden moss clump, nutritional bar, coffee beans).
 With vanilla inputs (hunger golden / gilded, modifier kept): apple 8 / 16 (0.3), carrot 6 / 12 (0.6), melon slice
 4 / 8, sweet and glow berries 4 / 8 (0.1), chorus fruit 8 / 16, baked potato 10 / 20, beetroot 2 / 4, dried kelp
 2 / 4, cooked beef and porkchop 16 / 20 (0.8), mutton and salmon 12 / 20 (0.8), chicken 12 / 20, rabbit, cod and
-bread 10 / 20 (0.6), cookie 4 / 8 (0.1), pumpkin pie 16 / 20 (0.3), mushroom stew and beetroot soup 12 / 20 (0.6),
-rabbit stew 20 / 20, honey bottle 12 / 20 (0.1). Before: every golden 4 hunger / 1.2, every enchanted 8 / 8.0.
+bread 10 / 20 (0.6), cookie 4 / 8 (0.1), pumpkin pie 16 / 20 (0.3), honey bottle 12 / 20
+(0.1); Golden Roll 20 (0.6). Before: every golden 4 hunger / 1.2, every enchanted 8 / 8.0.
 The generated cans of these foods copy the catalog values: `tools/gen_can_types.py` needs a `/dumpfood` after the
 restart first (it reads `kubejs/exported/food/catalog.json`); not rerun yet (its `--check` on 2026-11-03 already
 showed 5 other members' scripts pending from parallel work).

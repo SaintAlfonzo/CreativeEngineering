@@ -191,6 +191,9 @@ public class CreativeCompat {
 			if (com.SaintAlfonzo.creativecompat.corpse.CorpseSections.CURIOS) com.SaintAlfonzo.creativecompat.corpse.CorpseCurios.register();
 			if (FMLEnvironment.dist == Dist.CLIENT) com.SaintAlfonzo.creativecompat.corpse.CorpseSectionsClient.register(modEventBus);
 		}
+		// Two flower pots in one block, like candles (compat/DoublePot; flower_pots.md 3.4).
+		com.SaintAlfonzo.creativecompat.compat.DoublePot.register(modEventBus);
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.DoublePot.class);
 		// Beautify botanist workbench as a flower pot (compat/BotanistPot, mixin/BotanistWorkbenchPotMixin; flower_pots.md).
 		if (ModList.get().isLoaded("beautify")) {
 			BotanistPot.register(modEventBus);

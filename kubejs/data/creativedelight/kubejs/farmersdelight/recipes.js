@@ -117,8 +117,8 @@ ServerEvents.recipes(e => {
 		// Bone broth fluid (dishes/ingredients #36): Spout fills a bowl with 250 mB, the Item Drain empties it
 		if (f.bone_broth) R.createBottle(i.bone_broth, f.bone_broth, e, 'bone_broth', { container: i.bowl })
 		// Stews with bone broth (heatless meal rule: see "Meals" below; soupCraft adds the broth, or the fluid in a basin)
-		F.soupCraft([i.cooked_beef, i.carrot, i.baked_potato], i.beef_stew)
-		F.soupCraft([i.cooked_cod, i.cooked_eggs, i.baked_potato, i.tomato_sauce], i.baked_cod_stew)
+		F.soupCraft([i.cooked_beef, i.carrot, i.t_baked_potatoes], i.beef_stew)
+		F.soupCraft([i.cooked_cod, i.cooked_eggs, i.t_baked_potatoes, i.tomato_sauce], i.baked_cod_stew)
 		F.soupCraft([i.cooked_pork, i.cooked_eggs, i.pasta, i.dried_kelp], i.noodle_soup)
 		// the raw carrot is gone (no cooked carrot); salad stays raw
 		F.soupCraft([i.cooked_chicken, i.t_soup_veggie_cooked, i.salad_ingredients, i.t_soup_veggie_cooked], i.chicken_soup)
@@ -127,7 +127,7 @@ ServerEvents.recipes(e => {
 		//Cooked rice
 		// Shapeless craft rice dishes w/ cooked_rice (Delightful's sinigang: delightful/recipes.js)
 		F.mealCraft([i.cooked_rice, i.cooked_eggs, i.cooked_eggs, i.carrot, i.onion], i.fried_rice)
-		F.mealCraft([i.cooked_rice, i.brown_mushroom, i.brown_mushroom, i.red_mushroom, i.baked_potato], i.mushroom_rice)
+		F.mealCraft([i.cooked_rice, i.brown_mushroom, i.brown_mushroom, i.red_mushroom, i.t_baked_potatoes], i.mushroom_rice)
 
 		//######################### Fluids #########################
 
@@ -154,7 +154,9 @@ ServerEvents.recipes(e => {
 				R.ieSqueezing(Fluid.of(f.melon_juice, 1250), i.melon_block, e, undefined, undefined, 6400)
 				R.ieBottling(i.melon_juice, f.t_melon_juice, i.glass_bottle, e, undefined, 250)
 			}
-			R.createMixing(Fluid.of(f.melon_juice, 250), [i.any_sweetener_drink, Item.of(i.melon, 3)], e, undefined, 'n/a')
+			// Heated mixing on the juice rule (creativedelight/drinks.js): 2 slices + 250 mB water -> 250 mB, as the IE
+			// Squeezer's 125 mB a slice (TODO dishes/ingredients #8; was 3 slices + a sweetener, unheated)
+			R.createMixing(Fluid.of(f.melon_juice, 250), [i.melon, i.melon, Fluid.of(f.water, 250)], e, 'melon_juice', 'heated')
 		}
 
 		//Apple cider
@@ -234,7 +236,7 @@ ServerEvents.recipes(e => {
 		// abnormals_delight, delightful); Brewin' and Chewin's stay in the pack's cooking.js.
 
 		// Pot meals with no grid route yet
-		F.soupCraft([i.carrot, i.baked_potato, i.beetroot, i.salad_ingredients, i.t_soup_veggie_cooked], i.vegetable_soup)
+		F.soupCraft([i.carrot, i.t_baked_potatoes, i.beetroot, i.salad_ingredients, i.t_soup_veggie_cooked], i.vegetable_soup)
 		F.mealCraft([i.carrot, i.brown_mushroom, i.pasta, i.salad_ingredients, i.t_soup_veggie_cooked, i.t_soup_veggie_cooked, i.bowl], i.vegetable_noodles)
 		F.mealCraft([i.tomato_sauce, i.onion, i.beetroot, i.t_soup_veggie_cooked, i.t_soup_veggie_cooked], i.ratatouille)
 
@@ -276,9 +278,9 @@ ServerEvents.recipes(e => {
 		// Assembly meals (TODO dishes/meals #3)
 		// Shepherd's pie: a cheese wedge in place of milk
 		R.remove({ id: 'farmersdelight:shepherds_pie_block' }, e)
-		R.shapeless(i.shepherds_pie_block, [i.baked_potato, i.baked_potato, i.t_cheese_wedge, i.cooked_mutton, i.cooked_mutton,
+		R.shapeless(i.shepherds_pie_block, [i.t_baked_potatoes, i.t_baked_potatoes, i.t_cheese_wedge, i.cooked_mutton, i.cooked_mutton,
 			i.cooked_mutton, i.onion, i.onion, i.bowl], e, 'shepherds_pie_manual_only')
-		F.assemble(i.bowl, [i.cooked_mutton, i.cooked_mutton, i.cooked_mutton, i.onion, i.onion, i.baked_potato, i.baked_potato,
+		F.assemble(i.bowl, [i.cooked_mutton, i.cooked_mutton, i.cooked_mutton, i.onion, i.onion, i.t_baked_potatoes, i.t_baked_potatoes,
 			i.t_cheese_wedge], i.shepherds_pie_block)
 		// Stuffed pumpkin (TODO dishes/meals #44): one pot recipe in place of FD's and Corn Delight's, in a pumpkin
 		R.remove({ id: 'farmersdelight:cooking/stuffed_pumpkin_block' }, e)
@@ -289,9 +291,9 @@ ServerEvents.recipes(e => {
 		F.assemble(i.baked_potato, [i.cooked_beef, i.any_cheese], i.stuffed_potato)
 		// Steak and potatoes: shaped
 		R.remove({ id: 'farmersdelight:steak_and_potatoes' }, e)
-		R.shaped(i.steak_and_potatoes, ['ROP', ' B ', ' W '], { R: i.cooked_rice, O: i.onion, P: i.baked_potato, B: i.cooked_beef, W: i.bowl },
+		R.shaped(i.steak_and_potatoes, ['ROP', ' B ', ' W '], { R: i.cooked_rice, O: i.onion, P: i.t_baked_potatoes, B: i.cooked_beef, W: i.bowl },
 			e, 'steak_and_potatoes_manual_only')
-		F.assemble(i.bowl, [i.cooked_rice, i.baked_potato, i.cooked_beef, i.onion], i.steak_and_potatoes)
+		F.assemble(i.bowl, [i.cooked_rice, i.t_baked_potatoes, i.cooked_beef, i.onion], i.steak_and_potatoes)
 
 		//######################### Protein #########################
 		//Egg
