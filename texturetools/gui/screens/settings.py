@@ -1,10 +1,16 @@
 # SPDX-License-Identifier: GPL-3.0-only
-"""Settings screen: project folder, dev mode, recent folders, About (plan_texture_tools_gui.md section 8)."""
+"""Settings screen: project folder, dev mode, recent folders, About (plan_texture_tools_gui.md section 8).
+
+show_about() opens the About popup (version, license, library versions) and returns it.
+"""
+import sys
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.checkbox import CheckBox
 from kivy.uix.label import Label
+from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import Screen
 
 from ... import __version__
@@ -44,10 +50,35 @@ class SettingsScreen(Screen):
 		clear = Button(text="Clear recent folders", size_hint=(None, None), size=(200, 34))
 		clear.bind(on_release=lambda *a: self._set("recent_folders", []))
 		box.add_widget(clear)
-		box.add_widget(Label(text="Texture Tools {0}  -  GPL-3.0-only".format(__version__), size_hint_y=None,
-			height=30))
+		about = BoxLayout(size_hint_y=None, height=34, spacing=8)
+		about.add_widget(Label(text="Texture Tools {0}  -  GPL-3.0-only".format(__version__)))
+		about_btn = Button(text="About", size_hint_x=None, width=100)
+		about_btn.bind(on_release=lambda *a: self.show_about())
+		about.add_widget(about_btn)
+		box.add_widget(about)
 		box.add_widget(Label())
 		self.add_widget(box)
+
+	def show_about(self):
+		lines = ["Texture Tools {0}".format(__version__), "License: GPL-3.0-only", "",
+			"Python {0}".format(sys.version.split()[0])]
+		for mod, label in (("numpy", "numpy"), ("PIL", "Pillow"), ("kivy", "Kivy")):
+			m = sys.modules.get(mod)
+			if m is None:
+				try:
+					m = __import__(mod)
+				except ImportError:
+					continue
+			lines.append("{0} {1}".format(label, getattr(m, "__version__", "?")))
+		body = BoxLayout(orientation="vertical", spacing=6, padding=8)
+		body.add_widget(Label(text="\n".join(lines), halign="center"))
+		close = Button(text="Close", size_hint_y=None, height=34)
+		body.add_widget(close)
+		popup = Popup(title="About Texture Tools", content=body, size_hint=(None, None), size=(360, 300))
+		close.bind(on_release=lambda *a: popup.dismiss())
+		popup.open()
+		self.about_popup = popup
+		return popup
 
 	def on_pre_enter(self, *a):
 		rec = self.settings.recent_folders() if self.settings is not None else []

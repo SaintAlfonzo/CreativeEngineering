@@ -276,6 +276,13 @@ def child():
 		yield 0.1
 		check(app.manager.current == "editor" and app.screens["editor"].preview.array is not None,
 			"open in editor hands the array over")
+		# About popup on the settings screen shows the version
+		from texturetools import __version__
+		pop = app.switch_to("settings").show_about()
+		yield 0.1
+		txt = pop.content.children[-1].text
+		check(__version__ in txt and "GPL-3.0-only" in txt, "about popup shows version and license")
+		pop.dismiss()
 		check(sorted(os.listdir(img_dir)) == before, "no file written next to the inputs")
 
 	gen = steps()

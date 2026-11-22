@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Build-only pins for texturetools/packaging/build.sh (on top of texturetools/requirements.txt).
+pyinstaller==6.10.0
+pyinstaller-hooks-contrib==2026.10
