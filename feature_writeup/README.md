@@ -14,12 +14,12 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=49fd12afbaa0 -->
+<!-- generated:status_index begin readme sha1=182aa66e0c34 -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-PTH r1120nv 2026-11-21: 2 INCONCLUSIVE; SQ-BRA r1119 2026-11-19: 2 PASS, 1 LOOK; CQ-PTH r1116 2026-11-16: 1 DEFERRED | creativecompat pending, creativedevtools installed 2026-11-20, creativedelight installed 2026-11-21 | DEPLOYED, in-game test pending |
 | Tooltips | [tooltips.md](tooltips.md) | `TT-` | BUILT | none | creativecompat pending, creativecommon pending | DEPLOYED (new removals), in-game test pending |
-| Structure tuning | [structure_tuning.md](structure_tuning.md) | `ST-` | BUILT | SQ-PSM r1121b 2026-11-21: 1 BATCH-FAULT; SQ-TER r1120nv 2026-11-21: 1 INCONCLUSIVE; SQ-ST r1120nv 2026-11-21: 1 PASS; +6 codes | creativeworldgen installed 2026-11-21 | DEPLOYED, in-game test pending (plans 7.1 to 7.4 went out INCOMPLETE with 1.0.6 |
+| Structure tuning | [structure_tuning.md](structure_tuning.md) | `ST-` | BROKEN | SQ-PSM r1121br 2026-11-21: 1 FAIL; SQ-TER r1120nv 2026-11-21: 1 INCONCLUSIVE; SQ-ST r1120nv 2026-11-21: 1 PASS; +6 codes | creativeworldgen installed 2026-11-21 | DEPLOYED, in-game test pending (plans 7.1 to 7.4 went out INCOMPLETE with 1.0.6 |
 | Structure testing log | [00_plan.md](testing/structures/00_plan.md) | `ST-`, `LO-` | reference | none |  | scratch run 8.0.1 to 8.0.10 done 2026-10-19 (M1 build, M2, Phases 3 to 10), 11 (1.0.8 fixes) and 12 (earth ... |
 | Structures by biome | [structures_by_biome.md](structures_by_biome.md) | none | reference | none |  | reference, regenerate with `python3 tools/gen_structure_biome_table.py` |
 | Biome fits | [biome_fits.md](biome_fits.md) | none | reference | none |  | reference |
@@ -91,7 +91,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Nether's Delight 4.0 update | [nethers_delight.md](nethers_delight.md) | none | BUILT | SQ-NDM r1120lr 2026-11-20: 6 PASS, 1 LOOK | creativedelight installed 2026-11-21 | BUILT 2026-11-01 as CD member `repackedNethers` (4.9), installed in `mods/` 2026-11-02, not deployed |
 | Farmer's Delight 1.3.4 update | [farmers_delight.md](farmers_delight.md) | none | BROKEN | SQ-FDB r1121b 2026-11-21: 2 PASS, 1 FAIL | creativedelight installed 2026-11-21 | check by hand first) |
 | Comfort vs Nourishment audit | [comfort_nourishment.md](comfort_nourishment.md) | `CNS-` | BUILT | SQ-CNS r1121b 2026-11-21: 2 PASS | creativedelight installed 2026-11-21 | Audit DONE 2026-10-26 |
-| Rustic Delight 1.7.0 backport in Creative Delight | [rustic_delight.md](rustic_delight.md) | `RD-` | BUILT | SQ-RDX r1121b 2026-11-21: 1 PASS; SQ-RD r1121b 2026-11-21: 5 PASS, 1 BATCH-FAULT; SQ-RDB r1120nv 2026-11-21: 1 BATCH-FAULT | creativedelight installed 2026-11-21 | 2026-11-03: one potato salad, Comfort rule recheck (5.12) BUILT, CD jar installed 2026-11-03 00:08, not booted |
+| Rustic Delight 1.7.0 backport in Creative Delight | [rustic_delight.md](rustic_delight.md) | `RD-` | BUILT | SQ-RD r1121br 2026-11-21: 1 LOOK; SQ-RDX r1121b 2026-11-21: 1 PASS; SQ-RDB r1120nv 2026-11-21: 1 BATCH-FAULT | creativedelight installed 2026-11-21 | 2026-11-03: one potato salad, Comfort rule recheck (5.12) BUILT, CD jar installed 2026-11-03 00:08, not booted |
 | Fruits Delight 1.1.3 fixes on the installed 0.5.11 | [fruits_delight.md](fruits_delight.md) | `FR-` | BUILT | SQ-FR r1121b 2026-11-21: 1 PASS | creativedelight installed 2026-11-21 | DEPLOYED with 1.1.03 (in the CD jar) |
 | Fruit reference | [fruit.md](fruit.md) | none | planned | none |  | reference: fruit effects, slices, berry colors, Fruits Delight length ratios |
 | Smoothies and brain freeze | [smoothies.md](smoothies.md) | none | planned | none |  | planned 2026-11-18, plan_smoothies.md |
@@ -132,7 +132,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Flower pots and planters | [flower_pots.md](flower_pots.md), [flower_pots_matrix.md](flower_pots_matrix.md) | `POT-` | BROKEN | SQ-POT r1121b 2026-11-21: 2 PASS, 3 FAIL | creativecompat pending, creativebrewing installed 2026-11-21, creativedevtools installed 2026-11-20 | audit 2026-10-27 (static) |
 | Weather: season types for Serene Seasons | [weather.md](weather.md) | `WE-` | BUILT | none | creativecalendar pending | DEPLOYED with 1.0.6 (Creative Common 1.0.5 + 1.0.6 code |
 | Weather by biome | [weather_by_biome.md](weather_by_biome.md) | none | reference | none |  | reference, regenerate with `python3 tools/gen_weather_table.py` after `/dumpbiomes` or `/dumpclimate` |
-| Time system | [time.md](time.md) | `TI-` | BUILT | SQ-TI r1121b 2026-11-21: 1 BATCH-FAULT; SQ-PST r1121b 2026-11-21: 4 PASS, 1 FAIL; SQ-TD r1118 2026-11-18: 3 PASS, 1 BATCH-FAULT; +1 codes | creativecalendar pending | DEPLOYED with 1.0.8 (2026-10-19, Creative Common 1.0.8): master, push, sun seasons, pause when empty, GUI, ... |
+| Time system | [time.md](time.md) | `TI-` | BUILT | SQ-TI r1121br 2026-11-21: 1 FAIL; SQ-PST r1121b 2026-11-21: 4 PASS, 1 FAIL; SQ-TD r1118 2026-11-18: 3 PASS, 1 BATCH-FAULT; +1 codes | creativecalendar pending | DEPLOYED with 1.0.8 (2026-10-19, Creative Common 1.0.8): master, push, sun seasons, pause when empty, GUI, ... |
 | Advancements switched off | [advancements.md](advancements.md) | `AV-` | BUILT | SQ-AV r1121b 2026-11-21: 1 PASS | creativecommon pending | DEPLOYED with 1.0.8 (2026-10-19 |
 | Player changelog | [changelog.md](changelog.md) | `CL-` | BUILT | none | creativecommon pending | DEPLOYED with 1.1.01 (2026-10-22), 1.1.02 to 1.1.04 notes shipped |
 | Loading screen tips | [loading_tips.md](loading_tips.md), [plan_creative_tips.md](plan_creative_tips.md), [plan_loading_tips_screens.md](plan_loading_tips_screens.md), [loading_tips_audit.md](loading_tips_audit.md) | `LTP-` | BUILT | SQ-QN r1118 2026-11-18: 2 PASS | creativecommon pending | BUILT 2026-11-06 in creativecommon-1.1.0 (not installed) |

@@ -705,7 +705,7 @@ Choices made while building (owner may revisit):
   `level`), `slot`, `unlock` (`effect`, `level`). The pack file is `defaultconfigs/solraspberrypie/ladder.json`
   (draft values for `#12`: old Apple Pie hearts, toughness and knockback carried over; 5 slots at 2, 10, 30, 50, 75;
   flat Speed I at 20, so Speed is capped at I in the pool: V11 hides it from the picker once the flat bonus is on);
-  the jar's built-in default (vanilla only) is `solraspberrypie/default_ladder.json`.
+  the jar's built-in default (vanilla only) is `solraspberrypie/default_ladder.json` (Apple Pie's ladder since 2026-11-21, 12.9).
 - **Validation (3.3) as built:** V1/V2 skip, one warning listing every skipped entry; V3 drop the unlock, warn; V4
   warn; V5 clamp to the cap, warn; V6 warn (a higher unlock grants the lower levels); V7 warn on equal slot
   thresholds, slots numbered by threshold then file order; V8 extra stored choices dropped at login (logged); V10
@@ -945,4 +945,18 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   `solRaspberryPie-LGPL-2.1-solcarrot.txt` (the upstream `LICENSE.txt` files) and `solRaspberryPie-NOTICE` (names,
   authors, versions, sha1, "unmodified", upstream tag / commit links, the Liquid Diet Log art credit). `mods.toml` has
   `displayURL` and `issueTrackerURL` (the GitHub repo). The compile jars in `libs/` stay git-ignored.
+- **Default ladder (P2).** `solraspberrypie/default_ladder.json` (used when no `defaultconfigs/solraspberrypie/ladder.json`
+  exists, so never in the pack) is Apple Pie 2.2.0's own default ladder read from `SOLSweetPotatoConfig`: half a heart
+  (`health` 1) at each threshold 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, armor toughness +2 at
+  15, 50 and 80, knockback resistance +1 at 40. Apple Pie's effect benefits (always-on Speed I at 2 and II at 25, Haste
+  I and II, Strength I to III, Regeneration I, Luck I and II) are not carried over as flat rungs: they would hide five
+  of the ten unlocks from the picker (V11) for most of the ladder; its `generic.speed` entry at 45 names no attribute
+  and is left out (agent reading of the plan's "kept as health, toughness, knockback and other attribute rungs",
+  unconfirmed). Ten one-time unlocks (D2, D10), level I, pool cap I: Speed 10, Haste 18, Strength 26, Jump Boost 34,
+  Night Vision 43, Water Breathing 53, Luck 63, Regeneration 74, Fire Resistance 86, Glowing 100 (Fire Resistance is
+  allowed here, unlike the pack pool in section 4). Four slots at 10, 30, 55, 80 (D3). Headless test
+  `tools/test_rp_ladder.sh` (in `check_all.py`): the file parses on vanilla registries with no V1 to V10 warning and has
+  that shape. **V12 finding:** with vanilla foods and Apple Pie's default settings (`queueSize` 32, `endDecay` 32) the
+  reachable bound is about 56.2 (best vanilla food in all 32 positions), so the 11 rungs from 60 up log a V12 warning
+  in isolation and cannot be reached there; Apple Pie's own default ladder has the same gap. Open for the owner.
 

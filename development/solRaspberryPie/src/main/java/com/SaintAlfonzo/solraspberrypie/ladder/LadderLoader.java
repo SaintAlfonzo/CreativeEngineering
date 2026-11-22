@@ -87,8 +87,16 @@ public final class LadderLoader {
 	}
 
 	static Ladder parse(JsonObject root, String source) {
+		return parse(root, source, new ArrayList<>());
+	}
+
+	/**
+	 * As {@link #parse(JsonObject, String)}, and adds every warning it logs to {@code warnings} (the skipped-entry
+	 * summary first); the headless default-ladder test (tools/test_rp_ladder.sh) asserts the built-in ladder adds none.
+	 */
+	static Ladder parse(JsonObject root, String source, List<String> warnings) {
 		List<String> skipped = new ArrayList<>();
-		List<String> warnings = new ArrayList<>();
+		int firstOwn = warnings.size();
 
 		Map<ResourceLocation, Integer> pool = new LinkedHashMap<>();
 		for (JsonElement el : arr(root, "pool")) {
@@ -187,10 +195,13 @@ public final class LadderLoader {
 		}
 
 		if (!skipped.isEmpty()) {
-			SolRaspberryPie.LOG.warn("Diet ladder ({}): skipped {} entries naming effects or attributes that are not registered: {}",
-					source, skipped.size(), String.join(", ", skipped));
+			String line = "skipped " + skipped.size() + " entries naming effects or attributes that are not registered: " + String.join(", ", skipped);
+			SolRaspberryPie.LOG.warn("Diet ladder ({}): {}", source, line);
+			warnings.add(firstOwn, line);
 		}
-		for (String w : warnings) SolRaspberryPie.LOG.warn("Diet ladder ({}): {}", source, w);
+		for (String w : warnings.subList(skipped.isEmpty() ? firstOwn : firstOwn + 1, warnings.size())) {
+			SolRaspberryPie.LOG.warn("Diet ladder ({}): {}", source, w);
+		}
 		return ladder;
 	}
 
