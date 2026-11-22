@@ -35,7 +35,7 @@ Rule, per block break (loot context with a block state, the block's own table):
 3. The drops already hold a shard (`#quark:shards`) or the block's own item: unchanged. This keeps Quark's tables for
    vanilla glass (no double drop) and leaves glass that always drops itself (framed glass that is not silk-only) as it
    is. Exception, tinted glass (`#forge:glass/tinted`, `#forge:glass_panes/tinted` or `tinted` in the id): there is no
-   tinted shard, so it loses its self-drop and gives Quark's dirty shard, same counts (owner 2026-11-21).
+   tinted shard, so it loses its self-drop and gives Quark's dirty shard, same counts (owner, 2026-11-21).
 4. Otherwise: block 1 to 3 shards, pane 1 to 2. Color from `#forge:glass/<color>` or `#forge:glass_panes/<color>`,
    else a color word in the id (`red_framed_glass` -> red, longest color name first so `light_blue` wins over `blue`),
    else the clear shard. Explosions keep each shard at 1 in radius.
