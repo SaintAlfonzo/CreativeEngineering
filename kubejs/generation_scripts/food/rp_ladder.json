@@ -1,0 +1,20 @@
+{
+	"_readme": [
+		"Config of tools/gen_rp_ladder.py: the pack's Raspberry Pie diet ladder (plan_rp_standalone.md P7, D10;",
+		"plan_food_diversity_1121.md section 7). The effects and their order are rp_ladder.csv next to this file.",
+		"densityRatio: effects per diversity point at the start of the unlockable and permanent sub-ladders divided by",
+		"  the same at their end (density falls linearly; 1.0 = evenly spaced). Endpoints stay fixed.",
+		"unlockables / permanent: first and last threshold; count = the CSV's positions (checked).",
+		"hearts: count rungs of amount health points (2 = one heart) at top/(count+1) steps (the gap after the last",
+		"  equals the gap before the first). pairs: armor toughness + knockback resistance at those fractions of top.",
+		"slots: count effect slots, evenly spaced from first in steps of (top - first)/count.",
+		"decimals: thresholds are rounded to this many places."
+	],
+	"densityRatio": 2.0,
+	"decimals": 1,
+	"unlockables": {"from": 2.5, "to": 97.5, "count": 39},
+	"permanent": {"from": 25, "to": 100, "count": 12},
+	"hearts": {"count": 10, "top": 100, "amount": 2},
+	"pairs": {"fractions": ["1/6", "1/2", "5/6"], "top": 100, "toughness": 1, "knockback": 0.1},
+	"slots": {"count": 5, "first": 2.5, "top": 100}
+}

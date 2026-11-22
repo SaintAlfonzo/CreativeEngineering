@@ -436,6 +436,17 @@
 			"apply": "rebuild and install Creative Delight (./gradlew :creativeDelight:build --offline, then :creativeDelight:installToMods), restart; --report prints the tier tops and rotation table"
 		},
 		{
+			"id": "rp_ladder",
+			"script": "tools/gen_rp_ladder.py",
+			"groups": ["food"],
+			"outputs": [
+				"defaultconfigs/solraspberrypie/ladder.json",
+				"configs_edited/server_config/solraspberrypie/ladder.json",
+				"kubejs/assets/solraspberrypie/lang/en_us.json"
+			],
+			"apply": "new worlds seed from defaultconfigs; an existing world keeps serverconfig/solraspberrypie/ladder.json (replace it there) and needs a server restart; taglines: F3+T or restart the client (raspberry_pie.md 3.3)"
+		},
+		{
 			"id": "coaster_models",
 			"script": "tools/gen_coaster_models.py",
 			"groups": ["client", "food"],
