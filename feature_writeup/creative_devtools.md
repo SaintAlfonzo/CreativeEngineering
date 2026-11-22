@@ -131,7 +131,7 @@ strings (the splitter strips double quotes), `none`. Unknown options and extra w
 | place | `place X Y Z STATE [flags=3]` | setBlock with those flags (18 = no updates) |
 | items | `items X Y Z R [keep]` | item entities summed by id, XP orb value; discarded unless keep |
 | entities | `entities X Y Z R [type=ID\|#TAG] [nbt]` | one line per entity (type, uuid, pos, health, name, NBT), then `n`, `by_type` |
-| use | `use X Y Z [as=NAME] [held=ITEM] [face=up] [hit=dx,dy,dz] [hand=main\|off\|both\|client] [sneak]` | block right click per hand, then both hands and the block state |
+| use | `use X Y Z [as=NAME] [held=ITEM] [face=up] [hit=dx,dy,dz] [hand=main\|off\|both\|client] [sneak] [stand=x,y,z]` | block right click per hand, then both hands and the block state; the fake player stands on the clicked block unless `stand=` names the block its feet are in |
 | useair | `useair [as=NAME] [held=ITEM] [hand=both]` | the item's air use (`zq useitem`) |
 | break | `break X Y Z [as=NAME] [held=ITEM] [keep]` | survival break (BreakEvent, harvest check, tool damage), drops within 3 |
 | kill | `kill X Y Z TYPE [n=1] [held=ITEM] [as=NAME] [fire] [keep]` | N mobs summoned as /summon and killed by a player hit of 1000; drops within 4 (XP orbs come 20 ticks later) |

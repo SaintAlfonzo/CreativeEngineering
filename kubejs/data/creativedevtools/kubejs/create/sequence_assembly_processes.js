@@ -55,7 +55,9 @@ ServerEvents.recipes(e => {
 
 	// TODO: change helper to return recipe for all valid sequence processes, make comment explaining in each helper func
 
-	R.createSequencedAssembly(Item.of(i.nether_star, 1), i.nether_star, [
+	// Each mod's steps only when that mod is loaded; Create's builders also need kubejs_create (CCO-12 sets)
+	if (!global.has('create', 'kubejs_create')) return
+	var steps = [
 
 		// ── Create (native, 4) ──────────────────────────────────────────────
 		// Cutting/Pressing have no NCH wrapper at all; Deploying/Filling have one
@@ -65,12 +67,15 @@ ServerEvents.recipes(e => {
 		e.recipes.create.deploying(inc, [inc, i.nether_star]),
 		e.recipes.create.filling(inc, [inc, Fluid.of(f.water, 250)]),
 		e.recipes.create.pressing(inc, inc),
+	]
 
-		// ── Create Addition (1) ──────────────────────────────────────────────
-		// createRolling exists but also calls .id() itself — raw json, same shape it builds.
-		e.custom({ type: 'createaddition:rolling', input: { item: inc }, result: { item: inc } }),
+	// ── Create Addition (1) ──────────────────────────────────────────────
+	// createRolling exists but also calls .id() itself — raw json, same shape it builds.
+	if (global.has('createaddition')) steps.push(
+		e.custom({ type: 'createaddition:rolling', input: { item: inc }, result: { item: inc } }))
 
-		// ── Vintage Improvements (10) ────────────────────────────────────────
+	// ── Vintage Improvements (10) ────────────────────────────────────────
+	if (global.has('vintageimprovements')) steps.push(
 		// viPolishing is the only VI helper written to return the bare recipe - use it directly.
 		R.viPolishing(inc, inc, e),
 		// viLaserCutting / viVibrating exist but call .id() themselves - raw json instead
@@ -89,9 +94,9 @@ ServerEvents.recipes(e => {
 		e.custom({ type: 'vintageimprovements:hammering', hammerBlows: 1, ingredients: [{ item: inc }], results: [{ item: inc }] }),
 		// springColor is required - reuse the incomplete item's own default gray tint.
 		e.custom({ type: 'vintageimprovements:coiling', springColor: '808080', ingredients: [{ item: inc }], results: [{ item: inc }] }),
-		e.custom({ type: 'vintageimprovements:centrifugation', ingredients: [{ item: inc }], results: [{ item: inc }] })
+		e.custom({ type: 'vintageimprovements:centrifugation', ingredients: [{ item: inc }], results: [{ item: inc }] }))
 
-	], null, e, 'seq_test_star_all_processes', 1)
+	R.createSequencedAssembly(Item.of(i.nether_star, 1), i.nether_star, steps, null, e, 'seq_test_star_all_processes', 1)
 })
 });
 

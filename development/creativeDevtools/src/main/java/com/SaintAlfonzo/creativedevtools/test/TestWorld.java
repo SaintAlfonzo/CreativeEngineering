@@ -405,21 +405,28 @@ final class TestWorld {
 	}
 
 	/**
-	 * use X Y Z [as=NAME] [held=ITEM] [face=up] [hit=dx,dy,dz] [hand=main|off|both|client] [sneak]: a right click on
-	 * the block. both = the off hand when the main hand did not consume the click; client = the client's full order
-	 * (per hand: block use; FAIL stops; then the item's air use when the hand is not empty).
+	 * use X Y Z [as=NAME] [held=ITEM] [face=up] [hit=dx,dy,dz] [hand=main|off|both|client] [sneak] [stand=x,y,z]: a
+	 * right click on the block. both = the off hand when the main hand did not consume the click; client = the client's
+	 * full order (per hand: block use; FAIL stops; then the item's air use when the hand is not empty). The fake player
+	 * stands on top of the clicked block unless stand= names the block its feet are in (blocks that refuse a player
+	 * standing in the target, like an Immersive Posts post base, SQ-IPO-02).
 	 */
 	private static void use(TestCtx c) {
 		ServerLevel level = c.level();
 		BlockPos pos = c.pos("pos");
 		c.args.end();
-		c.args.checkOpts("dim", "as", "held", "face", "hit", "hand", "sneak");
+		c.args.checkOpts("dim", "as", "held", "face", "hit", "hand", "sneak", "stand");
 		TestCtx.loaded(level, pos);
 		Direction face = TestCtx.face(c.args.opt("face", "up"));
 		double[] hit = c.args.optTriple("hit");
+		double[] stand = c.args.optTriple("stand");
 		Vec3 at = hit == null ? Vec3.atCenterOf(pos).relative(face, 0.5)
 				: new Vec3(pos.getX() + hit[0], pos.getY() + hit[1], pos.getZ() + hit[2]);
 		ServerPlayer p = c.actor(level, pos);
+		if (stand != null) {
+			if (!(p instanceof net.minecraftforge.common.util.FakePlayer)) throw new TestArgs.Bad("stand= moves only the fake player, not as=");
+			p.moveTo(Math.floor(stand[0]) + 0.5, Math.floor(stand[1]), Math.floor(stand[2]) + 0.5, 0f, 90f);
+		}
 		String mode = c.args.opt("hand", "main");
 		BlockHitResult bhr = new BlockHitResult(at, face, pos, false);
 		for (InteractionHand hand : hands(mode)) {

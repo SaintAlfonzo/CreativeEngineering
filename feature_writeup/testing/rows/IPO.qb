@@ -33,21 +33,21 @@ reject \[cdevtest\] .*done=0
 @group A
 @commands Place a post base; use an iron fence on it 3 times; use a hammer on the post's side to make an arm; place a second post 3 blocks away and join them with a truss (fence on the post side)
 @pass Post grows, arm and truss form as before
-@fails A kept material lost its post or truss: `Posts.get` returned null, check `ImmersivePostsMaterials.KEPT`
-@reviewed 2026-11-16
+@fails A kept material lost its post or truss: `Posts.get` returned null, check `ImmersivePostsMaterials.KEPT`. Every use stands off the post column (`stand=`): Immersive Posts skips the post when the player stands in the target block (the r1120lr FAIL was that, not the mixins)
+@reviewed 2026-11-22
 > forceload add 2696 2696 2720 2720
 > setblock 2704 -60 2704 immersiveposts:postbase
-> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main
-> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main
-> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main
+> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main stand=2702,-60,2704
+> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main stand=2702,-60,2704
+> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main stand=2702,-60,2704
 > setblock 2708 -60 2704 immersiveposts:postbase
-> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main
-> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main
-> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main
+> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main stand=2710,-60,2704
+> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main stand=2710,-60,2704
+> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main stand=2710,-60,2704
 > cdevtest count 2704 -59 2704 2704 -55 2704 immersiveposts:ironpost
-> cdevtest use 2704 -58 2704 held=immersiveengineering:hammer face=east hand=main
+> cdevtest use 2704 -58 2704 held=immersiveengineering:hammer face=east hand=main stand=2702,-60,2704
 > cdevtest state 2705 -58 2704
-> cdevtest use 2704 -57 2704 held=immersiveposts:fence_iron face=east hand=main
+> cdevtest use 2704 -57 2704 held=immersiveposts:fence_iron face=east hand=main stand=2702,-60,2704
 > cdevtest state 2706 -57 2704
 expect verb=count block=immersiveposts:ironpost n=3\b
 reject (?i)exception
