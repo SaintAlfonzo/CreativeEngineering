@@ -36,6 +36,8 @@ Rules: status (built, deployed, tested, versions) lives in [README.md](../README
 ## Potions, machines, Create/IE
 - [IE potion machines](ie-potion-machines.md); [Create config widget](create-config-string-widget.md); [sawblade routing](sawblade-recipe-routing.md); [AM potion fix](am-potion-brewing-fix.md); [potion buckets](potion-buckets.md)
 - [CE components/coils](ce-components-coils.md); [BlockRunner tiers](blockrunner-speed-tiers.md); [camo walk](camo-walk-speed.md); [sinking blocks](sinking-blocks-investigation.md); [ItemPhysic fire/lava](itemphysic-fire-lava-split.md); [TrashSlot](trashslot-pack-defaults.md)
+## Texture tooling
+- [texturetools gotchas](texturetools-gotchas.md) — frozen tests/legacy, extended parsers keep stderr parity, batch kinds register on import, no kivy.core.window outside xvfb; owner doc texture_tools.md
 ## Gear, combat, effects
 - [Effect refresh / HUD icon gotchas](effect-refresh-and-hud-icon-gotchas.md) — Health Boost refresh clamps health; 5-arg ctor hides HUD icon; [effects] remap/removed/forceHudIcon
 - [Shields](shields.md); [damage types](damage-types.md); [armor/tool effect frameworks](armor-tool-effects.md); [dragon gear](dragon-gear-notes.md); [echo gear](echo-tier-gear.md); [Magic Resistance](magic-resistance-effect.md); [Air Brake](air-brake-item.md)

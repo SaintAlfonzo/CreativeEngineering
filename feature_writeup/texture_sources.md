@@ -16,6 +16,8 @@ Where every pack-owned texture came from, the texture rule, and the textures tha
 | `textures/tools #4` | Planned | none | Owner confirms the 349 textures with no provenance evidence |
 <!-- generated:status_index end open_work -->
 
+**Tool.** The owner's texture tools (palette swap, combine, painter, editor, scale) are documented in [texture_tools.md](texture_tools.md). With dev mode on, a Run offers a provenance row for `texture_sources/sources.csv` (source, tool, use) and reminds to rerun `python3 tools/texture_provenance.py --write`; the row is appended only on confirm.
+
 2743 PNGs under `development/**/textures` and `kubejs/assets/**/textures` (build output skipped).
 
 | Status | Count | Meaning |

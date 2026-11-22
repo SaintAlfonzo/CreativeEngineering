@@ -1,9 +1,103 @@
 # Texture Tools
 
-Stub (2026-11-22, P6 of [plan_texture_tools_gui.md](plan_texture_tools_gui.md)); P10 writes the full writeup. The app
-is `texturetools/` (core engines, CLI wrappers, Kivy GUI): `python3 -m texturetools.gui`.
+A standalone pixel-art texture toolbox for the owner and other developers: palette swap, layer combine, shape-keeping
+paint, a sprite editor and scale/upscale, as a Kivy GUI over headless engines, plus command-line wrappers with the old
+flags. Built 2026-11-22 per [plan_texture_tools_gui.md](plan_texture_tools_gui.md) (TODO `texture-tooling #1`; the swap
+engine fixes are `textures/food #10`). Run it with `python3 -m texturetools.gui`. Dev tool: no jar, no scratch queue,
+no changelog bullet. Review state: the owner checklists G1 to G3 below are pending.
 
-## Owner checklists
+## 1. Rulings (owner, 2026-11-21)
+
+| Id | Ruling |
+|---|---|
+| R1 | Top-level `texturetools/`, GPL-3.0-only (SPDX in every file), ships to other developers |
+| R2 | Packaged for Linux only (PyInstaller onedir, tarball); Windows and macOS not planned |
+| R3 | Palette swap has selectable mapping modes; the rank map stays the default and its output stays byte-identical |
+| R4 | The CLAUDE.md texture rule binds agents, not the tool: a user-driven editor is allowed. No agent draws, edits or regenerates a texture while building or testing it; tests use synthetic arrays and existing sprites read-only |
+
+## 2. Architecture
+
+```
+texturetools/
+  core/      numpy + Pillow only, no Kivy: image_io, colors, palette, swap, combine, paint, edit, scale, batch,
+             presets, undo, provenance
+  cli/       palette_swap, combine_tex, paint_tex, scale_tex, upscale_sprites: thin wrappers
+  gui/       Kivy app (app, registry, settings, worker, provenance_ui), screens/{swap,combine,paint,editor,scale,
+             settings,base,bulkui}, widgets/
+  tests/     headless tests (test_*.py) plus tests/legacy/ (frozen pre-move scripts)
+  packaging/ PyInstaller spec, build script, user README: see packaging/README.md (written by P9)
+textureswapper/{palette_swap,combine_tex,scale_tex,upscale_sprites}.py   shims
+```
+
+Principles: every function takes and returns arrays; a screen builds a params object and the live preview calls the
+same engine function the batch runs; nothing is written without Save or Run; output is raw RGBA PNG (no gAMA or sRGB
+chunk, no metadata); previews are nearest-neighbor with a 150 ms debounce on a worker thread; the editor and result
+screens share a snapshot undo stack (`core/undo.py`).
+
+- **Shims.** The four scripts in `textureswapper/` re-export `texturetools.cli.*` and keep the same command lines and
+  module names, so every `gen_*.py` that imports them still works (gen_jam_art.py output was byte-identical before and
+  after P0).
+- **Batch.** `core/batch.py` is the one job runner (dry run, overwrite skip/rename/replace, include/exclude globs,
+  recursion, name patterns, skip report, never writes outside the output folder, cartesian count). Job kinds (swap,
+  combine, paint, upscale) register on import.
+- **Dev-mode provenance.** A setting, off in shipped builds. After a Run, a popup offers a row for
+  [texture_sources/sources.csv](texture_sources/sources.csv) (source, tool, use) via `core/provenance.py`; the row is
+  appended only on confirm, then the popup reminds to run `python3 tools/texture_provenance.py --write`. See
+  [texture_sources.md](texture_sources.md).
+
+## 3. Screens
+
+All tool screens have a live preview, Run, preview-all grid (click to enlarge, untick to skip), presets (JSON), Open
+in Editor and Copy as CLI. Zoom 1x to 64x with hard pixels. The per-line behavior is in the checklists (section 7).
+
+| Screen | Controls |
+|---|---|
+| Palette Swap | source and palette from file, folder or a hand-built swatch strip; mapping mode (rank, even, role, nearest, ramp); interpolate off/smaller/always with amount and RGB/HSV/Lab space; invert; drop lightest/darkest N and classes; palette alpha threshold; palette and source (keep) exclusion lists with tolerance and eyedropper on the thumbnails; hue/saturation/value shift; preserve slider; contrast stretch; alpha source; ordered dither; bulk both directions with name pattern, globs, overwrite policy, dry run |
+| Combine | layer list (add, duplicate, remove, reorder, eye); blend mode (alpha, add, multiply, screen, overlay, subtract, min, max, paint); opacity; offset with nudge arrows and drag on the preview; edge clip/wrap/grow; anchor; nearest resize, LCM fit, trim; mask and invert; paint strength/inset/clip; canvas base/largest/fixed and background; varying slots with count and in-UI cartesian confirm; stack JSON export and import |
+| Painter | inplace and projected modes (stretch, contain, cover); offset, scale, tile, flip, rotate, inset; strength; outline shade/keep; mask and invert; paint-only and keep color lists with tolerance; material alpha; clip; bulk both directions |
+| Editor | canvas with grid, checkerboard, hover cursor; pencil, eraser, line, rectangle, ellipse, bucket with tolerance, global fill, picker (alt-click from any tool), rectangle select, wand, mirror draw; floating copy/cut/paste; flip, rotate, resize canvas, scale, shift, trim; undo and redo with a history strip; color panel (RGB/hex/HSV/alpha, nudge, suggest, harmonies, last 16, 32 saved slots, palette import and export, image palette strip); autosave and restore in the config folder |
+| Scale | single image (factor or target size, trim, canvas, anchor) and folder upscale (factors, recursive, flat) |
+| Settings | dev mode, project folder, recent folders |
+
+## 4. Command line
+
+Every wrapper runs as `python3 -m texturetools.cli.<name>`; `--help` is the reference. The old flags are unchanged.
+
+- `palette_swap`: `--invert --drop-lightest N --drop-darkest N --drop CLASS --interpolate --even --preview`; new:
+  `--mode {rank,even,role,nearest,ramp} --interp {off,smaller,always} --interp-amount --interp-space {rgb,hsv,lab}
+  --palette-alpha N --palette-exclude --palette-tol --keep-source --keep-tol --hue-shift --sat-shift --val-shift
+  --preserve --stretch --alpha {palette,source} --dither {none,ordered}`, plus the bulk flags.
+- `combine_tex`: `--batch --pattern --mode {alpha,add,multiply,paint} --center --lcm --mask --strength --inset --clip`;
+  new: more modes, bulk flags, inline `--stack` JSON.
+- `paint_tex`: `--mode {inplace,projected} --fit --offset-x/-y --scale --tile --flip-h/-v --rotate --inset --strength
+  --outline --mask --mask-invert --only --only-tol --keep --keep-tol --material-alpha --clip` and bulk
+  `--bulk --in-dir --out-dir --reverse --pattern --overwrite --include --exclude --recursive --dry-run`.
+- `scale_tex`: `--factor | --size, --trim, --canvas, --anchor {topleft,center}`.
+- `upscale_sprites`: `--factors N... --recursive --flat`.
+
+## 5. Tests
+
+Run by `tools/test_texturetools.sh` (every `texturetools/tests/test_*.py`, each must exit 0), wired into
+`tools/check_all.py` as check `test_texturetools`. Synthetic arrays only; the `textureswapper/` sprites are read only.
+
+| Id | File | Covers |
+|---|---|---|
+| T1 | test_parity.py | swap parity: legacy mode vs the frozen old script on every fixture, array-equal |
+| T2, T2b | test_parity.py | combine parity (alpha, add, multiply, paint, `--lcm`, `--center`, batch naming), shim parity |
+| T3 | test_batch.py | bulk never writes outside the output folder; skip report |
+| T4 | test_edit.py | undo/redo identity, bucket tolerance, global fill count, rotate x4, nudge in gamut |
+| T5 | test_colors.py | suggest differs by exactly the delta on one axis |
+| T6 | test_gui_smoke.py | every screen constructs under xvfb |
+| | test_swap_modes, test_combine_stack, test_paint, test_gui_swap_combine, test_gui_editor, test_gui_paint_scale | engine and GUI checks per phase |
+
+Gotchas are in [agent_notes/texturetools-gotchas.md](agent_notes/texturetools-gotchas.md).
+
+## 6. Packaging
+
+Linux onedir tarball: [texturetools/packaging/README.md](../texturetools/packaging/README.md). Shipped builds carry no
+pack art, generated textures or donor jars.
+
+## 7. Owner checklists
 
 Checked by the owner at a screen (no game, no scratch queue). Use your own sources and palettes; agents do not make
 textures. Mark each line with the date when it passes.
@@ -134,3 +228,18 @@ Every screen:
 - [ ] G3.12 Open in Editor from Palette Swap, Combine, Painter and Scale opens the current result in the editor as an
   unsaved document (from a bulk grid: the tile last clicked).
 - [ ] G3.13 With dev mode on, a Painter or Scale Run offers the provenance row like the other screens.
+
+## 8. Open items for the owner
+
+Defaults the plan did not specify or that were kept for byte-identical legacy output:
+
+- (a) Three legacy defaults kept instead of the plan's values: palette alpha threshold 1 (plan 255, opaque only); alpha
+  source `palette` (plan: keep source); the old `--interpolate` equals `always` (plan said `smaller`). Each is a knob;
+  say if the default should flip (the legacy output then changes and gen_*.py regenerate differently).
+- (b) The `role` mapping mode (hue family, then lightness rank) is a first design: review its output on the jam and pepper
+  cases before it is kept.
+- (c) Legacy Combine multiply and add ignore the overlay's alpha, so transparent overlay pixels turn black under
+  multiply. Kept for parity; shown in G1.10.
+- (d) `core/swap.py` and `core/palette.py` each carry their own Lab and HSV helpers; merge them into `core/colors.py`.
+- (e) `scale_tex.main` can call `core/scale.scale_pipeline` instead of its own path.
+- Not planned: Windows and macOS, animated textures, normal and specular maps, undo of bulk runs.
