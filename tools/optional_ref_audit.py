@@ -78,6 +78,9 @@ ALLOW = [
 	 "script data: an index of loot table ids from the dump; 05_tuning.js only edits tables that exist"),
 	("development/creativeDelight/src/main/resources/creativedelight/soil_yield.json",
 	 "soil_yield.js reads it; a crop whose base is missing is skipped with a warning (NaN row)"),
+	("development/creativeDelight/src/main/resources/solraspberrypie/diversity/",
+	 "Raspberry Pie's diversity table: Diversity skips every id not in the item registry with one INFO count "
+	 "(plan_rp_standalone.md A6, P3)"),
 	("kubejs/data/creativedelight/worldgen/",
 	 "splitWorldgen build source (dev only, never deployed, prep_srv.sh drops it); the build splits it into "
 	 "packs/worldgen/<mod>/ and fails on an unrouted namespace, and the split output is audited instead"),
