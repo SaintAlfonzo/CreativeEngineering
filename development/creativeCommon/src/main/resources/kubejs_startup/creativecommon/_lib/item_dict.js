@@ -12773,10 +12773,8 @@ i.tortilla_chip      = 'corn_delight:tortilla_chip';
 i.incomplete_chorus_flower_pie = 'create_central_kitchen:incomplete_chorus_flower_pie';
 i.incomplete_chorus_fruit_pie  = 'create_central_kitchen:incomplete_chorus_fruit_pie';
 
-// ===== creativedelight (3) =====
-i.canned_legendary_roll_medley = 'creativedelight:canned_legendary_roll_medley';
-i.canned_mythical_roll_medley  = 'creativedelight:canned_mythical_roll_medley';
-i.netherite_lunchbox           = 'creativedelight:netherite_lunchbox';  // registered by Creative Common lunchbox/
+// ===== creativedelight (1) =====
+i.netherite_lunchbox = 'creativedelight:netherite_lunchbox';  // registered by Creative Common lunchbox/
 
 // ===== ends_delight (47) =====
 i.assorted_salad                = 'ends_delight:assorted_salad';

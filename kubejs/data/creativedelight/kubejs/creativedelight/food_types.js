@@ -5,8 +5,6 @@
 if (global.CD) global.CD.genPut('food_types', 'creativedelight', {
  "types": {
   "raw/veggie": [
-   "canned_legendary_roll_medley",
-   "canned_mythical_roll_medley",
    "netherite_lunchbox"
   ],
   "raw/veggie/sliced": [
