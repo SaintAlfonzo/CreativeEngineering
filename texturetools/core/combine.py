@@ -6,7 +6,10 @@ combine_tex.py code, unchanged. P2 adds the layer stack: combine_stack folds any
 per-mode functions plus the new modes screen, overlay, subtract, min and max, with per-layer opacity, visibility,
 whole-pixel offset (clip, wrap, grow), nearest resize (factor or WxH), anchor, trim, LCM fit, mask and inverted mask,
 and a canvas (base, largest or fixed; transparent or a color). A two-layer stack equals the old output array for
-array (T2). Bulk runs go through core/batch.py: stack_jobs (one varying slot, or several for a cartesian run) and
+array (T2) when the overlay layer has legacy_blend set. Since 2026-11-22 (owner ruling R8) the stack's add and
+multiply respect the overlay's alpha (combine_add_alpha, combine_multiply_alpha: transparent overlay pixels leave the
+base unchanged); Layer.legacy_blend (CLI --legacy-blend) keeps the old functions, which ignore it. The function-level
+API (combine_add, combine_multiply, combine(), combine_dir()) keeps the legacy behavior by default. Bulk runs go through core/batch.py: stack_jobs (one varying slot, or several for a cartesian run) and
 the registered "combine" job kind; combine_dir is a thin caller of it with the old printed output.
 """
 
@@ -176,6 +179,25 @@ W3C_FNS = {
 }
 
 
+# add and multiply that respect the overlay's alpha (owner ruling R8): the W3C separable form, so a transparent
+# overlay pixel leaves the base unchanged and a transparent base shows the overlay's own color. With both layers
+# opaque they equal combine_add / combine_multiply.
+ALPHA_FNS = {
+	"add": lambda cb, cs: cb + cs,
+	"multiply": lambda cb, cs: cb * cs,
+}
+
+
+def combine_add_alpha(base_arr, overlay_arr):
+	"""Additive blend weighted by the overlay's alpha (the stack's add since 2026-11-22)."""
+	return _w3c_blend(base_arr, overlay_arr, ALPHA_FNS["add"])
+
+
+def combine_multiply_alpha(base_arr, overlay_arr):
+	"""Multiplicative blend weighted by the overlay's alpha (the stack's multiply since 2026-11-22)."""
+	return _w3c_blend(base_arr, overlay_arr, ALPHA_FNS["multiply"])
+
+
 def combine_screen(base_arr, overlay_arr):
 	return _w3c_blend(base_arr, overlay_arr, W3C_FNS["screen"])
 
@@ -208,13 +230,14 @@ BLEND_MODES.update({
 NEW_MODES = ("screen", "overlay", "subtract", "min", "max")
 
 
-def combine(mode, base_arr, overlay_arr, paint_opts=None):
+def combine(mode, base_arr, overlay_arr, paint_opts=None, legacy_blend=True):
 	"""Run one mode on two same-size arrays; paint_opts = dict(mask=path, strength=, inset=, clip=) for paint.
-	A two-layer combine_stack (same output as before P2)."""
+	A two-layer combine_stack (same output as before P2). legacy_blend True (default, the old function) keeps add
+	and multiply ignoring the overlay's alpha; False uses the alpha-aware ones."""
 	o = dict(paint_opts or {}) if mode == "paint" else {}
 	return combine_stack([Layer(base_arr), Layer(overlay_arr, mode=mode, mask=o.get("mask"),
 												 strength=o.get("strength", 1.0), inset=o.get("inset", 0),
-												 clip=o.get("clip", False))])
+												 clip=o.get("clip", False), legacy_blend=legacy_blend)])
 
 
 # ---------------------------------------------------------------- the layer stack (P2)
@@ -243,7 +266,8 @@ class Layer:
 	scale (whole factor) or size (w, h): nearest resize, after trim. anchor: ANCHORS key (where the layer sits
 	when its size differs from the canvas). mask: path, bool array or None; canvas-sized, or layer-sized (moves with
 	the layer); paint mode keeps the old rule (base-sized path, default the base's opaque pixels). mask_invert
-	flips it. strength, inset, clip: paint options (old --strength, --inset, --clip)."""
+	flips it. strength, inset, clip: paint options (old --strength, --inset, --clip). legacy_blend: add and multiply
+	ignore the overlay's alpha (the pre-2026-11-22 output, CLI --legacy-blend); default False respects it."""
 	image: Any = None
 	mode: str = "alpha"
 	opacity: float = 1.0
@@ -260,6 +284,7 @@ class Layer:
 	inset: int = 0
 	clip: bool = False
 	name: str = ""
+	legacy_blend: bool = False
 
 	def with_image(self, image):
 		d = {f.name: getattr(self, f.name) for f in dc_fields(self)}
@@ -506,6 +531,8 @@ def _fold(acc, placed, layer, size, arr, rect):
 			out = combine_alpha(acc, p)
 	elif mode in W3C_FNS:
 		out = _w3c_blend(acc, placed, W3C_FNS[mode], op)
+	elif mode in ALPHA_FNS and not layer.legacy_blend:
+		out = _w3c_blend(acc, placed, ALPHA_FNS[mode], op)
 	else:
 		out = BLEND_MODES[mode](acc, placed)
 		if op < 1:
@@ -598,11 +625,12 @@ def count_stack_jobs(vary, include=None, exclude=None, recursive=False):
 
 
 def combine_dir(base, overlay_dir, output_dir, pattern="{name}.png", mode="alpha", center=False, lcm=False,
-				paint_opts=None, dry_run=False, overwrite="replace", include=None, exclude=None, layer_opts=None):
+				paint_opts=None, dry_run=False, overwrite="replace", include=None, exclude=None, layer_opts=None,
+				legacy_blend=True):
 	"""Combine base with every image in overlay_dir, saving each result to output_dir under
 	pattern.format(name=, ext=, base=). Returns the number of files written (dry run: the number it would write).
 	The old batch, run through batch.run_batch with the old printed output; dry_run, overwrite, include, exclude
-	and layer_opts (extra Layer fields for the overlay, e.g. opacity) are P2 additions."""
+	and layer_opts (extra Layer fields for the overlay, e.g. opacity) are P2 additions. legacy_blend as in combine()."""
 	base_arr = load_rgba_array(base)
 	base_stem = os.path.splitext(os.path.basename(base))[0]
 	o = dict(paint_opts or {}) if mode == "paint" else {}
@@ -621,7 +649,7 @@ def combine_dir(base, overlay_dir, output_dir, pattern="{name}.png", mode="alpha
 		if fitted is None:
 			raise batch.Skip("{0} is {1}, base is {2}".format(src, overlay_arr.shape[:2][::-1], base_arr.shape[:2][::-1]))
 		top = Layer(fitted, mode=mode, mask=o.get("mask"), strength=o.get("strength", 1.0), inset=o.get("inset", 0),
-					clip=o.get("clip", False), **extra)
+					clip=o.get("clip", False), legacy_blend=extra.pop("legacy_blend", legacy_blend), **extra)
 		return (lambda: combine_stack([Layer(pair_base), top])), info
 
 	jobs = []

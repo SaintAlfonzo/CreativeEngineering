@@ -366,8 +366,11 @@ def child():
 		exp = swap_image(img["src_arr"], pal_u8, swap_mod.options_from_params(scr.params))
 		check(np.array_equal(scr.preview.array, exp), "swap: worker preview after a params change equals the engine")
 		check(scr.preview._tex.mag_filter == "nearest", "swap: preview nearest filter")
-		check(len(scr.exclude_list.colors) == 16 and len(scr.keep_list.colors) > 3, "swap: swatch lists filled ({0}, {1})"
-			.format(len(scr.exclude_list.colors), len(scr.keep_list.colors)))
+		from texturetools.core.palette import extract_palette
+		n_pal = len(extract_palette(pal_u8, alpha_min=int(scr.params["palette_alpha"]))[0])   # opaque only by default
+		check(len(scr.exclude_list.colors) == n_pal and len(scr.keep_list.colors) > 3,
+			"swap: swatch lists filled ({0} of {1}, {2})".format(len(scr.exclude_list.colors), n_pal,
+			len(scr.keep_list.colors)))
 		scr.update_params(dict((k, swap_mod.default_params()[k]) for k in v))
 
 		# --- eyedropper and swatch list
@@ -524,6 +527,20 @@ def child():
 		check(got.get("layers") is not None and norm_layers(got["layers"]) == norm_layers(lay)
 			and got["opts"] == opts, "combine cli: flag form re-parses to the same stack ({0})".format(
 				got.get("opts")))
+		# add / multiply respect alpha by default (owner ruling R8); the layer toggle keeps the old blend
+		for legacy in (False, True):
+			twom = [L("base", image=img["src"]), L("top", image=img["over"], mode="multiply", legacy_blend=legacy)]
+			pm = dict(cs.params, layers=twom, output=os.path.join(work, "cm.png"))
+			argv = comb_mod.cli_argv(pm)
+			got = parse_combine_cli(argv)
+			lay, _, _ = comb_mod.build_stack(pm)
+			check(("--legacy-blend" in argv) == legacy and got.get("layers") is not None
+				and norm_layers(got["layers"]) == norm_layers(lay),
+				"combine cli: legacy_blend={0} round trips through the flag form".format(legacy))
+		check(L("x")["legacy_blend"] is False, "combine: a new layer respects alpha (legacy_blend off)")
+		sd = swap_mod.default_params()
+		check((sd["palette_alpha"], sd["alpha"], sd["interpolate"]) == (255, "source", "smaller"),
+			"swap: GUI defaults follow the engine (255, source, smaller)")
 		p3 = dict(cs.params, output=os.path.join(work, "c3.png"))
 		argv = comb_mod.cli_argv(p3)
 		check("--stack" in argv, "combine cli: three layers use the inline stack form")

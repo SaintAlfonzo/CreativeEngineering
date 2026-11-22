@@ -196,6 +196,8 @@ def cli_argv(params, python="python3"):
 			argv += ["--inset", str(int(top.inset))]
 		if top.clip:
 			argv.append("--clip")
+		if top.legacy_blend and top.mode in ("add", "multiply"):
+			argv.append("--legacy-blend")
 		if bulk:
 			argv.append("--batch")
 		return argv + bulk_flags
@@ -288,6 +290,8 @@ class CombineScreen(BulkPreviewMixin, ToolScreen):
 		self._lctl(NumberControl("strength", "Paint strength", 1.0, 0.0, 1.0, 0.05, self._layer_change))
 		self._lctl(NumberControl("inset", "Paint inset", 0, 0, 16, 1, self._layer_change))
 		self._lctl(ToggleControl("clip", "Paint clip", False, self._layer_change))
+		# add / multiply respect the overlay's alpha (owner ruling R8); this keeps the old blend
+		self._lctl(ToggleControl("legacy_blend", "Ignore alpha (legacy)", False, self._layer_change))
 
 		self.add_heading("Canvas")
 		self.add_choice("canvas", "Canvas", ["base", "largest", "fixed"])
@@ -369,7 +373,8 @@ class CombineScreen(BulkPreviewMixin, ToolScreen):
 				"offset_y": off[1], "offset_mode": d.get("offset_mode", "clip"), "anchor": d.get("anchor", "top_left"),
 				"resize": d.get("resize", "none"), "scale": d.get("scale") or 1, "size_w": size[0], "size_h": size[1],
 				"trim": d.get("trim", False), "mask_invert": d.get("mask_invert", False),
-				"strength": d.get("strength", 1.0), "inset": d.get("inset", 0), "clip": d.get("clip", False)}
+				"strength": d.get("strength", 1.0), "inset": d.get("inset", 0), "clip": d.get("clip", False),
+				"legacy_blend": d.get("legacy_blend", False)}
 			for k, v in vals.items():
 				self.lc[k].set_value(v)
 			resize = vals["resize"]
@@ -378,6 +383,7 @@ class CombineScreen(BulkPreviewMixin, ToolScreen):
 			paint = d.get("mode") == "paint"
 			for k in ("strength", "inset", "clip"):
 				self.lc[k].disabled = not paint
+			self.lc["legacy_blend"].disabled = d.get("mode") not in ("add", "multiply")
 		finally:
 			self._loading = False
 

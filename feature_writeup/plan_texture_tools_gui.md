@@ -20,6 +20,15 @@ rank map stays the default). TODO rows: `textures/food #10` (swap engine) plus n
 | R2 | Packaged for Linux only (PyInstaller onedir, tarball; AppImage optional). Windows and macOS later, not planned |
 | R3 | Palette swap gets selectable mapping modes; the current rank map stays the default and its output stays byte-identical |
 | R4 | The texture rule in CLAUDE.md binds agents, not the tool: the tool is the owner's, so a user-driven editor is allowed. No agent draws, edits or regenerates a texture while building or testing it; tests use synthetic arrays and existing sprites read-only |
+| R5 | Swap palette alpha threshold default 255 (only fully opaque palette pixels count); was 1 (owner, 2026-11-22) |
+| R6 | Swap alpha source default: keep the source alpha; was palette (owner, 2026-11-22) |
+| R7 | Swap interpolation default `smaller` (only when the palette is smaller); the old `--interpolate` keeps meaning `always` (owner, 2026-11-22) |
+| R8 | Combine add and multiply respect the overlay's alpha by default (transparent overlay pixels leave the base unchanged) in the engine, the stack, the CLI and the GUI (owner, 2026-11-22) |
+
+R5 to R8 switch away from the byte-identical legacy defaults of R3 (the rank map stays the default mode). The old output
+stays reachable: swap `--legacy` or `--palette-alpha 1 --alpha palette --interp off` (`SwapOptions.legacy()`), combine
+`--legacy-blend` (`Layer.legacy_blend`). The function-level API (`palette_swap()`, `combine_add`, `combine_multiply`,
+`combine()`, `combine_dir()`) keeps the legacy behavior, so gen_*.py outputs do not change.
 
 ## 2. Architecture
 

@@ -137,18 +137,18 @@ Image.fromarray(image([(v, v, v, 255) for v in (10, 14, 18, 22, 250)]), 'RGBA').
 Image.fromarray(pal_img, 'RGBA').save(pal_p)
 script = os.path.join('textureswapper', 'palette_swap.py')
 ok = True
-for flags, ref in (([], ps.palette_swap), (['--even'], None), (['--interpolate'], None), (['--even', '--invert'], None)):
+for flags, ref in ((['--legacy'], ps.palette_swap), (['--even'], None), (['--interpolate'], None), (['--even', '--invert'], None)):
 	out_p = os.path.join(T, 'out_%s.png' % '_'.join(f.strip('-') for f in flags))
 	r = subprocess.run([sys.executable, script, src_p, pal_p, out_p] + flags, capture_output=True, text=True)
 	if r.returncode or not os.path.exists(out_p):
 		ok = False
 		print(r.stderr[-400:])
 		continue
-	if not flags:
+	if flags == ['--legacy']:  # the pre-2026-11-22 defaults (plain runs use the new ones)
 		_, p, = ps.load_palette_colors(pal_p, False)
 		ok = ok and np.array_equal(np.array(Image.open(out_p).convert('RGBA')),
 								   legacy(np.array(Image.open(src_p).convert('RGBA')), p))
-check('5a CLI single runs (plain output equals the legacy map)', ok)
+check('5a CLI single runs (--legacy output equals the legacy map)', ok)
 bulk = os.path.join(T, 'bulk')
 os.makedirs(os.path.join(bulk, 'in'))
 Image.fromarray(pal_img, 'RGBA').save(os.path.join(bulk, 'in', 'pepper.png'))

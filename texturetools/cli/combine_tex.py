@@ -67,6 +67,13 @@ Paint-mode options (ignored by the other modes):
                 (aspect ratios that don't match) is an error/skip, since that
                 would stretch it. Done before --center.
 
+Blending with alpha (2026-11-22, owner ruling R8): --mode add and multiply respect the overlay's alpha
+(a transparent overlay pixel leaves the base unchanged; where the base is transparent the overlay's own color shows).
+    --legacy-blend
+                The pre-2026-11-22 add and multiply, which ignore the overlay's alpha (a transparent overlay pixel
+                still adds or multiplies its color). Works with every form; in a stack JSON it is the layer key
+                "legacy_blend": true.
+
 Layer stack and bulk options (P2, plan_texture_tools_gui.md section 4). Any of these switches to the extended
 parser; without them the old parser and output are unchanged:
     --mode screen|overlay|subtract|min|max
@@ -196,7 +203,12 @@ def _build_parser(extended):
 	return parser
 
 
+LEGACY_BLEND = "--legacy-blend"
+
+
 def _add_ext_args(parser):
+	parser.add_argument(LEGACY_BLEND, action="store_true",
+						help="add and multiply ignore the overlay's alpha (the pre-2026-11-22 output)")
 	parser.add_argument("--opacity", type=float, default=1.0, help="Overlay opacity 0..1 (default 1)")
 	parser.add_argument("--offset", default="0,0", help="Overlay offset X,Y in whole pixels")
 	parser.add_argument("--offset-mode", choices=OFFSET_MODES, default="clip", help="clip, wrap or grow (default clip)")
@@ -325,7 +337,7 @@ def ext_main(argv):
 
 	def top(image):
 		return Layer(image, mode=args.mode, mask=args.mask if paint else None, strength=args.strength,
-					 inset=args.inset, clip=args.clip, anchor=anchor, **layer_opts)
+					 inset=args.inset, clip=args.clip, anchor=anchor, legacy_blend=args.legacy_blend, **layer_opts)
 
 	if args.batch:
 		if not os.path.isdir(args.overlay):
@@ -372,6 +384,9 @@ def main(argv=None):
 		return stack_main(argv)
 	if _extended(argv):
 		return ext_main(argv)
+	# the old parser stays byte-identical (usage and errors); --legacy-blend is taken out before it parses
+	legacy_blend = LEGACY_BLEND in argv
+	argv = [a for a in argv if a != LEGACY_BLEND]
 	parser = _build_parser(False)
 	args = parser.parse_args(argv)
 	paint_opts = dict(mask=args.mask, strength=args.strength, inset=args.inset, clip=args.clip)
@@ -383,7 +398,8 @@ def main(argv=None):
 		if not os.path.isdir(args.overlay):
 			sys.stderr.write("Error: overlay directory not found: {0}\n".format(args.overlay))
 			sys.exit(1)
-		combine_dir(args.base, args.overlay, args.output, args.pattern, args.mode, args.center, args.lcm, paint_opts)
+		combine_dir(args.base, args.overlay, args.output, args.pattern, args.mode, args.center, args.lcm, paint_opts,
+					legacy_blend=legacy_blend)
 		return
 
 	if not os.path.exists(args.overlay):
@@ -412,7 +428,7 @@ def main(argv=None):
 		sys.exit(1)
 
 	try:
-		save_raw(combine(args.mode, base_arr, fitted, paint_opts), args.output)
+		save_raw(combine(args.mode, base_arr, fitted, paint_opts, legacy_blend), args.output)
 	except ValueError as e:
 		sys.stderr.write("Error: {0}\n".format(e))
 		sys.exit(1)

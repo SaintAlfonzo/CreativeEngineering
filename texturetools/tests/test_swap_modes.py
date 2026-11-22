@@ -1,11 +1,13 @@
 # SPDX-License-Identifier: GPL-3.0-only
 """Swap engine modes and knobs (plan_texture_tools_gui.md section 3, P1).
 
-S1 default SwapOptions (and mode even, interpolate always) equal the frozen legacy palette_swap on every fixture
+S1 SwapOptions.legacy() (and mode even, interpolate always) equal the frozen legacy palette_swap on every fixture
 S2 extract_palette defaults equal load_palette_colors; alpha threshold, exclusion with tolerance, HSV shift
 S3 per-mode properties: rank, even, role, nearest, ramp; interpolate off / smaller / always, amount, spaces
 S4 knobs: source keep, preserve, alpha source, stretch, dither; transparent pixels untouched in every mode
 S5 CLI: new flags run, --mode even == --even byte for byte, cli_args round trip, bad values exit 1
+S6 the 2026-11-22 defaults (owner rulings R5 to R7): palette alpha 255, source alpha kept, interpolate smaller; the
+   legacy options and the CLI's --legacy reach the old output; a stored preset keeps its values
 
 Synthetic arrays (seeded) plus the top-level textureswapper/*.png sprites read only; outputs in a temp dir.
 Usage: python3 texturetools/tests/test_swap_modes.py [-v]
@@ -120,7 +122,7 @@ def s1_s2(srcs, pals, tmp):
 			check('S2 extract', lp == ep and lc == ec, 'extract_palette == load_palette_colors %s %s' % (pname, invert))
 			for sname, sarr in srcs.items():
 				for mode, interp in (('rank', 'off'), ('even', 'off'), ('rank', 'always'), ('even', 'always')):
-					o = SwapOptions(mode=mode, interpolate=interp, invert=invert, drops=drops, drop_darkest=dd,
+					o = SwapOptions.legacy(mode=mode, interpolate=interp, invert=invert, drops=drops, drop_darkest=dd,
 									drop_lightest=dl)
 					x = outcome(old.palette_swap, sarr, lp, interp == 'always', mode == 'even', lc)
 					y = outcome(S.swap_image, sarr, parr, o)
@@ -166,51 +168,51 @@ def s3(srcs, pals):
 		for pname, parr in pals.items():
 			pal_colors = set(P.extract_palette(parr)[0])
 			for mode in modes:
-				o = SwapOptions(mode=mode)
+				o = SwapOptions.legacy(mode=mode)
 				out = S.swap_image(sarr, parr, o)
 				tr = sarr[:, :, 3] == 0
 				check('S3 base', np.array_equal(out[tr], sarr[tr]), 'transparent untouched %s %s %s' % (mode, sname, pname))
 				check('S3 base', colors_of(out) <= pal_colors, 'off: only palette colors %s %s %s' % (mode, sname, pname))
 				# smaller: blends only when the palette has fewer colors than the source
 				n_src = len(colors_of(sarr))
-				sm = S.swap_image(sarr, parr, SwapOptions(mode=mode, interpolate='smaller'))
+				sm = S.swap_image(sarr, parr, SwapOptions.legacy(mode=mode, interpolate='smaller'))
 				ref = 'always' if 1 < len(pal_colors) < n_src else 'off'
 				if mode != 'role' and (mode in ('rank', 'even') or ref == 'off'):   # role: per family pair
-					rr = S.swap_image(sarr, parr, SwapOptions(mode=mode if mode != 'rank' or ref == 'off' else 'even',
+					rr = S.swap_image(sarr, parr, SwapOptions.legacy(mode=mode if mode != 'rank' or ref == 'off' else 'even',
 															   interpolate=ref) if mode in ('rank', 'even') else
-									  SwapOptions(mode=mode))
+									  SwapOptions.legacy(mode=mode))
 					check('S3 smaller', np.array_equal(sm, rr), 'smaller == %s %s %s %s' % (ref, mode, sname, pname))
 				for space in S.SPACES:
-					a0 = S.swap_image(sarr, parr, SwapOptions(mode=mode, interpolate='always', interp_amount=0,
+					a0 = S.swap_image(sarr, parr, SwapOptions.legacy(mode=mode, interpolate='always', interp_amount=0,
 															   interp_space=space))
-					off = S.swap_image(sarr, parr, SwapOptions(mode=mode, interpolate='off'))
+					off = S.swap_image(sarr, parr, SwapOptions.legacy(mode=mode, interpolate='off'))
 					if mode in ('rank',):
-						off = S.swap_image(sarr, parr, SwapOptions(mode='even'))   # interpolate implies even ranks
+						off = S.swap_image(sarr, parr, SwapOptions.legacy(mode='even'))   # interpolate implies even ranks
 					check('S3 amount', np.array_equal(a0, off), 'amount 0 == pick %s %s %s %s' % (mode, space, sname, pname))
 	# even: a 3-level source on a 9-color monotonic gray palette takes the first, middle and last runs
 	grays = [(v, v, v) for v in range(20, 255, 28)]
 	pal = np.array([[g + (255,) for g in grays]], np.uint8)
 	src = np.array([[(10, 10, 10, 255), (100, 100, 100, 255), (101, 101, 101, 255)]], np.uint8)
-	ev = S.swap_image(src, pal, SwapOptions(mode='even'))
+	ev = S.swap_image(src, pal, SwapOptions.legacy(mode='even'))
 	check('S3 even', [tuple(p) for p in ev[0, :, :3]] == [grays[0], grays[4], grays[8]], 'even spreads 3 levels %s'
 		  % ([tuple(p) for p in ev[0]],))
-	rk = S.swap_image(src, pal, SwapOptions())
+	rk = S.swap_image(src, pal, SwapOptions.legacy())
 	check('S3 rank', [tuple(p) for p in rk[0, :, :3]] == [grays[0], grays[8], grays[8]], 'rank bunches by value')
 	# nearest: a palette holding the source colors exactly returns the source
 	rng = np.random.default_rng(5)
 	s = sprite(rng, rand_colors(rng, 6), partial=0)
-	near = S.swap_image(s, s, SwapOptions(mode='nearest'))
+	near = S.swap_image(s, s, SwapOptions.legacy(mode='nearest'))
 	check('S3 nearest', np.array_equal(near, s), 'nearest onto itself is identity')
 	# ramp: output lightness follows source lightness (non-decreasing), invert reverses it
 	shuffled = [grays[i] for i in (4, 0, 7, 2, 8, 1, 5, 3, 6)]
 	pal_s = np.array([[g + (255,) for g in shuffled]], np.uint8)
 	src8 = srcs['ramp8']
 	for inv in (False, True):
-		out = S.swap_image(src8, pal_s, SwapOptions(mode='ramp', stretch=True, invert=inv))
+		out = S.swap_image(src8, pal_s, SwapOptions.legacy(mode='ramp', stretch=True, invert=inv))
 		ls = [lum(tuple(out[i * 2, 0])) for i in range(8)]
 		mono = all(b >= a - 1e-6 for a, b in zip(ls, ls[1:])) if not inv else all(b <= a + 1e-6 for a, b in zip(ls, ls[1:]))
 		check('S3 ramp', mono and abs(ls[0] - ls[-1]) > 50, 'ramp monotonic invert=%s %s' % (inv, [round(v) for v in ls]))
-	blend = S.swap_image(src8, pal_s[:, :3], SwapOptions(mode='ramp', stretch=True, interpolate='always',
+	blend = S.swap_image(src8, pal_s[:, :3], SwapOptions.legacy(mode='ramp', stretch=True, interpolate='always',
 														   interp_space='lab'))
 	check('S3 ramp', len(colors_of(blend)) == 8, 'ramp blend gives 8 shades from 3 palette colors')
 	# role: gray body + red accent onto gray + blue palette -> body on grays, accent on blues
@@ -220,14 +222,14 @@ def s3(srcs, pals):
 	pgrays = [(40, 40, 45), (90, 90, 95), (140, 140, 145), (200, 200, 205)]
 	pblues = [(20, 30, 140), (40, 60, 200), (90, 120, 240)]
 	ppal = np.array([[c + (255,) for c in pgrays + pblues]], np.uint8)
-	ro = S.swap_image(src, ppal, SwapOptions(mode='role'))
+	ro = S.swap_image(src, ppal, SwapOptions.legacy(mode='role'))
 	got = [tuple(int(v) for v in p[:3]) for p in ro[0, :5]]
 	check('S3 role', all(g in pgrays for g in got[:3]) and all(g in pblues for g in got[3:]),
 		  'role body->grays accent->blues %s' % (got,))
 	check('S3 role', got[0] != got[2] and got[3] != got[4], 'role keeps lightness order inside families')
 	one = sprite(np.random.default_rng(3), [(120, 30, 30), (160, 40, 40), (200, 60, 60)], partial=0)
-	check('S3 role', np.array_equal(S.swap_image(one, ppal, SwapOptions(mode='role')),
-									S.swap_image(one, ppal, SwapOptions(mode='even'))), 'one-family source == even')
+	check('S3 role', np.array_equal(S.swap_image(one, ppal, SwapOptions.legacy(mode='role')),
+									S.swap_image(one, ppal, SwapOptions.legacy(mode='even'))), 'one-family source == even')
 	fams = S.hue_families([(200, 0, 0, 255), (0, 200, 0, 255), (0, 0, 200, 255), (128, 128, 128, 255)])
 	check('S3 role', [f[0] for f in fams] == ['gray', 'hue', 'hue', 'hue'], 'hue_families split at gaps')
 	# lab round trip
@@ -243,22 +245,22 @@ def s3(srcs, pals):
 
 def s4(srcs, pals):
 	sarr, parr = srcs['rand12'], pals['p4']
-	base = S.swap_image(sarr, parr)
+	base = S.swap_image(sarr, parr, SwapOptions.legacy())
 	keep = sorted(colors_of(sarr))[:2]
-	ko = S.swap_image(sarr, parr, SwapOptions(source_keep=[c[:3] for c in keep]))
+	ko = S.swap_image(sarr, parr, SwapOptions.legacy(source_keep=[c[:3] for c in keep]))
 	km = P.color_match_mask(sarr, [c[:3] for c in keep], 0) & (sarr[:, :, 3] > 0)
 	check('S4 keep', km.any() and np.array_equal(ko[km], sarr[km]), 'kept colors untouched')
 	check('S4 keep', not np.array_equal(ko[~km & (sarr[:, :, 3] > 0)], sarr[~km & (sarr[:, :, 3] > 0)]),
 		  'others recolored')
-	kt = S.swap_image(sarr, parr, SwapOptions(source_keep=['#000000'], source_keep_tol=255))
+	kt = S.swap_image(sarr, parr, SwapOptions.legacy(source_keep=['#000000'], source_keep_tol=255))
 	check('S4 keep', np.array_equal(kt, sarr) or not (sarr[:, :, 3] > 0).any(), 'keep tol 255 keeps everything')
 	op = sarr[:, :, 3] > 0
-	p1 = S.swap_image(sarr, parr, SwapOptions(preserve=1.0))
+	p1 = S.swap_image(sarr, parr, SwapOptions.legacy(preserve=1.0))
 	check('S4 preserve', np.array_equal(p1[op, :3], sarr[op, :3]), 'preserve 1 = source RGB')
-	ph = S.swap_image(sarr, parr, SwapOptions(preserve=0.5))
+	ph = S.swap_image(sarr, parr, SwapOptions.legacy(preserve=0.5))
 	mid = np.round((base[op, :3].astype(float) + sarr[op, :3]) / 2)
 	check('S4 preserve', np.abs(ph[op, :3] - mid).max() <= 1, 'preserve 0.5 = midpoint')
-	al = S.swap_image(sarr, parr, SwapOptions(alpha='source'))
+	al = S.swap_image(sarr, parr, SwapOptions.legacy(alpha='source'))
 	check('S4 alpha', np.array_equal(al[:, :, 3], sarr[:, :, 3]) and np.array_equal(al[:, :, :3], base[:, :, :3]),
 		  'alpha source keeps source alpha')
 	check('S4 alpha', not np.array_equal(base[:, :, 3], sarr[:, :, 3]), 'alpha palette (legacy) takes palette alpha')
@@ -266,8 +268,8 @@ def s4(srcs, pals):
 	grays = np.array([[(v, v, v, 255) for v in range(0, 256, 32)]], np.uint8)
 	dark = np.array([[(v, v, v, 255) for v in (20, 30, 40, 50)]], np.uint8)
 	for mode in ('nearest', 'ramp'):
-		ns = S.swap_image(dark, grays, SwapOptions(mode=mode))
-		ys = S.swap_image(dark, grays, SwapOptions(mode=mode, stretch=True))
+		ns = S.swap_image(dark, grays, SwapOptions.legacy(mode=mode))
+		ys = S.swap_image(dark, grays, SwapOptions.legacy(mode=mode, stretch=True))
 		check('S4 stretch', ns[0, :, 0].max() <= 64 and ys[0, 0, 0] == 0 and ys[0, -1, 0] >= 224,
 			  'stretch %s %s -> %s' % (mode, ns[0, :, 0].tolist(), ys[0, :, 0].tolist()))
 	# dither: 8 levels onto 2 colors; outputs only palette colors, the middle levels mix both
@@ -277,20 +279,20 @@ def s4(srcs, pals):
 		src[:, i * 4:i * 4 + 4, :3] = 20 + i * 30
 	src[:, :, 3] = 255
 	for mode in ('rank', 'even', 'ramp'):
-		d = S.swap_image(src, two, SwapOptions(mode=mode, dither='ordered', stretch=True))
+		d = S.swap_image(src, two, SwapOptions.legacy(mode=mode, dither='ordered', stretch=True))
 		cols = colors_of(d)
 		mixed = sum(1 for i in range(8) if len(colors_of(d[:, i * 4:i * 4 + 4])) == 2)
 		check('S4 dither', cols <= {(0, 0, 0, 255), (255, 255, 255, 255)} and mixed >= 4,
 			  'dither %s: palette only, %d of 8 columns mixed' % (mode, mixed))
 	big = pals['p20']
-	check('S4 dither', np.array_equal(S.swap_image(sarr, big, SwapOptions(dither='ordered')),
-									  S.swap_image(sarr, big)), 'dither ignored for a larger palette')
+	check('S4 dither', np.array_equal(S.swap_image(sarr, big, SwapOptions.legacy(dither='ordered')),
+									  S.swap_image(sarr, big, SwapOptions.legacy())), 'dither ignored for a larger palette')
 	# every mode with every knob at once runs on every fixture
 	n = 0
 	for sname, s in srcs.items():
 		for pname, p in pals.items():
 			for mode in S.MODES:
-				o = SwapOptions(mode=mode, interpolate='always', interp_space='lab', interp_amount=0.7, preserve=0.2,
+				o = SwapOptions.legacy(mode=mode, interpolate='always', interp_space='lab', interp_amount=0.7, preserve=0.2,
 								palette_alpha=255, hue_shift=30, sat_shift=0.1, val_shift=-0.1, stretch=True,
 								alpha='source', dither='ordered', source_keep=['#000000'], source_keep_tol=20,
 								palette_exclude=['#ffffff'], palette_exclude_tol=10, invert=True)
@@ -298,10 +300,10 @@ def s4(srcs, pals):
 				n += 1
 				check('S4 all', r[1] is None or 'no opaque' in r[1], 'all knobs %s %s %s %s' % (mode, sname, pname, r[1]))
 	check('S4 all', n > 0, 'ran %d all-knob swaps' % n)
-	err = outcome(S.swap_image, srcs['rand3'], pals['p4'], SwapOptions(mode='bogus'))
+	err = outcome(S.swap_image, srcs['rand3'], pals['p4'], SwapOptions.legacy(mode='bogus'))
 	check('S4 validate', err[1] is not None and 'mode' in err[1], 'unknown mode rejected')
-	rt = SwapOptions.from_dict(dict(SwapOptions(mode='role', preserve=0.3).to_dict(), junk=1))
-	check('S4 dict', rt == SwapOptions(mode='role', preserve=0.3), 'to_dict / from_dict round trip')
+	rt = SwapOptions.from_dict(dict(SwapOptions.legacy(mode='role', preserve=0.3).to_dict(), junk=1))
+	check('S4 dict', rt == SwapOptions.legacy(mode='role', preserve=0.3), 'to_dict / from_dict round trip')
 
 
 # ---------------------------------------------------------------- S5 CLI
@@ -376,6 +378,65 @@ def s5(srcs, pals, tmp):
 	check('S5 file', not outside, 'nothing written into the repo root')
 
 
+def s6(tmp):
+	old = legacy()
+	d, lg = SwapOptions(), SwapOptions.legacy()
+	check('S6 defaults', (d.palette_alpha, d.alpha, d.interpolate) == (255, 'source', 'smaller'), 'new defaults')
+	check('S6 defaults', (lg.palette_alpha, lg.alpha, lg.interpolate) == (1, 'palette', 'off'), 'legacy() values')
+	check('S6 defaults', lg.is_legacy() and not d.is_legacy(), 'is_legacy: legacy() yes, defaults no')
+	check('S6 defaults', SwapOptions.legacy(mode='even', interpolate='always').mode == 'even', 'legacy() overrides')
+	# a 2x4 gray ramp source, every pixel opaque except one at alpha 100
+	src = np.zeros((2, 4, 4), np.uint8)
+	for i, v in enumerate((20, 60, 100, 140, 180, 200, 220, 240)):
+		src[i // 4, i % 4] = (v, v, v, 255)
+	src[1, 3, 3] = 100
+	# palette: dark and light opaque, one bright red at alpha 128 (counted only with palette alpha 1)
+	pal = np.array([[(10, 10, 10, 255), (250, 250, 250, 255), (255, 0, 0, 128)]], np.uint8)
+	new = S.swap_image(src, pal, d)
+	cols = set(map(tuple, new.reshape(-1, 4)[:, :3].tolist()))
+	check('S6 palette alpha', (255, 0, 0) not in cols, 'semi-transparent palette color unused by default')
+	leg = S.swap_image(src, pal, lg)
+	check('S6 palette alpha', (255, 0, 0) in set(map(tuple, leg.reshape(-1, 4)[:, :3].tolist())),
+		  'legacy palette alpha 1 uses it (fixture premise)')
+	check('S6 alpha', new[1, 3, 3] == 100 and (new[:, :, 3] == src[:, :, 3]).all(), 'source alpha kept by default')
+	check('S6 alpha', leg[1, 3, 3] != 100, 'legacy alpha from the palette (fixture premise)')
+	# interpolate smaller: an opaque source with more levels than the palette blends (= legacy --interpolate)
+	opq = src.copy()
+	opq[:, :, 3] = 255
+	two = pal[:, :2].copy()
+	pc = [tuple(c) for c in reversed(old.get_colors_by_brightness(two))]
+	blended = S.swap_image(opq, two, d)
+	check('S6 interp', np.array_equal(blended, old.palette_swap(opq, pc, True)), 'smaller palette blends (legacy --interpolate)')
+	check('S6 interp', len(set(map(tuple, blended.reshape(-1, 4).tolist()))) > 2, 'blended colors beyond the palette')
+	check('S6 interp', np.array_equal(S.swap_image(opq, two, lg), old.palette_swap(opq, pc)), 'legacy: no blend')
+	big = np.array([[(v, v, v, 255) for v in range(5, 255, 10)]], np.uint8)
+	bc = [tuple(c) for c in reversed(old.get_colors_by_brightness(big))]
+	check('S6 interp', np.array_equal(S.swap_image(opq, big, d), old.palette_swap(opq, bc)),
+		  'larger palette: the plain rank pick')
+	# CLI: plain run = defaults, --legacy and the three explicit flags = the old script's map
+	d6 = tempfile.mkdtemp(dir=tmp)
+	Image.fromarray(src, 'RGBA').save(os.path.join(d6, 's.png'))
+	Image.fromarray(pal, 'RGBA').save(os.path.join(d6, 'p.png'))
+	rd = lambda n: np.array(Image.open(os.path.join(d6, n)).convert('RGBA'))
+	run_cli(['s.png', 'p.png', 'a.png'], d6)
+	check('S6 cli', np.array_equal(rd('a.png'), new), 'plain CLI run uses the new defaults')
+	_, lp, lc = old.load_palette_colors(os.path.join(d6, 'p.png'), False, with_counts=True)
+	for name, fl in (('b.png', ['--legacy']), ('c.png', ['--palette-alpha', '1', '--alpha', 'palette', '--interp', 'off'])):
+		code, out, _ = run_cli(['s.png', 'p.png', name] + fl, d6)
+		check('S6 cli', code == 0 and np.array_equal(rd(name), old.palette_swap(src, lp)) and 'Options:' not in out,
+			  '%s equals the legacy map, no Options line' % ' '.join(fl))
+	run_cli(['s.png', 'p.png', 'e.png', '--legacy', '--interpolate'], d6)
+	check('S6 cli', np.array_equal(rd('e.png'), old.palette_swap(src, lp, True, False, lc)), '--legacy --interpolate')
+	run_cli(['s.png', 'p.png', 'f.png', '--interpolate'], d6)
+	check('S6 cli', np.array_equal(rd('f.png'), S.swap_image(src, pal, SwapOptions(interpolate='always'))),
+		  '--interpolate still means always')
+	check('S6 cli', SwapOptions().cli_args() == [] and lg.cli_args() == ['--interp', 'off', '--palette-alpha', '1',
+																	   '--alpha', 'palette'], 'cli_args of both')
+	# a preset stored before the change (full dict with the old values) keeps them
+	stored = dict(lg.to_dict(), mode='even')
+	check('S6 preset', SwapOptions.from_dict(stored) == SwapOptions.legacy(mode='even'), 'stored values kept')
+
+
 START = 0
 
 
@@ -390,6 +451,7 @@ def main():
 		s3(srcs, pals)
 		s4(srcs, pals)
 		s5(srcs, pals, tmp)
+		s6(tmp)
 	finally:
 		shutil.rmtree(tmp, ignore_errors=True)
 	failed = 0

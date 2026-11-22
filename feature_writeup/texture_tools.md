@@ -14,6 +14,20 @@ no changelog bullet. Review state: the owner checklists G1 to G3 below are pendi
 | R2 | Packaged for Linux only (PyInstaller onedir, tarball); Windows and macOS not planned |
 | R3 | Palette swap has selectable mapping modes; the rank map stays the default and its output stays byte-identical |
 | R4 | The CLAUDE.md texture rule binds agents, not the tool: a user-driven editor is allowed. No agent draws, edits or regenerates a texture while building or testing it; tests use synthetic arrays and existing sprites read-only |
+| R5 | (owner, 2026-11-22) Swap palette alpha threshold default 255: only fully opaque palette pixels count (was 1) |
+| R6 | (owner, 2026-11-22) Swap alpha source default: keep the source alpha (was palette) |
+| R7 | (owner, 2026-11-22) Swap interpolation default `smaller` (blend only when the palette is smaller); `--interpolate` still means `always` |
+| R8 | (owner, 2026-11-22) Combine add and multiply respect the overlay's alpha by default (a transparent overlay pixel leaves the base unchanged), in the engine, the stack, the CLI and the GUI |
+
+R5 to R8 replace the byte-identical legacy defaults (R3 keeps the rank map as the default mode). The old output is one
+switch away: swap `--legacy` (or `--palette-alpha 1 --alpha palette --interp off`; in code `SwapOptions.legacy()`),
+combine `--legacy-blend` (stack JSON layer key `"legacy_blend": true`; GUI layer toggle "Ignore alpha (legacy)").
+The function-level API keeps the legacy behavior: `palette_swap()`, `process_one()`, `combine_add`, `combine_multiply`,
+`combine()` and `combine_dir()` (default `legacy_blend=True`), so generators that import them (gen_jam_art.py) do not
+change; gen_jam_art.py output was checked byte-identical before and after (2026-11-22, scratch folder). The GUI follows
+the new engine defaults; a preset saved earlier keeps its stored swap values, but a combine preset or stack JSON saved
+before 2026-11-22 has no `legacy_blend` key, so its add and multiply layers now respect alpha. The `textureswapper/`
+shims run the CLI, so a plain shim run now uses the new defaults (add `--legacy` / `--legacy-blend` for the old output).
 
 ## 2. Architecture
 
@@ -61,14 +75,19 @@ in Editor and Copy as CLI. Zoom 1x to 64x with hard pixels. The per-line behavio
 
 ## 4. Command line
 
-Every wrapper runs as `python3 -m texturetools.cli.<name>`; `--help` is the reference. The old flags are unchanged.
+Every wrapper runs as `python3 -m texturetools.cli.<name>`; `--help` is the reference. The old flags are unchanged;
+the defaults of R5 to R8 changed on 2026-11-22.
 
 - `palette_swap`: `--invert --drop-lightest N --drop-darkest N --drop CLASS --interpolate --even --preview`; new:
   `--mode {rank,even,role,nearest,ramp} --interp {off,smaller,always} --interp-amount --interp-space {rgb,hsv,lab}
   --palette-alpha N --palette-exclude --palette-tol --keep-source --keep-tol --hue-shift --sat-shift --val-shift
-  --preserve --stretch --alpha {palette,source} --dither {none,ordered}`, plus the bulk flags.
+  --preserve --stretch --alpha {palette,source} --dither {none,ordered}`, plus the bulk flags. Defaults
+  `--palette-alpha 255 --alpha source --interp smaller`; `--legacy` sets `--palette-alpha 1 --alpha palette --interp
+  off` for those not given (the old output). `--interpolate` turns `off` or an unset `--interp` into `always`.
 - `combine_tex`: `--batch --pattern --mode {alpha,add,multiply,paint} --center --lcm --mask --strength --inset --clip`;
-  new: more modes, bulk flags, inline `--stack` JSON.
+  new: more modes, bulk flags, inline `--stack` JSON. `add` and `multiply` respect the overlay's alpha;
+  `--legacy-blend` (every form; the old parser stays byte-identical, the flag is taken out before it parses) gives
+  the old blend that ignores it.
 - `paint_tex`: `--mode {inplace,projected} --fit --offset-x/-y --scale --tile --flip-h/-v --rotate --inset --strength
   --outline --mask --mask-invert --only --only-tol --keep --keep-tol --material-alpha --clip` and bulk
   `--bulk --in-dir --out-dir --reverse --pattern --overwrite --include --exclude --recursive --dry-run`.
@@ -82,8 +101,9 @@ Run by `tools/test_texturetools.sh` (every `texturetools/tests/test_*.py`, each 
 
 | Id | File | Covers |
 |---|---|---|
-| T1 | test_parity.py | swap parity: legacy mode vs the frozen old script on every fixture, array-equal |
-| T2, T2b | test_parity.py | combine parity (alpha, add, multiply, paint, `--lcm`, `--center`, batch naming), shim parity |
+| T1 | test_parity.py | swap parity: the frozen old script vs the new CLI and shim run with `--legacy` or `--palette-alpha 1 --alpha palette --interp off`; engine `palette_swap()` array-equal |
+| T2, T2b | test_parity.py | combine parity (alpha, add, multiply, paint, `--lcm`, `--center`, batch naming) with `--legacy-blend`, shim parity |
+| T7 | test_swap_modes.py S6, test_combine_stack.py alpha_blend | the 2026-11-22 defaults (R5 to R8) on synthetic arrays: opaque-only palette, source alpha kept, smaller-palette blend, alpha-aware add and multiply, CLI default vs legacy flags, stored preset values |
 | T3 | test_batch.py | bulk never writes outside the output folder; skip report |
 | T4 | test_edit.py | undo/redo identity, bucket tolerance, global fill count, rotate x4, nudge in gamut |
 | T5 | test_colors.py | suggest differs by exactly the delta on one axis |
@@ -130,7 +150,8 @@ Combine:
 - [ ] G1.10 Per-layer controls each change the preview: blend mode (all ten), Opacity, Offset X / Y, the Nudge arrows,
   a left drag on the preview (moves the selected layer by whole pixels; with Snap a scaled layer moves by its scale),
   Offset edge (clip, wrap, grow), Anchor, Resize (scale, size), Trim first, Mask and Invert mask, Paint strength /
-  inset / clip (paint mode).
+  inset / clip (paint mode), Ignore alpha (legacy) (add and multiply only: off, a transparent overlay pixel leaves the
+  base unchanged; on, the old blend darkens or brightens it).
 - [ ] G1.11 Canvas base / largest / fixed WxH, Background color, LCM fit, Size check (any, contain, same): the preview
   follows; a size problem shows as a status line, not a crash.
 - [ ] G1.12 Bulk: tick Varies on a layer and give it a folder: the count line shows the number of outputs; Preview all
@@ -233,13 +254,12 @@ Every screen:
 
 Defaults the plan did not specify or that were kept for byte-identical legacy output:
 
-- (a) Three legacy defaults kept instead of the plan's values: palette alpha threshold 1 (plan 255, opaque only); alpha
-  source `palette` (plan: keep source); the old `--interpolate` equals `always` (plan said `smaller`). Each is a knob;
-  say if the default should flip (the legacy output then changes and gen_*.py regenerate differently).
+- (a) Closed 2026-11-22 (R5 to R7): the defaults flipped to palette alpha 255, keep source alpha, interpolate
+  `smaller`; `--interpolate` still means `always`. Legacy via `--legacy`; gen_*.py unchanged (function-level API).
 - (b) The `role` mapping mode (hue family, then lightness rank) is a first design: review its output on the jam and pepper
   cases before it is kept.
-- (c) Legacy Combine multiply and add ignore the overlay's alpha, so transparent overlay pixels turn black under
-  multiply. Kept for parity; shown in G1.10.
+- (c) Closed 2026-11-22 (R8): Combine multiply and add respect the overlay's alpha by default; `--legacy-blend` and
+  the layer toggle "Ignore alpha (legacy)" keep the old blend. G1.10 now shows the new default.
 - (d) `core/swap.py` and `core/palette.py` each carry their own Lab and HSV helpers; merge them into `core/colors.py`.
 - (e) `scale_tex.main` can call `core/scale.scale_pipeline` instead of its own path.
 - Not planned: Windows and macOS, animated textures, normal and specular maps, undo of bulk runs.

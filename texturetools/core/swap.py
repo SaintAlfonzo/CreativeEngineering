@@ -5,7 +5,10 @@ palette_swap() is the legacy rank map (with --even / --interpolate), unchanged f
 parity (T1). P1 adds SwapOptions and swap_image() / swap_colors(): modes rank, even, role, nearest, ramp;
 interpolation off / smaller / always with an amount and RGB, HSV or Lab space; palette alpha threshold, exclusion
 with tolerance and HSV shift; source keep list; preserve-source blend; contrast stretch; alpha source; ordered
-dither. With default SwapOptions, swap_image() equals load_palette_colors + palette_swap array for array.
+dither. With SwapOptions.legacy() (the old defaults: palette alpha 1, alpha from the palette, interpolate off),
+swap_image() equals load_palette_colors + palette_swap array for array. The SwapOptions defaults differ since
+2026-11-22 (owner rulings R5 to R7): palette alpha 255 (opaque only), keep the source alpha, interpolate smaller.
+palette_swap() and process_one() keep the legacy behavior (gen_*.py import them).
 
 The Lab / HSV helpers below are private copies; consolidate into core/colors.py (P4) later.
 """
@@ -147,24 +150,28 @@ INTERPOLATE = ("off", "smaller", "always")
 SPACES = ("rgb", "hsv", "lab")
 ALPHA_SOURCES = ("palette", "source")
 DITHERS = ("none", "ordered")
+# The pre-2026-11-22 defaults (SwapOptions.legacy(), the CLI's --legacy); the new defaults are on SwapOptions.
+LEGACY_DEFAULTS = {"palette_alpha": 1, "alpha": "palette", "interpolate": "off"}
 
 
 @dataclass
 class SwapOptions:
-	"""Every swap knob. Defaults reproduce the legacy rank map exactly.
+	"""Every swap knob. Defaults (owner, 2026-11-22): palette_alpha 255, alpha source, interpolate smaller.
+	SwapOptions.legacy() (LEGACY_DEFAULTS: palette_alpha 1, alpha palette, interpolate off) reproduces the legacy rank
+	map exactly.
 
 	mode           rank (legacy, by brightness value), even (by brightness rank), role (hue family, then lightness
 	               rank inside it), nearest (closest palette color in Lab), ramp (source Lab lightness fitted onto
 	               the palette sorted by lightness)
-	interpolate    off; smaller = blend only when the palette has fewer colors than the source; always = blend
+	interpolate    off (legacy); smaller (default) = blend only when the palette has fewer colors than the source; always = blend
 	               also when it is larger (rank/even: pixel-weighted mean of each palette run, as legacy
 	               --interpolate). rank/even with interpolate use even rank spacing (legacy --interpolate)
 	interp_amount  0..1, how far toward the blended color (1 = full blend)
 	interp_space   rgb, hsv or lab: the space the blend and run means are taken in
 	invert         palette order reversed (dark <-> light)
 	drops, drop_darkest, drop_lightest   as the CLI flags
-	palette_alpha  palette pixels with alpha below this are ignored (1 = legacy, every non-transparent pixel;
-	               255 = opaque only)
+	palette_alpha  palette pixels with alpha below this are ignored (255 = default, opaque only; 1 = legacy, every
+	               non-transparent pixel)
 	palette_exclude, palette_exclude_tol  colors (hex strings or tuples) left out of the palette, with every color
 	               within tol per channel
 	source_keep, source_keep_tol   source colors left untouched (outlines, eyes) and not ranked
@@ -172,19 +179,19 @@ class SwapOptions:
 	preserve       0..1, blend the result back toward the source per pixel
 	stretch        contrast stretch: nearest and ramp fit the source lightness range onto the palette's (rank,
 	               even and role already rank relative to the source's own range, so it changes nothing there)
-	alpha          palette = output alpha from the palette color (legacy); source = keep the source alpha
+	alpha          source = keep the source alpha (default); palette = output alpha from the palette color (legacy)
 	dither         none or ordered (4x4 Bayer between the two nearest palette colors; only where the palette has
 	               fewer colors than the source; replaces blending there; rank, even and ramp)
 	"""
 	mode: str = "rank"
-	interpolate: str = "off"
+	interpolate: str = "smaller"
 	interp_amount: float = 1.0
 	interp_space: str = "rgb"
 	invert: bool = False
 	drops: list = field(default_factory=list)
 	drop_darkest: int = 0
 	drop_lightest: int = 0
-	palette_alpha: int = 1
+	palette_alpha: int = 255
 	palette_exclude: list = field(default_factory=list)
 	palette_exclude_tol: int = 0
 	source_keep: list = field(default_factory=list)
@@ -194,8 +201,15 @@ class SwapOptions:
 	val_shift: float = 0.0
 	preserve: float = 0.0
 	stretch: bool = False
-	alpha: str = "palette"
+	alpha: str = "source"
 	dither: str = "none"
+
+	@classmethod
+	def legacy(cls, **kw):
+		"""Options with the pre-2026-11-22 defaults (LEGACY_DEFAULTS); kw overrides any field."""
+		d = dict(LEGACY_DEFAULTS)
+		d.update(kw)
+		return cls(**d)
 
 	def validate(self):
 		for name, allowed in (("mode", MODES), ("interpolate", INTERPOLATE), ("interp_space", SPACES),
@@ -218,8 +232,9 @@ class SwapOptions:
 		return cls(**dict((k, v) for k, v in (d or {}).items() if k in names)).validate()
 
 	def is_legacy(self):
-		"""True when only legacy knobs are set (palette_swap.py output, flags --invert/--drop*/--even/--interpolate)."""
-		d = SwapOptions()
+		"""True when only legacy knobs are set at their legacy values (palette_swap() output: flags --invert/--drop*/
+		--even/--interpolate with palette alpha 1, alpha palette, interpolate off or always)."""
+		d = SwapOptions.legacy()
 		return all(getattr(self, k) == getattr(d, k) for k in (
 			"interp_amount", "interp_space", "palette_alpha", "palette_exclude", "source_keep", "hue_shift",
 			"sat_shift", "val_shift", "preserve", "stretch", "alpha", "dither")) \

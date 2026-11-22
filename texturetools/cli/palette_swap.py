@@ -59,19 +59,23 @@ Options:
                 into that many runs (in brightness order) and each level takes the
                 most-used real color of its run, so no stretch of the palette is
                 skipped, also colors whose hue breaks the brightness order.
-                Without --even and --interpolate the legacy mapping is unchanged.
+                Without --even and --interpolate the rank map by brightness value is used.
     --preview   Also save a 160x160 upscaled preview alongside each output.
 
-Mapping options (2026-11-22, plan_texture_tools_gui.md section 3; every default keeps the legacy output):
-    --mode M    rank (default, legacy), even (same as --even), role (hue family, then
+Mapping options (2026-11-22, plan_texture_tools_gui.md section 3). The defaults changed on 2026-11-22 (owner
+rulings R5 to R7): opaque palette pixels only, the source alpha kept, blending when the palette is smaller.
+--legacy (or --palette-alpha 1 --alpha palette --interp off) gives the old output exactly:
+    --legacy    the pre-2026-11-22 defaults for the three flags below that are not given
+    --mode M    rank (default), even (same as --even), role (hue family, then
                 lightness rank inside it), nearest (closest palette color in Lab),
                 ramp (source lightness fitted onto the palette sorted by lightness)
-    --interp W  off (default), smaller (blend only when the palette has fewer colors
-                than the source), always (same as --interpolate)
+    --interp W  smaller (default: blend only when the palette has fewer colors
+                than the source), off (legacy), always (same as --interpolate)
+                --interpolate turns off (or no --interp) into always
     --interp-amount F   0..1, how far toward the blended color (default 1)
     --interp-space S    rgb (default), hsv, lab
-    --palette-alpha N   ignore palette pixels with alpha below N (default 1 = every
-                non-transparent pixel; 255 = opaque only)
+    --palette-alpha N   ignore palette pixels with alpha below N (default 255 = opaque
+                only; 1 = legacy, every non-transparent pixel)
     --palette-exclude C,C   palette colors to leave out (#rrggbb, comma separated)
     --palette-tol N     also leave out colors within N per channel of those
     --keep-source C,C   source colors left untouched (outlines, eyes)
@@ -79,7 +83,8 @@ Mapping options (2026-11-22, plan_texture_tools_gui.md section 3; every default 
     --hue-shift DEG, --sat-shift F, --val-shift F   shift the palette first (F in -1..1)
     --preserve F        0..1, blend the result back toward the source
     --stretch           contrast stretch the source lightness (nearest, ramp)
-    --alpha A           palette (default, legacy: alpha from the palette color) or source
+    --alpha A           source (default: keep the source alpha) or palette (legacy:
+                alpha from the palette color)
     --dither D          none (default) or ordered (only where the palette is smaller)
 
 Texture Tools GUI options (2026-11-22, P6; "Copy as CLI" emits them):
@@ -149,12 +154,15 @@ def add_mode_args(parser):
 	"""The P1 mapping flags (shared by single and --bulk). The usage line stays the legacy one (error output is
 	part of the T1 parity); -h lists the new flags."""
 	parser.usage = parser.format_usage()[len("usage: "):].rstrip("\n")
-	parser.add_argument("--mode", choices=MODES, default="rank", help="Mapping mode (default rank, the legacy map)")
-	parser.add_argument("--interp", choices=INTERPOLATE, default="off", help="Blend between palette neighbors")
+	parser.add_argument("--legacy", action="store_true",
+						help="Pre-2026-11-22 defaults: --palette-alpha 1 --alpha palette --interp off (unless given)")
+	parser.add_argument("--mode", choices=MODES, default="rank", help="Mapping mode (default rank)")
+	parser.add_argument("--interp", choices=INTERPOLATE, default=None,
+						help="Blend between palette neighbors (default smaller; legacy off)")
 	parser.add_argument("--interp-amount", type=float, default=1.0, metavar="F", help="0..1 toward the blend")
 	parser.add_argument("--interp-space", choices=SPACES, default="rgb", help="Blend space")
-	parser.add_argument("--palette-alpha", type=int, default=1, metavar="N",
-						help="Ignore palette pixels with alpha below N (1 = legacy, 255 = opaque only)")
+	parser.add_argument("--palette-alpha", type=int, default=None, metavar="N",
+						help="Ignore palette pixels with alpha below N (default 255 = opaque only; legacy 1)")
 	parser.add_argument("--palette-exclude", type=parse_color_list, default=[], metavar="C,C",
 						help="Palette colors to leave out (#rrggbb, comma separated)")
 	parser.add_argument("--palette-tol", type=int, default=0, metavar="N", help="Tolerance for --palette-exclude")
@@ -166,21 +174,27 @@ def add_mode_args(parser):
 	parser.add_argument("--val-shift", type=float, default=0.0, metavar="F", help="Shift palette value (-1..1)")
 	parser.add_argument("--preserve", type=float, default=0.0, metavar="F", help="0..1 blend back toward the source")
 	parser.add_argument("--stretch", action="store_true", help="Contrast stretch source lightness (nearest, ramp)")
-	parser.add_argument("--alpha", choices=ALPHA_SOURCES, default="palette", help="Output alpha source")
+	parser.add_argument("--alpha", choices=ALPHA_SOURCES, default=None,
+						help="Output alpha source (default source; legacy palette)")
 	parser.add_argument("--dither", choices=DITHERS, default="none", help="Ordered dither for smaller palettes")
 
 
 def options_from_args(args):
-	"""SwapOptions from parsed args; --even / --interpolate fold into --mode even / --interp always."""
+	"""SwapOptions from parsed args; --even / --interpolate fold into --mode even / --interp always; --legacy fills
+	the flags not given with LEGACY_DEFAULTS, otherwise they take the SwapOptions defaults."""
+	d = SwapOptions.legacy() if args.legacy else SwapOptions()
 	mode = "even" if args.even and args.mode == "rank" else args.mode
-	interp = "always" if args.interpolate and args.interp == "off" else args.interp
+	interp = d.interpolate if args.interp is None else args.interp
+	if args.interpolate and (args.interp is None or args.interp == "off"):
+		interp = "always"
 	return SwapOptions(
 		mode=mode, interpolate=interp, interp_amount=args.interp_amount, interp_space=args.interp_space,
 		invert=args.invert, drops=list(args.drop), drop_darkest=args.drop_darkest, drop_lightest=args.drop_lightest,
-		palette_alpha=args.palette_alpha, palette_exclude=list(args.palette_exclude),
+		palette_alpha=d.palette_alpha if args.palette_alpha is None else args.palette_alpha,
+		palette_exclude=list(args.palette_exclude),
 		palette_exclude_tol=args.palette_tol, source_keep=list(args.keep_source), source_keep_tol=args.keep_tol,
 		hue_shift=args.hue_shift, sat_shift=args.sat_shift, val_shift=args.val_shift, preserve=args.preserve,
-		stretch=args.stretch, alpha=args.alpha, dither=args.dither).validate()
+		stretch=args.stretch, alpha=d.alpha if args.alpha is None else args.alpha, dither=args.dither).validate()
 
 
 def print_new_options(opts):

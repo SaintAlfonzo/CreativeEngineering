@@ -9,6 +9,9 @@ T2b scale parity: scale_tex.py and upscale_sprites.py CLI runs byte-identical.
 
 Every CLI case runs three entry points in a fresh copy of the fixture folder: the frozen legacy script, the new
 texturetools/cli module and the textureswapper/ shim. Exit code, stdout, stderr and every file in the folder must match.
+Since the 2026-11-22 default changes (owner rulings R5 to R8) the new entry points get the explicit legacy options
+appended (palette_swap: --palette-alpha 1 --alpha palette --interp off, or --legacy; combine_tex: --legacy-blend);
+the legacy script runs the plain argv. The engine checks call the function-level API, which keeps the legacy behavior.
 
 Fixtures are synthetic arrays (seeded) written to a temp dir, plus the top-level textureswapper/*.png sprites when
 present, read only. Nothing is written into the repo.
@@ -250,12 +253,19 @@ def run_script(path, script, argv, fixture_dir, work_root):
 	return code, norm(out.getvalue()), norm(err.getvalue()), snapshot(work)
 
 
-def cli_case(section, script, argv, fixture_dir, work_root):
+# the explicit options that reach the legacy output from the new entry points (never given to the legacy script)
+SWAP_LEGACY = ['--palette-alpha', '1', '--alpha', 'palette', '--interp', 'off']
+SWAP_LEGACY_SHORT = ['--legacy']
+COMBINE_LEGACY = ['--legacy-blend']
+
+
+def cli_case(section, script, argv, fixture_dir, work_root, legacy_argv=()):
 	ref = run_script(os.path.join(LEGACY, script + '.py'), script, argv, fixture_dir, work_root)
 	for label, rel in ENTRIES:
-		got = run_script(os.path.join(ROOT, rel.format(script)), script, argv, fixture_dir, work_root)
+		new_argv = list(argv) + list(legacy_argv)
+		got = run_script(os.path.join(ROOT, rel.format(script)), script, new_argv, fixture_dir, work_root)
 		ok = got == ref
-		what = '{0} {1} {2}'.format(label, script, ' '.join(argv))
+		what = '{0} {1} {2}'.format(label, script, ' '.join(new_argv))
 		if not ok and VERBOSE:
 			for i, n in enumerate(('exit', 'stdout', 'stderr')):
 				if got[i] != ref[i]:
@@ -283,14 +293,15 @@ def t1_cli(fixdir, work_root, srcs, n_real):
 				['--invert', '--even', '--preview'], ['--invert', '--interpolate'], ['--drop', 'brown,white'],
 				['--drop', 'brown', '--interpolate'], ['--drop-darkest', '1', '--drop-lightest', '1'],
 				['--drop-darkest', '2', '--even']]
-	for src, pal in pairs:
+	for i, (src, pal) in enumerate(pairs):
 		for fl in flagsets:
-			cli_case('T1 cli', 'palette_swap', [src, pal, 'out/res.png'] + fl, fixdir, work_root)
+			cli_case('T1 cli', 'palette_swap', [src, pal, 'out/res.png'] + fl, fixdir, work_root,
+					 SWAP_LEGACY if i % 2 == 0 else SWAP_LEGACY_SHORT)
 	for argv in (['s_rand8.png', 'p4.png', 'res.jpg'], ['s_empty.png', 'p4.png', 'res.png'],
 				 ['s_rand8.png', 'p_empty.png', 'res.png'], ['missing.png', 'p4.png', 'res.png'],
 				 ['s_rand8.png', 'missing.png', 'res.png'], ['s_rand8.png', 'p4.png', 'res.png', '--drop', 'nope'],
 				 ['s_single.png', 'p1.png', 'res.png', '--even'], ['s_rand8.png']):
-		cli_case('T1 cli', 'palette_swap', argv, fixdir, work_root)
+		cli_case('T1 cli', 'palette_swap', argv, fixdir, work_root, SWAP_LEGACY)
 	# --bulk: ./in holds the palettes (a broken file and an empty one included), ./out is written
 	bulk = tempfile.mkdtemp(dir=work_root)
 	shutil.copy(os.path.join(fixdir, 's_ramp.png'), os.path.join(bulk, 'shape.png'))
@@ -302,9 +313,10 @@ def t1_cli(fixdir, work_root, srcs, n_real):
 	with open(os.path.join(bulk, 'in', 'notes.txt'), 'w') as fh:
 		fh.write('skip me')
 	for fl in ([], ['--invert', '--even', '--preview'], ['--interpolate', '--drop', 'brown'], ['--drop-darkest', '1']):
-		cli_case('T1 cli', 'palette_swap', ['shape.png', '--bulk'] + fl, bulk, work_root)
-	cli_case('T1 cli', 'palette_swap', ['in/p4.png', '--bulk'], bulk, work_root)   # shape inside ./in is skipped
-	cli_case('T1 cli', 'palette_swap', ['shape.png', '--bulk'], fixdir, work_root)  # no ./in: error
+		cli_case('T1 cli', 'palette_swap', ['shape.png', '--bulk'] + fl, bulk, work_root, SWAP_LEGACY)
+		cli_case('T1 cli', 'palette_swap', ['shape.png', '--bulk'] + fl, bulk, work_root, SWAP_LEGACY_SHORT)
+	cli_case('T1 cli', 'palette_swap', ['in/p4.png', '--bulk'], bulk, work_root, SWAP_LEGACY)   # shape inside ./in is skipped
+	cli_case('T1 cli', 'palette_swap', ['shape.png', '--bulk'], fixdir, work_root, SWAP_LEGACY)  # no ./in: error
 
 
 def t2_cli(work_root):
@@ -335,22 +347,22 @@ def t2_cli(work_root):
 		fh.write('not an image')
 	os.makedirs(os.path.join(d, 'labels', 'sub.png'))
 	for mode in ('alpha', 'add', 'multiply', 'paint'):
-		cli_case('T2 cli', 'combine_tex', ['base.png', 'over.png', 'res.png', '--mode', mode], d, work_root)
+		cli_case('T2 cli', 'combine_tex', ['base.png', 'over.png', 'res.png', '--mode', mode], d, work_root, COMBINE_LEGACY)
 	for fl in (['--mask', 'mask.png'], ['--mask', 'mask.png', '--strength', '0'], ['--strength', '0.5', '--inset', '1'],
 			   ['--inset', '2', '--clip'], ['--mask', 'mask.png', '--clip', '--strength', '0.25'],
 			   ['--mask', 'mask_bad.png']):
-		cli_case('T2 cli', 'combine_tex', ['base.png', 'over.png', 'res.png', '--mode', 'paint'] + fl, d, work_root)
+		cli_case('T2 cli', 'combine_tex', ['base.png', 'over.png', 'res.png', '--mode', 'paint'] + fl, d, work_root, COMBINE_LEGACY)
 	for argv in (['base.png', 'small.png', 'res.png', '--center'], ['base.png', 'small.png', 'res.png'],
 				 ['base.png', 'big.png', 'res.png', '--center'], ['b12.png', 'o8.png', 'res.png', '--lcm'],
 				 ['b12.png', 'o8.png', 'res.png', '--lcm', '--mode', 'multiply'], ['tall.png', 'o8.png', 'res.png', '--lcm'],
 				 ['o8.png', 'small.png', 'res.png', '--lcm', '--center'], ['missing.png', 'over.png', 'res.png'],
 				 ['base.png', 'missing.png', 'res.png'], ['base.png', 'over.png', 'res.png', '--mode', 'nope']):
-		cli_case('T2 cli', 'combine_tex', argv, d, work_root)
+		cli_case('T2 cli', 'combine_tex', argv, d, work_root, COMBINE_LEGACY)
 	for fl in ([], ['--pattern', 'canned_{name}.png'], ['--pattern', '{base}_{name}.{ext}'], ['--center'],
 			   ['--lcm'], ['--lcm', '--center', '--pattern', 'x_{name}_{base}.png'], ['--mode', 'add', '--center'],
 			   ['--mode', 'paint', '--mask', 'mask.png', '--strength', '0'], ['--mode', 'multiply']):
-		cli_case('T2 cli', 'combine_tex', ['--batch', 'base.png', 'labels', 'outdir'] + fl, d, work_root)
-	cli_case('T2 cli', 'combine_tex', ['--batch', 'base.png', 'nolabels', 'outdir'], d, work_root)
+		cli_case('T2 cli', 'combine_tex', ['--batch', 'base.png', 'labels', 'outdir'] + fl, d, work_root, COMBINE_LEGACY)
+	cli_case('T2 cli', 'combine_tex', ['--batch', 'base.png', 'nolabels', 'outdir'], d, work_root, COMBINE_LEGACY)
 
 
 def t2b_cli(work_root):

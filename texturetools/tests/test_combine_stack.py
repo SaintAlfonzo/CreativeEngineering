@@ -1,8 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-only
 """P2 combine layer stack tests (plan_texture_tools_gui.md sections 4, 10).
 
-Two-layer parity: combine_stack with two layers equals the frozen old combine_tex (tests/legacy/) array for array,
-dtype included, in every old mode, paint options, --center and --lcm. N-layer properties: fold order, opacity,
+Two-layer parity: combine_stack with two layers (overlay legacy_blend for add and multiply) equals the frozen old
+combine_tex (tests/legacy/) array for array, dtype included, in every old mode, paint options, --center and --lcm.
+Alpha-aware add and multiply (owner ruling R8, 2026-11-22): a transparent overlay pixel leaves the base unchanged,
+opaque layers equal the old blend, the CLI default and --legacy-blend. N-layer properties: fold order, opacity,
 visibility, offset clip / wrap / grow, anchor, canvas, background, resize, trim, mask and inverted mask, the new
 modes' defining identities, preset round trip and cartesian job counts. Synthetic arrays only; files in a temp dir.
 """
@@ -70,7 +72,8 @@ def parity(tmp):
 	for trial in range(12):
 		b, o = img(16, 16), img(16, 16)
 		for mode in ("alpha", "add", "multiply", "paint"):
-			check(same(old.MODES[mode](b, o), combine_stack([Layer(b), Layer(o, mode=mode)])), "2-layer %s #%d" % (mode, trial))
+			check(same(old.MODES[mode](b, o), combine_stack([Layer(b), Layer(o, mode=mode, legacy_blend=True)])),
+				  "2-layer %s #%d" % (mode, trial))
 			check(same(old.combine(mode, b, o, None), C.combine(mode, b, o, None)), "combine() %s #%d" % (mode, trial))
 		mpath = write(tmp, "m%d.png" % trial, img(16, 16, holes=0.5))
 		for strength in (0.0, 0.5, 1.0):
@@ -84,11 +87,13 @@ def parity(tmp):
 		small = img(5, 7)
 		for mode in ("alpha", "add", "multiply"):
 			ref = old.combine(mode, b, old.center_overlay(b, small), None)
-			check(same(ref, combine_stack([Layer(b), Layer(small, mode=mode, anchor="center")], fit="contain")),
+			check(same(ref, combine_stack([Layer(b), Layer(small, mode=mode, anchor="center", legacy_blend=True)],
+										  fit="contain")),
 				  "center %s #%d" % (mode, trial))
 		b12, o8 = img(12, 12), img(8, 8)
 		pb, po_, _ = old.lcm_pair(b12, o8)
-		check(same(old.MODES["multiply"](pb, po_), combine_stack([Layer(b12), Layer(o8, mode="multiply")], lcm=True)),
+		check(same(old.MODES["multiply"](pb, po_), combine_stack([Layer(b12), Layer(o8, mode="multiply",
+																						   legacy_blend=True)], lcm=True)),
 			  "lcm #%d" % trial)
 	try:
 		combine_stack([Layer(img(16, 16)), Layer(img(5, 7))], fit="same")
@@ -196,6 +201,59 @@ def properties():
 	check(C.parse_color("#0a0b0c") == (10, 11, 12, 255) and C.parse_color("1,2,3,4") == (1, 2, 3, 4), "parse_color")
 
 
+def alpha_blend(tmp):
+	"""Owner ruling R8 (2026-11-22): the stack's add and multiply respect the overlay's alpha."""
+	for trial in range(8):
+		b, o = img(12, 12), img(12, 12)
+		for mode, legacy_fn in (("add", old.combine_add), ("multiply", old.combine_multiply)):
+			got = combine_stack([Layer(b), Layer(o, mode=mode)])
+			clear = (o[:, :, 3] == 0) & (b[:, :, 3] > 0)
+			check(close(got[clear], b[clear]), "%s: transparent overlay leaves the base #%d" % (mode, trial))
+			check(close(got[:, :, 3], old.combine_alpha(b, o)[:, :, 3]), "%s: alpha is source-over #%d" % (mode, trial))
+			both = (o[:, :, 3] == 255) & (b[:, :, 3] == 255)
+			check(close(got[both], legacy_fn(b, o)[both]), "%s: opaque layers equal the old blend #%d" % (mode, trial))
+			bare = (b[:, :, 3] == 0) & (o[:, :, 3] == 255)
+			check(close(got[bare], o[bare]), "%s: transparent base shows the overlay #%d" % (mode, trial))
+			check(same(got, C.combine(mode, b, o, None, legacy_blend=False)), "%s: combine(legacy_blend=False) #%d"
+				  % (mode, trial))
+			check(same(got, C.combine_add_alpha(b, o) if mode == "add" else C.combine_multiply_alpha(b, o)),
+				  "%s: *_alpha function #%d" % (mode, trial))
+			if trial == 0:
+				check(clear.any() and not close(legacy_fn(b, o)[clear], b[clear]),
+					  "%s: the legacy blend changes the base under transparent pixels (fixture premise)" % mode)
+	# CLI: default respects alpha, --legacy-blend (old parser, extended parser, stack JSON) is the old output
+	from texturetools.cli import combine_tex as cli
+	from texturetools.core.image_io import load_rgba_array
+	d = tempfile.mkdtemp(dir=tmp)
+	b, o = img(8, 8), img(8, 8)
+	bp, op = write(d, "b.png", b), write(d, "o.png", o)
+	b, o = load_rgba_array(bp), load_rgba_array(op)
+	ref_new = write(d, "ref_new.png", combine_stack([Layer(b), Layer(o, mode="multiply")]))
+	ref_old = write(d, "ref_old.png", old.combine_multiply(b, o))
+	rd = lambda p: open(p, "rb").read()
+	import contextlib
+	import io
+	import json
+	def run(argv):
+		with contextlib.redirect_stdout(io.StringIO()):
+			cli.main(argv)
+	for name, argv, ref in (
+			("plain", [bp, op, os.path.join(d, "a.png"), "--mode", "multiply"], ref_new),
+			("old parser --legacy-blend", [bp, op, os.path.join(d, "c.png"), "--mode", "multiply", "--legacy-blend"],
+			 ref_old),
+			("extended --legacy-blend", [bp, op, os.path.join(d, "e.png"), "--mode", "multiply", "--opacity", "1",
+										 "--legacy-blend"], ref_old),
+			("extended default", [bp, op, os.path.join(d, "f.png"), "--mode", "multiply", "--opacity", "1"], ref_new),
+			("stack legacy_blend", ["--stack", json.dumps({"layers": [{"image": bp}, {"image": op, "mode": "multiply",
+				"legacy_blend": True}]}), os.path.join(d, "g.png")], ref_old)):
+		run(argv)
+		check(rd(argv[2]) == rd(ref), "cli %s" % name)   # argv[2] is the output in both forms
+	write(os.path.join(d, "ov"), "x.png", o)
+	with contextlib.redirect_stdout(io.StringIO()):
+		C.combine_dir(bp, os.path.join(d, "ov"), os.path.join(d, "od"), mode="multiply")
+	check(rd(os.path.join(d, "od", "x.png")) == rd(ref_old), "combine_dir default keeps the legacy blend")
+
+
 def bulk(tmp):
 	base = write(tmp, "can.png", img(8, 8))
 	for n in ("a", "b", "c"):
@@ -226,6 +284,7 @@ def main():
 	try:
 		parity(tmp)
 		properties()
+		alpha_blend(tmp)
 		bulk(tmp)
 	finally:
 		shutil.rmtree(tmp, ignore_errors=True)
