@@ -1,6 +1,6 @@
 # Creative Common
 
-**The shared library behind the Creative mods.** Creative Common is the core that every Creative mod is built on. On its own it adds no blocks or items. It provides the shared code, scripting helpers and data the other Creative mods need, plus bug fixes and performance fixes that help any large Forge 1.19.2 pack.
+**The shared library behind the Creative mods.** Creative Common is the core that every Creative mod is built on. On its own it adds only a set of wooden composters. It provides the shared code, scripting helpers and data the other Creative mods need, plus bug fixes and performance fixes that help any large Forge 1.19.2 pack.
 
 ***
 
@@ -11,6 +11,8 @@
 *   **Creative Brewing**: brewing, alcohol and potions
 *   **Creative Equipment**: armor, tools and gear
 *   **Creative Magic**: magic mod integration
+*   **Creative Loot**: loot, drops and trades
+*   **Creative Labels**: sticky notes and labels
 *   **Creative Worldgen**: world generation and wildlife
 *   **Creative Calendar**: seasons and time
 *   **Creative Compat**: compatibility between third-party mods, and the JEI, WTHIT and tooltip improvements
@@ -30,9 +32,13 @@ Every feature below works without any other Creative mod. Features that touch an
 
 <div class="spoiler"><ul><li><strong>In-game changelog viewer</strong> on the title screen and pause menu. It only appears when a pack ships a changelog.</li></ul><p><img src="https://media.forgecdn.net/attachments/2164/300/2026-11-07_17-21-27-png.png" alt="Changelog viewer"></p><ul><li><strong>Loading screen tip bar</strong>: tips roll across the bottom of the world loading screen. Tip packs use the Loading Screen Tips format; over 300 general Minecraft tips are built in.</li></ul><p><img src="https://media.forgecdn.net/attachments/2164/299/screenshot-from-2026-11-07-17-28-10-png.png" alt="Changelog viewer"> <img src="https://media.forgecdn.net/attachments/2164/298/screenshot-from-2026-11-07-17-28-55-png.png" alt="Changelog viewer"></p><ul><li><strong>Mod display names</strong>: rename how any mod is shown in JEI, WTHIT and the Mods screen. The list starts empty.</li></ul></div>
 
+### World and gameplay
+
+<div class="spoiler"><ul><li><strong>Melting</strong>: salt, fire, lava and magma melt ice and snow. Snow melts one layer at a time, packed ice and cryosol melt slowly, blue ice and permafrost only touching lava, and ice and snow melt on their own in the Nether and in hot biomes. In the End only the blocks touching a source melt, and fire cannot be placed. Blocks salt can melt say "Saltable" in their tooltip. Every number is in the <code>[melting]</code> config section.</li><li><strong>Wooden composters</strong>: Composters in 12 woods (spruce, birch, dark oak, jungle, acacia, mangrove, crimson, warped, twisted, ancient, blossom and azalea), each crafted from 7 slabs of its wood and working like the vanilla Composter.</li><li><strong>Glass shards</strong>: with Quark installed, every glass block and pane, modded ones included, breaks into shards of its color without Silk Touch.</li><li><strong>Idle random ticks</strong>: blocks that can no longer change on a random tick (full-grown colonies, waxed lanterns, flower bushes) stop asking for them, so chunk sections holding only such blocks are skipped (performance; <code>[perf] idleRandomTicks</code>, restart to apply).</li><li><strong>Sack pick-up</strong>: sneak and right-click a placed sack to pick it up with its contents.</li></ul></div>
+
 ### Effects and potions
 
-<div class="spoiler"><ul><li><strong>Magic Resistance</strong>: a new effect that reduces magic damage and shortens poison and wither, with potions (normal, long and strong).</li><li><strong>Effect rules in the config</strong>: change an effect's category (beneficial, harmful, neutral), swap one effect for another wherever it is applied, block effects from being applied at all, and choose which hidden effects keep their HUD icon. No effect is swapped or blocked by default. (Creative Compat draws the icons and effect descriptions.)</li></ul></div>
+<div class="spoiler"><ul><li><strong>Magic Resistance</strong>: a new effect that reduces magic damage and shortens poison and wither, with potions (normal, long and strong).</li><li><strong>Effect rules in the config</strong>: change an effect's category (beneficial, harmful, neutral), swap one effect for another wherever it is applied, block effects from being applied at all, and choose which hidden effects keep their HUD icon. No effect is swapped or blocked by default.</li><li><strong>Level caps</strong>: <code>[effects] levelCaps</code> holds effects that do the same at every level at level I from every source, tooltips included; the default list holds the 87 effects that do the same at every level (Fire Resistance, Water Breathing, Night Vision and so on); empty the list to turn it off.</li><li><strong>Config reload</strong>: changes saved to the pack's own config files while the game runs are applied after about a second, without a restart. (Creative Compat draws the icons and effect descriptions.)</li></ul></div>
 
 ### Bug fixes
 
@@ -42,7 +48,7 @@ Every feature below works without any other Creative mod. Features that touch an
 
 ## Optional pack settings
 
-<div class="spoiler"><p>Out of the box, Creative Common leaves vanilla behavior alone (the Create: Gravity limit below is the one performance setting that is on). The *Creative Engineering* pack turns these on in its own config, and any pack can do the same in <code>config/creativecommon-common.toml</code>:</p><table><thead><tr><th>Setting</th><th>What it does</th></tr></thead><tbody><tr><td><code>[advancements] enabled = false</code></td><td>Loads no advancements at all (vanilla, mods and datapacks)</td></tr><tr><td><code>[wandering_trader] enabled = true</code></td><td>Sets the Wandering Trader's spawn interval and number of offers</td></tr><tr><td><code>[perf] gravityLimitDimensions = true</code></td><td>Create: Gravity's per-entity work and Creative Common's low gravity for items, blocks and projectiles only run in the listed dimensions (default the End)</td></tr><tr><td><code>[creative_menu] disabled = true</code></td><td>Creative players open the survival inventory, which avoids the long freeze of building the creative search in large packs; JEI's cheat mode covers item browsing</td></tr></tbody></table><p>Most other features have a switch in the same file. With Create and Creative Compat installed, the file can also be edited in game through Create's config screen.</p></div>
+<div class="spoiler"><p>Out of the box, Creative Common leaves vanilla behavior alone except for melting, level caps, the idle random tick rules and the Create: Gravity limit below, which are on and have a switch or list in the config. The *Creative Engineering* pack turns these on in its own config, and any pack can do the same in <code>config/creativecommon-common.toml</code>:</p><table><thead><tr><th>Setting</th><th>What it does</th></tr></thead><tbody><tr><td><code>[advancements] enabled = false</code></td><td>Loads no advancements at all (vanilla, mods and datapacks)</td></tr><tr><td><code>[wandering_trader] enabled = true</code></td><td>Sets the Wandering Trader's spawn interval and number of offers</td></tr><tr><td><code>[perf] gravityLimitDimensions = true</code></td><td>Create: Gravity's per-entity work and Creative Common's low gravity for items, blocks and projectiles only run in the listed dimensions (default the End)</td></tr><tr><td><code>[creative_menu] disabled = true</code></td><td>Creative players open the survival inventory, which avoids the long freeze of building the creative search in large packs; JEI's cheat mode covers item browsing</td></tr></tbody></table><p>Most other features have a switch in the same file. With Create and Creative Compat installed, the file can also be edited in game through Create's config screen.</p></div>
 
 ***
 
@@ -60,6 +66,8 @@ Every feature below works without any other Creative mod. Features that touch an
 | Forge                  |43 or newer                           |
 | KubeJS                 |1902.6.2-build.73 or newer (1902.6.x) |
 | Rhino and Architectury |required by KubeJS                    |
+
+Creative mods that need Creative Common: version 1.3.0 or later of Creative Common is required by every Creative jar listed above.
 
 Everything else is optional; see "Optional mods: what changes with each" above.
 

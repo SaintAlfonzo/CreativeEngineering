@@ -1,5 +1,7 @@
 # Glass shards: every glass block and pane breaks into shards of its color
 
+Ships in Creative Common 1.3.0 ([creative_engineering.md](creative_engineering.md) 7.6).
+
 Test prefix `GSH-`. TODO `gameplay/misc #22`; plan [plan_wood_bucket_batch_1121.md](plan_wood_bucket_batch_1121.md) R3, D1.
 
 ## 0. At a glance

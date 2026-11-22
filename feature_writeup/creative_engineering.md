@@ -22,11 +22,18 @@ changelog and JEI world trees, the JFR events and the mixin member prefix.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=1813904de4e9 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 3 Complete.
+<!-- generated:status_index begin open_work sha1=b39f35904f9a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 3, In Progress 2, Testing 5), 5 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `creative-common-publish #7` | Planned |  | P6 build and install Common 1.3.0 then the dependents; jarstamp pending empty for the upload set |
+| `creative-common-publish #8` | Planned | S C | P7 tests: CC13 run block (solo, optional-mod, full pack sets) and new client rows |
+| `creative-common-publish #9` | Planned |  | P8 release: tag creativecommon-1.3.0, upload Common first, then the dependents |
+| `creative-common-publish #3` | In Progress |  | P2 texture sources: no row missing since 1.2.0; owner look-check of the 12 wood composters (rows status=confirm) |
+| `creative-common-publish #4` | In Progress |  | P3 ISO dates and spelling: fixer, 9 unresolved on the owner list, spelling_docs |
+| `creative-common-publish #5` | Testing |  | P4 writeups: creative_engineering.md 7.6 Update to 1.3.0, 7.5 closed, touched writeups, project page |
+| `creative-common-publish #6` | Testing |  | P5 changelogs: CurseForge file changelog for Common, pack bullets, changelog_lint |
 | `creativecommon/publish #1` | Testing | S+ C | Creative Common publish readiness: mixin version gates, `mods.toml`, dependency list |
 | `creativecommon/publish #2` | Testing | S C | Neutral defaults for wide distribution |
 | `creativesplit/engineering #10` | Testing | none | Carve Creative Engineering with the Computers rows, then the id swap |
@@ -662,3 +669,51 @@ Before the upload:
    ERROR, swap summary with 739 permanent aliases and 4 capability keys on the full pack, "every listed id resolved" on
    stop; Common 1.2.0 also ran under every other r1114 phase without a Common error.
 5. Commit, then tag `creativecommon-1.2.0` on that commit.
+
+**7.5 closed 2026-11-22:** the 1.2.0 checks above are done (swap list boot rows SQ-CC12-01 to -03 re-run on 1.3.0 in
+7.6); item 3 (file changelog) is written in 7.6 for 1.3.0, which ships the whole change set since the 1.2.0 tag. Whether
+1.2.0 was ever public is unknown (owner chat, 2026-11-21), so 1.3.0 is the first upload.
+
+### 7.6 Update to 1.3.0 (2026-11-22, [plan_cc_publish_1_3.md](plan_cc_publish_1_3.md), TODO `creative-common-publish #1` to `#9`)
+
+Owner ruling (2026-11-21): ship the entire change set since tag `creativecommon-1.2.0` (2026-11-13) as 1.3.0, because
+it adds library API and gameplay content, and require it from every dependent jar (`[1.3.0,)`). The change set is 84
+commits touching Common's tree, `kubejs/data/creativecommon` and `kubejs/assets/creativecommon`
+(`git log creativecommon-1.2.0..HEAD -- development/creativeCommon kubejs/data/creativecommon kubejs/assets/creativecommon`).
+
+| Change since 1.2.0 | Tested |
+|---|---|
+| Melting: salt, fire, lava and magma melt ice and snow by source-found scheduled ticks, snow by layer, saltable tag and tooltip, slow tier (packed ice, cryosol), hot places and the Nether, End contact-only melting and no fire in the End ([melting.md](melting.md); `melting/`, biome and light mixins) | SQ-MELT-01 to -20: 11 PASS on earlier jars, SQ-MELT-08 FAIL (r1115), 11 drafts; client tooltip row CQ-CC13-02; rerun in SQ-CC13-06 (pending) |
+| Salt: placed-only salt licks, salt listener before melt, Salt Melt tool, salt dict keys ([salt.md](salt.md)) | SQ-SALT: 6 PASS on earlier jars, 2 FAIL (older runs), 8 drafts; rerun in SQ-CC13-06 (pending) |
+| Effect level caps: `[effects] levelCaps` holds the 87 same-at-every-level effects at level I from every source, tooltips included (`LevelCappedEffect`, `MobEffectInstanceLevelCapMixin`; [effects.md](effects.md) section 3) | SQ-EFX-15 to -17 current PASS (built 2026-11-19); in game CQ-CC13-03 (pending) |
+| Own-config watcher: Common watches `config/` for the pack's own files (modify and create, 1 s debounce, content guard) and runs Forge's reload path (`config/OwnConfigWatcher`, `OwnConfigLogic`, `ConfigReload`) | not yet queued before CC13; CQ-CC13-01 (pending) |
+| Wooden composters: 12 woods, recipe from 7 slabs, loot tables, Polymorph back to the Composter, furnace fuel and burn values for the flammable woods ([composting.md](composting.md); `composter/`) | SQ-CM-37 to -41 never run (queued); CQ-CM-37, CQ-CM-42 and CQ-CC13-04 (pending); side textures await the owner look-check (TODO `creative-common-publish #3`) |
+| Glass shards: global loot modifier `creativecommon:glass_shards` for every block and pane in the forge glass tags ([glass_shards.md](glass_shards.md); needs Creative Loot's GlmMerge and Quark) | SQ-GSH rows, not part of the CC13 gate |
+| Idle random ticks: grown crops and Floral bushes stop random ticking, ripe Vinery stems too (`IdleRandomTickMixin`, `IdleTickRules`) | with SQ-CC13-05 (boot) |
+| Sack pick-up: sneak and right-click a placed sack with an empty hand to pick it up with its contents (`storage/SneakPickup`) | the dependents' own rows |
+| NCH helpers: json edit helpers mark the recipe changed, `NCH.forPack` / `reg.forPack`, Create crushing and milling pools, new recipe types named directly | the pack's recipe load (SQ-CC13-05) |
+| Dict API: namespace binding, `dict_lint`, literal-id swap and missing-key tooling, orphan-tab handling, dict tag check; ids follow the owning mod (`creativecommon:` namespace); retired dict keys `diet_log`, `liquid_diet_log`, `food_dictionary` (moved to Raspberry Pie) | SQ-CMV-01, SQ-CCO-15, SQ-CPP-01 in SQ-CC13-01 and -05 (pending) |
+| Loot data: `glm_entries.json` fragment (glass shards), wooden composter loot tables | SQ-CCO-16 and SQ-CC13-05 (pending) |
+| American spelling in own lang values and config comments, build stamps, notices (`NOTICE-commonmark.txt`, `NOTICE-thirdparty.txt`), dated comments out of code, tab indent in Java, JS and Gradle (including the trader package) | no behavior change |
+
+**Run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md), scratch jar `1.3.0+23c5050d`,
+not the final build).** 77 Common and Compat server rows: PASS 69, FAIL 4, BATCH-FAULT 1, INCONCLUSIVE 3.
+Open before the upload: SQ-CC-03, SQ-CC12-02, SQ-CPP-05 (NCH sand layer recipes without Immersive Weathering, in
+Compat's `misc_mods.js`, TODO `blockrunner #18`), SQ-SPFX-06 (`canned_legendary_roll_medley` and
+`canned_mythical_roll_medley` in Common's `item_dict.js`, TODO `mod-updates #3`). SQ-CC12-01 is a BATCH-FAULT, not a
+product fail. P7 reruns everything on the final jar.
+
+**Gate (P7, CC13.qb).** Server sets SQ-CC13-01 to -06 (Common alone, optional mods present and absent, Common +
+Compat + Calendar, full pack, new content) chain the existing rows listed in each; client rows CQ-CC13-01 to -04 are
+new. Owner client rows from the plan: CQ-CMV-02 (PASS r1108), CQ-CMV-03, CQ-CC-01 to -06, CQ-CCB-02, -03 (FAIL r1107,
+needs the Tempad jar), CQ-CCO-02, -03, CQ-CPP-01, CQ-CIF-01, CQ-SPFX-02, the CQ-CGE client half, CQ-CLOG-02 and
+CQ-CHK-01 (owner PASS 2026-11-13: close the queue row). Dedicated-server rows stay out of the gate (owner, 2026-11-08).
+
+**Release steps.** P1 done 2026-11-22: `mod_version` 1.3.0 and all 11 dependents (Equipment, Engineering, Brewing,
+Delight, Loot, Compat, Devtools, Calendar, Worldgen, Magic, Labels) require `[1.3.0,)`; `mod_sides.md` names
+`creativecommon-1.3.0.jar`. P2 (textures): every texture added since 1.2.0 has a `sources.csv` row or ledger row;
+the 12 composter rows await the owner look-check. P6 build and install, P7 runs, P8 tag `creativecommon-1.3.0` and upload
+(Common first) are still open. The CurseForge file changelog is
+[project_pages/creative_common_changelog_1_3_0.md](project_pages/creative_common_changelog_1_3_0.md); the project page is
+[project_pages/creative_common.md](project_pages/creative_common.md). `pack/MODLIST.md` and `pack/manifest.json` follow
+at the next deploy.

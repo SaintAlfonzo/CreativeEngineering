@@ -1,7 +1,7 @@
 # Melting: salt, fire and lava melt ice and snow (Creative Common)
 
-Status: BUILT and installed 2026-11-14 (Creative Common 1.2.0, `development/creativeCommon`), scratch rows queued
-(section 7), not run. Plan: [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.8 (owner, 2026-11-14). TODO
+Creative Common (`development/creativeCommon`); ships in 1.3.0 ([creative_engineering.md](creative_engineering.md) 7.6); state is in the
+TODO rows below and the scratch queue (section 7). Plan: [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.8 (owner, 2026-11-14). TODO
 `creativedelight/members #56`. Rework of 2026-11-17 (melt ticks, snow by layer, magma, saltable tag, slow tier frozen):
 [plan_post_scratch_1115.md](plan_post_scratch_1115.md) G7, G8; TODO `tooling/scratch-1115-follow-ups #20`. G11 rulings
 and E1 frozen decor built 2026-11-17 (lane C1, plan G12; TODO `#20`, `#22`, `#9`). Related: [salt.md](salt.md) (The Salt's item click and the switched-off block melt).

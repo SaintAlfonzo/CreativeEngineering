@@ -1,5 +1,7 @@
 # Composting: the pack's composter table, rules, values and exclusions
 
+The 12 wooden composters are Creative Common content and ship in 1.3.0 ([creative_engineering.md](creative_engineering.md) 7.6).
+
 Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.md) already uses).
 
 ## 0. At a glance

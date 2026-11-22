@@ -1,5 +1,7 @@
 # Effects: every mob effect in the pack, by mod, with its brewing, arrows, JEI and food coverage
 
+The level caps (section 3) ship in Creative Common 1.3.0 ([creative_engineering.md](creative_engineering.md) 7.6).
+
 ## 0. At a glance
 
 <!-- generated:status_index begin open_work sha1=744eaefe8b75 -->
