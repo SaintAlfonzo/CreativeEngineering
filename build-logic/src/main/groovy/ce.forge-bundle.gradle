@@ -8,6 +8,10 @@
 //   bundle_members   comma-separated Gradle project paths (`:repackedOceans,...`). Each member's shipped jar is
 //                    nested, its metadata entry built from its mod_group_id, jar_name and mod_version, with the
 //                    range pinned to exactly that version. Set bundled_in=<this project> in each member.
+//   bundle_external_jars  optional, ';'-separated third-party jars nested unmodified (Raspberry Pie's Apple Pie and
+//                    Carrot), each `path|group|artifact|version|range|sha1`: path relative to the project, the metadata
+//                    identifier and version, the Maven range other jars may share it under, and the sha1 the file must
+//                    have (the build stops on any other file, so a changed or swapped library never ships).
 //
 // The bundle is build/libs/<jar_name>-<mod_version>.jar; this project's own (reobfed) jar alone is the `-own`
 // classifier.
@@ -20,6 +24,13 @@ def csv = { String key -> (prop(key, '') ?: '').split(',')*.trim().findAll { it 
 def modId = prop('mod_id')
 def jarName = prop('jar_name', modId)
 def memberPaths = csv('bundle_members')
+def externals = (prop('bundle_external_jars', '') ?: '').split(';')*.trim().findAll { it }.collect { spec ->
+	def f = spec.split('\\|', -1)*.trim()
+	if (f.size() != 6 || f.any { !it }) {
+		throw new GradleException("${project.name}: bundle_external_jars entry '${spec}' is not path|group|artifact|version|range|sha1")
+	}
+	[file: file(f[0]), group: f[1], artifact: f[2], version: f[3], range: f[4], sha1: f[5].toLowerCase()]
+}
 
 ext.shipped_jar_task = 'bundleJar'
 
@@ -55,12 +66,18 @@ def writeMetadata = tasks.register('jarJarMetadata') {
 		def p = project(path)
 		[path, p.findProperty('mod_group_id'), p.findProperty('jar_name'), p.findProperty('mod_version')].join('|')
 	})
+	inputs.property('externals', externals.collect { [it.file.name, it.group, it.artifact, it.version, it.range].join('|') })
 	outputs.file(out)
 	doLast {
 		def jars = members().collect { m ->
 			[identifier : [group: m.group, artifact: m.artifact],
 			 version    : [range: "[${m.version}]", artifactVersion: m.version],
 			 path       : "META-INF/jarjar/${m.task.archiveFileName.get()}",
+			 isObfuscated: false]
+		} + externals.collect { e ->
+			[identifier : [group: e.group, artifact: e.artifact],
+			 version    : [range: e.range, artifactVersion: e.version],
+			 path       : "META-INF/jarjar/${e.file.name}",
 			 isObfuscated: false]
 		}
 		def f = out.get().asFile
@@ -89,13 +106,22 @@ tasks.register('bundleJar', Jar) {
 	from(metadataDir)
 	into('META-INF/jarjar') {
 		from({ members().collect { it.task.archiveFile } })
+		from(externals.collect { it.file })
 	}
+	externals.each { inputs.file(it.file) }
 	duplicatesStrategy = DuplicatesStrategy.FAIL
 
 	// Same manifest as the own jar (ce.forge-mod's attributes, incl. MixinConfigs).
 	manifest.from(tasks.named('jar', Jar).get().manifest)
 
 	doFirst {
+		externals.each { e ->
+			if (!e.file.isFile()) throw new GradleException("${project.path}: bundle_external_jars file ${e.file} is missing")
+			def md = java.security.MessageDigest.getInstance('SHA-1')
+			e.file.withInputStream { s -> byte[] b = new byte[1 << 16]; int n; while ((n = s.read(b)) > 0) md.update(b, 0, n) }
+			def have = md.digest().encodeHex().toString()
+			if (have != e.sha1) throw new GradleException("${project.path}: ${e.file.name} has sha1 ${have}, bundle_external_jars pins ${e.sha1}")
+		}
 		members().each { m ->
 			if (!m.group || !m.version) throw new GradleException("${m.project.path}: mod_group_id and mod_version are required for the bundle")
 		}

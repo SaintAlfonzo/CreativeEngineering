@@ -16,13 +16,12 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=e5c132282d4b -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 40 open TODO rows (Planned 12, Testing 28), 3 Complete.
+<!-- generated:status_index begin open_work sha1=8a159a268433 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 39 open TODO rows (Planned 11, Testing 28), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food-tuning #15` | Planned |  | Food Dictionary: hand-made type sort mirroring the JEI food family order (after that is done) |
-| `food-tuning #37` | Planned |  | RP standalone P0: verify LGPL-2.1 for Apple Pie and Carrot (and their book art) at the upstream tags; record result |
 | `food-tuning #38` | Planned | S | RP standalone P1: Jar-in-Jar bundle (Apple Pie, Carrot nested), license texts, NOTICE, mods.toml URLs, deploy and manifest updates |
 | `food-tuning #39` | Planned | S C | RP standalone P2: default ladder = Apple Pie's ladder plus 10 vanilla unlockables and slots |
 | `food-tuning #40` | Planned | S | RP standalone P3: diversity table loaded from any jar's solraspberrypie/diversity/*.json, ids optional, no table in the mod |
@@ -74,9 +73,9 @@ mixes into Apple Pie, not a fork: no Apple Pie code is copied in.
 | Mod id | `solraspberrypie` (permanent; the display name may change, the id may not) |
 | Tree | `development/solRaspberryPie` (root `settings.gradle`, `build-logic/`) |
 | Sides | both (screens, widget, overlay messages on the client; all rules on the server) |
-| Depends on | `solapplepie` 2.2.0 exactly (mixins and accessors on its private members) |
-| License | own code GPLv3; Apple Pie is LGPL-2.1, so mixins into it and linking are fine; credit Apple Pie and its forks |
-| `mod_sides.md` | add a row when built |
+| Depends on | `solapplepie` 2.2.0 exactly (mixins and accessors on its private members); nested in the jar since 2026-11-21 with Carrot Edition 1.14.0 (optional), section 12.9 |
+| License | own code GPL-3.0-only; Apple Pie and Carrot are LGPL-2.1 (checked at the source, plan_rp_standalone.md P0) and ship nested unmodified with their license texts and a `NOTICE`; credit Apple Pie and its forks |
+| `mod_sides.md` | row `solraspberrypie` (both); the nested ids take its side |
 
 Carrot Edition: the GitHub text the owner found is the GTNH 1.7.10 fork (LGPL-3.0, original code public domain). Our
 1.19.2 jar declares `LGPL-2.1` in `mods.toml`; CurseForge says All Rights Reserved. Route: **copy no Carrot code.**
@@ -930,4 +929,20 @@ to the family head, so a family is one diet entry. `#solraspberrypie:no_diet` (c
 a drink but never logged. Workflow: `/dumpfood` -> `python3 tools/food_diversity.py --report` -> rebuild and install the
 jar -> restart. Rules, tier tops and fitted values: plan_food_diversity_1121.md sections 3 and 6; the last step scales each tier so the
 best diet peaks at 100, high meals and feasts at about 72 (3/4 of the ladder), gilded and dragon food the last quarter (R15, food_diversity_audit.md 1.1).
+
+### 12.9 Standalone mod (plan_rp_standalone.md, built 2026-11-21)
+
+Raspberry Pie runs with only Forge and its own jar; the pack layers its table, ladder, names and Apple Pie settings on
+top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); status in its TODO rows.
+
+- **Bundle (P1).** `solRaspberryPie-<ver>.jar` is a `ce.forge-bundle` jar: Apple Pie 2.2.0 and Carrot Edition 1.14.0
+  are nested unmodified under `META-INF/jarjar/` (`bundle_external_jars` in `gradle.properties`, each file pinned by
+  sha1, so a changed library stops the build). Metadata ranges: Apple Pie `[1.19.2-2.2.0]`, Carrot `[1.19.2-1.14.0,)`.
+  Carrot stays optional in `mods.toml` (D6) and its mixins stay gated to 1.14.0. A loose copy of either in `mods/` is
+  picked by Forge's Jar-in-Jar selection instead of the nested one (RPS-04); `build_deploy.py` refuses a stage with a
+  loose copy (duplicate mod id) and `gen_pack_manifest.py` lists the nested jars under the bundle and leaves a loose
+  copy out. The jar carries `solRaspberryPie-LICENSE.txt` (GPL-3.0-only), `solRaspberryPie-LGPL-2.1-solapplepie.txt`,
+  `solRaspberryPie-LGPL-2.1-solcarrot.txt` (the upstream `LICENSE.txt` files) and `solRaspberryPie-NOTICE` (names,
+  authors, versions, sha1, "unmodified", upstream tag / commit links, the Liquid Diet Log art credit). `mods.toml` has
+  `displayURL` and `issueTrackerURL` (the GitHub repo). The compile jars in `libs/` stay git-ignored.
 

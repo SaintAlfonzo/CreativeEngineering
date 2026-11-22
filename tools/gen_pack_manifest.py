@@ -12,15 +12,21 @@ Sources of truth:
 
 Every file gets its local sha1 so a rebuilt pack can be checked byte-for-byte. Files with no
 CurseForge/Modrinth entry are marked source "local" (the in-tree Creative Common jar, hand-made packs).
+Own jars (source "local") that nest mods (Jar-in-Jar, META-INF/jarjar/: the Creative bundles' members, Raspberry Pie's
+Apple Pie and Carrot) list them under "nested"; a loose copy of such a mod in mods/ is left out of the list (it ships inside the
+bundle) and named in a warning, so it is not downloaded twice.
 
 Re-run after adding, removing or updating anything, then commit pack/.
 
 Run: python3 tools/gen_pack_manifest.py
 """
 import hashlib
+import io
 import json
 import os
+import re
 import sys
+import zipfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from dump_server_mods import ROOT, jar_modid, read_doc  # noqa: E402
@@ -35,6 +41,28 @@ def sha1(path):
 		for chunk in iter(lambda: f.read(1 << 20), b''):
 			h.update(chunk)
 	return h.hexdigest()
+
+
+def nested_mods(path):
+	"""[{file, modId, version, sha1}] for the Jar-in-Jar mods in a jar's META-INF/jarjar/metadata.json."""
+	out = []
+	try:
+		with zipfile.ZipFile(path) as z:
+			if 'META-INF/jarjar/metadata.json' not in z.namelist():
+				return out
+			for entry in json.loads(z.read('META-INF/jarjar/metadata.json')).get('jars', []):
+				data = z.read(entry['path'])
+				modid = None
+				with zipfile.ZipFile(io.BytesIO(data)) as nz:
+					if 'META-INF/mods.toml' in nz.namelist():
+						m = re.search(r'^\s*modId\s*=\s*"([^"]+)"', nz.read('META-INF/mods.toml').decode('utf8', 'replace'), re.M)
+						modid = m.group(1) if m else None
+				out.append({'file': entry['path'].rsplit('/', 1)[-1], 'modId': modid,
+							'version': (entry.get('version') or {}).get('artifactVersion', ''),
+							'sha1': hashlib.sha1(data).hexdigest()})
+	except (zipfile.BadZipFile, KeyError, ValueError):
+		pass
+	return out
 
 
 def source_of(entry):
@@ -121,6 +149,17 @@ def main():
 		if side == 'dev':
 			continue  # dev mods/ only (Creative Devtools), not part of the pack
 		mods.append(build('mods', 'mods', jar, {'modId': modid, 'side': side}))
+	# Third-party mods nested in an own bundle ship inside it: record them there, drop a loose copy from the list.
+	in_bundle = {}
+	for rec in mods:
+		if rec['source'] == 'local':
+			nested = [n for n in nested_mods(os.path.join(ROOT, 'mods', rec['file'])) if n['modId']]
+			if nested:
+				rec['nested'] = nested
+				for n in nested:
+					in_bundle.setdefault(n['modId'], rec['file'])
+	loose = [r for r in mods if r['modId'] in in_bundle and in_bundle[r['modId']] != r['file']]
+	mods = [r for r in mods if r not in loose]
 
 	disabled = [build('mods', folder, jar, {'modId': jar_modid(os.path.join(ROOT, folder, jar))})
 				for folder in ('disabledmods', 'disabledmods/archive')
@@ -160,6 +199,9 @@ def main():
 		print('no download source (source "local"):', ', '.join(local))
 	if unsided:
 		print('WARNING: no row in mod_sides.md:', ', '.join(unsided))
+	for r in loose:
+		print(f"WARNING: mods/{r['file']} is a loose copy of {r['modId']}, nested in {in_bundle[r['modId']]}: "
+			  'left out of the list; remove it from mods/')
 
 
 def link(rec):
@@ -199,6 +241,13 @@ def render_md(m):
 	for r in sorted(m['mods'], key=lambda r: r['name'].lstrip("'[").lower()):
 		lines.append(f"| {r['side'] or '?'} | {cell(r['name'])} | `{r['modId'] or '-'}` | {cell(r['version'])} "
 					 f"| `{cell(r['file'])}` | {link(r)} |")
+	bundles = [r for r in m['mods'] if r.get('nested')]
+	if bundles:
+		lines += ['', '## Nested in own jars (Jar-in-Jar, ship inside the bundle, not downloaded separately)', '',
+				  '| Bundle | Mod id | Version | Nested file |', '|---|---|---|---|']
+		for r in bundles:
+			for n in r['nested']:
+				lines.append(f"| `{cell(r['file'])}` | `{n['modId']}` | {cell(n['version'])} | `{cell(n['file'])}` |")
 	lines += ['', '## Resource packs', '',
 			  'Load order is bottom-to-top as in the in-game menu (higher number = higher priority).', '',
 			  '| Order | Pack | File | Source |', '|---|---|---|---|']

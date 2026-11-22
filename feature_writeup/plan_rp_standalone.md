@@ -1,11 +1,10 @@
 # Plan: Raspberry Pie as a standalone mod, shipped from the GitHub repo (2026-11-21)
 
-<!-- generated:status_index begin open_work sha1=9f92622d72b8 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 10), 0 Complete.
+<!-- generated:status_index begin open_work sha1=4e008ddf42e3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 9), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food-tuning #37` | Planned |  | RP standalone P0: verify LGPL-2.1 for Apple Pie and Carrot (and their book art) at the upstream tags; record result |
 | `food-tuning #38` | Planned | S | RP standalone P1: Jar-in-Jar bundle (Apple Pie, Carrot nested), license texts, NOTICE, mods.toml URLs, deploy and manifest updates |
 | `food-tuning #39` | Planned | S C | RP standalone P2: default ladder = Apple Pie's ladder plus 10 vanilla unlockables and slots |
 | `food-tuning #40` | Planned | S | RP standalone P3: diversity table loaded from any jar's solraspberrypie/diversity/*.json, ids optional, no table in the mod |
@@ -78,6 +77,20 @@ Rights Reserved in raspberry_pie.md section 1, which is a conflict the owner has
 source). Record the result and date here. Also check the license of the book art (Diet Log, Food Dictionary textures)
 in each repo, since the Liquid Diet Log copy depends on it.
 
+P0 result (checked 2026-11-21 against GitHub, public API and raw files):
+- Apple Pie: upstream `https://github.com/txnimc/Spice-of-Life-Apple-Pie` (the jar's `issueTrackerURL`,
+  `tarinoita/Spice-of-Life-Sweet-Potato-Edition`, is gone; `tarinoita/Spice-of-Life-Sweet-Potato` is the older 1.18
+  fork). Tag `2.2.0` exists, `gradle.properties` there says `mod_version = 2.2.0`, `minecraft_version = 1.19.2`;
+  `LICENSE.txt` at the tag is the GNU LGPL 2.1 text; GitHub reports LGPL-2.1 for the repo.
+- Carrot: upstream `https://github.com/Cazsius/Spice-of-Life-Carrot-Edition`, no tags; branch `1.19` (head
+  `ddb1729`, 2023-01-24) has `mod_version = 1.14.0`, `mc_version = 1.19.2` and `LICENSE.txt` = LGPL 2.1.
+- Book art: neither repo carries a separate asset license or an art note in its README, so the textures fall under the
+  repo LICENSE (LGPL-2.1). `liquid_diet_log.png` is byte-identical (sha1 `33173875...`) to Apple Pie's
+  `assets/solapplepie/textures/items/food_book.png` at tag 2.2.0 and in the 2.2.0 jar.
+- The CurseForge "All Rights Reserved" label in raspberry_pie.md section 1 conflicts with the source; the repo license
+  and the jar's `mods.toml` (`license = "LGPL-2.1"`) agree, and A1 stands. `NOTICE` links the tag (Apple Pie) and
+  the branch head commit (Carrot) as the source offer.
+
 **P1 Bundle build.** Switch `development/solRaspberryPie` from `ce.forge-mod-refmap` to the bundle plugin
 (`build-logic/.../ce.forge-bundle.gradle`) with Apple Pie and Carrot as unmodified nested jars under
 `META-INF/jarjar/`, version ranges as today (`[1.19.2-2.2.0]`, Carrot `[1.19.2-1.14.0,)`; Carrot becomes mandatory in
@@ -136,7 +149,7 @@ values it wants through that table, so the mod is neutral (A7).
 | D6 | Carrot nested and mandatory? | **Ruled (owner, 2026-11-21): agent default kept.** Nested; stays optional in `mods.toml` terms so Raspberry Pie still loads if the nested Carrot is replaced or removed |
 | D7 | Version number for the first public build | **Ruled (owner, 2026-11-21): agent default kept.** 1.0.0 stays; the nested jars carry their own versions |
 | D8 | Test prefix for the isolation rows | **Ruled (owner, 2026-11-21): agent default kept.** New prefix `RPS` (isolation), row added to test_prefix_index.md first |
-| D10 | Falling effect density | **Ruled (owner, 2026-11-21): the start of the chain has about 2x (configurable `densityRatio`) the effects per point as the end**, applied to unlockables and permanent effects (P7 above); positions in plan_food_diversity_1121.md section 7. Agent default, unconfirmed: it also applies to the 10 default-ladder unlockables, at 10, 18, 26, 34, 43, 53, 63, 74, 86, 100 (D2's "about every 10" becomes these) |
+| D10 | Falling effect density | **Ruled (owner, 2026-11-21): the start of the chain has about 2x (configurable `densityRatio`) the effects per point as the end**, applied to unlockables and permanent effects (P7 above); positions in plan_food_diversity_1121.md section 7. Also applies (owner, 2026-11-21) to the 10 default-ladder unlockables, at 10, 18, 26, 34, 43, 53, 63, 74, 86, 100 (D2's "about every 10" becomes these) |
 | D9 | What "fleet food" means | **Ruled (owner, 2026-11-21): Fleet-Footed**, the Alex's Mobs effect (`FleetFootedMixin`); P6 stands |
 
 ## 6. Tests

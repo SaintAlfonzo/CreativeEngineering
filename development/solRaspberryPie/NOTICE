@@ -1,0 +1,30 @@
+Spice of Life: Raspberry Pie Addition (solraspberrypie)
+Copyright SaintAlfonzo. Licensed under the GNU General Public License version 3 only (GPL-3.0-only),
+see solRaspberryPie-LICENSE.txt. Source: https://github.com/SaintAlfonzo/CreativeEngineering
+(development/solRaspberryPie).
+
+This jar also contains two third-party mods, nested UNMODIFIED as separate jars under META-INF/jarjar/ (Forge
+Jar-in-Jar). They stay separate works under their own license, the GNU Lesser General Public License version 2.1
+(LGPL-2.1). A user may replace either one by putting another build of it in the mods folder; Forge then loads that
+copy instead of the nested one. Raspberry Pie's own code is not derived from theirs: it mixes into them at runtime
+and copies none of their code.
+
+1. Spice of Life: Apple Pie Edition (mod id solapplepie)
+   Author: tarinoita (forked from Spice of Life: Potato Edition by Kevun1 and the Carrot Edition team)
+   Version: 1.19.2-2.2.0, file META-INF/jarjar/solapplepie-1.19.2-2.2.0.jar
+   (sha1 b0b0e3719adea49a1283bf115dba3037ab1ee465), unmodified
+   License: LGPL-2.1, full text in solRaspberryPie-LGPL-2.1-solapplepie.txt
+   Source: https://github.com/txnimc/Spice-of-Life-Apple-Pie at tag 2.2.0
+   (https://github.com/txnimc/Spice-of-Life-Apple-Pie/tree/2.2.0)
+
+2. Spice of Life: Carrot Edition (mod id solcarrot)
+   Authors: Cazsius, Talonos, juliand665
+   Version: 1.19.2-1.14.0, file META-INF/jarjar/SoL-Carrot-1.19.2-1.14.0.jar
+   (sha1 55625f32bc8e0c5b28a4420fc6bc6211bb771a8a), unmodified
+   License: LGPL-2.1, full text in solRaspberryPie-LGPL-2.1-solcarrot.txt
+   Source: https://github.com/Cazsius/Spice-of-Life-Carrot-Edition, branch 1.19 at commit ddb1729
+   (https://github.com/Cazsius/Spice-of-Life-Carrot-Edition/tree/ddb1729)
+
+Art: the Liquid Diet Log texture (assets/solraspberrypie/textures/item/liquid_diet_log.png) is an unmodified copy of
+Apple Pie's Food Book texture (assets/solapplepie/textures/items/food_book.png at tag 2.2.0), LGPL-2.1, from the
+Apple Pie source above.

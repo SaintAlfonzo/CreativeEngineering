@@ -8,6 +8,8 @@ Donor jars (`*_upstream/` folders, ARR mods such as Vinery, Farmer's Structures,
 
 **Publish plan (owner, 2026-11-09):** the published pack's distribution points to the official original sources of every needed jar (CurseForge/Modrinth, author-uploaded builds). A function, probably in Creative Common, detects those specific jars (by pinned sha1, as `UpstreamJars` does) and moves them into the upstream folder. We never host a third-party jar ourselves.
 
+**Exception (owner, 2026-11-21, plan_rp_standalone.md A1):** Raspberry Pie nests Spice of Life: Apple Pie Edition 2.2.0 and Carrot Edition 1.14.0 unmodified (Jar-in-Jar) in its own jar, which the pack and the GitHub release ship. Both are LGPL-2.1 (checked at the upstream source, plan P0), so this is a license-backed exception for two LGPL mods, not a change to the ARR donor rule: the jar carries their license texts and a `NOTICE` with the source links, the jars stay unmodified and replaceable (sha1-pinned in `bundle_external_jars`).
+
 **Planned:** merge all `<name>_upstream/` folders into one single upstream folder (not done yet; touches every `UpstreamJars`, `build_deploy.py` categories, `tools/*` readers, `.gitignore`).
 
 **Why:** the owner does not want the rehosting question raised again on every ARR donor candidate.

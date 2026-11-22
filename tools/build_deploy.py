@@ -525,7 +525,9 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
 			if meta['modId']:
 				by_id.setdefault(meta['modId'], []).append(jar)
 		# Nested (Jar-in-Jar) mods count too: a stale upstream jar beside Creative Delight or Creative Brewing would silently win
-		# if its version string sorts newer (creative_delight.md 14.1.4).
+		# if its version string sorts newer (creative_delight.md 14.1.4). Raspberry Pie nests Apple Pie and Carrot
+		# (plan_rp_standalone.md P1): a loose solapplepie / SoL-Carrot jar beside it is a top-level duplicate and stops the
+		# stage, so the nested jars never ship a second time loose.
 		for jar, path in files['mods'].items() | files['client_mods'].items():
 			for nested_jar, nested_id in nested_modids(path):
 				by_id.setdefault(nested_id, []).append(f'{jar}!{nested_jar}')
