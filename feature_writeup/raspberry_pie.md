@@ -4,8 +4,9 @@ Status: **BUILT 2026-11-12, server rows scratch PASSED, client rows queued** (`s
 section 14). Design decisions: owner 2026-11-10, two rounds on 2026-11-11 and two on 2026-11-12 (chat). TODO
 `food/types-and-tuning #21` (selectable bonus), touches `#12` (ladder values: the pack ladder is a draft) and `#4`.
 Build choices not in the design are in section 15. Waiting on rebuilds the owner does (those jars carry other unbuilt
-commits): Common (`item_dict.js` key `diet_log`, `liquid_diet_log`) and Creative Delight (`names.js` "Diet Log",
-`solapplepie/diet_log.js` removing Apple Pie's book + potato recipe) together; Creative Brewing (Lava Walker burn).
+commits): Creative Brewing (Lava Walker burn). The Diet Log name and Apple Pie's book + potato recipe removal moved
+from Creative Delight into this jar on 2026-11-21 (12.9), and the `item_dict.js` keys `diet_log`, `liquid_diet_log`,
+`food_dictionary` were deleted from Common.
 Existing worlds (Workspace, Structures, New World) keep their old `serverconfig/` copies of Apple Pie's settings
 (benefits, `resetOnDeath`, blacklist, `minFoodsToActivate` 10): edit them by hand, or run
 `python3 tools/gen_sol_drink_blacklist.py --worlds` for the blacklist.
@@ -91,7 +92,7 @@ license question does not matter.
 | Apple Pie config | `benefitsUnparsed` and `thresholds` emptied; Apple Pie applies nothing itself (verify when built that its parser accepts two empty lists) |
 | Apple Pie screens | show Raspberry Pie's ladder (mixins on its client pages, 6.3) |
 
-Item names: Apple Pie's book is renamed **Diet Log** (was Diet Tracker; `names.js` in the Creative Delight tree, the
+Item names: Apple Pie's book is renamed **Diet Log** (was Diet Tracker; by this jar's lang overrides since 2026-11-21, 12.9, `names.js` in the Creative Delight tree before; the
 changelog bullet "called Diet Tracker" gets rewritten). The new drink book is the **Liquid Diet Log** (Raspberry Pie item).
 
 ## 3. The ladder
@@ -725,7 +726,7 @@ Choices made while building (owner may revisit):
   `#solraspberrypie:diet_log_excluded` (drinks, and carrot: book + carrot stays the Food Dictionary's). JEI lists
   drinks in its ingredient cycle (display only). Liquid Diet Log: book + `#solraspberrypie:drinks` (the pack drink
   tags, Farmer's Delight and Brewin' drink tags, potions, milk bucket). Apple Pie's book + potato is removed by
-  `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js`.
+  `RecipeManagerMixin` in this jar (12.9; `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js` before 2026-11-21).
 - **Pause list** is kept in world data (`data/solraspberrypie_paused.dat`) so offline paused players are listed.
 - **Fleet-Footed:** the shared state that matters is `removeEffectAfter` (`lastDuration` is written and read in the
   same per-entity call); the mixin keeps that countdown per entity. Applied only with Alex's Mobs.
@@ -969,4 +970,14 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   `src/main/resources/solraspberrypie/diversity/creativedelight.json`, written by `tools/food_diversity.py`
   (`generators.json` output and apply step updated). Same file shape (`values`, `families`). The headless test covers
   the merge, a family with an absent head, no table, and the pack file on vanilla ids.
+- **Names and recipe (P4).** The pack wiring moved into the jar, no KubeJS needed. Names: the lang file carries
+  `solraspberrypie.override.<key>` entries ("Diet Log" for `item.solapplepie.food_book`, "Food Dictionary" for
+  `item.solcarrot.food_book`, "Open Diet Log" for `key.solapplepie.open_food_book`) and `ClientLanguageMixin` copies
+  each onto its key after every lang file is merged (`LangOverrides`). Plain keys of another namespace in our lang file
+  (the plan's first idea) do not work: the client merges namespaces in HashMap order, and with few mods `solapplepie`
+  and `solcarrot` load after `solraspberrypie` and keep "Food Book". Recipe: `RecipeManagerMixin` (priority 900, ahead
+  of KubeJS's 1100 HEAD cancel) drops `solapplepie:food_book` from the recipe map before parsing, so it also runs on a
+  dedicated server without KubeJS. Creative Delight's `names.js` lines and `solapplepie/diet_log.js` are deleted;
+  Common's `item_dict.js` keys `diet_log`, `liquid_diet_log` and `food_dictionary` are deleted (nothing reads them once
+  `names.js` stops; `food_dictionary` went too for the same reason, beyond the plan's two).
 

@@ -13205,17 +13205,10 @@ i.sweet_salad                     = 'rusticdelight:sweet_salad';
 i.syrup_cheesecake_slice          = 'rusticdelight:syrup_cheesecake_slice';
 i.syrup_sandwich                  = 'rusticdelight:syrup_sandwich';
 
-// ===== solapplepie (4) =====
-i.diet_log        = 'solapplepie:food_book';  // renamed Food Book -> Diet Log (names.js; was Diet Tracker)
+// ===== solapplepie (3) =====
 i.golden_lunchbox = 'solapplepie:golden_lunchbox';
 i.lunchbag        = 'solapplepie:lunchbag';
 i.lunchbox        = 'solapplepie:lunchbox';
-
-// ===== solcarrot (1) =====
-i.food_dictionary = 'solcarrot:food_book';  // Spice of Life: Carrot Edition, shown as Food Dictionary (names.js)
-
-// ===== solraspberrypie (1) =====
-i.liquid_diet_log = 'solraspberrypie:liquid_diet_log';  // Spice of Life: Raspberry Pie Addition (raspberry_pie.md 7)
 
 // ===== untitledduckmod (4) =====
 i.cooked_duck  = 'untitledduckmod:cooked_duck';

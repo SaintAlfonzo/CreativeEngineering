@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.ladder;
 
+import com.SaintAlfonzo.solraspberrypie.client.LangOverrides;
 import com.SaintAlfonzo.solraspberrypie.logic.Diversity;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -14,14 +15,16 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Headless checks for Raspberry Pie standing alone (feature_writeup/plan_rp_standalone.md P2, tools/test_rp_ladder.sh):
  * the built-in default ladder parses on vanilla registries with no file warning (3.3 V1 to V10; V12 is reported), and has the ruled shape
  * (D2, D3, D10: ten unlocks at 10, 18, 26, 34, 43, 53, 63, 74, 86, 100; four slots at 10, 30, 55, 80; Apple Pie's
  * thresholds); P3: the diversity tables merge (a later file wins), ids of absent mods are skipped, no table leaves
- * Apple Pie's values, and the pack's Creative Delight table loads. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
+ * Apple Pie's values, and the pack's Creative Delight table loads; P4: the lang name overrides. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
  */
 public class RpStandaloneTest {
 	private static int ok, fail;
@@ -93,6 +96,19 @@ public class RpStandaloneTest {
 		Diversity.use(List.of(new Diversity.Source("creativedelight:creativedelight.json", cdJson)), ForgeRegistries.ITEMS::containsKey);
 		double bread = cdJson.getAsJsonObject("values").get("minecraft:bread").getAsDouble();
 		check(Double.valueOf(bread).equals(Diversity.value(Items.BREAD)), "the pack table (Creative Delight) loads on vanilla ids only, modded ids skipped (bread " + bread + ")");
+
+		// P4: the name overrides in the lang file win over Apple Pie's and Carrot's own keys in any merge order.
+		JsonObject lang = JsonParser.parseString(Files.readString(root.resolve(
+				"development/solRaspberryPie/src/main/resources/assets/solraspberrypie/lang/en_us.json"), StandardCharsets.UTF_8)).getAsJsonObject();
+		Map<String, String> merged = new HashMap<>();
+		lang.entrySet().forEach(e -> merged.put(e.getKey(), e.getValue().getAsString()));
+		merged.put("item.solapplepie.food_book", "Food Book");   // Apple Pie's file merged after ours
+		merged.put("item.solcarrot.food_book", "Food Book");
+		merged.put("key.solapplepie.open_food_book", "Open Food Book");
+		LangOverrides.apply(merged);
+		check("Diet Log".equals(merged.get("item.solapplepie.food_book")), "Apple Pie's book is the Diet Log");
+		check("Food Dictionary".equals(merged.get("item.solcarrot.food_book")), "Carrot's book is the Food Dictionary");
+		check("Open Diet Log".equals(merged.get("key.solapplepie.open_food_book")), "the open-book key says Open Diet Log");
 
 		System.out.println(fail == 0 ? "ALL " + ok + " OK" : fail + " FAILED");
 	}

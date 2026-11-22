@@ -12,12 +12,14 @@
     "FoodListAccessor",
     "FoodListMixin",
     "FoodTrackerMixin",
-    "MobEffectInstanceAccessor"
+    "MobEffectInstanceAccessor",
+    "RecipeManagerMixin"
   ],
   "client": [
     "client.AppleSkinTooltipRendererMixin",
     "client.CarrotBookScreenMixin",
     "client.CarrotFoodDataMixin",
+    "client.ClientLanguageMixin",
     "client.DiversityPageMixin",
     "client.EffectRenderingInventoryScreenMixin",
     "client.FoodBookScreenAccessor",
