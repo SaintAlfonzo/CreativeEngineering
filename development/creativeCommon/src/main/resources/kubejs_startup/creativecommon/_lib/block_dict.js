@@ -12,6 +12,7 @@ b.sunflower_stem = 'hearthandharvest:sunflower_stem'; // Sunflower Stem block (H
 b.sweet_berry_bush = 'minecraft:sweet_berry_bush'; // block id (the item is sweet_berries)
 b.emu_nest = 'creativedelight:emu_nest';         // Creative Delight compat/incubation/nest/EmuNests.java
 b.emu_egg_nest = 'creativedelight:emu_egg_nest'; // the 1-6 egg state; no item
+b.whale_oil_lamp = 'creativedelight:whale_oil_lamp';   // dairy-fats-and-batter #1, CD fats/WhaleOilLamp.java
 b.duck_nest = 'creativedelight:duck_nest';         // Creative Delight compat/incubation/nest/WaterfowlNests.java
 b.duck_egg_nest = 'creativedelight:duck_egg_nest'; // the 1-6 egg state; no item
 b.goose_nest = 'creativedelight:goose_nest';

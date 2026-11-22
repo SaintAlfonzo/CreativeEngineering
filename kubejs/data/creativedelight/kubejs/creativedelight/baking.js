@@ -156,16 +156,13 @@ ServerEvents.recipes(e => {
 		// dough + 2 raw oats, before that 2 raw oats + honey -> 8 in the grid)
 		F._sweep(i.oatmeal_cookie)
 		R.ceBaking([i.oat_dough, F.SWEET, F.SWEET, n(i.raw_oats, 2)], Item.of(i.oatmeal_cookie, 12), e, 'oatmeal_cookie', F.ware.sheet)
-		// End's Delight's Chorus Cookie is made from Ender's Delight's Uncanny Cookie (baking/baked-goods #22; was cookie
-		// dough + 2 chorus fruit grain in the oven): 8 cookies around a chorus fruit grain by hand, as dyeing
-		F._sweep(i.chorus_cookie)
-		var uncanny = []
-		for (var u = 0; u < 8; u++) uncanny.push(i.uncanny_cookies) // G5 (R.shapeless ingredients)
-		R.shapeless(Item.of(i.chorus_cookie, 8), uncanny.concat([i.chorus_fruit_grain]), e, 'chorus_cookie_manual_only')
+		// End's Delight's Chorus Cookie bakes like the other cookies (baking/baked-goods #22, owner; was 8 Uncanny
+		// Cookies + a chorus fruit grain -> 8 by hand): cookie dough + 2 chorus fruit grain on the baking sheet
+		F.cookieBake(i.chorus_fruit_grain, i.chorus_cookie)
 
 		//######################### Muffins (muffin tin, paper) ######################### The family call bakes 4 in the
-		// oven (flour, one paper each) and removes the mods' Cooking Pot recipes: muffins are not made in the pot
-		// (owner).
+		// oven (flour, one paper each), assembles 6 on paper, and removes the mods' Cooking Pot recipes: muffins are
+		// not made in the pot (owner).
 		F.muffinBake(i.t_fruits_blueberry, i.blueberry_muffin) // G5
 		F.muffinBake(i.t_fruits_cranberry, i.cranberry_muffin) // G5
 		F.muffinBake(i.baked_sweet_potato, i.sweet_potato_cupcake)   // Veggies Delight's, named Sweet Potato Muffin (its sweet potato dough craft stays)

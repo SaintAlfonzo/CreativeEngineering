@@ -54,7 +54,7 @@ global.CD.FOOD = {
 	},
 	// Oven: xp and ticks for every baked family; output counts
 	bake: { exp: 0.1, time: 200 },
-	cookies: 12, muffinsOven: 4, tarts: 2,
+	cookies: 12, muffinsOven: 4, muffinsPaper: 6, tarts: 2,
 	// Golden food: gold in the heated mixer and the Arc Furnace (the grid is a ring of 8)
 	gold: { mixer: 6, arc: 4 },
 	// Gilded (enchanted golden) food: sequenced assembly loops, each 1 gold ingot + this much liquid XP and a press
@@ -165,7 +165,7 @@ global.CD.food = function (e) {
 		// Muffins bake in the oven only: the mod's Cooking Pot recipe goes and none replaces it (baking/baked-goods,
 		// owner). Removing it also drops Slice & Dice's mixer copy, which is built from the loaded pot recipes.
 		// Wheat flour or cornmeal (baking/baked-goods #2). The sequenced assembly on paper takes the oven's ingredients,
-		// the milk as 250 mB of any milk, and gives the oven's count.
+		// the milk as 250 mB of any milk, and gives 6 (owner; was the oven's 4).
 		muffinBake(fruit, output) {
 			var s = suffix(output, '')
 			R.remove({ type: 'farmersdelight:cooking', output: output, not: OURS }, e)
@@ -173,7 +173,7 @@ global.CD.food = function (e) {
 			var fl = global.fluid
 			if (fl && fl.t_milk)
 				F.assemble(i.paper, [i.t_flour_or_cornmeal, i.eggs, SWEET, fruit, fruit, { fill: R.createFluidTag(fl.t_milk, 250) }],
-					Item.of(output, V.muffinsOven))
+					Item.of(output, V.muffinsPaper))
 		},
 		// Brownie tray (dessert/brownie, baking/baked-goods #18): every other recipe of the tray goes; slices -> tray
 		// stays. Cake pan; the placed tray is cut with a knife (board or world).

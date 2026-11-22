@@ -221,6 +221,7 @@
 - **Changed:** 2 Animal Fat and a bottle cook into Cooking Oil. The Animal Oil Bottle is merged into Cooking Oil.
 - **Changed:** Any seed makes Cooking Oil [Pumpkin and Cotton Seeds]; a Spout fills a bottle with 250 mB Seed Oil into Cooking Oil.
 - **Changed:** Fish Oil counts as Cooking Oil; 2 raw fish and a bottle cook into Fish Oil.
+- **New:** Whale Oil Lamp, crafted from 8 iron nuggets around a Whale Oil. It stands or hangs like a lantern, is placed unlit and gives a lantern's light once lit with Flint and Steel or a Fire Charge; water puts it out.
 
 ## Cheese <!-- icon: brewinandchewin:flaxen_cheese_wedge -->
 
@@ -291,13 +292,13 @@
 
 - **New:** Gingerdough bakes into Gingerbread in the Oven on a Baking Sheet, 1, 3 or 6 at a time.
 - **Changed:** Oatmeal Cookies bake from Oat Dough, 2 sweeteners and 2 Raw Oats, 12 at a time [Cookie Dough and 2 Raw Oats].
-- **Changed:** Chorus Cookies are crafted from 8 Uncanny Cookies and a Chorus Fruit Grain, 8 at a time [baked from Cookie Dough and 2 Chorus Fruit Grain].
 - **Changed:** Muffins take Wheat Flour or Cornmeal [Wheat Flour only].
-- **New:** Blueberry, Cranberry and Sweet Potato Muffins can be built on a paper in a Create sequenced assembly: flour or cornmeal, an egg, a sweetener, 2 fruit and 250 mB milk make 4.
+- **New:** Blueberry, Cranberry and Sweet Potato Muffins can be built on a paper in a Create sequenced assembly: flour or cornmeal, an egg, a sweetener, 2 fruit and 250 mB milk make 6.
 - **Changed:** The Beetroot Brownie Tray bakes in the Oven in a Cake Pan from 2 beetroot, sugar, an egg, dough and cocoa beans [crafted from 3 beetroot, 2 cocoa beans, 2 sugar and 2 eggs].
-- **Changed:** Strawberry Scones bake in the Oven on a Baking Sheet from butter, 2 strawberries, sugar and batter, 1 at a time [crafted from 2 flour, a strawberry and sugar, 2 at a time].
+- **Changed:** Strawberry Scones bake in the Oven on a Baking Sheet from butter, 2 strawberries, sugar and batter, 2 at a time [crafted from 2 flour, a strawberry and sugar, 2 at a time].
 - **Changed:** Strange Eclair bakes in the Oven on a Baking Sheet from an Eye of Ender, dough and sugar [crafted from an Eye of Ender, 2 flour and sugar].
 - **Changed:** Fig Pudding bakes in the Oven on a Baking Sheet from sweet berries, a milk bottle, an egg, Orange Jelly, a fig and dough [crafted from 2 milk bottles, sweet berries, 2 eggs, Orange Jelly, 2 figs and dough].
+- **Changed:** Adzuki Buns bake in the Oven on a Baking Sheet from flour, Roasted Adzuki Beans and a milk bottle, 2 at a time [crafted from wheat, Roasted Adzuki Beans and milk, 1 at a time].
 - **New:** An Uncooked Waffle is made from any dough with an Engineer's Hammer, on a Cutting Board or in the crafting grid, or with a Create Mechanical Press.
 
 ## Food & Cooking
@@ -481,6 +482,7 @@
 - **New:** The potions, fluid amounts and loop counts of the echo, felsic ingot, dragon and Air Brake assembly recipes can be changed in the Creative Equipment config.
 - **New:** Glass blocks and panes from every mod break into shards of their color without Silk Touch: blocks 1 to 3, panes 1 to 2. Tinted glass gives dirty shards.
 - **New:** Sneak and right-click a placed sack with an empty hand to pick it up with its contents.
+- **Changed:** Wild carrots generate twice as often, 1 patch in 60 chunks [120], and wild adzuki beans 1 in 64 [128].
 - **Changed:** The Saturation effect and its potions and arrows are renamed Satiated [Saturation]; its description reads "Keeps the player fed."
 - **Changed:** A chain of TNT keeps at most 32 shrapnel pieces in the air at once [24 per TNT].
 - **Changed:** A TNT item exploding in fire or lava deals half damage; the knockback is unchanged.
@@ -575,6 +577,7 @@
 
 - **New:** Two Flower Pots fit in one block, like candles: use a Flower Pot on a placed one. The second pot is 2 pixels taller, and each pot holds its own plant.
 - **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.
+- **New:** Plants that go in a Flower Pot say "Pottable" in their tooltip.
 
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 

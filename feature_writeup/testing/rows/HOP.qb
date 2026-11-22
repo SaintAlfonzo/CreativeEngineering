@@ -136,6 +136,15 @@ reject \[cdevtest\] verb=\S+ done=0
 @from batches/r1115/p5_b1.qb
 look hops_vine "in K chunks" over the two sites at least 1 and at most a quarter of wild_carrots' chunk count
 
+## SQ-HOP-15 | judged from SQ-HH-304's countsets: wild carrots and adzuki sprouts found in the forest boxes (chance 60, rarity 64)
+@phase worldgen
+@group B (fresh world, with SQ-HH-304)
+@commands As SQ-HH-304 (two located forests, 256 chunks each, seed 8675309) with two more countsets on the same boxes: `farmersdelight:wild_carrots` and `neapolitan:adzuki_sprouts`; `shell grep -A3 "wild_carrots\]" config/farmersdelight-common.toml`
+@pass the shell shows `chance = 60`; the sum of each block's two countsets is at least 1 (expected about 8 carrot and 4 adzuki attempts over the 512 chunks, most under a closed canopy fail: r1115 counted 0 of both at 120 and 128); `columns skipped: 0`
+@fails FD config `[world.wild_carrots] chance` (copy in configs_edited/); the pack's placed feature `kubejs/data/neapolitan/worldgen/placed_feature/patch_adzuki_sprouts.json` not overriding Neapolitan's (rarity 128); `wild_crops.json` adzuki and carrot rules (farming/wild-crops #9)
+@reviewed 2026-11-22
+look wild_carrots and adzuki_sprouts countset sums each at least 1 over the two sites; 0 of one with nothing skipped: compare with the rate and look at the placed feature
+
 ## SQ-HOP-07 | hops on an empty Vinery lattice (no farmland): age 1, grape=hops; one hops used
 @group A
 @commands `/setblock 610 -60 520 minecraft:stone`; `/setblock 610 -60 521 vinery:grapevine_lattice[facing=south,age=0]`; `/pbot hold G hearthandharvest:hops 2`; `/pbot use G 610 -60 521 south`; `/execute if block 610 -60 521 vinery:grapevine_lattice[age=1,grape=hops]`; `/zhh5 hand G`

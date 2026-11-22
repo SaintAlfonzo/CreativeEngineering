@@ -462,7 +462,7 @@ companion plant within 6, y ±3. Chances are in `farmersdelight-common.toml` `[w
 |---|---|---|---|---|---|
 | Cabbage | `farmersdelight:wild_cabbages` | vanilla **Beach only** | 1/30 | sand | Sandy Shrub |
 | Beetroot | `farmersdelight:wild_beetroots` (Sea Beet) | vanilla **Beach only** | 1/30 | sand | Sandy Shrub |
-| Carrot | `farmersdelight:wild_carrots` | every overworld biome with base temperature 0.4 to 0.9 except Lush Caves and Mushroom Fields: 57 biomes (forests, plains, meadow, swamps, beach, river, 34 Terralith). Share 21% | 1/120 | `#minecraft:dirt` | Grass, plus a **Coarse Dirt floor** under the patch |
+| Carrot | `farmersdelight:wild_carrots` | every overworld biome with base temperature 0.4 to 0.9 except Lush Caves and Mushroom Fields: 57 biomes (forests, plains, meadow, swamps, beach, river, 34 Terralith). Share 21% | 1/60 (FD config `chance`, pack value since 2026-11-22, `farming/wild-crops #9`; FD default 120) | `#minecraft:dirt` | Grass, plus a **Coarse Dirt floor** under the patch |
 | Onion | `farmersdelight:wild_onions` | same 57 biomes as carrots | 1/120 | `#minecraft:dirt` | Allium |
 | Potato | `farmersdelight:wild_potatoes` | temperature 0.1 to 0.3, not underground: 24 cold biomes (taigas, windswept hills, Terralith cold forests and mountains). Share 12% | 1/100 | `#minecraft:dirt` | Fern |
 | Tomato | `farmersdelight:wild_tomatoes` | `#forge:is_hot/overworld` minus `#forge:is_wet`: 30 biomes (desert, savannas, badlands, Terralith arid and volcanic). Share 13% | 1/100 | `#farmersdelight:terrain` (dirt, grass, sand, red sand, mud...) | Dead Bush |
@@ -500,7 +500,7 @@ regenerated; `test_wild_crops` and `test_mushroom_spawns` pass. Generator and do
 |---|---|---|---|---|---|
 | Strawberries | `neapolitan:strawberry_bush`. 90% are red, ripe bushes (age 6). 10% are unripe bushes on Coarse Dirt | vanilla **Plains only** | 1/64, 512 tries within 5 | grass block or coarse dirt | **Coarse Dirt**: under the unripe bushes, and each neighbor of a bush has a 50% chance to turn |
 | Vanilla | `neapolitan:vanilla_vine` growing sideways | Savanna, Savanna Plateau, Windswept Savanna (vanilla only) | 1/64 | the side of `#neapolitan:vanilla_plantable_on` (logs, leaves, dirt) | none |
-| Adzuki Beans | `neapolitan:adzuki_sprouts`, ripe (age 6) | forest, birch forest, old-growth birch, flower forest, dark forest | 1/128, 256 tries within 3 | grass block | **the grass under each sprout becomes plain Dirt**. Breaking a ripe sprout turns the dirt or grass under it into **Adzuki Soil** (`neapolitan:adzuki_soil`), which grows a new sprout on its own (light 9+, 1 in 4 per random tick, or with bone meal). So the "adzuki soil" you see in the wild comes from a harvest; the worldgen itself only lays down dirt |
+| Adzuki Beans | `neapolitan:adzuki_sprouts`, ripe (age 6) | forest, birch forest, old-growth birch, flower forest, dark forest | 1/64 (pack copy of the placed feature, `kubejs/data/neapolitan/worldgen/placed_feature/patch_adzuki_sprouts.json`, since 2026-11-22, `farming/wild-crops #9`; Neapolitan 128), 256 tries within 3 | grass block | **the grass under each sprout becomes plain Dirt**. Breaking a ripe sprout turns the dirt or grass under it into **Adzuki Soil** (`neapolitan:adzuki_soil`), which grows a new sprout on its own (light 9+, 1 in 4 per random tick, or with bone meal). So the "adzuki soil" you see in the wild comes from a harvest; the worldgen itself only lays down dirt |
 | Mint | `neapolitan:mint` (age 4, 1 to 4 sprouts) around a **mint pond** | windswept hills, windswept forest, windswept gravelly hills, Terralith Cloud Forest, Fractured Savanna, Haze Mountain, Jungle Mountains | 1/4 | flat grass with grass/dirt on all four sides | **a small pond (1 to about 9 water blocks)**, grass under the water turned to dirt, and often **one spruce tree** beside it |
 | Banana | banana stalk 3 to 6 tall with fronds, sometimes a **Banana Bundle** | common: jungle, bamboo jungle (0.75 per chunk). Uncommon: sparse jungle (1/10). Rare: beach, stony shore (1/20) | see biomes | grass block, sand or gravel | **grass around the plant turns to Gravel**. With a bundle, 25% chance of a **chimpanzee group** (12 to 24 spawn attempts, up to 10). Bundles can release **Plantain Spiders** |
 
@@ -624,7 +624,8 @@ Scope for the planned vegetation system, not yet broken down per biome:
 2026-10-10 (DEPLOYED with 1.0.6) and 2026-10-22 (tea, grapes, flax; DEPLOYED 1.1.01); not looked at in game. Moved into
 Creative Delight 2026-10-25 (same rules, ids now `creativedelight:*`; [creative_delight.md](creative_delight.md) 24,
 SQ-WCD queued).** Your 2026-10-03 spec
-decides which biomes each wild crop and fruit tree goes to. The mods' own rates stay; only the biomes change. §2.7
+decides which biomes each wild crop and fruit tree goes to. The mods' own rates stay (except wild carrots 1/60 and adzuki 1/64,
+owner 2026-11-22: r1115 found neither in about 740 forest chunks, most attempts landing on the canopy); only the biomes change. §2.7
 describes what the mods do on their own, which is what you get with the switch off.
 
 **How it works**

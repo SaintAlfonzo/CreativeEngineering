@@ -6,15 +6,15 @@ can be potted, a tooltip label on every flower pot, every pot distinct, pots hol
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=7fc0f9e40a9b -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 1, In Progress 2, Testing 15), 1 Complete.
+<!-- generated:status_index begin open_work sha1=3948ef312ee0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 1, In Progress 1, Testing 16), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `blocks/framed-and-decor #11` | Planned | C P | Random flower block position |
-| `blocks/flower-pots #2` | In Progress | C P | Pottable tooltip and Contains line on every flower pot |
 | `blocks/flower-pots #10` | In Progress | S C P | Hanging pots place as wall lanterns: remove |
 | `blocks/flower-pots #1` | Testing | S C P | Flower pots placeable like candles |
+| `blocks/flower-pots #2` | Testing | CQ-POT-05 | Pottable tooltip and Contains line on every flower pot |
 | `blocks/flower-pots #3` | Testing | S P | Remove Handcrafted flower pots from the flower pot world |
 | `blocks/flower-pots #4` | Testing | S C P | Framed pots accept flowers before framing |
 | `blocks/flower-pots #5` | Testing | S C P | Beautify hanging pot becomes lush hanging pot |
@@ -222,13 +222,21 @@ unconfirmed: two offset vanilla pot cuboids, no new art, height a constant). Cre
    (`PottedPlantHolder.plants()`). No item, so nothing in JEI or creative search.
 5. **Not covered:** `/dumppots`, `/pottest` and the Flower Test world have no column for it; structures never place it.
 
+### 3.5 Pottable tooltip (2026-11-22, [plan_unblocked_batch_1121.md](plan_unblocked_batch_1121.md) R11)
+
+TODO `blocks/flower-pots #2`; owner 2026-11-22: a "Pottable" line on every plant item that can go in a pot, none on pot
+items. Creative Compat `compat/PottableTooltip` (client `ItemTooltipEvent`): a block item whose block the vanilla pot's
+live map lists (`BotanistPot.pottedFor`: `getFullPotsView()`, so every mod's `potted_*` plant counts, and glow lichen,
+which the botanist workbench and the two-pot block take) gets "Pottable" (lang `tooltip.creativecompat.pottable`) in dark
+green, the color of the plantable lines ([plantable.md](plantable.md)). Plants only the boxes, planters or the silt pot
+take (tall flowers, crops) get no line. CQ-POT-05.
+
 ## 4. Decisions (open, owner)
 
 - **D1 "pots hold every flower":** which plants get a vanilla `potted_*` block (map entry + model)? Options: (a) all
   F3/F5/F7/F11 plants in a new Creative Common or CD registration pass (Botania alone is 170 blocks plus models), (b) only
   small flowers and saplings (mystical 16, shiny 16, special flowers, wild crops), (c) leave it to the flower box.
-- **D2 tooltip label on every pot:** one line per holder naming what it takes (for example "Holds 1 flower or sapling",
-  "Holds 3 plants", "Tall flowers only"), through the tooltip system (`tooltips.md`). Needs the wording per holder.
+- **D2 tooltip label:** decided 2026-11-22 (owner): a "Pottable" line on the plant items, not a label on the pots (3.5).
 - **D3 buttercup tag:** add `buzzier_bees:buttercup` to `#minecraft:small_flowers` (via `global.tags`)? It would then
   enter the boxes, the silt pot, bee breeding and anything else that reads the tag.
 - **D4 Floral tall-flower pots:** disable the 4 tall-flower variants or the whole large pot (enchanting #7).
@@ -376,3 +384,4 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
   creative_devtools.md 2); players no longer get the world type.
 - 2026-11-16: melon, pumpkin, carved pumpkin, jack o'lantern, moss block and moss carpet refused by every box (`#creativecompat:not_in_flower_boxes`); Flower Test world column of wall-hung Rich Hanging Pots for the owner (3.3; `blocks/flower-pots #9`, `#10`, `#14` closed as built). POT-18, POT-19; queue SQ-POT-09, CQ-POT-03 (plan_small_fixes_1116.md). Not run.
 - 2026-11-22: two flower pots in one block, like candles (3.4; `blocks/flower-pots #1`): Creative Compat built (`jarstamp.py pending`; its working-tree mods.toml needs Creative Common 1.3.0, so it waits for that jar). POT-20; queue SQ-POT-10, CQ-POT-04. Rows `#3` to `#5`, `#7`, `#8`, `#11` to `#13`, `#15`, `#16` were the 2026-10-31 tweaks already built (3.2): set to Testing. `#2`: the pottable tooltip waits on D2.
+- 2026-11-22: Pottable tooltip on plant items a flower pot takes (3.5; `blocks/flower-pots #2`, D2 decided): Creative Compat `PottableTooltip`. CQ-POT-05.

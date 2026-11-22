@@ -177,6 +177,7 @@ JAVA_PLACED = {
 												   'turns nearby ground to Coarse Dirt'),
 	'neapolitan:patch_vanilla_vine': dict(crop='Vanilla', mods=[rarity(64), HM_WORLD],
 		ground='side of #neapolitan:vanilla_plantable_on (logs, leaves, dirt)', notes='64 tries per direction within 7'),
+	# Neapolitan's own rarity; the pack's json copy (kubejs/data/neapolitan/worldgen/placed_feature/, rarity 64) wins
 	'neapolitan:patch_adzuki_sprouts': dict(crop='Adzuki Beans', mods=[rarity(128), HM_WORLD],
 		ground='grass block', notes='256 tries within 3; ripe sprouts (age 6); the grass under each becomes Dirt'),
 	'neapolitan:mint_pond': dict(crop='Mint', mods=[rarity(4), HM_WORLD],
@@ -237,6 +238,7 @@ CROP_BLOCKS = {
 	'endersdelight:ethereal_saffron_bush': 'Ethereal Saffron', 'endersdelight:voidpepper_block': 'Void Pepper',
 	'ends_delight:chorus_succulent': 'Chorus Succulent',
 	'hearthandharvest:raspberry_bush': 'Raspberry',
+	'neapolitan:adzuki_sprouts': 'Adzuki Beans',   # the pack's json placed feature (rarity 64, farming/wild-crops #9)
 	'hearthandharvest:wild_hops': 'Wild Hops', 'hearthandharvest:hops_vine': 'Wild Hops',
 	'vinery:red_grape_bush': 'Grapes: red', 'vinery:white_grape_bush': 'Grapes: white',
 	'vinery:savanna_grape_bush_red': 'Grapes: savanna red', 'vinery:savanna_grape_bush_white': 'Grapes: savanna white',

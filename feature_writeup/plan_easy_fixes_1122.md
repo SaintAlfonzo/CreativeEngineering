@@ -17,17 +17,17 @@ reason for none), writeup line and queue rows in the same session.
 
 ## 0. Decisions (owner, 2026-11-22)
 
-<!-- generated:status_index begin open_work sha1=12f09057900b -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Planned 1, In Progress 1, Testing 9), 0 Complete.
+<!-- generated:status_index begin open_work sha1=81b5f9962262 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (In Progress 1, Testing 10), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `farming/wild-crops #9` | Planned | S | Wild carrots and adzuki missing from forest boxes |
 | `dishes/ingredients #28` | In Progress | S P | Sliced potato tag |
 | `alcohol/vineryport #24` | Testing | SQ-VN-02 | Ripe stem shearing may duplicate seeds |
 | `blockrunner #18` | Testing | SQ-CC-03 SQ-CC12-02 SQ-CPP-05 | Sand and red sand layer recipes error when Immersive Weathering is absent |
 | `blocks/framed-and-decor #2` | Testing | CQ-TT-06 | Copycat resource pack keeps the framed block name |
 | `engineering/sawmill-and-components #3` | Testing | CQ-EN-26 | JEI doesn't show the sawmill blade |
+| `farming/wild-crops #9` | Testing | SQ-HOP-15 | Wild carrots and adzuki missing from forest boxes |
 | `generators-and-tests #28` | Testing | SQ-CCO-12a SQ-CCO-12b SQ-CCO-12c SQ-CCO-12d SQ-CCO-12e SQ-CCO-12f | creativedevtools sequence_assembly_processes.js line 58 logs 'Failed to create custom JSON recipe' |
 | `mod-updates #3` | Testing | SQ-SPFX-06 | Item dict still lists the dropped legendary and mythical roll medley cans |
 | `performance-and-server #2` | Testing | SQ-IPO-02 | Immersive Posts: iron fence on a post base no longer grows the post |
@@ -42,6 +42,7 @@ reason for none), writeup line and queue rows in the same session.
 | D3 | `alcohol/vineryport #24` | Shearing a ripe stem drops grapes and seeds and resets the stem to age 0 (upstream 1.3.10). |
 | D4 | `blocks/framed-and-decor #2` | Keep the Copycat Framed Block pack for its textures; every framed block keeps its Framed Blocks name. |
 | D5 | `engineering/sawmill-and-components #3` | A JEI info page per sawmill blade (which machine takes it, what it cuts), no tooltip line. |
+| D6 | `farming/wild-crops #9` | Raise both chances to about half: Farmer's Delight wild carrot chance 120 -> 60 (config, backed up to configs_edited/), and a pack copy of Neapolitan's adzuki placed feature with rarity 128 -> 64 (`kubejs/data/neapolitan/worldgen/placed_feature/`). (owner, 2026-11-22; source AskUserQuestion 2026-11-22) |
 
 ## 1. Tier 1 (cause known, one file)
 
@@ -156,6 +157,7 @@ log the numbers on the row and ask the owner before changing rarity. Changelog o
 Result (2026-11-22): traits fine; FD wild carrots rarity 120 (config) on the motion-blocking heightmap, Neapolitan adzuki
 rarity 128 on world surface and grass only: about 4 and 1.8 attempts in the counted boxes, most landing on forest canopy.
 Item left the plan; numbers and the owner question are on the row.
+Ruling D6 (owner, 2026-11-22): chances halved; built 2026-11-22 (config + data, no jar), SQ-HOP-15.
 
 ## 3. Order and commits
 

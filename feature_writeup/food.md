@@ -10,18 +10,20 @@ wrong today and how tuning will work.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=0566bb12c74c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 2, Pinned 1, In Progress 4, Testing 16), 0 Complete.
+<!-- generated:status_index begin open_work sha1=6a32777472c0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 3, Pinned 1, In Progress 4, Testing 17), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `cans/canning #20` | Planned | S P T | Canned effects follow the input food |
+| `dairy-fats-and-batter #3` | Planned | S C | Whale oil lamp fuel: oil tank, burn rate, refill, config |
 | `food/types-and-tuning #1` | Planned | S P T | Food tuning system (values per type, Spice of Life complexity, canned parity) |
 | `food/types-and-tuning #12` | Pinned | S P T | Spice of Life much slower |
 | `dishes/ingredients #22` | In Progress | S C P | Honeycomb as sugar, honey and spread |
 | `food/seasoning #3` | In Progress | S~ C P T | New seasonings |
 | `food/types-and-tuning #3` | In Progress | S P T | Golden food changes vanilla values |
 | `food/types-and-tuning #16` | In Progress | S C P | Spice of Life carrot for the food dictionary only |
+| `dairy-fats-and-batter #1` | Testing | SQ-FO-17 CQ-FO-63 | Whale oil lamp |
 | `dishes/ingredients #23` | Testing | S~ C P T | Powdered sugar recipe rebalance |
 | `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
 | `food/seasoning #2` | Testing | C P | Seasoning crafts in their own JEI category |
@@ -862,6 +864,16 @@ Owner R12, R19, R22 (plan_food_batch_1119.md wave D). Each part has a `[fats]` s
 
 The plan's cauldron route for whale oil is the Cooking Pot recipe for now (a cauldron mechanic needs its own block and
 art; `dairy-fats-and-batter #2`). Tests SQ-FO-08 to SQ-FO-11.
+
+**Whale Oil Lamp** (`dairy-fats-and-batter #1`, 2026-11-22, plan_unblocked_batch_1121.md R13). `creativedelight:whale_oil_lamp`
+(CD `fats/WhaleOilLamp`, `WhaleOilLampBlock`, a `LanternBlock` with `lit`): stands or hangs and waterlogs like a lantern,
+same shape, strength and sound; placed unlit (light 0), lit by hand with flint and steel (1 durability) or a fire charge
+(used up) to light 15, the lantern's. Water puts it out and an unlit waterlogged lamp cannot be lit. Recipe 8 iron nuggets
+around a Whale Oil (`fats.js`, behind `whaleOil`); `#minecraft:mineable/pickaxe`; drops itself. Model parents
+`template_lantern` / `template_hanging_lantern` (cutout) on a copy of the vanilla lantern texture (block, animated, and
+item); the recolor waits for an owner palette (owner, 2026-11-22). Not built (row text, owner to confirm): the oil tank
+(full when crafted), steady burn and refill with whale oil, burning out, and config values for light, burn rate and
+tank size. Tests SQ-FO-17, CQ-FO-63.
 
 ## 4. Limits and decisions
 

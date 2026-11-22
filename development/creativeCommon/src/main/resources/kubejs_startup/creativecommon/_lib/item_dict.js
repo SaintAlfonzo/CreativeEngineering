@@ -406,6 +406,7 @@ i.fish_oil = 'alexsmobs:fish_oil';
 // Fats and oils (dishes/ingredients #10; CD kubejs_startup/creativedelight/fats.js)
 i.blubber = 'creativedelight:blubber';
 i.whale_oil = 'creativedelight:whale_oil';
+i.whale_oil_lamp = 'creativedelight:whale_oil_lamp';   // dairy-fats-and-batter #1, CD fats/WhaleOilLamp.java
 // Produce (plan_unblocked_batch_1121.md P2; CD kubejs_startup/creativedelight/produce.js)
 i.potato_dough = 'creativedelight:potato_dough';             // dishes/ingredients #27, mirrors Veggies' sweet potato dough
 i.tofu = 'creativedelight:tofu';                             // dishes/ingredients #17

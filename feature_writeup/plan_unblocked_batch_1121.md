@@ -1,14 +1,13 @@
 # Plan: unblocked batch 2026-11-21
 
-<!-- generated:status_index begin open_work sha1=52b353375278 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 20 open TODO rows (Planned 4, Pinned 1, In Progress 6, Testing 9), 0 Complete.
+<!-- generated:status_index begin open_work sha1=fa6595ea9047 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 3, Pinned 1, In Progress 6, Testing 11), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `baking/baked-goods #30` | Planned | S C P | Baking dish bakeware |
-| `baking/baked-goods #35` | Planned | none | Investigate brownie tray and adzuki bun family |
 | `baking/baked-goods #40` | Planned | S C | Fruit scones: a new baked family, one item per fruit |
-| `dairy-fats-and-batter #1` | Planned | S C P | Whale oil lamp |
+| `dairy-fats-and-batter #3` | Planned | S C | Whale oil lamp fuel: oil tank, burn rate, refill, config |
 | `placeable-food #1` | Pinned | none | List other mods' non-food plates and coasters for review and possible removal |
 | `baking/baked-goods #2` | In Progress | S C P T | Muffins as a decent food source |
 | `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
@@ -17,8 +16,10 @@
 | `dishes/ingredients #8` | In Progress | S C P | Produce fixes |
 | `dishes/ingredients #9` | In Progress | S C P T | Cheese |
 | `baking/baked-goods #18` | Testing | S C P | Brownie and cupcake baking types |
-| `baking/baked-goods #22` | Testing | S C | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #22` | Testing | SQ-FF-22 OV-39 | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #35` | Testing | SQ-FF-25 OV-42 | Investigate brownie tray and adzuki bun family |
 | `blocks/flower-pots #1` | Testing | S C P | Flower pots placeable like candles |
+| `dairy-fats-and-batter #1` | Testing | SQ-FO-17 CQ-FO-63 | Whale oil lamp |
 | `dishes/ingredients #17` | Testing | S C P | Tofu from mushrooms |
 | `dishes/ingredients #21` | Testing | S C P | Potato and sweet potato compatibility |
 | `dishes/ingredients #27` | Testing | S C P | Potato dough |
@@ -53,6 +54,13 @@ lives in the rows, not here.
 | R4 | Pot models | open | agent default, unconfirmed: two offset vanilla pot cuboids, no new art; height a constant so it retunes | 2026-11-21 | agent default |
 | R5 | Palette swap design | open | Fix the three known faults only: non-monotonic palettes, interpolation when the palette is larger than the texture, even rank spacing. No full redesign; owner reviews the outputs | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R6 | Creative Brewing CurseForge publish | clear | Left out; stays in `plan_cb_publish.md` | 2026-11-21 | agent default, unconfirmed |
+| R7 | `baking/baked-goods #22` Chorus Cookie | open | Bakes like the other cookies: cookie dough + 2 chorus fruit grain -> 12 on the baking sheet, no Uncanny Cookie; the 8 Uncanny Cookies + grain -> 8 hand craft goes (owner, 2026-11-22; replaces a same-day Uncanny Cookie bake ruling) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R8 | `baking/baked-goods #35` Adzuki Bun | open | Moves to the oven: flour + roasted adzuki beans + milk on the baking sheet -> 2; the grid recipe goes (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R9 | `baking/baked-goods #2` muffins on paper | open | The paper sequenced assembly makes 6 (was 4); the oven stays 4 (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R10 | `baking/baked-goods #36` Strawberry Scones | open | 2 per bake (was 1) (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R11 | `blocks/flower-pots #2` pottable tooltip | open | A "Pottable" line on every plant item that can go in a pot, not on pot items (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R12 | `dishes/ingredients #15` churn | open | Pinned: churn wanted later; nothing built (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R13 | `dairy-fats-and-batter #1` whale oil lamp | open | The model starts from the vanilla lantern (texture copied as-is); the recolor waits for an owner palette (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
 
 ## 3. Phases
 

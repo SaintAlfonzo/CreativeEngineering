@@ -79,6 +79,8 @@ public class CreativeDelight {
 		TreatedSticks.register(FMLJavaModLoadingContext.get().getModEventBus());
 		// Wooden bucket and its farm fluids (farm/bucket/)
 		com.SaintAlfonzo.creativedelight.farm.bucket.WoodenBuckets.register(FMLJavaModLoadingContext.get().getModEventBus());
+		// Whale Oil Lamp (fats/)
+		com.SaintAlfonzo.creativedelight.fats.WhaleOilLamp.register(FMLJavaModLoadingContext.get().getModEventBus());
 		registerKitchen(FMLJavaModLoadingContext.get().getModEventBus());
 		registerCompartments(FMLJavaModLoadingContext.get().getModEventBus());
 

@@ -12,6 +12,8 @@
 //                 Spout fills a bottle with 250 mB of Crafts & Additions' seed oil into Cooking Oil
 //   fishOil       Alex's Mobs fish oil is a #rusticdelight:cooking_oil; 2 raw fish + a bottle cook down to 1 (its
 //                 4-blobfish craft stays)
+// Whale Oil Lamp (dairy-fats-and-batter #1, CD fats/WhaleOilLamp.java): 8 iron nuggets around a whale oil, as the
+// lantern around its torch; mined with a pickaxe like the lantern. Behind whaleOil.
 // The plan's cauldron route for whale oil became the Cooking Pot recipe (plan build notes, wave D).
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
@@ -20,6 +22,11 @@ ServerEvents.tags('item', e => {
 	if (global.CD.fats('blubber')) t.add(e, i.t_animal_fat, i.blubber)
 	if (global.CD.fats('seedOil')) t.add(e, i.t_cooking_oil_ingredients, i.t_seeds)
 	if (global.CD.fats('fishOil') && global.has(i.fish_oil)) t.add(e, i.t_cooking_oil, i.fish_oil)
+})
+
+ServerEvents.tags('block', e => {
+	if (!global.CD || !global.CD.fats('whaleOil')) return
+	global.tags.add(e, global.blocks.t_mineable_pickaxe, global.blocks.whale_oil_lamp)
 })
 
 ServerEvents.tags('fluid', e => {
@@ -40,6 +47,7 @@ ServerEvents.recipes(e => {
 			R.createMixing(Fluid.of(f.whale_oil, 250), [i.blubber], e, 'whale_oil', 'heated')
 			R.fdCooking([i.blubber, i.blubber], Item.of(i.whale_oil, 1), e, 'whale_oil_manual_only', 0.35, 200, i.glass_bottle)
 			R.createBottle(i.whale_oil, f.whale_oil, e, 'whale_oil')
+			R.shaped(i.whale_oil_lamp, ['NNN', 'NON', 'NNN'], { N: i.nugget_iron, O: i.whale_oil }, e, 'whale_oil_lamp')
 		}
 		if (global.CD.fats('animalFatOil')) {
 			R.remove({ id: 'delightful:cooking/animal_oil_bottle' }, e)

@@ -53,9 +53,15 @@ ServerEvents.recipes(e => {
 		//######################### Strawberry Scones #########################
 		// The scone family's recipe (baking/baked-goods #36): Hearth and Harvest's raspberry scone with strawberries,
 		// oven on the baking sheet; Neapolitan's grid and Create Central Kitchen's routes go (was 2 flour + strawberry +
-		// sugar -> 2 by hand)
+		// sugar -> 2 by hand); 2 per bake (owner; was 1)
 		var F = global.CD.food(e)
 		F._sweep(i.strawberry_scones)
-		R.ceBaking([i.butter, F.slot(i.t_fruits_strawberry, 2), i.sugar, i.batter], i.strawberry_scones, e, 'strawberry_scones', F.ware.sheet)
+		R.ceBaking([i.butter, F.slot(i.t_fruits_strawberry, 2), i.sugar, i.batter], Item.of(i.strawberry_scones, 2), e, 'strawberry_scones', F.ware.sheet)
+
+		//######################### Adzuki Bun #########################
+		// Oven on the baking sheet (baking/baked-goods #35, owner; was roasted adzuki beans + milk + wheat ->
+		// 1 by hand): flour + roasted adzuki beans + milk -> 2. Neapolitan's grid recipe goes.
+		F._sweep(i.adzuki_bun)
+		R.ceBaking([i.flour, i.roasted_adzuki_beans, i.t_milk_bottle], Item.of(i.adzuki_bun, 2), e, 'adzuki_bun', F.ware.sheet)
 	})
 })

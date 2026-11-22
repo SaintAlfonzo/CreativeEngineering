@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "creativedelight:block/whale_oil_lamp"
+    },
+    "hanging=true": {
+      "model": "creativedelight:block/whale_oil_lamp_hanging"
+    }
+  }
+}

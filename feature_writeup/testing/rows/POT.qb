@@ -246,3 +246,19 @@ look the be lines; the sneak use left 882 a plain empty flower pot; latest.log h
 @fails model `creativecompat:block/double_flower_pot` (pot B base uv rows 14-16 of `block/flower_pot`); `DoublePotClient` offsets (`POT_A_CENTER_PX`, `POT_B_CENTER_PX`, `TALL_RISE_PX`); tint offsets 1000 / 2000
 @owner true
 @reviewed 2026-11-22
+
+@@section 4
+@@title CQ-POT pottable tooltip, 2026-11-22 ([plan_unblocked_batch_1121.md](../plan_unblocked_batch_1121.md) R11; [flower_pots.md](../flower_pots.md) 3.5; TODO `blocks/flower-pots #2`)
+@@date 2026-11-22
+@@jars creativecompat
+@@sources feature_writeup/flower_pots.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/PottableTooltip.java
+@@text
+@@text Client look; needs the Creative Compat jar of 2026-11-22.
+@@text
+@@table
+## CQ-POT-05 | "Pottable" on plant items a flower pot takes, not on pots or other plants
+@group client
+@commands client with the Creative Compat jar of 2026-11-22; hover a poppy, an oak sapling, a fern, a cactus, glow lichen, a modded potted plant (for example a Botania mystical flower or a Biomes O' Plenty flower), wheat seeds, a sunflower, a flower pot and a planter box
+@pass a dark green "Pottable" line on the poppy, sapling, fern, cactus, glow lichen and the modded flower; none on wheat seeds, the sunflower (tall), the flower pot or the planter box; the line sits after the item's other lines (with "Sapling" or the other plantable line where the item has one)
+@fails Creative Compat `compat/PottableTooltip` (BlockItem whose block `BotanistPot.pottedFor` maps), lang `tooltip.creativecompat.pottable`
+@draft client look; the first client runner writes the steps

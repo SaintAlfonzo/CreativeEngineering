@@ -1074,3 +1074,37 @@ reject verb=tag kind=item tag=rusticdelight:raw_cooked_eggs n=\d+ ids=.*(turtle_
 expect verb=rdetail id=creativedelight:smoking/fried_egg_from_eggs/fryable
 look the oil batch rdetail line takes #creativedelight:eggs/fryable three times
 reject verb=\S+ .*done=0
+
+@@section 6
+@@title Whale Oil Lamp, 2026-11-22 ([food.md](../food.md) 3.22, TODO `dairy-fats-and-batter #1`, plan_unblocked_batch_1121.md R13)
+@@date 2026-11-22
+@@jars creativecommon creativedelight
+@@sources feature_writeup/food.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/fats/WhaleOilLampBlock.java kubejs/data/creativedelight/kubejs/creativedelight/fats.js
+@@text
+@@text Needs the Creative Common and Creative Delight jars of 2026-11-22 (the `whale_oil_lamp` dict keys and the block) and a
+@@text restart; `[fats] whaleOil` on (default). Group A for SQ-FO-17; CQ-FO-63 is the client check.
+@@text
+@@table
+## SQ-FO-17 | Whale Oil Lamp: block and item registered, 8 iron nuggets around a whale oil, pickaxe tag
+@group A
+@reviewed 2026-11-22
+@commands registry probes for `creativedelight:whale_oil_lamp`; rdetail of `whale_oil_lamp`; block tag probe `minecraft:mineable/pickaxe`
+@pass block and item `creativedelight:whale_oil_lamp` exist; shaped `creativedelight:<type>/whale_oil_lamp` -> 1 from 8 iron nuggets around a Whale Oil; `#minecraft:mineable/pickaxe` holds the lamp
+@fails CD `fats/WhaleOilLamp.java` registration, data `creativedelight/fats.js` (recipe and tag behind whaleOil), Common item_dict / block_dict `whale_oil_lamp`
+> cdevtest reg block whale_oil_lamp
+> cdevtest reg item whale_oil_lamp
+> cdevtest rdetail whale_oil_lamp
+> cdevtest tag block minecraft:mineable/pickaxe
+waitlog verb=tag kind=block tag=minecraft:mineable/pickaxe n= 30
+expect verb=reg kind=block regex=whale_oil_lamp n=1\b
+expect verb=reg kind=item regex=whale_oil_lamp n=1\b
+expect verb=rdetail id=\S+whale_oil_lamp serializer=\S+ result=creativedelight:whale_oil_lamp\*1 ingredients=.*minecraft:iron_nugget.*creativedelight:whale_oil
+expect verb=tag kind=block tag=minecraft:mineable/pickaxe n=\d+ ids=.*creativedelight:whale_oil_lamp
+reject verb=\S+ .*done=0
+
+## CQ-FO-63 | Whale Oil Lamp: placed unlit, lit by flint and steel or a fire charge, lantern light, stands and hangs, water puts it out
+@group client
+@commands creative world at night; place the lamp on the ground and under a block (hanging); F3 light level next to it; use flint and steel on one, a fire charge on the other; pour water into a lit one; break one with a pickaxe
+@pass both look like a vanilla lantern (texture copied as-is, the recolor waits for an owner palette); placed: light 0 from the lamp; after lighting: block light 15 at the lamp like a lantern, flint and steel loses 1 durability, the fire charge is used (kept in creative); waterlogging a lit lamp turns its light off and it cannot be lit while waterlogged; the pickaxe drops the lamp
+@fails `WhaleOilLampBlock` (LIT state, `use`, `updateShape`), `WhaleOilLamp` light level, models `creativedelight:block/whale_oil_lamp(_hanging)` (`render_type` cutout)
+@draft client look; the first client runner writes the steps
