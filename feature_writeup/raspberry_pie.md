@@ -918,5 +918,6 @@ without a packet; a food missing from the table keeps Apple Pie's value. `FoodLi
 `FoodList.getComplexity` and rewrites the item argument of `addFood`, `simulateFoodAdd`, `getLastEaten` and `hasEaten`
 to the family head, so a family is one diet entry. `#solraspberrypie:no_diet` (chocolate coins) is out of the diet like
 a drink but never logged. Workflow: `/dumpfood` -> `python3 tools/food_diversity.py --report` -> rebuild and install the
-jar -> restart. Rules, tier tops and fitted values: plan_food_diversity_1121.md sections 3 and 6.
+jar -> restart. Rules, tier tops and fitted values: plan_food_diversity_1121.md sections 3 and 6; the last step scales each tier so the
+best diet peaks at 120 and the cumulative columns step evenly to low only (R14, food_diversity_audit.md 1.1).
 

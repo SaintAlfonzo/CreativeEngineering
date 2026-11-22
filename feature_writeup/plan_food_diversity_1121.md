@@ -54,6 +54,7 @@ status lives in the rows.
 | R11 | Golden and gilded floors | clear | Golden at least the average high-tier meal (5.25), gilded at least the average feast (6.78) | 2026-11-21 | chat 2026-11-21 |
 | R12 | Coated food and candies | clear | Lowered to mid-tier diversity: capped at the mid top (3), never below the best food input (replaces O2) | 2026-11-21 | chat 2026-11-21 |
 | R13 | Baking vs tier caps | open | Bake by batch value: best ingredient + the pot's median boost (2.97), scaled by the batch's input value (scale fitted so the median matches; it saturates), capped one tier above the food's own; a food lifted past its tier's top moves up a tier. Baking median +2.73 (pot +3.07, same measure) | 2026-11-21 | AskUserQuestion 2026-11-21 |
+| R14 | Ceiling scale | clear | Full cumulative table from no restrictions to low only (none, no dragon, no gilded, no feasts, no golden, mid and low, low only); every tier scaled so the top ceiling is 120 and the columns step evenly to low only. Low-only ceiling 20 (agent default, unconfirmed; was 16.5), so 120, 103.3, 86.7, 70, 53.3, 36.7, 20. Scales: low 1.212, mid 0.741, high 0.539, golden 0.777, feast 0.752, gilded 0.838, dragon 0.993; tops after it dragon 10.93, gilded 8.38, feasts 6.01, golden 5.44, high 3.23, mid 2.22, low 1.21. Table: food_diversity_audit.md 1.1 | 2026-11-21 | chat 2026-11-21 |
 | R9 | Small values for non-food inputs (I11) | clear | Generator-only input values (ice, bone meal, mushrooms, blaze powder and similar about 0.1 to 0.25); a dish never scores below its best food input | 2026-11-21 | agent default, unconfirmed |
 
 ## 3. Design
@@ -134,7 +135,11 @@ Columns remove dragon, gilded, feasts and golden cumulatively, the audit's 1.1 l
   member tier's top.
 - D6 Family meals show in the Diet Log as the family head (red pepper, milk chocolate), not the color eaten.
 
+**After R14** the section 6 table above is the pre-scale state; the current table is food_diversity_audit.md 1.1.
+Side effect: baked cookies lifted into mid (2.20) now score the same as steak (high, 2.21), since high is scaled
+hardest (0.539).
+
 **Open for the owner:**
-- O1 The ladder (rungs 2 to 100) now tops out early: a 32-food diet reaches 138.3 (single-tier and cumulative tables: food_diversity_audit.md 1.1) and high-tier food alone 99
+- O1 The ladder (rungs 2 to 100) against the 120 ceiling (R14; before it 138.3) (single-tier and cumulative tables: food_diversity_audit.md 1.1) and high-tier food alone 99
   (best diet was 91.9 before). Rescale the rungs, or lower the tier tops?
 - O2 (ruled R12) Coated sweets reached the high cap 6; now capped at 3.

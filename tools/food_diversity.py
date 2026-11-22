@@ -389,6 +389,8 @@ class Table:
 			if v < val[fid]:
 				val[fid] = v
 				self.why[fid] = 'coated: capped at %.2f' % v
+			if v <= cap:
+				tier[fid] = self.rules['coated']['tier']  # counts (and scales) as a mid-tier food
 		for fid in ids:
 			if tier[fid] == 'canned':
 				srcs = [s for s in self.cans.get(fid, []) if s in val]
@@ -404,8 +406,55 @@ class Table:
 			for mm in members:
 				if mm in val:
 					val[mm] = top
+		self.scales = self.fit_ceilings(val, tier)
+		for fid in val:
+			val[fid] *= self.scales.get(self.entry_tier(fid, tier), 1.0)
 		self.val = {k: round(v, 4) for k, v in sorted(val.items())}
 		self.tiers = tier
+
+	def entry_tier(self, fid, tier):
+		"""The tier a food counts in for the ceiling table: a can in its source's tier."""
+		tr = tier.get(fid, 'none')
+		if tr == 'canned':
+			src = [x for x in self.cans.get(fid, []) if x in tier]
+			tr = tier[src[0]] if src else 'high'
+			if tr == 'canned':
+				tr = 'high'
+		return tr
+
+	def entries(self, val, tier):
+		"""(value, tier) per diet entry: a family once (its head), drinks and no-diet foods left out."""
+		head = {m: ms[0] for ms in self.families.values() for m in ms[1:]}
+		ent = {}
+		for fid, v in val.items():
+			tr = self.entry_tier(fid, tier)
+			if tr != 'none':
+				ent[head.get(fid, fid)] = (v, tr)
+		return list(ent.values())
+
+	def fit_ceilings(self, val, tier):
+		"""Per-tier scale so the cumulative columns' ceilings step evenly from ceilings.top down to ceilings.low
+		(owner, plan R14). Fitted bottom-up: low only, then mid and low, then high, golden, feasts, gilded, dragon."""
+		c = self.rules.get('ceilings')
+		if not c:
+			return {}
+		ent = self.entries(val, tier)
+		chain = c['chain']  # tiers added from the bottom: low, mid, high, golden, feast, gilded, dragon
+		targets = [c['low'] + (c['top'] - c['low']) * i / (len(chain) - 1) for i in range(len(chain))]
+		scales = {}
+		for k, t in enumerate(chain):
+			inside = set(chain[:k + 1])
+
+			def ceil(f):
+				vs = [v * (f if tr == t else scales.get(tr, 1.0)) for v, tr in ent if tr in inside]
+				return max(rotation(vs, n, c['memory']) for n in range(1, c['maxRotation'] + 1))
+			lo, hi = 0.0, 20.0
+			for _ in range(50):
+				m = (lo + hi) / 2
+				lo, hi = (m, hi) if ceil(m) < targets[k] else (lo, m)
+			scales[t] = (lo + hi) / 2
+		self.ceiling_targets = dict(zip(chain, targets))
+		return scales
 
 	def coated(self, ids):
 		"""Food made by a Create filling (a dip or coating) plus the listed candies; drinks and dragon, golden tiers excluded."""
@@ -454,38 +503,28 @@ def rotation(vals, n, memory=32):
 def report(t):
 	r, n = t.pot
 	print('pot fit: value = %.3f x inputs per output (median of %d pot recipes); meat fit: value = %.3f x q' % (r, n, t.meat_k))
-	cols = ['None', '-Dragon', '-Gilded', '-Feasts', '-Golden', 'High only', 'Mid only', 'Low only']
-	order = ['dragon', 'gilded', 'feast', 'golden', 'high', 'mid', 'low']
-	head = {}
-	for name, ms in t.families.items():
-		for m in ms[1:]:
-			head[m] = ms[0]
-	ent = {}
-	for fid, v in t.val.items():
-		tr = t.tiers[fid]
-		if tr == 'none':
-			continue
-		if tr == 'canned':
-			src = [s for s in t.cans.get(fid, []) if s in t.tiers]
-			tr = t.tiers[src[0]] if src else 'high'
-		ent[head.get(fid, fid)] = (v, tr)
-	sel = {
-		'None': lambda tr: True, '-Dragon': lambda tr: tr != 'dragon',
-		'-Gilded': lambda tr: tr not in ('dragon', 'gilded'), '-Feasts': lambda tr: tr not in ('dragon', 'gilded', 'feast'),
-		'-Golden': lambda tr: tr in ('high', 'mid', 'low'), 'High only': lambda tr: tr == 'high',
-		'Mid only': lambda tr: tr == 'mid', 'Low only': lambda tr: tr == 'low',
-	}
-	print('Columns remove dragon, gilded, feasts, golden cumulatively (cans count in their source tier, a family once).')
-	print('| Rotation | ' + ' | '.join(cols) + ' |')
-	print('|---:|' + '---:|' * len(cols))
-	for n in (1, 2, 4, 8, 16, 24, 32):
-		row = [rotation([v for v, tr in ent.values() if sel[c](tr)], n) for c in cols]
-		print('| %d | ' % n + ' | '.join('%.1f' % x for x in row) + ' |')
-	print('baking: + %.2f (pot median gain) x min(1, %.2f x batch inputs / %.2f pot median inputs)' % (t.pot_gain, t.bake_k, t.pot_inputs))
-	print('floors: golden %.2f (average high meal), gilded %.2f (average feast)' % (t.floors['golden'], t.floors['gilded']))
+	chain = t.rules['ceilings']['chain'][::-1]  # dragon .. low
+	names = ['None', 'No dragon', 'No dragon, gilded', 'No D, G, feasts', 'No D, G, F, golden', 'Mid and low', 'Low only']
+	ent = t.entries(t.val, t.tiers)
+	pools = [[v for v, tr in ent if tr in chain[i:]] for i in range(len(chain))]
+	print('scales: ' + ', '.join('%s %.3f' % (k, v) for k, v in t.scales.items()))
+	print('| Rotation | ' + ' | '.join(names) + ' |')
+	print('|---:|' + '---:|' * len(names))
+	for n in (1, 2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32):
+		print('| %d | ' % n + ' | '.join('%.1f' % rotation(pl, n) for pl in pools) + ' |')
+	best = [max((rotation(pl, n), n) for n in range(1, 33)) for pl in pools]
+	print('| Ceiling (size) | ' + ' | '.join('%.1f (%d)' % b for b in best) + ' |')
+	print('| Foods | ' + ' | '.join(str(len(pl)) for pl in pools) + ' |')
+	order = chain
 	print('Top 5 per tier:')
+	head = {m: ms[0] for ms in t.families.values() for m in ms[1:]}
+	byid = {}
+	for fid, v in t.val.items():
+		tr = t.entry_tier(fid, t.tiers)
+		if tr != 'none':
+			byid[head.get(fid, fid)] = (v, tr)
 	for tr in order:
-		top = sorted(((v, f) for f, (v, x) in ent.items() if x == tr), reverse=True)[:5]
+		top = sorted(((v, f) for f, (v, x) in byid.items() if x == tr), reverse=True)[:5]
 		print('  %-7s ' % tr + ', '.join('%s %.2f' % (f.split(':')[1], v) for v, f in top))
 
 

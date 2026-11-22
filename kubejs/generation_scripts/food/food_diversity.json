@@ -6,6 +6,7 @@
 		"topRank: the multiplier lifts the tier's (topRank+1)-th best food to the top, so one outlier does not set it; above it values cap.",
 		"tierTops: best food of each tier (R2). Tiers low / mid / high are by q (lowMax, midMax) or Nourishment = high;",
 		"their values are capped at the top. dragon, gilded, feast, golden get a multiplier fitted to the top.",
+		"ceilings: after all rules, each tier is scaled so the cumulative columns (none, no dragon, ... low only) peak at evenly spaced values from top to low (plan R14); tierTops are the values before this scale.",
 		"canShare: a can scores this share of its source (R4). nonFood: value of a non-food recipe input (R9);",
 		"containers score 0. families: members share one diet entry and one value (R5, R6)."
 	],
@@ -14,6 +15,7 @@
 	"lowMax": 2,
 	"midMax": 5,
 	"tierTops": { "dragon": 11, "gilded": 10, "feast": 8, "golden": 7, "high": 6, "mid": 3, "low": 1 },
+	"ceilings": { "top": 120, "low": 20, "chain": ["low", "mid", "high", "golden", "feast", "gilded", "dragon"], "memory": 32, "maxRotation": 32 },
 	"canShare": 0.8,
 	"fillingCoating": { "item": "create:bar_of_chocolate", "share": 1.5 },
 	"dishFloorStep": 0.1,
