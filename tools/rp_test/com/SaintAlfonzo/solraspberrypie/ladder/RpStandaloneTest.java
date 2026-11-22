@@ -3,6 +3,9 @@ package com.SaintAlfonzo.solraspberrypie.ladder;
 
 import com.SaintAlfonzo.solraspberrypie.client.LangOverrides;
 import com.SaintAlfonzo.solraspberrypie.logic.Diversity;
+import com.SaintAlfonzo.solraspberrypie.logic.FoodWindow;
+import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
+import com.tarinoita.solsweetpotato.tracking.FoodInstance;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.SharedConstants;
@@ -24,7 +27,8 @@ import java.util.Map;
  * the built-in default ladder parses on vanilla registries with no file warning (3.3 V1 to V10; V12 is reported), and has the ruled shape
  * (D2, D3, D10: ten unlocks at 10, 18, 26, 34, 43, 53, 63, 74, 86, 100; four slots at 10, 30, 55, 80; Apple Pie's
  * thresholds); P3: the diversity tables merge (a later file wins), ids of absent mods are skipped, no table leaves
- * Apple Pie's values, and the pack's Creative Delight table loads; P4: the lang name overrides. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
+ * Apple Pie's values, and the pack's Creative Delight table loads; P4: the lang name overrides; P5: ageing out on Apple
+ * Pie's default settings. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
  */
 public class RpStandaloneTest {
 	private static int ok, fail;
@@ -109,6 +113,27 @@ public class RpStandaloneTest {
 		check("Diet Log".equals(merged.get("item.solapplepie.food_book")), "Apple Pie's book is the Diet Log");
 		check("Food Dictionary".equals(merged.get("item.solcarrot.food_book")), "Carrot's book is the Food Dictionary");
 		check("Open Diet Log".equals(merged.get("key.solapplepie.open_food_book")), "the open-book key says Open Diet Log");
+
+		// P5: ageing out on Apple Pie's own defaults (queueSize 32 = endDecay 32, minContribution 0; the headless config
+		// reads its defaults). A respec of the two oldest window foods and a death (the whole window) cost what they
+		// contributed: the moved foods count nothing.
+		check(SOLSweetPotatoConfig.size() == 32 && SOLSweetPotatoConfig.endDecay() == 32 && SOLSweetPotatoConfig.minContribution() == 0.0,
+				"Apple Pie defaults read: queueSize " + SOLSweetPotatoConfig.size() + ", endDecay " + SOLSweetPotatoConfig.endDecay());
+		Map<FoodInstance, Integer> memory = new HashMap<>();
+		FoodInstance apple = new FoodInstance(Items.APPLE), breadF = new FoodInstance(Items.BREAD), carrot = new FoodInstance(Items.CARROT);
+		memory.put(apple, 0);
+		memory.put(breadF, 5);
+		memory.put(carrot, 20);
+		double before = FoodWindow.diversity(memory);
+		double appleOnly = FoodWindow.diversity(Map.of(apple, 0));
+		List<FoodInstance> oldest = FoodWindow.windowOldestFirst(memory).subList(0, 2);
+		check(oldest.equals(List.of(carrot, breadF)), "oldest window foods first (carrot, bread)");
+		FoodWindow.moveOut(memory, oldest);
+		check(Math.abs(FoodWindow.diversity(memory) - appleOnly) < 1e-9 && before > appleOnly,
+				"respec: the two moved foods count nothing (" + String.format(java.util.Locale.ROOT, "%.3f -> %.3f", before, FoodWindow.diversity(memory)) + ")");
+		check(memory.get(carrot) >= 32 && memory.get(breadF) >= 32 && memory.get(apple) == 0, "moved foods sit at endDecay or past it " + memory.values());
+		FoodWindow.moveOut(memory, FoodWindow.windowOldestFirst(memory));
+		check(FoodWindow.diversity(memory) == 0.0 && FoodWindow.windowOldestFirst(memory).isEmpty(), "death: the whole window moves out, diversity 0");
 
 		System.out.println(fail == 0 ? "ALL " + ok + " OK" : fail + " FAILED");
 	}

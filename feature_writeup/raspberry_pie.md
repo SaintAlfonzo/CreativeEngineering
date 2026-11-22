@@ -980,4 +980,15 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   dedicated server without KubeJS. Creative Delight's `names.js` lines and `solapplepie/diet_log.js` are deleted;
   Common's `item_dict.js` keys `diet_log`, `liquid_diet_log` and `food_dictionary` are deleted (nothing reads them once
   `names.js` stops; `food_dictionary` went too for the same reason, beyond the plan's two).
+- **Apple Pie's own settings (P5).** Raspberry Pie writes no Apple Pie file (D4); the pack's
+  `defaultconfigs/solapplepie-server.toml` stays the recommended set (`queueSize` 256, `minFoodsToActivate` 5, empty
+  benefit lists, drink blacklist). `ApplePieSettings.report()` at server start replaces the three single warnings: one
+  boxed WARN block names each setting it cannot work with (`minContribution` above 0, `resetOnDeath` true, `startDecay`
+  above `endDecay`), and INFO lines note the ones that only change behavior: `endDecay` not below `queueSize` (Apple
+  Pie's defaults, 32 and 32: aged-out foods land at 32, count nothing and are forgotten at the next meal, so the Diet
+  Log keeps no out-of-window history; costs are unchanged) and a non-empty Apple Pie benefit list (kept off by
+  `BenefitsHandlerMixin`; was a warning saying they apply on top, which they do not). Apple Pie's defaults therefore
+  give no warning. `minFoodsToActivate` 0 opens the gate at once (the unique-food counter is then unused). Headless
+  test: a respec of the two oldest window foods and a death on the default settings cost exactly what those foods
+  contributed.
 

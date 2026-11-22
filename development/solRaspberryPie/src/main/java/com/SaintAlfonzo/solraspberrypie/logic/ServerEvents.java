@@ -9,7 +9,6 @@ import com.SaintAlfonzo.solraspberrypie.ladder.LadderLoader;
 import com.SaintAlfonzo.solraspberrypie.net.RpNetwork;
 import com.SaintAlfonzo.solraspberrypie.net.S2CLadder;
 import com.SaintAlfonzo.solraspberrypie.net.S2CMessage;
-import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
 import com.tarinoita.solsweetpotato.tracking.CapabilityHandler;
 import com.tarinoita.solsweetpotato.tracking.FoodList;
 import net.minecraft.network.chat.Component;
@@ -52,16 +51,7 @@ public final class ServerEvents {
 	@SubscribeEvent
 	public static void serverStarted(ServerStartedEvent e) {
 		Ladder.current = LadderLoader.load(e.getServer());
-		if (SOLSweetPotatoConfig.minContribution() > 0) {
-			SolRaspberryPie.LOG.warn("Apple Pie minContribution is {} (above 0): foods aged out by respecs and death still count a little, so every respec costs less (6.1)",
-					SOLSweetPotatoConfig.minContribution());
-		}
-		if (SOLSweetPotatoConfig.shouldResetOnDeath()) {
-			SolRaspberryPie.LOG.warn("Apple Pie resetOnDeath is true: it clears the whole food memory on death; Raspberry Pie expects false and ages the window out instead");
-		}
-		if (!SOLSweetPotatoConfig.getBenefitsUnparsed().isEmpty() || !SOLSweetPotatoConfig.getThresholds().isEmpty()) {
-			SolRaspberryPie.LOG.warn("Apple Pie still has its own benefits configured (benefitsUnparsed / thresholds): they apply on top of the Raspberry Pie ladder. Empty both lists.");
-		}
+		ApplePieSettings.report();
 	}
 
 	@SubscribeEvent
