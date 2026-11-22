@@ -67,6 +67,9 @@ findings) become a plan, split and classify them and ask the open items before b
   - Delegate using what an agent can know: split by independence, file/subsystem ownership, and what each side
     already has in context or tools. Give pointers (paths, doc names, what is already ruled out), not retyped content.
     Do not hand off a lookup you can finish in a few tool calls.
+  - Agent type by work: `scratch-judge` for judging scratch results, `doc-pass` for doc, status, TODO-row and
+    queue-row-text passes (both on Sonnet); `general-purpose` (session model) for Java, KubeJS and multi-file
+    code phases.
   - Delegation is provisional. If the other agent reports information that contradicts or supersedes the plan
     (the work is already done, a premise is false, a better owner exists, scope differs), adopt it: say so in
     one line, re-split the work, and do not repeat the original request. Say the same when you hold such

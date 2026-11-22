@@ -243,6 +243,8 @@ everything below is the default unless the prompt says otherwise.
 
 ### B4. Judge
 
+A runner that hands judging to an agent spawns agent type `scratch-judge` (Sonnet), one per RES dir or rerun.
+
 Turn every LOOK into PASS or FAIL from `RES/rows/<ID>.log`, `rows/<ID>.shell.txt` and `shots/`. A failure caused by
 the batch (wrong regex, wrong coordinates) is `BATCH-FAULT`: when the fix is simple, fix it and rerun it in-run
 (run default 11); otherwise write the cause for a later rewrite pass (the row keeps its id: reruns are verdict
