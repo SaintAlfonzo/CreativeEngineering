@@ -12,9 +12,11 @@
 @@text Not run. Targets the final `solRaspberryPie` jar after plan phases P1 to P6 and P8 (nests Apple Pie 2.2.0 and Carrot
 @@text 1.14.0). Jar set `tools/scratch_query/modsets/rps.toml`: Forge plus the Raspberry Pie jar only, no KubeJS, no Creative
 @@text jars, empty `config/` and `defaultconfigs/` (the mod runs on its built-in defaults). Variants: `rps only` (default),
-@@text `rps loose` (adds a loose `solapplepie-1.19.2-2.2.0.jar`), `rps alex` (adds Alex's Mobs and Citadel). Default
-@@text ladder (P2): Apple Pie's 17 attribute rungs at diversity 2, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90,
-@@text 100; 10 vanilla unlocks at 10, 18, 26, 34, 43, 53, 63, 74, 86, 100; 4 effect slots at 10, 30, 55, 80. Client rows
+@@text `rps loose` (adds a loose `solapplepie-1.19.2-2.2.0.jar`, kept in `jar_archive/displaced/`), `rps alex` (adds Alex's
+@@text Mobs 1.21.1 and Citadel). Default ladder (P2, owner rulings 2026-11-21): Apple Pie's ladder halved to a top of 50
+@@text (16 half-heart rungs 2.5 to 50, toughness at 7.5, 25, 40, knockback at 20, its flat effects at 1 to 50), 13 vanilla
+@@text unlocks at 5, 7.9, 10.8, 13.9, 17.1, 20.4, 23.8, 27.5, 31.4, 35.5, 39.9, 44.7, 50, 4 effect slots at 5, 15, 27.5,
+@@text 40; start line `Diet ladder: 47 rungs, 4 slots, 11 pool effects`, no warning (V12 included). Client rows
 @@text (CQ) need a fresh survival world with that jar set. The existing Raspberry Pie rows (SQ-RPI, CQ-RPI in
 @@text [RP.qb](RP.qb) section 2) are rerun against the final jar after these pass (plan section 6, TODO `food-tuning #46`).
 @@text
@@ -22,23 +24,24 @@
 ## SQ-RPS-01 | isolated boot: ladder loads clean, nested mods found
 @group B
 @commands Boot with `rps only`. `grep -nE "Diet ladder|Raspberry Pie|solapplepie|solcarrot|Mixin apply|Missing or unsupported" logs/latest.log` (RPS-01)
-@pass exactly one `Diet ladder:` info line naming 4 slots; no `Diet ladder (` warning line; no missing-dependency, mixin or injection error; `Done (` reached
+@pass exactly one `Diet ladder: 47 rungs, 4 slots, 11 pool effects` info line; no `Diet ladder (` warning line (V12 included); no `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` block; no missing-dependency, mixin or injection error; `Done (` reached
 @fails nested jar metadata or version range in `mods.toml` / `ce.forge-bundle.gradle` (P1); default ladder file (P2); a mixin target that needs a mod the standalone set lacks (P4, P6)
 @from plan_rp_standalone.md section 6
-bootexpect Diet ladder: \d+ rungs, 4 slots
+bootexpect Diet ladder: 47 rungs, 4 slots, 11 pool effects
 bootreject Diet ladder \(
+bootreject APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH
 bootreject Missing or unsupported mandatory|InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError|Encountered an unexpected exception
-look the `Diet ladder:` line appears once in the whole log (grep -c); the rung count is the default ladder's 17 attribute rungs plus 10 unlocks, as P2 wrote them
+look the `Diet ladder:` line appears once in the whole log (grep -c); the line reads exactly `Diet ladder: 47 rungs, 4 slots, 11 pool effects`
 ## CQ-RPS-02 | isolated client: names, Apple Pie book and potato recipe gone, book recipes work
 @group client
 @commands Client with `rps only`, new survival world. Inventory, `/recipe`-free: open the crafting table and JEI-free recipe book; craft book + bread, book + apple juice or any drink, book + carrot (RPS-02)
 @pass the book is named Diet Log, the second book Food Dictionary (not Apple Pie's names); Apple Pie's own book recipe and its potato recipe are absent; book + food gives a Diet Log, book + drink a Liquid Diet Log
-@fails Raspberry Pie `assets/solraspberrypie/lang/en_us.json` and `client/LangOverrides.java` (names, P4); `RecipeManagerMixin` (recipe removal must run without KubeJS)
+@fails Raspberry Pie `assets/solraspberrypie/lang/en_us.json` and `client/LangOverrides.java` (names, P4: the lang file holds `solraspberrypie.override.item.solapplepie.food_book` "Diet Log", `solraspberrypie.override.item.solcarrot.food_book` "Food Dictionary", `solraspberrypie.override.key.solapplepie.open_food_book` "Open Diet Log"; `client.ClientLanguageMixin` copies each `solraspberrypie.override.<key>` onto `<key>` after all lang files merge, so Controls also shows "Open Diet Log"); `RecipeManagerMixin` (recipe removal must run without KubeJS)
 @draft client steps: crafting-table slots, names read by the capture driver
 ## CQ-RPS-03 | isolated client: no diversity table, Apple Pie food values stand, tooltips and books agree
 @group client
 @commands Client with `rps only`, no diversity file on the classpath. Eat or inspect bread, apple, golden apple, cake; open the Diet Log (RPS-03)
-@pass no table loaded (one INFO line, no warning); each food's tooltip diversity value equals Apple Pie's own value for it; the Diet Log shows the same value after eating
+@pass no table loaded (one INFO line `No diversity table (solraspberrypie/diversity/*.json) in any mod; Apple Pie's values apply`, no warning); each food's tooltip diversity value equals Apple Pie's own value for it; the Diet Log shows the same value after eating
 @fails `Diversity` loader (P3): no-file case must not override; the tooltip mixin reading a different source than the book
 @draft client steps and the reference values (read Apple Pie's own tooltip values from the nested jar)
 ## SQ-RPS-04 | loose Apple Pie 2.2.0 beside the nested copy: one loads, no crash
@@ -48,35 +51,35 @@ look the `Diet ladder:` line appears once in the whole log (grep -c); the rung c
 @pass server reaches `Done (`; no duplicate-mod crash and no `ModFileDuplicate`/`Duplicate` error; the log names one `solapplepie` mod file; one `Diet ladder:` line
 @fails Jar-in-Jar version range in `ce.forge-bundle.gradle` (P1); Forge picks the higher or loose version: both are 2.2.0, so the nested jar must be skipped without an error
 bootexpect Done \(
-bootexpect Diet ladder: \d+ rungs, 4 slots
+bootexpect Diet ladder: 47 rungs, 4 slots, 11 pool effects
 bootreject Duplicate|duplicate mod|ModFileDuplicate|DuplicateModsFoundException|Encountered an unexpected exception
 look `grep -n "solapplepie" logs/latest.log` shows one loaded mod file for solapplepie
 ## CQ-RPS-05 | Apple Pie defaults: eat, respec, drop, die; ageing-out and gate
 @group client
 @commands Client with `rps only` (Apple Pie settings at their defaults: `queueSize` 32, `minFoodsToActivate` 0). Eat a run of different foods past 32 entries, respec at the ladder screen, drop a food, die (RPS-05)
-@pass eating adds diversity and the 33rd distinct food ages the oldest out at the cost plan 6.1 gives; the unique-food gate refuses a repeat; respec refunds and re-applies the ladder; dropping and dying leave state consistent (`resetOnDeath` default); start log has no Raspberry Pie warning (`minContribution` is 0)
-@fails ageing-out cost and gate in `raspberry_pie.md` 6.1 and the gate code (P5); the warning list in the config check (P5)
+@pass eating adds diversity; `minFoodsToActivate` 0 opens the gate at the first meal; a respec moves the oldest window foods to count 32 and diversity falls by exactly what they gave (6.1); death moves the whole window out (diversity 0, `resetOnDeath` false); with `endDecay` 32 = `queueSize` 32 the moved foods are forgotten at the next meal, so the Diet Log shows no older-foods history (expected, not a FAIL); start log has no boxed `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` warning and exactly two INFO lines from `Raspberry Pie`: `Apple Pie settings: endDecay 32 is not below queueSize 32: foods aged out by respecs and death are forgotten at the next meal ...` and `Apple Pie settings: Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off (its ladder replaces it)`
+@fails ageing-out cost and gate in `raspberry_pie.md` 6.1 and the gate code (P5); `logic/ApplePieSettings.java` (P5)
 @draft client steps: eat loop with `/give`, respec command, `/kill`
 ## SQ-RPS-06 | Alex's Mobs present: Fleet-Footed mixin applies
 @group B
 @modset rps alex
-@commands Boot with `rps alex` (Alex's Mobs 1.19.2 and Citadel beside the Raspberry Pie jar) (RPS-06)
+@commands Boot with `rps alex` (Alex's Mobs 1.21.1 for 1.19.2 and Citadel beside the Raspberry Pie jar) (RPS-06)
 @pass `Done (` reached; the Fleet-Footed mixin applies (no skip warning from Raspberry Pie); no mixin error
-@fails `FleetFootedMixin` and the member check in its mixin plugin (P6); Alex's Mobs version differs from the ranged one in the writeup
+@fails `FleetFootedMixin` and the member check in `RpMixinPlugin` (P6); Alex's Mobs version differs from the tested 1.21.1 (raspberry_pie.md 12.2)
 bootexpect Done \(
-bootreject Fleet-Footed.*skipp|FleetFooted.*skipp|InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError
+bootreject Fleet-Footed fix is off|Fleet-Footed fix failed|InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError
 look no warning about EffectFleetFooted anywhere in latest.log; the mixin is listed as applied if `-Dmixin.debug` output is present
 ## SQ-RPS-08 | Alex's Mobs stub missing a field: mixin skipped, one warning, no crash
 @group B
 @modset rps alex
 @commands Boot with `rps alex` after a stub swap: the Alex's Mobs jar is replaced by a copy whose `EffectFleetFooted` lacks a field the mixin touches (second half of RPS-06; id 08 because the plan's single RPS-06 needs two boots)
-@pass `Done (` reached; exactly one Raspberry Pie warning naming the skipped Fleet-Footed mixin; no crash, no mixin error
+@pass `Done (` reached; exactly one warning `[solraspberrypie] Alex's Mobs com.github.alexthe666.alexsmobs.effect.EffectFleetFooted lacks <member>: the Fleet-Footed fix is off (tested with Alex's Mobs 1.21.1)` (member `int field lastDuration` or `applyEffectTick(LivingEntity, int) (m_6742_)`); no `Fleet-Footed fix failed` line; no crash, no mixin error
 @fails the member check and `require = 0` in `FleetFootedMixin` / its plugin (P6)
 @draft fixture: a tools/ script that builds the stub jar from the pack's Alex's Mobs jar (rewrites `EffectFleetFooted` without one field); the first runner writes it, then `edit` swaps the jar before `restart`
 ## SQ-RPS-07 | in the pack: table split, unknown id loads, count logged once
 @group B
 @modset none
 @commands Pack server (full pack, Creative Delight carries the pack table). Add a scratch diversity table file with an unknown food id on the classpath, boot (RPS-07)
-@pass the server boots; one INFO line gives the count of skipped unknown ids (no per-id warning); other ids in the same file apply (`/cdevtest` reads or the tooltip value of a known id in the file matches it)
+@pass the server boots; one INFO summary line `Diversity table: <n> values, <m> family members from <k> file(s) (creativedelight:creativedelight.json, <owner>:<file>.json); <s> ids skipped (mod not loaded)` (logger `solraspberrypie/diversity`; no per-id warning; a file overriding another adds one `Diversity table: <n> entries of <later> over <earlier>` line); other ids in the same file apply (`/cdevtest` reads or the tooltip value of a known id in the file matches it)
 @fails `Diversity` loader merge and optional-id handling (P3); the table's new location in Creative Delight (P8)
-@draft fixture: the scratch table's classpath root (a datapack-free jar or a `development` resource) and the file shape from `Diversity`; the first runner writes it
+@draft fixture: a small jar with a `META-INF/mods.toml` (any test mod id) holding `solraspberrypie/diversity/<name>.json`; tables are read from loaded mod files only (Forge `ModList`), not from datapacks or loose folders. File shape: `{"values": {"<item id>": <number>, ...}, "families": {"<name>": ["<head id>", "<member id>", ...]}}` (both keys optional; first family member is the head). The first runner writes it
