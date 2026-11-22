@@ -12,6 +12,11 @@ PixelPreview(Widget)
 	pixel_at(x, y)            window coords -> (col, row) with row 0 at the top, or None outside the image
 	on_pixel(col, row, button, kind)   event; kind 'down' | 'move' | 'up' for presses on the image with
 	                          `pick_buttons` (default left); screens bind it for pickers and the editor canvas.
+	report_outside            BooleanProperty (default False): when True, presses and drags off the image are
+	                          reported too, with unclamped pixel coords (may be negative or past the edge)
+	checker                   BooleanProperty (default True): draw the checkerboard under the image
+	image_rect()              (x, y, width, height) of the drawn image in widget (parent) coords
+	pixel_at(x, y, outside=False)   outside=True returns the unclamped (col, row) even off the image
 Input: wheel zooms about the cursor; drag with `pan_buttons` (default middle and right, plus left when left_pans) pans;
 double click with a pan button fits. Textures use mag_filter and min_filter 'nearest', so pixels stay crisp at every zoom.
 """
@@ -57,6 +62,8 @@ class PixelPreview(StencilView):
 	pick_buttons = ListProperty(["left"])
 	background = ListProperty([0.16, 0.16, 0.18, 1])
 	revision = NumericProperty(0)
+	report_outside = BooleanProperty(False)
+	checker = BooleanProperty(True)
 
 	__events__ = ("on_pixel",)
 
@@ -72,7 +79,7 @@ class PixelPreview(StencilView):
 			Color(1, 1, 1, 1)
 			self._check_rect = Rectangle(texture=self._checker, size=(0, 0))
 			self._img_rect = Rectangle(size=(0, 0))
-		self.bind(pos=self._redraw, size=self._redraw, zoom=self._redraw, pan=self._redraw,
+		self.bind(pos=self._redraw, size=self._redraw, zoom=self._redraw, pan=self._redraw, checker=self._redraw,
 			background=lambda *a: setattr(self._bg_color, "rgba", self.background))
 
 	# ---- data ----
@@ -158,14 +165,20 @@ class PixelPreview(StencilView):
 		ox, oy = self._origin()
 		sw, sh = w * self.zoom, h * self.zoom
 		self._check_rect.pos = (ox, oy)
-		self._check_rect.size = (sw, sh)
+		self._check_rect.size = (sw, sh) if self.checker else (0, 0)
 		self._check_rect.tex_coords = (0, 0, sw / (2.0 * CHECKER_PX), 0, sw / (2.0 * CHECKER_PX),
 			sh / (2.0 * CHECKER_PX), 0, sh / (2.0 * CHECKER_PX))
 		self._img_rect.pos = (ox, oy)
 		self._img_rect.size = (sw, sh)
 
-	def pixel_at(self, x, y):
-		"""Window coords -> (col, row), row 0 at the top; None outside the image."""
+	def image_rect(self):
+		"""(x, y, width, height) of the drawn image in widget coords (zero size when empty)."""
+		w, h = self.image_size
+		ox, oy = self._origin()
+		return ox, oy, w * self.zoom, h * self.zoom
+
+	def pixel_at(self, x, y, outside=False):
+		"""Window coords -> (col, row), row 0 at the top; None outside the image (outside=True: unclamped coords)."""
 		if self.array is None:
 			return None
 		wx, wy = self.to_widget(x, y)
@@ -173,9 +186,12 @@ class PixelPreview(StencilView):
 		w, h = self.image_size
 		col = int((wx - ox) // self.zoom)
 		row_from_bottom = int((wy - oy) // self.zoom)
-		if 0 <= col < w and 0 <= row_from_bottom < h:
+		if outside or (0 <= col < w and 0 <= row_from_bottom < h):
 			return col, h - 1 - row_from_bottom
 		return None
+
+	def _event_pixel(self, pos):
+		return self.pixel_at(*pos, outside=self.report_outside)
 
 	# ---- input ----
 
@@ -201,7 +217,7 @@ class PixelPreview(StencilView):
 			self._drag = ("pan", touch.pos, list(self.pan))
 			return True
 		if button in self.pick_buttons:
-			p = self.pixel_at(*touch.pos)
+			p = self._event_pixel(touch.pos)
 			touch.grab(self)
 			self._drag = ("pick", button)
 			if p is not None:
@@ -216,7 +232,7 @@ class PixelPreview(StencilView):
 			_, start, pan0 = self._drag
 			self.pan = [pan0[0] + touch.pos[0] - start[0], pan0[1] + touch.pos[1] - start[1]]
 		else:
-			p = self.pixel_at(*touch.pos)
+			p = self._event_pixel(touch.pos)
 			if p is not None:
 				self.dispatch("on_pixel", p[0], p[1], self._drag[1], "move")
 		return True
@@ -226,7 +242,7 @@ class PixelPreview(StencilView):
 			return super().on_touch_up(touch)
 		touch.ungrab(self)
 		if self._drag is not None and self._drag[0] == "pick":
-			p = self.pixel_at(*touch.pos)
+			p = self._event_pixel(touch.pos)
 			if p is not None:
 				self.dispatch("on_pixel", p[0], p[1], self._drag[1], "up")
 		self._drag = None

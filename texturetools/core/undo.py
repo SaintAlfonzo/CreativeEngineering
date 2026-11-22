@@ -32,7 +32,7 @@ class UndoStack:
 	"""entries[0..index] are the past and current state, entries[index+1..] the redo branch.
 
 	s = UndoStack(img, label='open'); s.push(new_img, 'pencil'); s.undo() -> previous copy; s.redo();
-	s.current (a copy); s.history() -> [(label, is_current)]; s.jump(i); s.clear(state)."""
+	s.current (a copy); s.history() -> [(label, is_current)]; s.jump(i); s.clear(state); s.replace_current(state)."""
 
 	def __init__(self, initial=None, label="start", limit_bytes=DEFAULT_LIMIT, max_steps=None):
 		self.limit_bytes = limit_bytes
@@ -54,6 +54,17 @@ class UndoStack:
 		del self._entries[self._index + 1:]
 		self._entries.append([label, _copy(state), _size(state)])
 		self._index = len(self._entries) - 1
+		self._trim()
+
+	def replace_current(self, state, label=None):
+		"""Swap the current entry's state (and label) in place, no new history step (editor: Save as changes the
+		document path of the current entry)."""
+		if self._index < 0:
+			raise IndexError("empty stack")
+		e = self._entries[self._index]
+		e[1], e[2] = _copy(state), _size(state)
+		if label is not None:
+			e[0] = label
 		self._trim()
 
 	@property
