@@ -16,6 +16,7 @@ strength, as combine_paint.
 Arrays: any HxWx4 numeric RGBA in, float32 out (save with image_io.save_raw), as the combine engine.
 """
 
+import os
 from dataclasses import asdict, dataclass, field, fields
 
 import numpy as np
@@ -204,3 +205,62 @@ def paint_file(base_path, material_path, out_path, opts=None, mask_path=None):
 	mask = load_rgba_array(mask_path) if mask_path else None
 	save_raw(paint(base, load_rgba_array(material_path), opts, mask), out_path)
 	return out_path
+
+
+# ---------------------------------------------------------------- bulk (core/batch.py kind "paint", P8)
+
+def _stem(path):
+	return os.path.splitext(os.path.basename(path))[0]
+
+
+def paint_jobs(fixed, folder, reverse=False, opts=None, mask=None, pattern="{name}.png", include=None, exclude=None,
+			   recursive=False):
+	"""Bulk paint jobs (kind "paint"; run with batch.run_batch, saver save_raw).
+
+	reverse False: fixed is the shape and every image in folder is a material (one shape, many materials).
+	reverse True: fixed is the material and every image in folder is a shape (one material, many shapes).
+	folder: a folder (scanned with include / exclude globs) or a list of paths. The fixed file itself is left out.
+	mask: optional mask path shared by every job (a shape of another size skips).
+	Name fields: {name} the varying file's stem, {ext}, {shape} shape stem, {material} material stem, {n}."""
+	from texturetools.core import batch
+	files = batch.scan_folder(folder, include, exclude, recursive) if isinstance(folder, str) else list(folder)
+	fixed_abs = os.path.abspath(fixed)
+	files = [f for f in files if os.path.abspath(f) != fixed_abs]
+	params = {"options": (opts or PaintOptions()).validate().to_dict(), "mask": mask or ""}
+	jobs = []
+	for n, path in enumerate(files, 1):
+		f = batch.name_fields(path)
+		f["n"] = n
+		if reverse:
+			inputs = {"shape": path, "material": fixed}
+			f["shape"], f["material"] = f["name"], _stem(fixed)
+		else:
+			inputs = {"shape": fixed, "material": path}
+			f["shape"], f["material"] = _stem(fixed), f["name"]
+		jobs.append(batch.Job(inputs=inputs, params=dict(params), pattern=pattern, fields=f, kind="paint",
+							  label=os.path.basename(path)))
+	return jobs
+
+
+def _paint_worker(job):
+	"""Job kind "paint": inputs shape and material (path or array), params options (PaintOptions dict) and mask
+	(path, or ""). A size mismatch with the mask becomes a Skip."""
+	from texturetools.core import batch
+	opts = PaintOptions.from_dict(job.params.get("options"))
+	shape, mat = job.inputs["shape"], job.inputs["material"]
+	shape_arr = load_rgba_array(shape) if isinstance(shape, str) else np.asarray(shape)
+	mat_arr = load_rgba_array(mat) if isinstance(mat, str) else np.asarray(mat)
+	mask_path = job.params.get("mask")
+	mask = load_rgba_array(mask_path) if mask_path else None
+	try:
+		return paint(shape_arr, mat_arr, opts, mask)
+	except ValueError as e:
+		raise batch.Skip(str(e))
+
+
+def _register_kind():
+	from texturetools.core import batch
+	batch.register_kind("paint", _paint_worker)
+
+
+_register_kind()

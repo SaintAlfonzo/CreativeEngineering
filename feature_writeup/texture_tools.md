@@ -97,3 +97,40 @@ Color panel:
   row holds complementary, two triadic and two analogous colors at the same lightness.
 - [ ] G2.18 Image palette strip under the canvas lists every color of the image; a click selects it; with Bucket or
   Global fill as the tool a click replaces that color everywhere (inside the selection, if any) with the current color.
+
+### G3: Texture Painter and Scale screens, Open in Editor, Copy as CLI (P8)
+
+Painter:
+- [ ] G3.1 Pick a shape and a material: the preview paints the material into the shape and keeps its shading; the shape
+  and material thumbnails show over the preview. Save as writes a file that looks exactly like the preview.
+- [ ] G3.2 Every control changes the preview where it applies: Mode (inplace, projected), Projected fit (stretch,
+  contain, cover; only enabled in projected), Offset X / Y, Scale and Tile (only in place), Flip H / V, Rotate (0, 90,
+  180, 270), Inset, Strength (0 = the material's own colors, 1 = full shading), Outline (keep leaves the rim as it was),
+  Material alpha (skip leaves the shape where the material is transparent), Clip unpainted.
+- [ ] G3.3 Load a mask: only its opaque pixels are painted; Invert mask paints the rest of the shape.
+- [ ] G3.4 Click the shape thumbnail with "Eyedropper adds to" = keep: the color is ticked in the Keep list and that
+  color stays unpainted; click again to untick. With "only": only the ticked colors are painted; Keep tol and Only tol
+  widen the match.
+- [ ] G3.5 Bulk (one shape, a materials folder) and Reverse roles (one material, a shapes folder) with a name pattern
+  ({shape}, {material}): Dry run reports the count and writes nothing; Preview all shows every result, untick one and
+  Run leaves it out.
+- [ ] G3.6 Copy as CLI, paste in a terminal from the repo root (`python3 -m texturetools.cli.paint_tex ...`): it writes
+  the same file as Run, single and bulk.
+- [ ] G3.7 Save a preset, change things, load it: every control and both color lists come back.
+
+Scale:
+- [ ] G3.8 Single image: Scale by factor, by target size (S or WxH; an uneven or non-multiple size says why and writes
+  nothing) and fit canvas; Trim first; Canvas with Anchor topleft and center. The preview is pixel-crisp and Save as / Run
+  write what the preview shows; a blank Output writes `<stem>_<size>.png` next to the input.
+- [ ] G3.9 Folder mode: Factors (e.g. `2 4 8 16`), Recursive, Flat: the status line counts images and files; Preview all
+  shows every output (nothing written); Run writes `x<N>/` subfolders (or `_x<N>` names when Flat) in the output folder
+  (blank = `<folder>_upscaled`).
+- [ ] G3.10 Copy as CLI gives `scale_tex` (single) or `upscale_sprites` (folder); pasted, it writes the same files.
+- [ ] G3.11 In the Texture Editor, "Scale screen (size, canvas, trim)" opens the image on the Scale screen; Open in
+  Editor brings the scaled result back as an unsaved document. The editor's own Scale Up / Down and Trim give the same
+  pixels as the Scale screen at that factor.
+
+Every screen:
+- [ ] G3.12 Open in Editor from Palette Swap, Combine, Painter and Scale opens the current result in the editor as an
+  unsaved document (from a bulk grid: the tile last clicked).
+- [ ] G3.13 With dev mode on, a Painter or Scale Run offers the provenance row like the other screens.

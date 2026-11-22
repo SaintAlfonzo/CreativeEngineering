@@ -29,7 +29,8 @@ import sys
 from pathlib import Path
 
 from texturetools.core.scale import *  # noqa: F401,F403 (the old module's names, for importers)
-from texturetools.core.scale import SUPPORTED_EXTS, find_images, upscale_image
+from texturetools.core.scale import (SUPPORTED_EXTS, find_images, upscale_factors, upscale_image, upscale_output_dir,
+									 upscale_plan)
 
 
 def main(argv=None):
@@ -70,9 +71,9 @@ def main(argv=None):
 		print(f"Error: input folder not found: {input_dir}")
 		sys.exit(1)
 
-	output_dir: Path = args.output_dir or input_dir.parent / f"{input_dir.name}_upscaled"
+	output_dir: Path = upscale_output_dir(input_dir, args.output_dir)
 
-	factors = sorted(set(f for f in args.factors if f > 1))
+	factors = upscale_factors(args.factors)
 	if not factors:
 		print("Error: no valid factors > 1 given.")
 		sys.exit(1)
@@ -86,20 +87,13 @@ def main(argv=None):
 	print(f"Output folder: {output_dir}\n")
 
 	total = 0
-	for src_path in images:
-		rel_path = src_path.relative_to(input_dir)
-		for factor in factors:
-			if args.flat:
-				dest_path = output_dir / f"{rel_path.stem}_x{factor}{rel_path.suffix}"
-			else:
-				dest_path = output_dir / f"x{factor}" / rel_path
-
-			try:
-				upscale_image(src_path, factor, dest_path)
-				total += 1
-				print(f"  [x{factor:<3}] {rel_path} -> {dest_path}")
-			except Exception as e:
-				print(f"  FAILED: {rel_path} (x{factor}): {e}")
+	for src_path, rel_path, factor, dest_path in upscale_plan(input_dir, output_dir, factors, args.recursive, args.flat):
+		try:
+			upscale_image(src_path, factor, dest_path)
+			total += 1
+			print(f"  [x{factor:<3}] {rel_path} -> {dest_path}")
+		except Exception as e:
+			print(f"  FAILED: {rel_path} (x{factor}): {e}")
 
 	print(f"\nDone. Wrote {total} upscaled image(s) to {output_dir}")
 

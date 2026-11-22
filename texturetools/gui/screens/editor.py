@@ -296,6 +296,7 @@ class EditorScreen(ToolScreen):
 		self._row(_small_label("Scale", 40), self.scale_factor,
 			self._btn("Up", lambda: self.op_scale(int(self.scale_factor.text))),
 			self._btn("Down", lambda: self.op_scale(-int(self.scale_factor.text))))
+		self._row(self._btn("Scale screen (size, canvas, trim)", self.open_in_scale))
 		self.shift_dx = _int_input(1, 36)
 		self.shift_dy = _int_input(0, 36)
 		self._row(_small_label("Shift", 40), self.shift_dx, self.shift_dy,
@@ -689,6 +690,18 @@ class EditorScreen(ToolScreen):
 				return None
 			return self._op(lambda a: edit.scale_int(a, factor), "scale x{0}".format(factor))
 		return self._op(lambda a: edit.downscale_int(a, -factor), "scale /{0}".format(-factor))
+
+	def open_in_scale(self):
+		"""Hand the image to the Scale screen (target size, fit canvas, trim, anchor: core/scale.py, the same
+		implementation as Scale Up / Down and Trim here); its Open in Editor hands the result back."""
+		if self.floating is not None:
+			self.commit_floating()
+		app = App.get_running_app()
+		scr = app.switch_to("scale") if app is not None else None
+		if scr is None:
+			return None
+		scr.load_array(self.image.copy(), self.result_name)
+		return scr
 
 	def op_shift(self, dx, dy):
 		wrap = bool(self.params.get("shift_wrap", True))

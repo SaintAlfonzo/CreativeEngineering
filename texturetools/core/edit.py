@@ -19,6 +19,8 @@ from dataclasses import dataclass
 import numpy as np
 from PIL import Image
 
+from texturetools.core import scale as _scale
+
 TRANSPARENT = (0, 0, 0, 0)
 ANCHORS = {
 	"top_left": (0, 0), "top": (1, 0), "top_right": (2, 0),
@@ -347,19 +349,15 @@ def resize_canvas(img, w, h, anchor="top_left", fill=TRANSPARENT):
 
 
 def scale_int(img, factor):
-	"""Nearest-neighbor scale by a whole factor (every pixel becomes a factor x factor block)."""
-	if int(factor) != factor or factor < 1:
-		raise ValueError("factor must be a whole number of 1 or more")
-	f = int(factor)
-	return np.repeat(np.repeat(img, f, axis=0), f, axis=1)
+	"""Nearest-neighbor scale by a whole factor (every pixel becomes a factor x factor block): core/scale.py's
+	scale_array, the one implementation the Scale screen shares (P8)."""
+	return _scale.scale_array(img, factor)
 
 
 def downscale_int(img, factor):
-	"""Inverse of scale_int: keep the top-left pixel of every factor x factor block (size must divide)."""
-	h, w = img.shape[:2]
-	if h % factor or w % factor:
-		raise ValueError("{0}x{1} is not a multiple of {2}".format(w, h, factor))
-	return img[::factor, ::factor].copy()
+	"""Inverse of scale_int: keep the top-left pixel of every factor x factor block (size must divide);
+	core/scale.py's downscale_array."""
+	return _scale.downscale_array(img, factor)
 
 
 def shift(img, dx, dy, wrap=True, fill=TRANSPARENT):
@@ -371,17 +369,14 @@ def shift(img, dx, dy, wrap=True, fill=TRANSPARENT):
 
 
 def trim_bbox(img):
-	"""(x0, y0, x1, y1) inclusive bounds of alpha > 0, or None when fully transparent."""
-	return selection_bbox(img[:, :, 3] > 0)
+	"""(x0, y0, x1, y1) inclusive bounds of alpha > 0, or None when fully transparent (core/scale.py alpha_bbox)."""
+	return _scale.alpha_bbox(img)
 
 
 def trim(img):
-	"""Crop to the non-transparent pixels (a fully transparent image is returned unchanged, as a copy)."""
-	box = trim_bbox(img)
-	if box is None:
-		return img.copy()
-	x0, y0, x1, y1 = box
-	return img[y0:y1 + 1, x0:x1 + 1].copy()
+	"""Crop to the non-transparent pixels (a fully transparent image is returned unchanged, as a copy);
+	core/scale.py's trim_array."""
+	return _scale.trim_array(img)
 
 
 def crop(img, x0, y0, x1, y1):
