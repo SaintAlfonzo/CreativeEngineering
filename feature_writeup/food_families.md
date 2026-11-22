@@ -4,15 +4,14 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=8a03b123dd7e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 12, Pinned 1, In Progress 47, Testing 34), 3 Complete.
+<!-- generated:status_index begin open_work sha1=77f0bc501d14 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 11, Pinned 1, In Progress 47, Testing 35), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `baking/baked-goods #34` | Planned | S C P | Every cake as a sequenced assembly |
 | `baking/baked-goods #35` | Planned | none | Investigate brownie tray and adzuki bun family |
 | `baking/baked-goods #36` | Planned | S C P | Dessert cookware and recipe treatments |
-| `dishes/ingredients #9` | Planned | S C P T | Cheese |
 | `dishes/ingredients #15` | Planned | S C P | Butter |
 | `dishes/meals #14` | Planned | S C P T | Patty food type |
 | `dishes/meals #18` | Planned | S C P | Cheese in nachos |
@@ -47,7 +46,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `cooking/oven #7` | In Progress | S P | Cooking pot recipes that suit the oven |
 | `dishes/ingredients #7` | In Progress | S C P | Batter uses |
 | `dishes/ingredients #8` | In Progress | S C P | Produce fixes |
-| `dishes/ingredients #21` | In Progress | S C P | Potato and sweet potato compatibility |
+| `dishes/ingredients #9` | In Progress | S C P T | Cheese |
 | `dishes/ingredients #22` | In Progress | S C P | Honeycomb as sugar, honey and spread |
 | `dishes/jams #2` | In Progress | S C P | Jam crafting: 4 fruit, sugar, lemon slice for 2 jam |
 | `dishes/jams #3` | In Progress | S C P | Recipes use jam, never bottled jam or jelly |
@@ -84,6 +83,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/ingredients #10` | Testing | S C P T | Fats and oils: animal fat, blubber, cooking oil |
 | `dishes/ingredients #18` | Testing | S C P | Cutting banana bunch |
 | `dishes/ingredients #20` | Testing | S~ C P | Sweet potato slices |
+| `dishes/ingredients #21` | Testing | S C P | Potato and sweet potato compatibility |
 | `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
 | `dishes/meals #12` | Testing | S C P T | Pancake food type |
 | `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
@@ -3459,10 +3459,19 @@ Needs the Creative Common and Creative Delight jars from this change installed a
 - [ ] **FF-15 Pancake food type (2026-11-02):** after `/dumpall`, `/dumpfood` and `/tags` show `#creativedelight:food_type/sweet/pancake` with Sweet Potato Pancakes and the six Rustic single pancakes; each is still in `#creativedelight:food_type/sweet`; `#creativedelight:food_family/dessert/pancake` holds the same seven
 - [ ] **FF-16 Sweet Potato Pancakes placed:** sneak + right click the top of a block with Sweet Potato Pancakes -> a bowl of pancakes, facing you, named Placed Sweet Potato Pancakes in WTHIT; empty hand takes it back; breaking it drops the pancakes, no bowl dupe; then `/dumpall` and `python3 tools/placeable_catalog.py` give it the "Placeable" tooltip line
 - [ ] **FF-17 Every pancake kept:** JEI: Pancake (Supplementaries), the seven Rustic plates, the six Rustic singles and Sweet Potato Pancakes each keep their recipes (no recipe removed or added by this change)
+- [ ] **FF-18 Potato Dough and Tofu (2026-11-22):** Common, CD and CB jars of the change installed, restart. JEI: Potato Dough from 2 potatoes + wheat flour + egg or water bucket (3), knife -> 2 Gnocchi; Tofu in the Cooking Pot from 2 mushrooms + Nut Milk, and in the Veggie Burger's patty slot, not in beef patty slots. Both show their stand-in sprites (wheat dough, animal fat) until the owner's own art. Queue SQ-FF-16, -17
+- [ ] **FF-19 Cheese milk (2026-11-22):** JEI: Flaxen and Scarlet cheese in the Keg and Cheese Curds in the Cooking Pot take cow or goat milk, never Nut Milk; Goat Cheese Wheel crafts from 4 slices. Queue SQ-FF-18, -19
+- [ ] **FF-20 Potato compat (2026-11-22):** JEI: Beef Stew, Potato Soup, Shepherd's Pie take a sweet potato or a baked sweet potato; Mashed Potatoes, potato slices and the Stuffed Potato unchanged. Queue SQ-FF-20
+- [ ] **FF-21 Produce fixes (2026-11-22):** a chorus crate on a Vibrating Table gives 9 chorus fruit; Melon Juice in a heated mixer from 2 slices + 250 mB water; Cake Base from 3 Batter + 2 sweeteners. Queue SQ-FF-21; JEI sliced potato barrier check CQ-FF-04
 - [ ] **FFH-03 (offline):** `tools/test_cd_food.sh` runs; the only ids not in the last recipe dump are `truffle_pie` (dead, `fungiport #3`), the 7 culture cuts and the 6 glowing calamari cooks
 
 
 ## 8. History
+
+- 2026-11-22: unblocked batch P2 (plan_unblocked_batch_1121.md): Potato Dough and Tofu (CD startup `produce.js`, stand-in
+  sprites read in place), `#creativedelight:veggie_patty`, `#creativedelight:baked_potatoes` and the potato compat swap
+  (`creativedelight/potato_compat.js`), animal milk tags for cheese, goat cheese from slices, chorus crate vibrating,
+  melon juice mixing on the juice rule, cake base from batter. FF-18 to FF-21, SQ-FF-16 to -21, CQ-FF-04.
 
 - 2026-11-20: `baked/misc` family and gingerbread to `bread/loaf` (4.9); the tool also writes the fruit x family
   matrix into fruit.md 4.1. SQ-FF-15.

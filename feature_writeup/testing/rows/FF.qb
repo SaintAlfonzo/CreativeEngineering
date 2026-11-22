@@ -334,3 +334,115 @@ look the reg lines: onion_soup absent, bnc_creamy_onion_soup present
 @pass name Tropical Pizza / Tropical Pizza Slice, italic tooltip "Misnomer, invented in Canada" on both; the placed block and the bitten states show the cheese pizza art
 @fails Vintage member assets `tropical_pizza*`; `assets/creativedelight/kubejs/vintagedelight/client.js`
 @draft client look; the first client runner writes the steps
+
+@@section 5
+@@title Unblocked batch 2026-11-22 P2: potato dough, tofu, cheese milk, potato compat, produce fixes ([plan_unblocked_batch_1121.md](../plan_unblocked_batch_1121.md) P2, TODO `dishes/ingredients #27`, `#17`, `#35`, `#9`, `#21`, `#8`, `#7`)
+@@date 2026-11-22
+@@jars creativecommon creativedelight creativebrewing
+@@sources feature_writeup/plan_unblocked_batch_1121.md kubejs/data/creativedelight/kubejs/creativedelight/potato_compat.js kubejs/data/creativedelight/kubejs/creativedelight/patties.js kubejs/data/creativedelight/kubejs/creativedelight/milk.js kubejs/data/creativebrewing/kubejs/brewinandchewin/alcohol.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/produce.js
+@@text
+@@text Needs Creative Common (new dict keys: potato dough, tofu, veggie patty, baked potatoes, animal milk tags), Creative
+@@text Delight and Creative Brewing jars built 2026-11-22 or later installed together; a CD or CB jar without the new
+@@text Common fails the new recipes' validation. Group A.
+@@text
+@@table
+## SQ-FF-16 | Potato Dough: registered, 2 grid recipes, knife cut into 2 gnocchi, in #forge:dough
+@group A
+@commands registry probe; rdetail `potato_dough`; tag probe `forge:dough`
+@pass `creativedelight:potato_dough` registered; shapeless `potato_dough_from_eggs` and `_from_water` give 3 (2 potatoes, wheat flour, egg or water bucket); `gnocchi_from_potato_dough` cutting gives `veggiesdelight:potato_noodle*2`; `#forge:dough` holds it
+@fails `produce.js` (CD startup), `veggiesdelight/recipes.js` Gnocchi section, `veggiesdelight/tags.js`, item_dict `i.potato_dough`
+@absent creativedelight:potato_dough (new item, not in the dumps yet)
+> cdevtest reg item creativedelight:potato_dough
+> cdevtest rdetail potato_dough
+> cdevtest tag item forge:dough
+waitlog verb=tag kind=item tag=forge:dough n= 30
+expect verb=rdetail id=\S+potato_dough_from_eggs serializer=\S+ result=creativedelight:potato_dough\*3
+expect verb=rdetail id=\S+potato_dough_from_water serializer=\S+ result=creativedelight:potato_dough\*3
+expect verb=rdetail id=\S+gnocchi_from_potato_dough serializer=\S+ result=veggiesdelight:potato_noodle\*2
+expect verb=tag kind=item tag=forge:dough n=\d+ ids=.*creativedelight:potato_dough
+reject verb=\S+ .*done=0
+
+## SQ-FF-17 | Tofu: pot recipe from 2 mushrooms + nut milk, food 6 / 0.8, fills the veggie patty slot only
+@group A
+@commands rdetail `tofu` and `vegetarian_burger`; food probe; tag probes `creativedelight:veggie_patty`, `creativedelight:patty`
+@pass pot recipe `creativedelight:farmersdelightcooking/tofu` -> 1 tofu (2 mushroom slots, nut milk bottle or jar); tofu nutrition 6 modifier 0.8; `#creativedelight:veggie_patty` = cooked vegetarian patty + tofu; `#creativedelight:patty` has no tofu; the Vegetarian Burger shaped and assembly recipes list tofu in the patty slot
+@fails `creativedelight/patties.js` tofu block, `veggiesdelight/recipes.js` burger line, `produce.js`
+@absent creativedelight:tofu (new item, not in the dumps yet)
+> cdevtest rdetail tofu
+> cdevtest rdetail vegetarian_burger
+> cdevtest food creativedelight:tofu
+> cdevtest tag item creativedelight:veggie_patty
+> cdevtest tag item creativedelight:patty
+waitlog verb=tag kind=item tag=creativedelight:patty n= 30
+expect verb=rdetail id=creativedelight:farmersdelightcooking/tofu serializer=\S+ result=creativedelight:tofu\*1
+expect verb=food item=creativedelight:tofu\S* food=true nutrition=6 modifier=0\.8
+expect verb=tag kind=item tag=creativedelight:veggie_patty n=2 ids=.*creativedelight:tofu
+reject verb=tag kind=item tag=creativedelight:patty n=\d+ ids=.*creativedelight:tofu
+look vegetarian_burger rdetail lines: the patty ingredient reads veggiesdelight:cooked_vegetarian_patty/creativedelight:tofu
+reject verb=\S+ .*done=0
+
+## SQ-FF-18 | Cheese takes cow or goat milk, not nut milk
+@group A
+@commands fluid tag probe `creativedelight:animal_milk`; item tag probe `creativedelight:animal_milk_buckets`; rdetail `cheese_from_milk` and `cheese_curds`
+@pass `#creativedelight:animal_milk` = minecraft:milk + hearthandharvest:goat_milk (no creativedelight:nut_milk); `#creativedelight:animal_milk_buckets` has no wooden nut milk bucket; flaxen and scarlet `creativebrewing:*cheese_from_milk` base fluid reads the animal milk tag (no nut milk); no `brewinandchewin:fermenting/*cheese_from_milk`; Vintage cheese curds take an animal milk bucket
+@fails `creativedelight/milk.js`, Creative Brewing `brewinandchewin/alcohol.js`, fluid_dict `f.t_animal_milk`
+> cdevtest tag fluid creativedelight:animal_milk
+> cdevtest tag item creativedelight:animal_milk_buckets
+> cdevtest rdetail cheese_from_milk
+> cdevtest rdetail cheese_curds
+waitlog verb=rdetail id=\S*cheese_curds 30
+expect verb=tag kind=fluid tag=creativedelight:animal_milk n=2
+reject verb=tag kind=fluid tag=creativedelight:animal_milk .*nut_milk
+reject verb=tag kind=item tag=creativedelight:animal_milk_buckets .*nut_milk
+reject verb=rdetail id=brewinandchewin:fermenting/\S*cheese_from_milk
+reject verb=rdetail .*cheese.* part=fluids value=.*nut_milk
+look the two cheese_from_milk fluids lines and the cheese_curds ingredients: milk buckets without the wooden nut milk bucket
+reject verb=\S+ .*done=0
+
+## SQ-FF-19 | Goat cheese wheel from 4 slices
+@group A
+@commands rdetail `goat_cheese_wheel_from_slices`
+@pass shaped 2x2 of `hearthandharvest:goat_cheese_slice` -> `hearthandharvest:goat_cheese_wheel*1`
+@fails `hearthandharvest/recipes.js`
+> cdevtest rdetail goat_cheese_wheel_from_slices
+waitlog verb=rdetail id=\S*goat_cheese_wheel_from_slices 30
+expect verb=rdetail id=\S+goat_cheese_wheel_from_slices serializer=\S+ result=hearthandharvest:goat_cheese_wheel\*1 ingredients=hearthandharvest:goat_cheese_slice,hearthandharvest:goat_cheese_slice,hearthandharvest:goat_cheese_slice,hearthandharvest:goat_cheese_slice
+reject verb=\S+ .*done=0
+
+## SQ-FF-20 | Potato dishes take sweet potatoes, raw and baked; potato lines unchanged
+@group A
+@commands tag probe `creativedelight:baked_potatoes`; rdetail of Farmer's beef stew and shepherd's pie, Large Meals potato soup, Rustic potato slices, Farmer's baked potato smelting
+@pass `#creativedelight:baked_potatoes` = baked potato + baked sweet potato; `farmersdelight:cooking/beef_stew` and `creativedelight:farmersdelightcooking/potato_soup` potato slot lists more than the potato (sweet potato in `#forge:vegetables/potato`); the shepherd's pie grid lists the baked sweet potato; `rusticdelight` / `creativedelight` potato slices cutting still takes only minecraft:potato
+@fails `creativedelight/potato_compat.js` (ids, priority -90), script line swaps (farmersdelight, largemeals, rusticdelight, ends_delight, endersdelight, fungidelight, veggiesdelight, hearthandharvest)
+> cdevtest tag item creativedelight:baked_potatoes
+> cdevtest rdetail farmersdelight:cooking/beef_stew
+> cdevtest rdetail farmersdelightcooking/potato_soup
+> cdevtest rdetail shepherds_pie_block
+> cdevtest rdetail cutting/potato_slices
+waitlog verb=rdetail id=\S*potato_slices 30
+expect verb=tag kind=item tag=creativedelight:baked_potatoes n=2 ids=.*veggiesdelight:baked_sweet_potato
+expect verb=rdetail id=farmersdelight:cooking/beef_stew serializer=\S+ result=\S+ ingredients=.*(sweet_potato|potato_slices)
+look potato_soup and shepherds_pie_block ingredients list sweet or baked sweet potato; the potato_slices cutting ingredient is minecraft:potato alone
+reject verb=\S+ .*done=0
+
+## SQ-FF-21 | Chorus crate on the Vibrating Table, melon juice mixing, cake base from batter
+@group A
+@commands rdetail `vivibrating/chorus_fruit_from_crate`, `melon_juice`, `cake_base_batter`
+@pass vibrating recipe: chorus crate tag -> `minecraft:chorus_fruit*9`; `creativedelight:createmixing/melon_juice` heated, 2 melon slices + 250 mB water -> 250 mB melon juice (no 3-slice mixing recipe); shapeless `cake_base_batter_manual_only`: 3 batter + 2 sweeteners -> cake base
+@fails `endersdelight/recipes.js`, `farmersdelight/recipes.js` melon juice block, `creativedelight/baking.js`
+> cdevtest rdetail vivibrating/chorus_fruit_from_crate
+> cdevtest rdetail melon_juice
+> cdevtest rdetail cake_base_batter
+waitlog verb=rdetail id=\S*cake_base_batter 30
+expect verb=rdetail id=creativedelight:vivibrating/chorus_fruit_from_crate serializer=\S+ result=minecraft:chorus_fruit\*9
+expect verb=rdetail id=creativedelight:createmixing/melon_juice serializer=\S+ .*ingredients=minecraft:melon_slice,minecraft:melon_slice\b
+reject verb=rdetail id=creativedelight:createmixing/\S*sweeteners_drink_to_melon_juice
+expect verb=rdetail id=\S+cake_base_batter_manual_only serializer=\S+ result=\S+cake_base\*1
+reject verb=\S+ .*done=0
+
+## CQ-FF-04 | Sliced potato recipes in JEI show no barrier
+@group client
+@commands JEI uses of `rusticdelight:potato_slices` and `creativedelight:sliced_sweet_potato`; open each dish recipe that takes a sliced potato
+@pass every slot that takes a sliced potato cycles Rustic potato slices and the sliced sweet potato; no barrier icon in any of them; note the id of any recipe that still shows a barrier (TODO `dishes/ingredients #28`)
+@fails a recipe naming an absent item or `minecraft:potatoes` (the block) in a slot; `veggiesdelight/tags.js` sliced potato tags
+@draft client look; the first client runner writes the steps

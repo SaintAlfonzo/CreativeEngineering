@@ -22,7 +22,7 @@ Deploy pipeline,deploy.md,DP-,BUILT,tools,,"BUILT, used for the 1.0.3, 1.0.4, 1.
 Vinery JEI pages,vinery_jei.md,VJ-,reference,,,REMOVED 2026-10-27: Creative Common's 1.3.10 plugin deleted (pack_hygiene.md finding 6),reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Vinery,vinery.md,VN-,reference,,SQ-VN,"reference, in-game checks pending (VN-01 to VN-20)",reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Food catalog,food_catalog.md,,reference,,,"reference, regenerate with `python3 tools/food_catalog.py` after `/dumpfood`",,,
-Food families,food_families.md,FF-,BUILT,"creativecommon, creativedelight","CQ-PCK, SQ-FF, SQ-FFB, SQ-FFH, SQ-PCK, SQ-RM","2026-11-02 night: pancake family (4.7) BUILT, CD jar installed 2026-11-02 23:16, not booted",,,
+Food families,food_families.md,FF-,BUILT,"creativebrewing, creativecommon, creativedelight","CQ-FF, CQ-PCK, SQ-FF, SQ-FFB, SQ-FFH, SQ-PCK, SQ-RM","2026-11-02 night: pancake family (4.7) BUILT, CD jar installed 2026-11-02 23:16, not booted",,,
 Can parity worksheet,can_parity.md,CP-,reference,,,worksheet written 2026-10-13,reference,"2026-11-16: worksheet; its fix rows (dishes/ingredients #6) belong to Cans, so a linked TODO row must not make it planned/BUILT",2026-11-16
 Placeable food,placeable_food.md,PL-,BUILT,"creativebrewing, creativecommon, creativedelight","CQ-PL, SQ-PL",DEPLOYED with 1.0.6,,,
 Plantable items,plantable.md,PT-,BUILT,"creativecommon, kubejs","CQ-PT, SQ-PT","BUILT 2026-11-01, unreleased",,,
