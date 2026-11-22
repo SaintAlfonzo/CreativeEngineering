@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "solraspberrypie:item/diet_marker"
+    "layer0": "minecraft:item/map"
   }
 }

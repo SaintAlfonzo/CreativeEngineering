@@ -1006,3 +1006,5 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   canceled only after the per-entity logic succeeded). Tested with Alex's Mobs 1.21.1 (12.2). An Alex's Mobs update
   can only turn the fix off, never crash the boot or a tick.
 
+- **Diet marker art (owner, 2026-11-21).** The marker item's model points at vanilla `minecraft:item/map` (no copy); its own
+  agent-made `diet_marker.png` (a flat square, a texture-rule breach) is retired. JEI hides the item (`RpJeiPlugin`).
