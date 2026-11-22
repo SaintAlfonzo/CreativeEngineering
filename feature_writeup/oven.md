@@ -307,11 +307,28 @@ That keeps the old craft's full-can rule.
 | `mulberry_cookie` | mulberry |
 | `uncanny_cookies` | mite crust |
 | `cherry_cookie` (abnormals_delight, new 2026-10-22) | cherry (`vinery:cherry`) |
-| `oatmeal_cookie` (vintagedelight, 2026-10-23; was 2 raw oats + honey -> 8 in the grid) | raw oats |
+
+Not on cookie dough (2026-11-22, plan_unblocked_batch_1121.md P3): Vintage Delight's `oatmeal_cookie` bakes from oat dough
++ 2 sweeteners + 2 raw oats -> 12 (baking sheet; TODO `baking/baked-goods #23`; was cookie dough + 2 raw oats, before
+that 2 raw oats + honey -> 8 in the grid). End's Delight's `chorus_cookie` is made by hand from 8 Uncanny Cookies + 1
+chorus fruit grain -> 8 (`chorus_cookie_manual_only`, `#22`; was cookie dough + 2 chorus fruit grain in the oven).
 
 **Muffins** (muffin tin, plated on paper, 4 per bake; no Cooking Pot route since 2026-10-29, 3.8): `blueberry_muffin`,
-`cranberry_muffin`: 2x berry, wheat flour, milk bottle, egg, sugar; Sweet Potato Muffin (`veggiesdelight:sweet_potato_cupcake`,
-renamed from Sweet Potato Cupcake 2026-10-29): 2 baked sweet potato, the same rest.
+`cranberry_muffin`: 2x berry, wheat flour or cornmeal (2026-11-22, `baking/baked-goods #2`), milk bottle, egg, sugar;
+Sweet Potato Muffin (`veggiesdelight:sweet_potato_cupcake`, renamed from Sweet Potato Cupcake 2026-10-29): 2 baked sweet
+potato, the same rest. Each also has a Create sequenced assembly on paper (2026-11-22): flour or cornmeal, egg,
+sweetener, 2 fruit, 250 mB any milk -> 4 (`<muffin>_sequenced_assembly`).
+
+**Brownie tray** (cake pan, `F.brownieBake`, 2026-11-22, `baking/baked-goods #18`): Veggies Delight's Beetroot Brownie
+Tray from 2 beetroot, sugar, egg, dough, cocoa beans -> 1 (was 3 beetroot, 2 cocoa, 2 sugar, 2 eggs by hand). The placed
+tray cuts into 4 brownies with a knife (board or world); 4 brownies craft back to the tray.
+
+**Desserts** (baking sheet, 2026-11-22, `baking/baked-goods #36`; the mods' grid, Central Kitchen and mixing routes
+are swept): Neapolitan's Strawberry Scones as the raspberry scone (butter, 2 strawberries, sugar, batter -> 1; was 2
+flour + strawberry + sugar -> 2 by hand), Ender's Delight's Strange Eclair (ender eye, dough, sugar -> 1; was ender eye
++ 2 flour + sugar), Fruits Delight's Fig Pudding (sweet berries, milk bottle, egg, orange jelly, fig, dough -> 1; was a
+9-item grid recipe). Create Factory's Uncooked Waffle is also hammered from any dough (Engineer's Hammer on the cutting
+board or in the grid) and pressed from dough by the Create press; the cake paste press and the smoker bake stay.
 
 **Tarts** (baking sheet, 2 per bake): `lemon_tart`, `fig_tart`: fruit, pie crust, egg, sugar, milk bottle.
 
@@ -588,6 +605,16 @@ Needs a Creative Common build in `mods/`.
   inventory, JEI and the WTHIT line; no item is named Cupcake. (Texture still the cupcake sprite, retexture open.)
 - [ ] **OV-38 Gingerbread in the oven:** (recipe half: SQ-FF-15) gingerdough + baking sheet in the oven -> gingerbread;
   6 gingerdough -> 6; JEI on gingerbread shows the oven, furnace and smoker recipes.
+- [ ] **OV-39 Cookies off cookie dough:** (recipe half: SQ-FF-22) oat dough + 2 sugar + 2 raw oats on the baking sheet
+  bake 12 Oatmeal Cookies; 8 Uncanny Cookies around a chorus fruit grain in the grid give 8 Chorus Cookies.
+- [ ] **OV-40 Muffins on paper:** (recipe half: SQ-FF-23) a muffin bake with cornmeal in the flour slot gives 4; a Create
+  sequenced assembly on a paper (flour, egg, sugar, 2 blueberries, 250 mB milk) ends in 4 Blueberry Muffins and the
+  incomplete item shows the muffin sprite.
+- [ ] **OV-41 Brownie tray:** (recipe half: SQ-FF-24) 2 beetroot, sugar, egg, dough, cocoa beans with the cake pan bake a
+  Beetroot Brownie Tray; placed, a knife cuts it into brownies.
+- [ ] **OV-42 Desserts:** (recipe half: SQ-FF-25) Strawberry Scones, Strange Eclair and Fig Pudding bake on the baking
+  sheet and have no grid recipe in JEI; an Engineer's Hammer on dough on the cutting board gives an Uncooked Waffle,
+  which smokes into a Waffle.
 - [ ] **OV-14 Server:** the same on a dedicated server with a client (menu opens, slots sync, JEI page present).
 
 ## 8. History
@@ -654,6 +681,9 @@ Needs a Creative Common build in `mods/`.
 - 2026-10-29: muffins out of the Cooking Pot (oven only); Sweet Potato Cupcake renamed Sweet Potato Muffin. OV-36, OV-37.
 - 2026-11-20: gingerdough -> gingerbread on the baking sheet, 1 / 3 / 6 (2.6 Gingerbread; baked-goods #39,
   plan_owner_rows_1120.md G2b). OV-38, SQ-FF-15. Needs the CD jar.
+- 2026-11-22: plan_unblocked_batch_1121.md P3: oatmeal cookie on oat dough, chorus cookie from uncanny cookies, muffins
+  take cornmeal and assemble on paper, brownie tray in the cake pan, oven scones, eclair and fig pudding, waffle from
+  dough (2.6, OV-39 to OV-42).
 
 ## Owner ideas (scratchpad 2026-10-26)
 

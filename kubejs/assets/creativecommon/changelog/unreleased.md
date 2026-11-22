@@ -287,6 +287,19 @@
 - **New:** Potato Dough: 2 potatoes, wheat flour and an egg or a water bucket make 3. A knife cuts it into 2 Gnocchi.
 - **Changed:** Dishes that take a potato or a baked potato also take a sweet potato or a baked sweet potato.
 
+## Baking <!-- icon: minecraft:cookie -->
+
+- **New:** Gingerdough bakes into Gingerbread in the Oven on a Baking Sheet, 1, 3 or 6 at a time.
+- **Changed:** Oatmeal Cookies bake from Oat Dough, 2 sweeteners and 2 Raw Oats, 12 at a time [Cookie Dough and 2 Raw Oats].
+- **Changed:** Chorus Cookies are crafted from 8 Uncanny Cookies and a Chorus Fruit Grain, 8 at a time [baked from Cookie Dough and 2 Chorus Fruit Grain].
+- **Changed:** Muffins take Wheat Flour or Cornmeal [Wheat Flour only].
+- **New:** Blueberry, Cranberry and Sweet Potato Muffins can be built on a paper in a Create sequenced assembly: flour or cornmeal, an egg, a sweetener, 2 fruit and 250 mB milk make 4.
+- **Changed:** The Beetroot Brownie Tray bakes in the Oven in a Cake Pan from 2 beetroot, sugar, an egg, dough and cocoa beans [crafted from 3 beetroot, 2 cocoa beans, 2 sugar and 2 eggs].
+- **Changed:** Strawberry Scones bake in the Oven on a Baking Sheet from butter, 2 strawberries, sugar and batter, 1 at a time [crafted from 2 flour, a strawberry and sugar, 2 at a time].
+- **Changed:** Strange Eclair bakes in the Oven on a Baking Sheet from an Eye of Ender, dough and sugar [crafted from an Eye of Ender, 2 flour and sugar].
+- **Changed:** Fig Pudding bakes in the Oven on a Baking Sheet from sweet berries, a milk bottle, an egg, Orange Jelly, a fig and dough [crafted from 2 milk bottles, sweet berries, 2 eggs, Orange Jelly, 2 figs and dough].
+- **New:** An Uncooked Waffle is made from any dough with an Engineer's Hammer, on a Cutting Board or in the crafting grid, or with a Create Mechanical Press.
+
 ## Food & Cooking
 
 - **New:** A Vibrating Table shakes a Chorus Fruit Crate into 9 Chorus Fruit.
@@ -300,7 +313,6 @@
 - **New:** Every raw skewer can be built on its stick in a Create sequenced assembly from the same ingredients as its basin or crafting recipe.
 - **New:** 6 Garlic Cloves craft into a Garlic.
 - **New:** Cat Food, cooked in the Cooking Pot from a raw fish, a cooked fish, raw meat and rice, or crafted from a raw fish, a cooked fish, 2 cooked meats and cooked rice. Fed to a tamed cat it restores full health and gives Speed, Strength and Resistance for 5 minutes.
-- **New:** Gingerdough bakes into Gingerbread in the Oven on a Baking Sheet, 1, 3 or 6 at a time.
 - **New:** Bone Broth fluid. A Spout fills a bowl with 250 mB into Bone Broth; an Item Drain empties it.
 - **New:** Soups and stews crafted with Bone Broth can be mixed in a Create Basin from 250 mB of Bone Broth fluid, a bowl and the same ingredients.
 - **Changed:** End's Delight Shulker Meat and Shulker Meat Slice become Ender's Delight Shulker Mollusk and Shulker Filet in recipes, loot and inventories [the reverse for most recipes].

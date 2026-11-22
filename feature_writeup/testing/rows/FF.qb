@@ -446,3 +446,83 @@ reject verb=\S+ .*done=0
 @pass every slot that takes a sliced potato cycles Rustic potato slices and the sliced sweet potato; no barrier icon in any of them; note the id of any recipe that still shows a barrier (TODO `dishes/ingredients #28`)
 @fails a recipe naming an absent item or `minecraft:potatoes` (the block) in a slot; `veggiesdelight/tags.js` sliced potato tags
 @draft client look; the first client runner writes the steps
+
+@@section 6
+@@title Unblocked batch 2026-11-22 P3: oven cookies, muffins, brownie tray, desserts ([plan_unblocked_batch_1121.md](../plan_unblocked_batch_1121.md) P3, TODO `baking/baked-goods #22`, `#23`, `#2`, `#18`, `#36`)
+@@date 2026-11-22
+@@jars creativedelight
+@@sources feature_writeup/plan_unblocked_batch_1121.md kubejs/data/creativedelight/kubejs/creativedelight/baking.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_transition_items.js kubejs/data/creativedelight/kubejs/neapolitan/recipes.js kubejs/data/creativedelight/kubejs/endersdelight/recipes.js kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js kubejs/data/creativedelight/kubejs/create/recipes.js
+@@text
+@@text Needs the Creative Delight jar built 2026-11-22 after P3 (cd_food.js muffin and brownie calls, muffin transition
+@@text items) together with the section 5 jars (Creative Common 1.3.0). No new Common key. Group A.
+@@text
+@@table
+## SQ-FF-22 | Oatmeal cookie from oat dough; chorus cookie from 8 uncanny cookies
+@group A
+@commands rdetail `oatmeal_cookie`, `chorus_cookie`
+@pass oven `creativedelight:baking/oatmeal_cookie` -> 12 from oat dough, 2 sweeteners, 2 raw oats (no cookie dough); shapeless `chorus_cookie_manual_only` -> 8 chorus cookies from 8 uncanny cookies + a chorus fruit grain; no other recipe makes either cookie (End's and the cookie dough oven recipe gone)
+@fails `creativedelight/baking.js` cookie block (COOKIES rows removed, two lines below the forEach)
+> cdevtest rdetail oatmeal_cookie
+> cdevtest rdetail chorus_cookie
+waitlog verb=rdetail id=\S*chorus_cookie\S* 30
+expect verb=rdetail id=creativedelight:baking/oatmeal_cookie serializer=\S+ result=vintagedelight:oatmeal_cookie\*12 ingredients=.*vintagedelight:oat_dough
+reject verb=rdetail id=\S+oatmeal_cookie serializer=\S+ result=\S+ ingredients=.*cookie_dough
+expect verb=rdetail id=\S+chorus_cookie_manual_only serializer=\S+ result=ends_delight:chorus_cookie\*8 ingredients=.*endersdelight:uncanny_cookies.*ends_delight:chorus_fruit_grain
+reject verb=rdetail id=creativedelight:baking/chorus_cookie
+reject verb=rdetail id=ends_delight:\S*chorus_cookie
+reject verb=\S+ .*done=0
+
+## SQ-FF-23 | Muffins take cornmeal and assemble on paper
+@group A
+@commands rdetail `blueberry_muffin`, `cranberry_muffin`, `sweet_potato_cupcake`; registry probe `kubejs:incomplete_blueberry_muffin`
+@pass each oven muffin recipe's flour slot reads `#creativedelight:flour_or_cornmeal`; `*_muffin_sequenced_assembly` / `sweet_potato_cupcake_sequenced_assembly` exist on paper (flour or cornmeal, egg, sweetener, 2 fruit, 250 mB `#forge:milk`) -> 4; the three incomplete items are registered
+@fails `cd_food.js` muffinBake, `cd_transition_items.js` muffin rows (a missing row throws `no incomplete item registered` at load)
+> cdevtest reg item kubejs:incomplete_blueberry_muffin
+> cdevtest reg item kubejs:incomplete_cranberry_muffin
+> cdevtest reg item kubejs:incomplete_sweet_potato_cupcake
+> cdevtest rdetail blueberry_muffin
+> cdevtest rdetail cranberry_muffin
+> cdevtest rdetail sweet_potato_cupcake
+waitlog verb=rdetail id=\S*sweet_potato_cupcake\S* 30
+expect verb=rdetail id=creativedelight:baking/blueberry_muffin serializer=\S+ result=fruitsdelight:blueberry_muffin\*4 ingredients=.*flour_or_cornmeal
+expect verb=rdetail id=creativedelight:baking/sweet_potato_cupcake serializer=\S+ result=\S+\*4 ingredients=.*flour_or_cornmeal
+expect verb=rdetail id=\S+blueberry_muffin_sequenced_assembly serializer=\S+ result=fruitsdelight:blueberry_muffin\*4
+expect verb=rdetail id=\S+cranberry_muffin_sequenced_assembly serializer=\S+ result=fruitsdelight:cranberry_muffin\*4
+expect verb=rdetail id=\S+sweet_potato_cupcake_sequenced_assembly serializer=\S+ result=veggiesdelight:sweet_potato_cupcake\*4
+look the registry lines: the three incomplete muffin items exist
+reject verb=\S+ .*done=0
+
+## SQ-FF-24 | Beetroot Brownie Tray bakes in the cake pan
+@group A
+@commands rdetail `beetroot_brownie_tray`, `beetroot_brownie`
+@pass oven `creativedelight:baking/beetroot_brownie_tray` -> 1 tray from 2 beetroot, sugar, egg, dough, cocoa beans, cake pan tool; no `veggiesdelight:beetroot_brownie_tray` shapeless; `beetroot_brownie_from_slices` and the knife cutting (4 brownies) stay
+@fails `cd_food.js` brownieBake, `creativedelight/baking.js` Brownies line
+> cdevtest rdetail beetroot_brownie_tray
+> cdevtest rdetail beetroot_brownie
+waitlog verb=rdetail id=\S*beetroot_brownie\S* 30
+expect verb=rdetail id=creativedelight:baking/beetroot_brownie_tray serializer=\S+ result=veggiesdelight:beetroot_brownie_tray\*1 ingredients=.*minecraft:cocoa_beans
+reject verb=rdetail id=veggiesdelight:beetroot_brownie_tray serializer=
+expect verb=rdetail id=veggiesdelight:beetroot_brownie_from_slices
+expect verb=rdetail id=\S*cutting/beetroot_brownie serializer=\S+ result=veggiesdelight:beetroot_brownie\*4
+reject verb=\S+ .*done=0
+
+## SQ-FF-25 | Dessert oven bakes: strawberry scones, strange eclair, fig pudding; waffle from dough
+@group A
+@commands rdetail `strawberry_scones`, `strange_eclair`, `fig_pudding`, `uncooked_waffle`
+@pass oven on the baking sheet: `creativedelight:baking/strawberry_scones` (butter, 2 strawberries, sugar, batter -> 1), `creativedelight:baking/strange_eclair` (ender eye, dough, sugar -> 1), `creativedelight:baking/fig_pudding` (sweet berries, milk bottle, egg, orange jelly, fig, dough -> 1); none of their grid, Central Kitchen or mixing recipes left; uncooked waffle: hammer cutting `uncooked_waffle_hammering` and its shapeless, Create pressing from `#forge:dough`, `create_factory:uncooked_waffle` (cake paste) kept
+@fails `neapolitan/recipes.js`, `endersdelight/recipes.js`, `fruitsdelight/recipes.js`, `create/recipes.js` Waffles block
+> cdevtest rdetail strawberry_scones
+> cdevtest rdetail strange_eclair
+> cdevtest rdetail fig_pudding
+> cdevtest rdetail uncooked_waffle
+waitlog verb=rdetail id=\S*uncooked_waffle\S* 30
+expect verb=rdetail id=creativedelight:baking/strawberry_scones serializer=\S+ result=neapolitan:strawberry_scones\*1
+expect verb=rdetail id=creativedelight:baking/strange_eclair serializer=\S+ result=endersdelight:strange_eclair\*1
+expect verb=rdetail id=creativedelight:baking/fig_pudding serializer=\S+ result=fruitsdelight:fig_pudding\*1 ingredients=.*fruitsdelight:orange_jelly
+reject verb=rdetail id=(neapolitan|create_central_kitchen):\S*strawberry_scones
+reject verb=rdetail id=endersdelight:strange_eclair
+reject verb=rdetail id=fruitsdelight:fig_pudding serializer=
+expect verb=rdetail id=\S+uncooked_waffle_hammering serializer=\S+ result=create_factory:uncooked_waffle
+expect verb=rdetail id=\S+uncooked_waffle_from_dough serializer=\S+ result=create_factory:uncooked_waffle
+expect verb=rdetail id=create_factory:uncooked_waffle serializer=
+reject verb=\S+ .*done=0

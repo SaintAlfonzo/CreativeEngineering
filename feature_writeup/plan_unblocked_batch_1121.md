@@ -73,5 +73,13 @@ Left out: `dishes/meals #13` (deferred), `creativebrewing/publish #3` (own plan)
 ## 5. Open items
 
 - R4 and R6 are agent defaults, unconfirmed.
+- P3 build calls (agent, 2026-11-22, unconfirmed; the rows had no stated shape): chorus cookie = 8 uncanny cookies + 1
+  chorus fruit grain -> 8 by hand; the muffin assembly on paper gives the oven's 4; strawberry scones mirror the
+  raspberry scone at 1 per bake (Neapolitan made 2).
+- Waiting on owner art or palettes (texture rule, not asked by the build agent): baking dish (`baking/baked-goods #30`),
+  oatmeal raisin cookie (`#23`), five new muffins (`#2`), seven fruit scones (`#40`), strawberry scone and sweet potato
+  muffin retextures (`#36`, `#32`), plain donut (`#39`), whale oil lamp and cauldron (`dairy-fats-and-batter #1`, `#2`).
+- Open owner questions: Adzuki Bun to the oven or not (`#35`); the pottable tooltip meaning and wording
+  (`blocks/flower-pots #2`); the earlier P2 ones in `dishes/ingredients #7`, `#9`, `#15`.
 - Gnocchi `dishes/meals #33`: its details say no potato dough or gnocchi item existed on 2026-10-24 yet the same row
   records them shipped in 1.1.03; the row is stale and needs a status check before building.
