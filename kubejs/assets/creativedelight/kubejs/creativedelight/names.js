@@ -123,6 +123,6 @@ ClientEvents.lang('en_us', e => {
 	e.add('item.solapplepie.container.golden_lunchbox', 'Iron Lunchbox')
 	e.add('item.creativedelight.netherite_lunchbox', 'Netherite Lunchbox')
 	e.add('item.solapplepie.container.netherite_lunchbox', 'Netherite Lunchbox')
-	// The two food books (Diet Log, Food Dictionary) and the open-book key are named by Raspberry Pie's jar since
-	// 2026-11-21 (plan_rp_standalone.md P4), as is its Liquid Diet Log.
+	// The two food books (Diet Log, Food Dictionary) and the open-book key are named by Raspberry Pie's jar
+	// (plan_rp_standalone.md P4), as is its Liquid Diet Log.
 })

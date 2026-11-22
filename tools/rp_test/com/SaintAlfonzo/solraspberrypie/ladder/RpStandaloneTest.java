@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * Headless checks for Raspberry Pie standing alone (feature_writeup/plan_rp_standalone.md P2, tools/test_rp_ladder.sh):
  * the built-in default ladder parses on vanilla registries with no warning (every 3.3 check, V12 included), and has the ruled shape
- * (owner 2026-11-21: Apple Pie's ladder with its flat effects, scaled to 50; 13 unlocks with falling density; four
+ * (owner ruling, plan_rp_standalone.md P2: Apple Pie's ladder with its flat effects, scaled to 50; 13 unlocks with falling density; four
  * slots at 5, 15, 27.5, 40); P3: the diversity tables merge (a later file wins), ids of absent mods are skipped, no table leaves
  * Apple Pie's values, and the pack's Creative Delight table loads; P4: the lang name overrides; P5: ageing out on Apple
  * Pie's default settings. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
@@ -52,7 +52,7 @@ public class RpStandaloneTest {
 		JsonObject json = JsonParser.parseString(Files.readString(file, StandardCharsets.UTF_8)).getAsJsonObject();
 		List<String> warnings = new ArrayList<>();
 		Ladder ladder = LadderLoader.parse(json, "built-in default", warnings);
-		// Scaled to a top of 50 (owner, 2026-11-21): with vanilla foods and Apple Pie's defaults (queueSize 32, endDecay 32)
+		// Scaled to a top of 50 (plan_rp_standalone.md P2): with vanilla foods and Apple Pie's defaults (queueSize 32, endDecay 32)
 		// the reachable bound is about 56, so not even V12 may warn.
 		for (String w : warnings) System.out.println("     warning: " + w);
 		check(warnings.isEmpty(), "default ladder parses with no warning, V12 included (" + warnings.size() + ")");
