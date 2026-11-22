@@ -103,8 +103,18 @@
 
 ## Diet Bonuses <!-- icon: solapplepie:food_book -->
 
-- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of 8 hearts, 3 armor toughness tiers, knockback resistance, 10% walk speed, permanent Speed I at diversity 20, 5 effect slots and effect unlocks [fixed Apple Pie bonuses]. Applies to new worlds.
-- **New:** Effect slots hold an unlocked effect of your choice: Speed, Haste, Strength, Jump Boost, Night Vision, Water Breathing, Luck, Regeneration, Shrinking, Long Reach, Patrol Nullifier, Phantom Bane, Fleet-Footed or Lava Walker.
+- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor, 11 permanent buffs, 5 effect slots and 49 effect unlocks [fixed Apple Pie bonuses]. Applies to new worlds.
+  - Hearts: 10 extra, one every 9.1 diversity (20 hearts at 90.9)
+  - Armor: +1 armor toughness and +10% knockback resistance at diversity 16.7, 50 and 83.3
+  - Effect slots at diversity 2.5, 22, 41.5, 61 and 80.5
+- **New:** Permanent buffs: Luck I at diversity 25, Speed I at 30.2, Night Vision at 35.6, Phantom Bane at 41.2, Speed II at 47.1, Regeneration I at 53.2, Long Reach I at 59.7, Strength I at 66.6, Luck II at 73.9, Invisibility at 81.8, Double Jump at 90.4.
+- **New:** Effect slots hold an unlocked effect of your choice. Unlocks come closer together early in the ladder (diversity 2.5 to 97.5), in this order:
+  - Night Vision and Glowing, Leaf Piercing, Speed I, Allure, Refreshing and Sweetening, Astringent, Haste I and Burrowing I, Water Breathing and Water Walker, Prickly I, Luck I, Jump Boost I, Lava Vision and Lava Walker, Climbing, Patrol Nullifier and Phantom Bane, Regeneration I, Poison Resistance, Shrinking, Bug Pheromones and Clinging, Fire Resistance, Strength I, Clarity and Stimulation
+  - Speed II, Luck II, Long Reach I, Slow Falling, Magic Resistance, Prickly II, Haste II and Burrowing II, Magnet, Jump Boost II, Recovering, Long Reach II, Fleet-Footed, Strength II, Appetizing, Digesting and Lozenge, Regeneration II, Long Reach III, Luck III
+- **New:** Some diet effects switch on and off for free instead of changing level: the slot's On/Off button, or a click on the permanent buff's icon in the Diet Bonuses screen.
+  - In a slot: Night Vision, Glowing, Astringent, Slow Falling, Magnet
+  - Permanent: Night Vision, Phantom Bane, Invisibility and Double Jump (the last two start off)
+- **New:** Hovering an effect in the Diet Bonuses screen or on the inventory bar shows a short description ("See in the dark").
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.
 - **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice. Unlocks, and their messages, wait until the diet first activates.
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
@@ -113,7 +123,7 @@
 - **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it. The screen shows the effect slots side by side over a progress bar marked with each slot's diversity.
 - **New:** The Diet Log's first page shows your last 32 meals as a grid of large icons above the diversity, newest first, repeats included. Meals of foods aged out by a Change or Drop are left out.
 - **New:** Hovering a meal in the Diet Log shows the food's full diversity and its contribution. When an older repeat no longer counts it, the food's total comes first and the meal's value is struck through.
-- **New:** The Diet Log's progress bar shows the last milestone reached and the next 4, evenly spaced, with an icon for each bonus.
+- **New:** The Diet Log's progress bar shows the last milestone reached and the next 4, evenly spaced, with an icon for each bonus and a tick on the bar for each milestone: gray once reached, purple before.
 - **New:** Diet Log icons: effect unlocks alternate a lock and the effect until unlocked, then show the effect grayed in a colored frame; permanent buffs alternate a diamond shard and the effect; effect slots have a metal frame. The key lists knockback resistance.
 - **New:** The Diet Log's Milestones list active bonuses in green and strike through reached effect unlocks, except their milestone number.
 - **New:** The Diet Log's diversity icon is the food you have eaten, not a drink, closest in diversity to the average of your recent meals; before that, seeds, moss, rotten flesh, a spider eye or a dandelion leaf.
