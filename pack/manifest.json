@@ -7615,20 +7615,27 @@
       }
     },
     {
-      "file": "solapplepie-1.19.2-2.2.0.jar",
-      "name": "Spice of Life: Apple Pie Edition",
-      "version": "solapplepie-1.19.2-2.2.0.jar",
-      "sha1": "b0b0e3719adea49a1283bf115dba3037ab1ee465",
-      "modId": "solapplepie",
+      "file": "solRaspberryPie-1.0.0.jar",
+      "name": "solRaspberryPie-1.0.0.jar",
+      "version": "Unknown",
+      "sha1": "af3ec66ff01fd2e46cc5eb17414114eed722fbbc",
+      "modId": "solraspberrypie",
       "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 704584,
-          "fileId": 4596169,
-          "slug": "spice-of-life-apple-pie-edition",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/spice-of-life-apple-pie-edition/files/4596169"
+      "source": "local",
+      "nested": [
+        {
+          "file": "solapplepie-1.19.2-2.2.0.jar",
+          "modId": "solapplepie",
+          "version": "1.19.2-2.2.0",
+          "sha1": "b0b0e3719adea49a1283bf115dba3037ab1ee465"
+        },
+        {
+          "file": "SoL-Carrot-1.19.2-1.14.0.jar",
+          "modId": "solcarrot",
+          "version": "1.19.2-1.14.0",
+          "sha1": "55625f32bc8e0c5b28a4420fc6bc6211bb771a8a"
         }
-      }
+      ]
     },
     {
       "file": "sootychimneys-1.19.2-1.2.1.jar",

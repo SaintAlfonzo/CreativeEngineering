@@ -362,10 +362,10 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | Sit | `sit` | v1.3.3 | `sit-1.19-1.3.3.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/sit/files/3871685) [MR](https://modrinth.com/mod/bl4cks-sit/version/T1eFly6W) |
 | both | Sky Structures | `sky_structures` | Sky Structures 1.0.0 | `Sky Structures 1.0.0 - 1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/sky-structures/files/4416898) |
 | both | Smaller Nether Portals | `smallernetherportals` | 1.19.2-3.6-fabric+forge+neo | `smallernetherportals-1.19.2-3.6.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/smaller-nether-portals/files/4963859) [MR](https://modrinth.com/mod/smaller-nether-portals/version/rHtuDJM0) |
+| both | solRaspberryPie-1.0.0.jar | `solraspberrypie` | Unknown | `solRaspberryPie-1.0.0.jar` | local |
 | both | Sooty Chimneys | `sootychimneys` | 1.2.1 | `sootychimneys-1.19.2-1.2.1.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/sooty-chimneys/files/5060719) [MR](https://modrinth.com/mod/sooty-chimneys/version/IdmSySlD) |
 | both | Sophisticated Backpacks | `sophisticatedbackpacks` | 1.19.2-3.20.2.1035 | `sophisticatedbackpacks-1.19.2-3.20.2.1035.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/sophisticated-backpacks/files/5194759) [MR](https://modrinth.com/mod/sophisticated-backpacks/version/1TblkbcZ) |
 | both | Sophisticated Core | `sophisticatedcore` | 1.19.2-0.6.4.730 | `sophisticatedcore-1.19.2-0.6.4.730.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/sophisticated-core/files/5870031) [MR](https://modrinth.com/mod/sophisticated-core/version/LRDUyYPU) |
-| both | Spice of Life: Apple Pie Edition | `solapplepie` | solapplepie-1.19.2-2.2.0.jar | `solapplepie-1.19.2-2.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/spice-of-life-apple-pie-edition/files/4596169) |
 | client | Spyglass Improvements: Zoom, Quick Access... [Fabric/NeoForge] | `spyglass_improvements` | 1.5.12+mc1.19+forge | `spyglass_improvements-forge-1.5.12+mc1.19+forge.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/spyglass-improvements/files/7226243) [MR](https://modrinth.com/mod/spyglass-improvements/version/sRCimnZ2) |
 | both | Stardew Fishing | `stardew_fishing` | Stardew Fishing - v1.3 (1.19.2) | `stardew_fishing-1.19.2-1.3-all.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/stardew-fishing/files/5593593) |
 | both | Sticky It! | `sticky_it` | sticky_it-1.2.1-forge-1.19.2.jar | `sticky_it-1.2.1-forge-1.19.2.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/sticky-it/files/7253365) |
@@ -425,6 +425,13 @@ Full data (ids, sha1, download urls) is in `manifest.json`.
 | both | YUNG's Better Witch Huts (Forge/NeoForge) | `betterwitchhuts` | 1.19.2-Forge-2.1.0 | `YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/yungs-better-witch-huts/files/4031226) [MR](https://modrinth.com/mod/yungs-better-witch-huts/version/rAwSL8Wn) |
 | both | YUNG's Extras (Forge/NeoForge) | `yungsextras` | 1.19.2-Forge-3.1.0 | `YungsExtras-1.19.2-Forge-3.1.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/yungs-extras/files/4031230) [MR](https://modrinth.com/mod/yungs-extras/version/Ltax470w) |
 | both | Yuushya Modelling | `yuushya_modelling` | 2.2.0 | `yuushya-modelling-1.19.2-forge-2.2.0.jar` | [CF](https://www.curseforge.com/minecraft/mc-mods/yuushya-modelling/files/5739072) [MR](https://modrinth.com/mod/yuushya-modelling/version/6PlAnTuC) |
+
+## Nested in own jars (Jar-in-Jar, ship inside the bundle, not downloaded separately)
+
+| Bundle | Mod id | Version | Nested file |
+|---|---|---|---|
+| `solRaspberryPie-1.0.0.jar` | `solapplepie` | 1.19.2-2.2.0 | `solapplepie-1.19.2-2.2.0.jar` |
+| `solRaspberryPie-1.0.0.jar` | `solcarrot` | 1.19.2-1.14.0 | `SoL-Carrot-1.19.2-1.14.0.jar` |
 
 ## Resource packs
 
