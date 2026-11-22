@@ -17,8 +17,8 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=8a159a268433 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 39 open TODO rows (Planned 11, Testing 28), 4 Complete.
+<!-- generated:status_index begin open_work sha1=efc63a19a173 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 51 open TODO rows (Planned 23, Testing 28), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -32,6 +32,18 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food-tuning #44` | Planned | S C | RP standalone P7: pack ladder from the scratchpad (toggles, tick markers, hover taglines, new effect ids) |
 | `food-tuning #45` | Planned | S | RP standalone P8: pack diversity table moves to Creative Delight; pack sets Apple Pie values |
 | `food-tuning #46` | Planned | S C | RP standalone P9: isolation tests RPS-01 to -07 and RPI rerun |
+| `food-tuning #47` | Planned | S C | Wither Immunity effect for the Raspberry Pie pack ladder (reserved unlock 22 at 47.1) |
+| `food-tuning #48` | Planned | S C | Satiated (minecraft:saturation) as the RP pack ladder's final permanent buff at 100: V10 exception for flat rungs |
+| `food-tuning #49` | Planned | S C | RP ladder: a later unlock replaces its parts (Clinging hides Climbing; Recovering hides Poison Immunity and Wither Immunity) |
+| `food-tuning #50` | Planned | S C | RP ladder: once a permanent buff of an effect is active, a slot holding that effect grays out with a free respec |
+| `food-tuning #51` | Planned | S C | Steady (Astringent): stops every slip effect (ice, soap), not dripleaf or pressure plates; JEI description |
+| `food-tuning #52` | Planned | S C | Leaf Piercing: leaf particles of the pierced block trailing the arrow, a leaf poof where it enters |
+| `food-tuning #53` | Planned | S C | Prickly II: tamed and passive mobs exempt (level I: tamed only); JEI description |
+| `food-tuning #54` | Planned | S C | Lava Walker: crouch to drop into lava |
+| `food-tuning #55` | Planned | S C | Fleet-Footed: lower field-of-view shift while its speed applies |
+| `food-tuning #56` | Planned | S C | Display names: Astringent -> Steady, Poison Resistance -> Poison Immunity, Fire Resistance -> Fire Immunity |
+| `food-tuning #57` | Planned | S C | Emptiness becomes a sub-effect of Patrol Nullifier and Phantom Bane |
+| `food-tuning #58` | Planned | S C | Harmony: a new source (not adzuki, not the diet ladder), e.g. a rare passive mob; applies Emptiness and hostile mob flee |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
 | `food-tuning #2` | Testing | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
 | `food-tuning #3` | Testing | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
@@ -156,7 +168,7 @@ would see if nothing checked it, and the proposed handling. "Warn" = one log lin
 | V7 | Slot milestones out of order or on the same threshold | slot 3 at 20, slot 2 at 30 | slot 3 active while slot 2 is not, breaking bottom-up filling (5) | **decided 2026-11-12**: as proposed in 3.3 (recommended) |
 | V8 | Fewer slots than before the restart | 5 slots -> 4, a player has a choice in slot 5 | a choice in a slot that no longer exists | **decided 2026-11-12**: as proposed in 3.3 (recommended) |
 | V9 | Unlock moved higher, or removed, after players earned it | Strength II moved 70 -> 90, a player at max 80 has it slotted | an unlock "never lost" is lost through an edit | **decided 2026-11-12** (Q-G): keep a slotted unlock until the player changes it |
-| V10 | Refresh-unsafe effect as a flat bonus or in the pool | Absorption, Health Boost, instant effects | refilled absorption, clamped health, instant effect every 20 s (4, 9.1) | **decided 2026-11-12**: as proposed in 3.3 (recommended) |
+| V10 | Refresh-unsafe effect as a flat bonus or in the pool | Absorption, Health Boost, instant effects | refilled absorption, clamped health, instant effect every 20 s (4, 9.1) | **decided 2026-11-12**: as proposed in 3.3 (recommended). Exception (owner, 2026-11-21): `minecraft:saturation` (Satiated) is allowed as a flat rung, never in the pool; it ticks every tick while active, so a refresh only extends it |
 | V11 | Same effect in a flat bonus and the pool | flat Speed I, Speed in the pool | **decided 2026-11-12**: allowed. The pack unlocks the effect as slottable first and as a flat bonus later; once the flat bonus is active the effect is hidden from the picker. A slot that already holds it keeps it (5.1, 9.5) | allow |
 | V12 | Threshold higher than any player can reach | a rung at 500 | an unreachable rung | **decided 2026-11-12**: as proposed in 3.3 (recommended) |
 | V13 | File missing or malformed JSON | a stray comma | server cannot build a ladder | **decided 2026-11-12** (Q-H): fall back to the built-in default ladder with a loud error |
@@ -188,7 +200,7 @@ Not slottable:
 | Resistance (any level) | owner rule; overrides the "all beacon effects" rule |
 | Instant effects: Instant Health, Saturation, Instant Breath, Restfulness, Teleport | fire again on every refresh |
 | Absorption, Health Boost | a refresh refills absorption / clamps health |
-| Nourishment, Comfort, Saturation | remove the reason to eat varied food |
+| Nourishment, Comfort, Saturation | remove the reason to eat varied food (Saturation, shown as Satiated, is allowed as a permanent buff only, V10 exception, owner 2026-11-21: the pack ladder's last rung at 100) |
 | Invisibility, Hero of the Village, Fire Resistance | remove a mechanic (mobs and PvP, villager and Lightman's Currency prices, lava) |
 | Dolphin's Grace, Conduit Power | owner rule |
 | Caffeinated, Rest, Stimulation, Ender Phasing, Raging | logic on expiry or removal would fire on every switch-off; check each before allowing |
@@ -1037,13 +1049,12 @@ takes the tagline of the unlock row with its effect and level. The jar's default
   the D10 falling density (positions in plan_food_diversity_1121.md section 7). A grouped heading (Brightening, Immunity,
   Dig, Water, Lava, Mobs, Spider, Eating) is one position with several unlocks. Five effect slots evenly spaced from the
   first unlock: 2.5, 22, 41.5, 61, 80.5 (agent default; count and start in `rp_ladder.json`). Start line on a pack server:
-  about `Diet ladder: 81 rungs, 5 slots, 38 pool effects`.
-- **Toggles.** Flat: Night Vision (on), Phantom Bane (on), Invisibility (off), Double Jump (off). Pool: Night Vision,
-  Glowing, Steady (`fruitsdelight:astringent`), Slow Falling, Magnet (all on). Phantom Bane is a toggle when slotted too
+  about `Diet ladder: 81 rungs, 5 slots, 37 pool effects`. Stimulation was dropped from position 21 (owner, 2026-11-21: section 4 keeps it unslottable); no vanilla positive effect was left to take its place (all slottable ones are on the ladder, the rest are refused by section 4), so Clarity holds the position alone.
+- **Toggles** (defaults ruled by the owner, 2026-11-21). Flat: Night Vision, Phantom Bane, Double Jump on; Invisibility off. Pool:
+  Night Vision and Steady (`fruitsdelight:astringent`) on; Glowing, Slow Falling, Magnet off. Phantom Bane is a toggle when slotted too
   (the switch is per effect).
-- **Reserved positions** (kept in the CSV, left out of the file): Wither Immunity (unlock 22, 47.1: no effect id yet) and
-  Satiated (permanent 12, 100: `minecraft:saturation` is instant, so V10 refuses it as a flat rung). Their TODO rows are
-  in plan_rp_standalone.md P7.
+- **Reserved position** (kept in the CSV, left out of the file): Wither Immunity (unlock 22, 47.1: no effect id yet,
+  `food-tuning #47`). Satiated (`minecraft:saturation`) is in at 100 through the V10 exception.
 - **Ladder bar ticks.** The Diet Log's Ladder bar draws a tick at each milestone of its window: the bar's `<` color
   (gray) once reached, its `>` color (purple) before; shorter than the highest-diversity mark.
 - Headless: `tools/test_rp_ladder.sh` parses the generated file on vanilla registries (modded entries skipped in one

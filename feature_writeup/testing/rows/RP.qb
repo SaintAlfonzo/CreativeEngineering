@@ -700,7 +700,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## SQ-RPI-14 | pack ladder loads (food-tuning #44)
 @group A
 @commands Fresh world; `grep -n "Diet ladder" logs/latest.log`
-@pass `Diet ladder: 81 rungs, 5 slots, 38 pool effects` (fewer only if a listed mod is missing, then one `skipped N entries` warning naming them); no `toggle:` warning; no V3, V4, V5 or V6 warning
+@pass `Diet ladder: 81 rungs, 5 slots, 37 pool effects` (fewer only if a listed mod is missing, then one `skipped N entries` warning naming them); no `toggle:` warning; no V3, V4, V5, V6 or V10 warning (Satiated, `minecraft:saturation`, at 100 is allowed); at diversity 100 Saturation is applied and hunger stays full
 @fails `LadderLoader.parse` (toggle / tagline fields), a mod's effect id renamed (rerun `/dumppotions`, compare with `rp_ladder.csv`)
 @draft written with the build 2026-11-21
 
