@@ -23,8 +23,11 @@ ServerEvents.recipes(e => {
 		F.fruitCook(i.t_fruits_persimmon, i.dried_persimmon)
 
 		//######################### 1.1.3 carry-overs (fruits_delight.md 2.2) #########################
-		// Fig Pudding takes any egg
-		R.replaceInput({ id: 'fruitsdelight:fig_pudding' }, i.minecraft_egg, i.eggs, e)
+		// Fig Pudding: one oven recipe on the baking sheet (baking/baked-goods #36; was 2 milk bottles, sweet berries,
+		// 2 eggs, orange jelly, 2 figs and dough in the grid)
+		F._sweep(i.fig_pudding)
+		R.ceBaking([i.sweet_berries, i.t_milk_bottle, i.eggs, i.orange_jelly, i.t_fruits_fig, i.any_dough], i.fig_pudding, e,
+			'fig_pudding', F.ware.sheet)
 
 
 		//######################### Egg solution #########################

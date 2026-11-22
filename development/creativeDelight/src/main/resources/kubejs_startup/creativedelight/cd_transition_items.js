@@ -106,7 +106,11 @@ StartupEvents.registry('item', e => {
 		['kebab_sandwich'],
 		['crawling_sandwich'],
 		['steak_and_potatoes'],
-		['suspiciousbaconandaggs',       'hostiledelight:items/gren_bacon_and_eggs']    // Green Eggs and Ham, CD hostiledelight/recipes.js
+		['suspiciousbaconandaggs',       'hostiledelight:items/gren_bacon_and_eggs'],   // Green Eggs and Ham, CD hostiledelight/recipes.js
+		// Muffins on paper (F.muffinBake, baking/baked-goods #2): the muffin's own sprite
+		['blueberry_muffin',             'fruitsdelight:item/blueberry_muffin'],
+		['cranberry_muffin',             'fruitsdelight:item/cranberry_muffin'],
+		['sweet_potato_cupcake',         'veggiesdelight:item/sweet_potato_cupcake'],
 	]
 	// G5 end
 	SEQUENCED_ASSEMBLIES.forEach(([key, texture, color]) => R.registerIncomplete(e, key, texture, color))

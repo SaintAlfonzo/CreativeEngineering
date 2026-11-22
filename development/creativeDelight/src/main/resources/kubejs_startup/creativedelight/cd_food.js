@@ -21,6 +21,8 @@
 //                                                     filling and crust + full can
 //                   cookieBake (flavor, cookie, second)  cookie dough + 2 flavor (or flavor + second) -> 12
 //                   muffinBake (fruit, muffin)        oven 4 on paper; no Cooking Pot route (the mod's pot recipe goes)
+//                                                     plus a sequenced assembly on paper (4); flour or cornmeal
+//                   brownieBake (inputs, tray)        one tray in the cake pan; the placed tray cuts into brownies
 //                   tartBake (fruit, tart)            crust + fruit + egg + sugar + milk -> 2, baking sheet
 //                   handPieBake (fillings, pie)       crust + fillings -> 1, baking sheet, oven only
 //   heatless grid   mealCraft (inputs, meal)          a pot meal's grid route from cooked forms (`_cooked_manual_only`)
@@ -162,10 +164,22 @@ global.CD.food = function (e) {
 		},
 		// Muffins bake in the oven only: the mod's Cooking Pot recipe goes and none replaces it (baking/baked-goods,
 		// owner). Removing it also drops Slice & Dice's mixer copy, which is built from the loaded pot recipes.
+		// Wheat flour or cornmeal (baking/baked-goods #2). The sequenced assembly on paper takes the oven's ingredients,
+		// the milk as 250 mB of any milk, and gives the oven's count.
 		muffinBake(fruit, output) {
 			var s = suffix(output, '')
 			R.remove({ type: 'farmersdelight:cooking', output: output, not: OURS }, e)
-			R.ceBaking([n(fruit, 2), i.flour, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsOven), e, s, ware.muffin)
+			R.ceBaking([n(fruit, 2), i.t_flour_or_cornmeal, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsOven), e, s, ware.muffin)
+			var fl = global.fluid
+			if (fl && fl.t_milk)
+				F.assemble(i.paper, [i.t_flour_or_cornmeal, i.eggs, SWEET, fruit, fruit, { fill: R.createFluidTag(fl.t_milk, 250) }],
+					Item.of(output, V.muffinsOven))
+		},
+		// Brownie tray (dessert/brownie, baking/baked-goods #18): every other recipe of the tray goes; slices -> tray
+		// stays. Cake pan; the placed tray is cut with a knife (board or world).
+		brownieBake(inputs, output) {
+			F._sweep(output)
+			R.ceBaking(inputs, Item.of(output, 1), e, suffix(output, ''), ware.cake)
 		},
 		// A one-serving pie: every other recipe of it goes, as for whole pies. fillings: slots (F.slot for a count)
 		handPieBake(fillings, output) {

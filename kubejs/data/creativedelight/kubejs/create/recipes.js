@@ -75,5 +75,13 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'tmted:wheat_dough_from_egg' }, e)
 		R.remove({ id: 'farmersdelight:wheat_dough_from_eggs' }, e)
 		R.shapeless(Item.of(i.dough, 6), [i.flour, i.flour, i.flour, i.eggs], e, '3_wheat_flour_to_6_dough_by_shapeless')
+
+		//######################### Waffles #########################
+		// Create Factory's Uncooked Waffle: any dough hammered (Engineer's Hammer on the cutting board, or in the grid),
+		// or pressed (baking/baked-goods #36). The cake paste press and the smoker bake stay.
+		if (global.has('create_factory')) {
+			R.hammering(i.uncooked_waffle, i.any_dough, e, 'uncooked_waffle')
+			R.createPressing(i.uncooked_waffle, i.any_dough, e, 'uncooked_waffle_from_dough')
+		}
 	})
 })

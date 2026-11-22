@@ -31,6 +31,7 @@
 //   pie tin       pies
 //   cake pan      cakes, cake base
 //   muffin tin    muffins, plated on paper
+//   cake pan      also the brownie tray
 
 ServerEvents.recipes(e => {
 	if (!global.CD) return
@@ -77,9 +78,7 @@ ServerEvents.recipes(e => {
 			['cranberry_cookie', i.t_fruits_cranberry], ['persimmon_cookie', i.dried_persimmon],
 			['lemon_cookie', i.t_fruits_lemon], ['mulberry_cookie', i.mulberry], ['uncanny_cookies', i.mite_crust],
 			['cherry_cookie', i.cherry],                     // abnormals_delight, Vinery's cherry
-			['oatmeal_cookie', i.raw_oats],                  // Vintage Delight (was 2 raw oats + honey -> 8 in the grid)
 			['bat_cookie', i.smoked_bat_wing],               // Miner's Delight
-			['chorus_cookie', i.chorus_fruit_grain],         // End's Delight
 			// Maple Cookie (Abnormals Delight's): rusticdelight/recipes.js, syrup + honey (creativedelight/members #16)
 			['blazecookie', i.blaze_rod], ['ghastcookie', i.ghasttentacle], ['guardiancookie', i.guardianfillet],
 			['magicbuttercookie', i.magicalbutter], ['magmacookie', i.magma_cream], ['mitecookie', i.rawendermite],
@@ -153,6 +152,16 @@ ServerEvents.recipes(e => {
 
 		//######################### Cookies (baking sheet) #########################
 		COOKIES.forEach(c => F.cookieBake(c[1], i[c[0]], c[2]))
+		// Vintage Delight's Oatmeal Cookie bakes from oat dough, not cookie dough (baking/baked-goods #23; was cookie
+		// dough + 2 raw oats, before that 2 raw oats + honey -> 8 in the grid)
+		F._sweep(i.oatmeal_cookie)
+		R.ceBaking([i.oat_dough, F.SWEET, F.SWEET, n(i.raw_oats, 2)], Item.of(i.oatmeal_cookie, 12), e, 'oatmeal_cookie', F.ware.sheet)
+		// End's Delight's Chorus Cookie is made from Ender's Delight's Uncanny Cookie (baking/baked-goods #22; was cookie
+		// dough + 2 chorus fruit grain in the oven): 8 cookies around a chorus fruit grain by hand, as dyeing
+		F._sweep(i.chorus_cookie)
+		var uncanny = []
+		for (var u = 0; u < 8; u++) uncanny.push(i.uncanny_cookies)
+		R.shapeless(Item.of(i.chorus_cookie, 8), uncanny.concat([i.chorus_fruit_grain]), e, 'chorus_cookie_manual_only')
 
 		//######################### Muffins (muffin tin, paper) ######################### The family call bakes 4 in the
 		// oven (flour, one paper each) and removes the mods' Cooking Pot recipes: muffins are not made in the pot
@@ -160,6 +169,11 @@ ServerEvents.recipes(e => {
 		F.muffinBake(i.t_fruits_blueberry, i.blueberry_muffin) // G5
 		F.muffinBake(i.t_fruits_cranberry, i.cranberry_muffin) // G5
 		F.muffinBake(i.baked_sweet_potato, i.sweet_potato_cupcake)   // Veggies Delight's, named Sweet Potato Muffin (its sweet potato dough craft stays)
+
+		//######################### Brownies (cake pan) #########################
+		// Veggies Delight's Beetroot Brownie Tray (baking/baked-goods #18; was 3 beetroot + 2 cocoa + 2 sugar + 2 eggs by
+		// hand). Cut into 4 brownies on the board or with a knife in the world; 4 brownies craft back to the tray.
+		F.brownieBake([n(i.beetroot, 2), i.any_sugar, i.eggs, i.any_dough, i.cocoa_beans], i.beetroot_brownie_tray)
 
 		//######################### Tarts (baking sheet) #########################
 		// Fruits Delight pot recipes.

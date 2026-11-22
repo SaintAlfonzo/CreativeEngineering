@@ -76,5 +76,11 @@ ServerEvents.recipes(e => {
 		R.shapeless(Item.of(i.ender_paella, 1), [i.cooked_rice, i.cooked_rice, i.shulker_loot, i.chorus_flower, i.chorus_flower, i.ender_sight, i.shulker_bowl], e, 'ender_paella_cooked_manual_only')
 		//Pearl pasta shapeless
 		R.shapeless(Item.of(i.pearl_pasta, 1), [i.enderman, i.pasta, i.pasta, i.chorus_juice, i.chorus_juice, i.shulker_bowl], e, 'pearl_pasta_cooked_manual_only')
+
+		//######################### Strange Eclair #########################
+		// Oven on the baking sheet (baking/baked-goods #36): ender eye + dough + sugar (was ender eye + 2 flour + sugar by hand)
+		var F = global.CD.food(e)
+		F._sweep(i.strange_eclair)
+		R.ceBaking([i.ender_eye, i.any_dough, i.any_sugar], i.strange_eclair, e, 'strange_eclair', F.ware.sheet)
 	})
 })

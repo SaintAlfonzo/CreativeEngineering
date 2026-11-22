@@ -49,5 +49,13 @@ ServerEvents.recipes(e => {
 			'fruitsdelight:mixing/flowing_bellini_cocktail']
 		// G5 end
 		R.replaceInput(iceFoods.map(id => ({ id: id })), i.ice, i.t_ice_cubes, e)
+
+		//######################### Strawberry Scones #########################
+		// The scone family's recipe (baking/baked-goods #36): Hearth and Harvest's raspberry scone with strawberries,
+		// oven on the baking sheet; Neapolitan's grid and Create Central Kitchen's routes go (was 2 flour + strawberry +
+		// sugar -> 2 by hand)
+		var F = global.CD.food(e)
+		F._sweep(i.strawberry_scones)
+		R.ceBaking([i.butter, F.slot(i.t_fruits_strawberry, 2), i.sugar, i.batter], i.strawberry_scones, e, 'strawberry_scones', F.ware.sheet)
 	})
 })

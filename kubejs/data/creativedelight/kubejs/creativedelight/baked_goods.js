@@ -15,8 +15,7 @@ ServerEvents.recipes(e => {
 
 		//######################### Breads, buns, scones, eclair #########################
 		var BREADS = ['minecraft:bread', 'quark:tweaks/crafting/utility/bent/bread', 'hostiledelight:gbread', // G5 begin (recipe ids, a filter for R.replaceInput)
-			'neapolitan:adzuki/adzuki_bun', 'neapolitan:banana/banana_bread', 'neapolitan:strawberry/strawberry_scones',
-			'endersdelight:strange_eclair']
+			'neapolitan:adzuki/adzuki_bun', 'neapolitan:banana/banana_bread']   // strawberry scones, strange eclair: oven (neapolitan, endersdelight recipes.js)
 		// G5 end
 		R.replaceInput(BREADS.map(id => ({ id: id })), i.wheat, i.flour, e)
 
