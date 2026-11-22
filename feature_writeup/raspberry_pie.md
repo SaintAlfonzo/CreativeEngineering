@@ -951,20 +951,23 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   `solRaspberryPie-LGPL-2.1-solcarrot.txt` (the upstream `LICENSE.txt` files) and `solRaspberryPie-NOTICE` (names,
   authors, versions, sha1, "unmodified", upstream tag / commit links, the Liquid Diet Log art credit). `mods.toml` has
   `displayURL` and `issueTrackerURL` (the GitHub repo). The compile jars in `libs/` stay git-ignored.
-- **Default ladder (P2).** `solraspberrypie/default_ladder.json` (used when no `defaultconfigs/solraspberrypie/ladder.json`
-  exists, so never in the pack) is Apple Pie 2.2.0's own default ladder read from `SOLSweetPotatoConfig`: half a heart
-  (`health` 1) at each threshold 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100, armor toughness +2 at
-  15, 50 and 80, knockback resistance +1 at 40. Apple Pie's effect benefits (always-on Speed I at 2 and II at 25, Haste
-  I and II, Strength I to III, Regeneration I, Luck I and II) are not carried over as flat rungs: they would hide five
-  of the ten unlocks from the picker (V11) for most of the ladder; its `generic.speed` entry at 45 names no attribute
-  and is left out (agent reading of the plan's "kept as health, toughness, knockback and other attribute rungs",
-  unconfirmed). Ten one-time unlocks (D2, D10), level I, pool cap I: Speed 10, Haste 18, Strength 26, Jump Boost 34,
-  Night Vision 43, Water Breathing 53, Luck 63, Regeneration 74, Fire Resistance 86, Glowing 100 (Fire Resistance is
-  allowed here, unlike the pack pool in section 4). Four slots at 10, 30, 55, 80 (D3). Headless test
-  `tools/test_rp_ladder.sh` (in `check_all.py`): the file parses on vanilla registries with no V1 to V10 warning and has
-  that shape. **V12 finding:** with vanilla foods and Apple Pie's default settings (`queueSize` 32, `endDecay` 32) the
-  reachable bound is about 56.2 (best vanilla food in all 32 positions), so the 11 rungs from 60 up log a V12 warning
-  in isolation and cannot be reached there; Apple Pie's own default ladder has the same gap. Open for the owner.
+- **Default ladder (P2; reworked after the owner rulings of 2026-11-21).** `solraspberrypie/default_ladder.json` (used
+  when no `defaultconfigs/solraspberrypie/ladder.json` exists, so never in the pack) is Apple Pie 2.2.0's own default
+  ladder (`SOLSweetPotatoConfig`) scaled to a top of 50, every threshold halved: with vanilla foods and Apple Pie's
+  default settings (`queueSize` 32, `endDecay` 32) about 56.2 is the most a diet reaches (best vanilla food in all 32
+  positions), so Apple Pie's 100 scale left 11 rungs unreachable (owner: default max diversity 50). Rungs: half a heart
+  (`health` 1) at 2.5, 3.5, 5, 7.5, 10, 12.5, 15, 17.5, 20, 22.5, 25, 30, 35, 40, 45, 50; armor toughness +2 at 7.5, 25,
+  40; knockback resistance +1 at 20; Apple Pie's always-on effects kept as flat rungs (owner): Speed I 1, Haste I 3.5,
+  Strength I 5, Regeneration I 10, Speed II 12.5, Luck I 17.5, Haste II 30, Strength II 35, Strength III 45, Luck II 50
+  (its second Strength I, at 30 on its scale, adds nothing and is left out, as is its `generic.speed` entry, which names
+  no attribute). Four slots at 5, 15, 27.5, 40. Thirteen one-time unlocks with the D10 falling density (ratio 2.0, 5 to
+  50): Speed I 5, Haste I 7.9, Strength I 10.8, Jump Boost I 13.9, Night Vision 17.1, Water Breathing 20.4, Luck I 23.8,
+  Regeneration I 27.5, Fire Resistance 31.4, Jump Boost II 35.5, Haste II 39.9, Slow Falling 44.7, Glowing 50. The three
+  added unlocks (Jump Boost II, Haste II, Slow Falling) and that order are agent defaults, **unconfirmed**. A flat effect
+  hides an unlock of the same effect from the picker (V11) where they overlap; accepted (owner). Pool: the 11 effects,
+  cap II for Haste and Jump Boost, I otherwise. Fire Resistance is allowed here, unlike the pack pool in section 4.
+  Expected start line: `Diet ladder: 47 rungs, 4 slots, 11 pool effects`, no warning (V12 included). Headless test
+  `tools/test_rp_ladder.sh` (in `check_all.py`) checks that and the shape.
 - **Table loader (P3, P8).** `Diversity` reads every `solraspberrypie/diversity/*.json` in any loaded mod file (Forge
   `ModList` mod files, so any jar can ship one), merged in mod-id then file-name order; a later file wins an id both
   list, logged as one INFO line per file pair with the count. Ids not in the item registry (their mod is absent) are

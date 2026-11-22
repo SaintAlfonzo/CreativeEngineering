@@ -107,6 +107,11 @@ slot rungs below. Ten vanilla unlockables spread across the ladder, taken from t
 effect slots so the unlocks are usable. Validate with the existing 3.3 checks; add a headless test that the default
 ladder loads with no warning.
 
+P2 as built after the owner rulings of 2026-11-21 (raspberry_pie.md 12.9): Apple Pie's ladder with its flat effects,
+every threshold halved to a top of 50 (vanilla foods on Apple Pie's defaults reach about 56); slots 5, 15, 27.5, 40;
+13 unlocks at 5 to 50 with the D10 falling density; the three added unlocks (Jump Boost II, Haste II, Slow Falling) are
+an agent default, **unconfirmed**. Start line `Diet ladder: 47 rungs, 4 slots, 11 pool effects`, no warning.
+
 **P3 Table loader.** `Diversity` reads `solraspberrypie/diversity/*.json` from every classpath root (`getResources`),
 merges them (later file wins on a conflict, logged), skips ids not registered (one INFO line with the count, never a
 warning per id), and the jar's own copy is deleted. With no file found nothing is overridden and Apple Pie's values stand

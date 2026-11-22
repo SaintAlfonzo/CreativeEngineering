@@ -24,9 +24,9 @@ import java.util.Map;
 
 /**
  * Headless checks for Raspberry Pie standing alone (feature_writeup/plan_rp_standalone.md P2, tools/test_rp_ladder.sh):
- * the built-in default ladder parses on vanilla registries with no file warning (3.3 V1 to V10; V12 is reported), and has the ruled shape
- * (D2, D3, D10: ten unlocks at 10, 18, 26, 34, 43, 53, 63, 74, 86, 100; four slots at 10, 30, 55, 80; Apple Pie's
- * thresholds); P3: the diversity tables merge (a later file wins), ids of absent mods are skipped, no table leaves
+ * the built-in default ladder parses on vanilla registries with no warning (every 3.3 check, V12 included), and has the ruled shape
+ * (owner 2026-11-21: Apple Pie's ladder with its flat effects, scaled to 50; 13 unlocks with falling density; four
+ * slots at 5, 15, 27.5, 40); P3: the diversity tables merge (a later file wins), ids of absent mods are skipped, no table leaves
  * Apple Pie's values, and the pack's Creative Delight table loads; P4: the lang name overrides; P5: ageing out on Apple
  * Pie's default settings. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
  */
@@ -52,30 +52,29 @@ public class RpStandaloneTest {
 		JsonObject json = JsonParser.parseString(Files.readString(file, StandardCharsets.UTF_8)).getAsJsonObject();
 		List<String> warnings = new ArrayList<>();
 		Ladder ladder = LadderLoader.parse(json, "built-in default", warnings);
-		// V12 (a rung above the reachable bound) depends on the registered foods and Apple Pie's settings, not on the
-		// file: with vanilla foods only and Apple Pie's defaults (queueSize 32, endDecay 32) the bound is about 56, so
-		// the upper rungs on Apple Pie's own 2-to-100 scale warn there (Apple Pie's own default ladder does too). It is
-		// reported, not failed; every file check (V1 to V10) must stay silent.
-		List<String> fileWarnings = warnings.stream().filter(w -> !w.startsWith("V12:")).toList();
-		for (String w : fileWarnings) System.out.println("     warning: " + w);
-		long v12 = warnings.size() - fileWarnings.size();
-		if (v12 > 0) System.out.println("note " + v12 + " V12 lines on vanilla foods: " + warnings.stream().filter(w -> w.startsWith("V12:")).findFirst().orElse(""));
-		check(fileWarnings.isEmpty(), "default ladder parses with no file warning (" + fileWarnings.size() + ")");
+		// Scaled to a top of 50 (owner, 2026-11-21): with vanilla foods and Apple Pie's defaults (queueSize 32, endDecay 32)
+		// the reachable bound is about 56, so not even V12 may warn.
+		for (String w : warnings) System.out.println("     warning: " + w);
+		check(warnings.isEmpty(), "default ladder parses with no warning, V12 included (" + warnings.size() + ")");
 		check(ladder.rungs.size() == json.getAsJsonArray("rungs").size(), "no rung skipped (" + ladder.rungs.size() + ")");
 
-		List<Double> unlocks = new ArrayList<>(), slots = new ArrayList<>(), health = new ArrayList<>();
+		List<Double> unlocks = new ArrayList<>(), slots = new ArrayList<>(), health = new ArrayList<>(), flats = new ArrayList<>();
 		for (Rung r : ladder.rungs) {
 			if (r.kind == Rung.Kind.UNLOCK) unlocks.add(r.threshold);
 			if (r.kind == Rung.Kind.SLOT) slots.add(r.threshold);
 			if (r.kind == Rung.Kind.HEALTH) health.add(r.threshold);
+			if (r.kind == Rung.Kind.FLAT) flats.add(r.threshold);
 		}
-		check(unlocks.equals(List.of(10.0, 18.0, 26.0, 34.0, 43.0, 53.0, 63.0, 74.0, 86.0, 100.0)), "unlocks at the D10 positions " + unlocks);
-		check(slots.equals(List.of(10.0, 30.0, 55.0, 80.0)), "slots at 10, 30, 55, 80 " + slots);
-		check(health.equals(List.of(5.0, 7.0, 10.0, 15.0, 20.0, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0, 60.0, 70.0, 80.0, 90.0, 100.0)),
-				"health at Apple Pie's thresholds " + health);
-		check(ladder.pool.size() == 10, "pool of 10 effects (" + ladder.pool.size() + ")");
+		check(unlocks.equals(List.of(5.0, 7.9, 10.8, 13.9, 17.1, 20.4, 23.8, 27.5, 31.4, 35.5, 39.9, 44.7, 50.0)),
+				"13 unlocks, falling density 2.0 over 5 to 50 " + unlocks);
+		check(slots.equals(List.of(5.0, 15.0, 27.5, 40.0)), "slots at 5, 15, 27.5, 40 " + slots);
+		check(health.equals(List.of(2.5, 3.5, 5.0, 7.5, 10.0, 12.5, 15.0, 17.5, 20.0, 22.5, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0)),
+				"health at Apple Pie's thresholds halved " + health);
+		check(flats.equals(List.of(1.0, 3.5, 5.0, 10.0, 12.5, 17.5, 30.0, 35.0, 45.0, 50.0)), "Apple Pie's flat effects halved " + flats);
+		check(ladder.rungs.size() == 47 && ladder.slotCount() == 4 && ladder.pool.size() == 11,
+				"Diet ladder: 47 rungs, 4 slots, 11 pool effects (" + ladder.rungs.size() + ", " + ladder.slotCount() + ", " + ladder.pool.size() + ")");
 		check(ladder.pool.keySet().stream().allMatch(id -> id.getNamespace().equals(ResourceLocation.DEFAULT_NAMESPACE)), "pool is vanilla only");
-		check(ladder.rungs.stream().noneMatch(r -> r.kind == Rung.Kind.FLAT), "no flat effects");
+		check(ladder.maxThreshold() == 50.0, "top rung at 50");
 
 		// The checks still fire: a ladder naming an unknown effect warns once.
 		JsonObject bad = JsonParser.parseString("{\"pool\":[{\"effect\":\"minecraft:speed\"}],\"rungs\":[{\"threshold\":1,\"type\":\"unlock\",\"effect\":\"nomod:nothing\"}]}").getAsJsonObject();
