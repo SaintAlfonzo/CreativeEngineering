@@ -75,11 +75,11 @@ The first tip keeps its id and takes the new text; the others go to `remove`.
 | 32 `lecterns_hold_books_for_reading` | 240 | A lectern holds a book anyone can read and sends a redstone pulse on each page turn | same block |
 | 34 `hoppers_move_items_between_containers` | 242 | Hoppers pull items from above, push into the container they face and stop while powered | same block |
 | 37 `axolotls_help_fight_guardians_and_grant` | 285 | Axolotls play dead to heal, and killing a mob one is fighting gives you Regeneration | same mob |
-| 42 `spyglasses_zoom_in_on_the_horizon` | 293 | Spyglasses, made from amethyst and copper, zoom in on distant things | recipe and use |
+| 42 `spyglasses_zoom_in_on_the_horizon` | 293 | Spyglasses, made from amethyst and copper, can be used to zoom in on distant things | recipe and use |
 | 43 `goats_can_ram_you_off_cliffs` | 214 | Goats can ram you off cliffs, and a Goat that rams a hard block drops a goat horn | same mob |
 | 44 `frogs_eat_small_slimes_and_magma_cubes` | 210, 211, 212, 213 | Frogs eat small Slimes for slimeballs and small Magma Cubes for froglight in the Frog's color, set by its biome | five fragments of one feature |
 | 48 `pumpkins_need_space_to_grow` | 49 | Pumpkins and melons need a free dirt, grass or farmland block beside the stem to grow | sister crops |
-| 51 `bells_alert_villagers_to_raids` | 171 | Ring a bell, by hand or with an arrow, to send villagers indoors and make nearby raiders glow | same block |
+| 51 `bells_alert_villagers_to_raids` | 171 | Ring a bell, by hand or with a projectile, to send villagers indoors and make nearby raiders glow | same block |
 | 60 `blast_protection_reduces_explosion_damage_and` | 61, 62 | Protection, Fire, Blast and Projectile Protection exclude each other; each specific one guards best against its own damage | exclusive family |
 | 64 `respiration_iii_lets_you_breathe_longer` | 57, 65, 274 | Underwater, Respiration and turtle shells add breath, Aqua Affinity restores mining speed and Depth Strider speeds you up | underwater gear family |
 | 66 `ender_pearls_teleport_you_instantly` | 105 | A thrown ender pearl teleports you where it lands, costs a little health and sometimes spawns an Endermite | cost and side effect |

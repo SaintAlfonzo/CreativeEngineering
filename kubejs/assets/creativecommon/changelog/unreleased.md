@@ -580,6 +580,7 @@
 - **Changed:** Village waystones have Yellow Corundum in their base [Glowstone].
 - **Fixed:** The Weathered Cardboard Box showed its whole texture sheet on every face; it now looks like a taped box.
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
+- **Changed:** With the Copycat Framed Block resource pack on, framed blocks keep their Framed Blocks names [128 renamed to Copycat names].
 
 ## Mods Added & Removed
 
@@ -624,6 +625,7 @@
 - **Changed:** One tip stays through a whole load and changes only every 10 seconds [a new tip on each loading screen].
 - **Changed:** Tips rewritten against the pack: 213 tips [335]. Tips on one feature merged into one tip; trivia removed.
 - **Fixed:** Tips said anvils turn 'Too Expensive', Illusioners never spawn and Shulker shells drop from End Cities.
+- **Fixed:** The bell tip said only arrows ring a bell; any projectile does.
 
 ## Mod Ids <!-- icon: creativedelight:oven -->
 
