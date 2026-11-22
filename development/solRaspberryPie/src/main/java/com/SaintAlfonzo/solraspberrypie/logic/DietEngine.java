@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 /**
  * Evaluates the ladder for a player and applies the result (3, 8, 9, 10). Rungs are evaluated when a food is eaten,
@@ -49,9 +50,16 @@ public final class DietEngine {
 		public final Map<ResourceLocation, Integer> slotEffects = new LinkedHashMap<>();
 		public final Map<ResourceLocation, Integer> effects = new LinkedHashMap<>();
 		public final Map<ResourceLocation, Double> attrs = new LinkedHashMap<>();
+		/** Toggle effects granted (flat or slotted) but switched off: kept in flat / slotEffects, left out of effects. */
+		public final Set<ResourceLocation> off = new HashSet<>();
 	}
 
 	public static State compute(Ladder ladder, double diversity, int foodsEaten, List<SlotChoice> slots) {
+		return compute(ladder, diversity, foodsEaten, slots, id -> true);
+	}
+
+	/** As above; {@code on} says whether a toggle effect is switched on (3.3), an off one is granted but not applied. */
+	public static State compute(Ladder ladder, double diversity, int foodsEaten, List<SlotChoice> slots, Predicate<ResourceLocation> on) {
 		State s = new State();
 		s.diversity = diversity;
 		s.gate = foodsEaten >= SOLSweetPotatoConfig.minFoodsToActivate();
@@ -73,12 +81,23 @@ public final class DietEngine {
 		}
 		s.effects.putAll(s.slotEffects);
 		s.flat.forEach((k, v) -> s.effects.merge(k, v, Math::max));
+		for (ResourceLocation id : List.copyOf(s.effects.keySet())) {
+			if (ladder.isToggle(id) && !on.test(id)) {
+				s.effects.remove(id);
+				s.off.add(id);
+			}
+		}
 		return s;
 	}
 
 	public static State current(ServerPlayer player) {
 		FoodList fl = FoodList.get(player);
-		return compute(Ladder.current, fl.foodDiversity(), GateFoods.count(fl), RpData.get(player).slots);
+		RpData d = RpData.get(player);
+		return compute(Ladder.current, fl.foodDiversity(), GateFoods.count(fl), d.slots, switchedOn(Ladder.current, d));
+	}
+
+	public static Predicate<ResourceLocation> switchedOn(Ladder ladder, RpData d) {
+		return id -> d.isOn(ladder, id);
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
@@ -113,7 +132,7 @@ public final class DietEngine {
 		FoodList fl = FoodList.get(player);
 		double div = fl.foodDiversity();
 		double oldMax = d.maxDiversity;
-		State s = compute(ladder, div, GateFoods.count(fl), d.slots);
+		State s = compute(ladder, div, GateFoods.count(fl), d.slots, switchedOn(ladder, d));
 		// Unlocks wait for the first gate opening (plan_diet_books_r2.md A6); after it the highest diversity climbs
 		// even while the gate is closed again.
 		if (s.gate) d.gateOpened = true;

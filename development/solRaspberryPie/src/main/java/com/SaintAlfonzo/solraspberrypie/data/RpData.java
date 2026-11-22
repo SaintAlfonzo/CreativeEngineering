@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.solraspberrypie.data;
 
 import com.SaintAlfonzo.solraspberrypie.SolRaspberryPie;
+import com.SaintAlfonzo.solraspberrypie.ladder.Ladder;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -24,7 +25,7 @@ import java.util.Set;
 
 /**
  * Raspberry Pie's own player data (13.4): max diversity, slot choices, the Regeneration anchor, the state stamp, the
- * pause flag and the Liquid Diet Log. Copied on death and on the End exit clone. Fields marked transient are rebuilt
+ * pause flag, the toggle switches and the Liquid Diet Log. Copied on death and on the End exit clone. Fields marked transient are rebuilt
  * from the world at login and never saved.
  */
 public final class RpData implements ICapabilitySerializable<CompoundTag> {
@@ -49,6 +50,8 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 	public boolean booksGiven;
 	/** Unique drinks, value = drinks since it was last drunk (0 = latest). */
 	public final Map<ResourceLocation, Integer> drinks = new LinkedHashMap<>();
+	/** Toggle effects the player switched (effect -> on); an effect not listed follows the ladder's default (3.3). */
+	public final Map<ResourceLocation, Boolean> toggles = new LinkedHashMap<>();
 	/** Health saved at logout, restored once the transient max-health modifier is back (login). */
 	public float savedHealth = -1;
 
@@ -74,6 +77,12 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 
 	public SlotChoice slot(int i) {
 		return i >= 0 && i < slots.size() ? slots.get(i) : null;
+	}
+
+	/** Whether an effect is switched on: always for an effect that is no toggle, else the player's switch or the default. */
+	public boolean isOn(Ladder ladder, ResourceLocation effect) {
+		if (!ladder.isToggle(effect)) return true;
+		return toggles.getOrDefault(effect, ladder.toggleDefault(effect));
 	}
 
 	public void ensureSlots(int count) {
@@ -108,6 +117,8 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 		booksGiven = o.booksGiven;
 		drinks.clear();
 		drinks.putAll(o.drinks);
+		toggles.clear();
+		toggles.putAll(o.toggles);
 	}
 
 	@Override
@@ -141,6 +152,9 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 			dl.add(d);
 		}
 		t.put("drinks", dl);
+		CompoundTag tg = new CompoundTag();
+		toggles.forEach((k, v) -> tg.putBoolean(k.toString(), v));
+		t.put("toggles", tg);
 		if (savedHealth >= 0) t.putFloat("savedHealth", savedHealth);
 		return t;
 	}
@@ -164,6 +178,12 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 			CompoundTag d = (CompoundTag) el;
 			ResourceLocation id = ResourceLocation.tryParse(d.getString("id"));
 			if (id != null) drinks.put(id, d.getInt("since"));
+		}
+		toggles.clear();
+		CompoundTag tg = t.getCompound("toggles");
+		for (String k : tg.getAllKeys()) {
+			ResourceLocation id = ResourceLocation.tryParse(k);
+			if (id != null) toggles.put(id, tg.getBoolean(k));
 		}
 		savedHealth = t.contains("savedHealth") ? t.getFloat("savedHealth") : -1;
 	}

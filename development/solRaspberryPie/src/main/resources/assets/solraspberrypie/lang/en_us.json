@@ -55,6 +55,11 @@
   "solraspberrypie.screen.none_unlocked": "No unlocked effects to choose from.",
   "solraspberrypie.screen.free": "Free",
   "solraspberrypie.screen.change_cost": "Costs diversity: your oldest foods age out",
+  "solraspberrypie.screen.on": "On",
+  "solraspberrypie.screen.off": "Off",
+  "solraspberrypie.toggle.on": "Switched on",
+  "solraspberrypie.toggle.off": "Switched off",
+  "solraspberrypie.toggle.click": "Click to switch it on or off",
 
   "solraspberrypie.confirm.change": "Change slot %s to %s?",
   "solraspberrypie.confirm.drop": "Drop slot %s?",

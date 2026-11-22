@@ -92,7 +92,7 @@ public final class InventoryWidget {
 			int x = r.getX() + PAD + (vertical ? 0 : i * CELL);
 			int y = r.getY() + PAD + (vertical ? i * CELL : 0);
 			if (c.flat) GuiComponent.fill(pose, x, y, x + CELL, y + CELL, 0xFF8A6D1E);
-			if (paused) RenderSystem.setShaderColor(0.35F, 0.35F, 0.35F, 1F);
+			if (paused || ClientState.state.off.contains(c.effect)) RenderSystem.setShaderColor(0.35F, 0.35F, 0.35F, 1F);
 			Icons.effect(pose, c.effect, x + 1, y + 1);
 			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			if (mouseX >= x && mouseX < x + CELL && mouseY >= y && mouseY < y + CELL) hovered = c;
@@ -114,6 +114,7 @@ public final class InventoryWidget {
 	private static List<Component> tooltip(Cell c) {
 		List<Component> tip = new ArrayList<>();
 		tip.add(DietEngine.effectName(c.effect, c.level));
+		EffectScreen.addTagline(tip, ClientState.ladder, c.effect, c.level);
 		if (c.flat) {
 			double at = 0;
 			for (Rung r : ClientState.ladder.rungs) {
@@ -127,6 +128,7 @@ public final class InventoryWidget {
 			double at = c.slot < ClientState.ladder.slots.size() ? ClientState.ladder.slots.get(c.slot).threshold : 0;
 			tip.add(Component.translatable("solraspberrypie.widget.slot", c.slot + 1, Icons.num(at)).withStyle(ChatFormatting.AQUA));
 		}
+		if (ClientState.ladder.isToggle(c.effect)) EffectScreen.addToggleState(tip, ClientState.state.off.contains(c.effect), false);
 		if (ClientState.state.paused) tip.add(Component.translatable("solraspberrypie.paused").withStyle(ChatFormatting.RED));
 		return tip;
 	}

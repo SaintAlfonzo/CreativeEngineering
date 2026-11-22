@@ -8,7 +8,10 @@ import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
 import com.tarinoita.solsweetpotato.tracking.FoodInstance;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.SaintAlfonzo.solraspberrypie.logic.DietEngine;
+import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.Items;
@@ -28,7 +31,8 @@ import java.util.Map;
  * (owner ruling, plan_rp_standalone.md P2: Apple Pie's ladder with its flat effects, scaled to 50; 13 unlocks with falling density; four
  * slots at 5, 15, 27.5, 40); P3: the diversity tables merge (a later file wins), ids of absent mods are skipped, no table leaves
  * Apple Pie's values, and the pack's Creative Delight table loads; P4: the lang name overrides; P5: ageing out on Apple
- * Pie's default settings. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
+ * Pie's default settings; P7: the toggle and tagline fields (parse, sync round trip, an off toggle is granted but not applied)
+ * and the generated pack ladder (defaultconfigs/solraspberrypie/ladder.json) on vanilla registries. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
  */
 public class RpStandaloneTest {
 	private static int ok, fail;
@@ -81,6 +85,67 @@ public class RpStandaloneTest {
 		List<String> badWarnings = new ArrayList<>();
 		LadderLoader.parse(bad, "test", badWarnings);
 		check(badWarnings.size() == 2 && badWarnings.get(0).startsWith("skipped 1 "), "a bad ladder still warns (skipped + V4): " + badWarnings);
+
+		// P7: toggle and tagline fields (raspberry_pie.md 3.3).
+		check(ladder.toggles.isEmpty(), "the default ladder has no toggle effect");
+		JsonObject tj = JsonParser.parseString("{\"pool\":[{\"effect\":\"minecraft:night_vision\",\"toggle\":\"on\"},"
+				+ "{\"effect\":\"minecraft:speed\",\"max_level\":2}],\"rungs\":["
+				+ "{\"threshold\":1,\"type\":\"slot\"},"
+				+ "{\"threshold\":1,\"type\":\"unlock\",\"effect\":\"minecraft:night_vision\",\"tagline\":\"t.nv\"},"
+				+ "{\"threshold\":1,\"type\":\"unlock\",\"effect\":\"minecraft:speed\",\"level\":1,\"tagline\":\"t.speed1\"},"
+				+ "{\"threshold\":2,\"type\":\"unlock\",\"effect\":\"minecraft:speed\",\"level\":2},"
+				+ "{\"threshold\":3,\"type\":\"flat\",\"effect\":\"minecraft:invisibility\",\"toggle\":\"off\"},"
+				+ "{\"threshold\":3,\"type\":\"flat\",\"effect\":\"minecraft:luck\",\"tagline\":\"t.luck\"}]}").getAsJsonObject();
+		List<String> tw = new ArrayList<>();
+		Ladder tl = LadderLoader.parse(tj, "toggle test", tw);
+		check(tw.isEmpty(), "toggle and tagline fields parse with no warning " + tw);
+		check(tl.isToggle(new ResourceLocation("minecraft:night_vision")) && tl.toggleDefault(new ResourceLocation("minecraft:night_vision")),
+				"pool toggle 'on': a toggle, on by default");
+		check(tl.isToggle(new ResourceLocation("minecraft:invisibility")) && !tl.toggleDefault(new ResourceLocation("minecraft:invisibility")),
+				"flat toggle 'off': a toggle, off by default");
+		check(!tl.isToggle(new ResourceLocation("minecraft:speed")), "no toggle field: no toggle");
+		check("t.speed1".equals(tl.tagline(new ResourceLocation("minecraft:speed"), 2)), "Speed II without its own tagline uses Speed I's");
+		check("t.luck".equals(tl.tagline(new ResourceLocation("minecraft:luck"), 1)), "a flat rung's tagline");
+		check(tl.tagline(new ResourceLocation("minecraft:invisibility"), 1) == null, "no tagline field: none");
+		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
+		tl.write(buf);
+		Ladder synced = Ladder.read(buf);
+		check(synced.toggles.equals(tl.toggles) && "t.nv".equals(synced.tagline(new ResourceLocation("minecraft:night_vision"), 1))
+				&& synced.rungs.size() == tl.rungs.size(), "toggles and taglines survive the login sync");
+		List<com.SaintAlfonzo.solraspberrypie.data.SlotChoice> picks = List.of(new com.SaintAlfonzo.solraspberrypie.data.SlotChoice(new ResourceLocation("minecraft:night_vision"), 1));
+		DietEngine.State on = DietEngine.compute(tl, 5, 99, picks, id -> !id.getPath().equals("invisibility"));
+		DietEngine.State off = DietEngine.compute(tl, 5, 99, picks, id -> false);
+		ResourceLocation nv = new ResourceLocation("minecraft:night_vision"), inv = new ResourceLocation("minecraft:invisibility");
+		check(on.effects.containsKey(nv) && !on.effects.containsKey(inv) && on.flat.containsKey(inv) && on.off.equals(java.util.Set.of(inv)),
+				"an off toggle is granted (flat) but not applied; an on one is applied");
+		check(!off.effects.containsKey(nv) && off.slotEffects.containsKey(nv) && off.effects.containsKey(new ResourceLocation("minecraft:luck")),
+				"a slotted toggle switched off stays in its slot, unapplied; a non-toggle is applied whatever the switch says");
+
+		// P7: the generated pack ladder parses on vanilla registries; modded entries are skipped (one warning), the rest is the ruled shape.
+		JsonObject pack = JsonParser.parseString(Files.readString(root.resolve("defaultconfigs/solraspberrypie/ladder.json"), StandardCharsets.UTF_8)).getAsJsonObject();
+		List<String> pw = new ArrayList<>();
+		Ladder pl = LadderLoader.parse(pack, "pack ladder", pw);
+		List<String> other = pw.stream().skip(1).filter(w -> !w.startsWith("V12:")).toList();
+		check(!pw.isEmpty() && pw.get(0).startsWith("skipped ") && other.isEmpty(), "pack ladder on vanilla: only the skip line ("
+				+ (pw.isEmpty() ? "none" : pw.get(0).substring(0, pw.get(0).indexOf(':'))) + ") and V12; other warnings " + other);
+		List<Double> hearts = new ArrayList<>(), packSlots = new ArrayList<>(), tough = new ArrayList<>();
+		for (Rung r : pl.rungs) {
+			if (r.kind == Rung.Kind.HEALTH) hearts.add(r.threshold);
+			if (r.kind == Rung.Kind.SLOT) packSlots.add(r.threshold);
+			if (r.kind == Rung.Kind.ATTRIBUTE && r.id.getPath().equals("generic.armor_toughness")) tough.add(r.threshold);
+		}
+		check(hearts.equals(List.of(9.1, 18.2, 27.3, 36.4, 45.5, 54.5, 63.6, 72.7, 81.8, 90.9)), "pack: 10 hearts every 100/11 " + hearts);
+		check(tough.equals(List.of(16.7, 50.0, 83.3)), "pack: toughness pairs at 1/6, 1/2, 5/6 " + tough);
+		check(packSlots.equals(List.of(2.5, 22.0, 41.5, 61.0, 80.5)), "pack: 5 slots evenly spaced from 2.5 " + packSlots);
+		check(!pl.toggleDefault(inv) && pl.isToggle(inv) && pl.toggleDefault(nv) && pl.isToggle(nv), "pack: Invisibility toggle off, Night Vision on");
+		check("solraspberrypie.tagline.minecraft.speed.2".equals(pl.tagline(new ResourceLocation("minecraft:speed"), 2)), "pack: Speed II tagline key");
+		JsonObject packLang = JsonParser.parseString(Files.readString(root.resolve("kubejs/assets/solraspberrypie/lang/en_us.json"), StandardCharsets.UTF_8)).getAsJsonObject();
+		boolean allKeyed = true;
+		for (var el : pack.getAsJsonArray("rungs")) {
+			JsonObject o = el.getAsJsonObject();
+			if (o.has("tagline") && !packLang.has(o.get("tagline").getAsString())) allKeyed = false;
+		}
+		check(allKeyed, "pack: every tagline key has its text in the pack lang file");
 
 		// P3: table merge and optional ids.
 		JsonObject a = JsonParser.parseString("{\"values\":{\"minecraft:apple\":1.0,\"minecraft:carrot\":2.0,\"nomod:x\":3.0},"

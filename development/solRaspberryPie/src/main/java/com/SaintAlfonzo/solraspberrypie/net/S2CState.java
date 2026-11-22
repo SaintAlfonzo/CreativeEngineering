@@ -14,6 +14,8 @@ import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +42,8 @@ public final class S2CState {
 	/** Effects we applied: effect -> level (what the display filter hides). */
 	public final Map<ResourceLocation, Integer> applied = new LinkedHashMap<>();
 	public final List<ResourceLocation> drinks = new ArrayList<>();
+	/** Toggle effects of the ladder that are switched off for this player (3.3). */
+	public final Set<ResourceLocation> off = new LinkedHashSet<>();
 
 	public static S2CState of(ServerPlayer player) {
 		RpData d = RpData.get(player);
@@ -61,6 +65,8 @@ public final class S2CState {
 		m.flat.putAll(s.flat);
 		m.applied.putAll(d.applied);
 		m.drinks.addAll(d.drinksByRecency());
+		var ladder = com.SaintAlfonzo.solraspberrypie.ladder.Ladder.current;
+		for (ResourceLocation id : ladder.toggles.keySet()) if (!d.isOn(ladder, id)) m.off.add(id);
 		return m;
 	}
 
@@ -82,6 +88,8 @@ public final class S2CState {
 		writeMap(buf, m.applied);
 		buf.writeVarInt(m.drinks.size());
 		for (ResourceLocation id : m.drinks) buf.writeResourceLocation(id);
+		buf.writeVarInt(m.off.size());
+		for (ResourceLocation id : m.off) buf.writeResourceLocation(id);
 	}
 
 	public static S2CState decode(FriendlyByteBuf buf) {
@@ -103,6 +111,8 @@ public final class S2CState {
 		readMap(buf, m.applied);
 		int d = buf.readVarInt();
 		for (int i = 0; i < d; i++) m.drinks.add(buf.readResourceLocation());
+		int o = buf.readVarInt();
+		for (int i = 0; i < o; i++) m.off.add(buf.readResourceLocation());
 		return m;
 	}
 

@@ -29,7 +29,9 @@ import java.util.function.Supplier;
 /**
  * The effect screen (11.2): flat bonuses (read only), then the slots side by side with a progress bar under them (G5c). Active slots: fill (free, lands in the
  * lowest empty active slot), level change (free), change effect and drop (paid, through the confirm panel). Grayed
- * slots show their stored choice and are read only. While paused, every action is disabled and PAUSED shows.
+ * slots show their stored choice and are read only. A toggle effect (3.3) has an on/off switch instead of a level change:
+ * a click on its flat icon, or the slot's On/Off button. Hover text carries the ladder's tagline. While paused, every
+ * action is disabled and PAUSED shows.
  */
 public class EffectScreen extends Screen {
 	private static final int MIN_W = 276, CELL_MAX = 92, CELL_H = 90, BAR_H = 5;
@@ -43,6 +45,9 @@ public class EffectScreen extends Screen {
 	private final List<Runnable> hoverTips = new ArrayList<>();
 	/** Buttons with a hover tooltip (Change and Drop: how many foods age out, plan_diet_books.md 1.10). */
 	private final List<TipButton> tipButtons = new ArrayList<>();
+	/** The flat icons' left edges this frame, in {@code S2CState.flat} order (clicks switch toggle effects). */
+	private final List<Integer> flatXs = new ArrayList<>();
+	private final List<ResourceLocation> flatIds = new ArrayList<>();
 
 	public EffectScreen() {
 		super(Component.translatable("solraspberrypie.screen.title"));
@@ -121,13 +126,19 @@ public class EffectScreen extends Screen {
 				}));
 				continue;
 			}
-			int max = Math.max(ladder.unlockedLevel(c.effect(), s.maxDiversity), c.level());
-			Button minus = new Button(cx - 19, y + 48, 18, 18, Component.literal("-"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() - 1));
-			minus.active = c.level() > 1;
-			Button plus = new Button(cx + 1, y + 48, 18, 18, Component.literal("+"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() + 1));
-			plus.active = c.level() < max && c.level() < ladder.unlockedLevel(c.effect(), s.maxDiversity);
-			addRenderableWidget(minus);
-			addRenderableWidget(plus);
+			if (ladder.isToggle(c.effect())) {
+				boolean on = !s.off.contains(c.effect());
+				addRenderableWidget(new Button(cx - 19, y + 48, 38, 18, Component.translatable(on ? "solraspberrypie.screen.on" : "solraspberrypie.screen.off"),
+						b -> send(C2SAction.Op.TOGGLE, slot, c.effect(), c.level())));
+			} else {
+				int max = Math.max(ladder.unlockedLevel(c.effect(), s.maxDiversity), c.level());
+				Button minus = new Button(cx - 19, y + 48, 18, 18, Component.literal("-"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() - 1));
+				minus.active = c.level() > 1;
+				Button plus = new Button(cx + 1, y + 48, 18, 18, Component.literal("+"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() + 1));
+				plus.active = c.level() < max && c.level() < ladder.unlockedLevel(c.effect(), s.maxDiversity);
+				addRenderableWidget(minus);
+				addRenderableWidget(plus);
+			}
 			int bw = Math.min(44, (cell - 8) / 2);
 			tipButtons.add(addRenderableWidget(new TipButton(cx - bw - 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.change"), b -> {
 				mode = Mode.PICK_CHANGE;
@@ -226,12 +237,25 @@ public class EffectScreen extends Screen {
 		drawString(pose, font, flatLabel, left + 8, top + 44, 0xFFD27F);
 		int fx = left + 8 + font.width(flatLabel) + 14;
 		if (s.flat.isEmpty()) drawString(pose, font, Component.translatable("solraspberrypie.screen.none"), fx, top + 44, 0x777777);
+		flatXs.clear();
+		flatIds.clear();
 		for (Map.Entry<ResourceLocation, Integer> e : s.flat.entrySet()) {
-			fill(pose, fx - 1, top + 39, fx + 19, top + 59, 0xFF8A6D1E);
-			Icons.effect(pose, e.getKey(), fx, top + 40);
+			ResourceLocation id = e.getKey();
+			boolean toggle = ladder.isToggle(id), off = s.off.contains(id);
+			fill(pose, fx - 1, top + 39, fx + 19, top + 59, off ? 0xFF4A3D1E : 0xFF8A6D1E);
+			if (off) RenderSystem.setShaderColor(0.35F, 0.35F, 0.35F, 1F);
+			Icons.effect(pose, id, fx, top + 40);
+			RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
+			if (toggle) fill(pose, fx + 1, top + 57, fx + 17, top + 58, off ? 0xFFCC4444 : 0xFF44CC44);
+			flatXs.add(fx);
+			flatIds.add(id);
 			if (in(mouseX, mouseY, fx, top + 40, 18, 18)) {
-				Component name = DietEngine.effectName(e.getKey(), e.getValue());
-				hoverTips.add(() -> renderComponentTooltip(pose, List.of(name, Component.translatable("solraspberrypie.screen.flat_tip").withStyle(ChatFormatting.GOLD)), mouseX, mouseY));
+				List<Component> tip = new ArrayList<>();
+				tip.add(DietEngine.effectName(id, e.getValue()));
+				addTagline(tip, ladder, id, e.getValue());
+				tip.add(Component.translatable("solraspberrypie.screen.flat_tip").withStyle(ChatFormatting.GOLD));
+				if (toggle) addToggleState(tip, off, !s.paused && mode == Mode.SLOTS);
+				hoverTips.add(() -> renderComponentTooltip(pose, tip, mouseX, mouseY));
 			}
 			fx += 22;
 		}
@@ -263,14 +287,16 @@ public class EffectScreen extends Screen {
 			fill(pose, x + 1, y, x + cell - 1, y + CELL_H, active ? 0xFF2E3A2E : 0xFF2A2A2A);
 			drawCenteredString(pose, font, Component.translatable("solraspberrypie.screen.slot", i + 1), cx, y + 3, active ? 0x88AA88 : 0x666666);
 			fill(pose, cx - 10, y + 13, cx + 10, y + 33, 0xFF111111);
+			boolean off = c != null && s.off.contains(c.effect());
 			if (c != null) {
 				if (!active || s.paused) RenderSystem.setShaderColor(0.4F, 0.4F, 0.4F, 1F);
+				else if (off) RenderSystem.setShaderColor(0.35F, 0.35F, 0.35F, 1F);
 				Icons.effect(pose, c.effect(), cx - 9, y + 14);
 				RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			}
 			Component name = c != null ? DietEngine.effectName(c.effect(), c.level()) : Component.translatable("solraspberrypie.screen.empty");
 			boolean covered = c != null && active && s.flat.containsKey(c.effect());
-			int color = !active ? 0x777777 : covered ? 0xFFFF55 : 0xFFFFFF;
+			int color = !active ? 0x777777 : covered ? 0xFFFF55 : off ? 0xAAAAAA : 0xFFFFFF;
 			String shown = font.plainSubstrByWidth(name.getString(), cell - 6);
 			drawString(pose, font, shown, cx - font.width(shown) / 2, y + 37, color);
 			if (in(mouseX, mouseY, x + 1, y, cell - 2, 46)) {
@@ -278,7 +304,11 @@ public class EffectScreen extends Screen {
 				Component sub = active ? (covered ? Component.translatable("solraspberrypie.screen.covered")
 						: Component.translatable("solraspberrypie.widget.slot", i + 1, Icons.num(r.threshold)))
 						: Component.translatable("solraspberrypie.screen.greyed", i + 1, Icons.num(r.threshold));
-				List<Component> tip = List.of(name, sub.copy().withStyle(active ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+				List<Component> tip = new ArrayList<>();
+				tip.add(name);
+				if (c != null) addTagline(tip, ladder, c.effect(), c.level());
+				tip.add(sub.copy().withStyle(active ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+				if (c != null && ladder.isToggle(c.effect())) addToggleState(tip, off, false);
 				hoverTips.add(() -> renderComponentTooltip(pose, tip, mouseX, mouseY));
 			}
 		}
@@ -330,6 +360,7 @@ public class EffectScreen extends Screen {
 			if (in(mouseX, mouseY, x, y, 22, 22)) {
 				List<Component> tip = new ArrayList<>();
 				tip.add(DietEngine.effectName(id, lvl));
+				addTagline(tip, ladder, id, lvl);
 				if (mode == Mode.PICK_CHANGE) tip.add(Component.translatable("solraspberrypie.screen.change_cost").withStyle(ChatFormatting.RED));
 				else tip.add(Component.translatable("solraspberrypie.screen.free").withStyle(ChatFormatting.GREEN));
 				hoverTips.add(() -> renderComponentTooltip(pose, tip, mouseX, mouseY));
@@ -377,6 +408,36 @@ public class EffectScreen extends Screen {
 			drawString(pose, font, preview.lines.get(i), left + 14, y, preview.yellow.get(i) ? 0xFFFF55 : 0xFF5555);
 			y += 10;
 		}
+	}
+
+	/** A click on a toggle effect's flat icon switches it (3.3); free, like the slot's On/Off button. */
+	@Override
+	public boolean mouseClicked(double mx, double my, int button) {
+		if (button == 0 && mode == Mode.SLOTS && ClientState.ready() && !ClientState.state.paused) {
+			for (int i = 0; i < flatXs.size(); i++) {
+				ResourceLocation id = flatIds.get(i);
+				if (ClientState.ladder.isToggle(id) && in((int) mx, (int) my, flatXs.get(i), top + 40, 18, 18)) {
+					Minecraft.getInstance().getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+							net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1F));
+					send(C2SAction.Op.TOGGLE, -1, id, 0);
+					return true;
+				}
+			}
+		}
+		return super.mouseClicked(mx, my, button);
+	}
+
+	/** The ladder's hover tagline for an effect at a level (3.3), gray, when it has one. */
+	public static void addTagline(List<Component> tip, Ladder ladder, ResourceLocation id, int level) {
+		String key = ladder.tagline(id, level);
+		if (key != null) tip.add(Component.translatable(key).withStyle(ChatFormatting.GRAY));
+	}
+
+	/** "Switched on" / "Switched off" for a toggle effect, and the click hint where a click switches it. */
+	public static void addToggleState(List<Component> tip, boolean off, boolean clickable) {
+		tip.add(Component.translatable(off ? "solraspberrypie.toggle.off" : "solraspberrypie.toggle.on")
+				.withStyle(off ? ChatFormatting.RED : ChatFormatting.GREEN));
+		if (clickable) tip.add(Component.translatable("solraspberrypie.toggle.click").withStyle(ChatFormatting.DARK_GRAY));
 	}
 
 	private static boolean in(int mx, int my, int x, int y, int w, int h) {

@@ -35,7 +35,9 @@ import java.util.Set;
  * Reads serverconfig/solraspberrypie/ladder.json once at server start (3), seeding it from
  * defaultconfigs/solraspberrypie/ladder.json or the built-in default. Applies the validation table (3.3):
  * unregistered effects and attributes are skipped (one warning listing them), unusable unlocks dropped, levels clamped,
- * refresh-unsafe effects refused, a broken file falls back to the built-in default with a loud error.
+ * refresh-unsafe effects refused, a broken file falls back to the built-in default with a loud error. Optional fields
+ * (raspberry_pie.md 3.3): {@code "toggle": "on"|"off"} on a pool entry or a flat rung makes that effect a toggle (on or off
+ * by default), {@code "tagline": "<lang key>"} on a flat or unlock rung names its hover tagline.
  */
 public final class LadderLoader {
 	private static final String BUILT_IN = "/solraspberrypie/default_ladder.json";
@@ -99,6 +101,8 @@ public final class LadderLoader {
 		int firstOwn = warnings.size();
 
 		Map<ResourceLocation, Integer> pool = new LinkedHashMap<>();
+		Map<ResourceLocation, Boolean> toggles = new LinkedHashMap<>();
+		Map<ResourceLocation, Boolean> flatToggles = new LinkedHashMap<>();
 		for (JsonElement el : arr(root, "pool")) {
 			JsonObject o = el.getAsJsonObject();
 			ResourceLocation id = new ResourceLocation(o.get("effect").getAsString());
@@ -113,6 +117,8 @@ public final class LadderLoader {
 				continue;
 			}
 			pool.put(id, cap);
+			Boolean t = toggle(o, "pool " + id, warnings);
+			if (t != null) toggles.put(id, t);
 		}
 
 		List<Rung> rungs = new ArrayList<>();
@@ -144,7 +150,14 @@ public final class LadderLoader {
 							warnings.add("V10: flat " + id + " at " + t + " cannot be refreshed safely; skipped");
 							continue;
 						}
-						rungs.add(new Rung(Rung.Kind.FLAT, t, id, 0, level));
+						rungs.add(new Rung(Rung.Kind.FLAT, t, id, 0, level, tagline(o)));
+						Boolean tg = toggle(o, "flat " + id + " at " + t, warnings);
+						if (tg != null) {
+							Boolean before = flatToggles.put(id, tg);
+							if (before != null && !before.equals(tg)) {
+								warnings.add("toggle: flat " + id + " is 'on' in one rung and 'off' in another; the later rung wins");
+							}
+						}
 					} else {
 						Integer cap = pool.get(id);
 						if (cap == null) {
@@ -155,14 +168,21 @@ public final class LadderLoader {
 							warnings.add("V5: unlock " + id + " level " + level + " at " + t + " is above the pool cap " + cap + "; clamped");
 							level = cap;
 						}
-						rungs.add(new Rung(Rung.Kind.UNLOCK, t, id, 0, level));
+						rungs.add(new Rung(Rung.Kind.UNLOCK, t, id, 0, level, tagline(o)));
 					}
 				}
 				default -> warnings.add("unknown rung type '" + type + "' at " + t + "; skipped");
 			}
 		}
 
-		Ladder ladder = new Ladder(rungs, pool);
+		flatToggles.forEach((id, on) -> {
+			Boolean pooled = toggles.put(id, on);
+			if (pooled != null && !pooled.equals(on)) {
+				warnings.add("toggle: " + id + " is '" + (pooled ? "on" : "off") + "' in the pool and '" + (on ? "on" : "off")
+						+ "' as a flat rung; the flat rung's default is used");
+			}
+		});
+		Ladder ladder = new Ladder(rungs, pool, toggles);
 
 		// V4: pool effects nobody can unlock.
 		for (ResourceLocation id : pool.keySet()) {
@@ -203,6 +223,20 @@ public final class LadderLoader {
 			SolRaspberryPie.LOG.warn("Diet ladder ({}): {}", source, w);
 		}
 		return ladder;
+	}
+
+	/** The optional "toggle" field: "on" or "off" (the default state), null when absent. */
+	private static Boolean toggle(JsonObject o, String what, List<String> warnings) {
+		if (!o.has("toggle")) return null;
+		String v = o.get("toggle").getAsString().toLowerCase(Locale.ROOT);
+		if (v.equals("on")) return Boolean.TRUE;
+		if (v.equals("off")) return Boolean.FALSE;
+		warnings.add("toggle: " + what + " has toggle '" + v + "' (expected \"on\" or \"off\"); read as on");
+		return Boolean.TRUE;
+	}
+
+	private static String tagline(JsonObject o) {
+		return o.has("tagline") ? o.get("tagline").getAsString() : null;
 	}
 
 	public static boolean refreshUnsafe(MobEffect effect) {

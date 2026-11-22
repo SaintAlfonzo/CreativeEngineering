@@ -76,6 +76,7 @@ public final class RpCommands {
 			data.gateOpened = false;
 			data.slots.clear();
 			data.drinks.clear();
+			data.toggles.clear();
 			data.regenAnchor = -1;
 			data.stamp++;
 			CapabilityHandler.syncFoodList(p);

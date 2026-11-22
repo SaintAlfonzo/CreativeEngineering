@@ -27,7 +27,8 @@ import java.util.Map;
  * Player slot actions (5). Free: fill an empty active slot (lands in the lowest empty active slot) and change a slot's
  * level. Paid, through a confirm panel: change a slot's effect (ages out the oldest foods of the decay window) and drop
  * a slot (ages out oldest foods until the highest active slot is lost; active choices above shift down). Grayed slots
- * are read only. Everything is refused while the player is paused (12.3).
+ * are read only. A toggle effect the player has is switched on and off for free (3.3). Everything is refused while the
+ * player is paused (12.3).
  */
 public final class SlotActions {
 
@@ -59,6 +60,14 @@ public final class SlotActions {
 				int max = Math.max(ladder.unlockedLevel(c.effect(), d.maxDiversity), 0);
 				if (a.level > max) break;
 				d.slots.set(a.slot, new SlotChoice(c.effect(), a.level));
+				DietEngine.evaluate(player, false);
+			}
+			case TOGGLE -> {
+				// 3.3: a toggle effect the player has (flat, or in an active slot) is switched on or off; nothing is paid.
+				if (a.effect == null || !ladder.isToggle(a.effect)) break;
+				boolean granted = s.flat.containsKey(a.effect) || s.slotEffects.containsKey(a.effect);
+				if (!granted) break;
+				d.toggles.put(a.effect, !d.isOn(ladder, a.effect));
 				DietEngine.evaluate(player, false);
 			}
 			case PREVIEW_CHANGE, PREVIEW_DROP -> {
@@ -187,7 +196,7 @@ public final class SlotActions {
 		Sim sim = new Sim();
 		sim.slot = a.slot;
 		sim.before = FoodWindow.diversity(original);
-		sim.sBefore = DietEngine.compute(ladder, sim.before, eaten, d.slots);
+		sim.sBefore = DietEngine.compute(ladder, sim.before, eaten, d.slots, DietEngine.switchedOn(ladder, d));
 		sim.slots = new ArrayList<>(d.slots);
 
 		if (change) {
@@ -205,7 +214,7 @@ public final class SlotActions {
 			sim.slots.set(active - 1, null);
 		}
 		sim.after = FoodWindow.diversity(sim.memory);
-		sim.sAfter = DietEngine.compute(ladder, sim.after, eaten, sim.slots);
+		sim.sAfter = DietEngine.compute(ladder, sim.after, eaten, sim.slots, DietEngine.switchedOn(ladder, d));
 		return sim;
 	}
 

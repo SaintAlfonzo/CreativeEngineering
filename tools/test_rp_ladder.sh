@@ -2,7 +2,8 @@
 # Offline checks for Raspberry Pie standing alone (feature_writeup/plan_rp_standalone.md P2 to P4): RpStandaloneTest parses
 # the built-in default ladder on vanilla registries (no warning, V12 included; the ruled shape), checks the diversity table merge
 # rules, loads the pack table (development/creativeDelight/src/main/resources/solraspberrypie/diversity) and applies
-# the lang name overrides. Runs against
+# the lang name overrides; P7 the ladder toggle and tagline fields and the generated pack ladder (also checked for staleness
+# against tools/gen_rp_ladder.py). Runs against
 # development/solRaspberryPie build/classes (./gradlew :solRaspberryPie:compileJava --offline first). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -18,4 +19,5 @@ javac -proc:none -nowarn -cp "$CP" -d "$T/stub" tools/structure_groups_test/net/
 javac -proc:none -nowarn -cp "$T/stub:$CP" -d "$T/test" tools/rp_test/com/SaintAlfonzo/solraspberrypie/*/*.java 2>&1 | grep -v 'warning\|unchecked\|deprecat\|Unsafe' || true
 java -cp "$T/stub:$T/test:$CP" com.SaintAlfonzo.solraspberrypie.ladder.RpStandaloneTest "$ROOT" > "$T/java.txt" 2>&1 || true
 grep -E '^(ok|FAIL|note|ALL|[0-9]+ FAILED)|^     warning|Exception|Error' "$T/java.txt" || true
+python3 "$ROOT/tools/gen_rp_ladder.py" --check
 grep -q '^ALL [0-9]* OK' "$T/java.txt" # a FAIL line or a crash fails the script

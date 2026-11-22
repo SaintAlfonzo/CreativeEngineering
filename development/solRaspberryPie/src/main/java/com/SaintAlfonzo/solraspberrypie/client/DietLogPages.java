@@ -52,6 +52,11 @@ import java.util.TreeSet;
  */
 public final class DietLogPages {
 	static final int HEALTH = 0xFFD03030, ATTRIBUTE = 0xFF4060C0, SLOT = 0xFF20A0A0, FLAT = 0xFFC09020, UNLOCK = 0xFF9040C0, GREY = 0xFFA0A0A0;
+	/**
+	 * The Ladder bar's "<" (milestones before the window) and ">" (highest diversity past it) colors; a milestone tick
+	 * on the bar takes the "<" color once reached (past) and the ">" color before (future), scratchpad "rp changes".
+	 */
+	static final int ARROW_PAST = 0x777777, ARROW_FUTURE = 0x7A3FA3;
 	private static final int ROWS_PER_PAGE = 11;
 	private static final int ICON = 9;
 	/** Bar window: the last milestone reached and the next four, or the first five (plan_diet_books.md 1.7). */
@@ -430,14 +435,22 @@ public final class DietLogPages {
 			GuiComponent.fill(pose, x0, barY, x1, barY + 4, 0xFF8A8A8A);
 			int filled = window.x(s.diversity, x0, x1);
 			GuiComponent.fill(pose, x0, barY, filled, barY + 4, 0xFF3FA34D);
+			// A tick per milestone on the bar: 2 px wide (a 1 px mark is lost at the 0.85 page scale), 1 px above and below
+			// the bar, so it stays shorter than the highest-diversity mark.
+			boolean gate = s.foodsEaten >= s.minFoods;
+			for (int i = 0; i < window.values().size(); i++) {
+				int px = window.pointX(i, x0, x1);
+				boolean past = gate && window.values().get(i) <= s.diversity;
+				GuiComponent.fill(pose, px - 1, barY - 1, px + 1, barY + 5, 0xFF000000 | (past ? ARROW_PAST : ARROW_FUTURE));
+			}
 			if (window.contains(s.maxDiversity)) {
 				// 2 px wide, 3 px above and below the bar: at the 0.85 page scale a 1 px mark was lost at many positions.
 				int maxX = window.x(s.maxDiversity, x0, x1);
 				GuiComponent.fill(pose, maxX - 1, barY - 3, maxX + 1, barY + 7, 0xFF7A3FA3);
 			} else if (s.maxDiversity > window.hi()) {
-				fontRenderer.draw(pose, ">", x1 + 2, barY - 2, 0x7A3FA3);
+				fontRenderer.draw(pose, ">", x1 + 2, barY - 2, ARROW_FUTURE);
 			}
-			if (window.before()) fontRenderer.draw(pose, "<", x0 - 7, barY - 2, 0x777777);
+			if (window.before()) fontRenderer.draw(pose, "<", x0 - 7, barY - 2, ARROW_PAST);
 			if (window.after()) fontRenderer.draw(pose, "...", x1 - fontRenderer.width("...") / 2, barY + 16, 0x777777);
 			if (window.origin()) fontRenderer.draw(pose, "0", x0, barY + 7, 0x777777);
 			for (int i = 0; i < window.values().size(); i++) {

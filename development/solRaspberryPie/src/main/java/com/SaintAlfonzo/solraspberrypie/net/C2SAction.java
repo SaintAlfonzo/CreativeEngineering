@@ -8,9 +8,9 @@ import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-/** A slot action from the effect screen (5.2). PREVIEW_* asks for a confirm panel; CONFIRM_* carries its state stamp. */
+/** A slot action from the effect screen (5.2), or TOGGLE (switch a toggle effect, 3.3). PREVIEW_* asks for a confirm panel; CONFIRM_* carries its state stamp. */
 public final class C2SAction {
-	public enum Op { FILL, LEVEL, PREVIEW_CHANGE, PREVIEW_DROP, CONFIRM_CHANGE, CONFIRM_DROP }
+	public enum Op { FILL, LEVEL, PREVIEW_CHANGE, PREVIEW_DROP, CONFIRM_CHANGE, CONFIRM_DROP, TOGGLE }
 
 	public final Op op;
 	public final int slot;
