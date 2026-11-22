@@ -51,14 +51,16 @@ R.shaped(i.doormat, ['SS'], { S: i.straw }, e, 'doormat_from_straw')
 
 // Sand and red sand layers: 1 block <-> 9 layers, lossless with the 9th layer that turns a full pile of 8 into the
 // block (surface/SurfaceLayers; upstream 3 sand -> 6 layers, 4 layers -> 1 sand)
-R.remove({id: 'immersive_weathering:sand_layer_block'}, e)
-R.remove({id: 'immersive_weathering:sand_from_sand_layer'}, e)
-R.remove({id: 'immersive_weathering:red_sand_layer_block'}, e)
-R.remove({id: 'immersive_weathering:red_sand_from_red_sand_layer'}, e)
-R.shapeless(Item.of(i.sand_layer_block, 9), [i.sand], e, 'sand_layers_from_sand')
-R.shaped(i.sand, ['LLL', 'LLL', 'LLL'], { L: i.sand_layer_block }, e, 'sand_from_sand_layers')
-R.shapeless(Item.of(i.red_sand_layer_block, 9), [i.red_sand], e, 'red_sand_layers_from_red_sand')
-R.shaped(i.red_sand, ['LLL', 'LLL', 'LLL'], { L: i.red_sand_layer_block }, e, 'red_sand_from_red_sand_layers')
+if (Platform.isLoaded('immersive_weathering')) {
+	R.remove({id: 'immersive_weathering:sand_layer_block'}, e)
+	R.remove({id: 'immersive_weathering:sand_from_sand_layer'}, e)
+	R.remove({id: 'immersive_weathering:red_sand_layer_block'}, e)
+	R.remove({id: 'immersive_weathering:red_sand_from_red_sand_layer'}, e)
+	R.shapeless(Item.of(i.sand_layer_block, 9), [i.sand], e, 'sand_layers_from_sand')
+	R.shaped(i.sand, ['LLL', 'LLL', 'LLL'], { L: i.sand_layer_block }, e, 'sand_from_sand_layers')
+	R.shapeless(Item.of(i.red_sand_layer_block, 9), [i.red_sand], e, 'red_sand_layers_from_red_sand')
+	R.shaped(i.red_sand, ['LLL', 'LLL', 'LLL'], { L: i.red_sand_layer_block }, e, 'red_sand_from_red_sand_layers')
+}
 
 // Fodder
 //Replace flax bale w/ rice and straw bale

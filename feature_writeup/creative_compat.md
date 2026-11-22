@@ -34,7 +34,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   Stick and Cozy's Improved Cats, [cozy_cats.md](cozy_cats.md) 10) with 5 more gated common mixins (DiFeatherEntity,
   FishingHookFeatherPull, CatCozyCommand, CozyHomeGoalFeather, CozyMessageGender) and a new `[cats]` config table
   (not carried from the old file).
-- **Mixins:** `creativecompat.mixins.json`, 32 common + 14 client (2026-11-07: `XaeroAtlasColourMixin`, gated on `xaeroworldmap`, perf.md 18; 2026-11-04: the two client additions are `JetpackItemTooltipMixin`, gated on
+- **Mixins:** `creativecompat.mixins.json`, 86 common + 62 client (counted from the jar's list 2026-11-22; SQ-CMP-01 compares the list to what applies instead of a typed count; per-change counts in the history; 2026-11-07: `XaeroAtlasColourMixin`, gated on `xaeroworldmap`, perf.md 18; 2026-11-04: the two client additions are `JetpackItemTooltipMixin`, gated on
   `create_dd`, and the ungated `FallingBlockWaterSplashMixin`, both from Common, member prefix `creativecompat$`), SRG names, `remap = false`, member prefixes still
   `creativeengineering$`. `compat/CompatMixinPlugin` (a `GatedMixinPlugin`) applies each only when its mod is loaded:
   an any-of table plus an all-of table (`NEEDS_ALL`) for the Polymorph pairs (with sophisticatedcore, IE, Pretty Pipes),
@@ -159,7 +159,7 @@ with two potions and read the WTHIT line; CMP-02 (campfire) moved to SQ-CFR / CQ
 and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors and a Bedspreads / Elytra banner.
 Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16; corpse screen sections
 SQ-CMP-17 and CQ-CMP-18 (screenshot look-check), -19, -20.
-Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md) 8, Compat 23c5050d): SQ-CMP-03 to -08, -11 to -13 PASS; SQ-CMP-01 BATCH-FAULT (expected mixin count, owner); sand-layer recipes without Immersive Weathering FAIL (SQ-CC-03, SQ-CC12-02, SQ-CPP-05, TODO `blockrunner #18`).
+Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md) 8, Compat 23c5050d): SQ-CMP-03 to -08, -11 to -13 PASS; SQ-CMP-01 BATCH-FAULT (typed mixin count; fixed 2026-11-22, `cmp_mixin_check.py`); sand-layer recipes without Immersive Weathering FAIL (SQ-CC-03, SQ-CC12-02, SQ-CPP-05, TODO `blockrunner #18`; guarded 2026-11-22, rerun after the Compat rebuild).
 
 ## 5. History
 

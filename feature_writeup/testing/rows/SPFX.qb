@@ -7,6 +7,7 @@
 @@date 2026-11-06
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/testing/scratch_run_2026-11-06.md
+@@prep A: boot=2: modset spfx_noip
 @@text
 @@text Not run. Targets the builds of 2026-11-06 22:07-22:09 (all ten Creative jars rebuilt: Common's
 @@text `ChunkMapPortalsVisibilityMixin` and NCH empty-fluid check, Equipment's `packs/felsic_gear+nullscape/`, Worldgen's
@@ -17,8 +18,8 @@
 @@table
 ## SQ-SPFX-01
 @group A
-@commands full pack with `immersive-portals-2.3.7`, `portalgun`, `portalgels` kept in srv/mods; boot; `grep -E "Immersive Portals overwrites conform\|MixinChunkMap_C" logs/latest.log logs/debug.log \| head`; then a second boot with Immersive Portals and Portal Gun moved out
-@pass first boot reaches `Done (` (world created), one `[compat] Immersive Portals overwrites conform to target visibility` line, one `Static binding violation ... m_183760_ in imm_ptl.mixins.json:common.chunk_sync.MixinChunkMap_C` WARN, no `Mixin apply failed ... MixinChunkMap_C`; second boot: no `[compat] Immersive Portals` line, Done
+@commands full pack with `immersive-portals-2.3.7`, `portalgun`, `portalgels` kept in srv/mods; boot; `grep -E "Immersive Portals overwrites conform\|MixinChunkMap_C" logs/latest.log logs/debug.log \| head`; the second boot without them is SQ-SPFX-01b
+@pass first boot reaches `Done (` (world created), one `[compat] Immersive Portals overwrites conform to target visibility` line, one `Static binding violation ... m_183760_ in imm_ptl.mixins.json:common.chunk_sync.MixinChunkMap_C` WARN, no `Mixin apply failed ... MixinChunkMap_C`
 @fails `[compat] imm_ptl.mixins.json not found` / `could not set conformVisibility` (Mixin internals differ); IP outside `[2.3.7,2.4)` (one "outside the tested range" warning); another IP overwrite clashes with an access transformer (read the crash: the method name). Rewritten 2026-11-07 for the acceptTargets fix (the preApply fix FAILED r1106spfx)
 @reviewed 2026-11-16
 bootexpect Done \(
@@ -26,7 +27,20 @@ bootreject Mixin apply failed.*MixinChunkMap_C
 bootreject imm_ptl\.mixins\.json not found|could not set conformVisibility
 shell test "$(cat logs/latest.log logs/debug.log 2>/dev/null | grep -c "Immersive Portals overwrites conform to target visibility")" -ge 1 && echo "conform line present"
 shell grep -hE "Immersive Portals overwrites conform|MixinChunkMap_C|outside the tested range" logs/latest.log logs/debug.log 2>/dev/null | head -6 | cut -c1-240; true
-look one conform line and one Static binding violation WARN naming m_183760_ in MixinChunkMap_C; the second boot (Immersive Portals and Portal Gun moved out of srv/mods) is a separate boot: Done and no [compat] Immersive Portals line (bootreject on that boot)
+shell grep -h "Static binding violation" logs/latest.log logs/debug.log 2>/dev/null | grep -c "m_183760_"; test "$(grep -h "Static binding violation" logs/latest.log logs/debug.log 2>/dev/null | grep -c "m_183760_")" -ge 1
+# 2026-11-22: the second boot (Immersive Portals and Portal Gun out) is SQ-SPFX-01b, boot 2 of this step (@@prep A: boot=2: modset spfx_noip)
+
+## SQ-SPFX-01b | second boot without Immersive Portals and Portal Gun
+@group A
+@commands second boot of the SQ-SPFX-01 server with `@@prep A: boot=2:` `modset spfx_noip` (full pack, Immersive Portals and Portal Gun out of srv/mods, world kept); `grep -c "\[compat\] Immersive Portals" logs/latest.log`
+@pass boot 2 reaches `Done (`; no `[compat] Immersive Portals` line; no `Mixin apply failed`; neither jar in srv/mods
+@fails the Immersive Portals conform step runs without the mod (gate in Common's `ChunkMapPortalsVisibilityMixin` / compat plugin)
+@reviewed 2026-11-22
+@boot 2
+bootexpect Done \(
+bootreject \[compat\] Immersive Portals
+bootreject Mixin apply failed
+shell ! ls mods | grep -qiE "immersive-portals|portalgun"
 ## SQ-SPFX-02 | horror lasagna sequenced assembly in the full pack
 @group A
 @commands full pack: `/cdevtest rdetail horror_lasagna_sequenced_assembly`; `grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log \| grep -iE "error\|fail"`; spout + deployer rig is CQ-SPFX-01
@@ -44,7 +58,7 @@ look the step lines: the filling step names create_central_kitchen:tomato_sauce 
 
 ## SQ-SPFX-03
 @group A + chain
-@commands (a) full pack with `tools/scratch_query/nch_empty_fluid_probe.js` copied to `srv/kubejs/server_scripts/zz_nch_probe.js`: `grep "\[zqnch\]" logs/latest.log`; `grep -c "zz_probe_empty_fluid" logs/kubejs/server.log`; (b) port chain p1 (`tools/scratch_query/batches/r1106cbp/run_boots.sh '^p1$'` with the 22:07 Common, CD, CB copied into CEPortTesting): `grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log`
+@commands (a) full pack with `tools/scratch_query/nch_empty_fluid_probe.js` copied to `srv/kubejs/server_scripts/zz_nch_probe.js`: `grep "\[zqnch\]" logs/latest.log`; `grep -c "zz_probe_empty_fluid" logs/kubejs/server.log`; (b) is SQ-SPFX-03b
 @pass (a) `[zqnch] zz_probe_empty_fluid: skipped (... minecraft:empty ...)`, `[zqnch] zz_probe_good: built`, no `Error parsing recipe` naming `zz_probe` and no loose `create:kjs_` filling recipe; (b) no `Error parsing recipe ...horror_lasagna`, `with 0 failed recipes`
 @fails `NCH._stepJsonHasEmptyFluid` (step `serialize()` / `json` not reachable in kubejs 1902.6: print `step.json` in the probe); `dropSteps` (newRecipe)
 @reviewed 2026-11-16
@@ -57,7 +71,22 @@ expect verb=recipes text=zz_probe n=1 shown=1
 expect verb=recipes id=\S+zz_probe_good
 reject \[cdevtest\] .*done=0
 shell echo "zz_probe_empty_fluid lines: $(grep -c zz_probe_empty_fluid logs/kubejs/server.log)"
-look the create:kjs_ and zz_probe recipe lines: no loose create:kjs_ filling recipe from the probe, zz_probe_good present; (b) the port chain p1 half (run_boots.sh '^p1$' in batches/r1106cbp: no Error parsing recipe ...horror_lasagna, "with 0 failed recipes") is a chain boot of its own
+shell test "$(grep -c zz_probe_empty_fluid logs/kubejs/server.log)" -le 1
+# 2026-11-22: half (b), the port chain p1 boot, is SQ-SPFX-03b
+
+## SQ-SPFX-03b | horror lasagna parses on the port chain (p1)
+@group chain
+@commands boot the port chain (`@modset port_chain chain`, was `run_boots.sh '^p1$'`); `grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log`; `grep -h "failed recipes" logs/kubejs/server.log logs/latest.log`
+@pass no `Error parsing recipe ...horror_lasagna`; `with 0 failed recipes`
+@fails `NCH._stepJsonHasEmptyFluid` on the chain (kubejs-create `Either` values; see SQ-CBP-03b)
+@reviewed 2026-11-22
+@modset port_chain chain +creativedevtools-*.jar
+bootexpect Done \(
+bootreject Error parsing recipe .*horror_lasagna
+bootexpect with 0 failed recipes
+> cdevtest recipes horror_lasagna
+expect verb=recipes text=horror_lasagna n=
+reject \[cdevtest\] .*done=0
 ## SQ-SPFX-04
 @group chain + A
 @commands (a) p6 (Equipment, no Felsic Gear, no CB); (b) p6f (+ Felsic Gear, no Nullscape): `grep -h "mod data packs on\|Error parsing recipe\|Unbound values" logs/latest.log logs/kubejs/*.log`; (c) full pack B world: `/execute in minecraft:the_end run locate biome nullscape:crystal_peaks`, tp there, `/zq count` the felsic ore block over 4 chunks

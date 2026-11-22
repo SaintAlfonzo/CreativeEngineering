@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# SQ-SPFX-01b (2026-11-22): the full pack with Immersive Portals and Portal Gun taken out, for the second boot of SQ-SPFX
+# (`@@prep A: boot=2: modset spfx_noip`): kubejs and config stay the pack's, only srv/mods changes. Row specs:
+#   spfx_noip
+description = "Full pack without Immersive Portals and Portal Gun (second boot of SQ-SPFX-01)"
+source = "pack"
+kubejs = "pack"
+config = "pack"
+default = "noip"
+
+[variants.noip]
+drop = ["immersive-portals-*.jar", "portalgun-*.jar"]

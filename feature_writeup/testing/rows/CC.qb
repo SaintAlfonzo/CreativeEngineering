@@ -151,10 +151,11 @@ reject (Unknown or incomplete command|Incorrect argument for command|No player w
 @draft needs a world saved on the 2026-11-06 builds with a creativecommon:long_reach potion in a chest (an old-build boot first, then the swap); a fresh scratch world cannot hold the old string
 ## SQ-CC-10
 @group A (full pack)
-@commands Magic Resistance (bots are invulnerable FakePlayers: use NoAI cows; MCA replaces summoned villagers): `/effect give <mob> creativeengineering:magic_resistance 60 0` then `minecraft:poison 10 1` and `minecraft:wither 10 1`; compare damage taken with and without; Better Beacons: `batches/r1107cc/b1_phantom.qb` or `/zph N` (`cc_phantom_probe.js`), two bots on platforms at y 70 (above the superflat sea level 63), `spawn-monsters=true`
-@pass poison and wither ticks shortened under Magic Resistance, damage reduced (old SQ-EFX-02/-03); the second bot still gets phantoms with the first bot holding Phantom Bane
-@fails `effect/EffectRules`, `LivingEntityEffectRemapMixin`, Better Beacons mixin gate
-@reviewed 2026-11-16
+@commands Magic Resistance (bots are invulnerable FakePlayers: use NoAI cows; MCA replaces summoned villagers): `/effect give <mob> creativeengineering:magic_resistance 60 0` then `minecraft:poison 10 1` and `minecraft:wither 10 1`; compare damage taken with and without (the Better Beacons phantom half is SQ-CCO-10)
+@pass poison and wither ticks shortened under Magic Resistance, damage reduced (old SQ-EFX-02/-03)
+@fails `effect/EffectRules`, `LivingEntityEffectRemapMixin`
+@reviewed 2026-11-22
+# 2026-11-22: phantom half split out to SQ-CCO-10 (already a runnable row on the cc_only set); this row is the Magic Resistance half only
 # judge-4 r1118 (2026-11-18): villagers -> cows (MCA overwriteOriginalVillagers replaced them: No entity was found, entities n=0); cow 10 HP survives 160 ticks of Poison II / Wither II
 # judge-cc r1122cc (2026-11-22): cows -> iron golems: the prep_srv server has spawn-animals=false, so ServerLevel discards every Animal a tick after the summon (No entity was found, entities n=0; gotchas.md); golems survive, 100 HP, box ceiling raised for their height
 > forceload add 2384 2384 2416 2416
@@ -178,7 +179,7 @@ capture HMRW verb=entities type=minecraft:iron_golem .*health=([\d.]+) max=\S+ n
 capture HPLW verb=entities type=minecraft:iron_golem .*health=([\d.]+) max=\S+ name=plw
 shell python3 -c "import sys; print('poison', {HMRP}, 'vs', {HPLP}, 'wither', {HMRW}, 'vs', {HPLW}); sys.exit(0 if {HMRP} > {HPLP} and {HMRW} > {HPLW} else 1)"
 > kill @e[type=minecraft:iron_golem,x=2406,y=-59,z=2400,distance=..10]
-look the Better Beacons phantom half (a second bot still gets phantoms beside a Phantom Bane holder) stays in batches/r1107cc/b1_phantom.qb (cc_phantom_probe.js, night, spawn-monsters)
+# the Better Beacons phantom half (a second bot still gets phantoms beside a Phantom Bane holder) is SQ-CCO-10 (/zph, PASS 2026-11-22)
 reject \[cdevtest\] .*done=0
 
 ## SQ-CC-11

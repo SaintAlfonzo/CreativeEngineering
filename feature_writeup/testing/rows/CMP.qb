@@ -17,14 +17,15 @@
 @@table
 ## SQ-CMP-01 | Compat loads, mixins apply once
 @group A
-@commands `grep -E "\[creativecompat\]\|creativecompat.mixins.json" logs/latest.log`; `grep -c "from creativecompat.mixins.json" logs/debug.log`
-@pass Compat core line; no mixin apply error; the 27 common mixins apply on the server (minus any whose mod is absent)
+@commands `grep -E "\[creativecompat\]\|creativecompat.mixins.json" logs/latest.log`; `grep -c "from creativecompat.mixins.json" logs/debug.log`; `python3 $INST/tools/scratch_query/cmp_mixin_check.py` (listed vs applied, no count typed in)
+@pass Compat core line; no mixin apply error; every common mixin in the jar list applies on the server except those its gate skips (mod absent or out of range; `CompatMixinPlugin`); none applied twice or also from Creative Engineering
 @fails Jar missing, a gate id wrong in `CompatMixinPlugin`, or Creative Common still listing a moved mixin (applied twice)
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-22
 bootexpect \[creativecompat\] loaded \(config/
 bootreject creativecompat\.mixins\.json.*(Error|error|failed)
-shell grep -c "from creativecompat.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativecompat.mixins.json" logs/debug.log | sort -u | wc -l; grep -o "Mixing [A-Za-z_.]* from creativecompat.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > /tmp/cmp_mx.txt; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - /tmp/cmp_mx.txt | head; rm -f /tmp/cmp_mx.txt
-look up to 27 common mixins from creativecompat.mixins.json; none also from creativeengineering.mixins.json (the comm list above is empty)
+shell python3 $INST/tools/scratch_query/cmp_mixin_check.py
+# 2026-11-22: the typed 27 (and the writeup's 32) is gone: the jar lists 86 common mixins, 76 applied on the full pack, 10 skipped by gate (r1122cc); cmp_mixin_check.py compares the lists
 
 ## SQ-CMP-02 | config sections carried to the Compat file
 @group A
