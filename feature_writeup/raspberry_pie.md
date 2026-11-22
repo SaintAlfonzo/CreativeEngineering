@@ -1000,6 +1000,6 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   `lastDuration` (shadowed) and `applyEffectTick(LivingEntity, int)` (`m_6742_`, the injection point); otherwise one
   warning names what is missing and the fix is off. The injection keeps `require = 0`, and the handler runs in a try:
   a failure logs one warning, flags the fix off and hands every later tick back to Alex's Mobs' own code (the tick is
-  cancelled only after the per-entity logic succeeded). Tested with Alex's Mobs 1.21.1 (12.2). An Alex's Mobs update
+  canceled only after the per-entity logic succeeded). Tested with Alex's Mobs 1.21.1 (12.2). An Alex's Mobs update
   can only turn the fix off, never crash the boot or a tick.
 
