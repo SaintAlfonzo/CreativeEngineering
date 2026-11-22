@@ -104,7 +104,7 @@ LINTS = {
 	'todo_rows': (['python3', 'tools/todo.py', 'lint', '--changed'], ['feature_writeup/todo/', 'feature_writeup/briefs/',
 																	 'tools/todo.py', 'tools/todo_rows.py'], 2, False),
 }
-PATH_RE = re.compile(r'\b((?:development|kubejs|tools|data|config|configs_edited|generation_scripts)/[A-Za-z0-9_.\-/]+)')
+PATH_RE = re.compile(r'\b((?:development|kubejs|tools|data|config|configs_edited|generation_scripts|texturetools|textureswapper)/[A-Za-z0-9_.\-/]+)')
 
 
 def test_inputs(script):
@@ -118,6 +118,8 @@ def test_inputs(script):
 			p = '/'.join(parts[:3])
 		elif parts[0] == 'tools' and len(parts) >= 2:
 			p = '/'.join(parts[:2])
+		elif parts[0] in ('texturetools', 'textureswapper'):
+			p = parts[0]                            # the package and its shims, whole
 		paths.add(p)
 	return sorted(paths)
 

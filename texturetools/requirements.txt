@@ -1,0 +1,5 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# Pinned to the dev machine's versions (2026-11-22). core/ and cli/ need numpy and Pillow only; gui/ adds Kivy.
+numpy==1.26.4
+Pillow==9.0.1
+Kivy==2.3.0

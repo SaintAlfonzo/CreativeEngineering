@@ -34,6 +34,8 @@
 !/textureswapper/wooden_bucket/masks/
 /textureswapper/wooden_bucket/masks/*
 !/textureswapper/wooden_bucket/masks/derive_masks.py
+# Texture tools package and Kivy app (plan_texture_tools_gui.md): code, tests and packaging only, no images
+!/texturetools/
 !/.claude/
 
 # --- pack content ---
