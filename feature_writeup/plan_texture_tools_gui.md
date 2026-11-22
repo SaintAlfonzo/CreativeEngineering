@@ -1,11 +1,11 @@
 # Plan: Texture Tools GUI (Kivy)
 
-<!-- generated:status_index begin open_work sha1=a479e70f979b -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=73e76fa09019 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `texture-tooling #1` | Planned | none | Texture Tools GUI (Kivy): swap, combine, painter, editor, packaged for Linux |
+| `texture-tooling #1` | Testing | none | Texture Tools GUI (Kivy): swap, combine, painter, editor, packaged for Linux |
 <!-- generated:status_index end open_work -->
 
 Source: owner request (chat 2026-11-21). Supersedes the "three faults only" ruling R5 of
