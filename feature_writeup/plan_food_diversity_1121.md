@@ -168,7 +168,10 @@ At the high-and-feasts ceiling (72), with the falling density: 31 of 39 unlockab
 effects. Luck II moved before Invisibility so those two sit 3rd and 2nd highest as listed.
 
 **Open for the owner:**
-- O3 Build the new ladder: needs effect ids for the scratchpad's new effects (Leaf Piercing, Steady, Prickly, Magnet,
+- O3 ruled (owner, 2026-11-21): build the ladder now with the effects that exist (vanilla, `fruitsdelight:leaf_piercing`,
+  existing Creative Common effects); each missing effect gets its own TODO row, is built later in Creative Common and
+  fills its reserved rung. Effect slots stay, evenly spaced along the ladder. Original question:
+  O3 Build the new ladder: needs effect ids for the scratchpad's new effects (Leaf Piercing, Steady, Prickly, Magnet,
   Double Jump, the immunity groups, toggles), and whether effect slots stay and where.
 - O4 ruled 2026-11-21: permanent effects start at 25 (was 40 assumed).
 
