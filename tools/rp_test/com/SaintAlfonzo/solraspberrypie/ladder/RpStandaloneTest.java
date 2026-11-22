@@ -1,11 +1,14 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.ladder;
 
+import com.SaintAlfonzo.solraspberrypie.logic.Diversity;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.SharedConstants;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
+import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -17,7 +20,8 @@ import java.util.List;
  * Headless checks for Raspberry Pie standing alone (feature_writeup/plan_rp_standalone.md P2, tools/test_rp_ladder.sh):
  * the built-in default ladder parses on vanilla registries with no file warning (3.3 V1 to V10; V12 is reported), and has the ruled shape
  * (D2, D3, D10: ten unlocks at 10, 18, 26, 34, 43, 53, 63, 74, 86, 100; four slots at 10, 30, 55, 80; Apple Pie's
- * thresholds). Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
+ * thresholds); P3: the diversity tables merge (a later file wins), ids of absent mods are skipped, no table leaves
+ * Apple Pie's values, and the pack's Creative Delight table loads. Prints "ok ..." / "FAIL ..." lines and "ALL n OK" at the end.
  */
 public class RpStandaloneTest {
 	private static int ok, fail;
@@ -71,6 +75,24 @@ public class RpStandaloneTest {
 		List<String> badWarnings = new ArrayList<>();
 		LadderLoader.parse(bad, "test", badWarnings);
 		check(badWarnings.size() == 2 && badWarnings.get(0).startsWith("skipped 1 "), "a bad ladder still warns (skipped + V4): " + badWarnings);
+
+		// P3: table merge and optional ids.
+		JsonObject a = JsonParser.parseString("{\"values\":{\"minecraft:apple\":1.0,\"minecraft:carrot\":2.0,\"nomod:x\":3.0},"
+				+ "\"families\":{\"beef\":[\"minecraft:cooked_beef\",\"minecraft:beef\",\"nomod:y\"],\"gone\":[\"nomod:z\",\"minecraft:bread\"]}}").getAsJsonObject();
+		JsonObject b = JsonParser.parseString("{\"values\":{\"minecraft:apple\":5.0}}").getAsJsonObject();
+		Diversity.use(List.of(new Diversity.Source("a:a.json", a), new Diversity.Source("b:b.json", b)), ForgeRegistries.ITEMS::containsKey);
+		check(Double.valueOf(5.0).equals(Diversity.value(Items.APPLE)), "a later table wins an id (apple " + Diversity.value(Items.APPLE) + ")");
+		check(Double.valueOf(2.0).equals(Diversity.value(Items.CARROT)), "an id only the first table lists stays (carrot)");
+		check(Diversity.value(Items.BREAD) == null, "an unlisted food keeps Apple Pie's value (bread)");
+		check(Diversity.head(Items.BEEF) == Items.COOKED_BEEF, "a family member counts as its head (beef -> cooked beef)");
+		check(Diversity.head(Items.BREAD) == Items.BREAD, "a family with an absent head is skipped (bread is its own entry)");
+		Diversity.use(List.of(), ForgeRegistries.ITEMS::containsKey);
+		check(Diversity.value(Items.APPLE) == null && Diversity.head(Items.BEEF) == Items.BEEF, "no table: nothing overridden");
+		Path cd = root.resolve("development/creativeDelight/src/main/resources/solraspberrypie/diversity/creativedelight.json");
+		JsonObject cdJson = JsonParser.parseString(Files.readString(cd, StandardCharsets.UTF_8)).getAsJsonObject();
+		Diversity.use(List.of(new Diversity.Source("creativedelight:creativedelight.json", cdJson)), ForgeRegistries.ITEMS::containsKey);
+		double bread = cdJson.getAsJsonObject("values").get("minecraft:bread").getAsDouble();
+		check(Double.valueOf(bread).equals(Diversity.value(Items.BREAD)), "the pack table (Creative Delight) loads on vanilla ids only, modded ids skipped (bread " + bread + ")");
 
 		System.out.println(fail == 0 ? "ALL " + ok + " OK" : fail + " FAILED");
 	}

@@ -1,7 +1,7 @@
 {
 	"_readme": [
 		"Rules for tools/food_diversity.py (plan_food_diversity_1121.md section 3). The tool writes every food's diversity",
-		"into solRaspberryPie's diversity.json (values + families); a jar rebuild applies it.",
+		"into Creative Delight's solraspberrypie/diversity/creativedelight.json (values + families); a Creative Delight rebuild applies it.",
 		"q = hunger x (1 + saturation modifier) / 2. curve: [q, value] anchors, linear between, flat past the last.",
 		"topRank: the multiplier lifts the tier's (topRank+1)-th best food to the top, so one outlier does not set it; above it values cap.",
 		"tierTops: best food of each tier (R2). Tiers low / mid / high are by q (lowMax, midMax) or Nourishment = high;",

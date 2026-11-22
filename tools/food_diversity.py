@@ -5,7 +5,9 @@
 Reads the /dumpfood export (kubejs/exported/food/foods.json, recipes.json), the food types
 (kubejs/generation_scripts/food/food_types.json, canned sources) and the rules
 (kubejs/generation_scripts/food/food_diversity.json); writes every food's diversity and the families into
-development/solRaspberryPie/src/main/resources/solraspberrypie/diversity.json. A solRaspberryPie rebuild applies it.
+development/creativeDelight/src/main/resources/solraspberrypie/diversity/creativedelight.json (plan_rp_standalone.md P8:
+Raspberry Pie reads every solraspberrypie/diversity/*.json in any mod's jar and ships none). A Creative Delight rebuild
+applies it.
 
     python3 tools/food_diversity.py            write the table, print the tier tops
     python3 tools/food_diversity.py --report   also print the rotation table (audit 1.1, golden and gilded split)
@@ -32,7 +34,7 @@ RECIPES = os.path.join(ROOT, 'kubejs/exported/food/recipes.json')
 TYPES = os.path.join(ROOT, 'kubejs/generation_scripts/food/food_types.json')
 RULES = os.path.join(ROOT, 'kubejs/generation_scripts/food/food_diversity.json')
 DICT = os.path.join(ROOT, 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js')
-OUT = os.path.join(ROOT, 'development/solRaspberryPie/src/main/resources/solraspberrypie/diversity.json')
+OUT = os.path.join(ROOT, 'development/creativeDelight/src/main/resources/solraspberrypie/diversity/creativedelight.json')
 NOURISH = 'farmersdelight:nourishment'
 DRINK_TAG = 'solraspberrypie:drinks'
 NO_DIET = {'lightmanscurrency:coin_chocolate_' + m for m in ('copper', 'iron', 'gold', 'emerald', 'diamond', 'netherite')}

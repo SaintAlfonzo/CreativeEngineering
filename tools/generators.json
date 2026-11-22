@@ -431,9 +431,9 @@
 			"groups": ["food"],
 			"dumps": ["dumpfood"],
 			"outputs": [
-				"development/solRaspberryPie/src/main/resources/solraspberrypie/diversity.json"
+				"development/creativeDelight/src/main/resources/solraspberrypie/diversity/creativedelight.json"
 			],
-			"apply": "rebuild and install solRaspberryPie (./gradlew :solRaspberryPie:build --offline, then :solRaspberryPie:installToMods), restart; --report prints the tier tops and rotation table"
+			"apply": "rebuild and install Creative Delight (./gradlew :creativeDelight:build --offline, then :creativeDelight:installToMods), restart; --report prints the tier tops and rotation table"
 		},
 		{
 			"id": "coaster_models",

@@ -16,7 +16,7 @@ Removed items (`canned_goods:canned_food`, `canned_goods:hot_hot_hotpot`) are le
 **Was:** no pack layer. Every food outside Apple Pie's 22-entry config list followed `q = hunger x (1 + modifier) /
 2`, complexity `q / 5` below q 5, else `1 + 4 x log10(q - 4)`, with a 9x jump in slope at q 5.
 
-**Now:** Raspberry Pie's table sets all 1658 foods (`/solraspberrypie/diversity.json`; Apple Pie's config list is
+**Now:** Raspberry Pie's table sets all 1658 foods (Creative Delight's `solraspberrypie/diversity/creativedelight.json` since 2026-11-21, read by Raspberry Pie; Apple Pie's config list is
 empty). Each food takes the first rule that fits:
 
 1. Drinks (`#solraspberrypie:drinks`) and no-diet foods (`#solraspberrypie:no_diet`, the chocolate coins): 0, outside

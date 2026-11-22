@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Offline checks for Raspberry Pie standing alone (feature_writeup/plan_rp_standalone.md P2, P3): RpStandaloneTest parses
-# the built-in default ladder on vanilla registries and asserts no warning and the ruled shape. Runs against
+# the built-in default ladder on vanilla registries (no file warning, the ruled shape), checks the diversity table merge
+# rules and loads the pack table (development/creativeDelight/src/main/resources/solraspberrypie/diversity). Runs against
 # development/solRaspberryPie build/classes (./gradlew :solRaspberryPie:compileJava --offline first). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
