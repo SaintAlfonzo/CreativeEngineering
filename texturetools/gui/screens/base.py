@@ -44,6 +44,7 @@ from ..widgets.controls import ChoiceControl, NumberControl, TextControl, Toggle
 from ..widgets.fileslot import FileSlot
 from ..widgets.filebrowser import open_browser
 from ..widgets.preview import PixelPreview
+from ..widgets.sections import SectionPanel, SettingsSectionState
 from ..worker import Debouncer, Worker
 
 BAR_H = 36
@@ -128,16 +129,27 @@ class ToolScreen(Screen):
 
 	# ---- layout ----
 
-	def _build_layout(self):
-		root = BoxLayout(orientation="horizontal", spacing=6, padding=6)
-		left = BoxLayout(orientation="vertical", size_hint_x=0.36, spacing=4)
+	def _section_state(self):
+		app = App.get_running_app()
+		return SettingsSectionState(getattr(app, "settings", None), self.tool_name)
+
+	def _sidebar(self, size_hint_x):
+		"""Left sidebar: fold bar, the sectioned control column (self.controls), preset bar."""
+		left = BoxLayout(orientation="vertical", size_hint_x=size_hint_x, spacing=4)
+		self.controls = SectionPanel(state=self._section_state())
+		fold = BoxLayout(size_hint_y=None, height=28, spacing=4)
+		fold.add_widget(self._button("Expand all", self.controls.expand_all))
+		fold.add_widget(self._button("Collapse all", self.controls.collapse_all))
+		left.add_widget(fold)
 		scroll = ScrollView(do_scroll_x=False)
-		self.controls = BoxLayout(orientation="vertical", size_hint_y=None, spacing=4)
-		self.controls.bind(minimum_height=self.controls.setter("height"))
 		scroll.add_widget(self.controls)
 		left.add_widget(scroll)
 		left.add_widget(self._preset_bar())
-		root.add_widget(left)
+		return left
+
+	def _build_layout(self):
+		root = BoxLayout(orientation="horizontal", spacing=6, padding=6)
+		root.add_widget(self._sidebar(0.36))
 
 		right = BoxLayout(orientation="vertical", spacing=4)
 		self.preview_area = BoxLayout(orientation="vertical")
@@ -218,11 +230,10 @@ class ToolScreen(Screen):
 	def add_text(self, key, label):
 		return self._add_control(TextControl(key, label, self.params.get(key, ""), self.set_param))
 
-	def add_heading(self, text):
-		lbl = Label(text="[b]{0}[/b]".format(text), markup=True, size_hint_y=None, height=28, halign="left")
-		lbl.bind(size=lambda inst, *a: setattr(inst, "text_size", inst.size))
-		self.controls.add_widget(lbl)
-		return lbl
+	def add_heading(self, text, is_open=None):
+		"""Start a folding sidebar section; the controls added after it go inside. is_open None = the stored state,
+		else only a screen's first section starts open. Returns the Section (its .text is the header markup)."""
+		return self.controls.begin_section(text, is_open=is_open)
 
 	# ---- params and preview ----
 

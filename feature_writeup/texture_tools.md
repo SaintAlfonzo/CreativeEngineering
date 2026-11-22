@@ -4,7 +4,7 @@ A standalone pixel-art texture toolbox for the owner and other developers: palet
 paint, a sprite editor and scale/upscale, as a Kivy GUI over headless engines, plus command-line wrappers with the old
 flags. Built 2026-11-22 per [plan_texture_tools_gui.md](plan_texture_tools_gui.md) (TODO `texture-tooling #1`; the swap
 engine fixes are `textures/food #10`). Run it with `python3 -m texturetools.gui`. Dev tool: no jar, no scratch queue,
-no changelog bullet. Review state: the owner checklists G1 to G3 below are pending.
+no changelog bullet. Review state: the owner checklists G1 to G4 below are pending.
 
 ## 1. Rulings (owner, 2026-11-21)
 
@@ -18,6 +18,8 @@ no changelog bullet. Review state: the owner checklists G1 to G3 below are pendi
 | R6 | (owner, 2026-11-22) Swap alpha source default: keep the source alpha (was palette) |
 | R7 | (owner, 2026-11-22) Swap interpolation default `smaller` (blend only when the palette is smaller); `--interpolate` still means `always` |
 | R8 | (owner, 2026-11-22) Combine add and multiply respect the overlay's alpha by default (a transparent overlay pixel leaves the base unchanged), in the engine, the stack, the CLI and the GUI |
+| R9 | (owner, 2026-11-22) File dialogs are the system default file browser only: zenity (GTK desktops) or kdialog (KDE); the Kivy browser is gone, no built-in fallback |
+| R10 | (owner, 2026-11-22) Each set of config options folds under a dropdown in the left sidebar |
 
 R5 to R8 replace the byte-identical legacy defaults (R3 keeps the rank map as the default mode). The old output is one
 switch away: swap `--legacy` (or `--palette-alpha 1 --alpha palette --interp off`; in code `SwapOptions.legacy()`),
@@ -108,14 +110,20 @@ Run by `tools/test_texturetools.sh` (every `texturetools/tests/test_*.py`, each 
 | T4 | test_edit.py | undo/redo identity, bucket tolerance, global fill count, rotate x4, nudge in gamut |
 | T5 | test_colors.py | suggest differs by exactly the delta on one axis |
 | T6 | test_gui_smoke.py | every screen constructs under xvfb |
+| T8 | test_gui_dialogs_sections.py | R9 and R10: dialog child env (PyInstaller and snap leaks), backend order, zenity / kdialog argv per mode, fake-dialog runs (choose, cancel, failure, none installed); every sidebar sectioned, first open and the rest folded, state kept per screen, dialog result on the main thread, one dialog at a time, failure on the status line |
 | | test_swap_modes, test_combine_stack, test_paint, test_gui_swap_combine, test_gui_editor, test_gui_paint_scale | engine and GUI checks per phase |
 
 Gotchas are in [agent_notes/texturetools-gotchas.md](agent_notes/texturetools-gotchas.md).
 
 ## 6. Packaging
 
-Linux onedir tarball: [texturetools/packaging/README.md](../texturetools/packaging/README.md). Shipped builds carry no
-pack art, generated textures or donor jars.
+Linux onedir tarball and AppImage: [texturetools/packaging/README.md](../texturetools/packaging/README.md). Shipped
+builds carry no pack art, generated textures or donor jars. `build.sh` makes the AppImage when `appimagetool` is on
+PATH (installed at `~/.local/bin/appimagetool`, 1.9.0, 2026-11-22); first built 2026-11-22
+(`texturetools-0.1.0-linux-x86_64.AppImage`, 43 MB, selftest PASS under xvfb). Run it with
+`./texturetools-<version>-linux-x86_64.AppImage` (add `APPIMAGE_EXTRACT_AND_RUN=1` without FUSE).
+
+File dialogs (R9) need zenity or kdialog on the user's system; neither is bundled.
 
 ## 7. Owner checklists
 
@@ -249,6 +257,19 @@ Every screen:
 - [ ] G3.12 Open in Editor from Palette Swap, Combine, Painter and Scale opens the current result in the editor as an
   unsaved document (from a bulk grid: the tile last clicked).
 - [ ] G3.13 With dev mode on, a Painter or Scale Run offers the provenance row like the other screens.
+
+### G4: System file dialog and folding sidebar (P11)
+
+- [ ] G4.1 Browse on any slot (Source, Palette, Output, a folder slot), Open / Save as in the editor, Import / Export
+  stack JSON and palettes: your desktop's own file dialog opens (not a Kivy one), in the last folder used; the app
+  keeps drawing while it is open; Cancel changes nothing.
+- [ ] G4.2 Save as onto an existing file: the dialog asks to overwrite; a second Browse while a dialog is open is
+  refused on the status line.
+- [ ] G4.3 Every screen's left sidebar: each heading is a dropdown ("-" open, "+" folded); the first starts open, the
+  rest folded (Combine: Selected layer open too); a click folds or opens it; Expand all / Collapse all work.
+- [ ] G4.4 Fold and open some sections, restart the app: each screen comes back as you left it.
+- [ ] G4.5 Combine: selecting another layer renames the Selected layer header and keeps its fold state. A file dropped
+  where a folded slot would be is handled like a drop outside any slot (the screen's first slot that takes it).
 
 ## 8. Open items for the owner
 

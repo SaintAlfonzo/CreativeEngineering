@@ -34,6 +34,13 @@ Every tool prints its options with `--help`, for example `./texturetools palette
 the version. In the app, Copy as CLI gives the matching `python3 -m texturetools.cli.<tool> ...` line for a checkout;
 with the bundle, run the same arguments as `./texturetools <tool> ...`.
 
+The AppImage takes the same commands: `./texturetools-<version>-linux-x86_64.AppImage palette_swap ARGS...`
+(make it executable first; without FUSE, set `APPIMAGE_EXTRACT_AND_RUN=1`).
+
+File dialogs are your desktop's own file browser: `zenity` (GNOME, Unity, Xfce, Cinnamon, MATE) or `kdialog` (KDE;
+tried first in a KDE or LXQt session). Neither is bundled; install one if Browse reports "no system file dialog
+found". `TEXTURETOOLS_FILE_DIALOG=zenity` or `=kdialog` picks one.
+
 Examples:
 
 	./texturetools palette_swap source.png palette.png out.png

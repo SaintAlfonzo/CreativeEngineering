@@ -173,14 +173,7 @@ class EditorScreen(ToolScreen):
 
 	def _build_layout(self):
 		root = BoxLayout(orientation="horizontal", spacing=6, padding=6)
-		left = BoxLayout(orientation="vertical", size_hint_x=0.22, spacing=4)
-		scroll = ScrollView(do_scroll_x=False)
-		self.controls = BoxLayout(orientation="vertical", size_hint_y=None, spacing=4)
-		self.controls.bind(minimum_height=self.controls.setter("height"))
-		scroll.add_widget(self.controls)
-		left.add_widget(scroll)
-		left.add_widget(self._preset_bar())
-		root.add_widget(left)
+		root.add_widget(self._sidebar(0.22))
 
 		center = BoxLayout(orientation="vertical", spacing=4)
 		center.add_widget(self._file_bar())

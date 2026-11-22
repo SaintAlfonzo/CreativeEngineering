@@ -258,7 +258,7 @@ class CombineScreen(BulkPreviewMixin, ToolScreen):
 			row.add_widget(b)
 		self.controls.add_widget(row)
 
-		self.layer_heading = self.add_heading("Selected layer")
+		self.layer_heading = self.add_heading("Selected layer", is_open=True)
 		self.lc = {}
 		self.image_slot = FileSlot(label="Image", kind="file")
 		self.image_slot.bind(paths=lambda inst, p: self._layer_change("image", inst.path))

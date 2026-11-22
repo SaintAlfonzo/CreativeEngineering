@@ -24,6 +24,8 @@ rank map stays the default). TODO rows: `textures/food #10` (swap engine) plus n
 | R6 | Swap alpha source default: keep the source alpha; was palette (owner, 2026-11-22) |
 | R7 | Swap interpolation default `smaller` (only when the palette is smaller); the old `--interpolate` keeps meaning `always` (owner, 2026-11-22) |
 | R8 | Combine add and multiply respect the overlay's alpha by default (transparent overlay pixels leave the base unchanged) in the engine, the stack, the CLI and the GUI (owner, 2026-11-22) |
+| R9 | File dialogs use only the system default file browser (zenity on GTK desktops, kdialog on KDE); the Kivy file browser is removed, no built-in fallback (owner, 2026-11-22) |
+| R10 | Each set of config options folds under a dropdown in the left sidebar: every heading is a collapsible section (owner, 2026-11-22) |
 
 R5 to R8 switch away from the byte-identical legacy defaults of R3 (the rank map stays the default mode). The old output
 stays reachable: swap `--legacy` or `--palette-alpha 1 --alpha palette --interp off` (`SwapOptions.legacy()`), combine
@@ -146,7 +148,8 @@ mode with recursion. Linked from the Editor's resize options so there is one imp
 
 ## 8. Cross-cutting
 
-- Shared file browser with recent folders, drag and drop of files onto any slot, a project folder setting.
+- System file dialog (R9, P11): the desktop's own browser opens in the newest recent folder (then the project folder, then home), chosen folders join recent folders; drag and drop of files onto any slot, a project folder setting.
+- Left sidebar (R10, P11): each heading a folding section, first open and the rest folded until toggled; open state kept per screen in the settings store; Expand all / Collapse all.
 - Every screen: preview, Run, "Open in Editor", "Copy as CLI", preset save and load.
 - Pixel art defaults everywhere: nearest-neighbor, never smoothing; no color management, no metadata written.
 - Dev mode (a setting, off in shipped builds): after Run, offers a provenance row for `feature_writeup/texture_sources/sources.csv` (source, tool, use) and reminds to rerun `python3 tools/texture_provenance.py --write`. Shipped builds have no repo knowledge.
@@ -172,6 +175,7 @@ screen, so GUI phases hand over a short checklist instead of a scratch queue row
 | P8 | Painter and Scale screens, Open in Editor handoff, Copy as CLI | general-purpose | Owner checklist G3 |
 | P9 | Packaging: PyInstaller spec (onedir), bundle Kivy deps and SDL libs, launcher script, tarball, optional AppImage, README, LICENSE, version in About; build on a clean venv and run on a machine without the dev setup (container or fresh user) | general-purpose | Tarball starts, loads every screen, runs one swap and one combine |
 | P10 | Docs: `feature_writeup/texture_tools.md` writeup, agent note, `texture_sources.md` pointer, `tools/generators.json` untouched, `mod_sides.md` not applicable | doc-pass | `status_index.py` clean |
+| P11 | R9 system file dialog (`gui/widgets/filebrowser.py` rewritten: zenity / kdialog in a worker thread, cleaned child env) and R10 folding sidebar (`gui/widgets/sections.py`, `ToolScreen.add_heading` starts a section); AppImage built | general-purpose | `test_gui_dialogs_sections.py` passes, the earlier GUI tests unchanged; owner checklist G4 |
 
 Order: P0 first and alone (everything depends on parity). P1 to P4 are independent engines (different files) and can run
 in parallel agents after P0. P5 after P0. P6 to P8 after their engines and P5, one at a time (shared shell files).
@@ -190,7 +194,7 @@ Headless, in `texturetools/tests/` and wired into `tools/check_all.py` (added in
 ## 11. Risks and open items
 
 - Kivy on Linux packaging: SDL2 and GStreamer pulls make the tarball large; strip unused providers (`KIVY_NO_*`, exclude video/audio) in the spec. Expected 80 to 150 MB.
-- Kivy has no native file dialog: the shared file browser (P5) is real work; a `plyer` or `tkinter` fallback is not planned (keeps the bundle small).
+- Kivy has no native file dialog: P11 (R9) shells out to zenity or kdialog instead of the P5 Kivy browser. Neither is bundled; a desktop without both gets a status-line message. The xdg-desktop-portal FileChooser is not used (needs a DBus client in the bundle); zenity under GTK honors the portal when `GTK_USE_PORTAL=1`.
 - Pillow 9.0.1 is old; confirm the pinned version works with Kivy 2.3.0 and PyInstaller before P0 ends.
 - Open (default taken, owner may overturn): the `role` mode's definition (hue family then lightness rank) is a first design; the owner reviews its outputs on the jam and pepper cases from the row text before it is kept.
 - Not planned: Windows and macOS builds, animated textures (.mcmeta strips), normal and specular maps, an undo of bulk runs (bulk previews first instead).
