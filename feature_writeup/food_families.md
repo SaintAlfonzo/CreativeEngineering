@@ -4,14 +4,13 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=77f0bc501d14 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 11, Pinned 1, In Progress 47, Testing 35), 3 Complete.
+<!-- generated:status_index begin open_work sha1=7a2ce2a9b50d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 10, Pinned 1, In Progress 46, Testing 37), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `baking/baked-goods #34` | Planned | S C P | Every cake as a sequenced assembly |
 | `baking/baked-goods #35` | Planned | none | Investigate brownie tray and adzuki bun family |
-| `baking/baked-goods #36` | Planned | S C P | Dessert cookware and recipe treatments |
 | `dishes/ingredients #15` | Planned | S C P | Butter |
 | `dishes/meals #14` | Planned | S C P T | Patty food type |
 | `dishes/meals #18` | Planned | S C P | Cheese in nachos |
@@ -33,11 +32,10 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `baking/baked-goods #13` | In Progress | S C P | Cherry pie |
 | `baking/baked-goods #14` | In Progress | S C P | Unobtainable pie slices |
 | `baking/baked-goods #17` | In Progress | S C P | Dough unification |
-| `baking/baked-goods #18` | In Progress | S C P | Brownie and cupcake baking types |
 | `baking/baked-goods #20` | In Progress | S C P | Pizza food type |
-| `baking/baked-goods #22` | In Progress | S P | Chorus cookie from the uncanny cookie |
 | `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
 | `baking/baked-goods #32` | In Progress | S C P | Merge muffin and cupcake |
+| `baking/baked-goods #36` | In Progress | S C P | Dessert cookware and recipe treatments |
 | `baking/sweets #1` | In Progress | S C P T | Gummies |
 | `baking/sweets #2` | In Progress | S C P | Rock candy variants |
 | `baking/sweets #3` | In Progress | S C P | Cold sweets variants |
@@ -69,8 +67,10 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `food/types-and-tuning #13` | In Progress | S P | Food families: one set of cooking rules per family |
 | `merges/dishes #8` | In Progress | S C P | Pizza and quiche |
 | `baking/baked-goods #15` | Testing | S+ P | Maple cookie |
+| `baking/baked-goods #18` | Testing | S C P | Brownie and cupcake baking types |
 | `baking/baked-goods #19` | Testing | S C P | Quiche baking type |
 | `baking/baked-goods #21` | Testing | S C P | Lasagna baking type |
+| `baking/baked-goods #22` | Testing | S C | Chorus cookie from the uncanny cookie |
 | `baking/baked-goods #24` | Testing | C | No shapeless pie-to-crust recipes |
 | `baking/baked-goods #25` | Testing | S~ C P | Sponge cake becomes sponge pie |
 | `baking/baked-goods #26` | Testing | S~ P | Honey cake honey and comb split |

@@ -1,14 +1,23 @@
 # Plan: unblocked batch 2026-11-21
 
-<!-- generated:status_index begin open_work sha1=c575209ba35a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Pinned 1, In Progress 3, Testing 7), 0 Complete.
+<!-- generated:status_index begin open_work sha1=52b353375278 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 20 open TODO rows (Planned 4, Pinned 1, In Progress 6, Testing 9), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `baking/baked-goods #30` | Planned | S C P | Baking dish bakeware |
+| `baking/baked-goods #35` | Planned | none | Investigate brownie tray and adzuki bun family |
+| `baking/baked-goods #40` | Planned | S C | Fruit scones: a new baked family, one item per fruit |
+| `dairy-fats-and-batter #1` | Planned | S C P | Whale oil lamp |
 | `placeable-food #1` | Pinned | none | List other mods' non-food plates and coasters for review and possible removal |
+| `baking/baked-goods #2` | In Progress | S C P T | Muffins as a decent food source |
+| `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
+| `baking/baked-goods #36` | In Progress | S C P | Dessert cookware and recipe treatments |
 | `dishes/ingredients #7` | In Progress | S C P | Batter uses |
 | `dishes/ingredients #8` | In Progress | S C P | Produce fixes |
 | `dishes/ingredients #9` | In Progress | S C P T | Cheese |
+| `baking/baked-goods #18` | Testing | S C P | Brownie and cupcake baking types |
+| `baking/baked-goods #22` | Testing | S C | Chorus cookie from the uncanny cookie |
 | `blocks/flower-pots #1` | Testing | S C P | Flower pots placeable like candles |
 | `dishes/ingredients #17` | Testing | S C P | Tofu from mushrooms |
 | `dishes/ingredients #21` | Testing | S C P | Potato and sweet potato compatibility |
