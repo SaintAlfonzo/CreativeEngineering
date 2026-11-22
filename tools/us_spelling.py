@@ -212,7 +212,8 @@ def process(path, apply):
 
 
 CODE_SKIP = re.compile(r'(^|/)(exported|logs|jar_archive|build|deploy|loot_catalog|generation_scripts|moved_code_backup)/|'
-					   r'_upstream/|^(config|configs_edited|defaultconfigs|server)/|/upstream/')
+					   r'_upstream/|^(config|configs_edited|defaultconfigs|server)/|/upstream/'
+					   r'|^texturetools/tests/legacy/')  # frozen parity references (texturetools test_parity.py)
 # The spelling and date tools quote British forms in their word lists and docs.
 CODE_SELF = {'tools/us_spelling.py', 'tools/iso_dates.py', 'tools/history_extract.py', 'tools/design_rules_audit.py'}
 

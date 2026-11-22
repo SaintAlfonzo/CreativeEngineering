@@ -1060,3 +1060,8 @@ takes the tagline of the unlock row with its effect and level. The jar's default
 - Headless: `tools/test_rp_ladder.sh` parses the generated file on vanilla registries (modded entries skipped in one
   line, hearts, pairs, slots, toggles, every tagline key has its text) and runs `gen_rp_ladder.py --check`.
 
+## History
+
+Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
+
+- 2026-11-21: Satiated (minecraft:saturation) is the one instant effect allowed as a flat rung (owner, 2026-11-21): it ticks every tick while active, so a refresh only extends it (raspberry_pie.md 3.3, 4) (development/solRaspberryPie/src/main/java/com/SaintAlfonzo/solraspberrypie/ladder/LadderLoader.java)

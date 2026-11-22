@@ -269,6 +269,11 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-17: Tempad was a Compat nested member until 2026-11-07, now its own jar (development/backportedTempad); the Vinery taiga grape bush entry of StuckInBlock was dropped (no entityInside in the port) (build.gradle, StuckInBlock)
 - 2026-11-18: Weathered Cardboard Box renders its own model again: KubeJS generated a cube_all model at `block/weathered_cardboard_box` that outranked the jar's JSON (the whole sheet on every face). The model ships as `block/weathered_cardboard_box_wrapped` (Design and Decor's `cardboard_box/block.json` geometry) and `decor_blocks.js` sets the blockstate (`x: 90`, Design and Decor's facing-north box); the shadowed blockstate and item model left the jar (plan_bugfix_1117 A3, TODO `textures/merges #11`; CQ-CMP-09) (development/creativeCompat/src/main/resources/kubejs_startup/creativecompat/decor_blocks.js)
 
+Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
+
+- 2026-11-21: How much taller the second pot is than the first (owner 2026-11-21: 2 px) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/DoublePot.java)
+
+
 
 ## 6. License audit (2026-11-04, plan_cb_publish.md Step 2)
 

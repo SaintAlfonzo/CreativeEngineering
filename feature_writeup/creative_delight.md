@@ -1131,6 +1131,14 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-14: Always false since 2026-11-14: Creative Common's melting system melts ice and snow (plan_bugfix_1114 3.8) (development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/salt/SaltBlockTicks.java)
 - 2026-11-17: The pack's startup_scripts/compost/compost_values.js rows moved unchanged into per-mod kubejs_startup/<mod>/compost_values.js member scripts of the CD jar (compost_values files)
 
+Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
+
+- 2026-11-01: Not swapped (owner 2026-11-01: the mashed family keeps the two apart; a potato's own lines stay its own): mashed potatoes, potato slices and baked potato slices cutting, potato dough, crates, the Stuffed Potato (made on the baked potato), the golden baked potato, salting, cans, gnocchi, non-food recipes (Botania, Quark, Power Grid, machines' fuels) (kubejs/data/creativedelight/kubejs/creativedelight/potato_compat.js)
+- 2026-11-19: Recipes that named the vanilla Milk Bucket (recipe dump 2026-11-19) (kubejs/data/creativedelight/kubejs/creativedelight/milk.js)
+- 2026-11-19: Tofu (TODO dishes/ingredients #17, owner 2026-11-19): stands in for the cooked vegetarian patty only, not the beef patty: #creativedelight:veggie_patty holds both and replaces the vegetarian patty in recipes below (kubejs/data/creativedelight/kubejs/creativedelight/patties.js)
+- 2026-11-22: Data recipes by id below (recipe dump of the jars 2026-11-22); the pack's own script recipes name i.any_potato themselves (kubejs/data/creativedelight/kubejs/creativedelight/potato_compat.js)
+
+
 
 ## 19. Built 2026-10-25: the framework
 

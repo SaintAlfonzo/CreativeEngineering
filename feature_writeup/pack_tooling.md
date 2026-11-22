@@ -627,3 +627,9 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 Lines moved out of code comments (2026-11-18, plan_rules_fixes.md section 17):
 
 - 2026-11-18: Ender's Delight's mollusk and filet (End's Delight's meat and slice are merged onto them, plan_misc_1117.md 2) plus End's shulker meat's Levitation II (4 s) as a 50% chance (owner, 2026-11-18) (tools/gen_can_types.py)
+
+Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
+
+- 2026-11-10: ================================================================ fluids (SQ-VP-06: soft fluids) the 6 goldenfood stews left the soup list 2026-11-10 (they are no longer soft fluids): 18 old + 8 new = 26 (tools/vintage_probe/vintage_probe.js)
+- 2026-11-21: Other mods' non-food cups, bowls, tankards and bottles that go on a coaster (owner, 2026-11-21, ruling R2 of plan_unblocked_batch_1121.md, TODO food/placeable #6) (tools/placeable_catalog.py)
+- 2026-11-21: palette_swap() as of 2026-11-21, frozen for the parity check (tools/test_palette_swap.sh)

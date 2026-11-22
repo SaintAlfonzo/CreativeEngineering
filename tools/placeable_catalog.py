@@ -106,7 +106,7 @@ EXCLUDE = {
 	'vintagedelight:glow_berry_jam_jar': 'removed (dishes/jams, 2026-10-29): Fruits Delight has the glow berry jam',
 }
 
-# Other mods' non-food cups, bowls, tankards and bottles that go on a coaster (owner, 2026-11-21, ruling R2 of
+# Other mods' non-food cups, bowls, tankards and bottles that go on a coaster (owner, ruling R2 of
 # plan_unblocked_batch_1121.md, TODO food/placeable #6). Item -> jar patterns its own block model is read from;
 # tools/gen_coaster_models.py writes a coaster file for each, and add_coaster() tags them although EXCLUDE names
 # their namespace (EXCLUDE keeps them out of the placeable tags). Non-food plates and platters stay off the coaster

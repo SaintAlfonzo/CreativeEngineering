@@ -31,7 +31,7 @@ def check(name, ok, detail=''):
 
 
 def legacy(src_arr, palette_colors, interpolate=False):
-	# palette_swap() as of 2026-11-21, frozen for the parity check
+	# palette_swap(), frozen for the parity check
 	src_colors = ps.get_colors_by_brightness(src_arr)
 	n_palette = len(palette_colors)
 	br = lambda c: int(c[0]) + int(c[1]) + int(c[2])

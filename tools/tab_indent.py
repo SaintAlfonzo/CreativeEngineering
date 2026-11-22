@@ -42,7 +42,8 @@ LANG = {'.py': 'py', '.js': 'js', '.mjs': 'js', '.java': 'java', '.gradle': 'gra
 SKIP = re.compile(r'^(kubejs/exported/|kubejs/generation_scripts/|kubejs/archive/|jar_archive/|deploy/|config/|'
 				  r'defaultconfigs/|configs_edited/|\.claude/|mods/|saves/|server_mods/|client_mods/)'
 				  r'|(^|/)moved_code_backup/|(^|/)build/|_upstream/|(^|/)node_modules/'
-				  r'|^development/[^/]+(/members/[^/]+)?/upstream/')
+				  r'|^development/[^/]+(/members/[^/]+)?/upstream/'
+				  r'|^texturetools/tests/legacy/')  # frozen parity references (texturetools test_parity.py)
 OWN_NS = re.compile(r'^(creative[a-z_]*|moremooblooms|babymobs|vinerybackport)$')
 NS_RE = re.compile(r'/(?:data|assets)/([^/]+)/')
 MARKER = re.compile(r'(?i)\bgenerated\b.{0,80}\b(by|from)\b')

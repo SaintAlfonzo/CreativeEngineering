@@ -43,8 +43,8 @@ ServerEvents.recipes(e => {
 		// Nut Milk bottle <-> 250 mB nut milk (Spout and Item Drain; the Kettle reads the pair)
 		if (global.CD.on('vintagedelight') && f.nut_milk) R.createBottle(i.nut_milk_bottle, f.nut_milk, e, 'nut_milk')
 
-		// Recipes that named the vanilla Milk Bucket (recipe dump 2026-11-19). Slice & Dice's copy of the cheese curds
-		// pot recipe follows the pot recipe. An absent mod's id matches nothing.
+		// Recipes that named the vanilla Milk Bucket (recipe dump). Slice & Dice's copy of the cheese curds pot recipe
+		// follows the pot recipe. An absent mod's id matches nothing.
 		R.replaceInput([
 			{ id: 'cookingforblockheads:milk_jar' },
 			{ id: 'engineersdecor:independent/small_milking_machine_recipe' },

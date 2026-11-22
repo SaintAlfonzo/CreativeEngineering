@@ -42,7 +42,7 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class DoublePot {
 
-	/** How much taller the second pot is than the first (owner 2026-11-21: 2 px). */
+	/** How much taller the second pot is than the first (owner: 2 px). */
 	public static final int TALL_RISE_PX = 2;
 	/** Pot centers in block pixels (x = z). */
 	static final float POT_A_CENTER_PX = 5f;

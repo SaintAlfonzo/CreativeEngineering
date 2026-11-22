@@ -13,8 +13,8 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.t_patty, i.beef_patty)
 	if (global.CD.on('veggiesdelight')) t.add(e, i.t_patty, i.cooked_vegetarian_patty)
 	if (global.CD.on('miners_delight')) t.add(e, i.t_patty, i.vegan_patty)
-	// Tofu (TODO dishes/ingredients #17, owner 2026-11-19): stands in for the cooked vegetarian patty only, not the beef
-	// patty: #creativedelight:veggie_patty holds both and replaces the vegetarian patty in recipes below
+	// Tofu (TODO dishes/ingredients #17, owner): stands in for the cooked vegetarian patty only, not the beef patty:
+	// #creativedelight:veggie_patty holds both and replaces the vegetarian patty in recipes below
 	if (global.CD.on('veggiesdelight')) t.add(e, i.t_veggie_patty, [i.cooked_vegetarian_patty, i.tofu])
 	// The Horror Lasagna's meat tag named the beef patty
 	if (global.has('brewinandchewin')) t.add(e, 'brewinandchewin:cooked_horror_lasagna_meats', i.t_patty)

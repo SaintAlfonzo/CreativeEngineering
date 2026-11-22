@@ -160,7 +160,7 @@ ServerEvents.recipes(e => {
 		// dough + 2 chorus fruit grain in the oven): 8 cookies around a chorus fruit grain by hand, as dyeing
 		F._sweep(i.chorus_cookie)
 		var uncanny = []
-		for (var u = 0; u < 8; u++) uncanny.push(i.uncanny_cookies)
+		for (var u = 0; u < 8; u++) uncanny.push(i.uncanny_cookies) // G5 (R.shapeless ingredients)
 		R.shapeless(Item.of(i.chorus_cookie, 8), uncanny.concat([i.chorus_fruit_grain]), e, 'chorus_cookie_manual_only')
 
 		//######################### Muffins (muffin tin, paper) ######################### The family call bakes 4 in the

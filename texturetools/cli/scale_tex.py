@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: GPL-3.0-only
 """
-scale_tex.py - upscale an image by a whole-number ratio with nearest-neighbour
+scale_tex.py - upscale an image by a whole-number ratio with nearest-neighbor
 sampling, so every source pixel becomes an exact N x N block (pixel art stays
-crisp, no blur, no new colours). The image mode is kept (palette images stay
+crisp, no blur, no new colors). The image mode is kept (palette images stay
 palette images) and no gAMA/sRGB/ICC metadata is written.
 
 Usage:
@@ -43,12 +43,12 @@ from PIL import Image
 
 from texturetools.core.scale import *  # noqa: F401,F403 (the old module's names, for importers)
 from texturetools.core.scale import (default_output, fit_factor, parse_size, place_on_canvas, resolve_factor,
-                                     scale_image, trim)
+									 scale_image, trim)
 
 
 def main(argv=None):
 	parser = argparse.ArgumentParser(
-		description="Upscale an image by a whole-number ratio (nearest-neighbour)."
+		description="Upscale an image by a whole-number ratio (nearest-neighbor)."
 	)
 	parser.add_argument("input", help="Source image")
 	parser.add_argument("output", nargs="?", help="Output path (default: <stem>_<size>.png)")

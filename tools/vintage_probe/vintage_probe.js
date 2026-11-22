@@ -417,7 +417,7 @@
 	}
 
 	// ================================================================ fluids (SQ-VP-06: soft fluids)
-	// the 6 goldenfood stews left the soup list 2026-11-10 (they are no longer soft fluids): 18 old + 8 new = 26
+	// the 6 goldenfood stews left the soup list (they are no longer soft fluids): 18 old + 8 new = 26
 	const OLD_SOUPS = ['alexsdelight:acacia_blossom_soup', 'neapolitan:adzuki_stew', 'fruitsdelight:bayberry_soup',
 		'rusticdelight:bell_pepper_soup', 'farmersrespite:blazing_chili', 'farmersdelight:bone_broth', 'moredelight:carrot_soup',
 		'quarkdelight:cavern_explorer_stew', 'endersdelight:chorus_stew', 'corn_delight:corn_soup',
