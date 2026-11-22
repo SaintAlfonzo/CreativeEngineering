@@ -6,12 +6,11 @@ runs too often or too rarely. The fixes are planned in [plan_process_overhaul.md
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=70681de1e0f0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (In Progress 2, Testing 4), 4 Complete.
+<!-- generated:status_index begin open_work sha1=7d109ff1f58e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (In Progress 1, Testing 4), 5 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `tooling/process #6` | In Progress | none | Commit per plan phase, push to agent_staging |
 | `tooling/process #7` | In Progress | none | Agent notes out of memory |
 | `tooling/process #2` | Testing | S | Build stamps and install ledger |
 | `tooling/process #3` | Testing | none | Design intake before building |

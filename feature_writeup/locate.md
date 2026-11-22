@@ -7,13 +7,12 @@ classes and Async Locator 1.3.0; decisions in 4)
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=98f43b2f9e47 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Pinned 1, In Progress 1, Testing 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=067e6936171c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Pinned 1, Testing 5), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `locate #2` | Pinned | S P | Fold stages C to E |
-| `structures/testing #4` | In Progress | S P | Census false negatives: Terralith underground |
 | `locate #1` | Testing | S~ C P | Locate folding, non-blocking loads, census, DH clip |
 | `locate #3` | Testing | none | Distant Horizons pregen on the final server world |
 | `locate #4` | Testing | S+ C | DH clip runs in the Nether and End |
