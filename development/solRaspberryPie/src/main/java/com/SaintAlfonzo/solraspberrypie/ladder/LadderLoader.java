@@ -146,7 +146,9 @@ public final class LadderLoader {
 						continue;
 					}
 					if (type.equals("flat")) {
-						if (refreshUnsafe(effect)) {
+						// Satiated (minecraft:saturation) is the one instant effect allowed as a flat rung (owner, 2026-11-21): it
+						// ticks every tick while active, so a refresh only extends it (raspberry_pie.md 3.3, 4).
+						if (refreshUnsafe(effect) && effect != MobEffects.SATURATION) {
 							warnings.add("V10: flat " + id + " at " + t + " cannot be refreshed safely; skipped");
 							continue;
 						}

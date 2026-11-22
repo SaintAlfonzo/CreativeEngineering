@@ -1,6 +1,6 @@
 ladder,position,group,name,effect,level,toggle,tagline,status,note
 unlock,1,Brightening,Night Vision,minecraft:night_vision,1,on,See in the dark,built,
-unlock,1,Brightening,Glowing,minecraft:glowing,1,on,Reveal yourself to nearby players,built,
+unlock,1,Brightening,Glowing,minecraft:glowing,1,off,Reveal yourself to nearby players,built,
 unlock,2,,Leaf Piercing,fruitsdelight:leaf_piercing,1,,Projectiles pass through leaves,built,
 unlock,3,,Speed I,minecraft:speed,1,,Move faster,built,
 unlock,4,,Allure,botania:allure,1,,Faster fishing,built,
@@ -26,18 +26,17 @@ unlock,18,Spider,Bug Pheromones,alexsmobs:bug_pheromones,1,,Arthropods are neutr
 unlock,18,Spider,Clinging,alexsmobs:clinging,1,,Climb walls and ceilings,built,
 unlock,19,,Fire Immunity,minecraft:fire_resistance,1,,,built,
 unlock,20,,Strength I,minecraft:strength,1,,Hit harder,built,
-unlock,21,Immunity,Clarity,hearthandharvest:clarity,1,,Immunity to Blindness and Darkness,built,
-unlock,21,Immunity,Stimulation,create_confectionery:stimulation,1,,Slowness and Mining Fatigue immunity,built,
+unlock,21,Immunity,Clarity,hearthandharvest:clarity,1,,Immunity to Blindness and Darkness,built,"Stimulation removed from this position (owner, 2026-11-21); no eligible vanilla replacement, see plan P7"
 unlock,22,,Wither Immunity,,1,,,reserved,no effect id yet; TODO food-tuning #47
 unlock,23,,Speed II,minecraft:speed,2,,Move faster,built,
 unlock,24,,Luck II,minecraft:luck,2,,Get lucky,built,
 unlock,25,,Long Reach I,better_beacons:long_reach,1,,Reach farther,built,
-unlock,26,,Slow Falling,minecraft:slow_falling,1,on,,built,
+unlock,26,,Slow Falling,minecraft:slow_falling,1,off,,built,
 unlock,27,,Magic Resistance I,creativecommon:magic_resistance,1,,,built,
 unlock,28,,Prickly II,hearthandharvest:prickly,2,,"Touch harms nearby creatures, tamed and passive exempt",built,
 unlock,29,Dig,Haste II,minecraft:haste,2,,Mine faster,built,
 unlock,29,Dig,Burrowing II,fungidelight:burrowing,2,,Mine very fast with shovel,built,
-unlock,30,,Magnet,vinery:magnet,1,on,Attract items when standing,built,
+unlock,30,,Magnet,vinery:magnet,1,off,Attract items when standing,built,
 unlock,31,,Jump Boost II,minecraft:jump_boost,2,,Jump higher,built,
 unlock,32,,Recovering,fruitsdelight:recovering,1,,Poison and Wither immunity,built,
 unlock,33,,Long Reach II,better_beacons:long_reach,2,,Reach farther,built,
@@ -59,5 +58,5 @@ permanent,7,,Long Reach I,better_beacons:long_reach,1,,,built,
 permanent,8,,Strength I,minecraft:strength,1,,,built,
 permanent,9,,Luck II,minecraft:luck,2,,,built,
 permanent,10,,Invisibility,minecraft:invisibility,1,off,,built,
-permanent,11,,Double Jump,vinery:double_jump,1,off,,built,
-permanent,12,,Satiated,minecraft:saturation,1,,,reserved,minecraft:saturation is instant (V10 refuses it as a flat rung); TODO food-tuning #48
+permanent,11,,Double Jump,vinery:double_jump,1,on,,built,
+permanent,12,,Satiated,minecraft:saturation,1,,,built,"minecraft:saturation, V10 exception for flat rungs (owner, 2026-11-21)"
