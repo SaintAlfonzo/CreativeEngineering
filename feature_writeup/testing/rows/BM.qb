@@ -45,7 +45,7 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 @commands `/summon minecraft:cow ~ ~ ~ {Age:-24000}` and the same for pig, sheep, chicken, wolf, `cozys-improved-cats:improved_cat` (Cozy's Improved Cats replaces the cat), horse, villager, zombie (`IsBaby:1`); `/data get entity @e[type=cow,limit=1,sort=nearest] Age`
 @pass each summons and keeps its age or baby flag; server does not crash or log a mixin error on any of them
 @fails a server-side use of a remodel class. Needs spawn-animals=true (section @@prep): with false, vanilla discards every Animal on its first tick (r1120lr s17 batch fault)
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 @from batches/r1103/p2_R.qb
 # r1103 p2: at pace 2 the "5 s" reads came about 25 s after the summons, and the baby zombie burned to death in the
 # sun (onFire from 02:53:24, gone by 02:53:46): now night, a helmet on the zombie, pace 0.2 for the summons. The cat
@@ -63,7 +63,7 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 > summon minecraft:zombie 145 -60 508 {IsBaby:1b,NoAI:1b,PersistenceRequired:1b,Tags:["bm02"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
 > cdevtest entities 145 -59 505 1
 sleep 1
-> execute if entity @e[tag=bm02c] run say BM02 cat present at 1 s
+> execute if entity @e[type=cozys-improved-cats:improved_cat,x=145,y=-61,z=505,dx=1,dy=2,dz=1,limit=1] run say BM02 cat present at 1 s
 > cdevtest entities 145 -59 505 2
 sleep 4
 > data get entity @e[type=minecraft:cow,tag=bm02,limit=1] Age
@@ -74,8 +74,8 @@ sleep 4
 > data get entity @e[type=minecraft:horse,tag=bm02,limit=1] Age
 > data get entity @e[type=#zq:villagers,tag=bm02,limit=1] Age
 > data get entity @e[type=minecraft:zombie,tag=bm02,limit=1] IsBaby
-> execute unless entity @e[tag=bm02c] run say BM02 cat gone at 5 s
-> data get entity @e[tag=bm02c,limit=1] Age
+> execute unless entity @e[type=cozys-improved-cats:improved_cat,x=145,y=-61,z=505,dx=1,dy=2,dz=1,limit=1] run say BM02 cat gone at 5 s
+> data get entity @e[type=cozys-improved-cats:improved_cat,x=145,y=-61,z=505,dx=1,dy=2,dz=1,limit=1] Age
 > execute as @e[tag=bm02] run say BM02 alive
 count has the following entity data: -2\d{4}$ == 8
 expect has the following entity data: 1b$
@@ -84,7 +84,7 @@ reject BM02 cat gone
 reject (?i)mixin.*(baby|remodel).*(error|exception)
 reject \[cdevtest\] .*done=0
 look the two entities reads at x 145 z 505 (by_type): the cat (minecraft:cat) right after its summon, and what stands there at 1 s if it is gone (another mod's cat type = replaced, not lost); the "BM02 alive" lines name the 9 mobs (the villager as an MCA villager); if the cat is gone, grep the row log for what removed it
-> kill @e[tag=bm02]
+> kill @e[x=140,y=-61,z=495,dx=10,dy=5,dz=18]
 > time set 6000
 
 @@text

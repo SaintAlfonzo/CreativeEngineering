@@ -237,21 +237,23 @@ expect Test failed
 
 ## SQ-CMP-13 | Nether: skeleton after 1 day, wither skeleton after 2; End: never
 @group A
-@commands Shortened Nether times (`netherSkeletonTime = 200`, `netherWitherTime = 200`: wither 200 ticks after the skeleton) and a restart; advance the clock 600 ticks; in the Nether a corpse holding stone (`c13a`) with `DeathTime` 300 ticks ago, a second (`c13b`) with `DeathTime:1L`; in the End a third (`c13c`) with `DeathTime:1L`; forceload each spot; wait 3 s; read each `Stage`
+@commands Shortened Nether times (`netherSkeletonTime = 200`, `netherWitherTime = 1000`: wither 1000 ticks after the skeleton) and a restart; advance the clock 1200 ticks; in the Nether a corpse holding stone (`c13a`) with `DeathTime` 300 ticks ago, a second (`c13b`) with `DeathTime:1L`; in the End a third (`c13c`) with `DeathTime:1L`; forceload each spot; wait 3 s; read each `Stage`
 @pass c13a 1b, c13b 2b, c13c 0b
 @fails c13b 1b: the Nether list does not match the dimension id; c13c 1b: the End is not in `noDecayDimensions`
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 # r1120fix (2026-11-20): a negative DeathTime is the mixin's "unset" sentinel (CorpseDecayMixin: deathTime < 0 -> now - age),
 # so the r1120nv fixture read as just died. Now: Nether skeleton at 200 ticks, wither 200 ticks later (stand in for 1 + 1 days;
 # restart), the clock moved 600 ticks, positive DeathTimes; the defaults (24000 / 24000) are put back at the end of the row
-edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherSkeletonTime 200 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherWitherTime 200
+# r1121b batch fault: at pace 2 c13a was read about 520 ticks after its death, past the 400-tick wither line (2b);
+# wither now 1000 ticks after the skeleton (window 200-1200) and the clock moved 1200 ticks so c13b still withers
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherSkeletonTime 200 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherWitherTime 1000
 restart
 > execute in minecraft:the_nether run forceload add 0 0
 > execute in minecraft:the_end run forceload add 100 0
 sleep 5
-> cdevtest tickwarp 600
-waitlog verb=tickwarp end=done ticks=600 120
+> cdevtest tickwarp 1200
+waitlog verb=tickwarp end=done ticks=1200 120
 > time query gametime
 capture GT The time is (\d+)
 > execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["c13a"],NoGravity:1b,Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:{GT-300}L}}
@@ -268,7 +270,7 @@ expect has the following entity data: 0b
 > execute in minecraft:the_nether run kill @e[tag=c13b]
 > execute in minecraft:the_end run kill @e[tag=c13c]
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherSkeletonTime 24000 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherWitherTime 24000
-look c13a must read 1b (its death {GT}-300 lies between the skeleton at 200 and the wither at 400 ticks); the three Stage lines in order a, b, c
+look c13a must read 1b (its death {GT}-300 lies between the skeleton at 200 and the wither at 1200 ticks); the three Stage lines in order a, b, c
 reject (Unknown or incomplete command|Incorrect argument for command|No entity was found|\[cdevtest\] verb=tickwarp .*done=0)
 
 ## SQ-CMP-16 | Skeleton corpses sink in water, player-model corpses float

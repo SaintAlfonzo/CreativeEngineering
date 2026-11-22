@@ -2050,10 +2050,11 @@ count verb=tagsof id=creativedelight:[a-z_]+dough_block .*item_tags=\S*forge:sto
 @pass `Done (`; no mixin error naming `XaeroTimeInfoMixin` (Xaero is not on a dedicated server, so `@Pseudo` must skip it silently); no `ClassNotFound` / `NoClassDefFound` for `MossTint`, `net.minecraft.client` or `xaero`; `creativeengineering-common.toml` has `[moss]` `biomeTint`, `tintStrength`
 @fails `creativeengineering.mixins.json` client list vs common list; `MossTint` registration guarded by `FMLEnvironment.dist`
 @jars creativecommon
-@reviewed 2026-11-16
+@reviewed 2026-11-21
 bootexpect Done \(
 bootreject (?i)XaeroTimeInfoMixin.*(error|fail|exception)
-bootreject (ClassNotFound|NoClassDefFound).*(MossTint|net[./]minecraft[./]client|xaero)
+# judge-7, 2026-11-21: another mod's optional-mixin WARN ("[mixin/]: Error loading class net/minecraft/client/...", gotchas.md "Not ours") excluded
+bootreject ^(?!.*\[mixin/\]: Error loading class).*(ClassNotFound|NoClassDefFound).*(MossTint|net[./]minecraft[./]client|xaero)
 shell grep -rn -A3 "^\[moss\]" config/*.toml | head -8; true
 look shell: a [moss] section with biomeTint and tintStrength (creativeengineering-common.toml or the Common config that holds it now)
 ## SQ-TI-01 | pack clock helpers, [time] on and off (toggles the Creative Calendar config, leaves it on)
@@ -2887,6 +2888,13 @@ look shell: placeAs = "FARMERSDELIGHT", sneakToPlace = false, farmlandBlocks = t
 @from batches/r1102b/s1_A.qb
 @reviewed 2026-11-16
 bootreject (?i)item_dict.*(rope_fence|gleaming_salad|pumpkin_pie_slice|hanging_canvas_sign)
+# setup copied from the section setup row so this row reruns alone (r1121q prescreen, 2026-11-21)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > pbot spawn fdb2 {H1+6} {H2} {H3-5} minecraft:overworld survival
 sleep 2
 > give fdb2 farmersdelight:rope_fence 3
@@ -2954,6 +2962,13 @@ look a missing FDB03 line names the failing join (rope fence states printed by a
 @fails Light 0: the lightLevel lambda
 @from batches/r1102b/s1_A.qb
 @reviewed 2026-11-16
+# setup copied from the section setup row so this row reruns alone (r1121q prescreen, 2026-11-21)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > fill {H1+49} {H2} {H3-11} {H1+51} {H2+1} {H3-9} minecraft:air
 > setblock {H1+50} {H2} {H3-10} farmersdelight:gleaming_salad_block
 > pbot spawn fdb4 {H1+50} {H2} {H3-8} minecraft:overworld survival
@@ -3035,6 +3050,13 @@ look the lanes decide the live reload (debug.log never logged the watcher line i
 @from batches/r1103/p2_R.qb
 # run 1: stone-free H2-1 layer let the golems land beside the soils, and the kill found no tagged golem; now a stone
 # floor at the soil level, a 6-block drop, golem positions and an entity count before the kill
+# setup copied from the section setup row so this row reruns alone (r1121q prescreen, 2026-11-21)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > execute positioned {H1+55}.5 {H2} {H3-16}.5 run kill @e[type=minecraft:iron_golem,distance=..12]
@@ -3636,13 +3658,15 @@ look cookies: dough + 2 flavour -> 12 in the oven only; cheesecakes: pie crust +
 @pass Dark seeds in some ancient city rolls, Pale seeds in some sky village rolls, never in jungle temples; every squid kill (Looting or not, player or not) drops exactly 1 `miners_delight:squid` and nothing else (no ink sac, no Calamari); a trader sometimes offers Pale or Dark seeds (5 emeralds, 3 uses)
 @fails No seeds: `rusticdelight/loot.js` (lootTuning) or the table ids
 @from batches/r1113/c4_a.qb
+@reviewed 2026-11-21
 > forceload add 40790 39990 40920 40100
 sleep 3
 > summon minecraft:squid 40860 -60 40008 {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["rd8sq"]}
 > pbot spawn rd8 40856 -60 40008 minecraft:overworld survival
 sleep 2
 > clear rd8
-> kill @e[type=minecraft:item,x=40850,y=-62,z=39995,dx=20,dy=8,dz=20]
+# judge-7, 2026-11-21: the cleanup kill prints "No entity was found" on an empty area, which the reject below caught: guarded
+> execute if entity @e[type=minecraft:item,x=40850,y=-62,z=39995,dx=20,dy=8,dz=20] run kill @e[type=minecraft:item,x=40850,y=-62,z=39995,dx=20,dy=8,dz=20]
 repeat 10
 > execute as rd8 run loot spawn 40860 -60 40000 kill @e[type=minecraft:squid,tag=rd8sq,limit=1]
 end
@@ -5641,8 +5665,14 @@ expect RSP04 water refused
 @fails Strong recipe base / matching (`getMatchingRecipe` HEAD)
 @jars creativecommon creativedelight
 @from batches/r1103/p2_R.qb
+# setup copied from the section setup row so this row reruns alone (r1121q prescreen, 2026-11-21)
+> forceload add 1000 1000
+sleep 3
+> execute unless entity @e[type=minecraft:marker,tag=rhome] run summon minecraft:marker 1000 -60 1000 {Tags:["rhome"]}
+sleep 2
 > data get entity @e[type=minecraft:marker,tag=rhome,limit=1] Pos
 capture R entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {R1-16} {R3-16} {R1+80} {R3+150}
 > setblock {R1+2} {R2} {R3+106} minecraft:campfire[lit=true]
 > setblock {R1+2} {R2+1} {R3+106} farmersrespite:kettle
 > pbot spawn rsp5 {R1+2} {R2+1} {R3+103} minecraft:overworld survival

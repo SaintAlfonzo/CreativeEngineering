@@ -13205,18 +13205,17 @@ i.sweet_salad                     = 'rusticdelight:sweet_salad';
 i.syrup_cheesecake_slice          = 'rusticdelight:syrup_cheesecake_slice';
 i.syrup_sandwich                  = 'rusticdelight:syrup_sandwich';
 
-// ===== solapplepie (5) =====
-i.diet_log           = 'solapplepie:food_book';  // renamed Food Book -> Diet Log (names.js; was Diet Tracker)
-i.golden_lunchbox    = 'solapplepie:golden_lunchbox';
-i.lunchbag           = 'solapplepie:lunchbag';
-i.lunchbox           = 'solapplepie:lunchbox';
-i.netherite_lunchbox = 'creativedelight:netherite_lunchbox';  // registered by Creative Common lunchbox/
-
-// ===== solraspberrypie (1) =====
-i.liquid_diet_log    = 'solraspberrypie:liquid_diet_log';  // Spice of Life: Raspberry Pie Addition (raspberry_pie.md 7)
+// ===== solapplepie (4) =====
+i.diet_log        = 'solapplepie:food_book';  // renamed Food Book -> Diet Log (names.js; was Diet Tracker)
+i.golden_lunchbox = 'solapplepie:golden_lunchbox';
+i.lunchbag        = 'solapplepie:lunchbag';
+i.lunchbox        = 'solapplepie:lunchbox';
 
 // ===== solcarrot (1) =====
-i.food_dictionary    = 'solcarrot:food_book';  // Spice of Life: Carrot Edition, shown as Food Dictionary (names.js)
+i.food_dictionary = 'solcarrot:food_book';  // Spice of Life: Carrot Edition, shown as Food Dictionary (names.js)
+
+// ===== solraspberrypie (1) =====
+i.liquid_diet_log = 'solraspberrypie:liquid_diet_log';  // Spice of Life: Raspberry Pie Addition (raspberry_pie.md 7)
 
 // ===== untitledduckmod (4) =====
 i.cooked_duck  = 'untitledduckmod:cooked_duck';
@@ -15316,10 +15315,10 @@ i.boatload_warped_boat             = 'boatload:warped_boat';
 i.boatload_crimson_chest_boat      = 'boatload:crimson_chest_boat';
 i.boatload_warped_chest_boat       = 'boatload:warped_chest_boat';
 i.t_pickerelweed                   = '#creativedelight:pickerelweed';  // blue and purple (1.21 Upgrade Aquatic has one)
+i.t_buckets_milk                   = '#forge:buckets/milk';
 // Any full bucket of milk: cow, goat or nut milk, iron or wooden (plan_wood_bucket_batch_1121.md R1, R11). A recipe that
 // took the vanilla Milk Bucket takes this; a wooden one hands back the empty wooden bucket. Contents: CD creativedelight/milk.js
 i.t_milk_buckets                   = '#creativedelight:milk_buckets';
-i.t_buckets_milk                   = '#forge:buckets/milk';
 i.raw_pike                         = '#forge:raw_fishes/pike';
 
 // ===== Removed items with no other key (removed_items.js) =====

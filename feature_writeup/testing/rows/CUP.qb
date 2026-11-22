@@ -109,7 +109,7 @@ look the copper_pot rdetail line: the centre ingredient is only minecraft:water_
 @pass neither tag names `miners_delight:milk_cup` (tags load without error); the jar fills from a bowl of Cave Soup and gives the bowl back
 @fails translator tag strip; `soft_fluids/cave_soup.json`
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 # /reload fills Moonlight's soft-fluid item map (empty on a dedicated server until a player joins or a reload);
 # it truncates logs/kubejs/server.log, so this row is last
 > reload
@@ -133,7 +133,8 @@ sleep 3
 > pbot remove cup4
 expect 140, -60, 500 has the following block data: .*cave_soup
 expect cup4 has the following entity data: .*minecraft:bowl
-reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|no such item)
+# r1121b batch fault (judge-4): the reload's recipe warnings ("Unknown item 'biomesoplenty:...'") sit in this row's log; match only the command replies
+reject MinecraftServer/\]: (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|no such item)
 look the "pbot use" reply is SUCCESS / CONSUME; the jar's fluid is the cave soup; the bot holds a bowl
 reject verb=\S+ .*done=0
 

@@ -14,11 +14,12 @@ fix, two cake-slice effect changes and a death-message fix (section 2).
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=70e05c52e9a3 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Testing 4), 0 Complete.
+<!-- generated:status_index begin open_work sha1=a482ca043754 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `mod-updates #2` | Planned | SQ-RSP-02 | Farmer's Respite kettle recipe count 95 vs 84 expected |
 | `food/drinks #12` | Testing | S+ P | Spout filling for Kettle drinks and the water cup fails to load |
 | `food/drinks #16` | Testing | S P T | Kettle brews too fast |
 | `largecontent/mod-additions #21` | Testing | S~ C P T | Farmer's Respite 2.1.2 changes on the installed 2.0 |

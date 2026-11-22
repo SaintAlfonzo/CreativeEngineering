@@ -7,7 +7,8 @@ if (global.CD) global.CD.genPut('food_types', 'minecraft', {
   "raw/veggie": [
    "minecraft_beetroot",
    "minecraft_carrot",
-   "minecraft_potato"
+   "minecraft_potato",
+   "pumpkin_seeds"
   ],
   "raw/fruit": [
    "apple",

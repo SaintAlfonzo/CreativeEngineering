@@ -96,7 +96,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass the egg falls (Pos[1] drops about 0.04 per tick squared) and sinks in water like an ordinary item; it is in none of the floating tags (or the owner's wish is recorded as floating)
 @fails `item_physics` tag json, ItemPhysic config
 @from batches/r1113/c4_a.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-21
 > forceload add 40290 39990 40330 40010
 sleep 3
 > fill 40300 -63 40000 40300 -61 40002 minecraft:water
@@ -118,7 +118,7 @@ sleep 4
 > data get entity @e[tag=cew,limit=1] Pos
 > data get entity @e[tag=gel,limit=1] Pos
 > data get entity @e[tag=geg,limit=1] Pos
-look after 10 ticks both golden eggs are below y -55 (falling); after 4 s the water egg sits at the same depth as the plain egg (y -63 to -61), the ground egg at -60.0, the lava egg burns or floats per the lava rule; it is in no floating tag
+look after 10 ticks both golden eggs are below y -55 (falling); after 4 s the water egg rests on the bottom (y -63; the plain egg floats at the surface, minecraft:egg is in the floats tag), the ground egg at -60.0, the lava egg burns or floats per the lava rule; it is in no floating tag
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GAP-06 | renames that need no client (lang sources)

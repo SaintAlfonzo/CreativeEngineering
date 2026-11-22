@@ -84,16 +84,19 @@ look 216 = 211 jar + 5 pack (and = the 2026-11-10 dump count from the shell line
 @commands Same save: `/data get block` the chest; `/summon minecraft:tnt ~ ~ ~ {Fuse:1}` near the bot, then count `creativecompat:shrapnel` entities over 5 ticks
 @pass Wooden water bucket, sawblade and sawdust keep their ids and NBT; shrapnel pieces per TNT = `[shrapnel] count` in `creativecompat-common.toml` (24 in the pack config; 12 when the save prep set it)
 @fails Compat shrapnel registry not created (`ShrapnelEntities`); config not read. r1120nv batch fault: shrapnel moved to Creative Compat (`creativecompat:shrapnel`), the row counted `creativeengineering:shrapnel`
-@reviewed 2026-11-20
+@reviewed 2026-11-21
+# r1121b batch fault: at pace 2 the TNT blew 2 s before the count and the pieces (maxDistance 12 at 1.4 blocks/tick)
+# were gone; count within a few ticks of the blast as SQ-SPF-13 (pace 0.05), three reads, one must hit the full count
 > forceload add 0 0 15 15
 > fill 0 -60 0 15 -50 15 minecraft:air
+pace 0.05
 > summon minecraft:tnt 8 -60 8 {Fuse:1}
-> cdevtest tickwarp 3
-waitlog \[cdevtest\] verb=tickwarp end=done ticks=3 30
 > cdevtest entities 8 -60 8 24 type=creativecompat:shrapnel
+> cdevtest entities 8 -60 8 24 type=creativecompat:shrapnel
+> cdevtest entities 8 -60 8 24 type=creativecompat:shrapnel
+pace 2
 waitlog \[cdevtest\] verb=entities done= 30
 shell c=$(awk '/^\[shrapnel\]/{f=1;next} /^\[/{f=0} f && $1=="count"{print $3}' config/creativecompat-common.toml); echo "config count=$c"; grep -qE "verb=entities n=$c( |$)" logs/latest.log
-reject \[cdevtest\] verb=entities n=0\b
 > kill @e[type=creativecompat:shrapnel]
 > forceload remove 0 0 15 15
 reject \[cdevtest\] .*(done=0|error=)

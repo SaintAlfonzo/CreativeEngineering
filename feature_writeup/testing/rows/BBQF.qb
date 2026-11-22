@@ -243,7 +243,7 @@ reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 @commands Give a nut butter bottle and a Delightful sandwich, relog
 @pass They become Nut Mash and `pb_j`; log shows the merge count (43 per the Vintage agent; recount with the potato salad pairs) and no `merged twice`
 @fails CD `swaps/merges_vintagedelight.json`, `merges_delightful.json`; Creative Common `swap/ItemMerges.java`; TODO `#7`
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 # own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
@@ -266,11 +266,12 @@ sleep 2
 > pbot inv savtd get
 expect verb=pbot.inv bot=savtd slot=\d+ item=vintagedelight:nut_mash_jar
 expect verb=pbot.inv bot=savtd slot=\d+ item=vintagedelight:pb_j
-expect \[swaps\] savtd: \d+ merged stack\(s\) rewritten
+# r1121b batch fault: the pack's inventory swap (server_scripts/other/item_merges.js, inventoryChanged) merges the
+# stacks at /give, before the relog, so the login rewrite line never comes; the two inv reads after the relog are the check
 shell grep -hE "\[swaps\].*item merge" logs/latest.log | head -3
 bootreject merged twice
 > pbot remove savtd
-look the merge count line (43 with the potato salad pairs)
+look the merge count line ([swaps] N item merge(s) live; 43 before the potato salad pairs, recount)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0)
 
 ## SQ-VTDA-13 | quiches: oven with a pie tin only, no grid recipe (recipe half; the physical oven bake: sA_skip.md)
@@ -333,9 +334,9 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## SQ-CDM2-03 | Globular Rice and Bowl of Paella: Nourishment and Comfort 4:00
 @group A
 @commands Eat Globular Rice and Bowl of Paella; grep log
-@pass Globular Rice Nourishment 4:00, Bowl of Paella Comfort 4:00 (one effect each); log `277 ruled foods set` (8 Miner's cups dropped)
+@pass Globular Rice Nourishment 4:00, Bowl of Paella Comfort 4:00 (one effect each); log `N ruled foods set` with N = the `set` entries of `generation_scripts/food/comfort_nourishment.json` (329 on 2026-11-21)
 @fails `generation_scripts/food/comfort_nourishment.json` (`tools/gen_comfort_nourishment.py`), CD `comfort_nourishment.js`; TODO `dishes/ocean #8`
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 # own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
@@ -364,7 +365,8 @@ count verb=pbot.useitem bot=sacdm end=finish == 2
 count verb=player name=sacdm effects=farmersdelight:nourishment:0:4[78]\d\d\b == 1
 count verb=player name=sacdm effects=farmersdelight:comfort:0:4[78]\d\d\b == 1
 shell grep -hE "ruled foods set" logs/latest.log logs/kubejs/*.log | head -3
-shell grep -qhE "285 ruled foods set" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
+# r1121b batch fault: a typed count (285) went stale with the generator; the count is read from the generated file
+shell n=$(python3 -I -c "import json,sys; print(len(json.load(open(sys.argv[1]))['set']))" "$INST/kubejs/generation_scripts/food/comfort_nourishment.json"); echo "set entries=$n"; grep -qhE "\] $n ruled foods set" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
 > pbot remove sacdm
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 

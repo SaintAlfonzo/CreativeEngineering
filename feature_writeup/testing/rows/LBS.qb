@@ -74,10 +74,15 @@ reject \[zlbs\] FAIL
 @pass control: a torch drops; every host: the label (blank) and the note (with its Text) drop as item entities at the cell, the cell is air (20 of 20); piston line PASS (note dropped with Text, cell air); survival break drops the label
 @fails control drops nothing too: every block drop is skipped (Creative Worldgen `FirstTickWater` flag; needs the 2026-11-03 Worldgen jar, which clears it each level tick); control drops but paper does not: `FacePaperInteractions.hostChanged` / `refit`
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 # probe hosts at x 300..348, z 20..44 (zlbs_probe.js); forceload added r1120fix 2026-11-20
 > forceload add 296 16 351 47
 sleep 3
+# hosts, labels and notes come from the -01 and -03 steps; repeated here so the row runs in a boot without them (r1121b 2026-11-21)
+> zlbs labels
+waitlog \[zlbs\] DONE labels 60
+> zlbs centre
+waitlog \[zlbs\] DONE centre 60
 > zlbs refit
 waitlog \[zlbs\] DONE refit 60
 count \[zlbs\] PASS refit == 20

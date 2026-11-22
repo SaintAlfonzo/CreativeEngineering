@@ -1,0 +1,2742 @@
+[
+ {
+  "id": "SQ-AV-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQ-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQ-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQ-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQ-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQ-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LGM-11",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQ2-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ROLL-12",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQF-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQF-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQF-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQF-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQF-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQF-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQF-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VTDA-11",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VTDA-12",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDM2-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDM2-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-GLD2-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SALT2-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SALT2-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SALT2-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SALT2-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SALT2-08",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-GLD2-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BBQW-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDB-10",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDB-11",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDFW-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDFW-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CEN-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CMG-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CEQ-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CFR-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CFR-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CFS-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CMP-11",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CMP-13",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-DEP-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-DNR-O-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-DRK-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-DRK-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-EX-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FDI-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FF-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FF-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FF-09",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FF-11",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CNS-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CORN-04b",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FO-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FO-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FFB-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PS-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VNG-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-STD-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CNP-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FO-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FO-08",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FO-14",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CNG-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ENM-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-GLD-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SWP-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SWP-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SWP-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-GLD-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PCK-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HOP-12",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PRT-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-IPO-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JFP-01b",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JFP-01c",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JFP-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JFP-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JFP-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JFP-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JFP-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A2.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LBS-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LGM-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LGM-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LGM-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LGM-08",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LOOT-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MT-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VTD7-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-NSM-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PFS-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PF-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PF-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-POT-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-POT-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-POT-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-POT-04v",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-POT-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PS15B-13",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PS15B-26",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RB-21",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RE-31",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-30",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-31",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-32",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-09",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-13",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-19",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-24",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RFX-27",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ROLL-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ROLL-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ROLL-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ROLL-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ROLL-08",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RPI-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RPI-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RPI-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SALT-08",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A3.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SMK-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T1",
+  "client": false
+ },
+ {
+  "id": "SQ-SMK-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T1",
+  "client": false
+ },
+ {
+  "id": "SQ-SMK-09",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T1",
+  "client": false
+ },
+ {
+  "id": "SQ-SMK-11",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T1",
+  "client": false
+ },
+ {
+  "id": "SQ-STK-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-STN-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-TP-41",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-TP-42",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MG-21",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VDF-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VDF-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VDF-05",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VDF-06",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VDF-07",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VDF-09",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VN-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CUP-02",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CUP-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CUP-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-IMS-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-IMS-03",
+  "file": "tools/scratch_query/batches/r1121q/bundle_A4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ABD-01",
+  "file": "tools/scratch_query/batches/r1121q/bundle_B1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ABD-04",
+  "file": "tools/scratch_query/batches/r1121q/bundle_B1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VTDA-10",
+  "file": "tools/scratch_query/batches/r1121q/bundle_B1.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BM-01",
+  "file": "feature_writeup/testing/rows/BM.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BM-02",
+  "file": "feature_writeup/testing/rows/BM.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CBP-08b",
+  "file": "feature_writeup/testing/rows/CBP.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CBW-01",
+  "file": "feature_writeup/testing/rows/CBW.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CCO-12a",
+  "file": "feature_writeup/testing/rows/CCO.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CCO-12b",
+  "file": "feature_writeup/testing/rows/CCO.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CCO-12c",
+  "file": "feature_writeup/testing/rows/CCO.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CCO-12d",
+  "file": "feature_writeup/testing/rows/CCO.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CCO-12e",
+  "file": "feature_writeup/testing/rows/CCO.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CCO-12f",
+  "file": "feature_writeup/testing/rows/CCO.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDJ4-08b",
+  "file": "feature_writeup/testing/rows/CDJ4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-LEM-02",
+  "file": "feature_writeup/testing/rows/CDJ4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JSL-01",
+  "file": "feature_writeup/testing/rows/CDJ4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JSL-02",
+  "file": "feature_writeup/testing/rows/CDJ4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CSI-01",
+  "file": "feature_writeup/testing/rows/CSI.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CSI-02",
+  "file": "feature_writeup/testing/rows/CSI.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-DNR-O-05",
+  "file": "feature_writeup/testing/rows/DNR.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-DNR-E-03",
+  "file": "feature_writeup/testing/rows/DNR.qb",
+  "section": 3,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-DNR-E-04",
+  "file": "feature_writeup/testing/rows/DNR.qb",
+  "section": 4,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BOT-04",
+  "file": "feature_writeup/testing/rows/FCK.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MG-23",
+  "file": "feature_writeup/testing/rows/FCK.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MG-24",
+  "file": "feature_writeup/testing/rows/FCK.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-T1-02",
+  "file": "feature_writeup/testing/rows/FCK.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FFH-02",
+  "file": "feature_writeup/testing/rows/FFH.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-GAP-05",
+  "file": "feature_writeup/testing/rows/GAP.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-201",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-204",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-205",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-206",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-211",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-215",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-216",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-218",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-219",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-221",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-229",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-234",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-255",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-256",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1108",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1141",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1142",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1214",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1205",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1215",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1153",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1157",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1280",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1241",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1298",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-329",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1304",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-227",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1511",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1520",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1532",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1533",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1588",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1590",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1595",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1546",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-266",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1106",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1109",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1110",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1111",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1230",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1231",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1232",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1326",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1606",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1607",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1608",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1609",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1610",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1611",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MBX-02",
+  "file": "feature_writeup/testing/rows/MB.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MBX-03",
+  "file": "feature_writeup/testing/rows/MB.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MBX-04",
+  "file": "feature_writeup/testing/rows/MB.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MBX-07",
+  "file": "feature_writeup/testing/rows/MB.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MRD-02",
+  "file": "feature_writeup/testing/rows/MRD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PG-02",
+  "file": "feature_writeup/testing/rows/PG.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PJL-02",
+  "file": "feature_writeup/testing/rows/PJL.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PJL-05",
+  "file": "feature_writeup/testing/rows/PJL.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FCB-01",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FCB-07",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FCB-08",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PSF-02",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PSF-08",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PSF-09",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PSW-00",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PSM-06",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PST-03",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PST-08",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PST-10c",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PST-11",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PST-11b",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PWG-11",
+  "file": "feature_writeup/testing/rows/PWG.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PWG-35",
+  "file": "feature_writeup/testing/rows/PWG.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PWG-55",
+  "file": "feature_writeup/testing/rows/PWG.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RD-22",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VP-06",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDF-08",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FDB-02",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RD-08",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FDB-04",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FDB-06",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RD-19",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RM-03",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RSP-02",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FR-04",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-FF-02",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RSP-05",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RSP-06",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RSP-11",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RSP-15",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-VTD4-07",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CDQ-00",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CNS-02",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RD-07",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RD-15",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-CORN-07",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-WCD-07",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-TI-00",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RD-17",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RDX-06",
+  "file": "feature_writeup/testing/rows/RDX.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SALT-06",
+  "file": "feature_writeup/testing/rows/SALT.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SSP-01",
+  "file": "feature_writeup/testing/rows/SSP.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SSP-02",
+  "file": "feature_writeup/testing/rows/SSP.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-SSP-03",
+  "file": "feature_writeup/testing/rows/SSP.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-ENC-02",
+  "file": "feature_writeup/testing/rows/SSP.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ }
+]

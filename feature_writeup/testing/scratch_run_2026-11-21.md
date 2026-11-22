@@ -235,3 +235,119 @@ Next scratch session, in order:
    keeps boot-1 config, qlint false positives, rows needing their own reboot).
 4. Then the rest of the queue (owner, 2026-11-21): jar-changed rows, failed rows, never-run drafts.
 Client rows were not run.
+
+## 9. r1121q: rerun list, bundled (evening session)
+
+Owner request (2026-11-21 17:00): execute the scratch queue, as many low-effort rows as possible, bundle tests when
+possible. Scope taken: handover item 2, the r1120nv rerun list (`perf/runs/r1120nv/rerun.txt`, qrerun.py plan: 286 rows,
+87 sections). Not taken: the 36 worldgen / long steps of r1120nv (handover item 1), client rows, drafts.
+
+- Bundling: new `tools/scratch_query/qbundle.py` copies the plan rows of sections with no `@@prep` for their group,
+  no `@@modset` / `@modset`, all on boot 1 and no failed-boot row into run batches
+  `tools/scratch_query/batches/r1121q/bundle_A1..A4.qb`, `bundle_B1.qb` (at most 40 rows per boot, a section's rows
+  never split, sections with a `/reload` last in a boot); the other sections run as normal drive steps. One drive,
+  `--plan-json tools/scratch_query/batches/r1121q/all.plan.json`: 28 boots for 274 rows (99 unbundled).
+- Dropped (tools/scratch_query/batches/r1121q/dropped.txt): SQ-HH-477, -494, -501 (boot-2 rows: they bring the 486
+  boot-1 rows of HH section 2 along, about 3.6 h) and the worldgen rows SQ-CWG-03, -06, -09, SQ-DNR-O-04, SQ-DNR-E-02,
+  SQ-FSD-02, SQ-FTW-02, SQ-HH-318, SQ-VH-12 (fresh worlds; not low effort).
+- Jars: prep_srv.sh swaps in the build jars newer than `mods/` (Common 1.2.0+6da18f23.dirty-fa644e.2611211613, Compat,
+  Calendar, Loot 6da18f23 2611211558/1618; `jarstamp.py pending` lists these 4 as built, not installed).
+- Preflight: `check_all.py --fast` 3 FAIL, all lint on uncommitted work (comment_dates, spelling_code, tab_indent),
+  none boot-relevant; disk 15 GB free.
+
+### 9.1 Run notes
+
+- 17:00 RUNNER idle, no game JVM. qprescreen on the rerun plan: 10 likely. Fixed (run default 11, row steps only):
+  SQ-FDB-02, -04, -06 and SQ-RSP-05 read the s1home / rhome markers only the section setup row makes -> the setup lines
+  copied into each row; SQ-CFS-02 placed blocks at 304 -60 310 unloaded -> forceload added. Left as false positives:
+  SQ-LGM-11, SQ-PFS-03, SQ-ROLL-03, SQ-MG-21 (a bot spawn loads the chunk), SQ-DNR-E-02 (locate).
+- 17:06 perf session r1121q opened; drive r1121q started on the unbundled plan (99 steps, 737 rows, ETA 1000 min) and
+  stopped at once at step 1 to bundle (see above). SQ-JFP-02 (`@group same`) split from its fixture rows in the first
+  bundling: qbundle.py now inherits the previous row's group and keeps a section whole when any of its rows is not plain.
+- 17:18 drive r1121b started on tools/scratch_query/batches/r1121q/all.plan.json (36 steps, 277 rows, ETA 01:02); r1121q
+  (unbundled) left stopped at step 1, not resumed.
+- 17:40 step 1 (bundle A1) done; judge-1: PASS 29, BATCH-FAULT 9, INCONCLUSIVE 2, no real FAIL.
+  - BF-FIX SQ-BBQ-03 bibimbap dropped (plan_wood_bucket_batch_1121.md R18) -> meal expect turned into a reject;
+    SQ-CEN-05 TNT burst before the count at pace 2 -> pace 0.05 around the summon (SQ-SPF-13 pattern); SQ-CMP-13 c13a
+    read past the wither line -> netherWitherTime 1000, tickwarp 1200; SQ-CDM2-03 typed count 285 -> read N (329) from
+    comfort_nourishment.json; SQ-ROLL-12 can / slice rejects too wide (FD rice roll cans, Create sweet roll, S&D copy)
+    -> scoped; SQ-VTDA-12 inventory swap merges at /give, relog line never appears -> expect dropped. All in
+    perf/runs/r1121b/rerun.txt.
+  - Not simple: SQ-BBQ-06, -07 `pbot use` hits y+1.0, above GrillBlockEntity.getBox (0.8125 to 0.99): needs a hit-point
+    option on `pbot use` (tool change in Creative Devtools perfbot). SQ-GLD2-03 log `[golden values] 41` vs
+    golden_food.md 3.6 "46 items": docs and code disagree, owner rules.
+  - INCONCLUSIVE: SQ-CEQ-04 (rdetail prints no sequenced-assembly fluid amounts), SQ-CFR-05 (SPF-81 fixture campfire
+    absent in a bundle boot).
+  - Notes: SQ-BBQ-04 still expects compost bibimbap=1 (same R18 cause); SQ-CDFW-06 @pass text needs a refresh (fried egg
+    items have no furnace recipe, food.md 3.7).
+- 18:13 step 2 (bundle A2) done: PASS 7, FAIL 3, LOOK 30 raw; judge-2 on it. Step 3 (bundle A3) booting.
+- 18:3x judge-2 (step 2, bundle A2): PASS 36, BATCH-FAULT 2, INCONCLUSIVE 1, FAIL 1.
+  - Real FAIL SQ-GLD-03 milk half: after golden milk and enchanted milk the Speed is cured but the bot then reads
+    `effects=minecraft:poison:0:92` (Poison I about 100 t), and hunger 18 -> 20 on finish (golden_food.md 3.1 "milk
+    never eats"). ShinyItems.GoldenMilk / Milk only cure; suspect a use-finish handler or the drink food rules
+    (food_types.js). TODO food-tuning #31.
+  - BF-FIX SQ-FF-04 cdevtest prints `modifier=1` -> regex `modifier=1(\.0)? saturation=`; SQ-PCK-02 waffle moved to
+    `food_family/baked/misc` (owner 2026-11-20, food_families.md 4.9) -> row queries and expects that tag.
+  - INCONCLUSIVE SQ-FO-08: no cachalot kill step, the blubber drop is untested (rewrite pass). PASS caveats: SQ-FO-04 cook
+    times not printed by rdetail; SQ-JFP-05 look text says 3 cookies, setup inserts 1.
+- 18:36 step 3 (bundle A3) done; judge-3: PASS 23, BATCH-FAULT 9, FAIL 4, INCONCLUSIVE 3.
+  - Real FAIL SQ-LGM-07: a full omurice_block (servings=4) drops the block and a bowl (bowl only when servings is not 4).
+    SQ-POT-02: framed_flower_pot accepts melon, pumpkin, moss block, azalea leaves, hamimelon; hanging_flower_pot accepts
+    0 of 555 (as r1120pot; suspect SuppFlowerBoxPlantsMixin / framed pot mixin, or the probe face). SQ-POT-04: vanilla
+    pot with gossypium does not return the plant. SQ-POT-04v: potted_gossypium / potted_hemp break drops nothing
+    (pack loot tables in kubejs/data not applied?).
+  - BF-FIX SQ-LBS-04 hosts from other boots -> `zlbs labels` / `centre` first; SQ-LGM-08 pot contents -> recipes.js
+    inputs; SQ-RFX-09, -19 Spice of Life values changed on purpose (food diversity 2026-11-21) -> filter ignores sol;
+    SQ-ROLL-03 peaceful refills hunger -> difficulty easy around the eat.
+  - Environment: server thread stalled 18:21:11 to 18:28:11 at SQ-PS15B-13's `forceload add 1290 1290 1330 1310` (chunk
+    generation suspected, no thread dump); collateral SQ-PS15B-13, -26, SQ-RB-21, SQ-RE-31 BATCH-FAULT, rerun. A second
+    stall on PS15B-13 = stop and jstack.
+  - INCONCLUSIVE SQ-RFX-02, -19, -30: scratch dumps differ from the pack dump by 373 recipe and 142 tag lines (client
+    mods, oceansdelight, IE sawmill, powergrid; baseline 2026-11-17 looks stale: owner refreshes the baseline);
+    SQ-RFX-24 /wine time prints bare lang keys, no values (needs a value probe).
+  - Side effect: SQ-POT-05's shell rewrites feature_writeup/flower_pots_matrix.md (no net change in git).
+- 18:47 step 4 (bundle A4) done: PASS 10, LOOK 9, FAIL 2 raw; judge-4 on it. Step 5 (bundle B1) started as group A.
+  - Tool fault: qdrive.build_steps read row metadata only from rows/*.qb, so every bundle row took the default group A
+    and bundle B1's three group B rows (SQ-ABD-01, -04, SQ-VTDA-10) run on the superflat. Fix in qdrive.py: also load
+    the files the plan names. Those three rows go to the rerun; bundles A1 to A4 unaffected (all group A, no modset).
+- 19:0x judge-4 (step 4, bundle A4): PASS 19, BATCH-FAULT 2, no real FAIL.
+  - BF-FIX SQ-CUP-04 reject matched another section's /reload recipe warning -> anchored on MinecraftServer lines;
+    SQ-TP-41 replies 40 ticks late at pace 2 -> macro / cd / doors under pace 0. **Owner check:** the same fix changed
+    `doors total 1` to `2` from the observed output (one macro opens a linked pair); no writeup states the count.
+  - Weak evidence on PASS: SQ-VDF-09 can honey ingredient from can_types.js only; SQ-VDF-07 server half only.
+- 19:4x judge-5 (steps 6 to 20, 23 rows): PASS 20, BATCH-FAULT 3, no real FAIL.
+  - BF-FIX SQ-BM-02 Cozy's Improved Cats replaces the summoned cat (tag lost) -> select by type and box; SQ-JSL-02
+    `Slot: 8` prints without b -> `Slot: 8b?,`; SQ-MG-24 surviving rope recipe is supplementaries:rope_2 -> `rope(?:_2)?`.
+  - Finding (not a row fault): 10 KubeJS server ERRORs "Failed to create custom JSON recipe" from creativedevtools
+    sequence_assembly_processes.js#58 (createaddition, vintageimprovements types) in every CCO-12 set; TODO at write-back.
+- 20:4x judge-6 (steps 21 to 27, 64 rows): PASS 58, BATCH-FAULT 4, FAIL 2.
+  - Real FAIL SQ-HH-1232: `litter minecraft:pig x300 truffle: babies 623, extra 323`, row wants 864 to 963 (plain pigs
+    SQ-HH-1230 extra 289; r1120nv on the old code 550); truffleLitterBonus=1 in the srv toml, CD jar newer than the
+    2026-11-21 13:49 commit. Suspect hearth AnimalEvents.java 103-107 or fungi ModEntitiesEvents.onBabySpawn.
+    SQ-HH-1608: iron watering can 2x2 soaks (561,-61,576) but not the clicked column (560,-61,575); 3x3 / 4x4 pass.
+    Suspect WateringCanItem area code (~295) or the pbot hit point; unproven.
+  - BF-FIX SQ-HH-1326 needs SQ-HH-1324's toml edits and restart -> added; SQ-HH-1511 summon after the watch -> moved
+    before; SQ-HH-1607 can level inherited from -1606 -> own item replace, forceload, bot; SQ-HH-227 waitlog ticks=400 vs
+    warp 600 -> 600 (cow count 1 of 3 may remain); SQ-MBX-06 judged PASS, Speed control check added and queued.
+  - Row text stale (no rerun): SQ-GAP-05 egg floats by design (physics/floats) -> row text fixed; SQ-FFH-02 @pass says
+    muffins have pot recipes (oven only since 2026-10-29); SQ-MBX-05 hardness 50 in the row vs 25 in changelog 1.1.05
+    (owner settles).
+- 21:18 drive r1121b 36/36 steps done; no JVM left; RUNNER idle (driver release). judge-7 on steps 28 to 36; the rerun
+  drive r1121br (perf/runs/r1121b/rerun.txt) starts after it.
+- 21:2x judge-7 (steps 28 to 36, 47 rows): PASS 39, FAIL 4, BATCH-FAULT 4. The copied marker setups in SQ-FDB-02, -04,
+  -06 and SQ-RSP-05 worked.
+  - Real FAIL SQ-PSF-09: well Amount 51000 before and after the can use, FillTick 163 -> 135: the drain does not reach
+    the tank (r1120nv same shape; H&H well / can handler in the CD hearthandharvest member). SQ-PST-11b: grass over
+    mycelium winter/spring 0.20, limit 0.35 to 0.85 (r1120nv 0.88, r1102b 0.13: unstable measure; IWGrassSpreadSeasonMixin
+    or the count). SQ-FDB-06: Rich Soil holds, but the vanilla control farmland is not trampled either (golem 6-block
+    drop, mobGriefing true; crops.md says farmland tramples; cause not found). SQ-RSP-02: 95 kettle recipes, row expects
+    84 from the 2026-11-19 dump (owner: stale dump or 11 new recipes).
+  - BF-FIX SQ-PSM-06 reject hit a conditional recipe WARN after the restart -> `^(?!.*Error parsing recipe)` prefix;
+    SQ-RD-08 reject hit the pre-loop kill on an empty area -> `execute if entity` guard; SQ-TI-00 bootreject hit another
+    mod's optional mixin WARN -> `[mixin/]: Error loading class` excluded.
+  - Not simple: SQ-VP-06 tools/vintage_probe/vintage_probe.js OLD_SOUPS still lists the 6 goldenfood stews removed
+    2026-11-10 (shared probe; drop them and the row's 32 soups -> 26 in a rewrite pass).
+  - Row text stale: SQ-PSW-00 "47" structures, the scan prints 43.
+- 21:30 rerun drive r1121br: perf/runs/r1121b/rerun.txt (33 ids) plus SQ-BM-01 (forceload fixture for SQ-BM-02),
+  bundled by qbundle.py into tools/scratch_query/batches/r1121br/ (bundle A1 19 rows, B1 3 rows) plus 7 sections: 9
+  steps, 34 rows, ETA 23:23. The group fix in qdrive.py is in this drive (bundle B1 resolves to group B).

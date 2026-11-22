@@ -16,13 +16,14 @@ asks for it by name. Upstream bugs are fixed (3.5).
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=ca974584249c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=aac6635185ce -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `largecontent/mod-additions #12` | Testing | none | Overlap analysis of five small farming mods, then per-mod ports |
 | `largecontent/mod-additions #40` | Testing | S~ C P T | Large Meals 1.3.0 port |
+| `mod-updates #1` | Testing | SQ-LGM-07 | Full omurice block drops the block and a bowl |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |

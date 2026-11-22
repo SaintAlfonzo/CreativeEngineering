@@ -1,0 +1,963 @@
+@@section 1
+@@title bundle A3 (run batch, not queue rows): LBS.qb LGM.qb LOOT.qb MT.qb MXS.qb NSM.qb PB.qb PF.qb POT.qb PS15B.qb RB.qb RE.qb RFX.qb ROLL.qb RP.qb SALT.qb
+@@date 2026-11-21
+@@phase server
+@@text Run-only copy of plan rows that share one group A boot (qbundle.py); the queue rows stay in rows/*.qb.
+@@table
+
+## SQ-LBS-04 | host set to air: label and written note drop, cell air (zlbs refit, after -01 and -03)
+@group A
+@commands `/zlbs refit` after -01 and -03 (hosts set to air with `setBlockAndUpdate`, flag 3); first line is a control: a wall torch on a stone host that goes to air; last line (10 ticks later) a piston pushing a noted stone host. By hand once: a labelled stone broken in survival
+@pass control: a torch drops; every host: the label (blank) and the note (with its Text) drop as item entities at the cell, the cell is air (20 of 20); piston line PASS (note dropped with Text, cell air); survival break drops the label
+@fails control drops nothing too: every block drop is skipped (Creative Worldgen `FirstTickWater` flag; needs the 2026-11-03 Worldgen jar, which clears it each level tick); control drops but paper does not: `FacePaperInteractions.hostChanged` / `refit`
+@jars creativelabels
+@sources feature_writeup/sticky_notes.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sB_2.qb
+# probe hosts at x 300..348, z 20..44 (zlbs_probe.js); forceload added r1120fix 2026-11-20
+> forceload add 296 16 351 47
+sleep 3
+> zlbs refit
+waitlog \[zlbs\] DONE refit 60
+count \[zlbs\] PASS refit == 20
+reject \[zlbs\] FAIL
+look the label drops are blank (no NBT), the note drops carry their Text
+
+## SQ-LGM-03 | Potato Soup: with a bowl it comes out, without one the pot keeps it (pots 180, 183)
+@group A
+@commands Place a Cooking Pot over a campfire, insert 2 potato, onion, milk bucket, bowl; wait 200 ticks
+@pass Potato Soup out, bowl consumed; without a bowl the pot holds the meal (LGM-03)
+@fails recipe/container
+@jars creativedelight
+@sources feature_writeup/large_meals.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
+> setblock 180 -60 500 minecraft:campfire[lit=true]
+> setblock 180 -59 500 farmersdelight:cooking_pot
+> data merge block 180 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> setblock 183 -60 500 minecraft:campfire[lit=true]
+> setblock 183 -59 500 farmersdelight:cooking_pot
+> data merge block 183 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b}]}}
+sleep 25
+> data get block 180 -59 500 Inventory
+> data get block 183 -59 500 Inventory
+expect Slot: 8b?, id: "largemeals:potato_soup"
+expect Slot: 6b?, id: "largemeals:potato_soup"
+reject Slot: 7b?, id: "minecraft:bowl"
+
+## SQ-LGM-05 | knife kills drop racks of mutton (sheep at 190)
+@group A
+@commands Summon 20 sheep, bot kills each with a knife in the main hand; again burning; again with a stone sword
+@pass about half drop a Raw Rack of Mutton; burning ones the Cooked Rack; none with the sword (LGM-05, 06)
+@fails loot modifier (`data/forge/loot_modifiers`)
+@jars creativedelight
+@sources feature_writeup/large_meals.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
+> cdevtest kill 190 -60 500 minecraft:sheep n=20 held=farmersdelight:iron_knife
+> cdevtest kill 190 -60 500 minecraft:sheep n=20 held=farmersdelight:iron_knife fire
+> cdevtest kill 190 -60 500 minecraft:sheep n=20 held=minecraft:stone_sword
+count verb=kill type=minecraft:sheep n=20 killed=20 == 3
+expect verb=kill drops=\S*largemeals:raw_mutton_rack:([5-9]|1[0-5])\b
+expect verb=kill drops=\S*largemeals:cooked_mutton_rack:([5-9]|1[0-5])\b
+reject verb=kill drops=\S*cooked_mutton_rack:\d+,\S*raw_mutton_rack:
+count verb=kill drops=\S*mutton_rack: == 2
+look drops lines in order knife, knife burning, sword: about half of each knife batch drops a rack; the burning batch has no raw rack; the sword batch none
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-LGM-07 | Omurice feast: 4 bowls then the plate; full and part-eaten drops (block at 200)
+@group A
+@commands `/setblock ~ ~ ~ largemeals:omurice_block`, bot right-clicks with bowls 5 times; break a full and a `[servings=2]` one
+@pass 4 Bowl of Omurice, then the plate leftover; full drops the feast item, part-eaten a bowl (LGM-09, 10)
+@fails FeastBlock property names
+@jars creativedelight
+@sources feature_writeup/large_meals.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
+> setblock 200 -60 500 largemeals:omurice_block
+> pbot spawn lg7 200 -60 503 minecraft:overworld survival
+> pbot hold lg7 minecraft:bowl 5
+repeat 5
+> pbot use lg7 200 -60 500 up
+end
+> clear lg7 largemeals:omurice 0
+> data get block 200 -60 500
+expect Found 4 matching item
+> setblock 200 -60 500 largemeals:omurice_block
+> cdevtest break 200 -60 500
+> setblock 200 -60 500 largemeals:omurice_block[servings=2]
+> cdevtest break 200 -60 500
+expect verb=break drops=largemeals:omurice_block:1 stacks=1\b
+expect verb=break drops=minecraft:bowl:1 stacks=1\b
+> pbot remove lg7
+look after the 4th bowl the block is the plate leftover (5th use); the setblock state name servings fits FeastBlock
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-LGM-08 | Roasted Rack feast from the pot, both ways; grid craft manual_only (pots 205, 208)
+@group A
+@commands Roasted Rack feast: pot with raw rack + 2 cooked rice + carrot + baked potato + bowl; then cooked rack + 2 rice + carrot + 2 baked potato + bowl; hand grid craft
+@pass each gives the feast (LGM-17); grid craft listed `_manual_only`
+@fails pot ingredient limit 6
+@jars creativedelight
+@sources feature_writeup/large_meals.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
+> forceload add 175 495 215 510
+sleep 3
+> cdevtest recipes roasted_mutton_rack
+> setblock 205 -60 500 minecraft:campfire[lit=true]
+> setblock 205 -59 500 farmersdelight:cooking_pot
+> data merge block 205 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:raw_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> setblock 208 -60 500 minecraft:campfire[lit=true]
+> setblock 208 -59 500 farmersdelight:cooking_pot
+> data merge block 208 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:cooked_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:5b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done 60
+> data get block 205 -59 500 Inventory
+> data get block 208 -59 500 Inventory
+count Slot: [68]b?, id: "largemeals:roasted_mutton_rack_block" == 2
+expect verb=recipes id=creativedelight:\S*roasted_mutton_rack\S*_manual_only result=
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-LOOT-01 | boot: loot engine banner once, tuning line equals the pre-split one
+@group A
+@commands Boot on the installed jars; read startup.log, the KubeJS server log and latest.log
+@pass `[creativeloot] core finished` once in startup.log; `[creativeloot] loaded` in latest.log; `global.LOOT ready`; the `[loot-tuning] N rules -> rewrote M tables (...)` line equals the baseline log's line; no `global.LOOT missing`, no `could not read`, no `queued loot rules failed`, no mixin error on LootModifierManagerMixin
+@fails Line differs: a rule file did not load from the new pack (`// requires: creativeloot`), or the CD `loot.js` queue never ran (`global.LOOT.rules` vs the CD jar copy). `global.LOOT missing`: the startup script is not in the jar. Mixin error: SRG name `m_5787_`
+@jars creativeloot creativeworldgen
+@sources development/creativeLoot kubejs/data/creativeloot/kubejs development/creativeWorldgen/src/main/resources/META-INF/mods.toml kubejs/data/creativedelight/kubejs/miners_delight/loot.js kubejs/data/creativedelight/kubejs/rusticdelight/loot.js kubejs/data/creativedelight/kubejs/veggiesdelight/loot.js kubejs/data/creativedelight/kubejs/vintagedelight/loot.js
+@tier T2
+@reviewed 2026-11-21
+shell test "$(grep -c '\[creativeloot\] core finished' logs/kubejs/startup.log)" = 1
+bootexpect \[creativeloot\] loaded
+bootreject LootModifierManagerMixin.*(InvalidInjectionException|could not find|failed)
+kjsexpect global\.LOOT ready
+kjsreject global\.LOOT missing|\[loot-tuning\] (could not read|disabled: missing)|queued loot rules failed
+# baseline + loot/tables #18 (2026-11-20, botania:lexicon removed from both Botania inject tables): +1 rule, +2 tables,
+# +2 entries removed, +2 pools reweighted, the rest unchanged (judge-7, r1120nv, 2026-11-21)
+shell a=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' logs/kubejs/server.log | tail -1); b=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' "$INST/kubejs/exported/baseline_loot_split_2026-11-17/server_2026-11-16.log" | tail -1 | sed 's/5 rules -> rewrote 184 tables (40 entries removed, 109 pools/6 rules -> rewrote 186 tables (42 entries removed, 111 pools/'); echo "now:  $a"; echo "want: $b"; [ "$a" = "$b" ]
+
+## SQ-MT-02 | Quark nerfs in play: a killed sheep drops no wool; an iron golem still drops iron; a creeper breaks blocks
+@group A
+@commands `forceload add 760 700 800 740`; `/cdevtest kill 760 -60 700 minecraft:sheep n=10`; `/cdevtest kill 770 -60 700 minecraft:iron_golem n=3`; a 5 x 5 stone pad at 780 -61 700, `summon minecraft:creeper 780 -60 700 {Fuse:0s,ignited:1b}`, wait 2 s, `/cdevtest count 778 -61 698 782 -61 702 minecraft:stone`
+@pass sheep drops have mutton and no wool; golem drops have iron ingots; the stone pad has fewer than 25 stone left (the creeper is no longer in `Non Griefing Entities`)
+@fails `quark-common.toml` not the edited one; Quark GameNerfsModule not loaded
+@jars creativecompat
+@sources feature_writeup/mob_block_tweaks.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mobs/GolemCooldown.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/BoatFriction.java configs_edited/root_config/quark-common.toml
+@tier T2
+@reviewed 2026-11-21
+> forceload add 760 700 800 740
+> cdevtest kill 760 -60 700 minecraft:sheep n=10
+> cdevtest kill 770 -60 700 minecraft:iron_golem n=3
+> fill 778 -61 698 782 -61 702 minecraft:stone
+# scratch servers run peaceful, which removes the creeper at once (judge-7, r1120nv, 2026-11-21)
+> difficulty easy
+> summon minecraft:creeper 780 -60 700 {Fuse:0s,ignited:1b}
+sleep 2
+> cdevtest count 778 -61 698 782 -61 702 minecraft:stone
+> difficulty peaceful
+expect verb=kill drops=.*minecraft:mutton
+reject verb=kill drops=.*minecraft:\w+_wool
+expect verb=kill drops=.*minecraft:iron_ingot
+reject verb=count .*n=25\b
+look sheep: mutton, no wool; golems: iron ingots; stone count below 25
+
+## SQ-VTD7-02 | BlockRunner surface tags for Vintage and salt blocks
+@group A
+@commands `/dumptags` (block): `blockrunner:surface/wood` has `vintagedelight:peanut_crate`; `blockrunner:surface/soft` (0.88x) has `oat_bale`, `oat_bag`, `minecraft:hay_block`, `salt:salt_block`, `vintagedelight:salt_block` (owner decision 2026-11-02, kept 2026-11-03); `salt:raw_rock_salt_block` is in `natural_rough`, not `soft`; `constructed_brick` has `vintagedelight:salt_bricks`; `constructed_smooth` has `smooth_salt_block`; `confectionery` has `cheese_pizza`; log line `BlockRunner tier overlaps` reports 0
+@pass all present, 0 overlaps
+@fails missing: `blocktags.js` not reloaded
+@jars creativedelight
+@sources feature_writeup/vintage_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
+> cdevtest tag block blockrunner:surface/wood
+> cdevtest tag block blockrunner:surface/soft
+> cdevtest tag block blockrunner:surface/natural_rough
+> cdevtest tag block blockrunner:surface/constructed_brick
+> cdevtest tag block blockrunner:surface/constructed_smooth
+> cdevtest tag block blockrunner:surface/confectionery
+expect verb=tag kind=block tag=blockrunner:surface/wood n=\d+ ids=.*vintagedelight:peanut_crate
+# r1120lr batch fault: the row's own @commands (and blocktags.js) put oat_bale and the salt blocks in soft, but the expects read natural_smooth; tag dump 2026-11-19: soft holds hay_block, oat_bale, oat_bag, salt:salt_block, vintagedelight:salt_block
+expect verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*vintagedelight:oat_bale
+expect verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*salt:salt_block
+expect verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*vintagedelight:salt_block
+expect verb=tag kind=block tag=blockrunner:surface/natural_rough n=\d+ ids=.*salt:raw_rock_salt_block
+reject verb=tag kind=block tag=blockrunner:surface/soft n=\d+ ids=.*salt:raw_rock_salt_block
+expect verb=tag kind=block tag=blockrunner:surface/constructed_brick n=\d+ ids=.*vintagedelight:salt_bricks
+expect verb=tag kind=block tag=blockrunner:surface/constructed_smooth n=\d+ ids=.*vintagedelight:smooth_salt_block
+expect verb=tag kind=block tag=blockrunner:surface/confectionery n=\d+ ids=.*vintagedelight:cheese_pizza
+reject verb=\S+ .*done=0
+
+## SQ-NSM-01 | seasonings after the move (static half; crafting, overlay, eat bonus and JEI page are client)
+@group A (no old save)
+@commands Season a food with each of the 5 seasonings (crafting), hover, eat; JEI Seasoning page (client); the server half reads the seasoning recipes and the seasonable tags
+@pass Tooltip lines, the overlay on the icon, the eat bonus and the JEI page all work; `/data get entity @s SelectedItem` shows `creativedelight:<seasoning>` in `Seasonings`; the server half: seasoning recipes and the pepper, chili and cheese seasonable tags are non-empty. An old seasoned stack losing its lines is an accepted loss (no row)
+@fails No overlay: `assets/creativedelight/models/item/seasoned/` missing from the Delight jar. No tag match: `#creativedelight:seasonable/<path>` not built (`seasoning_tags.js` reads the id)
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@sources feature_writeup/namespace_move.md
+@tier T2
+@reviewed 2026-11-21
+@from batches/r1113/c4_a.qb
+@absent creativedelight:flavor (recipe serializer id, listed in the recipe dumps, not an item)
+# r1118 R3 (2026-11-18): new-world half only; the old-stack half is dropped (loss accepted, owner ruling 1)
+# ids per seasonings.md 7 (Seasoning -> Flavor, 2026-11-19): serializer creativedelight:flavor, tags #<ns>:flavorable/<path> (judge-7, r1120nv)
+> cdevtest bytype creativedelight:flavor max=5
+> cdevtest tag item barbequesdelight:flavorable/pepper
+> cdevtest tag item barbequesdelight:flavorable/chili
+> cdevtest tag item creativedelight:flavorable/cheese
+expect verb=bytype serializer=creativedelight:flavor n=[1-9]
+expect verb=tag kind=item tag=barbequesdelight:flavorable/pepper n=[1-9]
+expect verb=tag kind=item tag=barbequesdelight:flavorable/chili n=[1-9]
+expect verb=tag kind=item tag=creativedelight:flavorable/cheese n=[1-9]
+reject \[cdevtest\] verb=\S+ done=0
+reject flavorable.*creativeengineering:
+
+## SQ-PFS-03 | 
+@group A
+@commands `pbot path bot1 <x+500> 200 <z> 1.5`; after 20 s grep `perf/bot/ticks-*.csv` for `path_done:bot1`; status lines' chunk column; `pbot census t`
+@pass `path_done` after about 334 ticks; loaded chunks follow; `perf/bot/census-t.json` written
+@fails Chunks don't follow: `ServerChunkCache.move` not reached
+@jars creativedevtools
+@sources feature_writeup/perf_suite.md
+@tier T2
+@reviewed 2026-11-20
+# the path is 500 blocks at 1.5 b/t (about 334 ticks): a 400-tick warp replaces the 20 s
+# bot1 spawned here too so the row reruns alone (judge-7, r1120nv, 2026-11-21)
+> execute unless entity bot1 run pbot spawn bot1 3000 -60 3000 minecraft:overworld survival
+sleep 3
+> pbot path bot1 3500 200 3000 1.5
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done ticks=400 120
+> cdevtest player bot1
+> pbot census t
+shell grep -l "path_done:bot1" perf/bot/ticks-*.csv
+shell test -s perf/bot/census-t.json
+expect census t entities \d+ block_entities \d+
+expect verb=player name=bot1 .*x=3(4[89]\d|500)[. ]
+reject \[cdevtest\] .*done=0
+look the status lines' chunk column follows the bot (perf/bot/ticks-*.csv); path_done near tick 334 of the path
+
+## SQ-PF-01 | 
+@group A
+@commands Boot; `/cdevperf status` (PF-14)
+@pass Recording `ce` running; all 10 events recorded; hooks: all run except possibly chunk wait; KubeJS handlers wrapped > 0; no mixin warning for the 9 perf mixins
+@jars creativecommon creativeworldgen
+@tier T2
+@reviewed 2026-11-16
+bootreject Mixin apply failed.*(?i:perf)
+# an idle flat world has no ticking entity or block entity, so those two hooks never ran (judge-7, r1120nv, 2026-11-21)
+> forceload add 0 0
+> summon minecraft:pig 0 -60 0 {Tags:["pf01"]}
+> setblock 1 -60 0 minecraft:hopper
+sleep 3
+> cdevperf status
+> kill @e[tag=pf01]
+> setblock 1 -60 0 minecraft:air
+expect recording '
+expect hooks: (all have run|not run yet: [^,]*chunk[^,]*;)
+expect [1-9]\d* KubeJS handlers wrapped
+expect (?<!not )recorded: \S
+look the recorded list holds all 10 events (no "not recorded:" line); a hooks line naming only the chunk wait is fine
+
+## SQ-PF-02 | /cdevperf dump and the perf report
+@group A
+@commands After 2 min, `/cdevperf dump smoke`; copy the file here, `python3 tools/perf/perf_report.py <file>` (PF-15)
+@pass Chat says saved; the report's "Measured by the pack's hooks" has ticks, a row per dimension, handlers as `server_scripts:<file>:<line>`, entity and block entity types
+@fails Depends on: SQ-PF-01
+@jars creativecommon creativeworldgen
+@tier T2
+@reviewed 2026-11-21
+@from batches/r1102b/s3_A.qb
+# judge-7, r1120nv, 2026-11-21: a pig and a hopper tick during the recording (the idle flat world has none); the report is
+# HTML now (perf/reports/, path on the `report:` line), so the shell prints its text
+> forceload add 0 0
+> summon minecraft:pig 0 -60 0 {Tags:["pf02"]}
+> setblock 1 -60 0 minecraft:hopper
+sleep 5
+> cdevperf status
+expect recording '
+> cdevperf dump smoke
+waitlog \[cdevperf\] recording saved to 300
+capture PFF recording saved to (\S+)
+shell python3 -I $INST/tools/perf/perf_report.py {PFF} > ../pf02_report.txt 2>&1; echo "exit $?"; cat ../pf02_report.txt; r=$(grep -o "report: .*" ../pf02_report.txt | cut -d" " -f2); python3 -I -c "import re,sys,html; t=open(sys.argv[1]).read(); t=re.sub(r'<script.*?</script>|<style.*?</style>','',t,flags=re.S); t=re.sub(r'\s+',' ',html.unescape(re.sub(r'<[^>]+>',' ',t))); i=t.find('Measured by the pack'); print(t[i:i+5000])" "$r"
+> kill @e[tag=pf02]
+> setblock 1 -60 0 minecraft:air
+look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as <script pack>:<file>:<line> (jar scripts since the carve), entity and block entity types (the pig, the hopper)
+
+## SQ-POT-02 | 
+@group A
+@commands `forceload add 290 290 350 310`, wait 5 s, `/pottest all`, wait for `PP-DONE`
+@pass `PASS PP-01` (vanilla pot = map), `PASS PP-02` for the framed and hanging pots; `PP-SUM` lines give per-holder counts close to [flower_pots.md](../flower_pots.md) 1
+@fails PP-01 FAIL naming a plant: a potted block whose plant item differs from the block (record it in POTTED_ITEM in `tools/flower_pot_audit.py`); hanging pot all refused: the probe clicks its north face, try `up` from below; `holder did not place`: the spec's state props (flower box `floor`, AF `facing`)
+@jars creativebrewing creativecompat
+@sources feature_writeup/flower_pots.md
+@tier T2
+@reviewed 2026-11-16
+> forceload add 290 290 350 310
+sleep 5
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+expect \[pottest\] PASS PP-01
+expect \[pottest\] PASS PP-02
+count \[pottest\] FAIL PP-0[12]: == 0
+shell grep -aE '\[pottest\] .*PP-SUM' logs/latest.log | cut -c1-200 | head -30
+look PP-SUM per-holder counts close to flower_pots.md section 1 (probe copied fresh from tools/flower_pot_test/pot_probe.js)
+
+## SQ-POT-03 | /pottest all: no PP-03 exception on any holder (F1 struck: the Another Furniture planter box passes too)
+@group same run (probe copied fresh from `tools/flower_pot_test/pot_probe.js`)
+@commands grep `PP-03`; for any FAIL read the `stack` field of that row in `kubejs/exported/blocks/pot_probe.json`
+@pass `PASS PP-03` for every holder, 0 `minecraft:hanging_roots` exceptions (Immersive Weathering wall roots no longer get `facing=up`: hanging roots against the top of a holder do nothing); planter box and fungi caps pass (F1 struck)
+@fails `Cannot set property ... facing ... to up` again: `WallRootsVerticalFaceMixin` (CD `mixin/immersive_weathering`) not applied, check the boot log for the CD mixin config; another exception: its frames are in `stack`
+@jars creativebrewing creativecompat
+@sources feature_writeup/flower_pots.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+> dumppots
+waitlog Dumped \d+ potted blocks 300
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+# r1120fix (2026-11-20): F1 is struck (r1120lr: all 12 holders PASS PP-03), so no FAIL line is expected any more
+count \[pottest\] FAIL PP-03: == 0
+count \[pottest\] PASS PP-03: >= 12
+reject (?i)\[pottest\] .*ClassCastException
+
+## SQ-POT-04 | accepted plants come back when the holder breaks
+@group same run
+@commands grep `PP-04`
+@pass `PASS PP-04` for every `pot` holder: an accepted plant comes back when the holder breaks; `beautify:hanging_pot` rows carry `toggle: true` (the second click takes the plant back, the probe replants once) and drop the pot plus the plant
+@fails `beautify:hanging_pot` drops only the pot without `toggle`: old probe copied (r1103 broke an empty pot after plant, take back, plant, take back); another holder eating the plant: new finding in flower_pots.md 3
+@jars creativebrewing creativecompat
+@sources feature_writeup/flower_pots.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+# r1120fix (2026-11-20): floralench:large_pot drops the filled pot item with the plant kept inside it
+# (flower_pots.md section 1 records that as its drop; large pots hidden since 2026-10-31), so its PP-04 FAIL line is
+# accepted when every lost entry is one floralench:large_*_pot item; any other holder failing, or an empty drop, still fails
+count \[pottest\] FAIL PP-04: (?!floralench:large_pot ) == 0
+reject \[pottest\] FAIL PP-04: floralench:large_pot .*\[(?!1x floralench:large_\w+_pot\])[^\]]*\]
+count \[pottest\] PASS PP-04: >= 1
+
+## SQ-POT-04v | hand check: vanilla flower pot with Gossypium and IE hemp seed gives the plant back on a survival break
+@group A
+@commands Survival: place a flower pot, plant `miners_delight:gossypium`, break it by hand; same with `immersiveengineering:seed` (makes `immersiveengineering:potted_hemp`); also one explosion (`/summon tnt`) next to a third potted one
+@pass Each break drops `minecraft:flower_pot` plus the plant (gossypium, or the IE hemp seed); the explosion drops what survives it, not air
+@fails Nothing drops: the pack tables `kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json` / `kubejs/data/immersiveengineering/loot_tables/blocks/potted_hemp.json` not loaded (`/reload`, check for a datapack error)
+@jars creativebrewing creativecompat
+@sources feature_writeup/flower_pots.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/r_A.qb
+> forceload add 288 496 296 508
+sleep 3
+> setblock 290 -60 500 minecraft:flower_pot
+> setblock 292 -60 500 minecraft:flower_pot
+> pbot spawn pot4 291 -60 504 minecraft:overworld survival
+sleep 2
+> clear pot4
+> pbot hold pot4 miners_delight:gossypium
+> pbot use pot4 290 -60 500 up
+> pbot hold pot4 immersiveengineering:seed
+> pbot use pot4 292 -60 500 up
+> pbot remove pot4
+> cdevtest state 290 -60 500
+> cdevtest state 292 -60 500
+> cdevtest break 290 -60 500 held=none
+> cdevtest break 292 -60 500 held=none
+waitlog \[cdevtest\] verb=break done= 30
+count \[cdevtest\] verb=break .*broken=true >= 2
+reject \[cdevtest\] .*(done=0|error=)
+look the two `verb=state` lines: does each pot hold the plant (a potted_* id) or stay minecraft:flower_pot (refused, then nothing to lose)? A held plant must come back in the `verb=break drops=` line (flower_pot:1 plus the plant); flower_pot:1 alone on a filled pot = item loss. The explosion half of the row text is not automated
+
+## SQ-POT-05 | 
+@group same run
+@commands `python3 tools/flower_pot_audit.py` after copying both files back
+@pass Planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, red mushroom `Y` (survive on the planter); silt pot column = the `FlowerBlock` plants; "Probe against prediction" lists only explainable rows (Supplementaries special models, Floral doubles)
+@fails a planter refusing crops: `SelfPlanterMixin` not applied (grep `supplementaries` mixin warnings)
+@jars creativebrewing creativecompat
+@sources feature_writeup/flower_pots.md
+@tier T2
+@reviewed 2026-11-16
+shell cp kubejs/exported/blocks/flower_pots.json kubejs/exported/blocks/pot_probe.json $INST/kubejs/exported/blocks/ && cd $INST && python3 tools/flower_pot_audit.py 2>&1 | tail -30
+look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, red mushroom Y; silt pot column = the FlowerBlock plants; Probe against prediction lists only explainable rows (Supplementaries special models, Floral doubles). The copy overwrites the instance dumps on purpose (the audit reads them there)
+
+## SQ-PS15B-13 | layers fall and stack: snow 3 onto 2 -> 5, snow 3 onto 7 -> snow block + 2 above, salt 2 onto 7 -> salt block (9 layers = 1 block), bamboo 3 onto 3 -> full 6, sawdust onto air -> lands, snow into water -> snowballs
+@group A
+@commands Each pile sits on a stone block 4 above the ground (or over a water pool); the stone is removed and the pile falls onto the ground pile below
+@pass the merged states as in the title (one `say` line each); the water case leaves 3 snowballs as an item entity and no snow
+@fails `FallingLayers.holdAndQueue` (updateShape mixins: SnowLayerFallMixin, TwigsBambooLeavesMixin, IeSawdustFallMixin), `FallingLayerEntity.tick` landing, `FallingLayers.land` merge / `withLayers` / `SnowLayers.fullToBlock`, `drop`
+@jars creativecompat creativedevtools
+@sources feature_writeup/plan_post_scratch_1115.md feature_writeup/plan_post_scratch_1115b.md feature_writeup/plan_passthrough.md
+@tier T2
+@reviewed 2026-11-20
+> forceload add 1290 1290 1330 1310
+> setblock 1300 -60 1300 minecraft:snow[layers=2]
+> setblock 1300 -57 1300 minecraft:stone
+> setblock 1300 -56 1300 minecraft:snow[layers=3]
+> setblock 1303 -60 1300 minecraft:snow[layers=7]
+> setblock 1303 -57 1300 minecraft:stone
+> setblock 1303 -56 1300 minecraft:snow[layers=3]
+> setblock 1306 -60 1300 vintagedelight:salt[layers=7]
+> setblock 1306 -57 1300 minecraft:stone
+> setblock 1306 -56 1300 vintagedelight:salt[layers=2]
+> setblock 1309 -60 1300 twigs:bamboo_leaves[layers=3]
+> setblock 1309 -57 1300 minecraft:stone
+> setblock 1309 -56 1300 twigs:bamboo_leaves[layers=3]
+> setblock 1312 -57 1300 minecraft:stone
+> setblock 1312 -56 1300 immersiveengineering:sawdust[layers=4]
+> fill 1314 -61 1299 1316 -61 1301 minecraft:water
+> setblock 1315 -57 1300 minecraft:stone
+> setblock 1315 -56 1300 minecraft:snow[layers=3]
+sleep 1
+> fill 1300 -57 1300 1315 -57 1300 minecraft:air replace minecraft:stone
+sleep 4
+> execute if block 1300 -60 1300 minecraft:snow[layers=5] run say ps15b13 snow 2+3 = 5
+> execute if block 1303 -60 1300 minecraft:snow_block if block 1303 -59 1300 minecraft:snow[layers=2] run say ps15b13 snow 7+3 = block + 2
+> execute if block 1306 -60 1300 salt:salt_block if block 1306 -59 1300 minecraft:air run say ps15b13 salt 7+2 = block
+> cdevtest state 1309 -60 1300
+> execute if block 1312 -60 1300 immersiveengineering:sawdust[layers=4] run say ps15b13 sawdust landed
+> execute if entity @e[type=minecraft:item,x=1314,y=-62,z=1299,dx=3,dy=3,dz=3,nbt={Item:{id:"minecraft:snowball",Count:3b}}] run say ps15b13 water drop 3 snowballs
+expect ps15b13 snow 2\+3 = 5
+expect ps15b13 snow 7\+3 = block \+ 2
+expect ps15b13 salt 7\+2 = block
+expect verb=state pos=1309,-60,1300 state="?creativecompat:bamboo_leaves_full\[.*layers=6
+expect ps15b13 sawdust landed
+expect ps15b13 water drop 3 snowballs
+> fill 1299 -61 1299 1316 -55 1301 minecraft:air
+> fill 1299 -61 1299 1316 -61 1301 minecraft:grass_block
+
+## SQ-PS15B-26 | in-place and rename saves of an own toml apply about 1 s later without a command, one reload each
+@group A
+@commands Boot line `config watcher on`; Compat `[debug.passthrough] timing` true by an in-place save (truncate + write, count 2: Forge missed it), then false by `sed -i` (rename); one appended blank line to Common's toml (a single write: Forge's own watcher would also have fired)
+@pass boot: `[creativecommon] config watcher on: N own config file(s)`; each save gives exactly one `[creativecommon] <file> reloaded` line within 3 s; `[passthrough-timing]` lines start after the first save and stop after the second; one line (not two) for Common's append
+@fails `OwnConfigWatcher.start` (FileWatcher.removeWatch, register MODIFY + CREATE), `OwnConfigLogic.Debounce`, `ConfigReload.reload` dispatch to the owning mod
+@jars creativecommon creativecompat
+@sources feature_writeup/plan_post_scratch_1115.md feature_writeup/plan_post_scratch_1115b.md feature_writeup/creative_devtools.md
+@tier T2
+@reviewed 2026-11-20
+bootexpect \[creativecommon\] config watcher on: [0-9]+ own config file
+shell cp config/creativecompat-common.toml .ps15b26_compat.toml
+shell cp config/creativecommon-common.toml .ps15b26_common.toml
+shell python3 -c "p='config/creativecompat-common.toml';s=open(p).read().replace('timing = false','timing = true',1);f=open(p,'r+');f.write(s);f.truncate();f.close()"
+waitlog \[creativecommon\] creativecompat-common.toml reloaded 10
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done ticks=400 120
+waitlog \[passthrough-timing\] side=server 30
+shell sed -i 's/timing = true/timing = false/' config/creativecompat-common.toml
+sleep 4
+> say ps15b26 after rename save
+> cdevtest tickwarp 401
+waitlog verb=tickwarp end=done ticks=401 120
+shell printf '\n' >> config/creativecommon-common.toml
+sleep 4
+# counts read before the restore: the row-log count also took the restore's own reload of the Common toml (judge-7, r1120nv, 2026-11-21)
+shell n=$(grep -c '\[creativecommon\] creativecompat-common.toml reloaded' logs/latest.log); m=$(grep -c '\[creativecommon\] creativecommon-common.toml reloaded' logs/latest.log); echo "compat $n common $m"; [ "$n" = 2 ] && [ "$m" = 1 ]
+shell cp .ps15b26_compat.toml config/creativecompat-common.toml
+shell cp .ps15b26_common.toml config/creativecommon-common.toml
+sleep 4
+reject reload failed
+look `[passthrough-timing]` lines appear during the 400-tick warp and none after the `ps15b26 after rename save` line; the two counts above were taken before the restore
+
+## SQ-RB-21 | Copper Pot recycles a bowl-food ingredient's bowl into the container (1 meal)
+@group A
+@commands `/setblock` a lit campfire and `miners_delight:copper_pot` on it; `/data merge block` the pot's slots 0-3 with a bowl-served FD cooking recipe that takes a bowl-food ingredient (probe the recipe manager for a `farmersdelight:cooking` recipe whose ingredient has a bowl remainder and whose container is a bowl), container slot (5) empty; wait for one cook; `/data get block`. Repeat with 3 meals' inputs and 1 bowl in slot 5
+@pass First case: slot 6 holds the plated meal, slots 5 and 7 empty, no item entity near the pot. Second (rule of 2026-11-03, remainder_buffer.md 3.8): recycled bowls stack in slot 5 up to 64, slot 7 holds only non-bowl leftovers; every bowl accounted for (bowls before = slot 5 + slot 7 + meals plated)
+@fails `CopperPotBlockEntity.recycleRoom` / `storeOrThrowLeftover`; `getContainer()` empty because `mealContainerStack` was not set before the leftovers
+@jars creativecommon creativedelight
+@sources feature_writeup/remainder_buffer.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s5_R_A.qb
+# self-contained since r1120fix (2026-11-20): own s5home marker and S5H capture (was the r1102b boot's S5H, never captured when the row runs alone)
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+44} {S5H3+12} {S5H1+60} {S5H3+28}
+sleep 3
+> s5 potrecipe
+waitlog \[s5\] potrecipe: \d+ found 30
+capture S5PA \[s5\] potnbt1 \S+ (\{.*\})$
+capture S5PB \[s5\] potnbt3 \S+ (\{.*\})$
+capture S5PC \[s5\] potrecipe \S+ cook (\d+)
+> kill @e[type=minecraft:item]
+> setblock {S5H1+50} {S5H2} {S5H3+20} minecraft:campfire[lit=true]
+> setblock {S5H1+50} {S5H2+1} {S5H3+20} miners_delight:copper_pot
+> data merge block {S5H1+50} {S5H2+1} {S5H3+20} {S5PA}
+> cdevtest tickwarp {S5PC+300}
+waitlog verb=tickwarp end=done ticks={S5PC+300} 120
+> data get block {S5H1+50} {S5H2+1} {S5H3+20}
+> cdevtest items {S5H1+50} {S5H2+1} {S5H3+20} 2
+# data get prints the block id before Inventory: order-free match (judge-7, r1120nv, 2026-11-21)
+expect has the following block data: (?=.*miners_delight:copper_pot).*\{(?=[^{}]*Slot: 6b?\b)[^{}]*\}
+reject has the following block data: .*\{[^{}]*Slot: [57]b?\b[^{}]*\}.*miners_delight:copper_pot
+expect verb=items items=- stacks=0\b
+reject \[cdevtest\] verb=\S+ .*error=
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the probe's recipe (potrecipe line) takes a bowl food; slot 6 holds the plated meal; no recipe found = row N/A, not a FAIL
+look tick warp {S5PC}+300 ticks replaces the old real-time wait (cook time + 15 s)
+
+## SQ-RE-31 | pressure chamber: 8 coal blocks per diamond (was 9), 4 per diamond shard
+@group A
+@commands `/cdevtest makes minecraft:diamond`; `/cdevtest bytype pneumaticcraft:pressure_chamber max=400`
+@pass a `pneumaticcraft:pressure_chamber` recipe makes `minecraft:diamond*1` from 8 coal blocks (the ingredient shows `minecraft:coal_block`; the count is in `part=fields` or the JSON); the shard recipe from 4 is unchanged
+@fails `crystal.js` `Item.of(i.coal_block, 8)`
+@jars creativecommon creativeengineering
+@sources feature_writeup/recipes_engineering.md kubejs/data/creativeengineering/kubejs/engineering/crystal.js kubejs/data/creativeengineering/kubejs/engineering/dust.js kubejs/data/creativeengineering/kubejs/engineering/redstone.js
+@tier T2
+> cdevtest makes minecraft:diamond
+> cdevtest bytype pneumaticcraft:pressure_chamber max=400
+# judge-8 2026-11-21: cdevtest prints result=empty for PneumaticCraft recipes; the NCH id carries the count
+expect verb=bytype id=creativeengineering:pcpressurechamber/8_coal_block_to_diamond_by_pressure
+expect verb=bytype id=creativeengineering:pcpressurechamber/4_coal_block_to_diamond_shard_by_pressure
+look the coal block count of the diamond recipe is 8 (rdetail the id from the makes line; part=fields or the dumped JSON)
+
+## SQ-RFX-02 | recipe ids: count unchanged, moves exactly the Compat, Magic and Labels sets
+@group A
+@commands `/dumpall`; `python3 $INST/tools/dump_diff.py recipes $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels`
+@pass `RECIPES_SAME` (same count, no unexplained id); `moved creativeengineering -> creativecompat` about 380 (feature ports 377, misc mods, flower pots, the Fertile Soil pot soil), `-> creativemagic: 14` (dragon breathing), `-> creativelabels: 7` (3 shaped, 4 note specials); Equipment, Devtools, Worldgen, Loot and Engineering ids unchanged (they were already bound by their `recipes(...)` wrappers)
+@fails `ONLY_BASE`/`ONLY_NEW` lines name the ids: a recipe file missed its `forPack` (namespace_lint.py), or a P2/P2b change since the 2026-11-15 baseline (check against commit 86659cfc before blaming P3a). A count change: a `global.has` guard or a dict key that resolves to nothing (`literal_id_swap.py`)
+@jars creativecommon creativecompat creativedevtools creativeengineering creativeequipment creativelabels creativeloot creativemagic creativeworldgen
+@sources kubejs/server_scripts kubejs/data/creativecompat/kubejs kubejs/data/creativemagic/kubejs kubejs/data/creativelabels/kubejs kubejs/data/creativeloot/kubejs kubejs/data/creativecommon/kubejs/tags kubejs/data/creativeequipment/kubejs/tags development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib tools/dump_diff.py
+@tier T2
+@reviewed 2026-11-20
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -vE '^(ONLY_|moved)' ; python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(ONLY_|moved)' | head -40
+look moved counts as in Pass; every ONLY_ line explained in the run doc
+# r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the instance's 2026-11-19 pack dump already differs from it
+# by 221 recipe ONLY_ lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
+shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" recipes "$B" "$1" --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(ONLY_|moved)' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "recipe lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
+look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected
+
+## SQ-RFX-30 | tags: floats, planter box, flower box, flower and loot tags equal the baseline after the move
+@group A
+@commands `/dumpall`; `python3 $INST/tools/dump_diff.py tags $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/` (or against the dump of the commit c65c5871 jars)
+@pass `TAGS_SAME` for `creativecompat:physics/floats`, `creativecompat:flower_box_plants`, `another_furniture:planter_box_placeables`, `minecraft:flowers`, `minecraft:small_flowers`, `minecraft:tall_flowers`, `creativeloot:loot/chalk` and `creativeloot:loot/golden_food`; any other tag line is explained in the run doc
+@fails a flower tag still holding a `wild_` item or a Botania special flower: Compat's `flower_tags.js` ran before a script that fills the flower tags (load order between script packs), or the jar is not installed; floats missing the wild plants: the same order problem, or `t.add` ran after the removal
+@jars creativecompat creativecommon creativeloot
+@sources kubejs/data/creativecompat/kubejs/tags/flower_tags.js kubejs/server_scripts/tags/animal_tags.js kubejs/data/creativeloot/kubejs/tags/loottags.js
+@tier T2
+# judge-8b, 2026-11-21: no dumpall in the row, so kubejs/exported was the copied pack dump (r1120nv s102, 0 lines beyond)
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | grep -E "physics/floats|flower_box_plants|planter_box_placeables|minecraft:(small_|tall_)?flowers|loot/(chalk|golden_food)|TAGS_SAME" | tail -20
+look the grep output: no ONLY_ or changed line for the eight tags
+# r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the 2026-11-19 pack dump already differs from it in
+# 120 tag lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
+shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" tags "$B" "$1" --rename creativeworldgen:loot/=creativeloot:loot/ | grep -E '^  ' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "tag lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
+look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected
+
+## SQ-RFX-31 | float tag members: the wild plants and Botania special flowers float, bees and hummingbirds lose them
+@group A
+@commands `/cdevtest tag item creativecompat:physics/floats`, `/cdevtest tag item minecraft:flowers`
+@pass the floats tag lists wild plants (for example `wild_onions` ids of the Delight crops), `botania` special flower ids (with Botania), `immersive_weathering:flower_crown` and the azalea leaf and flower piles; `minecraft:flowers` lists none of the `wild_` items, no Botania special flower, no flower crown
+@fails floats without the wild plants: `flower_tags.js` did not run or read the flower tag after the removal; flowers still holding wild plants: the removal did not run (script error in the log, search `flower_tags`)
+@jars creativecompat creativecommon creativeloot
+@sources kubejs/data/creativecompat/kubejs/tags/flower_tags.js kubejs/server_scripts/tags/animal_tags.js kubejs/data/creativeloot/kubejs/tags/loottags.js
+@tier T2
+> cdevtest tag item creativecompat:physics/floats
+> cdevtest tag item minecraft:flowers
+waitlog verb=tag kind=item tag=creativecompat:physics/floats n=[1-9]\d*
+reject verb=tag kind=item tag=minecraft:flowers n=\d+ ids=.*:wild_
+shell ! grep -nE "(ERROR|Error).*flower_tags" logs/kubejs/server.log
+look the floats tag member list (wild plants, special flowers, crown, piles) and the flowers list without them
+
+## SQ-RFX-32 | loot tag probe: the chalk tag holds the chalks and the box, under creativeloot
+@group A
+@commands `/cdevtest tag item creativeloot:loot/chalk`, `/cdevtest tag item creativeloot:loot/golden_food`, `/cdevtest tag item creativeworldgen:loot/chalk`
+@pass the chalk tag lists every chalk stick and the chalk box, the golden food tag lists the golden apple, golden carrot and Golden Food's plain golden foods; the `creativeworldgen:loot/chalk` probe shows an empty or missing tag
+@fails `creativeloot:loot/chalk` empty: `tags/loottags.js` did not load (Creative Loot not installed); the worldgen id filled: a script still names it
+@jars creativecompat creativecommon creativeloot
+@sources kubejs/data/creativecompat/kubejs/tags/flower_tags.js kubejs/server_scripts/tags/animal_tags.js kubejs/data/creativeloot/kubejs/tags/loottags.js
+@tier T2
+> cdevtest tag item creativeloot:loot/chalk
+> cdevtest tag item creativeloot:loot/golden_food
+> cdevtest tag item creativeworldgen:loot/chalk
+waitlog verb=tag kind=item tag=creativeloot:loot/chalk n=[1-9]\d*
+reject verb=tag kind=item tag=creativeworldgen:loot/chalk n=[1-9]\d*
+look the two creativeloot lists are full and the worldgen id has no members
+
+## SQ-RFX-09 | food values: the absolute rows give the same foods
+@group A
+@commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py food $INST/kubejs/exported/baseline_rules_p3b_2026-11-17 kubejs/exported`
+@pass `FOOD_SAME`: Delightful's 17 foods (3.8.1 hunger and saturation), the Bellini Cocktail (one Heal Aura 10 s) and Ghost Charcoal (0 hunger, always edible, Wither 5 s, Fire Resistance 3 min) as before
+@fails `CHANGED <id>: <fields>`: the absolute row (`delightful_foods.js`, `fruits_foods.js`, `vintage_items.js`) or the applier (`food_value_copies.js`); effects in a new order or missing: `keepEffects` / `dedupeEffects`
+@jars creativecalendar creativecommon creativedelight creativeengineering
+@sources kubejs/data/creativedelight/kubejs kubejs/assets/creativedelight/kubejs development/creativeDelight/src/main/resources/kubejs_startup development/creativeDelight/src/main/java development/creativeDelight/members/barbeques/src/main/java development/creativeDelight/members/miners/src/main/java development/creativeDelight/members/vintage/src/main/java development/creativeDelight/src/main/resources/data/creativedelight/swaps/merges_tmted.json development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/has.js development/creativeCalendar/src/main/java development/creativeEngineering/src/main/resources/kubejs_startup tools/dump_diff.py
+@tier T2
+@reviewed 2026-11-20
+# r1120fix, 2026-11-20: expect reads the log, never shell output, so "expect FOOD_SAME" could not pass; and the 2026-11-15 baseline predates
+# 52 intended food changes (2026-11-19 pack dump). The shell exit checks the row's own foods: Delightful, Bellini, Ghost Charcoal
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx09_food.txt; tail -25 rfx09_food.txt; ! grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) (delightful:[a-z_]+|fruitsdelight:bellini_cocktail|vintagedelight:ghost_charcoal)\b' rfx09_food.txt | grep -vE '^CHANGED [^ ]+: (name|tags)(, (name|tags))*$'
+
+## SQ-RFX-13 | Engineer's Delight wheat flour merges into Create's
+@group A
+@commands Fake player holding 5 `tmted:wheat_flour`; wait a second; read the player's inventory
+@pass the stack becomes 5 `create:wheat_flour`; `tmted:wheat_flour` stays hidden in JEI (removed items); recipes that took or made it take or make Create's flour (SQ-RFX-08 grep 0)
+@fails the stack stays: `merges_tmted.json` not read (`requires` tmted and create, both loaded?) or the `creativedelight` merge group's inventory half not running
+@jars creativecalendar creativecommon creativedelight creativeengineering
+@sources kubejs/data/creativedelight/kubejs kubejs/assets/creativedelight/kubejs development/creativeDelight/src/main/resources/kubejs_startup development/creativeDelight/src/main/java development/creativeDelight/members/barbeques/src/main/java development/creativeDelight/members/miners/src/main/java development/creativeDelight/members/vintage/src/main/java development/creativeDelight/src/main/resources/data/creativedelight/swaps/merges_tmted.json development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/has.js development/creativeCalendar/src/main/java development/creativeEngineering/src/main/resources/kubejs_startup tools/dump_diff.py
+@tier T2
+@reviewed 2026-11-20
+> pbot spawn wfl1 0 -60 0 minecraft:overworld survival
+sleep 2
+> give wfl1 tmted:wheat_flour 5
+sleep 3
+> data get entity wfl1 Inventory
+sleep 1
+expect create:wheat_flour
+> pbot remove wfl1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+
+## SQ-RFX-19 | recipes, tags and foods unchanged after the Brewing swap and the Compat JEI tag move
+@group A
+@commands `/dumpall`; `dump_diff.py recipes`, `tags` (as SQ-RFX-08, -11) and `food` (as SQ-RFX-09) against the baselines
+@pass `RECIPES_SAME` with the P3a moves only; `TAGS_SAME` apart from the P3a renames (the `creativecompat:jei/*` tags are filled from Compat's pack now, same members); `FOOD_SAME` (the 44 alcoholic drinks through absolute rows: hunger 1, saturation 0, always edible, Intoxication hidden, Nausea unless Tipsy)
+@fails a recipe id `creativeengineering:` to `creativebrewing:`: a Brewing file outside `global.CB.recipes`; a drink with a second Nausea or no Intoxication: the `dropEffects` / `unlessHas` fields of the applier
+@jars creativebrewing creativecalendar creativecompat creativedelight creativeloot exposure
+@sources kubejs/data/creativebrewing/kubejs kubejs/assets/creativebrewing/kubejs development/creativeBrewing kubejs/data/creativeloot/kubejs/loot/09_drops.js kubejs/data/creativedelight/kubejs development/creativeDelight/members development/creativeDelight/src/main/resources/packs/mods/vinery development/exposureBackport/src kubejs/data/creativecompat/kubejs/tags/jei_order_tags.js
+@tier T2
+@reviewed 2026-11-20
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | tail -15
+shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -15
+# r1120fix, 2026-11-20: expect reads the log, not shell output, and the baseline predates 52 intended food changes: the shell exit checks the drinks
+# (foods with Intoxication in the new dump; 51 in the 2026-11-19 pack dump) against the baseline
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx19_food.txt; tail -15 rfx19_food.txt; python3 -I -c "import json,re,sys;d=json.load(open('kubejs/exported/food/foods.json'))['foods'];k={f['id'] for f in d if any(e.get('effect')=='brewinandchewin:intoxication' for e in (f.get('effects') or []))};t=open('rfx19_food.txt').read();c=sorted({i for i in k for l in t.splitlines() if re.match(r'(CHANGED|ONLY_BASE|ONLY_NEW) '+re.escape(i)+r'\b',l) and not re.fullmatch(r'CHANGED \S+: (name|tags)(, (name|tags))*',l)});print('RFX19 drink changed',c) if c else print('RFX19 drinks same n=%d'%len(k));sys.exit(1 if c or not k else 0)"
+# r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the instance's 2026-11-19 pack dump already differs from it
+# by 221 recipe ONLY_ lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
+shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" recipes "$B" "$1" --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(ONLY_|moved)' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "recipe lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
+look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected
+# r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the 2026-11-19 pack dump already differs from it in
+# 120 tag lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
+shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" tags "$B" "$1" --rename creativeworldgen:loot/=creativeloot:loot/ | grep -E '^  ' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "tag lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
+look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected
+
+## SQ-RFX-24 | /ccaltime date backward moves the vintage clock (Vinery registers with Calendar)
+@group A
+@commands `[time.wine] clock = SUN`; `/wine time`; `/ccaltime date add 10 days`; `/ccaltime date set 1 early_spring 1 6:00 am`; `/wine time`
+@pass the date command's output ends with `wine clock moved back` (not `no wine clock registered`); the second `/wine time` shows the clock moved back by the same days
+@fails `no wine clock registered`: the Vinery port's `PackTime.registerDateMoves` did not run (Creative Brewing older than 2026-11-17)
+@jars creativebrewing creativecalendar creativecompat creativedelight creativeloot exposure
+@sources kubejs/data/creativebrewing/kubejs kubejs/assets/creativebrewing/kubejs development/creativeBrewing kubejs/data/creativeloot/kubejs/loot/09_drops.js kubejs/data/creativedelight/kubejs development/creativeDelight/members development/creativeDelight/src/main/resources/packs/mods/vinery development/exposureBackport/src kubejs/data/creativecompat/kubejs/tags/jei_order_tags.js
+@tier T2
+@reviewed 2026-11-20
+> wine time
+> ccaltime date add 10 day
+> ccaltime date set 1 early_spring 1 6:00 am
+expect wine clock moved back
+> wine time
+look the two `/wine time` lines: the second clock value smaller by the move
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|no wine clock registered|Unknown unit)
+
+## SQ-RFX-27 | old ids in NBT on a fresh world resolve through the aliases (mooblooms, camera bags)
+@group A
+@commands Fresh world, new jars: `> setblock 20 -61 0 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:1b},{Slot:1b,id:"creativeengineering:leather_camera_bag",Count:1b},{Slot:2b,id:"creativeengineering:iron_camera_bag",Count:1b},{Slot:3b,id:"creativeengineering:netherite_camera_bag",Count:1b},{Slot:4b,id:"exposure_extras:camera_bag",Count:1b}]}`; `> data get block 20 -61 0 Items`; `> setblock 22 -61 0 spawner{SpawnData:{entity:{id:"more_mooblooms:moobloom"}}}`; `> data get block 22 -61 0 SpawnData`
+@pass the chest lists `moremooblooms:moobloom_spawn_egg`, `exposureextras:leather_camera_bag`, `exposureextras:iron_camera_bag`, `exposureextras:netherite_camera_bag`, and in slot 4 a second `exposureextras:leather_camera_bag` from the old plain `exposure_extras:camera_bag` (owner R2 2026-11-21) (5 stacks, none `minecraft:air`); the spawner keeps a moobloom; boot log: `[swaps] N permanent alias(es) in the active registries` (N counts these 6 ids among the rest)
+@fails slot 4 gone or `[swaps] unresolved exposure_extras:camera_bag` in the log: its `replaces` entry under leather_camera_bag; a camera bag gone: the `creativeengineering:` ids are not `replaces` entries in Exposure's `owner_namespace.json` (V-06); the egg gone: the moremooblooms `replaces` entry
+@jars creativeworldgen creativecommon exposure
+@sources development/creativeWorldgen/members/mooblooms/src/main development/creativeWorldgen/members/babymobs/src/main/java development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CreativeWorldgen.java development/exposureBackport/src/extras
+@tier T2
+> setblock 20 -61 0 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:1b},{Slot:1b,id:"creativeengineering:leather_camera_bag",Count:1b},{Slot:2b,id:"creativeengineering:iron_camera_bag",Count:1b},{Slot:3b,id:"creativeengineering:netherite_camera_bag",Count:1b},{Slot:4b,id:"exposure_extras:camera_bag",Count:1b}]}
+> data get block 20 -61 0 Items
+expect moremooblooms:moobloom_spawn_egg
+expect exposureextras:leather_camera_bag
+expect exposureextras:iron_camera_bag
+expect exposureextras:netherite_camera_bag
+expect Slot: 4b, id: "exposureextras:leather_camera_bag"
+> setblock 22 -61 0 spawner{SpawnData:{entity:{id:"more_mooblooms:moobloom"}}}
+> data get block 22 -61 0 SpawnData
+expect moremooblooms:moobloom
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[swaps\] unresolved exposure_extras:camera_bag)
+
+## SQ-ROLL-03 | chopsticks lengthen the off-hand food's effects 1.5x (Glowing Calamari Roll; bot at 150)
+@group A
+@commands Bot: hunger 19 (`pbot hunger <bot> 19`), main hand `roll_delight:chopsticks`, off hand `farmersdelight:cooked_rice`, use until eaten; `/data get entity @p foodLevel`; `/data get entity @p ActiveEffects`; `/data get entity @p SelectedItem`
+@pass hunger 20 (capped), no Comfort (cooked rice has none; use a Comfort food to check the 1.5x duration), chopsticks Damage 1 (ROLL-07)
+@fails Start/Finish hook: off-hand identity check, `getUsedItemHand`
+@jars creativedelight
+@sources feature_writeup/roll_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/p2_R.qb
+# r1103 p2: cooked rice has had no Comfort since the 2026-11-02 Comfort / Nourishment rules (comfort_nourishment.json
+# "none"), so its read could not show the lengthening; hunger 19 -> 20 and chopsticks Damage 1 passed there
+> cdevtest food creativedelight:glowing_calamari_roll
+> pbot spawn rl3 150 -60 503 minecraft:overworld survival
+sleep 2
+> clear rl3
+# r1120lr batch fault: effect hunger 1 255 left the bot at foodLevel 20, so the roll (not always-edible) could not be eaten; the bot's food is set to 19 directly
+> pbot hunger rl3 19
+sleep 1
+> data get entity rl3 foodLevel
+expect rl3 has the following entity data: 19$
+> pbot hold rl3 roll_delight:chopsticks
+> item replace entity rl3 weapon.offhand with creativedelight:glowing_calamari_roll
+> cdevtest useair as=rl3 hand=both
+sleep 5
+> data get entity rl3 foodLevel
+> data get entity rl3 ActiveEffects
+expect has the following entity data: \[\{.*Duration
+> data get entity rl3 SelectedItem
+> data get entity rl3 Inventory
+expect \[cdevtest\] verb=useair who=rl3 hand=off result=(CONSUME|SUCCESS)
+expect has the following entity data: \{.*id: "roll_delight:chopsticks".*Damage: 1\b
+> pbot remove rl3
+look each ActiveEffects Duration is 1.5x the roll's own (effects= of the verb=food line above, id:amp:ticks:chance; less the 5 s already ticked); off-hand roll gone
+reject \[cdevtest\] verb=\S+ done=0
+
+## SQ-ROLL-05 | Legendary Roll Medley servings by empty hand, dirt, chopsticks (medley at 155)
+@group A
+@commands `/setblock ~ ~ ~ roll_delight:legendary_roll_medley`; bot right-clicks with an empty hand 9 times, counting items; again with a held dirt block; then with chopsticks at hunger 10
+@pass 3 mushroom slices, 3 Salmon Maki, 2 Tobiko in that order, then the plate stays (servings 0) and the 9th click breaks it for a bowl; held dirt places against it; chopsticks eat one serving in place, 1 damage (ROLL-10, ROLL-14, ROLL-18)
+@fails `use` override, FeastBlock super
+@jars creativedelight
+@sources feature_writeup/roll_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
+> setblock 155 -60 500 roll_delight:legendary_roll_medley
+> pbot spawn rl5 155 -60 503 minecraft:overworld survival
+repeat 9
+> pbot hold rl5 minecraft:air
+> pbot use rl5 155 -60 500 up
+> data get entity rl5 SelectedItem
+> clear rl5
+> data get block 155 -60 500
+end
+> execute if block 155 -60 500 minecraft:air run say ROLL05 medley gone after 9
+> cdevtest items 155 -60 500 4 keep
+> setblock 155 -60 500 roll_delight:legendary_roll_medley
+> pbot hold rl5 minecraft:dirt
+> pbot use rl5 155 -60 500 north
+> execute if block 155 -60 499 minecraft:dirt run say ROLL05 dirt placed against the medley
+> setblock 155 -60 499 minecraft:air
+> pbot hunger rl5 10
+> pbot hold rl5 roll_delight:chopsticks
+> pbot use rl5 155 -60 500 up
+> cdevtest player rl5
+> cdevtest state 155 -60 500
+> data get entity rl5 SelectedItem
+expect ROLL05 medley gone after 9
+expect ROLL05 dirt placed against the medley
+expect verb=items items=\S*minecraft:bowl:1
+expect verb=pbot\.hunger bot=rl5 food=10
+expect verb=player name=rl5 .*food=(1[1-9]|20)
+reject verb=pbot\.\S+ .*error=
+reject \[cdevtest\] .*done=0
+> pbot remove rl5
+look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, then nothing (plate at servings 0), the 9th click breaks it (the bowl in the verb=items line); chopsticks: food above 10 in the verb=player line, the medley state one serving lower, SelectedItem Damage 1
+
+## SQ-ROLL-06 | Mythical Roll Medley drops its servings and a bowl (medley at 160)
+@group A
+@commands `/setblock ~ ~ ~ roll_delight:mythical_roll_medley[servings=5]`, break it in survival
+@pass drops the 5 servings still on the plate (2 Nether Rolls, 3 Golden Roll Slices) and 1 bowl; at `[servings=8]` the medley itself (ROLL-11)
+@fails loot table generator
+@jars creativedelight
+@sources feature_writeup/roll_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
+> setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=5]
+> cdevtest break 160 -60 500
+> setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=8]
+> cdevtest break 160 -60 500
+count \[cdevtest\] verb=break who=fake broken=true before=\"?roll_delight:mythical_roll_medley == 2
+expect \[cdevtest\] verb=break drops=\S*\bminecraft:bowl:1\b
+expect \[cdevtest\] verb=break drops=roll_delight:mythical_roll_medley:1 stacks=1
+look the drops= line with the bowl (servings=5): 2 Nether Rolls and 3 Golden Roll Slices
+reject \[cdevtest\] verb=\S+ done=0
+
+## SQ-ROLL-07 | Wrapped Chopsticks block: add 3, take 4, break at 3 (block at 165)
+@group A
+@commands `/setblock ~ ~ ~ roll_delight:wrapped_chopsticks`; bot uses wrapped chopsticks on it 3 times, then empty hand 4 times; place again with `[chopsticks=3]` and break
+@pass 4 pairs, then 4 plain Chopsticks back and the block gone; breaking at 3 drops 3 Wrapped Chopsticks (ROLL-12)
+@fails `use`, set_count conditions
+@jars creativedelight
+@sources feature_writeup/roll_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb passed
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
+> setblock 165 -60 500 roll_delight:wrapped_chopsticks
+> pbot spawn rl7 165 -60 503 minecraft:overworld survival
+> pbot hold rl7 roll_delight:wrapped_chopsticks 3
+repeat 3
+> pbot use rl7 165 -60 500 up
+end
+> data get block 165 -60 500
+> pbot hold rl7 minecraft:air
+repeat 4
+> pbot use rl7 165 -60 500 up
+> clear rl7 roll_delight:chopsticks
+end
+count Removed 1 item == 4
+> execute unless block 165 -60 500 roll_delight:wrapped_chopsticks run say ROLL07 block gone
+expect ROLL07 block gone
+> setblock 165 -60 500 roll_delight:wrapped_chopsticks[chopsticks=3]
+> cdevtest break 165 -60 500
+expect \[cdevtest\] verb=break who=fake broken=true before=\"?roll_delight:wrapped_chopsticks
+expect \[cdevtest\] verb=break drops=roll_delight:wrapped_chopsticks:3
+> pbot remove rl7
+reject \[cdevtest\] verb=\S+ done=0
+
+## SQ-ROLL-08 | frogspawn: shears drop it, a hand does not (on water at 170)
+@group A
+@commands `/setblock ~ ~ ~ minecraft:frogspawn` on water; break with shears in survival; again by hand
+@pass shears: 1 frogspawn item; hand: nothing (ROLL-05)
+@fails BreakEvent hook
+@jars creativedelight
+@sources feature_writeup/roll_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb passed
+# r1120lr batch fault: x 150-170 z 500 was not loaded ('That position is not loaded' / verb=break error=unloaded); the row loads its own chunks
+> forceload add 145 495 175 510
+sleep 3
+> fill 169 -61 499 171 -61 501 minecraft:water
+> setblock 170 -60 500 minecraft:frogspawn
+> cdevtest break 170 -60 500 held=minecraft:shears
+> setblock 170 -60 500 minecraft:frogspawn
+> cdevtest break 170 -60 500
+count \[cdevtest\] verb=break who=fake broken=true before=minecraft:frogspawn == 2
+expect \[cdevtest\] verb=break drops=minecraft:frogspawn:1 stacks=1
+expect \[cdevtest\] verb=break drops=- stacks=0
+reject \[cdevtest\] verb=\S+ done=0
+
+## SQ-RPI-02 | ladder.json seeded from defaultconfigs
+@group A
+@commands Same boot: `ls saves/<world>/serverconfig/solraspberrypie/ladder.json`; `diff` it with `defaultconfigs/solraspberrypie/ladder.json`
+@pass file exists, identical (seeded from defaultconfigs)
+@fails `LadderLoader.load` seeding path (`FMLPaths.GAMEDIR/defaultconfigs`)
+@jars creativebrewing creativedelight solraspberrypie
+@sources feature_writeup/raspberry_pie.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1112/rp1.qb passed
+bootexpect Seeded .*ladder\.json from .*defaultconfigs
+shell L=$(sed -n 's/^level-name=//p' server.properties); ls -l "$L"/serverconfig/solraspberrypie/ladder.json && diff "$L"/serverconfig/solraspberrypie/ladder.json defaultconfigs/solraspberrypie/ladder.json && echo IDENTICAL
+
+## SQ-RPI-06 | Raspberry Pie recipes loaded (CD half waits for a Creative Delight rebuild)
+@group A
+@commands `/kubejs` probe or JEI dump: recipes of type `solraspberrypie:diet_book` and `solraspberrypie:liquid_diet_log` loaded; `/zq recipes food_book` (`diet_log.js` loads from the pack's `kubejs/data/creativedelight/kubejs/`, no rebuild needed)
+@pass both Raspberry Pie recipes load; Apple Pie's `solapplepie:food_book` recipe is removed (0 matches), no NCH remove error
+@fails `data/solraspberrypie/recipes/`; `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js`
+@jars creativebrewing creativedelight solraspberrypie
+@sources feature_writeup/raspberry_pie.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1112/rp1.qb
+> cdevtest bytype solraspberrypie:diet_book
+waitlog \[cdevtest\] verb=bytype done= 30
+> cdevtest recipes diet_log
+waitlog \[cdevtest\] verb=recipes done= 30
+> cdevtest recipes food_book
+waitlog \[cdevtest\] verb=recipes done= 30
+expect \[cdevtest\] verb=bytype serializer=solraspberrypie:diet_book n=[1-9]
+# liquid_diet_log_manual_only (renamed 2026-11-20, raspberry_pie.md) is a plain crafting_shapeless recipe (only diet_log uses the solraspberrypie:diet_book serializer)
+expect \[cdevtest\] verb=bytype id=solraspberrypie:diet_log result=
+expect \[cdevtest\] verb=recipes id=solraspberrypie:diet_log result=
+expect \[cdevtest\] verb=recipes id=solraspberrypie:liquid_diet_log_manual_only result=solraspberrypie:liquid_diet_log
+reject \[cdevtest\] .*(done=0|error=)
+shell grep -n "solapplepie:food_book" logs/kubejs/server.log | head; grep -cE "NCH.*(error|fail)" logs/kubejs/server.log; true
+look record whether a `verb=recipes id=solapplepie:food_book` line is still present (expected until the CD rebuild; the recipes food_book call lists it)
+
+## SQ-RPI-07 | /solrp reset clears the Apple Pie food list and the Raspberry Pie diet cap
+@group A
+@commands Fresh world, bot `<name>`: `/solrp reset <name>`; `/data get entity <name> ForgeCaps` (#30)
+@pass "Reset the diet of 1 players"; the bot gets "Your diet was reset"; Apple Pie's food list has `foodsEaten` 0, an empty `foodList` and an empty `solrp_gateFoods`; Raspberry Pie's `diet` cap has `maxDiversity` 0 and empty `slots` and `drinks`
+@fails `RpCommands.reset`; `FoodListMixin.solrp$save`
+@jars creativebrewing creativedelight solraspberrypie
+@sources feature_writeup/raspberry_pie.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1115/p9_a1.qb
+> forceload add 0 990 40 1010
+> pbot spawn rp7 10 -60 1000 minecraft:overworld survival
+sleep 3
+> pbot hunger rp7 2
+> pbot inv rp7 set 0 minecraft:apple 1
+> pbot inv rp7 select 0
+> pbot eat rp7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:apple 30
+> pbot hunger rp7 2
+> pbot inv rp7 set 0 minecraft:bread 1
+> pbot inv rp7 select 0
+> pbot eat rp7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:bread 30
+> pbot hunger rp7 2
+> pbot inv rp7 set 0 minecraft:cooked_beef 1
+> pbot inv rp7 select 0
+> pbot eat rp7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:cooked_beef 30
+> zc4 sol rp7
+waitlog \[zc4\] sol rp7 20
+> data get entity rp7 ForgeCaps
+sleep 1
+> solrp reset rp7
+sleep 1
+expect Reset the diet of 1 players|solraspberrypie\.cmd\.reset
+> zc4 sol rp7
+> data get entity rp7 ForgeCaps
+sleep 1
+reject \[cdevtest\] verb=pbot\.\S+ bot=rp7 error=
+look ForgeCaps after the reset: Apple Pie food list foodsEaten 0, foodList [] and solrp_gateFoods []; solraspberrypie:diet maxDiversity 0, slots [], drinks []; zc4 sol counts 0 after (3 before)
+
+## SQ-SALT-08 | rain dissolving off: nothing dissolves in rain, water still dissolves
+@group A
+@commands `config/creativedelight-common.toml` `[salt.Dissolving] SaltDissolvingInRain = false` (and the `configs_edited/root_config/` copy; salt-common.toml was carried there, salt.md 6 S10): `/weather rain`, `randomTickSpeed 300`, a Salt Block, a Salt Layer, salt ore and a Vintage salt brick in open sky (not a snowing biome) for 2 min; then beside a water source
+@pass Existing test: None dissolve in rain; the layer and the Salt Block beside water still dissolve
+@fails MG-35
+@jars creativecommon creativedelight
+@sources feature_writeup/item_merges.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb passed
+# r1120fix (2026-11-20): config/salt-common.toml moved into creativedelight-common.toml [salt] (salt.md 6 S10); the row
+# sets rain itself (r1120lr: no rain, so the rain cases reported no rain); the melt FAIL lines of the shared probe are not
+# this row's (SQ-MELT)
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Dissolving\][[:space:]]*$/ && /SaltDissolvingInRain/' config/creativedelight-common.toml | grep -q "SaltDissolvingInRain = false"
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Dissolving\][[:space:]]*$/ && /SaltDissolvingInRain/' $INST/configs_edited/root_config/creativedelight-common.toml | grep -q "SaltDissolvingInRain = false"
+> weather rain 6000
+sleep 5
+> salttest
+waitlog \[salttest\] done \d+ pass 600
+expect \[salttest\] PASS salt:salt_block in rain, open sky, stays
+expect \[salttest\] PASS salt:rock_salt_ore in rain, open sky, stays
+expect \[salttest\] PASS vintagedelight:salt_bricks in rain, open sky, stays
+expect \[salttest\] PASS vintagedelight:salt in rain, open sky, stays
+expect \[salttest\] PASS Salt Layer beside water becomes water
+expect \[salttest\] PASS salt:salt_block beside water dissolves
+expect \[salttest\] NOTE rain cases: .*isRainingAt true
+> weather clear 100000

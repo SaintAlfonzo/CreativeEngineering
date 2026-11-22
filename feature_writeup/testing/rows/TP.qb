@@ -790,7 +790,7 @@ look shell: the dropped-data line names no loot_table file (second number 0)
 @commands Bot with a Tempad and 6000 chronons saves a location, pins it, sets the pinned-location macro; `/ztp macro` twice at once, then again after 45 ticks
 @pass first macro: a door to the pinned location, `[ztp] cd true`; second macro at once: still one door; after the cooldown: a second door (API opens through `/ztp open` also start the cooldown, owner ruling 2026-11-18, SQ-TP-04)
 @fails no cooldown: the macro path does not call the item cooldown (`UseMacroPacket` handler); a second door at once: the cooldown is not checked
-@reviewed 2026-11-18
+@reviewed 2026-11-21
 @absent tempad:default tempad:teleport tempad:pinned_location (Tempad app and macro ids, not registry entries: ModApps / macro ids)
 # owner ruling 6 reversed (2026-11-18): both paths start the cooldown; this row checks the macro path (the item-use path a player's shift-use takes)
 > forceload add -16 -16 48 16
@@ -808,14 +808,16 @@ sleep 2
 > ztp settings t40 tempad:teleport tempad:default
 > kill @e[type=tempad:timedoor]
 sleep 2
+# r1121b batch fault (judge-4): at pace 2 each reply came 2 s (40 ticks) after the macro, so the cooldown had run out; send macro, cd, macro, doors in one tick. One macro opens a linked pair (original true and false), so one use = doors total 2
+pace 0
 > ztp macro t40
 > ztp cd t40
-waitlog \[ztp\] cd 20
-expect \[ztp\] cd true
 > ztp macro t40
 > ztp doors
+pace 2
 waitlog \[ztp\] doors total 20
-expect \[ztp\] doors total 1\b
+expect \[ztp\] cd true
+expect \[ztp\] doors total 2\b
 > cdevtest tickwarp 45
 waitlog verb=tickwarp end=done 30
 > kill @e[type=tempad:timedoor]

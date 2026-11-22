@@ -1777,7 +1777,7 @@ look the ship line: box unwrecked_pillager_ships (boat pool) for a pillager-crew
 @fails 0 elders, hollow monument: `StructureStartMetaMonumentMixin` not applied or `repairMonumentsAfterLoad` skipped (warning line says why)
 @jars creativecommon
 @from batches/r1102b/s5_B2.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 # the restart puts boot lines in the row log: KubeJS "does not have required mod" plugin WARN excluded (judge-7, r1120nv, 2026-11-21)
 # own capture (r1120fix 2026-11-20; was s5_B.qb's SQ-PSM-06a before a separate boot): locate, no tp, then restart
 > locate structure creativeworldgen:meta/struck_monument
@@ -1800,7 +1800,8 @@ sleep 2
 waitlog PSM06 struck counted 180
 expect #struck_elders has 3 \[s5n\]
 reject could not be rebuilt
-reject (Unknown (item|block|block type|entity)|does not (have|accept)(?! required mod)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+# judge-7, 2026-11-21: boot-time conditional recipe parse WARN (Unknown item biomesoplenty:dead_wood) excluded like the other restart rows
+reject ^(?!.*Error parsing recipe).*(Unknown (item|block|block type|entity)|does not (have|accept)(?! required mod)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 expect \[spawn-boxes\] .*box spawn_overrides of creativeworldgen:meta/struck_monument, part minecraft:monument -> \[minecraft:guardian 1 \(2-4\)\]
 look prismarine brick count well above 0 = interior rooms present (compare with the lone monument's count in SQ-PSM-06b)
 > pbot remove s5mstruck

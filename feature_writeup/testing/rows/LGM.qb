@@ -139,21 +139,21 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-LGM-08 | Roasted Rack feast from the pot, both ways; grid craft manual_only (pots 205, 208)
 @group A
-@commands Roasted Rack feast: pot with raw rack + 2 cooked rice + carrot + baked potato + bowl; then cooked rack + 2 rice + carrot + 2 baked potato + bowl; hand grid craft
+@commands Roasted Rack feast: pot with raw rack + 2 cooked rice + 2 carrots + baked potato + bowl; then cooked rack + cooked rice + 2 carrots + 2 baked potatoes + bowl (the recipes in largemeals recipes.js); hand grid craft
 @pass each gives the feast (LGM-17); grid craft listed `_manual_only`
 @fails pot ingredient limit 6
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 # r1120lr batch fault: x 180-210 z 500 was not loaded ('That position is not loaded' / verb=kill error=unloaded); the row loads its own chunks
 > forceload add 175 495 215 510
 sleep 3
 > cdevtest recipes roasted_mutton_rack
 > setblock 205 -60 500 minecraft:campfire[lit=true]
 > setblock 205 -59 500 farmersdelight:cooking_pot
-> data merge block 205 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:raw_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> data merge block 205 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:raw_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:carrot",Count:1b},{Slot:5b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
 > setblock 208 -60 500 minecraft:campfire[lit=true]
 > setblock 208 -59 500 farmersdelight:cooking_pot
-> data merge block 208 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:cooked_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:5b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> data merge block 208 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:cooked_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"minecraft:carrot",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:5b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
 > cdevtest tickwarp 600
 waitlog verb=tickwarp end=done 60
 > data get block 205 -59 500 Inventory

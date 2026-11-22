@@ -4253,7 +4253,11 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass log matches `verb=items items=- `; log matches `litter minecraft:pig x100: babies 100, extra 0$`
 @fails `HHConfig`: `manureFromFedAnimals`, `litters` off
 @from batches/r1108hh/t12_b.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
+# judge-6, 2026-11-21: r1121b ran this without SQ-HH-1324's restart (litters on: extra 100, manure dropped); the two toml edits and the restart are in the row now
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml animals litters false
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml animals manureFromFedAnimals false
+restart
 > forceload add 3144 3480
 > pbot spawn bot1 3144 -60 3480 minecraft:overworld survival
 > effect clear bot1
@@ -5003,14 +5007,18 @@ look `Test failed` (none in love: 16 animals in the 20x8x20 box stop it); Items 
 @pass `Test passed, count: 3` (a calf was born; both adults stayed in love for the Breed goal) (HNH-74 food breeds)
 @fails `animal.setInLove(null)`, vanilla Breed goal; count 2 after 20 s can mean the cows wandered apart, widen the wait
 @from batches/r1111/hh_mach.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
+# judge-6, 2026-11-21: self-contained for a lone rerun (forceload and bot hb1 come from SQ-HH-201 otherwise)
+> forceload add 192 64 224 96
+> execute unless entity hb1 run pbot spawn hb1 8 -60 8 minecraft:overworld survival
+sleep 3
 > setblock 208 -60 80 hearthandharvest:trough
 > summon minecraft:cow 209 -60 80
 > summon minecraft:cow 207 -60 80
 > pbot hold hb1 minecraft:wheat 4
 > pbot use hb1 208 -60 80 up
 > cdevtest tickwarp 600
-waitlog verb=tickwarp end=done ticks=400 60
+waitlog verb=tickwarp end=done ticks=600 90
 > execute if entity @e[type=minecraft:cow,x=208,y=-60,z=80,distance=..8]
 expect Test passed, count: 3$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -9895,13 +9903,15 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass first "Test passed" (ringer lit the touching lamp), second "Test passed" (lamp went out)
 @fails `ThrownHorseshoe.onHitBlock`; `scheduleTick` delay
 @from batches/r1112/hh_gear.qb
+@reviewed 2026-11-21
 > forceload add 470 470 620 620
 sleep 3
 > setblock 496 -60 476 minecraft:oak_fence
 > setblock 497 -60 476 minecraft:redstone_lamp
 sleep 1
-> cdevtest watch 497 -60 476 40 2
+# judge-6, 2026-11-21: r1121b ran the summon only after the 40-tick watch ended (the watch holds the command queue); summon first, then watch
 > summon hearthandharvest:thrown_horseshoe 496.5 -58.3 476.5 {Motion:[0.0,-1.0,0.0],HorseshoeItem:{id:"hearthandharvest:horseshoe",Count:1b}}
+> cdevtest watch 497 -60 476 40 2
 sleep 3
 > execute if block 497 -60 476 minecraft:redstone_lamp[lit=false]
 expect verb=watch .*state=\S*redstone_lamp\[lit=true\]
@@ -11454,9 +11464,14 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `WaterLevel:4`, `BonemealLevel:5` (HNH-33: soaks for water only)
 @fails spend guards
 @from batches/r1111/hh_boot5.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > fill 550 -61 563 554 -61 567 minecraft:farmland[moisture=0]
 > fill 550 -60 563 554 -60 567 minecraft:wheat[age=7]
+# judge-6, 2026-11-21: r1121b ran with the can left by SQ-HH-1606 (WaterLevel:3 after the use); the 5/5 can from the commands is set here
+> item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5,BonemealLevel:5,FertilizerItem:"minecraft:bone_meal"}
 > pbot use G 552 -60 565 up
 > cdevtest player G
 expect verb=player name=G .*main=\S*WaterLevel:4\b

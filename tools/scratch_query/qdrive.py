@@ -144,7 +144,10 @@ def build_steps(plan_rows):
 	sys.path.insert(0, str(HERE))
 	import qrows
 	meta, files = {}, {}
-	for p in qrows.all_files():
+	# the queue's rows files plus any run batch the plan names (qbundle.py bundles, r1121b: without them a bundle's
+	# group B rows read as group A)
+	extra = {INST / x['file'] for x in plan_rows} - set(qrows.all_files())
+	for p in list(qrows.all_files()) + sorted(q for q in extra if q.is_file()):
 		f = qrows.load(p)
 		files[os.path.relpath(p, INST)] = f
 		for sec in f['sections']:

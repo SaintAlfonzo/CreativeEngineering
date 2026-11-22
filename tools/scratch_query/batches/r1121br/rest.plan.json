@@ -1,0 +1,122 @@
+[
+ {
+  "id": "SQ-BM-01",
+  "file": "feature_writeup/testing/rows/BM.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "forceload fixture for SQ-BM-02 (r1121br)",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-BM-02",
+  "file": "feature_writeup/testing/rows/BM.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-JSL-02",
+  "file": "feature_writeup/testing/rows/CDJ4.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MG-24",
+  "file": "feature_writeup/testing/rows/FCK.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1326",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1607",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-1511",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-HH-227",
+  "file": "feature_writeup/testing/rows/HH.qb",
+  "section": 2,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-MBX-06",
+  "file": "feature_writeup/testing/rows/MB.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-PSM-06",
+  "file": "feature_writeup/testing/rows/PSU.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-RD-08",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ },
+ {
+  "id": "SQ-TI-00",
+  "file": "feature_writeup/testing/rows/RD.qb",
+  "section": 1,
+  "phase": "server",
+  "state": "failed",
+  "why": "rerun after fix",
+  "tier": "T2",
+  "client": false
+ }
+]

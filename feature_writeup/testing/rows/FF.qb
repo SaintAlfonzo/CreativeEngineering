@@ -127,6 +127,8 @@ reject verb=\S+ .*done=0
 @commands `cdevtest food` for each dish
 @pass broccoli soup 13 / 0.7, pasta with broccoli 15 / 0.8, stuffed potato 13 / 0.7, truffle pasta 15 / 0.8, both creamy pastas 15 / 0.8, nachos 13 / 1.0, lasagna slice 15 / 0.75, fiery fondue 15 / 0.75
 @fails CD startup `creativedelight/cheese_values.js` (CD jar not rebuilt, or the row loaded after `food_value_copies.js` read the list); `[food values]` warnings in latest.log
+@reviewed 2026-11-21
+# r1121b fix (2026-11-21, judge-2): cdevtest prints modifier=1 for 1.0; nachos regex takes both
 > cdevtest food veggiesdelight:broccoli_soup
 > cdevtest food veggiesdelight:pasta_with_broccoli
 > cdevtest food farmersdelight:stuffed_potato
@@ -143,7 +145,7 @@ expect verb=food item=farmersdelight:stuffed_potato\S* food=true nutrition=13 mo
 expect verb=food item=fungidelight:truffle_pasta\S* food=true nutrition=15 modifier=0\.8
 expect verb=food item=moredelight:creamy_pasta_with_chicken_cuts\S* food=true nutrition=15 modifier=0\.8
 expect verb=food item=moredelight:creamy_pasta_with_ham\S* food=true nutrition=15 modifier=0\.8
-expect verb=food item=corn_delight:nachos_bowl\S* food=true nutrition=13 modifier=1\.0
+expect verb=food item=corn_delight:nachos_bowl\S* food=true nutrition=13 modifier=1(\.0)? saturation=
 expect verb=food item=veggiesdelight:lasagna_slice\S* food=true nutrition=15 modifier=0\.75
 expect verb=food item=brewinandchewin:fiery_fondue\S* food=true nutrition=15 modifier=0\.75
 reject verb=\S+ .*done=0

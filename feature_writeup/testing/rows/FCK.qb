@@ -810,7 +810,7 @@ look the IW-flowers makes list holds Twigs' flowering-azalea recipes
 @pass no recipe uses or makes the flax items; rope only from 3 string, sack only wheat + string; no flax seeds in either table (MG-51)
 @fails Supplementaries reverted `[functional.flax]`; `misc_mods.js` not in the Compat jar
 @jars creativecommon creativedelight
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 @from batches/r1113/c3_a1.qb
 > cdevtest uses supplementaries:flax
 > cdevtest uses supplementaries:flax_seeds
@@ -827,7 +827,7 @@ expect verb=uses item=supplementaries:flax_block alone=0 shared=0
 expect verb=makes item=supplementaries:flax_block n=0$
 expect verb=makes item=supplementaries:rope n=1$
 expect verb=makes item=supplementaries:sack n=1$
-expect verb=rdetail id=supplementaries:rope serializer=\S+ result=supplementaries:rope\*\d+ ingredients=(?:empty,)*minecraft:string,(?:empty,)*minecraft:string,(?:empty,)*minecraft:string(?:,empty)*$
+expect verb=rdetail id=supplementaries:rope(?:_2)? serializer=\S+ result=supplementaries:rope\*\d+ ingredients=(?:empty,)*minecraft:string,(?:empty,)*minecraft:string,(?:empty,)*minecraft:string(?:,empty)*$
 > forceload add 1076 996 1084 1004
 sleep 3
 repeat 20

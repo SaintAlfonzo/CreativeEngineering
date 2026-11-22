@@ -161,14 +161,14 @@ permanent effects from early-mid diversity up to Satiated as the final unlock, s
 |---|---:|---|
 | Hearts (+1 heart each, max 20 hearts) | 10 | every 100/11: 9.1, 18.2, 27.3, 36.4, 45.5, 54.5, 63.6, 72.7, 81.8, 90.9 (the gap after the last heart equals the gap before the first) |
 | Toughness 1 + knockback resistance 0.1, paired | 3 | 16.7, 50, 83.3 (1/6, 1/2, 5/6) |
-| Permanent effects | 12 | 40 to 100, every 5.45 (start 40 = "early-mid", agent default, unconfirmed): Luck I, Speed I, Night Vision, Phantom Bane, Speed II, Regeneration I, Long Reach I, Strength I, Luck II, Invisibility (3rd highest), Double Jump (2nd highest), Satiated (100) |
-| Unlockables (a grouped heading = one slot) | 39 | every 2.5: 2.5 to 97.5, in the scratchpad's order |
+| Permanent effects | 12 | 25 to 100, density falling to half (ruled 2026-11-21, plan_rp_standalone.md D10): 25, 30.2, 35.6, 41.2, 47.1, 53.2, 59.7, 66.6, 73.9, 81.8, 90.4, 100: Luck I, Speed I, Night Vision, Phantom Bane, Speed II, Regeneration I, Long Reach I, Strength I, Luck II, Invisibility (3rd highest), Double Jump (2nd highest), Satiated (100) |
+| Unlockables (a grouped heading = one slot) | 39 | 2.5 to 97.5, density falling to half (D10), in the scratchpad's order: 2.5, 4.4, 6.3, 8.2, 10.2, 12.1, 14.1, 16.1, 18.1, 20.2, 22.3, 24.4, 26.5, 28.7, 30.9, 33.1, 35.3, 37.6, 39.9, 42.3, 44.7, 47.1, 49.6, 52.1, 54.7, 57.3, 59.9, 62.6, 65.4, 68.3, 71.2, 74.1, 77.2, 80.3, 83.5, 86.8, 90.3, 93.8, 97.5 |
 
-At the high-and-feasts ceiling (72): 28 of 39 unlockables (72%), 7 of 10 hearts, 2 of 3 pairs, 6 of 12 permanent
+At the high-and-feasts ceiling (72), with the falling density: 31 of 39 unlockables (79%), 7 of 10 hearts, 2 of 3 pairs, 8 of 12 permanent effects. (Evenly spaced it was 28, 7, 2, 6.) Luck II moved before Invisibility so those two sit 3rd and 2nd highest as listed.
 effects. Luck II moved before Invisibility so those two sit 3rd and 2nd highest as listed.
 
 **Open for the owner:**
 - O3 Build the new ladder: needs effect ids for the scratchpad's new effects (Leaf Piercing, Steady, Prickly, Magnet,
   Double Jump, the immunity groups, toggles), and whether effect slots stay and where.
-- O4 Start of the permanent effects (40 assumed).
+- O4 ruled 2026-11-21: permanent effects start at 25 (was 40 assumed).
 

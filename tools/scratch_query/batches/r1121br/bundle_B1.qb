@@ -1,0 +1,85 @@
+@@section 1
+@@title bundle B1 (run batch, not queue rows): ABD.qb BBQF.qb
+@@date 2026-11-21
+@@phase server
+@@text Run-only copy of plan rows that share one group B boot (qbundle.py); the queue rows stay in rows/*.qb.
+@@table
+
+## SQ-ABD-01 | 
+@group B
+@commands Boot, then `/dumpall` and look up `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice`
+@pass Both gone; `creativedelight:smelting/cooked_perch_slice_from_perch_slice` and `.../cooked_pike_slice_from_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes (`creativedelight:smoking/...`, `creativedelight:campfirecooking/..._from_..._slice`) present; no error in `logs/latest.log`
+@fails Depends on: CD jar. Recipe ids renamed `smelting/cooked_<fish>_slice_from_<fish>_slice` (recipes/all.csv 2026-11-19; r1120nv batch fault)
+@jars creativedelight
+@tier T2
+@reviewed 2026-11-20
+> cdevtest recipes abnormals_delight:upgrade_aquatic/cooked_
+> cdevtest rdetail cooked_perch_slice
+> cdevtest rdetail cooked_pike_slice
+expect verb=recipes text=abnormals_delight:upgrade_aquatic/cooked_ n=0\b
+expect verb=rdetail id=creativedelight:smelting/cooked_perch_slice_from_perch_slice serializer=minecraft:smelting\b
+expect verb=rdetail id=creativedelight:smelting/cooked_pike_slice_from_pike_slice serializer=minecraft:smelting\b
+expect verb=rdetail id=creativedelight:smoking/cooked_perch_slice_from_perch_slice serializer=minecraft:smoking\b
+expect verb=rdetail id=creativedelight:campfirecooking/cooked_pike_slice_from_pike_slice serializer=minecraft:campfire_cooking\b
+look experience 0.35 and cookingtime 200 are not printed (part=fields only for public fields): check the /dumpall recipe dump; the smoking and campfire lines unchanged
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-ABD-04 | pickerelweed tag and the two CD cooking recipes
+@group B
+@commands Same boot; `/dumptags` or the tag dump
+@pass `#creativedelight:pickerelweed` = blue + purple (tag moved from `creativeengineering:`, ids follow the owning mod; tag dump 2026-11-19); `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creativedelight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks
+@fails Depends on: CD jar
+@jars creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+> cdevtest tag item creativedelight:pickerelweed
+> cdevtest rdetail pickerelweed_juice
+> cdevtest rdetail pike_with_beetroot
+expect verb=tag kind=item tag=creativedelight:pickerelweed n=2 ids=\S*upgrade_aquatic:blue_pickerelweed
+expect verb=tag kind=item tag=creativedelight:pickerelweed n=2 ids=\S*upgrade_aquatic:purple_pickerelweed
+reject verb=rdetail id=abnormals_delight:\S*pickerelweed_juice serializer=
+reject verb=rdetail id=abnormals_delight:\S*pike_with_beetroot serializer=
+expect verb=rdetail id=creativedelight:farmersdelightcooking/pickerelweed_juice(_manual_only)? serializer=\S+ result=\S+ ingredients=\S*pickerelweed\S*pickerelweed
+expect verb=rdetail id=creativedelight:farmersdelightcooking/pike_with_beetroot serializer=\S+ result=\S+ ingredients=\S*pickerelweed\S*pickerelweed
+look 1.0 xp and 200 ticks: a part=fields line shows them only if the recipe class has public fields (else recipe dump or JEI)
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-VTDA-10 | wild ghost peppers: only the crimson nylium one survives a neighbor update
+@group B
+@commands Terralith world: `/setblock` wild ghost peppers on grass, moss, mycelium, crimson nylium; update a neighbour
+@pass Only the nylium one survives
+@fails Vintage `GhostPepperWildCropBlock.java` (`mayPlaceOn`); TODO `ports/vintageport #7` (with SQ-VTD6-01)
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_4.qb
+# own home (r1120fix, 2026-11-20): {SBH} came from the retired r1103 setup row SA4-00; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
+capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SBH1+16} {SBH3-8} {SBH1+31} {SBH3+8}
+sleep 3
+> setblock {SBH1+20} 200 {SBH3} minecraft:grass_block
+> setblock {SBH1+22} 200 {SBH3} minecraft:moss_block
+> setblock {SBH1+24} 200 {SBH3} minecraft:mycelium
+> setblock {SBH1+26} 200 {SBH3} minecraft:crimson_nylium
+> setblock {SBH1+20} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+22} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+24} 201 {SBH3} vintagedelight:wild_ghost_peppers
+> setblock {SBH1+26} 201 {SBH3} vintagedelight:wild_ghost_peppers
+sleep 1
+> setblock {SBH1+20} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+22} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+24} 201 {SBH3+1} minecraft:stone
+> setblock {SBH1+26} 201 {SBH3+1} minecraft:stone
+> fill {SBH1+20} 201 {SBH3+1} {SBH1+26} 201 {SBH3+1} minecraft:air
+sleep 2
+> execute if block {SBH1+20} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper grass survived
+> execute if block {SBH1+22} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper moss survived
+> execute if block {SBH1+24} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper mycelium survived
+> execute if block {SBH1+26} 201 {SBH3} vintagedelight:wild_ghost_peppers run say SA4 pepper nylium survived
+expect SA4 pepper nylium survived
+reject SA4 pepper (grass|moss|mycelium) survived
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|That position is not loaded)

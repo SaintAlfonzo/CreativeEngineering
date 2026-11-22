@@ -229,7 +229,7 @@ reject verb=\S+ .*done=0
 @pass Orange Jam, then Lemon Jam, each in the mason jar
 @fails same
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 # r1120lr batch fault: x 130-134 z 500 was not loaded; the row loads its own chunks
 > forceload add 124 494 140 506
 sleep 3
@@ -251,7 +251,7 @@ waitlog verb=tickwarp end=done ticks={JT1+300} 120
 waitlog verb=tickwarp end=done ticks={JT2+300} 120
 > data get block 130 -59 500 Inventory
 > data get block 134 -59 500 Inventory
-expect 130, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:orange_jelly"
-expect 134, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:lemon_jelly"
+expect 130, -59, 500 has the following block data: .*Slot: 8b?, id: "fruitsdelight:orange_jelly"
+expect 134, -59, 500 has the following block data: .*Slot: 8b?, id: "fruitsdelight:lemon_jelly"
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zsb|zlbs)\] (error|unknown)|verb=tickwarp .*done=0)
 look slot 8 holds the jam (Orange Jam / Lemon Jam = orange_jelly / lemon_jelly) and the mason jar was used; on a FAIL check whether slot 6 holds the meal (no container taken) or the inputs stayed (no recipe matched)

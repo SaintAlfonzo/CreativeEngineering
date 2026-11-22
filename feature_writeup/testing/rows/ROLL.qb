@@ -50,7 +50,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass hunger 20 (capped), no Comfort (cooked rice has none; use a Comfort food to check the 1.5x duration), chopsticks Damage 1 (ROLL-07)
 @fails Start/Finish hook: off-hand identity check, `getUsedItemHand`
 @from batches/r1103/p2_R.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 # r1103 p2: cooked rice has had no Comfort since the 2026-11-02 Comfort / Nourishment rules (comfort_nourishment.json
 # "none"), so its read could not show the lengthening; hunger 19 -> 20 and chopsticks Damage 1 passed there
 > cdevtest food creativedelight:glowing_calamari_roll
@@ -58,6 +58,9 @@ reject \[cdevtest\] verb=\S+ done=0
 sleep 2
 > clear rl3
 # r1120lr batch fault: effect hunger 1 255 left the bot at foodLevel 20, so the roll (not always-edible) could not be eaten; the bot's food is set to 19 directly
+# r1121b judge-3, 2026-11-21: scratch servers run peaceful, which refills food 1 per 10 ticks (foodLevel read 20 after the 1 s sleep,
+# so the roll could not be eaten): easy for the row, peaceful again after
+> difficulty easy
 > pbot hunger rl3 19
 sleep 1
 > data get entity rl3 foodLevel
@@ -71,6 +74,7 @@ sleep 5
 expect has the following entity data: \[\{.*Duration
 > data get entity rl3 SelectedItem
 > data get entity rl3 Inventory
+> difficulty peaceful
 expect \[cdevtest\] verb=useair who=rl3 hand=off result=(CONSUME|SUCCESS)
 expect has the following entity data: \{.*id: "roll_delight:chopsticks".*Damage: 1\b
 > pbot remove rl3

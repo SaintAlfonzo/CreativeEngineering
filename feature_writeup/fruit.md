@@ -41,19 +41,19 @@ orange to 5, pineapple 6 + 2 saplings).
 "Raw" = the effect when the fruit is eaten as is. "Fruit foods" = the effect its Fruits Delight jello and jam give (or
 the owning mod's own fruit foods), the pack's existing association for that fruit.
 
-| Fruit | Id | Raw | Fruit foods |
+| Fruit | Id | Raw | Food Effects |
 |---|---|---|---|
 | Acorn | `delightful:acorn` | none | none |
 | Apple | `minecraft:apple` | none | Absorption |
-| Banana | `neapolitan:banana` (and `alexsmobs:banana`) | Climbing 15 s (Neapolitan banana) | Agility (Neapolitan banana foods) |
+| Banana | `neapolitan:banana` (and `alexsmobs:banana`) | none | Climbing 15 s (Neapolitan banana) |
 | Bayberry | `fruitsdelight:bayberry` | none | Leaf Piercing |
-| Blueberry | `fruitsdelight:blueberry` | none | Night Vision + Brightening |
+| Blueberry | `fruitsdelight:blueberry` | none | Clarity |
 | Cantaloupe | `delightful:cantaloupe_slice` | none | Health Boost |
 | Cherry | `vinery:cherry` | none | none |
 | Chorus Fruit | `minecraft:chorus_fruit` | random teleport | Teleport |
 | Coffee Berries | `farmersrespite:coffee_berries` | Wither 5 s (80%), Caffeinated 10 s | Caffeinated |
 | Cranberry | `fruitsdelight:cranberry` | none | Shrinking |
-| Durian | `fruitsdelight:durian_flesh` | none | Alienating + Suspicious Smell |
+| Durian | `fruitsdelight:durian_flesh` | none | Alienating |
 | Fig | `fruitsdelight:fig` | none | Digesting |
 | Glow Berries | `minecraft:glow_berries` | Glowing 15 s | Glowing |
 | Grapes (red, white; jungle, savanna, taiga) | `vinery:*grape*` | none | none (wines have their own) |

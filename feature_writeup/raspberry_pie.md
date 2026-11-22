@@ -16,12 +16,22 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=801c633beb5d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 30 open TODO rows (Planned 2, Testing 28), 3 Complete.
+<!-- generated:status_index begin open_work sha1=e5c132282d4b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 40 open TODO rows (Planned 12, Testing 28), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food-tuning #15` | Planned |  | Food Dictionary: hand-made type sort mirroring the JEI food family order (after that is done) |
+| `food-tuning #37` | Planned |  | RP standalone P0: verify LGPL-2.1 for Apple Pie and Carrot (and their book art) at the upstream tags; record result |
+| `food-tuning #38` | Planned | S | RP standalone P1: Jar-in-Jar bundle (Apple Pie, Carrot nested), license texts, NOTICE, mods.toml URLs, deploy and manifest updates |
+| `food-tuning #39` | Planned | S C | RP standalone P2: default ladder = Apple Pie's ladder plus 10 vanilla unlockables and slots |
+| `food-tuning #40` | Planned | S | RP standalone P3: diversity table loaded from any jar's solraspberrypie/diversity/*.json, ids optional, no table in the mod |
+| `food-tuning #41` | Planned | S C | RP standalone P4: move Diet Log rename, recipe removal and item_dict keys out of the pack into Raspberry Pie |
+| `food-tuning #42` | Planned | S | RP standalone P5: standalone defaults: Apple Pie default settings, recommended settings file, start warnings |
+| `food-tuning #43` | Planned | S | RP standalone P6: Fleet-Footed mixin guard (member check, require 0, one warning) |
+| `food-tuning #44` | Planned | S C | RP standalone P7: pack ladder from the scratchpad (toggles, tick markers, hover taglines, new effect ids) |
+| `food-tuning #45` | Planned | S | RP standalone P8: pack diversity table moves to Creative Delight; pack sets Apple Pie values |
+| `food-tuning #46` | Planned | S C | RP standalone P9: isolation tests RPS-01 to -07 and RPI rerun |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
 | `food-tuning #2` | Testing | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
 | `food-tuning #3` | Testing | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |

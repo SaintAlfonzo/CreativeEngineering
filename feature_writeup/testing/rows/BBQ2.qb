@@ -142,13 +142,15 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails
 @jars creativedelight
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
+# r1121b batch fault: the can reject also hit Farmer's Delight's Rice Roll Medley / Royale cans (kept, owner 2026-11-20,
+# roll_delight.md) and Create's Sweet Roll can; the slice reject hit Slice & Dice's automatic copy of the cutting recipe
 > cdevtest makes roll_delight:golden_roll_slice
 > cdevtest recipes golden_roll
 > cdevtest recipes canned_ max=2000
-reject verb=recipes id=\S*canned_\S*roll\S*(\s|$)
-reject verb=makes id=\S+ result=roll_delight:golden_roll_slice\S* serializer=(?!farmersdelight:cutting\b)
-look golden_roll_slice made only by creativedelight:farmersdelightcutting/golden_roll_slice; no recipe id with gild or enchant on golden rolls; no canned_ recipe id with roll in it (max=2000: the whole list is shown)
+reject verb=recipes id=\S*canned_(?!(rice_roll_medley|rice_roll_royale|sweet_roll)\b)\S*roll\S*(\s|$)
+reject verb=makes id=\S+ result=roll_delight:golden_roll_slice\S* serializer=(?!(farmersdelight|sliceanddice):cutting\b)
+look golden_roll_slice made only by creativedelight:farmersdelightcutting/golden_roll_slice (and its Slice & Dice copy); no gild or enchant recipe with the slice as base or result (the Golden Roll's own gilding routes are fine); no canned_ recipe id for a Roll Delight roll, slice or medley (Canned Rice Roll Medley / Royale stay) (max=2000: the whole list is shown)
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ2-01 | after /reload no skewer script error; the 8 pack raw skewers exist under their mods

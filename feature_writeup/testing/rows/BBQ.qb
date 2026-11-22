@@ -53,10 +53,10 @@ reject \[cdevtest\] verb=\S+ .*error=
 ## SQ-BBQ-03 | Barbeque's item and block tags
 @group A
 @commands `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativecommon:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativedelight:food_type/handheld`, `/meal`, `/hazard`
-@pass 18 raw (10 Barbeque's Delight + 8 pack raws) + 10 grilled skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
+@pass 18 raw (10 Barbeque's Delight + 8 pack raws) + 10 grilled skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in no food type (dropped, plan_wood_bucket_batch_1121.md R18), burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
 @fails `tags.js` not loaded (`global.CD.on`). Ids from the 2026-11-19 tag dump (food_type tags under `creativedelight:`, rain_douses under `creativecommon:`, raw_skewers 18); r1120lr batch fault: old namespaces
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
 > cdevtest tag item barbequesdelight:raw_skewers
 > cdevtest tag item barbequesdelight:grilled_skewers
@@ -78,7 +78,7 @@ expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdeligh
 expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:tray\b
 expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b
 expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b
-expect verb=tag kind=item tag=creativedelight:food_type/meal .*ids=\S*barbequesdelight:bibimbap\b
+reject verb=tag kind=item tag=creativedelight:food_type/meal .*ids=\S*barbequesdelight:bibimbap\b
 expect verb=tag kind=item tag=creativedelight:food_type/hazard .*ids=\S*barbequesdelight:burnt_skewer\b
 reject verb=tagsof id=barbequesdelight:raw_beef_skewer .*item_tags=\S*food_type
 look the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block_tags in the tagsof lines)

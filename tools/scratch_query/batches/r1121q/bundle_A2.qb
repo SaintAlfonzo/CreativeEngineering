@@ -1,0 +1,1296 @@
+@@section 1
+@@title bundle A2 (run batch, not queue rows): DEP.qb DNR.qb DRK.qb EX.qb FDI.qb FF.qb FO.qb GLD.qb HOP.qb IP.qb IPO.qb JFP.qb
+@@date 2026-11-21
+@@phase server
+@@text Run-only copy of plan rows that share one group A boot (qbundle.py); the queue rows stay in rows/*.qb.
+@@table
+
+## SQ-DEP-05 | rain puts out an open-sky campfire on stone, not one on a coal block; the douse tag is present
+@group A
+@commands Same boot: `/setblock` a `minecraft:campfire` under open sky and one on a `minecraft:coal_block` beside it, `/weather thunder`, wait 400 ticks, then `/execute if block <pos> minecraft:campfire[lit=false]` for each; `/dumpall`, `grep -c "creativecommon:campfire/rain_douses" kubejs/exported/tags/block_tags.json`
+@pass open-sky campfire out, the one on coal lit; tag present (1)
+@fails Common's `CampfireRainInfo` namespace vs `block_dict.js` `t_campfire_rain_*` (7.17 item 1)
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@sources feature_writeup/creative_split.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c2_a1.qb
+# forceload (r1120fix, 2026-11-20): r1120nv batch fault, the campfire area was not loaded
+> forceload add 328 296 336 304
+sleep 3
+> setblock 330 -61 300 minecraft:stone
+> setblock 330 -60 300 minecraft:campfire[lit=true]
+> setblock 332 -61 300 minecraft:coal_block
+> setblock 332 -60 300 minecraft:campfire[lit=true]
+> weather thunder
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end= 60
+expect verb=tickwarp end=done ticks=400
+> execute if block 330 -60 300 minecraft:campfire[lit=false]
+> execute if block 332 -60 300 minecraft:campfire[lit=true]
+> cdevtest tag block creativecommon:campfire/rain_douses
+> weather clear
+count Test passed == 2
+expect verb=tag kind=block tag=creativecommon:campfire/rain_douses n=[1-9]
+reject \[cdevtest\] .*done=0
+look the row's /dumpall grep is replaced by the live tag query (same tag)
+
+## SQ-DNR-O-02 | 
+@group A
+@commands Eat Shrimp Stew, Bowl of Paella, Sea Grape, Sea Grape Juice and Nautilus Juice; use the paella and pufferfish with and without a bowl; knife the sponge cake, then eat from it; bone meal a sea grape plant; brew Awkward + Elder Guardian Eye, then + redstone, + glowstone
+@pass Bowls, bottle and shell come back; Comfort 4:00 (paella), Nourishment 4:00 (shrimp stew) by the pack rule (upstream 5:00), Instant Breath (air full) apply, with blue tooltip lines; no bowl gives "You need a Bowl to eat this."; the empty paella pan is picked up (pan + skillet); a slice drops; bone meal adds a plant; the three Mining Fatigue potions brew and JEI shows them
+@fails Compare with ocean_delight.md 5.6; missing effect: Farmer's Delight effect id lookup in `OceanicFood.farmers`
+@jars creativedelight
+@sources feature_writeup/creative_delight.md feature_writeup/ocean_delight.md feature_writeup/ends_delight.md
+@tier T2
+@reviewed 2026-11-20
+> forceload add 2592 2592 2616 2616
+> pbot spawn dnr2 2600 -60 2600 minecraft:overworld survival
+sleep 3
+> clear dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:shrimp_stew
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:bowl_of_paella
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:sea_grape
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:sea_grape_juice
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:nautilus_juice
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> pbot inv dnr2 get
+count verb=pbot.useitem bot=dnr2 end=finish == 5
+# r1120fix (2026-11-20): the pack Comfort / Nourishment rule (comfort_nourishment.md 10; comfort_nourishment.json set:
+# shrimp_stew nourishment 240 s, bowl_of_paella comfort 240 s) gives 4:00, not upstream 5:00; the containers are read
+# from the useitem result (each pbot hold overwrites slot 0, so the inventory keeps only the last one)
+expect verb=player name=dnr2 effects=\S*farmersdelight:comfort:0:4[5-8]\d\d\b
+expect verb=player name=dnr2 effects=\S*farmersdelight:nourishment:0:4[5-8]\d\d\b
+count verb=pbot.useitem bot=dnr2 end=finish item=oceanic_delight:(shrimp_stew|bowl_of_paella)\S* result=minecraft:bowl == 2
+expect verb=pbot.useitem bot=dnr2 end=finish item=oceanic_delight:sea_grape_juice\S* result=minecraft:glass_bottle
+expect verb=pbot.useitem bot=dnr2 end=finish item=oceanic_delight:nautilus_juice\S* result=minecraft:nautilus_shell
+> pbot remove dnr2
+> cdevtest place 2604 -60 2604 oceanic_delight:paella_plate
+> cdevtest use 2604 -60 2604 held=minecraft:bowl hand=main
+> cdevtest place 2606 -60 2604 oceanic_delight:sponge_cake
+> cdevtest use 2606 -60 2604 held=farmersdelight:flint_knife hand=main
+> cdevtest items 2606 -60 2604 2
+> cdevtest place 2608 -61 2604 minecraft:sand
+> fill 2607 -60 2603 2609 -58 2605 minecraft:water
+> cdevtest place 2608 -60 2604 oceanic_delight:sea_grape_plant
+> cdevtest use 2608 -60 2604 held=minecraft:bone_meal hand=main
+> cdevtest count 2608 -60 2604 2608 -55 2604 oceanic_delight:sea_grape_plant
+> cdevtest potion minecraft:awkward oceanic_delight:elder_guardian_eye
+> cdevtest potion oceanic_delight:mining_fatigue minecraft:redstone,minecraft:glowstone_dust
+expect verb=use main=oceanic_delight:bowl_of_paella\*1
+expect verb=items items=\S*oceanic_delight:sponge_cake_slice:1\b
+expect verb=potion potion=minecraft:awkward ingredient=oceanic_delight:elder_guardian_eye output="minecraft:potion oceanic_delight:mining_fatigue"
+expect verb=potion potion=oceanic_delight:mining_fatigue ingredient=minecraft:redstone output="minecraft:potion oceanic_delight:mining_fatigue_extended"
+expect verb=potion potion=oceanic_delight:mining_fatigue ingredient=minecraft:glowstone_dust output="minecraft:potion oceanic_delight:mining_fatigue_two"
+reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|Unknown item|No player was found)
+look the five player lines: Comfort 4:00, Nourishment 4:00, Instant Breath (air=300) after the right food; the sea grape count above 1 after the bone meal; the empty paella pan pick-up (pan + skillet), the "You need a Bowl" message, the blue tooltip lines and JEI are client (CQ)
+
+## SQ-DRK-01 | drink scripts load clean; 14 items and 17 fluids registered
+@group A
+@commands Boot; `grep -nE "Error occurred while handling event\|drinks.js\|drink_tags.js\|kettle.js" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log \| head -30`; `grep -n "\[NCH\]" logs/kubejs/server.log \| grep -iE "tea\|juice\|coffee\|latte\|nectar" \| head`
+@pass No error; no NCH warning naming a drink; no duplicate recipe id; startup registers the 14 items and 17 fluids (`/give @p creativeengineering:kiwi_tea`, `creativeengineering:peach_juice` work)
+@fails missing dict key (`item_dict.js` / `fluid_dict.js` not updated on the server), duplicate id with `kettle.js` or a member file
+@jars creativedelight
+@sources feature_writeup/creative_delight_drinks.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s5_A.qb
+shell ! grep -iE '(error|exception).*(drinks|drink_tags|kettle|fluids)\.js' logs/kubejs/startup.log logs/kubejs/server.log
+shell ! (grep -n 'Error occurred while handling event' logs/latest.log | grep -qiE 'drink|kettle|tea|juice')
+kjsreject \[NCH\].*(?i:tea|juice|coffee|latte|nectar)
+kjsreject (?i)duplicate recipe id
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+16} {S5H3+28} {S5H1+20} {S5H3+32}
+sleep 3
+> pbot spawn s5g {S5H1+18} {S5H2} {S5H3+30} minecraft:overworld survival
+> give s5g creativedelight:kiwi_tea
+> give s5g creativedelight:turnip_tea
+> give s5g creativedelight:bayberry_tea
+> give s5g creativedelight:hamimelon_tea
+> give s5g creativedelight:carrot_tea
+> give s5g creativedelight:lemon_tea
+> give s5g creativedelight:melon_tea
+> give s5g creativedelight:orange_tea
+> give s5g creativedelight:pear_tea
+> give s5g creativedelight:lychee_juice
+> give s5g creativedelight:hawberry_juice
+> give s5g creativedelight:mango_juice
+> give s5g creativedelight:mangosteen_juice
+> give s5g creativedelight:peach_juice
+count Gave 1 +\[ >= 14
+> cdevtest tag fluid forge:fluid/kiwi_tea
+> cdevtest tag fluid forge:fluid/turnip_tea
+> cdevtest tag fluid forge:fluid/bayberry_tea
+> cdevtest tag fluid forge:fluid/hamimelon_tea
+> cdevtest tag fluid forge:fluid/carrot_tea
+> cdevtest tag fluid forge:fluid/lemon_tea
+> cdevtest tag fluid forge:fluid/melon_tea
+> cdevtest tag fluid forge:fluid/orange_tea
+> cdevtest tag fluid forge:fluid/pear_tea
+> cdevtest tag fluid forge:fluid/lychee_juice
+> cdevtest tag fluid forge:fluid/hawberry_juice
+> cdevtest tag fluid forge:fluid/mango_juice
+> cdevtest tag fluid forge:fluid/mangosteen_juice
+> cdevtest tag fluid forge:fluid/peach_juice
+> cdevtest tag fluid forge:fluid/chorus_tea
+> cdevtest tag fluid forge:fluid/sea_grape_juice
+> cdevtest tag fluid forge:fluid/pickerelweed_juice
+count \[cdevtest\] verb=tag kind=fluid tag=forge:fluid/\S+ n=[1-9]\d* ids=\S*creativedelight: >= 17
+reject \[cdevtest\] verb=tag kind=fluid tag=forge:fluid/\S+ n=0\b
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+look the pickerelweed and sea grape fluids may be another mod's (abnormals_delight / oceanic_delight) when the fluid dict maps them there; 14 + 3 non-empty tags
+
+## SQ-DRK-04 | spout fills a bottle from Kiwi Tea (diagnostic: recipe presence)
+@group A
+@commands Spout and Item Drain: fill a glass bottle from 250 mB of `creativeengineering:kiwi_tea`, `lychee_juice`, `chorus_tea`, `sea_grape_juice` (creative fluid tank); drain a Kiwi Tea back
+@pass each fills one bottle of the matching item and drains back to 250 mB
+@fails createBottle pair missing for that fluid
+@jars creativedelight
+@sources feature_writeup/creative_delight_drinks.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/p2_R2.qb
+# r1103 p2: every spout line read "needs -1 mB, gives nothing" (no filling recipe matched) while the drain worked;
+# NCH createBottle makes the filling and emptying pair together. List both recipes and retry the spout.
+> cdevtest recipes kiwi_tea
+> cdevtest recipes lychee_juice
+# r1120fix (2026-11-20): bytype create:filling stops at 500 shown lines (kiwi_tea not among them); the recipes lines
+# name the filling and emptying pair directly. The s5 spout probe reads "needs -1 mB" even for the water control
+# (r1120nv judge-2): its lines are diagnostic only until the probe is fixed.
+> cdevtest rdetail creativedelight:createfilling/kiwi_tea
+> s5 spout creativedelight:kiwi_tea 250 minecraft:glass_bottle
+> s5 spout minecraft:water 250 minecraft:glass_bottle
+expect \[cdevtest\] verb=recipes id=creativedelight:createfilling/kiwi_tea result=creativedelight:kiwi_tea\*1
+expect \[cdevtest\] verb=recipes id=creativedelight:createemptying/kiwi_tea result=minecraft:glass_bottle\*1
+expect \[cdevtest\] verb=recipes id=creativedelight:createfilling/lychee_juice result=creativedelight:lychee_juice\*1
+expect \[cdevtest\] verb=recipes id=creativedelight:createemptying/lychee_juice result=minecraft:glass_bottle\*1
+look the rdetail of createfilling/kiwi_tea takes a glass bottle and 250 mB creativedelight:kiwi_tea; the two s5 spout lines are diagnostic (probe control reads -1 for water too: probe fault, not the pack)
+
+## SQ-EX-01 | camera bags written under the old ids load under exposureextras ids; no hand remap left
+@group A (no old save)
+@commands `> setblock 30 -61 0 chest{Items:[...]}` with `creativeengineering:iron_camera_bag` and `exposure_extras:leather_camera_bag` (each with a `CameraBag` tag); `> data get block 30 -61 0 Items`; `> give @p exposureextras:leather_camera_bag`
+@pass the chest holds `exposureextras:iron_camera_bag` and `exposureextras:leather_camera_bag` with their `CameraBag` tags; the give works; no `[exposureextras]` remap line; no missing-registry warning for any `camera_bag`
+@fails the bag gone: the `creativeengineering:` / `exposure_extras:` entries are missing from Exposure's swap list (Creative Common reads `data/exposureextras/swaps/`)
+@jars exposure creativecommon
+@sources development/exposureBackport/src/extras
+@tier T2
+@absent creativeengineering:iron_camera_bag exposure_extras:leather_camera_bag (old ids written into the chest on purpose)
+# r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
+# old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
+> forceload add 16 -16 47 15
+sleep 2
+> setblock 30 -61 0 chest{Items:[{Slot:0b,id:"creativeengineering:iron_camera_bag",Count:1b,tag:{CameraBag:{}}},{Slot:1b,id:"exposure_extras:leather_camera_bag",Count:1b,tag:{CameraBag:{}}}]}
+> data get block 30 -61 0 Items
+> pbot spawn ex01 32 -60 2 minecraft:overworld creative
+sleep 3
+> give ex01 exposureextras:leather_camera_bag
+expect exposureextras:iron_camera_bag.*CameraBag|CameraBag.*exposureextras:iron_camera_bag
+expect exposureextras:leather_camera_bag
+expect Gave 1\s+\[.*\] to ex01
+shell ! grep -E "[Mm]issing.*camera_bag|Identifier .*camera_bag.* is missing|\[exposureextras\] .*remap" logs/latest.log
+> pbot remove ex01
+> setblock 30 -61 0 minecraft:air
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
+
+## SQ-FDI-05 | lunchbox blacklist in the new world's server configs (static half)
+@group A
+@commands Blacklist is set in `defaultconfigs/` (new worlds) and the three worlds' Apple Pie copies; check `saves/<world>/serverconfig/solcarrot-server.toml` has it too. Put each food kind into a lunchbox; open both books; hover a lunchbox (FDI-08, FDI-10)
+@pass no lunchbox listed in the Food Dictionary; lunchbox still accepts foods; lunchbox tooltip says it does not contribute to food diversity
+@fails blacklist hits the container slots: drop it and filter the book list instead
+@jars creativecommon creativedelight
+@sources feature_writeup/food_dictionary.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c4_a.qb
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); for f in "$L"/serverconfig/solcarrot-server.toml "$L"/serverconfig/solapplepie-server.toml; do echo "== $f"; grep -n "blacklist" "$f" | cut -c1-300; done
+look both files list solapplepie:lunchbox, lunchbag, golden_lunchbox and creativedelight:netherite_lunchbox; book listing and the lunchbox tooltip are client (CQ)
+
+## SQ-FF-07 | fruit cuts and whole-from-slices
+@group A
+@commands `cdevtest makes` for each slice and whole; `cdevtest food`-free; rdetail of each `_from_whole` and `_from_slices`
+@pass knife: melon 8, pumpkin 8, hamimelon 8, lemon 5 + seeds, orange 5, pineapple 6 + sapling + 50% sapling, mini cantaloupe 4; Create saw the same for hamimelon, lemon, orange, pineapple (no 8-slice pineapple saw); whole from slices, shapeless only: melon 9, pumpkin 9, hamimelon 9, lemon 6, orange 6, pineapple 9, cantaloupe 4; no `minecraft:melon` 3x3, `farmersdelight:pumpkin_from_slices` or 2x2 cantaloupe; a pumpkin broken with a knife drops 8 slices
+@fails `creativedelight/fruit_cuts.js`; `farmersdelight/loot.js` (pumpkin knife break)
+@jars creativecommon creativedelight
+@sources feature_writeup/plan_food_batch_1119.md kubejs/data/creativedelight/kubejs/creativedelight/cheese_for_milk.js kubejs/data/creativedelight/kubejs/creativedelight/fruit_cuts.js kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js
+@tier T2
+@absent farmersdelight:pumpkin_from_slices fruitsdelight:cutting/pineapple_slice (removed recipe ids: negative test)
+> cdevtest rdetail _from_whole
+> cdevtest rdetail _from_slices
+# rdetail _from_slices stops at 40 of 46 matches (r1120nv): pineapple asked by id
+> cdevtest rdetail creativedelight:shapeless/pineapple_from_slices
+> cdevtest recipes minecraft:melon
+> cdevtest recipes farmersdelight:pumpkin_from_slices
+> cdevtest recipes fruitsdelight:cutting/pineapple_slice
+waitlog verb=recipes text=fruitsdelight:cutting/pineapple_slice n= 30
+expect verb=rdetail id=creativedelight:farmersdelightcutting/melon_slice_from_whole .*result=minecraft:melon_slice\*8
+expect verb=rdetail id=creativedelight:farmersdelightcutting/pumpkin_slice_from_whole .*result=farmersdelight:pumpkin_slice\*8
+expect verb=rdetail id=creativedelight:shapeless/melon_from_slices .*result=minecraft:melon\*1
+# recipes is a substring search (minecraft:melon also hits melon_seeds): reject the exact id line, not the count
+reject verb=recipes id=minecraft:melon result=
+reject verb=recipes text=(farmersdelight:pumpkin_from_slices|fruitsdelight:cutting/pineapple_slice) n=[1-9]
+expect verb=rdetail id=creativedelight:shapeless/pineapple_from_slices .*result=fruitsdelight:pineapple\*1
+look each _from_whole and _from_slices line against the pass column counts
+reject verb=\S+ .*done=0
+
+## SQ-FF-04 | cheesy dishes' food values went up
+@group A
+@commands `cdevtest food` for each dish
+@pass broccoli soup 13 / 0.7, pasta with broccoli 15 / 0.8, stuffed potato 13 / 0.7, truffle pasta 15 / 0.8, both creamy pastas 15 / 0.8, nachos 13 / 1.0, lasagna slice 15 / 0.75, fiery fondue 15 / 0.75
+@fails CD startup `creativedelight/cheese_values.js` (CD jar not rebuilt, or the row loaded after `food_value_copies.js` read the list); `[food values]` warnings in latest.log
+@jars creativecommon creativedelight
+@sources feature_writeup/plan_food_batch_1119.md kubejs/data/creativedelight/kubejs/creativedelight/cheese_for_milk.js kubejs/data/creativedelight/kubejs/creativedelight/fruit_cuts.js kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js
+@tier T2
+> cdevtest food veggiesdelight:broccoli_soup
+> cdevtest food veggiesdelight:pasta_with_broccoli
+> cdevtest food farmersdelight:stuffed_potato
+> cdevtest food fungidelight:truffle_pasta
+> cdevtest food moredelight:creamy_pasta_with_chicken_cuts
+> cdevtest food moredelight:creamy_pasta_with_ham
+> cdevtest food corn_delight:nachos_bowl
+> cdevtest food veggiesdelight:lasagna_slice
+> cdevtest food brewinandchewin:fiery_fondue
+waitlog verb=food item=brewinandchewin:fiery_fondue\S* 30
+expect verb=food item=veggiesdelight:broccoli_soup\S* food=true nutrition=13 modifier=0\.7
+expect verb=food item=veggiesdelight:pasta_with_broccoli\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=farmersdelight:stuffed_potato\S* food=true nutrition=13 modifier=0\.7
+expect verb=food item=fungidelight:truffle_pasta\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=moredelight:creamy_pasta_with_chicken_cuts\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=moredelight:creamy_pasta_with_ham\S* food=true nutrition=15 modifier=0\.8
+expect verb=food item=corn_delight:nachos_bowl\S* food=true nutrition=13 modifier=1\.0
+expect verb=food item=veggiesdelight:lasagna_slice\S* food=true nutrition=15 modifier=0\.75
+expect verb=food item=brewinandchewin:fiery_fondue\S* food=true nutrition=15 modifier=0\.75
+reject verb=\S+ .*done=0
+
+## SQ-FF-09 | edible seeds: values, tag, trail mix and stuffed cantaloupe
+@group A
+@commands `cdevtest food` for the five seeds; tag probe; rdetail of trail mix and stuffed cantaloupe
+@pass sunflower seeds and corn kernels nutrition 1 modifier 0.25; pumpkin, oat and mixed seeds nutrition 1 modifier 0; `creativedelight:edible_seeds` holds the five; trail mix and stuffed cantaloupe take the tag, not `#forge:seeds`
+@fails CD startup `creativedelight/edible_seeds.js`; `creativedelight/tags.js`; Common item_dict `t_edible_seeds` (Common jar not installed: the recipes warn an undefined ingredient)
+@jars creativecommon creativedelight
+@sources feature_writeup/plan_food_batch_1119.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/edible_seeds.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/drinks.js kubejs/assets/creativedelight/kubejs/creativedelight/names.js
+@tier T2
+@absent creativedelight:edible_seeds (a new tag, not in the dumps yet)
+> cdevtest food hearthandharvest:sunflower_seeds
+> cdevtest food corn_delight:corn_seeds
+> cdevtest food minecraft:pumpkin_seeds
+> cdevtest food vintagedelight:oat_seeds
+> cdevtest food vintagedelight:mixed_seeds
+> cdevtest tag item creativedelight:edible_seeds
+> cdevtest rdetail trail_mix
+> cdevtest rdetail stuffed_cantaloupe
+waitlog verb=rdetail text=stuffed_cantaloupe n= 30
+expect verb=food item=hearthandharvest:sunflower_seeds\S* food=true nutrition=1 modifier=0\.25
+expect verb=food item=corn_delight:corn_seeds\S* food=true nutrition=1 modifier=0\.25
+expect verb=food item=minecraft:pumpkin_seeds\S* food=true nutrition=1 modifier=0(\.0)?\s
+expect verb=food item=vintagedelight:oat_seeds\S* food=true nutrition=1 modifier=0(\.0)?\s
+expect verb=food item=vintagedelight:mixed_seeds\S* food=true nutrition=1 modifier=0(\.0)?\s
+expect verb=tag kind=item tag=creativedelight:edible_seeds n=5\b
+look trail mix and stuffed cantaloupe list an edible seed slot (no wheat or beetroot seeds)
+reject verb=\S+ .*done=0
+
+## SQ-FF-11 | pizza recipes: knife cut 8, ring of 8 recrafts, no 2x2
+@group A
+@commands rdetail of `_pizza_slices` and `_pizza_from_slices`; recipes probe of the mods' cut and 2x2 ids
+@pass for cheese, meat, tropical, vegan and Supreme (`brewinandchewin:pizza`) pizza: one knife cut `creativedelight:farmersdelightcutting/<name>_slices` giving 8 slices; one shaped `creativedelight:shaped/<name>_from_slices` (ring of 8, center empty); no `vintagedelight:*_pizza_from_slices`, `veggiesdelight:vegan_pizza_from_slices`, `brewinandchewin:pizza_from_slices` or the mods' 4-slice cuts
+@fails `creativedelight/pizza.js`
+@jars creativecommon creativedelight creativebrewing
+@sources feature_writeup/plan_food_batch_1119.md kubejs/data/creativedelight/kubejs/creativedelight/pizza.js development/creativeDelight/members/vintage/src/main/java/net/ribs/vintagedelight/block/custom/PizzaBlock.java development/creativeDelight/members/veggies/src/main/java/net/mehdinoui/veggiesdelight/common/block/PizzaBlock.java development/creativeBrewing/members/brewin/src/main/java/umpaz/brewinandchewin/common/block/PizzaBlock.java development/creativeDelight/members/display/src/main/java/com/jkvin114/displaydelight/init/DisplayFoods.java
+@tier T2
+@absent vintagedelight:cheese_pizza_from_slices vintagedelight:meat_pizza_from_slices veggiesdelight:vegan_pizza_from_slices brewinandchewin:pizza_from_slices (removed recipe ids: negative test)
+> cdevtest rdetail pizza_slices
+> cdevtest rdetail pizza_from_slices
+> cdevtest recipes pizza_from_slices
+> cdevtest recipes cutting/pizza
+waitlog verb=recipes text=cutting/pizza n= 30
+count verb=rdetail id=creativedelight:farmersdelightcutting/\S*pizza_slices .*result=\S+pizza_slice\*8 == 5
+count verb=rdetail id=creativedelight:shaped/\S*pizza_from_slices\b == 5
+reject verb=recipes text=pizza_from_slices .*(vintagedelight|veggiesdelight|brewinandchewin):\S*pizza_from_slices
+reject verb=recipes text=cutting/pizza .*brewinandchewin:cutting/pizza\b
+reject verb=\S+ .*done=0
+
+## SQ-CNS-03 | Comfort / Nourishment on cans match their dishes
+@group A
+@commands `/zq food farmersdelight:noodle_soup`; `/zq food creativeengineering:canned_noodle_soup`; `/zq food creativeengineering:canned_bone_broth`; `/zq food farmersdelight:beef_stew`; `/zq food creativeengineering:canned_beef_stew`
+@pass canned noodle soup has `farmersdelight:nourishment` with ticks = the noodle soup's x the section `dur` (soup 0.75: 4800 -> 3600); canned bone broth has neither effect; canned beef stew has the beef stew's Comfort at 0.75 (4800 -> 3600) (plan_scratch_bugfix_1103 7.9: durations stay scaled)
+@fails CD can member scripts older than 2026-11-01 (rerun `gen_can_types.py`, rebuild CD) or the can rebuild runs after `comfort_nourishment.js` strips
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sB_2.qb
+> cdevtest food farmersdelight:noodle_soup
+> cdevtest food creativedelight:canned_noodle_soup
+> cdevtest food creativedelight:canned_bone_broth
+> cdevtest food farmersdelight:beef_stew
+> cdevtest food creativedelight:canned_beef_stew
+waitlog verb=food item=creativedelight:canned_beef_stew\S* 30
+expect verb=food item=creativedelight:canned_noodle_soup\S* .*farmersdelight:nourishment
+reject verb=food item=creativedelight:canned_bone_broth\S* .*farmersdelight:(nourishment|comfort)
+expect verb=food item=creativedelight:canned_beef_stew\S* .*farmersdelight:comfort
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|not a food|\[(zsb|zlbs)\] (error|unknown)|verb=\S+ .*done=0)
+look the canned noodle soup's nourishment ticks are the noodle soup's x 0.75 (4800 -> 3600); the canned beef stew's comfort ticks are the beef stew's x 0.75 (pass column, plan_scratch_bugfix_1103 7.9)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): # the cans moved to creativedelight: (namespace move 2026-11-10)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): expect verb=food item=creativedelight:canned_noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject verb=food item=creativedelight:canned_bone_broth\S* .*effects=\S*farmersdelight:(nourishment|comfort)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): expect verb=food item=creativedelight:canned_beef_stew\S* food=true .*effects=\S*farmersdelight:comfort:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject verb=food item=\S+ food=false
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject \[cdevtest\] verb=\S+ done=0
+
+## SQ-CORN-04b | corn knife harvest by a player: corncobs from age 7 with a knife only (x 100..106)
+@group A
+@commands `setblock` farmland + `corn_delight:corn_crop[age=7,upper=false]` / `[age=7,upper=true]`, and an age 3 crop beside it; `pbot spawn cn4 <2 blocks away> minecraft:overworld survival`; `pbot hold cn4 farmersdelight:iron_knife`; 40 times: re-set the age 7 crop, `execute as cn4 run loot spawn <pos> mine <crop pos> mainhand`; `zcount`; then 20 rolls with `pbot hold cn4 minecraft:air`, and 20 knife rolls on the age 3 crop
+@pass about 10 `creativedelight:corncob` from 40 knife rolls (accept 4 to 18); 0 with an empty hand; 0 from age 3
+@fails LootJS `matchMainHand` still sees no player (THIS_ENTITY not set by `execute as`): check by hand in the client
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic storagedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sB_R.qb
+bootexpect Done \(
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set noon
+> weather clear 100000
+> forceload add 96 496 212 512
+sleep 30
+> setblock 100 -61 500 minecraft:farmland
+> setblock 100 -60 500 corn_delight:corn_crop[age=7,upper=false]
+> setblock 100 -59 500 corn_delight:corn_crop[age=7,upper=true]
+> setblock 104 -61 500 minecraft:farmland
+> setblock 104 -60 500 corn_delight:corn_crop[age=3,upper=false]
+> pbot spawn cn4 102.5 -60 502.5 minecraft:overworld survival
+> pbot hold cn4 farmersdelight:iron_knife
+> kill @e[type=minecraft:item,x=98,y=-62,z=504,dx=6,dy=8,dz=5]
+# loot spawn does not break the block, so the age 7 crop stays set between rolls; drops land at z 506, away from the bot
+repeat 40
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 100 -60 500 mainhand
+end
+sleep 3
+> cdevtest items 100 -59 506 4
+> pbot hold cn4 minecraft:air
+repeat 20
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 100 -60 500 mainhand
+end
+sleep 3
+> cdevtest items 100 -59 506 4
+> pbot hold cn4 farmersdelight:iron_knife
+repeat 20
+> execute as cn4 run loot spawn 100.5 -59 506.5 mine 104 -60 500 mainhand
+end
+sleep 3
+> cdevtest items 100 -59 506 4
+> pbot remove cn4
+count verb=items items= == 3
+expect verb=items items=\S*creativedelight:corncob:([4-9]|1[0-8])\b
+count verb=items items=\S*creativedelight:corncob: == 1
+reject verb=\S+ done=0
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No player was found|no such bot|no such item|\[cdevtest\] .*error=)
+look the three verb=items lines in order: knife on age 7 (about 10 corncobs of 40), empty hand (0), knife on age 3 (0); if the first is 0 too, LootJS matchMainHand sees no player (the row's fail note: check by hand in the client)
+
+## SQ-FO-02 | nested food_type tags, canned_source
+@group A
+@commands `/zq tagsof farmersdelight:bacon`; `/zq tagsof minecraft:cooked_porkchop`; `/zq tagsof minecraft:carrot`; `/zq tagsof neapolitan:strawberries`; `/zq itemtag creativeengineering:food_type/meal/feast`
+@pass bacon: `food_type/raw/meat/sliced`, `food_type/raw/meat`, `food_type/raw`, `food_type`; porkchop: `food_type/cooked/meat` and `creativeengineering:canned_source`; carrot: `canned_source` (it has a generated can, accepted 2026-11-03); strawberries: `food_type/raw/fruit`; feast tag not empty
+@fails nested tag adds in CD `food_type_tags.js`
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic storagedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sB_2.qb
+> cdevtest tagsof farmersdelight:bacon
+> cdevtest tagsof minecraft:cooked_porkchop
+> cdevtest tagsof minecraft:carrot
+> cdevtest tagsof neapolitan:strawberries
+> cdevtest tag item creativedelight:food_type/meal/feast
+waitlog verb=tag kind=item tag=creativedelight:food_type/meal/feast n= 30
+expect verb=tagsof id=farmersdelight:bacon .*item_tags=(?=.*\bcreativedelight:food_type/raw/meat/sliced\b)(?=.*\bcreativedelight:food_type/raw/meat(,|\s|$))(?=.*\bcreativedelight:food_type/raw(,|\s|$))(?=.*\bcreativedelight:food_type(,|\s|$))
+expect verb=tagsof id=minecraft:cooked_porkchop .*item_tags=(?=.*\bcreativedelight:food_type/cooked/meat\b)(?=.*\bcreativedelight:canned_source\b)
+expect verb=tagsof id=minecraft:carrot .*item_tags=.*\bcreativedelight:canned_source\b
+expect verb=tagsof id=neapolitan:strawberries .*item_tags=.*\bcreativedelight:food_type/raw/fruit\b
+expect verb=tag kind=item tag=creativedelight:food_type/meal/feast n=[1-9]
+reject verb=\S+ .*done=0
+
+## SQ-FO-04 | fried egg, cooking oil, fried chicken recipes
+@group A
+@commands `/zq makes farmersdelight:fried_egg`; `/zq recipes incubation:fried_egg`; `/zq tagsof minecraft:pumpkin_seeds`; `/zq rdetail cooking_oil`; `/zq recipes fried_chicken`; `grep -n "\[NCH\].*cooking_oil" logs/kubejs/server.log`
+@pass fried egg from `minecraft:egg` by smoking 100 t and campfire 600 t, no smelting (removed 2026-11-16, SQ-FO-06); no `incubation:fried_egg*` recipe; pumpkin seeds in `rusticdelight:cooking_oil_ingredients`; one FD cooking `..._manual_only` (3 + 3 seeds -> 2 `rusticdelight:cooking_oil`), one heated mixing (3 seeds + glass bottle -> 1), no `sliceanddice:` cooking oil recipe; the Slice & Dice fried chicken mixing still present; no NCH warning
+@fails `F.eggCook` in CD `farmersdelight/recipes.js`; incubation removals
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic storagedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sB_2.qb
+> cdevtest makes farmersdelight:fried_egg
+> cdevtest rdetail fried_egg
+> cdevtest recipes incubation:fried_egg
+> cdevtest tagsof minecraft:pumpkin_seeds
+> cdevtest rdetail cooking_oil
+> cdevtest recipes fried_chicken
+waitlog verb=recipes text=fried_chicken n= 30
+expect verb=recipes text=incubation:fried_egg n=0
+expect verb=tagsof id=minecraft:pumpkin_seeds .*item_tags=.*\brusticdelight:cooking_oil_ingredients\b
+reject id=sliceanddice:\S*cooking_oil_manual_only serializer=
+kjsreject \[NCH\].*cooking_oil
+look fried egg from minecraft:egg: smoking 100 t, campfire 600 t, no smelting (2026-11-16); one FD cooking _manual_only (3 + 3 seeds -> 2 rusticdelight:cooking_oil) and one heated mixing (3 seeds + glass bottle -> 1); the Slice & Dice fried chicken mixing still listed
+reject verb=\S+ .*done=0
+
+## SQ-FFB-04 | bread tags without the four foreign breads
+@group A
+@commands tag probe: `#forge:bread` and the generated `food_family/bread` tag
+@pass `#forge:bread` holds garlic, banana and cantaloupe bread, bread slice, toast; neither tag holds `buzzier_bees:honey_bread`, `upgrade_aquatic:mulberry_bread`, `hostiledelight:glowbread`, `fruitsdelight:jelly_bread`
+@fails `bread_tags.js`; a mod jar's own `forge:bread` entry; `food_families.py` not regenerated
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic storagedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sB_2.qb
+> cdevtest tag item forge:bread
+> cdevtest tag item creativedelight:food_family/bread
+waitlog verb=tag kind=item tag=creativedelight:food_family/bread n= 30
+reject verb=tag kind=item tag=(forge:bread|creativedelight:food_family/bread) n=\d+ ids=.*\b(buzzier_bees:honey_bread|upgrade_aquatic:mulberry_bread|hostiledelight:glowbread|fruitsdelight:jelly_bread)\b
+expect verb=tag kind=item tag=forge:bread n=[1-9]
+look forge:bread holds garlic, banana and cantaloupe bread, the bread slice and toast
+reject verb=\S+ .*done=0
+
+## SQ-PS-06 | powdered sugar crushing and milling: second result at 0.5
+@group A
+@commands recipe probe on `creativedelight:createcrushing/sugar_powdered_sugar` and `createmilling/sugar_powdered_sugar`, printing every result with its chance
+@pass each has `creativeengineering:powdered_sugar` x1 at chance 1.0 plus a second x1 at chance 0.5 (replaces the JEI-only part of SQ-PS-05)
+@fails `powdered_sugar.js` emitter dropped the chance output
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic storagedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sB_2.qb passed
+> cdevtest rdetail sugar_powdered_sugar
+waitlog verb=rdetail text=sugar_powdered_sugar n= 30
+expect verb=rdetail id=creativedelight:createcrushing/sugar_powdered_sugar part=results value=creativedelight:powdered_sugar\*1@1(\.0)?,creativedelight:powdered_sugar\*1@0\.5
+expect verb=rdetail id=creativedelight:createmilling/sugar_powdered_sugar part=results value=creativedelight:powdered_sugar\*1@1(\.0)?,creativedelight:powdered_sugar\*1@0\.5
+reject verb=\S+ .*done=0
+
+## SQ-VNG-01 | vinegar can recipes use the jar, not the merged-away bottle
+@group A
+@commands `/zq uses vintagedelight:vinegar_jar`; `/zq uses vintagedelight:vinegar_bottle`; `/zq makes creativeengineering:canned_apple`; JEI on the Pickling Jar recipes for leather and the 3 froglights, run one leather batch; `grep -n "\[NCH\]" logs/latest.log \| grep -i vinegar`
+@pass every `creativedelight:shapeless/canned_*_vinegar` recipe (raw veggie, fruit, meat, fish, salad cans) lists `vintagedelight:vinegar_jar`; the 4 pickling recipes (leather, ochre / verdant / pearlescent froglight) take the vinegar jar and list no secondary output; a leather batch leaves one empty mason jar in the jar's leftover slots (no glass bottle); none lists `vinegar_bottle`; no NCH line (plan_scratch_bugfix_1103 1.1)
+@fails `i.vinegar` not the jar alias (`item_dict.js`), `vintagedelight/recipes.js` still naming the bottle
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic storagedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sB_2.qb
+> cdevtest uses vintagedelight:vinegar_jar
+> cdevtest uses vintagedelight:vinegar_bottle
+> cdevtest makes creativedelight:canned_apple
+waitlog verb=makes item=creativedelight:canned_apple n= 30
+expect verb=uses item=vintagedelight:vinegar_bottle alone=0 shared=0
+expect verb=uses id=creativedelight:shapeless/canned_\S+_vinegar
+capture VNGID id=(creativedelight:shapeless/canned_apple_vinegar\S*) result=creativedelight:canned_apple\*
+kjsreject \[NCH\].*vinegar
+look the jar's uses list the raw veggie, fruit, meat, fish and salad _vinegar can recipes
+reject verb=\S+ .*done=0
+
+## SQ-STD-03 | Storage Delight fuel: bamboo drawer and oak cabinet burn, warped cabinet does not (x 166..170)
+@group A
+@commands `/setblock ~2 ~ ~ minecraft:furnace`; `/data merge block ~2 ~ ~ {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:bamboo_drawer",Count:1b}]}`; after 2 s `/data get block ~2 ~ ~ BurnTime`; repeat on a fresh furnace with `storagedelight:oak_cabinet_with_polished_tuff_countertop` and `storagedelight:warped_cabinet_with_stone_bricks_countertop`
+@pass bamboo and oak: BurnTime 250 to 300, fuel slot empty; warped: BurnTime 0, the cabinet still in slot 1
+@fails overlay `ItemRegistry` fuel values (300 for overworld woods and bamboo)
+@jars storagedelight
+@tier T2
+@from batches/r1103/sB_2.qb
+> setblock 166 -60 500 minecraft:furnace
+> setblock 168 -60 500 minecraft:furnace
+> setblock 170 -60 500 minecraft:furnace
+> data merge block 166 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:bamboo_drawer",Count:1b}]}
+> data merge block 168 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:oak_cabinet_with_polished_tuff_countertop",Count:1b}]}
+> data merge block 170 -60 500 {Items:[{Slot:0b,id:"minecraft:raw_iron",Count:1b},{Slot:1b,id:"storagedelight:warped_cabinet_with_stone_bricks_countertop",Count:1b}]}
+sleep 2
+# commands run 2 s apart: BurnTime is read about 8 s (160 t) after the merge, so a 300 t fuel reads about 140
+> data get block 166 -60 500 BurnTime
+> data get block 168 -60 500 BurnTime
+> data get block 170 -60 500 BurnTime
+> data get block 166 -60 500 Items
+> data get block 170 -60 500 Items
+expect 166, -60, 500 has the following block data: (1[2-9]\d|2\d\d|300)s?$
+expect 168, -60, 500 has the following block data: (1[2-9]\d|2\d\d|300)s?$
+expect 170, -60, 500 has the following block data: 0s?$
+expect 170, -60, 500 has the following block data: \[.*Slot: 1b, id: "storagedelight:warped_cabinet_with_stone_bricks_countertop"
+reject 166, -60, 500 has the following block data: \[.*Slot: 1b
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded)
+
+## SQ-CNP-01 | can grid guard: crafting recipes taking a can are _manual_only, no automation recipe takes one
+@group A
+@commands recipe probe over every recipe with an ingredient that is a pack can (`can_types.json` ids plus the hand-written raw cans)
+@pass every crafting recipe taking a can has an id ending `_manual_only`; no `create:mixing`, `create:mechanical_crafting`, `immersiveengineering:*` or `ae2:*` recipe takes a can, except the canning routes (empty can + food)
+@fails NCH can guard (`neoCraftHelper.js` about line 912, `_manual_only` suffix); a mod recipe naming the can directly
+@jars creativedelight
+@tier T2
+@from batches/r1103/sB_2.qb
+> zsb cans
+waitlog \[zsb\] cans: \d+ recipes take a pack can 180
+expect \[zsb\] cans: [1-9]\d* recipes take a pack can, 0 violations
+reject \[zsb\] (error|unknown)
+look the "cans by serializer" line; any create:mixing / mechanical_crafting / IE / AE2 line printed is a canning route (result is a can)
+
+## SQ-FO-07 | no furnace recipe for an egg dish; smoker and campfire forms stay
+@group A
+@commands `/cdevtest bytype minecraft:smelting max=4000`, then grep the lines for fried egg, fried turtle egg, omelette, shulker omelette, fried dragon egg, boiled emu egg; `/cdevtest makes farmersdelight:fried_egg`; `/cdevtest makes moredelight:omelette`
+@pass no `minecraft:smelting` recipe makes `farmersdelight:fried_egg`, `moredelight:omelette`, `ends_delight:shulker_omelette`, `ends_delight:fried_dragon_egg`, `alexsmobs:boiled_emu_egg` or a fried turtle egg; `makes` lists smoking and campfire recipes for the fried egg and the omelette; ids `creativedelight:smelting/fried_egg_from_egg`, `moredelight:omelette_smelting`, `ends_delight:food_smelting/fried_dragon_egg`, `ends_delight:food_smelting/shulker_omelette`, `alexsmobs:boiled_emu_egg` absent
+@fails the CD egg cook family's furnace value (0), the removals in `moredelight/recipes.js`, `ends_delight/recipes.js`, `alexsmobs/recipes.js`
+@jars creativecommon creativedelight
+@sources feature_writeup/food.md kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js kubejs/data/creativedelight/kubejs/moredelight/recipes.js kubejs/data/creativedelight/kubejs/ends_delight/recipes.js kubejs/data/creativedelight/kubejs/alexsmobs/recipes.js
+@tier T2
+@reviewed 2026-11-20
+@absent moredelight:omelette_smelting (removed recipe id: negative test)
+> cdevtest bytype minecraft:smelting max=4000
+> cdevtest makes farmersdelight:fried_egg
+> cdevtest makes moredelight:omelette
+> cdevtest recipes creativedelight:smelting/fried_egg_from_egg
+> cdevtest recipes moredelight:omelette_smelting
+> cdevtest recipes ends_delight:food_smelting/
+> cdevtest recipes alexsmobs:boiled_emu_egg
+reject verb=bytype id=\S+ result=(farmersdelight:fried_egg|moredelight:omelette|ends_delight:shulker_omelette|ends_delight:fried_dragon_egg|alexsmobs:boiled_emu_egg|\S*fried_?turtle_?egg)\*
+expect verb=recipes text=creativedelight:smelting/fried_egg_from_egg n=0\b
+expect verb=recipes text=moredelight:omelette_smelting n=0\b
+reject verb=recipes id=alexsmobs:boiled_emu_egg result=
+reject verb=recipes id=ends_delight:food_smelting/(fried_dragon_egg|shulker_omelette)
+look makes lines: the fried egg and the omelette still have a smoking and a campfire recipe
+
+## SQ-FO-08 | blubber: registered, cachalot drop, knife cut, animal fat tag, soap
+@group A
+@commands `cdevtest reg item creativedelight:blubber`; loot of `alexsmobs:entities/cachalot_whale`; rdetail of the blubber cut and the soap recipes; tag probe `forge:animal_fat`
+@pass the item exists (Delightful's animal fat sprite); a cachalot kill drops 3-6 blubber; knife cut gives 2 `delightful:animal_fat`; `#forge:animal_fat` holds blubber; `supplementaries:soap` and `creativecompat:createmixing/soap_heated_mixing` take blubber and whale oil
+@fails CD startup `creativedelight/fats.js`; data `creativedelight/fats.js` (tag, cut, `global.LOOT.rules`); Compat `other/misc_mods.js` SOAP_FAT
+@jars creativecommon creativedelight
+@sources feature_writeup/food.md kubejs/data/creativedelight/kubejs/creativedelight/fats.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fats.js kubejs/data/creativecompat/kubejs/other/misc_mods.js
+@tier T2
+@reviewed 2026-11-20
+@absent creativedelight:blubber creativedelight:whale_oil (new items, not in the dumps yet)
+> cdevtest reg item creativedelight:blubber
+> cdevtest rdetail animal_fat_from_blubber
+> cdevtest tag item forge:animal_fat
+> cdevtest rdetail supplementaries:soap
+> cdevtest rdetail soap_heated_mixing
+waitlog verb=rdetail text=soap_heated_mixing n= 30
+expect verb=rdetail id=creativedelight:farmersdelightcutting/animal_fat_from_blubber .*result=delightful:animal_fat\*2
+expect verb=tag kind=item tag=forge:animal_fat n=\d+ ids=.*creativedelight:blubber
+look the soap recipes list blubber and whale oil among the fats; a cachalot kill (`/summon alexsmobs:cachalot_whale`, kill as a player) drops 3-6 blubber
+reject verb=\S+ .*done=0
+
+## SQ-FO-14 | milled powders
+@group A
+@commands `cdevtest reg item` for the three powders; rdetail `onion_powder`, `garlic_powder`, `ghost_pepper_powder`
+@pass the three items exist; Create crushing, millstone and mortar recipes give 2 powder from one onion, garlic and ghost pepper; the onion and garlic flavors take the powders as well as the crops; the ghost pepper flavor takes ghost pepper powder
+@fails startup `flavors.js` (registration, flavor items), data `flavor.js` (`R.foodGrinding`); Common item_dict powder keys
+@jars creativecommon creativedelight
+@sources feature_writeup/seasonings.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/flavors.js development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/food/Flavors.java kubejs/data/creativedelight/kubejs/creativedelight/flavor.js kubejs/data/creativedelight/kubejs/creativedelight/flavor_tags.js
+@tier T2
+@absent creativedelight:onion_powder creativedelight:garlic_powder creativedelight:ghost_pepper_powder (new items, not in the dumps yet)
+> cdevtest reg item creativedelight:onion_powder
+> cdevtest reg item creativedelight:garlic_powder
+> cdevtest reg item creativedelight:ghost_pepper_powder
+> cdevtest rdetail onion_powder
+> cdevtest rdetail garlic_powder
+> cdevtest rdetail ghost_pepper_powder
+waitlog verb=rdetail text=ghost_pepper_powder n= 30
+expect verb=rdetail id=creativedelight:\S*onion_powder\S* .*result=creativedelight:onion_powder\*2
+expect verb=rdetail id=creativedelight:\S*garlic_powder\S* .*result=creativedelight:garlic_powder\*2
+expect verb=rdetail id=creativedelight:\S*ghost_pepper_powder\S* .*result=creativedelight:ghost_pepper_powder\*2
+reject verb=\S+ .*done=0
+
+## SQ-CNG-01 | Canned Goods repack nested in Creative Delight, no golem mixins
+@group A
+@commands Boot 2: `grep -E "canned_goods\|repackedCannedGoods\|creativedelight.mixins.json" logs/latest.log \| head -20`; `grep -i "canned_golem\|CannedGolem" logs/latest.log`
+@pass `repackedCannedGoods-1.19.2-3-ce-19.2-01` found by `JarInJarDependencyLocator`; mod `canned_goods` version `1.19.2-3-ce-19.2-01`; no mixin error, no `CannedGolemColorMixin` / `CannedGolemRendererMixin` line (removed); no "member canned_goods is loaded from CannedGoods-..." error
+@fails Stale `CannedGoods-*.jar` in `mods/` (`replaces_jars`), or CD built from a tree that still lists the mixins (double definition of the color data)
+@jars creativecommon creativedelight creativeworldgen
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# the JarInJar "Found valid mod file" line is in debug.log only; the builds line in latest.log names the nested version
+bootexpect \[creativecommon\] builds: .*\bcanned_goods 1\.19\.2-3-ce-19\.2-01\+
+bootreject CannedGolemColorMixin|CannedGolemRendererMixin
+bootreject member canned_goods is loaded from CannedGoods
+shell grep -hE "canned_goods|repackedCannedGoods|creativedelight.mixins.json" logs/latest.log logs/debug.log | head -20
+shell grep -hiE "canned_golem|CannedGolem" logs/latest.log | head -10 || true
+shell ! ls mods | grep -i "^CannedGoods-"
+look canned_goods version 1.19.2-3-ce-19.2-01 in the debug.log mod list, found by JarInJarDependencyLocator
+
+## SQ-ENM-01 | End's member: ends_delight and enders_additions once, from repackedEnds
+@group A
+@commands Boot with the new CD jar and Ender's 1.2.2; `grep -nE "enders_additions\|ends_delight\|Duplicate\|DuplicateModsFound\|endersAdditions" logs/latest.log`; `/forge mods` or the log's mod list
+@pass `ends_delight` and `enders_additions` each loaded once, both from the repackedEnds nested jar; no `endersAdditions-` jar in the jarjar list; no duplicate-mod error; `enders_upstream_data` pack listed (the assets pack is client-only, absent on a dedicated server)
+@fails Duplicate mod: the old member still in CD `bundle_members` or `mods/` holds an old CD jar; only one mod listed: `members/ends/src/main/resources/META-INF/mods.toml` second `[[mods]]` entry
+@jars creativecommon creativedelight creativeworldgen
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+bootreject DuplicateModsFound|Found duplicate mods
+shell grep -nhE "enders_additions|ends_delight|Duplicate|endersAdditions" logs/latest.log logs/debug.log | head -20
+shell unzip -l mods/creativedelight-*.jar | grep -oE "jarjar/[A-Za-z]+-[^ ]+\.jar" | grep -iE "ends|enders"
+shell ! unzip -l mods/creativedelight-*.jar | grep -q "jarjar/endersAdditions-"
+shell grep -hoE "enders_upstream_(assets|data)" logs/latest.log logs/debug.log | sort -u
+look both mod ids from repackedEnds-...-03 only; both enders_upstream packs listed
+
+## SQ-GLD-02 | golden and enchanted bread, golden carrot, enchanted golden apple: edible full, effects, stack 1
+@group A
+@commands `/give @p goldenfood:golden_bread`, `goldenfood:enchanted_golden_bread`, `minecraft:golden_carrot`, `minecraft:enchanted_golden_apple`; at full hunger eat each; `/effect give @p minecraft:poison 30`; then `/data get entity @p ActiveEffects` after each
+@pass Every one is edible at full hunger. Golden: Regeneration amp 1 for 100 t, Absorption amp 0 for 2400 t. Enchanted: Regeneration amp 1 400 t, Resistance amp 0 6000 t, Fire Resistance 6000 t, Absorption amp 3 2400 t. Golden carrot behaves like the golden bread. Golden and enchanted foods, stews and honeys stack to 16 (`/give ... 20` gives 16 + 4), the golden apple, golden carrot and enchanted golden apple too; the golden and enchanted milk buckets and cakes stack to 8; enchanted items show a glint (plan_scratch_bugfix_1103 7.1)
+@fails Wrong values: `GoldenItems.golden()` / `enchanted()`; carrot plain vanilla: the `minecraft` DeferredRegister (`VANILLA_ITEMS`) not registered
+@jars creativecommon creativedelight creativeworldgen
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+8} {SAH3+38} {SAH1+12} {SAH3+42}
+sleep 3
+> pbot spawn sagld {SAH1+10} {SAH2} {SAH3+40} minecraft:overworld survival
+sleep 2
+> clear sagld
+> pbot hunger sagld 20
+> cdevtest item goldenfood:enchanted_golden_bread
+> cdevtest item minecraft:enchanted_golden_apple
+> cdevtest item goldenfood:golden_bread
+> effect clear sagld
+> pbot hold sagld goldenfood:golden_bread
+> pbot hunger sagld 20
+> sa canuse sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_bread 20
+> cdevtest player sagld
+> effect clear sagld
+> pbot hold sagld goldenfood:enchanted_golden_bread
+> pbot hunger sagld 20
+> sa canuse sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_bread 20
+> cdevtest player sagld
+> effect clear sagld
+> pbot hold sagld minecraft:golden_carrot
+> pbot hunger sagld 20
+> sa canuse sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=minecraft:golden_carrot 20
+> cdevtest player sagld
+> effect clear sagld
+> pbot hold sagld minecraft:enchanted_golden_apple
+> pbot hunger sagld 20
+> sa canuse sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=minecraft:enchanted_golden_apple 20
+> cdevtest player sagld
+> effect clear sagld
+expect verb=item item=goldenfood:enchanted_golden_bread .*max_stack=16\b
+expect verb=item item=minecraft:enchanted_golden_apple .*max_stack=16\b
+count \[sa\] canuse sagld .* food 20: (CONSUME|SUCCESS) using=true >= 4
+count verb=pbot.useitem bot=sagld end=finish == 4
+expect verb=player name=sagld effects=\S*minecraft:fire_resistance:0:
+look the four effects lines in order (golden bread, enchanted bread, golden carrot, enchanted apple): golden bread: Regeneration amp 1 100t, Absorption amp 0 2400t; enchanted bread and enchanted apple: Regeneration amp 1 400t, Resistance amp 0 6000t, Fire Resistance 6000t, Absorption amp 3 2400t; golden carrot as golden bread. Glint: client
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+
+## SQ-SWP-03 | /ceswap items rewrites a chest stack, keeps its name
+@group A
+@commands `/setblock ~ ~ ~1 chest`; `/data merge block ~ ~ ~1 {Items:[{Slot:0b,id:"alexsmobs:banana",Count:5b,tag:{display:{Name:'{"text":"Kept"}'}}}]}`; `/ccswap items`; `/data get block ~ ~ ~1 Items`
+@pass Command reports >= 1 stack rewritten; slot 0 is `neapolitan:banana`, Count 5b, name "Kept"
+@fails `ItemMerges.chunk` (chunk not in `LOADED`), `convert` (tag lost)
+@jars creativecommon creativedelight
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+20} {SAH3+48} {SAH1+24} {SAH3+52}
+sleep 3
+> setblock {SAH1+22} {SAH2} {SAH3+50} minecraft:chest
+> data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:0b,id:"alexsmobs:banana",Count:5b,tag:{display:{Name:'{"text":"Kept"}'}}}]}
+> ccswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+50} Items
+expect Slot: 0b, id: "neapolitan:banana"|Slot:0b,id:"neapolitan:banana"
+expect neapolitan:banana.*Count: 5b|neapolitan:banana.*Count:5b
+expect Kept
+look /ceswap reports >= 1 stack rewritten
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-SWP-04 | 64 vinegar bottles become jar stacks within the stack size
+@group A
+@commands `/setblock ~ ~ ~2 chest`; `/data merge block ~ ~ ~2 {Items:[{Slot:0b,id:"vintagedelight:vinegar_bottle",Count:64b}]}`; open the chest as the bot/player (or `/ccswap items`); `/data get block ~ ~ ~2 Items`
+@pass Only `vintagedelight:vinegar_jar` stacks, each at most its stack size, counts summing to 64; nothing on the ground unless the chest was full
+@fails `ItemMerges.rewrite` overflow (empty-slot fill, sink), `ItemMergeCore.split`
+@jars creativecommon creativedelight
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+20} {SAH3+50} {SAH1+24} {SAH3+54}
+sleep 3
+> setblock {SAH1+22} {SAH2} {SAH3+52} minecraft:chest
+> data merge block {SAH1+22} {SAH2} {SAH3+52} {Items:[{Slot:0b,id:"vintagedelight:vinegar_bottle",Count:64b}]}
+> cdevtest item vintagedelight:vinegar_jar
+> ccswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+52} Items
+> cdevtest items {SAH1+22} {SAH2} {SAH3+52} 2
+expect vintagedelight:vinegar_jar
+reject vintagedelight:vinegar_bottle
+expect verb=items items=- stacks=0\b
+look only vinegar_jar stacks, each at most the max_stack in the cdevtest item line, counts summing to 64
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+
+## SQ-SWP-05 | nested shulker box contents rewritten
+@group A
+@commands `/data merge block ~ ~ ~1 {Items:[{Slot:1b,id:"minecraft:shulker_box",Count:1b,tag:{BlockEntityTag:{Items:[{Slot:0b,id:"farmersrespite:coffee",Count:3b}]}}}]}`; `/ccswap items`; `/data get block ~ ~ ~1 Items[{Slot:1b}]`
+@pass Nested item is `rusticdelight:coffee`, Count 3b; the box id unchanged
+@fails `ItemMergeCore.rewriteNested`
+@jars creativecommon creativedelight
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+20} {SAH3+48} {SAH1+24} {SAH3+52}
+sleep 3
+# own chest (r1120nv judge-3): the chest came from SQ-SWP-03
+> setblock {SAH1+22} {SAH2} {SAH3+50} minecraft:chest
+> data merge block {SAH1+22} {SAH2} {SAH3+50} {Items:[{Slot:1b,id:"minecraft:shulker_box",Count:1b,tag:{BlockEntityTag:{Items:[{Slot:0b,id:"farmersrespite:coffee",Count:3b}]}}}]}
+> ccswap items
+sleep 2
+> data get block {SAH1+22} {SAH2} {SAH3+50} Items[{Slot:1b}]
+expect rusticdelight:coffee
+expect minecraft:shulker_box
+reject farmersrespite:coffee"
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-GLD-03 | golden honey (cures Poison), milk (clears effects, no food effects); containers and stack sizes
+@group A
+@commands Own fresh bot `sagldm` that has eaten nothing (Raspberry Pie's diet ladder re-adds its 800 t effects the tick after milk, raspberry_pie.md 9.3; r1120nv's ~800 t Speed came from the 8 foods `sagld` had eaten). Milk first: `effect give @s minecraft:speed 60`, drink golden milk, again with enchanted milk; then golden and enchanted honey with Poison on; returned items and stack sizes
+@pass each milk clears every effect (Speed gone), gives no food effects (upstream), returns a bucket; honey removes Poison, gives its food effects (golden: Regeneration II 5 s, Absorption 2 min; enchanted: the enchanted set), returns a glass bottle; both honeys stack to 16
+@fails Speed stays after golden milk: `ShinyItems.GoldenMilk` not used (cures as a vanilla milk bucket); a Speed of 800 t or less on a milk line: the bot had eaten (diet ladder), not a milk fault
+@jars creativecommon creativedelight creativeworldgen
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# r1120nv fix (2026-11-20): golden stews removed 2026-11-10 (golden_food.md 0); honey stacks to 16; fresh bot so no diet effects
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+12} {SAH3+38} {SAH1+16} {SAH3+42}
+sleep 3
+> pbot spawn sagldm {SAH1+14} {SAH2} {SAH3+40} minecraft:overworld survival
+sleep 2
+> clear sagldm
+> effect clear sagldm
+> cdevtest item goldenfood:golden_honey_bottle
+> cdevtest item goldenfood:enchanted_golden_honey_bottle
+> effect give sagldm minecraft:speed 60
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:golden_milk_bucket
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:golden_milk_bucket 20
+> cdevtest player sagldm
+> effect give sagldm minecraft:speed 60
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:enchanted_golden_milk_bucket
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:enchanted_golden_milk_bucket 20
+> cdevtest player sagldm
+> effect clear sagldm
+> effect give sagldm minecraft:poison 30
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:golden_honey_bottle
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:golden_honey_bottle 20
+> cdevtest player sagldm
+> effect clear sagldm
+> effect give sagldm minecraft:poison 30
+> pbot hunger sagldm 10
+> pbot hold sagldm goldenfood:enchanted_golden_honey_bottle
+> pbot eat sagldm
+waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:enchanted_golden_honey_bottle 20
+> cdevtest player sagldm
+> pbot remove sagldm
+expect verb=item item=goldenfood:golden_honey_bottle .*max_stack=16\b
+expect verb=item item=goldenfood:enchanted_golden_honey_bottle .*max_stack=16\b
+count verb=pbot.useitem bot=sagldm end=finish item=goldenfood:\S*honey_bottle result=minecraft:glass_bottle == 2
+count verb=pbot.useitem bot=sagldm end=finish item=goldenfood:\S*milk_bucket result=minecraft:bucket == 2
+reject verb=player name=sagldm effects=\S*minecraft:poison
+count verb=player name=sagldm effects=- == 2
+look effects lines: the two milk lines are empty (effects=-); the two honey lines show the honey effects with Poison gone
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+
+## SQ-PCK-02 | pancake food type and family tags (runtime tags by /zq; the /dumptags file is written for the record)
+@group A
+@commands `/dumptags item`; in `kubejs/exported/tags/item_tags.json` read `creativedelight:food_type/sweet/pancake`, `creativedelight:food_type/sweet`, `creativedelight:food_family/dessert/pancake`, `creativedelight:food_family/dessert/pastry`
+@pass `food_type/sweet/pancake` and `food_family/dessert/pancake` each hold exactly `veggiesdelight:sweet_potato_pancakes` and `rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake` (7); all 7 also in `food_type/sweet`; `veggiesdelight:sweet_potato_pancakes` not in `food_family/dessert/pastry`; `hearthandharvest:waffle` is in `food_type/baked` and `food_family/dessert/pastry`, in neither pancake tag (misc baked like Adzuki Bun, owner 2026-11-20)
+@fails `food_types.json` / member `food_types.js` (`food_catalog.py --members`); `food_families.json` hand sync (`dessert/pancake` key); tag nesting in `food_type_tags.js`
+@jars creativecommon creativedelight
+@sources feature_writeup/plan_creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+> cdevtest tag item creativedelight:food_type/sweet/pancake
+> cdevtest tag item creativedelight:food_family/dessert/pancake
+> cdevtest tag item creativedelight:food_type/sweet
+> cdevtest tag item creativedelight:food_family/dessert/pastry
+> cdevtest tag item creativedelight:food_type/baked
+> dumptags item
+expect verb=tag kind=item tag=creativedelight:food_type/sweet/pancake n=7\b
+expect verb=tag kind=item tag=creativedelight:food_family/dessert/pancake n=7\b
+expect verb=tag kind=item tag=creativedelight:food_type/sweet/pancake .*ids=\S*veggiesdelight:sweet_potato_pancakes
+expect verb=tag kind=item tag=creativedelight:food_type/sweet .*ids=\S*rusticdelight:coffee_pancake
+expect verb=tag kind=item tag=creativedelight:food_type/sweet .*ids=\S*veggiesdelight:sweet_potato_pancakes
+reject verb=tag kind=item tag=creativedelight:food_family/dessert/pastry .*ids=\S*veggiesdelight:sweet_potato_pancakes
+expect verb=tag kind=item tag=creativedelight:food_family/dessert/pastry .*ids=\S*hearthandharvest:waffle
+expect verb=tag kind=item tag=creativedelight:food_type/baked .*ids=\S*hearthandharvest:waffle
+look the 7: veggiesdelight:sweet_potato_pancakes and rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+
+## SQ-HOP-12 | hops vine ages 0 to 2: tree fertilizer, IE and Botania fertilizer, organic mash, manure grow it one age and are used up; a feather passes
+@group A
+@commands per item a log at x -60 520 and `hearthandharvest:hops_vine[north=true,age=1]` at x -60 521; `/cdevtest use x -60 521 held=ITEM*2 face=north`; feather on an age 1 vine
+@pass each fertilizer: `main=ITEM*1`, state `age=2`; the feather: `main=minecraft:feather*2`, state still `age=1`; no hops item dropped
+@fails `HopsVineBlock.use` (`isFertilizer`, `#creativedelight:bonemeal_like`, `#hearthandharvest:bonemeal_substitutes`); tags not loaded: SQ-HOP-14
+@jars creativebrewing creativecommon creativedelight
+@sources feature_writeup/hearth_and_harvest.md development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/block/HopsVineBlock.java kubejs/data/creativedelight/kubejs/hearthandharvest/tags.js kubejs/data/creativedelight/kubejs/hearthandharvest/machine_tags.js
+@tier T2
+@reviewed 2026-11-20
+> forceload add 650 500 680 540
+> setblock 660 -60 520 minecraft:oak_log
+> setblock 661 -60 520 minecraft:oak_log
+> setblock 662 -60 520 minecraft:oak_log
+> setblock 663 -60 520 minecraft:oak_log
+> setblock 664 -60 520 minecraft:oak_log
+> setblock 665 -60 520 minecraft:oak_log
+> cdevtest place 660 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 661 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 662 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 663 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 664 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest place 665 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> cdevtest use 660 -60 521 held=create:tree_fertilizer*2 face=north
+> cdevtest use 661 -60 521 held=immersiveengineering:fertilizer*2 face=north
+> cdevtest use 662 -60 521 held=botania:fertilizer*2 face=north
+> cdevtest use 663 -60 521 held=vintagedelight:organic_mash*2 face=north
+> cdevtest use 664 -60 521 held=hearthandharvest:manure*2 face=north
+> cdevtest use 665 -60 521 held=minecraft:feather*2 face=north
+> cdevtest items 662 -60 521 6
+expect verb=use main=create:tree_fertilizer\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=immersiveengineering:fertilizer\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=botania:fertilizer\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=vintagedelight:organic_mash\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=hearthandharvest:manure\*1 off=empty state="?hearthandharvest:hops_vine\[age=2,
+expect verb=use main=minecraft:feather\*2 off=empty state="?hearthandharvest:hops_vine\[age=1,
+reject verb=items .*hearthandharvest:hops:
+look five fertilizers each used once and the vine one age up; the feather kept and the vine unchanged; no hops on the ground
+
+## SQ-PRT-01 | obsidian frames lit by flint, fire charge, lightning, sneak flint, small frame: no portal, crying obsidian + soul fire
+@group A
+@commands #17 build a 4x5 obsidian frame in the Overworld; light it with flint and steel (bot `qa`), a fire charge from a dispenser, and lightning (`/summon lightning_bolt` on top of a lit-fire frame); a fresh frame each time; also crouch + flint and steel on the obsidian; flint and steel on the smallest frame Smaller Nether Portals takes (2x3 inside)
+@pass no portal (no `imm_ptl_core:nether_portal_new` entity, no `minecraft:nether_portal` blocks); frame turns to crying obsidian, soul fire in it; `PortalSpawnEvent fired` in the log for each, the full-size frames with `state=Block{minecraft:fire}` (not `nether_portal`: that is Smaller Nether Portals' late event); the small frame also turns to crying obsidian, its portal blocks gone
+@fails `IPFireGateMixin` not applied (boot check), or IP's redirect took another path: grep `onFireLitOnObsidian` callers again
+@jars creativecompat tempad
+@sources feature_writeup/plan_portal_changes.md
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1113/fix_c3a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 fix_c3a1 SQ-C3F-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity qa run pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 3
+> fill 1200 -60 1000 1203 -56 1000 minecraft:obsidian
+> fill 1201 -59 1000 1202 -57 1000 minecraft:air
+> fill 1210 -60 1000 1213 -56 1000 minecraft:obsidian
+> fill 1211 -59 1000 1212 -57 1000 minecraft:air
+> fill 1220 -60 1000 1223 -56 1000 minecraft:obsidian
+> fill 1221 -59 1000 1222 -57 1000 minecraft:air
+> fill 1230 -60 1000 1233 -56 1000 minecraft:obsidian
+> fill 1231 -59 1000 1232 -57 1000 minecraft:air
+> fill 1240 -60 1000 1242 -57 1000 minecraft:obsidian
+> fill 1241 -59 1000 1241 -58 1000 minecraft:air
+> clear qa
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1201 -60 1000 up
+sleep 2
+> setblock 1211 -59 1001 minecraft:stone
+> setblock 1211 -59 999 minecraft:dispenser[facing=south]{Items:[{Slot:0b,id:"minecraft:fire_charge",Count:1b}]}
+> setblock 1211 -59 998 minecraft:redstone_block
+sleep 3
+> gamerule doFireTick true
+> summon minecraft:lightning_bolt 1221 -59 1000
+sleep 3
+> gamerule doFireTick false
+> pbot sneak qa on
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1231 -60 1000 up
+> pbot sneak qa off
+sleep 2
+> pbot hold qa minecraft:flint_and_steel 1
+> pbot use qa 1241 -60 1000 up
+sleep 2
+> cdevtest state 1201 -60 1000
+> cdevtest state 1200 -58 1000
+> cdevtest state 1211 -60 1000
+> cdevtest state 1210 -58 1000
+> cdevtest state 1221 -60 1000
+> cdevtest state 1220 -58 1000
+> cdevtest state 1231 -60 1000
+> cdevtest state 1230 -58 1000
+> cdevtest state 1241 -60 1000
+> cdevtest state 1240 -58 1000
+> cdevtest state 1201 -59 1000
+> cdevtest state 1211 -59 1000
+> cdevtest state 1221 -59 1000
+> cdevtest state 1231 -59 1000
+> cdevtest state 1241 -59 1000
+> cdevtest state 1241 -58 1000
+> execute if entity @e[type=imm_ptl_core:nether_portal_new]
+reject Test passed
+reject \[cdevtest\] verb=state .*state="?minecraft:nether_portal\b
+count PortalSpawnEvent fired, state=Block\{minecraft:fire\} >= 3
+count \[cdevtest\] verb=state pos=12[0-4][01],-(60|58),1000 state=minecraft:crying_obsidian >= 8
+look all ten edge-middle reads crying obsidian (corners stay obsidian: the converter takes only frame blocks beside the interior); soul fire inside each; small frame 1240 too (row: its portal blocks gone)
+
+## SQ-IPO-03 | 
+@group A
+@commands Use a silver fence, a gold fence and a nether brick fence on a post base
+@pass Nothing happens (fence places as a normal block or the click is ignored), no exception in the log
+@fails Exception from `getPostState`: `isValidItem` was not redirected at that call site
+@jars creativecommon creativeworldgen
+@sources feature_writeup/perf.md
+@tier T2
+@reviewed 2026-11-20
+> forceload add 2696 2696 2720 2720
+> setblock 2712 -60 2704 immersiveposts:postbase
+> cdevtest use 2712 -60 2704 held=immersiveposts:fence_silver hand=main
+> cdevtest use 2712 -60 2704 held=immersiveposts:fence_gold hand=main
+> cdevtest use 2712 -60 2704 held=minecraft:nether_brick_fence hand=main
+> cdevtest state 2712 -59 2704
+# r1120lr batch fault: the reject also matched immersiveposts:fence_silver, the plain fence block the pass allows; only a post state is a fail
+reject verb=state pos=2712,-59,2704 state="?immersiveposts:\S*post
+reject (?i)exception
+reject \[cdevtest\] .*done=0
+look the three use lines: the click is ignored or the fence places as a plain block
+
+## SQ-JFP-01b | diagnostic: pump with a pipe segment between it and the jar moves water (plan_scratch_findings_1121 F7)
+@group A
+@commands Tank T (4000 mB water), mechanical pump P, one fluid pipe, jar J along +x at x+410; cogwheel above P, creative motor above T at 64 RPM; pump east 40 s, then west 40 s; `/data get block` the jar and the tank after each
+@pass after one direction the jar `FluidHolder` holds water and the tank is below 4000 mB; after the other the jar is empty again
+@fails a pipe segment changes nothing: `JarFluidPipes` fill / capability side (TODO `jars #15`); compare SQ-JFP-01c (no jar) to rule out the harness
+@jars creativecompat creativedelight
+@sources feature_writeup/mixed_jars.md
+@tier T2
+@reviewed 2026-11-21
+# F7 first step: SQ-JFP-01 to -04 had the pump touching the jar directly and moved nothing in either direction.
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> fill {S5H1+409} {S5H2} {S5H3-1} {S5H1+414} {S5H2+2} {S5H3+1} minecraft:air
+> setblock {S5H1+410} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+410} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+413} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+412} {S5H2} {S5H3} create:fluid_pipe[east=true,west=true,north=false,south=false,up=false,down=false]
+> setblock {S5H1+411} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+> setblock {S5H1+411} {S5H2+1} {S5H3} create:cogwheel[axis=x]
+> setblock {S5H1+410} {S5H2+1} {S5H3} create:creative_motor[facing=east]{ScrollValue:64}
+sleep 2
+> data get block {S5H1+411} {S5H2} {S5H3} Speed
+sleep 38
+> say JFP01b phase 1 pump east
+> data get block {S5H1+413} {S5H2} {S5H3}
+> data get block {S5H1+410} {S5H2} {S5H3} TankContent
+> setblock {S5H1+411} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 40
+> say JFP01b phase 2 pump west
+> data get block {S5H1+413} {S5H2} {S5H3}
+> data get block {S5H1+410} {S5H2} {S5H3} TankContent
+> setblock {S5H1+410} {S5H2+1} {S5H3} minecraft:air
+count has the following block data: -?64\.0f$ >= 1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|Invalid (block state|tag))
+look one phase ends with jar FluidHolder water (count up to 12) and the tank below 4000; the other drains the jar; note which pump facing fills
+
+## SQ-JFP-01c | control: the same pump layout moves water from tank to tank (no jar)
+@group A
+@commands As SQ-JFP-01b one row south (z+6), with a second, empty Create fluid tank in place of the jar
+@pass after one direction the far tank holds water and the near one is below 4000 mB
+@fails nothing moves tank to tank either: the row layout (setblock pump, cog, motor) is the problem, not the jar; fix SQ-JFP-01 to -04 and 01b before judging `jars #15`
+@jars creativecompat creativedelight
+@sources feature_writeup/mixed_jars.md
+@tier T2
+@reviewed 2026-11-21
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> fill {S5H1+409} {S5H2} {S5H3+5} {S5H1+414} {S5H2+2} {S5H3+7} minecraft:air
+> setblock {S5H1+410} {S5H2} {S5H3+6} create:fluid_tank
+> setblock {S5H1+413} {S5H2} {S5H3+6} create:fluid_tank
+sleep 2
+> data merge block {S5H1+410} {S5H2} {S5H3+6} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+412} {S5H2} {S5H3+6} create:fluid_pipe[east=true,west=true,north=false,south=false,up=false,down=false]
+> setblock {S5H1+411} {S5H2} {S5H3+6} create:mechanical_pump[facing=east]
+> setblock {S5H1+411} {S5H2+1} {S5H3+6} create:cogwheel[axis=x]
+> setblock {S5H1+410} {S5H2+1} {S5H3+6} create:creative_motor[facing=east]{ScrollValue:64}
+sleep 2
+> data get block {S5H1+411} {S5H2} {S5H3+6} Speed
+sleep 38
+> say JFP01c phase 1 pump east
+> data get block {S5H1+413} {S5H2} {S5H3+6} TankContent
+> data get block {S5H1+410} {S5H2} {S5H3+6} TankContent
+> setblock {S5H1+411} {S5H2} {S5H3+6} create:mechanical_pump[facing=west]
+sleep 40
+> say JFP01c phase 2 pump west
+> data get block {S5H1+413} {S5H2} {S5H3+6} TankContent
+> data get block {S5H1+410} {S5H2} {S5H3+6} TankContent
+> setblock {S5H1+410} {S5H2+1} {S5H3+6} minecraft:air
+count has the following block data: -?64\.0f$ >= 1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|Invalid (block state|tag))
+look one phase ends with the far tank holding water; if neither does, the layout is at fault
+
+## SQ-JFP-01 | pump water from a Create tank into a Supplementaries jar (both pump directions tried)
+@group A
+@commands Place `supplementaries:jar`; `/setblock` a `create:fluid_tank` beside it with `/data merge block` 4000 mB water (or a creative fluid tank), mechanical pump + pipe from the tank to the jar, creative motor 64 RPM; wait 20 s; `/data get block <jar>`
+@pass `FluidHolder` water, count 12; no `Error occurred` in latest.log
+@fails No capability: `JarFluidPipes.register` not reached (Supplementaries check) or the attach event filter
+@jars creativecompat creativedelight
+@sources feature_writeup/mixed_jars.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s5_R_A.qb
+# layout at x+400 (forceloaded): tank T, pump P (small cog, axis x), jar J along +x; cogwheel above P, creative motor
+# above T facing east drives it at 64 RPM (ScrollValue 64; Speed read back). Create's flow direction depends on facing and rotation sign, so each phase is run
+# with the pump facing east and then west; one of them fills the jar (JFP-01), the next drains it back (JFP-02).
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> fill {S5H1+399} {S5H2} {S5H3-1} {S5H1+403} {S5H2+2} {S5H3+1} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+> setblock {S5H1+401} {S5H2+1} {S5H3} create:cogwheel[axis=x]
+> setblock {S5H1+400} {S5H2+1} {S5H3} create:creative_motor[facing=east]{ScrollValue:64}
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 2
+> data get block {S5H1+400} {S5H2+1} {S5H3} Speed
+> data get block {S5H1+401} {S5H2} {S5H3} Speed
+sleep 58
+> say JFP phase 1 pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+count has the following block data: -?64\.0f$ >= 2
+expect has the following block data: .*FluidHolder
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look phase 1 or phase 2 (next row) ends with the jar FluidHolder water, count 12, and the tank down to 1000 mB; no Error occurred line
+
+## SQ-JFP-02 | reverse the pump: the jar drains back into the tank
+@group same
+@commands Reverse the pump; empty tank on the far side
+@pass Tank 3000 mB water, jar `FluidHolder` empty, `ForgeCaps` has no PendingMb
+@fails Drain returns the wrong fluid: `contents()` / `getForgeFluid`
+@jars creativecompat creativedelight
+@sources feature_writeup/mixed_jars.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s5_R_A.qb
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 60
+> say JFP phase 2 pump west
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 60
+> say JFP phase 3 pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+shell ! grep -n 'Error occurred' logs/latest.log | grep -iE 'jar|fluid|supplementaries'
+look across phases 1-3: one direction fills the jar to water 12 from the tank, the other empties the jar and the tank gets the water back (row: tank 3000 mB from an empty far-side tank; here the same tank holds 4000 again); after a drain the jar FluidHolder is empty and ForgeCaps has no PendingMb
+
+## SQ-JFP-03 | motor stopped mid-fill: PendingMb kept over a chunk unload and reload
+@group same
+@commands Stop the motor mid-fill (between bottles); `/data get block <jar>`
+@pass `ForgeCaps.creativecompat:jar_fluid_pipes.PendingMb` 1-249; after a save and reload it is still there
+@fails Buffer not saved: ForgeCaps serialization
+@jars creativecompat creativedelight
+@sources feature_writeup/mixed_jars.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s5_A.qb
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> setblock {S5H1+400} {S5H2+1} {S5H3} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+> setblock {S5H1+401} {S5H2+1} {S5H3} create:cogwheel[axis=x]
+> setblock {S5H1+400} {S5H2+1} {S5H3} create:creative_motor[facing=east]
+sleep 2
+> setblock {S5H1+400} {S5H2+1} {S5H3} minecraft:air
+sleep 3
+> say JFP03 jar east before unload
+> data get block {S5H1+402} {S5H2} {S5H3}
+> fill {S5H1+399} {S5H2} {S5H3+3} {S5H1+403} {S5H2+2} {S5H3+5} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3+4} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3+4} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3+4} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3+4} supplementaries:jar
+> setblock {S5H1+401} {S5H2} {S5H3+4} create:mechanical_pump[facing=west]
+> setblock {S5H1+401} {S5H2+1} {S5H3+4} create:cogwheel[axis=x]
+> setblock {S5H1+400} {S5H2+1} {S5H3+4} create:creative_motor[facing=east]
+sleep 2
+> setblock {S5H1+400} {S5H2+1} {S5H3+4} minecraft:air
+sleep 3
+> say JFP03 jar west before unload
+> data get block {S5H1+402} {S5H2} {S5H3+4}
+> save-all flush
+waitlog Saved the game 120
+> forceload remove {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 20
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 5
+> say JFP03 after reload
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+402} {S5H2} {S5H3+4}
+count has the following block data: .*PendingMb: (?:[1-9]\d?|1\d\d|2[0-4]\d)[,}] >= 2
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the filling-direction jar shows ForgeCaps creativecompat:jar_fluid_pipes PendingMb 1-249 before the unload and the same value after it (the other jar pulled nothing)
+
+## SQ-JFP-04 | potion fluid keeps its NBT into the jar
+@group same
+@commands Fill a tank with `create:potion` NBT `{Potion:"minecraft:swiftness",Bottle:"REGULAR"}`, pump into an empty jar
+@pass Jar fluid `minecraft:potion` (soft fluid), tank NBT Potion swiftness
+@fails Wrong NBT keys: `preserved()`
+@jars creativecompat creativedelight
+@sources feature_writeup/mixed_jars.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s5_A.qb
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> setblock {S5H1+400} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"create:potion",Amount:4000,Tag:{Potion:"minecraft:swiftness",Bottle:"REGULAR"}}}
+> setblock {S5H1+402} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+400} {S5H2+1} {S5H3} create:creative_motor[facing=east]
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 25
+> say JFP phase 4a pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 25
+> say JFP phase 4b pump west
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+expect has the following block data: .*(?i:potion)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look in the filling phase the jar FluidHolder is minecraft:potion (soft fluid) with Potion swiftness, the tank TankContent keeps Potion swiftness / Bottle REGULAR
+
+## SQ-JFP-05 | jar holding cookies is not filled by a pump
+@group same
+@commands Jar with 3 cookies, pump water at it
+@pass Jar unchanged
+@fails `canInteractWithSoftFluidTank` guard
+@jars creativecompat creativedelight
+@sources feature_writeup/mixed_jars.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s5_A.qb
+# own home (r1120fix, 2026-11-20): {S5H} came from the retired r1102b slice-5 home batch
+> execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos
+capture S5H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 3
+> setblock {S5H1+400} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> item replace block {S5H1+402} {S5H2} {S5H3} container.0 with minecraft:cookie 3
+> data get block {S5H1+402} {S5H2} {S5H3}
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 20
+> say JFP phase 5a pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 20
+> say JFP phase 5b pump west
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+400} {S5H2+1} {S5H3} minecraft:air
+expect has the following block data: .*minecraft:cookie
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the jar holds the 3 cookies in every reading and no water (FluidHolder empty or absent); tank stays 4000

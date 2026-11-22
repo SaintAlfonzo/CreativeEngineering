@@ -1,0 +1,1124 @@
+@@section 1
+@@title bundle A1 (run batch, not queue rows): AV.qb BBQ.qb BBQ2.qb BBQF.qb BBQW.qb CDB.qb CDFW.qb CEN.qb CEQ.qb CFR.qb CFS.qb CMP.qb
+@@date 2026-11-21
+@@phase server
+@@text Run-only copy of plan rows that share one group A boot (qbundle.py); the queue rows stay in rows/*.qb.
+@@table
+
+## SQ-AV-01 | /recipe give learns nothing; the book stays empty
+@group A
+@commands Fake player: `/recipe give rbk1 *`, then `/recipe give rbk1 minecraft:stick`, then `/recipe take rbk1 *`
+@pass both gives answer "No new recipes were learned"; the take answers "No recipes could be forgotten" (nothing was added); boot log has no mixin error naming NoRecipeUnlockMixin
+@fails mixin not applied (`bootexpect` on creativecommon.mixins.json, the SRG names m_7281_ / m_7902_), or Common older than 2026-11-17
+@jars creativecommon creativedelight
+@sources development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/NoRecipeUnlockMixin.java development/creativeCommon/src/main/resources/creativecommon.mixins.json development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/oven development/creativeDelight/members/miners/src/main/java/com/sammy/minersdelight/content/block/copper_pot
+@tier T2
+@reviewed 2026-11-20
+> pbot spawn rbk1 0 -60 0 minecraft:overworld survival
+sleep 2
+> recipe give rbk1 *
+waitlog No new recipes were learned 20
+# r1120nv s02 (2026-11-20): the server answered 'Unknown recipe: minecraft:furnace' (batch fault); the single-id give now names minecraft:stick
+> recipe give rbk1 minecraft:stick
+sleep 2
+count No new recipes were learned >= 2
+> recipe take rbk1 *
+waitlog No recipes could be forgotten 20
+reject Unlocked \d+ recipes? for
+reject Unknown recipe:
+bootreject NoRecipeUnlockMixin.*(InvalidInjectionException|could not find|failed)
+> pbot remove rbk1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+
+## SQ-BBQ-02 | Barbeque's recipes: 28 skewering and grilling, all creativedelight ids; no combine; basin and tray per wood
+@group A
+@commands Recipe lookup: types `barbequesdelight:skewering` (10), `barbequesdelight:grilling` (18 = 10 Barbeque's Delight lines + 8 pack raw skewers), no `barbequesdelight:combine` (plan_meals_rolls_bbq.md C8: combos are shaped / assembly recipes); ids `creativedelight:shaped/bbq_grill`, `creativedelight:stonecutting/bbq_<wood>_basin_from_logs` and `bbq_<wood>_tray_from_logs` (9 woods each, barbeques_delight.md 3.11)
+@pass 28 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); no combine recipe; 9 basin and 9 tray stonecutting recipes; skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`)
+@fails NCH emitters missing (Creative Common jar not rebuilt). Counts from kubejs/exported/recipes/all.csv 2026-11-19 (skewering 10, grilling 18, combine 0, 18 bbq_*_from_logs); r1120lr batch fault: row predated C8 and 3.11
+@jars creativedelight
+@sources feature_writeup/barbeques_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+> cdevtest rdetail creativedelight:skewering/
+> cdevtest rdetail creativedelight:grilling/ max=100
+> cdevtest recipes creativedelight:combine/
+> cdevtest recipes barbequesdelight:
+> cdevtest rdetail bbq_grill
+> cdevtest rdetail _basin_from_logs max=50
+> cdevtest rdetail _tray_from_logs max=50
+count verb=rdetail id=creativedelight:skewering/\S+ serializer= == 10
+count verb=rdetail id=creativedelight:grilling/\S+ serializer= == 18
+expect verb=recipes text=creativedelight:combine/ n=0\b
+expect verb=recipes text=barbequesdelight: n=0\b
+expect verb=rdetail id=creativedelight:shaped/bbq_grill serializer=
+count verb=rdetail id=creativedelight:stonecutting/bbq_[a-z_]+_basin_from_logs serializer= == 9
+count verb=rdetail id=creativedelight:stonecutting/bbq_[a-z_]+_tray_from_logs serializer= == 9
+look skewering inputs (ingredients=, item ids of each tag) are the forge: tags of barbeques_delight.md 3.1 (beef: 2 #forge:raw_beef + 2 #forge:crops/cabbage)
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-BBQ-03 | Barbeque's item and block tags
+@group A
+@commands `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativecommon:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativedelight:food_type/handheld`, `/meal`, `/hazard`
+@pass 18 raw (10 Barbeque's Delight + 8 pack raws) + 10 grilled skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
+@fails `tags.js` not loaded (`global.CD.on`). Ids from the 2026-11-19 tag dump (food_type tags under `creativedelight:`, rain_douses under `creativecommon:`, raw_skewers 18); r1120lr batch fault: old namespaces
+@jars creativedelight
+@sources feature_writeup/barbeques_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
+> cdevtest tag item barbequesdelight:raw_skewers
+> cdevtest tag item barbequesdelight:grilled_skewers
+> cdevtest tag block creativecommon:campfire/rain_douses
+> cdevtest tag block blockrunner:surface/metal
+> cdevtest tag block blockrunner:surface/wood
+> cdevtest tagsof barbequesdelight:grill
+> cdevtest tagsof barbequesdelight:basin
+> cdevtest tag item creativedelight:food_type/handheld
+> cdevtest tag item creativedelight:food_type/meal
+> cdevtest tag item creativedelight:food_type/hazard
+> cdevtest tagsof barbequesdelight:raw_beef_skewer
+expect verb=tag kind=item tag=barbequesdelight:raw_skewers n=18\b
+expect verb=tag kind=item tag=barbequesdelight:grilled_skewers n=10\b
+expect verb=tag kind=block tag=creativecommon:campfire/rain_douses .*ids=\S*minecraft:campfire\b
+expect verb=tag kind=block tag=creativecommon:campfire/rain_douses .*ids=\S*barbequesdelight:grill\b
+expect verb=tag kind=block tag=blockrunner:surface/metal .*ids=\S*barbequesdelight:grill\b
+expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:basin\b
+expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:tray\b
+expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b
+expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b
+expect verb=tag kind=item tag=creativedelight:food_type/meal .*ids=\S*barbequesdelight:bibimbap\b
+expect verb=tag kind=item tag=creativedelight:food_type/hazard .*ids=\S*barbequesdelight:burnt_skewer\b
+reject verb=tagsof id=barbequesdelight:raw_beef_skewer .*item_tags=\S*food_type
+look the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block_tags in the tagsof lines)
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-BBQ-05 | grill on a campfire: lights, goes out in rain on stone, stays lit on coal (212 stone, 216 coal block)
+@group A
+@commands Bot: place a grill on a placed campfire (`/setblock` campfire then use the grill item on it); `/data get block` / block state; `/setblock ~ ~-1 ~ minecraft:stone`, `/weather rain`, light it with flint and steel, wait 200 ticks; repeat on `minecraft:coal_block`
+@pass state `has_campfire=true,lit=false` on placing; lit by flint and steel (light 15); out in rain after `rainOutTicks` (160) on stone; still lit on the coal block; breaking drops the grill and a campfire
+@fails rain rule: grill not in `rain_douses`, or Creative Compat not filling CampfireRainInfo
+@jars creativedelight
+@sources feature_writeup/barbeques_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
+> forceload add 208 496 232 506
+sleep 3
+> setblock 212 -61 500 minecraft:stone
+> setblock 216 -61 500 minecraft:coal_block
+> setblock 212 -60 500 minecraft:campfire[lit=false]
+> setblock 216 -60 500 minecraft:campfire[lit=false]
+> pbot spawn bbq5 214 -60 503 minecraft:overworld survival
+> pbot hold bbq5 barbequesdelight:grill
+> pbot use bbq5 212 -60 500 up
+> pbot hold bbq5 barbequesdelight:grill
+> pbot use bbq5 216 -60 500 up
+> execute if block 212 -60 500 barbequesdelight:grill[has_campfire=true,lit=false] run say BBQ05 grill on campfire 212
+> execute if block 216 -60 500 barbequesdelight:grill[has_campfire=true,lit=false] run say BBQ05 grill on campfire 216
+> pbot hold bbq5 minecraft:flint_and_steel
+> pbot use bbq5 212 -60 500 up
+> pbot hold bbq5 minecraft:flint_and_steel
+> pbot use bbq5 216 -60 500 up
+> execute if block 212 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 212
+> execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 216
+> cdevtest state 212 -60 500
+> weather rain 600
+> cdevtest tickwarp 300
+waitlog verb=tickwarp end=done 60
+> execute if block 212 -60 500 barbequesdelight:grill[lit=false] run say BBQ05 out in rain on stone
+> execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 still lit on coal
+> weather clear 100000
+> cdevtest break 212 -60 500
+expect BBQ05 grill on campfire 212
+expect BBQ05 grill on campfire 216
+expect BBQ05 lit 212
+expect BBQ05 lit 216
+expect BBQ05 out in rain on stone
+expect BBQ05 still lit on coal
+expect verb=state pos=212,-60,500 state="?barbequesdelight:grill\[.*lit=true.* light_block=15\b
+expect verb=break drops=barbequesdelight:grill:1,minecraft:campfire:1 stacks=2\b
+> pbot remove bbq5
+look if the grill landed one block up (y -59) instead of replacing the campfire, the execute lines are silent: check the cdevtest state line
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-BBQ-06 | an unflipped skewer burns at 640 ticks, its entry stays still (grill at 220; the flip half needs sneak: s3_skip.md)
+@group A
+@commands Bot: grill on a lit campfire, put `raw_beef_skewer` on a slot (use on the top), wait 160 ticks, sneak-use empty hand, wait 160, take; second skewer left 640 ticks unflipped; `/data get block` on the grill during the burnt state twice, 20 ticks apart
+@pass flip allowed at 160; Cooked Beef Skewer at 320; the unflipped one becomes Burnt Skewer at 640; the burnt entry's Time keeps counting between reads (after the B1 fix) and no block update spam
+@fails tick order; entry time not saved
+@jars creativedelight
+@sources feature_writeup/barbeques_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
+> forceload add 208 496 232 506
+sleep 3
+> setblock 220 -60 500 minecraft:campfire[lit=true]
+> pbot spawn bbq6 220 -60 503 minecraft:overworld survival
+> pbot hold bbq6 barbequesdelight:grill
+> pbot use bbq6 220 -60 500 up
+> pbot hold bbq6 minecraft:flint_and_steel
+> pbot use bbq6 220 -60 500 up
+> pbot hold bbq6 barbequesdelight:raw_beef_skewer
+> pbot use bbq6 220 -60 500 up
+> data get block 220 -60 500
+sleep 36
+> data get block 220 -60 500
+sleep 1
+> data get block 220 -60 500
+expect has the following block data: .*barbequesdelight:burnt_skewer
+> pbot remove bbq6
+look the two last reads (20 ticks apart) are the same burnt entry; no block-update spam lines
+
+## SQ-BBQ-07 | seasonings: sauce refused on a raw skewer, powder taken, sauce on a cutting board (grill 226, board 229)
+@group A
+@commands Bot: `/give` a `chili_powder` and a `barbeque_sauce`; raw beef skewer on the grill, right-click it with the sauce, then the powder; put a cooked beef skewer on an FD cutting board and right-click it with the sauce; then craft a cooked beef skewer with the chili powder in the grid (shapeless) and grill a raw one seasoned the same way
+@pass right-click seasoning does nothing on the grill or the cutting board (use retired, BBQ-28), seasonings stack to 64; the shapeless craft gives the "Chili Flavored" skewer and the grilled one keeps the prefix
+@fails shapeless season recipes missing (seasoning framework fold, barbeques_delight.md 4.5); member `GrillBlock` still handling the click
+@jars creativedelight
+@sources feature_writeup/barbeques_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
+> forceload add 208 496 232 506
+sleep 3
+> setblock 226 -60 500 minecraft:campfire[lit=true]
+> pbot spawn bbq7 227 -60 503 minecraft:overworld survival
+> pbot hold bbq7 barbequesdelight:grill
+> pbot use bbq7 226 -60 500 up
+> pbot hold bbq7 barbequesdelight:raw_beef_skewer
+> pbot use bbq7 226 -60 500 up
+> pbot hold bbq7 barbequesdelight:barbeque_sauce
+> pbot use bbq7 226 -60 500 up
+> data get block 226 -60 500
+> pbot hold bbq7 barbequesdelight:chili_powder
+> pbot use bbq7 226 -60 500 up
+> data get block 226 -60 500
+> setblock 229 -60 500 farmersdelight:cutting_board
+> pbot hold bbq7 barbequesdelight:grilled_beef_skewer
+> pbot use bbq7 229 -60 500 up
+> pbot hold bbq7 barbequesdelight:barbeque_sauce
+> pbot use bbq7 229 -60 500 up
+> data get entity bbq7 SelectedItem
+> data get block 229 -60 500
+> pbot remove bbq7
+look right-click seasoning is retired (BBQ-28): no BBQSeasoning in either grill read; board: the cooked skewer gets no sauce and the sauce stack is unchanged; the shapeless seasoning craft half is not automated
+
+## SQ-LGM-11 | pufferfish broth gives Comfort 2400 and Nausea 100, no poison
+@group A
+@commands Bot eats `largemeals:pufferfish_broth`; `/data get entity` the bot `ActiveEffects`
+@pass Comfort 2400 ticks (the comfort_nourishment R5 length for a bowl food under 10 hunger, 120 s; comfort_nourishment.md section 9, food dump 2026-11-19; the plan's A4 "Comfort 1 min" was the upstream value before that rule) and Nausea (`minecraft:nausea`) 100 ticks; no poison (LGM-22)
+@fails `MealItems.java` not in the nested jar. r1120nv batch fault: the row wanted Comfort 1200
+@jars creativedelight
+@sources feature_writeup/plan_meals_rolls_bbq.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c2_a1.qb
+> pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
+> pbot hunger c2b 4
+> pbot hold c2b largemeals:pufferfish_broth 1
+> pbot eat c2b
+waitlog verb=pbot.useitem bot=c2b end=finish item=largemeals:pufferfish_broth 20
+> cdevtest player c2b
+expect verb=player name=c2b effects=\S*farmersdelight:comfort:0:2[34]\d\d\b
+expect verb=player name=c2b effects=\S*minecraft:nausea:0:\d+
+reject verb=player name=c2b effects=\S*minecraft:poison
+look Nausea about 100 ticks
+> effect clear c2b
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-BBQ2-02 | every route of each pack skewer; Nether has no heatless craft, Cave has one with Miner's; End raw and heatless shapeless
+@group A
+@commands Recipe dump for each pack skewer: raw craft, `_from_smelting`, `_from_smoking`, `_from_campfire`, grilling, `_from_cooked_manual_only`, raw assembly
+@pass every route present; Nether has no heatless craft; Cave has its heatless `caveskewer_from_cooked_manual_only` (baked spider leg) with Miner's loaded (owner, 2026-11-17, `dishes/meals #58`, barbeques_delight.md); End raw and heatless shapeless, 1 result; upstream crafts gone (BBQ-35)
+@fails id clash in the log. r1120nv batch fault: the reject predated the #58 ruling
+@jars creativedelight
+@sources feature_writeup/plan_meals_rolls_bbq.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c2_a1.qb
+> cdevtest recipes barbecue_stick
+> cdevtest recipes caveskewer
+> cdevtest recipes nether_skewer
+> cdevtest recipes crispy_skewer
+> cdevtest recipes seafood_skewer
+> cdevtest recipes turnip_mutton_skewer
+reject verb=recipes id=creativedelight:\S*nether_skewer_from_cooked_manual_only
+expect verb=recipes id=creativedelight:\S*caveskewer_from_cooked_manual_only\b
+look per skewer: raw craft (shaped/raw_*), _from_smelting, _from_smoking, _from_campfire, grilling, _from_cooked_manual_only (not Nether), raw assembly; End: raw and heatless shapeless with 1 result; no upstream craft ids (endersdelight: / hostiledelight: / nethersdelight: / ends_delight: crafting of the cooked skewer)
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-ROLL-12 | golden roll slice only from cutting; no gild / enchant recipe; no roll can
+@group A
+@commands Recipe dump filtered on `golden_roll_slice` and on `canned_` + `roll_delight:`
+@pass slice only as a cutting result; no gild or enchant recipe; no roll can (ROLL-26, -27)
+@jars creativedelight
+@sources feature_writeup/plan_meals_rolls_bbq.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c2_a1.qb
+> cdevtest makes roll_delight:golden_roll_slice
+> cdevtest recipes golden_roll
+> cdevtest recipes canned_ max=2000
+reject verb=recipes id=\S*canned_\S*roll\S*(\s|$)
+reject verb=makes id=\S+ result=roll_delight:golden_roll_slice\S* serializer=(?!farmersdelight:cutting\b)
+look golden_roll_slice made only by creativedelight:farmersdelightcutting/golden_roll_slice; no recipe id with gild or enchant on golden rolls; no canned_ recipe id with roll in it (max=2000: the whole list is shown)
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-BBQF-01 | six BBQ flavors and grilled defined
+@group A
+@commands Boot, grep `[flavor]` in logs/latest.log
+@pass `[flavor] defined` lines for the 6 BBQ flavors and `barbequesdelight:grilled`; no `bad definition`
+@fails CD `food/Flavors.java`, `kubejs_startup/creativedelight/flavors.js`, BBQ `compat/PackFlavors.java`; TODO `food/seasoning #11`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+@absent barbequesdelight:cumin barbequesdelight:pepper barbequesdelight:chili barbequesdelight:honey_mustard barbequesdelight:buffalo barbequesdelight:barbeque barbequesdelight:grilled (flavor ids, not registry ids)
+# r1120fix (2026-11-20): seasonings renamed Flavor (plan_food_batch_1119 wave E, 1fd558bd); the log tag is [flavor] from
+# Flavors.java in latest.log, no longer [seasoning] in kubejs startup.log
+shell grep -hE "\[flavor\] defined barbequesdelight:" logs/latest.log | head -20
+shell echo "BBQ defined lines: $(grep -hcE '\[flavor\] defined barbequesdelight:' logs/latest.log || true)"
+shell test "$(grep -hoE '\[flavor\] defined barbequesdelight:(barbeque|buffalo|chili|cumin|honey_mustard|pepper|grilled)\b' logs/latest.log | sort -u | wc -l)" -eq 7
+shell ! grep -hE "\[flavor\].*bad definition" logs/latest.log
+look defined lines for the 6 BBQ flavors (barbeque, buffalo, chili, cumin, honey_mustard, pepper) and barbequesdelight:grilled
+
+## SQ-BBQF-02 | BBQ flavor crafts and cooking routes
+@group A
+@commands Recipe dump / `cdevtest recipes`
+@pass 6 `creativedelight:shapeless/flavor/<key>` crafts for the BBQ flavors; 10 each of `grilled_*_skewer` `_from_smelting`, `_from_smoking`, `_from_campfire`, `_from_cooked_manual_only`
+@fails BBQ `PackFlavors.java`, `barbequesdelight/recipes.js`; TODO `#11`, `dishes/meals #46`, `#49`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# r1120fix (2026-11-20): season/ renamed flavor/ (wave E, 1fd558bd); the recipes live under creativedelight:, and
+# /cdevtest prints "verb=recipes id=X result=Y" (the zq "id -> result" format is retired). Counts from the 2026-11-19
+# recipe dump: 6 BBQ flavor crafts, 10 grilled skewers per route (other skewers, e.g. caveskewer, also match the suffix)
+> cdevtest recipes shapeless/flavor/ max=500
+> cdevtest recipes _from_smelting max=500
+> cdevtest recipes _from_smoking max=500
+> cdevtest recipes _from_campfire max=500
+> cdevtest recipes _from_cooked_manual_only max=500
+count verb=recipes id=creativedelight:shapeless/flavor/(barbeque|buffalo|chili|cumin|honey_mustard|pepper) result= == 6
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_smelting result= == 10
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_smoking result= == 10
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_campfire result= == 10
+count verb=recipes id=creativedelight:[a-z_]+/grilled_[a-z_]+_skewer_from_cooked_manual_only result= == 10
+reject (Unknown or incomplete command|\[cdevtest\] verb=recipes .*done=0)
+
+## SQ-BBQF-03 | flavorable tags: cumin takes raw and cooked skewers, honey mustard no raw skewer
+@group A
+@commands Tag check
+@pass `#barbequesdelight:flavorable/cumin` holds raw and cooked skewers; `flavorable/honey_mustard` holds no raw skewer
+@fails `creativedelight/seasoning_tags.js`, BBQ `PackFlavors.java`; TODO `#11`, `#46`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb passed
+# r1120fix (2026-11-20): seasonable/* renamed flavorable/* (wave E, 1fd558bd); 2026-11-19 tag dump: cumin 28 entries
+# (raw and grilled beef skewer among them), honey_mustard 10 (grilled skewers only)
+> cdevtest tag item barbequesdelight:flavorable/cumin
+> cdevtest tag item barbequesdelight:flavorable/honey_mustard
+expect verb=tag kind=item tag=barbequesdelight:flavorable/cumin .*barbequesdelight:raw_beef_skewer
+expect verb=tag kind=item tag=barbequesdelight:flavorable/cumin .*barbequesdelight:grilled_beef_skewer
+expect verb=tag kind=item tag=barbequesdelight:flavorable/honey_mustard .*barbequesdelight:grilled_beef_skewer
+reject verb=tag kind=item tag=barbequesdelight:flavorable/honey_mustard .*barbequesdelight:raw_[a-z_]+_skewer
+reject (Unknown or incomplete command|\[cdevtest\] verb=tag .*done=0)
+
+## SQ-BBQF-04 | level-1 butchers sell the six seasonings (12 emeralds, 64 powders / 16 sauces, maxUses 4, 4 XP)
+@group A
+@commands Summon level-1 butchers (vanilla and MCA), read offers
+@pass The six seasonings at 12 emeralds for 64 powders or 16 sauces, maxUses 4, 4 XP
+@fails BBQ trades in `BarbequesDelight.java`; TODO `food/seasoning #18`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1+64} {SAH3+64} {SAH1+96} {SAH3+96}
+sleep 3
+# MCA replaces minecraft:villager (gotchas.md, r1113): summon both kinds, read the offers with the sA probe (as SQ-SALT2-07)
+repeat 10
+> summon minecraft:villager {SAH1+80} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+> summon mca:male_villager {SAH1+82} {SAH2} {SAH3+80} {NoAI:1b,PersistenceRequired:1b,Tags:["sabbq"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+end
+sleep 3
+> sa offers sabbq
+waitlog \[sa\] done 60
+count \[sa\] offer \d+: 12 minecraft:emerald -> (64 barbequesdelight:(cumin|chili|pepper)_powder|16 barbequesdelight:(barbeque|buffalo|honey_mustard)_sauce), maxUses 4, xp 4 >= 1
+reject \[sa\] (error|offers sabbq: no merchant)
+look each seasoning offer: 12 emerald -> 64 (powder) or 16 (sauce), maxUses 4, xp 4; a level-1 butcher rolls 2 of its level-1 trades, so not all six show in every run
+> kill @e[tag=sabbq]
+> forceload remove {SAH1+64} {SAH3+64} {SAH1+96} {SAH3+96}
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+## SQ-BBQF-05 | Creative Delight [food] flavor keys
+@group A
+@commands `config/creativedelight-common.toml`
+@pass `[food] maxFlavors = 2`, `grilledCountsTowardMax = false`, `grilledFlavorSlots = 2`
+@fails CD `CDConfig.java` `[food]`; TODO `#11`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb passed
+# r1120fix (2026-11-20): maxSeasonings renamed maxFlavors, grilledFlavorSlots added (wave E, 1fd558bd; pack config 2026-11-20)
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s && /(maxFlavors|grilledCountsTowardMax|grilledFlavorSlots)/' config/creativedelight-common.toml
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "maxFlavors = 2"
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "grilledCountsTowardMax = false"
+shell awk '/^\[food\]/{s=1;next} /^\[/{s=0} s' config/creativedelight-common.toml | grep -qE "grilledFlavorSlots = 2"
+
+## SQ-BBQF-06 | Grill adds the grilled flavor to a flavored skewer
+@group A
+@commands Heated Grill, `/data merge` a raw beef skewer with `{Flavors:["barbequesdelight:cumin"]}`, Flipped true, Time near Duration
+@pass Output has Flavors [cumin, grilled]
+@fails BBQ `GrillBlockEntity.java`, CD `Flavors.java`; TODO `food/seasoning #13`, `#46`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+@absent barbequesdelight:cumin barbequesdelight:grilled (flavor ids in the item NBT, not registry ids)
+# r1120fix (2026-11-20): the NBT key is Flavors (Flavors.TAG, wave E 1fd558bd), was Seasonings
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+40} {SAH1+31} {SAH3+63}
+sleep 3
+> setblock {SAH1+10} {SAH2} {SAH3+50} barbequesdelight:grill[has_campfire=true,lit=true]
+> data merge block {SAH1+10} {SAH2} {SAH3+50} {Entries:[{Item:{id:"barbequesdelight:raw_beef_skewer",Count:1b,tag:{Flavors:["barbequesdelight:cumin"]}},Time:180,Duration:200,Flipped:1b,Burnt:0b},{}]}
+sleep 3
+> data get block {SAH1+10} {SAH2} {SAH3+50} Entries[0].Item
+expect barbequesdelight:grilled_beef_skewer
+expect Flavors: \[.*"barbequesdelight:cumin".*\]
+expect Flavors: \[.*"barbequesdelight:grilled".*\]
+look Flavors [cumin, grilled] on the grilled skewer (read before Time reaches 2 x Duration = burnt)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|That position is not loaded)
+
+## SQ-BBQF-07 | raw skewer through a fueled furnace by hopper: plain Beef Skewer
+@group A
+@commands Raw beef skewer into a fuelled furnace by hopper
+@pass Beef Skewer, no Flavors tag
+@fails `barbequesdelight/recipes.js` cooking rows, BBQ `BBQSkewerItem.java`; TODO `dishes/meals #49`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb passed
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+40} {SAH1+31} {SAH3+63}
+sleep 3
+> setblock {SAH1+14} {SAH2} {SAH3+50} minecraft:furnace
+> data merge block {SAH1+14} {SAH2} {SAH3+50} {Items:[{Slot:1b,id:"minecraft:coal",Count:8b}]}
+> setblock {SAH1+14} {SAH2+1} {SAH3+50} minecraft:hopper[facing=down]
+> data merge block {SAH1+14} {SAH2+1} {SAH3+50} {Items:[{Slot:0b,id:"barbequesdelight:raw_beef_skewer",Count:1b}]}
+sleep 16
+> data get block {SAH1+14} {SAH2} {SAH3+50} Items
+expect Slot: 2b, id: "barbequesdelight:grilled_beef_skewer"|Slot:2b,id:"barbequesdelight:grilled_beef_skewer"
+reject (Seasonings|Flavors)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|That position is not loaded)
+
+## SQ-VTDA-11 | one kimchi, one nut butter: no recipe makes or takes the removed items; the new ones exist
+@group A
+@commands Recipe dump
+@pass No recipe makes or takes Brewin' kimchi, nut butter, nut dough or the nut mash bottle; six pickling `kimchi_from_*` (plus upstream's fermenting one), `nut_mash_jar`, `quiche_{meat,fungus,greens}`, `zucchini_quiche` exist
+@fails `vintagedelight/recipes.js`, `brewinandchewin/recipes.js`, `delightful/recipes.js`; TODO `merges/dishes #7`, `#8`, `#9`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sA_2.qb
+> cdevtest makes brewinandchewin:kimchi
+> cdevtest uses brewinandchewin:kimchi
+> cdevtest makes delightful:nut_butter_bottle
+> cdevtest uses delightful:nut_butter_bottle
+> cdevtest makes delightful:nut_dough
+> cdevtest uses delightful:nut_dough
+> cdevtest makes vintagedelight:nut_mash_bottle
+> cdevtest uses vintagedelight:nut_mash_bottle
+> cdevtest recipes kimchi_from_ max=500
+> cdevtest recipes nut_mash_jar max=500
+> cdevtest recipes quiche_meat max=500
+> cdevtest recipes quiche_fungus max=500
+> cdevtest recipes quiche_greens max=500
+> cdevtest recipes zucchini_quiche max=500
+expect verb=makes item=brewinandchewin:kimchi n=0
+expect verb=uses item=brewinandchewin:kimchi alone=0 shared=0
+expect verb=makes item=delightful:nut_butter_bottle n=0
+expect verb=uses item=delightful:nut_butter_bottle alone=0 shared=0
+expect verb=makes item=delightful:nut_dough n=0
+expect verb=uses item=delightful:nut_dough alone=0 shared=0
+expect verb=makes item=vintagedelight:nut_mash_bottle n=0
+expect verb=uses item=vintagedelight:nut_mash_bottle alone=0 shared=0
+# r1120fix (2026-11-20): 6 pack pickling kimchi_from_* plus upstream's vintagedelight:fermenting/kimchi_from_fermenting
+# kept (vintagedelight/recipes.js; 2026-11-19 recipe dump n=7)
+expect verb=recipes text=kimchi_from_ n=7\b
+count verb=recipes id=creativedelight:pickling/kimchi_from_[a-z_]+ result= == 6
+expect verb=recipes text=nut_mash_jar n=[1-9]
+expect verb=recipes text=quiche_meat n=[1-9]
+expect verb=recipes text=quiche_fungus n=[1-9]
+expect verb=recipes text=quiche_greens n=[1-9]
+expect verb=recipes text=zucchini_quiche n=[1-9]
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
+
+## SQ-VTDA-12 | nut butter bottle and Delightful sandwich become Nut Mash and pb_j on relog
+@group A
+@commands Give a nut butter bottle and a Delightful sandwich, relog
+@pass They become Nut Mash and `pb_j`; log shows the merge count (43 per the Vintage agent; recount with the potato salad pairs) and no `merged twice`
+@fails CD `swaps/merges_vintagedelight.json`, `merges_delightful.json`; Creative Common `swap/ItemMerges.java`; TODO `#7`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+32} {SAH1+15} {SAH3+47}
+sleep 3
+> pbot spawn savtd {SAH1+8} {SAH2} {SAH3+38} minecraft:overworld survival
+sleep 2
+> clear savtd
+> give savtd delightful:nut_butter_bottle 1
+> give savtd delightful:nut_butter_and_jelly_sandwich 1
+> pbot inv savtd get
+> pbot remove savtd
+sleep 1
+> pbot spawn savtd {SAH1+8} {SAH2} {SAH3+38} minecraft:overworld survival
+sleep 2
+> pbot inv savtd get
+expect verb=pbot.inv bot=savtd slot=\d+ item=vintagedelight:nut_mash_jar
+expect verb=pbot.inv bot=savtd slot=\d+ item=vintagedelight:pb_j
+expect \[swaps\] savtd: \d+ merged stack\(s\) rewritten
+shell grep -hE "\[swaps\].*item merge" logs/latest.log | head -3
+bootreject merged twice
+> pbot remove savtd
+look the merge count line (43 with the potato salad pairs)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0)
+
+## SQ-CDM2-03 | Globular Rice and Bowl of Paella: Nourishment and Comfort 4:00
+@group A
+@commands Eat Globular Rice and Bowl of Paella; grep log
+@pass Globular Rice Nourishment 4:00, Bowl of Paella Comfort 4:00 (one effect each); log `277 ruled foods set` (8 Miner's cups dropped)
+@fails `generation_scripts/food/comfort_nourishment.json` (`tools/gen_comfort_nourishment.py`), CD `comfort_nourishment.js`; TODO `dishes/ocean #8`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+32} {SAH1+15} {SAH3+47}
+sleep 3
+> pbot spawn sacdm {SAH1+8} {SAH2} {SAH3+42} minecraft:overworld survival
+sleep 2
+> clear sacdm
+> effect clear sacdm
+> pbot hunger sacdm 10
+> pbot hold sacdm oceanic_delight:globular_rice
+> pbot eat sacdm
+sleep 3
+> cdevtest player sacdm
+> effect clear sacdm
+> pbot hunger sacdm 10
+> pbot hold sacdm oceanic_delight:bowl_of_paella
+> pbot eat sacdm
+sleep 3
+> cdevtest player sacdm
+count verb=pbot.useitem bot=sacdm end=finish == 2
+count verb=player name=sacdm effects=farmersdelight:nourishment:0:4[78]\d\d\b == 1
+count verb=player name=sacdm effects=farmersdelight:comfort:0:4[78]\d\d\b == 1
+shell grep -hE "ruled foods set" logs/latest.log logs/kubejs/*.log | head -3
+shell grep -qhE "285 ruled foods set" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
+> pbot remove sacdm
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
+
+## SQ-CDM2-04 | one Potato Salad: Rustic's recipes only; More Delight's becomes Rustic's
+@group A
+@commands Recipes for `rusticdelight:potato_salad`; give `moredelight:potato_salad`
+@pass Pot, `_manual_only` and egg-solution mixing only; the given one becomes Rustic's
+@fails `rusticdelight/recipes.js`, CD `swaps/merges_moredelight.json`, `merges_oceanic_delight_potato.json`; TODO `merges/dishes #4`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+> cdevtest makes rusticdelight:potato_salad
+> cdevtest rdetail potato_salad
+> cdevtest makes moredelight:potato_salad
+> cdevtest makes oceanic_delight:potato_salad
+# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {SAH1} {SAH3+40} {SAH1+15} {SAH3+55}
+sleep 3
+> pbot spawn sapot {SAH1+8} {SAH2} {SAH3+46} minecraft:overworld survival
+sleep 2
+> clear sapot
+> give sapot moredelight:potato_salad 1
+> pbot remove sapot
+sleep 1
+> pbot spawn sapot {SAH1+8} {SAH2} {SAH3+46} minecraft:overworld survival
+sleep 2
+> pbot inv sapot get
+expect verb=pbot.inv bot=sapot slot=\d+ item=rusticdelight:potato_salad
+reject verb=pbot.inv bot=sapot slot=\d+ item=moredelight:potato_salad
+expect verb=makes item=moredelight:potato_salad n=0
+expect verb=makes item=oceanic_delight:potato_salad n=0
+look rusticdelight:potato_salad makers: the Cooking Pot recipe, its _manual_only copy and the egg-solution mixing only
+> pbot remove sapot
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0)
+
+## SQ-GLD2-02 | gilded carrot and apple: 8 loops of gold ingot + 125 mB + press
+@group A
+@commands JEI / recipe dump for the gilded carrot and apple
+@pass 8 loops of gold ingot + 125 mB + press
+@fails `goldenfood/golden.js`, incomplete items in `startup_scripts/changes/transition_items.js`; TODO `#22`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1103/sA_2.qb
+# r1120fix (2026-11-20): the assemblies are creativedelight:createsequencedassembly/enchanted_golden_{apple,carrot}_sequenced_assembly
+# (2026-11-19 recipe dump); /cdevtest rdetail prints part=start and part=stepN serializer=... lines (the zq "rdetail+ ... step"
+# format is retired); loops and the fill amount are not printed (golden_food.md 3.5: 8 loops, 125 mB liquid experience)
+> cdevtest rdetail enchanted_golden_apple_sequenced_assembly
+> cdevtest rdetail enchanted_golden_carrot_sequenced_assembly
+expect verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_apple_sequenced_assembly serializer=create:sequenced_assembly result=minecraft:enchanted_golden_apple\*1
+expect verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_carrot_sequenced_assembly serializer=create:sequenced_assembly result=\S*enchanted_golden_carrot\*1
+count verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step0 serializer=create:deploying value=\S*gold_ingot == 2
+count verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step1 serializer=create:filling == 2
+count verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step2 serializer=create:pressing == 2
+reject verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_(apple|carrot)_sequenced_assembly part=step3
+look loops 8 and 125 mB are not in the rdetail lines: JEI page in game (CQ-GLD2-04) or golden.js `global.CD.FOOD.gilded`; part=start names the golden apple / golden carrot
+reject (Unknown or incomplete command|\[cdevtest\] verb=rdetail .*done=0)
+
+## SQ-SALT2-02 | heated water cauldrons at 3, 2, 1 levels evaporate; harvests give 8, 5, 3 salt dust
+@group A
+@commands Heated water cauldrons (campfire under) at 3, 2 and 1 levels, `randomTickSpeed 1000`, harvest each salt cauldron
+@pass 8, 5 and 3 salt dust
+@fails `kubejs/data/salt/loot_tables/cauldron_evaporation/`; [salt.md](../salt.md) 6 S1; TODO `food/seasoning #1`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c1_a1.qb
+# r1120fix (2026-11-20): the lane was never forceloaded (r1120nv: "That position is not loaded", skipped_columns=7)
+> forceload add 1056 1024 1071 1039
+sleep 3
+> setblock 1060 -60 1030 minecraft:campfire[lit=true]
+> setblock 1063 -60 1030 minecraft:campfire[lit=true]
+> setblock 1066 -60 1030 minecraft:campfire[lit=true]
+> setblock 1060 -59 1030 minecraft:water_cauldron[level=3]
+> setblock 1063 -59 1030 minecraft:water_cauldron[level=2]
+> setblock 1066 -59 1030 minecraft:water_cauldron[level=1]
+> cdevtest randomtick 1060 -59 1030 1066 -59 1030 100
+expect verb=randomtick .*changed=[1-9]
+> execute if block 1060 -59 1030 salt:salt_cauldron[level=3]
+> execute if block 1063 -59 1030 salt:salt_cauldron[level=2]
+> execute if block 1066 -59 1030 salt:salt_cauldron[level=1]
+> pbot spawn c1sc 1063 -60 1033 minecraft:overworld survival
+sleep 3
+> clear c1sc
+> pbot pickup c1sc off
+> cdevtest items 1063 -59 1030 6
+> pbot use c1sc 1060 -59 1030
+sleep 2
+> cdevtest items 1060 -59 1030 2
+> pbot use c1sc 1063 -59 1030
+sleep 2
+> cdevtest items 1063 -59 1030 2
+> pbot use c1sc 1066 -59 1030
+sleep 2
+> cdevtest items 1066 -59 1030 2
+> pbot remove c1sc
+count Test passed == 3
+count verb=items items=vintagedelight:salt_dust:8 == 1
+count verb=items items=vintagedelight:salt_dust:5 == 1
+count verb=items items=vintagedelight:salt_dust:3 == 1
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|That position is not loaded)
+> forceload remove 1056 1024 1071 1039
+look "Test failed" on a level = the water did not turn into a salt cauldron of the same level (100 random ticks per block = the old 20 s at randomTickSpeed 1000; rerun with more rounds before judging the loot)
+
+## SQ-SALT2-03 | rock_salt_water_salt mixing, raw rock salt crushing / milling / hammering, no knife cutting
+@group A
+@commands Recipe check: the `rock_salt_water_salt` mixing, the `raw_rock_salt_salt` crushing, milling and hammering recipes
+@pass Heated, raw rock salt block + 1000 mB water -> block kept + 2 salt dust; crushing and milling 4 + 1 at 0.5; Engineer's Hammer 4 on the cutting board (`farmersdelightcutting/raw_rock_salt_salt_hammering`) and in the grid (`shapeless/raw_rock_salt_salt_hammering`); the plain hand craft `shapeless/raw_rock_salt_salt` (4, intended, salt.js); no knife cutting recipe
+@fails CD `creativedelight/salt.js`; salt.md 6 S2, S6
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c1_a1.qb
+# r1120fix (2026-11-20): /cdevtest prints "verb=rdetail id=X serializer=Y result=Z*N ingredients=..." (the zq
+# "id {serializer} -> result" format is retired); the mixing id is creativedelight:createmixing/rock_salt_water_salt
+# (2026-11-19 recipe dump; its result line shows the first output, the salt dust in part=results)
+> cdevtest rdetail rock_salt_water_salt
+> cdevtest rdetail raw_rock_salt_salt
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt serializer=create:mixing\b
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt part=fluids value=in:\S*minecraft:water\S*@1000mB
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt part=results value=\S*vintagedelight:salt_dust\*2@1
+expect verb=rdetail id=creativedelight:farmersdelightcutting/raw_rock_salt_salt_hammering serializer=farmersdelight:cutting result=vintagedelight:salt_dust\*4\b
+expect verb=rdetail id=creativedelight:shapeless/raw_rock_salt_salt_hammering serializer=\S+ result=vintagedelight:salt_dust\*4\b
+expect verb=rdetail id=creativedelight:createcrushing/raw_rock_salt_salt part=results value=vintagedelight:salt_dust\*4@1\S*,vintagedelight:salt_dust\*1@0\.5
+expect verb=rdetail id=creativedelight:createmilling/raw_rock_salt_salt part=results value=vintagedelight:salt_dust\*4@1\S*,vintagedelight:salt_dust\*1@0\.5
+reject verb=rdetail id=(?!\S*hammering)\S*raw_rock_salt\S* serializer=farmersdelight:cutting\b
+look the mixing is heated (JEI or salt.js; rdetail does not print heat) and keeps the block (part=results); the hammering cutting row's part=fields names the Engineer's Hammer as the tool
+reject (Unknown or incomplete command|\[cdevtest\] verb=rdetail .*done=0)
+
+## SQ-SALT2-04 | raw rock salt block in natural_rough, not soft; Salt Block in soft
+@group A
+@commands Block tags of `salt:raw_rock_salt_block`, `salt:salt_block`
+@pass Raw rock salt block in `blockrunner:surface/natural_rough`, not `soft`; Salt Block in `soft`
+@fails `server_scripts/tags/blocktags.js`; salt.md 6 S3
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c1_a1.qb passed
+> cdevtest tagsof salt:raw_rock_salt_block
+> cdevtest tagsof salt:salt_block
+# r1120fix (2026-11-20): /cdevtest tagsof prints "verb=tagsof id=X ... block_tags=a,b,..." (the zq "block tags of X:" format is retired)
+expect verb=tagsof id=salt:raw_rock_salt_block .*block_tags=\S*blockrunner:surface/natural_rough\b
+reject verb=tagsof id=salt:raw_rock_salt_block .*block_tags=\S*blockrunner:surface/soft\b
+expect verb=tagsof id=salt:salt_block .*block_tags=\S*blockrunner:surface/soft\b
+reject (Unknown or incomplete command|\[cdevtest\] verb=tagsof .*done=0)
+
+## SQ-SALT2-07 | butchers: 12 emeralds -> 64 salt dust, 4 uses; never a salt:salt trade
+@group A
+@commands Trade dump or a new butcher's level 1 offers
+@pass 12 emeralds -> 64 salt dust, 4 uses; no `salt:salt` trade at any level
+@fails CD `kubejs/salt/trades.js`, `salt-common.toml` `ButcherSaltTradesEnabled = false`; salt.md 6 S9
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c1_a1.qb
+# r1120fix (2026-11-20): the summon spot was never forceloaded (r1120nv: "no merchant with that tag")
+> forceload add 1088 1072 1103 1087
+sleep 3
+# MCA replaces minecraft:villager (r1103): summon both kinds; a level-1 butcher rolls 2 of its level-1 trades
+repeat 12
+> summon minecraft:villager 1090 -60 1080 {NoAI:1b,PersistenceRequired:1b,Tags:["c1salt"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+> summon mca:male_villager 1092 -60 1080 {NoAI:1b,PersistenceRequired:1b,Tags:["c1salt"],VillagerData:{profession:"minecraft:butcher",level:1,type:"minecraft:plains"}}
+end
+sleep 3
+> sa offers c1salt
+waitlog \[sa\] done 60
+count \[sa\] offer \d+: 12 minecraft:emerald -> 64 vintagedelight:salt_dust, maxUses 4 >= 1
+reject \[sa\] offer \d+: .* -> \d+ salt:salt\b
+reject \[sa\] (error|offers c1salt: no merchant)
+> kill @e[tag=c1salt]
+> forceload remove 1088 1072 1103 1087
+look every salt-dust offer reads 12 emerald -> 64 salt dust, maxUses 4; none at 0 is not a FAIL if few butchers rolled it (summon more)
+
+## SQ-SALT2-08 | an edited salt-common.toml is carried into creativedelight-common.toml once, renamed .moved, not recreated
+@group A
+@commands Restart with an edited `config/salt-common.toml` (`EvaporationChance = 0.5`) and no `[salt]` in `creativedelight-common.toml`
+@pass Log `config/salt-common.toml carried into config/creativedelight-common.toml (19 values)`; file renamed `.moved`; `[salt]` holds 0.5; no `salt-common.toml` recreated; a salted food listed in `SaltingFoodValues` gets that value (AppleSkin); `/reload` after editing `[salt]` applies
+@fails Salt member `Configuration` (`-03`), CD `compat/SaltConfigBridge`, `MemberConfigMove`; salt.md 6 S10
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/fix_c1a1.qb
+# r1120fix (2026-11-20): own fixture. The pack ships salt-common.toml.moved and a full [salt] in creativedelight-common.toml;
+# MemberConfigMove.carry skips a key the target already holds, so the edit restores salt-common.toml from the .moved copy
+# (EvaporationChance 0.3 -> 0.5) and drops every [salt] / [salt.*] table from creativedelight-common.toml (kept as .r1120bak),
+# then restarts. The row puts the pack copy back at the end (the running server keeps 0.5 until its next boot).
+edit cp config/creativedelight-common.toml config/creativedelight-common.toml.r1120bak && cp config/salt-common.toml.moved config/salt-common.toml && sed -i -E 's/^([[:space:]]*EvaporationChance = )0\.3[[:space:]]*$/\10.5/' config/salt-common.toml && grep -qE "EvaporationChance = 0\.5" config/salt-common.toml && awk '/^[[:space:]]*\[/{skip=($0 ~ /^[[:space:]]*\[salt(\.[^]]*)?\][[:space:]]*$/)} !skip' config/creativedelight-common.toml.r1120bak > config/creativedelight-common.toml && ! grep -qE "^[[:space:]]*\[salt" config/creativedelight-common.toml && rm config/salt-common.toml.moved
+restart
+bootexpect \[creativedelight\] config/salt-common.toml carried into config/creativedelight-common.toml \(19 values\)
+bootreject could not carry|could not rename
+shell grep -h "salt-common.toml carried" logs/latest.log | cut -c1-300
+shell ls config | grep -i "^salt-"; test -f config/salt-common.toml.moved && test ! -f config/salt-common.toml && echo SALT2-08-FILES-OK
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Evaporation\][[:space:]]*$/ && /EvaporationChance/' config/creativedelight-common.toml | grep -E "EvaporationChance = 0\.5"
+shell cp config/creativedelight-common.toml config/creativedelight-common.toml.carried && cp config/creativedelight-common.toml.r1120bak config/creativedelight-common.toml
+look carried line says 19 values; ls shows salt-client.toml and salt-common.toml.moved only, then SALT2-08-FILES-OK; [salt.Evaporation] EvaporationChance = 0.5 (the carried file is kept as creativedelight-common.toml.carried)
+
+## SQ-GLD2-03 | golden values: 46 set, golden and gilded beef hunger
+@group A
+@commands Log + `/dumpfood`
+@pass `[golden values] 46`; golden beef 16 hunger at the input modifier, gilded beef 20
+@fails CD `kubejs_startup/goldenfood/golden_values.js`; TODO `#3`
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-16
+@from batches/r1103/sA_2.qb
+shell grep -hE "\[golden values\]" logs/kubejs/startup.log logs/latest.log | head -3
+shell grep -qhE "\[golden values\] 46" logs/kubejs/startup.log logs/latest.log
+> cdevtest food goldenfood:golden_cooked_beef
+> cdevtest food goldenfood:enchanted_golden_cooked_beef
+look golden beef nutrition 16 (at the input modifier: modifier as cooked beef), gilded (enchanted) beef 20; /dumpfood half: Boot 0's kubejs/exported/food (sA_setup.md)
+
+## SQ-BBQW-01 | 18 stonecutter recipes for the wood basins and trays; log tags; block tags
+@group A
+@commands Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|missing\|invalid for block" \| head`; recipe dump `creativedelight:stonecutting/bbq_*_from_logs`; tag probe `#creativedelight:bbq_oak_logs`, `#minecraft:mineable/axe`, `#blockrunner:surface/wood`
+@pass No log line; 18 stonecutter recipes (9 basin x2, 9 tray x4), each wood's on its own log tag, oak's on `#creativedelight:bbq_oak_logs`; that tag holds oak logs and modded logs, no spruce/birch/jungle/acacia/dark oak/mangrove logs or crimson/warped stems; the 18 blocks in both block tags; no `bbq_basin_from_logs` / `bbq_tray_from_logs`
+@fails unknown dict key in `recipes.js` / `tags.js`; `addMatching` warning. r1120nv batch fault: the log-tag reject had an unparenthesized alternation that matched the crimson tray's rdetail line
+@jars creativedelight
+@sources feature_writeup/barbeques_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c2_a1.qb
+bootreject (?i)barbequesdelight.*(error|exception|invalid for block)
+> cdevtest rdetail _from_logs
+> cdevtest tag item creativedelight:bbq_oak_logs
+> cdevtest tag block minecraft:mineable/axe
+> cdevtest tag block blockrunner:surface/wood
+waitlog verb=tag kind=block tag=blockrunner:surface/wood n= 20
+count id=creativedelight:stonecutting/bbq_[a-z_]+_from_logs serializer= == 18
+reject stonecutting/bbq_(basin|tray)_from_logs
+reject verb=tag kind=item tag=creativedelight:bbq_oak_logs n=\d+ ids=.*minecraft:((spruce|birch|jungle|acacia|dark_oak|mangrove)_log|(crimson|warped)_stem)\b
+look basins x2 and trays x4 output; each wood's on its own log tag, oak's on #creativedelight:bbq_oak_logs (oak logs and modded logs); the 18 blocks in mineable/axe and blockrunner:surface/wood
+reject verb=\S+ .*done=0
+
+## SQ-CDB-10 | 
+@group A
+@commands JEI: mhadjeb, potato noodle (RC-132, RC-133)
+@pass No mhadjeb or uncooked mhadjeb; Gnocchi and Creamy Gnocchi names; knife on sweet potato dough gives 2 gnocchi; Creamy Gnocchi takes milk, 2 gnocchi, onion / garlic / pickled onion
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+> cdevtest makes veggiesdelight:mhadjeb
+> cdevtest makes veggiesdelight:uncooked_mhadjeb
+> cdevtest rdetail gnocchi
+expect verb=makes item=veggiesdelight:mhadjeb n=0\b
+expect verb=makes item=veggiesdelight:uncooked_mhadjeb n=0\b
+# r1120lr batch fault: Gnocchi is a name only, the item id is veggiesdelight:potato_noodle (recipe creativedelight:farmersdelightcutting/gnocchi_from_sweet_potato_dough)
+expect verb=rdetail id=\S*gnocchi\S* serializer=farmersdelight:cutting result=veggiesdelight:potato_noodle\*2\b ingredients=veggiesdelight:sweet_potato_dough
+reject \[cdevtest\] .*done=0
+look Creamy Gnocchi's ingredients: milk, 2 gnocchi, onion / garlic / pickled onion; names and JEI hiding are client
+
+## SQ-CDB-11 | 
+@group A
+@commands JEI: Bayberry Juice; heatless cacciatore (RC-D2, RC-136)
+@pass The bottle, the fluid and the can read Bayberry Juice; 12 bottles fill a jar (MJ-14); the cacciatore grid recipe cycles cooked chicken cuts
+@jars creativecommon creativedelight
+@tier T2
+@reviewed 2026-11-20
+> cdevtest rdetail cacciatore
+# r1120lr batch fault: Bayberry Juice is a rename of the name only, the ids stay bayberry_soup (fruits_delight.md, Bayberry Juice)
+> cdevtest reg item bayberry_soup
+expect verb=reg kind=item regex=bayberry_soup n=[1-9]
+reject \[cdevtest\] .*done=0
+look the cacciatore grid recipe slot lists several cooked chicken cuts (/+N); the Bayberry Juice names (bottle, fluid, can) and the 12-bottle jar fill are client (MJ-14)
+
+## SQ-CDFW-01 | CD framework counts at boot
+@group A
+@commands Boot; `grep -n "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log \| head -20`; `grep -n "Error occurred while handling event" logs/latest.log \| head`
+@pass `[cans] registered N generated cans` (307 on r1120lr); `[food types] ... in 32 types` (food_catalog.md); `[placeable]` counts; `[can servings] N cans` (344 on r1120lr 2026-11-20, after the post-2026-11-01 can additions; less any whose mod is absent); `[mortar] 6 of 6 catalog crafts`; no "no ... member scripts loaded" error
+@fails a member script did not load: check its `// requires:` mod id and that the jar loader honors `requires`; rerun `tools/test_gen_members.py`
+@jars creativecommon creativedelight
+@sources feature_writeup/creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: stale counts (row wanted 31 types and 31x servings); 32 types per food_catalog.md, servings 344 on 2026-11-20
+bootexpect \[cans\] registered \d+ generated cans
+bootexpect \[food types\] \d+ foods in 32 types
+bootexpect \[placeable\]
+bootexpect \[can servings\] [1-9]\d\d cans
+bootexpect \[mortar\] 6 of 6 catalog crafts
+bootreject (?i)no .* member scripts loaded
+shell grep -hn "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log | head -20; true
+look [can servings] is 344 (2026-11-20) less cans of absent mods (rows/SQ-CDFW-01.shell.txt); a different [cans] count after a later generator run is not a fail by itself
+
+## SQ-CDFW-06 | cooked family: three recipes each, old mod ids gone
+@group A
+@commands Same lookup for Grilled Ghast, Cooked Rotten Ham, Fried Turtle Egg, Cooked Arthropod, Cooked Duck Fillet, Cooked Perch / Pike Slice, Roasted Acorn, Farmer's Delight Fried Egg
+@pass three recipes each, `creativedelight:`, 0.35 xp, 200 / 100 / 600; no `hostiledelight:cghast_*`, `cookrothamrecp*`, `fteggrecp*`, `miners_delight:cooked_arthropod`, `abnormals_delight:upgrade_aquatic/cooked_*_slice*`
+@fails family removal missed a mod recipe
+@jars creativecommon creativedelight
+@sources feature_writeup/creative_delight.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1102b/s3_A.qb
+# r1120lr batch fault: Hostile Delight ids have no underscores (grilledghast, cookedrottenham, friedturtleegg)
+> cdevtest makes hostiledelight:grilledghast
+> cdevtest makes hostiledelight:cookedrottenham
+> cdevtest makes hostiledelight:friedturtleegg
+> cdevtest makes miners_delight:cooked_arthropod
+> cdevtest makes cooked_duck_fillet
+> cdevtest makes cooked_perch_slice
+> cdevtest makes cooked_pike_slice
+> cdevtest makes roasted_acorn
+> cdevtest makes farmersdelight:fried_egg
+reject verb=makes id=hostiledelight:(cghast_|cookrothamrecp|fteggrecp)
+reject verb=makes id=miners_delight:cooked_arthropod
+reject verb=makes id=abnormals_delight:upgrade_aquatic/cooked_\S*_slice
+reject \[cdevtest\] .*done=0
+look each item: three creativedelight: smelting / smoking / campfirecooking lines (0.35 xp, 200 / 100 / 600 ticks are in the recipe dump only)
+
+## SQ-CEN-05 | 
+@group A
+@commands Same save: `/data get block` the chest; `/summon minecraft:tnt ~ ~ ~ {Fuse:1}` near the bot, then count `creativecompat:shrapnel` entities over 5 ticks
+@pass Wooden water bucket, sawblade and sawdust keep their ids and NBT; shrapnel pieces per TNT = `[shrapnel] count` in `creativecompat-common.toml` (24 in the pack config; 12 when the save prep set it)
+@fails Compat shrapnel registry not created (`ShrapnelEntities`); config not read. r1120nv batch fault: shrapnel moved to Creative Compat (`creativecompat:shrapnel`), the row counted `creativeengineering:shrapnel`
+@jars creativecommon creativeengineering
+@sources feature_writeup/creative_engineering.md feature_writeup/creative_split.md
+@tier T2
+@reviewed 2026-11-20
+> forceload add 0 0 15 15
+> fill 0 -60 0 15 -50 15 minecraft:air
+> summon minecraft:tnt 8 -60 8 {Fuse:1}
+> cdevtest tickwarp 3
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=3 30
+> cdevtest entities 8 -60 8 24 type=creativecompat:shrapnel
+waitlog \[cdevtest\] verb=entities done= 30
+shell c=$(awk '/^\[shrapnel\]/{f=1;next} /^\[/{f=0} f && $1=="count"{print $3}' config/creativecompat-common.toml); echo "config count=$c"; grep -qE "verb=entities n=$c( |$)" logs/latest.log
+reject \[cdevtest\] verb=entities n=0\b
+> kill @e[type=creativecompat:shrapnel]
+> forceload remove 0 0 15 15
+reject \[cdevtest\] .*(done=0|error=)
+look the carried chest (boot 1 save): `cdevtest inv X Y Z` at its position shows the wooden water bucket, sawblade and sawdust with their ids and NBT kept (position from the save prep)
+
+## SQ-CMG-04 | 
+@group A
+@commands Same save: `/data get block` the portal frame; light a new obsidian frame with `minecraft:flint_and_steel` and with `creativeengineering:flint_and_terrasteel` (`/give`); `/recipe` or the recipe dump for `creativemagic:` ids
+@pass Ordinary flame fails and the frame turns to crying obsidian; Dark Fire opens the portal; existing portal blocks still there; Flint and Terrasteel, Ender Storage, CEI machine and sculk recipes exist under `creativemagic:`
+@fails `PortalFailureHandler` subscriber not registered (modid); `DARK_FIRE` not registered
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@sources feature_writeup/creative_magic.md feature_writeup/creative_equipment.md
+@tier T2
+@reviewed 2026-11-20
+> forceload add 352 288 384 304
+# two obsidian frames (inside 2 x 3), one per igniter
+> fill 360 -61 300 363 -56 300 minecraft:obsidian
+> fill 361 -60 300 362 -57 300 minecraft:air
+> fill 370 -61 300 373 -56 300 minecraft:obsidian
+> fill 371 -60 300 372 -57 300 minecraft:air
+> cdevtest use 361 -61 300 held=minecraft:flint_and_steel face=up
+sleep 1
+> cdevtest state 361 -60 300
+> cdevtest count 360 -61 300 363 -56 300 minecraft:crying_obsidian
+> cdevtest use 371 -61 300 held=creativemagic:flint_and_terrasteel face=up
+# r1120nv batch fault: Immersive Portals is in the pack, so a lit frame becomes a portal entity with air inside, never a nether_portal block; the row reads Immersive Portals' generation line and the entities in the frame
+waitlog Portal Generation Attempted minecraft:overworld 371 -60 300 20
+sleep 1
+> cdevtest state 371 -60 300
+> cdevtest entities 371 -59 300 3
+> cdevtest recipes creativemagic: max=400
+expect verb=count block=minecraft:crying_obsidian n=[1-9]
+reject verb=state pos=361,-60,300 state="?minecraft:nether_portal
+reject Portal Generation Attempted minecraft:overworld 361 -60 300
+expect Portal Generation Attempted minecraft:overworld 371 -60 300
+expect verb=recipes id=creativemagic:\S*flint_and_terrasteel
+reject verb=\S+ .*done=0
+look the entities line at 371 -59 300 lists an immersive_portals portal entity (by_type); recipes list has Ender Storage, CEI machine and sculk recipes under creativemagic:; portal blocks of the old save (same save as SQ-CMG-01) still standing is checked by the runner where that save's portal was
+
+## SQ-CEQ-04 | Equipment recipes under creativeequipment:, felsic assembly reads its potion mB from the Equipment toml
+@group A
+@commands Recipe dump: `grep -c "creativeequipment:" ` in the recipe list; check felsic assembly, End gear, shield, stepstool, archery, bullets, camera bag, backpack skin recipes
+@pass All present under `creativeequipment:` ids; felsic assembly reads its potion mB from `creativeequipment-common.toml`
+@fails `CEQ.recipes` wrapper broken; `NCH.cfg` falls back to defaults
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativeequipment creativemagic
+@sources feature_writeup/creative_magic.md feature_writeup/creative_equipment.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c2_a1.qb
+> cdevtest recipes creativeequipment:
+> cdevtest rdetail felsic
+> cdevtest recipes stepstool
+> cdevtest recipes shield
+> cdevtest recipes camera_bag
+# r1120nv batch fault: the waitlog waited for the retired zq 'recipes matching' line
+waitlog verb=recipes text=camera_bag n= 30
+shell grep -nE "felsic|potion" config/creativeequipment-common.toml | grep -vE "^\s*[0-9]+:\s*#" | head -8
+expect verb=recipes text=creativeequipment: n=\d{3}
+look count about 167 (r1106 SPF-50); felsic assembly (sequenced) has a create:filling step whose fluid amount equals the toml's felsic potion mB; end gear, shields, stepstools, archery, bullets, camera bag, backpack skin recipes present under creativeequipment:
+reject verb=\S+ .*done=0
+
+## SQ-CFR-07 | comfort near a campfire (default config)
+@group A
+@commands Default config. Bot player 2 blocks from a lit campfire, wait 40 ticks, `/data get entity <bot> ActiveEffects`; move the bot 6 blocks away, wait 120 ticks; `qrun.py toml` CD `[campfire] useComfort = false`, reboot, repeat at 2 blocks
+@pass Near: `farmersdelight:comfort` with 3 to 5 s left; far: none after it runs out; `useComfort = false`: `minecraft:regeneration`
+@fails `CampfireComfort.tick` not called, or the effect lookup (`farmersdelight:comfort` registry)
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@sources feature_writeup/creative_split.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1106spf/b1.qb
+# r1120nv batch fault: bot qa was never spawned in this row's step ('No entity was found' x7); the row spawns it
+> execute unless entity qa run pbot spawn qa 92 -60 -20 minecraft:overworld survival
+sleep 3
+> setblock 90 -60 -20 minecraft:campfire[lit=true]
+> effect clear qa
+> tp qa 92 -60 -20
+sleep 3
+> data get entity qa ActiveEffects
+expect farmersdelight:comfort|Id:
+> tp qa 96 -60 -20
+> effect clear qa
+sleep 7
+> data get entity qa ActiveEffects
+> tp qa -20 -60 -24
+reject No entity was found|No player was found
+look near: comfort 3 to 5 s left; far: none
+
+## SQ-CFR-05 | rain douses an open-sky campfire on stone only
+@group A
+@commands Default config. `/weather rain`; `/setblock` stone, a lit `minecraft:campfire` on it under open sky; second lit campfire on `minecraft:coal_block`; a lit `minecraft:soul_campfire` on stone; a lit campfire on stone under a 3-block roof; wait 200 ticks; `/data get block` / block state of each
+@pass Only the open-sky one on stone is `lit=false` (after 160 ticks; fizz sound, food on it stays); coal-block, soul and roofed ones stay `lit=true`; `/weather clear` + relight: stays lit
+@fails `CampfireRain` not ticking (mixin not applied) or `CDConfig.CAMPFIRE` not read; tags `#creativeengineering:campfire/rain_douses` / `rain_proof_fuel` (blocktags.js)
+@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@sources feature_writeup/creative_split.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1106spf/b1.qb
+# r1120nv FAIL (TODO misc-gameplay #1, cause unproven): forceload so the block entities tick for sure, and the
+# `cdevtest rain` probe (Devtools) prints every input of CampfireRain's gate at the open-sky campfire before and after
+# the warp. rainingAt=true with rainTicks=0 after the warp: the tick is not reached; rainingAt=false: read which input.
+> forceload add 88 -42 101 -29
+sleep 3
+> fill 90 -61 -40 100 -61 -30 minecraft:stone
+> setblock 90 -60 -40 minecraft:campfire[lit=true]
+> setblock 93 -61 -40 minecraft:coal_block
+> setblock 93 -60 -40 minecraft:campfire[lit=true]
+> setblock 96 -60 -40 minecraft:soul_campfire[lit=true]
+> setblock 99 -60 -40 minecraft:campfire[lit=true]
+> fill 98 -57 -41 100 -57 -39 minecraft:stone
+> weather rain
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=\S+ ticks=40 60
+> cdevtest rain 90 -60 -40
+> cdevtest tickwarp 220
+waitlog verb=tickwarp end=\S+ ticks=220 60
+> cdevtest rain 90 -60 -40
+expect verb=rain pos=90,-60,-40 .*raining=true .*rainingAt=true .*blockTicking=true
+> execute if block 90 -60 -40 minecraft:campfire[lit=false]
+> execute if block 93 -60 -40 minecraft:campfire[lit=true]
+> execute if block 96 -60 -40 minecraft:soul_campfire[lit=true]
+> execute if block 99 -60 -40 minecraft:campfire[lit=true]
+count Test passed == 4
+> execute if block -25 -60 -35 minecraft:campfire[lit=false]
+> weather clear
+look the fixture campfire (open sky, grass) also out: SQ-SPF-81 thunder half
+
+## SQ-CFS-02 | a CfB oven is an FD heat source only while lit; the pot above cooks only then; oven slots kept through the toggles
+@group A
+@commands tag probe `#farmersdelight:heat_sources`; oven with no fuel, `farmersdelight:cooking_pot` above it with a fast recipe's inputs (`/data merge block`); wait 30 s; then put coal in the oven's fuel slot (`/data get block` first to see the fuel container's NBT key, then `/data merge block`, or a hopper into the fuel side); wait; let the fuel run out
+@pass tag lists `cookingforblockheads:oven`; no cooking while unlit; `lit=true` within a tick of burning, the pot finishes the meal; `lit=false` when the fuel runs out and the pot's progress stops; the oven's items are kept through each toggle (the 3 potatoes end as 3 baked potatoes: the lit oven bakes them)
+@fails `CfbOvenLitSyncMixin` not at RETURN of the instance `serverTick`; tag script skipped (`global.CD.on('blockheads_additions')` false)
+@jars creativecommon creativedelight
+@sources feature_writeup/kitchen.md
+@tier T2
+@reviewed 2026-11-20
+@from batches/r1113/c2_a1.qb
+> cdevtest tag block farmersdelight:heat_sources
+> cdevtest rdetail farmersdelight:cooking/tomato_sauce
+> forceload add 296 304 312 316
+> setblock 304 -60 310 cookingforblockheads:oven[facing=north]{ItemHandler:{Items:[{Slot:0,id:"minecraft:potato",Count:3b}]}}
+> setblock 304 -59 310 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"farmersdelight:tomato",Count:1b},{Slot:1,id:"farmersdelight:tomato",Count:1b},{Slot:7,id:"minecraft:bowl",Count:4b}]}}
+> data get block 304 -60 310
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=\S+ ticks=200 60
+> cdevtest be 304 -59 310
+> cdevtest state 304 -60 310
+> data merge block 304 -60 310 {BurnTime:400,CurrentItemBurnTime:400}
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=\S+ ticks=40 60
+> cdevtest state 304 -60 310
+> cdevtest tickwarp 240
+waitlog verb=tickwarp end=\S+ ticks=240 60
+> cdevtest be 304 -59 310
+> cdevtest tickwarp 201
+waitlog verb=tickwarp end=\S+ ticks=201 60
+> cdevtest state 304 -60 310
+> cdevtest be 304 -59 310
+> cdevtest tickwarp 80
+waitlog verb=tickwarp end=\S+ ticks=80 60
+> cdevtest be 304 -59 310
+> cdevtest inv 304 -60 310
+expect verb=tag kind=block tag=farmersdelight:heat_sources .*cookingforblockheads:oven(,|$)
+expect verb=state pos=304,-60,310 state="\S*lit=true
+expect verb=state pos=304,-60,310 state="\S*lit=false
+# r1120nv batch fault: a lit CfB oven moves its input into the cooking slots and bakes it (slots 7-9 at placement, baked_potato*3 in slot 4 at the end); the 3 potatoes are kept as baked potatoes
+expect verb=inv slot=\d+ item=minecraft:baked_potato\*3
+reject \[cdevtest\] .*done=0
+look (1) the rdetail line gives tomato_sauce's inputs; if they are not 2 tomatoes the pot never starts: BATCH-FAULT, rerun with those inputs. (2) first pot be line (unlit, 200 ticks): CookTime 0. (3) after BurnTime 400 the oven reads lit=true; 240 ticks later the pot's CookTime > 0 or the sauce is in slot 6/8. (4) after the burn ran out (481 ticks after the merge) lit=false and the two last pot be lines 80 ticks apart show the same CookTime (no progress). (5) last oven inv still holds slot 0 potato x3 (checked). data get line: note the fuel slot index (ItemHandler) for the CQ / a rerun with real fuel
+
+## SQ-CMP-11 | A full corpse turns skeleton 7 days after death, caught up on load
+@group A
+@commands Shortened `[corpses] skeletonTime = 200` and a restart (stands in for 7 days); `forceload add 0 0`; advance the clock 300 ticks; `summon corpse:corpse 2 -60 2 {Tags:["c11a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:1L}}` and a second with `Tags:["c11b"]` and no `creativecompat:corpse`; wait 3 s; read each `Stage`
+@pass c11a: `Stage: 1b` (skeleton; its death was more than skeletonTime ticks of game time ago); c11b: `Stage: 0b` with a `DeathTime` near the current game time
+@fails c11a stays 0: the decay check does not run (tick redirect or config gate); c11b turns skeleton at once: DeathTime defaulted to 0
+@jars creativecompat
+@sources feature_writeup/plan_corpses.md
+@tier T2
+@reviewed 2026-11-20
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+# r1120fix (2026-11-20): a negative DeathTime is the mixin's "unset" sentinel (CorpseDecayMixin: deathTime < 0 -> now - age),
+# so the r1120nv fixture read as just died. Now: skeletonTime 200 ticks (restart), the clock moved past 300 ticks, and a
+# positive DeathTime 1 (game tick 1); the default is put back at the end of the row
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses skeletonTime 200
+restart
+> forceload add 0 0
+sleep 3
+> cdevtest tickwarp 300
+waitlog verb=tickwarp end=done ticks=300 120
+> time query gametime
+capture GT The time is (\d+)
+> summon corpse:corpse 2 -60 2 {Tags:["c11a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:1L}}
+> summon corpse:corpse 4 -60 2 {Tags:["c11b"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]}}
+sleep 3
+> data get entity @e[tag=c11a,limit=1] "creativecompat:corpse".Stage
+expect has the following entity data: 1b
+> data get entity @e[tag=c11b,limit=1] "creativecompat:corpse".Stage
+expect has the following entity data: 0b
+> data get entity @e[tag=c11b,limit=1] "creativecompat:corpse".DeathTime
+look c11b DeathTime is near the game time {GT} (within a few hundred ticks), not 0
+> kill @e[tag=c11a]
+> kill @e[tag=c11b]
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses skeletonTime 168000
+reject (Unknown or incomplete command|Incorrect argument for command|No entity was found|\[cdevtest\] verb=tickwarp .*done=0)
+
+## SQ-CMP-13 | Nether: skeleton after 1 day, wither skeleton after 2; End: never
+@group A
+@commands Shortened Nether times (`netherSkeletonTime = 200`, `netherWitherTime = 200`: wither 200 ticks after the skeleton) and a restart; advance the clock 600 ticks; in the Nether a corpse holding stone (`c13a`) with `DeathTime` 300 ticks ago, a second (`c13b`) with `DeathTime:1L`; in the End a third (`c13c`) with `DeathTime:1L`; forceload each spot; wait 3 s; read each `Stage`
+@pass c13a 1b, c13b 2b, c13c 0b
+@fails c13b 1b: the Nether list does not match the dimension id; c13c 1b: the End is not in `noDecayDimensions`
+@jars creativecompat
+@sources feature_writeup/plan_corpses.md
+@tier T2
+@reviewed 2026-11-20
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+# r1120fix (2026-11-20): a negative DeathTime is the mixin's "unset" sentinel (CorpseDecayMixin: deathTime < 0 -> now - age),
+# so the r1120nv fixture read as just died. Now: Nether skeleton at 200 ticks, wither 200 ticks later (stand in for 1 + 1 days;
+# restart), the clock moved 600 ticks, positive DeathTimes; the defaults (24000 / 24000) are put back at the end of the row
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherSkeletonTime 200 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherWitherTime 200
+restart
+> execute in minecraft:the_nether run forceload add 0 0
+> execute in minecraft:the_end run forceload add 100 0
+sleep 5
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done ticks=600 120
+> time query gametime
+capture GT The time is (\d+)
+> execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["c13a"],NoGravity:1b,Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:{GT-300}L}}
+> execute in minecraft:the_nether run summon corpse:corpse 2 64 0 {Tags:["c13b"],NoGravity:1b,Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:1L}}
+> execute in minecraft:the_end run summon corpse:corpse 100 64 0 {Tags:["c13c"],NoGravity:1b,Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:1L}}
+sleep 3
+> execute in minecraft:the_nether run data get entity @e[tag=c13a,limit=1] "creativecompat:corpse".Stage
+expect has the following entity data: 1b
+> execute in minecraft:the_nether run data get entity @e[tag=c13b,limit=1] "creativecompat:corpse".Stage
+expect has the following entity data: 2b
+> execute in minecraft:the_end run data get entity @e[tag=c13c,limit=1] "creativecompat:corpse".Stage
+expect has the following entity data: 0b
+> execute in minecraft:the_nether run kill @e[tag=c13a]
+> execute in minecraft:the_nether run kill @e[tag=c13b]
+> execute in minecraft:the_end run kill @e[tag=c13c]
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherSkeletonTime 24000 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml corpses netherWitherTime 24000
+look c13a must read 1b (its death {GT}-300 lies between the skeleton at 200 and the wither at 400 ticks); the three Stage lines in order a, b, c
+reject (Unknown or incomplete command|Incorrect argument for command|No entity was found|\[cdevtest\] verb=tickwarp .*done=0)

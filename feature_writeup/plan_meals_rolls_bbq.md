@@ -11,8 +11,8 @@ no emoji, no advancements, no conversions. Hand-edited config is copied to `conf
 
 ## 0. Order and cost
 
-<!-- generated:status_index begin open_work sha1=d711b8ff542d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (In Progress 1, Testing 6), 0 Complete.
+<!-- generated:status_index begin open_work sha1=bb43412b6243 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (In Progress 1, Testing 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -23,6 +23,7 @@ no emoji, no advancements, no conversions. Hand-edited config is copied to `conf
 | `largecontent/mod-additions #37` | Testing | S~ C P T | Barbeque's Delight: integrate skewers, combos, seasonings and blocks |
 | `largecontent/mod-additions #39` | Testing | S~ C P T | Roll Delight 1.3.1 port |
 | `largecontent/mod-additions #40` | Testing | S~ C P T | Large Meals 1.3.0 port |
+| `mod-updates #1` | Testing | SQ-LGM-07 | Full omurice block drops the block and a bowl |
 <!-- generated:status_index end open_work -->
 
 | Part | Needs | Rebuild | Restart |

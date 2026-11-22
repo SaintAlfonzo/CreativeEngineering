@@ -8,6 +8,8 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
   "raw/veggie": [
    "cucumber",
    "ghost_pepper",
+   "mixed_seeds",
+   "oat_seeds",
    "raw_oats"
   ],
   "raw/fruit": [
@@ -56,7 +58,8 @@ if (global.CD) global.CD.genPut('food_types', 'vintagedelight', {
    "deluxe_burger",
    "meat_pizza_slice",
    "pb_j",
-   "stuffed_burrito"
+   "stuffed_burrito",
+   "tropical_pizza_slice"
   ],
   "salad": [
    "cucumber_salad"

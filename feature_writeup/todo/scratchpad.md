@@ -2,7 +2,12 @@
 
 ## Prompt scratchpad, dont touch
 
-these effects will be sorted into the solrp ladder. speed, haste, strength, jump boost, regen, resistance, fire resistance, water breathing, invisibility (one of the highest levels), night vision, absorption, satiated (final effect, permanant effect at 'max' diversity, essentially locks diet if no food is eaten, not brewable), glowing, luck, slow falling, dolphin grace (high level permanant), bug pheromones, clinging, fleet-footed, kb resistance, lava vision, poison resistance, long reach, patrol nullifier, phantom bane, allure, emptiness (high), feather feet, raging, sweet heart, stimulation (refreshing and sweetening super), magic resistance, all fruit delight (rename astringent to steady, drop cycling, drop chorus, alienated, healing aura, disgusted, rage aura, suspicious smell), burrowing, clarity, prickly, pungent, magnet, water walker, are included. identify other positive permanant effects i may have missed, break down all of these effects in a list with the description in the scratchpad for me to sort further later
+id like dragon food and feasts to have a multiplier on their diversity to bring their top foods to the stairstep pattern the table expects, but with dragon food better than golden food. add a multiplier to golden if needed at the same time. canned food should provide slightly less diversity than the input food. baking should give on average the same boost to diversity that the cooking pot does. brewing and fermenting things into drinks should destroy the diversity it has and turn it to a drink that only contributes to the drink log. cooked shaped/shapeless/assemble crafts that dont have a raw version should not get a diversity penalty and be about the same boost as cooking pot. modded cooked meats should follow the vanilla meats diversity in terms of hunger/saturation ratio. cooked dragon meat gets significant boost but not as high as dragon meat/egg in meals. mirror create filling recipes (ruby chocolate on apple/waffle, etc) in the cooking pot (slightly more expensive in cooking vs spout, adjust ratios ) and base the diversity off the cooking pot value. keep golden foods diversity lower and gilden higher, split golden and gilded in table, so the order is dragon, gilded, feasts, golden, high, mid, low. 
+
+
+
+
+
 
 I am an agent picking up the food-decisions walkthrough (round 6, started 2026-11-19; the prior agent committed c5af0057 on agent_staging). Goal: walk the owner through the remaining open food and cooking TODO decisions with AskUserQuestion, and record every ruling on its row.
 
@@ -39,16 +44,41 @@ Settled, do not re-ask: every round-5 Block A row (baking/baked-goods #2, #5, #1
     - do animals eat while unloaded?
     - update book info, rewrite to be more concise/more words per page?
 
+- all budding blocks cant be picked up with silk touch
+    - expensive/advanced craft for budding blocks
+    - dragon pickaxe w/ silktouch can pick up budding blocks
+- crouch click pick up pickle jars like kettle/skillet etc
 - change campfire textures to not have fire when place unlit is enabled
 - underground wood crop
+- add 'requires knife'-like tooltip to all products that require it, tooltip and jei
 - trash can inventory slots is high priority
     - point at ftb trash can
 - mustard?
+- add any trade specific enchants, mending, to enchantment table output.
+    - mending relativelt common
+- mineshafts spawning in air
+    - cancel shafts that travel far distance in air without replacing stone at the end
+    - limit intersections, staircases in hanging/in the air shafts
+    - allow to hang by copper and iron chains, rope
+    - set start and end points of shaft segments within stone but through air/hanging when possible 
+- rotten flesh in more miners recipe
+- botania underground mushroom spawning
+    - mushrooms can spawn in small patches of 1-5
+    - noise function applied for 'colored mushroom biomes' that creates 16 regions for each mushroom color applied by chunk, roughly similar size and frequency of every color, no association  with surface biome rules, configurable region size with ~4 chunk radius default
+    - shimmering mushroom spawn rare chance of single mushroom in that color mushroom region
+- bop webs spawn in infested caves
+- remove nether wart, soul soil/sand and glowstone from philips deepslate ruin
+- underground  mining/dredge structure with iron ore pile is too common
+    - lower rate
+    - set ore pile to common ore at that level, any naturally spawning ore
+- command shortcuts
+    - /cc nv: night vision 
 - display delight
     - allow plated food to be picked up with silk touch, dont allow drinks or placed bowls
     - tooltip on all plated display blocks 'Can be picked up on plate w/ silk touch /n Plate food then serve customers'
     - crouch to pickup empty plates like fd stations
     - plated smore places as 2 items, only shows as 1 
+    - eat more foods off of plates, use chopsticks, leave messy plate/scraps, eat from bowl and leave messy bowl
 - fake meatloaf to veggie meatloaf
 - storage delight cabinets as half cabinets, high priority!
 - small manual create mixing basin
@@ -131,6 +161,10 @@ Settled, do not re-ask: every round-5 Block A row (baking/baked-goods #2, #5, #1
 - fruit tree leaf layers should be unripe texture, currently ripe
 - inside layers of leaves only render when head is inside leaves
 
+- unsure sacks of all seeds and produce exist
+- add more captured photos to the loot pool for polaroids
+- lunchbox random/circular eat rotation
+    - show diversity of food in lunchbox eaten in order (box: [abc d], effective diversity: [dcba] as only 4 foods eaten, d most recent). random order shows average diversity from eating the foods in random order( how to determine this?)
 
 - loot tables
     - magic (common, rare), these are base tables not village or witch chests
@@ -150,9 +184,12 @@ Settled, do not re-ask: every round-5 Block A row (baking/baked-goods #2, #5, #1
     - i meant when the players head is inside of leaf layers, the player currently doesnt see those leaves. render the outside texture on the inside of the block as well so leaf cube needs to be seen through, including partial layers.
     - break down what you think i mean before implementing
 
+- drop suspicious smell effect
+
 - splash texts
     - ISO 8601
     - Free and Open Source
+
 
 ## Tempad/portals WIP dont move
 
@@ -262,6 +299,7 @@ Settled, do not re-ask: every round-5 Block A row (baking/baked-goods #2, #5, #1
     - NO SOUPS OR STEWS, these are removed. Still present in the dump with the standard effects: Golden / Gilded Beetroot Soup (12 / 20), Mushroom Stew (12 / 20), Rabbit Stew (20 / 20)
     - Canned versions (CE canned goods) carry scaled-down effects: Regeneration II 1.25s, Absorption I 30s, Nourishment I 30s (moss can: Regeneration II 2.5s, Nourishment I 30s; nutritional bar can: Nourishment I 30s). Canned Golden Apples (canned_goods) has no effects in the dump.
 
+# Raspberry Pie
 
 ## Permanent effects for the Raspberry Pie ladder: breakdown (agent, 2026-11-20, from the owner's list in the prompt block; for the owner to sort)
 
@@ -271,199 +309,183 @@ Source of descriptions: [effects.md](../effects.md) section 2.1 (Brief column an
 -rp changes
     - ladder is missing tick marker on milestones
         - same color as left/right arrow if past/future milestone
-
+    - ladder is built by 3 subladders, stat increases, permanant, and unlocked effects. defined below
+    - ~120 max diversity?
+        - >40 is mid, >80 is high
 
 ### Stat increases
 
-- Max 20 hearts
-- 2x paired 
+- Max 20 hearts, 10 milestones evenly spread between min and max (max is satiated, last heart is unlocked before at same distance to first heart unlock from 0)
+- 3x paired toughness and kb resistance milestones, at 1/6,1/2,5/6 max diversity. 1 tough, .1 kbr
+- NO movement speed increases
 
 ### Permanant Effect Unlocks
 
-- Speed
-- Haste
-- Strength
-- Regen
-- Jump Boost
-- Luck
+- Luck 1
+- Speed 1
+- Night Vision
+    - Toggle
+- Phantom Bane
+    - Toggle
+- Speed 2
+- Regen 1
+- Long Reach 1
+- Strength 1
 - Invisibility 
     - toggle switch, off by default
-    - high lv
-    - not unlockable
+    - 3rd highest lv
 - Double Jump
     - toggle switch, off by default
     - 2nd highest lv
+- Luck 2
 - Satiated
     - final effect
-    - not unlockable
 
 ### Unlockable
 
 - short tagline over effect when hovering in rp guis, / means no hover tag (self explanitory)
 - unlockables are not slotable once permanant effect of same kind is enabled, grays replaced slot with free respec 
 
+~ 40 unlock slots, evenly spread along diversity ladder
 
-## Low
-
-- Bright
+- Brightening
     - Night Vision: See in the dark
         - (toggle switch instead of lv adjust)
     - Glowing: Reveal yourself to nearby players
         - (toggle switch instead of lv adjust)
 
+- Leaf Piercing: Projectiles pass through leaves
+    - Spawn leaf particles of leaf block trailing after an arrow, leaf poof at block enter point 
+
+- Speed 1: Move faster
+
+- Allure: Faster fishing
+
+- Immunity
+    - Refreshing: Slowness immunity
+        - Removed when Stimulation unlocked
+    - Sweetening: Mining Fatigue immunity
+        - Removed when Stimulation unlocked
+
+- Steady: Not affected by slippery blocks
+    - Change to stop all slip effects, ices and soap
+    - Toggle
+    - Prevent dripleaf and pressure plates from being affected, add to jei description
+
+- Dig
+    - Haste 1: Mine faster
+    - Burrowing 1: Mine very fast with shovel
+
 - Water
     - Water Breathing: /
     - Water Walker: /
 
-## Mid
+- Prickly 1: Touch harms nearby creatures, tamed exempt
+
+- Luck 1: Get lucky
+
+- Jump Boost 1: Jump higher
 
 - Lava
     - Lava Vision: See clearly in lava
     - Lava Walker: /
+        - Act like magma blocks when walking w/o fire immunity, crouch to fall into lava
+
+- Climbing: Climb walls
+    - Removed when clinging unlocked
+
+- Mobs
+    - Patrol Nullifier: Disable patrols
+    - Phantom Bane: Disable phantoms
+
+- Regen 1: Passively heal
+
+- Poison Immunity: /
+    - rename
+
+- Shrinking: Crawl in 1-block gaps while crouched
 
 - Spider
     - Bug Pheromones: Anthropods are neutral
     - Clinging: Climb walls and ceilings
         - Holds climbing as a super
 
-## High
+- Fire Immunity: /
+    - rename
+    - Drown in lava w/o, mostly cosmetic
+
+- Strength 1: Hit harder
+
+- Immunity
+    - Clarity: Immunity to Blindness and Darkness
+    - Stimulation: Slowness and Mining Fatigue immunity
+        - Refreshing: Slowness immunity
+            - removes when unlocked
+        - Sweetening: Mining Fatigue immunity
+            - removes when unlocked
+
+- Wither Immunity: /
+
+- Speed 2: Move faster
+
+- Luck 2: Get lucky
+
+- Long Reach 1: Reach farther
+
+- Slow Falling: /
+    - (toggle switch instead of lv adjust)
+
+- Magic Resistance 1: /
+
+- Prickly 2: Touch harms nearby creatures, tamed and passive exempt (at lv 2)
+    - add to jei
+
+- Dig
+    - Haste 2: Mine faster
+    - Burrowing 2: Mine very fast with shovel
+
+- Magnet: Attract items when standing
+    - (toggle switch instead of lv adjust)
+
+- Jump Boost 2: Jump higher
+
+- Recovering: Poison and Wither immunity
+    - Disables sub-effects when unlocked
+        - Poison Immunity: /
+        - Wither Immunity: /
+
+- Long Reach 2: Reach farther
 
 - Fleet-Footed: Faster while in the air
     - Holds feather feet as a super
     - Lower FOV shift when speed is applied
 
+- Strength 2: Hit harder
+
+- Eating
+    - Appetizing: Eat when full
+    - Digesting: Overeat to gain saturation
+    - Lozenge: Eat food fast
+
+- Regen 2: Passively heal
+
+- Long Reach 3: Reach farther
+
+- Luck 3: Get lucky
 
 
 
-
-
-
-- Speed: Move faster
-- Haste: Mine faster
-- Burrowing: Mine faster w/ shovels
-- Strength: Hit harder
-- Regen: Passively heal
-- Jump Boost: Jump higher
-- Luck: Get lucky
-
-
-
-- Poison Immunity: /
-    - rename
-
-- Wither Immunity: /
-    - high level
-
-- Fire Immunity: /
-    - rename
-
-
-
-
-
-- Slow Falling: /
-    - (toggle switch instead of lv adjust)
-
-
-
-
-
-- Long Reach: Reach further
-
-- Mobs (Mid)
-    - Patrol Nullifier: Disable patrols
-    - Phantom Bane: Disable phantoms
-
-- Allure: Faster fishing
-
-- Stimulation (Unlock later and replace subeffects from list?)
-    - Refreshing: Slowness immunity
-    - Sweetening: Mining Fatigue immunity
-
-- Magic Resistance: /
-
-- Appetizing: Eat when full
-- Digesting: Overeat to saturation
-- Lozenge: Fast eating
-
-- Steady: 
-- Shrinking: 
-
-- Leaf Piercing
-- Prickly
-
-- Magnet
-
-
-
-
-- Clarity: Blindness/Darkness
-
-
-### A. Owner's list, grouped
-
-**Vanilla, scaling (levels give real steps)**
-
-| Effect | What it does | Notes |
-|---|---|---|
-| Speed | +20% walk speed per level | ladder now (unlock I at 2, flat I at 20) |
-| Haste | +20% mining speed, +10% attack speed per level | ladder now (I at 5, II at 60) |
-| Strength | +3 melee damage per level | ladder now (I at 10, II at 70, III at 90) |
-| Jump Boost | +0.1 jump velocity per level (about +0.5 block at I); fall damage starts 1 block later per level | ladder now (I at 7, II at 55) |
-| Regeneration | 1 HP every 2.5 s at I, interval halves per level | ladder now (I at 20) |
-| Luck | +1 luck per level (loot and fishing) | ladder now (I at 18, II at 100) |
-
-| Fire Resistance | Immune to fire and lava damage | cap I |
-| Water Breathing | No drowning | ladder now (14); cap I |
-| Invisibility | Invisible; mobs see you from closer (detection x0.07) | owner: one of the highest levels; cap I |
-| Night Vision | See in the dark and underwater | ladder now (12); cap I |
-| Glowing | Outline visible through walls | owner listed it as positive; it is a tell for other players, not a buff; cap I |
-| Slow Falling | Fall slowly, no fall damage | cap I; overlaps Feather Feet (slight) and Sunbird's Blessing (total) |
-
-| Satiated (saturation) | Every tick +1 hunger and +2 saturation per level | owner: final effect at max diversity; essentially locks the diet while no food is eaten; not brewable. The pack currently brews it (5 ticks), so "not brewable" means removing that recipe. The level 1 effect is permanent here, so each tick tops the bar up |
-
-| Bug Pheromones | Arthropods do not target you unless you hit them | cap I |
-| Clinging | Walk upside down on ceilings; sneak to drop | cap I |
-| Fleet-Footed | +0.2 speed (about 3x walk) while sprinting in the air | ladder now (36); cap I |
-| Lava Vision | See through lava | cap I; overlaps Night Vision (slight) |
-| Poison Resistance | Clears Poison every tick | cap I; overlaps Recovering (Fruits Delight, Poison and Wither) |
-
-| Long Reach | +3 block reach (blocks only, not attacks) | ladder now (25); max V from a netherite beacon, also felsic and dragon armor |
-| Patrol Nullifier | No pillager patrols spawn around you | ladder now (33); cap I |
-| Phantom Bane | No phantoms spawn for you | ladder now (22); cap I; also the echo armor set |
-
-| Allure | Fishing rod ticks twice as often | cap I |
-| Feather Feet | No fall damage | cap I; also the dragon armor set; overlaps Slow Falling |
-
-
-| Magic Resistance | -20% magic damage per level, immune at V | max II from potions; also felsic and dragon armor |
-
-| Appetizing | Eat when full | |
-| Astringent -> rename "Steady" | Ice and slime do not slide you | rename needs a lang change plus a JEED text pass |
-| Brightening | Immune to Blindness and Darkness | overlaps Clarity (Hearth and Harvest, Blindness and Darkness; Clarity also removes them) |
-| Digesting | Food over a full bar becomes saturation | |
-| Leaf Piercing | Your projectiles pass through leaves | |
-| Lozenge | Eat and drink twice as fast (more per level) | |
-| Shrinking | Half size while sneaking; crawl through 1-block gaps | ladder now (27) |
-| Sliding | Boats slide on land like on ice | |
-| Dropped by owner | Cycling, Chorus, Alienating, Heal Aura, Disgusted, Rage Aura, Suspicious Smell | not in the ladder; check they are also gone from foods and the brewing and JEI lists if the owner wants them removed entirely, not just kept out of the ladder |
-
-| Burrowing | +50% mining speed on shovel blocks (max II from a potion) | |
-| Clarity | Removes and blocks Blindness and Darkness | |
-| Prickly | 1 damage every 0.5 s to mobs touching you; tamed animals spared | |
-| Magnet | Items within 5 blocks (+1 per level) picked up at once, or pulled to you when the inventory is full; sneak to pause | max VI from aged wine |
-| Water Walker | Walk on water | cap I |
-
-
-Remove: Agility, Stability
-- Harmony needs new source, not adzuki or diet
-
+- Remove: Agility, Stability, Brightening
+- Make emptiness a super of patrol nullifier and phantom bane
+- Harmony needs new source, not adzuki or diet ladder
+    - Applied by a passive mob? Koi in newer updates, do audit of similar rare passive mobs
+    - Applies emptiness (subsubeffects!) and hostile mob flee
 
 ### C. Open questions for the owner
 
-1. Stimulation: replaces Refreshing and Sweetening (read above), or sits next to them?
-2. Lava Walker is in the current ladder but not on the list; keep, drop, or swap for Lava Vision?
-3. Knockback Resistance (Alex's Mobs) and Resilience (Quark) are the same effect; confirm Alex's Mobs one only.
-4. Satiated: remove its brewing recipe, and does it replace the Nourishment and Digesting rungs or stack?
-5. Rename Astringent to Steady: just the display name, or also the id? (Id cannot change without an alias.)
-6. Glowing: keep as a rung, or treat as a trade-off effect?
+1. Stimulation: replaces Refreshing and Sweetening (read above), or sits next to them? replace when unlocked
+2. Lava Walker is in the current ladder but not on the list; keep, drop, or swap for Lava Vision? keep both in their slot
+3. Knockback Resistance (Alex's Mobs) and Resilience (Quark) are the same effect; confirm Alex's Mobs one only. drop resilience, confirm
+4. Satiated: remove its brewing recipe, and does it replace the Nourishment and Digesting rungs or stack? permanant buff, stack
+5. Rename Astringent to Steady: just the display name, or also the id? (Id cannot change without an alias.) name
+6. Glowing: keep as a rung, or treat as a trade-off effect? keep

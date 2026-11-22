@@ -172,10 +172,11 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 @commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py food $INST/kubejs/exported/baseline_rules_p3b_2026-11-17 kubejs/exported`
 @pass `FOOD_SAME`: Delightful's 17 foods (3.8.1 hunger and saturation), the Bellini Cocktail (one Heal Aura 10 s) and Ghost Charcoal (0 hunger, always edible, Wither 5 s, Fire Resistance 3 min) as before
 @fails `CHANGED <id>: <fields>`: the absolute row (`delightful_foods.js`, `fruits_foods.js`, `vintage_items.js`) or the applier (`food_value_copies.js`); effects in a new order or missing: `keepEffects` / `dedupeEffects`
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 # r1120fix, 2026-11-20: expect reads the log, never shell output, so "expect FOOD_SAME" could not pass; and the 2026-11-15 baseline predates
 # 52 intended food changes (2026-11-19 pack dump). The shell exit checks the row's own foods: Delightful, Bellini, Ghost Charcoal
-shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx09_food.txt; tail -25 rfx09_food.txt; ! grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) (delightful:[a-z_]+|fruitsdelight:bellini_cocktail|vintagedelight:ghost_charcoal)\b' rfx09_food.txt | grep -vE '^CHANGED [^ ]+: (name|tags)(, (name|tags))*$'
+# r1121b judge-3, 2026-11-21: `sol` (Spice of Life diversity values) is reworked on purpose by food diversity rounds 1 to 3 (2026-11-21), so sol-only CHANGED lines are ignored too
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx09_food.txt; tail -25 rfx09_food.txt; ! grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) (delightful:[a-z_]+|fruitsdelight:bellini_cocktail|vintagedelight:ghost_charcoal)\b' rfx09_food.txt | grep -vE '^CHANGED [^ ]+: (name|tags|sol)(, (name|tags|sol))*$'
 ## SQ-RFX-10 | villager trades: the Delight trades unchanged through global.trades.villager
 @group A
 @commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py trades $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported minecraft:farmer minecraft:butcher beautify:botanist`
@@ -288,14 +289,14 @@ shell grep -hE '\[loot-drops\]|\[alcohol\] food values' logs/kubejs/server.log l
 @commands `/dumpall`; `dump_diff.py recipes`, `tags` (as SQ-RFX-08, -11) and `food` (as SQ-RFX-09) against the baselines
 @pass `RECIPES_SAME` with the P3a moves only; `TAGS_SAME` apart from the P3a renames (the `creativecompat:jei/*` tags are filled from Compat's pack now, same members); `FOOD_SAME` (the 44 alcoholic drinks through absolute rows: hunger 1, saturation 0, always edible, Intoxication hidden, Nausea unless Tipsy)
 @fails a recipe id `creativeengineering:` to `creativebrewing:`: a Brewing file outside `global.CB.recipes`; a drink with a second Nausea or no Intoxication: the `dropEffects` / `unlessHas` fields of the applier
-@reviewed 2026-11-20
+@reviewed 2026-11-21
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | tail -15
 shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -15
 # r1120fix, 2026-11-20: expect reads the log, not shell output, and the baseline predates 52 intended food changes: the shell exit checks the drinks
 # (foods with Intoxication in the new dump; 51 in the 2026-11-19 pack dump) against the baseline
-shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx19_food.txt; tail -15 rfx19_food.txt; python3 -I -c "import json,re,sys;d=json.load(open('kubejs/exported/food/foods.json'))['foods'];k={f['id'] for f in d if any(e.get('effect')=='brewinandchewin:intoxication' for e in (f.get('effects') or []))};t=open('rfx19_food.txt').read();c=sorted({i for i in k for l in t.splitlines() if re.match(r'(CHANGED|ONLY_BASE|ONLY_NEW) '+re.escape(i)+r'\b',l) and not re.fullmatch(r'CHANGED \S+: (name|tags)(, (name|tags))*',l)});print('RFX19 drink changed',c) if c else print('RFX19 drinks same n=%d'%len(k));sys.exit(1 if c or not k else 0)"
+shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_rules_p3b_2026-11-17" kubejs/exported > rfx19_food.txt; tail -15 rfx19_food.txt; python3 -I -c "import json,re,sys;d=json.load(open('kubejs/exported/food/foods.json'))['foods'];k={f['id'] for f in d if any(e.get('effect')=='brewinandchewin:intoxication' for e in (f.get('effects') or []))};t=open('rfx19_food.txt').read();c=sorted({i for i in k for l in t.splitlines() if re.match(r'(CHANGED|ONLY_BASE|ONLY_NEW) '+re.escape(i)+r'\b',l) and not re.fullmatch(r'CHANGED \S+: (name|tags|sol)(, (name|tags|sol))*',l)});print('RFX19 drink changed',c) if c else print('RFX19 drinks same n=%d'%len(k));sys.exit(1 if c or not k else 0)"
 # r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the instance's 2026-11-19 pack dump already differs from it
 # by 221 recipe ONLY_ lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
 shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" recipes "$B" "$1" --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(ONLY_|moved)' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "recipe lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true

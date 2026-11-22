@@ -37,6 +37,7 @@ look shell lines: no InvalidInjectionException naming a CfbOven mixin (others in
 @from batches/r1113/c2_a1.qb
 > cdevtest tag block farmersdelight:heat_sources
 > cdevtest rdetail farmersdelight:cooking/tomato_sauce
+> forceload add 296 304 312 316
 > setblock 304 -60 310 cookingforblockheads:oven[facing=north]{ItemHandler:{Items:[{Slot:0,id:"minecraft:potato",Count:3b}]}}
 > setblock 304 -59 310 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"farmersdelight:tomato",Count:1b},{Slot:1,id:"farmersdelight:tomato",Count:1b},{Slot:7,id:"minecraft:bowl",Count:4b}]}}
 > data get block 304 -60 310
