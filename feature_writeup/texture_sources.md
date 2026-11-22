@@ -41,6 +41,12 @@ were preview and contact sheets only.
   `textureswapper/palette_swap.py` (recolour, bulk recolour), `combine_tex.py` (layering), `scale_tex.py` and
   `upscale_sprites.py` (nearest-neighbor scaling). `textureswapper/` is the owner's local folder (git-ignored).
   Scripts that only call these tools count (`make_seasoning.py`, `make_salt.py`, `make_psugar.py`, `gen_jam_art.py`).
+  `palette_swap.py` fixes (2026-11-22, TODO `textures/food #10`, ruling R5 of plan_unblocked_batch_1121.md): new
+  `--even` (even rank spacing; a palette larger than the source is split into one run per source shade and the run's
+  most-used color is taken, so non-monotonic palette colors such as dark reds among browns are no longer skipped) and
+  `--interpolate` now also blends when the palette has as many colors as the source or more (run means). Without
+  either flag the output is unchanged. No texture was regenerated: the owner reruns on their palettes and reviews.
+  Test: `tools/test_palette_swap.sh` (in `check_all.py`).
 - Not allowed: AI-drawn pixels, AI-chosen palettes or ramps, and one-off AI scripts that transform pixels themselves
   (hue shifts, brightness maps, greyscale splits) instead of going through the tools above.
 - Every texture that is not a plain upstream copy gets a row in `sources.csv` in the same session: source file(s) and

@@ -2,10 +2,10 @@
 palette_swap.py - swap the palette of a source image to match a target palette image.
 
 Usage (single file):
-    python palette_swap.py <source> <palette> <output> [--invert] [--drop CLASS,...] [--interpolate] [--preview]
+    python palette_swap.py <source> <palette> <output> [--invert] [--drop CLASS,...] [--interpolate] [--even] [--preview]
 
 Usage (bulk):
-    python palette_swap.py <shape> --bulk [--invert] [--drop CLASS,...] [--interpolate] [--preview]
+    python palette_swap.py <shape> --bulk [--invert] [--drop CLASS,...] [--interpolate] [--even] [--preview]
 
     Bulk mode works the OPPOSITE way from single-file mode: <shape> is the one
     file whose SHAPE stays fixed for every output. Each image found in
@@ -30,23 +30,35 @@ Options:
                 writing results into BULK_OUTPUT_DIR (created if it doesn't exist).
     --invert    Invert the palette mapping so dark maps to light and vice versa.
                 Use this when you want the outline of the item to be the darkest color.
-    --drop      Comma-separated colour classes to leave out of the palette
+    --drop      Comma-separated color classes to leave out of the palette
                 before mapping: brown, white (see DROP_CLASSES). Ignored for a
                 palette where it would leave no colours.
     --drop-darkest N
-                Leave the N darkest colours out of the palette (e.g. an item's
+                Leave the N darkest colors out of the palette (e.g. an item's
                 outline, so a soft block template stays soft). Ignored when it
                 would leave no colours.
     --drop-lightest N
-                The same for the N lightest colours (applied after --drop-darkest).
+                The same for the N lightest colors (applied after --drop-darkest).
     --interpolate
-                When the palette has fewer unique colours than the image being
+                When the palette has fewer unique colors than the image being
                 recoloured, force an even gradient: the source shades, ranked by
-                brightness, are spaced evenly from the palette's first colour to
-                its last, blending between neighbouring palette colours, instead
+                brightness, are spaced evenly from the palette's first color to
+                its last, blending between neighboring palette colors, instead
                 of several source shades snapping onto one palette colour. Keeps
-                shading from a near-uniform palette or a gradient. No effect when
-                the palette has as many colours or more, or only one.
+                shading from a near-uniform palette or a gradient. When the
+                palette has as many colors as the source or more (no effect
+                before 2026-11-22), it is split into one run per source
+                brightness level and each level takes its run's pixel-weighted
+                mean color. No effect with a one-color palette.
+    --even      Even rank spacing without blending: the source's distinct brightness
+                levels, ranked, are spread evenly over the palette (rank i of n
+                takes palette position i/(n-1)) instead of by brightness value,
+                which bunched shades onto one end of the palette. When the palette
+                has more colors than the source has levels, the palette is split
+                into that many runs (in brightness order) and each level takes the
+                most-used real color of its run, so no stretch of the palette is
+                skipped, also colors whose hue breaks the brightness order.
+                Without --even and --interpolate the legacy mapping is unchanged.
     --preview   Also save a 160x160 upscaled preview alongside each output.
 
 Examples:
@@ -55,6 +67,7 @@ Examples:
     python palette_swap.py wire_aluminum.png --bulk --invert --preview
     python palette_swap.py strad_wine.png creeper_wine.png creeper_box.png --drop brown
     python palette_swap.py gradient_block.png flat_block.png out.png --interpolate
+    python palette_swap.py jelly_content.png pepper.png pepper_jelly.png --even
 """
 
 import argparse
@@ -99,7 +112,7 @@ def parse_drops(value):
     for n in names:
         if n not in DROP_CLASSES:
             raise argparse.ArgumentTypeError(
-                "unknown colour class {0!r} (known: {1})".format(n, ", ".join(sorted(DROP_CLASSES)))
+                "unknown color class {0!r} (known: {1})".format(n, ", ".join(sorted(DROP_CLASSES)))
             )
     return names
 
@@ -113,6 +126,16 @@ def get_colors_by_brightness(arr, descending=True):
     )
 
 
+def color_counts(arr):
+    """Pixel count of every opaque color in arr, as {(r, g, b, a): count}."""
+    pixels = arr.reshape(-1, 4)
+    pixels = pixels[pixels[:, 3] > 0]
+    if not len(pixels):
+        return {}
+    uniq, counts = np.unique(pixels, axis=0, return_counts=True)
+    return dict((tuple(int(v) for v in c), int(n)) for c, n in zip(uniq, counts))
+
+
 def lerp_palette(palette_colors, t):
     """Sample the palette as a continuous gradient at t in [0, 1] (RGBA blended linearly)."""
     pos = t * (len(palette_colors) - 1)
@@ -123,16 +146,64 @@ def lerp_palette(palette_colors, t):
     return tuple(int(round(a[i] + (b[i] - a[i]) * f)) for i in range(4))
 
 
-def palette_swap(src_arr, palette_colors, interpolate=False):
-    """
-    Remap every opaque color in src_arr to the nearest palette color by brightness rank.
-    Transparent pixels are left untouched.
+def palette_bins(palette_colors, n_bins):
+    """Split the ordered palette into n_bins contiguous runs, 1 < n_bins <= len(palette): run i holds the colors
+    nearest the even position i/(n_bins-1) along the palette (end runs are half width, so the palette's first and
+    last colors anchor the ends). Returns [(run colors, index of the color at the position within the run)]."""
+    n = len(palette_colors)
+    runs = [[] for _ in range(n_bins)]
+    for k, c in enumerate(palette_colors):
+        runs[int(round(k * (n_bins - 1) / float(n - 1)))].append((k, c))
+    out = []
+    for i, run in enumerate(runs):
+        center = i * (n - 1) / float(n_bins - 1)
+        ks = [k for k, _ in run]
+        out.append(([c for _, c in run], min(range(len(ks)), key=lambda j: (abs(ks[j] - center), ks[j]))))
+    return out
 
-    interpolate: when the palette has fewer colors than src_arr, spread the source
-    shades as an even gradient across the palette: rank each distinct source
-    brightness, give rank i of n the position i/(n-1), and blend the two neighbouring
-    palette colors there. Every source shade keeps its own output shade, evenly
-    stepped (gradients, near-uniform palettes).
+
+def bin_mean(colors, center, counts):
+    """Pixel-weighted mean color of one palette run (each color weight 1 when counts are unknown)."""
+    w = [float(counts.get(tuple(c), 1)) if counts else 1.0 for c in colors]
+    total = sum(w)
+    return tuple(int(round(sum(c[i] * wi for c, wi in zip(colors, w)) / total)) for i in range(4))
+
+
+def bin_pick(colors, center, counts):
+    """The most-used real color of one palette run (the color at the run's position on a tie or without counts)."""
+    if not counts:
+        return tuple(colors[center])
+    order = sorted(range(len(colors)), key=lambda i: (-counts.get(tuple(colors[i]), 0), abs(i - center), i))
+    return tuple(colors[order[0]])
+
+
+def palette_swap(src_arr, palette_colors, interpolate=False, even=False, palette_counts=None):
+    """
+    Remap every opaque color in src_arr to a palette color by brightness.
+    Transparent pixels are left untouched. palette_colors is ordered darkest-first
+    for a plain swap (load_palette_colors does that), lightest-first with --invert.
+
+    Default (even=False, interpolate=False): legacy rank map, unchanged. Each source
+    color's brightness VALUE is scaled onto the palette index, so bunched source
+    shades land on bunched palette entries and a long palette is sampled sparsely.
+
+    The source shades are first collapsed to their distinct brightness levels
+    (n of them), ranked darkest to lightest. Rank i of n sits at t = i/(n-1).
+
+    even: even rank spacing. Rank i takes palette index round(t * (len-1)), so the
+    shades spread evenly over the palette however unevenly their brightness is
+    spaced. When the palette has more colors than the source has levels, the
+    palette is split into n contiguous runs, run i around palette position t, and
+    level i takes the most-used real color of run i (palette_counts; the color at
+    t without counts, which is the plain even pick), so no stretch of the palette
+    is skipped, including colors whose hue breaks the brightness order (a dark
+    red run among browns).
+
+    interpolate: blend instead of picking. A palette with fewer colors than the
+    source has colors is sampled as a gradient at t (unchanged); otherwise (palette
+    as large as the source or larger, which used to fall back to the legacy map)
+    the palette is split into n runs as above and level i takes run i's
+    pixel-weighted mean color. Even rank spacing either way.
 
     Raises ValueError if src_arr has no opaque pixels, or if palette_colors is empty.
     """
@@ -151,16 +222,29 @@ def palette_swap(src_arr, palette_colors, interpolate=False):
     src_min = min(src_bright)
     src_max = max(src_bright)
 
-    blend = interpolate and 1 < n_palette < len(src_colors)
-    # Even gradient: each distinct source brightness level gets an evenly spaced
-    # step along the palette by rank, however unevenly the levels are spaced.
+    legacy_blend = interpolate and 1 < n_palette < len(src_colors)
     levels = sorted(set(src_bright))
+    n_levels = len(levels)
     level_rank = dict((b, i) for i, b in enumerate(levels))
 
+    def rank_t(b):
+        return level_rank[b] / float(n_levels - 1) if n_levels > 1 else 0.5
+
+    binned = None
+    # Legacy blend (interpolate, palette smaller than the source's color count) keeps its output.
+    if (even or interpolate) and not legacy_blend and n_palette >= n_levels > 1:
+        bins = palette_bins(palette_colors, n_levels)
+        pick = bin_mean if interpolate else bin_pick
+        binned = [pick(run, center, palette_counts) for run, center in bins]
+
     def map_color(b):
-        if blend:
-            t = level_rank[b] / float(len(levels) - 1) if len(levels) > 1 else 0.5
-            return lerp_palette(palette_colors, t)
+        if binned is not None:
+            return binned[level_rank[b]]
+        if legacy_blend:
+            return lerp_palette(palette_colors, rank_t(b))
+        if even:
+            idx = int(round(rank_t(b) * (n_palette - 1)))
+            return palette_colors[max(0, min(n_palette - 1, idx))]
         t = (b - src_min) / float(src_max - src_min) if src_max != src_min else 0.5
         idx = int(round(t * (n_palette - 1)))
         idx = max(0, min(n_palette - 1, idx))  # clamp defensively
@@ -181,8 +265,9 @@ def palette_swap(src_arr, palette_colors, interpolate=False):
     return result_arr
 
 
-def load_palette_colors(pal_path, invert, drops=(), drop_darkest=0, drop_lightest=0):
-    """Load a palette image once and return its brightness-ordered color list."""
+def load_palette_colors(pal_path, invert, drops=(), drop_darkest=0, drop_lightest=0, with_counts=False):
+    """Load a palette image once and return its brightness-ordered color list
+    (and, with with_counts, a third value: {color: pixel count} for --even / --interpolate)."""
     pal_img = Image.open(pal_path).convert("RGBA")
     pal_arr = np.array(pal_img)
     palette_colors = drop_colors(get_colors_by_brightness(pal_arr), drops)
@@ -192,13 +277,15 @@ def load_palette_colors(pal_path, invert, drops=(), drop_darkest=0, drop_lightes
         palette_colors = palette_colors[drop_lightest:]
     if not invert:
         palette_colors = list(reversed(palette_colors))
+    if with_counts:
+        return pal_img, palette_colors, color_counts(pal_arr)
     return pal_img, palette_colors
 
 
-def process_one(src_arr, palette_colors, out_path, preview, interpolate=False):
+def process_one(src_arr, palette_colors, out_path, preview, interpolate=False, even=False, palette_counts=None):
     """Apply palette_colors onto an already-loaded src_arr and save the result.
     Raises on failure; caller decides how to handle."""
-    result_arr = palette_swap(src_arr, palette_colors, interpolate)
+    result_arr = palette_swap(src_arr, palette_colors, interpolate, even, palette_counts)
     result_img = Image.fromarray(result_arr, "RGBA")
 
     out_dir = os.path.dirname(out_path)
@@ -232,7 +319,8 @@ def run_single(args):
         sys.stderr.write("Error: palette file not found: {0}\n".format(pal_path))
         sys.exit(1)
 
-    pal_img, palette_colors = load_palette_colors(pal_path, args.invert, args.drop, args.drop_darkest, args.drop_lightest)
+    pal_img, palette_colors, palette_counts = load_palette_colors(
+        pal_path, args.invert, args.drop, args.drop_darkest, args.drop_lightest, with_counts=True)
     src_img = Image.open(src_path).convert("RGBA")
     src_arr = np.array(src_img)
 
@@ -249,12 +337,15 @@ def run_single(args):
     )
     print("Invert:  {0}".format(args.invert))
     if args.interpolate:
-        print("Interpolate: on (even gradient when the palette has fewer colours than the shape)")
+        print("Interpolate: on (even gradient; a larger palette is averaged in even runs)")
+    if args.even:
+        print("Even:    on (even rank spacing; a larger palette is sampled in even runs)")
     if args.drop:
         print("Drop:    {0}".format(", ".join(args.drop)))
 
     try:
-        out_path, preview_path = process_one(src_arr, palette_colors, out_path, args.preview, args.interpolate)
+        out_path, preview_path = process_one(src_arr, palette_colors, out_path, args.preview, args.interpolate,
+                                             args.even, palette_counts)
     except ValueError as e:
         sys.stderr.write("Error: {0}\n".format(e))
         sys.exit(1)
@@ -290,7 +381,9 @@ def run_bulk(args):
     )
     print("Invert:  {0}".format(args.invert))
     if args.interpolate:
-        print("Interpolate: on (even gradient when the palette has fewer colours than the shape)")
+        print("Interpolate: on (even gradient; a larger palette is averaged in even runs)")
+    if args.even:
+        print("Even:    on (even rank spacing; a larger palette is sampled in even runs)")
     if args.drop:
         print("Drop:    {0}".format(", ".join(args.drop)))
 
@@ -322,8 +415,10 @@ def run_bulk(args):
         try:
             # Each item in the folder supplies its OWN palette, which gets
             # applied onto the fixed shape's pixels.
-            _, palette_colors = load_palette_colors(item_path, args.invert, args.drop, args.drop_darkest, args.drop_lightest)
-            saved_path, preview_path = process_one(shape_arr, palette_colors, out_path, args.preview, args.interpolate)
+            _, palette_colors, palette_counts = load_palette_colors(
+                item_path, args.invert, args.drop, args.drop_darkest, args.drop_lightest, with_counts=True)
+            saved_path, preview_path = process_one(shape_arr, palette_colors, out_path, args.preview, args.interpolate,
+                                                   args.even, palette_counts)
             msg = "  OK    {0} -> {1}".format(fname, saved_path)
             if preview_path:
                 msg += " (+ preview)"
@@ -357,22 +452,27 @@ def main():
         )
         parser.add_argument(
             "--drop-lightest", type=int, default=0, metavar="N",
-            help="Leave the N lightest colours out of each palette",
+            help="Leave the N lightest colors out of each palette",
         )
         parser.add_argument(
             "--drop-darkest", type=int, default=0, metavar="N",
-            help="Leave the N darkest colours out of each palette (e.g. an outline)",
+            help="Leave the N darkest colors out of each palette (e.g. an outline)",
         )
         parser.add_argument(
             "--drop",
             type=parse_drops,
             default=[],
-            help="Comma-separated colour classes to leave out of each palette: " + ", ".join(sorted(DROP_CLASSES)),
+            help="Comma-separated color classes to leave out of each palette: " + ", ".join(sorted(DROP_CLASSES)),
         )
         parser.add_argument(
             "--interpolate",
             action="store_true",
-            help="Even gradient across each palette when it has fewer colours than <shape>.",
+            help="Blend: even gradient across the palette; a palette as large as the source or larger is averaged in even runs.",
+        )
+        parser.add_argument(
+            "--even",
+            action="store_true",
+            help="Even rank spacing: source shades spread evenly over the palette; a larger palette is sampled in even runs.",
         )
         parser.add_argument(
             "--preview",
@@ -396,22 +496,27 @@ def main():
     )
     parser.add_argument(
         "--drop-lightest", type=int, default=0, metavar="N",
-        help="Leave the N lightest colours out of the palette",
+        help="Leave the N lightest colors out of the palette",
     )
     parser.add_argument(
         "--drop-darkest", type=int, default=0, metavar="N",
-        help="Leave the N darkest colours out of the palette (e.g. an outline)",
+        help="Leave the N darkest colors out of the palette (e.g. an outline)",
     )
     parser.add_argument(
         "--drop",
         type=parse_drops,
         default=[],
-        help="Comma-separated colour classes to leave out of the palette: " + ", ".join(sorted(DROP_CLASSES)),
+        help="Comma-separated color classes to leave out of the palette: " + ", ".join(sorted(DROP_CLASSES)),
     )
     parser.add_argument(
         "--interpolate",
         action="store_true",
-        help="Even gradient across the palette when it has fewer colours than the source.",
+        help="Blend: even gradient across the palette; a palette as large as the source or larger is averaged in even runs.",
+    )
+    parser.add_argument(
+        "--even",
+        action="store_true",
+        help="Even rank spacing: source shades spread evenly over the palette; a larger palette is sampled in even runs.",
     )
     parser.add_argument(
         "--preview",
