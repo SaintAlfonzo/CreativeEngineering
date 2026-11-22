@@ -406,6 +406,9 @@ from the DEPLOYED.json mark it writes; `--backfill-history VERSION...` adds miss
 - 2026-10-31 12:51: 1.1.05 recorded as deployed with `--snapshot` (client). Payload: update from 1.1.04, config functional: 108 files, 18.8 MB.
 - 2026-10-31 12:52: 1.1.05 recorded as deployed with `--snapshot` (server, client). Payload: update from 1.1.04, config functional: 108 files, 18.8 MB.
 - 2026-10-31 17:58: 1.1.06 recorded as deployed with `--snapshot` (client). Payload: install, config functional: 3798 files, 547.9 MB.
+- 2026-11-22: `resourcepacks/Copycat Framed Block.zip` rewritten without `assets/framedblocks/lang/en_us.json` (the other 60
+  entries byte-identical; backup in `configs_edited/resourcepacks/`), so framed blocks keep their Framed Blocks names
+  (`blocks/framed-and-decor #2`, D4 in plan_easy_fixes_1122.md). The next client payload carries it as 1 resource pack file.
 
 ## Owner notes (scratchpad 2026-11-07)
 
