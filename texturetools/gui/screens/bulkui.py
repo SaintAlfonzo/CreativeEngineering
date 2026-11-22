@@ -11,6 +11,8 @@ BulkPreviewMixin (mix into a ToolScreen before it):
 	run_params()                                params + "_skip": labels of unticked tiles (kept out of presets)
 	filter_skipped(jobs, params)                jobs without the unticked ones
 """
+import time
+
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.label import Label
@@ -68,21 +70,24 @@ class BulkPreviewMixin:
 		self.preview_all_button.disabled = True
 		self.set_status("computing every result (nothing is written) ...")
 		self._grid_params = dict(self.params)
-		self._grid_worker.submit(self._compute_all, self.params, on_done=self._all_done, on_error=self._all_error,
+		t_req = time.monotonic()
+		self._grid_worker.submit(self._compute_all, self.params,
+			on_done=lambda result, t_req=t_req: self._all_done(result, t_req), on_error=self._all_error,
 			on_progress=lambda f, m: self.set_status("preview all {0:.0f}% {1}".format(f * 100, m)))
 
 	def _compute_all(self, params, progress):
 		jobs = self.bulk_jobs(params)
 		return {"items": compute_job_previews(jobs, MAX_TILES, progress), "total": len(jobs)}
 
-	def _all_done(self, result):
+	def _all_done(self, result, t_req=None):
 		self.preview_all_button.disabled = False
 		self.grid_items = result["items"]
 		self.grid.set_items(result["items"], result["total"])
 		self.view_button.disabled = False
 		self.grid_note.text = ""
 		self.show_grid(True)
-		self.set_status(self.grid.info.text)
+		if t_req is None or not self.status_is_stale(t_req):
+			self.set_status(self.grid.info.text)
 
 	def _all_error(self, exc, tb):
 		self.preview_all_button.disabled = False

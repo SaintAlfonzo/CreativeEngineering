@@ -27,6 +27,7 @@ Params flow: a control change -> set_param(key, value) -> 150 ms debounce -> com
 No file is written except by Run, Save as and preset save, each an explicit button.
 """
 import os
+import time
 
 from kivy.app import App
 from kivy.logger import Logger
@@ -65,6 +66,9 @@ class ToolScreen(Screen):
 		self._preview_worker = None
 		self._run_worker = None
 		self._debounce = Debouncer(self._start_preview)
+		self._preview_req_t = 0.0   # when the params of the next preview changed
+		self._last_run_t = -1.0     # when the last Run started; older previews keep their image, not their status
+		self._preview_stale = False
 		self._build_layout()
 		self.build_controls()
 		self._refresh_presets()
@@ -240,7 +244,13 @@ class ToolScreen(Screen):
 		self.request_preview()
 
 	def request_preview(self):
+		self._preview_req_t = time.monotonic()
 		self._debounce()
+
+	def status_is_stale(self, t_req):
+		"""True when a Run started after the params of a preview (or grid) requested at t_req changed: its status
+		line would overwrite the Run's result, so only its image is shown."""
+		return t_req < self._last_run_t
 
 	def refresh_now(self):
 		self._debounce.flush()
@@ -250,17 +260,22 @@ class ToolScreen(Screen):
 			return
 		if self._preview_worker is None:
 			self._preview_worker = Worker(latest_only=True, name="tt-preview-" + self.tool_name)
-		self._preview_worker.submit(self.compute_preview, self.params, on_done=self._preview_done,
-			on_error=self._error)
+		t_req = self._preview_req_t
+		self._preview_worker.submit(self.compute_preview, self.params,
+			on_done=lambda result, t_req=t_req: self._preview_done(result, t_req), on_error=self._error)
 
-	def _preview_done(self, result):
+	def _preview_done(self, result, t_req=None):
 		if result is None:
 			return
-		self.show_preview(result)
+		self._preview_stale = t_req is not None and self.status_is_stale(t_req)
+		try:
+			self.show_preview(result)
+		finally:
+			self._preview_stale = False
 
 	def show_preview(self, result):
 		arr = result.get("preview") if isinstance(result, dict) else result
-		if isinstance(result, dict) and result.get("status"):
+		if isinstance(result, dict) and result.get("status") and not self._preview_stale:
 			self.set_status(result["status"])
 		if arr is not None:
 			self.result_array = arr
@@ -285,6 +300,7 @@ class ToolScreen(Screen):
 		if self._run_worker is None:
 			self._run_worker = Worker(latest_only=False, name="tt-run-" + self.tool_name)
 		self.run_button.disabled = True
+		self._last_run_t = time.monotonic()
 		self.set_status("running ...")
 		self._run_worker.submit(self.run_job, self.run_params(), on_done=self._run_done, on_error=self._run_error,
 			on_progress=lambda f, m: self.set_status("{0:.0f}% {1}".format(f * 100, m)))
