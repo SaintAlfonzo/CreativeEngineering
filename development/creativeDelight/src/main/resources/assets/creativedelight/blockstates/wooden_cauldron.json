@@ -1,8 +1,8 @@
 {
-  "variants": {
-    "level=0": { "model": "creativedelight:block/wooden_cauldron" },
-    "level=1": { "model": "creativedelight:block/wooden_cauldron" },
-    "level=2": { "model": "creativedelight:block/wooden_cauldron" },
-    "level=3": { "model": "creativedelight:block/wooden_cauldron" }
-  }
+	"variants": {
+		"level=0": { "model": "creativedelight:block/wooden_cauldron" },
+		"level=1": { "model": "creativedelight:block/wooden_cauldron" },
+		"level=2": { "model": "creativedelight:block/wooden_cauldron" },
+		"level=3": { "model": "creativedelight:block/wooden_cauldron" }
+	}
 }
