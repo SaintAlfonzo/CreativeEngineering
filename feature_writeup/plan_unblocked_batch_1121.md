@@ -1,12 +1,19 @@
 # Plan: unblocked batch 2026-11-21
 
-<!-- generated:status_index begin open_work sha1=f755c653d34e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Pinned 1, Testing 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c575209ba35a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Pinned 1, In Progress 3, Testing 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `placeable-food #1` | Pinned | none | List other mods' non-food plates and coasters for review and possible removal |
+| `dishes/ingredients #7` | In Progress | S C P | Batter uses |
+| `dishes/ingredients #8` | In Progress | S C P | Produce fixes |
+| `dishes/ingredients #9` | In Progress | S C P T | Cheese |
 | `blocks/flower-pots #1` | Testing | S C P | Flower pots placeable like candles |
+| `dishes/ingredients #17` | Testing | S C P | Tofu from mushrooms |
+| `dishes/ingredients #21` | Testing | S C P | Potato and sweet potato compatibility |
+| `dishes/ingredients #27` | Testing | S C P | Potato dough |
+| `dishes/ingredients #35` | Testing | S P | Nut milk usable in most milk recipes |
 | `food/placeable #6` | Testing | S C P | Coaster and small plate compatibility |
 | `textures/food #10` | Testing | C | Palette swap overhaul before the swapper goes in a GUI |
 <!-- generated:status_index end open_work -->

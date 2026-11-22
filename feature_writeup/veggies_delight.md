@@ -20,8 +20,8 @@ This file has four parts:
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5c2bef1dc8ed -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 2, Pinned 1, In Progress 4, Testing 7), 1 Complete.
+<!-- generated:status_index begin open_work sha1=98668e658488 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 2, Pinned 1, In Progress 3, Testing 8), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -29,11 +29,11 @@ This file has four parts:
 | `textures/food #2` | Planned | C P | Retexture cauliflower soup |
 | `ports/culturalport #1` | Pinned | S C P | Cultural Delights as a possible addition |
 | `baking/baked-goods #17` | In Progress | S C P | Dough unification |
-| `dishes/ingredients #21` | In Progress | S C P | Potato and sweet potato compatibility |
 | `dishes/meals #33` | In Progress | S+ C P | Potato noodles become creamy gnocchi |
 | `dishes/meals #35` | In Progress | S C P | Steak and broccoli sides |
 | `creativedelight/members #30` | Testing | S~ C P | Fold the remaining Veggies Delight overlaps into their food families |
 | `dishes/ingredients #20` | Testing | S~ C P | Sweet potato slices |
+| `dishes/ingredients #21` | Testing | S C P | Potato and sweet potato compatibility |
 | `merges/dishes #1` | Testing | S+ C P | Fish and chips |
 | `merges/dishes #2` | Testing | S+ C P | Mashed potatoes: split, not merged |
 | `ports/veggiesport #1` | Testing | S~ C P | Veggies Delight backport and integration |
