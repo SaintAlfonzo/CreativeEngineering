@@ -513,6 +513,8 @@
 - **New:** Heated mixing turns Flesh into 250 mB of blood and a bone at 25%, Porous Flesh into 500 mB, Flesh Tendons into 250 mB.
 - **New:** Mixing 2 Porous Flesh, 2 Flesh and 1000 mB of plant oil, seed oil or vegetable oil gives 2 Porous Flesh and 3 Flesh.
 - **New:** Mixing 2 Flesh Tendons, 1 Flesh and 250 mB of blood gives 1 Porous Flesh.
+- **New:** The Millstone, Crushing Wheels and the Crusher turn a Broken Bone into 2 Bone Meal and a Bone Chunk into 1; crushing gives one more at 25%.
+- **New:** The Mechanical Press turns a Bone into a Broken Bone.
 
 ## Wise Oak <!-- icon: minecraft:oak_log -->
 

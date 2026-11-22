@@ -119,6 +119,12 @@ Heated mixing renders flesh (250 mB blood, bone at 25 %), porous flesh (500 mB) 
 1 porous flesh. Tendons and the strand are climbable (not villager ladders). Item physics for the Heap items stays
 deferred (plan section 6).
 
+Bone recipes (2026-11-22, [plan_easy_fixes_1122.md](plan_easy_fixes_1122.md) D2, TODO `worldgen/biomes #15`):
+`recipes/broken_bones.js` (`// requires: philipsruins`). Millstone, crushing wheels and the IE Crusher: Broken Bone -> 2 bone
+meal, Bone Chunk -> 1; crushing wheels and the Crusher add 1 bone meal at 25 %. Mechanical Press: bone -> Broken Bone. No
+other mod presses bones (jar scan 2026-11-22); a pressed bone gives at most 2.25 bone meal against 3 (Millstone) or 6 (Crusher)
+whole, so no loop. Test SQ-VH-13.
+
 ## 7. Owner notes (scratchpad 2026-11-13)
 
 Executed (section 6, TODO `worldgen/biomes #11`): crush pools, cultivation, blood rendering, spongy and very sticky walk tiers. Plan changes: oil cultivation gives 2 porous + 3 flesh; pus bubble and hair give slimeball and string, no organic waste.
