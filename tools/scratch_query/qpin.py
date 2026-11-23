@@ -32,8 +32,10 @@ import jarstamp  # noqa: E402
 
 ROOT = HERE.parent.parent
 MOD_SIDES = ROOT / 'mod_sides.md'
-# jars prep_srv.sh adds on purpose that have no mod_sides.md row (dev-only)
-EXTRAS = (re.compile(r'cdevperfbot-.*\.jar$'), re.compile(r'backportedPowerGrid-.*\.jar$'))
+# jars prep_srv.sh or a row's @@prep adds on purpose that have no mod_sides.md row (dev-only; the loose Apple Pie jar is
+# SQ-RPS-04's fixture from jar_archive/displaced/, r1123rp)
+EXTRAS = (re.compile(r'cdevperfbot-.*\.jar$'), re.compile(r'backportedPowerGrid-.*\.jar$'),
+		re.compile(r'solapplepie-1\.19\.2-2\.2\.0\.jar$'))
 
 
 @lru_cache(maxsize=1)

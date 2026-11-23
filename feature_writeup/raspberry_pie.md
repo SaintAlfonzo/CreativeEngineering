@@ -731,6 +731,10 @@ Results: r1112 ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8
 jar did not load (`solapplepie` range `[2.2.0]` against Apple Pie's jar version `1.19.2-2.2.0`); fixed to
 `[1.19.2-2.2.0]` in `mods.toml`, jar of 21:27 installed. SQ-RPI-06 needs no Creative Delight rebuild: `diet_log.js`
 loads from the pack's `kubejs/data` folder. Client rows CQ-RPI-01 to -28 not run.
+Scratch run r1123rp (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run_2026-11-23.md) 11, jar
+911197e7c.2611222309, publish gate): 16 server rows PASS: SQ-RPS-01, -04, -06, -07, -08, -10 (isolation set,
+plan_rp_standalone.md 6) and SQ-RPI-01 to -08, -14 (boot half), -16; pack ladder `82 rungs, 5 slots, 38 pool effects`.
+Client rows (all `@draft`) not run; the owner's 2026-11-23 ruling "UI looks good" covers the UI-look ones (run doc 11).
 
 ## 15. Build notes (2026-11-12)
 

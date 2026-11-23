@@ -87,6 +87,9 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   pin check. For a run that tests the known pack, `DROPJARS="glob ..."` in the driver's environment makes prep_srv.sh
   remove them from `srv/mods` before the pin; `run_captures.py serve --drop GLOB` does the same for a client. Say so in
   the run notes; the sides rows are the add-mod pass's (r1123cc).
+- A modset variant's keep globs draw only from its source (`mods/` for `source = "pack"`): `rps loose` found no loose Apple Pie jar (it lives in `jar_archive/displaced/`) and booted without it. Copy such a jar in with a section `@@prep run cp`; `qpin.py verify` then refuses it for lacking a mod_sides.md row unless it is in qpin's EXTRAS (SQ-RPS-04, r1123rp 2026-11-23).
+- A stub class fixture that must fail a ClassNode member check: rename the member's CONSTANT_Utf8 (declaration and every Fieldref follow) instead of dropping the declaration; a constructor that writes the dropped field throws `NoSuchFieldError` at registry time and the boot dies (`rps_fixture.py stub`, SQ-RPS-08, r1123rp).
+
 ## Boot and shutdown
 
 - A multi-boot section runs its boots only under the driver (`qrun.py drive`, `@boot N` + `@@prep boot=N:`): a plain
@@ -298,6 +301,8 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - Dedicated-server dumps: recipes, tags, loot, structures, biomes, spawns, trades are good; names, stacks, effects, gear,
   food, crops, compost, paintings need the client. The /dumpall recipe dump has only id + type: use `/cdevtest rdetail`.
 - A reject on `Unknown command` never matches: 1.19.2 prints "Unknown or incomplete command"; reject `Unknown or incomplete command|Incorrect argument` (r1118 judge-2).
+- After a row's `restart` the row segment holds the whole new boot log, so a broad `reject` (SQ-RPI-08 `_modifier_` hit a dynamicvillagertrades `placement_modifier` line) fails on boot noise: anchor rejects to the command reply. A `shell` after `restart` printed the previous boot's `latest.log` lines (SQ-RPI-03); `bootexpect` read the new boot correctly; judge counts from `logs/qrun_bootN.log` (r1123rp 2026-11-23).
+- Breaking a JSON fixture by deleting "the first comma" can hit a comma inside a string (`_comment`) and leave valid JSON: truncate the file instead (SQ-RPI-04, r1123rp).
 
 ## World, chunks and ticking
 

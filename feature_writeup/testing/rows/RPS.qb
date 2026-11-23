@@ -44,16 +44,6 @@ look the `Diet ladder:` line appears once in the whole log (grep -c); the line r
 @pass no table loaded (one INFO line `No diversity table (solraspberrypie/diversity/*.json) in any mod; Apple Pie's values apply`, no warning); each food's tooltip diversity value equals Apple Pie's own value for it; the Diet Log shows the same value after eating
 @fails `Diversity` loader (P3): no-file case must not override; the tooltip mixin reading a different source than the book
 @draft client steps and the reference values (read Apple Pie's own tooltip values from the nested jar)
-## SQ-RPS-04 | loose Apple Pie 2.2.0 beside the nested copy: one loads, no crash
-@group B
-@modset rps loose
-@commands Boot with `rps loose` (loose `solapplepie-1.19.2-2.2.0.jar` in `mods/` next to the nested one) (RPS-04)
-@pass server reaches `Done (`; no duplicate-mod crash and no `ModFileDuplicate`/`Duplicate` error; the log names one `solapplepie` mod file; one `Diet ladder:` line
-@fails Jar-in-Jar version range in `ce.forge-bundle.gradle` (P1); Forge picks the higher or loose version: both are 2.2.0, so the nested jar must be skipped without an error
-bootexpect Done \(
-bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
-bootreject Duplicate|duplicate mod|ModFileDuplicate|DuplicateModsFoundException|Encountered an unexpected exception
-look `grep -n "solapplepie" logs/latest.log` shows one loaded mod file for solapplepie
 ## CQ-RPS-05 | Apple Pie defaults: eat, respec, drop, die; ageing-out and gate
 @group client
 @commands Client with `rps only` (Apple Pie settings at their defaults: `queueSize` 32, `minFoodsToActivate` 0). Eat a run of different foods past 32 entries, respec at the ladder screen, drop a food, die (RPS-05)
@@ -69,20 +59,6 @@ look `grep -n "solapplepie" logs/latest.log` shows one loaded mod file for solap
 bootexpect Done \(
 bootreject Fleet-Footed fix is off|Fleet-Footed fix failed|InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError
 look no warning about EffectFleetFooted anywhere in latest.log; the mixin is listed as applied if `-Dmixin.debug` output is present
-## SQ-RPS-08 | Alex's Mobs stub missing a field: mixin skipped, one warning, no crash
-@group B
-@modset rps alex
-@commands Boot with `rps alex` after a stub swap: the Alex's Mobs jar is replaced by a copy whose `EffectFleetFooted` lacks a field the mixin touches (second half of RPS-06; id 08 because the plan's single RPS-06 needs two boots)
-@pass `Done (` reached; exactly one warning `[solraspberrypie] Alex's Mobs com.github.alexthe666.alexsmobs.effect.EffectFleetFooted lacks <member>: the Fleet-Footed fix is off (tested with Alex's Mobs 1.21.1)` (member `int field lastDuration` or `applyEffectTick(LivingEntity, int) (m_6742_)`); no `Fleet-Footed fix failed` line; no crash, no mixin error
-@fails the member check and `require = 0` in `FleetFootedMixin` / its plugin (P6)
-@draft fixture: a tools/ script that builds the stub jar from the pack's Alex's Mobs jar (rewrites `EffectFleetFooted` without one field); the first runner writes it, then `edit` swaps the jar before `restart`
-## SQ-RPS-07 | in the pack: table split, unknown id loads, count logged once
-@group B
-@modset none
-@commands Pack server (full pack, Creative Delight carries the pack table). Add a scratch diversity table file with an unknown food id on the classpath, boot (RPS-07)
-@pass the server boots; one INFO summary line `Diversity table: <n> values, <m> family members from <k> file(s) (creativedelight:creativedelight.json, <owner>:<file>.json); <s> ids skipped (mod not loaded)` (logger `solraspberrypie/diversity`; no per-id warning; a file overriding another adds one `Diversity table: <n> entries of <later> over <earlier>` line); other ids in the same file apply (`/cdevtest` reads or the tooltip value of a known id in the file matches it)
-@fails `Diversity` loader merge and optional-id handling (P3); the table's new location in Creative Delight (P8)
-@draft fixture: a small jar with a `META-INF/mods.toml` (any test mod id) holding `solraspberrypie/diversity/<name>.json`; tables are read from loaded mod files only (Forge `ModList`), not from datapacks or loose folders. File shape: `{"values": {"<item id>": <number>, ...}, "families": {"<name>": ["<head id>", "<member id>", ...]}}` (both keys optional; first family member is the head). The first runner writes it
 
 ## CQ-RPS-09 | isolated client: default unlocks all slottable, vanilla icons (PR-RP-11, PR-RP-15)
 @group client
@@ -91,10 +67,132 @@ look no warning about EffectFleetFooted anywhere in latest.log; the mixin is lis
 @fails `default_ladder.json`, `LadderLoader` V14, `RpConfig` client defaults
 @draft written with the build 2026-11-22
 
-## SQ-RPS-10 | isolated: a wrong-shape diversity table is skipped (PR-RP-04)
-@group server
-@commands rps only set plus a throwaway jar or datapack-less mod folder holding `solraspberrypie/diversity/bad.json` = `{"values": [1, 2]}` (any mod jar works; e.g. a copy of the Raspberry Pie jar with that file added); start the server, `/give @p minecraft:bread`, hover it on a client or eat it
-@pass one `Diversity table ... has the wrong shape (...); skipped` error line; no exception later; foods keep Apple Pie's values; the server reaches `Done (`
-@fails `Diversity.use` / `read`
-@draft written with the build 2026-11-22
 
+@@section 2
+@@title SQ-RPS-08 Raspberry Pie standalone with a stubbed Alex's Mobs, 2026-11-23 ([plan_rp_standalone.md](../plan_rp_standalone.md) section 6 RPS-06, TODO `food-tuning #38` to `#46`)
+@@date 2026-11-23
+@@jars solraspberrypie
+@@sources feature_writeup/plan_rp_standalone.md development/solRaspberryPie
+@@modset rps alex
+@@prep run python3 "$INST/tools/scratch_query/rps_fixture.py" stub "mods/alexsmobs-*.jar"
+@@text
+@@text The `rps alex` set with the server's Alex's Mobs copy stubbed: `EffectFleetFooted` without `lastDuration` (moved out of
+@@text section 1 by r1123rp because the stub is a section `@@prep`).
+@@text
+@@table
+## SQ-RPS-08 | Alex's Mobs stub missing a field: mixin skipped, one warning, no crash
+@group B
+@commands Boot with `rps alex` after a stub swap (section `@@prep run`): the server's Alex's Mobs jar is replaced by a copy whose `EffectFleetFooted` lacks the int field `lastDuration` (`tools/scratch_query/rps_fixture.py stub`, renamed over the hard link) (second half of RPS-06; id 08 because the plan's single RPS-06 needs two boots)
+@pass `Done (` reached; exactly one warning `[solraspberrypie] Alex's Mobs com.github.alexthe666.alexsmobs.effect.EffectFleetFooted lacks <member>: the Fleet-Footed fix is off (tested with Alex's Mobs 1.21.1)` (member `int field lastDuration` or `applyEffectTick(LivingEntity, int) (m_6742_)`); no `Fleet-Footed fix failed` line; no crash, no mixin error
+@fails the member check and `require = 0` in `FleetFootedMixin` / its plugin (P6)
+# steps written r1123rp 2026-11-23 (runner-rp): fixture rps_fixture.py stub, own section for the @@prep
+bootexpect Done \(
+bootexpect \[solraspberrypie\] Alex's Mobs com\.github\.alexthe666\.alexsmobs\.effect\.EffectFleetFooted lacks int field lastDuration: the Fleet-Footed fix is off \(tested with Alex's Mobs 1\.21\.1\)
+bootreject Fleet-Footed fix failed|InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError|Encountered an unexpected exception
+shell grep -c "the Fleet-Footed fix is off" logs/latest.log; test "$(grep -c "the Fleet-Footed fix is off" logs/latest.log)" = 1
+
+@@section 3
+@@title SQ-RPS-10 Raspberry Pie standalone with a wrong-shape diversity table, 2026-11-23 ([plan_rp_standalone.md](../plan_rp_standalone.md) section 10 PR-RP-04)
+@@date 2026-11-23
+@@jars solraspberrypie
+@@sources feature_writeup/plan_rp_standalone.md development/solRaspberryPie
+@@modset rps only
+@@prep run python3 "$INST/tools/scratch_query/rps_fixture.py" table "mods/solRaspberryPie-*.jar" bad '{"values": [1, 2]}'
+@@text
+@@text The `rps only` set with `bad.json` in the server's Raspberry Pie copy (moved out of section 1 by r1123rp: the fixture is a section `@@prep`).
+@@text
+@@table
+## SQ-RPS-10 | isolated: a wrong-shape diversity table is skipped (PR-RP-04)
+@group B
+@commands rps only set; the server's Raspberry Pie copy gets `solraspberrypie/diversity/bad.json` = `{"values": [1, 2]}` (section `@@prep run` `rps_fixture.py table`); boot. The tables load right after `Done (` on a bare server (r1123rp SQ-RPS-01 log), so no player is needed
+@pass one `Diversity table solraspberrypie:bad.json has the wrong shape (...); skipped` error line; then `No usable diversity table ...; Apple Pie's values apply` (the bad file was the only one: foods keep Apple Pie's values); no exception later; the server reaches `Done (`
+@fails `Diversity.use` / `read`
+# steps written r1123rp 2026-11-23 (runner-rp): fixture rps_fixture.py table, own section for the @@prep
+bootexpect Done \(
+bootexpect Diversity table solraspberrypie:bad\.json has the wrong shape \(.*\); skipped
+bootexpect No usable diversity table \(solraspberrypie/diversity/\*\.json\) in any mod; Apple Pie's values apply
+bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
+bootreject Exception in server tick loop|Encountered an unexpected exception
+shell grep -c "has the wrong shape" logs/latest.log; test "$(grep -c "has the wrong shape" logs/latest.log)" = 1
+
+@@section 4
+@@title SQ-RPS-07 Raspberry Pie in the pack: table split with an extra table file, 2026-11-23 ([plan_rp_standalone.md](../plan_rp_standalone.md) section 6 RPS-07, P8)
+@@date 2026-11-23
+@@jars solraspberrypie creativedelight
+@@sources feature_writeup/plan_rp_standalone.md development/solRaspberryPie
+@@prep run python3 "$INST/tools/scratch_query/rps_fixture.py" table "mods/solRaspberryPie-*.jar" rps07 '{"values": {"minecraft:bread": 7.25, "nosuchmod:thing": 3.0}}'
+@@text
+@@text Full pack; the server's Raspberry Pie copy carries an extra table `rps07.json` (moved out of section 1 by r1123rp: the fixture is a section `@@prep`).
+@@text
+@@table
+## SQ-RPS-07 | in the pack: table split, unknown id loads, count logged once
+@group A
+@commands Pack server (full pack, Creative Delight carries the pack table). The server's Raspberry Pie copy gets `solraspberrypie/diversity/rps07.json` = bread 7.25 plus the unknown `nosuchmod:thing` (section `@@prep run` `rps_fixture.py table`); boot; bot rps7 eats bread, apple, cooked beef, baked potato, carrot (5 foods open the pack gate `minFoodsToActivate` 5); `data get entity rps7 ForgeCaps` (RPS-07)
+@pass the server boots; one INFO summary line `Diversity table: <n> values, <m> family members from <k> file(s) (creativedelight:creativedelight.json, <owner>:<file>.json); <s> ids skipped (mod not loaded)` (logger `solraspberrypie/diversity`; no per-id warning; a file overriding another adds one `Diversity table: <n> entries of <later> over <earlier>` line); other ids in the same file apply (`/cdevtest` reads or the tooltip value of a known id in the file matches it)
+@fails `Diversity` loader merge and optional-id handling (P3); the table's new location in Creative Delight (P8)
+# steps written r1123rp 2026-11-23 (runner-rp): the table rides in a copy of the Raspberry Pie jar (owner solraspberrypie,
+# sorted after creativedelight, so it overrides bread). CD table values: bread 2.0859, apple 1.038, cooked_beef 2.2049,
+# baked_potato 1.73, carrot 0.9391; Apple Pie decay (startDecay 0, endDecay 32) weighs the meal n back by 1 - n/32:
+# maxDiversity 11.967 with the fixture's bread applied, 7.448 without (r1123rp).
+bootexpect Diversity table: 1 entries of solraspberrypie:rps07\.json over creativedelight:creativedelight\.json
+bootexpect Diversity table: [0-9]+ values, [0-9]+ family members from 2 file\(s\) \(creativedelight:creativedelight\.json, solraspberrypie:rps07\.json\); [1-9][0-9]* ids skipped \(mod not loaded\)
+bootreject nosuchmod:thing
+shell grep -c "Diversity table: [0-9]* values" logs/latest.log; test "$(grep -c "Diversity table: [0-9]* values" logs/latest.log)" = 1
+> forceload add 0 990 40 1010
+> pbot spawn rps7 10 -60 1000 minecraft:overworld survival
+sleep 3
+> pbot hunger rps7 2
+> pbot inv rps7 set 0 minecraft:bread 1
+> pbot inv rps7 select 0
+> pbot eat rps7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rps7 end=finish item=minecraft:bread 30
+> pbot hunger rps7 2
+> pbot inv rps7 set 0 minecraft:apple 1
+> pbot inv rps7 select 0
+> pbot eat rps7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rps7 end=finish item=minecraft:apple 30
+> pbot hunger rps7 2
+> pbot inv rps7 set 0 minecraft:cooked_beef 1
+> pbot inv rps7 select 0
+> pbot eat rps7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rps7 end=finish item=minecraft:cooked_beef 30
+> pbot hunger rps7 2
+> pbot inv rps7 set 0 minecraft:baked_potato 1
+> pbot inv rps7 select 0
+> pbot eat rps7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rps7 end=finish item=minecraft:baked_potato 30
+> pbot hunger rps7 2
+> pbot inv rps7 set 0 minecraft:carrot 1
+> pbot inv rps7 select 0
+> pbot eat rps7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rps7 end=finish item=minecraft:carrot 30
+sleep 2
+> data get entity rps7 ForgeCaps
+sleep 1
+reject \[cdevtest\] verb=pbot\.\S+ bot=rps7 error=
+look ForgeCaps: solraspberrypie:diet maxDiversity about 11.97 (bread at the fixture's 7.25 applies), not about 7.45 (bread at the pack's 2.0859); the summary line counts at least 1 skipped id (nosuchmod:thing) and no per-id warning names it
+
+@@section 5
+@@title SQ-RPS-04 Raspberry Pie standalone beside a loose Apple Pie 2.2.0, 2026-11-23 ([plan_rp_standalone.md](../plan_rp_standalone.md) section 6 RPS-04)
+@@date 2026-11-23
+@@jars solraspberrypie
+@@sources feature_writeup/plan_rp_standalone.md development/solRaspberryPie
+@@modset rps only
+@@prep run cp "$INST/jar_archive/displaced/solapplepie-1.19.2-2.2.0.jar" mods/
+@@text
+@@text The `rps only` set plus the loose Apple Pie jar from `jar_archive/displaced/` (moved out of section 1 by r1123rp: the
+@@text `rps loose` variant takes it from `mods/`, where it is not).
+@@text
+@@table
+## SQ-RPS-04 | loose Apple Pie 2.2.0 beside the nested copy: one loads, no crash
+@group B
+@commands Boot with `rps loose` (loose `solapplepie-1.19.2-2.2.0.jar` in `mods/` next to the nested one) (RPS-04)
+@pass server reaches `Done (`; no duplicate-mod crash and no `ModFileDuplicate`/`Duplicate` error; the log names one `solapplepie` mod file; one `Diet ladder:` line
+@fails Jar-in-Jar version range in `ce.forge-bundle.gradle` (P1); Forge picks the higher or loose version: both are 2.2.0, so the nested jar must be skipped without an error
+bootexpect Done \(
+bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
+bootreject Duplicate|duplicate mod|ModFileDuplicate|DuplicateModsFoundException|Encountered an unexpected exception
+# r1123rp BF-FIX 2026-11-23: `rps loose` takes solapplepie-* from mods/, where the loose jar is not; the section copies it
+# from jar_archive/displaced/ (@@prep run)
+shell ls mods/; grep -n "Found valid mod file solapplepie" logs/debug.log | cut -c1-220
+look srv/mods holds the loose solapplepie-1.19.2-2.2.0.jar beside the Raspberry Pie jar (ls above); one solapplepie mod loads (one `Diet ladder:` line, no duplicate error)

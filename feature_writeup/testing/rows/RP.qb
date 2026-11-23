@@ -51,15 +51,19 @@
 ## SQ-RPI-01 | boot: ladder loaded, no mixin errors, no Apple Pie warnings
 @group A
 @commands Boot. `grep -nE "solraspberrypie\|Raspberry Pie\|Mixin apply.*solraspberrypie\|InvalidInjectionException" logs/latest.log` (RPI-01)
-@pass `Diet ladder: 38 rungs, 5 slots, 14 pool effects`; no mixin or injection error; no "Apple Pie still has its own benefits" warning; no "resetOnDeath is true" warning
+@pass `Diet ladder: N rungs, 5 slots, M pool effects` with N, M about 81, 37 (raspberry_pie.md 3.3; fewer only with one `skipped N entries` warning naming a missing mod); no mixin or injection error; no `Apple Pie's own benefit list is not empty` note; no `resetOnDeath is true` problem and no `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` block
 @fails mixin target names in `development/solRaspberryPie/.../mixin/` (Apple Pie `initPages`, `m_7856_`, `updateFoodList`, `addFood`); world copied an old `serverconfig/solapplepie-server.toml` (fresh world needed)
 @reviewed 2026-11-20
 @from batches/r1112/rp1.qb passed
-bootexpect Diet ladder: 38 rungs, 5 slots, 14 pool effects
+# r1123rp BF-FIX 2026-11-23: the pack ladder grew (raspberry_pie.md 3.3: about 81 rungs, 5 slots, 37 pool effects) and the
+# Apple Pie settings lines were reworded (plan_rp_standalone.md P5, ApplePieSettings): counts read as a look
+bootexpect Diet ladder: [0-9]+ rungs, 5 slots, [0-9]+ pool effects
 bootreject InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError
-bootreject Apple Pie still has its own benefits
-bootreject Apple Pie resetOnDeath is true
+bootreject Apple Pie's own benefit list is not empty
+bootreject resetOnDeath is true
+bootreject APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH
 shell grep -nE "solraspberrypie|Raspberry Pie" logs/latest.log | cut -c1-300 | head -40
+look the `Diet ladder:` line's rung and pool counts are about 81 and 37; any `skipped N entries` line names only ids of mods not in the pack
 
 ## SQ-RPI-02 | ladder.json seeded from defaultconfigs
 @group A
@@ -74,15 +78,18 @@ shell L=$(sed -n 's/^level-name=//p' server.properties); ls -l "$L"/serverconfig
 ## SQ-RPI-03 | unregistered and unsafe entries skipped, ladder still 38 rungs
 @group A
 @commands Stop. In the world's `ladder.json` add `{"threshold": 3, "type": "unlock", "effect": "nosuchmod:thing"}` and `{"threshold": 4, "type": "flat", "effect": "minecraft:absorption"}`; boot (RPI-20, RPI-35, V10)
-@pass exactly one line `skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3.0`; one `V10: flat minecraft:absorption` warning; still `Diet ladder: 38 rungs`
+@pass exactly one line `skipped N entries naming effects or attributes that are not registered: ...` that names `unlock nosuchmod:thing at 3.0`; one `V10: flat minecraft:absorption at 4.0 ...` warning; the `Diet ladder:` rung count equals the unedited boot's
 @fails `LadderLoader.parse` skipped / warnings lists
 @reviewed 2026-11-20
 @from batches/r1112/rp2.qb
-bootexpect skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3\.0
-bootexpect V10: flat minecraft:absorption
-bootexpect Diet ladder: 38 rungs
-shell grep -cE "skipped [0-9]+ entries" logs/latest.log; grep -cE "V10: flat minecraft:absorption" logs/latest.log; true
-look exactly one skipped line and one absorption V10 line (counts above both 1)
+# r1123rp 2026-11-23: the edit and restart are in the row (r1120nv lost the batch prep); counts relative to the pack ladder
+edit L=$(sed -n "s/^level-name=//p" server.properties); F="$L/serverconfig/solraspberrypie/ladder.json"; cp "$F" "$F.orig" && python3 -c 'import json,sys; f=sys.argv[1]; d=json.load(open(f)); d["rungs"]+=[{"threshold": 3, "type": "unlock", "effect": "nosuchmod:thing"}, {"threshold": 4, "type": "flat", "effect": "minecraft:absorption"}]; json.dump(d, open(f, "w"), indent=1)' "$F" && echo EDITED
+restart
+bootexpect skipped [0-9]+ entries naming effects or attributes that are not registered: .*unlock nosuchmod:thing at 3\.0
+bootexpect V10: flat minecraft:absorption at 4\.0
+bootexpect Diet ladder: [0-9]+ rungs, 5 slots
+shell grep -cE "skipped [0-9]+ entries" logs/latest.log; grep -cE "V10: flat minecraft:absorption" logs/latest.log; grep -E "Diet ladder: " logs/latest.log | cut -c1-200; grep -E "Diet ladder: " logs/qrun_boot1.log | cut -c1-200; true
+look exactly one skipped line and one absorption V10 line (counts above both 1); the rung count equals boot 1's (qrun_boot1.log line above): the two added rungs are both dropped
 
 ## SQ-RPI-04 | broken ladder file: loud error, built-in ladder, server runs
 @group A
@@ -91,8 +98,12 @@ look exactly one skipped line and one absorption V10 line (counts above both 1)
 @fails `LadderLoader.load` catch path; `default_ladder.json` in the jar
 @reviewed 2026-11-20
 @from batches/r1112/rp3.qb passed
+# r1123rp 2026-11-23: edit and restart in the row; SQ-RPI-08 restores ladder.json.orig (saved by SQ-RPI-03). BF-FIX r1123rp:
+# the first comma sits inside the _comment string (still valid JSON), so the file is cut in half instead
+edit L=$(sed -n "s/^level-name=//p" server.properties); F="$L/serverconfig/solraspberrypie/ladder.json"; test -f "$F.orig" || cp "$F" "$F.orig"; python3 -c 'import sys; f=sys.argv[1]; t=open(f).read(); open(f, "w").write(t[:len(t) // 2])' "$F" && echo BROKEN
+restart
 bootexpect DIET LADDER FILE IS BROKEN OR MISSING
-bootreject Diet ladder: 38 rungs
+bootreject Diet ladder: [0-9]+ rungs, 5 slots
 > solrp pause list
 expect rpb|paused
 
@@ -356,12 +367,16 @@ look ForgeCaps after the reset: Apple Pie food list foodsEaten 0, foodList [] an
 ## SQ-RPI-08 | Apple Pie benefits left in its config: warning at boot, no max-health bonus applied
 @group A
 @commands Stop. In the world's `serverconfig/solapplepie-server.toml` set `thresholds = [0.0]`, `benefitsUnparsed = ["attribute,generic.max_health,4"]`, `minFoodsToActivate = 0`; boot; bot joins; `/attribute <name> minecraft:generic.max_health get`; `/data get entity <name> Attributes` (#33)
-@pass boot log has "Apple Pie still has its own benefits configured"; max health 20; no attribute modifier named `..._modifier_...` (Apple Pie would add 4 at login without the fix)
+@pass boot log has the INFO note `Apple Pie settings: Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off (its ladder replaces it)`; max health 20; no attribute modifier named `..._modifier_...` (Apple Pie would add 4 at login without the fix)
 @fails `BenefitsHandlerMixin` (`updateBenefits`, `tickBenefits`)
 @reviewed 2026-11-20
 @from batches/r1115/p9_a1b.qb
-bootexpect Apple Pie still has its own benefits configured
-shell grep -nE "thresholds|benefitsUnparsed|minFoodsToActivate" p9a/serverconfig/solapplepie-server.toml | grep -v "#"
+# r1123rp 2026-11-23: edit and restart in the row (restores the ladder broken by SQ-RPI-04); the warning was reworded to an
+# INFO note in plan_rp_standalone.md P5 (ApplePieSettings)
+edit L=$(sed -n "s/^level-name=//p" server.properties); F="$L/serverconfig/solraspberrypie/ladder.json"; test -f "$F.orig" && cp "$F.orig" "$F"; T="$L/serverconfig/solapplepie-server.toml"; sed -i -E 's/^(\s*)thresholds = .*/\1thresholds = [0.0]/; s/^(\s*)benefitsUnparsed = .*/\1benefitsUnparsed = ["attribute,generic.max_health,4"]/; s/^(\s*)minFoodsToActivate = .*/\1minFoodsToActivate = 0/' "$T" && grep -nE "^\s*(thresholds|benefitsUnparsed|minFoodsToActivate) " "$T"
+restart
+bootexpect Apple Pie settings: Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off
+bootexpect Diet ladder: [0-9]+ rungs, 5 slots
 > forceload add 0 990 40 1010
 > pbot spawn rp8 22 -60 1000 minecraft:overworld survival
 sleep 4
@@ -373,7 +388,9 @@ sleep 4
 > data get entity rp7 Attributes
 sleep 1
 count Value of attribute .* for (entity )?rp[78] is 20\.0 == 2
-reject _modifier_
+# BF-FIX r1123rp 2026-11-23: the restart puts the whole boot log in the row segment (a dynamicvillagertrades
+# placement_modifier line matched); scope the reject to the entity data replies
+reject has the following entity data: .*_modifier_
 look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attributes
 
 ## CQ-RPI-29
@@ -702,7 +719,12 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @commands Fresh world; `grep -n "Diet ladder" logs/latest.log`
 @pass `Diet ladder: 81 rungs, 5 slots, 37 pool effects` (fewer only if a listed mod is missing, then one `skipped N entries` warning naming them); no `toggle:` warning; no V3, V4, V5, V6 or V10 warning (Satiated, `minecraft:saturation`, at 100 is allowed); at diversity 100 Saturation is applied and hunger stays full
 @fails `LadderLoader.parse` (toggle / tagline fields), a mod's effect id renamed (rerun `/dumppotions`, compare with `rp_ladder.csv`)
-@draft written with the build 2026-11-21
+# steps written r1123rp 2026-11-23 (runner-rp): the boot half; the Saturation-at-100 half needs a player at diversity 100 (client, owner)
+bootexpect Diet ladder: [0-9]+ rungs, 5 slots, [0-9]+ pool effects
+bootreject Diet ladder \(.*\): (toggle|V3|V4|V5|V6|V10)
+bootreject Diet ladder \(.*\): .*toggle
+shell grep -nE "Diet ladder|skipped [0-9]+ entries" logs/latest.log | cut -c1-300
+look the start line reads about `81 rungs, 5 slots, 37 pool effects`; any `skipped N entries` line names only mods not in the pack; the Saturation-at-100 half is not run here (client)
 
 ## SQ-RPI-15 | toggle switch persists (food-tuning #44)
 @group A
@@ -764,11 +786,14 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @draft written with the build 2026-11-22
 
 ## SQ-RPI-16 | whole-number milestones (food-tuning #60)
-@group server
+@group A
 @commands New world; read `serverconfig/solraspberrypie/ladder.json` and the start line
 @pass every threshold is a whole number; milestones that differed before still differ (18 and 19, 26 and 27, 49 and 50); start line about 81 rungs, 5 slots, 37 pool effects, no new warning
 @fails `tools/gen_rp_ladder.py` `spread`, ladder not regenerated, world seeded from an old copy
-@draft written with the build 2026-11-22
+# steps written r1123rp 2026-11-23 (runner-rp)
+bootexpect Diet ladder: [0-9]+ rungs, 5 slots, [0-9]+ pool effects
+shell L=$(sed -n "s/^level-name=//p" server.properties); python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); t=[float(r["threshold"]) for r in d["rungs"]]; bad=[x for x in t if x != int(x)]; print("thresholds", len(t), "non-whole", bad); print("has", sorted(set(int(x) for x in t) & {18, 19, 26, 27, 49, 50}))' "$L/serverconfig/solraspberrypie/ladder.json"
+look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the formerly close milestones stay apart); the start line has no new warning
 
 ## CQ-RPI-73 | food tooltips never empty (food-tuning #61)
 @group client

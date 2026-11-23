@@ -407,3 +407,125 @@ FAIL 3, LOOK 1 (owner shots). BF-FIX and rerun PASS: SQ-CMP-01, -23, -25, CQ-TSL
 - Draft, not run: SQ-CMP-09s, -10, -16, -17, SQ-TN-11, -12, SQ-MT-03, CQ-CMP-09, -14, -15, -18 to -22, -26, CQ-TN-13.
 - Text for a doc pass: SQ-CMP-07 @commands says 475 paintings (445 built, as the docs say).
 - TODO gear-tuning #1 filed for the r1123cc stage d Equipment NCH ERRORs (none existed).
+
+
+## 11. r1123rp: Raspberry Pie publish tests (milestone 3)
+
+Targeted run (skill `scratch-test` part B), owner request 2026-11-23 via the main session: milestone 3 of the publish
+gate. Runner: runner-rp for the main orchestrator. Results in `perf/runs/r1123rp*/`. Perf capture skipped (targeted
+run, run default 4). Full-pack steps run with the 4 unlisted jars dropped (`source perf/runs/r1123cc/env.sh`, 9).
+Owner ruling for this run (2026-11-23): "spice of life raspberry pie ui looks good": rows whose only open check is a
+UI appearance LOOK are judged PASS `--by owner` on it.
+
+### 11.1 Scope and preflight
+
+Scope: plan_rp_standalone.md 6 and 10 -> RPS.qb (isolation set) and RP.qb (pack rows). Order: SQ-RPS-01, the other
+RPS server rows, RP.qb server rows, RPS client rows, RP.qb client rows. Stage lists in `perf/runs/r1123rp/<stage>.txt`.
+
+| jar | `mods/` (stamp) | installed |
+|---|---|---|
+| solRaspberryPie | 1.0.0+911197e7c.2611222309 | 2026-11-22 23:14 |
+
+- 05:36 `game_jvms.sh` empty, `df -h /` 70 GB free, `jarstamp.py pending` 0, RUNNER.md idle (left for the drive to claim).
+- `check_all.py --fast`: 42 run, 2 FAIL: comment_dates (the known 3 dated comments) and test_queue_rows (PROC-20: queue
+  blocks differ from .qb sections edited by r1123cx; `status_index.py` at write-back re-renders them). Neither is a runtime test.
+- Fixture builder `tools/scratch_query/rps_fixture.py` (table: a diversity file added to a copy of a loaded mod jar;
+  stub: EffectFleetFooted without `lastDuration`), tested offline on scratch copies.
+
+### 11.2 Run notes
+
+- 05:39 stage a (`perf/runs/r1123rp/a.txt`, drive r1123rpa) 05:39 to 05:41, 3 steps: SQ-RPS-01 PASS (one `Diet ladder: 44
+  rungs, 4 slots, 8 pool effects`; the table loader runs right after `Done (` on a bare server: `No usable diversity
+  table ...`), SQ-RPS-06 PASS (debug.log `Mixing FleetFootedMixin ... into ...EffectFleetFooted`). SQ-RPS-04
+  BATCH-FAULT: `rps loose` takes `solapplepie-*` from `mods/`, but the loose jar is in `jar_archive/displaced/`; srv/mods
+  held only Raspberry Pie. BF-FIX: own section 5 with `@@prep run cp` of the displaced jar.
+  Note (no row criterion, upstream): the standalone boot logs 18 `[solapplepie] Item is not food:` WARNs for
+  farmersdelight / farmersrespite / largemeals ids from Apple Pie 2.2.0's own default `complexityUnparsed`.
+- 05:50 drafts written (steps in the .qb, lint clean): SQ-RPS-08 (section 2, `rps_fixture.py stub`), SQ-RPS-10 (section 3,
+  isolated: the tables load at boot, so no player is needed), SQ-RPS-07 (section 4, full pack, group A, table in a
+  copy of the Raspberry Pie jar, bot eats 5 foods), SQ-RPI-14 (boot half), SQ-RPI-16. Rewritten (r1120nv "not simple"
+  BATCH-FAULTs, now row-local `edit` + `restart`): SQ-RPI-03, -04, -08; SQ-RPI-01 regex to the current pack ladder and
+  the reworded Apple Pie settings lines (P5). Stages b (RPS-04, -10, -08, -07) and c (SQ-RPI-01 to -08, -14, -16) chained.
+- 05:43 stage b step 1 (SQ-RPS-08) boot failed: environment fault in my stub fixture. Dropping the `lastDuration` field
+  declaration made `EffectFleetFooted.<init>` throw `NoSuchFieldError: lastDuration` at alexsmobs registry time (the
+  Raspberry Pie warning itself was logged correctly first). Fix: `rps_fixture.py stub` now renames the field's Utf8
+  constant (declaration and every Fieldref follow), verified with javap. The drive waited out its 600 s boot timeout,
+  stopped resumable; first attempt kept in `perf/runs/r1123rpb/s00_try1_stubcrash`. Chain b c resumed.
+- 05:47 to 05:52 stage b (drive r1123rpb, resumed): SQ-RPS-08 PASS (one `lacks int field lastDuration: the Fleet-Footed
+  fix is off` warning, Done, no mixin error), SQ-RPS-10 PASS (one wrong-shape error for `solraspberrypie:bad.json`, then
+  `No usable diversity table ...`, Done). SQ-RPS-07 PASS (runner): summary `1648 values, 65 family members from 2
+  file(s) (creativedelight:creativedelight.json, solraspberrypie:rps07.json); 3 ids skipped`, one override line;
+  bot maxDiversity 11.9666 = Apple Pie's decay (weight 1 - n/32 for the meal n back, startDecay 0, endDecay 32) with
+  bread at the fixture's 7.25 (7.448 without). The row's look numbers (13.16 / 8.00) left the decay out: corrected in
+  RPS.qb. SQ-RPS-04 step refused by qrun's pin check: the loose Apple Pie jar has no mod_sides.md row. Fix: qpin.py
+  EXTRAS allows `solapplepie-1.19.2-2.2.0.jar` (fixture, not a pack jar); `qpin.py verify` OK; drive b resumed after c.
+- 05:52 to 06:02 stage c (drive r1123rpc, 3 pack boots, group A): SQ-RPI-01 PASS (`Diet ladder: 82 rungs, 5 slots, 38
+  pool effects` = every entry of the generated ladder; the docs' "about 81 / 37"), -02 PASS, -03 PASS (boot 2: one
+  `skipped 1 entries ... unlock nosuchmod:thing at 3.0`, one `V10: flat minecraft:absorption at 4.0`, rung count as
+  boot 1), -05 PASS, -06 PASS (Apple Pie's food_book recipe gone, 0 NCH errors), -07 PASS (reset clears Apple Pie's
+  list and the diet cap; Carrot's Food Dictionary keeps its 3, as raspberry_pie.md 12 #30 says), -14 PASS (boot half:
+  0 `Diet ladder (` warnings; the Saturation-at-100 half needs a player), -16 PASS (82 whole thresholds, 18/19, 26/27,
+  49/50 apart). BF-FIX SQ-RPI-04: the edit removed the first comma, which is inside the `_comment` string, so the file
+  stayed valid and loaded -> the edit cuts the file in half. BF-FIX SQ-RPI-08: `reject _modifier_` matched a
+  dynamicvillagertrades `placement_modifier` boot line (after `restart` the row segment holds the whole boot log);
+  behavior was right (max health 20 for both bots, the only max_health modifier is Carrot's `Health Gained from Trying
+  New Foods` at 0.0; boot note `Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off`) -> reject
+  scoped to the entity data replies. Both rerun in drive r1123rpr (perf/runs/r1123rp/r.txt) after stage b step 4.
+  Observation: SQ-RPI-03's `shell` after `restart` printed boot 1's `latest.log` lines (no qrun_boot1.log yet);
+  bootexpect read boot 2 correctly. Judge restart rows by bootexpect or `logs/qrun_bootN.log` after the run.
+- 06:03 to 06:08 stage b step 4 (resumed) SQ-RPS-04 PASS (JarSelector: "Attempted to select a dependency jar for JarJar which was passed in as source: solapplepie. Using Mod File: .../srv/mods/...": the loose copy loads, the nested one is skipped without an error; one `Diet ladder:` line). Rerun drive r1123rpr: SQ-RPI-04 PASS (broken-ladder block, built-in ladder, `/solrp pause list` answers), SQ-RPI-08 PASS. `game_jvms.sh` empty 06:08.
+- Client block not booted. Every client row in scope is `@draft` with no steps (RPS.qb 4, RP.qb 82 plus the `@owner`
+  CQ-RPI-21 and the superseded CQ-RPI-33, -36), so there was nothing to run, and none could be written within about 15
+  minutes each:
+  - CQ-RPS-02, -03, -05, -09 need an isolated client (Forge + Raspberry Pie only). The capture driver lives in Creative
+    Devtools, which needs Creative Common, so `run_captures.py serve` cannot drive that set; it is an xdotool hand run
+    or the owner's. Deferred.
+  - The pack rows' diversity lines come from `RenderTooltipEvent.GatherComponents`, which the driver's `tooltip_text`
+    does not read (client_capture.md D5), so the value rows (CQ-RPI-63, -64, -72, -73) are shots only.
+- Owner ruling 2026-11-23 ("spice of life raspberry pie ui looks good"): it covers the draft rows whose only check is
+  how the UI looks. They were not run (no RES, so no `qrun.py judge` record); listed here for the owner to close on the
+  ruling: CQ-RPI-11, -12, -14, -17, -29, -32, -34, -35, -41 to -46, -48 to -53, -55, -57, -58, -60 to -63, -67 to
+  -73, -81 (35 rows).
+- Behavior client rows left (draft, owner or a row-writing pass): CQ-RPI-01 to -10, -13, -15, -16, -18 to -20, -22 to
+  -28, -30, -31, -37 to -40, -47, -54, -56, -59, -64 to -66, -74 to -80, -82 (44 rows); CQ-RPI-21 (`@owner`);
+  CQ-RPS-02, -03, -05, -09; CQ-RPB-01 to -03 (resource pack bench, a long operation, not Raspberry Pie behavior).
+
+### 11.3 Final verdicts
+
+Table: `perf/runs/r1123rp/table.md` (`qrun.py table` over every r1123rp RES dir in `perf/runs/r1123rp/res_dirs.txt`, later reruns win). 16 server rows: PASS 16. Judged by the runner from text evidence (one-row RES dirs). BF-FIX and rerun PASS: SQ-RPS-04, SQ-RPI-04, -08. Drafts written and run: SQ-RPS-07, -08, -10, SQ-RPI-14 (boot half), -16; rewritten and run: SQ-RPI-01, -03, -04, -08.
+
+| Stage | Time | Rows | PASS | FAIL | BATCH-FAULT left |
+|---|---|---|---|---|---|
+| a RPS isolated | 05:39 to 05:41 | 3 | 2 | 0 | 0 (SQ-RPS-04 fixed, rerun in b) |
+| b RPS fixtures + pack | 05:43 to 05:52, 06:02 to 06:03 | 4 | 4 | 0 | 0 |
+| c RP pack server | 05:52 to 06:02 | 10 | 8 | 0 | 0 (SQ-RPI-04, -08 fixed, rerun) |
+| r reruns | 06:03 to 06:08 | (2) | (2) | 0 | 0 |
+| client | not booted | 0 | - | - | - |
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-RPS-01 | PASS | runner: grep -c 'Diet ladder:' = 1, line 'Diet ladder: 44 rungs, 4 slots, 8 pool effects'; no ladder warning; Done 23.6 s |
+| SQ-RPS-04 | PASS | runner: srv/mods = loose solapplepie-1.19.2-2.2.0.jar + Raspberry Pie; JarSelector 'Attempted to select a dependency jar for JarJar which was passed in as source: solapplepie. Using Mod File: .../srv/mods/...' (the loose copy wins, nested skipped without error); one PackInfo mod:solapplepie; Done; one 'Diet ladder: 44 rungs, 4 slots, 8 pool effects'; no duplicate error |
+| SQ-RPS-06 | PASS | runner: debug.log 'Mixing FleetFootedMixin from solraspberrypie.mixins.json into ...EffectFleetFooted'; no Fleet-Footed warning; Done reached |
+| SQ-RPS-08 | PASS | 4 checks passed |
+| SQ-RPS-10 | PASS | 6 checks passed |
+| SQ-RPS-07 | PASS | runner: maxDiversity 11.96657 = Apple Pie decay (startDecay 0, endDecay 32, factor 1-n/32 over the 5 meals) with bread at the fixture's 7.25; with the pack's 2.0859 it would be 7.448 (the row's 13.16/8.00 omitted the decay); summary line '1648 values, 65 family members from 2 file(s) (creativedelight:creativedelight.json, solraspberrypie:rps07.json); 3 ids skipped (mod not loaded)', one override line, no line names nosuchmod |
+| SQ-RPI-01 | PASS | runner: 'Diet ladder: 82 rungs, 5 slots, 38 pool effects' = every entry of defaultconfigs/solraspberrypie/ladder.json (82 rungs, 38 pool; raspberry_pie.md 3.3 says about 81/37); no skipped-entries line; no settings note or problem block |
+| SQ-RPI-02 | PASS | 2 checks passed |
+| SQ-RPI-03 | PASS | runner: qrun_boot2.log: 1 'skipped 1 entries ... unlock nosuchmod:thing at 3.0' line, 1 'V10: flat minecraft:absorption at 4.0' line, 'Diet ladder: 82 rungs' as boot 1 (both added rungs dropped); the row's shell read the pre-restart latest.log, counts taken from qrun_boot2.log |
+| SQ-RPI-04 | PASS | 5 checks passed |
+| SQ-RPI-05 | PASS | runner: 'No player has paused' -> 'Paused diet bonuses for 1 players' -> '1 paused: rpb' -> 'Resumed ...' -> 'No player has paused' -> paused again |
+| SQ-RPI-06 | PASS | runner: bytype diet_book n=1 (solraspberrypie:diet_log), recipes liquid_diet_log_manual_only present; 'recipes food_book' lists only solcarrot:food_book (Apple Pie's food_book recipe removed); 0 NCH error lines |
+| SQ-RPI-07 | PASS | runner: 'Reset the diet of 1 players'; after: Apple Pie foodsEaten 0, foodList [], solrp_gateFoods []; diet maxDiversity 0.0, slots 5 empty compounds, drinks []; zc4 applepie 3 -> 0; Carrot's Food Dictionary list keeps 3 (raspberry_pie.md 12 #30: reset clears Apple Pie's memory, not the dictionary) |
+| SQ-RPI-08 | PASS | runner: max health 20.0 for rp8 (new) and rp7 (has eaten); the only max_health modifier is Carrot's 'Health Gained from Trying New Foods' amount 0.0 (no Apple Pie +4); boot note 'Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off' |
+| SQ-RPI-14 | PASS | runner: 'Diet ladder: 82 rungs, 5 slots, 38 pool effects' (all of the generated file; docs say about 81/37), 0 'Diet ladder (' warning lines (no toggle, V3 to V6, V10), no skipped line; boot half only, the Saturation-at-100 half needs a player (client, not run) |
+| SQ-RPI-16 | PASS | runner: 82 thresholds, non-whole []; 18, 19, 26, 27, 49, 50 all present and apart; start line 82/5/38, 0 'Diet ladder (' warnings |
+
+
+### 11.4 Handover
+
+- No FAIL; no TODO row filed. Every Raspberry Pie publish server row in scope passed on jar 911197e7c.2611222309.
+- Observation, no row criterion: the standalone boot logs 18 `[solapplepie] Item is not food:` WARNs (farmersdelight, farmersrespite, largemeals ids) from Apple Pie 2.2.0's own default `complexityUnparsed` (upstream defaults; the owner decides whether a standalone publish quiets them).
+- Owner: close the 35 UI-look draft rows on the 2026-11-23 ruling (11.2 list) or keep them queued; the 44 behavior client rows, CQ-RPI-21 and CQ-RPS-02, -03, -05, -09 need a row-writing pass or a hand run.
+- `check_all.py --fast` test_queue_rows FAIL (PROC-20): scratch_queue.md blocks are stale against CMP/TSK/BPT/RP/RPS.qb; `python3 tools/status_index.py` re-renders them (not run here: it rewrites generated docs other sessions have open).
+- Tool changes: `tools/scratch_query/rps_fixture.py` (new), `qpin.py` EXTRAS (loose Apple Pie fixture jar). Modset `rps loose` is dead (its jar is not in `mods/`); SQ-RPS-04 copies it in its own section instead.
