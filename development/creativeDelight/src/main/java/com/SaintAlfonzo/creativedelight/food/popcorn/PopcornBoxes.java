@@ -31,7 +31,7 @@ public final class PopcornBoxes {
 
 	static {
 		VARIANTS.put("plain", null);
-		for (String f : new String[] { "cheese", "onion", "garlic", "ghost_pepper", "void_pepper", "cream_and_onion" }) {
+		for (String f : new String[] { "cheese", "onion", "garlic", "ghost_pepper", "void_pepper" }) {
 			VARIANTS.put(f, new ResourceLocation(CreativeDelight.MOD_ID, f));
 		}
 	}

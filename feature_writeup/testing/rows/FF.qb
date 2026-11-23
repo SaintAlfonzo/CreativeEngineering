@@ -669,30 +669,49 @@ expect verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper n=\d+ ids=
 expect verb=tag kind=item tag=creativedelight:flavorable/ice n=[1-9]\d*
 reject verb=\S+ .*done=0
 
-## SQ-FF-31 | Cream and Onion flavor craft; placeable popcorn boxes registered with their recipes
+## SQ-FF-31 | Placeable popcorn boxes registered with their recipes; no Cream and Onion
 @group A
-@commands rdetail of the flavor craft `creativedelight:shapeless/flavor/cream_and_onion`; reg probes for the seven popcorn boxes; rdetail `cheese_popcorn_box`, `plain_popcorn_box`
-@pass the Cream and Onion craft takes popcorn, a cheese or milk and an onion or onion powder (two flavor parts, one flavor); blocks and items `creativedelight:{plain,cheese,onion,garlic,ghost_pepper,void_pepper,cream_and_onion}_popcorn_box` exist (void pepper box recipe only with Ender's Delight Additions); shapeless `cheese_popcorn_box` from 4 popcorn with partial NBT `Flavors` cheese + paper; `plain_popcorn_box` from 4 popcorn + paper
-@fails CD startup `flavors.js` (cream_and_onion and its hidden onion part), data `creativedelight/flavor.js` (extra parts), Java `FlavorRecipe.flavors()` distinct, `food/popcorn/PopcornBoxes`, CD startup `popcorn_boxes.js`, data `corn_delight/recipes.js`
-> cdevtest rdetail creativedelight:shapeless/flavor/cream_and_onion
+@commands reg probes for the six popcorn boxes and the removed Cream and Onion box; rdetail `cheese_popcorn_box`, `plain_popcorn_box`; recipe probe of the removed Cream and Onion flavor craft
+@pass blocks `creativedelight:{plain,cheese,onion,garlic,ghost_pepper,void_pepper}_popcorn_box` exist (void pepper box recipe only with Ender's Delight Additions), no `cream_and_onion_popcorn_box`; shapeless `cheese_popcorn_box` from 4 popcorn with partial NBT `Flavors` cheese + paper; `plain_popcorn_box` from 4 popcorn + paper; no `creativedelight:shapeless/flavor/cream_and_onion`
+@fails `food/popcorn/PopcornBoxes` VARIANTS, Common item_dict `*_popcorn_box` keys, data `corn_delight/recipes.js`, CD startup `flavors.js`
 > cdevtest reg block creativedelight:plain_popcorn_box
+> cdevtest reg block creativedelight:void_pepper_popcorn_box
 > cdevtest reg block creativedelight:cream_and_onion_popcorn_box
 > cdevtest rdetail cheese_popcorn_box
 > cdevtest rdetail plain_popcorn_box
-waitlog verb=rdetail id=\S*plain_popcorn_box\S* 30
-expect verb=rdetail id=creativedelight:shapeless/flavor/cream_and_onion serializer=\S+ .*onion
+> cdevtest recipes creativedelight:shapeless/flavor/cream_and_onion
+waitlog verb=recipes text=creativedelight:shapeless/flavor/cream_and_onion 30
 expect verb=reg kind=block regex=creativedelight:plain_popcorn_box n=1\b
-expect verb=reg kind=block regex=creativedelight:cream_and_onion_popcorn_box n=1\b
+expect verb=reg kind=block regex=creativedelight:void_pepper_popcorn_box n=1\b
+expect verb=reg kind=block regex=creativedelight:cream_and_onion_popcorn_box n=0\b
 expect verb=rdetail id=\S+cheese_popcorn_box serializer=\S+ result=creativedelight:cheese_popcorn_box\*1 ingredients=.*corn_delight:popcorn
 expect verb=rdetail id=\S+plain_popcorn_box serializer=\S+ result=creativedelight:plain_popcorn_box\*1 ingredients=.*minecraft:paper
+expect verb=recipes text=creativedelight:shapeless/flavor/cream_and_onion n=0\b
 reject verb=\S+ .*done=0
 
-## CQ-FF-06 | Popcorn boxes place and serve flavored popcorn; Cream and Onion popcorn
+## CQ-FF-06 | Popcorn boxes place and serve flavored popcorn
 @group client
-@commands craft Cream and Onion popcorn (popcorn, a milk bottle, an onion); craft a Cheese Popcorn Box; place it, take all four servings by hand, then use the empty box
-@pass the craft gives popcorn with the Cream and Onion flavor line and uses the milk and the onion; the box looks like Corn Delight's popcorn box and shrinks per serving; each serving is popcorn with the Cheese flavor; the empty box gives a paper and is removed
+@commands craft a Cheese Popcorn Box from 4 cheese popcorn and a paper; place it, take all four servings by hand, then use the empty box
+@pass the box looks like Corn Delight's popcorn box and shrinks per serving; each serving is popcorn with the Cheese flavor; the empty box gives a paper and is removed
 @fails `PopcornBoxBlock` (getServingItem, takeServing), blockstates `creativedelight:*_popcorn_box` (Corn Delight's models)
 @draft client look; the first client runner writes the steps
+
+## SQ-FF-32 | Sugar, not ghost pepper, on cookies, scones and misc baked goods
+@group A
+@commands tag `creativedelight:flavorable/sugar` and `creativedelight:flavorable/ghost_pepper`
+@pass sugar holds `minecraft:cookie`, `hearthandharvest:raspberry_scone`, `hearthandharvest:croissant`, `creativedelight:plain_donut`, `creativedelight:peach_scone`, `creativedelight:oatmeal_raisin_cookie`, and no `canned_*cookie`; ghost pepper holds none of them (it keeps popcorn, waffles, pancakes, sweet rolls, the brownie and skewers)
+@fails CD startup `flavors.js` sugarOnlyFamilies / sugarOnlyAdd / sugarOnlyRemove, data `creativedelight/flavor_tags.js`, the `cookie` and `baked/misc` family tags
+> cdevtest tag item creativedelight:flavorable/sugar
+> cdevtest tag item creativedelight:flavorable/ghost_pepper
+waitlog verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper 30
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*minecraft:cookie\b
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*hearthandharvest:raspberry_scone
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*hearthandharvest:croissant
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*creativedelight:plain_donut
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*creativedelight:oatmeal_raisin_cookie
+reject verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*canned_\w*cookie
+reject verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper n=\d+ ids=.*(minecraft:cookie\b|raspberry_scone|croissant|plain_donut)
+reject verb=\S+ .*done=0
 
 ## CQ-FF-05 | Tooltips and placeholder art of the new foods
 @group client

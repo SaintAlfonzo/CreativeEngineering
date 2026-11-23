@@ -55,6 +55,16 @@ var sweetPairRemove = [i.beetroot_brownie_tray]
 // Every skewer, raw and grilled, takes all three pairs (dishes/meals #46, owner ruling): garlic + onion, salt + pepper
 // (pepper is on skewers already, Salt's Salted on any food), sugar + ghost pepper
 var skewers = global.has('barbequesdelight') ? [i.t_raw_skewers, i.t_grilled_skewers] : []
+// Sugar alone (not ghost pepper) also goes on every cookie, scone and misc baked good (owner, R31 in
+// plan_food_batch_1119.md): the cookie and baked/misc families, minus their cans, plus the Creative Delight bakes that
+// join those families at the next food_families run
+var sugarOnlyFamilies = ['cookie', 'baked/misc']
+var sugarOnlyAdd = [i.plain_donut, i.oatmeal_raisin_cookie, i.blueberry_scone, i.cranberry_scone, i.lemon_scone,
+	i.orange_scone, i.cherry_scone, i.apple_scone, i.peach_scone]
+var sugarOnlyRemove = [i.canned_bayberry_cookie, i.canned_cherry_cookie, i.canned_cranberry_cookie,
+	i.canned_enchanted_golden_cookie, i.canned_golden_cookie, i.canned_green_tea_cookie, i.canned_honey_cookie,
+	i.canned_lemon_cookie, i.canned_maple_cookie, i.canned_mulberry_cookie, i.canned_oatmeal_cookie,
+	i.canned_persimmon_cookie, i.canned_sweet_berry_cookie, i.canned_uncanny_cookie]
 
 global.flavor = {
 	// popcorn only for now; open them up by family later
@@ -66,17 +76,13 @@ global.flavor = {
 	garlic: { id: 'creativedelight:garlic', name: 'Garlic', item: [i.garlic, i.garlic_powder], saturation: 2,
 		effects: [{ effect: ef.speed, duration: 200, amplifier: 0 }],
 		families: [], add: popcorn.concat(skewers) },
-	// Cream and Onion (food/seasoning #3, owner ruling): a cream (any cheese, or a milk bottle or bucket) and an onion
-	// (whole or powder) in one craft, both used; `extra` names the hidden part holding the onion (below the table)
-	cream_and_onion: { id: 'creativedelight:cream_and_onion', name: 'Cream and Onion',
-		item: [i.any_cheese, i.t_cheese_wedge, i.milk], extra: ['cream_and_onion_onion'], saturation: 2,
-		families: [], add: popcorn },
 	// sugar or powdered sugar (not the rest of #forge:sugar: glycerol). Popcorn + sugar is Corn Delight's caramel popcorn,
 	// so not on popcorn. Sweet desserts for the sugar + ghost pepper pair (owner ruling R26; agent's pick, listed
 	// for review, widened by the owner to every pancake): waffles, pancakes, sweet rolls and the brownie; never a
 	// placed block (the brownie tray). Every skewer too (the pair on skewers).
 	sugar:  { id: 'creativedelight:sugar',  name: 'Sugar',  item: [i.sugar, i.powdered_sugar], saturation: 2, combines: ['ghost_pepper'],
-		families: sweetPairFamilies, add: skewers, remove: sweetPairRemove },
+		families: sweetPairFamilies.concat(sugarOnlyFamilies), add: skewers.concat(sugarOnlyAdd),
+		remove: sweetPairRemove.concat(sugarOnlyRemove) },
 	// Ghost pepper powder, milled from Vintage Delight's ghost pepper (food/seasoning #28); not Barbeque's chili powder.
 	// Popcorn, and the sugar desserts above so the pair has foods.
 	ghost_pepper: { id: 'creativedelight:ghost_pepper', name: 'Ghost Pepper', item: i.ghost_pepper_powder, saturation: 2,
@@ -124,10 +130,6 @@ global.flavor = {
 	grilled: { id: 'barbequesdelight:grilled', name: 'Grilled', station: true, addsSlots: true, combinesAll: true,
 		needs: 'barbequesdelight', families: [], add: [] },
 }
-// The onion part of Cream and Onion: same flavor id, its own ingredient. Not enumerable, so it is no flavor of its own
-// (no definition, tag or craft); global.NCH.flavor reads it by key when flavor.js builds the two-part craft.
-Object.defineProperty(global.flavor, 'cream_and_onion_onion', { enumerable: false,
-	value: { id: 'creativedelight:cream_and_onion', name: 'Cream and Onion', item: [i.onion, i.onion_powder] } })
 
 // Flavor pairs (R3): [flavor key or 'salt' (Salt's Salted), flavor key, extra saturation points]. Both on one food
 // give the extra (0.5 a flavor: 2 + 2 + 1 = 5). The pack flavors of a pair also need each other in `combines`.

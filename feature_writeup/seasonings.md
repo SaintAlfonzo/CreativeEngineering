@@ -157,15 +157,15 @@ Owner rulings R3 to R7, R20, R24.
   pair has foods. Cookies, scones and misc baked goods wait on the owner's exemptions.
 - **Skewers** (`dishes/meals #46`, plan_meals_rolls_bbq.md ruling 5): every raw and grilled skewer takes onion, garlic,
   sugar and ghost pepper besides the Barbeque's Delight flavors, so all three pairs go on a skewer.
-- **Cream and Onion** (R29): one flavor put on by one craft with two ingredients, a cream (any cheese, cheese wedge or
-  `#forge:milk`) and an onion (or onion powder), on popcorn. `global.flavor.cream_and_onion.extra` names a hidden
-  (non-enumerable) part key holding the onion; `flavor.js` passes both to `NCH.flavor`, and `FlavorRecipe.flavors()`
-  lists a flavor once. No overlay icon yet.
-- **Popcorn boxes** (R30): `creativedelight:<variant>_popcorn_box` for plain popcorn and the six popcorn flavors (CD
+- **Cream and Onion** (R29): removed again (owner, 2026-11-23: not a popcorn flavor); dill also stays out.
+- **Popcorn boxes** (R30): `creativedelight:<variant>_popcorn_box` for plain popcorn and five popcorn flavors (cheese, onion, garlic, ghost pepper, void pepper) (CD
   `food/popcorn/PopcornBoxes`, `PopcornBoxBlock`, a Farmer's Delight `FeastBlock`; with Corn Delight only). Corn
   Delight's popcorn box models and texture, 4 servings of popcorn carrying the flavor, taken by hand; the empty box
-  gives a paper. Crafted from 4 popcorn with the flavor (partial NBT) + paper. Item keys sit in CD startup
-  `popcorn_boxes.js` until Common's item_dict takes them. Tests SQ-FF-31, CQ-FF-06.
+  gives a paper. Crafted from 4 popcorn with the flavor (partial NBT) + paper; item keys in Common's item_dict. Tests
+  SQ-FF-31, CQ-FF-06.
+- **Sugar on bakes** (R31, owner 2026-11-23): sugar alone, not ghost pepper, also goes on every cookie, scone and misc
+  baked good: the `cookie` and `baked/misc` families minus their cans, plus the Creative Delight plain donut, oatmeal
+  raisin cookie and seven fruit scones until the next food_families run files them. Test SQ-FF-32.
 - **Ice** (`#3` leftovers, R26): Neapolitan's Ice Cubes (`#forge:ice_cubes`) as the Ice flavor on `drink/juice` and
   `drink/soda`; +2 saturation like every flavor, no overlay icon yet (art list). Dill, cream and onion and placeable
   popcorn variants are still open on the row. Test SQ-FF-30.

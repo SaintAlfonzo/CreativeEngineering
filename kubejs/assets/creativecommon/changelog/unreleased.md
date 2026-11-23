@@ -223,9 +223,9 @@
 - **Changed:** Grilled adds no saturation [2]; a grilled food takes 2 more flavors.
 - **Removed:** Food seasoned before this version loses its seasonings.
 - **New:** Sugar and Ghost Pepper flavor waffles, pancakes, sweet rolls and the Beetroot Brownie, so the pair has foods.
+- **New:** Sugar, without Ghost Pepper, also flavors every cookie, every scone and the other baked goods (Croissant, Cider Donut, Plain Donut, Honey Bread, Mulberry Bread, Glowing Bread, Strange Eclair, Adzuki Bun, Waffle).
 - **New:** Every skewer takes Onion, Garlic, Sugar and Ghost Pepper, so Garlic with Onion, Salt with Pepper and Sugar with Ghost Pepper all go on skewers.
-- **New:** Cream and Onion, a popcorn flavor crafted from a cheese or a milk and an onion or onion powder.
-- **New:** Placeable Plain, Cheese, Onion, Garlic, Ghost Pepper, Void Pepper and Cream and Onion Popcorn Boxes: 4 popcorn of that flavor and a paper. Each holds 4 servings of its popcorn; the empty box gives back the paper.
+- **New:** Placeable Plain, Cheese, Onion, Garlic, Ghost Pepper and Void Pepper Popcorn Boxes: 4 popcorn of that flavor and a paper. Each holds 4 servings of its popcorn; the empty box gives back the paper.
 - **New:** Ice, a flavor from Neapolitan's Ice Cubes, for juices and sodas.
 
 ## Fats and Oils <!-- icon: rusticdelight:cooking_oil -->

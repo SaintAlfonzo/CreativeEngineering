@@ -64,6 +64,13 @@ i.pumpkin_muffin = 'creativedelight:pumpkin_muffin';
 i.oatmeal_raisin_cookie = 'creativedelight:oatmeal_raisin_cookie';     // baking/baked-goods #23
 i.pickled_garlic = 'creativedelight:pickled_garlic';                   // dishes/pickles-and-ferments #17
 i.boxed_raw_pasta = 'creativedelight:boxed_raw_pasta';                 // dishes/ingredients #8 (block, 9 raw pasta)
+// Placeable popcorn boxes (food/seasoning #3; CD Java food/popcorn/PopcornBoxes, with Corn Delight only)
+i.plain_popcorn_box = 'creativedelight:plain_popcorn_box';
+i.cheese_popcorn_box = 'creativedelight:cheese_popcorn_box';
+i.onion_popcorn_box = 'creativedelight:onion_popcorn_box';
+i.garlic_popcorn_box = 'creativedelight:garlic_popcorn_box';
+i.ghost_pepper_popcorn_box = 'creativedelight:ghost_pepper_popcorn_box';
+i.void_pepper_popcorn_box = 'creativedelight:void_pepper_popcorn_box';
 i.catfish = 'alexsmobs:raw_catfish';
 i.component_diamond = 'creativeengineering:component_diamond';
 // Air Brake — hold-to-use elytra brake. Item: startup_scripts/items/air_brake.js |

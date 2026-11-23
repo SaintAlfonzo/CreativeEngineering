@@ -17,8 +17,13 @@ ServerEvents.recipes(e => {
 		// Placeable plain and flavored popcorn boxes (food/seasoning #3, owner ruling): 4 popcorn carrying the flavor + paper
 		// (partial NBT: popcorn with that flavor among others matches too); plain takes any popcorn. A flavor whose
 		// member is off gets no box recipe.
-		Object.keys(global.popcornBoxes || {}).forEach(v => {
-			var key = global.popcornBoxes[v], box = i[v + '_popcorn_box']
+		// [box, global.flavor key or null for plain]: the variants of CD Java food/popcorn/PopcornBoxes
+		;[
+			[i.plain_popcorn_box, null], [i.cheese_popcorn_box, 'cheese'], [i.onion_popcorn_box, 'onion'],
+			[i.garlic_popcorn_box, 'garlic'], [i.ghost_pepper_popcorn_box, 'ghost_pepper'],
+			[i.void_pepper_popcorn_box, 'void_pepper'],
+		].forEach(row => {
+			var box = row[0], key = row[1]
 			if (!box || !Item.exists(box)) return
 			var popcorn = i.popcorn
 			if (key) {
@@ -26,7 +31,7 @@ ServerEvents.recipes(e => {
 				if (!fl || (fl.needs && !global.CD.on(fl.needs))) return
 				popcorn = Item.of(i.popcorn, '{Flavors:["' + fl.id + '"]}')
 			}
-			R.shapeless(box, [popcorn, popcorn, popcorn, popcorn, i.paper], e, v + '_popcorn_box')
+			R.shapeless(box, [popcorn, popcorn, popcorn, popcorn, i.paper], e, box.split(':')[1])
 		})
 
 		//######################### Taco #########################
