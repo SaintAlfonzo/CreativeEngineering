@@ -529,3 +529,60 @@ Table: `perf/runs/r1123rp/table.md` (`qrun.py table` over every r1123rp RES dir 
 - Owner: close the 35 UI-look draft rows on the 2026-11-23 ruling (11.2 list) or keep them queued; the 44 behavior client rows, CQ-RPI-21 and CQ-RPS-02, -03, -05, -09 need a row-writing pass or a hand run.
 - `check_all.py --fast` test_queue_rows FAIL (PROC-20): scratch_queue.md blocks are stale against CMP/TSK/BPT/RP/RPS.qb; `python3 tools/status_index.py` re-renders them (not run here: it rewrites generated docs other sessions have open).
 - Tool changes: `tools/scratch_query/rps_fixture.py` (new), `qpin.py` EXTRAS (loose Apple Pie fixture jar). Modset `rps loose` is dead (its jar is not in `mods/`); SQ-RPS-04 copies it in its own section instead.
+
+## 12. r1123cd: Creative Delight and Creative Brewing jar-changed rows
+
+Targeted run model (skill `scratch-test` part B), owner request 2026-11-23 via the main session (orchestrator).
+Runner: runner-cd for the main session. Judging by separate scratch-judge agents afterwards. Results in
+`perf/runs/r1123cd*/`; perf capture on (bulk run, session `r1123cd`).
+
+### 12.1 Scope
+
+- Taken: 824 rows in `tools/scratch_query/batches/r1123cd/plan.json` (a `qrun.py plan --json` subset: every
+  jar-changed row whose section `@@jars` names creativedelight or creativebrewing), 82 rows files, 102 drive steps
+  (server 783, worldgen 37, longwait 2, long 2; no client rows).
+- Not taken: SQ-HH (HH.qb), deferred to a later run (owner). Client rows: none in the plan.
+
+### 12.2 Jars and preflight
+
+| jar | `mods/` (stamp) |
+|---|---|
+| creativedelight | 1.1.0+1aeb786f9.dirty-501b85.2611230023 |
+| creativebrewing | 1.0.0+828d92737.dirty-ed2da3.2611230003 |
+| creativecommon | 1.3.0+2e68d8807.dirty-e4f25c.2611230023 |
+
+- 12:22 RUNNER.md idle -> claimed (Run r1123cd); `game_jvms.sh` empty; `df -h /` 69 GB free; `jarstamp.py pending` 0.
+- `check_all.py --fast`: 42 run, 2 FAIL, neither a runtime test: comment_dates (3 dated comments in uncommitted
+  development/ files: LeafPiercingTrail.java, GoldenItems.java, golden_values.js; not runner-editable) and
+  test_queue_rows PROC-20 (scratch_queue.md blocks stale against GLD.qb, edited uncommitted by another session).
+- Full-pack steps run with the 4 jars lacking a mod_sides.md row dropped (`source perf/runs/r1123cc/env.sh`, DROPJARS
+  chestbubblesrevived, kleeslabs, numarevive, prettybeaches; same as 9 to 11; the add-mod pass is the owner's).
+- GLD.qb (24 plan rows) has uncommitted edits by another session; the drive reads it at its step start.
+
+### 12.3 Steps
+
+`qrun.py drive start r1123cd --plan-json tools/scratch_query/batches/r1123cd/plan.json` (one prep + boot per section
+and world group; state `perf/runs/r1123cd/drive/state.json`); reruns via `perf/runs/r1123cd/rerun.txt`.
+
+### 12.4 Run notes
+
+- 12:30 pre-screen (`qprescreen.py --plan-json`): 102 steps, 32 likely on 30 rows, 14 risk, 438 stale. Fixed 2
+  (row steps): SQ-CEQ-05 `forceload add 336 288 351 303` before its setblock at 342 -60 300 (its forceload lived in
+  unplanned SQ-CEQ-02); SQ-HOP-13 `forceload add 650 500 680 540` before its setblocks at 666 -60 520 (forceload lived
+  in unplanned SQ-HOP-12). Left as false positives: 13 "unloaded" lines on `pbot spawn` / `tp` of a bot (the bot loads
+  its chunks) or `locate` origins, SQ-TX-01 (unloaded on purpose); dead ids that are recipe ids or types, structures,
+  configured features, enchantments, tags or the `minecraft:fluid` registry (not in the item/block dump), or ids in
+  prose; SQ-CDJ-09 cdj5home (a diagnostic `say` only). Stale rows not rewritten (run scope).
+- 12:29 perf session r1123cd open (collector pid 3566122). Drive started detached with DROPJARS exported, session
+  runner-cd: 179 steps, 827 rows (boot-phase setup rows joined), 0 skipped; driver ETA 1902 min (over the 12 h cap;
+  the per-row estimates are conservative, watched against the cap).
+- 13:08 steps 1 to 9 done, step 10 (port_chain mod set) booted and running rows. Observed pace about 2.5 min fixed cost
+  per step plus about 0.4 min per row: about 13 h for the whole drive, past the 12 h cap. First 52 results: PASS 16,
+  LOOK 33, FAIL 3 (SQ-BBQ-03, SQ-BBQ2-05, SQ-ROLL-11; for the judges; SQ-ROLL-11 log shows bread +8 hunger where the
+  row expects 5). Disk 67 GB free, about 0.3 GB per step.
+- 13:10 runner-cd handed back to the orchestrator while the detached drive keeps running (it continues without the
+  runner; `qrun.py drive status r1123cd` for progress, `drive resume r1123cd` after a dead driver).
+
+### 12.5 Final verdicts
+
+Pending judging (scratch-judge agents).

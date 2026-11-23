@@ -195,6 +195,7 @@ reject verb=\S+ .*done=0
 > cdevtest tagsof creativeengineering:copper_dust_pile
 > cdevtest tag block creativeequipment:needs_copper_tool
 shell grep -cE "\[tags\].*harvest|harvest\.js" logs/kubejs/server.log; grep -nE "\[tags\].*harvest|harvest\.js" logs/kubejs/server.log | head -4 | cut -c1-200
+> forceload add 336 288 351 303
 > setblock 342 -60 300 creativeengineering:aluminum_plate_block
 > cdevtest break 342 -60 300 held=everythingcopper:copper_pickaxe
 > setblock 343 -60 300 creativeengineering:aluminum_plate_block

@@ -578,6 +578,7 @@ look five fertilizers each used once and the vine one age up; the feather kept a
 @pass bone meal: `main=minecraft:bone_meal*1`, age 1 or more; bag: `main=hearthandharvest:fertilizer_bag*1{Damage:1}`, age 2; age 3: state `age=1`, `main=create:tree_fertilizer*2`, 1 or 2 `hearthandharvest:hops` on the ground
 @fails bone meal unchanged: the `BoneMealItem` pass (`held.getItem() instanceof BoneMealItem`) or `isValidBonemealTarget`; bag shrunk instead of damaged: `isDamageableItem` branch
 @reviewed 2026-11-20
+> forceload add 650 500 680 540
 > setblock 666 -60 520 minecraft:oak_log
 > setblock 667 -60 520 minecraft:oak_log
 > setblock 668 -60 520 minecraft:oak_log
