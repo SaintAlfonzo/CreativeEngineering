@@ -83,6 +83,10 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - A hand claim of RUNNER.md blocks `qrun.py drive start|resume`: `qdrive.claim` accepts a held claim only when its `Run:` line starts with the drive's run id. Write `Run: <run id> ...` in the claim, or leave RUNNER idle and let the driver claim it (2026-11-21).
 - A `@group` text starting with B is world group B (`qdrive.world_letter`), even a batch label like `b1`; the section's `@@prep A:` lines are then skipped. Start such groups with the world letter (`A b1 ...`) (r1122cc, SQ-CGE section 2).
 
+- Jars another session or the owner put in `mods/` without a mod_sides.md row make every full-pack step refuse at the
+  pin check. For a run that tests the known pack, `DROPJARS="glob ..."` in the driver's environment makes prep_srv.sh
+  remove them from `srv/mods` before the pin; `run_captures.py serve --drop GLOB` does the same for a client. Say so in
+  the run notes; the sides rows are the add-mod pass's (r1123cc).
 ## Boot and shutdown
 
 - A multi-boot section runs its boots only under the driver (`qrun.py drive`, `@boot N` + `@@prep boot=N:`): a plain
@@ -138,6 +142,11 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   (r1106cbb).
 - Never run `scratch_server.sh boot` with captured stdout/stderr: the fifo feeder inherited the pipe and a `subprocess.run(capture_output=True)` never returned (r1118 drive hang; feeder now writes stderr to /dev/null, qdrive logs boot to drive/sNN_boot.txt).
 
+- `game_jvms.sh` used to list the ATLauncher launcher itself (`ATLauncher.jar`) as a game JVM; it is skipped since
+  r1123cc. A client the owner starts from the launcher (`--launchTarget forgeclient`, cwd the instance) is a real game
+  JVM: wait for it to exit, never kill it (r1123cc lost 10 minutes to one).
+- A wait loop `while pgrep -f "drive resume RUN"` matches its own shell's command line and never ends: use a bracket
+  pattern (`pgrep -f "[q]run.py drive resume RUN"`) (r1123cc).
 ## Driving the server and processes
 
 - Commands go through the stdin fifo (`scratch_server.sh cmd`); console is op, positioned at world spawn. `cmd`/`stop`
@@ -251,6 +260,8 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   `@superseded` and `@draft` marks are dropped at step start without that.
 - Dedicated-server dumps carry raw lang keys (517 food names untranslated), so a row comparing names with the client-made pack dump in `kubejs/exported/` sees noise; a row that diffs against a dump runs its own `/dumpall` first (r1120nv SQ-RFX-09, -30).
 
+- Common's `[swaps] load report: every listed id resolved` line is written at server stop (SwapReport onStopping), not
+  at boot: a row reads it after a `restart`, from the newest `logs/qrun_bootN.log` (r1123cc SQ-SMK-01).
 ## Regexes and log matching
 
 - Enforced: a regex that does not compile, or with `(?i)` after its start (Python 3.10 warns and applies it to the whole

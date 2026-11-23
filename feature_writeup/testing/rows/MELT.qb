@@ -62,6 +62,7 @@ look [melting] tags salt >= 2 (bootexpect above); the five end states above
 @pass every distance-3 ice melted, every distance-4 ice still ice (each pair); the unlit-campfire ice still ice
 @fails the 4-block ice melted: range wrong or vanilla light melt on (`vanillaLightMelting`); magma at 3 not melting: SQ-MELT-07; unlit campfire melting: `fireActive` (lit property)
 @from batches/r1115/p3_a1.qb
+@reviewed 2026-11-23
 # self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
 # bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
 > forceload add 1984 1984 2143 2143
@@ -75,36 +76,57 @@ sleep 3
 > execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
 sleep 3
 > setblock 2033 -61 2000 minecraft:ice
+> setblock 2033 -60 2000 minecraft:glass
 > setblock 2026 -61 2000 minecraft:ice
+> setblock 2026 -60 2000 minecraft:glass
 > setblock 2030 -61 2003 minecraft:snow
+> setblock 2030 -60 2003 minecraft:glass
 > setblock 2030 -61 1996 minecraft:snow
+> setblock 2030 -60 1996 minecraft:glass
 > setblock 2030 -62 2000 minecraft:netherrack
 > setblock 2030 -61 2000 minecraft:fire
 > setblock 2033 -61 2012 minecraft:ice
+> setblock 2033 -60 2012 minecraft:glass
 > setblock 2026 -61 2012 minecraft:ice
+> setblock 2026 -60 2012 minecraft:glass
 > setblock 2030 -61 2015 minecraft:snow
+> setblock 2030 -60 2015 minecraft:glass
 > setblock 2030 -61 2008 minecraft:snow
+> setblock 2030 -60 2008 minecraft:glass
 > setblock 2030 -62 2012 minecraft:soul_soil
 > setblock 2030 -61 2012 minecraft:soul_fire
 > setblock 2033 -61 2024 minecraft:ice
+> setblock 2033 -60 2024 minecraft:glass
 > setblock 2026 -61 2024 minecraft:ice
+> setblock 2026 -60 2024 minecraft:glass
 > setblock 2030 -61 2027 minecraft:snow
+> setblock 2030 -60 2027 minecraft:glass
 > setblock 2030 -61 2020 minecraft:snow
+> setblock 2030 -60 2020 minecraft:glass
 > setblock 2030 -61 2024 minecraft:campfire[lit=true]
 > setblock 2033 -61 2036 minecraft:ice
+> setblock 2033 -60 2036 minecraft:glass
 > setblock 2026 -61 2036 minecraft:ice
+> setblock 2026 -60 2036 minecraft:glass
 > setblock 2030 -61 2039 minecraft:snow
+> setblock 2030 -60 2039 minecraft:glass
 > setblock 2030 -61 2032 minecraft:snow
+> setblock 2030 -60 2032 minecraft:glass
 > setblock 2030 -61 2036 minecraft:soul_campfire[lit=true]
 > setblock 2033 -61 2048 minecraft:ice
+> setblock 2033 -60 2048 minecraft:glass
 > setblock 2026 -61 2048 minecraft:ice
+> setblock 2026 -60 2048 minecraft:glass
 > setblock 2030 -61 2051 minecraft:snow
+> setblock 2030 -60 2051 minecraft:glass
 > setblock 2030 -61 2044 minecraft:snow
+> setblock 2030 -60 2044 minecraft:glass
 > setblock 2030 -61 2048 minecraft:magma_block
 > setblock 2031 -61 2060 minecraft:ice
+> setblock 2031 -60 2060 minecraft:glass
 > setblock 2030 -61 2060 minecraft:campfire[lit=false]
 sleep 1
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+reject ^(?!.*Error parsing recipe).*(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
 > gamerule randomTickSpeed 1000
 sleep 120
 > gamerule randomTickSpeed 3
@@ -197,12 +219,13 @@ expect SQ-MELT-03-flow_ice4_water$
 expect SQ-MELT-03-cauldron_ice4_water$
 look flowing lava cell at 2062 present (fed by the source 6 away from the ice)
 
-## SQ-MELT-04 | blue ice beside salt steps blue -> packed -> ice -> water at the slow rate; packed by fire / lava ranges (randomTickSpeed 100, 5 min)
+## SQ-MELT-04 | blue ice beside salt never steps (salt skips blue ice, melting.md 1); packed ice: fire never, lava within 2 (randomTickSpeed 100, 5 min)
 @group A
 @commands Four Salt Blocks each touching one `minecraft:blue_ice`; the first watched every tick for 5 min (`cdevtest watch`); packed ice touching fire and packed ice at distance 2 from fire; packed ice at 2 and at 3 from lava; wait 5 min
-@pass blue ice steps blue -> packed -> ice -> water, never skipping a tier; step count over the window roughly `slowMeltChance` (0.05) x random ticks (about 1 in 20 of the melts the plain ice gets); packed beside fire stepped, at 2 from fire not; at 2 from lava stepped, at 3 not
+@pass blue ice beside salt stays blue ice (blue0 watched every tick, no state change; blue1 to blue3 end states blue ice); plain ice beside salt went to water; packed ice touching fire kept (fire never melts the slow tier), at 2 from fire kept; at 2 from lava stepped, at 3 not
 @fails skipped tiers: `slowSteps`; no steps at all: blue/packed not random ticking (`extraRandomTickBlocks`)
 @from batches/r1115/p3_a1.qb
+@reviewed 2026-11-23
 # self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
 # bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
 > forceload add 1984 1984 2143 2143
@@ -248,16 +271,22 @@ shell awk '/verb=watch watching=state ticks=6000 every=1/{n=1; k=0; last=""} n &
 > cdevtest state 2013 -61 2084
 > cdevtest state 2019 -61 2084
 > cdevtest state 2025 -61 2084
-> execute unless block 2001 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_fire1_stepped
+> execute if block 2001 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_fire1_kept
+> execute if block 2007 -61 2084 minecraft:blue_ice run say SQ-MELT-04-blue1_kept
+> execute if block 2013 -61 2084 minecraft:blue_ice run say SQ-MELT-04-blue2_kept
+> execute if block 2019 -61 2084 minecraft:blue_ice run say SQ-MELT-04-blue3_kept
 > execute if block 2014 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_fire2_kept
 > execute unless block 2026 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_lava2_stepped
 > execute if block 2039 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_lava3_kept
-expect SQ-MELT-04-packed_fire1_stepped$
+expect SQ-MELT-04-packed_fire1_kept$
+expect SQ-MELT-04-blue1_kept$
+expect SQ-MELT-04-blue2_kept$
+expect SQ-MELT-04-blue3_kept$
 expect SQ-MELT-04-packed_fire2_kept$
 expect SQ-MELT-04-packed_lava2_stepped$
 expect SQ-MELT-04-packed_lava3_kept$
 reject \[cdevtest\] .*done=0
-look rows/SQ-MELT-04.shell.txt: blue0 sequence and the tick of each step in the watch lines (slow steps ~ 1/(100/4096*0.05) = 820 ticks mean, ice -> water ~ 102 ticks); blue1 to blue3 end states (no tier skipped is only proven for blue0); plain ice beside salt went to water
+look rows/SQ-MELT-04.shell.txt: blue0 sequence is blue ice alone (no step in 6000 ticks); the cdevtest state lines: blue1 to blue3 blue ice, plain ice beside salt water
 
 ## SQ-MELT-05 | Nether: ice beside a Salt Block -> air, never water
 @group B-nether
@@ -296,6 +325,7 @@ reject \[cdevtest\] .*done=0
 @pass distance 3 melted, 4 not, for all six; sea lantern, redstone torch, jelly torch and unlit brazier ice unchanged; with the switch on the sea-lantern ice melts
 @fails a modded id missing from the tag: `melting_tags.js` globs / `has()`; sea lantern melting with the switch off: `VanillaLightMeltMixin` not applied (grep `latest.log` for the mixin)
 @from batches/r1115/p3_a1.qb
+@reviewed 2026-11-23
 # self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
 # bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
 > forceload add 1984 1984 2143 2143
@@ -309,45 +339,73 @@ sleep 3
 > execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
 sleep 3
 > setblock 2093 -61 2000 minecraft:ice
+> setblock 2093 -60 2000 minecraft:glass
 > setblock 2086 -61 2000 minecraft:ice
+> setblock 2086 -60 2000 minecraft:glass
 > setblock 2090 -61 2003 minecraft:snow
+> setblock 2090 -60 2003 minecraft:glass
 > setblock 2090 -61 1996 minecraft:snow
+> setblock 2090 -60 1996 minecraft:glass
 > setblock 2090 -61 2000 minecraft:torch
 > setblock 2093 -61 2012 minecraft:ice
+> setblock 2093 -60 2012 minecraft:glass
 > setblock 2086 -61 2012 minecraft:ice
+> setblock 2086 -60 2012 minecraft:glass
 > setblock 2090 -61 2015 minecraft:snow
+> setblock 2090 -60 2015 minecraft:glass
 > setblock 2090 -61 2008 minecraft:snow
+> setblock 2090 -60 2008 minecraft:glass
 > setblock 2090 -61 2012 minecraft:soul_torch
 > setblock 2093 -61 2024 minecraft:ice
+> setblock 2093 -60 2024 minecraft:glass
 > setblock 2086 -61 2024 minecraft:ice
+> setblock 2086 -60 2024 minecraft:glass
 > setblock 2090 -61 2027 minecraft:snow
+> setblock 2090 -60 2027 minecraft:glass
 > setblock 2090 -61 2020 minecraft:snow
+> setblock 2090 -60 2020 minecraft:glass
 > setblock 2090 -61 2024 minecraft:lantern
 > setblock 2093 -61 2036 minecraft:ice
+> setblock 2093 -60 2036 minecraft:glass
 > setblock 2086 -61 2036 minecraft:ice
+> setblock 2086 -60 2036 minecraft:glass
 > setblock 2090 -61 2039 minecraft:snow
+> setblock 2090 -60 2039 minecraft:glass
 > setblock 2090 -61 2032 minecraft:snow
+> setblock 2090 -60 2032 minecraft:glass
 > setblock 2090 -61 2036 supplementaries:sconce
 > setblock 2093 -61 2048 minecraft:ice
+> setblock 2093 -60 2048 minecraft:glass
 > setblock 2086 -61 2048 minecraft:ice
+> setblock 2086 -60 2048 minecraft:glass
 > setblock 2090 -61 2051 minecraft:snow
+> setblock 2090 -60 2051 minecraft:glass
 > setblock 2090 -61 2044 minecraft:snow
+> setblock 2090 -60 2044 minecraft:glass
 > setblock 2090 -61 2048 everythingcopper:copper_lantern
 > setblock 2093 -61 2060 minecraft:ice
+> setblock 2093 -60 2060 minecraft:glass
 > setblock 2086 -61 2060 minecraft:ice
+> setblock 2086 -60 2060 minecraft:glass
 > setblock 2090 -61 2063 minecraft:snow
+> setblock 2090 -60 2063 minecraft:glass
 > setblock 2090 -61 2056 minecraft:snow
+> setblock 2090 -60 2056 minecraft:glass
 > setblock 2090 -61 2060 minecraft:glowstone
 > setblock 2091 -61 2072 minecraft:ice
+> setblock 2091 -60 2072 minecraft:glass
 > setblock 2090 -61 2072 minecraft:sea_lantern
 > setblock 2091 -61 2084 minecraft:ice
+> setblock 2091 -60 2084 minecraft:glass
 > setblock 2090 -61 2084 minecraft:redstone_torch
 > setblock 2091 -61 2096 minecraft:ice
+> setblock 2091 -60 2096 minecraft:glass
 > setblock 2090 -61 2096 upgrade_aquatic:blue_jelly_torch
 > setblock 2091 -61 2108 minecraft:ice
+> setblock 2091 -60 2108 minecraft:glass
 > setblock 2090 -61 2108 decorative_blocks:brazier[lit=false]
 sleep 1
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+reject ^(?!.*Error parsing recipe).*(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
 > gamerule randomTickSpeed 1000
 sleep 120
 > gamerule randomTickSpeed 3
@@ -416,6 +474,7 @@ sleep 3
 > execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
 sleep 3
 > setblock 2091 -61 2120 minecraft:ice
+> setblock 2091 -60 2120 minecraft:glass
 > setblock 2090 -61 2120 minecraft:sea_lantern
 sleep 1
 > gamerule randomTickSpeed 1000
@@ -433,6 +492,7 @@ restart
 @pass ice melted; latest.log `[melting] source-driven fire (light below 4, random ticks): [minecraft:magma_block (light 3)...]`
 @fails magma not source-driven: `DRIVEN` flag / `isRandomlyTicking`; the palette pre-check (`mayHaveTargets`)
 @from batches/r1115/p3_a1.qb
+@reviewed 2026-11-23
 # self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
 # bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
 > forceload add 1984 1984 2143 2143
@@ -457,7 +517,7 @@ sleep 120
 > execute if block 2003 -59 2060 minecraft:water run say SQ-MELT-07-ice_water
 expect SQ-MELT-07-ice_water$
 look boot source-driven line names magma_block (light 3); the ice had block light 0 before the wait (expect above)
-bootexpect \[melting\] source-driven fire \(light below 4, random ticks\): \[minecraft:magma_block \(light 3\)
+bootexpect \[melting\] source-driven fire \(light below 4, random ticks\): \[.*minecraft:magma_block \(light 3\)
 expect verb=state pos=2003,-59,2060 state="?minecraft:ice\b.*light_block=0
 reject \[cdevtest\] .*done=0
 
@@ -469,37 +529,35 @@ reject \[cdevtest\] .*done=0
 @reviewed 2026-11-17
 @draft no steps written yet: the next runner writes them (survival bot with salt dust on stone, snow, ice; r1118 R2 note, 2026-11-18)
 
-## SQ-MELT-08 | salt item click (survival bot) steps blue ice one tier per click: blue -> packed -> ice -> water
+## SQ-MELT-08 | salt item click (survival bot) steps packed ice one tier per click: packed -> ice -> water (blue ice is not saltable)
 @group A
-@commands Right-click `minecraft:blue_ice` with a salt item three times (`salt:salt`, survival)
-@pass blue -> packed -> ice -> water, one step per click, every click
+@commands Right-click `minecraft:packed_ice` with a salt item twice (`salt:salt`, survival)
+@pass packed -> ice -> water, one step per click, 1 dust spent per click (salt.md Hand click; blue ice is not in melting/saltable, melting.md 1)
 @fails the salt member's item click (Creative Delight, agent cd-a); it should call `Melting.meltStep`
 @from batches/r1115/p3_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 # r1118 (2026-11-18): own forceload and bot (P3-00 setup lost); the retired zmelt probe dropped
 > forceload add 1984 1984 2143 2143
 sleep 3
 > execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
 sleep 3
-> setblock 2048 -61 2072 minecraft:blue_ice
+> setblock 2048 -61 2072 minecraft:packed_ice
 > clear m3
-> pbot hold m3 salt:salt 3
+> pbot hold m3 salt:salt 2
 > pbot use m3 2048 -61 2072 up
-> execute if block 2048 -61 2072 minecraft:packed_ice run say SQ-MELT-08-click1
+> execute if block 2048 -61 2072 minecraft:ice run say SQ-MELT-08-click1
 expect SQ-MELT-08-click1$
 > pbot use m3 2048 -61 2072 up
-> execute if block 2048 -61 2072 minecraft:ice run say SQ-MELT-08-click2
+> execute if block 2048 -61 2072 minecraft:water run say SQ-MELT-08-click2
 expect SQ-MELT-08-click2$
-> pbot use m3 2048 -61 2072 up
-> execute if block 2048 -61 2072 minecraft:water run say SQ-MELT-08-click3
-expect SQ-MELT-08-click3$
 > pbot inv m3 get
 waitlog \[cdevtest\] verb=pbot\.inv bot=m3 filled= 20
-look the use replies; the verb=pbot.inv lines show the salt left (one step per click is the three execute checks)
+look the use replies; the verb=pbot.inv lines show the salt left (one step per click is the two execute checks)
 reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 
 ## SQ-MELT-09 | Common + Compat: fire and lava melt as in -02 / -03; [melting] tags salt 0; no melting error or warning
 @group A
+@reviewed 2026-11-23
 @commands Boot the Common + Compat set (no Creative Delight, so no Salt or Vintage); fire and lava cases of -02 and -03 (one pair each); grep latest.log for `melting`
 @pass fire and lava melt as in -02 / -03; `[melting] tags:` with salt 0; no error or warning naming melting
 @fails `melting_tags.js` touching an absent mod's id without `has()`; a Java reference to a Salt class
@@ -509,7 +567,8 @@ reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 # probes-only kubejs; no Devtools); the retired zmelt probe dropped; the reject skips KubeJS recipe-parse warnings (judge-8)
 bootexpect \[melting\] tags: \d+ meltable, \d+ slow, 0 salt
 # Forge fills a fresh config with "Incorrect key melting... corrected" WARN lines (no config/ in this set): not a fault
-bootreject (?i)^(?!.*KubeJS Recipe Event)(?=.*(ERROR|WARN))(?!.*Incorrect key).*melting|melting.*(Exception|NoClassDefFound)
+# r1123cc judge-f3: an empty melting/salt tag (no Salt, no Vintage in this set) makes dict_tag_check WARN once per start; expected, melting.md 8 (tags may be empty)
+bootreject (?i)^(?!.*KubeJS Recipe Event)(?=.*(ERROR|WARN))(?!.*Incorrect key)(?!.*dict_tag_check).*melting|melting.*(Exception|NoClassDefFound)
 shell grep -hiE "melting" logs/latest.log | sed -E 's/^.*\]: //' | cut -c1-300 | head -12
 shell ls mods
 > forceload add 0 0 63 31
@@ -684,6 +743,7 @@ reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 @superseded SQ-DCM-02 in DCM.qb (its steps carry this rerun's check: no absent-mods line names the five G5 mods)
 ## SQ-MELT-09b | Common + Compat: fire and lava melt as in -02 / -03; [melting] tags salt 0; no melting error or warning
 @group A
+@reviewed 2026-11-23
 @commands Rerun of the SQ-MELT-09 boot (Common + Compat set, no Rare Ice) with creativecommon-1.2.0.jar built 2026-11-15 02:27 (fix-1, r1115: `RareIceLightMeltMixin` gated on `rare_ice` in `CommonMixinPlugin.NEEDS_MOD`); grep latest.log for `RareIce` and `melting`
 @pass no `Error loading class: me/shedaniel/rareice/forge/blocks/RareIceBlock`; no line naming `RareIceLightMeltMixin`; the SQ-MELT-09 pass text otherwise; on a full-pack boot (Rare Ice present) the mixin still applies (no skip warning naming it)
 @fails the `NEEDS_MOD` row missing from the built jar (stale build); mod id not `rare_ice`
@@ -694,7 +754,7 @@ reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 bootreject (?i)rareice|RareIceLightMeltMixin
 bootexpect \[melting\] tags: \d+ meltable, \d+ slow, 0 salt
 # Forge fills a fresh config with "Incorrect key melting... corrected" WARN lines (no config/ in this set): not a fault
-bootreject (?i)^(?!.*KubeJS Recipe Event)(?=.*(ERROR|WARN))(?!.*Incorrect key).*melting|melting.*(Exception|NoClassDefFound)
+bootreject (?i)^(?!.*KubeJS Recipe Event)(?=.*(ERROR|WARN))(?!.*Incorrect key)(?!.*dict_tag_check).*melting|melting.*(Exception|NoClassDefFound)
 shell grep -hiE "melting" logs/latest.log | sed -E 's/^.*\]: //' | cut -c1-300 | head -12
 shell ls mods; ls mods | grep -ci rare; grep -iE 'rare.?ice' logs/latest.log | head -3
 > forceload add 0 0 63 31

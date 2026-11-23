@@ -128,21 +128,21 @@ bootreject replaceItems.*creativeengineering:canned_
 bootreject (?i)couldn.t parse .*fishing_net
 bootreject (?i)biome_tag.*(unknown|invalid)
 > cdevtest bytype creativedelight:baking max=2000
-> cdevtest bytype creativedelight:seasoning max=2000
+> cdevtest bytype creativedelight:flavor max=2000
 > cdevtest bytype creativedelight:lunchbox_shaped max=2000
 > cdevtest bytype creativedelight:lunchbox_upgrade max=2000
 > cdevtest bytype creativedelight:lunchbox_skin max=2000
 > cdevtest bytype creativedelight:lunchbox_dye max=2000
 > cdevtest bytype creativedelight:lunchbox_soap max=2000
 expect verb=bytype serializer=creativedelight:baking n=(9\d|\d{3,})\b
-expect verb=bytype serializer=creativedelight:seasoning n=([5-9]|\d{2,})\b
+expect verb=bytype serializer=creativedelight:flavor n=([5-9]|\d{2,})\b
 expect verb=bytype serializer=creativedelight:lunchbox_shaped n=([2-9]|\d{2,})\b
 expect verb=bytype serializer=creativedelight:lunchbox_upgrade n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_skin n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_dye n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_soap n=[1-9]
-# judge-4 r1118 (2026-11-18): seasoning is a CustomRecipe (result depends on the food in the grid), so its 11 ids list result=empty by design
-reject verb=bytype id=creativedelight:(?!shapeless/season/)\S+ result=(empty|minecraft:air)
+# judge-e2 r1123cc (2026-11-23): the seasoning craft is now the flavor serializer (seasonings.md 7, renamed 2026-11-19), a CustomRecipe (result depends on the food in the grid), so its 16 ids list result=empty by design
+reject verb=bytype id=creativedelight:(?!shapeless/(season|flavor)/)\S+ result=(empty|minecraft:air)
 > forceload add 0 0
 sleep 2
 > setblock 0 150 0 creativedelight:oven

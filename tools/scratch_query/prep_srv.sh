@@ -15,6 +15,7 @@
 #   - SKIPSWAP="creativecompat creativedelight": no swap for those mods (glob prefix), e.g. a build another session is
 #     still rewriting
 #   - COPYDEV=1: swapped dev jars are COPIED, not hard-linked (use while other sessions run Gradle builds)
+#   - DROPJARS="glob ...": remove matching jars from srv/mods before the pin (unlisted jars another session added)
 #   - PGJAR=<path>: also copy that Power Grid jar (never in mods/; the orchestrator names it in jar_archive/pwg_gate/);
 #     PGJAR=1 takes the newest development/backportedPowerGrid build jar instead
 # Refuses while any game JVM is up (one game JVM at a time).
@@ -109,6 +110,9 @@ if [ "$GROUP" = B ]; then
   setprop level-type 'minecraft\:normal'; setprop generate-structures true; setprop level-seed 8675309
 fi
 for kv in "$@"; do setprop "${kv%%=*}" "${kv#*=}"; done
+# DROPJARS="glob ...": drop these jars from srv/mods (r1123cc: jars the owner put in mods/ that night, no mod_sides.md
+# row yet, kept the publish run on the known pack instead of adding rows from a runner)
+for g in ${DROPJARS:-}; do for j in mods/$g; do [ -e "$j" ] && { rm -f "$j"; echo "dropjars: removed ${j#mods/}"; }; done; done
 # pin (plan_process_overhaul.md P2.4): own jars become real copies, OUT/pinned.json records their stamps; qrun.py run
 # refuses to start when they change, turn into links again, or an unlisted jar is in mods/
 python3 "$INST/tools/scratch_query/qpin.py" pin "$OUT"

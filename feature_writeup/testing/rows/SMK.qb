@@ -20,7 +20,6 @@
 @fails Jar missing or broken mods.toml, a mixin target renamed, a swap list id that no longer resolves
 bootexpect Done \(
 bootexpect CreativeCommon setup complete
-bootexpect \[swaps\] load report: every listed id resolved
 bootexpect \[melting\] tags: \d+ meltable
 bootexpect \[damage-tags\] loaded [1-9]\d* data-defined tag
 bootreject /ERROR\].*\bcreativecommon\b
@@ -28,6 +27,9 @@ bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|
 bootreject \[CE potions\] .* not found while building
 shell grep -q "Found valid mod file creativecommon-[^ ]*\.jar with .creativecommon." logs/debug.log
 shell echo "mixins $(grep -c 'from creativecommon.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativecommon.mixins.json' logs/debug.log)" -gt 0
+# judge-a r1123cc: SwapReport writes the load report on ServerStoppingEvent only, so stop the server (restart keeps the old log as logs/qrun_bootN.log) and read it there
+restart
+shell L=$(ls -t logs/qrun_boot*.log | head -1); grep -E "\[swaps\] load report: every listed id resolved" "$L" | head -1; grep -q "\[swaps\] load report: every listed id resolved" "$L"; ! grep -q "\[swaps\] unresolved" "$L"
 
 ## SQ-SMK-02 | Common script pack: helpers and dicts load from the jar
 @group A

@@ -141,14 +141,15 @@ look seconds between the CCO07 start and arrived lines (vanilla /tp does not wai
 @from batches/r1107cco/b2_console.qb
 # Gravity adds its low-gravity modifier only while the entity falls (removed on landing): read it mid-fall from y 200.
 # NoAI mobs do not move at all in 1.19, so these zombies have AI
+# judge-c r1123cc: Invulnerable on both, the overworld zombie died of fall damage before its Pos read ("No entity was found")
 bootreject (?i)CreateGravityDimensionMixin.*(error|fail)
 shell s=$(ls */serverconfig/create_gravity-server.toml | head -1); grep -E "biome_configs" $s
 # the set boots peaceful (spawn-monsters=false): peaceful removes the zombies at once
 > difficulty normal
 > kill @e[tag=cco08]
 > execute in minecraft:the_end run forceload add 0 0
-> execute in minecraft:the_end run summon minecraft:zombie 0 200 0 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
-> execute in minecraft:overworld run summon minecraft:zombie 3 200 3 {Silent:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
+> execute in minecraft:the_end run summon minecraft:zombie 0 200 0 {Silent:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
+> execute in minecraft:overworld run summon minecraft:zombie 3 200 3 {Silent:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
 sleep 2
 > execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Pos[1]
 > data get entity @e[tag=cco08o,limit=1] Pos[1]
@@ -453,6 +454,8 @@ reject \[cdevtest\] verb=\S+ .*error=
 > summon minecraft:wandering_trader 4 71 4 {NoAI:1b,Tags:["cco16"]}
 sleep 2
 > data get entity @e[tag=cco16,limit=1] Offers.Recipes
+> pbot spawn s5pb1 0 70 0 minecraft:overworld creative
+sleep 2
 > advancement grant s5pb1 only minecraft:story/root
 expect (?i)granted the advancement|has the advancement|Granted
 > kill @e[tag=cco16]
