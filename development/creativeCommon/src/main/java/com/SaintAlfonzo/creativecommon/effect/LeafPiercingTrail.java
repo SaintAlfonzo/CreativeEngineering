@@ -16,7 +16,9 @@ import net.minecraft.world.phys.Vec3;
  * holder of Leaf Piercing with {@code fruitsdelight:leaf_piercing} and lets tagged arrows pass through leaves
  * ({@code minecraft:leaves}). Each server tick of such an arrow ({@code mixin/LeafPiercingTrailMixin}) walks the stretch
  * it just flew: a poof of the leaf block's particles where it enters a leaf block, and a thin trail of them while it
- * is inside one. Particles go out with {@code ServerLevel.sendParticles}, so every nearby client sees them.
+ * is inside one. Once it has passed through leaves it keeps trailing the last leaf's particles until it stops moving
+ * (stuck in a block, or spent on a hit) or {@link #MAX_TRAIL_TICKS} after it first entered leaves (owner, 2026-11-23).
+ * Particles go out with {@code ServerLevel.sendParticles}, so every nearby client sees them.
  */
 public final class LeafPiercingTrail {
 
@@ -25,38 +27,57 @@ public final class LeafPiercingTrail {
 	private static final double STEP = 0.25D;
 	private static final int POOF_COUNT = 12;
 	private static final int TRAIL_COUNT = 2;
+	/** How long the trail lasts after the arrow first enters leaves: 5 seconds. */
+	private static final int MAX_TRAIL_TICKS = 100;
 
 	private LeafPiercingTrail() {}
 
-	/**
-	 * Called at the end of the arrow's tick. {@code lastLeaf} is the leaf block the arrow was in at the end of its last
-	 * tick (null for none); returns the one it is in now.
-	 */
-	@Nullable
-	public static BlockPos tick(AbstractArrow arrow, @Nullable BlockPos lastLeaf) {
-		if (!(arrow.level instanceof ServerLevel level) || !arrow.getTags().contains(TAG)) return null;
+	/** Per-arrow trail state, held by the mixin. */
+	public static final class State {
+		/** The leaf block the arrow was in at the end of its last tick, null for none. */
+		@Nullable BlockPos lastLeaf;
+		/** The last leaf block state passed through; null until the arrow first enters leaves. */
+		@Nullable BlockState trail;
+		int age;
+		boolean done;
+	}
+
+	/** Called at the end of the arrow's tick. */
+	public static void tick(AbstractArrow arrow, State s) {
+		if (s.done || !(arrow.level instanceof ServerLevel level) || !arrow.getTags().contains(TAG)) return;
 		Vec3 from = new Vec3(arrow.xo, arrow.yo, arrow.zo);
 		Vec3 to = arrow.position();
 		double length = from.distanceTo(to);
-		if (length < 1.0E-3D) return lastLeaf;
+		if (length < 1.0E-3D) {
+			// stopped: it reached its destination; a trail never restarts (a returning trident stays plain)
+			if (s.trail != null) s.done = true;
+			return;
+		}
+		if (s.trail != null && ++s.age > MAX_TRAIL_TICKS) {
+			s.done = true;
+			return;
+		}
 		int steps = Math.max(1, (int) Math.ceil(length / STEP));
-		BlockPos current = lastLeaf;
 		for (int i = 1; i <= steps; i++) {
 			Vec3 at = from.lerp(to, (double) i / steps);
 			BlockPos pos = new BlockPos(at);
 			BlockState state = level.getBlockState(pos);
 			if (!state.is(BlockTags.LEAVES)) {
-				current = null;
+				s.lastLeaf = null;
+				if (s.trail != null && i % 2 == 0) {
+					level.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, s.trail), at.x, at.y, at.z,
+							TRAIL_COUNT, 0.03D, 0.03D, 0.03D, 0.0D);
+				}
 				continue;
 			}
+			s.trail = state;
 			BlockParticleOption particle = new BlockParticleOption(ParticleTypes.BLOCK, state);
-			if (!pos.equals(current)) {
+			if (!pos.equals(s.lastLeaf)) {
 				level.sendParticles(particle, at.x, at.y, at.z, POOF_COUNT, 0.2D, 0.2D, 0.2D, 0.05D);
-				current = pos;
+				s.lastLeaf = pos;
 			} else if (i % 2 == 0) {
 				level.sendParticles(particle, at.x, at.y, at.z, TRAIL_COUNT, 0.03D, 0.03D, 0.03D, 0.0D);
 			}
 		}
-		return current;
 	}
 }

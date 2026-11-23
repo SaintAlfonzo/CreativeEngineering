@@ -111,19 +111,23 @@
   - Effect slots at diversity 2.5, 22, 41.5, 61 and 80.5
 - **New:** Permanent buffs: Luck I at diversity 25, Speed I at 30.2, Night Vision at 35.6, Phantom Bane at 41.2, Speed II at 47.1, Regeneration I at 53.2, Long Reach I at 59.7, Strength I at 66.6, Luck II at 73.9, Invisibility at 81.8, Double Jump at 90.4, Satiated at 100.
 - **New:** Effect slots hold an unlocked effect of your choice. Unlocks come closer together early in the ladder (diversity 2.5 to 97.5), in this order:
-  - Night Vision and Glowing, Leaf Piercing, Speed I, Allure, Refreshing and Sweetening, Astringent, Haste I and Burrowing I, Water Breathing and Water Walker, Prickly I, Luck I, Jump Boost I, Lava Vision and Lava Walker, Climbing, Patrol Nullifier and Phantom Bane, Regeneration I, Poison Resistance, Shrinking, Bug Pheromones and Clinging, Fire Resistance, Strength I, Clarity, Wither Immunity
+  - Night Vision and Glowing, Leaf Piercing, Speed I, Allure, Refreshing and Sweetening, Steady, Haste I and Burrowing I, Water Breathing and Water Walker, Prickly I, Luck I, Jump Boost I, Lava Vision and Lava Walker, Climbing, Patrol Nullifier and Phantom Bane, Regeneration I, Poison Immunity, Shrinking, Bug Pheromones and Clinging, Fire Immunity, Strength I, Clarity, Wither Immunity
   - Speed II, Luck II, Long Reach I, Slow Falling, Magic Resistance, Prickly II, Haste II and Burrowing II, Magnet, Jump Boost II, Recovering, Long Reach II, Fleet-Footed, Strength II, Appetizing, Digesting and Lozenge, Regeneration II, Long Reach III, Luck III
 - **New:** Some diet effects switch on and off for free instead of changing level: the slot's On/Off button, or a click on the permanent buff's icon in the Diet Bonuses screen.
-  - In a slot: Night Vision and Astringent; Glowing, Slow Falling and Magnet start off
+  - In a slot: Night Vision and Steady; Glowing, Slow Falling and Magnet start off
   - Permanent: Night Vision, Phantom Bane and Double Jump; Invisibility starts off
 - **New:** Hovering an effect in the Diet Bonuses screen or on the inventory bar shows a short description ("See in the dark").
-- **New:** Clinging replaces Climbing and Recovering replaces Poison Resistance and Wither Immunity once unlocked: the replaced effect leaves the effect list and stops working in its slot. Applies to new worlds.
+- **New:** Clinging replaces Climbing and Recovering replaces Poison Immunity and Wither Immunity once unlocked: the replaced effect leaves the effect list and stops working in its slot. Applies to new worlds.
 - **New:** A slot whose effect a permanent buff or a replacing unlock now covers grays out, and changing its effect is free.
 - **New:** Fleet-Footed widens the view a quarter as much while its speed applies (client setting).
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.
 - **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice. Unlocks, and their messages, wait until the diet first activates.
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
-- **New:** Lava Walker burns like a Magma Block when standing on lava without Fire Resistance.
+- **New:** Lava Walker burns like a Magma Block when standing on lava without Fire Immunity.
+- **New:** Lava Walker: crouch to sink into the lava.
+- **New:** Steady stops Slippery and Slipping and clears them when gained. Pressure plates and tripwires ignore you and big dripleaf does not tip.
+- **New:** Arrows shot with Leaf Piercing burst leaf particles where they enter leaves and trail them until they land or hit, for up to 5 seconds.
+- **Changed:** Prickly II spares passive mobs that are not attacking you; Prickly I spares only tamed animals [both spared only tamed animals].
 - **New:** Diet bonus messages show on the action bar, one at a time.
 - **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it. The screen shows the effect slots side by side over a progress bar marked with each slot's diversity.
 - **New:** The Diet Log's first page shows your last 32 meals as a grid of large icons above the diversity, newest first, repeats included. Meals of foods aged out by a Change or Drop are left out.
@@ -505,6 +509,8 @@
 
 - **New:** The inventory's effect list shows permanent effects (beacon, conduit, armor, held tools, diet bonuses) in a second column right of the timed ones; a narrow window keeps one column.
 - **Changed:** Effects that work the same at every level (87, e.g. Fire Resistance, Water Breathing, Night Vision, Nausea, Blindness) are capped at level I from every source; tooltips show level I [up to VI].
+- **Changed:** Astringent is renamed Steady, Poison Resistance Poison Immunity and Fire Resistance Fire Immunity, with their potions and arrows [Astringent, Poison Resistance, Fire Resistance].
+- **New:** Emptiness also gives Patrol Nullifier and Phantom Bane for its duration; its tooltip lists them.
 - **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
 - **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
 

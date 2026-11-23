@@ -808,7 +808,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## CQ-RPI-78 | Leaf Piercing leaf trail (food-tuning #52)
 @group client
 @commands `/effect give @s fruitsdelight:leaf_piercing 300`; shoot arrows through an oak and a birch canopy, then a crossbow bolt and a thrown trident; a second player (or F5) watches
-@pass a puff of that tree's leaf particles where each arrow enters a leaf block and a thin trail of them while it flies through; without the effect arrows stop at the leaves and no particles show
+@pass a puff of that tree's leaf particles where each arrow enters a leaf block and a thin trail of them while it flies through, continuing after it leaves the canopy until it lands or hits a mob; a shot into open sky stops trailing after 5 seconds; without the effect arrows stop at the leaves and no particles show
 @fails `LeafPiercingTrailMixin` (AbstractArrow tick), `LeafPiercingTrail.tick`, projectile tag `fruitsdelight:leaf_piercing`
 @draft written with the build 2026-11-23
 

@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.SaintAlfonzo.creativecommon.effect.LeafPiercingTrail;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 
 /** Leaf Piercing particles ({@code food-tuning #52}, {@link LeafPiercingTrail}) at the end of every arrow tick. */
@@ -16,10 +15,11 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 public abstract class LeafPiercingTrailMixin {
 
 	@Unique
-	private BlockPos creativecommon$lastLeaf;
+	private LeafPiercingTrail.State creativecommon$trail;
 
 	@Inject(method = "m_8119_", at = @At("TAIL"), remap = false)
 	private void creativecommon$leafTrail(CallbackInfo ci) {
-		creativecommon$lastLeaf = LeafPiercingTrail.tick((AbstractArrow) (Object) this, creativecommon$lastLeaf);
+		if (creativecommon$trail == null) creativecommon$trail = new LeafPiercingTrail.State();
+		LeafPiercingTrail.tick((AbstractArrow) (Object) this, creativecommon$trail);
 	}
 }
