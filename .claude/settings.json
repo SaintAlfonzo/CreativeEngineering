@@ -32,7 +32,7 @@
       "Bash(rm -v kubejs/data/creativeengineering/recipes/bottling/bottle_create_potion.json)",
       "Bash(rmdir kubejs/data/creativeengineering/recipes/bottling)",
       "Bash(find ~/.gradle ~/.m2 / -maxdepth 8 \\\\\\( -iname \"*vineflower*.jar\" -o -iname \"*cfr*.jar\" -o -iname \"*procyon*decompiler*.jar\" -o -iname \"*fernflower*.jar\" \\\\\\) 2>/dev/null | head; echo \"---\"; find / -maxdepth 6 -iname \"*.jar\" -path \"*decompiler*\" 2>/dev/null | head)",
-      "Read(//home/[REDACTED]/.gradle/**)",
+      "Read(~/.gradle/**)",
       "Bash(javap -p -c com/github/alexthe666/alexsmobs/effect/AMEffectRegistry.class)",
       "Bash(javap -p -c com/github/alexthe666/alexsmobs/effect/ProperBrewingRecipe.class)",
       "Bash(javap -p com/github/alexthe666/alexsmobs/effect/AMEffectRegistry.class)",
@@ -40,13 +40,11 @@
       "Bash(javap -p -c com/almostreliable/morejs/features/potion/PotionBrewingRegisterEvent.class)",
       "Bash(javap -p -c com/almostreliable/morejs/core/Events.class)",
       "Bash(javap -p -c com/almostreliable/morejs/features/potion/PotionBrewingRegisterEventForge.class)",
-      "Read(//home/[REDACTED]/.local/share/atlauncher/instances/**)",
+      "Read(~/.local/share/atlauncher/instances/**)",
       "Bash(javap -p com/github/alexthe666/alexsmobs/effect/ProperBrewingRecipe.class)",
       "Bash(find ~/.gradle/caches/forge_gradle ~/.gradle/caches/modules-2 -iname \"*.jar\" 2>/dev/null | grep -iE \"client-|joined|forge-1.19.2.*\\(srg|official\\)|mc_official\" | head; echo \"---\"; ls ~/.local/share/atlauncher/instances/CreativeEngineering2/patcherMod/build 2>/dev/null; find ~/.local/share/atlauncher/instances/CreativeEngineering2/patcherMod -iname \"*.jar\" 2>/dev/null | grep -iE \"mc|forge|srg|client\" | head)",
-      "Read(//home/[REDACTED]/.gradle/caches/forge_gradle/**)",
-      "Bash(unzip -o -q /home/[REDACTED]/.gradle/caches/forge_gradle/minecraft_user_repo/net/minecraftforge/forge/1.19.2-43.3.9_mapped_official_1.19.2/forge-1.19.2-43.3.9_mapped_official_1.19.2.jar net/minecraft/world/item/alchemy/Potions.class)",
+      "Read(~/.gradle/caches/forge_gradle/**)",
       "Bash(javap -p -c net/minecraft/world/item/alchemy/Potions.class)",
-      "Bash(unzip -o -q /home/[REDACTED]/.gradle/caches/forge_gradle/mcp_repo/net/minecraft/joined/1.19.2-20220805.130853/joined-1.19.2-20220805.130853-srg.jar 'net/minecraft/world/item/alchemy/Potions.class' -d srgmc)",
       "Bash(javap -p srgmc/net/minecraft/world/item/alchemy/Potions.class)",
       "Bash(javap -c com/almostreliable/morejs/core/Events.class)",
       "Bash(javap -p com/almostreliable/morejs/*Plugin*.class)",
@@ -62,9 +60,6 @@
       "Bash(grep -oE \"Method [a-zA-Z/.$]*\\(getRecipes|getPotionMixes|getMixes|instanceof|createRecipe|getInput|getOutput|getIngredient\\)[^ ]*|checkcast .*|instanceof .*|// class .*\")",
       "Bash(grep -oE \"\\(instanceof|checkcast|new\\) #[0-9]+ +// \\(class \\)?[a-zA-Z/.$]+|Method [a-zA-Z/.$]*\\\\.\\(getRecipes|getInput|getOutput|getIngredients|isInput|test\\)[^ ]*\")",
       "Bash(awk '/private static java.util.List createRecipes\\\\\\(\\\\\\);/,/^$/')"
-    ],
-    "additionalDirectories": [
-      "/home/[REDACTED]/.claude/plans"
     ]
   },
   "hooks": {

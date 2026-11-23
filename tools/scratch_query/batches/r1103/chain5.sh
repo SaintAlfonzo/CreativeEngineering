@@ -1,8 +1,8 @@
 #!/bin/bash
 # r1103: after chain4.sh, sA_R.qb part 1 (rows from sA_R_rows.txt, read at run time) on a fresh group A superflat sar,
 # current jars, setup as sA_setup.md Boot 2 (probes incl. the fixed sA_probe.js). Part 2 (old 1.1.06 world) not run.
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCRATCH:?SCRATCH unset}/r1103
 cd "$INST" || exit 1
 until grep -q 'CHAIN4 enm3 done' perf/runs/r1103/chain.log; do sleep 30; done
 export JFR_MAX=200m B0=$SCR/b0

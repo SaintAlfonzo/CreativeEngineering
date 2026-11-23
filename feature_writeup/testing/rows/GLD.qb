@@ -84,7 +84,7 @@ expect verb=recipes text=create__the_salt:cooked_beef_salted n=[1-9]
 expect verb=recipes text=create__the_salt:salt_create_ n=0\b
 expect verb=recipes text=salt:salt_from_raw_rock_salt n=0\b
 shell B="$INST/tools/scratch_query/batches/r1103/sA_baseline"; echo "baseline salting: $(grep -c ',salt:salting,' $B/salt_recipes_1030.csv)"; echo "baseline create__the_salt / create_salt ids: $(grep -cE '^(create__the_salt|create_salt):' $B/salt_recipes_1030.csv)"; python3 -c "import json;d=json.load(open('$B/salt_item_tags_1030.json'));print('baseline #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
-shell D="${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported"; echo "Boot 0 salting: $(grep -c ',salt:salting,' $D/recipes/all.csv)  create__the_salt ids: $(grep -cE '^create__the_salt:' $D/recipes/all.csv)"; python3 -c "import json;d=json.load(open('$D/tags/item_tags.json'));print('Boot 0 #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
+shell D="${B0:?B0 unset}/srv/kubejs/exported"; echo "Boot 0 salting: $(grep -c ',salt:salting,' $D/recipes/all.csv)  create__the_salt ids: $(grep -cE '^create__the_salt:' $D/recipes/all.csv)"; python3 -c "import json;d=json.load(open('$D/tags/item_tags.json'));print('Boot 0 #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
 look salting count and Create: The Salt recipe count match the baseline (ids unchanged); #salt:can_be_salted = baseline 148 plus the SQ-SALT2-01 additions (Calamari Roll, Crab Rangoon, kangaroo burger) minus the refused three; the raw rock salt to 4 salt dust recipe present among the salt_dust makers
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
@@ -808,7 +808,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 waitlog verb=recipes text=enchanted_golden_ n= 60
 count verb=recipes id=\S*enchanted_golden_[a-z_]+_sequenced_assembly result= == 24
 shell ! grep -hiE "(goldenEnchant|incomplete_enchanted_golden|golden\.js).*(rror|xception|not registered)" logs/latest.log logs/kubejs/server.log
-shell D="${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/recipes/all.csv"; echo "Boot 0 dump (00:54): $(grep -cE 'enchanted_golden_[a-z_]+_sequenced_assembly' "$D")"
+shell D="${B0:?B0 unset}/srv/kubejs/exported/recipes/all.csv"; echo "Boot 0 dump (00:54): $(grep -cE 'enchanted_golden_[a-z_]+_sequenced_assembly' "$D")"
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-13 | no recipe for the enchanted golden cake
@@ -1243,7 +1243,7 @@ waitlog Display Delight links 120
 shell python3 -c "import json;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];print('placed', len(d['placed']), 'link', d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
 shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if d['placed'].get('veggiesdelight:sweet_potato_pancakes')=='creativedelight:placed_sweet_potato_pancakes' else 1)"
 shell cat "$INST/tools/scratch_query/batches/r1103/sA_baseline/placeable_dd_1030.txt"
-shell python3 -c "import json;d=json.load(open('${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
+shell python3 -c "import json;d=json.load(open('${B0:?B0 unset}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
 look placed-link count one higher than the 2026-10-30 baseline 135 (other links changed since: Boot 0 had 149 with the link present, so this row PASSes on the link and an equal count to Boot 0)
 
 ## SQ-PCK-05 | pancake recipes unchanged

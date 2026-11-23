@@ -56,6 +56,10 @@ GLOBAL_INPUTS = ['tools/check_all.py', 'tools/check_known.csv', 'tools/java_test
 
 SCRIPT_TREES = ['development/', 'kubejs/data/', 'kubejs/assets/', 'kubejs/startup_scripts/', 'kubejs/server_scripts/',
 				'kubejs/client_scripts/']
+# every tracked top-level tree: any tracked file can carry personal data
+PRIVACY_INPUTS = SCRIPT_TREES + ['tools/', 'feature_writeup/', 'config/', 'configs_edited/', 'defaultconfigs/', 'server/',
+								  'deploy/', 'pack/', '.claude/', 'build-logic/', 'textureswapper/', 'texturetools/', 'CLAUDE.md',
+								  'README.md', '.gitignore', 'mod_sides.md']
 # name -> (command, inputs, estimate s, full only)
 LINTS = {
 	'id_owner_lint': (['python3', 'tools/id_owner_lint.py'], ['development/', 'kubejs/data/', 'kubejs/assets/'], 7, False),
@@ -101,6 +105,9 @@ LINTS = {
 														   'development/creativeDelight/members/display/tools/port_resources.py']
 					 + sorted({str(p.relative_to(ROOT)) for p in ROOT.glob('development/**/src/main/resources/data/*/swaps')
 							   if '/build/' not in str(p)}), 1, False),
+	# personal data in tracked files (feature_writeup/privacy.md PV-1 to PV-9); --jars adds own jars and deploy/latest
+	'privacy_lint': (['python3', 'tools/privacy_lint.py'], PRIVACY_INPUTS, 5, False),
+	'privacy_lint_jars': (['python3', 'tools/privacy_lint.py', '--jars'], PRIVACY_INPUTS + ['deploy/latest/'], 8, True),
 	'todo_rows': (['python3', 'tools/todo.py', 'lint', '--changed'], ['feature_writeup/todo/', 'feature_writeup/briefs/',
 																	 'tools/todo.py', 'tools/todo_rows.py'], 2, False),
 }

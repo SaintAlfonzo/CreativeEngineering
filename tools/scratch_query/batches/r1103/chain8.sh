@@ -1,7 +1,7 @@
 #!/bin/bash
 # r1103: after chain7.sh, p2_R2.qb (two boots on fresh A world s5r2, header of p2_R2.qb).
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCRATCH:?SCRATCH unset}/r1103
 cd "$INST" || exit 1
 until grep -q 'CHAIN7 p2R done' perf/runs/r1103/chain.log; do sleep 30; done
 export JFR_MAX=200m

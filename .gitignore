@@ -16,8 +16,8 @@
 !/value.ods
 !/dump_loot_tables.sh
 !/pack/
-# Screenshots of licence / permission replies from mod authors
-!/communications/
+# Screenshots of license / permission replies from mod authors: kept locally, never tracked (privacy rules,
+# feature_writeup/privacy.md); the NOTICE files cite them as private replies
 # Deploy record from tools/build_deploy.py (DEPLOY_LOG.md + history/); the staged payload isn't committed
 !/deploy/
 /deploy/latest/
@@ -102,6 +102,11 @@
 /config/creativecommon/changelog_seen.txt
 # Claude Code per-machine settings
 /.claude/settings.local.json
+# Personal data never tracked (feature_writeup/privacy.md PV-3): JEI per-world bookmarks are named after the worlds
+# and servers a player joined; Simple Hats' downloaded supporter UUID list; perf reports pulled from a server
+/config/jei/world/
+/config/simplehats_hatdl/
+/server/perf/reports/
 
 __pycache__/
 *.pyc

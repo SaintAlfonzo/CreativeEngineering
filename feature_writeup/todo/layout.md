@@ -1033,6 +1033,13 @@ citations, README index, Immersive Paintings writeup, stale comments, ST-53 / ST
 
 <?todo rows Texture Tooling?>
 
+## Privacy
+
+Personal data in the repo and the pack, players' privacy, chat reporting and outbound contacts. Rules and owner
+steps: [privacy.md](../privacy.md).
+
+<?todo rows Privacy?>
+
 ---
 
 ## Process

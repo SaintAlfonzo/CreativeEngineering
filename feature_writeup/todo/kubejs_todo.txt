@@ -62,7 +62,7 @@ If it's useful, the single highest-value thing to act on first is probably the l
 
 Bash Search for extensibility/limited-coverage comments across java files
 IN
-cd /home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2/patcherMod/src
+cd <instance>/patcherMod/src
 grep -rniE "add (a |another )?(row|entry|entries|case|line)|for more|add more|only supports?|only handles?|only covers?|extend this|not (all|every)|doesn.t (yet )?(support|handle|cover)" --include='*.java' . 
 
 OUT

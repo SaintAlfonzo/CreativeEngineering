@@ -3,8 +3,8 @@ Public License v3 (see LICENSE.txt).
 
 Rustic Delight 1.7.0 by PhantomWing (https://github.com/PhantomWing/RusticDelight) is distributed under the MIT License
 below (LICENSE.txt on the version/1.21 branch, checked 2026-11-10; the 1.7.0 tag has no licence file). PhantomWing
-confirmed the MIT terms and welcomed this port on 2026-11-10 (communications/RusticDelight-PhantomWing.png in the pack
-repository). Its textures, models, blockstates, lang and data are copied into src/main/resources by
+confirmed the MIT terms and welcomed this port on 2026-11-10 (a private message; the maintainer keeps a copy of the
+reply and can show it on request). Its textures, models, blockstates, lang and data are copied into src/main/resources by
 tools/bake_upstream.py, translated to Forge 1.19.2; tools/bake_manifest.json lists every such file and the change made.
 The textures assets/rusticdelight/textures/block/glowing_calamari_crate_top.png and _side.png and the six pancake
 recolours listed in tools/own_overrides.json are edits of upstream textures. All of these are covered by this notice.

@@ -7839,7 +7839,7 @@ Mods updated (2):
 - `jei/world/server/Creative_Engineering_30/bookmarks.ini`
 - `jei/world/server/Creative_Engineering_6768b59c/bookmarks.ini`
 - `jei/world/server/Creative_Engineering_85adfa7b/bookmarks.ini`
-- `jei/world/server/[REDACTED]_and_[REDACTED]_30/bookmarks.ini`
+- `jei/world/server/<private-server>_30/bookmarks.ini`
 - `jei/world/server/Minecraft_Server_30/bookmarks.ini`
 - `jei/world/server/Minecraft_Server_85adf6b1/bookmarks.ini`
 - `jei/world/server/Minecraft_Server_85adfa7b/bookmarks.ini`
@@ -8938,7 +8938,7 @@ Mods removed (1):
 - `jei/world/server/Creative_Engineering_30/bookmarks.ini`
 - `jei/world/server/Creative_Engineering_6768b59c/bookmarks.ini`
 - `jei/world/server/Creative_Engineering_85adfa7b/bookmarks.ini`
-- `jei/world/server/[REDACTED]_and_[REDACTED]_30/bookmarks.ini`
+- `jei/world/server/<private-server>_30/bookmarks.ini`
 - `jei/world/server/Minecraft_Server_30/bookmarks.ini`
 - `jei/world/server/Minecraft_Server_85adf6b1/bookmarks.ini`
 - `jei/world/server/Minecraft_Server_85adfa7b/bookmarks.ini`

@@ -8,8 +8,8 @@
 # Setup per w_setup.md (worldgen keys are in creativeworldgen-common.toml since the wave 5 carve). Every step logs
 # "STEP <name> <phase> <time>"; resume with FROM_STEP. Stops at the first boot that does not reach "Done (".
 set -u
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/288946da-307e-457f-a955-0b504a02002b/scratchpad/r1103w
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCRATCH:?SCRATCH unset}/r1103w
 B=$INST/tools/scratch_query/batches/r1103w
 Q="python3 $INST/tools/scratch_query/qrun.py"
 R=$INST/perf/runs/r1103w

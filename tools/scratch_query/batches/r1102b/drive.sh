@@ -5,8 +5,8 @@
 # Stops at the first boot that does not reach "Done (" (except s2RDstop, which must not). Every step logs a line
 # "STEP <name> <phase> <time>" so a later session can resume with FROM_STEP.
 set -u
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/133c37cb-cd14-46c8-b6a3-0d4c84f23691/scratchpad/r1102b
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCRATCH:?SCRATCH unset}/r1102b
 B=$INST/tools/scratch_query/batches/r1102b
 Q="python3 $INST/tools/scratch_query/qrun.py"
 R=$INST/perf/runs/r1102b

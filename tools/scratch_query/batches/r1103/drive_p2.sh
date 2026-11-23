@@ -9,8 +9,8 @@
 #   RA / RA2 / RA3  fresh A world s5ra: s5_R_A*.qb (as drive_s5r.sh)
 #   B / B2  fresh B world s5b: s5_B.qb --rows SQ-PSM-06a (monument captures), then s5_B2.qb (s5_setup.md)
 set -u
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=${SCR:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103}
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCR:?SCR unset}
 B=$INST/tools/scratch_query/batches/r1102b
 Q="python3 $INST/tools/scratch_query/qrun.py"
 R=$INST/perf/runs/r1103/p2

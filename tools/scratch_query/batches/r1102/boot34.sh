@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # r1102 Boots 3 and 4 (expected to stop at startup): SQ-MDP-17 (no miners_upstream), SQ-MDP-15 (only the 1.4.5 jar).
 #   boot34.sh OUT       OUT = the cdj5 scratch dir; the cdj5 server must be stopped by this script's first step.
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
 OUT=$1; S=$OUT/srv; [ -d "$S" ] || exit 1
 jv() { bash "$INST/tools/scratch_query/game_jvms.sh"; }
 waitempty() { for i in $(seq 90); do jv | grep -q . || return 0; sleep 2; done; return 1; }

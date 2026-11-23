@@ -55,7 +55,7 @@ Ruins `"Enable Configs"=true` / Towns & Towers / Wares `.toml`), Lightman's coin
 (`lightmanscurrency-common.lcconfig [loot]`), Domestication Innovation book injects, Allurement
 horse-armor list, BetterDungeons chest count. Listed in README.
 
-Approved plan: `/home/[REDACTED]/.claude/plans/id-like-to-implement-purring-lamport.md` (opaque name;
+Approved plan: `~/.claude/plans/id-like-to-implement-purring-lamport.md` (opaque name;
 this memory is the durable pointer). Related helper pattern: memory `item-dict-mechanics`, and the
 `global.NCH` recipe helper in `neoCraftHelper.js` that `global.LOOT` mirrors.
 

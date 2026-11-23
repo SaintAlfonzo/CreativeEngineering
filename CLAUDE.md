@@ -45,6 +45,11 @@ findings) become a plan, split and classify them and ask the open items before b
   scripts use those keys, not literal `namespace:id` strings.
 - No emoji in any file. Own work is GPL-3.0-only (SPDX). Never publish claude.ai artifacts.
 - Dates are ISO 8601 everywhere (`YYYY-MM-DD`, times `YYYY-MM-DD HH:MM`), never year-less `11-14` or `Nov 14`; American spelling and `->` arrows in prose (design_rules.md DR-L4b, DR-L7).
+- **Privacy** ([privacy.md](feature_writeup/privacy.md), PV-1 to PV-9): no personal data of the owner (beyond the
+  `SaintAlfonzo` handle and its noreply address) or of anyone else in any tracked, built or shipped file; no machine
+  paths (relative, `~`, `<instance>`, `<scratchpad>`; scrub pasted `ls -l`/log output); player-data files (saves, logs,
+  JEI world bookmarks, account and server lists) never tracked. New personal terms go in the untracked `.privacy_terms`,
+  never in a tracked file. `tools/privacy_lint.py` enforces it; never accept its failures in `check_known.csv`.
 - **Textures: human art or the owner's tools only.** Never draw, generate or pixel-edit a texture, pick its palette, or
   transform it with an ad-hoc script. Allowed: copy human art (upstream, vanilla, owner's), or run
   `textureswapper/palette_swap.py` / `combine_tex.py` / `scale_tex.py` / `upscale_sprites.py` on a source and palette

@@ -4,8 +4,8 @@
 #   rerun of chosen rows: LEVEL=sbr R=$INST/perf/runs/r1103/sBR ROWS2=SQ-LBS-01,... bash drive_sB.sh (boot 1 runs whole sB_1)
 # Steps: b1 b2. Logs "STEP <name> <phase> <time>"; stops at the first boot that does not reach "Done (".
 set -u
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=${SCR:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103}
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCR:?SCR unset}
 B=$INST/tools/scratch_query/batches/r1103
 Q="python3 $INST/tools/scratch_query/qrun.py"
 R=${R:-$INST/perf/runs/r1103/sB}

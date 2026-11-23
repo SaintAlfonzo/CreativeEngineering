@@ -261,7 +261,7 @@ crash-2026-08-22_22.31.55-fml.txt
 crash-2026-08-17_21.53.42-server.txt
 crash-2026-08-16_18.00.02-fml.txt
 === today's 0-byte crash report ===
--rw-rw-r-- 1 [REDACTED] [REDACTED] 0 Sep 11 17:47 crash-reports/crash-2026-09-11_17.47.20-server.txt
+-rw-rw-r-- 1 user user 0 Sep 11 17:47 crash-reports/crash-2026-09-11_17.47.20-server.txt
 One finding needs flagging before the list: there's a confirmed, likely-still-live crash bug, not just an incomplete feature. Let me also fix a stale line in my own memory index while it's fresh — the "CE components/coils recipes still TODO" note is outdated (the detail file already shows recipes were completed).
 
 Edit MEMORY.md

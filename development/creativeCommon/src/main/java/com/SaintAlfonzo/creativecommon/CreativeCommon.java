@@ -1,7 +1,6 @@
 package com.SaintAlfonzo.creativecommon;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -214,9 +213,6 @@ public class CreativeCommon
 		@SubscribeEvent
 		public static void onClientSetup(FMLClientSetupEvent event)
 		{
-			LOGGER.info("HELLO FROM CLIENT SETUP");
-			LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-
 			// Detail Armor Bar compat: Creative Equipment. Lunchbox looks, cob pipe renderer and
 			// the oven screen: Creative Delight.
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.trader.client.TradeSyncClient.class);

@@ -43,6 +43,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | `python3 tools/dict_lint.py` | DR-C2, DR-C3 | a dict key assigned twice in one of Common's `_lib/*_dict.js` files (fails; in check_all) |
 | `python3 tools/namespace_lint.py` (`--write` for [namespace_report.md](namespace_report.md), `--strict` to fail) | DR-C9, DR-C11 | registrations outside the folder's namespace (allowlist `tools/namespace_allowlist.csv`), recipe helpers not bound with `forPack`, LootJS log names, Java `DeferredRegister` mod ids; report mode until plan_rules_fixes P3 |
 | `python3 tools/literal_id_swap.py` | DR-C2 | swap tool (dry run by default): quoted ids to dict keys, `--missing`, `--add-keys`, `--aliases` (`forPack`) |
+| `python3 tools/privacy_lint.py` (`--jars` for own jars and `deploy/latest/`; check_all `privacy_lint`, `privacy_lint_jars`) | PV-1 to PV-5 | personal terms of this machine and `.privacy_terms`, mail addresses, home paths, tracked files of a player-data kind ([privacy.md](privacy.md)) |
 | `python3 tools/texture_provenance.py` | DR-C18 | every derived texture has a `sources.csv` row |
 | `python3 tools/design_rules_audit.py trades --fail` (check_all `trade_lint`) | DR-C1 | a raw villager `e.addTrade` outside `global.trades.villager` (fails; plan_rules_fixes.md 12c) |
 | `python3 tools/tab_indent.py` (`--lint` fails; check_all `tab_indent`) | DR-C21, DR-C22 | space indent and trailing whitespace in own source files (D3 scope); `--apply` converts, with a parse or AST fingerprint compare per file |
@@ -176,6 +177,13 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-A3 | Keep context lean: focused Bash output, grep big docs; a one-line "good point for a new session; status is in <doc>" at about 150k or a natural break. | Hard | CLAUDE.md; memory `token-economy-habits` |
 | DR-A4 | Confirm scope before acting on vague or wide requests, especially ones that reach features not under discussion. | Memory | memory `confirm-vague-wide-scope` |
 | DR-A5 | Game process command lines only with the access token redacted in the same command. | Hard | CLAUDE.md |
+
+## 6b. Privacy
+
+Rules PV-1 to PV-9 live in [privacy.md](privacy.md) section 2 (owner, 2026-11-22): no personal data of the owner or
+anyone else in anything tracked, built or shipped; kinds of files that hold player data never tracked; no machine
+paths in tracked text; our mods send nothing off the machine and log no account, address or chat. Checked by
+`python3 tools/privacy_lint.py` (check_all `privacy_lint`; `--jars` in `--full` as `privacy_lint_jars`).
 
 ## 7. Gaps and conflicts to decide
 
@@ -492,3 +500,4 @@ each area's numbering. Counts are from 2026-11-14.
 - 2026-11-17: P5 section 16 of plan_rules_fixes.md: V-21 fixed by `tools/tab_indent.py` (one commit per language), lint `tab_indent` in check_all and the audit's `format` check; DR-C21 names the literal and comment-column cases and points to `tab_indent.py --scope` for the generated and upstream tests.
 - 2026-11-17: P6 of plan_rules_fixes.md: V-53, V-54, V-56, V-57, V-58 fixed (docs only); `tools/test_line_fix.py` (DR-W3) and the audit checks `testlines` and `index` (DR-W6) added; DR-W4 names the World table form and the banner cap.
 - 2026-11-17: P7 of plan_rules_fixes.md: V-02 built (Creative Worldgen), V-55 fixed (memory and agent notes), V-50 and V-51 deferred to TODO tooling/design-rules #2 with the audit check `writeuphistory` (DR-W5); V-14 left for the owner (closed 2026-11-17 as not applicable, plan_rules_fixes_followup.md F1). Section 1 registry: `tab_indent.py`, `todo.py lint`, `qrowlint.py` rows; the audit row names DR-L7, DR-W5, DR-C26, DR-P15; `docnames` skips `agent_notes/`; the 12c trade lint fails in check_all (`trade_lint`).
+- 2026-11-22: section 6b (privacy, rules PV-1 to PV-9 in privacy.md) and the `privacy_lint.py` row in section 1 added.

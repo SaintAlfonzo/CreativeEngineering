@@ -375,6 +375,7 @@ CONFIG_CLASSES = [
 	('jei/ingredient-list-mod-sort-order.ini', 'functional'),  # pack's ingredient list order by mod
 	('jei/ingredient-list-type-sort-order.ini', 'functional'), # ... and by ingredient type
 	('jei/*', 'player'),                            # JEI client options, colors, per-world bookmarks
+	('simplehats_hatdl/*', 'player'),                # Simple Hats' own download cache (untracked; privacy.md PV-3)
 	('*-client.*', 'player'),                       # every mod's client config (HUD, rendering, keys, sounds)
 	('*_client.*', 'player'),
 	('xaero/*/common.cfg', 'functional'),           # Xaero server rules (what maps/radar may show) ...

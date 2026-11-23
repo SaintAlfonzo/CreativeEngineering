@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-27). Repo status docs win over any status line here.
 
-Set up 2026-09-27. Remote `origin` = git@github.com:SaintAlfonzo/CreativeEngineering.git (private), branch `main`. Repo-local author is SaintAlfonzo <334673951+SaintAlfonzo@users.noreply.github.com> (the user wants commits authored by the repo owner, not the global [REDACTED] identity).
+Set up 2026-09-27. Remote `origin` = git@github.com:SaintAlfonzo/CreativeEngineering.git (private), branch `main`. Repo-local author is SaintAlfonzo <334673951+SaintAlfonzo@users.noreply.github.com> (the owner wants commits authored by the repo identity, not a personal one).
 
 `.gitignore` is an allow-list (`/*` then `!/kubejs/` etc.). New top-level files/dirs are ignored unless explicitly opted in. Mods, resource packs and shaders are NOT committed. `tools/gen_pack_manifest.py` writes pack/manifest.json + pack/MODLIST.md (sources, sides, sha1, resource-pack order); re-run it and commit pack/ after any mod change.
 

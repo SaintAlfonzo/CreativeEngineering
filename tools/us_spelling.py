@@ -24,7 +24,8 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-MEMORY = Path.home() / '.claude/projects/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/memory'
+# Claude Code's project folder name is the instance path with every non-alphanumeric character as '-'
+MEMORY = Path.home() / '.claude/projects' / re.sub(r'[^A-Za-z0-9]', '-', str(ROOT)) / 'memory'
 SKIP = re.compile(r'(^|/)(exported|logs|jar_archive|build|deploy|loot_catalog)/|_upstream/|moved_code_backup/|'
 				  r'kubejs/assets/creativecommon/changelog/(?!unreleased\.md)')
 GENERATED = {'feature_writeup/todo/TODO.md', 'feature_writeup/testing/scratch_queue.md', 'feature_writeup/README.md'}

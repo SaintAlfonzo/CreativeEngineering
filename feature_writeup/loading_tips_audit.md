@@ -43,7 +43,7 @@ and [plan_loading_tips_screens.md](plan_loading_tips_screens.md). First audit (2
 - Checks after the write: no unknown or unmatched ids, longest tip 129 characters, no trailing period, no
   "now / new / no longer / changed".
 - Archive of the state before this audit (both files from the working tree and HEAD, and the generated list):
-  `/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/2bb72711-5d06-4617-8f48-c2173d7e8f5d/scratchpad/tips_archive_2026-11-14/`
+  `<scratchpad>/tips_archive_2026-11-14/`
   (session scratchpad, not kept). The repo copy is `tools/loading_tips_audit_1114/effective_before.tsv` (index, source,
   id, text) plus the decision table and apply script (`audit_decisions.py`, `audit_apply.py`), and git holds the
   files themselves.

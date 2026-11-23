@@ -1,7 +1,7 @@
 #!/bin/bash
 # r1103: after chain6.sh, p2_R.qb (19 phase-2 batch-fault rows) on a fresh group A superflat p2r (setup = drive_p2.sh rA).
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCRATCH:?SCRATCH unset}/r1103
 cd "$INST" || exit 1
 until grep -q 'CHAIN6 sAR3 done' perf/runs/r1103/chain.log; do sleep 30; done
 export JFR_MAX=200m

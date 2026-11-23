@@ -223,8 +223,8 @@ def auto(cls, match, ev):
 
 def main():
 	ap = argparse.ArgumentParser()
-	ap.add_argument('--transcripts', default=os.path.expanduser(
-		'~/.claude/projects/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2'))
+	ap.add_argument('--transcripts', default=os.path.join(os.path.expanduser('~/.claude/projects'),
+		re.sub(r'[^A-Za-z0-9]', '-', os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 	ap.add_argument('--sheet', nargs=2, metavar=('STATUS', 'OUT'))
 	ap.add_argument('--write', action='store_true', help='write the ledger (default: check only)')
 	a = ap.parse_args()

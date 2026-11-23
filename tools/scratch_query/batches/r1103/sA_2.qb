@@ -275,7 +275,7 @@ expect \[zq\] recipes matching create__the_salt:cooked_beef_salted: [1-9]
 expect \[zq\] recipes matching create__the_salt:salt_create_: 0
 expect \[zq\] recipes matching salt:salt_from_raw_rock_salt: 0
 shell B="$INST/tools/scratch_query/batches/r1103/sA_baseline"; echo "baseline salting: $(grep -c ',salt:salting,' $B/salt_recipes_1030.csv)"; echo "baseline create__the_salt / create_salt ids: $(grep -cE '^(create__the_salt|create_salt):' $B/salt_recipes_1030.csv)"; python3 -c "import json;d=json.load(open('$B/salt_item_tags_1030.json'));print('baseline #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
-shell D="${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported"; echo "Boot 0 salting: $(grep -c ',salt:salting,' $D/recipes/all.csv)  create__the_salt ids: $(grep -cE '^create__the_salt:' $D/recipes/all.csv)"; python3 -c "import json;d=json.load(open('$D/tags/item_tags.json'));print('Boot 0 #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
+shell D="${B0:?B0 unset}/srv/kubejs/exported"; echo "Boot 0 salting: $(grep -c ',salt:salting,' $D/recipes/all.csv)  create__the_salt ids: $(grep -cE '^create__the_salt:' $D/recipes/all.csv)"; python3 -c "import json;d=json.load(open('$D/tags/item_tags.json'));print('Boot 0 #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
 look salting count and Create: The Salt recipe count match the baseline (ids unchanged); #salt:can_be_salted = baseline 148 plus the SQ-SALT2-01 additions (Calamari Roll, Crab Rangoon, kangaroo burger) minus the refused three; the raw rock salt to 4 salt dust recipe present among the salt_dust makers
 reject (Unknown or incomplete command|\[zq\] error)
 
@@ -615,7 +615,7 @@ reject (Unknown or incomplete command|\[zq\] error)
 waitlog \[zq\] recipes matching enchanted_golden_: \d+ 60
 count enchanted_golden_[a-z_]+_sequenced_assembly -> == 24
 shell ! grep -hiE "(goldenEnchant|incomplete_enchanted_golden|golden\.js).*(rror|xception|not registered)" logs/latest.log logs/kubejs/server.log
-shell D="${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/recipes/all.csv"; echo "Boot 0 dump (00:54): $(grep -cE 'enchanted_golden_[a-z_]+_sequenced_assembly' "$D")"
+shell D="${B0:?B0 unset}/srv/kubejs/exported/recipes/all.csv"; echo "Boot 0 dump (00:54): $(grep -cE 'enchanted_golden_[a-z_]+_sequenced_assembly' "$D")"
 look if the zq list is cut at 80 lines, judge on the Boot 0 dump count (24)
 reject (Unknown or incomplete command|\[zq\] error)
 
@@ -853,7 +853,7 @@ waitlog Display Delight links 120
 shell python3 -c "import json;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];print('placed', len(d['placed']), 'link', d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
 shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if d['placed'].get('veggiesdelight:sweet_potato_pancakes')=='creativeengineering:placed_sweet_potato_pancakes' else 1)"
 shell cat "$INST/tools/scratch_query/batches/r1103/sA_baseline/placeable_dd_1030.txt"
-shell python3 -c "import json;d=json.load(open('${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
+shell python3 -c "import json;d=json.load(open('${B0:?B0 unset}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
 look placed-link count one higher than the 10-30 baseline 135 (other links changed since: Boot 0 had 149 with the link present, so this row PASSes on the link and an equal count to Boot 0)
 
 ## SQ-PCK-05 | pancake recipes unchanged

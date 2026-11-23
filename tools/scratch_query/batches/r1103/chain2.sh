@@ -1,6 +1,6 @@
 #!/bin/bash
 # r1103: after chain.sh ends, rerun SQ-LBS-05a (sB_1) and SQ-LBS-00..05 (sB_2) with the fixed zlbs_probe.js.
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
 cd "$INST" || exit 1
 until grep -q 'CHAIN p2 done' perf/runs/r1103/chain.log; do sleep 30; done
 mkdir -p perf/runs/r1103/sBR

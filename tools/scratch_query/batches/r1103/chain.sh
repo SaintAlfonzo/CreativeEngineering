@@ -1,6 +1,6 @@
 #!/bin/bash
 # r1103: after drive_sB.sh ends, run drive_sA.sh then drive_p2.sh (one JVM at a time; each driver waits for game_jvms.sh empty).
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
 cd "$INST" || exit 1
 until grep -qE 'STEP (ALL|ABORT)' perf/runs/r1103/sB/drive.log; do sleep 20; done
 echo "CHAIN sB done $(date +%H:%M:%S)"

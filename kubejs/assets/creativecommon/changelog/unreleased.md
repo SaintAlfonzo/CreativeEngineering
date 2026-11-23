@@ -595,6 +595,7 @@
 
 ## Performance & Stability
 
+- **Fixed:** The game log recorded the player's Minecraft account name at startup.
 - **Fixed:** A client with Power Grid crashed when joining a server without it.
 - **Fixed:** Worlds did not load with Creative Delight but without Creative Brewing or Corn Delight.
 - **Fixed:** Changes saved to the pack's own mod config files while the game ran were often not applied until a restart; they now apply about 1 second after saving.

@@ -4,8 +4,8 @@
 #   nohup bash tools/scratch_query/batches/r1103/drive_sA.sh [FROM_STEP] > perf/runs/r1103/sA/drive.log 2>&1 &
 # Logs "STEP <name> <phase> <time>". a1 failing to boot is not fatal (rows marked setup-blocked, a2 preps a fresh level).
 set -u
-INST=/home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2
-SCR=${SCR:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103}
+INST=$HOME/.local/share/atlauncher/instances/CreativeEngineering2
+SCR=${SCR:?SCR unset}
 B=$INST/tools/scratch_query/batches/r1103
 Q="python3 $INST/tools/scratch_query/qrun.py"
 R=$INST/perf/runs/r1103/sA
