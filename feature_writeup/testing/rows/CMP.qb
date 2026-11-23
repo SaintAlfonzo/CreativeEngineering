@@ -34,6 +34,7 @@ shell python3 $INST/tools/scratch_query/cmp_mixin_check.py
 @fails `carrySections` ran after config load, or Forge did not correct the CE file
 @from batches/r1101/cs2_boot2.qb
 @superseded legacy config from 1.1.06, migration shipped in 1.2.00 and already ran on both machines (owner, 2026-11-18)
+@reviewed 2026-11-22
 bootexpect \[swaps\] config sections \[leaf_piles, moss, vine_shearing, campfire, monster_box, trash_slot\] carried over
 shell grep -n "rainOutTicks" config/creativecompat-common.toml; grep -nE "^\s*\[(leaf_piles|moss|vine_shearing|campfire|monster_box|trash_slot)\]" config/creativeengineering-common.toml || echo "CE has none of the six"
 look Compat file rainOutTicks = 200; CE file lost the six sections (restart half in cs2_boot2b)
@@ -44,6 +45,7 @@ look Compat file rainOutTicks = 200; CE file lost the six sections (restart half
 @pass Pack `creativecompat` loads; no `[creativecompat] global.itemPhysics missing` error; item physics rules load (count line as before)
 @fails Startup tree not in the jar, or the ItemPhysic class names in `item_physics.js` wrong
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-22
 shell grep -E "startup script packs in order|creativecompat|item_physics" logs/kubejs/startup.log | cut -c1-220 | head -8
 kjsreject global\.itemPhysics missing|ItemPhysicSplit not on classpath
 look pack creativecompat loads; [item_physics] summary line as before
@@ -54,6 +56,7 @@ look pack creativecompat loads; [item_physics] summary line as before
 @pass Runs and lists rules (it loads `com.SaintAlfonzo.creativecompat.itemphysic.ItemPhysicSplit`)
 @fails dump_physics.js class name
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-22
 > dumpphysics
 sleep 5
 reject Unknown or incomplete command
@@ -66,6 +69,7 @@ look rules listed
 @pass Blast plus shrapnel as before; fireproof item survives
 @fails `BurnBursts` handler not registered by the shrapnel side
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-22
 # self-contained since r1118 (judge-5, 2026-11-18): the {H} home marker came from a lost setup row; fixed superflat spot
 > forceload add 200 200 232 232
 > execute unless entity @e[type=minecraft:marker,tag=cmphome] run summon minecraft:marker 200 -60 200 {Tags:["cmphome"]}
@@ -97,6 +101,7 @@ look the blast itself is not visible on a console; the TNT item is consumed and 
 @pass Block and item exist (`creativecompat:weathered_cardboard_box`); loot table resolves; physics tags present
 @fails Startup `decor_blocks.js` or jar data paths
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-22
 # self-contained since r1118 (judge-5, 2026-11-18; ids creativecompat: since the 2026-11-09 move): the {H} home marker came from a lost setup row; fixed superflat spot
 > forceload add 200 200 232 232
 > execute unless entity @e[type=minecraft:marker,tag=cmphome] run summon minecraft:marker 200 -60 200 {Tags:["cmphome"]}
@@ -122,15 +127,17 @@ look block, item and loot resolve; physics tags present
 @pass Same count as before the carve; no painting load error
 @fails Paintings not loaded from a mod jar datapack (move them back to the pack folder)
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-22
 shell grep -ciE "paintings" logs/latest.log; grep -iE "immersive_?paintings" logs/latest.log | grep -iE "error|fail|load" | head -3 | cut -c1-200; ls kubejs/data | head -40 | tr '\n' ' '
 look painting count as before the carve, no load error
 
 ## SQ-CMP-08 | moved server scripts, /reload
 @group A
 @commands Same boot: `grep -E "Error occurred while handling event\|creativecompat" logs/kubejs/server.log logs/latest.log \| head`; `/reload`
-@pass No script error from the moved server files (coin, starter kit, feature ports, flowers, misc mods, tag rows); `/reload` clean
+@pass No script error from the Compat server files (flowers, Botany Pots, tag rows; since 2026-11-22 coin, starter kit, feature ports and misc mods run from the pack folder, SQ-CMP-25); `/reload` clean
 @fails A moved script reading a top-level name from the pack's scope
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-22
 shell grep -E "Error occurred while handling event|creativecompat" logs/kubejs/server.log | head -6 | cut -c1-220; grep -c "Error occurred while handling event" logs/latest.log; true
 kjsreject Error occurred while handling event
 > reload
@@ -150,10 +157,12 @@ look no script error from moved Compat files; /reload clean
 @commands Any boot with the current Compat jar; `setblock ~ ~ ~2 creativecompat:weathered_cardboard_box`
 @pass no `decor_blocks.js` error in `logs/kubejs/startup.log`; the setblock succeeds
 @fails a startup error on `blockstateJson`: Rhino did not convert the object to a JsonObject (set it from Java or `JsonIO` instead)
+@reviewed 2026-11-22
 kjsreject decor_blocks.js
 > setblock 0 -60 2 creativecompat:weathered_cardboard_box
 expect Changed the block
 @draft no batch holds this row yet
+@reviewed 2026-11-22
 
 ## CQ-CMP-09 | Weathered Cardboard Box wraps its texture
 @group client
@@ -161,6 +170,7 @@ expect Changed the block
 @pass LOOK: each face shows one tile of the sheet (not the whole sheet four times): taped top, plain flap bottom, a handle side north and south, label sides east and west, matching Design and Decor's cardboard box placed facing north; the box fills the full block
 @fails the whole sheet on each face: the generated cube_all model still wins (blockstate not taken from `decor_blocks.js`); a face sideways or upside down: the face rotations of `block/weathered_cardboard_box_wrapped`
 @draft no batch holds this row yet; needs a client
+@reviewed 2026-11-22
 
 @@section 3
 @@title SQ-CMP Corpse decay on world time, 2026-11-18 ([plan_corpses.md](../plan_corpses.md) 3.1, TODO `corpses #1`, `corpses #6`)
@@ -176,17 +186,19 @@ expect Changed the block
 @commands Any boot with Corpse and the current Compat jar; read `config/creativecompat-common.toml`
 @pass `CorpseDecayMixin` applies (no mixin error); the file has `[corpses]` with `skeletonTime = 168000`, `emptySkeletonTime = 600`, `emptyDespawnTime = 6000`, the four Nether times and both dimension lists
 @fails a target name in `CorpseDecayMixin` (m_8119_, m_7380_, m_7378_, m_8097_, m_5446_) no longer matches the Corpse jar
+@reviewed 2026-11-22
 bootreject CorpseDecayMixin.*(Error|error|failed)
 shell grep -nE "^\s*\[corpses\]|skeletonTime|emptyDespawnTime|netherWitherTime|noDecayDimensions" config/creativecompat-common.toml
 look the [corpses] section with the default values
 @draft no batch holds this row yet
+@reviewed 2026-11-22
 
 ## SQ-CMP-11 | A full corpse turns skeleton 7 days after death, caught up on load
 @group A
 @commands Shortened `[corpses] skeletonTime = 200` and a restart (stands in for 7 days); `forceload add 0 0`; advance the clock 300 ticks; `summon corpse:corpse 2 -60 2 {Tags:["c11a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:1L}}` and a second with `Tags:["c11b"]` and no `creativecompat:corpse`; wait 3 s; read each `Stage`
 @pass c11a: `Stage: 1b` (skeleton; its death was more than skeletonTime ticks of game time ago); c11b: `Stage: 0b` with a `DeathTime` near the current game time
 @fails c11a stays 0: the decay check does not run (tick redirect or config gate); c11b turns skeleton at once: DeathTime defaulted to 0
-@reviewed 2026-11-20
+@reviewed 2026-11-22
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 # r1120fix (2026-11-20): a negative DeathTime is the mixin's "unset" sentinel (CorpseDecayMixin: deathTime < 0 -> now - age),
 # so the r1120nv fixture read as just died. Now: skeletonTime 200 ticks (restart), the clock moved past 300 ticks, and a
@@ -218,7 +230,7 @@ reject (Unknown or incomplete command|Incorrect argument for command|No entity w
 @commands `summon corpse:corpse 6 -60 2 {Tags:["c12"],Death:{PlayerName:"Test"}}`; read `Stage` at 10 s and 35 s; check the entity at 4 min 50 s and 5 min 10 s
 @pass Stage 0b at 10 s, 1b at 35 s; still there at 4 min 50 s; gone at 5 min 10 s (no item drops: it was empty)
 @fails gone after 30 s: the Corpse mod's own despawn still runs (redirect of m_146870_ in tick); never gone: emptiedAt never set
-@reviewed 2026-11-20
+@reviewed 2026-11-22
 > forceload add 0 0
 sleep 3
 > summon corpse:corpse 6 -60 2 {Tags:["c12"],Death:{PlayerName:"Test"}}
@@ -241,7 +253,7 @@ expect Test failed
 @commands Shortened Nether times (`netherSkeletonTime = 200`, `netherWitherTime = 1000`: wither 1000 ticks after the skeleton) and a restart; advance the clock 1200 ticks; in the Nether a corpse holding stone (`c13a`) with `DeathTime` 300 ticks ago, a second (`c13b`) with `DeathTime:1L`; in the End a third (`c13c`) with `DeathTime:1L`; forceload each spot; wait 3 s; read each `Stage`
 @pass c13a 1b, c13b 2b, c13c 0b
 @fails c13b 1b: the Nether list does not match the dimension id; c13c 1b: the End is not in `noDecayDimensions`
-@reviewed 2026-11-21
+@reviewed 2026-11-22
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 # r1120fix (2026-11-20): a negative DeathTime is the mixin's "unset" sentinel (CorpseDecayMixin: deathTime < 0 -> now - age),
 # so the r1120nv fixture read as just died. Now: Nether skeleton at 200 ticks, wither 200 ticks later (stand in for 1 + 1 days;
@@ -280,6 +292,7 @@ reject (Unknown or incomplete command|Incorrect argument for command|No entity w
 @pass c16a (skeleton) at the bottom of its column (y about -59); c16b (player model) at the water surface (y about -50); `config/creativecompat-common.toml` has `skeletonsSink = true`, `sinkSpeed = 0.1`
 @fails c16a still near the top: the `@ModifyArg` on `m_20334_` in `CorpseEntity.m_8119_` did not apply (look for a mixin warning); c16b sank too: the skeleton check is missing
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+@reviewed 2026-11-22
 > forceload add 16 16
 > fill 20 -59 20 22 -50 22 minecraft:water
 > fill 26 -59 20 28 -50 22 minecraft:water
@@ -292,6 +305,7 @@ look about -59 (the column floor)
 look about -50 (the water surface)
 shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 @draft no batch holds this row yet
+@reviewed 2026-11-22
 
 ## CQ-CMP-14 | Corpse look: armor follows contents, wither skeleton in the Nether
 @group client
@@ -299,6 +313,7 @@ shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 @pass LOOK: within a second the corpse no longer wears the helmet or holds the sword, the rest of the armor stays; the Nether corpse is a normal-size skeleton with the dark wither skeleton texture, wearing the gold helmet
 @fails armor still shown: `followContents` off or the renderer still caches its dummy; wither corpse big: drawn with the wither skeleton renderer instead of the skeleton model
 @draft no batch holds this row yet; needs a client
+@reviewed 2026-11-22
 
 ## CQ-CMP-15 | Cosmetic armor goes into the corpse and back
 @group client
@@ -307,6 +322,7 @@ shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 @fails the helmet stays on the player: `CosArmorKeepThroughDeath` still true (config not copied to the client or server folder); it lands in the inventory, not the cosmetic slot: Cosmetic Armor x Corpse Compat missing
 @sources feature_writeup/plan_corpses.md config/cosmeticarmorreworked-common.toml
 @draft no batch holds this row yet; needs a client and a real death
+@reviewed 2026-11-22
 
 ## SQ-CMP-17 | Corpse sections: mixins apply, config keys, a corpse holding only section items is not empty
 @group A
@@ -314,6 +330,7 @@ shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 @pass the five common section mixins apply (no mixin error); `[corpses]` has `sectionedScreen = true`, `curioCap = 24`; c17: `Stage: 0b`, `EmptiedAt: -1L` (it holds items, so neither the empty skeleton nor the 5 min rule runs)
 @fails Stage 1b: section stacks were left out of the empty check (only the Additional Items checks may skip them); a mixin error naming `lambda$openCorpseGUI$1`, `m_38946_`, `transferItems`, `m_7648_` or `executeServerSide`: the Corpse jar changed
 @absent creativecompat:corpse creativecompat:curio (NBT keys on the corpse and on stacks, not registry ids)
+@reviewed 2026-11-22
 bootreject Corpse(InventoryContainer|ContainerBase|AdditionalContainer|Guis|TransferMessage)Mixin.*(Error|error|failed)
 shell grep -nE "sectionedScreen|curioCap" config/creativecompat-common.toml
 look sectionedScreen = true and curioCap = 24
@@ -322,7 +339,7 @@ look sectionedScreen = true and curioCap = 24
 sleep 40
 > data get entity @e[tag=c17,limit=1] "creativecompat:corpse"
 look Stage: 0b and EmptiedAt: -1L
-@reviewed 2026-11-19
+@reviewed 2026-11-22
 @draft no batch holds this row yet
 
 ## CQ-CMP-18 | Corpse screen sections look-check (screenshot)
@@ -331,7 +348,7 @@ look Stage: 0b and EmptiedAt: -1L
 @pass LOOK (screenshot to the owner before any polish): top row = 4 armor slots, 4 cosmetic slots (helmet leftmost, empty ones show the armor silhouettes), offhand at the right end; a Curios-style panel hugs the window's left edge with one slot per curio worn, in slot type order, a second column further left past 12; a hovered curio's tooltip names its slot type ("Curio: Ring"), a cosmetic piece says "Cosmetic armor"; no Additional Items button when every extra item is in a section
 @fails offhand still at x 98 with a gap at the end: the `<init>` TAIL hook did not run; slots drawn but empty: the client cap differs from the server's (synced section tag missing); curio slots without the panel: `curios:textures/gui/inventory.png` moved; an Additional Items button that opens empty pages: the button flag redirect in `Guis` did not apply
 @sources feature_writeup/plan_corpses.md
-@reviewed 2026-11-19
+@reviewed 2026-11-22
 @draft no batch holds this row yet; needs a client and a real death
 
 ## CQ-CMP-19 | Corpse sections: take, shift-click and Transfer Items put each item back where it was
@@ -340,7 +357,7 @@ look Stage: 0b and EmptiedAt: -1L
 @pass (a) each taken item stacks with a fresh copy of the same item (no hidden tags; F3+H shows no `creativecompat:curio` or `Cosmetic*` keys); the section slot empties; Additional Items holds only the extra items; (b) every curio returns to the exact slot type and index it was in at death, the ring whose slot is taken goes to another ring slot or the inventory; cosmetic pieces go back to their cosmetic slots; nothing keeps a section tag
 @fails a curio in the wrong index of its type: the transfer packet hook ran after Corpse Curios Compat; a taken item does not stack: the tag strip missed a path (shift-click is `m_7648_`, hotbar swap is `onTake`); section items also on the Additional Items pages: the filtered view did not replace the container's inventory
 @sources feature_writeup/plan_corpses.md
-@reviewed 2026-11-19
+@reviewed 2026-11-22
 @draft no batch holds this row yet; needs a client and a real death
 
 ## CQ-CMP-20 | The corpse model wears its own cosmetic armor, not the player's current one
@@ -349,7 +366,7 @@ look Stage: 0b and EmptiedAt: -1L
 @pass the corpse wears the gold helmet (its own cosmetic stack), not the leather one the player wears now; after it is taken (within a second) the corpse shows the iron helmet; the living player still shows the leather cosmetic helmet
 @fails the corpse shows the leather helmet: Cosmetic Armor Reworked's UUID swap still wins (the NORMAL `RenderPlayerEvent.Pre` listener did not run or ran first); the living player shows the corpse's helmet: the Post restore missed
 @sources feature_writeup/plan_corpses.md
-@reviewed 2026-11-19
+@reviewed 2026-11-22
 @draft no batch holds this row yet; needs a client and a real death
 
 ## CQ-CMP-21 | Corpse player model wears the corpse's curios and an Elytra Slot elytra (look-check with CQ-CMP-18)
@@ -358,7 +375,7 @@ look Stage: 0b and EmptiedAt: -1L
 @pass LOOK (screenshot to the owner with CQ-CMP-18): the corpse's player model shows the curios that draw on the player (belt, necklace, back items) and the elytra on its back over the chestplate, as the player looked before death; the render-toggled curio does not show; after the items are taken (within a second) they no longer show; the living player's own curios are unaffected
 @fails no curios on the model: the dummy player's curios handler was not filled (no `Curios` list in the synced section tag, or the `RenderPlayerEvent.Pre` listener did not reach `CorpseCuriosClient.fill`); the elytra missing while curios show: Elytra Slot's layer reads another source; the toggled curio shows: the `Hidden` flag was not recorded at death; taken items still show: the fill is not redone on a resync
 @sources feature_writeup/plan_corpses.md
-@reviewed 2026-11-19
+@reviewed 2026-11-22
 @draft no batch holds this row yet; needs a client and a real death
 
 ## CQ-CMP-22 | Corpse skeleton wears its curios, an Elytra Slot elytra and its cosmetic armor (look-check with CQ-CMP-18)
@@ -367,5 +384,67 @@ look Stage: 0b and EmptiedAt: -1L
 @pass LOOK (screenshot to the owner with CQ-CMP-18): the skeleton wears the gold helmet (cosmetic over real), the visible curios and the elytra on its back; the render-toggled curio does not show; after taking, the iron helmet shows and the elytra is gone within a second; the wither skeleton shows the same; no warning `curio renderer for ... failed on a corpse skeleton` in `logs/latest.log` (if one is there, name the item: its renderer is player-only and is skipped)
 @fails nothing on the skeleton: `CorpseSkeletonLayer` not added (the AddLayers listener on the mod bus did not run) or the corpse pointer is not set while the skeleton draws; the real helmet shows: `withCosmetics` not applied; the wither skeleton bare while the plain one is dressed: the layer was not added to the wither look
 @sources feature_writeup/plan_corpses.md
-@reviewed 2026-11-19
+@reviewed 2026-11-22
 @draft no batch holds this row yet; needs a client and a real death
+
+@@section 4
+@@title SQ-CMP Compat publish pass, 2026-11-22 ([publish_readiness.md](../publish_readiness.md) 4, TODO `creative-compat-publish #1` to `#6`; [plan_corpses.md](../plan_corpses.md) rulings 36 to 38)
+@@date 2026-11-22
+@@jars creativecommon creativecompat
+@@sources feature_writeup/creative_compat.md feature_writeup/publish_readiness.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/CompatMixinPlugin.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/MixinSwitches.java
+@@prep boot=2: toml creativecompat-common.toml mixins snowLayerFall false
+@@prep boot=2: toml creativecompat-common.toml mixins insideBlocks false
+@@text
+@@text Boot 1 is the full pack with the 2026-11-22 Compat jar (fresh config). Boot 2 switches two `[mixins]` keys off,
+@@text one of them the pass-through duck interface (`insideBlocks`), to show a switched-off mixin is skipped without a crash.
+@@text
+@@table
+## SQ-CMP-23 | [mixins] keys written, every gated mod in its tested range, exact Breezy gate
+@group A
+@commands Boot 1; read `config/creativecompat-common.toml`; grep the log for range warnings and the Breezy mixin
+@pass `[mixins]` table with 32 keys, all `true`; no `is outside the tested range` and no `is not [` line from `[creativecompat]`; `SupplementariesBreezyCompatMixin` applies (pack has Supplementaries 1.19.2-2.4.20, Breezy 1.0.8); `python3 $INST/tools/scratch_query/cmp_mixin_check.py` shows no mixin skipped that applied in r1122cc
+@fails a range string wrong for the installed version (the mod's mixins go missing); the config spec missing `[mixins]`
+@boot 1
+@reviewed 2026-11-22
+bootexpect \[creativecompat\] loaded \(config/
+bootreject \[creativecompat\].*(outside the tested range|is not \[)
+shell awk '/^\[mixins\]/{m=1;next} /^\[/{m=0} m && /=/' config/creativecompat-common.toml | grep -c "= true"
+shell grep -c "SupplementariesBreezyCompatMixin" logs/debug.log; python3 $INST/tools/scratch_query/cmp_mixin_check.py | tail -5
+look 32 true keys; Breezy mixin applied; cmp_mixin_check skips only absent-mod mixins
+
+## SQ-CMP-24 | A switched-off [mixins] key skips its mixin; pass-through off without a crash
+@group A
+@commands Boot 2 (prep: `snowLayerFall = false`, `insideBlocks = false`); grep the log; walk through a cobweb and place a snow layer over air with `/setblock ~ ~3 ~ minecraft:snow`
+@pass log line `mixins switched off in [mixins]: [...SnowLayerFallMixin..., ...InsideBlocksMixin...]`; neither mixin in `logs/debug.log` apply lines for this boot; no exception mentioning `PassHolder`, `PassChunkHolder` or `ClassCastException` after 60 s with a player or bot online; the floating snow layer stays (does not fall)
+@fails ClassCastException from a pass-through cast (a duck cast missed in surface/); the key not read (plugin reads before the file exists only on a first start)
+@boot 2
+@reviewed 2026-11-22
+bootexpect mixins switched off in \[mixins\]
+bootreject ClassCastException.*creativecompat
+> setblock 0 120 0 minecraft:snow
+sleep 5
+> execute if block 0 120 0 minecraft:snow run say SNOW_STAYED
+waitlog SNOW_STAYED 20
+shell grep -cE "ClassCastException|NoClassDefFoundError" logs/latest.log; true
+look no cast errors; snow layer stayed
+
+## SQ-CMP-25 | Pack balance runs from the pack folder; crop recipes and dimension tags from the jar
+@group A
+@commands Boot 1; grep the KubeJS server log for the moved scripts; check one rebuilt recipe id; list the jar
+@pass `misc mods starting`, `feature ports (tier 1) starting`, `dead recipe removal starting`, `Coin starting` each once (from `server_scripts`, not the jar); no script error; recipe `creativecompat:` AE2 cable recipes still listed (`/kubejs` dump or JEI count unchanged); the jar lists `data/creativecompat/recipes/botanypots/crop/` (41 files) and both `tags/items/botany_pots/` tags
+@fails a moved script read a name from Compat's script scope; the build no longer copies the recipe tree
+@boot 1
+@reviewed 2026-11-22
+kjsreject Error occurred while handling event
+shell grep -cE "misc mods starting|feature ports \(tier 1\) starting|dead recipe removal starting|Coin starting" logs/kubejs/server.log
+shell unzip -l mods/creativecompat-1.0.0.jar | grep -cE "data/creativecompat/recipes/botanypots/crop/.+\.json|tags/items/botany_pots/(nether|end)_only\.json"
+look 4 script lines; 43 jar entries (41 recipes, 2 tags)
+
+## CQ-CMP-26 | Corpse skeleton shows a Customizable Elytra elytra's dye and banner (look-check with CQ-CMP-18)
+@group client
+@commands Survival client; craft a Customizable Elytra elytra dyed one color with a banner on the other wing (split wings) and wear it in the Elytra Slot back slot; set `[corpses] skeletonTime = 200`; die; wait for the skeleton; screenshot (F2) from behind; then repeat with a plain vanilla elytra
+@pass LOOK (screenshot to the owner with CQ-CMP-18): the skeleton's wings show the dye color and the banner pattern as the player's did; the vanilla elytra shows the vanilla wings; no `CorpseSkeletonLayer custom elytra failed` line in `logs/latest.log`
+@fails vanilla wings for the customized elytra: `CorpseCustomElytra` not used (Customizable Elytra not detected, or the layer failed and fell back: read the log line)
+@sources feature_writeup/plan_corpses.md
+@draft no batch holds this row yet; needs a client and a real death
+@reviewed 2026-11-22

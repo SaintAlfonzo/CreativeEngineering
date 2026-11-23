@@ -38,19 +38,24 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   `create_dd`, and the ungated `FallingBlockWaterSplashMixin`, both from Common, member prefix `creativecompat$`), SRG names, `remap = false`, member prefixes still
   `creativeengineering$`. `compat/CompatMixinPlugin` (a `GatedMixinPlugin`) applies each only when its mod is loaded:
   an any-of table plus an all-of table (`NEEDS_ALL`) for the Polymorph pairs (with sophisticatedcore, IE, Pretty Pipes),
-  Breezy with Supplementaries, and the Create breaker with Quark. Ungated vanilla targets: own-stack fill, botanist pot
-  template, vine shear.
-- **Config:** `config/creativecompat-common.toml` (`CompatConfig`): `[leaf_piles]` (until 2026-11-15, see below), `[moss]`, `[vine_shearing]`,
-  `[monster_box]`, `[trash_slot]`, keys, comments and defaults unchanged. On the first boot after the
-  carve, Common's `ConfigRename.carrySections` copies those tables with their values from
-  `creativeengineering-common.toml` into the new file (only when the new file does not exist yet); Creative Common's own
-  config correction then drops them from its file. If nothing could be carried, Compat warns about the leftover
-  section headers (Calendar's pattern).
+  Breezy with Supplementaries, and the Create breaker with Quark. Since 2026-11-22 (publish_readiness.md PR-CP-04 to
+  -07): every gated mod has a tested version range in `MOD_RANGE` (installed jar up to its next minor; outside it the
+  mod's mixins are skipped with one warning); the Breezy `@Overwrite` applies only at Supplementaries 1.19.2-2.4.20 and
+  Breezy 1.0.8 exactly (`EXACT`); `CozyHomeGoalFeatherMixin` needs both Cozy's Improved Cats and Domestication
+  Innovation. The 32 mixins that change vanilla with no mod to gate them each have an enable key in `[mixins]`
+  (`compat/MixinSwitches`, all default true, read by the plugin as text at start, so a change needs a restart; owner
+  ruling P3, 2026-11-22). Pass-through code checks its duck interfaces with `instanceof`, so any of those keys can be
+  off without a crash. Hook faults in per-tick and per-frame mixins log once each (`compat/HookFaults`, PR-CP-09).
+- **Config:** `config/creativecompat-common.toml` (`CompatConfig`). Since 2026-11-22 there is no carry-over from older
+  files: the section copies from `creativeengineering-common.toml` and `creativecommon-common.toml`, the leaf pile
+  migration and the pass-through table rewrite were dropped before the first public release (PR-CP-17; owner,
+  2026-11-22). New table `[mixins]` (one key per ungated mixin, see Mixins). `[gui_title] logOverflow` defaults to
+  false (PR-CP-16; the pack's own config file keeps its value).
 - **Leaf piles (2026-11-15, pass-through phase 3, [plan_passthrough.md](plan_passthrough.md) 3.1):** `LeafPileSlowMixin`
   and `surface/LeafPileSlow` are gone; IW leaf piles and Twigs bamboo leaves are the `leaf_pile` pass-through tier,
   threshold `[surface.passthrough.leaf_pile] minLayers` (default 4). `surface/LeafPileMigration` moves an old
   `[leaf_piles] slowFromLayers` value there on boot (the old value wins unless it is the default 4 and `minLayers`
-  exists) and drops the section. IW's `leaf_piles_slow` no longer sets the slowdown (the tier cancels IW's
+  exists) and drops the section (dropped 2026-11-22 with the other migrations). IW's `leaf_piles_slow` no longer sets the slowdown (the tier cancels IW's
   `makeStuckInBlock`), but it still gates IW's spruce thorn damage, which sits in the same branch: thorns need
   `leaf_piles_slow = true` and, with the mixin gone, IW's own 4+ layers (6+ for damage), whatever `minLayers` says.
 - **Pass-through config (2026-11-15, [plan_passthrough.md](plan_passthrough.md), feature doc [blockrunner.md](blockrunner.md) 3.10):**
@@ -117,7 +122,9 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   to the vanilla skeleton renderer (mod-bus `EntityRenderersEvent.AddLayers`) and to the wither look, acts only on the
   Corpse mod's `DummySkeleton` while its corpse draws: each shown curio (cosmetic over real, one per slot index) through
   its `ICurioRenderer` (a renderer that throws is skipped with one log warning), and an elytra in a curio slot with no
-  curio renderer through a vanilla elytra layer (vanilla wings texture). The skeleton is dressed with the cosmetic armor
+  curio renderer through a vanilla elytra layer (vanilla wings texture); since 2026-11-22 a Customizable Elytra elytra
+  goes through that mod's own layer instead, so its dye colors and banner patterns show (`corpse/CorpseCustomElytra`;
+  owner ruling M2, 2026-11-22). The skeleton is dressed with the cosmetic armor
   over its real armor (`CorpseSectionsClient.withCosmetics`). Curios API calls only in `CorpseCurios` and
   `CorpseCuriosClient`.
 - **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
@@ -126,8 +133,12 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   Elytra set is built at load from the installed jars, `banners/BannerPatternPack`, 6.3), no painting art (since 2026-11-05 the Immersive Paintings set
   is built at load from the installed jars, `paintings/PaintingPack`, 6.2), the monster box reward loot table, the weathered cardboard box assets.
 - **Scripts:** startup `kubejs_startup/creativecompat/` (`item_physics.js`, `decor_blocks.js` weathered cardboard
-  box); server `kubejs/data/creativecompat/kubejs/` (coin, dead recipe removal, feature ports, flowers, misc mods,
-  starter kit, physics tags, and the Compat rows of curios, feature-port, block and misc tags); client
+  box); server `kubejs/data/creativecompat/kubejs/` (flowers, Botany Pots, physics tags, and the Compat rows of curios, block
+  and misc tags). The pack balance (Starter Kit, feature ports, misc mods, dead recipe removal, coin, feature-port tags)
+  moved to the pack's `kubejs/server_scripts/` on 2026-11-22 (publish_readiness.md D1: Compat publishes compatibility
+  fixes only); recipe ids keep the `creativecompat` namespace. The Botany Pots crop recipes and the two dimension tags
+  (`kubejs/data/creativecompat/recipes/`, `tags/`, written by `tools/gen_botany_crops.py`) are copied into the jar since
+  2026-11-22 (PR-CP-10); client
   `kubejs/assets/creativecompat/kubejs/` (flower pot names, the Misc Mods, Quark, Supplementaries, Framed / Copycat and
   flower pot tooltips). Each tree opens with `_compat_core.js`. The Compat tooltips call the pack's tooltip helpers
   through `global.tooltips` (published by `client_scripts/tooltips.js`), at event time.
@@ -166,6 +177,11 @@ Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run
 - 2026-11-01: carved (wave 3). Creative Common 1.1.06 loses the classes, mixins, sections and resources; Calendar,
   Devtools, Creative Delight and Creative Brewing require `creativecompat`. Added ModList gates that were missing for
   the spout gun farmland, nightstands, sack scroll, banner atlas and monster box listeners.
+- 2026-11-22: publish pass (publish_readiness.md section 4, TODO `creative-compat-publish #1` to `#6`): pack balance
+  out of the jar, description corrected, `[mixins]` enable keys, version ranges for every gated mod, exact Breezy gate,
+  Cozy feather gate, Create copycat holder (`surface/CreateCamo`), sinking render tag test first, hook faults logged
+  once, config migrations dropped, `logOverflow` off by default, crop recipes and dimension tags in the jar; corpse
+  skeletons draw Customizable Elytra. Sections 2 and 3 are not yet rewritten from the code (PR-CP-18).
 - 2026-11-04: campfire rain, Comfort, the Campfire Rules JEI rows and `[campfire]` moved to Creative Delight
   (creative_split.md 7.9 step 1); Compat 33 -> 32 common mixins. Tests SQ-CFR.
 - 2026-11-04 (creative_split.md 7.14): from Creative Common, the Create: Dreams & Desires jetpack tooltip null-level

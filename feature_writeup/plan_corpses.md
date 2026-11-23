@@ -1,6 +1,6 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=8609378010f2 -->
+<!-- generated:status_index begin open_work sha1=93559adcdc3c -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Pinned 1, Testing 8), 0 Complete.
 
 | Id | Status | Tests | Change |
@@ -8,7 +8,7 @@
 | `corpses #3` | Pinned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
 | `corpses #1` | Testing | S C | Corpse decay on world time: skeleton after 7 days, empty corpse skeleton after 30 s and despawn after 5 min, shown armor follows contents (Creative Compat) |
 | `corpses #2` | Testing | S C | Ancient corpses: skeletons on 3x3 flat cave floors (below y48, about 80% below y16) and ocean floors (cold and deep more common), about 1 per 32 chunks, loot rolled on first open (Creative Loot, only with Corpse loaded) |
-| `corpses #4` | Testing | CQ-CMP-15 SQ-CMP-17 CQ-CMP-18 CQ-CMP-19 CQ-CMP-20 CQ-CMP-21 CQ-CMP-22 | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
+| `corpses #4` | Testing | CQ-CMP-15 SQ-CMP-17 CQ-CMP-18 CQ-CMP-19 CQ-CMP-20 CQ-CMP-21 CQ-CMP-22 CQ-CMP-26 | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
 | `corpses #5` | Testing | S C | Ancient corpse armor rolls: equip chains, 56/35/15/5 chances, material weights, oxidized or waxed copper, dyed leather colors (all configurable) |
 | `corpses #6` | Testing | S C | Nether corpses wither (skeleton then wither skeleton corpse), End corpses keep the player model (Creative Compat) |
 | `corpses #7` | Testing | S C | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and a skeleton skull 25% of the time |
@@ -195,7 +195,7 @@ skeleton calling `ICurioRenderer.render`; cosmetic armor on the skeleton. Elytra
 the same fill.
 
 Build notes, round 1 (2026-11-19; [creative_compat.md](creative_compat.md) Corpse screen sections; SQ-CMP-17, CQ-CMP-18
-to -20). Choices the design left open, for the owner to confirm:
+to -20). Choices the design left open (confirmed, owner, 2026-11-22, ruling 38):
 - **Offhand moved.** The jar has the offhand slot at (98, 18), not (152, 18): the free top-row spots were 80, 116, 134
   and 152. To keep ruling 31 ("between the real armor and the offhand"), the offhand slot moves to x 152 and the
   cosmetic slots take 80 to 134; the 4 cosmetic frames and the offhand frame are always drawn.
@@ -218,7 +218,7 @@ to -20). Choices the design left open, for the owner to confirm:
 - **Curio cosmetic slots** (Curios' own cosmetic column) are recorded and returned too (`Cosmetic` in the tag).
 
 Build notes, round 2 (2026-11-19, ruling 35; [creative_compat.md](creative_compat.md) Corpse models; CQ-CMP-21, -22,
-look-checked together with CQ-CMP-18). Choices the design left open, for the owner to confirm:
+look-checked together with CQ-CMP-18). Choices the design left open (confirmed, owner, 2026-11-22, ruling 38):
 - **Synced curio list.** The section tag gains `Curios`: every curio-tagged stack still in the corpse (slot, index,
   cosmetic, hidden, item), not capped by `curioCap` (the cap is the screen's). It is rebuilt once a second from the
   contents like the cosmetic stacks, so a taken curio stops showing within a second (ruling 4).
@@ -231,8 +231,9 @@ look-checked together with CQ-CMP-18). Choices the design left open, for the own
   shown curio (cosmetic over real, one per slot index) through its `ICurioRenderer`. A renderer written for players only
   that throws is skipped (one warning in the log) instead of breaking the frame.
 - **Skeleton elytra** (Elytra Slot): an elytra in any curio slot with no curio renderer is drawn by a vanilla elytra
-  layer with the elytra in the chest slot for that draw, over a chestplate as on players. Vanilla wings texture: a
-  Customizable Elytra color or banner is not shown on the skeleton (the player model shows it through Elytra Slot).
+  layer with the elytra in the chest slot for that draw, over a chestplate as on players. A Customizable Elytra elytra
+  goes through that mod's own layer (`CorpseCustomElytra`), so its colors and banner patterns show on the skeleton as
+  on the player model (ruling 37, built 2026-11-22); any other elytra keeps the vanilla wings texture.
 - **Skeleton cosmetic armor**: same rule as the player model (cosmetic over real, nothing for a skin-hidden slot),
   applied to the skeleton's dressing each frame.
 
@@ -274,6 +275,9 @@ look-checked together with CQ-CMP-18). Choices the design left open, for the own
 | 32 | curio slot origin | open | Recorded at death: each curio stack tagged with its slot type and index, tag removed when it leaves the corpse; Transfer Items returns it to that exact slot | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 33 | order of the rest of `#4` | open | Round 1: curio origin tags, sectioned screen, live cosmetic armor bug fix, screenshot look-check. Round 2: curio and cosmetic rendering on both models | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 34 | Compat clash with a parallel session (uncommitted surface-layer work) | open | Write the `#4` code now, commit only own files; build and install Compat only after the other work is committed | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 36 | height curve share (build note 6b: the curve left 92% below y16) | open | Retune to about 80% below y16 (built 2026-11-22, see 6b) | 2026-11-22 | owner rulings 2026-11-22 (M2) |
+| 37 | skeleton elytra look (3.6 round 2: vanilla wings only) | open | Skeleton corpses also show Customizable Elytra colors and banners | 2026-11-22 | owner rulings 2026-11-22 (M2) |
+| 38 | build choices the rulings did not fix (6b, 3.6 build notes) | clear | Every other corpse build choice confirmed (owner, 2026-11-22) | 2026-11-22 | owner rulings 2026-11-22 (M2) |
 | 35 | round 1 commit 3588e492 did not compile (config fields and a mixin entry pasted out of place); order of the next steps | open | Fix, install, then round 2; the round 1 and round 2 screenshot look-checks are done together later | 2026-11-19 | AskUserQuestion 2026-11-19 |
 
 Armor rolls (ruling 15), share of ancient corpses by pieces worn:
@@ -290,7 +294,7 @@ A full set of one material needs pieces 1 and 2 to roll the same material (piece
 weights in ruling 16 that is 19.5% of full sets, about 1 in 35000 corpses for any one-material set and about 1 in 1.4
 million for full iron or full chain.
 
-Agent defaults, unconfirmed (clear items only): the ancient corpse feature is skipped in biomes with no cave floor
+Agent defaults (confirmed with every other build choice, owner, 2026-11-22, ruling 38): the ancient corpse feature is skipped in biomes with no cave floor
 (none expected); enchant chance about 5 percent per piece; RGB "far apart" = distance of at least 200 (of 441); unaffected-copper penalty halves its weight; lukewarm and warm oceans count as warm, cold and frozen as cold; Visceral Heap drops 1 to 3 bones, 0 to 1 bone chunk, 0 to 2 cracked bones; `philipsruins:cracked_bone` gets a dict key (only `bone_chunk` has one), values in `loot_config.json`;
 ocean corpses only in `#minecraft:is_ocean` biomes (not rivers); cave corpses below the sea level only.
 
@@ -331,12 +335,17 @@ a tool or an inventory item in the main hand or offhand (shown on the model, loo
 Built: `corpses #1`, `#6` (Creative Compat, [creative_compat.md](creative_compat.md) Corpse decay), `#2`, `#5`, `#7`
 (Creative Loot, [creative_loot.md](creative_loot.md) 2c); of `corpses #4` only ruling 9 (`CosArmorKeepThroughDeath = false`,
 in `config/` and `configs_edited/`; CQ-CMP-15). Still open in `#4`: the curio slot check, the sectioned corpse screen
-and the cosmetic and curio rendering (3.3). Choices the rulings did not fix, for the owner to confirm:
+and the cosmetic and curio rendering (3.3). Choices the rulings did not fix (confirmed, owner, 2026-11-22, ruling 38):
 - **Sealed corpses** (replaced by ruling 24 in the second pass). An ancient corpse with no armor and its loot not yet rolled holds nothing, so the empty rule
   (ruling 8) would remove it 5 min after its chunk first ticks, before anyone finds it. It carries Compat's
   `creativecompat:corpse_sealed` mark until first opened and counts as full while sealed.
 - **Height curve** (ruling 12): the 25x density gap between y-64 and y32 leaves 92% of target heights below y16 (not
   80%); 78% are below y0. Taken as "gap first, 80% flexible". Real spread waits on the survey row SQ-LOOT-08.
+  Retuned 2026-11-22 (ruling 36): `y_curve` in `loot_config.json` is now -64 1.0, -32 0.8, 0 0.65, 16 0.6, 24 0.6,
+  32 0.55, 48 0.15: 80.3% of target heights below y16, 67% below y0, 7.5% above y32. A monotone curve with 80% below
+  y16 cannot keep a wide gap (the band above y16 needs a fifth of the weight), so the y-64 : y32 rate gap is now 1.8x
+  (was 25x). The fallback default in Creative Loot's `AncientCorpseConfig` still holds the old points (Creative Loot
+  is owned by another agent this session).
 - **Plain oceans** (`ocean`, `deep_ocean`, modded oceans) count as neutral, temperature factor 2, between warm 1 and cold 3.
 - **Wither look** (ruling 20): the renderer reads vanilla `textures/entity/skeleton/wither_skeleton.png` from its own
   path instead of a copy, so no new texture file and no sources.csv row; resource packs apply.
@@ -347,7 +356,7 @@ and the cosmetic and curio rendering (3.3). Choices the rulings did not fix, for
 
 Second phase (2026-11-18, rulings 24 to 30): built `corpses #8` (Creative Loot `AncientHands`, block `hands` in
 `loot_config.json`) and `#9` (Compat `[corpses] skeletonsSink`, `sinkSpeed`; ocean corpses lose `NoGravity`). Choices
-the rulings did not fix:
+the rulings did not fix (confirmed, owner, 2026-11-22, ruling 38):
 - **Waxed copper states are shared** between a corpse's armor and its copper tools (one state, or two, for the whole
   kit), since the tool rolls "mirror armor" (ruling 26).
 - **Offhand tool material copy** (ruling 26, "a second tool copies the first") applies only when the main hand holds a
@@ -374,4 +383,6 @@ CQ-CMP-20; round 2 CQ-CMP-21, CQ-CMP-22 (look-checks done with CQ-CMP-18).
 - 2026-11-18: second phase questions: ruling 25 offhand made independent; rulings 28 to 30.
 - 2026-11-19: built `corpses #4` round 1 (3.6 items 1 to 6); build notes under 3.6.
 - 2026-11-19: ruling 35: round 1 repaired (52a568a9) and installed; built `corpses #4` round 2 (curios, Elytra Slot elytra and cosmetic armor on both corpse models); build notes under 3.6.
+- 2026-11-22: rulings 36 to 38 (owner rulings M2): height curve retuned to 80% below y16; Customizable Elytra on
+  skeleton corpses built (Compat); every other build choice confirmed.
 - 2026-11-18: built `corpses #8`, `#9`; `#4` round 1 designed (3.6), rulings 31 to 34.

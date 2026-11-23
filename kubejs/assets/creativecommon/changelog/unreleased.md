@@ -357,12 +357,12 @@
 
 - **New:** Corpses in the Nether turn into skeletons after 1 day and into wither skeletons a day later; emptied ones after 15 and 45 seconds.
 - **New:** Corpses in the End keep the player model and never turn into skeletons.
-- **New:** Ancient Corpses generate in new chunks: skeletons on flat cave floors below y48, most of them deep, and on ocean floors, more often in cold and deep oceans.
+- **New:** Ancient Corpses generate in new chunks: skeletons on flat cave floors below y48, about 80% of them below y16, and on ocean floors, more often in cold and deep oceans.
 - **New:** An Ancient Corpse's loot is rolled when it is first opened. Emptied ones disappear after 5 minutes.
 - **New:** Ancient Corpses can wear worn wooden, leather, dyed leather, copper, chainmail or iron armor, rarely enchanted. Copper pieces are fully oxidized unless waxed.
 - **New:** Ancient Corpses can hold a worn wooden, stone, copper or iron sword or pickaxe, and torches (caves) or bread (oceans) in the offhand. Every Ancient Corpse holds at least one item.
 - **New:** Ancient Remains generate in the Visceral Heap: empty skeletons that never decay. A hit breaks one into Bones, Bone Chunks, Cracked Bones and, at 25%, a Skeleton Skull.
-- **New:** A corpse and its skeleton show the curios and cosmetic armor inside it, including an elytra in the back slot; curios hidden on the player stay hidden.
+- **New:** A corpse and its skeleton show the curios and cosmetic armor inside it, including an elytra in the back slot with its Customizable Elytra colors and banner patterns; curios hidden on the player stay hidden.
 - **Changed:** Corpses turn into skeletons 7 in-game days after death, counted in world time, also while the area is unloaded [1 hour of loaded time].
 - **Changed:** Emptied corpses turn into skeletons after 30 seconds and disappear after 5 minutes [disappeared after 30 seconds]. Putting items back restarts the 5 minutes.
 - **Changed:** A corpse shows only the armor and held items still inside it.
@@ -493,6 +493,7 @@
 
 - **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
 - **New:** The potions, fluid amounts and loop counts of the echo, felsic ingot, dragon and Air Brake assembly recipes can be changed in the Creative Equipment config.
+- **New:** Each change Creative Compat makes to vanilla behavior (walking through plants and webs, falling snow layers, the golem farm cooldown, boat friction, the toast filter, sign text distance and others) can be switched off on its own in the Creative Compat config.
 - **New:** Sneak and right-click a placed sack with an empty hand to pick it up with its contents.
 - **Changed:** Wild carrots generate twice as often, 1 patch in 60 chunks [120], and wild adzuki beans 1 in 64 [128].
 - **Changed:** The Saturation effect and its potions and arrows are renamed Satiated [Saturation]; its description reads "Keeps the player fed."
@@ -507,6 +508,7 @@
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
 - **Changed:** Little Logistics receiver and transmitter components in an inventory turn into Redstone Links.
 - **Changed:** A Wandering Trader carries about 2 Wares delivery agreements [about 5].
+- **Fixed:** The Starter Kit deleted any armor or offhand item a player wore on first join; it now gives them back with the rest of the inventory.
 - **Fixed:** TNT shrapnel broke nearby minecarts and armor stands and turned TNT minecarts into items; it now hits only living things.
 - **Fixed:** Rubber trees did not generate in jungles.
 - **Fixed:** Grass below height 32 spread as fast in winter as in spring.

@@ -53,6 +53,31 @@ These shape the fix list; the agent default is given where one is obvious.
 | D9 | Raspberry Pie open defaults: the three added default unlocks (Jump Boost II, Haste II, Slow Falling), the `diversityIconFallback` list, the shared Diet Log icon, CurseForge or Modrinth | Flagged unconfirmed in plan_rp_standalone.md sections 4, 8, 9 | none |
 | D10 | Rule exemptions proposed in section 8 (DR-C2, DR-C7, DR-C10) | Otherwise they stay open violations | Record the exemptions |
 
+## 2a. Owner rulings (2026-11-22)
+
+Wave 1 is Common, Compat and Raspberry Pie. Creative Delight is dropped from the first wave (D3), so D4 to D6 are
+deferred with it (TODO `publish-readiness #7`, Pinned). TODO rows exist for every wave-1 finding group:
+`creative-common-publish #10` to `#15`, `creative-compat-publish #1` to `#6`, `raspberry-pie-publish #1` to `#7`,
+`publish-readiness #1` to `#6`.
+
+| # | Ruling |
+|---|---|
+| D1 | Compat publishes compatibility fixes only; pack tuning and the starter kit move to the pack folder |
+| D2 | Common ships vanilla defaults; the pack's values move to the pack config |
+| D3 | Delight is dropped from the initial publish list; focus on Common, Compat and Raspberry Pie |
+| D4 | Deferred with Delight. Derived art: Vintage jam, jello, jar and interior textures and the core lemonade textures are palette swaps of Fruits Delight 0.5.11 (All Rights Reserved); generated PNGs are tracked in git |
+| D5, D6 | Deferred with Delight |
+| D7 | The repository is currently public; rewrite history (the 19 commits with a personal address) |
+| D8 | Common 1.2.0 is published; 1.3.0 is the next upload |
+| D9 | Keep the three added default unlocks; CurseForge now, Modrinth possibly later |
+| D10 | Raspberry Pie's DR-C7 exception is permanent (recorded in design_rules.md). The other proposed exemptions are temporary and stay TODOs to fix (`publish-readiness #6`) |
+| P3 | PR-CP-04: every one of the 32 ungated Compat mixins gets an enable key, default on (built 2026-11-22: `[mixins]` in creativecompat-common.toml) |
+| P4 | PR-CP-17: drop the old config migrations (built 2026-11-22). DR-C11: the NBT and SavedData names (`CENightstandItems`, `CE` keys) stay; accepted exemption, since renaming them would need a conversion (recorded in design_rules.md) |
+| PR-CP-13 | The weathered cardboard box texture is owner-only: no agent redo; listed in texture_sources/art_needed_2026-11-22.csv |
+| P1 | PR-CC-03: Common ships the Forge global loot modifier list entry (`replace: false`) for glass shards; Creative Loot also adds glass shards to the mid-tier chest tables, mostly dirty or clear, a random chance of colored (owner, 2026-11-22). Built 2026-11-22; the DR-P15 lint exempts Common's list |
+| P2 | PR-CC-11: the potions of 12 vanilla effects stay in Common and are documented (project page, mods.toml description) (owner, 2026-11-22) |
+| P7 | TODO `food-tuning #47`: the Wither Immunity effect is registered in Creative Common, `creativecommon:wither_immunity` (owner, 2026-11-22) |
+
 ## 3. Creative Common 1.3.0
 
 Paths: `CC/` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/`, `RES/` =
@@ -252,7 +277,7 @@ Values are masked on purpose; file paths are enough to find them.
 
 | Id | Sev | Area | Where | Finding | Ev | Fix |
 |---|---|---|---|---|---|---|
-| PR-RE-01 | Blocker | metadata | `agent_notes/git-repo-setup.md:7`; `mods.toml` of Common and Raspberry Pie; `solRaspberryPie/NOTICE:3` | The only recorded repo state is "private" (2026-09-27). Both mods link to it and Raspberry Pie names it as the GPL source location | R (visibility not checked) | D7; record visibility in one doc |
+| PR-RE-01 | Blocker | metadata | `agent_notes/git-repo-setup.md:7`; `mods.toml` of Common and Raspberry Pie; `solRaspberryPie/NOTICE:3` | The only recorded repo state is "private" (2026-09-27). Both mods link to it and Raspberry Pie names it as the GPL source location | R (visibility not checked) | D7; record visibility in one doc. Done 2026-11-22: public, recorded in `agent_notes/git-repo-setup.md` |
 | PR-RE-02 | High | privacy | git history | 19 commits carry a personal mail address as author; the other 604 use noreply addresses | C | D7 |
 | PR-RE-03 | High | privacy | `agent_notes/git-repo-setup.md:7` | Names the owner's separate global git identity | R | Drop the clause |
 | PR-RE-04 | High | privacy | `config/jei/world/` (14 tracked files); `configs_edited/config_26_09_26.zip` | Bookmark folders named after servers and worlds joined; one folder name carries two first names | C (count), R | Untrack and ignore the folder; rebuild or drop the zip |
@@ -261,7 +286,7 @@ Values are masked on purpose; file paths are enough to find them.
 | PR-RE-07 | Medium | privacy | `development/creativeCommon/changelog.txt` | The Forge template changelog with 12 third-party contributor mail addresses | C (tracked) | Delete |
 | PR-RE-08 | Medium | privacy | `communications/` (one image); `server/perf/reports/` (three zips) | A third party's permission reply as a screenshot; reports with hardware details and the home path | C (tracked) | Keep permission evidence out of the public repo and cite it in the NOTICE; untrack the reports |
 | PR-RE-09 | Medium | build | `gradle.properties:8`; `build-logic/build.gradle:8-9` | A Linux-only `org.gradle.java.home`; dynamic plugin versions; no wrapper checksum | C (path), R | Remove the line; pin the versions |
-| PR-RE-10 | High | records | `creative_engineering.md:486`; `plan_cc_publish_1_3.md:25, 39`; `creative_common_changelog_1_3_0.md:3` | Upload state of Common is recorded nowhere; the plan's cut-off is 1.2.0 and the changelog says it covers everything since 1.1.0 | R | D8; a release ledger (version, tag, sha1, date, site) |
+| PR-RE-10 | High | records | `creative_engineering.md:486`; `plan_cc_publish_1_3.md:25, 39`; `creative_common_changelog_1_3_0.md:3` | Upload state of Common is recorded nowhere; the plan's cut-off is 1.2.0 and the changelog says it covers everything since 1.1.0 | R | D8; a release ledger (version, tag, sha1, date, site); started 2026-11-22 as [release_ledger.csv](release_ledger.csv) |
 | PR-RE-11 | Medium | metadata | `mods.toml` of Compat and Delight | No `displayURL` or `issueTrackerURL`; no `logoFile` in any of the four; both descriptions describe the pack, and Compat's "every other Creative mod requires it" is false | R | Add; rewrite for a standalone reader |
 | PR-RE-12 | Medium | docs | `project_pages/` | Project page and file changelog exist for Common only; no README in any of the four mod folders | R | Three pages, three first changelogs, a README each |
 | PR-RE-13 | Medium | records | `todo/rows/creative_mods.csv` (`creativecommon/publish #1` to `#5`, `creativecompat/publish #1`, `licence/compat #1` to `#3`) | Rows in Testing since 2026-11-05 to 2026-11-16 with stale text (a tag listed as open that exists; "NOT installed" beside an install of 2026-11-22). No publish family for Delight or Raspberry Pie | R | Refresh or close; add the families |
@@ -294,7 +319,7 @@ Judged hits and proposed exemptions (D10):
 | DR-C10 | five underscored mixin packages in Delight | Functional: the plugin reads the package segment as the mod id. Propose an exemption |
 | DR-C10 | six underscored member ids | Upstream ids kept by ports; `enders_additions` is the one own id (PR-CM-14) |
 | DR-C7 | Common and Compat naming higher jars by string | Real (PR-CC-08, -27, PR-CP-11, -12); Raspberry Pie having no Common dependency matches its plan and needs one exemption line |
-| DR-C11 | `creativeengineering$` and `ce$` names in Common, Compat, Delight | Real, low (PR-CC-28, PR-CP-23, PR-CD-23); NBT and SavedData names cannot change without a conversion and need a ruling |
+| DR-C11 | `creativeengineering$` and `ce$` names in Common, Compat, Delight | Real, low (PR-CC-28, PR-CP-23, PR-CD-23); NBT and SavedData names: accepted exemption (owner, 2026-11-22), they keep their names since renaming needs a conversion; member prefixes stay a TODO |
 | DR-C14 | 405 upstream advancement files in repacks | PR-CM-11 |
 | DR-C18 | one ad-hoc texture in Compat, 26 unconfirmed or redo in members | PR-CP-13, PR-CM-09 |
 | DR-C19 | Raspberry Pie NOTICE name; stale notices in Common, Compat, Hearth | PR-RP-07, PR-CC-12, PR-CP-14, PR-CM-07 |
@@ -330,5 +355,6 @@ packages reached only through a loaded check) would have caught all three.
 
 ## 12. History
 
+- 2026-11-22: owner rulings D1 to D10 recorded in section 2a; TODO rows created.
 - 2026-11-22: analysis written (owner request). Six parallel read-only reviews plus the tooling baseline; blocker and
   high findings marked C were re-read in the code afterwards.

@@ -126,7 +126,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-C4 | One solution per job: no second system beside an existing framework (compost, loot, item merges, food values, `NCH.cfg`, armor and tool effects). | Hard | pack_hygiene.md 1 (group G) |
 | DR-C5 | No version gates or fallbacks between in-tree pieces that always ship together. | Hard | pack_hygiene.md (group A) |
 | DR-C6 | Food code goes in Creative Delight's trees, one folder per mod; brewing, alcohol and the Winemaker in Creative Brewing; effects and potions in Common; gear rows in Equipment; time and seasons in Creative Calendar. | Memory | memory `creative-delight-routing`; creative_delight.md 956 |
-| DR-C7 | Dependencies point down: Common depends on nothing of ours; content jars depend on Common. One owner per file; mixed files are split by row. | Hard | creative_split.md 3, rules 2 and 7 |
+| DR-C7 | Dependencies point down: Common depends on nothing of ours; content jars depend on Common. One owner per file; mixed files are split by row. Exception (owner, 2026-11-22): Raspberry Pie ships standalone with no Common dependency. | Hard | creative_split.md 3, rules 2 and 7 |
 | DR-C8 | Jar scripts follow the Creative Delight and Creative Brewing layout. Each jar script pack has its own scope; only `global` crosses. | Hard | creative_split.md rules 5 and 9 |
 
 ### 5.2 Naming and ids
@@ -135,7 +135,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 |---|---|---|---|
 | DR-C9 | Content, tags and data ids use the namespace of the mod that owns them (since 2026-11-09), never `creativeengineering` unless the content is Creative Engineering's. | Hard | creative_split.md rule 1; plan_owner_ids.md |
 | DR-C10 | No underscore in own mod ids, Java packages, `<modid>-common.toml` names or script-pack folders (`creativecommon`, `creativeworldgen`). | Hard | creative_split.md rule 10; memory `creative-mod-naming` |
-| DR-C11 | `CE` / `Ce` class names, `CE_` constants and `ce...` commands only in Creative Engineering; event subscribers, channels, JEI and WTHIT ids name their own jar. | Checked | `tools/id_owner_lint.py` |
+| DR-C11 | `CE` / `Ce` class names, `CE_` constants and `ce...` commands only in Creative Engineering; event subscribers, channels, JEI and WTHIT ids name their own jar. Exemption (owner, 2026-11-22): saved NBT and SavedData names (`CENightstandItems`, `CE` keys) keep their names, since renaming them would need a conversion. | Checked | `tools/id_owner_lint.py` |
 | DR-C12 | A moved id gets a swap-list entry in the moving jar's `data/<modid>/swaps/*.json` (never pruned), so saved worlds carry over. | Hard | creative_split.md; memory `creative-mod-naming` |
 | DR-C13 | Config keys move with their feature and keep their names and comments. | Hard | creative_split.md rule 3 |
 
