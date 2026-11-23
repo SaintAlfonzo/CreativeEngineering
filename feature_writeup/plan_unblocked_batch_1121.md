@@ -63,6 +63,7 @@ lives in the rows, not here.
 | R13 | `dairy-fats-and-batter #1` whale oil lamp | open | The model starts from the vanilla lantern (texture copied as-is); the recolor waits for an owner palette (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
 | R14 | `dishes/ingredients #9` cheese | open | 4 wedges -> 1 wheel, matching the cut yield (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
 | R15 | `dairy-fats-and-batter #3` whale oil lamp fuel | open | All config values: tank 1000 mB, full when crafted; burns 1 mB per 24 ticks; refill with a whale oil bottle (250 mB) or bucket (1000 mB); goes out when empty; keeps its oil when broken (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R16 | `dishes/ingredients #7` batter | open | Which recipes batter replaces, and whether it joins Rustic Delight's Fried Mushrooms: pinned for future review (owner, 2026-11-22) | 2026-11-22 | coordinator relay 2026-11-22 |
 
 ## 3. Phases
 

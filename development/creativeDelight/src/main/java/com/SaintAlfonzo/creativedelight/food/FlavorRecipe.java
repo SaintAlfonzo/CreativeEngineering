@@ -54,8 +54,9 @@ public class FlavorRecipe extends CustomRecipe {
 		return parts;
 	}
 
+	/** The flavors put on, each once: two parts may name one flavor when it takes two ingredients (Cream and Onion). */
 	public List<ResourceLocation> flavors() {
-		return parts.stream().map(Part::flavor).toList();
+		return parts.stream().map(Part::flavor).distinct().toList();
 	}
 
 	/** The food stack in the grid if the rest is exactly one of each part, else EMPTY. */

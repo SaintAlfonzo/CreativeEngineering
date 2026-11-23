@@ -20,6 +20,12 @@ public class LavaWalkerEffect extends MobEffect {
     @Override
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
         if (!(pLivingEntity instanceof Player player && player.isSpectator())) {
+            // Pack change (raspberry_pie.md 4, food-tuning #54): crouching drops the walker into the lava; no lift, no
+            // standing on the surface, so the lava burns as usual.
+            if (pLivingEntity.isShiftKeyDown()) {
+                super.applyEffectTick(pLivingEntity, pAmplifier);
+                return;
+            }
             Vec3 pos = pLivingEntity.position();
             Vec3 movement = pLivingEntity.getDeltaMovement();
             Vec3 futurePos = pos.add(movement);
@@ -34,8 +40,9 @@ public class LavaWalkerEffect extends MobEffect {
                 pLivingEntity.setDeltaMovement(movement.x(), Math.max(movement.y(), 0D), movement.z());
                 pLivingEntity.setOnGround(true);
                 // Pack change (raspberry_pie.md 4): standing on lava burns like a magma block unless the walker has
-                // Fire Resistance (or is fire immune, or sneaks, as on magma). Falling into lava burns as usual.
-                if (!pLivingEntity.level.isClientSide && !pLivingEntity.fireImmune() && !pLivingEntity.isSteppingCarefully()
+                // Fire Resistance (or is fire immune). Falling into lava burns as usual. Sneaking no longer spares the
+                // walker as on magma: crouching drops it into the lava (above).
+                if (!pLivingEntity.level.isClientSide && !pLivingEntity.fireImmune()
                         && !pLivingEntity.hasEffect(MobEffects.FIRE_RESISTANCE)) {
                     pLivingEntity.hurt(DamageSource.HOT_FLOOR, 1.0F);
                 }

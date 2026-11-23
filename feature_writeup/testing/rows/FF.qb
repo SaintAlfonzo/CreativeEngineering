@@ -648,22 +648,51 @@ expect verb=makes item=barbequesdelight:kebab_wrap n=0
 expect verb=makes item=barbequesdelight:kebab_sandwich n=0
 reject verb=\S+ .*done=0
 
-## SQ-FF-30 | Sugar and ghost pepper pair foods; Ice flavor on cold drinks
+## SQ-FF-30 | Sugar and ghost pepper pair foods; skewers take all three pairs; Ice flavor on cold drinks
 @group A
-@commands tag `creativedelight:flavorable/sugar`, `creativedelight:flavorable/ghost_pepper`, `creativedelight:flavorable/ice`
-@pass sugar and ghost pepper both hold the waffles, pancakes, sweet rolls and `veggiesdelight:beetroot_brownie`, not `beetroot_brownie_tray` or `rusticdelight:vegetable_pancake`; ghost pepper still holds popcorn; ice holds juices and sodas
+@commands tag `creativedelight:flavorable/sugar`, `creativedelight:flavorable/ghost_pepper`, `creativedelight:flavorable/onion`, `creativedelight:flavorable/garlic`, `creativedelight:flavorable/ice`
+@pass sugar and ghost pepper both hold the waffles, every pancake (the Vegetable Pancake too), sweet rolls and `veggiesdelight:beetroot_brownie`, not `beetroot_brownie_tray`; ghost pepper still holds popcorn; sugar, ghost pepper, onion and garlic hold `#barbequesdelight:raw_skewers` and the grilled skewers tag (a raw skewer such as `barbequesdelight:raw_beef_skewer`); ice holds juices and sodas
 @fails CD startup `flavors.js` (sweetPairFamilies, ice), data `creativedelight/flavor_tags.js`, the dessert family tags
 > cdevtest tag item creativedelight:flavorable/sugar
 > cdevtest tag item creativedelight:flavorable/ghost_pepper
+> cdevtest tag item creativedelight:flavorable/onion
 > cdevtest tag item creativedelight:flavorable/ice
 waitlog verb=tag kind=item tag=creativedelight:flavorable/ice 30
 expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*create_factory:waffle
 expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*veggiesdelight:beetroot_brownie\b
-reject verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*(beetroot_brownie_tray|vegetable_pancake)
+reject verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*beetroot_brownie_tray
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*rusticdelight:vegetable_pancake
+expect verb=tag kind=item tag=creativedelight:flavorable/onion n=\d+ ids=.*barbequesdelight:raw_beef_skewer
+expect verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper n=\d+ ids=.*barbequesdelight:raw_beef_skewer
 expect verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper n=\d+ ids=.*corn_delight:popcorn.*
 expect verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper n=\d+ ids=.*rusticdelight:honey_pancake
 expect verb=tag kind=item tag=creativedelight:flavorable/ice n=[1-9]\d*
 reject verb=\S+ .*done=0
+
+## SQ-FF-31 | Cream and Onion flavor craft; placeable popcorn boxes registered with their recipes
+@group A
+@commands rdetail of the flavor craft `creativedelight:shapeless/flavor/cream_and_onion`; reg probes for the seven popcorn boxes; rdetail `cheese_popcorn_box`, `plain_popcorn_box`
+@pass the Cream and Onion craft takes popcorn, a cheese or milk and an onion or onion powder (two flavor parts, one flavor); blocks and items `creativedelight:{plain,cheese,onion,garlic,ghost_pepper,void_pepper,cream_and_onion}_popcorn_box` exist (void pepper box recipe only with Ender's Delight Additions); shapeless `cheese_popcorn_box` from 4 popcorn with partial NBT `Flavors` cheese + paper; `plain_popcorn_box` from 4 popcorn + paper
+@fails CD startup `flavors.js` (cream_and_onion and its hidden onion part), data `creativedelight/flavor.js` (extra parts), Java `FlavorRecipe.flavors()` distinct, `food/popcorn/PopcornBoxes`, CD startup `popcorn_boxes.js`, data `corn_delight/recipes.js`
+> cdevtest rdetail creativedelight:shapeless/flavor/cream_and_onion
+> cdevtest reg block creativedelight:plain_popcorn_box
+> cdevtest reg block creativedelight:cream_and_onion_popcorn_box
+> cdevtest rdetail cheese_popcorn_box
+> cdevtest rdetail plain_popcorn_box
+waitlog verb=rdetail id=\S*plain_popcorn_box\S* 30
+expect verb=rdetail id=creativedelight:shapeless/flavor/cream_and_onion serializer=\S+ .*onion
+expect verb=reg kind=block regex=creativedelight:plain_popcorn_box n=1\b
+expect verb=reg kind=block regex=creativedelight:cream_and_onion_popcorn_box n=1\b
+expect verb=rdetail id=\S+cheese_popcorn_box serializer=\S+ result=creativedelight:cheese_popcorn_box\*1 ingredients=.*corn_delight:popcorn
+expect verb=rdetail id=\S+plain_popcorn_box serializer=\S+ result=creativedelight:plain_popcorn_box\*1 ingredients=.*minecraft:paper
+reject verb=\S+ .*done=0
+
+## CQ-FF-06 | Popcorn boxes place and serve flavored popcorn; Cream and Onion popcorn
+@group client
+@commands craft Cream and Onion popcorn (popcorn, a milk bottle, an onion); craft a Cheese Popcorn Box; place it, take all four servings by hand, then use the empty box
+@pass the craft gives popcorn with the Cream and Onion flavor line and uses the milk and the onion; the box looks like Corn Delight's popcorn box and shrinks per serving; each serving is popcorn with the Cheese flavor; the empty box gives a paper and is removed
+@fails `PopcornBoxBlock` (getServingItem, takeServing), blockstates `creativedelight:*_popcorn_box` (Corn Delight's models)
+@draft client look; the first client runner writes the steps
 
 ## CQ-FF-05 | Tooltips and placeholder art of the new foods
 @group client

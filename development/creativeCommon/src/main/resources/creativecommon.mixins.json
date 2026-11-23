@@ -60,7 +60,11 @@
     "RareIceLightMeltMixin",
     "EndFireMixin",
     "NoRecipeUnlockMixin",
-    "ItemOrphanTabMixin"
+    "ItemOrphanTabMixin",
+    "SteadyBlockTriggersMixin",
+    "SteadyDripleafMixin",
+    "SteadyWeightedPlateMixin",
+    "LeafPiercingTrailMixin"
   ],
   "client": [
     "KubeJSClientResourceScriptsMixin",

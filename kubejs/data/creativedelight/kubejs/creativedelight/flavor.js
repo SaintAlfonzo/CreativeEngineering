@@ -23,7 +23,8 @@ ServerEvents.recipes(e => {
 		var hasFoods = key => (S[key].families || []).length + (S[key].add || []).length > 0 &&
 			(!S[key].needs || global.CD.on(S[key].needs))
 		var keys = Object.keys(S).filter(hasFoods)
-		keys.forEach(key => R.flavor(flavorable(key), key, e, key))
+		// a flavor with `extra` parts (Cream and Onion) takes one more ingredient per part in the same craft
+		keys.forEach(key => R.flavor(flavorable(key), [key].concat(S[key].extra || []), e, key))
 		keys.forEach((a, n) => keys.slice(n + 1).forEach(b => {
 			if ((S[a].combines || []).indexOf(b) < 0 && (S[b].combines || []).indexOf(a) < 0) return
 			var pair = [a, b].sort()

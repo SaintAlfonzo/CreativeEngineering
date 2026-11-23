@@ -153,8 +153,19 @@ Owner rulings R3 to R7, R20, R24.
   slots past `[food] maxFlavors` (default 2) (R20).
 - **Pairs** (`#26`): garlic + onion, Salt's Salted + pepper, sugar + ghost pepper: +1 saturation point together (5 in
   all), shown as a tooltip line "A + B: +1 saturation" and in AppleSkin. Sugar and ghost pepper both take the dessert
-  families waffle, pancake, roll and brownie (minus the placed Beetroot Brownie Tray and the Vegetable Pancake; owner
-  R26 2026-11-22, the agent's pick for review), so the pair has foods.
+  families waffle, pancake (every one; owner R28), roll and brownie (minus the placed Beetroot Brownie Tray), so the
+  pair has foods. Cookies, scones and misc baked goods wait on the owner's exemptions.
+- **Skewers** (`dishes/meals #46`, plan_meals_rolls_bbq.md ruling 5): every raw and grilled skewer takes onion, garlic,
+  sugar and ghost pepper besides the Barbeque's Delight flavors, so all three pairs go on a skewer.
+- **Cream and Onion** (R29): one flavor put on by one craft with two ingredients, a cream (any cheese, cheese wedge or
+  `#forge:milk`) and an onion (or onion powder), on popcorn. `global.flavor.cream_and_onion.extra` names a hidden
+  (non-enumerable) part key holding the onion; `flavor.js` passes both to `NCH.flavor`, and `FlavorRecipe.flavors()`
+  lists a flavor once. No overlay icon yet.
+- **Popcorn boxes** (R30): `creativedelight:<variant>_popcorn_box` for plain popcorn and the six popcorn flavors (CD
+  `food/popcorn/PopcornBoxes`, `PopcornBoxBlock`, a Farmer's Delight `FeastBlock`; with Corn Delight only). Corn
+  Delight's popcorn box models and texture, 4 servings of popcorn carrying the flavor, taken by hand; the empty box
+  gives a paper. Crafted from 4 popcorn with the flavor (partial NBT) + paper. Item keys sit in CD startup
+  `popcorn_boxes.js` until Common's item_dict takes them. Tests SQ-FF-31, CQ-FF-06.
 - **Ice** (`#3` leftovers, R26): Neapolitan's Ice Cubes (`#forge:ice_cubes`) as the Ice flavor on `drink/juice` and
   `drink/soda`; +2 saturation like every flavor, no overlay icon yet (art list). Dill, cream and onion and placeable
   popcorn variants are still open on the row. Test SQ-FF-30.

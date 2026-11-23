@@ -51,7 +51,10 @@ var popcorn = global.has(i.popcorn) ? [i.popcorn] : []
 var grilledSkewers = global.has('barbequesdelight') ? [i.t_grilled_skewers] : []
 // Foods of the sugar + ghost pepper pair (R26): sweet dessert families, minus placed blocks and savory members
 var sweetPairFamilies = ['dessert/waffle', 'dessert/pancake', 'dessert/roll', 'dessert/brownie']
-var sweetPairRemove = [i.beetroot_brownie_tray, i.vegetable_pancake]
+var sweetPairRemove = [i.beetroot_brownie_tray]
+// Every skewer, raw and grilled, takes all three pairs (dishes/meals #46, owner ruling): garlic + onion, salt + pepper
+// (pepper is on skewers already, Salt's Salted on any food), sugar + ghost pepper
+var skewers = global.has('barbequesdelight') ? [i.t_raw_skewers, i.t_grilled_skewers] : []
 
 global.flavor = {
 	// popcorn only for now; open them up by family later
@@ -59,20 +62,26 @@ global.flavor = {
 		families: [], add: popcorn },
 	// whole onion and garlic stay; their milled powders do the same (food/seasoning #28, R6)
 	onion:  { id: 'creativedelight:onion',  name: 'Onion',  item: [i.onion, i.onion_powder], saturation: 2, combines: ['garlic'],
-		families: [], add: popcorn },
+		families: [], add: popcorn.concat(skewers) },
 	garlic: { id: 'creativedelight:garlic', name: 'Garlic', item: [i.garlic, i.garlic_powder], saturation: 2,
 		effects: [{ effect: ef.speed, duration: 200, amplifier: 0 }],
+		families: [], add: popcorn.concat(skewers) },
+	// Cream and Onion (food/seasoning #3, owner ruling): a cream (any cheese, or a milk bottle or bucket) and an onion
+	// (whole or powder) in one craft, both used; `extra` names the hidden part holding the onion (below the table)
+	cream_and_onion: { id: 'creativedelight:cream_and_onion', name: 'Cream and Onion',
+		item: [i.any_cheese, i.t_cheese_wedge, i.milk], extra: ['cream_and_onion_onion'], saturation: 2,
 		families: [], add: popcorn },
 	// sugar or powdered sugar (not the rest of #forge:sugar: glycerol). Popcorn + sugar is Corn Delight's caramel popcorn,
 	// so not on popcorn. Sweet desserts for the sugar + ghost pepper pair (owner ruling R26; agent's pick, listed
-	// for review): waffles, pancakes, sweet rolls and the brownie; never a placed block (the brownie tray) and not the
-	// savory vegetable pancake.
+	// for review, widened by the owner to every pancake): waffles, pancakes, sweet rolls and the brownie; never a
+	// placed block (the brownie tray). Every skewer too (the pair on skewers).
 	sugar:  { id: 'creativedelight:sugar',  name: 'Sugar',  item: [i.sugar, i.powdered_sugar], saturation: 2, combines: ['ghost_pepper'],
-		families: sweetPairFamilies, add: [], remove: sweetPairRemove },
+		families: sweetPairFamilies, add: skewers, remove: sweetPairRemove },
 	// Ghost pepper powder, milled from Vintage Delight's ghost pepper (food/seasoning #28); not Barbeque's chili powder.
 	// Popcorn, and the sugar desserts above so the pair has foods.
 	ghost_pepper: { id: 'creativedelight:ghost_pepper', name: 'Ghost Pepper', item: i.ghost_pepper_powder, saturation: 2,
-		combines: ['sugar'], needs: 'vintagedelight', families: sweetPairFamilies, add: popcorn, remove: sweetPairRemove },
+		combines: ['sugar'], needs: 'vintagedelight', families: sweetPairFamilies, add: popcorn.concat(skewers),
+		remove: sweetPairRemove },
 	// Ice (food/seasoning #3 leftovers; owner ruling R26): Neapolitan's ice cubes in a cold drink, juices and sodas
 	// (warm drinks, teas, coffees and milk drinks stay out). No overlay icon yet (art list).
 	ice: { id: 'creativedelight:ice', name: 'Ice', item: i.t_ice_cubes, saturation: 2, needs: 'neapolitan',
@@ -115,6 +124,10 @@ global.flavor = {
 	grilled: { id: 'barbequesdelight:grilled', name: 'Grilled', station: true, addsSlots: true, combinesAll: true,
 		needs: 'barbequesdelight', families: [], add: [] },
 }
+// The onion part of Cream and Onion: same flavor id, its own ingredient. Not enumerable, so it is no flavor of its own
+// (no definition, tag or craft); global.NCH.flavor reads it by key when flavor.js builds the two-part craft.
+Object.defineProperty(global.flavor, 'cream_and_onion_onion', { enumerable: false,
+	value: { id: 'creativedelight:cream_and_onion', name: 'Cream and Onion', item: [i.onion, i.onion_powder] } })
 
 // Flavor pairs (R3): [flavor key or 'salt' (Salt's Salted), flavor key, extra saturation points]. Both on one food
 // give the extra (0.5 a flavor: 2 + 2 + 1 = 5). The pack flavors of a pair also need each other in `combines`.

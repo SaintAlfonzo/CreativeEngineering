@@ -22,3 +22,5 @@ creativedelight:baking_dish,creativedelight:cake_pan texture copied,owner art fo
 creativedelight:pickled_garlic,hearthandharvest:pickled_carrots texture copied,owner palette recolor of the pickled carrots jar,dishes/pickles-and-ferments #17 (S2),placeholder = pickled carrots
 "creativedelight:boxed_raw_pasta (block, all faces)",farmersdelight:block/crate_bottom texture copied,owner art for a pasta box block,dishes/ingredients #8 (S2),placeholder = Farmer's Delight crate bottom
 creativedelight:ice flavor overlay (item/seasoned/ice),none (no overlay drawn),owner palette for textureswapper/seasoning/make_seasoning.py,food/seasoning #3 (R26),flavor works without its icon; ghost pepper has none either
+creativedelight:plain/cheese/onion/garlic/ghost_pepper/void_pepper/cream_and_onion_popcorn_box,corn_delight popcorn box models and texture used as-is (no copy),owner art per flavor,food/seasoning #3 (R30),all seven look like the Corn Delight box
+creativedelight:cream_and_onion flavor overlay (item/seasoned/cream_and_onion),none (no overlay drawn),owner palette for textureswapper/seasoning/make_seasoning.py,food/seasoning #3 (R29),flavor works without its icon

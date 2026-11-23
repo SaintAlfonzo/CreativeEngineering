@@ -216,7 +216,7 @@
   "effect.hearthandharvest.pungent.description": "Mobs within 8 blocks flee from you (12 at level II). Brain-driven mobs such as villagers and piglins ignore it.",
   "effect.hearthandharvest.tempting.description": "Animals within 8 blocks walk toward you (12 at level II).",
   "effect.hearthandharvest.clarity.description": "Removes Blindness and Darkness and stops them from being applied.",
-  "effect.hearthandharvest.prickly.description": "Anything touching you takes damage every half second. Tamed animals are spared.",
+  "effect.hearthandharvest.prickly.description": "Anything touching you takes 1 damage per level every half second. Tamed animals are spared; from level II, passive mobs that are not attacking you are spared too.",
   "effect.hearthandharvest.pinned.description": "Movement and jumping are stopped.",
   "effect.hearthandharvest.horse_boost.description": "Hidden horse effect from the Sugar Horse Treat: +25% speed and jump.",
   "item.minecraft.potion.effect.pungent": "Potion of Pungent",

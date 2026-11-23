@@ -14,6 +14,20 @@ ServerEvents.recipes(e => {
 		//######################### Popcorn box #########################
 		// Feast assembly (dishes/meals #5; owner ruling R26): on a paper, 4 caramel popcorn; the upstream craft stays
 		global.CD.food(e).assemble(i.paper, [i.caramel_popcorn, i.caramel_popcorn, i.caramel_popcorn, i.caramel_popcorn], i.popcorn_box)
+		// Placeable plain and flavored popcorn boxes (food/seasoning #3, owner ruling): 4 popcorn carrying the flavor + paper
+		// (partial NBT: popcorn with that flavor among others matches too); plain takes any popcorn. A flavor whose
+		// member is off gets no box recipe.
+		Object.keys(global.popcornBoxes || {}).forEach(v => {
+			var key = global.popcornBoxes[v], box = i[v + '_popcorn_box']
+			if (!box || !Item.exists(box)) return
+			var popcorn = i.popcorn
+			if (key) {
+				var fl = global.flavor[key]
+				if (!fl || (fl.needs && !global.CD.on(fl.needs))) return
+				popcorn = Item.of(i.popcorn, '{Flavors:["' + fl.id + '"]}')
+			}
+			R.shapeless(box, [popcorn, popcorn, popcorn, popcorn, i.paper], e, v + '_popcorn_box')
+		})
 
 		//######################### Taco #########################
 		// One taco recipe (TODO dishes/meals #51): Corn Delight's took an onion, Veggies Delight's a roasted red, green or

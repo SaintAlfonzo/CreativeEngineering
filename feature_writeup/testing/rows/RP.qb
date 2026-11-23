@@ -798,3 +798,44 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @fails `FleetFootedFov.onFov` (modifier id 7E0292F2-...), client config not reloaded
 @draft written with the build 2026-11-22
 
+## CQ-RPI-77 | Steady: no slipping, light step (food-tuning #51, #56)
+@group client
+@commands `/effect give @s fruitsdelight:astringent 300`; walk and stop on packed ice and a soap block; `/effect give @s immersiveengineering:slippery 30` and `/effect give @s neapolitan:slipping 30`; then clear Steady, give Slipping, and give Steady again; step on a stone, a wooden and a weighted pressure plate wired to a lamp, walk through a tripwire hooked to a lamp, stand on a big dripleaf; hover Steady in JEI
+@pass no sliding on ice or soap; both slip effects refused while Steady lasts; giving Steady clears Slipping; no plate, no tripwire lights the lamp; the dripleaf stays level; the effect is named "Steady" and its JEI text names ice, soap, Slippery and Slipping, plates, tripwires and dripleaf; without Steady all of these behave as vanilla
+@fails `SteadyRules`, `SteadyBlockTriggersMixin`, `SteadyWeightedPlateMixin`, `SteadyDripleafMixin`, `effects/effect_names.js`
+@draft written with the build 2026-11-23
+
+## CQ-RPI-78 | Leaf Piercing leaf trail (food-tuning #52)
+@group client
+@commands `/effect give @s fruitsdelight:leaf_piercing 300`; shoot arrows through an oak and a birch canopy, then a crossbow bolt and a thrown trident; a second player (or F5) watches
+@pass a puff of that tree's leaf particles where each arrow enters a leaf block and a thin trail of them while it flies through; without the effect arrows stop at the leaves and no particles show
+@fails `LeafPiercingTrailMixin` (AbstractArrow tick), `LeafPiercingTrail.tick`, projectile tag `fruitsdelight:leaf_piercing`
+@draft written with the build 2026-11-23
+
+## CQ-RPI-79 | Prickly II spares passive mobs (food-tuning #53)
+@group client
+@commands `/effect give @s hearthandharvest:prickly 120 0`, stand pressed against a cow, a villager, a tamed wolf and a zombie; repeat with `/effect give @s hearthandharvest:prickly 120 1`; hit an iron golem until it attacks and let it touch you; hover Prickly in JEI
+@pass level I hurts the cow, the villager and the zombie, never the tamed wolf; level II hurts only the zombie and the angry iron golem; JEI text names both levels' exemptions
+@fails `PricklyEffect.isPassive` (Creative Delight hearth member; needs a Creative Delight build), lang `effect.hearthandharvest.prickly.description`
+@draft written with the build 2026-11-23
+
+## CQ-RPI-80 | Lava Walker: crouch to drop in (food-tuning #54)
+@group client
+@commands `/effect give @s vinery:lava_walker 120` and `/effect give @s minecraft:fire_resistance 120`; walk onto a lava pool, then hold crouch, then release crouch while in the lava
+@pass walking stays on the surface; crouching sinks into the lava; releasing crouch lifts back to the surface; without Fire Immunity, standing on the surface burns like a magma block
+@fails `LavaWalkerEffect.applyEffectTick` (Creative Brewing Vinery member)
+@draft written with the build 2026-11-23
+
+## CQ-RPI-81 | Immunity names (food-tuning #56)
+@group client
+@commands Hover in JEI: Potion of Fire Resistance, its splash, lingering and arrow forms, the Alex's Mobs poison resistance potions; open the effect list with Fire Resistance and Alex's Mobs Poison Resistance active
+@pass names read Fire Immunity and Poison Immunity on the effect, potion, splash, lingering and arrow forms (long ones too); the Poison Resistance enchantment keeps its name; ids in F3+H unchanged
+@fails `effects/effect_names.js` (Creative Common client script), lang namespace order
+@draft written with the build 2026-11-23
+
+## CQ-RPI-82 | Emptiness holds Patrol Nullifier and Phantom Bane (food-tuning #57)
+@group client
+@commands `/effect give @s botania:emptiness 600`; hover a Botania Emptiness brew and the effect in JEI; read `/data get entity @s ActiveEffects`; `/effect clear @s botania:emptiness` and read again; stay awake 3 nights with Emptiness active
+@pass tooltip and JEI list Patrol Nullifier and Phantom Bane under "When Applied:"; both are in the effect data with no icon, same time as Emptiness; clearing Emptiness removes both hidden copies (a beacon's own Phantom Bane stays); no phantoms or patrols come while it lasts
+@fails `EmptinessParts`, `CompoundEffects` entry `botania:emptiness`, Better Beacons' patrol and phantom checks
+@draft written with the build 2026-11-23

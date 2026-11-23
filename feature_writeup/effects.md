@@ -120,7 +120,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Nausea `minecraft:nausea` | Minecraft | Y (pack) | Y | Y | Y |  | N | I (capped) |  | N |  | Tipsy, Trippy, Earthquake: slight | Screen wobble. | Wobbles and warps the screen. |
 | Regeneration `minecraft:regeneration` | Minecraft | Y | Y | Y | Y | Melon; Orange | Y | VI (aged wine) | 1 HP every 2.5 s at I; interval halves per level (1.25 s at II; 0.6 s at III); every tick from VII | N |  | Jellie: total; Comfort, Sweet Heart: slight | 1 HP every 2.5 s (halved per level). | Regenerates health over time; higher levels make health regenerate quicker. |
 | Resistance `minecraft:resistance` | Minecraft | Y (pack) | Y | Y | Y | Cantaloupe (Delightful) | Y | VI (aged wine) | -20% damage taken per level; immune at V | N |  | Magic Resistance, Armor (Vinery), Berserking: slight | -20% damage taken. | Provides 20% damage reduction per level. |
-| Fire Resistance `minecraft:fire_resistance` | Minecraft | Y | Y | Y | Y |  | N | I (capped) |  | N |  | Anti-Fire (IP): slight | Immune to fire and lava damage. | Grants immunity to fire damage as well as damage from lava. |
+| Fire Immunity (was Fire Resistance) `minecraft:fire_resistance` | Minecraft | Y | Y | Y | Y |  | N | I (capped) |  | N |  | Anti-Fire (IP): slight | Immune to fire and lava damage. | Grants immunity to fire damage as well as damage from lava. |
 | Water Breathing `minecraft:water_breathing` | Minecraft | Y | Y | Y | Y | Salmonberries; Sea Grapes (juice) | N | I (capped) |  | N |  | Conduit Power: total | No drowning. | Prevents drowning and allows to breathe underwater. |
 | Invisibility `minecraft:invisibility` | Minecraft | Y | Y | Y | Y |  | N | I (capped) |  (the 0.07 detection multiplier ignores level) | N |  |  | Invisible; mobs see you from closer. | Grants invisibility, making the user invisible and reducing its detection range. Held or worn items will still be visible. Higher levels further decrease the detection range |
 | Blindness `minecraft:blindness` | Minecraft | Y (pack) | Y | Y | Y |  | N | I (capped) |  | N |  | Darkness, Flashed: slight | Short view, no sprint or crits. | Impairs vision and disables the ability to sprint and critical hit. |
@@ -154,7 +154,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Lava Vision `alexsmobs:lava_vision` | Alex's Mobs | Y | Y | Y | Y |  | N | I (capped) |  | N |  | Night Vision: slight | See through lava. | Allows seeing through lava. |
 | Oiled `alexsmobs:oiled` | Alex's Mobs | N | - | N | Y |  | N | I (capped) |  | N |  | Water Walker: total; Dolphin's Grace: slight | Float up in water and rain; sneak to sink. | Oil floats on water. Cover yourself in oil to float on the surface of water and outside in the rain. |
 | Orca's Might `alexsmobs:orcas_might` | Alex's Mobs | N | - | N | Y |  | Y | I | +3 attack speed per level | N |  | Haste, Raging, Caffeinated: slight | +3 attack speed; from swimming with an orca. | Grants increased attack speed. Effect may be applied when swimming with an Orca. |
-| Poison Resistance `alexsmobs:poison_resistance` | Alex's Mobs | Y | Y | Y | Y |  | N | I (capped) |  | N |  | Recovering: total | Clears Poison every tick. | Grants immunity to poison. |
+| Poison Immunity (was Poison Resistance) `alexsmobs:poison_resistance` | Alex's Mobs | Y | Y | Y | Y |  | N | I (capped) |  | N |  | Recovering: total | Clears Poison every tick. | Grants immunity to poison. |
 | Power Outage `alexsmobs:power_down` | Alex's Mobs | N | - | N | Y (pack) |  | N | I (capped) |  (no walking at I) | N |  | Scared Still: total | Can't move or jump, plays a power-outage sound; April Fools grizzly only. | Freezes you in place (no walking or jumping) and plays a power-outage sound. Only from Alex's Mobs' April Fools grizzly bear. |
 | Soulsteal `alexsmobs:soulsteal` | Alex's Mobs | Y | Y | Y | Y |  | Y | II (potion) | On hit: 50% chance at I; +25% per level (always from III); heals damage x level / 2; at most 2 + 2 x level HP | N |  | Soul Cross: slight | On hit: (25 + 25 x level)% chance to heal half the damage x level, at most 2 + 2 x level. | Grants the user attacks some life-steal. |
 | Sunbird's Blessing `alexsmobs:sunbird_blessing` | Alex's Mobs | N | - | N | Y |  | N | I (capped) |  | Y | Slow Falling (plus elytra lift) | Slow Falling: total; Feather Feet: slight | Slow fall, no fall damage, lift while gliding upward; near a Sunbird. | Decreases fall speed, prevents fall damage and makes it easier to fly with an Elytra or Tarantula Hawk Elytra. Effect is applied when near a Sunbird. |
@@ -186,7 +186,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Caffeinated `farmersrespite:caffeinated` | Farmer's Respite | N | - | N | Y (pack) | Coffee Berries | Y | III (Coffee) | +10% walk speed and +20% attack speed per level; phantom part  | N |  | Phantom Bane: total (phantom spawns); Restfulness: total; Speed, Haste: slight | +10% walk speed, +20% attack speed, keeps resetting time since rest. | Increases walk speed by 10% and attack speed by 20%, and keeps resetting the time since you last slept, so phantoms don't come. |
 | Alienating `fruitsdelight:alienating` | Fruits Delight | N | - | N | Y | Durian | N | I (capped) |  | Y | Weakness, Disgusted (on others) |  | Every second, mobs within 12 blocks get Weakness and Disgusted. | Apply disgusted and weakness effect to surrounding entities without this effect |
 | Appetizing `fruitsdelight:appetizing` | Fruits Delight | N | - | N | Y | Hawberry | N | I (capped) |  | N |  |  | Eat when full. | Eat and drink even when you are full. |
-| Astringent `fruitsdelight:astringent` | Fruits Delight | N | - | N | Y | Persimmon | N | I (capped) |  | N |  |  | Ice and slime don't slide. | Grant more friction when walking on low-friction blocks, such as ice. |
+| Steady (was Astringent) `fruitsdelight:astringent` | Fruits Delight | N | - | N | Y | Persimmon | N | I (capped) |  | N |  |  | Ice and slime don't slide. | Grant more friction when walking on low-friction blocks, such as ice. |
 | Brightening `fruitsdelight:brightening` | Fruits Delight | N | - | N | Y | Blueberry | N | I (capped) |  | N |  |  | Immune to Blindness and Darkness. | Make player immune to blindness and darkness |
 | Chorus `fruitsdelight:chorus` | Fruits Delight | N | - | N | Y |  | N | I (capped) | ; the pack remaps it to Teleport (Vinery) | N |  | Teleport (Vinery): total | One random chorus-fruit teleport. | Teleport player randomly |
 | Cycling `fruitsdelight:cycling` | Fruits Delight | N | - | N | Y | Kiwi | Y | I | Drops 1 level as XP every 1 s at I; interval doubles per level (2 s at II; 4 s at III) | N |  |  | Drops 1 level as XP orbs every second (slower per level). | Player will drop 1 level of experience as orbs every second |
@@ -348,7 +348,7 @@ it?
 | Nausea `minecraft:nausea` | Minecraft | HARMFUL | red | |  |
 | Regeneration `minecraft:regeneration` | Minecraft | BENEFICIAL | blue | |  |
 | Resistance `minecraft:resistance` | Minecraft | BENEFICIAL | blue | |  |
-| Fire Resistance `minecraft:fire_resistance` | Minecraft | BENEFICIAL | blue | |  |
+| Fire Immunity (was Fire Resistance) `minecraft:fire_resistance` | Minecraft | BENEFICIAL | blue | |  |
 | Water Breathing `minecraft:water_breathing` | Minecraft | BENEFICIAL | blue | |  |
 | Invisibility `minecraft:invisibility` | Minecraft | BENEFICIAL | blue | |  |
 | Blindness `minecraft:blindness` | Minecraft | HARMFUL | red | |  |
@@ -382,7 +382,7 @@ it?
 | Lava Vision `alexsmobs:lava_vision` | Alex's Mobs | BENEFICIAL | blue | |  |
 | Oiled `alexsmobs:oiled` | Alex's Mobs | BENEFICIAL | blue | |  |
 | Orca's Might `alexsmobs:orcas_might` | Alex's Mobs | BENEFICIAL | blue | |  |
-| Poison Resistance `alexsmobs:poison_resistance` | Alex's Mobs | BENEFICIAL | blue | |  |
+| Poison Immunity (was Poison Resistance) `alexsmobs:poison_resistance` | Alex's Mobs | BENEFICIAL | blue | |  |
 | Power Outage `alexsmobs:power_down` | Alex's Mobs | NEUTRAL | blue | **HARMFUL** (red) | You can't move or jump |
 | Soulsteal `alexsmobs:soulsteal` | Alex's Mobs | BENEFICIAL | blue | |  |
 | Sunbird's Blessing `alexsmobs:sunbird_blessing` | Alex's Mobs | BENEFICIAL | blue | |  |
@@ -413,7 +413,7 @@ it?
 | Caffeinated `farmersrespite:caffeinated` | Farmer's Respite | BENEFICIAL | blue | |  |
 | Alienating `fruitsdelight:alienating` | Fruits Delight | BENEFICIAL | blue | |  |
 | Appetizing `fruitsdelight:appetizing` | Fruits Delight | BENEFICIAL | blue | |  |
-| Astringent `fruitsdelight:astringent` | Fruits Delight | NEUTRAL | blue | | Mixed: no sliding on ice or slime |
+| Steady (was Astringent) `fruitsdelight:astringent` | Fruits Delight | NEUTRAL | blue | | Mixed: no sliding on ice or slime |
 | Brightening `fruitsdelight:brightening` | Fruits Delight | BENEFICIAL | blue | |  |
 | Chorus `fruitsdelight:chorus` | Fruits Delight | NEUTRAL | blue | | Random hop |
 | Cycling `fruitsdelight:cycling` | Fruits Delight | BENEFICIAL | blue | | Mixed: turns levels into orbs (Mending). Kept blue |

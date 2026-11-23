@@ -1123,6 +1123,37 @@ Plan: plan_rp_standalone.md section 10 (rulings P5, P6, P8, P9 of 2026-11-22). R
 - **Existing worlds** keep their `serverconfig/solraspberrypie/ladder.json`: the pack ladder's new `replaces` entries
   reach a world only after its copy is replaced from `defaultconfigs/` (PR-RP-18).
 
+### 12.13 Ladder effects outside the jar (built 2026-11-23)
+
+Plan: plan_rp_standalone.md (scratchpad rows, wave 2). Rows `food-tuning #51` to `#54`, `#56`, `#57`. Effect code is
+Creative Common's (Prickly's is the Creative Delight hearth member's, Lava Walker's the Creative Brewing Vinery
+member's); no Raspberry Pie code changed. Names only: every effect and potion id stays.
+
+- **Steady** (`fruitsdelight:astringent`, `#51`). Fruits Delight already caps block friction at 0.6 (ice, soap blocks,
+  slime). Common's `effect.SteadyRules` refuses Immersive Engineering's Slippery and Neapolitan's Slipping while Steady
+  lasts and clears them when Steady is added. A light step: wooden, stone and weighted pressure plates and tripwires
+  ignore the holder, big dripleaf does not tilt (`mixin/SteadyBlockTriggersMixin` on `Entity.isIgnoringBlockTriggers`,
+  `SteadyWeightedPlateMixin`, `SteadyDripleafMixin`). Fruits Delight's Sliding (boats) is not a slip effect and stays.
+  Modded pressure plates that do not ask `isIgnoringBlockTriggers` still trigger.
+- **Leaf Piercing particles** (`#52`). `mixin/LeafPiercingTrailMixin` (end of every arrow tick, server) hands
+  `effect.LeafPiercingTrail` the stretch the arrow flew: an arrow tagged `fruitsdelight:leaf_piercing` sends a puff of
+  the leaf block's particles where it enters a leaf block (12) and a thin trail (2 every half block) while inside.
+  Arrows and tridents only (Fruits Delight lets only those through leaves).
+- **Prickly II** (`#53`). Level I spares tamed animals; from level II passive mobs are spared too: a mob that is not
+  a monster and is not targeting the holder (an angered iron golem or bee is hurt). JEI text names both levels.
+  Creative Delight hearth member `PricklyEffect.isPassive`.
+- **Lava Walker crouch** (`#54`). Crouching skips the lift and the solid surface, so the walker sinks and the lava burns
+  as usual; sneaking no longer spares the magma-block burn on the surface. vinery.md has the Vinery port note.
+- **Names** (`#56`). Astringent -> Steady, Poison Resistance -> Poison Immunity (Alex's Mobs effect and potions), Fire
+  Resistance -> Fire Immunity (effect, potion, splash, lingering, arrow). Common client script
+  `effects/effect_names.js` adds each key under the namespace of the jar that ships it, so the KubeJS pack wins in that
+  namespace's lang stack. It also writes the Steady and Leaf Piercing JEI texts. The Poison Resistance enchantment keeps
+  its name.
+- **Emptiness** (`#57`). Botania's Emptiness holds Patrol Nullifier and Phantom Bane as sub-effects (the scratchpad's
+  "Emptiness a super of patrol nullifier and phantom bane"; Harmony, `#58`, will hold Emptiness). `effect.EmptinessParts`
+  adds both hidden for Emptiness's time (skipped when a visible copy lasts as long) and removes the hidden copies when
+  Emptiness is removed early; `CompoundEffects` lists them under "When Applied:" and in JEI.
+
 ## History
 
 Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):

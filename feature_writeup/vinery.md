@@ -4,13 +4,13 @@ Test prefix **VN-** · Last updated **2026-10-01** · Overall status **reference
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5fb270832f11 -->
+<!-- generated:status_index begin open_work sha1=b605849630a5 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 2, Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `alcohol/vineryport #8` | Planned | none | 1.3.10 reference tests |
-| `alcohol/vineryport #28` | Planned | S P | Vinery trees grow upward on themselves? |
+| `alcohol/vineryport #28` | Planned | S P | Vinery trees grow upward on themselves (config) |
 | `alcohol/vineryport #7` | Testing | S+ C P | Hopper jams |
 <!-- generated:status_index end open_work -->
 
@@ -266,9 +266,9 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 - **BlockRunner display:** the taiga bush is listed as a 0.8 slow block in Creative Common `StuckInBlock` (display only).
 - **Flower box and flower pot** (port `-07`, 2026-10-31): the box takes `#creativecompat:flower_box_plants` and sits centered on floors (`wall` state); the pot takes any plant a planter grows; both draw Supplementaries' flower box models. [flower_pots.md](flower_pots.md) 3.2.
 - **Lava Walker** (port, 2026-11-12, [raspberry_pie.md](raspberry_pie.md) 4): standing on lava burns like a magma block
-  (1 damage, invulnerability frames) unless the walker has Fire Resistance, is fire immune or sneaks; falling into lava
-  burns as usual. `LavaWalkerEffect.applyEffectTick`. Built in Creative Brewing source, jar not rebuilt yet; test
-  CQ-RPI-27.
+  (1 damage, invulnerability frames) unless the walker has Fire Resistance (Fire Immunity) or is fire immune; falling
+  into lava burns as usual. Crouching drops the walker into the lava (2026-11-23, `food-tuning #54`, raspberry_pie.md
+  12.13): no lift, no solid surface while crouched. `LavaWalkerEffect.applyEffectTick`. Tests CQ-RPI-27, CQ-RPI-80.
 - **Hops on the lattice** (port, 2026-11-14, [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.1; [hearth_and_harvest.md](hearth_and_harvest.md) 4.8):
   `GrapeTypeRegistry.HOPS` (`hops`, lattice, white), registered statically so the `grape` state property holds it; fruit
   and seeds are `hearthandharvest:hops` looked up by id (air without Hearth and Harvest: inert), no juice
@@ -364,6 +364,7 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - 2026-10-31: scratchpad notes translated into TODO rows (`alcohol/vineryport #28`). No code changed.
 - 2026-10-31: port `-07` flower box and flower pot changes ([flower_pots.md](flower_pots.md) 3.2); built, not installed.
 - 2026-11-12: Lava Walker burns on lava without Fire Resistance (section 3), for Raspberry Pie's slot pool.
+- 2026-11-23: Lava Walker: crouch to drop into lava (`food-tuning #54`).
 - 2026-11-14: hops grape type on the lattice, model alias, pot juice guard (section 3); Creative Brewing built and installed; not run.
 - 2026-11-16: the jungle grape lattice takes bone meal without a lattice below (2.5; `farming/crops #52`); the stem keeps the trunk rule. VN-13 rewritten, VN-21; queue SQ-VN-01 (plan_small_fixes_1116.md). Creative Brewing built and installed; not run.
 

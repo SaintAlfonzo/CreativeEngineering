@@ -114,6 +114,7 @@ Rulings on the four assumptions (owner, 2026-11-22):
 2. Only Ender's Delight's Shulker Mollusk and its filet are used as shulker meat; every End's Delight item whose texture shows the yellow shulker meat needs a texture tweak (owner art; listed in [art_needed_2026-11-22.csv](texture_sources/art_needed_2026-11-22.csv)) (owner, 2026-11-22).
 3. Golden Roll slice is 10 / 0.5 and keeps always-edible (reverses the assumption); every always-edible food gets the tooltip "Can be eaten when full" (new TODO row) (owner, 2026-11-22).
 4. The kebab combo items (Kebab Wrap, Kebab Sandwich, Bibimbap) are dropped, not rebuilt (reverses C7 and C8 for these three) (owner, 2026-11-22).
+5. Skewer flavor pairs (`dishes/meals #46`): every skewer, raw and grilled, takes all three pairs: garlic + onion, salt + pepper, sugar + ghost pepper (owner, 2026-11-22).
 
 ## F. Not in this plan (TODO rows)
 

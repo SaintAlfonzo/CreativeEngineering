@@ -222,9 +222,12 @@
 - **Changed:** Every flavor adds 2 saturation and no hunger or healing [Onion 2 hunger, Void Pepper 2 hunger and 0.4 saturation, Cumin 1 heart, Sugar 1 hunger, Garlic nothing besides Speed]. Their effects stay.
 - **Changed:** Grilled adds no saturation [2]; a grilled food takes 2 more flavors.
 - **Removed:** Food seasoned before this version loses its seasonings.
-
-- **New:** Sugar and Ghost Pepper flavor waffles, pancakes (not the Vegetable Pancake), sweet rolls and the Beetroot Brownie, so the pair has foods.
+- **New:** Sugar and Ghost Pepper flavor waffles, pancakes, sweet rolls and the Beetroot Brownie, so the pair has foods.
+- **New:** Every skewer takes Onion, Garlic, Sugar and Ghost Pepper, so Garlic with Onion, Salt with Pepper and Sugar with Ghost Pepper all go on skewers.
+- **New:** Cream and Onion, a popcorn flavor crafted from a cheese or a milk and an onion or onion powder.
+- **New:** Placeable Plain, Cheese, Onion, Garlic, Ghost Pepper, Void Pepper and Cream and Onion Popcorn Boxes: 4 popcorn of that flavor and a paper. Each holds 4 servings of its popcorn; the empty box gives back the paper.
 - **New:** Ice, a flavor from Neapolitan's Ice Cubes, for juices and sodas.
+
 ## Fats and Oils <!-- icon: rusticdelight:cooking_oil -->
 
 - **New:** Blubber, dropped by Cachalot Whales (3 to 6). A Knife cuts it into 2 Animal Fat; it counts as animal fat and makes Soap.
@@ -234,25 +237,25 @@
 - **Changed:** Any seed makes Cooking Oil [Pumpkin and Cotton Seeds]; a Spout fills a bottle with 250 mB Seed Oil into Cooking Oil.
 - **Changed:** Fish Oil counts as Cooking Oil; 2 raw fish and a bottle cook into Fish Oil.
 - **New:** Whale Oil Lamp, crafted from 8 iron nuggets around a Whale Oil. It stands or hangs like a lantern, is placed unlit and gives a lantern's light once lit with Flint and Steel or a Fire Charge; water puts it out.
-
 - **New:** The Whale Oil Lamp holds 1000 mB of Whale Oil, full when crafted, and burns 1 mB every 1.2 seconds while lit; empty, it goes out and cannot be lit.
 - **New:** A Whale Oil bottle (250 mB) or a container of whale oil refills the lamp. It keeps its oil when broken, and its tooltip shows the oil left. The values are in the Creative Delight config.
+
 ## Cheese <!-- icon: brewinandchewin:flaxen_cheese_wedge -->
 
 - **New:** 4 Goat Cheese Slices craft into a Goat Cheese Wheel.
 - **Changed:** Broccoli Soup, Pasta with Broccoli, Stuffed Potato, Truffle Pasta and both Creamy Pastas take any cheese [milk] and restore 3 more hunger.
 - **Changed:** Nachos and Fiery Fondue take any cheese [milk]; each serving restores 1 more hunger.
 - **Changed:** The Stuffed Potato sequenced assembly deploys a cheese [250 mB milk].
-
 - **Changed:** Syrup, Coffee and Cherry Blossom Cheesecakes bake from a pie crust, 3 of their flavor, a sweetener and a cheese wedge or slice, a milk bottle or a milk bucket [2 sweeteners, no cheese or milk].
+
 ## Pizza <!-- icon: vintagedelight:cheese_pizza -->
 
 - **New:** Tropical Pizza: pineapple slice, cooked bacon and pineapple slice over 3 cheese, on dough, tomato sauce and dough. Its slice restores 5 hunger and gives Nourishment.
 - **Changed:** A pizza is 8 slices [4]: each of its 4 bites gives 2 slices, taken by hand or cut with a Knife; it is no longer eaten from the block. Broken, it drops 2 slices per bite left; a Knife on the Cutting Board gives 8.
 - **Changed:** 8 pizza slices in a ring craft the whole pizza [4 in a square].
-
 - **Changed:** Pizza slices restore less, so a whole pizza is worth 1.5 times a 4-slice pizza: Cheese 3 hunger [4], Meat, Tropical, Vegan and Supreme 4 [5], each with less saturation.
 - **New:** Cheese, Meat and Tropical Pizzas can be built on dough in a Create sequenced assembly: tomato sauce, dough, 3 cheese and the toppings.
+
 ## Lasagna <!-- icon: veggiesdelight:lasagna_slice -->
 
 - **Changed:** Lasagna Pan is named Lasagna; it takes any cheese except Scarlet Cheese [milk]; each slice restores 1 more hunger.
@@ -317,7 +320,6 @@
 - **Changed:** Fig Pudding bakes in the Oven on a Baking Sheet from sweet berries, a milk bottle, an egg, Orange Jelly, a fig and dough [crafted from 2 milk bottles, sweet berries, 2 eggs, Orange Jelly, 2 figs and dough].
 - **Changed:** Adzuki Buns bake in the Oven on a Baking Sheet from flour, Roasted Adzuki Beans and a milk bottle, 2 at a time [crafted from wheat, Roasted Adzuki Beans and milk, 1 at a time].
 - **New:** An Uncooked Waffle is made from any dough with an Engineer's Hammer, on a Cutting Board or in the crafting grid, or with a Create Mechanical Press.
-
 - **New:** 9 Gingerbread craft into a Gingerbread Block and back. A Gingerdough Block smokes in a Smoker or bakes in the Oven on a Baking Sheet into a Gingerbread Block.
 - **Removed:** 4 Gingerdough no longer craft into a Gingerbread Block.
 - **New:** Plain Donut: batter, cooking oil, salt and sugar bake into 2 on a Baking Sheet.
@@ -325,14 +327,15 @@
 - **New:** Orange Cranberry Muffin (Regeneration 10 s and Shrinking 40 s), Lemon Poppy Muffin (Haste 10 s and Refreshing 10 s), and Carrot, Zucchini and Pumpkin Muffins, baked like the other muffins.
 - **New:** Oatmeal Raisin Cookie: Oat Dough, 2 sweeteners, Raw Oats and a grape bake into 12 on a Baking Sheet.
 - **New:** Baking Dish, glass bakeware crafted from 5 glass in a bowl shape.
+
 ## Food & Cooking
 
-- **New:** A Vibrating Table shakes a Chorus Fruit Crate into 9 Chorus Fruit.
 - **New:** Every food that can be eaten when full says so in its tooltip.
 - **Changed:** The Golden Roll and its slice can be eaten when full.
 - **New:** Roast Chicken, Honey Glazed Ham and the Popcorn Box can be built in a Create sequenced assembly from the ingredients of their crafts.
 - **New:** Pickled Garlic: 5 garlic and salt in the Pickling Jar.
 - **New:** Boxed Raw Pasta, a block of 9 Raw Pasta.
+- **New:** A Vibrating Table shakes a Chorus Fruit Crate into 9 Chorus Fruit.
 - **New:** Cake Base crafts from 3 Batter and 2 sweeteners.
 - **Changed:** Melon Juice in the Create mixer takes 2 Melon Slices and 250 mB water, heated [3 slices and a sweetener].
 - **New:** Lemonade, Blue Lemonade and Pink Lemonade, made in a Create mixer or a Kettle. Lemonade gives Haste for 30 s; Blue adds Night Vision and Pink adds Jump Boost for 20 s.
