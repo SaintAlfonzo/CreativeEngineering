@@ -46,7 +46,7 @@ ServerEvents.recipes(e => {
 		// pickling jar
 		R.vdPickling(i.pickled_garlic, [F.slot(i.t_crops_garlic, 5), i.t_salts], e, 'pickled_garlic')
 
-		// Baking Dish (baking/baked-goods #30): 5 glass in a bowl shape (owner 2026-11-17: shaped from glass, not
+		// Baking Dish (baking/baked-goods #30): 5 glass in a bowl shape (owner ruling: shaped from glass, not
 		// hammered); never used up in the oven
 		R.shaped(i.baking_dish, ['G G', 'GGG'], { G: i.glass }, e, 'baking_dish')
 
