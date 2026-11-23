@@ -24,6 +24,9 @@
 @reviewed 2026-11-22
 bootexpect \[creativecompat\] loaded \(config/
 bootreject creativecompat\.mixins\.json.*(Error|error|failed)
+# r1123cx (2026-11-23): the pathfinding mixins (SnowPathMixin, LeafPilePathMixin) apply when the first mob paths, about 1 s after Done; a mob and a wait first
+> summon minecraft:zombie 0 100 0
+sleep 10
 shell python3 $INST/tools/scratch_query/cmp_mixin_check.py
 # 2026-11-22: the typed 27 (and the writeup's 32) is gone: the jar lists 86 common mixins, 76 applied on the full pack, 10 skipped by gate (r1122cc); cmp_mixin_check.py compares the lists
 
@@ -402,15 +405,16 @@ look Stage: 0b and EmptiedAt: -1L
 ## SQ-CMP-23 | [mixins] keys written, every gated mod in its tested range, exact Breezy gate
 @group A
 @commands Boot 1; read `config/creativecompat-common.toml`; grep the log for range warnings and the Breezy mixin
-@pass `[mixins]` table with 32 keys, all `true`; no `is outside the tested range` and no `is not [` line from `[creativecompat]`; `SupplementariesBreezyCompatMixin` applies (pack has Supplementaries 1.19.2-2.4.20, Breezy 1.0.8); `python3 $INST/tools/scratch_query/cmp_mixin_check.py` shows no mixin skipped that applied in r1122cc
+@pass `[mixins]` table with 32 keys, all `true`; no `is outside the tested range` and no `is not [` line from `[creativecompat]`; the `SupplementariesBreezyCompatMixin` gate passes (pack has Supplementaries 1.19.2-2.4.20, Breezy 1.0.8: no `is not [` line; the mixin itself applies only on a client, when a wind vane first ticks); `python3 $INST/tools/scratch_query/cmp_mixin_check.py` shows no mixin skipped that applied in r1122cc
 @fails a range string wrong for the installed version (the mod's mixins go missing); the config spec missing `[mixins]`
 @boot 1
 @reviewed 2026-11-22
 bootexpect \[creativecompat\] loaded \(config/
 bootreject \[creativecompat\].*(outside the tested range|is not \[)
-shell awk '/^\[mixins\]/{m=1;next} /^\[/{m=0} m && /=/' config/creativecompat-common.toml | grep -c "= true"
+shell awk '/^\[mixins\]/{m=1;next} /^\[/{m=0} m && /=/' config/creativecompat-common.toml | grep -c "= true"; true
 shell grep -c "SupplementariesBreezyCompatMixin" logs/debug.log; python3 $INST/tools/scratch_query/cmp_mixin_check.py | tail -5
-look 32 true keys; Breezy mixin applied; cmp_mixin_check skips only absent-mod mixins
+# r1123cx (2026-11-23): BreezyCompatImpl is called only by a ticking wind vane on a client, so on a dedicated server the mixin never applies; the row checks the gate
+look 32 true keys; no Breezy gate warning; cmp_mixin_check skips only absent-mod mixins and the client-only Breezy one
 
 ## SQ-CMP-24 | A switched-off [mixins] key skips its mixin; pass-through off without a crash
 @group A
@@ -431,14 +435,15 @@ look no cast errors; snow layer stayed
 ## SQ-CMP-25 | Pack balance runs from the pack folder; crop recipes and dimension tags from the jar
 @group A
 @commands Boot 1; grep the KubeJS server log for the moved scripts; check one rebuilt recipe id; list the jar
-@pass `misc mods starting`, `feature ports (tier 1) starting`, `dead recipe removal starting`, `Coin starting` each once (from `server_scripts`, not the jar); no script error; recipe `creativecompat:` AE2 cable recipes still listed (`/kubejs` dump or JEI count unchanged); the jar lists `data/creativecompat/recipes/botanypots/crop/` (41 files) and both `tags/items/botany_pots/` tags
+@pass `misc mods starting`, `feature ports (tier 1) starting`, `dead recipe removal starting`, `Coin starting` each once (from `server_scripts`, not the jar); no script error; recipe `creativecompat:` AE2 cable recipes still listed (`/kubejs` dump or JEI count unchanged); the jar lists `data/creativecompat/recipes/botanypots/crop/` (every file of the pack folder's crop tree, 39 on 2026-11-23) and both `tags/items/botany_pots/` tags
 @fails a moved script read a name from Compat's script scope; the build no longer copies the recipe tree
 @boot 1
 @reviewed 2026-11-22
 kjsreject Error occurred while handling event
-shell grep -cE "misc mods starting|feature ports \(tier 1\) starting|dead recipe removal starting|Coin starting" logs/kubejs/server.log
-shell unzip -l mods/creativecompat-1.0.0.jar | grep -cE "data/creativecompat/recipes/botanypots/crop/.+\.json|tags/items/botany_pots/(nether|end)_only\.json"
-look 4 script lines; 43 jar entries (41 recipes, 2 tags)
+shell grep -cE "misc mods starting|feature ports \(tier 1\) starting|dead recipe removal starting|Coin starting" logs/kubejs/server.log; true
+# r1123cx (2026-11-23): the typed 41 came from the PR-CP-10 audit; gen_botany_crops.py now writes 39, so the jar is compared with the pack folder
+shell n=$(ls $INST/kubejs/data/creativecompat/recipes/botanypots/crop/*.json | wc -l); j=$(unzip -l mods/creativecompat-1.0.0.jar | grep -cE "data/creativecompat/recipes/botanypots/crop/.+\.json"); t=$(unzip -l mods/creativecompat-1.0.0.jar | grep -cE "tags/items/botany_pots/(nether|end)_only\.json"); echo "pack $n jar $j tags $t"; test "$n" -gt 0 -a "$n" = "$j" -a "$t" = 2
+look 4 script lines; jar crop recipes = pack folder count, 2 tags
 
 ## CQ-CMP-26 | Corpse skeleton shows a Customizable Elytra elytra's dye and banner (look-check with CQ-CMP-18)
 @group client

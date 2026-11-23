@@ -44,8 +44,11 @@ count CENightstandItems: \[\{.*minecraft:sugar >= 2
 > setblock 44 -61 10 minecraft:hopper
 > setblock 44 -59 10 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:sugar",Count:1b}]}
 sleep 4
+# r1123cx (2026-11-23): read the nightstand too, so an empty hopper below tells "never entered" from "not pulled"
 > data get block 44 -61 10 Items
 expect minecraft:sugar
+> data get block 44 -60 10
+> data get block 44 -59 10 Items
 look the hopper below pulled the sugar; restart and break halves in p1b
 
 ## SQ-SVA-05 | brewery sky houses carry hanging herbs

@@ -67,7 +67,8 @@ look the shell count is 1 before and after the reload (cached); patterns still d
 @fails `creativecompat$spectatorClears` redirect
 @reviewed 2026-11-16
 > setblock 0 101 0 minecraft:chest
-do {"look": {"from": "0.5 102.6 -1.5", "at": "0.5 101.5 0.5"}}
+# r1123cx (2026-11-23): look adds 0.5 to x and z (block coordinates), so the old "0.5 ... -1.5" stood on the chest edge and missed it
+do {"look": {"from": "0 102.6 -2", "at": "0 101 0"}}
 do {"use": true}
 do {"wait": "screen:ContainerScreen"}
 shot chest_survival

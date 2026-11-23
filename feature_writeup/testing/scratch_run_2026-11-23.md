@@ -257,3 +257,153 @@ not seen.
 - The 4 jars added to `mods/` 2026-11-23 00:17 to 00:29 (chestbubblesrevived, kleeslabs, numarevive, prettybeaches)
   have no mod_sides.md row; every full-pack server and the client of this run ran without them (`DROPJARS`).
 
+
+## 10. r1123cx: Creative Compat publish tests (milestone 2)
+
+Targeted run (skill `scratch-test` part B), owner request 2026-11-23 via the main session: milestone 2 of the publish
+gate. Runner: runner-compat for the main orchestrator. Results in `perf/runs/r1123cx*/`. Perf capture skipped (targeted
+run, run default 4). Full-pack steps run with the 4 unlisted jars dropped (`source perf/runs/r1123cc/env.sh`, 9).
+
+### 10.1 Scope
+
+No Compat publish plan exists (`plan_*.md` grep: only plan_cb_publish.md license rows and plan_cc_publish_1_3.md
+stage d, done in r1123cc). Scope = creative_compat.md 4 test list plus the rows files whose `@@jars` name Compat
+alone or Common + Compat (CMP, BPT, PA, MT, SG, TN) and the Compat + Creative Delight rows file TSK. Plan lists in
+`perf/runs/r1123cx/<stage>.txt`, plans by `qrerun.py`. The Compat jar changed since r1122cc (23c5050d ->
+2e68d8807), so no r1122cc PASS is current.
+
+| Stage | Set | Rows planned |
+|---|---|---|
+| a | T1 smoke + load | SQ-SMK-18, -19, -20, SQ-CMP-01 |
+| b | Common + Compat | SQ-CMP-03 to -08, -11, -13, -23, -24, -25, SQ-BPT-01, SQ-PA-01 to -04, SQ-MT-01, -02, SQ-SG-01 to -03 |
+| c | Compat + Creative Delight (TSK) | SQ-SB31-01, SQ-NS-01, SQ-TSK-02, -03, SQ-DM-03 |
+| d | long | SQ-CMP-12 |
+
+Left out: SQ-CIF-04, -04b (PASS in r1123cc on the current Compat stamp 2e68d8807.2611230027); SQ-CMP-02 (superseded);
+SQ-CMP-09s, -10, -16, -17, SQ-TN-11, -12, SQ-MT-03 (draft); SQ-CIF-01 to -03 (Brewing / Equipment config and potion
+rows, CIF `@@jars` do not name Compat); SQ-SVA-05 (worldgen, Creative Delight structure); every row that only has
+Compat in a full-pack jar set (RD, SALT, RFX, UPG and the like). Client rows: see 10.5.
+
+### 10.2 Jars and preflight
+
+| jar | `mods/` (stamp) | installed |
+|---|---|---|
+| creativecompat | 1.0.0+2e68d8807.2611230027 | 2026-11-23 00:30 |
+| creativecommon | 1.3.0+2e68d8807.dirty-e4f25c.2611230023 | 2026-11-23 00:30 |
+
+- RUNNER.md idle, claimed 04:30. `df -h /` 73 GB free. `jarstamp.py pending`: 0. `game_jvms.sh` empty.
+- `check_all.py --fast`: 42 run, 1 FAIL = comment_dates (same 3 dated comments as 4; not a runtime test).
+- `qprescreen.py --plan-json perf/runs/r1123cx/all.plan.json`: 2 likely (grepc SQ-CMP-23, -25) -> fixed in CMP.qb
+  (`; true` after the look-judged `grep -c` counts, 3 lines), lint clean; 3 risk, 8 stale (SMK-18 to -20, SG, BPT, MT:
+  sources changed after review; run as written, judged on their pass text).
+
+### 10.3 Run notes
+
+- 04:38 first chain start: stage a refused (my hand claim in RUNNER.md: drives claim it themselves, so a hand claim
+  blocks them); claim set back to idle. Second start: stage a refused again (state.json from the refused start), the
+  chain went on to stage b; stopped at 04:39 before any row ran (b step 1 boot cut, resumable). `chain.sh` now resumes
+  a drive whose state exists. 04:40 chain a -> b -> c -> d started (`perf/runs/r1123cx/chain.sh`).
+- 04:44 stage a done (04:40 to 04:44, 2 steps): SQ-SMK-18, -19, -20 PASS. SQ-CMP-01 HARNESS: listed 86, applied 73,
+  skipped 13; SnowPathMixin and LeafPilePathMixin "not applied, no gate", but debug.log shows both applied at
+  04:41:48.05, 0.1 s after the check ran (Done 04:41:46): lazy target classes (NodeEvaluator, WalkNodeEvaluator) load
+  when the first mob paths. BF-FIX SQ-CMP-01: summon a zombie and `sleep 10` before cmp_mixin_check.py (CMP.qb); rerun
+  queued (perf/runs/r1123cx/rerun.txt). Real numbers on this set: listed 86, applied 75, skipped by gate 11.
+- 04:50 TODO gear-tuning #1 (Bug) filed for the 4 Equipment NCH ERRORs on Common + Compat + Calendar + Equipment (r1123cc 7 01:20 observation; no row existed). New family slug from todo.py (the family's older rows use `gear/tuning`).
+- 04:55 judge-b1 (stage b steps 1 to 3): SQ-BPT-01, SQ-CMP-03 to -08, -11, -13 PASS (9). Notes: SQ-CMP-07 @commands
+  text says 475 paintings, the docs and logs say 445 (445 of 445 built; text only, for a doc pass); s02 latest.log has
+  Hearths `Detected setBlock in a far chunk` ERRORs from `hearths:*_lakes` (not Compat, no pass criterion hit).
+- 05:00 runner judged stage b step 4 (CMP-23 to -25): SQ-CMP-24 PASS (both mixins switched off, snow stayed, 0 cast
+  errors). BF-FIX SQ-CMP-23: 32 true keys, no range or `is not [` warning, cmp_mixin_check listed 86 / applied 76 /
+  skipped 10; the row expected `SupplementariesBreezyCompatMixin` to apply, but its target is called only by a
+  ticking wind vane on a client (mixin javadoc), so it never applies on a dedicated server -> pass and look check the
+  gate (CMP.qb). BF-FIX SQ-CMP-25: 4 script lines PASS; jar 39 crop recipes + 2 tags vs typed 41 recipes (the PR-CP-10
+  audit count; the pack folder now holds 39, all in the jar) -> the row compares the jar with the pack folder count.
+  Both rerun queued (perf/runs/r1123cx/rerun.txt).
+- 05:07 stage b done (04:44 to 05:07, 7 steps). judge-b2 (steps 5 to 7): SQ-MT-01, -02 (the r1120nv peaceful-difficulty
+  fault is fixed in the row), SQ-PA-01 to -04, SQ-SG-01 PASS. SQ-SG-02, -03 FAIL: the unsheared control patches did not
+  spread either (24 of 24 dirt left after 60 s at randomTickSpeed 300, bot qa at the patches; Calendar's
+  `grass season hook live` logged for the IW, Vinery and Vintage grass classes); cause not proven (Calendar
+  GrassSeasonHook, time of day under Better Days, or IW grass); not a Compat code path (Compat holds no grass
+  spread code: the `fertile` state is Immersive Weathering's, Compat adds only the WTHIT sheared line), TODO creative-calendar #2 with the diagnostic step. Stage c drive `r1123cxc` started 05:07.
+- 05:10 stage c done (05:07 to 05:10, 1 step). judge-c: SQ-SB31-01, SQ-DM-03, SQ-TSK-02, -03 PASS. SQ-NS-01 FAIL: the
+  feed half passed (sugar in both nightstands at 40 and 42 -60 10), but the hopper below the third nightstand
+  (44 -61 10) read `Items: []` 4 s after the hopper above fed it; cause not proven (Compat `NightstandStorage` extract
+  side, or the sugar never entered), TODO decor-and-framed-blocks #3. Diagnostic reads of the nightstand and the hopper
+  above added after the row's check (TSK.qb); rerun queued for evidence. Stage d drive `r1123cxd` (SQ-CMP-12) started
+  05:10.
+- 05:17 stage d done (05:10 to 05:17): SQ-CMP-12 PASS (4 checks). 05:17 rerun drive `r1123cxr` started (perf/runs/r1123cx/rerun.plan.json: SQ-CMP-01, -23, -25, SQ-NS-01).
+- 05:23 rerun drive `r1123cxr` done (05:17 to 05:23, 3 steps), runner judged: SQ-CMP-01 PASS (listed 86, applied 76,
+  skipped by gate 10, the numbers of the row comment and creative_compat.md 1: the r1122cc BATCH-FAULT is settled;
+  32 is the `[mixins]` key count, not a mixin count), SQ-CMP-23 PASS (32 keys, no gate warning, 86/76/10), SQ-CMP-25
+  PASS (pack 39 = jar 39 crop recipes, 2 tags). SQ-NS-01 FAIL again, now with the cause narrowed: the third nightstand
+  (hopper placed below it first) never took the sugar (`CENightstandItems: []`, the hopper above still holds it 10 s
+  later); logged on TODO decor-and-framed-blocks #3.
+- 05:24 client block: capture client (`run_captures.py serve`, the 4 unlisted jars dropped with `--drop`) up 05:24 to
+  05:29; `qrun.py client` on BPT.qb CQ-BPT-01, -03, CQ-TSL-02 -> perf/runs/r1123cxg. CQ-BPT-01, -03 PASS (runner,
+  text). BF-FIX CQ-TSL-02: both screen waits timed out, `use` hit no block: the look verb adds 0.5 to x and z, so the
+  row's centered `from "0.5 102.6 -1.5"` stood on the chest edge (tp x 1.000) -> whole-number coordinates (BPT.qb);
+  rerun on the same client: 9 of 9 checks pass, 3 shots for the owner (LOOK open). First attempt kept in
+  perf/runs/r1123cxg_try1. Client stopped, `game_jvms.sh` empty 05:29.
+
+### 10.4 Final verdicts
+
+Table: `perf/runs/r1123cx/table.md` (`qrun.py table` over every r1123cx RES dir, later reruns win). 34 rows: PASS 30,
+FAIL 3, LOOK 1 (owner shots). BF-FIX and rerun PASS: SQ-CMP-01, -23, -25, CQ-TSL-02 (LOOK).
+
+| Stage | Time | Rows | PASS | FAIL | BATCH-FAULT left | LOOK |
+|---|---|---|---|---|---|---|
+| a smoke + load | 04:40 to 04:44 | 4 | 4 | 0 | 0 | 0 |
+| b Common + Compat | 04:44 to 05:07 | 21 | 19 | 2 (SQ-SG-02, -03) | 0 | 0 |
+| c Compat + Creative Delight | 05:07 to 05:10 | 5 | 4 | 1 (SQ-NS-01) | 0 | 0 |
+| d long | 05:10 to 05:17 | 1 | 1 | 0 | 0 | 0 |
+| reruns r1123cxr | 05:17 to 05:23 | (4) | (3) | (1) | 0 | 0 |
+| client g | 05:24 to 05:29 | 3 | 2 | 0 | 0 | 1 |
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CMP-01 | PASS | 3 checks passed |
+| SQ-SMK-18 | PASS | 10 checks passed |
+| SQ-SMK-19 | PASS | 3 checks passed |
+| SQ-SMK-20 | PASS | 3 checks passed |
+| SQ-BPT-01 | PASS | 2 checks passed |
+| SQ-CMP-03 | PASS | startup.log: creativecompat pack in order; [item_physics] canonical tags / burn-transform 3 id + 5 tag rules line; no missing error |
+| SQ-CMP-04 | PASS | dumpphysics: 20550 items, 1416 survive lava; ItemPhysicSplit class loaded, no error |
+| SQ-CMP-05 | PASS | fire still burning, TNT item gone, netherite ingot survived (say lines) |
+| SQ-CMP-06 | PASS | box placed and given, loot dropped 16 Coal, no unknown; item_tags has creativecompat:physics/{floats,sinks,fireproof,lavaproof} |
+| SQ-CMP-07 | PASS | 445 of 445 painting variants built (matches immersive_paintings.md; row text 475 is stale), no error |
+| SQ-CMP-08 | PASS | 0 script errors in server.log before and after /reload |
+| SQ-CMP-11 | PASS | GT 462, c11b DeathTime 543L (about 80 ticks after), Stage 0b; c11a 1b |
+| SQ-CMP-13 | PASS | c13a 1b, c13b 2b, c13c 0b |
+| SQ-CMP-23 | PASS | 32 true keys; no 'is not [' or range line; listed 86, applied 76, skipped by gate 10 (absent-mod mixins and the client-only Breezy one) |
+| SQ-CMP-24 | PASS | boot 2: 'mixins switched off in [mixins]' line; SNOW_STAYED (layer at 0 120 0 did not fall); 0 ClassCastException/NoClassDefFoundError |
+| SQ-CMP-25 | PASS | 4 script lines (misc mods, feature ports, dead recipe removal, Coin); pack 39 jar 39 crop recipes, tags 2 |
+| SQ-MT-01 | PASS | golems 5/12000/24000, boat blocks 0.98/0.96/0.94, Quark Game Nerfs true, Iron Farms/Ice Roads false, enderman only, mixin count 2 |
+| SQ-MT-02 | PASS | mutton:13, no wool; iron_ingot:11; stone n=24 (<25); peaceful fix from r1120nv in place and holds |
+| SQ-PA-01 | PASS | 445 of 445 built from 415 sources, no WARN; INFO only for upgrade_aquatic:sightless grid |
+| SQ-PA-02 | PASS | 60 files; no built line after /reload, no painting error |
+| SQ-PA-03 | PASS | afternoon from pa_test.zip line; WARN no_such.zip (with path); 445 of 445 built |
+| SQ-PA-04 | PASS | 5 checks passed |
+| SQ-SG-01 | PASS | 2 checks passed |
+| SQ-SG-02 | FAIL | unsheared patch also 24 of 24 dirt left after 60 s at randomTickSpeed 300: nothing spread |
+| SQ-SG-03 | FAIL | count /Successfully filled 24 block/ = 4, wanted == 2; all four fills 24: unsheared rich soil and slab patches did not spread either |
+| SQ-DM-03 | PASS | rich z30 count 2 then 5; mulch_block z32 count 8 then 9 of 10: fertile ahead at both reads (saturating); no done=0 |
+| SQ-NS-01 | FAIL | feed half PASS (40, 42 -60 10 hold the sugar); at 44: hopper below Items [], nightstand CENightstandItems [], hopper above still holds the sugar 10 s after placing: the third nightstand (hopper placed below it first) took nothing |
+| SQ-SB31-01 | PASS | 2 checks passed |
+| SQ-TSK-02 | PASS | randomtick changed=5; three Test passed: FD vine and Supplementaries stick tomatoes both climbed, air at y-57 |
+| SQ-TSK-03 | PASS | treated_stick restored after soil break; drops dirt, tomato, seeds, tomato; 3 axe loots each 1 Treated Stick |
+| SQ-CMP-12 | PASS | 4 checks passed |
+| CQ-BPT-01 | PASS | one '[banner_patterns] 27 Bedspreads and 25 Customizable Elytra pattern textures built from 6 jars' line, no banner WARN; no TrashSlotGuiHandlerMixin error line in latest.log (the client writes no debug.log) |
+| CQ-BPT-03 | PASS | built line count 1 before and after F3+T (cached); 'patterns still drawn' is CQ-BPT-02, owner |
+| CQ-TSL-02 | LOOK | open look 1: first and last shots show the trash slot; the spectator shot shows none |
+
+### 10.5 Handover
+
+- FAILs: SQ-SG-02, -03 (no grass spread at all, controls included: TODO creative-calendar #2, not a Compat code path);
+  SQ-NS-01 (a nightstand with a hopper placed below it first takes nothing from the hopper above: TODO
+  decor-and-framed-blocks #3, Compat `NightstandStorage`, the one Compat product finding of this run).
+- Owner: judge `test_captures/judgement/qrun_r1123cxg/CQ-TSL-02_*.png` (trash slot in survival and back, none in
+  spectator). Owner or hand rows not run: CQ-BPT-02, CQ-TSL-01, CQ-PA-01, -02, CQ-MT-01 (`@owner`); CQ-NS-02, CQ-TSK-01
+  (hand look rows); CQ-CCB-03 (needs a Common + Compat client without JEI; `serve --drop` only thins the full pack).
+- Draft, not run: SQ-CMP-09s, -10, -16, -17, SQ-TN-11, -12, SQ-MT-03, CQ-CMP-09, -14, -15, -18 to -22, -26, CQ-TN-13.
+- Text for a doc pass: SQ-CMP-07 @commands says 475 paintings (445 built, as the docs say).
+- TODO gear-tuning #1 filed for the r1123cc stage d Equipment NCH ERRORs (none existed).

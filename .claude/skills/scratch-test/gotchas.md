@@ -543,6 +543,9 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   (r1115 phase 10).
 - Translated donor data can vanish silently: a port that converts upstream data at load may drop whole files (debug.log
   only). `/loot spawn ~ ~ ~ loot <ns>:blocks/<block>` = "Dropped 0 items" is the quick check (r1107tp).
+- A mixin applies only when its target class loads. Pathfinding targets (`NodeEvaluator`, `WalkNodeEvaluator`) load when the first mob paths, about 1 s after `Done (`, so a mixin-count check right at boot misses them; summon a mob and wait first (SQ-CMP-01). Client-only targets (Supplementaries `BreezyCompatImpl`, called by a ticking wind vane) never apply on a dedicated server: check the gate, not the apply line (SQ-CMP-23, r1123cx 2026-11-23).
+- A drive refused at start (RUNNER claim) still leaves `perf/runs/RUN/drive/state.json`, so the next `drive start` of the same id refuses with "state.json exists": `drive resume RUN` it (r1123cx 2026-11-23).
+- `todo.py set|log` take the row id as separate words with the `#n` last (`todo.py log decor-and-framed-blocks "#3" TEXT`); a quoted `"family #3"` one-word id answers `row id like "food/salt #3"`.
 
 ## Worldgen and structures
 
@@ -597,6 +600,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   are about 5 s apart, so use one `/function` for anything that must happen together (r1108cge2).
 - Client speeds: read them from client position steps; server-side motion values for a real player are not the client's
   (r1115 phase 11).
+- `do {"look": {"from": ..., "at": ...}}` takes block coordinates and adds 0.5 to x and z itself (cdevcapture `Steps.Look`): a centered `from "0.5 102.6 -1.5"` lands on the block edge (x 1.0) and the crosshair misses, so `use` uses the item and the screen wait times out. Give whole numbers (CQ-TSL-02, r1123cx 2026-11-23).
 
 ## Perf and timing
 

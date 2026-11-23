@@ -171,6 +171,7 @@ and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors an
 Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16; corpse screen sections
 SQ-CMP-17 and CQ-CMP-18 (screenshot look-check), -19, -20.
 Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md) 8, Compat 23c5050d): SQ-CMP-03 to -08, -11 to -13 PASS; SQ-CMP-01 BATCH-FAULT (typed mixin count; fixed 2026-11-22, `cmp_mixin_check.py`); sand-layer recipes without Immersive Weathering FAIL (SQ-CC-03, SQ-CC12-02, SQ-CPP-05, TODO `blockrunner #18`; guarded 2026-11-22, rerun after the Compat rebuild).
+Scratch run r1123cx (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run_2026-11-23.md) 10, Compat 2e68d8807, publish gate): 34 rows, PASS 30; SQ-CMP-01 (86 listed, 76 applied, 10 gated), -03 to -08, -11 to -13, -23 to -25, SQ-SMK-18 to -20, SQ-PA-01 to -04, SQ-MT-01, -02, SQ-BPT-01, CQ-BPT-01, -03 PASS; SQ-NS-01 FAIL (nightstand with a hopper below takes nothing, TODO `decor-and-framed-blocks #3`); SQ-SG-02, -03 FAIL (no grass spreads, controls included, TODO `creative-calendar #2`); CQ-TSL-02 shots for the owner.
 
 ## 5. History
 
