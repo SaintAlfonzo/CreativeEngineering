@@ -157,9 +157,12 @@ look verb=ages means (open x 92..108 first, glass x 120..136 second; n about 285
 > fill 100 -60 60 108 -60 68 minecraft:wheat[age=0]
 > setblock 104 -60 64 minecraft:air
 > season set MID_SPRING
-> cdevtest randomtick 100 -60 0 108 -60 68 18
-> cdevtest tickwarp 22
-waitlog verb=tickwarp end=done ticks=22 60
+# BF-FIX judge-3 r1123cd: `randomtick ... 18` runs its 18 rounds in one command and CropSeasons queues extra ticks in a position SET (CropSeasons.EXTRA, drained once per level tick),
+# so each plant got at most 1 extra tick instead of about 4.5 (ratio read 0.96 and 1.05 at n=320); the row now ripens with randomTickSpeed 30 and tickwarp 2400 (about 18 random ticks per block, one drain per game tick)
+> gamerule randomTickSpeed 30
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 180
+> gamerule randomTickSpeed 3
 > cdevtest ages 100 -60 0 108 -60 68 minecraft:wheat
 > fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
 > setblock 104 -60 4 minecraft:air
@@ -170,9 +173,10 @@ waitlog verb=tickwarp end=done ticks=22 60
 > fill 100 -60 60 108 -60 68 minecraft:wheat[age=0]
 > setblock 104 -60 64 minecraft:air
 > season set MID_SUMMER
-> cdevtest randomtick 100 -60 0 108 -60 68 18
-> cdevtest tickwarp 23
-waitlog verb=tickwarp end=done ticks=23 60
+> gamerule randomTickSpeed 30
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 180
+> gamerule randomTickSpeed 3
 > cdevtest ages 100 -60 0 108 -60 68 minecraft:wheat
 shell grep -E "verb=ages block=minecraft:wheat" logs/latest.log | grep -oE "n=[0-9]+ mean=[0-9.]+" | tail -2 | tr "\n" " " | awk '{split($2,a,"="); split($4,b,"="); printf "spring %s summer %s ratio %.3f\n", a[2], b[2], a[2]/b[2]}'
 reject \[cdevtest\] .*done=0

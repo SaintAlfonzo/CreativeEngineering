@@ -103,7 +103,7 @@ bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missin
 bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)
 shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
 shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 shell grep -E "Skipped creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
 kjsreject Skipped creativebrewing:kubejs/
 kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js

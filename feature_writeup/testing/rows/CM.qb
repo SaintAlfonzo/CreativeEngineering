@@ -28,7 +28,7 @@ bootreject (?i)(item_merges|veggies_foods|canning)\.js.*(error|exception)
 look shell: the [itemMerges] creativedelight count is 3 higher than before the cantaloupe merge (MG-39); no script error line
 ## SQ-CM-02
 @group same
-@commands Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `creativedelight:shaped/mini_cantaloupe`, `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing
+@commands Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing
 @pass Existing test: MG-41
 @reviewed 2026-11-16
 > cdevtest makes fruitsdelight:hamimelon_seeds
@@ -38,7 +38,8 @@ look shell: the [itemMerges] creativedelight count is 3 higher than before the c
 > cdevtest recipes popsicle
 > cdevtest makes fruitsdelight:hamimelon_popsicle
 expect verb=uses id=\S+ alone=\S+ serializer=\S+
-expect verb=recipes id=creativedelight:shaped/mini_cantaloupe
+# BF-FIX judge-3 r1123cd: the 4 slices -> Mini Cantaloupe grid was dropped in plan_food_batch_1119 wave A (A6: cutting only, fruit_cuts.js); the row now rejects it
+reject verb=recipes id=creativedelight:shaped/mini_cantaloupe
 expect verb=recipes id=creativedelight:shapeless/mini_cantaloupe_seeds
 expect verb=recipes id=creativedelight:shapeless/cantaloupe_seeds_from_mini
 # judge-5, 2026-11-18: trailing spaces are stripped, so the reject matched cantaloupe_seeds_from_mini; Delightful's popsicle recipes are creativedelight:shaped/cantaloupe_popsicle(_from_cantaloupe) now
@@ -262,7 +263,8 @@ reject verb=\S+ .*done=0
 > cdevtest tag item creativedelight:veggie_noodle_veg
 expect creativedelight:shapeless/cucumber_dough
 reject id=vintagedelight:cucumber_dough serializer=
-expect verb=tag kind=item tag=creativedelight:veggie_noodle_veg n=6
+# BF-FIX judge-3 r1123cd: vintagedelight/tags.js:16 adds Rustic Delight's green bell pepper slice when present: 7 on a boot with it
+expect verb=tag kind=item tag=creativedelight:veggie_noodle_veg n=[67]\b
 reject verb=\S+ .*done=0
 
 ## SQ-CM-23 | shrimp fried rice in the Cooking Pot

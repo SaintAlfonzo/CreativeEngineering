@@ -346,6 +346,7 @@ expect verb=pbot.interact bot=A .*result=(SUCCESS|CONSUME) held_after=(minecraft
 > execute unless entity @e[type=minecraft:iron_golem,x=961,y=-60,z=900,distance=..3] run summon minecraft:iron_golem 961 -60 900 {NoAI:1b}
 > execute unless entity A run pbot spawn A 960 -60 900 minecraft:overworld survival
 sleep 3
+> gamerule naturalRegeneration false
 > pbot hunger A 10
 > pbot inv A set 0 minecraft:bread 2
 > pbot inv A select 0
@@ -358,6 +359,7 @@ sleep 3
 > pbot useitem A main 20
 sleep 2
 > cdevtest entities 960 -60 900 40 type=minecraft:arrow
+> gamerule naturalRegeneration true
 expect verb=pbot.eat bot=A .*result=CONSUME using=true use_ticks=32 .*food=10
 expect verb=pbot.useitem bot=A end=finish item=minecraft:bread
 expect verb=pbot.useitem bot=A .*using=true use_ticks=\d+ release_after=20

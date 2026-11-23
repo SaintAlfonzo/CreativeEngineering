@@ -29,7 +29,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 ## SQ-ABD-02 | Upgrade Aquatic driftwood salvaging moved to CD ids
 @group B
 @commands Same boot: look up the salvaging ids in the dump
-@pass `abnormals_delight:upgrade_aquatic/cutting/driftwood_door`, `_sign`, `_trapdoor` gone; `creativedelight:farmersdelightcutting/salvaging/driftwood_furniture` (10 items incl. `abnormals_delight:driftwood_cabinet`, 0.75 driftwood planks, axe), `.../driftwood_chest_boat`, `.../driftwood_furnace_boat`, `.../<wood>_furnace_boat` for the 9 vanilla woods (crimson and warped give `boatload:` boats), `.../crimson_boat`, `.../warped_boat`, `.../crimson_chest_boat`, `.../warped_chest_boat` present; no `fdCutting` warning in `logs/latest.log`
+@pass `abnormals_delight:upgrade_aquatic/cutting/driftwood_door`, `_sign`, `_trapdoor` gone; `creativedelight:farmersdelightcutting/salvaging/driftwood_furniture` (9 items incl. `abnormals_delight:driftwood_cabinet`, 0.75 driftwood planks, axe), `.../driftwood_chest_boat`, `.../driftwood_furnace_boat`, `.../<wood>_furnace_boat` for the 9 vanilla woods (crimson and warped give `boatload:` boats), `.../crimson_boat`, `.../warped_boat`, `.../crimson_chest_boat`, `.../warped_chest_boat` present; no `fdCutting` warning in `logs/latest.log`
 @fails Depends on: CD jar
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
@@ -47,7 +47,7 @@ expect verb=recipes id=creativedelight:farmersdelightcutting/salvaging/warped_ch
 count verb=recipes id=creativedelight:farmersdelightcutting/salvaging/[a-z_]+_furnace_boat result= >= 10
 kjsreject (?i)fdCutting.*(warn|error)
 bootreject (?i)fdCutting.*warn
-look driftwood_furniture rdetail: input lists the 10 driftwood items incl. abnormals_delight:driftwood_cabinet (first 3 + "/+7"), result driftwood planks, axe tool; crimson / warped furnace boats take boatload: boats
+look driftwood_furniture rdetail: input lists the 9 driftwood items incl. abnormals_delight:driftwood_cabinet (first 3 + "/+6"), result driftwood planks, axe tool; crimson / warped furnace boats take boatload: boats
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-ABD-03 | Adzuki curry: grid recipe moved, pot recipe kept

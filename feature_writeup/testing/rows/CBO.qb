@@ -41,7 +41,7 @@
 @modset port_chain chain +creativedevtools-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -110,8 +110,8 @@ waitlog Added [0-9]+ recipes, removed 120
 sleep 3
 # "server scripts ready" prints on ServerEvents.loaded only (boot), not on /reload
 bootexpect server scripts ready, members on: vinery, brewinandchewin
-shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe\|Couldn't parse loot table\|Not a JSON object"
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log
+shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe\|Couldn't parse loot table\|Not a JSON object\|\[loot-tuning\] ban"
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo effects
 waitlog \[cbo\] done 30
 expect effects leaks 0
@@ -123,7 +123,12 @@ expect effects leaks 0
 @fails `CBConfig.Magic` read path; a `correcting` line: the key name in the row is wrong, check the written toml
 @from batches/r1106cbo/c1b_chain_mr.qb passed
 @modset port_chain chain +creativedevtools-*.jar
-bootreject Incorrect key|correcting
+# r1123cd (judge-2, 2026-11-23): reductionPerLevel moved to creativecommon-common.toml [magic_resistance] (default 0.2, so A
+# read 95.2 not 97.0): the row sets it itself and restarts; every fresh srv/config logs "Incorrect key ... corrected from null"
+# for every file (fml.toml, farmersdelight-common.toml), so the regex names the edited key
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml magic_resistance reductionPerLevel 0.5
+restart
+bootreject reductionPerLevel.*(Incorrect|corrected)|(Incorrect|corrected).*reductionPerLevel
 > forceload add 0 0
 sleep 2
 > summon minecraft:iron_golem 0 -60 5 {Tags:["cbaA"],NoAI:1b}
@@ -150,7 +155,7 @@ count entity data: 94\.0 == 1
 @from batches/r1106cbp/p3_optional.qb
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -168,8 +173,8 @@ look record the potion ... registered lines (all true except quark:resilience an
 ## SQ-CBO-11 | optional: counts above the chain
 @group A (optional)
 @commands same boot: the SQ-CBO-02 grep
-@pass mix count above the chain's; no `better_beacons not present`; `registered [1-9][0-9]* dragon-breath fluid-brewing recipes` and `re-added [1-9]`; `Lingerification: registered refinery list generator`; `potion bottling done \([1-9]`; `jeed_providers.js: [1-9][0-9]* effect provider recipes`; effect swaps count above the chain's; `[alcohol] food values set on 44 of 44`; no `mix skipped` / `not registered` WARN
-@fails each count names its script; `44 of 44` short: `alcohol_drinks.js` item_dict key for the missing drink
+@pass mix count above the chain's; no `better_beacons not present`; `registered [1-9][0-9]* dragon-breath fluid-brewing recipes` and `re-added [1-9]`; `Lingerification: registered refinery list generator`; `potion bottling done \([1-9]`; `jeed_providers.js: [1-9][0-9]* effect provider recipes`; effect swaps count above the chain's; `[alcohol] food values set on 51 of 51`; no `mix skipped` / `not registered` WARN
+@fails each count names its script; `51 of 51` short: `alcohol_drinks.js` item_dict key for the missing drink
 @from batches/r1106cbp/p3_optional.qb
 shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
 kjsexpect potion bottling done \([1-9]
@@ -209,6 +214,11 @@ reject \[cdevtest\] .*done=0
 @pass remaps: `vinery:climbing_effect`, `vinery:teleport`, `alexsmobs:knockback_resistance` in ActiveEffects, the `from` id absent; removed: none of the three in ActiveEffects
 @fails `LivingEntityEffectRemapMixin` (minecraft compartment) or the `[effects] remap` / `removed` defaults in `CBConfig`
 @from batches/r1106cbp/p3_optional.qb passed
+# r1123cd (judge-2, 2026-11-23): a fresh srv/config has [effects] remap and removed empty (the pack lists live in the hand-edited
+# config/creativecommon-common.toml); the row sets them from there and restarts so the golem check sees the pack behavior
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects remap '["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]'
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects removed '["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]'
+restart
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -310,8 +320,8 @@ waitlog Added [0-9]+ recipes, removed 120
 sleep 3
 # "server scripts ready" prints on ServerEvents.loaded only (boot), not on /reload
 bootexpect server scripts ready, members on: vinery, brewinandchewin
-shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe\|Couldn't parse loot table\|Not a JSON object"
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log
+shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe\|Couldn't parse loot table\|Not a JSON object\|\[loot-tuning\] ban"
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo effects
 waitlog \[cbo\] done 30
 expect effects leaks 0
@@ -324,7 +334,7 @@ expect effects leaks 0
 @from batches/r1106cbp/p3b_optional_members_off.qb passed
 @boot 2
 kjsexpect server scripts ready, members on: $
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo effects
 waitlog \[cbo\] done 30
 expect effects leaks 0
@@ -339,7 +349,7 @@ expect effects leaks 0
 @modset port_chain chain +creativedevtools-*.jar +alexsmobs-*.jar +citadel-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -352,6 +362,11 @@ kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
 sleep 3
 expect verb=potion potion=\S+ ingredient=\S*gazelle_horn output="?.*speed_iii
 expect verb=potion potion=\S*lava_vision ingredient=minecraft:redstone output="?.*long_lava_vision
+# r1123cd (judge-2, 2026-11-23): a fresh srv/config has [effects] remap and removed empty (the pack lists live in the hand-edited
+# config/creativecommon-common.toml); the row sets them from there and restarts so the golem check sees the pack behavior
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects remap '["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]'
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects removed '["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]'
+restart
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -377,7 +392,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +appleskin-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -395,7 +410,7 @@ expect mods loaded 1 of 24: appleskin$
 @modset port_chain chain +creativedevtools-*.jar +CerbonsBetterBeacons-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -422,7 +437,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +Botania-*.jar +curios-forge-*.jar +Patchouli-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -441,7 +456,7 @@ expect mods loaded 1 of 24: botania$
 @modset port_chain chain +creativedevtools-*.jar +buzzier_bees-*.jar +blueprint-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -465,7 +480,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +create_central_kitchen-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -485,7 +500,7 @@ shell grep -h "re-added [1-9]" logs/latest.log logs/kubejs/startup.log logs/kube
 @modset port_chain chain +creativedevtools-*.jar +create_deep_dark-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -504,7 +519,7 @@ bootreject EchoArmorEffectProcedureMixin
 @modset port_chain chain +creativedevtools-*.jar +dragonloot-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -522,7 +537,7 @@ expect effects items by namespace: .*\bdragonloot=
 @modset port_chain chain +creativedevtools-*.jar +everythingcopper-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -542,7 +557,7 @@ reject leak .*immersiveengineering:conductive
 @modset port_chain chain +creativedevtools-*.jar +FarmersRespite-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -565,7 +580,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar "+Felsic Gear *.jar"
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -578,21 +593,26 @@ reject leak .*better_beacons
 ## SQ-CBO-31 | chain + fruitsdelight-*.jar
 @group A (chain + Fruits Delight)
 @commands `ADD="fruitsdelight-*.jar"`; boot; checks S; `[alcohol]` grep; winemaker count; golem check `fruitsdelight:chorus`
-@pass `food values set on 43 of 44`; winemaker above SQ-CBA-10's; `vinery:teleport` applied instead of chorus
+@pass `food values set on 50 of 51`; winemaker above SQ-CBA-10's; `vinery:teleport` applied instead of chorus
 @fails `vinery/wandering_trades.js` guard; `FruitsDelightEffectFuncMixin` / remap
 @from batches/r1106cbp/s31.qb
 @modset port_chain chain +creativedevtools-*.jar +fruitsdelight-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: fruitsdelight$
-shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "43 of 44"
+shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "50 of 51"
 shell grep -h "\[wandering trades\]" logs/kubejs/server.log logs/kubejs/startup.log
+# r1123cd (judge-2, 2026-11-23): a fresh srv/config has [effects] remap and removed empty (the pack lists live in the hand-edited
+# config/creativecommon-common.toml); the row sets them from there and restarts so the golem check sees the pack behavior
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects remap '["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]'
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects removed '["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]'
+restart
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -617,7 +637,7 @@ look winemaker count above SQ-CBA-10's
 @modset port_chain chain +creativedevtools-*.jar +geodeforge-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -639,7 +659,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +immersive_armors-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -658,7 +678,7 @@ reject leak .*immersiveengineering:flammable
 @modset port_chain chain +creativedevtools-*.jar +immersive_weathering-*.jar +moonlight-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -669,7 +689,7 @@ shell ! grep -E "WARN.*immersive_weathering" logs/latest.log | grep -iE "creativ
 
 ## SQ-CBO-35 | chain + ImmersiveEngineering-*.jar
 @group A (chain + Immersive Engineering)
-@commands `ADD="ImmersiveEngineering-*.jar"`; boot; checks S; `bootexpect Lingerification: registered refinery list generator`; `shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log`; `> cdevtest recipes creativebrewing:bottling`; `> cbo effects`
+@commands `ADD="ImmersiveEngineering-*.jar"`; boot; checks S; `bootexpect Lingerification: registered refinery list generator`; `shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log`; `> cdevtest recipes creativebrewing:iebottling`; `> cbo effects`
 @pass refinery generator line; `generated [1-9]` refinery recipes; bottling count above 0; `creativebrewing:` bottling ids listed; namespaces include `immersiveengineering`; no IE mixin error (`PotionHelperMixin`, `PotionRecipeGeneratorsMixin`)
 @fails `Lingerification`, `potion_bottling.js`, the `immersiveengineering` compartment
 @from batches/r1106cbp/s35.qb
@@ -677,7 +697,7 @@ shell ! grep -E "WARN.*immersive_weathering" logs/latest.log | grep -iE "creativ
 @modset port_chain chain +creativedevtools-*.jar +ImmersiveEngineering-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -689,9 +709,9 @@ bootexpect Lingerification: registered refinery list generator
 shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log
 bootexpect Lingerification: generated [1-9]
 kjsexpect potion bottling done \([1-9]
-> cdevtest recipes creativebrewing:bottling
+> cdevtest recipes creativebrewing:iebottling
 sleep 3
-expect verb=recipes text=creativebrewing:bottling n=[1-9]
+expect verb=recipes text=creativebrewing:iebottling n=[1-9]
 bootreject PotionHelperMixin|PotionRecipeGeneratorsMixin
 reject \[cdevtest\] .*done=0
 
@@ -705,7 +725,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +jeed-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -729,7 +749,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +jei-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -747,7 +767,7 @@ bootreject PotionMachinesJEI|PotionPagesJEI|mezz\.jei.*Exception
 @modset port_chain chain +creativedevtools-*.jar +neapolitan-*.jar +blueprint-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -755,6 +775,11 @@ reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: neapolitan$
 shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+# r1123cd (judge-2, 2026-11-23): a fresh srv/config has [effects] remap and removed empty (the pack lists live in the hand-edited
+# config/creativecommon-common.toml); the row sets them from there and restarts so the golem check sees the pack behavior
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects remap '["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]'
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects removed '["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]'
+restart
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -778,7 +803,7 @@ look effect swaps above the chain's
 @modset port_chain chain +creativedevtools-*.jar +potionbundles-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -797,7 +822,7 @@ bootreject PotionFluidHandlerMixin
 @modset port_chain chain +creativedevtools-*.jar +Quark-*.jar +AutoRegLib-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -831,7 +856,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +supplementaries-*.jar +moonlight-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -843,20 +868,20 @@ expect mods loaded 1 of 24: supplementaries$
 ## SQ-CBO-42 | chain + Engineers Delight *.jar,ImmersiveEngineering-*.jar
 @group A (chain + Engineer's Delight)
 @commands `ADD="Engineers Delight *.jar,ImmersiveEngineering-*.jar"` (it requires IE); boot; checks S; `[alcohol]` grep
-@pass `food values set on 43 of 44` (wodka in, bellini out); mods loaded 2
+@pass `food values set on 50 of 51` (wodka in, bellini out); mods loaded 2
 @fails `alcohol_drinks.js` wodka key
 @from batches/r1106cbp/s42.qb passed
 @modset port_chain chain +creativedevtools-*.jar "+Engineers Delight *.jar" +ImmersiveEngineering-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: immersiveengineering, tmted$
-shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "43 of 44"
+shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "50 of 51"
 
 ## SQ-CBO-43 | chain + upgrade_aquatic-*.jar,blueprint-*.jar
 @group A (chain + Upgrade Aquatic)
@@ -868,13 +893,18 @@ shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/serv
 @modset port_chain chain +creativedevtools-*.jar +upgrade_aquatic-*.jar +blueprint-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: upgrade_aquatic$
+# r1123cd (judge-2, 2026-11-23): a fresh srv/config has [effects] remap and removed empty (the pack lists live in the hand-edited
+# config/creativecommon-common.toml); the row sets them from there and restarts so the golem check sees the pack behavior
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects remap '["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]'
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects removed '["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]'
+restart
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -906,7 +936,7 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +CerbonsBetterBeacons-*.jar +geodeforge-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -928,13 +958,18 @@ reject \[cdevtest\] .*done=0
 @modset port_chain chain +creativedevtools-*.jar +alexsmobs-*.jar +citadel-*.jar +Quark-*.jar +AutoRegLib-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: alexsmobs, quark$
+# r1123cd (judge-2, 2026-11-23): a fresh srv/config has [effects] remap and removed empty (the pack lists live in the hand-edited
+# config/creativecommon-common.toml); the row sets them from there and restarts so the golem check sees the pack behavior
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects remap '["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]'
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml effects removed '["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]'
+restart
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -959,7 +994,7 @@ look mix count above SQ-CBO-20's
 @modset port_chain chain +creativedevtools-*.jar +everythingcopper-*.jar +ImmersiveEngineering-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -981,7 +1016,7 @@ look copper armor rows carry immersiveengineering:conductive
 @modset port_chain chain +creativedevtools-*.jar +immersive_armors-*.jar +ImmersiveEngineering-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$

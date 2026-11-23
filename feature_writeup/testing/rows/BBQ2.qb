@@ -107,6 +107,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @reviewed 2026-11-20
 > pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
 sleep 3
+> gamerule naturalRegeneration false
 > effect clear c2b
 > pbot hunger c2b 0
 > pbot hold c2b minecraft:bread 1
@@ -133,6 +134,7 @@ expect verb=useair who=c2b hand=main result=FAIL using=false
 look bread from 0 must read food 5: if it reads 9, the +4 is a pack-wide eat bonus (find its source before judging the rolls) and the slice's 14 is that, not a roll value. Effects: Nourishment 2400t on both is the comfort_nourishment golden rule (120 s), not a fault; useitem at full hunger FAIL/PASS (not eaten)
 > effect clear c2b
 > clear c2b
+> gamerule naturalRegeneration true
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-ROLL-12 | golden roll slice only from cutting; no gild / enchant recipe; no roll can
@@ -223,6 +225,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @reviewed 2026-11-20
 > pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
 sleep 3
+> gamerule naturalRegeneration false
 > effect clear c2b
 > pbot hunger c2b 2
 > pbot hold c2b barbequesdelight:kebab_wrap 1
@@ -247,6 +250,7 @@ expect verb=pbot.useitem bot=c2b end=finish item=barbequesdelight:bibimbap .*foo
 look effects: only an ambient Raspberry Pie diet effect (800t, e.g. Speed after enough foods) may show; any other effect the food gave is a FAIL. Hunger: subtract the offset ROLL-11's bread showed (if any)
 > effect clear c2b
 > clear c2b
+> gamerule naturalRegeneration true
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ2-06 | the Shulker Mollusk cuts to 2 filets

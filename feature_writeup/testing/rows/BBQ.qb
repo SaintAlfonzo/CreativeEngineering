@@ -53,7 +53,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 ## SQ-BBQ-03 | Barbeque's item and block tags
 @group A
 @commands `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativecommon:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativedelight:food_type/handheld`, `/meal`, `/hazard`
-@pass 18 raw (10 Barbeque's Delight + 8 pack raws) + 10 grilled skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in no food type (dropped, plan_wood_bucket_batch_1121.md R18), burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
+@pass 18 raw (10 Barbeque's Delight + 8 pack raws) + 10 grilled skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers in handheld, kebab wrap, kebab sandwich and bibimbap in no food type (dropped, plan_meals_rolls_bbq.md ruling 4, owner 2026-11-22), burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
 @fails `tags.js` not loaded (`global.CD.on`). Ids from the 2026-11-19 tag dump (food_type tags under `creativedelight:`, rain_douses under `creativecommon:`, raw_skewers 18); r1120lr batch fault: old namespaces
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-21
@@ -76,8 +76,8 @@ expect verb=tag kind=block tag=creativecommon:campfire/rain_douses .*ids=\S*barb
 expect verb=tag kind=block tag=blockrunner:surface/metal .*ids=\S*barbequesdelight:grill\b
 expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:basin\b
 expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:tray\b
-expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b
-expect verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b
+reject verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b
+reject verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b
 reject verb=tag kind=item tag=creativedelight:food_type/meal .*ids=\S*barbequesdelight:bibimbap\b
 expect verb=tag kind=item tag=creativedelight:food_type/hazard .*ids=\S*barbequesdelight:burnt_skewer\b
 reject verb=tagsof id=barbequesdelight:raw_beef_skewer .*item_tags=\S*food_type

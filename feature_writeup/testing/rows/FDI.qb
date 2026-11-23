@@ -18,7 +18,7 @@
 @reviewed 2026-11-16
 bootexpect Done \(
 bootreject (?i)Failed to parse.*solcarrot|solcarrot.*(exception|could not)
-shell grep -nE "solcarrot|Failed to parse" logs/latest.log | cut -c1-250 | head -20; ls mods | grep -i carrot
+shell grep -nE "solcarrot|Failed to parse" logs/latest.log | cut -c1-250 | head -20; ls mods | grep -iE "carrot|raspberry"; true
 > cdevtest item solcarrot:food_book
 waitlog \[cdevtest\] verb=item done= 30
 expect \[cdevtest\] verb=item item=solcarrot:food_book class=

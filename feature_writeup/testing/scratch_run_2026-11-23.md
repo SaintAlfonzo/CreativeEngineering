@@ -586,3 +586,469 @@ and world group; state `perf/runs/r1123cd/drive/state.json`); reruns via `perf/r
 ### 12.5 Final verdicts
 
 Pending judging (scratch-judge agents).
+
+#### Verdicts steps 1 to 9
+
+Judge judge-1, RES `perf/runs/r1123cd/s00_res` to `s08_res`. BATCH-FAULT rows are fixed in their `.qb` (run default 11) and listed in `perf/runs/r1123cd/rerun.txt` (SQ-ROLL-11, SQ-BBQ2-05, SQ-BBQ-03, SQ-GLD2-01).
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-ABD-01 | PASS | log: smelting, campfire, smoking and salting recipes present for perch and pike slices, same input/output; xp 0.35 / time not printed, source upgrade_aquatic.js F.fishCook (0.35 xp, FD times) removes the 4.1.2 smelting |
+| SQ-ABD-02 | PASS | log: furniture recipe lists 9 items (door, trapdoor, sign +6 = doc list incl. cabinet; row said 10, miscount fixed in .qb), result driftwood planks @0.75; crimson/warped furnace boats give boatload: boats |
+| SQ-ABD-03 | PASS | log: adzuki_curry_cooked_manual_only inputs roasted adzuki beans, dried banana, carrot, pumpkin slice, bowl |
+| SQ-ABD-04 | PASS | log: pickerelweed_juice_manual_only takes the tag twice, pike_with_beetroot takes it twice, cook time 200; 1.0 xp not printed, source upgrade_aquatic.js fdCooking 1.0 xp 200 ticks |
+| SQ-ABD-05 | PASS | 5 checks passed |
+| SQ-AV-01 | PASS | 7 checks passed |
+| SQ-BBQ-01 | PASS | 4 checks passed |
+| SQ-BBQ-02 | PASS | log: raw skewer ingredients are tag items: beef = beef/minced_beef x2 + cabbage/cabbage_leaf x2; potato = potato/sweet_potato x2 + bacon; others match 3.1 |
+| SQ-BBQ-03 | BATCH-FAULT | reclassified from FAIL: row expected kebab wrap and sandwich in food_type/handheld; dropped by owner ruling 2026-11-22 (plan_meals_rolls_bbq.md); row fixed to reject, rerun queued; no line matches /verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b/; no line matches /verb=tag kind=item tag=creativedelight:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b/; open look 1: the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block_tags in the tagsof lines) |
+| SQ-BBQ-04 | PASS | compost.json: 11 rows at 0.25 (10 raw + burnt), 11 at 0.5 (10 cooked + wrap), sandwich 0.75, bibimbap 1.0 = 24 rows, matches barbeques_delight.md 3.7 |
+| SQ-BBQ-05 | PASS | state line has_campfire=true at y-60 (replaced the campfire, not one up), lit, out in rain on stone, lit on coal, break drops grill + campfire |
+| SQ-BBQ2-01 | PASS | shell grep for barbequesdelight/skewers.js/F.skewer error/warn lines returned nothing after reload; 8 BBQSkewerItem raws registered |
+| SQ-BBQ2-02 | PASS | log: all 8 pack skewers have raw craft (shaped/raw_*, End shapeless), smelting, smoking, campfire, grilling, raw sequenced assembly; _from_cooked_manual_only for all but Nether (End shapeless, Cave present); no upstream craft ids (all creativedelight:) |
+| SQ-BBQ2-03 | PASS | 2 checks passed |
+| SQ-BBQ2-05 | BATCH-FAULT | reclassified from FAIL: same peaceful food regen offset; gamerule naturalRegeneration false added; rerun queued; no line matches /verb=pbot.useitem bot=c2b end=finish item=barbequesdelight:kebab_wrap .*food=12\b/; no line matches /verb=pbot.useitem bot=c2b end=finish item=barbequesdelight:kebab_sandwich .*food=18\b/; no line matches /verb=pbot.useitem bot=c2b end=finish item=barbequesdelight:bibimbap .*food=18\b/; open look 1: effects: only an ambient Raspberry Pie diet effect (800t, e.g. Speed after enough foods) may show; any other effect the food gave is a FAIL. Hunger: subtract the offset ROLL-11's bread showed (if any) |
+| SQ-BBQ2-07 | PASS | famcheck: cooked skewers 23, in family skewer 18; the other 5 = burnt_skewer (hazard) + 4 displaydelight plated items (NONE); skewer cans 0 |
+| SQ-LGM-11 | PASS | effects comfort 2392 t and nausea 92 t left after the eat (about 100 at the start); no poison |
+| SQ-LGM-12 | PASS | canned_omurice, canned_mushroom_pot_pie, canned_roasted_mutton_rack = empty can + placed feast block (shapeless); no can recipe in the uses lists of raw/cooked mutton rack; no uncan listed |
+| SQ-LGM-14 | PASS | famcheck: lm blocks 13, not placeable 0 (placeable, placeable/sneak, placeable_on_coaster) |
+| SQ-ROLL-10 | PASS | 4 checks passed |
+| SQ-ROLL-11 | BATCH-FAULT | reclassified from FAIL: peaceful food regen (+8 per eat, gotchas Peaceful refills food); row now sets gamerule naturalRegeneration false; rerun queued; no line matches /verb=pbot.useitem bot=c2b end=finish item=minecraft:bread .*food=5\b/; no line matches /verb=pbot.useitem bot=c2b end=finish item=roll_delight:golden_roll_slice .*food=10\b/; no line matches /verb=useair who=c2b hand=main result=FAIL using=false/; open look 1: bread from 0 must read food 5: if it reads 9, the +4 is a pack-wide eat bonus (find its source before judging the rolls) and the slice's 14 is that, not a roll value. Effects: Nourishment 2400t on both is the comfort_nourishment golden rule (120 s), not a fault; useitem at full hunger FAIL/PASS (not eaten) |
+| SQ-ROLL-12 | PASS | golden_roll_slice made only by farmersdelightcutting/golden_roll_slice (+S&D copy); golden_roll gilding recipes only; no canned_ recipe for a Roll Delight roll/slice (canned_rice_roll_medley/royale stay; canned_sweet_roll is a bakery can) |
+| SQ-BBQF-01 | PASS | 7 [flavor] defined lines: cumin, pepper, chili, honey_mustard, buffalo, barbeque, grilled |
+| SQ-BBQF-02 | PASS | 6 checks passed |
+| SQ-BBQF-03 | PASS | 5 checks passed |
+| SQ-BBQF-04 | PASS | 22 BBQ offers over 20 butchers: all six seasonings seen, each 12 emerald -> 64 powder (chili, cumin, pepper) or 16 sauce (barbeque, buffalo, honey_mustard), maxUses 4, xp 4 |
+| SQ-BBQF-05 | PASS | 4 checks passed |
+| SQ-BBQF-06 | PASS | NBT Flavors [barbequesdelight:cumin, barbequesdelight:grilled] on the grilled beef skewer |
+| SQ-BBQF-07 | PASS | 4 checks passed |
+| SQ-CDM2-01 | PASS | 2 checks passed |
+| SQ-CDM2-03 | PASS | 7 checks passed |
+| SQ-CDM2-04 | PASS | makes: Cooking Pot recipe, its S&D mixing copy, potato_salad_manual_only and potato_salad_egg_solution mixing only (n=4); moredelight/oceanic potato_salad n=0 |
+| SQ-GLD2-01 | BATCH-FAULT | reclassified from LOOK: rdetail ids wrong for cake (goldenfood:golden_cake) and apple (minecraft:golden_apple): recipe ids are creativedelight:shaped/golden_cake and shaped/golden_apple, so n=0; beef part verified (cooked beef + 8 nuggets); rdetail fixed in BBQF.qb, rerun queued; open look 1: golden beef = cooked beef + 8 gold nuggets; golden cake also nuggets; golden apple still 8 gold ingots |
+| SQ-GLD2-02 | PASS | part=start golden_apple / golden_carrot, deploying gold ingot (rose gold counts), filling, pressing steps; 8 loops and 125 mB per golden.js header (goldenEnchant: 1 ingot, 125 mB, press, 8 loops) and golden_food.md 146 |
+| SQ-SALT2-01 | PASS | 7 checks passed |
+| SQ-SALT2-02 | PASS | randomtick changed=3; 3x Test passed, no Test failed; salt dust 8, 5, 3 from the three levels |
+| SQ-SALT2-03 | PASS | mixing rock_salt_water_salt: water 1000 mB, results raw_rock_salt_block@1 + salt_dust*2 (block kept); salt.js passes 'heated'; hammering cutting/grid rows exist (grid input immersiveengineering:hammer; R.hammering helper = Engineer's Hammer) |
+| SQ-SALT2-04 | PASS | 4 checks passed |
+| SQ-SALT2-05 | PASS | makes: createmixing/salting/rusticdelight_calamari_roll (CD salting) makes calamari roll {Salted}; shell: 224 mixes added, 3 Create: The Salt mixes removed |
+| SQ-SALT2-06 | PASS | shell: config/creativedelight-common.toml SaltBlockMeltingEnabled = false; ow_salt_kept chat line |
+| SQ-SALT2-07 | PASS | both salt-dust offers 12 emerald -> 64 vintagedelight:salt_dust, maxUses 4, xp 4 |
+| SQ-SALT2-08 | PASS | carried line 19 values; ls: salt-client.toml + salt-common.toml.moved, SALT2-08-FILES-OK; [salt.Evaporation] EvaporationChance = 0.5 |
+| SQ-VTDA-11 | PASS | 16 checks passed |
+| SQ-VTDA-12 | PASS | [swaps] 49 item merge(s) live = sum of sources across the 18 merges_*.json lists (49); no 'merged twice'; nut_mash_jar and pb_j in bot inventory |
+| SQ-VTDA-13 | PASS | quiche_meat, _fungus, _greens, zucchini_quiche are creativedelight:baking recipes (cooktime 200), no grid recipe except quiche_from_slices; tool = pie tin per recipes.js QUICHE / veggiesdelight recipes.js (t_bakeware_pie_tin; rdetail does not print tool) |
+| SQ-VTDA-10 | PASS | 4 checks passed |
+| SQ-BBQS-01 | PASS | raw_potato_skewer = potato/sweet_potato x2 + bacon x2, raw_beef = beef/minced_beef x2 + cabbage/cabbage_leaf x2 (tags creativedelight:skewering/*); kebab_sandwich recipes n=0 (dropped, owner 2026-11-22, plan_meals_rolls_bbq.md ruling 4) |
+| SQ-BBQS-02 | PASS | basin slot0 sweet_potato*2 before; after: well empty (filled=0), raw potato skewer in slot 0, stick gone, off hand empty: recipe takes bacon x2 (barbeques_delight.md skewering table), row's 'down by one' was a miscount, fixed in BBQS.qb |
+| SQ-BBQS-03 | PASS | pbot.inv: stick*1 slot 0 (main hand kept), cabbage*1 slot 1; basin kept cabbage*3 |
+| SQ-BBQW-01 | PASS | 22 _from_logs stonecutting rows: basins x2, trays x4 per wood on its own log tag (oak on creativedelight:bbq_oak_logs, 52 ids incl modded); all 18 basin/tray blocks in minecraft:mineable/axe and blockrunner:surface/wood |
+| SQ-BBQW-02 | PASS | 2 checks passed |
+| SQ-BBQW-03 | PASS | states: spruce_tray support=false, tray (oak) support=true, birch_tray support=true, stacked -59/-58/-57; after the plank removal all three air; Killed 3 entities |
+| SQ-CAL-01 | PASS | debug.log: 13 unique creativecalendar common mixins incl CropSeasonGrowHook (IE / Dirty Stuff / Nether's Delight present) |
+| SQ-CAL-04 | PASS | /ccaltime: preset SINGLEPLAYER, 45 min day + 15 min night, sub-season 8 days; push line 'nothing to push: every value already matches'; date answer in [time] Year/day format |
+| SQ-CAL-05 | PASS | ccaltime day 1 -> 2 of 8 (world day 2); /season Early Spring day 2/8 |
+| SQ-CAL-07 | PASS | [time] Moved to 1 x month: +8.0 days, world day 10, wine clock follows |
+
+Counts: PASS 52, BATCH-FAULT 4
+
+BF-FIX SQ-ROLL-11, SQ-BBQ2-05: peaceful food regen (+8 hunger before every eat, gotchas "Peaceful refills food") -> `gamerule naturalRegeneration false` after the bot spawn and back to true at the end (BBQ2.qb); rerun queued.
+BF-FIX SQ-BBQ-03: row expected kebab wrap and sandwich in food_type/handheld, dropped by owner ruling 2026-11-22 (plan_meals_rolls_bbq.md ruling 4) -> two `expect` became `reject`, @pass text updated (BBQ.qb); rerun queued.
+BF-FIX SQ-GLD2-01: `rdetail goldenfood:golden_cake` / `minecraft:golden_apple` matched no recipe id -> `rdetail shaped/golden_cake` / `shaped/golden_apple` (BBQF.qb); rerun queued.
+Row text corrections without rerun (verdict PASS from the log): SQ-ABD-02 (9 driftwood items, "/+6"), SQ-BBQS-02 (bacon x2 consumed, off hand empty) in ABD.qb / BBQS.qb.
+Note: SQ-BBQS-01 and SQ-BBQ-04 / SQ-BBQ2-05 still touch the dropped kebab items; the items stay registered (hidden), so the rows read them; the rows go with the kebab retirement.
+BF-FIX-ahead SQ-TX-14: reads food=10 + bread nutrition after `pbot eat`; peaceful food regen would add to it (gotchas.md "Peaceful refills food") -> `gamerule naturalRegeneration false` after the bot spawn, `true` after the last step (TX.qb), pending step.
+BF-FIX-ahead scan: other pending rows with `pbot eat` (CIF-02/03, DNR-O-02, FDI-04, GLD-02/07/16, RD-20) read effects, queue counts or teleports, not food deltas: no change. ROLL-03 already uses difficulty easy; ROLL-04/05 read only foodLevel 20 / 11+; BBQF and RPS have no pending steps. Skipped step: running CBA.qb SQ-CBA-14 (no food reads). qprescreen r1123cd: 28 likely findings (dead-id and unloaded-coordinate), left unfixed as non-simple or likely false positives (bot spawns load their own chunks).
+
+#### Verdicts steps 10 to 40
+
+Judge judge-2, RES `perf/runs/r1123cd/s09_res` to `s39_res` (drive steps 10 to 40: CBA, CBB, CBC, CBM, CBO on reduced mod sets). BATCH-FAULT rows are fixed in their `.qb` where simple (run default 11) and listed in `perf/runs/r1123cd/rerun.txt`. SQ-CBO-32 is a product FAIL that still shows HARNESS (the loot WARN tripped first; `--reclassify` cannot set FAIL); its rerun with the narrowed regex turns it FAIL. Steps 41 and later are not judged here (SQ-CBO-38 and -39 were fixed by the same edits and queued).
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CBA-01 | PASS | 2 checks passed |
+| SQ-CBA-02 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: boot regex matched RuntimeDistCleaner 'Attempted to load class net/minecraft/client/multiplayer/ClientLevel' lines that never name a mod (Rhino/KubeJS scans, other jars; run doc 2026-11-06 finding 5 ruled them noise); client-class alternative dropped from the regex, creativebrewing-attributed alternatives kept; rerun queued; boot log: /Mixin a ...
+| SQ-CBA-03 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error regex matched creativeloot 07_rules.js WARN (PneumaticCraft absent from the chain, Rhino Class could not be found, caught and logged); other checks passed; regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:585:[13:08:00] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban Pneu ...
+| SQ-CBA-04 | PASS | 4 checks passed |
+| SQ-CBA-05 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: the log line is '[CB potions] better_beacons not present - skipping the Long Reach and Phantom Bane potions' (one line, reworded); regex updated; the six registered=true and long_reach false checks passed; rerun queued; boot log: no line matches /better_beacons not present - skipping the long_reach potions/ |
+| SQ-CBA-06 | PASS | 9 checks passed |
+| SQ-CBA-07 | PASS | 3 checks passed |
+| SQ-CBA-08 | PASS | 4 checks passed |
+| SQ-CBA-09 | PASS | 7 checks passed |
+| SQ-CBA-10 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: expected count stale: alcohol_drinks.js lists 51 drinks since Hearth and Harvest D16 added 7; the chain boot logs 49 of 51 (bellini and wodka absent); rows now expect 49 of 51 (CBO 50 of 51, instance 51 of 51); rerun queued; shell exit 1:  |
+| SQ-CBA-11 | PASS | 6 checks passed |
+| SQ-CBA-12 | PASS | 4 checks passed |
+| SQ-CBA-13 | PASS | 3 checks passed |
+| SQ-CBA-16 | PASS | mix count 68 on the instance boot vs 45 on the chain boot (SQ-CBA-06); mundane + wither_rose -> creativecommon:wither, thick + amethyst -> magic_resistance (judge) |
+| SQ-CBA-17 | PASS | winemaker trades 34 on the instance boot vs 21 on the chain boot (SQ-CBA-10) |
+| SQ-CBA-18 | PASS | absent list = 50 structure packs, createsifter, powergrid; quark, fruitsdelight, supplementaries are in mods/; 0 ERROR lines naming creativebrewing in latest.log |
+| SQ-CBB-01 | PASS | 4 checks passed |
+| SQ-CBB-02 | PASS | 7 checks passed |
+| SQ-CBB-03 | FAIL | no line matches /pale_jane_from_rice_wine/ |
+| SQ-CBB-05 | FAIL | kippers not listed: rdetail/recipes brewinandchewin:fermenting/kippers n=0; #forge:raw_fishes holds miners_delight:tentacles (so not the 2026-11-06 tentacle-strip cause); ingredient list not printable; tracked in TODO creativebrewing/publish #4 |
+| SQ-CBB-06 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:572:[13:29:36] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBB-07 | PASS | 4 checks passed |
+| SQ-CBB-08 | PASS | 6 checks passed |
+| SQ-CBB-09 | PASS | 2 checks passed |
+| SQ-CBB-12 | PASS | 4 checks passed |
+| SQ-CBC-01 | PASS | 4 checks passed |
+| SQ-CBC-03 | PASS | 2 checks passed |
+| SQ-CBC-07 | PASS | 3 checks passed |
+| SQ-CBC-02 | PASS | 11 failed-and-skipped lines left (pale_jane bark tag, azalea_tea, pink_lemonade x2, cake_base x2, vdPickling leather, twisted_composter, seq_test_star, azalea manual_only), 0 Empty array, none of grown_/twig_nest/rope_to__air/canned_mulberry lines, total under 40; [absent mods] lines printed |
+| SQ-CBC-04 | PASS | sequenced assembly n matches 296-299; transition items CD 117, Engineering 67; Added 7341 / removed 1312 / modified 1282, 91 failed; [absent mods] prints (63 lines) |
+| SQ-CBC-05 | PASS | 5 checks passed |
+| SQ-CBO-01 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:585:[13:41:12] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-02 | FAIL | shell exit 1: [13:41:03] [WARN] creativebrewing:creativebrewing/potions.js#185: [CE potions] mix skipped: hearthandharvest:strong_bad_omen + minecraft:fermented_spider_eye -> buzzier_bees:strong_luck (potion not re; PASS: recorded: 45 mixes, swaps 0, alcohol 49 of 51, JEED 75, bottling 1701, tipped 94 x 2, re-added 0 dragon-breath, better_beacons skip line (Long Reach and Phantom Bane), no Lin ...
+| SQ-CBO-03 | PASS | [absent mods] lines name architects_palette, beautify, bushierflowers, create_compressed, immersiveengineering, jeed, quark and other mods absent from the chain; 58 failed-and-skipped lines in startup.log (recorded) |
+| SQ-CBO-04 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: 7 645:[23Nov2026 13:42:02.099] [Server thread/WARN] [KubeJS Server/]: creativeloot:kubejs/loot/07_ ...
+| SQ-CBO-05 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: row never set reductionPerLevel 0.5 (the key moved to creativecommon-common.toml [magic_resistance], default 0.2 gives A 95.2); config-error regex matched the fresh-srv fml.toml and farmersdelight Incorrect key lines; row now edits the toml, restarts and rejects only a reductionPerLevel correction; rerun queued; boot log: /Incorrect key/correc ...
+| SQ-CBO-10 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: NOT SIMPLE (not fixed): the row expects Armor / Tool Effects item namespaces; those gear rows moved to Creative Equipment (gear_effects.js, publish #17) and the chain has no Equipment jar, so 'effects items by namespace' is empty (run doc 2026-11-06 already listed this row fault); needs a @modset change or a rewrite to check effects only; loot ...
+| SQ-CBO-11 | PASS | mixes 68 (chain 45), effect swaps 15 (chain 0), re-added 135 dragon-breath, alcohol 51 of 51, bottling 2385, tipped 132 x 2 |
+| SQ-CBO-12 | PASS | 8 checks passed |
+| SQ-CBO-13 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: fresh srv/config has [effects] remap and removed empty (the pack lists are in hand-edited config/creativecommon-common.toml), so no remap or removal happened; row now sets both lists in the toml and restarts before the golem check; rerun queued; no line matches /"forge:id": "vinery:climbing_effect"/; no line matches /"forge:id": "vinery:telepo ...
+| SQ-CBO-14 | PASS | 8 checks passed |
+| SQ-CBO-15 | PASS | 7 checks passed |
+| SQ-CBO-16 | PASS | 13 failed-and-skipped lines vs 58 on SQ-CBO-03; recipes: 0 failed |
+| SQ-CBO-17 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: 4 618:[23Nov2026 13:45:35.737] [Server thread/WARN] [KubeJS Server/]: creativeloot:kubejs/loot/07_ ...
+| SQ-CBO-18 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:567:[13:46:28] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-20 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: fresh srv/config has [effects] remap and removed empty (the pack lists are in hand-edited config/creativecommon-common.toml), so no remap or removal happened; row now sets both lists in the toml and restarts before the golem check; rerun queued (loot WARN regex also narrowed); shell exit 1: logs/kubejs/server.log:584:[13:47:18] [WARN] creative ...
+| SQ-CBO-21 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:585:[13:48:36] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-22 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:585:[13:49:30] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-23 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:583:[13:50:31] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-24 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:584:[13:51:22] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-25 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:584:[13:52:22] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-26 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:584:[13:53:15] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-27 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: NOT SIMPLE (not fixed): the row expects Armor / Tool Effects item namespaces; those gear rows moved to Creative Equipment (gear_effects.js, publish #17) and the chain has no Equipment jar, so 'effects items by namespace' is empty (run doc 2026-11-06 already listed this row fault); needs a @modset change or a rewrite to check effects only; loot ...
+| SQ-CBO-28 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: NOT SIMPLE (not fixed): the row expects Armor / Tool Effects item namespaces; those gear rows moved to Creative Equipment (gear_effects.js, publish #17) and the chain has no Equipment jar, so 'effects items by namespace' is empty (run doc 2026-11-06 already listed this row fault); needs a @modset change or a rewrite to check effects only; loot ...
+| SQ-CBO-29 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:584:[13:55:55] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-30 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: NOT SIMPLE (not fixed): the row expects Armor / Tool Effects item namespaces; those gear rows moved to Creative Equipment (gear_effects.js, publish #17) and the chain has no Equipment jar, so 'effects items by namespace' is empty (run doc 2026-11-06 already listed this row fault); needs a @modset change or a rewrite to check effects only; loot ...
+| SQ-CBO-31 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: fresh srv/config has [effects] remap and removed empty (the pack lists are in hand-edited config/creativecommon-common.toml), so no remap or removal happened; row now sets both lists in the toml and restarts before the golem check; rerun queued; also stale 43 of 44 alcohol count (now 50 of 51) and the loot WARN regex narrowed; shell exit 1: lo ...
+| SQ-CBO-32 | HARNESS | shell exit 1: logs/kubejs/server.log:585:[13:58:54] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException:; shell exit 1: [13:58:46] [WARN] creativebrewing:creativebrewing/potions.js#185: [CE potions] mix skipped: hearthandharvest:strong_bad_omen + minecraft:fermented_spider_eye -> bu ...
+| SQ-CBO-33 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: NOT SIMPLE (not fixed): the row expects Armor / Tool Effects item namespaces; those gear rows moved to Creative Equipment (gear_effects.js, publish #17) and the chain has no Equipment jar, so 'effects items by namespace' is empty (run doc 2026-11-06 already listed this row fault); needs a @modset change or a rewrite to check effects only; loot ...
+| SQ-CBO-34 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:584:[14:00:46] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+| SQ-CBO-35 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: NOT SIMPLE (not fixed): 'Lingerification: generated N' is logged only when IE resolves the generated list (full pack: client Render thread line), never on this dedicated chain boot (run doc 2026-11-06 row fault); bottling ids are creativebrewing:iebottling/... (id text fixed in the row); loot WARN regex narrowed. Rewrite pass needed for the ge ...
+| SQ-CBO-36 | BATCH-FAULT | reclassified from FAIL: judge-2 2026-11-23: NOT SIMPLE (not fixed): row expects a creativebrewing:magic_resistance JEED provider; jeed_providers.js loads 75 providers (ids creativebrewing:jeed/<effect>) with none for Magic Resistance, run doc 2026-11-06 ruled it a row fault (JEED's own potion provider); owner/docs decide the expected provider; loot WARN regex narrowed; shell exit 1: log ...
+| SQ-CBO-37 | BATCH-FAULT | reclassified from HARNESS: judge-2 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught and logged, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:585:[14:03:35] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning ...
+
+Counts: PASS 30, BATCH-FAULT 29, FAIL 3, HARNESS 1
+
+Shared cause (26 rows): `creativeloot:kubejs/loot/07_rules.js#36` logs `[loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: ...EvaluatorException: Failed to load Java class ...ConfigHelper: Class could not be found!` (and #46 for Lightman's) on every reduced mod set without those mods; the exception is caught by the ban helper. The rows' `! grep EvaluatorException` check read it as a script error. Ruling: batch regex too wide for the row's purpose (script errors in the Creative Brewing scripts), product noise logged as TODO loot-tables #3 (low: skip the read when the mod is absent). Full-pack steps 1 to 9 never showed it.
+
+BF-FIX loot WARN (SQ-CBA-03, SQ-CBB-06, SQ-CBO-01, -04, -17, -18, -21 to -26, -29, -34, -37 and the loot part of -10, -20, -27, -28, -30, -31, -32, -33, -35, -36): every `shell ! grep -nE "...EvaluatorException..."` in CBA, CBB, CBO, CBP.qb now ends `| grep -vF "[loot-tuning] ban"`, the two `.preload_n` compound checks (CBO-04, -17 shape) add `\[loot-tuning\] ban` to their `grep -v` list. SQ-CBO-40 (running step) left unedited; its rerun is needed only if it trips the same line.
+BF-FIX SQ-CBA-02 (and the same regex at CBA.qb section 15): `Attempted to load class net/minecraft/client` matched RuntimeDistCleaner lines (ClientLevel, AbstractClientPlayer, PoseStack) that never name a mod; run doc 2026-11-06 finding 5 ruled them noise (Quark, CD scripts, Rhino scans), the row said "narrow to creativebrewing frames" and never did. Alternative dropped, @pass text says why. Source of the lines in the chain not proven from the log alone.
+BF-FIX SQ-CBA-05: the line is now `[CB potions] better_beacons not present - skipping the Long Reach and Phantom Bane potions` (one line); regex updated (also the @commands text).
+BF-FIX SQ-CBA-10, CBO-31, -42, CBO @pass/text, CBM-01: `alcohol_drinks.js` lists 51 drinks since Hearth and Harvest D16 added 7 (hearth_and_harvest.md 3.1); chain 49 of 51, one-extra-mod boots 50 of 51 (CBO-31 log: 50 of 51), all 51 of 51 (full-pack boots 51 of 51). alcohol.md still says 44 (stale doc, not edited here).
+BF-FIX SQ-CBO-05: `reductionPerLevel` moved to `creativecommon-common.toml [magic_resistance]` (default 0.2, A read 95.2 not 97.0) and the row never set it (its "stop; qrun.py toml" text was not a step); row now `edit ... qrun.py toml` + `restart`. The `Incorrect key|correcting` regex matched FMLConfig and farmersdelight-common.toml first-boot corrections (every fresh srv/config logs one per file); now only a `reductionPerLevel` correction.
+BF-FIX SQ-CBO-13, -20, -31, -38, -43, -51: fresh srv/config has `[effects] remap` and `removed` empty (`config: empty` prep; the pack lists live in hand-edited `config/creativecommon-common.toml`), so no remap or removal ran (neapolitan:agility stayed). Each row now sets both lists with `qrun.py toml` and restarts before its golem block. CBO-43 and -51 had not run yet.
+BATCH-FAULT not simple (not fixed): SQ-CBO-10, -27, -28, -30, -33 expect `effects items by namespace` entries (dragonloot, everythingcopper, felsic_gear, immersive_armors, creativeequipment ...); the Armor / Tool Effects tables are filled by Creative Equipment (gear_effects.js, publish #17), absent on these sets, so the line is empty (run doc 2026-11-06 listed this row fault); needs a `@modset` change (add the Equipment jar) or a rewrite to effects only. SQ-CBO-35: `Lingerification: generated N` is logged when IE resolves the generated list (a client Render thread line in the full pack), never on a dedicated boot; bottling ids are `creativebrewing:iebottling/...` (id text fixed, not enough to pass). SQ-CBO-36: no `creativebrewing:magic_resistance` JEED provider exists (75 providers, ids `creativebrewing:jeed/<effect>`); expected provider needs an owner or doc call. Pending rows with the same namespace expectation: SQ-CBO-52 and -53 (look only), -41 already judged by judge-3.
+
+Findings (real FAIL):
+- SQ-CBO-02 and -32: `potions.js#185` `[CE potions] mix skipped: hearthandharvest:strong_bad_omen + minecraft:fermented_spider_eye -> buzzier_bees:strong_luck (potion not registered)` with Buzzier Bees absent (potions.js line 236 mix, comment "mix() skips an unregistered potion"). TODO potions #11 (low).
+- SQ-CBB-03: Pale Jane fermenting skipped on the chain: `[NCH] bncFermenting pale_jane_from_rice_wine input[1]: item/tag "#creativecommon:bark" does not exist or is empty` (`creativecommon:bark` is `#immersive_weathering:bark` only since 2026-11-09; no Immersive Weathering on the chain). Logged on TODO creativebrewing/publish #4 (the row's pass text still says Pale Jane listed and bark = farmersdelight:tree_bark).
+- SQ-CBB-05: `brewinandchewin:fermenting/kippers` n=0 although `miners_delight:tentacles` is in `#forge:raw_fishes`; cause open; logged on creativebrewing/publish #4.
+
+LOOKs filled: SQ-CBA-16 (68 vs 45 mixes), -17 (34 vs 21 winemaker), -18, SQ-CBB-05 (FAIL), SQ-CBC-02 (11 skipped lines left, 0 Empty array), -04, SQ-CBO-01, -02, -03 (58 skipped lines), -10, -11 (68 mixes, 15 swaps, re-added 135), -16 (13 vs 58), -29 (8 swaps, fermenting 22), -31 (34 winemaker). No owner LOOK left in this range.
+
+#### Verdicts steps 41 to 81
+
+Judge judge-3, RES `perf/runs/r1123cd/s40_res` to `s80_res` (drive steps 41 to 81: CBO 38 to 53, CBP, CBW, CDB, CDFL, CDFW, CDJ, CDJ4, CEQ, CFR, CFS, CIF, CL, CM, CNS, CS, CUP, DCM, DEP, DNR-O). Step 82 (s81_res, DNR) was still running and is not judged here. Simple batch faults are fixed in their `.qb` (run default 11) and listed in `perf/runs/r1123cd/rerun.txt` (qrerun.py --add). SQ-CBP-01 is a product FAIL that still shows HARNESS (the shell exit code tripped first; `--reclassify` cannot set FAIL).
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CBO-38 | BATCH-FAULT | reclassified from FAIL: judge-3 2026-11-23: fresh srv/config had empty [effects] remap/removed (neapolitan:agility stayed, no vinery:climbing_effect), row now sets both lists in the toml and restarts (judge-2 fix); plus the loot WARN regex narrowed; rerun queued; shell exit 1: logs/kubejs/server.log:584:[14:04:28] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException:; no line matches /"forge:id": "vinery:climbing_effect"/; /"forge:id": "neapolitan:agility"/ matched: [23Nov2026 14:04:52.063] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: Iron Golem has the following entity data: [{"forge:id": "neapolitan:agility", Ambient: 0b, CurativeItems: [{id: "; open look 1: effect swaps above the chain's |
+| SQ-CBO-39 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught by the ban helper, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:585:[14:05:41] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException: |
+| SQ-CBO-40 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught by the ban helper, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:581:[14:06:37] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException:; open look 1: record whether Resilience stayed or was dropped (remap target absent) |
+| SQ-CBO-41 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught by the ban helper, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:583:[14:07:55] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException: |
+| SQ-CBO-42 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught by the ban helper, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; also the stale alcohol count fixed by judge-2 (50 of 51); shell exit 1: logs/kubejs/server.log:582:[14:08:48] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException:; shell exit 1:  |
+| SQ-CBO-43 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught by the ban helper, not a script error); regex now skips [loot-tuning] ban lines; rerun queued; shell exit 1: logs/kubejs/server.log:584:[14:09:42] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException:; open look 1: both brews -> nothing (or the potion unregistered) |
+| SQ-CBO-50 | PASS | 11 checks passed |
+| SQ-CBO-51 | PASS | potion mixes 56 against SQ-CBO-20 chain 55; golem effect remapped to alexsmobs:knockback_resistance (pass text) (judge-3) |
+| SQ-CBO-52 | BATCH-FAULT | judge-3 2026-11-23 NOT SIMPLE (not fixed): effects armor pieces 0, items by namespace empty; Armor/Tool Effects rows are filled by Creative Equipment (gear_effects.js, publish #17), absent from this chain set; same cause as SQ-CBO-10; needs a @modset change or a rewrite to effects only (judge-3) |
+| SQ-CBO-53 | BATCH-FAULT | judge-3 2026-11-23 NOT SIMPLE (not fixed): effects armor pieces 0, items by namespace empty; Armor/Tool Effects rows are filled by Creative Equipment (gear_effects.js, publish #17), absent from this chain set; same cause as SQ-CBO-10 (judge-3) |
+| SQ-CBP-01 | HARNESS | shell exit 1: loot errors=7; open look 1: the loot-table line names fruitsdelight, moredelight, supplementaries, upgrade_aquatic, endersdelight among others |
+| SQ-CBP-03b | INCONCLUSIVE | no Error parsing recipe line (0) and the horror_lasagna recipes load; but no [absent mods] line counts a minecraft:empty / Item.of / Fluid.of row (11 recipe-row lines name only absent mods), so the counting claim of the pass text is unverified (judge-3) |
+| SQ-CBP-09 | PASS | 4 checks passed |
+| SQ-CBP-02 | PASS | 4 checks passed |
+| SQ-CBP-04 | PASS | 3 checks passed |
+| SQ-CBP-05 | PASS | 6 checks passed |
+| SQ-CBP-08b | PASS | end gear transition items (37) printed; mod data packs line: off (mod not loaded): [felsic_gear, felsic_gear+nullscape]; [absent mods] skipped 2 recipe rows for absent sophisticatedbackpacks (judge-3) |
+| SQ-CBW-01 | PASS | oak board = 2 sticks + 4 oak planks; shaped/cutting_board on #creativedelight:cutting_board_planks (n=50, holds spruce and modded planks); the 8 wood boards plus the spruce board are in mineable/axe, counter_toppers and hammer_no_rotate (judge-3) |
+| SQ-CDB-01 | PASS | no script error on the listed scripts; [itemMerges] creativedelight: 49 merges, 52 recipes swapped (the older run-doc counts 14/17/38/44 predate later merges, so only the direction is checkable); counted as PASS on the checks (judge-3) |
+| SQ-CDB-02 | PASS | tags: sweeteners n=4 (powdered_sugar, honey_bottle, honeycomb, sugar), brewing n=4, drink n=3 (sugar, powdered sugar, honey bottle), plain n=2 (sugar, powdered sugar) = item_dict.js comments (the row pass text is older); hot cocoa slot lists sugar/powdered_sugar/honey_bottle (judge-3) |
+| SQ-CDB-03 | PASS | results: calamari 1 @1.0 + 1 @0.5, ink sac 1 @1.0 + 2 @0.5; glow variant the same with glowing_calamari and glow ink (judge-3) |
+| SQ-CDB-04 | PASS | squid kill drops miners_delight:squid:1, glow squid drops miners_delight:glow_squid:1 (one id per kill) (judge-3) |
+| SQ-CDB-05 | PASS | 7 checks passed |
+| SQ-CDB-06 | PASS | 3 checks passed |
+| SQ-CDB-07 | PASS | splash_milk:milk_bottle goes into a jar as fluid moonlight:milk; jars probe 5 pass 0 fail (judge-3) |
+| SQ-CDB-08 | PASS | Pickling Jar recipe 5 sea pickles + salt dust -> pickled_sea_pickle*5 (vintagedelight:fermenting) (judge-3) |
+| SQ-CDB-09 | PASS | row checks passed; braised sea pickle inputs sea pickle + 2 brown mushroom match the cooking pot probe, no pot failed (judge-3) |
+| SQ-CDB-10 | PASS | creamy gnocchi: milk tag slot, 2 potato_noodle, onion/garlic/garlic clove slot, bowl (judge-3) |
+| SQ-CDB-11 | PASS | bayberry soup registered (fruitsdelight + canned_bayberry_soup); cacciatore chicken slot reads minecraft:chicken/farmersdelight:chicken_cuts (raw cuts, no /+N), the "cooked chicken cuts" wording of the look is older than the recipe; client halves open (judge-3) |
+| SQ-CDB-12 | PASS | makes lines: creativedelight:shapeless/canned_pickled_pickles and _salt give the canned item; name is client (judge-3) |
+| SQ-CDB-13 | PASS | 2 checks passed |
+| SQ-CDB-15 | PASS | cake base (baked flour/dough/manual) takes 3 flour or cornmeal slots, egg tag slot, sweetener tag; cacciatore slot as SQ-CDB-11; hand crafting is client (judge-3) |
+| SQ-CDB-16 | PASS | fish egg roll egg slot: oceanic_delight:salmon_eggs/oceanic_delight:ancient_fish_eggs, nothing else (judge-3) |
+| SQ-CDFL-01 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: no-error check matched the creativeloot 07_rules.js [loot-tuning] ban WARN (PneumaticCraft/Lightman's absent from the reduced mod set; caught by the ban helper, not a script error); regex now skips [loot-tuning] ban lines; rerun queued (CDFL.qb line 43); shell exit 1: logs/kubejs/server.log:554:[14:28:22] [WARN] creativeloot:kubejs/loot/07_rules.js#36: [loot-tuning] ban PneumaticCraft: could not read the mod's loot switch: dev.latvian.mods.rhino.EvaluatorException: |
+| SQ-CDFL-02 | PASS | 6 checks passed |
+| SQ-CDFL-04 | PASS | 2 checks passed |
+| SQ-CDFW-01 | PASS | [can servings] 338 cans, below the 344 of 2026-11-20 by the cans of absent mods; [cans] registered 301 (judge-3) |
+| SQ-CDFW-02 | PASS | tagdiff food_type: only-here entries are H&H and later items added after the 2026-11-19 dump, only-other entries are golden / absent-mod items (goldenfood, oceansdelight guardian tail) (judge-3) |
+| SQ-CDFW-03 | PASS | placeable 283 here vs 278 in the dump (only here: H&H pies, waffle, tropical pizza), coaster/plate tags differ by items added after the 2026-11-19 dump; no only-other entries in placeable (judge-3) |
+| SQ-CDFW-04 | PASS | mortar recipes listed: create wheat, create sugar cane, farmersdelight rice x2 (wild rice, rice panicle), cocoa powder, garlic clove (+ hay, corn, powders); 21 total (judge-3) |
+| SQ-CDFW-05 | PASS | 6 checks passed |
+| SQ-CDFW-06 | PASS | smelting/smoking/campfire trio present for ghast, ham, arthropod, duck, perch, pike, acorn; Fried Turtle Egg and Fried Egg have smoking + campfire only: eggs have no furnace recipe by design (food.md 3.7, cd_food.js egg furnace 0, FO-62); the row pass text still says three each (judge-3) |
+| SQ-CDFW-08 | PASS | sequenced enchanted golden apple step takes minecraft:gold_ingot/mca:rose_gold_ingot; the other makes/rdetail lines for the golden pieces exist (judge-3) |
+| SQ-CDFW-09 | PASS | 119 *_cooked_manual_only recipes listed (Farmers, Fruits, Alex, Abnormals, Delightful, ...) (judge-3) |
+| SQ-CDFW-10 | INCONCLUSIVE | row asks for a client or offline count (108 tool, 227 misc): both dict scripts load without error (Loaded script lines, shell checks passed) but no key count is printed on a server (judge-3) |
+| SQ-CDJ-09 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: the cdj5home marker and its forceload came from SQ-CDJ-11 (superseded, never run), so H1..H3 never captured and the bot not spawned; row now forceloads and summons the marker at 1400 -60 1400 (flat world, as SQ-MXS rows); rerun queued; capture H: no line matches /entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]/; placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); /CDJ5 home marker missing/ matched: [23Nov2026 14:35:00.777] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: [Not Secure] [Server] CDJ5 home marker missing; count /Gave 1 +\[/ = 0, wanted >= 5; /Unknown item/No player was found/ matched: [23Nov2026 14:35:10.817] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: No player was found; open look 1: item counts per namespace (displaydelight 212, fungidelight 32, miners_delight 69, veggiesdelight 89, vintagedelight 134 or more) are SQ-CDJ-09b after /dumpall; error count in rows/SQ-CDJ-09.shell.txt against the last r1101 boot |
+| SQ-CDJ-10 | BATCH-FAULT | reclassified from HARNESS: judge-3 2026-11-23: same missing cdj5home marker as SQ-CDJ-09, and the drive boots with displaydelight = true (the run plan 'Boot 2' toml edit is manual): row now sets [members] displaydelight=false and restarts, forceloads 1392..1423 x 1392..1455, restores true at its end; rerun queued; shell exit 1: ; capture H: no line matches /entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]/; placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); no line matches /CDJ10 stew placed/; no line matches /verb=break who=\S+ broken=true before="?displaydelight:beef_stew/; no line matches /verb=break drops=farmersdelight:beef_stew:1 stacks=1\b/; open look 1: the break is a survival break by the Devtools fake player (BreakEvent, no tool); same loot context as a bot break |
+| SQ-LOOT-FD1 (I5 side effect) | PASS | row checks passed; crate and bag tables list the crops in the item lines of both loot dumps (judge-3) |
+| SQ-MDP-13 rerun (I3) | PASS | row checks passed; bat wing sandwich ingredients list bread tag, wing and calamari/brown mushroom slots (judge-3) |
+| SQ-MDP-17 | BATCH-FAULT | reclassified from FAIL: judge-3 2026-11-23: NOT SIMPLE (not fixed): the row needs a boot with the srv miners_upstream symlink removed so the boot stops; the drive prep keeps the symlink (Done reached) and a restart waits for Done, so it needs its own step with a prep rm action (CDJ.qb run plan boot 3); cannot run in this drive; boot log: no line matches /Miner's Delight \(Creative Delight\) reads its textures, models and recipes from the original Miner's Delight jar, which must be in the folder 'miners_upstream' of the game directory \(not in mods/\):/; boot log: no line matches /missing: .*miners_upstream/miners_delight-1\.20\.1-1\.4\.5-backport\.jar/; boot log: no line matches /get it from https://cdn\.modrinth\.com/data/qMxbM4BQ/versions/p0INUam7/miners_delight-1\.20\.1-1\.4\.5-backport\.jar \(Modrinth/; boot log: no line matches /missing: .*miners_upstream/miners_delight-1\.19\.2-1\.1\.2\.jar/; boot log: no line matches /get it from https://mediafilez\.forgecdn\.net/files/4738/272/miners_delight-1\.19\.2-1\.1\.2\.jar \(CurseForge/; boot log: /Done \(/ matched: [23Nov2026 14:34:56.925] [Server thread/INFO] [net.minecraft.server.dedicated.DedicatedServer/]: Done (10.048s)! For help, type "help"; open look 1: the crash report / log blames only Miner's Delight (Creative Delight) (Suspected Mods: creativedelight or miners_delight), no other mod named as the cause |
+| SQ-MDP-18 (I7) | PASS | row checks passed (burning drop cooked_arthropod, no raw; non-burning raw arthropod) (judge-3) |
+| SQ-CDJ4-04 | PASS | 3 checks passed |
+| SQ-CDJ4-07 | PASS | six lunchbox recipes listed (shaped copper/golden, soap, dye, smithing skin and netherite upgrade), no unknown serializer (judge-3) |
+| SQ-CDJ4-08b | FAIL | no line matches /has the following entity data: -2\d{4}/; /No entity was found/ matched: [23Nov2026 14:58:53.337] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: No entity was found |
+| SQ-JSL-01 | PASS | jam recipes: whole-fruit slot lists lemon/lemon_slice, separate lemon_slice slot, sugar slot; pot recipe container vintagedelight:empty_mason_jar (zsb potrecipe) (judge-3) |
+| SQ-JSL-02 | PASS | slot 8 holds orange_jelly and lemon_jelly after the pots cooked (the expect checks passed); container empty_mason_jar (judge-3) |
+| SQ-LEM-01 | PASS | 10 picks gave fruitsdelight:lemon:22 (bot found 10 matching items), inside 20 to 50; breaks drop 2 to 5 (judge-3) |
+| SQ-LEM-02 | PASS | knife recipe result lemon_slice*5 + lemon_seeds*1 @1.0 (both the Create cutting copy and the FD cutting recipe) (judge-3) |
+| SQ-CEQ-01 | INCONCLUSIVE | tag lists printed (stepstools 16, dragon_gear 17, elytra 1, charms 1) but not compared with the r1106 boot 1 lists; the old-save half has no steps (judge-3) |
+| SQ-CEQ-05 | PASS | aluminum plate block in creativeequipment:needs_copper_tool and a pickaxe tag; copper pickaxe break drops 1 aluminum_plate_block, wooden pickaxe 0; harvest.js loaded once (judge-3) |
+| SQ-CEQ-07 | PASS | helmet durability read 100 after 220 ticks (200 -> 150 -> 100 two pulses; look accepts a second pulse when the timer started earlier) (judge-3) |
+| SQ-CEQ-08 | INCONCLUSIVE | tools match tune_tools.js (echo sword 9 -> attribute 8 / -2.35, echo pickaxe 6, felsic pickaxe 7, wooden knife 1.5) but dragonloot:dragon_helmet reads armor 8 where tune_armor.js sets 7 (toughness 4.5 and knockback 0.3 equal; dragonloot config default is 8): tune not applied to dragonloot armor or the tune value is stale; open for the owner (judge-3) |
+| SQ-CMG-01 | PASS | Magic mixins from its json 13 (max 13), Equipment 21 (max 23); the creativeengineering list holds 16 of its own 17 names, none of Magic or Equipment (judge-3) |
+| SQ-CMG-03 | PASS | startup packs order: ... startup_scripts, creativecompat, creativecalendar, creativeloot, creativemagic, creativeequipment, creativeengineering; no error lines (judge-3) |
+| SQ-CMG-04 | PASS | entities line at 371 -60 300: imm_ptl_core:nether_portal_new x2 (by_type); creativemagic: recipes 23 incl. ender chest/pouch/tank, printer (CEI), dragonbreathing (judge-3) |
+| SQ-CMG-05 | PASS | #forge:experience holds only create_enchantment_industry:experience (+ flowing); trinket case probe 0 fail (judge-3) |
+| SQ-CFR-01 | PASS | one apply: minecraft.CampfireRainMixin from creativedelight.mixins.json (judge-3) |
+| SQ-CFR-06 | BATCH-FAULT | reclassified from FAIL: judge-3 2026-11-23: row never set [campfire] rainDouses = false (srv config has true, campfire doused in rain: Test failed); row now edits the toml, restarts, restores true at its end; rerun queued; no line matches /Test passed/ |
+| SQ-CFR-07 | PASS | comfort near the campfire: Duration 90 ticks (4.5 s); after the move away: no ActiveEffects (judge-3) |
+| SQ-CFR-08 | PASS | 2 checks passed |
+| SQ-CFS-01 | PASS | shell empty: no InvalidInjectionException naming a CfbOven mixin; oven state read as expected (judge-3) |
+| SQ-CFS-02 | PASS | oven lit=true after the burn, pot output (tomato_sauce slot 8, bowls back) after 240 ticks, oven lit=false 201 ticks later; no pot stall (judge-3) |
+| SQ-CIF-02 | INCONCLUSIVE | new-world half passed (long_reach/long_long_reach registered, Phantom Bane drink effect 3592 ticks); the old-world chest half cannot run: no 2026-11-06 build kept to make the save (judge-3) |
+| SQ-CIF-03 | PASS | Caffeinated and Phantom Bane both 1791 ticks; rest stat 282 after the drink and 213 after both end (about 200, not near -24000) (judge-3) |
+| SQ-CIF-04 | PASS | mods list: creativecommon, creativecompat, creativecalendar, SereneSeasons, architectury, kubejs, rhino, cdevperfbot (+ creativedevtools for the reads) (judge-3) |
+| SQ-CIF-04b | PASS | mods list: creativecommon, creativecompat, creativeequipment, creativecalendar, SereneSeasons, creativedevtools, architectury, kubejs, rhino, cdevperfbot (judge-3) |
+| SQ-MG-16 | PASS | makes lines: the two creativecompat:createsplashing/cardboard_box recipes only; client half open (judge-3) |
+| SQ-CM-01 | INCONCLUSIVE | no script error; [itemMerges] creativedelight: 49 merges, 52 recipes swapped, but no stored pre-cantaloupe count to compare ("3 higher" cannot be checked) (judge-3) |
+| SQ-CM-02 | BATCH-FAULT | reclassified from FAIL: judge-3 2026-11-23: row expected creativedelight:shaped/mini_cantaloupe (4 slices -> Mini Cantaloupe); plan_food_batch_1119 wave A (A6, commit 1336abd37, 2026-11-19) removed that grid (cutting only); item_merges.md 3 still lists it (stale doc); row now rejects it; the seeds and popsicle expectations match the code; rerun queued; no line matches /verb=recipes id=creativedelight:shaped/mini_cantaloupe/; open look 1: makes fruitsdelight:hamimelon_seeds lists a recipe; the uses lines of the slice include that seeds recipe; Delightful's two popsicle recipes are in the popsicle list |
+| SQ-CM-03 | PASS | 4 checks passed |
+| SQ-CM-04 | PASS | raw pasta uses: alone=0 shared=90, every listed recipe alone=false (judge-3) |
+| SQ-CM-05 | PASS | 3 checks passed |
+| SQ-CM-06 | PASS | oat dough uses include creativedelight:baking/bread_from_dough_1, _3 and _6 (alone=false) (judge-3) |
+| SQ-CM-07 | PASS | 7 checks passed |
+| SQ-CM-10 | PASS | 4 checks passed |
+| SQ-BJ-01 | PASS | new jam jar pot recipes exist with result *1 (2 -> 1 since 2026-11-02, dishes/jams #4; the row text still says 2); removed-jam items not listed as results (judge-3) |
+| SQ-BJ-02 | PASS | chicken sandwich and More Delight sandwiches list the bread tag (pneumaticcraft:sourdough_bread/minecraft:bread/... +6); bread_slice cutting keeps minecraft:bread (judge-3) |
+| SQ-BJ-03 | PASS | 5 checks passed |
+| SQ-CM-20 | PASS | 7 checks passed |
+| SQ-CM-21 | PASS | shrimp fried rice effect farmersdelight:comfort 4800 (judge-3) |
+| SQ-CM-22 | BATCH-FAULT | reclassified from FAIL: judge-3 2026-11-23: tag has 7 members on this boot, not 6: vintagedelight/tags.js:16 adds rusticdelight:bell_pepper_slice_green when Rustic Delight is present; regex now n=[67]; rerun queued; no line matches /verb=tag kind=item tag=creativedelight:veggie_noodle_veg n=6/ |
+| SQ-CM-23 | PASS | shrimp fried rice: fried_rice + 2 shrimp tag slots (shrimp/shrimp_slices) (judge-3) |
+| SQ-CM-24 | PASS | 2 checks passed |
+| SQ-KT-21 | PASS | coasters at 5, 7, 9 hold red wine, hamburger, long black tea; the coasters at 11 and 13 Items: [] (judge-3) |
+| SQ-CM-30 | PASS | 4 checks passed |
+| SQ-CM-31 | PASS | seagrass salad inputs minecraft:seagrass x2 + bowl; tentacle uses lines alone=0 (judge-3) |
+| SQ-CM-32 | PASS | seafood skewer chain starts from raw_seafood_skewer (shaped slot: calamari / calamari_slice / miners squid +3 first, no tentacle); squid and pickles: cooked calamari slot (judge-3) |
+| SQ-CM-34 | PASS | displayName="Storage Delight (Creative Delight)" (judge-3) |
+| SQ-CM-35 | PASS | forge:squid_tentacles and forge:foods/tentacles hold glowing calamari, miners squid, rusticdelight calamari (6 each); takoyaki takes calamari in both slots, no empty slots (judge-3) |
+| SQ-CM-36 | PASS | fgdtest: oven truffle pie PASS (creativedelight:baking/truffle_pie); note: fgdtest also printed 2 FAIL lines (stomach alcohol / Swiftness with Weak Stomach) outside this row (judge-3) |
+| SQ-CSN-04 | PASS | curios list names hands, face, feet (creativeequipment) among 13 slot types (judge-3) |
+| SQ-CSN-05 | PASS | JFR parsed: 228 creativecommon.ServerTick and 3648 creativecommon.LevelTick events (judge-3) |
+| SQ-CS-01 | PASS | 2 checks passed |
+| SQ-CS-02 | PASS | answers 1, 6, 11, 16 passed: wheat temperate, tobacco warm_dry, melon stem warm_wet, cave vines cave; count passed == 4 (judge-3) |
+| SQ-CS-03 | PASS | winter open mean 2.232 below glass 2.860 (0.78); spring open 3.081 above glass 2.933 (1.05, direction only; see SQ-CS-04 for the ratio finding) (judge-3) |
+| SQ-CS-04 | BATCH-FAULT | judge-3 2026-11-23: ratio 0.962 (spring 2.928, summer 3.044, n=320) is a harness artifact: cdevtest randomtick runs its 18 rounds in one command and CropSeasons.EXTRA is a position set drained once per level tick, so a plant gets at most 1 extra tick (about 1.06x) instead of about 4.5 (1.25x); row now ripens with randomTickSpeed 30 + tickwarp 2400; rerun queued (judge-3) |
+| SQ-CS-05 | FAIL | count /Test failed/ = 3, wanted >= 4; open look 1: every "Test failed" = grew past age 0; an "Unknown block" or property error = a guessed id (Ender crop id from endersdelight, CD endersAdditions); fix the id and rerun the row |
+| SQ-CS-06 | PASS | row checks passed, reload with no KubeJS errors, instance file restored in srv (judge-3) |
+| SQ-CS-08 | PASS | 2 checks passed |
+| SQ-CUP-01 | PASS | handler errors: 0; no Unknown item line (judge-3) |
+| SQ-CUP-02 | PASS | 7 checks passed |
+| SQ-CUP-03 | PASS | copper_pot recipe centre ingredient minecraft:water_bucket; pots hold cave_soup / bat_soup in slot 6 with container bowl, CookTimeTotal 160 (judge-3) |
+| SQ-CUP-04 | PASS | use CONSUME; jar fluid creativedelight:cave_soup; bot holds minecraft:bowl (judge-3) |
+| SQ-DCM-01 | PASS | 4 checks passed |
+| SQ-DCM-02 | PASS | Reloaded with no KubeJS errors; 32318 recipes against 32223 in the 2026-11-19 instance dump (+95, later recipes); [absent mods] lines name only absent mods (judge-3) |
+| SQ-CBS-02 | PASS | no [absent mods] line names alexsmobs (present); the other lines name mods missing from srv/mods; note the step booted the full pack, not the minimal chain of the row text (judge-3) |
+| SQ-CDFO-02 | BATCH-FAULT | judge-3 2026-11-23 NOT SIMPLE (not fixed): the step booted the full pack (cookingforblockheads, balm, incubation all in srv/mods and the compartments config on), so the no-CfB / no-Incubation scenario was never tested; rack and duck nest are registered BlockItems. The row has no @modset; needs its own boot set (judge-3) |
+| SQ-CDFO-03 | BATCH-FAULT | judge-3 2026-11-23 NOT SIMPLE (not fixed): the step booted the full pack (Incubation present), so "Incubation absent: nest half does not load" was not tested; duck_nest registered as BlockItem. Rack half and oven recipes loaded. The row needs its own @modset / boot (judge-3) |
+| SQ-DEP-01 | PASS | no apply error or skip line (shell empty) (judge-3) |
+| SQ-DEP-03 | PASS | 2 checks passed |
+| SQ-DEP-04 | PASS | only third-party optional-class lines (sodium, backpacked, multimine, aquaculture, botarium, overweightfarming, vanilla client class); none naming com.SaintAlfonzo or our mixin configs (grep 0) (judge-3) |
+| SQ-DEP-05 | PASS | live tag query creativecommon:campfire/rain_douses n=2 (barbequesdelight:grill, minecraft:campfire) (judge-3) |
+| SQ-DEP-06 | PASS | the one grep line is the Lingerification generator registration, not a disabled warning (judge-3) |
+| SQ-DEP-07 | PASS | client halves only; row checks passed (judge-3) |
+| SQ-DEP-08 | PASS | 2 checks passed |
+| SQ-DEP-09a | PASS | corn maze rolls: corn_delight items, vinery:apple_cider, create_factory:caramel_apple; destroy lines: bowl + supplementaries:pancake 4 (servings 2), lemon_jelly 3, buzzier_bees:four_leaf_clover 1; no ERR lines (judge-3) |
+| SQ-DEP-02 | PASS | setblock of the absent brewing jar failed as expected ("brewing jar gone"), ERR lines naming brewinandchewin or vinery 0; 16 grape bush lines recorded on creativesplit/deps #27 (judge-3) |
+| SQ-DNR-O-02 | PASS | nourishment 4712 ticks, comfort 4711, instant-effect food leaves effects "-" with air=300, water_breathing / resistance 1112 from the other foods; sea grape count 2 after bone meal; client parts open (judge-3) |
+
+Counts: PASS 101, BATCH-FAULT 18, INCONCLUSIVE 6, FAIL 2, HARNESS 1
+
+BF-FIX loot WARN (SQ-CBO-39 to -43, SQ-CDFL-01): the same `| grep -vF "[loot-tuning] ban"` as judge-2 on the `EvaluatorException` shell checks of CBO.qb (SQ-CBO-40, the step that was running) and CDFL.qb; SQ-CBO-41 to -43 already carried it from judge-2's edits and had run before. SQ-CBO-38: remap/removed empty (judge-2 fix) plus the loot regex; rerun.
+BF-FIX SQ-CDJ-09, -10: the `cdj5home` marker and its forceload were made by SQ-CDJ-11 (superseded, never run), so H1 to H3 stayed unset and the bot never spawned; both rows now forceload 1392..1423 and summon the marker at 1400 -60 1400 (flat world, as SQ-MXS-01). SQ-CDJ-10 also lacked the manual "Boot 2" toml edit (`[members] displaydelight = false`): it now sets it with `edit` + `restart` before its boot checks and restores true with a second `edit` + `restart` at its end; forceload widened to z 1455 for the stew at H3+50.
+BF-FIX SQ-CFR-06: the row never set `[campfire] rainDouses = false` (srv config has true; the campfire doused, "Test failed"); now `edit` toml + `restart` + forceload before the check and a restore to true + `restart` at its end.
+BF-FIX SQ-CM-02: `creativedelight:shaped/mini_cantaloupe` (4 slices -> Mini Cantaloupe) was dropped by plan_food_batch_1119 wave A (A6, commit 1336abd37, 2026-11-19: cutting only); row now rejects it, the seeds and popsicle expectations match the code. item_merges.md 3 still lists the grid (stale doc, not edited here).
+BF-FIX SQ-CM-22: `#creativedelight:veggie_noodle_veg` has 7 members with Rustic Delight loaded (vintagedelight/tags.js line 16 adds the green bell pepper slice), 6 without: regex `n=[67]`.
+BF-FIX SQ-CS-04: ratio 0.962 (n=320) and CS-03's spring 1.05 are a harness artifact: `cdevtest randomtick ... 18` runs its 18 rounds inside one command and `CropSeasons.EXTRA` is a position set drained once per level tick, so each plant got at most 1 extra tick (about 1.06) instead of about 4.5 (1.25). The row now ripens with `randomTickSpeed 30` + `tickwarp 2400`; rerun. SQ-CS-03 keeps PASS (direction check only); if its ratio matters later it needs the same change.
+BATCH-FAULT not simple (not fixed): SQ-CBO-52, -53 (same cause as judge-2's SQ-CBO-10: Armor / Tool Effects rows are filled by Creative Equipment, absent on the chain set; needs `@modset` or a rewrite to effects only). SQ-CDFO-02, -03: the step booted the full pack (CfB, Balm, Incubation all in srv/mods, compartments on), so the no-CfB / no-Incubation scenarios were never tested; the rows carry no `@modset`, so each needs its own boot set (drive owner to be told before a `@modset` change). SQ-MDP-17: needs a boot with the srv `miners_upstream` symlink removed so the boot stops; the drive prep keeps the symlink and `restart` waits for Done, so it needs its own step with a prep rm action (CDJ.qb run plan boot 3).
+
+Findings (real FAIL or open):
+- SQ-CBP-01 (FAIL): 7 `Couldn't parse loot table` lines on the chain boot (creativecommon:blocks/{azalea,twisted,blossom,ancient}_composter, delightful:blocks/{mini_melon,cantaloupe}, minecraft:blocks/pumpkin), row wants 0. Logged on TODO creativebrewing/publish #13 (was about 30 on 2026-11-06).
+- SQ-CDJ4-08b (FAIL): squid summoned with Age:-24000 gone 7 s later with spawn-animals=true (second run in a row, r1120lr too). Logged on TODO mobs/tweaks #21.
+- SQ-CS-05 (FAIL): hemp and tobacco stay at age 0 in mid_winter at randomTickSpeed 100 for 120 s (grape bush, fungus colony and Ender crop on tilled end stone grew; 2026-11-18 all four grew). New TODO crops #60 (Bug).
+- SQ-CEQ-08 (INCONCLUSIVE): `dragonloot:dragon_helmet` armor reads 8; tune_armor.js sets 7 (toughness and knockback match; the dragonloot config default is 8). Tool values match tune_tools.js. Owner or Equipment session to decide whether the tune applies to dragonloot armor.
+- SQ-CM-36 note: `/fgdtest` prints 2 FAIL lines (stomach alcohol and Swiftness with Weak Stomach) that no row of this range judges; 134 pass.
+- SQ-DEP-02 and -09a notes added to TODO creativesplit/deps #27 (16 grape WARN lines; Unknown loot table hearthandharvest:mod_items/vinery/apple_cider validation WARNs).
+- INCONCLUSIVE with cause: SQ-CBP-03b (no [absent mods] line counts a minecraft:empty row), SQ-CDFW-10 (no key count printed), SQ-CEQ-01 (no r1106 baseline compared, old-save half without steps), SQ-CIF-02 (old-world half needs a 2026-11-06 build), SQ-CM-01 (no stored pre-cantaloupe merge count). SQ-CDB-01 PASS on its error checks only (49 merges; older doc counts predate later merges).
+- Stale pass texts seen (rows not edited, verdicts follow the code and docs): SQ-CDB-02 (sweetener tag sizes now 4/4/3/2), SQ-CDFW-06 (eggs have no furnace recipe by design, food.md 3.7), SQ-BJ-01 (result *1 since dishes/jams #4), SQ-CDB-11 and -15 (cacciatore chicken slot is raw chicken / chicken cuts).
+- No owner LOOK left in this range (no shots).
+
+#### Verdicts steps 82 to 102
+
+Judge judge-4, RES `perf/runs/r1123cd/s81_res` to `s101_res` (drive steps 82 to 102: DNR, DRK, EDL, ENGM, FCK/AZW/BOT/FCB/MG/T1, FDI, FF, FFH, FFB/RCO/CNP/VNG/FO/CNS/WCT/SGF/CORN, GAP, CNG/ENM/GLD/PCK/SLT/SWP). The drive was stopped cleanly after step 102 (GLD.qb section 1, 20 of 23 rows). Simple batch faults are fixed in their `.qb` (run default 11) and listed in `perf/runs/r1123cd/rerun.txt` (qrerun.py --add, 44 ids now). Same ruled causes as judges 1 to 3 (peaceful food regen, loot-tuning ban WARN, potions.js mix skipped, gear rows in Creative Equipment, empty fresh [effects] remap); none of them hit this range.
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-DNR-O-05 | PASS | missing-jar half passed (message, missing path, Modrinth URL, no Done); wrong-file half is the shared DonorJars code PASSed by SQ-DNR-E-04 (judge-4) |
+| SQ-DNR-E-03 | PASS | 3 checks passed |
+| SQ-DNR-E-04 | PASS | 2 checks passed |
+| SQ-DRK-01 | PASS | 17 forge:fluid tags n=1 each, incl sea_grape_juice and pickerelweed_juice as creativedelight fluids; scripts clean (judge-4) |
+| SQ-DRK-02 | PASS | bayberry..peach juice _manual_only recipes present; kiwi = 4 fruit + sugar/powdered_sugar/honey_bottle slot; dandelion = 2 leaves + 2 sugar cane; stale row text on old ids noted (judge-4) |
+| SQ-DRK-03 | PASS | createmixing/kiwi_tea: kiwi_juice 250 mB + 2 tea leaf slots + kiwi + sweetener slot -> kiwi_tea 250 mB; chorus_tea brewing takes tea leaves + ender_eye (judge-4) |
+| SQ-DRK-04 | PASS | createfilling/kiwi_tea: glass bottle + 250 mB creativedelight:kiwi_tea -> kiwi_tea*1; spout lines diagnostic per the look (judge-4) |
+| SQ-DRK-05 | PASS | tags coffee_chocolate n=3 (bar_of_chocolate, cocoa_beans, chocolate_bar), coffee_pumpkin n=2 (pumpkin_slice, pumpkin) (judge-4) |
+| SQ-DRK-06 | PASS | drink_fruits/lemon n=2, /orange n=2, /hamimelon n=1 (drink_tags.js makes only these three); rest PASSed in r1102b (judge-4) |
+| SQ-DRK-08 | PASS | #creativedelight:sea_pickles (2 items) is the ingredient slot, repeated 3 times in createmixing/sea_pickle_tea_on_sea_grape (judge-4) |
+| SQ-EDL-03 | FAIL | no line matches /verb=count block=endersdelight:voidpepper_block n=([2-9]/\d\d)\b/; judge-4: count n=1 after 30 rounds (block_ticks=3: the origin ticked 3 times, no persistent spread sprout), origin fruited; the writeup says 2/3 spread per tick; r1120 run had n=3; spread not reproducing (TODO largecontent/mod-additions #28) |
+| SQ-EDL-06 | PASS | 2 checks passed |
+| SQ-ENGM-03 | PASS | Killed 24 entities (shrapnel found); torch_crafting_animal_fat and seeds_bone_meal recipes n=1; creativedelight:millable_seeds n=33 = pack dump 33; vinery:barrel and forge:mulch/green filled; wooden_bucket made (judge-4) |
+| SQ-ENGM-04 | PASS | diff of the old Engineering [surface] block against Compat's shows only added keys (furniture, flora, camo walk/dense/items keys), no changed or removed value; excavation half left for CQ-ENGM-01 (judge-4) |
+| SQ-ENGM-05 | PASS | chain boot: [creativedelight] transition items (117) (row's 89 predates later additions), 0 failed recipes, no creativecompat/creativedelight ERROR lines, no unregistered-row warnings (judge-4) |
+| SQ-AZW-02 | PASS | rack use CONSUME, state creativedelight:azalea_spice_rack[facing=north] placed (be cookingforblockheads:spice_rack), break drops the rack; quark:azalea_planks makers n=12 (judge-4) |
+| SQ-AZW-03 | PASS | quark:azalea_log -> stripped_azalea_log*1 @1.0 + azalea_bark*1 @0.5 in createsaw, FD cutting and S&D cutting recipes (judge-4) |
+| SQ-BOT-01 | PASS | [botany_pots] 3 soils set (Rich x1.1, Fertile x1.2); growthTicks scaled on 212 pot crops (49 flowers x2, rest x8); flowers 49 as 2026-11-12, crop total grew from 175 with added mods (judge-4) |
+| SQ-BOT-02 | PASS | 4 checks passed |
+| SQ-BOT-03 | PASS | botany pot read 1: dirt + seeds GrowthTime 100, read 2 after bone meal GrowthTime 261, never -1 (merge set the crop) (judge-4) |
+| SQ-BOT-04 | PASS | lemon botany recipe display phases half: lower x5 (judge-4) |
+| SQ-BOT-05 | PASS | wheat getGrowthTicks=9600, rich_soil and rich_soil_farmland getGrowthModifier=1.1, Fertile Soil soil id creativecompat:botany_soil/fertile_soil getGrowthModifier=1.2 (judge-4) |
+| SQ-FCB-09 | PASS | cooking pot item keeps carrot (slot 0), bowls (slot 7), soup (slot 8; row text slots 0/6/7 is the old layout); copper pot keeps bone + lichen, glass bottle drops loose; kettle keeps 2 green_tea_leaves (judge-4) |
+| SQ-FCB-10 | PASS | 6 checks passed |
+| SQ-FCK-01 | PASS | the blacklist is the block tag quark:simple_harvest_blacklisted (n=1 immersive_weathering:weeds; item tag empty n=0); fertile_blocks n=3 (judge-4) |
+| SQ-FCK-02 | PASS | 2 checks passed |
+| SQ-FCK-03 | PASS | copper pot: bone + glow lichen cook (160 t) -> Inventory slot 6 bone_broth*2, recipe bone_to_2_bone_broth_by_fdcooking = yield 2 (judge-4) |
+| SQ-FCK-04 | PASS | canned_oatmeal = can + 6 oatmeal; canned_oatmeal_sugar = can + 3 oatmeal + sugar; makes n=2 (judge-4) |
+| SQ-FCK-05 | PASS | peanut_crop[age=7] 20000 rolls: magic_peanut 9 (0.045 %), peanut 74283 (judge-4) |
+| SQ-FCK-06 | PASS | 4 checks passed |
+| SQ-FCK-09 | BATCH-FAULT | reclassified from FAIL: judge-4 2026-11-23: stale count: the legendary and mythical roll medley cans were removed by owner ruling (swaps/removed.json, plan_easy_fixes_1122.md), so 19 feast cans have a recipe, not 21; counts in the row set to 19; rerun queued; count /verb=makes item=creativedelight:canned_[a-z_]+ n=1$/ = 19, wanted >= 21; count /verb=rdetail id=creativedelight:shapeless/canned_[a-z_]+ serializer=\S+ result=creativedelight:canned_[a-z_]+\*1 ingredients=\S*canned_goods:empty_can/ = 19, wanted >= 21; open look 1: 21 `verb=makes ... n=1` lines; each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 2026-11-12 pack log |
+| SQ-FCK-10 | PASS | 5 checks passed |
+| SQ-FCK-11 | PASS | well Amount 4000 -> 3000 after the use, can WaterLevel 12, then well Amount 10000 (refilled); WaterLevel not set without Amount falling (judge-4) |
+| SQ-FCK-12 | PASS | 5 checks passed |
+| SQ-FCK-13 | PASS | dispenser shear: honeycomb:6 at multiplier 2, honeycomb:3 after the toml edit to 1 (read live, both expects passed); the debug.log watcher grep (count 0) is a stale message text, not the value check (judge-4) |
+| SQ-FCK-14 | BATCH-FAULT | reclassified from FAIL: judge-4 2026-11-23: the 3x3 centre is read about 80 ticks after the use and a farmland random tick dropped it 7 -> 6 (the other eight cells read 7/0 as expected); row now accepts 6 or 7 for the centre; rerun queued; no line matches /verb=state pos=1020,-61,1020 state="minecraft:farmland\[moisture=7\]"/ |
+| SQ-FCK-15 | PASS | 8 checks passed |
+| SQ-FCK-16 | PASS | bot use result CONSUME, farmland moisture 0 both reads, water[level=0] appears above after the bucket use (judge-4) |
+| SQ-FCK-17 | PASS | tea_bush[age=2] lower and upper set (no setblock failure); small_tea_bush states read for the 3 younger ones (judge-4) |
+| SQ-FCK-18 | PASS | top-layer count n=0, corn crop reads age=0 upper=false after the harvest; drops corn:2, corn_seeds:5, corn_husk:1 (judge-4) |
+| SQ-MG-22 | PASS | coffee bush lower+upper became air after 1 block tick on basalt, wheat age=3 untouched, no items (young bush) (judge-4) |
+| SQ-MG-23 | PASS | makes list for immersive_weathering:azalea_flowers n=2: twigs:azalea_flowers_from_flowering_azalea and _leaves (x6 each); itemMerges 4 pack merges registered (judge-4) |
+| SQ-MG-24 | PASS | supplementaries:sack_2 = 7 wheat + string (one sack recipe, n=1); rope_2 from 3 string; no flax uses (judge-4) |
+| SQ-T1-02 | PASS | 5 checks passed |
+| SQ-T1-03 | PASS | create:cutting/diced_potatoes n=0; creativedelight:sliced_sweet_potato used by 141 shared recipes incl moredelight diced_potatoes_with_{beef,chicken_cuts,porkchop}; no barrier ingredient (judge-4) |
+| SQ-T1-04 | PASS | forge:plates/gold = IE plate + rose gold sheet, wires/gold = gold_wire + rose_gold_wire; rose gold ingot/sheet uses name clock, mechanical_crafter, golden_pickaxe, golden_apple, component_gold, none for gold_block or gold_bars (judge-4) |
+| SQ-FDI-01 | BATCH-FAULT | reclassified from HARNESS: judge-4 2026-11-23: shell exit 1 came from the trailing 'ls mods / grep -i carrot' (no jar has carrot in its name, the item solcarrot:food_book loaded and the bootreject passed); the Failed to parse lines are unrelated recipes; row now ends with '; true'; rerun queued; shell exit 1: 2898:[23Nov2026 16:42:58.366] [main/WARN] [KubeJS Server/]: Failed to parse recipe 'minecraft:golden_milk_bucket[minecraft:crafting_shaped]'! Falling back to vanilla: ItemStack 'result' can't be empty; open look 1: item name "Food Dictionary" is a lang check (client); here: the item exists and the mod loaded without errors |
+| SQ-FDI-02 | PASS | fdj ate 20 foods: carrot=19 applepie=19; the one food neither book counted is minecraft:pumpkin_pie (13th): the use did not consume it (result=minecraft:pumpkin_pie, others result=air), so no eat event; same 19/20 as the row title; max health 22 to 24 is the Raspberry Pie health ladder (judge-4) |
+| SQ-FDI-03 | PASS | cake: before carrotHas=false; bites 1 to 3 carrotHas=true applepieHas=true, applepieEntries 1,2,3; supplementaries:directional_cake bites=1,2,3; minecraft:cake applepieHas=false (judge-4) |
+| SQ-FDI-04 | PASS | lunchbag, lunchbox, golden_lunchbox: food lines carrotHas=true applepieHas=true, lunchbox lines applepieHas=false (blacklist), applepieEntries +1 per bite (judge-4) |
+| SQ-FDI-05 | PASS | both serverconfig blacklists list solapplepie:lunchbox, lunchbag, golden_lunchbox and creativedelight:netherite_lunchbox; book and tooltip halves are client (CQ) (judge-4) |
+| SQ-FF-03 | PASS | changed recipes (nachos block, truffle pasta, creamy pasta with chicken cuts / ham, fiery fondue pot, lasagna pan, stuffed potato) take the cheese slot vintagedelight:cheese_slice/flaxen_cheese_wedge/goat_cheese_slice where the milk was (judge-4) |
+| SQ-FF-04 | PASS | 11 checks passed |
+| SQ-FF-05 | PASS | stuffed_pumpkin_block cooking recipe: tomato sauce, potato/sweet potato, bread tag, berries, mushrooms, vegetables slots, cook time 400; the container is not printed by rdetail (judge-4) |
+| SQ-FF-06 | PASS | cucumber_salad_manual_only pickled slots list vintagedelight:pickle; echo cake base and cake paste egg slots are the egg tag (quark parrot eggs ... +9) (judge-4) |
+| SQ-FF-07 | PASS | _from_whole: melon 8, pumpkin 8, hamimelon 8, lemon 5 (+seeds on saw), orange 5, pineapple 6, cantaloupe 4; _from_slices shapeless: melon 9, pumpkin 9, hamimelon 9, lemon 6, orange 6, pineapple 9; minecraft:melon recipes only melon_seeds, pumpkin_from_slices and cutting/pineapple_slice n=0 (judge-4) |
+| SQ-FF-08 | PASS | baking/quiche_meat: crust, cheese, milk, egg, filling twice (6 slots); horror_lasagna: two scarlet_cheese_wedge, beetroot, tomato sauce, pasta (judge-4) |
+| SQ-FF-09 | PASS | trail mix seed slot = sunflower/pumpkin/oat seeds +2 (edible seeds, all food=true) and stuffed cantaloupe the same slot, no wheat or beetroot seeds (judge-4) |
+| SQ-FF-10 | PASS | 5 checks passed |
+| SQ-FF-11 | PASS | 6 checks passed |
+| SQ-FF-13 | BATCH-FAULT | reclassified from FAIL: judge-4 2026-11-23: stale expectation: slice values 4 / 0.7 since pizza_values.js (plan_food_batch_1119.md R25, 0.75x slices); log reads nutrition=4 modifier=0.7; row regex fixed; rerun queued (food_catalog.md 914 and vintage_delight.md 1052 still say 5 / 0.75); no line matches /verb=food item=vintagedelight:tropical_pizza_slice\S* food=true nutrition=5 modifier=0\.75/ |
+| SQ-FF-14 | PASS | displaydelight:onion_soup n=0, displaydelight:bnc_creamy_onion_soup registered (FoodBlock) (judge-4) |
+| SQ-FFH-02 | PASS | 7 muffin recipes, all creativedelight:baking/ (4 per bake), no farmersdelightcooking/ muffin recipe; muffin_tin hammering recipes only (judge-4) |
+| SQ-FFH-03 | PASS | creativedelight:baking/zucchini_quiche: pie crust, cheese wedge, milk, egg tag, 2 roasted zucchini; no sequenced assembly recipe for it; the pie tin tool is not printed by rdetail (judge-4) |
+| SQ-CNP-01 | PASS | [zsb] cans by serializer: kubejs:shapeless 9, creativedelight:baking 11, crafting_shapeless 1, creativedelight:flavor 1, solraspberrypie:diet_book 1; no mixing, mechanical_crafting, IE or AE2 route (judge-4) |
+| SQ-CNS-03 | PASS | canned noodle soup Nourishment 3600 t = noodle soup 4800 x 0.75; canned beef stew Comfort 3600 t = beef stew 4800 x 0.75 (judge-4) |
+| SQ-CORN-04b | PASS | knife on age 7: corncob 12 (+ corn 40); empty hand: no corncob; knife on age 3: no corncob (judge-4) |
+| SQ-DRK-07 | PASS | canned_bayberry_soup recipes canned_bayberry_soup and _soup_broth, canned_bayberry, canned_bayberry_cookie_sugar present (judge-4) |
+| SQ-FFB-03 | PASS | oven baking/honey_cake: cake_base, frosting, 1 honey_bottle, 1 honeycomb; honey_cake_manual_only: cake_base_baked, frosting, honey bottle, honeycomb; no 2-bottle recipe, no Crafts and Additions maker; cutting gives 7 slices (judge-4) |
+| SQ-FFB-04 | PASS | forge:bread n=9 incl garlic_bread, banana_bread, cantaloupe_bread, bread_slice, toast (judge-4) |
+| SQ-FO-02 | PASS | 7 checks passed |
+| SQ-FO-03 | PASS | empty_can makers: stonecutting x4, shaped x12, create deploying x12, IE blueprint x32; soda_recipe and reef_cola_recipe still use it; no smelting or blasting among 590 uses; ingredient slots not printed (judge-4) |
+| SQ-FO-04 | PASS | fried egg: smoking and campfire from eggs, no smelting; FD cooking fried_eggs_from_cooking_oil x3; cooking_oil_manual_only (seeds -> oil x2) and cooking_oil_heated_mixing; times 100/600 t not printed by rdetail (source) (judge-4) |
+| SQ-FO-05 | PASS | [stack_sizes] set 1391 stack sizes (row says about 1341: items added since); minecraft:egg, parrot egg and emu egg max_stack=64 (judge-4) |
+| SQ-MRD-04 | PASS | 3 checks passed |
+| SQ-PS-06 | PASS | 4 checks passed |
+| SQ-RCO-01 | PASS | minecraft:smoker recipes n=0; makers only quark deepslate_smoker and blackstone_smoker (the row's third-maker look is the old text, the pass text says Nether's Delight's smoker is its own block) (judge-4) |
+| SQ-RCO-02 | PASS | cake makers: farmersdelight:cake_from_slices (7-slice reassembly), baking/cake, baking/cake_berry, createfilling/cake_frosting_spout, cake_manual_only, cake_berry_manual_only = the pass list (judge-4) |
+| SQ-SGF-01 | PASS | water shot summon wet both farmland blocks (moisture 7) and the wheat stayed: Test passed x3 (judge-4) |
+| SQ-SGF-02 | PASS | lava and honey shots left farmland unwet: Test passed x2 (SGF-01 wet its farmland on the same summon path) (judge-4) |
+| SQ-VNG-01 | PASS | vinegar_jar uses: 87 alone (canned_*_vinegar: veggie, fruit, raw_crab, flying_fish, salads e.g. cucumber_salad_vinegar); vinegar_bottle 0 (judge-4) |
+| SQ-VNG-02 | PASS | 4 checks passed |
+| SQ-WCT-06 | PASS | Test passed x2 (netherite, dragon), Test failed x1 (golden, third execute) (judge-4) |
+| SQ-WCT-07 | PASS | golden can BonemealLevel/WaterLevel 16/16 after the clicks, 15/15 after the use; 7 Test passed (wheat grew, sapling stage 0) (judge-4) |
+| SQ-WCT-08 | PASS | first useair result=CONSUME with WaterLevel 4, second result=PASS with WaterLevel 0 (judge-4) |
+| SQ-FO-06 | PASS | fried_eggs_from_cooking_oil (FD cooking and S&D mixing) = cooking oil/fish oil + egg slots -> fried_egg*3; omelettes_from_fried_eggs = 4 fried eggs -> omelette*4 (judge-4) |
+| SQ-FO-07 | PASS | fried egg: smoking and campfire_cooking from eggs (n=5 makers incl FD pot, S&D, Salt); omelette: moredelight omelette_smoking and omelette_campfire_cooking (judge-4) |
+| SQ-FO-09 | PASS | whale_oil: heated mixing blubber -> 250 mB, pot whale_oil_manual_only 2 blubber, filling and emptying 250 mB, forge:lubricant fluid tag n=3 incl whale_oil, no S&D copy (judge-4) |
+| SQ-FO-10 | PASS | 5 checks passed |
+| SQ-FO-12 | PASS | 8 checks passed |
+| SQ-FO-14 | PASS | 5 checks passed |
+| SQ-GAP-01 | PASS | 10 jam jar Cooking Pot recipes (vintagedelight jars, incl creativedelight:farmersdelightcooking/*) all time=400, count 1; no Fruits Delight jam is a Cooking Pot recipe: they are create:mixing (fruitsdelight:mixing/flowing_*_jam), so the row's pass text "every Fruits Delight jam cooks 400" is stale (judge-4) |
+| SQ-GAP-02 | PASS | gen_moobloom_rules unchanged, exit 0; checker OK exit 0 (11 variants, 10 breeding rules, 38 spawn rules; the row says 37 rules) (judge-4) |
+| SQ-GAP-04 | PASS | clock, mechanical_crafter, golden apple/pickaxe/chestplate/carrot list gold_ingot/rose_gold_ingot (nugget slots for the carrot), powered rail takes gold rods; golden_watering_can smithing addition gold_block/rose_gold_block; createdeco gold sheet metal keeps literal gold_block; gold_ingot and gold_block makers listed as makes lines (no rdetail printed) (judge-4) |
+| SQ-GAP-05 | PASS | water golden egg rests at y -63, ground golden egg -60.0, plain egg floats at -59.84, lava egg gone (burned); golden_egg has no item tags and no physic tag (judge-4) |
+| SQ-GAP-06 | PASS | names.js: block.redeco.jar Empty Terrarium, supplementaries flower_box Large Flower Box, design_decor tinted_framed_glass Smooth Tinted Glass; refined gelatin: item.hostiledelight.refinedgelatin = 'Gelatin' in kubejs/assets/creativedelight/kubejs/hostiledelight/names.js (the row's grep looks for double quotes and prints nothing for it) (judge-4) |
+| SQ-GAP-07 | PASS | survivors: pineapple on farmland, rich, fertile, sand, red sand, coarse dirt; tea on farmland, rich, fertile and grass; grape on grass, dirt and stone. Not surviving: pineapple on grass, dirt, stone; tea on sand and stone; grape on farmland (popped). Record for the writeup: tea survives on grass, grape on stone (judge-4) |
+| SQ-GAP-08 | PASS | long lines: 0 (CQ-GAP-02 sizing still open) (judge-4) |
+| SQ-GAP-09 | PASS | /ccaltime date prints "[time] Year 1, Early Spring, day 1 of 8, 5:07 am (world day 1)"; four new command names registered, four old ones missing (judge-4) |
+| SQ-CNG-01 | PASS | debug.log: Found valid mod file repackedCannedGoods-1.19.2-3-ce-19.2-01.jar with {canned_goods}, version 1.19.2-3-ce-19.2-01 (judge-4) |
+| SQ-CNG-02 | PASS | [cans] registered 301 generated cans (228 in r1102b); held cans carry servings tags: canned_beef cans/servings/3, canned_beetroot /2 (judge-4) |
+| SQ-CNG-04 | PASS | 4 checks passed |
+| SQ-ENM-01 | PASS | repackedEnds-1.19.2-2.1-ce-19.2-03.jar provides ends_delight and enders_additions (jarjar path only repackedEnds, no endersAdditions- jar); enders_upstream_data pack listed (judge-4) |
+| SQ-ENM-05 | PASS | 5 checks passed |
+| SQ-ENM-05b | PASS | 5 checks passed |
+| SQ-GLD-02 | PASS | golden bread Regeneration amp 1 92 t + Absorption amp 0 2392 t; enchanted bread and enchanted apple Regeneration amp 1 ~391 t, Resistance 5991 t, Fire Resistance 5991 t, Absorption amp 3 2391 t; golden carrot as golden bread; all also carry farmersdelight:nourishment (judge-4) |
+| SQ-GLD-04 | PASS | golden slice Regeneration amp 1 60 t + Absorption amp 1 2360 t; enchanted slice Regeneration amp 1 360 t, Resistance and Fire Resistance 5960 t, Absorption amp 3 2360 t (judge-4) |
+| SQ-GLD-06 | PASS | 3 anvil combines of book + golden item -> empty, enchreg gf_enchantment false, /enchant answers Unknown enchantment; book hover is client (judge-4) |
+| SQ-GLD-07 | PASS | golden chorus fruit teleport 18.6 blocks (60.5,70.5 -> 76.6,79.9), enchanted 22.4 blocks (-> 64.2,92.6); cooldown off at the next read after each eat (cd probe on=false) (judge-4) |
+| SQ-GLD-13 | PASS | enchanted_golden_cake has no recipe (makes n=0, row expect passed); place and eat verified in SQ-GLD-04 (judge-4) |
+| SQ-GLD-16 | PASS | after the eat: mushroom_stew*2 + bowl*1 (hold gave 3 stew); no golden/goldenfood script error; canned_golden_bread recipe present (judge-4) |
+| SQ-PCK-01 | PASS | 4 checks passed |
+| SQ-PCK-02 | PASS | food_type/sweet/pancake n=7: sweet_potato_pancakes + rusticdelight cherry_blossom, chocolate, coffee, honey, pumpkin, vegetable pancake (judge-4) |
+| SQ-PCK-03 | PASS | 6 checks passed |
+| SQ-PCK-05 | PASS | supplementaries:pancake: shapeless sweeteners x3, heated mixing milk x5, egg solution mixing x5; plates: pot, S&D mixing, shaped and plate/single conversions; sweet_potato_pancakes S&D mixing copy listed (judge-4) |
+| SQ-SLT-01 | PASS | create__the_salt 1.19.2-1.1.0-ce-19.2-01 found; Salt itself loads as repackedSalt-1.2.4.1-ce-19.2-04 (the row's -01 suffix is old); the error grep shows only unrelated Create mixing input-count WARNs, nothing from Salt (judge-4) |
+| SQ-SLT-02 | PASS | 4 checks passed |
+| SQ-SWP-02 | PASS | give farmersrespite:long_coffee 2 -> inv rusticdelight:coffee*2 before and after the relog (judge-4) |
+| SQ-SWP-03 | PASS | /ccswap items: 1 stack rewritten (2 players, 565 chunks, 49 merges); the Kept-named neapolitan:banana stack keeps its name (judge-4) |
+
+Counts: PASS 114, BATCH-FAULT 4, FAIL 1
+
+BF-FIX SQ-FCK-09: the legendary and mythical roll medley cans were removed by owner ruling (swaps/removed.json, plan_easy_fixes_1122.md), so their makes lines read n=0 and 19 feast cans have a recipe, not 21; the two counts in FCK.qb are now `>= 19` (the two dead probe steps stay, harmless); rerun queued.
+BF-FIX SQ-FCK-14: the 3x3 centre is read third, about 80 ticks after the bucket use, and a farmland random tick can drop it 7 -> 6 (r1123cd read 6, the other eight cells read 7 / 0); the centre expect is now `moisture=[67]`; rerun queued.
+BF-FIX SQ-FF-13: tropical pizza slice is 4 / 0.7 since pizza_values.js (plan_food_batch_1119.md R25, slices 0.75x, Food wave 2026-11-22); the log read nutrition=4 modifier=0.7, the row still wanted 5 / 0.75 (also stale in food_catalog.md 914 and vintage_delight.md 1052, not edited here); regex fixed; rerun queued.
+BF-FIX SQ-FDI-01: shell exit 1 came from the trailing `ls mods | grep -i carrot` (no jar name has carrot; the item solcarrot:food_book loaded and the bootreject passed); the line now ends with `; true`; rerun queued.
+
+Findings (real FAIL or open):
+- SQ-EDL-03 (FAIL): voidpepper_block count n=1 after 30 random ticks (block_ticks=3: the origin ticked 3 times and fruited, no persistent spread sprout); ends_delight.md says 2/3 spread per tick; r1120 run had n=3. Intermittent or a spread regression. Logged on TODO largecontent/mod-additions #28; needs a repeat before any fix.
+- SQ-FDI-02 (PASS, note): the one food neither Spice of Life book counts out of the 20 is minecraft:pumpkin_pie (the use does not consume it: result=pumpkin_pie), same 19 of 20 as the row title.
+- SQ-GAP-01 (PASS, note): no Fruits Delight jam is a Cooking Pot recipe (they are create:mixing, fruitsdelight:mixing/flowing_*_jam); the 10 jam jar pot recipes are all 400 ticks. The row pass text "every Fruits Delight jam cooks 400" is stale.
+- SQ-GAP-07 (PASS, record for the writeup): survivors pineapple on farmland, rich soil, fertile soil, sand, red sand, coarse dirt; tea on farmland, rich, fertile and grass; grape on grass, dirt and stone; broke: pineapple on grass, dirt, stone; tea on sand and stone; grape on farmland.
+- Stale row texts seen (verdicts follow code and docs, rows not edited): SQ-ENGM-05 (transition count 117, row 89), SQ-BOT-01 (212 pot crops, row 173), SQ-FO-05 (1391 stack sizes, row 1341), SQ-GAP-02 (38 spawn rules, row 37), SQ-SLT-01 (Salt jar -04, row -01), SQ-RCO-01 (look names a third smoker maker, pass text says none), SQ-FCB-09 (cooking pot slots 0/7/8 now, row 0/6/7), SQ-GAP-06 (the Gelatin grep uses double quotes, the name is in single quotes).
+- Not verified by the row log, passed on the rest of the row: SQ-FF-05 (container not printed), SQ-FO-03 (maker ingredient slots not printed), SQ-FO-04 (smoking 100 t / campfire 600 t not printed), SQ-FFH-03 (pie tin tool not printed), SQ-GAP-04 (gold_ingot and gold_block makers only listed, not rdetailed).
+- No owner LOOK left in this range (no shots).
+
+#### Run totals (steps 1 to 102)
+
+Counts: PASS 297, BATCH-FAULT 55, FAIL 6, INCONCLUSIVE 6, HARNESS 2
+
+Whole-run table: `python3 tools/scratch_query/qrun.py table $(ls -d perf/runs/r1123cd/s*_res)` (101 RES dirs). The two remaining HARNESS rows are SQ-CBP-01 (a product FAIL, TODO creativebrewing/publish #13) and SQ-CBO-32 (shell exit 1 on the creativeloot loot-tuning ban WARN, ruled cause, not judged in this range; still to reclassify).

@@ -312,7 +312,8 @@ reject verb=\S+ .*done=0
 > cdevtest food vintagedelight:tropical_pizza_slice
 waitlog verb=food item=vintagedelight:tropical_pizza_slice\S* 30
 expect verb=makes id=vintagedelight:tropical_pizza result=vintagedelight:tropical_pizza\*1
-expect verb=food item=vintagedelight:tropical_pizza_slice\S* food=true nutrition=5 modifier=0\.75
+# judge-4 2026-11-23: slice values are 4 / 0.7 since pizza_values.js (plan_food_batch_1119.md R25, 0.75x slices, Food wave 2026-11-22); was 5 / 0.75
+expect verb=food item=vintagedelight:tropical_pizza_slice\S* food=true nutrition=4 modifier=0\.7\b
 reject verb=\S+ .*done=0
 
 ## SQ-FF-14 | no Display Delight onion soup block; creamy onion soup still places

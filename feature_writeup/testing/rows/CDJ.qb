@@ -109,6 +109,11 @@ bootreject NOT loaded|not from the Creative Delight jar|not nested
 shell ! ls mods | grep -iE "backported(Veggies|Vintage|Fungi|Miners|Display)"
 # error count against the last r1101 boot: judged by hand from rows/SQ-CDJ-09.shell.txt
 shell echo "error/exception lines in latest.log: $(grep -ciE 'error|exception' logs/latest.log)"
+# BF-FIX judge-3 r1123cd: the cdj5home marker came from SQ-CDJ-11 (superseded, never run); row makes its own at the flat-world home 1400 -60 1400
+> forceload add 1392 1392 1423 1423
+sleep 2
+> execute unless entity @e[type=minecraft:marker,tag=cdj5home] run summon minecraft:marker 1400 -60 1400 {Tags:["cdj5home"]}
+sleep 1
 > execute unless entity @e[type=minecraft:marker,tag=cdj5home] run say CDJ5 home marker missing
 > data get entity @e[type=minecraft:marker,tag=cdj5home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
@@ -133,12 +138,20 @@ look item counts per namespace (displaydelight 212, fungidelight 32, miners_deli
 @fails An error: a CD script that should be gated on `[members] displaydelight` (the switch is generated from `bundle_members`)
 @from batches/r1102/b2_switches.qb
 @reviewed 2026-11-16
+# BF-FIX judge-3 r1123cd: the drive boots with displaydelight = true (the run plan's "Boot 2" toml edit is manual); the row sets it and restarts,
+# and restores true at its end so later rows of the step see the default
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members displaydelight false
+restart
 bootexpect Done \(
 bootexpect \[creativedelight\] members: \[([a-z_]+, ){20}[a-z_]+\]$
 bootreject Error occurred while handling event
 bootreject (?i)\b(error|warn)\b.*displaydelight
 kjsreject (?i)\b(error|warn)\b.*displaydelight
 shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[members\][[:space:]]*$/ && /^[[:space:]]*displaydelight[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
+> forceload add 1392 1392 1423 1455
+sleep 2
+> execute unless entity @e[type=minecraft:marker,tag=cdj5home] run summon minecraft:marker 1400 -60 1400 {Tags:["cdj5home"]}
+sleep 1
 > data get entity @e[type=minecraft:marker,tag=cdj5home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > kill @e[type=minecraft:item]
@@ -151,6 +164,8 @@ expect verb=break who=\S+ broken=true before="?displaydelight:beef_stew
 expect verb=break drops=farmersdelight:beef_stew:1 stacks=1\b
 reject \[cdevtest\] verb=\S+ .*error=
 look the break is a survival break by the Devtools fake player (BreakEvent, no tool); same loot context as a bot break
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members displaydelight true
+restart
 
 ## CQ-CDJ-01
 @group client

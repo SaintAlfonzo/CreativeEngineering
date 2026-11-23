@@ -16,13 +16,13 @@
 ## SQ-CBM-01 | CB startup pack
 @group A
 @commands `grep -E "Error\|creativebrewing\|potion_area\|Tool Effects\|\[alcohol\]\|\[food values\]\|CE potions" logs/kubejs/startup.log \| head -40`
-@pass CB pack lists `creativeengineering/potions.js` ... `vinery/winemaker_trades.js`; `[alcohol] food values set on 44 of 44 drinks` (as before the move); `[food values] 12 effect swaps`; no `could not install dispenser handler`; no `global.trades missing`
+@pass CB pack lists `creativeengineering/potions.js` ... `vinery/winemaker_trades.js`; `[alcohol] food values set on 51 of 51 drinks` (as before the move); `[food values] 12 effect swaps`; no `could not install dispenser handler`; no `global.trades missing`
 @fails A moved startup file reads a pack top-level name at load (4.1 rule 3), or a renamed Java class (PotionBucketDispenser, DragonBreathBrewing, WinemakerTrades) is not in the CB jar
 @from batches/r1101/cs4_boot3.qb
 shell grep -E "Error|creativebrewing\]|potion_area|Tool Effects|\[alcohol\]|\[food values\]|CE potions|could not install|global.trades missing|jar-startup" logs/kubejs/startup.log | cut -c1-220 | head -40
 kjsreject could not install dispenser handler
 kjsreject global\.trades missing
-look CB pack lists its startup files; [alcohol] food values set on 44 of 44 drinks; [food values] 12 effect swaps
+look CB pack lists its startup files; [alcohol] food values set on 51 of 51 drinks; [food values] 12 effect swaps
 
 ## SQ-CBM-02 | CB-registered items, effect, potion
 @group A

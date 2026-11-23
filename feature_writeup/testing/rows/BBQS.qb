@@ -60,7 +60,7 @@ expect verb=inv via=\S+ slots=\d+ filled=0
 expect verb=pbot\.inv bot=c2b slot=\d+ item=barbequesdelight:raw_potato_skewer
 reject verb=pbot\.\S+ .*error=
 reject \[cdevtest\] .*done=0
-look first basin inv shows slot=0 item=veggiesdelight:sweet_potato*2 (else the Items NBT shape is wrong: BATCH-FAULT); after the use: well 0 empty, raw potato skewer in the inventory or main hand, stick gone (main now empty or the skewer), bacon in the off hand down by one (off now 1 farmersdelight:bacon). Hit x 0.75 is well 0 for facing=north (BlockSlot index = 1 - x)
+look first basin inv shows slot=0 item=veggiesdelight:sweet_potato*2 (else the Items NBT shape is wrong: BATCH-FAULT); after the use: well 0 empty, raw potato skewer in the inventory or main hand, stick gone (main now empty or the skewer), bacon in the off hand down by two (barbeques_delight.md 3.x table: potato x2 + bacon x2; off now empty). Hit x 0.75 is well 0 for facing=north (BlockSlot index = 1 - x)
 > clear c2b
 
 ## SQ-BBQS-03 | sneaking use with a stick on a well of 4 cabbage takes one cabbage, keeps the stick

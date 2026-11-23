@@ -414,9 +414,9 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @reviewed 2026-11-16
 @from batches/r1103/sA_2.qb
 > cdevtest rdetail golden_cooked_beef
-> cdevtest rdetail goldenfood:golden_cake
+> cdevtest rdetail shaped/golden_cake
 > cdevtest makes minecraft:golden_apple
-> cdevtest rdetail minecraft:golden_apple
+> cdevtest rdetail shaped/golden_apple
 sleep 2
 expect gold_nugget
 look golden beef = cooked beef + 8 gold nuggets; golden cake also nuggets; golden apple still 8 gold ingots

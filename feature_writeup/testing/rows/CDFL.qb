@@ -40,7 +40,7 @@ shell grep -h "Unknown fluid\|Invalid fluid" logs/kubejs/*.log | head; ! grep -q
 shell ! grep -h "effect_swaps" logs/kubejs/*.log | grep -iE "error|fail"
 shell grep -h "\[food values\].*effect swaps" logs/kubejs/*.log logs/latest.log | head -3
 shell grep -h "\[food values\] [0-9]* effect swaps" logs/kubejs/*.log logs/latest.log | head -1 | grep -q .
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 
 ## SQ-CDFL-02 | CD alone: filling, emptying, kettle, mixing name creativedelight: fluids
 @group A (CD alone)

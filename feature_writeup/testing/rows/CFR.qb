@@ -110,6 +110,11 @@ look the grass campfire at 91 -60 -32 (the SQ-SPF-81 fixture's setup) also out: 
 @fails `rainDouses` read from the wrong spec (Compat)
 @reviewed 2026-11-20
 @from batches/r1106spf/b1c.qb passed
+# BF-FIX judge-3 r1123cd: the row never set rainDouses = false (fresh srv config has true, campfire doused); it sets it, restarts, and restores true at its end
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire rainDouses false
+restart
+> forceload add 80 -48 100 -40
+sleep 2
 > setblock 90 -60 -44 minecraft:campfire[lit=true]
 > weather rain
 > cdevtest tickwarp 400
@@ -117,6 +122,8 @@ waitlog verb=tickwarp end=\S+ ticks=400 60
 > execute if block 90 -60 -44 minecraft:campfire[lit=true]
 expect Test passed
 > weather clear
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire rainDouses true
+restart
 
 ## SQ-CFR-07 | comfort near a campfire (default config)
 @group A

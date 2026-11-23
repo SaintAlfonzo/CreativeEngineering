@@ -269,10 +269,11 @@ shell grep -h "\[cans\] registered" logs/kubejs/startup.log | cut -c1-200
 > cdevtest makes creativedelight:canned_stuffed_bell_peppers
 > cdevtest rdetail creativedelight:shapeless/canned_stuffed_bell_peppers
 waitlog verb=rdetail text=creativedelight:shapeless/canned_stuffed_bell_peppers n=\d+ 30
-count verb=makes item=creativedelight:canned_[a-z_]+ n=1$ >= 21
-count verb=rdetail id=creativedelight:shapeless/canned_[a-z_]+ serializer=\S+ result=creativedelight:canned_[a-z_]+\*1 ingredients=\S*canned_goods:empty_can >= 21
+# judge-4 2026-11-23: the legendary and mythical roll medley cans are removed (owner ruling, removed.json), their makes lines read n=0: 19 feast cans
+count verb=makes item=creativedelight:canned_[a-z_]+ n=1$ >= 19
+count verb=rdetail id=creativedelight:shapeless/canned_[a-z_]+ serializer=\S+ result=creativedelight:canned_[a-z_]+\*1 ingredients=\S*canned_goods:empty_can >= 19
 reject verb=(makes|rdetail) .*done=0
-look 21 `verb=makes ... n=1` lines; each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 2026-11-12 pack log
+look 19 `verb=makes ... n=1` lines (the legendary and mythical roll medley cans were dropped by owner ruling, swaps/removed.json, plan_easy_fixes_1122.md: 21 -> 19); each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 2026-11-12 pack log
 
 ## SQ-FCK-10 | #fruitsdelight:pineapple_grows_on holds the farmland soils; pineapple places on all three
 @group A
@@ -400,12 +401,13 @@ sleep 3
 > pbot use G 1020 -61 1020 up
 > cdevtest state 1019 -61 1019
 > cdevtest state 1021 -61 1021
+# judge-4 2026-11-23: the centre is read third (about 80 ticks after the use) and a farmland random tick may drop it from 7 to 6 (r1123cd: 6): accept 6 or 7
 > cdevtest state 1020 -61 1020
 > cdevtest state 1018 -61 1018
 > cdevtest state 1022 -61 1020
 expect verb=state pos=1019,-61,1019 state="minecraft:farmland\[moisture=7\]"
 expect verb=state pos=1021,-61,1021 state="minecraft:farmland\[moisture=7\]"
-expect verb=state pos=1020,-61,1020 state="minecraft:farmland\[moisture=7\]"
+expect verb=state pos=1020,-61,1020 state="minecraft:farmland\[moisture=[67]\]"
 expect verb=state pos=1018,-61,1018 state="minecraft:farmland\[moisture=0\]"
 expect verb=state pos=1022,-61,1020 state="minecraft:farmland\[moisture=0\]"
 > cdevtest player G
