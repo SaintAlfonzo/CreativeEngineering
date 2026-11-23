@@ -3412,7 +3412,8 @@ Scone, Strawberry Scones, Adzuki Bun, Strange Eclair (were `dessert/pastry`), Ci
 Bread, Mulberry Bread, Glow Bread (were `dessert/other`) and the Hearth and Harvest Waffle (was `dessert/pancake`). By id
 (`MISC_BAKED` in the tool), ahead of the name rules. Gingerbread moves from `dessert/other` to `bread/loaf`
 (`FAMILY_OVERRIDE`) and bakes from gingerdough like a dough into bread ([oven.md](oven.md) 2.6 Gingerbread). No rule
-rows yet (3.1 shows `-`). A plain donut beside the cider donut stays open on the row (D15: needs art). The family tags
+rows yet (3.1 shows `-`). The Plain Donut (`creativedelight:plain_donut`, 2026-11-22, D15) and the seven fruit scones
+(`baking/baked-goods #40`) join it by id. The family tags
 (`#creativedelight:food_family/baked/misc`) change with the jar; no flavor lists a family today, so nothing else
 follows. The fruit x family matrix the tool also writes is in [fruit.md](fruit.md) 4.1 (TODO `fruit #4`).
 

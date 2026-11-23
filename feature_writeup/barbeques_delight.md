@@ -712,6 +712,8 @@ plan from a basin recipe to a craft by hand.
 - **Shulker mollusk merge undone** (owner, End Skewer uses the mollusk only): the 2026-11-02 merge (`dishes/ingredients #32`,
   [item_merges.md](item_merges.md) 2.14) is emptied for the mollusk and filet; Ender's knife drop and mollusk-to-filet cut are
   upstream's again; the stuffed shulker (pot and heatless) takes End's shulker meat, so every other recipe keeps End's meat.
+- **Combos dropped (owner, 2026-11-22, `skewers #1`):** Kebab Wrap, Kebab Sandwich and Bibimbap have no recipes and are
+  hidden (`removed_items.js`); they stay registered so saves keep them. The C8 text below is history.
 - **Combos** (C8): Kebab Wrap (shaped on a tortilla + assembly), Kebab Sandwich (shaped on whole bread + assembly; the long-roll
   sandwich family's bread, no separate bread-roll tag exists) and Bibimbap (heatless rice meal) from cooked BBQ skewers. No
   combine recipe, nothing stored, no skewer effects; `BBQSandwichItem` keeps only its own seasoning. Static values: Wrap

@@ -77,6 +77,14 @@ jars are covered and JEI shows the new times.
   only in the End. Elsewhere it sits in the pot and does not grow. Creative Compat `BotanyPotDimensionMixin` on
   `BotanyPotHelper.canCropGrow` (Botany Pots 9 has no dimension condition and no growth event; its Forge events only
   swap the looked-up crop or the drops).
+- **Rules of 2026-11-22 (owner R20 in [plan_owner_rows_1120.md](plan_owner_rows_1120.md), TODO `crops #59`):** vanilla
+  crimson and warped fungus and roots join `nether_only` and the Ender Crop (`endercrop:ender_seeds`) joins `end_only`
+  (gate rows in `botany_pot_crops.csv`; their soils were already Nether nylium and End stone). Not plantable: Botany
+  Pots' glow berry bush, hanging roots, vines, twisting and weeping vines (removed by id in `botany_pots.js`), and the
+  generated Mixed Seeds and Berry Good glow berry pips crops are gone (39 generated crops). The propelplant pot crop
+  gives 1 to 2 pearls and its cane back at 5% (was 25%), like the other seeds. No water plants are added. The
+  `botany_pots.js` change ships in the Creative Compat jar (its `kubejs/` folder) on the next Compat build. Test
+  SQ-BOT-08.
 
 ## 4. Limits and decisions
 

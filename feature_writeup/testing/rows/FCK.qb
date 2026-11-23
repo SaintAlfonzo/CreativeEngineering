@@ -926,26 +926,26 @@ expect part=numbers value=\S*getGrowthModifier=1\.2\b
 reject \[cdevtest\] .*done=0
 look the numbers lines; record the Fertile Soil soil id
 
-## SQ-BOT-06 | the 41 generated pot crops load, scaled x8 (colonies x8 of 1400), and the two dimension tags hold their seeds
+## SQ-BOT-06 | the 39 generated pot crops load, scaled x8 (colonies x8 of 1400), and the two dimension tags hold their seeds
 @group A
-@commands `/cdevtest recipes creativecompat:botanypots/crop/`; `/cdevtest rdetail` on broccoli seeds, the inky cap colony and Mixed Seeds; `/cdevtest tag item` on both dimension tags; `/cdevtest makes` on two seeds
-@pass 41 recipes; broccoli `getGrowthTicks=9600`, inky cap colony 11200; both tags list their seeds (nether: nether wart, propelplant, crimson and warped colonies; end: chorus fruit, chorusflame, chorus succulent); log has no recipe parse error for `creativecompat:botanypots`
+@commands `/cdevtest recipes creativecompat:botanypots/crop/`; `/cdevtest rdetail` on broccoli seeds and the inky cap colony; `/cdevtest tag item` on both dimension tags; `/cdevtest makes` on two seeds
+@pass 39 recipes (Mixed Seeds and glow berry pips have none since 2026-11-22, crops #59); broccoli `getGrowthTicks=9600`, inky cap colony 11200; both tags list their seeds (nether: nether wart, propelplant, crimson and warped colonies, crimson and warped fungus and roots; end: chorus fruit, chorusflame, chorus succulent, ender seeds); log has no recipe parse error for `creativecompat:botanypots`
 @fails n=0: the pack datapack folder not loaded or a mod_loaded condition false; growthTicks 1200: botany_pots.js ran before the datapack (load order) or `scaleRecipeInt` missing; a parse error names the bad JSON (rerun `python3 tools/gen_botany_crops.py --check`)
 @jars creativecommon creativecompat creativedevtools
 @from plan_owner_rows_1120.md G5 (farming/crops #36, R11)
-@reviewed 2026-11-21
+@reviewed 2026-11-22
 > cdevtest recipes creativecompat:botanypots/crop/
-expect verb=recipes text=creativecompat:botanypots/crop/ n=41\b
+expect verb=recipes text=creativecompat:botanypots/crop/ n=39\b
 > cdevtest rdetail creativecompat:botanypots/crop/broccoli_seeds
 expect part=numbers value=\S*getGrowthTicks=9600\b
 > cdevtest rdetail creativecompat:botanypots/crop/inky_cap_mushroom_colony
 expect part=numbers value=\S*getGrowthTicks=11200\b
 > cdevtest tag item creativecompat:botany_pots/nether_only
-expect verb=tag kind=item tag=creativecompat:botany_pots/nether_only n=4\b
+expect verb=tag kind=item tag=creativecompat:botany_pots/nether_only n=8\b
 > cdevtest tag item creativecompat:botany_pots/end_only
-expect verb=tag kind=item tag=creativecompat:botany_pots/end_only n=3\b
+expect verb=tag kind=item tag=creativecompat:botany_pots/end_only n=4\b
 shell grep -c "creativecompat:botanypots" logs/latest.log
-look the shell count is 0 (no parse or condition error names a generated crop); the rdetail line of Mixed Seeds (run it by hand: `> cdevtest rdetail creativecompat:botanypots/crop/mixed_seeds`) lists five drops at 0.2
+look the shell count is 0 (no parse or condition error names a generated crop)
 
 ## SQ-BOT-07 | Nether and End pot crops grow only in their dimension (BotanyPotDimensionMixin)
 @group B
@@ -959,15 +959,39 @@ look the shell count is 0 (no parse or condition error names a generated crop); 
 shell grep -c "BotanyPotDimensionMixin" logs/latest.log
 look no line says the mixin failed to apply; record the pot NBT keys for the growth time
 
-## CQ-BOT-01 | generated pot crops render and harvest: one seed, one produce, one colony, one End plant, the Mixed Seeds
+## CQ-BOT-01 | generated pot crops render and harvest: one seed, one produce, one colony, one End plant
 @group client
-@commands JEI uses of `veggiesdelight:broccoli_seeds`, `veggiesdelight:garlic_clove`, `fungidelight:morel_mushroom_colony`, `ends_delight:chorus_succulent`, `vintagedelight:mixed_seeds`, `vinery:red_grape_seeds`, `endersdelight:chorusflame` on the Botany Pots page; plant each in a pot on its soil and watch one growth cycle (creative, a pot near the player)
+@commands JEI uses of `veggiesdelight:broccoli_seeds`, `veggiesdelight:garlic_clove`, `fungidelight:morel_mushroom_colony`, `ends_delight:chorus_succulent`, `vinery:red_grape_seeds`, `endersdelight:chorusflame` on the Botany Pots page; plant each in a pot on its soil and watch one growth cycle (creative, a pot near the player)
 @pass each JEI page shows the soils (dirt or farmland; mushroom soils for the colony; end stone for the End plants) and the drops; the pot shows the growing plant, no purple-black missing model (Vinery grape bushes, cave carrot and chorusflame have no blockstate in mods/, look at them); harvest gives the listed drops
 @fails a missing model in the pot: wrong display block or property; no JEI page: recipe not loaded (SQ-BOT-06)
 @jars creativecompat
 @from plan_owner_rows_1120.md G5 (farming/crops #36, R11)
 @draft client row: the JEI and pot looks are judged by eye; no batch holds this row yet
 @reviewed 2026-11-21
+
+## SQ-BOT-08 | not pottable: glow berries, hanging roots, vines, Mixed Seeds; propelplant cane back at 0.05
+@group A
+@commands recipe probes on the five removed Botany Pots crops and the two dropped generated ones; rdetail of the propelplant pot crop
+@pass `botanypots:minecraft/crop/glow_berry_bush`, `hanging_roots`, `vines`, `twisting_vines`, `weeping_vines` are gone, and no `creativecompat:botanypots/crop/mixed_seeds` or `glow_berry_pips`; `creativecompat:botanypots/crop/propelplant_cane` drops propelpearl at 1.0 (1-2) and the cane at 0.05
+@fails `kubejs/data/creativecompat/kubejs/other/botany_pots.js` removal line; `botany_pot_crops.csv` rows and `gen_botany_crops.py` output
+@jars creativecommon creativecompat creativedevtools
+@from plan_owner_rows_1120.md R20 (crops #59)
+@reviewed 2026-11-22
+> cdevtest recipes botanypots:minecraft/crop/glow_berry_bush
+> cdevtest recipes botanypots:minecraft/crop/hanging_roots
+> cdevtest recipes botanypots:minecraft/crop/vines
+> cdevtest recipes botanypots:minecraft/crop/twisting_vines
+> cdevtest recipes botanypots:minecraft/crop/weeping_vines
+> cdevtest recipes creativecompat:botanypots/crop/mixed_seeds
+> cdevtest rdetail creativecompat:botanypots/crop/propelplant_cane
+waitlog verb=rdetail id=creativecompat:botanypots/crop/propelplant_cane 30
+expect verb=recipes text=botanypots:minecraft/crop/glow_berry_bush n=0\b
+expect verb=recipes text=botanypots:minecraft/crop/hanging_roots n=0\b
+expect verb=recipes text=botanypots:minecraft/crop/vines n=0\b
+expect verb=recipes text=botanypots:minecraft/crop/twisting_vines n=0\b
+expect verb=recipes text=botanypots:minecraft/crop/weeping_vines n=0\b
+expect verb=recipes text=creativecompat:botanypots/crop/mixed_seeds n=0\b
+look the propelplant rdetail lists propelpearl at 1.0 and the cane at 0.05
 
 ## SQ-FCB-09 | survival break of cooking pot, copper pot, kettle keeps the contents in the item; leftover bottle drops loose (break half)
 @group A

@@ -530,3 +530,144 @@ expect verb=rdetail id=\S+uncooked_waffle_hammering serializer=\S+ result=create
 expect verb=rdetail id=\S+uncooked_waffle_from_dough serializer=\S+ result=create_factory:uncooked_waffle
 expect verb=rdetail id=create_factory:uncooked_waffle serializer=
 reject verb=\S+ .*done=0
+
+@@section 7
+@@title Food wave 2026-11-22: new baked goods, cheesecakes, gingerbread block, pizza values and assemblies, vinegar, feasts, flavors, kebab combos ([plan_food_batch_1119.md](../plan_food_batch_1119.md) R25, R26; [plan_unblocked_batch_1121.md](../plan_unblocked_batch_1121.md); [plan_owner_rows_1120.md](../plan_owner_rows_1120.md) R19; [plan_meals_rolls_bbq.md](../plan_meals_rolls_bbq.md) assumptions; TODO `baking/baked-goods #2`, `#23`, `#30`, `#39`, `#40`, `#20`, `baking-types-and-bakeware #1`, `ingredients #47`, `dishes/meals #5`, `food/seasoning #3`, `skewers #1`, `pickles-and-ferments #17`, `dishes/ingredients #8`)
+@@date 2026-11-22
+@@jars creativecommon creativedelight
+@@sources development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/new_foods.js kubejs/data/creativedelight/kubejs/creativedelight/new_foods.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js kubejs/data/creativedelight/kubejs/creativedelight/baking.js kubejs/data/creativedelight/kubejs/creativedelight/pizza.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/pizza_values.js kubejs/data/creativedelight/kubejs/vintagedelight/jams.js kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js kubejs/data/creativedelight/kubejs/corn_delight/recipes.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/flavors.js kubejs/data/creativedelight/kubejs/barbequesdelight/recipes.js
+@@text
+@@text Needs the Creative Common and Creative Delight jars built 2026-11-22 (food wave: new dict keys, new items, cd_food.js
+@@text cheesecakeBake and muffinBake second fruit, transition items) and a restart. Group A.
+@@text
+@@table
+## SQ-FF-26 | New baked goods and kitchen items registered with their recipes
+@group A
+@commands reg probes for the 17 new items and the block; rdetail `plain_donut`, `blueberry_scone`, `orange_cranberry_muffin`, `carrot_muffin`, `oatmeal_raisin_cookie`, `baking_dish`, `pickled_garlic`, `boxed_raw_pasta`; tag `creativedelight:bakeware`
+@pass items exist; oven `creativedelight:baking/plain_donut` -> 2 (batter, cooking oil, salt, sugar, baking sheet); `baking/blueberry_scone` -> 1 (butter, 2 blueberries, sugar, batter); `baking/orange_cranberry_muffin` -> 4 and its paper assembly -> 6; `baking/carrot_muffin` -> 4; `baking/oatmeal_raisin_cookie` -> 12 (oat dough, 2 sweeteners, raw oats, a grape); shaped `baking_dish` from 5 glass; pickling `pickled_garlic` (5 garlic, salt); `boxed_raw_pasta` 9 <-> 1; `#creativedelight:bakeware` holds `#creativedelight:bakeware/baking_dish`
+@fails CD startup `creativedelight/new_foods.js` (items, block), data `creativedelight/new_foods.js` (recipes), `cd_food.js` muffinBake, `cd_transition_items.js` muffin rows, `creativedelight/tags.js` bakeware, Common item_dict keys
+> cdevtest reg item creativedelight:plain_donut
+> cdevtest reg item creativedelight:peach_scone
+> cdevtest reg item creativedelight:pumpkin_muffin
+> cdevtest reg item creativedelight:baking_dish
+> cdevtest reg block creativedelight:boxed_raw_pasta
+> cdevtest reg item kubejs:incomplete_orange_cranberry_muffin
+> cdevtest rdetail plain_donut
+> cdevtest rdetail blueberry_scone
+> cdevtest rdetail orange_cranberry_muffin
+> cdevtest rdetail carrot_muffin
+> cdevtest rdetail oatmeal_raisin_cookie
+> cdevtest rdetail baking_dish
+> cdevtest rdetail pickled_garlic
+> cdevtest rdetail boxed_raw_pasta
+> cdevtest tag item creativedelight:bakeware
+waitlog verb=tag kind=item tag=creativedelight:bakeware n= 30
+expect verb=reg kind=item regex=creativedelight:plain_donut n=1\b
+expect verb=reg kind=item regex=creativedelight:peach_scone n=1\b
+expect verb=reg kind=item regex=creativedelight:pumpkin_muffin n=1\b
+expect verb=reg kind=item regex=creativedelight:baking_dish n=1\b
+expect verb=reg kind=block regex=creativedelight:boxed_raw_pasta n=1\b
+expect verb=reg kind=item regex=kubejs:incomplete_orange_cranberry_muffin n=1\b
+expect verb=rdetail id=creativedelight:baking/plain_donut serializer=\S+ result=creativedelight:plain_donut\*2 ingredients=.*rusticdelight:batter
+expect verb=rdetail id=creativedelight:baking/blueberry_scone serializer=\S+ result=creativedelight:blueberry_scone\*1 ingredients=.*hearthandharvest:butter
+expect verb=rdetail id=creativedelight:baking/orange_cranberry_muffin serializer=\S+ result=creativedelight:orange_cranberry_muffin\*4
+expect verb=rdetail id=\S+orange_cranberry_muffin_sequenced_assembly serializer=\S+ result=creativedelight:orange_cranberry_muffin\*6
+expect verb=rdetail id=creativedelight:baking/carrot_muffin serializer=\S+ result=creativedelight:carrot_muffin\*4
+expect verb=rdetail id=creativedelight:baking/oatmeal_raisin_cookie serializer=\S+ result=creativedelight:oatmeal_raisin_cookie\*12 ingredients=.*vintagedelight:oat_dough
+expect verb=rdetail id=\S+baking_dish serializer=\S+ result=creativedelight:baking_dish\*1 ingredients=.*minecraft:glass
+expect verb=rdetail id=\S+pickled_garlic serializer=\S+ result=creativedelight:pickled_garlic
+expect verb=rdetail id=\S+boxed_raw_pasta serializer=\S+ result=creativedelight:boxed_raw_pasta\*1
+expect verb=rdetail id=\S+raw_pasta_from_boxed_raw_pasta serializer=\S+ result=farmersdelight:raw_pasta\*9
+expect verb=tag kind=item tag=creativedelight:bakeware n=\d+ ids=.*creativedelight:baking_dish
+reject verb=\S+ .*done=0
+
+## SQ-FF-27 | New foods' values; pizza slices at 0.75x; Golden Roll always edible
+@group A
+@commands food probes on the new foods, the five pizza slices and the Golden Roll and its slice
+@pass Plain Donut 4 / 0.5; scones 6 / 0.3; Orange Cranberry Muffin 5 / 0.4 with Regeneration 200 t and Shrinking 800 t; Lemon Poppy Muffin with Haste and Refreshing 200 t; veggie muffins 6 / 0.5; Oatmeal Raisin Cookie 3 / 0.2 fast; Pickled Garlic 4 / 0.5; cheese pizza slice 3 / 0.75, meat and tropical 4 / 0.7, vegan 4 / 0.47, Supreme 4 / 0.94; Golden Roll and slice always=true
+@fails CD startup `new_foods.js`, `pizza_values.js` (applied by `food_value_copies.js`), roll member `RollItems` foodAlways
+> cdevtest food creativedelight:plain_donut
+> cdevtest food creativedelight:orange_cranberry_muffin
+> cdevtest food creativedelight:lemon_poppy_muffin
+> cdevtest food creativedelight:oatmeal_raisin_cookie
+> cdevtest food vintagedelight:cheese_pizza_slice
+> cdevtest food vintagedelight:meat_pizza_slice
+> cdevtest food veggiesdelight:vegan_pizza_slice
+> cdevtest food brewinandchewin:pizza_slice
+> cdevtest food roll_delight:golden_roll_slice
+waitlog verb=food item=roll_delight:golden_roll_slice\S* 30
+expect verb=food item=creativedelight:plain_donut\S* food=true nutrition=4 modifier=0\.5
+expect verb=food item=creativedelight:orange_cranberry_muffin\S* food=true nutrition=5 modifier=0\.4.*effects=.*minecraft:regeneration.*fruitsdelight:shrinking
+expect verb=food item=creativedelight:lemon_poppy_muffin\S* food=true .*effects=.*minecraft:haste.*fruitsdelight:refreshing
+expect verb=food item=creativedelight:oatmeal_raisin_cookie\S* food=true nutrition=3
+expect verb=food item=vintagedelight:cheese_pizza_slice\S* food=true nutrition=3 modifier=0\.75
+expect verb=food item=vintagedelight:meat_pizza_slice\S* food=true nutrition=4 modifier=0\.7
+expect verb=food item=veggiesdelight:vegan_pizza_slice\S* food=true nutrition=4 modifier=0\.47
+expect verb=food item=brewinandchewin:pizza_slice\S* food=true nutrition=4 modifier=0\.94
+expect verb=food item=roll_delight:golden_roll_slice\S* food=true nutrition=10 modifier=0\.5 .*always=true
+reject verb=\S+ .*done=0
+
+## SQ-FF-28 | Cheesecakes take cheese or milk; gingerbread block; vinegar from apple jelly
+@group A
+@commands rdetail `syrup_cheesecake`, `gingerbread_block`, `vinegar_jar`
+@pass oven `creativedelight:baking/syrup_cheesecake` (pie crust, 3 syrup, a sweetener, a slot of cheese / cheese wedge / milk bottle / milk bucket); `gingerbread_block_from_gingerbread` (9 -> 1), `gingerbread_from_gingerbread_block` (1 -> 9), smoking `gingerbread_block_from_gingerdough_block`, oven `baking/gingerbread_block`; no `create_confectionery:gingerbread_block_recipe`; pickling `vinegar_from_apple_jam` (Apple Jelly + mushroom) beside `vinegar_from_apple_mash`
+@fails `cd_food.js` cheesecakeBake, `rusticdelight/recipes.js` CHEESECAKES, `creativedelight/baking.js` Gingerbread block, `vintagedelight/jams.js` Vinegar
+> cdevtest rdetail syrup_cheesecake
+> cdevtest rdetail gingerbread_block
+> cdevtest rdetail vinegar_jar
+waitlog verb=rdetail id=\S*vinegar\S* 30
+expect verb=rdetail id=creativedelight:baking/syrup_cheesecake serializer=\S+ result=rusticdelight:syrup_cheesecake\*1 ingredients=.*(milk|cheese)
+expect verb=rdetail id=\S+gingerbread_block_from_gingerbread serializer=\S+ result=create_confectionery:gingerbread_block\*1
+expect verb=rdetail id=\S+gingerbread_block_from_gingerdough_block serializer=\S+ result=create_confectionery:gingerbread_block
+expect verb=rdetail id=creativedelight:baking/gingerbread_block serializer=\S+ result=create_confectionery:gingerbread_block\*1
+reject verb=rdetail id=create_confectionery:gingerbread_block_recipe serializer=
+expect verb=rdetail id=\S+vinegar_from_apple_jam serializer=\S+ result=vintagedelight:vinegar_jar
+reject verb=\S+ .*done=0
+
+## SQ-FF-29 | Feast and pizza assemblies; kebab combos have no recipes
+@group A
+@commands rdetail `roast_chicken_block`, `honey_glazed_ham_block`, `popcorn_box`, `cheese_pizza`, `meat_pizza`, `tropical_pizza`, `kebab_wrap`, `kebab_sandwich`
+@pass a `*_sequenced_assembly` for each of the six on its base (bowl, bowl, paper, dough x3) and the upstream crafts kept; nothing makes `barbequesdelight:kebab_wrap` or `kebab_sandwich`
+@fails `farmersdelight/recipes.js` Feast assemblies, `corn_delight/recipes.js` Popcorn box, `creativedelight/pizza.js` Pizza assemblies, `cd_transition_items.js` feast rows, `barbequesdelight/recipes.js` Combos
+> cdevtest rdetail roast_chicken_block
+> cdevtest rdetail honey_glazed_ham_block
+> cdevtest rdetail popcorn_box
+> cdevtest rdetail cheese_pizza
+> cdevtest rdetail meat_pizza
+> cdevtest rdetail tropical_pizza
+> cdevtest makes barbequesdelight:kebab_wrap
+> cdevtest makes barbequesdelight:kebab_sandwich
+waitlog verb=makes item=barbequesdelight:kebab_sandwich n=\d+ 30
+expect verb=rdetail id=\S+roast_chicken_block_sequenced_assembly serializer=\S+ result=farmersdelight:roast_chicken_block
+expect verb=rdetail id=\S+honey_glazed_ham_block_sequenced_assembly serializer=\S+ result=farmersdelight:honey_glazed_ham_block
+expect verb=rdetail id=\S+popcorn_box_sequenced_assembly serializer=\S+ result=corn_delight:popcorn_box
+expect verb=rdetail id=\S+cheese_pizza_sequenced_assembly serializer=\S+ result=vintagedelight:cheese_pizza
+expect verb=rdetail id=\S+meat_pizza_sequenced_assembly serializer=\S+ result=vintagedelight:meat_pizza
+expect verb=rdetail id=\S+tropical_pizza_sequenced_assembly serializer=\S+ result=vintagedelight:tropical_pizza
+expect verb=makes item=barbequesdelight:kebab_wrap n=0
+expect verb=makes item=barbequesdelight:kebab_sandwich n=0
+reject verb=\S+ .*done=0
+
+## SQ-FF-30 | Sugar and ghost pepper pair foods; Ice flavor on cold drinks
+@group A
+@commands tag `creativedelight:flavorable/sugar`, `creativedelight:flavorable/ghost_pepper`, `creativedelight:flavorable/ice`
+@pass sugar and ghost pepper both hold the waffles, pancakes, sweet rolls and `veggiesdelight:beetroot_brownie`, not `beetroot_brownie_tray` or `rusticdelight:vegetable_pancake`; ghost pepper still holds popcorn; ice holds juices and sodas
+@fails CD startup `flavors.js` (sweetPairFamilies, ice), data `creativedelight/flavor_tags.js`, the dessert family tags
+> cdevtest tag item creativedelight:flavorable/sugar
+> cdevtest tag item creativedelight:flavorable/ghost_pepper
+> cdevtest tag item creativedelight:flavorable/ice
+waitlog verb=tag kind=item tag=creativedelight:flavorable/ice 30
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*create_factory:waffle
+expect verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*veggiesdelight:beetroot_brownie\b
+reject verb=tag kind=item tag=creativedelight:flavorable/sugar n=\d+ ids=.*(beetroot_brownie_tray|vegetable_pancake)
+expect verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper n=\d+ ids=.*corn_delight:popcorn.*
+expect verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper n=\d+ ids=.*rusticdelight:honey_pancake
+expect verb=tag kind=item tag=creativedelight:flavorable/ice n=[1-9]\d*
+reject verb=\S+ .*done=0
+
+## CQ-FF-05 | Tooltips and placeholder art of the new foods
+@group client
+@commands creative inventory search for the new items; hover a golden apple, a Golden Roll slice and bread
+@pass each new item shows its copied placeholder sprite (no purple-black missing texture); Boxed Raw Pasta places as a crate-bottom cube; "Can be eaten when full" under the name of the golden apple and the Golden Roll slice, not on bread
+@fails CD `food/AlwaysEdibleTooltip`, lang `tooltip.creativedelight.always_edible`, textures in `assets/creativedelight/textures/item/`
+@draft client look; the first client runner writes the steps

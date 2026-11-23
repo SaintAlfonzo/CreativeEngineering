@@ -152,7 +152,12 @@ Owner rulings R3 to R7, R20, R24.
   nutrition went); effects and kinds stay. Grilled gives no saturation and adds `[food] grilledFlavorSlots` (default 2)
   slots past `[food] maxFlavors` (default 2) (R20).
 - **Pairs** (`#26`): garlic + onion, Salt's Salted + pepper, sugar + ghost pepper: +1 saturation point together (5 in
-  all), shown as a tooltip line "A + B: +1 saturation" and in AppleSkin. Sugar has no foods yet, so its pair waits.
+  all), shown as a tooltip line "A + B: +1 saturation" and in AppleSkin. Sugar and ghost pepper both take the dessert
+  families waffle, pancake, roll and brownie (minus the placed Beetroot Brownie Tray and the Vegetable Pancake; owner
+  R26 2026-11-22, the agent's pick for review), so the pair has foods.
+- **Ice** (`#3` leftovers, R26): Neapolitan's Ice Cubes (`#forge:ice_cubes`) as the Ice flavor on `drink/juice` and
+  `drink/soda`; +2 saturation like every flavor, no overlay icon yet (art list). Dill, cream and onion and placeable
+  popcorn variants are still open on the row. Test SQ-FF-30.
 - **Powders** (`#28`): Onion Powder, Garlic Powder, Ghost Pepper Powder (`creativedelight:*_powder`), 2 from one crop by
   the pack's food grinding (crushing wheels, millstone, mortar). Onion and garlic powder put on the onion and garlic
   flavors (the whole crops still do); ghost pepper powder is the new Ghost Pepper flavor (popcorn for now). Art:

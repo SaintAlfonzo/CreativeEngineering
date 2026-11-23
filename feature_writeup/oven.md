@@ -189,6 +189,7 @@ One iron plate, hammered into each shape in turn with the Engineer's Hammer (`R.
 | `creativedelight:muffin_tin` | baking sheet | muffins (plated on paper) |
 | `creativedelight:pie_tin` | muffin tin | pies |
 | `creativedelight:cake_pan` | pie tin | cakes, cheesecake, cake base |
+| `creativedelight:baking_dish` | 5 glass, bowl shape (not hammered; `baking/baked-goods #30`) | `F.ware.dish`; no recipe uses it yet (lasagna, `#21`, later); placeholder cake pan art |
 
 Each step is two recipes: `farmersdelight:cutting` with the hammer as the tool (`farmersdelightcutting/<item>_hammering`;
 put the piece on a cutting board, use the hammer on it, 1 durability), and a shapeless craft, hammer + piece

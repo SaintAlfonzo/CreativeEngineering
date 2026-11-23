@@ -871,9 +871,16 @@ same shape, strength and sound; placed unlit (light 0), lit by hand with flint a
 (used up) to light 15, the lantern's. Water puts it out and an unlit waterlogged lamp cannot be lit. Recipe 8 iron nuggets
 around a Whale Oil (`fats.js`, behind `whaleOil`); `#minecraft:mineable/pickaxe`; drops itself. Model parents
 `template_lantern` / `template_hanging_lantern` (cutout) on a copy of the vanilla lantern texture (block, animated, and
-item); the recolor waits for an owner palette (owner, 2026-11-22). Not built (row text, owner to confirm): the oil tank
-(full when crafted), steady burn and refill with whale oil, burning out, and config values for light, burn rate and
-tank size. Tests SQ-FO-17, CQ-FO-63.
+item); the recolor waits for an owner palette (owner, 2026-11-22).
+
+Oil tank (`dairy-fats-and-batter #3`, owner values 2026-11-22, F3; CD `fats/WhaleOilLampBlockEntity`, `WhaleOilLampItem`,
+config `[whale_oil_lamp]` in `creativedelight-common.toml`, read live): `tankMb` 1000, a crafted lamp (no
+`BlockEntityTag`) is full; while lit it burns `burnMb` 1 every `burnTicks` 24 and goes out (unlit) at 0; an empty lamp
+cannot be lit. Refill by hand: a Whale Oil bottle adds `bottleMb` 250 when that much fits (the glass bottle comes back);
+any fluid container item holding the whale oil fluid gives up to `bucketMb` 1000 (the pack has no whale oil bucket item:
+the fluid is `noBucket`). Broken, it keeps its oil (`copy_nbt` Oil -> `BlockEntityTag.Oil` in the loot table); the
+item tooltip reads "Oil: N / 1000 mB". Light is not configurable (block light is fixed per state at registration).
+Tests SQ-FO-17, SQ-FO-18, CQ-FO-63.
 
 ## 4. Limits and decisions
 

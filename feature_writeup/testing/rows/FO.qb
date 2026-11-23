@@ -1108,3 +1108,26 @@ reject verb=\S+ .*done=0
 @pass both look like a vanilla lantern (texture copied as-is, the recolor waits for an owner palette); placed: light 0 from the lamp; after lighting: block light 15 at the lamp like a lantern, flint and steel loses 1 durability, the fire charge is used (kept in creative); waterlogging a lit lamp turns its light off and it cannot be lit while waterlogged; the pickaxe drops the lamp
 @fails `WhaleOilLampBlock` (LIT state, `use`, `updateShape`), `WhaleOilLamp` light level, models `creativedelight:block/whale_oil_lamp(_hanging)` (`render_type` cutout)
 @draft client look; the first client runner writes the steps
+
+## SQ-FO-18 | Whale Oil Lamp oil tank: block entity, loot keeps the oil, config section
+@group A
+@commands reg probe of the block entity type `creativedelight:whale_oil_lamp`; loot table probe of `creativedelight:blocks/whale_oil_lamp`; grep the config file for `[whale_oil_lamp]`
+@pass the block entity type exists; the loot entry has a `copy_nbt` from the block entity `Oil` to `BlockEntityTag.Oil`; `config/creativedelight-common.toml` has `[whale_oil_lamp]` with tankMb 1000, burnTicks 24, burnMb 1, bottleMb 250, bucketMb 1000
+@fails CD `fats/WhaleOilLamp` (BLOCK_ENTITY), `fats/WhaleOilLampBlockEntity`, loot table `data/creativedelight/loot_tables/blocks/whale_oil_lamp.json`, `CDConfig.Lamp`
+@jars creativecommon creativedelight
+@from plan_unblocked_batch_1121.md R15 (dairy-fats-and-batter #3)
+@draft the block entity registry probe verb and the loot JSON probe are fixed at the first run
+@reviewed 2026-11-22
+shell grep -A6 "^\[whale_oil_lamp\]" config/creativedelight-common.toml
+shell unzip -p mods/creativedelight-*.jar data/creativedelight/loot_tables/blocks/whale_oil_lamp.json
+look the config block lists the five values; the loot JSON has the copy_nbt Oil -> BlockEntityTag.Oil
+
+## CQ-FO-64 | Whale Oil Lamp burns its oil, goes out, refills, keeps its oil when broken
+@group client
+@commands creative and survival; craft a lamp and hover it; place and light it, set `burnTicks` to 1 and `tankMb` to 100 in the config to watch it run out; refill with a Whale Oil bottle; break it with oil left and hover the dropped item; try a second bottle on a full lamp
+@pass a crafted lamp reads "Oil: 1000 / 1000 mB"; lit, it goes out (light 0) when the oil reaches 0 and flint and steel then does nothing; a bottle adds 250 mB (glass bottle back, not in creative) and is refused when it does not fit; the broken lamp's item shows the oil it had and places with it
+@fails `WhaleOilLampBlock.use` / `refill`, `WhaleOilLampBlockEntity.serverTick`, `WhaleOilLampItem` tooltip, lang `tooltip.creativedelight.whale_oil_lamp.oil`
+@jars creativecommon creativedelight
+@from plan_unblocked_batch_1121.md R15 (dairy-fats-and-batter #3)
+@draft client look; the first client runner writes the steps
+@reviewed 2026-11-22
