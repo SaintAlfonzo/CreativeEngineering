@@ -731,3 +731,41 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass one short tick on the bar at each milestone of the window; reached ones gray like the `<`, later ones purple like the `>`; the purple highest-diversity mark stays taller than the ticks; labels under the bar unchanged
 @fails `DietLogPages.ProgressPage.render` tick loop (`ARROW_PAST`, `ARROW_FUTURE`)
 @draft written with the build 2026-11-21; owner to confirm which arrows the colors follow (bar glyphs, not the page-turn buttons)
+
+@@section 6
+@@title RPI owner notes 2026-11-22: gate line, Ladder page, Milestones columns, book tooltips, whole-number milestones ([raspberry_pie.md](../raspberry_pie.md) 12.10, 12.11; TODO `food-tuning #59`, `#60`)
+
+## CQ-RPI-69 | gate warning on one line (food-tuning #59)
+@group client
+@commands New world, eat fewer than 5 different foods, open the Diet Log on the Overview page
+@pass "N more unique foods to activate diet" is one line inside the page; "Current Food Diversity" keeps its size; no second warning line
+@fails `DiversityPageMixin` (min_warning1 redirect, addChild ordinal 4, gate fit scale)
+@draft written with the build 2026-11-22
+
+## CQ-RPI-70 | Ladder page lowered (food-tuning #59)
+@group client
+@commands Diet Log, Ladder page, at a diversity whose window holds a milestone with three bonuses (50: toughness, knockback and a heart or unlock)
+@pass the three stacked icons sit below the "Highest" line, none overlap it; key and gate text below the bar, inside the page
+@fails `DietLogPages.ProgressPage` `BAR_DY` / `LEGEND_DY`
+@draft written with the build 2026-11-22
+
+## CQ-RPI-71 | Milestones columns (food-tuning #59)
+@group client
+@commands Diet Log, flip through every Milestones page
+@pass icon at the left, the milestone value left aligned after it, the bonus text left aligned at one column on every page, after the widest value with a gap
+@fails `DietLogPages.ListPage` (`numX`, `textX`, `numWidth`)
+@draft written with the build 2026-11-22
+
+## CQ-RPI-72 | Diet Log and Food Dictionary tooltips (food-tuning #59)
+@group client
+@commands Hover the Diet Log, the Food Dictionary and the Liquid Diet Log in the inventory
+@pass gray line under the name: "Your recent meals, food diversity and diet ladder.", "Every food you have ever eaten.", and the Liquid Diet Log's own line; the mod name line appears once
+@fails `FoodTooltips.bookLine`, lang `solraspberrypie.tooltip.book.*`
+@draft written with the build 2026-11-22
+
+## SQ-RPI-16 | whole-number milestones (food-tuning #60)
+@group server
+@commands New world; read `serverconfig/solraspberrypie/ladder.json` and the start line
+@pass every threshold is a whole number; milestones that differed before still differ (18 and 19, 26 and 27, 49 and 50); start line about 81 rungs, 5 slots, 37 pool effects, no new warning
+@fails `tools/gen_rp_ladder.py` `spread`, ladder not regenerated, world seeded from an old copy
+@draft written with the build 2026-11-22

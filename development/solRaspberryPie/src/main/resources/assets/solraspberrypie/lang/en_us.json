@@ -3,6 +3,8 @@
   "item.solraspberrypie.liquid_diet_log.tooltip": "Every drink you have had. Drinks do not count toward food diversity.",
   "solraspberrypie.override.item.solapplepie.food_book": "Diet Log",
   "solraspberrypie.override.item.solcarrot.food_book": "Food Dictionary",
+  "solraspberrypie.tooltip.book.solapplepie": "Your recent meals, food diversity and diet ladder.",
+  "solraspberrypie.tooltip.book.solcarrot": "Every food you have ever eaten.",
   "solraspberrypie.override.key.solapplepie.open_food_book": "Open Diet Log",
   "item.solraspberrypie.diet_marker": "Diet Effect Marker",
 

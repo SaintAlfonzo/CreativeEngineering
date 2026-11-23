@@ -126,17 +126,21 @@
 - **New:** The Diet Log's progress bar shows the last milestone reached and the next 4, evenly spaced, with an icon for each bonus and a tick on the bar for each milestone: gray once reached, purple before.
 - **New:** Diet Log icons: effect unlocks alternate a lock and the effect until unlocked, then show the effect grayed in a colored frame; permanent buffs alternate a diamond shard and the effect; effect slots have a metal frame. The key lists knockback resistance.
 - **New:** The Diet Log's Milestones list active bonuses in green and strike through reached effect unlocks, except their milestone number.
+- **Changed:** Diet ladder milestones are whole numbers, no two the same [one decimal]. Applies to new worlds.
+- **Changed:** The Diet Log's Milestones list starts each bonus's text at the same column, after the widest milestone number.
+- **Fixed:** Three bonus icons stacked on the Diet Log's progress bar overlapped the highest diversity line.
 - **New:** The Diet Log's diversity icon is the food you have eaten, not a drink, closest in diversity to the average of your recent meals; before that, seeds, moss, rotten flesh, a spider eye or a dandelion leaf.
 - **New:** Diversity is shown with two decimals, rounded down, in the books, the Diet Bonuses screen and tooltips.
 - **New:** The mouse wheel flips pages in the Diet Log and the Food Dictionary.
 - **New:** The Diet Log is drawn at 140% size (smaller on small windows) and 25% wider; its text and icons are drawn at 85% so they stay on the page. The book size, its width and each page's position and size are client settings.
 - **New:** Liquid Diet Log, a book (book + any drink) listing every drink you have had. No bonuses. Pauses the game in single player.
+- **New:** The Diet Log and the Food Dictionary have a one-line description in their tooltips.
 - **New:** New players start with a Diet Log and a Liquid Diet Log.
 - **New:** Food tooltips show the food's diversity, and what it contributes while it counts toward your diet: "Diversity: 1.40 (contributes 0.85)".
 - **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button. It is crafted from a book and any food that is not a drink [book and potato].
 - **Changed:** Drinks, potions and milk no longer count toward food diversity or push foods out of your diet.
 - **Changed:** Dying ages every recent food out of your diet and resets the foods-eaten count; bonuses return as you eat [the diet was cleared].
-- **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. The books show "N more unique foods to activate diet".
+- **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. The books show "N more unique foods to activate diet" on one line.
 - **Changed:** Food tooltips show hunger and saturation at the top, on one row (client setting: saturation on its own line), then the diversity, then the meal word ("Hearty Meal") [a second shank row under the name, hunger and saturation at the bottom].
 - **Removed:** The Spice of Life bonus and food history pages, and the separate "Food Diversity" tooltip line.
 - **Changed:** Food diversity follows food tiers: dragon dishes up to 9.4, gilded food 4.6 to 6.7, feasts up to 5.0, golden food 3.5 to 4.7, other filling food up to 3.2, mid-sized food up to 2.2, light snacks up to 1.2 [enchanted golden apple 10, golden cans under 1].

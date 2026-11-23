@@ -63,6 +63,55 @@ def rnd(v, decimals):
 	return int(r) if r == int(r) else r
 
 
+def spread(raw, decimals):
+	"""Rounded thresholds that keep distinct values distinct: each distinct raw value (within 1e-6) gets a step of
+	10^-decimals, strictly increasing in raw order, at the least total distance from the raw values (the plain rounding
+	wherever it does not merge two values; a merged pair moves one of them to the nearest free step)."""
+	vals = []
+	for v in sorted(raw):
+		if not vals or v - vals[-1] > 1e-6:
+			vals.append(v)
+	scale = 10 ** decimals
+	lo = math.floor(vals[0] * scale) - len(vals)
+	hi = math.ceil(vals[-1] * scale) + len(vals)
+	steps = range(lo, hi + 1)
+	inf = float('inf')
+	# best[k]: least cost with the current value at step lo + k; prev links for the walk back.
+	# A tie goes to the higher step (half up), by a bias far below any real distance.
+	def cost(v, s):
+		return abs(v - s / scale) - 1e-9 * s / scale
+
+	best = [cost(vals[0], s) for s in steps]
+	links = []
+	for v in vals[1:]:
+		cur, link = [inf] * len(best), [-1] * len(best)
+		run, arg = inf, -1
+		for k in range(len(best)):
+			if k > 0 and best[k - 1] < run:
+				run, arg = best[k - 1], k - 1
+			if arg >= 0:
+				cur[k] = run + cost(v, steps[k])
+				link[k] = arg
+		links.append(link)
+		best = cur
+	k = min(range(len(best)), key=lambda i: (best[i], i))
+	out = [k]
+	for link in reversed(links):
+		k = link[k]
+		out.append(k)
+	out.reverse()
+	mapped = {}
+	for v, k in zip(vals, out):
+		mapped[v] = rnd(steps[k] / scale, decimals)
+
+	def at(v):
+		for u in vals:
+			if abs(u - v) <= 1e-6:
+				return mapped[u]
+		raise KeyError(v)
+	return at
+
+
 def read_rows():
 	with open(TABLE, newline='', encoding='utf-8') as f:
 		rows = list(csv.DictReader(f))
@@ -100,7 +149,7 @@ def build():
 		if 'count' in span and span['count'] != len(positions):
 			sys.exit(f'{TABLE.name}: {name} has {len(positions)} positions, {CONFIG.name} expects {span["count"]}')
 		at = falling(len(positions), float(span['from']), float(span['to']), ratio)
-		ladders[name] = (sub, {p: rnd(at[p - 1], dec) for p in positions})
+		ladders[name] = (sub, {p: at[p - 1] for p in positions})
 
 	unlocks, u_at = ladders['unlock']
 	perms, p_at = ladders['permanent']
@@ -117,15 +166,15 @@ def build():
 
 	h = cfg['hearts']
 	for k in range(1, h['count'] + 1):
-		add(rnd(h['top'] * k / (h['count'] + 1), dec), {'type': 'health', 'amount': h['amount']})
+		add(h['top'] * k / (h['count'] + 1), {'type': 'health', 'amount': h['amount']})
 	p = cfg['pairs']
 	for frac in p['fractions']:
-		t = rnd(float(Fraction(frac)) * p['top'], dec)
+		t = float(Fraction(frac)) * p['top']
 		add(t, {'type': 'attribute', 'attribute': 'minecraft:generic.armor_toughness', 'amount': p['toughness']})
 		add(t, {'type': 'attribute', 'attribute': 'minecraft:generic.knockback_resistance', 'amount': p['knockback']})
 	sl = cfg['slots']
 	for k in range(sl['count']):
-		add(rnd(sl['first'] + k * (sl['top'] - sl['first']) / sl['count'], dec), {'type': 'slot'})
+		add(sl['first'] + k * (sl['top'] - sl['first']) / sl['count'], {'type': 'slot'})
 
 	for r in unlocks:
 		if r['status'] != 'built':
@@ -156,7 +205,12 @@ def build():
 			rung['tagline'] = key
 		add(p_at[r['position']], rung)
 
-	rungs.sort(key=lambda x: (x[0], x[1]))
+	# Rounded last, so two milestones that differ never share a value.
+	# Reserved positions take part, so filling one later moves nothing.
+	at = spread([t for t, _, _ in rungs] + list(u_at.values()) + list(p_at.values()), dec)
+	rungs = sorted(((at(t), o, r) for t, o, r in rungs), key=lambda x: (x[0], x[1]))
+	u_at = {k: at(v) for k, v in u_at.items()}
+	p_at = {k: at(v) for k, v in p_at.items()}
 	pool_list = []
 	for eff, cap in pool.items():
 		e = {'effect': eff, 'max_level': cap}

@@ -389,7 +389,8 @@ public final class DietLogPages {
 	}
 
 	private static final class ProgressPage extends UIElement {
-		private static final int BAR_DY = 66, LEGEND_DY = 86;
+		/** Bar and key low enough that three stacked icons clear the highest diversity line. */
+		private static final int BAR_DY = 72, LEGEND_DY = 92;
 		private final Layout layout;
 		private final Window window;
 		private final List<Rung> shown = new ArrayList<>();
@@ -506,6 +507,9 @@ public final class DietLogPages {
 			layout.begin(frame);
 			int tx = left(frame);
 			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.milestones"), tx, frame.y + 4, 0x000000);
+			// Columns: icon and value left aligned, a spacer, then the text left aligned at the
+			// widest value of the whole ladder, so every Milestones page lines up.
+			int numX = tx + 1 + ICON + 3, textX = numX + numWidth() + 6;
 			int y = frame.y + 18;
 			for (Rung r : rungs) {
 				boolean got = reached(r);
@@ -514,15 +518,21 @@ public final class DietLogPages {
 				// (plan_owner_notes_1119.md ruling 6). Every other row: black reached, gray not.
 				boolean struck = r.kind == Rung.Kind.UNLOCK && got;
 				boolean dark = struck ? r.threshold <= ClientState.state.diversity : got;
-				String text = fontRenderer.plainSubstrByWidth(describe(r).getString(), right(frame) - (tx + 34));
-				fontRenderer.draw(pose, Icons.num(r.threshold), tx + 14, y + 1, dark ? 0x1E6B2A : 0x777777);
+				String text = fontRenderer.plainSubstrByWidth(describe(r).getString(), right(frame) - textX);
+				fontRenderer.draw(pose, Icons.num(r.threshold), numX, y + 1, dark ? 0x1E6B2A : 0x777777);
 				// Active buffs (reached rungs other than one-time unlocks) in green (owner notes, round 3).
 				int textColor = !dark ? 0x777777 : r.kind != Rung.Kind.UNLOCK ? 0x1E6B2A : 0x000000;
-				fontRenderer.draw(pose, styled(text, struck), tx + 34, y + 1, textColor);
+				fontRenderer.draw(pose, styled(text, struck), textX, y + 1, textColor);
 				y += 12;
 			}
 			Layout.end();
 			super.render(pose);
+		}
+
+		private static int numWidth() {
+			int w = 0;
+			for (Rung r : ClientState.ladder.rungs) w = Math.max(w, fontRenderer.width(Icons.num(r.threshold)));
+			return w;
 		}
 	}
 

@@ -17,8 +17,8 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=efc63a19a173 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 51 open TODO rows (Planned 23, Testing 28), 4 Complete.
+<!-- generated:status_index begin open_work sha1=9843abdedec0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 54 open TODO rows (Planned 24, Testing 30), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -44,6 +44,7 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food-tuning #56` | Planned | S C | Display names: Astringent -> Steady, Poison Resistance -> Poison Immunity, Fire Resistance -> Fire Immunity |
 | `food-tuning #57` | Planned | S C | Emptiness becomes a sub-effect of Patrol Nullifier and Phantom Bane |
 | `food-tuning #58` | Planned | S C | Harmony: a new source (not adzuki, not the diet ladder), e.g. a rare passive mob; applies Emptiness and hostile mob flee |
+| `food-tuning #61` | Planned | C | Bug: food tooltips (inventory and food log) show an empty frame, too small for one character; no log error; cause not found |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
 | `food-tuning #2` | Testing | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
 | `food-tuning #3` | Testing | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
@@ -65,6 +66,8 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food-tuning #25` | Testing | S P | Effect unlocks (and their messages) wait until the unique-food gate first opens |
 | `food-tuning #26` | Testing | C | Diet Log diversity icon: eaten non-drink food closest to the window's average meal value (newest on a tie); else seeds, moss, rotten flesh, spider eye or dandelion leaf |
 | `food-tuning #28` | Testing | C | Food tooltip line Diversity: X (contributes Y); diversity printed with two decimals, rounded down, everywhere |
+| `food-tuning #59` | Testing | C | Diet Log polish: gate warning on one line, Ladder page bar and key lower (stacked icons clear the Highest line), Milestones text column after the widest value, Diet Log and Food Dictionary tooltip lines |
+| `food-tuning #60` | Testing | S C | Pack ladder milestones are whole numbers, distinct values kept distinct (gen_rp_ladder.py decimals 0, least-distance spread) |
 | `food/types-and-tuning #21` | Testing | S C P T | Spice of Life selectable unlock bonus |
 | `food/types-and-tuning #29` | Testing | C | Raspberry Pie item tooltip: "Doesn't run programs" |
 | `food/types-and-tuning #30` | Testing | S | Raspberry Pie: player reset command |
@@ -1044,11 +1047,17 @@ effect: sub-ladder, position, group, effect id, level, toggle, tagline text, `bu
 (`kubejs/assets/solraspberrypie/lang/en_us.json`, keys `solraspberrypie.tagline.<namespace>.<effect>.<level>`); a flat rung
 takes the tagline of the unlock row with its effect and level. The jar's default ladder is untouched.
 
-- **Shape.** 10 hearts (+1 each, 20 at the top) at 100/11 steps (9.1 to 90.9); armor toughness +1 with knockback
-  resistance +0.1 at 16.7, 50, 83.3; no movement speed. Permanent (flat) effects 25 to 100 and unlockables 2.5 to 97.5 with
+- **Whole-number milestones** (owner, 2026-11-22). `rp_ladder.json` `decimals` 0: every threshold is computed
+  unrounded, then each distinct value gets a whole number, strictly increasing, at the least total distance from the
+  unrounded values (`spread` in the generator; ties round half up). Values that only differ in the decimals are kept
+  apart, not merged: where two would round to the same number, one moves to the nearest free number (18.1 and 18.2 are 18 and 19).
+  Reserved positions take part, so filling one later moves nothing. Values that were already equal (a pair, a group,
+  the 2.5 slot and unlock) stay equal. Existing worlds keep their copy of the old ladder.
+- **Shape.** 10 hearts (+1 each, 20 at the top) at 100/11 steps (9 to 91); armor toughness +1 with knockback
+  resistance +0.1 at 17, 50, 83; no movement speed. Permanent (flat) effects 25 to 100 and unlockables 2.5 to 97.5 with
   the D10 falling density (positions in plan_food_diversity_1121.md section 7). A grouped heading (Brightening, Immunity,
   Dig, Water, Lava, Mobs, Spider, Eating) is one position with several unlocks. Five effect slots evenly spaced from the
-  first unlock: 2.5, 22, 41.5, 61, 80.5 (agent default; count and start in `rp_ladder.json`). Start line on a pack server:
+  first unlock: 3, 22, 42, 61, 80 (agent default; count and start in `rp_ladder.json`). Start line on a pack server:
   about `Diet ladder: 81 rungs, 5 slots, 37 pool effects`. Stimulation was dropped from position 21 (owner, 2026-11-21: section 4 keeps it unslottable); no vanilla positive effect was left to take its place (all slottable ones are on the ladder, the rest are refused by section 4), so Clarity holds the position alone.
 - **Toggles** (defaults ruled by the owner, 2026-11-21). Flat: Night Vision, Phantom Bane, Double Jump on; Invisibility off. Pool:
   Night Vision and Steady (`fruitsdelight:astringent`) on; Glowing, Slow Falling, Magnet off. Phantom Bane is a toggle when slotted too
@@ -1058,7 +1067,25 @@ takes the tagline of the unlock row with its effect and level. The jar's default
 - **Ladder bar ticks.** The Diet Log's Ladder bar draws a tick at each milestone of its window: the bar's `<` color
   (gray) once reached, its `>` color (purple) before; shorter than the highest-diversity mark.
 - Headless: `tools/test_rp_ladder.sh` parses the generated file on vanilla registries (modded entries skipped in one
-  line, hearts, pairs, slots, toggles, every tagline key has its text) and runs `gen_rp_ladder.py --check`.
+  line, hearts, pairs, slots within 1 of their spacing and whole, every threshold whole, toggles, every tagline key has
+  its text) and runs `gen_rp_ladder.py --check`.
+
+### 12.11 Owner notes 2026-11-22 (built 2026-11-22)
+
+- **Gate on one line.** The Overview page's two warning lines ("N more unique foods" / "to activate diet", or Apple
+  Pie's "Need to eat N more times" / "to activate benefits" without the unique gate) are one label: the first
+  `Localization` call returns both texts joined by a space and the second label's `addChild` (ordinal 4) is dropped
+  (`DiversityPageMixin`). The gate label gets its own fit scale (at most the shared one), so its length does not shrink
+  "Current Food Diversity".
+- **Ladder page lower.** The bar sits at 72 and the key at 92 book pixels from the page top (were 66 and 86), so three
+  icons stacked on one milestone clear the "Highest" line; the gate text under the key moves with it.
+- **Milestones columns.** Icon at the left, the value left aligned 3 px after it, then the text left aligned at one
+  column for the whole ladder: after the widest milestone value plus 6 px.
+- **Book tooltips.** A gray line under the name: Diet Log "Your recent meals, food diversity and diet ladder.", Food
+  Dictionary "Every food you have ever eaten." (`FoodTooltips.bookLine`, ItemTooltipEvent; lang
+  `solraspberrypie.tooltip.book.<namespace>`). The Liquid Diet Log keeps its own line.
+- **Open: empty food tooltips.** The owner sees an empty tooltip frame, too small for one character, when hovering a
+  food in the inventory and in the food log. No exception in the logs. Not reproduced or fixed yet (TODO row).
 
 ## History
 

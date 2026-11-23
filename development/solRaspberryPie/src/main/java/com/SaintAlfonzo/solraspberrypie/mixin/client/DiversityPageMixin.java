@@ -12,6 +12,7 @@ import com.tarinoita.solsweetpotato.client.gui.elements.UIStack;
 import com.tarinoita.solsweetpotato.lib.Localization;
 import net.minecraft.client.resources.language.I18n;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
@@ -30,7 +31,8 @@ import java.util.List;
  * the diversity value becomes a food matching the diversity ({@link DietLogPages#diversityIcon}).
  * <p>
  * plan_diet_books_r2.md A3, A9: the diversity value printed with two decimals rounded down; "Current Food Diversity"
- * and the gate lines drawn at the largest text scale (at most 0.85) that fits the page, each on its own line.
+ * drawn at the largest text scale (at most 0.85) that fits the page. The gate's two lines
+ * are one line ("N more unique foods to activate diet"), fitted on its own so it does not shrink the other labels.
  */
 @Mixin(value = DiversityPage.class, remap = false)
 public abstract class DiversityPageMixin {
@@ -40,23 +42,22 @@ public abstract class DiversityPageMixin {
 			target = "Lcom/tarinoita/solsweetpotato/lib/Localization;localized(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;",
 			ordinal = 2))
 	private String solrp$uniqueWording(String domain, String path, Object[] args) {
-		if ("food_book.stats.min_warning1".equals(path) && ClientState.state != null && ClientState.state.uniqueGate && args.length > 0) {
+		if (!"food_book.stats.min_warning1".equals(path)) return Localization.localized(domain, path, args);
+		String text;
+		if (ClientState.state != null && ClientState.state.uniqueGate && args.length > 0) {
 			boolean one = args[0] instanceof Number n && n.intValue() == 1;
-			return I18n.get(one ? "solraspberrypie.dietlog.min_unique_one" : "solraspberrypie.dietlog.min_unique", args[0]);
+			text = I18n.get(one ? "solraspberrypie.dietlog.min_unique_one" : "solraspberrypie.dietlog.min_unique", args[0])
+					+ " " + I18n.get("solraspberrypie.dietlog.min_unique2");
+		} else {
+			text = Localization.localized(domain, path, args) + " " + Localization.localized(domain, "food_book.stats.min_warning2", args);
 		}
-		return Localization.localized(domain, path, args);
+		solrp$gate = text;
+		return text;
 	}
 
-	// ordinal 3 = the min_warning2 call (the second line).
-	@Redirect(method = "<init>", at = @At(value = "INVOKE",
-			target = "Lcom/tarinoita/solsweetpotato/lib/Localization;localized(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;",
-			ordinal = 3))
-	private String solrp$uniqueWording2(String domain, String path, Object[] args) {
-		if ("food_book.stats.min_warning2".equals(path) && ClientState.state != null && ClientState.state.uniqueGate) {
-			return I18n.get("solraspberrypie.dietlog.min_unique2");
-		}
-		return Localization.localized(domain, path, args);
-	}
+	/** The one-line gate text (both warning lines on one line), fitted on its own. */
+	@Unique
+	private String solrp$gate;
 
 	private static final String ADD_CHILD = "Lcom/tarinoita/solsweetpotato/client/gui/elements/UIStack;addChild(Lcom/tarinoita/solsweetpotato/client/gui/elements/UIElement;)V";
 
@@ -64,6 +65,11 @@ public abstract class DiversityPageMixin {
 	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = ADD_CHILD, ordinal = 0))
 	private void solrp$mealsGrid(UIStack stack, UIElement spacer) {
 		stack.addChild(DietLogPages.mealsGrid());
+	}
+
+	// ordinal 4 = the second warning label, now part of the first line.
+	@Redirect(method = "<init>", at = @At(value = "INVOKE", target = ADD_CHILD, ordinal = 4))
+	private void solrp$dropSecondWarning(UIStack stack, UIElement label) {
 	}
 
 	// ordinal 2 = the 1 x 10 spacer above the "need to eat" lines (only added while the gate is not met).
@@ -127,11 +133,14 @@ public abstract class DiversityPageMixin {
 		if (texts.isEmpty()) return;
 		float layout = DietLogPages.Layout.diversity().scale();
 		int avail = Math.round((page.frame.width - 2 * FIT_MARGIN) / Math.max(0.25F, layout));
-		float scale = FitLabel.fit(avail, texts);
+		// The gate line is fitted on its own, so its length does not shrink the other labels.
+		float scale = FitLabel.fit(avail, texts.stream().filter(t -> !t.equals(solrp$gate)).toList());
+		float gateScale = Math.min(scale, solrp$gate == null ? scale : FitLabel.fit(avail, List.of(solrp$gate)));
 		for (int k = 0; k < owners.size(); k++) {
 			List<UIElement> list = owners.get(k);
 			int idx = slots.get(k);
-			list.set(idx, new FitLabel((UILabel) list.get(idx), scale));
+			UILabel label = (UILabel) list.get(idx);
+			list.set(idx, new FitLabel(label, label.text.equals(solrp$gate) ? gateScale : scale));
 		}
 		main.updateFrames();
 		main.setCenterX(page.getCenterX());

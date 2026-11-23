@@ -17,6 +17,8 @@ import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
@@ -94,6 +96,18 @@ public final class FoodTooltips {
 		} catch (RuntimeException ex) {
 			return null;
 		}
+	}
+
+	/**
+	 * A gray description line under the name of Apple Pie's Diet Log and Carrot Edition's Food Dictionary,
+	 * like the Liquid Diet Log's own line. Lang keys {@code solraspberrypie.tooltip.book.<namespace>}.
+	 */
+	public static void bookLine(ItemTooltipEvent e) {
+		var id = ForgeRegistries.ITEMS.getKey(e.getItemStack().getItem());
+		if (id == null || !"food_book".equals(id.getPath())) return;
+		if (!"solapplepie".equals(id.getNamespace()) && !"solcarrot".equals(id.getNamespace())) return;
+		List<Component> list = e.getToolTip();
+		list.add(Math.min(1, list.size()), Component.translatable("solraspberrypie.tooltip.book." + id.getNamespace()).withStyle(ChatFormatting.GRAY));
 	}
 
 	public static boolean saturationOwnLine() {

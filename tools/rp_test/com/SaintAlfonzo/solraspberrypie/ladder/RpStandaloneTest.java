@@ -37,6 +37,16 @@ import java.util.Map;
 public class RpStandaloneTest {
 	private static int ok, fail;
 
+	/** {@code n} values, strictly increasing, whole numbers, the k-th (from 1) within 1 of {@code base + k * step}. */
+	private static boolean near(List<Double> vs, double base, double step, int n) {
+		if (vs.size() != n) return false;
+		for (int k = 0; k < n; k++) {
+			double v = vs.get(k);
+			if (v != Math.rint(v) || Math.abs(v - (base + (k + 1) * step)) > 1.0 || (k > 0 && v <= vs.get(k - 1))) return false;
+		}
+		return true;
+	}
+
 	private static void check(boolean cond, String what) {
 		if (cond) {
 			ok++;
@@ -134,9 +144,17 @@ public class RpStandaloneTest {
 			if (r.kind == Rung.Kind.SLOT) packSlots.add(r.threshold);
 			if (r.kind == Rung.Kind.ATTRIBUTE && r.id.getPath().equals("generic.armor_toughness")) tough.add(r.threshold);
 		}
-		check(hearts.equals(List.of(9.1, 18.2, 27.3, 36.4, 45.5, 54.5, 63.6, 72.7, 81.8, 90.9)), "pack: 10 hearts every 100/11 " + hearts);
-		check(tough.equals(List.of(16.7, 50.0, 83.3)), "pack: toughness pairs at 1/6, 1/2, 5/6 " + tough);
-		check(packSlots.equals(List.of(2.5, 22.0, 41.5, 61.0, 80.5)), "pack: 5 slots evenly spaced from 2.5 " + packSlots);
+		// Whole-number thresholds, each within 1 of its spaced value (a merged pair moves one value to the nearest free step).
+		check(near(hearts, 0, 100 / 11.0, 10), "pack: 10 hearts every 100/11, whole numbers " + hearts);
+		check(near(tough, 100 / 6.0 - 100 / 3.0, 100 / 3.0, 3), "pack: toughness pairs at 1/6, 1/2, 5/6, whole numbers " + tough);
+		check(near(packSlots, 2.5 - 19.5, 19.5, 5), "pack: 5 slots evenly spaced from 2.5, whole numbers " + packSlots);
+		java.util.Set<Double> distinct = new java.util.TreeSet<>();
+		boolean whole = true;
+		for (Rung r : pl.rungs) {
+			distinct.add(r.threshold);
+			whole &= r.threshold == Math.rint(r.threshold);
+		}
+		check(whole && distinct.size() >= 40, "pack: every threshold a whole number, " + distinct.size() + " distinct values");
 		check(!pl.toggleDefault(inv) && pl.isToggle(inv) && pl.toggleDefault(nv) && pl.isToggle(nv), "pack: Invisibility toggle off, Night Vision on");
 		check("solraspberrypie.tagline.minecraft.speed.2".equals(pl.tagline(new ResourceLocation("minecraft:speed"), 2)), "pack: Speed II tagline key");
 		JsonObject packLang = JsonParser.parseString(Files.readString(root.resolve("kubejs/assets/solraspberrypie/lang/en_us.json"), StandardCharsets.UTF_8)).getAsJsonObject();

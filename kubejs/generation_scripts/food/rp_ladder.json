@@ -8,10 +8,11 @@
 		"hearts: count rungs of amount health points (2 = one heart) at top/(count+1) steps (the gap after the last",
 		"  equals the gap before the first). pairs: armor toughness + knockback resistance at those fractions of top.",
 		"slots: count effect slots, evenly spaced from first in steps of (top - first)/count.",
-		"decimals: thresholds are rounded to this many places."
+		"decimals: thresholds are rounded to this many places; distinct milestones stay distinct (a merged pair moves",
+		"  one value to the nearest free step)."
 	],
 	"densityRatio": 2.0,
-	"decimals": 1,
+	"decimals": 0,
 	"unlockables": {"from": 2.5, "to": 97.5, "count": 39},
 	"permanent": {"from": 25, "to": 100, "count": 12},
 	"hearts": {"count": 10, "top": 100, "amount": 2},
