@@ -32,7 +32,7 @@
 ## CQ-PRV-04 | nothing can be reported
 @group client
 @commands on the pack's server, open Social Interactions (P), pick another player (PRV-04)
-@pass the Report button is greyed out (reporting unavailable); no network error toast
+@pass the Report button is grayed out (reporting unavailable); no network error toast
 @fails Report enabled: the user API is not the offline one
 @draft vanilla report screen
 ## CQ-PRV-05 | the switch turns vanilla back on
