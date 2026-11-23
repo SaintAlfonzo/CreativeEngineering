@@ -16,7 +16,7 @@ that (families, regroups, the archive table) is in [todo/TODO_history.md](../tod
   a new family is a new `## heading` plus `<?todo rows HEADING?>` there.
 - **Ids (D17):** old ids (`family/sub #n`) never change. A new row takes its `##` family's slug and the next number
   (`salt #1`, `conventions #27`); `todo.py add` assigns it.
-- **Details carry no status words.** "Built", "not installed", run results go in `log` (`todo.py log`); the jar install
+- **Details carry no status words.** "Built", "absent", run results go in `log` (`todo.py log`); the jar install
   state is generated per row from its feature's jars. `todo.py lint --changed` FAILs new Details text with them.
 - **Priority:** high / normal / low (empty = normal). High rows are listed at the top of TODO.md.
 - **Complete rows** stay in their category file; the archive section of TODO.md is a view. Open rows without a family

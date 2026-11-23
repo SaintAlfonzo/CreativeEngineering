@@ -1,0 +1,4 @@
+version,tag,sha1,date,site,note
+Common 1.1.0,creativecommon-1.1.0,,2026-11-08,unknown,"tag date; whether 1.1.0 was uploaded is not recorded (publish_readiness D8 names it as a question)"
+Common 1.2.0,creativecommon-1.2.0,,2026-11-13,CurseForge,"published (owner, 2026-11-22; D8, D9); date is the tag date, upload date and uploaded jar sha1 not recorded: owner supplies the sha1 of the uploaded file"
+Common 1.3.0,,,,CurseForge (next upload),"not yet uploaded; upload only the jar whose stamp equals the tag commit and record its sha1 here (PR-RE-14)"

@@ -247,7 +247,7 @@ Impact:
 |---|---|---|
 | Loaded every session | MEMORY.md, ~78 lines | MEMORY.md 54 lines (5.8 KB) plus the notes index 52 lines (9 KB) through CLAUDE.md: about the same, since the index lines moved and were not dropped |
 | Recall | One-line hooks in MEMORY.md | The same hooks in the imported notes index |
-| Versioning | None (outside git) | Tracked, diffable, pushed with commits (repo is private) |
+| Versioning | None (outside git) | Tracked, diffable, pushed with commits (repo is public, see agent_notes/git-repo-setup.md) |
 | Reach | This machine's Claude Code only | Any checkout: cloud sessions, other machines, agents given a path |
 | Checks | None | Can be linted by `check_all.py` (dead links, status words; P1.4) |
 | Staleness | 39 notes carry status words | Same 39, now flagged by the moved-on line ("repo status docs win") |

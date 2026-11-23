@@ -1,10 +1,11 @@
 # Small fixes batch (written 2026-11-16)
 
-<!-- generated:status_index begin open_work sha1=d7181d17a00c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 20 open TODO rows (In Progress 1, Testing 19), 3 Complete.
+<!-- generated:status_index begin open_work sha1=5090deb601c3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 1, In Progress 1, Testing 19), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `ingredients #47` | Planned | S | Vinegar rework: apple mash or jam, mushroom enzyme |
 | `blocks/flower-pots #10` | In Progress | S C P | Hanging pots place as wall lanterns: remove |
 | `blocks/flower-pots #9` | Testing | S P | Exclude melon, moss and pumpkin blocks from the flower pot world |
 | `dishes/ingredients #18` | Testing | S C P | Cutting banana bunch |
@@ -74,14 +75,14 @@ scripts call. P2 to P6 in any order. Every Java or startup change needs a full r
 | R6 | jungle grapes | premise | Drop the trunk rule on the grapevine lattice only (age > 0, not mature); the grapevine stem keeps it | 2026-11-16 | AskUserQuestion 2026-11-16 |
 | R7 | dragon hoe | premise | Add an explicit "is bone meal" guard to the charm refund, fix the stale brief, close the row | 2026-11-16 | AskUserQuestion 2026-11-16 |
 | R8 | syrup / sap | premise | Stack size done; sap recipe stays pinned with `creativedelight/members #16` | 2026-11-16 | AskUserQuestion 2026-11-16 |
-| R9 | vinegar | open | Build now with any mushroom (`#forge:mushrooms`) as the enzyme: 3 apple mash + mushroom in the pickling jar; swap to crushed fungus when `pickles-and-ferments #5` lands. Jam route: agent default, unconfirmed: removed (the row says "change the vinegar craft") | 2026-11-16 | AskUserQuestion 2026-11-16 |
+| R9 | vinegar | open | Replaced (owner, 2026-11-22): 3 apple mash or apple jam; mushrooms work as the enzyme, and enzymes are usable when added (crushed mushrooms more efficient, required for some crafts). Earlier ruling: any mushroom as the enzyme, jam route removed | 2026-11-22 | AskUserQuestion 2026-11-22 |
 | R10 | JEI ordering | open | Fishing rods get their own group under equipment, backpacks their own group under equipment; wardrobe backpacks and Simple Hats leave the JEI ordering for now (a cosmetic family later) | 2026-11-16 | AskUserQuestion 2026-11-16 |
 | R11 | hanging pots | open | Put the lantern-type hanging pots (with plants) in the Flower Test world next to the other hanging pots; keep or remove after looking at the potted plants. No placement change now | 2026-11-16 | AskUserQuestion 2026-11-16 |
 | R12 | flower pot world exclusions | premise | The real holders refuse them too: melon, pumpkin, carved pumpkin, jack o'lantern, moss block, moss carpet join `not_in_flower_boxes` | 2026-11-16 | AskUserQuestion 2026-11-16 |
 | R13 | fried egg batch | open | Replace Rustic's 1:1 oil recipe (and its Slice and Dice mirror) with oil + 3 eggs -> 3 fried eggs; 4 fried eggs -> 4 omelettes in the cooking pot. Every furnace (smelting) egg recipe becomes smoking + campfire (so the skillet cooks it) | 2026-11-16 | AskUserQuestion 2026-11-16 |
-| R14 | blocks/flower-pots #14 | premise | Already built; close the row (agent default, unconfirmed: not asked, the ban tag and mixin exist) | 2026-11-16 | agent default, unconfirmed |
+| R14 | blocks/flower-pots #14 | premise | Already built; close the row (owner, 2026-11-22: confirmed) | 2026-11-16 | agent default, unconfirmed |
 | R15 | banana bunch | clear | Knife cutting, 1 bunch -> 6 bananas | 2026-11-16 | chat 2026-11-16 |
-| R16 | waystone glowstone | clear | Through Worldgen's template block swaps (no edited upstream nbt) | 2026-11-16 | agent default, unconfirmed |
+| R16 | waystone glowstone | clear | Through Worldgen's template block swaps (no edited upstream nbt) | 2026-11-22 | owner, 2026-11-22 (confirmed) |
 
 ## P1. Creative Common (rebuild, restart)
 

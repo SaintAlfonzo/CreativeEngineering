@@ -10,7 +10,7 @@ Merged 2026-10-19 from 3 memories (index compaction).
 
 The pack-wide **chest loot overhaul** (cut unwanted items, redistribute, place in specific
 tables, tune frequency, vanilla + ~320 mods) is built on **LootJS** — `mods/lootjs-forge-1.19.2-2.9.1.jar`,
-already installed, hard-depends on KubeJS. That mod *is* "the kubejs loot integration"; no
+already in the pack, hard-depends on KubeJS. That mod *is* "the kubejs loot integration"; no
 "Loot Integration(s)" mod needed.
 
 **Why LootJS, not Loot Integration(s) or datapack JSON:** the user wants surgical per-item /
@@ -139,7 +139,7 @@ Built 2026-10-03 at the user's request ("detailed breakdown of the loottables...
 **Key facts found:**
 - 963 containers hold fixed items with no table (435 dispensers in jungle temples etc.); 164 chest-like. 151 more were converted by lootr_fixed_containers.py (only kubejs/data ports).
 - 11 dead table ids: 17 containers roll a table that doesn't exist (always empty): kaisyn forest_ruins x4, simply_houses taiga_inn (luna_structures: id) x4, terralith desert/giant_bee_hive, minecraft village_leatherworker (vanilla is village_tannery).
-- 29 tables are unused as installed (Wares and Old Guns are flagged non-container instead) (all of MES, 3 skyvillages, 7 terralith, library_md...).
+- 29 tables are unused as loaded (Wares and Old Guns are flagged non-container instead) (all of MES, 3 skyvillages, 7 terralith, library_md...).
 - Structure resolution: jigsaw walk limited to the structure's `size` (without it a house with a street jigsaw reaches the whole village). Philip's Ruins ships // comments in JSON (loads_lenient). Vanilla start pools hardcoded.
 - Tables are AS SHIPPED, before the pack's pre-roll rules; code-added pools/entries come from the /dumploot export (weights approximate).
 

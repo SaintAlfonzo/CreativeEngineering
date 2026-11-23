@@ -1,10 +1,12 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=9b545847e1e4 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Planned 1, In Progress 1, Testing 22), 4 Complete.
+<!-- generated:status_index begin open_work sha1=33db22db860d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 26 open TODO rows (Planned 3, In Progress 1, Testing 22), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `baking-types-and-bakeware #1` | Planned | S | Gingerbread block recipes |
+| `crops #59` | Planned | S | Botany Pots rules |
 | `farming/crops #3` | Planned | S P | Harvest and replant audit for new crops |
 | `baking/baked-goods #39` | In Progress | S | Baked families: croissant to misc baked, plain donut beside the cider donut |
 | `conventions #39` | Testing | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
@@ -76,7 +78,7 @@ AskUserQuestion rounds the same day. Status lives in the TODO rows; this plan ho
 | R1 | Rotten foods "like rotten flesh and rotten apple" | open | Rotten Ham, Cooked Rotten Ham, Rotten Pie, Green Pie, Fried Turtle Egg and Suspicious Bacon and Eggs are all `hazard`. Each gets a 20% chance of Poison II for 5 s. | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | R2 | "suspicious egg and ham (rename green eggs and ham)" | clear | `hostiledelight:suspiciousbaconandaggs` is renamed Green Eggs and Ham (lang only; the id stays). | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | R3 | Not saltable | clear | Rotten Pie, Green Pie and Green Eggs and Ham leave the salt list (row #48). | 2026-11-04 | row #48 |
-| R4 | Frying eggs | open | Bird eggs (chicken, duck, goose and the other bird eggs in `#forge:eggs`) fry into the Farmer's Delight fried egg. Parrot, turtle, crocodile and terrapin eggs don't, and emu keeps only its Boiled Emu Egg. | 2026-11-20 | AskUserQuestion 2026-11-20 (two rounds) |
+| R4 | Frying eggs | open | Bird eggs (chicken, duck, goose and the other bird eggs in `#forge:eggs`; parrot eggs excluded as too small, owner, 2026-11-22) fry into the Farmer's Delight fried egg. Parrot, turtle, crocodile and terrapin eggs don't, and emu keeps only its Boiled Emu Egg. | 2026-11-20 | AskUserQuestion 2026-11-20 (two rounds) |
 | R5 | Magma and Slime Brownies are gummies | open | They are renamed Magma Gummy and Slime Gummy. A `candy/gummy` family is added with these two and the Glow, Salmonberry, Cantaloupe and Matcha gummies. The build writes down the recipe patterns the six use today and leaves them as they are; the gummy recipe pattern is applied later. | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | R6 | Guardian fillet | open | Hostile's `guardianfillet` is the one raw guardian fillet. Ocean's `guardian_tail` merges onto it, with a save swap. | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | R7 | "define dirt slot" | open | New tag `#creativedelight:compost_dirt`: dirt, coarse dirt, rooted dirt, podzol, moss block, mud, IW humus and silt. No grass block or mycelium (silk-touch only), no rich soil (an output tier). | 2026-11-20 | AskUserQuestion 2026-11-20 |
@@ -90,25 +92,28 @@ AskUserQuestion rounds the same day. Status lives in the TODO rows; this plan ho
 | R15 | Quark tome trade | open | Remove it (`Librarians Exchange Ancient Tomes` = false). Over-leveled books then come only from the anvil route. | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | R16 | Public pack notes | open | Add both points to `README.md` "Gameplay highlights". | 2026-11-20 | AskUserQuestion 2026-11-20 |
 | R17 | Wares trader "8x" | clear | The Wares delivery agreement weight goes from 20 to 8. This replaces the 2026-10-30 "3x less" ruling. | 2026-11-20 | chat 2026-11-20 |
-| D1 | `neighbours` config key | clear | Keep the key, field and enum (renaming breaks user tomls). Fix only the two "colour" comments. SQ-RFX-28's grep skips the key. | 2026-11-20 | agent default, unconfirmed |
-| D2 | Component comments | clear | `Light?` -> `Light`, `Dense?` -> `Heavy`, per the 2026-10-29 ruling. No joke tooltip. | 2026-11-20 | agent default, unconfirmed |
-| D3 | Tag as a recipe result | clear | Both dough results become `i.in_dough`. `_itemJson` warns and refuses a tag when `allowTag` is false, which covers every result slot. | 2026-11-20 | agent default, unconfirmed |
-| D4 | Polishing route | clear | New NCH helper `createSandpaperPolishing` next to `createSplashing`: iron bars -> polished iron bars. Extends the helper rule rather than writing a raw event. | 2026-11-20 | agent default, unconfirmed |
-| D5 | Lexica Botania | clear | Removed from every table, spawn bonus chest included, as the row says. | 2026-11-20 | agent default, unconfirmed |
-| D6 | Already-spawned villagers | clear | Leave their existing book offers. Only new trade rolls lose books. | 2026-11-20 | agent default, unconfirmed |
-| D7 | Gossypium loot | clear | Hand-written: one pool, two entries (flower pot, gossypium), each surviving explosions. | 2026-11-20 | agent default, unconfirmed |
-| D8 | End gear config | clear | `EchoPiece` and `DragonPiece` classes in `CEQConfig`, plus the felsic ingot fluid amount, per the gear tuning brief. | 2026-11-20 | agent default, unconfirmed |
-| D9 | Dict tag check | clear | A server-side check after tags load (lowest-priority `ServerEvents.tags` capture, like creativeloot `95_tag_capture.js`), which logs dict tags that are empty or unknown. | 2026-11-20 | agent default, unconfirmed |
-| D10 | Entity dictionary | clear | Build it now (the owner listed the row): Common `_lib/entity_dict.js`, `global.entity`, used by `entitytags.js` and `sample_syringe.js`. | 2026-11-20 | agent default, unconfirmed |
-| D11 | Green Eggs and Ham assembly | clear | `F.assemble(i.bowl, [i.cookedrottenham, i.friedturtleegg], result, 2)`, copying FD's bacon and eggs. The upstream shapeless recipe stays, as FD's does. | 2026-11-20 | agent default, unconfirmed |
-| D12 | Guardian drops | clear | Hostile's guardian table keeps its shard and crystal counts. The fillet entry is replaced by 1 Guardian Shell, and Ocean's `guardian_drop` GLM is turned off so there is no double drop. Cutting the shell: 1-3 fillets plus a 30% Prismarine Shard. Elder guardians are untouched. | 2026-11-20 | agent default, unconfirmed |
-| D13 | Guardian Soup | clear | FD pot: Guardian Shell, 2 fillets, tomato, onion, Elder Guardian Eye, bowl -> the existing feast block. | 2026-11-20 | agent default, unconfirmed |
-| D14 | Mash compost recipes | clear | Remove the member's two organic compost recipes (rotten flesh mash, tree bark mash) and add organic mash to `#forge:mulch/waste` and the composter. The tree fertilizer stays. | 2026-11-20 | agent default, unconfirmed |
-| D15 | Plain donut | open | Left out of this batch: the owner's list for R8 has no plain donut, and it would need art (texture rule). It stays on `#39` as an open item. | 2026-11-20 | agent default, unconfirmed |
-| D16 | Jar row wording | clear | "These don't mix: one kind per jar." | 2026-11-20 | agent default, unconfirmed |
-| D17 | Harvest audit | clear | A separate `/dumpcropharvest` that reuses the growth dump's block walk, per the brief. | 2026-11-20 | agent default, unconfirmed |
-| D18 | Fruit audit | clear | A fruit x family matrix generator in `tools/food_families.py` (from recipe ingredients), written into `fruit.md`. | 2026-11-20 | agent default, unconfirmed |
-| D19 | Rustic cooked eggs | clear | `rusticdelight:raw_cooked_eggs` follows R4: bird eggs only. | 2026-11-20 | agent default, unconfirmed |
+| R18 | Owner rows D1-D19 | clear | All confirmed, with one change: bird eggs exclude parrot eggs (too small) (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R19 | Gingerbread (R9 follow-up) | open | 9 gingerbread <-> 1 gingerbread block; the gingerdough block smokes or bakes (smoker and oven, as gingerbread does) into a gingerbread block; other recipes unchanged (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R20 | Botany Pots (R11 follow-up) | open | Dimension soil gating: vanilla fungus and roots need Nether soils, Ender Crop needs End soil; propelplant pot drops fixed; Mixed Seeds not pottable; glow berries, hanging Nether roots and any vines not plantable in pots; no water plants (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| D1 | `neighbours` config key | clear | Keep the key, field and enum (renaming breaks user tomls). Fix only the two "colour" comments. SQ-RFX-28's grep skips the key. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D2 | Component comments | clear | `Light?` -> `Light`, `Dense?` -> `Heavy`, per the 2026-10-29 ruling. No joke tooltip. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D3 | Tag as a recipe result | clear | Both dough results become `i.in_dough`. `_itemJson` warns and refuses a tag when `allowTag` is false, which covers every result slot. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D4 | Polishing route | clear | New NCH helper `createSandpaperPolishing` next to `createSplashing`: iron bars -> polished iron bars. Extends the helper rule rather than writing a raw event. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D5 | Lexica Botania | clear | Removed from every table, spawn bonus chest included, as the row says. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D6 | Already-spawned villagers | clear | Leave their existing book offers. Only new trade rolls lose books. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D7 | Gossypium loot | clear | Hand-written: one pool, two entries (flower pot, gossypium), each surviving explosions. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D8 | End gear config | clear | `EchoPiece` and `DragonPiece` classes in `CEQConfig`, plus the felsic ingot fluid amount, per the gear tuning brief. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D9 | Dict tag check | clear | A server-side check after tags load (lowest-priority `ServerEvents.tags` capture, like creativeloot `95_tag_capture.js`), which logs dict tags that are empty or unknown. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D10 | Entity dictionary | clear | Build it now (the owner listed the row): Common `_lib/entity_dict.js`, `global.entity`, used by `entitytags.js` and `sample_syringe.js`. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D11 | Green Eggs and Ham assembly | clear | `F.assemble(i.bowl, [i.cookedrottenham, i.friedturtleegg], result, 2)`, copying FD's bacon and eggs. The upstream shapeless recipe stays, as FD's does. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D12 | Guardian drops | clear | Hostile's guardian table keeps its shard and crystal counts. The fillet entry is replaced by 1 Guardian Shell, and Ocean's `guardian_drop` GLM is turned off so there is no double drop. Cutting the shell: 1-3 fillets plus a 30% Prismarine Shard. Elder guardians are untouched. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D13 | Guardian Soup | clear | FD pot: Guardian Shell, 2 fillets, tomato, onion, Elder Guardian Eye, bowl -> the existing feast block. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D14 | Mash compost recipes | clear | Remove the member's two organic compost recipes (rotten flesh mash, tree bark mash) and add organic mash to `#forge:mulch/waste` and the composter. The tree fertilizer stays. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D15 | Plain donut | open | Add now with the cider donut texture as a placeholder (owner, 2026-11-22; replaces the left-out default); art in [art_needed_2026-11-22.csv](texture_sources/art_needed_2026-11-22.csv) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| D16 | Jar row wording | clear | "These don't mix: one kind per jar." | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D17 | Harvest audit | clear | A separate `/dumpcropharvest` that reuses the growth dump's block walk, per the brief. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D18 | Fruit audit | clear | A fruit x family matrix generator in `tools/food_families.py` (from recipe ingredients), written into `fruit.md`. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
+| D19 | Rustic cooked eggs | clear | `rusticdelight:raw_cooked_eggs` follows R4: bird eggs only. | 2026-11-20 | agent default; confirmed (owner, 2026-11-22) |
 
 ## 3. Lanes and order
 

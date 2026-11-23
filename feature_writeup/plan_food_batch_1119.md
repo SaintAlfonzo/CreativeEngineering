@@ -68,6 +68,10 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 | R22 | A4 blubber cut | open | Accepted as written: a knife cuts a blubber into 2 animal fat | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
 | R23 | A5 Tropical Pizza id | open | Accepted as written: the id is in the Vintage member's namespace (`vintagedelight:`) | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
 | R24 | Wave E powder textures | open | Run `textureswapper/palette_swap.py` on the Barbeque's Delight chili powder sprite with each crop's own sprite palette (onion, garlic, ghost pepper); no further confirm | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
+| R25 | `baking/baked-goods #20` pizza value | open | A whole pizza is worth 1.5 x its old value; slices, diversity and dependent values are updated to match (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R26 | Flavor leftovers and sugar pair (`food/seasoning #3`) | open | Build now: sugar foods for the sugar + ghost pepper pair (the agent picks desserts and lists them for review); seasoning leftovers (dill, cream and onion, ice cubes, placeable popcorn variants); feast sequenced assemblies (roast chicken, shepherd's pie, honey glazed ham, pizza, popcorn; `dishes/meals #5`); cheesecakes (Rustic's three) take a cheese wedge or a milk bottle or bucket; Sweet Berry Pie unchanged (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+
+**Still open**: R12's cachalot blubber drop is not ruled on 2026-11-22; it stays as built until the owner says otherwise.
 
 **Agent readings, unconfirmed**: none left (A1 became R18; A2 to A5 were accepted as written, R20 to R23).
 

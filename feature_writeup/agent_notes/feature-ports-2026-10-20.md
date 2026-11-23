@@ -10,7 +10,7 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
   (`ae2:can_remove_color`, `forge:buckets/water`, `creativeengineering:bottled_air/fire_sources`),
   `kubejs/data/minecraft/loot_tables/blocks/{copper_ore,deepslate_copper_ore}.json` (Copper Drops: 1 raw copper),
   `other/starter_kit.js`. Jars (11) in `disabledmods/`, rows out of mod_sides.md, configs deleted, server_mods/pack regenerated.
-- **Book Fishing stays installed** (user: part of the enchanted-book loot rebalance). Create Waystone Recipes' only
+- **Book Fishing stays present** (user: part of the enchanted-book loot rebalance). Create Waystone Recipes' only
   recipe needed `createcasing:chorium_ingot` (mod not in pack) = never loaded; just removed (D6 open).
 - Starter Kit: the mod's real "already served" record is `<world>/data/starterkit/tracking.json` (multiplayer uuid map,
   singleplayer world-folder map; every playerdata uuid marked on each start), NOT the scoreboard tag. Port reads it,

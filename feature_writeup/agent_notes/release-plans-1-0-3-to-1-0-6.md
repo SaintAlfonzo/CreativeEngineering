@@ -55,3 +55,10 @@ User 2026-10-14: "ship all the changes as 1.0.6. just mark the structure tuning 
 
 **Why:** structure testing (Phase 5 started 12:45 in another session) was still running; the user chose to ship it mid-test rather than split it out.
 **Gotcha:** staging archives the shipped jar into jar_archive/<name>, overwriting an older unshipped build of the same version. Related: [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md), [deploy-pipeline](deploy-pipeline.md), [plan-7-1-execution](plan-7-1-execution.md), memory `structure-testing-log-method`.
+
+## Gotchas from 1.0.7 to 1.0.9 (merged 2026-11-22 from plan-1-0-7, plan-1-0-8, plan-1-0-9; contents and state are in plan_1.0.7.md, plan_1.0.8.md, plan_1.0.9.md and deploy.md)
+
+- Two Brewin' jars with one mod id (BrewinAndChewin-1.19-2.0 and backportedBrewin -01) in mods/: `build_deploy` keys mods by mod id, so it reported neither; FML 43 UniqueModListBuilder picks the most recent by version, so the port loaded on the server too (debug/10_18). The duplicate-jar preflight came with 1.0.9. First staging of 1.0.7 crashed the dedicated server on the Vinery grass slab ([backported-vinery](backported-vinery.md)).
+- A common-list mixin whose inject references `net.minecraft.client.Minecraft` stops a dedicated server boot (FML ClassMetadataNotFoundException); client-only injects go in the client mixin list (SereneSeasonsClientClockMixin).
+- To rebuild an already snapshotted version, set the DEPLOYED.json marks back to the previous version (its history json sha), drop the stray log section, then `--version X`.
+- 1.0.9 skipped as decisions: Spice of Life speed benefit, felsic potionMb, AP bullet category, engineering comments and recipes, Terralith caves, recipe scan rework.

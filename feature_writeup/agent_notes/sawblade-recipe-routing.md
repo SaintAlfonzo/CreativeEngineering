@@ -1,11 +1,11 @@
 # sawblade-recipe-routing
 
-> IE Sawmill recipe selection driven by the installed sawblade's {Profile} NBT — how it works, the 3 mixins, the data
+> IE Sawmill recipe selection driven by the loaded sawblade's {Profile} NBT — how it works, the 3 mixins, the data
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-07). Repo status docs win over any status line here.
 
 The IE Sawmill can run **different recipes for the same input** depending on which sawblade
-is installed. `minecraft:oak_planks` -> stairs / door / fence / … is chosen by the blade.
+is present. `minecraft:oak_planks` -> stairs / door / fence / … is chosen by the blade.
 
 **Why it was needed:** the pack's sawmill recipes (now written by `wood_types.js`) are many `immersiveengineering:sawmill`
 recipes that share one input; IE's `SawmillRecipe.findRecipe` returns only the first input
@@ -18,7 +18,7 @@ selection deterministic.
   default for that input (what a plain `immersiveengineering:sawblade` produces).
 - Precision sawblade (`creativeengineering:precision_sawblade`) carries NBT `{Profile:"<shape>"}`.
 - Creative Common [creative-common-coremod](creative-common-coremod.md) routes: among input-matching recipes, prefer the one
-  whose `blade` == the installed blade's `Profile`; else the `blade==""` default; else null
+  whose `blade` == the loaded blade's `Profile`; else the `blade==""` default; else null
   (IE passes the item through unchanged — safe, `getCurrentStack` null-guards).
 
 ## Creative Common pieces (`com.SaintAlfonzo.creativeengineering.sawmill.*` + `.mixin.*`)
@@ -73,7 +73,7 @@ Fix: `CreativeEngineering.commonSetup` now `Class.forName`s `SawbladeRouting` +
 both `duck` interfaces up front (`forceLoad(...)`), so they're defined before the lazy apply.
 Any future mixin that's applied lazily and references a Creative Common class needs the same treatment.
 
-Status: see feature_writeup/ (sawmill/sawblade rows in todo/TODO.md).
+Rows: see feature_writeup/ (sawmill/sawblade rows in todo/TODO.md).
 
 ## Done 2026-11-21: the sawmill recipes are dynamic
 

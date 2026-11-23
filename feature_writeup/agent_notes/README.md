@@ -50,7 +50,7 @@ Rules: status (built, deployed, tested, versions) lives in [README.md](../README
 - [Power Grid port](power-grid-port.md) — P0-P10 ported 2026-11-13, gate jars only from jar_archive/pwg_gate/, never mods/; state in plan_power_grid.md + run doc 2026-11-13 sections 9-10
 - [Rustic Delight port](rustic-delight-port.md) — CD member, MIT files baked by bake_upstream.py since 2026-11-10 (no runtime donor), all_of / tag / FeastBlock gotchas; - [Miner's Delight backport plan](miners-delight-backport-plan.md) — ARR license, donor-jar method, cup dropped, 1.20->1.19.2 data gotchas; [Backported Vinery](backported-vinery.md); [Backported Brewin](backported-brewin.md); [Exposure](exposure-backport.md); [baby mobs](baby-mobs-backport.md); [feature ports](feature-ports-2026-10-20.md); [Creative Labels](sticky-notes-rebuild.md)
 ## Releases (all in feature_writeup/plan_*.md; one pointer each)
-- [1.0.3-1.0.6](release-plans-1-0-3-to-1-0-6.md), [1.0.7](plan-1-0-7.md), [1.0.8](plan-1-0-8.md), [1.0.9](plan-1-0-9.md)
+- [1.0.3-1.0.9](release-plans-1-0-3-to-1-0-6.md) (1.0.7 to 1.0.9 gotchas in its last section)
 - [forge:raw_meat gotcha](forge-raw-meat-tag-gotcha.md) — pack tag has 2 Miner's items; use food_type/raw/meat
 - [Forge remap uses STAGING registry](forge-missing-mappings-staging.md) — resolve survivors in RegistryManager.ACTIVE; test renames on a fresh old-id save
 - [Upstream jar distribution](upstream-jar-distribution-policy.md) — donor jars go only to local dev; publish points to official sources, Common moves detected jars into the upstream folder; do not raise rehosting concerns; single upstream folder planned

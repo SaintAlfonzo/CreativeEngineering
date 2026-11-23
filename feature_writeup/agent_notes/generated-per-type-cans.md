@@ -18,7 +18,7 @@ Built 2026-10-04 (new items and dict keys: a change needs a restart). Sections/m
   "texture" field (null when kubejs/assets/.../item/<key>.png exists). Stale generated keys are dropped from
   can_servings/food_types on rerun. 381 recipes, node dry-run clean; not in game. Placeholder values in can_parity.md 3.1.
 - Not built: salad vinegar additive, suspicious stew can, 6 unobtainable pie slices.
-- After restart: /dumpfood then `python3 tools/food_catalog.py --check` (it flags the new cans as not installed until then).
+- After restart: /dumpfood then `python3 tools/food_catalog.py --check` (it flags the new cans as absent until then).
 
 - 2026-10-21: the 26 hand-written raw veggie/fruit/meat cans moved in (section raw_veggie + EXPLICIT rows; `input` opt =
   recipe keys/tags vs catalog value sources; Cactus Flesh `adv=0.5` keeps 4/2+1). Verified identical to the old

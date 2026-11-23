@@ -11,11 +11,14 @@ no emoji, no advancements, no conversions. Hand-edited config is copied to `conf
 
 ## 0. Order and cost
 
-<!-- generated:status_index begin open_work sha1=bb43412b6243 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (In Progress 1, Testing 7), 0 Complete.
+<!-- generated:status_index begin open_work sha1=57cb36c2d069 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Planned 3, In Progress 1, Testing 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `food-tuning #62` | Planned | S C | Always-edible foods get the tooltip 'Can be eaten when full' |
+| `ingredients #46` | Planned | S | Ender's Delight Shulker Mollusk and filet as the only shulker meat |
+| `skewers #1` | Planned | S | Drop the kebab combo items |
 | `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `dishes/meals #57` | Testing | S P | Sequenced assembly for raw skewers |
 | `dishes/meals #58` | Testing | S C P | Cave Skewer: merge with Miner's Delight |
@@ -105,6 +108,12 @@ Assumptions I made, tell me if wrong:
 2. Shulker meat in the End Skewer craft is Ender's Delight's Shulker Mollusk only (updated 2026-11-04). This needs the 2026-11-02 shulker merge undone for the mollusk. Scope assumed: only the mollusk (and filet if needed) leave the merge, and every other recipe keeps End's Delight meat. If you want the whole merge reversed or the mollusk used in other recipes too, say so; that is a separate change to `dishes/ingredients #32`.
 3. Golden Roll slice is 10 / 0.5 and the roll loses its always-edible flag with the kelp copy.
 4. Kebab ceiling of 16 hunger is mine (upstream's largest); change if you want the full 0.8 x input.
+
+Rulings on the four assumptions (owner, 2026-11-22):
+1. Correct: all 10 Barbeque's Delight lines join every part-C change (owner, 2026-11-22).
+2. Only Ender's Delight's Shulker Mollusk and its filet are used as shulker meat; every End's Delight item whose texture shows the yellow shulker meat needs a texture tweak (owner art; listed in [art_needed_2026-11-22.csv](texture_sources/art_needed_2026-11-22.csv)) (owner, 2026-11-22).
+3. Golden Roll slice is 10 / 0.5 and keeps always-edible (reverses the assumption); every always-edible food gets the tooltip "Can be eaten when full" (new TODO row) (owner, 2026-11-22).
+4. The kebab combo items (Kebab Wrap, Kebab Sandwich, Bibimbap) are dropped, not rebuilt (reverses C7 and C8 for these three) (owner, 2026-11-22).
 
 ## F. Not in this plan (TODO rows)
 

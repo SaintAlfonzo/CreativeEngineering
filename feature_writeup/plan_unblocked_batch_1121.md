@@ -51,7 +51,7 @@ lives in the rows, not here.
 | R1 | Skewer food type | open | "Defer": left out of this plan | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R2 | Coaster compatibility | open | "a, mark other non food related plates for review and possible removal": other mods' items go on our coaster (tag entries plus a model file each); other mods' non-food plates are listed for review and possible removal | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R3 | Pot height | open | Second pot 2 px taller than the first | 2026-11-21 | AskUserQuestion 2026-11-21 |
-| R4 | Pot models | open | agent default, unconfirmed: two offset vanilla pot cuboids, no new art; height a constant so it retunes | 2026-11-21 | agent default |
+| R4 | Pot models | open | Two offset vanilla pot cuboids, no new art; height a constant so it retunes (owner, 2026-11-22: confirmed) | 2026-11-22 | owner, 2026-11-22 |
 | R5 | Palette swap design | open | Fix the three known faults only: non-monotonic palettes, interpolation when the palette is larger than the texture, even rank spacing. No full redesign; owner reviews the outputs | 2026-11-21 | AskUserQuestion 2026-11-21 |
 | R6 | Creative Brewing CurseForge publish | clear | Left out; stays in `plan_cb_publish.md` | 2026-11-21 | agent default, unconfirmed |
 | R7 | `baking/baked-goods #22` Chorus Cookie | open | Bakes like the other cookies: cookie dough + 2 chorus fruit grain -> 12 on the baking sheet, no Uncanny Cookie; the 8 Uncanny Cookies + grain -> 8 hand craft goes (owner, 2026-11-22; replaces a same-day Uncanny Cookie bake ruling) | 2026-11-22 | AskUserQuestion 2026-11-22 |
@@ -61,6 +61,8 @@ lives in the rows, not here.
 | R11 | `blocks/flower-pots #2` pottable tooltip | open | A "Pottable" line on every plant item that can go in a pot, not on pot items (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
 | R12 | `dishes/ingredients #15` churn | open | Pinned: churn wanted later; nothing built (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
 | R13 | `dairy-fats-and-batter #1` whale oil lamp | open | The model starts from the vanilla lantern (texture copied as-is); the recolor waits for an owner palette (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R14 | `dishes/ingredients #9` cheese | open | 4 wedges -> 1 wheel, matching the cut yield (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
+| R15 | `dairy-fats-and-batter #3` whale oil lamp fuel | open | All config values: tank 1000 mB, full when crafted; burns 1 mB per 24 ticks; refill with a whale oil bottle (250 mB) or bucket (1000 mB); goes out when empty; keeps its oil when broken (owner, 2026-11-22) | 2026-11-22 | AskUserQuestion 2026-11-22 |
 
 ## 3. Phases
 
@@ -89,14 +91,12 @@ Left out: `dishes/meals #13` (deferred), `creativebrewing/publish #3` (own plan)
 
 ## 5. Open items
 
-- R4 and R6 are agent defaults, unconfirmed.
-- P3 build calls (agent, 2026-11-22, unconfirmed; the rows had no stated shape): chorus cookie = 8 uncanny cookies + 1
-  chorus fruit grain -> 8 by hand; the muffin assembly on paper gives the oven's 4; strawberry scones mirror the
-  raspberry scone at 1 per bake (Neapolitan made 2).
-- Waiting on owner art or palettes (texture rule, not asked by the build agent): baking dish (`baking/baked-goods #30`),
-  oatmeal raisin cookie (`#23`), five new muffins (`#2`), seven fruit scones (`#40`), strawberry scone and sweet potato
-  muffin retextures (`#36`, `#32`), plain donut (`#39`), whale oil lamp and cauldron (`dairy-fats-and-batter #1`, `#2`).
-- Open owner questions: Adzuki Bun to the oven or not (`#35`); the pottable tooltip meaning and wording
-  (`blocks/flower-pots #2`); the earlier P2 ones in `dishes/ingredients #7`, `#9`, `#15`.
-- Gnocchi `dishes/meals #33`: its details say no potato dough or gnocchi item existed on 2026-10-24 yet the same row
-  records them shipped in 1.1.03; the row is stale and needs a status check before building.
+- R6 is an agent default, unconfirmed.
+- The P3 build calls and the open owner questions listed here earlier are answered by R7 to R12 (owner, 2026-11-22).
+- Waiting on owner art or palettes (texture rule): baking dish (`baking/baked-goods #30`), oatmeal raisin cookie
+  (`#23`), five new muffins (`#2`), seven fruit scones (`#40`), strawberry scone and sweet potato muffin retextures
+  (`#36`, `#32`), plain donut (`#39`, placeholder allowed per S2, see
+  [art_needed_2026-11-22.csv](texture_sources/art_needed_2026-11-22.csv)), whale oil lamp recolor (R13) and cauldron
+  (`dairy-fats-and-batter #2`).
+- Gnocchi `dishes/meals #33`: status checked 2026-11-22 (row log): Gnocchi is Veggies' potato noodle renamed, potato
+  dough exists (`dishes/ingredients #27`); only the two noodle textures (owner art) are open.

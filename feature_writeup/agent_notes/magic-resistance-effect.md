@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-13). Repo status docs win over any status line here.
 
-Built 2026-09-12. No installed mod already provides this — CoFH Core has a `magic_resistance`
+Built 2026-09-12. No present mod already provides this — CoFH Core has a `magic_resistance`
 effect ("immune to all magic damage") but CoFH Core isn't in this pack's `mods/` folder (only
 showed up because `jeed`, an effect-description mod, bundles lang text for it speculatively).
 Installing CoFH Core just for this was rejected in favor of a from-scratch implementation,

@@ -32,6 +32,8 @@ from sources, its in-game half is LTP-07 to LTP-09), installed in `mods/creative
   the tip with the same id from an earlier file, with no flag on the individual tip. A file without the switch never
   replaces: a repeated id keeps the first tip and logs the clash.
 
+- **Section 4 confirmed** (owner, 2026-11-22): the removals build and all 14 migration matches.
+
 ## 2. Tip file format
 
 ```json

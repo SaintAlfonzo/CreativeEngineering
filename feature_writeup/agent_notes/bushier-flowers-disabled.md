@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-30). Repo status docs win over any status line here.
 
-User prefers Flower Patch's mechanics over Bushier Flowers (both installed). 2026-09-29:
+User prefers Flower Patch's mechanics over Bushier Flowers (both in the pack). 2026-09-29:
 - `mixin/BushierFlowersDisableMixin` (Creative Common, jar 1.0.2 rebuilt in place, not bumped) empties
   `ModBlocks.validFlowers` / `grownFlowers` at `<clinit>` TAIL (@Shadow @Mutable). Both of the mod's
   growth paths (its BoneMealItem.useOn HEAD inject + bone-meal dispenser behavior) key off those

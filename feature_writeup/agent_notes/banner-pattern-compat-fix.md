@@ -179,7 +179,7 @@ game and confirm (a) no Mixin apply crash at startup — check `logs/latest.log`
 these three new classes' names; (b) a vanilla-pattern banner on a decorated bed and on a
 customizable elytra still renders correctly (regression check); (c) a banner using a pattern from
 one of the 6 confirmed modded-pattern mods (easiest to test: `supplementaries` or
-`immersiveengineering`, both already installed) now renders on both a decorated bed and a
+`immersiveengineering`, both already in the pack) now renders on both a decorated bed and a
 customizable elytra instead of blank. See memory `debugging-with-latest-log` for the general
 log-first-not-static-code-guessing approach this project already follows.
 

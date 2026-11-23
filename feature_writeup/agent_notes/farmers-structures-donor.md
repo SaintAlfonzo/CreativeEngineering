@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-The 1.0.6 jar lives unmodified in `<game>/farmers_upstream/` (git-ignored, sha1-pinned in `UpstreamJars.java`, deployed by `build_deploy.py` category `farmers_upstream`). `FarmersDonor` adds a built-in server data pack (id `farmers_structures_donor`, sorts below KubeJS ids) above the installed 1.0.0 mod; `FarmersTranslator` converts 1.21 NBT/JSON. Foreign-dimension structures are skipped, so 1.0.0's disabled versions remain.
+The 1.0.6 jar lives unmodified in `<game>/farmers_upstream/` (git-ignored, sha1-pinned in `UpstreamJars.java`, deployed by `build_deploy.py` category `farmers_upstream`). `FarmersDonor` adds a built-in server data pack (id `farmers_structures_donor`, sorts below KubeJS ids) above the loaded 1.0.0 mod; `FarmersTranslator` converts 1.21 NBT/JSON. Foreign-dimension structures are skipped, so 1.0.0's disabled versions remain.
 
 **Why:** owner chose the Vinery-style donor route for ARR content (2026-10-25). Details: feature_writeup/farmers_structures.md section 5.
 

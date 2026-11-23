@@ -9,7 +9,7 @@ Rule ids `PV-<n>`; [design_rules.md](design_rules.md) section 6b points here.
 
 "Distributed or potentially distributed" means all of these, now or later:
 
-- every tracked file in git (the repo is private but may go public, publish_readiness D7) and every past commit;
+- every tracked file in git (the repo is public, owner 2026-11-22; recorded in [git-repo-setup](agent_notes/git-repo-setup.md); publish_readiness D7) and every past commit;
 - every jar we build (own mods, bundles, nested members) and the `deploy/` payload and records;
 - project pages, changelogs, CurseForge and Modrinth text, issue and pull request text;
 - what our code writes on players' machines and servers (logs, config files, data files).
@@ -68,7 +68,7 @@ All 626 commits kept; the branch tips' files are unchanged (tree ids compared). 
 `jar_archive/history_rewrite_2026-11-22.csv` (untracked) maps old ids to new ones for jar stamps and older docs.
 
 Left: GitHub keeps the old history reachable through the 15 pull request refs (`refs/pull/N/head`), which can't be
-force-pushed, and through its cache of old commit ids. Before the repo goes public, ask GitHub Support to remove the
+force-pushed, and through its cache of old commit ids. The repo is already public, so ask GitHub Support to remove the
 cached views and the pull request refs (or publish from a fresh repo). Every other clone (other machines, cloud
 sessions) must be re-cloned, not pulled; a push from an old clone would bring the old history back.
 
