@@ -52,22 +52,25 @@ The lint does not see git history; section 4 covers that.
 
 ### 4.1 Git history (PR-RE-02, publish_readiness D7; TODO `privacy #1`)
 
-The tracked files are clean, but older commits still hold: 19 commits authored with a personal mail address, and
-the blobs of everything removed on 2026-11-22 (JEI world folder names with two first names, home paths, the
-permission screenshot, perf reports with hardware details, the Forge template changelog). Making this repo public
-as it is publishes all of that. Two routes:
+Rewritten 2026-11-22 (owner request) with `git filter-repo` in a scratch mirror, then force-pushed (`main`,
+`agent_staging`, both `creativecommon-*` tags; `creative-split` and the `claude/*` branches no longer existed on
+GitHub):
 
-1. **Fresh export (simplest, nothing to rewrite):** create a new public repo from the current tree only
-   (`git archive HEAD` into a new folder, `git init`, one commit as the repo identity). Keep this private repo as the
-   working history.
-2. **Rewrite history:** `git filter-repo` with a mailmap that maps the personal address to the noreply address, plus
-   `--invert-paths` for `config/jei/world/`, `communications/`, `server/perf/reports/`,
-   `config/simplehats_hatdl/`, `development/creativeCommon/changelog.txt`, and `--replace-text` with a local
-   (untracked) file of the home path and names. Then force-push `main` and `agent_staging` and re-clone every other
-   copy. Every commit id changes, so ids cited in docs (`jar_archive/installed.csv` stamps, run docs) stop matching.
+- the 19 commits with a personal author address now carry `[REDACTED]` as the address;
+- every text blob: the Unix user name, the owner's other handles and addresses, and the two first names replaced by
+  `[REDACTED]` (word-bounded regexes from a local term file, deleted after the run);
+- dropped from every commit: `config/jei/world/`, `communications/`, `server/perf/reports/`,
+  `config/simplehats_hatdl/`, and the Forge template changelog at its three old paths (`changelog.txt` under
+  `development/creativeCommon/`, `development/patcherMod/` and `patcherMod/`);
+- the old `configs_edited/config_26_09_26.zip` blob replaced by the cleaned zip.
 
-Either way, the GitHub repo keeps old commits reachable by id until GitHub support purges them; ask for a cache purge
-after a rewrite.
+All 626 commits kept; the branch tips' files are unchanged (tree ids compared). Commit ids changed:
+`jar_archive/history_rewrite_2026-11-22.csv` (untracked) maps old ids to new ones for jar stamps and older docs.
+
+Left: GitHub keeps the old history reachable through the 15 pull request refs (`refs/pull/N/head`), which can't be
+force-pushed, and through its cache of old commit ids. Before the repo goes public, ask GitHub Support to remove the
+cached views and the pull request refs (or publish from a fresh repo). Every other clone (other machines, cloud
+sessions) must be re-cloned, not pulled; a push from an old clone would bring the old history back.
 
 ### 4.2 Players' privacy in the pack
 
@@ -77,16 +80,22 @@ network calls (PV-7).
 
 To turn off chat reporting and the rest:
 
-1. **Chat reporting (not handled yet; TODO `privacy #2`).** 1.19.2 signs chat with the player's Mojang key, and a signed message can be
-   reported to Mojang by any player who receives it. The pack has no mod that stops this. Options:
-   - add No Chat Reports (Forge 1.19.2 build) on both sides, through the `add-mod` skill. Its server side strips
-     signatures and sends chat as server messages, so nothing a player sends can be reported; the client side
-     also blocks signing on servers without it.
-   - or set `enforce-secure-profile=false` in the server's `server.properties` (players without keys can join)
-     and turn off the "Only Show Secure Chat" client option. Signed chat is still reportable, so this alone is
-     not enough.
-   - or build the same behavior into Creative Common (a mixin that converts player chat to system messages on the
-     server). More work, our own code.
+1. **Chat reporting (not handled yet; TODO `privacy #2`).** 1.19.2 signs chat with a key the client fetches from
+   Mojang, and a player who receives a signed message can report it to Mojang. No Chat Reports is no longer
+   available (owner, 2026-11-22). Route found 2026-11-22 (planned): in 1.19.2 every call to Mojang's user API goes through one
+   object, `Minecraft.userApiService` (authlib 3.11.49 `UserApiService`): the chat key fetch (`getKeyPair`),
+   abuse reports (`reportAbuse`), telemetry (`newTelemetrySession`) and the block list. A client mixin on
+   `Minecraft.createUserApiService` that returns authlib's own `UserApiService.OFFLINE` (the object vanilla uses in
+   offline mode) cuts all of them at once: no key, so no message is ever signed and none can be reported; reports and
+   telemetry have nowhere to go. Login and skins use other services and keep working. Needs:
+   - the mixin in Creative Common, behind a config switch (default on), plus a small mixin to hide the "chat
+     messages can't be verified" toast;
+   - `enforce-secure-profile=false` in the server's `server.properties` (a server that demands keys would refuse
+     players with none);
+   - optional server side: send player chat as unsigned server messages, for a client without the pack (not
+     possible on this pack's server today, which requires the pack's mods).
+   Without a mod, `enforce-secure-profile=false` alone is not enough: clients still sign, and signed chat stays
+   reportable.
 2. **Outbound contacts by third-party mods (each sends the player's IP to an outside host; TODO `privacy #3`).** These can be set off in
    the pack's configs (also back up each to `configs_edited/`):
    - Forge's update check for every mod: `versionCheck = false` in `config/fml.toml`.
@@ -113,7 +122,7 @@ To turn off chat reporting and the rest:
 | PR-RE-07 | `development/creativeCommon/changelog.txt` (Forge template with third-party addresses) deleted |
 | PR-RE-08 | `communications/` and `server/perf/reports/` untracked and ignored (files kept locally); the Rustic Delight NOTICE cites the permission as a private reply (Creative Delight, needs a rebuild) |
 | (new) | `config/simplehats_hatdl/` (Simple Hats' downloaded list of supporter UUIDs) untracked, ignored and class `player` in `build_deploy.py` |
-| PR-RE-02 | Open: history, section 4.1 |
+| PR-RE-02 | History rewritten and force-pushed (section 4.1); GitHub pull request refs left |
 
 Three queue rows in `testing/rows/GLD.qb` (SQ-SLT-04, SQ-GLD-12, SQ-PCK-04) now need `B0` set explicitly: their fallback was
 an old session's scratchpad path.
@@ -121,3 +130,4 @@ an old session's scratchpad path.
 ## 6. History
 
 - 2026-11-22: created; rules PV-1 to PV-9, `tools/privacy_lint.py`, fixes in section 5.
+- 2026-11-22: history rewritten and force-pushed (section 4.1).

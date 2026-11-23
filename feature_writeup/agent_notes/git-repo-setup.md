@@ -12,3 +12,7 @@ Set up 2026-09-27. Remote `origin` = git@github.com:SaintAlfonzo/CreativeEnginee
 **How to apply:** never `git add` anything outside the allow-list without asking. After mod changes, regenerate pack/ and update [[mod_sides.md]] (17 jars were unclassified at setup).
 
 **Commit and push (owner, 2026-11-16):** agents commit at the end of each plan phase as the configured author with the Co-Authored-By trailer and push `HEAD:agent_staging`, never `main`; rule text in CLAUDE.md "Build and verify". `agent_staging` was 29 commits behind `main` with nothing of its own on 2026-11-16, so the first push is a fast-forward.
+
+**History rewrite (owner, 2026-11-22):** personal data removed from every commit with `git filter-repo` and
+force-pushed; details and the old -> new id map in [privacy.md](../privacy.md) 4.1. Clones made before 2026-11-22 must be
+re-cloned, never pushed.
