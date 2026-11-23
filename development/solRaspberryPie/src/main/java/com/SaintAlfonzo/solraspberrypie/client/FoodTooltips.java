@@ -49,13 +49,29 @@ public final class FoodTooltips {
 			}
 		}
 		if (apple == null && word == null && diversity == null) return;
-		int at = 1;
+		int at = afterTitle(list);
 		if (apple != null) list.add(Math.min(at++, list.size()), apple);
 		if (diversity != null) list.add(Math.min(at++, list.size()), Either.left(diversity));
 		if (word != null) list.add(Math.min(at, list.size()), word);
 	}
 
-	private static final String AP_LABELS = "gui.solapplepie.food_book.queue.tooltip.";
+	private static final String TITLE_BREAK = "$TitleBreakComponent";
+
+	/**
+	 * Where the food rows go: right after the name, or after Iceberg's title break when it is already in the title
+	 * area (Legendary Tooltips: name, or model + name + spacer, then the break). Iceberg's handler and ours are both
+	 * LOWEST, so which runs first follows listener registration and changes between launches. Rows placed above the
+	 * break become title lines; Legendary Tooltips then draws an empty zero-size frame for the whole tooltip.
+	 */
+	private static int afterTitle(List<Either<FormattedText, TooltipComponent>> list) {
+		for (int i = 1; i < Math.min(list.size(), 4); i++) {
+			var right = list.get(i).right();
+			if (right.isPresent() && right.get().getClass().getName().endsWith(TITLE_BREAK)) return i + 1;
+		}
+		return 1;
+	}
+
+	private static final String AP_LABELS ="gui.solapplepie.food_book.queue.tooltip.";
 
 	/** Apple Pie's TooltipHandler line: its label (uneaten or contribution) followed by the value. */
 	private static void dropApplePieDiversity(List<Either<FormattedText, TooltipComponent>> list) {

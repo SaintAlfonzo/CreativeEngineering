@@ -17,8 +17,8 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=9843abdedec0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 54 open TODO rows (Planned 24, Testing 30), 4 Complete.
+<!-- generated:status_index begin open_work sha1=4b0425b9163a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 54 open TODO rows (Planned 23, Testing 31), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -44,7 +44,6 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food-tuning #56` | Planned | S C | Display names: Astringent -> Steady, Poison Resistance -> Poison Immunity, Fire Resistance -> Fire Immunity |
 | `food-tuning #57` | Planned | S C | Emptiness becomes a sub-effect of Patrol Nullifier and Phantom Bane |
 | `food-tuning #58` | Planned | S C | Harmony: a new source (not adzuki, not the diet ladder), e.g. a rare passive mob; applies Emptiness and hostile mob flee |
-| `food-tuning #61` | Planned | C | Bug: food tooltips (inventory and food log) show an empty frame, too small for one character; no log error; cause not found |
 | `food/types-and-tuning #35` | Planned | C | Food log texture instead of the fluid log texture |
 | `food-tuning #2` | Testing | S P | Diet window 30 meals (endDecay 32 -> 30), respec ages out 5 (was 8) |
 | `food-tuning #3` | Testing | S C | Diet Log: Apple Pie food history pages removed; last 30 meals list (duplicates shown) |
@@ -68,6 +67,7 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food-tuning #28` | Testing | C | Food tooltip line Diversity: X (contributes Y); diversity printed with two decimals, rounded down, everywhere |
 | `food-tuning #59` | Testing | C | Diet Log polish: gate warning on one line, Ladder page bar and key lower (stacked icons clear the Highest line), Milestones text column after the widest value, Diet Log and Food Dictionary tooltip lines |
 | `food-tuning #60` | Testing | S C | Pack ladder milestones are whole numbers, distinct values kept distinct (gen_rp_ladder.py decimals 0, least-distance spread) |
+| `food-tuning #61` | Testing | C | Bug fixed: food tooltips were an empty zero-size frame on launches where Iceberg's title break ran before the Raspberry Pie reorder (rows landed in the Legendary Tooltips title) |
 | `food/types-and-tuning #21` | Testing | S C P T | Spice of Life selectable unlock bonus |
 | `food/types-and-tuning #29` | Testing | C | Raspberry Pie item tooltip: "Doesn't run programs" |
 | `food/types-and-tuning #30` | Testing | S | Raspberry Pie: player reset command |
@@ -1084,8 +1084,10 @@ takes the tagline of the unlock row with its effect and level. The jar's default
 - **Book tooltips.** A gray line under the name: Diet Log "Your recent meals, food diversity and diet ladder.", Food
   Dictionary "Every food you have ever eaten." (`FoodTooltips.bookLine`, ItemTooltipEvent; lang
   `solraspberrypie.tooltip.book.<namespace>`). The Liquid Diet Log keeps its own line.
-- **Open: empty food tooltips.** The owner sees an empty tooltip frame, too small for one character, when hovering a
-  food in the inventory and in the food log. No exception in the logs. Not reproduced or fixed yet (TODO row).
+- **Empty food tooltips (fixed).** Every food tooltip was an empty zero-size frame on some launches: Iceberg's title
+  break and our reorder are both LOWEST listeners, and when Iceberg ran first the food rows landed above the break, so
+  Legendary Tooltips took them for title lines. `FoodTooltips.afterTitle` now inserts after the break when it is
+  already there. Mechanics: [agent note](agent_notes/food-tooltip-rows.md).
 
 ## History
 

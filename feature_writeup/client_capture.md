@@ -136,7 +136,7 @@ through `cmd`.
 | `use` | Right-clicks the targeted block or the held item through `gameMode.useItemOn` / `useItem` (opens real GUIs: pickling jar, kettle, oven) |
 | `attack` | Left-click on the target (one swing) |
 | `screen` | `inventory`, `creative:<tab>`, `jei_recipes:<item>`, `jei_uses:<item>`, `jei_category:<uid>`, `close` |
-| `tooltip` | Opens the driver's stage screen: flat `#202020` background, the item at the center, its tooltip drawn by the normal path (so Legendary Tooltips, AppleSkin, KubeJS and our tooltip lines all run). Options: `shift`, `ctrl`, `advanced` (F3+H) |
+| `tooltip` | Opens the driver's stage screen: flat `#202020` background, the item at the center, its tooltip drawn by the normal path (so Legendary Tooltips, AppleSkin, KubeJS and our tooltip lines all run). Options: `shift`, `ctrl`, `advanced` (F3+H) | Option `"at": [x, y]` places the item at that share of the screen (0 to 1), for edge cases such as a tooltip that must flip left.
 | `hover` | Puts the virtual mouse at GUI coords or on slot N of the open screen (2.7), for tooltips inside a real GUI |
 | `key` | Holds a modifier (`shift`, `ctrl`, `alt`) for the next capture |
 | `reload` | F3+T resource reload, then waits `resources` |

@@ -17,19 +17,27 @@ public class StageScreen extends Screen {
 	public static final int BACKGROUND = 0xFF202020;
 
 	private final ItemStack stack;
+	/** Anchor as a share of the screen (0 to 1), or negative for the default left-third spot. */
+	private final double atX, atY;
 
 	public StageScreen(ItemStack stack) {
+		this(stack, -1, -1);
+	}
+
+	public StageScreen(ItemStack stack, double atX, double atY) {
 		super(Component.literal("cdevcapture stage"));
 		this.stack = stack;
+		this.atX = atX;
+		this.atY = atY;
 	}
 
 	/** Where the virtual mouse sits: the tooltip opens 12 px right of it, with room for wide tooltips. */
 	int anchorX() {
-		return Math.max(24, width / 6);
+		return atX >= 0 ? (int) Math.round(width * atX) : Math.max(24, width / 6);
 	}
 
 	int anchorY() {
-		return Math.max(24, height / 3);
+		return atY >= 0 ? (int) Math.round(height * atY) : Math.max(24, height / 3);
 	}
 
 	@Override

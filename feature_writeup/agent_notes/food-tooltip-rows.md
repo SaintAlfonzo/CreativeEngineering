@@ -22,3 +22,10 @@ Decompiled 2026-11-20 for plan_diet_books_r2.md A11. Status lives in TODO `toolt
 - **Mod Name Tooltip** (`modnametooltip`, ItemTooltipEvent at LOW) adds the mod name unless the last line already is
   it; anything appended after it on a second pass over the same list makes it add the name again (Roll's chopstick
   line, fixed by adding that line once, `tooltips #20`).
+- **Empty frame (2026-11-22, TODO `food-tuning #61`).** Iceberg's `TitleBreakComponent` handler and Raspberry Pie's
+  reorder are both LOWEST, so their order follows listener registration and changes between launches. When Iceberg ran
+  first, the food rows went in at index 1, above the break; Legendary Tooltips then counted them as title lines
+  (AppleSkin's component among them) and drew a zero-size frame with nothing in it, for every food, in every screen.
+  No log line. Fix: `FoodTooltips.afterTitle` inserts after a break found at index 1 to 3. A GUI scale change looked
+  like the trigger but only changed the launch (and so the order). Found with the capture runner at 1920x1080 scale 3
+  and temporary element logging (GatherComponents HIGHEST and LOWEST, RenderTooltipEvent.Pre sizes).

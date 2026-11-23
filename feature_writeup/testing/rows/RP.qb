@@ -769,3 +769,10 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass every threshold is a whole number; milestones that differed before still differ (18 and 19, 26 and 27, 49 and 50); start line about 81 rungs, 5 slots, 37 pool effects, no new warning
 @fails `tools/gen_rp_ladder.py` `spread`, ladder not regenerated, world seeded from an old copy
 @draft written with the build 2026-11-22
+
+## CQ-RPI-73 | food tooltips never empty (food-tuning #61)
+@group client
+@commands Restart the client 3 times; each time hover bread, steak and a gingerbread man in the inventory, in JEI's item list at the top right, and a meal in the Diet Log
+@pass every food tooltip shows the name, the separator line, the shank row, the diversity line and the rest; never an empty frame
+@fails `FoodTooltips.afterTitle` (Iceberg title break found at index 1 to 3), listener order of Iceberg and Raspberry Pie
+@draft written with the build 2026-11-22

@@ -129,6 +129,7 @@
 - **Changed:** Diet ladder milestones are whole numbers, no two the same [one decimal]. Applies to new worlds.
 - **Changed:** The Diet Log's Milestones list starts each bonus's text at the same column, after the widest milestone number.
 - **Fixed:** Three bonus icons stacked on the Diet Log's progress bar overlapped the highest diversity line.
+- **Fixed:** Food tooltips were sometimes an empty frame, in the inventory, JEI and the books.
 - **New:** The Diet Log's diversity icon is the food you have eaten, not a drink, closest in diversity to the average of your recent meals; before that, seeds, moss, rotten flesh, a spider eye or a dandelion leaf.
 - **New:** Diversity is shown with two decimals, rounded down, in the books, the Diet Bonuses screen and tooltips.
 - **New:** The mouse wheel flips pages in the Diet Log and the Food Dictionary.

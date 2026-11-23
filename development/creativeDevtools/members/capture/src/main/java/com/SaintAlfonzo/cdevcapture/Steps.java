@@ -441,7 +441,7 @@ final class Steps {
 		}
 	}
 
-	/** Opens the stage screen. Options: {@code shift}, {@code ctrl}, {@code alt}, {@code advanced}, {@code count}, {@code nbt}. */
+	/** Opens the stage screen. Options: {@code shift}, {@code ctrl}, {@code alt}, {@code advanced}, {@code count}, {@code nbt}, {@code at}. */
 	static class Tooltip extends Step {
 		final JsonObject o;
 
@@ -460,7 +460,8 @@ final class Steps {
 				VirtualInput.ctrl = bool(o, "ctrl");
 				VirtualInput.alt = bool(o, "alt");
 				mc.options.advancedItemTooltips = bool(o, "advanced");
-				StageScreen stage = new StageScreen(st);
+				// "at": [x, y] anchor as a share of the screen (an edge case: [0.9, 0.2] makes the tooltip flip left).
+				StageScreen stage = o.has("at") ? new StageScreen(st, o.getAsJsonArray("at").get(0).getAsDouble(), o.getAsJsonArray("at").get(1).getAsDouble()) : new StageScreen(st);
 				mc.setScreen(stage);
 				// The tooltip hangs off the mouse; park the virtual mouse on the stage's anchor.
 				Window w = mc.getWindow();
