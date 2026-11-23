@@ -34,7 +34,7 @@ StartupEvents.registry('item', e => {
 		[i.peach_scone, 'Peach Scone'],
 	].forEach(s => food(s[0], s[1], 6, 0.3))
 
-	// Effects as decided 2026-11-18 (round 5): orange cranberry Regeneration 10 s + Shrinking 40 s, lemon poppy Haste
+	// Effects as decided in owner round 5: orange cranberry Regeneration 10 s + Shrinking 40 s, lemon poppy Haste
 	// 10 s + Refreshing 10 s
 	// (Shrinking and Refreshing are Fruits Delight's effects: left out without it)
 	food(i.orange_cranberry_muffin, 'Orange Cranberry Muffin', 5, 0.4, f => {
