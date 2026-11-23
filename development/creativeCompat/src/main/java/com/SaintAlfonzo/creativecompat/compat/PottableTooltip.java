@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * "Pottable" on every plant item a flower pot takes (blocks/flower-pots #2, owner 2026-11-22): a block item whose
+ * "Pottable" on every plant item a flower pot takes (blocks/flower-pots #2): a block item whose
  * block the vanilla pot's live map lists ({@link BotanistPot#pottedFor}, so mods' potted plants and glow lichen for
  * the botanist workbench and the double pot count too). Pot items get no line. Dark green, like the pack's
  * plantable lines ("Sapling", "Seed Item").

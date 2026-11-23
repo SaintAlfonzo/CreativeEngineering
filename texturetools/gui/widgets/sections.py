@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-only
-"""Collapsible sidebar sections (owner 2026-11-22, plan_texture_tools_gui.md R10).
+"""Collapsible sidebar sections (owner, 2026-11-22, plan_texture_tools_gui.md R10).
 
 SectionPanel(state=None)    the left sidebar's control column (ToolScreen.controls). begin_section(title, is_open)
                             starts a Section; every add_widget after it lands in that section's body, so a screen's

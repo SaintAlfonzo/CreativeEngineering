@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-3.0-only
-"""File dialogs: the desktop's own file browser, never a Kivy one (owner 2026-11-22, plan_texture_tools_gui.md R9).
+"""File dialogs: the desktop's own file browser, never a Kivy one (owner, 2026-11-22, plan_texture_tools_gui.md R9).
 
 open_browser(mode, on_select, settings=None, filters=("*.png",), title=None, start=None, default_name="",
 		on_error=None)
