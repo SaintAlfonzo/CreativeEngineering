@@ -596,6 +596,15 @@
 			"apply": "report only (crop season type per crop from crop_seasons.json, grow-event check; crops.md section 2.12.1)"
 		},
 		{
+			"id": "crop_harvest_coverage",
+			"script": "tools/crop_harvest_coverage.py",
+			"groups": ["reports", "food"],
+			"dumps": ["dumpcropharvest"],
+			"warnExit": [1],
+			"outputs": ["feature_writeup/crop_harvest_audit.md"],
+			"apply": "report only (harvest and replant per crop vs tools/crop_harvest_rules.json; UNKNOWN = add a rule and a crops.md 2.1 row)"
+		},
+		{
 			"id": "botany_crops",
 			"script": "tools/gen_botany_crops.py",
 			"groups": ["food"],

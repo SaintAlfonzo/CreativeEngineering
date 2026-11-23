@@ -1,4 +1,5 @@
 // requires: creativedevtools
+// SPDX-License-Identifier: GPL-3.0-only
 // /dumpcropgrowth   ->  writes kubejs/exported/crops/crop_growth_audit.json
 //
 //   Every block that looks like a growing plant (an age/stage-style blockstate property, or a
@@ -34,6 +35,17 @@ ServerEvents.commandRegistry(event => {
 })
 
 function dumpCropGrowth() {
+	var w = cropGrowthWalk()
+	var rows = w.entries.map(e => e.row)
+	writeExportJson('kubejs/exported/crops/crop_growth_audit.json',
+		{ total: w.total, listed: rows.length, missing: w.missing, skipped: w.skipped, blocks: rows })
+	console.log(`[dumpcropgrowth] ${rows.length} growing blocks of ${w.total}; ${w.missing} without WTHIT growth (${w.skipped} skipped)`)
+	return { total: w.total, listed: rows.length, missing: w.missing }
+}
+
+// The block walk, shared with /dumpcropharvest (dump_crop_harvest.js, same script pack): every growing block as
+// { row, block }, row being the crop_growth_audit.json entry.
+function cropGrowthWalk() {
 	var $Reg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 	var NATIVE_IDS = {
 		'minecraft:melon_stem': 1, 'minecraft:pumpkin_stem': 1, 'minecraft:nether_wart': 1,
@@ -95,7 +107,7 @@ function dumpCropGrowth() {
 	$Reg.BLOCKS.getKeys().forEach(rl => keys.push(rl))
 	keys.sort((a, b) => String(a) < String(b) ? -1 : String(a) > String(b) ? 1 : 0)
 
-	var rows = [], total = 0, skipped = 0, missing = 0
+	var entries = [], total = 0, skipped = 0, missing = 0
 	keys.forEach(rl => {
 		var id = String(rl)
 		total++
@@ -119,14 +131,11 @@ function dumpCropGrowth() {
 				props: props, classes: ch.classes, interfaces: ch.interfaces,
 				cropLike: cropLike, ageLike: ageLike,
 			}
-			rows.push(row)
+			entries.push({ row: row, block: block })
 			if (!native) missing++
 		})
 		if (!g.ok) { skipped++; console.warn(`[dumpcropgrowth] skipped ${id}: ${g.error}`) }
 	})
 
-	writeExportJson('kubejs/exported/crops/crop_growth_audit.json',
-		{ total: total, listed: rows.length, missing: missing, skipped: skipped, blocks: rows })
-	console.log(`[dumpcropgrowth] ${rows.length} growing blocks of ${total}; ${missing} without WTHIT growth (${skipped} skipped)`)
-	return { total: total, listed: rows.length, missing: missing }
+	return { total: total, skipped: skipped, missing: missing, entries: entries }
 }

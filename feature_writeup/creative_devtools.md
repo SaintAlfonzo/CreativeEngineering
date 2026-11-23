@@ -233,6 +233,9 @@ Scratch server (SQ-CDV, [scratch_queue.md](testing/scratch_queue.md)) and in gam
   later with one `[creativecommon] <file> reloaded` line and no command; a touch or the reload's own correction save
   adds none; third-party tomls unchanged. Rows SQ-PS15B-26, SQ-PS15B-27, CQ-PS15B-04. Headless:
   `bash tools/test_config_watcher.sh` prints `ALL 23 OK` (2026-11-17).
+- [ ] **CDV-09 /dumpcropharvest:** writes `kubejs/exported/crops/crop_harvest_audit.json` with Quark read (`quark: true`,
+  replant and click counts above 0); also part of `/dumpall`. Row SQ-CDV-09. Offline: `python3 tools/crop_harvest_coverage.py`
+  (`/cdevgen run crop_harvest_coverage`) checks it against `tools/crop_harvest_rules.json` (crops.md 6, `farming/crops #3`).
 
 ## 5. Install (game closed)
 

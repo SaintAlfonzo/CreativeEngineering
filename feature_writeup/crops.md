@@ -1491,6 +1491,18 @@ Everything in §2 was read from decompiled classes (2026-10-02). To re-check aft
   `tools/crop_growth_coverage.py` against `kubejs/exported/crops/crop_growth_audit.json`. After adding mods, run
   `/dumpcropgrowth` (or `/dumpall`) and the coverage script; an UNKNOWN row is a new plant to give a rule or a skip reason.
   Not covered offline: the WTHIT overlay itself (CR-59 to CR-66).
+- **Harvest and replant audit (`farming/crops #3`, 2026-11-22):** `/dumpcropharvest` (Creative Devtools, in `/dumpall`;
+  same block walk as `/dumpcropgrowth` plus every block Quark lists) writes `kubejs/exported/crops/crop_harvest_audit.json`:
+  per crop the Quark Simple Harvest state (replant with its ripe states, click, replantBlock, blacklisted), the
+  `#creativedelight:crops/farmland_crops`, `own_pick` and `harvest_from_bottom` tags, the crop season type tags, and the
+  non-vanilla classes that declare their own `canSurvive` / `mayPlaceOn`. `python3 tools/crop_harvest_coverage.py`
+  (`/cdevgen run crop_harvest_coverage`) checks it against the hand rules in `tools/crop_harvest_rules.json` (one per
+  block or glob: replant, own_pick, shears, break, top_break, skip) and writes [crop_harvest_audit.md](crop_harvest_audit.md):
+  UNKNOWN = a crop with no rule (add a rule and a 2.1 row), MISMATCH = the game disagrees with the rule (a Quark replant
+  that overrides an own pick, a missing Quark entry), FLAG = replant + click, or an own soil check outside the parity
+  tag. Exit 1 on UNKNOWN or MISMATCH. Without the harvest dump it falls back to the growth audit (UNKNOWN only).
+  Run it after every mod change. Rules not yet in 2.1: pale and dark bell peppers, the five Veggies replant crops,
+  Mini Cantaloupe, raspberry bush, hops vine, sunflower stem (rules written from the classes; check them on the first dump).
 
 ## 7. In-game test suite
 

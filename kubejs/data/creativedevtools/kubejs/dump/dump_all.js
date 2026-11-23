@@ -30,6 +30,7 @@
 		'dumpnotab',       // items with no creative tab (tools/no_tab_report.py, jei/jei-coverage #29)
 		'dumpphysics',
 		'dumpcropgrowth',
+		'dumpcropharvest', // harvest and replant audit (tools/crop_harvest_coverage.py, farming/crops #3)
 		'dumpfood',
 		'dumpplaceable',
 		'dumppots',

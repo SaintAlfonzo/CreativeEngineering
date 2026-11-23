@@ -52,13 +52,15 @@ look every command answered; /recipescan summary line; spawns.json written now; 
 ## SQ-CDV-03 | /dumpall (about 5 min)
 @group A
 @commands `/dumpall` (about 5 min, includes dumpclimate); then `grep -E "ReferenceError\|guardThrowable\|writeExportJson" logs/kubejs/server.log`
-@pass `[dumpall] all 20 dumps done` (plain `/dumpall`; `full` adds the 6 worldgen dumps); no ReferenceError: the Devtools wrappers reach `global.guardThrowable` / `global.writeExportJson` from the pack's `_lib`
+@pass `[dumpall] all 22 dumps done` (plain `/dumpall`; `full` adds the 6 worldgen dumps); no ReferenceError: the Devtools wrappers reach `global.guardThrowable` / `global.writeExportJson` from the pack's `_lib`
 @fails `java_guard.js` / `export_io.js` not exporting their globals
+@reviewed 2026-11-22
 @from batches/r1106spf/b1.qb passed
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 # judge-5, 2026-11-18: plain /dumpall runs 20 dumps (the 6 worldgen ones only with /dumpall full)
-expect \[dumpall\] all 20 dumps done
+# 2026-11-22: 22 since /dumpnotab and /dumpcropharvest (farming/crops #3)
+expect \[dumpall\] all 22 dumps done
 reject \[dumpall\] \d+/\d+ dumps ok in .*failed
 kjsreject ReferenceError
 kjsreject guardThrowable.*(not|undefined)|writeExportJson.*(not|undefined)
@@ -76,3 +78,27 @@ sleep 5
 sleep 20
 shell grep -rho "creativedevtools:[^\"]*" kubejs/exported/recipes/ | sort -u | head -30
 look one *_mech_crafting per metal and wood, netherite, one sequenced assembly, all creativedevtools:
+
+@@section 2
+@@title SQ-CDV crop harvest audit, 2026-11-22 ([crops.md](../crops.md) 6, TODO `farming/crops #3`)
+@@date 2026-11-22
+@@jars creativecommon creativedevtools
+@@sources kubejs/data/creativedevtools/kubejs/dump/dump_crop_harvest.js development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/dump/CropHarvestProbe.java tools/crop_harvest_coverage.py
+@@text
+@@text `/dumpcropharvest` (Creative Devtools, also in `/dumpall`) writes `kubejs/exported/crops/crop_harvest_audit.json`; `tools/crop_harvest_coverage.py`
+@@text checks it against `tools/crop_harvest_rules.json`. The owner's own `/dumpall` in the real pack is what feeds the follow-up (Quark list and tag fixes);
+@@text this row only proves the dump runs and reads Quark on a scratch server. Group A, full pack.
+@@text
+@@table
+## SQ-CDV-09 | /dumpcropharvest reads Quark and writes the harvest audit
+@group A
+@commands `/dumpcropharvest`; `python3 -c` over `kubejs/exported/crops/crop_harvest_audit.json`: `quark`, and the Quark flags of `minecraft:wheat`, `neapolitan:strawberry_bush`, `vintagedelight:cucumber_crop`
+@pass Chat `Dumped N crop blocks (R Quark replant, C Quark click)` with R and C above 0 and no `Quark not read`; the json has `quark: true`, wheat has `replant` with a ripe state `age=7`, the strawberry bush has `click`, the cucumber has `ownPick: true`
+@fails `CropHarvestProbe` missing (old Devtools jar), a Quark field renamed (`quarkError` in the json), `cropGrowthWalk` not defined (dump_crop_growth.js older than the harvest script)
+> dumpcropharvest
+waitlog Dumped \d+ crop blocks 120
+reject Quark not read
+reject dumpcropharvest failed
+kjsreject ReferenceError.*cropGrowthWalk
+shell python3 -c "import json; a=json.load(open('kubejs/exported/crops/crop_harvest_audit.json')); b={r['id']: r for r in a['blocks']}; print('quark', a['quark'], a['quarkError'], a['listed'], a['replant'], a['click']); [print(k, b[k]['quark'], b[k]['ripeStates'][:1], b[k]['ownPick']) for k in ('minecraft:wheat', 'neapolitan:strawberry_bush', 'vintagedelight:cucumber_crop') if k in b]"
+look quark True, wheat [replant...] with an age=7 ripe state, strawberry bush has click, cucumber ownPick True
