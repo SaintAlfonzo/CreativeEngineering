@@ -530,6 +530,22 @@ Table: `perf/runs/r1123rp/table.md` (`qrun.py table` over every r1123rp RES dir 
 - `check_all.py --fast` test_queue_rows FAIL (PROC-20): scratch_queue.md blocks are stale against CMP/TSK/BPT/RP/RPS.qb; `python3 tools/status_index.py` re-renders them (not run here: it rewrites generated docs other sessions have open).
 - Tool changes: `tools/scratch_query/rps_fixture.py` (new), `qpin.py` EXTRAS (loose Apple Pie fixture jar). Modset `rps loose` is dead (its jar is not in `mods/`); SQ-RPS-04 copies it in its own section instead.
 
+### 11.5 Owner verdicts (2026-11-23, main session)
+
+Screenshots judged by the owner, recorded with `qrun.py judge ... --by owner`:
+
+| ID | Result | Evidence |
+|---|---|---|
+| CQ-CCB-02 | PASS (order half) | owner: JEI list keeps the pack order, Equipment first by material; the page 1 shot does not show the fluids or the Magic Resistance icon (log checks cover the fluid count) |
+| CQ-TSL-02 | PASS | owner: no trash slot in spectator; slot on the chest in survival and after switching back |
+
+Raspberry Pie UI ruling (owner, 2026-11-23: "ui looks good as is"): the appearance half of the 35 UI-look draft rows in
+11.2 is approved. Rows whose pass criteria are appearance only are closed on it: CQ-RPI-17, -29, -32, -34, -35, -43,
+-44, -53. The rest keep their behavior halves open (for example CQ-RPI-11 lock toggle and relog position, -48 rounding,
+-51 scroll page turns, -55 hover counts) for a row-writing pass. These are drafts, so `qrun.py states` still lists them
+as draft; this section is the record. The owner's new Raspberry Pie feature notes from the same answer go to the
+session that owns Raspberry Pie features, not this run.
+
 ## 12. r1123cd: Creative Delight and Creative Brewing jar-changed rows
 
 Targeted run model (skill `scratch-test` part B), owner request 2026-11-23 via the main session (orchestrator).
