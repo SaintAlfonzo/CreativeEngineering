@@ -72,7 +72,13 @@
     "CreativePickBlockSyncMixin",
     "ChatOpenArmMixin",
     "ChatOpenCharDropMixin",
-    "EffectColumnsMixin"
+    "EffectColumnsMixin",
+    "MojangUserApiOfflineMixin",
+    "ProfileKeyNoSigningMixin",
+    "ChatNotSecureTagMixin",
+    "UnsecureServerToastMixin"
   ],
-  "server": []
+  "server": [
+    "DedicatedServerUnsignedChatMixin"
+  ]
 }

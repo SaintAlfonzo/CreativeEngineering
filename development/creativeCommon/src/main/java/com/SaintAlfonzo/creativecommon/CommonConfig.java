@@ -41,6 +41,7 @@ public final class CommonConfig {
 	public static final MagicResistance MAGIC_RESISTANCE;
 	public static final MeltingConfig MELTING;
 	public static final Tooltips TOOLTIPS;
+	public static final Privacy PRIVACY;
 
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -68,6 +69,8 @@ public final class CommonConfig {
 		MELTING = new MeltingConfig(builder);
 		// [tooltips] paletteDemo: the color palette test item (plan_rules_fixes.md section 9, V-45)
 		TOOLTIPS = new Tooltips(builder);
+		// [privacy]: unsigned chat on a dedicated server (feature_writeup/privacy.md 4.2)
+		PRIVACY = new Privacy(builder);
 		// [dragon_gear], [air_brake], [stepstool], [crafting], [armor_enchantability], [shields], [bonemeal_charm],
 		// [bottled_air], [backpackSkins]: creativeequipment-common.toml (Creative Equipment)
 		COMMON_SPEC = builder.build();
@@ -300,6 +303,21 @@ public final class CommonConfig {
 					"/dumpnotab lists every orphan with its recipe and loot sources. Takes effect on the next game start."
 			).defineList("orphanTabItems", com.SaintAlfonzo.creativecommon.util.OrphanTabs.DEFAULTS, o -> o instanceof String);
 			b.pop();
+		}
+	}
+
+	/** {@code mixin/DedicatedServerUnsignedChatMixin}: chat signing on a dedicated server (feature_writeup/privacy.md 4.2). */
+	public static final class Privacy {
+		public final ForgeConfigSpec.BooleanValue acceptUnsignedChat;
+
+		private Privacy(ForgeConfigSpec.Builder b) {
+			b.comment("Chat signing (dedicated server).").push("privacy");
+			acceptUnsignedChat = b.comment(
+					"true: the server lets players join without a chat signing key, whatever enforce-secure-profile says in",
+					"server.properties. Needed for the pack's clients, which hold no key ([privacy] blockMojangReporting in",
+					"creativecommon-client.toml). false: server.properties decides. Read at each login."
+			).define("acceptUnsignedChat", true);
+			b.pop(); // privacy
 		}
 	}
 

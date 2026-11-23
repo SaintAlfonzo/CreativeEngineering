@@ -168,7 +168,7 @@ Meat blocks,meat_blocks.md,ST-,reference,,,"reference, regenerate with `python3 
 Wood mismatch,wood_mismatch.md,,reference,,,"reference, regenerate with `python3 tools/wood_mismatch_scan.py`",,,
 Pack hygiene,pack_hygiene.md,PH-,BUILT,creativedelight,,AUDIT 2026-10-27: 55 findings,,,
 Design rules,design_rules.md,DR-,reference,,,reference,reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
-Privacy rules,privacy.md,,reference,,,reference,reference,2026-11-22: rules PV-1 to PV-9 and the privacy lint; owner steps in section 4,2026-11-22
+Privacy rules,privacy.md,PRV-,BUILT,creativecommon,"CQ-PRV, SQ-PRV",2026-11-22: rules PV-1 to PV-9 and the privacy lint; chat reporting blocked in Creative Common (privacy.md 4.2); owner steps in section 4,,,
 Fixes and compat,fixes_compat.md,FX-,BUILT,"creativecompat, creativecommon, creativeworldgen, creativeequipment","CQ-CHK, SQ-LR, SQ-UC","DEPLOYED (1.0.3 to 1.0.8, 2.22 with 1.0.8)",,,
 Third-party bug fixes,thirdparty_fixes.md,"SQ-TPF, CQ-TPF",planned,creativecommon,"CQ-TPF, SQ-TPF","2026-11-14: Debugify config shipped (9 fixes, plan_bugfix_1114.md 2), row and changelog",,,
 Jar handle leak,jar_handle_leak.md,CQ-FDR-,VERIFIED,creativecommon,CQ-FDR,BUILT and installed 2026-11-14,,,

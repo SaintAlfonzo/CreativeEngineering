@@ -1,0 +1,43 @@
+# Scratch queue rows PRV (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PRV.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title PRV chat reporting blocked, 2026-11-22 ([privacy.md](../privacy.md) 4.2, PRV-01 to PRV-05; TODO `privacy #2`)
+@@date 2026-11-22
+@@jars creativecommon
+@@sources feature_writeup/privacy.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/privacy development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MojangUserApiOfflineMixin.java development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ProfileKeyNoSigningMixin.java development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ChatNotSecureTagMixin.java development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/UnsecureServerToastMixin.java development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/DedicatedServerUnsignedChatMixin.java
+@@text
+@@text The client rows need a client logged in to a real account (an offline client never has a key, so it proves nothing).
+@@text
+@@table
+## SQ-PRV-01 | a dedicated server with `enforce-secure-profile=true` lets a keyless client in
+@group A
+@commands set `enforce-secure-profile=true` in server.properties, boot; check `[privacy] acceptUnsignedChat = true` in config/creativecommon-common.toml; join with the pack client (PRV-01)
+@pass the client joins and can chat; no "Missing profile public key" kick; latest.log has no mixin apply error for DedicatedServerUnsignedChatMixin
+@fails the mixin not applied (server mixin list), or the common config not loaded when the first login arrives
+@draft server side of the chat key block; needs one client join
+## CQ-PRV-02 | the client starts with the user API offline and no key
+@group client
+@commands start the client (real account); `grep -E "Mojang user API (offline|online)|profile key pair" logs/latest.log` (PRV-02)
+@pass one line "Mojang user API offline ([privacy] blockMojangReporting = true)"; no "Failed to retrieve profile key pair" error; login, skins and the multiplayer list work
+@fails the mixin not applied: no state line, or a key fetch error from the offline service
+@draft startup log check
+## CQ-PRV-03 | chat on the pack's server shows no unsigned markers
+@group client
+@commands join the pack's server (SQ-PRV-01 setup), send a chat line from two players; watch for toasts on join (PRV-03)
+@pass no "Chat messages can't be verified" toast; chat lines have no gray "Not Secure" bar; server-modified lines still show their tag
+@fails the toast or bar still shown: UnsecureServerToastMixin or ChatNotSecureTagMixin not applied
+@draft visual check, owner or runner screenshot
+## CQ-PRV-04 | nothing can be reported
+@group client
+@commands on the pack's server, open Social Interactions (P), pick another player (PRV-04)
+@pass the Report button is greyed out (reporting unavailable); no network error toast
+@fails Report enabled: the user API is not the offline one
+@draft vanilla report screen
+## CQ-PRV-05 | the switch turns vanilla back on
+@group client
+@commands set `[privacy] blockMojangReporting = false` in config/creativecommon-client.toml, restart the client, join a server with `enforce-secure-profile=true` and `[privacy] acceptUnsignedChat = false` (PRV-05)
+@pass state line says "online"; the client gets a key and joins the enforcing server; chat is signed (no Not Secure bar); set back to true afterwards
+@fails a cached decision: the switch is read once per start, so a restart is needed
+@draft opt-out path

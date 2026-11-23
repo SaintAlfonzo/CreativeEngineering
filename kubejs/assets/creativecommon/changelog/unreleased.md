@@ -594,13 +594,19 @@
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
 - **Changed:** With the Copycat Framed Block resource pack on, framed blocks and their tools keep their Framed Blocks names [Framed Copycat names, Copycat Hammer].
 
+## Privacy
+
+- **New:** Chat is never signed, so nothing a player writes can be reported to Mojang. No chat reports or telemetry are sent, and the Microsoft account block list is not loaded. Players who need signed chat can turn this off in the client config.
+- **New:** The pack's server lets players join without a chat signing key.
+- **Changed:** Chat lines no longer show the gray Not Secure bar, and joining a server no longer shows the 'Chat messages can't be verified' toast.
+- **Fixed:** The game log recorded the player's Minecraft account name at startup.
+
 ## Mods Added & Removed
 
 - **New:** Packet Fixer, on clients and the server. Items, block contents and chunks of up to 64 MB are accepted [2 MB].
 
 ## Performance & Stability
 
-- **Fixed:** The game log recorded the player's Minecraft account name at startup.
 - **Fixed:** A client with Power Grid crashed when joining a server without it.
 - **Fixed:** Worlds did not load with Creative Delight but without Creative Brewing or Corn Delight.
 - **Fixed:** Changes saved to the pack's own mod config files while the game ran were often not applied until a restart; they now apply about 1 second after saving.

@@ -80,22 +80,28 @@ network calls (PV-7).
 
 To turn off chat reporting and the rest:
 
-1. **Chat reporting (not handled yet; TODO `privacy #2`).** 1.19.2 signs chat with a key the client fetches from
-   Mojang, and a player who receives a signed message can report it to Mojang. No Chat Reports is no longer
-   available (owner, 2026-11-22). Route found 2026-11-22 (planned): in 1.19.2 every call to Mojang's user API goes through one
-   object, `Minecraft.userApiService` (authlib 3.11.49 `UserApiService`): the chat key fetch (`getKeyPair`),
-   abuse reports (`reportAbuse`), telemetry (`newTelemetrySession`) and the block list. A client mixin on
-   `Minecraft.createUserApiService` that returns authlib's own `UserApiService.OFFLINE` (the object vanilla uses in
-   offline mode) cuts all of them at once: no key, so no message is ever signed and none can be reported; reports and
-   telemetry have nowhere to go. Login and skins use other services and keep working. Needs:
-   - the mixin in Creative Common, behind a config switch (default on), plus a small mixin to hide the "chat
-     messages can't be verified" toast;
-   - `enforce-secure-profile=false` in the server's `server.properties` (a server that demands keys would refuse
-     players with none);
-   - optional server side: send player chat as unsigned server messages, for a client without the pack (not
-     possible on this pack's server today, which requires the pack's mods).
-   Without a mod, `enforce-secure-profile=false` alone is not enough: clients still sign, and signed chat stays
-   reportable.
+1. **Chat reporting (built 2026-11-22, Creative Common; TODO `privacy #2`).** 1.19.2 signs chat with a key the
+   client fetches from Mojang, and a player who receives a signed message can report it to Mojang. No Chat Reports is
+   no longer available (owner, 2026-11-22). Every call the 1.19.2 client makes to Mojang's user API goes through one
+   object, `Minecraft.userApiService` (authlib 3.11.49 `UserApiService`): the chat key fetch, abuse reports, telemetry
+   and the block list. Creative Common:
+   - `MojangUserApiOfflineMixin` (client): `Minecraft.createUserApiService` returns authlib's own
+     `UserApiService.OFFLINE` (what vanilla uses when not logged in). Reports, telemetry and the key fetch go nowhere;
+     the Microsoft account block list is not loaded. Login and skins use the session service and keep working.
+   - `ProfileKeyNoSigningMixin` (client): no key at all, including one cached in `profilekeys/` from an earlier
+     session (vanilla reuses a cached key without asking the user API). No key: chat is sent unsigned and the login
+     carries no public key, so nothing a player writes can be reported. Same target as ModernFix's optional
+     `remove_chat_signing` (left off; not needed).
+   - `ChatNotSecureTagMixin`, `UnsecureServerToastMixin` (client): hide the gray "Not Secure" bar on chat lines and
+     the "Chat messages can't be verified" toast. "Modified" and "Filtered" tags stay.
+   - `DedicatedServerUnsignedChatMixin` (server): the dedicated server never demands keys, whatever
+     `enforce-secure-profile` says, so the owner need not edit `server.properties`.
+
+   Switches: `[privacy] blockMojangReporting` in `creativecommon-client.toml` (per player, default true; read straight
+   from the file at game start because the service is built before Forge loads configs; a change needs a restart)
+   and `[privacy] acceptUnsignedChat` in `creativecommon-common.toml` (server, default true). A player who turns the
+   client switch off gets vanilla behavior back and can join servers that enforce secure chat; with it on, such
+   servers refuse them.
 2. **Outbound contacts by third-party mods (each sends the player's IP to an outside host; TODO `privacy #3`).** These can be set off in
    the pack's configs (also back up each to `configs_edited/`):
    - Forge's update check for every mod: `versionCheck = false` in `config/fml.toml`.
@@ -111,7 +117,18 @@ To turn off chat reporting and the rest:
 4. **Tell players (TODO `privacy #4`).** A short line on the project page or in the pack README: what the pack sends (nothing from our
    mods; listed third-party contacts if kept), whether chat reporting is blocked, and what the server logs.
 
-## 5. Fixes done 2026-11-22
+## 5. Tests
+
+Queue rows: [rows/PRV.qb](testing/rows/PRV.qb). Headless: `MojangReporting.parse` (switch read from the file) checked
+2026-11-22 with a javac harness (absent file, other table, bad value, prefix key).
+
+- [ ] **PRV-01:** A dedicated server with `enforce-secure-profile=true` lets a keyless pack client join and chat.
+- [ ] **PRV-02:** Client log: one "Mojang user API offline" line, no profile key fetch error; login and skins work.
+- [ ] **PRV-03:** On the pack's server: no "can't be verified" toast, no "Not Secure" bar on chat lines.
+- [ ] **PRV-04:** Social Interactions: Report is unavailable.
+- [ ] **PRV-05:** `blockMojangReporting = false` + restart: key fetched, signed chat, joins an enforcing server.
+
+## 6. Fixes done 2026-11-22
 
 | Finding | What changed |
 |---|---|
@@ -127,7 +144,8 @@ To turn off chat reporting and the rest:
 Three queue rows in `testing/rows/GLD.qb` (SQ-SLT-04, SQ-GLD-12, SQ-PCK-04) now need `B0` set explicitly: their fallback was
 an old session's scratchpad path.
 
-## 6. History
+## 7. History
 
-- 2026-11-22: created; rules PV-1 to PV-9, `tools/privacy_lint.py`, fixes in section 5.
+- 2026-11-22: created; rules PV-1 to PV-9, `tools/privacy_lint.py`, fixes in section 6.
 - 2026-11-22: history rewritten and force-pushed (section 4.1).
+- 2026-11-22: chat reporting blocked in Creative Common (section 4.2 item 1, tests section 5).

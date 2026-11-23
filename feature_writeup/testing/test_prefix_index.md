@@ -172,6 +172,8 @@ same pass as the renames.
 | `POT-` | [flower_pots.md](../flower_pots.md) | SQ-POT (8) |  |  |
 | `PROC-` | [plan_process_overhaul.md](../plan_process_overhaul.md) | SQ-PROC (7), CQ-PROC (1) |  | new 2026-11-16 (the plan drafted PO-, owned by potions.md); process tooling, no writeup; offline tests PROC-20 to -28 (`tools/test_queue_rows.sh`) |
 | `PRT-` | [immersive_portals.md](../immersive_portals.md) | CQ-PRT (4), SQ-PRT (5) |  | new 2026-11-16, was IP- (README only; item_physics.md owns IP-); queue SQ-IP-01 to -05 and CQ-IP in the Immersive Portals section become SQ-PRT, CQ-PRT |
+| `PRV-` | [privacy.md](../privacy.md) | SQ-PRV (1), CQ-PRV (4) |  | new 2026-11-22 (chat reporting block) |
+| `PV-` | [privacy.md](../privacy.md) |  |  | new 2026-11-22: privacy rule ids PV-1 to PV-9 (rules, not tests) |
 | `PS-` | [perf.md](../perf.md) | SQ-PS (7) |  | not in the README index yet |
 | `PT-` | [plantable.md](../plantable.md) | CQ-PT (1), SQ-PT (1) |  |  |
 | `PWG-` | [power_grid.md](../power_grid.md) | CQ-PWG (30), SQ-PWG (101) | energy_advanced.md | energy_advanced.md has no tests of its own; its SQ-PWG-01 to -08 perf rows are in the same series |

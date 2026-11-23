@@ -11,10 +11,12 @@ public final class CommonClientConfig {
 
 	public static final ForgeConfigSpec CLIENT_SPEC;
 	public static final LoadingTips LOADING_TIPS;
+	public static final Privacy PRIVACY;
 
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		LOADING_TIPS = new LoadingTips(builder);
+		PRIVACY = new Privacy(builder);
 		CLIENT_SPEC = builder.build();
 	}
 
@@ -36,6 +38,28 @@ public final class CommonClientConfig {
 					.defineInRange("cycleSeconds", 10, 2, 120);
 
 			b.pop(); // loading_tips
+		}
+	}
+
+	/**
+	 * Chat reporting and Mojang's user API ({@code privacy.MojangReporting}, feature_writeup/privacy.md 4.2). The
+	 * value is read straight from this file at game start, before Forge loads configs; the spec only writes the key.
+	 */
+	public static final class Privacy {
+		public final ForgeConfigSpec.BooleanValue blockMojangReporting;
+
+		private Privacy(ForgeConfigSpec.Builder b) {
+			b.comment("Chat reporting and Mojang's user API.").push("privacy");
+
+			blockMojangReporting = b.comment(
+					"true: the game uses Mojang's offline user API. It never gets a chat signing key, so nothing you",
+					"write in chat is signed or can be reported to Mojang; no abuse reports or telemetry are sent; your",
+					"Microsoft account block list is not loaded. The \"Not Secure\" chat bar and the \"Chat messages can't",
+					"be verified\" toast are hidden. Servers that enforce secure chat refuse players without a key: set",
+					"false to play on those. Login and skins are unaffected. Applies on the next game start."
+			).define("blockMojangReporting", true);
+
+			b.pop(); // privacy
 		}
 	}
 }
