@@ -306,7 +306,7 @@ public final class ItemMerges {
 		boolean every = SwapConfig.ON_PLAYER_DATA_LOAD.get();
 		if (!every && !(SwapConfig.ONCE_WHEN_UPDATED.get() && !playerStamped(player))) return;
 		int n = player(player);
-		if (n > 0) LOGGER.info("[swaps] {}: {} merged stack(s) rewritten", player.getGameProfile().getName(), n);
+		if (n > 0) LOGGER.info("[swaps] player login: {} merged stack(s) rewritten", n);
 	}
 
 	@SubscribeEvent
@@ -316,7 +316,7 @@ public final class ItemMerges {
 			int n = rewrite(of(event.getContainer()), toPlayer(player));
 			if (n > 0) {
 				event.getContainer().broadcastChanges();
-				LOGGER.info("[swaps] {} opened {}: {} merged stack(s) rewritten", player.getGameProfile().getName(), event.getContainer().getClass().getSimpleName(), n);
+				LOGGER.info("[swaps] menu {}: {} merged stack(s) rewritten", event.getContainer().getClass().getSimpleName(), n);
 			}
 		} catch (RuntimeException e) {
 			LOGGER.warn("[swaps] menu {} skipped: {}", event.getContainer().getClass().getName(), e.toString());
@@ -335,7 +335,7 @@ public final class ItemMerges {
 
 	@SubscribeEvent
 	public static void onChunkData(ChunkDataEvent.Load event) {
-		if (!(event.getLevel() instanceof ServerLevel level)) return;
+		if (!(event.getLevel() instanceof ServerLevel level) || idle()) return;
 		if (fingerprintNow().equals(event.getData().getString(STAMP)))
 			STAMPED.computeIfAbsent(level.dimension(), k -> ConcurrentHashMap.newKeySet()).add(event.getChunk().getPos().toLong());
 	}
@@ -344,7 +344,13 @@ public final class ItemMerges {
 	public static void onChunkSave(ChunkDataEvent.Save event) {
 		if (!(event.getLevel() instanceof ServerLevel level)) return;
 		Set<Long> stamped = STAMPED.get(level.dimension());
-		if (stamped != null && stamped.contains(event.getChunk().getPos().toLong())) event.getData().putString(STAMP, fingerprint);
+		long pos = event.getChunk().getPos().toLong();
+		if (stamped == null || !stamped.contains(pos)) return;
+		event.getData().putString(STAMP, fingerprint);
+		// Forge posts ChunkEvent.Unload before the last save, so a chunk no longer in LOADED is on its way out: the stamp
+		// is in its NBT now and is read back on the next load (publish_readiness.md PR-CC-14: STAMPED no longer only grows)
+		Set<Long> loaded = LOADED.get(level.dimension());
+		if (loaded == null || !loaded.contains(pos)) stamped.remove(pos);
 	}
 
 	@SubscribeEvent

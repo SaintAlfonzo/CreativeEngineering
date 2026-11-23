@@ -8,6 +8,12 @@ Immersive Weathering 1.2.10 by Ordana, MehVahdJukaar, Keybounce (GNU LGPL v3)
   com/SaintAlfonzo/creativecommon/mixin/IwBlockGrowthHandlerMixin: the fallback branch reproduces the upstream method
   body. The LGPL v3 adds permissions to the GNU GPL v3 (creativecommon-LICENSE.txt); its text follows.
 
+Wood composter textures (assets/creativecommon/textures/block/*_composter_*.png)
+  The shape is the vanilla Minecraft composter; each wood's colors are taken from that wood's planks texture: vanilla
+  for spruce, birch, dark oak, jungle, acacia, mangrove, crimson and warped, Quark 3.4-418 by Vazkii and contributors
+  for ancient, blossom and azalea, Architect's Palette 1.3.5 for twisted. No pixels are copied
+  from those mods; the palette use is pending the owner's ruling (design rule DR-C20).
+
 
 -------------------------------------------------------------------------------------------------------
 

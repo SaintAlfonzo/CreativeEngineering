@@ -59,6 +59,7 @@ ef.phantom_bane = 'better_beacons:phantom_bane';
 ef.nourishment = 'farmersdelight:nourishment';
 ef.comfort = 'farmersdelight:comfort';
 ef.magic_resistance = 'creativecommon:magic_resistance';
+ef.wither_immunity = 'creativecommon:wither_immunity';
 ef.exsanguination = 'alexsmobs:exsanguination';
 ef.conductive = 'immersiveengineering:conductive';
 ef.pungent = 'hearthandharvest:pungent';

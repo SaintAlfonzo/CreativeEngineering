@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-GSH Every glass block and pane breaks into shards, 2026-11-21 ([glass_shards.md](../glass_shards.md) 7, GSH-01 to GSH-07; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R3, R19, D1; TODO `gameplay/misc #22`)
 @@date 2026-11-21
+@@reviewed 2026-11-22
 @@jars creativecommon creativeloot
 @@sources feature_writeup/glass_shards.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/loot/GlassShardsModifier.java development/creativeCommon/src/main/resources/data/creativecommon/loot_modifiers/glass_shards.json development/creativeCommon/src/main/resources/data/creativecommon/glm_entries.json
 @@text
@@ -115,3 +116,32 @@ expect verb=loot .*rolls=20 drops=quark:dirty_shard:([2-5]\d|60)(\s|$)
 > cdevtest loot 5347 -60 5210 rolls=20
 expect verb=loot .*rolls=20 drops=quark:dirty_shard:(2\d|3\d|40)(\s|$)
 reject \[cdevtest\] .*done=0
+
+@@section 2
+@@title SQ-GSH Glass shards load without Creative Loot; shards in mid-tier chests, 2026-11-22 ([glass_shards.md](../glass_shards.md) 7, GSH-08, GSH-09; [publish_readiness.md](../publish_readiness.md) PR-CC-03, ruling P1; TODO `creative-common-publish #12`)
+@@date 2026-11-22
+@@jars creativecommon creativeloot
+@@sources development/creativeCommon/src/main/resources/data/forge/loot_modifiers/global_loot_modifiers.json kubejs/data/creativeloot/kubejs/loot/07_rules.js
+@@table
+## SQ-GSH-08 | Common and Quark without Creative Loot: the modifier loads from the Forge list, glass breaks into shards
+@group B (Common + Quark, no Creative Loot)
+@commands boot `cc_only` with Quark and without Creative Loot; rerun SQ-GSH-04 and SQ-GSH-07
+@pass both rows PASS (blue pane -> blue shards, tinted glass -> dirty shards); no `[GlmMerge]` line (Creative Loot absent)
+@fails Forge list `data/forge/loot_modifiers/global_loot_modifiers.json` missing from the jar or `replace` true; codec registration in `CreativeCommon.java`
+@draft modset spec to pick: `cc_only full` minus Creative Loot; the runner chains the two rows
+## SQ-GSH-09 | mid-tier chest tables roll glass shards, mostly dirty or clear
+@group A
+@commands `/loot spawn` minecraft:chests/simple_dungeon 40 times at a cleared spot, then `/cdevtest items` there
+@pass `quark:dirty_shard` or `quark:clear_shard` among the items (about 12 of 40 rolls carry 1 to 3 shards); colored shards, if any, fewer than dirty plus clear; `/loottuning` lists the `glass shards` pool add for 12 tables
+@fails no shards: the `L.addPool` block in `07_rules.js` (Quark's dirty shard not registered skips it), or the table list
+> forceload add 3200 3200 3216 3216
+> fill 3200 -60 3200 3210 -50 3210 minecraft:air
+repeat 40
+> loot spawn 3205 -58 3205 loot minecraft:chests/simple_dungeon
+end
+sleep 2
+> cdevtest items 3205 -58 3205 6
+waitlog verb=items 30
+expect verb=items .*quark:(dirty|clear)_shard
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look dirty plus clear shards outnumber the colored ones

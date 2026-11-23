@@ -83,6 +83,13 @@
 	#Read when data loads: a change applies on the next /reload or world start.
 	enabled = false
 
+#Recipe book (server side).
+[recipe_book]
+	#false: no recipe is ever unlocked (crafting, furnaces, the knowledge book, advancement rewards,
+	#/recipe give, other mods), so the recipe book gains no entry and no "new recipe" toast shows.
+	#Entries already in a save stay. Default true (vanilla). Read live.
+	unlocks = false
+
 #Creative inventory (client side).
 [creative_menu]
 	#true: creative players open the survival inventory (2x2 crafting grid) instead of the creative tabs,
@@ -156,7 +163,7 @@
 #Bees.
 [bees]
 	#Multiplies the honeycomb a full hive or nest drops when sheared (by hand or by a dispenser).
-	#Vanilla drops 3, so 2 gives 6 (the pack's setting). 1 = vanilla. Read live.
+	#Vanilla drops 3, so 2 gives 6. 1 = vanilla (default). Read live.
 	#Range: 1 ~ 16
 	honeycombMultiplier = 2
 

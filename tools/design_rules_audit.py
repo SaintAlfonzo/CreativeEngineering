@@ -314,7 +314,11 @@ if wants('glm'):
 	import json
 	import zipfile
 	own = re.compile(r'^development/.*/src/[^/]+/resources/(.*/)?data/')
-	lists = [(p, 0, 'Forge list') for p in FILES if own.match(p) and p.endswith('data/forge/loot_modifiers/global_loot_modifiers.json')]
+	# Exemption: Creative Common ships the Forge list with replace false (its glass shards modifier must load without
+	# Creative Loot; publish_readiness.md PR-CC-03, ruling P1). The fragment stays as well.
+	common_list = 'development/creativeCommon/src/main/resources/data/forge/loot_modifiers/global_loot_modifiers.json'
+	lists = [(p, 0, 'Forge list') for p in FILES if own.match(p) and p.endswith('data/forge/loot_modifiers/global_loot_modifiers.json')
+			 and not (p == common_list and json.loads(read(p)).get('replace') is False)]
 	defs = {re.sub(r'^.*?data/([^/]+)/loot_modifiers/(.+)\.json$', r'\1:\2', p) for p in FILES
 			if re.search(r'data/[^/]+/loot_modifiers/.+\.json$', p)}
 	missing = []

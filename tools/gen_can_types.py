@@ -471,7 +471,7 @@ EXPLICIT = [
 	('golden', 'canned_enchanted_apples', None, ['enchanted_golden_apple'], True, dict(norecipe=True, code_fx=True)),
 	('soup', 'canned_beetroot_soup', None, ['beetroot_soup'], True, dict(norecipe=True)),
 	('soup', 'canned_suspicious_stew', None, ['suspicious_stew'], True, dict(norecipe=True, code_fx=True)),
-	# Canned Food and the Hot Hot Hotpot are removed from the pack (creativecommon/_lib/removed_items.js)
+	# Canned Food and the Hot Hot Hotpot are removed from the pack (startup_scripts/removed/removed_items.js)
 ]
 
 # soup keys that are not canned; salads without a can

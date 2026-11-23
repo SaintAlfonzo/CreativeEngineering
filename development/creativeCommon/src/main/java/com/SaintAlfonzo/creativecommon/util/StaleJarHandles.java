@@ -40,10 +40,17 @@ import java.util.Set;
  * them. Jars with no game copy in the mod list (service jars, plain libraries) are left alone. The private fields are
  * read with {@code sun.misc.Unsafe}: securejarhandler does not open its package to reflection (same idiom as
  * {@link ModDisplayNames}).
+ *
+ * <p>Gated (publish_readiness.md PR-CC-09): by default it runs only on Linux with {@link #THRESHOLD} or more mod files;
+ * {@code -Dcreativecommon.closeStaleJars=true} forces it, {@code =false} turns it off.
  */
 public final class StaleJarHandles {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	private static boolean done;
+	/** JVM flag: true always runs, false never, auto (default) only on Linux with {@link #THRESHOLD} or more mod files. */
+	static final String FLAG = "creativecommon.closeStaleJars";
+	/** Mod files from which auto mode runs: two descriptors per jar pass 1024 at about 420 jars plus the libraries. */
+	static final int THRESHOLD = 300;
 
 	private StaleJarHandles() {}
 
@@ -52,6 +59,19 @@ public final class StaleJarHandles {
 			return;
 		}
 		done = true;
+		String mode = System.getProperty(FLAG, "auto");
+		if ("false".equalsIgnoreCase(mode)) {
+			LOGGER.info("[jar handles] off (-D{}=false)", FLAG);
+			return;
+		}
+		if (!"true".equalsIgnoreCase(mode)) {
+			// auto: only where the crash happens, Linux with a mod list near the select() limit
+			boolean linux = System.getProperty("os.name", "").toLowerCase(java.util.Locale.ROOT).contains("linux");
+			int jars = LoadingModList.get().getModFiles().size();
+			if (!linux || jars < THRESHOLD) {
+				return;
+			}
+		}
 		try {
 			int before = openCount();
 			Map<FileSystem, Boolean> live = new IdentityHashMap<>();

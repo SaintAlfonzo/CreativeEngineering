@@ -237,12 +237,9 @@ def excluded_ids(key_val):
 	out = set()
 	types = json.loads((INSTANCE / 'kubejs/generation_scripts/food/food_types.json').read_text())
 	out |= {key_val.get(k) for k in types['excluded']}
-	removed = (LIB / 'removed_items.js').read_text()
-	body = removed[removed.index('global.removedItems'):]
-	body = body[:body.index(']')]
-	out |= {key_val.get(k) for k in re.findall(r'i\.(\w+)', body)}
+	out |= {key_val.get(k) for k in P.removed_item_keys()}
 	# merge pairs: the pack's list (dict keys), and Creative Delight's swap lists (ids; item_merges.md 1.1, 6)
-	p = LIB / 'item_merges.js'
+	p = P.PACK_REMOVED / 'item_merges.js'
 	out |= {key_val.get(k) for k in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', p.read_text())}
 	swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'
 	for f in sorted(swaps.glob('merges_*.json')):

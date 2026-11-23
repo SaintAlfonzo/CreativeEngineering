@@ -26,6 +26,7 @@ from .common import (EXPORTED, KUBEJS_DATA, MODS, ROOT, block, block_tag, entity
 SUPP_CONFIG = ROOT / 'config' / 'supplementaries-common.toml'
 DELIGHTFUL_CONFIG = ROOT / 'config' / 'delightful-common.toml'
 LIB = ROOT / 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib'
+PACK = ROOT / 'kubejs/startup_scripts/removed'   # the pack's removed items, merges and woods (PR-CC-01)
 JAR = 'supplementaries:jar'
 UNIT_MB = 250          # one soft fluid unit (a bottle) in mB; a bucket is 4
 
@@ -79,9 +80,9 @@ def removed_and_merges():
 	"""(removed item ids, {old id: new id}) from removed_items.js, removed_woods.js and every item_merges.js."""
 	vals = _item_dict()
 	removed, merges = set(), {}
-	src = (LIB / 'removed_items.js').read_text(encoding='utf-8')
-	body = src.split('global.removedItems = [', 1)[1].split('];', 1)[0]
-	for key in re.findall(r'i\.(\w+)', body):
+	src = (PACK / 'removed_items.js').read_text(encoding='utf-8')
+	body = src.split('global.removedItems.push(', 1)[1].split('\n);', 1)[0]
+	for key in re.findall(r'\bi\.(\w+)', re.sub(r'//[^\n]*', '', body)):
 		if key in vals:
 			removed.add(vals[key])
 	# the pack's merges (dict keys), then Creative Delight's swap lists (ids; item_merges.md 1.1, 6)
@@ -91,7 +92,7 @@ def removed_and_merges():
 			for old in olds:
 				removed.add(old)
 				merges[old] = new
-	for p in [LIB / 'item_merges.js', LIB / 'removed_woods.js']:
+	for p in [PACK / 'item_merges.js', PACK / 'removed_woods.js']:
 		if not p.exists():
 			continue
 		for a, b in re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.(\w+)\s*\]', p.read_text(encoding='utf-8')):

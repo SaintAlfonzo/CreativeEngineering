@@ -105,6 +105,31 @@
 	// above, which is what removed it from villages).
 	L.frequency(i.t_loot_golden_food, 2)                                     // golden food twice as common
 
+	// ── glass shards in mid-tier chests (publish_readiness.md PR-CC-03, ruling P1) ─────────
+	// One extra pool, 30% per chest: 1 to 3 shards, mostly dirty or clear, about one roll in three a random color.
+	// Mid tier = the vanilla structure chests between village houses and the treasure rooms (agent pick, glass_shards.md).
+	if (Item.exists(i.dirty_shard)) {
+		var shardEntries = [
+			{ type: 'minecraft:item', name: i.dirty_shard, weight: 20 },
+			{ type: 'minecraft:item', name: i.clear_shard, weight: 14 },
+		]
+		;['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
+			'blue', 'brown', 'green', 'red', 'black'].forEach(function (c) {
+			shardEntries.push({ type: 'minecraft:item', name: i[c + '_shard'], weight: 1 })
+		})
+		L.addPool([
+			'minecraft:chests/simple_dungeon', 'minecraft:chests/abandoned_mineshaft', 'minecraft:chests/desert_pyramid',
+			'minecraft:chests/jungle_temple', 'minecraft:chests/pillager_outpost', 'minecraft:chests/ruined_portal',
+			'minecraft:chests/shipwreck_supply', 'minecraft:chests/underwater_ruin_big', 'minecraft:chests/igloo_chest',
+			'minecraft:chests/woodland_mansion', 'minecraft:chests/stronghold_corridor', 'minecraft:chests/stronghold_crossing',
+		], {
+			rolls: 1,
+			conditions: [{ condition: 'minecraft:random_chance', chance: 0.3 }],
+			entries: shardEntries,
+			functions: [{ function: 'minecraft:set_count', count: { type: 'minecraft:uniform', min: 1, max: 3 } }],
+		}, { name: 'glass shards' })
+	}
+
 	// ── containers that name a table nobody ships (always empty): one roll of a sibling ───────
 	L.alias('kaisyn:village/village_birch_forest_house',                    'minecraft:chests/village/village_plains_house')
 	L.alias('kaisyn:village/village_forest_ruins/forest_ruins_butcher',     'minecraft:chests/village/village_butcher')

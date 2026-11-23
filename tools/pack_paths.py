@@ -3,6 +3,8 @@ loader and the vanilla / Forge jar locator. Standard library only, so importing 
 
     import pack_paths as P
     P.INSTANCE, P.MODS, P.ITEM_DICT, P.STARTUP_LIB   # STARTUP_LIB: the dicts' folder in Creative Common
+    P.PACK_REMOVED                                # the pack's removed-item list, item merges and removed woods
+    P.removed_item_keys()                         # dict keys in the pack's removed-item list
     src, key_val, by_id = P.parse_item_dict()     # key -> value (last wins), item id -> [keys] (no '#tag' values)
     P.item_dict_first_keys()                      # value -> first key that assigns it
     P.loads_lenient(raw)                          # json with // and /* */ comments and trailing commas
@@ -23,7 +25,18 @@ MODS = INSTANCE / 'mods'
 # The dicts (global.item, food, fluid, blocks,...) ship in Creative Common's jar (plan_cb_publish.md M1).
 STARTUP_LIB = INSTANCE / 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib'
 ITEM_DICT = STARTUP_LIB / 'item_dict.js'
+# The pack's removed-item list, general item merges and removed woods (moved out of Common, publish_readiness PR-CC-01)
+PACK_REMOVED = INSTANCE / 'kubejs/startup_scripts/removed'
+REMOVED_ITEMS_JS = PACK_REMOVED / 'removed_items.js'
 GRADLE_CACHE = Path.home() / '.gradle/caches/forge_gradle'
+
+
+def removed_item_keys():
+	"""Dict keys (i.<key>) in the pack's removed-item list, in file order (the push(...) block only)."""
+	src = REMOVED_ITEMS_JS.read_text(encoding='utf-8')
+	body = src.split('global.removedItems.push(', 1)[1].split('\n);', 1)[0]
+	body = re.sub(r'//[^\n]*', '', body)
+	return re.findall(r'\bi\.(\w+)', body)
 
 
 NESTED_CACHE = INSTANCE / 'tools/.nested_jars'

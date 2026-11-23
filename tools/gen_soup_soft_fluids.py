@@ -38,7 +38,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from food_catalog import INSTANCE, parse_dict  # noqa: E402
 import pack_paths  # noqa: E402
 
-REMOVED_JS = pack_paths.STARTUP_LIB / 'removed_items.js'
+REMOVED_JS = pack_paths.REMOVED_ITEMS_JS
 TYPES = INSTANCE / 'kubejs/generation_scripts/food/food_types.json'
 FOODS = INSTANCE / 'kubejs/exported/food/foods.json'
 OUT = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/moonlight/soft_fluids'
@@ -212,7 +212,7 @@ def main():
 	types = json.loads(TYPES.read_text())['types']
 	keys = list(types.get('soup', []))
 	_, key_val, _ = parse_dict()
-	removed = set(re.findall(r'^\s*i\.(\w+)\s*,', REMOVED_JS.read_text(), re.M))
+	removed = set(pack_paths.removed_item_keys())
 	keys = [k for k in keys if k not in removed]
 	remainder = {f['id']: f.get('remainder') for f in json.loads(FOODS.read_text())['foods']}
 	jars = jar_index()

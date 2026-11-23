@@ -35,6 +35,7 @@ public final class CommonConfig {
 	public static final WanderingTrader WANDERING_TRADER;
 	public static final Bees BEES;
 	public static final Advancements ADVANCEMENTS;
+	public static final RecipeBook RECIPE_BOOK;
 	public static final CreativeMenu CREATIVE_MENU;
 	public static final ModNames MOD_NAMES;
 	public static final Effects EFFECTS;
@@ -59,6 +60,8 @@ public final class CommonConfig {
 		WANDERING_TRADER = new WanderingTrader(builder);
 		BEES = new Bees(builder);
 		ADVANCEMENTS = new Advancements(builder);
+		// [recipe_book]: recipe unlocks switch (publish_readiness.md PR-CC-02)
+		RECIPE_BOOK = new RecipeBook(builder);
 		CREATIVE_MENU = new CreativeMenu(builder);
 		MOD_NAMES = new ModNames(builder);
 		// [effects], [magic_resistance]: from creativebrewing-common.toml (plan_cb_polish.md 2); the constructor
@@ -248,8 +251,8 @@ public final class CommonConfig {
 			b.comment("Bees.").push("bees");
 			honeycombMultiplier = b.comment(
 					"Multiplies the honeycomb a full hive or nest drops when sheared (by hand or by a dispenser).",
-					"Vanilla drops 3, so 2 gives 6 (the pack's setting). 1 = vanilla. Read live."
-			).defineInRange("honeycombMultiplier", 2, 1, 16);
+					"Vanilla drops 3, so 2 gives 6. 1 = vanilla (default). Read live."
+			).defineInRange("honeycombMultiplier", 1, 1, 16);
 			b.pop(); // bees
 		}
 	}
@@ -264,6 +267,21 @@ public final class CommonConfig {
 					"false: none are loaded, so none show, toast or give rewards (the pack's setting). Default true (vanilla).",
 					"Read when data loads: a change applies on the next /reload or world start."
 			).define("enabled", true);
+			b.pop();
+		}
+	}
+
+	/** {@code mixin/NoRecipeUnlockMixin}: recipe unlocks off (the pack's setting, design rule DR-C14). */
+	public static final class RecipeBook {
+		public final ForgeConfigSpec.BooleanValue unlocks;
+
+		private RecipeBook(ForgeConfigSpec.Builder b) {
+			b.comment("Recipe book (server side).").push("recipe_book");
+			unlocks = b.comment(
+					"false: no recipe is ever unlocked (crafting, furnaces, the knowledge book, advancement rewards,",
+					"/recipe give, other mods), so the recipe book gains no entry and no \"new recipe\" toast shows.",
+					"Entries already in a save stay. Default true (vanilla). Read live."
+			).define("unlocks", true);
 			b.pop();
 		}
 	}
@@ -355,15 +373,9 @@ public final class CommonConfig {
 			categoryOverrides = b.comment(
 					"Category overrides, \"namespace:effect=CATEGORY\" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.",
 					"The category colors the effect's name in potion, food and gear tooltips (HARMFUL red, the other",
-					"two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the",
-					"effects whose own category showed the wrong color (feature_writeup/effects.md 2.4). Read live."
+					"two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. Empty by default",
+					"(feature_writeup/effects.md 2.4). Read live."
 			).defineList("categoryOverrides", List.of(
-					"create_confectionery:rest=BENEFICIAL",
-					"alexsmobs:debilitating_sting=HARMFUL",
-					"alexsmobs:fear=HARMFUL",
-					"alexsmobs:power_down=HARMFUL",
-					"neapolitan:slipping=HARMFUL",
-					"vinery:trippy=HARMFUL"
 			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=(BENEFICIAL|HARMFUL|NEUTRAL)"));
 			forceHudIcon = b.comment(
 					"Effects that always get their HUD icon (top right), even when the mod that gave them hid it",
@@ -389,11 +401,8 @@ public final class CommonConfig {
 					"Effects swapped for another wherever they are applied, \"from=to\". Same duration, level and",
 					"visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and",
 					"Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS",
-					"(global.foodEffectSwaps). Server side, read live."
+					"(global.foodEffectSwaps). Empty by default. Server side, read live."
 			).defineList("remap", List.of(
-					"neapolitan:agility=vinery:climbing_effect",
-					"fruitsdelight:chorus=vinery:teleport",
-					"quark:resilience=alexsmobs:knockback_resistance"
 			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
 			removed = b.comment(
 					"Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed",

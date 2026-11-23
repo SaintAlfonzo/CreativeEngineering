@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -56,6 +57,9 @@ public final class WoodComposters {
 	private WoodComposters() {}
 
 	private static void add(String name, String planks, boolean flammable) {
+		// A modded wood's composter registers only with its mod (publish_readiness.md PR-CC-10)
+		String ns = new ResourceLocation(planks).getNamespace();
+		if (!"minecraft".equals(ns) && !ModList.get().isLoaded(ns)) return;
 		String id = name + "_composter";
 		Material material = flammable ? Material.WOOD : Material.NETHER_WOOD;
 		ResourceLocation planksId = new ResourceLocation(planks);

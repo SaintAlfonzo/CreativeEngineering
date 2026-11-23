@@ -13,6 +13,8 @@
   "effect.creativecommon.part.elytra_lift": "Elytra Lift",
   "effect.creativecommon.magic_resistance": "Magic Resistance",
   "effect.creativecommon.magic_resistance.description": "Reduces magic damage (potions, evoker fangs, thorns, sonic booms, curses and life drain) by 20% per level. Poison and Wither ticks deal no damage while their level is at most this effect's level.",
+  "effect.creativecommon.wither_immunity": "Wither Immunity",
+  "effect.creativecommon.wither_immunity.description": "Wither cannot be applied, and a Wither already present deals no damage.",
   "item.minecraft.lingering_potion.effect.magic_resistance": "Lingering Potion of Magic Resistance",
   "item.minecraft.lingering_potion.effect.long_magic_resistance": "Lingering Potion of Magic Resistance",
   "item.minecraft.lingering_potion.effect.strong_magic_resistance": "Lingering Potion of Magic Resistance",

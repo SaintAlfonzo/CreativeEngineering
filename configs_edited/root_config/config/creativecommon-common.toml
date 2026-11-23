@@ -1,0 +1,273 @@
+
+#Player changelog, "What's New" (client side). The notes are the pack's
+#assets/creativecommon/changelog/<version>.md files. Takes effect the next time a menu opens.
+[changelog]
+	#Master switch: off removes the book buttons and the update popup.
+	enabled = true
+	#Book button on the title screen, right of Singleplayer.
+	titleButton = true
+	#Book button on the pause menu, right of Back to Game.
+	pauseButton = true
+	#Speech bubble beside the book button while the newest version's notes are unread. Opening the
+	#changelog once acknowledges it (config/creativecommon/changelog_seen.txt).
+	updatePopup = true
+
+#Damage tags classify every hit (fire, magic, electric, ...) so shields - and later armor -
+#can treat kinds of damage differently. Every tag is a data/creativecommon/damage_tags/
+#<name>.json file, merged across datapacks and reloaded by /reload: most list message ids
+#directly (fire.json, magic.json, ... - these mirror vanilla's own damage flags, but as a
+#visible, editable file instead of a hidden check), and a couple are pure META tags that
+#only #include other tags (elemental.json = fire+cold+electric+chemical; physical.json =
+#melee+machinery+piercing+firearm+explosion+projectile). Shields read only these tags -
+#never a raw damage flag - so reclassifying a source, or moving a whole kind of damage
+#between shield columns, is always a data edit here, never Java.
+[damage_tags]
+	#Discovery aid. When true, the first time each distinct damage source (message id + flags)
+	#hurts anything on the server it is logged once as '[damage-tags] seen msgId=...'.
+	#'tags=NONE' means no damage_tags file claims that source yet. Off by default.
+	#Live: takes effect immediately.
+	logSeenSources = true
+
+#Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.
+[perf]
+	#Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in
+	#every dimension on every tick. On: only entities in the dimensions below run it (entities that
+	#still carry the low-gravity modifier from one run it once more to drop it). Off: the mod's own
+	#behaviour.
+	gravityLimitDimensions = true
+	#Dimensions Create: Gravity is allowed to run in. The pack's biome_configs lists only
+	##minecraft:is_end, so the End is enough. Add a dimension here if you add a gravity biome
+	#outside the End.
+	gravityDimensions = ["minecraft:the_end"]
+	#Ticks between passes that apply a worn horse armor's effects (dragon horse armor: Regeneration).
+	#The pass walks every entity in the level, which cost too much every tick. Effects last
+	#this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval.
+	#Range: 1 ~ 1200
+	mountEffectIntervalTicks = 100
+	#Block states that can no longer change on a random tick (full-grown colonies, waxed lanterns,
+	#Floral Enchantment flower bushes) stop asking for random ticks, so chunk sections holding only
+	#such blocks are skipped. Off: every block keeps its mod's own setting. Restart to apply.
+	idleRandomTicks = true
+	#Which states stop. One line per rule: '<block id> [<property>=<value> | <property>!=<value> ...]
+	#[+wake_above]'. All conditions of a line must hold; several lines for one block are alternatives;
+	#no condition stops every state. 'max' / 'min' is the highest / lowest value of a number property.
+	#+wake_above: a stopped block runs its own random tick a few more times when a block is placed
+	#right above it (a grown tomato vine still climbs a rope placed later). Lines for blocks that are
+	#not installed are ignored. Restart to apply.
+	idleRandomTickRules = ["farmersdelight:tomatoes age=max +wake_above", "supplementaries:rope_tomatoes age=max +wake_above", "supplementaries:stick_tomatoes age=max +wake_above", "creativedelight:treated_stick_tomatoes age=max +wake_above", "farmersdelight:rice age=max supporting=true", "farmersdelight:brown_mushroom_colony age=max", "farmersdelight:red_mushroom_colony age=max", "fungidelight:inky_cap_mushroom_colony age=max", "fungidelight:morel_mushroom_colony age=max", "nethersdelight:crimson_fungus_colony age=max", "nethersdelight:warped_fungus_colony age=max", "immersiveengineering:hemp growth=top0", "neapolitan:strawberry_bush age=max", "neapolitan:adzuki_sprouts age=max", "redeco:stone_lantern waxed!=0", "redeco:stone_lantern mossing=max", "redeco:deepslate_lantern waxed!=0", "redeco:deepslate_lantern mossing=max", "floralench:allium_bush", "floralench:azure_bluet_bush", "floralench:blue_orchid_bush", "floralench:cornflower_bush", "floralench:dandelion_bush", "floralench:lilac_bush", "floralench:lily_of_the_valley_bush", "floralench:orange_tulip_bush", "floralench:oxeye_daisy_bush", "floralench:peony_bush", "floralench:pink_tulip_bush", "floralench:poppy_bush", "floralench:red_tulip_bush", "floralench:rose_bush_bush", "floralench:sunflower_bush", "floralench:white_tulip_bush", "floralench:wither_rose_bush"]
+
+#Wandering Trader spawning and offer counts (the Wandering Winemaker: vinery-common.toml [trader]).
+#The spawner rolls once per interval, counted in server ticks (20 = 1 second) while the
+#overworld runs with doMobSpawning on. Day length (Better Days), sleeping and /time do not
+#change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then
+#a free spot near a random player; on average about 14 rolls per spawn.
+#/gamerule doTraderSpawning false stops it and the Winemaker.
+[wandering_trader]
+	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers). Default off; the pack sets true.
+	enabled = true
+	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes
+	#(the pack's value). A change takes effect after the wait already counting down.
+	#Range: 1200 ~ 100000000
+	traderIntervalTicks = 96000
+	#Offers drawn from the common pool. Vanilla: 5 (the pack: 25). Each offer is a different listing; a pool
+	#smaller than this gives every listing once.
+	#Range: 0 ~ 200
+	commonTrades = 25
+	#Offers drawn from the rare pool, all different items. Vanilla: 1 (the pack: 5).
+	#Range: 1 ~ 50
+	rareTrades = 5
+
+#Advancements (vanilla, every mod, every datapack).
+[advancements]
+	#false: none are loaded, so none show, toast or give rewards (the pack's setting). Default true (vanilla).
+	#Read when data loads: a change applies on the next /reload or world start.
+	enabled = false
+
+#Recipe book (server side).
+[recipe_book]
+	#false: no recipe is ever unlocked (crafting, furnaces, the knowledge book, advancement rewards,
+	#/recipe give, other mods), so the recipe book gains no entry and no "new recipe" toast shows.
+	#Entries already in a save stay. Default true (vanilla). Read live.
+	unlocks = false
+
+#Creative inventory (client side).
+[creative_menu]
+	#true: creative players open the survival inventory (2x2 crafting grid) instead of the creative tabs,
+	#which skips the creative search cache build (a multi-second freeze on the first E press with many
+	#mods); JEI's cheat mode covers item browsing. Default false (vanilla); the pack sets true.
+	#Takes effect the next time the inventory opens.
+	disabled = true
+	#Items that have no creative tab (so creative mode, its search and JEI never list them) but should be
+	#listed. Each goes into the tab most other items of its mod use (vanilla Food or Miscellaneous when the
+	#mod has none). Only items listed here change; an orphan left out stays hidden on purpose. The default
+	#is the Abnormals Delight compat foods that have pack recipes while their parent mods are absent.
+	#/dumpnotab lists every orphan with its recipe and loot sources. Takes effect on the next game start.
+	orphanTabItems = ["abnormals_delight:maple_glazed_bacon", "abnormals_delight:cherry_cookie", "abnormals_delight:duck_fillet", "abnormals_delight:cooked_duck_fillet", "abnormals_delight:duck_noodles"]
+
+#Mod display names (client side: JEI's mod line and @ search, WTHIT, the Mods screen).
+[mod_names]
+	#"modid=Name" entries replacing the name from the mod's mods.toml. Applied at startup and when this
+	#file is saved; JEI and WTHIT keep the name they read first, so a change shows after a restart.
+	#Removing an entry gives the mod its own name back. The mod id stays the same (JEI @<modid> still works).
+	#Empty by default; a pack lists its own names here (the Creative Engineering pack's list moved to its
+	#config 2026-11-07, creative_engineering.md 7.1).
+	overrides = ["abnormals_delight=Abnormals' Delight", "apexcore=Apex Core", "appleskin=Apple Skin", "astikorcarts=Astikor Carts", "autoreglib=Auto Reg Lib", "babymobs=Baby Mobs", "betterdays=Better Days", "betterf3=Better F3", "boatview360=Boat View 360", "bobberdetector=Create: Bobber Detector", "canned_goods=Canned Goods (Creative Delight)", "cb_microblock=CB Microblock", "cb_multipart=CB Multipart", "cb_multipart_minecraft=CB Multipart Minecraft", "cccbridge=Create: CC Bridge", "chefsdelight=Chef's Delight", "cherisheditems=Cherished Items", "codechickenlib=Code Chicken Lib", "compressedcreativity=Create: Compressed Creativity", "conditional_mixin=Conditional Mixin", "cookingforblockheads=Cooking for Blockheads", "corpsecurioscompat=Corpse Curios Compat", "cosmeticarmorreworked=Cosmetic Armor Reworked", "create__the_salt=Create: The Salt (Creative Delight)", "create_compressed=Create: Compressed", "create_confectionery=Create: Confectionery", "create_crush_everything=Create: Recycling", "create_enchantment_industry=Create: Enchantment Industry", "create_mechanical_extruder=Create: Mechanical Extruder", "create_questing=Create: Questing", "create_things_and_misc=Create: Things & Misc", "createaddition=Create: Crafts & Additions", "createappliedkinetics=Create: Applied Kinetics", "createdeco=Create: Deco", "creategbd=Create: Guardian Beam Defense", "creategoggles=Create: Goggles", "createliquidfuel=Create: Liquid Fuel", "creativecore=Creative Core", "creativeengineering=Creative Engineering", "ctm=Connected Textures Mod", "darkpaintings=Dark Paintings", "deathknell=Death Knell", "design_decor=Create: Design & Decor", "do_a_barrel_roll=Do a Barrel Roll", "dont_void_arrows=Don't Void Arrows", "dragonloot=Dragon Loot", "dummmmmmy=Target Dummy", "enchdesc=Enchantment Descriptions", "enderstorage=Ender Storage", "entityculling=Entity Culling", "everythingcopper=Everything Is Copper", "exposure=Exposure Backport & Extras", "exposure_catalog=Exposure Catalog Backport", "exposure_expanded=Exposure: Expanded Backport", "exposureextras=Exposure Extras", "exposure_polaroid=Exposure Polaroid Backport", "extendedgears=Create: Extended Cogwheels", "farmers_structures=Farmer's Structures", "fastfurnace=Fast Furnace", "fireflybushport=Firefly Bush Port", "fishontheline=Fish on the Line", "fortuneonneterite_i_ig_z=Fortune on Netherite", "framedblocks=Framed Blocks", "geckolib3=Gecko Lib", "hobbit_house_=Hobbit House", "hopour=Hopo Better Underwater Ruins", "immediatelyfast=Immediately Fast", "ipo=Improved Pillager Outpost", "itemphysic=Item Physic", "just_enough_beacons=Just Enough Beacons", "kotlinforforge=Kotlin for Forge", "kubejsdelight=KubeJS Delight", "lightmansdiscord=Lightman's Discord Integration", "littlecontraptions=Create: Little Contraptions", "minecraft_style_paintings=Minecraft Style Paintings", "mixinsquared=Mixin Squared", "moremooblooms=More Mooblooms", "netherportalfix=Nether Portal Fix", "nocubescreateexp=Create: Compact Exp", "notenoughanimations=Not Enough Animations", "old_swamp_fisherman_house=Old Swamp Fisherman House", "oreexcavation=Ore Excavation", "portablewardrobe=Portable Wardrobe", "projectred_core=Project Red Core", "projectred_fabrication=Project Red Fabrication", "projectred_illumination=Project Red Illumination", "projectred_integration=Project Red Integration", "projectred_transmission=Project Red Transmission", "railways=Create: Steam & Rails", "restapi=REST API", "sawmillhouse=Sawmill House", "seasonhud=Season HUD", "simplehats=Simple Hats", "sliceanddice=Create: Slice & Dice", "spectrelib=Spectre Lib", "supermartijn642configlib=Config Library", "supermartijn642corelib=Core Lib", "swingthroughgrass=Swing Through Grass", "t_and_t=Towns & Towers", "takesapillage=It Takes a Pillage", "tmted=Engineer's Delight", "transition=Transition", "trashslot=Trash Slot", "treechop=HT's Tree Chop", "villagersellanimals=Villagers Sell Animals", "w2w2=Waystones 2 Waypoints 2", "waila=Waila", "whitenoise=White Noise", "worldedit=World Edit", "wthit=WTHIT", "xaerolib=Xaero Lib", "xaerozoomout=Xaero Zoomout"]
+
+#Mob effects (client and server).
+[effects]
+	#Category overrides, "namespace:effect=CATEGORY" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.
+	#The category colors the effect's name in potion, food and gear tooltips (HARMFUL red, the other
+	#two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the
+	#effects whose own category showed the wrong color (feature_writeup/effects.md 2.4). Read live.
+	categoryOverrides = ["create_confectionery:rest=BENEFICIAL", "alexsmobs:debilitating_sting=HARMFUL", "alexsmobs:fear=HARMFUL", "alexsmobs:power_down=HARMFUL", "neapolitan:slipping=HARMFUL", "vinery:trippy=HARMFUL"]
+	#Effects that always get their HUD icon (top right), even when the mod that gave them hid it
+	#(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held
+	#tool and aura effects are left hidden on purpose (feature_writeup/effects.md 2.6). Client, read live.
+	forceHudIcon = ["brewinandchewin:intoxication", "via_romana:travellers_fatigue", "monobank:thief"]
+	#Items whose effects always get their HUD icon: every effect added while an entity finishes using
+	#one (eating, drinking, the item's own code). "namespace" for a whole mod or "namespace:item". Effect
+	#ids in forceHudIcon show from any source; this list only for these items, so the same effect from
+	#armor stays hidden. Server side, read live.
+	forceHudIconItems = ["create:builders_tea", "canned_goods:canned_pufferfishs", "farmersrespite", "immersive_weathering"]
+	#Effects swapped for another wherever they are applied, "from=to". Same duration, level and
+	#visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and
+	#Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS
+	#(global.foodEffectSwaps). Server side, read live.
+	remap = ["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]
+	#Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed
+	#by KubeJS (Creative Brewing's potions.js). Server side, read live.
+	removed = ["upgrade_aquatic:restfulness", "upgrade_aquatic:insomnia", "alexsmobs:power_down", "alexsmobs:fear"]
+	#Highest level an effect can have, "namespace:effect=LEVEL" (1 = level I). A higher level from any
+	#source (food, drink, wine, potion, mob, command) is lowered to it when applied, and every tooltip
+	#and the effect list show the capped level. The defaults are the effects that do the same at every
+	#level (feature_writeup/effects.md 2.1, Leveled N). Client and server, read live.
+	levelCaps = ["minecraft:nausea=1", "minecraft:fire_resistance=1", "minecraft:water_breathing=1", "minecraft:invisibility=1", "minecraft:blindness=1", "minecraft:night_vision=1", "minecraft:glowing=1", "minecraft:slow_falling=1", "minecraft:dolphins_grace=1", "minecraft:darkness=1", "alexsmobs:bug_pheromones=1", "alexsmobs:clinging=1", "alexsmobs:earthquake=1", "alexsmobs:fear=1", "alexsmobs:fleet_footed=1", "alexsmobs:lava_vision=1", "alexsmobs:oiled=1", "alexsmobs:poison_resistance=1", "alexsmobs:power_down=1", "alexsmobs:sunbird_blessing=1", "alexsmobs:sunbird_curse=1", "alexsmobs:tigers_blessing=1", "better_beacons:patrol_nullifier=1", "better_beacons:phantom_bane=1", "botania:allure=1", "botania:bloodthirst=1", "botania:clear=1", "botania:emptiness=1", "botania:feather_feet=1", "botania:soul_cross=1", "brewinandchewin:intoxication=1", "buzzier_bees:sunny=1", "create_confectionery:rest=1", "create_confectionery:stimulation=1", "createaddition:shocking=1", "endersdelight:phasing=1", "farmersdelight:comfort=1", "farmersdelight:nourishment=1", "fruitsdelight:alienating=1", "fruitsdelight:appetizing=1", "fruitsdelight:astringent=1", "fruitsdelight:brightening=1", "fruitsdelight:chorus=1", "fruitsdelight:digesting=1", "fruitsdelight:disgusted=1", "fruitsdelight:leaf_piercing=1", "fruitsdelight:rage_aura=1", "fruitsdelight:recovering=1", "fruitsdelight:refreshing=1", "fruitsdelight:shrinking=1", "fruitsdelight:sliding=1", "fruitsdelight:suspicious_smell=1", "fruitsdelight:sweetening=1", "fungidelight:weak_stomach=1", "hearthandharvest:clarity=1", "hearthandharvest:pinned=1", "hostiledelight:collapsing=1", "hostiledelight:dioxide=1", "immersiveengineering:concrete_feet=1", "immersiveengineering:slippery=1", "immersiveengineering:stunned=1", "immersivepetroleum:anti_fire=1", "neapolitan:agility=1", "neapolitan:harmony=1", "neapolitan:slipping=1", "neapolitan:vanilla_scent=1", "oceanic_delight:instant_breath=1", "untitledduckmod:intimidation=1", "via_romana:travellers_fatigue=1", "vinery:climbing_effect=1", "vinery:lava_walker=1", "vinery:party_effect=1", "vinery:teleport=1", "vinery:trippy=1", "vinery:water_walker=1", "xaerominimap:no_cave_maps=1", "xaerominimap:no_cave_maps_harmful=1", "xaerominimap:no_entity_radar=1", "xaerominimap:no_entity_radar_harmful=1", "xaerominimap:no_minimap=1", "xaerominimap:no_minimap_harmful=1", "xaerominimap:no_waypoints=1", "xaerominimap:no_waypoints_harmful=1", "xaeroworldmap:no_cave_maps=1", "xaeroworldmap:no_cave_maps_harmful=1", "xaeroworldmap:no_world_map=1", "xaeroworldmap:no_world_map_harmful=1"]
+
+#Tuning for creativecommon:magic_resistance's damage reduction against
+#the creativecommon:magic damage tag (the same tag the shields' MAGIC column
+#reads: potions, poison, evoker fangs, thorns, sonic booms, curses, life drain) and
+#against the periodic damage of the effects listed in negatedEffectTicks.
+[magic_resistance]
+	#Damage reduction per effect amplifier level (amplifier 0 = level I), same
+	#shape as vanilla Resistance. Total reduction is capped at 1.0 (full immunity)
+	#regardless of amplifier.
+	#Range: 0.0 ~ 1.0
+	reductionPerLevel = 0.2
+	#Effects whose periodic damage Magic Resistance stops outright, comma-separated
+	#effect ids. A tick of one of these deals no damage while its level is at most the
+	#Magic Resistance level (Poison I against Magic Resistance I); a higher level takes
+	#the per-level cut instead. These are ticks no shield can block
+	#([shields].unblockableEffectTicks).
+	negatedEffectTicks = "minecraft:poison, minecraft:wither"
+
+#Bees.
+[bees]
+	#Multiplies the honeycomb a full hive or nest drops when sheared (by hand or by a dispenser).
+	#Vanilla drops 3, so 2 gives 6. 1 = vanilla (default). Read live.
+	#Range: 1 ~ 16
+	honeycombMultiplier = 2
+
+#Melting: salt, fire and lava melt ice and snow (server side). Sources are the block tags
+#creativecommon:melting/salt, /fire (a block with a lit property counts only while lit) and /lava (plus any
+#block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow loses a layer, frozen
+#decor becomes its meltProducts row, the rest air) and /meltable_slow (packed and blue ice, IW cryosol and
+#permafrost, one tier down; only lava and magma heat them, /lava_only ones only by touching lava). Salt melts
+#only /saltable blocks. A pair is found by the target's random tick or by a source's own random tick
+#(magma, lava, salt blocks); the target then gets a melt tick every meltTickInterval while a source stays in
+#reach, rolling its chance each time. Ranges are spheres measured through any blocks: 1 = the 6 touching
+#blocks, 0 = this source never melts that kind. A target looks past its 6 neighbors for fire and lava only
+#when block light reaches it, so a fire behind a sealed wall melts nothing. feature_writeup/melting.md.
+[melting]
+	#Master switch for salt, fire and lava melting. The Salt item click is The Salt's own and not covered.
+	enabled = true
+	#Salt: reach for every target (meltable and meltable_slow). 1 = touching. Above 1 every
+	#target scans a sphere on each roll (salt gives no light to gate it), so keep it at 1 on big glaciers.
+	#Range: 0 ~ 4
+	saltRange = 1
+	#Fire, torches, lanterns, glowstone, magma: reach for meltable targets.
+	#Range: 0 ~ 8
+	fireRange = 3
+	#Lava: reach for meltable targets.
+	#Range: 0 ~ 8
+	lavaRange = 4
+	#Lava: reach for meltable_slow targets (packed ice, cryosol). Blue ice and permafrost
+	#(creativecommon:melting/lava_only) melt only touching lava, whatever this says. Other fire never melts them.
+	#Range: 0 ~ 8
+	slowLavaRange = 2
+	#Magma (creativecommon:melting/magma): reach for meltable_slow targets that are not lava_only.
+	#Range: 0 ~ 8
+	slowMagmaRange = 2
+	#Chance per tick (its random tick and each melt tick) that a meltable target with a source in reach
+	#melts. Snow layers use snowLayerMeltChance.
+	#Range: 0.0 ~ 1.0
+	meltChance = 0.4
+	#The same for meltable_slow targets, one tier per success.
+	#Range: 0.0 ~ 1.0
+	slowMeltChance = 0.05
+	#Melted ice (#minecraft:ice) leaves a water source; false leaves air. Ultra-warm dimensions
+	#(the Nether) always leave air.
+	placeWater = true
+	#Vanilla melts ice above block light 11 and snow layers above 11, from any light (sea lanterns,
+	#shroomlights, redstone lamps). false: only the sources above melt anything (torches, lanterns and
+	#glowstone through the fire rule). true: vanilla's light melting runs as well. Serene Seasons' seasonal
+	#melt and Immersive Weathering's ice melt are their own and not touched by this.
+	vanillaLightMelting = false
+	#Blocks in creativecommon:melting/ultrawarm_instant (snow layers, snow blocks, powder snow) become air the
+	#moment they are placed in an ultra-warm dimension (the Nether): by hand, dispenser, /setblock or a mod.
+	ultraWarmInstantMelt = true
+	#"from=to" block ids: what a meltable_slow target becomes when it melts. A meltable_slow block with no
+	#row here melts fully, like a meltable one.
+	slowSteps = ["minecraft:blue_ice=minecraft:packed_ice", "minecraft:packed_ice=minecraft:ice", "immersive_weathering:permafrost=immersive_weathering:cryosol", "immersive_weathering:cryosol=minecraft:dirt", "architects_palette:polished_packed_ice=minecraft:ice", "architects_palette:chiseled_packed_ice=minecraft:ice", "architects_palette:packed_ice_pillar=minecraft:ice"]
+	#Blocks that get random ticks so they can find a fire or lava by themselves (vanilla gives none to these).
+	#Ice, frosted ice, snow layers and Immersive Weathering's snowy and frosty blocks tick already. A target left
+	#out (packed and blue ice, cryosol, permafrost) is found only by a source's own tick (magma, lava, salt
+	#blocks). Sources listed here (Molten Nether Bricks) scan from their own tick like magma. Read once at
+	#startup: a change needs a restart.
+	extraRandomTickBlocks = ["minecraft:snow_block", "minecraft:powder_snow", "immersive_weathering:thin_ice", "immersive_weathering:snow_bricks", "immersive_weathering:snow_brick_slab", "immersive_weathering:snow_brick_stairs", "immersive_weathering:snow_brick_wall", "immersive_weathering:snow_brick_vertical_slab", "architects_palette:coarse_snow", "architects_palette:molten_nether_bricks"]
+	#Chance per tick that a snow layer with a source in reach loses one layer.
+	#Range: 0.0 ~ 1.0
+	snowLayerMeltChance = 0.8
+	#Ticks between melt ticks of a target with a source in reach (75 to 125 percent of this, vanilla scheduled
+	#ticks saved with the chunk). 100 = 5 s. 0 = off: targets melt only on random ticks, as before 2026-11-17.
+	#Range: 0 ~ 12000
+	meltTickInterval = 100
+	#Snow (layers, blocks, powder snow) within this reach of a block in creativecommon:melting/magma melts at
+	#once: when placed, on magma's own tick, or on its melt tick. 0 = off.
+	#Range: 0 ~ 4
+	magmaInstantRange = 2
+	#No snow forms from snowfall and no water freezes into ice within fireRange of a creativecommon:melting/magma
+	#block (the weather's snow and ice placement, server only; world generation is not checked).
+	magmaStopsFreezing = true
+	#Snow layers one Salt Melt use or one salt dispense removes; a Snow Block counts as 8 layers. A salt block
+	#melting by its tick removes one.
+	#Range: 1 ~ 8
+	saltMeltSnowLayers = 3
+	#"from=to" block ids: what a saltable block becomes when salt melts it (shared properties copied). Not
+	#listed: ice (#minecraft:ice) becomes water as placeWater says, anything else air. Snow loses layers instead.
+	saltProducts = ["minecraft:packed_ice=minecraft:ice", "immersive_weathering:cryosol=minecraft:dirt"]
+	#"from=to" block ids: what a meltable target becomes when heat melts it (and salt, when saltProducts has
+	#no row), every property the two share copied by name (facing, half, slab type, wall sides, waterlogged).
+	#minecraft:water becomes air in ultra-warm dimensions or with placeWater off. Not listed: water for
+	##minecraft:ice, else air. A row whose product is missing (mod not loaded) is skipped.
+	meltProducts = ["immersive_weathering:snowy_stone=minecraft:stone", "immersive_weathering:snowy_stone_slab=minecraft:stone_slab", "immersive_weathering:snowy_stone_stairs=minecraft:stone_stairs", "immersive_weathering:snowy_stone_wall=immersive_weathering:stone_wall", "immersive_weathering:snowy_stone_vertical_slab=quark:stone_vertical_slab", "immersive_weathering:snowy_cobblestone=minecraft:cobblestone", "immersive_weathering:snowy_cobblestone_slab=minecraft:cobblestone_slab", "immersive_weathering:snowy_cobblestone_stairs=minecraft:cobblestone_stairs", "immersive_weathering:snowy_cobblestone_wall=minecraft:cobblestone_wall", "immersive_weathering:snowy_cobblestone_vertical_slab=quark:cobblestone_vertical_slab", "immersive_weathering:snowy_stone_bricks=minecraft:stone_bricks", "immersive_weathering:snowy_stone_brick_slab=minecraft:stone_brick_slab", "immersive_weathering:snowy_stone_brick_stairs=minecraft:stone_brick_stairs", "immersive_weathering:snowy_stone_brick_wall=minecraft:stone_brick_wall", "immersive_weathering:snowy_stone_brick_vertical_slab=quark:stone_brick_vertical_slab", "immersive_weathering:snowy_chiseled_stone_bricks=minecraft:chiseled_stone_bricks", "immersive_weathering:frosty_glass=minecraft:glass", "immersive_weathering:frosty_glass_pane=minecraft:glass_pane", "immersive_weathering:frosty_grass=minecraft:grass", "immersive_weathering:frosty_fern=minecraft:fern", "immersive_weathering:thin_ice=minecraft:water", "architects_palette:coarse_snow=minecraft:gravel"]
+	#Chance multiplier for creativecommon:melting/sluggish targets (snow bricks).
+	#Range: 0.0 ~ 1.0
+	sluggishMeltFactor = 0.25
+	#Hot places: in an ultra-warm dimension (the Nether) every target but the lava_only ones (blue ice,
+	#permafrost), and in a creativecommon:melting/hot biome (arid, dry and tropical) ice, snow and frozen decor, take a
+	#melt tick this often with no source needed, rolling meltChance each time (the slow tier too). 0 = off.
+	#Range: 0 ~ 12000
+	hotMeltTickInterval = 20
+	#The End: every source (salt, fire, magma, lava) melts only the blocks touching it; no reach, no magma
+	#instant zone past the touching blocks.
+	endContactOnly = true
+	#No minecraft:fire in the End: any placement of it is refused (flint and steel, fire charges, lava, End
+	#crystals, commands) and fire already there goes out on its next tick. Soul fire is not affected.
+	endNoFire = true
+
+#Item tooltips (client side).
+[tooltips]
+	#true: White Wool and White Concrete show the color palette test tooltips (every tooltip role and
+	#text color). Default false. Read when the client scripts load: a change applies after a client restart.
+	paletteDemo = true
+

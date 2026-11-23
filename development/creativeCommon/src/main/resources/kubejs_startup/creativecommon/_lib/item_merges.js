@@ -9,8 +9,8 @@
 //
 // Merges are split by who runs them (item_merges.md 1.1). Each group's recipe, loot and inventory swaps run once,
 // from the group's own server script:
-//   pack              general merges, here and in removed_woods.js (later split out by mod);
-//                     server half in server_scripts/other/item_merges.js
+//   pack              general merges, in the pack's startup_scripts/removed/ (item_merges.js, removed_woods.js);
+//                     server half in server_scripts/other/item_merges.js. Empty in the jar alone
 //   creativedelight  food merges, in Creative Delight's swap lists (data/creativedelight/swaps/merges_*.json in the
 //                     CD jar, fed in by its startup script creativedelight/swap_merges.js); server half in
 //                     kubejs/data/creativedelight/kubejs/_core/item_merges.js. Stacks already in the world are
@@ -79,19 +79,3 @@ global.itemMergeRun = {
 		}
 	},
 }
-
-var i = global.item
-
-global.addItemMerges('pack', [
-	// Decorative Blocks' rocky dirt goes, Twigs' stays (Dave's is a separate block, renamed Pebble Dirt)
-	[i.decorative_blocks_rocky_dirt, i.twigs_rocky_dirt],
-	// Twigs' azalea flowers -> Immersive Weathering's; the placed block stays Twigs' (Creative Compat
-	// IwAzaleaFlowersPlaceMixin places it from Immersive Weathering's item; item_merges.md 2.21)
-	[i.azalea_flowers, i.immersive_weathering_azalea_flowers],
-	// Little Logistics' wireless components -> Create's Redstone Link (their own recipes are removed in Creative
-	// Engineering's transport.js)
-	[i.ll_receiver_component, i.redstone_link],
-	[i.ll_transmitter_component, i.redstone_link],
-])
-
-console.log(`[itemMerges] ${global.itemMergeGroups.pack.length} pack merges registered`)

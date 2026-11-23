@@ -40,7 +40,7 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
   a decision, F1 is a bug.
 - **Files to open:** [bark.js](../kubejs/data/creativeengineering/kubejs/wood/bark.js), [sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js),
   [wood_types.js](../kubejs/data/creativeengineering/kubejs/wood/wood_types.js), [ash.js](../kubejs/data/creativeengineering/kubejs/wood/ash.js),
-  [removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (+ [server side](../kubejs/server_scripts/wood/removed_woods.js)).
+  [removed_woods.js](../kubejs/startup_scripts/removed/removed_woods.js) (+ [server side](../kubejs/server_scripts/wood/removed_woods.js)).
 - **Knobs:** CEConfig `[worldgen.systems] mulberrySapling` (2.6). Server scripts (`/reload`); removed woods need a restart.
 
 ## 1. Overview
@@ -111,7 +111,7 @@ recipes stay.
 ### 2.6 Removed woods (`removed_woods.js`)
 
 A removed wood is merged into oak with the item merge system ([item_merges.md](item_merges.md)): every block, item and
-other mod's variant of it is listed as purged id -> oak twin in `startup_scripts/_lib/removed_woods.js`
+other mod's variant of it is listed as purged id -> oak twin in `startup_scripts/removed/removed_woods.js`
 (`global.removedWoods`), which joins `global.itemMerges` and `global.removedItems`. So the purged items are hidden in
 JEI, lose their tags, drop their oak twin as loot (old placed blocks too), and turn into it in a player's inventory.
 `server_scripts/wood/removed_woods.js` first removes every recipe that makes a purged item (one OR-filter pass), so the
@@ -230,7 +230,7 @@ are NCH's generated ones, so they ignore counts (F1).
 
 - [server_scripts/wood/](../kubejs/data/creativeengineering/kubejs/wood/): `bark.js`, `sawdust.js`, `wood_types.js`, `ash.js`,
   `removed_woods.js`.
-- Removed woods: [startup_scripts/_lib/removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (lists; keys in
+- Removed woods: [startup_scripts/removed/removed_woods.js](../kubejs/startup_scripts/removed/removed_woods.js) (lists; keys in
   `item_dict.js` section "removed woods"), `development/creativeWorldgen/src/main/resources/packs/upgrade_aquatic/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json`,
   Creative Common `worldgen/MulberrySapling.java` (+ `CEConfig` / `WorldgenConfig` `mulberrySapling`), names in
   `client_scripts/namechanges.js`.

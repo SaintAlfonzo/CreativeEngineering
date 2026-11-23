@@ -21,10 +21,12 @@ import org.slf4j.Logger;
 import com.electronwill.nightconfig.core.file.FileWatcher;
 import com.mojang.logging.LogUtils;
 
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.config.ConfigTracker;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
+import net.minecraftforge.forgespi.language.IModFileInfo;
 
 /**
  * Common's own watcher on config/ for our mods' config files (plan_post_scratch_1115.md G11, cause in
@@ -49,6 +51,17 @@ public final class OwnConfigWatcher {
 	private static final OwnConfigLogic.Debounce DEBOUNCE = new OwnConfigLogic.Debounce(OwnConfigLogic.DEBOUNCE_MS);
 	private static volatile boolean started;
 
+	/** The mod's jar carries Common's build stamp (in-tree jars, bundles and repacks). */
+	private static boolean stamped(String modId) {
+		IModFileInfo info = ModList.get().getModFileById(modId);
+		if (info == null) return false;
+		try {
+			return Files.exists(info.getFile().findResource(OwnConfigLogic.STAMP));
+		} catch (RuntimeException e) {
+			return false;
+		}
+	}
+
 	/** Mod bus, FMLLoadCompleteEvent: every COMMON and CLIENT config is loaded by now. */
 	public static void onLoadComplete(FMLLoadCompleteEvent event) {
 		start();
@@ -63,7 +76,7 @@ public final class OwnConfigWatcher {
 		}
 		Set<Path> dirs = new HashSet<>();
 		for (ModConfig c : ConfigTracker.INSTANCE.fileMap().values()) {
-			if (!OwnConfigLogic.isOwn(c.getModId())) continue;
+			if (!OwnConfigLogic.isOwn(c.getModId(), OwnConfigWatcher::stamped)) continue;
 			Path p = inConfigDir(c);
 			if (p == null) continue;
 			OWNED.put(p, c);

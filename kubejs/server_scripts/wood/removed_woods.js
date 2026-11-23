@@ -1,5 +1,5 @@
 // Lives in the pack folder, not in the Engineering jar: it must run before other/item_merges.js (priority -100), and
-// script packs of different jars load in no fixed order. Removed woods (startup_scripts/_lib/removed_woods.js,
+// script packs of different jars load in no fixed order. Removed woods (startup_scripts/removed/removed_woods.js,
 // feature_writeup/recipes_wood.md 2.6): each purged wood item is an item merge into its oak twin. Every recipe that
 // makes a purged item goes here, in one pass, before other/item_merges.js swaps the remaining inputs; swapped outputs
 // would only repeat the oak recipes.

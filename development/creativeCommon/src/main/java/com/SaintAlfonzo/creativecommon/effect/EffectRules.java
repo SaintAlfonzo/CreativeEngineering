@@ -138,6 +138,8 @@ public final class EffectRules {
 
 	private static volatile List<? extends String> capSource;
 	private static volatile Map<ResourceLocation, Integer> capLevels = Map.of();
+	/** Per-effect cap, resolved once per effect per list (publish_readiness.md PR-CC-15); -1 = no cap. */
+	private static volatile Map<MobEffect, Integer> capByEffect = new java.util.concurrent.ConcurrentHashMap<>();
 
 	/**
 	 * The amplifier lowered to the effect's {@code [effects] levelCaps} entry (level N = amplifier N-1), or the amplifier
@@ -165,11 +167,16 @@ public final class EffectRules {
 				}
 			}
 			capLevels = parsed;
+			capByEffect = new java.util.concurrent.ConcurrentHashMap<>();
 			capSource = raw;
 		}
-		if (capLevels.isEmpty()) return amplifier;
-		Integer max = capLevels.get(ForgeRegistries.MOB_EFFECTS.getKey(effect));
-		return max == null ? amplifier : Math.min(amplifier, max);
+		Map<ResourceLocation, Integer> levels = capLevels;
+		if (levels.isEmpty()) return amplifier;
+		int max = capByEffect.computeIfAbsent(effect, e -> {
+			Integer m = levels.get(ForgeRegistries.MOB_EFFECTS.getKey(e));
+			return m == null ? -1 : m;
+		});
+		return max < 0 ? amplifier : Math.min(amplifier, max);
 	}
 
 	private static Set<ResourceLocation> parseIds(List<? extends String> raw) {

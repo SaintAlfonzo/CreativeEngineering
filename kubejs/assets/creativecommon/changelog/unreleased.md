@@ -484,11 +484,15 @@
 - **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
 - **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
 
+## Glass Shards <!-- icon: quark:clear_shard -->
+
+- **New:** Glass blocks and panes from every mod break into shards of their color without Silk Touch: blocks 1 to 3, panes 1 to 2. Tinted glass gives dirty shards.
+- **New:** Dungeons, mineshafts, desert and jungle temples, pillager outposts, ruined portals, shipwreck supply chests, big underwater ruins, igloos, woodland mansions and stronghold corridors and crossings can hold 1 to 3 glass shards, mostly dirty or clear, sometimes colored.
+
 ## Gameplay
 
 - **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
 - **New:** The potions, fluid amounts and loop counts of the echo, felsic ingot, dragon and Air Brake assembly recipes can be changed in the Creative Equipment config.
-- **New:** Glass blocks and panes from every mod break into shards of their color without Silk Touch: blocks 1 to 3, panes 1 to 2. Tinted glass gives dirty shards.
 - **New:** Sneak and right-click a placed sack with an empty hand to pick it up with its contents.
 - **Changed:** Wild carrots generate twice as often, 1 patch in 60 chunks [120], and wild adzuki beans 1 in 64 [128].
 - **Changed:** The Saturation effect and its potions and arrows are renamed Satiated [Saturation]; its description reads "Keeps the player fed."

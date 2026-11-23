@@ -29,14 +29,15 @@ public final class ConfigWatcherTest {
 	}
 
 	public static void main(String[] args) throws Exception {
-		// own ids
-		check("own: creativecompat", OwnConfigLogic.isOwn("creativecompat"));
-		check("own: creativecommon", OwnConfigLogic.isOwn("creativecommon"));
-		check("own: solraspberrypie", OwnConfigLogic.isOwn("solraspberrypie"));
-		check("own: vinery member", OwnConfigLogic.isOwn("vinery"));
-		check("not own: quark", !OwnConfigLogic.isOwn("quark"));
-		check("not own: forge", !OwnConfigLogic.isOwn("forge"));
-		check("not own: null", !OwnConfigLogic.isOwn(null));
+		// own = the jar carries the build stamp (stand-in lookup: these ids are stamped)
+		java.util.Set<String> stamped = java.util.Set.of("creativecompat", "creativecommon", "solraspberrypie", "vinery");
+		check("own: creativecompat", OwnConfigLogic.isOwn("creativecompat", stamped::contains));
+		check("own: creativecommon", OwnConfigLogic.isOwn("creativecommon", stamped::contains));
+		check("own: solraspberrypie", OwnConfigLogic.isOwn("solraspberrypie", stamped::contains));
+		check("own: vinery member", OwnConfigLogic.isOwn("vinery", stamped::contains));
+		check("not own: quark", !OwnConfigLogic.isOwn("quark", stamped::contains));
+		check("not own: upstream farmersdelight (no stamp)", !OwnConfigLogic.isOwn("farmersdelight", stamped::contains));
+		check("not own: null", !OwnConfigLogic.isOwn(null, stamped::contains));
 
 		// debounce
 		Path a = Path.of("/cfg/a.toml"), b = Path.of("/cfg/b.toml");

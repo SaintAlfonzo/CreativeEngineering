@@ -47,8 +47,10 @@ import net.minecraftforge.registries.ForgeRegistries;
  * Tinted glass ({@code forge:glass/tinted}, {@code forge:glass_panes/tinted} or {@code tinted} in the id) has no shard of
  * its own: it loses its self-drop and gives Quark's dirty shard instead (plan_wood_bucket_batch_1121.md R19).
  * Explosions keep each shard at 1 / radius, like {@code explosion_decay}.
- * Definition {@code data/creativecommon/loot_modifiers/glass_shards.json}, listed in Common's
- * {@code glm_entries.json} fragment (Creative Loot's GlmMerge).
+ * Definition {@code data/creativecommon/loot_modifiers/glass_shards.json}, listed in Forge's
+ * {@code data/forge/loot_modifiers/global_loot_modifiers.json} ({@code replace: false}, so it loads without any other
+ * Creative mod) and in Common's {@code glm_entries.json} fragment (Creative Loot's GlmMerge keeps it when another
+ * jar's list replaces Forge's; duplicates are dropped by id).
  */
 public class GlassShardsModifier extends LootModifier {
 

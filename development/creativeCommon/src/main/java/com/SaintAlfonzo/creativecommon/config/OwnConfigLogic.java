@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.function.Predicate;
 import java.util.zip.CRC32;
 
 /**
  * Forge-free rules of Common's config watcher ({@link OwnConfigWatcher}, plan_post_scratch_1115.md G11, 1115b E3):
- * which mods count as ours, the 1 s debounce, and the content guard that keeps a reload from running twice for one
+ * which mods count as ours (the build stamp), the 1 s debounce, and the content guard that keeps a reload from running twice for one
  * content (our own correction save, a touch without a change). Kept free of Forge and Minecraft classes so
  * tools/test_config_watcher.sh can test it with plain javac.
  */
@@ -23,23 +23,16 @@ public final class OwnConfigLogic {
 	public static final long DEBOUNCE_MS = 1000L;
 
 	/**
-	 * Mod ids whose config files the watcher owns: the in-tree jars of development/ (the Creative jars, Sol: Raspberry
-	 * Pie) and the in-tree ports and bundle members that keep their own config file in config/ (assumed list).
-	 * Third-party mods keep Forge's own watcher.
+	 * The build stamp every in-tree jar carries (build-logic ce.forge-mod; a bundle or repack carries its own, so its
+	 * members count too). A mod whose jar has it is ours and its config files are watched here; third-party mods keep
+	 * Forge's own watcher (publish_readiness.md PR-CC-08: no hard-coded id list, so a real upstream mod of the same id
+	 * is left to Forge).
 	 */
-	public static final Set<String> OWN_MOD_IDS = Set.of(
-			// Creative jars
-			"creativecommon", "creativecompat", "creativedelight", "creativebrewing", "creativeequipment",
-			"creativeengineering", "creativemagic", "creativelabels", "creativeworldgen", "creativecalendar",
-			"creativedevtools", "creativeloot",
-			// other own jars
-			"solraspberrypie", "exposure", "powergrid", "tempad",
-			// bundle members with their own config file (Creative Delight, Creative Brewing, Creative Worldgen)
-			"farmersdelight", "hearthandharvest", "miners_delight", "rusticdelight", "roll_delight", "delightful",
-			"salt", "vinery", "brewinandchewin", "babymobs", "moremooblooms");
+	public static final String STAMP = "META-INF/ce-build.json";
 
-	public static boolean isOwn(String modId) {
-		return modId != null && OWN_MOD_IDS.contains(modId);
+	/** True when {@code hasStamp} finds {@link #STAMP} in the jar that holds the mod. */
+	public static boolean isOwn(String modId, Predicate<String> hasStamp) {
+		return modId != null && hasStamp.test(modId);
 	}
 
 	/** Content fingerprint: CRC32 in the low half, length in the high half. */

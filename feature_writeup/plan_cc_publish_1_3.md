@@ -39,6 +39,9 @@ Status lives in TODO rows (created in P0), not here.
 | R2 | Version | open | 1.3.0: new library API and gameplay content since 1.2.0, and 1.2.0 may already be published | 2026-11-21 | owner chat |
 | R3 | Dependents' minimum | open | Every dependent's Common range becomes `[1.3.0,)` in the same wave | 2026-11-21 | owner chat |
 | R4 | Server rows | clear | Dedicated-server rows stay out of the gate | 2026-11-08 | owner |
+| R5 | Glass shards (PR-CC-03, P1) | clear | Common ships the Forge loot modifier list entry; Creative Loot adds shards to mid-tier chests (mostly dirty or clear, a chance of colored) | 2026-11-22 | owner |
+| R6 | Potions of 12 vanilla effects (PR-CC-11, P2) | clear | Stay in Common; documented | 2026-11-22 | owner |
+| R7 | Wither Immunity (food-tuning #47, P7) | clear | Registered in Common as `creativecommon:wither_immunity` | 2026-11-22 | owner |
 
 ## 3. Phases
 
@@ -73,6 +76,11 @@ file. Add the run block to a new `feature_writeup/testing/rows/CC13.qb` (prefix 
 ### P3 ISO dates and spelling
 - Run the fixer behind `iso_dates_docs` (11 changes), then the 9 unresolved on the owner list: list them for the
   owner, fix as ruled. 45 ambiguous stay.
+- The 9 unresolved (listed 2026-11-22; agent classification: all number ranges or line-number spans, none a date):
+  briefs/recipes_cooking.md:49 (line span), plan_1.0.3.md:526 (count range), plan_owner_notes_1119.md:25 (pixel
+  range), plan_rules_fixes.md:657 (line span), plan_rules_fixes.md:658 twice (line spans), split/F_pack_scripts.md:298
+  (line span), testing/structures/02_new_mods_tests.md:71 (number range), todo/rows/kitchen_and_cooking.csv:69 (line
+  span). Owner decides; not accepted in check_known.csv.
 - Rerun `spelling_docs`; fix or add to the allowlist as the lint says.
 - Accepted leftovers go in `tools/check_known.csv` with reason and date. Exit: `check_all.py --fast --changed` shows no
   FAIL, so `installToMods` is not refused.

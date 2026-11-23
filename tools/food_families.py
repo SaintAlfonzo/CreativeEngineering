@@ -1596,12 +1596,10 @@ def main():
 	cat, foods, blocks, recipes, dump_place, tags, key_val, types, place_keys = load()
 	rows = build_rows(cat, foods, blocks)
 	add_dough_rows(rows, key_val)
-	removed = (PP.STARTUP_LIB / 'removed_items.js').read_text()
-	removed = removed[removed.index('global.removedItems'):]
-	removed = re.findall(r'i\.(\w+)', removed[:removed.index(']')])
+	removed = PP.removed_item_keys()
 	# merged items (the old id of each [old, new] pair): the pack's list (dict keys) and Creative Delight's swap
 	# lists (ids, data/creativedelight/swaps/merges_*.json; item_merges.md 6)
-	f = PP.STARTUP_LIB / 'item_merges.js'
+	f = PP.PACK_REMOVED / 'item_merges.js'
 	if f.exists():
 		removed += re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', f.read_text())
 	swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'

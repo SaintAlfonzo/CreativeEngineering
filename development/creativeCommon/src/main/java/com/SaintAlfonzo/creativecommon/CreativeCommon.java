@@ -86,6 +86,8 @@ public class CreativeCommon
 		// MobEffect itself is KubeJS, effects/magic_resistance.js) and Phantom Bane's rules.
 		com.SaintAlfonzo.creativecommon.effect.CommonPotions.register(modEventBus);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.MagicResistanceEffect.class);
+		// Wither Immunity (the MobEffect is KubeJS, effects/wither_immunity.js; TODO food-tuning #47)
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.WitherImmunityEffect.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.PhantomBaneRules.class);
 
 		// Sawblade and sawdust items, the shrapnel entity, the dragon breathing recipe type, the wooden bucket:

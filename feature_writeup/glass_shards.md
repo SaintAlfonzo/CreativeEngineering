@@ -6,19 +6,25 @@ Test prefix `GSH-`. TODO `gameplay/misc #22`; plan [plan_wood_bucket_batch_1121.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=ba133888da4a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
+<!-- generated:status_index begin open_work sha1=faae0af58cce -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `creative-common-publish #12` | Testing | S | Glass shards loot modifier: ship the Forge list entry in Common or move to Creative Loot |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|
 | Global loot modifier `creativecommon:glass_shards` (Creative Common `loot/GlassShardsModifier`) | BUILT 2026-11-21 (Creative Common) |
 | Definition and `glm_entries.json` fragment (read by Creative Loot's GlmMerge) | BUILT 2026-11-21 |
+| Forge list entry in Common (`replace: false`), so it loads without Creative Loot (PR-CC-03, P1) | BUILT 2026-11-22 |
+| Shards in 12 mid-tier chest tables (Creative Loot `07_rules.js`, P1) | BUILT 2026-11-22 |
 
 - **Files to open:** [GlassShardsModifier.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/loot/GlassShardsModifier.java),
   [glass_shards.json](../development/creativeCommon/src/main/resources/data/creativecommon/loot_modifiers/glass_shards.json).
 - **Knobs:** `block_min` / `block_max` (1 to 3) and `pane_min` / `pane_max` (1 to 2) in the definition; data reload.
-- **Needs:** Creative Loot (GlmMerge reads the fragment) and Quark (the shard items). Without Quark nothing changes.
+- **Needs:** Quark (the shard items). Without Quark nothing changes. Creative Loot is optional: Common ships the Forge list entry, and GlmMerge keeps the entry when another jar's list replaces Forge's.
 
 ## 1. Overview
 
@@ -48,8 +54,15 @@ Examples: red stained glass pane -> 1 to 2 red shards. Create Framed `horizontal
 ## 3. What the pack changes
 
 - Creative Common registers the codec `creativecommon:glass_shards` (`GLOBAL_LOOT_MODIFIER_SERIALIZERS`).
-- `data/creativecommon/loot_modifiers/glass_shards.json` holds the counts; `data/creativecommon/glm_entries.json` lists
-  it (plan_rules_fixes.md section 5: the pack's jars never ship the Forge list).
+- `data/creativecommon/loot_modifiers/glass_shards.json` holds the counts. Two lists name it: Forge's
+  `data/forge/loot_modifiers/global_loot_modifiers.json` with `replace: false` (so Common alone loads it; ruling P1
+  (owner, 2026-11-22), an exemption from plan_rules_fixes.md section 5 and the DR-P15 lint) and the fragment
+  `data/creativecommon/glm_entries.json` (Creative Loot's GlmMerge; a duplicate id is dropped).
+- Chest loot (Creative Loot, ruling P1): `loot/07_rules.js` adds one pool to 12 mid-tier vanilla structure chests
+  (simple dungeon, mineshaft, desert pyramid, jungle temple, pillager outpost, ruined portal, shipwreck supply, big
+  underwater ruin, igloo, woodland mansion, stronghold corridor and crossing): 30% per chest, 1 to 3 shards, weights
+  dirty 20, clear 14, each of the 16 colors 1 (colored about one roll in three). The table list is the agent's pick of
+  "mid tier" (between village houses and treasure rooms); the owner may widen it.
 
 ## 4. Limits and decisions
 
@@ -65,6 +78,8 @@ Examples: red stained glass pane -> 1 to 2 red shards. Create Framed `horizontal
 
 - [loot/GlassShardsModifier.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/loot/GlassShardsModifier.java), registered in `CreativeCommon.java`.
 - [loot_modifiers/glass_shards.json](../development/creativeCommon/src/main/resources/data/creativecommon/loot_modifiers/glass_shards.json), [glm_entries.json](../development/creativeCommon/src/main/resources/data/creativecommon/glm_entries.json).
+- [global_loot_modifiers.json](../development/creativeCommon/src/main/resources/data/forge/loot_modifiers/global_loot_modifiers.json) (Forge list).
+- Chest pool: [07_rules.js](../kubejs/data/creativeloot/kubejs/loot/07_rules.js) (glass shards block).
 - GlmMerge: [creative_loot.md](creative_loot.md).
 
 ## 6. Offline checks
@@ -73,7 +88,7 @@ Examples: red stained glass pane -> 1 to 2 red shards. Create Framed `horizontal
 
 ## 7. In-game test suite
 
-Queue: SQ-GSH-01 to SQ-GSH-07 ([rows/GSH.qb](testing/rows/GSH.qb)), one row per test.
+Queue: SQ-GSH-01 to SQ-GSH-09 ([rows/GSH.qb](testing/rows/GSH.qb)), one row per test.
 
 - [ ] **GSH-01 Merge:** boot -> the `[GlmMerge]` line counts one more fragment entry; no `skipped: creativecommon:glass_shards`.
 - [ ] **GSH-02 Modded pane:** break a Create Framed red stained framed glass pane by hand -> 1 to 2 red shards.
@@ -84,7 +99,10 @@ Queue: SQ-GSH-01 to SQ-GSH-07 ([rows/GSH.qb](testing/rows/GSH.qb)), one row per 
 - [ ] **GSH-06 Silk Touch:** Silk Touch pickaxe on each of the above -> the block, no shards.
 - [ ] **GSH-07 Tinted:** break tinted glass by hand -> 1 to 3 dirty shards, no tinted glass; a Create Framed tinted pane ->
   1 to 2 dirty shards; Silk Touch -> the block.
+- [ ] **GSH-08 Without Creative Loot:** Common and Quark only -> GSH-04 and GSH-07 give the same shards.
+- [ ] **GSH-09 Chest loot:** 40 rolls of the simple dungeon table -> dirty and clear shards in about 12, colored fewer.
 
 ## 8. History
 
 - 2026-11-21: built (plan_wood_bucket_batch_1121.md P2 item 3), Creative Common jar.
+- 2026-11-22: Forge list entry in Common and the mid-tier chest pool in Creative Loot (publish_readiness.md PR-CC-03, ruling P1).

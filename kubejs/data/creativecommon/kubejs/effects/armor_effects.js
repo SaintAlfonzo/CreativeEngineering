@@ -51,7 +51,8 @@ PlayerEvents.tick(event => {
 	if (!player || player.getLevel().isClientSide()) return
 
 	var AE = global.armorEffects
-	if (!AE) return
+	// nothing registered (Common alone): no slot reads or strings per player per tick (publish_readiness.md PR-CC-16)
+	if (!AE || (!AE.SETS.length && !Object.keys(AE.PIECES).length)) return
 
 	var worn = []
 	ARMOR_SLOTS.forEach(slot => {

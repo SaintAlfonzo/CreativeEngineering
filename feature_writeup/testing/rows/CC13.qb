@@ -74,3 +74,34 @@
 @pass the compost gaps take each plank's darkest shades; no missing texture; owner approves, then the `sources.csv` composter rows go from `confirm` to `ok`
 @fails the palette choice (rerun the swap with another palette; ask the owner which), model paths
 @draft no steps yet: the owner judges the look
+
+@@section 2
+@@title SQ-CC13 publish fixes on the 1.3.0 jar, 2026-11-22 ([publish_readiness.md](../publish_readiness.md) PR-CC-01, -02, -04, -05, -08, -10, ruling P7; TODO `creative-common-publish #10` to `#15`, `food-tuning #47`)
+@@date 2026-11-22
+@@jars creativecommon
+@@sources feature_writeup/publish_readiness.md feature_writeup/project_pages/creative_common.md
+@@table
+## SQ-CC13-07 | Common alone: vanilla defaults (recipe unlocks on, honeycomb x1, no effect swaps, empty removed list, no modded composters)
+@group B (Common only)
+@commands `cc_only alone`, fresh config; `/recipe give @s minecraft:stick`; read the written `config/creativecommon-common.toml`; grep latest.log for `[jeiRemove]` and `[itemMerges]`; `/give @s creativecommon:twisted_composter`
+@pass the recipe is given (`Unlocked 1 recipes`); the toml has `[recipe_book] unlocks = true`, `honeycombMultiplier = 1`, `remap = []`, `categoryOverrides = []`; no `[jeiRemove]` pack line; `twisted_composter` and the three Quark composters are unknown items while `spruce_composter` gives
+@fails `CommonConfig` defaults; `NoRecipeUnlockMixin` gate; `WoodComposters.add` mod check
+@draft the runner needs a fresh-config boot of the `cc_only alone` set
+## SQ-CC13-08 | full pack: pack values still apply (no recipe unlocks, honeycomb x2, swaps), removed items hidden and tag-stripped from the pack list
+@group A (full pack)
+@commands `/recipe give @s minecraft:stick`; shear a full beehive with `/cdevtest loot`-style shears or a dispenser; grep latest.log for `[jeiRemove]`, `[itemMerges]`, `[removedWoods]`; `/kubejs hand` on a removed item (`create_dd:spirit_planks` or `quark:flax`... any listed id)
+@pass `Unlocked 0 recipes`; 6 honeycomb from a full hive; the `[jeiRemove] N removed items registered (pack list added)` line with N the same order as before (about 360 plus merges); a removed item has no item tags
+@fails pack config `config/creativecommon-common.toml` lost `[recipe_book] unlocks = false` or `honeycombMultiplier = 2`; `kubejs/startup_scripts/removed/` not loaded or ran before Common's list; `server_scripts/tags/removed_item_tags.js`
+@draft the item id in the tag check is picked from `startup_scripts/removed/removed_items.js` at run time
+## SQ-CC13-09 | Wither Immunity: Wither is refused while it lasts, and an existing Wither deals no damage
+@group A (full pack)
+@commands bot in survival: `/effect give BOT minecraft:wither 20 1`, wait 2 s, `/effect give BOT creativecommon:wither_immunity 30`, read health over 5 s; `/effect clear BOT minecraft:wither`, `/effect give BOT minecraft:wither 10`; `/data get entity BOT ActiveEffects`
+@pass health stops falling once the immunity is on; the second Wither give fails (`Unable to apply this effect`) and no Wither is in ActiveEffects; JEI and JEED show the name Wither Immunity and its description
+@fails `effect/WitherImmunityEffect` not registered on the event bus; `effects/wither_immunity.js` (the effect id missing)
+@draft steps follow SQ-EFX rows' bot pattern
+## SQ-CC13-10 | own config watcher: only stamped jars are taken over from Forge
+@group A (full pack)
+@commands boot; grep latest.log for the config watcher start line; edit `config/creativecompat-common.toml` and a third-party config (`config/quark-common.toml`) while running
+@pass the Creative config reloads once after about 1 s (Common's watcher); the third-party file follows Forge's own watcher; no `config watcher could not start`
+@fails `OwnConfigWatcher.stamped` (the `META-INF/ce-build.json` lookup) for nested or bundled jars
+@draft log line names to be read from the run
