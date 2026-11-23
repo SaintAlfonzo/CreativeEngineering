@@ -37,7 +37,8 @@ import java.util.Set;
  * unregistered effects and attributes are skipped (one warning listing them), unusable unlocks dropped, levels clamped,
  * refresh-unsafe effects refused, a broken file falls back to the built-in default with a loud error. Optional fields
  * (raspberry_pie.md 3.3): {@code "toggle": "on"|"off"} on a pool entry or a flat rung makes that effect a toggle (on or off
- * by default), {@code "tagline": "<lang key>"} on a flat or unlock rung names its hover tagline.
+ * by default), {@code "tagline": "<lang key>"} on a flat or unlock rung names its hover tagline, {@code "replaces": [ids]} on a
+ * pool entry names pool effects that effect replaces once unlocked (food-tuning #49).
  */
 public final class LadderLoader {
 	private static final String BUILT_IN = "/solraspberrypie/default_ladder.json";
@@ -103,6 +104,7 @@ public final class LadderLoader {
 		Map<ResourceLocation, Integer> pool = new LinkedHashMap<>();
 		Map<ResourceLocation, Boolean> toggles = new LinkedHashMap<>();
 		Map<ResourceLocation, Boolean> flatToggles = new LinkedHashMap<>();
+		Map<ResourceLocation, List<ResourceLocation>> replacesRaw = new LinkedHashMap<>();
 		for (JsonElement el : arr(root, "pool")) {
 			JsonObject o = el.getAsJsonObject();
 			ResourceLocation id = new ResourceLocation(o.get("effect").getAsString());
@@ -119,7 +121,25 @@ public final class LadderLoader {
 			pool.put(id, cap);
 			Boolean t = toggle(o, "pool " + id, warnings);
 			if (t != null) toggles.put(id, t);
+			if (o.has("replaces")) {
+				List<ResourceLocation> list = new ArrayList<>();
+				JsonElement rv = o.get("replaces");
+				for (JsonElement x : rv.isJsonArray() ? rv.getAsJsonArray() : single(rv)) list.add(new ResourceLocation(x.getAsString()));
+				replacesRaw.put(id, list);
+			}
 		}
+		// "replaces": only pool effects count; an unregistered or unpooled target is dropped quietly when its mod is
+		// absent (A6), a self reference is refused.
+		Map<ResourceLocation, List<ResourceLocation>> replaces = new LinkedHashMap<>();
+		replacesRaw.forEach((id, list) -> {
+			List<ResourceLocation> keep = new ArrayList<>();
+			for (ResourceLocation r : list) {
+				if (r.equals(id)) warnings.add("replaces: " + id + " names itself; ignored");
+				else if (pool.containsKey(r)) keep.add(r);
+				else if (ForgeRegistries.MOB_EFFECTS.containsKey(r)) warnings.add("replaces: " + id + " names " + r + ", which is not in the slot pool; ignored");
+			}
+			if (!keep.isEmpty()) replaces.put(id, keep);
+		});
 
 		List<Rung> rungs = new ArrayList<>();
 		for (JsonElement el : arr(root, "rungs")) {
@@ -184,7 +204,7 @@ public final class LadderLoader {
 						+ "' as a flat rung; the flat rung's default is used");
 			}
 		});
-		Ladder ladder = new Ladder(rungs, pool, toggles);
+		Ladder ladder = new Ladder(rungs, pool, toggles, replaces);
 
 		// V4: pool effects nobody can unlock.
 		for (ResourceLocation id : pool.keySet()) {
@@ -207,6 +227,21 @@ public final class LadderLoader {
 		Set<Double> slotThresholds = new HashSet<>();
 		for (Rung s : ladder.slots) {
 			if (!slotThresholds.add(s.threshold)) warnings.add("V7: two slot milestones at " + s.threshold + "; numbered in file order");
+		}
+		// V14: an unlock that can never be slotted, because a flat rung of the same effect is reached no later than the
+		// first slot (a flat bonus hides the effect from the picker, V11).
+		if (!ladder.slots.isEmpty()) {
+			double firstSlot = ladder.slots.get(0).threshold;
+			for (Rung u : ladder.rungs) {
+				if (u.kind != Rung.Kind.UNLOCK) continue;
+				for (Rung f : ladder.rungs) {
+					if (f.kind == Rung.Kind.FLAT && u.id.equals(f.id) && f.threshold <= firstSlot) {
+						warnings.add("V14: unlock " + u.id + " at " + u.threshold + " can never be slotted: the flat rung at " + f.threshold
+								+ " grants it before the first slot at " + firstSlot);
+						break;
+					}
+				}
+			}
 		}
 		// V12: unreachable thresholds.
 		double reach = maxReachableDiversity();
@@ -235,6 +270,12 @@ public final class LadderLoader {
 		if (v.equals("off")) return Boolean.FALSE;
 		warnings.add("toggle: " + what + " has toggle '" + v + "' (expected \"on\" or \"off\"); read as on");
 		return Boolean.TRUE;
+	}
+
+	private static JsonArray single(JsonElement e) {
+		JsonArray a = new JsonArray();
+		a.add(e);
+		return a;
 	}
 
 	private static String tagline(JsonObject o) {

@@ -17,6 +17,7 @@
   "solraspberrypie.msg.unlocked": "Unlocked for your effect slots: %s",
   "solraspberrypie.msg.covered": "Your slotted %s is covered by a flat bonus and can be reslotted",
   "solraspberrypie.msg.sustained": "%s effect sustained by existing bonus",
+  "solraspberrypie.msg.replaced": "%s replaces %s: a slot holding it can be changed for free",
   "solraspberrypie.msg.death": "You lost every diet bonus due to death",
   "solraspberrypie.msg.reset": "Your diet was reset",
 
@@ -50,6 +51,8 @@
   "solraspberrypie.screen.drop": "Drop",
   "solraspberrypie.screen.confirm": "Confirm",
   "solraspberrypie.screen.covered": "Covered by a permanent buff",
+  "solraspberrypie.screen.replaced": "Replaced by %s",
+  "solraspberrypie.screen.change_free": "Changing this slot is free",
   "solraspberrypie.screen.greyed": "Slot %s: needs diversity %s",
   "solraspberrypie.screen.slot": "Slot %s",
   "solraspberrypie.screen.pick_fill": "Choose an effect (it goes into the lowest empty slot)",

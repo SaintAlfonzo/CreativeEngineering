@@ -115,6 +115,9 @@
   - In a slot: Night Vision and Astringent; Glowing, Slow Falling and Magnet start off
   - Permanent: Night Vision, Phantom Bane and Double Jump; Invisibility starts off
 - **New:** Hovering an effect in the Diet Bonuses screen or on the inventory bar shows a short description ("See in the dark").
+- **New:** Clinging replaces Climbing and Recovering replaces Poison Resistance once unlocked: the replaced effect leaves the effect list and stops working in its slot. Applies to new worlds.
+- **New:** A slot whose effect a permanent buff or a replacing unlock now covers grays out, and changing its effect is free.
+- **New:** Fleet-Footed widens the view a quarter as much while its speed applies (client setting).
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.
 - **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice. Unlocks, and their messages, wait until the diet first activates.
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.

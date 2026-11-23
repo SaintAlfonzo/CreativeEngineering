@@ -4,6 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -12,23 +13,31 @@ import java.util.Map;
 /**
  * The validated ladder: rungs sorted by threshold, the slot pool (effect -> level cap) and the slot milestones in
  * order, and the toggle effects (effect -> on by default; a toggle effect is switched on and off by the player instead of
- * changing its level, raspberry_pie.md 3.3). Built once at server start by {@link LadderLoader} and synced to clients
+ * changing its level, raspberry_pie.md 3.3) and the replacements (a pool effect that, once unlocked, replaces other pool
+ * effects: they leave the picker and a slot holding one is covered, 3.3 "replaces"). Built once at server start by {@link LadderLoader} and synced to clients
  * on login.
  */
 public final class Ladder {
-	public static Ladder current = new Ladder(List.of(), Map.of(), Map.of());
+	public static Ladder current = new Ladder(List.of(), Map.of(), Map.of(), Map.of());
 
 	public final List<Rung> rungs;
 	public final Map<ResourceLocation, Integer> pool;
 	public final List<Rung> slots;
 	/** Toggle effects: effect -> switched on by default. */
 	public final Map<ResourceLocation, Boolean> toggles;
+	/** Replacements: pool effect -> the pool effects it replaces once unlocked (any level). */
+	public final Map<ResourceLocation, List<ResourceLocation>> replaces;
 
 	public Ladder(List<Rung> rungs, Map<ResourceLocation, Integer> pool) {
-		this(rungs, pool, Map.of());
+		this(rungs, pool, Map.of(), Map.of());
 	}
 
 	public Ladder(List<Rung> rungs, Map<ResourceLocation, Integer> pool, Map<ResourceLocation, Boolean> toggles) {
+		this(rungs, pool, toggles, Map.of());
+	}
+
+	public Ladder(List<Rung> rungs, Map<ResourceLocation, Integer> pool, Map<ResourceLocation, Boolean> toggles,
+				  Map<ResourceLocation, List<ResourceLocation>> replaces) {
 		List<Rung> sorted = new ArrayList<>(rungs);
 		sorted.sort((a, b) -> Double.compare(a.threshold, b.threshold)); // stable: file order kept on ties
 		List<Rung> slotList = new ArrayList<>();
@@ -44,6 +53,26 @@ public final class Ladder {
 		this.pool = Collections.unmodifiableMap(new LinkedHashMap<>(pool));
 		this.slots = Collections.unmodifiableList(slotList);
 		this.toggles = Collections.unmodifiableMap(new LinkedHashMap<>(toggles));
+		Map<ResourceLocation, List<ResourceLocation>> rep = new LinkedHashMap<>();
+		replaces.forEach((k, v) -> rep.put(k, List.copyOf(v)));
+		this.replaces = Collections.unmodifiableMap(rep);
+	}
+
+	/** The unlocked pool effect that replaces {@code effect} at this max diversity, or null (3.3 "replaces"). */
+	public ResourceLocation replacedBy(ResourceLocation effect, double maxDiversity) {
+		for (Map.Entry<ResourceLocation, List<ResourceLocation>> e : replaces.entrySet()) {
+			if (e.getValue().contains(effect) && unlockedLevel(e.getKey(), maxDiversity) >= 1) return e.getKey();
+		}
+		return null;
+	}
+
+	/**
+	 * A slot choice is covered when a permanent (flat) buff of its effect is active or an unlocked effect replaces it
+	 * (food-tuning #49, #50): the slot shows grayed and changing its effect is free. A replaced effect is not applied
+	 * from the slot; a flat-covered one still is (the flat buff holds it anyway).
+	 */
+	public boolean covered(ResourceLocation effect, Collection<ResourceLocation> activeFlat, double maxDiversity) {
+		return effect != null && (activeFlat.contains(effect) || replacedBy(effect, maxDiversity) != null);
 	}
 
 	public boolean isToggle(ResourceLocation effect) {
@@ -115,6 +144,12 @@ public final class Ladder {
 			buf.writeResourceLocation(k);
 			buf.writeBoolean(v);
 		});
+		buf.writeVarInt(replaces.size());
+		replaces.forEach((k, v) -> {
+			buf.writeResourceLocation(k);
+			buf.writeVarInt(v.size());
+			for (ResourceLocation r : v) buf.writeResourceLocation(r);
+		});
 	}
 
 	public static Ladder read(FriendlyByteBuf buf) {
@@ -127,6 +162,15 @@ public final class Ladder {
 		int t = buf.readVarInt();
 		Map<ResourceLocation, Boolean> toggles = new LinkedHashMap<>();
 		for (int i = 0; i < t; i++) toggles.put(buf.readResourceLocation(), buf.readBoolean());
-		return new Ladder(rungs, pool, toggles);
+		int rp = buf.readVarInt();
+		Map<ResourceLocation, List<ResourceLocation>> replaces = new LinkedHashMap<>();
+		for (int i = 0; i < rp; i++) {
+			ResourceLocation k = buf.readResourceLocation();
+			int m = buf.readVarInt();
+			List<ResourceLocation> list = new ArrayList<>(m);
+			for (int j = 0; j < m; j++) list.add(buf.readResourceLocation());
+			replaces.put(k, list);
+		}
+		return new Ladder(rungs, pool, toggles, replaces);
 	}
 }

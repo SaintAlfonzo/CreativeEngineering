@@ -212,10 +212,16 @@ def build():
 	u_at = {k: at(v) for k, v in u_at.items()}
 	p_at = {k: at(v) for k, v in p_at.items()}
 	pool_list = []
+	# replaces (food-tuning #49): replacing effect -> pool effects it replaces once unlocked; only pairs whose both ends
+	# are on the built unlock ladder are written (a reserved or removed effect joins when its row is built).
+	replaces = cfg.get('replaces', {})
 	for eff, cap in pool.items():
 		e = {'effect': eff, 'max_level': cap}
 		if eff in pool_toggle:
 			e['toggle'] = pool_toggle[eff]
+		gone = [x for x in replaces.get(eff, []) if x in pool]
+		if gone:
+			e['replaces'] = gone
 		pool_list.append(e)
 
 	def line(obj):

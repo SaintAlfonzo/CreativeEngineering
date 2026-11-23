@@ -47,7 +47,7 @@ public final class InventoryWidget {
 		for (Map.Entry<ResourceLocation, Integer> e : s.flat.entrySet()) out.add(new Cell(e.getKey(), e.getValue(), true, -1));
 		for (int i = 0; i < s.activeSlots && i < s.slots.size(); i++) {
 			SlotChoice c = s.slots.get(i);
-			if (c != null && !s.flat.containsKey(c.effect())) out.add(new Cell(c.effect(), c.level(), false, i));
+			if (c != null && !ClientState.ladder.covered(c.effect(), s.flat.keySet(), s.maxDiversity)) out.add(new Cell(c.effect(), c.level(), false, i));
 		}
 		return out;
 	}

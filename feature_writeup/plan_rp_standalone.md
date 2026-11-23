@@ -1,35 +1,36 @@
 # Plan: Raspberry Pie as a standalone mod, shipped from the GitHub repo (2026-11-21)
 
-<!-- generated:status_index begin open_work sha1=092b675b568c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 21), 1 Complete.
+<!-- generated:status_index begin open_work sha1=85a5558a2df6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 9, In Progress 1, Testing 12), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food-tuning #38` | Planned | S | RP standalone P1: Jar-in-Jar bundle (Apple Pie, Carrot nested), license texts, NOTICE, mods.toml URLs, deploy and manifest updates |
-| `food-tuning #39` | Planned | S C | RP standalone P2: default ladder = Apple Pie's ladder plus 10 vanilla unlockables and slots |
-| `food-tuning #40` | Planned | S | RP standalone P3: diversity table loaded from any jar's solraspberrypie/diversity/*.json, ids optional, no table in the mod |
-| `food-tuning #41` | Planned | S C | RP standalone P4: move Diet Log rename, recipe removal and item_dict keys out of the pack into Raspberry Pie |
-| `food-tuning #42` | Planned | S | RP standalone P5: standalone defaults: Apple Pie default settings, recommended settings file, start warnings |
-| `food-tuning #43` | Planned | S | RP standalone P6: Fleet-Footed mixin guard (member check, require 0, one warning) |
-| `food-tuning #44` | Planned | S C | RP standalone P7: pack ladder from the scratchpad (toggles, tick markers, hover taglines, new effect ids) |
-| `food-tuning #45` | Planned | S | RP standalone P8: pack diversity table moves to Creative Delight; pack sets Apple Pie values |
 | `food-tuning #46` | Planned | S C | RP standalone P9: isolation tests RPS-01 to -07 and RPI rerun |
-| `food-tuning #47` | Planned | S C | Wither Immunity effect for the Raspberry Pie pack ladder (reserved unlock 22 at 47.1) |
-| `food-tuning #48` | Planned | S C | Satiated (minecraft:saturation) as the RP pack ladder's final permanent buff at 100: V10 exception for flat rungs |
-| `food-tuning #49` | Planned | S C | RP ladder: a later unlock replaces its parts (Clinging hides Climbing; Recovering hides Poison Immunity and Wither Immunity) |
-| `food-tuning #50` | Planned | S C | RP ladder: once a permanent buff of an effect is active, a slot holding that effect grays out with a free respec |
 | `food-tuning #51` | Planned | S C | Steady (Astringent): stops every slip effect (ice, soap), not dripleaf or pressure plates; JEI description |
 | `food-tuning #52` | Planned | S C | Leaf Piercing: leaf particles of the pierced block trailing the arrow, a leaf poof where it enters |
 | `food-tuning #53` | Planned | S C | Prickly II: tamed and passive mobs exempt (level I: tamed only); JEI description |
 | `food-tuning #54` | Planned | S C | Lava Walker: crouch to drop into lava |
-| `food-tuning #55` | Planned | S C | Fleet-Footed: lower field-of-view shift while its speed applies |
 | `food-tuning #56` | Planned | S C | Display names: Astringent -> Steady, Poison Resistance -> Poison Immunity, Fire Resistance -> Fire Immunity |
 | `food-tuning #57` | Planned | S C | Emptiness becomes a sub-effect of Patrol Nullifier and Phantom Bane |
 | `food-tuning #58` | Planned | S C | Harmony: a new source (not adzuki, not the diet ladder), e.g. a rare passive mob; applies Emptiness and hostile mob flee |
+| `raspberry-pie-publish #10` | Planned |  | Standalone Diet Log recipe takes any edible item that is not excluded; state sync stops resending every drink id |
+| `food-tuning #47` | In Progress | S C | Wither Immunity effect for the Raspberry Pie pack ladder (reserved unlock 22 at 47.1) |
+| `food-tuning #38` | Testing | S | RP standalone P1: Jar-in-Jar bundle (Apple Pie, Carrot nested), license texts, NOTICE, mods.toml URLs, deploy and manifest updates |
+| `food-tuning #39` | Testing | S C | RP standalone P2: default ladder = Apple Pie's ladder plus 10 vanilla unlockables and slots |
+| `food-tuning #40` | Testing | S | RP standalone P3: diversity table loaded from any jar's solraspberrypie/diversity/*.json, ids optional, no table in the mod |
+| `food-tuning #41` | Testing | S C | RP standalone P4: move Diet Log rename, recipe removal and item_dict keys out of the pack into Raspberry Pie |
+| `food-tuning #42` | Testing | S | RP standalone P5: standalone defaults: Apple Pie default settings, recommended settings file, start warnings |
+| `food-tuning #43` | Testing | S | RP standalone P6: Fleet-Footed mixin guard (member check, require 0, one warning) |
+| `food-tuning #44` | Testing | S C | RP standalone P7: pack ladder from the scratchpad (toggles, tick markers, hover taglines, new effect ids) |
+| `food-tuning #45` | Testing | S | RP standalone P8: pack diversity table moves to Creative Delight; pack sets Apple Pie values |
+| `food-tuning #48` | Testing | S C | Satiated (minecraft:saturation) as the RP pack ladder's final permanent buff at 100: V10 exception for flat rungs |
+| `food-tuning #49` | Testing | S C | RP ladder: a later unlock replaces its parts (Clinging hides Climbing; Recovering hides Poison Immunity and Wither Immunity) |
+| `food-tuning #50` | Testing | S C | RP ladder: once a permanent buff of an effect is active, a slot holding that effect grays out with a free respec |
+| `food-tuning #55` | Testing | S C | Fleet-Footed: lower field-of-view shift while its speed applies |
 <!-- generated:status_index end open_work -->
 
 Source: owner chat 2026-11-21 (after the publish-readiness review in the same session). Design of the mod itself:
-[raspberry_pie.md](raspberry_pie.md). Status lives in the TODO rows (section 7), not here. Nothing in this plan is built.
+[raspberry_pie.md](raspberry_pie.md). Status lives in the TODO rows (section 7), not here. P0 to P8 are built (`food-tuning #38` to `#45`, `#48`); P9 (tests) and the scratchpad follow-ups `#47`, `#49` to `#58` are listed in section 4 P7.
 
 Goal: `solRaspberryPie` runs and is useful with only Spice of Life: Apple Pie Edition (and Carrot Edition for the Food
 Dictionary), carries nothing that belongs to the pack, and is distributed from the Creative Engineering GitHub repo the
@@ -122,7 +123,7 @@ ladder loads with no warning.
 P2 as built after the owner rulings of 2026-11-21 (raspberry_pie.md 12.9): Apple Pie's ladder with its flat effects,
 every threshold halved to a top of 50 (vanilla foods on Apple Pie's defaults reach about 56); slots 5, 15, 27.5, 40;
 13 unlocks at 5 to 50 with the D10 falling density; the three added unlocks (Jump Boost II, Haste II, Slow Falling) are
-an agent default, **unconfirmed**. Start line `Diet ladder: 47 rungs, 4 slots, 11 pool effects`, no warning.
+an agent default, kept (owner, 2026-11-22, D9 in publish_readiness.md); Haste II then left with the four unusable unlocks (section 10). Start line now `Diet ladder: 44 rungs, 4 slots, 8 pool effects`, no warning.
 
 **P3 Table loader.** `Diversity` reads `solraspberrypie/diversity/*.json` from every classpath root (`getResources`),
 merges them (later file wins on a conflict, logged), skips ids not registered (one INFO line with the count, never a
@@ -156,7 +157,7 @@ values it wants through that table, so the mod is neutral (A7).
 
 ## 5. Open decisions, with the agent default taken
 
-| # | Question | Agent default (unconfirmed) |
+| # | Question | Agent default (all ruled) |
 |---|---|---|
 | D1 | Where the value-override mechanism lives | **Ruled (owner, 2026-11-21): agent default kept.** In Raspberry Pie, data-driven and empty without data (not a mixin in Creative Common). Alternative: a Common-owned mixin into Apple Pie, which splits Apple Pie wiring across two jars |
 | D2 | Which 10 vanilla effects are the default unlocks | **Ruled (owner, 2026-11-21): agent default kept.** Speed I, Haste I, Strength I, Jump Boost I, Night Vision, Water Breathing, Luck I, Regeneration I, Fire Resistance, Glowing; at about every 10 diversity from 10 to 100 on Apple Pie's scale. Resistance, Invisibility, Absorption, Health Boost and instant effects stay out (rules in raspberry_pie.md section 4) |
@@ -202,13 +203,15 @@ advice, and the one fact it depends on (P0) has not been checked at the source.
 | Contradiction with the donor-jar policy | Needs a recorded exception | [upstream-jar-distribution-policy](agent_notes/upstream-jar-distribution-policy.md) says the pack never hosts a third-party jar. That note is about ARR donor jars; A1 is a deliberate, license-backed exception for two LGPL mods. Update the note and `deploy.md` when ruled final |
 | Liquid Diet Log texture (copy of Apple Pie art) | Yes, with attribution | Needs the art's license from P0, a `NOTICE` line, and rows in `texture_sources/sources.csv` (there is none for it or `diet_marker.png` today); the rule allows copies of upstream art |
 | Pack contents (table, ladder, names, recipes) | Yes | Ours; only the Apple Pie values stay Apple Pie's |
-| CurseForge or Modrinth | Not decided here | Not needed for the GitHub route. Their moderation looks at nested jars and at the CurseForge page's All Rights Reserved text, so verify P0 first and decide separately |
-| Repo state | Open | The release step "public repo and tags, project page" in plan_cb_publish.md step 3 is not recorded as done for Creative Common; check that it is before pointing players at a release |
+| CurseForge or Modrinth | CurseForge (owner, 2026-11-22, publish_readiness.md D9) | Modrinth possibly later. Their moderation looks at nested jars and at the CurseForge page's All Rights Reserved text (P0 found LGPL-2.1 at the source) |
+| Repo state | Public (owner, 2026-11-22) | The GitHub repo is the source location named in `mods.toml` and the NOTICE |
 | Per-release needs | Yes | Tag, a standalone changelog (the pack's `unreleased.md` is player-facing for the pack, not for a separate mod), README with install steps and the isolation tests, `mods.toml` URLs |
 
-## 9. Agent defaults still unconfirmed in the Raspberry Pie docs
+## 9. Agent defaults in the Raspberry Pie docs
 
-Collected for the owner to rule or keep. Each is flagged "unconfirmed" in its source doc.
+Collected for the owner to rule or keep. **All confirmed (owner, 2026-11-22, P9):** R5, R6, R9, R14, D1 to D6 of
+plan_food_diversity_1121.md, the `diversityIconFallback` list (now the pack's value in `config/solraspberrypie-client.toml`;
+the jar default is vanilla, PR-RP-15) and the shared Diet Log icon. The "confirm" cells below are kept as the record.
 
 | Source | Default | Ruling needed |
 |---|---|---|
@@ -222,9 +225,61 @@ Collected for the owner to rule or keep. Each is flagged "unconfirmed" in its so
 | D4 (that plan) | Non-food input values (ice, mushrooms, blaze powder 0.25; bone meal, sugar 0.15) and "a dish never below its best food input + 0.1" | confirm |
 | D5 (that plan) | A family's value is its best member, capped at the lowest member's tier top | confirm |
 | D6 (that plan) | Family meals show in the Diet Log as the family head | confirm |
-| plan_food_diversity_1121.md section 7, O4 | Permanent effects start at diversity 40 ("early-mid") | rule |
+| plan_food_diversity_1121.md section 7, O4 | Permanent effects start at diversity 40 ("early-mid") | superseded: ruled 25 (row O4 below) |
 | plan_owner_notes_1119.md 12a | Static diversity-icon pool by diversity band (apple, bread, carrot, sweet berries at 0 up to enchanted golden apple at 100); replaced in 12.7 by `diversityIconFallback` (pumpkin, mixed, oat, corn and sunflower seeds, Miner's moss, moss clump, rotten flesh, spider eye, dandelion leaf), also an agent pick | confirm the fallback list |
 | plan_owner_notes_1119.md ruling 2 (not Raspberry Pie) | Dust particles reach every nearby mob, not only the player | listed for completeness |
 | raspberry_pie.md 12.5 | Key's slot-effect cycle period 1 second, fixed in code | superseded by the 12.6 key; close |
 | This plan D1 to D9 | section 5 | all ruled 2026-11-21 |
 | O4 | Permanent effects start at 25 (owner, 2026-11-21; was 40 assumed). Spread of 12 effects over 25 to 100, every 6.8; the ladder sub-table in plan_food_diversity_1121.md section 7 and the P7 pack ladder use it | ruled |
+
+## 10. Publish fixes and scratchpad follow-ups (2026-11-22)
+
+Rulings (owner, 2026-11-22): P5 the release attaches source zips of the pinned LGPL commits (PR-RP-08); P6 the four
+unusable default unlocks are swapped for vanilla effects that work standalone, listed for review (PR-RP-11); P8 Harmony
+(`food-tuning #58`): an agent audits rare passive mobs and returns a short list, the owner picks, nothing is built; P9
+section 9 confirmed. Rows: `raspberry-pie-publish #2` to `#6`, `food-tuning #49`, `#50`, `#55`.
+
+Built in the jar (raspberry_pie.md 12.12):
+
+- **Default unlocks (P6).** Speed I, Haste I, Haste II and Strength I could never be slotted (Apple Pie's flat rungs grant
+  Speed, Haste and Strength before the first slot). No allowed vanilla effect is left outside the pool (section 4 of
+  raspberry_pie.md refuses Resistance, Invisibility, Absorption, Health Boost, the instant effects, Hero of the Village,
+  Dolphin's Grace and Conduit Power), so the four leave and Jump Boost III comes in; the ten unlocks are re-spread with
+  the D10 falling density over 5 to 50 (agent default, **for review**):
+  old 5 Speed I, 7.9 Haste I, 10.8 Strength I, 13.9 Jump Boost I, 17.1 Night Vision, 20.4 Water Breathing, 23.8 Luck I,
+  27.5 Regeneration I, 31.4 Fire Resistance, 35.5 Jump Boost II, 39.9 Haste II, 44.7 Slow Falling, 50 Glowing ->
+  new 5 Regeneration I, 8.8 Jump Boost I, 12.8 Luck I, 17.1 Night Vision, 21.5 Water Breathing, 26.3 Fire Resistance,
+  31.4 Jump Boost II, 36.9 Slow Falling, 43 Jump Boost III, 50 Glowing. Regeneration and Luck unlock before their flat
+  rungs (10, 17.5); once the flat rung arrives, the slot is covered and changes for free (#50). New check V14 warns
+  about an unlock whose flat rung comes no later than the first slot.
+- **Replacements (#49).** Pool field `"replaces": [ids]`: once the effect is unlocked the named effects leave the picker,
+  a slot holding one is covered and no longer applied, one yellow chat line names the pair. The pack ladder gets them
+  from `rp_ladder.json` `replaces` through `gen_rp_ladder.py`: Clinging replaces Climbing, Recovering replaces Poison
+  Immunity (Wither Immunity joins once `#47` gives it an id), Stimulation replaces Refreshing and Sweetening (written
+  only while Stimulation is on the unlock ladder; it is not, per the 2026-11-21 ruling, and the 2026-11-22 scratchpad
+  ruling "Stimulation replaces Refreshing and Sweetening when unlocked" needs Stimulation back in `rp_ladder.csv`: owner).
+- **Covered slots (#50).** A slot whose effect is held by an active permanent buff or replaced by an unlock shows grayed
+  with "Covered by a permanent buff" or "Replaced by X" and "Changing this slot is free"; its Change ages out no foods.
+- **Fleet-Footed field of view (#55).** Client config `effects.fleetFootedFov` (default 0.25): the share of the view
+  widening that Fleet-Footed's speed bonus causes; other speed changes widen it as usual.
+- **Publish fixes.** PR-RP-04 table loader skips a wrong-shape file with one error line and bad values with one count;
+  PR-RP-05 hover debug deleted; PR-RP-02 `tools/rp_libs.py fetch` (sha1-checked, `libs.csv`); PR-RP-07 notice renamed
+  `NOTICE-nested-LGPL.txt` with the own copyright moved out; PR-RP-08 `tools/rp_libs.py sources DIR` (`lgpl_sources.csv`)
+  and the release step below; PR-RP-09 `require = 0` on both effect-list redirects; PR-RP-10 only names that start with
+  the attribute's own id are stripped; PR-RP-13 the Change and Drop counts are cached per window; PR-RP-15 client icon
+  defaults vanilla (the pack keeps its values in the tracked `config/solraspberrypie-client.toml`).
+
+Release step (PR-RP-08): for each Raspberry Pie GitHub release, run `python3 tools/rp_libs.py sources <dir>` and attach
+`solapplepie-1.19.2-2.2.0-sources.zip` and `SoL-Carrot-1.19.2-1.14.0-sources.zip` next to the jar; the NOTICE names
+the release page as the source location. A clean clone builds after `python3 tools/rp_libs.py fetch`.
+
+Not in this jar (wave 2): `#51` Steady, `#52` Leaf Piercing particles, `#53` Prickly II exemptions, `#56` display names,
+`#57` Emptiness as a super-effect of Patrol Nullifier and Phantom Bane (effect code, Creative Common); `#54` Lava Walker
+crouch (Creative Brewing, Vinery member); `#47` Wither Immunity's ladder row once Common registers it. Still open from
+PR-RP-07 to -15: PR-RP-12 (Diet Log recipe takes any edible item standalone) and PR-RP-13's drink id resend. PR-RP-14
+(writeup install line, section 4 for two ladders) is done in raspberry_pie.md.
+
+Harmony (#58, P8) shortlist from `kubejs/exported/spawns.json` (overworld, share of its spawn category per biome):
+Allay (7 biomes, about 2% share; peaceful item helper), Alex's Mobs Potoo (1 biome, night bird), Alex's Mobs Mimic
+Octopus (1 biome, warm ocean; the closest to a koi), Alex's Mobs Bunfungus (2 mushroom biomes), More Mooblooms'
+Moobloom (2 biomes). Owner picks.

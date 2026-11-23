@@ -27,7 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -119,7 +118,10 @@ public final class Diversity {
 
 	/**
 	 * Merges the tables (later source wins an id both list, one line per pair), drops ids {@code known} rejects (one INFO
-	 * count) and makes the result current. Public for the headless test (tools/test_rp_ladder.sh).
+	 * count) and makes the result current. Each source is read on its own: a file of the wrong shape is skipped whole
+	 * with one error line, a value that is not a finite number of 0 or more is skipped (one warning count), and the
+	 * table is always assigned, so a bad file from any mod never leaves the lookups failing (publish_readiness.md
+	 * PR-RP-04). Public for the headless test (tools/test_rp_ladder.sh).
 	 */
 	public static synchronized void use(List<Source> sources, Predicate<ResourceLocation> known) {
 		Map<ResourceLocation, Double> v = new HashMap<>();
@@ -127,58 +129,93 @@ public final class Diversity {
 		Map<ResourceLocation, ResourceLocation> c = new HashMap<>();
 		Map<ResourceLocation, String> familyFrom = new HashMap<>();
 		Map<String, Integer> overrides = new LinkedHashMap<>();
-		int absent = 0;
-		for (Source src : sources) {
-			JsonObject root = src.json();
-			if (root.has("values")) {
-				for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("values").entrySet()) {
-					ResourceLocation id = ResourceLocation.tryParse(e.getKey());
-					if (id == null) continue;
-					if (!known.test(id)) {
-						absent++;
-						continue;
-					}
+		List<String> used = new ArrayList<>();
+		int[] absent = {0};
+		int[] badValues = {0};
+		try {
+			for (Source src : sources) {
+				Map<ResourceLocation, Double> sv = new LinkedHashMap<>();
+				Map<ResourceLocation, ResourceLocation> sc = new LinkedHashMap<>();
+				int[] sAbsent = {0};
+				int[] sBad = {0};
+				try {
+					read(src, known, sv, sc, sAbsent, sBad);
+				} catch (Exception ex) {
+					LOG.error("Diversity table {} has the wrong shape ({}); skipped", src.name(), ex.toString());
+					continue;
+				}
+				used.add(src.name());
+				absent[0] += sAbsent[0];
+				badValues[0] += sBad[0];
+				sv.forEach((id, val) -> {
 					String before = valueFrom.put(id, src.name());
 					if (before != null && !before.equals(src.name())) overrides.merge(src.name() + " over " + before, 1, Integer::sum);
-					v.put(id, e.getValue().getAsDouble());
-				}
+					v.put(id, val);
+				});
+				sc.forEach((id, head) -> {
+					String before = familyFrom.put(id, src.name());
+					if (before != null && !before.equals(src.name())) overrides.merge(src.name() + " over " + before, 1, Integer::sum);
+					c.put(id, head);
+				});
 			}
-			if (root.has("families")) {
-				for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("families").entrySet()) {
-					JsonArray members = e.getValue().getAsJsonArray();
-					if (members.size() < 2) continue;
-					ResourceLocation head = ResourceLocation.tryParse(members.get(0).getAsString());
-					if (head == null) continue;
-					if (!known.test(head)) {
-						absent += members.size();
+			overrides.forEach((pair, n) -> LOG.info("Diversity table: {} entries of {}", n, pair));
+			if (badValues[0] > 0) LOG.warn("Diversity table: {} values skipped (not a finite number of 0 or more)", badValues[0]);
+			if (used.isEmpty()) {
+				LOG.info("No usable diversity table (solraspberrypie/diversity/*.json) in any mod; Apple Pie's values apply");
+			} else {
+				LOG.info("Diversity table: {} values, {} family members from {} file(s) ({}); {} ids skipped (mod not loaded)",
+						v.size(), c.size(), used.size(), String.join(", ", used), absent[0]);
+			}
+		} finally {
+			synchronized (HEADS) {
+				HEADS.clear();
+			}
+			canonical = c;
+			values = v;
+		}
+	}
+
+	/** One source into {@code v} and {@code c}; throws on a wrong shape (the caller skips the whole file). */
+	private static void read(Source src, Predicate<ResourceLocation> known, Map<ResourceLocation, Double> v,
+							 Map<ResourceLocation, ResourceLocation> c, int[] absent, int[] bad) {
+		JsonObject root = src.json();
+		if (root.has("values")) {
+			for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("values").entrySet()) {
+				ResourceLocation id = ResourceLocation.tryParse(e.getKey());
+				if (id == null) continue;
+				if (!known.test(id)) {
+					absent[0]++;
+					continue;
+				}
+				double val = e.getValue().getAsDouble();
+				if (!Double.isFinite(val) || val < 0) {
+					bad[0]++;
+					continue;
+				}
+				v.put(id, val);
+			}
+		}
+		if (root.has("families")) {
+			for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("families").entrySet()) {
+				JsonArray members = e.getValue().getAsJsonArray();
+				if (members.size() < 2) continue;
+				ResourceLocation head = ResourceLocation.tryParse(members.get(0).getAsString());
+				if (head == null) continue;
+				if (!known.test(head)) {
+					absent[0] += members.size();
+					continue;
+				}
+				for (JsonElement m : members) {
+					ResourceLocation id = ResourceLocation.tryParse(m.getAsString());
+					if (id == null || id.equals(head)) continue;
+					if (!known.test(id)) {
+						absent[0]++;
 						continue;
 					}
-					for (JsonElement m : members) {
-						ResourceLocation id = ResourceLocation.tryParse(m.getAsString());
-						if (id == null || id.equals(head)) continue;
-						if (!known.test(id)) {
-							absent++;
-							continue;
-						}
-						String before = familyFrom.put(id, src.name());
-						if (before != null && !before.equals(src.name())) overrides.merge(src.name() + " over " + before, 1, Integer::sum);
-						c.put(id, head);
-					}
+					c.put(id, head);
 				}
 			}
 		}
-		overrides.forEach((pair, n) -> LOG.info("Diversity table: {} entries of {}", n, pair));
-		if (sources.isEmpty()) {
-			LOG.info("No diversity table (solraspberrypie/diversity/*.json) in any mod; Apple Pie's values apply");
-		} else {
-			LOG.info("Diversity table: {} values, {} family members from {} file(s) ({}); {} ids skipped (mod not loaded)",
-					v.size(), c.size(), sources.size(), sources.stream().map(Source::name).collect(Collectors.joining(", ")), absent);
-		}
-		synchronized (HEADS) {
-			HEADS.clear();
-		}
-		canonical = c;
-		values = v;
 	}
 
 	private Diversity() {}

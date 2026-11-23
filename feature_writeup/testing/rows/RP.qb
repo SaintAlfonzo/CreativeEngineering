@@ -776,3 +776,25 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass every food tooltip shows the name, the separator line, the shank row, the diversity line and the rest; never an empty frame
 @fails `FoodTooltips.afterTitle` (Iceberg title break found at index 1 to 3), listener order of Iceberg and Raspberry Pie
 @draft written with the build 2026-11-22
+
+## CQ-RPI-74 | replacement: Clinging replaces Climbing (food-tuning #49)
+@group client
+@commands Pack world; eat varied foods to a highest diversity between the Climbing (26) and Clinging (38) unlocks, slot Climbing, then eat on past 38; open the effect screen and the picker
+@pass at the unlock a yellow chat line "Clinging replaces Climbing: ..."; the Climbing slot is grayed with "Replaced by Clinging" and "Changing this slot is free"; Climbing is no longer applied (inventory effect list); the picker no longer lists Climbing; Change -> Clinging ages out no foods (confirm panel: 0 foods)
+@fails `Ladder.replacedBy`, `DietEngine.compute` (maxDiversity), `SlotActions.simulate`, `EffectScreen` covered state, pack ladder `replaces` (tools/gen_rp_ladder.py)
+@draft written with the build 2026-11-22
+
+## CQ-RPI-75 | covered slot: permanent buff grays the slot, free change (food-tuning #50)
+@group client
+@commands Pack world; slot Phantom Bane (unlock 29) and raise diversity past its permanent rung (41); open the effect screen
+@pass the Phantom Bane slot is grayed, hover "Covered by a permanent buff" and "Changing this slot is free"; the Change button hover says Free; picking another effect shows a confirm panel that ages out 0 foods and diversity stays the same; the inventory diet widget no longer shows the covered slot
+@fails `Ladder.covered`, `SlotActions.simulate`, `EffectScreen.coveredSlot`, `InventoryWidget.cells`
+@draft written with the build 2026-11-22
+
+## CQ-RPI-76 | Fleet-Footed lower view shift (food-tuning #55)
+@group client
+@commands Pack world; slot Fleet-Footed (or `/effect give @s alexsmobs:fleet_footed 60`); sprint-jump on flat ground, then set `effects.fleetFootedFov` to 1.0 in `config/solraspberrypie-client.toml` and repeat
+@pass at 0.25 the view widens only slightly more than plain sprinting while airborne; at 1.0 it widens as before (the full jump); Speed potions widen the view as usual at both settings
+@fails `FleetFootedFov.onFov` (modifier id 7E0292F2-...), client config not reloaded
+@draft written with the build 2026-11-22
+

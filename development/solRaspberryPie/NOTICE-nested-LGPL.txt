@@ -1,7 +1,5 @@
-Spice of Life: Raspberry Pie Addition (solraspberrypie)
-Copyright SaintAlfonzo. Licensed under the GNU General Public License version 3 only (GPL-3.0-only),
-see solRaspberryPie-LICENSE.txt. Source: https://github.com/SaintAlfonzo/CreativeEngineering
-(development/solRaspberryPie).
+Third-party notices for Spice of Life: Raspberry Pie Addition (solraspberrypie). Raspberry Pie's own code is
+GPL-3.0-only (solRaspberryPie-LICENSE.txt); this file covers only the third-party works below.
 
 This jar also contains two third-party mods, nested UNMODIFIED as separate jars under META-INF/jarjar/ (Forge
 Jar-in-Jar). They stay separate works under their own license, the GNU Lesser General Public License version 2.1
@@ -24,6 +22,9 @@ and copies none of their code.
    License: LGPL-2.1, full text in solRaspberryPie-LGPL-2.1-solcarrot.txt
    Source: https://github.com/Cazsius/Spice-of-Life-Carrot-Edition, branch 1.19 at commit ddb1729
    (https://github.com/Cazsius/Spice-of-Life-Carrot-Edition/tree/ddb1729)
+
+Source offer: the complete source of both mods at the tag and commit above is also attached as a zip to every
+Raspberry Pie release on GitHub (https://github.com/SaintAlfonzo/CreativeEngineering/releases), next to the jar.
 
 Art: the Liquid Diet Log texture (assets/solraspberrypie/textures/item/liquid_diet_log.png) is an unmodified copy of
 Apple Pie's Food Book texture (assets/solapplepie/textures/items/food_book.png at tag 2.2.0), LGPL-2.1, from the

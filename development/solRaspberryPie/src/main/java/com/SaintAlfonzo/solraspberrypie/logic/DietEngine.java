@@ -55,11 +55,21 @@ public final class DietEngine {
 	}
 
 	public static State compute(Ladder ladder, double diversity, int foodsEaten, List<SlotChoice> slots) {
-		return compute(ladder, diversity, foodsEaten, slots, id -> true);
+		return compute(ladder, diversity, foodsEaten, slots, id -> true, diversity);
 	}
 
-	/** As above; {@code on} says whether a toggle effect is switched on (3.3), an off one is granted but not applied. */
+	/** As below, with the current diversity as the highest one. */
 	public static State compute(Ladder ladder, double diversity, int foodsEaten, List<SlotChoice> slots, Predicate<ResourceLocation> on) {
+		return compute(ladder, diversity, foodsEaten, slots, on, diversity);
+	}
+
+	/**
+	 * As above; {@code on} says whether a toggle effect is switched on (3.3), an off one is granted but not applied.
+	 * {@code maxDiversity} decides the replacements: a slot holding an effect that an unlocked effect replaces is not
+	 * applied (food-tuning #49).
+	 */
+	public static State compute(Ladder ladder, double diversity, int foodsEaten, List<SlotChoice> slots, Predicate<ResourceLocation> on,
+								double maxDiversity) {
 		State s = new State();
 		s.diversity = diversity;
 		s.gate = foodsEaten >= SOLSweetPotatoConfig.minFoodsToActivate();
@@ -74,7 +84,9 @@ public final class DietEngine {
 				case SLOT -> {
 					s.activeSlots++;
 					SlotChoice c = r.slotIndex < slots.size() ? slots.get(r.slotIndex) : null;
-					if (c != null && ForgeRegistries.MOB_EFFECTS.containsKey(c.effect())) s.slotEffects.merge(c.effect(), c.level(), Math::max);
+					if (c != null && ForgeRegistries.MOB_EFFECTS.containsKey(c.effect()) && ladder.replacedBy(c.effect(), maxDiversity) == null) {
+						s.slotEffects.merge(c.effect(), c.level(), Math::max);
+					}
 				}
 				default -> {}
 			}
@@ -93,7 +105,7 @@ public final class DietEngine {
 	public static State current(ServerPlayer player) {
 		FoodList fl = FoodList.get(player);
 		RpData d = RpData.get(player);
-		return compute(Ladder.current, fl.foodDiversity(), GateFoods.count(fl), d.slots, switchedOn(Ladder.current, d));
+		return compute(Ladder.current, fl.foodDiversity(), GateFoods.count(fl), d.slots, switchedOn(Ladder.current, d), d.maxDiversity);
 	}
 
 	public static Predicate<ResourceLocation> switchedOn(Ladder ladder, RpData d) {
@@ -132,11 +144,11 @@ public final class DietEngine {
 		FoodList fl = FoodList.get(player);
 		double div = fl.foodDiversity();
 		double oldMax = d.maxDiversity;
-		State s = compute(ladder, div, GateFoods.count(fl), d.slots, switchedOn(ladder, d));
 		// Unlocks wait for the first gate opening (plan_diet_books_r2.md A6); after it the highest diversity climbs
 		// even while the gate is closed again.
-		if (s.gate) d.gateOpened = true;
+		if (GateFoods.count(fl) >= SOLSweetPotatoConfig.minFoodsToActivate()) d.gateOpened = true;
 		if (d.gateOpened && div > d.maxDiversity) d.maxDiversity = div;
+		State s = compute(ladder, div, GateFoods.count(fl), d.slots, switchedOn(ladder, d), d.maxDiversity);
 		if (announce && !d.paused) announce(player, ladder, d, s, oldMax);
 		d.activeKeys = new HashSet<>(s.active.keySet());
 		if (!d.paused) apply(player, d, s);
@@ -152,6 +164,12 @@ public final class DietEngine {
 			if (r.kind == Rung.Kind.UNLOCK) {
 				if (r.threshold > oldMax && r.threshold <= d.maxDiversity) {
 					send(player, S2CMessage.line(S2CMessage.GREEN, Component.translatable("solraspberrypie.msg.unlocked", effectName(r.id, r.level))));
+					// food-tuning #49: the first unlock of a replacing effect names what it replaces.
+					if (ladder.unlockedLevel(r.id, oldMax) < 1) {
+						for (ResourceLocation gone : ladder.replaces.getOrDefault(r.id, List.of())) {
+							send(player, S2CMessage.line(S2CMessage.YELLOW, Component.translatable("solraspberrypie.msg.replaced", effectName(r.id, 0), effectName(gone, 0))));
+						}
+					}
 				}
 				continue;
 			}

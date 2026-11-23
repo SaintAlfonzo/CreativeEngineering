@@ -14,9 +14,9 @@
 @@text jars, empty `config/` and `defaultconfigs/` (the mod runs on its built-in defaults). Variants: `rps only` (default),
 @@text `rps loose` (adds a loose `solapplepie-1.19.2-2.2.0.jar`, kept in `jar_archive/displaced/`), `rps alex` (adds Alex's
 @@text Mobs 1.21.1 and Citadel). Default ladder (P2, owner rulings 2026-11-21): Apple Pie's ladder halved to a top of 50
-@@text (16 half-heart rungs 2.5 to 50, toughness at 7.5, 25, 40, knockback at 20, its flat effects at 1 to 50), 13 vanilla
-@@text unlocks at 5, 7.9, 10.8, 13.9, 17.1, 20.4, 23.8, 27.5, 31.4, 35.5, 39.9, 44.7, 50, 4 effect slots at 5, 15, 27.5,
-@@text 40; start line `Diet ladder: 47 rungs, 4 slots, 11 pool effects`, no warning (V12 included). Client rows
+@@text (16 half-heart rungs 2.5 to 50, toughness at 7.5, 25, 40, knockback at 20, its flat effects at 1 to 50), 10 vanilla
+@@text unlocks at 5, 8.8, 12.8, 17.1, 21.5, 26.3, 31.4, 36.9, 43, 50 (2026-11-22, PR-RP-11), 4 effect slots at 5, 15, 27.5,
+@@text 40; start line `Diet ladder: 44 rungs, 4 slots, 8 pool effects`, no warning (V12 included). Client rows
 @@text (CQ) need a fresh survival world with that jar set. The existing Raspberry Pie rows (SQ-RPI, CQ-RPI in
 @@text [RP.qb](RP.qb) section 2) are rerun against the final jar after these pass (plan section 6, TODO `food-tuning #46`).
 @@text
@@ -24,14 +24,14 @@
 ## SQ-RPS-01 | isolated boot: ladder loads clean, nested mods found
 @group B
 @commands Boot with `rps only`. `grep -nE "Diet ladder|Raspberry Pie|solapplepie|solcarrot|Mixin apply|Missing or unsupported" logs/latest.log` (RPS-01)
-@pass exactly one `Diet ladder: 47 rungs, 4 slots, 11 pool effects` info line; no `Diet ladder (` warning line (V12 included); no `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` block; no missing-dependency, mixin or injection error; `Done (` reached
+@pass exactly one `Diet ladder: 44 rungs, 4 slots, 8 pool effects` info line; no `Diet ladder (` warning line (V12 included); no `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` block; no missing-dependency, mixin or injection error; `Done (` reached
 @fails nested jar metadata or version range in `mods.toml` / `ce.forge-bundle.gradle` (P1); default ladder file (P2); a mixin target that needs a mod the standalone set lacks (P4, P6)
 @from plan_rp_standalone.md section 6
-bootexpect Diet ladder: 47 rungs, 4 slots, 11 pool effects
+bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
 bootreject Diet ladder \(
 bootreject APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH
 bootreject Missing or unsupported mandatory|InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError|Encountered an unexpected exception
-look the `Diet ladder:` line appears once in the whole log (grep -c); the line reads exactly `Diet ladder: 47 rungs, 4 slots, 11 pool effects`
+look the `Diet ladder:` line appears once in the whole log (grep -c); the line reads exactly `Diet ladder: 44 rungs, 4 slots, 8 pool effects`
 ## CQ-RPS-02 | isolated client: names, Apple Pie book and potato recipe gone, book recipes work
 @group client
 @commands Client with `rps only`, new survival world. Inventory, `/recipe`-free: open the crafting table and JEI-free recipe book; craft book + bread, book + apple juice or any drink, book + carrot (RPS-02)
@@ -51,7 +51,7 @@ look the `Diet ladder:` line appears once in the whole log (grep -c); the line r
 @pass server reaches `Done (`; no duplicate-mod crash and no `ModFileDuplicate`/`Duplicate` error; the log names one `solapplepie` mod file; one `Diet ladder:` line
 @fails Jar-in-Jar version range in `ce.forge-bundle.gradle` (P1); Forge picks the higher or loose version: both are 2.2.0, so the nested jar must be skipped without an error
 bootexpect Done \(
-bootexpect Diet ladder: 47 rungs, 4 slots, 11 pool effects
+bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
 bootreject Duplicate|duplicate mod|ModFileDuplicate|DuplicateModsFoundException|Encountered an unexpected exception
 look `grep -n "solapplepie" logs/latest.log` shows one loaded mod file for solapplepie
 ## CQ-RPS-05 | Apple Pie defaults: eat, respec, drop, die; ageing-out and gate
@@ -83,3 +83,18 @@ look no warning about EffectFleetFooted anywhere in latest.log; the mixin is lis
 @pass the server boots; one INFO summary line `Diversity table: <n> values, <m> family members from <k> file(s) (creativedelight:creativedelight.json, <owner>:<file>.json); <s> ids skipped (mod not loaded)` (logger `solraspberrypie/diversity`; no per-id warning; a file overriding another adds one `Diversity table: <n> entries of <later> over <earlier>` line); other ids in the same file apply (`/cdevtest` reads or the tooltip value of a known id in the file matches it)
 @fails `Diversity` loader merge and optional-id handling (P3); the table's new location in Creative Delight (P8)
 @draft fixture: a small jar with a `META-INF/mods.toml` (any test mod id) holding `solraspberrypie/diversity/<name>.json`; tables are read from loaded mod files only (Forge `ModList`), not from datapacks or loose folders. File shape: `{"values": {"<item id>": <number>, ...}, "families": {"<name>": ["<head id>", "<member id>", ...]}}` (both keys optional; first family member is the head). The first runner writes it
+
+## CQ-RPS-09 | isolated client: default unlocks all slottable, vanilla icons (PR-RP-11, PR-RP-15)
+@group client
+@commands Fresh survival world with the rps only set; eat varied vanilla foods to diversity 30 and above; open the effect screen at each slot; open the Diet Log Milestones and Overview pages
+@pass the picker offers Regeneration I from 5 (until the flat Regeneration at 10), Jump Boost I, Luck I (until 17.5), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength never appear in the picker; no `V14` warning in the log; Diet Log icons are vanilla (awkward potion, diamond, item frame) and the diversity icon fallback with nothing eaten is a vanilla seed or rotten flesh / spider eye
+@fails `default_ladder.json`, `LadderLoader` V14, `RpConfig` client defaults
+@draft written with the build 2026-11-22
+
+## SQ-RPS-10 | isolated: a wrong-shape diversity table is skipped (PR-RP-04)
+@group server
+@commands rps only set plus a throwaway jar or datapack-less mod folder holding `solraspberrypie/diversity/bad.json` = `{"values": [1, 2]}` (any mod jar works; e.g. a copy of the Raspberry Pie jar with that file added); start the server, `/give @p minecraft:bread`, hover it on a client or eat it
+@pass one `Diversity table ... has the wrong shape (...); skipped` error line; no exception later; foods keep Apple Pie's values; the server reaches `Done (`
+@fails `Diversity.use` / `read`
+@draft written with the build 2026-11-22
+

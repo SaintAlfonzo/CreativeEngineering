@@ -144,7 +144,8 @@ public class EffectScreen extends Screen {
 				mode = Mode.PICK_CHANGE;
 				pickSlot = slot;
 				rebuild();
-			}, () -> ageTip(ClientState.state.changeAge))));
+			}, () -> coveredSlot(slot) ? List.of(Component.translatable("solraspberrypie.screen.free").withStyle(ChatFormatting.GREEN))
+					: ageTip(ClientState.state.changeAge))));
 			tipButtons.add(addRenderableWidget(new TipButton(cx + 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.drop"),
 					b -> send(C2SAction.Op.PREVIEW_DROP, slot, null, 0), () -> ageTip(ClientState.state.dropAge))));
 		}
@@ -153,7 +154,7 @@ public class EffectScreen extends Screen {
 	private List<ResourceLocation> pickable(Ladder ladder, S2CState s) {
 		List<ResourceLocation> out = new ArrayList<>();
 		for (ResourceLocation id : ladder.pool.keySet()) {
-			if (ladder.unlockedLevel(id, s.maxDiversity) < 1 || s.flat.containsKey(id)) continue;
+			if (ladder.unlockedLevel(id, s.maxDiversity) < 1 || s.flat.containsKey(id) || ladder.replacedBy(id, s.maxDiversity) != null) continue;
 			boolean used = false;
 			for (SlotChoice c : s.slots) if (c != null && c.effect().equals(id)) used = true;
 			if (!used && ForgeRegistries.MOB_EFFECTS.containsKey(id)) out.add(id);
@@ -288,26 +289,31 @@ public class EffectScreen extends Screen {
 			drawCenteredString(pose, font, Component.translatable("solraspberrypie.screen.slot", i + 1), cx, y + 3, active ? 0x88AA88 : 0x666666);
 			fill(pose, cx - 10, y + 13, cx + 10, y + 33, 0xFF111111);
 			boolean off = c != null && s.off.contains(c.effect());
+			// food-tuning #49, #50: covered by a permanent buff or replaced by an unlocked effect: grayed, change is free.
+			boolean covered = c != null && active && ladder.covered(c.effect(), s.flat.keySet(), s.maxDiversity);
 			if (c != null) {
-				if (!active || s.paused) RenderSystem.setShaderColor(0.4F, 0.4F, 0.4F, 1F);
+				if (!active || s.paused || covered) RenderSystem.setShaderColor(0.4F, 0.4F, 0.4F, 1F);
 				else if (off) RenderSystem.setShaderColor(0.35F, 0.35F, 0.35F, 1F);
 				Icons.effect(pose, c.effect(), cx - 9, y + 14);
 				RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			}
 			Component name = c != null ? DietEngine.effectName(c.effect(), c.level()) : Component.translatable("solraspberrypie.screen.empty");
-			boolean covered = c != null && active && s.flat.containsKey(c.effect());
-			int color = !active ? 0x777777 : covered ? 0xFFFF55 : off ? 0xAAAAAA : 0xFFFFFF;
+			int color = !active || covered ? 0x777777 : off ? 0xAAAAAA : 0xFFFFFF;
 			String shown = font.plainSubstrByWidth(name.getString(), cell - 6);
 			drawString(pose, font, shown, cx - font.width(shown) / 2, y + 37, color);
 			if (in(mouseX, mouseY, x + 1, y, cell - 2, 46)) {
 				Rung r = ladder.slots.get(i);
-				Component sub = active ? (covered ? Component.translatable("solraspberrypie.screen.covered")
+				ResourceLocation by = covered ? ladder.replacedBy(c.effect(), s.maxDiversity) : null;
+				Component sub = active ? (covered ? (by != null && !s.flat.containsKey(c.effect())
+						? Component.translatable("solraspberrypie.screen.replaced", DietEngine.effectName(by, 0))
+						: Component.translatable("solraspberrypie.screen.covered"))
 						: Component.translatable("solraspberrypie.widget.slot", i + 1, Icons.num(r.threshold)))
 						: Component.translatable("solraspberrypie.screen.greyed", i + 1, Icons.num(r.threshold));
 				List<Component> tip = new ArrayList<>();
 				tip.add(name);
 				if (c != null) addTagline(tip, ladder, c.effect(), c.level());
-				tip.add(sub.copy().withStyle(active ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+				tip.add(sub.copy().withStyle(covered ? ChatFormatting.YELLOW : active ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+				if (covered) tip.add(Component.translatable("solraspberrypie.screen.change_free").withStyle(ChatFormatting.GREEN));
 				if (c != null && ladder.isToggle(c.effect())) addToggleState(tip, off, false);
 				hoverTips.add(() -> renderComponentTooltip(pose, tip, mouseX, mouseY));
 			}
@@ -361,7 +367,7 @@ public class EffectScreen extends Screen {
 				List<Component> tip = new ArrayList<>();
 				tip.add(DietEngine.effectName(id, lvl));
 				addTagline(tip, ladder, id, lvl);
-				if (mode == Mode.PICK_CHANGE) tip.add(Component.translatable("solraspberrypie.screen.change_cost").withStyle(ChatFormatting.RED));
+				if (mode == Mode.PICK_CHANGE && !coveredSlot(pickSlot)) tip.add(Component.translatable("solraspberrypie.screen.change_cost").withStyle(ChatFormatting.RED));
 				else tip.add(Component.translatable("solraspberrypie.screen.free").withStyle(ChatFormatting.GREEN));
 				hoverTips.add(() -> renderComponentTooltip(pose, tip, mouseX, mouseY));
 			}
@@ -438,6 +444,14 @@ public class EffectScreen extends Screen {
 		tip.add(Component.translatable(off ? "solraspberrypie.toggle.off" : "solraspberrypie.toggle.on")
 				.withStyle(off ? ChatFormatting.RED : ChatFormatting.GREEN));
 		if (clickable) tip.add(Component.translatable("solraspberrypie.toggle.click").withStyle(ChatFormatting.DARK_GRAY));
+	}
+
+	/** Whether an active slot's choice is covered (food-tuning #49, #50): changing it ages out no foods. */
+	private static boolean coveredSlot(int slot) {
+		S2CState s = ClientState.state;
+		if (s == null || ClientState.ladder == null || slot < 0 || slot >= s.activeSlots || slot >= s.slots.size()) return false;
+		SlotChoice c = s.slots.get(slot);
+		return c != null && ClientState.ladder.covered(c.effect(), s.flat.keySet(), s.maxDiversity);
 	}
 
 	private static boolean in(int mx, int my, int x, int y, int w, int h) {

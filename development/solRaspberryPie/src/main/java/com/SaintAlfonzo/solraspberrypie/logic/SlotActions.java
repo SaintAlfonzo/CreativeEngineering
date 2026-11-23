@@ -98,11 +98,14 @@ public final class SlotActions {
 		return slot >= 0 && slot < s.activeSlots ? d.slot(slot) : null;
 	}
 
-	/** In the pool, unlocked at that level, not hidden by an active flat bonus (V11), not in another slot (Q-D). */
+	/**
+	 * In the pool, unlocked at that level, not hidden by an active flat bonus (V11) or an unlocked replacement
+	 * (food-tuning #49), not in another slot (Q-D).
+	 */
 	static boolean pickable(Ladder ladder, RpData d, DietEngine.State s, ResourceLocation effect, int level, int ignoreSlot) {
 		if (!ladder.pool.containsKey(effect)) return false;
 		if (level < 1 || level > ladder.unlockedLevel(effect, d.maxDiversity)) return false;
-		if (s.flat.containsKey(effect)) return false;
+		if (s.flat.containsKey(effect) || ladder.replacedBy(effect, d.maxDiversity) != null) return false;
 		for (int i = 0; i < d.slots.size(); i++) {
 			SlotChoice c = d.slots.get(i);
 			if (i != ignoreSlot && c != null && c.effect().equals(effect)) return false;
@@ -196,11 +199,12 @@ public final class SlotActions {
 		Sim sim = new Sim();
 		sim.slot = a.slot;
 		sim.before = FoodWindow.diversity(original);
-		sim.sBefore = DietEngine.compute(ladder, sim.before, eaten, d.slots, DietEngine.switchedOn(ladder, d));
+		sim.sBefore = DietEngine.compute(ladder, sim.before, eaten, d.slots, DietEngine.switchedOn(ladder, d), d.maxDiversity);
 		sim.slots = new ArrayList<>(d.slots);
 
 		if (change) {
-			int n = changeCount(oldest.size());
+			// food-tuning #50: changing a covered slot (a permanent buff or an unlocked replacement holds its effect) is free.
+			int n = ladder.covered(current.effect(), sim.sBefore.flat.keySet(), d.maxDiversity) ? 0 : changeCount(oldest.size());
 			sim.group = new ArrayList<>(oldest.subList(0, n));
 			sim.memory = new HashMap<>(original);
 			FoodWindow.moveOut(sim.memory, sim.group);
@@ -214,7 +218,7 @@ public final class SlotActions {
 			sim.slots.set(active - 1, null);
 		}
 		sim.after = FoodWindow.diversity(sim.memory);
-		sim.sAfter = DietEngine.compute(ladder, sim.after, eaten, sim.slots, DietEngine.switchedOn(ladder, d));
+		sim.sAfter = DietEngine.compute(ladder, sim.after, eaten, sim.slots, DietEngine.switchedOn(ladder, d), d.maxDiversity);
 		return sim;
 	}
 
@@ -245,9 +249,23 @@ public final class SlotActions {
 		Ladder ladder = Ladder.current;
 		if (ladder == null) return new int[]{0, 0};
 		Map<FoodInstance, Integer> original = FoodWindow.copy(FoodList.get(player));
+		// The drop count walks the window (thousands of lookups at pack settings) and syncs fire on every food: reuse the
+		// last answer while the window, the active slots, the ladder and respecFoods are the same (PR-RP-13).
+		int key = java.util.Objects.hash(original, s.activeSlots, System.identityHashCode(ladder), RpConfig.SERVER.respecFoods.get());
+		synchronized (AGE_CACHE) {
+			int[] hit = AGE_CACHE.get(player);
+			if (hit != null && hit[2] == key) return new int[]{hit[0], hit[1]};
+		}
 		List<FoodInstance> oldest = FoodWindow.windowOldestFirst(original);
-		return new int[]{changeCount(oldest.size()), dropCount(ladder, original, oldest, s.activeSlots)};
+		int[] out = {changeCount(oldest.size()), dropCount(ladder, original, oldest, s.activeSlots)};
+		synchronized (AGE_CACHE) {
+			AGE_CACHE.put(player, new int[]{out[0], out[1], key});
+		}
+		return out;
 	}
+
+	/** Last {change, drop, key} per player for {@link #ageCounts}. */
+	private static final Map<ServerPlayer, int[]> AGE_CACHE = new java.util.WeakHashMap<>();
 
 	private SlotActions() {}
 }

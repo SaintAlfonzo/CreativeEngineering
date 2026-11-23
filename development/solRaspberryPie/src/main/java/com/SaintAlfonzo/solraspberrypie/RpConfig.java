@@ -67,6 +67,7 @@ public final class RpConfig {
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> unlockIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> flatIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> slotIcon;
+		public final ForgeConfigSpec.DoubleValue fleetFootedFov;
 
 		Client(ForgeConfigSpec.Builder b) {
 			b.push("dietLog");
@@ -78,10 +79,9 @@ public final class RpConfig {
 					.defineInRange("extraWidth", 47, 0, 400);
 			diversityIconFallback = b.comment("Diet Log Overview: the icon left of the diversity value is the eaten food (Food Dictionary) closest",
 							"in base diversity to the average of the meals in the diet window, never a drink. With nothing eaten it is one of",
-							"these items (loaded ones only).")
-					.defineList("diversityIconFallback", List.of("minecraft:pumpkin_seeds", "vintagedelight:mixed_seeds",
-							"vintagedelight:oat_seeds", "corn_delight:corn_seeds", "hearthandharvest:sunflower_seeds", "miners_delight:moss",
-							"immersive_weathering:moss_clump", "minecraft:rotten_flesh", "minecraft:spider_eye", "veggiesdelight:dandelion_leaf"),
+							"these items (loaded ones only). Defaults are vanilla; a modpack sets its own list in this file.")
+					.defineList("diversityIconFallback", List.of("minecraft:pumpkin_seeds", "minecraft:melon_seeds", "minecraft:wheat_seeds",
+							"minecraft:beetroot_seeds", "minecraft:rotten_flesh", "minecraft:spider_eye"),
 							o -> o instanceof String);
 			b.comment("Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)",
 					"of each Diet Log page's content.").push("pages");
@@ -106,18 +106,23 @@ public final class RpConfig {
 					.defineList("customOrder", List.of(), o -> o instanceof String);
 			b.pop();
 			b.push("icons");
-			unlockIcon = b.comment("Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT",
-							"in braces, e.g. minecraft:potion{Potion:\"minecraft:awkward\"}.")
-					.defineList("unlock", List.of("monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"), o -> o instanceof String);
+			unlockIcon = b.comment("Diet Log icon for one-time unlocks: the first of these items that is loaded (any mod's item may be",
+							"listed before the vanilla default). An item may carry NBT in braces, e.g. minecraft:potion{Potion:\"minecraft:awkward\"}.")
+					.defineList("unlock", List.of("minecraft:potion{Potion:\"minecraft:awkward\"}"), o -> o instanceof String);
 			flatIcon = b.comment("Diet Log icon for permanent buffs: the first of these items that is loaded.")
-					.defineList("permanentBuff", List.of("create_crush_everything:diamond_shard", "minecraft:diamond"), o -> o instanceof String);
+					.defineList("permanentBuff", List.of("minecraft:diamond"), o -> o instanceof String);
 			slotIcon = b.comment("Diet Log icon for effect slots (the Diet Log never shows the chosen effect): the first of these items that is loaded.")
-					.defineList("slot", List.of("suppsquared:metal_frame", "minecraft:item_frame"), o -> o instanceof String);
+					.defineList("slot", List.of("minecraft:item_frame"), o -> o instanceof String);
 			b.pop();
 			b.push("tooltips");
 			saturationOwnLine = b.comment("Food tooltips: AppleSkin's saturation icons on their own line under the shanks (AppleSkin's own layout).",
 							"Off: on the shank row, after the shanks.")
 					.define("saturationOwnLine", false);
+			b.pop();
+			b.push("effects");
+			fleetFootedFov = b.comment("Share of the field-of-view widening that Alex's Mobs' Fleet-Footed speed bonus causes while it applies:",
+							"1.0 = unchanged, 0.0 = none. Other speed changes widen the view as usual.")
+					.defineInRange("fleetFootedFov", 0.25, 0.0, 1.0);
 			b.pop();
 			b.push("widget");
 			widgetEnabled = b.comment("Show the diet bonus bar on the survival inventory. When off, diet effects show like any other effect.")

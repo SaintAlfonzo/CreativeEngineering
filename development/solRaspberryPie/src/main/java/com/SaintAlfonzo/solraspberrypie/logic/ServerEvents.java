@@ -40,8 +40,20 @@ import java.util.regex.Pattern;
 
 /** Forge event wiring: capability, ladder load, login/logout, death and respawn, ticks, cures, drinks, commands. */
 public final class ServerEvents {
-	/** Apple Pie 2.2.0's attribute modifier names: "<attribute>_modifier_<value>" (3.1). */
-	private static final Pattern APPLE_PIE_MODIFIER = Pattern.compile("^[a-z0-9_.:/-]+_modifier_-?[0-9.]+(E-?[0-9]+)?$");
+	/**
+	 * Apple Pie 2.2.0's attribute modifier names: "<attribute>_modifier_<value>" (3.1), the attribute named as in its config
+	 * (registry path or full id). Only a name that starts with the attribute's own id matches, so other mods' modifiers
+	 * of a similar shape stay (publish_readiness.md PR-RP-10).
+	 */
+	private static final Pattern APPLE_PIE_VALUE = Pattern.compile("^-?[0-9.]+(E-?[0-9]+)?$");
+
+	static boolean applePieModifier(net.minecraft.resources.ResourceLocation attr, String name) {
+		if (attr == null || name == null) return false;
+		for (String prefix : new String[]{attr.getPath() + "_modifier_", attr + "_modifier_"}) {
+			if (name.startsWith(prefix) && APPLE_PIE_VALUE.matcher(name.substring(prefix.length())).matches()) return true;
+		}
+		return false;
+	}
 
 	@SubscribeEvent
 	public static void attach(AttachCapabilitiesEvent<Entity> e) {
@@ -166,7 +178,8 @@ public final class ServerEvents {
 			AttributeInstance inst = player.getAttribute(attr);
 			if (inst == null) continue;
 			List<AttributeModifier> doomed = new ArrayList<>();
-			for (AttributeModifier m : inst.getModifiers()) if (APPLE_PIE_MODIFIER.matcher(m.getName()).matches()) doomed.add(m);
+			var attrId = ForgeRegistries.ATTRIBUTES.getKey(attr);
+			for (AttributeModifier m : inst.getModifiers()) if (applePieModifier(attrId, m.getName())) doomed.add(m);
 			for (AttributeModifier m : doomed) {
 				inst.removeModifier(m.getId());
 				removed++;

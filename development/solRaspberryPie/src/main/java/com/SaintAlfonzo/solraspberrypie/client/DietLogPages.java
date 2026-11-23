@@ -786,44 +786,6 @@ public final class DietLogPages {
 	 * Timing of one Diet Log open (plan_diet_books_r2.md A4): the page build, its diversity icon and meals grid, and
 	 * the first frame. One line per open in latest.log, so the owner's log shows what freezes.
 	 */
-	/**
-	 * TEMPORARY hover debug (Overview hovers missing): at most twice a second, while the mouse
-	 * moves on the Overview page, logs the mouse in page coordinates and every element under it with its frame and
-	 * whether it carries a tooltip. Remove once the cause is found.
-	 */
-	public static final class HoverDebug {
-		private static long last;
-		private static int lastX = Integer.MIN_VALUE, lastY;
-
-		public static void log(UIElement page, int rawX, int rawY, int x, int y) {
-			long now = System.currentTimeMillis();
-			if (now - last < 500 || (x == lastX && y == lastY)) return;
-			last = now;
-			lastX = x;
-			lastY = y;
-			StringBuilder sb = new StringBuilder();
-			sb.append("[RP hover debug] mouse raw ").append(rawX).append(',').append(rawY).append(" page ").append(x).append(',').append(y)
-					.append(" pageFrame ").append(str(page.frame)).append(" |");
-			walk(page, x, y, 0, sb);
-			SolRaspberryPie.LOG.info(sb.toString());
-		}
-
-		private static void walk(UIElement e, int x, int y, int depth, StringBuilder sb) {
-			boolean tip = e instanceof MealCell || e.tooltip != null;
-			if (e.frame != null && e.frame.contains(x, y)) {
-				sb.append(' ').append(depth).append(':').append(e.getClass().getSimpleName()).append(str(e.frame)).append(tip ? "[tip]" : "");
-			}
-			for (UIElement c : ((com.SaintAlfonzo.solraspberrypie.mixin.client.UIElementAccessor) e).solrp$children()) walk(c, x, y, depth + 1, sb);
-			if (e instanceof MealsGrid g && !g.cells.isEmpty()) {
-				sb.append(" grid").append(str(g.frame)).append(" cell0").append(str(g.cells.get(0).frame));
-			}
-		}
-
-		private static String str(Rectangle r) {
-			return r == null ? "null" : "(" + r.x + "," + r.y + " " + r.width + "x" + r.height + ")";
-		}
-	}
-
 	public static final class OpenTiming {
 		static long icon, grid;
 		private static long pagesStart, pagesTook;

@@ -14,7 +14,7 @@ import java.util.Collection;
 @Mixin(Gui.class)
 public abstract class GuiMixin {
 	@Redirect(method = "renderEffects", at = @At(value = "INVOKE",
-			target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
+			target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"), require = 0) // another mod redirecting the same call only disables this filter (PR-RP-09)
 	private Collection<MobEffectInstance> solrp$filterHud(LocalPlayer player) {
 		return EffectFilter.hud(player.getActiveEffects());
 	}

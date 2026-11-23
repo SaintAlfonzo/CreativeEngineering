@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /** Raspberry Pie's channel (13.3): ladder, player state, messages and previews to the client; slot actions to the server. */
 public final class RpNetwork {
-	private static final String VERSION = "4"; // 4: ladder toggles and taglines, S2CState off set, TOGGLE action; 3: S2CState carries the Change and Drop age counts
+	private static final String VERSION = "5"; // bump on any packet layout change (5: ladder replacements)
 	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
 			new ResourceLocation(SolRaspberryPie.MOD_ID, "main"), () -> VERSION, VERSION::equals, VERSION::equals);
 

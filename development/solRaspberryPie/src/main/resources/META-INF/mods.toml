@@ -11,7 +11,7 @@ version="${mod_version}"
 displayName="${mod_name}"
 authors="${mod_authors}"
 displayURL="https://github.com/SaintAlfonzo/CreativeEngineering"
-credits="Spice of Life: Apple Pie Edition by tarinoita, forked from the Potato Edition (Kevun1) and the Carrot Edition team. Apple Pie and Carrot Edition (LGPL-2.1) are nested unmodified (see the NOTICE file); no code of theirs is copied."
+credits="Spice of Life: Apple Pie Edition by tarinoita, forked from the Potato Edition (Kevun1) and the Carrot Edition team. Apple Pie and Carrot Edition (LGPL-2.1) are nested unmodified (see solRaspberryPie-NOTICE-nested-LGPL.txt in the jar); no code of theirs is copied."
 itemIcon="solraspberrypie:liquid_diet_log"
 description='''${mod_description}'''
 

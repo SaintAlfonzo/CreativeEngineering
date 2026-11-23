@@ -79,14 +79,14 @@ public class RpStandaloneTest {
 			if (r.kind == Rung.Kind.HEALTH) health.add(r.threshold);
 			if (r.kind == Rung.Kind.FLAT) flats.add(r.threshold);
 		}
-		check(unlocks.equals(List.of(5.0, 7.9, 10.8, 13.9, 17.1, 20.4, 23.8, 27.5, 31.4, 35.5, 39.9, 44.7, 50.0)),
-				"13 unlocks, falling density 2.0 over 5 to 50 " + unlocks);
+		check(unlocks.equals(List.of(5.0, 8.8, 12.8, 17.1, 21.5, 26.3, 31.4, 36.9, 43.0, 50.0)),
+				"10 unlocks, falling density 2.0 over 5 to 50 " + unlocks);
 		check(slots.equals(List.of(5.0, 15.0, 27.5, 40.0)), "slots at 5, 15, 27.5, 40 " + slots);
 		check(health.equals(List.of(2.5, 3.5, 5.0, 7.5, 10.0, 12.5, 15.0, 17.5, 20.0, 22.5, 25.0, 30.0, 35.0, 40.0, 45.0, 50.0)),
 				"health at Apple Pie's thresholds halved " + health);
 		check(flats.equals(List.of(1.0, 3.5, 5.0, 10.0, 12.5, 17.5, 30.0, 35.0, 45.0, 50.0)), "Apple Pie's flat effects halved " + flats);
-		check(ladder.rungs.size() == 47 && ladder.slotCount() == 4 && ladder.pool.size() == 11,
-				"Diet ladder: 47 rungs, 4 slots, 11 pool effects (" + ladder.rungs.size() + ", " + ladder.slotCount() + ", " + ladder.pool.size() + ")");
+		check(ladder.rungs.size() == 44 && ladder.slotCount() == 4 && ladder.pool.size() == 8,
+				"Diet ladder: 44 rungs, 4 slots, 8 pool effects (" + ladder.rungs.size() + ", " + ladder.slotCount() + ", " + ladder.pool.size() + ")");
 		check(ladder.pool.keySet().stream().allMatch(id -> id.getNamespace().equals(ResourceLocation.DEFAULT_NAMESPACE)), "pool is vanilla only");
 		check(ladder.maxThreshold() == 50.0, "top rung at 50");
 
@@ -95,6 +95,33 @@ public class RpStandaloneTest {
 		List<String> badWarnings = new ArrayList<>();
 		LadderLoader.parse(bad, "test", badWarnings);
 		check(badWarnings.size() == 2 && badWarnings.get(0).startsWith("skipped 1 "), "a bad ladder still warns (skipped + V4): " + badWarnings);
+
+		// PR-RP-11 / V14: an unlock whose flat rung comes no later than the first slot warns.
+		JsonObject hidden = JsonParser.parseString("{\"pool\":[{\"effect\":\"minecraft:speed\"}],\"rungs\":[{\"threshold\":1,\"type\":\"flat\",\"effect\":\"minecraft:speed\"},"
+				+ "{\"threshold\":5,\"type\":\"slot\"},{\"threshold\":5,\"type\":\"unlock\",\"effect\":\"minecraft:speed\"}]}").getAsJsonObject();
+		List<String> hw = new ArrayList<>();
+		LadderLoader.parse(hidden, "test", hw);
+		check(hw.size() == 1 && hw.get(0).startsWith("V14:"), "an unlock hidden by an early flat rung warns (V14): " + hw);
+
+		// food-tuning #49, #50: replacements and covered slots.
+		JsonObject rj = JsonParser.parseString("{\"pool\":[{\"effect\":\"minecraft:jump_boost\"},{\"effect\":\"minecraft:slow_falling\",\"replaces\":[\"minecraft:jump_boost\",\"nomod:gone\"]},"
+				+ "{\"effect\":\"minecraft:luck\"}],\"rungs\":[{\"threshold\":1,\"type\":\"slot\"},{\"threshold\":1,\"type\":\"unlock\",\"effect\":\"minecraft:jump_boost\"},"
+				+ "{\"threshold\":1,\"type\":\"unlock\",\"effect\":\"minecraft:luck\"},{\"threshold\":3,\"type\":\"flat\",\"effect\":\"minecraft:luck\"},"
+				+ "{\"threshold\":5,\"type\":\"unlock\",\"effect\":\"minecraft:slow_falling\"}]}").getAsJsonObject();
+		List<String> rw = new ArrayList<>();
+		Ladder rl = LadderLoader.parse(rj, "replace test", rw);
+		ResourceLocation jb = new ResourceLocation("minecraft:jump_boost"), sf = new ResourceLocation("minecraft:slow_falling"), luck = new ResourceLocation("minecraft:luck");
+		check(rw.isEmpty() && rl.replaces.equals(Map.of(sf, List.of(jb))), "replaces parses; an absent mod's id is dropped quietly " + rw + " " + rl.replaces);
+		check(rl.replacedBy(jb, 4) == null && sf.equals(rl.replacedBy(jb, 5)), "replaced only once the replacing effect is unlocked");
+		FriendlyByteBuf rbuf = new FriendlyByteBuf(Unpooled.buffer());
+		rl.write(rbuf);
+		check(Ladder.read(rbuf).replaces.equals(rl.replaces), "replacements survive the login sync");
+		List<com.SaintAlfonzo.solraspberrypie.data.SlotChoice> jbPick = List.of(new com.SaintAlfonzo.solraspberrypie.data.SlotChoice(jb, 1));
+		check(DietEngine.compute(rl, 2, 99, jbPick, id -> true, 4).effects.containsKey(jb)
+				&& !DietEngine.compute(rl, 2, 99, jbPick, id -> true, 5).effects.containsKey(jb), "a replaced effect in a slot is not applied");
+		DietEngine.State luckFlat = DietEngine.compute(rl, 3, 99, List.of(new com.SaintAlfonzo.solraspberrypie.data.SlotChoice(luck, 1)), id -> true, 3);
+		check(rl.covered(luck, luckFlat.flat.keySet(), 3) && rl.covered(jb, java.util.Set.of(), 5) && !rl.covered(jb, java.util.Set.of(), 4),
+				"covered: a flat buff of the effect, or an unlocked replacement");
 
 		// P7: toggle and tagline fields (raspberry_pie.md 3.3).
 		check(ladder.toggles.isEmpty(), "the default ladder has no toggle effect");
@@ -175,6 +202,14 @@ public class RpStandaloneTest {
 		check(Diversity.value(Items.BREAD) == null, "an unlisted food keeps Apple Pie's value (bread)");
 		check(Diversity.head(Items.BEEF) == Items.COOKED_BEEF, "a family member counts as its head (beef -> cooked beef)");
 		check(Diversity.head(Items.BREAD) == Items.BREAD, "a family with an absent head is skipped (bread is its own entry)");
+		// PR-RP-04: a table of the wrong shape is skipped whole, bad values one by one; the good table still applies.
+		JsonObject wrong = JsonParser.parseString("{\"values\":[1,2],\"families\":{}}").getAsJsonObject();
+		JsonObject badVals = JsonParser.parseString("{\"values\":{\"minecraft:bread\":-1,\"minecraft:carrot\":\"NaN\",\"minecraft:beef\":0.5}}").getAsJsonObject();
+		Diversity.use(List.of(new Diversity.Source("a:a.json", a), new Diversity.Source("w:wrong.json", wrong), new Diversity.Source("v:vals.json", badVals)),
+				ForgeRegistries.ITEMS::containsKey);
+		check(Double.valueOf(1.0).equals(Diversity.value(Items.APPLE)) && Double.valueOf(0.5).equals(Diversity.value(Items.BEEF))
+				&& Double.valueOf(2.0).equals(Diversity.value(Items.CARROT)) && Diversity.value(Items.BREAD) == null,
+				"a wrong-shape table is skipped, negative and NaN values are skipped, the rest applies");
 		Diversity.use(List.of(), ForgeRegistries.ITEMS::containsKey);
 		check(Diversity.value(Items.APPLE) == null && Diversity.head(Items.BEEF) == Items.BEEF, "no table: nothing overridden");
 		Path cd = root.resolve("development/creativeDelight/src/main/resources/solraspberrypie/diversity/creativedelight.json");

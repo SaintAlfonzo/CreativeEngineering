@@ -21,6 +21,7 @@ public final class ClientSetup {
 		MinecraftForge.EVENT_BUS.addListener(ClientSetup::tick);
 		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, FoodTooltips::gather);
 		MinecraftForge.EVENT_BUS.addListener(FoodTooltips::bookLine);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, FleetFootedFov::onFov);
 		modBus.addListener((FMLClientSetupEvent e) -> e.enqueueWork(EffectFilter::registerPermanentSource));
 		MinecraftForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> ClientState.reset());
 		MinecraftForge.EVENT_BUS.addListener((ScreenEvent.Render.Post e) -> {
