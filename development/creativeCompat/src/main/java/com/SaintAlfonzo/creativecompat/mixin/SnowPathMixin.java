@@ -26,7 +26,8 @@ public abstract class SnowPathMixin {
 		try {
 			SnowLayers.beginPath(mob);
 			LeafThorns.beginPath(mob);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SnowPathMixin", t);
 			SnowLayers.endPath();
 			LeafThorns.endPath();
 		}

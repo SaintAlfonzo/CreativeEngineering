@@ -48,7 +48,8 @@ public abstract class SnowLayerPassMixin {
 		try {
 			BlockState to = SnowLayers.fullToBlock(s, PassValues.of(ctx.getLevel().isClientSide));
 			if (to != s) cir.setReturnValue(to);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SnowLayerPassMixin#1", t);
 			// place the layer as vanilla
 		}
 	}
@@ -58,7 +59,8 @@ public abstract class SnowLayerPassMixin {
 												CallbackInfo ci) {
 		try {
 			if (SnowLayers.randomTick(state, level, pos)) ci.cancel();
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SnowLayerPassMixin#2", t);
 			// tick as vanilla
 		}
 	}

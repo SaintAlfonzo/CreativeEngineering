@@ -26,7 +26,6 @@ final class PassPhase35Test {
 	private PassPhase35Test() {}
 
 	static void run(Path root) throws Exception {
-		migration(root);
 		format();
 		stuckInBlock();
 	}
@@ -63,75 +62,6 @@ final class PassPhase35Test {
 	static Object at(String toml, String... path) {
 		CommentedConfig c = new TomlParser().parse(toml);
 		return c.get(List.of(path));
-	}
-
-	static void migration(Path root) throws Exception {
-		LeafPileMigration.Result r = LeafPileMigration.migrate(OLD.formatted("4") + NEW_TABLE.formatted("4"));
-		check("migrate: old 4, new 4 -> section gone, minLayers 4, nothing carried",
-				r.changed() && !r.text().contains("[leaf_piles]") && !r.text().contains("slowFromLayers")
-						&& !r.text().contains("Immersive Weathering leaf piles (1-8")
-						&& Integer.valueOf(4).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers"))
-						&& r.carried() == null && Integer.valueOf(4).equals(r.oldValue()));
-		check("migrate: the next section keeps its comment and keys",
-				r.text().contains("#Moss block and moss carpet colour") /* spelling: keep (old config text) */ && Boolean.TRUE.equals(at(r.text(), "moss", "biomeTint"))
-						&& !r.text().startsWith("\n\n"));
-		r = LeafPileMigration.migrate(OLD.formatted("6") + NEW_TABLE.formatted("4"));
-		check("migrate: old 6 -> minLayers 6, indentation kept",
-				r.carried() != null && r.carried() == 6 && r.text().contains("\n\t\t\tminLayers = 6\n")
-						&& Integer.valueOf(6).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers"))
-						&& Integer.valueOf(1).equals(at(r.text(), "surface", "passthrough", "grass", "minLayers")));
-		r = LeafPileMigration.migrate(OLD.formatted("4") + NEW_TABLE.formatted("3"));
-		check("migrate: old default 4, new edited 3 -> keeps 3",
-				r.carried() == null && Integer.valueOf(3).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers")));
-		r = LeafPileMigration.migrate(OLD.formatted("9") + NEW_TABLE.formatted("3"));
-		check("migrate: old 9 (never) wins over an edited new value",
-				Integer.valueOf(9).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers")));
-		r = LeafPileMigration.migrate(OLD.formatted("5"));
-		check("migrate: no pass-through table yet -> appended with minLayers 5",
-				r.carried() != null && r.carried() == 5
-						&& Integer.valueOf(5).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers"))
-						&& at(r.text(), "leaf_piles") == null);
-		// what Forge then does: correct the file against the spec
-		CommentedConfig cfg = new TomlParser().parse(PassConfigMigration.migrate(r.text()).text());
-		CompatConfig.SPEC.correct(cfg);
-		check("migrate: then leaf_pile -> layers and Forge's correction keep minLayers 5 and fill the table",
-				Integer.valueOf(5).equals(cfg.get(List.of("surface", "passthrough", "layers", "minLayers")))
-						&& cfg.contains(List.of("surface", "passthrough", "layers", "snowMaxSlow"))
-						&& !cfg.contains(List.of("surface", "passthrough", "leaf_pile")) && !cfg.contains("leaf_piles"));
-		for (String bad : List.of("0", "12", "abc")) {
-			r = LeafPileMigration.migrate(OLD.formatted(bad) + NEW_TABLE.formatted("4"));
-			check("migrate: unusable old value '" + bad + "' dropped, minLayers stays 4",
-					r.changed() && !r.text().contains("[leaf_piles]") && r.carried() == null
-							&& Integer.valueOf(4).equals(at(r.text(), "surface", "passthrough", "leaf_pile", "minLayers")));
-		}
-		r = LeafPileMigration.migrate(NEW_TABLE.formatted("4"));
-		check("migrate: no old section -> unchanged", !r.changed() && r.text().equals(NEW_TABLE.formatted("4")));
-		r = LeafPileMigration.migrate("[leaf_piles]\n\n[moss]\n\tbiomeTint = true\n");
-		check("migrate: old section without its key -> dropped, nothing added",
-				r.changed() && r.carried() == null && !r.text().contains("leaf_pile") && r.text().startsWith("[moss]"));
-		r = LeafPileMigration.migrate(OLD.formatted("4").replace("[moss]\n\tbiomeTint = true\n", "") + NEW_TABLE.formatted("4"));
-		check("migrate: old section right before another file's comment block", !r.text().contains("[leaf_piles]"));
-
-		// the live file (the phase 1 jar wrote both): run() on a copy, then Forge's correction
-		Path live = root.resolve("config/creativecompat-common.toml");
-		if (Files.isRegularFile(live)) {
-			Path tmp = Files.createTempFile("cc-migrate", ".toml");
-			Files.copy(live, tmp, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-			String before = Files.readString(tmp, StandardCharsets.UTF_8);
-			boolean hadOld = before.contains("[leaf_piles]");
-			LeafPileMigration.Result lr = LeafPileMigration.run(tmp);
-			PassConfigMigration.run(tmp);
-			String after = Files.readString(tmp, StandardCharsets.UTF_8);
-			CommentedConfig lc = new TomlParser().parse(after);
-			CompatConfig.SPEC.correct(lc);
-			check("migrate: live config copy -> no [leaf_piles] or leaf_pile, layers minLayers " + lc.get(List.of("surface", "passthrough", "layers", "minLayers")),
-					!after.contains("[leaf_piles]") && !after.contains("[surface.passthrough.leaf_pile]") && (!hadOld || lr != null)
-							&& lc.get(List.of("surface", "passthrough", "layers", "minLayers")) instanceof Integer);
-			check("migrate: second run does nothing", LeafPileMigration.run(tmp) == null && PassConfigMigration.run(tmp) == null);
-			Files.delete(tmp);
-		}
-		check("spec has no leaf_piles section", !CompatConfig.SPEC.getSpec().contains("leaf_piles"));
-		check("spec has surface.wthit.passThrough", CompatConfig.SPEC.getSpec().contains(List.of("surface", "wthit", "passThrough")));
 	}
 
 	static String text(PassThroughFormat.Line l) {

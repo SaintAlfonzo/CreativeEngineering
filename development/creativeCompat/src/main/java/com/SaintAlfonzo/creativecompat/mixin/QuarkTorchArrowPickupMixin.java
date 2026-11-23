@@ -27,7 +27,8 @@ public abstract class QuarkTorchArrowPickupMixin {
 					&& PassProjectiles.webHung((Entity) (Object) this)) {
 				cir.setReturnValue(new ItemStack(TorchArrowModule.torch_arrow));
 			}
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("QuarkTorchArrowPickupMixin", t);
 			// keep Quark's answer
 		}
 	}

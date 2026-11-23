@@ -21,7 +21,8 @@ public abstract class LayerJumpMixin {
 			float p = cir.getReturnValueF();
 			float q = PassThrough.jumpPower((LivingEntity) (Object) this, p);
 			if (q != p) cir.setReturnValue(q);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("LayerJumpMixin", t);
 			// vanilla jump
 		}
 	}

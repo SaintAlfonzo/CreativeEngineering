@@ -89,6 +89,11 @@ public final class SinkingRender {
 		int by = Mth.floor(y - EPS);
 		int cx = Mth.floor(x);
 		int cz = Mth.floor(z);
+		// cheap tag test first (publish_readiness.md PR-CP-15): no shape lookups or allocations under an entity that
+		// stands on no sinking or camouflage block, which is nearly every entity on every frame
+		if (!anyTagged(level, x, z, cx, by, cz, Math.max(0, half - EPS))) {
+			return 0;
+		}
 		double centre = support(level, cx, by, cz, y, full, item);
 		if (centre >= 0) {
 			return centre;
@@ -109,6 +114,28 @@ public final class SinkingRender {
 			best = Math.max(best, support(level, bx, by, bz, y, full, item));
 		}
 		return best;
+	}
+
+	private static final ThreadLocal<BlockPos.MutableBlockPos> PROBE = ThreadLocal.withInitial(BlockPos.MutableBlockPos::new);
+
+	/** True when the block under the center or a hitbox corner is sinking or a camouflage block. */
+	private static boolean anyTagged(Level level, double x, double z, int cx, int by, int cz, double w) {
+		BlockPos.MutableBlockPos p = PROBE.get();
+		if (tagged(level.getBlockState(p.set(cx, by, cz)))) {
+			return true;
+		}
+		for (int i = 0; i < 4; i++) {
+			int bx = Mth.floor(x + ((i & 1) == 0 ? -w : w));
+			int bz = Mth.floor(z + ((i & 2) == 0 ? -w : w));
+			if ((bx != cx || bz != cz) && tagged(level.getBlockState(p.set(bx, by, bz)))) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static boolean tagged(BlockState state) {
+		return state.is(SINKING) || state.is(CamoSpeed.TAG);
 	}
 
 	private static boolean contains(long[] keys, int n, long key) {

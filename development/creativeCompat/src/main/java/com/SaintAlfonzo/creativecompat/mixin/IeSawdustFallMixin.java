@@ -25,7 +25,8 @@ public abstract class IeSawdustFallMixin {
 										   BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
 		try {
 			if (FallingLayers.holdAndQueue(state, level, pos)) cir.setReturnValue(state);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("IeSawdustFallMixin", t);
 			// IE: an unsupported pile breaks
 		}
 	}

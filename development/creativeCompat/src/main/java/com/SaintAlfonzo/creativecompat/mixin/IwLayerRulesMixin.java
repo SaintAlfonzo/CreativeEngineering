@@ -31,7 +31,8 @@ public abstract class IwLayerRulesMixin {
 		try {
 			Boolean r = SurfaceLayers.replaceable(state, ctx);
 			if (r != null) cir.setReturnValue(r);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("IwLayerRulesMixin#1", t);
 			// the block's own rule
 		}
 	}
@@ -41,7 +42,8 @@ public abstract class IwLayerRulesMixin {
 			CallbackInfo ci) {
 		try {
 			SurfaceLayers.settle(level, pos, state);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("IwLayerRulesMixin#2", t);
 			// stays a full layer pile
 		}
 	}

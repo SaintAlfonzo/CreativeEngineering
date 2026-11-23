@@ -613,10 +613,14 @@ public final class PassThrough {
 		return hit[0];
 	}
 
-	/** The entity's {@link PassState}, created when {@code create}. */
+	/**
+	 * The entity's {@link PassState}, created when {@code create}. With InsideBlocksMixin switched off ([mixins] in
+	 * creativecompat-common.toml) entities carry no state: a throwaway one when {@code create}, else null.
+	 */
 	@Nullable
 	public static PassState state(Entity e, boolean create) {
-		return ((PassHolder) e).creativecompat$passState(create);
+		if (e instanceof PassHolder h) return h.creativecompat$passState(create);
+		return create ? new PassState() : null;
 	}
 
 	// ---- movement ----

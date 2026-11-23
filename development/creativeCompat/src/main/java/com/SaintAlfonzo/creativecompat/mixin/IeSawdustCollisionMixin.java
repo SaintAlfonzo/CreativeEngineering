@@ -27,7 +27,8 @@ public abstract class IeSawdustCollisionMixin {
 										 CallbackInfoReturnable<VoxelShape> cir) {
 		try {
 			cir.setReturnValue(state.getShape(level, pos, ctx));
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("IeSawdustCollisionMixin", t);
 			// the mod's own collision
 		}
 	}

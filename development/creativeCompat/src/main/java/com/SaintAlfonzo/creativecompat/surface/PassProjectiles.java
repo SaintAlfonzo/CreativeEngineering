@@ -312,7 +312,8 @@ public final class PassProjectiles {
 		Direction face = v.lengthSqr() > 1.0E-12 ? Direction.getNearest(-v.x, -v.y, -v.z) : Direction.UP;
 		BlockHitResult hit = new BlockHitResult(c, face, pos, false);
 		if (!ForgeEventFactory.onProjectileImpact(proj, hit)) {
-			((PassImpact) proj).creativecompat$impact(hit);
+			// ProjectilePassMixin switched off ([mixins]): the projectile is only removed
+			if (proj instanceof PassImpact impact) impact.creativecompat$impact(hit);
 		}
 		if (!p.level.isClientSide && !p.isRemoved()) p.discard();
 	}

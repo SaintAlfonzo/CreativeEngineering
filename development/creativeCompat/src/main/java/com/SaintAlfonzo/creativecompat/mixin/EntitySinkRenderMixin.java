@@ -45,7 +45,8 @@ public abstract class EntitySinkRenderMixin {
 		try {
 			double depth = SinkingRender.depth(this.creativeengineering$rendering, this.creativeengineering$partialTick);
 			return depth == 0 ? offset : offset.subtract(0, depth, 0);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("EntitySinkRenderMixin", t);
 			return offset;
 		}
 	}

@@ -24,7 +24,8 @@ public abstract class SnowMobMixin {
 		try {
 			Vec3 v = SnowLayers.mobMove((LivingEntity) (Object) this, cir.getReturnValue());
 			if (v != null) cir.setReturnValue(v);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SnowMobMixin", t);
 			// vanilla movement
 		}
 	}

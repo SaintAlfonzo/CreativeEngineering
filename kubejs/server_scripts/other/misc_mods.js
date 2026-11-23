@@ -1,5 +1,6 @@
 // requires: creativecompat
-// Creative Compat.
+// Pack script: moved out of Creative Compat on 2026-11-22 (Compat publishes compatibility fixes only; publish_readiness.md
+// D1, PR-CP-01 to -03). Recipe ids keep the creativecompat namespace (forPack) so nothing already saved changes.
 ServerEvents.recipes(e => {
 
 console.log('misc mods starting')

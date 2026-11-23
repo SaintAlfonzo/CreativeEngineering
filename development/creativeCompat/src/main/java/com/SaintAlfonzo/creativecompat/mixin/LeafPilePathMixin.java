@@ -30,7 +30,8 @@ public abstract class LeafPilePathMixin {
 			BlockState state = level.getBlockState(pos);
 			if (LeafThorns.blocksPath(state)) cir.setReturnValue(LeafThorns.pathType());
 			else if (SnowLayers.openForPath(state)) cir.setReturnValue(BlockPathTypes.OPEN);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("LeafPilePathMixin", t);
 			// vanilla type
 		}
 	}

@@ -5,6 +5,9 @@
 //     rebuild, copied into the jar at the same resource path:
 //       kubejs/data/creativecompat/kubejs/    -> data/creativecompat/kubejs/    (server scripts)
 //       kubejs/assets/creativecompat/kubejs/  -> assets/creativecompat/kubejs/  (client scripts)
+//   - the Botany Pots crop recipes and the two dimension tags BotanyPotDimensionMixin reads, generated into the pack
+//     folder by tools/gen_botany_crops.py and copied in the same way (data/creativecompat/recipes/, tags/), so the
+//     published jar carries them (publish_readiness.md PR-CP-10).
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecompat/), loaded from the jar by
 //     Creative Common's startup loader.
 //   - no nested members so Compat needs no donor jar.
@@ -22,7 +25,8 @@ dependencies {
 	compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
 }
 
-def scriptTrees = ['data/creativecompat/kubejs', 'assets/creativecompat/kubejs']
+def scriptTrees = ['data/creativecompat/kubejs', 'assets/creativecompat/kubejs', 'data/creativecompat/recipes',
+		'data/creativecompat/tags']
 
 tasks.named('processResources', ProcessResources).configure {
 	scriptTrees.each { tree ->

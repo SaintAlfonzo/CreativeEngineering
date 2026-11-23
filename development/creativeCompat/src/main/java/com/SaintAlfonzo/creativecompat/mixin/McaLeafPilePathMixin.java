@@ -29,7 +29,8 @@ public abstract class McaLeafPilePathMixin {
 			BlockState state = world.getBlockState(pos);
 			if (LeafThorns.blocksPath(state)) cir.setReturnValue(ExtendedPathNodeType.DAMAGE_OTHER);
 			else if (SnowLayers.openForPath(state)) cir.setReturnValue(ExtendedPathNodeType.OPEN);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("McaLeafPilePathMixin", t);
 			// MCA's type
 		}
 	}

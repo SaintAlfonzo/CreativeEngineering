@@ -29,7 +29,8 @@ public abstract class SnowLayerFallMixin {
 										   BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
 		try {
 			if (FallingLayers.holdAndQueue(state, level, pos)) cir.setReturnValue(state);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SnowLayerFallMixin#1", t);
 			// vanilla: an unsupported layer breaks
 		}
 	}
@@ -39,7 +40,8 @@ public abstract class SnowLayerFallMixin {
 										   CallbackInfo ci) {
 		try {
 			if (FallingLayers.randomTick(state, level, pos)) ci.cancel();
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SnowLayerFallMixin#2", t);
 			// tick as vanilla
 		}
 	}

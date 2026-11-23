@@ -32,17 +32,20 @@ public abstract class BlockRunnerBlockStateMixin {
 		LivingEntity self = (LivingEntity) (Object) this;
 		try {
 			StickyFacing.afterBlockRunner(self);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("BlockRunnerBlockStateMixin#1", t);
 			// leave BlockRunner's modifier as it is
 		}
 		try {
 			CamoSpeed.afterBlockRunner(self);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("BlockRunnerBlockStateMixin#2", t);
 			// leave BlockRunner's modifier as it is
 		}
 		try {
 			SurfaceLayers.afterBlockRunner(self);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("BlockRunnerBlockStateMixin#3", t);
 			// leave BlockRunner's modifier as it is
 		}
 	}

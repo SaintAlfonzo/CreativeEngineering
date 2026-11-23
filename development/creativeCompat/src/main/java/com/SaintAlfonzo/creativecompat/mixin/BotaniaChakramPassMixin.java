@@ -39,7 +39,8 @@ public abstract class BotaniaChakramPassMixin implements PassSnagItem {
 	private void creativecompat$chakramWeb(CallbackInfo ci) {
 		try {
 			PassProjectiles.snagTail((Entity) (Object) this);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("BotaniaChakramPassMixin", t);
 			// a broken lookup must never stop the chakram
 		}
 	}

@@ -22,8 +22,6 @@ import com.SaintAlfonzo.creativecompat.shrapnel.TntShrapnelHandler;
 import com.SaintAlfonzo.creativecompat.surface.CamoSpeedTooltip;
 import com.SaintAlfonzo.creativecompat.surface.PassSync;
 import com.SaintAlfonzo.creativecompat.surface.PassSyncClient;
-import com.SaintAlfonzo.creativecompat.surface.LeafPileMigration;
-import com.SaintAlfonzo.creativecompat.surface.PassConfigMigration;
 import com.SaintAlfonzo.creativecompat.surface.PassThrough;
 import com.SaintAlfonzo.creativecompat.surface.PassValues;
 import com.SaintAlfonzo.creativecompat.surface.SurfaceSpeeds;
@@ -31,7 +29,6 @@ import com.SaintAlfonzo.creativecommon.util.BurnBursts;
 import com.SaintAlfonzo.creativecompat.compat.JarContents;
 import com.SaintAlfonzo.creativecompat.compat.jei.world.WorldRows;
 import com.SaintAlfonzo.creativecompat.compat.jei.world.WorldTab;
-import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -50,17 +47,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fml.loading.FMLPaths;
 import org.slf4j.Logger;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Creative Compat (feature_writeup/creative_compat.md): the pack's tweaks to third-party mods that have no wider system
@@ -79,28 +67,13 @@ public class CreativeCompat {
 	public static final String NS = MOD_ID;
 	public static final Logger LOGGER = LogUtils.getLogger();
 
-	private static final String OLD_FILE = "creativeengineering-common.toml";
 	private static final String FILE = MOD_ID + "-common.toml";
 
 	public CreativeCompat() {
-		// The sections are carried from Creative Common's file: the first boot copies the player's values over (then Creative
-		// Common drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
-		boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.SECTIONS);
-		// [shrapnel], [surface] and [vein_undo] are carried from Creative Engineering's file of the same name into a new
-		// file, or merged into an existing one.
-		if (!ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS))
-			ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS);
-		// [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit] are carried from Creative Common's file. Sections this file already has are kept; Common drops its copies when Forge corrects its
-		// file.
-		if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS))
-			ConfigRename.mergeSections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS);
-		ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.COMMON_SECTIONS);
-		// [leaf_piles] slowFromLayers -> [surface.passthrough.leaf_pile] minLayers (plan_passthrough.md 3.1), then the
-		// neighbor model and the layer tier (plan_post_scratch_1115b.md C1, D: surface/PassConfigMigration)
-		migrateLeafPiles();
-		migratePassThrough();
+		// No carry-over from older files: the pack-history migrations (sections from creativeengineering-common.toml and
+		// creativecommon-common.toml, the leaf pile and pass-through table rewrites) were dropped before the first
+		// public release (publish_readiness.md PR-CP-17; owner, 2026-11-22).
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
-		if (!carried) warnOldKeys();
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(CreativeCompat::commonSetup);
@@ -269,63 +242,6 @@ public class CreativeCompat {
 		} catch (Throwable t) {
 			LOGGER.error("[creativecompat] failed to pre-load {}", className, t);
 		}
-	}
-
-	/** The leaf pile mixin's old key moves into the pass-through table (surface/LeafPileMigration). */
-	private static void migrateLeafPiles() {
-		try {
-			LeafPileMigration.Result r = LeafPileMigration.run(FMLPaths.CONFIGDIR.get().resolve(FILE));
-			if (r != null) {
-				LOGGER.info("[creativecompat] config/{}: [leaf_piles] slowFromLayers ({}) moved to "
-						+ "[surface.passthrough.leaf_pile] minLayers ({})", FILE, r.oldValue(),
-						r.carried() != null ? r.carried() : "kept");
-			}
-		} catch (IOException e) {
-			LOGGER.error("[creativecompat] could not move [leaf_piles] in config/{}", FILE, e);
-		}
-	}
-
-	/**
-	 * RING / CUBE neighbors become SIDES / FACES, the old denseFrom default 6 becomes 3, and the leaf_pile table moves
-	 * into [surface.passthrough.layers] (surface/PassConfigMigration). Before Forge loads the file.
-	 */
-	private static void migratePassThrough() {
-		try {
-			PassConfigMigration.Result r = PassConfigMigration.run(FMLPaths.CONFIGDIR.get().resolve(FILE));
-			if (r != null) {
-				LOGGER.info("[creativecompat] config/{}: pass-through tables moved to the 2026-11-15 model: {}", FILE,
-						String.join("; ", r.notes()));
-			}
-		} catch (IOException e) {
-			LOGGER.error("[creativecompat] could not update the pass-through tables in config/{}", FILE, e);
-		}
-	}
-
-	/** Lines of creativeengineering-common.toml that hold the sections carried here. */
-	private static final Pattern OLD_KEY = Pattern.compile(
-			"^\\s*(\\[(?:leaf_piles|moss|vine_shearing|monster_box|trash_slot)\\])", Pattern.MULTILINE);
-
-	/**
-	 * The sections carried from Creative Common's file. When this file already existed the carry-over does not run, and
-	 * Forge drops the old sections from Creative Common's file on its next correction, so an edited value left there is
-	 * lost: say which ones were still there. Runs at construction, before Forge loads and corrects the COMMON configs.
-	 */
-	private static void warnOldKeys() {
-		Path old = FMLPaths.CONFIGDIR.get().resolve(OLD_FILE);
-		if (!Files.isRegularFile(old)) return;
-		String text;
-		try {
-			text = Files.readString(old, StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			return;
-		}
-		List<String> found = new ArrayList<>();
-		Matcher m = OLD_KEY.matcher(text);
-		while (m.find()) found.add(m.group(1));
-		if (found.isEmpty()) return;
-		LOGGER.warn("[creativecompat] config/{} still has sections that moved to config/{}: {}. "
-				+ "Creative Compat reads only its own file; copy any edited value over (Creative Common drops these from its file).",
-				OLD_FILE, FILE, found);
 	}
 
 	/** Client half: MOD bus, client only. */

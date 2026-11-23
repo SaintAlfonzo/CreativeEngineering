@@ -180,7 +180,8 @@ public final class ItemPhysicSplit {
 		try {
 			if (item.isEyeInFluid(FluidTags.LAVA)) return true;
 			if (item.getFluidHeight(FluidTags.LAVA) > 0.0D) return true;
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("ItemPhysicSplit", t);
 			// fluid maps not populated yet this tick
 		}
 		Level level = item.level;

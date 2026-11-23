@@ -61,7 +61,8 @@ public abstract class InsideBlocksMixin implements PassHolder {
 		if (st == null || type != MoverType.SELF || !PassItems.stuckState(st)) return;
 		try {
 			if (PassItems.heldMove((Entity) (Object) this, st)) ci.cancel();
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("InsideBlocksMixin#1", t);
 			// move as usual
 		}
 	}
@@ -85,7 +86,8 @@ public abstract class InsideBlocksMixin implements PassHolder {
 	private void creativecompat$beforeLanding(MoverType type, Vec3 motion, CallbackInfo ci) {
 		try {
 			PassThrough.beforeLanding((Entity) (Object) this);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("InsideBlocksMixin#2", t);
 			// fall damage as vanilla
 		}
 	}
@@ -95,7 +97,8 @@ public abstract class InsideBlocksMixin implements PassHolder {
 		Entity self = (Entity) (Object) this;
 		try {
 			WallSlide.afterInsideBlocks(self);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("InsideBlocksMixin#3", t);
 			// a broken lookup must never stop movement
 		}
 		try {
@@ -106,7 +109,8 @@ public abstract class InsideBlocksMixin implements PassHolder {
 			} else {
 				PassThrough.afterInsideBlocks(self);
 			}
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("InsideBlocksMixin#4", t);
 			// a broken lookup must never stop movement
 		}
 	}

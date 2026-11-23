@@ -47,7 +47,7 @@ public final class PassArrows {
 		PassState st = PassThrough.state(arrow, true);
 		if (st.longLife == 0) {
 			boolean pickable = arrow.pickup == AbstractArrow.Pickup.ALLOWED
-					&& !((PassArrow) arrow).creativecompat$pickupItem().isEmpty();
+					&& arrow instanceof PassArrow pa && !pa.creativecompat$pickupItem().isEmpty();
 			st.longLife = (byte) (pickable ? 2 : 1);
 		}
 		boolean pickable = st.longLife == 2;
@@ -69,7 +69,7 @@ public final class PassArrows {
 		while (set.size() > Math.max(0, cap)) {
 			AbstractArrow[] members = set.toArray(new AbstractArrow[0]);
 			int[] lives = new int[members.length];
-			for (int i = 0; i < members.length; i++) lives[i] = ((PassArrow) members[i]).creativecompat$life();
+			for (int i = 0; i < members.length; i++) lives[i] = members[i] instanceof PassArrow pa ? pa.creativecompat$life() : 0;
 			AbstractArrow oldest = members[PassMath.oldestIndex(lives, lives.length)];
 			set.remove(oldest);
 			PassState os = PassThrough.state(oldest, true);
@@ -83,7 +83,7 @@ public final class PassArrows {
 		for (Iterator<AbstractArrow> it = set.iterator(); it.hasNext(); ) {
 			AbstractArrow a = it.next();
 			PassState s = PassThrough.state(a, false);
-			boolean keep = !a.isRemoved() && ((PassArrow) a).creativecompat$inGround() && s != null && !s.shortLife
+			boolean keep = !a.isRemoved() && a instanceof PassArrow pa && pa.creativecompat$inGround() && s != null && !s.shortLife
 					&& ChunkPos.asLong(a.getBlockX() >> 4, a.getBlockZ() >> 4) == chunk;
 			if (!keep) {
 				it.remove();

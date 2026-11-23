@@ -919,7 +919,8 @@ final class CyclingCraftingPages {
 					if (new ItemStack(i).isDamageableItem()) {
 						list.add(i);
 					}
-				} catch (Throwable ignored) {
+				} catch (Throwable t) {
+					com.SaintAlfonzo.creativecompat.compat.HookFaults.once("CyclingCraftingPages#1", t);
 					// a broken item: leave it out
 				}
 			}
@@ -1008,7 +1009,8 @@ final class CyclingCraftingPages {
 		NonNullList<ItemStack> list = NonNullList.create();
 		try {
 			item.fillItemCategory(CreativeModeTab.TAB_SEARCH, list);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("CyclingCraftingPages#2", t);
 			// leave it with the plain stack
 		}
 		if (list.isEmpty()) {

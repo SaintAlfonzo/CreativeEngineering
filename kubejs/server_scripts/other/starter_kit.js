@@ -1,5 +1,7 @@
 // requires: creativecompat
-// Creative Compat. Starter Kit port. A player joining a world for the first time gets one of the kits below at
+// Pack script: moved out of Creative Compat on 2026-11-22 (Compat publishes compatibility fixes only; publish_readiness.md
+// D1, PR-CP-01 to -03). Recipe ids keep the creativecompat namespace (forPack) so nothing already saved changes.
+// Starter Kit port. A player joining a world for the first time gets one of the kits below at
 // random, 10 ticks after the join (as the mod: books other mods hand out on join exist by then and are given back
 // after the kit is set).
 //
@@ -68,7 +70,9 @@ PlayerEvents.loggedIn(e => {
 		}
 		var inv = player.getInventory()
 		var keep = []
-		for (var n = 0; n < 36; n++) {
+		// every slot, worn armor (36 to 39) and the offhand (40) included: clearContent empties them all, and anything
+		// worn or held there is given back after the kit is set (publish_readiness.md PR-CP-01)
+		for (var n = 0; n < inv.getContainerSize(); n++) {
 			var held = inv.getItem(n)
 			if (!held.isEmpty()) keep.push(held.copy())
 		}

@@ -2,7 +2,6 @@ package com.SaintAlfonzo.creativecompat.surface;
 
 import com.SaintAlfonzo.creativecompat.CompatConfig;
 import com.SaintAlfonzo.creativecompat.CreativeCompat;
-import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 
 import fuzs.blockrunner.data.BlockSpeedManager;
 import net.minecraft.core.BlockPos;
@@ -43,6 +42,7 @@ public final class CamoSpeed {
 
 	private static final boolean FRAMED = ModList.get().isLoaded("framedblocks");
 	private static final boolean COPYCATS = ModList.get().isLoaded("copycats");
+	private static final boolean CREATE = ModList.get().isLoaded("create");
 
 	public static void afterBlockRunner(LivingEntity entity) {
 		if (entity instanceof Player player && player.getAbilities().flying) {
@@ -97,10 +97,7 @@ public final class CamoSpeed {
 				return state;
 			}
 		}
-		if (be instanceof CopycatBlockEntity copycat) { // Create's own copycat panel / step
-			return copycat.hasCustomMaterial() ? copycat.getMaterial() : null;
-		}
-		return null;
+		return CREATE ? CreateCamo.camo(be) : null; // Create's own copycat panel / step
 	}
 
 	/** Replacement for BlockRunner's "Speed Multiplier" tooltip line on camouflage blocks. */

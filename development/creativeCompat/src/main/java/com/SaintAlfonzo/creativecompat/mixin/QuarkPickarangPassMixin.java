@@ -34,7 +34,8 @@ public abstract class QuarkPickarangPassMixin implements PassSnagItem {
 		if (self.isRemoved()) return;
 		try {
 			PassProjectiles.tick(self);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("QuarkPickarangPassMixin", t);
 			// a broken lookup must never stop the pickarang
 		}
 	}

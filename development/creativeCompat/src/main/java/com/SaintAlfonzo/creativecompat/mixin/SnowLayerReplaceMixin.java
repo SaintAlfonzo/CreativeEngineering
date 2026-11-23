@@ -29,7 +29,8 @@ public abstract class SnowLayerReplaceMixin {
 		try {
 			Boolean r = SurfaceLayers.replaceable(state, ctx);
 			if (r != null) cir.setReturnValue(r);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SnowLayerReplaceMixin", t);
 			// the block's own rule
 		}
 	}

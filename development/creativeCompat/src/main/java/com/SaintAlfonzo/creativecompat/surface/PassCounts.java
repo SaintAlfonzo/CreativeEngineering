@@ -66,8 +66,10 @@ public final class PassCounts {
 	/** Forge bus, generic on LevelChunk. */
 	public static void attach(AttachCapabilitiesEvent<LevelChunk> event) {
 		LevelChunk chunk = event.getObject();
+		// LevelChunkPassMixin switched off ([mixins]): no baked counts, PassThrough counts live
+		if (!(chunk instanceof PassChunkHolder holder)) return;
 		PassCountData data = new PassCountData();
-		((PassChunkHolder) chunk).creativecompat$setPassCounts(data);
+		holder.creativecompat$setPassCounts(data);
 		boolean client = chunk.getLevel() != null && chunk.getLevel().isClientSide;
 		event.addCapability(ID, client ? new Provider(data) : new Saved(chunk, data));
 	}
@@ -128,8 +130,7 @@ public final class PassCounts {
 	/** The chunk's data, made on demand for a chunk the attach event missed (then never saved). */
 	@Nullable
 	private static PassCountData data(LevelChunk chunk) {
-		if (chunk instanceof EmptyLevelChunk) return null;
-		PassChunkHolder h = (PassChunkHolder) chunk;
+		if (chunk instanceof EmptyLevelChunk || !(chunk instanceof PassChunkHolder h)) return null;
 		PassCountData d = h.creativecompat$passCounts();
 		if (d == null) {
 			d = new PassCountData();

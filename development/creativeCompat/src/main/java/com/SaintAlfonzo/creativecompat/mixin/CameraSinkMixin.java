@@ -42,7 +42,8 @@ public abstract class CameraSinkMixin {
 	private double creativeengineering$sinkEye(double eyeY) {
 		try {
 			return eyeY - SinkingRender.depth(this.creativeengineering$viewer, this.creativeengineering$partialTick);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("CameraSinkMixin", t);
 			return eyeY;
 		}
 	}

@@ -58,8 +58,7 @@ public enum PassTier {
 	/**
 	 * Which neighbors count toward density (plan_post_scratch_1115b.md C1): none, the 4 side-adjacent cells on the
 	 * same layer, or the 6 face-adjacent cells. {@code RING} and {@code CUBE} are the pre-2026-11-15 names, kept only
-	 * as aliases for code that still names them ({@link #canonical()}); the config accepts the three new names, and
-	 * {@link PassConfigMigration} rewrites an old file.
+	 * as aliases for code that still names them ({@link #canonical()}); the config accepts the three new names.
 	 */
 	public enum Neighbours {
 		NONE(0), SIDES(4), FACES(6),

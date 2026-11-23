@@ -4,14 +4,19 @@ import com.SaintAlfonzo.creativecompat.shared.GatedMixinPlugin;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import net.minecraftforge.fml.loading.FMLPaths;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Mixin config plugin for creativecompat.mixins.json: the table form of the shared {@link GatedMixinPlugin}
  * (development/shared/mixinplugin). A mixin in {@link #NEEDS_MOD} applies when one of its mods is loaded; a mixin in
  * {@link #NEEDS_ALL} only when every one of its mods is (a target in one mod that calls code typed on another). Mixins
- * in neither table (vanilla targets whose feature does nothing without its mod: BlockItemOwnStackFillMixin,
- * StructureTemplateBotanistPotMixin, VineBlockShearMixin; the visual sinking pair CameraSinkMixin and
- * EntitySinkRenderMixin) always apply. The mixins use SRG names, remap = false and creativeengineering$ member prefixes.
+ * in neither table change vanilla behavior with no mod to gate them: each has an enable key in the {@code [mixins]}
+ * table of creativecompat-common.toml ({@link MixinSwitches}, default on, read here as text at mixin time). The mixins
+ * use SRG names, remap = false and creativeengineering$ member prefixes.
  */
 public class CompatMixinPlugin extends GatedMixinPlugin {
 
@@ -82,7 +87,6 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("DiFeatherEntityMixin", DOMESTICATION),
 			Map.entry("FishingHookFeatherPullMixin", DOMESTICATION),
 			// Cozy's Improved Cats (cats.CozyCats)
-			Map.entry("CozyHomeGoalFeatherMixin", COZY),
 			Map.entry("CozyMessageGenderMixin", COZY),
 			// Alex's Mobs giant squid flee radius from cachalot whales (CompatConfig.GiantSquid)
 			Map.entry("AmGiantSquidAvoidWhalesMixin", List.of("alexsmobs")),
@@ -158,8 +162,9 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 	private static final List<String> POLYMORPH_SOPHISTICATED = List.of("polymorph", "sophisticatedcore");
 
 	/**
-	 * Tested version range of the interface mods: outside it the mod's mixins are skipped with one warning instead
-	 * of crashing the boot.
+	 * Tested version range of every gated mod: outside it the mod's mixins are skipped with one warning instead of
+	 * crashing the boot (mixins with require = 1, shadows and accessors fail hard on a changed target). Lower bound =
+	 * the tested jar, upper bound = its next minor version (publish_readiness.md PR-CP-05; versions as of 2026-11-22).
 	 */
 	private static final Map<String, String> MOD_RANGE = Map.ofEntries(
 			Map.entry("jei", com.SaintAlfonzo.creativecompat.compat.jei.JeiGate.RANGE),
@@ -172,7 +177,52 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("prettypipes", "[1.13.6,1.14)"),
 			Map.entry("wares", "[1.2.9,1.3)"),
 			Map.entry("ae2", "[12.9.12,12.10)"),
-			Map.entry("legendarytooltips", "[1.4.0,1.5)"));
+			Map.entry("legendarytooltips", "[1.4.0,1.5)"),
+			Map.entry("handcrafted", "[2.0.6,2.1)"),
+			Map.entry("create_dd", "[1.2c.Beta,1.3)"),
+			Map.entry("supplementaries", "[1.19.2-2.4.20,1.19.2-2.5)"),
+			Map.entry("moonlight", "[1.19.2-2.3.7,1.19.2-2.4)"),
+			Map.entry("itemphysic", "[1.6.7,1.7)"),
+			Map.entry("beautify", "[1.4.3,1.5)"),
+			Map.entry("botanypots", "[9.0.44,9.1)"),
+			Map.entry("framedblocks", "[6.8.6,6.9)"),
+			Map.entry("twigs", "[1.19.2-3.0.1,1.19.2-3.1)"),
+			Map.entry("immersiveengineering", "[1.19.2-9.2.4-170,1.19.2-9.3)"),
+			Map.entry("immersive_weathering", "[1.19.2-1.2.10,1.19.2-1.3)"),
+			Map.entry("mca", "[7.5.20+1.19.2,7.6)"),
+			Map.entry("quark", "[3.4-418,3.5)"),
+			Map.entry("immersive_paintings", "[0.6.7+1.19.2,0.7)"),
+			Map.entry("another_furniture", "[1.19.2-2.1.4,1.19.2-2.2)"),
+			Map.entry("bedspreads", "[6.0.0+1.19.2,6.1)"),
+			Map.entry("customizableelytra", "[1.19.0-1.7.4,1.19.0-1.8)"),
+			Map.entry("trashslot", "[12.1.0,12.2)"),
+			Map.entry("distanthorizons", "[3.0.2-b,3.1)"),
+			Map.entry("xaeroworldmap", "[1.40.11,1.41)"),
+			Map.entry("simplehats", "[1.19.2-0.3.2,1.19.2-0.4)"),
+			Map.entry("domesticationinnovation", "[1.6.1,1.7)"),
+			Map.entry("cozys_improved_cats", "[2.1.0,2.2)"),
+			Map.entry("alexsmobs", "[1.21.1,1.22)"),
+			Map.entry("oreexcavation", "[1.11.166,1.12)"),
+			Map.entry("blockrunner", "[4.2.2,4.3)"),
+			Map.entry("botania", "[1.19.2-440.2-FORGE,1.19.2-441)"),
+			Map.entry("copycats", "[2.2.2+mc.1.19.2-forge,2.3)"),
+			Map.entry("portalgun", "[5.0.0,5.1)"),
+			Map.entry("imm_ptl_core", "[2.3.7,2.4)"),
+			Map.entry("corpse", "[1.19.2-1.0.17,1.19.2-1.1)"),
+			Map.entry("curios", "[1.19.2-5.1.6.4,1.19.2-5.2)"),
+			Map.entry("breezy", "[1.0.8,1.1)"),
+			Map.entry("polymorph", "[0.46.6+1.19.2,0.47)"),
+			Map.entry("sophisticatedcore", "[1.19.2-0.6.4.730,1.19.2-0.7)"),
+			Map.entry("geckolib3", "[3.1.40,3.2)"),
+			Map.entry("immediatelyfast", "[1.4.0+1.19.2,1.5)"));
+
+	/**
+	 * Fix mixins written against one exact jar: applied only at these versions, since a newer jar may carry the upstream
+	 * fix the mixin would undo (publish_readiness.md PR-CP-06). The only {@code @Overwrite}: Breezy 1.0.8's wind data
+	 * for Supplementaries 2.4.20.
+	 */
+	private static final Map<String, Map<String, String>> EXACT = Map.of(
+			"SupplementariesBreezyCompatMixin", Map.of("supplementaries", "[1.19.2-2.4.20]", "breezy", "[1.0.8]"));
 
 	/** Every listed mod must be loaded. */
 	private static final Map<String, List<String>> NEEDS_ALL = Map.ofEntries(
@@ -186,6 +236,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("IECraftingTablePolymorphMixin", List.of("polymorph", "immersiveengineering")),
 			// Skips DI's three-mode click on Cozy cats only; nothing to do without both
 			Map.entry("CatCozyCommandMixin", List.of("domesticationinnovation", "cozys_improved_cats")),
+			// Cozy's home goal calls cats.CatFeather, which uses DI's FeatherEntity (publish_readiness.md PR-CP-07)
+			Map.entry("CozyHomeGoalFeatherMixin", List.of("domesticationinnovation", "cozys_improved_cats")),
 			Map.entry("PrettyPipesCraftingTerminalPolymorphMixin", List.of("polymorph", "prettypipes")),
 			// Create's breaker target, Quark's monster box
 			Map.entry("CreateBreakerMonsterBoxMixin", List.of("create", "quark")),
@@ -196,14 +248,41 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			// GeckoLib item in the hotbar flushing ImmediatelyFast's HUD item batch (plan_portal_gun.md 2)
 			Map.entry("GeckoItemHudBatchMixin", List.of("geckolib3", "immediatelyfast")));
 
+	/** True when {@code modId} is loaded at a version in {@code spec}; a loaded jar at another version logs once. */
+	private static boolean exactOn(String mixin, String modId, String spec) {
+		net.minecraftforge.fml.loading.moddiscovery.ModFileInfo file =
+				net.minecraftforge.fml.loading.LoadingModList.get().getModFileById(modId);
+		if (file == null) return false;
+		org.apache.maven.artifact.versioning.ArtifactVersion have = file.getMods().stream()
+				.filter(m -> m.getModId().equals(modId)).findFirst().orElse(file.getMods().get(0)).getVersion();
+		if (inRange(spec, have)) return true;
+		LOGGER.warn("[creativecompat] {} {} is not {}: {} is off (check the fix against the new jar)", modId, have, spec, mixin);
+		return false;
+	}
+
 	public CompatMixinPlugin() {
 		super("[creativecompat]", NEEDS_MOD, MOD_RANGE);
 	}
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(CompatMixinPlugin.class);
+
+	/** Mixins switched off in [mixins], read once from the config file. */
+	private Set<String> switchedOff;
+
 	@Override
 	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		List<String> all = NEEDS_ALL.get(mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1));
-		if (all != null) return all.stream().allMatch(GatedMixinPlugin::isLoaded);
+		String name = mixinClassName.substring(mixinClassName.lastIndexOf('.') + 1);
+		if (MixinSwitches.MIXINS.containsKey(name)) {
+			if (switchedOff == null) {
+				switchedOff = MixinSwitches.off(FMLPaths.CONFIGDIR.get().resolve("creativecompat-common.toml"));
+				if (!switchedOff.isEmpty()) LOGGER.info("[creativecompat] mixins switched off in [mixins]: {}", switchedOff);
+			}
+			if (switchedOff.contains(name)) return false;
+		}
+		Map<String, String> exact = EXACT.get(name);
+		if (exact != null && !exact.entrySet().stream().allMatch(e -> exactOn(name, e.getKey(), e.getValue()))) return false;
+		List<String> all = NEEDS_ALL.get(name);
+		if (all != null) return all.stream().allMatch(this::modOn);
 		return super.shouldApplyMixin(targetClassName, mixinClassName);
 	}
 }

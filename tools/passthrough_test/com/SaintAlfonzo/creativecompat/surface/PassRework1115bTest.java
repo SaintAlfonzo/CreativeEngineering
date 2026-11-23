@@ -36,7 +36,6 @@ final class PassRework1115bTest {
 		countDataC();
 		invalidationC();
 		growthC();
-		migrationC();
 		syncC();
 		layersD();
 		motionG713();
@@ -232,55 +231,6 @@ final class PassRework1115bTest {
 
 	static Object at(String text, String... path) {
 		return new TomlParser().parse(text).get(List.of(path));
-	}
-
-	static void migrationC() {
-		PassConfigMigration.Result r = PassConfigMigration.migrate(OLD.formatted("6", "0.45", "4", "true"));
-		String t = r.text();
-		check("C1 migrate: RING -> SIDES, CUBE -> FACES, denseFrom 6 -> 3",
-				r.changed() && "SIDES".equals(at(t, "surface", "passthrough", "dense_crop", "neighbours"))
-						&& "FACES".equals(at(t, "surface", "passthrough", "cobweb", "neighbours"))
-						&& Integer.valueOf(3).equals(at(t, "surface", "passthrough", "dense_crop", "denseFrom"))
-						&& Integer.valueOf(3).equals(at(t, "surface", "passthrough", "cobweb", "denseFrom")));
-		check("D migrate: leaf_pile table and its comment gone, defaults not carried (no layers table added)",
-				!t.contains("leaf_pile") && !t.contains("Immersive Weathering leaf piles") && !t.contains("[surface.passthrough.layers]")
-						&& t.contains("[surface.passthrough.grass]"));
-		CommentedConfig cfg = new TomlParser().parse(t);
-		CompatConfig.SPEC.correct(cfg);
-		check("C1 migrate: Forge's correction then keeps SIDES / 3 and adds surroundedAt 6",
-				"SIDES".equals(String.valueOf((Object) cfg.get(List.of("surface", "passthrough", "dense_crop", "neighbours"))))
-						&& Integer.valueOf(3).equals(cfg.get(List.of("surface", "passthrough", "dense_crop", "denseFrom")))
-						&& Integer.valueOf(6).equals(cfg.get(List.of("surface", "passthrough", "cobweb", "surroundedAt"))));
-		r = PassConfigMigration.migrate(OLD.formatted("5", "0.3", "6", "false"));
-		t = r.text();
-		check("C1 migrate: an edited denseFrom (5) stays", Integer.valueOf(5).equals(at(t, "surface", "passthrough", "cobweb", "denseFrom")));
-		check("D migrate: edited leaf_pile values carried into layers (minLayers 6, leafMaxSlow 0.3, depth strider off)",
-				Integer.valueOf(6).equals(at(t, "surface", "passthrough", "layers", "minLayers"))
-						&& Double.valueOf(0.3).equals(at(t, "surface", "passthrough", "layers", "leafMaxSlow"))
-						&& Boolean.FALSE.equals(at(t, "surface", "passthrough", "layers", "depthStriderPasses")));
-		cfg = new TomlParser().parse(t);
-		CompatConfig.SPEC.correct(cfg);
-		check("D migrate: Forge's correction keeps the carried layers values",
-				Integer.valueOf(6).equals(cfg.get(List.of("surface", "passthrough", "layers", "minLayers")))
-						&& Double.valueOf(0.3).equals(cfg.get(List.of("surface", "passthrough", "layers", "leafMaxSlow"))));
-		// a 1115b D file (layerMaxSlow, solidBelowFull, overrides): Forge's correction drops the old keys, adds the new
-		cfg = new TomlParser().parse("[surface.passthrough.layers]\n\tlayerMaxSlow = 0.3\n\tsolidBelowFull = 2\n"
-				+ "\tsolidBelowFullOverrides = [\"twigs:bamboo_leaves=0\"]\n\tminLayers = 3\n");
-		CompatConfig.SPEC.correct(cfg);
-		check("G7.4 migrate: Forge drops layerMaxSlow / solidBelowFull / overrides, keeps minLayers 3, adds snowMaxSlow 0.4",
-				!cfg.contains(List.of("surface", "passthrough", "layers", "layerMaxSlow"))
-						&& !cfg.contains(List.of("surface", "passthrough", "layers", "solidBelowFull"))
-						&& !cfg.contains(List.of("surface", "passthrough", "layers", "solidBelowFullOverrides"))
-						&& Integer.valueOf(3).equals(cfg.get(List.of("surface", "passthrough", "layers", "minLayers")))
-						&& Double.valueOf(0.4).equals(cfg.get(List.of("surface", "passthrough", "layers", "snowMaxSlow"))));
-		// after Forge corrects it (surroundedAt present, no leaf_pile), a second run does nothing
-		com.electronwill.nightconfig.toml.TomlWriter wr = new com.electronwill.nightconfig.toml.TomlWriter();
-		java.io.StringWriter sw = new java.io.StringWriter();
-		wr.write(cfg, sw);
-		String corrected = sw.toString();
-		check("C1 migrate: a corrected file is left alone (one-time)", !PassConfigMigration.migrate(corrected).changed());
-		check("C1 migrate: a table with surroundedAt keeps denseFrom 6",
-				!PassConfigMigration.migrate("[surface.passthrough.cobweb]\n\tsurroundedAt = 6\n\tdenseFrom = 6\n").changed());
 	}
 
 	static void syncC() {

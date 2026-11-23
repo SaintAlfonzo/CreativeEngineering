@@ -32,7 +32,8 @@ public abstract class BambooLeafDropMixin {
 										   CallbackInfo ci) {
 		try {
 			BambooLeafDrops.randomTick(state, level, pos, random);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("BambooLeafDropMixin", t);
 			// no drop this tick
 		}
 	}

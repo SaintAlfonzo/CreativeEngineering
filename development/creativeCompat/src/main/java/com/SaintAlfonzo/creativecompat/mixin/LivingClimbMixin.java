@@ -28,7 +28,8 @@ public abstract class LivingClimbMixin {
 		try {
 			Vec3 out = PassThrough.surroundedMotion((LivingEntity) (Object) this, cir.getReturnValue(), f_20899_);
 			if (out != null) cir.setReturnValue(out);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("LivingClimbMixin", t);
 			// keep vanilla's motion if the lookup breaks
 		}
 	}

@@ -29,7 +29,8 @@ public abstract class IwLayerCollisionMixin {
 		if ((Object) this instanceof LeafPileBlock) return; // walk-through, no collision of its own
 		try {
 			cir.setReturnValue(state.getShape(level, pos, ctx));
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("IwLayerCollisionMixin", t);
 			// the mod's own collision
 		}
 	}

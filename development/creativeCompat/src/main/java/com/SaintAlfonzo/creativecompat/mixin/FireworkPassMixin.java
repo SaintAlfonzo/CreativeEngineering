@@ -28,7 +28,8 @@ public abstract class FireworkPassMixin {
 	private void creativecompat$fireworkWeb(CallbackInfo ci) {
 		try {
 			PassProjectiles.fireworkTail((FireworkRocketEntity) (Object) this, m_37088_());
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("FireworkPassMixin", t);
 			// a broken lookup must never stop the rocket
 		}
 	}

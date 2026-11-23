@@ -44,7 +44,8 @@ public abstract class LevelChunkPassMixin implements PassChunkHolder {
 		if (old == null) return;
 		try {
 			PassCounts.blockChanged((LevelChunk) (Object) this, pos, old, state);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("LevelChunkPassMixin", t);
 			// a failed invalidation must never stop a block change; the count is fixed by the next load
 		}
 	}

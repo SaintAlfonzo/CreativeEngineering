@@ -27,7 +27,8 @@ public abstract class BlockRunnerSpeedConfigMixin {
 	private JsonObject creativeengineering$surfaceSpeeds(JsonObject json) {
 		try {
 			return SurfaceSpeeds.apply(json);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("BlockRunnerSpeedConfigMixin", t);
 			return json; // keep BlockRunner's own values
 		}
 	}

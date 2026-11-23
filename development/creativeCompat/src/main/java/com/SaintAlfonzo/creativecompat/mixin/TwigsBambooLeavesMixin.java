@@ -32,7 +32,8 @@ public abstract class TwigsBambooLeavesMixin {
 										   BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
 		try {
 			if (FallingLayers.holdAndQueue(state, level, pos)) cir.setReturnValue(state);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("TwigsBambooLeavesMixin#1", t);
 			// Twigs: an unsupported pile breaks
 		}
 	}
@@ -43,7 +44,8 @@ public abstract class TwigsBambooLeavesMixin {
 		try {
 			Boolean r = SurfaceLayers.replaceable(state, ctx);
 			if (r != null) cir.setReturnValue(r);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("TwigsBambooLeavesMixin#2", t);
 			// Twigs' answer
 		}
 	}
@@ -57,7 +59,8 @@ public abstract class TwigsBambooLeavesMixin {
 					&& FullBambooLeavesBlock.state(FullBambooLeavesBlock.TWIGS_MAX + 1) != null) {
 				cir.setReturnValue(true);
 			}
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("TwigsBambooLeavesMixin#3", t);
 			// Twigs' answer
 		}
 	}
@@ -77,7 +80,8 @@ public abstract class TwigsBambooLeavesMixin {
 				to = to.setValue(BlockStateProperties.WATERLOGGED, there.getValue(BlockStateProperties.WATERLOGGED));
 			}
 			cir.setReturnValue(to);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("TwigsBambooLeavesMixin#4", t);
 			// Twigs' state
 		}
 	}

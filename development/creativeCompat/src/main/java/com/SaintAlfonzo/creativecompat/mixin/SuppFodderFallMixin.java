@@ -25,7 +25,8 @@ public abstract class SuppFodderFallMixin {
 										  BlockPos pos, BlockPos neighborPos, CallbackInfoReturnable<BlockState> cir) {
 		try {
 			FallingLayers.holdAndQueue(state, level, pos);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("SuppFodderFallMixin", t);
 			// stays floating
 		}
 	}

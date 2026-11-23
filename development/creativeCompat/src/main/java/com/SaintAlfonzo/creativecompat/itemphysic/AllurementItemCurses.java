@@ -38,7 +38,8 @@ public final class AllurementItemCurses {
 			MethodType t = MethodType.methodType(void.class, ItemEntity.class);
 			ascend = l.findStatic(util, "ascendItem", t);
 			repel = l.findStatic(util, "repelItem", t);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("AllurementItemCurses#1", t);
 			ascend = null;
 			repel = null;
 		}
@@ -50,7 +51,8 @@ public final class AllurementItemCurses {
 		try {
 			if (level(item, ASCENSION) > 0) ascend.invoke(item);
 			if (level(item, FLEETING) > 0) repel.invoke(item);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("AllurementItemCurses#2", t);
 		}
 	}
 

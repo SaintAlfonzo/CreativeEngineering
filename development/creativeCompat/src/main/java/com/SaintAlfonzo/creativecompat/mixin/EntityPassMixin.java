@@ -27,7 +27,8 @@ public abstract class EntityPassMixin {
 	private void creativecompat$passSave(CompoundTag tag, CallbackInfoReturnable<CompoundTag> cir) {
 		try {
 			PassSave.save((Entity) (Object) this, cir.getReturnValue());
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("EntityPassMixin#1", t);
 			// never break a save
 		}
 	}
@@ -36,7 +37,8 @@ public abstract class EntityPassMixin {
 	private void creativecompat$passLoad(CompoundTag tag, CallbackInfo ci) {
 		try {
 			PassSave.load((Entity) (Object) this, tag);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("EntityPassMixin#2", t);
 			// never break a load
 		}
 	}
@@ -45,7 +47,8 @@ public abstract class EntityPassMixin {
 	private void creativecompat$passTouch(Player player, CallbackInfo ci) {
 		try {
 			PassProjectiles.playerTouch((Entity) (Object) this, player);
-		} catch (Throwable ignored) {
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("EntityPassMixin#3", t);
 			// a failed pickup leaves the tool where it is
 		}
 	}

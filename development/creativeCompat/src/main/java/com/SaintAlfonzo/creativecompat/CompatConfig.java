@@ -11,10 +11,8 @@ import com.SaintAlfonzo.creativecompat.surface.SurfaceTier;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
- * Creative Compat's COMMON config, {@code config/creativecompat-common.toml}. The first boot with Compat copies a
- * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeCompat}).
- * {@code [shrapnel]}, {@code [surface]} and {@code [vein_undo]} (TNT shrapnel, walk speed, Ore Excavation undo) are
- * carried or merged the same way from creativeengineering-common.toml ({@link #ENGINEERING_SECTIONS}).
+ * Creative Compat's COMMON config, {@code config/creativecompat-common.toml}. No carry-over from older files
+ * (publish_readiness.md PR-CP-17).
  */
 public final class CompatConfig {
 
@@ -42,25 +40,10 @@ public final class CompatConfig {
 	public static final PortalGun PORTAL_GUN;
 	public static final Corpses CORPSES;
 	public static final Debug DEBUG;
-
-	/** Sections carried over from Creative Common's creativecommon-common.toml. */
-	public static final List<String> COMMON_SECTIONS = List.of("jei", "gui_title", "toasts", "tooltips", "coaster", "wthit");
+	public static final Mixins MIXINS;
 
 	/** How the WTHIT Run Speed line writes a multiplier: 1.50x or +50%. */
 	public enum SpeedFormat { MULTIPLIER, PERCENT }
-
-	/**
-	 * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]}
-	 * and {@code [giant_squid]} are not carried. {@code [campfire]} belongs to
-	 * Creative Delight's file (creative_split.md 7.9 step 1), which carries it from here.
-	 * {@code [leaf_piles]} has no spec: carried from an old file, {@code surface.LeafPileMigration}
-	 * then moves its value to {@code [surface.passthrough.leaf_pile] minLayers} and drops it.
-	 */
-	public static final List<String> SECTIONS =
-			List.of("leaf_piles", "moss", "vine_shearing", "monster_box", "trash_slot");
-
-	/** The tables carried over from Creative Engineering's creativeengineering-common.toml. */
-	public static final List<String> ENGINEERING_SECTIONS = List.of("shrapnel", "surface", "vein_undo");
 
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -92,6 +75,8 @@ public final class CompatConfig {
 		CORPSES = new Corpses(builder);
 		// developer switches (plan_passthrough.md 7.3)
 		DEBUG = new Debug(builder);
+		// enable keys of the vanilla-changing mixins (compat/MixinSwitches; publish_readiness.md PR-CP-04)
+		MIXINS = new Mixins(builder);
 		SPEC = builder.build();
 	}
 
@@ -1094,8 +1079,8 @@ public final class CompatConfig {
 
 			logOverflow = b.comment(
 					"Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json",
-					"(screen class, texture, title and widths; kept across sessions)."
-			).define("logOverflow", true);
+					"(screen class, texture, title and widths; kept across sessions). A developer report: off by default."
+			).define("logOverflow", false);
 
 			b.pop(); // gui_title
 		}
@@ -1540,6 +1525,22 @@ public final class CompatConfig {
 			).define("timing", false);
 			b.pop(); // passthrough
 			b.pop(); // debug
+		}
+	}
+
+	/**
+	 * {@code [mixins]}: one enable key per mixin that changes vanilla with no mod to gate it ({@code compat.MixinSwitches}).
+	 * Declared here so Forge writes them; the mixin plugin reads the file itself at start, so a change needs a restart.
+	 */
+	public static final class Mixins {
+		public final Map<String, ForgeConfigSpec.BooleanValue> enabled = new java.util.LinkedHashMap<>();
+
+		private Mixins(ForgeConfigSpec.Builder b) {
+			b.comment("Changes to vanilla that need no other mod, one switch each (all on by default).",
+					"Read at game start: restart the game after changing one.").push("mixins");
+			com.SaintAlfonzo.creativecompat.compat.MixinSwitches.MIXINS.forEach((mixin, comment) ->
+					enabled.put(mixin, b.comment(comment).define(com.SaintAlfonzo.creativecompat.compat.MixinSwitches.key(mixin), true)));
+			b.pop(); // mixins
 		}
 	}
 }
