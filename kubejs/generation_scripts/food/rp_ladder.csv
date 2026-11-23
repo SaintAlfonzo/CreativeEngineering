@@ -27,7 +27,7 @@ unlock,18,Spider,Clinging,alexsmobs:clinging,1,,Climb walls and ceilings,built,
 unlock,19,,Fire Immunity,minecraft:fire_resistance,1,,,built,
 unlock,20,,Strength I,minecraft:strength,1,,Hit harder,built,
 unlock,21,Immunity,Clarity,hearthandharvest:clarity,1,,Immunity to Blindness and Darkness,built,"Stimulation removed from this position (owner, 2026-11-21); no eligible vanilla replacement, see plan P7"
-unlock,22,,Wither Immunity,,1,,,reserved,no effect id yet; TODO food-tuning #47
+unlock,22,,Wither Immunity,creativecommon:wither_immunity,1,,Wither immunity,built,food-tuning #47 (effect in Creative Common 1.3.0)
 unlock,23,,Speed II,minecraft:speed,2,,Move faster,built,
 unlock,24,,Luck II,minecraft:luck,2,,Get lucky,built,
 unlock,25,,Long Reach I,better_beacons:long_reach,1,,Reach farther,built,

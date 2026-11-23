@@ -103,19 +103,19 @@
 
 ## Diet Bonuses <!-- icon: solapplepie:food_book -->
 
-- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor, 12 permanent buffs, 5 effect slots and 48 effect unlocks [fixed Apple Pie bonuses]. Applies to new worlds.
+- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor, 12 permanent buffs, 5 effect slots and 49 effect unlocks [fixed Apple Pie bonuses]. Applies to new worlds.
   - Hearts: 10 extra, one every 9.1 diversity (20 hearts at 90.9)
   - Armor: +1 armor toughness and +10% knockback resistance at diversity 16.7, 50 and 83.3
   - Effect slots at diversity 2.5, 22, 41.5, 61 and 80.5
 - **New:** Permanent buffs: Luck I at diversity 25, Speed I at 30.2, Night Vision at 35.6, Phantom Bane at 41.2, Speed II at 47.1, Regeneration I at 53.2, Long Reach I at 59.7, Strength I at 66.6, Luck II at 73.9, Invisibility at 81.8, Double Jump at 90.4, Satiated at 100.
 - **New:** Effect slots hold an unlocked effect of your choice. Unlocks come closer together early in the ladder (diversity 2.5 to 97.5), in this order:
-  - Night Vision and Glowing, Leaf Piercing, Speed I, Allure, Refreshing and Sweetening, Astringent, Haste I and Burrowing I, Water Breathing and Water Walker, Prickly I, Luck I, Jump Boost I, Lava Vision and Lava Walker, Climbing, Patrol Nullifier and Phantom Bane, Regeneration I, Poison Resistance, Shrinking, Bug Pheromones and Clinging, Fire Resistance, Strength I, Clarity
+  - Night Vision and Glowing, Leaf Piercing, Speed I, Allure, Refreshing and Sweetening, Astringent, Haste I and Burrowing I, Water Breathing and Water Walker, Prickly I, Luck I, Jump Boost I, Lava Vision and Lava Walker, Climbing, Patrol Nullifier and Phantom Bane, Regeneration I, Poison Resistance, Shrinking, Bug Pheromones and Clinging, Fire Resistance, Strength I, Clarity, Wither Immunity
   - Speed II, Luck II, Long Reach I, Slow Falling, Magic Resistance, Prickly II, Haste II and Burrowing II, Magnet, Jump Boost II, Recovering, Long Reach II, Fleet-Footed, Strength II, Appetizing, Digesting and Lozenge, Regeneration II, Long Reach III, Luck III
 - **New:** Some diet effects switch on and off for free instead of changing level: the slot's On/Off button, or a click on the permanent buff's icon in the Diet Bonuses screen.
   - In a slot: Night Vision and Astringent; Glowing, Slow Falling and Magnet start off
   - Permanent: Night Vision, Phantom Bane and Double Jump; Invisibility starts off
 - **New:** Hovering an effect in the Diet Bonuses screen or on the inventory bar shows a short description ("See in the dark").
-- **New:** Clinging replaces Climbing and Recovering replaces Poison Resistance once unlocked: the replaced effect leaves the effect list and stops working in its slot. Applies to new worlds.
+- **New:** Clinging replaces Climbing and Recovering replaces Poison Resistance and Wither Immunity once unlocked: the replaced effect leaves the effect list and stops working in its slot. Applies to new worlds.
 - **New:** A slot whose effect a permanent buff or a replacing unlock now covers grays out, and changing its effect is free.
 - **New:** Fleet-Footed widens the view a quarter as much while its speed applies (client setting).
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.

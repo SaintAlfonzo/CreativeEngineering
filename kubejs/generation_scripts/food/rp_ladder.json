@@ -22,7 +22,7 @@
 	"slots": {"count": 5, "first": 2.5, "top": 100},
 	"replaces": {
 		"alexsmobs:clinging": ["vinery:climbing_effect"],
-		"fruitsdelight:recovering": ["alexsmobs:poison_resistance"],
+		"fruitsdelight:recovering": ["alexsmobs:poison_resistance", "creativecommon:wither_immunity"],
 		"create_confectionery:stimulation": ["fruitsdelight:refreshing", "fruitsdelight:sweetening"]
 	}
 }

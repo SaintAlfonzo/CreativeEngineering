@@ -1,7 +1,7 @@
 # Plan: Raspberry Pie as a standalone mod, shipped from the GitHub repo (2026-11-21)
 
-<!-- generated:status_index begin open_work sha1=85a5558a2df6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 9, In Progress 1, Testing 12), 1 Complete.
+<!-- generated:status_index begin open_work sha1=206922f97b0d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 9, Testing 13), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -14,7 +14,6 @@
 | `food-tuning #57` | Planned | S C | Emptiness becomes a sub-effect of Patrol Nullifier and Phantom Bane |
 | `food-tuning #58` | Planned | S C | Harmony: a new source (not adzuki, not the diet ladder), e.g. a rare passive mob; applies Emptiness and hostile mob flee |
 | `raspberry-pie-publish #10` | Planned |  | Standalone Diet Log recipe takes any edible item that is not excluded; state sync stops resending every drink id |
-| `food-tuning #47` | In Progress | S C | Wither Immunity effect for the Raspberry Pie pack ladder (reserved unlock 22 at 47.1) |
 | `food-tuning #38` | Testing | S | RP standalone P1: Jar-in-Jar bundle (Apple Pie, Carrot nested), license texts, NOTICE, mods.toml URLs, deploy and manifest updates |
 | `food-tuning #39` | Testing | S C | RP standalone P2: default ladder = Apple Pie's ladder plus 10 vanilla unlockables and slots |
 | `food-tuning #40` | Testing | S | RP standalone P3: diversity table loaded from any jar's solraspberrypie/diversity/*.json, ids optional, no table in the mod |
@@ -23,6 +22,7 @@
 | `food-tuning #43` | Testing | S | RP standalone P6: Fleet-Footed mixin guard (member check, require 0, one warning) |
 | `food-tuning #44` | Testing | S C | RP standalone P7: pack ladder from the scratchpad (toggles, tick markers, hover taglines, new effect ids) |
 | `food-tuning #45` | Testing | S | RP standalone P8: pack diversity table moves to Creative Delight; pack sets Apple Pie values |
+| `food-tuning #47` | Testing | S C | Wither Immunity effect for the Raspberry Pie pack ladder (reserved unlock 22 at 47.1) |
 | `food-tuning #48` | Testing | S C | Satiated (minecraft:saturation) as the RP pack ladder's final permanent buff at 100: V10 exception for flat rungs |
 | `food-tuning #49` | Testing | S C | RP ladder: a later unlock replaces its parts (Clinging hides Climbing; Recovering hides Poison Immunity and Wither Immunity) |
 | `food-tuning #50` | Testing | S C | RP ladder: once a permanent buff of an effect is active, a slot holding that effect grays out with a free respec |
@@ -255,7 +255,7 @@ Built in the jar (raspberry_pie.md 12.12):
 - **Replacements (#49).** Pool field `"replaces": [ids]`: once the effect is unlocked the named effects leave the picker,
   a slot holding one is covered and no longer applied, one yellow chat line names the pair. The pack ladder gets them
   from `rp_ladder.json` `replaces` through `gen_rp_ladder.py`: Clinging replaces Climbing, Recovering replaces Poison
-  Immunity (Wither Immunity joins once `#47` gives it an id), Stimulation replaces Refreshing and Sweetening (written
+  Immunity and Wither Immunity, Stimulation replaces Refreshing and Sweetening (written
   only while Stimulation is on the unlock ladder; it is not, per the 2026-11-21 ruling, and the 2026-11-22 scratchpad
   ruling "Stimulation replaces Refreshing and Sweetening when unlocked" needs Stimulation back in `rp_ladder.csv`: owner).
 - **Covered slots (#50).** A slot whose effect is held by an active permanent buff or replaced by an unlock shows grayed
@@ -275,7 +275,8 @@ the release page as the source location. A clean clone builds after `python3 too
 
 Not in this jar (wave 2): `#51` Steady, `#52` Leaf Piercing particles, `#53` Prickly II exemptions, `#56` display names,
 `#57` Emptiness as a super-effect of Patrol Nullifier and Phantom Bane (effect code, Creative Common); `#54` Lava Walker
-crouch (Creative Brewing, Vinery member); `#47` Wither Immunity's ladder row once Common registers it. Still open from
+crouch (Creative Brewing, Vinery member). `#47` done 2026-11-22: Common 1.3.0 registers
+`creativecommon:wither_immunity`; the reserved unlock 22 (48) is filled and Recovering replaces it too. Still open from
 PR-RP-07 to -15: PR-RP-12 (Diet Log recipe takes any edible item standalone) and PR-RP-13's drink id resend. PR-RP-14
 (writeup install line, section 4 for two ladders) is done in raspberry_pie.md.
 
