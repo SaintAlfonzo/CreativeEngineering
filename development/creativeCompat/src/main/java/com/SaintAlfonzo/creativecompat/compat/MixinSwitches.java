@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * The {@code [mixins]} table of creativecompat-common.toml: one enable key, default on, for each mixin that changes
- * vanilla behavior with no third-party mod to gate it (publish_readiness.md PR-CP-04; owner ruling P3, 2026-11-22).
+ * vanilla behavior with no third-party mod to gate it (publish_readiness.md PR-CP-04; owner ruling P3).
  * Read twice: {@link CompatMixinPlugin} parses the file as text at mixin time (before Forge loads any config) and skips
  * a mixin whose key is false; {@code CompatConfig} declares the same keys so Forge writes them with their comments.
  * A change applies on the next game start. Plain Java only: the plugin loads this class before the game does.

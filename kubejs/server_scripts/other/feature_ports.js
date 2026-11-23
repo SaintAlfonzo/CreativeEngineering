@@ -1,5 +1,5 @@
 // requires: creativecompat
-// Pack script: moved out of Creative Compat on 2026-11-22 (Compat publishes compatibility fixes only; publish_readiness.md
+// Pack script: moved out of Creative Compat (Compat publishes compatibility fixes only; publish_readiness.md
 // D1, PR-CP-01 to -03). Recipe ids keep the creativecompat namespace (forPack) so nothing already saved changes.
 // Feature ports, tier 1 (feature_writeup/feature_porting.md 1): small recipe mods absorbed into the
 // pack so their jars can go. Each block below rebuilds a mod's recipes through global.NCH, same inputs and outputs,

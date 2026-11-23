@@ -22,7 +22,7 @@ import net.minecraft.world.item.ItemStack;
  * an elytra in a curio slot (Elytra Slot's back slot) with no curio renderer is drawn by a vanilla elytra layer with
  * the elytra in the skeleton's chest slot for that one draw, so it shows over a chestplate as Elytra Slot does on
  * players. A Customizable Elytra elytra is drawn by that mod's own layer, so its colors and banner patterns show as on
- * the player ({@link CorpseCustomElytra}; owner ruling M2, 2026-11-22); any other elytra uses the vanilla texture.
+ * the player ({@link CorpseCustomElytra}; plan_corpses.md ruling 37); any other elytra uses the vanilla texture.
  */
 public class CorpseSkeletonLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 	private final RenderLayerParent<T, M> parent;

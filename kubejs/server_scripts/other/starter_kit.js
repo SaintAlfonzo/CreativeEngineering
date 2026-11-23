@@ -1,5 +1,5 @@
 // requires: creativecompat
-// Pack script: moved out of Creative Compat on 2026-11-22 (Compat publishes compatibility fixes only; publish_readiness.md
+// Pack script: moved out of Creative Compat (Compat publishes compatibility fixes only; publish_readiness.md
 // D1, PR-CP-01 to -03). Recipe ids keep the creativecompat namespace (forPack) so nothing already saved changes.
 // Starter Kit port. A player joining a world for the first time gets one of the kits below at
 // random, 10 ticks after the join (as the mod: books other mods hand out on join exist by then and are given back

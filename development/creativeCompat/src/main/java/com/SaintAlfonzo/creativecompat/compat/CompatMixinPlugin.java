@@ -164,7 +164,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 	/**
 	 * Tested version range of every gated mod: outside it the mod's mixins are skipped with one warning instead of
 	 * crashing the boot (mixins with require = 1, shadows and accessors fail hard on a changed target). Lower bound =
-	 * the tested jar, upper bound = its next minor version (publish_readiness.md PR-CP-05; versions as of 2026-11-22).
+	 * the tested jar, upper bound = its next minor version (publish_readiness.md PR-CP-05).
 	 */
 	private static final Map<String, String> MOD_RANGE = Map.ofEntries(
 			Map.entry("jei", com.SaintAlfonzo.creativecompat.compat.jei.JeiGate.RANGE),

@@ -72,7 +72,7 @@ public class CreativeCompat {
 	public CreativeCompat() {
 		// No carry-over from older files: the pack-history migrations (sections from creativeengineering-common.toml and
 		// creativecommon-common.toml, the leaf pile and pass-through table rewrites) were dropped before the first
-		// public release (publish_readiness.md PR-CP-17; owner, 2026-11-22).
+		// public release (publish_readiness.md PR-CP-17).
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
