@@ -94,6 +94,7 @@ public final class CDConfig {
 	public static final Perf PERF;
 	public static final Food FOOD;
 	public static final Campfire CAMPFIRE;
+	public static final Lamp LAMP;
 	/** {@code [worldgen] wildCropCanopyProofHeightmap} (crops.CanopyProofHeightmap, plan_post_scratch_1115 E2). */
 	public static final ForgeConfigSpec.BooleanValue WILD_CROP_CANOPY_PROOF;
 	public static final Cfb CFB;
@@ -186,6 +187,7 @@ public final class CDConfig {
 		PERF = new Perf(b);
 		FOOD = new Food(b);
 		CAMPFIRE = new Campfire(b);
+		LAMP = new Lamp(b);
 		CFB = new Cfb(b);
 		INCUBATION = new Incubation(b);
 		SPEC = b.build();
@@ -778,6 +780,36 @@ public final class CDConfig {
 		public int grilledFlavorSlots() {
 			return SPEC.isLoaded() ? grilledFlavorSlots.get() : 2;
 		}
+	}
+
+	/**
+	 * The Whale Oil Lamp's oil tank ({@code fats.WhaleOilLampBlockEntity}, dairy-fats-and-batter #3, owner values
+	 * ruling F3). Read live.
+	 */
+	public static final class Lamp {
+		private final ForgeConfigSpec.IntValue tankMb;
+		private final ForgeConfigSpec.IntValue burnTicks;
+		private final ForgeConfigSpec.IntValue burnMb;
+		private final ForgeConfigSpec.IntValue bottleMb;
+		private final ForgeConfigSpec.IntValue bucketMb;
+
+		private Lamp(ForgeConfigSpec.Builder b) {
+			b.comment("Whale Oil Lamp: an oil tank, full when crafted, burned while lit; out when empty, refilled with whale",
+					"oil. The lamp keeps its oil when broken (feature_writeup/food.md 3.22).").push("whale_oil_lamp");
+			tankMb = b.comment("Tank size in mB. A crafted lamp starts full.").defineInRange("tankMb", 1000, 1, 1000000);
+			burnTicks = b.comment("Ticks between oil uses while lit (24 ticks = 1.2 s).").defineInRange("burnTicks", 24, 1, 72000);
+			burnMb = b.comment("mB used every burnTicks while lit.").defineInRange("burnMb", 1, 1, 1000000);
+			bottleMb = b.comment("mB one Whale Oil bottle adds (the empty bottle comes back).").defineInRange("bottleMb", 250, 1, 1000000);
+			bucketMb = b.comment("Most mB one use of a fluid container (a bucket or tank item holding whale oil) adds.")
+					.defineInRange("bucketMb", 1000, 1, 1000000);
+			b.pop();
+		}
+
+		public int tankMb() { return SPEC.isLoaded() ? tankMb.get() : 1000; }
+		public int burnTicks() { return SPEC.isLoaded() ? burnTicks.get() : 24; }
+		public int burnMb() { return SPEC.isLoaded() ? burnMb.get() : 1; }
+		public int bottleMb() { return SPEC.isLoaded() ? bottleMb.get() : 250; }
+		public int bucketMb() { return SPEC.isLoaded() ? bucketMb.get() : 1000; }
 	}
 
 	/**

@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     {
+      "id": "endercrop:ender_seeds",
+      "required": false
+    },
+    {
       "id": "endersdelight:chorusflame",
       "required": false
     },

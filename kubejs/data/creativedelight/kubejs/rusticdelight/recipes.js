@@ -25,14 +25,14 @@ ServerEvents.recipes(e => {
 			[i.maple_cookie, i.syrup, i.honey_bottle],
 		] // G5 end
 		COOKIES.forEach(c => F.cookieBake(c[1], c[0], c[2]))
-		// Cheesecakes are pies here (as Sweet Berry Cheesecake): pie crust + 3 flavor + 2 sweet. Slices back to a
-		// whole cheesecake stay.
+		// Cheesecakes bake like pies with a cheese or a milk: pie crust + 3 flavor + 1 sweet + a cheese wedge or slice,
+		// milk bottle or milk bucket (F.cheesecakeBake; owner ruling F4). Slices back to a whole cheesecake stay.
 		var CHEESECAKES = [
 			[i.syrup_cheesecake, i.syrup],
 			[i.coffee_cheesecake, i.roasted_coffee_beans],
 			[i.cherry_blossom_cheesecake, i.t_cherry_blossom],
 		]
-		CHEESECAKES.forEach(c => F.pieBake(c[1], c[0]))
+		CHEESECAKES.forEach(c => F.cheesecakeBake(c[1], c[0]))
 
 		//######################### Maple foods ######################### Abnormals Delight's maple foods stay; Rustic's
 		// syrup stands in for Autumnity's (owner). Maple is half syrup, half honey (owner, creativedelight/members #16):

@@ -78,6 +78,7 @@ ef.feather_feet = 'botania:feather_feet';
 ef.soulsteal = 'alexsmobs:soulsteal';
 ef.leaf_piercing = 'fruitsdelight:leaf_piercing';
 ef.refreshing = 'fruitsdelight:refreshing';
+ef.shrinking = 'fruitsdelight:shrinking';
 ef.astringent = 'fruitsdelight:astringent';
 ef.suspicious_smell = 'fruitsdelight:suspicious_smell';
 ef.lozenge = 'fruitsdelight:lozenge';

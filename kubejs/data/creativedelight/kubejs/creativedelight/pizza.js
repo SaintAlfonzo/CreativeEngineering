@@ -25,5 +25,18 @@ ServerEvents.recipes(e => {
 			R.fdCutting(p[0], i.any_knife, Item.of(p[1], 8), e, name + '_slices')
 			R.shaped(p[0], ['sss', 's s', 'sss'], { s: p[1] }, e, name + '_from_slices')
 		})
+
+		// Pizza assemblies (dishes/meals #5; owner ruling R26): Vintage Delight's three pizzas keep their shaped
+		// crafts and get one assembly on a dough, as the Supreme (brewinandchewin/recipes.js) and Vegan
+		// (veggiesdelight/recipes.js) pizzas: tomato sauce, the second dough, 3 cheese, then the toppings
+		if (global.CD.on('vintagedelight')) {
+			var F = global.CD.food(e)
+			var base = [i.tomato_sauce, i.any_dough, i.any_cheese, i.any_cheese, i.any_cheese]
+			F.assemble(i.any_dough, base, i.cheese_pizza)
+			F.assemble(i.any_dough, base.concat([[i.t_food_cooked_meat, i.t_food_cooked_fish]]), i.meat_pizza)
+			if (global.has('fruitsdelight')) {
+				F.assemble(i.any_dough, base.concat([i.pineapple_slice, i.cooked_bacon, i.pineapple_slice]), i.tropical_pizza)
+			}
+		}
 	})
 })

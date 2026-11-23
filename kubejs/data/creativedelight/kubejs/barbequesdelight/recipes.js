@@ -30,14 +30,8 @@ ServerEvents.recipes(e => {
 
 		// Skewers (basin, grill, furnace, smoker, campfire, heatless craft): skewers.js, on F.skewer (plan_meals_rolls_bbq.md C2)
 
-		// Combos (plan_meals_rolls_bbq.md C8, dishes/meals #48): ordinary recipes from cooked skewers, shaped plus one
-		// assembly as every sandwich; no combine recipe, so no stored skewers and no carried skewer effects (values are
-		// the items' own, BBQItems.java). Wrap on a tortilla (dishes/meals #47), sandwich on a whole bread (the long-roll
-		// sandwich family). Bibimbap is dropped (removed_items.js, plan_wood_bucket_batch_1121.md R18)
-		var F = global.CD.food(e)
-		F.sandwichAssemble(['C', 'K', 'T'], { C: i.cabbage, K: i.t_grilled_skewers, T: i.t_tortilla }, i.kebab_wrap,
-			[i.t_grilled_skewers, i.cabbage], i.t_tortilla)
-		F.sandwichAssemble([' C ', 'KOK', ' B '], { C: i.cabbage, O: i.onion, K: i.t_grilled_skewers, B: i.t_bread },
-			i.kebab_sandwich, [i.t_grilled_skewers, i.t_grilled_skewers, i.cabbage, i.onion])
+		// Combos: Kebab Wrap, Kebab Sandwich and Bibimbap are dropped (owner ruling F6 assumption 4, skewers #1;
+		// Bibimbap earlier, plan_wood_bucket_batch_1121.md R18): no recipes, hidden (removed_items.js), still registered so
+		// saves keep them.
 	})
 })

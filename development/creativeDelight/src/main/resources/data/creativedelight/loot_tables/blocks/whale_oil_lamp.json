@@ -11,7 +11,20 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "creativedelight:whale_oil_lamp"
+          "name": "creativedelight:whale_oil_lamp",
+          "functions": [
+            {
+              "function": "minecraft:copy_nbt",
+              "source": "block_entity",
+              "ops": [
+                {
+                  "source": "Oil",
+                  "target": "BlockEntityTag.Oil",
+                  "op": "replace"
+                }
+              ]
+            }
+          ]
         }
       ],
       "rolls": 1.0

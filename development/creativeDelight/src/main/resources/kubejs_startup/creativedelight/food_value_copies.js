@@ -25,6 +25,7 @@
 //   Creative Brewing creativebrewing/alcohol_drinks.js  absolute: every alcoholic drink (global.alcohol)
 //   minecraft/food_values.js         glistering_melon_slice
 //   creativedelight/cheese_values.js absolute: the dishes whose milk became cheese (dishes/meals #45)
+//   creativedelight/pizza_values.js  absolute: the five pizza slices (baking/baked-goods #20, 0.75x the mod slice)
 //   creativedelight/edible_seeds.js  absolute: the five edible seeds (dishes/ingredients #40)
 //   creativedelight/drinks.js        absolute: the warm drinks (food/drinks #14)
 // The effect swaps and Farmer's Respite cake slice effects: Creative Brewing's kubejs_startup/creativeengineering/

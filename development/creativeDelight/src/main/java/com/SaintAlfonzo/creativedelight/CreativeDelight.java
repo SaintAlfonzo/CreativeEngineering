@@ -160,6 +160,8 @@ public class CreativeDelight {
 		// Multi-serving cans ([canning]): max-servings cache cleared on tag reload + the "Servings" tooltip line.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServings.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.CanServingsTooltip.class);
+		// "Can be eaten when full" on every always-edible food (food-tuning #62).
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.AlwaysEdibleTooltip.class);
 		// Pack flavors (kubejs_startup/creativedelight/flavors.js): the craft, the bonus and the tooltip lines.
 		com.SaintAlfonzo.creativedelight.food.FlavorRecipe.register(modBus);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.food.Flavors.class);

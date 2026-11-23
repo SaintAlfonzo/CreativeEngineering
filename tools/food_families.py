@@ -216,6 +216,10 @@ MISC_BAKED = {
 	'hearthandharvest:croissant', 'hearthandharvest:raspberry_scone', 'neapolitan:strawberry_scones',
 	'neapolitan:adzuki_bun', 'hearthandharvest:cider_donut', 'buzzier_bees:honey_bread', 'upgrade_aquatic:mulberry_bread',
 	'hostiledelight:glowbread', 'endersdelight:strange_eclair', 'hearthandharvest:waffle',
+	# Creative Delight's plain donut and fruit scones (baking/baked-goods #39, #40)
+	'creativedelight:plain_donut', 'creativedelight:blueberry_scone', 'creativedelight:cranberry_scone',
+	'creativedelight:lemon_scone', 'creativedelight:orange_scone', 'creativedelight:cherry_scone',
+	'creativedelight:apple_scone', 'creativedelight:peach_scone',
 }
 UNSORTED = 'unsorted'
 NOFAM = 'nofamily'   # foods that fit no family: listed on their own, no rules

@@ -2,7 +2,23 @@
   "replace": false,
   "values": [
     {
+      "id": "minecraft:crimson_fungus",
+      "required": false
+    },
+    {
+      "id": "minecraft:crimson_roots",
+      "required": false
+    },
+    {
       "id": "minecraft:nether_wart",
+      "required": false
+    },
+    {
+      "id": "minecraft:warped_fungus",
+      "required": false
+    },
+    {
+      "id": "minecraft:warped_roots",
       "required": false
     },
     {

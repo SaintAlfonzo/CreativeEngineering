@@ -282,6 +282,12 @@ ServerEvents.recipes(e => {
 			i.cooked_mutton, i.onion, i.onion, i.bowl], e, 'shepherds_pie_manual_only')
 		F.assemble(i.bowl, [i.cooked_mutton, i.cooked_mutton, i.cooked_mutton, i.onion, i.onion, i.t_baked_potatoes, i.t_baked_potatoes,
 			i.t_cheese_wedge], i.shepherds_pie_block)
+		// Feast assemblies (dishes/meals #5; owner ruling R26): FD's shapeless crafts stay; one assembly each on a
+		// bowl with the craft's ingredients in order
+		F.assemble(i.bowl, [i.cooked_chicken, i.t_bread, i.eggs, i.onion, i.carrot, i.carrot, i.baked_potato, i.baked_potato],
+			i.roast_chicken_block)
+		F.assemble(i.bowl, [i.smoked_ham, i.cooked_rice, i.cooked_rice, i.sweet_berries, i.sweet_berries, i.sweet_berries,
+			i.sweet_berries, i.honey_bottle], i.honey_glazed_ham_block)
 		// Stuffed pumpkin (TODO dishes/meals #44): one pot recipe in place of FD's and Corn Delight's, in a pumpkin
 		R.remove({ id: 'farmersdelight:cooking/stuffed_pumpkin_block' }, e)
 		if (global.has('corn_delight')) R.remove({ id: 'corn_delight:cooking/stuffed_pumpkin_from_cornbread' }, e)

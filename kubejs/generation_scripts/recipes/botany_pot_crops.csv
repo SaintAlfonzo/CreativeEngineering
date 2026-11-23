@@ -12,7 +12,6 @@
 # growth_ticks: base value before botany_pots.js scales every pot crop (1200 like wheat and carrot, 1400 colonies).
 # dimension: nether or end = the crop grows only there (Creative Compat BotanyPotDimensionMixin reads the tags).
 name,kind,seed,like,categories,drops,growth_ticks,display,dimension,note
-glow_berry_pips,new,glow_berry_pips,botanypots:minecraft/crop/glow_berry_bush,,,,,,Berry Good pips plant cave vines
 sweet_berry_pips,new,sweet_berry_pips,botanypots:minecraft/crop/sweet_berry_bush,,,,,,Berry Good pips plant the sweet berry bush
 cantaloupe_seeds,new,cantaloupe_seeds,,dirt|farmland,cantaloupe@1|cantaloupe_seeds@0.05,1200,,,like the melon pot crop
 salmonberry_pips,new,salmonberry_pips,botanypots:delightful/crop/salmonberries,,,,,,
@@ -40,7 +39,6 @@ grape_seeds_white_jungle,new,grape_seeds_white_jungle,,dirt,jungle_grapes_white@
 cucumber_seeds,new,cucumber_seeds,,dirt|farmland,cucumber@1x1-2|cucumber_seeds@0.05x1-2,1200,,,
 ghost_pepper_seeds,new,ghost_pepper_seeds,,dirt|farmland,ghost_pepper@1x1-2|ghost_pepper_seeds@0.05x1-2,1200,,,
 oat_seeds,new,oat_seeds,,dirt|farmland,oat@1x1-2|oat_seeds@0.05x1-2,1200,,,
-mixed_seeds,new,mixed_seeds,,dirt|farmland,,1200,mix:t_mixed_seeds_plants,,one of the Mixed Seeds plants per harvest on average
 peanut,new,peanut,,dirt|farmland,peanut@1x1-2|peanut@0.15x1-2,1200,,,like the carrot pot crop
 hops,new,hops,,dirt|farmland,hops@1x1-2|hops@0.05x1-2,1200,,,
 cave_carrot,new,cave_carrot,,dirt|farmland|stone,cave_carrot@1x1-2|cave_carrot@0.15x1-2,1200,,,grows on stone like the wild cave carrot
@@ -50,8 +48,13 @@ inky_cap_mushroom_colony,new,inky_cap_mushroom_colony,,mushroom,inky_cap_mushroo
 morel_mushroom_colony,new,morel_mushroom_colony,,mushroom,morel_mushroom@1x1-3|morel_mushroom@0.05x1-2,1400,,,like the red mushroom colony
 crimson_fungus_colony,new,crimson_fungus_colony,,crimson_nylium,crimson_fungus@1x1-3|crimson_fungus@0.05x1-2,1400,,nether,
 warped_fungus_colony,new,warped_fungus_colony,,warped_nylium,warped_fungus@1x1-3|warped_fungus@0.05x1-2,1400,,nether,
-propelplant_cane,new,propelplant_cane,,nether,propelpearl@1x1-2|propelplant_cane@0.25,1200,nethersdelight:propelplant_cane>nethersdelight:propelplant_berry_stem[pearl=false]>nethersdelight:propelplant_berry_stem[pearl=true],nether,
+propelplant_cane,new,propelplant_cane,,nether,propelpearl@1x1-2|propelplant_cane@0.05,1200,nethersdelight:propelplant_cane>nethersdelight:propelplant_berry_stem[pearl=false]>nethersdelight:propelplant_berry_stem[pearl=true],nether,pot harvest: 1-2 pearls as the world pick, cane back at the seed rate (crops #59)
 chorusflame,new,chorusflame,,end_stone,chorusflame@1x1-2|chorusflame@0.05,1200,endersdelight:chorus_flame_block,end,like the chorus pot crop
 chorus_succulent,new,chorus_succulent,,end_stone,chorus_succulent@1x1-2,1200,ends_delight:chorus_succulent[succulent=1]>ends_delight:chorus_succulent[succulent=2]>ends_delight:chorus_succulent[succulent=3],end,growth property is not named age
 nether_wart,gate,nether_wart,botanypots:minecraft/crop/nether_wart,,,,,nether,Botany Pots' own recipe
 chorus_fruit,gate,chorus_fruit,botanypots:minecraft/crop/chorus,,,,,end,Botany Pots' own recipe
+crimson_fungus,gate,crimson_fungus,botanypots:minecraft/crop/crimson_fungus,,,,,nether,Botany Pots' own recipe (crops #59)
+warped_fungus,gate,warped_fungus,botanypots:minecraft/crop/warped_fungus,,,,,nether,Botany Pots' own recipe (crops #59)
+crimson_roots,gate,crimson_roots,botanypots:minecraft/crop/crimson_roots,,,,,nether,Botany Pots' own recipe (crops #59)
+warped_roots,gate,warped_roots,botanypots:minecraft/crop/warped_roots,,,,,nether,Botany Pots' own recipe (crops #59)
+ender_seeds,gate,ender_seeds,botanypots:endercrop/crop/ender,,,,,end,Ender Crop: Botany Pots' own recipe (End soils only already; crops #59)

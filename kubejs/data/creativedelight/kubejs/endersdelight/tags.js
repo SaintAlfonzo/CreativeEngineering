@@ -10,7 +10,8 @@ ServerEvents.tags('item', e => {
 
 	t.storageBlock(e, 'chorus_fruit', i.chorus_crate)
 	t.add(e, i.t_chorus_pie_slice, i.chorus_pie_slice)
-	// Shulker meat: Ender's mollusk and filet merge into End's meat and slice (CD startup endersdelight/item_merges.js)
+	// Shulker meat: End's meat and slice merge onto Ender's mollusk and filet, the only shulker meat (swap list
+	// merges_ends_delight.json; owner ruling, ingredients #46)
 })
 
 ServerEvents.tags('block', e => {

@@ -104,6 +104,17 @@ ServerEvents.recipes(e => {
 				R.ceBaking([k > 1 ? n(i.gingerdough, k) : i.gingerdough], Item.of(i.gingerbread, k), e, 'gingerbread_' + k,
 					{ exp: 0.1, time: 200, tool: i.t_bakeware_baking_sheet })
 			})
+			// Gingerbread block (baking-types-and-bakeware #1; owner ruling F8): 9 gingerbread <-> 1 block, and the
+			// gingerdough block (9 gingerdough) smokes or bakes into one, as gingerdough does into gingerbread (smoker 1
+			// xp, 9x the upstream 200 ticks, the same rate; oven 400 ticks on the baking sheet, faster than six loose gingerdough).
+			// Confectionery's other recipes stay, except its 4 gingerdough -> gingerbread block craft: with the 9-way
+			// uncraft it would turn 4 gingerdough into 9 gingerbread.
+			R.remove({ id: 'create_confectionery:gingerbread_block_recipe' }, e)
+			R.shapeless(i.gingerbread_block, [Item.of(i.gingerbread, 9)], e, 'gingerbread_block_from_gingerbread')
+			R.shapeless(Item.of(i.gingerbread, 9), [i.gingerbread_block], e, 'gingerbread_from_gingerbread_block')
+			R.smoking(i.gingerbread_block, i.gingerdough_block, e, 'gingerbread_block_from_gingerdough_block', 1, 1800)
+			R.ceBaking([i.gingerdough_block], Item.of(i.gingerbread_block, 1), e, 'gingerbread_block',
+				{ exp: 0.9, time: 400, tool: i.t_bakeware_baking_sheet })
 		}
 
 		//######################### Bases #########################

@@ -111,14 +111,17 @@ ServerEvents.recipes(e => {
 			R.replaceInput({ id: 'handcrafted:berry_jam_jar' }, i.glass_bottle, i.empty_mason_jar, e)
 
 		//######################### Vinegar #########################
-		// R9 (plan_small_fixes_1116.md, dishes/pickles-and-ferments #6): vinegar is 3 apple mash + an enzyme in the pickling
-		// jar. Any mushroom (#forge:mushrooms) stands in for the enzyme (crushed fungus) until pickles-and-ferments #5 adds
-		// it; then swap i.mushrooms for it here. The jam route (any jam + mushroom, TODO pickles-and-ferments #11) is gone, as
-		// are Vintage's jam bottle and jam recipes. Upstream time and organic mash kept.
+		// R9 (plan_small_fixes_1116.md, replaced by owner ruling F5; ingredients #47): vinegar is 3 apple mash or
+		// 1 apple jam (Fruits Delight's Apple Jelly) + an enzyme in the pickling jar. Any mushroom (#forge:mushrooms) works
+		// as the enzyme. When the crushed-mushroom enzyme comes (dishes/pickles-and-ferments #5) it joins as a second,
+		// more efficient enzyme (more vinegar per craft) and is the only one some crafts take; the mushroom stays. Vintage's
+		// own jam routes (any jam bottle or jar) stay removed. Upstream time and organic mash kept.
 		R.remove({ id: 'vintagedelight:fermenting/vinegar_from_jam_bottles' }, e)
 		R.remove({ id: 'vintagedelight:fermenting/vinegar_from_jam' }, e)
 		R.vdPickling(i.vinegar_jar, [Item.of(i.apple_mash, 3), i.mushrooms], e, 'vinegar_from_apple_mash',
 			{ time: 2400, secondary: Item.of(i.organic_mash, 3) })
+		if (Platform.isLoaded('fruitsdelight'))
+			R.vdPickling(i.vinegar_jar, [i.apple_jelly, i.mushrooms], e, 'vinegar_from_apple_jam', { time: 2400 })
 
 		//######################### Grape, cherry, salmonberry and raspberry jam #########################
 		// Salmonberry and raspberry (TODO dishes/jams #7, Vintage port -13): same pattern

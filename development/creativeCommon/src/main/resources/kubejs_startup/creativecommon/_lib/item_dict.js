@@ -44,6 +44,26 @@ i.t_bakeware_baking_sheet = '#creativedelight:bakeware/baking_sheet';
 i.t_bakeware_cake_pan = '#creativedelight:bakeware/cake_pan';
 i.t_bakeware_pie_tin = '#creativedelight:bakeware/pie_tin';
 i.t_bakeware_muffin_tin = '#creativedelight:bakeware/muffin_tin';
+i.baking_dish = 'creativedelight:baking_dish';   // glass bakeware, baking/baked-goods #30 (CD bakeware.js)
+i.t_bakeware_baking_dish = '#creativedelight:bakeware/baking_dish';
+// Creative Delight baked goods and kitchen items of rulings S2 and F10 (CD kubejs_startup/creativedelight/new_foods.js; placeholder
+// textures listed in feature_writeup/texture_sources/art_needed_2026-11-22.csv)
+i.plain_donut = 'creativedelight:plain_donut';                   // baking/baked-goods #39 (F10)
+i.blueberry_scone = 'creativedelight:blueberry_scone';           // baking/baked-goods #40 fruit scones
+i.cranberry_scone = 'creativedelight:cranberry_scone';
+i.lemon_scone = 'creativedelight:lemon_scone';
+i.orange_scone = 'creativedelight:orange_scone';
+i.cherry_scone = 'creativedelight:cherry_scone';
+i.apple_scone = 'creativedelight:apple_scone';
+i.peach_scone = 'creativedelight:peach_scone';
+i.orange_cranberry_muffin = 'creativedelight:orange_cranberry_muffin';   // baking/baked-goods #2 muffins
+i.lemon_poppy_muffin = 'creativedelight:lemon_poppy_muffin';
+i.carrot_muffin = 'creativedelight:carrot_muffin';
+i.zucchini_muffin = 'creativedelight:zucchini_muffin';
+i.pumpkin_muffin = 'creativedelight:pumpkin_muffin';
+i.oatmeal_raisin_cookie = 'creativedelight:oatmeal_raisin_cookie';     // baking/baked-goods #23
+i.pickled_garlic = 'creativedelight:pickled_garlic';                   // dishes/pickles-and-ferments #17
+i.boxed_raw_pasta = 'creativedelight:boxed_raw_pasta';                 // dishes/ingredients #8 (block, 9 raw pasta)
 i.catfish = 'alexsmobs:raw_catfish';
 i.component_diamond = 'creativeengineering:component_diamond';
 // Air Brake — hold-to-use elytra brake. Item: startup_scripts/items/air_brake.js |
@@ -12643,6 +12663,7 @@ i.netherite_horse_armor = 'netherite_horse_armor:netherite_horse_armor';
 
 // ===== endercrop  -  1 new  (2 items, 0 already mapped) =====
 i.tilled_end_stone = 'endercrop:tilled_end_stone';
+i.ender_seeds = 'endercrop:ender_seeds';   // Botany Pots End-only gate (crops #59)
 
 // ===== BlockRunner: blocks tiered by single id in server_scripts/tags/blocktags.js =====
 i.create_dd_hazard_block      = 'create_dd:hazard_block';

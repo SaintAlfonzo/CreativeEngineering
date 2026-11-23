@@ -19,8 +19,9 @@
 //   oven            cakeBake (flavor, cake, second)  baked base + frosting + 2 flavor (or flavor + second) by hand; raw base in the oven
 //                   pieBake (flavor, pie, can)       crust + 3 flavor + 2 sweet; with a filling can key also the pot
 //                                                     filling and crust + full can
+//                   cheesecakeBake (flavor, cheesecake)  crust + 3 flavor + 1 sweet + a cheese or a milk (bottle or bucket)
 //                   cookieBake (flavor, cookie, second)  cookie dough + 2 flavor (or flavor + second) -> 12
-//                   muffinBake (fruit, muffin)        oven 4 on paper; no Cooking Pot route (the mod's pot recipe goes)
+//                   muffinBake (fruit, muffin, second)  oven 4 on paper; no Cooking Pot route (the mod's pot recipe goes)
 //                                                     plus a sequenced assembly on paper (4); flour or cornmeal
 //                   brownieBake (inputs, tray)        one tray in the cake pan; the placed tray cuts into brownies
 //                   tartBake (fruit, tart)            crust + fruit + egg + sugar + milk -> 2, baking sheet
@@ -36,7 +37,7 @@
 //                   or an array of choices (deploy), { fill: Fluid.of(...) } (spout) or { press: true } (press)
 //   golden          goldenGild (food, golden, gold)   food in a ring of 8 gold; heated mixer + 6; Arc Furnace + 5
 //                   goldenEnchant (golden, gilded) assembly: gold ingot, 125 mB liquid XP, press, 8 loops
-//   oven parts      F.slot(id, count), F.ware.sheet / pie / cake / muffin, F.SWEET for one-off oven recipes
+//   oven parts      F.slot(id, count), F.ware.sheet / pie / cake / muffin / dish, F.SWEET for one-off oven recipes
 
 global.CD.FOOD = {
 	// Cutting board: pieces per whole when the call gives no count
@@ -72,6 +73,7 @@ global.CD.food = function (e) {
 		pie: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_pie_tin },
 		cake: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_cake_pan },
 		muffin: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_muffin_tin, container: i.paper },
+		dish: { exp: V.bake.exp, time: V.bake.time, tool: i.t_bakeware_baking_dish },   // glass baking dish (baking/baked-goods #30)
 	}
 	var SWEET = i.any_sweetener   // one sweet slot: any sweetener (sugar, powdered sugar, honey bottle, honeycomb)
 	// Recipes the pack and CD add themselves are never swept by a family's removal
@@ -157,6 +159,14 @@ global.CD.food = function (e) {
 			R.fdCooking([flavour, flavour, flavour, SWEET, SWEET], Item.of(i[can], 1), e, can + '_pot', V.bake.exp, V.bake.time, i.empty_can)
 			R.ceBaking([i.pie_crust, i[can]], Item.of(output, 1), e, s + '_from_filling', ware.pie)
 		},
+		// Cheesecakes (Rustic Delight's three; owner ruling F4): a pie with a cheese wedge or slice, a milk bottle or a
+		// milk bucket in one slot; one sweet so it fits the oven's 6 slots (crust, 3 flavor, sweet, cheese or milk).
+		// Sweet Berry Cheesecake is the pack's Sweet Berry Pie and stays a plain pie.
+		cheesecakeBake(flavour, output) {
+			F._sweep(output)
+			R.ceBaking([i.pie_crust, n(flavour, 3), SWEET, [i.any_cheese, i.t_cheese_wedge, i.t_milk_bottle, i.t_milk_buckets]],
+				Item.of(output, 1), e, suffix(output, ''), ware.pie)
+		},
 		cookieBake(flavour, output, second) {
 			F._sweep(output)
 			var flavours = second ? [flavour, second] : [n(flavour, 2)]
@@ -166,13 +176,15 @@ global.CD.food = function (e) {
 		// owner). Removing it also drops Slice & Dice's mixer copy, which is built from the loaded pot recipes.
 		// Wheat flour or cornmeal (baking/baked-goods #2). The sequenced assembly on paper takes the oven's ingredients,
 		// the milk as 250 mB of any milk, and gives 6 (owner; was the oven's 4).
-		muffinBake(fruit, output) {
+		// second: a second fruit in place of the second of the two (orange cranberry, lemon poppy)
+		muffinBake(fruit, output, second) {
 			var s = suffix(output, '')
 			R.remove({ type: 'farmersdelight:cooking', output: output, not: OURS }, e)
-			R.ceBaking([n(fruit, 2), i.t_flour_or_cornmeal, i.t_milk_bottle, i.eggs, i.any_sweetener], Item.of(output, V.muffinsOven), e, s, ware.muffin)
+			var fruits = second ? [fruit, second] : [n(fruit, 2)]
+			R.ceBaking(fruits.concat([i.t_flour_or_cornmeal, i.t_milk_bottle, i.eggs, i.any_sweetener]), Item.of(output, V.muffinsOven), e, s, ware.muffin)
 			var fl = global.fluid
 			if (fl && fl.t_milk)
-				F.assemble(i.paper, [i.t_flour_or_cornmeal, i.eggs, SWEET, fruit, fruit, { fill: R.createFluidTag(fl.t_milk, 250) }],
+				F.assemble(i.paper, [i.t_flour_or_cornmeal, i.eggs, SWEET, fruit, second || fruit, { fill: R.createFluidTag(fl.t_milk, 250) }],
 					Item.of(output, V.muffinsPaper))
 		},
 		// Brownie tray (dessert/brownie, baking/baked-goods #18): every other recipe of the tray goes; slices -> tray

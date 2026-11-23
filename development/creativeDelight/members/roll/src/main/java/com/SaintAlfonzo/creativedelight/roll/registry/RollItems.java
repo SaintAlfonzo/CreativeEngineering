@@ -30,10 +30,11 @@ public final class RollItems {
 	/**
 	 * Golden tier (roll_delight.md 2.3, plan_meals_rolls_bbq.md B3): the whole roll is the golden rule on the Rice Roll
 	 * (x2 hunger capped at 20, modifier kept: 20 / 0.6), applied again at runtime by CD goldenfood/golden_values.js; the
-	 * slice is a static 10 / 0.5 (half the roll, as the Rice Roll's slice). No effects, not always edible, stack 64.
+	 * slice is a static 10 / 0.5 (half the roll, as the Rice Roll's slice). No effects, stack 64. Both are always edible,
+	 * as golden food (owner ruling, plan_meals_rolls_bbq.md assumption 3; tooltip line: food-tuning #62).
 	 */
-	public static final RegistryObject<Item> GOLDEN_ROLL = food("golden_roll", 20, 0.6F);
-	public static final RegistryObject<Item> GOLDEN_ROLL_SLICE = food("golden_roll_slice", 10, 0.5F);
+	public static final RegistryObject<Item> GOLDEN_ROLL = foodAlways("golden_roll", 20, 0.6F);
+	public static final RegistryObject<Item> GOLDEN_ROLL_SLICE = foodAlways("golden_roll_slice", 10, 0.5F);
 	public static final RegistryObject<Item> NETHER_ROLL = food("nether_roll", 6, 0.7F);
 	public static final RegistryObject<Item> TOBIKO_ROLL = food("tobiko_roll", 7, 0.6F);
 	/** As Farmer's Delight's Cooked Rice (D14): a bowl food that hands the bowl back, stack 64. */
@@ -53,6 +54,11 @@ public final class RollItems {
 
 	private static Item.Properties props() {
 		return new Item.Properties().tab(RollTab.TAB);
+	}
+
+	private static RegistryObject<Item> foodAlways(String id, int hunger, float saturation) {
+		return ITEMS.register(id, () -> new Item(props().food(new FoodProperties.Builder().nutrition(hunger).saturationMod(saturation)
+				.alwaysEat().build())));
 	}
 
 	private static RegistryObject<Item> food(String id, int hunger, float saturation) {

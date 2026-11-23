@@ -50,6 +50,11 @@ ServerEvents.recipes(e => {
 		return global.BOTANY_GROWTH_MULT
 	}, e)
 	R.remove({ type: 'botanypots:fertilizer' }, e)
+	// Not plantable in pots (owner ruling, crops #59, plan_owner_rows_1120.md R20): glow berries, hanging roots and
+	// every vine. Mixed Seeds and the Berry Good glow berry pips have no pot crop (botany_pot_crops.csv). No water plants
+	// are added; Botany Pots' own ones stay.
+	;['botanypots:minecraft/crop/glow_berry_bush', 'botanypots:minecraft/crop/hanging_roots', 'botanypots:minecraft/crop/vines',
+		'botanypots:minecraft/crop/twisting_vines', 'botanypots:minecraft/crop/weeping_vines'].forEach(id => R.remove({ id: id }, e))
 
 	if (!R.setRecipeNumber || !R.botanySoil) {
 		console.error('[botany_pots] global.NCH.setRecipeNumber / botanySoil missing: Creative Common is older than this script; pot soils left at the mod\'s values')

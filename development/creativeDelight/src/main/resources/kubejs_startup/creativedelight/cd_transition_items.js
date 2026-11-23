@@ -84,6 +84,12 @@ StartupEvents.registry('item', e => {
 		['kangaroo_burger'],
 		['cheese_burger'],                                           // Vintage Delight (vintage_delight.md 4 step 9)
 		['deluxe_burger'],
+		['roast_chicken'],                                           // feast assemblies (dishes/meals #5)
+		['honey_glazed_ham'],
+		['cheese_pizza'],
+		['meat_pizza'],
+		['tropical_pizza'],
+		['popcorn_box'],
 		['stuffed_burrito'],
 		['shepherds_pie'],
 		['horror_lasagna'],
@@ -102,13 +108,18 @@ StartupEvents.registry('item', e => {
 		['raw_turnip_mutton_skewer',       'barbequesdelight:item/raw_cod_skewer'],
 		['raw_crispy_skewer',              'barbequesdelight:item/raw_cod_skewer'],
 		['raw_caveskewer',                 'barbequesdelight:item/raw_cod_skewer'],
-		['kebab_wrap'],                                               // Barbeque's Delight combos (plan_meals_rolls_bbq.md C8)
-		['kebab_sandwich'],
+		['kebab_wrap'],                                               // Barbeque's Delight combos, dropped (skewers #1):
+		['kebab_sandwich'],                                           // kept registered for saves, hidden (removed_items.js)
 		['crawling_sandwich'],
 		['steak_and_potatoes'],
 		['suspiciousbaconandaggs',       'hostiledelight:items/gren_bacon_and_eggs'],   // Green Eggs and Ham, CD hostiledelight/recipes.js
 		// Muffins on paper (F.muffinBake, baking/baked-goods #2): the muffin's own sprite
 		['blueberry_muffin',             'fruitsdelight:item/blueberry_muffin'],
+		['orange_cranberry_muffin',      'creativedelight:item/orange_cranberry_muffin'],   // CD new_foods.js
+		['lemon_poppy_muffin',           'creativedelight:item/lemon_poppy_muffin'],
+		['carrot_muffin',                'creativedelight:item/carrot_muffin'],
+		['zucchini_muffin',              'creativedelight:item/zucchini_muffin'],
+		['pumpkin_muffin',               'creativedelight:item/pumpkin_muffin']
 		['cranberry_muffin',             'fruitsdelight:item/cranberry_muffin'],
 		['sweet_potato_cupcake',         'veggiesdelight:item/sweet_potato_cupcake'],
 	]

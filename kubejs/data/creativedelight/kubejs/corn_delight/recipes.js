@@ -11,6 +11,10 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Popcorn box #########################
+		// Feast assembly (dishes/meals #5; owner ruling R26): on a paper, 4 caramel popcorn; the upstream craft stays
+		global.CD.food(e).assemble(i.paper, [i.caramel_popcorn, i.caramel_popcorn, i.caramel_popcorn, i.caramel_popcorn], i.popcorn_box)
+
 		//######################### Taco #########################
 		// One taco recipe (TODO dishes/meals #51): Corn Delight's took an onion, Veggies Delight's a roasted red, green or
 		// yellow bell pepper; the one recipe takes an onion or any roasted bell pepper (9 colors). No roasted onion

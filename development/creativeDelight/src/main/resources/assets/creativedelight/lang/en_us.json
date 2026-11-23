@@ -79,6 +79,8 @@
   "item.creativedelight.wooden_nut_milk_bucket": "Wooden Nut Milk Bucket",
   "block.creativedelight.wooden_cauldron": "Wooden Cauldron",
   "block.creativedelight.whale_oil_lamp": "Whale Oil Lamp",
+  "tooltip.creativedelight.whale_oil_lamp.oil": "Oil: %s / %s mB",
+  "tooltip.creativedelight.always_edible": "Can be eaten when full",
   "creativedelight.jei.salt_evaporation.full": "Full cauldron: %s",
   "creativedelight.jei.salt_evaporation.two_thirds": "Two thirds full: %s",
   "creativedelight.jei.salt_evaporation.one_third": "One third full: %s",

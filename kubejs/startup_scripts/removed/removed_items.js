@@ -393,7 +393,11 @@ global.removedItems.push(
 	// no_alexsmobs_crow in mob_spawns.json, crowSpawnWeight 0). Crows already in saves stay.
 	i.spawn_egg_crow,
 	// Barbeque's Delight's Bibimbap is dropped from the pack (plan_wood_bucket_batch_1121.md R18).
-	i.bibimbap
+	i.bibimbap,
+	// and its Kebab Wrap and Kebab Sandwich (owner ruling, skewers #1; plan_meals_rolls_bbq.md assumption 4). Their
+	// assembly incomplete items stay registered (Creative Delight cd_transition_items.js) with no recipe.
+	i.kebab_wrap,
+	i.kebab_sandwich
 );
 
 // Floral Enchantment's 31 large pots (empty and filled) are hidden; a pack pot replaces them (flower_pots.md 3.2.9).

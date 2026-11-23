@@ -49,6 +49,9 @@ var i = global.item
 var ef = global.effect
 var popcorn = global.has(i.popcorn) ? [i.popcorn] : []
 var grilledSkewers = global.has('barbequesdelight') ? [i.t_grilled_skewers] : []
+// Foods of the sugar + ghost pepper pair (R26): sweet dessert families, minus placed blocks and savory members
+var sweetPairFamilies = ['dessert/waffle', 'dessert/pancake', 'dessert/roll', 'dessert/brownie']
+var sweetPairRemove = [i.beetroot_brownie_tray, i.vegetable_pancake]
 
 global.flavor = {
 	// popcorn only for now; open them up by family later
@@ -61,12 +64,19 @@ global.flavor = {
 		effects: [{ effect: ef.speed, duration: 200, amplifier: 0 }],
 		families: [], add: popcorn },
 	// sugar or powdered sugar (not the rest of #forge:sugar: glycerol). Popcorn + sugar is Corn Delight's caramel popcorn,
-	// so no foods yet (was waffles).
+	// so not on popcorn. Sweet desserts for the sugar + ghost pepper pair (owner ruling R26; agent's pick, listed
+	// for review): waffles, pancakes, sweet rolls and the brownie; never a placed block (the brownie tray) and not the
+	// savory vegetable pancake.
 	sugar:  { id: 'creativedelight:sugar',  name: 'Sugar',  item: [i.sugar, i.powdered_sugar], saturation: 2, combines: ['ghost_pepper'],
-		families: [], add: [] },
-	// Ghost pepper powder, milled from Vintage Delight's ghost pepper (food/seasoning #28); not Barbeque's chili powder
+		families: sweetPairFamilies, add: [], remove: sweetPairRemove },
+	// Ghost pepper powder, milled from Vintage Delight's ghost pepper (food/seasoning #28); not Barbeque's chili powder.
+	// Popcorn, and the sugar desserts above so the pair has foods.
 	ghost_pepper: { id: 'creativedelight:ghost_pepper', name: 'Ghost Pepper', item: i.ghost_pepper_powder, saturation: 2,
-		combines: ['sugar'], needs: 'vintagedelight', families: [], add: popcorn },
+		combines: ['sugar'], needs: 'vintagedelight', families: sweetPairFamilies, add: popcorn, remove: sweetPairRemove },
+	// Ice (food/seasoning #3 leftovers; owner ruling R26): Neapolitan's ice cubes in a cold drink, juices and sodas
+	// (warm drinks, teas, coffees and milk drinks stay out). No overlay icon yet (art list).
+	ice: { id: 'creativedelight:ice', name: 'Ice', item: i.t_ice_cubes, saturation: 2, needs: 'neapolitan',
+		families: ['drink/juice', 'drink/soda'], add: [] },
 	// Ender's Delight's crushed void pepper
 	void_pepper: { id: 'creativedelight:void_pepper', name: 'Void Pepper', item: i.crushed_voidpepper, // G5 (needs: its tag and crafts are skipped while enders_additions is off)
 		saturation: 2, needs: 'enders_additions', families: [], add: popcorn },
