@@ -321,19 +321,19 @@ expect \[cdevreload\] compat:
 reject not loaded yet
 reject /ERROR\].*\bcreativecompat\b
 
-## SQ-SMK-20 | Compat tags and the weathered cardboard box
+## SQ-SMK-20 | Compat tags and the weathered cardboard box (an Engineering id since 2026-11-24)
 @group A
-@commands `forceload add 9000 9000 9100 9100`; `/cdevtest tag item creativecompat:burn/to_ash`; `/cdevtest place 9030 -60 9010 creativecompat:weathered_cardboard_box`; `/cdevtest state 9030 -60 9010`
-@pass the burn tag holds 400 or more items (535 on 2026-11-15); the box places and reads back as `creativecompat:weathered_cardboard_box`
+@commands `forceload add 9000 9000 9100 9100`; `/cdevtest tag item creativecompat:burn/to_ash`; `/cdevtest place 9030 -60 9010 creativeengineering:weathered_cardboard_box`; `/cdevtest state 9030 -60 9010`
+@pass the burn tag holds 400 or more items (535 on 2026-11-15); the box places and reads back as `creativeengineering:weathered_cardboard_box`
 @fails Server tag scripts not in the jar (`data/creativecompat/kubejs/tags/`), `decor_blocks.js` not run
 > forceload add 9000 9000 9100 9100
 sleep 5
 > cdevtest tag item creativecompat:burn/to_ash
-> cdevtest place 9030 -60 9010 creativecompat:weathered_cardboard_box
+> cdevtest place 9030 -60 9010 creativeengineering:weathered_cardboard_box
 > cdevtest state 9030 -60 9010
 expect verb=tag kind=item tag=creativecompat:burn/to_ash n=([4-9]\d\d|\d{4,})\b
-expect verb=place placed=true state="?creativecompat:weathered_cardboard_box
-expect verb=state pos=9030,-60,9010 state="?creativecompat:weathered_cardboard_box
+expect verb=place placed=true state="?creativeengineering:weathered_cardboard_box
+expect verb=state pos=9030,-60,9010 state="?creativeengineering:weathered_cardboard_box
 
 @@section 7
 @@title SQ-SMK Creative Calendar smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)

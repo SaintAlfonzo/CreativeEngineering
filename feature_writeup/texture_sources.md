@@ -103,7 +103,7 @@ made by an AI script look the same; those stay `confirm`. Mojang 26.1 files are 
 |---|---|---|---|
 | Rustic member `block/glowing_calamari_crate_side`, `_top` | Rustic Delight 1.7.0 `calamari_crate_side`, `_top` | ad-hoc brightness remap onto the Glowing Calamari colors (14 to 14 colors, wood unchanged) | `palette_swap.py` with the calamari shades only, glow ink sac palette. Owner flagged; the plain Calamari Crate is an exact Rustic copy (ok) |
 | `kubejs/assets/wares/textures/block/*` (cardboard box, package sides) | Wares packages and boxes; Dustrial Decor cardboard colors | `make_cardboard.py` own remap with a tape mask | `palette_swap.py` (`--drop` for the tape) |
-| Creative Compat `block/weathered_cardboard_box` | Design and Decor box sheet | `make_cardboard.py` graying | `palette_swap.py` onto a gray palette |
+| Creative Engineering `block/weathered_cardboard_box` | Design and Decor box sheet | `make_cardboard.py` graying | `palette_swap.py` onto a gray palette |
 | `kubejs/assets/solapplepie/textures/items/lunchbox_dye/*` (8) | the four lunchbox looks | `gen_lunchbox_looks.py` greyscale split into dye base + overlay | `palette_swap.py` onto a gray ramp for the base; overlay by hand or `combine_tex.py` |
 | Canned food: CD `canned_cabbage` (8 px edited), `canned_carrot`; `canned_goods` `canned_fish`, `canned_mushrooms` | Canned Goods can sprites | ad-hoc recolour (2026-10-21) | `palette_swap.py` from the Canned Goods can |
 | CD `item/cornmeal` | Create `wheat_flour` | ad-hoc recolour | `palette_swap.py` |

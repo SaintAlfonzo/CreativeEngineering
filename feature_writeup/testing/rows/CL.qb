@@ -25,19 +25,19 @@
 @jars creativecommon creativedelight
 @from batches/r1113/c1_a1.qb
 @reviewed 2026-11-16
-# ids: Old box = design_decor:cardboard_box, Weathered = creativecompat:weathered_cardboard_box (Common item_dict),
+# ids: Old box = design_decor:cardboard_box, Weathered = creativeengineering:weathered_cardboard_box (Common item_dict),
 # Dustrial box = dustrial_decor:cardboard_box
 > cdevtest makes design_decor:cardboard_box
-> cdevtest makes creativecompat:weathered_cardboard_box
+> cdevtest makes creativeengineering:weathered_cardboard_box
 > cdevtest rdetail cardboard_box
-> cdevtest tagsof creativecompat:weathered_cardboard_box
+> cdevtest tagsof creativeengineering:weathered_cardboard_box
 waitlog \[cdevtest\] verb=tagsof done= 30
 expect \[cdevtest\] verb=makes item=design_decor:cardboard_box n=1
-expect \[cdevtest\] verb=makes item=creativecompat:weathered_cardboard_box n=1
+expect \[cdevtest\] verb=makes item=creativeengineering:weathered_cardboard_box n=1
 expect \[cdevtest\] verb=rdetail id=\S+ serializer=create:splashing result=design_decor:cardboard_box\*1 ingredients=dustrial_decor:cardboard_box
-expect \[cdevtest\] verb=rdetail id=\S+ serializer=create:splashing result=creativecompat:weathered_cardboard_box\*1 ingredients=design_decor:cardboard_box
-expect \[cdevtest\] verb=tagsof id=creativecompat:weathered_cardboard_box block_tags=\S*minecraft:mineable/axe
-expect \[cdevtest\] verb=tagsof id=creativecompat:weathered_cardboard_box block_tags=\S*blockrunner:surface/soft
+expect \[cdevtest\] verb=rdetail id=\S+ serializer=create:splashing result=creativeengineering:weathered_cardboard_box\*1 ingredients=design_decor:cardboard_box
+expect \[cdevtest\] verb=tagsof id=creativeengineering:weathered_cardboard_box block_tags=\S*minecraft:mineable/axe
+expect \[cdevtest\] verb=tagsof id=creativeengineering:weathered_cardboard_box block_tags=\S*blockrunner:surface/soft
 reject \[cdevtest\] .*(done=0|error=)
 look client half (textures, names, JEI, walking feel, sinking) stays open; the two makes lines are the splashing recipes only
 

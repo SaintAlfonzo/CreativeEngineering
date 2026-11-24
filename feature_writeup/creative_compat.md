@@ -52,8 +52,8 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   migration and the pass-through table rewrite were dropped before the first public release (PR-CP-17; owner,
   2026-11-22). The one carry-over left (2026-11-23, PR-CP-11): the four old `[jei]` page switches
   (`seasoningCategory`, `canCategories`, `potionBucketCategory`, `tippedArrowCategory`) are read once into `[jei]
-  pagesOff` and removed (`JeiPageKeys`, before the config is registered). Top-level tables in the spec (24, from
-  `CompatConfig` 2026-11-23): `[moss]`, `[vine_shearing]`, `[monster_box]`, `[trash_slot]`, `[cats]`, `[giant_squid]`,
+  pagesOff` and removed (`JeiPageKeys`, before the config is registered). Top-level tables in the spec (23, from
+  `CompatConfig` 2026-11-24; `[giant_squid]` removed, ruling W17): `[moss]`, `[vine_shearing]`, `[monster_box]`, `[trash_slot]`, `[cats]`,
   `[golems]`, `[boat_friction]`, `[paintings]`, `[shrapnel]`, `[surface]` (subtables `speed`, `sticky`, `camouflage`,
   `sinking`, `passthrough`, `wthit`), `[vein_undo]`, `[jei]`, `[gui_title]`, `[toasts]`, `[screens]`, `[tooltips]`,
   `[coaster]`, `[wthit]` (`state_lines`), `[immersive_portals]` (`fog`), `[portalgun]`, `[corpses]`, `[debug]`
@@ -152,9 +152,10 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   flower box models, `tags/items/physics/`, 136
   lang keys (counted 2026-11-23: MCA eyes, monster box, pass-through and WTHIT lines, falling layer, ancient corpse names), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
   Elytra set is built at load from the installed jars, `banners/BannerPatternPack`, 6.3), no painting art (since 2026-11-05 the Immersive Paintings set
-  is built at load from the installed jars, `paintings/PaintingPack`, 6.2), the monster box reward loot table, the weathered cardboard box assets.
-- **Scripts:** startup `kubejs_startup/creativecompat/` (`item_physics.js`, `decor_blocks.js` weathered cardboard
-  box); server `kubejs/data/creativecompat/kubejs/` (flowers, Botany Pots, physics tags, and the Compat rows of curios, block
+  is built at load from the installed jars, `paintings/PaintingPack`, 6.2), the monster box reward loot table. The
+  weathered cardboard box left for Creative Engineering on 2026-11-24 (ruling W16, `creative-compat-publish #8`;
+  [creative_engineering.md](creative_engineering.md) 4.2).
+- **Scripts:** startup `kubejs_startup/creativecompat/` (`item_physics.js`); server `kubejs/data/creativecompat/kubejs/` (flowers, Botany Pots, physics tags, and the Compat rows of curios, block
   and misc tags). The pack balance (Starter Kit, feature ports, misc mods, dead recipe removal, coin, feature-port tags)
   moved to the pack's `kubejs/server_scripts/` on 2026-11-22 (publish_readiness.md D1: Compat publishes compatibility
   fixes only); recipe ids keep the `creativecompat` namespace. The Botany Pots crop recipes and the two dimension tags
@@ -219,6 +220,10 @@ tab). Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking sk
 SQ-CMP-17 and CQ-CMP-18 (screenshot look-check), -19, -20.
 Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md) 8, Compat 23c5050d): SQ-CMP-03 to -08, -11 to -13 PASS; SQ-CMP-01 BATCH-FAULT (typed mixin count; fixed 2026-11-22, `cmp_mixin_check.py`); sand-layer recipes without Immersive Weathering FAIL (SQ-CC-03, SQ-CC12-02, SQ-CPP-05, TODO `blockrunner #18`; guarded 2026-11-22, rerun after the Compat rebuild).
 Scratch run r1123cx (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run_2026-11-23.md) 10, Compat 2e68d8807, publish gate): 34 rows, PASS 30; SQ-CMP-01 (86 listed, 76 applied, 10 gated), -03 to -08, -11 to -13, -23 to -25, SQ-SMK-18 to -20, SQ-PA-01 to -04, SQ-MT-01, -02, SQ-BPT-01, CQ-BPT-01, -03 PASS; SQ-NS-01 FAIL (nightstand with a hopper below takes nothing, TODO `decor-and-framed-blocks #3`); SQ-SG-02, -03 FAIL (no grass spreads, controls included, TODO `creative-calendar #2`); CQ-TSL-02 shots for the owner.
+
+Box move and squid (2026-11-24, `creative-compat-publish #8`, `#9`): SQ-CMP-09s and CQ-CMP-09 superseded by SQ-CEN-09 and
+CQ-CEN-02 (the box is Creative Engineering's, [creative_engineering.md](creative_engineering.md) 4.2); squid and whales
+SQ-MT-04 to -06 ([mob_block_tweaks.md](mob_block_tweaks.md) 2.10; SQ-PSM-08 superseded).
 
 Wave 2 carve (2026-11-24, queue): SQ-MELT-21 and -22 (carry-over, merge and new file), -23 (new tag namespace), -24 (End no fire), CQ-MELT-02 (tooltip); SQ-GSH-10 to -12; SQ-SNP-06; SQ-CGE-17, -18; CQ-RPI-94 (fov carry-over), CQ-RPI-95 (Fleet-Footed fix and fov), SQ-RPI-96 (Raspberry Pie alone). Headless: `tools/test_melting.sh` 34/34.
 
@@ -344,6 +349,10 @@ Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
   entries from registrations (section 2); the ancient corpse names moved to Compat's lang; Common's idle tick rule for
   treated-stick tomatoes and its `[effects]` carry-over from Brewing's file moved to those jars; Common's mixin members
   and the campfire rain accessor are `creativecommon$`, its potion log tag `[creativecommon potions]`.
+- 2026-11-24: Weathered Cardboard Box moved back to Creative Engineering (ruling W16, `creative-compat-publish #8`):
+  startup script, model, texture, axe tag and the Design n' Decor notice left this jar; its swap list no longer maps the
+  box. Squid and whales (ruling W17, `#9`): `mobs/SquidsAndWhales`, `AmGiantSquidAvoidWhalesMixin` now cancels the
+  giant squid's flee goal; `[giant_squid]` removed.
 - 2026-11-24: wave 2 carve (section 1, TODO `creative-common-publish #17`, `raspberry-pie-publish #25`): melting, glass shards, sack sneak pick-up and Create: Gravity low gravity from Creative Common; Fleet-Footed fix and view setting from Raspberry Pie. Ruling P1 of `creative-common-publish #12` (Forge list entry in Common) is superseded: the entry ships in Compat.
 - 2026-11-23: Item Trash Can screen (plan_ready_now_1123.md 8, R1, TODO `storage-and-item-loss #17`): right-click
   opens a 27-slot delete-on-close chest screen, sneak keeps the filter (`TrashCansItemCanUseMixin`, `TrashCanScreen`;
@@ -373,7 +382,7 @@ art upscaled (474 exact after downscaling, one stretched). None is own art; each
 | paintings `minecraft` (30) | Mojang | remove |
 | elytra banner and bedspread textures (73) | derived from Botania, IE (Blu's), Alex's Mobs (LGPL), Buzzier Bees banner patterns | built 2026-11-06: built at load from the installed jars, none ship (6.3) |
 | MineColonies banner textures (25) | MineColonies not in the pack; leftover output | removed 2026-11-06 (6.3) |
-| `weathered_cardboard_box.png` + models | Design and Decor (MIT) recolor | OK: MIT notice added 2026-11-05 |
+| `weathered_cardboard_box.png` + models | Design and Decor (MIT) recolor | moved to Creative Engineering with its notice 2026-11-24 |
 | `moss_block_tinted.png` | Mojang `moss_block` greyscaled | low ([creative_brewing.md](creative_brewing.md) 9.3) |
 | flower box models (3) | reference Beautify / Quark textures, none copied | OK |
 | Java, 79 classes (45 mixins), scripts, lang, tags, loot | own | OK |

@@ -62,7 +62,8 @@ changelog and JEI world trees, the JFR events and the mixin member prefix.
   vein undo messages, wooden buckets).
 - **Scripts:**
   - Startup `kubejs_startup/creativeengineering/`: `ce_core.js` (`global.CEN`: `modId`, `on()`, `recipes()`),
-    `items/` (components, coil blocks, plate blocks, dust piles, misc items, wood pellets, amethyst dust and lens),
+    `items/` (components, coil blocks, plate blocks, dust piles, misc items, wood pellets, amethyst dust and lens,
+    `decor_blocks.js` the Weathered Cardboard Box),
     `changes/transition_items.js` (every sequenced assembly transition item).
   - Server `kubejs/data/creativeengineering/kubejs/`: `engineering/` (22 files, `computing.js` and `redstone.js`
     included), `metal/` (3), `wood/` (6), `tags/` (engineering, fluid, metal, storage block and wood tags); opened by
@@ -143,7 +144,23 @@ No config file of its own any more (sections in `creativecompat-common.toml`). D
 KubeJS-registered blocks (dust piles, plate blocks, coil blocks) get their blockstate and models from KubeJS's
 generated pack, which outranks the jar: the scripts set textures with `.textureAll()` / `.texture(face, ...)` and the jar
 holds only the textures. Hand-made JSONs for these ids in the jar are ignored (they left the jar 2026-11-07, TODO
-`creativesplit/regression #21`). Compat's `weathered_cardboard_box` still has the problem (custom UVs lost).
+`creativesplit/regression #21`). The Weathered Cardboard Box sidesteps it: its model ships as
+`block/weathered_cardboard_box_wrapped` and `items/decor_blocks.js` sets the blockstate.
+
+### 4.2 Weathered Cardboard Box back from Creative Compat (2026-11-24, `creative-compat-publish #8`)
+
+Owner ruling W16 ([plan_wave1_publish.md](plan_wave1_publish.md)): the box returns before Compat 1.0.0. Id
+`creativeengineering:weathered_cardboard_box` (the id it had in released packs up to 1.1.06); item dict key
+`weathered_cardboard_box` unchanged (now pointing here). Startup `items/decor_blocks.js` (stats of Dustrial Decor's
+box: strength 1.0, blast resistance 0.3, wool sound); axe tag in `tags/storageblocktags.js`; walk speed (soft tier)
+and visual sink still from the pack's `server_scripts/tags/blocktags.js` by dict key; washing recipe unchanged
+(`misc_mods.js`). Model `block/weathered_cardboard_box_wrapped` and texture `block/weathered_cardboard_box` copied
+unchanged from Compat; credit and MIT text in `NOTICE-thirdparty-designdecor.txt` (in the jar as
+`creativeengineering-NOTICE-thirdparty-designdecor.txt`). Texture: DR-C18 exemption (W2) moved with it, still `redo`
+in `texture_sources/sources.csv`. Saves: `data/creativeengineering/swaps/compat_return.json` turns
+`creativecompat:weathered_cardboard_box` (dev and test worlds since 2026-11-10) back into this id; Compat's own swap
+list no longer lists the box. Tests: SQ-CEN-09 (id, tags, recipe), SQ-CEN-10 (old save with the Compat id; draft, needs
+an old-jar fixture), CQ-CEN-02 (look); SQ-UPG-03 now expects the Engineering id.
 
 ## 5. Tests
 

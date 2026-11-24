@@ -135,3 +135,55 @@ look no class-load error for com.SaintAlfonzo.creativecommon.CommonConfig; the i
 @draft no batch holds this row yet
 @@text
 @@text Results: not run yet.
+
+@@section 2
+@@title SQ-CEN Weathered Cardboard Box back in Creative Engineering, 2026-11-24 ([creative_engineering.md](../creative_engineering.md) 4.2, [plan_wave1_publish.md](../plan_wave1_publish.md) W16, TODO `creative-compat-publish #8`)
+@@date 2026-11-24
+@@jars creativecommon creativecompat creativeengineering
+@@sources feature_writeup/creative_engineering.md development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/decor_blocks.js development/creativeEngineering/src/main/resources/data/creativeengineering/swaps/compat_return.json kubejs/data/creativeengineering/kubejs/tags/storageblocktags.js
+@@text
+@@text Targets Common, Compat and Engineering installed 2026-11-24 (commit 0f78d9277). SQ-CEN-10 needs a fixture world saved
+@@text with the box under its Compat id: build Common, Compat and Engineering at commit a10d6a720 (the parent, box still in
+@@text Compat) in a `git worktree` in the scratchpad, never in `mods/`.
+@@text
+@@table
+## SQ-CEN-09 | the box registers under creativeengineering, keeps its tags, recipe and blockstate; Compat has none
+@group A
+@commands Boot; `/cdevtest place` the box by its Engineering id and read the state; `tagsof`; `makes`; try the Compat id
+@pass places as `creativeengineering:weathered_cardboard_box`; block tags hold `minecraft:mineable/axe` and `blockrunner:surface/soft`; made only by Create splashing from Design n' Decor's box; `creativecompat:weathered_cardboard_box` is unknown; no `decor_blocks.js` error in the startup log
+@fails unknown id: `items/decor_blocks.js` not in the Engineering jar (`kubejs_startup/creativeengineering/items/`); axe tag missing: `storageblocktags.js` not copied into the jar; Compat id still registers: an old Compat jar in `mods/`
+@absent creativecompat:weathered_cardboard_box (the old id, gone on purpose)
+kjsreject decor_blocks.js
+> forceload add 9000 9000 9100 9100
+> cdevtest place 9032 -60 9010 creativeengineering:weathered_cardboard_box
+> cdevtest state 9032 -60 9010
+> cdevtest tagsof creativeengineering:weathered_cardboard_box
+> cdevtest makes creativeengineering:weathered_cardboard_box
+waitlog \[cdevtest\] verb=makes done= 30
+> setblock 9034 -60 9010 creativecompat:weathered_cardboard_box
+expect verb=place placed=true state="?creativeengineering:weathered_cardboard_box
+expect verb=state pos=9032,-60,9010 state="?creativeengineering:weathered_cardboard_box
+expect \[cdevtest\] verb=tagsof id=creativeengineering:weathered_cardboard_box block_tags=\S*minecraft:mineable/axe
+expect \[cdevtest\] verb=tagsof id=creativeengineering:weathered_cardboard_box block_tags=\S*blockrunner:surface/soft
+expect \[cdevtest\] verb=makes item=creativeengineering:weathered_cardboard_box n=1
+expect Unknown block type
+reject \[cdevtest\] verb=(place|state|tagsof) .*(done=0|error=)
+look the makes line is the one splashing recipe (from design_decor:cardboard_box)
+
+## SQ-CEN-10 | old save: boxes saved under the Compat id come back as the Engineering box
+@group Old save (Compat-id box fixture)
+@boot 2
+@commands Boot 1 on the a10d6a720 jars: place a box, put one in a chest, drop one on the ground, `/save-all flush`, stop. Boot 2 on the installed jars: read the block, the chest and the item entity
+@pass boot 2 log: a `[swaps]` remap of `creativecompat:weathered_cardboard_box` for blocks and items, nothing unresolved; the placed box, the chest stack and the dropped item read `creativeengineering:weathered_cardboard_box`
+@fails box gone or air: `compat_return.json` missing from the Engineering jar (`data/creativeengineering/swaps/`) or not read (`SwapLists`); unresolved: the survivor not registered (Engineering startup script failed)
+@absent creativecompat:weathered_cardboard_box (the old id, placed by boot 1 on the old jars)
+@draft needs the old-jar fixture (section text): the driver has no step yet that swaps mods/ between boots for a worktree build
+@reviewed 2026-11-24
+
+## CQ-CEN-02 | the box looks as before under Creative Engineering
+@group client
+@commands Creative client: JEI search `@creativeengineering` for the box; place it, look at all six faces, hold it, check the inventory icon and the WTHIT mod line
+@pass LOOK: listed under Creative Engineering with its name; each face one tile of the sheet (taped top, flap bottom, handles north and south, labels east and west), as in CQ-CMP-09; WTHIT names Creative Engineering
+@fails purple-black: model or texture path under `assets/creativecompat/` still; whole sheet on every face: the blockstate from `decor_blocks.js` not taken
+@draft needs a client
+@reviewed 2026-11-24

@@ -729,7 +729,7 @@ the chef's hat (Wardrobe / Simple Hats hat removed) confirmed working in game 20
   Farmer's Respite's sack. Apples: drop the bag when Fruits Delight is installed. Sweet berries: drop the Berry Good
   berry basket. (Also `alcohol/decisions #7`, Vinery crates and bags.)
 - Cardboard: PARTLY BUILT 2026-10-28 (scratch test queued SQ-MG-16; shipped to the client in 1.1.04). Design and Decor's cardboard box is renamed Old
-  Cardboard Box; the new `creativecompat:weathered_cardboard_box` is the last step. Both are made only by washing
+  Cardboard Box; the new `creativeengineering:weathered_cardboard_box` is the last step (in Creative Compat 2026-11-10 to 2026-11-24, back by ruling W16). Both are made only by washing
   (Create splashing in `misc_mods.js`): Dustrial Decor box -> Old -> Weathered; their other recipes are removed.
   The Wares boxes and packages are recoloured brown (`textureswapper/cardboard/`). Still open: remove Design and
   Decor's cardboard sheet, one cardboard item with recipes and tags through NCH / `global.tags`, a longer crafting chain.

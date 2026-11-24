@@ -1311,7 +1311,7 @@ look a 0 in one biome is not a fail by itself if the biome tag holds it (the row
 @group A
 @commands boot; grep `latest.log` for `StructureStartMetaMonumentMixin`, `AmGiantSquidAvoidWhalesMixin`; `/cwgspawnbox`; `/cwgspawnbox ~ ~ ~ nonsense`
 @pass no mixin apply error or `failsoft` naming either; probe prints `[spawn-boxes] monster at ...: no box (structures referenced here: none) -> vanilla [...]`; bad category gives `[spawn-boxes] no mob category nonsense`
-@fails SRG `m_226857_` (loadStaticStart) or constants 50.0F / 60.0F in `AIAvoidWhales` m_8036_ / m_8045_; command not registered: `StructureSpawnBoxes` not on the event bus
+@fails SRG `m_226857_` (loadStaticStart) or `AIAvoidWhales` m_8036_ (canUse) missing; command not registered: `StructureSpawnBoxes` not on the event bus
 @jars creativecommon
 @from batches/r1102b/s5_A.qb passed
 @reviewed 2026-11-20
@@ -1844,6 +1844,7 @@ look none with the probe right: record the mobcap line (monster cap full?)
 @jars creativecommon
 @from batches/r1102b/s5_B.qb
 @reviewed 2026-11-20
+@superseded by SQ-MT-04 to SQ-MT-06 (the giant squid fights whales, the flee config is gone; ruling W17, 2026-11-24)
 > locate biome minecraft:deep_ocean
 waitlog (The nearest minecraft:deep_ocean is at|Could not find) 600
 capture S5O The nearest minecraft:deep_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]

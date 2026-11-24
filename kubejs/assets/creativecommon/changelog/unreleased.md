@@ -539,6 +539,11 @@
 - **New:** Glass blocks and panes from every mod break into shards of their color without Silk Touch: blocks 1 to 3, panes 1 to 2. Tinted glass gives dirty shards.
 - **New:** Dungeons, mineshafts, desert and jungle temples, pillager outposts, ruined portals, shipwreck supply chests, big underwater ruins, igloos, woodland mansions and stronghold corridors and crossings can hold 1 to 3 glass shards, mostly dirty or clear, sometimes colored.
 
+## Squid and Whales <!-- icon: minecraft:squid_spawn_egg -->
+
+- **Changed:** Squid and Glow Squid swim away from a Cachalot Whale within 16 blocks until it is 24 blocks off [they fled only what hurt them].
+- **Changed:** Giant Squid no longer flee Cachalot Whales [within 16 blocks]; they attack a whale that hits them or comes within 12 blocks.
+
 ## Gameplay
 
 - **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
@@ -715,7 +720,6 @@
 - **Changed:** Creative Delight items and blocks are listed under Creative Delight [Creative Engineering].
 - **Changed:** Tier shields, stepstools, echo tools, the Air Brake, Felsic Scrap and Arrow Fletching are listed under Creative Equipment [Creative Engineering].
 - **Changed:** Dark Fire and Flint and Terrasteel are listed under Creative Magic [Creative Engineering].
-- **Changed:** The Weathered Cardboard Box is listed under Creative Compat [Creative Engineering].
 - **Changed:** The Netherite Lunchbox is listed under Creative Delight [Spice of Life].
 - **Changed:** Commands that name the pack's own dimensions, structures and worldgen tags take Creative Worldgen names [Creative Engineering].
 - **Changed:** Existing worlds keep these items and blocks, the pack's dimensions with the players in them, generated structures, including stored kitchen corner contents, placed paintings, sticky notes and camera bag contents.

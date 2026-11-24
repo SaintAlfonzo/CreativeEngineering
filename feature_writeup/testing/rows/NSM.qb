@@ -304,15 +304,15 @@ reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown
 @pass Every moved item has its name, model and texture (no purple-black, no raw lang key) and lists under its new mod; tier shields render their pattern base; canned golems show their dye color
 @fails Missing texture: an asset path still under `creativeengineering` (`python3 tools/id_owner_lint.py`)
 @reviewed 2026-11-16
+@absent creativeengineering:weathered_cardboard_box (registered by Engineering since 2026-11-24, after the last /dumpall)
 do {"tooltip_text": "creativeequipment:copper_shield", "reject": "item\\.creativeengineering"}
 do {"tooltip_text": "creativemagic:flint_and_terrasteel", "reject": "item\\.creativeengineering"}
-do {"tooltip_text": "creativecompat:weathered_cardboard_box", "reject": "block\\.creativeengineering"}
 do {"wait": "jei"}
 do {"screen": "creative:creativeequipment"}
 shot equipment_tab
 do {"screen": "close"}
 > fill 0 100 0 6 100 2 minecraft:stone
-> setblock 0 101 1 creativecompat:weathered_cardboard_box
+> setblock 0 101 1 creativeengineering:weathered_cardboard_box
 do {"look": {"from": "1 102.6 -1", "at": "0.5 101.5 1.5"}}
 shot wthit_box
 look every moved item named, modelled and textured (no purple-black, no raw key) under its new mod; JEI @creativeequipment / @creativemagic / @creativecompat by hand; tier shield pattern base and canned golem colours by hand

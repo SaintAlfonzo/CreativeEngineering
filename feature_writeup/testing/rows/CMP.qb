@@ -101,10 +101,11 @@ look the blast itself is not visible on a console; the TNT item is consumed and 
 ## SQ-CMP-06 | weathered cardboard box, monster box loot, physics tags
 @group A
 @commands Same boot: `/give` a weathered cardboard box and place it; `/loot` the monster box reward table; check `#creativeengineering:...` physics tags with `/dumptags`
-@pass Block and item exist (`creativecompat:weathered_cardboard_box`); loot table resolves; physics tags present
+@pass Block and item exist (`creativeengineering:weathered_cardboard_box`); loot table resolves; physics tags present
 @fails Startup `decor_blocks.js` or jar data paths
 @from batches/r1101/cs2_boot2.qb
 @reviewed 2026-11-22
+@absent creativeengineering:weathered_cardboard_box (registered by Engineering since 2026-11-24, after the last /dumpall)
 # self-contained since r1118 (judge-5, 2026-11-18; ids creativecompat: since the 2026-11-09 move): the {H} home marker came from a lost setup row; fixed superflat spot
 > forceload add 200 200 232 232
 > execute unless entity @e[type=minecraft:marker,tag=cmphome] run summon minecraft:marker 200 -60 200 {Tags:["cmphome"]}
@@ -113,9 +114,9 @@ sleep 2
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > execute unless entity qa run pbot spawn qa {H1} {H2} {H3} minecraft:overworld survival
 sleep 3
-> setblock {H1+8} {H2} {H3} creativecompat:weathered_cardboard_box
-> execute if block {H1+8} {H2} {H3} creativecompat:weathered_cardboard_box run say CMP box placed
-> give qa creativecompat:weathered_cardboard_box
+> setblock {H1+8} {H2} {H3} creativeengineering:weathered_cardboard_box
+> execute if block {H1+8} {H2} {H3} creativeengineering:weathered_cardboard_box run say CMP box placed
+> give qa creativeengineering:weathered_cardboard_box
 > loot give qa loot creativecompat:misc/monster_box_reward
 expect CMP box placed
 reject Unknown (block|item)|Unknown loot table
@@ -161,6 +162,7 @@ look no script error from moved Compat files; /reload clean
 @pass no `decor_blocks.js` error in `logs/kubejs/startup.log`; the setblock succeeds
 @fails a startup error on `blockstateJson`: Rhino did not convert the object to a JsonObject (set it from Java or `JsonIO` instead)
 @reviewed 2026-11-22
+@superseded by SQ-CEN-09 (the box moved to Creative Engineering, ruling W16, 2026-11-24)
 kjsreject decor_blocks.js
 > setblock 0 -60 2 creativecompat:weathered_cardboard_box
 expect Changed the block
@@ -174,6 +176,7 @@ expect Changed the block
 @fails the whole sheet on each face: the generated cube_all model still wins (blockstate not taken from `decor_blocks.js`); a face sideways or upside down: the face rotations of `block/weathered_cardboard_box_wrapped`
 @draft no batch holds this row yet; needs a client
 @reviewed 2026-11-22
+@superseded by CQ-CEN-02 (the box moved to Creative Engineering, ruling W16, 2026-11-24)
 
 @@section 3
 @@title SQ-CMP Corpse decay on world time, 2026-11-18 ([plan_corpses.md](../plan_corpses.md) 3.1, TODO `corpses #1`, `corpses #6`)

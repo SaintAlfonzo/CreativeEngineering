@@ -138,7 +138,7 @@ look swaps lines: every creativeengineering Equipment and Magic id and solapplep
 > summon minecraft:tnt 20 -60 6 {Fuse:1}
 sleep 2
 shell grep -nE "^\s*rewardTable" config/creativecompat-common.toml
-expect verb=state pos=2,-60,4 state="?creativecompat:weathered_cardboard_box
+expect verb=state pos=2,-60,4 state="?creativeengineering:weathered_cardboard_box
 expect verb=be be=creativecompat:botanist_pot nbt=.*Plant:\\"minecraft:poppy\\"
 expect verb=be be=\S+ nbt=.*creativecompat:jar_fluid_pipes
 expect verb=be be=\S+ nbt=.*minecraft:book

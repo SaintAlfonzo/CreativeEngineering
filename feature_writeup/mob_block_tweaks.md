@@ -286,15 +286,22 @@ dead.
   `BreakEvent` (not checked beyond Create) could still break a box. `vaultMode = false` returns Quark's behavior,
   except that the hardness and tags stay (KubeJS).
 
-### 2.10 Giant squid flee distance (added 2026-11-02, TODO `mobs/tweaks #18`)
+### 2.10 Squid and cachalot whales (added 2026-11-02, TODO `mobs/tweaks #18`; reworked 2026-11-24, `creative-compat-publish #9`)
 
-Alex's Mobs' giant squid runs from cachalot whales: its `AIAvoidWhales` goal starts when any whale is within 50 blocks
-and keeps running while that whale is within 60, so squid scatter from whales far out of sight. Owner decision
-2026-11-02: squid are the fleeing mob (the whales are not changed). Creative Compat `AmGiantSquidAvoidWhalesMixin`
-(ModifyConstant on the goal's `canUse` 50 and `canContinueToUse` 60, gated on `alexsmobs`) reads
-`config/creativecompat-common.toml` `[giant_squid]`: `whaleFleeStart` 16 (1 to 64), `whaleFleeStop` 24 (1 to 96, kept
-at least the start). Read live each time the goal checks. Vanilla squid have no whale goal (they only flee what hurt
-them); orcas and other whales are untouched.
+Owner ruling W17 (2026-11-23, [plan_wave1_publish.md](plan_wave1_publish.md); supersedes the 2026-11-02 flee tuning and
+its `[giant_squid]` config, which is gone):
+
+- **Squid and glow squid flee cachalot whales.** A vanilla squid or glow squid in water swims away from any Alex's Mobs
+  cachalot whale within 16 blocks and keeps going until the whale is 24 off (vanilla's squid flee movement, aimed at the
+  nearest whale; a bubble every half second). Vanilla squid otherwise flee only what hurt them. Orcas are not fled.
+- **The giant squid fights whales.** Alex's Mobs' `AIAvoidWhales` goal (flee from any whale within 50 blocks) never
+  starts. The giant squid targets a whale that hurt it (Alex's Mobs' own retaliation goal skips whales) or any whale
+  within 12 blocks, then its melee goal swims in and grabs it (3 to 7 damage a second, as against any target). The
+  whales are not changed: they still hunt giant squid, squid and glow squid (Alex's Mobs `cachalot_whale_targets`).
+
+Creative Compat: `AmGiantSquidAvoidWhalesMixin` (cancels the goal's `canUse`, gated on `alexsmobs`) and
+`mobs/SquidsAndWhales` (goals added on `EntityJoinLevelEvent`, server side, registered only with Alex's Mobs loaded).
+The radii are fixed (16, 24, 12); no config. Queue: SQ-MT-04 to -06 (SQ-PSM-08 superseded).
 
 ### 2.11 Iron golem farm cooldown (added 2026-11-16, R2, [plan_small_fixes_1116.md](plan_small_fixes_1116.md) P6)
 
@@ -438,7 +445,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 - Villager gates and doors: [McaVillagerPathGatesMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/McaVillagerPathGatesMixin.java), [WalkNodeEvaluatorVillagerGateMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/WalkNodeEvaluatorVillagerGateMixin.java).
 - Villager ladders: [McaVillagerPathLaddersMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/McaVillagerPathLaddersMixin.java), [GroundPathNavigationClimbMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/GroundPathNavigationClimbMixin.java), [MoveControlVillagerLadderMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MoveControlVillagerLadderMixin.java); tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), key `t_villager_ladders` in `block_dict.js`.
 - Monster box vaults: [mobs/MonsterBoxVault.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mobs/MonsterBoxVault.java) (registered in `CreativeEngineering`), [MonsterBoxBlockEntityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MonsterBoxBlockEntityMixin.java), [CreateBreakerMonsterBoxMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/CreateBreakerMonsterBoxMixin.java), `CEConfig.MonsterBox`, lang `chat.creativeengineering.monster_box.sneak`, [monster_box_reward.json](../kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json), `quark-common.toml` (`Enable Extra Loot Table`, both copies).
-- Giant squid flee distance: Creative Compat [AmGiantSquidAvoidWhalesMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/AmGiantSquidAvoidWhalesMixin.java), `CompatConfig.GiantSquid` (`[giant_squid]`), gate in `CompatMixinPlugin`.
+- Squid and whales: Creative Compat [AmGiantSquidAvoidWhalesMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/AmGiantSquidAvoidWhalesMixin.java), [mobs/SquidsAndWhales.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mobs/SquidsAndWhales.java), gate in `CompatMixinPlugin`.
 - Golem cooldown and boat friction: Creative Compat [mobs/GolemCooldown.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mobs/GolemCooldown.java), [VillagerGolemCooldownMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/VillagerGolemCooldownMixin.java), [surface/BoatFriction.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/BoatFriction.java), [BoatIceFrictionMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/BoatIceFrictionMixin.java), `CompatConfig` `[golems]`, `[boat_friction]`; Quark: `config/quark-common.toml` `[experimental.game_nerfs]`.
 - KubeJS: [entitytags.js](../kubejs/server_scripts/tags/entitytags.js), [flowers.js](../kubejs/server_scripts/other/flowers.js), [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js), `kubejs/data/bushierflowers/forge/biome_modifier/` (5 files).
 
@@ -554,9 +561,15 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   client side); mine it sneaking -> it breaks, nothing drops. Same in creative.
 - [ ] **MT-50 Create:** a powered drill against a box, and a drill on a moving contraption -> the box doesn't break;
   a contraption doesn't pick the box up.
-- [ ] **MT-51 Giant squid flee distance [scratch]:** a giant squid and a cachalot whale summoned 30 blocks apart in deep
-  open water -> the squid does not flee; whale moved to 12 blocks -> it swims away and stops once more than 24 off. With
-  `whaleFleeStart = 50`, `whaleFleeStop = 60` it flees at 30 again (Alex's Mobs' own).
+- [ ] **MT-51 Giant squid flee distance [scratch]:** superseded 2026-11-24 by MT-63 to MT-65 (the giant squid no
+  longer flees whales; ruling W17).
+- [ ] **MT-63 Squid flee whales [scratch]:** deep open water, a squid and a glow squid, a cachalot whale (NoAI) 30 blocks
+  off -> they wander; whale moved to 10 blocks -> both swim away and slow to wandering past about 24. An orca at 10 blocks
+  -> no flight.
+- [ ] **MT-64 Giant squid fights back [scratch]:** a giant squid and a cachalot whale (NoAI) 30 blocks apart -> the squid
+  does not flee and does not attack; whale moved to 10 blocks -> the squid swims to it and grabs it (whale health drops).
+- [ ] **MT-65 Giant squid retaliates [scratch]:** a giant squid with a cachalot whale (AI on) hunting it from 25 blocks
+  -> the squid never flees; once hit it grabs the whale; the config file has no `[giant_squid]` table.
 
 - [ ] **MT-52 Golem cooldown [scratch]:** a village with a bell: summon and kill 5 iron golems by the bell within 10 minutes
   -> the villagers summon no golem for one in-game day, even when panicking or gossiping; after it they summon again. A

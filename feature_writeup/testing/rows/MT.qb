@@ -63,3 +63,38 @@ look sheep: mutton, no wool; golems: iron ingots; stone count below 25
 @owner true
 @draft rowing a boat 200 blocks per ice kind and judging that walking and sprinting feel the same, plus a restart with the key off: owner playtest (the server half is SQ-MT-01)
 @reviewed 2026-11-16
+
+@@section 2
+@@title SQ-MT Squid and cachalot whales, 2026-11-24 ([mob_block_tweaks.md](../mob_block_tweaks.md) 2.10, MT-63 to MT-65; [plan_wave1_publish.md](../plan_wave1_publish.md) W17, TODO `creative-compat-publish #9`)
+@@date 2026-11-24
+@@jars creativecompat
+@@phase worldgen
+@@sources feature_writeup/mob_block_tweaks.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mobs/SquidsAndWhales.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/AmGiantSquidAvoidWhalesMixin.java
+@@text
+@@text Targets the Creative Compat jar installed 2026-11-24 (commit 0f78d9277). Replaces SQ-PSM-08. Deep ocean, positions
+@@text read with `data get entity ... Pos` and compared by a `shell python3` line as in SQ-PSM-08.
+@@text
+@@table
+## SQ-MT-04 | squid and glow squid flee a cachalot whale at 10 blocks, not at 30; an orca is not fled
+@group B
+@commands deep ocean: a squid and a glow squid (tagged), a cachalot whale `{NoAI:1b}` 30 blocks off; Pos at 0 s and 10 s; tp the whale 10 blocks from them, Pos at 0 s and 8 s; then the same with an orca `{NoAI:1b}` at 10 blocks
+@pass at 30 both wander (no steady drift from the whale); after the tp both are farther from the whale by 8 s (about 14 blocks or more off); the orca at 10: no steady flight
+@fails no flight: `SquidsAndWhales` not registered (Alex's Mobs check in `CreativeCompat`) or the goal not added on join; flight from the orca: the goal matches more than `EntityCachalotWhale`
+@draft steps follow SQ-PSM-08's pattern (locate deep_ocean, forceload, summon, Pos captures, distance print); the first runner writes them here once
+@reviewed 2026-11-24
+
+## SQ-MT-05 | the giant squid does not flee a whale and attacks one within 12 blocks
+@group B
+@commands deep ocean: a giant squid and a cachalot whale `{NoAI:1b}` 30 blocks apart; Pos and the whale's Health at 0 s and 10 s; tp the whale 10 blocks from the squid; Pos and Health at 5 s and 20 s
+@pass at 30 the squid neither flees nor closes in; after the tp it swims to the whale and the whale's Health drops (grab damage 3 to 7 a second); the boot log applies `AmGiantSquidAvoidWhalesMixin` with no error
+@fails it swims away: the mixin did not apply (`m_8036_` in `EntityGiantSquid$AIAvoidWhales`); no attack: the target goal not added
+@draft steps follow SQ-PSM-08's pattern; the first runner writes them here once
+@reviewed 2026-11-24
+
+## SQ-MT-06 | the giant squid fights back against a hunting whale; no [giant_squid] config
+@group B
+@commands deep ocean: a giant squid and a cachalot whale with AI 25 blocks apart (the whale hunts giant squid); watch 60 s (Pos, both Health every 10 s); grep `config/creativecompat-common.toml`
+@pass the squid never moves away from the whale; once the whale hits it, it grabs the whale (the whale's Health drops); the config file has no `[giant_squid]` table
+@fails the squid flees: SQ-MT-05 fails too; a `[giant_squid]` table: an old config copied in (Forge drops the unknown table on the next write)
+@draft the whale only hunts when hungry and not sleeping (Alex's Mobs); the first runner sets the steps and the wait
+@reviewed 2026-11-24
