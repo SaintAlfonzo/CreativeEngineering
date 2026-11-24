@@ -14,9 +14,9 @@
 
 	[dragonloot.armor]
 		#Range: 0 ~ 20
-		dragon_armor_protection_helmet = 8
+		dragon_armor_protection_helmet = 9
 		#Range: 0 ~ 20
-		dragon_armor_protection_chest = 13
+		dragon_armor_protection_chest = 12
 		#Range: 0 ~ 20
 		dragon_armor_protection_leggings = 11
 		#Range: 0 ~ 20

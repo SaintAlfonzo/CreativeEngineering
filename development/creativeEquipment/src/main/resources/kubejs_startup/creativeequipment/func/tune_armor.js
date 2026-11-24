@@ -96,11 +96,14 @@ var i = global.item;
 	tune(i.felsic_boots,      { armor: 4, toughness: 4, knockbackResistance: 0.25, durability: 676,  rarity: 'epic', fireproof: true })
 
 	// ─────────────────────────────────── Dragon ────────────────────────────────
-	tune(i.dragon_helmet,              { armor: 7,  toughness: 4.5, knockbackResistance: 0.3, durability: 1300, rarity: 'epic', fireproof: true }) // ench 25
+	// Armor points come from config/dragonloot-common.toml (dragon_armor_protection_*): DragonArmorMaterial reads the
+	// config, so that file is authoritative and the armor values here only mirror it (40 points, gear-tuning #2; both
+	// chestplates read the one chest key). Keep both in step.
+	tune(i.dragon_helmet,              { armor: 9,  toughness: 4.5, knockbackResistance: 0.3, durability: 1300, rarity: 'epic', fireproof: true }) // ench 25
 	tune(i.dragon_chestplate,          { armor: 12, toughness: 4.5, knockbackResistance: 0.3, durability: 1750, rarity: 'epic', fireproof: true }) // ench 25
 	tune(i.upgraded_dragon_chestplate, { armor: 12, toughness: 4.5, knockbackResistance: 0.3, durability: 1750, rarity: 'epic', fireproof: true }) // dragonloot:upgraded_dragon_chestplate · ench 25
-	tune(i.dragon_leggings,            { armor: 10,  toughness: 4.5, knockbackResistance: 0.3, durability: 1600, rarity: 'epic', fireproof: true }) // ench 25
-	tune(i.dragon_boots,               { armor: 7,  toughness: 4.5, knockbackResistance: 0.3, durability: 1400, rarity: 'epic', fireproof: true }) // ench 25
+	tune(i.dragon_leggings,            { armor: 11, toughness: 4.5, knockbackResistance: 0.3, durability: 1600, rarity: 'epic', fireproof: true }) // ench 25
+	tune(i.dragon_boots,               { armor: 8,  toughness: 4.5, knockbackResistance: 0.3, durability: 1400, rarity: 'epic', fireproof: true }) // ench 25
 
 	// dragon_horse_armor is not an ArmorItem (HorseArmorItem) — kjs$setArmor* won't
 	// take. Tune its protection via a datapack attribute or Creative Common if needed.
