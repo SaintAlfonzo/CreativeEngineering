@@ -195,6 +195,7 @@ same pass as the renames.
 | `SB-` | [storage_audit.md](../storage_audit.md) | SQ-SB (10) |  | not in the README index yet |
 | `SCAT-` | [plan_structure_catalogue.md](../plan_structure_catalogue.md) | CQ-SCAT (5), SQ-SCAT (3) |  |  |
 | `SH-` | [shields.md](../shields.md) |  |  |  |
+| `SHB-` | [farming_for_blockheads.md](../farming_for_blockheads.md) |  |  |  |
 | `SLT-` | [salt.md](../salt.md) | CQ-SLT (2), SQ-SLT (5) |  |  |
 | `SN-` | [sticky_notes.md](../sticky_notes.md) | SQ-SN (4) |  |  |
 | `SP-` | [plan_1.0.3.md](../plan_1.0.3.md) |  |  | not in the README index yet |
