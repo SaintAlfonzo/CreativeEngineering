@@ -14,18 +14,19 @@
 @@table world
 ## SQ-CM-01
 @group any
-@commands latest.log: `[itemMerges] creativedelight` count up by 3 (cantaloupe pairs), no script error from `fruitsdelight/item_merges.js`, `veggies_foods.js`, `canning.js`; no loaded recipe makes `creativeengineering:canned_hamimelon` or `fruitsdelight:hamimelon_popsicle` or takes `fruitsdelight:hamimelon_slice`
+@commands latest.log: `[itemMerges] creativedelight` prints 49 merges on the full pack (baseline 2026-11-23, the sum of the 18 swaps merges_*.json lists; the old "3 higher than before" half is dropped, no pre-cantaloupe count is kept), no script error from `fruitsdelight/item_merges.js`, `veggies_foods.js`, `canning.js`; no loaded recipe makes `creativeengineering:canned_hamimelon` or `fruitsdelight:hamimelon_popsicle` or takes `fruitsdelight:hamimelon_slice`
 @pass Existing test: MG-39
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 shell grep -hE "\[itemMerges\] creativedelight" logs/latest.log logs/kubejs/startup.log | tail -3; grep -hiE "(item_merges|veggies_foods|canning)\.js.*(error|exception)" logs/kubejs/startup.log logs/kubejs/server.log | head -5; true
 > cdevtest makes canned_hamimelon
 > cdevtest makes fruitsdelight:hamimelon_popsicle
 > cdevtest uses fruitsdelight:hamimelon_slice
+shell grep -qE "\[itemMerges\] creativedelight: 49 merges" logs/kubejs/startup.log logs/latest.log
 expect verb=makes item=canned_hamimelon n=0\b
 expect verb=makes item=fruitsdelight:hamimelon_popsicle n=0\b
 expect verb=uses (item=fruitsdelight:hamimelon_slice alone=0 shared=0|error="no such item)
 bootreject (?i)(item_merges|veggies_foods|canning)\.js.*(error|exception)
-look shell: the [itemMerges] creativedelight count is 3 higher than before the cantaloupe merge (MG-39); no script error line
+look shell: the [itemMerges] creativedelight line reads 49 merges (a changed count means a merge list edit since 2026-11-23: update the baseline); no script error line
 ## SQ-CM-02
 @group same
 @commands Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing
@@ -325,10 +326,10 @@ look the first three coasters hold their item in the block entity data, the last
 ## SQ-BJ-01 | muffins oven only, new jam jars (needs Vintage -09 in srv/mods)
 @group A
 @commands boot after the CD and Vintage `-09` install; recipe dump
-@pass no `farmersdelight:cooking` output of `fruitsdelight:blueberry_muffin`, `cranberry_muffin` or `veggiesdelight:sweet_potato_cupcake`; `creativedelight:farmersdelightcooking/{green_grape,red_grape,cherry}_jam_jar` exist, count 2, container `vintagedelight:empty_mason_jar`; no recipe outputs the 6 removed jam items
+@pass no `farmersdelight:cooking` output of `fruitsdelight:blueberry_muffin`, `cranberry_muffin` or `veggiesdelight:sweet_potato_cupcake`; `creativedelight:farmersdelightcooking/{green_grape,red_grape,cherry}_jam_jar` exist, count 1 (was 2 until 2026-11-02, dishes/jams #4), container `vintagedelight:empty_mason_jar`; no recipe outputs the 6 removed jam items
 @fails RC-172 to RC-175, OV-36
+@reviewed 2026-11-23
 @from batches/r1031/a1_data.qb
-@reviewed 2026-11-16
 > cdevtest makes fruitsdelight:blueberry_muffin
 > cdevtest makes fruitsdelight:cranberry_muffin
 > cdevtest makes veggiesdelight:sweet_potato_cupcake
@@ -337,7 +338,7 @@ reject id=farmersdelight:cooking\S* result=(fruitsdelight:blueberry_muffin|fruit
 expect creativedelight:farmersdelightcooking/green_grape_jam_jar
 expect creativedelight:farmersdelightcooking/red_grape_jam_jar
 expect creativedelight:farmersdelightcooking/cherry_jam_jar
-look each new jar recipe gives 2 with container vintagedelight:empty_mason_jar; none of the 6 removed jam items is a result
+look each new jar recipe gives 1 with container vintagedelight:empty_mason_jar; none of the 6 removed jam items is a result
 reject verb=\S+ .*done=0
 
 ## SQ-BJ-02 | any bread

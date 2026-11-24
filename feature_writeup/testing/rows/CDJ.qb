@@ -271,10 +271,12 @@ look the rdetail line shows the 4 cloves + honey bottle recipe (else the batch's
 
 ## SQ-MDP-17 | Miner's member stops startup naming both missing donor jars
 @group A (Boot 3)
-@commands `rm OUT/srv/miners_upstream` (the symlink only); boot; `grep -n -A6 "reads its textures" logs/latest.log` or the crash report
+@commands own step (`@modset port_chain chain +creativedevtools-*.jar noupstream=miners_upstream`: the step's server has no `miners_upstream` symlink; a drive step keeps it and reaches `Done`, r1123cd); boot; `grep -n -A6 "reads its textures" logs/latest.log` or the crash report
 @pass Startup stops with `Miner's Delight (Creative Delight) reads its textures, models and recipes from the original Miner's Delight jar, which must be in the folder 'miners_upstream' of the game directory (not in mods/):` followed by both missing jars with their links (MND-04); no other mod named as the cause
 @fails Old wording "(Backport)": the nested Miner's jar is older than `-03`; no stop: `UpstreamJars.verifyOrFail` not reached (member init order)
+@reviewed 2026-11-23
 @jars creativedelight creativeworldgen
+@modset port_chain chain +creativedevtools-*.jar noupstream=miners_upstream
 @from batches/r1102/b3_nodonor.qb
 bootexpect Miner's Delight \(Creative Delight\) reads its textures, models and recipes from the original Miner's Delight jar, which must be in the folder 'miners_upstream' of the game directory \(not in mods/\):
 bootexpect missing: .*miners_upstream/miners_delight-1\.20\.1-1\.4\.5-backport\.jar
@@ -290,15 +292,17 @@ look the crash report / log blames only Miner's Delight (Creative Delight) (Susp
 ## SQ-CDFW-10 | tool_dict.js / misc_dict.js load without a thrown check
 @group A (Boot 1)
 @commands `grep -nE "tool_dict\|misc_dict" logs/kubejs/startup.log logs/latest.log \| grep -iE "error\|throw\|missing\|warn"`; `/kubejs eval Object.keys(global.tool).length` and `global.misc` (or a startup print)
-@pass no error or warning naming `tool_dict.js` / `misc_dict.js`; 108 tool keys, 227 misc keys (plan E1); no `[item_dict]` missing key added by them
+@pass no error or warning naming `tool_dict.js` / `misc_dict.js`; tool and misc key counts printed by the shell step from the dict source files (105 tool keys, 227 misc keys on 2026-11-23; plan E1 said 108 tool, 3 keys were dropped since); no `[item_dict]` missing key added by them
 @fails A thrown check names the bad key (value not in `global.item`, a duplicate, a key outside the grammar): fix the dict entry, rerun `tools/kitchen_dicts.py`
+@reviewed 2026-11-23
 @from batches/r1102/b1_main.qb
 shell grep -nE "tool_dict|misc_dict" logs/kubejs/startup.log | head -5
 # judge-4 r1118 (2026-11-18): the dicts load from Creative Common's jar (creativecommon:creativecommon/_lib/), not startup_scripts/_lib/
 shell grep -qE "Loaded script creativecommon:creativecommon/_lib/tool_dict.js" logs/kubejs/startup.log && grep -qE "Loaded script creativecommon:creativecommon/_lib/misc_dict.js" logs/kubejs/startup.log
 shell ! grep -nE "tool_dict|misc_dict" logs/kubejs/startup.log logs/latest.log | grep -iE "error|throw|missing|warn"
 shell ! grep -nE "(tool|misc) dict: [0-9]+ problem" logs/kubejs/startup.log logs/latest.log
-look key counts (108 tool, 227 misc): KubeJS 1.19.2 has no /kubejs eval and the dicts print no count; judge offline (grep the two files) or leave to a client session with a startup print
+shell D=$INST/development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib; t=$(grep -cE "^\s*t\.[a-z_0-9]+\s*=" $D/tool_dict.js); m=$(grep -cE "^\s*m\.[a-z_0-9]+\s*=" $D/misc_dict.js); echo "tool keys=$t misc keys=$m"; test "$t" = 105 && test "$m" = 227
+look the printed counts, tool 105 and misc 227 (KubeJS 1.19.2 has no /kubejs eval and the dicts print no count at load, so the step counts the `t.` / `m.` key lines of the two source files in Creative Common's jar tree; a changed count means a dict edit since 2026-11-23, update the baseline)
 
 ## SQ-CDFW-11 | no Veggies recipe, tag or loot id lost in the pilot move (server dump half)
 @group A (Boot 1, last)

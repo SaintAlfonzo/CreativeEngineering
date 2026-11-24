@@ -847,13 +847,14 @@ look sack: one recipe, wheat + string (rdetail ingredients line). If the bunker 
 ## SQ-BOT-01 | [botany_pots] growthTicks scaled line, no scaleRecipeInt missing
 @group A
 @commands Boot after the Common rebuild; `grep "\[botany_pots\]" logs/kubejs/server.log`
-@pass "growthTicks scaled on ~173 pot crops (~49 flowers x2, the rest x8); pot fertilizers removed"; no "scaleRecipeInt missing"
+@pass "growthTicks scaled on ~212 pot crops (49 flowers x2, the rest x8); pot fertilizers removed" (2026-11-23; the crop total grows with added mods, the flower count stays 49); no "scaleRecipeInt missing"
 @fails installed Common lacks `scaleRecipeInt`; KubeJS json write-back on `botanypots:crop`
+@reviewed 2026-11-23
 @from batches/r1113/c3_a1.qb
 kjsexpect \[botany_pots\] growthTicks scaled on \d+ pot crops \(\d+ flowers x2, the rest x8\); pot fertilizers removed
 kjsreject scaleRecipeInt missing
 shell grep -h "\[botany_pots\]" logs/kubejs/server.log | cut -c1-200
-look count near 173 (the 2026-11-12 pack log says 175 crops, 49 flowers)
+look count near 212 with 49 flowers (175 crops on 2026-11-12, 212 on 2026-11-23: added mods)
 
 ## SQ-BOT-02 | pot crop growthTicks wheat 9600, poppy 2400, wild tomatoes 9600
 @group A
@@ -997,11 +998,11 @@ look the propelplant rdetail lists propelpearl at 1.0 and the cane at 0.05
 
 ## SQ-FCB-09 | survival break of cooking pot, copper pot, kettle keeps the contents in the item; leftover bottle drops loose (break half)
 @group A
-@commands Fake player in survival: `/setblock` a `farmersdelight:cooking_pot` with an ingredient in slot 0, bowls in slot 7, a meal in slot 6, a glass bottle in its remainder buffer; break it; repeat for `miners_delight:copper_pot` (bottle in slot 7) and `farmersrespite:kettle` (tank fluid, item in slot 0); then the sneak right-click pickup on each; place each item; break one in creative
+@commands Fake player in survival: `/setblock` a `farmersdelight:cooking_pot` with an ingredient in slot 0, bowls in slot 7, a meal in slot 6 (the item keeps it in slot 8), a glass bottle in its remainder buffer; break it; repeat for `miners_delight:copper_pot` (bottle in slot 7) and `farmersrespite:kettle` (tank fluid, item in slot 0); then the sneak right-click pickup on each; place each item; break one in creative
 @pass the item has `BlockEntityTag.Inventory` with every kept slot (pot 0-8, copper 0-6, kettle 0-4 plus `CETankLevel`); only the bottle drops; placing restores every slot and the tank; the creative break drops loose; `[qol] cookwareKeepContents = false` restores upstream drops and the #27 pickup (KT-26)
 @fails `CookwareContents` not registered (no mark); BreakEvent canceled by protection; loot run on another tick
+@reviewed 2026-11-23
 @jars creativecommon creativedelight
-@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
 > setblock 1060 -60 1050 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0b,id:"minecraft:carrot",Count:1b},{Slot:6b,id:"farmersdelight:vegetable_soup",Count:2b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
 > cdevtest break 1060 -60 1050 held=minecraft:iron_pickaxe keep
@@ -1021,7 +1022,7 @@ expect has the following entity data: .*BlockEntityTag.*minecraft:glow_lichen
 expect has the following entity data: .*BlockEntityTag.*farmersrespite:green_tea_leaves
 count verb=break .*broken=true >= 3
 reject \[cdevtest\] .*done=0
-look cooking pot item keeps slots 0, 6, 7 (carrot, soup, bowls); copper pot item keeps bone and lichen, the glass bottle (slot 7) drops loose beside it; kettle item keeps the leaves. Place-back, sneak pickup, creative break and the remainder-buffer bottle stay
+look cooking pot item keeps slot 0 (carrot), slot 7 (bowls) and slot 8 (soup); copper pot item keeps bone and lichen, the glass bottle (slot 7) drops loose beside it; kettle item keeps the leaves. Place-back, sneak pickup, creative break and the remainder-buffer bottle stay
 
 ## SQ-FCB-10 | removing the wall drops the hung skillet (wall-removal case only)
 @group A

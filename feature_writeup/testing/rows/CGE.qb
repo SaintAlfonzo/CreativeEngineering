@@ -28,9 +28,9 @@ look Done line present; no WARN/ERROR naming either Create Gravity mixin
 ## SQ-CGE-02
 @group A (same boot)
 @commands falling block: `summon falling_block 0 120 0 {BlockState:{Name:"minecraft:sand"},Time:1}` in the End and in the overworld (plains, flat); read `Pos[1]` at 20 and 40 ticks
-@pass End drop is under 40 percent of the overworld drop at both reads (expected about 20 percent); overworld drop equals vanilla (about 27 blocks at 40 ticks)
+@pass End drop is under 40 percent of the overworld drop at both reads (expected about 20 percent); overworld drop equals vanilla with drag (24.57 blocks at 40 ticks)
 @fails method name `m_8119_` on `FallingBlockEntity`, `ServerConfig.getBiomeConfig` returning null for the End (tag `#minecraft:is_end` not resolved), `PULL` constant
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 > execute in minecraft:the_end run forceload add 0 0 6 18
 > forceload add 0 0 6 18
 # judge-5, 2026-11-18: the first End summon right after forceload found 0 entities (chunk not loaded yet, r1118 s34/s35)
@@ -42,7 +42,7 @@ waitlog \[zgv\] drop done dim=minecraft:the_end 20
 waitlog \[zgv\] drop done dim=minecraft:overworld 20
 reject \[zgv\] error
 shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld low
-look shell.txt: falling_block (and the item and TNT of SQ-CGE-03) at about 0.2 of the overworld drop at t=20 and t=40; overworld drop about 27 blocks at t=40
+look shell.txt: falling_block (and the item and TNT of SQ-CGE-03) at about 0.2 of the overworld drop at t=20 and t=40; overworld drop 24.57 blocks at t=40 (End 4.914, ratio 0.200)
 ## SQ-CGE-03 | item and TNT in the End (covered by the drop lines of 02b / 02c: type=item.minecraft.stone, entity.minecraft.tnt)
 @group A (same boot)
 @commands dropped item `summon item 0 120 0 {Item:{id:"minecraft:stone",Count:1b},Age:0}` and lit TNT `summon tnt 0 120 0 {Fuse:200}`, End vs overworld, as SQ-CGE-02

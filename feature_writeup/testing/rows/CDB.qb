@@ -23,21 +23,24 @@ shell grep -h "\[itemMerges\]" logs/kubejs/*.log logs/latest.log | head -3; true
 look the [itemMerges] count is one higher than the previous run's (the calamari merge)
 ## SQ-CDB-02
 @group A
-@commands `/dumpall`; look up the four `#creativeengineering:sweeteners` tags and sugar recipes
-@pass Cooking (pumpkin pie, a Fruits Delight jam) takes all five; drinks (`farmersdelight:cooking/hot_cocoa`, a Fruits Delight tea mix, a Create DD milkshake mix) sugar, powdered sugar, honey bottle; Brewin' keg recipes all but glycerol; Botania mana powder, a Pretty Pipes module, the fermented spider eye jar recipe sugar or powdered sugar; powdered sugar and the sugar cube plain sugar (RC-25)
+@commands `/dumpall`; look up the four `#creativedelight:sweeteners` tags and sugar recipes
+@pass tag sizes on the 2026-11-23 boot: `sweeteners` 4 (powdered sugar, honey bottle, honeycomb, sugar), `sweeteners/brewing` 4, `sweeteners/drink` 3 (sugar, powdered sugar, honey bottle), `sweeteners/plain` 2 (sugar, powdered sugar), as the item_dict.js comments; `farmersdelight:cooking/hot_cocoa` slot lists sugar, powdered sugar, honey bottle (RC-25)
 @fails
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 > cdevtest tag item creativedelight:sweeteners
 > cdevtest tag item creativedelight:sweeteners/brewing
 > cdevtest tag item creativedelight:sweeteners/drink
 > cdevtest tag item creativedelight:sweeteners/plain
 > cdevtest rdetail farmersdelight:cooking/hot_cocoa
 > cdevtest rdetail pumpkin_pie
-expect verb=tag kind=item tag=creativedelight:sweeteners n=[1-9]
+expect verb=tag kind=item tag=creativedelight:sweeteners n=4\b
+expect verb=tag kind=item tag=creativedelight:sweeteners/brewing n=4\b
+expect verb=tag kind=item tag=creativedelight:sweeteners/drink n=3\b
+expect verb=tag kind=item tag=creativedelight:sweeteners/plain n=2\b
 expect verb=tag kind=item tag=creativedelight:sweeteners/drink .*minecraft:honey_bottle(,|$)
 expect verb=tag kind=item tag=creativedelight:sweeteners/plain .*minecraft:sugar(,|$)
 reject \[cdevtest\] .*done=0
-look the four tag sizes against the pass text (all five, drinks: sugar, powdered sugar, honey bottle; brewing: all but glycerol; plain: sugar); the hot cocoa and pumpkin pie ingredients name the tags (first 3 ids, /+N); the other recipe families of the pass text by rdetail if a tag looks wrong (tag ids moved to creativedelight: since the row was written)
+look the four tag sizes (4 / 4 / 3 / 2) and the hot cocoa slot list (sugar, powdered sugar, honey bottle); the pumpkin pie ingredients name the tag (first 3 ids, /+N); other recipe families by rdetail only if a tag count differs
 ## SQ-CDB-03
 @group A
 @commands Same dump: `creativedelight:farmersdelightcutting/squid_to_calamari`, `glow_squid_to_calamari`, `baked_squid_to_calamari`; `miners_delight` squid cuts
@@ -173,15 +176,15 @@ look Creamy Gnocchi's ingredients: milk, 2 gnocchi, onion / garlic / pickled oni
 ## SQ-CDB-11
 @group A
 @commands JEI: Bayberry Juice; heatless cacciatore (RC-D2, RC-136)
-@pass The bottle, the fluid and the can read Bayberry Juice; 12 bottles fill a jar (MJ-14); the cacciatore grid recipe cycles cooked chicken cuts
+@pass The bottle, the fluid and the can read Bayberry Juice; 12 bottles fill a jar (MJ-14); the cacciatore chicken slot reads `minecraft:chicken` / `farmersdelight:chicken_cuts` (raw cuts, no `/+N`)
 @fails
-@reviewed 2026-11-20
+@reviewed 2026-11-23
 > cdevtest rdetail cacciatore
 # r1120lr batch fault: Bayberry Juice is a rename of the name only, the ids stay bayberry_soup (fruits_delight.md, Bayberry Juice)
 > cdevtest reg item bayberry_soup
 expect verb=reg kind=item regex=bayberry_soup n=[1-9]
 reject \[cdevtest\] .*done=0
-look the cacciatore grid recipe slot lists several cooked chicken cuts (/+N); the Bayberry Juice names (bottle, fluid, can) and the 12-bottle jar fill are client (MJ-14)
+look the cacciatore chicken slot reads minecraft:chicken / farmersdelight:chicken_cuts (raw cuts, no /+N); the Bayberry Juice names (bottle, fluid, can) and the 12-bottle jar fill are client (MJ-14)
 ## SQ-CDB-12
 @group A
 @commands After `/dumpfood` and `/cdevgen`: can generator output
@@ -215,16 +218,16 @@ reject \[cdevtest\] .*done=0
 @draft no batch holds this row yet
 ## SQ-CDB-15 | Cake Base, Pie Crust, Cacciatore inputs (Item.of(tag, n) fix; server half of a client row)
 @group client
-@commands Craft Cake Base with 2 chicken eggs, 3 flour and 2 honey bottles; Pie Crust from cornmeal; Cacciatore with cooked chicken cuts
+@commands Craft Cake Base (flour, dough or manual recipe: 3 flour or cornmeal slots, an egg tag slot, a sweetener tag slot); Pie Crust from cornmeal; Cacciatore with raw chicken cuts
 @pass All three craft (fixed 2026-10-26 run, `Item.of(tag, n)`)
 @fails
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 @from batches/r1102b/s3_A.qb
 > cdevtest rdetail cake_base
 > cdevtest rdetail pie_crust
 > cdevtest rdetail cacciatore
 reject \[cdevtest\] .*done=0
-look cake base takes 2 chicken eggs, 3 flour, 2 honey bottles (not the first item of a tag only); pie crust has a cornmeal recipe; the cacciatore grid recipe slot holds several cooked chicken cuts (/+N). Crafting it by hand is the client half
+look cake base takes 3 flour or cornmeal slots, an egg tag slot and a sweetener tag slot (tags, not the first item only); pie crust has a cornmeal recipe; the cacciatore chicken slot reads minecraft:chicken / farmersdelight:chicken_cuts (raw cuts, as SQ-CDB-11). Crafting it by hand is the client half
 
 ## SQ-CDB-16 | fish egg roll takes salmon eggs or ancient fish eggs
 @group A

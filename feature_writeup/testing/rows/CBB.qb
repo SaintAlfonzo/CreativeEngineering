@@ -77,18 +77,19 @@ reject \[cdevtest\] .*done=0
 @pass all PASS; SQ-CBA-02 judged on creativebrewing frames only
 @fails as SQ-CBA
 @draft a rerun of other rows: run SQ-CBA-01 to -08 and -10 (CBA.qb, `--rows`) on this chain boot instead of copying their steps here
-## SQ-CBB-05 | kippers and forge:raw_fishes on the chain
+## SQ-CBB-05 | kippers removed: no kippers recipe; forge:raw_fishes on the chain
 @group A (chain)
 @commands `> cdevtest rdetail brewinandchewin:fermenting/kippers`; `> cdevtest tag item forge:raw_fishes`; `> cdevtest recipes brewinandchewin:fermenting/kippers`
-@pass kippers listed; record whether `#forge:raw_fishes` holds `miners_delight:tentacles` and the ingredient list (4th ingredient `[]`)
-@fails kippers gone and tentacles not in the tag: the empty `[]` ingredient matches KubeJS's `{input: X}` filter, so CD `miners_delight/recipes.js` must not remove by input (TODO open-issues list, run doc section 2)
+@pass `brewinandchewin:fermenting/kippers` does not exist (`recipes` n=0, `rdetail` finds none): Kippers are removed from the pack (creative-brewing #1: in `global.removedItems`, tags stripped, hidden in JEI, and in Creative Brewing `swaps/removed.json`); record whether `#forge:raw_fishes` holds `miners_delight:tentacles` (it did on 2026-11-23)
+@fails a kippers recipe still listed: the removal (`global.removedItems`, Creative Brewing `swaps/removed.json`, the fermenting recipe remove) did not apply
+@reviewed 2026-11-23
 @from batches/r1106cbb/c1.qb
-@reviewed 2026-11-16
 > cdevtest rdetail brewinandchewin:fermenting/kippers
 > cdevtest tag item forge:raw_fishes
 > cdevtest recipes brewinandchewin:fermenting/kippers
 sleep 3
-look record whether kippers is listed, whether #forge:raw_fishes holds miners_delight:tentacles, and the ingredient list
+expect verb=recipes text=brewinandchewin:fermenting/kippers n=0\b
+look no kippers recipe (n=0); record whether #forge:raw_fishes holds miners_delight:tentacles
 reject \[cdevtest\] .*done=0
 
 ## SQ-CBB-06 | cooking boot: SQ-CBA-01 to -03 checks

@@ -104,9 +104,9 @@ look one fluid (Create liquid experience); no Cycle, Stockpile, Recovery: checke
 ## SQ-CEQ-01
 @group A
 @commands Same save: `/data get` the chest with the skinned backpack and the player inventory (tier shield, stepstool in the Curios feet slot); `/give` each tier shield; `/dumptags` item `creativeengineering:stepstools`, `curios:feet`, `creativeengineering:dragon_gear`, `creativeengineering:elytra_chestplates`, `creativeengineering:bonemeal_charms`
-@pass Items load with their NBT (skin tag kept); `creativeengineering:copper_shield` .. `dragon_shield` exist; the tags hold the same members as on boot 1
+@pass `creativeequipment:copper_shield` .. `dragon_shield` exist; tag sizes equal the baseline of the 2026-11-23 boot (r1123cd): stepstools 16, dragon_gear 17, elytra_chestplates 1, bonemeal_charms 1 (the r1106 boot 1 lists are not kept). Dropped 2026-11-23, no steps and no old-save build: the NBT half (skinned backpack chest and player inventory of the old save read with `/data get`)
 @fails ids registered under the wrong namespace; tag script missing from the jar tree
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 > cdevtest reg item ^creativeequipment:\w+_shield$
 > cdevtest tag item creativeequipment:stepstools
 > cdevtest tag item curios:feet
@@ -115,13 +115,13 @@ look one fluid (Create liquid experience); no Cycle, Stockpile, Recovery: checke
 > cdevtest tag item creativeequipment:bonemeal_charms
 expect verb=reg kind=item id=creativeequipment:copper_shield
 expect verb=reg kind=item id=creativeequipment:dragon_shield
-expect verb=tag kind=item tag=creativeequipment:stepstools n=1[6-9]
+expect verb=tag kind=item tag=creativeequipment:stepstools n=16\b
 expect verb=tag kind=item tag=curios:feet .*ids=\S*creativeequipment:\w+_stepstool
-expect verb=tag kind=item tag=creativeequipment:dragon_gear n=[1-9]
-expect verb=tag kind=item tag=creativeequipment:elytra_chestplates n=[1-9]
-expect verb=tag kind=item tag=creativeequipment:bonemeal_charms n=[1-9]
+expect verb=tag kind=item tag=creativeequipment:dragon_gear n=17\b
+expect verb=tag kind=item tag=creativeequipment:elytra_chestplates n=1\b
+expect verb=tag kind=item tag=creativeequipment:bonemeal_charms n=1\b
 reject verb=\S+ .*done=0
-look tag members equal boot 1's lists (r1106 dumps); the skinned backpack chest and the player inventory of the old save are read with /data get where that save put them
+look tag sizes 16 / 17 / 1 / 1 as printed; a larger count after a gear addition means update the baseline (2026-11-23)
 ## SQ-CEQ-02 | bone meal charm refund (dragon hoe in the off hand); bottled air underwater (shield block and air brake glide: client)
 @group A
 @commands Bot player: block a zombie hit with an iron shield and a copper shield; hold the air brake while gliding (`/effect` levitation off, elytra on); bone meal with the dragon hoe in the off hand (100 tries); glass bottle in water with the bot underwater at low air
@@ -233,21 +233,29 @@ reject verb=\S+ .*done=0
 look with amountPerInterval 50 and intervalTicks 200 the helmet goes 200 -> 150 (one pulse in 220 ticks; a second pulse gives 100: fine if the pulse timer started earlier)
 ## SQ-CEQ-08 | tune_tools / tune_armor attributes on echo, felsic, dragon gear and a wooden knife
 @group A
-@commands `tune_tools` / `tune_armor`: `/data get` attributes of an echo sword, felsic pickaxe, dragon helmet and a wooden knife (More Delight)
-@pass Values as the boilerplate in `func/tune_tools.js` / `tune_armor.js` (same as before the carve); echo pickaxe, axe, shovel, hoe and Felsic Scrap exist
+@commands `tune_tools` / `tune_armor`: `/data get` attributes of an echo sword, felsic pickaxe, the Dragon Loot armor (helmet, chestplate, upgraded chestplate, leggings, boots) and a wooden knife (More Delight)
+@pass Values as the boilerplate in `func/tune_tools.js` / `tune_armor.js`; dragon armor reads helmet 9, chestplate 12, upgraded chestplate 12, leggings 11, boots 8 (40 points, the Dragon Loot config `dragon_armor_protection_*`, tune_armor.js mirrors it, gear-tuning #2; was 8/13/11/8); echo pickaxe, axe, shovel, hoe and Felsic Scrap exist
 @fails Equipment startup pack not loaded, or loaded before the dicts
+@reviewed 2026-11-23
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-16
 > cdevtest attrs create_deep_dark:echo_sword
 > cdevtest attrs creativeequipment:echo_pickaxe
 > cdevtest attrs felsic_gear:felsic_pickaxe
 > cdevtest attrs dragonloot:dragon_helmet
+> cdevtest attrs dragonloot:dragon_chestplate
+> cdevtest attrs dragonloot:upgraded_dragon_chestplate
+> cdevtest attrs dragonloot:dragon_leggings
+> cdevtest attrs dragonloot:dragon_boots
 > cdevtest attrs moredelight:wooden_knife
 > cdevtest reg item ^creativeequipment:(echo_(pickaxe|axe|shovel|hoe)|felsic_scrap)$
 expect verb=reg kind=item regex=\S+ n=5\b
-count verb=attrs item=\S+ n=[1-9] == 5
+count verb=attrs item=\S+ n=[1-9] == 9
+expect verb=attrs slot=head attribute=minecraft:generic.armor op=ADDITION amount=9\b
+count verb=attrs slot=chest attribute=minecraft:generic.armor op=ADDITION amount=12\b == 2
+expect verb=attrs slot=legs attribute=minecraft:generic.armor op=ADDITION amount=11\b
+expect verb=attrs slot=feet attribute=minecraft:generic.armor op=ADDITION amount=8\b
 reject verb=\S+ .*done=0
-look the verb=attrs slot/attribute/amount lines: attack damage / speed / armor values against the boilerplate in Equipment's kubejs_startup func/tune_tools.js and tune_armor.js (development/creativeEquipment/src/main/resources/kubejs_startup/); same as before the carve (r1106 SPF-50 tags equal)
+look the verb=attrs slot/attribute/amount lines: attack damage / speed / armor values against func/tune_tools.js and func/tune_armor.js (development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/func/); dragon armor 9 + 12 + 12 + 11 + 8 (40 points counting one chestplate: 9 + 12 + 11 + 8); toughness 4.5 and knockback 0.3 on each piece
 
 ## CQ-CEQ-01
 @group client

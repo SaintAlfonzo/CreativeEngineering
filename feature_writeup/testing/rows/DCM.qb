@@ -93,15 +93,17 @@ look no absent-mods line names alexsmobs; the others name mods the chain lacks
 @draft needs an old-id fixture save made on the pre-M8 jars (placed racks, fridge, corner, oven, nests and crates with contents, the old config); no fixture builder exists for it; write the steps (cdevtest inv / be per position) with that builder
 ## SQ-CDFO-02 | no Cooking for Blockheads, Balm or Incubation: no class load error, no recipe / tag / loot error naming them
 @group B
-@commands CD chain without Cooking for Blockheads, Balm and Incubation
+@commands own step (`@modset port_chain chain +creativedevtools-*.jar`: the chain has no Cooking for Blockheads, Balm or Incubation; a drive step without `@modset` boots the full pack and tested nothing, r1123cd); boot
 @pass boots; no CfB / Incubation class load error, no recipe, tag or loot error naming `cookingforblockheads` or the nests in `latest.log`
 @fails a compartment class referenced outside its `init`
+@reviewed 2026-11-23
 @from batches/r1113/c3_ch1.qb
-@reviewed 2026-11-16
+@modset port_chain chain +creativedevtools-*.jar
+shell test "$(ls mods | grep -ciE "cookingforblockheads|balm|incubation")" = 0
 bootreject (NoClassDefFoundError|ClassNotFoundException).*(cookingforblockheads|blay09|incubation|balm)
 bootreject (Couldn't parse|Unknown item|Unknown tag|Can't find|Failed to load).*(cookingforblockheads|incubation|_nest\b)
 shell grep -ciE "cookingforblockheads|incubation" logs/latest.log; true
-# chain boot: ADD="creativedevtools-*.jar" to port_chain.sh (the /cdevtest reads); an absent item answers error="no such item ..." done=0
+# chain boot (the row's @modset adds creativedevtools for the /cdevtest reads); an absent item answers error="no such item ..." done=0
 > cdevtest item creativedelight:oak_spice_rack
 > cdevtest item creativedelight:duck_nest
 expect verb=item (item=creativedelight:oak_spice_rack class=|error="no such item creativedelight:oak_spice_rack)
@@ -110,15 +112,17 @@ look both compartment items absent (error line) or inert (class AirItem, or regi
 
 ## SQ-CDFO-03 | CfB present, Incubation absent: boots; rack half loads, nest half does not
 @group B
-@commands Pack with CfB but no Incubation; then Incubation without Alex's Mobs and Untitled Duck Mod
-@pass each boots; only the present half's content loads. Also CfB installed with `[compartments] cookingforblockheads = false`: no racks, no oven mixins, no rack merges
+@commands own step (`@modset port_chain chain +creativedevtools-*.jar +cookingforblockheads-*.jar +balm-forge-*.jar`: CfB and Balm present, Incubation absent; a drive step without `@modset` boots the full pack and tested nothing, r1123cd); boot
+@pass boots; only the rack half loads (rack item registered, nest item absent or inert). Dropped from this row 2026-11-23, no steps ever ran them: Incubation without Alex's Mobs and Untitled Duck Mod, and CfB with `[compartments] cookingforblockheads = false` (a separate boot with its own `@@prep`, to be written when wanted)
 @fails built-in pack mod list, mixin gate, `Compartments` switch
+@reviewed 2026-11-23
 @from batches/r1113/c3_ch2.qb
-@reviewed 2026-11-16
+@modset port_chain chain +creativedevtools-*.jar +cookingforblockheads-*.jar +balm-forge-*.jar
 bootexpect Done \(
 bootreject (NoClassDefFoundError|ClassNotFoundException).*(incubation|cookingforblockheads|blay09)
 bootreject (Couldn't parse|Unknown item|Unknown tag|Failed to load).*(incubation|cookingforblockheads)
-# chain boot: ADD="creativedevtools-*.jar" to port_chain.sh (the /cdevtest reads)
+# chain boot plus CfB and Balm, no Incubation (the row's @modset)
+shell ls mods | grep -ciE "cookingforblockheads|balm"; test "$(ls mods | grep -ciE "incubation")" = 0
 > cdevtest item creativedelight:oak_spice_rack
 expect verb=item item=creativedelight:oak_spice_rack class=(?!\S*AirItem)
 > cdevtest item creativedelight:duck_nest

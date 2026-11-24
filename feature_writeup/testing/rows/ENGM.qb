@@ -152,8 +152,9 @@ look no diff lines (or only keys added since 2026-11-06) between the old Enginee
 ## SQ-ENGM-05 | chain boot as r1106cbp p1: CD transition items, failed recipes under 50, no new Compat / Delight script error
 @group A (chain, CEPortTesting)
 @commands `@modset port_chain chain` with the eight builds copied into CEPortTesting (was `port_chain.sh` chain and `run_boots.sh '^p1$'`); boot
-@pass as r1106cbp p1; no new errors from Compat / Delight scripts
+@pass as r1106cbp p1; the `[creativedelight] transition items (N)` line prints a count (117 on the 2026-11-23 chain boot); failed recipes under 50; no new errors from Compat / Delight scripts
 @fails a moved script missing its `// requires:` guard
+@reviewed 2026-11-23
 @from batches/r1113/c3_ch1.qb
 @modset port_chain chain +creativedevtools-*.jar
 bootexpect Done \(
@@ -164,7 +165,7 @@ shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log | tail -1; n=$(grep 
 shell grep -hE "\[ERROR\]" logs/kubejs/startup.log logs/kubejs/server.log | grep -iE "creativecompat|creativedelight" | cut -c1-200 | head -10
 shell test "$(grep -hE "\[ERROR\]" logs/kubejs/startup.log logs/kubejs/server.log | grep -ciE "creativecompat|creativedelight")" = 0
 bootreject Missing or unsupported mandatory
-look CD transition count (89 in the full pack); r1106cbp p1 is the reference (scratch_run_2026-11-06.md 5); a script error naming a moved file = its `// requires:` guard is missing
+look CD transition count (117 on the 2026-11-23 chain boot, 89 in r1106cbp p1: items were added since); r1106cbp p1 is the reference (scratch_run_2026-11-06.md 5); a script error naming a moved file = its `// requires:` guard is missing
 
 ## CQ-ENGM-01
 @group client (full pack)

@@ -11,32 +11,33 @@
 @@text **HOLD: run this section only after the Common suite is finished.** Order: SQ-CGE and its re-run list (Common 2026-11-08 00:01 jar), then every FAIL or PARTIAL from that run debugged and rerun until the Common rows are complete; only then boot for SQ-GAP. Sweep method: every TODO row dated 2026-11-05 to 2026-11-08 in Built / Testing / In Progress with no test ID (13 rows), plus changelog bullets with no table row (Botany Pot tooltip, grape seed tooltip, Pineapple and Tea planting). Features that already have rows (Tempad SQ-TP, Portals SQ-IP / SQ-PG, cans, cookware, skewers, crops, lichen, Rose Gold recipes in SQ-CDFW-08, Nether DH CQ-PNE) are not repeated; swept and found covered: `dishes/meals #8` rotten ham tags (SQ-T1-02), `creativesplit/regression #21` textures (CQ-ENGM-01, extended by CQ-GAP-01), loading tips (SQ-CC-01..03). Jars: whatever Common run left installed in `mods/` plus the 2026-11-07 Engineering, Delight, Compat 23:10 builds; no new build is needed.
 @@text
 @@table
-## SQ-GAP-01 | jams: one jar per Cooking Pot jam, 400-tick Fruits Delight jams, jars stack to 64
+## SQ-GAP-01 | jams: one jar per Cooking Pot jam, 400-tick Cooking Pot jams, jars stack to 64
 @group A (full pack)
 @commands jams (TODO `dishes/jams #9`, changelog Jams): `/cdevtest rdetail` on every recipe id that matches `vintagedelight:*jam*` and `fruitsdelight:*jam*` (`/cdevtest recipes` filter, or grep `kubejs/exported/` recipe dump); read output count, cook time
-@pass every Vintage Delight jam recipe outputs 1 item; every Fruits Delight jam cooks 400 ticks in the Cooking Pot; the jam jar items stack to 64 (`/cdevtest item vintagedelight:cherry_jam_jar` or the item dump `maxStackSize`)
+@pass every Vintage Delight jam jar Cooking Pot recipe (10 on 2026-11-23, incl. `creativedelight:farmersdelightcooking/*`) outputs 1 item and cooks 400 ticks; Fruits Delight jams are `create:mixing` (`fruitsdelight:mixing/flowing_*_jam`), not Cooking Pot recipes; the jam jar items stack to 64 (`/cdevtest item vintagedelight:cherry_jam_jar` or the item dump `maxStackSize`)
 @fails `jams.js`, jar JSONs in the Delight jar, stack-size policy script
+@reviewed 2026-11-23
 @from batches/r1113/c4_a.qb
-@reviewed 2026-11-16
 > cdevtest rdetail jam_jar max=400
 waitlog \[cdevtest\] verb=rdetail text=jam_jar n= 30
-count \[cdevtest\] verb=rdetail id=\S+ serializer=farmersdelight:cooking result=vintagedelight:\S*jam_jar\*1 >= 9
+count \[cdevtest\] verb=rdetail id=\S+ serializer=farmersdelight:cooking result=vintagedelight:\S*jam_jar\*1 >= 10
 reject \[cdevtest\] verb=rdetail id=\S+ serializer=farmersdelight:cooking result=vintagedelight:\S*jam_jar\*([2-9]|\d\d+)
 > zc4 cooktime jam
 waitlog \[zc4\] done 30
 > cdevtest item vintagedelight:cherry_jam_jar
 expect \[cdevtest\] verb=item item=vintagedelight:cherry_jam_jar .*max_stack=64
-look every fruitsdelight jam in the zc4 cook lines has time=400 (if none is listed, Fruits Delight jams are not Cooking Pot recipes in this build: record which serializer makes them)
+look every jam jar cook line in the zc4 output has time=400 (10 recipes); no Fruits Delight jam is listed there (they are create:mixing)
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GAP-02 | Moobloom rules idempotent, checker clean (offline)
 @group A
 @commands Moobloom rules (TODO `flowers #2`): offline `python3 tools/gen_moobloom_rules.py` then `python3 tools/check_moobloom_data.py`; `git diff --stat -- kubejs/data`
-@pass no rule changes on a rerun (37 rules, idempotent), checker prints no errors
+@pass no rule changes on a rerun (idempotent), checker prints no errors and exit 0 (11 variants, 10 breeding rules, 38 spawn rules on 2026-11-23)
 @fails `moobloom_rules.json` manual block, `wild_flowers.json` drift (mooblooms.md 2.8)
+@reviewed 2026-11-23
 @from batches/r1113/c4_a.qb
 shell cd $INST && python3 tools/gen_moobloom_rules.py --check; echo "gen exit=$?"; python3 tools/check_moobloom_data.py 2>&1 | tail -8; echo "check exit=$?"
-look gen --check prints no change and exit 0 (37 rules); checker prints no errors
+look gen --check prints no change and exit 0; checker prints no errors and counts 11 variants, 10 breeding rules, 38 spawn rules
 
 ## SQ-GAP-03 | Bushier Flowers worldgen off: 5 forge:none modifiers, zero bushierflowers blocks after pregen
 @phase long
@@ -126,9 +127,10 @@ reject \[cdevtest\] verb=\S+ done=0
 @commands Rename checks that need no client: `grep -rn "Empty Terrarium\|Large Flower Box\|Smooth Tinted Glass" kubejs/assets development/*/src/main/resources \| head`; `/zq` lang lookup not available, so also read the generated lang dump
 @pass `block.redeco.jar` = Empty Terrarium, Supplementaries flower box = Large Flower Box, tinted framed glass = Smooth Tinted Glass (three variants), refined gelatin id kept with name Gelatin
 @fails `names.js` in Compat and Delight, lang override priority
+@reviewed 2026-11-23
 @from batches/r1113/c4_a.qb
-shell cd $INST && grep -rn "Empty Terrarium\|Large Flower Box\|Smooth Tinted Glass" kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-220 | head -20; grep -rn '"Gelatin"' kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-200 | head -5
-look block.redeco.jar = Empty Terrarium; Supplementaries flower box = Large Flower Box; tinted framed glass = Smooth Tinted Glass (three variants); refined gelatin keeps its id with the name Gelatin (shell output)
+shell cd $INST && grep -rn "Empty Terrarium\|Large Flower Box\|Smooth Tinted Glass" kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-220 | head -20; grep -rn "refinedgelatin.*Gelatin" kubejs/assets development/*/src/main/resources 2>/dev/null | cut -c1-200 | head -5
+look block.redeco.jar = Empty Terrarium; Supplementaries flower box = Large Flower Box; tinted framed glass = Smooth Tinted Glass (three variants); refined gelatin keeps its id with the name Gelatin: `item.hostiledelight.refinedgelatin = 'Gelatin'` in kubejs/assets/creativedelight/kubejs/hostiledelight/names.js (single quotes; shell output)
 
 ## SQ-GAP-07 | planting rules: pineapple and tea on farmland, rich soil farmland, fertile soil; grape seeds off farmland
 @group A (survival bot)

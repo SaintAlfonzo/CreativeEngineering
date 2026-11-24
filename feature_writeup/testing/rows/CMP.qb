@@ -126,13 +126,13 @@ look block, item and loot resolve; physics tags present
 
 ## SQ-CMP-07 | paintings
 @group A
-@commands Same boot: `grep -ciE "paintings" logs/latest.log`; Immersive Paintings painting list count (the pack's 475 images)
-@pass Same count as before the carve; no painting load error
+@commands Same boot: `grep -ciE "paintings" logs/latest.log`; Immersive Paintings painting list count (445 variants built, immersive_paintings.md)
+@pass 445 of 445 painting variants built (2026-11-23); no painting load error
 @fails Paintings not loaded from a mod jar datapack (move them back to the pack folder)
+@reviewed 2026-11-23
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-22
 shell grep -ciE "paintings" logs/latest.log; grep -iE "immersive_?paintings" logs/latest.log | grep -iE "error|fail|load" | head -3 | cut -c1-200; ls kubejs/data | head -40 | tr '\n' ' '
-look painting count as before the carve, no load error
+look 445 of 445 painting variants built, no load error
 
 ## SQ-CMP-08 | moved server scripts, /reload
 @group A

@@ -37,11 +37,11 @@ look the carry log line (`[swaps] config sections ... carried` or similar) in la
 
 ## SQ-CIF-02 | Better Beacons potions under creativebrewing: mixes exist; drinking phantom_bane gives Better Beacons Phantom Bane
 @group B (same world)
-@commands before the swap: put a `creativecommon:long_reach` potion, a `creativecommon:long_phantom_bane` tipped arrow in a chest (2026-11-06 build); after: `/data get block` on the chest; `/zq recipes` brewing mixes for `creativebrewing:long_long_reach`; `/give @p potion{Potion:"creativebrewing:phantom_bane"}` and drink
-@pass chest items read `creativebrewing:` ids; mixes present; drinking gives Better Beacons Phantom Bane
+@commands brewing mixes for `creativebrewing:long_long_reach`; `/give @p potion{Potion:"creativebrewing:phantom_bane"}` and drink
+@pass mixes present (`creativebrewing:long_long_reach` registered, long_reach + redstone brews it); drinking `creativebrewing:phantom_bane` gives Better Beacons Phantom Bane (about 3592 ticks on 2026-11-23). Dropped 2026-11-23: the old-world half (a chest with `creativecommon:long_reach` potions from a 2026-11-06 save; no 2026-11-06 build is kept to make the save; the swap list itself is covered by the remap rows)
 @fails swap list not read (data/creativebrewing/swaps), PotionByNameRemapMixin
+@reviewed 2026-11-23
 @from batches/r1113/c3_b1.qb
-@reviewed 2026-11-20
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_b1 SQ-C3B-setup
 > forceload add 0 0
 > setblock 0 199 0 minecraft:stone
@@ -62,7 +62,7 @@ waitlog \[cdevtest\] verb=pbot\.useitem bot=cb end=finish item=minecraft:potion 
 waitlog \[cdevtest\] verb=player name=cb effects= 20
 expect \[cdevtest\] verb=player name=cb effects=\S*better_beacons:phantom_bane:
 reject \[cdevtest\] .*(done=0|error=)
-look old-world half (a chest with creativecommon:long_reach potions from an 2026-11-06 save) not run: no 2026-11-06 build kept to make the save
+look phantom_bane drink gives better_beacons:phantom_bane with a duration near 3592 ticks
 
 ## SQ-CIF-03 | Farmer's Respite coffee: Caffeinated plus a hidden Phantom Bane of the same length; rest stat not -24000; reset to 0 when it ends
 @group B (same boot)

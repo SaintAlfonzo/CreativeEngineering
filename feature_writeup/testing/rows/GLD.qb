@@ -20,18 +20,18 @@
 @@table
 ## SQ-SLT-01 | Salt and Create: The Salt nested in Creative Delight
 @group A
-@reviewed 2026-11-20
 @commands Boot. `grep -nE "salt\|create__the_salt" srv/logs/latest.log \| grep -iE "error\|exception\|mixin"`; `ls srv/mods \| grep -iE "^salt-\|create_salt"`
-@pass Server reaches `Done`. latest.log lists mod `salt` version `1.2.4.1-ce-19.2-01` and `create__the_salt` version `1.19.2-1.1.0-ce-19.2-01` (Jar-in-Jar from the creativedelight jar); no `Mixin apply failed` / `InvalidMixinException` for `mixins.salt.json`; no `creativedelight.mixins.json` error naming `SaltRockNoDissolveMixin`; no duplicate-mod error for `salt` / `create__the_salt`; grep in `srv/mods` empty
+@pass Server reaches `Done`. latest.log lists mod `salt` version `1.2.4.1-ce-19.2-04` (`repackedSalt-1.2.4.1-ce-19.2-04`) and `create__the_salt` version `1.19.2-1.1.0-ce-19.2-01` (Jar-in-Jar from the creativedelight jar); no `Mixin apply failed` / `InvalidMixinException` for `mixins.salt.json`; no `creativedelight.mixins.json` error naming `SaltRockNoDissolveMixin`; no duplicate-mod error for `salt` / `create__the_salt`; grep in `srv/mods` empty
 @fails Duplicate mod: the old upstream jars still in `mods/` (CD `replaces_jars` globs). Mixin error for `mixins.salt.json`: `mixin_configs` in `members/salt/gradle.properties`. `SaltRockNoDissolveMixin` missing class: stale `creativedelight.mixins.json`
+@reviewed 2026-11-23
 @from batches/r1103/sA_2.qb
 bootreject (Mixin apply failed|InvalidMixinException).*(salt|create__the_salt)
 bootreject SaltRockNoDissolveMixin
 bootreject DuplicateModsFound|Found duplicate mods
 shell grep -nE "salt|create__the_salt" logs/latest.log | grep -iE "error|exception|mixin" | head -10 || true
-shell grep -hoE "(salt|create__the_salt)[^a-z_][^ ]*(1\.2\.4\.1-ce-19\.2-01|1\.19\.2-1\.1\.0-ce-19\.2-01)" logs/debug.log logs/latest.log | sort -u | head
+shell grep -hoE "(salt|create__the_salt)[^a-z_][^ ]*(1\.2\.4\.1-ce-19\.2-04|1\.19\.2-1\.1\.0-ce-19\.2-01)" logs/debug.log logs/latest.log | sort -u | head
 shell ! ls mods | grep -iE "^salt-|create_salt"
-look mod salt 1.2.4.1-ce-19.2-01 and create__the_salt 1.19.2-1.1.0-ce-19.2-01 listed (Jar-in-Jar); the error grep above shows nothing from Salt
+look mod salt 1.2.4.1-ce-19.2-04 and create__the_salt 1.19.2-1.1.0-ce-19.2-01 listed (Jar-in-Jar); the error grep above shows nothing from Salt (unrelated Create mixing input-count WARNs may show)
 
 ## SQ-SLT-02 | Salt's access transformer reaches the nested jar
 @group A

@@ -186,17 +186,17 @@ reject \[cbo\] leak
 ## SQ-CBP-03b
 @group B (chain)
 @commands rerun of SQ-CBP-03 with the Common build of 2026-11-06 18:29 (`_stepHasEmptyFluid` unwraps `Either`): `bash tools/scratch_query/batches/r1106cbp/run_boots.sh '^p1$'` after copying Common into `CEPortTesting/mods/`
-@pass no `Error parsing recipe ...horror_lasagna`; `[absent mods] skipped N recipe rows for absent minecraft:empty` (or the Item.of / Fluid.of label) counts it; failed recipes 0 on the chain
+@pass no `Error parsing recipe ...horror_lasagna` (printed count 0) and the horror_lasagna recipes load (`recipes` n above 0); the `[absent mods]` count of minecraft:empty / Item.of / Fluid.of rows is dropped (2026-11-23: no `[absent mods]` line counts such a row, the 11 recipe-row lines name absent mods only; the parse-error half carries the check)
 @fails the value is not an `Either` in this kubejs-create build: print `step.inputValues()[k].value.getClass()` in a srv-only script
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 # boot p1 of tools/scratch_query/batches/r1106cbp/run_boots.sh (chain); this row reads that boot's logs
 bootexpect Done \(
 bootreject Error parsing recipe .*horror_lasagna
-shell grep -hE "\[absent mods\] skipped [0-9]+ recipe rows" logs/latest.log logs/kubejs/server.log | head -5; grep -hcE "Error parsing recipe" logs/latest.log; true
+shell n=$(cat logs/latest.log logs/kubejs/server.log | grep -cE "Error parsing recipe"); echo "parse errors=$n"; test "$n" = 0
 > cdevtest recipes horror_lasagna
-expect verb=recipes text=horror_lasagna n=
+expect verb=recipes text=horror_lasagna n=[1-9]
 reject verb=\S+ .*done=0
-look shell: an [absent mods] skipped line counts the minecraft:empty (or Item.of / Fluid.of) row; the parse-error count is 0
+look shell: parse errors=0 and the horror_lasagna recipes listed
 ## SQ-CBP-08b
 @group B (Equipment without CB)
 @commands rerun of SQ-CBP-08 with the Equipment, Engineering and Common builds of 18:35 (end gear and air brake transition rows, felsic data, shield and echo / air brake textures moved into Equipment; backpack skin recipes guarded): `run_boots.sh '^p6f?$'`

@@ -51,12 +51,15 @@ bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDef
 ## SQ-CBA-03 | startup script order and script errors
 @group A (chain)
 @commands same boot: `shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log`; `shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log`; `shell ! grep -nE "ReferenceError\|TypeError\|EvaluatorException\|is not defined\|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log`; `kjsexpect Skipped creativebrewing:kubejs/alexsmobs/lava_vision.js: Mod alexsmobs is not loaded`; `kjsexpect Loaded script creativebrewing:kubejs/vinery/wandering_trades.js`
-@pass all shell steps exit 0; only `alexsmobs/lava_vision.js` is skipped among the 12 `creativebrewing:kubejs/` server scripts
+@pass all shell steps exit 0; with PneumaticCraft or Lightman's absent the log has at most one INFO line `[loot-tuning] ban <name>: <mod> not loaded, switch check skipped` and no WARN; only `alexsmobs/lava_vision.js` is skipped among the 12 `creativebrewing:kubejs/` server scripts
 @fails the script and line in the error: a row naming an optional mod without a `global.has` guard (`python3 tools/guard_check.py --jar creativebrewing`), or a pack-folder global the chain does not define (plan_cb_publish.md 1.1)
+@reviewed 2026-11-23
 @from batches/r1106cba/b1.qb passed
 shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
 shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -hE "WARN.*\[loot-tuning\] ban" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell grep -h "\[loot-tuning\] ban" logs/kubejs/server.log | head -3; test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "\[loot-tuning\] ban .*not loaded, switch check skipped")" -le 1
 shell grep -E "Skipped creativebrewing:kubejs/|Loaded script creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
 kjsexpect Skipped creativebrewing:kubejs/alexsmobs/lava_vision.js: Mod alexsmobs is not loaded
 kjsexpect Loaded script creativebrewing:kubejs/vinery/wandering_trades.js

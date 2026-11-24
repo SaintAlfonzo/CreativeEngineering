@@ -616,14 +616,14 @@ sleep 15
 shell grep -hiE "melting" logs/latest.log | grep -iE "error|warn|exception" | head -5; grep -ciE "\[ERROR\]" logs/kubejs/server.log; true
 look fire and lava pairs as in -02 / -03; tags line salt 0; no melting error after /reload either
 
-## SQ-MELT-10 | boot log: [melting] tags fire >= 100, source-driven magma only, no low-light warning; fire tag ids
+## SQ-MELT-10 | boot log: [melting] tags fire >= 100, source-driven magma block and molten nether bricks, no low-light warning; fire tag ids
 @group A
 @commands Boot log check, no world steps: grep latest.log for `[melting]`; `/dumpall`, then check every id of the 3.8 table against `kubejs/exported/tags/block_tags.json` `creativecommon:melting/fire`
-@pass `[melting] tags:` fire count >= 100; every 3.8 table id in the dumped tag with the whole pack (vanilla + the 3.8 table); the source-driven list holds `minecraft:magma_block (light 3)` only; no `fire tag blocks with light below 4 that do not random tick` warning (if present, each named block is a finding: owner decides source-driven or drop it)
+@pass `[melting] tags:` fire count >= 100; every 3.8 table id in the dumped tag with the whole pack (vanilla + the 3.8 table); the source-driven list holds `minecraft:magma_block` and molten nether bricks (both light 3; molten bricks join magma, melting.md 2026-11-17); no `fire tag blocks with light below 4 that do not random tick` warning (if present, each named block is a finding: owner decides source-driven or drop it)
 @fails a glob matched nothing: id renamed in a mod update (re-grep a fresh `/dumpall`); a low-light block: check it melts at 1 only and report
+@reviewed 2026-11-23
 @owner true
 @from batches/r1115/p3_a1.qb
-@reviewed 2026-11-16
 bootexpect \[melting\] tags: \d+ meltable
 bootexpect \[melting\] random ticks on for \d+ extra blocks
 bootreject fire tag blocks with light below
@@ -635,7 +635,7 @@ shell grep -hE "\[melting\]" logs/latest.log | sed -E 's/^.*\[melting\]/[melting
 > cdevtest tag block creativecommon:melting/meltable_slow
 waitlog \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/meltable_slow n= 30
 expect \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/fire n=\d{3,}
-look fire count >= 100 in the [melting] tags line; source-driven list = magma_block (light 3) only; every 3.8 table id in the ids= of the verb=tag ... tag=creativecommon:melting/fire line
+look fire count >= 100 in the [melting] tags line; source-driven list = magma_block and molten nether bricks (both light 3); every 3.8 table id in the ids= of the verb=tag ... tag=creativecommon:melting/fire line
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-MELT-P1

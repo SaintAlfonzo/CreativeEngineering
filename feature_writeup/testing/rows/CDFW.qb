@@ -79,12 +79,12 @@ reject verb=makes id=fruitsdelight:\S*_(smoking|campfire)
 count verb=makes id=creativedelight:(smelting|smoking|campfirecooking)/\S+ result=fruitsdelight:(baked_durian|baked_pear|dried_persimmon)\*1 == 9
 reject \[cdevtest\] .*done=0
 
-## SQ-CDFW-06 | cooked family: three recipes each, old mod ids gone
+## SQ-CDFW-06 | cooked family: smelting, smoking, campfire (eggs: smoking and campfire only), old mod ids gone
 @group A
 @commands Same lookup for Grilled Ghast, Cooked Rotten Ham, Fried Turtle Egg, Cooked Arthropod, Cooked Duck Fillet, Cooked Perch / Pike Slice, Roasted Acorn, Farmer's Delight Fried Egg
-@pass three recipes each, `creativedelight:`, 0.35 xp, 200 / 100 / 600; no `hostiledelight:cghast_*`, `cookrothamrecp*`, `fteggrecp*`, `miners_delight:cooked_arthropod`, `abnormals_delight:upgrade_aquatic/cooked_*_slice*`
+@pass ghast, ham, arthropod, duck, perch, pike, acorn: smelting, smoking and campfire (three each); Fried Turtle Egg and Fried Egg: smoking and campfire only (no furnace recipe by design, food.md 3.7), all `creativedelight:`, 0.35 xp, 200 / 100 / 600; no `hostiledelight:cghast_*`, `cookrothamrecp*`, `fteggrecp*`, `miners_delight:cooked_arthropod`, `abnormals_delight:upgrade_aquatic/cooked_*_slice*`
 @fails family removal missed a mod recipe
-@reviewed 2026-11-20
+@reviewed 2026-11-23
 @from batches/r1102b/s3_A.qb
 # r1120lr batch fault: Hostile Delight ids have no underscores (grilledghast, cookedrottenham, friedturtleegg)
 > cdevtest makes hostiledelight:grilledghast
@@ -100,7 +100,7 @@ reject verb=makes id=hostiledelight:(cghast_|cookrothamrecp|fteggrecp)
 reject verb=makes id=miners_delight:cooked_arthropod
 reject verb=makes id=abnormals_delight:upgrade_aquatic/cooked_\S*_slice
 reject \[cdevtest\] .*done=0
-look each item: three creativedelight: smelting / smoking / campfirecooking lines (0.35 xp, 200 / 100 / 600 ticks are in the recipe dump only)
+look each item: three creativedelight: smelting / smoking / campfirecooking lines, the two eggs two (smoking, campfirecooking) (0.35 xp, 200 / 100 / 600 ticks are in the recipe dump only)
 
 ## SQ-CDFW-07 | knife cuts of catfish, salmon, cod, duck
 @group A

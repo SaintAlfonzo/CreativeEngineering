@@ -73,8 +73,8 @@ reject verb=\S+ .*done=0
 @commands recipe probe: id `minecraft:smoker`, and every recipe with output `minecraft:smoker`
 @pass no `minecraft:smoker` id; only makers are `quark:building/crafting/furnaces/deepslate_smoker`, `blackstone_smoker` ; Nether's Delight's nether brick smoker is its own block, not a `minecraft:smoker` maker
 @fails CD `minecraft/recipes.js` line 13; Quark Variant Furnaces off in `quark-common.toml`
+@reviewed 2026-11-23
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
 > cdevtest recipes minecraft:smoker
 > cdevtest makes minecraft:smoker
 waitlog verb=makes item=minecraft:smoker n= 30
@@ -82,7 +82,7 @@ expect verb=recipes text=minecraft:smoker n=0
 expect id=quark:building/crafting/furnaces/deepslate_smoker result=minecraft:smoker\*
 expect id=quark:building/crafting/furnaces/blackstone_smoker result=minecraft:smoker\*
 reject verb=makes id=(?!quark:building/crafting/furnaces/(deepslate|blackstone)_smoker |nethersdelight:)\S+ result=minecraft:smoker\*
-look the third maker is Nether's Delight's nether brick smoker
+look only the two Quark smokers make minecraft:smoker; Nether's Delight's nether brick smoker is its own block (nethersdelight:), not a maker
 reject verb=\S+ .*done=0
 
 ## SQ-RCO-02 | cake makers: the two _manual_only, oven, 7-slice reassembly only
@@ -259,10 +259,10 @@ reject verb=\S+ .*done=0
 ## SQ-FO-05 | egg stacks 64, stack sizes applied
 @group A
 @commands `/zq item minecraft:egg`; `/zq item quark:egg_parrot_blue`; `/zq item alexsmobs:emu_egg`; `grep -n "\[stack_sizes\]" logs/kubejs/startup.log`
-@pass max stack 64 each; `set N stack sizes` line (about 1341), no `no item_dict key`
+@pass max stack 64 each; `set N stack sizes` line (about 1391 on 2026-11-23), no `no item_dict key`
 @fails egg rule in `gen_stack_sizes.py`
+@reviewed 2026-11-23
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
 bootexpect \[stack_sizes\] set \d+ stack sizes
 bootreject no item_dict key
 > cdevtest item minecraft:egg
@@ -272,7 +272,7 @@ waitlog verb=item item=alexsmobs:emu_egg 30
 count verb=item item=(minecraft:egg|quark:egg_parrot_blue|alexsmobs:emu_egg) .*max_stack=64\b == 3
 shell grep -hoE "\[stack_sizes\] set [0-9]+ stack sizes" logs/latest.log logs/kubejs/startup.log | head -2; true
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|\[(zsb|zlbs)\] (error|unknown)|verb=\S+ .*done=0)
-look the stack_sizes count is about 1341
+look the stack_sizes count is about 1391 (1341 earlier: items were added since)
 
 @@text
 @@text ### SQ-CF Spice of Life milestone speed fix, 2026-11-02 ([food.md](../food.md) section 7 FO-32, TODO `food/types-and-tuning #4`)

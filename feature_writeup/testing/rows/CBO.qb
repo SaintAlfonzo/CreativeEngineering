@@ -63,8 +63,9 @@ reject \[cdevtest\] .*done=0
 ## SQ-CBO-02 | chain: potion, swap, alcohol, bottling, JEED counts (reference)
 @group A (chain)
 @commands same boot: `shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]" logs/kubejs/startup.log logs/kubejs/server.log`; `bootreject Lingerification:`; `bootreject registered [0-9]+ dragon-breath`
-@pass record every count (reference for -10 and the single boots); `better_beacons not present - skipping` for long_reach and phantom_bane; `re-added 0 dragon-breath`; no Lingerification line (needs Immersive Engineering); no `[CE potions] mix skipped` or `effect .* not registered` WARN (a guarded mix that still ran)
+@pass record every count (reference for -10 and the single boots); `better_beacons not present - skipping` for long_reach and phantom_bane; `re-added 0 dragon-breath`; no Lingerification line (needs Immersive Engineering); no `[CE potions] mix skipped` or `effect .* not registered` WARN (a guarded mix that still ran); the strong Bad Omen -> `buzzier_bees:strong_luck` mix is only added with Buzzier Bees loaded, so no WARN naming strong_luck here
 @fails a `mix skipped` line names the mix: its block in `potions.js` lacks the guard; a Lingerification line: the `CreativeBrewing.commonSetup` Create + IE check
+@reviewed 2026-11-23
 @from batches/r1106cbp/p1_chain.qb
 @modset port_chain chain +creativedevtools-*.jar
 shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
@@ -73,6 +74,7 @@ bootreject registered [0-9]+ dragon-breath
 shell grep -h "better_beacons not present" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | head -4
 shell grep -c "better_beacons not present" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log; true
 shell ! grep -hE "\[CE potions\] mix skipped|effect .* not registered" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell ! grep -hE "WARN.*strong_luck" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
 look counts recorded; better_beacons skip lines for long_reach and phantom_bane; re-added 0 dragon-breath
 
 ## SQ-CBO-03 | chain: absent-mods summary, NCH failure count
@@ -150,8 +152,9 @@ count entity data: 94\.0 == 1
 ## SQ-CBO-10 | optional: 24 of 24, namespaces, potions registered
 @group A (optional)
 @commands new OUT: `port_chain.sh server OUT cbo10 A optional`; boot; checks S; `> cbo all`
-@pass `expect mods loaded 24 of 24`; `effects leaks 0`; namespaces now include `alexsmobs`, `botania`, `dragonloot`, `felsic_gear`, `immersive_armors`, `immersiveengineering`, `supplementaries`, `everythingcopper`, `create_deep_dark`; all seven `potion ... registered: true` except `quark:resilience` and `upgrade_aquatic:restfulness` (record: CB removes their brews, the potions stay registered)
+@pass `expect mods loaded 24 of 24`; `effects leaks 0`; effects-only check (the item namespaces of the Armor / Tool Effects rows are Creative Equipment's since 2026-11-06, no Equipment jar in this set); all seven `potion ... registered: true` except `quark:resilience` and `upgrade_aquatic:restfulness` (record: CB removes their brews, the potions stay registered)
 @fails an optional mod failing to load: its own required jar is missing from `OPTIONAL` in port_chain.sh (the FML list names it); a leak: the row's effect id belongs to a mod other than the one its guard checks
+@reviewed 2026-11-23
 @from batches/r1106cbp/p3_optional.qb
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
@@ -162,10 +165,7 @@ expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 24 of 24
-# judge-3, 2026-11-18: the probe counts ITEM namespaces of the Armor / Tool Effects rows; since the gear rows moved to
-# Creative Equipment (2026-11-06) the items are dragonloot, everythingcopper, felsic_gear, immersive_armors, vanilla and
-# the echo tools (creativeequipment:); alexsmobs / botania / IE / supplementaries only supply effects, not items
-expect effects items by namespace: .*creativeequipment=.*dragonloot=.*everythingcopper=.*felsic_gear=.*immersive_armors=.*minecraft=
+# 2026-11-23 (r1123cd judges): Armor / Tool Effects rows moved to Creative Equipment, absent from this chain set, so the row checks the effects probe only (no item namespaces); the gear rows are SQ-CEQ's.
 > cbo potions
 waitlog \[cbo\] done 30
 look record the potion ... registered lines (all true except quark:resilience and upgrade_aquatic:restfulness expected)
@@ -513,8 +513,9 @@ bootreject EchoArmorEffectProcedureMixin
 ## SQ-CBO-27 | chain + dragonloot-*.jar
 @group A (chain + DragonLoot)
 @commands `ADD="dragonloot-*.jar"`; boot; checks S; `> cbo effects`
-@pass namespaces include `dragonloot`; leaks 0
+@pass `mods loaded 1 of 24: dragonloot`; leaks 0 (effects-only: item namespaces are Creative Equipment's since 2026-11-06, not in this set)
 @fails `has('dragonloot')` blocks
+@reviewed 2026-11-23
 @from batches/r1106cbp/s27.qb passed
 @modset port_chain chain +creativedevtools-*.jar +dragonloot-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
@@ -526,13 +527,14 @@ expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: dragonloot$
-expect effects items by namespace: .*\bdragonloot=
+# 2026-11-23 (r1123cd judges): Armor / Tool Effects rows moved to Creative Equipment, absent from this chain set, so the row checks the effects probe only (no item namespaces); the gear rows are SQ-CEQ's.
 
 ## SQ-CBO-28 | chain + everythingcopper-*.jar
 @group A (chain + Everything Copper)
 @commands `ADD="everythingcopper-*.jar"`; boot; checks S; `> cbo effects`
-@pass namespaces include `everythingcopper`; leaks 0 (the Immersive Engineering `conductive` row inside the copper block must be skipped or guarded: a leak `effect immersiveengineering:conductive` here is a finding)
+@pass `mods loaded 1 of 24: everythingcopper`; leaks 0 (effects-only: item namespaces are Creative Equipment's since 2026-11-06, not in this set) (the Immersive Engineering `conductive` row inside the copper block must be skipped or guarded: a leak `effect immersiveengineering:conductive` here is a finding)
 @fails `armor_effects.js` copper block: nest the IE effect in `has('immersiveengineering')`
+@reviewed 2026-11-23
 @from batches/r1106cbp/s28.qb
 @modset port_chain chain +creativedevtools-*.jar +everythingcopper-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
@@ -544,7 +546,7 @@ expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: everythingcopper$
-expect effects items by namespace: .*\beverythingcopper=
+# 2026-11-23 (r1123cd judges): Armor / Tool Effects rows moved to Creative Equipment, absent from this chain set, so the row checks the effects probe only (no item namespaces); the gear rows are SQ-CEQ's.
 reject leak .*immersiveengineering:conductive
 
 ## SQ-CBO-29 | chain + FarmersRespite-*.jar
@@ -574,8 +576,9 @@ reject \[cdevtest\] .*done=0
 ## SQ-CBO-30 | chain + Felsic Gear *.jar
 @group A (chain + Felsic Gear)
 @commands `ADD="Felsic Gear *.jar"`; boot; checks S; `> cbo effects`
-@pass namespaces include `felsic_gear`; leaks 0 (its rows name `better_beacons:long_reach`: a leak on that effect means the row needs both guards)
+@pass `mods loaded 1 of 24: felsic_gear`; leaks 0 (effects-only: item namespaces are Creative Equipment's since 2026-11-06, not in this set) (its rows name `better_beacons:long_reach`: a leak on that effect means the row needs both guards)
 @fails `has('felsic_gear')` block in `armor_effects.js`
+@reviewed 2026-11-23
 @from batches/r1106cbp/s30.qb passed
 @modset port_chain chain +creativedevtools-*.jar "+Felsic Gear *.jar"
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
@@ -587,7 +590,7 @@ expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: felsic_gear$
-expect effects items by namespace: .*\bfelsic_gear=
+# 2026-11-23 (r1123cd judges): Armor / Tool Effects rows moved to Creative Equipment, absent from this chain set, so the row checks the effects probe only (no item namespaces); the gear rows are SQ-CEQ's.
 reject leak .*better_beacons
 
 ## SQ-CBO-31 | chain + fruitsdelight-*.jar
@@ -630,14 +633,16 @@ look winemaker count above SQ-CBA-10's
 ## SQ-CBO-32 | chain + geodeforge-*.jar
 @group A (chain + Geode)
 @commands `ADD="geodeforge-*.jar"`; boot; checks S; `> cdevtest potion minecraft:thick geode:wrappist_shard`
-@pass `-> nothing`, no `mix skipped` WARN (Better Beacons absent)
+@pass `-> nothing`, no `mix skipped` WARN (Better Beacons absent); the strong Bad Omen -> `buzzier_bees:strong_luck` mix is only added with Buzzier Bees loaded, so no strong_luck WARN here; at most one INFO `[loot-tuning] ban ... not loaded, switch check skipped` line, no loot WARN
 @fails the Geode block must stay inside the Better Beacons block
+@reviewed 2026-11-23
 @from batches/r1106cbp/s32.qb passed
-@reviewed 2026-11-16
 @modset port_chain chain +creativedevtools-*.jar +geodeforge-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -hE "WARN.*\[loot-tuning\] ban" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell grep -h "\[loot-tuning\] ban" logs/kubejs/server.log | head -3; test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "\[loot-tuning\] ban .*not loaded, switch check skipped")" -le 1
 > cbo all
 waitlog \[cbo\] done 30
 expect effects leaks 0$
@@ -648,13 +653,15 @@ expect mods loaded 1 of 24: geode$
 sleep 3
 expect verb=potion potion=\S+ ingredient=\S*wrappist_shard output="?nothing
 shell ! grep -hE "mix skipped" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell ! grep -hE "WARN.*strong_luck" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
 reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-33 | chain + immersive_armors-*.jar
 @group A (chain + Immersive Armors)
 @commands `ADD="immersive_armors-*.jar"`; boot; checks S; `> cbo effects`
-@pass namespaces include `immersive_armors`; leaks 0 (its block names `immersiveengineering:flammable`: a leak on it is a finding, as SQ-CBO-28)
+@pass `mods loaded 1 of 24: immersive_armors`; leaks 0 (effects-only: item namespaces are Creative Equipment's since 2026-11-06, not in this set) (its block names `immersiveengineering:flammable`: a leak on it is a finding, as SQ-CBO-28)
 @fails `has('immersive_armors')` block
+@reviewed 2026-11-23
 @from batches/r1106cbp/s33.qb
 @modset port_chain chain +creativedevtools-*.jar +immersive_armors-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
@@ -666,7 +673,7 @@ expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: immersive_armors$
-expect effects items by namespace: .*\bimmersive_armors=
+# 2026-11-23 (r1123cd judges): Armor / Tool Effects rows moved to Creative Equipment, absent from this chain set, so the row checks the effects probe only (no item namespaces); the gear rows are SQ-CEQ's.
 reject leak .*immersiveengineering:flammable
 
 ## SQ-CBO-34 | chain + immersive_weathering-*.jar,moonlight-*.jar
@@ -717,12 +724,12 @@ reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-36 | chain + jeed-*.jar
 @group A (chain + JEED)
-@commands `ADD="jeed-*.jar"`; boot; checks S; `kjsexpect jeed_providers.js: [1-9]`; `> cdevtest bytype jeed:effect_provider`
-@pass provider recipes above 0 with `creativebrewing:magic_resistance` among them; no `no Vinery wine providers` WARN
+@commands `@modset` chain + JEED + Creative Equipment + Felsic Gear + Dragon Loot (the Magic Resistance provider is Equipment's, built from its gear effect rows, effect-text #1); boot; checks S; `kjsexpect jeed_providers.js: [1-9]`; `> cdevtest bytype jeed:effect_provider`
+@pass provider recipes above 0 (ids `creativebrewing:jeed/<effect>`) with `creativeequipment:jeed/creativecommon_magic_resistance` among them (effect id `creativecommon:magic_resistance`; its items are every armor piece whose gear_effects.js row grants it: the Felsic set and the Dragon set, both chestplates); no `no Vinery wine providers` WARN
 @fails `jeed_providers.js`; JEED's recipe type id
+@reviewed 2026-11-23
 @from batches/r1106cbp/s36.qb
-@reviewed 2026-11-16
-@modset port_chain chain +creativedevtools-*.jar +jeed-*.jar
+@modset port_chain chain +creativedevtools-*.jar +jeed-*.jar +creativeequipment-*.jar "+Felsic Gear *.jar" +dragonloot-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
@@ -731,12 +738,15 @@ waitlog \[cbo\] done 30
 expect effects leaks 0$
 reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
-expect mods loaded 1 of 24: jeed$
+expect mods loaded 3 of 24: dragonloot, felsic_gear, jeed$
 kjsexpect jeed_providers.js: [1-9]
 > cdevtest bytype jeed:effect_provider
 sleep 3
 expect verb=bytype serializer=jeed:effect_provider n=[1-9]
-expect magic_resistance
+expect creativeequipment:jeed/creativecommon_magic_resistance
+> cdevtest rdetail creativeequipment:jeed/creativecommon_magic_resistance
+sleep 3
+look the Magic Resistance provider recipe lists the Felsic Gear armor pieces and the Dragon Loot armor pieces (helmet, both chestplates, leggings, boots); no creativebrewing:jeed/magic_resistance recipe
 kjsreject no Vinery wine providers
 reject \[cdevtest\] .*done=0
 
@@ -988,8 +998,9 @@ look mix count above SQ-CBO-20's
 ## SQ-CBO-52 | chain + everythingcopper-*.jar,ImmersiveEngineering-*.jar
 @group A (chain + Everything Copper + IE)
 @commands `ADD="everythingcopper-*.jar,ImmersiveEngineering-*.jar"`; boot; checks S; `> cbo effects`
-@pass leaks 0, copper armor rows carry `immersiveengineering:conductive`
+@pass leaks 0 with both mods loaded (effects-only: the copper armor rows that carry `immersiveengineering:conductive` are Creative Equipment's since 2026-11-06, not in this set)
 @fails as SQ-CBO-28
+@reviewed 2026-11-23
 @from batches/r1106cbp/s52.qb
 @modset port_chain chain +creativedevtools-*.jar +everythingcopper-*.jar +ImmersiveEngineering-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
@@ -1003,15 +1014,16 @@ reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: everythingcopper, immersiveengineering$
 > cbo effects
 waitlog \[cbo\] done 30
+# 2026-11-23 (r1123cd judges): Armor / Tool Effects rows moved to Creative Equipment, absent from this chain set, so the row checks the effects probe only (no item namespaces); the gear rows are SQ-CEQ's.
 expect effects leaks 0$
-shell grep -c "immersiveengineering:conductive" logs/kubejs/startup.log logs/latest.log; true
-look copper armor rows carry immersiveengineering:conductive
+reject leak .*immersiveengineering:conductive
 
 ## SQ-CBO-53 | chain + immersive_armors-*.jar,ImmersiveEngineering-*.jar
 @group A (chain + Immersive Armors + IE)
 @commands `ADD="immersive_armors-*.jar,ImmersiveEngineering-*.jar"`; boot; checks S; `> cbo effects`
-@pass leaks 0, `immersiveengineering:flammable` rows present
+@pass leaks 0 with both mods loaded (effects-only: the `immersiveengineering:flammable` armor rows are Creative Equipment's since 2026-11-06, not in this set)
 @fails as SQ-CBO-33
+@reviewed 2026-11-23
 @from batches/r1106cbp/s53.qb
 @modset port_chain chain +creativedevtools-*.jar +immersive_armors-*.jar +ImmersiveEngineering-*.jar
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
@@ -1025,8 +1037,9 @@ reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: immersive_armors, immersiveengineering$
 > cbo effects
 waitlog \[cbo\] done 30
+# 2026-11-23 (r1123cd judges): Armor / Tool Effects rows moved to Creative Equipment, absent from this chain set, so the row checks the effects probe only (no item namespaces); the gear rows are SQ-CEQ's.
 expect effects leaks 0
-look immersiveengineering:flammable rows present
+reject leak .*immersiveengineering:flammable
 
 ## CQ-CBO-01
 @group client (bare chain)
