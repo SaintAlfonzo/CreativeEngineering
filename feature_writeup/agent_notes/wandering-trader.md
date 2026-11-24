@@ -6,6 +6,7 @@ Moved from agent memory 2026-11-16 (last edited there 2026-10-03). Repo status d
 
 Built 2026-10-03 (two rounds, second on request): CEConfig `[wandering_trader]` traderIntervalTicks / winemakerIntervalTicks 96000, commonTrades 25, rareTrades 5.
 Creative Common `trader/`: WanderingTraderTweaks + 2 mixins, WinemakerSpawner (own spawner, SavedData), TradeListings / TagItemListing / WinemakerTrades (Java bridge).
+Since 2026-11-24 (wave 2 carve, W2-2): WanderingTraderTweaks, both mixins and `[wandering_trader]` are Creative Loot's (`creativeloot-common.toml`, `LootConfig`); the Winemaker spawner is the Vinery port's; TradeListings, TagItemListing, TradeSync and the trade helper stay in Common.
 KubeJS: `global.trades` (startup func/trade_helper.js) used in MoreJSEvents.wandererTrades (server economy/wandering_trades.js); tags in tags/tradetags.js.
 Vinery `wine_trader_chance` set to 0 (backed up). Jar md5 37ce1023 in mods/; scratch server checked, WT tests pending.
 

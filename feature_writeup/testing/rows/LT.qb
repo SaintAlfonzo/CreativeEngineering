@@ -75,7 +75,7 @@
 ## CQ-LTP-10
 @group client
 @commands `grep "Loading tips:" logs/latest.log`
-@pass `213 tips from 2 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)` (counts since tip audit 2, loading_tips_audit.md LTP-15)
+@pass `213 tips from 3 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)` (counts since tip audit 2, loading_tips_audit.md LTP-15; 3 files since the jar version filter, 2026-11-24)
 @fails Unmatched or clash lines name the id
 @draft no batch holds this row yet
 ## CQ-LTP-11
@@ -117,3 +117,17 @@
 @draft a tip shows at random: the grep is the firm half
 @reviewed 2026-11-22
 look the grep prints both lines; any spyglass or bell tip seen in the bar matches
+
+@@section 3
+@@title CQ-LTP version filter in Creative Common's jar, 2026-11-24 ([loading_tips.md](../loading_tips.md) 2, 3; [publish_readiness.md](../publish_readiness.md) PR-CC-13; TODO `creative-common-publish #15`)
+@@date 2026-11-24
+@@jars creativecommon
+@@sources feature_writeup/loading_tips.md development/creativeCommon/src/main/resources/resourcepacks/loading_tips/assets/loading_tips/loading_tips/version_filter.json kubejs/assets/creativetips/loading_tips/tips.json
+@@text Creative Common's Loading Tips pack has a second file, `version_filter.json` (override, priority 1), removing the 106 tips about content newer than 1.19.2; Creative Tips' `remove` list keeps the other 213. Client only.
+@@table
+## CQ-LTP-17 | the jar drops the 106 newer-version tips; the pack shows the same 213 tips as before
+@group client
+@commands full pack client: F3+T; grep latest.log for `Loading tips:`; then a client with Creative Common and no pack folder tips (no `kubejs/assets/creativetips`): F3+T, same grep
+@pass full pack: `Loading tips: 213 tips from 3 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)`; Common alone: `426 tips from 2 files (0 replaced, 106 removed, 0 id clashes, 0 unmatched ids)`; no Mace, Trial Chamber or Breeze tip in either
+@fails `version_filter.json` missing from the jar (`resourcepacks/loading_tips/`), or a Creative Tips `remove` id that the filter already dropped (logged as unmatched)
+@draft the Common-alone half needs a client without the pack's kubejs assets

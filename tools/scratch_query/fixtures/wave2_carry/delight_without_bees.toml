@@ -1,0 +1,5 @@
+# Fixture (creative-common-publish #18, 2026-11-24): an existing creativedelight-common.toml with no [bees], so the
+# carry-over takes the merge path (SQ-FCK-20). Forge fills every other key with its default.
+
+[qol]
+	compost = true

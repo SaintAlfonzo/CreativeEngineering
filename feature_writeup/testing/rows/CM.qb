@@ -509,86 +509,87 @@ look the /fgdtest oven truffle pie line is PASS; Truffle Pie name and the chocol
 @@section 4
 @@title SQ-CM Composters in 12 more woods, 2026-11-21 ([composting.md](../composting.md) 3, CM-10 to CM-15; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R8, R17, R20; TODO `farming/composting #3`)
 @@date 2026-11-21
-@@jars creativecommon creativecompat
-@@sources feature_writeup/composting.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/composter kubejs/data/creativecommon/kubejs/recipes/composters.js
+@@reviewed 2026-11-24
+@@jars creativecommon creativecompat creativedelight
+@@sources feature_writeup/composting.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/composter kubejs/data/creativedelight/kubejs/creativedelight/composters.js
 @@text
-@@text Targets the Creative Common jar of 2026-11-21 (`composter/WoodComposters`: `creativecommon:<wood>_composter` for spruce, birch, dark oak, jungle, acacia, mangrove, twisted, ancient, blossom, azalea, crimson, warped) and Common's server script `recipes/composters.js`. Recipes as built (R17, R20): each wood's 7 slabs -> that composter, vanilla's `#minecraft:wooden_slabs` recipe kept (one species' slabs match both: Polymorph, CQ-CM-37), each wood composter -> vanilla composter shapeless. Group A, area x 5312 to 5343, z 5200 to 5215.
+@@text Targets the Creative Delight jar of 2026-11-24 (moved from Creative Common in the wave 2 carve, W2-9; `farm/composter/WoodComposters`: `creativedelight:<wood>_composter` for spruce, birch, dark oak, jungle, acacia, mangrove, twisted, ancient, blossom, azalea, crimson, warped) and Delight's server script `creativedelight/composters.js`. Recipes as built (R17, R20): each wood's 7 slabs -> that composter, vanilla's `#minecraft:wooden_slabs` recipe kept (one species' slabs match both: Polymorph, CQ-CM-37), each wood composter -> vanilla composter shapeless. Group A, area x 5312 to 5343, z 5200 to 5215.
 @@text
 @@table
 ## SQ-CM-37 | recipes: 7 slabs -> that wood's composter; vanilla's slab recipe kept; each wood composter -> vanilla composter; tags
 @group A
-@commands `/cdevtest makes` each `creativecommon:<wood>_composter` and `minecraft:composter`; `/cdevtest tag item creativecommon:composters`; `/cdevtest tag block minecraft:mineable/axe`
+@commands `/cdevtest makes` each `creativedelight:<wood>_composter` and `minecraft:composter`; `/cdevtest tag item creativedelight:composters`; `/cdevtest tag block minecraft:mineable/axe`
 @pass each wood composter has one shaped recipe; `minecraft:composter` is made by vanilla's `minecraft:composter` recipe and by 12 shapeless recipes (one per wood composter); the composters tag has 13 (vanilla + 12); the 12 are axe-mineable
 @fails `recipes/composters.js` (the `global.has` gates for Architect's Palette twisted and Quark ancient, blossom, azalea slabs); a script removing vanilla's composter recipe; dict keys `i.composter_<wood>`, `i.slab_<wood>`
-@absent creativecommon:spruce_composter creativecommon:birch_composter creativecommon:dark_oak_composter creativecommon:jungle_composter creativecommon:acacia_composter creativecommon:mangrove_composter creativecommon:twisted_composter creativecommon:ancient_composter creativecommon:blossom_composter creativecommon:azalea_composter creativecommon:crimson_composter creativecommon:warped_composter creativecommon:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
-> cdevtest makes creativecommon:spruce_composter
-expect verb=makes id=\S+ .*result=creativecommon:spruce_composter\*1
-> cdevtest makes creativecommon:birch_composter
-expect verb=makes id=\S+ .*result=creativecommon:birch_composter\*1
-> cdevtest makes creativecommon:dark_oak_composter
-expect verb=makes id=\S+ .*result=creativecommon:dark_oak_composter\*1
-> cdevtest makes creativecommon:jungle_composter
-expect verb=makes id=\S+ .*result=creativecommon:jungle_composter\*1
-> cdevtest makes creativecommon:acacia_composter
-expect verb=makes id=\S+ .*result=creativecommon:acacia_composter\*1
-> cdevtest makes creativecommon:mangrove_composter
-expect verb=makes id=\S+ .*result=creativecommon:mangrove_composter\*1
-> cdevtest makes creativecommon:twisted_composter
-expect verb=makes id=\S+ .*result=creativecommon:twisted_composter\*1
-> cdevtest makes creativecommon:ancient_composter
-expect verb=makes id=\S+ .*result=creativecommon:ancient_composter\*1
-> cdevtest makes creativecommon:blossom_composter
-expect verb=makes id=\S+ .*result=creativecommon:blossom_composter\*1
-> cdevtest makes creativecommon:azalea_composter
-expect verb=makes id=\S+ .*result=creativecommon:azalea_composter\*1
-> cdevtest makes creativecommon:crimson_composter
-expect verb=makes id=\S+ .*result=creativecommon:crimson_composter\*1
-> cdevtest makes creativecommon:warped_composter
-expect verb=makes id=\S+ .*result=creativecommon:warped_composter\*1
+@absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter creativedelight:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
+> cdevtest makes creativedelight:spruce_composter
+expect verb=makes id=\S+ .*result=creativedelight:spruce_composter\*1
+> cdevtest makes creativedelight:birch_composter
+expect verb=makes id=\S+ .*result=creativedelight:birch_composter\*1
+> cdevtest makes creativedelight:dark_oak_composter
+expect verb=makes id=\S+ .*result=creativedelight:dark_oak_composter\*1
+> cdevtest makes creativedelight:jungle_composter
+expect verb=makes id=\S+ .*result=creativedelight:jungle_composter\*1
+> cdevtest makes creativedelight:acacia_composter
+expect verb=makes id=\S+ .*result=creativedelight:acacia_composter\*1
+> cdevtest makes creativedelight:mangrove_composter
+expect verb=makes id=\S+ .*result=creativedelight:mangrove_composter\*1
+> cdevtest makes creativedelight:twisted_composter
+expect verb=makes id=\S+ .*result=creativedelight:twisted_composter\*1
+> cdevtest makes creativedelight:ancient_composter
+expect verb=makes id=\S+ .*result=creativedelight:ancient_composter\*1
+> cdevtest makes creativedelight:blossom_composter
+expect verb=makes id=\S+ .*result=creativedelight:blossom_composter\*1
+> cdevtest makes creativedelight:azalea_composter
+expect verb=makes id=\S+ .*result=creativedelight:azalea_composter\*1
+> cdevtest makes creativedelight:crimson_composter
+expect verb=makes id=\S+ .*result=creativedelight:crimson_composter\*1
+> cdevtest makes creativedelight:warped_composter
+expect verb=makes id=\S+ .*result=creativedelight:warped_composter\*1
 > cdevtest makes minecraft:composter
 expect verb=makes id=minecraft:composter\b
-count verb=makes id=creativecommon:\S+ .*result=minecraft:composter\*1 == 12
-> cdevtest tag item creativecommon:composters
-expect verb=tag kind=item tag=creativecommon:composters n=13\b
+count verb=makes id=creativedelight:\S+ .*result=minecraft:composter\*1 == 12
+> cdevtest tag item creativedelight:composters
+expect verb=tag kind=item tag=creativedelight:composters n=13\b
 > cdevtest tag block minecraft:mineable/axe
-expect verb=tag kind=block tag=minecraft:mineable/axe n=\d+ ids=(?=\S*creativecommon:spruce_composter)(?=\S*creativecommon:warped_composter)(?=\S*creativecommon:twisted_composter)(?=\S*creativecommon:azalea_composter)
+expect verb=tag kind=block tag=minecraft:mineable/axe n=\d+ ids=(?=\S*creativedelight:spruce_composter)(?=\S*creativedelight:warped_composter)(?=\S*creativedelight:twisted_composter)(?=\S*creativedelight:azalea_composter)
 reject \[cdevtest\] .*done=0
 look the shaped lines take 7 slabs of that wood in the composter shape (rdetail one, e.g. the spruce id); the 12 shapeless ones take one wood composter each
 
 ## SQ-CM-38 | a Warped Composter uses the shared table: pies always, seeds sometimes, level 7 turns ready, bone meal out
 @group A
-@commands \`creativecommon:warped_composter\`: \`/cdevtest use\` 7 times with a pumpkin pie, \`/cdevtest tickwarp 40\`, \`/cdevtest state\`, \`/cdevtest use\` empty-handed, \`/cdevtest items\`; a second one: 30 clicks with wheat seeds; a vanilla composter the same 30 seeds
+@commands \`creativedelight:warped_composter\`: \`/cdevtest use\` 7 times with a pumpkin pie, \`/cdevtest tickwarp 40\`, \`/cdevtest state\`, \`/cdevtest use\` empty-handed, \`/cdevtest items\`; a second one: 30 clicks with wheat seeds; a vanilla composter the same 30 seeds
 @pass the 7 pies give level 7 (one level each), after the tick level 8; the empty-hand click gives 1 bone meal and level 0; the seeded warped and vanilla composters both end above level 0 and below 8 (about 3 in 10 succeed)
 @fails \`WoodComposters\` blocks not \`ComposterBlock\` subclasses; the shared table (\`ComposterBlock.COMPOSTABLES\`) read by block class somewhere (Common's compost framework, composting.md 3)
-@absent creativecommon:spruce_composter creativecommon:birch_composter creativecommon:dark_oak_composter creativecommon:jungle_composter creativecommon:acacia_composter creativecommon:mangrove_composter creativecommon:twisted_composter creativecommon:ancient_composter creativecommon:blossom_composter creativecommon:azalea_composter creativecommon:crimson_composter creativecommon:warped_composter creativecommon:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
+@absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter creativedelight:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
 > forceload add 5312 5200 5343 5215
 > fill 5312 -61 5200 5343 -61 5215 minecraft:stone
 > fill 5312 -60 5200 5343 -56 5215 minecraft:air
 sleep 2
-> setblock 5313 -60 5201 creativecommon:warped_composter
+> setblock 5313 -60 5201 creativedelight:warped_composter
 repeat 7
 > cdevtest use 5313 -60 5201 held=minecraft:pumpkin_pie face=up
 end
 > cdevtest state 5313 -60 5201
-expect verb=state .*state="?creativecommon:warped_composter\[level=7\]
+expect verb=state .*state="?creativedelight:warped_composter\[level=7\]
 > cdevtest tickwarp 40
 waitlog verb=tickwarp .*end=done 60
 > cdevtest state 5313 -60 5201
-expect verb=state .*state="?creativecommon:warped_composter\[level=8\]
+expect verb=state .*state="?creativedelight:warped_composter\[level=8\]
 > kill @e[type=minecraft:item,x=5313,y=-60,z=5201,distance=..4]
 > cdevtest use 5313 -60 5201 held=none face=up
 > cdevtest items 5313 -60 5201 3 keep
 expect verb=items .*minecraft:bone_meal:1\b
 > cdevtest state 5313 -60 5201
-expect verb=state .*state="?creativecommon:warped_composter\[level=0\]
-> setblock 5315 -60 5201 creativecommon:warped_composter
+expect verb=state .*state="?creativedelight:warped_composter\[level=0\]
+> setblock 5315 -60 5201 creativedelight:warped_composter
 > setblock 5317 -60 5201 minecraft:composter
 repeat 30
 > cdevtest use 5315 -60 5201 held=minecraft:wheat_seeds face=up
 > cdevtest use 5317 -60 5201 held=minecraft:wheat_seeds face=up
 end
 > cdevtest state 5315 -60 5201
-expect verb=state .*state="?creativecommon:warped_composter\[level=[1-7]\]
+expect verb=state .*state="?creativedelight:warped_composter\[level=[1-7]\]
 > cdevtest state 5317 -60 5201
 expect verb=state .*state="?minecraft:composter\[level=[1-7]\]
 reject \[cdevtest\] .*done=0
@@ -599,29 +600,29 @@ look the two seeded levels are close (same chance table; 30 seeds at about 0.3 g
 @commands hopper (16 wheat seeds) facing down onto a Spruce Composter, \`/cdevtest tickwarp 400\`, \`/cdevtest state\`; a level-8 Spruce Composter over a hopper, \`/cdevtest tickwarp 20\`, \`/cdevtest inv\` the hopper; a comparator reading a level-4 composter
 @pass the fed composter's level rises above 0 and the top hopper has fewer seeds; the lower hopper holds 1 bone meal and the composter is level 0; the comparator \`OutputSignal:4\`
 @fails \`getContainer\` (WorldlyContainerHolder) and \`getAnalogOutputSignal\` are inherited from \`ComposterBlock\`; an override in \`WoodComposters\` that drops them
-@absent creativecommon:spruce_composter creativecommon:birch_composter creativecommon:dark_oak_composter creativecommon:jungle_composter creativecommon:acacia_composter creativecommon:mangrove_composter creativecommon:twisted_composter creativecommon:ancient_composter creativecommon:blossom_composter creativecommon:azalea_composter creativecommon:crimson_composter creativecommon:warped_composter creativecommon:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
+@absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter creativedelight:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
 > forceload add 5312 5200 5343 5215
 > fill 5320 -61 5200 5330 -61 5215 minecraft:stone
 > fill 5320 -60 5200 5330 -56 5215 minecraft:air
 sleep 2
-> setblock 5321 -60 5201 creativecommon:spruce_composter
+> setblock 5321 -60 5201 creativedelight:spruce_composter
 > setblock 5321 -59 5201 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:wheat_seeds",Count:16b}]}
 > cdevtest tickwarp 400
 waitlog verb=tickwarp .*end=done 120
 > cdevtest state 5321 -60 5201
-expect verb=state .*state="?creativecommon:spruce_composter\[level=[1-8]\]
+expect verb=state .*state="?creativedelight:spruce_composter\[level=[1-8]\]
 > cdevtest inv 5321 -59 5201
 reject verb=inv slot=0 item=minecraft:wheat_seeds\*16\b
 > setblock 5324 -60 5201 minecraft:hopper[facing=down]
-> setblock 5324 -59 5201 creativecommon:spruce_composter[level=8]
+> setblock 5324 -59 5201 creativedelight:spruce_composter[level=8]
 > cdevtest tickwarp 20
 waitlog verb=tickwarp .*end=done 60
 > cdevtest inv 5324 -60 5201
 expect verb=inv slot=\d+ item=minecraft:bone_meal\*1\b
 > cdevtest state 5324 -59 5201
-expect verb=state .*state="?creativecommon:spruce_composter\[level=0\]
+expect verb=state .*state="?creativedelight:spruce_composter\[level=0\]
 > setblock 5327 -60 5201 minecraft:comparator[facing=west]
-> setblock 5326 -60 5201 creativecommon:spruce_composter[level=4]
+> setblock 5326 -60 5201 creativedelight:spruce_composter[level=4]
 > cdevtest tickwarp 6
 waitlog verb=tickwarp .*end=done 60
 > cdevtest be 5327 -60 5201
@@ -630,18 +631,18 @@ reject \[cdevtest\] .*done=0
 
 ## SQ-CM-40 | a Birch Composter drops itself, plus 1 bone meal when ready
 @group A
-@commands \`creativecommon:birch_composter[level=8]\` and \`[level=3]\`; \`/cdevtest loot\` each with an iron axe
+@commands \`creativedelight:birch_composter[level=8]\` and \`[level=3]\`; \`/cdevtest loot\` each with an iron axe
 @pass level 8: one birch composter and one bone meal; level 3: one birch composter only
-@fails loot table \`creativecommon:blocks/birch_composter\` (generated per wood from vanilla's composter table)
-@absent creativecommon:spruce_composter creativecommon:birch_composter creativecommon:dark_oak_composter creativecommon:jungle_composter creativecommon:acacia_composter creativecommon:mangrove_composter creativecommon:twisted_composter creativecommon:ancient_composter creativecommon:blossom_composter creativecommon:azalea_composter creativecommon:crimson_composter creativecommon:warped_composter creativecommon:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
+@fails loot table \`creativedelight:blocks/birch_composter\` (generated per wood from vanilla's composter table)
+@absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter creativedelight:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
 > forceload add 5312 5200 5343 5215
 > fill 5331 -61 5200 5336 -61 5203 minecraft:stone
-> setblock 5332 -60 5201 creativecommon:birch_composter[level=8]
-> setblock 5334 -60 5201 creativecommon:birch_composter[level=3]
+> setblock 5332 -60 5201 creativedelight:birch_composter[level=8]
+> setblock 5334 -60 5201 creativedelight:birch_composter[level=3]
 > cdevtest loot 5332 -60 5201 tool=minecraft:iron_axe
-expect verb=loot .*drops=(?=\S*creativecommon:birch_composter:1\b)(?=\S*minecraft:bone_meal:1\b)
+expect verb=loot .*drops=(?=\S*creativedelight:birch_composter:1\b)(?=\S*minecraft:bone_meal:1\b)
 > cdevtest loot 5334 -60 5201 tool=minecraft:iron_axe
-expect verb=loot .*drops=creativecommon:birch_composter:1(\s|$)
+expect verb=loot .*drops=creativedelight:birch_composter:1(\s|$)
 reject \[cdevtest\] .*done=0
 
 ## SQ-CM-41 | Acacia Composter burns and is furnace fuel (300 ticks); Crimson Composter neither
@@ -649,90 +650,91 @@ reject \[cdevtest\] .*done=0
 @commands \`gamerule doFireTick true\`, clear weather; fire on top of an Acacia and of a Crimson Composter, \`/cdevtest tickwarp 1600\`, \`/cdevtest state\` both; two furnaces with 3 raw iron / 3 raw copper and an Acacia / a Crimson Composter as fuel, \`/cdevtest tickwarp 400\`, \`/cdevtest inv\`
 @pass the acacia composter is gone (air or fire), the crimson one stays; the acacia-fueled furnace made 1 iron ingot (300 ticks: one and a half items), the crimson one made nothing and still holds the composter
 @fails \`WoodComposters\` flammability (\`FireBlock\` 5 / 20, none for crimson and warped) and \`getBurnTime\` on the block item (300, crimson and warped 0); fire is random: a surviving acacia composter with the fire gone early is a rerun before a FAIL
-@absent creativecommon:spruce_composter creativecommon:birch_composter creativecommon:dark_oak_composter creativecommon:jungle_composter creativecommon:acacia_composter creativecommon:mangrove_composter creativecommon:twisted_composter creativecommon:ancient_composter creativecommon:blossom_composter creativecommon:azalea_composter creativecommon:crimson_composter creativecommon:warped_composter creativecommon:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
+@absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter creativedelight:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
 > forceload add 5312 5200 5343 5215
 > fill 5312 -61 5206 5330 -61 5215 minecraft:stone
 > fill 5312 -60 5206 5330 -56 5215 minecraft:air
 > gamerule doFireTick true
 > weather clear 1000000
 sleep 2
-> setblock 5313 -60 5208 creativecommon:acacia_composter
+> setblock 5313 -60 5208 creativedelight:acacia_composter
 > setblock 5313 -59 5208 minecraft:fire
-> setblock 5319 -60 5208 creativecommon:crimson_composter
+> setblock 5319 -60 5208 creativedelight:crimson_composter
 > setblock 5319 -59 5208 minecraft:fire
-> setblock 5313 -60 5212 minecraft:furnace{Items:[{Slot:0b,id:"minecraft:raw_iron",Count:3b},{Slot:1b,id:"creativecommon:acacia_composter",Count:1b}]}
-> setblock 5319 -60 5212 minecraft:furnace{Items:[{Slot:0b,id:"minecraft:raw_copper",Count:3b},{Slot:1b,id:"creativecommon:crimson_composter",Count:1b}]}
+> setblock 5313 -60 5212 minecraft:furnace{Items:[{Slot:0b,id:"minecraft:raw_iron",Count:3b},{Slot:1b,id:"creativedelight:acacia_composter",Count:1b}]}
+> setblock 5319 -60 5212 minecraft:furnace{Items:[{Slot:0b,id:"minecraft:raw_copper",Count:3b},{Slot:1b,id:"creativedelight:crimson_composter",Count:1b}]}
 > cdevtest tickwarp 1600
 waitlog verb=tickwarp .*end=done 300
 > cdevtest state 5313 -60 5208
-reject verb=state .*state="?creativecommon:acacia_composter
+reject verb=state .*state="?creativedelight:acacia_composter
 > cdevtest state 5319 -60 5208
-expect verb=state .*state="?creativecommon:crimson_composter
+expect verb=state .*state="?creativedelight:crimson_composter
 > cdevtest inv 5313 -60 5212
 expect verb=inv slot=2 item=minecraft:iron_ingot\*1\b
 > cdevtest inv 5319 -60 5212
 reject verb=inv slot=2 item=minecraft:copper_ingot
-expect verb=inv slot=1 item=creativecommon:crimson_composter\*1
+expect verb=inv slot=1 item=creativedelight:crimson_composter\*1
 > gamerule doFireTick false
 reject \[cdevtest\] .*done=0
 
 @@section 5
 @@title CQ-CM Composters client half, 2026-11-21 (same section; [composting.md](../composting.md) CM-10, CM-14)
 @@date 2026-11-21
-@@jars creativecommon creativecompat
-@@sources feature_writeup/composting.md development/creativeCommon/src/main/resources/assets/creativecommon
+@@reviewed 2026-11-24
+@@jars creativecommon creativecompat creativedelight
+@@sources feature_writeup/composting.md development/creativeDelight/src/main/resources/assets/creativedelight
 @@text
 @@table
 ## CQ-CM-37 | Polymorph: one wood's slabs offer its composter first, then vanilla's; mixed slabs and a lone wood composter give vanilla's
 @group client
 @commands crafting table, survival: 7 spruce slabs in the composter shape (Polymorph button), pick each; 7 oak slabs; 4 spruce + 3 birch slabs; a Spruce Composter alone in the grid
 @pass spruce slabs: the Polymorph list shows Spruce Composter first, then Composter, and each can be taken; oak slabs and mixed slabs: Composter only (no button); a Spruce Composter alone: Composter
-@fails Polymorph orders by translation key (`block.creativecommon.*` before `block.minecraft.*`, R20); a recipe that also matched mixed slabs
+@fails Polymorph orders by translation key (`block.creativedelight.*` before `block.minecraft.*`, R20); a recipe that also matched mixed slabs
 @draft crafting-grid and Polymorph-widget clicks: the first runner writes the driver steps (`click_widget`) or keeps it a hand check
 ## CQ-CM-42 | look: the 12 composters in the world (empty, filling, ready) and WTHIT's level line
 @group client
 @commands platform at 0 100 0, the 12 wood composters and vanilla's in a row at level 0, a second row at level 4, a third at level 8; shots; WTHIT on a level-4 one
 @pass LOOK: each composter shows its own wood (palette swaps of vanilla's composter, R8) on the side, top and bottom, the vanilla compost fill at level 4 and the ready texture at 8; WTHIT shows the level line on a wood composter
-@fails textures `assets/creativecommon/textures/block/<wood>_composter_{side,top,bottom}.png` (sources.csv rows); models parent vanilla's composter; WTHIT registers on the `ComposterBlock` class
-@absent creativecommon:spruce_composter creativecommon:birch_composter creativecommon:dark_oak_composter creativecommon:jungle_composter creativecommon:acacia_composter creativecommon:mangrove_composter creativecommon:twisted_composter creativecommon:ancient_composter creativecommon:blossom_composter creativecommon:azalea_composter creativecommon:crimson_composter creativecommon:warped_composter creativecommon:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
+@fails textures `assets/creativedelight/textures/block/<wood>_composter_{side,top,bottom}.png` (sources.csv rows); models parent vanilla's composter; WTHIT registers on the `ComposterBlock` class
+@absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter creativedelight:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
 > fill 0 100 0 15 100 8 minecraft:stone
 > fill 0 101 0 15 104 8 minecraft:air
-> setblock 1 101 2 creativecommon:spruce_composter[level=0]
-> setblock 1 101 4 creativecommon:spruce_composter[level=4]
-> setblock 1 101 6 creativecommon:spruce_composter[level=8]
-> setblock 2 101 2 creativecommon:birch_composter[level=0]
-> setblock 2 101 4 creativecommon:birch_composter[level=4]
-> setblock 2 101 6 creativecommon:birch_composter[level=8]
-> setblock 3 101 2 creativecommon:dark_oak_composter[level=0]
-> setblock 3 101 4 creativecommon:dark_oak_composter[level=4]
-> setblock 3 101 6 creativecommon:dark_oak_composter[level=8]
-> setblock 4 101 2 creativecommon:jungle_composter[level=0]
-> setblock 4 101 4 creativecommon:jungle_composter[level=4]
-> setblock 4 101 6 creativecommon:jungle_composter[level=8]
-> setblock 5 101 2 creativecommon:acacia_composter[level=0]
-> setblock 5 101 4 creativecommon:acacia_composter[level=4]
-> setblock 5 101 6 creativecommon:acacia_composter[level=8]
-> setblock 6 101 2 creativecommon:mangrove_composter[level=0]
-> setblock 6 101 4 creativecommon:mangrove_composter[level=4]
-> setblock 6 101 6 creativecommon:mangrove_composter[level=8]
-> setblock 7 101 2 creativecommon:twisted_composter[level=0]
-> setblock 7 101 4 creativecommon:twisted_composter[level=4]
-> setblock 7 101 6 creativecommon:twisted_composter[level=8]
-> setblock 8 101 2 creativecommon:ancient_composter[level=0]
-> setblock 8 101 4 creativecommon:ancient_composter[level=4]
-> setblock 8 101 6 creativecommon:ancient_composter[level=8]
-> setblock 9 101 2 creativecommon:blossom_composter[level=0]
-> setblock 9 101 4 creativecommon:blossom_composter[level=4]
-> setblock 9 101 6 creativecommon:blossom_composter[level=8]
-> setblock 10 101 2 creativecommon:azalea_composter[level=0]
-> setblock 10 101 4 creativecommon:azalea_composter[level=4]
-> setblock 10 101 6 creativecommon:azalea_composter[level=8]
-> setblock 11 101 2 creativecommon:crimson_composter[level=0]
-> setblock 11 101 4 creativecommon:crimson_composter[level=4]
-> setblock 11 101 6 creativecommon:crimson_composter[level=8]
-> setblock 12 101 2 creativecommon:warped_composter[level=0]
-> setblock 12 101 4 creativecommon:warped_composter[level=4]
-> setblock 12 101 6 creativecommon:warped_composter[level=8]
+> setblock 1 101 2 creativedelight:spruce_composter[level=0]
+> setblock 1 101 4 creativedelight:spruce_composter[level=4]
+> setblock 1 101 6 creativedelight:spruce_composter[level=8]
+> setblock 2 101 2 creativedelight:birch_composter[level=0]
+> setblock 2 101 4 creativedelight:birch_composter[level=4]
+> setblock 2 101 6 creativedelight:birch_composter[level=8]
+> setblock 3 101 2 creativedelight:dark_oak_composter[level=0]
+> setblock 3 101 4 creativedelight:dark_oak_composter[level=4]
+> setblock 3 101 6 creativedelight:dark_oak_composter[level=8]
+> setblock 4 101 2 creativedelight:jungle_composter[level=0]
+> setblock 4 101 4 creativedelight:jungle_composter[level=4]
+> setblock 4 101 6 creativedelight:jungle_composter[level=8]
+> setblock 5 101 2 creativedelight:acacia_composter[level=0]
+> setblock 5 101 4 creativedelight:acacia_composter[level=4]
+> setblock 5 101 6 creativedelight:acacia_composter[level=8]
+> setblock 6 101 2 creativedelight:mangrove_composter[level=0]
+> setblock 6 101 4 creativedelight:mangrove_composter[level=4]
+> setblock 6 101 6 creativedelight:mangrove_composter[level=8]
+> setblock 7 101 2 creativedelight:twisted_composter[level=0]
+> setblock 7 101 4 creativedelight:twisted_composter[level=4]
+> setblock 7 101 6 creativedelight:twisted_composter[level=8]
+> setblock 8 101 2 creativedelight:ancient_composter[level=0]
+> setblock 8 101 4 creativedelight:ancient_composter[level=4]
+> setblock 8 101 6 creativedelight:ancient_composter[level=8]
+> setblock 9 101 2 creativedelight:blossom_composter[level=0]
+> setblock 9 101 4 creativedelight:blossom_composter[level=4]
+> setblock 9 101 6 creativedelight:blossom_composter[level=8]
+> setblock 10 101 2 creativedelight:azalea_composter[level=0]
+> setblock 10 101 4 creativedelight:azalea_composter[level=4]
+> setblock 10 101 6 creativedelight:azalea_composter[level=8]
+> setblock 11 101 2 creativedelight:crimson_composter[level=0]
+> setblock 11 101 4 creativedelight:crimson_composter[level=4]
+> setblock 11 101 6 creativedelight:crimson_composter[level=8]
+> setblock 12 101 2 creativedelight:warped_composter[level=0]
+> setblock 12 101 4 creativedelight:warped_composter[level=4]
+> setblock 12 101 6 creativedelight:warped_composter[level=8]
 > setblock 13 101 2 minecraft:composter[level=0]
 > setblock 13 101 4 minecraft:composter[level=4]
 > setblock 13 101 6 minecraft:composter[level=8]
@@ -745,5 +747,28 @@ do {"look": {"from": "10.5 102.5 0.5", "at": "10.5 101 4.5"}}
 shot composters_close_right
 do {"look": {"from": "1.5 102.5 6.5", "at": "1.5 101 4.5"}}
 shot wthit_spruce_level4
-bootreject Missing texture.*creativecommon:block/\w+_composter
+bootreject Missing texture.*creativedelight:block/\w+_composter
 look shots: 12 distinct woods next to vanilla's, fill at level 4 and the ready texture at level 8 in each; the WTHIT shot shows the level line
+
+@@section 6
+@@title SQ-CM wave 2 carve: composters moved to Creative Delight, old ids swapped, 2026-11-24 ([composting.md](../composting.md) 3; [plan_wave2_publish.md](../plan_wave2_publish.md) W2-9; TODO `creative-common-publish #18`)
+@@date 2026-11-24
+@@jars creativecommon creativecompat creativedelight
+@@sources feature_writeup/composting.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/composter development/creativeDelight/src/main/resources/data/creativedelight/swaps/common_composters.json kubejs/data/creativedelight/kubejs/creativedelight/composters.js
+@@text The 12 wood composters are `creativedelight:<wood>_composter` since 2026-11-24; Delight's swap list `common_composters.json` maps each old `creativecommon:` id. An old-id save must be made fresh with the jars from before the carve (agent note forge-missing-mappings-staging.md: a world opened once without the remap loses the old ids from level.dat).
+@@table
+## SQ-CM-42 | old save: composters placed, in a chest and in an inventory with the Common ids come back as Delight's
+@group B (old-id save fixture)
+@commands boot 1 with the Creative Common and Creative Delight jars from before the carve (`jar_archive/displaced/`, stamp 16c9e8ace or older): place `creativecommon:spruce_composter[level=4]` and `creativecommon:crimson_composter`, put 2 `creativecommon:birch_composter` in a chest and 1 in a bot's inventory; stop; swap in the current jars; boot 2; read the blocks, the chest and the inventory
+@pass boot 2: the blocks are `creativedelight:spruce_composter[level=4]` and `creativedelight:crimson_composter`; the chest holds 2 `creativedelight:birch_composter`, the bot 1; latest.log has the swap lines for the composter ids and no `Missing` / `unknown` line naming `creativecommon:*_composter`
+@fails `data/creativedelight/swaps/common_composters.json` not read (SwapLists, Delight jar); the remap resolved in the STAGING registry (agent note forge-missing-mappings-staging.md); the save opened once without the new jars
+@draft the runner writes the two-boot jar swap as `@@prep boot=2: run` lines (old jars from `jar_archive/displaced/`)
+@modset none
+## SQ-CM-43 | composters and their recipes, tags and loot under Delight's namespace; no Common composter left
+@group A
+@commands `/cdevtest makes creativedelight:spruce_composter`; `/cdevtest tag item creativedelight:composters`; `/cdevtest tag item creativecommon:composters`; `/cdevtest tag item creativecompat:floats` (or the item physics floats tag the Compat script fills); `/give @s creativecommon:spruce_composter`; grep latest.log for `composter`
+@pass the recipe is from 7 spruce slabs; `creativedelight:composters` has 13 entries; `creativecommon:composters` is empty or absent; the floats tag holds the 12 wood composters; the Common id is an unknown item; no ERROR line naming a composter id or `#creativedelight:composters`
+@fails `kubejs/data/creativedelight/kubejs/creativedelight/composters.js` not in the Delight jar; `item_dict.js` keys still naming `creativecommon:`; Compat's `item_physics_tags.js` guard (`global.has('creativedelight')`)
+@draft steps from SQ-CM-37 with the new namespace; the floats tag name is read from `item_physics_tags.js` `PHYSICS_TAG`
+@absent creativedelight:spruce_composter creativedelight:composters (moved 2026-11-24, after the last /dumpall)
+@modset none

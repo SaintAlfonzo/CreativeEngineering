@@ -142,6 +142,10 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 ## 3. What the pack changes (mechanics)
 
+- **Owning jar:** the spawn wait and offer counts (`trader/WanderingTraderTweaks`, the two mixins, `[wandering_trader]`)
+  are Creative Loot's since 2026-11-24 (wave 2 carve, ruling W2-2, TODO `creative-common-publish #19`); the keys are in
+  `config/creativeloot-common.toml`, copied once from `creativecommon-common.toml` by Loot's constructor. Trade Sync,
+  `TradeListings`, `TagItemListing` and the trade helper stay in Creative Common as library code.
 - **Trader wait:** `WanderingTraderSpawnerMixin` swaps the `sipush 24000` in `tick` (`m_7995_`) and in the
   constructor (a new world's first wait) for `traderIntervalTicks`. Bytecode-checked: those are the only two.
 - **Winemaker spawner** (in the Vinery port since 2026-10-27, `forge/WinemakerSpawner`; before that Creative Common
@@ -198,14 +202,14 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 | File | Role |
 |---|---|
-| [CEConfig.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CEConfig.java) | `[wandering_trader]` |
-| [trader/WanderingTraderTweaks.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/WanderingTraderTweaks.java) | trader wait, common count, extra rare offers |
+| [LootConfig.java](../development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/LootConfig.java) (Creative Loot) | `[wandering_trader]` |
+| [trader/WanderingTraderTweaks.java](../development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/trader/WanderingTraderTweaks.java) (Creative Loot) | trader wait, common count, extra rare offers |
 | [backportedVinery forge/WinemakerSpawner.java](../development/backportedVinery/src/main/java/net/satisfy/vinery/forge/WinemakerSpawner.java) | Winemaker spawner + saved data (moved from Creative Common 2026-10-27) |
 | [trader/TradeListings.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/TradeListings.java) | listing builders, find-by-result |
 | [trader/TagItemListing.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/TagItemListing.java) | random tag member listing |
 | [trader/WinemakerTrades.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/trader/WinemakerTrades.java) | Winemaker pool extras (reflection, no Vinery compile dependency) |
-| [mixin/WanderingTraderSpawnerMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/WanderingTraderSpawnerMixin.java) | 24000 constant |
-| [mixin/WanderingTraderTradesMixin.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/WanderingTraderTradesMixin.java) | 5 constant + TAIL rare injection |
+| [mixin/WanderingTraderSpawnerMixin.java](../development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/mixin/WanderingTraderSpawnerMixin.java) (Creative Loot) | 24000 constant |
+| [mixin/WanderingTraderTradesMixin.java](../development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/mixin/WanderingTraderTradesMixin.java) (Creative Loot) | 5 constant + TAIL rare injection |
 | [startup_scripts/func/trade_helper.js](../kubejs/startup_scripts/func/trade_helper.js) | `global.trades` |
 | [server_scripts/economy/wandering_trades.js](../kubejs/server_scripts/economy/wandering_trades.js) | the stock |
 | [server_scripts/tags/tradetags.js](../kubejs/server_scripts/tags/tradetags.js) | `trades/golden_food`, `trades/canned_golden` |
@@ -259,6 +263,8 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
   mules) arrive on their own, separately. Set the intervals back to 96000.
 - [ ] **WT-17 no Fruits Delight apple sapling:** `/reload`, then summon several Winemakers -> Fruits Delight
   saplings on offer, never `fruitsdelight:apple_sapling`. Scratch server PASSED 2026-10-22 (SQ-MG-05).
+- [ ] **WT-18 moved to Creative Loot:** an old `[wandering_trader]` in creativecommon-common.toml becomes
+  creativeloot-common.toml on the first boot; offer counts and the off switch read Loot's file. Queue SQ-WT-03, SQ-WT-04.
 
 ## 8. History
 
@@ -281,3 +287,6 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 ## Owner ideas (scratchpad 2026-10-26)
 
 - Rare Rustic pepper seed offer: `loot/trader #4`. Built with the Rustic port and live since 1.1.03: Pale or Dark seeds, 5 emeralds, 3 uses ([rustic_delight.md](rustic_delight.md) 5.4).
+- 2026-11-24: wave 2 carve (ruling W2-2, TODO `creative-common-publish #19`): `WanderingTraderTweaks`, both mixins and
+  `[wandering_trader]` moved from Creative Common to Creative Loot (`config/creativeloot-common.toml`, its first config file;
+  values carried over once). Trade Sync and the trade helper stay in Common. WT-18, SQ-WT-03, SQ-WT-04.

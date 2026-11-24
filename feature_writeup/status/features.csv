@@ -54,7 +54,7 @@ Creative Compat,creative_compat.md,"SQ-CMP, CMP-",BUILT,"creativecommon, creativ
 Creative Devtools,creative_devtools.md,CDV-,BUILT,"creativecommon, creativedevtools","CQ-TXR, SQ-CDV, SQ-TX","carved 2026-11-01, installed",,,
 Structure Catalog world type,plan_structure_catalogue.md,SCAT-,BUILT,creativedevtools,"CQ-SCAT, SQ-SCAT",client rows not run),,,
 Creative Worldgen,creative_worldgen.md,"SQ-CWG, CWG-",BUILT,"creativecommon, creativeworldgen","CQ-CWG, SQ-CWG",SQ-CWG-08 / -08o open (old-world rerun),,,
-Creative Loot,creative_loot.md,"SQ-LOOT, LOOT-",BUILT,"creativecommon, creativeloot","CQ-LOOT, SQ-LOOT",split out of Creative Worldgen 2026-11-17 (plan_rules_fixes.md 5b); member fragments and the Delight drop rules since P3c; SQ-LOOT queued,,,
+Creative Loot,creative_loot.md,"SQ-LOOT, LOOT-",BUILT,"creativecommon, creativeloot","CQ-LOOT, SQ-LOOT, SQ-WT",split out of Creative Worldgen 2026-11-17 (plan_rules_fixes.md 5b); member fragments and the Delight drop rules since P3c; SQ-LOOT queued,,,
 Creative Magic,creative_magic.md,"SQ-CMG (tests in nether_portal.md NP-, recipes_magic.md RA-)",BUILT,"creativecommon, creativemagic",,"built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted",,,
 Creative Equipment,creative_equipment.md,"SQ-CEQ, CQ-CEQ",BUILT,"creativecommon, creativeequipment","CQ-CEQ, SQ-CBP, SQ-CEQ","built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted",,,
 Creative Engineering and Creative Common,creative_engineering.md,"SQ-CEN, CQ-CEN, SQ-CC, SQ-CPP",BUILT,"creativecommon, creativeengineering, creativecompat","CQ-CC, CQ-CC13, CQ-CCB, CQ-CCO, CQ-CEN, CQ-CGE, CQ-CLOG, CQ-CMV, CQ-CPP, CQ-SPFX, SQ-CC, SQ-CC12, SQ-CC13, SQ-CCB, SQ-CCO, SQ-CEN, SQ-CGE, SQ-CMV, SQ-CPP, SQ-SPFX",carved and swapped 2026-11-04,,,
@@ -123,7 +123,7 @@ Creative Labels: sticky notes and labels as face paper,sticky_notes.md,SN-,BUILT
 Names,names.md,NM-,BUILT,creativecommon,CQ-NM,audit DEPLOYED with 1.1.01 (436 fixes,,,
 JEI coverage gaps,jei_coverage.md,JC-,BUILT,"creativecommon, creativecompat, creativedevtools, kubejs","SQ-JC, CQ-JC","part 1 (crafting) generated, regenerate with `python3 tools/jei_coverage.py` after `/dumpcraftingaudit`",,,
 JEI world-interaction tabs,jei_world_tabs.md,JW-,BUILT,creativecompat,,DEPLOYED with 1.1.01,,,
-Wandering Trader + Wandering Winemaker,wandering_trader.md,WT-,BUILT,"creativecommon, creativebrewing",SQ-WT,DEPLOYED with 1.0.4,,,
+Wandering Trader + Wandering Winemaker,wandering_trader.md,WT-,BUILT,"creativecommon, creativebrewing, creativeloot",SQ-WT,DEPLOYED with 1.0.4,,,
 Trade sync,trade_sync.md,TS-,BUILT,creativecommon,SQ-TSY,"BUILT 2026-11-03 (patcherMod, installed in `mods/`, not booted",,,
 Wandering Trader catalog,wandering_trader_catalog.md,,reference,,,"reference, regenerate with `python3 tools/wandering_trader_report.py` after `/dumptrades`",,,
 Shields,shields.md,SH-,BUILT,creativeequipment,,"DEPLOYED, in-game test pending (SH-06 passed)",,,
@@ -152,7 +152,7 @@ Nests and egg crates,nests.md,NE-,BUILT,creativedelight,SQ-NEST,"2026-11-03: wil
 Mooblooms,mooblooms.md,MB-,BUILT,creativeworldgen,,More Mooblooms 1.0.0 DEPLOYED with 1.0.6 (first release,,,
 Mob spawns by biome,mob_spawns.md,MS-,BUILT,creativeworldgen,SQ-MOB,DEPLOYED with 1.0.6: 12 tuning rules + 3 spawn conditions + spawn ground,,,
 Animal breeding item and bee flower audit,breeding_audit.md,SQ-BREED-,reference,,SQ-BREED,audit DONE 2026-11-10 (static),reference,audit 2026-11-16: reference document; its TODO rows belong to other features,2026-11-16
-Bee nests,bee_nests.md,BN-,BUILT,creativeworldgen,,DEPLOYED with 1.0.6 with the starter rules (scratch-server verified: 44 biomes),,,
+Bee nests,bee_nests.md,BN-,BUILT,"creativedelight, creativeworldgen",,DEPLOYED with 1.0.6 with the starter rules (scratch-server verified: 44 biomes),,,
 Bee nests by biome,bee_nests_by_biome.md,,reference,,,"reference, regenerate with `python3 tools/gen_bee_nests.py`",,,
 Spawns by biome,spawns_by_biome.md,,reference,,,"reference, generated from the 2026-10-09 `/dumpspawns`",,,
 Monkeys and apes,monkeys.md,,reference,,,"reference, decision open (TODO `merges/mobs #1`)",reference,audit 2026-11-16: reference document; its TODO rows belong to other features,2026-11-16

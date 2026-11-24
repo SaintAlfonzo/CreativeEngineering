@@ -2399,3 +2399,19 @@ looks in every in-tree jar's assets for a KubeJS item's sprite. Jar built, not i
   Create's (`swaps/merges_tmted.json`); its crusher flour recipes removed by script; Vintage advancements dropped; Oven
   and Copper Pot pop XP without unlocking recipes; Barbeques calls the seasoning framework directly; requires Creative
   Loot. Queue SQ-RFX-07 to -15, CQ-RFX-03, SQ-AV-02, -03, SQ-PST-10c.
+
+## 41. Wave 2 carve: wood composters and honeycomb shearing from Creative Common (2026-11-24)
+
+TODO `creative-common-publish #18`, rulings W2-8 and W2-9 ([plan_wave2_publish.md](plan_wave2_publish.md)).
+
+- **Wood composters:** `farm/composter/` (`WoodComposters`, `WoodComposterBlock`, `WoodComposterItem`), registered from the
+  constructor. Ids `creativedelight:<wood>_composter` for the 12 woods (twisted, ancient, blossom and azalea only with
+  their mods); blockstates, models, textures (copied unchanged; provenance row in `texture_sources/sources.csv`), loot
+  tables and lang moved with them. Recipes and tags: `kubejs/data/creativedelight/kubejs/creativedelight/composters.js`
+  (`#creativedelight:composters`); dict keys `i.composter_<wood>` and `i.t_composters` kept with the new values. Old
+  `creativecommon:` ids: `swaps/common_composters.json`. Texture credit (Quark and Architect's Palette plank palettes,
+  ruling W1): Delight's `NOTICE-thirdparty-various.txt`. Mechanics: [composting.md](composting.md) section 3.
+- **Honeycomb shearing:** `mixin/minecraft/BeehiveHoneycombMixin`, `CDConfig.BEES` `[bees] honeycombMultiplier` (default
+  1, the pack 2). The constructor copies an old `[bees]` from `creativecommon-common.toml` once before registering the
+  config (`CDConfig.COMMON_FILE`, `COMMON_SECTIONS`). Mechanics: [bee_nests.md](bee_nests.md) section 4.
+- Tests: CM-16 (SQ-CM-42 old-save swap, SQ-CM-43), SQ-FCK-20 and SQ-FCK-21 (carry-over); SQ-FCK-12, -13 read Delight's file.

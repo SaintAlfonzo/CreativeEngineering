@@ -1,0 +1,11 @@
+# Fixture (creative-common-publish #18, #19, 2026-11-24): a pre-carve creativecommon-common.toml holding [bees] and
+# [wandering_trader] with non-default values, for the carry-over rows SQ-FCK-20, SQ-FCK-21 and SQ-WT-03.
+
+[wandering_trader]
+	enabled = true
+	traderIntervalTicks = 48000
+	commonTrades = 12
+	rareTrades = 3
+
+[bees]
+	honeycombMultiplier = 3

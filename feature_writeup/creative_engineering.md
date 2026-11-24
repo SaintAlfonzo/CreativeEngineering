@@ -493,7 +493,7 @@ copy), which already held every value explicitly:
 | `[advancements] enabled` | true | false |
 | `[toasts] tutorial`, `advancement` | true, true | false, false |
 | `[jei] packOrder` | false | true |
-| `[wandering_trader] enabled`, `traderIntervalTicks`, `commonTrades`, `rareTrades` | false, 24000, 5, 1 | true, 96000, 25, 5 |
+| `[wandering_trader] enabled`, `traderIntervalTicks`, `commonTrades`, `rareTrades` (Creative Loot's `creativeloot-common.toml` since 2026-11-24, wave 2) | false, 24000, 5, 1 | true, 96000, 25, 5 |
 | `[creative_menu] disabled` (new key; `CreativeMenuDisableMixin` now asks it, before: always on) | false | true |
 
 The title panorama left the jar for `kubejs/assets/minecraft/textures/gui/title/background/` (pack-owned, shipped to
@@ -706,13 +706,13 @@ commits touching Common's tree, `kubejs/data/creativecommon` and `kubejs/assets/
 | Salt: placed-only salt licks, salt listener before melt, Salt Melt tool, salt dict keys ([salt.md](salt.md)) | SQ-SALT: 6 PASS on earlier jars, 2 FAIL (older runs), 8 drafts; rerun in SQ-CC13-06 (pending) |
 | Effect level caps: `[effects] levelCaps` holds the 87 same-at-every-level effects at level I from every source, tooltips included (`LevelCappedEffect`, `MobEffectInstanceLevelCapMixin`; [effects.md](effects.md) section 3) | SQ-EFX-15 to -17 current PASS (built 2026-11-19); in game CQ-CC13-03 (pending) |
 | Own-config watcher: Common watches `config/` for the pack's own files (modify and create, 1 s debounce, content guard) and runs Forge's reload path (`config/OwnConfigWatcher`, `OwnConfigLogic`, `ConfigReload`) | not yet queued before CC13; CQ-CC13-01 (pending) |
-| Wooden composters: 12 woods, recipe from 7 slabs, loot tables, Polymorph back to the Composter, furnace fuel and burn values for the flammable woods ([composting.md](composting.md); `composter/`) | SQ-CM-37 to -41 never run (queued); CQ-CM-37, CQ-CM-42 and CQ-CC13-04 (pending); side textures await the owner look-check (TODO `creative-common-publish #3`) |
+| Wooden composters (moved to Creative Delight 2026-11-24, wave 2, ids `creativedelight:<wood>_composter`, old ids swapped): 12 woods, recipe from 7 slabs, loot tables, Polymorph back to the Composter, furnace fuel and burn values for the flammable woods ([composting.md](composting.md); `composter/`) | SQ-CM-37 to -41 never run (queued); CQ-CM-37, CQ-CM-42 and CQ-CC13-04 (pending); side textures await the owner look-check (TODO `creative-common-publish #3`) |
 | Glass shards (moved to Creative Compat 2026-11-24, id `creativecompat:glass_shards`): global loot modifier for every block and pane in the forge glass tags ([glass_shards.md](glass_shards.md); needs Creative Loot's GlmMerge and Quark) | SQ-GSH rows, not part of the CC13 gate |
 | Idle random ticks: grown crops and Floral bushes stop random ticking, ripe Vinery stems too (`IdleRandomTickMixin`, `IdleTickRules`) | with SQ-CC13-05 (boot) |
 | Sack pick-up (moved to Creative Compat 2026-11-24, `storage/SneakPickup`): sneak and right-click a placed sack with an empty hand to pick it up with its contents (`storage/SneakPickup`) | the dependents' own rows |
 | NCH helpers: json edit helpers mark the recipe changed, `NCH.forPack` / `reg.forPack`, Create crushing and milling pools, new recipe types named directly | the pack's recipe load (SQ-CC13-05) |
 | Dict API: namespace binding, `dict_lint`, literal-id swap and missing-key tooling, orphan-tab handling, dict tag check; ids follow the owning mod (`creativecommon:` namespace); retired dict keys `diet_log`, `liquid_diet_log`, `food_dictionary` (moved to Raspberry Pie) | SQ-CMV-01, SQ-CCO-15, SQ-CPP-01 in SQ-CC13-01 and -05 (pending) |
-| Loot data: wooden composter loot tables | SQ-CCO-16 and SQ-CC13-05 (pending) |
+| Loot data: wooden composter loot tables (moved to Creative Delight with the composters) | SQ-CCO-16 and SQ-CC13-05 (pending) |
 | American spelling in own lang values and config comments, build stamps, notices (`NOTICE-commonmark.txt`, `NOTICE-thirdparty.txt`), dated comments out of code, tab indent in Java, JS and Gradle (including the trader package) | no behavior change |
 
 **Run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md), scratch jar `1.3.0+23c5050d`,

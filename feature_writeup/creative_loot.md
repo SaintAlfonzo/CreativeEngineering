@@ -3,7 +3,8 @@
 Written 2026-11-17 (plan_rules_fixes.md section 5b, D13; section 5, D14, D25; TODO `conventions #16`, `#15`).
 
 Written for: the owner and agents working on loot. Own mod `creativeloot` (development/creativeLoot,
-`creativeloot-1.0.0.jar`, side both), package `com.SaintAlfonzo.creativeloot`, no config file, script packs
+`creativeloot-1.0.0.jar`, side both), package `com.SaintAlfonzo.creativeloot`, config `creativeloot-common.toml`
+(`[wandering_trader]` only, since 2026-11-24), script packs
 `kubejs_startup/creativeloot/` (in the jar) and `kubejs/data/creativeloot/kubejs/` (pack folder, copied into the jar).
 Split out of Creative Worldgen with the same behavior: loot is not worldgen, and Creative Delight and Creative Brewing
 need the engine without needing Worldgen. How the engine tunes loot (pre-roll rewrite, post-roll LootJS layer, bans,
@@ -23,8 +24,9 @@ packed food, drops) is [loot.md](loot.md); this file is the jar.
 - Requires Creative Common, Creative Compat and LootJS (mandatory, AFTER). Required by Creative Worldgen (since
   2026-11-17); Creative Delight and Creative Brewing add the requirement with their next rebuild (plan P3, D25).
 - Registers the ancient corpse feature, its configured and placed features and the `creativeloot:ancient_corpses`
-  biome modifier serializer (section 2c, since 2026-11-18); nothing else. No config file: every knob is in `loot/loot_config.json`. Worldgen never had a `[loot]` config section,
-  so there was nothing to carry with `ConfigRename`.
+  biome modifier serializer (section 2c, since 2026-11-18). Loot knobs are in `loot/loot_config.json`; Worldgen never had
+  a `[loot]` config section, so there was nothing to carry with `ConfigRename`.
+- Wandering Trader spawn wait and offer counts (section 2d, since 2026-11-24): the jar's one toml file.
 
 ## 1. What it holds
 
@@ -147,6 +149,18 @@ decay, names and render are Creative Compat's ([creative_compat.md](creative_com
   keeps `tools/optional_ref_audit.py` clean. Loot tables in the jar: `corpse/cave`, `corpse/ocean` only.
 - **Lang** `assets/creativeloot/lang/en_us.json`: `entity.creativeloot.ancient_corpse`, `entity.creativeloot.ancient_remains`.
 
+## 2d. Wandering Trader spawn and offers (2026-11-24)
+
+Moved from Creative Common in the wave 2 carve (ruling W2-2, TODO `creative-common-publish #19`): `trader/WanderingTraderTweaks`,
+`mixin/WanderingTraderSpawnerMixin` (the 24000-tick wait) and `mixin/WanderingTraderTradesMixin` (common count, extra
+rare offers), with `LootConfig` `[wandering_trader]` (`enabled`, `traderIntervalTicks`, `commonTrades`, `rareTrades`;
+defaults vanilla, the pack sets true / 96000 / 25 / 5). The constructor copies an old `[wandering_trader]` from
+`creativecommon-common.toml` once before registering the config (`ConfigRename.carrySections`, or `mergeSections` when
+the file exists); Common keeps the section name in its own carry list from `creativeengineering-common.toml`, so a pack
+that skipped every version since still gets it. Trade Sync, `TradeListings`, `TagItemListing` and the trade helper stay
+in Common; what the pools hold is still `kubejs/server_scripts/economy/wandering_trades.js`. Mechanics:
+[wandering_trader.md](wandering_trader.md).
+
 ## 3. Edges
 
 - `global.CWG.lootRules` is gone (no alias): the four Creative Delight callers (`miners_delight/loot.js`,
@@ -178,11 +192,15 @@ decay, names and render are Creative Compat's ([creative_compat.md](creative_com
   pickaxe in the main hand (wood, stone, copper, iron; worn; copper oxidized or waxed), some an offhand tool or torches
   (bread underwater); none is empty before opening; taking the held item off the corpse removes it from the model.
   Ocean ones have no `NoGravity` (sinking itself: Compat SQ-CMP-16). Queue SQ-LOOT-11, CQ-LOOT-12.
+- [ ] **LOOT-12 Wandering Trader settings:** the carry-over from Common's file and the offer counts read from Loot's
+  file ([wandering_trader.md](wandering_trader.md) WT-18). Queue SQ-WT-03, SQ-WT-04.
 - [ ] **LOOT-09 Remains:** remains in the Visceral Heap -> a hit breaks them and drops bones; they never despawn. Queue
   SQ-LOOT-09.
 
 ## 5. History
 
+- 2026-11-24: the Wandering Trader spawn wait and offer counts moved in from Creative Common (section 2d; W2-2,
+  `creative-common-publish #19`); first config file `creativeloot-common.toml`. LOOT-12, SQ-WT-03, SQ-WT-04.
 - 2026-11-23: `L.ban` records its mod (`mod` option, default from an `@mod` target) and `checkBanSwitches` skips a ban whose mod is not loaded with one INFO line (`loot-tables #3`). `swapDrop` with several conditions writes an alternative of inverted terms instead of `minecraft:all_of`, which 1.19.2 lacks (`creativebrewing/publish #13`); the modded composter tables (twisted, ancient, blossom, azalea) carry a top-level `forge:conditions` mod_loaded.
 - 2026-11-18: held items and the no-empty guarantee (`hands` block, `AncientHands`; TODO `corpses #8`); sealed mark and ocean `NoGravity` dropped (`corpses #9`); SQ-LOOT-11, CQ-LOOT-12.
 - 2026-11-18: ancient corpses, their armor rolls and the Visceral Heap remains (section 2c; plan_corpses.md, TODO `corpses #2`, `#5`, `#7`; SQ-LOOT-07 to -09, CQ-LOOT-10).

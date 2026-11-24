@@ -158,9 +158,11 @@ with the rules emptied (the generator refuses a baseline taken with rules).
 Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Built so far: honeycomb shearing (below, 2026-11-07).
 
 - `mobs/bees #3` honeycomb shearing: BUILT 2026-11-07 (plan_farming_cooking_batch A9, owner decision Q7: 6 per shear, no
-  Looting). Vanilla's `BeehiveBlock.dropHoneycomb` (`m_49600_`) pops a fixed 3 (checked in the 1.19.2 jar); Creative Common
-  `mixin/BeehiveHoneycombMixin` multiplies that constant by `[bees] honeycombMultiplier` in creativecommon-common.toml
-  (default 2, so 6; 1 = vanilla; 1 to 16; read live). Hand shearing and dispenser shearing both go through that method.
+  Looting). Vanilla's `BeehiveBlock.dropHoneycomb` (`m_49600_`) pops a fixed 3 (checked in the 1.19.2 jar); Creative Delight
+  `mixin/minecraft/BeehiveHoneycombMixin` multiplies that constant by `[bees] honeycombMultiplier` in
+  creativedelight-common.toml (default 1 = vanilla, the pack sets 2, so 6; 1 to 16; read live). In Creative Common until
+  2026-11-24 (wave 2 carve, TODO `creative-common-publish #18`): Delight copies an old `[bees]` from
+  creativecommon-common.toml once (SQ-FCK-20, SQ-FCK-21). Hand shearing and dispenser shearing both go through that method.
   Hives from other mods with their own drop code are untouched. Test BN-HC-01: shear a full (honey level 5) hive with
   shears -> 6 honeycombs; a dispenser with shears facing a full nest -> 6; set the key to 1 -> 3. See `dishes/ingredients #22`
   for honeycomb as sugar.

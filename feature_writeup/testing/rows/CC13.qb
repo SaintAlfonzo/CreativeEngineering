@@ -81,17 +81,17 @@
 @@jars creativecommon
 @@sources feature_writeup/publish_readiness.md feature_writeup/project_pages/creative_common.md
 @@table
-## SQ-CC13-07 | Common alone: vanilla defaults (recipe unlocks on, honeycomb x1, no effect swaps, empty removed list, no modded composters)
+## SQ-CC13-07 | Common alone: vanilla defaults (recipe unlocks on, no effect swaps, empty removed list, no composters)
 @group B (Common only)
-@commands `cc_only alone`, fresh config; `/recipe give @s minecraft:stick`; read the written `config/creativecommon-common.toml`; grep latest.log for `[jeiRemove]` and `[itemMerges]`; `/give @s creativecommon:twisted_composter`
-@pass the recipe is given (`Unlocked 1 recipes`); the toml has `[recipe_book] unlocks = true`, `honeycombMultiplier = 1`, `remap = []`, `categoryOverrides = []`; no `[jeiRemove]` pack line; `twisted_composter` and the three Quark composters are unknown items while `spruce_composter` gives
-@fails `CommonConfig` defaults; `NoRecipeUnlockMixin` gate; `WoodComposters.add` mod check
+@commands `cc_only alone`, fresh config; `/recipe give @s minecraft:stick`; read the written `config/creativecommon-common.toml`; grep latest.log for `[jeiRemove]` and `[itemMerges]`; `/give @s creativecommon:spruce_composter`
+@pass the recipe is given (`Unlocked 1 recipes`); the toml has `[recipe_book] unlocks = true`, `remap = []`, `categoryOverrides = []` and no `[bees]` or `[wandering_trader]`; no `[jeiRemove]` pack line; `creativecommon:spruce_composter` is an unknown item (the composters, `[bees]` and `[wandering_trader]` left Common in the wave 2 carve, 2026-11-24; Delight's composters: SQ-CM-43)
+@fails `CommonConfig` defaults; `NoRecipeUnlockMixin` gate; a composter or `[bees]` / `[wandering_trader]` left in Common
 @draft the runner needs a fresh-config boot of the `cc_only alone` set
 ## SQ-CC13-08 | full pack: pack values still apply (no recipe unlocks, honeycomb x2, swaps), removed items hidden and tag-stripped from the pack list
 @group A (full pack)
 @commands `/recipe give @s minecraft:stick`; shear a full beehive with `/cdevtest loot`-style shears or a dispenser; grep latest.log for `[jeiRemove]`, `[itemMerges]`, `[removedWoods]`; `/kubejs hand` on a removed item (`create_dd:spirit_planks` or `quark:flax`... any listed id)
 @pass `Unlocked 0 recipes`; 6 honeycomb from a full hive; the `[jeiRemove] N removed items registered (pack list added)` line with N the same order as before (about 360 plus merges); a removed item has no item tags
-@fails pack config `config/creativecommon-common.toml` lost `[recipe_book] unlocks = false` or `honeycombMultiplier = 2`; `kubejs/startup_scripts/removed/` not loaded or ran before Common's list; `server_scripts/tags/removed_item_tags.js`
+@fails pack config `config/creativecommon-common.toml` lost `[recipe_book] unlocks = false`, or `config/creativedelight-common.toml` `honeycombMultiplier = 2` (carried over from Common's file, SQ-FCK-20); `kubejs/startup_scripts/removed/` not loaded or ran before Common's list; `server_scripts/tags/removed_item_tags.js`
 @draft the item id in the tag check is picked from `startup_scripts/removed/removed_items.js` at run time
 ## SQ-CC13-09 | Wither Immunity: Wither is refused while it lasts, and an existing Wither deals no damage
 @group A (full pack)

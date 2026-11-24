@@ -52,8 +52,8 @@ look stop is clean (the runner's stop: no exception after "Stopping server" in l
 @draft no batch holds this row yet
 ## SQ-CMV-04 | Common's generated config keeps vanilla defaults
 @group B
-@commands Vanilla defaults (2026-11-07, creative_engineering.md 7.1): on `@modset cc_only alone` (config empty, so Common writes its defaults; no pack advancement drop); after the boot `grep -nE "^\s*(enabled|traderIntervalTicks|commonTrades|rareTrades|disabled) =" config/creativecommon-common.toml`
-@pass the generated file has advancements enabled = true, wandering_trader enabled = false with 24000 / 5 / 1, creative_menu disabled = false (the config keys only; packOrder = false and the toasts tutorial / advancement = true live in `creativecompat-common.toml` since the carve, CompatConfig Jei / Toasts, and are not on this Common-alone modset; the advancement grant check was dropped, owner ruling 2026-11-18: the pack drops advancements)
+@commands Vanilla defaults (2026-11-07, creative_engineering.md 7.1): on `@modset cc_only alone` (config empty, so Common writes its defaults; no pack advancement drop); after the boot `grep -nE "^\s*(enabled|disabled) =" config/creativecommon-common.toml` (`[wandering_trader]` moved to Creative Loot in the wave 2 carve, 2026-11-24: SQ-WT-04)
+@pass the generated file has advancements enabled = true, creative_menu disabled = false and no `[wandering_trader]` (the config keys only; packOrder = false and the toasts tutorial / advancement = true live in `creativecompat-common.toml` since the carve, CompatConfig Jei / Toasts, and are not on this Common-alone modset; the advancement grant check was dropped, owner ruling 2026-11-18: the pack drops advancements)
 @fails a default left at the pack value in `CommonConfig`
 @from batches/r1108cge/b5_cco.qb
 @modset cc_only alone
@@ -61,7 +61,7 @@ shell grep -nE "^\s*(enabled|traderIntervalTicks|commonTrades|rareTrades|disable
 > execute in minecraft:the_end run forceload add 0 0
 > pbot spawn cge06 0 75 0 minecraft:the_end survival
 sleep 3
-look shell.txt: advancements enabled = true, wandering_trader enabled = false with 24000 / 5 / 1, creative_menu disabled = false
+look shell.txt: advancements enabled = true, creative_menu disabled = false, no wandering_trader keys
 
 ## CQ-CMV-03
 @group client

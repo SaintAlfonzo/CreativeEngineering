@@ -333,16 +333,16 @@ look Amount falls by 1000 after the use (FillTick not wrapped between the two re
 ## SQ-FCK-12 | sheared full beehive drops 6 honeycomb; honeycombMultiplier = 2
 @group A
 @commands `/setblock ~ ~ ~ minecraft:beehive[honey_level=5]`; fake player with shears uses it; count honeycomb item entities
-@pass one stack of 6; `[bees] honeycombMultiplier = 2` in `config/creativecommon-common.toml` (BN-HC-01)
-@fails `BeehiveHoneycombMixin` not applied (latest.log, `m_49600_`)
+@pass one stack of 6; `[bees] honeycombMultiplier = 2` in `config/creativedelight-common.toml` (BN-HC-01)
+@fails `BeehiveHoneycombMixin` not applied (Creative Delight's `mixin/minecraft/` since the wave 2 carve, 2026-11-24; latest.log, `m_49600_`)
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb passed
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
 > forceload add 1000 1000 1480 1080
 > execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
 sleep 3
-shell grep -A4 "^\[bees\]" config/creativecommon-common.toml | grep honeycombMultiplier
-shell grep -qE "^\s*honeycombMultiplier = 2" config/creativecommon-common.toml
+shell grep -A4 "^\[bees\]" config/creativedelight-common.toml | grep honeycombMultiplier
+shell grep -qE "^\s*honeycombMultiplier = 2" config/creativedelight-common.toml
 > setblock 1040 -60 1080 minecraft:beehive[honey_level=5,facing=north]
 > pbot hold G minecraft:shears 1
 > pbot use G 1040 -60 1080 north
@@ -369,9 +369,9 @@ waitlog verb=tickwarp end=done ticks=\d+ asked=20\b 30
 waitlog verb=tickwarp end=done ticks=\d+ asked=21\b 30
 > cdevtest items 1051 -60 1080 3
 expect verb=items items=(\S*,)?minecraft:honeycomb:6\b
-shell sed 's/^\(\s*honeycombMultiplier = \)2/\11/' config/creativecommon-common.toml > config/creativecommon-common.toml.tmp && cat config/creativecommon-common.toml.tmp > config/creativecommon-common.toml && rm config/creativecommon-common.toml.tmp && grep honeycombMultiplier config/creativecommon-common.toml
+shell sed 's/^\(\s*honeycombMultiplier = \)2/\11/' config/creativedelight-common.toml > config/creativedelight-common.toml.tmp && cat config/creativedelight-common.toml.tmp > config/creativedelight-common.toml && rm config/creativedelight-common.toml.tmp && grep honeycombMultiplier config/creativedelight-common.toml
 sleep 5
-shell grep -c "creativecommon-common.toml changed" logs/debug.log; true
+shell grep -c "creativedelight-common.toml changed" logs/debug.log; true
 > setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
 > setblock 1050 -60 1081 minecraft:redstone_block
 > cdevtest tickwarp 22
@@ -381,7 +381,7 @@ waitlog verb=tickwarp end=done ticks=\d+ asked=22\b 30
 waitlog verb=tickwarp end=done ticks=\d+ asked=23\b 30
 > cdevtest items 1051 -60 1080 3
 expect verb=items items=(\S*,)?minecraft:honeycomb:3\b
-shell sed 's/^\(\s*honeycombMultiplier = \)1/\12/' config/creativecommon-common.toml > config/creativecommon-common.toml.tmp && cat config/creativecommon-common.toml.tmp > config/creativecommon-common.toml && rm config/creativecommon-common.toml.tmp && grep honeycombMultiplier config/creativecommon-common.toml
+shell sed 's/^\(\s*honeycombMultiplier = \)1/\12/' config/creativedelight-common.toml > config/creativedelight-common.toml.tmp && cat config/creativedelight-common.toml.tmp > config/creativedelight-common.toml && rm config/creativedelight-common.toml.tmp && grep honeycombMultiplier config/creativedelight-common.toml
 reject \[cdevtest\] .*done=0
 look the debug.log count is >= 1 (the watcher saw the edit); honeycomb:6 again with a count >= 1 means the value is not read live (FAIL); count 0 = the edit was still not seen (batch)
 
@@ -1213,3 +1213,25 @@ expect verb=randomtick rounds=1 block_ticks=3\b
 expect verb=state pos=1264,-60,1243 state="?vinery:grapevine_lattice\[.*grape=hops
 reject \[cdevtest\] .*done=0
 look the two randomtick lines come in command order: the first (stopped row) must read block_ticks=0, the second 3; savanna_red keeps the stem's leaf placement (red and white only) out of the test
+
+@@section 2
+@@title SQ-FCK wave 2 carve: [bees] honeycombMultiplier moved to Creative Delight, config carry-over, 2026-11-24 ([bee_nests.md](../bee_nests.md); [plan_wave2_publish.md](../plan_wave2_publish.md) W2-8; TODO `creative-common-publish #18`)
+@@date 2026-11-24
+@@jars creativecommon creativedelight
+@@sources feature_writeup/bee_nests.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/CreativeDelight.java development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/mixin/minecraft/BeehiveHoneycombMixin.java
+@@text `[bees] honeycombMultiplier` lives in `config/creativedelight-common.toml` since 2026-11-24; Delight's constructor copies an old `[bees]` from `creativecommon-common.toml` once (ConfigRename carry for a new file, merge for an existing one). Fixtures: `tools/scratch_query/fixtures/wave2_carry/` (`old_common_bees_trader.toml`, `delight_without_bees.toml`).
+@@table
+## SQ-FCK-20 | carry-over, merge: old Common [bees] copied into an existing Delight toml without [bees]
+@group A (full pack, fixture tomls)
+@commands before boot put `old_common_bees_trader.toml` as `config/creativecommon-common.toml` and `delight_without_bees.toml` as `config/creativedelight-common.toml`; boot; read both files and the log; shear a full beehive (SQ-FCK-12 steps)
+@pass `config/creativedelight-common.toml` `[bees] honeycombMultiplier = 3`; `config/creativecommon-common.toml` has no `[bees]` after the boot; latest.log has `[swaps] config sections [bees] merged from creativecommon-common.toml`; the hive drops 9 honeycomb
+@fails the carry in `CreativeDelight` constructor (must run before `registerConfig`); Common still declaring `[bees]`; `BeehiveHoneycombMixin` not in `creativedelight.mixins.json`
+@draft fixture copy as a section `@@prep run`; first runner writes the steps
+@modset none
+## SQ-FCK-21 | carry-over, new file: no Delight toml, Common's [bees] carried whole
+@group A (full pack, fixture tomls)
+@commands as SQ-FCK-20 but only `old_common_bees_trader.toml` is put in `config/` (no `creativedelight-common.toml`)
+@pass Delight's new toml has `[bees] honeycombMultiplier = 3` and every other Delight section at its default; latest.log has `[swaps] config sections [bees] carried over` (or merged, when an earlier carry in the same constructor wrote the file first)
+@fails `ConfigRename.carrySections` new-file path; the earlier Delight carries (campfire, creativeengineering sections) wrote the file first, then the merge path is the one taken
+@draft as SQ-FCK-20
+@modset none

@@ -1,6 +1,7 @@
 # Composting: the pack's composter table, rules, values and exclusions
 
-The 12 wooden composters are Creative Common content and ship in 1.3.0 ([creative_engineering.md](creative_engineering.md) 7.6).
+The 12 wooden composters are Creative Delight content since 2026-11-24 (moved from Creative Common in the wave 2 carve,
+[plan_wave2_publish.md](plan_wave2_publish.md) W2-9; [creative_delight.md](creative_delight.md)).
 
 Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.md) already uses).
 
@@ -120,18 +121,20 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
   CD `vintagedelight/compost.js`; it was not compostable). Tests SQ-CP-02, SQ-CP-03, SQ-CP-04.
 
 - **Wood composters (2026-11-21, TODO `farming/composting #3`, [brief](briefs/farming_composting.md) "composting #3"):**
-  Creative Common registers `creativecommon:<wood>_composter` for spruce, birch, dark oak, jungle, acacia, mangrove,
-  twisted, ancient, blossom, azalea, crimson and warped (`composter/WoodComposters`); oak stays `minecraft:composter`.
+  Creative Delight registers `creativedelight:<wood>_composter` for spruce, birch, dark oak, jungle, acacia, mangrove,
+  twisted, ancient, blossom, azalea, crimson and warped (`farm/composter/WoodComposters`); oak stays `minecraft:composter`.
   Each is a `ComposterBlock` subclass, so the shared table above, hoppers, the comparator, the level-7 -> 8 tick and
   bone meal are vanilla's; WTHIT's level line registers on the `ComposterBlock` class and covers them. Fire 5 / 20 and
   fuel 300 ticks like vanilla, none for crimson and warped; map color from the wood's planks. Loot: itself (explosion
-  decay) plus 1 bone meal at level 8. Model: vanilla's composter parent with `creativecommon:block/<wood>_composter_{side,top,bottom}`
-  (palette swaps, plan R8), vanilla fill models. Recipes (Common's server script `recipes/composters.js`): that wood's 7
+  decay) plus 1 bone meal at level 8. Model: vanilla's composter parent with `creativedelight:block/<wood>_composter_{side,top,bottom}`
+  (palette swaps, plan R8), vanilla fill models. Recipes (Delight's server script `creativedelight/composters.js`): that wood's 7
   slabs in the vanilla shape. Vanilla's `minecraft:composter` recipe (`#minecraft:wooden_slabs`, mixed species too) stays,
   so one species' slabs match both and Polymorph offers the choice, the wood composter listed first (Polymorph sorts by
   translation key; owner 2026-11-21). Each wood composter crafts back into the vanilla one, shapeless 1 to 1. Tags
-  `#creativecommon:composters` (block and item, vanilla's and the 12; in the Compat item physics floats list), the 12
-  in `#minecraft:mineable/axe`. Dict keys `i.composter_<wood>`, `i.t_composters`.
+  `#creativedelight:composters` (block and item, vanilla's and the 12; in the Compat item physics floats list when Delight
+  is loaded), the 12 in `#minecraft:mineable/axe`. Dict keys `i.composter_<wood>`, `i.t_composters` (kept; values follow
+  the new namespace). Saves with the old `creativecommon:` ids are swapped by Delight's `swaps/common_composters.json`.
+  Texture credit (palettes from Quark and Architect's Palette planks): Delight's NOTICE (publish_readiness.md PR-CC-12, ruling W1).
 
 ## 4. Limits and decisions
 
@@ -171,7 +174,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - [server_scripts/_lib/dump_compost.js](../kubejs/server_scripts/_lib/dump_compost.js) (`/dumpcompost`).
 - [tools/gen_compost_values.py](../tools/gen_compost_values.py).
 - Related recipes: [wood/sawdust.js](../kubejs/data/creativeengineering/kubejs/wood/sawdust.js) (compost, fertile soil, mulch).
-- Wood composters: [composter/](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/composter/WoodComposters.java) (Creative Common), [recipes/composters.js](../kubejs/data/creativecommon/kubejs/recipes/composters.js) (recipes, tags).
+- Wood composters: [farm/composter/](../development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/composter/WoodComposters.java) (Creative Delight), [creativedelight/composters.js](../kubejs/data/creativedelight/kubejs/creativedelight/composters.js) (recipes, tags), [swaps/common_composters.json](../development/creativeDelight/src/main/resources/data/creativedelight/swaps/common_composters.json) (old ids).
 
 ## 6. Offline checks
 
@@ -208,6 +211,8 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - [ ] **CM-14 Look and WTHIT:** each of the 12 shows its wood, the fill and the ready texture; WTHIT shows the level line. Queue CQ-CM-42.
 - [ ] **CM-15 Fire and fuel:** a lit Acacia Composter burns away, a Crimson Composter does not; an Acacia Composter
   smelts 1.5 items in a furnace, a Crimson Composter is not fuel. Queue SQ-CM-41.
+- [ ] **CM-16 Moved to Creative Delight:** an old save's Common composters load as Delight's (placed, chest, inventory); the
+  recipes, tags and floats list use the new namespace; Common alone registers none. Queue SQ-CM-42, SQ-CM-43.
 
 ## 8. History
 
@@ -227,3 +232,6 @@ Use a composter and watch its level; or read `/dumpcompost`.
   (plan_owner_rows_1120.md G3). Needs the Creative Engineering jar. SQ-CP-04.
 - 2026-11-21: wood composters built (plan_wood_bucket_batch_1121.md P2 item 1): Creative Common blocks, assets, loot,
   recipes and tags (section 3); CM-10 to CM-15. Needs the Creative Common jar and the texture PNGs.
+- 2026-11-24: wave 2 carve (TODO `creative-common-publish #18`, ruling W2-9): the 12 composters moved to Creative Delight
+  with Delight's namespace (blocks, items, assets, loot, lang, recipes, tags, dict values); old ids swapped by
+  `swaps/common_composters.json`; texture credit in Delight's NOTICE. CM-16, SQ-CM-42, SQ-CM-43.
