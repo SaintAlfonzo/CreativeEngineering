@@ -506,3 +506,27 @@ look the floats tag member list (wild plants, special flowers, crown, piles) and
 waitlog verb=tag kind=item tag=creativeloot:loot/chalk n=[1-9]\d*
 reject verb=tag kind=item tag=creativeworldgen:loot/chalk n=[1-9]\d*
 look the two creativeloot lists are full and the worldgen id has no members
+
+@@section 11
+@@title SQ-RFX Publish readiness P4: DR-C2 literals to dict keys (neoCraftHelper, generated cans, Create salting, pass-through blocks), 2026-11-23 ([plan_ready_now_1123.md](../plan_ready_now_1123.md) 5; [publish_readiness.md](../publish_readiness.md) 9, PR-CP-24; TODO `publish-readiness #6`)
+@@date 2026-11-23
+@@reviewed 2026-11-23
+@@jars creativecommon creativecompat creativedelight
+@@sources development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib kubejs/data/creativedelight/kubejs/salt/create_salting.js kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js development/creativeDelight/src/main/resources/kubejs_startup tools/gen_can_types.py
+@@text
+@@text Same content expected: only the spelling of ids changed (dict keys for literals; new keys `i.air`, `i.any_axe`, `f.empty`, `ef.phasing`, `ef.rage_aura` and 35 pass-through block keys in `block_dict.js`). Offline already equal: the pass-through tag members (`passthrough_tag_sim.js` out.json), the Create salting table, the generated cans through `test_gen_members.py`, the NCH absent and axe checks. Baseline: the instance pack dump (`$INST/kubejs/exported`, jars before commit 27d517e37 plus earlier ones); lines that differ there and come from other jars built since that dump are explained in the run doc, none may name a can, a salting mix, a pass-through tag or a recipe with an axe or stick tool.
+@@table
+## SQ-RFX-33 | boot on the P4 jars: recipe, tag and can food dumps unchanged, no dict error
+@group A
+@commands Boot on the P4 Common, Compat and Delight jars; `/dumpall`; `python3 $INST/tools/dump_diff.py recipes|tags|food $INST/kubejs/exported kubejs/exported`
+@pass no `[block_dict] Missing/invalid` line naming a new pass-through key, no `ReferenceError`, `is not defined` or `Cannot read property` from `neoCraftHelper.js`, `create_salting.js`, `passthrough_tags.js` or a `can_types.js`; `[salt] Create salting: N mixes added, M ... removed` as before; `[cans] registered N generated cans` with no `could not register`; recipe count and ids the same as the pack dump (the Create salting mixes and the Barbeque's skewering and Farmer's Delight axe salvaging recipes among them); every `creativecompat:passthrough*` block tag the same; `FOOD_SAME` for every `canned_` food (effects included)
+@fails a dict key that resolves to nothing: the tag, recipe or effect drops out (an `ONLY_BASE` line or a can with fewer effects); `global.effect` undefined in a `can_types.js`: Creative Delight's startup pack ran before Common's dicts (JarStartupScripts order); `R.AXE` undefined in salvaging recipes: the NCH getter is missing or forPack did not copy it
+bootexpect \[cans\] registered \d+ generated cans
+kjsreject (ReferenceError|is not defined|Cannot read property).*(neoCraftHelper|create_salting|passthrough_tags|can_types)
+bootreject \[block_dict\] Missing/invalid block IDs
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell for k in recipes tags food; do echo "== $k"; python3 "$INST/tools/dump_diff.py" $k "$INST/kubejs/exported" kubejs/exported | tail -30; done; true
+shell ! python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported" kubejs/exported | grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) [a-z0-9_]+:canned_'
+shell ! python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported" kubejs/exported | grep -E 'creativecompat:passthrough'
+look the recipe and tag diffs: RECIPES_SAME and TAGS_SAME, or every line explained by a jar built after the pack dump (none from this change)

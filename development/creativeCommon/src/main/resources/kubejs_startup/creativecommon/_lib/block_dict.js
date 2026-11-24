@@ -332,6 +332,44 @@ b.melt_fire_ff_necrolord_candelabra = 'fantasyfurniture:decorations/necrolord_ca
 b.melt_fire_ff_royal_candelabra = 'fantasyfurniture:decorations/royal_candelabra';
 b.melt_fire_di_wayward_lantern = 'domesticationinnovation:wayward_lantern';
 
+// Pass-through tier blocks with no item (Creative Compat tags/passthrough_tags.js, plan_passthrough.md); unresolved
+// when their mod is absent
+b.reinforced_cobweb = 'securitycraft:reinforced_cobweb';
+b.spider_web_small = 'fantasyfurniture:decorations/spider_web_small';
+b.spider_web_wide = 'fantasyfurniture:decorations/spider_web_wide';
+b.budding_tomatoes = 'farmersdelight:budding_tomatoes';
+b.propelplant_stem = 'nethersdelight:propelplant_stem';
+b.propelplant_berry_stem = 'nethersdelight:propelplant_berry_stem';
+b.propelplant_berry_cane = 'nethersdelight:propelplant_berry_cane';
+b.raspberry_bush = 'hearthandharvest:raspberry_bush';
+b.red_grape_bush = 'vinery:red_grape_bush';
+b.white_grape_bush = 'vinery:white_grape_bush';
+b.savanna_grape_bush_red = 'vinery:savanna_grape_bush_red';
+b.savanna_grape_bush_white = 'vinery:savanna_grape_bush_white';
+b.taiga_grape_bush_red = 'vinery:taiga_grape_bush_red';
+b.taiga_grape_bush_white = 'vinery:taiga_grape_bush_white';
+b.salmonberry_bush = 'delightful:salmonberry_bush';
+b.bamboo_leaves_full = 'creativecompat:bamboo_leaves_full';
+b.twisting_vines_plant = 'minecraft:twisting_vines_plant';
+b.weeping_vines_plant = 'minecraft:weeping_vines_plant';
+b.cave_vines = 'minecraft:cave_vines';
+b.cave_vines_plant = 'minecraft:cave_vines_plant';
+b.solid_vine = 'botania:solid_vine';
+b.attached_melon_stem = 'minecraft:attached_melon_stem';
+b.attached_pumpkin_stem = 'minecraft:attached_pumpkin_stem';
+b.coffee_bush = 'farmersrespite:coffee_bush';
+b.coffee_bush_top = 'farmersrespite:coffee_bush_top';
+b.coffee_stem = 'farmersrespite:coffee_stem';
+b.coffee_stem_middle = 'farmersrespite:coffee_stem_middle';
+b.coffee_stem_double = 'farmersrespite:coffee_stem_double';
+b.tea_bush = 'farmersrespite:tea_bush';
+b.small_tea_bush = 'farmersrespite:small_tea_bush';
+b.cantaloupe_plant = 'delightful:cantaloupe_plant';
+b.mint_plant = 'neapolitan:mint';
+b.hanging_roots_wall = 'immersive_weathering:hanging_roots_wall';
+b.wither_roots = 'farmersrespite:wither_roots';
+b.wither_roots_plant = 'farmersrespite:wither_roots_plant';
+
 // ############################## Validation ##############################
 
 StartupEvents.postInit(() => {

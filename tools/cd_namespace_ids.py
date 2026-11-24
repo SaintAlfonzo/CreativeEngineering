@@ -137,7 +137,9 @@ def can_ids(items_dict):
 		text = read(path)
 		start = text.index("{", text.index("genPut('can_types'"))
 		end = text.rindex("}") + 1
-		for key, row in json.loads(text[start:end])["cans"].items():
+		# effect fields are global.effect.<key> references (gen_can_types.effect_refs); quote them to read the JSON
+		body = re.sub(r'global\.effect\.(\w+)', r'"\1"', text[start:end])
+		for key, row in json.loads(body)["cans"].items():
 			if row.get("existing"):
 				continue
 			if key not in items_dict:

@@ -43,8 +43,11 @@ public class RhinoRun {
 					"  (Array.isArray(ids) ? ids : [ids]).forEach(function (x) { __tags[tag].push(String(x)) }) }",
 					"global.tags = { addTag: __tag, add: __tag };",
 					"global.removedItems = [];",
+					"global.has = function () { return true };",
+					"global.reg = { forPack: function () { return { item: function (e, id) { return e.create(id) } } } };",
 					"global.NCH = { registerConfig: function () {}, withNamespace: function (ns, fn) { return fn() },",
 					"  mortar: function (out, inp, e, id, n) { __mortar.push({ id: String(id), output: out.id, count: out.count, input: String(inp), inputs: n }) } };",
+					"global.NCH.forPack = function () { return global.NCH };",
 					""), "stubs", 1, null);
 			}
 		}

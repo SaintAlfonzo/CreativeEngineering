@@ -796,11 +796,35 @@ def can_member_parts(cans, servings):
 	return types_parts, serv_parts
 
 
+EFFECT_FIELD = re.compile(r'"effect": "([a-z0-9_.-]+:[a-z0-9_./-]+)"')
+
+
+def effect_keys(path=None):
+	"""Effect id -> its global.effect key (effect_dict.js in Common's _lib; DR-C2). One id with several keys takes the
+    key named like the id's path, else the first assigned."""
+	text = Path(path or pack_paths.STARTUP_LIB / 'effect_dict.js').read_text(encoding='utf-8')
+	keys = {}
+	for k, v in re.findall(r"^\s*ef\.([A-Za-z_$][\w$]*)\s*=\s*'([^']+)'", text, re.M):
+		tail = v.split(':', 1)[-1]
+		if v not in keys or (k == tail and keys[v] != tail):
+			keys[v] = k
+	return keys
+
+
+def effect_refs(body, keys=None):
+	"""Member script body: each "effect": "ns:id" with a global.effect key becomes "effect": global.effect.<key> (DR-C2,
+    the dict is loaded before Creative Delight's startup pack); ids with no key stay quoted."""
+	keys = effect_keys() if keys is None else keys
+	return EFFECT_FIELD.sub(lambda m: '"effect": global.effect.' + keys[m.group(1)] if m.group(1) in keys else m.group(0), body)
+
+
 def write_can_members(check=False):
 	"""Member scripts from can_types.json and can_servings.json as they are on disk; True when something differs."""
 	types_parts, serv_parts = can_member_parts(load_json(OUT)['cans'], load_json(SERVINGS)['servings'])
 	root = gen_out.INSTANCE / gen_out.STARTUP_ROOT
-	a = gen_out.write_member_scripts('can_types', 'can_types', types_parts, root, 'Generated cans (values, effects, recipes)', check)
+	keys = effect_keys()
+	a = gen_out.write_member_scripts('can_types', 'can_types', types_parts, root, 'Generated cans (values, effects, recipes)', check,
+									 post=lambda body: effect_refs(body, keys))
 	b = gen_out.write_member_scripts('can_types', 'can_servings', serv_parts, root, 'Servings per can', check)
 	return gen_out.report_member_scripts('can_types', *a, check) | gen_out.report_member_scripts('can_servings', *b, check)
 

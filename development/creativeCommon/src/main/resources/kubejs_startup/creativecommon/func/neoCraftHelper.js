@@ -18,7 +18,6 @@ global.NCH = {
 	modId: 'creativeengineering',
 	// Namespace of the recipe IDS the helpers write; withNamespace() changes it for one block of calls.
 	_ns: 'creativeengineering',
-	AXE: '#forge:tools/axes',
 	strict: true, // true = throw on invalid item/fluid ids, false = warn and continue
 
 	// ========================================================================
@@ -473,7 +472,7 @@ global.NCH = {
 			global.NCH._warn(context, 'resolved to an undefined/empty item id - check for an unset global.item key')
 			return false
 		}
-		if (id === 'minecraft:air') global.NCH._absent(id, context)
+		if (id === global.item.air) global.NCH._absent(id, context)
 		var valid = global.NCH._isTag(id)
 			? (Ingredient.of(id).itemIds.length > 0)
 			: Item.exists(id)
@@ -492,7 +491,7 @@ global.NCH = {
 	// in the full pack the label showing up in the [absent mods] summary means a real missing id.
 	_missingStackLabel: 'unknown mod (Item.of or Fluid.of of a missing id gave air or the empty fluid)',
 	_absent(id, context) {
-		if (id === 'minecraft:air' || id === 'minecraft:empty') {
+		if (id === global.item.air || id === global.fluid.empty) {
 			var e = new Error('[NCH] ' + context + ': ' + id + ' (Item.of / Fluid.of of a missing id)')
 			e.nchAbsent = global.NCH._missingStackLabel
 			throw e
@@ -534,7 +533,7 @@ global.NCH = {
 		global.NCH._warn(context, 'resolved to an undefined/empty fluid id')
 		return false
 		}
-		if (id === 'minecraft:empty') global.NCH._absent(id, context)
+		if (id === global.fluid.empty) global.NCH._absent(id, context)
 		if (global.NCH._isTag(id)) {
 		// once per tag: the potion bottling loop alone passes #forge:fluid/potion hundreds of times
 		if (!global.NCH._fluidTagsSeen[id]) global.NCH._fluidTagsSeen[id] = String(context)
@@ -1713,7 +1712,7 @@ global.NCH = {
 		var ing = global.NCH._resolveIdCount(ingredient)
 		var json = {
 			type: 'barbequesdelight:skewering',
-			tool: global.NCH._itemJson(tool ?? 'minecraft:stick', { countMode: 'none', context: ctx + ' tool' }),
+			tool: global.NCH._itemJson(tool ?? global.item.stick, { countMode: 'none', context: ctx + ' tool' }),
 			ingredient: global.NCH._itemJson(ingredient, { countMode: 'none', context: ctx + ' ingredient' }),
 			ingredientCount: Math.max(1, ing.count || 1),
 			sideCount: 0,
@@ -2415,7 +2414,7 @@ global.NCH = {
 		for (var si = 0; si < steps.length; si++) {
 			if (!global.NCH._stepHasEmptyFluid(steps[si])) continue
 			dropSteps()
-			return global.NCH._absent('minecraft:empty', ctx + ' step[' + si + ']')
+			return global.NCH._absent(global.fluid.empty, ctx + ' step[' + si + ']')
 		}
 
 		let r = e.recipes.create.sequenced_assembly(output, input, sequence)
@@ -2475,7 +2474,7 @@ global.NCH = {
 			if (typeof step.serialize === 'function') step.serialize()
 			var j = step.json
 			if (j === undefined || j === null) return false
-			return /"fluid"\s*:\s*"minecraft:empty"/.test(String(j))
+			return new RegExp('"fluid"\\s*:\\s*"' + global.fluid.empty + '"').test(String(j))
 		} catch (err) {
 			return false
 		}
@@ -3338,3 +3337,7 @@ Object.keys(global.NCH).forEach((key) => {
 	}
 	}
 })
+
+// AXE: the axe tag for tool slots (R.AXE). A getter, defined after the safety net walks the keys, because the dicts
+// do not exist yet when this file loads; forPack copies it as a getter too.
+Object.defineProperty(global.NCH, 'AXE', { get: () => global.item.any_axe, enumerable: true })

@@ -148,7 +148,7 @@ Low (R): status line "nothing booted" beside a recorded run, typed install state
 `mods.toml` header and 19 touched mods with no optional row (PR-CP-20); `build.gradle` comment names moved classes
 (PR-CP-21); 23 unused `CommonConfig` imports (PR-CP-22); `ce$` members, NBT `CENightstandItems`, 104 lang keys in other
 jars' key spaces (PR-CP-23, DR-C11); 44 literal block ids in `passthrough_tags.js` (the 139 entity ids have no dict and
-are legitimate) (PR-CP-24, DR-C2); `PassArrows` `WeakHashMap` touched from two threads in single player (PR-CP-25);
+are legitimate) (PR-CP-24, DR-C2) [fixed 2026-11-23: 41 uses of 35 block ids -> new `block_dict.js` keys]; `PassArrows` `WeakHashMap` touched from two threads in single player (PR-CP-25);
 `bamboo_leaves_full` registers without Twigs, vanilla vines not shearable without Quark (PR-CP-26); `DustParticles`
 scans every client tick with an empty tag (PR-CP-27); `CompoundEffectTooltip` looks up two methods per call
 (PR-CP-28); `[paintings] extraSources` reads paths outside the game folder if an admin sets them and logs the absolute
@@ -313,10 +313,10 @@ Judged hits and proposed exemptions (D10):
 
 | Rule | Hit | Judgment |
 |---|---|---|
-| DR-C2 | `neoCraftHelper.js` 74 literals | Legitimate: recipe type ids and NBT keys have no dict |
-| DR-C2 | generated `can_types.js` files (196, 58, 55) | Generator output; propose exempting generated files as DR-C21 does |
-| DR-C2 | `passthrough_tags.js` 198 | 139 entity ids legitimate (no dict); 44 block ids are a real, small break (PR-CP-24) |
-| DR-C2 | `salt/create_salting.js` 130 | A lookup table of recipe ids; legitimate as data |
+| DR-C2 | `neoCraftHelper.js` 74 literals | Legitimate: recipe type ids and NBT keys have no dict [fixed 2026-11-23: the item, tag and fluid ids (air, empty fluid, stick, `AXE`) use keys; 66 left are recipe types, ingredient types and the potion NBT, no dict] |
+| DR-C2 | generated `can_types.js` files (196, 58, 55) | Generator output; propose exempting generated files as DR-C21 does [fixed 2026-11-23: `gen_can_types.py` writes `global.effect` keys for all 355 effect ids (new keys `phasing`, `rage_aura`); the texture paths left have no dict] |
+| DR-C2 | `passthrough_tags.js` 198 | 139 entity ids legitimate (no dict); 44 block ids are a real, small break (PR-CP-24) [fixed 2026-11-23: block ids use `block_dict.js` keys; 157 left are the entity ids, tag names and patterns] |
+| DR-C2 | `salt/create_salting.js` 130 | A lookup table of recipe ids; legitimate as data [fixed 2026-11-23: the 65 food ids use item keys; the 65 recipe ids stay as data] |
 | DR-C1 | 21 raw Create calls in two Delight scripts | Step lists passed to the sequenced-assembly helper; legitimate under the current helper |
 | DR-C10 | five underscored mixin packages in Delight | Functional: the plugin reads the package segment as the mod id. Propose an exemption |
 | DR-C10 | six underscored member ids | Upstream ids kept by ports; `enders_additions` is the one own id (PR-CM-14) |

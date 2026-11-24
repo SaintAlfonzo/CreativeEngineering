@@ -53,6 +53,8 @@ ef.agility = 'neapolitan:agility';
 ef.climbing = 'vinery:climbing_effect';
 ef.knockback_resistance = 'alexsmobs:knockback_resistance';
 ef.phantom_bane = 'better_beacons:phantom_bane';
+ef.phasing = 'endersdelight:phasing';
+ef.rage_aura = 'fruitsdelight:rage_aura';
 
 // ############################## Keys added by tools/literal_id_swap.py ##############################
 // Ids used two or more times as literals in scripts (plan_rules_fixes.md section 7).

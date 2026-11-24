@@ -4,6 +4,7 @@ var global = {};
 var console = { log: function () {}, info: function () {}, warn: function () {}, error: function (m) { __errors.push(String(m)) } };
 var __errors = [];
 var Platform = { isLoaded: function () { return true } };
+var StartupEvents = { postInit: function () {}, init: function () {}, registry: function () {} };   // the dicts' validation hooks
 var Java = { loadClass: function (n) { return {} } };
 var Item = { exists: function () { return true } };
 var Ingredient = { of: function () { return { itemIds: ['minecraft:stone'] } } };

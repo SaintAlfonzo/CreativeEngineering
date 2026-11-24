@@ -525,6 +525,7 @@ i.fd_rope = 'farmersdelight:rope';
 i.any_wool = '#minecraft:wool';
 i.any_knife = '#forge:tools/knives';
 i.any_hoe = '#forge:tools/hoes';
+i.any_axe = '#forge:tools/axes';
 i.any_shears = '#forge:shears';
 i.t_forge_fences = '#forge:fences';
 i.t_forge_fence_gates = '#forge:fence_gates';
@@ -1540,6 +1541,8 @@ i.tall_iron_door = 'dramaticdoors:tall_iron_door';
 // ############################## Vanilla ##############################
 
 // ########## Minecraft ##########
+
+i.air = 'minecraft:air'; // the empty stack's id (NCH treats it as a missing item)
 
 //Stone / Building
 i.cobblestone = 'minecraft:cobblestone';

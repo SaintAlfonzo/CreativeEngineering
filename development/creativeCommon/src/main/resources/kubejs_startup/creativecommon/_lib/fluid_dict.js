@@ -22,6 +22,7 @@ f.memory_essence = 'pneumaticcraft:memory_essence';
 f.flowing_memory_essence = 'pneumaticcraft:memory_essence_flowing';
 
 //Vanilla
+f.empty = 'minecraft:empty'; // the empty fluid (NCH treats it as a missing fluid)
 f.water = 'minecraft:water';
 f.flowing_water = 'minecraft:flowing_water';
 f.t_water = '#forge:fluid/water';
