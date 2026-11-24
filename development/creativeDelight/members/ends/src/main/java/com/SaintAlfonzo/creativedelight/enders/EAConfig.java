@@ -19,8 +19,8 @@ public final class EAConfig {
                 .defineInRange("chorusflameGrowthSlow", 0.1, 0.0, 1.0);
         CHORUSFLAME_GROWTH_FAST = b.comment("Chance per random tick that a Chorusflame on fast soil grows one stage. Ender's Delight 1.1.4: 0.2.")
                 .defineInRange("chorusflameGrowthFast", 0.2, 0.0, 1.0);
-        VOIDPEPPER_TICK_SLOW = b.comment("Chance per random tick that a spreading Void Pepper Sprout attached to slow soil acts:",
-                        "then 2 in 3 it spreads to a free spot near soil, 1 in 3 it fruits and stops spreading.")
+        VOIDPEPPER_TICK_SLOW = b.comment("Chance per random tick that an unfruited Void Pepper Sprout attached to slow soil fruits.",
+                        "Sprouts do not spread.")
                 .defineInRange("voidpepperTickSlow", 0.5, 0.0, 1.0);
         VOIDPEPPER_TICK_FAST = b.comment("The same for a sprout attached to fast soil. Ender's Delight 1.1.4: 1.0 (acts on every random tick).")
                 .defineInRange("voidpepperTickFast", 1.0, 0.0, 1.0);

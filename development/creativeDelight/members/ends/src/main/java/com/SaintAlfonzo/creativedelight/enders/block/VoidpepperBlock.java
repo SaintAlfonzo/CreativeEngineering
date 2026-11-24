@@ -14,15 +14,15 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * Void Pepper Sprout (1.1.4 VoidpepperBush): a vine on the faces of the End plant soil around it. While {@code spreading},
- * a random tick that passes the soil tier's chance either spreads a new sprout (2 in 3) to a free spot within 7 blocks
- * (Manhattan) that touches soil, or fruits it (1 in 3: {@code pepper}, spreading stops).
+ * Void Pepper Sprout (1.1.4 VoidpepperBush): a vine on the faces of the End plant soil around it. It does not spread
+ * (creative-delight-members #4): until it fruits, a random tick that passes the soil tier's chance fruits it
+ * ({@code pepper}). {@code spreading} stays in the state definition for the blockstate files and saved worlds; it is
+ * set false with the fruit and drives nothing else.
  * <p>
  * The face properties keep 1.1.4's meaning, which the blockstate and shapes depend on: {@code up} and {@code down} name
  * the soil side; {@code north}, {@code south}, {@code east} and {@code west} name the side away from the soil (south =
@@ -37,8 +37,6 @@ public class VoidpepperBlock extends Block {
     public static final BooleanProperty UP = BooleanProperty.create("up");
     public static final BooleanProperty DOWN = BooleanProperty.create("down");
     public static final BooleanProperty PEPPER = BooleanProperty.create("pepper");
-    private static final int SPREAD_RADIUS = 7;
-    private static final int SPREAD_TRIES = 15;
 
     /** Face property, the direction of the soil it sits on, and its 1px shape (1.1.4 values). */
     private record Face(BooleanProperty prop, Direction soil, VoxelShape shape) {
@@ -110,45 +108,17 @@ public class VoidpepperBlock extends Block {
 
     @Override
     public boolean isRandomlyTicking(BlockState state) {
-        return state.getValue(SPREADING);
+        return !state.getValue(PEPPER);
     }
 
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (!state.getValue(SPREADING)) return;
+        if (state.getValue(PEPPER)) return;
         int tier = soilTier(state, level, pos);
         if (tier == 0) return;
         double chance = tier == 2 ? EAConfig.VOIDPEPPER_TICK_FAST.get() : EAConfig.VOIDPEPPER_TICK_SLOW.get();
         if (random.nextDouble() >= chance) return;
-        if (random.nextDouble() < 2.0 / 3.0) {
-            spread(level, pos, random);
-        } else {
-            level.setBlock(pos, state.setValue(PEPPER, true).setValue(SPREADING, false), Block.UPDATE_CLIENTS);
-        }
-    }
-
-    private void spread(ServerLevel level, BlockPos origin, RandomSource random) {
-        // Never load or generate chunks from a random tick: the whole spread area (+1 for the soil check) must be loaded.
-        if (!level.isAreaLoaded(origin, SPREAD_RADIUS + 1)) return;
-        int span = SPREAD_RADIUS * 2 + 1;
-        for (int i = 0; i < SPREAD_TRIES; i++) {
-            BlockPos target = origin.offset(random.nextInt(span) - SPREAD_RADIUS, random.nextInt(span) - SPREAD_RADIUS,
-                    random.nextInt(span) - SPREAD_RADIUS);
-            if (target.distManhattan(origin) > SPREAD_RADIUS || !touchesSoil(level, target) || !level.isEmptyBlock(target)) {
-                continue;
-            }
-            BlockState sprout = withFaces(level, target);
-            level.setBlock(target, sprout, Block.UPDATE_CLIENTS);
-            level.gameEvent(GameEvent.BLOCK_CHANGE, target, GameEvent.Context.of(sprout));
-            return;
-        }
-    }
-
-    private static boolean touchesSoil(BlockGetter level, BlockPos pos) {
-        for (Direction d : Direction.values()) {
-            if (EndSoil.isSoil(level.getBlockState(pos.relative(d)))) return true;
-        }
-        return false;
+        level.setBlock(pos, state.setValue(PEPPER, true).setValue(SPREADING, false), Block.UPDATE_CLIENTS);
     }
 
     @Override
