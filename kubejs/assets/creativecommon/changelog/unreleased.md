@@ -116,7 +116,7 @@
 - **New:** Some diet effects switch on and off for free instead of changing level: the slot's On/Off button, or a click on the permanent buff's icon in the Diet Bonuses screen.
   - In a slot: Night Vision and Steady; Glowing, Slow Falling and Magnet start off
   - Permanent: Night Vision, Phantom Bane and Double Jump; Invisibility starts off
-- **New:** Hovering an effect in the Diet Bonuses screen or on the inventory bar shows a short description ("See in the dark").
+- **New:** Hovering an effect in the Diet Bonuses screen or on the inventory bar shows a short description ("See in the dark"); every effect but Poison Immunity has one. Steady's reads "No slipping; does not trigger plates, tripwires or dripleaf".
 - **New:** Clinging replaces Climbing and Recovering replaces Poison Immunity and Wither Immunity once unlocked: the replaced effect leaves the effect list and stops working in its slot. Applies to new worlds.
 - **New:** A slot whose effect a permanent buff or a replacing unlock now covers grays out, and changing its effect is free.
 - **New:** Fleet-Footed widens the view a quarter as much while its speed applies (client setting).

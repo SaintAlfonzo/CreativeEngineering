@@ -51,7 +51,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   migration and the pass-through table rewrite were dropped before the first public release (PR-CP-17; owner,
   2026-11-22). The one carry-over left (2026-11-23, PR-CP-11): the four old `[jei]` page switches
   (`seasoningCategory`, `canCategories`, `potionBucketCategory`, `tippedArrowCategory`) are read once into `[jei]
-  pagesOff` and removed (`JeiPageKeys`, before the config is registered). Top-level tables in the spec (23, from
+  pagesOff` and removed (`JeiPageKeys`, before the config is registered). Top-level tables in the spec (24, from
   `CompatConfig` 2026-11-23): `[moss]`, `[vine_shearing]`, `[monster_box]`, `[trash_slot]`, `[cats]`, `[giant_squid]`,
   `[golems]`, `[boat_friction]`, `[paintings]`, `[shrapnel]`, `[surface]` (subtables `speed`, `sticky`, `camouflage`,
   `sinking`, `passthrough`, `wthit`), `[vein_undo]`, `[jei]`, `[gui_title]`, `[toasts]`, `[screens]`, `[tooltips]`,
@@ -207,7 +207,7 @@ Scratch run r1123cx (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run
   out of the jar, description corrected, `[mixins]` enable keys, version ranges for every gated mod, exact Breezy gate,
   Cozy feather gate, Create copycat holder (`surface/CreateCamo`), sinking render tag test first, hook faults logged
   once, config migrations dropped, `logOverflow` off by default, crop recipes and dimension tags in the jar; corpse
-  skeletons draw Customizable Elytra. Sections 2 and 3 are not yet rewritten from the code (PR-CP-18).
+  skeletons draw Customizable Elytra. Sections 1 to 5 checked against the code and corrected 2026-11-23 (PR-CP-18: 24 top-level config tables, 86 common + 62 client mixins, 32 with an enable key, 11 pass-through tiers, hooks table).
 - 2026-11-04: campfire rain, Comfort, the Campfire Rules JEI rows and `[campfire]` moved to Creative Delight
   (creative_split.md 7.9 step 1); Compat 33 -> 32 common mixins. Tests SQ-CFR.
 - 2026-11-04 (creative_split.md 7.14): from Creative Common, the Create: Dreams & Desires jetpack tooltip null-level

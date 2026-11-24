@@ -1,19 +1,12 @@
 # Plan: Raspberry Pie as a standalone mod, shipped from the GitHub repo (2026-11-21)
 
-<!-- generated:status_index begin open_work sha1=206922f97b0d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 9, Testing 13), 1 Complete.
+<!-- generated:status_index begin open_work sha1=92f615f905b0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Planned 2, Testing 22), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `food-tuning #46` | Planned | S C | RP standalone P9: isolation tests RPS-01 to -07 and RPI rerun |
-| `food-tuning #51` | Planned | S C | Steady (Astringent): stops every slip effect (ice, soap), not dripleaf or pressure plates; JEI description |
-| `food-tuning #52` | Planned | S C | Leaf Piercing: leaf particles of the pierced block trailing the arrow, a leaf poof where it enters |
-| `food-tuning #53` | Planned | S C | Prickly II: tamed and passive mobs exempt (level I: tamed only); JEI description |
-| `food-tuning #54` | Planned | S C | Lava Walker: crouch to drop into lava |
-| `food-tuning #56` | Planned | S C | Display names: Astringent -> Steady, Poison Resistance -> Poison Immunity, Fire Resistance -> Fire Immunity |
-| `food-tuning #57` | Planned | S C | Emptiness becomes a sub-effect of Patrol Nullifier and Phantom Bane |
 | `food-tuning #58` | Planned | S C | Harmony: a new source (not adzuki, not the diet ladder), e.g. a rare passive mob; applies Emptiness and hostile mob flee |
-| `raspberry-pie-publish #10` | Planned |  | Standalone Diet Log recipe takes any edible item that is not excluded; state sync stops resending every drink id |
 | `food-tuning #38` | Testing | S | RP standalone P1: Jar-in-Jar bundle (Apple Pie, Carrot nested), license texts, NOTICE, mods.toml URLs, deploy and manifest updates |
 | `food-tuning #39` | Testing | S C | RP standalone P2: default ladder = Apple Pie's ladder plus 10 vanilla unlockables and slots |
 | `food-tuning #40` | Testing | S | RP standalone P3: diversity table loaded from any jar's solraspberrypie/diversity/*.json, ids optional, no table in the mod |
@@ -26,7 +19,16 @@
 | `food-tuning #48` | Testing | S C | Satiated (minecraft:saturation) as the RP pack ladder's final permanent buff at 100: V10 exception for flat rungs |
 | `food-tuning #49` | Testing | S C | RP ladder: a later unlock replaces its parts (Clinging hides Climbing; Recovering hides Poison Immunity and Wither Immunity) |
 | `food-tuning #50` | Testing | S C | RP ladder: once a permanent buff of an effect is active, a slot holding that effect grays out with a free respec |
+| `food-tuning #51` | Testing | S C | Steady (Astringent): stops every slip effect (ice, soap), not dripleaf or pressure plates; JEI description |
+| `food-tuning #52` | Testing | S C | Leaf Piercing: leaf particles of the pierced block trailing the arrow, a leaf poof where it enters |
+| `food-tuning #53` | Testing | S C | Prickly II: tamed and passive mobs exempt (level I: tamed only); JEI description |
+| `food-tuning #54` | Testing | S C | Lava Walker: crouch to drop into lava |
 | `food-tuning #55` | Testing | S C | Fleet-Footed: lower field-of-view shift while its speed applies |
+| `food-tuning #56` | Testing | S C | Display names: Astringent -> Steady, Poison Resistance -> Poison Immunity, Fire Resistance -> Fire Immunity |
+| `food-tuning #57` | Testing | S C | Emptiness holds Patrol Nullifier and Phantom Bane as sub-effects |
+| `food-tuning #63` | Testing | CQ-RPI-83 to CQ-RPI-91 | Raspberry Pie tweaks 2026-11-23: steady reached permanent icons, no level numeral on single-level effects, /solrp diversity and ladder commands, Stimulation back on the ladder |
+| `food-tuning #65` | Testing | CQ-RPI-93 | Fleet-Footed holds Feather Feet as a sub-effect (applied hidden, listed in tooltips, JEI and JEED) |
+| `raspberry-pie-publish #10` | Testing | SQ-RPS-11, CQ-RPS-12, SQ-RPS-13 | Standalone Diet Log recipe takes any edible item that is not excluded; state sync stops resending every drink id |
 <!-- generated:status_index end open_work -->
 
 Source: owner chat 2026-11-21 (after the publish-readiness review in the same session). Design of the mod itself:
@@ -59,7 +61,7 @@ way Creative Common is. The pack layers its own food table, ladder, names and co
   removal in Creative Delight's `solapplepie/diet_log.js`; the third piece of Apple Pie wiring in the pack,
   `kubejs/data/creativedelight/kubejs/solapplepie/food_types.js`, is deleted in the working tree already and stays
   pack-side (a pack food-type file).
-- `src/main/resources/solraspberrypie/diversity.json` (1,658 ids, about 1,500 from pack mods, scale fitted to a 120
+- (Superseded by P3/P8: the jar ships no table; the pack table lives in Creative Delight.) `src/main/resources/solraspberrypie/diversity.json` (1,658 ids, about 1,500 from pack mods, scale fitted to a 120
   ceiling) is unconditional and overrides Apple Pie's value for every listed food, vanilla included.
 - `default_ladder.json` in the jar tops out at diversity 15 (the old scale). Apple Pie's own default ladder is 17
   rungs at 2, 5, 7, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100 (read from its decompiled config class).
@@ -172,7 +174,7 @@ values it wants through that table, so the mod is neutral (A7).
 
 ## 6. Tests
 
-Rows go into `feature_writeup/testing/rows/RPS.qb` (isolation) and the existing `RPI.qb`; nothing is booted until you
+Rows go into `feature_writeup/testing/rows/RPS.qb` (isolation) and the existing `RP.qb` (queue code RPI); nothing is booted until you
 say so.
 
 | Id | Where | Check |
@@ -184,7 +186,7 @@ say so.
 | RPS-05 | isolated | Apple Pie's own settings at its defaults (`queueSize` 32, `minFoodsToActivate` 0): eat, respec, drop, die; ageing-out and the gate behave |
 | RPS-06 | server | with Alex's Mobs 1.19.2 present: Fleet-Footed mixin applies; with a stubbed class missing a field: skipped with one warning, no crash |
 | RPS-07 | pack | table split: a table file with an unknown id loads, count logged once, other ids apply |
-| RPI-* | pack | the existing 65 client rows, rerun against the final jar (after P2 to P8) |
+| RPI-* | pack | the existing RPI rows in `RP.qb` (CQ-RPI and SQ-RPI), rerun against the final jar (after P2 to P8) |
 
 ## 7. TODO rows
 

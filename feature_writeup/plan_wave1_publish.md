@@ -9,15 +9,15 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 
 ## 0. Owner rulings
 
-<!-- generated:status_index begin open_work sha1=9f273714a36d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 4), 0 Complete.
+<!-- generated:status_index begin open_work sha1=e518231bca7d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 2, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `raspberry-pie-publish #21` | Planned | C | Permanent buff icon keeps cycling diamond and effect while the buff is active: find and fix (rule unchanged: cycle until reached, effect alone while active) |
-| `raspberry-pie-publish #22` | Planned | C | Steady text: Diet Log tagline 'No slipping; does not trigger plates, tripwires or dripleaf'; full effect description lists all three SteadyRules rules |
-| `raspberry-pie-publish #23` | Planned | C | Hover taglines for the 19 ladder effects that have none: agent drafts, owner reviews the list before it is written |
 | `raspberry-pie-publish #24` | Planned | S C | Dropping the top effect slot drops every slot: find and fix (a drop should lose only the highest active slot) |
+| `raspberry-pie-publish #22` | Testing | C | Steady text: Diet Log tagline 'No slipping; does not trigger plates, tripwires or dripleaf'; full effect description lists all three SteadyRules rules |
+| `raspberry-pie-publish #23` | Testing | C | Hover taglines for the 19 ladder effects that have none: agent drafts, owner reviews the list before it is written |
 <!-- generated:status_index end open_work -->
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |
@@ -29,7 +29,7 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 | W5 | Raspberry Pie low rows `#12`, `#14` to `#20` | open | All in 1.0.0 | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W6 | "permanant effects stop cycling between icon and diamond when enabled" | open | Keep the rule (cycle until reached, effect alone while active); the report is a bug to find (`raspberry-pie-publish #21`) | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W7 | "update steady effect description" | open | Tagline and full effect description both list the SteadyRules rules (`#22`) | 2026-11-23 | AskUserQuestion 2026-11-23 |
-| W8 | "all short effect descriptions" | open | "review missing": the agent drafts taglines for the 19 ladder effects without one, the owner reviews before they are written (`#23`). Jar shipping not ruled: agent default, unconfirmed, pack language file only | 2026-11-23 | AskUserQuestion 2026-11-23 |
+| W8 | "all short effect descriptions" | open | "review missing": the agent drafts taglines for the 19 ladder effects without one, the owner reviews before they are written (`#23`). Reviewed 2026-11-23: drafts accepted, Poison Immunity keeps none, Fire Immunity names magma; taglines ship in the jar too (`gen_rp_ladder.py` writes both language files) | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W9 | "dropping top effect slot drops all, fix" | clear | Bug: a drop should lose only the highest active slot (`#24`) | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W10 | Test run timing | open | The executing session runs one scratch run of all wave 1 rows after every code phase is built and committed | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W11 | Common 1.2.0 uploaded jar | open | The archived jar is the uploaded file: sha1 `7d3bad9fdade48155030b2fa5637033280da3679` | 2026-11-23 | AskUserQuestion 2026-11-23 |
@@ -69,10 +69,13 @@ path, push to `agent_staging`.
 ## 3. Owner actions
 
 - File the GitHub Support request for the 15 pull request refs and cached views (W12, `publish-readiness #2`).
-- Review the drafted taglines (W-P4).
+- Review the drafted taglines (W-P4): done 2026-11-23.
 - Upload the jars in W-P8.
 - Later, not blocking: the weathered cardboard box texture (W2).
 
 ## 4. History
 
 - 2026-11-23: plan written; rulings W1 to W12.
+- 2026-11-23: execution started. Another session held `impl` (owner: this session waits, docs only). W-P4 `#22`, `#23`
+  written (Testing; the jar copy of the taglines is built in W-P6); W-P2 and `#20` handed to doc passes. Code phases
+  W-P1, W-P3, W-P5 to W-P7 wait for the impl slot.

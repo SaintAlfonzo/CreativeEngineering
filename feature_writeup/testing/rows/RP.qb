@@ -742,8 +742,8 @@ look the start line reads about `81 rungs, 5 slots, 37 pool effects`; any `skipp
 
 ## CQ-RPI-67 | hover taglines (food-tuning #44)
 @group client
-@commands Hover in the Diet Bonuses picker: Night Vision, Speed (I, and II once unlocked), Water Breathing, Prickly II; hover a filled slot, a permanent buff icon and an inventory bar cell
-@pass gray line under the name: "See in the dark", "Move faster" (both levels), none for Water Breathing, "Touch harms nearby creatures, tamed and passive exempt" for Prickly II; the slot, the permanent Speed I icon and the inventory cell show the same line; no raw `solraspberrypie.tagline.` key anywhere
+@commands Hover in the Diet Bonuses picker: Night Vision, Speed (I, and II once unlocked), Water Breathing, Poison Immunity, Prickly II; hover a filled slot, a permanent buff icon and an inventory bar cell
+@pass gray line under the name: "See in the dark", "Move faster" (both levels), "Breathe underwater" for Water Breathing (since 2026-11-23, `raspberry-pie-publish #23`), none for Poison Immunity, "Touch harms nearby creatures, tamed and passive exempt" for Prickly II; the slot, the permanent Speed I icon and the inventory cell show the same line; no raw `solraspberrypie.tagline.` key anywhere
 @fails `Ladder.tagline` lookup, `Rung` tagline sync, the kubejs lang file not loaded (F3+T)
 @draft written with the build 2026-11-21
 

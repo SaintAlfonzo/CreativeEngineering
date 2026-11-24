@@ -1017,7 +1017,7 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   added unlocks (Jump Boost II, Haste II, Slow Falling) and that order are agent defaults, **unconfirmed**. A flat effect
   hides an unlock of the same effect from the picker (V11) where they overlap; accepted (owner). Pool: the 11 effects,
   cap II for Haste and Jump Boost, I otherwise. Fire Resistance is allowed here, unlike the pack pool in section 4.
-  Expected start line: `Diet ladder: 47 rungs, 4 slots, 11 pool effects`, no warning (V12 included). Headless test
+  Expected start line then: `Diet ladder: 47 rungs, 4 slots, 11 pool effects` (superseded by the 44-rung ladder in 12.15), no warning (V12 included). Headless test
   `tools/test_rp_ladder.sh` (in `check_all.py`) checks that and the shape.
 - **Table loader (P3, P8).** `Diversity` reads every `solraspberrypie/diversity/*.json` in any loaded mod file (Forge
   `ModList` mod files, so any jar can ship one), merged in mod-id then file-name order; a later file wins an id both
@@ -1067,7 +1067,11 @@ The scratchpad "rp changes" ladder as the pack's `defaultconfigs/solraspberrypie
 effect: sub-ladder, position, group, effect id, level, toggle, tagline text, `built` or `reserved`) and
 `rp_ladder.json` (`densityRatio` 2.0 and the spans). It also writes the configs_edited backup and the tagline texts
 (`kubejs/assets/solraspberrypie/lang/en_us.json`, keys `solraspberrypie.tagline.<namespace>.<effect>.<level>`); a flat rung
-takes the tagline of the unlock row with its effect and level. The jar's default ladder is untouched.
+takes the tagline of the unlock row with its effect and level. The jar's default ladder is untouched. Every ladder
+effect but Poison Immunity has a tagline (owner, 2026-11-23, `raspberry-pie-publish #23`; Steady's is "No slipping;
+does not trigger plates, tripwires or dripleaf", `#22`). The generator also writes the same tagline keys as the last
+block of the jar's own `assets/solraspberrypie/lang/en_us.json` (owner, 2026-11-23: the jar ships them too), keeping
+the jar's other keys and layout.
 
 - **Whole-number milestones** (owner, 2026-11-22). `rp_ladder.json` `decimals` 0: every threshold is computed
   unrounded, then each distinct value gets a whole number, strictly increasing, at the least total distance from the

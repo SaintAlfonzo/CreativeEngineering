@@ -147,7 +147,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-C15 | Ports and backports: no old-version or cross-mod conversions or remaps. Code from an ARR donor is written from behavior, never translated from a decompile. | Hard | CLAUDE.md; skill `port` |
 | DR-C16 | Structure searches go through Async Locator off the server thread, never a synchronous search. | Memory | memory `async-locator-everywhere` |
 | DR-C17 | No `getChunkAt`, `getBiome` or `getHeight` on ungenerated land from a KubeJS command; no `r.getType()` while looping all recipes. | Hard | skill `scratch-test` gotchas.md |
-| DR-C18 | Textures: human art or the owner's tools only (`palette_swap.py`, `combine_tex.py`, `scale_tex.py`, `upscale_sprites.py`) on a source and palette the owner picked. Never drawn, generated, palette-picked or transformed by an ad-hoc script. Each derived texture gets a `sources.csv` row the same session. | Checked | CLAUDE.md; texture_sources.md 1 |
+| DR-C18 | Textures: human art or the owner's tools only (`palette_swap.py`, `combine_tex.py`, `scale_tex.py`, `upscale_sprites.py`) on a source and palette the owner picked. Never drawn, generated, palette-picked or transformed by an ad-hoc script. Each derived texture gets a `sources.csv` row the same session. Exemption (owner, 2026-11-23): the weathered cardboard box texture in Creative Compat (PR-CP-13, made by `make_cardboard.py`) ships as is in Compat 1.0.0 and stays `redo` / art_needed until the owner replaces it. | Checked | CLAUDE.md; texture_sources.md 1 |
 
 ### 5.4 License
 
