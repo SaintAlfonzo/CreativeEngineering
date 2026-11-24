@@ -17,7 +17,7 @@ if (global.CD) global.CD.genPut('can_types', 'nethersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 2400,
      "amp": 0,
      "chance": 1

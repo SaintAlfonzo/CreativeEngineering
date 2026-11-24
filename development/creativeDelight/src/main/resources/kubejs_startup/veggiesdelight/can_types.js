@@ -495,7 +495,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -532,13 +532,13 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 75,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -575,7 +575,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -673,7 +673,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 4800,
      "amp": 0,
      "chance": 1
@@ -800,13 +800,13 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 75,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 900,
      "amp": 0,
      "chance": 1
@@ -860,13 +860,13 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:strength",
+     "effect": global.effect.strength,
      "ticks": 75,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -920,7 +920,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -974,7 +974,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:haste",
+     "effect": global.effect.haste,
      "ticks": 75,
      "amp": 0,
      "chance": 1
@@ -1028,7 +1028,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -1083,7 +1083,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -1138,7 +1138,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -1193,7 +1193,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -1248,7 +1248,7 @@ if (global.CD) global.CD.genPut('can_types', 'veggiesdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

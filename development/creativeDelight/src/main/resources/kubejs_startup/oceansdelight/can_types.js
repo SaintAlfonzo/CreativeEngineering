@@ -17,7 +17,7 @@ if (global.CD) global.CD.genPut('can_types', 'oceansdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 4800,
      "amp": 0,
      "chance": 1

@@ -17,13 +17,13 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:nausea",
+     "effect": global.effect.nausea,
      "ticks": 200,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:levitation",
+     "effect": global.effect.levitation,
      "ticks": 80,
      "amp": 1,
      "chance": 0.5
@@ -99,7 +99,7 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:nausea",
+     "effect": global.effect.nausea,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -183,7 +183,7 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:speed",
+     "effect": global.effect.speed,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -221,19 +221,19 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:levitation",
+     "effect": global.effect.levitation,
      "ticks": 400,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1800,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 6000,
      "amp": 0,
      "chance": 1
@@ -270,13 +270,13 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 450,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:speed",
+     "effect": global.effect.speed,
      "ticks": 1800,
      "amp": 0,
      "chance": 1
@@ -331,7 +331,7 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "endersdelight:phasing",
+     "effect": global.effect.phasing,
      "ticks": 150,
      "amp": 0,
      "chance": 1
@@ -386,7 +386,7 @@ if (global.CD) global.CD.genPut('can_types', 'endersdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:strength",
+     "effect": global.effect.strength,
      "ticks": 450,
      "amp": 0,
      "chance": 1

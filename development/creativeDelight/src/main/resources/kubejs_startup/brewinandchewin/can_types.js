@@ -65,7 +65,7 @@ if (global.CD) global.CD.genPut('can_types', 'brewinandchewin', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -194,7 +194,7 @@ if (global.CD) global.CD.genPut('can_types', 'brewinandchewin', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

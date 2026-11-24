@@ -82,7 +82,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsmobs', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:poison",
+     "effect": global.effect.poison,
      "ticks": 120,
      "amp": 0,
      "chance": 1

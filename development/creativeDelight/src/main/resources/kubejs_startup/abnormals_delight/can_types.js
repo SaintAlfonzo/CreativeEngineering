@@ -158,7 +158,7 @@ if (global.CD) global.CD.genPut('can_types', 'abnormals_delight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -213,7 +213,7 @@ if (global.CD) global.CD.genPut('can_types', 'abnormals_delight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

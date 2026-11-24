@@ -17,19 +17,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -72,19 +72,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -127,19 +127,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -182,19 +182,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -237,19 +237,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -292,19 +292,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -347,19 +347,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -402,19 +402,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -457,19 +457,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -512,19 +512,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -567,19 +567,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -622,19 +622,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -677,19 +677,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -732,19 +732,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -787,19 +787,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -842,19 +842,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -897,19 +897,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -952,19 +952,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -1007,19 +1007,19 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 25,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -1062,31 +1062,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1129,31 +1129,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1196,31 +1196,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1263,31 +1263,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1330,31 +1330,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1397,31 +1397,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1464,31 +1464,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1531,31 +1531,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1598,31 +1598,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1665,31 +1665,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1732,31 +1732,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1799,31 +1799,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1866,31 +1866,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -1933,31 +1933,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -2000,31 +2000,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -2067,31 +2067,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -2134,31 +2134,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -2201,31 +2201,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -2268,31 +2268,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1
@@ -2335,31 +2335,31 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 1500,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1

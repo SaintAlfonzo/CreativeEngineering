@@ -82,13 +82,13 @@ if (global.CD) global.CD.genPut('can_types', 'upgrade_aquatic', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:poison",
+     "effect": global.effect.poison,
      "ticks": 600,
      "amp": 3,
      "chance": 1
     },
     {
-     "effect": "minecraft:nausea",
+     "effect": global.effect.nausea,
      "ticks": 300,
      "amp": 2,
      "chance": 1
@@ -160,7 +160,7 @@ if (global.CD) global.CD.genPut('can_types', 'upgrade_aquatic', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:hunger",
+     "effect": global.effect.hunger,
      "ticks": 600,
      "amp": 0,
      "chance": 0.3
@@ -236,7 +236,7 @@ if (global.CD) global.CD.genPut('can_types', 'upgrade_aquatic', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:hunger",
+     "effect": global.effect.hunger,
      "ticks": 600,
      "amp": 0,
      "chance": 0.3

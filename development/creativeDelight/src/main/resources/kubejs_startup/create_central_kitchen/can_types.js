@@ -17,7 +17,7 @@ if (global.CD) global.CD.genPut('can_types', 'create_central_kitchen', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:speed",
+     "effect": global.effect.speed,
      "ticks": 600,
      "amp": 0,
      "chance": 1

@@ -17,13 +17,13 @@ if (global.CD) global.CD.genPut('can_types', 'farmersrespite', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:wither",
+     "effect": global.effect.wither,
      "ticks": 40,
      "amp": 0,
      "chance": 0.8
     },
     {
-     "effect": "farmersrespite:caffeinated",
+     "effect": global.effect.caffeinated,
      "ticks": 200,
      "amp": 0,
      "chance": 1
@@ -95,7 +95,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersrespite', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:haste",
+     "effect": global.effect.haste,
      "ticks": 200,
      "amp": 0,
      "chance": 1
@@ -149,7 +149,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersrespite', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 400,
      "amp": 0,
      "chance": 1
@@ -187,7 +187,7 @@ if (global.CD) global.CD.genPut('can_types', 'farmersrespite', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:weakness",
+     "effect": global.effect.weakness,
      "ticks": 200,
      "amp": 0,
      "chance": 0.8
@@ -224,13 +224,13 @@ if (global.CD) global.CD.genPut('can_types', 'farmersrespite', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:fire_resistance",
+     "effect": global.effect.fire_resistance,
      "ticks": 900,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

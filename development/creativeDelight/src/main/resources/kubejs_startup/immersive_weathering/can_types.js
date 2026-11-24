@@ -17,13 +17,13 @@ if (global.CD) global.CD.genPut('can_types', 'immersive_weathering', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 50,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -66,25 +66,25 @@ if (global.CD) global.CD.genPut('can_types', 'immersive_weathering', {
    "glow": true,
    "effects": [
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 400,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 75,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:water_breathing",
+     "effect": global.effect.water_breathing,
      "ticks": 400,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 1200,
      "amp": 0,
      "chance": 1

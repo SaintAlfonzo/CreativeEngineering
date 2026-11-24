@@ -1130,7 +1130,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:leaf_piercing",
+     "effect": global.effect.leaf_piercing,
      "ticks": 100,
      "amp": 0,
      "chance": 1
@@ -1184,7 +1184,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:shrinking",
+     "effect": global.effect.shrinking,
      "ticks": 400,
      "amp": 0,
      "chance": 1
@@ -1238,13 +1238,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:haste",
+     "effect": global.effect.haste,
      "ticks": 100,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "fruitsdelight:refreshing",
+     "effect": global.effect.refreshing,
      "ticks": 100,
      "amp": 0,
      "chance": 1
@@ -1298,7 +1298,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:astringent",
+     "effect": global.effect.astringent,
      "ticks": 400,
      "amp": 0,
      "chance": 1
@@ -1352,13 +1352,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:alienating",
+     "effect": global.effect.alienating,
      "ticks": 200,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "fruitsdelight:suspicious_smell",
+     "effect": global.effect.suspicious_smell,
      "ticks": 400,
      "amp": 0,
      "chance": 1
@@ -1412,7 +1412,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:lozenge",
+     "effect": global.effect.lozenge,
      "ticks": 100,
      "amp": 0,
      "chance": 1
@@ -1466,7 +1466,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:astringent",
+     "effect": global.effect.astringent,
      "ticks": 400,
      "amp": 0,
      "chance": 1
@@ -1520,7 +1520,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:leaf_piercing",
+     "effect": global.effect.leaf_piercing,
      "ticks": 150,
      "amp": 0,
      "chance": 1
@@ -1575,13 +1575,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:alienating",
+     "effect": global.effect.alienating,
      "ticks": 800,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "fruitsdelight:suspicious_smell",
+     "effect": global.effect.suspicious_smell,
      "ticks": 1600,
      "amp": 0,
      "chance": 1
@@ -1618,13 +1618,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:speed",
+     "effect": global.effect.speed,
      "ticks": 400,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "fruitsdelight:sweetening",
+     "effect": global.effect.sweetening,
      "ticks": 400,
      "amp": 0,
      "chance": 1
@@ -1661,7 +1661,7 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:digesting",
+     "effect": global.effect.digesting,
      "ticks": 1600,
      "amp": 0,
      "chance": 1
@@ -1698,13 +1698,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:haste",
+     "effect": global.effect.haste,
      "ticks": 400,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "fruitsdelight:refreshing",
+     "effect": global.effect.refreshing,
      "ticks": 400,
      "amp": 0,
      "chance": 1
@@ -1741,19 +1741,19 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:speed",
+     "effect": global.effect.speed,
      "ticks": 800,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "fruitsdelight:sweetening",
+     "effect": global.effect.sweetening,
      "ticks": 800,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 4800,
      "amp": 0,
      "chance": 1
@@ -1790,13 +1790,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:lozenge",
+     "effect": global.effect.lozenge,
      "ticks": 450,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 1800,
      "amp": 0,
      "chance": 1
@@ -1851,13 +1851,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:strength",
+     "effect": global.effect.strength,
      "ticks": 450,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "fruitsdelight:rage_aura",
+     "effect": global.effect.rage_aura,
      "ticks": 450,
      "amp": 0,
      "chance": 1
@@ -1911,13 +1911,13 @@ if (global.CD) global.CD.genPut('can_types', 'fruitsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "fruitsdelight:digesting",
+     "effect": global.effect.digesting,
      "ticks": 2400,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

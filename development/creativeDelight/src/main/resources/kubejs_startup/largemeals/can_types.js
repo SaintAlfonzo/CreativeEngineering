@@ -17,7 +17,7 @@ if (global.CD) global.CD.genPut('can_types', 'largemeals', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 4800,
      "amp": 0,
      "chance": 1
@@ -54,7 +54,7 @@ if (global.CD) global.CD.genPut('can_types', 'largemeals', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 4800,
      "amp": 0,
      "chance": 1
@@ -91,7 +91,7 @@ if (global.CD) global.CD.genPut('can_types', 'largemeals', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 4800,
      "amp": 0,
      "chance": 1
@@ -128,7 +128,7 @@ if (global.CD) global.CD.genPut('can_types', 'largemeals', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -183,13 +183,13 @@ if (global.CD) global.CD.genPut('can_types', 'largemeals', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:nausea",
+     "effect": global.effect.nausea,
      "ticks": 75,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 1800,
      "amp": 0,
      "chance": 1
@@ -244,7 +244,7 @@ if (global.CD) global.CD.genPut('can_types', 'largemeals', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -299,7 +299,7 @@ if (global.CD) global.CD.genPut('can_types', 'largemeals', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

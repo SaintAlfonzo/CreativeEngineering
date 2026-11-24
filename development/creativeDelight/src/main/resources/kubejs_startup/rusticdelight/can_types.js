@@ -257,7 +257,7 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -423,13 +423,13 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 75,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 1800,
      "amp": 0,
      "chance": 1
@@ -531,7 +531,7 @@ if (global.CD) global.CD.genPut('can_types', 'rusticdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

@@ -17,25 +17,25 @@ if (global.CD) global.CD.genPut('can_types', 'ends_delight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 1500,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 300,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "minecraft:strength",
+     "effect": global.effect.strength,
      "ticks": 600,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 4800,
      "amp": 0,
      "chance": 1
@@ -72,19 +72,19 @@ if (global.CD) global.CD.genPut('can_types', 'ends_delight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 100,
      "amp": 0,
      "chance": 1
     },
     {
-     "effect": "minecraft:levitation",
+     "effect": global.effect.levitation,
      "ticks": 40,
      "amp": 1,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 2400,
      "amp": 0,
      "chance": 1
@@ -121,31 +121,31 @@ if (global.CD) global.CD.genPut('can_types', 'ends_delight', {
    "glow": false,
    "effects": [
     {
-     "effect": "minecraft:absorption",
+     "effect": global.effect.absorption,
      "ticks": 1200,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "minecraft:regeneration",
+     "effect": global.effect.regeneration,
      "ticks": 1200,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "minecraft:strength",
+     "effect": global.effect.strength,
      "ticks": 1200,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "minecraft:resistance",
+     "effect": global.effect.resistance,
      "ticks": 1200,
      "amp": 2,
      "chance": 1
     },
     {
-     "effect": "farmersdelight:nourishment",
+     "effect": global.effect.nourishment,
      "ticks": 4800,
      "amp": 0,
      "chance": 1

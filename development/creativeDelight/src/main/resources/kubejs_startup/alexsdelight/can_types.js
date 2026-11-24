@@ -17,7 +17,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -54,7 +54,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -91,7 +91,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1
@@ -146,7 +146,7 @@ if (global.CD) global.CD.genPut('can_types', 'alexsdelight', {
    "glow": false,
    "effects": [
     {
-     "effect": "farmersdelight:comfort",
+     "effect": global.effect.comfort,
      "ticks": 3600,
      "amp": 0,
      "chance": 1

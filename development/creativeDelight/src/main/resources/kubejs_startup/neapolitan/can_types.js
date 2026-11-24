@@ -17,7 +17,7 @@ if (global.CD) global.CD.genPut('can_types', 'neapolitan', {
    "glow": false,
    "effects": [
     {
-     "effect": "vinery:climbing_effect",
+     "effect": global.effect.climbing,
      "ticks": 300,
      "amp": 0,
      "chance": 1
@@ -219,7 +219,7 @@ if (global.CD) global.CD.genPut('can_types', 'neapolitan', {
    "glow": false,
    "effects": [
     {
-     "effect": "vinery:climbing_effect",
+     "effect": global.effect.climbing,
      "ticks": 200,
      "amp": 0,
      "chance": 1
@@ -273,7 +273,7 @@ if (global.CD) global.CD.genPut('can_types', 'neapolitan', {
    "glow": false,
    "effects": [
     {
-     "effect": "neapolitan:harmony",
+     "effect": global.effect.harmony,
      "ticks": 100,
      "amp": 0,
      "chance": 1
@@ -327,7 +327,7 @@ if (global.CD) global.CD.genPut('can_types', 'neapolitan', {
    "glow": false,
    "effects": [
     {
-     "effect": "neapolitan:harmony",
+     "effect": global.effect.harmony,
      "ticks": 300,
      "amp": 0,
      "chance": 1
@@ -364,7 +364,7 @@ if (global.CD) global.CD.genPut('can_types', 'neapolitan', {
    "glow": false,
    "effects": [
     {
-     "effect": "vinery:climbing_effect",
+     "effect": global.effect.climbing,
      "ticks": 600,
      "amp": 0,
      "chance": 1
@@ -401,7 +401,7 @@ if (global.CD) global.CD.genPut('can_types', 'neapolitan', {
    "glow": false,
    "effects": [
     {
-     "effect": "neapolitan:harmony",
+     "effect": global.effect.harmony,
      "ticks": 300,
      "amp": 0,
      "chance": 1
