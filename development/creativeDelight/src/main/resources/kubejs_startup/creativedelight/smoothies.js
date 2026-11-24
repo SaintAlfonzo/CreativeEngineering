@@ -24,6 +24,7 @@ global.smoothies = (function () {
 	return {
 		// key: global.item key (also the fluid key); a, b: recipe fruits (a x2, b x1; b null = a x3); mods: what the
 		// recipe needs; effects: first fruit, then second; color: the fluid tint; special: 'teleport', 'berries'
+		// G5 begin: the recipe script skips a row unless every mod in its mods list is loaded (Platform.isLoaded), and effects pass effectOn
 		list: [
 			{ key: 'mixed_berry_smoothie', name: 'Mixed Berry Smoothie', a: i.t_berries_red, b: i.t_berries_blue_or_purple,
 				mods: [], effects: [], special: 'berries' },
@@ -61,14 +62,17 @@ global.smoothies = (function () {
 			{ key: 'hawberry_smoothie', name: 'Hawberry Smoothie', a: i.t_fruits_hawberry, b: i.white_strawberries,
 				mods: ['fruitsdelight', 'neapolitan'], effects: [e(ef.appetizing, 20)], color: 0xD04A55 },
 		],
+		// G5 end
 		// Mixed Berry (smoothies.md 2.1): what each berry adds, at half its base length; the same berry twice adds up to
 		// the full base. Berries not listed (raspberry, strawberries, sweet berries, cherry, mulberry) add nothing.
 		berryEffects: (function () {
 			var m = {}
+			// G5 begin: a lookup by the crafted berry (an absent mod's berry is never in a recipe); effects pass effectOn
 			m[i.cranberry] = [e(ef.shrinking, 40)]
 			m[i.hawberry] = [e(ef.appetizing, 10)]
 			m[i.blueberry] = [e(ef.night_vision, 10), e(ef.brightening, 10)]
 			m[i.bayberry] = [e(ef.leaf_piercing, 10)]
+			// G5 end
 			return m
 		})(),
 		// the NBT key on Mixed Berry: "effect id|ticks|amplifier" entries joined with ';' ('' = no effect)
