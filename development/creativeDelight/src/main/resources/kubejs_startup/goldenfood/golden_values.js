@@ -5,8 +5,7 @@
 // multiplier, capped at maxHunger; the saturation modifier stays the input's, so saturation points scale with hunger.
 // Multipliers: kubejs/generation_scripts/food/food_tuning.json `golden`. Effects, flags (always edible) and stack
 // sizes are kept. Replaces upstream's flat 4 / 1.2 (golden) and 8 / 8.0 (enchanted). Not here: the golden and gilded
-// milk buckets (milk is no food; as upstream their values never apply) and the two cakes (block slices,
-// GoldenCakeBlock). Creative Delight startup script, loaded from the jar after the pack's startup_scripts; priority
+// two cakes (block slices, GoldenCakeBlock). The golden milk bucket and honey bottle sets were removed 2026-11-22. Creative Delight startup script, loaded from the jar after the pack's startup_scripts; priority
 // -50 so the input foods' own changes are in first (comfort_nourishment.js, -100, only touches Comfort / Nourishment).
 // Restart to apply.
 ItemEvents.modification(e => {
@@ -34,7 +33,6 @@ ItemEvents.modification(e => {
 		porkchop_cooked: 'cooked_porkchop', mutton_cooked: 'cooked_mutton', chicken_cooked: 'cooked_chicken',
 		rabbit_cooked: 'cooked_rabbit', cod_cooked: 'cooked_cod', salmon_cooked: 'cooked_salmon',
 		minecraft_bread: 'bread', cookie: 'cookie', pumpkin_pie: 'pumpkin_pie',
-		honey_bottle: 'honey_bottle',
 	}
 	// A vanilla input the pack made a non-food (Pumpkin Pie is a placed pie, eaten as slices) keeps its vanilla
 	// values for the golden math: read net.minecraft.world.food.Foods (PUMPKIN_PIE = 8 / 0.3). A missing static

@@ -117,8 +117,8 @@
 [effects]
 	#Category overrides, "namespace:effect=CATEGORY" with CATEGORY one of BENEFICIAL, HARMFUL, NEUTRAL.
 	#The category colors the effect's name in potion, food and gear tooltips (HARMFUL red, the other
-	#two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. The defaults are the
-	#effects whose own category showed the wrong color (feature_writeup/effects.md 2.4). Read live.
+	#two blue), and AppleSkin, Quark's saturation word and isBeneficial() go by it. Empty by default
+	#(feature_writeup/effects.md 2.4). Read live.
 	categoryOverrides = ["create_confectionery:rest=BENEFICIAL", "alexsmobs:debilitating_sting=HARMFUL", "alexsmobs:fear=HARMFUL", "alexsmobs:power_down=HARMFUL", "neapolitan:slipping=HARMFUL", "vinery:trippy=HARMFUL"]
 	#Effects that always get their HUD icon (top right), even when the mod that gave them hid it
 	#(showIcon false, mostly to drop particles). The inventory list shows them either way. Armor, held
@@ -132,7 +132,7 @@
 	#Effects swapped for another wherever they are applied, "from=to". Same duration, level and
 	#visibility. Covers foods, potions, blocks, commands and mob code (LivingEntity#addEffect), and
 	#Fruits Delight's jam / jelly effect lines. Food tooltips are swapped by KubeJS
-	#(global.foodEffectSwaps). Server side, read live.
+	#(global.foodEffectSwaps). Empty by default. Server side, read live.
 	remap = ["neapolitan:agility=vinery:climbing_effect", "fruitsdelight:chorus=vinery:teleport", "quark:resilience=alexsmobs:knockback_resistance"]
 	#Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed
 	#by KubeJS (Creative Brewing's potions.js). Server side, read live.
@@ -270,4 +270,11 @@
 	#true: White Wool and White Concrete show the color palette test tooltips (every tooltip role and
 	#text color). Default false. Read when the client scripts load: a change applies after a client restart.
 	paletteDemo = false
+
+#Chat signing (dedicated server).
+[privacy]
+	#true: the server lets players join without a chat signing key, whatever enforce-secure-profile says in
+	#server.properties. Needed for the pack's clients, which hold no key ([privacy] blockMojangReporting in
+	#creativecommon-client.toml). false: server.properties decides. Read at each login.
+	acceptUnsignedChat = true
 

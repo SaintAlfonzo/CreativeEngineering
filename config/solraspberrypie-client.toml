@@ -6,10 +6,10 @@
 	locked = true
 	#Bar position relative to the inventory's left edge.
 	#Range: -2000 ~ 2000
-	x = 0
+	x = -24
 	#Bar position relative to the inventory's top edge.
 	#Range: -2000 ~ 2000
-	y = 166
+	y = -28
 
 [dietLog]
 	#Diet Log size: 1.4 draws the book at 140%. Shrinks to fit a small window, never below 100%
@@ -22,7 +22,7 @@
 	extraWidth = 47
 	#Diet Log Overview: the icon left of the diversity value is the eaten food (Food Dictionary) closest
 	#in base diversity to the average of the meals in the diet window, never a drink. With nothing eaten it is one of
-	#these items (loaded ones only).
+	#these items (loaded ones only). Defaults are vanilla; a modpack sets its own list in this file.
 	diversityIconFallback = ["minecraft:pumpkin_seeds", "vintagedelight:mixed_seeds", "vintagedelight:oat_seeds", "corn_delight:corn_seeds", "hearthandharvest:sunflower_seeds", "miners_delight:moss", "immersive_weathering:moss_clump", "minecraft:rotten_flesh", "minecraft:spider_eye", "veggiesdelight:dandelion_leaf"]
 
 	#Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)
@@ -82,8 +82,8 @@
 	customOrder = []
 
 [icons]
-	#Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT
-	#in braces, e.g. minecraft:potion{Potion:"minecraft:awkward"}.
+	#Diet Log icon for one-time unlocks: the first of these items that is loaded (any mod's item may be
+	#listed before the vanilla default). An item may carry NBT in braces, e.g. minecraft:potion{Potion:"minecraft:awkward"}.
 	unlock = ["monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"]
 	#Diet Log icon for permanent buffs: the first of these items that is loaded.
 	permanentBuff = ["create_crush_everything:diamond_shard", "minecraft:diamond"]
@@ -94,4 +94,10 @@
 	#Food tooltips: AppleSkin's saturation icons on their own line under the shanks (AppleSkin's own layout).
 	#Off: on the shank row, after the shanks.
 	saturationOwnLine = false
+
+[effects]
+	#Share of the field-of-view widening that Alex's Mobs' Fleet-Footed speed bonus causes while it applies:
+	#1.0 = unchanged, 0.0 = none. Other speed changes widen the view as usual.
+	#Range: 0.0 ~ 1.0
+	fleetFootedFov = 0.25
 

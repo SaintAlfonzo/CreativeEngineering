@@ -20,9 +20,7 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
    "golden_cookie",
    "golden_dried_kelp",
    "golden_glow_berries",
-   "golden_honey_bottle",
    "golden_melon_slice",
-   "golden_milk_bucket",
    "golden_pumpkin_pie",
    "golden_sweet_berries"
   ],
@@ -42,9 +40,7 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
    "enchanted_golden_cookie",
    "enchanted_golden_dried_kelp",
    "enchanted_golden_glow_berries",
-   "enchanted_golden_honey_bottle",
    "enchanted_golden_melon_slice",
-   "enchanted_golden_milk_bucket",
    "enchanted_golden_pumpkin_pie",
    "enchanted_golden_sweet_berries"
   ]
@@ -95,14 +91,8 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
   "canned_enchanted_golden_glow_berries": [
    "enchanted_golden_glow_berries"
   ],
-  "canned_enchanted_golden_honey_bottle": [
-   "enchanted_golden_honey_bottle"
-  ],
   "canned_enchanted_golden_melon_slice": [
    "enchanted_golden_melon_slice"
-  ],
-  "canned_enchanted_golden_milk_bucket": [
-   "enchanted_golden_milk_bucket"
   ],
   "canned_enchanted_golden_pumpkin_pie": [
    "enchanted_golden_pumpkin_pie"
@@ -152,14 +142,8 @@ if (global.CD) global.CD.genPut('food_types', 'goldenfood', {
   "canned_golden_glow_berries": [
    "golden_glow_berries"
   ],
-  "canned_golden_honey_bottle": [
-   "golden_honey_bottle"
-  ],
   "canned_golden_melon_slice": [
    "golden_melon_slice"
-  ],
-  "canned_golden_milk_bucket": [
-   "golden_milk_bucket"
   ],
   "canned_golden_pumpkin_pie": [
    "golden_pumpkin_pie"

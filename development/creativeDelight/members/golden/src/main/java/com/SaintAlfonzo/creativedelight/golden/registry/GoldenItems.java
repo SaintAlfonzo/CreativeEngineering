@@ -8,9 +8,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.EnchantedGoldenAppleItem;
-import net.minecraft.world.item.HoneyBottleItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.Rarity;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -23,8 +21,7 @@ import java.util.function.Function;
  * (4 hunger, 1.2 saturation, Regeneration II 5 s, Absorption I 2 min, always edible; rare), every enchanted one like
  * upstream's enchanted golden apple (8 hunger, 8.0 saturation, Regeneration II 20 s, Resistance and Fire Resistance
  * 5 min, Absorption IV 2 min, always edible; epic, glint, stack of 1). The item class only changes how the food is
- * used: chorus fruit teleports, milk clears effects (and, as upstream, never applies its food
- * values), honey clears poison and leaves a bottle.
+ * used: chorus fruit teleports. The golden milk bucket and honey bottle sets were removed 2026-11-22 (owner).
  * <p>
  * As upstream, three vanilla ids are replaced: {@code minecraft:golden_apple}, {@code minecraft:enchanted_golden_apple}
  * and {@code minecraft:golden_carrot} (the carrot gains the golden apple's effects, the enchanted apple the higher
@@ -57,9 +54,6 @@ public final class GoldenItems {
 				"cooked_chicken", "cooked_rabbit", "cooked_cod", "cooked_salmon", "bread", "cookie", "pumpkin_pie"}) {
 			plain(food);
 		}
-		pair("milk_bucket", p -> new ShinyItems.GoldenMilk(p.craftRemainder(Items.BUCKET)), p -> new ShinyItems.Milk(p.craftRemainder(Items.BUCKET)), 1, 1);
-		pair("honey_bottle", p -> new HoneyBottleItem(p.craftRemainder(Items.GLASS_BOTTLE)),
-				p -> new ShinyItems.Honey(p.craftRemainder(Items.GLASS_BOTTLE)), 8, 4);
 	}
 
 	private GoldenItems() {

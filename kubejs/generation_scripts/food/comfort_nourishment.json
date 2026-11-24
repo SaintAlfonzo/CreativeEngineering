@@ -641,15 +641,7 @@
 			"effect": "nourishment",
 			"seconds": 240
 		},
-		"enchanted_golden_honey_bottle": {
-			"effect": "nourishment",
-			"seconds": 240
-		},
 		"enchanted_golden_melon_slice": {
-			"effect": "nourishment",
-			"seconds": 240
-		},
-		"enchanted_golden_milk_bucket": {
 			"effect": "nourishment",
 			"seconds": 240
 		},
@@ -717,15 +709,7 @@
 			"effect": "nourishment",
 			"seconds": 120
 		},
-		"golden_honey_bottle": {
-			"effect": "nourishment",
-			"seconds": 120
-		},
 		"golden_melon_slice": {
-			"effect": "nourishment",
-			"seconds": 120
-		},
-		"golden_milk_bucket": {
 			"effect": "nourishment",
 			"seconds": 120
 		},

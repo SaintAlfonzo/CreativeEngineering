@@ -943,7 +943,7 @@
 	#their title the vanilla way (chests, barrels, shulker boxes, hoppers, horses, dispensers, furnaces).
 	stretchPlaque = true
 	#Record every title that needed a stretch in kubejs/exported/gui_title_overflow.json
-	#(screen class, texture, title and widths; kept across sessions).
+	#(screen class, texture, title and widths; kept across sessions). A developer report: off by default.
 	logOverflow = true
 
 #Pop-up toasts in the top-right corner (client side).
@@ -1219,4 +1219,79 @@
 	#Synced to clients through the corpse, so only the server's value counts.
 	#Range: 0 ~ 48
 	curioCap = 24
+
+#Screen look (client side).
+[screens]
+	#On: vanilla's dark overlay over the world behind the inventory and other container screens.
+	#Off: the world stays undimmed. Menus outside a world (title screen) are unchanged.
+	#Takes effect the next time a screen draws.
+	dimWorldBehindScreens = true
+
+#Changes to vanilla that need no other mod, one switch each (all on by default).
+#Read at game start: restart the game after changing one.
+[mixins]
+	#Iron golem farm cooldown ([golems]).
+	villagerGolemCooldown = true
+	#Boat-only block friction ([boat_friction]).
+	boatIceFriction = true
+	#Sweet berries and glow berries listed in the creative tabs and JEI again.
+	blockItemOwnStackFill = true
+	#Botanist workbenches placed by structures start with a flower (Beautify).
+	structureTemplateBotanistPot = true
+	#Sheared vines stop growing ([vine_shearing]).
+	vineBlockShear = true
+	#Pass-through blocks: each entity's pass-through state and the movement hook ([surface.passthrough]). Off: entities walk through as vanilla.
+	insideBlocks = true
+	#Pass-through blocks: the tier cached on each block state (off: looked up each time).
+	blockStatePass = true
+	#Snow layers can be walked through.
+	snowLayerPass = true
+	#Snow and salt layers fall like sand.
+	snowLayerFall = true
+	#A placed block replaces snow layers up to [surface] replaceMaxLayers deep.
+	snowLayerReplace = true
+	#Mobs do not path through deep leaf piles.
+	leafPilePath = true
+	#Weaker jumps inside deep snow and leaf layers.
+	layerJump = true
+	#Mobs sunk in snow layers climb out when they walk into a block.
+	snowMob = true
+	#Path searches of mobs sunk in snow layers start from the layer.
+	snowPath = true
+	#Pass-through neighbor counts stored in chunks (off: counted each time).
+	levelChunkPass = true
+	#Pass-through blocks set their own slowdown instead of the cobweb one.
+	makeStuckInBlock = true
+	#Pass-through state saved with entities; items stuck in webs picked up on touch.
+	entityPass = true
+	#Climbing and hanging in surrounded webs.
+	livingClimb = true
+	#Arrows hang in pass-through webs and despawn on their own timer.
+	arrowPass = true
+	#Fireworks slowed in webs.
+	fireworkPass = true
+	#Projectiles in surrounded webs hit the web block.
+	projectilePass = true
+	#Falling blocks splash when they enter water (client).
+	fallingBlockWaterSplash = true
+	#Entities standing on sinking blocks drawn lower (client).
+	entitySinkRender = true
+	#The camera lowered on sinking blocks (client).
+	cameraSink = true
+	#A tooltip taller than the screen keeps its top on screen (client).
+	screenTooltipTop = true
+	#GUI resource pack title plaques stretched to long titles ([gui_title], client).
+	containerTitlePlaque = true
+	#Tutorial and advancement toasts filtered ([toasts], client).
+	toastFilter = true
+	#[screens] dimWorldBehindScreens (client).
+	screenBackgroundDim = true
+	#Finds a container screen's background for the title plaques (client).
+	renderSystemShaderTexture = true
+	#HUD effect icons for effects listed in Creative Common's [effects] forceHudIcon (client).
+	guiEffectIcon = true
+	#Sign text not drawn far from the camera (client).
+	signTextDistance = true
+	#Field of view ignores block walking speeds (client).
+	passFov = true
 

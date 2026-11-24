@@ -35,8 +35,6 @@ ServerEvents.recipes(e => {
 		gild(i.minecraft_bread, i.golden_bread)
 		gild(i.cookie, i.golden_cookie)
 		gild(i.pumpkin_pie, i.golden_pumpkin_pie)
-		gild(i.minecraft_milk_bucket, i.golden_milk_bucket)
-		gild(i.honey_bottle, i.golden_honey_bottle)
 		gild(i.cake, i.golden_cake)
 
 		// minecraft:golden_carrot (replaced by Golden Food) -> goldenfood:enchanted_golden_carrot
@@ -58,7 +56,5 @@ ServerEvents.recipes(e => {
 		F.goldenEnchant(i.golden_bread, i.enchanted_golden_bread)
 		F.goldenEnchant(i.golden_cookie, i.enchanted_golden_cookie)
 		F.goldenEnchant(i.golden_pumpkin_pie, i.enchanted_golden_pumpkin_pie)
-		F.goldenEnchant(i.golden_milk_bucket, i.enchanted_golden_milk_bucket)
-		F.goldenEnchant(i.golden_honey_bottle, i.enchanted_golden_honey_bottle)
 	})
 })

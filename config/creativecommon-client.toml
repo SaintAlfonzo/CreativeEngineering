@@ -8,3 +8,12 @@
 	#Range: 2 ~ 120
 	cycleSeconds = 10
 
+#Chat reporting and Mojang's user API.
+[privacy]
+	#true: the game uses Mojang's offline user API. It never gets a chat signing key, so nothing you
+	#write in chat is signed or can be reported to Mojang; no abuse reports or telemetry are sent; your
+	#Microsoft account block list is not loaded. The "Not Secure" chat bar and the "Chat messages can't
+	#be verified" toast are hidden. Servers that enforce secure chat refuse players without a key: set
+	#false to play on those. Login and skins are unaffected. Applies on the next game start.
+	blockMojangReporting = true
+

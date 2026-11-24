@@ -18,9 +18,7 @@ if (global.CD) global.CD.genPut('can_servings', 'goldenfood', {
   "canned_golden_cookie": 10,
   "canned_golden_dried_kelp": 10,
   "canned_golden_glow_berries": 10,
-  "canned_golden_honey_bottle": 10,
   "canned_golden_melon_slice": 10,
-  "canned_golden_milk_bucket": 10,
   "canned_golden_pumpkin_pie": 10,
   "canned_golden_sweet_berries": 10,
   "canned_enchanted_golden_baked_potato": 10,
@@ -38,9 +36,7 @@ if (global.CD) global.CD.genPut('can_servings', 'goldenfood', {
   "canned_enchanted_golden_cookie": 10,
   "canned_enchanted_golden_dried_kelp": 10,
   "canned_enchanted_golden_glow_berries": 10,
-  "canned_enchanted_golden_honey_bottle": 10,
   "canned_enchanted_golden_melon_slice": 10,
-  "canned_enchanted_golden_milk_bucket": 10,
   "canned_enchanted_golden_pumpkin_pie": 10,
   "canned_enchanted_golden_sweet_berries": 10
  }

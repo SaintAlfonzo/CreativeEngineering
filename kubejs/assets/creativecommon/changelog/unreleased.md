@@ -220,6 +220,7 @@
 - **Changed:** Golden food in the Arc Furnace takes 4 gold [5].
 - **Fixed:** Golden and gilded Pumpkin Pie kept their old food values; they fill 16 and 20 hunger [4 and 8].
 - **Removed:** Golden and gilded mushroom stew, beetroot soup and rabbit stew, their cans and jar fluids. Existing ones in worlds are deleted.
+- **Removed:** Golden and gilded Honey Bottle and Milk Bucket, their cans and Incomplete items. Existing ones in worlds are deleted.
 
 ## Flavors <!-- icon: barbequesdelight:chili_powder -->
 
@@ -530,8 +531,8 @@
 - **New:** Fleet-Footed also gives Feather Feet (no fall damage) for its duration; its tooltip lists it.
 - **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
 - **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
-
 - **Fixed:** The Magic Resistance page in the effect list now shows the Felsic and Dragon armor that give it [no armor].
+
 ## Glass Shards <!-- icon: quark:clear_shard -->
 
 - **New:** Glass blocks and panes from every mod break into shards of their color without Silk Touch: blocks 1 to 3, panes 1 to 2. Tinted glass gives dirty shards.
@@ -663,8 +664,8 @@
 
 ## Mods Added & Removed
 
-- **New:** Packet Fixer, on clients and the server. Items, block contents and chunks of up to 64 MB are accepted [2 MB].
 - **Removed:** Kippers.
+- **New:** Packet Fixer, on clients and the server. Items, block contents and chunks of up to 64 MB are accepted [2 MB].
 
 ## Performance & Stability
 

@@ -17,7 +17,7 @@ PACKS = ROOT / "development/creativeCommon/src/main/resources/resourcepacks"
 OUT = ROOT / "feature_writeup/loading_tips_list.md"
 # Pack-held tips (not in any jar): the KubeJS assets folder, read like a resource pack.
 PACK_HELD = (ROOT / "kubejs", "Creative Tips: Creative Engineering tips for the world loading screen (pack-held, "
-			 "kubejs/assets/creative_tips/loading_tips/)")
+			 "kubejs/assets/creativetips/loading_tips/)")
 
 
 def pack_tips(pack):

@@ -519,3 +519,22 @@
 	#Alex's Mobs fish oil counts as cooking oil; any raw fish cooks down to fish oil.
 	fishOil = true
 
+#Whale Oil Lamp: an oil tank, full when crafted, burned while lit; out when empty, refilled with whale
+#oil. The lamp keeps its oil when broken (feature_writeup/food.md 3.22).
+[whale_oil_lamp]
+	#Tank size in mB. A crafted lamp starts full.
+	#Range: 1 ~ 1000000
+	tankMb = 1000
+	#Ticks between oil uses while lit (24 ticks = 1.2 s).
+	#Range: 1 ~ 72000
+	burnTicks = 24
+	#mB used every burnTicks while lit.
+	#Range: 1 ~ 1000000
+	burnMb = 1
+	#mB one Whale Oil bottle adds (the empty bottle comes back).
+	#Range: 1 ~ 1000000
+	bottleMb = 250
+	#Most mB one use of a fluid container (a bucket or tank item holding whale oil) adds.
+	#Range: 1 ~ 1000000
+	bucketMb = 1000
+

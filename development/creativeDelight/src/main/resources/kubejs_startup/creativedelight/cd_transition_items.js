@@ -53,8 +53,6 @@ StartupEvents.registry('item', e => {
 		['enchanted_golden_bread',                   'goldenfood:item/golden_bread'],
 		['enchanted_golden_cookie',                  'goldenfood:item/golden_cookie'],
 		['enchanted_golden_pumpkin_pie',             'goldenfood:item/golden_pumpkin_pie'],
-		['enchanted_golden_milk_bucket',             'goldenfood:item/golden_milk_bucket'],
-		['enchanted_golden_honey_bottle',            'goldenfood:item/golden_honey_bottle'],
 		['ham_and_cheese_sandwich'],                                 // alcohol.js (alcohol.md 8.6)
 		['quiche'],
 		['zucchini_quiche'],                                         // CD veggiesdelight/recipes.js (food_families.md quiche/whole)
@@ -84,14 +82,14 @@ StartupEvents.registry('item', e => {
 		['kangaroo_burger'],
 		['cheese_burger'],                                           // Vintage Delight (vintage_delight.md 4 step 9)
 		['deluxe_burger'],
+		['stuffed_burrito'],
+		['shepherds_pie'],
 		['roast_chicken'],                                           // feast assemblies (dishes/meals #5)
 		['honey_glazed_ham'],
 		['cheese_pizza'],
 		['meat_pizza'],
 		['tropical_pizza'],
 		['popcorn_box'],
-		['stuffed_burrito'],
-		['shepherds_pie'],
 		['horror_lasagna'],
 		['stuffed_potato'],
 		['crispy_skewer'],
@@ -115,13 +113,13 @@ StartupEvents.registry('item', e => {
 		['suspiciousbaconandaggs',       'hostiledelight:items/gren_bacon_and_eggs'],   // Green Eggs and Ham, CD hostiledelight/recipes.js
 		// Muffins on paper (F.muffinBake, baking/baked-goods #2): the muffin's own sprite
 		['blueberry_muffin',             'fruitsdelight:item/blueberry_muffin'],
+		['cranberry_muffin',             'fruitsdelight:item/cranberry_muffin'],
+		['sweet_potato_cupcake',         'veggiesdelight:item/sweet_potato_cupcake'],
 		['orange_cranberry_muffin',      'creativedelight:item/orange_cranberry_muffin'],   // CD new_foods.js
 		['lemon_poppy_muffin',           'creativedelight:item/lemon_poppy_muffin'],
 		['carrot_muffin',                'creativedelight:item/carrot_muffin'],
 		['zucchini_muffin',              'creativedelight:item/zucchini_muffin'],
 		['pumpkin_muffin',               'creativedelight:item/pumpkin_muffin']
-		['cranberry_muffin',             'fruitsdelight:item/cranberry_muffin'],
-		['sweet_potato_cupcake',         'veggiesdelight:item/sweet_potato_cupcake'],
 	]
 	// G5 end
 	SEQUENCED_ASSEMBLIES.forEach(([key, texture, color]) => R.registerIncomplete(e, key, texture, color))

@@ -4,7 +4,7 @@
 Restores Loading Tips to the unmodified upstream list (Loading Tips 1.2.1+26.1, 532 tips, text verbatim) with one
 slug id per tip, and turns every change the pack made into Creative Tips overrides (`override: true`): a `remove` list
 for dropped tips and same-id replacements for changed text. Creative Tips that rewrote an audited upstream tip become
-same-id replacements; the rest stay new `creative_tips:` tips.
+same-id replacements; the rest stay new `creativetips:` tips.
 
     python3 tools/loading_tips_migrate.py            # dry run: prints the matches and the acceptance check
     python3 tools/loading_tips_migrate.py --write    # also writes both tips.json files (only if the check passes)
@@ -20,7 +20,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 UPSTREAM = ROOT / "DecompiledMods/loading_tips-1.2.1+26.1/assets/loading_tips/text/loading_tips.json"
 LT = ROOT / "development/creativeCommon/src/main/resources/resourcepacks/loading_tips/assets/loading_tips/loading_tips/tips.json"
-CT = ROOT / "kubejs/assets/creative_tips/loading_tips/tips.json"
+CT = ROOT / "kubejs/assets/creativetips/loading_tips/tips.json"
 SLUG_MAX = 48
 
 
@@ -140,7 +140,7 @@ def main():
 			free.discard(i)
 			fuzzy.append(("CT", r, up[i][1], t))
 		else:
-			fuzzy.append(("CT", 0.0, "(no match: new creative_tips tip)", t))
+			fuzzy.append(("CT", 0.0, "(no match: new creativetips tip)", t))
 
 	# 3. Overrides.
 	replaced = {}
@@ -152,7 +152,7 @@ def main():
 	remove = [up[i][0] for i in sorted(free)]
 	ct_taken = set()
 	ct_tips = [{"id": up[i][0], "text": replaced[i]} for i in sorted(replaced)]
-	ct_tips += [{"id": f"creative_tips:{slugify(t, ct_taken)}", "text": t}
+	ct_tips += [{"id": f"creativetips:{slugify(t, ct_taken)}", "text": t}
 				for j, t in enumerate(ct_now) if j not in ct_match]
 	lt_new = {"replace": False, "priority": 0, "tips": [{"id": i, "text": t} for i, t in up]}
 	ct_new = {"override": True, "priority": 10, "remove": remove, "tips": ct_tips}
@@ -165,7 +165,7 @@ def main():
 		  f"({norm_only} normalization only), new creative tips {len(ct_now) - len(ct_match)}")
 
 	# 4. Acceptance: same texts, same set as the old effective list.
-	result = apply([("creative_tips:loading_tips/tips", ct_new), ("loading_tips:loading_tips/tips", lt_new)])
+	result = apply([("creativetips:loading_tips/tips", ct_new), ("loading_tips:loading_tips/tips", lt_new)])
 	ok = sorted(result) == sorted(target) and len(result) == len(target)
 	print(f"acceptance: {len(result)} effective vs {len(target)} old -> {'PASS' if ok else 'FAIL'}")
 	if not ok:

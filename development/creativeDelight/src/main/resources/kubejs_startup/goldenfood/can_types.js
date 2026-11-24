@@ -774,61 +774,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    ],
    "texture": "canned_goods:items/canned_golden_apples"
   },
-  "canned_golden_honey_bottle": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Golden Honey Bottle",
-   "servings": 10,
-   "hunger": 3,
-   "modifier": 0.1,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": false,
-   "effects": [
-    {
-     "effect": global.effect.regeneration,
-     "ticks": 25,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.absorption,
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.nourishment,
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "golden_honey_bottle"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "golden_honey_bottle"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_golden_apples"
-  },
   "canned_golden_melon_slice": {
    "section": "golden",
    "existing": false,
@@ -870,61 +815,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
       {
        "any": [
         "golden_melon_slice"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_golden_apples"
-  },
-  "canned_golden_milk_bucket": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Golden Milk Bucket",
-   "servings": 10,
-   "hunger": 1,
-   "modifier": 1.2,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": false,
-   "effects": [
-    {
-     "effect": global.effect.regeneration,
-     "ticks": 25,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.absorption,
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.nourishment,
-     "ticks": 600,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "golden_milk_bucket"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "golden_milk_bucket"
        ],
        "n": 2
       },
@@ -2054,73 +1944,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
    ],
    "texture": "canned_goods:items/canned_notch_apples"
   },
-  "canned_enchanted_golden_honey_bottle": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Gilded Honey Bottle",
-   "servings": 10,
-   "hunger": 5,
-   "modifier": 0.1,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": true,
-   "effects": [
-    {
-     "effect": global.effect.regeneration,
-     "ticks": 100,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.resistance,
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.fire_resistance,
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.absorption,
-     "ticks": 600,
-     "amp": 3,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.nourishment,
-     "ticks": 1200,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "enchanted_golden_honey_bottle"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "enchanted_golden_honey_bottle"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_notch_apples"
-  },
   "canned_enchanted_golden_melon_slice": {
    "section": "golden",
    "existing": false,
@@ -2174,73 +1997,6 @@ if (global.CD) global.CD.genPut('can_types', 'goldenfood', {
       {
        "any": [
         "enchanted_golden_melon_slice"
-       ],
-       "n": 2
-      },
-      {
-       "any": [
-        "honey_bottle"
-       ],
-       "n": 1
-      }
-     ]
-    }
-   ],
-   "texture": "canned_goods:items/canned_notch_apples"
-  },
-  "canned_enchanted_golden_milk_bucket": {
-   "section": "golden",
-   "existing": false,
-   "name": "Canned Gilded Milk Bucket",
-   "servings": 10,
-   "hunger": 2,
-   "modifier": 8.0,
-   "meat": false,
-   "fast": false,
-   "always": true,
-   "glow": true,
-   "effects": [
-    {
-     "effect": global.effect.regeneration,
-     "ticks": 100,
-     "amp": 1,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.resistance,
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.fire_resistance,
-     "ticks": 1500,
-     "amp": 0,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.absorption,
-     "ticks": 600,
-     "amp": 3,
-     "chance": 1
-    },
-    {
-     "effect": global.effect.nourishment,
-     "ticks": 1200,
-     "amp": 0,
-     "chance": 1
-    }
-   ],
-   "sources": [
-    "enchanted_golden_milk_bucket"
-   ],
-   "recipes": [
-    {
-     "suffix": "",
-     "inputs": [
-      {
-       "any": [
-        "enchanted_golden_milk_bucket"
        ],
        "n": 2
       },
