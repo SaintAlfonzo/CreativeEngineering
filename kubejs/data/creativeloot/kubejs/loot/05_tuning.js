@@ -348,6 +348,12 @@
 		for (var i = 0; i < T.bans.length; i++) {
 			var ban = T.bans[i]
 			if (!ban.modLootOn) continue
+			// an absent mod has no loot switch to read (its classes do not exist): skip, no WARN
+			if (ban.mod && !Platform.isLoaded(ban.mod)) {
+				if (!ban.skipLogged) console.info(TAG + 'ban ' + ban.name + ': ' + ban.mod + ' not loaded, switch check skipped')
+				ban.skipLogged = true
+				continue
+			}
 			var res = callGuarded(ban.modLootOn)
 			if (!res.ok) {
 				warn('ban ' + ban.name + ': could not read the mod\'s loot switch: ' + res.error)
@@ -397,6 +403,8 @@
 	//   why        text for the warning: which switch is supposed to keep it out
 	//   modLootOn  function returning true when the mod's own loot switch is on (bad), checked every reload
 	//   ownTables  tables expected to ship the item (the mod's own); default for '@mod' is that mod
+	//   mod        mod id whose loot switch modLootOn reads; default for '@mod' is that mod. When the mod
+	//              is not loaded the switch check is skipped (one INFO line), the removals still run
 	T.ban = function (targets, opts) {
 		opts = opts || {}
 		var list = arr(targets)
@@ -408,6 +416,7 @@
 			r.name = opts.name || r.key
 			r.why = opts.why || '(no reason given)'
 			r.modLootOn = opts.modLootOn || null
+			r.mod = opts.mod || (String(list[i]).charAt(0) === '@' ? String(list[i]).substring(1) : null)
 			r.ownTables = matchers(own, 'ban ownTables')
 			T.bans.push(r)
 			T.stats.rules++

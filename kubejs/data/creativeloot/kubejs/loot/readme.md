@@ -69,7 +69,7 @@ KubeJS ignores this `.md` and the `.json` files here (it only loads `.js`).
 |---|---|
 | `L.frequency(target, f, { except, tables })` | chance per roll x f: 0 removes, < 1 cuts, > 1 boosts (the rest of the pool pays) |
 | `L.remove(target, { except, tables })` | never (in those tables) |
-| `L.ban(target, { name, why, modLootOn, ownTables })` | removed, and LOUD (error-log banner + red chat to ops, repeated to ops on login) if `modLootOn()` reads true at a reload, if a table outside `ownTables` ships it, or if a chest roll ever produces it |
+| `L.ban(target, { name, why, modLootOn, ownTables, mod })` | removed, and LOUD (error-log banner + red chat to ops, repeated to ops on login) if `modLootOn()` reads true at a reload, if a table outside `ownTables` ships it, or if a chest roll ever produces it. `mod` names the mod whose switch `modLootOn` reads (default: the mod of an `@mod` target; regex targets set it); when that mod is not loaded the switch check is skipped with one INFO line and the removals still run |
 | `L.pack(packed, loose, { rate, max })` | splits each `loose` entry: the top `rate` of its roll becomes 1..max packed items (higher roll, more crates); nothing else in the pool changes |
 | `L.packRate(r)` / `L.packBoost(tables, mult)` / `L.packExclude(tables)` | default rate (cap 0.9); multiply it in matching tables; skip tables |
 | `L.companion(item, anchors, { rate, count, nbt, tables })` | `item` beside every anchor entry at rate x its chance |

@@ -42,6 +42,7 @@
 		name: 'Lightman\'s coins',
 		why: 'Lightman\'s coin loot is off: [loot.chests] and [loot.entities] enabled=false in config/lightmanscurrency-common.lcconfig',
 		ownTables: '@lightmanscurrency',
+		mod: 'lightmanscurrency',
 		modLootOn: function () {
 			var LC = Java.loadClass('io.github.lightman314.lightmanscurrency.LCConfig').COMMON
 			return String(LC.enableChestLoot.get()) === 'true' || String(LC.enableEntityDrops.get()) === 'true'
