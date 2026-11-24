@@ -1,13 +1,12 @@
 # Creative Brewing publish polish plan (2026-11-06, from scratch run r1106cbo)
 
-<!-- generated:status_index begin open_work sha1=0d15ad8715b3 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Testing 13), 1 Complete.
+<!-- generated:status_index begin open_work sha1=c0b519fbf4ea -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Testing 12), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creativebrewing/publish #11` | Testing | S | `[absent mods]` summary never prints |
 | `creativebrewing/publish #12` | Testing | S | Echo tool on-hit rows leak without Creative Engineering |
-| `creativebrewing/publish #13` | Testing | S | Chain: loot tables of optional-mod blocks fail to parse |
 | `creativebrewing/publish #14` | Testing | S | Chain: horror lasagna assembly gets an empty fluid |
 | `creativebrewing/publish #15` | Testing | S | Cooking set: 77 `Empty array?` NCH remove failures left |
 | `creativebrewing/publish #16` | Testing | S | Common compost WARN with Immersive Weathering and no Architect's Palette / Fruits Delight |

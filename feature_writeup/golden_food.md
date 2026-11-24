@@ -37,6 +37,8 @@ converted. Sections 1 to 8 still describe the stews where they were written; rea
 catalogs (`food_catalog.md`, `food_families.md`, `can_parity.md`, `stack_sizes.md`, `item_physics_audit.md`) refresh on the
 next `/dumpall` and `/cdevgen`. Test `SQ-GLD-16` replaces SQ-GLD-15.
 
+2026-11-22 (owner, TODO food/types-and-tuning #26): the golden and gilded honey bottle and milk bucket are removed the same way: `GoldenItems` (and `ShinyItems`), Common's `item_dict.js` / `food_dict.js`, the four cans, the two `kubejs:incomplete_enchanted_golden_*` items, `golden.js` gild and enchant calls, `golden_values.js`, the generated can and food-type JSON, and the stack, physics, comfort and diversity tables. The 14 ids (with both can namespaces) are in `swaps/removed.json`; old worlds delete the stacks. Needs a Creative Common and Creative Delight rebuild, install and restart. Test `SQ-GLD-17`.
+
 ## 1. Upstream inventory (goldenfood-1.19.2-2.0.0.jar)
 
 Native Forge 1.19.2, mod id `goldenfood`, author GGWPJason, no dependencies but Forge and Minecraft, no mixins, no
@@ -57,7 +59,7 @@ config, no access transformer, no block entities.
 | Enchanted foods (17) | `enchanted_golden_` + the same, plus `enchanted_golden_carrot` | vanilla enchanted golden apple class (glint); chorus: glinting chorus with a second teleport | 1 | epic |
 | Stews (3 + 3) | **REMOVED 2026-11-10** (see section 0): `(enchanted_)golden_mushroom_stew`, `_beetroot_soup`, `_rabbit_stew` | bowl food, bowl back | 1 | rare / epic |
 | Milk (1 + 1) | `(enchanted_)golden_milk_bucket` | milk bucket, bucket back | 1 | rare / epic |
-| Honey (1 + 1) | `(enchanted_)golden_honey_bottle` | honey bottle, bottle back | 8 / 4 | rare / epic |
+| Honey (1 + 1) | **REMOVED 2026-11-22** (see section 0): `(enchanted_)golden_honey_bottle` | honey bottle, bottle back | 8 / 4 | rare / epic |
 | Cakes (1 + 1) | `golden_cake`, `enchanted_golden_cake` | block item (enchanted: glint); **not in the creative tab** | 1 | rare / epic |
 | Vanilla replacements (3) | `minecraft:golden_apple`, `minecraft:enchanted_golden_apple`, `minecraft:golden_carrot` | registered in the `minecraft` namespace, replacing vanilla | 64 / **1** / 64 | rare / epic / rare |
 

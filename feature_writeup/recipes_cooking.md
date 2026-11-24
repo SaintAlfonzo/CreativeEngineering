@@ -7,13 +7,12 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=308aa18e668e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 33 open TODO rows (Planned 1, In Progress 8, Testing 24), 1 Complete.
+<!-- generated:status_index begin open_work sha1=f9d6a13dd675 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 33 open TODO rows (Planned 1, In Progress 7, Testing 25), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `dishes/meals #37` | Planned | S C P | Pancake coverings review |
-| `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
 | `dishes/jams #2` | In Progress | S C P | Jam crafting: 4 fruit, sugar, lemon slice for 2 jam |
 | `dishes/jams #3` | In Progress | S C P | Recipes use jam, never bottled jam or jelly |
 | `dishes/meals #21` | In Progress | S C P | Meal-specific ingredients audit |
@@ -22,6 +21,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | `merges/dishes #5` | In Progress | S C P | Merge cheesy pastas |
 | `merges/dishes #8` | In Progress | S C P | Pizza and quiche |
 | `baking/baked-goods #22` | Testing | SQ-FF-22 OV-39 | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #23` | Testing | SQ-FF-22 SQ-FF-26 SQ-FF-27 | Oatmeal cookies from oat dough |
 | `baking/baked-goods #24` | Testing | C | No shapeless pie-to-crust recipes |
 | `baking/baked-goods #25` | Testing | S~ C P | Sponge cake becomes sponge pie |
 | `baking/baked-goods #26` | Testing | S~ P | Honey cake honey and comb split |

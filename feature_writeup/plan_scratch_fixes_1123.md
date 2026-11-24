@@ -5,23 +5,23 @@ the owner's chat request 2026-11-23. Session role for the build: `impl` (one cod
 
 ## 0. Intake
 
-<!-- generated:status_index begin open_work sha1=a07097aa89fe -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Bug 1, Planned 8, In Progress 1, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c48065420363 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 12 open TODO rows (Testing 12), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `crops #60` | Bug | S | Hemp and tobacco do not grow in mid winter (SQ-CS-05) |
-| `creative-brewing #1` | Planned | SQ-CBB-05 | Remove Kippers from the pack |
-| `creative-brewing #2` | Planned |  | Alcohol, food and item merges docs refreshed against the code |
-| `creative-delight-members #4` | Planned | SQ-EDL-03 | Void Pepper Sprout no longer spreads; a passing tick fruits it |
-| `effect-text #1` | Planned | SQ-CBO-36 C | JEED provider for Magic Resistance: Felsic gear |
-| `gear-tuning #2` | Planned | SQ-CEQ-08 | Dragon armor 40 points: helmet 9, chest 12, leggings 11, boots 8 |
-| `generators-and-tests #29` | Planned |  | Rewrite the stale and not-simple rows flagged by the r1123 judges |
-| `loot-tables #3` | Planned | SQ-CBA-03 SQ-CBO-32 | Creative Loot ban warns on every boot when the banned mod is absent (PneumaticCraft, Lightman's) |
-| `potions #11` | Planned | SQ-CBO-02 SQ-CBO-32 | potions.js mix hearthandharvest:strong_bad_omen -> buzzier_bees:strong_luck warns when Buzzier Bees is absent |
-| `creativebrewing/publish #4` | In Progress | S | Chain alone: Pale Jane, Steel Toe Stout and Kippers cannot be brewed |
+| `creative-brewing #1` | Testing | SQ-CBB-05 | Remove Kippers from the pack |
+| `creative-brewing #2` | Testing |  | Alcohol, food and item merges docs refreshed against the code |
+| `creative-delight-members #4` | Testing | SQ-EDL-03 | Void Pepper Sprout no longer spreads; a passing tick fruits it |
+| `creativebrewing/publish #4` | Testing | S | Chain alone: Pale Jane and Steel Toe Stout cannot be brewed |
 | `creativebrewing/publish #13` | Testing | S | Chain: loot tables of optional-mod blocks fail to parse |
+| `crops #60` | Testing | S | Hemp and tobacco do not grow in mid winter (SQ-CS-05) |
+| `effect-text #1` | Testing | SQ-CBO-36 C | JEED provider for Magic Resistance: Felsic gear |
+| `gear-tuning #2` | Testing | SQ-CEQ-08 | Dragon armor 40 points: helmet 9, chest 12, leggings 11, boots 8 |
+| `generators-and-tests #29` | Testing |  | Rewrite the stale and not-simple rows flagged by the r1123 judges |
+| `loot-tables #3` | Testing | SQ-CBA-03 SQ-CBO-32 | Creative Loot ban warns on every boot when the banned mod is absent (PneumaticCraft, Lightman's) |
 | `mobs/tweaks #21` | Testing | S P | Baby squid, glow squid and dolphin do not spawn as babies |
+| `potions #11` | Testing | SQ-CBO-02 SQ-CBO-32 | potions.js mix hearthandharvest:strong_bad_omen -> buzzier_bees:strong_luck warns when Buzzier Bees is absent |
 <!-- generated:status_index end open_work -->
 
 | # | Item (owner's words) | Class | Finding |

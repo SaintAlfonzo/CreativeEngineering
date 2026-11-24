@@ -2,18 +2,10 @@
 
 ## Open plans, dont touch
 
-feature_writeup/plan_unblocked_batch_1121.md
-feature_writeup/plan_cc_publish_1_3.md
-feature_writeup/plan_texture_tools_gui.md
+feature_writeup/plan_wave1_publish.md
+feature_writeup/plan_wave2_publish.md
 
 ## Prompt scratchpad, dont touch
-
-id like dragon food and feasts to have a multiplier on their diversity to bring their top foods to the stairstep pattern the table expects, but with dragon food better than golden food. add a multiplier to golden if needed at the same time. canned food should provide slightly less diversity than the input food. baking should give on average the same boost to diversity that the cooking pot does. brewing and fermenting things into drinks should destroy the diversity it has and turn it to a drink that only contributes to the drink log. cooked shaped/shapeless/assemble crafts that dont have a raw version should not get a diversity penalty and be about the same boost as cooking pot. modded cooked meats should follow the vanilla meats diversity in terms of hunger/saturation ratio. cooked dragon meat gets significant boost but not as high as dragon meat/egg in meals. mirror create filling recipes (ruby chocolate on apple/waffle, etc) in the cooking pot (slightly more expensive in cooking vs spout, adjust ratios ) and base the diversity off the cooking pot value. keep golden foods diversity lower and gilden higher, split golden and gilded in table, so the order is dragon, gilded, feasts, golden, high, mid, low. 
-
-
-
-
-
 
 I am an agent picking up the food-decisions walkthrough (round 6, started 2026-11-19; the prior agent committed c5af0057 on agent_staging). Goal: walk the owner through the remaining open food and cooking TODO decisions with AskUserQuestion, and record every ruling on its row.
 
@@ -33,204 +25,34 @@ Settled, do not re-ask: every round-5 Block A row (baking/baked-goods #2, #5, #1
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
-- cozy cats
-    - ensure stay-follow-wander-guard modes are enabled from in world sit/stand interaction
-    - enable gender for cat, but still asexual reproduction
-    - update cat food list in book and behavior
-        - all raw meat
-        - most raw fish (non poisonus)
-        - cave carrot meats
-        - caviar
-    - tooltips on all items
-    - check peace-make items like wheat, add feather and foods
-    - yarn ball doesnt work
-    - merge beds w/ domestic innovation
-        - use DI bed as cozy bed, remove cozy bed
-    - enable totem of undying behavior reroll
-    - do animals eat while unloaded?
-    - update book info, rewrite to be more concise/more words per page?
+- rp tweaks
+    - commands to set diversity to specific level for player
+    - permanant effects stop cycling between icon and diamond when enabled
+    - update steady effect description
+    - all short effect descriptions  
+    - dropping top effect slot drops all, fix (intake 2026-11-23 -> plan_wave1_publish.md)
+- all jams should be foods (intake 2026-11-23 -> plan_wave1_publish.md)
+- hot cocoa, coffes, prickly pear juice, strawberry banana smoothie, and all their families are drinks (intake 2026-11-23 -> plan_wave1_publish.md)
 
-- all budding blocks cant be picked up with silk touch
-    - expensive/advanced craft for budding blocks
-    - dragon pickaxe w/ silktouch can pick up budding blocks
-- crouch click pick up pickle jars like kettle/skillet etc
-- change campfire textures to not have fire when place unlit is enabled
-- underground wood crop
-- add 'requires knife'-like tooltip to all products that require it, tooltip and jei
-- trash can inventory slots is high priority
-    - point at ftb trash can
-- mustard?
-- add any trade specific enchants, mending, to enchantment table output.
-    - mending relativelt common
-- mineshafts spawning in air
-    - cancel shafts that travel far distance in air without replacing stone at the end
-    - limit intersections, staircases in hanging/in the air shafts
-    - allow to hang by copper and iron chains, rope
-    - set start and end points of shaft segments within stone but through air/hanging when possible 
-- rotten flesh in more miners recipe
-- botania underground mushroom spawning
-    - mushrooms can spawn in small patches of 1-5
-    - noise function applied for 'colored mushroom biomes' that creates 16 regions for each mushroom color applied by chunk, roughly similar size and frequency of every color, no association  with surface biome rules, configurable region size with ~4 chunk radius default
-    - shimmering mushroom spawn rare chance of single mushroom in that color mushroom region
-- bop webs spawn in infested caves
-- remove nether wart, soul soil/sand and glowstone from philips deepslate ruin
-- underground  mining/dredge structure with iron ore pile is too common
-    - lower rate
-    - set ore pile to common ore at that level, any naturally spawning ore
-- command shortcuts
-    - /cc nv: night vision 
-- display delight
-    - allow plated food to be picked up with silk touch, dont allow drinks or placed bowls
-    - tooltip on all plated display blocks 'Can be picked up on plate w/ silk touch /n Plate food then serve customers'
-    - crouch to pickup empty plates like fd stations
-    - plated smore places as 2 items, only shows as 1 
-    - eat more foods off of plates, use chopsticks, leave messy plate/scraps, eat from bowl and leave messy bowl
-- fake meatloaf to veggie meatloaf
-- storage delight cabinets as half cabinets, high priority!
-- small manual create mixing basin
-- copycat/framed blocks dont render on xaeros minimap/world map
-- bop flesh and porus flesh burn to rotten flesh block on contact w/ lava
-- parcool mod
-    - optional, dont add now
-    - enable certain moves with curios item equiped?
-- expand waystone selection page size (check decompiled)
-- sophisticated backpack crafting table restock feature from newer version
-- peppercorn? nether crop?
-- dragon armor/other armor effects reapply to 40 second length at 10 second remaining
-- pickle aging
-    - 3 pickles (any kind) + vinegar and salt in jar
-    - long recipe, several days
-    - adds the 'mature' flavor, +2 sat for now
+- move weathered cardboard box to creative engineering (intake 2026-11-23 -> plan_wave1_publish.md)
 
-- server enabled 'bleed out on ground and get up w/ help' mod
-- cheese aging
-    - place and wait to age
-    - aged flavor doesnt transfer to recipes
-    - required for some recipes?
-- raw pufferfish has same poison chance as raw sliced, 25% on all raw with tiny chance on all cooked
-    - new effect and custom damage type toxin, wither w/ poison heart color, slowness 4, nausea
-    - custom death messages from toxin
-    - other toxin sources?
-    - toxin antidote?
-- chopstick use jei screen
-- armor added by non equiped means (frost armor for example) should get a new texture, swap color to pure white?
-- cant place sweet potato pancakes?
-- remove canned stuffed bellpeppers
-- raspberry pie as its own mod, ships apple pie and carrot as submods, publish soon
+- all vanilla squid should flee whales, giant squid should fight (intake 2026-11-23 -> plan_wave1_publish.md)
 
-- diversity
-    - smelting adds small bonus, useful for small value foods but not large
-    - seasoning doesnt affect
-    - ensure apple pie calculation rules are followed for all foods
+- little joys mod
+    - extra random rewards
+    - port or recreation
 
-- even more rp
-    - pull ladder and milestone horizontal bounds in another 10%
-    - increase 32 meal icon size by 20%
-    - milestone text color for active buffs (effect slots, permanant effects, hearts, resistance, etc) show in green 
-    - permanant buffs also alternate between diamond shard and effect on milestones and ladder before unlocked
+- Farming for Blockheads
+    - only for shipping bin, disable the rest
 
-- more rasp pie
-    - no hover renders on first page
-    - shrink page width 25%
-    - pull in horizontal text bounds of ladder and milestones page 25% to prevent overlap
+- steady still prevents slime slowdown
+    - expand to prevent all block surface type slowdown or remove immunity
 
-- rasp pie (intake 2026-11-19 -> plan_diet_books_r2.md)
-    - merge raspberry pie changelog lines
-    - expand food log horizontally by 50%
-    - shrink text size of 'current diversity' and 'need x foods' text on first page, keep both on their own line w/ no overflow
-    - diet log freezes for short time on each open, carrot dict does on first open but not after. caching needed? other issue?
-    - liquid diet log should also pause game in sp
-    - food total shouldnt show up on 30 meal hover if its the same as this meal
-    - hover order is food total(only present if different from hovered food meal value), this meal(crossed out if food total is present)
-    - show food diversity tag on food items between shanks and meal description (hearty meal, snack)
-    - queue unlock messages fired when food eaten threshold is not passed
-    - diversity value food icon ONLY pulls from carrot food dict history, otherwise a pufferfish
-        - pick food closest in value to current diversity scaled to food values (eating many low value foods to get a higer diversity is still shown as a low value food, eating mid diversity meals and getting high diversity still shows mid diversity meals)
-        - never pick drinks
-    - last 30 meals label should be centered
-    - change last meals to 8 columns by 4 rows, 32 last meals count
-    - include pancakes (treat as single pancake) and all other in world eaten foods in diet calcs 
-    - item tags in game show diversity value and contribution when present
-    - sort carrot options for highest food, saturation, diversity
-        - applied to uneaten, old 'same as uneaten' renamed to custom and applied to uneaten too, not shown if not configured (mark note to configure)
-- move food diversity tag on food items between shanks and meal description (hearty meal, snack) (intake 2026-11-19 -> plan_diet_books_r2.md)
-- move permanant effects (from armor, charm, beacon, etc) to the right of the timed effects in a new column. dont push over if only permanant effects are applied (intake 2026-11-19 -> plan_diet_books_r2.md)
-- appleskin (intake 2026-11-19 -> plan_diet_books_r2.md)
-    - a hunger shank shows below food name, hunger shank and saturation shown at bottom of item
-    - move hunger+saturation to top, remove duplicate
-- double mod label on item when eaten w/ chopsticks tooltip is shown? (intake 2026-11-19 -> plan_diet_books_r2.md)
-
-
-- armor bars should fill bottom row first, then top
-- 2nd+ row of armor doesnt show grayed missing armor slots
-- increase jei effect text box max size
-- fruit tree leaf layers should be unripe texture, currently ripe
-- inside layers of leaves only render when head is inside leaves
-
-- unsure sacks of all seeds and produce exist
-- add more captured photos to the loot pool for polaroids
-- lunchbox random/circular eat rotation
-    - show diversity of food in lunchbox eaten in order (box: [abc d], effective diversity: [dcba] as only 4 foods eaten, d most recent). random order shows average diversity from eating the foods in random order( how to determine this?)
-
-- loot tables
-    - magic (common, rare), these are base tables not village or witch chests
-        - village
-        - witch
-        - pillage
-        - old
-        - nether
-        - underground
-        - water
-
-- apply food log stretch
-- dust blocks cause dust particles colored like block when walking, check ash implementation, mirror to all dust
-- leaf layers are always transparent inside and out (past ~6 layer currently renders solid)
-- leaf overlay
-    - misunderstood, remove on player overlay
-    - i meant when the players head is inside of leaf layers, the player currently doesnt see those leaves. render the outside texture on the inside of the block as well so leaf cube needs to be seen through, including partial layers.
-    - break down what you think i mean before implementing
-
-- drop suspicious smell effect
-
-- splash texts
-    - ISO 8601
-    - Free and Open Source
-
-
-## Tempad/portals WIP dont move
-
-- tempad notes
-    - change chronons to [chronitons](https://futurama.fandom.com/wiki/Chronitons)
-    - allow knowledge projector recipes to update based on actual recipe
-    - change knowledge projector lore (remove TVA)
-    - change tempad time to in game time
-    - multiple chronometers cancel out chronitons charging
-    - add braclet curios slot
-    - enlarge knowledge projector screen
-    - fix 'hold {X} chronotons' knowledge projector
-    - cant remove card from wallet?
-    - tooltips for every item, based on knowledge projector
-    - timedoor marker
-        - name and color fields dont render until clicked, color updates inconsistanly when using color selection screen
-    - rename timesteel to temporal steel
-        - change recipe to felsic/steel alloy
-            - ender pearl or ender grain additive?
-    - mark a note to make recipes much much more complex, intermediate steps, unusual craft steps
-    - change 
-    - potential issues
-        - default app doesnt work?
-        - only 1 macro option?
-        - workstation is locked?
-        - cant use empty or marked location card on tempad
-    - change knowledge base categories (iron vs steel) to basic vs advanced. make advanced recipes harder and nerf basic storage capacity or etc?
-    - use projector in timedoor projector, timedoor projector in tempad
-    - swap timedoor projector door projection angle 180 degrees (behind station., not ahead)
-    - need to test location boradcaster in multiplayer
-    - ensure all apps are added to tempad
-    - timeline missing languange in tempad
-
-- tempad in server
-    - chronomarker used for mining/resource dimension navigation, more valuable resource dimensions availible w/ own tempad (unlock location cards? wandering trader rarely, or found in end chests?)
+- industrial oven multiblock?
+    - smoking or baking
+    - 2x2 or 3x3
+        - changes i/o capacity 
+        - larger oven give speed buff but shouldnt compensate for size increase (larger oven is faster but less space efficient, dense oven setups would use 2x2, two 2x2 should process faster than one 3x3)
 
 ## Golden Buffs, WIP Dont move
 
@@ -318,6 +140,8 @@ Source of descriptions: [effects.md](../effects.md) section 2.1 (Brief column an
     - ladder is built by 3 subladders, stat increases, permanant, and unlocked effects. defined below
     - ~120 max diversity?
         - >40 is mid, >80 is high
+
+
 
 ### Stat increases
 

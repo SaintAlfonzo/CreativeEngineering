@@ -1,25 +1,25 @@
 # Plan: unblocked batch 2026-11-21
 
-<!-- generated:status_index begin open_work sha1=fa6595ea9047 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 3, Pinned 1, In Progress 6, Testing 11), 0 Complete.
+<!-- generated:status_index begin open_work sha1=02d9cbed2040 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Pinned 2, In Progress 2, Testing 17), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `baking/baked-goods #30` | Planned | S C P | Baking dish bakeware |
-| `baking/baked-goods #40` | Planned | S C | Fruit scones: a new baked family, one item per fruit |
-| `dairy-fats-and-batter #3` | Planned | S C | Whale oil lamp fuel: oil tank, burn rate, refill, config |
+| `dishes/ingredients #7` | Pinned | S C P | Batter uses |
 | `placeable-food #1` | Pinned | none | List other mods' non-food plates and coasters for review and possible removal |
-| `baking/baked-goods #2` | In Progress | S C P T | Muffins as a decent food source |
-| `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
 | `baking/baked-goods #36` | In Progress | S C P | Dessert cookware and recipe treatments |
-| `dishes/ingredients #7` | In Progress | S C P | Batter uses |
-| `dishes/ingredients #8` | In Progress | S C P | Produce fixes |
 | `dishes/ingredients #9` | In Progress | S C P T | Cheese |
+| `baking/baked-goods #2` | Testing | SQ-FF-23 SQ-FF-26 SQ-FF-27 | Muffins as a decent food source |
 | `baking/baked-goods #18` | Testing | S C P | Brownie and cupcake baking types |
 | `baking/baked-goods #22` | Testing | SQ-FF-22 OV-39 | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #23` | Testing | SQ-FF-22 SQ-FF-26 SQ-FF-27 | Oatmeal cookies from oat dough |
+| `baking/baked-goods #30` | Testing | SQ-FF-26 | Baking dish bakeware |
 | `baking/baked-goods #35` | Testing | SQ-FF-25 OV-42 | Investigate brownie tray and adzuki bun family |
+| `baking/baked-goods #40` | Testing | SQ-FF-26 SQ-FF-27 CQ-FF-05 | Fruit scones: a new baked family, one item per fruit |
 | `blocks/flower-pots #1` | Testing | S C P | Flower pots placeable like candles |
 | `dairy-fats-and-batter #1` | Testing | SQ-FO-17 CQ-FO-63 | Whale oil lamp |
+| `dairy-fats-and-batter #3` | Testing | SQ-FO-18 CQ-FO-64 | Whale oil lamp fuel: oil tank, burn rate, refill, config |
+| `dishes/ingredients #8` | Testing | SQ-FF-21 SQ-FF-26 | Produce fixes |
 | `dishes/ingredients #17` | Testing | S C P | Tofu from mushrooms |
 | `dishes/ingredients #21` | Testing | S C P | Potato and sweet potato compatibility |
 | `dishes/ingredients #27` | Testing | S C P | Potato dough |
@@ -40,7 +40,7 @@ lives in the rows, not here.
 | I1 | Skewer food type (`dishes/meals #13`): which foods, recipes | open | asked |
 | I2 | Coaster and small plate compatibility (`food/placeable #6`): "define what these compatibilities would mean" | open | asked twice; meanings A to C explained |
 | I3 | Flower pots placeable like candles (`blocks/flower-pots #1`): pot heights, models | open | asked (height); models not asked |
-| I4 | Palette swap overhaul (`textures/food #10`): design | open | asked |
+| I4 | Palette swap overhaul (`textures/food #10`): design | open | asked; owner (2026-11-23) wants a walkthrough of the design options first |
 | I5 | Creative Brewing CurseForge publish (`creativebrewing/publish #3`) | clear | not a decision, a release effort with its own plan |
 | I6 | Breads and Dough (`baking/baked-goods #17`), gnocchi (`dishes/meals #33`) | premise | "decisions" text was a build note and a stale check; rows treated as unblocked |
 

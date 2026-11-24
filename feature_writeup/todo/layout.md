@@ -219,6 +219,9 @@ move here when they get a family.
   - [Creative Brewing](#creative-brewing)
   - [Creative Calendar](#creative-calendar)
   - [Creative Common Publish](#creative-common-publish)
+  - [Creative Compat Publish](#creative-compat-publish)
+  - [Raspberry Pie Publish](#raspberry-pie-publish)
+  - [Publish Readiness](#publish-readiness)
   - [Creative Split](#creative-split)
 - [Tooling](#tooling)
   - [Performance and Server](#performance-and-server)
@@ -966,6 +969,24 @@ A future own mod, Creative Calendar, for the calendar, day and night cycle, seas
 Creative Common 1.3.0 CurseForge update ([plan_cc_publish_1_3.md](../plan_cc_publish_1_3.md)); the 1.2.0-era rows are `creativecommon/publish #1` to `#5` under Creative Brewing.
 
 <?todo rows Creative Common Publish?>
+
+## Creative Compat Publish
+
+Creative Compat 1.0.0 as compatibility fixes only (owner ruling D1, 2026-11-22); findings in [publish_readiness.md](../publish_readiness.md) section 4.
+
+<?todo rows Creative Compat Publish?>
+
+## Raspberry Pie Publish
+
+Raspberry Pie 1.0.0 standalone publish to CurseForge ([publish_readiness.md](../publish_readiness.md) section 7, [plan_rp_standalone.md](../plan_rp_standalone.md)).
+
+<?todo rows Raspberry Pie Publish?>
+
+## Publish Readiness
+
+Repository, shared records, rule exemptions and the deferred Creative Delight wave from [publish_readiness.md](../publish_readiness.md) (analysis and rulings 2026-11-22).
+
+<?todo rows Publish Readiness?>
 
 ## Creative Split
 

@@ -6,8 +6,8 @@ offline sim but are untested in game)
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=072664f4b0ac -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 10, In Progress 2, Testing 2), 2 Complete.
+<!-- generated:status_index begin open_work sha1=3a1d079345b7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 15 open TODO rows (Planned 10, In Progress 2, Testing 3), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -23,6 +23,7 @@ offline sim but are untested in game)
 | `loot/tables #19` | Planned | S P | Gun loot: lower the note rate, full guns, more ammo |
 | `loot/lootjs-layer #1` | In Progress | S P | LootJS-only scripts |
 | `loot/lootjs-layer #2` | In Progress | none | Legacy loot dump |
+| `loot-tables #3` | Testing | SQ-CBA-03 SQ-CBO-32 | Creative Loot ban warns on every boot when the banned mod is absent (PneumaticCraft, Lightman's) |
 | `loot/tables #7` | Testing | S P | Coins and PneumaticCraft loot |
 | `loot/tables #18` | Testing | S P | Remove Lexica Botania from loot |
 <!-- generated:status_index end open_work -->
@@ -461,9 +462,9 @@ three cases:
 | pre-roll | a banned entry in a table outside `ownTables` (default for `'@mod'`: that mod's own tables) | another mod or datapack ships the item |
 | post-roll | a chest roll produced a banned stack (it's stripped) | a GLM or code pool added it after the pre-roll pass |
 
-Live bans: `@pneumaticcraft` (switch: `enable_dungeon_loot = false`) and Lightman's coins, coin piles and coin blocks
 Since 2026-11-23 (`loot-tables #3`) a ban records its mod (option `mod`, default from an `@mod` target) and the every-reload switch check skips a ban whose mod is not loaded, with one INFO line instead of the warning.
 
+Live bans: `@pneumaticcraft` (switch: `enable_dungeon_loot = false`) and Lightman's coins, coin piles and coin blocks
 including the chocolate ones (switches: `[loot.chests]` and `[loot.entities] enabled=false`; `ownTables`
 `@lightmanscurrency`). Pre-roll still strips the 36 entries of PneumaticCraft's own 4 tables quietly; that's expected.
 

@@ -11,22 +11,22 @@ no emoji, no advancements, no conversions. Hand-edited config is copied to `conf
 
 ## 0. Order and cost
 
-<!-- generated:status_index begin open_work sha1=57cb36c2d069 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Planned 3, In Progress 1, Testing 7), 0 Complete.
+<!-- generated:status_index begin open_work sha1=a598712616ff -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Testing 11), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food-tuning #62` | Planned | S C | Always-edible foods get the tooltip 'Can be eaten when full' |
-| `ingredients #46` | Planned | S | Ender's Delight Shulker Mollusk and filet as the only shulker meat |
-| `skewers #1` | Planned | S | Drop the kebab combo items |
-| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
+| `dishes/meals #46` | Testing | SQ-FF-30 | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `dishes/meals #57` | Testing | S P | Sequenced assembly for raw skewers |
 | `dishes/meals #58` | Testing | S C P | Cave Skewer: merge with Miner's Delight |
 | `dishes/meals #59` | Testing | S P | Cooked Nether Wart: integrate with Nether's Delight |
+| `food-tuning #62` | Testing | CQ-FF-05 | Always-edible foods get the tooltip 'Can be eaten when full' |
+| `ingredients #46` | Testing | SQ-BBQ2-08 | Ender's Delight Shulker Mollusk and filet as the only shulker meat |
 | `largecontent/mod-additions #37` | Testing | S~ C P T | Barbeque's Delight: integrate skewers, combos, seasonings and blocks |
 | `largecontent/mod-additions #39` | Testing | S~ C P T | Roll Delight 1.3.1 port |
 | `largecontent/mod-additions #40` | Testing | S~ C P T | Large Meals 1.3.0 port |
 | `mod-updates #1` | Testing | SQ-LGM-07 | Full omurice block drops the block and a bowl |
+| `skewers #1` | Testing | SQ-FF-29 | Drop the kebab combo items |
 <!-- generated:status_index end open_work -->
 
 | Part | Needs | Rebuild | Restart |

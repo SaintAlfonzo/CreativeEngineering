@@ -21,544 +21,544 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 
 `assets/loading_tips/loading_tips/tips.json`, priority 0, 532 tips
 
-1. `loading_tips:use_a_mace_with_the_wind_burst_enchantment_to` Use a Mace with the Wind Burst enchantment to stay airborne! *(removed by creative_tips:tips)*
-2. `loading_tips:trial_chambers_are_found_deep_underground_in_the` Trial Chambers are found deep underground in the Overworld. *(removed by creative_tips:tips)*
-3. `loading_tips:copper_bulbs_have_different_light_levels_based` Copper Bulbs have different light levels based on oxidation. *(removed by creative_tips:tips)*
-4. `loading_tips:breeze_rods_can_be_crafted_into_wind_charges` Breeze Rods can be crafted into Wind Charges. *(removed by creative_tips:tips)*
-5. `loading_tips:heavy_cores_are_rare_rewards_from_trial_vaults` Heavy Cores are rare rewards from Trial Vaults. *(removed by creative_tips:tips)*
-6. `loading_tips:you_can_use_an_axe_to_scrape_oxidation_off` You can use an Axe to scrape oxidation off Copper blocks. *(replaced by creative_tips:tips)*
-7. `loading_tips:crafters_require_a_redstone_signal_to_craft` Crafters require a Redstone signal to craft. *(removed by creative_tips:tips)*
-8. `loading_tips:the_bogged_is_a_new_skeleton_variant_that_fires` The Bogged is a new skeleton variant that fires poison arrows. *(removed by creative_tips:tips)*
-9. `loading_tips:armadillo_scutes_can_be_used_to_craft_wolf_armor` Armadillo Scutes can be used to craft Wolf Armor. *(removed by creative_tips:tips)*
-10. `loading_tips:vaults_can_be_opened_by_every_player_once_using` Vaults can be opened by every player once using a Trial Key. *(removed by creative_tips:tips)*
-11. `loading_tips:dont_dig_straight_down` Don't dig straight down! *(removed by creative_tips:tips)*
-12. `loading_tips:crouch_to_avoid_falling_off_ledges` Crouch to avoid falling off ledges. *(replaced by creative_tips:tips)*
-13. `loading_tips:gold_tools_are_faster_but_break_easily` Gold tools are faster but break easily. *(replaced by creative_tips:tips)*
-14. `loading_tips:beds_explode_in_the_nether` Beds explode in the Nether. *(replaced by creative_tips:tips)*
-15. `loading_tips:endermen_hate_water` Endermen hate water. *(replaced by creative_tips:tips)*
-16. `loading_tips:use_a_silk_touch_pickaxe_for_glass` Use a silk touch pickaxe for glass. *(replaced by creative_tips:tips)*
-17. `loading_tips:axes_disable_shields` Axes disable shields. *(replaced by creative_tips:tips)*
-18. `loading_tips:fortune_works_on_coal_diamonds_lapis_copper_and` Fortune works on coal, diamonds, lapis, copper, and iron. *(replaced by creative_tips:tips)*
-19. `loading_tips:torches_prevent_monster_spawns` Torches prevent monster spawns. *(replaced by creative_tips:tips)*
-20. `loading_tips:sprinting_makes_you_hungrier` Sprinting makes you hungrier. *(replaced by creative_tips:tips)*
-21. `loading_tips:smelt_sand_to_get_glass` Smelt sand to get glass. *(removed by creative_tips:tips)*
-22. `loading_tips:villagers_love_emeralds` Villagers love emeralds. *(replaced by creative_tips:tips)*
-23. `loading_tips:zombies_burn_in_sunlight` Zombies burn in sunlight. *(replaced by creative_tips:tips)*
-24. `loading_tips:creepers_are_afraid_of_cats` Creepers are afraid of cats. *(replaced by creative_tips:tips)*
-25. `loading_tips:water_buckets_negate_fall_damage` Water buckets negate fall damage. *(replaced by creative_tips:tips)*
-26. `loading_tips:pigs_love_carrots` Pigs love carrots. *(replaced by creative_tips:tips)*
-27. `loading_tips:wolves_love_bones_to_tame_and_meat_to_heal` Wolves love bones to tame and meat to heal! *(replaced by creative_tips:tips)*
-28. `loading_tips:shear_sheep_for_more_wool` Shear sheep for more wool. *(replaced by creative_tips:tips)*
-29. `loading_tips:milk_removes_all_potion_effects` Milk removes all potion effects. *(replaced by creative_tips:tips)*
-30. `loading_tips:riptide_tridents_only_work_in_rain` Riptide tridents only work in rain. *(removed by creative_tips:tips)*
-31. `loading_tips:looting_increases_mob_drops` Looting increases mob drops. *(replaced by creative_tips:tips)*
-32. `loading_tips:fire_aspect_cooks_meat_instantly` Fire Aspect cooks meat instantly. *(replaced by creative_tips:tips)*
-33. `loading_tips:wearing_gold_prevents_piglin_attacks` Wearing gold prevents Piglin attacks. *(removed by creative_tips:tips)*
-34. `loading_tips:barter_with_piglins_using_gold_ingots` Barter with Piglins using gold ingots. *(removed by creative_tips:tips)*
-35. `loading_tips:ancient_debris_is_found_deep_in_the_nether` Ancient Debris is found deep in the Nether. *(removed by creative_tips:tips)*
-36. `loading_tips:ghasts_hate_their_own_fireballs` Ghasts hate their own fireballs. *(removed by creative_tips:tips)*
-37. `loading_tips:blazes_are_weak_to_snowballs` Blazes are weak to snowballs. *(replaced by creative_tips:tips)*
-38. `loading_tips:soul_sand_slows_you_down` Soul Sand slows you down. *(replaced by creative_tips:tips)*
-39. `loading_tips:blue_ice_is_the_fastest_for_boat_travel` Blue ice is the fastest for boat travel. *(removed by creative_tips:tips)*
-40. `loading_tips:phantoms_spawn_if_you_dont_sleep_for_3_in_game` Phantoms spawn if you don't sleep for 3 in-game days. *(removed by creative_tips:tips)*
-41. `loading_tips:scaffolding_is_great_for_building` Scaffolding is great for building. *(replaced by creative_tips:tips)*
-42. `loading_tips:composters_turn_food_into_bone_meal` Composters turn food into bone meal. *(replaced by creative_tips:tips)*
-43. `loading_tips:barrels_are_cheaper_than_chests` Barrels are cheaper than chests. *(replaced by creative_tips:tips)*
-44. `loading_tips:smokers_cook_food_twice_as_fast` Smokers cook food twice as fast. *(replaced by creative_tips:tips)*
-45. `loading_tips:blast_furnaces_smelt_ore_faster` Blast furnaces smelt ore faster. *(removed by creative_tips:tips)*
-46. `loading_tips:anvils_can_rename_your_items` Anvils can rename your items. *(replaced by creative_tips:tips)*
-47. `loading_tips:grindstones_remove_enchantments` Grindstones remove enchantments. *(replaced by creative_tips:tips)*
-48. `loading_tips:lecterns_hold_books_for_reading` Lecterns hold books for reading. *(replaced by creative_tips:tips)*
-49. `loading_tips:stonecutters_save_stairs_and_slabs` Stonecutters save stairs and slabs. *(replaced by creative_tips:tips)*
-50. `loading_tips:target_blocks_produce_redstone_signals` Target blocks produce Redstone signals. *(removed by creative_tips:tips)*
-51. `loading_tips:honey_blocks_prevent_sticking_to_walls` Honey blocks prevent sticking to walls. *(removed by creative_tips:tips)*
-52. `loading_tips:slime_blocks_make_you_bounce` Slime blocks make you bounce. *(removed by creative_tips:tips)*
-53. `loading_tips:observers_detect_block_updates` Observers detect block updates. *(removed by creative_tips:tips)*
-54. `loading_tips:hoppers_move_items_between_containers` Hoppers move items between containers. *(replaced by creative_tips:tips)*
-55. `loading_tips:redstone_repeaters_delay_signals` Redstone repeaters delay signals. *(removed by creative_tips:tips)*
-56. `loading_tips:comparators_detect_container_fullness_compare` Comparators detect container fullness, compare, and subtract Redstone signals! *(replaced by creative_tips:tips)*
-57. `loading_tips:dispensers_can_equip_armor_for_you` Dispensers can equip armor for you. *(removed by creative_tips:tips)*
-58. `loading_tips:droppers_just_drop_items` Droppers just drop items. *(removed by creative_tips:tips)*
-59. `loading_tips:note_blocks_play_music` Note blocks play music. *(removed by creative_tips:tips)*
-60. `loading_tips:jukeboxes_play_music_discs` Jukeboxes play music discs. *(removed by creative_tips:tips)*
-61. `loading_tips:conduits_help_you_breathe_underwater` Conduits help you breathe underwater. *(removed by creative_tips:tips)*
-62. `loading_tips:dolphins_lead_you_to_shipwrecks` Dolphins lead you to shipwrecks. *(removed by creative_tips:tips)*
-63. `loading_tips:turtles_drop_scutes_when_they_grow` Turtles drop scutes when they grow. *(removed by creative_tips:tips)*
-64. `loading_tips:axolotls_help_fight_guardians_and_grant` Axolotls help fight guardians and grant Regeneration when they kill one! *(replaced by creative_tips:tips)*
-65. `loading_tips:guardians_and_elder_guardians_hate_being_out_of` Guardians and Elder Guardians hate being out of water! *(removed by creative_tips:tips)*
-66. `loading_tips:bees_produce_honey_and_wax` Bees produce honey and wax. *(replaced by creative_tips:tips)*
-67. `loading_tips:copper_oxidizes_over_time` Copper oxidizes over time. *(removed by creative_tips:tips)*
-68. `loading_tips:honeycomb_prevents_copper_oxidation` Honeycomb prevents copper oxidation. *(removed by creative_tips:tips)*
-69. `loading_tips:lightning_rods_protect_wooden_roofs` Lightning rods protect wooden roofs. *(removed by creative_tips:tips)*
-70. `loading_tips:amethyst_grows_on_budding_geodes` Amethyst grows on budding geodes. *(removed by creative_tips:tips)*
-71. `loading_tips:spyglasses_zoom_in_on_the_horizon` Spyglasses zoom in on the horizon. *(replaced by creative_tips:tips)*
-72. `loading_tips:goats_can_ram_you_off_cliffs` Goats can ram you off cliffs. *(replaced by creative_tips:tips)*
-73. `loading_tips:allays_love_items_and_music` Allays love items and music. *(removed by creative_tips:tips)*
-74. `loading_tips:frogs_eat_small_slimes_and_magma_cubes` Frogs eat small slimes and magma cubes. *(replaced by creative_tips:tips)*
-75. `loading_tips:mud_is_made_from_dirt_and_water` Mud is made from dirt and water. *(replaced by creative_tips:tips)*
-76. `loading_tips:mangrove_trees_grow_in_water` Mangrove trees grow in water. *(replaced by creative_tips:tips)*
-77. `loading_tips:sniffers_find_ancient_seeds` Sniffers find ancient seeds. *(removed by creative_tips:tips)*
-78. `loading_tips:camel_dashes_jump_over_ravines` Camel dashes jump over ravines. *(removed by creative_tips:tips)*
-79. `loading_tips:bamboo_can_be_used_for_wood` Bamboo can be used for wood. *(removed by creative_tips:tips)*
-80. `loading_tips:armor_trims_are_found_in_structures` Armor trims are found in structures. *(removed by creative_tips:tips)*
-81. `loading_tips:smithing_templates_are_required_for_upgrades` Smithing templates are required for upgrades. *(removed by creative_tips:tips)*
-82. `loading_tips:netherite_requires_a_smithing_template` Netherite requires a smithing template. *(removed by creative_tips:tips)*
-83. `loading_tips:trail_ruins_are_buried_underground` Trail Ruins are buried underground. *(removed by creative_tips:tips)*
-84. `loading_tips:suspicious_gravel_can_be_brushed` Suspicious gravel can be brushed. *(removed by creative_tips:tips)*
-85. `loading_tips:trial_chambers_are_full_of_loot` Trial Chambers are full of loot. *(removed by creative_tips:tips)*
-86. `loading_tips:trial_spawners_give_rewards` Trial Spawners give rewards. *(removed by creative_tips:tips)*
-87. `loading_tips:trial_keys_unlock_vaults` Trial Keys unlock Vaults. *(removed by creative_tips:tips)*
-88. `loading_tips:the_breeze_drops_breeze_rods` The Breeze drops Breeze Rods. *(removed by creative_tips:tips)*
-89. `loading_tips:the_bogged_fires_poison_arrows` The Bogged fires poison arrows. *(removed by creative_tips:tips)*
-90. `loading_tips:maces_do_more_damage_from_heights` Maces do more damage from heights. *(removed by creative_tips:tips)*
-91. `loading_tips:wind_charges_launch_you_upward` Wind Charges launch you upward. *(removed by creative_tips:tips)*
-92. `loading_tips:crafters_automate_your_crafting` Crafters automate your crafting. *(removed by creative_tips:tips)*
-93. `loading_tips:copper_bulbs_change_light_levels` Copper Bulbs change light levels. *(removed by creative_tips:tips)*
-94. `loading_tips:heavy_cores_craft_the_mace` Heavy Cores craft the Mace. *(removed by creative_tips:tips)*
-95. `loading_tips:ominous_trials_are_harder_but_better` Ominous Trials are harder but better. *(removed by creative_tips:tips)*
-96. `loading_tips:bad_omen_triggers_ominous_trials` Bad Omen triggers Ominous Trials. *(removed by creative_tips:tips)*
-97. `loading_tips:drink_ominous_bottles_for_a_challenge` Drink Ominous Bottles for a challenge. *(removed by creative_tips:tips)*
-98. `loading_tips:vaults_can_be_opened_by_everyone_but_not_twice` Vaults can be opened by everyone, but not twice per player. *(removed by creative_tips:tips)*
-99. `loading_tips:chiseled_tuff_looks_great_for_builds` Chiseled Tuff looks great for builds. *(removed by creative_tips:tips)*
-100. `loading_tips:copper_grates_allow_light_through` Copper Grates allow light through. *(removed by creative_tips:tips)*
-101. `loading_tips:hardened_glass_wont_break_easily` Hardened glass won't break easily. *(removed by creative_tips:tips)*
-102. `loading_tips:sugar_cane_grows_on_sand_or_dirt` Sugar cane grows on sand or dirt. *(replaced by creative_tips:tips)*
-103. `loading_tips:pumpkins_need_space_to_grow` Pumpkins need space to grow. *(replaced by creative_tips:tips)*
-104. `loading_tips:melons_need_space_to_grow` Melons need space to grow. *(removed by creative_tips:tips)*
-105. `loading_tips:sweet_berries_slow_you_down` Sweet berries slow you down. *(removed by creative_tips:tips)*
-106. `loading_tips:campfires_can_cook_four_items` Campfires can cook four items. *(replaced by creative_tips:tips)*
-107. `loading_tips:bells_alert_villagers_to_raids` Bells alert villagers to raids. *(replaced by creative_tips:tips)*
-108. `loading_tips:ravagers_are_afraid_of_rabbits` Ravagers are afraid of rabbits. *(removed by creative_tips:tips)*
-109. `loading_tips:evokers_turn_blue_sheep_red` Evokers turn blue sheep red. *(removed by creative_tips:tips)*
-110. `loading_tips:the_wither_is_a_powerful_boss` The Wither is a powerful boss. *(removed by creative_tips:tips)*
-111. `loading_tips:punching_tnt_with_flint_and_steel_ignites_it` Punching TNT with Flint and Steel ignites it. *(removed by creative_tips:tips)*
-112. `loading_tips:bows_with_power_v_deal_massive_damage` Bows with Power V deal massive damage. *(removed by creative_tips:tips)*
-113. `loading_tips:infinity_bows_dont_need_extra_arrows_but_cant` Infinity bows don't need extra arrows, but can't have Mending! *(removed by creative_tips:tips)*
-114. `loading_tips:mending_repairs_gear_using_xp_orbs` Mending repairs gear using XP orbs. *(replaced by creative_tips:tips)*
-115. `loading_tips:unbreaking_iii_makes_gear_last_longer` Unbreaking III makes gear last longer. *(replaced by creative_tips:tips)*
-116. `loading_tips:efficiency_v_mines_blocks_instantly` Efficiency V mines blocks instantly. *(removed by creative_tips:tips)*
-117. `loading_tips:silk_touch_collects_beehives_with_bees_inside` Silk Touch collects beehives with bees inside. *(replaced by creative_tips:tips)*
-118. `loading_tips:depth_strider_makes_you_swim_faster` Depth Strider makes you swim faster. *(removed by creative_tips:tips)*
-119. `loading_tips:frost_walker_turns_water_into_ice` Frost Walker turns water into ice. *(removed by creative_tips:tips)*
-120. `loading_tips:feather_falling_iv_reduces_fall_damage` Feather Falling IV reduces fall damage. *(replaced by creative_tips:tips)*
-121. `loading_tips:blast_protection_saves_you_from_creepers` Blast Protection saves you from Creepers. *(removed by creative_tips:tips)*
-122. `loading_tips:blast_protection_reduces_explosion_damage_and` Blast Protection reduces explosion damage and knockback! *(replaced by creative_tips:tips)*
-123. `loading_tips:projectile_protection_reduces_arrow_damage` Projectile Protection reduces arrow damage. *(removed by creative_tips:tips)*
-124. `loading_tips:fire_protection_is_essential_for_the_nether` Fire Protection is essential for the Nether. *(removed by creative_tips:tips)*
-125. `loading_tips:swift_sneak_makes_you_crouch_walk_faster` Swift Sneak makes you crouch-walk faster. *(removed by creative_tips:tips)*
-126. `loading_tips:soul_speed_is_faster_on_soul_sand` Soul Speed is faster on Soul Sand. *(removed by creative_tips:tips)*
-127. `loading_tips:thorns_damage_enemies_who_hit_you` Thorns damage enemies who hit you. *(replaced by creative_tips:tips)*
-128. `loading_tips:respiration_iii_lets_you_breathe_longer` Respiration III lets you breathe longer. *(replaced by creative_tips:tips)*
-129. `loading_tips:aqua_affinity_speeds_up_underwater_mining` Aqua Affinity speeds up underwater mining. *(removed by creative_tips:tips)*
-130. `loading_tips:multishot_fires_three_arrows_for_one` Multishot fires three arrows for one. *(removed by creative_tips:tips)*
-131. `loading_tips:piercing_arrows_go_through_multiple_mobs` Piercing arrows go through multiple mobs. *(removed by creative_tips:tips)*
-132. `loading_tips:quick_charge_makes_crossbows_fire_faster` Quick Charge makes crossbows fire faster. *(removed by creative_tips:tips)*
-133. `loading_tips:channeling_strikes_lightning_during_storms` Channeling strikes lightning during storms. *(removed by creative_tips:tips)*
-134. `loading_tips:impaling_deals_extra_damage_to_sea_life` Impaling deals extra damage to sea life. *(removed by creative_tips:tips)*
-135. `loading_tips:loyalty_tridents_fly_back_to_you` Loyalty tridents fly back to you. *(removed by creative_tips:tips)*
-136. `loading_tips:ender_pearls_teleport_you_instantly` Ender Pearls teleport you instantly. *(replaced by creative_tips:tips)*
-137. `loading_tips:chorus_fruit_teleports_you_randomly` Chorus Fruit teleports you randomly. *(replaced by creative_tips:tips)*
-138. `loading_tips:totems_of_undying_save_you_from_death` Totems of Undying save you from death. *(removed by creative_tips:tips)*
-139. `loading_tips:shields_block_100_of_melee_damage` Shields block 100% of melee damage. *(removed by creative_tips:tips)*
-140. `loading_tips:gold_apples_give_extra_health_hearts` Gold apples give extra health hearts. *(replaced by creative_tips:tips)*
-141. `loading_tips:enchanted_apples_give_massive_buffs` Enchanted apples give massive buffs. *(removed by creative_tips:tips)*
-142. `loading_tips:potions_of_speed_make_you_run_faster` Potions of Speed make you run faster. *(replaced by creative_tips:tips)*
-143. `loading_tips:potions_of_strength_increase_melee_damage` Potions of Strength increase melee damage. *(replaced by creative_tips:tips)*
-144. `loading_tips:potions_of_haste_speed_up_mining` Potions of Haste speed up mining. *(replaced by creative_tips:tips)*
+1. `loading_tips:use_a_mace_with_the_wind_burst_enchantment_to` Use a Mace with the Wind Burst enchantment to stay airborne! *(removed by creativetips:tips)*
+2. `loading_tips:trial_chambers_are_found_deep_underground_in_the` Trial Chambers are found deep underground in the Overworld. *(removed by creativetips:tips)*
+3. `loading_tips:copper_bulbs_have_different_light_levels_based` Copper Bulbs have different light levels based on oxidation. *(removed by creativetips:tips)*
+4. `loading_tips:breeze_rods_can_be_crafted_into_wind_charges` Breeze Rods can be crafted into Wind Charges. *(removed by creativetips:tips)*
+5. `loading_tips:heavy_cores_are_rare_rewards_from_trial_vaults` Heavy Cores are rare rewards from Trial Vaults. *(removed by creativetips:tips)*
+6. `loading_tips:you_can_use_an_axe_to_scrape_oxidation_off` You can use an Axe to scrape oxidation off Copper blocks. *(replaced by creativetips:tips)*
+7. `loading_tips:crafters_require_a_redstone_signal_to_craft` Crafters require a Redstone signal to craft. *(removed by creativetips:tips)*
+8. `loading_tips:the_bogged_is_a_new_skeleton_variant_that_fires` The Bogged is a new skeleton variant that fires poison arrows. *(removed by creativetips:tips)*
+9. `loading_tips:armadillo_scutes_can_be_used_to_craft_wolf_armor` Armadillo Scutes can be used to craft Wolf Armor. *(removed by creativetips:tips)*
+10. `loading_tips:vaults_can_be_opened_by_every_player_once_using` Vaults can be opened by every player once using a Trial Key. *(removed by creativetips:tips)*
+11. `loading_tips:dont_dig_straight_down` Don't dig straight down! *(removed by creativetips:tips)*
+12. `loading_tips:crouch_to_avoid_falling_off_ledges` Crouch to avoid falling off ledges. *(replaced by creativetips:tips)*
+13. `loading_tips:gold_tools_are_faster_but_break_easily` Gold tools are faster but break easily. *(replaced by creativetips:tips)*
+14. `loading_tips:beds_explode_in_the_nether` Beds explode in the Nether. *(replaced by creativetips:tips)*
+15. `loading_tips:endermen_hate_water` Endermen hate water. *(replaced by creativetips:tips)*
+16. `loading_tips:use_a_silk_touch_pickaxe_for_glass` Use a silk touch pickaxe for glass. *(replaced by creativetips:tips)*
+17. `loading_tips:axes_disable_shields` Axes disable shields. *(replaced by creativetips:tips)*
+18. `loading_tips:fortune_works_on_coal_diamonds_lapis_copper_and` Fortune works on coal, diamonds, lapis, copper, and iron. *(replaced by creativetips:tips)*
+19. `loading_tips:torches_prevent_monster_spawns` Torches prevent monster spawns. *(replaced by creativetips:tips)*
+20. `loading_tips:sprinting_makes_you_hungrier` Sprinting makes you hungrier. *(replaced by creativetips:tips)*
+21. `loading_tips:smelt_sand_to_get_glass` Smelt sand to get glass. *(removed by creativetips:tips)*
+22. `loading_tips:villagers_love_emeralds` Villagers love emeralds. *(replaced by creativetips:tips)*
+23. `loading_tips:zombies_burn_in_sunlight` Zombies burn in sunlight. *(replaced by creativetips:tips)*
+24. `loading_tips:creepers_are_afraid_of_cats` Creepers are afraid of cats. *(replaced by creativetips:tips)*
+25. `loading_tips:water_buckets_negate_fall_damage` Water buckets negate fall damage. *(replaced by creativetips:tips)*
+26. `loading_tips:pigs_love_carrots` Pigs love carrots. *(replaced by creativetips:tips)*
+27. `loading_tips:wolves_love_bones_to_tame_and_meat_to_heal` Wolves love bones to tame and meat to heal! *(replaced by creativetips:tips)*
+28. `loading_tips:shear_sheep_for_more_wool` Shear sheep for more wool. *(replaced by creativetips:tips)*
+29. `loading_tips:milk_removes_all_potion_effects` Milk removes all potion effects. *(replaced by creativetips:tips)*
+30. `loading_tips:riptide_tridents_only_work_in_rain` Riptide tridents only work in rain. *(removed by creativetips:tips)*
+31. `loading_tips:looting_increases_mob_drops` Looting increases mob drops. *(replaced by creativetips:tips)*
+32. `loading_tips:fire_aspect_cooks_meat_instantly` Fire Aspect cooks meat instantly. *(replaced by creativetips:tips)*
+33. `loading_tips:wearing_gold_prevents_piglin_attacks` Wearing gold prevents Piglin attacks. *(removed by creativetips:tips)*
+34. `loading_tips:barter_with_piglins_using_gold_ingots` Barter with Piglins using gold ingots. *(removed by creativetips:tips)*
+35. `loading_tips:ancient_debris_is_found_deep_in_the_nether` Ancient Debris is found deep in the Nether. *(removed by creativetips:tips)*
+36. `loading_tips:ghasts_hate_their_own_fireballs` Ghasts hate their own fireballs. *(removed by creativetips:tips)*
+37. `loading_tips:blazes_are_weak_to_snowballs` Blazes are weak to snowballs. *(replaced by creativetips:tips)*
+38. `loading_tips:soul_sand_slows_you_down` Soul Sand slows you down. *(replaced by creativetips:tips)*
+39. `loading_tips:blue_ice_is_the_fastest_for_boat_travel` Blue ice is the fastest for boat travel. *(removed by creativetips:tips)*
+40. `loading_tips:phantoms_spawn_if_you_dont_sleep_for_3_in_game` Phantoms spawn if you don't sleep for 3 in-game days. *(removed by creativetips:tips)*
+41. `loading_tips:scaffolding_is_great_for_building` Scaffolding is great for building. *(replaced by creativetips:tips)*
+42. `loading_tips:composters_turn_food_into_bone_meal` Composters turn food into bone meal. *(replaced by creativetips:tips)*
+43. `loading_tips:barrels_are_cheaper_than_chests` Barrels are cheaper than chests. *(replaced by creativetips:tips)*
+44. `loading_tips:smokers_cook_food_twice_as_fast` Smokers cook food twice as fast. *(replaced by creativetips:tips)*
+45. `loading_tips:blast_furnaces_smelt_ore_faster` Blast furnaces smelt ore faster. *(removed by creativetips:tips)*
+46. `loading_tips:anvils_can_rename_your_items` Anvils can rename your items. *(replaced by creativetips:tips)*
+47. `loading_tips:grindstones_remove_enchantments` Grindstones remove enchantments. *(replaced by creativetips:tips)*
+48. `loading_tips:lecterns_hold_books_for_reading` Lecterns hold books for reading. *(replaced by creativetips:tips)*
+49. `loading_tips:stonecutters_save_stairs_and_slabs` Stonecutters save stairs and slabs. *(replaced by creativetips:tips)*
+50. `loading_tips:target_blocks_produce_redstone_signals` Target blocks produce Redstone signals. *(removed by creativetips:tips)*
+51. `loading_tips:honey_blocks_prevent_sticking_to_walls` Honey blocks prevent sticking to walls. *(removed by creativetips:tips)*
+52. `loading_tips:slime_blocks_make_you_bounce` Slime blocks make you bounce. *(removed by creativetips:tips)*
+53. `loading_tips:observers_detect_block_updates` Observers detect block updates. *(removed by creativetips:tips)*
+54. `loading_tips:hoppers_move_items_between_containers` Hoppers move items between containers. *(replaced by creativetips:tips)*
+55. `loading_tips:redstone_repeaters_delay_signals` Redstone repeaters delay signals. *(removed by creativetips:tips)*
+56. `loading_tips:comparators_detect_container_fullness_compare` Comparators detect container fullness, compare, and subtract Redstone signals! *(replaced by creativetips:tips)*
+57. `loading_tips:dispensers_can_equip_armor_for_you` Dispensers can equip armor for you. *(removed by creativetips:tips)*
+58. `loading_tips:droppers_just_drop_items` Droppers just drop items. *(removed by creativetips:tips)*
+59. `loading_tips:note_blocks_play_music` Note blocks play music. *(removed by creativetips:tips)*
+60. `loading_tips:jukeboxes_play_music_discs` Jukeboxes play music discs. *(removed by creativetips:tips)*
+61. `loading_tips:conduits_help_you_breathe_underwater` Conduits help you breathe underwater. *(removed by creativetips:tips)*
+62. `loading_tips:dolphins_lead_you_to_shipwrecks` Dolphins lead you to shipwrecks. *(removed by creativetips:tips)*
+63. `loading_tips:turtles_drop_scutes_when_they_grow` Turtles drop scutes when they grow. *(removed by creativetips:tips)*
+64. `loading_tips:axolotls_help_fight_guardians_and_grant` Axolotls help fight guardians and grant Regeneration when they kill one! *(replaced by creativetips:tips)*
+65. `loading_tips:guardians_and_elder_guardians_hate_being_out_of` Guardians and Elder Guardians hate being out of water! *(removed by creativetips:tips)*
+66. `loading_tips:bees_produce_honey_and_wax` Bees produce honey and wax. *(replaced by creativetips:tips)*
+67. `loading_tips:copper_oxidizes_over_time` Copper oxidizes over time. *(removed by creativetips:tips)*
+68. `loading_tips:honeycomb_prevents_copper_oxidation` Honeycomb prevents copper oxidation. *(removed by creativetips:tips)*
+69. `loading_tips:lightning_rods_protect_wooden_roofs` Lightning rods protect wooden roofs. *(removed by creativetips:tips)*
+70. `loading_tips:amethyst_grows_on_budding_geodes` Amethyst grows on budding geodes. *(removed by creativetips:tips)*
+71. `loading_tips:spyglasses_zoom_in_on_the_horizon` Spyglasses zoom in on the horizon. *(replaced by creativetips:tips)*
+72. `loading_tips:goats_can_ram_you_off_cliffs` Goats can ram you off cliffs. *(replaced by creativetips:tips)*
+73. `loading_tips:allays_love_items_and_music` Allays love items and music. *(removed by creativetips:tips)*
+74. `loading_tips:frogs_eat_small_slimes_and_magma_cubes` Frogs eat small slimes and magma cubes. *(replaced by creativetips:tips)*
+75. `loading_tips:mud_is_made_from_dirt_and_water` Mud is made from dirt and water. *(replaced by creativetips:tips)*
+76. `loading_tips:mangrove_trees_grow_in_water` Mangrove trees grow in water. *(replaced by creativetips:tips)*
+77. `loading_tips:sniffers_find_ancient_seeds` Sniffers find ancient seeds. *(removed by creativetips:tips)*
+78. `loading_tips:camel_dashes_jump_over_ravines` Camel dashes jump over ravines. *(removed by creativetips:tips)*
+79. `loading_tips:bamboo_can_be_used_for_wood` Bamboo can be used for wood. *(removed by creativetips:tips)*
+80. `loading_tips:armor_trims_are_found_in_structures` Armor trims are found in structures. *(removed by creativetips:tips)*
+81. `loading_tips:smithing_templates_are_required_for_upgrades` Smithing templates are required for upgrades. *(removed by creativetips:tips)*
+82. `loading_tips:netherite_requires_a_smithing_template` Netherite requires a smithing template. *(removed by creativetips:tips)*
+83. `loading_tips:trail_ruins_are_buried_underground` Trail Ruins are buried underground. *(removed by creativetips:tips)*
+84. `loading_tips:suspicious_gravel_can_be_brushed` Suspicious gravel can be brushed. *(removed by creativetips:tips)*
+85. `loading_tips:trial_chambers_are_full_of_loot` Trial Chambers are full of loot. *(removed by creativetips:tips)*
+86. `loading_tips:trial_spawners_give_rewards` Trial Spawners give rewards. *(removed by creativetips:tips)*
+87. `loading_tips:trial_keys_unlock_vaults` Trial Keys unlock Vaults. *(removed by creativetips:tips)*
+88. `loading_tips:the_breeze_drops_breeze_rods` The Breeze drops Breeze Rods. *(removed by creativetips:tips)*
+89. `loading_tips:the_bogged_fires_poison_arrows` The Bogged fires poison arrows. *(removed by creativetips:tips)*
+90. `loading_tips:maces_do_more_damage_from_heights` Maces do more damage from heights. *(removed by creativetips:tips)*
+91. `loading_tips:wind_charges_launch_you_upward` Wind Charges launch you upward. *(removed by creativetips:tips)*
+92. `loading_tips:crafters_automate_your_crafting` Crafters automate your crafting. *(removed by creativetips:tips)*
+93. `loading_tips:copper_bulbs_change_light_levels` Copper Bulbs change light levels. *(removed by creativetips:tips)*
+94. `loading_tips:heavy_cores_craft_the_mace` Heavy Cores craft the Mace. *(removed by creativetips:tips)*
+95. `loading_tips:ominous_trials_are_harder_but_better` Ominous Trials are harder but better. *(removed by creativetips:tips)*
+96. `loading_tips:bad_omen_triggers_ominous_trials` Bad Omen triggers Ominous Trials. *(removed by creativetips:tips)*
+97. `loading_tips:drink_ominous_bottles_for_a_challenge` Drink Ominous Bottles for a challenge. *(removed by creativetips:tips)*
+98. `loading_tips:vaults_can_be_opened_by_everyone_but_not_twice` Vaults can be opened by everyone, but not twice per player. *(removed by creativetips:tips)*
+99. `loading_tips:chiseled_tuff_looks_great_for_builds` Chiseled Tuff looks great for builds. *(removed by creativetips:tips)*
+100. `loading_tips:copper_grates_allow_light_through` Copper Grates allow light through. *(removed by creativetips:tips)*
+101. `loading_tips:hardened_glass_wont_break_easily` Hardened glass won't break easily. *(removed by creativetips:tips)*
+102. `loading_tips:sugar_cane_grows_on_sand_or_dirt` Sugar cane grows on sand or dirt. *(replaced by creativetips:tips)*
+103. `loading_tips:pumpkins_need_space_to_grow` Pumpkins need space to grow. *(replaced by creativetips:tips)*
+104. `loading_tips:melons_need_space_to_grow` Melons need space to grow. *(removed by creativetips:tips)*
+105. `loading_tips:sweet_berries_slow_you_down` Sweet berries slow you down. *(removed by creativetips:tips)*
+106. `loading_tips:campfires_can_cook_four_items` Campfires can cook four items. *(replaced by creativetips:tips)*
+107. `loading_tips:bells_alert_villagers_to_raids` Bells alert villagers to raids. *(replaced by creativetips:tips)*
+108. `loading_tips:ravagers_are_afraid_of_rabbits` Ravagers are afraid of rabbits. *(removed by creativetips:tips)*
+109. `loading_tips:evokers_turn_blue_sheep_red` Evokers turn blue sheep red. *(removed by creativetips:tips)*
+110. `loading_tips:the_wither_is_a_powerful_boss` The Wither is a powerful boss. *(removed by creativetips:tips)*
+111. `loading_tips:punching_tnt_with_flint_and_steel_ignites_it` Punching TNT with Flint and Steel ignites it. *(removed by creativetips:tips)*
+112. `loading_tips:bows_with_power_v_deal_massive_damage` Bows with Power V deal massive damage. *(removed by creativetips:tips)*
+113. `loading_tips:infinity_bows_dont_need_extra_arrows_but_cant` Infinity bows don't need extra arrows, but can't have Mending! *(removed by creativetips:tips)*
+114. `loading_tips:mending_repairs_gear_using_xp_orbs` Mending repairs gear using XP orbs. *(replaced by creativetips:tips)*
+115. `loading_tips:unbreaking_iii_makes_gear_last_longer` Unbreaking III makes gear last longer. *(replaced by creativetips:tips)*
+116. `loading_tips:efficiency_v_mines_blocks_instantly` Efficiency V mines blocks instantly. *(removed by creativetips:tips)*
+117. `loading_tips:silk_touch_collects_beehives_with_bees_inside` Silk Touch collects beehives with bees inside. *(replaced by creativetips:tips)*
+118. `loading_tips:depth_strider_makes_you_swim_faster` Depth Strider makes you swim faster. *(removed by creativetips:tips)*
+119. `loading_tips:frost_walker_turns_water_into_ice` Frost Walker turns water into ice. *(removed by creativetips:tips)*
+120. `loading_tips:feather_falling_iv_reduces_fall_damage` Feather Falling IV reduces fall damage. *(replaced by creativetips:tips)*
+121. `loading_tips:blast_protection_saves_you_from_creepers` Blast Protection saves you from Creepers. *(removed by creativetips:tips)*
+122. `loading_tips:blast_protection_reduces_explosion_damage_and` Blast Protection reduces explosion damage and knockback! *(replaced by creativetips:tips)*
+123. `loading_tips:projectile_protection_reduces_arrow_damage` Projectile Protection reduces arrow damage. *(removed by creativetips:tips)*
+124. `loading_tips:fire_protection_is_essential_for_the_nether` Fire Protection is essential for the Nether. *(removed by creativetips:tips)*
+125. `loading_tips:swift_sneak_makes_you_crouch_walk_faster` Swift Sneak makes you crouch-walk faster. *(removed by creativetips:tips)*
+126. `loading_tips:soul_speed_is_faster_on_soul_sand` Soul Speed is faster on Soul Sand. *(removed by creativetips:tips)*
+127. `loading_tips:thorns_damage_enemies_who_hit_you` Thorns damage enemies who hit you. *(replaced by creativetips:tips)*
+128. `loading_tips:respiration_iii_lets_you_breathe_longer` Respiration III lets you breathe longer. *(replaced by creativetips:tips)*
+129. `loading_tips:aqua_affinity_speeds_up_underwater_mining` Aqua Affinity speeds up underwater mining. *(removed by creativetips:tips)*
+130. `loading_tips:multishot_fires_three_arrows_for_one` Multishot fires three arrows for one. *(removed by creativetips:tips)*
+131. `loading_tips:piercing_arrows_go_through_multiple_mobs` Piercing arrows go through multiple mobs. *(removed by creativetips:tips)*
+132. `loading_tips:quick_charge_makes_crossbows_fire_faster` Quick Charge makes crossbows fire faster. *(removed by creativetips:tips)*
+133. `loading_tips:channeling_strikes_lightning_during_storms` Channeling strikes lightning during storms. *(removed by creativetips:tips)*
+134. `loading_tips:impaling_deals_extra_damage_to_sea_life` Impaling deals extra damage to sea life. *(removed by creativetips:tips)*
+135. `loading_tips:loyalty_tridents_fly_back_to_you` Loyalty tridents fly back to you. *(removed by creativetips:tips)*
+136. `loading_tips:ender_pearls_teleport_you_instantly` Ender Pearls teleport you instantly. *(replaced by creativetips:tips)*
+137. `loading_tips:chorus_fruit_teleports_you_randomly` Chorus Fruit teleports you randomly. *(replaced by creativetips:tips)*
+138. `loading_tips:totems_of_undying_save_you_from_death` Totems of Undying save you from death. *(removed by creativetips:tips)*
+139. `loading_tips:shields_block_100_of_melee_damage` Shields block 100% of melee damage. *(removed by creativetips:tips)*
+140. `loading_tips:gold_apples_give_extra_health_hearts` Gold apples give extra health hearts. *(replaced by creativetips:tips)*
+141. `loading_tips:enchanted_apples_give_massive_buffs` Enchanted apples give massive buffs. *(removed by creativetips:tips)*
+142. `loading_tips:potions_of_speed_make_you_run_faster` Potions of Speed make you run faster. *(replaced by creativetips:tips)*
+143. `loading_tips:potions_of_strength_increase_melee_damage` Potions of Strength increase melee damage. *(replaced by creativetips:tips)*
+144. `loading_tips:potions_of_haste_speed_up_mining` Potions of Haste speed up mining. *(replaced by creativetips:tips)*
 145. `loading_tips:potions_of_invisibility_greatly_reduce_mob` Potions of Invisibility greatly reduce mob detection range, but remove armor for full effect!
-146. `loading_tips:potions_of_night_vision_see_in_the_dark` Potions of Night Vision see in the dark. *(replaced by creative_tips:tips)*
-147. `loading_tips:potions_of_fire_resistance_stop_lava_damage` Potions of Fire Resistance stop lava damage. *(replaced by creative_tips:tips)*
-148. `loading_tips:potions_of_slow_falling_prevent_fall_death_and` Potions of Slow Falling prevent fall death, and disable maces. *(removed by creative_tips:tips)*
-149. `loading_tips:potions_of_water_breathing_are_for_diving` Potions of Water Breathing are for diving. *(replaced by creative_tips:tips)*
-150. `loading_tips:lingering_potions_create_effect_clouds` Lingering potions create effect clouds. *(replaced by creative_tips:tips)*
-151. `loading_tips:splash_potions_affect_multiple_entities` Splash potions affect multiple entities. *(replaced by creative_tips:tips)*
-152. `loading_tips:arrows_can_be_tipped_with_potion_effects` Arrows can be tipped with potion effects. *(removed by creative_tips:tips)*
-153. `loading_tips:spectral_arrows_highlight_enemies` Spectral arrows highlight enemies. *(replaced by creative_tips:tips)*
-154. `loading_tips:weakness_potions_help_cure_zombie_villagers` Weakness potions help cure Zombie Villagers. *(replaced by creative_tips:tips)*
-155. `loading_tips:golden_apples_help_cure_zombie_villagers` Golden apples help cure Zombie Villagers. *(removed by creative_tips:tips)*
-156. `loading_tips:fletching_tables_create_tipped_arrows` Fletching tables create tipped arrows. *(removed by creative_tips:tips)*
-157. `loading_tips:cartography_tables_zoom_out_your_maps` Cartography tables zoom out your maps. *(replaced by creative_tips:tips)*
-158. `loading_tips:loom_tables_make_custom_banner_designs` Loom tables make custom banner designs. *(replaced by creative_tips:tips)*
-159. `loading_tips:smite_deals_extra_damage_to_the_undead` Smite deals extra damage to the undead. *(removed by creative_tips:tips)*
-160. `loading_tips:bane_of_arthropods_kills_spiders_fast` Bane of Arthropods kills spiders fast. *(removed by creative_tips:tips)*
-161. `loading_tips:knockback_pushes_enemies_far_away` Knockback pushes enemies far away. *(removed by creative_tips:tips)*
-162. `loading_tips:fireballs_can_be_hit_back_at_ghasts` Fireballs can be hit back at Ghasts. *(replaced by creative_tips:tips)*
-163. `loading_tips:magma_blocks_deal_damage_when_stepped_on` Magma blocks deal damage when stepped on. *(replaced by creative_tips:tips)*
-164. `loading_tips:crouching_prevents_magma_block_damage` Crouching prevents magma block damage. *(removed by creative_tips:tips)*
-165. `loading_tips:ice_blocks_melt_near_light_sources` Ice blocks melt near light sources. *(replaced by creative_tips:tips)*
-166. `loading_tips:packed_ice_never_melts_in_light` Packed ice never melts in light. *(removed by creative_tips:tips)*
-167. `loading_tips:blue_ice_is_the_slipperiest_block` Blue ice is the slipperiest block. *(replaced by creative_tips:tips)*
-168. `loading_tips:lava_flows_further_in_the_nether` Lava flows further in the Nether. *(replaced by creative_tips:tips)*
-169. `loading_tips:water_cannot_be_placed_in_the_nether` Water cannot be placed in the Nether. *(replaced by creative_tips:tips)*
-170. `loading_tips:cauldrons_can_hold_water_in_the_nether` Cauldrons can hold water in the Nether. *(removed by creative_tips:tips)*
-171. `loading_tips:sponge_blocks_soak_up_nearby_water` Sponge blocks soak up nearby water. *(replaced by creative_tips:tips)*
-172. `loading_tips:wet_sponges_can_be_dried_in_a_furnace_or_by` Wet sponges can be dried in a furnace or by placing them in the Nether! *(removed by creative_tips:tips)*
-173. `loading_tips:conduits_require_a_prismarine_frame` Conduits require a prismarine frame. *(replaced by creative_tips:tips)*
-174. `loading_tips:beacons_require_a_pyramid_base` Beacons require a pyramid base. *(replaced by creative_tips:tips)*
-175. `loading_tips:beacons_give_powerful_area_of_effect_buffs` Beacons give powerful area-of-effect buffs. *(removed by creative_tips:tips)*
-176. `loading_tips:nether_stars_are_dropped_by_the_wither` Nether Stars are dropped by the Wither. *(removed by creative_tips:tips)*
-177. `loading_tips:wither_skeletons_drop_rare_skulls` Wither Skeletons drop rare skulls. *(removed by creative_tips:tips)*
-178. `loading_tips:ender_dragons_drop_dragon_breath` Ender Dragons drop Dragon Breath. *(removed by creative_tips:tips)*
-179. `loading_tips:elytra_let_you_glide_through_the_sky` Elytra let you glide through the sky. *(replaced by creative_tips:tips)*
-180. `loading_tips:fireworks_boost_your_elytra_flight` Fireworks boost your Elytra flight. *(replaced by creative_tips:tips)*
-181. `loading_tips:shulker_boxes_are_portable_chests` Shulker Boxes are portable chests. *(replaced by creative_tips:tips)*
-182. `loading_tips:shulker_shells_are_dropped_in_end_cities` Shulker Shells are dropped in End Cities. *(removed by creative_tips:tips)*
-183. `loading_tips:dragon_heads_look_cool_on_walls` Dragon Heads look cool on walls. *(removed by creative_tips:tips)*
-184. `loading_tips:end_crystals_respawn_the_ender_dragon` End Crystals respawn the Ender Dragon. *(replaced by creative_tips:tips)*
-185. `loading_tips:silverfish_spawn_from_infested_blocks_and` Silverfish spawn from infested blocks and spawners. *(replaced by creative_tips:tips)*
-186. `loading_tips:endermites_sometimes_spawn_from_pearls` Endermites sometimes spawn from pearls. *(removed by creative_tips:tips)*
-187. `loading_tips:wandering_traders_offer_exotic_items` Wandering Traders offer exotic items. *(replaced by creative_tips:tips)*
-188. `loading_tips:lead_animals_to_move_them_easily` Lead animals to move them easily. *(replaced by creative_tips:tips)*
-189. `loading_tips:name_tags_prevent_mobs_from_despawning` Name tags prevent mobs from despawning. *(replaced by creative_tips:tips)*
-190. `loading_tips:saddles_let_you_ride_horses_and_pigs` Saddles let you ride horses and pigs. *(replaced by creative_tips:tips)*
-191. `loading_tips:horse_armor_protects_your_mount` Horse armor protects your mount. *(replaced by creative_tips:tips)*
-192. `loading_tips:llamas_can_carry_chests_for_storage` Llamas can carry chests for storage. *(replaced by creative_tips:tips)*
-193. `loading_tips:mules_are_a_cross_between_horses_and_donkeys` Mules are a cross between horses and donkeys. *(replaced by creative_tips:tips)*
-194. `loading_tips:striders_can_walk_on_lava_with_saddles` Striders can walk on lava with saddles. *(removed by creative_tips:tips)*
-195. `loading_tips:warped_fungus_on_a_stick_guides_striders` Warped fungus on a stick guides Striders. *(removed by creative_tips:tips)*
-196. `loading_tips:carrot_on_a_stick_guides_pigs` Carrot on a stick guides pigs. *(removed by creative_tips:tips)*
-197. `loading_tips:ravagers_can_be_stunned_by_shields` Ravagers can be stunned by shields. *(replaced by creative_tips:tips)*
-198. `loading_tips:vexes_can_fly_through_solid_blocks` Vexes can fly through solid blocks. *(removed by creative_tips:tips)*
-199. `loading_tips:vindicators_are_fast_and_dangerous` Vindicators are fast and dangerous. *(replaced by creative_tips:tips)*
-200. `loading_tips:pillager_outposts_hold_trapped_allays` Pillager Outposts hold trapped Allays. *(replaced by creative_tips:tips)*
-201. `loading_tips:raids_start_when_entering_a_village` Raids start when entering a village. *(removed by creative_tips:tips)*
-202. `loading_tips:hero_of_the_village_gives_discounts` Hero of the Village gives discounts. *(removed by creative_tips:tips)*
-203. `loading_tips:villagers_change_jobs_based_on_blocks` Villagers change jobs based on blocks. *(replaced by creative_tips:tips)*
-204. `loading_tips:iron_golems_protect_villages_from_sieges` Iron Golems protect villages from sieges. *(removed by creative_tips:tips)*
-205. `loading_tips:snow_golems_leave_a_trail_of_snow` Snow Golems leave a trail of snow. *(replaced by creative_tips:tips)*
-206. `loading_tips:pumpkin_masks_hide_you_from_endermen` Pumpkin masks hide you from Endermen. *(removed by creative_tips:tips)*
-207. `loading_tips:dye_leather_armor_using_a_cauldron` Dye leather armor using a cauldron. *(removed by creative_tips:tips)*
-208. `loading_tips:suspicious_stew_gives_random_effects` Suspicious stew gives random effects. *(replaced by creative_tips:tips)*
-209. `loading_tips:brushes_are_used_for_archeology` Brushes are used for archeology. *(removed by creative_tips:tips)*
-210. `loading_tips:pottery_sherds_make_decorated_pots` Pottery Sherds make decorated pots. *(removed by creative_tips:tips)*
-211. `loading_tips:sniffer_eggs_hatch_on_moss_blocks` Sniffer eggs hatch on moss blocks. *(removed by creative_tips:tips)*
-212. `loading_tips:lava_buckets_are_the_best_furnace_fuel` Lava buckets are the best furnace fuel. *(replaced by creative_tips:tips)*
-213. `loading_tips:bows_can_be_repaired_with_string` Bows can be repaired with string. *(removed by creative_tips:tips)*
-214. `loading_tips:wooden_buttons_have_a_longer_signal` Wooden buttons have a longer signal. *(replaced by creative_tips:tips)*
-215. `loading_tips:pressure_plates_detect_items_or_players` Pressure plates detect items or players. *(removed by creative_tips:tips)*
-216. `loading_tips:iron_doors_require_a_redstone_signal` Iron doors require a redstone signal. *(replaced by creative_tips:tips)*
-217. `loading_tips:trapdoors_can_be_used_as_ladders` Trapdoors can be used as ladders. *(replaced by creative_tips:tips)*
-218. `loading_tips:slabs_prevent_mob_spawning` Slabs prevent mob spawning. *(removed by creative_tips:tips)*
-219. `loading_tips:stairs_can_be_waterlogged` Stairs can be waterlogged. *(replaced by creative_tips:tips)*
-220. `loading_tips:fences_connect_to_most_solid_blocks` Fences connect to most solid blocks. *(replaced by creative_tips:tips)*
-221. `loading_tips:gates_can_be_opened_both_ways` Gates can be opened both ways. *(removed by creative_tips:tips)*
-222. `loading_tips:anvils_fall_and_deal_damage` Anvils fall and deal damage. *(removed by creative_tips:tips)*
-223. `loading_tips:dripstone_can_kill_if_it_falls_on_you` Dripstone can kill if it falls on you. *(removed by creative_tips:tips)*
-224. `loading_tips:pointed_dripstone_fills_cauldrons` Pointed dripstone fills cauldrons. *(replaced by creative_tips:tips)*
-225. `loading_tips:powder_snow_can_freeze_you` Powder snow can freeze you. *(removed by creative_tips:tips)*
-226. `loading_tips:leather_boots_let_you_walk_on_snow` Leather boots let you walk on snow. *(replaced by creative_tips:tips)*
-227. `loading_tips:magma_cubes_are_immune_to_fire` Magma cubes are immune to fire. *(replaced by creative_tips:tips)*
-228. `loading_tips:strider_babies_can_ride_adults` Strider babies can ride adults. *(removed by creative_tips:tips)*
-229. `loading_tips:piglin_brutes_never_barter` Piglin Brutes never barter. *(replaced by creative_tips:tips)*
-230. `loading_tips:hoglins_are_afraid_of_warped_fungus_nether` Hoglins are afraid of warped fungus, nether portals and respawn anchors. *(replaced by creative_tips:tips)*
-231. `loading_tips:zoglins_are_afraid_of_nothing` Zoglins are afraid of nothing. *(removed by creative_tips:tips)*
-232. `loading_tips:bastions_are_full_of_gold_blocks` Bastions are full of gold blocks. *(replaced by creative_tips:tips)*
-233. `loading_tips:lodestones_help_you_navigate` Lodestones help you navigate. *(removed by creative_tips:tips)*
-234. `loading_tips:compasses_point_to_world_spawn` Compasses point to world spawn. *(replaced by creative_tips:tips)*
-235. `loading_tips:recovery_compasses_show_last_death` Recovery compasses show last death. *(removed by creative_tips:tips)*
+146. `loading_tips:potions_of_night_vision_see_in_the_dark` Potions of Night Vision see in the dark. *(replaced by creativetips:tips)*
+147. `loading_tips:potions_of_fire_resistance_stop_lava_damage` Potions of Fire Resistance stop lava damage. *(replaced by creativetips:tips)*
+148. `loading_tips:potions_of_slow_falling_prevent_fall_death_and` Potions of Slow Falling prevent fall death, and disable maces. *(removed by creativetips:tips)*
+149. `loading_tips:potions_of_water_breathing_are_for_diving` Potions of Water Breathing are for diving. *(replaced by creativetips:tips)*
+150. `loading_tips:lingering_potions_create_effect_clouds` Lingering potions create effect clouds. *(replaced by creativetips:tips)*
+151. `loading_tips:splash_potions_affect_multiple_entities` Splash potions affect multiple entities. *(replaced by creativetips:tips)*
+152. `loading_tips:arrows_can_be_tipped_with_potion_effects` Arrows can be tipped with potion effects. *(removed by creativetips:tips)*
+153. `loading_tips:spectral_arrows_highlight_enemies` Spectral arrows highlight enemies. *(replaced by creativetips:tips)*
+154. `loading_tips:weakness_potions_help_cure_zombie_villagers` Weakness potions help cure Zombie Villagers. *(replaced by creativetips:tips)*
+155. `loading_tips:golden_apples_help_cure_zombie_villagers` Golden apples help cure Zombie Villagers. *(removed by creativetips:tips)*
+156. `loading_tips:fletching_tables_create_tipped_arrows` Fletching tables create tipped arrows. *(removed by creativetips:tips)*
+157. `loading_tips:cartography_tables_zoom_out_your_maps` Cartography tables zoom out your maps. *(replaced by creativetips:tips)*
+158. `loading_tips:loom_tables_make_custom_banner_designs` Loom tables make custom banner designs. *(replaced by creativetips:tips)*
+159. `loading_tips:smite_deals_extra_damage_to_the_undead` Smite deals extra damage to the undead. *(removed by creativetips:tips)*
+160. `loading_tips:bane_of_arthropods_kills_spiders_fast` Bane of Arthropods kills spiders fast. *(removed by creativetips:tips)*
+161. `loading_tips:knockback_pushes_enemies_far_away` Knockback pushes enemies far away. *(removed by creativetips:tips)*
+162. `loading_tips:fireballs_can_be_hit_back_at_ghasts` Fireballs can be hit back at Ghasts. *(replaced by creativetips:tips)*
+163. `loading_tips:magma_blocks_deal_damage_when_stepped_on` Magma blocks deal damage when stepped on. *(replaced by creativetips:tips)*
+164. `loading_tips:crouching_prevents_magma_block_damage` Crouching prevents magma block damage. *(removed by creativetips:tips)*
+165. `loading_tips:ice_blocks_melt_near_light_sources` Ice blocks melt near light sources. *(replaced by creativetips:tips)*
+166. `loading_tips:packed_ice_never_melts_in_light` Packed ice never melts in light. *(removed by creativetips:tips)*
+167. `loading_tips:blue_ice_is_the_slipperiest_block` Blue ice is the slipperiest block. *(replaced by creativetips:tips)*
+168. `loading_tips:lava_flows_further_in_the_nether` Lava flows further in the Nether. *(replaced by creativetips:tips)*
+169. `loading_tips:water_cannot_be_placed_in_the_nether` Water cannot be placed in the Nether. *(replaced by creativetips:tips)*
+170. `loading_tips:cauldrons_can_hold_water_in_the_nether` Cauldrons can hold water in the Nether. *(removed by creativetips:tips)*
+171. `loading_tips:sponge_blocks_soak_up_nearby_water` Sponge blocks soak up nearby water. *(replaced by creativetips:tips)*
+172. `loading_tips:wet_sponges_can_be_dried_in_a_furnace_or_by` Wet sponges can be dried in a furnace or by placing them in the Nether! *(removed by creativetips:tips)*
+173. `loading_tips:conduits_require_a_prismarine_frame` Conduits require a prismarine frame. *(replaced by creativetips:tips)*
+174. `loading_tips:beacons_require_a_pyramid_base` Beacons require a pyramid base. *(replaced by creativetips:tips)*
+175. `loading_tips:beacons_give_powerful_area_of_effect_buffs` Beacons give powerful area-of-effect buffs. *(removed by creativetips:tips)*
+176. `loading_tips:nether_stars_are_dropped_by_the_wither` Nether Stars are dropped by the Wither. *(removed by creativetips:tips)*
+177. `loading_tips:wither_skeletons_drop_rare_skulls` Wither Skeletons drop rare skulls. *(removed by creativetips:tips)*
+178. `loading_tips:ender_dragons_drop_dragon_breath` Ender Dragons drop Dragon Breath. *(removed by creativetips:tips)*
+179. `loading_tips:elytra_let_you_glide_through_the_sky` Elytra let you glide through the sky. *(replaced by creativetips:tips)*
+180. `loading_tips:fireworks_boost_your_elytra_flight` Fireworks boost your Elytra flight. *(replaced by creativetips:tips)*
+181. `loading_tips:shulker_boxes_are_portable_chests` Shulker Boxes are portable chests. *(replaced by creativetips:tips)*
+182. `loading_tips:shulker_shells_are_dropped_in_end_cities` Shulker Shells are dropped in End Cities. *(removed by creativetips:tips)*
+183. `loading_tips:dragon_heads_look_cool_on_walls` Dragon Heads look cool on walls. *(removed by creativetips:tips)*
+184. `loading_tips:end_crystals_respawn_the_ender_dragon` End Crystals respawn the Ender Dragon. *(replaced by creativetips:tips)*
+185. `loading_tips:silverfish_spawn_from_infested_blocks_and` Silverfish spawn from infested blocks and spawners. *(replaced by creativetips:tips)*
+186. `loading_tips:endermites_sometimes_spawn_from_pearls` Endermites sometimes spawn from pearls. *(removed by creativetips:tips)*
+187. `loading_tips:wandering_traders_offer_exotic_items` Wandering Traders offer exotic items. *(replaced by creativetips:tips)*
+188. `loading_tips:lead_animals_to_move_them_easily` Lead animals to move them easily. *(replaced by creativetips:tips)*
+189. `loading_tips:name_tags_prevent_mobs_from_despawning` Name tags prevent mobs from despawning. *(replaced by creativetips:tips)*
+190. `loading_tips:saddles_let_you_ride_horses_and_pigs` Saddles let you ride horses and pigs. *(replaced by creativetips:tips)*
+191. `loading_tips:horse_armor_protects_your_mount` Horse armor protects your mount. *(replaced by creativetips:tips)*
+192. `loading_tips:llamas_can_carry_chests_for_storage` Llamas can carry chests for storage. *(replaced by creativetips:tips)*
+193. `loading_tips:mules_are_a_cross_between_horses_and_donkeys` Mules are a cross between horses and donkeys. *(replaced by creativetips:tips)*
+194. `loading_tips:striders_can_walk_on_lava_with_saddles` Striders can walk on lava with saddles. *(removed by creativetips:tips)*
+195. `loading_tips:warped_fungus_on_a_stick_guides_striders` Warped fungus on a stick guides Striders. *(removed by creativetips:tips)*
+196. `loading_tips:carrot_on_a_stick_guides_pigs` Carrot on a stick guides pigs. *(removed by creativetips:tips)*
+197. `loading_tips:ravagers_can_be_stunned_by_shields` Ravagers can be stunned by shields. *(replaced by creativetips:tips)*
+198. `loading_tips:vexes_can_fly_through_solid_blocks` Vexes can fly through solid blocks. *(removed by creativetips:tips)*
+199. `loading_tips:vindicators_are_fast_and_dangerous` Vindicators are fast and dangerous. *(replaced by creativetips:tips)*
+200. `loading_tips:pillager_outposts_hold_trapped_allays` Pillager Outposts hold trapped Allays. *(replaced by creativetips:tips)*
+201. `loading_tips:raids_start_when_entering_a_village` Raids start when entering a village. *(removed by creativetips:tips)*
+202. `loading_tips:hero_of_the_village_gives_discounts` Hero of the Village gives discounts. *(removed by creativetips:tips)*
+203. `loading_tips:villagers_change_jobs_based_on_blocks` Villagers change jobs based on blocks. *(replaced by creativetips:tips)*
+204. `loading_tips:iron_golems_protect_villages_from_sieges` Iron Golems protect villages from sieges. *(removed by creativetips:tips)*
+205. `loading_tips:snow_golems_leave_a_trail_of_snow` Snow Golems leave a trail of snow. *(replaced by creativetips:tips)*
+206. `loading_tips:pumpkin_masks_hide_you_from_endermen` Pumpkin masks hide you from Endermen. *(removed by creativetips:tips)*
+207. `loading_tips:dye_leather_armor_using_a_cauldron` Dye leather armor using a cauldron. *(removed by creativetips:tips)*
+208. `loading_tips:suspicious_stew_gives_random_effects` Suspicious stew gives random effects. *(replaced by creativetips:tips)*
+209. `loading_tips:brushes_are_used_for_archeology` Brushes are used for archeology. *(removed by creativetips:tips)*
+210. `loading_tips:pottery_sherds_make_decorated_pots` Pottery Sherds make decorated pots. *(removed by creativetips:tips)*
+211. `loading_tips:sniffer_eggs_hatch_on_moss_blocks` Sniffer eggs hatch on moss blocks. *(removed by creativetips:tips)*
+212. `loading_tips:lava_buckets_are_the_best_furnace_fuel` Lava buckets are the best furnace fuel. *(replaced by creativetips:tips)*
+213. `loading_tips:bows_can_be_repaired_with_string` Bows can be repaired with string. *(removed by creativetips:tips)*
+214. `loading_tips:wooden_buttons_have_a_longer_signal` Wooden buttons have a longer signal. *(replaced by creativetips:tips)*
+215. `loading_tips:pressure_plates_detect_items_or_players` Pressure plates detect items or players. *(removed by creativetips:tips)*
+216. `loading_tips:iron_doors_require_a_redstone_signal` Iron doors require a redstone signal. *(replaced by creativetips:tips)*
+217. `loading_tips:trapdoors_can_be_used_as_ladders` Trapdoors can be used as ladders. *(replaced by creativetips:tips)*
+218. `loading_tips:slabs_prevent_mob_spawning` Slabs prevent mob spawning. *(removed by creativetips:tips)*
+219. `loading_tips:stairs_can_be_waterlogged` Stairs can be waterlogged. *(replaced by creativetips:tips)*
+220. `loading_tips:fences_connect_to_most_solid_blocks` Fences connect to most solid blocks. *(replaced by creativetips:tips)*
+221. `loading_tips:gates_can_be_opened_both_ways` Gates can be opened both ways. *(removed by creativetips:tips)*
+222. `loading_tips:anvils_fall_and_deal_damage` Anvils fall and deal damage. *(removed by creativetips:tips)*
+223. `loading_tips:dripstone_can_kill_if_it_falls_on_you` Dripstone can kill if it falls on you. *(removed by creativetips:tips)*
+224. `loading_tips:pointed_dripstone_fills_cauldrons` Pointed dripstone fills cauldrons. *(replaced by creativetips:tips)*
+225. `loading_tips:powder_snow_can_freeze_you` Powder snow can freeze you. *(removed by creativetips:tips)*
+226. `loading_tips:leather_boots_let_you_walk_on_snow` Leather boots let you walk on snow. *(replaced by creativetips:tips)*
+227. `loading_tips:magma_cubes_are_immune_to_fire` Magma cubes are immune to fire. *(replaced by creativetips:tips)*
+228. `loading_tips:strider_babies_can_ride_adults` Strider babies can ride adults. *(removed by creativetips:tips)*
+229. `loading_tips:piglin_brutes_never_barter` Piglin Brutes never barter. *(replaced by creativetips:tips)*
+230. `loading_tips:hoglins_are_afraid_of_warped_fungus_nether` Hoglins are afraid of warped fungus, nether portals and respawn anchors. *(replaced by creativetips:tips)*
+231. `loading_tips:zoglins_are_afraid_of_nothing` Zoglins are afraid of nothing. *(removed by creativetips:tips)*
+232. `loading_tips:bastions_are_full_of_gold_blocks` Bastions are full of gold blocks. *(replaced by creativetips:tips)*
+233. `loading_tips:lodestones_help_you_navigate` Lodestones help you navigate. *(removed by creativetips:tips)*
+234. `loading_tips:compasses_point_to_world_spawn` Compasses point to world spawn. *(replaced by creativetips:tips)*
+235. `loading_tips:recovery_compasses_show_last_death` Recovery compasses show last death. *(removed by creativetips:tips)*
 236. `loading_tips:clocks_show_the_time_of_day_but_dont_work_in_the` Clocks show the time of day, but don't work in the Nether or End!
-237. `loading_tips:daylight_detectors_activate_when_exposed_to` Daylight Detectors activate when exposed to sunlight! *(replaced by creative_tips:tips)*
-238. `loading_tips:glass_bottles_collect_dragon_breath` Glass bottles collect dragon breath. *(removed by creative_tips:tips)*
-239. `loading_tips:dragon_breath_crafts_lingering_potions` Dragon breath crafts lingering potions. *(removed by creative_tips:tips)*
-240. `loading_tips:arrows_fly_further_if_you_jump_shot` Arrows fly further if you jump-shot. *(removed by creative_tips:tips)*
-241. `loading_tips:sweet_berry_bushes_damage_mobs` Sweet berry bushes damage mobs. *(removed by creative_tips:tips)*
-242. `loading_tips:cactus_blocks_destroy_items` Cactus blocks destroy items. *(replaced by creative_tips:tips)*
-243. `loading_tips:sand_falls_if_there_is_no_block_below` Sand falls if there is no block below. *(replaced by creative_tips:tips)*
-244. `loading_tips:gravel_falls_if_there_is_no_block_below` Gravel falls if there is no block below. *(removed by creative_tips:tips)*
-245. `loading_tips:concrete_is_made_by_wetting_powder` Concrete is made by wetting powder. *(replaced by creative_tips:tips)*
-246. `loading_tips:wool_muffles_the_sound_of_footsteps` Wool muffles the sound of footsteps. *(removed by creative_tips:tips)*
-247. `loading_tips:carpet_can_be_placed_over_string` Carpet can be placed over string. *(removed by creative_tips:tips)*
-248. `loading_tips:item_frames_can_be_placed_on_floors` Item frames can be placed on floors. *(replaced by creative_tips:tips)*
-249. `loading_tips:glow_ink_sacs_make_signs_glow` Glow ink sacs make signs glow. *(removed by creative_tips:tips)*
-250. `loading_tips:regular_ink_sacs_clear_sign_glow` Regular ink sacs clear sign glow. *(removed by creative_tips:tips)*
-251. `loading_tips:honey_bottles_remove_poison` Honey bottles remove poison. *(replaced by creative_tips:tips)*
-252. `loading_tips:sugar_speeds_up_baby_horses` Sugar speeds up baby horses. *(replaced by creative_tips:tips)*
-253. `loading_tips:wheat_heals_injured_cows` Wheat heals injured cows. *(removed by creative_tips:tips)*
-254. `loading_tips:seeds_heal_injured_chickens` Seeds heal injured chickens. *(removed by creative_tips:tips)*
-255. `loading_tips:raw_fish_heals_injured_cats` Raw fish heals injured cats. *(replaced by creative_tips:tips)*
-256. `loading_tips:rotten_flesh_heals_injured_wolves` Rotten flesh heals injured wolves. *(removed by creative_tips:tips)*
-257. `loading_tips:zombies_can_break_wooden_doors` Zombies can break wooden doors. *(replaced by creative_tips:tips)*
-258. `loading_tips:skeleton_horses_spawn_during_storms` Skeleton horses spawn during storms. *(replaced by creative_tips:tips)*
-259. `loading_tips:trident_drowned_only_spawn_in_oceans` Trident drowned only spawn in oceans. *(removed by creative_tips:tips)*
-260. `loading_tips:slimes_only_spawn_in_certain_chunks` Slimes only spawn in certain chunks. *(replaced by creative_tips:tips)*
-261. `loading_tips:witches_use_potions_to_heal` Witches use potions to heal. *(replaced by creative_tips:tips)*
-262. `loading_tips:vexes_are_summoned_by_evokers` Vexes are summoned by Evokers. *(removed by creative_tips:tips)*
-263. `loading_tips:illusioners_are_hidden_in_the_code` Illusioners are hidden in the code. *(removed by creative_tips:tips)*
-264. `loading_tips:the_warden_reacts_to_vibrations` The Warden reacts to vibrations. *(removed by creative_tips:tips)*
-265. `loading_tips:sneaking_hides_you_from_the_warden` Sneaking hides you from the Warden. *(removed by creative_tips:tips)*
-266. `loading_tips:wool_blocks_block_warden_vibrations` Wool blocks block Warden vibrations. *(removed by creative_tips:tips)*
-267. `loading_tips:echo_shards_craft_recovery_compasses` Echo shards craft recovery compasses. *(removed by creative_tips:tips)*
-268. `loading_tips:swift_sneak_is_found_in_ancient_cities` Swift Sneak is found in Ancient Cities. *(removed by creative_tips:tips)*
-269. `loading_tips:silence_armor_trim_is_the_rarest` Silence Armor Trim is the rarest. *(removed by creative_tips:tips)*
-270. `loading_tips:spore_blossoms_create_green_particles` Spore blossoms create green particles. *(removed by creative_tips:tips)*
-271. `loading_tips:big_dripleaves_collapse_under_weight` Big dripleaves collapse under weight. *(replaced by creative_tips:tips)*
-272. `loading_tips:small_dripleaves_need_bone_meal` Small dripleaves need bone meal. *(removed by creative_tips:tips)*
-273. `loading_tips:azalea_trees_mark_lush_caves` Azalea trees mark lush caves. *(removed by creative_tips:tips)*
-274. `loading_tips:glow_berries_provide_light_and_food` Glow berries provide light and food. *(replaced by creative_tips:tips)*
-275. `loading_tips:spies_can_see_through_tinted_glass` Spies can see through tinted glass. *(removed by creative_tips:tips)*
-276. `loading_tips:tinted_glass_blocks_light_completely` Tinted glass blocks light completely. *(removed by creative_tips:tips)*
-277. `loading_tips:amethyst_clusters_drop_four_shards` Amethyst clusters drop four shards. *(removed by creative_tips:tips)*
-278. `loading_tips:calibrated_sculks_sense_specific_sounds` Calibrated sculks sense specific sounds. *(removed by creative_tips:tips)*
-279. `loading_tips:sculk_shriekers_summon_the_warden` Sculk shriekers summon the Warden. *(removed by creative_tips:tips)*
-280. `loading_tips:sculk_catalysts_create_sculk_blocks` Sculk catalysts create sculk blocks. *(replaced by creative_tips:tips)*
-281. `loading_tips:bells_can_be_rung_with_arrows` Bells can be rung with arrows. *(removed by creative_tips:tips)*
-282. `loading_tips:soul_torches_give_off_low_light` Soul torches give off low light. *(replaced by creative_tips:tips)*
-283. `loading_tips:crying_obsidian_sets_spawn_in_nether` Crying obsidian sets spawn in Nether. *(removed by creative_tips:tips)*
-284. `loading_tips:respawn_anchors_need_glowstone` Respawn anchors need glowstone. *(removed by creative_tips:tips)*
-285. `loading_tips:nether_gold_ore_drops_nuggets` Nether gold ore drops nuggets. *(replaced by creative_tips:tips)*
-286. `loading_tips:gilded_blackstone_drops_gold_nuggets` Gilded blackstone drops gold nuggets. *(removed by creative_tips:tips)*
-287. `loading_tips:nether_sprouts_are_just_for_looks` Nether sprouts are just for looks. *(removed by creative_tips:tips)*
-288. `loading_tips:crimson_fungus_breeds_hoglins` Crimson fungus breeds Hoglins. *(removed by creative_tips:tips)*
-289. `loading_tips:warped_fungus_breeds_nothing` Warped fungus breeds nothing. *(removed by creative_tips:tips)*
-290. `loading_tips:twisting_vines_grow_upward` Twisting vines grow upward. *(replaced by creative_tips:tips)*
-291. `loading_tips:weeping_vines_grow_downward` Weeping vines grow downward. *(removed by creative_tips:tips)*
-292. `loading_tips:basalt_forms_from_blue_ice_and_lava` Basalt forms from blue ice and lava. *(replaced by creative_tips:tips)*
-293. `loading_tips:cobblestone_forms_from_water_and_lava` Cobblestone forms from water and lava. *(replaced by creative_tips:tips)*
-294. `loading_tips:obsidian_forms_when_water_hits_source_lava` Obsidian forms when water hits source lava. *(replaced by creative_tips:tips)*
-295. `loading_tips:crying_obsidian_cannot_be_moved_by_pistons` Crying obsidian cannot be moved by pistons. *(replaced by creative_tips:tips)*
-296. `loading_tips:bedrock_is_unbreakable_in_survival` Bedrock is unbreakable in survival. *(removed by creative_tips:tips)*
-297. `loading_tips:end_portal_frames_are_unbreakable` End portal frames are unbreakable. *(removed by creative_tips:tips)*
-298. `loading_tips:silverfish_hide_inside_stone_bricks` Silverfish hide inside stone bricks. *(removed by creative_tips:tips)*
-299. `loading_tips:strongholds_have_libraries_full_of_books` Strongholds have libraries full of books. *(replaced by creative_tips:tips)*
-300. `loading_tips:eyes_of_ender_lead_to_the_portal` Eyes of Ender lead to the portal. *(replaced by creative_tips:tips)*
-301. `loading_tips:shulkers_fire_levitation_bullets` Shulkers fire levitation bullets. *(replaced by creative_tips:tips)*
-302. `loading_tips:end_ships_hold_the_elytra` End ships hold the Elytra. *(replaced by creative_tips:tips)*
-303. `loading_tips:dragon_eggs_are_unique_trophies` Dragon eggs are unique trophies. *(removed by creative_tips:tips)*
-304. `loading_tips:beacons_can_be_colored_with_glass` Beacons can be colored with glass. *(removed by creative_tips:tips)*
-305. `loading_tips:armor_stands_can_hold_any_item` Armor stands can hold any item. *(replaced by creative_tips:tips)*
-306. `loading_tips:pistons_can_push_up_to_12_blocks` Pistons can push up to 12 blocks. *(replaced by creative_tips:tips)*
-307. `loading_tips:sticky_pistons_pull_blocks_back` Sticky pistons pull blocks back. *(removed by creative_tips:tips)*
-308. `loading_tips:slime_and_honey_dont_stick_together` Slime and Honey don't stick together. *(removed by creative_tips:tips)*
-309. `loading_tips:redstone_torches_invert_signals` Redstone torches invert signals. *(replaced by creative_tips:tips)*
-310. `loading_tips:tnt_can_be_lit_with_fire_charges` TNT can be lit with fire charges. *(replaced by creative_tips:tips)*
-311. `loading_tips:hardcore_mode_means_one_life_only` Hardcore mode means one life only. *(removed by creative_tips:tips)*
-312. `loading_tips:the_mace_deals_more_damage_the_further_you_fall` The Mace deals more damage the further you fall before hitting! *(removed by creative_tips:tips)*
-313. `loading_tips:wind_burst_enchantment_on_a_mace_can_launch_you` Wind Burst enchantment on a Mace can launch you back into the air. *(removed by creative_tips:tips)*
-314. `loading_tips:the_breach_enchantment_reduces_the_effectiveness` The Breach enchantment reduces the effectiveness of enemy armor. *(removed by creative_tips:tips)*
-315. `loading_tips:density_enchantment_increases_the_damage_dealt` Density enchantment increases the damage dealt per block fallen. *(removed by creative_tips:tips)*
-316. `loading_tips:mace_smash_attacks_negate_all_fall_damage_if_you` Mace smash attacks negate all fall damage if you land the hit! *(removed by creative_tips:tips)*
-317. `loading_tips:combine_a_breeze_rod_and_a_heavy_core_to_craft` Combine a Breeze Rod and a Heavy Core to craft the Mace. *(removed by creative_tips:tips)*
-318. `loading_tips:heavy_cores_are_found_rarely_within_ominous` Heavy Cores are found rarely within Ominous Vaults. *(removed by creative_tips:tips)*
-319. `loading_tips:ominous_trials_are_started_by_drinking_a_trial` Ominous Trials are started by drinking a Trial Omen bottle. *(removed by creative_tips:tips)*
-320. `loading_tips:trial_omens_are_gained_by_defeating_raid` Trial Omens are gained by defeating Raid Captains outside of raids. *(removed by creative_tips:tips)*
-321. `loading_tips:the_breeze_can_reflect_projectiles_back_at_you` The Breeze can reflect projectiles back at you with its wind. *(removed by creative_tips:tips)*
-322. `loading_tips:breeze_rods_are_essential_for_crafting_the_new` Breeze Rods are essential for crafting the new Wind Charges. *(removed by creative_tips:tips)*
-323. `loading_tips:wind_charges_allow_you_to_rocket_jump_like_a` Wind Charges allow you to 'rocket jump' like a Breeze! *(removed by creative_tips:tips)*
-324. `loading_tips:vaults_in_trial_chambers_can_be_looted_by_every` Vaults in Trial Chambers can be looted by every player once. *(removed by creative_tips:tips)*
-325. `loading_tips:ominous_vaults_have_better_loot_but_require` Ominous Vaults have better loot but require Ominous Trial Keys. *(removed by creative_tips:tips)*
-326. `loading_tips:trial_spawners_adjust_their_difficulty_based_on` Trial Spawners adjust their difficulty based on how many players are nearby. *(removed by creative_tips:tips)*
-327. `loading_tips:trial_spawners_eject_rewards_like_trial_keys` Trial Spawners eject rewards like Trial Keys after all mobs are defeated. *(removed by creative_tips:tips)*
-328. `loading_tips:the_bogged_skeleton_variant_spawns_in_swamps_and` The Bogged skeleton variant spawns in Swamps and Trial Chambers. *(removed by creative_tips:tips)*
-329. `loading_tips:you_can_shear_a_bogged_to_get_mushrooms_from_its` You can shear a Bogged to get mushrooms from its head! *(removed by creative_tips:tips)*
-330. `loading_tips:copper_bulbs_dont_give_off_light_when_fully` Copper Bulbs don't give off light when fully oxidized. *(removed by creative_tips:tips)*
-331. `loading_tips:wax_your_copper_bulbs_to_lock_in_their_specific` Wax your Copper Bulbs to lock in their specific light level. *(removed by creative_tips:tips)*
-332. `loading_tips:the_crafter_can_be_automated_with_hoppers_for` The Crafter can be automated with Hoppers for infinite crafting. *(removed by creative_tips:tips)*
-333. `loading_tips:use_redstone_comparators_to_read_how_many_slots` Use Redstone Comparators to read how many slots are filled in a Crafter. *(removed by creative_tips:tips)*
-334. `loading_tips:chiseled_tuff_and_polished_tuff_are_great_new` Chiseled Tuff and Polished Tuff are great new building blocks. *(removed by creative_tips:tips)*
-335. `loading_tips:trial_chambers_contain_hidden_chests_behind_some` Trial Chambers contain hidden chests behind some decorative walls. *(removed by creative_tips:tips)*
-336. `loading_tips:flow_armor_trims_are_found_only_in_trial_chamber` Flow Armor Trims are found only in Trial Chamber Vaults. *(removed by creative_tips:tips)*
-337. `loading_tips:the_bolt_armor_trim_has_a_unique_mechanical_look` The Bolt Armor Trim has a unique mechanical look. *(removed by creative_tips:tips)*
-338. `loading_tips:guster_pottery_sherds_feature_the_breezes_iconic` Guster Pottery Sherds feature the Breeze's iconic swirl. *(removed by creative_tips:tips)*
-339. `loading_tips:trial_spawners_have_a_30_minute_cooldown_after` Trial Spawners have a 30-minute cooldown after being defeated. *(removed by creative_tips:tips)*
-340. `loading_tips:ominous_spawners_fire_projectiles_like_potions` Ominous Spawners fire projectiles like Potions and Fire Charges at you. *(removed by creative_tips:tips)*
-341. `loading_tips:silverfish_spawners_in_trial_chambers_can` Silverfish Spawners in Trial Chambers can quickly overwhelm you. *(removed by creative_tips:tips)*
-342. `loading_tips:sniffers_find_ancient_seeds_by_sniffing_the` Sniffers find ancient seeds by sniffing the ground. *(removed by creative_tips:tips)*
-343. `loading_tips:torchflower_seeds_can_be_used_to_breed_sniffers` Torchflower seeds can be used to breed Sniffers. *(removed by creative_tips:tips)*
-344. `loading_tips:pitcher_plants_are_tall_ancient_decorative` Pitcher Plants are tall, ancient decorative flowers. *(removed by creative_tips:tips)*
-345. `loading_tips:camel_saddles_allow_two_players_to_ride_at_once` Camel saddles allow two players to ride at once. *(removed by creative_tips:tips)*
-346. `loading_tips:camels_can_dash_across_large_gaps_to_escape_mobs` Camels can dash across large gaps to escape mobs. *(removed by creative_tips:tips)*
-347. `loading_tips:zombies_cant_reach_you_while_you_are_riding_a` Zombies can't reach you while you are riding a Camel. *(removed by creative_tips:tips)*
-348. `loading_tips:suspicious_sand_in_desert_temples_contains_rare` Suspicious Sand in Desert Temples contains rare Pottery Sherds. *(removed by creative_tips:tips)*
-349. `loading_tips:suspicious_gravel_is_often_found_in_trail_ruins` Suspicious Gravel is often found in Trail Ruins. *(removed by creative_tips:tips)*
-350. `loading_tips:trail_ruins_are_mostly_buried_youll_need_to_dig` Trail Ruins are mostly buried; you'll need to dig them out! *(removed by creative_tips:tips)*
-351. `loading_tips:brush_suspicious_blocks_carefully_or_they_will` Brush suspicious blocks carefully or they will break. *(removed by creative_tips:tips)*
-352. `loading_tips:the_recovery_compass_points_to_where_you_last` The Recovery Compass points to where you last died. *(replaced by creative_tips:tips)*
-353. `loading_tips:echo_shards_are_needed_to_craft_a_recovery` Echo Shards are needed to craft a Recovery Compass. *(removed by creative_tips:tips)*
-354. `loading_tips:ancient_cities_are_the_only_place_to_find_swift` Ancient Cities are the only place to find Swift Sneak books. *(replaced by creative_tips:tips)*
-355. `loading_tips:swift_sneak_allows_you_to_walk_faster_while` Swift Sneak allows you to walk faster while crouching. *(removed by creative_tips:tips)*
-356. `loading_tips:the_warden_is_completely_blind_but_has` The Warden is completely blind but has incredible hearing. *(replaced by creative_tips:tips)*
-357. `loading_tips:throw_projectiles_to_distract_the_warden_away` Throw projectiles to distract the Warden away from you. *(removed by creative_tips:tips)*
-358. `loading_tips:sculk_sensors_can_be_waterlogged_to_make_them` Sculk Sensors can be waterlogged to make them silent. *(removed by creative_tips:tips)*
-359. `loading_tips:wool_blocks_dampen_vibrations_making_you` Wool blocks dampen vibrations, making you invisible to Sculk. *(replaced by creative_tips:tips)*
-360. `loading_tips:amethyst_resonators_can_pass_redstone_signals` Amethyst Resonators can pass Redstone signals wirelessly. *(removed by creative_tips:tips)*
-361. `loading_tips:allay_mobs_will_collect_items_for_you_if_you` Allay mobs will collect items for you if you give them one. *(replaced by creative_tips:tips)*
-362. `loading_tips:play_a_jukebox_near_an_allay_to_make_it_dance` Play a Jukebox near an Allay to make it dance! *(removed by creative_tips:tips)*
-363. `loading_tips:give_a_dancing_allay_an_amethyst_shard_to` Give a dancing Allay an Amethyst Shard to duplicate it. *(removed by creative_tips:tips)*
-364. `loading_tips:mangrove_swamps_are_home_to_mud_blocks_and_frogs` Mangrove Swamps are home to Mud blocks and Frogs. *(removed by creative_tips:tips)*
-365. `loading_tips:frogs_produce_froglight_when_they_eat_small` Frogs produce Froglight when they eat small Magma Cubes. *(removed by creative_tips:tips)*
-366. `loading_tips:different_frog_colors_produce_different_colors` Different Frog colors produce different colors of Froglight. *(removed by creative_tips:tips)*
-367. `loading_tips:tadpoles_grow_into_different_frogs_depending_on` Tadpoles grow into different Frogs depending on the biome. *(removed by creative_tips:tips)*
-368. `loading_tips:goat_horns_are_dropped_when_a_goat_rams_a_hard` Goat Horns are dropped when a Goat rams a hard block. *(removed by creative_tips:tips)*
-369. `loading_tips:copper_horns_were_a_prototype_but_goat_horns_are` Copper Horns were a prototype, but Goat Horns are the real deal! *(removed by creative_tips:tips)*
-370. `loading_tips:glow_ink_sacs_make_sign_text_glow_in_the_dark` Glow Ink Sacs make sign text glow in the dark. *(replaced by creative_tips:tips)*
-371. `loading_tips:use_a_glow_ink_sac_on_an_item_frame_to_make_it` Use a Glow Ink Sac on an Item Frame to make it shine. *(removed by creative_tips:tips)*
-372. `loading_tips:firework_rockets_with_stars_deal_blast_damage` Firework rockets with stars deal blast damage when fired from Crossbows. *(replaced by creative_tips:tips)*
-373. `loading_tips:piercing_crossbows_allow_one_arrow_to_hit` Piercing Crossbows allow one arrow to hit multiple enemies. *(removed by creative_tips:tips)*
-374. `loading_tips:multishot_crossbows_fire_three_arrows_for_the` Multishot Crossbows fire three arrows for the price of one. *(replaced by creative_tips:tips)*
-375. `loading_tips:quick_charge_reduces_the_reload_time_of_your` Quick Charge reduces the reload time of your Crossbow. *(removed by creative_tips:tips)*
-376. `loading_tips:shields_can_block_creeper_explosions_if_you_are` Shields can block Creeper explosions if you are facing them. *(removed by creative_tips:tips)*
-377. `loading_tips:sweeping_edge_increases_the_damage_of_your` Sweeping Edge increases the damage of your sword's sweep attack. *(replaced by creative_tips:tips)*
-378. `loading_tips:knockback_is_great_for_keeping_creepers_at_a` Knockback is great for keeping Creepers at a distance. *(replaced by creative_tips:tips)*
-379. `loading_tips:smite_deals_massive_damage_to_undead_mobs_like` Smite deals massive damage to Undead mobs like Withers. *(replaced by creative_tips:tips)*
-380. `loading_tips:bane_of_arthropods_makes_spiders_much_easier_to` Bane of Arthropods makes Spiders much easier to deal with. *(removed by creative_tips:tips)*
-381. `loading_tips:fire_aspect_is_great_for_combat_but_careful_with` Fire Aspect is great for combat, but careful with Endermen! *(removed by creative_tips:tips)*
-382. `loading_tips:looting_iii_increases_the_chance_of_rare_drops` Looting III increases the chance of rare drops like mob heads. *(removed by creative_tips:tips)*
-383. `loading_tips:impaling_tridents_deal_extra_damage_to_all` Impaling Tridents deal extra damage to all aquatic mobs. *(replaced by creative_tips:tips)*
-384. `loading_tips:loyalty_tridents_fly_back_to_your_hand_after` Loyalty Tridents fly back to your hand after being thrown. *(replaced by creative_tips:tips)*
-385. `loading_tips:channeling_tridents_summon_lightning_during` Channeling Tridents summon lightning during thunderstorms. *(removed by creative_tips:tips)*
-386. `loading_tips:riptide_tridents_allow_you_to_fly_through_rain` Riptide Tridents allow you to fly through rain and water. *(removed by creative_tips:tips)*
-387. `loading_tips:punch_bows_increase_the_knockback_of_your_arrows` Punch Bows increase the knockback of your arrows. *(removed by creative_tips:tips)*
-388. `loading_tips:flame_bows_ignite_enemies_and_can_light_tnt_from` Flame Bows ignite enemies and can light TNT from afar. *(removed by creative_tips:tips)*
-389. `loading_tips:infinity_bows_never_run_out_of_arrows_as_long_as` Infinity Bows never run out of arrows, as long as you have one. *(replaced by creative_tips:tips)*
-390. `loading_tips:power_v_bows_can_one_shot_most_common_mobs` Power V Bows can one-shot most common mobs. *(removed by creative_tips:tips)*
-391. `loading_tips:tipped_arrows_can_apply_potion_effects_from_a` Tipped arrows can apply Potion effects from a distance. *(replaced by creative_tips:tips)*
-392. `loading_tips:observers_detect_block_updates_in_front_of_them` Observers detect block updates in front of them. *(replaced by creative_tips:tips)*
-393. `loading_tips:target_blocks_give_a_stronger_redstone_signal_if` Target blocks give a stronger Redstone signal if hit in the center. *(replaced by creative_tips:tips)*
-394. `loading_tips:note_blocks_play_different_sounds_depending_on` Note Blocks play different sounds depending on the block below. *(replaced by creative_tips:tips)*
-395. `loading_tips:daylight_sensors_can_be_inverted_to_turn_on` Daylight Sensors can be inverted to turn on lights at night. *(removed by creative_tips:tips)*
-396. `loading_tips:trapped_chests_give_off_a_redstone_signal_when` Trapped Chests give off a Redstone signal when opened. *(replaced by creative_tips:tips)*
-397. `loading_tips:lecterns_send_a_signal_when_a_page_is_turned` Lecterns send a signal when a page is turned. *(removed by creative_tips:tips)*
-398. `loading_tips:redstone_repeaters_can_delay_signals_up_to_0_4` Redstone Repeaters can delay signals up to 0.4 seconds. *(replaced by creative_tips:tips)*
-399. `loading_tips:redstone_comparators_can_subtract_signal` Redstone Comparators can subtract signal strengths. *(removed by creative_tips:tips)*
-400. `loading_tips:hoppers_can_be_disabled_by_a_redstone_signal` Hoppers can be disabled by a Redstone signal. *(removed by creative_tips:tips)*
-401. `loading_tips:droppers_move_items_while_dispensers_use_them` Droppers move items, while Dispensers use them. *(replaced by creative_tips:tips)*
-402. `loading_tips:dispensers_can_equip_armor_onto_players_and` Dispensers can equip armor onto players and armor stands. *(replaced by creative_tips:tips)*
-403. `loading_tips:dispensers_can_shear_sheep_and_carve_pumpkins` Dispensers can shear sheep and carve pumpkins automatically. *(removed by creative_tips:tips)*
-404. `loading_tips:tnt_minecarts_explode_instantly_if_they_hit_a` TNT Minecarts explode instantly if they hit a wall at speed. *(removed by creative_tips:tips)*
-405. `loading_tips:powered_rails_can_be_used_to_launch_minecarts_up` Powered Rails can be used to launch Minecarts up slopes. *(replaced by creative_tips:tips)*
-406. `loading_tips:detector_rails_send_a_signal_when_a_minecart` Detector Rails send a signal when a Minecart passes over. *(removed by creative_tips:tips)*
-407. `loading_tips:activator_rails_can_eject_players_from_minecarts` Activator Rails can eject players from Minecarts. *(removed by creative_tips:tips)*
-408. `loading_tips:redstone_dust_can_travel_up_transparent_blocks` Redstone Dust can travel up transparent blocks like Glass. *(replaced by creative_tips:tips)*
-409. `loading_tips:sticky_pistons_can_pull_other_pistons_to_create` Sticky Pistons can pull other Pistons to create complex doors. *(removed by creative_tips:tips)*
-410. `loading_tips:slime_blocks_bounce_entities_high_into_the_air` Slime blocks bounce entities high into the air. *(replaced by creative_tips:tips)*
-411. `loading_tips:honey_blocks_prevent_jumping_but_allow_you_to` Honey blocks prevent jumping but allow you to slide down walls. *(removed by creative_tips:tips)*
-412. `loading_tips:sweet_berry_bushes_slow_you_down_and_deal_damage` Sweet Berry bushes slow you down and deal damage. *(replaced by creative_tips:tips)*
-413. `loading_tips:foxes_will_pick_up_and_use_any_item_you_drop` Foxes will pick up and use any item you drop. *(replaced by creative_tips:tips)*
-414. `loading_tips:a_fox_holding_a_fire_aspect_sword_can_set_you_on` A Fox holding a Fire Aspect sword can set you on fire! *(removed by creative_tips:tips)*
-415. `loading_tips:polar_bears_are_peaceful_unless_you_get_near` Polar Bears are peaceful unless you get near their cubs. *(replaced by creative_tips:tips)*
-416. `loading_tips:pandas_have_different_personalities_based_on` Pandas have different personalities based on their genes. *(replaced by creative_tips:tips)*
-417. `loading_tips:sneezing_baby_pandas_can_drop_slimeballs` Sneezing baby Pandas can drop Slimeballs. *(removed by creative_tips:tips)*
-418. `loading_tips:parrots_mimic_the_sounds_of_nearby_hostile_mobs` Parrots mimic the sounds of nearby hostile mobs. *(replaced by creative_tips:tips)*
-419. `loading_tips:dont_feed_chocolate_cookies_to_parrots_its` Don't feed chocolate cookies to Parrots; it's poisonous! *(removed by creative_tips:tips)*
-420. `loading_tips:ocelots_no_longer_turn_into_cats_they_are` Ocelots no longer turn into Cats; they are separate mobs. *(removed by creative_tips:tips)*
-421. `loading_tips:stray_cats_spawn_in_villages_and_can_bring_you` Stray Cats spawn in villages and can bring you gifts at night. *(removed by creative_tips:tips)*
-422. `loading_tips:villager_gossip_determines_the_price_of_their` Villager gossip determines the price of their trades. *(removed by creative_tips:tips)*
-423. `loading_tips:curing_a_zombie_villager_gives_you_massive_trade` Curing a Zombie Villager gives you massive trade discounts. *(replaced by creative_tips:tips)*
-424. `loading_tips:iron_golems_spawn_in_villages_to_protect_against` Iron Golems spawn in villages to protect against raids. *(replaced by creative_tips:tips)*
-425. `loading_tips:you_can_repair_an_iron_golem_with_iron_ingots` You can repair an Iron Golem with Iron Ingots. *(removed by creative_tips:tips)*
-426. `loading_tips:ravagers_are_afraid_of_rabbits_for_some_reason` Ravagers are afraid of Rabbits for some reason! *(removed by creative_tips:tips)*
-427. `loading_tips:vindicators_named_johnny_will_attack_every` Vindicators named 'Johnny' will attack every nearby mob. *(replaced by creative_tips:tips)*
-428. `loading_tips:evokers_turn_blue_sheep_into_red_sheep_with_a` Evokers turn blue sheep into red sheep with a 'Wololo'. *(removed by creative_tips:tips)*
-429. `loading_tips:totems_of_undying_must_be_held_to_save_you_from` Totems of Undying must be held to save you from death. *(replaced by creative_tips:tips)*
-430. `loading_tips:vexes_are_summoned_by_evokers_and_can_fly` Vexes are summoned by Evokers and can fly through walls. *(replaced by creative_tips:tips)*
-431. `loading_tips:phantoms_spawn_if_you_havent_slept_for_three` Phantoms spawn if you haven't slept for three days. *(replaced by creative_tips:tips)*
-432. `loading_tips:phantom_membranes_are_used_to_repair_elytra` Phantom Membranes are used to repair Elytra. *(removed by creative_tips:tips)*
-433. `loading_tips:slow_falling_potions_are_made_using_phantom` Slow Falling potions are made using Phantom Membranes. *(replaced by creative_tips:tips)*
-434. `loading_tips:drowned_mobs_can_spawn_with_tridents_and` Drowned mobs can spawn with Tridents and Nautilus Shells. *(replaced by creative_tips:tips)*
-435. `loading_tips:conduits_protect_you_underwater_and_kill_nearby` Conduits protect you underwater and kill nearby mobs. *(removed by creative_tips:tips)*
-436. `loading_tips:turtle_shells_give_you_extra_breath_time` Turtle shells give you extra breath time underwater. *(removed by creative_tips:tips)*
-437. `loading_tips:scutes_are_dropped_when_baby_turtles_grow_into` Scutes are dropped when baby Turtles grow into adults. *(replaced by creative_tips:tips)*
-438. `loading_tips:dolphins_will_lead_you_to_shipwrecks_if_you_feed` Dolphins will lead you to shipwrecks if you feed them fish. *(replaced by creative_tips:tips)*
-439. `loading_tips:magma_blocks_underwater_create_bubble_columns` Magma blocks underwater create bubble columns that pull you down. *(removed by creative_tips:tips)*
-440. `loading_tips:soul_sand_underwater_creates_bubble_columns_that` Soul Sand underwater creates bubble columns that push you up. *(replaced by creative_tips:tips)*
-441. `loading_tips:kelp_can_be_smelted_into_dried_kelp_for_a_quick` Kelp can be smelted into Dried Kelp for a quick snack. *(replaced by creative_tips:tips)*
-442. `loading_tips:dried_kelp_blocks_are_a_very_efficient_fuel_for` Dried Kelp blocks are a very efficient fuel for furnaces. *(removed by creative_tips:tips)*
-443. `loading_tips:sea_pickles_provide_light_when_placed_underwater` Sea Pickles provide light when placed underwater. *(replaced by creative_tips:tips)*
-444. `loading_tips:coral_fans_must_stay_in_water_or_they_will_turn` Coral fans must stay in water or they will turn gray. *(replaced by creative_tips:tips)*
-445. `loading_tips:tropical_fish_can_be_carried_in_buckets` Tropical Fish can be carried in buckets. *(replaced by creative_tips:tips)*
-446. `loading_tips:pufferfish_deal_poison_damage_if_you_touch_them` Pufferfish deal poison damage if you touch them. *(replaced by creative_tips:tips)*
-447. `loading_tips:axolotls_will_play_dead_to_regenerate_health` Axolotls will play dead to regenerate health. *(removed by creative_tips:tips)*
-448. `loading_tips:glow_squids_drop_glow_ink_sacs_for_glowing_signs` Glow Squids drop Glow Ink Sacs for glowing signs. *(removed by creative_tips:tips)*
-449. `loading_tips:lush_caves_are_filled_with_moss_glow_berries_and` Lush Caves are filled with Moss, Glow Berries, and Spore Blossoms. *(replaced by creative_tips:tips)*
-450. `loading_tips:dripstone_caves_contain_sharp_stalactites_that` Dripstone Caves contain sharp stalactites that can fall on you. *(removed by creative_tips:tips)*
-451. `loading_tips:pointed_dripstone_can_be_used_to_create_infinite` Pointed Dripstone can be used to create infinite lava or water. *(replaced by creative_tips:tips)*
-452. `loading_tips:azalea_trees_mark_the_location_of_a_lush_cave` Azalea trees mark the location of a Lush Cave below. *(replaced by creative_tips:tips)*
-453. `loading_tips:copper_blocks_turn_green_over_time_due_to` Copper blocks turn green over time due to oxidation. *(removed by creative_tips:tips)*
-454. `loading_tips:lightning_rods_protect_your_wooden_roofs_from` Lightning Rods protect your wooden roofs from fire. *(replaced by creative_tips:tips)*
-455. `loading_tips:spyglasses_are_crafted_from_amethyst_and_copper` Spyglasses are crafted from Amethyst and Copper. *(removed by creative_tips:tips)*
-456. `loading_tips:tinted_glass_blocks_light_but_is_still` Tinted Glass blocks light but is still transparent. *(replaced by creative_tips:tips)*
-457. `loading_tips:amethyst_geodes_are_found_deep_underground_in` Amethyst Geodes are found deep underground in the Overworld. *(replaced by creative_tips:tips)*
-458. `loading_tips:budding_amethyst_blocks_cannot_be_moved_even` Budding Amethyst blocks cannot be moved, even with Silk Touch. *(removed by creative_tips:tips)*
-459. `loading_tips:deepslate_is_tougher_than_stone_and_takes_longer` Deepslate is tougher than Stone and takes longer to mine. *(replaced by creative_tips:tips)*
-460. `loading_tips:raw_iron_copper_and_gold_can_be_smelted_faster` Raw Iron, Copper, and Gold can be smelted faster in a Blast Furnace! *(removed by creative_tips:tips)*
-461. `loading_tips:fortune_enchantment_works_on_raw_ore_blocks` Fortune enchantment works on Raw Ore blocks! *(removed by creative_tips:tips)*
-462. `loading_tips:end_crystal_beams_can_be_blocked_with_blocks_to` End Crystal beams can be blocked with blocks to stop the Dragon's heal. *(replaced by creative_tips:tips)*
-463. `loading_tips:the_dragon_breath_can_be_collected_in_glass` The Dragon Breath can be collected in glass bottles. *(replaced by creative_tips:tips)*
-464. `loading_tips:lingering_potions_are_made_using_dragon_breath` Lingering potions are made using Dragon Breath. *(replaced by creative_tips:tips)*
-465. `loading_tips:wither_skeletons_only_spawn_in_nether_fortresses` Wither Skeletons only spawn in Nether Fortresses. *(replaced by creative_tips:tips)*
-466. `loading_tips:wither_skulls_are_needed_to_summon_the_wither` Wither Skulls are needed to summon the Wither boss. *(replaced by creative_tips:tips)*
-467. `loading_tips:the_wither_is_much_harder_to_fight_on_bedrock` The Wither is much harder to fight on Bedrock Edition! *(removed by creative_tips:tips)*
-468. `loading_tips:beacons_provide_buffs_like_haste_and` Beacons provide buffs like Haste and Regeneration. *(removed by creative_tips:tips)*
-469. `loading_tips:netherite_armor_is_fireproof_and_wont_burn_in` Netherite armor is fireproof and won't burn in lava. *(replaced by creative_tips:tips)*
-470. `loading_tips:ancient_debris_is_most_common_at_y_level_15_in` Ancient Debris is most common at Y-level 15 in the Nether. *(replaced by creative_tips:tips)*
-471. `loading_tips:lodestones_allow_compasses_to_point_to_a` Lodestones allow Compasses to point to a specific block. *(replaced by creative_tips:tips)*
-472. `loading_tips:striders_can_walk_on_lava_and_be_ridden_with_a` Striders can walk on lava and be ridden with a saddle. *(removed by creative_tips:tips)*
-473. `loading_tips:warped_fungus_on_a_stick_is_used_to_control` Warped Fungus on a Stick is used to control Striders. *(removed by creative_tips:tips)*
-474. `loading_tips:hoglins_are_afraid_of_warped_fungus_even_in` Hoglins are afraid of Warped Fungus, even in flower pots! *(removed by creative_tips:tips)*
-475. `loading_tips:piglins_love_gold_and_will_barter_with_you_for` Piglins love Gold and will barter with you for it. *(replaced by creative_tips:tips)*
-476. `loading_tips:wear_gold_armor_to_stop_piglins_from_attacking` Wear Gold armor to stop Piglins from attacking you. *(replaced by creative_tips:tips)*
-477. `loading_tips:piglin_brutes_protect_bastions_and_cannot_be` Piglin Brutes protect Bastions and cannot be distracted by Gold. *(replaced by creative_tips:tips)*
-478. `loading_tips:zombified_piglins_are_neutral_until_you_attack` Zombified Piglins are neutral until you attack them. *(replaced by creative_tips:tips)*
-479. `loading_tips:ghast_tears_are_used_to_brew_regeneration` Ghast tears are used to brew Regeneration potions. *(replaced by creative_tips:tips)*
-480. `loading_tips:blaze_rods_are_the_best_fuel_for_brewing_stands` Blaze rods are the best fuel for brewing stands. *(removed by creative_tips:tips)*
-481. `loading_tips:magma_cream_is_used_for_fire_resistance_potions` Magma cream is used for Fire Resistance potions. *(replaced by creative_tips:tips)*
-482. `loading_tips:soul_speed_enchantment_makes_you_run_faster_on` Soul Speed enchantment makes you run faster on Soul Sand. *(removed by creative_tips:tips)*
-483. `loading_tips:netherite_scrap_is_made_by_smelting_ancient` Netherite scrap is made by smelting Ancient Debris. *(removed by creative_tips:tips)*
-484. `loading_tips:smithing_templates_are_required_to_upgrade_to` Smithing Templates are required to upgrade to Netherite armor. *(removed by creative_tips:tips)*
-485. `loading_tips:bastions_are_the_best_place_to_find_pigstep` Bastions are the best place to find Pigstep music discs. *(removed by creative_tips:tips)*
-486. `loading_tips:ruined_portals_appear_in_both_the_overworld_and` Ruined Portals appear in both the Overworld and the Nether. *(replaced by creative_tips:tips)*
-487. `loading_tips:crying_obsidian_can_be_used_to_craft_respawn` Crying Obsidian can be used to craft Respawn Anchors. *(removed by creative_tips:tips)*
-488. `loading_tips:respawn_anchors_allow_you_to_set_your_spawn_in` Respawn Anchors allow you to set your spawn in the Nether. *(replaced by creative_tips:tips)*
-489. `loading_tips:dont_use_a_respawn_anchor_in_the_overworld_it` Don't use a Respawn Anchor in the Overworld; it will explode! *(removed by creative_tips:tips)*
-490. `loading_tips:blackstone_can_be_used_as_a_substitute_for` Blackstone can be used as a substitute for Cobblestone. *(replaced by creative_tips:tips)*
-491. `loading_tips:gilded_blackstone_has_a_chance_to_drop_gold` Gilded Blackstone has a chance to drop Gold nuggets. *(removed by creative_tips:tips)*
-492. `loading_tips:basalt_deltas_are_home_to_magma_cubes_and_ash` Basalt Deltas are home to Magma Cubes and ash particles. *(replaced by creative_tips:tips)*
-493. `loading_tips:blue_ice_is_the_fastest_surface_for_boat_travel` Blue Ice is the fastest surface for boat travel. *(removed by creative_tips:tips)*
-494. `loading_tips:packed_ice_doesnt_melt_even_near_light_sources` Packed Ice doesn't melt, even near light sources. *(removed by creative_tips:tips)*
-495. `loading_tips:snow_golems_wear_pumpkins_that_can_be_sheared` Snow Golems wear pumpkins that can be sheared off. *(removed by creative_tips:tips)*
-496. `loading_tips:leads_can_be_used_to_tie_mobs_to_fences` Leads can be used to tie mobs to fences. *(removed by creative_tips:tips)*
-497. `loading_tips:armor_trims_allow_you_to_customize_the_look_of` Armor Trims allow you to customize the look of your gear. *(removed by creative_tips:tips)*
-498. `loading_tips:netherite_templates_are_consumed_upon_use_make` Netherite templates are consumed upon use; make copies! *(removed by creative_tips:tips)*
-499. `loading_tips:the_silence_armor_trim_is_the_rarest_trim_in_the` The Silence Armor Trim is the rarest trim in the game. *(removed by creative_tips:tips)*
-500. `loading_tips:trial_chambers_are_the_ultimate_test_of_your` Trial Chambers are the ultimate test of your combat skills. *(removed by creative_tips:tips)*
-501. `loading_tips:you_are_now_a_minecraft_master_good_luck` You are now a Minecraft Master. Good luck! *(removed by creative_tips:tips)*
-502. `loading_tips:holding_f3_c_for_10_seconds_intentionally` Holding F3+C for 10 seconds intentionally crashes the game for debugging purposes! *(removed by creative_tips:tips)*
-503. `loading_tips:bamboo_is_the_least_efficient_fuel_smelting_only` Bamboo is the least efficient fuel, smelting only 0.25 items each! *(removed by creative_tips:tips)*
+237. `loading_tips:daylight_detectors_activate_when_exposed_to` Daylight Detectors activate when exposed to sunlight! *(replaced by creativetips:tips)*
+238. `loading_tips:glass_bottles_collect_dragon_breath` Glass bottles collect dragon breath. *(removed by creativetips:tips)*
+239. `loading_tips:dragon_breath_crafts_lingering_potions` Dragon breath crafts lingering potions. *(removed by creativetips:tips)*
+240. `loading_tips:arrows_fly_further_if_you_jump_shot` Arrows fly further if you jump-shot. *(removed by creativetips:tips)*
+241. `loading_tips:sweet_berry_bushes_damage_mobs` Sweet berry bushes damage mobs. *(removed by creativetips:tips)*
+242. `loading_tips:cactus_blocks_destroy_items` Cactus blocks destroy items. *(replaced by creativetips:tips)*
+243. `loading_tips:sand_falls_if_there_is_no_block_below` Sand falls if there is no block below. *(replaced by creativetips:tips)*
+244. `loading_tips:gravel_falls_if_there_is_no_block_below` Gravel falls if there is no block below. *(removed by creativetips:tips)*
+245. `loading_tips:concrete_is_made_by_wetting_powder` Concrete is made by wetting powder. *(replaced by creativetips:tips)*
+246. `loading_tips:wool_muffles_the_sound_of_footsteps` Wool muffles the sound of footsteps. *(removed by creativetips:tips)*
+247. `loading_tips:carpet_can_be_placed_over_string` Carpet can be placed over string. *(removed by creativetips:tips)*
+248. `loading_tips:item_frames_can_be_placed_on_floors` Item frames can be placed on floors. *(replaced by creativetips:tips)*
+249. `loading_tips:glow_ink_sacs_make_signs_glow` Glow ink sacs make signs glow. *(removed by creativetips:tips)*
+250. `loading_tips:regular_ink_sacs_clear_sign_glow` Regular ink sacs clear sign glow. *(removed by creativetips:tips)*
+251. `loading_tips:honey_bottles_remove_poison` Honey bottles remove poison. *(replaced by creativetips:tips)*
+252. `loading_tips:sugar_speeds_up_baby_horses` Sugar speeds up baby horses. *(replaced by creativetips:tips)*
+253. `loading_tips:wheat_heals_injured_cows` Wheat heals injured cows. *(removed by creativetips:tips)*
+254. `loading_tips:seeds_heal_injured_chickens` Seeds heal injured chickens. *(removed by creativetips:tips)*
+255. `loading_tips:raw_fish_heals_injured_cats` Raw fish heals injured cats. *(replaced by creativetips:tips)*
+256. `loading_tips:rotten_flesh_heals_injured_wolves` Rotten flesh heals injured wolves. *(removed by creativetips:tips)*
+257. `loading_tips:zombies_can_break_wooden_doors` Zombies can break wooden doors. *(replaced by creativetips:tips)*
+258. `loading_tips:skeleton_horses_spawn_during_storms` Skeleton horses spawn during storms. *(replaced by creativetips:tips)*
+259. `loading_tips:trident_drowned_only_spawn_in_oceans` Trident drowned only spawn in oceans. *(removed by creativetips:tips)*
+260. `loading_tips:slimes_only_spawn_in_certain_chunks` Slimes only spawn in certain chunks. *(replaced by creativetips:tips)*
+261. `loading_tips:witches_use_potions_to_heal` Witches use potions to heal. *(replaced by creativetips:tips)*
+262. `loading_tips:vexes_are_summoned_by_evokers` Vexes are summoned by Evokers. *(removed by creativetips:tips)*
+263. `loading_tips:illusioners_are_hidden_in_the_code` Illusioners are hidden in the code. *(removed by creativetips:tips)*
+264. `loading_tips:the_warden_reacts_to_vibrations` The Warden reacts to vibrations. *(removed by creativetips:tips)*
+265. `loading_tips:sneaking_hides_you_from_the_warden` Sneaking hides you from the Warden. *(removed by creativetips:tips)*
+266. `loading_tips:wool_blocks_block_warden_vibrations` Wool blocks block Warden vibrations. *(removed by creativetips:tips)*
+267. `loading_tips:echo_shards_craft_recovery_compasses` Echo shards craft recovery compasses. *(removed by creativetips:tips)*
+268. `loading_tips:swift_sneak_is_found_in_ancient_cities` Swift Sneak is found in Ancient Cities. *(removed by creativetips:tips)*
+269. `loading_tips:silence_armor_trim_is_the_rarest` Silence Armor Trim is the rarest. *(removed by creativetips:tips)*
+270. `loading_tips:spore_blossoms_create_green_particles` Spore blossoms create green particles. *(removed by creativetips:tips)*
+271. `loading_tips:big_dripleaves_collapse_under_weight` Big dripleaves collapse under weight. *(replaced by creativetips:tips)*
+272. `loading_tips:small_dripleaves_need_bone_meal` Small dripleaves need bone meal. *(removed by creativetips:tips)*
+273. `loading_tips:azalea_trees_mark_lush_caves` Azalea trees mark lush caves. *(removed by creativetips:tips)*
+274. `loading_tips:glow_berries_provide_light_and_food` Glow berries provide light and food. *(replaced by creativetips:tips)*
+275. `loading_tips:spies_can_see_through_tinted_glass` Spies can see through tinted glass. *(removed by creativetips:tips)*
+276. `loading_tips:tinted_glass_blocks_light_completely` Tinted glass blocks light completely. *(removed by creativetips:tips)*
+277. `loading_tips:amethyst_clusters_drop_four_shards` Amethyst clusters drop four shards. *(removed by creativetips:tips)*
+278. `loading_tips:calibrated_sculks_sense_specific_sounds` Calibrated sculks sense specific sounds. *(removed by creativetips:tips)*
+279. `loading_tips:sculk_shriekers_summon_the_warden` Sculk shriekers summon the Warden. *(removed by creativetips:tips)*
+280. `loading_tips:sculk_catalysts_create_sculk_blocks` Sculk catalysts create sculk blocks. *(replaced by creativetips:tips)*
+281. `loading_tips:bells_can_be_rung_with_arrows` Bells can be rung with arrows. *(removed by creativetips:tips)*
+282. `loading_tips:soul_torches_give_off_low_light` Soul torches give off low light. *(replaced by creativetips:tips)*
+283. `loading_tips:crying_obsidian_sets_spawn_in_nether` Crying obsidian sets spawn in Nether. *(removed by creativetips:tips)*
+284. `loading_tips:respawn_anchors_need_glowstone` Respawn anchors need glowstone. *(removed by creativetips:tips)*
+285. `loading_tips:nether_gold_ore_drops_nuggets` Nether gold ore drops nuggets. *(replaced by creativetips:tips)*
+286. `loading_tips:gilded_blackstone_drops_gold_nuggets` Gilded blackstone drops gold nuggets. *(removed by creativetips:tips)*
+287. `loading_tips:nether_sprouts_are_just_for_looks` Nether sprouts are just for looks. *(removed by creativetips:tips)*
+288. `loading_tips:crimson_fungus_breeds_hoglins` Crimson fungus breeds Hoglins. *(removed by creativetips:tips)*
+289. `loading_tips:warped_fungus_breeds_nothing` Warped fungus breeds nothing. *(removed by creativetips:tips)*
+290. `loading_tips:twisting_vines_grow_upward` Twisting vines grow upward. *(replaced by creativetips:tips)*
+291. `loading_tips:weeping_vines_grow_downward` Weeping vines grow downward. *(removed by creativetips:tips)*
+292. `loading_tips:basalt_forms_from_blue_ice_and_lava` Basalt forms from blue ice and lava. *(replaced by creativetips:tips)*
+293. `loading_tips:cobblestone_forms_from_water_and_lava` Cobblestone forms from water and lava. *(replaced by creativetips:tips)*
+294. `loading_tips:obsidian_forms_when_water_hits_source_lava` Obsidian forms when water hits source lava. *(replaced by creativetips:tips)*
+295. `loading_tips:crying_obsidian_cannot_be_moved_by_pistons` Crying obsidian cannot be moved by pistons. *(replaced by creativetips:tips)*
+296. `loading_tips:bedrock_is_unbreakable_in_survival` Bedrock is unbreakable in survival. *(removed by creativetips:tips)*
+297. `loading_tips:end_portal_frames_are_unbreakable` End portal frames are unbreakable. *(removed by creativetips:tips)*
+298. `loading_tips:silverfish_hide_inside_stone_bricks` Silverfish hide inside stone bricks. *(removed by creativetips:tips)*
+299. `loading_tips:strongholds_have_libraries_full_of_books` Strongholds have libraries full of books. *(replaced by creativetips:tips)*
+300. `loading_tips:eyes_of_ender_lead_to_the_portal` Eyes of Ender lead to the portal. *(replaced by creativetips:tips)*
+301. `loading_tips:shulkers_fire_levitation_bullets` Shulkers fire levitation bullets. *(replaced by creativetips:tips)*
+302. `loading_tips:end_ships_hold_the_elytra` End ships hold the Elytra. *(replaced by creativetips:tips)*
+303. `loading_tips:dragon_eggs_are_unique_trophies` Dragon eggs are unique trophies. *(removed by creativetips:tips)*
+304. `loading_tips:beacons_can_be_colored_with_glass` Beacons can be colored with glass. *(removed by creativetips:tips)*
+305. `loading_tips:armor_stands_can_hold_any_item` Armor stands can hold any item. *(replaced by creativetips:tips)*
+306. `loading_tips:pistons_can_push_up_to_12_blocks` Pistons can push up to 12 blocks. *(replaced by creativetips:tips)*
+307. `loading_tips:sticky_pistons_pull_blocks_back` Sticky pistons pull blocks back. *(removed by creativetips:tips)*
+308. `loading_tips:slime_and_honey_dont_stick_together` Slime and Honey don't stick together. *(removed by creativetips:tips)*
+309. `loading_tips:redstone_torches_invert_signals` Redstone torches invert signals. *(replaced by creativetips:tips)*
+310. `loading_tips:tnt_can_be_lit_with_fire_charges` TNT can be lit with fire charges. *(replaced by creativetips:tips)*
+311. `loading_tips:hardcore_mode_means_one_life_only` Hardcore mode means one life only. *(removed by creativetips:tips)*
+312. `loading_tips:the_mace_deals_more_damage_the_further_you_fall` The Mace deals more damage the further you fall before hitting! *(removed by creativetips:tips)*
+313. `loading_tips:wind_burst_enchantment_on_a_mace_can_launch_you` Wind Burst enchantment on a Mace can launch you back into the air. *(removed by creativetips:tips)*
+314. `loading_tips:the_breach_enchantment_reduces_the_effectiveness` The Breach enchantment reduces the effectiveness of enemy armor. *(removed by creativetips:tips)*
+315. `loading_tips:density_enchantment_increases_the_damage_dealt` Density enchantment increases the damage dealt per block fallen. *(removed by creativetips:tips)*
+316. `loading_tips:mace_smash_attacks_negate_all_fall_damage_if_you` Mace smash attacks negate all fall damage if you land the hit! *(removed by creativetips:tips)*
+317. `loading_tips:combine_a_breeze_rod_and_a_heavy_core_to_craft` Combine a Breeze Rod and a Heavy Core to craft the Mace. *(removed by creativetips:tips)*
+318. `loading_tips:heavy_cores_are_found_rarely_within_ominous` Heavy Cores are found rarely within Ominous Vaults. *(removed by creativetips:tips)*
+319. `loading_tips:ominous_trials_are_started_by_drinking_a_trial` Ominous Trials are started by drinking a Trial Omen bottle. *(removed by creativetips:tips)*
+320. `loading_tips:trial_omens_are_gained_by_defeating_raid` Trial Omens are gained by defeating Raid Captains outside of raids. *(removed by creativetips:tips)*
+321. `loading_tips:the_breeze_can_reflect_projectiles_back_at_you` The Breeze can reflect projectiles back at you with its wind. *(removed by creativetips:tips)*
+322. `loading_tips:breeze_rods_are_essential_for_crafting_the_new` Breeze Rods are essential for crafting the new Wind Charges. *(removed by creativetips:tips)*
+323. `loading_tips:wind_charges_allow_you_to_rocket_jump_like_a` Wind Charges allow you to 'rocket jump' like a Breeze! *(removed by creativetips:tips)*
+324. `loading_tips:vaults_in_trial_chambers_can_be_looted_by_every` Vaults in Trial Chambers can be looted by every player once. *(removed by creativetips:tips)*
+325. `loading_tips:ominous_vaults_have_better_loot_but_require` Ominous Vaults have better loot but require Ominous Trial Keys. *(removed by creativetips:tips)*
+326. `loading_tips:trial_spawners_adjust_their_difficulty_based_on` Trial Spawners adjust their difficulty based on how many players are nearby. *(removed by creativetips:tips)*
+327. `loading_tips:trial_spawners_eject_rewards_like_trial_keys` Trial Spawners eject rewards like Trial Keys after all mobs are defeated. *(removed by creativetips:tips)*
+328. `loading_tips:the_bogged_skeleton_variant_spawns_in_swamps_and` The Bogged skeleton variant spawns in Swamps and Trial Chambers. *(removed by creativetips:tips)*
+329. `loading_tips:you_can_shear_a_bogged_to_get_mushrooms_from_its` You can shear a Bogged to get mushrooms from its head! *(removed by creativetips:tips)*
+330. `loading_tips:copper_bulbs_dont_give_off_light_when_fully` Copper Bulbs don't give off light when fully oxidized. *(removed by creativetips:tips)*
+331. `loading_tips:wax_your_copper_bulbs_to_lock_in_their_specific` Wax your Copper Bulbs to lock in their specific light level. *(removed by creativetips:tips)*
+332. `loading_tips:the_crafter_can_be_automated_with_hoppers_for` The Crafter can be automated with Hoppers for infinite crafting. *(removed by creativetips:tips)*
+333. `loading_tips:use_redstone_comparators_to_read_how_many_slots` Use Redstone Comparators to read how many slots are filled in a Crafter. *(removed by creativetips:tips)*
+334. `loading_tips:chiseled_tuff_and_polished_tuff_are_great_new` Chiseled Tuff and Polished Tuff are great new building blocks. *(removed by creativetips:tips)*
+335. `loading_tips:trial_chambers_contain_hidden_chests_behind_some` Trial Chambers contain hidden chests behind some decorative walls. *(removed by creativetips:tips)*
+336. `loading_tips:flow_armor_trims_are_found_only_in_trial_chamber` Flow Armor Trims are found only in Trial Chamber Vaults. *(removed by creativetips:tips)*
+337. `loading_tips:the_bolt_armor_trim_has_a_unique_mechanical_look` The Bolt Armor Trim has a unique mechanical look. *(removed by creativetips:tips)*
+338. `loading_tips:guster_pottery_sherds_feature_the_breezes_iconic` Guster Pottery Sherds feature the Breeze's iconic swirl. *(removed by creativetips:tips)*
+339. `loading_tips:trial_spawners_have_a_30_minute_cooldown_after` Trial Spawners have a 30-minute cooldown after being defeated. *(removed by creativetips:tips)*
+340. `loading_tips:ominous_spawners_fire_projectiles_like_potions` Ominous Spawners fire projectiles like Potions and Fire Charges at you. *(removed by creativetips:tips)*
+341. `loading_tips:silverfish_spawners_in_trial_chambers_can` Silverfish Spawners in Trial Chambers can quickly overwhelm you. *(removed by creativetips:tips)*
+342. `loading_tips:sniffers_find_ancient_seeds_by_sniffing_the` Sniffers find ancient seeds by sniffing the ground. *(removed by creativetips:tips)*
+343. `loading_tips:torchflower_seeds_can_be_used_to_breed_sniffers` Torchflower seeds can be used to breed Sniffers. *(removed by creativetips:tips)*
+344. `loading_tips:pitcher_plants_are_tall_ancient_decorative` Pitcher Plants are tall, ancient decorative flowers. *(removed by creativetips:tips)*
+345. `loading_tips:camel_saddles_allow_two_players_to_ride_at_once` Camel saddles allow two players to ride at once. *(removed by creativetips:tips)*
+346. `loading_tips:camels_can_dash_across_large_gaps_to_escape_mobs` Camels can dash across large gaps to escape mobs. *(removed by creativetips:tips)*
+347. `loading_tips:zombies_cant_reach_you_while_you_are_riding_a` Zombies can't reach you while you are riding a Camel. *(removed by creativetips:tips)*
+348. `loading_tips:suspicious_sand_in_desert_temples_contains_rare` Suspicious Sand in Desert Temples contains rare Pottery Sherds. *(removed by creativetips:tips)*
+349. `loading_tips:suspicious_gravel_is_often_found_in_trail_ruins` Suspicious Gravel is often found in Trail Ruins. *(removed by creativetips:tips)*
+350. `loading_tips:trail_ruins_are_mostly_buried_youll_need_to_dig` Trail Ruins are mostly buried; you'll need to dig them out! *(removed by creativetips:tips)*
+351. `loading_tips:brush_suspicious_blocks_carefully_or_they_will` Brush suspicious blocks carefully or they will break. *(removed by creativetips:tips)*
+352. `loading_tips:the_recovery_compass_points_to_where_you_last` The Recovery Compass points to where you last died. *(replaced by creativetips:tips)*
+353. `loading_tips:echo_shards_are_needed_to_craft_a_recovery` Echo Shards are needed to craft a Recovery Compass. *(removed by creativetips:tips)*
+354. `loading_tips:ancient_cities_are_the_only_place_to_find_swift` Ancient Cities are the only place to find Swift Sneak books. *(replaced by creativetips:tips)*
+355. `loading_tips:swift_sneak_allows_you_to_walk_faster_while` Swift Sneak allows you to walk faster while crouching. *(removed by creativetips:tips)*
+356. `loading_tips:the_warden_is_completely_blind_but_has` The Warden is completely blind but has incredible hearing. *(replaced by creativetips:tips)*
+357. `loading_tips:throw_projectiles_to_distract_the_warden_away` Throw projectiles to distract the Warden away from you. *(removed by creativetips:tips)*
+358. `loading_tips:sculk_sensors_can_be_waterlogged_to_make_them` Sculk Sensors can be waterlogged to make them silent. *(removed by creativetips:tips)*
+359. `loading_tips:wool_blocks_dampen_vibrations_making_you` Wool blocks dampen vibrations, making you invisible to Sculk. *(replaced by creativetips:tips)*
+360. `loading_tips:amethyst_resonators_can_pass_redstone_signals` Amethyst Resonators can pass Redstone signals wirelessly. *(removed by creativetips:tips)*
+361. `loading_tips:allay_mobs_will_collect_items_for_you_if_you` Allay mobs will collect items for you if you give them one. *(replaced by creativetips:tips)*
+362. `loading_tips:play_a_jukebox_near_an_allay_to_make_it_dance` Play a Jukebox near an Allay to make it dance! *(removed by creativetips:tips)*
+363. `loading_tips:give_a_dancing_allay_an_amethyst_shard_to` Give a dancing Allay an Amethyst Shard to duplicate it. *(removed by creativetips:tips)*
+364. `loading_tips:mangrove_swamps_are_home_to_mud_blocks_and_frogs` Mangrove Swamps are home to Mud blocks and Frogs. *(removed by creativetips:tips)*
+365. `loading_tips:frogs_produce_froglight_when_they_eat_small` Frogs produce Froglight when they eat small Magma Cubes. *(removed by creativetips:tips)*
+366. `loading_tips:different_frog_colors_produce_different_colors` Different Frog colors produce different colors of Froglight. *(removed by creativetips:tips)*
+367. `loading_tips:tadpoles_grow_into_different_frogs_depending_on` Tadpoles grow into different Frogs depending on the biome. *(removed by creativetips:tips)*
+368. `loading_tips:goat_horns_are_dropped_when_a_goat_rams_a_hard` Goat Horns are dropped when a Goat rams a hard block. *(removed by creativetips:tips)*
+369. `loading_tips:copper_horns_were_a_prototype_but_goat_horns_are` Copper Horns were a prototype, but Goat Horns are the real deal! *(removed by creativetips:tips)*
+370. `loading_tips:glow_ink_sacs_make_sign_text_glow_in_the_dark` Glow Ink Sacs make sign text glow in the dark. *(replaced by creativetips:tips)*
+371. `loading_tips:use_a_glow_ink_sac_on_an_item_frame_to_make_it` Use a Glow Ink Sac on an Item Frame to make it shine. *(removed by creativetips:tips)*
+372. `loading_tips:firework_rockets_with_stars_deal_blast_damage` Firework rockets with stars deal blast damage when fired from Crossbows. *(replaced by creativetips:tips)*
+373. `loading_tips:piercing_crossbows_allow_one_arrow_to_hit` Piercing Crossbows allow one arrow to hit multiple enemies. *(removed by creativetips:tips)*
+374. `loading_tips:multishot_crossbows_fire_three_arrows_for_the` Multishot Crossbows fire three arrows for the price of one. *(replaced by creativetips:tips)*
+375. `loading_tips:quick_charge_reduces_the_reload_time_of_your` Quick Charge reduces the reload time of your Crossbow. *(removed by creativetips:tips)*
+376. `loading_tips:shields_can_block_creeper_explosions_if_you_are` Shields can block Creeper explosions if you are facing them. *(removed by creativetips:tips)*
+377. `loading_tips:sweeping_edge_increases_the_damage_of_your` Sweeping Edge increases the damage of your sword's sweep attack. *(replaced by creativetips:tips)*
+378. `loading_tips:knockback_is_great_for_keeping_creepers_at_a` Knockback is great for keeping Creepers at a distance. *(replaced by creativetips:tips)*
+379. `loading_tips:smite_deals_massive_damage_to_undead_mobs_like` Smite deals massive damage to Undead mobs like Withers. *(replaced by creativetips:tips)*
+380. `loading_tips:bane_of_arthropods_makes_spiders_much_easier_to` Bane of Arthropods makes Spiders much easier to deal with. *(removed by creativetips:tips)*
+381. `loading_tips:fire_aspect_is_great_for_combat_but_careful_with` Fire Aspect is great for combat, but careful with Endermen! *(removed by creativetips:tips)*
+382. `loading_tips:looting_iii_increases_the_chance_of_rare_drops` Looting III increases the chance of rare drops like mob heads. *(removed by creativetips:tips)*
+383. `loading_tips:impaling_tridents_deal_extra_damage_to_all` Impaling Tridents deal extra damage to all aquatic mobs. *(replaced by creativetips:tips)*
+384. `loading_tips:loyalty_tridents_fly_back_to_your_hand_after` Loyalty Tridents fly back to your hand after being thrown. *(replaced by creativetips:tips)*
+385. `loading_tips:channeling_tridents_summon_lightning_during` Channeling Tridents summon lightning during thunderstorms. *(removed by creativetips:tips)*
+386. `loading_tips:riptide_tridents_allow_you_to_fly_through_rain` Riptide Tridents allow you to fly through rain and water. *(removed by creativetips:tips)*
+387. `loading_tips:punch_bows_increase_the_knockback_of_your_arrows` Punch Bows increase the knockback of your arrows. *(removed by creativetips:tips)*
+388. `loading_tips:flame_bows_ignite_enemies_and_can_light_tnt_from` Flame Bows ignite enemies and can light TNT from afar. *(removed by creativetips:tips)*
+389. `loading_tips:infinity_bows_never_run_out_of_arrows_as_long_as` Infinity Bows never run out of arrows, as long as you have one. *(replaced by creativetips:tips)*
+390. `loading_tips:power_v_bows_can_one_shot_most_common_mobs` Power V Bows can one-shot most common mobs. *(removed by creativetips:tips)*
+391. `loading_tips:tipped_arrows_can_apply_potion_effects_from_a` Tipped arrows can apply Potion effects from a distance. *(replaced by creativetips:tips)*
+392. `loading_tips:observers_detect_block_updates_in_front_of_them` Observers detect block updates in front of them. *(replaced by creativetips:tips)*
+393. `loading_tips:target_blocks_give_a_stronger_redstone_signal_if` Target blocks give a stronger Redstone signal if hit in the center. *(replaced by creativetips:tips)*
+394. `loading_tips:note_blocks_play_different_sounds_depending_on` Note Blocks play different sounds depending on the block below. *(replaced by creativetips:tips)*
+395. `loading_tips:daylight_sensors_can_be_inverted_to_turn_on` Daylight Sensors can be inverted to turn on lights at night. *(removed by creativetips:tips)*
+396. `loading_tips:trapped_chests_give_off_a_redstone_signal_when` Trapped Chests give off a Redstone signal when opened. *(replaced by creativetips:tips)*
+397. `loading_tips:lecterns_send_a_signal_when_a_page_is_turned` Lecterns send a signal when a page is turned. *(removed by creativetips:tips)*
+398. `loading_tips:redstone_repeaters_can_delay_signals_up_to_0_4` Redstone Repeaters can delay signals up to 0.4 seconds. *(replaced by creativetips:tips)*
+399. `loading_tips:redstone_comparators_can_subtract_signal` Redstone Comparators can subtract signal strengths. *(removed by creativetips:tips)*
+400. `loading_tips:hoppers_can_be_disabled_by_a_redstone_signal` Hoppers can be disabled by a Redstone signal. *(removed by creativetips:tips)*
+401. `loading_tips:droppers_move_items_while_dispensers_use_them` Droppers move items, while Dispensers use them. *(replaced by creativetips:tips)*
+402. `loading_tips:dispensers_can_equip_armor_onto_players_and` Dispensers can equip armor onto players and armor stands. *(replaced by creativetips:tips)*
+403. `loading_tips:dispensers_can_shear_sheep_and_carve_pumpkins` Dispensers can shear sheep and carve pumpkins automatically. *(removed by creativetips:tips)*
+404. `loading_tips:tnt_minecarts_explode_instantly_if_they_hit_a` TNT Minecarts explode instantly if they hit a wall at speed. *(removed by creativetips:tips)*
+405. `loading_tips:powered_rails_can_be_used_to_launch_minecarts_up` Powered Rails can be used to launch Minecarts up slopes. *(replaced by creativetips:tips)*
+406. `loading_tips:detector_rails_send_a_signal_when_a_minecart` Detector Rails send a signal when a Minecart passes over. *(removed by creativetips:tips)*
+407. `loading_tips:activator_rails_can_eject_players_from_minecarts` Activator Rails can eject players from Minecarts. *(removed by creativetips:tips)*
+408. `loading_tips:redstone_dust_can_travel_up_transparent_blocks` Redstone Dust can travel up transparent blocks like Glass. *(replaced by creativetips:tips)*
+409. `loading_tips:sticky_pistons_can_pull_other_pistons_to_create` Sticky Pistons can pull other Pistons to create complex doors. *(removed by creativetips:tips)*
+410. `loading_tips:slime_blocks_bounce_entities_high_into_the_air` Slime blocks bounce entities high into the air. *(replaced by creativetips:tips)*
+411. `loading_tips:honey_blocks_prevent_jumping_but_allow_you_to` Honey blocks prevent jumping but allow you to slide down walls. *(removed by creativetips:tips)*
+412. `loading_tips:sweet_berry_bushes_slow_you_down_and_deal_damage` Sweet Berry bushes slow you down and deal damage. *(replaced by creativetips:tips)*
+413. `loading_tips:foxes_will_pick_up_and_use_any_item_you_drop` Foxes will pick up and use any item you drop. *(replaced by creativetips:tips)*
+414. `loading_tips:a_fox_holding_a_fire_aspect_sword_can_set_you_on` A Fox holding a Fire Aspect sword can set you on fire! *(removed by creativetips:tips)*
+415. `loading_tips:polar_bears_are_peaceful_unless_you_get_near` Polar Bears are peaceful unless you get near their cubs. *(replaced by creativetips:tips)*
+416. `loading_tips:pandas_have_different_personalities_based_on` Pandas have different personalities based on their genes. *(replaced by creativetips:tips)*
+417. `loading_tips:sneezing_baby_pandas_can_drop_slimeballs` Sneezing baby Pandas can drop Slimeballs. *(removed by creativetips:tips)*
+418. `loading_tips:parrots_mimic_the_sounds_of_nearby_hostile_mobs` Parrots mimic the sounds of nearby hostile mobs. *(replaced by creativetips:tips)*
+419. `loading_tips:dont_feed_chocolate_cookies_to_parrots_its` Don't feed chocolate cookies to Parrots; it's poisonous! *(removed by creativetips:tips)*
+420. `loading_tips:ocelots_no_longer_turn_into_cats_they_are` Ocelots no longer turn into Cats; they are separate mobs. *(removed by creativetips:tips)*
+421. `loading_tips:stray_cats_spawn_in_villages_and_can_bring_you` Stray Cats spawn in villages and can bring you gifts at night. *(removed by creativetips:tips)*
+422. `loading_tips:villager_gossip_determines_the_price_of_their` Villager gossip determines the price of their trades. *(removed by creativetips:tips)*
+423. `loading_tips:curing_a_zombie_villager_gives_you_massive_trade` Curing a Zombie Villager gives you massive trade discounts. *(replaced by creativetips:tips)*
+424. `loading_tips:iron_golems_spawn_in_villages_to_protect_against` Iron Golems spawn in villages to protect against raids. *(replaced by creativetips:tips)*
+425. `loading_tips:you_can_repair_an_iron_golem_with_iron_ingots` You can repair an Iron Golem with Iron Ingots. *(removed by creativetips:tips)*
+426. `loading_tips:ravagers_are_afraid_of_rabbits_for_some_reason` Ravagers are afraid of Rabbits for some reason! *(removed by creativetips:tips)*
+427. `loading_tips:vindicators_named_johnny_will_attack_every` Vindicators named 'Johnny' will attack every nearby mob. *(replaced by creativetips:tips)*
+428. `loading_tips:evokers_turn_blue_sheep_into_red_sheep_with_a` Evokers turn blue sheep into red sheep with a 'Wololo'. *(removed by creativetips:tips)*
+429. `loading_tips:totems_of_undying_must_be_held_to_save_you_from` Totems of Undying must be held to save you from death. *(replaced by creativetips:tips)*
+430. `loading_tips:vexes_are_summoned_by_evokers_and_can_fly` Vexes are summoned by Evokers and can fly through walls. *(replaced by creativetips:tips)*
+431. `loading_tips:phantoms_spawn_if_you_havent_slept_for_three` Phantoms spawn if you haven't slept for three days. *(replaced by creativetips:tips)*
+432. `loading_tips:phantom_membranes_are_used_to_repair_elytra` Phantom Membranes are used to repair Elytra. *(removed by creativetips:tips)*
+433. `loading_tips:slow_falling_potions_are_made_using_phantom` Slow Falling potions are made using Phantom Membranes. *(replaced by creativetips:tips)*
+434. `loading_tips:drowned_mobs_can_spawn_with_tridents_and` Drowned mobs can spawn with Tridents and Nautilus Shells. *(replaced by creativetips:tips)*
+435. `loading_tips:conduits_protect_you_underwater_and_kill_nearby` Conduits protect you underwater and kill nearby mobs. *(removed by creativetips:tips)*
+436. `loading_tips:turtle_shells_give_you_extra_breath_time` Turtle shells give you extra breath time underwater. *(removed by creativetips:tips)*
+437. `loading_tips:scutes_are_dropped_when_baby_turtles_grow_into` Scutes are dropped when baby Turtles grow into adults. *(replaced by creativetips:tips)*
+438. `loading_tips:dolphins_will_lead_you_to_shipwrecks_if_you_feed` Dolphins will lead you to shipwrecks if you feed them fish. *(replaced by creativetips:tips)*
+439. `loading_tips:magma_blocks_underwater_create_bubble_columns` Magma blocks underwater create bubble columns that pull you down. *(removed by creativetips:tips)*
+440. `loading_tips:soul_sand_underwater_creates_bubble_columns_that` Soul Sand underwater creates bubble columns that push you up. *(replaced by creativetips:tips)*
+441. `loading_tips:kelp_can_be_smelted_into_dried_kelp_for_a_quick` Kelp can be smelted into Dried Kelp for a quick snack. *(replaced by creativetips:tips)*
+442. `loading_tips:dried_kelp_blocks_are_a_very_efficient_fuel_for` Dried Kelp blocks are a very efficient fuel for furnaces. *(removed by creativetips:tips)*
+443. `loading_tips:sea_pickles_provide_light_when_placed_underwater` Sea Pickles provide light when placed underwater. *(replaced by creativetips:tips)*
+444. `loading_tips:coral_fans_must_stay_in_water_or_they_will_turn` Coral fans must stay in water or they will turn gray. *(replaced by creativetips:tips)*
+445. `loading_tips:tropical_fish_can_be_carried_in_buckets` Tropical Fish can be carried in buckets. *(replaced by creativetips:tips)*
+446. `loading_tips:pufferfish_deal_poison_damage_if_you_touch_them` Pufferfish deal poison damage if you touch them. *(replaced by creativetips:tips)*
+447. `loading_tips:axolotls_will_play_dead_to_regenerate_health` Axolotls will play dead to regenerate health. *(removed by creativetips:tips)*
+448. `loading_tips:glow_squids_drop_glow_ink_sacs_for_glowing_signs` Glow Squids drop Glow Ink Sacs for glowing signs. *(removed by creativetips:tips)*
+449. `loading_tips:lush_caves_are_filled_with_moss_glow_berries_and` Lush Caves are filled with Moss, Glow Berries, and Spore Blossoms. *(replaced by creativetips:tips)*
+450. `loading_tips:dripstone_caves_contain_sharp_stalactites_that` Dripstone Caves contain sharp stalactites that can fall on you. *(removed by creativetips:tips)*
+451. `loading_tips:pointed_dripstone_can_be_used_to_create_infinite` Pointed Dripstone can be used to create infinite lava or water. *(replaced by creativetips:tips)*
+452. `loading_tips:azalea_trees_mark_the_location_of_a_lush_cave` Azalea trees mark the location of a Lush Cave below. *(replaced by creativetips:tips)*
+453. `loading_tips:copper_blocks_turn_green_over_time_due_to` Copper blocks turn green over time due to oxidation. *(removed by creativetips:tips)*
+454. `loading_tips:lightning_rods_protect_your_wooden_roofs_from` Lightning Rods protect your wooden roofs from fire. *(replaced by creativetips:tips)*
+455. `loading_tips:spyglasses_are_crafted_from_amethyst_and_copper` Spyglasses are crafted from Amethyst and Copper. *(removed by creativetips:tips)*
+456. `loading_tips:tinted_glass_blocks_light_but_is_still` Tinted Glass blocks light but is still transparent. *(replaced by creativetips:tips)*
+457. `loading_tips:amethyst_geodes_are_found_deep_underground_in` Amethyst Geodes are found deep underground in the Overworld. *(replaced by creativetips:tips)*
+458. `loading_tips:budding_amethyst_blocks_cannot_be_moved_even` Budding Amethyst blocks cannot be moved, even with Silk Touch. *(removed by creativetips:tips)*
+459. `loading_tips:deepslate_is_tougher_than_stone_and_takes_longer` Deepslate is tougher than Stone and takes longer to mine. *(replaced by creativetips:tips)*
+460. `loading_tips:raw_iron_copper_and_gold_can_be_smelted_faster` Raw Iron, Copper, and Gold can be smelted faster in a Blast Furnace! *(removed by creativetips:tips)*
+461. `loading_tips:fortune_enchantment_works_on_raw_ore_blocks` Fortune enchantment works on Raw Ore blocks! *(removed by creativetips:tips)*
+462. `loading_tips:end_crystal_beams_can_be_blocked_with_blocks_to` End Crystal beams can be blocked with blocks to stop the Dragon's heal. *(replaced by creativetips:tips)*
+463. `loading_tips:the_dragon_breath_can_be_collected_in_glass` The Dragon Breath can be collected in glass bottles. *(replaced by creativetips:tips)*
+464. `loading_tips:lingering_potions_are_made_using_dragon_breath` Lingering potions are made using Dragon Breath. *(replaced by creativetips:tips)*
+465. `loading_tips:wither_skeletons_only_spawn_in_nether_fortresses` Wither Skeletons only spawn in Nether Fortresses. *(replaced by creativetips:tips)*
+466. `loading_tips:wither_skulls_are_needed_to_summon_the_wither` Wither Skulls are needed to summon the Wither boss. *(replaced by creativetips:tips)*
+467. `loading_tips:the_wither_is_much_harder_to_fight_on_bedrock` The Wither is much harder to fight on Bedrock Edition! *(removed by creativetips:tips)*
+468. `loading_tips:beacons_provide_buffs_like_haste_and` Beacons provide buffs like Haste and Regeneration. *(removed by creativetips:tips)*
+469. `loading_tips:netherite_armor_is_fireproof_and_wont_burn_in` Netherite armor is fireproof and won't burn in lava. *(replaced by creativetips:tips)*
+470. `loading_tips:ancient_debris_is_most_common_at_y_level_15_in` Ancient Debris is most common at Y-level 15 in the Nether. *(replaced by creativetips:tips)*
+471. `loading_tips:lodestones_allow_compasses_to_point_to_a` Lodestones allow Compasses to point to a specific block. *(replaced by creativetips:tips)*
+472. `loading_tips:striders_can_walk_on_lava_and_be_ridden_with_a` Striders can walk on lava and be ridden with a saddle. *(removed by creativetips:tips)*
+473. `loading_tips:warped_fungus_on_a_stick_is_used_to_control` Warped Fungus on a Stick is used to control Striders. *(removed by creativetips:tips)*
+474. `loading_tips:hoglins_are_afraid_of_warped_fungus_even_in` Hoglins are afraid of Warped Fungus, even in flower pots! *(removed by creativetips:tips)*
+475. `loading_tips:piglins_love_gold_and_will_barter_with_you_for` Piglins love Gold and will barter with you for it. *(replaced by creativetips:tips)*
+476. `loading_tips:wear_gold_armor_to_stop_piglins_from_attacking` Wear Gold armor to stop Piglins from attacking you. *(replaced by creativetips:tips)*
+477. `loading_tips:piglin_brutes_protect_bastions_and_cannot_be` Piglin Brutes protect Bastions and cannot be distracted by Gold. *(replaced by creativetips:tips)*
+478. `loading_tips:zombified_piglins_are_neutral_until_you_attack` Zombified Piglins are neutral until you attack them. *(replaced by creativetips:tips)*
+479. `loading_tips:ghast_tears_are_used_to_brew_regeneration` Ghast tears are used to brew Regeneration potions. *(replaced by creativetips:tips)*
+480. `loading_tips:blaze_rods_are_the_best_fuel_for_brewing_stands` Blaze rods are the best fuel for brewing stands. *(removed by creativetips:tips)*
+481. `loading_tips:magma_cream_is_used_for_fire_resistance_potions` Magma cream is used for Fire Resistance potions. *(replaced by creativetips:tips)*
+482. `loading_tips:soul_speed_enchantment_makes_you_run_faster_on` Soul Speed enchantment makes you run faster on Soul Sand. *(removed by creativetips:tips)*
+483. `loading_tips:netherite_scrap_is_made_by_smelting_ancient` Netherite scrap is made by smelting Ancient Debris. *(removed by creativetips:tips)*
+484. `loading_tips:smithing_templates_are_required_to_upgrade_to` Smithing Templates are required to upgrade to Netherite armor. *(removed by creativetips:tips)*
+485. `loading_tips:bastions_are_the_best_place_to_find_pigstep` Bastions are the best place to find Pigstep music discs. *(removed by creativetips:tips)*
+486. `loading_tips:ruined_portals_appear_in_both_the_overworld_and` Ruined Portals appear in both the Overworld and the Nether. *(replaced by creativetips:tips)*
+487. `loading_tips:crying_obsidian_can_be_used_to_craft_respawn` Crying Obsidian can be used to craft Respawn Anchors. *(removed by creativetips:tips)*
+488. `loading_tips:respawn_anchors_allow_you_to_set_your_spawn_in` Respawn Anchors allow you to set your spawn in the Nether. *(replaced by creativetips:tips)*
+489. `loading_tips:dont_use_a_respawn_anchor_in_the_overworld_it` Don't use a Respawn Anchor in the Overworld; it will explode! *(removed by creativetips:tips)*
+490. `loading_tips:blackstone_can_be_used_as_a_substitute_for` Blackstone can be used as a substitute for Cobblestone. *(replaced by creativetips:tips)*
+491. `loading_tips:gilded_blackstone_has_a_chance_to_drop_gold` Gilded Blackstone has a chance to drop Gold nuggets. *(removed by creativetips:tips)*
+492. `loading_tips:basalt_deltas_are_home_to_magma_cubes_and_ash` Basalt Deltas are home to Magma Cubes and ash particles. *(replaced by creativetips:tips)*
+493. `loading_tips:blue_ice_is_the_fastest_surface_for_boat_travel` Blue Ice is the fastest surface for boat travel. *(removed by creativetips:tips)*
+494. `loading_tips:packed_ice_doesnt_melt_even_near_light_sources` Packed Ice doesn't melt, even near light sources. *(removed by creativetips:tips)*
+495. `loading_tips:snow_golems_wear_pumpkins_that_can_be_sheared` Snow Golems wear pumpkins that can be sheared off. *(removed by creativetips:tips)*
+496. `loading_tips:leads_can_be_used_to_tie_mobs_to_fences` Leads can be used to tie mobs to fences. *(removed by creativetips:tips)*
+497. `loading_tips:armor_trims_allow_you_to_customize_the_look_of` Armor Trims allow you to customize the look of your gear. *(removed by creativetips:tips)*
+498. `loading_tips:netherite_templates_are_consumed_upon_use_make` Netherite templates are consumed upon use; make copies! *(removed by creativetips:tips)*
+499. `loading_tips:the_silence_armor_trim_is_the_rarest_trim_in_the` The Silence Armor Trim is the rarest trim in the game. *(removed by creativetips:tips)*
+500. `loading_tips:trial_chambers_are_the_ultimate_test_of_your` Trial Chambers are the ultimate test of your combat skills. *(removed by creativetips:tips)*
+501. `loading_tips:you_are_now_a_minecraft_master_good_luck` You are now a Minecraft Master. Good luck! *(removed by creativetips:tips)*
+502. `loading_tips:holding_f3_c_for_10_seconds_intentionally` Holding F3+C for 10 seconds intentionally crashes the game for debugging purposes! *(removed by creativetips:tips)*
+503. `loading_tips:bamboo_is_the_least_efficient_fuel_smelting_only` Bamboo is the least efficient fuel, smelting only 0.25 items each! *(removed by creativetips:tips)*
 504. `loading_tips:spiders_climb_walls_by_treating_block_sides_as` Spiders climb walls by treating block sides as ladders!
-505. `loading_tips:crafting_coal_into_a_block_of_coal_gives_you_8` Crafting coal into a Block of Coal gives you 8 extra smeltings! *(replaced by creative_tips:tips)*
-506. `loading_tips:frost_walker_boots_let_you_walk_on_water_and` Frost Walker boots let you walk on water and also protect you from magma blocks! *(replaced by creative_tips:tips)*
-507. `loading_tips:the_chestplate_is_the_only_armor_piece_with_no` The chestplate is the only armor piece with no exclusive enchantments! *(removed by creative_tips:tips)*
-508. `loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn` Ocelots are passive in Minecraft, but can't spawn in Peaceful difficulty due to a bug! *(removed by creative_tips:tips)*
-509. `loading_tips:place_lava_or_water_above_pointed_dripstone_to` Place lava or water above Pointed Dripstone to slowly drip it into a Cauldron below! *(replaced by creative_tips:tips)*
-510. `loading_tips:babymobs_now_have_unique_models_instead_of` Baby mobs now have unique models instead of being shrunken adults! *(replaced by creative_tips:tips)*
-511. `loading_tips:golden_dandelions_keep_babymobs_young_forever` Golden Dandelions keep baby mobs young forever — craft one with a dandelion and 8 gold nuggets! *(removed by creative_tips:tips)*
-512. `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden` Breed a mob at least once to unlock the Golden Dandelion crafting recipe. *(removed by creative_tips:tips)*
-513. `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let` Feed a baby mob a Golden Dandelion again to let it grow up normally. *(removed by creative_tips:tips)*
-514. `loading_tips:golden_dandelions_dont_work_on_undead_babymobs` Golden Dandelions don't work on undead baby mobs or baby Villagers. *(removed by creative_tips:tips)*
-515. `loading_tips:piglins_will_pick_up_golden_dandelions_off_the` Piglins will pick up Golden Dandelions off the ground — be careful in the Nether! *(removed by creative_tips:tips)*
-516. `loading_tips:golden_dandelions_can_be_placed_in_flower_pots` Golden Dandelions can be placed in flower pots and used to craft yellow dye. *(removed by creative_tips:tips)*
-517. `loading_tips:wandering_traders_may_randomly_sell_a_golden` Wandering Traders may randomly sell a Golden Dandelion for 2 emeralds. *(removed by creative_tips:tips)*
-518. `loading_tips:golden_dandelions_used_in_suspicious_stew` Golden Dandelions used in suspicious stew restore extra hunger and saturation! *(removed by creative_tips:tips)*
-519. `loading_tips:plant_a_sapling_within_2_blocks_of_a_golden` Plant a sapling within 2 blocks of a Golden Dandelion for a 5% chance to grow a bee nest! *(removed by creative_tips:tips)*
-520. `loading_tips:name_tags_are_now_craftable_combine_any_metal` Name Tags are now craftable — combine any metal nugget with paper! *(removed by creative_tips:tips)*
-521. `loading_tips:name_tags_no_longer_appear_in_ancient_city_or` Name Tags no longer appear in Ancient City or Woodland Mansion chests. *(removed by creative_tips:tips)*
-522. `loading_tips:master_level_librarians_no_longer_trade_name` Master-level Librarians no longer trade Name Tags — craft them or buy from Wandering Traders instead! *(removed by creative_tips:tips)*
-523. `loading_tips:wandering_traders_now_sell_name_tags_for_just_1` Wandering Traders now sell Name Tags for just 1 emerald! *(removed by creative_tips:tips)*
-524. `loading_tips:copper_blocks_under_note_blocks_now_produce` Copper blocks under Note Blocks now produce trumpet sounds! *(removed by creative_tips:tips)*
-525. `loading_tips:the_trumpet_pitch_changes_depending_on_the` The trumpet pitch changes depending on the copper block's oxidation level. *(removed by creative_tips:tips)*
-526. `loading_tips:wax_your_copper_block_under_a_note_block_to_lock` Wax your copper block under a Note Block to lock in your trumpet's pitch forever! *(removed by creative_tips:tips)*
-527. `loading_tips:babymobs_now_have_their_own_dedicated_sounds` Baby mobs now have their own dedicated sounds — listen for kittens, piglets, and chicks! *(removed by creative_tips:tips)*
-528. `loading_tips:saddles_and_armor_no_longer_visually_render_on` Saddles and armor no longer visually render on baby mobs. *(removed by creative_tips:tips)*
-529. `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny` Rabbits got a complete model overhaul in Tiny Takeover — fluffier than ever! *(removed by creative_tips:tips)*
-530. `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long` Baby Polar Bears no longer attack Foxes — a long overdue fix! *(removed by creative_tips:tips)*
-531. `loading_tips:deepslate_can_now_be_directly_crafted_into` Deepslate can now be directly crafted into polished, brick, and tile variants in the Stonecutter! *(removed by creative_tips:tips)*
-532. `loading_tips:stone_can_now_be_directly_crafted_into_cobbled` Stone can now be directly crafted into cobbled stone variants in the Stonecutter! *(removed by creative_tips:tips)*
+505. `loading_tips:crafting_coal_into_a_block_of_coal_gives_you_8` Crafting coal into a Block of Coal gives you 8 extra smeltings! *(replaced by creativetips:tips)*
+506. `loading_tips:frost_walker_boots_let_you_walk_on_water_and` Frost Walker boots let you walk on water and also protect you from magma blocks! *(replaced by creativetips:tips)*
+507. `loading_tips:the_chestplate_is_the_only_armor_piece_with_no` The chestplate is the only armor piece with no exclusive enchantments! *(removed by creativetips:tips)*
+508. `loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn` Ocelots are passive in Minecraft, but can't spawn in Peaceful difficulty due to a bug! *(removed by creativetips:tips)*
+509. `loading_tips:place_lava_or_water_above_pointed_dripstone_to` Place lava or water above Pointed Dripstone to slowly drip it into a Cauldron below! *(replaced by creativetips:tips)*
+510. `loading_tips:babymobs_now_have_unique_models_instead_of` Baby mobs now have unique models instead of being shrunken adults! *(replaced by creativetips:tips)*
+511. `loading_tips:golden_dandelions_keep_babymobs_young_forever` Golden Dandelions keep baby mobs young forever — craft one with a dandelion and 8 gold nuggets! *(removed by creativetips:tips)*
+512. `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden` Breed a mob at least once to unlock the Golden Dandelion crafting recipe. *(removed by creativetips:tips)*
+513. `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let` Feed a baby mob a Golden Dandelion again to let it grow up normally. *(removed by creativetips:tips)*
+514. `loading_tips:golden_dandelions_dont_work_on_undead_babymobs` Golden Dandelions don't work on undead baby mobs or baby Villagers. *(removed by creativetips:tips)*
+515. `loading_tips:piglins_will_pick_up_golden_dandelions_off_the` Piglins will pick up Golden Dandelions off the ground — be careful in the Nether! *(removed by creativetips:tips)*
+516. `loading_tips:golden_dandelions_can_be_placed_in_flower_pots` Golden Dandelions can be placed in flower pots and used to craft yellow dye. *(removed by creativetips:tips)*
+517. `loading_tips:wandering_traders_may_randomly_sell_a_golden` Wandering Traders may randomly sell a Golden Dandelion for 2 emeralds. *(removed by creativetips:tips)*
+518. `loading_tips:golden_dandelions_used_in_suspicious_stew` Golden Dandelions used in suspicious stew restore extra hunger and saturation! *(removed by creativetips:tips)*
+519. `loading_tips:plant_a_sapling_within_2_blocks_of_a_golden` Plant a sapling within 2 blocks of a Golden Dandelion for a 5% chance to grow a bee nest! *(removed by creativetips:tips)*
+520. `loading_tips:name_tags_are_now_craftable_combine_any_metal` Name Tags are now craftable — combine any metal nugget with paper! *(removed by creativetips:tips)*
+521. `loading_tips:name_tags_no_longer_appear_in_ancient_city_or` Name Tags no longer appear in Ancient City or Woodland Mansion chests. *(removed by creativetips:tips)*
+522. `loading_tips:master_level_librarians_no_longer_trade_name` Master-level Librarians no longer trade Name Tags — craft them or buy from Wandering Traders instead! *(removed by creativetips:tips)*
+523. `loading_tips:wandering_traders_now_sell_name_tags_for_just_1` Wandering Traders now sell Name Tags for just 1 emerald! *(removed by creativetips:tips)*
+524. `loading_tips:copper_blocks_under_note_blocks_now_produce` Copper blocks under Note Blocks now produce trumpet sounds! *(removed by creativetips:tips)*
+525. `loading_tips:the_trumpet_pitch_changes_depending_on_the` The trumpet pitch changes depending on the copper block's oxidation level. *(removed by creativetips:tips)*
+526. `loading_tips:wax_your_copper_block_under_a_note_block_to_lock` Wax your copper block under a Note Block to lock in your trumpet's pitch forever! *(removed by creativetips:tips)*
+527. `loading_tips:babymobs_now_have_their_own_dedicated_sounds` Baby mobs now have their own dedicated sounds — listen for kittens, piglets, and chicks! *(removed by creativetips:tips)*
+528. `loading_tips:saddles_and_armor_no_longer_visually_render_on` Saddles and armor no longer visually render on baby mobs. *(removed by creativetips:tips)*
+529. `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny` Rabbits got a complete model overhaul in Tiny Takeover — fluffier than ever! *(removed by creativetips:tips)*
+530. `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long` Baby Polar Bears no longer attack Foxes — a long overdue fix! *(removed by creativetips:tips)*
+531. `loading_tips:deepslate_can_now_be_directly_crafted_into` Deepslate can now be directly crafted into polished, brick, and tile variants in the Stonecutter! *(removed by creativetips:tips)*
+532. `loading_tips:stone_can_now_be_directly_crafted_into_cobbled` Stone can now be directly crafted into cobbled stone variants in the Stonecutter! *(removed by creativetips:tips)*
 
 ## Creative Tips
 
-Creative Tips: Creative Engineering tips for the world loading screen (pack-held, kubejs/assets/creative_tips/loading_tips/)
+Creative Tips: Creative Engineering tips for the world loading screen (pack-held, kubejs/assets/creativetips/loading_tips/)
 
-`assets/creative_tips/loading_tips/tips.json`, priority 10, override: true, 210 tips, removes 319
+`assets/creativetips/loading_tips/tips.json`, priority 10, override: true, 210 tips, removes 319
 
 1. `loading_tips:you_can_use_an_axe_to_scrape_oxidation_off` Copper turns green over time; honeycomb wax stops it, and an axe scrapes off the wax or one stage of rust *(replacement)*
 2. `loading_tips:crouch_to_avoid_falling_off_ledges` Crouch to avoid falling off ledges *(replacement)*
@@ -593,7 +593,7 @@ Creative Tips: Creative Engineering tips for the world loading screen (pack-held
 31. `loading_tips:comparators_detect_container_fullness_compare` Comparators detect container fullness, compare, and subtract redstone signals! *(replacement)*
 32. `loading_tips:axolotls_help_fight_guardians_and_grant` Axolotls play dead to heal, and killing a mob one is fighting gives you Regeneration *(replacement)*
 33. `loading_tips:bees_produce_honey_and_wax` Bees fill hives with honey; take it with a bottle, or honeycomb with shears, and keep a campfire below to calm them *(replacement)*
-34. `loading_tips:spyglasses_zoom_in_on_the_horizon` Spyglasses, made from amethyst and copper, zoom in on distant things *(replacement)*
+34. `loading_tips:spyglasses_zoom_in_on_the_horizon` Spyglasses, made from amethyst and copper, can be used to zoom in on distant things *(replacement)*
 35. `loading_tips:goats_can_ram_you_off_cliffs` Goats can ram you off cliffs, and a Goat that rams a hard block drops a goat horn *(replacement)*
 36. `loading_tips:frogs_eat_small_slimes_and_magma_cubes` Frogs eat small Slimes for slimeballs and small Magma Cubes for froglight in the Frog's colour, set by its biome *(replacement)*
 37. `loading_tips:mud_is_made_from_dirt_and_water` Use a water bottle on dirt to make mud; mud above pointed dripstone dries into clay *(replacement)*
@@ -601,7 +601,7 @@ Creative Tips: Creative Engineering tips for the world loading screen (pack-held
 39. `loading_tips:sugar_cane_grows_on_sand_or_dirt` Sugar cane grows on sand or dirt *(replacement)*
 40. `loading_tips:pumpkins_need_space_to_grow` Pumpkins and melons need a free dirt, grass or farmland block beside the stem to grow *(replacement)*
 41. `loading_tips:campfires_can_cook_four_items` Campfires place unlit and cook four items; rain puts one out unless a coal or charcoal block is under it *(replacement)*
-42. `loading_tips:bells_alert_villagers_to_raids` Ring a bell, by hand or with an arrow, to send villagers indoors and make nearby raiders glow *(replacement)*
+42. `loading_tips:bells_alert_villagers_to_raids` Ring a bell, by hand or with a projectile, to send villagers indoors and make nearby raiders glow *(replacement)*
 43. `loading_tips:mending_repairs_gear_using_xp_orbs` Mending repairs held and worn gear with the XP orbs you collect, before the XP reaches your level *(replacement)*
 44. `loading_tips:unbreaking_iii_makes_gear_last_longer` Unbreaking III makes gear last longer *(replacement)*
 45. `loading_tips:silk_touch_collects_beehives_with_bees_inside` Silk Touch collects beehives with bees inside *(replacement)*

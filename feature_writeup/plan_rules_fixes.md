@@ -13,13 +13,12 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=914bd028b13c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 2, Testing 17), 12 Complete.
+<!-- generated:status_index begin open_work sha1=a4f96232aac7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 1, Testing 17), 12 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `tooling/design-rules #2` | Planned |  | History audit (low priority) |
-| `tooling/design-rules #4` | Planned |  | Palette test tooltips off before distribution |
 | `conventions #14` | Testing | SQ-DRK-08 | Tilled end stone and sea pickles |
 | `conventions #15` | Testing | SQ-LOOT-02, SQ-RFX-16 to -18 | Global loot modifiers |
 | `conventions #16` | Testing | SQ-LOOT-01 to -06, SQ-RFX-30, -32 | Split Creative Loot out of Creative Worldgen |

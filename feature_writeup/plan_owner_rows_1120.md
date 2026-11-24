@@ -1,16 +1,16 @@
 # Owner row batch (2026-11-20)
 
-<!-- generated:status_index begin open_work sha1=897ca870b228 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 26 open TODO rows (Planned 1, In Progress 1, Testing 24), 4 Complete.
+<!-- generated:status_index begin open_work sha1=fea900a452a5 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 26 open TODO rows (In Progress 1, Testing 25), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `crops #59` | Planned | S | Botany Pots rules |
 | `farming/crops #3` | In Progress | S P | Harvest and replant audit for new crops |
 | `baking-types-and-bakeware #1` | Testing | SQ-FF-28 | Gingerbread block recipes |
 | `baking/baked-goods #39` | Testing | SQ-FF-26 SQ-FF-27 CQ-FF-05 | Baked families: croissant to misc baked, plain donut beside the cider donut |
 | `conventions #39` | Testing | SQ-RFX-28 | Creative Compat config comments: British spelling of color (CompatConfig.java lines 112, 1426) |
 | `creativebrewing/publish #25` | Testing | S | Delight's IE Bottling dough recipe writes a tag as its result |
+| `crops #59` | Testing | SQ-BOT-08 | Botany Pots rules |
 | `dishes/ingredients #36` | Testing | S C P | Bone broth as a fluid |
 | `dishes/ocean #11` | Testing | S C P | Guardian Shell: guardian drop and cutting |
 | `dishes/ocean #12` | Testing | S P | Guardian Soup recipe |

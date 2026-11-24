@@ -4,8 +4,8 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=23487aa73406 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 8, Pinned 2, In Progress 46, Testing 38), 3 Complete.
+<!-- generated:status_index begin open_work sha1=c69690f72beb -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 8, Pinned 3, In Progress 41, Testing 42), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -18,8 +18,8 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/pickles-and-ferments #9` | Planned | S C P | Pickled egg for the century egg |
 | `tooling/generators-and-tests #11` | Planned | S | `food_families.py` reports 94 unsorted foods |
 | `creativedelight/qol #3` | Pinned | S | QoL-3 Food types and the Quark saturation word |
+| `dishes/ingredients #7` | Pinned | S C P | Batter uses |
 | `dishes/ingredients #15` | Pinned | S C P | Butter |
-| `baking/baked-goods #2` | In Progress | S C P T | Muffins as a decent food source |
 | `baking/baked-goods #4` | In Progress | S P | Pie sequenced assembly and chorus pie |
 | `baking/baked-goods #5` | In Progress | S C P T | Cakes |
 | `baking/baked-goods #6` | In Progress | S C P | Cake paste and tarts |
@@ -32,7 +32,6 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `baking/baked-goods #14` | In Progress | S C P | Unobtainable pie slices |
 | `baking/baked-goods #17` | In Progress | S C P | Dough unification |
 | `baking/baked-goods #20` | In Progress | S C P | Pizza food type |
-| `baking/baked-goods #23` | In Progress | S C P | Oatmeal cookies from oat dough |
 | `baking/baked-goods #32` | In Progress | S C P | Merge muffin and cupcake |
 | `baking/baked-goods #36` | In Progress | S C P | Dessert cookware and recipe treatments |
 | `baking/sweets #1` | In Progress | S C P T | Gummies |
@@ -41,8 +40,6 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `baking/sweets #4` | In Progress | S C P T | Ice cream rework |
 | `cans/canning #8` | In Progress | S P | Canning automation |
 | `cooking/oven #7` | In Progress | S P | Cooking pot recipes that suit the oven |
-| `dishes/ingredients #7` | In Progress | S C P | Batter uses |
-| `dishes/ingredients #8` | In Progress | S C P | Produce fixes |
 | `dishes/ingredients #9` | In Progress | S C P T | Cheese |
 | `dishes/ingredients #22` | In Progress | S C P | Honeycomb as sugar, honey and spread |
 | `dishes/jams #2` | In Progress | S C P | Jam crafting: 4 fruit, sugar, lemon slice for 2 jam |
@@ -54,7 +51,6 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/meals #29` | In Progress | S C P | Fermented veg in uncooked crafts |
 | `dishes/meals #31` | In Progress | S C P | Nut butter sandwich |
 | `dishes/meals #35` | In Progress | S C P | Steak and broccoli sides |
-| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `dishes/pickles-and-ferments #2` | In Progress | S C P | Pickle recipes take real pickles only |
 | `food/drinks #2` | In Progress | S C P | Tea cleanup |
 | `food/drinks #7` | In Progress | S C P T | Kettle with 6 ingredient slots; drinks move to the Kettle |
@@ -65,11 +61,13 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `food/types-and-tuning #8` | In Progress | S P T | Soup and stew values from their ingredients |
 | `food/types-and-tuning #13` | In Progress | S P | Food families: one set of cooking rules per family |
 | `merges/dishes #8` | In Progress | S C P | Pizza and quiche |
+| `baking/baked-goods #2` | Testing | SQ-FF-23 SQ-FF-26 SQ-FF-27 | Muffins as a decent food source |
 | `baking/baked-goods #15` | Testing | S+ P | Maple cookie |
 | `baking/baked-goods #18` | Testing | S C P | Brownie and cupcake baking types |
 | `baking/baked-goods #19` | Testing | S C P | Quiche baking type |
 | `baking/baked-goods #21` | Testing | S C P | Lasagna baking type |
 | `baking/baked-goods #22` | Testing | SQ-FF-22 OV-39 | Chorus cookie from the uncanny cookie |
+| `baking/baked-goods #23` | Testing | SQ-FF-22 SQ-FF-26 SQ-FF-27 | Oatmeal cookies from oat dough |
 | `baking/baked-goods #24` | Testing | C | No shapeless pie-to-crust recipes |
 | `baking/baked-goods #25` | Testing | S~ C P | Sponge cake becomes sponge pie |
 | `baking/baked-goods #26` | Testing | S~ P | Honey cake honey and comb split |
@@ -80,6 +78,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `cooking/kitchen #21` | Testing | S+ C P | Coaster tag: models or cuts |
 | `creativedelight/framework #11` | Testing | S+ | Move members from `global.foodFamily` to `global.CD.food` |
 | `creativedelight/framework #12` | Testing | S~ C | Hand-written family rows onto `global.CD.food` |
+| `dishes/ingredients #8` | Testing | SQ-FF-21 SQ-FF-26 | Produce fixes |
 | `dishes/ingredients #10` | Testing | S C P T | Fats and oils: animal fat, blubber, cooking oil |
 | `dishes/ingredients #18` | Testing | S C P | Cutting banana bunch |
 | `dishes/ingredients #20` | Testing | S~ C P | Sweet potato slices |
@@ -88,6 +87,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/meals #12` | Testing | S C P T | Pancake food type |
 | `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
 | `dishes/meals #27` | Testing | S C P | Pineapple pizza |
+| `dishes/meals #46` | Testing | SQ-FF-30 | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `dishes/ocean #2` | Testing | S C P | Fish egg roll accepts eggs |
 | `dishes/ocean #4` | Testing | S+ C P | Remove tentacles; all tentacles to calamari |
 | `dishes/ocean #5` | Testing | C P | Salmon eggs become caviar |

@@ -16,7 +16,7 @@ Owner request 2026-11-06: more loading screen tips about the pack's own behavior
 documented here. Step 1: scan item tooltips, WTHIT lines and JEI info pages and draft tips from what the UI already
 documents. TODO row: `ui/loadingtips #3`. Since 2026-11-14 Loading Tips is the unmodified upstream list and every
 change to it (the audit and owner edits below) lives in Creative Tips as `remove` entries and same-id replacements
-([plan_loading_tips_screens.md](plan_loading_tips_screens.md) section 8); new tips use `creative_tips:<slug>` ids. Mechanism and tip format: [loading_tips.md](loading_tips.md); current list:
+([plan_loading_tips_screens.md](plan_loading_tips_screens.md) section 8); new tips use `creativetips:<slug>` ids. Mechanism and tip format: [loading_tips.md](loading_tips.md); current list:
 [loading_tips_list.md](loading_tips_list.md).
 
 Status: step 1 (harvest) DONE 2026-11-06, drafts in section 4. Step 2 (owner review) in progress: first pass of

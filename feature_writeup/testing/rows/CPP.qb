@@ -11,7 +11,7 @@
 @@text Not run. Builds of 2026-11-07 evening (Common, Engineering, Compat, Delight, Equipment), not installed (game running).
 @@text Moved: `SequencedAssemblyRecipeMixin`, `CreateTeaPipeIconMixin`, `FluidTagInputMixin`, `DrinkFluidEffects` and
 @@text `JeiFluidHelperTooltipMixin` (from Compat) to Engineering; `FruitsDelightEffectFuncMixin` to Delight. Common defaults:
-@@text `[mod_names] overrides` and `[effects] removed` empty; Creative Tips in `kubejs/assets/creative_tips/`. Tags
+@@text `[mod_names] overrides` and `[effects] removed` empty; Creative Tips in `kubejs/assets/creativetips/`. Tags
 @@text `creativecommon:bark` / `metal_dusts` (were `creativeengineering:`); `create:scrap_*` placeholders gone, users guarded on
 @@text Create Recycle. Boot risks: mixins in new configs, Engineering's new MOD_RANGE.
 @@text

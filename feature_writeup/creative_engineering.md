@@ -22,16 +22,13 @@ changelog and JEI world trees, the JFR events and the mixin member prefix.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=b39f35904f9a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 3, In Progress 2, Testing 5), 5 Complete.
+<!-- generated:status_index begin open_work sha1=db076fe5bff6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, Testing 5), 8 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-common-publish #7` | Planned |  | P6 build and install Common 1.3.0 then the dependents; jarstamp pending empty for the upload set |
 | `creative-common-publish #8` | Planned | S C | P7 tests: CC13 run block (solo, optional-mod, full pack sets) and new client rows |
 | `creative-common-publish #9` | Planned |  | P8 release: tag creativecommon-1.3.0, upload Common first, then the dependents |
-| `creative-common-publish #3` | In Progress |  | P2 texture sources: no row missing since 1.2.0; owner look-check of the 12 wood composters (rows status=confirm) |
-| `creative-common-publish #4` | In Progress |  | P3 ISO dates and spelling: fixer, 9 unresolved on the owner list, spelling_docs |
 | `creative-common-publish #5` | Testing |  | P4 writeups: creative_engineering.md 7.6 Update to 1.3.0, 7.5 closed, touched writeups, project page |
 | `creative-common-publish #6` | Testing |  | P5 changelogs: CurseForge file changelog for Common, pack bullets, changelog_lint |
 | `creativecommon/publish #1` | Testing | S+ C | Creative Common publish readiness: mixin version gates, `mods.toml`, dependency list |
@@ -504,7 +501,7 @@ Patchouli, Lightman's, Pretty Pipes, Wares, Legendary Tooltips, JEI, Detail Armo
 2. Done: `mods.toml` description (gradle.properties `mod_description`) matches the project page.
 3. Done: Detail Armor Bar notice moved to Equipment's `NOTICE-thirdparty.txt`.
 4. Done: `[mod_names] overrides` and `[effects] removed` default to empty; Creative Tips left the jar for the pack's
-   `kubejs/assets/creative_tips/`. Still pack-flavored, kept: `[effects] forceHudIcon` / `forceHudIconItems` (they
+   `kubejs/assets/creativetips/`. Still pack-flavored, kept: `[effects] forceHudIcon` / `forceHudIconItems` (they
    only show icons).
 5. Done: no tag in another jar's namespace (7.2).
 6. Commit, push and tag the source (creative_brewing.md 9.4 R6); the page links the repo.

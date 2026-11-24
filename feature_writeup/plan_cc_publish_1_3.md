@@ -1,13 +1,12 @@
 # Plan: Creative Common CurseForge update (1.3.0)
 
-<!-- generated:status_index begin open_work sha1=ace2d1884dbd -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 2, In Progress 1, Testing 2), 4 Complete.
+<!-- generated:status_index begin open_work sha1=2b3d05b26720 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 2, Testing 2), 5 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creative-common-publish #8` | Planned | S C | P7 tests: CC13 run block (solo, optional-mod, full pack sets) and new client rows |
 | `creative-common-publish #9` | Planned |  | P8 release: tag creativecommon-1.3.0, upload Common first, then the dependents |
-| `creative-common-publish #4` | In Progress |  | P3 ISO dates and spelling: fixer, 9 unresolved on the owner list, spelling_docs |
 | `creative-common-publish #5` | Testing |  | P4 writeups: creative_engineering.md 7.6 Update to 1.3.0, 7.5 closed, touched writeups, project page |
 | `creative-common-publish #6` | Testing |  | P5 changelogs: CurseForge file changelog for Common, pack bullets, changelog_lint |
 <!-- generated:status_index end open_work -->
@@ -36,8 +35,8 @@ Status lives in TODO rows (created in P0), not here.
 | # | Item | Class | Ruling | Date | Source |
 |---|---|---|---|---|---|
 | R1 | Cut-off | clear | Include the entire update set since `creativecommon-1.2.0` | 2026-11-21 | owner chat |
-| R2 | Version | open | 1.3.0: new library API and gameplay content since 1.2.0, and 1.2.0 may already be published | 2026-11-21 | owner chat |
-| R3 | Dependents' minimum | open | Every dependent's Common range becomes `[1.3.0,)` in the same wave | 2026-11-21 | owner chat |
+| R2 | Version | decided | 1.3.0: new library API and gameplay content since 1.2.0, and 1.2.0 may already be published | 2026-11-21 | owner chat |
+| R3 | Dependents' minimum | decided | Every dependent's Common range becomes `[1.3.0,)` in the same wave | 2026-11-21 | owner chat |
 | R4 | Server rows | clear | Dedicated-server rows stay out of the gate | 2026-11-08 | owner |
 | R5 | Glass shards (PR-CC-03, P1) | clear | Common ships the Forge loot modifier list entry; Creative Loot adds shards to mid-tier chests (mostly dirty or clear, a chance of colored) | 2026-11-22 | owner |
 | R6 | Potions of 12 vanilla effects (PR-CC-11, P2) | clear | Stay in Common; documented | 2026-11-22 | owner |

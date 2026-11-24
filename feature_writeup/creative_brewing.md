@@ -20,20 +20,21 @@ Ports' own content and tests stay in [alcohol.md](alcohol.md) (Brewin', `AL-`) a
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=c127c1cd1250 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (In Progress 2, Testing 7), 2 Complete.
+<!-- generated:status_index begin open_work sha1=54f6aabf2737 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (In Progress 1, Testing 9), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creativebrewing/publish #3` | In Progress | none | Publish Creative Brewing on CurseForge |
-| `creativebrewing/publish #4` | In Progress | S | Chain alone: Pale Jane, Steel Toe Stout and Kippers cannot be brewed |
 | `creativebrewing/bundle #2` | Testing | S C | Creative Brewing bundle jar nesting the Vinery and Brewin' ports, plus the framework for the moves |
 | `creativebrewing/move #1` | Testing | S P | Move potion brewing, alcohol, Vinery and effect content into Creative Brewing |
+| `creativebrewing/publish #4` | Testing | S | Chain alone: Pale Jane and Steel Toe Stout cannot be brewed |
 | `creativebrewing/publish #5` | Testing | S | Creative Worldgen breaks world creation without YUNG's Better Jungle Temples |
 | `creativebrewing/publish #8` | Testing | S | Chain fixes from r1106cbb (built, not installed) |
 | `creativebrewing/publish #12` | Testing | S | Echo tool on-hit rows leak without Creative Engineering |
 | `creativesplit/cdcb #7` | Testing | S C | CB phases 1-3 and the CD-bound Java, troughs and members |
 | `gear/tuning #23` | Testing | S+ T | Felsic block scrap: loot table gives 1-2, its comment and SQ-CBP-11 say 2-4 |
+| `potions #11` | Testing | SQ-CBO-02 SQ-CBO-32 | potions.js mix hearthandharvest:strong_bad_omen -> buzzier_bees:strong_luck warns when Buzzier Bees is absent |
 <!-- generated:status_index end open_work -->
 
 | Member | Gradle project | Folder | Mod ids | Display name | Version |
@@ -427,8 +428,8 @@ Paths: `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativ
 
 ## 8. History
 
-- 2026-11-17: P3c of plan_rules_fixes.md: scripts bound with `global.NCH.forPack('creativebrewing')` (ids unchanged), 139 dict-key swaps after review (potion ids and an NBT string kept literal), JEED effect keys (V-30), Chorus Wine line `col.strange` (V-44), `global.CB.on('vinery')` (V-48), `global.effect.resolve` (V-35), alcohol food as absolute rows (V-36); Brewin': the temperature advancement scan deleted (V-01), advancements dropped and the port script skips them (V-03), the Keg pops XP without unlocking recipes (12e), the coaster renderer shifts itself on a Cooking for Blockheads counter (12f step 4), the loot modifier list is a fragment; Vinery: the grass slab asks `GrassSeasonHook` and the clock registers with Calendar's `DateMoves` (12f steps 1, 3); requires Creative Loot (D25), `GlmMerge.gate` with the member switches. Queue SQ-RFX-16 to -24, CQ-RFX-04, SQ-AV-04, SQ-PST-09c.
 - 2026-11-23 (`creative-brewing #1`, `potions #11`, `creativebrewing/publish #4`, `#13`): Kippers removed (the Brewin' port still registers the item; hidden through `kubejs_startup/brewinandchewin/removed_items.js`, id in `swaps/removed.json`, fermenting recipe and origins meat tag entry deleted, food dict line and food type out). Strong Bad Omen -> strong Luck mix only with Buzzier Bees loaded. Pale Jane (`fermenting/pale_jane_from_rice_wine`) takes Farmer's Delight tree bark when `#creativecommon:bark` is empty (chain alone, no Immersive Weathering). Four modded composter loot tables carry a `forge:conditions` mod_loaded.
+- 2026-11-17: P3c of plan_rules_fixes.md: scripts bound with `global.NCH.forPack('creativebrewing')` (ids unchanged), 139 dict-key swaps after review (potion ids and an NBT string kept literal), JEED effect keys (V-30), Chorus Wine line `col.strange` (V-44), `global.CB.on('vinery')` (V-48), `global.effect.resolve` (V-35), alcohol food as absolute rows (V-36); Brewin': the temperature advancement scan deleted (V-01), advancements dropped and the port script skips them (V-03), the Keg pops XP without unlocking recipes (12e), the coaster renderer shifts itself on a Cooking for Blockheads counter (12f step 4), the loot modifier list is a fragment; Vinery: the grass slab asks `GrassSeasonHook` and the clock registers with Calendar's `DateMoves` (12f steps 1, 3); requires Creative Loot (D25), `GlmMerge.gate` with the member switches. Queue SQ-RFX-16 to -24, CQ-RFX-04, SQ-AV-04, SQ-PST-09c.
 - 2026-11-06 (plan_cb_polish.md, all sections built, not installed): the potions, Magic Resistance, the effect rules,
   categories, compound lines, Phantom Bane rules, their ten mixins, `[effects]` and `[magic_resistance]` and the armor
   and tool effect frameworks moved to Creative Common (ids `creativecommon:`, remap list moved with them); the gear rows,

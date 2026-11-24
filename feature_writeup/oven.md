@@ -12,18 +12,18 @@ The ask, from cooking.md:
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=2aae5b8555dd -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 1, In Progress 6, Testing 6), 2 Complete.
+<!-- generated:status_index begin open_work sha1=706520c4ea3b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (In Progress 6, Testing 7), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `baking/baked-goods #30` | Planned | S C P | Baking dish bakeware |
 | `baking/baked-goods #1` | In Progress | S~ P | Flour, crust and cake base in every baked recipe |
 | `baking/baked-goods #12` | In Progress | S C P | Durian and pineapple pie rework |
 | `baking/baked-goods #13` | In Progress | S C P | Cherry pie |
 | `baking/baked-goods #14` | In Progress | S C P | Unobtainable pie slices |
 | `cooking/oven #2` | In Progress | S P | Oven crafting pattern (bakeware is hammered) |
 | `cooking/oven #6` | In Progress | S P | Baking audit |
+| `baking/baked-goods #30` | Testing | SQ-FF-26 | Baking dish bakeware |
 | `baking/baked-goods #31` | Testing | S+ P | Bread baked from dough on a baking sheet |
 | `cans/canning #16` | Testing | S+ C P | Sweet Berry Pie filling can |
 | `cooking/kitchen #14` | Testing | S+ C P | Oven overflow buffer loses bottles and buckets |

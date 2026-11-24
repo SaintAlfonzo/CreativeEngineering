@@ -8,22 +8,21 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=e7a3d26efe11 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, In Progress 4, Testing 16), 1 Complete.
+<!-- generated:status_index begin open_work sha1=976fa3955dea -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 1, In Progress 3, Testing 18), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `dairy-fats-and-batter #2` | Planned | S C P | Whale oil cauldron route |
-| `pickles-and-ferments #17` | Planned | S C P | Pickled garlic item |
 | `baking/baked-goods #20` | In Progress | S C P | Pizza food type |
-| `dishes/meals #5` | In Progress | S C P T | Feasts |
 | `dishes/meals #45` | In Progress | S C P | Broccoli soup: milk to cheese |
-| `food/seasoning #3` | In Progress | S~ C P T | New seasonings |
+| `food/seasoning #3` | In Progress | SQ-FF-30 SQ-FF-31 SQ-FF-32 CQ-FF-06 | New seasonings |
 | `baking/baked-goods #19` | Testing | S C P | Quiche baking type |
 | `baking/baked-goods #21` | Testing | S C P | Lasagna baking type |
 | `dishes/ingredients #10` | Testing | S C P T | Fats and oils: animal fat, blubber, cooking oil |
 | `dishes/ingredients #33` | Testing | S C P | Rename cucumber dough to veggie dough |
 | `dishes/ingredients #40` | Testing | S P | Edible seed family: sunflower, pumpkin, oat, mixed, corn seeds |
+| `dishes/meals #5` | Testing | SQ-FF-11 SQ-FF-12 SQ-FF-29 | Feasts |
 | `dishes/meals #27` | Testing | S C P | Pineapple pizza |
 | `dishes/meals #44` | Testing | S C P | Unify the two stuffed pumpkin recipes |
 | `dishes/meals #54` | Testing | S C P | Onion soup and creamy onion soup placeable |
@@ -31,6 +30,7 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 | `food/drinks #14` | Testing | S P | Hot cocoa and apple cider review |
 | `food/types-and-tuning #6` | Testing | S P | Vanilla egg -> `#forge:eggs` in recipes |
 | `fruit #3` | Testing | S C | Fruit slice yields and reassembly |
+| `pickles-and-ferments #17` | Testing | SQ-FF-26 | Pickled garlic item |
 | `seasoning #25` | Testing | S C P | Rename the seasoning mechanic to Flavor |
 | `seasoning #26` | Testing | S C P | Flavor pairs: garlic + onion, salt + pepper, sugar + ghost pepper |
 | `seasoning #27` | Testing | S C P | Sauce flavors: chorus sauce, glowing sauce, ardent sauce, relish |

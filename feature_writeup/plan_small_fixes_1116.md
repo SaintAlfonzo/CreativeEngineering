@@ -1,11 +1,10 @@
 # Small fixes batch (written 2026-11-16)
 
-<!-- generated:status_index begin open_work sha1=5090deb601c3 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 1, In Progress 1, Testing 19), 3 Complete.
+<!-- generated:status_index begin open_work sha1=1e541f0dea07 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (In Progress 1, Testing 20), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `ingredients #47` | Planned | S | Vinegar rework: apple mash or jam, mushroom enzyme |
 | `blocks/flower-pots #10` | In Progress | S C P | Hanging pots place as wall lanterns: remove |
 | `blocks/flower-pots #9` | Testing | S P | Exclude melon, moss and pumpkin blocks from the flower pot world |
 | `dishes/ingredients #18` | Testing | S C P | Cutting banana bunch |
@@ -15,6 +14,7 @@
 | `farming/wild-crops #11` | Testing | S | Wild crop table generator misses Rustic Delight's JSON placed features |
 | `food/types-and-tuning #27` | Testing | S P | Arc Furnace gilding: at most 4 gold |
 | `gameplay/blockrunner #12` | Testing | S C P | Ice boat speed by ice type |
+| `ingredients #47` | Testing | SQ-FF-28 | Vinegar rework: apple mash or jam, mushroom enzyme |
 | `items/jars #12` | Testing | S P | Glass bottle and mason jar crafts make 4 |
 | `jei/jei-ordering #7` | Testing | C | Remove fishing rods and backpacks from JEI ordering |
 | `largecontent/mod-additions #63` | Testing | C | Straw rug: break overlay extends over 4 adjacent blocks |

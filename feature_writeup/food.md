@@ -10,20 +10,20 @@ wrong today and how tuning will work.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=6a32777472c0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 3, Pinned 1, In Progress 4, Testing 17), 0 Complete.
+<!-- generated:status_index begin open_work sha1=55e0e7cf1782 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 2, Pinned 1, In Progress 4, Testing 18), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `cans/canning #20` | Planned | S P T | Canned effects follow the input food |
-| `dairy-fats-and-batter #3` | Planned | S C | Whale oil lamp fuel: oil tank, burn rate, refill, config |
 | `food/types-and-tuning #1` | Planned | S P T | Food tuning system (values per type, Spice of Life complexity, canned parity) |
 | `food/types-and-tuning #12` | Pinned | S P T | Spice of Life much slower |
 | `dishes/ingredients #22` | In Progress | S C P | Honeycomb as sugar, honey and spread |
-| `food/seasoning #3` | In Progress | S~ C P T | New seasonings |
+| `food/seasoning #3` | In Progress | SQ-FF-30 SQ-FF-31 SQ-FF-32 CQ-FF-06 | New seasonings |
 | `food/types-and-tuning #3` | In Progress | S P T | Golden food changes vanilla values |
 | `food/types-and-tuning #16` | In Progress | S C P | Spice of Life carrot for the food dictionary only |
 | `dairy-fats-and-batter #1` | Testing | SQ-FO-17 CQ-FO-63 | Whale oil lamp |
+| `dairy-fats-and-batter #3` | Testing | SQ-FO-18 CQ-FO-64 | Whale oil lamp fuel: oil tank, burn rate, refill, config |
 | `dishes/ingredients #23` | Testing | S~ C P T | Powdered sugar recipe rebalance |
 | `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
 | `food/seasoning #2` | Testing | C P | Seasoning crafts in their own JEI category |

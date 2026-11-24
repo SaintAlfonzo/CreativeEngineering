@@ -11,14 +11,14 @@ Raspberry Pie low-priority cleanups without a ruling (#12, #14 to #20).
 
 ## 0. Rulings (owner, 2026-11-23, AskUserQuestion)
 
-<!-- generated:status_index begin open_work sha1=80b487291cd3 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 2, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=0eea704d5224 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `kitchen #41` | Planned |  | Storage Delight cabinets as half cabinets (high priority) |
-| `storage-and-item-loss #17` | Planned |  | Trash can inventory slots (high priority) |
 | `creative-common-publish #16` | Testing | SQ-CC12-01 SQ-CC12-02 SQ-CMV-02 SQ-CC-03 SQ-CGE-15 SQ-CPP-05 SQ-CCO-12a SQ-CCO-12b SQ-CCO-12c SQ-CCO-12d SQ-CCO-12e SQ-CCO-12f | NCH composter -> vanilla shapeless recipes name modded composters (twisted, ancient, blossom, azalea) when their mods are absent |
+| `kitchen #41` | Testing | SQ-STD-04 SQ-STD-05 SQ-STD-06 SQ-STD-07 SQ-STD-08 CQ-STD-02 | Storage Delight cabinets as half cabinets (high priority) |
+| `storage-and-item-loss #17` | Testing | SQ-CMP-34 SQ-CMP-35 CQ-CMP-36 CQ-CMP-37 | Trash can inventory slots (high priority) |
 | `tooling/design-rules #4` | Testing |  | Palette test tooltips off before distribution |
 <!-- generated:status_index end open_work -->
 

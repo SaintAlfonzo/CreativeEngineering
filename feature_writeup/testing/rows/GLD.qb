@@ -512,62 +512,13 @@ expect verb=player name=sagld effects=\S*minecraft:fire_resistance:0:
 look the four effects lines in order (golden bread, enchanted bread, golden carrot, enchanted apple): golden bread: Regeneration amp 1 100t, Absorption amp 0 2400t; enchanted bread and enchanted apple: Regeneration amp 1 400t, Resistance amp 0 6000t, Fire Resistance 6000t, Absorption amp 3 2400t; golden carrot as golden bread. Glint: client
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
-## SQ-GLD-03 | golden honey (cures Poison), milk (clears effects, no food effects); containers and stack sizes
-@group A
-@commands Own fresh bot `sagldm` that has eaten nothing (Raspberry Pie's diet ladder re-adds its 800 t effects the tick after milk, raspberry_pie.md 9.3; r1120nv's ~800 t Speed came from the 8 foods `sagld` had eaten). Milk first: `effect give @s minecraft:speed 60`, drink golden milk, again with enchanted milk; then golden and enchanted honey with Poison on; returned items and stack sizes
-@pass each milk clears every effect (Speed gone), gives no food effects (upstream), returns a bucket; honey removes Poison, gives its food effects (golden: Regeneration II 5 s, Absorption 2 min; enchanted: the enchanted set), returns a glass bottle; both honeys stack to 16
-@fails Speed stays after golden milk: `ShinyItems.GoldenMilk` not used (cures as a vanilla milk bucket); a Speed of 800 t or less on a milk line: the bot had eaten (diet ladder), not a milk fault
-@from batches/r1103/sA_2.qb
-@reviewed 2026-11-20
-# r1120nv fix (2026-11-20): golden stews removed 2026-11-10 (golden_food.md 0); honey stacks to 16; fresh bot so no diet effects
-> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
-sleep 2
-> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
-capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
-> forceload add {SAH1+12} {SAH3+38} {SAH1+16} {SAH3+42}
-sleep 3
-> pbot spawn sagldm {SAH1+14} {SAH2} {SAH3+40} minecraft:overworld survival
-sleep 2
-> clear sagldm
-> effect clear sagldm
-> cdevtest item goldenfood:golden_honey_bottle
-> cdevtest item goldenfood:enchanted_golden_honey_bottle
-> effect give sagldm minecraft:speed 60
-> pbot hunger sagldm 10
-> pbot hold sagldm goldenfood:golden_milk_bucket
-> pbot eat sagldm
-waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:golden_milk_bucket 20
-> cdevtest player sagldm
-> effect give sagldm minecraft:speed 60
-> pbot hunger sagldm 10
-> pbot hold sagldm goldenfood:enchanted_golden_milk_bucket
-> pbot eat sagldm
-waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:enchanted_golden_milk_bucket 20
-> cdevtest player sagldm
-> effect clear sagldm
-> effect give sagldm minecraft:poison 30
-> pbot hunger sagldm 10
-> pbot hold sagldm goldenfood:golden_honey_bottle
-> pbot eat sagldm
-waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:golden_honey_bottle 20
-> cdevtest player sagldm
-> effect clear sagldm
-> effect give sagldm minecraft:poison 30
-> pbot hunger sagldm 10
-> pbot hold sagldm goldenfood:enchanted_golden_honey_bottle
-> pbot eat sagldm
-waitlog verb=pbot.useitem bot=sagldm end=finish item=goldenfood:enchanted_golden_honey_bottle 20
-> cdevtest player sagldm
-> pbot remove sagldm
-expect verb=item item=goldenfood:golden_honey_bottle .*max_stack=16\b
-expect verb=item item=goldenfood:enchanted_golden_honey_bottle .*max_stack=16\b
-count verb=pbot.useitem bot=sagldm end=finish item=goldenfood:\S*honey_bottle result=minecraft:glass_bottle == 2
-count verb=pbot.useitem bot=sagldm end=finish item=goldenfood:\S*milk_bucket result=minecraft:bucket == 2
-reject verb=player name=sagldm effects=\S*minecraft:poison
-count verb=player name=sagldm effects=- == 2
-look effects lines: the two milk lines are empty (effects=-); the two honey lines show the honey effects with Poison gone
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
-
+## SQ-GLD-03
+@group -
+@commands (obsolete 2026-11-22: the golden honey bottle and milk bucket were removed; replaced by SQ-GLD-17)
+@pass -
+@fails -
+@draft no batch holds this row yet
+@superseded obsolete 2026-11-22: golden honey and milk removed (TODO food/types-and-tuning #26); replaced by SQ-GLD-17
 ## SQ-GLD-04 | golden cake slices at full hunger, 7 slices, no drop
 @group A
 @commands Place a golden cake and an enchanted golden cake; at full hunger right-click each 7 times, `/data get entity @p ActiveEffects` after the first slice of each
@@ -1496,3 +1447,13 @@ sleep 2
 expect onCommand
 expect alexsmobs:banana
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+## SQ-GLD-17 | removed golden honey bottle and milk bucket sets: old stacks gone without warnings; /give fails; other golden foods intact
+@group A (no old save)
+@commands A chest written with `goldenfood:golden_honey_bottle`, `goldenfood:enchanted_golden_milk_bucket`, `creativedelight:canned_golden_honey_bottle` (removed ids in the NBT) next to `goldenfood:golden_bread`, `minecraft:honey_bottle` and `minecraft:milk_bucket`; `/give @p goldenfood:golden_milk_bucket`; JEI search `golden honey`, `golden milk`, `canned golden`
+@pass the removed stacks are gone from the chest with no missing-registry warning, the other three stay; `/give` fails (unknown item); JEI shows no golden or gilded honey bottle or milk bucket and no matching can; latest.log has no KubeJS error from `goldenfood` scripts; the other golden foods and cans still eat and can; plain honey and milk still work
+@fails a stale `i.golden_honey_bottle` / `i.golden_milk_bucket` key in a script; a missing `removed.json` entry
+@draft no batch holds this row yet
+@absent goldenfood:golden_honey_bottle goldenfood:enchanted_golden_milk_bucket creativedelight:canned_golden_honey_bottle (removed; written into the chest and given on purpose)
+bootexpect Done \(
+bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*goldenfood:(enchanted_)?golden_(honey_bottle|milk_bucket)
+bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*creativedelight:canned_(enchanted_)?golden_(honey_bottle|milk_bucket)

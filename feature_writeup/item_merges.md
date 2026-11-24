@@ -12,8 +12,8 @@ reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=609d2a78bd8d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 30 open TODO rows (In Progress 7, Testing 23), 0 Complete.
+<!-- generated:status_index begin open_work sha1=0b0cde2fd10d -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 31 open TODO rows (In Progress 7, Testing 24), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -24,6 +24,7 @@ reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges
 | `merges/materials #1` | In Progress | S C P | Merge cardboard |
 | `merges/materials #2` | In Progress | S C P | Merge rope |
 | `merges/materials #4` | In Progress | S P | Crate and bag merge |
+| `creative-common-publish #10` | Testing | S | Move the pack's removed-item list and tag-strip script out of Common into the pack |
 | `merges/dishes #1` | Testing | S+ C P | Fish and chips |
 | `merges/dishes #2` | Testing | S+ C P | Mashed potatoes: split, not merged |
 | `merges/dishes #3` | Testing | S+ C P | Stuffed peppers: remove Veggies Delight's |
@@ -528,8 +529,8 @@ cooked pair added so a fillet has one furnace result). Ocean's three cooked tail
 
 ## 3. Known limits
 
-- A Neapolitan milk bottle can't be poured back into a milk cauldron (only Neapolitan's own bottle fits, and it no
 - Merge count (2026-11-23): the scratch baseline `[itemMerges] creativedelight` reads 49 merges on the full pack (SQ-VTDA-12, SQ-CM-01); a changed count means a list edit since. A recount of `data/creativedelight/swaps/merges_*.json` on 2026-11-23 finds 19 files with 46 `merges` entries; the 3 difference is unexplained (SQ-CM-01 says 18 lists), so the baseline rests on the log, not on this sum.
+- A Neapolitan milk bottle can't be poured back into a milk cauldron (only Neapolitan's own bottle fits, and it no
   longer exists in inventories). A bucket still fills it.
 - The inventory swap covers the player inventory, not other containers. A purged item in a chest placed before the
   merge turns over when a player picks it up.

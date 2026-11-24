@@ -338,7 +338,7 @@ Same biome words and clause rules; `surface` mode skips ocean and cave biomes, `
 ### `creativedelight:wild/end_amberveil` (Amberveils)
 
 - Rate 1 in 10 chunks, height: surface
-- Ender's Delight 1.1.4's patch (10 tries, spread 3), 1 in 10 chunks, on end stone only. Rebuilt in the enders_additions member; 1.1.4's biome modifiers are not shipped. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes.
+- Ender's Delight 1.1.4's patch (10 tries, spread 3), 1 in 10 chunks, on end stone only. Rebuilt in the endersadditions mod; 1.1.4's biome modifiers are not shipped. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes.
 - Added by: wild_crops.json end_amberveil
 - 5 biomes: end_highlands (61.08%), small_end_islands (underground), nullscape:crystal_peaks (7.01%), nullscape:shadowlands (14.15%), nullscape:void_barrens (7.87%)
 

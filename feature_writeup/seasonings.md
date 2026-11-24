@@ -14,8 +14,8 @@ seasonings, its three sauces are sauces.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=6ee4b8367bac -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 4, In Progress 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=54f89990b92c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 4, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -23,7 +23,7 @@ seasonings, its three sauces are sauces.
 | `food/seasoning #22` | Planned | S C P | Grill raw meat for the grilled effect; burnt meat |
 | `food/seasoning #23` | Planned | S C P | Sauces on more meat-like foods |
 | `textures/food #11` | Planned | C | Cumin, pepper and chili powder as dusts |
-| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
+| `dishes/meals #46` | Testing | SQ-FF-30 | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `dishes/meals #62` | Testing | C P | Skewering QoL: basin grab, input tags, JEI, wood variants |
 <!-- generated:status_index end open_work -->
 

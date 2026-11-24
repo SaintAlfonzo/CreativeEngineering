@@ -11,8 +11,8 @@ asks for it by name. Upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=d7d31a3f2e59 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 2, Pinned 2, In Progress 2, Testing 13), 0 Complete.
+<!-- generated:status_index begin open_work sha1=eb31b26eb162 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 2, Pinned 2, In Progress 1, Testing 14), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -20,8 +20,8 @@ asks for it by name. Upstream bugs are fixed.
 | `food/types-and-tuning #19` | Planned | S P | Barbeque's Delight skewers: food and saturation investigation |
 | `food/placeable #5` | Pinned | C P | Barbeque's Delight placeables: model recolor review |
 | `food/seasoning #17` | Pinned | S P | Crafting recipe for each Barbeque's Delight seasoning |
-| `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `food/seasoning #12` | In Progress | S P | Seasoning sources and villager trades |
+| `dishes/meals #46` | Testing | SQ-FF-30 | Skewer fold: the pack's skewers join the Barbeque's Delight system |
 | `dishes/meals #47` | Testing | S+ P | Kebab Wrap on a tortilla |
 | `dishes/meals #48` | Testing | S C P | Integrate Kebab Sandwich (Bibimbap dropped) |
 | `dishes/meals #49` | Testing | S P | Decide: smelt or smoke raw skewers |

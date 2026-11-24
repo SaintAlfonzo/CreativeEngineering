@@ -99,7 +99,9 @@ findings) become a plan, split and classify them and ask the open items before b
 - **Session role.** At the start of a session, and whenever the work changes, run
   `python3 tools/session_role.py plan|impl|test`. The Stop hook follows it: `plan` silent; `impl` checks and counts
   only this session's own uncommitted code files (never docs or other sessions' files); `test` counts this session's
-  own uncommitted run docs and queue rows. Undeclared = `impl` with a hint.
+  own uncommitted run docs and queue rows. Undeclared = `impl` with a hint. **Only one session runs `impl` at a time**
+  (it runs the heavy Java and lint checks on every Stop, and parallel runs pin the CPU); any note-taking, doc, TODO,
+  planning or review session declares `plan` as its first action, and a second code session waits or declares `plan`.
 - **Commits.** Agents commit at the end of each plan phase, and at session end for any finished work left
   uncommitted, as the repo's configured author (the owner) with the Co-Authored-By trailer, then push with
   `git push origin HEAD:agent_staging` (never `main`; the owner merges). Stage only that phase's files by path
