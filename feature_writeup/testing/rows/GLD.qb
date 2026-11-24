@@ -234,15 +234,15 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@text Needs a CD jar built after the bundle_members change (nests `repackedEnds-1.19.2-2.1-ce-19.2-03`, no `endersAdditions-*` nested jar), `enders_upstream/endersdelight-1.1.4.jar` in place, full restart. SQ-ENM-03 also needs a second boot without `mods/endersdelight-1.19-1.2.2.jar`.
 @@text
 @@table
-## SQ-ENM-01 | End's member: ends_delight and enders_additions once, from repackedEnds
+## SQ-ENM-01 | End's member: ends_delight and endersadditions once, from repackedEnds
 @group A
 @reviewed 2026-11-20
-@commands Boot with the new CD jar and Ender's 1.2.2; `grep -nE "enders_additions\|ends_delight\|Duplicate\|DuplicateModsFound\|endersAdditions" logs/latest.log`; `/forge mods` or the log's mod list
-@pass `ends_delight` and `enders_additions` each loaded once, both from the repackedEnds nested jar; no `endersAdditions-` jar in the jarjar list; no duplicate-mod error; `enders_upstream_data` pack listed (the assets pack is client-only, absent on a dedicated server)
+@commands Boot with the new CD jar and Ender's 1.2.2; `grep -nE "endersadditions\|ends_delight\|Duplicate\|DuplicateModsFound\|endersAdditions" logs/latest.log`; `/forge mods` or the log's mod list
+@pass `ends_delight` and `endersadditions` each loaded once, both from the repackedEnds nested jar; no `endersAdditions-` jar in the jarjar list; no duplicate-mod error; `enders_upstream_data` pack listed (the assets pack is client-only, absent on a dedicated server)
 @fails Duplicate mod: the old member still in CD `bundle_members` or `mods/` holds an old CD jar; only one mod listed: `members/ends/src/main/resources/META-INF/mods.toml` second `[[mods]]` entry
 @from batches/r1103/sA_2.qb
 bootreject DuplicateModsFound|Found duplicate mods
-shell grep -nhE "enders_additions|ends_delight|Duplicate|endersAdditions" logs/latest.log logs/debug.log | head -20
+shell grep -nhE "endersadditions|ends_delight|Duplicate|endersAdditions" logs/latest.log logs/debug.log | head -20
 shell unzip -l mods/creativedelight-*.jar | grep -oE "jarjar/[A-Za-z]+-[^ ]+\.jar" | grep -iE "ends|enders"
 shell ! unzip -l mods/creativedelight-*.jar | grep -q "jarjar/endersAdditions-"
 shell grep -hoE "enders_upstream_(assets|data)" logs/latest.log logs/debug.log | sort -u
@@ -252,7 +252,7 @@ look both mod ids from repackedEnds-...-03 only; both enders_upstream packs list
 @group old world
 @commands Load a copy of a 1.1.03+ world with the 4 End plants (one fruiting void pepper vine), the 5 dishes in a chest and a generated End House; `grep -iE "Missing\|remap\|endersdelight:" logs/latest.log`
 @pass No missing-id or remap lines for the 14 1.1.4 ids; blocks, items and the House look as before (LOOK)
-@fails Ids gone: `EABlocks` / `EAItems` namespace or the `enders_additions` mod did not construct (check the mod list)
+@fails Ids gone: `EABlocks` / `EAItems` namespace or the `endersadditions` mod did not construct (check the mod list)
 @from batches/r1103/sA_2.qb
 @superseded old save from 1.1.03, migration shipped in 1.2.00 (owner, 2026-11-18)
 shell ! grep -hiE "(missing|remap).*endersdelight:(amberveil|ethereal_saffron|chorus_flame|chorusflame|voidpepper|crushed_voidpepper|chicken_curry|steak_fries|veil_of_flames)" logs/latest.log
@@ -336,7 +336,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-ENM-04 | chorusflameGrowthSlow 0: chorusflame on end stone stays age 0
 @group A
-@commands `qrun.py toml config/enders_additions-common.toml growth.chorusflameGrowthSlow 0`, restart, tick a chorusflame on end stone; then `qrun.py toml config/creativedelight-common.toml members.enders_additions false`, `/reload`, JEI uses of Void Pepper
+@commands `qrun.py toml config/endersadditions-common.toml growth.chorusflameGrowthSlow 0`, restart, tick a chorusflame on end stone; then `qrun.py toml config/creativedelight-common.toml members.endersadditions false`, `/reload`, JEI uses of Void Pepper
 @pass Chorusflame stays age 0 on end stone (config still read under the old file name); with the switch off no `creativedelight:` Void Pepper or 1.1.4 meal recipe
 @fails Config not read: `EAConfig` registered under the wrong mod container; recipes still there: `global.CD.on` / `CDConfig.isMember`
 @from batches/r1103/sA_3.qb
@@ -357,22 +357,22 @@ sleep 3
 > cdevtest randomtick {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} 60
 waitlog verb=randomtick rounds=60 60
 > cdevtest ages {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} endersdelight:chorus_flame_block
-shell grep -nE "chorusflameGrowthSlow" config/enders_additions-common.toml
+shell grep -nE "chorusflameGrowthSlow" config/endersadditions-common.toml
 > pbot remove saenm
 expect verb=ages block=endersdelight:chorus_flame_block prop=age n=4 mean=0.000 hist=0:4
 look ages histogram all 0 (4 plants, 60 random ticks each, about 40 s at randomTickSpeed 300); with the 0.1 default most would grow
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
-## SQ-ENM-04b | members.enders_additions false, /reload: no Void Pepper or 1.1.4 meal recipe from Creative Delight
+## SQ-ENM-04b | members.endersadditions false, /reload: no Void Pepper or 1.1.4 meal recipe from Creative Delight
 @group A
-@commands `unzip -p mods/creativedelight-1.0.0.jar creativedelight_members.txt`; boot; `qrun.py toml config/creativedelight-common.toml members.enders_additions false`, `/reload`; JEI uses of Void Pepper and `/kubejs` recipe dump for the 1.1.4 meals; set it back to true, `/reload`
-@pass The members file lists `enders_additions` after `ends_delight`; the toml has `[members] enders_additions = true` and the boot log has no `Incorrect key members.enders_additions` line; with false the `creativedelight:` Void Pepper and 1.1.4 meal recipes are gone, with true they are back
+@commands `unzip -p mods/creativedelight-1.0.0.jar creativedelight_members.txt`; boot; `qrun.py toml config/creativedelight-common.toml members.endersadditions false`, `/reload`; JEI uses of Void Pepper and `/kubejs` recipe dump for the 1.1.4 meals; set it back to true, `/reload`
+@pass The members file lists `endersadditions` after `ends_delight`; the toml has `[members] endersadditions = true` and the boot log has no `Incorrect key members.endersadditions` line; with false the `creativedelight:` Void Pepper and 1.1.4 meal recipes are gone, with true they are back
 @fails Key corrected to null: `bundle_extra_mods` not read by `writeMembersList` (CD `build.gradle`) or missing in `members/ends/gradle.properties`
 @from batches/r1103/sA_3.qb
 @reviewed 2026-11-16
 > cdevtest uses endersdelight:voidpepper
 > cdevtest recipes voidpepper
-shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members enders_additions false && grep -nE "enders_additions" config/creativedelight-common.toml
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members endersadditions false && grep -nE "endersadditions" config/creativedelight-common.toml
 > reload
 waitlog (Reloaded|reload) 120
 sleep 10
@@ -381,7 +381,7 @@ sleep 10
 > cdevtest makes endersdelight:amberveil_stew
 > cdevtest recipes voidpepper
 # restore the switch for the rows after this one in the same boot (the @commands "set it back to true")
-shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members enders_additions true && grep -nE "enders_additions" config/creativedelight-common.toml
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members endersadditions true && grep -nE "endersadditions" config/creativedelight-common.toml
 > reload
 waitlog (Reloaded|reload) 120
 sleep 10

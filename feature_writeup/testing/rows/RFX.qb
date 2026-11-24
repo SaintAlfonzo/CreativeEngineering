@@ -530,3 +530,37 @@ shell for k in recipes tags food; do echo "== $k"; python3 "$INST/tools/dump_dif
 shell ! python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported" kubejs/exported | grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) [a-z0-9_]+:canned_'
 shell ! python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported" kubejs/exported | grep -E 'creativecompat:passthrough'
 look the recipe and tag diffs: RECIPES_SAME and TAGS_SAME, or every line explained by a jar built after the pack dump (none from this change)
+
+@@section 12
+@@title SQ-RFX Publish readiness P5: Creative Delight renames (compartment packages without underscores, `enders_additions` -> `endersadditions`), 2026-11-23 ([plan_ready_now_1123.md](../plan_ready_now_1123.md) 6; [publish_readiness.md](../publish_readiness.md) PR-CM-14; [ends_delight.md](../ends_delight.md) 5.9; TODO `publish-readiness #6`)
+@@date 2026-11-23
+@@reviewed 2026-11-23
+@@jars creativecommon creativedelight
+@@sources development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/CreativeDelight.java development/creativeDelight/src/main/resources/creativedelight.mixins.json development/shared/mixinplugin development/creativeDelight/members/ends
+@@text
+@@text The mod id of Ender's 1.1.4 content (inside `repackedEnds-...-ce-19.2-04`) is `endersadditions` now. Its blocks and items were always `endersdelight:` ids, so a save needs no swap list; what moves is the config file (`enders_additions-common.toml` -> `endersadditions-common.toml`, Common's `ConfigRename.carryOver` from Creative Delight's constructor) and the `[members]` switch in `creativedelight-common.toml` (`MemberConfigMove.carryRenamedMemberSwitches`). The five compartment packages `mixin.createcentralkitchen`, `immersiveweathering`, `mysteriousmountainlib`, `thedirtystuff`, `upgradeaquatic` map back to their mod ids in `CDMixinPlugin.PACKAGE_MOD_IDS`. Old save: build it fresh from the release jars (`deploy/latest/mods/`, skill gotchas "Old-save fixtures"); a world opened once with the new jars cannot test the carry ([forge-missing-mappings-staging](../agent_notes/forge-missing-mappings-staging.md)).
+@@table
+## SQ-RFX-34 | old save from the release jars: Ender's 1.1.4 blocks and items stay, the config file and members switch carry over
+@group A (old save, two boots)
+@commands Boot 1 on the release jars (`deploy/latest/mods/`, mod id `enders_additions`): fresh superflat; set `growth.chorusflameGrowthSlow = 0.05` in `config/enders_additions-common.toml` and `members.enders_additions = false` in `config/creativedelight-common.toml` (stop, edit, start); `> setblock 0 -61 0 minecraft:end_stone`, `> setblock 0 -60 0 endersdelight:chorus_flame_block`, `> setblock 2 -61 0 minecraft:end_stone`, `> setblock 2 -60 0 endersdelight:amberveil_mushroom`; `> setblock 0 -61 4 chest{Items:[{Slot:0b,id:"endersdelight:voidpepper",Count:3b},{Slot:1b,id:"endersdelight:chicken_curry",Count:1b}]}`; `> save-all`; stop. Boot 2 on the current Common and Delight jars, SAME world; grep latest.log, read both tomls
+@pass boot 2 log: `[swaps] config enders_additions-common.toml carried over to endersadditions-common.toml` and `[creativedelight] [members] enders_additions carried to endersadditions (false)`; `endersadditions` in the mod list, no `enders_additions`; no missing-id line naming `endersdelight:`; both blocks still in place and the chest holds 3 Void Pepper and 1 Chicken Curry; `config/endersadditions-common.toml` has `chorusflameGrowthSlow = 0.05` and `config/enders_additions-common.toml` is gone; `creativedelight-common.toml` has `endersadditions = false` and no `enders_additions` key
+@fails config at defaults: Creative Delight's constructor did not carry the file before Forge read the COMMON configs; `endersadditions = true`: the switch carry ran after Forge corrected the file; blocks or items gone: something registers under the mod id instead of `endersdelight` (check `EABlocks` / `EAItems`)
+@draft boot 1 needs the release jars and a stop, config edit and restart in the middle; build the fixture as in skill gotchas "Old-save fixtures". Boot 2 checks below are runnable once the world exists
+shell grep -hE "\[swaps\] config enders_additions|\[members\] enders_additions carried" logs/latest.log
+shell ! grep -hiE "(missing|remap).*endersdelight:" logs/latest.log
+shell grep -n "chorusflameGrowthSlow" config/endersadditions-common.toml; ls config | grep -c "^enders_additions-common.toml$" || true
+shell grep -nE "^\s*enders_?additions" config/creativedelight-common.toml
+> execute if block 0 -60 0 endersdelight:chorus_flame_block run say RFX34 plant1 ok
+> execute if block 2 -60 0 endersdelight:amberveil_mushroom run say RFX34 plant2 ok
+> data get block 0 -61 4 Items
+expect endersdelight:voidpepper
+look the two `say` lines, the chest list and the toml values above
+
+## SQ-RFX-35 | boot: the five renamed compartment packages apply their mixins, no mixin error
+@group A
+@commands Boot on the current Delight jar with Create Central Kitchen, Immersive Weathering, Mysterious Mountain Lib, The Dirty Stuff and Upgrade Aquatic present (the full pack set); `grep -E "creativedelight\.mixins\.json|Mixin.*(creativedelight\.mixin\.)" logs/debug.log logs/latest.log`
+@pass no `Mixin apply failed`, `ClassNotFoundException` or `InvalidMixinException` naming `creativedelight.mixin.`; the nine mixins of the five packages apply (debug.log lines for `MulchBlockCropGrowthMixin`, `DandelionFertileSoilMixin`, `WallRootsVerticalFaceMixin`, `MmlibFoodPropertiesMixin`, `MulberryJamMasonJarMixin`, `TobaccoPlacementMixin`, `CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`) and SQ-POT's wall roots check still passes
+@fails a mixin silently skipped: `CDMixinPlugin.PACKAGE_MOD_IDS` lacks the package (its segment is read as the mod id); `ClassNotFoundException`: a stale build (clean-build Creative Delight)
+bootreject (Mixin apply failed|InvalidMixinException|ClassNotFoundException).*creativedelight\.mixin\.
+shell grep -hcE "(MulchBlockCropGrowthMixin|DandelionFertileSoilMixin|WallRootsVerticalFaceMixin|MmlibFoodPropertiesMixin|MulberryJamMasonJarMixin|TobaccoPlacementMixin|CckCookingGuideMealTooltipMixin|CckBrewingGuideMealTooltipMixin)" logs/debug.log
+look the count is not 0 and each of the eight class names (WallRoots, Mulch, Dandelion, Mmlib, MulberryJam, Tobacco, two Cck) appears in debug.log

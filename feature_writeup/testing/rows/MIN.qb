@@ -12,7 +12,7 @@
 @@text Not run. Built 2026-11-06, not installed (`development/creativeDelight/build/libs/creativedelight-1.1.0.jar`, with
 @@text `packs/worldgen/<mod>/` in it). Every boot needs a new level-name (worldgen registries and biome modifiers are read at
 @@text world creation). Mods CDW-01 removes: `myrtrees` and `fruitsdelight` (their packs go off), then the `endersdelight` jar
-@@text (no pack goes off: `enders_additions` registers the `endersdelight:` blocks itself). Nested members cannot be removed
+@@text (no pack goes off: `endersadditions` registers the `endersdelight:` blocks itself). Nested members cannot be removed
 @@text (a `[members]` switch only skips script rows, the mod stays loaded), so their packs are always on in the pack.
 @@text
 @@table
@@ -34,7 +34,7 @@ look the level is created (Done); no worldgen dir in srv kubejs/data/creativedel
 ## SQ-CDW-02 | all mods present: wild crop packs line off none, no skip line; rubber trees near a jungle
 @group B
 @commands All mods present, new level: the packs line, then `/locate biome minecraft:jungle`, tp, forceload a 10x10 chunk box, count `myrtrees:rubberwood_log`
-@pass packs line `on: [delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight]`, `off: none`; `[wild-crops]` counts as SQ-WCD-01 with no `mod not loaded, skipped` line; rubber logs in about 1 chunk in 4
+@pass packs line `on: [delightful, endersadditions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight]`, `off: none`; `[wild-crops]` counts as SQ-WCD-01 with no `mod not loaded, skipped` line; rubber logs in about 1 chunk in 4
 @fails packs missing from the line: `CompartmentPacks.addWorldgen` did not find `packs/worldgen` in the jar (check the jar listing); rubber trees 0 but no skip line: the placed feature did not reach the level (pack added only on `SERVER_DATA`)
 @jars creativedelight powergrid
 @from batches/r1115/p4_b1.qb
@@ -56,7 +56,7 @@ waitlog verb=count (block=minecraft:jungle_log n=|error=) 600
 expect verb=count block=myrtrees:rubberwood_log n=[1-9]
 reject \[cdevtest\] .*done=0
 > forceload remove {JG1-24} {JG3-24} {JG1+23} {JG3+23}
-look packs line lists delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight (a newer jar may add packs); rubberwood logs in about 1 chunk in 4 of the 10x10 box (log count / about 5 logs a tree).
+look packs line lists delightful, endersadditions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight (a newer jar may add packs); rubberwood logs in about 1 chunk in 4 of the 10x10 box (log count / about 5 logs a tree).
 
 ## SQ-CDW-03 | [wild-crops] skip lines name only the removed mod's rules
 @group B

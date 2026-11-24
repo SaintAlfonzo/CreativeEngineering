@@ -137,7 +137,7 @@ reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 look the chest items line may hold salmon or ancient fish eggs over the 20 rolls (chance-based: record, not judged); the squid kill drops one squid item; the warm ocean count above 0 (patches generate)
 ## SQ-DNR-E-01
 @group old world
-@commands Same boot; load a 1.1.03+ world that has the four End plants, a Void Pepper vine (plain and fruiting), a Chorus Crate and an End House; `grep -i "enders_upstream\|enders_additions\|Missing" logs/latest.log`
+@commands Same boot; load a 1.1.03+ world that has the four End plants, a Void Pepper vine (plain and fruiting), a Chorus Crate and an End House; `grep -i "enders_upstream\|endersadditions\|Missing" logs/latest.log`
 @pass No missing-id or remap lines; every 1.1.4 block and item keeps its texture and model; 1.2.2 items look as before
 @fails Missing textures: check that `enders_upstream_assets` is listed; 1.2.2 art changed: a translator path collides with 1.2.2
 @reviewed 2026-11-20

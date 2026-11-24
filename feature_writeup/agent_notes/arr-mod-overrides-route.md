@@ -5,7 +5,7 @@
 Moved from agent memory 2026-11-16 (last edited there 2026-10-26). Repo status docs win over any status line here.
 
 Ender's Delight 1.2.2 is ARR, so it is not a Creative Delight member. Its MIT 1.1.4 content lives in the CD member
-`enders_additions` (development/creativeDelight/members/enders/), which registers new ids under `endersdelight:` and has
+`endersadditions` (mod id `enders_additions` until 2026-11-23; inside the End's member, development/creativeDelight/members/ends/, since 2026-11-02), which registers new ids under `endersdelight:` and has
 a build guard (`checkNoArrResources`) that fails on any path the ARR jar also ships. Overrides of the ARR jar's own
 files (the 12 retextures) go in `kubejs/assets/endersdelight/...` with an MIT notice, because the KubeJS pack sits above
 mod jars and mod-jar load order is not reliable. Lang keys: `ClientEvents.lang` with the 3-argument `e.add(ns, ...)`.

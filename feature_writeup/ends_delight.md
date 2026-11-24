@@ -269,12 +269,12 @@ Mysticrift End tower in `type/end_constructed`; mortar route for Crushed Void Pe
 | 12 retextures from 1.1.4 (MIT notice beside them) | `kubejs/assets/endersdelight/textures/item/` (the KubeJS pack sits above mod jars; a member jar cannot override the ARR jar's paths) |
 | Knife drop tooltips and JEI pages (sight, crust, mollusk); "You need a Shulker Bowl to eat this" | `kubejs/assets/creativedelight/kubejs/endersdelight/client.js` |
 
-### 5.3 Ender's 1.1.4 content (member `enders_additions`)
+### 5.3 Ender's 1.1.4 content (mod `endersadditions`, `enders_additions` before 2026-11-23)
 
 **Owner decision 2026-11-02 (superseding): the 1.2.2 donor route is dropped (creative_delight.md 38.5). Ender's 1.2.2 stays its own jar; this member's content folds into the End's member (done 2026-11-02, section 5.9) and registers whether or not `endersdelight` is present (plan J1.2; old worlds without Ender's may lose the 1.2.2 items, accepted).** Earlier decision, void: Owner decision 2026-11-02: Ender's Delight 1.2.2 itself is also nested in Creative Delight on the Oceanic donor route** (our own code for every upstream id, art and data read from the unmodified `enders_upstream/endersdelight-1.2.2.jar`, nothing of it shipped, the installed jar leaves `mods/`), absorbing this member. TODO `creativedelight/members #33`; plan in creative_delight.md 38.1. Not built.
 
 
-Mod id `enders_additions`, registers under `endersdelight:` (Forge may log an "alternative prefix" warning); hard
+Mod id `endersadditions` (`enders_additions` until 2026-11-23, renamed for DR-C10; see 5.9), registers under `endersdelight:` (Forge may log an "alternative prefix" warning); hard
 dependency on `farmersdelight`, optional (load-after) on `endersdelight` since the merge (5.9; before: hard). Build guard `checkNoArrResources` fails on any path the ARR jar has.
 Blocks `amberveil_mushroom`, `ethereal_saffron_bush`, `chorus_flame_block` (age 0 to 2), `voidpepper_block` (multiface,
 no block entity: 1.1.4's was dead code); items `amberveil`, `ethereal_saffron`, `chorusflame`, `voidpepper`,
@@ -282,7 +282,7 @@ no block entity: 1.1.4's was dead code); items `amberveil`, `ethereal_saffron`, 
 the pepper item reads "Void Pepper", the spice "Crushed Void Pepper" (1.1.4: "Void Pepper Sprout" / "Void Pepper").
 
 - Soil: all four survive only on `#creativedelight:end_plant_soil_slow` (end stone) or `_fast` (Endercrop's tilled end
-  stone); the void pepper on any attached face. Growth chances in `config/enders_additions-common.toml [growth]`:
+  stone); the void pepper on any attached face. Growth chances in `config/endersadditions-common.toml [growth]`:
   `chorusflameGrowthSlow` 0.1, `chorusflameGrowthFast` 0.2 (1.1.4: 1/5), `voidpepperTickSlow` 0.5, `voidpepperTickFast` 1.0 (since 2026-11-23: the chance per random tick to fruit; the sprout no longer spreads).
 - Void pepper blockstate fixed so the plain and fruiting vines no longer overlap. (Spread, and its wait for loaded chunks, removed 2026-11-23.)
 - Recipes (`endersdelight/additions.js`): 1.1.4's five pot recipes; heatless grid routes; knife 1 -> 2 crushed;
@@ -432,6 +432,11 @@ Ender's Delight 1.2.2 stays its own jar in `mods/`. Not booted (last boot 2026-1
   `[members] enders_additions` switch, `global.CD.on('enders_additions')`, the wild-crops `requires`, `seasonings.js`
   `needs`, and the startup error text. Registry ids unchanged (`endersdelight:`), so old worlds keep every 1.1.4 block
   and item. `endersdelight` is now `mandatory=false`, `ordering=AFTER`.
+- **Rename 2026-11-23** (publish-readiness #6, PR-CM-14, DR-C10): the mod id is `endersadditions` (version
+  `1.1.4-ce-19.2-05`, inside `repackedEnds` `-04`). Creative Delight's constructor carries `config/enders_additions-common.toml`
+  to `endersadditions-common.toml` (Common's `ConfigRename.carryOver`) and the `[members] enders_additions` value to
+  `[members] endersadditions` (`MemberConfigMove.carryRenamedMemberSwitches`); scripts, the wild-crops `requires` and
+  `flavors.js` `needs` use the new id. Registry ids stay `endersdelight:`, so saves need no swap list (SQ-RFX-34).
 - **Without Ender's 1.2.2:** the 14 registrations, End House, donor packs and wild plants still load. The five dishes
   return 1.2.2's Shulker Bowl when present (`ShulkerBowlDishItem` looks it up at use) and nothing otherwise; their pot
   and grid recipes need the bowl, so they run only with `endersdelight`.
@@ -456,7 +461,8 @@ Tests (scratch queue SQ-ENM-01 to -05; SQ-DNR-E-01 to -04 and SQ-EDL-01, -03, -0
 | ENM-01 | Boot with Ender's 1.2.2: mod list shows `ends_delight` and `enders_additions` once each, from the CD jar; no duplicate-mod error |
 | ENM-02 | Old world (1.1.03+) with the 1.1.4 plants, dishes and an End House: no missing ids, art and models as before |
 | ENM-03 | Boot without Ender's 1.2.2: the 14 `endersdelight:` ids register, End plants grow, no meal recipe errors; dishes eat with no bowl back |
-| ENM-04 | `config/enders_additions-common.toml` still read; `[members] enders_additions = false` skips the 1.1.4 recipes and tags |
+| ENM-04 | `config/endersadditions-common.toml` read; `[members] endersadditions = false` skips the 1.1.4 recipes and tags |
+| RFX-34 | Old save and configs from the release jars (`enders_additions`): blocks and items stay, the config file and `[members]` switch carry over to `endersadditions` |
 | ENM-05 | Spice and soil tags present with and without Ender's 1.2.2 |
 
 

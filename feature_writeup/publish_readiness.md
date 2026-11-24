@@ -209,7 +209,7 @@ Writeup claims: 33 checked, 22 correct, 11 mismatched.
 | PR-CM-12 | Medium | license | `members/createsalt/`, `members/cannedgoods/`, `members/oceans/` NOTICE files | License evidenced only by the `mods.toml` string (no repository, no LICENSE file) | R | Author confirmation as for Rustic, or accept in writing |
 | PR-CM-13 | Medium | writeup | `creative_delight.md:3-8, 106, 2306, 2314` | Typed install state names `creativedelight-1.0.0.jar` with 22 members (is 1.1.0, 20); the Rustic license row says "unconfirmed" though the author confirmed on 2026-11-10; the Ender's donor row names the wrong version | R | Replace with the generated block; fix the rows |
 
-Low (R): own mod id `enders_additions` has an underscore (PR-CM-14, DR-C10); `tools/.nested_jars/*.jar` tracked
+Low (R): own mod id `enders_additions` has an underscore (PR-CM-14, DR-C10) [fixed 2026-11-23: mod id `endersadditions`; config file and `[members]` switch carried over, item and block ids were always `endersdelight:`]; `tools/.nested_jars/*.jar` tracked
 (PR-CM-15); five wordings of `mod_license` and two LICENSE file names across members (PR-CM-16); Barbeques imports
 Delight classes but declares only Common (PR-CM-17); stale build numbers in display_delight.md, rustic_delight.md,
 miners_delight.md and counts in texture_sources.md (PR-CM-18); a horseshoe modifier re-added every tick per horse
@@ -318,8 +318,8 @@ Judged hits and proposed exemptions (D10):
 | DR-C2 | `passthrough_tags.js` 198 | 139 entity ids legitimate (no dict); 44 block ids are a real, small break (PR-CP-24) [fixed 2026-11-23: block ids use `block_dict.js` keys; 157 left are the entity ids, tag names and patterns] |
 | DR-C2 | `salt/create_salting.js` 130 | A lookup table of recipe ids; legitimate as data [fixed 2026-11-23: the 65 food ids use item keys; the 65 recipe ids stay as data] |
 | DR-C1 | 21 raw Create calls in two Delight scripts | Step lists passed to the sequenced-assembly helper; legitimate under the current helper |
-| DR-C10 | five underscored mixin packages in Delight | Functional: the plugin reads the package segment as the mod id. Propose an exemption |
-| DR-C10 | six underscored member ids | Upstream ids kept by ports; `enders_additions` is the one own id (PR-CM-14) |
+| DR-C10 | five underscored mixin packages in Delight | Functional: the plugin reads the package segment as the mod id. Propose an exemption [fixed 2026-11-23: packages without underscores, `CDMixinPlugin` maps the five segments to their mod ids] |
+| DR-C10 | six underscored member ids | Upstream ids kept by ports; `enders_additions` is the one own id (PR-CM-14) [fixed 2026-11-23: renamed `endersadditions`; the upstream member ids stay] |
 | DR-C7 | Common and Compat naming higher jars by string | Real (PR-CC-08, -27, PR-CP-11, -12) [fixed 2026-11-23: `design_rules_audit.py sideways` reports 0]; Raspberry Pie having no Common dependency matches its plan and needs one exemption line |
 | DR-C11 | `creativeengineering$` and `ce$` names in Common, Compat, Delight | Real, low (PR-CC-28, PR-CP-23, PR-CD-23); NBT and SavedData names: accepted exemption (owner, 2026-11-22), they keep their names since renaming needs a conversion; member prefixes stay a TODO |
 | DR-C14 | 405 upstream advancement files in repacks | PR-CM-11 |
