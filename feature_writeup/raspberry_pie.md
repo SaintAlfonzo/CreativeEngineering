@@ -1201,6 +1201,10 @@ TODO `food-tuning #63`; rows CQ-RPI-83 to -91 (`rows/RP.qb` section 7).
   equal to the default gets its hash written, so it is tracked from then on. Row SQ-RPI-92.
 - **Log privacy** (PR-RP-22). Log lines name `<world>/serverconfig/...` and `defaultconfigs/...` instead of absolute
   paths and say "a player" instead of the player's name.
+- **Fleet-Footed holds Feather Feet** (owner, 2026-11-23; scratchpad "holds feather feet as a super"). Creative Common's
+  `effect.HeldEffectParts` (was `EmptinessParts`, now a holder -> parts table) adds Botania's Feather Feet hidden for
+  Fleet-Footed's time and removes the hidden copy when Fleet-Footed is removed early; `CompoundEffects` lists it under
+  "When Applied:", in the JEI effect hover and in the JEED text. Fleet-Footed stays an unlock at 79. Row CQ-RPI-93.
 - **Why the recorded ladders never showed** (Workspace world): it ran its 2026-11-12 ladder copy (38 rungs); its copy
   was replaced from `defaultconfigs` (backup kept in the save, untracked). The Structures world still has the
   2026-11-22 copy (81 rungs): run `/solrp ladder reset` there. Toggles for single-level effects were already in the

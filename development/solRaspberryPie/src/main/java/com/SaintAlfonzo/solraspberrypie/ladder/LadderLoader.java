@@ -107,7 +107,7 @@ public final class LadderLoader {
 	 * ladder as it was seeded. At load, a copy that differs from the current default is replaced (old copy kept as a
 	 * dated .bak, one log line) when it still matches that hash, i.e. nobody edited it; an edited copy, or one seeded
 	 * before the hash existed, is kept with a warning ({@code /solrp ladder reset} replaces it). A copy equal to the
-	 * default gets its hash written, so it is tracked from then on (PR-RP-18, owner 2026-11-23).
+	 * default gets its hash written, so it is tracked from then on (PR-RP-18).
 	 */
 	public static Ladder load(MinecraftServer server) {
 		Path worldFile = worldFile(server);

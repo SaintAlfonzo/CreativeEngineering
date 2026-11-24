@@ -20,8 +20,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  * Effects that are compounds of other effects ({@code potions/effects #10}, feature_writeup/effects.md 2.7): the parts are
  * listed under "When Applied:" in item tooltips ({@code potion/CompoundEffectTooltip}), the JEI effect hover and the JEED
  * description ({@code mixin/JeedEffectRendererMixin}, {@code mixin/JeedEffectInfoMixin}). Text only, except Caffeinated's
- * Phantom Bane, which {@link PhantomBaneRules} really applies, and Emptiness's two parts, which {@link EmptinessParts}
- * really applies. A part is another effect (named, with the compound's level
+ * Phantom Bane, which {@link PhantomBaneRules} really applies, and the parts {@link HeldEffectParts} really applies
+ * (Emptiness's two, Fleet-Footed's Feather Feet). A part is another effect (named, with the compound's level
  * when {@code levelled}) or a lang key for behavior no effect covers.
  */
 public final class CompoundEffects {
@@ -42,7 +42,7 @@ public final class CompoundEffects {
 	static {
 		// Caffeinated: +10% speed and +20% attack speed are its own modifiers (listed by the game already).
 		add("farmersrespite:caffeinated", Part.effect("better_beacons:phantom_bane", false));
-		// Emptiness holds Patrol Nullifier and Phantom Bane (food-tuning #57); EmptinessParts applies them.
+		// Emptiness holds Patrol Nullifier and Phantom Bane (food-tuning #57); HeldEffectParts applies them.
 		add("botania:emptiness",
 				Part.effect("better_beacons:patrol_nullifier", false), Part.effect("better_beacons:phantom_bane", false));
 		// Stimulation clears Slowness and Mining Fatigue each tick; Sweetening / Refreshing refuse them.
@@ -51,6 +51,8 @@ public final class CompoundEffects {
 		add("fruitsdelight:recovering", Part.effect("alexsmobs:poison_resistance", false), Part.text("wither_immunity"));
 		add("vinery:double_jump", Part.effect("minecraft:jump_boost", true), Part.text("mid_air_jump"));
 		add("immersiveengineering:flashed", Part.effect("minecraft:slowness", false), Part.text("screen_flash"));
+		// Fleet-Footed holds Feather Feet; HeldEffectParts applies it.
+		add("alexsmobs:fleet_footed", Part.effect("botania:feather_feet", false));
 		add("alexsmobs:sunbird_blessing", Part.effect("minecraft:slow_falling", false), Part.text("elytra_lift"));
 	}
 

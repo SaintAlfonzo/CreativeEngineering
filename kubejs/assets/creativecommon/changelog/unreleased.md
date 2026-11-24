@@ -515,6 +515,7 @@
 - **Changed:** Effects that work the same at every level (87, e.g. Fire Resistance, Water Breathing, Night Vision, Nausea, Blindness) are capped at level I from every source; tooltips show level I [up to VI].
 - **Changed:** Astringent is renamed Steady, Poison Resistance Poison Immunity and Fire Resistance Fire Immunity, with their potions and arrows [Astringent, Poison Resistance, Fire Resistance].
 - **New:** Emptiness also gives Patrol Nullifier and Phantom Bane for its duration; its tooltip lists them.
+- **New:** Fleet-Footed also gives Feather Feet (no fall damage) for its duration; its tooltip lists it.
 - **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
 - **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
 

@@ -919,6 +919,13 @@ look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the forme
 @fails `LadderLoader.load` hash check, PR-RP-22 log lines
 @draft written with the build 2026-11-23
 
+## CQ-RPI-93 | Fleet-Footed holds Feather Feet (food-tuning #65)
+@group client
+@commands `/effect give @s alexsmobs:fleet_footed 30`; jump from 20 blocks; `/effect clear @s alexsmobs:fleet_footed`; jump again; hover a Fleet-Footed source in JEI and read its JEED description
+@pass with Fleet-Footed: no fall damage, Feather Feet present without its own icon; after the clear Feather Feet is gone and the fall hurts; the JEI hover and JEED text list Feather Feet under "When Applied:"; a visible Feather Feet from another source is not removed by the clear
+@fails `HeldEffectParts`, `CompoundEffects` entry
+@draft written with the build 2026-11-23
+
 ## CQ-RPI-88 | Stimulation unlock replaces Refreshing and Sweetening (food-tuning #63)
 @group client
 @commands `/solrp diversity set @s 50`; fill slots with Refreshing and Sweetening, then with Stimulation; read the Ladder page tagline

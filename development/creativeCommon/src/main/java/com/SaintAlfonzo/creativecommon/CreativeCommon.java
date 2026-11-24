@@ -91,7 +91,7 @@ public class CreativeCommon
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.PhantomBaneRules.class);
 		// Raspberry Pie ladder effects (food-tuning #51, #57): Steady's slip immunity, Emptiness's parts
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.SteadyRules.class);
-		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.EmptinessParts.class);
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.HeldEffectParts.class);
 
 		// Sawblade and sawdust items, the shrapnel entity, the dragon breathing recipe type, the wooden bucket:
 		// Creative Engineering (creativeengineering, creative_split.md 7.13 wave 8). Dark Fire and Flint and
