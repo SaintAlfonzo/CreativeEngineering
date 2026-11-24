@@ -361,3 +361,4 @@ packages reached only through a loaded check) would have caught all three.
 - 2026-11-22: analysis written (owner request). Six parallel read-only reviews plus the tooling baseline; blocker and
   high findings marked C were re-read in the code afterwards.
 - 2026-11-23: wave 1 execution plan and rulings W1 to W12 (composter palettes, cardboard box, tips, clean-clone build, Raspberry Pie rows): [plan_wave1_publish.md](plan_wave1_publish.md).
+- 2026-11-23: wave 2 plan: gameplay moves out of Common to Compat, Delight and Loot, per-feature page layout, Raspberry Pie fixes (rulings W2-1 to W2-9): [plan_wave2_publish.md](plan_wave2_publish.md).
