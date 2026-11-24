@@ -133,16 +133,18 @@ expect Gave 1 \[.*\] to qa
 
 ## SQ-CDJ4-08b | baby squid keeps its age (spawn-animals=true; water at 130)
 @group A
-@commands Scratch server with `spawn-animals=true` (prep_srv.sh `spawn-animals=true`): `/summon minecraft:squid ~ ~ ~ {Age:-24000}` in water, `/data get entity @e[type=squid,limit=1,sort=nearest] Age`
+@commands Scratch server with `spawn-animals=true` (prep_srv.sh `spawn-animals=true`): `/summon minecraft:squid ~ ~ ~ {Age:-24000,PersistenceRequired:1b}` in water, `/data get entity @e[type=squid,limit=1,sort=nearest] Age`
 @pass Age stays negative (Baby Mobs, nested in the Creative Worldgen jar); with `spawn-animals=false` vanilla discards the squid on its next tick
 @fails Baby Mobs member not nested
 @from batches/r1102b/s3_A.qb passed
-@reviewed 2026-11-20
+@reviewed 2026-11-23
 # r1120lr batch fault: x 130 z 500 was not loaded and spawn-animals was false; the row loads its chunk, the section's @@prep sets spawn-animals=true
+# mobs/tweaks #21, 2026-11-23: r1120lr and r1123cd lost the squid to vanilla despawn, not to the age: the bot qa at 0 0 is
+# over 128 blocks away, so a water animal is discarded on its next tick. PersistenceRequired keeps it; the age is the check.
 > forceload add 124 494 136 506
 sleep 3
 > fill 129 -61 499 131 -61 501 minecraft:water
-> summon minecraft:squid 130 -61 500 {Age:-24000,Tags:["cdj408b"]}
+> summon minecraft:squid 130 -61 500 {Age:-24000,PersistenceRequired:1b,Tags:["cdj408b"]}
 sleep 5
 > data get entity @e[type=minecraft:squid,tag=cdj408b,limit=1] Age
 expect has the following entity data: -2\d{4}
