@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -12,7 +13,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -78,15 +78,16 @@ public final class Icons {
 		pose.popPose();
 	}
 
-	private static final Map<String, ItemStack> CONFIGURED = new HashMap<>();
+	private static final Map<List<? extends String>, ItemStack> CONFIGURED = new java.util.IdentityHashMap<>();
 
 	/**
 	 * The first item of a config list that is loaded (G5d: an item of another mod, then a vanilla fallback). An entry
 	 * may carry NBT in braces after the id. Empty when none is loaded or every entry is malformed.
 	 */
 	public static ItemStack configured(List<? extends String> ids) {
-		String key = String.join("|", ids);
-		return CONFIGURED.computeIfAbsent(key, k -> {
+		// Per frame: the config list object is the key (a config reload brings a new list), no join or copy
+		// (PR-RP-20). The stack is shared: callers draw it and never change it.
+		return CONFIGURED.computeIfAbsent(ids, k -> {
 			for (String entry : ids) {
 				int brace = entry.indexOf('{');
 				ResourceLocation id = ResourceLocation.tryParse((brace < 0 ? entry : entry.substring(0, brace)).trim());
@@ -102,12 +103,12 @@ public final class Icons {
 				return stack;
 			}
 			return ItemStack.EMPTY;
-		}).copy();
+		});
 	}
 
 	/**
-	 * A diversity value as printed by Raspberry Pie: two decimals, rounded down (plan_diet_books_r2.md ruling 4,
-	 * superseding one decimal), so 4.999 shows 4.99 and never reads as a milestone of 5 not reached yet. The small
+	 * A diversity value as printed by Raspberry Pie: two decimals, rounded down (plan_diet_books_r2.md ruling 4),
+	 * so 4.999 shows 4.99 and never reads as a milestone of 5 not reached yet. The small
 	 * epsilon keeps 1.40 stored as 1.3999999 at 1.40.
 	 */
 	public static String diversity(double v) {

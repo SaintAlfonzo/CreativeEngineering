@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
@@ -17,7 +18,7 @@ import java.util.Map;
 
 /**
  * The Food Dictionary's list orders (plan_diet_books.md 2.2, 2.3; plan_diet_books_r2.md A8). Uneaten foods: client
- * config {@code [foodDictionary] uneatenSort}. Eaten foods: {@code eatenSort}, cycled by the sort button: newest unlock
+ * config {@code [foodDictionary] uneatenSort} (easiest and hardest: base diversity up or down, then food). Eaten foods: {@code eatenSort}, cycled by the sort button: newest unlock
  * first (foods unlocked before the order was stored follow, in the uneaten order), latest eaten first (Apple Pie's meal
  * memory; foods it no longer remembers follow, in the uneaten order), highest food, highest saturation (points
  * restored: hunger x modifier x 2), highest diversity (Apple Pie's base value), or custom ({@code customOrder}, only
@@ -52,6 +53,8 @@ public final class FoodDictionarySort {
 			case MOD_NAME -> modName;
 			case NAME -> byName;
 			case EASIEST -> Comparator.comparingDouble(FoodDictionarySort::complexity).thenComparingInt(FoodDictionarySort::nutrition).thenComparing(byName);
+			case HARDEST -> Comparator.comparingDouble(FoodDictionarySort::complexity).reversed()
+					.thenComparing(Comparator.comparingInt(FoodDictionarySort::nutrition).reversed()).thenComparing(byName);
 			case HIGHEST_FOOD -> highestFood().thenComparing(byName);
 			case HIGHEST_SATURATION -> highestSaturation().thenComparing(byName);
 			case HIGHEST_DIVERSITY -> highestDiversity().thenComparing(byName);

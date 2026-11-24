@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
@@ -241,7 +242,7 @@ public final class DietLogPages {
 
 	/**
 	 * The kind's item icon from the client config (G5d: lock, diamond shard, metal frame, with vanilla fallbacks). When
-	 * none of the configured items is loaded, the old icon: the effect sprite, or for a slot an empty box.
+	 * none of the configured items is loaded, the effect sprite, or for a slot an empty box.
 	 */
 	private static void kindIcon(PoseStack pose, List<? extends String> ids, Rung r, int x, int y) {
 		ItemStack stack = RpConfig.CLIENT_SPEC.isLoaded() ? Icons.configured(ids) : ItemStack.EMPTY;
@@ -445,7 +446,7 @@ public final class DietLogPages {
 				GuiComponent.fill(pose, px - 1, barY - 1, px + 1, barY + 5, 0xFF000000 | (past ? ARROW_PAST : ARROW_FUTURE));
 			}
 			if (window.contains(s.maxDiversity)) {
-				// 2 px wide, 3 px above and below the bar: at the 0.85 page scale a 1 px mark was lost at many positions.
+				// 2 px wide, 3 px above and below the bar: at the 0.85 page scale a 1 px mark drops out at many positions.
 				int maxX = window.x(s.maxDiversity, x0, x1);
 				GuiComponent.fill(pose, maxX - 1, barY - 3, maxX + 1, barY + 7, 0xFF7A3FA3);
 			} else if (s.maxDiversity > window.hi()) {

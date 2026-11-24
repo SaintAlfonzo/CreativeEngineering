@@ -6,6 +6,7 @@ import com.SaintAlfonzo.solraspberrypie.logic.Diversity;
 import com.SaintAlfonzo.solraspberrypie.logic.FoodWindow;
 import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
 import com.tarinoita.solsweetpotato.tracking.FoodInstance;
+import com.tarinoita.solsweetpotato.tracking.FoodList;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.SaintAlfonzo.solraspberrypie.logic.DietEngine;
@@ -244,7 +245,7 @@ public class RpStandaloneTest {
 
 		// P5: ageing out on Apple Pie's own defaults (queueSize 32 = endDecay 32, minContribution 0; the headless config
 		// reads its defaults). A respec of the two oldest window foods and a death (the whole window) cost what they
-		// contributed: the moved foods count nothing.
+		// contributed: aged-out foods leave the memory (raspberry-pie-publish #26).
 		check(SOLSweetPotatoConfig.size() == 32 && SOLSweetPotatoConfig.endDecay() == 32 && SOLSweetPotatoConfig.minContribution() == 0.0,
 				"Apple Pie defaults read: queueSize " + SOLSweetPotatoConfig.size() + ", endDecay " + SOLSweetPotatoConfig.endDecay());
 		Map<FoodInstance, Integer> memory = new HashMap<>();
@@ -256,12 +257,33 @@ public class RpStandaloneTest {
 		double appleOnly = FoodWindow.diversity(Map.of(apple, 0));
 		List<FoodInstance> oldest = FoodWindow.windowOldestFirst(memory).subList(0, 2);
 		check(oldest.equals(List.of(carrot, breadF)), "oldest window foods first (carrot, bread)");
-		FoodWindow.moveOut(memory, oldest);
+		FoodWindow.ageOut(memory, oldest);
 		check(Math.abs(FoodWindow.diversity(memory) - appleOnly) < 1e-9 && before > appleOnly,
-				"respec: the two moved foods count nothing (" + String.format(java.util.Locale.ROOT, "%.3f -> %.3f", before, FoodWindow.diversity(memory)) + ")");
-		check(memory.get(carrot) >= 32 && memory.get(breadF) >= 32 && memory.get(apple) == 0, "moved foods sit at endDecay or past it " + memory.values());
-		FoodWindow.moveOut(memory, FoodWindow.windowOldestFirst(memory));
-		check(FoodWindow.diversity(memory) == 0.0 && FoodWindow.windowOldestFirst(memory).isEmpty(), "death: the whole window moves out, diversity 0");
+				"respec: the two aged-out foods count nothing (" + String.format(java.util.Locale.ROOT, "%.3f -> %.3f", before, FoodWindow.diversity(memory)) + ")");
+		check(!memory.containsKey(carrot) && !memory.containsKey(breadF) && memory.get(apple) == 0, "aged-out foods leave Apple Pie's memory " + memory.keySet().size());
+		FoodWindow.ageOut(memory, FoodWindow.windowOldestFirst(memory));
+		check(FoodWindow.diversity(memory) == 0.0 && memory.isEmpty(), "death: the whole window ages out, memory empty, diversity 0");
+
+		// raspberry-pie-publish #24: a drop loses only the highest active slot. The oldest food (stew) alone would take two
+		// slots, so it is kept and the next oldest (apple) goes; thresholds are set from the foods' contributions.
+		FoodInstance stew = new FoodInstance(Items.RABBIT_STEW), fresh = new FoodInstance(Items.APPLE), newest = new FoodInstance(Items.BREAD);
+		Map<FoodInstance, Integer> dm = new HashMap<>(Map.of(stew, 20, fresh, 10, newest, 0));
+		double t = FoodWindow.diversity(dm);
+		double cStew = FoodList.calculateDiversityContribution(stew, 20), cApple = FoodList.calculateDiversityContribution(fresh, 10);
+		check(cStew > cApple, String.format(java.util.Locale.ROOT, "drop fixture: the stew outweighs the apple (%.3f > %.3f)", cStew, cApple));
+		String th = String.format(java.util.Locale.ROOT, "{\"pool\":[{\"effect\":\"minecraft:speed\"}],\"rungs\":[{\"threshold\":0.01,\"type\":\"slot\"},"
+				+ "{\"threshold\":%.6f,\"type\":\"slot\"},{\"threshold\":%.6f,\"type\":\"slot\"}]}", t - (cStew + cApple) / 2, t - cApple / 2);
+		Ladder dl = LadderLoader.parse(JsonParser.parseString(th).getAsJsonObject(), "drop test", new ArrayList<>());
+		check(dl.activeSlots(t) == 3, "drop fixture: three slots active");
+		com.SaintAlfonzo.solraspberrypie.logic.SlotActions.DropPlan plan = com.SaintAlfonzo.solraspberrypie.logic.SlotActions.planDrop(
+				dl, dm, FoodWindow.windowOldestFirst(dm), 3);
+		check(plan.group.equals(List.of(fresh)) && plan.lowered == null && plan.memory.containsKey(stew)
+						&& dl.activeSlots(FoodWindow.diversity(plan.memory)) == 2,
+				"drop: the apple ages out, the stew stays, two slots stay active (" + plan.group.size() + " aged)");
+		Map<FoodInstance, Integer> one = new HashMap<>(Map.of(stew, 20));
+		com.SaintAlfonzo.solraspberrypie.logic.SlotActions.DropPlan only = com.SaintAlfonzo.solraspberrypie.logic.SlotActions.planDrop(
+				dl, one, FoodWindow.windowOldestFirst(one), dl.activeSlots(FoodWindow.diversity(one)));
+		check(only.group.equals(List.of(stew)), "drop: with no other way the oldest food still ages out");
 
 		// PR-RP-13: a state sync carries the drink list only when it changed; the client keeps its last list otherwise.
 		com.SaintAlfonzo.solraspberrypie.net.S2CState st = new com.SaintAlfonzo.solraspberrypie.net.S2CState();

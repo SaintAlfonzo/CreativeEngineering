@@ -183,8 +183,8 @@ look record whether a `verb=recipes id=solapplepie:food_book` line is still pres
 ## CQ-RPI-06
 @group client
 @commands Eat about 20 different foods. Change slot 1 to another effect: read the confirm panel, Confirm. Without eating, change again (RPI-06, RPI-30)
-@pass panel: diversity now and after, 8 food icons, list of lost bonuses; after confirm the Diet Log history shows those 8 foods past 32 meals; second change takes the next 8 and costs more; diversity after = panel value
-@fails `SlotActions.simulate` / `FoodWindow.moveOut`; Apple Pie sync (`CapabilityHandler.syncFoodList`)
+@pass panel: diversity now and after, 8 food icons, list of lost bonuses; after confirm those foods are gone from the Diet Log (raspberry-pie-publish #26); second change takes the next 8 and costs more; diversity after = panel value
+@fails `SlotActions.simulate` / `FoodWindow.ageOut`; Apple Pie sync (`CapabilityHandler.syncFoodList`)
 @draft no batch holds this row yet
 ## CQ-RPI-07
 @group client

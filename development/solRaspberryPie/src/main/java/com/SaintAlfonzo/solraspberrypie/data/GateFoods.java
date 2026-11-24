@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.data;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;

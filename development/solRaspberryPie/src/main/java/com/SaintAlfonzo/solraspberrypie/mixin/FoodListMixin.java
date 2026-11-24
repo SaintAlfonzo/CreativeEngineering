@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.mixin;
 
 import com.SaintAlfonzo.solraspberrypie.SolRaspberryPie;
@@ -39,11 +40,11 @@ import java.util.Set;
  * bump foodsEaten for a blacklisted drink. Returning early keeps the food memory and the counter untouched.
  * <p>
  * Also keeps the unique-food gate counter ({@link GateFoods}, 12.4): filled on a counted eat, cleared with Apple Pie's
- * own counter, saved beside it in Apple Pie's NBT (key {@code solrp_gateFoods}). A list saved before the key existed is
+ * own counter, saved beside it in Apple Pie's NBT (key {@code solrp_gateFoods}). A list saved without the key is
  * backfilled with the remembered foods eaten since the counter last reset.
  * <p>
  * And the meal log ({@link MealLog}, plan_diet_books.md 1.2): the last {@code endDecay} counted meals, newest first,
- * duplicates kept (key {@code solrp_meals}); cleared with Apple Pie's food memory. A list saved before the key existed is
+ * duplicates kept (key {@code solrp_meals}); cleared with Apple Pie's food memory. A list saved without the key is
  * backfilled from the memory (one entry per food still in the window, so no duplicates).
  * <p>
  * And the diversity table ({@link Diversity}, plan_food_diversity_1121.md R1): a listed food's value replaces Apple
@@ -170,7 +171,7 @@ public abstract class FoodListMixin implements GateFoods, MealLog {
 			}
 			return;
 		}
-		// Saved before the counter existed: a food with fewer meals since than foodsEaten was eaten after the reset.
+		// A list saved without the key: a food with fewer meals since than foodsEaten was eaten after the reset.
 		for (Map.Entry<FoodInstance, Integer> e : uniqueFoods.entrySet()) {
 			if (e.getValue() >= foodsEaten || e.getKey().getItem() == null) continue;
 			ResourceLocation id = ForgeRegistries.ITEMS.getKey(e.getKey().getItem());
@@ -199,7 +200,7 @@ public abstract class FoodListMixin implements GateFoods, MealLog {
 			}
 			return;
 		}
-		// Saved before the log existed: the remembered foods still in the window, newest first.
+		// A list saved without the key: the remembered foods still in the window, newest first.
 		List<Map.Entry<FoodInstance, Integer>> in = new ArrayList<>();
 		for (Map.Entry<FoodInstance, Integer> e : uniqueFoods.entrySet()) {
 			if (e.getValue() < MealLog.length() && e.getKey().getItem() != null) in.add(e);

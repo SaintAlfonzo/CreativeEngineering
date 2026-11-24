@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
@@ -38,21 +39,40 @@ public final class EffectFilter {
 	public static Collection<MobEffectInstance> hud(Collection<MobEffectInstance> all) {
 		S2CState s = ClientState.state;
 		if (s == null || s.applied.isEmpty()) return all;
-		List<MobEffectInstance> out = new ArrayList<>(all.size());
+		// Per frame: a new list only when something is left out (PR-RP-20).
+		List<MobEffectInstance> out = null;
+		int n = 0;
 		for (MobEffectInstance i : all) {
-			boolean ours = ours(i, s);
-			if (ours && (flat(i, s) || widgetOn())) continue;
-			out.add(i);
+			boolean hide = ours(i, s) && (flat(i, s) || widgetOn());
+			if (hide && out == null) out = new ArrayList<>(firstN(all, n));
+			else if (!hide && out != null) out.add(i);
+			n++;
 		}
-		return out;
+		return out == null ? all : out;
 	}
 
 	/** Inventory list: diet effects hide while the widget is on (the widget shows them). */
 	public static Collection<MobEffectInstance> inventory(Collection<MobEffectInstance> all) {
 		S2CState s = ClientState.state;
 		if (s == null || s.applied.isEmpty() || !widgetOn()) return all;
-		List<MobEffectInstance> out = new ArrayList<>(all.size());
-		for (MobEffectInstance i : all) if (!ours(i, s)) out.add(i);
+		List<MobEffectInstance> out = null;
+		int n = 0;
+		for (MobEffectInstance i : all) {
+			boolean hide = ours(i, s);
+			if (hide && out == null) out = new ArrayList<>(firstN(all, n));
+			else if (!hide && out != null) out.add(i);
+			n++;
+		}
+		return out == null ? all : out;
+	}
+
+	/** The first {@code n} instances of {@code all}, in order. */
+	private static List<MobEffectInstance> firstN(Collection<MobEffectInstance> all, int n) {
+		List<MobEffectInstance> out = new ArrayList<>(Math.max(n, all.size() - 1));
+		for (MobEffectInstance i : all) {
+			if (out.size() >= n) break;
+			out.add(i);
+		}
 		return out;
 	}
 

@@ -47,7 +47,7 @@ look the `Diet ladder:` line appears once in the whole log (grep -c); the line r
 ## CQ-RPS-05 | Apple Pie defaults: eat, respec, drop, die; ageing-out and gate
 @group client
 @commands Client with `rps only` (Apple Pie settings at their defaults: `queueSize` 32, `minFoodsToActivate` 0). Eat a run of different foods past 32 entries, respec at the ladder screen, drop a food, die (RPS-05)
-@pass eating adds diversity; `minFoodsToActivate` 0 opens the gate at the first meal; a respec moves the oldest window foods to count 32 and diversity falls by exactly what they gave (6.1); death moves the whole window out (diversity 0, `resetOnDeath` false); with `endDecay` 32 = `queueSize` 32 the moved foods are forgotten at the next meal, so the Diet Log shows no older-foods history (expected, not a FAIL); start log has no boxed `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` warning and exactly two INFO lines from `Raspberry Pie`: `Apple Pie settings: endDecay 32 is not below queueSize 32: foods aged out by respecs and death are forgotten at the next meal ...` and `Apple Pie settings: Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off (its ladder replaces it)`
+@pass eating adds diversity; `minFoodsToActivate` 0 opens the gate at the first meal; a respec removes the oldest window foods from Apple Pie's memory and diversity falls by exactly what they gave (6.1, raspberry-pie-publish #26); death removes the whole window (diversity 0, `resetOnDeath` false); start log has no boxed `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` warning and exactly one INFO line from `Raspberry Pie`: `Apple Pie settings: Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off (its ladder replaces it)`
 @fails ageing-out cost and gate in `raspberry_pie.md` 6.1 and the gate code (P5); `logic/ApplePieSettings.java` (P5)
 @draft client steps: eat loop with `/give`, respec command, `/kill`
 ## SQ-RPS-06 | Alex's Mobs present: Fleet-Footed mixin applies
@@ -247,3 +247,27 @@ expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*solappl
 expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*create_central_kitchen:incomplete_hamburger
 expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*minecraft:potion
 reject diet_log\.js.*(Error|error)
+
+@@section 8
+@@title CQ-RPS-14 Raspberry Pie standalone: drop loses one slot, aged-out foods leave Apple Pie's memory, Hardest sort, 2026-11-23 ([raspberry_pie.md](../raspberry_pie.md) section 12.16, TODO `raspberry-pie-publish #24`, `#26`, `#27`, `#28`)
+@@date 2026-11-23
+@@jars solraspberrypie
+@@sources feature_writeup/raspberry_pie.md development/solRaspberryPie
+@@modset rps only
+@@text
+@@text The `rps only` set with the Raspberry Pie jar built 2026-11-23 (plan_wave1_publish.md W-P3, plan_wave2_publish.md
+@@text I12, I13, I15). Default ladder slots at 5, 15, 27.5 and 40.
+@@text
+@@table
+## CQ-RPS-14 | drop after diversity set keeps the lower slots; respec, drop and death remove aged-out foods (#24, #26)
+@group client
+@commands Client with `rps only`, new survival world, operator. `/solrp diversity set @s 30`; fill slots 1 to 3 (effect screen, P); drop slot 3, confirm; `/solrp diversity get @s`. Then `/solrp reset @s`, eat 12 different vanilla foods, open the Diet Log Overview; change slot 1's effect, confirm; open the Diet Log again; `/kill @s`, respawn, open the Diet Log (RPS-14)
+@pass after the drop slots 1 and 2 stay active with their effects, slot 3 is empty and grayed; diversity reads 27.49 (just under 27.5), not 0; the confirm panel listed only slot 3 and its effect as lost; after the change the 5 oldest foods are gone from the Last meals grid and the Diet Log history, diversity fell by what they gave; after death the grid and history are empty and diversity is 0; eating one of the aged-out foods again counts it in full
+@fails `logic/SlotActions.planDrop` and `lowered` (Adjustment entry), `FoodWindow.ageOut`, `ServerEvents.respawn`; `client/DietLogPages.shownMeals`
+@draft client steps: effect screen clicks and the Diet Log pages through the capture driver
+## CQ-RPS-15 | Food Dictionary Hardest sort; Diet Log width default 48 (#27, #28)
+@group client
+@commands Client with `rps only`, fresh `config/` (jar defaults). Open the Diet Log; read `config/solraspberrypie-client.toml`; set `[foodDictionary] uneatenSort = "HARDEST"`, reopen the Food Dictionary uneaten pages; set `"EASIEST"`, reopen (RPS-15)
+@pass the generated config has `extraWidth = 48` and lists `HARDEST` after `EASIEST` in the uneatenSort comment and allowed values; Hardest lists the uneaten foods from the highest base diversity down (ties: more hunger first), Easiest the reverse order of base diversity; the Diet Log opens at the same about 25% extra width as before
+@fails `RpConfig.UneatenSort`, `client/FoodDictionarySort.uneaten`; `RpConfig` `extraWidth`
+@draft client steps: config edits between screen opens; read the order from the capture driver's page dump

@@ -12,8 +12,11 @@ displayName="${mod_name}"
 authors="${mod_authors}"
 displayURL="https://github.com/SaintAlfonzo/CreativeEngineering"
 credits="Spice of Life: Apple Pie Edition by tarinoita, forked from the Potato Edition (Kevun1) and the Carrot Edition team. Apple Pie and Carrot Edition (LGPL-2.1) are nested unmodified (see solRaspberryPie-NOTICE-nested-LGPL.txt in the jar); no code of theirs is copied."
-itemIcon="solraspberrypie:liquid_diet_log"
 description='''${mod_description}'''
+
+# Mod list icon for Catalogue (Forge 1.19.2 itself has no item icon key).
+[modproperties.${mod_id}]
+catalogueItemIcon="solraspberrypie:liquid_diet_log"
 
 [[dependencies.${mod_id}]]
 modId="forge"
@@ -52,5 +55,21 @@ side="CLIENT"
 modId="solcarrot"
 mandatory=false
 versionRange="[1.19.2-1.14.0,)"
+ordering="NONE"
+side="BOTH"
+
+# AppleSkin: the food tooltip row layout (client mixin gated on it, RpMixinPlugin).
+[[dependencies.${mod_id}]]
+modId="appleskin"
+mandatory=false
+versionRange="[2.4,)"
+ordering="NONE"
+side="CLIENT"
+
+# Alex's Mobs: the Fleet-Footed fix (mixin gated on it, RpMixinPlugin).
+[[dependencies.${mod_id}]]
+modId="alexsmobs"
+mandatory=false
+versionRange="[1.21,)"
 ordering="NONE"
 side="BOTH"

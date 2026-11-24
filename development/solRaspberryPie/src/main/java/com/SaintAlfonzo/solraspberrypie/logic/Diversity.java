@@ -44,38 +44,56 @@ public final class Diversity {
 	/** Folder inside a mod jar: {@code solraspberrypie/diversity/<name>.json}. */
 	private static final String[] DIR = {SolRaspberryPie.MOD_ID, "diversity"};
 
-	private static Map<ResourceLocation, Double> values;
-	private static Map<ResourceLocation, ResourceLocation> canonical;
-	/** Resolved family heads per member item, filled lazily (registry lookups after load). */
-	private static final Map<Item, Item> HEADS = new HashMap<>();
+	/**
+	 * The current table, replaced whole; null until read (or received). Volatile so the per-food lookups read it without
+	 * a lock (PR-RP-20); only reading and replacing it lock.
+	 */
+	private static volatile Table table;
+
+	/**
+	 * Values per item id and family member -> head; {@code heads} caches the resolved head per item (registry lookups
+	 * after load), filled lazily and dropped with the table.
+	 */
+	private record Table(Map<ResourceLocation, Double> values, Map<ResourceLocation, ResourceLocation> canonical, Map<Item, Item> heads) {
+		Table(Map<ResourceLocation, Double> values, Map<ResourceLocation, ResourceLocation> canonical) {
+			this(values, canonical, new java.util.concurrent.ConcurrentHashMap<>());
+		}
+	}
 
 	/** One table file: where it came from (for the log) and its parsed JSON. */
 	public record Source(String name, JsonObject json) {}
 
 	/** The table's value for this item, or null when the table does not list it. */
 	public static Double value(Item item) {
-		if (!load()) return null;
+		Table t = current();
+		if (t == null) return null;
 		ResourceLocation id = item == null ? null : ForgeRegistries.ITEMS.getKey(item);
-		return id == null ? null : values.get(id);
+		return id == null ? null : t.values().get(id);
 	}
 
 	/** The item whose diet entry this item counts as: its family head, or the item itself. */
 	public static Item head(Item item) {
 		if (item == null) return null;
-		if (!load() || canonical.isEmpty()) return item;
-		synchronized (HEADS) {
-			Item cached = HEADS.get(item);
-			if (cached != null) return cached;
-			Item out = item;
-			ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
-			ResourceLocation head = id == null ? null : canonical.get(id);
-			if (head != null) {
-				Item h = ForgeRegistries.ITEMS.getValue(head);
-				if (h != null) out = h;
-			}
-			HEADS.put(item, out);
-			return out;
+		Table t = current();
+		if (t == null || t.canonical().isEmpty()) return item;
+		Item cached = t.heads().get(item);
+		if (cached != null) return cached;
+		Item out = item;
+		ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
+		ResourceLocation head = id == null ? null : t.canonical().get(id);
+		if (head != null) {
+			Item h = ForgeRegistries.ITEMS.getValue(head);
+			if (h != null) out = h;
 		}
+		t.heads().put(item, out);
+		return out;
+	}
+
+	/** The current table without a lock once it is there; null while a remote client waits for the server's. */
+	private static Table current() {
+		Table t = table;
+		if (t != null) return t;
+		return load() ? table : null;
 	}
 
 	/**
@@ -83,7 +101,7 @@ public final class Diversity {
 	 * (false, nothing read); every server reads the jars once.
 	 */
 	private static synchronized boolean load() {
-		if (values != null) return true;
+		if (table != null) return true;
 		if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient()
 				&& net.minecraftforge.server.ServerLifecycleHooks.getCurrentServer() == null) return false;
 		List<Source> sources = new ArrayList<>();
@@ -99,7 +117,8 @@ public final class Diversity {
 	/** The current table for {@code S2CDiversity}: {values, family member -> head}; empty maps when there is none. */
 	public static synchronized List<Map<ResourceLocation, ?>> snapshot() {
 		load();
-		return List.of(values == null ? Map.of() : new HashMap<>(values), canonical == null ? Map.of() : new HashMap<>(canonical));
+		Table t = table;
+		return List.of(t == null ? Map.of() : new HashMap<>(t.values()), t == null ? Map.of() : new HashMap<>(t.canonical()));
 	}
 
 	/**
@@ -118,21 +137,13 @@ public final class Diversity {
 			if (ForgeRegistries.ITEMS.containsKey(id) && ForgeRegistries.ITEMS.containsKey(head)) nc.put(id, head);
 			else unknown[0]++;
 		});
-		synchronized (HEADS) {
-			HEADS.clear();
-		}
-		canonical = nc;
-		values = nv;
+		table = new Table(nv, nc);
 		LOG.info("Diversity table from the server: {} values, {} family members; {} ids unknown to this client", nv.size(), nc.size(), unknown[0]);
 	}
 
 	/** Leaving a world: the next server's table (or the integrated server's jars) replaces this one. */
 	public static synchronized void forget() {
-		synchronized (HEADS) {
-			HEADS.clear();
-		}
-		values = null;
-		canonical = null;
+		table = null;
 	}
 
 	/** Every {@code solraspberrypie/diversity/*.json} in the loaded mod files, in mod-id then file-name order. */
@@ -213,11 +224,7 @@ public final class Diversity {
 						v.size(), c.size(), used.size(), String.join(", ", used), absent[0]);
 			}
 		} finally {
-			synchronized (HEADS) {
-				HEADS.clear();
-			}
-			canonical = c;
-			values = v;
+			table = new Table(v, c);
 		}
 	}
 

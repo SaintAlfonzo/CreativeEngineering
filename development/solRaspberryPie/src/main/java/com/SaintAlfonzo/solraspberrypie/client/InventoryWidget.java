@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
@@ -41,9 +42,23 @@ public final class InventoryWidget {
 		return RpConfig.CLIENT.widgetEnabled.get() && ClientState.ready() && !inv.getRecipeBookComponent().isVisible();
 	}
 
+	/** The last cells and the state and ladder they were built from: rebuilt on a new state, not every frame (PR-RP-20). */
+	private static List<Cell> cellsCache;
+	private static S2CState cellsState;
+	private static Object cellsLadder;
+
 	private static List<Cell> cells() {
-		List<Cell> out = new ArrayList<>();
 		S2CState s = ClientState.state;
+		if (cellsCache != null && cellsState == s && cellsLadder == ClientState.ladder) return cellsCache;
+		List<Cell> out = buildCells(s);
+		cellsCache = out;
+		cellsState = s;
+		cellsLadder = ClientState.ladder;
+		return out;
+	}
+
+	private static List<Cell> buildCells(S2CState s) {
+		List<Cell> out = new ArrayList<>();
 		for (Map.Entry<ResourceLocation, Integer> e : s.flat.entrySet()) out.add(new Cell(e.getKey(), e.getValue(), true, -1));
 		for (int i = 0; i < s.activeSlots && i < s.slots.size(); i++) {
 			SlotChoice c = s.slots.get(i);

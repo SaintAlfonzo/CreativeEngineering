@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie;
 
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -38,7 +39,7 @@ public final class RpConfig {
 			effectDuration = b.comment("Duration in ticks of every diet effect instance (flat bonuses and slots).")
 					.defineInRange("effectDuration", 800, 100, 72000);
 			refreshInterval = b.comment("Every diet effect is re-added unconditionally this often, in ticks (staggered per player).",
-							"Keep it well below effectDuration.")
+							"A value not at least 20 ticks below effectDuration is used as effectDuration - 20 (one warning at server start).")
 					.defineInRange("refreshInterval", 400, 20, 72000);
 			pauseEndsOnRelog = b.comment("If true, /solrp pause ends when the player logs out; by default it persists across relog and restart.")
 					.define("pauseEndsOnRelog", false);
@@ -75,8 +76,8 @@ public final class RpConfig {
 							"(or below this value when it is under 1.0).")
 					.defineInRange("bookScale", 1.4, 0.5, 3.0);
 			extraWidth = b.comment("Diet Log background stretched sideways by this many pixels: the book's center column is repeated,",
-							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width; 47 = 25% wider.")
-					.defineInRange("extraWidth", 47, 0, 400);
+							"the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width; 48 = about 25% wider.")
+					.defineInRange("extraWidth", 48, 0, 400);
 			diversityIconFallback = b.comment("Diet Log Overview: the icon left of the diversity value is the eaten food (Food Dictionary) closest",
 							"in base diversity to the average of the meals in the diet window, never a drink. With nothing eaten it is one of",
 							"these items (loaded ones only). Defaults are vanilla; a modpack sets its own list in this file.")
@@ -93,7 +94,8 @@ public final class RpConfig {
 			b.pop();
 			b.push("foodDictionary");
 			uneatenSort = b.comment("Food Dictionary (Spice of Life: Carrot Edition) order of the uneaten foods: MOD_NAME (mod, then name),",
-							"NAME (A-Z), EASIEST (lowest base diversity first, then food), HIGHEST_FOOD (hunger restored),",
+							"NAME (A-Z), EASIEST (lowest base diversity first, then food), HARDEST (highest base diversity first, then food),",
+							"HIGHEST_FOOD (hunger restored),",
 							"HIGHEST_SATURATION (saturation points restored), HIGHEST_DIVERSITY (base diversity), CUSTOM (customOrder;",
 							"only while customOrder is not empty).")
 					.defineEnum("uneatenSort", UneatenSort.MOD_NAME);
@@ -150,8 +152,8 @@ public final class RpConfig {
 		}
 	}
 
-	/** A config value no longer listed (HARDEST, UNEATEN_ORDER) resets to the default when the config loads. */
-	public enum UneatenSort { MOD_NAME, NAME, EASIEST, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM }
+	/** A config value not listed here resets to the default when the config loads. */
+	public enum UneatenSort { MOD_NAME, NAME, EASIEST, HARDEST, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM }
 
 	public enum EatenSort {
 		NEWEST_UNLOCK, LATEST_EATEN, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM;

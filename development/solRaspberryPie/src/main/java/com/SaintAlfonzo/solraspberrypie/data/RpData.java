@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.data;
 
 import com.SaintAlfonzo.solraspberrypie.SolRaspberryPie;
@@ -77,9 +78,26 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 
 	private final LazyOptional<RpData> self = LazyOptional.of(() -> this);
 
+	/**
+	 * The player's data. A player without the capability (a fake player of another mod, or a player entity another mod
+	 * built without the attach event, or a player whose data was released after respawn) gets a detached instance kept for that entity, so its reads and writes agree within
+	 * the session; nothing of it is saved. One warning per entity class (PR-RP-21).
+	 */
 	public static RpData get(Player player) {
-		return player.getCapability(CAP).orElseGet(RpData::new);
+		RpData d = player.getCapability(CAP).resolve().orElse(null);
+		if (d != null) return d;
+		synchronized (DETACHED) {
+			if (WARNED.add(player.getClass().getName())) {
+				SolRaspberryPie.LOG.warn("A player entity ({}) has no Raspberry Pie data (none attached, or already released); its diet state is kept in memory only, not saved",
+						player.getClass().getName());
+			}
+			return DETACHED.computeIfAbsent(player, p -> new RpData());
+		}
 	}
+
+	/** Detached data per player entity without the capability ({@link #get}). */
+	private static final Map<Player, RpData> DETACHED = new java.util.WeakHashMap<>();
+	private static final Set<String> WARNED = new HashSet<>();
 
 	public SlotChoice slot(int i) {
 		return i >= 0 && i < slots.size() ? slots.get(i) : null;

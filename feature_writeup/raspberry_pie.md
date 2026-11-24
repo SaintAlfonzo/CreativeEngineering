@@ -247,7 +247,7 @@ The only player choices are **which effect at which level in which slot.** Every
 | Fill an empty active slot | free; lands in the lowest empty active slot (5.1) |
 | Change a slot's level (any unlocked level of the same effect) | free |
 | Change a slot to a different effect | age out the **5 oldest foods in the decay window** (configurable `respecFoods`; 8 from 2026-11-13 to 2026-11-19, 5 before) (6) |
-| Drop (clear) a slot | age out foods from the oldest end of the window **until the highest active slot is lost**. The dropped effect is removed and the choices of the **active** slots above it shift down one slot to fill the gap; the vacated highest active slot is left **empty and grayed** (owner, 2026-11-11). Choices stored in grayed slots stay where they are (Q-B option b, 2026-11-12) |
+| Drop (clear) a slot | age out foods from the oldest end of the window **until the highest active slot is lost, and only that slot** (a food that alone would also take a lower slot is kept and the next oldest goes; the `/solrp diversity set` Adjustment entry is lowered to just under the highest slot's milestone instead, 12.16). The dropped effect is removed and the choices of the **active** slots above it shift down one slot to fill the gap; the vacated highest active slot is left **empty and grayed** (owner, 2026-11-11). Choices stored in grayed slots stay where they are (Q-B option b, 2026-11-12) |
 | Swap two slots | not possible |
 | Re-applying a regained slot's stored choice | automatic, free |
 
@@ -292,27 +292,21 @@ Every paid action shows a confirm panel before anything happens: diversity now a
 
 ### 6.1 Rule
 
-Respecs and death move foods **out of the decay window** to the front of the out-of-window part of the food memory,
-instead of marking them gray (owner, 2026-11-11). A moved food:
+Respecs and death **remove the aged-out foods from Apple Pie's food memory** (raspberry-pie-publish #26, 2026-11-23;
+until then they were moved past `endDecay` and kept). An aged-out food:
 
-- has its "meals since last eaten" raised past `endDecay` (30), so it counts `minContribution` (0 in the pack);
-- keeps its order relative to the other moved foods: each moved food gets `k + (30 - smallest k in the group)`,
-  capped at 255. A respec of the foods at 25-29 puts them at 30-34; death (the whole window, 0-29) puts them at 30-59;
-- shows in the Diet Log history in its new place, drawn like any other old food (no gray drawing);
-- counts in full again when eaten (a fresh eat resets its count to 0, as Apple Pie already does);
-- is forgotten by Apple Pie once it reaches 256 meals, like any food. Nothing extra is stored, so nothing needs
-  pruning.
+- counts nothing and leaves the Diet Log (its meals drop off the Last meals grid);
+- counts in full again when eaten, as a new food.
 
-"Oldest in the decay window" = the foods with the largest count still below 30. If fewer foods than needed are in the
-window, all of them move.
-
-This relies on `minContribution` being 0: above 0, moved foods still count a little and every cost shrinks. Handling:
-Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
+"Oldest in the decay window" = the foods with the largest count still below `endDecay`. If fewer foods than needed are
+in the window, all of them go. Foods past the window that were never aged out stay in Apple Pie's memory as before.
+Q-E (a warning at server start when `minContribution` is above 0, decided 2026-11-12) still applies: foods past the
+window then count a little.
 
 ### 6.2 Implementation
 
-- Accessor mixin on `FoodList.uniqueFoods` (private `Map<FoodInstance, Integer>`); Raspberry Pie rewrites the counts,
-  then calls Apple Pie's public `CapabilityHandler.syncFoodList(player)`, since Apple Pie only syncs on eat, respawn,
+- Accessor mixin on `FoodList.uniqueFoods` (private `Map<FoodInstance, Integer>`); Raspberry Pie removes the aged-out
+  entries (`FoodWindow.ageOut`), then calls Apple Pie's public `CapabilityHandler.syncFoodList(player)`, since Apple Pie only syncs on eat, respawn,
   dimension change and login.
 - No extra NBT key, no diversity redirect, no tooltip mixin: Apple Pie's own diversity, Diet Log and tooltip
   (`calculateDiversityContribution(food, count)`) all read the moved count and show the right value.
@@ -629,7 +623,7 @@ hand-built widgets grow too large (check its license first). LDLib is not worth 
 | Q-B | Option b: only active choices shift on a drop; grayed slots keep theirs (5.1, 5.2). |
 | Q-C | Allow the change and store the choice grayed (5.3). |
 | Q-D | An effect already slotted is not offered for another slot (5.1). |
-| Q-E | Warn at server start when `minContribution` is above 0 (6.1). |
+| Q-E | Warn at server start when `minContribution` is above 0 (6.1; an INFO line since 12.16, aged-out foods leave the memory). |
 | Q-G | Keep a slotted unlock until the player changes it, even if a ladder edit moved it out of reach. |
 | Q-H | A broken or missing ladder file falls back to the built-in default ladder with a loud error. |
 | Q-I | Admin pause, resume and pause-list commands; persist by default, effects stop applying, data keeps updating, effect interaction blocked, PAUSED icon (12.3). |
@@ -733,6 +727,8 @@ icons, window, double page, health rule, backfill).
 
 12.15 rows (2026-11-23): SQ-RPS-11 (isolated Diet Log recipe loads), CQ-RPS-12 (any-food Diet Log, a dedicated
 server's table on the client, drink list kept between syncs), SQ-RPS-13 (pack exclusion tag, R5); `tools/test_rp_ladder.sh` ALL 55 OK.
+
+12.16 rows (2026-11-23): CQ-RPS-14 (drop after `/solrp diversity set` keeps the lower slots, aged-out foods leave the memory), CQ-RPS-15 (Hardest sort, Diet Log width 48); CQ-RPI-90 covers `#21`; `tools/test_rp_ladder.sh` ALL 59 OK.
 
 12.14 rows (2026-11-23): CQ-RPI-83 to -91 (diversity set raise and lower, closed gate, relog, ladder reset, Stimulation, numeral, reached icons, diversity get).
 
@@ -956,12 +952,12 @@ Plan and rulings: [plan_diet_books_r2.md](plan_diet_books_r2.md) (intake of the 
   minFoodsToActivate, unique foods) has been passed once; later gate closings (death resets Apple Pie's counter) do
   not stop it. Unlocks and their messages follow `maxDiversity`, so they wait too. Old saves: missing flag = opened when
   `maxDiversity` > 0. `/solrp reset` clears it.
-- **Food Dictionary sorts:** uneaten `MOD_NAME`, `NAME`, `EASIEST`, `HIGHEST_FOOD` (nutrition), `HIGHEST_SATURATION`
+- **Food Dictionary sorts:** uneaten `MOD_NAME`, `NAME`, `EASIEST`, `HARDEST` (12.16), `HIGHEST_FOOD` (nutrition), `HIGHEST_SATURATION`
   (nutrition x modifier x 2), `HIGHEST_DIVERSITY` (complexity), `CUSTOM`; eaten button `NEWEST_UNLOCK`,
   `LATEST_EATEN`, `HIGHEST_FOOD`, `HIGHEST_SATURATION`, `HIGHEST_DIVERSITY`, `CUSTOM` (icons golden carrot, clock,
   cooked beef, rabbit stew, suspicious stew, book and quill). Ties fall back to the uneaten order. `CUSTOM` reads
   client config `[foodDictionary] customOrder` (item ids, listed first in order); the button skips it while the list
-  is empty (`food-tuning #15`). A config still on `HARDEST` or `UNEATEN_ORDER` resets to the default on load.
+  is empty (`food-tuning #15`). A config value not in the list resets to the default on load.
 - **Food tooltips** (`client/FoodTooltips`, GatherComponents at LOWEST): order name, AppleSkin's food row, the
   diversity line, Quark's saturation word, the rest. Diversity line on every food Apple Pie counts (edible, not a
   drink, `shouldCount`): "Diversity: X", or "Diversity: X (contributes Y)" while its memory count is inside the window.
@@ -1243,6 +1239,41 @@ CQ-RPS-12 (`rows/RPS.qb` section 6). Network version 6 (client and server jars m
   with no integrated server never reads its own jars' tables (Apple Pie's values until the packet); it drops ids it
   does not know (one INFO line `Diversity table from the server: ...`) and forgets the table on leaving. Singleplayer
   and LAN hosts share the integrated server's table and ignore the packet.
+
+### 12.16 Publish fixes: drop, memory, config, perf (built 2026-11-23)
+
+TODO `raspberry-pie-publish #12`, `#14` to `#17`, `#19`, `#21`, `#24`, `#26` to `#28` ([plan_wave1_publish.md](plan_wave1_publish.md)
+W-P3, [plan_wave2_publish.md](plan_wave2_publish.md) I12, I13, I15); rows CQ-RPS-14, CQ-RPS-15 (`rows/RPS.qb` section 8).
+
+- **Drop loses one slot** (`#24`). The cause: after `/solrp diversity set` the window holds one Adjustment entry worth
+  the whole diversity, so ageing out the oldest food took every slot. A drop now ages out foods from the oldest end
+  until the highest active slot is lost and only that one: a food that alone would also take a lower slot is kept
+  and the next oldest goes; the Adjustment entry is lowered to just under the highest slot's milestone (0.01 under,
+  or half the gap to the next slot when that is smaller) and stays in the window. When no order loses exactly one
+  slot, foods go from the oldest end as before. The hover count counts the lowered entry.
+- **Aged-out foods leave Apple Pie's memory** (`#26`): 6.1. The server-start check follows: `minContribution` above 0
+  is an INFO line now, not part of the warning block (aged-out foods count nothing whatever it is; only foods past the
+  window still count a little), and the `endDecay` not below `queueSize` INFO line is gone (nothing is kept past the
+  window any more). Apple Pie's defaults still give no warning.
+- **Reached permanent buff icon** (`#21`): already steady since `food-tuning #63` (12.14; row CQ-RPI-90); the scratchpad
+  note predates that build. No code change.
+- **Food Dictionary Hardest** (`#27`): uneaten sort `HARDEST`, base diversity descending, then hunger descending, then
+  name (Easiest mirrored).
+- **Diet Log `extraWidth` default 48** (`#28`; pack config too).
+- **refreshInterval** (`#14`, PR-RP-19): used as at most `effectDuration` - 20 ticks; a server start with a larger value
+  logs one warning.
+- **Lock-free table lookups** (`#15`, PR-RP-20): the diversity table is one volatile object (values, families and the
+  family-head cache), read without a lock; per frame no config-icon key or stack copy (`Icons.configured`), the
+  inventory widget's cells rebuilt only on a new state, the effect filters allocate a list only when they leave an
+  effect out.
+- **Missing capability** (`#16`, PR-RP-21): `RpData.get` keeps a detached instance per player entity without the
+  capability (one warning per entity class), not a new throwaway object per call.
+- **mods.toml** (`#17`, PR-RP-23): the mod list icon is `[modproperties] catalogueItemIcon` (read by the mod list mod of that name); optional
+  dependency rows for AppleSkin (client) and Alex's Mobs.
+- **Jar tags** (`#12`, PR-RP-16): the `#creativedelight:food_type/drink` entry of `solraspberrypie:drinks` is already
+  optional (`required: false`); kept, like the Farmer's Delight and Brewin' entries.
+- **Sources** (`#19`, PR-RP-25): SPDX header on all 68 files; four history phrases in comments reworded.
+- `tools/test_rp_ladder.sh` ALL 59 OK (ageing out removes foods; the drop keeps a heavy oldest food).
 
 ## History
 

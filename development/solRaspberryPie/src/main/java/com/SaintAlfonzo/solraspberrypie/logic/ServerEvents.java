@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.logic;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
@@ -65,6 +66,19 @@ public final class ServerEvents {
 	public static void serverStarted(ServerStartedEvent e) {
 		Ladder.current = LadderLoader.load(e.getServer());
 		ApplePieSettings.report();
+		int every = RpConfig.SERVER.refreshInterval.get(), dur = RpConfig.SERVER.effectDuration.get();
+		if (every != refreshInterval()) {
+			SolRaspberryPie.LOG.warn("refreshInterval {} is not below effectDuration {} by a second; diet effects are refreshed every {} ticks instead",
+					every, dur, refreshInterval());
+		}
+	}
+
+	/**
+	 * The refresh period in ticks: {@code refreshInterval}, at most {@code effectDuration} less 20 ticks so an effect is
+	 * always re-added before it runs out (PR-RP-19; effectDuration is at least 100).
+	 */
+	static int refreshInterval() {
+		return Math.max(20, Math.min(RpConfig.SERVER.refreshInterval.get(), RpConfig.SERVER.effectDuration.get() - 20));
 	}
 
 	@SubscribeEvent
@@ -126,10 +140,10 @@ public final class ServerEvents {
 		RpData d = RpData.get(player);
 		DietEngine.forgetApplied(d);
 		if (!e.isEndConquered()) {
-			// 8: death ages the whole window out and resets the foods-eaten counter; slots gray, choices and unlocks stay.
+			// 8: death ages the whole window out (out of Apple Pie's memory) and resets the foods-eaten counter; slots gray, choices and unlocks stay.
 			FoodList fl = FoodList.get(player);
 			Map<com.tarinoita.solsweetpotato.tracking.FoodInstance, Integer> memory = FoodWindow.memory(fl);
-			FoodWindow.moveOut(memory, FoodWindow.windowOldestFirst(memory));
+			FoodWindow.ageOut(memory, FoodWindow.windowOldestFirst(memory));
 			fl.resetFoodsEaten();
 			d.stamp++;
 			CapabilityHandler.syncFoodList(player);
@@ -160,7 +174,7 @@ public final class ServerEvents {
 			d.pendingReapply = false;
 			return;
 		}
-		int interval = RpConfig.SERVER.refreshInterval.get();
+		int interval = refreshInterval();
 		long time = player.server.getTickCount() + (player.getUUID().hashCode() & 0x7fffffff);
 		if (d.pendingReapply || time % interval == 0) {
 			d.pendingReapply = false;

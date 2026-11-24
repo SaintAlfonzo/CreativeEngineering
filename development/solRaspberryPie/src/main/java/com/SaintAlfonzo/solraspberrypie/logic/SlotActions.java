@@ -1,6 +1,8 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.logic;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
+import com.SaintAlfonzo.solraspberrypie.data.DietAdjustment;
 import com.SaintAlfonzo.solraspberrypie.data.RpData;
 import com.SaintAlfonzo.solraspberrypie.data.SlotChoice;
 import com.SaintAlfonzo.solraspberrypie.ladder.Ladder;
@@ -26,7 +28,8 @@ import java.util.Map;
 /**
  * Player slot actions (5). Free: fill an empty active slot (lands in the lowest empty active slot) and change a slot's
  * level. Paid, through a confirm panel: change a slot's effect (ages out the oldest foods of the decay window) and drop
- * a slot (ages out oldest foods until the highest active slot is lost; active choices above shift down). Grayed slots
+ * a slot (ages out oldest foods until the highest active slot is lost, and only that slot; active choices above shift
+ * down). Aged-out foods leave Apple Pie's memory (FoodWindow). Grayed slots
  * are read only. A toggle effect the player has is switched on and off for free (3.3). Everything is refused while the
  * player is paused (12.3).
  */
@@ -83,7 +86,12 @@ public final class SlotActions {
 					break;
 				}
 				Map<FoodInstance, Integer> real = FoodWindow.memory(FoodList.get(player));
-				for (FoodInstance f : sim.group) real.put(f, sim.memory.get(f));
+				FoodWindow.ageOut(real, sim.group);
+				if (sim.lowered != null) {
+					// The Adjustment entry stays in the window with its lowered value, at its age.
+					Integer k = real.remove(sim.lowered);
+					if (k != null) real.put(sim.lowered, k);
+				}
 				d.slots.clear();
 				d.slots.addAll(sim.slots);
 				d.stamp++;
@@ -116,6 +124,8 @@ public final class SlotActions {
 	private static final class Sim {
 		Map<FoodInstance, Integer> memory;
 		List<FoodInstance> group;
+		/** A drop's Adjustment entry with its lowered value (it stays in the window), or null. */
+		FoodInstance lowered;
 		List<SlotChoice> slots;
 		double before;
 		double after;
@@ -207,13 +217,14 @@ public final class SlotActions {
 			int n = ladder.covered(current.effect(), sim.sBefore.flat.keySet(), d.maxDiversity) ? 0 : changeCount(oldest.size());
 			sim.group = new ArrayList<>(oldest.subList(0, n));
 			sim.memory = new HashMap<>(original);
-			FoodWindow.moveOut(sim.memory, sim.group);
+			FoodWindow.ageOut(sim.memory, sim.group);
 			sim.slots.set(a.slot, new SlotChoice(a.effect, a.level));
 		} else {
 			int active = sim.sBefore.activeSlots;
-			sim.group = new ArrayList<>(oldest.subList(0, dropCount(ladder, original, oldest, active)));
-			sim.memory = new HashMap<>(original);
-			FoodWindow.moveOut(sim.memory, sim.group);
+			DropPlan plan = planDrop(ladder, original, oldest, active);
+			sim.group = plan.group;
+			sim.lowered = plan.lowered;
+			sim.memory = plan.memory;
 			for (int j = a.slot; j < active - 1; j++) sim.slots.set(j, sim.slots.get(j + 1));
 			sim.slots.set(active - 1, null);
 		}
@@ -227,18 +238,80 @@ public final class SlotActions {
 		return Math.min(RpConfig.SERVER.respecFoods.get(), inWindow);
 	}
 
-	/**
-	 * Foods a drop ages out (5.2): from the oldest end of the window until the highest active slot is lost, or the
-	 * whole window when it never is. 0 with no active slot.
-	 */
-	static int dropCount(Ladder ladder, Map<FoodInstance, Integer> original, List<FoodInstance> oldest, int active) {
-		if (active <= 0) return 0;
-		for (int n = 1; n <= oldest.size(); n++) {
-			Map<FoodInstance, Integer> m = new HashMap<>(original);
-			FoodWindow.moveOut(m, oldest.subList(0, n));
-			if (ladder.activeSlots(FoodWindow.diversity(m)) < active) return n;
+	/** What a drop ages out: whole foods, and possibly the Adjustment entry lowered instead of aged out whole. */
+	public static final class DropPlan {
+		public final List<FoodInstance> group = new ArrayList<>();
+		public FoodInstance lowered;
+		public Map<FoodInstance, Integer> memory;
+
+		/** Foods touched, for the hover count. */
+		public int count() {
+			return group.size() + (lowered != null ? 1 : 0);
 		}
-		return oldest.size();
+	}
+
+	/**
+	 * A drop (5.2): ages out foods from the oldest end of the window until the highest active slot is lost, and only that
+	 * slot (raspberry-pie-publish #24). A food whose ageing out alone would also take a lower slot is kept and the next
+	 * oldest is tried; the Adjustment entry of {@code /solrp diversity set} (one entry worth the whole diversity) is lowered
+	 * instead, to just under the highest slot's milestone. When no such order loses exactly one slot, foods go from the
+	 * oldest end until the highest slot is lost. Nothing with no active slot. Public for the headless test.
+	 */
+	public static DropPlan planDrop(Ladder ladder, Map<FoodInstance, Integer> original, List<FoodInstance> oldest, int active) {
+		DropPlan p = new DropPlan();
+		p.memory = new HashMap<>(original);
+		if (active <= 0) return p;
+		for (FoodInstance f : oldest) {
+			Integer k = p.memory.remove(f);
+			int now = ladder.activeSlots(FoodWindow.diversity(p.memory));
+			if (now >= active) {
+				p.group.add(f);
+				continue;
+			}
+			if (now == active - 1) {
+				p.group.add(f);
+				return p;
+			}
+			p.memory.put(f, k);
+			FoodInstance part = lowered(ladder, p.memory, f, k, active);
+			if (part != null) {
+				p.memory.remove(f);
+				p.memory.put(part, k);
+				p.lowered = part;
+				return p;
+			}
+		}
+		DropPlan whole = new DropPlan();
+		whole.memory = new HashMap<>(original);
+		for (FoodInstance f : oldest) {
+			whole.memory.remove(f);
+			whole.group.add(f);
+			if (ladder.activeSlots(FoodWindow.diversity(whole.memory)) < active) break;
+		}
+		return whole;
+	}
+
+	/**
+	 * The Adjustment entry {@code f} (count {@code k}) with its value lowered so the diversity lands just under the
+	 * highest active slot's milestone and above the next one; null for any other food or when no value does that.
+	 */
+	private static FoodInstance lowered(Ladder ladder, Map<FoodInstance, Integer> memory, FoodInstance f, int k, int active) {
+		if (!((Object) f instanceof DietAdjustment adj) || adj.solrp$value() == null) return null;
+		double top = ladder.slots.get(active - 1).threshold;
+		double below = active >= 2 ? ladder.slots.get(active - 2).threshold : 0;
+		double target = top - Math.min(0.01, (top - below) / 2);
+		FoodInstance unit = new FoodInstance(f.getItem());
+		((DietAdjustment) (Object) unit).solrp$setValue(1.0);
+		double weight = FoodList.calculateDiversityContribution(unit, k);
+		if (weight <= 0) return null;
+		double value = adj.solrp$value() - (FoodWindow.diversity(memory) - target) / weight;
+		if (!(value >= 0)) return null;
+		FoodInstance part = new FoodInstance(f.getItem());
+		((DietAdjustment) (Object) part).solrp$setValue(value);
+		Map<FoodInstance, Integer> m = new HashMap<>(memory);
+		m.remove(f);
+		m.put(part, k);
+		return ladder.activeSlots(FoodWindow.diversity(m)) == active - 1 ? part : null;
 	}
 
 	/**
@@ -251,13 +324,13 @@ public final class SlotActions {
 		Map<FoodInstance, Integer> original = FoodWindow.copy(FoodList.get(player));
 		// The drop count walks the window (thousands of lookups at pack settings) and syncs fire on every food: reuse the
 		// last answer while the window, the active slots, the ladder and respecFoods are the same (PR-RP-13).
-		int key = java.util.Objects.hash(original, s.activeSlots, System.identityHashCode(ladder), RpConfig.SERVER.respecFoods.get());
+		int key = java.util.Objects.hash(original, s.diversity, s.activeSlots, System.identityHashCode(ladder), RpConfig.SERVER.respecFoods.get());
 		synchronized (AGE_CACHE) {
 			int[] hit = AGE_CACHE.get(player);
 			if (hit != null && hit[2] == key) return new int[]{hit[0], hit[1]};
 		}
 		List<FoodInstance> oldest = FoodWindow.windowOldestFirst(original);
-		int[] out = {changeCount(oldest.size()), dropCount(ladder, original, oldest, s.activeSlots)};
+		int[] out = {changeCount(oldest.size()), planDrop(ladder, original, oldest, s.activeSlots).count()};
 		synchronized (AGE_CACHE) {
 			AGE_CACHE.put(player, new int[]{out[0], out[1], key});
 		}

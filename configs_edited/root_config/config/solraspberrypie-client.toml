@@ -6,30 +6,98 @@
 	locked = true
 	#Bar position relative to the inventory's left edge.
 	#Range: -2000 ~ 2000
-	x = 0
+	x = -24
 	#Bar position relative to the inventory's top edge.
 	#Range: -2000 ~ 2000
-	y = 166
+	y = -28
 
 [dietLog]
-	#Diet Log progress bar: how many milestones ahead of the last one reached it shows.
-	#Range: 1 ~ 50
-	progressAhead = 3
-	#Diet Log size: 1.25 draws the book at 125%. Shrinks to fit a small window, never below 100%
+	#Diet Log size: 1.4 draws the book at 140%. Shrinks to fit a small window, never below 100%
 	#(or below this value when it is under 1.0).
 	#Range: 0.5 ~ 3.0
 	bookScale = 1.4
-	#Diet Log text and icons on our pages, relative to the book: 0.85 draws them at 85% so they stay on the page
-	#(the book itself is sized by bookScale). 1.0 = unscaled.
-	#Range: 0.5 ~ 1.5
-	contentScale = 0.85
+	#Diet Log background stretched sideways by this many pixels: the book's center column is repeated,
+	#the pages widen and the page buttons move out by half of it. 0 = Apple Pie's own width; 48 = about 25% wider.
+	#Range: 0 ~ 400
+	extraWidth = 48
+	#Diet Log Overview: the icon left of the diversity value is the eaten food (Food Dictionary) closest
+	#in base diversity to the average of the meals in the diet window, never a drink. With nothing eaten it is one of
+	#these items (loaded ones only). Defaults are vanilla; a modpack sets its own list in this file.
+	diversityIconFallback = ["minecraft:pumpkin_seeds", "vintagedelight:mixed_seeds", "vintagedelight:oat_seeds", "corn_delight:corn_seeds", "hearthandharvest:sunflower_seeds", "miners_delight:moss", "immersive_weathering:moss_clump", "minecraft:rotten_flesh", "minecraft:spider_eye", "veggiesdelight:dandelion_leaf"]
+
+	#Position (x, y: book pixels added to the page's top left corner) and size (scale, relative to the book)
+	#of each Diet Log page's content.
+	[dietLog.pages]
+
+		#Apple Pie's diversity page.
+		[dietLog.pages.diversity]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 0
+			#Range: 0.25 ~ 2.0
+			scale = 1.0
+
+		#The last meals grid on the Overview page (x, y move it from its place above the diversity line).
+		[dietLog.pages.meals]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 0
+			#Range: 0.25 ~ 2.0
+			scale = 0.85
+
+		#The Diet Ladder page (progress bar and key).
+		[dietLog.pages.ladder]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 10
+			#Range: 0.25 ~ 2.0
+			scale = 0.85
+
+		#The Milestones pages.
+		[dietLog.pages.milestones]
+			#Range: -200 ~ 200
+			x = 0
+			#Range: -200 ~ 200
+			y = 10
+			#Range: 0.25 ~ 2.0
+			scale = 0.85
+
+[foodDictionary]
+	#Food Dictionary (Spice of Life: Carrot Edition) order of the uneaten foods: MOD_NAME (mod, then name),
+	#NAME (A-Z), EASIEST (lowest base diversity first, then food), HIGHEST_FOOD (hunger restored),
+	#HIGHEST_SATURATION (saturation points restored), HIGHEST_DIVERSITY (base diversity), CUSTOM (customOrder;
+	#only while customOrder is not empty).
+	#Allowed Values: MOD_NAME, NAME, EASIEST, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM
+	uneatenSort = "MOD_NAME"
+	#Food Dictionary order of the eaten foods, also set by the sort button on those pages: NEWEST_UNLOCK,
+	#LATEST_EATEN (Apple Pie's meal memory), HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM (as for
+	#uneatenSort; the button skips it while customOrder is empty).
+	#Allowed Values: NEWEST_UNLOCK, LATEST_EATEN, HIGHEST_FOOD, HIGHEST_SATURATION, HIGHEST_DIVERSITY, CUSTOM
+	eatenSort = "NEWEST_UNLOCK"
+	#The CUSTOM sort: item ids in the order wanted; foods not listed follow in the uneatenSort order
+	#(MOD_NAME when that is CUSTOM too). Empty = the CUSTOM sort is hidden.
+	customOrder = []
 
 [icons]
-	#Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT
-	#in braces, e.g. minecraft:potion{Potion:"minecraft:awkward"}.
+	#Diet Log icon for one-time unlocks: the first of these items that is loaded (any mod's item may be
+	#listed before the vanilla default). An item may carry NBT in braces, e.g. minecraft:potion{Potion:"minecraft:awkward"}.
 	unlock = ["monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"]
 	#Diet Log icon for permanent buffs: the first of these items that is loaded.
 	permanentBuff = ["create_crush_everything:diamond_shard", "minecraft:diamond"]
-	#Diet Log icon for effect slots with no chosen effect (a slot with one shows that effect): the first of these items that is loaded.
+	#Diet Log icon for effect slots (the Diet Log never shows the chosen effect): the first of these items that is loaded.
 	slot = ["suppsquared:metal_frame", "minecraft:item_frame"]
+
+[tooltips]
+	#Food tooltips: AppleSkin's saturation icons on their own line under the shanks (AppleSkin's own layout).
+	#Off: on the shank row, after the shanks.
+	saturationOwnLine = false
+
+[effects]
+	#Share of the field-of-view widening that Alex's Mobs' Fleet-Footed speed bonus causes while it applies:
+	#1.0 = unchanged, 0.0 = none. Other speed changes widen the view as usual.
+	#Range: 0.0 ~ 1.0
+	fleetFootedFov = 0.25
 

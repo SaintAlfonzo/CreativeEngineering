@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.mixin;
 
 import net.minecraft.world.effect.MobEffectInstance;

@@ -120,7 +120,8 @@
 - **New:** Clinging replaces Climbing and Recovering replaces Poison Immunity and Wither Immunity once unlocked: the replaced effect leaves the effect list and stops working in its slot. Applies to new worlds.
 - **New:** A slot whose effect a permanent buff or a replacing unlock now covers grays out, and changing its effect is free.
 - **New:** Fleet-Footed widens the view a quarter as much while its speed applies (client setting).
-- **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.
+- **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off, and only that slot.
+- **New:** Foods aged out by a Change, a Drop or death are forgotten until eaten again. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.
 - **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice. Unlocks, and their messages, wait until the diet first activates.
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
 - **New:** Stimulation unlocks at diversity 45 with Clarity and replaces Refreshing and Sweetening once unlocked.
@@ -362,7 +363,7 @@
 - **New:** Lemonade, Blue Lemonade and Pink Lemonade, made in a Create mixer or a Kettle. Lemonade gives Haste for 30 s; Blue adds Night Vision and Pink adds Jump Boost for 20 s.
 - **New:** Two Cooking for Blockheads Fridges side by side, facing the same way, join into a double fridge with no gap or seal between them. A Fridge placed next to another opens the other way. Each keeps its own door and inventory.
 - **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
-- **New:** The Food Dictionary's untasted foods sort by mod, name, easiest, highest food, highest saturation or highest diversity (client setting); a button sorts tasted foods by newest unlock, latest eaten, highest food, highest saturation or highest diversity.
+- **New:** The Food Dictionary's untasted foods sort by mod, name, easiest, hardest, highest food, highest saturation or highest diversity (client setting); a button sorts tasted foods by newest unlock, latest eaten, highest food, highest saturation or highest diversity.
 - **New:** A Banana Bunch cuts into 6 Bananas on a Cutting Board.
 - **New:** Every raw skewer can be built on its stick in a Create sequenced assembly from the same ingredients as its basin or crafting recipe.
 - **New:** 6 Garlic Cloves craft into a Garlic.

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.solraspberrypie.logic;
 
 import com.SaintAlfonzo.solraspberrypie.mixin.FoodListAccessor;
@@ -12,9 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Ageing foods out of the decay window (6). A moved food keeps its order relative to the other moved foods: each gets
- * k + (endDecay - smallest k in the group), capped below Apple Pie's memory size, so it counts minContribution and is
- * forgotten by Apple Pie at the usual age. Nothing extra is stored.
+ * Ageing foods out of the decay window (6). An aged-out food is removed from Apple Pie's food memory: it counts nothing
+ * until eaten again, and the Diet Log shows it no more (raspberry-pie-publish #26). Nothing extra is stored.
  */
 public final class FoodWindow {
 	public static Map<FoodInstance, Integer> memory(FoodList list) {
@@ -36,18 +36,9 @@ public final class FoodWindow {
 		return out;
 	}
 
-	/** Moves the given foods out of the window in place (6.1). */
-	public static void moveOut(Map<FoodInstance, Integer> memory, Collection<FoodInstance> foods) {
-		if (foods.isEmpty()) return;
-		int minK = Integer.MAX_VALUE;
-		for (FoodInstance f : foods) minK = Math.min(minK, memory.getOrDefault(f, Integer.MAX_VALUE));
-		if (minK == Integer.MAX_VALUE) return;
-		int shift = endDecay() - minK;
-		int cap = Math.max(endDecay(), SOLSweetPotatoConfig.size() - 1);
-		for (FoodInstance f : foods) {
-			Integer k = memory.get(f);
-			if (k != null) memory.put(f, Math.min(cap, k + shift));
-		}
+	/** Ages the given foods out in place (6.1): removes them from the memory. */
+	public static void ageOut(Map<FoodInstance, Integer> memory, Collection<FoodInstance> foods) {
+		for (FoodInstance f : foods) memory.remove(f);
 	}
 
 	public static Map<FoodInstance, Integer> copy(FoodList list) {
