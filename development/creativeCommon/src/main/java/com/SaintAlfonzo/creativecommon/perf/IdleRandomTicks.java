@@ -95,7 +95,10 @@ public final class IdleRandomTicks {
 				return null;
 			}
 			Map<Block, List<IdleTickRules.Rule>> built = new IdentityHashMap<>();
-			if (on) build(lines, built);
+			if (on) {
+				build(lines, built);
+				build(IdleTickRules.modRules(), built);
+			}
 			byBlock = built;
 			return built;
 		}

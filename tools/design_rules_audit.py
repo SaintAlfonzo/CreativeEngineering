@@ -6,7 +6,7 @@ Read-only. Prints one summary block per check: the rule id, a count, and the wor
 
     python3 tools/design_rules_audit.py            # all checks, summary
     python3 tools/design_rules_audit.py -v         # also list every hit (long)
-    python3 tools/design_rules_audit.py emoji ids  # only the named checks
+    python3 tools/design_rules_audit.py emoji ids  # only the named checks (sideways = DR-C7)
 
 Scope: tracked files (git ls-files). Generated and upstream trees are skipped unless a check says otherwise:
 kubejs/exported/, kubejs/generation_scripts/, */build/, *_upstream/, moved_code_backup/, jar_archive/, deploy/.
@@ -214,6 +214,31 @@ if wants('naming'):
 		pkgs.setdefault(h[2], h)
 	report('DR-C10', 'underscored own names (upstream ids kept by ports are listed too: check)', list(pkgs.values()),
 		   'names', top=20)
+
+# DR-C7: Common and Compat naming the jars above them (Delight, Brewing, Loot) in code: string literals of Java
+# (comments skipped) and every Compat resource. Common's script dicts and data files are DR-C2's (ids live in the dicts).
+SIDEWAYS = re.compile(r'creative(delight|brewing|loot)|Creative (Delight|Brewing|Loot)')
+LOWER_JARS = ('development/creativeCommon/src/', 'development/creativeCompat/src/')
+if wants('sideways'):
+	hits = []
+	for p in FILES:
+		if not p.startswith(LOWER_JARS):
+			continue
+		s = read(p)
+		if s is None:
+			continue
+		if p.endswith('.java'):
+			code = re.sub(r'/\*.*?\*/', lambda m: '\n' * m.group(0).count('\n'), s, flags=re.S)
+			for i, line in enumerate(code.splitlines(), 1):
+				for lit in re.findall(r'"(?:[^"\\]|\\.)*"', line):
+					if SIDEWAYS.search(lit):
+						hits.append((p, i, line.strip()))
+						break
+		elif p.startswith('development/creativeCompat/'):
+			for i, line in enumerate(s.splitlines(), 1):
+				if SIDEWAYS.search(line):
+					hits.append((p, i, line.strip()))
+	report('DR-C7', 'Common or Compat code naming Delight, Brewing or Loot (register through a hook instead)', hits)
 
 # DR-C19: licence fields of own mods.
 if wants('licence'):

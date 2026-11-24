@@ -71,7 +71,7 @@ public final class CommonPotions {
 	public static void register(IEventBus modEventBus) {
 		for (Row row : ROWS) {
 			if (row.needsMod() != null && !ModList.get().isLoaded(row.needsMod())) {
-				LOGGER.info("[CE potions] {} not present - skipping the {} potions", row.needsMod(), row.name());
+				LOGGER.info("[creativecommon potions] {} not present - skipping the {} potions", row.needsMod(), row.name());
 				continue;
 			}
 			add(row, row.name(), BASE_DURATION, 0);
@@ -85,7 +85,7 @@ public final class CommonPotions {
 		POTIONS.register(name, () -> {
 			MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(row.effect());
 			if (effect == null) {
-				LOGGER.error("[CE potions] {} not found while building creativecommon:{} - {}", row.effect(), name, row.missing());
+				LOGGER.error("[creativecommon potions] {} not found while building creativecommon:{} - {}", row.effect(), name, row.missing());
 				return new Potion(new MobEffectInstance[0]);
 			}
 			return new Potion(new MobEffectInstance(effect, duration, amplifier));

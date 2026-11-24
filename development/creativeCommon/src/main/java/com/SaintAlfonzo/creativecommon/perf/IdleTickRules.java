@@ -20,6 +20,22 @@ public final class IdleTickRules {
 
 	public static final String WAKE_ABOVE = "+wake_above";
 
+	/** Rules other mods add for their own blocks ({@link #addModRule}), applied with the config's lines. */
+	private static final List<String> MOD_RULES = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+	/**
+	 * Adds a rule line (same form as {@code [perf] idleRandomTickRules}) for a mod's own block, applied with the
+	 * config's lines while {@code idleRandomTicks} is on. Call it from the mod's constructor.
+	 */
+	public static void addModRule(String line) {
+		MOD_RULES.add(line);
+	}
+
+	/** The rules added by {@link #addModRule}. */
+	public static List<String> modRules() {
+		return List.copyOf(MOD_RULES);
+	}
+
 	/** One property test. */
 	public record Cond(String prop, boolean negate, String value) {}
 
@@ -93,12 +109,12 @@ public final class IdleTickRules {
 	/** Pack defaults: rows 1-7, 9, 11 and 12 of random_tick_audit.md. */
 	public static List<String> defaults() {
 		List<String> l = new ArrayList<>(List.of(
-				// 1: FD tomato vines and the Supplementaries / Creative Delight climbing variants. Grown vines still
-				// climb a rope or stick placed above later (+wake_above); a picked vine is age 0 and ticks again.
+				// 1: FD tomato vines and the Supplementaries climbing variants (other mods add theirs with addModRule).
+				// Grown vines still climb a rope or stick placed above later (+wake_above); a picked vine is age 0 and
+				// ticks again.
 				"farmersdelight:tomatoes age=max " + WAKE_ABOVE,
 				"supplementaries:rope_tomatoes age=max " + WAKE_ABOVE,
 				"supplementaries:stick_tomatoes age=max " + WAKE_ABOVE,
-				"creativedelight:treated_stick_tomatoes age=max " + WAKE_ABOVE,
 				// 2: rice, grown and already carrying its panicles (supporting turns false when they are cut)
 				"farmersdelight:rice age=max supporting=true",
 				// 3-5: mushroom and fungus colonies at full size

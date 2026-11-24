@@ -12,7 +12,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
  * Creative Compat's COMMON config, {@code config/creativecompat-common.toml}. No carry-over from older files
- * (publish_readiness.md PR-CP-17).
+ * (publish_readiness.md PR-CP-17), apart from the [jei] page switches ({@link JeiPageKeys}).
  */
 public final class CompatConfig {
 
@@ -988,10 +988,7 @@ public final class CompatConfig {
 		public final ForgeConfigSpec.BooleanValue craftableFirst;
 		public final ForgeConfigSpec.BooleanValue packOrder;
 		public final ForgeConfigSpec.BooleanValue orderReport;
-		public final ForgeConfigSpec.BooleanValue seasoningCategory;
-		public final ForgeConfigSpec.BooleanValue potionBucketCategory;
-		public final ForgeConfigSpec.BooleanValue tippedArrowCategory;
-		public final ForgeConfigSpec.BooleanValue canCategories;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> pagesOff;
 		public final ForgeConfigSpec.EnumValue<FluidScale> fluidAmountScale;
 
 		/** How JEI tanks turn a fluid amount into a fill height ({@code mixin.JeiFluidTankScaleMixin}). */
@@ -1022,32 +1019,13 @@ public final class CompatConfig {
 					"python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB."
 			).define("orderReport", false);
 
-			seasoningCategory = b.comment(
-					"Show seasoning crafts (Salt's food + salt, Create: The Salt's salting mixes, and crafting recipes",
-					"with ids creativeengineering:shapeless/season/...) on their own Seasoning page instead of the",
-					"Crafting and Mixing pages. Off: they stay where their mods put them.",
+			pagesOff = b.comment(
+					"Grouped recipe pages to leave off. A mod that gathers a kind of recipe on a page of its own",
+					"(seasoning crafts, can crafts, potion buckets, tipped arrows) gives the page an id and asks this list",
+					"first; a page listed here is not added and its recipes stay on the pages their mods put them on.",
+					"Ids in this pack: seasoning, cans, potion_buckets, tipped_arrows. Empty: every page is shown.",
 					"Takes effect the next time JEI starts (rejoin or /reload)."
-			).define("seasoningCategory", true);
-
-			potionBucketCategory = b.comment(
-					"Show the potion bucket recipes on one Potion Buckets page per potion and bucket: filling and",
-					"draining by hand, the Spout, the Item Drain and the Bottling Machine together. Off: they stay on the",
-					"Crafting, Spout Filling, Item Draining and Bottling Machine pages.",
-					"Takes effect the next time JEI starts (rejoin or /reload)."
-			).define("potionBucketCategory", true);
-
-			tippedArrowCategory = b.comment(
-					"Show tipped arrow recipes on one Tipped Arrows page per potion: by hand (8 arrows + a lingering",
-					"potion), the Spout and the Bottling Machine together. Off: they stay on the Crafting, Spout Filling",
-					"and Bottling Machine pages.",
-					"Takes effect the next time JEI starts (rejoin or /reload)."
-			).define("tippedArrowCategory", true);
-
-			canCategories = b.comment(
-					"Show can crafts on two pages of their own: Canning (food + an empty can -> a can) and Using Cans",
-					"(crafts that take a can). Off: they stay on the Crafting page.",
-					"Takes effect the next time JEI starts (rejoin or /reload)."
-			).define("canCategories", true);
+			).defineListAllowEmpty(List.of("pagesOff"), List::of, o -> o instanceof String s && s.matches("[a-z0-9_]+"));
 
 			fluidAmountScale = b.comment(
 					"How full a fluid looks in JEI tanks (every mod's recipe pages and the pack's own) for its amount.",
@@ -1057,6 +1035,11 @@ public final class CompatConfig {
 			).defineEnum("fluidAmountScale", FluidScale.LOG);
 
 			b.pop(); // jei
+		}
+
+		/** False when {@code pagesOff} lists this grouped recipe page id. */
+		public boolean pageOn(String id) {
+			return !pagesOff.get().contains(id);
 		}
 	}
 

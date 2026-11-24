@@ -19,19 +19,19 @@ import java.util.function.Consumer;
 @Mixin(value = Level.class, remap = false)
 public class LevelEntityTickPerfMixin {
 	@Unique
-	private long ce$entityTickStart;
+	private long creativecommon$entityTickStart;
 
 	@Inject(method = "m_46653_", remap = false, require = 0, at = @At("HEAD"))
 	private void creativecommon$perfEntityStart(Consumer<Entity> tick, Entity entity, CallbackInfo ci) {
 		PerfEvents.seen(PerfEvents.HOOK_ENTITY);
-		ce$entityTickStart = PerfEvents.entityTicks && !((Level) (Object) this).isClientSide ? System.nanoTime() : 0L;
+		creativecommon$entityTickStart = PerfEvents.entityTicks && !((Level) (Object) this).isClientSide ? System.nanoTime() : 0L;
 	}
 
 	@Inject(method = "m_46653_", remap = false, require = 0, at = @At("RETURN"))
 	private void creativecommon$perfEntityEnd(Consumer<Entity> tick, Entity entity, CallbackInfo ci) {
-		long start = ce$entityTickStart;
+		long start = creativecommon$entityTickStart;
 		if (start == 0L) return;
-		ce$entityTickStart = 0L;
+		creativecommon$entityTickStart = 0L;
 		PerfEvents.entityTicked((Level) (Object) this, entity, System.nanoTime() - start);
 	}
 }

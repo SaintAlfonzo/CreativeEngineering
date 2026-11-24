@@ -15,17 +15,17 @@ import java.util.function.BooleanSupplier;
 @Mixin(value = ServerLevel.class, remap = false)
 public class ServerLevelTickPerfMixin {
 	@Unique
-	private PerfJfrEvents.LevelTick ce$tickEvent;
+	private PerfJfrEvents.LevelTick creativecommon$tickEvent;
 
 	@Inject(method = "m_8793_", remap = false, require = 0, at = @At("HEAD"))
 	private void creativecommon$perfLevelTickStart(BooleanSupplier hasTime, CallbackInfo ci) {
-		ce$tickEvent = PerfEvents.beginLevelTick();
+		creativecommon$tickEvent = PerfEvents.beginLevelTick();
 	}
 
 	@Inject(method = "m_8793_", remap = false, require = 0, at = @At("RETURN"))
 	private void creativecommon$perfLevelTickEnd(BooleanSupplier hasTime, CallbackInfo ci) {
-		PerfJfrEvents.LevelTick e = ce$tickEvent;
-		ce$tickEvent = null;
+		PerfJfrEvents.LevelTick e = creativecommon$tickEvent;
+		creativecommon$tickEvent = null;
 		PerfEvents.endLevelTick((ServerLevel) (Object) this, e);
 	}
 }

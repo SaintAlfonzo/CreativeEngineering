@@ -3,6 +3,7 @@ package com.SaintAlfonzo.creativecompat.block;
 import com.SaintAlfonzo.creativecompat.CompatConfig;
 
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -37,21 +38,34 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  *       glow berries is left to its own berry picking, as 1.20 does.</li>
  * </ul>
  * Left alone: vanilla vine (Quark), Quark's own vines (never grow), Vinery's jungle grape vine (shears already toggle
- * its {@code sterilized} state), Immersive Weathering's ivy (shears already set it to its last age).
+ * its {@code sterilized} state), Immersive Weathering's ivy (shears already set it to its last age), and any vine a
+ * mod registers through {@link #keepOwnHandling}.
  */
 public final class VineShearing {
 
 	/** Same name and sense as the sheared grass: true = grows (the first value, so {@code any()} keeps it on). */
 	public static final BooleanProperty FERTILE = BooleanProperty.create("fertile");
 
-	/** Vine classes (and their subclasses) that keep their own handling and get no {@link #FERTILE} state. */
-	private static final Set<String> OWN_HANDLING = Set.of(
-			"vazkii.quark.base.block.QuarkVineBlock",
-			"net.satisfy.vinery.core.block.GrapeVineBlock",
-			// Hearth and Harvest hops: shears toggle its own sterilized state, and it overrides randomTick
-			"com.SaintAlfonzo.creativedelight.hearth.block.HopsVineBlock");
+	/**
+	 * Vine classes (and their subclasses) that keep their own handling and get no {@link #FERTILE} state. Other mods
+	 * add theirs with {@link #keepOwnHandling}.
+	 */
+	private static final Set<String> OWN_HANDLING = ConcurrentHashMap.newKeySet();
+
+	static {
+		OWN_HANDLING.add("vazkii.quark.base.block.QuarkVineBlock");
+		OWN_HANDLING.add("net.satisfy.vinery.core.block.GrapeVineBlock");
+	}
 
 	private VineShearing() {}
+
+	/**
+	 * Registers a vine class (by its binary name; subclasses count) whose shears handling is its own, so it gets no
+	 * {@link #FERTILE} state. Call it from the mod's constructor: the state is added while blocks are constructed.
+	 */
+	public static void keepOwnHandling(String className) {
+		OWN_HANDLING.add(className);
+	}
 
 	/** Called from the mixin while a block builds its state definition. Vanilla's own vine is Quark's. */
 	public static boolean addsFertile(Class<?> type) {

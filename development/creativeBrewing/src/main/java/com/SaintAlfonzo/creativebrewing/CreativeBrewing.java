@@ -3,6 +3,7 @@ package com.SaintAlfonzo.creativebrewing;
 import com.SaintAlfonzo.creativebrewing.fluidbrewing.DragonBreathBrewing;
 import com.SaintAlfonzo.creativebrewing.fluidbrewing.Lingerification;
 import com.SaintAlfonzo.creativebrewing.potion.PotionBucketDispenser;
+import com.SaintAlfonzo.creativecommon.CommonConfig;
 import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
@@ -50,6 +51,7 @@ public class CreativeBrewing {
 
 	private static final String OLD_FILE = "creativeengineering-common.toml";
 	private static final String FILE = MOD_ID + "-common.toml";
+	private static final String COMMON_FILE = "creativecommon-common.toml";
 
 	public CreativeBrewing() {
 		ConfigRename.carryOver("creative_brewing-common.toml", FILE);
@@ -60,9 +62,19 @@ public class CreativeBrewing {
 				|| !ConfigRename.mergeSections(OLD_FILE, FILE, CBConfig.MOVED_SECTIONS).isEmpty();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CBConfig.SPEC, FILE);
 		if (!carried) warnOldKeys();
+		// [effects] and [magic_resistance] then moved on to Creative Common's file (plan_cb_polish.md 2): the first boot
+		// copies the player's values over (carry when Common's file is new, merge when it exists; sections it already
+		// has are kept), and this file drops them when Forge corrects it. Must run before Forge reads the COMMON configs.
+		if (!ConfigRename.carrySections(FILE, COMMON_FILE, CommonConfig.EFFECT_SECTIONS))
+			ConfigRename.mergeSections(FILE, COMMON_FILE, CommonConfig.EFFECT_SECTIONS);
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(CreativeBrewing::commonSetup);
+		// Wine effects in Creative Compat's compound effect tooltip lines (client only)
+		if (net.minecraftforge.fml.loading.FMLEnvironment.dist == net.minecraftforge.api.distmarker.Dist.CLIENT) {
+			com.SaintAlfonzo.creativecompat.compat.CompoundEffectTooltip.addEffectSource(
+					com.SaintAlfonzo.creativebrewing.compat.WineTooltipEffects::effects);
+		}
 		// Better Beacons potions (creativebrewing:long_reach, phantom_bane and variants).
 		com.SaintAlfonzo.creativebrewing.potion.BetterBeaconsPotions.register(modEventBus);
 		// Dispensed potion buckets credit the dispenser's placer (PotionBucketDispenser, potions/potion-buckets #3)

@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.BeehiveBlock;
 public abstract class BeehiveHoneycombMixin {
 
 	@ModifyConstant(method = "m_49600_", remap = false, require = 1, constant = @Constant(intValue = 3))
-	private static int creativeengineering$honeycombCount(int vanilla) {
+	private static int creativecommon$honeycombCount(int vanilla) {
 		return vanilla * CommonConfig.BEES.honeycombMultiplier.get();
 	}
 }

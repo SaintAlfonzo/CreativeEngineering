@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import net.minecraft.core.NonNullList;
@@ -19,25 +20,31 @@ import net.minecraft.world.item.ItemStack;
  * to top, so different items can share a jar and each layer keeps its own item.
  *
  * <p>What may share a jar: two items mix when they are the same item, or when one
- * {@code #creativedelight:jar_family/<name>} tag holds both (cookies, candied berries ...). A new item has to
- * share one family with every item already inside. Items in no family still go in a jar on their own, as before.
- * What goes in a jar at all is still {@code #supplementaries:cookies}. Tags: kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js,
- * feature_writeup/mixed_jars.md.
+ * {@code #<namespace>:jar_family/<name>} tag holds both (cookies, candied berries ...), for a namespace a mod
+ * registered with {@link #addFamilyNamespace}. A new item has to share one family with every item already inside.
+ * Items in no family still go in a jar on their own, as before. What goes in a jar at all is still
+ * {@code #supplementaries:cookies}. feature_writeup/mixed_jars.md.
  *
  * <p>Everything here works on the jar as a plain {@link Container} so it runs on the tile, the client copy and the
  * dummy tile Supplementaries builds from a jar item in an inventory.
  */
 public final class JarMixing {
 
-	private static final String FAMILY_NAMESPACE = "creativedelight";
+	/** Namespaces whose {@code jar_family/} item tags are jar families ({@link #addFamilyNamespace}). */
+	private static final Set<String> FAMILY_NAMESPACES = ConcurrentHashMap.newKeySet();
 	private static final String FAMILY_PREFIX = "jar_family/";
 
 	private JarMixing() {}
 
+	/** Makes the {@code <namespace>:jar_family/<name>} item tags jar families. Call it from the mod's constructor. */
+	public static void addFamilyNamespace(String namespace) {
+		FAMILY_NAMESPACES.add(namespace);
+	}
+
 	/** The jar_family tags an item is in. */
 	public static Set<TagKey<Item>> families(Item item) {
 		return item.builtInRegistryHolder().tags()
-				.filter(t -> t.location().getNamespace().equals(FAMILY_NAMESPACE)
+				.filter(t -> FAMILY_NAMESPACES.contains(t.location().getNamespace())
 						&& t.location().getPath().startsWith(FAMILY_PREFIX))
 				.collect(Collectors.toSet());
 	}

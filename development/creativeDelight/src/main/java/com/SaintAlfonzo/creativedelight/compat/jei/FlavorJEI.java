@@ -50,7 +50,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  *   <li>the pack's flavor crafts ({@link FlavorRecipe}, special, so never on the Crafting page) and crafting
  *       recipes with ids {@code creativedelight:shapeless/flavor/...}, a page each.</li>
  * </ol>
- * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] seasoningCategory}; re-run on
+ * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] pagesOff} (page id {@code seasoning}); re-run on
  * every JEI reload.
  */
 @ParametersAreNonnullByDefault
@@ -96,7 +96,7 @@ public class FlavorJEI implements IModPlugin {
 	public void registerRecipes(IRecipeRegistration registration) {
 		movedCrafting = Set.of();
 		movedMixing = Set.of();
-		if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.seasoningCategory.get()) {
+		if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.pageOn("seasoning")) {
 			return;
 		}
 		try {

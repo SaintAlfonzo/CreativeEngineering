@@ -26,12 +26,12 @@ public abstract class CampfireRainMixin implements CampfireRainTicks {
 	private int ce$rainTicks;
 
 	@Override
-	public int ce$getRainTicks() {
+	public int creativecommon$getRainTicks() {
 		return ce$rainTicks;
 	}
 
 	@Override
-	public void ce$setRainTicks(int ticks) {
+	public void creativecommon$setRainTicks(int ticks) {
 		ce$rainTicks = ticks;
 	}
 

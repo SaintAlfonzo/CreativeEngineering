@@ -62,6 +62,9 @@ public class CreativeDelight {
 		// M8: [members] blockheads_additions / incubation_additions became [compartments] switches; read raw below.
 		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.carryCompartmentSwitches();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, CDConfig.FILE);
+		// Hooks in Creative Common and Creative Compat (vine shearing, stuck-in-block speeds, jar families, the sample
+		// syringe JEI tab, idle random tick rules)
+		com.SaintAlfonzo.creativedelight.compat.CompatRegistrations.register();
 		// Global loot modifier fragments (data/<member>/glm_entries.json) of a member whose switch is off are skipped
 		// (Creative Loot's GlmMerge, plan_rules_fixes.md section 5, D17)
 		com.SaintAlfonzo.creativeloot.GlmMerge.gate(ns -> !CDConfig.isMember(ns) || CDConfig.member(ns));

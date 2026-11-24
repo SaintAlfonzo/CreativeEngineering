@@ -26,7 +26,7 @@ public abstract class PhantomSpawnerBaneSkipMixin {
 
 	@Redirect(method = "m_7995_", remap = false,
 			at = @At(value = "INVOKE", remap = false, target = "Lnet/minecraft/server/level/ServerLevel;m_6907_()Ljava/util/List;"))
-	private List<ServerPlayer> creativeengineering$withoutPhantomBane(ServerLevel level) {
+	private List<ServerPlayer> creativecommon$withoutPhantomBane(ServerLevel level) {
 		List<ServerPlayer> players = level.players();
 		if (!PhantomBaneRules.anyHasPhantomBane(players)) return players;
 		return players.stream().filter(p -> !PhantomBaneRules.hasPhantomBane(p)).toList();

@@ -71,11 +71,9 @@ public class CreativeCommon
 		// spec drops them from that file when Forge corrects it). The swap list toml is only renamed.
 		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(OLD_FILE, FILE, CommonConfig.SECTIONS);
 		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("creativeengineering-swaps.toml", MODID + "-swaps.toml");
-		// [effects] and [magic_resistance] are carried over from Creative Brewing's file (plan_cb_polish.md 2) and
-		// patcherMod's old file: the first boot copies the player's values in (sections this file already has are kept).
-		// CB drops them from its own file when Forge corrects it.
-		if (!com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS))
-			com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS);
+		// [effects] and [magic_resistance] are carried over from patcherMod's old file: the first boot copies the
+		// player's values in (sections this file already has are kept). A dependent jar that held them before carries
+		// its own copy over from its constructor (CommonConfig.EFFECT_SECTIONS).
 		com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(OLD_FILE, FILE, CommonConfig.EFFECT_SECTIONS);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.COMMON_SPEC, FILE);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CommonClientConfig.CLIENT_SPEC, "creativecommon-client.toml");

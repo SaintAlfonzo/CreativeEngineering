@@ -242,13 +242,13 @@ public final class PerfEvents {
 	// ── entity and block entity ticks ──
 
 	public static void entityTicked(Level level, Entity entity, long dt) {
-		((PerfStatsHolder) entity.getType()).ce$perfStats().add(ENTITY_STATS, dt);
+		((PerfStatsHolder) entity.getType()).creativecommon$perfStats().add(ENTITY_STATS, dt);
 		if (dt >= SLOW_ENTITY_TICK_NANOS) {
 			SlowEntityTick e = new SlowEntityTick();
 			if (e.isEnabled()) {
 				BlockPos p = entity.blockPosition();
 				e.dimension = dimension(level);
-				e.entityType = ((PerfStatsHolder) entity.getType()).ce$perfStats().key;
+				e.entityType = ((PerfStatsHolder) entity.getType()).creativecommon$perfStats().key;
 				e.x = p.getX();
 				e.y = p.getY();
 				e.z = p.getZ();
@@ -259,13 +259,13 @@ public final class PerfEvents {
 	}
 
 	public static void blockEntityTicked(Level level, BlockEntity be, long dt) {
-		((PerfStatsHolder) be.getType()).ce$perfStats().add(BLOCK_ENTITY_STATS, dt);
+		((PerfStatsHolder) be.getType()).creativecommon$perfStats().add(BLOCK_ENTITY_STATS, dt);
 		if (dt >= SLOW_BLOCK_ENTITY_TICK_NANOS) {
 			SlowBlockEntityTick e = new SlowBlockEntityTick();
 			if (e.isEnabled()) {
 				BlockPos p = be.getBlockPos();
 				e.dimension = dimension(level);
-				e.blockEntityType = ((PerfStatsHolder) be.getType()).ce$perfStats().key;
+				e.blockEntityType = ((PerfStatsHolder) be.getType()).creativecommon$perfStats().key;
 				e.x = p.getX();
 				e.y = p.getY();
 				e.z = p.getZ();

@@ -51,7 +51,7 @@ expect creativecommon:magic_resistance
 > effect give s5pb1 better_beacons:phantom_bane 30 0
 expect Applied effect Phantom Bane to s5pb1
 reject (Unknown (item|block|block type|entity|effect)|Incorrect argument for command|No player was found|no such bot)
-bootreject \[CE potions\] .* not present
+bootreject \[(CE|creativecommon) potions\] .* not present
 
 ## SQ-CCO-03 | WorldEdit present: the state-id skip does not break world edit
 @group -

@@ -48,7 +48,7 @@ import net.minecraft.world.item.crafting.Ingredient;
  *       uncanning, pies from a can, ...).</li>
  * </ul>
  * The icons are Create's two-item tab icon (big item, small crafting table on top), as on Create's Automated Shaped
- * Crafting page. {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] canCategories};
+ * Crafting page. {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] pagesOff} (page id {@code cans});
  * re-run on every JEI reload.
  */
 @ParametersAreNonnullByDefault
@@ -113,7 +113,7 @@ public class CanPagesJEI implements IModPlugin {
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
 		moved = Set.of();
-		if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.canCategories.get()) {
+		if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.pageOn("cans")) {
 			return;
 		}
 		try {

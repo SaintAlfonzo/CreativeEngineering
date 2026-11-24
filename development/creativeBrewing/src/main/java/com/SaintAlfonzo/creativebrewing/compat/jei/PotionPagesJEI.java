@@ -55,8 +55,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  *       the Bottling Machine ({@code kubejs/server_scripts/engineering/potion_bottling.js}).</li>
  * </ul>
  * Recipes are found by their id ({@code creativebrewing:<prefix>/<potion key>}); rows of one key share a page.
- * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by {@code [jei] tippedArrowCategory} and
- * {@code [jei] potionBucketCategory}; re-run on every JEI reload.
+ * {@link #onRuntimeAvailable} hides exactly what was re-shown. Gated by Compat's {@code [jei] pagesOff} (page ids
+ * {@code tipped_arrows} and {@code potion_buckets}); re-run on every JEI reload.
  */
 @ParametersAreNonnullByDefault
 @JeiPlugin
@@ -147,8 +147,8 @@ public class PotionPagesJEI implements IModPlugin {
 		if (Minecraft.getInstance().level == null) {
 			return;
 		}
-		boolean arrows = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.tippedArrowCategory.get();
-		boolean buckets = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.potionBucketCategory.get();
+		boolean arrows = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.pageOn("tipped_arrows");
+		boolean buckets = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.pageOn("potion_buckets");
 		if (!arrows && !buckets) {
 			return;
 		}

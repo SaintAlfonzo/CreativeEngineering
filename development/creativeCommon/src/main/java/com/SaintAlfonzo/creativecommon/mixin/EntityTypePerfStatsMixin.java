@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(value = EntityType.class, remap = false)
 public class EntityTypePerfStatsMixin implements PerfStatsHolder {
 	@Unique
-	private PerfEvents.TickStats ce$perfStats;
+	private PerfEvents.TickStats creativecommon$perfStats;
 
 	@Override
-	public PerfEvents.TickStats ce$perfStats() {
-		if (ce$perfStats == null) ce$perfStats = new PerfEvents.TickStats(EntityType.getKey((EntityType<?>) (Object) this).toString());
-		return ce$perfStats;
+	public PerfEvents.TickStats creativecommon$perfStats() {
+		if (creativecommon$perfStats == null) creativecommon$perfStats = new PerfEvents.TickStats(EntityType.getKey((EntityType<?>) (Object) this).toString());
+		return creativecommon$perfStats;
 	}
 }

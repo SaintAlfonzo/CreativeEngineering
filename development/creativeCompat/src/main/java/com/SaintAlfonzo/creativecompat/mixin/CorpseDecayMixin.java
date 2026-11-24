@@ -189,10 +189,10 @@ public abstract class CorpseDecayMixin implements CorpseState {
 		creativecompat$checked = false;
 	}
 
-	/** "Ancient Corpse" / "Ancient Remains" (lang in Creative Loot) instead of "Corpse". */
+	/** "Ancient Corpse" / "Ancient Remains" instead of "Corpse" for a corpse saved with the Ancient / Remains flag. */
 	@Inject(method = "m_5446_", at = @At("HEAD"), cancellable = true, remap = false)
 	private void creativecompat$ancientName(CallbackInfoReturnable<Component> cir) {
-		if (creativecompat$has(FLAG_REMAINS)) cir.setReturnValue(Component.translatable("entity.creativeloot.ancient_remains"));
-		else if (creativecompat$has(FLAG_ANCIENT)) cir.setReturnValue(Component.translatable("entity.creativeloot.ancient_corpse"));
+		if (creativecompat$has(FLAG_REMAINS)) cir.setReturnValue(Component.translatable("entity.creativecompat.ancient_remains"));
+		else if (creativecompat$has(FLAG_ANCIENT)) cir.setReturnValue(Component.translatable("entity.creativecompat.ancient_corpse"));
 	}
 }

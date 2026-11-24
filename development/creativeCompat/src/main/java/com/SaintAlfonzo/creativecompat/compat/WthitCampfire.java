@@ -80,7 +80,7 @@ public final class WthitCampfire implements IWailaCommonPlugin, IWailaClientPlug
 			if (level.getBlockState(pos.below()).is(CampfireRainInfo.RAIN_PROOF_FUEL)) {
 				raw.putInt(RAIN, RAIN_PROOF);
 			} else if (level.isRainingAt(pos.above())) {
-				int left = CampfireRainInfo.rainOutTicks() - ((CampfireRainTicks) campfire).ce$getRainTicks();
+				int left = CampfireRainInfo.rainOutTicks() - ((CampfireRainTicks) campfire).creativecommon$getRainTicks();
 				raw.putInt(RAIN, RAIN_GOING);
 				raw.putInt(RAIN_LEFT, Math.max(0, (left + 19) / 20));
 			} else {

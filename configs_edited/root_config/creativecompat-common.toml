@@ -823,25 +823,12 @@
 	#hidden in JEI's edit mode / never in JEI), plus problems in the definition. Render it with
 	#python3 tools/jei_order_report.py. Off by default: it takes a moment and a few MB.
 	orderReport = false
-	#Show seasoning crafts (Salt's food + salt, Create: The Salt's salting mixes, and crafting recipes
-	#with ids creativeengineering:shapeless/season/...) on their own Seasoning page instead of the
-	#Crafting and Mixing pages. Off: they stay where their mods put them.
+	#Grouped recipe pages to leave off. A mod that gathers a kind of recipe on a page of its own
+	#(seasoning crafts, can crafts, potion buckets, tipped arrows) gives the page an id and asks this list
+	#first; a page listed here is not added and its recipes stay on the pages their mods put them on.
+	#Ids in this pack: seasoning, cans, potion_buckets, tipped_arrows. Empty: every page is shown.
 	#Takes effect the next time JEI starts (rejoin or /reload).
-	seasoningCategory = true
-	#Show the potion bucket recipes on one Potion Buckets page per potion and bucket: filling and
-	#draining by hand, the Spout, the Item Drain and the Bottling Machine together. Off: they stay on the
-	#Crafting, Spout Filling, Item Draining and Bottling Machine pages.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	potionBucketCategory = true
-	#Show tipped arrow recipes on one Tipped Arrows page per potion: by hand (8 arrows + a lingering
-	#potion), the Spout and the Bottling Machine together. Off: they stay on the Crafting, Spout Filling
-	#and Bottling Machine pages.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	tippedArrowCategory = true
-	#Show can crafts on two pages of their own: Canning (food + an empty can -> a can) and Using Cans
-	#(crafts that take a can). Off: they stay on the Crafting page.
-	#Takes effect the next time JEI starts (rejoin or /reload).
-	canCategories = true
+	pagesOff = []
 	#How full a fluid looks in JEI tanks (every mod's recipe pages and the pack's own) for its amount.
 	#LOG: small amounts stay visible and 250, 1000 and 8000 mB look different. SQRT: a milder curve.
 	#LINEAR: JEI's own (fill = amount / tank size, so small amounts are a sliver).

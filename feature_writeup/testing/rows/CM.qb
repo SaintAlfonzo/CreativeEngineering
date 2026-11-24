@@ -127,7 +127,7 @@ reject verb=reg kind=potion id=\S*strong_phantom_bane
 expect verb=reg kind=potion id=\S+:phantom_bane
 expect verb=reg kind=potion id=\S+:long_phantom_bane
 expect verb=potion potion=creativebrewing:phantom_bane ingredient=minecraft:glowstone_dust output=nothing
-bootreject \[CE potions\].*(error|Error)
+bootreject \[(CE|creativecommon) potions\].*(error|Error)
 reject verb=\S+ .*done=0
 ## SQ-CM-08
 @phase worldgen

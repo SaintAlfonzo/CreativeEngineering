@@ -72,7 +72,9 @@ public class CreativeCompat {
 	public CreativeCompat() {
 		// No carry-over from older files: the pack-history migrations (sections from creativeengineering-common.toml and
 		// creativecommon-common.toml, the leaf pile and pass-through table rewrites) were dropped before the first
-		// public release (publish_readiness.md PR-CP-17).
+		// public release (publish_readiness.md PR-CP-17). The one kept: the four [jei] page switches -> [jei] pagesOff
+		// (PR-CP-11), a key rename inside this file.
+		JeiPageKeys.carryOver(FILE);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

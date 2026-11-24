@@ -49,8 +49,17 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 - **Config:** `config/creativecompat-common.toml` (`CompatConfig`). Since 2026-11-22 there is no carry-over from older
   files: the section copies from `creativeengineering-common.toml` and `creativecommon-common.toml`, the leaf pile
   migration and the pass-through table rewrite were dropped before the first public release (PR-CP-17; owner,
-  2026-11-22). New table `[mixins]` (one key per ungated mixin, see Mixins). `[gui_title] logOverflow` defaults to
-  false (PR-CP-16; the pack's own config file keeps its value).
+  2026-11-22). The one carry-over left (2026-11-23, PR-CP-11): the four old `[jei]` page switches
+  (`seasoningCategory`, `canCategories`, `potionBucketCategory`, `tippedArrowCategory`) are read once into `[jei]
+  pagesOff` and removed (`JeiPageKeys`, before the config is registered). Top-level tables in the spec (23, from
+  `CompatConfig` 2026-11-23): `[moss]`, `[vine_shearing]`, `[monster_box]`, `[trash_slot]`, `[cats]`, `[giant_squid]`,
+  `[golems]`, `[boat_friction]`, `[paintings]`, `[shrapnel]`, `[surface]` (subtables `speed`, `sticky`, `camouflage`,
+  `sinking`, `passthrough`, `wthit`), `[vein_undo]`, `[jei]`, `[gui_title]`, `[toasts]`, `[screens]`, `[tooltips]`,
+  `[coaster]`, `[wthit]` (`state_lines`), `[immersive_portals]` (`fog`), `[portalgun]`, `[corpses]`, `[debug]`
+  (`passthrough`), `[mixins]` (one key per ungated mixin, see Mixins). `[jei] pagesOff` (default empty) lists the
+  grouped recipe page ids to leave off; the jars that add the pages ask `CompatConfig.JEI.pageOn(id)`: `seasoning`,
+  `cans` (Creative Delight), `potion_buckets`, `tipped_arrows` (Creative Brewing). `[gui_title] logOverflow` defaults
+  to false (PR-CP-16; the pack's own config file keeps its value).
 - **Leaf piles (2026-11-15, pass-through phase 3, [plan_passthrough.md](plan_passthrough.md) 3.1):** `LeafPileSlowMixin`
   and `surface/LeafPileSlow` are gone; IW leaf piles and Twigs bamboo leaves are the `leaf_pile` pass-through tier,
   threshold `[surface.passthrough.leaf_pile] minLayers` (default 4). `surface/LeafPileMigration` moves an old
@@ -63,7 +72,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   | Table | Keys (default) | Side |
   |---|---|---|
   | `[surface.passthrough]` | `enabled` (true; false = every block back to its own slowdown), `arrowLifeTicks` (12000), `arrowLongLifeCap` (128) | common; the server's values are sent to clients on join and save |
-  | `[surface.passthrough.<tier>]`, one per tier: `dense_crop`, `crop`, `wild_crop`, `vine`, `tall_plant`, `cane`, `rope`, `cobweb`, `bush`, `leaf_pile`, `grass` | `walk`, `fall`, `growth` (ANY / HALF / TALL_HALF), `neighbours` (NONE / RING / CUBE), `denseFrom`, `denseWalk`, `denseFall`, `denseResetsFall`, `surrounded` (NONE / WEB), `minLayers` (1-9, 9 = never), `walkOnlyMoving`, `items` (NONE / STICK), `itemStickChance`, `projectiles`, `depthStriderPasses`; defaults per tier in blockrunner.md 3.10 | common, synced |
+  | `[surface.passthrough.<tier>]`, one per tier (`surface/PassTier`): `dense_crop`, `crop`, `wild_crop`, `vine`, `tall_plant`, `cane`, `rope`, `cobweb`, `bush`, `layers`, `grass` | `walk`, `fall`, `growth` (ANY / HALF / TALL_HALF), `neighbours` (NONE / SIDES / FACES; the old RING / CUBE still read as SIDES / FACES), `denseFrom`, `denseWalk`, `denseFall`, `denseResetsFall`, `surrounded` (NONE / WEB), `minLayers` (1-9, 9 = never), `walkOnlyMoving`, `items` (NONE / STICK), `itemStickChance`, `projectiles`, `depthStriderPasses`; defaults per tier in blockrunner.md 3.10 | common, synced |
   | `[surface.wthit] passThrough` | true: Walk Through / Fall Through / Neighbors lines | client |
   | `[debug.passthrough] timing` | false; true logs a `[passthrough-timing]` line per side every 200 ticks (`tools/perf/passthrough_timing.py` reads them) | both, applies on save |
 
@@ -84,7 +93,8 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   path (no copied file). State is saved in the entity compound `creativecompat:corpse` (`DeathTime`, `EmptiedAt`,
   `Stage`, `Ancient`, `Remains`); corpses from before the change take `DeathTime` = now minus the mod's loaded age.
   `Ancient` (skeleton from the start, "Ancient Corpse") and `Remains` (never decays or despawns, "Ancient Remains") are
-  set by Creative Loot through that compound (`corpses #2`, `#7`); their names are Creative Loot lang keys.
+  set by Creative Loot through that compound (`corpses #2`, `#7`); their names are Compat's own lang keys
+  (`entity.creativecompat.ancient_corpse`, `ancient_remains`; moved from Creative Loot 2026-11-23, PR-CP-12).
   Skeletons sink (`skeletonsSink`, `sinkSpeed` 0.1 blocks a tick; ruling 27, TODO `corpses #9`): a skeleton-stage
   corpse (player, ancient or remains) in water or lava speeds down to `sinkSpeed` instead of the Corpse mod's upward
   drift (a `@ModifyArg` on the y of its one `setDeltaMovement` in `tick`); player-model corpses keep floating.
@@ -127,9 +137,9 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   owner ruling M2, 2026-11-22). The skeleton is dressed with the cosmetic armor
   over its real armor (`CorpseSectionsClient.withCosmetics`). Curios API calls only in `CorpseCurios` and
   `CorpseCuriosClient`.
-- **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
-  flower box models, `tags/items/physics/`, 13
-  lang keys (MCA eyes, monster box), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
+- **Resources in the jar** (some paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
+  flower box models, `tags/items/physics/`, 136
+  lang keys (counted 2026-11-23: MCA eyes, monster box, pass-through and WTHIT lines, falling layer, ancient corpse names), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
   Elytra set is built at load from the installed jars, `banners/BannerPatternPack`, 6.3), no painting art (since 2026-11-05 the Immersive Paintings set
   is built at load from the installed jars, `paintings/PaintingPack`, 6.2), the monster box reward loot table, the weathered cardboard box assets.
 - **Scripts:** startup `kubejs_startup/creativecompat/` (`item_physics.js`, `decor_blocks.js` weathered cardboard
@@ -143,16 +153,29 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   flower pot tooltips). Each tree opens with `_compat_core.js`. The Compat tooltips call the pack's tooltip helpers
   through `global.tooltips` (published by `client_scripts/tooltips.js`), at event time.
 
-## 2. Edges to Common (Common never imports Compat)
+## 2. Edges to Common and hooks for the jars above (Common never imports Compat)
 
-| Common reader | Hook Compat fills |
-|---|---|
-| JEI world tabs (`WorldInteractionJEI`) | `WorldRows.provider(BURNING, ...)` from Compat's constructor when JEI is loaded (CAMPFIRE: Creative Delight since 2026-11-04) |
-| `WthitCampfire` | filled by Creative Delight since 2026-11-04 (`campfire/CampfireRainInfo` suppliers); `CampfireRainTicks` accessor stays Common |
-| `WthitHolderContents` | `compat/JarContents` kinds / total hooks (fallback: per-slot list) |
-| `WthitPotContents` | `compat/PottedPlantHolder`, implemented by the botanist pot block entity |
-| `surface/StuckInBlock` (Engineering) | `surface/LeafPileSlow` live reader (default 4); gone 2026-11-15 with the leaf pile mixin (pass-through phase 3) |
-| Compat `ItemBurnTransform` -> shrapnel (Engineering) | `util/BurnBursts`, registered by the shrapnel side |
+Compat requires Common; Common names no Compat class. Since 2026-11-23 (PR-CP-12, owner ruling on
+`creative-compat-publish #7`) Compat and Common hold no class name, lang key, namespace or config key of Creative
+Delight, Creative Brewing or Creative Loot: each of those jars registers what Compat or Common needs from its own
+constructor. `tools/design_rules_audit.py sideways` (DR-C7) checks it.
+
+| Reader | Hook | Filled by |
+|---|---|---|
+| Common JEI world tabs (`WorldInteractionJEI`, now Compat's) | `WorldRows.provider(BURNING, ...)` | Compat's constructor when JEI is loaded (CAMPFIRE: Creative Delight) |
+| `WthitCampfire` | `campfire/CampfireRainInfo` suppliers; `CampfireRainTicks` accessor (`creativecommon$getRainTicks`) in Common | Creative Delight |
+| `WthitHolderContents` | `compat/JarContents` kinds / total hooks (fallback: per-slot list) | Compat |
+| `WthitPotContents` | `compat/PottedPlantHolder`, implemented by the botanist pot block entity | Compat |
+| `ItemBurnTransform` -> shrapnel | `util/BurnBursts` | the shrapnel side |
+| `block/VineShearing` (no `fertile` state for vines with their own shears handling) | `VineShearing.keepOwnHandling(className)`; Quark's and Vinery's vines built in | Creative Delight (Hearth and Harvest hops vine) |
+| `surface/StuckInBlock` (WTHIT speed line of untiered blocks) | `StuckInBlock.register(className, multiplier)` | Creative Delight (powdered sugar block, 0.9) |
+| `compat/CompoundEffectTooltip` (parts under "When Applied:") | `CompoundEffectTooltip.addEffectSource(item -> effects)` | Creative Brewing (`WineTooltipEffects`, the Vinery port's wine table) |
+| `compat/JarMixing` (mixed jar families) | `JarMixing.addFamilyNamespace(ns)`: `<ns>:jar_family/<name>` item tags | Creative Delight |
+| `compat/jei/world/WorldTab.SAMPLE_SYRINGE` icon and catalyst | `WorldTab.addTool(tabId, itemOrTag)` (icons may be tags) | Creative Delight (`sample_syringe`) |
+| `mixin/CorpseDecayMixin` names | Compat lang `entity.creativecompat.ancient_corpse` / `ancient_remains` | Creative Loot sets the `Ancient` / `Remains` flags |
+| `[jei] pagesOff` | `CompatConfig.JEI.pageOn(id)` | Creative Delight (`seasoning`, `cans`), Creative Brewing (`potion_buckets`, `tipped_arrows`) |
+| Common `perf/IdleTickRules` | `IdleTickRules.addModRule(line)`, applied with `[perf] idleRandomTickRules` | Creative Delight (treated-stick tomatoes) |
+| Common `[effects]`, `[magic_resistance]` | `ConfigRename.carrySections` / `mergeSections` into `creativecommon-common.toml` | Creative Brewing, from its own old file |
 
 ## 3. Left in the pack folder or elsewhere on purpose
 
@@ -168,7 +191,9 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 Scratch SQ-CMP-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)). In game: CMP-01 open a Supplementaries jar
 with two potions and read the WTHIT line; CMP-02 (campfire) moved to SQ-CFR / CQ-CFR-01 with the code; CMP-03 TrashSlot
 and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors and a Bedspreads / Elytra banner.
-Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16; corpse screen sections
+Naming hooks (2026-11-23, queue section 5): SQ-CMP-27 (`[jei]` carry-over), -28 (vine shearing), -29 (idle tick
+rule), CQ-CMP-30 (JEI pages), -31 (stuck-in-block line), -32 (wine tooltip), -33 (corpse names, jar families, syringe
+tab). Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16; corpse screen sections
 SQ-CMP-17 and CQ-CMP-18 (screenshot look-check), -19, -20.
 Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md) 8, Compat 23c5050d): SQ-CMP-03 to -08, -11 to -13 PASS; SQ-CMP-01 BATCH-FAULT (typed mixin count; fixed 2026-11-22, `cmp_mixin_check.py`); sand-layer recipes without Immersive Weathering FAIL (SQ-CC-03, SQ-CC12-02, SQ-CPP-05, TODO `blockrunner #18`; guarded 2026-11-22, rerun after the Compat rebuild).
 Scratch run r1123cx (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run_2026-11-23.md) 10, Compat 2e68d8807, publish gate): 34 rows, PASS 30; SQ-CMP-01 (86 listed, 76 applied, 10 gated), -03 to -08, -11 to -13, -23 to -25, SQ-SMK-18 to -20, SQ-PA-01 to -04, SQ-MT-01, -02, SQ-BPT-01, CQ-BPT-01, -03 PASS; SQ-NS-01 FAIL (nightstand with a hopper below takes nothing, TODO `decor-and-framed-blocks #3`); SQ-SG-02, -03 FAIL (no grass spreads, controls included, TODO `creative-calendar #2`); CQ-TSL-02 shots for the owner.
@@ -289,6 +314,12 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
 
 - 2026-11-21: How much taller the second pot is than the first (owner 2026-11-21: 2 px) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/DoublePot.java)
+- 2026-11-23: Compat and Common stop naming the jars above them (plan_ready_now_1123.md 4, PR-CP-11, PR-CP-12,
+  PR-CC-27, PR-CC-28): the four `[jei]` page switches became `[jei] pagesOff` (carried over once); VineShearing,
+  StuckInBlock, CompoundEffectTooltip, JarMixing and the Sample Syringe world tab take their Delight and Brewing
+  entries from registrations (section 2); the ancient corpse names moved to Compat's lang; Common's idle tick rule for
+  treated-stick tomatoes and its `[effects]` carry-over from Brewing's file moved to those jars; Common's mixin members
+  and the campfire rain accessor are `creativecommon$`, its potion log tag `[creativecommon potions]`.
 
 
 

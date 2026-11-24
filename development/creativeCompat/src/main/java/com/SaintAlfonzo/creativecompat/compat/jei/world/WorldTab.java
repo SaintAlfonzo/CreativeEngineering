@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativecompat.compat.jei.world;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The world-interaction JEI tabs (feature_writeup/jei_coverage.md 4). Each tab's rows come from
@@ -8,7 +9,7 @@ import java.util.List;
  * {@code manual.json}) plus whatever {@link WorldRows} collected at runtime. A tab with no rows is not shown.
  *
  * <p>{@code icons}: first id that exists is the tab icon. {@code catalysts}: item ids or {@code #item_tag}s shown as
- * the tab's catalysts. No dependency on JEI here, so {@link WorldRows} can name tabs on a dedicated server.
+ * the tab's catalysts; other mods add theirs with {@link #addTool}. No dependency on JEI here, so {@link WorldRows} can name tabs on a dedicated server.
  */
 public enum WorldTab {
 	BLOCK_GROWTH("block_growth", List.of("immersive_weathering:moss_clump", "minecraft:grass_block"), List.of()),
@@ -24,7 +25,7 @@ public enum WorldTab {
 	JAR_INTERACTION("jar_interaction", List.of("supplementaries:faucet", "minecraft:glass_bottle"), List.of()),
 	KNIFE_DROPS("knife_drops", List.of("farmersdelight:iron_knife"), List.of()),
 	GRASS_DROPS("grass_drops", List.of("minecraft:wheat_seeds"), List.of()),
-	SAMPLE_SYRINGE("sample_syringe", List.of("creativedelight:sample_syringe"), List.of("creativedelight:sample_syringe")),
+	SAMPLE_SYRINGE("sample_syringe", List.of(), List.of()),
 	MOB_BOTTLING("mob_bottling", List.of("minecraft:axolotl_bucket"), List.of()),
 	MOB_TRANSFORMATION("mob_transformation", List.of("minecraft:golden_apple"), List.of()),
 	BURNING("burning", List.of("supplementaries:ash", "minecraft:flint_and_steel"), List.of()),
@@ -37,8 +38,19 @@ public enum WorldTab {
 
 	WorldTab(String id, List<String> icons, List<String> catalysts) {
 		this.id = id;
-		this.icons = icons;
-		this.catalysts = catalysts;
+		this.icons = new CopyOnWriteArrayList<>(icons);
+		this.catalysts = new CopyOnWriteArrayList<>(catalysts);
+	}
+
+	/**
+	 * Adds an item id or {@code #item_tag} as an icon candidate (after the built-in ones) and a catalyst of the tab
+	 * with this id, for a tab whose tool another mod adds (the sample syringe). Call it from the mod's constructor.
+	 */
+	public static void addTool(String tabId, String itemOrTag) {
+		WorldTab tab = byId(tabId);
+		if (tab == null) return;
+		tab.icons.add(itemOrTag);
+		tab.catalysts.add(itemOrTag);
 	}
 
 	public String titleKey() {

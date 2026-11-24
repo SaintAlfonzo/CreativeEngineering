@@ -12,15 +12,15 @@ import java.util.Set;
 @Mixin(value = Block.class, remap = false)
 public class IwBlockGrowthHolderMixin implements IwGrowthHolder {
 	@Unique
-	private Set<IBlockGrowth>[] ce$iwGrowths;
+	private Set<IBlockGrowth>[] creativecommon$iwGrowths;
 
 	@Override
-	public Set<IBlockGrowth>[] ce$iwGrowths() {
-		return ce$iwGrowths;
+	public Set<IBlockGrowth>[] creativecommon$iwGrowths() {
+		return creativecommon$iwGrowths;
 	}
 
 	@Override
-	public void ce$setIwGrowths(Set<IBlockGrowth>[] growths) {
-		ce$iwGrowths = growths;
+	public void creativecommon$setIwGrowths(Set<IBlockGrowth>[] growths) {
+		creativecommon$iwGrowths = growths;
 	}
 }

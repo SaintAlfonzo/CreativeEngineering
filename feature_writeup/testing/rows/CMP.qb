@@ -453,3 +453,80 @@ look 4 script lines; jar crop recipes = pack folder count, 2 tags
 @sources feature_writeup/plan_corpses.md
 @draft no batch holds this row yet; needs a client and a real death
 @reviewed 2026-11-22
+
+@@section 5
+@@title SQ-CMP Compat and Common naming, 2026-11-23 ([creative_compat.md](../creative_compat.md) 3, TODO `creative-compat-publish #7`, `publish-readiness #6`; [plan_ready_now_1123.md](../plan_ready_now_1123.md) 4)
+@@date 2026-11-23
+@@jars creativecommon creativecompat creativedelight creativebrewing creativeloot
+@@sources feature_writeup/creative_compat.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/JeiPageKeys.java development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/CompatRegistrations.java development/creativeBrewing/src/main/java/com/SaintAlfonzo/creativebrewing/compat/WineTooltipEffects.java
+@@prep run sed -i -E 's/^(\s*)pagesOff = .*/\1seasoningCategory = false\n\1canCategories = true\n\1potionBucketCategory = true\n\1tippedArrowCategory = false/' config/creativecompat-common.toml
+@@text
+@@text Full pack with the 2026-11-23 Common, Compat, Delight, Brewing and Loot jars. Before boot 1 the Compat config gets the
+@@text four old `[jei]` page switches back (two of them false). Every other row checks a class that now takes its higher-jar
+@@text names from a registration (behavior unchanged).
+@@text
+@@table
+
+## SQ-CMP-27 | The four old [jei] page switches carry over into [jei] pagesOff
+@group A
+@commands Boot 1 (prep writes `seasoningCategory = false`, `canCategories = true`, `potionBucketCategory = true`, `tippedArrowCategory = false`); read `config/creativecompat-common.toml`; restart and read again
+@pass log `[jei] page switches carried over to pagesOff = [seasoning, tipped_arrows]` once; the file has `pagesOff = ["seasoning", "tipped_arrows"]` and none of the four old keys; after the restart no second carry-over line and the list is unchanged
+@fails no carry-over line: `JeiPageKeys.carryOver` not called before `registerConfig` in `CreativeCompat`, or the file has no `[jei]` table; old keys still there: Forge read the file before the carry-over
+@boot 1
+bootexpect \[jei\] page switches carried over to pagesOff = \[seasoning, tipped_arrows\]
+shell grep -nE "pagesOff|seasoningCategory|canCategories|potionBucketCategory|tippedArrowCategory" config/creativecompat-common.toml
+restart
+shell grep -c "page switches carried over" logs/latest.log; grep -n "pagesOff" config/creativecompat-common.toml
+look first boot: one carry-over line, `pagesOff = ["seasoning", "tipped_arrows"]`, no old key; after the restart 0 carry-over lines and the same list
+
+## SQ-CMP-28 | Hops vine keeps its own shears handling; other modded vines still get fertile
+@group A
+@commands Same boot: `/setblock 0 120 0 botania:solid_vine[fertile=false]`, `/setblock 2 120 0 hearthandharvest:hops_vine[fertile=false]`, then `/setblock 2 120 0 hearthandharvest:hops_vine`
+@pass the Botania vine is placed with `fertile=false`; the hops vine command fails with an unknown-property error naming `fertile` and the plain hops vine places (Creative Delight registers the hops vine with `VineShearing.keepOwnHandling`)
+@fails the hops vine has `fertile`: Creative Delight's `CompatRegistrations.register` ran after the blocks were built, or the class name changed; Botania without it: `VineBlockShearMixin` not applied
+@boot 1
+> setblock 0 120 0 botania:solid_vine[fertile=false]
+> setblock 2 120 0 hearthandharvest:hops_vine[fertile=false]
+> setblock 2 120 0 hearthandharvest:hops_vine
+sleep 2
+> execute if block 0 120 0 botania:solid_vine[fertile=false] run say SOLID_VINE_FERTILE_STATE
+> execute if block 2 120 0 hearthandharvest:hops_vine run say HOPS_PLACED
+waitlog HOPS_PLACED 20
+shell grep -E "SOLID_VINE_FERTILE_STATE|HOPS_PLACED|fertile" logs/latest.log | tail -5
+look SOLID_VINE_FERTILE_STATE and HOPS_PLACED said; the hops vine line with fertile is an unknown-property error
+
+## SQ-CMP-29 | Treated-stick tomatoes stay in the idle random tick rules from Creative Delight
+@group A
+@commands Same boot: grep the log for idle random tick rule warnings; place a grown treated-stick tomato and a rope above it with the server running
+@pass no `[perf] idleRandomTickRules: skipped` line for `creativedelight:treated_stick_tomatoes`; the grown vine still climbs a stick placed above it (wake_above) as before
+@fails the rule is missing: `IdleTickRules.addModRule` not called from Creative Delight's constructor, or `IdleRandomTicks` built before it
+@boot 1
+@draft the climb check needs the treated-stick block id and its grown state written in; a runner fills them from the CD block list
+
+## CQ-CMP-30 | JEI grouped pages follow [jei] pagesOff
+@group client
+@commands Client on the SQ-CMP-27 config (`pagesOff = ["seasoning", "tipped_arrows"]`); open JEI on salt, an empty can, a potion bucket and a tipped arrow; then set `pagesOff = []` and `/reload`
+@pass with the list: no Seasoning or Tipped Arrows page (their recipes on Crafting / Mixing / Spout pages), Canning, Using Cans and Potion Buckets pages shown; with the empty list all six pages shown
+@fails a page shown while listed: its plugin still reads an old key, or the id is spelled differently from `CompatConfig.Jei.pageOn` callers (`FlavorJEI`, `CanPagesJEI`, `PotionPagesJEI`)
+@draft needs a client
+
+## CQ-CMP-31 | Powdered sugar block still shows its slowdown in the WTHIT speed line
+@group client
+@commands Client; stand inside a placed powdered sugar block (`creativedelight:powdered_sugar_block`) and look at it with WTHIT
+@pass the run speed line shows the 0.9 stuck multiplier as before (StuckInBlock rule registered by Creative Delight)
+@fails no line: `StuckInBlock.register` not called, or the class name changed
+@draft needs a client
+
+## CQ-CMP-32 | A wine still lists its compound effect's parts under When Applied
+@group client
+@commands Client; hover a Vinery wine whose effect is a compound effect (see Creative Common `CompoundEffects`)
+@pass the effect's parts are listed under "When Applied:" as before (Creative Brewing registers `WineTooltipEffects` with `CompoundEffectTooltip.addEffectSource`)
+@fails no parts: the source was not registered on the client, or the Vinery `WineEffects` class moved
+@draft needs a client and a wine id with a compound effect
+
+## CQ-CMP-33 | Ancient corpses keep their names; mixed jars and the Sample Syringe tab unchanged
+@group client
+@commands Client; look at an ancient corpse (`/locate` or SQ-LOOT-07's setup); put two cookie-family items in one Supplementaries jar; open the JEI world tab Sample Syringe
+@pass the corpse reads "Ancient Corpse" (or "Ancient Remains") in its name; the two cookies share the jar (Creative Delight's `jar_family/` tags still count); the Sample Syringe tab shows the syringe as icon and catalyst
+@fails raw lang key on the corpse: Compat's lang lacks `entity.creativecompat.ancient_corpse`; cookies refused: `JarMixing.addFamilyNamespace` not called; barrier icon: `WorldTab.addTool` not called
+@draft needs a client

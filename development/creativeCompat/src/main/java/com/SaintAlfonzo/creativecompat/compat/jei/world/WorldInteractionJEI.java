@@ -133,13 +133,13 @@ public class WorldInteractionJEI implements IModPlugin {
 		return out;
 	}
 
-	/** The tab's first icon item that exists; Jar Storage is the jar with a small faucet on top. */
+	/** The tab's first icon item (or first item of an icon tag) that exists; Jar Storage is the jar with a small faucet on top. */
 	private static IDrawable icon(IGuiHelper helper, WorldTab tab) {
 		ItemStack stack = new ItemStack(Items.BARRIER);
 		for (String id : tab.icons) {
-			Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
-			if (item != null && item != Items.AIR) {
-				stack = new ItemStack(item);
+			List<ItemStack> found = stacks(id);
+			if (!found.isEmpty()) {
+				stack = found.get(0);
 				break;
 			}
 		}

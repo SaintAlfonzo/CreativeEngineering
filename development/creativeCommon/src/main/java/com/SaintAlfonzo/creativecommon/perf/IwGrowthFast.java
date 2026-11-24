@@ -59,16 +59,16 @@ public final class IwGrowthFast {
 	/** After IW's {@code rebuild}: copies its maps into the per-block fields and the universal table. */
 	public static synchronized void rebuilt(Map<TickSource, Map<Block, Set<IBlockGrowth>>> forBlock,
 			Map<TickSource, Set<IBlockGrowth>> universalGrowths) {
-		for (Block b : owners) ((IwGrowthHolder) b).ce$setIwGrowths(null);
+		for (Block b : owners) ((IwGrowthHolder) b).creativecommon$setIwGrowths(null);
 		List<Block> now = new ArrayList<>();
 		for (Map.Entry<TickSource, Map<Block, Set<IBlockGrowth>>> e : forBlock.entrySet()) {
 			int s = e.getKey().ordinal();
 			for (Map.Entry<Block, Set<IBlockGrowth>> be : e.getValue().entrySet()) {
 				IwGrowthHolder h = (IwGrowthHolder) be.getKey();
-				Set<IBlockGrowth>[] t = h.ce$iwGrowths();
+				Set<IBlockGrowth>[] t = h.creativecommon$iwGrowths();
 				if (t == null) {
 					t = newTable();
-					h.ce$setIwGrowths(t);
+					h.creativecommon$setIwGrowths(t);
 					now.add(be.getKey());
 				}
 				t[s] = be.getValue();
@@ -93,7 +93,7 @@ public final class IwGrowthFast {
 	/** Replaces {@code BlockGrowthHandler.tickBlock} (via {@code IwBlockGrowthHandlerMixin}). */
 	public static void tickBlock(TickSource source, BlockState state, ServerLevel level, BlockPos pos) {
 		Block block = state.getBlock();
-		Set<IBlockGrowth>[] own = ((IwGrowthHolder) block).ce$iwGrowths();
+		Set<IBlockGrowth>[] own = ((IwGrowthHolder) block).creativecommon$iwGrowths();
 		int s = source.ordinal();
 		Set<IBlockGrowth> mine = own == null ? null : own[s];
 		Set<IBlockGrowth> all = universal[s];

@@ -19,13 +19,13 @@ import net.minecraft.world.entity.LivingEntity;
 public abstract class LivingEntityUseItemIconMixin {
 
 	@Inject(method = "m_8095_", at = @At("HEAD"), remap = false)
-	private void creativeengineering$markItem(CallbackInfo ci) {
+	private void creativecommon$markItem(CallbackInfo ci) {
 		LivingEntity self = (LivingEntity) (Object) this;
 		if (!self.level.isClientSide) EffectRules.setUsingItem(self.getUseItem().getItem());
 	}
 
 	@Inject(method = "m_8095_", at = @At("RETURN"), remap = false)
-	private void creativeengineering$clearItem(CallbackInfo ci) {
+	private void creativecommon$clearItem(CallbackInfo ci) {
 		if (!((LivingEntity) (Object) this).level.isClientSide) EffectRules.setUsingItem(null);
 	}
 }

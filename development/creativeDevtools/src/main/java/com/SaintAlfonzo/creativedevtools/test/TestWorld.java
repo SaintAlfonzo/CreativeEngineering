@@ -599,7 +599,7 @@ final class TestWorld {
 		BlockEntity be = level.getBlockEntity(pos);
 		if (be != null) {
 			try {
-				ticks = be.getClass().getMethod("ce$getRainTicks").invoke(be);
+				ticks = be.getClass().getMethod("creativecommon$getRainTicks").invoke(be);
 			} catch (ReflectiveOperationException | RuntimeException ignored) {
 				// not a campfire with the rain counter
 			}

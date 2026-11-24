@@ -11,14 +11,14 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(value = BlockEntityType.class, remap = false)
 public class BlockEntityTypePerfStatsMixin implements PerfStatsHolder {
 	@Unique
-	private PerfEvents.TickStats ce$perfStats;
+	private PerfEvents.TickStats creativecommon$perfStats;
 
 	@Override
-	public PerfEvents.TickStats ce$perfStats() {
-		if (ce$perfStats == null) {
+	public PerfEvents.TickStats creativecommon$perfStats() {
+		if (creativecommon$perfStats == null) {
 			ResourceLocation id = BlockEntityType.getKey((BlockEntityType<?>) (Object) this);
-			ce$perfStats = new PerfEvents.TickStats(id == null ? "unregistered" : id.toString());
+			creativecommon$perfStats = new PerfEvents.TickStats(id == null ? "unregistered" : id.toString());
 		}
-		return ce$perfStats;
+		return creativecommon$perfStats;
 	}
 }

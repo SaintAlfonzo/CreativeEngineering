@@ -24,7 +24,7 @@ bootexpect \[melting\] tags: \d+ meltable
 bootexpect \[damage-tags\] loaded [1-9]\d* data-defined tag
 bootreject /ERROR\].*\bcreativecommon\b
 bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\bcreativecommon
-bootreject \[CE potions\] .* not found while building
+bootreject \[(CE|creativecommon) potions\] .* not found while building
 shell grep -q "Found valid mod file creativecommon-[^ ]*\.jar with .creativecommon." logs/debug.log
 shell echo "mixins $(grep -c 'from creativecommon.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativecommon.mixins.json' logs/debug.log)" -gt 0
 # judge-a r1123cc: SwapReport writes the load report on ServerStoppingEvent only, so stop the server (restart keeps the old log as logs/qrun_bootN.log) and read it there

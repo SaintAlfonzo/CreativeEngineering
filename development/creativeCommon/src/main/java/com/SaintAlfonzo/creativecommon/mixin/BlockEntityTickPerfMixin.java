@@ -22,21 +22,21 @@ public class BlockEntityTickPerfMixin {
 	private BlockEntity f_156428_;
 
 	@Unique
-	private long ce$tickStart;
+	private long creativecommon$tickStart;
 
 	@Inject(method = "m_142224_", remap = false, require = 0, at = @At("HEAD"))
 	private void creativecommon$perfBlockEntityStart(CallbackInfo ci) {
 		PerfEvents.seen(PerfEvents.HOOK_BLOCK_ENTITY);
 		if (!PerfEvents.blockEntityTicks) return;
 		Level level = f_156428_.getLevel();
-		ce$tickStart = level != null && !level.isClientSide ? System.nanoTime() : 0L;
+		creativecommon$tickStart = level != null && !level.isClientSide ? System.nanoTime() : 0L;
 	}
 
 	@Inject(method = "m_142224_", remap = false, require = 0, at = @At("RETURN"))
 	private void creativecommon$perfBlockEntityEnd(CallbackInfo ci) {
-		long start = ce$tickStart;
+		long start = creativecommon$tickStart;
 		if (start == 0L) return;
-		ce$tickStart = 0L;
+		creativecommon$tickStart = 0L;
 		Level level = f_156428_.getLevel();
 		if (level != null) PerfEvents.blockEntityTicked(level, f_156428_, System.nanoTime() - start);
 	}

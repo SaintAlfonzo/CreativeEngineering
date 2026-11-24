@@ -25,7 +25,7 @@ public final class CommonConfig {
 	/** The toml tables of this file, carried over from creativeengineering-common.toml on the first boot after the swap. */
 	public static final List<String> SECTIONS = List.of("changelog", "damage_tags", "perf", "wandering_trader", "advancements", "mod_names");
 
-	/** Sections taken over from Creative Brewing's creativebrewing-common.toml (plan_cb_polish.md 2). */
+	/** Sections taken over from a dependent jar's file (plan_cb_polish.md 2); that jar carries them over. */
 	public static final List<String> EFFECT_SECTIONS = List.of("effects", "magic_resistance");
 
 	public static final ForgeConfigSpec COMMON_SPEC;
@@ -64,8 +64,8 @@ public final class CommonConfig {
 		RECIPE_BOOK = new RecipeBook(builder);
 		CREATIVE_MENU = new CreativeMenu(builder);
 		MOD_NAMES = new ModNames(builder);
-		// [effects], [magic_resistance]: from creativebrewing-common.toml (plan_cb_polish.md 2); the constructor
-		// carries the player's values over (EFFECT_SECTIONS)
+		// [effects], [magic_resistance]: taken over from a dependent jar (plan_cb_polish.md 2), which carries the
+		// player's values over (EFFECT_SECTIONS)
 		EFFECTS = new Effects(builder);
 		MAGIC_RESISTANCE = new MagicResistance(builder);
 		// [melting]: new (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8)
@@ -406,7 +406,7 @@ public final class CommonConfig {
 			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
 			removed = b.comment(
 					"Effects that are never applied (LivingEntity#addEffect refuses them). Their brews are removed",
-					"by KubeJS (Creative Brewing's potions.js). Server side, read live."
+					"by KubeJS (the potion scripts). Server side, read live."
 			).defineList("removed", List.of(
 			), o -> o instanceof String s && s.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
 			levelCaps = b.comment(

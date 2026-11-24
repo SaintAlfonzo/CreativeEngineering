@@ -19,17 +19,17 @@ import java.util.function.BooleanSupplier;
 @Mixin(value = MinecraftServer.class, remap = false)
 public class ServerTickPerfMixin {
 	@Unique
-	private PerfJfrEvents.ServerTick ce$tickEvent;
+	private PerfJfrEvents.ServerTick creativecommon$tickEvent;
 
 	@Inject(method = "m_5705_", remap = false, require = 0, at = @At("HEAD"))
 	private void creativecommon$perfTickStart(BooleanSupplier hasTime, CallbackInfo ci) {
-		ce$tickEvent = PerfEvents.beginServerTick();
+		creativecommon$tickEvent = PerfEvents.beginServerTick();
 	}
 
 	@Inject(method = "m_5705_", remap = false, require = 0, at = @At("RETURN"))
 	private void creativecommon$perfTickEnd(BooleanSupplier hasTime, CallbackInfo ci) {
-		PerfJfrEvents.ServerTick e = ce$tickEvent;
-		ce$tickEvent = null;
+		PerfJfrEvents.ServerTick e = creativecommon$tickEvent;
+		creativecommon$tickEvent = null;
 		PerfEvents.endServerTick((MinecraftServer) (Object) this, e);
 	}
 }

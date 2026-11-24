@@ -6,7 +6,7 @@ import java.util.Set;
 
 /** Added to every Block by {@code IwBlockGrowthHolderMixin}: its Immersive Weathering growths per tick source ordinal. */
 public interface IwGrowthHolder {
-	Set<IBlockGrowth>[] ce$iwGrowths();
+	Set<IBlockGrowth>[] creativecommon$iwGrowths();
 
-	void ce$setIwGrowths(Set<IBlockGrowth>[] growths);
+	void creativecommon$setIwGrowths(Set<IBlockGrowth>[] growths);
 }

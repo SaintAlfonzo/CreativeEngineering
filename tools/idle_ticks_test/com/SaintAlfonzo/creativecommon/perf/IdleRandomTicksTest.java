@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * Headless checks of idle random ticks (feature_writeup/random_tick_audit.md, plan_farming_cooking_batch.md F2): rule
- * line parsing and matching, the [perf] defaults (rows 1-7, 9, 11, 12 of the audit, 35 lines), and the rule table
+ * line parsing and matching, the [perf] defaults (rows 1-7, 9, 11, 12 of the audit, 34 lines; Creative Delight adds its treated-stick tomatoes with addModRule), and the rule table
  * against real vanilla block states (the pack's own rule blocks are mod blocks, absent here).
  */
 public class IdleRandomTicksTest {
@@ -78,7 +78,8 @@ public class IdleRandomTicksTest {
 		}
 		List<String> d = IdleTickRules.defaults();
 		check(d.stream().allMatch(IdleRandomTicksTest::parses), "every default line parses");
-		check(d.size() == 35, "35 default lines (" + d.size() + ")");
+		check(d.size() == 34, "34 default lines (" + d.size() + ")");
+		check(d.stream().noneMatch(s -> s.startsWith("creativedelight:")), "no Creative Delight line (it adds its own with addModRule)");
 		check(d.stream().filter(s -> s.startsWith("floralench:")).count() == 17, "17 Floral Enchantment bushes");
 		check(d.contains("floralench:rose_bush_bush"), "rose bush bush id");
 		check(d.stream().noneMatch(s -> s.startsWith("neapolitan:mint")), "mint not stopped (audit row 8: keep)");

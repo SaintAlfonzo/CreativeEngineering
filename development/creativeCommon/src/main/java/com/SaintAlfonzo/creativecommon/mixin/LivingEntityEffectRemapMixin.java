@@ -24,7 +24,7 @@ import net.minecraft.world.entity.LivingEntity;
 public abstract class LivingEntityEffectRemapMixin {
 
 	@Inject(method = "m_147207_", at = @At("HEAD"), cancellable = true, remap = false)
-	private void creativeengineering$remapEffect(MobEffectInstance instance, Entity source, CallbackInfoReturnable<Boolean> cir) {
+	private void creativecommon$remapEffect(MobEffectInstance instance, Entity source, CallbackInfoReturnable<Boolean> cir) {
 		LivingEntity self = (LivingEntity) (Object) this;
 		if (self.level.isClientSide) return;
 		if (EffectRules.isRemoved(instance.getEffect())) {

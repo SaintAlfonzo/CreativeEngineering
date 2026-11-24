@@ -1,6 +1,5 @@
 package com.SaintAlfonzo.creativecompat.surface;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,11 +20,12 @@ import net.minecraft.world.level.block.state.BlockState;
  * <p>Only untiered blocks are listed (cobwebs, barbed wire, berry bushes, propelplant, leaf piles and bamboo leaves
  * are tiered). Listed: powder snow and bamboo spikes (out of scope), and
  * the plants left outside the system (plan_passthrough.md seventh pass; phase 0 brief 1.2): Floral Enchantment vine
- * bushes, Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed. Keyed by block class
+ * bushes, Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed; other mods add
+ * theirs with {@link #register}. Keyed by block class
  * (superclasses count). Multipliers were read from each class's {@code entityInside} bytecode; only the horizontal
  * part is kept and per-entity conditions are not modelled. Display only: nothing here changes movement.
  */
-final class StuckInBlock {
+public final class StuckInBlock {
 
 	private StuckInBlock() {}
 
@@ -37,7 +37,7 @@ final class StuckInBlock {
 	private static final double NONE = Double.NaN;
 
 	/** Class name -> rule. Vanilla by class, modded by name (not on the compile classpath). */
-	private static final Map<String, Rule> RULES = new HashMap<>();
+	private static final Map<String, Rule> RULES = new ConcurrentHashMap<>();
 
 	static {
 		// only while you're in it; standing on top (leather boots) is the snow tier instead
@@ -55,7 +55,15 @@ final class StuckInBlock {
 		RULES.put("com.sammy.minersdelight.content.block.sticky_basket.StickyBasketBlock", (s, p, on) -> 0.25);
 		RULES.put("com.teamabnormals.upgrade_aquatic.common.block.MulberryJamBlock", (s, p, on) -> 0.2);
 		RULES.put("com.teamabnormals.upgrade_aquatic.common.block.GuardianSpineBlock", (s, p, on) -> 0.25);
-		RULES.put("com.SaintAlfonzo.creativedelight.food.PowderedSugarBlock", (s, p, on) -> 0.9);
+	}
+
+	/**
+	 * Registers a block class (by its binary name; subclasses count) whose {@code entityInside} slows you by a constant
+	 * horizontal multiplier, for the display. Call it from the mod's constructor or setup.
+	 */
+	public static void register(String className, double horizontal) {
+		RULES.put(className, (s, p, on) -> horizontal);
+		RULE_OF.clear();
 	}
 
 	/** Block -> its rule (empty = none), resolved once per block. */

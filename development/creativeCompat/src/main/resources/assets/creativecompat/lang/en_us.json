@@ -129,6 +129,8 @@
   "block.creativecompat.bamboo_leaves_full": "Bamboo Leaves",
   "block.creativecompat.double_flower_pot": "Flower Pots",
   "entity.creativecompat.falling_layer": "Falling Layer",
+  "entity.creativecompat.ancient_corpse": "Ancient Corpse",
+  "entity.creativecompat.ancient_remains": "Ancient Remains",
   "tooltip.creativecompat.corpse.curio": "Curio: %s",
   "tooltip.creativecompat.corpse.curio_cosmetic": "Curio: %s (cosmetic)",
   "tooltip.creativecompat.corpse.cosmetic": "Cosmetic armor",
