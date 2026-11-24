@@ -35,9 +35,11 @@ R.remove({ id: 'brewinandchewin:fermenting/scarlet_cheese_from_milk' }, e)
 R.bncFermenting(Fluid.of(f.scarlet_cheese, 1000), [i.crimson_fungus, i.nether_wart, i.sugar], f.t_animal_milk, e, 'scarlet_cheese_from_milk',
 	{ temperature: 5, category: 'meals' })
 
-// Pale Jane: any bark, not just Farmer's Delight's
+// Pale Jane: any bark, not just Farmer's Delight's. #creativecommon:bark is Immersive Weathering's barks only; without
+// Immersive Weathering (the chain alone) it is empty and Farmer's Delight's tree bark stands in (creativebrewing/publish #4)
 R.remove({ id: 'brewinandchewin:fermenting/pale_jane_from_rice_wine' }, e)
-R.bncFermenting(Fluid.of(f.pale_jane, 1000), [i.honey_bottle, i.any_bark, i.lily_of_the_valley, i.any_sweetener_brewing], f.rice_wine, e, 'pale_jane_from_rice_wine',
+var paleJaneBark = Ingredient.of(i.any_bark).getStacks().isEmpty() ? i.tree_bark : i.any_bark
+R.bncFermenting(Fluid.of(f.pale_jane, 1000), [i.honey_bottle, paleJaneBark, i.lily_of_the_valley, i.any_sweetener_brewing], f.rice_wine, e, 'pale_jane_from_rice_wine',
 	{ temperature: 4, time: 4800 })
 
 // Beer: dandelion in place of wheat seeds
