@@ -14,12 +14,14 @@ asks by name; upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=c1ed37eba29b -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=138c10272d12 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `mod-integration #7` | Planned | S C P T | Farming for Blockheads: port the Shipping Bin only (ARR, 26.3 donor art, own code) |
+| `mod-integration #8` | Planned | C | Courier Spawn Point: final texture (temporary: vanilla cartography table look) |
+| `mod-integration #9` | Planned | S | Courier Spawn Point: final recipe (temporary: chest surrounded by 8 trapdoors of any kind) |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -29,8 +31,8 @@ asks by name; upstream bugs are fixed.
 | Overlap | section 2 | no other shipping bin in the pack; the rest of FfB overlaps Hearth and Harvest, Quark, Incubation, Slice and Dice |
 | Upstream bugs | B1, B2 (section 3.4) | none blocking for the bin |
 | Fold-in (bin only) | section 4 | 12 steps drafted |
-| Decisions | D1 to D9 (section 5) | D1 to D6 ruled 2026-11-23 (5.1); D7 to D9 open |
-| Tests | SHB-01 to SHB-16 (section 8) | drafted |
+| Decisions | D1 to D9 (section 5) | D1 to D6, D8, D9 ruled 2026-11-23 and 2026-11-24 (5.1); D7 (rabbit trap, fishing barrel, scythe) open |
+| Tests | SHB-01 to SHB-20 (section 8) | drafted |
 
 - Jar: the 26.3 jar is the only source of the bin. It is a donor for art (Miner's Delight route, [miners_delight.md](miners_delight.md)
   D2, D12), never a mod in `mods/`. The 1.19.2 Fabric jar cannot load on Forge. A Forge 1.19.2 11.3.x jar exists
@@ -109,6 +111,54 @@ Dynamic Villager Trades changes):
 The scratchpad ruling ("disable the rest") holds for the audit as well: every other block has a pack equivalent
 except the rabbit trap and the fishing barrel. Those two are left out unless the owner asks for them by name.
 
+### 2.3 Rabbit trap, fishing barrel, scythe (investigated 2026-11-24, owner request)
+
+**Rabbit trap** (`farmingforblockheads:rabbit_trap`, 26.3 only). Recipe `PP / SCP`: planks, sticks, one carrot
+(the carrot is not bait; nothing is consumed). A wooden box trap, horizontal facing, rendered by a block entity
+(set-up and snap animation).
+- Player within 64 blocks: every 10 ticks, the nearest animal in the `rabbit_trap_capturable` entity tag (armadillo,
+  cat, chicken, frog, rabbit) within 8 blocks (2 up/down) is pathed to the trap; touching it captures it (full NBT
+  saved, the mob is removed, trapdoor sound, poof). The block switches to `triggered`.
+- No player nearby: the chance to catch something rises with the time left alone, `min(0.95, ticks / 24000)`, rolled
+  every 1200 ticks. A hit first rolls the loot table `gameplay/rabbit_trap` (only the fox note, chance 0.0005, a
+  renamed paper "I stole your carrot."), else spawns a fresh animal from `rabbit_trap_spawnable` (same 5 types,
+  10% baby). So an unattended trap creates animals from nothing (a passive mob farm), up to one per trap per
+  catch.
+- Right-click a triggered trap: the catch is released in front of it and the trap pops off as an item with 1 damage
+  (8 uses, a durability bar on the item). Breaking it also releases the catch.
+- Pack fit: no equivalent (Incubation, Quark and Hearth and Harvest have no live-capture trap; animal pens use leads
+  and Quark's feeding trough). In the pack the tag would read vanilla + modded small animals (Alex's Mobs, Naturalist
+  and the pack's fauna would need a list). The unattended spawning is a new animal source, which bypasses the pack's
+  mob spawn rules ([mob_spawns writeup](agent_notes/mob-spawns-system.md)); armadillo does not exist on 1.19.2.
+- Port cost: block, block entity, renderer with two animations, entity-tag reads, item durability through NBT (no
+  data components on 1.19.2). Medium.
+
+**Fishing barrel** (`farmingforblockheads:fishing_barrel`, 26.3 only). Recipe `PSP / PNP / PRP`: planks, string,
+nautilus shell, redstone. A barrel with a rod slot and 8 storage slots; it faces water.
+- Needs a fishing rod (tag `fishing_rods`: vanilla rod and `c:tools/fishing_rods`) in slot 0 and water in the block
+  in front of it, one down. Fishes every `100 + random(0..500) - 100 x Lure` ticks (minimum 40; 5 to 30 s), rolling
+  the vanilla `gameplay/fishing` table with the rod as tool (Luck of the Sea applies), 1 rod durability per catch,
+  rod break effect. Catches go to the 8 slots (overflow buffered, fishing stops while full); hoppers can pull them.
+  A 36-tick catch animation (bob, splash).
+- Pack fit: overlaps the Creative Delight / Oceanic fishing net (passive net with a cooldown and loot by biome,
+  [ocean_delight.md](ocean_delight.md) dishes/ocean #1), and skips the Stardew Fishing minigame and Fish On The
+  Line, which the pack runs for hand fishing. A rod barrel gives treasure (enchanted books, saddles, name tags)
+  that the net does not. Iron Fishing Rods' rods would need to be in the rod tag. Cozy Cats' GLM on
+  `gameplay/fishing` would apply to it.
+- Port cost: block, block entity, menu and screen, renderer animation. Medium.
+
+**Scythe** (`farmingforblockheads:iron_scythe`, "Scythe", 26.3 only). Recipe `III / SI / S` (vanilla hoe-like),
+iron hoe stats (attack speed -3.0). Right-click on a crop or its farmland, or breaking a mature crop, breaks every
+mature `CropBlock` in a 3x3 around it through the player's normal block breaking (drops, no replant). Only one
+tier.
+- Existing scythe in the pack: only `mca:scythe`, MCA's reaper weapon (not a farm tool). The pack's own scythe is
+  already planned: `cooking/kitchen #16` (area by tier wood 3, iron 5, diamond 7, netherite 9, replants like
+  Farmer's Delight right-click harvest, built on `crops/HoeHarvestArea`). Pack hoes already harvest 1x1 to 5x5 through
+  Quark ([hoe-harvest-area](agent_notes/hoe-harvest-area.md)), so the FfB iron scythe (3x3, no replant) is weaker
+  than an iron hoe's planned area and gives nothing new.
+- Recommendation: no FfB scythe. Its iron scythe art (donor texture `item/iron_scythe`) can serve as the iron tier's
+  art for kitchen #16 if the owner wants it (an art source, not a texture edit).
+
 ## 3. New content
 
 ### 3.1 Shipping Bin mechanics (26.3.0.2, from the decompile)
@@ -163,7 +213,7 @@ texture is drawn or edited ([texture_sources.md](texture_sources.md)).
 
 ### 3.4 Upstream bugs
 
-- **B1 Remainder lost.** A sale removes every sellable stack but pays `floor(value / 128)`: 255 points pay 1
+- **B1 Remainder lost (fixed by ruling D3a: partial sales, credit kept).** A sale removes every sellable stack but pays `floor(value / 128)`: 255 points pay 1
   emerald and 127 points vanish. Only full loads sell, so the loss is at most 127 points per sale (about one
   emerald). Upstream design or bug is unclear (D3).
 - **B2 Falling crate drops nothing** without Pantry for Blockheads, so shooting a balloon only destroys the effect.
@@ -191,9 +241,11 @@ texture is drawn or edited ([texture_sources.md](texture_sources.md)).
    emeralds at `floor(value / 128)`; the loot context carries the shipment value and the sold stacks so Lightman's
    prices and per-crop rules can be added there later.
 5a. **Courier** (ruling D5, D5a, D5b): config `courierMode` (`walk_in_out` default, `walk_out`, `at_bin`),
-   `courierWalkDistance`, `courierSpawnSearchRadius`; the Courier Spawn Point block (id in `item_dict.js`, recipe
+   `courierWalkDistance`, `courierSpawnSearchRadius` (default 96), `courierWalkTimeoutTicks` (default 1200); the Courier Spawn Point block (id in `item_dict.js`, recipe
    via `global.NCH`, art per D8, texture_sources row); walking pathfinds on the ground and falls back to the
-   configured distance (or `at_bin`) when no path is found; invisibility drink then despawn with the crate. MCA
+   configured distance (or `at_bin`) when no path is found; the courier's follow range is raised to the search radius
+   plus 16 (vanilla path search stops at the follow range) and paths longer than 32 blocks are walked in legs; the
+   walk timer (ruling D9) teleports a late courier to the bin and ends a late exit in place; invisibility drink then despawn with the crate. MCA
    villager skin for the courier once MCA textures are added. Config backup in `configs_edited/`.
 6. **Loot:** block drop table (our own file, same content as upstream). Mob loot: none.
 7. **Names and lang** ([names.md](names.md)): `block.`, `container.`, `entity.` keys for the bin, balloon, crate,
@@ -220,21 +272,26 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D4 | Drop the Shogi rule fields and the per-chunk sales history (price scaling hook) | Drop: nothing in the shipped data uses them | dropped |
 | D5 | Carriers: balloon + crate + courier (upstream), balloon only, or particles only | All three: they are the feature's look; courier names from a config list | all three |
 | D6 | Code home | Creative Delight `farm/` (farming and food routing; same author family as the CfB compartment); Creative Compat is for fixes only | Creative Delight |
-| D7 | Rabbit trap or fishing barrel later (the two FfB blocks with no pack equivalent) | Not now | not planned |
-| D8 | Courier spawn block: art and recipe | Owner picks a source texture (human art; texture_sources.md) and a recipe | open |
-| D9 | Courier spawn block reach: how far from a bin a spawn block is used (search radius), and whether one block serves several bins | Search radius 16 blocks, nearest block wins, one block serves any number of bins | open |
+| D7 | Rabbit trap (section 2.3): port, and if so: unattended spawning on or off, which modded animals in the tags | Port without unattended spawning (catch only animals that are there; no new mob source); tags: vanilla 1.19.2 small animals plus the pack's small fauna by list | not planned |
+| D7b | Fishing barrel (section 2.3): port, and if so: treasure loot or the fishing-net tables | Not now: overlaps the fishing net and skips the fishing minigame; if wanted, roll vanilla `gameplay/fishing` minus treasure | not planned |
+| D7c | Scythe (section 2.3) | No FfB scythe; build `cooking/kitchen #16`; optionally use the FfB iron scythe texture as its iron-tier art | not ported |
+| D8 | Courier Spawn Point art and recipe | Ruled 2026-11-24 (5.1): temporary; final art and recipe are TODO rows | temporary |
+| D9 | Courier Spawn Point reach and walk timeout | Ruled 2026-11-24 (5.1) | ruled |
 
-### 5.1 Owner rulings (owner, 2026-11-23)
+### 5.1 Owner rulings (owner, 2026-11-23 and 2026-11-24)
 
 | # | Ruling |
 |---|---|
 | D1 | Port the bin alone: our own code under the `farmingforblockheads` namespace, the 26.3 jar as an art donor, FfB itself not installed. |
 | D2 | Emeralds for now. Later, Lightman's Currency prices defined in the payout loot table. So the payout stays a loot table: port the `shipment_value` number provider and the `shipment_value` / `shipment_contains` conditions (section 3.2), never a payout in code. |
 | D3 | The 12 vanilla value rows for now; all crops later, also through the loot table. |
+| D3a | (2026-11-24) A sale takes only sellable increments and leaves the rest (replaces upstream B1): with total value V and capacity C, the sale pays `floor(V / C)` loads and removes only enough items to cover `floor(V / C) x C`, taking whole items slot by slot (input slots 0 to 5, `ceil(needed / value)` items from each until covered). Everything else stays in the inputs. The last item taken can overshoot by less than one item's value (at most 7 points with the shipped values); the overshoot is kept as stored credit in the bin (saved with the block, counted in the fill bar, used by the next sale), so no value is lost. Example: 31 carrots (155 points) -> 1 emerald, 26 carrots taken (130 points), 5 carrots stay, 2 points credit. |
 | D4 | Follows from D2 and D3: Shogi fields and the sales history dropped; the loot context (value, sold stacks) kept. |
 | D5 | All three carriers (balloon, crate, courier). The courier uses MCA villager textures once those are added (until then the donor `merchant` skin). It no longer teleports out: at its despawn point it stops, drinks an invisibility potion (wandering-trader drink animation and sound) and despawns with the crate. Courier mode is a config option with three values: `walk_in_out` (default: arrives on foot, takes the crate, walks back out), `walk_out` (appears beside the bin, walks away), `at_bin` (appears beside the bin, drinks on the spot). |
 | D5a | Walking distance is a config value (blocks between the bin and the courier's spawn and despawn point). |
 | D5b | New block: **Courier Spawn Point** (`farmingforblockheads:courier_spawn`, own id). In a walking mode the courier spawns at and walks back to the nearest such block in range (D9) instead of a point at the configured distance, so players can lay out a path for it. Without one in range the configured distance applies. Art and recipe: D8. |
+| D8 | (2026-11-24) Temporary art: the vanilla cartography table look (the block model names `minecraft:block/cartography_table`'s textures; no texture copied or edited). Temporary recipe: a chest surrounded by 8 trapdoors of any kind (`#minecraft:trapdoors`, wooden and iron). Both are marked for update: TODO rows `mod-integration` "Courier Spawn Point: final texture" and "Courier Spawn Point: final recipe". |
+| D9 | (2026-11-24) Spawn point search radius is a config value with a high default spanning several chunks: `courierSpawnSearchRadius` default 96 blocks (6 chunks), range 0 to 256 (0 = spawn points off). Walk timer: `courierWalkTimeoutTicks` (default 1200, 60 s). A courier that has not reached the bin when the timer runs out is teleported to the bin (Enderman teleport sound and portal particles, as upstream's exit). On the way out the same timer applies; when it runs out the courier drinks and despawns where it stands. The timer counts on the bin's block entity in game time, so a courier frozen in an unloaded chunk still times out. |
 | D6 | Code home: Creative Delight (default taken; not asked). |
 
 ## 6. File map (planned)
@@ -258,19 +315,23 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 - [ ] **SHB-01 Craft and place:** craft iron, log, emerald, green wool in `IWI / WEW / IGI`; place facing west -> bin faces the player, art shows, axe breaks it fast and it drops itself.
 - [ ] **SHB-02 Below capacity:** put 31 wheat (124 points) in -> fill bar near full, no sale, items stay.
 - [ ] **SHB-03 One load:** add 1 wheat (128) -> sale bar fills in 1 s, all wheat removed, 1 emerald in the outputs.
-- [ ] **SHB-04 Remainder:** put 63 wheat (252) -> 1 emerald, all 63 wheat gone (B1 as decided in D3).
+- [ ] **SHB-04 Partial sale:** put 63 wheat (252) -> 1 emerald, 32 wheat taken, 31 stay; put 31 carrots (155) in an empty bin -> 1 emerald, 26 carrots taken, 5 stay, the fill bar shows 27 points (25 + 2 credit).
 - [ ] **SHB-05 Unsellable item:** put cobblestone plus 32 wheat -> wheat sold, cobblestone stays in its slot.
 - [ ] **SHB-06 Output full:** fill all 6 output slots with emeralds, sell a load -> extra emeralds buffered, next sale waits until the outputs are emptied.
 - [ ] **SHB-07 Slots:** shift-click crops from the inventory -> they go to the inputs; placing an item in an output slot is refused.
 - [ ] **SHB-08 Hopper:** hopper above feeds inputs; hopper below pulls emeralds -> automated selling works.
 - [ ] **SHB-09 Balloon:** sell under open sky -> balloon inflates, rises out of sight, smoke at the top; hit it -> it pops and a crate falls, no item drops.
 - [ ] **SHB-10 Courier (default walk_in_out):** sell under a roof, no spawn point nearby -> crate on the bin, a named courier walks in from about the configured distance, takes the crate, walks back out, stops, drinks invisibility and vanishes with the crate; it takes no damage.
+- [ ] **SHB-11 Break with contents:** break a bin with inputs, outputs and a buffered overflow -> every item drops.
+- [ ] **SHB-12 JEI and WTHIT:** JEI shows the bin recipe and the 12 value rows; WTHIT shows the stored value.
 - [ ] **SHB-13 Courier modes:** set `courierMode` to `walk_out`, then `at_bin` -> courier appears beside the bin and walks away / drinks on the spot.
 - [ ] **SHB-14 Walk distance:** set `courierWalkDistance` to 4 and to 20 -> the courier's spawn and despawn points move to match.
 - [ ] **SHB-15 Courier Spawn Point:** place a spawn point 10 blocks from the bin -> the courier spawns on it, walks to the bin and back to it before drinking; remove it -> the configured distance applies again.
 - [ ] **SHB-16 No path:** wall the bin in on all sides (roof, no gap) -> the courier falls back to `at_bin` behavior, no stuck courier remains.
-- [ ] **SHB-11 Break with contents:** break a bin with inputs, outputs and a buffered overflow -> every item drops.
-- [ ] **SHB-12 JEI and WTHIT:** JEI shows the bin recipe and the 12 value rows; WTHIT shows the stored value.
+- [ ] **SHB-17 Far spawn point:** place a spawn point 90 blocks away (inside 96), stay near the bin -> the courier comes from it; a spawn point at 100 blocks is ignored (configured distance applies).
+- [ ] **SHB-18 Walk timeout:** put the spawn point behind a long maze, sell -> after 60 s the courier teleports to the bin with the Enderman sound; set `courierWalkTimeoutTicks` to 200 -> it teleports after 10 s.
+- [ ] **SHB-19 Courier Spawn Point block:** craft a chest surrounded by 8 trapdoors (mix oak, spruce and iron) -> 1 Courier Spawn Point with the cartography table look.
+- [ ] **SHB-20 Credit carried:** after SHB-04's carrots, add carrots until a second sale -> the 2 credit points count toward it.
 
 ## 9. History
 
@@ -279,3 +340,6 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 - 2026-11-23: owner rulings D1 to D5b (section 5.1): bin alone, emeralds now and loot-table prices later, 12 vanilla
   rows now, all three carriers with a walking courier, an invisibility exit, a configurable walk distance and a
   Courier Spawn Point block; D8, D9 open.
+- 2026-11-24: rulings D3a (partial sales, credit), D8 (temporary cartography table look, chest + 8 trapdoors
+  recipe), D9 (search radius 96, walk timeout teleport); rabbit trap, fishing barrel and scythe investigated (2.3, D7 to
+  D7c open).
