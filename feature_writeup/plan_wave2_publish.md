@@ -10,8 +10,8 @@ its own. Raspberry Pie gets four fixes. Pages: [project_pages/](project_pages/);
 
 ## 0. Intake (owner's words, 2026-11-23)
 
-<!-- generated:status_index begin open_work sha1=ee890cd21b05 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 10), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c239a045c9e5 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 6, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -21,10 +21,10 @@ its own. Raspberry Pie gets four fixes. Pages: [project_pages/](project_pages/);
 | `creative-common-publish #20` | Planned | D | Common project page in the W2-6 layout (family headers, a bold name and a spoiler per feature) after the wave 2 carve; moved features removed |
 | `creative-compat-publish #10` | Planned | D | Compat project page in the W2-6 layout, with the features moved from Common and Raspberry Pie (melting, glass shards, sack pick-up, low gravity, Fleet-Footed) |
 | `raspberry-pie-publish #25` | Planned | S C | Fleet-Footed fix and fleetFootedFov move from Raspberry Pie to Creative Compat (W2-3); config value carried over; Raspberry Pie page and writeup drop them |
-| `raspberry-pie-publish #26` | Planned | S | Death and paid slot actions (effect change, slot drop) remove the aged-out foods from Apple Pie's memory instead of keeping them past the decay window |
-| `raspberry-pie-publish #27` | Planned | C | Food Dictionary: add a Hardest sort (complexity descending) next to Easiest |
-| `raspberry-pie-publish #28` | Planned | C | Diet Log extraWidth default 48 [47] |
-| `raspberry-pie-publish #29` | Planned | D | Project page: command arguments in square brackets, no &lt; escapes (W2-7) |
+| `raspberry-pie-publish #26` | Testing | S | Death and paid slot actions (effect change, slot drop) remove the aged-out foods from Apple Pie's memory instead of keeping them past the decay window |
+| `raspberry-pie-publish #27` | Testing | C | Food Dictionary: add a Hardest sort (complexity descending) next to Easiest |
+| `raspberry-pie-publish #28` | Testing | C | Diet Log extraWidth default 48 [47] |
+| `raspberry-pie-publish #29` | Testing | D | Project page: command arguments in square brackets, no &lt; escapes (W2-7) |
 <!-- generated:status_index end open_work -->
 
 | # | Item (owner's words) | Class | Found |
