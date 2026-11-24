@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-package com.SaintAlfonzo.creativedelight.mixin.mysterious_mountain_lib;
+package com.SaintAlfonzo.creativedelight.mixin.mysteriousmountainlib;
 
 import java.lang.reflect.Field;
 

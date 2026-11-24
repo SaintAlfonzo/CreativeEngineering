@@ -93,8 +93,8 @@ global.flavor = {
 	ice: { id: 'creativedelight:ice', name: 'Ice', item: i.t_ice_cubes, saturation: 2, needs: 'neapolitan',
 		families: ['drink/juice', 'drink/soda'], add: [] },
 	// Ender's Delight's crushed void pepper
-	void_pepper: { id: 'creativedelight:void_pepper', name: 'Void Pepper', item: i.crushed_voidpepper, // G5 (needs: its tag and crafts are skipped while enders_additions is off)
-		saturation: 2, needs: 'enders_additions', families: [], add: popcorn },
+	void_pepper: { id: 'creativedelight:void_pepper', name: 'Void Pepper', item: i.crushed_voidpepper, // G5 (needs: its tag and crafts are skipped while endersadditions is off)
+		saturation: 2, needs: 'endersadditions', families: [], add: popcorn },
 
 	// Barbeque's Delight (food/seasoning #11, barbeques_delight.md 4.1, seasonings.md): the three powders are seasonings,
 	// the three sauces sauces (R5). Kinds as 1.3.0; cumin's heal became the +2 saturation (R3). Powders go on raw and

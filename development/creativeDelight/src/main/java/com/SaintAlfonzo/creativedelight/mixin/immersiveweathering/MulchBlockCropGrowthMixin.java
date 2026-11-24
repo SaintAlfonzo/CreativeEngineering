@@ -1,4 +1,4 @@
-package com.SaintAlfonzo.creativedelight.mixin.immersive_weathering;
+package com.SaintAlfonzo.creativedelight.mixin.immersiveweathering;
 
 import com.SaintAlfonzo.creativedelight.CDConfig;
 import com.SaintAlfonzo.creativedelight.crops.CropParity;

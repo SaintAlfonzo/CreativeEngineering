@@ -1,4 +1,4 @@
-package com.SaintAlfonzo.creativedelight.mixin.immersive_weathering;
+package com.SaintAlfonzo.creativedelight.mixin.immersiveweathering;
 
 import com.ordana.immersive_weathering.blocks.WallRootsBlock;
 import net.minecraft.world.item.context.BlockPlaceContext;

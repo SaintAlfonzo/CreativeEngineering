@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  */
 @Mod(EndersAdditionsMod.MODID)
 public class EndersAdditionsMod {
-    public static final String MODID = "enders_additions";
+    public static final String MODID = "endersadditions";
     /** Registry namespace of every block and item here: Ender's Delight's mod id. */
     public static final String NAMESPACE = "endersdelight";
     public static final Logger LOGGER = LoggerFactory.getLogger(MODID);

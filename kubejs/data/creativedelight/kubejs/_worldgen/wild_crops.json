@@ -385,15 +385,15 @@
 			"where": [],
 			"add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
 			"features": ["creativedelight:wild/end_amberveil"],
-			"requires": "enders_additions",
-			"notes": "Ender's Delight 1.1.4's patch (10 tries, spread 3), 1 in 10 chunks, on end stone only. Rebuilt in the enders_additions member; 1.1.4's biome modifiers are not shipped. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
+			"requires": "endersadditions",
+			"notes": "Ender's Delight 1.1.4's patch (10 tries, spread 3), 1 in 10 chunks, on end stone only. Rebuilt in the endersadditions mod; 1.1.4's biome modifiers are not shipped. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
 		},
 		"end_chorusflame": {
 			"label": "Chorusflame (End)",
 			"where": [],
 			"add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
 			"features": ["creativedelight:wild/end_chorusflame"],
-			"requires": "enders_additions",
+			"requires": "endersadditions",
 			"notes": "1.1.4's patch, ages 0 to 2 mixed, 1 in 15 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
 		},
 		"end_saffron": {
@@ -401,7 +401,7 @@
 			"where": [],
 			"add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
 			"features": ["creativedelight:wild/end_saffron"],
-			"requires": "enders_additions",
+			"requires": "endersadditions",
 			"notes": "1.1.4's patch (4 tries, spread 1), 1 in 25 chunks, on end stone only. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
 		},
 		"end_voidpepper": {
@@ -409,7 +409,7 @@
 			"where": [],
 			"add": ["minecraft:end_highlands", "minecraft:end_midlands", "minecraft:end_barrens", "minecraft:small_end_islands", "nullscape:crystal_peaks", "nullscape:shadowlands", "nullscape:void_barrens"],
 			"features": ["creativedelight:wild/end_voidpepper"],
-			"requires": "enders_additions",
+			"requires": "endersadditions",
 			"notes": "1.1.4's patch, spreading sprouts on the ground, 1 in 15 chunks, on end stone only; they spread and fruit by random tick. The four vanilla End land biomes (1.1.4's list) plus Nullscape's three land biomes."
 		},
 		"chorus_succulent": {

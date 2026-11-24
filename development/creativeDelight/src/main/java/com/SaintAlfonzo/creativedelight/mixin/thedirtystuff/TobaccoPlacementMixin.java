@@ -1,4 +1,4 @@
-package com.SaintAlfonzo.creativedelight.mixin.the_dirty_stuff;
+package com.SaintAlfonzo.creativedelight.mixin.thedirtystuff;
 
 import com.SaintAlfonzo.creativedelight.crops.CropParity;
 import net.mcreator.thedirtystuff.procedures.TobaccoSeedsBlockValidPlacementConditionProcedure;

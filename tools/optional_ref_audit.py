@@ -54,7 +54,7 @@ ALWAYS = {"minecraft", "forge", "c", "realms", "brigadier"}
 # Namespaces one of our always-present mods also registers into (ARR overrides, memory arr-mod-overrides-route): the
 # Ender's Delight Additions member registers its blocks and items as endersdelight:*. A reference into one counts as
 # present for any unit that has the member (the upstream mod's own ids under it are then not checked).
-NS_ALSO = {"endersdelight": {"enders_additions"}}
+NS_ALSO = {"endersdelight": {"endersadditions"}}
 # Projects not audited: Power Grid is a gate-jar port (plan_power_grid.md) and reported only; the rest are not in the pack.
 SKIP_PROJECTS = {"shared", "solRaspberryPie"}
 REPORT_ONLY = {"backportedPowerGrid"}
@@ -413,7 +413,7 @@ def main():
 	_exp = {}
 
 	def expand(g):
-		# a guard on a mod also guards what that mod requires (enders_additions -> endersdelight, member -> Farmer's)
+		# a guard on a mod also guards what that mod requires (endersadditions -> endersdelight, member -> Farmer's)
 		if g not in _exp:
 			_exp[g] = closure(g, mods)
 		return _exp[g]

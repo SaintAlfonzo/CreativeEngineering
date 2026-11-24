@@ -1,4 +1,4 @@
-package com.SaintAlfonzo.creativedelight.mixin.create_central_kitchen;
+package com.SaintAlfonzo.creativedelight.mixin.createcentralkitchen;
 
 import com.SaintAlfonzo.creativedelight.compat.MealSlotTooltip;
 import com.mojang.blaze3d.vertex.PoseStack;

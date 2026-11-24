@@ -31,7 +31,7 @@ def writeMembers = tasks.register('writeMembersList') {
 	def ids = providers.provider {
 		(findProperty('bundle_members') ?: '').toString().split(',')*.trim().findAll { it }
 				.collectMany { m ->
-					// a member jar that holds a second mod lists it in bundle_extra_mods (End's: enders_additions), so
+					// a member jar that holds a second mod lists it in bundle_extra_mods (End's: endersadditions), so
 					// that mod gets its own [members] switch too
 					def extra = (project(m).findProperty('bundle_extra_mods') ?: '').toString().split(',')*.trim().findAll { it }
 					[project(m).findProperty('mod_id').toString()] + extra

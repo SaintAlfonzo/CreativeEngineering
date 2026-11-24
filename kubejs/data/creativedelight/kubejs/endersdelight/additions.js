@@ -1,12 +1,12 @@
 // requires: creativedelight
-// requires: enders_additions
-// Recipes and tags for Ender's Delight 1.1.4's content, rebuilt as enders_additions inside the End's Delight member (ids
+// requires: endersadditions
+// Recipes and tags for Ender's Delight 1.1.4's content, rebuilt as endersadditions inside the End's Delight member (ids
 // stay endersdelight:*; ends_delight.md 3.1, 3.2, 5.9; TODO largecontent/mod-additions #28). It registers whether or not
-// the installed Ender's Delight 1.2.2 is loaded, so this file needs only enders_additions; the five dishes come in
+// the installed Ender's Delight 1.2.2 is loaded, so this file needs only endersadditions; the five dishes come in
 // 1.2.2's Shulker Bowl, so their rows also need endersdelight. Pot recipes as 1.1.4, plus the pack's heatless grid routes
 // and the void pepper grinding routes. Recipe ids are creativedelight:<type>/<suffix>.
 ServerEvents.recipes(e => {
-	if (!global.CD || !global.CD.on('enders_additions')) return
+	if (!global.CD || !global.CD.on('endersadditions')) return
 
 	var i = global.item
 	var R = global.NCH.forPack('creativedelight')
@@ -48,7 +48,7 @@ ServerEvents.recipes(e => {
 })
 
 ServerEvents.tags('item', e => {
-	if (!global.CD || !global.CD.on('enders_additions')) return
+	if (!global.CD || !global.CD.on('endersadditions')) return
 	var t = global.tags
 	var i = global.item
 
@@ -57,12 +57,12 @@ ServerEvents.tags('item', e => {
 })
 
 ServerEvents.tags('block', e => {
-	if (!global.CD || !global.CD.on('enders_additions')) return
+	if (!global.CD || !global.CD.on('endersadditions')) return
 	var t = global.tags
 	var b = global.blocks
 
 	// Soils of the End plants: survive on both, grow slowly on end stone, faster when tilled.
-	// Rates: config/enders_additions-common.toml [growth].
+	// Rates: config/endersadditions-common.toml [growth].
 	t.add(e, b.t_end_plant_soil_slow, b.end_stone)
 	if (Platform.isLoaded('endercrop')) t.add(e, b.t_end_plant_soil_fast, b.tilled_end_stone)
 })

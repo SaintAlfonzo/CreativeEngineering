@@ -17,7 +17,8 @@ import java.util.function.Consumer;
 
 /**
  * Mixin config plugin for creativedelight.mixins.json: the Java compartments of creative_delight.md 12. A mixin in
- * {@code mixin.<modid>.} applies only when that mod is loaded (and, for a mod in {@link #FOR_VERSION}, only at that
+ * {@code mixin.<modid>.} (the mod id without underscores, {@link #PACKAGE_MOD_IDS}) applies only when that mod is
+ * loaded (and, for a mod in {@link #FOR_VERSION}, only at that
  * version: those mixins fix bugs of one jar and would undo the upstream fix on a newer one). Nothing outside the
  * compartment's package references the mod, so CD boots the same without it. The gate is the shared
  * {@link GatedMixinPlugin} (development/shared/mixinplugin).
@@ -81,6 +82,22 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 
 	public CDMixinPlugin() {
 		super("[creativedelight]", COMPARTMENT_PREFIX, FOR_VERSION, NEEDS_MOD, MOD_RANGE);
+	}
+
+	/**
+	 * Compartment packages carry no underscore (DR-C10, publish_readiness.md PR-CM-14): package segment -> the mod id it
+	 * serves, for the mods whose ids have one. Any other segment is its mod id.
+	 */
+	private static final Map<String, String> PACKAGE_MOD_IDS = Map.of(
+			"createcentralkitchen", "create_central_kitchen",
+			"immersiveweathering", "immersive_weathering",
+			"mysteriousmountainlib", "mysterious_mountain_lib",
+			"thedirtystuff", "the_dirty_stuff",
+			"upgradeaquatic", "upgrade_aquatic");
+
+	@Override
+	protected String compartmentModId(String segment) {
+		return PACKAGE_MOD_IDS.getOrDefault(segment, segment);
 	}
 
 	/**

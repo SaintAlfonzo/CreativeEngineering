@@ -2,7 +2,10 @@ package com.SaintAlfonzo.creativedelight.enders;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
-/** Common config (enders_additions-common.toml): growth chances of the End plants per soil tier. */
+/**
+ * Common config (endersadditions-common.toml; a file under the former mod id enders_additions is carried over by
+ * Creative Delight's constructor): growth chances of the End plants per soil tier.
+ */
 public final class EAConfig {
     public static final ForgeConfigSpec SPEC;
     public static final ForgeConfigSpec.DoubleValue CHORUSFLAME_GROWTH_SLOW;

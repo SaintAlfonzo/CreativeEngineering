@@ -87,4 +87,30 @@ public final class MemberConfigMove {
 			CreativeDelight.LOGGER.error("[creativedelight] could not carry the [members] switches to [compartments]: {}", e.toString());
 		}
 	}
+
+	/** New member mod id -> its id before the naming-rule rename (no underscore in own mod ids, DR-C10). */
+	public static final Map<String, String> RENAMED_MEMBER_SWITCH = Map.of("endersadditions", "enders_additions");
+
+	/**
+	 * A member whose mod id was renamed gets a new {@code [members]} key: copies the player's value from the old key once,
+	 * before Forge corrects the file and drops the old key.
+	 */
+	public static void carryRenamedMemberSwitches() {
+		Path to = FMLPaths.CONFIGDIR.get().resolve(CDConfig.FILE);
+		if (!Files.isRegularFile(to)) return;
+		try (CommentedFileConfig cfg = CommentedFileConfig.builder(to, TomlFormat.instance()).build()) {
+			cfg.load();
+			boolean changed = false;
+			for (Map.Entry<String, String> e : RENAMED_MEMBER_SWITCH.entrySet()) {
+				Object v = cfg.get("members." + e.getValue());
+				if (!(v instanceof Boolean) || cfg.contains("members." + e.getKey())) continue;
+				cfg.set("members." + e.getKey(), v);
+				changed = true;
+				CreativeDelight.LOGGER.info("[creativedelight] [members] {} carried to {} ({})", e.getValue(), e.getKey(), v);
+			}
+			if (changed) cfg.save();
+		} catch (Exception e) {
+			CreativeDelight.LOGGER.error("[creativedelight] could not carry the renamed [members] switches: {}", e.toString());
+		}
+	}
 }

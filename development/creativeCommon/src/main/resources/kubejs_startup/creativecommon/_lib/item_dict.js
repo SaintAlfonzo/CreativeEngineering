@@ -12514,7 +12514,7 @@ i.stuffed_shulker_bowl = 'endersdelight:stuffed_shulker_bowl';
 i.twisted_cereal       = 'endersdelight:twisted_cereal';
 i.uncanny_cookies      = 'endersdelight:uncanny_cookies';
 
-// ===== endersdelight 1.1.4 content (Creative Delight member enders_additions, ends_delight.md 3.1) =====
+// ===== endersdelight 1.1.4 content (endersadditions, in the End's Delight member of Creative Delight, ends_delight.md 3.1) =====
 i.amberveil              = 'endersdelight:amberveil';
 i.ethereal_saffron       = 'endersdelight:ethereal_saffron';
 i.chorusflame            = 'endersdelight:chorusflame';

@@ -86,7 +86,16 @@ public abstract class GatedMixinPlugin implements IMixinConfigPlugin {
 		String rest = mixinClassName.substring(compartmentPrefix.length());
 		int dot = rest.indexOf('.');
 		if (dot < 0) return true;
-		return compartmentOn.computeIfAbsent(rest.substring(0, dot), this::compartmentOn);
+		return compartmentOn.computeIfAbsent(compartmentModId(rest.substring(0, dot)), this::compartmentOn);
+	}
+
+	/**
+	 * Mod id served by the compartment package segment {@code segment}. Packages carry no underscore (DR-C10), so a
+	 * subclass maps the segment of a mod whose id has one (for example {@code immersiveweathering} ->
+	 * {@code immersive_weathering}); the default is the segment itself.
+	 */
+	protected String compartmentModId(String segment) {
+		return segment;
 	}
 
 	/**

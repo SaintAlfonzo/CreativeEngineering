@@ -61,6 +61,11 @@ public class CreativeDelight {
 		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.run();
 		// M8: [members] blockheads_additions / incubation_additions became [compartments] switches; read raw below.
 		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.carryCompartmentSwitches();
+		// Ender's additions' mod id lost its underscore (enders_additions -> endersadditions, DR-C10): its
+		// config file moves to the new name and its [members] switch keeps the player's value. Its block and item ids are
+		// endersdelight:, so saves need no swap list.
+		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("enders_additions-common.toml", "endersadditions-common.toml");
+		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.carryRenamedMemberSwitches();
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, CDConfig.FILE);
 		// Hooks in Creative Common and Creative Compat (vine shearing, stuck-in-block speeds, jar families, the sample
 		// syringe JEI tab, idle random tick rules)
