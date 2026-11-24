@@ -3,7 +3,8 @@
 // into two half cabinets (shapeless) and two half cabinets stacked in a column make the cabinet again.
 ServerEvents.recipes(e => {
 	var i = global.item
-	var R = global.NCH
+	// recipe ids under the owning repack's namespace (ids follow the owning mod)
+	var R = global.NCH.forPack('storagedelight')
 
 	var woods = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove', 'crimson', 'warped', 'bamboo']
 	var stones = ['polished_deepslate', 'polished_andesite', 'polished_blackstone', 'polished_diorite', 'stone_bricks', 'polished_tuff']

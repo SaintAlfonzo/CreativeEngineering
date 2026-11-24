@@ -458,11 +458,11 @@ Tests (scratch queue SQ-ENM-01 to -05; SQ-DNR-E-01 to -04 and SQ-EDL-01, -03, -0
 
 | ID | Check |
 |---|---|
-| ENM-01 | Boot with Ender's 1.2.2: mod list shows `ends_delight` and `enders_additions` once each, from the CD jar; no duplicate-mod error |
+| ENM-01 | Boot with Ender's 1.2.2: mod list shows `ends_delight` and `endersadditions` once each, from the CD jar; no duplicate-mod error |
 | ENM-02 | Old world (1.1.03+) with the 1.1.4 plants, dishes and an End House: no missing ids, art and models as before |
 | ENM-03 | Boot without Ender's 1.2.2: the 14 `endersdelight:` ids register, End plants grow, no meal recipe errors; dishes eat with no bowl back |
 | ENM-04 | `config/endersadditions-common.toml` read; `[members] endersadditions = false` skips the 1.1.4 recipes and tags |
-| RFX-34 | Old save and configs from the release jars (`enders_additions`): blocks and items stay, the config file and `[members]` switch carry over to `endersadditions` |
+| ENM-06 | Old save and configs from the release jars (`enders_additions`): blocks and items stay, the config file and `[members]` switch carry over to `endersadditions` (queue SQ-RFX-34) |
 | ENM-05 | Spice and soil tags present with and without Ender's 1.2.2 |
 
 
