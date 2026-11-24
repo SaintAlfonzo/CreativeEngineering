@@ -23,4 +23,3 @@ creativedelight:pickled_garlic,hearthandharvest:pickled_carrots texture copied,o
 "creativedelight:boxed_raw_pasta (block, all faces)",farmersdelight:block/crate_bottom texture copied,owner art for a pasta box block,dishes/ingredients #8 (S2),placeholder = Farmer's Delight crate bottom
 creativedelight:ice flavor overlay (item/seasoned/ice),none (no overlay drawn),owner palette for textureswapper/seasoning/make_seasoning.py,food/seasoning #3 (R26),flavor works without its icon; ghost pepper has none either
 creativedelight:plain/cheese/onion/garlic/ghost_pepper/void_pepper_popcorn_box,corn_delight popcorn box models and texture used as-is (no copy),owner art per flavor,food/seasoning #3 (R30),all six look like the Corn Delight box
-creativecommon:brain_freeze (effect icon),vanilla slowness effect icon,owner art: Brain Freeze effect icon,sweets #9,"placeholder copied 2026-11-23; HUD, inventory and JEED page"

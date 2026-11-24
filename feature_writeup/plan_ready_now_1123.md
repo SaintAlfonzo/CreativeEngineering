@@ -29,6 +29,7 @@ Raspberry Pie low-priority cleanups without a ruling (#12, #14 to #20).
 | R3 | Scope of `publish-readiness #6` | All temporary exemptions in this plan, the Creative Delight package and own-id renames with save swaps included |
 | R4 | Phase order | Fixes, then publish rules, then features (sections 2 to 9 below in that order) |
 | R5 | Diet Log in the pack, now that the pack's override recipe is gone (removed 2026-11-21) and the jar recipe takes any edible item | Exclude non-foods and drinks: the pack adds them to the jar's exclusion tag (owner, 2026-11-23) |
+| R6 | Follow-ups to the hand-over (2026-11-23) | Drink tags: Hot Cocoa, the coffees and Prickly Pear Juice already carry `food_type/drink` (the report read the 2026-11-19 dump); jam bottles are already removed or merged into jars (`dishes/jams #1`), nothing to drop. Ancient corpse names in Compat's lang: OK. `kubejs/assets/creative_tips` -> `creativetips`. Half cabinets: 90 (10 woods x 9 styles), every cabinet. Brain freeze stays an effect that milk clears; icon copied from Immersive Weathering's icicle (owner, 2026-11-23) |
 
 Earlier rulings this plan carries: `kitchen #41`, `storage-and-item-loss #17`, `creative-compat-publish #7`,
 `publish-readiness #6`, `raspberry-pie-publish #10` and `#13` (owner, 2026-11-22 and 2026-11-23, in the rows);
@@ -129,7 +130,7 @@ Row: `publish-readiness #6` (DR-C10, PR-CM-14 and the underscored packages).
 
 Row: `kitchen #41`.
 
-- 45 new blocks in `development/repackedStorage` under `storagedelight` (`<cabinet id>_half`, final names checked
+- 90 new blocks (planned 45; built for every cabinet, 10 woods x 9 styles, R6) in `development/repackedStorage` under `storagedelight` (`<cabinet id>_half`, final names checked
   against the half wall cabinet naming in Hearth and Harvest): the `HalfCabinetBlock` shape copied into the repack
   (no Creative Delight dependency), same storage size as Hearth's half cabinet, same placement as the existing half
   wall cabinets.

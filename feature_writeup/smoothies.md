@@ -100,8 +100,8 @@ Owner (2026-11-17, 2026-11-18):
   message ("Brain freeze!"). While the effect lasts the frozen ticks are held at full, so the vanilla powdered snow
   overlay draws and the vanilla freeze damage (half a heart every 2 s) and slowdown apply; when it ends the frost thaws
   over about 3.5 s. Vanilla rules stay: leather armor and freeze-immune mobs take no freeze damage, milk clears the
-  effect. The effect is what makes the HUD icon (placeholder: the vanilla Slowness icon) and the JEED page possible
-  (plan_ready_now_1123.md section 9).
+  effect (kept, owner 2026-11-23). The effect is what makes the HUD icon (Immersive Weathering's icicle, owner pick
+  2026-11-23) and the JEED page possible (plan_ready_now_1123.md section 9).
 - Length by the number of rolls up to and including the hit: 1 -> 5 s, 2 -> 8 s, 3 -> 11 s, 4 -> 14 s, 5 or more ->
   20 s. Configurable in `creativecommon-common.toml` `[brain_freeze]`: `enabled`, `windowSeconds` (60), `chanceStep`
   (0.2), `lengths` ([5, 8, 11, 14, 20]; the last entry covers every later roll); read live (backup in `configs_edited/`
