@@ -183,6 +183,7 @@ decay, names and render are Creative Compat's ([creative_compat.md](creative_com
 
 ## 5. History
 
+- 2026-11-23: `L.ban` records its mod (`mod` option, default from an `@mod` target) and `checkBanSwitches` skips a ban whose mod is not loaded with one INFO line (`loot-tables #3`). `swapDrop` with several conditions writes an alternative of inverted terms instead of `minecraft:all_of`, which 1.19.2 lacks (`creativebrewing/publish #13`); the modded composter tables (twisted, ancient, blossom, azalea) carry a top-level `forge:conditions` mod_loaded.
 - 2026-11-18: held items and the no-empty guarantee (`hands` block, `AncientHands`; TODO `corpses #8`); sealed mark and ocean `NoGravity` dropped (`corpses #9`); SQ-LOOT-11, CQ-LOOT-12.
 - 2026-11-18: ancient corpses, their armor rolls and the Visceral Heap remains (section 2c; plan_corpses.md, TODO `corpses #2`, `#5`, `#7`; SQ-LOOT-07 to -09, CQ-LOOT-10).
 - 2026-11-17: P3c of plan_rules_fixes.md: every member list became a fragment, Delight and Brewing gate them (section 5);

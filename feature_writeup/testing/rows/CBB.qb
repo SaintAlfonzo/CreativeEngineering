@@ -51,10 +51,10 @@ reject \[cdevtest\] .*done=0
 ## SQ-CBB-03 | fermenting count, Pale Jane and Steel Toe, bark and metal dust tags in Common
 @group A (chain)
 @commands `> cdevtest bytype brewinandchewin:fermenting`; `> cdevtest recipes creativebrewing:fermenting/pale_jane`; `> cdevtest recipes creativebrewing:fermenting/steel_toe`; `> cdevtest tag item immersive_weathering:bark`; `> cdevtest tag item creativeengineering:bark`; `> cdevtest tag item creativeengineering:metal_dusts`; `bootreject Couldn't load tag\|missing references`
-@pass fermenting 18 or more (21 minus kombucha, kippers until CBB-05 is settled, and steel toe stout while `metal_dusts` has no chain member); `pale_jane_from_rice_wine` listed; `immersive_weathering:bark` empty and `creativeengineering:bark` holds `farmersdelight:tree_bark`; `metal_dusts` exists (0 members on the chain unless the owner added one)
+@pass fermenting 18 or more (kippers are removed from the pack and no longer in the count; minus kombucha and steel toe stout while `metal_dusts` has no chain member); Pale Jane recipe `creativebrewing:fermenting/pale_jane_from_rice_wine` listed on the chain, its bark falling back to `farmersdelight:tree_bark` (`#creativecommon:bark` is empty without Immersive Weathering); the `creativecommon:bark` tag text matches `#immersive_weathering:bark`; `metal_dusts` exists (0 members on the chain unless the owner added one)
 @fails the tag move into Common (sweep list in the run doc section 2)
 @from batches/r1106cbb/c1.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-23
 > cdevtest bytype brewinandchewin:fermenting
 > cdevtest recipes creativebrewing:fermenting/pale_jane
 > cdevtest recipes creativebrewing:fermenting/steel_toe

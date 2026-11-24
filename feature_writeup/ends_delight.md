@@ -100,7 +100,7 @@ no new items; its changes are drops, recipes and tags.
 |---|---|---|
 | 4 new End plants: **Amberveils** (`amberveil_mushroom`, drops `amberveil`), **Ethereal Saffron** (`ethereal_saffron_bush`, drops `ethereal_saffron`), **Chorusflame** (`chorus_flame_block`, age 0 to 2, drops `chorusflame`: 1 / 2 / 3 by age, Fortune adds), **Void Pepper Sprout** (`voidpepper_block`, drops `voidpepper`) | Fold into the pack's wild plant generation | One rule per plant in `wild_crops.json` ([briefs/farming_wild-crops.md](briefs/farming_wild-crops.md), applier `wild_crops.js`), End land biomes only (the mod used barrens, highlands, midlands, small islands; chance 1 in 10 / 15 / 15 / 25 per chunk for amberveil / chorusflame / void pepper / saffron). Do not ship the mod's four biome modifiers (they would double the generation). Densities go in the generator's table like the other wild crops |
 | **Void Pepper** is a spice | Mark it for the spice work | `crushed_voidpepper` (and `voidpepper`) are the first members of a `#creativedelight:spices` tag, created with the spice work in [briefs/food_seasoning.md](briefs/food_seasoning.md) (it says there is no pepper or spice item in the dictionary today). Until then it is only an ingredient. Saffron is a spice candidate too: see "needs a decision" |
-| Void Pepper **behavior** | Implement it | The sprout is a multiface block (one boolean per face, glow-lichen style, per-face collision shape) with `spreading` and `pepper` states. Random tick while spreading: 2/3 spread to a free spot within 7 blocks that touches end stone (up to 15 tries), 1/3 stop spreading and fruit. A fruiting sprout drops 3 `voidpepper`, a non-fruiting one 1 (Fortune adds to both). Needs Java (multiface shapes, a block entity that stores its origin), so a small in-tree mod in the `incubationAdditions` pattern, e.g. `development/endersDelightAdditions`, plus a `mod_sides.md` row. The `end_flames` particle (Chorusflame) comes with it. Confirm the in-tree mod route before building |
+| Void Pepper **behavior** | Implement it | The sprout is a multiface block (one boolean per face, glow-lichen style, per-face collision shape) with `spreading` and `pepper` states. Random tick (2026-11-23, `creative-delight-members #4`): a tick that passes the soil tier's chance fruits an unfruited sprout; it no longer spreads (was: 2/3 spread to a free spot within 7 blocks that touches end stone, 1/3 fruit). The `spreading` state stays and drives nothing. A fruiting sprout drops 3 `voidpepper`, a non-fruiting one 1 (Fortune adds to both). Needs Java (multiface shapes, a block entity that stores its origin), so a small in-tree mod in the `incubationAdditions` pattern, e.g. `development/endersDelightAdditions`, plus a `mod_sides.md` row. The `end_flames` particle (Chorusflame) comes with it. Confirm the in-tree mod route before building |
 | **Ground rule** for all 4 plants | Survive and grow only on **end stone** (slower) and **tilled end stone** (faster) | Tilled end stone is Endercrop's `endercrop:tilled_end_stone` (installed; a `FarmBlock`, dry and moist textures). The mod's bush base class also allowed any farmland: drop that. Put the two soils in tags (e.g. `end_plant_soil_slow`, `end_plant_soil_fast`) so a third soil can be added without code, and the growth chance per tier in CEConfig. Amberveils and Ethereal Saffron have **no growth stage** in the mod (place and pick), so "grow" needs a design: give them an age stage with a random-tick growth like Chorusflame, wild ones spawning mature. Open: does Endercrop's moist / dry state count as two speeds |
 | **Fertile end stone** | Mark as future | A new block above tilled end stone. **Craft and texture are not designed**; role beyond "best soil" is open. Listed here so the soil tags leave room for it |
 
@@ -184,7 +184,7 @@ Through the item dictionary, `global.NCH`, food tuning and a can decision like a
 | EDL-02 | The 4 plants generate wild in the End on end stone only, at the table's density; none generates twice |
 | EDL-03 | Each plant places and survives only on end stone and tilled end stone; breaks on farmland, dirt, grass |
 | EDL-04 | Growth is slower on end stone than on tilled end stone (measure over 20 random-tick samples) |
-| EDL-05 | Void Pepper Sprout spreads to end-stone-adjacent spots within 7 blocks, then fruits; drops 3 when fruiting, 1 when not |
+| EDL-05 | Void Pepper Sprout does not spread (2026-11-23, was: spreads within 7 blocks); a random tick fruits it; drops 3 when fruiting, 1 when not |
 | EDL-06 | End House generates in the chosen biomes, on the chosen pool's spacing; no chests; never over the void or below y 50 |
 | EDL-07 | Dragon killed bare-handed drops meat, leg and tooth; with a knife it drops extra meat and an extra tooth |
 | EDL-08 | Tooltips and JEI pages on the knife drops (6 items) and on the dragon drops |
@@ -283,8 +283,8 @@ the pepper item reads "Void Pepper", the spice "Crushed Void Pepper" (1.1.4: "Vo
 
 - Soil: all four survive only on `#creativedelight:end_plant_soil_slow` (end stone) or `_fast` (Endercrop's tilled end
   stone); the void pepper on any attached face. Growth chances in `config/enders_additions-common.toml [growth]`:
-  `chorusflameGrowthSlow` 0.1, `chorusflameGrowthFast` 0.2 (1.1.4: 1/5), `voidpepperTickSlow` 0.5, `voidpepperTickFast` 1.0.
-- Void pepper blockstate fixed so the plain and fruiting vines no longer overlap; spread waits for loaded chunks.
+  `chorusflameGrowthSlow` 0.1, `chorusflameGrowthFast` 0.2 (1.1.4: 1/5), `voidpepperTickSlow` 0.5, `voidpepperTickFast` 1.0 (since 2026-11-23: the chance per random tick to fruit; the sprout no longer spreads).
+- Void pepper blockstate fixed so the plain and fruiting vines no longer overlap. (Spread, and its wait for loaded chunks, removed 2026-11-23.)
 - Recipes (`endersdelight/additions.js`): 1.1.4's five pot recipes; heatless grid routes; knife 1 -> 2 crushed;
   `foodGrinding` (milling 2 + 30%, mortar 2; no crushing wheel). Spice tag `#creativedelight:spices` = the two peppers.
 - Wild: `end_amberveil` (1 in 10), `end_chorusflame` (15), `end_saffron` (25), `end_voidpepper` (15), 1.1.4's patches
@@ -346,7 +346,7 @@ now scans jars nested in `META-INF/jarjar/`. The Mysticrift End tower is in `typ
 | EDL-02 | The 4 plants generate wild in End land biomes on end stone only; none twice (no 1.1.4 modifiers) |
 | EDL-03 | Each plant places and survives only on end stone and tilled end stone; breaks on farmland, dirt, grass, and when its soil goes |
 | EDL-04 | Chorusflame and Void Pepper grow slower on end stone than tilled (config values to 0 stop growth) |
-| EDL-05 | Void Pepper spreads to end-stone-adjacent spots within 7 blocks, then fruits; drops 3 fruiting, 1 not (+Fortune); right face, no z-fighting |
+| EDL-05 | Void Pepper does not spread (2026-11-23; was: spreads within 7 blocks); a random tick fruits the sprout; drops 3 fruiting, 1 not (+Fortune); right face, no z-fighting |
 | EDL-06 | End House in end highlands / midlands, no chests, floor on end stone, never over the void (earth fill log CANCELED); tower rate unchanged |
 | EDL-07 | Dragon bare-handed: 5-7 meat, 2 legs, 1-2 teeth; knife and machete: +2 meat, +1 tooth |
 | EDL-08 | Tooltips and JEI pages on the 7 End's and 3 Ender's drops |
@@ -367,7 +367,7 @@ located, ground check not run); EDL-02, EDL-05, EDL-08, EDL-10 to EDL-15 open.
 Changelog: bullets added 2026-10-25 (Farming, Food, World Generation, Loot, Gear, Interface families).
 
 Scratch r1102b (2026-11-02, `perf/runs/r1102b/s3/`): SQ-EDL-04 (dragon drops) and SQ-EDL-06 (knife repair) PASS again;
-SQ-EDL-03 OPEN (soils and growth PASS; void pepper spreading, fruiting and the 3 / 1 drops not probed).
+SQ-EDL-03 OPEN (soils and growth PASS; void pepper spreading, fruiting and the 3 / 1 drops not probed). Since 2026-11-23 the row checks that the sprout count stays 1 and the origin fruits.
 
 ### 5.7 Ender's Delight 1.2.2 inventory (`creativedelight/members #33` step 1, 2026-11-02)
 

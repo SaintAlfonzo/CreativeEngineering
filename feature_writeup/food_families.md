@@ -1307,7 +1307,6 @@ No direct members; see the subfamilies.
 | Cooked Pike | `upgrade_aquatic:cooked_pike` | ok | **no** | ok | yes / yes | - | Campfire / Skillet, Furnace, Mixer, Smoker |
 | Cooked Salmon | `minecraft:cooked_salmon` | ok | ok | ok | yes / yes | coaster | Campfire / Skillet, Furnace, Mixer, Smoker |
 | Fried Fish | `rusticdelight:fried_fish` | - | **no** | **no** | no row / no | - | Cooking Pot, Mixer |
-| Kippers | `brewinandchewin:kippers` | ok | **no** | ok | no / no | - | Keg, Mixer |
 | Surströmming | `vintagedelight:surstromming` | ok | **no** | ok | yes / yes | - | Mixer, vintagedelight:fermenting |
 
 #### Cooked cut fish (`fish/cooked_cut`)
@@ -3232,7 +3231,7 @@ Delight placement for the egg dishes. The produce Decision rows became Rules (3.
 member's own criteria made the proposal wrong:
 
 - **Cured forms keep their own station.** Cooked meat, cooked fish and cooked egg: the cooking trio is for plainly
-  cooked ones; jerky, kippers, smoked ham, smoked dragon leg, glazed porkchop, century egg and surstromming keep the
+  cooked ones; jerky, smoked ham, smoked dragon leg, glazed porkchop, century egg and surstromming keep the
   Keg, Smoker, Spout, a craft or the Fermenting Jar. Boiled vegetables come from the Cooking Pot, scrambled eggs too.
 - **Dropped cuts.** Hoglin ear, strider slice, guardian fillet and the Oceanic squid tentacles are mob drops, not board
   cuts. A seasoned raw cut (mint chops) is crafted from its raw meat. A cooked cut vegetable can be cut from the

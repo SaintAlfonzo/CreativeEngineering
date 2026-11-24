@@ -1049,7 +1049,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-04: Port fix (creativedelight members #37, plan_creative_delight.md I2; strict per slot 2026-11-04): for each ingredient entry, the input slot (0-5) it takes one item from, or null when the inputs do not make this recipe (development/creativeDelight/members/vintage/src/main/java/net/ribs/vintagedelight/recipe/FermentingRecipe.java)
 - 2026-11-04: Pieces made with even_swap (forced even gradient) instead of the plain swap, which skips non-monotonic palette entries (pepper's dark reds are darker than its browns' brightness rank): owner 2026-11-04 (development/creativeDelight/members/vintage/tools/gen_jam_art.py)
 - 2026-11-19 (plan_food_batch_1119.md C1, C2): `PizzaBlock` gives 2 slices a bite, by hand or knife (no eating from the
-  block); pizza break loot doubled (8/6/4/2). New Tropical Pizza (`vintagedelight:tropical_pizza`, slice 5 / 0.75 +
+  block); pizza break loot doubled (8/6/4/2). New Tropical Pizza (`vintagedelight:tropical_pizza`, slice 4 / 0.7 (was 5 / 0.75 until 2026-11-23, `creativedelight/pizza_values.js`) +
   Nourishment, the cheese pizza's art copied; shaped recipe JSON, Fruits Delight condition; tooltip in
   `assets/creativedelight/kubejs/vintagedelight/client.js`). Tests SQ-FF-11 to SQ-FF-13, CQ-FF-03.
 

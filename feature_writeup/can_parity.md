@@ -347,7 +347,6 @@ Same section as cooked meat (cooked_meat in can_types.json).
 | x | Surströmming `vintagedelight:surstromming` (configured; waits on /dumpfood with Vintage loaded) | Canned Surströmming | - | - | - | - | - | x | - | 9 / 15.3 | 45 / 76.5 | 54 / 91.8 | 120% / 120% | 100% / 100% |
 | / | Cooked Crab Leg `quark:cooked_crab_leg` (not canned, removed 2026-10-13) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
 | / | Cooked Lobster Tail `alexsmobs:cooked_lobster_tail` (not canned, removed 2026-10-13) | n/a | n/a | - | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a | n/a |
-| / | Kippers `brewinandchewin:kippers` | Canned Kippers | n/a | - | - | - | - | - | - | - | - | - | n/a | n/a |
 
 ### 2.9 Bread <a id="bread"></a>
 

@@ -594,7 +594,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
   splashed, lingered and tipped by machine.
 - **Magic Resistance** ([armor_effects.md](armor_effects.md) 2.5): the pack's one own effect, registered in
   [magic_resistance.js](../kubejs/startup_scripts/magic/magic_resistance.js); the damage cut is Creative Common's
-  `MagicResistanceEffect`.
+  `MagicResistanceEffect`. Its JEED provider (JEI page) is written by Creative Equipment's `jeed_gear_effects.js` from the gear effect rows (2026-11-23, `effect-text #1`): the Felsic set and the Dragon set (both chestplates).
 - **Effect descriptions, one place:** every pack-side effect text is in
   [creativeengineering/lang/en_us.json](../kubejs/assets/creativeengineering/lang/en_us.json). The KubeJS pack sits
   above the mod jars, JEED's bundle and the Vinery donor jar, so a key there wins. It holds three kinds of line:
@@ -914,6 +914,7 @@ ingredient type.
 
 ## 9. History
 
+- 2026-11-23: Magic Resistance JEED provider from the armor effect rows, listing the Felsic and Dragon armor (`effect-text #1`; Equipment `jeed_gear_effects.js`).
 - 2026-11-19: 2.1 reworked: Food column dropped; Fruit, Leveled, Max lv and Level desc added (scaling read from
   the code); Super moved next to Subset; 11 missing effects added (Fungi's Delight, Hearth & Harvest, Hostile
   Delight, Oceanic Delight); Magic Resistance id now `creativecommon:`.

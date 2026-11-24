@@ -258,7 +258,7 @@
 
 ## Pizza <!-- icon: vintagedelight:cheese_pizza -->
 
-- **New:** Tropical Pizza: pineapple slice, cooked bacon and pineapple slice over 3 cheese, on dough, tomato sauce and dough. Its slice restores 5 hunger and gives Nourishment.
+- **New:** Tropical Pizza: pineapple slice, cooked bacon and pineapple slice over 3 cheese, on dough, tomato sauce and dough. Its slice restores 4 hunger and gives Nourishment.
 - **Changed:** A pizza is 8 slices [4]: each of its 4 bites gives 2 slices, taken by hand or cut with a Knife; it is no longer eaten from the block. Broken, it drops 2 slices per bite left; a Knife on the Cutting Board gives 8.
 - **Changed:** 8 pizza slices in a ring craft the whole pizza [4 in a square].
 - **Changed:** Pizza slices restore less, so a whole pizza is worth 1.5 times a 4-slice pizza: Cheese 3 hunger [4], Meat, Tropical, Vegan and Supreme 4 [5], each with less saturation.
@@ -518,6 +518,7 @@
 - **Fixed:** The Frosty Armor description said freezing starts at level II; it starts at level I, and armor, damage and slowness scale per level.
 - **Fixed:** The Shocked description said it stops all movement; it stops walking, not jumping.
 
+- **Fixed:** The Magic Resistance page in the effect list now shows the Felsic and Dragon armor that give it [no armor].
 ## Glass Shards <!-- icon: quark:clear_shard -->
 
 - **New:** Glass blocks and panes from every mod break into shards of their color without Silk Touch: blocks 1 to 3, panes 1 to 2. Tinted glass gives dirty shards.
@@ -537,7 +538,8 @@
 - **Changed:** Elytra fly in every dimension [the End only].
 - **Changed:** Campfires cannot be lit in the End: torches, flint and steel and fire charges hiss and are kept, and a campfire lit any other way goes out at once. Soul campfires still light.
 - **Changed:** Fire cannot exist in the End: flint and steel, fire charges, lava and End crystals light none, and fire already there goes out. Soul fire still burns.
-- **Changed:** Dragon armor gives 8, 13, 11 and 8 armor points for helmet, chestplate, leggings and boots [7, 12, 10, 7].
+- **Changed:** Dragon armor gives 9, 12, 11 and 8 armor points for helmet, chestplate, leggings and boots [7, 12, 10, 7].
+- **Changed:** Void Pepper Sprouts no longer spread; a sprout fruits on its own [spread up to 7 blocks away].
 - **Changed:** Items can no longer be frozen into Rare Ice; Rare Ice comes only from world generation [right-click ice with an item].
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
 - **Changed:** Little Logistics receiver and transmitter components in an inventory turn into Redstone Links.
@@ -647,6 +649,7 @@
 ## Mods Added & Removed
 
 - **New:** Packet Fixer, on clients and the server. Items, block contents and chunks of up to 64 MB are accepted [2 MB].
+- **Removed:** Kippers.
 
 ## Performance & Stability
 

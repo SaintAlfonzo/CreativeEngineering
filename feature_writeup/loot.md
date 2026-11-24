@@ -462,6 +462,8 @@ three cases:
 | post-roll | a chest roll produced a banned stack (it's stripped) | a GLM or code pool added it after the pre-roll pass |
 
 Live bans: `@pneumaticcraft` (switch: `enable_dungeon_loot = false`) and Lightman's coins, coin piles and coin blocks
+Since 2026-11-23 (`loot-tables #3`) a ban records its mod (option `mod`, default from an `@mod` target) and the every-reload switch check skips a ban whose mod is not loaded, with one INFO line instead of the warning.
+
 including the chocolate ones (switches: `[loot.chests]` and `[loot.entities] enabled=false`; `ownTables`
 `@lightmanscurrency`). Pre-roll still strips the 36 entries of PneumaticCraft's own 4 tables quietly; that's expected.
 

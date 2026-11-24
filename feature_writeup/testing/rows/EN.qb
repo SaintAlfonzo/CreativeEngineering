@@ -49,25 +49,25 @@ sleep 5
 shell python3 -c "import json,re,sys;d=json.load(open('kubejs/exported/villager_trades.json'));c=d['professions'].get('lightmanscurrency:cashier');print('cashier in dump:',c is not None);t=json.dumps(c);bad=re.findall(r'nock_enough_arrows:(?:stockpile|recovery|cycle)',t);print('NEA hits:',len(bad));sys.exit(1 if c is None or bad else 0)"
 look the shell line: cashier in dump True, NEA hits 0; whether cashiers offer enchanted books at all is in the same dump
 
-## SQ-EDL-03 | void pepper half: spreads then fruits; fruiting sprout drops 3, plain sprout 1 (soils / growth passed in r1102b s3)
+## SQ-EDL-03 | void pepper half: sprout count stays 1, origin fruits; fruiting sprout drops 3, plain sprout 1 (soils / growth passed in r1102b s3)
 @group A
 @commands Place the 4 plants on end stone, tilled end stone, dirt, farmland (EDL-03); random tick speed 100 on both soils (EDL-04, EDL-05)
-@pass Only the two soils; faster on tilled; void pepper spreads then fruits, 3 / 1 drops
+@pass Only the two soils; faster on tilled; void pepper does not spread (sprout count stays 1) and the origin fruits, 3 / 1 drops
 @fails
 @from batches/r1103/p2_R.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-23
 # no bot here any more (randomtick needs no player), so the lane is forceloaded instead
 > forceload add 320 520 334 534
 sleep 2
 > fill 320 -61 520 334 -61 534 minecraft:end_stone
 > fill 320 -60 520 334 -57 534 minecraft:air
 > setblock 327 -60 527 endersdelight:voidpepper_block[down=true,spreading=true,pepper=false]
-# 30 random ticks per block = the old 20 s at tick speed 300 near a bot (randomtick needs no player)
+# 30 random ticks per block = the old 20 s at tick speed 300 near a bot (randomtick needs no player). Since 2026-11-23 the sprout no longer spreads: one tick passing the soil chance fruits it
 > cdevtest randomtick 320 -60 520 334 -57 534 30
 > cdevtest count 320 -60 520 334 -57 534 endersdelight:voidpepper_block
-expect verb=count block=endersdelight:voidpepper_block n=([2-9]|\d\d)\b
+expect verb=count block=endersdelight:voidpepper_block n=1\b
 > execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=false,pepper=true] run say EN03 origin fruited
-> execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=true] run say EN03 origin still spreading
+> execute unless block 327 -60 527 endersdelight:voidpepper_block[pepper=true] run say EN03 origin not fruited
 > fill 320 -60 520 334 -57 534 minecraft:air
 > setblock 322 -60 522 endersdelight:voidpepper_block[down=true,spreading=false,pepper=true]
 > cdevtest break 322 -60 522
@@ -77,7 +77,7 @@ expect verb=break who=\S+ broken=true before="?endersdelight:voidpepper_block\S*
 expect verb=break drops=endersdelight:voidpepper:3 stacks=\d+\b
 expect verb=break drops=endersdelight:voidpepper:1 stacks=1\b
 > forceload remove 320 520 334 534
-look the spread count (more than one sprout after 30 random ticks per block, about 20 s at tick speed 300) and the origin line ("fruited" once spreading ends; "still spreading" is not a fail by itself)
+look the sprout count (exactly 1 after 30 random ticks per block; more than 1 means it still spreads) and the origin line ("EN03 origin fruited" printed, "origin not fruited" is a fail)
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-EDL-04 | Ender Dragon drops bare hand, knife, machete

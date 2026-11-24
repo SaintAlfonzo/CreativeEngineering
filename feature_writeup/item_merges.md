@@ -279,7 +279,7 @@ Pairs: Creative Delight `kubejs_startup/fruitsdelight/item_merges.js`; server ha
 - Recipes. The merge swaps Fruits Delight's data recipes onto the cantaloupe slice: 9 slices -> Cantaloupe (block),
   knife on the block -> 9 slices, slice -> Cantaloupe Seeds, jam,
   jello, juice. Removed: Delightful's slice -> Mini Cantaloupe Seeds and Fruits Delight's slice popsicle (Delightful's two
-  popsicle recipes stay). New: 4 slices (2x2) -> Mini Cantaloupe (`delightful/recipes.js`, `mini_cantaloupe`); 1 Cantaloupe Seeds
+  popsicle recipes stay). New: ~~4 slices (2x2) -> Mini Cantaloupe (`delightful/recipes.js`, `mini_cantaloupe`)~~ (dropped 2026-11-19, `plan_food_batch_1119.md` A6: the Mini Cantaloupe is cutting only, `delightful:cutting/cantaloupe`, 4 slices); 1 Cantaloupe Seeds
   <-> 1 Mini Cantaloupe Seeds (`mini_cantaloupe_seeds`, `cantaloupe_seeds_from_mini`); a Mini Cantaloupe + 2 ice cubes +
   stick -> the popsicle (Delightful's `cantaloupe_popsicle_from_cantaloupe`, now with the Mini Cantaloupe). Bread, gummy, wrapped and
   stuffed cantaloupe keep `#forge:fruits/cantaloupe` / the Mini Cantaloupe as before.
@@ -529,6 +529,7 @@ cooked pair added so a fillet has one furnace result). Ocean's three cooked tail
 ## 3. Known limits
 
 - A Neapolitan milk bottle can't be poured back into a milk cauldron (only Neapolitan's own bottle fits, and it no
+- Merge count (2026-11-23): the scratch baseline `[itemMerges] creativedelight` reads 49 merges on the full pack (SQ-VTDA-12, SQ-CM-01); a changed count means a list edit since. A recount of `data/creativedelight/swaps/merges_*.json` on 2026-11-23 finds 19 files with 46 `merges` entries; the 3 difference is unexplained (SQ-CM-01 says 18 lists), so the baseline rests on the log, not on this sum.
   longer exists in inventories). A bucket still fills it.
 - The inventory swap covers the player inventory, not other containers. A purged item in a chest placed before the
   merge turns over when a player picks it up.
@@ -604,7 +605,7 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
 - [ ] **MG-38:** JEI: uses of Evaporator, of Salt Layer, of `#salt:meltables` -> Evaporator page (layers on top, up to 8); Salt Layer in the dissolve rows; no "use salt on ice" or dispenser rows; Evaporator info reads "Salt Dust Blocks do not grow salt"
 - [ ] **MG-39:** JEI: search hamimelon, cantaloupe -> Cantaloupe (block), Cantaloupe Seeds, Cantaloupe Slice (Delightful's art), Cantaloupe Popsicle (Delightful's art), Jam, Jello, Juice, Shaved Ice; Mini Cantaloupe, Mini Cantaloupe Seeds; no Hamimelon Slice, no second popsicle, no Canned Hamimelon
 - [ ] **MG-40:** `/give @s fruitsdelight:hamimelon_slice 3`, `fruitsdelight:hamimelon_popsicle`, `creativeengineering:canned_hamimelon` -> 3 Cantaloupe Slices, a Cantaloupe Popsicle, a Canned Cantaloupe
-- [ ] **MG-41:** Craft: 1 slice; 9 slices; 4 slices (2x2); 1 Cantaloupe Seeds; 1 Mini Cantaloupe Seeds; Mini Cantaloupe + 2 ice cubes + stick -> Cantaloupe Seeds; Cantaloupe; Mini Cantaloupe; Mini Cantaloupe Seeds; Cantaloupe Seeds; Cantaloupe Popsicle
+- [ ] **MG-41:** Craft: 1 slice; 9 slices; (2x2 grid recipe gone since 2026-11-19: the Mini Cantaloupe is cutting only); 1 Cantaloupe Seeds; 1 Mini Cantaloupe Seeds; Mini Cantaloupe + 2 ice cubes + stick -> Cantaloupe Seeds; Cantaloupe; Mini Cantaloupe; Mini Cantaloupe Seeds; Cantaloupe Seeds; Cantaloupe Popsicle
 - [ ] **MG-42:** Knife on a Cantaloupe block on the cutting board; knife on a placed Mini Cantaloupe -> 9 Cantaloupe Slices; 4 Cantaloupe Slices
 - [ ] **MG-43:** JEI uses of the Cantaloupe Slice: jam, juice, jello, popsicle, exotic fruits bowl, fruit salad, Cantaloupe Bread -> All accept it
 - [ ] **MG-44:** New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creativedelight:wild/mini_cantaloupe` to see one); WTHIT on the stem -> Both on sand, red sand or terracotta; stem named Cantaloupe Stem

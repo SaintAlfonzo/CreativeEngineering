@@ -200,7 +200,8 @@ Every row is a change the port has to make (IDs are used in section 3).
 | Pickled Pickles x2 | 2 sea pickle, glowstone / honey bottle / 2 / 12000 | 2 sea pickle, glow berries / 250 honey / 2 / 9600 |
 | Jerky x3 | 3 raw meat / none / 3 / 12000 | 3 `#foods/jerky_meat` (raw meat or rotten flesh) / none / 4 / 9600 |
 | Kimchi x2 | vegetable, cabbage leaf, kelp / none / 3 / 12000 | same / none / 4 / 9600 |
-| Kippers | 2 raw fish, kelp / none / 3 / 12000, x3 | 2 safe raw fish, dried kelp / none / 4 / 9600, x2 |
+
+Kippers were removed from the pack 2026-11-23 (`creative-brewing #1`): the Brewin' port still registers the item, hidden in JEI and out of every tag; its fermenting recipe is deleted.
 
 All old recipes give 0.6 xp. New ones give 1.0, and Withering Dross gives 2.0.
 
@@ -286,7 +287,6 @@ Every drink also gives Intoxication. The new drinks last much shorter (Tipsy 2-4
 | Fiery Fondue | 16 / 1.0, Nourishment 6m | 14 / 0.75, Nourishment 7m |
 | Kimchi | 2 / 0.6, Satisfaction 2m | 2 / 0.6 |
 | Pickled Pickles | 4 / 0.3, Night Vision 2m, Luck 5m | 4 / 0.3 |
-| Kippers | 6 / 0.5, Water Breathing 30s | 6 / 0.5 |
 | Cocoa Fudge | 4 / 0.8, Speed 20s | 4 / 0.8, Speed 40s |
 | Jerky, cheese wedges, Ham and Cheese Sandwich | unchanged | unchanged |
 | Jams (new) | none | Sweet Berry Jam 6 / 0.4, Glow Berry Marmalade 6 / 0.4, Apple Jelly 10 / 0.6 |
@@ -1605,7 +1605,7 @@ included; every drink gives half a shank of rotten hunger and no saturation and 
 without a Tipsy / drunk effect also give 5 s of Nausea (10 s for drinks made from other drinks); the tooltip line
 reads "Intoxicating Drink".
 
-- **Which drinks (44):** the 16 Brewin' drinks, the 26 Vinery wines and ciders, Fruits Delight's Bellini Cocktail and
+- **Which drinks (44 when built; 51 since Hearth and Harvest D16, the chain's `[alcohol]` line reads 49 of 51 because Fruits Delight's Bellini and Engineer's Delight's Wodka are absent on it):** the 16 Brewin' drinks, the 26 Vinery wines and ciders, Fruits Delight's Bellini Cocktail and
   Engineer's Delight's Bottle of Wodka. Farmer's Delight / Farmer's Respite apple ciders are left out: they aren't
   alcoholic (no Intoxication, no Nausea, their food values unchanged).
 - **Food values ([alcohol_drinks.js](../kubejs/startup_scripts/cooking/alcohol_drinks.js), `global.alcohol`):**

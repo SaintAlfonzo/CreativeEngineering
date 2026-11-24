@@ -139,7 +139,7 @@ One type per food. A `/` nests a type under its parent, and the tag of a nested 
 | `cooked/fruit` | cooked or dried fruit | 4 | 4 / 0.3 | dried banana |
 | `cooked/meat` | cooked meat, whole; patties, jerky, glazed cuts | 20 | 6.5 / 0.8 | steak, smoked ham, beef patty, glazed porkchop |
 | `cooked/meat/sliced` | cooked cuts | 10 | 3.5 / 0.7 | cooked bacon, cooked mutton chops |
-| `cooked/fish` | cooked fish, whole | 10 | 6 / 0.68 | cooked cod, cooked pike, kippers |
+| `cooked/fish` | cooked fish, whole | 10 | 6 / 0.68 | cooked cod, cooked pike |
 | `cooked/fish/sliced` | cooked slices | 6 | 3 / 0.65 | cooked salmon slice |
 | `egg` | egg on its own | 4 | 4 / 0.6 | fried egg, scrambled eggs, boiled emu egg |
 | `baked` | bread and buns | 12 | 5 / 0.4 | bread, sourdough bread, banana bread, adzuki bun |
