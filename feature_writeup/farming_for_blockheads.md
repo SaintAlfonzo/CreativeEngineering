@@ -34,7 +34,7 @@ asks by name; upstream bugs are fixed.
 | Upstream bugs | B1, B2 (section 3.4) | none blocking for the bin |
 | Fold-in (bin and rabbit trap) | section 4 | 13 steps drafted |
 | Decisions | D1 to D11 (section 5) | ruled 2026-11-23 and 2026-11-24 (5.1) except D10, D11 (trap details); D7c pinned |
-| Tests | SHB-01 to SHB-27 (section 8) | drafted |
+| Tests | SHB-01 to SHB-28 (section 8) | drafted |
 
 - Jar: the 26.3 jar is the only source of the bin. It is a donor for art (Miner's Delight route, [miners_delight.md](miners_delight.md)
   D2, D12), never a mod in `mods/`. The 1.19.2 Fabric jar cannot load on Forge. A Forge 1.19.2 11.3.x jar exists
@@ -171,6 +171,14 @@ caves, most of the Nether, the End, AE2 storage) catch nothing, so only the fox 
 | Swamp | chicken 38 %, frog 38 %, duck 23 % |
 | Snowy plains | rabbit 59 %, raccoon 29 %, duck 12 % |
 | Jungle | chicken 77 %, duck 15 %, ocelot 8 % |
+
+**Passive catches limited by nearby traps (owner, 2026-11-24, D12):** unattended (passive) catches are limited per
+cluster of traps. When a player returns to several traps near each other whose unattended timers have all run out,
+only one of them gets a catch: among traps within `rabbitTrapPassiveSpacing` blocks of each other (config, default
+8), the first trap that rolls a passive catch claims it and the others in range skip that round. Only traps more than
+that distance from every trap that already caught get their own passive catch. When chunks load, the trap checked
+first for a passive catch is picked at random (not load order, which would always favor the same trap). Lured
+catches (an animal walking into a trap while a player is near) are not limited.
 
 **Review pending (owner, 2026-11-24, TODO `mod-integration #12`):** review this list and add more Alex's Mobs and
 other catchable mobs by biome before the build.
@@ -379,6 +387,7 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D5c | (2026-11-24) A courier that came from a Courier Spawn Point walks back to that block to drink and despawn, when spawn points are enabled (`courierSpawnSearchRadius` above 0), the block is still there and a path exists; otherwise it walks out to the configured distance (or drinks in place in `at_bin` mode). The walk timer (D9) still applies to the way back. |
 | D7 | (2026-11-24) Port the rabbit trap. Update the catch list for the pack (2.3.1), add an item tooltip that describes the behavior (2.3.3), and catch from per-biome tables when left alone (2.3.2). |
 | D7b | (2026-11-24) Fishing barrel not ported. |
+| D12 | (2026-11-24) Passive catches are limited by nearby traps: one passive catch per group of traps within `rabbitTrapPassiveSpacing` blocks (default 8, config); the trap checked first after a chunk load is random (2.3.2). |
 | D7c | (2026-11-24) Scythe pinned for a later recommendation (2.3); owner leans toward moving the hoe area harvest to scythes. |
 
 ## 6. File map (planned)
@@ -426,6 +435,7 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 - [ ] **SHB-25 No catches:** a trap in a deep ocean or the End left for a day -> stays empty (rarely a Mysterious Note).
 - [ ] **SHB-26 Tooltip:** hover the trap item -> three behavior lines; with Shift the catch list by name.
 - [ ] **SHB-27 Courier returns to its spawn point:** with a Courier Spawn Point 30 blocks away, sell under a roof -> the courier walks from it, takes the crate, walks back to it and drinks there; break the spawn point while it walks in -> it leaves to the configured distance instead.
+- [ ] **SHB-28 Passive spacing:** place 5 traps 3 blocks apart and one 12 blocks away, leave for a full day, return -> exactly one of the 5 close traps holds a catch (a different one over repeated runs) and the far trap can hold its own; set `rabbitTrapPassiveSpacing` to 2 -> each close trap can catch.
 
 ## 9. History
 
@@ -440,4 +450,5 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 - 2026-11-24: rabbit trap ruled in (catch list 2.3.1, biome tables 2.3.2 with the draft CSV, tooltip 2.3.3); courier
   returns to its spawn point (D5c); fishing barrel textures shown and the fishing net described (2.3); scythe pinned
   (D7c).
+- 2026-11-24: passive catches limited per group of nearby traps, random check order (D12).
 - 2026-11-24: fishing barrel not ported (D7b); biome catch list review noted (`mod-integration #12`).
