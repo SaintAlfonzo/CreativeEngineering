@@ -297,7 +297,10 @@
 			pools.push(JSON.parse(JSON.stringify(swap.pool)))
 			return true
 		}
-		var guard = not(swap.conditions.length === 1 ? swap.conditions[0] : { condition: 'minecraft:all_of', terms: swap.conditions })
+		// not(all of the conditions) = any one of them fails: 1.19.2 has no minecraft:all_of loot condition (a table with
+		// one fails to parse), so several conditions become an alternative of inverted terms
+		var guard = swap.conditions.length === 1 ? not(swap.conditions[0])
+			: { condition: 'minecraft:alternative', terms: swap.conditions.map(function (c) { return not(c) }) }
 		if (!guardEntries(pools, swap.item, guard)) {
 			warn(table + ': no ' + swap.item + ' entry to swap, skipped')
 			return false
