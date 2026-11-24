@@ -1138,6 +1138,14 @@ Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
 - 2026-11-19: Tofu (TODO dishes/ingredients #17, owner 2026-11-19): stands in for the cooked vegetarian patty only, not the beef patty: #creativedelight:veggie_patty holds both and replaces the vegetarian patty in recipes below (kubejs/data/creativedelight/kubejs/creativedelight/patties.js)
 - 2026-11-22: Data recipes by id below (recipe dump of the jars 2026-11-22); the pack's own script recipes name i.any_potato themselves (kubejs/data/creativedelight/kubejs/creativedelight/potato_compat.js)
 
+Lines moved out of code comments (2026-11-24, plan_rules_fixes.md section 17):
+
+- 2026-11-17: Pear (owner, 2026-11-17): the "eat at any hunger" drink (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/smoothies.js)
+- 2026-11-18: Sprites: every smoothie is a copy of Neapolitan's strawberry_banana_smoothie.png under its own id (placeholder, owner 2026-11-18; feature_writeup/texture_sources/sources.csv), so the per-flavor swap (sweets #10) replaces files only (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/smoothies.js)
+- 2026-11-18: #creativedelight:smoothies                 the 16 smoothies #creativedelight:honey_drink_sound         drunk with the honey bottle sounds (mixin ItemStackHoneyDrinkMixin) #creativedelight:berries/red, blue, purple Mixed Berry's slots by berry color (fruit.md section 4); the third #creativedelight:berries/blue_or_purple    slot takes blue or purple #creativecommon:brain_freeze               cold foods: Creative Common's BrainFreeze rolls on them (owner 2026-11-18: smoothies, ice cream, popsicles, shaved ice, cold milkshakes, Iced Berry Matcha Latte, ice cubes; not Frozen Flesh, not the Ice Sickle) #forge:fruits/cherry                       gets Vinery's cherry (it was empty) (kubejs/data/creativedelight/kubejs/creativedelight/smoothie_tags.js)
+- 2026-11-22: The golden milk bucket and honey bottle sets were removed 2026-11-22 (development/creativeDelight/src/main/resources/kubejs_startup/goldenfood/golden_values.js)
+
+
 
 
 ## 19. Built 2026-10-25: the framework

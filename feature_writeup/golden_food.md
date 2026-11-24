@@ -290,3 +290,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-02: Replaces upstream's anvil recipe with the Golden Food Enchantment book, which is removed (owner, 2026-11-02; creativedelight members #50) (kubejs/data/creativedelight/kubejs/goldenfood/golden.js)
 - 2026-11-03: Gilded (enchanted golden) foods (food_families.md `golden/enchanted`): the gilded apple's Create sequenced assembly (goldenEnchant: 1 gold ingot, 125 mB liquid experience, press, 8 loops; owner 2026-11-03) on every other golden food (kubejs/data/creativedelight/kubejs/goldenfood/golden.js)
 - 2026-11-10: the golden and gilded stews (mushroom stew, beetroot soup, rabbit stew) are not registered: removed 2026-11-10 (development/creativeDelight/members/golden/src/main/java/com/SaintAlfonzo/creativedelight/golden/registry/GoldenItems.java)
+
+Lines moved out of code comments (2026-11-24, plan_rules_fixes.md section 17):
+
+- 2026-11-22: The golden milk bucket and honey bottle sets were removed 2026-11-22 (owner) (development/creativeDelight/members/golden/src/main/java/com/SaintAlfonzo/creativedelight/golden/registry/GoldenItems.java)

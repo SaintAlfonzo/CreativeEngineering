@@ -5,9 +5,8 @@ import java.util.List;
 import java.util.function.DoubleSupplier;
 
 /**
- * One player's brain freeze count (TODO sweets #9, feature_writeup/smoothies.md section 3, owner 2026-11-17 and
- * 2026-11-18). Plain Java, no game classes, so the roll window runs in a headless test.
- * <ul>
+ * One player's brain freeze count (TODO sweets #9, feature_writeup/smoothies.md section 3, owner). Plain Java,
+ * no game classes, so the roll window runs in a headless test. <ul>
  *   <li>The first cold food after a gap longer than the window only starts the count: no roll.</li>
  *   <li>Every cold food eaten within the window of the one before rolls; the n-th roll in a row hits at
  *       {@code n x step} (capped at 1).</li>

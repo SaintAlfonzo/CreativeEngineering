@@ -34,7 +34,7 @@ QUOTING = re.compile(r'^feature_writeup/(testing/|briefs/|plan_[^/]*\.md$|archiv
 # queue sections that log results of other sections' rows (their ids quote, they do not define)
 RESULTS = re.compile(r'^@@title (Run log|Results)\b')
 # id forms that are not test prefixes (section 1 of the index): design rules, violations, release checks
-NOT_TESTS = re.compile(r'^(DR|V|G|R\d|ST|LO|SQ|CQ)$')
+NOT_TESTS = re.compile(r'^(DR|V|G|R\d|W\d|ST|LO|SQ|CQ)$')
 
 
 def git_files(*pat):

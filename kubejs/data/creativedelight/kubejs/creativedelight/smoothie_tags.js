@@ -5,7 +5,7 @@
 //   #creativedelight:honey_drink_sound         drunk with the honey bottle sounds (mixin ItemStackHoneyDrinkMixin)
 //   #creativedelight:berries/red, blue, purple Mixed Berry's slots by berry color (fruit.md section 4); the third
 //   #creativedelight:berries/blue_or_purple    slot takes blue or purple
-//   #creativecommon:brain_freeze               cold foods: Creative Common's BrainFreeze rolls on them (owner 2026-11-18:
+//   #creativecommon:brain_freeze               cold foods: Creative Common's BrainFreeze rolls on them (owner:
 //                                              smoothies, ice cream, popsicles, shaved ice, cold milkshakes, Iced Berry
 //                                              Matcha Latte, ice cubes; not Frozen Flesh, not the Ice Sickle)
 //   #forge:fruits/cherry                       gets Vinery's cherry (it was empty)

@@ -3,11 +3,11 @@
 // Golden and gilded food values (food.md 3.16, golden_food.md 3.6; TODO food/types-and-tuning #3, owner). A golden
 // food's hunger is its input food's times the golden multiplier, a gilded (enchanted golden) food's times the gilded
 // multiplier, capped at maxHunger; the saturation modifier stays the input's, so saturation points scale with hunger.
-// Multipliers: kubejs/generation_scripts/food/food_tuning.json `golden`. Effects, flags (always edible) and stack
-// sizes are kept. Replaces upstream's flat 4 / 1.2 (golden) and 8 / 8.0 (enchanted). Not here: the golden and gilded
-// two cakes (block slices, GoldenCakeBlock). The golden milk bucket and honey bottle sets were removed 2026-11-22. Creative Delight startup script, loaded from the jar after the pack's startup_scripts; priority
-// -50 so the input foods' own changes are in first (comfort_nourishment.js, -100, only touches Comfort / Nourishment).
-// Restart to apply.
+// Multipliers: kubejs/generation_scripts/food/food_tuning.json `golden`. Effects, flags (always edible) and stack sizes
+// are kept. Replaces upstream's flat 4 / 1.2 (golden) and 8 / 8.0 (enchanted). Not here: the golden and gilded two
+// cakes (block slices, GoldenCakeBlock). Creative Delight startup script, loaded from the jar after the pack's
+// startup_scripts; priority -50 so the input foods' own changes are in first (comfort_nourishment.js, -100, only
+// touches Comfort / Nourishment). Restart to apply.
 ItemEvents.modification(e => {
 	var i = global.item
 	var path = 'kubejs/generation_scripts/food/food_tuning.json'

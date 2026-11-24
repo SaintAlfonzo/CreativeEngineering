@@ -384,6 +384,11 @@ Lines moved out of code comments (2026-11-18, plan_rules_fixes.md section 17):
 - 2026-11-17: The slow tier (packed ice, cryosol) rolls {@code meltChance} here, not the low {@code slowMeltChance}, so it melts rapidly in the Nether (owner, 2026-11-17) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/melting/Melting.java)
 - 2026-11-17: Mod ids whose config files the watcher owns: the in-tree jars of development/ (the Creative jars, Sol: Raspberry Pie) and the in-tree ports and bundle members that keep their own config file in config/ (assumed list, 2026-11-17) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/config/OwnConfigLogic.java)
 
+Lines moved out of code comments (2026-11-24, plan_rules_fixes.md section 17):
+
+- 2026-11-17: One player's brain freeze count (TODO sweets #9, feature_writeup/smoothies.md section 3, owner 2026-11-17 and 2026-11-18) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/effect/BrainFreezeRoll.java)
+
+
 
 
 ## 7. License audit: Creative Common (2026-11-04, plan_cb_publish.md Step 2)

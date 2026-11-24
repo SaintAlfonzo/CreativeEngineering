@@ -4,16 +4,16 @@
 // Smoothies (TODO sweets #8; feature_writeup/smoothies.md sections 1 and 2, rulings plan_smoothies.md section 1): 16
 // fruit smoothies, 2 x the first fruit + 1 x the second (or 3 x a one-fruit smoothie) + a glass bottle, shapeless.
 // Effects: the first fruit at its Fruits Delight base length (jam, jello), the second at half, amplifiers as Fruits
-// Delight has them. Every smoothie is always edible, drinks with the honey bottle sound (#creativedelight:honey_drink_sound,
-// mixin.minecraft.ItemStackHoneyDrinkMixin), hands the bottle back, stacks to 32 and counts as a cold food for brain freeze
-// (#creativecommon:brain_freeze, Creative Common effect/BrainFreeze, sweets #9). Hunger and saturation: the drink values
-// (1, 0.2) until the food tuning pass sets the drink/juice family rule.
+// Delight has them. Every smoothie is always edible, drinks with the honey bottle sound
+// (#creativedelight:honey_drink_sound, mixin.minecraft.ItemStackHoneyDrinkMixin), hands the bottle back, stacks to 32
+// and counts as a cold food for brain freeze (#creativecommon:brain_freeze, Creative Common effect/BrainFreeze, sweets
+// #9). Hunger and saturation: the drink values (1, 0.2) until the food tuning pass sets the drink/juice family rule.
 // Mixed Berry: 2 red berries + 1 blue or purple berry; the craft stores the berries' effects on the item (NBT
 // SmoothieEffects, written by the recipe in data creativedelight/kubejs/creativedelight/smoothies.js), the tooltip
-// (assets creativedelight/kubejs/creativedelight/smoothie_tooltip.js) and the drink read them.
-// Sprites: every smoothie is a copy of Neapolitan's strawberry_banana_smoothie.png under its own id (placeholder, owner
-// 2026-11-18; feature_writeup/texture_sources/sources.csv), so the per-flavor swap (sweets #10) replaces files only.
-// Recipes, fluids' machine routes: data creativedelight/kubejs/creativedelight/smoothies.js; tags: smoothie_tags.js.
+// (assets creativedelight/kubejs/creativedelight/smoothie_tooltip.js) and the drink read them. Sprites: every smoothie
+// is a copy of Neapolitan's strawberry_banana_smoothie.png under its own id (placeholder, owner;
+// feature_writeup/texture_sources/sources.csv), so the per-flavor swap (sweets #10) replaces files only. Recipes,
+// fluids' machine routes: data creativedelight/kubejs/creativedelight/smoothies.js; tags: smoothie_tags.js.
 
 global.smoothies = (function () {
 	var i = global.item
@@ -50,7 +50,7 @@ global.smoothies = (function () {
 			{ key: 'blueberry_lemon_smoothie', name: 'Blueberry Lemon Smoothie', a: i.t_fruits_blueberry, b: i.lemon_slice,
 				mods: ['fruitsdelight'], effects: [e(ef.night_vision, 20), e(ef.brightening, 20), e(ef.haste, 10), e(ef.refreshing, 10)],
 				color: 0x7A6FC0 },
-			// Pear (owner, 2026-11-17): the "eat at any hunger" drink
+			// Pear (owner): the "eat at any hunger" drink
 			{ key: 'pear_smoothie', name: 'Pear Smoothie', a: i.t_fruits_pear, b: i.t_fruits_hawberry, mods: ['fruitsdelight'],
 				effects: [e(ef.appetizing, 300), e(ef.lozenge, 30)], color: 0xD6CF8A },
 			{ key: 'cherry_smoothie', name: 'Cherry Smoothie', a: i.t_fruits_cherry, b: i.t_fruits_lychee, mods: ['vinery', 'fruitsdelight'],
