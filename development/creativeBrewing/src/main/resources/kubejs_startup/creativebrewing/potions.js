@@ -233,8 +233,9 @@ MoreJSEvents.registerPotionBrewing(event => {
 		[I.crow_feather, 'minecraft:awkward', 'hearthandharvest:bad_omen'],
 		[I.glowstone, 'hearthandharvest:bad_omen', 'hearthandharvest:strong_bad_omen'],
 		[I.fermented_spider_eye, 'hearthandharvest:bad_omen', 'minecraft:luck'],
-		[I.fermented_spider_eye, 'hearthandharvest:strong_bad_omen', 'buzzier_bees:strong_luck']  // G5: mix() skips an unregistered potion
 	].forEach(row => mix(row[0], row[1], row[2]))
+	// strong Luck is Buzzier Bees's potion: only with it loaded (potions #11, no warn on the chain set)
+	if (global.has('buzzier_bees')) mix(I.fermented_spider_eye, 'hearthandharvest:strong_bad_omen', 'buzzier_bees:strong_luck')
 
 	// Resilience, Restfulness, Insomnia: out (REMOVED_POTIONS)
 	REMOVED_POTIONS.forEach(id => {
