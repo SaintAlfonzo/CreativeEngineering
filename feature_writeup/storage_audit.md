@@ -225,12 +225,12 @@ Owner (scratchpad 2026-11-09): "pick up Supplementaries sacks like backpacks and
   `copy_nbt` (Lock, LootTable, LootTableSeed) and `set_contents` into `BlockEntityTag.Items`; placing the item restores
   them (vanilla `BlockItem`). In creative, `playerWillDestroy` drops a filled sack the same way. `onRemove` never
   spills items. Every sack item already stacks to 1 (stack_sizes.md), filled or empty, so D6 needs nothing.
-- **Added: sneak pickup.** Sneak right-click with an empty main hand on a block in `#creativecommon:sneak_pickup`
+- **Added: sneak pickup.** Sneak right-click with an empty main hand on a block in `#creativecompat:sneak_pickup`
   puts it in the hand as its normal player-break drop (contents kept), as a placed Sophisticated Backpack picks up
   and as Creative Delight's cookware pickup does (`cooking/CookwareHandling`). The sack's screen does not open then.
   Break protection respected (a `BreakEvent` is posted); an unopened structure sack rolls its loot table first; any
   other drop of the table goes to the inventory; a table that does not give the block back leaves the block in place.
-  Creative Common `storage/SneakPickup`; tag filled by Common's server script `tags/sneak_pickup_tags.js` (`b.sack`,
+  Creative Compat `storage/SneakPickup` (moved from Creative Common 2026-11-24, wave 2; tag renamed from `creativecommon:sneak_pickup`, a tag is not saved); tag filled by Compat's server script `tags/sneak_pickup_tags.js` (`b.sack`,
   `b.suppsquared_sacks`). No config switch (the tag is the switch).
 
 ### Tests

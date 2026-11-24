@@ -305,7 +305,7 @@ look record whether a `verb=recipes id=solapplepie:food_book` line is still pres
 @group client
 @commands Two players (scratch server + 2 clients) with Fleet-Footed in a slot; one sprint-jumps, the other walks (RPI-33, 12.2)
 @pass walker's speed attribute has no "fleetfooted speed bonus" modifier while the other jumps; no flicker
-@fails `FleetFootedMixin` (applied only with Alex's Mobs; check the mixin log line)
+@fails `FleetFootedMixin` (moved to Creative Compat 2026-11-24, applied only with Alex's Mobs and Compat; check the mixin log line)
 @draft no batch holds this row yet
 ## CQ-RPI-27
 @group client
@@ -818,7 +818,7 @@ look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the forme
 
 ## CQ-RPI-76 | Fleet-Footed lower view shift (food-tuning #55)
 @group client
-@commands Pack world; slot Fleet-Footed (or `/effect give @s alexsmobs:fleet_footed 60`); sprint-jump on flat ground, then set `effects.fleetFootedFov` to 1.0 in `config/solraspberrypie-client.toml` and repeat
+@commands Pack world; slot Fleet-Footed (or `/effect give @s alexsmobs:fleet_footed 60`); sprint-jump on flat ground, then set the fov key to 1.0 (now Compat `[fleet_footed] fov`; was `effects.fleetFootedFov` in `config/solraspberrypie-client.toml`) and repeat
 @pass at 0.25 the view widens only slightly more than plain sprinting while airborne; at 1.0 it widens as before (the full jump); Speed potions widen the view as usual at both settings
 @fails `FleetFootedFov.onFov` (modifier id 7E0292F2-...), client config not reloaded
 @draft written with the build 2026-11-22
@@ -954,3 +954,25 @@ look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the forme
 @pass an operator gets current and highest diversity of that player; a non-operator is refused
 @fails command permission level 2
 @draft written with the build 2026-11-23
+
+## CQ-RPI-94 | Fleet-Footed config carry-over: fleetFootedFov moves from Raspberry Pie to Creative Compat (raspberry-pie-publish #25)
+@group client
+@commands put `tools/scratch_query/fixtures/wave2_carry/old_solraspberrypie-client.toml` (fleetFootedFov 0.5) as `config/solraspberrypie-client.toml` with no `[fleet_footed]` in `config/creativecompat-common.toml`; start the client; read both files and the log; then give Fleet-Footed and sprint-jump
+@pass Compat's toml has `[fleet_footed]` `fov = 0.5`; Raspberry Pie's file no longer has `fleetFootedFov`; log has `[swaps] config [effects] fleetFootedFov = 0.5 carried over`; the view shift matches 0.5
+@fails `MovedKeys` (Compat) and `FleetFootedFov` reading `[fleet_footed] fov`
+@draft needs a client
+@reviewed 2026-11-24
+## CQ-RPI-95 | Fleet-Footed fix with two players and the FOV, now Compat's (food-tuning #43, #55; raspberry-pie-publish #25)
+@group client
+@commands rerun CQ-RPI-26 and CQ-RPI-76 with Creative Compat installed; the FOV key is `[fleet_footed] fov` in `config/creativecompat-common.toml`
+@pass as CQ-RPI-26 and CQ-RPI-76 (no walker modifier while the other jumps; fov 1.0 = vanilla shift)
+@fails `FleetFootedMixin` and `FleetFootedFov` in `creativecompat/mobs/`, gate in `CompatMixinPlugin` (alexsmobs [1.21.1,1.22) plus the member check)
+@draft needs two clients
+@reviewed 2026-11-24
+## SQ-RPI-96 | Raspberry Pie alone without Compat: boots clean, no Fleet-Footed fix (W2-3 accepted)
+@group A (Raspberry Pie + Alex's Mobs, no Compat)
+@commands boot Raspberry Pie with Alex's Mobs and without Creative Compat; grep latest.log for `FleetFooted` and mixin errors
+@pass boots to `Done (`; no `FleetFootedMixin` error or warning from Raspberry Pie; no Fleet-Footed fix applied (accepted loss)
+@fails a leftover Raspberry Pie reference to `FleetFootedMixin` or `fleetFootedFov`
+@draft modset: Raspberry Pie standalone plus Alex's Mobs
+@reviewed 2026-11-24

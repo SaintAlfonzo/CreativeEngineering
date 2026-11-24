@@ -1,0 +1,3 @@
+# Fixture for CQ-RPI-94: Raspberry Pie client toml from before Fleet-Footed moved to Creative Compat.
+[effects]
+	fleetFootedFov = 0.5

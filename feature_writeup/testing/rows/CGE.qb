@@ -351,6 +351,7 @@ shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_nethe
 expect Entity Gravity for entity .* is 0\.01599
 
 ## SQ-CGE-15 | Common without Compat: no helper pack, low gravity for every type, Create Gravity's own tags only
+@superseded SQ-CGE-17 (low gravity moved to Compat 2026-11-24; Common alone has none)
 @group A b4 (Common without Compat)
 @commands order line, startup errors, dropall End (y 140) and overworld (y 200); judge `low`; backtanks tag
 @pass no `_helpers` pack, `creativecommon, startup_scripts`; 0 startup errors; about 0.2; backtanks 2 (Create's own)
@@ -376,7 +377,7 @@ look order line without a _helpers pack; 9 types at about 0.2; backtanks = Creat
 @group A b5 (`@modset cc_only full -@gravity` + ItemPhysic, CreativeCore; was `cc_only_srv.sh without=gravity`)
 @commands boot; dropall End (y 140) and overworld (y 200); judge `same`
 @pass boots, no `LowGravity` or `NoClassDefFoundError` line, all 9 types at vanilla speed in both dimensions
-@fails gate on `LowGravityItemPhysicMixin` in `CommonMixinPlugin` (needs ItemPhysic and Create Gravity)
+@fails gate on `LowGravityItemPhysicMixin` in `CompatMixinPlugin` (moved from Common 2026-11-24) (needs ItemPhysic and Create Gravity)
 @from batches/r1108cge2/b5_itemphysic_no_gravity.qb
 @modset cc_only full -@gravity +ItemPhysic_FORGE_*.jar +CreativeCore_FORGE_*.jar
 bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException|NoClassDefFoundError
@@ -521,3 +522,23 @@ look hand: right-click the boat (xdotool click at the window centre), hold W unt
 
 @@text
 @@text Supersedes the motion-packet design of SQ-CGE-02 to -04 and CQ-CGE-01 (the 00:49 jar's `CreateGravityEntitiesMixin` is gone; its End results, 4.914 vs 24.570 blocks at 40 ticks, stand as the target numbers).
+
+@@section 3
+@@title SQ-CGE low gravity moved to Creative Compat, 2026-11-24 ([creative_engineering.md](../creative_engineering.md) 7; TODO `creative-common-publish #17`)
+@@date 2026-11-24
+@@jars creativecommon creativecompat
+@@sources feature_writeup/creative_engineering.md feature_writeup/creative_compat.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/gravity/LowGravity.java
+@@text Low gravity for items, blocks, projectiles and boats, the ItemPhysic tie and the dedicated-server start fix (`CreateGravityServerStartMixin`) are Compat's, gated on create_gravity [1.2.0,1.3). Common keeps `CreateGravityDimensionMixin` and `[perf] gravityLimitDimensions` / `gravityDimensions` (API `perf/GravityDimensions`). The older SQ-CGE and CQ-CGE rows name their classes as before; rerun SQ-CGE-02, -05, -09, -10, -16 and CQ-CGE-02 with Compat and read `LowGravity` for the old Common class.
+@@table
+## SQ-CGE-17 | Common without Compat: Create Gravity boots, no low gravity for items or blocks, dimension limit still applies to living entities
+@group A (Common + Create Gravity, no Compat)
+@commands boot; dropall End (y 140) and overworld (y 200); judge `same`; the End living-entity check of SQ-CGE-06
+@pass boots with no `LowGravity` or NoClassDefFoundError line; all 9 types at vanilla speed in both dimensions; zombie in the End still carries the Low Gravity Biome modifier only inside `gravityDimensions`
+@fails Common must not reference `creativecompat.gravity.LowGravity`; `GravityDimensions` in `perf/`
+@draft modset `cc_only full` minus Compat
+## SQ-CGE-18 | Compat with Create Gravity: a dropped item falls slowly in the End; dedicated server starts
+@group A (full pack)
+@commands as SQ-CGE-02 (dropall End and overworld) and the SQ-CGE boot on a dedicated server
+@pass End items about 0.2 of vanilla speed, overworld vanilla; the dedicated server reaches `Done (` with no `CreateGravityServerStartMixin` error; `gravityDimensions` still gates it (set to overworld only: End items fall at vanilla speed)
+@fails `LowGravity.dimensionAllowed` asking Common's `GravityDimensions`; `CreateGravityServerStartMixin` target
+@draft reuse SQ-CGE-02 steps; the first runner writes them

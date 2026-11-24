@@ -1,6 +1,6 @@
-# Melting: salt, fire and lava melt ice and snow (Creative Common)
+# Melting: salt, fire and lava melt ice and snow (Creative Compat)
 
-Creative Common (`development/creativeCommon`); ships in 1.3.0 ([creative_engineering.md](creative_engineering.md) 7.6); state is in the
+Creative Compat (`development/creativeCompat`, package `creativecompat/melting/`; moved out of Creative Common 2026-11-24, wave 2 carve, TODO `creative-common-publish #17`, [plan_wave2_publish.md](plan_wave2_publish.md)); state is in the
 TODO rows below and the scratch queue (section 7). Plan: [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.8 (owner, 2026-11-14). TODO
 `creativedelight/members #56`. Rework of 2026-11-17 (melt ticks, snow by layer, magma, saltable tag, slow tier frozen):
 [plan_post_scratch_1115.md](plan_post_scratch_1115.md) G7, G8; TODO `tooling/scratch-1115-follow-ups #20`. G11 rulings
@@ -30,7 +30,7 @@ melt ticks (about every 5 s), plus its random ticks.
 | lava | within 4 blocks | within 2 (`slowLavaRange`) | touching only: one step down |
 
 - Hot places (G11): in an ultra-warm dimension (the Nether) every target but blue ice and permafrost, and in a hot
-  biome (`#creativecommon:melting/hot`: Creative Calendar's arid, dry and tropical season types) ice, snow and frozen
+  biome (`#creativecompat:melting/hot`: Creative Calendar's arid, dry and tropical season types) ice, snow and frozen
   decor (not packed ice or cryosol), take a melt tick every `hotMeltTickInterval` = 20 ticks (15 to 25) with no
   source, rolling `meltChance` (0.4; the slow tier too, so packed ice and cryosol melt rapidly in the Nether, owner
   2026-11-17). Packed ice placed in the Nether steps to ice, then air; cryosol steps to dirt. Snow on blue ice or
@@ -53,15 +53,15 @@ melt ticks (about every 5 s), plus its random ticks.
   grass, fern -> glass, pane, grass, fern; thin ice -> water (air when ultra-warm); coarse snow -> gravel; frost, icicle
   and the 5 snow brick blocks -> air. Snow bricks are `sluggish` (`sluggishMeltFactor` 0.25 of their chance) and vanish
   in the Nether like snow. Philips Ruins frozen prismarine never melts.
-- Salt melts only `#creativecommon:melting/saltable` (ice, frosted ice, Rare Ice, snow, snow block, powder snow,
+- Salt melts only `#creativecompat:melting/saltable` (ice, frosted ice, Rare Ice, snow, snow block, powder snow,
   packed ice, cryosol, the frozen decor, AP packed ice). Product: a `saltProducts` row (packed ice -> ice, cryosol ->
   dirt), else the heat product (`meltProducts`, `slowSteps`), shared properties copied, else water for ice
   (`placeWater`), else air; snow loses layers instead. A salt block's tick removes 1 layer; one
   salt dispense or Salt Melt use (`meltStep`) removes `saltMeltSnowLayers` = 3, a snow block counting as 8 (it
   becomes 5 layers). Items of saltable blocks show a gray "Saltable" tooltip line.
-- Snow resting on `#creativecommon:melting/keeps_snow` (blue ice, IW permafrost) ignores fire, lava, magma and
+- Snow resting on `#creativecompat:melting/keeps_snow` (blue ice, IW permafrost) ignores fire, lava, magma and
   vanilla light melting; salt still melts it (G6 4b).
-- Magma (`#creativecommon:melting/magma`): snow within `magmaInstantRange` = 2 melts at once (on placement, on
+- Magma (`#creativecompat:melting/magma`): snow within `magmaInstantRange` = 2 melts at once (on placement, on
   magma's tick, on the snow's melt tick); no snow forms from snowfall and no water freezes within `fireRange` = 3
   (`magmaStopsFreezing`, server weather only, not world generation).
 - Chances per roll: `meltChance` 0.4, `snowLayerMeltChance` 0.8 per layer, `slowMeltChance` 0.05 per tier, times
@@ -96,7 +96,7 @@ melt ticks (about every 5 s), plus its random ticks.
   its own scheduled ticks). Lava skips its own scan in ultra-warm dimensions (lava seas; Nether ice still finds lava
   by its random tick). G11: in ultra-warm dimensions lava scans only its 6 touching blocks (blue ice beside Nether
   lava; the rest melts as a hot place).
-- Hot places: `Melting.isHot` (ultra-warm dimension, or `getNoiseBiome` in `#creativecommon:melting/hot` for the
+- Hot places: `Melting.isHot` (ultra-warm dimension, or `getNoiseBiome` in `#creativecompat:melting/hot` for the
   meltable tier) on the target's random tick, its melt tick and on placement (`onPlaced` schedules the first tick, as
   packed ice and cryosol do not random tick); `hotTick` rolls, melts as heat would and schedules the next tick at
   `hotMeltTickInterval`.
@@ -108,7 +108,7 @@ melt ticks (about every 5 s), plus its random ticks.
   path checks that the ticked state is the one in the world, so snowy stone stairs never melt as a full snowy stone.
 - Alternatives (a) extra rolls and (b) extra random ticks per section were not built; the perf comparison is
   SQ-MELT-P2 (queued, not run).
-- Hook: `mixin/MeltingBlockStateMixin` on `BlockStateBase.randomTick` (`m_222972_`, what `ServerLevel.tickChunk`
+- Hook: Compat `mixin/MeltingBlockStateMixin` on `BlockStateBase.randomTick` (`m_222972_`, what `ServerLevel.tickChunk`
   calls) runs before the block's own random tick, and skips it when the block melted. Every block class is covered
   without a mixin per class; other blocks pay one identity-map lookup (`Reference2ByteOpenHashMap` of flags, rebuilt
   on `TagsUpdatedEvent`).
@@ -133,12 +133,12 @@ melt ticks (about every 5 s), plus its random ticks.
 - Magma against snowfall and ice: `mixin/BiomeMeltMixin` on `Biome.shouldSnow` (`m_47519_`) and
   `Biome.shouldFreeze(LevelReader, BlockPos, boolean)` (`m_47480_`), HEAD, false on a `ServerLevel` with magma within
   `fireRange` (palette check first). Serene Seasons' patch inside `shouldFreeze` runs after it.
-- Saltable tooltip: `melting/SaltableTooltip` (client, `ItemTooltipEvent`), lang `creativecommon.tooltip.saltable`.
+- Saltable tooltip: `melting/SaltableTooltip` (client, `ItemTooltipEvent`), lang `creativecompat.tooltip.saltable`.
 - Vanilla light melt: `mixin/VanillaLightMeltMixin` redirects the block-light read in `IceBlock` and `SnowLayerBlock`
   randomTick to 0 while the switch is off; `mixin/RareIceLightMeltMixin` (pseudo, Rare Ice's own copy) the same,
-  gated on `rare_ice` in `CommonMixinPlugin.NEEDS_MOD` (no class-load error without Rare Ice; SQ-MELT-09, 2026-11-15).
+  gated on `rare_ice` in `CompatMixinPlugin` (enable key `[mixins]`, `MixinSwitches`) (no class-load error without Rare Ice; SQ-MELT-09, 2026-11-15).
 - Config reads: the tick paths read `Melting.cfg`, a plain copy of the `[melting]` values refreshed on
-  ModConfigEvent Loading and Reloading of the main Common config (`Melting.onConfig`, mod bus), not ForgeConfigSpec
+  ModConfigEvent Loading and Reloading of the Compat config (`Melting.onConfig`, mod bus), not ForgeConfigSpec
   values per call (SQ-MELT-P1, 2026-11-15). Before the first load: melting off, vanilla light melt as vanilla.
   `slowSteps` (read only on a melt) and `extraRandomTickBlocks` (setup) still read the spec.
   Other injections into those methods keep running (Immersive Weathering's rain melt of snow layers, Creative
@@ -156,10 +156,10 @@ melt ticks (about every 5 s), plus its random ticks.
 
 ## 3. Tags
 
-Block tags under `creativecommon:melting/`, filled by Creative Common's
-`kubejs/data/creativecommon/kubejs/tags/melting_tags.js` through `global.tags`; every mod's line is guarded by
+Block tags under `creativecompat:melting/`, filled by Creative Compat's
+`kubejs/data/creativecompat/kubejs/tags/melting_tags.js` through `global.tags`; every mod's line is guarded by
 `global.has`. Ids and globs are `block_dict.js` keys (`b.t_melt_*`, `b.melt_fire_*`, ...). The Java side
-(`melting/MeltTags.java`) works with any tag empty, so Common runs without The Salt or Vintage Delight.
+(`melting/MeltTags.java`) works with any tag empty, so Compat runs without The Salt or Vintage Delight.
 
 - `salt`: `salt:salt_block`, `salt:raw_rock_salt_block`; Vintage Delight's salt family (`vintagedelight:*salt*`, the
   Evaporator); the Hearth and Harvest licked and waxed salt lick stages (`hearthandharvest:*licked_salt_block`,
@@ -211,7 +211,17 @@ The modded list is the 2026-11-13 `/dumpall` (`kubejs/exported/tags/block_tags_b
 re-grepped 2026-11-14 for torch / lantern / sconce / brazier / candelabra (same 131 ids). Light levels could not be
 read from the dumps (no light dump exists): SQ-MELT-10 reads the boot log's low-light warning instead.
 
-## 4. Config: `[melting]` in `config/creativecommon-common.toml`
+## 4. Config: `[melting]` in `config/creativecompat-common.toml`
+
+Moved 2026-11-24 from `creativecommon-common.toml` (every key, `endNoFire` included; `CompatConfig.MeltingConfig`). Compat's `MovedKeys`
+runs before the config registers: when Compat's toml is new it copies Common's whole `[melting]` section (log `[swaps] config sections [melting] carried over`);
+when Compat's toml exists without `[melting]` it merges the section (`... merged ...`); when nothing was copied and Common's file still has
+`[melting]` it logs one WARN naming it. Common then drops its old section on Forge's correction. Four enable keys in Compat's `[mixins]`:
+`meltingBlockState`, `biomeMelt`, `vanillaLightMelt`, `endFire`. Block and biome tags moved from `creativecommon:melting/*` to `creativecompat:melting/*`
+(tags are not saved: no swap entries; `block_dict.js` keys `b.t_melt_*` unchanged). Creative Delight's salt code (`SaltLayerMelt`, the salt member's reflection)
+calls `creativecompat.melting.Melting`. Carry-over and rename tests: SQ-MELT-21 to -24, CQ-MELT-02.
+
+The sections below that name `creativecommon-common.toml` describe the file before the move.
 
 Forge added the section on the first boot of the 2026-11-14 jar. 2026-11-17: the new keys were written into the
 instance toml with their defaults, and `slowSteps` and `extraRandomTickBlocks` (old values kept by Forge) set to the
@@ -293,7 +303,7 @@ Traced 2026-11-14 for "why did Nether ice melt in r1113":
 
 ## 7. Tests
 
-Headless: `tools/test_melting.sh` (`tools/melting_test/`, `MeltingTest`: spec defaults, snow by layer under heat and
+Headless: `tools/test_melting.sh` (`tools/melting_test/com/SaintAlfonzo/creativecompat/melting/MeltingTest.java`, adds Compat classes; 34/34 on 2026-11-24; spec defaults, snow by layer under heat and
 salt, snow block to 5 layers, products, shared property copy, melt tick delay range; part of `check_all.py`).
 Scratch rows for the 2026-11-17 rework: SQ-PS15-17 to -23, CQ-PS15-04 (PS15.qb section 2; -22 superseded by
 SQ-MELT-11); perf SQ-MELT-P2 (queued for a later perf run, MELT.qb section 2). G11 and E1: SQ-MELT-11 to -20,

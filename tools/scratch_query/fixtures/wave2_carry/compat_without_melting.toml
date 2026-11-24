@@ -1,0 +1,3 @@
+# Fixture for SQ-MELT-21: an existing Creative Compat toml with no [melting] section.
+[vine_shearing]
+	enabled = true

@@ -9,11 +9,12 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=4d8fa8602f82 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Testing 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=9b6031705ee1 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Testing 6), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `creative-common-publish #17` | Testing | S | Wave 2 carve to Creative Compat: melting (with End no-fire and the Saltable tooltip), Quark glass shard drops, sack sneak pick-up, Create: Gravity low gravity, server-start fix and ItemPhysic tie; [perf] gravityLimitDimensions stays in Common (W2-4); one-time config carry-over (W2-8) |
 | `creativecompat/publish #1` | Testing | C S | Compat crashes at load without the Tempad upstream jar |
 | `creativesplit/compat #5` | Testing | S C | Carve Creative Compat |
 | `licence/compat #1` | Testing | C | Paintings out of the Compat jar |
@@ -163,6 +164,14 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   flower pot tooltips). Each tree opens with `_compat_core.js`. The Compat tooltips call the pack's tooltip helpers
   through `global.tooltips` (published by `client_scripts/tooltips.js`), at event time.
 
+- **Wave 2 carve from Creative Common (2026-11-24; [plan_wave2_publish.md](plan_wave2_publish.md), TODO `creative-common-publish #17`, `raspberry-pie-publish #25`):**
+  - Melting ([melting.md](melting.md)): `melting/` (Melting, MeltTags, SaltableTooltip), mixins `MeltingBlockStateMixin`, `BiomeMeltMixin`, `VanillaLightMeltMixin`, `RareIceLightMeltMixin` (rare_ice) and `EndFireMixin`; `[melting]` in `creativecompat-common.toml` (all keys, `endNoFire` included); tags `creativecompat:melting/*`; lang key `creativecompat.tooltip.saltable`; enable keys `[mixins] meltingBlockState`, `biomeMelt`, `vanillaLightMelt`, `endFire`. Creative Delight's salt code calls `creativecompat.melting.Melting`.
+  - Glass shards ([glass_shards.md](glass_shards.md)): `loot/GlassShardsModifier`, serializer `creativecompat:glass_shards`, definition, Forge list entry (replace false) and the `glm_entries.json` fragment (Common ships none).
+  - Sack sneak pick-up ([storage_audit.md](storage_audit.md) 7): `storage/SneakPickup`, tag `#creativecompat:sneak_pickup`, script `tags/sneak_pickup_tags.js`.
+  - Create: Gravity low gravity ([creative_engineering.md](creative_engineering.md) 7): `gravity/LowGravity` and the `LowGravity*` mixins for items, blocks, projectiles and boats, `CreateGravityConfigAccessor`, `LowGravityItemPhysicMixin` (needs ItemPhysic and Create Gravity) and `CreateGravityServerStartMixin` (the dedicated-server start fix, split from Common's `CreateGravityDimensionMixin`); gated on create_gravity [1.2.0,1.3). Common keeps `CreateGravityDimensionMixin` and `[perf] gravityLimitDimensions` / `gravityDimensions` (W2-4), exposed as `perf/GravityDimensions`, which `LowGravity` asks.
+  - Fleet-Footed ([raspberry_pie.md](raspberry_pie.md) 12.2; from Raspberry Pie): `FleetFootedMixin` (alexsmobs [1.21.1,1.22) plus the member check, in `CompatMixinPlugin`) and `mobs/FleetFootedFov`; client `[fleet_footed] fov` (0.25, 0 to 1). Raspberry Pie alone has no Fleet-Footed fix (W2-3).
+  - Carry-over (`MovedKeys`, runs before the config registers): `[melting]` from `creativecommon-common.toml` (whole section copied when Compat's file is new, merged when it lacks `[melting]`; one WARN when nothing was copied and Common's file still has it); `fleetFootedFov` from `solraspberrypie-client.toml` `[effects]` into `[fleet_footed] fov`. Log lines `[swaps] config sections [melting] carried over|merged`, `[swaps] config [effects] fleetFootedFov = X carried over`. No registered ids moved, so no swap entries. Optional mods.toml rows added: create_gravity, alexsmobs, rare_ice.
+
 ## 2. Edges to Common and hooks for the jars above (Common never imports Compat)
 
 Compat requires Common; Common names no Compat class. Since 2026-11-23 (PR-CP-12, owner ruling on
@@ -210,6 +219,8 @@ tab). Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking sk
 SQ-CMP-17 and CQ-CMP-18 (screenshot look-check), -19, -20.
 Scratch run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md) 8, Compat 23c5050d): SQ-CMP-03 to -08, -11 to -13 PASS; SQ-CMP-01 BATCH-FAULT (typed mixin count; fixed 2026-11-22, `cmp_mixin_check.py`); sand-layer recipes without Immersive Weathering FAIL (SQ-CC-03, SQ-CC12-02, SQ-CPP-05, TODO `blockrunner #18`; guarded 2026-11-22, rerun after the Compat rebuild).
 Scratch run r1123cx (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run_2026-11-23.md) 10, Compat 2e68d8807, publish gate): 34 rows, PASS 30; SQ-CMP-01 (86 listed, 76 applied, 10 gated), -03 to -08, -11 to -13, -23 to -25, SQ-SMK-18 to -20, SQ-PA-01 to -04, SQ-MT-01, -02, SQ-BPT-01, CQ-BPT-01, -03 PASS; SQ-NS-01 FAIL (nightstand with a hopper below takes nothing, TODO `decor-and-framed-blocks #3`); SQ-SG-02, -03 FAIL (no grass spreads, controls included, TODO `creative-calendar #2`); CQ-TSL-02 shots for the owner.
+
+Wave 2 carve (2026-11-24, queue): SQ-MELT-21 and -22 (carry-over, merge and new file), -23 (new tag namespace), -24 (End no fire), CQ-MELT-02 (tooltip); SQ-GSH-10 to -12; SQ-SNP-06; SQ-CGE-17, -18; CQ-RPI-94 (fov carry-over), CQ-RPI-95 (Fleet-Footed fix and fov), SQ-RPI-96 (Raspberry Pie alone). Headless: `tools/test_melting.sh` 34/34.
 
 ## 5. History
 
@@ -333,6 +344,7 @@ Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
   entries from registrations (section 2); the ancient corpse names moved to Compat's lang; Common's idle tick rule for
   treated-stick tomatoes and its `[effects]` carry-over from Brewing's file moved to those jars; Common's mixin members
   and the campfire rain accessor are `creativecommon$`, its potion log tag `[creativecommon potions]`.
+- 2026-11-24: wave 2 carve (section 1, TODO `creative-common-publish #17`, `raspberry-pie-publish #25`): melting, glass shards, sack sneak pick-up and Create: Gravity low gravity from Creative Common; Fleet-Footed fix and view setting from Raspberry Pie. Ruling P1 of `creative-common-publish #12` (Forge list entry in Common) is superseded: the entry ships in Compat.
 - 2026-11-23: Item Trash Can screen (plan_ready_now_1123.md 8, R1, TODO `storage-and-item-loss #17`): right-click
   opens a 27-slot delete-on-close chest screen, sneak keeps the filter (`TrashCansItemCanUseMixin`, `TrashCanScreen`;
   section 1).

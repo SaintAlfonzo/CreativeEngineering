@@ -5,13 +5,13 @@
 @@section 1
 @@title SQ-MELT Melting system: salt, fire and lava melt ice and snow, 2026-11-14 ([melting.md](../melting.md) 7, [plan_bugfix_1114.md](../plan_bugfix_1114.md) 3.8, 5.1, 7.1; TODO `creativedelight/members #56`)
 @@date 2026-11-14
-@@jars creativebrewing creativecommon creativedelight powergrid
+@@jars creativebrewing creativecommon creativecompat creativedelight powergrid
 @@sources feature_writeup/melting.md feature_writeup/plan_bugfix_1114.md
 @@text
 @@text Creative Common 1.2.0 of 2026-11-14 (installed), with Creative Delight rebuilt so its salt member no longer melts by
 @@text block tick. Group A superflat unless noted; `gamerule randomTickSpeed 1000` for every melt row (`-04` counts steps, so
 @@text note the speed), back to 3 for SQ-MELT-P1. Each case gets its own spot at least 12 blocks from the others; probe the
-@@text end state with `execute if block`. Config keys are in `config/creativecommon-common.toml` `[melting]` (added by Forge
+@@text end state with `execute if block`. Config keys are in `config/creativecompat-common.toml` `[melting]` (added by Forge
 @@text on the first boot; `grep` before a `qrun.py toml` edit).
 @@text
 @@table
@@ -19,7 +19,7 @@
 @group A
 @commands `setblock X -60 Z salt:salt_block`; around it (touching): `minecraft:ice`, `minecraft:snow_block`, `minecraft:powder_snow`, `minecraft:snow[layers=3]` (layer on a stone block beside the salt); wait 120 s at randomTickSpeed 1000
 @pass ice -> `minecraft:water[level=0]`, the other three -> air; the Salt Block stays; latest.log `[melting] tags:` line with salt >= 2
-@fails `#creativecommon:melting/salt` empty (`melting_tags.js`, `has('salt')`); snow block and powder snow not melting: `[melting] random ticks on for N extra blocks` missing or N < 4 (`extraRandomTickBlocks`)
+@fails `#creativecompat:melting/salt` empty (`melting_tags.js`, `has('salt')`); snow block and powder snow not melting: `[melting] random ticks on for N extra blocks` missing or N < 4 (`extraRandomTickBlocks`)
 @from batches/r1115/p3_a1.qb
 # self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
 # bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
@@ -178,7 +178,7 @@ look every pair: 3 melted, 4 kept; the unlit campfire's ice kept
 @group A
 @commands Ice at distance 4 and at distance 5 from a lava source; ice at 4 from flowing lava (`setblock ... minecraft:lava[level=3]`, blocked from spreading by a glass ring); a `lava_cauldron` with ice at 4; wait 120 s at randomTickSpeed 1000
 @pass distance 4 melted (source, flowing, cauldron); distance 5 still ice
-@fails flowing lava missed: the fluid check (`FluidTags.LAVA`); cauldron missed: `#creativecommon:melting/lava`
+@fails flowing lava missed: the fluid check (`FluidTags.LAVA`); cauldron missed: `#creativecompat:melting/lava`
 @from batches/r1115/p3_a1.qb
 # self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
 # bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
@@ -321,7 +321,7 @@ reject \[cdevtest\] .*done=0
 
 ## SQ-MELT-06 | part 1 (switch off): torch, soul torch, lantern, sconce, copper lantern, glowstone melt at 3, not 4; sea lantern, redstone torch, jelly torch, unlit brazier nothing
 @group A
-@commands Ice at distance 3 and at distance 4 from each of: `torch`, `soul_torch`, `lantern`, `supplementaries:sconce`, `everythingcopper:copper_lantern`, `glowstone`; ice touching each of `sea_lantern`, `redstone_torch`, `upgrade_aquatic:blue_jelly_torch`; ice 1 from `decorative_blocks:brazier[lit=false]`; wait 90 s. Then `qrun.py toml creativecommon-common.toml melting vanillaLightMelting true`, restart, ice touching a sea lantern again, wait 90 s
+@commands Ice at distance 3 and at distance 4 from each of: `torch`, `soul_torch`, `lantern`, `supplementaries:sconce`, `everythingcopper:copper_lantern`, `glowstone`; ice touching each of `sea_lantern`, `redstone_torch`, `upgrade_aquatic:blue_jelly_torch`; ice 1 from `decorative_blocks:brazier[lit=false]`; wait 90 s. Then `qrun.py toml creativecompat-common.toml melting vanillaLightMelting true`, restart, ice touching a sea lantern again, wait 90 s
 @pass distance 3 melted, 4 not, for all six; sea lantern, redstone torch, jelly torch and unlit brazier ice unchanged; with the switch on the sea-lantern ice melts
 @fails a modded id missing from the tag: `melting_tags.js` globs / `has()`; sea lantern melting with the switch off: `VanillaLightMeltMixin` not applied (grep `latest.log` for the mixin)
 @from batches/r1115/p3_a1.qb
@@ -466,7 +466,7 @@ expect SQ-MELT-06-redstonetorch_ice1_ice$
 expect SQ-MELT-06-jellytorch_ice1_ice$
 expect SQ-MELT-06-brazierunlit_ice1_ice$
 # part 2 (r1118 R4 A2): vanillaLightMelting true needs a boot: edit and restart in the row, then a sea lantern case again
-edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml melting vanillaLightMelting true
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml melting vanillaLightMelting true
 restart
 > forceload add 1984 1984 2143 2143
 > gamerule randomTickSpeed 3
@@ -483,7 +483,7 @@ sleep 120
 > execute unless block 2091 -61 2120 minecraft:ice run say SQ-MELT-06-sealantern_on_melted
 expect SQ-MELT-06-sealantern_on_melted$
 # back to the default for the later rows
-edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml melting vanillaLightMelting false
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml melting vanillaLightMelting false
 restart
 
 ## SQ-MELT-07 | sealed dark room: magma 3 blocks from ice melts it (source-driven)
@@ -618,7 +618,7 @@ look fire and lava pairs as in -02 / -03; tags line salt 0; no melting error aft
 
 ## SQ-MELT-10 | boot log: [melting] tags fire >= 100, source-driven magma block and molten nether bricks, no low-light warning; fire tag ids
 @group A
-@commands Boot log check, no world steps: grep latest.log for `[melting]`; `/dumpall`, then check every id of the 3.8 table against `kubejs/exported/tags/block_tags.json` `creativecommon:melting/fire`
+@commands Boot log check, no world steps: grep latest.log for `[melting]`; `/dumpall`, then check every id of the 3.8 table against `kubejs/exported/tags/block_tags.json` `creativecompat:melting/fire`
 @pass `[melting] tags:` fire count >= 100; every 3.8 table id in the dumped tag with the whole pack (vanilla + the 3.8 table); the source-driven list holds `minecraft:magma_block` and molten nether bricks (both light 3; molten bricks join magma, melting.md 2026-11-17); no `fire tag blocks with light below 4 that do not random tick` warning (if present, each named block is a finding: owner decides source-driven or drop it)
 @fails a glob matched nothing: id renamed in a mod update (re-grep a fresh `/dumpall`); a low-light block: check it melts at 1 only and report
 @reviewed 2026-11-23
@@ -628,14 +628,14 @@ bootexpect \[melting\] tags: \d+ meltable
 bootexpect \[melting\] random ticks on for \d+ extra blocks
 bootreject fire tag blocks with light below
 shell grep -hE "\[melting\]" logs/latest.log | sed -E 's/^.*\[melting\]/[melting]/' | cut -c1-400
-> cdevtest tag block creativecommon:melting/fire
-> cdevtest tag block creativecommon:melting/salt
-> cdevtest tag block creativecommon:melting/lava
-> cdevtest tag block creativecommon:melting/meltable
-> cdevtest tag block creativecommon:melting/meltable_slow
-waitlog \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/meltable_slow n= 30
-expect \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/fire n=\d{3,}
-look fire count >= 100 in the [melting] tags line; source-driven list = magma_block and molten nether bricks (both light 3); every 3.8 table id in the ids= of the verb=tag ... tag=creativecommon:melting/fire line
+> cdevtest tag block creativecompat:melting/fire
+> cdevtest tag block creativecompat:melting/salt
+> cdevtest tag block creativecompat:melting/lava
+> cdevtest tag block creativecompat:melting/meltable
+> cdevtest tag block creativecompat:melting/meltable_slow
+waitlog \[cdevtest\] verb=tag kind=block tag=creativecompat:melting/meltable_slow n= 30
+expect \[cdevtest\] verb=tag kind=block tag=creativecompat:melting/fire n=\d{3,}
+look fire count >= 100 in the [melting] tags line; source-driven list = magma_block and molten nether bricks (both light 3); every 3.8 table id in the ids= of the verb=tag ... tag=creativecompat:melting/fire line
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-MELT-P1
@@ -859,7 +859,7 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @@section 2
 @@title SQ-MELT perf: melt tick method against the G7.1 alternatives, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G7.1, G8; [melting.md](../melting.md) 2)
 @@date 2026-11-17
-@@jars creativecommon
+@@jars creativecompat
 @@sources feature_writeup/melting.md feature_writeup/plan_post_scratch_1115.md
 @@text
 @@text Queued for a later perf run (owner, 2026-11-17: G8 "the perf comparison of G7.1 is queued for a later run"). Method: `tools/perf` session with JFR and the perfBot players (memory `perf-suite-bot-players`). Only the built method exists in code; (a) and (b) are approximated by config, as noted in the row.
@@ -875,8 +875,8 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @@section 3
 @@title SQ-MELT / CQ-MELT G11 and E1: slow tier from lava and magma, hot places, the End, no fire in the End, frozen decor, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G11, G12, E1; [melting.md](../melting.md) 1, 3; TODO `tooling/scratch-1115-follow-ups #20`, `#22`, `#9`)
 @@date 2026-11-17
-@@jars creativecommon
-@@sources feature_writeup/melting.md feature_writeup/plan_post_scratch_1115.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/melting/Melting.java kubejs/data/creativecommon/kubejs/tags/melting_tags.js
+@@jars creativecompat
+@@sources feature_writeup/melting.md feature_writeup/plan_post_scratch_1115.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/melting/Melting.java kubejs/data/creativecompat/kubejs/tags/melting_tags.js
 @@text
 @@text Creative Common built 2026-11-17 (lane C1, build/libs). Group A superflat, `gamerule randomTickSpeed 3` unless a row says otherwise. `[melting]` in `config/creativecommon-common.toml`: `meltTickInterval 100`, `slowLavaRange 2`, `slowMagmaRange 2`, `hotMeltTickInterval 20`, `endContactOnly true`, `endNoFire true`, `sluggishMeltFactor 0.25`. Nether and End spots: `execute in minecraft:the_nether` / `minecraft:the_end` with `forceload add` first (wait 30 s). Each case at least 12 blocks from the others. Supersedes SQ-PS15-22 (slow tier frozen) and fills SQ-PS15-08 (E1).
 @@text
@@ -897,7 +897,7 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @group B
 @commands Fresh normal world; find a desert (`locate biome minecraft:desert`), a savanna and a jungle; at each, away from any light source: `minecraft:ice`, `minecraft:snow[layers=8]`, `minecraft:snow_block`, `minecraft:packed_ice`, and `minecraft:snow[layers=8]` on `minecraft:blue_ice`. Control: the same set in a plains biome. Probe every 20 s for 4 minutes. Boot: Creative Calendar loaded (the hot tag reads its season tags)
 @pass desert, savanna and jungle: ice -> water within about 1 minute, the snow stack loses one layer at a time and is gone within about 1 minute, the snow block gone; packed ice unchanged; the snow on blue ice keeps 8 layers; plains: nothing changes
-@fails nothing melts in the desert: `#creativecommon:melting/hot` empty (Creative Calendar's `creativecalendar:seasons/arid`, `/dry`, `/tropical` tags, `melting_tags.js` biome event) or `getNoiseBiome` reads another biome at that height; plains melts: tag too wide
+@fails nothing melts in the desert: `#creativecompat:melting/hot` empty (Creative Calendar's `creativecalendar:seasons/arid`, `/dry`, `/tropical` tags, `melting_tags.js` biome event) or `getNoiseBiome` reads another biome at that height; plains melts: tag too wide
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## SQ-MELT-14 | the End (G11): every source melts only touching blocks
 @group A
@@ -945,5 +945,48 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @group client
 @commands Join the scratch server; hover Snowy Stone Bricks, Frosty Glass, Snow Bricks, Coarse Snow, Polished Packed Ice, Thin Ice, Blue Ice, Permafrost
 @pass a gray "Saltable" line on the first six; none on Blue Ice and Permafrost
-@fails no line on the decor: the client copy of `#creativecommon:melting/saltable` lacks them (the `immersive_weathering` / `architects_palette` guard in `melting_tags.js`)
+@fails no line on the decor: the client copy of `#creativecompat:melting/saltable` lacks them (the `immersive_weathering` / `architects_palette` guard in `melting_tags.js`)
 @draft runnable steps not written yet; the next runner writes them from @commands
+
+@@section 4
+@@title SQ-MELT / CQ-MELT wave 2 carve: melting moved to Creative Compat, config and tag carry-over, 2026-11-24 ([melting.md](../melting.md) 4; [plan_wave2_publish.md](../plan_wave2_publish.md) W2-8; TODO `creative-common-publish #17`)
+@@date 2026-11-24
+@@jars creativecommon creativecompat creativedelight
+@@sources feature_writeup/melting.md feature_writeup/plan_wave2_publish.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/melting/Melting.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/config/MovedKeys.java kubejs/data/creativecompat/kubejs/tags/melting_tags.js
+@@text Creative Common and Creative Compat built 2026-11-24 (wave 2 carve). `[melting]` now lives in `config/creativecompat-common.toml`; tags are `#creativecompat:melting/*`; Compat's `MovedKeys` copies an old `[melting]` from `creativecommon-common.toml` at construction. Fixtures: `tools/scratch_query/fixtures/wave2_carry/`. Group A superflat.
+@@table
+## SQ-MELT-21 | carry-over, merge: old Common [melting] copied into an existing Compat toml without [melting]
+@group A (full pack, fixture tomls)
+@commands before boot put `old_creativecommon-common.toml` (saltRange 2, endNoFire false) as `config/creativecommon-common.toml` and `compat_without_melting.toml` as `config/creativecompat-common.toml`; boot; read both files and the log
+@pass `config/creativecompat-common.toml` `[melting]` has saltRange = 2 and endNoFire = false; `config/creativecommon-common.toml` has no `[melting]` after the boot; latest.log has `[swaps] config sections [melting] merged`; no WARN naming `[melting]`; no `Missing`, `missing registry` or `unknown` line naming `creativecommon:glass_shards` or `creativecommon:melting`
+@fails `MovedKeys.mergeSections` in Compat (runs before the config registers); Common still declaring `[melting]` (should have dropped it); a loot modifier id left in a saved list
+@draft verify the fixture copy runs as a section `@@prep run` and the toml read with qrun.py toml; first runner writes the steps
+@modset none
+## SQ-MELT-22 | carry-over, new file: no Compat toml, Common's [melting] carried whole
+@group A (full pack, fixture tomls)
+@commands as SQ-MELT-21 but only `old_creativecommon-common.toml` is put in `config/` (no `creativecompat-common.toml`)
+@pass Compat's new toml has `[melting]` with saltRange = 2 and endNoFire = false; Common's file has no `[melting]`; latest.log has `[swaps] config sections [melting] carried over`; no `Missing` / `missing registry` line naming `creativecommon:glass_shards`
+@fails `MovedKeys.carrySections` (new-file path)
+@draft as SQ-MELT-21
+@modset none
+## SQ-MELT-23 | melting still works under the new tag namespace
+@group A
+@commands tag dumps `/cdevtest tag block creativecompat:melting/salt`, `/fire`, `/saltable`, `/hot`; salt block beside ice and snow with `gamerule randomTickSpeed 3`; grep latest.log for `[melting] tags:`
+@pass the tag dumps are non-empty with the same counts as before the move (compare SQ-MELT-09 / -16); `[melting] tags:` line present; ice and snow beside salt melt; `/cdevtest tag block creativecommon:melting/salt` is empty or absent; `creativecommon.tooltip.saltable` key unused
+@fails `kubejs/data/creativecompat/kubejs/tags/melting_tags.js` not loaded (data script path), `block_dict.js` `b.t_melt_*` values still naming the old namespace
+@draft steps from SQ-MELT-02 and -16 with the new tag names
+@absent creativecompat:melting/salt creativecompat:melting/fire creativecompat:melting/saltable creativecompat:melting/hot (tags added 2026-11-24, after the last /dumpall)
+@modset none
+## SQ-MELT-24 | End refuses fire with Compat's endFire mixin and endNoFire key
+@group A
+@commands in the End place a torch-lit fire block (`setblock ~ ~ ~ minecraft:fire`) and flint-and-steel it with a bot; then `qrun.py toml config/creativecompat-common.toml melting endNoFire false` and repeat
+@pass endNoFire true: no fire in the End and no sound; false: fire is placed; latest.log has no `EndFireMixin` apply error
+@fails `EndFireMixin` is in Compat's `mixin/` with enable key `[mixins] endFire`; `Melting.onScheduledTick` removal of fire already there
+@draft steps from SQ-MELT-11 to -13 (End no fire)
+@modset none
+## CQ-MELT-02 | Saltable tooltip under the Compat lang key
+@group client
+@commands hover salt blocks and ice items with Compat installed
+@pass the gray "Saltable" line shows on saltable items (text, not the raw key `creativecompat.tooltip.saltable`)
+@fails `SaltableTooltip` in `creativecompat/melting/`; lang key in Compat's en_us.json
+@draft same hover as CQ-MELT-01

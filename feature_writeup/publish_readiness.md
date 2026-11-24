@@ -74,7 +74,7 @@ deferred with it (TODO `publish-readiness #7`, Pinned). TODO rows exist for ever
 | P3 | PR-CP-04: every one of the 32 ungated Compat mixins gets an enable key, default on (built 2026-11-22: `[mixins]` in creativecompat-common.toml) |
 | P4 | PR-CP-17: drop the old config migrations (built 2026-11-22). DR-C11: the NBT and SavedData names (`CENightstandItems`, `CE` keys) stay; accepted exemption, since renaming them would need a conversion (recorded in design_rules.md) |
 | PR-CP-13 | The weathered cardboard box texture is owner-only: no agent redo; listed in texture_sources/art_needed_2026-11-22.csv |
-| P1 | PR-CC-03: Common ships the Forge global loot modifier list entry (`replace: false`) for glass shards; Creative Loot also adds glass shards to the mid-tier chest tables, mostly dirty or clear, a random chance of colored (owner, 2026-11-22). Built 2026-11-22; the DR-P15 lint exempts Common's list |
+| P1 | PR-CC-03: Common ships the Forge global loot modifier list entry (`replace: false`) for glass shards [superseded 2026-11-24: the modifier and its list entry moved to Creative Compat, wave 2 carve, `creative-common-publish #17`]; Creative Loot also adds glass shards to the mid-tier chest tables, mostly dirty or clear, a random chance of colored (owner, 2026-11-22). Built 2026-11-22; the DR-P15 lint exempts Common's list |
 | P2 | PR-CC-11: the potions of 12 vanilla effects stay in Common and are documented (project page, mods.toml description) (owner, 2026-11-22) |
 | P7 | TODO `food-tuning #47`: the Wither Immunity effect is registered in Creative Common, `creativecommon:wither_immunity` (owner, 2026-11-22) |
 
@@ -234,7 +234,7 @@ Phase state against [plan_rp_standalone.md](plan_rp_standalone.md):
 | P3 table loader | `#40` Planned | Built; no table in the jar |
 | P4 names and recipe | `#41` Planned | Built |
 | P5 standalone defaults | `#42` Planned | Built |
-| P6 Fleet-Footed guard | `#43` Planned | Built |
+| P6 Fleet-Footed guard | `#43` Planned | Built (moved to Creative Compat 2026-11-24, `raspberry-pie-publish #25`) |
 | P7 pack ladder | `#44` Planned | Built (81 rungs, 5 slots, 37 pool effects) |
 | P8 pack table | `#45` Planned | Built (1,658 values in Creative Delight) |
 | P9 tests | `#46` Planned | Not started: every `RPS` row is "Not run" |

@@ -1,0 +1,10 @@
+# Fixture for SQ-MELT-21/-22: a Creative Common toml from before the wave 2 carve, [melting] edited.
+[perf]
+	gravityLimitDimensions = true
+
+[melting]
+	enabled = true
+	saltRange = 2
+	fireRange = 3
+	meltChance = 0.4
+	endNoFire = false

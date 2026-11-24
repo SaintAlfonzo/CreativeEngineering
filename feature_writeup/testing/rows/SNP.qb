@@ -7,24 +7,24 @@
 @@section 1
 @@title SQ-SNP Sneak pickup of Supplementaries sacks, 2026-11-21 ([storage_audit.md](../storage_audit.md) 7, SB-10 to SB-14; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) P2 item 2, D6; TODO `items/storage-and-item-loss #12`)
 @@date 2026-11-21
-@@jars creativecommon
-@@sources feature_writeup/storage_audit.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/storage/SneakPickup.java kubejs/data/creativecommon/kubejs/tags/sneak_pickup_tags.js
+@@jars creativecompat
+@@sources feature_writeup/storage_audit.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/storage/SneakPickup.java kubejs/data/creativecompat/kubejs/tags/sneak_pickup_tags.js
 @@text
-@@text Targets the Creative Common jar of 2026-11-21 (`storage/SneakPickup`, tag `#creativecommon:sneak_pickup` from Common's server script `tags/sneak_pickup_tags.js`). Supplementaries and Supplementaries Squared from the pack. Group A, area x 5360 to 5375, z 5200 to 5215; SQ-SNP-04 works at spawn (spawn protection 16, an op online). `data get entity BOT SelectedItem` prints the held stack with its `BlockEntityTag`.
+@@text Targets the Creative Compat jar (moved from Common 2026-11-24; `storage/SneakPickup`, tag `#creativecompat:sneak_pickup` from Compat's server script `tags/sneak_pickup_tags.js`). Supplementaries and Supplementaries Squared from the pack. Group A, area x 5360 to 5375, z 5200 to 5215; SQ-SNP-04 works at spawn (spawn protection 16, an op online). `data get entity BOT SelectedItem` prints the held stack with its `BlockEntityTag`.
 @@text
 @@table
 ## SQ-SNP-01 | sneak right-click with an empty hand picks up a filled sack with its contents; placing it restores them
 @group A
-@commands `/cdevtest tag block creativecommon:sneak_pickup`; a `supplementaries:sack` holding apples, sticks, cobblestone; bot `snp1` sneaking, empty main hand, `pbot use`; `data get entity snp1 SelectedItem`; bot stops sneaking and places it on the stone beside; `/cdevtest inv` the new sack
+@commands `/cdevtest tag block creativecompat:sneak_pickup`; a `supplementaries:sack` holding apples, sticks, cobblestone; bot `snp1` sneaking, empty main hand, `pbot use`; `data get entity snp1 SelectedItem`; bot stops sneaking and places it on the stone beside; `/cdevtest inv` the new sack
 @pass the tag lists `supplementaries:sack` and the Supplementaries Squared sacks; after the click the sack block is air, no item entity on the ground, the hand holds the sack with `BlockEntityTag.Items` of the 3 kinds; the placed sack's inventory has apple 3, stick 5, cobblestone 7
 @fails `SneakPickup` (RightClickBlock handler: sneaking, empty main hand, tag match, `BreakEvent`, the player-break drop into the hand); the tag script; a drop with no contents = the sack's loot table (`copy_nbt` / `set_contents`) not run with the block entity
-@absent creativecommon:sneak_pickup (a block tag added 2026-11-21, after the last /dumpall)
+@absent creativecompat:sneak_pickup (a block tag added 2026-11-21, after the last /dumpall)
 > forceload add 5360 5200 5375 5215
 > fill 5360 -61 5200 5375 -61 5215 minecraft:stone
 > fill 5360 -60 5200 5375 -56 5215 minecraft:air
 sleep 2
-> cdevtest tag block creativecommon:sneak_pickup
-expect verb=tag kind=block tag=creativecommon:sneak_pickup n=\d+ ids=(?=\S*supplementaries:sack\b)(?=\S*suppsquared:sack_red\b)
+> cdevtest tag block creativecompat:sneak_pickup
+expect verb=tag kind=block tag=creativecompat:sneak_pickup n=\d+ ids=(?=\S*supplementaries:sack\b)(?=\S*suppsquared:sack_red\b)
 > kill @e[type=minecraft:item,x=5363,y=-60,z=5203,distance=..8]
 > setblock 5363 -60 5203 supplementaries:sack{Items:[{Slot:0b,id:"minecraft:apple",Count:3b},{Slot:1b,id:"minecraft:stick",Count:5b},{Slot:2b,id:"minecraft:cobblestone",Count:7b}]}
 > pbot spawn snp1 5363.5 -60 5205.5 minecraft:overworld survival
@@ -159,7 +159,7 @@ reject \[cdevtest\] .*done=0
 @@section 2
 @@title CQ-SNP Sack pickup client half, 2026-11-21 (same section)
 @@date 2026-11-21
-@@jars creativecommon
+@@jars creativecompat
 @@sources feature_writeup/storage_audit.md
 @@text
 @@table
@@ -169,3 +169,18 @@ reject \[cdevtest\] .*done=0
 @pass the tooltip lists the 3 kinds; the unsneaked click opens the sack's screen; in the foreign claim nothing happens and the sack stays
 @fails Supplementaries' sack tooltip reads `BlockEntityTag`; `SneakPickup` must leave the unsneaked click alone; FTB Chunks cancels the `BreakEvent`
 @draft needs a real client (the claim half needs two players on a dedicated server): a hand check unless the runner writes driver steps for the first two
+
+@@section 3
+@@title SQ-SNP sack sneak pick-up moved to Creative Compat, 2026-11-24 ([storage_audit.md](../storage_audit.md) 7; TODO `creative-common-publish #17`)
+@@date 2026-11-24
+@@jars creativecompat
+@@sources feature_writeup/storage_audit.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/storage/SneakPickup.java
+@@text Same checks as section 1 on the Compat jar; the tag is `#creativecompat:sneak_pickup`. Rows SQ-SNP-01 to -05 above were retargeted to the new tag and jar.
+@@table
+## SQ-SNP-06 | Compat without Common's script: tag filled from Compat's own server script, pickup works
+@group B (Compat + Supplementaries)
+@commands boot Compat with Supplementaries and the sacks; `/cdevtest tag block creativecompat:sneak_pickup`; rerun SQ-SNP-01
+@pass the tag lists `supplementaries:sack`; sneak right-click with an empty hand gives the sack with its contents; `creativecommon:sneak_pickup` does not exist
+@fails `kubejs/data/creativecompat/kubejs/tags/sneak_pickup_tags.js` not loaded; `SneakPickup` registration in `CreativeCompat.java`
+@draft as SQ-SNP-01 with the new tag
+@absent creativecompat:sneak_pickup (tag added 2026-11-24)

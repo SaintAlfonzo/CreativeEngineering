@@ -17,8 +17,8 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=67e10741c793 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 54 open TODO rows (Planned 4, Testing 50), 4 Complete.
+<!-- generated:status_index begin open_work sha1=e262af883613 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 55 open TODO rows (Planned 4, Testing 51), 4 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -76,6 +76,7 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food/types-and-tuning #36` | Testing | C P | Minimum foods to activate shown wrong in the book |
 | `food/types-and-tuning #37` | Testing | C | Diet Log milestone icons and colors missing |
 | `food/types-and-tuning #38` | Testing | C | Apple Pie pages still at the end of the Diet Log |
+| `raspberry-pie-publish #25` | Testing | S C | Fleet-Footed fix and fleetFootedFov move from Raspberry Pie to Creative Compat (W2-3); config value carried over; Raspberry Pie page and writeup drop them |
 <!-- generated:status_index end open_work -->
 
 ## 1. What it is
@@ -663,6 +664,8 @@ Nothing is open in the design. Remaining work is the ladder values (`#12`, set b
 
 ### 12.2 Fleet-Footed fix (decided 2026-11-12)
 
+**Moved to Creative Compat 2026-11-24** (wave 2 carve, TODO `raspberry-pie-publish #25`, W2-3): `FleetFootedMixin`, its member guard and `FleetFootedFov` are Compat's ([creative_compat.md](creative_compat.md) 1), gated on Alex's Mobs and Compat; Raspberry Pie alone has no Fleet-Footed fix (accepted). The text below is the design history; the old `[effects] fleetFootedFov` key is now Compat's `[fleet_footed] fov`, carried over once.
+
 The bug: Fleet-Footed (+20% speed only while sprinting and airborne) keeps its state in fields on the single shared
 effect object (the "last duration" it saw), and removes its speed modifier when the duration stops counting down as
 expected. With several players the fields overwrite each other (flicker or a stuck bonus), and Raspberry Pie's periodic
@@ -713,7 +716,7 @@ Live rows are in [scratch_queue.md](testing/scratch_queue.md) section "SQ-RP" (f
 | RPI-10, RPI-31 death | CQ-RPI-10 | | RPI-29 respec grays its own slot | CQ-RPI-24 |
 | RPI-11 widget | CQ-RPI-11 | | RPI-30 panel lists losses | CQ-RPI-06 |
 | RPI-12 effect display | CQ-RPI-04, -12 | | RPI-32 paid-action red lines | CQ-RPI-07 |
-| RPI-13 potion of the same effect | CQ-RPI-13 | | RPI-33 Fleet-Footed two players | CQ-RPI-26 |
+| RPI-13 potion of the same effect | CQ-RPI-13 | | RPI-33 Fleet-Footed two players (now Compat) | CQ-RPI-26, CQ-RPI-95 |
 | RPI-14 message queue | CQ-RPI-03 | | RPI-34, RPI-38 covered slot line | CQ-RPI-23 |
 | RPI-15 Diet Log pages | CQ-RPI-14 | | RPI-35, RPI-20 missing-mod entry | SQ-RPI-03 |
 | RPI-16 Liquid Diet Log | CQ-RPI-15 | | RPI-36 book recipes | CQ-RPI-02, SQ-RPI-06 |
@@ -1045,7 +1048,7 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   give no warning. `minFoodsToActivate` 0 opens the gate at once (the unique-food counter is then unused). Headless
   test: a respec of the two oldest window foods and a death on the default settings cost exactly what those foods
   contributed.
-- **Fleet-Footed guard (P6).** `FleetFootedMixin` stays gated on `alexsmobs`. `RpMixinPlugin` also reads the target
+- **Fleet-Footed guard (P6).** (Moved to Creative Compat 2026-11-24: the mixin and this guard now live in `CompatMixinPlugin`; Raspberry Pie keeps neither and its mods.toml has no alexsmobs row.) `FleetFootedMixin` stays gated on `alexsmobs`. `RpMixinPlugin` also reads the target
   class (`MixinService` bytecode provider) and applies the mixin only when `EffectFleetFooted` has the int field
   `lastDuration` (shadowed) and `applyEffectTick(LivingEntity, int)` (`m_6742_`, the injection point); otherwise one
   warning names what is missing and the fix is off. The injection keeps `require = 0`, and the handler runs in a try:
@@ -1125,7 +1128,7 @@ Plan: plan_rp_standalone.md section 10 (rulings P5, P6, P8, P9 of 2026-11-22). R
   X" and "Changing this slot is free"; the Change button and picker say Free, the confirm panel ages out no foods. A
   replaced effect in a slot is not applied; a flat-covered one is held by the flat buff. The inventory widget leaves
   covered slots out. Network version 5 (the ladder carries the replacements).
-- **Fleet-Footed view.** `ComputeFovModifierEvent` (LOW): when Alex's Mobs' Fleet-Footed speed modifier is on the
+- **Fleet-Footed view** (moved to Creative Compat 2026-11-24 as `mobs/FleetFootedFov`; the key is Compat's client `[fleet_footed] fov`, 0.25, carried over from `effects.fleetFootedFov`). `ComputeFovModifierEvent` (LOW): when Alex's Mobs' Fleet-Footed speed modifier is on the
   player, the widening it causes is scaled by client config `effects.fleetFootedFov` (0.25; 1.0 = vanilla).
 - **Table loader.** Each `solraspberrypie/diversity/*.json` is read on its own: a wrong shape skips the file (one error
   line), a value that is not a finite number of 0 or more is skipped (one warning count), the table is always assigned.

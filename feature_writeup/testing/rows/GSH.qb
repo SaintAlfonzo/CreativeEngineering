@@ -6,19 +6,19 @@
 @@title SQ-GSH Every glass block and pane breaks into shards, 2026-11-21 ([glass_shards.md](../glass_shards.md) 7, GSH-01 to GSH-07; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R3, R19, D1; TODO `gameplay/misc #22`)
 @@date 2026-11-21
 @@reviewed 2026-11-22
-@@jars creativecommon creativeloot
-@@sources feature_writeup/glass_shards.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/loot/GlassShardsModifier.java development/creativeCommon/src/main/resources/data/creativecommon/loot_modifiers/glass_shards.json development/creativeCommon/src/main/resources/data/creativecommon/glm_entries.json
+@@jars creativecompat creativeloot
+@@sources feature_writeup/glass_shards.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/loot/GlassShardsModifier.java development/creativeCompat/src/main/resources/data/creativecompat/loot_modifiers/glass_shards.json development/creativeCommon/src/main/resources/data/creativecompat/glm_entries.json
 @@text
-@@text Targets the Creative Common jar of 2026-11-21 (global loot modifier `creativecommon:glass_shards`, read by Creative Loot's GlmMerge) with Quark's Glass Shard module on. `/cdevtest loot X Y Z [tool=ITEM] rolls=20` runs the block's own table (and the loot modifiers) 20 times and sums the drops, so 1 to 3 shards per break reads 20 to 60, 1 to 2 reads 20 to 40, Quark's 2 to 4 reads 40 to 80. Tinted glass gives the dirty shard (R19). Group A, area x 5344 to 5359, z 5200 to 5215.
+@@text Targets the Creative Compat jar (moved from Common 2026-11-24) (global loot modifier `creativecompat:glass_shards`, read by Creative Loot's GlmMerge) with Quark's Glass Shard module on. `/cdevtest loot X Y Z [tool=ITEM] rolls=20` runs the block's own table (and the loot modifiers) 20 times and sums the drops, so 1 to 3 shards per break reads 20 to 60, 1 to 2 reads 20 to 40, Quark's 2 to 4 reads 40 to 80. Tinted glass gives the dirty shard (R19). Group A, area x 5344 to 5359, z 5200 to 5215.
 @@text
 @@table
 ## SQ-GSH-01 | GlmMerge reads the glass_shards fragment entry
 @group A
 @commands boot; grep latest.log for `[GlmMerge]`
-@pass the `[GlmMerge] N entries (lists: ..., fragments: ...)` line is there with no `could not read`; no `skipped:` line names `creativecommon:glass_shards`
-@fails `data/creativecommon/glm_entries.json` (the fragment) or the definition `loot_modifiers/glass_shards.json`; the codec registration in `CreativeCommon.java` (`GLOBAL_LOOT_MODIFIER_SERIALIZERS`)
+@pass the `[GlmMerge] N entries (lists: ..., fragments: ...)` line is there with no `could not read`; no `skipped:` line names `creativecompat:glass_shards`
+@fails `data/creativecompat/glm_entries.json` (the fragment) or the definition `loot_modifiers/glass_shards.json`; the codec registration in `CreativeCompat.java` (`GLOBAL_LOOT_MODIFIER_SERIALIZERS`)
 bootexpect \[GlmMerge\] \d+ entries \(lists:
-bootreject \[GlmMerge\] skipped:.*creativecommon:glass_shards
+bootreject \[GlmMerge\] skipped:.*creativecompat:glass_shards
 bootreject \[GlmMerge\] could not read
 look the fragments count in the GlmMerge line is one more than the last run doc's (SQ-LOOT-02) before 2026-11-21
 
@@ -120,14 +120,14 @@ reject \[cdevtest\] .*done=0
 @@section 2
 @@title SQ-GSH Glass shards load without Creative Loot; shards in mid-tier chests, 2026-11-22 ([glass_shards.md](../glass_shards.md) 7, GSH-08, GSH-09; [publish_readiness.md](../publish_readiness.md) PR-CC-03, ruling P1; TODO `creative-common-publish #12`)
 @@date 2026-11-22
-@@jars creativecommon creativeloot
-@@sources development/creativeCommon/src/main/resources/data/forge/loot_modifiers/global_loot_modifiers.json kubejs/data/creativeloot/kubejs/loot/07_rules.js
+@@jars creativecompat creativeloot
+@@sources development/creativeCompat/src/main/resources/data/forge/loot_modifiers/global_loot_modifiers.json kubejs/data/creativeloot/kubejs/loot/07_rules.js
 @@table
-## SQ-GSH-08 | Common and Quark without Creative Loot: the modifier loads from the Forge list, glass breaks into shards
-@group B (Common + Quark, no Creative Loot)
+## SQ-GSH-08 | Compat and Quark without Creative Loot: the modifier loads from the Forge list, glass breaks into shards
+@group B (Compat + Quark, no Creative Loot)
 @commands boot `cc_only` with Quark and without Creative Loot; rerun SQ-GSH-04 and SQ-GSH-07
 @pass both rows PASS (blue pane -> blue shards, tinted glass -> dirty shards); no `[GlmMerge]` line (Creative Loot absent)
-@fails Forge list `data/forge/loot_modifiers/global_loot_modifiers.json` missing from the jar or `replace` true; codec registration in `CreativeCommon.java`
+@fails Forge list `data/forge/loot_modifiers/global_loot_modifiers.json` missing from the jar or `replace` true; codec registration in `CreativeCompat.java`
 @draft modset spec to pick: `cc_only full` minus Creative Loot; the runner chains the two rows
 ## SQ-GSH-09 | mid-tier chest tables roll glass shards, mostly dirty or clear
 @group A
@@ -145,3 +145,29 @@ waitlog verb=items 30
 expect verb=items .*quark:(dirty|clear)_shard
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
 look dirty plus clear shards outnumber the colored ones
+
+@@section 3
+@@title SQ-GSH glass shards moved to Creative Compat: serializer id, Forge list, old-save safety, 2026-11-24 ([glass_shards.md](../glass_shards.md) 7; TODO `creative-common-publish #12`, `#17`)
+@@date 2026-11-24
+@@jars creativecompat creativecommon creativeloot
+@@sources feature_writeup/glass_shards.md development/creativeCompat/src/main/resources/data/forge/loot_modifiers/global_loot_modifiers.json development/creativeCompat/src/main/resources/data/creativecompat/glm_entries.json
+@@text Compat ships the modifier (`creativecompat:glass_shards`), its Forge list and its `glm_entries.json`; Common ships none. Quark on.
+@@table
+## SQ-GSH-10 | Compat alone (no Creative Loot): a broken glass pane drops shards
+@group B (Compat + Quark, no Creative Loot)
+@commands boot Compat + Quark without Creative Loot; break a blue stained glass pane and a Create framed glass block with a bot (`/cdevtest loot ... rolls=20`)
+@pass blue shards from the pane, clear shards from the framed glass; latest.log has no `Missing` line for `creativecompat:glass_shards` and no `[GlmMerge]` line
+@fails Forge list `data/forge/loot_modifiers/global_loot_modifiers.json` in Compat's jar (replace false); serializer registration in `CreativeCompat.java`
+@draft same steps as SQ-GSH-08
+## SQ-GSH-11 | Compat with Creative Loot: one merged entry, shards drop once
+@group B (full pack)
+@commands boot the full pack; `[GlmMerge]` line; break a blue pane
+@pass `[GlmMerge]` counts the Compat fragment and no `skipped: creativecompat:glass_shards`; one stack of shards per pane, not two
+@fails `data/creativecompat/glm_entries.json` (fragment); GlmMerge duplicate handling
+@draft as SQ-GSH-01 with the new id
+## SQ-GSH-12 | Common alone (no Compat): no glass_shards modifier, no warning
+@group B (Common, no Compat)
+@commands boot Common without Compat; grep latest.log for `glass_shards`
+@pass no `glass_shards` line, no loot modifier error; a glass pane drops what Quark gives
+@fails Common still shipping a Forge list entry or fragment (it must not)
+@draft jar set: `cc_only` minus Compat

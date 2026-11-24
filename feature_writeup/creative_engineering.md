@@ -603,7 +603,7 @@ low oxygen in the End, per-file header.
   spectator players and anyone in Create diving boots (`#create_gravity:anti_low_gravity_boots`); falling mobs also
   take less fall damage (fall distance x0.925 a tick). The attribute is synced, so players predict it themselves.
   Common keeps its dimension limit on that handler (`CreateGravityDimensionMixin`).
-- **Everything else** (`gravity/LowGravity` + `LowGravity*Mixin`): these entities add a fixed pull per tick; Common
+- **Everything else** (`gravity/LowGravity` + `LowGravity*Mixin`, Creative Compat since 2026-11-24; the ItemPhysic tie and the dedicated-server start fix moved with them): these entities add a fixed pull per tick; Compat
   scales that constant by `1 + factor` (0.2 at -0.8, 0 at -1): items, falling blocks, TNT, minecarts, Shulker bullets
   (0.04), XP orbs and fishing bobbers (0.03), arrows / tridents (0.05), llama spit (0.06), thrown projectiles via
   `getGravity()` (snowball, egg, pearl, potions, bottle o' enchanting, modded subclasses), boats out of water (in water
@@ -617,7 +617,7 @@ low oxygen in the End, per-file header.
   packet per airborne entity per tick; it is gone. Server lookup = the mod's `ServerConfig.getBiomeConfig`; client
   lookup = Common's own parse of the mod's `biome_configs` strings (`CreateGravityConfigAccessor`; Forge syncs SERVER
   configs at login; the mod's parsed list is always empty on a dedicated client because each entry needs the server).
-- **Dimension limit**: `LowGravity.dimensionAllowed` (perf `gravityLimitDimensions` / `gravityDimensions`, default
+- **Dimension limit**: `LowGravity.dimensionAllowed` asks Common's `perf/GravityDimensions` (perf `gravityLimitDimensions` / `gravityDimensions`, default
   the End only) gates the lookup for every type and the living handler. The client uses its own copy of Common's
   config (the pack ships the same file to both sides).
 - **End oxygen (kept)**: Create: Gravity's default makes every gravity biome low-oxygen (factor 100): a survival player
@@ -685,17 +685,17 @@ commits touching Common's tree, `kubejs/data/creativecommon` and `kubejs/assets/
 
 | Change since 1.2.0 | Tested |
 |---|---|
-| Melting: salt, fire, lava and magma melt ice and snow by source-found scheduled ticks, snow by layer, saltable tag and tooltip, slow tier (packed ice, cryosol), hot places and the Nether, End contact-only melting and no fire in the End ([melting.md](melting.md); `melting/`, biome and light mixins) | SQ-MELT-01 to -20: 11 PASS on earlier jars, SQ-MELT-08 FAIL (r1115), 11 drafts; client tooltip row CQ-CC13-02; rerun in SQ-CC13-06 (pending) |
+| Melting (moved to Creative Compat 2026-11-24, wave 2): salt, fire, lava and magma melt ice and snow by source-found scheduled ticks, snow by layer, saltable tag and tooltip, slow tier (packed ice, cryosol), hot places and the Nether, End contact-only melting and no fire in the End ([melting.md](melting.md); `melting/`, biome and light mixins) | SQ-MELT-01 to -20: 11 PASS on earlier jars, SQ-MELT-08 FAIL (r1115), 11 drafts; client tooltip row CQ-CC13-02; rerun in SQ-CC13-06 (pending) |
 | Salt: placed-only salt licks, salt listener before melt, Salt Melt tool, salt dict keys ([salt.md](salt.md)) | SQ-SALT: 6 PASS on earlier jars, 2 FAIL (older runs), 8 drafts; rerun in SQ-CC13-06 (pending) |
 | Effect level caps: `[effects] levelCaps` holds the 87 same-at-every-level effects at level I from every source, tooltips included (`LevelCappedEffect`, `MobEffectInstanceLevelCapMixin`; [effects.md](effects.md) section 3) | SQ-EFX-15 to -17 current PASS (built 2026-11-19); in game CQ-CC13-03 (pending) |
 | Own-config watcher: Common watches `config/` for the pack's own files (modify and create, 1 s debounce, content guard) and runs Forge's reload path (`config/OwnConfigWatcher`, `OwnConfigLogic`, `ConfigReload`) | not yet queued before CC13; CQ-CC13-01 (pending) |
 | Wooden composters: 12 woods, recipe from 7 slabs, loot tables, Polymorph back to the Composter, furnace fuel and burn values for the flammable woods ([composting.md](composting.md); `composter/`) | SQ-CM-37 to -41 never run (queued); CQ-CM-37, CQ-CM-42 and CQ-CC13-04 (pending); side textures await the owner look-check (TODO `creative-common-publish #3`) |
-| Glass shards: global loot modifier `creativecommon:glass_shards` for every block and pane in the forge glass tags ([glass_shards.md](glass_shards.md); needs Creative Loot's GlmMerge and Quark) | SQ-GSH rows, not part of the CC13 gate |
+| Glass shards (moved to Creative Compat 2026-11-24, id `creativecompat:glass_shards`): global loot modifier for every block and pane in the forge glass tags ([glass_shards.md](glass_shards.md); needs Creative Loot's GlmMerge and Quark) | SQ-GSH rows, not part of the CC13 gate |
 | Idle random ticks: grown crops and Floral bushes stop random ticking, ripe Vinery stems too (`IdleRandomTickMixin`, `IdleTickRules`) | with SQ-CC13-05 (boot) |
-| Sack pick-up: sneak and right-click a placed sack with an empty hand to pick it up with its contents (`storage/SneakPickup`) | the dependents' own rows |
+| Sack pick-up (moved to Creative Compat 2026-11-24, `storage/SneakPickup`): sneak and right-click a placed sack with an empty hand to pick it up with its contents (`storage/SneakPickup`) | the dependents' own rows |
 | NCH helpers: json edit helpers mark the recipe changed, `NCH.forPack` / `reg.forPack`, Create crushing and milling pools, new recipe types named directly | the pack's recipe load (SQ-CC13-05) |
 | Dict API: namespace binding, `dict_lint`, literal-id swap and missing-key tooling, orphan-tab handling, dict tag check; ids follow the owning mod (`creativecommon:` namespace); retired dict keys `diet_log`, `liquid_diet_log`, `food_dictionary` (moved to Raspberry Pie) | SQ-CMV-01, SQ-CCO-15, SQ-CPP-01 in SQ-CC13-01 and -05 (pending) |
-| Loot data: `glm_entries.json` fragment (glass shards), wooden composter loot tables | SQ-CCO-16 and SQ-CC13-05 (pending) |
+| Loot data: wooden composter loot tables | SQ-CCO-16 and SQ-CC13-05 (pending) |
 | American spelling in own lang values and config comments, build stamps, notices (`NOTICE-commonmark.txt`, `NOTICE-thirdparty.txt`), dated comments out of code, tab indent in Java, JS and Gradle (including the trader package) | no behavior change |
 
 **Run r1122cc (2026-11-22, [scratch_run_2026-11-22.md](testing/scratch_run_2026-11-22.md), scratch jar `1.3.0+23c5050d`,
