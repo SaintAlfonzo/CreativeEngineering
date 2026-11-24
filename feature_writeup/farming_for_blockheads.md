@@ -28,9 +28,9 @@ asks by name; upstream bugs are fixed.
 | Shipping Bin mechanics (sale rule, payout, carriers) | section 3.1 | read from the decompile |
 | Overlap | section 2 | no other shipping bin in the pack; the rest of FfB overlaps Hearth and Harvest, Quark, Incubation, Slice and Dice |
 | Upstream bugs | B1, B2 (section 3.4) | none blocking for the bin |
-| Fold-in (bin only) | section 4 | 11 steps drafted |
-| Decisions | D1 to D7 (section 5) | open |
-| Tests | SHB-01 to SHB-12 (section 8) | drafted |
+| Fold-in (bin only) | section 4 | 12 steps drafted |
+| Decisions | D1 to D9 (section 5) | D1 to D6 ruled 2026-11-23 (5.1); D7 to D9 open |
+| Tests | SHB-01 to SHB-16 (section 8) | drafted |
 
 - Jar: the 26.3 jar is the only source of the bin. It is a donor for art (Miner's Delight route, [miners_delight.md](miners_delight.md)
   D2, D12), never a mod in `mods/`. The 1.19.2 Fabric jar cannot load on Forge. A Forge 1.19.2 11.3.x jar exists
@@ -149,7 +149,7 @@ except the rabbit trap and the fishing barrel. Those two are left out unless the
 |---|---|
 | `Recipe<SingleRecipeInput>`, `RecipeMap`, codec serializer | `Recipe<Container>` with a JSON serializer; type `farmingforblockheads:shipping_bin` kept |
 | `valueEffect` / `predicate` Shogi fields, sales saved data | dropped (no Shogi on 1.19.2; no shipped recipe uses them) (D4) |
-| Loot number provider `shipment_value`, conditions `shipment_value` / `shipment_contains`, custom context set | 1.19.2 loot number providers and conditions register through `Registry.LOOT_NUMBER_PROVIDER_TYPE` / `LOOT_CONDITION_TYPE`; or pay in code (D4) |
+| Loot number provider `shipment_value`, conditions `shipment_value` / `shipment_contains`, custom context set | 1.19.2 loot number providers and conditions register through `Registry.LOOT_NUMBER_PROVIDER_TYPE` / `LOOT_CONDITION_TYPE`; kept so later prices live in the loot table (ruling D2, D3) |
 | `ValueInput` / `ValueOutput` NBT, `preRemoveSideEffects` | `CompoundTag` load/save, `onRemove` drop |
 | Item model `items/shipping_bin.json`, GUI sprites atlas | our own `models/item` parent file; GUI blits textures by path |
 | Block model `format_version` key, all rotations angle 0 | loads on 1.19.2 unchanged (extra key ignored) |
@@ -187,8 +187,14 @@ texture is drawn or edited ([texture_sources.md](texture_sources.md)).
 4. **Recipes** via `global.NCH`: the crafting recipe (logs as `#minecraft:logs`); a new NCH helper
    `NCH.shippingBin(input, value)` for the value rows (extend the helper, no `e.custom`). Values: the 12 upstream rows,
    plus whatever D3 adds.
-5. **Payout** per D2 (loot table `farmingforblockheads:gameplay/shipping_bin` in our data under the upstream id, or
-   coins).
+5. **Payout** (ruling D2): loot table `farmingforblockheads:gameplay/shipping_bin` in our data under the upstream id,
+   emeralds at `floor(value / 128)`; the loot context carries the shipment value and the sold stacks so Lightman's
+   prices and per-crop rules can be added there later.
+5a. **Courier** (ruling D5, D5a, D5b): config `courierMode` (`walk_in_out` default, `walk_out`, `at_bin`),
+   `courierWalkDistance`, `courierSpawnSearchRadius`; the Courier Spawn Point block (id in `item_dict.js`, recipe
+   via `global.NCH`, art per D8, texture_sources row); walking pathfinds on the ground and falls back to the
+   configured distance (or `at_bin`) when no path is found; invisibility drink then despawn with the crate. MCA
+   villager skin for the courier once MCA textures are added. Config backup in `configs_edited/`.
 6. **Loot:** block drop table (our own file, same content as upstream). Mob loot: none.
 7. **Names and lang** ([names.md](names.md)): `block.`, `container.`, `entity.` keys for the bin, balloon, crate,
    courier, falling crate under `assets/farmingforblockheads/lang/` in our jar (our own text); courier names from
@@ -215,6 +221,21 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D5 | Carriers: balloon + crate + courier (upstream), balloon only, or particles only | All three: they are the feature's look; courier names from a config list | all three |
 | D6 | Code home | Creative Delight `farm/` (farming and food routing; same author family as the CfB compartment); Creative Compat is for fixes only | Creative Delight |
 | D7 | Rabbit trap or fishing barrel later (the two FfB blocks with no pack equivalent) | Not now | not planned |
+| D8 | Courier spawn block: art and recipe | Owner picks a source texture (human art; texture_sources.md) and a recipe | open |
+| D9 | Courier spawn block reach: how far from a bin a spawn block is used (search radius), and whether one block serves several bins | Search radius 16 blocks, nearest block wins, one block serves any number of bins | open |
+
+### 5.1 Owner rulings (owner, 2026-11-23)
+
+| # | Ruling |
+|---|---|
+| D1 | Port the bin alone: our own code under the `farmingforblockheads` namespace, the 26.3 jar as an art donor, FfB itself not installed. |
+| D2 | Emeralds for now. Later, Lightman's Currency prices defined in the payout loot table. So the payout stays a loot table: port the `shipment_value` number provider and the `shipment_value` / `shipment_contains` conditions (section 3.2), never a payout in code. |
+| D3 | The 12 vanilla value rows for now; all crops later, also through the loot table. |
+| D4 | Follows from D2 and D3: Shogi fields and the sales history dropped; the loot context (value, sold stacks) kept. |
+| D5 | All three carriers (balloon, crate, courier). The courier uses MCA villager textures once those are added (until then the donor `merchant` skin). It no longer teleports out: at its despawn point it stops, drinks an invisibility potion (wandering-trader drink animation and sound) and despawns with the crate. Courier mode is a config option with three values: `walk_in_out` (default: arrives on foot, takes the crate, walks back out), `walk_out` (appears beside the bin, walks away), `at_bin` (appears beside the bin, drinks on the spot). |
+| D5a | Walking distance is a config value (blocks between the bin and the courier's spawn and despawn point). |
+| D5b | New block: **Courier Spawn Point** (`farmingforblockheads:courier_spawn`, own id). In a walking mode the courier spawns at and walks back to the nearest such block in range (D9) instead of a point at the configured distance, so players can lay out a path for it. Without one in range the configured distance applies. Art and recipe: D8. |
+| D6 | Code home: Creative Delight (default taken; not asked). |
 
 ## 6. File map (planned)
 
@@ -243,7 +264,11 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 - [ ] **SHB-07 Slots:** shift-click crops from the inventory -> they go to the inputs; placing an item in an output slot is refused.
 - [ ] **SHB-08 Hopper:** hopper above feeds inputs; hopper below pulls emeralds -> automated selling works.
 - [ ] **SHB-09 Balloon:** sell under open sky -> balloon inflates, rises out of sight, smoke at the top; hit it -> it pops and a crate falls, no item drops.
-- [ ] **SHB-10 Courier:** sell under a roof -> crate on the bin, a named courier appears beside it, reaches, both teleport away; the courier takes no damage.
+- [ ] **SHB-10 Courier (default walk_in_out):** sell under a roof, no spawn point nearby -> crate on the bin, a named courier walks in from about the configured distance, takes the crate, walks back out, stops, drinks invisibility and vanishes with the crate; it takes no damage.
+- [ ] **SHB-13 Courier modes:** set `courierMode` to `walk_out`, then `at_bin` -> courier appears beside the bin and walks away / drinks on the spot.
+- [ ] **SHB-14 Walk distance:** set `courierWalkDistance` to 4 and to 20 -> the courier's spawn and despawn points move to match.
+- [ ] **SHB-15 Courier Spawn Point:** place a spawn point 10 blocks from the bin -> the courier spawns on it, walks to the bin and back to it before drinking; remove it -> the configured distance applies again.
+- [ ] **SHB-16 No path:** wall the bin in on all sides (roof, no gap) -> the courier falls back to `at_bin` behavior, no stuck courier remains.
 - [ ] **SHB-11 Break with contents:** break a bin with inputs, outputs and a buffered overflow -> every item drops.
 - [ ] **SHB-12 JEI and WTHIT:** JEI shows the bin recipe and the 12 value rows; WTHIT shows the stored value.
 
@@ -251,3 +276,6 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 
 - 2026-11-23: investigation written (26.3.0.2 decompiled with `tools/decompile_mod.py`, 11.3.5 inventory), nothing
   built.
+- 2026-11-23: owner rulings D1 to D5b (section 5.1): bin alone, emeralds now and loot-table prices later, 12 vanilla
+  rows now, all three carriers with a walking courier, an invisibility exit, a configurable walk distance and a
+  Courier Spawn Point block; D8, D9 open.
