@@ -84,7 +84,8 @@ reject \[cdevtest\] .*(done=0|error=)
 @pass -0.015, +0.025, -0.055, no modifier
 @fails wrong tier: `blocktags.js` audit block; crafting table with a modifier: a 1.00 tier with another speed in `[surface.speed]`
 @from batches/r1111/a1.qb passed
-> forceload add 900 -40 1100 40
+# forceload widened to x 880 (r1124fx runner-1, 2026-11-24): the fill starts at x 890, outside the old box
+> forceload add 880 -40 1100 40
 > fill 890 -61 -3 1050 -61 3 minecraft:grass_block
 sleep 2
 > fill 899 -60 -1 901 -60 1 minecraft:air
@@ -145,6 +146,9 @@ sleep 1
 @pass soft five -0.012; cake and roast chicken -0.015; tube coral block -0.008; kelpy cobblestone +0.015; scute pavement, polished manure, manure bricks +0.025; carrot crate and beehive +0.01; jello block -0.055
 @fails wrong value: the block's tier in `kubejs/exported/surface_audit.json` (SQ-BRA-02), then its entry in the `blocktags.js` audit block; a tier with the right name but wrong value: `[surface.speed]` in `config/creativecompat-common.toml` (copy in `configs_edited/root_config/`); a coral block on the wrong value: the coral tier's speed, the changelog says 0.92
 @from batches/r1111/a1.qb passed
+# forceload added (r1124fx runner-1, 2026-11-24): section 2 is its own drive step, the SQ-BRA-05 box is not there
+> forceload add 880 -40 1100 40
+sleep 2
 > fill 923 -60 -1 925 -60 1 minecraft:air
 > setblock 924 -60 0 comforts:sleeping_bag_white
 > pbot spawn br924 924.5 -57 0.5
@@ -272,6 +276,9 @@ sleep 1
 @pass each +0.025 (constructed_brick and metal tiers, both 1.25); none "no modifier"
 @fails no modifier: the `@mosaic_masonry` / `@metalfences` mod filters in `blocktags.js` (the `@mod` filter fix in Common `has.js`, 22:36); a stale Common jar in `mods/`
 @from batches/r1111/a1.qb
+# forceload added (r1124fx runner-1, 2026-11-24): section 2 is its own drive step, the SQ-BRA-05 box is not there
+> forceload add 880 -40 1100 40
+sleep 2
 > fill 1013 -60 -1 1015 -60 1 minecraft:air
 > setblock 1014 -61 0 mosaic_masonry:common_bond
 > pbot spawn br1014 1014.5 -57 0.5

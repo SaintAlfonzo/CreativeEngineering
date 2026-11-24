@@ -68,6 +68,10 @@ look no Can't keep up during the walk worth attention; no crow / nest exception 
 @pass Every nest sits on leaves with nothing above; count near 150 (1 in 6 chunks, about 100 to 200); none on grass or the ground
 @fails No nests: biome tag `creativedelight:crow_nest_forests` empty or modifier `nest_tree_top` not loaded (`/cdevplace` the placed feature); nests on the ground: heightmap in `placed_feature/nest_tree_top.json`
 @from batches/r1111/b1.qb
+# FO located here (r1124fx runner-1, 2026-11-24): SQ-HCS-02, which captured it, is not in the selection
+> locate biome minecraft:forest
+waitlog (nearest minecraft:forest is at|Could not find) 600
+capture FO nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > chunky world minecraft:overworld
 > chunky shape square
 > chunky center {FO1} {FO3}

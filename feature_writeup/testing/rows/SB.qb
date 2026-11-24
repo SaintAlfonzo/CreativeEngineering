@@ -86,6 +86,10 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails meta spots spawn nothing or biome mobs: `StructureSpawnBoxes.inMeta` / `MetaStructure.parts`
 @from batches/r1101/w2_worldgen.qb
 @reviewed 2026-11-16
+# r1124fx judge-5 (2026-11-24): the row ran alone, so SQ-SB-01's bot qa did not exist (tp: No entity was found); spawn it here, night as in SQ-SB-03
+> pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 5
+> time set 18000
 > locate structure creativeworldgen:meta/pillager_tower_siege
 waitlog nearest creativeworldgen:meta/pillager_tower_siege is at|type "?creativeworldgen:meta/pillager_tower_siege|creativeworldgen:meta/pillager_tower_siege.*timed out 330
 capture TS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]

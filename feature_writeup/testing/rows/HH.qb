@@ -5030,6 +5030,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `ManureDrops.schedule` from the trough, `canDrop`
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
+# forceload added (r1124fx runner-1, 2026-11-24): SQ-HH-201 (forceload 0 0 319 255) is not in the selection
+> forceload add 232 72 248 88
+> execute unless entity hb1 run pbot spawn hb1 8 -60 8 minecraft:overworld survival
+sleep 3
 > setblock 240 -60 80 hearthandharvest:trough
 > summon minecraft:cow 241 -60 80 {NoAI:1b}
 > pbot hold hb1 minecraft:wheat 1
@@ -5678,6 +5682,9 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails **Known from code reading (report):** `entityInside` records PEAK only while `y < 0.75` inside the block, so a fast drop can skip the rim and sample close to the floor. Offline simulation of 0.08/0.98 gravity: drops of 2, 8 blocks stomp, 3, 3.5, 5, 6, 10, 16 blocks do not (measured fall 0.243 from 3). Expected to FAIL until `MIN_FALL` handling is fixed: track total fall distance, not the in-block peak
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-20
+# forceload added (r1124fx runner-1, 2026-11-24): SQ-HH-201 (forceload 0 0 319 255) is not in the selection
+> forceload add 40 200 56 216
+sleep 3
 > setblock 48 -60 208 hearthandharvest:stomping_basin[facing=north]
 > zhh2 insert 48 -60 208 minecraft:sweet_berries 4
 > summon minecraft:villager 48.5 -57 208.5
@@ -6085,7 +6092,7 @@ look `[Pp]laced feature` in the command output; `countset hearthandharvest:wild_
 ## SQ-HH-304 | sum of the two `countset hearthandharvest:wild_hops` lines at least 1
 @phase worldgen
 @group B
-@commands Fresh world, new level-name, seed 8675309 (worldgen registry rows; a world made before tranche 3 has none of this). `prep_srv.sh OUT hhwb B`; copy the probe; boot. `/locate biome minecraft:forest`, qrun `capture P is at \[(-?\d+), (~\|-?\d+), (-?\d+)\]` ({P1} = x, {P3} = z; same form for every capture below); `forceload add {P1-128} {P3-128} {P1+127} {P3+127}` (256 chunks); after it finishes `/zhh2 countset {P1-128} 40 {P3-128} {P1+127} 120 {P3+127} hearthandharvest:wild_hops`; second site: `execute positioned 2144 70 -2592 run locate biome minecraft:forest` capture Q; `forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}`; `/zhh2 countset {Q1-128} 40 {Q3-128} {Q1+127} 120 {Q3+127} hearthandharvest:wild_hops`
+@commands Fresh world, new level-name, seed 8675309 (worldgen registry rows; a world made before tranche 3 has none of this). `prep_srv.sh OUT hhwb B`; copy the probe; boot. `/locate biome minecraft:forest`, qrun `capture P is at \[(-?\d+), (~\|-?\d+), (-?\d+)\]` ({P1} = x, {P3} = z; same form for every capture below); `forceload add {P1-128} {P3-128} {P1+127} {P3+127}` (256 chunks); after it finishes `/zhh2 countset {P1-120} 40 {P3-120} {P1+119} 120 {P3+119} hearthandharvest:wild_hops`; second site: `execute positioned 2144 70 -2592 run locate biome minecraft:forest` capture Q; `forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}`; `/zhh2 countset {Q1-120} 40 {Q3-120} {Q1+119} 120 {Q3+119} hearthandharvest:wild_hops`
 @pass sum of the two `countset hearthandharvest:wild_hops` lines at least 1 (`countset ... [1-9]` on one of them: rate 1 in 120 chunks, two 256-chunk sites give about 4 patches, HNH-04 hops half, J24). `columns skipped: 0` on each
 @fails `placed_feature/wild/wild_hops.json` rarity, the wild crop biome modifier `creativedelight:forge/biome_modifier/wild_crops/wild_hops`; 0 with nothing skipped twice is under 2 % by chance, look at the feature json
 @from batches/r1111/hh_wgb.qb
@@ -6094,15 +6101,17 @@ look `[Pp]laced feature` in the command output; `countset hearthandharvest:wild_
 > locate biome minecraft:forest
 waitlog (nearest minecraft:forest is at \[|Could not find a biome of type "?minecraft:forest) 300
 capture P nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> forceload add {P1-128} {P3-128} {P1+127} {P3+127}
+> forceload add {P1-120} {P3-120} {P1+119} {P3+119}
 sleep 90
-> zhh2 countset {P1-128} 40 {P3-128} {P1+127} 120 {P3+127} hearthandharvest:wild_hops
+> zhh2 countset {P1-120} 40 {P3-120} {P1+119} 120 {P3+119} hearthandharvest:wild_hops
+waitlog \[zhh2\] done 300
 > execute positioned 2144 70 -2592 run locate biome minecraft:forest
 waitlog (nearest minecraft:forest is at \[|Could not find a biome of type "?minecraft:forest) 300
 capture Q nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}
+> forceload add {Q1-120} {Q3-120} {Q1+119} {Q3+119}
 sleep 90
-> zhh2 countset {Q1-128} 40 {Q3-128} {Q1+127} 120 {Q3+127} hearthandharvest:wild_hops
+> zhh2 countset {Q1-120} 40 {Q3-120} {Q1+119} 120 {Q3+119} hearthandharvest:wild_hops
+waitlog \[zhh2\] done 300
 look sum of the two `countset hearthandharvest:wild_hops` lines at least 1 (`countset ... [1-9]` on one of them: rate 1 in 120 chunks, two 256-chunk sites give about 4 patches, HNH-04 hops half, J24). `columns skipped: 0` on each
 
 ## SQ-HH-305 | `\(10\):` with `minecraft:plains`, `minecraft:sunflower_plains`, `mine

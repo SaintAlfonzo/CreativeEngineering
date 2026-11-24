@@ -5484,6 +5484,12 @@ look still incomplete: the Assembly inserted=k/3 and missing= of the last depot 
 @pass `lineck belt facing=east`; `arm ... points=4` (two TAKE, then DEPOSIT depot, DEPOSIT belt); after 70 ticks `belt ... items powergrid:incomplete_circuit x1 Schematic components=3 ... @` about 4.5 `lockedExternally` (held on the arm's segment, index 4) and `Assembly inserted=` 1 to 3; at the end the end depot holds `powergrid:circuit_board x1 Schematic components=3` (unlocked when complete, it rode on), `same ... design=true`; the stone depot unchanged (`minecraft:stone x64`); part stacks the arm left loose on the belt (r1114: resistor x7, wire_connector x6) are upstream behaviour: record them, PASS-as-upstream
 @fails the circuit rides past the arm with the depot output first: B25 (`ArmBlockEntityMixin` stopped at the depot); rides past in any case: the lock window (`handleCenteredProcessingOnAllItems(0.05)`): set the belt motor slower (`zpwg3 scroll 1142 -60 1905 16` or the motor's value) and rerun; the arm drops parts on the belt as loose items: the belt branch (`powerGrid$handleBelt`) not reached (`BeltPoint` before `DepotPoint`)
 @from batches/r1115/p2_r1.qb
+# forceload added (r1124fx runner-1, 2026-11-24): prescreen found the row coordinates outside every forceload
+> forceload add 1136 1850 1160 1915
+sleep 3
+# source board built in the row (judge-4, 2026-11-24: SQ-PWG-76 builds it and is not in this step; same line as SQ-PWG-76)
+> zpwg9 board 1140 -60 1858 resistor
+waitlog \[zpwg9\] done 20
 > zpwg9c line 1142 -60 1906 plain
 waitlog \[zpwg9c\] done 20
 sleep 0.5

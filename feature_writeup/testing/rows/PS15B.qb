@@ -20,6 +20,11 @@
 @pass lone web: fall distance 14.55 -> about 12.4 on entering, damage about x0.85; 3 stacked: about x0.61; 3-face web: fall distance 0 inside, no damage (dense reset); bush: full plain damage
 @fails `PassThrough.fallResetClip` / `ownsFallReset`, `PassRule.cell` `resetFall` (dense only); lone web at ground level (enters and lands in one move): `PassThrough.beforeLanding` (InsideBlocksMixin before `checkFallDamage`, built 2026-11-17)
 @from batches/r1116/ps15b_a.qb
+# forceload added (r1124fx runner-1, 2026-11-24): prescreen found the row coordinates outside every forceload
+# BF-FIX judge-3 r1124fx: the section's server is peaceful (prep_srv default), which discards the summoned zombies (probe: none found); difficulty normal for the row (gotchas: Difficulty, spawning and mobs; PTH.qb preps it)
+> difficulty normal
+> forceload add 992 976 1231 1215
+sleep 3
 > setblock 1004 -60 1090 minecraft:cobweb
 > setblock 1008 -55 1090 minecraft:cobweb
 > fill 1012 -60 1090 1012 -58 1090 minecraft:cobweb
@@ -345,6 +350,8 @@ look shell: SIDES >= 1, FACES >= 1, RING/CUBE 0, denseFrom 3 in every table, sur
 @fails `PassRule.layerWalk` (H = max for leaf layers, max - 1 for snow), tags `creativecompat:passthrough_layers` / `_open` (passthrough_tags.js), `SnowLayers.collision` / `SnowLayerPassMixin`
 @reviewed 2026-11-17
 # written 2026-11-17 for plan_post_scratch_1115.md G7.4 (replaces the r1116 D2 version); superflat group A, stand at -60
+# BF-FIX judge-3 r1124fx: the section's server is peaceful (prep_srv default), which discards the summoned zombies (probe: none found); difficulty normal for the row (gotchas: Difficulty, spawning and mobs; PTH.qb preps it)
+> difficulty normal
 > forceload add 1095 1095 1135 1125
 > setblock 1103 -60 1100 minecraft:snow[layers=1]
 > summon minecraft:zombie 1103.5 -58.5 1100.5 {Tags:["z10snow1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
@@ -635,6 +642,8 @@ look attrs: bare feet only a1386f64 at -0.4 and Pos[1] -60.0; boots: no a1386f64
 # passes on Common alone; the save-without-command checks live in SQ-PS15B-26.
 # every switch is saved by a whole-file rewrite (qrun.py toml), which the watcher misses, then /cdevreload compat;
 # the server copy is restored at the end. Cross web at 1000 -60 1200 (3 faces: dense), zombie z12x in it
+# BF-FIX judge-3 r1124fx: the section's server is peaceful (prep_srv default), which discards the summoned zombies (probe: none found); difficulty normal for the row (gotchas: Difficulty, spawning and mobs; PTH.qb preps it)
+> difficulty normal
 shell cp config/creativecompat-common.toml .ps15b12_compat.toml
 > forceload add 990 1190 1110 1210
 > setblock 1000 -60 1200 minecraft:cobweb

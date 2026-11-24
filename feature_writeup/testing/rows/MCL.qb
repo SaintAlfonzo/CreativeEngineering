@@ -60,6 +60,10 @@ look apart about 578 chunks and level 1; together back to level 0 once below 400
 @from batches/r1031/a2_variants.qb
 # needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
 # run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
+# BF-FIX judge-3 r1124fx: the row never set the toml (srv had -1, level 0) and spawned no bot; it sets it, restarts, spawns qa, and restores -1 at its end
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml perf mobCapForceLevel 2
+restart
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
 sleep 10
 # a fresh boot spawns nothing near a just-joined bot for about 2.5 min (seen 2026-10-31, level 0 too): wait it out
 sleep 160
@@ -74,6 +78,9 @@ sleep 120
 > execute if entity @e[type=minecraft:creeper]
 > execute as @e[type=#zq:monsters,limit=1,sort=furthest] run data get entity @s Pos
 look the four counts sum to about 25 (not 70); the farthest monster within about 90 blocks of 0 0 (perf.md 17); the toml switch is read live (if the level line still says auto, it is not)
+> pbot remove qa
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml perf mobCapForceLevel -1
+restart
 
 ## SQ-MCL-05 | forced level 2: no new monster more than 32 blocks above or below the player
 @group A

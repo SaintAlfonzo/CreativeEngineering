@@ -190,6 +190,8 @@ look rows/SQ-CS-04.shell.txt: spring / summer ratio about 1.25 (1.15 or more pas
 @fails hook cancels the whole tick wrongly or crashes
 @from batches/r1031/a2_variants.qb
 @reviewed 2026-11-23
+> forceload add 96 8 111 16
+# r1124fx judge-2 (2026-11-24): the row relied on SQ-CS-03/04's forceload; alone in its step the field chunks were unloaded and nothing grew
 > season set MID_WINTER
 # crops #60, 2026-11-23: hemp needs local light 12 and tobacco 9 with the sky darkening counted (getMaxLocalRawBrightness),
 # so a night-time run stops both whatever the season (r1123cd); the grape bush reads light without the night. Noon.

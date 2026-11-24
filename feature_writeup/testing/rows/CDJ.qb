@@ -245,6 +245,11 @@ look the cdevtest state after the takeAll-true sneak: the plate stays (an empty 
 @jars creativedelight
 @from batches/r1102/b1_main.qb
 @reviewed 2026-11-16
+# home capture moved into the row (r1124fx runner-1, 2026-11-24): the rows that captured it are not in the selection
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 shell ls config | grep -i vintagedelight
 shell test -f config/vintagedelight-common.toml.moved && test ! -f config/vintagedelight-common.toml
 shell test "$(grep -c 'config/vintagedelight-common.toml carried into' logs/latest.log)" = 1

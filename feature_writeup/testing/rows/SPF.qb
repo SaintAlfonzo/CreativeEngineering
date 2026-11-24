@@ -465,7 +465,7 @@ bootreject (Mixin apply failed|InvalidInjectionException).*(creativeworldgen|Wor
 > datapack list
 > pbot spawn qa 0 120 0 minecraft:overworld creative
 > locate structure creativeworldgen:meta/ruin_scatter
-waitlog (nearest|Could not find).* 240
+waitlog (nearest|Could not find).*ruin_scatter 240
 capture RS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > locate structure creativeworldgen:meta/ruin_cluster
 waitlog (nearest|Could not find).*ruin_cluster 240
@@ -488,6 +488,16 @@ look every creative pack listed and enabled; each locate finds a structure withi
 @pass named cows as SQ-NM; mooblooms and baby mobs spawn; calf type follows the parents' rules
 @fails member mod ids changed; `moobloom_spawns/` not copied at build
 @from batches/r1106spf/b2.qb
+# self-contained (judge-4, 2026-11-24): bot qa and the plains capture came from SQ-SPF-70 and SQ-NM-01, not in this step (execute at qa ran on nothing)
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
+> execute positioned 3000 70 3000 run locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 300
+capture PL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {PL1-32} {PL3-32} {PL1+31} {PL3+31}
+> tp qa {PL1} 150 {PL3}
+sleep 40
+> tp qa {PL1} 90 {PL3}
 sleep 20
 > execute at qa run kill @e[type=minecraft:item,distance=..200]
 > execute at qa if entity @e[type=#zq:villagers,distance=..1]

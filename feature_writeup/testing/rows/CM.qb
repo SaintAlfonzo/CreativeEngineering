@@ -24,7 +24,8 @@ shell grep -hE "\[itemMerges\] creativedelight" logs/latest.log logs/kubejs/star
 shell grep -qE "\[itemMerges\] creativedelight: 49 merges" logs/kubejs/startup.log logs/latest.log
 expect verb=makes item=canned_hamimelon n=0\b
 expect verb=makes item=fruitsdelight:hamimelon_popsicle n=0\b
-expect verb=uses (item=fruitsdelight:hamimelon_slice alone=0 shared=0|error="no such item)
+# r1124fx judge-2 (2026-11-24): the Diet Log recipe (solraspberrypie:diet_book, book + any food, raspberry_pie.md) is the one shared use of any food, so shared=1 is expected; no recipe takes the slice alone
+expect verb=uses (item=fruitsdelight:hamimelon_slice alone=0 shared=[01]|error="no such item)
 bootreject (?i)(item_merges|veggies_foods|canning)\.js.*(error|exception)
 look shell: the [itemMerges] creativedelight line reads 49 merges (a changed count means a merge list edit since 2026-11-23: update the baseline); no script error line
 ## SQ-CM-02

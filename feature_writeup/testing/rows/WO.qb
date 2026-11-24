@@ -96,6 +96,9 @@ look data get line: one record (G) with trust 50, none for H
 @pass `No Wise Oak at that position` twice; value rejected above 100 and below 0; `That player does not exist`; `That position is not loaded`; no exception in the log
 @fails Argument ranges or the block entity check in `WiseOakCommand.tree`
 @from batches/r1113/rerun_a.qb passed
+# forceload added (r1124fx runner-1, 2026-11-24): the 30000 x 30020 trees sat outside every forceload (prescreen)
+> forceload add 30000 30000 30100 30040
+sleep 3
 > wiseoak trust 30030 -60 30020 G 50
 > setblock 30030 -60 30020 mysticaloaktree:wise_oak
 > wiseoak trust 30030 -60 30020 G 101
@@ -121,6 +124,9 @@ reject Exception
 @fails The stock day sleep is still active: `randomTick` inject
 @reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
+# forceload added (r1124fx runner-1, 2026-11-24): the 30000 x 30020 trees sat outside every forceload (prescreen)
+> forceload add 30000 30000 30100 30040
+sleep 3
 > gamerule randomTickSpeed 3
 > time set noon
 > weather clear 100000
@@ -167,6 +173,9 @@ reject \[cdevtest\] .*done=0
 @fails `isNight` in thunder; the sky-darkness update needs players or a ticking level
 @reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
+# forceload added (r1124fx runner-1, 2026-11-24): the 30000 x 30020 trees sat outside every forceload (prescreen)
+> forceload add 30000 30000 30100 30040
+sleep 3
 > time set noon
 > setblock 30050 -60 30020 mysticaloaktree:wise_oak
 > weather thunder 600
@@ -217,6 +226,9 @@ reject \[cdevtest\] .*done=0
 @fails `onInteract` wake inject; `angerDurationSeconds`
 @reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
+# forceload added (r1124fx runner-1, 2026-11-24): the 30000 x 30020 trees sat outside every forceload (prescreen)
+> forceload add 30000 30000 30100 30040
+sleep 3
 > gamerule randomTickSpeed 0
 > time set noon
 > weather clear 100000
@@ -242,6 +254,9 @@ reject \[cdevtest\] .*done=0
 @fails The 23-tick timer inject or the game-time basis
 @reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
+# forceload added (r1124fx runner-1, 2026-11-24): the 30000 x 30020 trees sat outside every forceload (prescreen)
+> forceload add 30000 30000 30100 30040
+sleep 3
 > zwo skip 601
 sleep 3
 > cdevtest state 30060 -60 30020
@@ -1019,10 +1034,15 @@ shell echo "inotify instances: $(find /proc/*/fd -lname 'anon_inode:inotify' 2>/
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml wise_oak.gifts saplings '["minecraft:oak_sapling"]'
 sleep 15
 shell echo "reload lines: $(grep -E 'creativeworldgen-common.toml' logs/debug.log | grep -ciE 'changed|reload|notif')"
+# forceload added (r1124fx runner-1, 2026-11-24): the 30000 x 30020 trees sat outside every forceload (prescreen)
+> forceload add 30000 30000 30100 30040
+sleep 3
 > time set noon
 > setblock 30080 -60 30020 mysticaloaktree:wise_oak
 > wiseoak trust 30080 -60 30020 G 100
-> tp G 30080 -60 30017
+# bot G spawned in the row (judge-4, 2026-11-24): boot 5 had no G because SQ-WO-33, which spawns it, is not in the selection
+> pbot spawn G 30080 -60 30017 minecraft:overworld survival
+sleep 3
 > pbot use G 30080 -60 30020 up
 > cdevtest items 30080 -60 30020 3
 sleep 1

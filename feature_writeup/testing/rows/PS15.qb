@@ -38,8 +38,9 @@
 @owner true
 ## SQ-PS15-01 | salt dust click on ice, packed ice, snow layer (1 and 3): a salt layer on top, target not melted; then the layer melts it
 @group A
+# BF-FIX judge-3 r1124fx: expectations predate salt.md 208 (owner 2026-11-17: the click melts one stage, no layer on saltable blocks)
 @commands Salt dust click on ice, packed ice, snow layer (CD 1.1.0 with Salt -04, Common 1.2.0 of 2026-11-15)
-@pass a salt layer is placed on top; the ice is not melted by the click; the layer then melts it at block rate
+@pass a click on a saltable block melts it one stage and spends 1 dust, no layer (salt.md 208; a layer only on a non-saltable block)
 @fails route the click through the layer place only
 @from batches/r1116/ps15_a.qb
 # self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
@@ -67,10 +68,11 @@ sleep 1
 > cdevtest state 303 -60 300
 > cdevtest items 304 -60 300 8
 count \[cdevtest\] verb=use who=fake hand=main action=block result=(CONSUME|SUCCESS) == 4
-count \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?minecraft:(ice|packed_ice)\b == 2
-count \[cdevtest\] verb=state pos=30[03],-60,300 state="vintagedelight:salt\[layers=1\]" == 2
+count \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?minecraft:water == 1
+count \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?minecraft:ice\b == 1
+count \[cdevtest\] verb=state pos=(30[03],-60|30[69],-59),300 state=minecraft:air == 4
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
-look before the ticks: ice and packed ice kept with a 1-layer salt layer above, dust 4 -> 3; snow 1 and 3: record (layer on top, or replaced); after the ticks: ice -> water, packed -> ice; layer above popped or kept (record)
+look after the click (salt.md 208, owner 2026-11-17): ice -> water, packed ice -> ice, snow 1 and 3 -> air, no layer above any of them, dust 4 -> 3 per click; after the ticks nothing else changes
 
 ## SQ-PS15-02 | dispenser with salt dust facing air over grass, air over air, ice, packed ice, snow layer, salt layer 3, stone
 @group A
@@ -492,6 +494,7 @@ look all three refills one stage per salt (layer of 2: two stages, layer gone); 
 @from batches/r1116/ps15_a.qb
 @absent salt:salt_melt (registered by SaltMeltRegistry after the 2026-11-15 dumps; drop this line after /dumpall)
 # self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+# BF-FIX judge-3 r1124fx: blue ice is not saltable (melting.md, 2026-11-17: refused, no damage) and a snow block leaves snow[layers=5] (saltMeltSnowLayers 3 of 8): 4 damaging uses before the loop, so loop 59 reaches Damage 63 and use 64 breaks it
 > forceload add 280 280 380 420
 sleep 2
 > cdevtest rdetail creativedelight:shapeless/salt_melt
@@ -514,7 +517,7 @@ sleep 3
 > cdevtest use 308 -61 370 as=SM face=up
 > cdevtest use 310 -61 370 as=SM face=up
 > say ps07 loop
-repeat 58
+repeat 59
 > setblock 320 -61 370 minecraft:ice
 > cdevtest use 320 -61 370 as=SM face=up
 end
@@ -544,9 +547,10 @@ sleep 1
 > pbot remove SM
 expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:1\} off=empty state="?minecraft:water
 expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:2\} off=empty state="?minecraft:ice
-expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:3\} off=empty state="?minecraft:packed_ice
-expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:5\} off=empty state="?minecraft:(?!stone)
-expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:5\} off=empty state="?minecraft:stone
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:2\} off=empty state="?minecraft:blue_ice
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:3\} off=empty state="?minecraft:snow\[layers=5\]
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:4\} off=empty state="?minecraft:air
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:4\} off=empty state="?minecraft:stone
 expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:63\} off=empty state="?minecraft:water
 count \[cdevtest\] verb=use main=empty off=empty state="?minecraft:water == 1
 count \[cdevtest\] verb=use main=empty off=empty state="?minecraft:ice == 1
@@ -708,6 +712,12 @@ look pie, apple pie and stick: notInserted=1 and the box empty; cooked beef insi
 @pass the arm's held item is never more than 1 part (`HeldItem` count 1 or empty); the circuit locks, Assembly goes 1/3 to 3/3 and the end depot holds `powergrid:circuit_board x1 Schematic components=3`; part depots lose only what went into the board or onto the belt one at a time (record how many loose single parts rode to the end depot before the circuit arrived: upstream fallback to the belt insert); stone depot x64 unchanged
 @fails arm holds x7 again: the cap did not apply (wrong jar, or `getDistributableAmount` signature on Create 0.5.1.i); stall at 1/3 with the arm empty: belt lock window (SQ-PWG-82 failure column)
 @from batches/r1116/ps15_pwg.qb
+# BF-FIX judge-3 r1124fx: the row names jar -19 but section 1 has no PGJAR prep, so mods/ had no Power Grid jar (probe: CircuitBoardBlockEntity class could not be found); it copies the jar and restarts
+edit cp "$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar" mods/
+restart
+# forceload added (r1124fx runner-1, 2026-11-24): prescreen found the row coordinates outside every forceload
+> forceload add 1136 1850 1160 1915
+sleep 3
 > zpwg9c line 1142 -60 1906 plain
 waitlog \[zpwg9c\] done 20
 sleep 0.5

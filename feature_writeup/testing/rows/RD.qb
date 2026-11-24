@@ -316,6 +316,37 @@ look below Y 50 and depth 13+: inky and morel singles rare, on stone / sculk / d
 @jars creativecommon creativedelight
 @from batches/r1102/b5_groupB.qb
 bootreject (?i)\b(error|exception)\b.*(truffle_dirt|rooted_dirt|wild_crops)
+# squares located and pregenerated here (r1124fx runner-1, 2026-11-24), as in SQ-FGD-12: it is not in the selection
+> locate biome minecraft:dark_forest
+waitlog (nearest minecraft:dark_forest|Could not find) 600
+capture DF nearest minecraft:dark_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {DF1} {DF3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:swamp
+waitlog (nearest minecraft:swamp|Could not find) 600
+capture SW nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {SW1} {SW3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:taiga
+waitlog (nearest minecraft:taiga|Could not find) 600
+capture TA nearest minecraft:taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {TA1} {TA3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:birch_forest
+waitlog (nearest minecraft:birch_forest|Could not find) 600
+capture BI nearest minecraft:birch_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {BI1} {BI3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> save-all flush
+waitlog Saved the game 300
 shell for b in "DF {DF1} {DF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}" "SW {SW1} {SW3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'minecraft:rooted_dirt$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:truffle_dirt$' --near 'minecraft:rooted_dirt$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
 look both near the surface in dark forest and cold forest (taiga, grove) biomes, none in a conifer biome that is neither (read the by_biome lines; the four squares hold several biomes each, e.g. old growth or windswept forests); truffle dirt mostly with a rooted dirt neighbour. Rooted dirt but no truffle dirt: the two rules ran in the wrong order (merge them, row text)
 
@@ -1021,6 +1052,11 @@ look the recipe types (serializer= on the makes lines: cooking pot, cutting boar
 # config/miners_delight-common.toml (not moved into the CD file)
 bootexpect Miner's Delight upstream data: \d+ files
 bootreject (?i)miners_upstream.*(error|missing)
+# home capture moved into the row (r1124fx runner-1, 2026-11-24): the rows that captured it are not in the selection
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 shell test -f config/miners_delight-common.toml
 > cdevtest rdetail farmersdelight:cooking/hot_cocoa
 > setblock {H1+14} {H2} {H3+28} minecraft:campfire[lit=true]
@@ -1079,6 +1115,11 @@ look only the 1.1.2 jar named (missing), with its CurseForge link; the 1.4.5 cop
 @fails CD `miners_delight/loot.js` not loaded (CD jar), or the pre-roll framework does not see the Miner's table
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
+# home capture moved into the row (r1124fx runner-1, 2026-11-24): the rows that captured it are not in the selection
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > loottuning
 > kill @e[type=minecraft:item]
 repeat 300
@@ -2543,6 +2584,11 @@ look global.food.veggie_slice_cooked_potato = rusticdelight:baked_potato_slices 
 @pass 4 slices (wheel: `vintagedelight:cheese_slice`, pizzas: their own slice), 2 slices at `bites=2`; the TNT blast may drop some of the slices (loot table `minecraft:survives_explosion`, owner 2026-11-02: fine), r1102 got 4
 @fails Nothing at all: the CD jar does not nest Vintage `-05` or later (now `-11`), or `port_resources.py` was not rerun before the build
 @from batches/r1102/b1_main.qb
+# home capture moved into the row (r1124fx runner-1, 2026-11-24): the rows that captured it are not in the selection
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+18} vintagedelight:cheese_wheel
 > setblock {H1+3} {H2} {H3+18} vintagedelight:cheese_pizza
@@ -2558,8 +2604,9 @@ sleep 3
 > zcount {H1+5} {H2} {H3+17} {H1+7} {H2+2} {H3+19}
 > zcount {H1+8} {H2} {H3+17} {H1+10} {H2+2} {H3+19}
 expect \[zcount\] entities item:vintagedelight:cheese_slice x4=1$
-expect \[zcount\] entities item:vintagedelight:cheese_pizza_slice x4=1$
-expect \[zcount\] entities item:vintagedelight:meat_pizza_slice x4=1$
+# pizza breaks drop 2 slices per bite left, 8 from a whole pizza (changelog Pizza section; judge-4, 2026-11-24)
+expect \[zcount\] entities item:vintagedelight:cheese_pizza_slice x8=1$
+expect \[zcount\] entities item:vintagedelight:meat_pizza_slice x8=1$
 expect \[zcount\] entities item:vintagedelight:cheese_slice x2=1$
 # blast: a wheel 30 blocks off the other lanes, TNT with no fuse beside it
 > setblock {H1+30} {H2} {H3+18} vintagedelight:cheese_wheel
@@ -3186,6 +3233,9 @@ expect verb=tag kind=block tag=farmersdelight:mineable/knife n=\d+ ids=\S*farmer
 # /loot kill gave no onion in 300 tries in run 1 (the LootJS modifier needs a real kill), so the bot kills real
 # zombies: 1-health zombies under a leather helmet (no sun burn), an arrow owned by the bot dropped on each one.
 # Then 100 kills by ownerless arrows (no player) as the control, then the knife through execute as the bot.
+# summon added (r1124fx runner-1, 2026-11-24): no selected row summons the s1home marker
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
 > data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > kill @e[type=minecraft:zombie,tag=fdb11]
@@ -3234,11 +3284,12 @@ sleep 2
 sleep 2
 > zcount {H1+50} {H2} {H3-31} {H1+52} {H2+2} {H3-30}
 > zcount {H1+50} {H2} {H3-29} {H1+52} {H2+2} {H3-27}
-expect \[zcount\] entities .*item:farmersdelight:pumpkin_slice x4
+# a Pumpkin broken with a Knife drops 8 Pumpkin Slices [4] (changelog; judge-4, 2026-11-24)
+expect \[zcount\] entities .*item:farmersdelight:pumpkin_slice x8
 expect \[zcount\] entities .*item:minecraft:pumpkin x1
 > kill @e[type=minecraft:item]
 > pbot remove fdb11
-look after "player kills counted": onions about 10 of 200 (2 % + 3 x 1 %); after "control (no player)": no onion; first knife zcount: 4 pumpkin_slice, no pumpkin; second (Silk Touch): minecraft:pumpkin
+look after "player kills counted": onions about 10 of 200 (2 % + 3 x 1 %); after "control (no player)": no onion; first knife zcount: 8 pumpkin_slice, no pumpkin; second (Silk Touch): minecraft:pumpkin
 
 ## SQ-FDB-12
 @group A, client
@@ -4272,29 +4323,44 @@ waitlog The nearest minecraft:jungle 600
 capture JG The nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {JG1-48} {JG3-48} {JG1+48} {JG3+48}
 sleep 40
-> cdevtest count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_bell_peppers
-waitlog verb=count block=rusticdelight:wild_bell_peppers n= 300
-> cdevtest count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_coffee
-waitlog verb=count block=rusticdelight:wild_coffee n= 300
-> cdevtest count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:bell_pepper_red_block
-waitlog verb=count block=rusticdelight:bell_pepper_red_block n= 300
-expect verb=count block=rusticdelight:bell_pepper_red_block n=0\b
+> say RD26J begin
+> cdevtest count {JG1-48} 50 {JG3-48} {JG1+48} 119 {JG3-17} rusticdelight:wild_bell_peppers
+> cdevtest count {JG1-48} 50 {JG3-16} {JG1+48} 119 {JG3+16} rusticdelight:wild_bell_peppers
+> cdevtest count {JG1-48} 50 {JG3+17} {JG1+48} 119 {JG3+48} rusticdelight:wild_bell_peppers
+> cdevtest count {JG1-48} 50 {JG3-48} {JG1+48} 119 {JG3-17} rusticdelight:wild_coffee
+> cdevtest count {JG1-48} 50 {JG3-16} {JG1+48} 119 {JG3+16} rusticdelight:wild_coffee
+> cdevtest count {JG1-48} 50 {JG3+17} {JG1+48} 119 {JG3+48} rusticdelight:wild_coffee
+> cdevtest count {JG1-48} 50 {JG3-48} {JG1+48} 119 {JG3-17} rusticdelight:bell_pepper_red_block
+> cdevtest count {JG1-48} 50 {JG3-16} {JG1+48} 119 {JG3+16} rusticdelight:bell_pepper_red_block
+> cdevtest count {JG1-48} 50 {JG3+17} {JG1+48} 119 {JG3+48} rusticdelight:bell_pepper_red_block
+> say RD26J end
+waitlog RD26J end 300
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);e=any('verb=count error' in l for l in L[i:]);print(a,'totals',t,'skipped_columns',s,'error',e);bad=[b for b in sys.argv[2:] if (t.get(b[1:],0)==0 if b[0]=='+' else t.get(b[1:],0)!=0)];print('bad:',bad);sys.exit(1 if (bad or e) else 0)" RD26J +rusticdelight:wild_coffee -rusticdelight:bell_pepper_red_block
 > execute positioned -2500 70 2500 run locate biome minecraft:savanna
 waitlog The nearest minecraft:savanna 600
 capture SV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {SV1-64} {SV3-64} {SV1+64} {SV3+64}
 sleep 60
-> cdevtest count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_cotton
-waitlog verb=count block=rusticdelight:wild_cotton n= 300
-> cdevtest count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:bell_pepper_red_block
-> cdevtest count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_coffee
-> cdevtest count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_bell_peppers
-sleep 5
+> say RD26S begin
+> cdevtest count {SV1-48} 56 {SV3-48} {SV1+48} 135 {SV3-17} rusticdelight:wild_cotton
+> cdevtest count {SV1-48} 56 {SV3-16} {SV1+48} 135 {SV3+16} rusticdelight:wild_cotton
+> cdevtest count {SV1-48} 56 {SV3+17} {SV1+48} 135 {SV3+48} rusticdelight:wild_cotton
+> cdevtest count {SV1-48} 56 {SV3-48} {SV1+48} 135 {SV3-17} rusticdelight:bell_pepper_red_block
+> cdevtest count {SV1-48} 56 {SV3-16} {SV1+48} 135 {SV3+16} rusticdelight:bell_pepper_red_block
+> cdevtest count {SV1-48} 56 {SV3+17} {SV1+48} 135 {SV3+48} rusticdelight:bell_pepper_red_block
+> cdevtest count {SV1-48} 56 {SV3-48} {SV1+48} 135 {SV3-17} rusticdelight:wild_coffee
+> cdevtest count {SV1-48} 56 {SV3-16} {SV1+48} 135 {SV3+16} rusticdelight:wild_coffee
+> cdevtest count {SV1-48} 56 {SV3+17} {SV1+48} 135 {SV3+48} rusticdelight:wild_coffee
+> cdevtest count {SV1-48} 56 {SV3-48} {SV1+48} 135 {SV3-17} rusticdelight:wild_bell_peppers
+> cdevtest count {SV1-48} 56 {SV3-16} {SV1+48} 135 {SV3+16} rusticdelight:wild_bell_peppers
+> cdevtest count {SV1-48} 56 {SV3+17} {SV1+48} 135 {SV3+48} rusticdelight:wild_bell_peppers
+> say RD26S end
+waitlog RD26S end 300
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);e=any('verb=count error' in l for l in L[i:]);print(a,'totals',t,'skipped_columns',s,'error',e);bad=[b for b in sys.argv[2:] if (t.get(b[1:],0)==0 if b[0]=='+' else t.get(b[1:],0)!=0)];print('bad:',bad);sys.exit(1 if (bad or e) else 0)" RD26S +rusticdelight:wild_cotton
+# r1124fx judge-5 (2026-11-24): the boxes were over the 262144-block count limit (error box over 262144 blocks, done=0); now z-slices of at most 97x33x80 each, sums by the shell
 > cdevtest tag biome creativedelight:wild_crops/bell_pepper
 > cdevtest tag biome creativedelight:wild_crops/coffee
 > cdevtest tag biome creativedelight:wild_crops/giant_bell_pepper
-expect verb=count block=rusticdelight:wild_coffee n=[1-9]
-expect verb=count block=rusticdelight:wild_cotton n=[1-9]
 expect verb=tag kind=biome tag=creativedelight:wild_crops/bell_pepper n=[1-9]\d* ids=\S*jungle
 reject verb=tag kind=biome tag=creativedelight:wild_crops/giant_bell_pepper n=\d+ ids=\S*jungle
 reject verb=(count|tag) done=0
@@ -5719,12 +5785,21 @@ expect RSP06 level 3
 @fails `ce$stowBottles`; `[qol] remainderBuffer` off
 @jars creativecommon creativedelight
 @from batches/r1103/p2_R.qb
+# rhome capture moved into the row (r1124fx runner-1, 2026-11-24): the rows that captured it are not in the selection
+> forceload add 1000 1000
+sleep 2
+> execute unless entity @e[type=minecraft:marker,tag=rhome] run summon minecraft:marker 1000 -60 1000 {Tags:["rhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=rhome,limit=1] Pos
+capture R entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {R1+14} {R3+106}
 > setblock {R1+14} {R2} {R3+106} minecraft:campfire[lit=true]
 > setblock {R1+14} {R2+1} {R3+106} farmersrespite:kettle[water_level=4]
 > data merge block {R1+14} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"minecraft:glass_bottle",Count:3b}]}}
 sleep 2
 > data get block {R1+14} {R2+1} {R3+106}
-reject Slot: 0, id: "minecraft:glass_bottle"
+# the buffer capability (ForgeCaps) also prints Slot: 0; only the kettle Inventory must be empty (judge-4, 2026-11-24)
+expect Inventory: \{Size: 5, Items: \[\]\}
 expect minecraft:glass_bottle
 look the 3 bottles are in the buffer / leftover slots, the plating slot (3) is empty
 

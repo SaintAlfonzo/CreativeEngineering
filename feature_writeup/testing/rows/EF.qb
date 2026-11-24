@@ -86,13 +86,18 @@ capture AH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > pbot spawn qa {AH1} 200 {AH3} minecraft:overworld creative
 sleep 20
 > execute at qa run place structure philipsruins:ancient_crypt ~ ~ ~
+# forceload added (r1124fx runner-1, 2026-11-24): prescreen found the row coordinates outside every forceload
+> forceload add 2144 -2592
+sleep 20
 > execute positioned 2144 64 -2592 run place structure philipsruins:ancient_crypt
 > execute positioned 0 70 0 run locate biome minecraft:deep_ocean
 waitlog nearest minecraft:deep_ocean is at 300
 capture DO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {DO1} {DO3} {DO1+80} {DO3}
+sleep 20
 > execute positioned {DO1} 40 {DO3} run place structure philipsruins:ocean_ruins
 > execute positioned {DO1+80} 40 {DO3} run place structure philipsruins:ocean_fortress
-reject (?i)failed to place
+reject (?i)(failed to place|position is not loaded)
 look crypt: ground ring at the entrance roof, no pit, rooms open (screenshots in the client block at the logged positions); record how the seabed ruins sit for brief #3 (ST-238)
 
 ## SQ-EF-06 | undead castles kept on slopes (same world plus a highlands square)

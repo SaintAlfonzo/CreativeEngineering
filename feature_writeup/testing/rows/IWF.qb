@@ -91,6 +91,13 @@ look the counts (two y bands per block; the random ticks go through the level's 
 @fails Growths run: the switch is not read (`growthsOn`)
 @from batches/r1031/b1_iwf.qb
 @reviewed 2026-11-16
+# BF-FIX judge-3 r1124fx: the row never set block_growths = false (the srv config had true, grass spread by growths); it sets it, restarts, and restores true at its end
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/immersive_weathering-common.toml general block_growths false
+restart
+# PL located here (r1124fx runner-1, 2026-11-24): SQ-IWF-02, which captured it, is not in the selection
+> execute positioned 0 70 0 run locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 300
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > pbot spawn qa {PL1} 161 {PL3-12} minecraft:overworld creative
 sleep 15
 > fill {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:dirt
@@ -104,6 +111,8 @@ sleep 60
 > cdevtest count {PL1+10} 181 {PL3-2} {PL1+14} 181 {PL3+2} immersive_weathering:oak_leaf_pile
 look grass still spreads (vanilla), but no IW flowers on it and no leaf piles beyond what leaf decay drops (persistent leaves do not decay, so 0)
 reject verb=\S+ .*done=0
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/immersive_weathering-common.toml general block_growths true
+restart
 
 ## SQ-IWF-05
 @group B
