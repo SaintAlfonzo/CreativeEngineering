@@ -21,16 +21,16 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 
 `assets/loading_tips/loading_tips/tips.json`, priority 0, 532 tips
 
-1. `loading_tips:use_a_mace_with_the_wind_burst_enchantment_to` Use a Mace with the Wind Burst enchantment to stay airborne! *(removed by creativetips:tips)*
-2. `loading_tips:trial_chambers_are_found_deep_underground_in_the` Trial Chambers are found deep underground in the Overworld. *(removed by creativetips:tips)*
-3. `loading_tips:copper_bulbs_have_different_light_levels_based` Copper Bulbs have different light levels based on oxidation. *(removed by creativetips:tips)*
-4. `loading_tips:breeze_rods_can_be_crafted_into_wind_charges` Breeze Rods can be crafted into Wind Charges. *(removed by creativetips:tips)*
-5. `loading_tips:heavy_cores_are_rare_rewards_from_trial_vaults` Heavy Cores are rare rewards from Trial Vaults. *(removed by creativetips:tips)*
+1. `loading_tips:use_a_mace_with_the_wind_burst_enchantment_to` Use a Mace with the Wind Burst enchantment to stay airborne! *(removed by loading_tips:version_filter)*
+2. `loading_tips:trial_chambers_are_found_deep_underground_in_the` Trial Chambers are found deep underground in the Overworld. *(removed by loading_tips:version_filter)*
+3. `loading_tips:copper_bulbs_have_different_light_levels_based` Copper Bulbs have different light levels based on oxidation. *(removed by loading_tips:version_filter)*
+4. `loading_tips:breeze_rods_can_be_crafted_into_wind_charges` Breeze Rods can be crafted into Wind Charges. *(removed by loading_tips:version_filter)*
+5. `loading_tips:heavy_cores_are_rare_rewards_from_trial_vaults` Heavy Cores are rare rewards from Trial Vaults. *(removed by loading_tips:version_filter)*
 6. `loading_tips:you_can_use_an_axe_to_scrape_oxidation_off` You can use an Axe to scrape oxidation off Copper blocks. *(replaced by creativetips:tips)*
-7. `loading_tips:crafters_require_a_redstone_signal_to_craft` Crafters require a Redstone signal to craft. *(removed by creativetips:tips)*
-8. `loading_tips:the_bogged_is_a_new_skeleton_variant_that_fires` The Bogged is a new skeleton variant that fires poison arrows. *(removed by creativetips:tips)*
-9. `loading_tips:armadillo_scutes_can_be_used_to_craft_wolf_armor` Armadillo Scutes can be used to craft Wolf Armor. *(removed by creativetips:tips)*
-10. `loading_tips:vaults_can_be_opened_by_every_player_once_using` Vaults can be opened by every player once using a Trial Key. *(removed by creativetips:tips)*
+7. `loading_tips:crafters_require_a_redstone_signal_to_craft` Crafters require a Redstone signal to craft. *(removed by loading_tips:version_filter)*
+8. `loading_tips:the_bogged_is_a_new_skeleton_variant_that_fires` The Bogged is a new skeleton variant that fires poison arrows. *(removed by loading_tips:version_filter)*
+9. `loading_tips:armadillo_scutes_can_be_used_to_craft_wolf_armor` Armadillo Scutes can be used to craft Wolf Armor. *(removed by loading_tips:version_filter)*
+10. `loading_tips:vaults_can_be_opened_by_every_player_once_using` Vaults can be opened by every player once using a Trial Key. *(removed by loading_tips:version_filter)*
 11. `loading_tips:dont_dig_straight_down` Don't dig straight down! *(removed by creativetips:tips)*
 12. `loading_tips:crouch_to_avoid_falling_off_ledges` Crouch to avoid falling off ledges. *(replaced by creativetips:tips)*
 13. `loading_tips:gold_tools_are_faster_but_break_easily` Gold tools are faster but break easily. *(replaced by creativetips:tips)*
@@ -97,30 +97,30 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 74. `loading_tips:frogs_eat_small_slimes_and_magma_cubes` Frogs eat small slimes and magma cubes. *(replaced by creativetips:tips)*
 75. `loading_tips:mud_is_made_from_dirt_and_water` Mud is made from dirt and water. *(replaced by creativetips:tips)*
 76. `loading_tips:mangrove_trees_grow_in_water` Mangrove trees grow in water. *(replaced by creativetips:tips)*
-77. `loading_tips:sniffers_find_ancient_seeds` Sniffers find ancient seeds. *(removed by creativetips:tips)*
-78. `loading_tips:camel_dashes_jump_over_ravines` Camel dashes jump over ravines. *(removed by creativetips:tips)*
-79. `loading_tips:bamboo_can_be_used_for_wood` Bamboo can be used for wood. *(removed by creativetips:tips)*
-80. `loading_tips:armor_trims_are_found_in_structures` Armor trims are found in structures. *(removed by creativetips:tips)*
-81. `loading_tips:smithing_templates_are_required_for_upgrades` Smithing templates are required for upgrades. *(removed by creativetips:tips)*
-82. `loading_tips:netherite_requires_a_smithing_template` Netherite requires a smithing template. *(removed by creativetips:tips)*
-83. `loading_tips:trail_ruins_are_buried_underground` Trail Ruins are buried underground. *(removed by creativetips:tips)*
-84. `loading_tips:suspicious_gravel_can_be_brushed` Suspicious gravel can be brushed. *(removed by creativetips:tips)*
-85. `loading_tips:trial_chambers_are_full_of_loot` Trial Chambers are full of loot. *(removed by creativetips:tips)*
-86. `loading_tips:trial_spawners_give_rewards` Trial Spawners give rewards. *(removed by creativetips:tips)*
-87. `loading_tips:trial_keys_unlock_vaults` Trial Keys unlock Vaults. *(removed by creativetips:tips)*
-88. `loading_tips:the_breeze_drops_breeze_rods` The Breeze drops Breeze Rods. *(removed by creativetips:tips)*
-89. `loading_tips:the_bogged_fires_poison_arrows` The Bogged fires poison arrows. *(removed by creativetips:tips)*
-90. `loading_tips:maces_do_more_damage_from_heights` Maces do more damage from heights. *(removed by creativetips:tips)*
-91. `loading_tips:wind_charges_launch_you_upward` Wind Charges launch you upward. *(removed by creativetips:tips)*
-92. `loading_tips:crafters_automate_your_crafting` Crafters automate your crafting. *(removed by creativetips:tips)*
-93. `loading_tips:copper_bulbs_change_light_levels` Copper Bulbs change light levels. *(removed by creativetips:tips)*
-94. `loading_tips:heavy_cores_craft_the_mace` Heavy Cores craft the Mace. *(removed by creativetips:tips)*
-95. `loading_tips:ominous_trials_are_harder_but_better` Ominous Trials are harder but better. *(removed by creativetips:tips)*
-96. `loading_tips:bad_omen_triggers_ominous_trials` Bad Omen triggers Ominous Trials. *(removed by creativetips:tips)*
-97. `loading_tips:drink_ominous_bottles_for_a_challenge` Drink Ominous Bottles for a challenge. *(removed by creativetips:tips)*
-98. `loading_tips:vaults_can_be_opened_by_everyone_but_not_twice` Vaults can be opened by everyone, but not twice per player. *(removed by creativetips:tips)*
-99. `loading_tips:chiseled_tuff_looks_great_for_builds` Chiseled Tuff looks great for builds. *(removed by creativetips:tips)*
-100. `loading_tips:copper_grates_allow_light_through` Copper Grates allow light through. *(removed by creativetips:tips)*
+77. `loading_tips:sniffers_find_ancient_seeds` Sniffers find ancient seeds. *(removed by loading_tips:version_filter)*
+78. `loading_tips:camel_dashes_jump_over_ravines` Camel dashes jump over ravines. *(removed by loading_tips:version_filter)*
+79. `loading_tips:bamboo_can_be_used_for_wood` Bamboo can be used for wood. *(removed by loading_tips:version_filter)*
+80. `loading_tips:armor_trims_are_found_in_structures` Armor trims are found in structures. *(removed by loading_tips:version_filter)*
+81. `loading_tips:smithing_templates_are_required_for_upgrades` Smithing templates are required for upgrades. *(removed by loading_tips:version_filter)*
+82. `loading_tips:netherite_requires_a_smithing_template` Netherite requires a smithing template. *(removed by loading_tips:version_filter)*
+83. `loading_tips:trail_ruins_are_buried_underground` Trail Ruins are buried underground. *(removed by loading_tips:version_filter)*
+84. `loading_tips:suspicious_gravel_can_be_brushed` Suspicious gravel can be brushed. *(removed by loading_tips:version_filter)*
+85. `loading_tips:trial_chambers_are_full_of_loot` Trial Chambers are full of loot. *(removed by loading_tips:version_filter)*
+86. `loading_tips:trial_spawners_give_rewards` Trial Spawners give rewards. *(removed by loading_tips:version_filter)*
+87. `loading_tips:trial_keys_unlock_vaults` Trial Keys unlock Vaults. *(removed by loading_tips:version_filter)*
+88. `loading_tips:the_breeze_drops_breeze_rods` The Breeze drops Breeze Rods. *(removed by loading_tips:version_filter)*
+89. `loading_tips:the_bogged_fires_poison_arrows` The Bogged fires poison arrows. *(removed by loading_tips:version_filter)*
+90. `loading_tips:maces_do_more_damage_from_heights` Maces do more damage from heights. *(removed by loading_tips:version_filter)*
+91. `loading_tips:wind_charges_launch_you_upward` Wind Charges launch you upward. *(removed by loading_tips:version_filter)*
+92. `loading_tips:crafters_automate_your_crafting` Crafters automate your crafting. *(removed by loading_tips:version_filter)*
+93. `loading_tips:copper_bulbs_change_light_levels` Copper Bulbs change light levels. *(removed by loading_tips:version_filter)*
+94. `loading_tips:heavy_cores_craft_the_mace` Heavy Cores craft the Mace. *(removed by loading_tips:version_filter)*
+95. `loading_tips:ominous_trials_are_harder_but_better` Ominous Trials are harder but better. *(removed by loading_tips:version_filter)*
+96. `loading_tips:bad_omen_triggers_ominous_trials` Bad Omen triggers Ominous Trials. *(removed by loading_tips:version_filter)*
+97. `loading_tips:drink_ominous_bottles_for_a_challenge` Drink Ominous Bottles for a challenge. *(removed by loading_tips:version_filter)*
+98. `loading_tips:vaults_can_be_opened_by_everyone_but_not_twice` Vaults can be opened by everyone, but not twice per player. *(removed by loading_tips:version_filter)*
+99. `loading_tips:chiseled_tuff_looks_great_for_builds` Chiseled Tuff looks great for builds. *(removed by loading_tips:version_filter)*
+100. `loading_tips:copper_grates_allow_light_through` Copper Grates allow light through. *(removed by loading_tips:version_filter)*
 101. `loading_tips:hardened_glass_wont_break_easily` Hardened glass won't break easily. *(removed by creativetips:tips)*
 102. `loading_tips:sugar_cane_grows_on_sand_or_dirt` Sugar cane grows on sand or dirt. *(replaced by creativetips:tips)*
 103. `loading_tips:pumpkins_need_space_to_grow` Pumpkins need space to grow. *(replaced by creativetips:tips)*
@@ -168,7 +168,7 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 145. `loading_tips:potions_of_invisibility_greatly_reduce_mob` Potions of Invisibility greatly reduce mob detection range, but remove armor for full effect!
 146. `loading_tips:potions_of_night_vision_see_in_the_dark` Potions of Night Vision see in the dark. *(replaced by creativetips:tips)*
 147. `loading_tips:potions_of_fire_resistance_stop_lava_damage` Potions of Fire Resistance stop lava damage. *(replaced by creativetips:tips)*
-148. `loading_tips:potions_of_slow_falling_prevent_fall_death_and` Potions of Slow Falling prevent fall death, and disable maces. *(removed by creativetips:tips)*
+148. `loading_tips:potions_of_slow_falling_prevent_fall_death_and` Potions of Slow Falling prevent fall death, and disable maces. *(removed by loading_tips:version_filter)*
 149. `loading_tips:potions_of_water_breathing_are_for_diving` Potions of Water Breathing are for diving. *(replaced by creativetips:tips)*
 150. `loading_tips:lingering_potions_create_effect_clouds` Lingering potions create effect clouds. *(replaced by creativetips:tips)*
 151. `loading_tips:splash_potions_affect_multiple_entities` Splash potions affect multiple entities. *(replaced by creativetips:tips)*
@@ -229,9 +229,9 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 206. `loading_tips:pumpkin_masks_hide_you_from_endermen` Pumpkin masks hide you from Endermen. *(removed by creativetips:tips)*
 207. `loading_tips:dye_leather_armor_using_a_cauldron` Dye leather armor using a cauldron. *(removed by creativetips:tips)*
 208. `loading_tips:suspicious_stew_gives_random_effects` Suspicious stew gives random effects. *(replaced by creativetips:tips)*
-209. `loading_tips:brushes_are_used_for_archeology` Brushes are used for archeology. *(removed by creativetips:tips)*
-210. `loading_tips:pottery_sherds_make_decorated_pots` Pottery Sherds make decorated pots. *(removed by creativetips:tips)*
-211. `loading_tips:sniffer_eggs_hatch_on_moss_blocks` Sniffer eggs hatch on moss blocks. *(removed by creativetips:tips)*
+209. `loading_tips:brushes_are_used_for_archeology` Brushes are used for archeology. *(removed by loading_tips:version_filter)*
+210. `loading_tips:pottery_sherds_make_decorated_pots` Pottery Sherds make decorated pots. *(removed by loading_tips:version_filter)*
+211. `loading_tips:sniffer_eggs_hatch_on_moss_blocks` Sniffer eggs hatch on moss blocks. *(removed by loading_tips:version_filter)*
 212. `loading_tips:lava_buckets_are_the_best_furnace_fuel` Lava buckets are the best furnace fuel. *(replaced by creativetips:tips)*
 213. `loading_tips:bows_can_be_repaired_with_string` Bows can be repaired with string. *(removed by creativetips:tips)*
 214. `loading_tips:wooden_buttons_have_a_longer_signal` Wooden buttons have a longer signal. *(replaced by creativetips:tips)*
@@ -289,7 +289,7 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 266. `loading_tips:wool_blocks_block_warden_vibrations` Wool blocks block Warden vibrations. *(removed by creativetips:tips)*
 267. `loading_tips:echo_shards_craft_recovery_compasses` Echo shards craft recovery compasses. *(removed by creativetips:tips)*
 268. `loading_tips:swift_sneak_is_found_in_ancient_cities` Swift Sneak is found in Ancient Cities. *(removed by creativetips:tips)*
-269. `loading_tips:silence_armor_trim_is_the_rarest` Silence Armor Trim is the rarest. *(removed by creativetips:tips)*
+269. `loading_tips:silence_armor_trim_is_the_rarest` Silence Armor Trim is the rarest. *(removed by loading_tips:version_filter)*
 270. `loading_tips:spore_blossoms_create_green_particles` Spore blossoms create green particles. *(removed by creativetips:tips)*
 271. `loading_tips:big_dripleaves_collapse_under_weight` Big dripleaves collapse under weight. *(replaced by creativetips:tips)*
 272. `loading_tips:small_dripleaves_need_bone_meal` Small dripleaves need bone meal. *(removed by creativetips:tips)*
@@ -298,7 +298,7 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 275. `loading_tips:spies_can_see_through_tinted_glass` Spies can see through tinted glass. *(removed by creativetips:tips)*
 276. `loading_tips:tinted_glass_blocks_light_completely` Tinted glass blocks light completely. *(removed by creativetips:tips)*
 277. `loading_tips:amethyst_clusters_drop_four_shards` Amethyst clusters drop four shards. *(removed by creativetips:tips)*
-278. `loading_tips:calibrated_sculks_sense_specific_sounds` Calibrated sculks sense specific sounds. *(removed by creativetips:tips)*
+278. `loading_tips:calibrated_sculks_sense_specific_sounds` Calibrated sculks sense specific sounds. *(removed by loading_tips:version_filter)*
 279. `loading_tips:sculk_shriekers_summon_the_warden` Sculk shriekers summon the Warden. *(removed by creativetips:tips)*
 280. `loading_tips:sculk_catalysts_create_sculk_blocks` Sculk catalysts create sculk blocks. *(replaced by creativetips:tips)*
 281. `loading_tips:bells_can_be_rung_with_arrows` Bells can be rung with arrows. *(removed by creativetips:tips)*
@@ -332,46 +332,46 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 309. `loading_tips:redstone_torches_invert_signals` Redstone torches invert signals. *(replaced by creativetips:tips)*
 310. `loading_tips:tnt_can_be_lit_with_fire_charges` TNT can be lit with fire charges. *(replaced by creativetips:tips)*
 311. `loading_tips:hardcore_mode_means_one_life_only` Hardcore mode means one life only. *(removed by creativetips:tips)*
-312. `loading_tips:the_mace_deals_more_damage_the_further_you_fall` The Mace deals more damage the further you fall before hitting! *(removed by creativetips:tips)*
-313. `loading_tips:wind_burst_enchantment_on_a_mace_can_launch_you` Wind Burst enchantment on a Mace can launch you back into the air. *(removed by creativetips:tips)*
-314. `loading_tips:the_breach_enchantment_reduces_the_effectiveness` The Breach enchantment reduces the effectiveness of enemy armor. *(removed by creativetips:tips)*
-315. `loading_tips:density_enchantment_increases_the_damage_dealt` Density enchantment increases the damage dealt per block fallen. *(removed by creativetips:tips)*
-316. `loading_tips:mace_smash_attacks_negate_all_fall_damage_if_you` Mace smash attacks negate all fall damage if you land the hit! *(removed by creativetips:tips)*
-317. `loading_tips:combine_a_breeze_rod_and_a_heavy_core_to_craft` Combine a Breeze Rod and a Heavy Core to craft the Mace. *(removed by creativetips:tips)*
-318. `loading_tips:heavy_cores_are_found_rarely_within_ominous` Heavy Cores are found rarely within Ominous Vaults. *(removed by creativetips:tips)*
-319. `loading_tips:ominous_trials_are_started_by_drinking_a_trial` Ominous Trials are started by drinking a Trial Omen bottle. *(removed by creativetips:tips)*
-320. `loading_tips:trial_omens_are_gained_by_defeating_raid` Trial Omens are gained by defeating Raid Captains outside of raids. *(removed by creativetips:tips)*
-321. `loading_tips:the_breeze_can_reflect_projectiles_back_at_you` The Breeze can reflect projectiles back at you with its wind. *(removed by creativetips:tips)*
-322. `loading_tips:breeze_rods_are_essential_for_crafting_the_new` Breeze Rods are essential for crafting the new Wind Charges. *(removed by creativetips:tips)*
-323. `loading_tips:wind_charges_allow_you_to_rocket_jump_like_a` Wind Charges allow you to 'rocket jump' like a Breeze! *(removed by creativetips:tips)*
-324. `loading_tips:vaults_in_trial_chambers_can_be_looted_by_every` Vaults in Trial Chambers can be looted by every player once. *(removed by creativetips:tips)*
-325. `loading_tips:ominous_vaults_have_better_loot_but_require` Ominous Vaults have better loot but require Ominous Trial Keys. *(removed by creativetips:tips)*
-326. `loading_tips:trial_spawners_adjust_their_difficulty_based_on` Trial Spawners adjust their difficulty based on how many players are nearby. *(removed by creativetips:tips)*
-327. `loading_tips:trial_spawners_eject_rewards_like_trial_keys` Trial Spawners eject rewards like Trial Keys after all mobs are defeated. *(removed by creativetips:tips)*
-328. `loading_tips:the_bogged_skeleton_variant_spawns_in_swamps_and` The Bogged skeleton variant spawns in Swamps and Trial Chambers. *(removed by creativetips:tips)*
-329. `loading_tips:you_can_shear_a_bogged_to_get_mushrooms_from_its` You can shear a Bogged to get mushrooms from its head! *(removed by creativetips:tips)*
-330. `loading_tips:copper_bulbs_dont_give_off_light_when_fully` Copper Bulbs don't give off light when fully oxidized. *(removed by creativetips:tips)*
-331. `loading_tips:wax_your_copper_bulbs_to_lock_in_their_specific` Wax your Copper Bulbs to lock in their specific light level. *(removed by creativetips:tips)*
-332. `loading_tips:the_crafter_can_be_automated_with_hoppers_for` The Crafter can be automated with Hoppers for infinite crafting. *(removed by creativetips:tips)*
-333. `loading_tips:use_redstone_comparators_to_read_how_many_slots` Use Redstone Comparators to read how many slots are filled in a Crafter. *(removed by creativetips:tips)*
-334. `loading_tips:chiseled_tuff_and_polished_tuff_are_great_new` Chiseled Tuff and Polished Tuff are great new building blocks. *(removed by creativetips:tips)*
-335. `loading_tips:trial_chambers_contain_hidden_chests_behind_some` Trial Chambers contain hidden chests behind some decorative walls. *(removed by creativetips:tips)*
-336. `loading_tips:flow_armor_trims_are_found_only_in_trial_chamber` Flow Armor Trims are found only in Trial Chamber Vaults. *(removed by creativetips:tips)*
-337. `loading_tips:the_bolt_armor_trim_has_a_unique_mechanical_look` The Bolt Armor Trim has a unique mechanical look. *(removed by creativetips:tips)*
-338. `loading_tips:guster_pottery_sherds_feature_the_breezes_iconic` Guster Pottery Sherds feature the Breeze's iconic swirl. *(removed by creativetips:tips)*
-339. `loading_tips:trial_spawners_have_a_30_minute_cooldown_after` Trial Spawners have a 30-minute cooldown after being defeated. *(removed by creativetips:tips)*
-340. `loading_tips:ominous_spawners_fire_projectiles_like_potions` Ominous Spawners fire projectiles like Potions and Fire Charges at you. *(removed by creativetips:tips)*
-341. `loading_tips:silverfish_spawners_in_trial_chambers_can` Silverfish Spawners in Trial Chambers can quickly overwhelm you. *(removed by creativetips:tips)*
-342. `loading_tips:sniffers_find_ancient_seeds_by_sniffing_the` Sniffers find ancient seeds by sniffing the ground. *(removed by creativetips:tips)*
-343. `loading_tips:torchflower_seeds_can_be_used_to_breed_sniffers` Torchflower seeds can be used to breed Sniffers. *(removed by creativetips:tips)*
-344. `loading_tips:pitcher_plants_are_tall_ancient_decorative` Pitcher Plants are tall, ancient decorative flowers. *(removed by creativetips:tips)*
-345. `loading_tips:camel_saddles_allow_two_players_to_ride_at_once` Camel saddles allow two players to ride at once. *(removed by creativetips:tips)*
-346. `loading_tips:camels_can_dash_across_large_gaps_to_escape_mobs` Camels can dash across large gaps to escape mobs. *(removed by creativetips:tips)*
-347. `loading_tips:zombies_cant_reach_you_while_you_are_riding_a` Zombies can't reach you while you are riding a Camel. *(removed by creativetips:tips)*
-348. `loading_tips:suspicious_sand_in_desert_temples_contains_rare` Suspicious Sand in Desert Temples contains rare Pottery Sherds. *(removed by creativetips:tips)*
-349. `loading_tips:suspicious_gravel_is_often_found_in_trail_ruins` Suspicious Gravel is often found in Trail Ruins. *(removed by creativetips:tips)*
-350. `loading_tips:trail_ruins_are_mostly_buried_youll_need_to_dig` Trail Ruins are mostly buried; you'll need to dig them out! *(removed by creativetips:tips)*
-351. `loading_tips:brush_suspicious_blocks_carefully_or_they_will` Brush suspicious blocks carefully or they will break. *(removed by creativetips:tips)*
+312. `loading_tips:the_mace_deals_more_damage_the_further_you_fall` The Mace deals more damage the further you fall before hitting! *(removed by loading_tips:version_filter)*
+313. `loading_tips:wind_burst_enchantment_on_a_mace_can_launch_you` Wind Burst enchantment on a Mace can launch you back into the air. *(removed by loading_tips:version_filter)*
+314. `loading_tips:the_breach_enchantment_reduces_the_effectiveness` The Breach enchantment reduces the effectiveness of enemy armor. *(removed by loading_tips:version_filter)*
+315. `loading_tips:density_enchantment_increases_the_damage_dealt` Density enchantment increases the damage dealt per block fallen. *(removed by loading_tips:version_filter)*
+316. `loading_tips:mace_smash_attacks_negate_all_fall_damage_if_you` Mace smash attacks negate all fall damage if you land the hit! *(removed by loading_tips:version_filter)*
+317. `loading_tips:combine_a_breeze_rod_and_a_heavy_core_to_craft` Combine a Breeze Rod and a Heavy Core to craft the Mace. *(removed by loading_tips:version_filter)*
+318. `loading_tips:heavy_cores_are_found_rarely_within_ominous` Heavy Cores are found rarely within Ominous Vaults. *(removed by loading_tips:version_filter)*
+319. `loading_tips:ominous_trials_are_started_by_drinking_a_trial` Ominous Trials are started by drinking a Trial Omen bottle. *(removed by loading_tips:version_filter)*
+320. `loading_tips:trial_omens_are_gained_by_defeating_raid` Trial Omens are gained by defeating Raid Captains outside of raids. *(removed by loading_tips:version_filter)*
+321. `loading_tips:the_breeze_can_reflect_projectiles_back_at_you` The Breeze can reflect projectiles back at you with its wind. *(removed by loading_tips:version_filter)*
+322. `loading_tips:breeze_rods_are_essential_for_crafting_the_new` Breeze Rods are essential for crafting the new Wind Charges. *(removed by loading_tips:version_filter)*
+323. `loading_tips:wind_charges_allow_you_to_rocket_jump_like_a` Wind Charges allow you to 'rocket jump' like a Breeze! *(removed by loading_tips:version_filter)*
+324. `loading_tips:vaults_in_trial_chambers_can_be_looted_by_every` Vaults in Trial Chambers can be looted by every player once. *(removed by loading_tips:version_filter)*
+325. `loading_tips:ominous_vaults_have_better_loot_but_require` Ominous Vaults have better loot but require Ominous Trial Keys. *(removed by loading_tips:version_filter)*
+326. `loading_tips:trial_spawners_adjust_their_difficulty_based_on` Trial Spawners adjust their difficulty based on how many players are nearby. *(removed by loading_tips:version_filter)*
+327. `loading_tips:trial_spawners_eject_rewards_like_trial_keys` Trial Spawners eject rewards like Trial Keys after all mobs are defeated. *(removed by loading_tips:version_filter)*
+328. `loading_tips:the_bogged_skeleton_variant_spawns_in_swamps_and` The Bogged skeleton variant spawns in Swamps and Trial Chambers. *(removed by loading_tips:version_filter)*
+329. `loading_tips:you_can_shear_a_bogged_to_get_mushrooms_from_its` You can shear a Bogged to get mushrooms from its head! *(removed by loading_tips:version_filter)*
+330. `loading_tips:copper_bulbs_dont_give_off_light_when_fully` Copper Bulbs don't give off light when fully oxidized. *(removed by loading_tips:version_filter)*
+331. `loading_tips:wax_your_copper_bulbs_to_lock_in_their_specific` Wax your Copper Bulbs to lock in their specific light level. *(removed by loading_tips:version_filter)*
+332. `loading_tips:the_crafter_can_be_automated_with_hoppers_for` The Crafter can be automated with Hoppers for infinite crafting. *(removed by loading_tips:version_filter)*
+333. `loading_tips:use_redstone_comparators_to_read_how_many_slots` Use Redstone Comparators to read how many slots are filled in a Crafter. *(removed by loading_tips:version_filter)*
+334. `loading_tips:chiseled_tuff_and_polished_tuff_are_great_new` Chiseled Tuff and Polished Tuff are great new building blocks. *(removed by loading_tips:version_filter)*
+335. `loading_tips:trial_chambers_contain_hidden_chests_behind_some` Trial Chambers contain hidden chests behind some decorative walls. *(removed by loading_tips:version_filter)*
+336. `loading_tips:flow_armor_trims_are_found_only_in_trial_chamber` Flow Armor Trims are found only in Trial Chamber Vaults. *(removed by loading_tips:version_filter)*
+337. `loading_tips:the_bolt_armor_trim_has_a_unique_mechanical_look` The Bolt Armor Trim has a unique mechanical look. *(removed by loading_tips:version_filter)*
+338. `loading_tips:guster_pottery_sherds_feature_the_breezes_iconic` Guster Pottery Sherds feature the Breeze's iconic swirl. *(removed by loading_tips:version_filter)*
+339. `loading_tips:trial_spawners_have_a_30_minute_cooldown_after` Trial Spawners have a 30-minute cooldown after being defeated. *(removed by loading_tips:version_filter)*
+340. `loading_tips:ominous_spawners_fire_projectiles_like_potions` Ominous Spawners fire projectiles like Potions and Fire Charges at you. *(removed by loading_tips:version_filter)*
+341. `loading_tips:silverfish_spawners_in_trial_chambers_can` Silverfish Spawners in Trial Chambers can quickly overwhelm you. *(removed by loading_tips:version_filter)*
+342. `loading_tips:sniffers_find_ancient_seeds_by_sniffing_the` Sniffers find ancient seeds by sniffing the ground. *(removed by loading_tips:version_filter)*
+343. `loading_tips:torchflower_seeds_can_be_used_to_breed_sniffers` Torchflower seeds can be used to breed Sniffers. *(removed by loading_tips:version_filter)*
+344. `loading_tips:pitcher_plants_are_tall_ancient_decorative` Pitcher Plants are tall, ancient decorative flowers. *(removed by loading_tips:version_filter)*
+345. `loading_tips:camel_saddles_allow_two_players_to_ride_at_once` Camel saddles allow two players to ride at once. *(removed by loading_tips:version_filter)*
+346. `loading_tips:camels_can_dash_across_large_gaps_to_escape_mobs` Camels can dash across large gaps to escape mobs. *(removed by loading_tips:version_filter)*
+347. `loading_tips:zombies_cant_reach_you_while_you_are_riding_a` Zombies can't reach you while you are riding a Camel. *(removed by loading_tips:version_filter)*
+348. `loading_tips:suspicious_sand_in_desert_temples_contains_rare` Suspicious Sand in Desert Temples contains rare Pottery Sherds. *(removed by loading_tips:version_filter)*
+349. `loading_tips:suspicious_gravel_is_often_found_in_trail_ruins` Suspicious Gravel is often found in Trail Ruins. *(removed by loading_tips:version_filter)*
+350. `loading_tips:trail_ruins_are_mostly_buried_youll_need_to_dig` Trail Ruins are mostly buried; you'll need to dig them out! *(removed by loading_tips:version_filter)*
+351. `loading_tips:brush_suspicious_blocks_carefully_or_they_will` Brush suspicious blocks carefully or they will break. *(removed by loading_tips:version_filter)*
 352. `loading_tips:the_recovery_compass_points_to_where_you_last` The Recovery Compass points to where you last died. *(replaced by creativetips:tips)*
 353. `loading_tips:echo_shards_are_needed_to_craft_a_recovery` Echo Shards are needed to craft a Recovery Compass. *(removed by creativetips:tips)*
 354. `loading_tips:ancient_cities_are_the_only_place_to_find_swift` Ancient Cities are the only place to find Swift Sneak books. *(replaced by creativetips:tips)*
@@ -504,7 +504,7 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 481. `loading_tips:magma_cream_is_used_for_fire_resistance_potions` Magma cream is used for Fire Resistance potions. *(replaced by creativetips:tips)*
 482. `loading_tips:soul_speed_enchantment_makes_you_run_faster_on` Soul Speed enchantment makes you run faster on Soul Sand. *(removed by creativetips:tips)*
 483. `loading_tips:netherite_scrap_is_made_by_smelting_ancient` Netherite scrap is made by smelting Ancient Debris. *(removed by creativetips:tips)*
-484. `loading_tips:smithing_templates_are_required_to_upgrade_to` Smithing Templates are required to upgrade to Netherite armor. *(removed by creativetips:tips)*
+484. `loading_tips:smithing_templates_are_required_to_upgrade_to` Smithing Templates are required to upgrade to Netherite armor. *(removed by loading_tips:version_filter)*
 485. `loading_tips:bastions_are_the_best_place_to_find_pigstep` Bastions are the best place to find Pigstep music discs. *(removed by creativetips:tips)*
 486. `loading_tips:ruined_portals_appear_in_both_the_overworld_and` Ruined Portals appear in both the Overworld and the Nether. *(replaced by creativetips:tips)*
 487. `loading_tips:crying_obsidian_can_be_used_to_craft_respawn` Crying Obsidian can be used to craft Respawn Anchors. *(removed by creativetips:tips)*
@@ -517,10 +517,10 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 494. `loading_tips:packed_ice_doesnt_melt_even_near_light_sources` Packed Ice doesn't melt, even near light sources. *(removed by creativetips:tips)*
 495. `loading_tips:snow_golems_wear_pumpkins_that_can_be_sheared` Snow Golems wear pumpkins that can be sheared off. *(removed by creativetips:tips)*
 496. `loading_tips:leads_can_be_used_to_tie_mobs_to_fences` Leads can be used to tie mobs to fences. *(removed by creativetips:tips)*
-497. `loading_tips:armor_trims_allow_you_to_customize_the_look_of` Armor Trims allow you to customize the look of your gear. *(removed by creativetips:tips)*
-498. `loading_tips:netherite_templates_are_consumed_upon_use_make` Netherite templates are consumed upon use; make copies! *(removed by creativetips:tips)*
-499. `loading_tips:the_silence_armor_trim_is_the_rarest_trim_in_the` The Silence Armor Trim is the rarest trim in the game. *(removed by creativetips:tips)*
-500. `loading_tips:trial_chambers_are_the_ultimate_test_of_your` Trial Chambers are the ultimate test of your combat skills. *(removed by creativetips:tips)*
+497. `loading_tips:armor_trims_allow_you_to_customize_the_look_of` Armor Trims allow you to customize the look of your gear. *(removed by loading_tips:version_filter)*
+498. `loading_tips:netherite_templates_are_consumed_upon_use_make` Netherite templates are consumed upon use; make copies! *(removed by loading_tips:version_filter)*
+499. `loading_tips:the_silence_armor_trim_is_the_rarest_trim_in_the` The Silence Armor Trim is the rarest trim in the game. *(removed by loading_tips:version_filter)*
+500. `loading_tips:trial_chambers_are_the_ultimate_test_of_your` Trial Chambers are the ultimate test of your combat skills. *(removed by loading_tips:version_filter)*
 501. `loading_tips:you_are_now_a_minecraft_master_good_luck` You are now a Minecraft Master. Good luck! *(removed by creativetips:tips)*
 502. `loading_tips:holding_f3_c_for_10_seconds_intentionally` Holding F3+C for 10 seconds intentionally crashes the game for debugging purposes! *(removed by creativetips:tips)*
 503. `loading_tips:bamboo_is_the_least_efficient_fuel_smelting_only` Bamboo is the least efficient fuel, smelting only 0.25 items each! *(removed by creativetips:tips)*
@@ -531,34 +531,147 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 508. `loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn` Ocelots are passive in Minecraft, but can't spawn in Peaceful difficulty due to a bug! *(removed by creativetips:tips)*
 509. `loading_tips:place_lava_or_water_above_pointed_dripstone_to` Place lava or water above Pointed Dripstone to slowly drip it into a Cauldron below! *(replaced by creativetips:tips)*
 510. `loading_tips:babymobs_now_have_unique_models_instead_of` Baby mobs now have unique models instead of being shrunken adults! *(replaced by creativetips:tips)*
-511. `loading_tips:golden_dandelions_keep_babymobs_young_forever` Golden Dandelions keep baby mobs young forever — craft one with a dandelion and 8 gold nuggets! *(removed by creativetips:tips)*
-512. `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden` Breed a mob at least once to unlock the Golden Dandelion crafting recipe. *(removed by creativetips:tips)*
-513. `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let` Feed a baby mob a Golden Dandelion again to let it grow up normally. *(removed by creativetips:tips)*
-514. `loading_tips:golden_dandelions_dont_work_on_undead_babymobs` Golden Dandelions don't work on undead baby mobs or baby Villagers. *(removed by creativetips:tips)*
-515. `loading_tips:piglins_will_pick_up_golden_dandelions_off_the` Piglins will pick up Golden Dandelions off the ground — be careful in the Nether! *(removed by creativetips:tips)*
-516. `loading_tips:golden_dandelions_can_be_placed_in_flower_pots` Golden Dandelions can be placed in flower pots and used to craft yellow dye. *(removed by creativetips:tips)*
-517. `loading_tips:wandering_traders_may_randomly_sell_a_golden` Wandering Traders may randomly sell a Golden Dandelion for 2 emeralds. *(removed by creativetips:tips)*
-518. `loading_tips:golden_dandelions_used_in_suspicious_stew` Golden Dandelions used in suspicious stew restore extra hunger and saturation! *(removed by creativetips:tips)*
-519. `loading_tips:plant_a_sapling_within_2_blocks_of_a_golden` Plant a sapling within 2 blocks of a Golden Dandelion for a 5% chance to grow a bee nest! *(removed by creativetips:tips)*
-520. `loading_tips:name_tags_are_now_craftable_combine_any_metal` Name Tags are now craftable — combine any metal nugget with paper! *(removed by creativetips:tips)*
-521. `loading_tips:name_tags_no_longer_appear_in_ancient_city_or` Name Tags no longer appear in Ancient City or Woodland Mansion chests. *(removed by creativetips:tips)*
-522. `loading_tips:master_level_librarians_no_longer_trade_name` Master-level Librarians no longer trade Name Tags — craft them or buy from Wandering Traders instead! *(removed by creativetips:tips)*
-523. `loading_tips:wandering_traders_now_sell_name_tags_for_just_1` Wandering Traders now sell Name Tags for just 1 emerald! *(removed by creativetips:tips)*
-524. `loading_tips:copper_blocks_under_note_blocks_now_produce` Copper blocks under Note Blocks now produce trumpet sounds! *(removed by creativetips:tips)*
-525. `loading_tips:the_trumpet_pitch_changes_depending_on_the` The trumpet pitch changes depending on the copper block's oxidation level. *(removed by creativetips:tips)*
-526. `loading_tips:wax_your_copper_block_under_a_note_block_to_lock` Wax your copper block under a Note Block to lock in your trumpet's pitch forever! *(removed by creativetips:tips)*
-527. `loading_tips:babymobs_now_have_their_own_dedicated_sounds` Baby mobs now have their own dedicated sounds — listen for kittens, piglets, and chicks! *(removed by creativetips:tips)*
-528. `loading_tips:saddles_and_armor_no_longer_visually_render_on` Saddles and armor no longer visually render on baby mobs. *(removed by creativetips:tips)*
-529. `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny` Rabbits got a complete model overhaul in Tiny Takeover — fluffier than ever! *(removed by creativetips:tips)*
-530. `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long` Baby Polar Bears no longer attack Foxes — a long overdue fix! *(removed by creativetips:tips)*
-531. `loading_tips:deepslate_can_now_be_directly_crafted_into` Deepslate can now be directly crafted into polished, brick, and tile variants in the Stonecutter! *(removed by creativetips:tips)*
-532. `loading_tips:stone_can_now_be_directly_crafted_into_cobbled` Stone can now be directly crafted into cobbled stone variants in the Stonecutter! *(removed by creativetips:tips)*
+511. `loading_tips:golden_dandelions_keep_babymobs_young_forever` Golden Dandelions keep baby mobs young forever — craft one with a dandelion and 8 gold nuggets! *(removed by loading_tips:version_filter)*
+512. `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden` Breed a mob at least once to unlock the Golden Dandelion crafting recipe. *(removed by loading_tips:version_filter)*
+513. `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let` Feed a baby mob a Golden Dandelion again to let it grow up normally. *(removed by loading_tips:version_filter)*
+514. `loading_tips:golden_dandelions_dont_work_on_undead_babymobs` Golden Dandelions don't work on undead baby mobs or baby Villagers. *(removed by loading_tips:version_filter)*
+515. `loading_tips:piglins_will_pick_up_golden_dandelions_off_the` Piglins will pick up Golden Dandelions off the ground — be careful in the Nether! *(removed by loading_tips:version_filter)*
+516. `loading_tips:golden_dandelions_can_be_placed_in_flower_pots` Golden Dandelions can be placed in flower pots and used to craft yellow dye. *(removed by loading_tips:version_filter)*
+517. `loading_tips:wandering_traders_may_randomly_sell_a_golden` Wandering Traders may randomly sell a Golden Dandelion for 2 emeralds. *(removed by loading_tips:version_filter)*
+518. `loading_tips:golden_dandelions_used_in_suspicious_stew` Golden Dandelions used in suspicious stew restore extra hunger and saturation! *(removed by loading_tips:version_filter)*
+519. `loading_tips:plant_a_sapling_within_2_blocks_of_a_golden` Plant a sapling within 2 blocks of a Golden Dandelion for a 5% chance to grow a bee nest! *(removed by loading_tips:version_filter)*
+520. `loading_tips:name_tags_are_now_craftable_combine_any_metal` Name Tags are now craftable — combine any metal nugget with paper! *(removed by loading_tips:version_filter)*
+521. `loading_tips:name_tags_no_longer_appear_in_ancient_city_or` Name Tags no longer appear in Ancient City or Woodland Mansion chests. *(removed by loading_tips:version_filter)*
+522. `loading_tips:master_level_librarians_no_longer_trade_name` Master-level Librarians no longer trade Name Tags — craft them or buy from Wandering Traders instead! *(removed by loading_tips:version_filter)*
+523. `loading_tips:wandering_traders_now_sell_name_tags_for_just_1` Wandering Traders now sell Name Tags for just 1 emerald! *(removed by loading_tips:version_filter)*
+524. `loading_tips:copper_blocks_under_note_blocks_now_produce` Copper blocks under Note Blocks now produce trumpet sounds! *(removed by loading_tips:version_filter)*
+525. `loading_tips:the_trumpet_pitch_changes_depending_on_the` The trumpet pitch changes depending on the copper block's oxidation level. *(removed by loading_tips:version_filter)*
+526. `loading_tips:wax_your_copper_block_under_a_note_block_to_lock` Wax your copper block under a Note Block to lock in your trumpet's pitch forever! *(removed by loading_tips:version_filter)*
+527. `loading_tips:babymobs_now_have_their_own_dedicated_sounds` Baby mobs now have their own dedicated sounds — listen for kittens, piglets, and chicks! *(removed by loading_tips:version_filter)*
+528. `loading_tips:saddles_and_armor_no_longer_visually_render_on` Saddles and armor no longer visually render on baby mobs. *(removed by loading_tips:version_filter)*
+529. `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny` Rabbits got a complete model overhaul in Tiny Takeover — fluffier than ever! *(removed by loading_tips:version_filter)*
+530. `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long` Baby Polar Bears no longer attack Foxes — a long overdue fix! *(removed by loading_tips:version_filter)*
+531. `loading_tips:deepslate_can_now_be_directly_crafted_into` Deepslate can now be directly crafted into polished, brick, and tile variants in the Stonecutter! *(removed by loading_tips:version_filter)*
+532. `loading_tips:stone_can_now_be_directly_crafted_into_cobbled` Stone can now be directly crafted into cobbled stone variants in the Stonecutter! *(removed by loading_tips:version_filter)*
+
+`assets/loading_tips/loading_tips/version_filter.json`, priority 1, override: true, 0 tips, removes 106
+
+(no tips yet)
+
+Removes:
+
+- `loading_tips:use_a_mace_with_the_wind_burst_enchantment_to`
+- `loading_tips:trial_chambers_are_found_deep_underground_in_the`
+- `loading_tips:copper_bulbs_have_different_light_levels_based`
+- `loading_tips:breeze_rods_can_be_crafted_into_wind_charges`
+- `loading_tips:heavy_cores_are_rare_rewards_from_trial_vaults`
+- `loading_tips:crafters_require_a_redstone_signal_to_craft`
+- `loading_tips:the_bogged_is_a_new_skeleton_variant_that_fires`
+- `loading_tips:armadillo_scutes_can_be_used_to_craft_wolf_armor`
+- `loading_tips:vaults_can_be_opened_by_every_player_once_using`
+- `loading_tips:sniffers_find_ancient_seeds`
+- `loading_tips:camel_dashes_jump_over_ravines`
+- `loading_tips:bamboo_can_be_used_for_wood`
+- `loading_tips:armor_trims_are_found_in_structures`
+- `loading_tips:smithing_templates_are_required_for_upgrades`
+- `loading_tips:netherite_requires_a_smithing_template`
+- `loading_tips:trail_ruins_are_buried_underground`
+- `loading_tips:suspicious_gravel_can_be_brushed`
+- `loading_tips:trial_chambers_are_full_of_loot`
+- `loading_tips:trial_spawners_give_rewards`
+- `loading_tips:trial_keys_unlock_vaults`
+- `loading_tips:the_breeze_drops_breeze_rods`
+- `loading_tips:the_bogged_fires_poison_arrows`
+- `loading_tips:maces_do_more_damage_from_heights`
+- `loading_tips:wind_charges_launch_you_upward`
+- `loading_tips:crafters_automate_your_crafting`
+- `loading_tips:copper_bulbs_change_light_levels`
+- `loading_tips:heavy_cores_craft_the_mace`
+- `loading_tips:ominous_trials_are_harder_but_better`
+- `loading_tips:bad_omen_triggers_ominous_trials`
+- `loading_tips:drink_ominous_bottles_for_a_challenge`
+- `loading_tips:vaults_can_be_opened_by_everyone_but_not_twice`
+- `loading_tips:chiseled_tuff_looks_great_for_builds`
+- `loading_tips:copper_grates_allow_light_through`
+- `loading_tips:potions_of_slow_falling_prevent_fall_death_and`
+- `loading_tips:brushes_are_used_for_archeology`
+- `loading_tips:pottery_sherds_make_decorated_pots`
+- `loading_tips:sniffer_eggs_hatch_on_moss_blocks`
+- `loading_tips:silence_armor_trim_is_the_rarest`
+- `loading_tips:calibrated_sculks_sense_specific_sounds`
+- `loading_tips:the_mace_deals_more_damage_the_further_you_fall`
+- `loading_tips:wind_burst_enchantment_on_a_mace_can_launch_you`
+- `loading_tips:the_breach_enchantment_reduces_the_effectiveness`
+- `loading_tips:density_enchantment_increases_the_damage_dealt`
+- `loading_tips:mace_smash_attacks_negate_all_fall_damage_if_you`
+- `loading_tips:combine_a_breeze_rod_and_a_heavy_core_to_craft`
+- `loading_tips:heavy_cores_are_found_rarely_within_ominous`
+- `loading_tips:ominous_trials_are_started_by_drinking_a_trial`
+- `loading_tips:trial_omens_are_gained_by_defeating_raid`
+- `loading_tips:the_breeze_can_reflect_projectiles_back_at_you`
+- `loading_tips:breeze_rods_are_essential_for_crafting_the_new`
+- `loading_tips:wind_charges_allow_you_to_rocket_jump_like_a`
+- `loading_tips:vaults_in_trial_chambers_can_be_looted_by_every`
+- `loading_tips:ominous_vaults_have_better_loot_but_require`
+- `loading_tips:trial_spawners_adjust_their_difficulty_based_on`
+- `loading_tips:trial_spawners_eject_rewards_like_trial_keys`
+- `loading_tips:the_bogged_skeleton_variant_spawns_in_swamps_and`
+- `loading_tips:you_can_shear_a_bogged_to_get_mushrooms_from_its`
+- `loading_tips:copper_bulbs_dont_give_off_light_when_fully`
+- `loading_tips:wax_your_copper_bulbs_to_lock_in_their_specific`
+- `loading_tips:the_crafter_can_be_automated_with_hoppers_for`
+- `loading_tips:use_redstone_comparators_to_read_how_many_slots`
+- `loading_tips:chiseled_tuff_and_polished_tuff_are_great_new`
+- `loading_tips:trial_chambers_contain_hidden_chests_behind_some`
+- `loading_tips:flow_armor_trims_are_found_only_in_trial_chamber`
+- `loading_tips:the_bolt_armor_trim_has_a_unique_mechanical_look`
+- `loading_tips:guster_pottery_sherds_feature_the_breezes_iconic`
+- `loading_tips:trial_spawners_have_a_30_minute_cooldown_after`
+- `loading_tips:ominous_spawners_fire_projectiles_like_potions`
+- `loading_tips:silverfish_spawners_in_trial_chambers_can`
+- `loading_tips:sniffers_find_ancient_seeds_by_sniffing_the`
+- `loading_tips:torchflower_seeds_can_be_used_to_breed_sniffers`
+- `loading_tips:pitcher_plants_are_tall_ancient_decorative`
+- `loading_tips:camel_saddles_allow_two_players_to_ride_at_once`
+- `loading_tips:camels_can_dash_across_large_gaps_to_escape_mobs`
+- `loading_tips:zombies_cant_reach_you_while_you_are_riding_a`
+- `loading_tips:suspicious_sand_in_desert_temples_contains_rare`
+- `loading_tips:suspicious_gravel_is_often_found_in_trail_ruins`
+- `loading_tips:trail_ruins_are_mostly_buried_youll_need_to_dig`
+- `loading_tips:brush_suspicious_blocks_carefully_or_they_will`
+- `loading_tips:smithing_templates_are_required_to_upgrade_to`
+- `loading_tips:armor_trims_allow_you_to_customize_the_look_of`
+- `loading_tips:netherite_templates_are_consumed_upon_use_make`
+- `loading_tips:the_silence_armor_trim_is_the_rarest_trim_in_the`
+- `loading_tips:trial_chambers_are_the_ultimate_test_of_your`
+- `loading_tips:golden_dandelions_keep_babymobs_young_forever`
+- `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden`
+- `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let`
+- `loading_tips:golden_dandelions_dont_work_on_undead_babymobs`
+- `loading_tips:piglins_will_pick_up_golden_dandelions_off_the`
+- `loading_tips:golden_dandelions_can_be_placed_in_flower_pots`
+- `loading_tips:wandering_traders_may_randomly_sell_a_golden`
+- `loading_tips:golden_dandelions_used_in_suspicious_stew`
+- `loading_tips:plant_a_sapling_within_2_blocks_of_a_golden`
+- `loading_tips:name_tags_are_now_craftable_combine_any_metal`
+- `loading_tips:name_tags_no_longer_appear_in_ancient_city_or`
+- `loading_tips:master_level_librarians_no_longer_trade_name`
+- `loading_tips:wandering_traders_now_sell_name_tags_for_just_1`
+- `loading_tips:copper_blocks_under_note_blocks_now_produce`
+- `loading_tips:the_trumpet_pitch_changes_depending_on_the`
+- `loading_tips:wax_your_copper_block_under_a_note_block_to_lock`
+- `loading_tips:babymobs_now_have_their_own_dedicated_sounds`
+- `loading_tips:saddles_and_armor_no_longer_visually_render_on`
+- `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny`
+- `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long`
+- `loading_tips:deepslate_can_now_be_directly_crafted_into`
+- `loading_tips:stone_can_now_be_directly_crafted_into_cobbled`
 
 ## Creative Tips
 
 Creative Tips: Creative Engineering tips for the world loading screen (pack-held, kubejs/assets/creativetips/loading_tips/)
 
-`assets/creativetips/loading_tips/tips.json`, priority 10, override: true, 210 tips, removes 319
+`assets/creativetips/loading_tips/tips.json`, priority 10, override: true, 210 tips, removes 213
 
 1. `loading_tips:you_can_use_an_axe_to_scrape_oxidation_off` Copper turns green over time; honeycomb wax stops it, and an axe scrapes off the wax or one stage of rust *(replacement)*
 2. `loading_tips:crouch_to_avoid_falling_off_ledges` Crouch to avoid falling off ledges *(replacement)*
@@ -773,15 +886,6 @@ Creative Tips: Creative Engineering tips for the world loading screen (pack-held
 
 Removes:
 
-- `loading_tips:use_a_mace_with_the_wind_burst_enchantment_to`
-- `loading_tips:trial_chambers_are_found_deep_underground_in_the`
-- `loading_tips:copper_bulbs_have_different_light_levels_based`
-- `loading_tips:breeze_rods_can_be_crafted_into_wind_charges`
-- `loading_tips:heavy_cores_are_rare_rewards_from_trial_vaults`
-- `loading_tips:crafters_require_a_redstone_signal_to_craft`
-- `loading_tips:the_bogged_is_a_new_skeleton_variant_that_fires`
-- `loading_tips:armadillo_scutes_can_be_used_to_craft_wolf_armor`
-- `loading_tips:vaults_can_be_opened_by_every_player_once_using`
 - `loading_tips:dont_dig_straight_down`
 - `loading_tips:riptide_tridents_only_work_in_rain`
 - `loading_tips:wearing_gold_prevents_piglin_attacks`
@@ -803,30 +907,6 @@ Removes:
 - `loading_tips:copper_oxidizes_over_time`
 - `loading_tips:lightning_rods_protect_wooden_roofs`
 - `loading_tips:allays_love_items_and_music`
-- `loading_tips:sniffers_find_ancient_seeds`
-- `loading_tips:camel_dashes_jump_over_ravines`
-- `loading_tips:bamboo_can_be_used_for_wood`
-- `loading_tips:armor_trims_are_found_in_structures`
-- `loading_tips:smithing_templates_are_required_for_upgrades`
-- `loading_tips:netherite_requires_a_smithing_template`
-- `loading_tips:trail_ruins_are_buried_underground`
-- `loading_tips:suspicious_gravel_can_be_brushed`
-- `loading_tips:trial_chambers_are_full_of_loot`
-- `loading_tips:trial_spawners_give_rewards`
-- `loading_tips:trial_keys_unlock_vaults`
-- `loading_tips:the_breeze_drops_breeze_rods`
-- `loading_tips:the_bogged_fires_poison_arrows`
-- `loading_tips:maces_do_more_damage_from_heights`
-- `loading_tips:wind_charges_launch_you_upward`
-- `loading_tips:crafters_automate_your_crafting`
-- `loading_tips:copper_bulbs_change_light_levels`
-- `loading_tips:heavy_cores_craft_the_mace`
-- `loading_tips:ominous_trials_are_harder_but_better`
-- `loading_tips:bad_omen_triggers_ominous_trials`
-- `loading_tips:drink_ominous_bottles_for_a_challenge`
-- `loading_tips:vaults_can_be_opened_by_everyone_but_not_twice`
-- `loading_tips:chiseled_tuff_looks_great_for_builds`
-- `loading_tips:copper_grates_allow_light_through`
 - `loading_tips:hardened_glass_wont_break_easily`
 - `loading_tips:sweet_berries_slow_you_down`
 - `loading_tips:ravagers_are_afraid_of_rabbits`
@@ -845,7 +925,6 @@ Removes:
 - `loading_tips:loyalty_tridents_fly_back_to_you`
 - `loading_tips:totems_of_undying_save_you_from_death`
 - `loading_tips:shields_block_100_of_melee_damage`
-- `loading_tips:potions_of_slow_falling_prevent_fall_death_and`
 - `loading_tips:arrows_can_be_tipped_with_potion_effects`
 - `loading_tips:fletching_tables_create_tipped_arrows`
 - `loading_tips:smite_deals_extra_damage_to_the_undead`
@@ -860,9 +939,6 @@ Removes:
 - `loading_tips:raids_start_when_entering_a_village`
 - `loading_tips:iron_golems_protect_villages_from_sieges`
 - `loading_tips:dye_leather_armor_using_a_cauldron`
-- `loading_tips:brushes_are_used_for_archeology`
-- `loading_tips:pottery_sherds_make_decorated_pots`
-- `loading_tips:sniffer_eggs_hatch_on_moss_blocks`
 - `loading_tips:bows_can_be_repaired_with_string`
 - `loading_tips:lodestones_help_you_navigate`
 - `loading_tips:recovery_compasses_show_last_death`
@@ -877,54 +953,12 @@ Removes:
 - `loading_tips:wool_blocks_block_warden_vibrations`
 - `loading_tips:echo_shards_craft_recovery_compasses`
 - `loading_tips:swift_sneak_is_found_in_ancient_cities`
-- `loading_tips:silence_armor_trim_is_the_rarest`
 - `loading_tips:small_dripleaves_need_bone_meal`
 - `loading_tips:azalea_trees_mark_lush_caves`
 - `loading_tips:spies_can_see_through_tinted_glass`
 - `loading_tips:tinted_glass_blocks_light_completely`
-- `loading_tips:calibrated_sculks_sense_specific_sounds`
 - `loading_tips:crying_obsidian_sets_spawn_in_nether`
 - `loading_tips:warped_fungus_breeds_nothing`
-- `loading_tips:the_mace_deals_more_damage_the_further_you_fall`
-- `loading_tips:wind_burst_enchantment_on_a_mace_can_launch_you`
-- `loading_tips:the_breach_enchantment_reduces_the_effectiveness`
-- `loading_tips:density_enchantment_increases_the_damage_dealt`
-- `loading_tips:mace_smash_attacks_negate_all_fall_damage_if_you`
-- `loading_tips:combine_a_breeze_rod_and_a_heavy_core_to_craft`
-- `loading_tips:heavy_cores_are_found_rarely_within_ominous`
-- `loading_tips:ominous_trials_are_started_by_drinking_a_trial`
-- `loading_tips:trial_omens_are_gained_by_defeating_raid`
-- `loading_tips:the_breeze_can_reflect_projectiles_back_at_you`
-- `loading_tips:breeze_rods_are_essential_for_crafting_the_new`
-- `loading_tips:wind_charges_allow_you_to_rocket_jump_like_a`
-- `loading_tips:vaults_in_trial_chambers_can_be_looted_by_every`
-- `loading_tips:ominous_vaults_have_better_loot_but_require`
-- `loading_tips:trial_spawners_adjust_their_difficulty_based_on`
-- `loading_tips:trial_spawners_eject_rewards_like_trial_keys`
-- `loading_tips:the_bogged_skeleton_variant_spawns_in_swamps_and`
-- `loading_tips:you_can_shear_a_bogged_to_get_mushrooms_from_its`
-- `loading_tips:copper_bulbs_dont_give_off_light_when_fully`
-- `loading_tips:wax_your_copper_bulbs_to_lock_in_their_specific`
-- `loading_tips:the_crafter_can_be_automated_with_hoppers_for`
-- `loading_tips:use_redstone_comparators_to_read_how_many_slots`
-- `loading_tips:chiseled_tuff_and_polished_tuff_are_great_new`
-- `loading_tips:trial_chambers_contain_hidden_chests_behind_some`
-- `loading_tips:flow_armor_trims_are_found_only_in_trial_chamber`
-- `loading_tips:the_bolt_armor_trim_has_a_unique_mechanical_look`
-- `loading_tips:guster_pottery_sherds_feature_the_breezes_iconic`
-- `loading_tips:trial_spawners_have_a_30_minute_cooldown_after`
-- `loading_tips:ominous_spawners_fire_projectiles_like_potions`
-- `loading_tips:silverfish_spawners_in_trial_chambers_can`
-- `loading_tips:sniffers_find_ancient_seeds_by_sniffing_the`
-- `loading_tips:torchflower_seeds_can_be_used_to_breed_sniffers`
-- `loading_tips:pitcher_plants_are_tall_ancient_decorative`
-- `loading_tips:camel_saddles_allow_two_players_to_ride_at_once`
-- `loading_tips:camels_can_dash_across_large_gaps_to_escape_mobs`
-- `loading_tips:zombies_cant_reach_you_while_you_are_riding_a`
-- `loading_tips:suspicious_sand_in_desert_temples_contains_rare`
-- `loading_tips:suspicious_gravel_is_often_found_in_trail_ruins`
-- `loading_tips:trail_ruins_are_mostly_buried_youll_need_to_dig`
-- `loading_tips:brush_suspicious_blocks_carefully_or_they_will`
 - `loading_tips:sculk_sensors_can_be_waterlogged_to_make_them`
 - `loading_tips:amethyst_resonators_can_pass_redstone_signals`
 - `loading_tips:copper_horns_were_a_prototype_but_goat_horns_are`
@@ -939,37 +973,10 @@ Removes:
 - `loading_tips:the_wither_is_much_harder_to_fight_on_bedrock`
 - `loading_tips:hoglins_are_afraid_of_warped_fungus_even_in`
 - `loading_tips:blaze_rods_are_the_best_fuel_for_brewing_stands`
-- `loading_tips:smithing_templates_are_required_to_upgrade_to`
 - `loading_tips:blue_ice_is_the_fastest_surface_for_boat_travel`
-- `loading_tips:armor_trims_allow_you_to_customize_the_look_of`
-- `loading_tips:netherite_templates_are_consumed_upon_use_make`
-- `loading_tips:the_silence_armor_trim_is_the_rarest_trim_in_the`
-- `loading_tips:trial_chambers_are_the_ultimate_test_of_your`
 - `loading_tips:you_are_now_a_minecraft_master_good_luck`
 - `loading_tips:the_chestplate_is_the_only_armor_piece_with_no`
 - `loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn`
-- `loading_tips:golden_dandelions_keep_babymobs_young_forever`
-- `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden`
-- `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let`
-- `loading_tips:golden_dandelions_dont_work_on_undead_babymobs`
-- `loading_tips:piglins_will_pick_up_golden_dandelions_off_the`
-- `loading_tips:golden_dandelions_can_be_placed_in_flower_pots`
-- `loading_tips:wandering_traders_may_randomly_sell_a_golden`
-- `loading_tips:golden_dandelions_used_in_suspicious_stew`
-- `loading_tips:plant_a_sapling_within_2_blocks_of_a_golden`
-- `loading_tips:name_tags_are_now_craftable_combine_any_metal`
-- `loading_tips:name_tags_no_longer_appear_in_ancient_city_or`
-- `loading_tips:master_level_librarians_no_longer_trade_name`
-- `loading_tips:wandering_traders_now_sell_name_tags_for_just_1`
-- `loading_tips:copper_blocks_under_note_blocks_now_produce`
-- `loading_tips:the_trumpet_pitch_changes_depending_on_the`
-- `loading_tips:wax_your_copper_block_under_a_note_block_to_lock`
-- `loading_tips:babymobs_now_have_their_own_dedicated_sounds`
-- `loading_tips:saddles_and_armor_no_longer_visually_render_on`
-- `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny`
-- `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long`
-- `loading_tips:deepslate_can_now_be_directly_crafted_into`
-- `loading_tips:stone_can_now_be_directly_crafted_into_cobbled`
 - `loading_tips:smelt_sand_to_get_glass`
 - `loading_tips:ancient_debris_is_found_deep_in_the_nether`
 - `loading_tips:blast_furnaces_smelt_ore_faster`
