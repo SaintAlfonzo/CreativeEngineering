@@ -56,8 +56,8 @@ its own. Raspberry Pie gets four fixes. Pages: [project_pages/](project_pages/);
 | W2-5 | I11 | clear | Performance and stability, bug fixes, swap lists, KubeJS helpers and every effect stay in Common | 2026-11-23 | chat 2026-11-23 |
 | W2-6 | I1 page layout | open | Family as a `###` header; each feature or tweak is a bold name line followed by its own spoiler holding the whole description. Applies to Common and Compat | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W2-7 | I14 command notation | open | Command arguments in square brackets: `/solrp reset [players]` | 2026-11-23 | AskUserQuestion 2026-11-23 |
-| W2-8 | I2, I3, I4, I7 | clear | Moved config keys keep the player's values: a one-time carry-over from `creativecommon-common.toml` into the new jar's file, as in PR-CC-27 | 2026-11-23 | agent default, unconfirmed |
-| W2-9 | I9 composter ids | clear | The 12 composters take Creative Delight's namespace (ids follow the owning mod); old Common ids swapped in saves | 2026-11-23 | agent default, unconfirmed |
+| W2-8 | I2, I3, I4, I7 | clear | Moved config keys keep the player's values: a one-time carry-over from `creativecommon-common.toml` into the new jar's file, as in PR-CC-27 | 2026-11-23 | AskUserQuestion 2026-11-23 (agent default confirmed) |
+| W2-9 | I9 composter ids | clear | The 12 composters take Creative Delight's namespace (ids follow the owning mod); old Common ids swapped in saves | 2026-11-23 | AskUserQuestion 2026-11-23 (agent default confirmed) |
 
 ## 2. Phases
 
@@ -76,3 +76,5 @@ wandering trader there removes them from a standalone Common.
 ## 3. History
 
 - 2026-11-23: intake of the owner's wave 2 notes; rulings W2-1 to W2-7 asked, W2-8 and W2-9 agent defaults.
+- 2026-11-23: W2-8 and W2-9 confirmed by the owner. Execution started together with wave 1 (one impl session; phase
+  order in plan_wave1_publish.md section 4). The scratch run (W-P7) is the owner's to start; this session stops after W-P6.

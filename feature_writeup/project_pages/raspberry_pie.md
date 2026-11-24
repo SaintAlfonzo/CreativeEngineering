@@ -28,7 +28,7 @@ Every feature below works in a standalone install. The ladder, the settings and 
 
 ### Commands
 
-<div class="spoiler"><p>All need permission level 2.</p><ul><li><code>/solrp reset &lt;players&gt;</code>: clears a player's food memory.</li><li><code>/solrp diversity set &lt;players&gt; &lt;value&gt;</code>: sets a player's diversity to exactly that value (current and highest).</li><li><code>/solrp diversity get &lt;player&gt;</code>: shows current and highest diversity.</li><li><code>/solrp ladder reset</code>: replaces the world's ladder file with the current default (the old file is kept as a dated backup) and re-applies it to everyone online.</li><li><code>/solrp pause &lt;player&gt;</code>, <code>/solrp pause list</code> and <code>/solrp resume &lt;player&gt;</code>: stop and restore a player's diet effects.</li></ul></div>
+<div class="spoiler"><p>All need permission level 2.</p><ul><li><code>/solrp reset [players]</code>: clears a player's food memory.</li><li><code>/solrp diversity set [players] [value]</code>: sets a player's diversity to exactly that value (current and highest).</li><li><code>/solrp diversity get [player]</code>: shows current and highest diversity.</li><li><code>/solrp ladder reset</code>: replaces the world's ladder file with the current default (the old file is kept as a dated backup) and re-applies it to everyone online.</li><li><code>/solrp pause [player]</code>, <code>/solrp pause list</code> and <code>/solrp resume [player]</code>: stop and restore a player's diet effects.</li></ul></div>
 
 ***
 
