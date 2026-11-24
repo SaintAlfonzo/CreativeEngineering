@@ -198,11 +198,11 @@ look WTHIT names; contents shown when planted (hand: plant a flower in each); ho
 @@text
 @@text Run results live in the Run log at the bottom, not in the entry rows. The five newest runs (older banner lines are in the run doc of their date, section "Queue banner lines"):
 @@text
+@@text - r1124fx (failed rows with a changed jar, 2026-11-24 00:43 to 09:06: PASS 71, FAIL 31, BATCH-FAULT 16, INCONCLUSIVE 12; [scratch_run_2026-11-24.md](scratch_run_2026-11-24.md) 1)
 @@text - r1118 (drive over the default plan, 2026-11-18 00:49 to 16:59, STOPPED by the owner at step 150 of 167: 799 results, PASS 330, BATCH-FAULT 420, 5 real FAILs, 15 unjudged; [scratch_run_2026-11-18.md](scratch_run_2026-11-18.md) 8, 10)
 @@text - r1115 phase 11 pass-through (2026-11-15 11:33 to 13:40, PASS 27, FAIL 6)
 @@text - r1115 (10 phases, 2026-11-15 00:10 to 08:18; [scratch_run_2026-11-15.md](scratch_run_2026-11-15.md) 8)
 @@text - r1114 (whole queue, 2026-11-14 00:00 to 12:08; [scratch_run_2026-11-14.md](scratch_run_2026-11-14.md) 8)
-@@text - r1113 continuation (PAUSED 19:22; resume point section 12; STOPPED for a fresh agent: queue group A part and Power Grid gates P0 to P9d; resume point in [scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 10)
 @@text
 @@text Entry fields: ID, feature, target state, world group, commands, expected log, pass / fail, if it fails.
 @@text

@@ -974,6 +974,8 @@ Nothing is built. Each answer is also written into the row it concerns.
 
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-HH-328 PASS on three seeds within the shipped 120 s (77 s, 7.9 s, 39.4 s); SQ-HH-309, -434, -440, -440b, -1505, -1507, -1534, -1546, -1546b, -1546c, -1574, -1575, -1593, -266, -266b, -266c PASS; SQ-HH-482 PASS (a cow at 24 that strolls to 22 is pulled in too). Hops: SQ-HOP-01 to -03, -07 to -11 PASS; SQ-HOP-04 FAIL (a stick replaces an age-1 vine, owner); SQ-HOP-05 FAIL (Compat vine shearing sets `fertile` first, `sterilized` needs a second use; fix with the pass-through session); SQ-HOP-06 / SQ-HH-304 FAIL (0 wild hops over about 740 forest chunks, owner). Salt lick: SQ-SLK-02 to -04 PASS, SQ-SLK-01 fixed by fix-2 (reach), rerun -01c PASS. SQ-HCS-10 PASS (aggregate), SQ-OB-05, -07, -08, -10, -11 PASS (row texts updated). Client: CQ-HOP-01, CQ-SLK-01, SQ-OB-02 PASS.
 
+Scratch run r1124fx (2026-11-24, [scratch_run_2026-11-24.md](testing/scratch_run_2026-11-24.md) 1): SQ-HH-228, -1606 to -1611, SQ-HOP-04, -12 PASS; SQ-HH-304 FAIL (wild_hops 0 at two 256-chunk sites; TODO scratch-1115-follow-ups #13); SQ-HH-227, -262, -1232, -1273, -1292 FAIL again; SQ-HCS-03 INCONCLUSIVE (9 nests, about 20 expected).
+
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-HH-328 PASS with a finding: the corn maze generates (corn 350, Lootr center chest) but was found only after 424 s with a 600 s deadline, 10612 blocks from spawn; with the shipped 120 s a player's locate fails (TODO `locate #6`).
 
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-SGF-01, -02, SQ-WCT-06, -07, -08.

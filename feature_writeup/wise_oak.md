@@ -324,6 +324,8 @@ Nothing else is open.
 
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-WO-15 to -25 PASS (11 of 11), SQ-WO-31, -33 PASS (no gift with chance 0 / empty lists, no exception). Earlier runs: r1109wo, r1110wo.
 
+Scratch run r1124fx (2026-11-24, [scratch_run_2026-11-24.md](testing/scratch_run_2026-11-24.md) 1): SQ-WO-01, -02, -03, -05, -07 to -13, -15, -17, -18, -22 to -26, -28 to -32, -35 PASS; SQ-WO-34 FAIL (gift gave 3 oak saplings with saplingCount 1; TODO mob-and-block-tweaks #4); SQ-WO-04, -06 BATCH-FAULT (tired sleep inside the 2400-tick warp, row rewrite pending).
+
 - [ ] **WO-01 awake by day:** place a Wise Oak in the day, wait 2 minutes -> it blinks and never sleeps.
 - [ ] **WO-02 asleep by night:** `/time set night`, wait about a minute -> SLEEPING; `/time set day` -> wakes within about a minute.
 - [ ] **WO-02b storm:** `/weather thunder` in the day -> it sleeps; `/weather clear` -> it wakes.
