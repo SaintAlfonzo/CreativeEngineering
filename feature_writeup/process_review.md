@@ -201,6 +201,25 @@ Added after the owner's rulings (2026-11-16 evening):
 
 Not planned: a recurring weekly consolidation pass. P1.6 and P2.5 do one-time clean-ups.
 
+## 10. Follow-up (2026-11-24): owner-side communication faults
+
+A read-only pass over the plan intake tables, reversal notes and git history after one week of intake (finding 6,
+P1.3). Ranked by rework caused. It sees only what was written down, not chat. Main result: intake caught most vague
+specs. Rework now comes mostly from new notes that silently reverse an earlier ruling, and from requests made against
+stale state.
+
+| # | Fault | Evidence | Fix |
+|---|---|---|---|
+| 1 | A note reverses an earlier ruling without saying so | Weathered cardboard box back to Engineering undoes the carve move and the Compat exemption ([plan_wave1_publish.md](plan_wave1_publish.md) W16); squid flee reverses `mobs/tweaks #18` (W17); also crow D2, Cream and Onion popcorn (built, removed 2026-11-23), ocean corpses (ruling 27), Tempad cooldown (2026-11-18), salt layers, acid recipes. Only 7 intake rows were ever classed `conflict` | Notes that change a decision say so ("changes X", "undo Y") |
+| 2 | Requests for work that already exists | 48 intake rows across 14 plans classed `premise`: stack size 64, flower box exclusion, tilled end stone, tooltip "bugs" that were Quark or AppleSkin config ([plan_small_fixes_1116.md](plan_small_fixes_1116.md), [plan_rules_fixes.md](plan_rules_fixes.md), [plan_diet_books.md](plan_diet_books.md)) | Look up the TODO rows first (`tools/todo.py`), or ask an agent "is X done?" |
+| 3 | Builds start on unconfirmed decisions | 191 intake rows `open`, 99 decision briefs, food-decisions walkthrough on round 6; builds go ahead on "agent default, unconfirmed" values (Raspberry Pie ladder built from 40, ruled 25: [plan_rp_standalone.md](plan_rp_standalone.md) O4) | An unconfirmed default blocks any player-visible visual or numeric value |
+| 4 | Visual and UI work is specified in words | Diet Log: five rounds, then back to one page; corpse screen item 27 could not be built literally (no crafting grid, [plan_corpses.md](plan_corpses.md)); leaf layers reversed | Agree on a mockup (an ASCII preview in a question) before Java |
+| 5 | Terse or bundled notes | "flip to be hoe function, where to check in order" needed a guess ([plan_creative_tips.md](plan_creative_tips.md) R7); "9 and 13" meant 8 and 12; "two shanks" was two mods' rows | One change per line, with the item or screen named |
+| 6 | Parallel sessions started without knowing about each other | Jar swaps under a scratch run logged four times, hit again 2026-11-02b and 2026-11-15; the perf suite tested a jar another session rebuilt | Check `session_role.py` and running sessions before starting a code session |
+| 7 | Agent-written relay prompts used as the handover | The [scratchpad](todo/scratchpad.md) "Prompt scratchpad" block holds the round-6 "settled, do not re-ask" list, kept by hand outside the TODO rows | Settled rulings live on their rows; the relay prompt only points to them |
+
+None of these is planned yet; any fix goes through intake as rows under `tooling/process`.
+
 ## History
 
 - 2026-11-16: written (review session; read-only apart from this file, the plan and their index rows).
@@ -208,3 +227,4 @@ Not planned: a recurring weekly consolidation pass. P1.6 and P2.5 do one-time cl
 - 2026-11-16 night: P1.1 to P1.3 built; offline results in [plan_process_overhaul.md](plan_process_overhaul.md) (tests renamed PO- to PROC-: PO- belongs to potions.md). Section 3 table: 10 of the 12 tests repaired, 3 tests KNOWN on two real gaps (`largecontent/mod-additions #64`, `farming/wild-crops #11`); 27 guard_check hits: 2 real guards added, the rest tool gaps or G5 tables.
 - 2026-11-16 late night: plan Phase 2 built (finding 2: tiered queue, rows as data, expiry, pinned jars, resumable driver); offline results PROC-20 to PROC-28 in [plan_process_overhaul.md](plan_process_overhaul.md) test list.
 - 2026-11-16 late night: Phase 3 planned in [plan_process_overhaul.md](plan_process_overhaul.md) (clean-up passes, install baseline, features audit and CSV, Phase 1 and 2 fixes, TODO as the single source of truth). Owner ruling D12: the section 7 "TODO re-layouts" row is withdrawn (the owner's choice).
+- 2026-11-24: section 10 added (follow-up on owner-side communication faults after one week of intake; read-only pass, nothing planned yet).
