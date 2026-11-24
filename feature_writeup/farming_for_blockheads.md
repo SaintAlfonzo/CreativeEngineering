@@ -6,7 +6,7 @@ Investigation written 2026-11-23, nothing built. Jars read: Farming for Blockhea
 All Rights Reserved (BlayTheNinth, both jars; permissions page `https://mods.twelveiterations.com/permissions`). A port
 is needed: the Shipping Bin exists only in the 26.3 line, and the 1.19.2 line has no bin. Initial goal (owner,
 2026-11-23, scratchpad "only for shipping bin, disable the rest"): port the Shipping Bin only. The rest of the mod is
-audited in sections 2 and 3, and none of it is planned. Short name in this file: FfB. Test prefix: `SHB-`
+audited in sections 2 and 3; the rabbit trap was added to the port on 2026-11-24 (section 2.3), the rest is not planned. Short name in this file: FfB. Test prefix: `SHB-`
 (`FFB` is taken by the oven queue rows).
 
 Scope rule: integration adds no recipe or mechanic that is not in the mod or defined by a pack rule unless the owner
@@ -14,14 +14,15 @@ asks by name; upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=138c10272d12 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=96345f30619a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `mod-integration #7` | Planned | S C P T | Farming for Blockheads: port the Shipping Bin only (ARR, 26.3 donor art, own code) |
 | `mod-integration #8` | Planned | C | Courier Spawn Point: final texture (temporary: vanilla cartography table look) |
 | `mod-integration #9` | Planned | S | Courier Spawn Point: final recipe (temporary: chest surrounded by 8 trapdoors of any kind) |
+| `mod-integration #10` | Planned | S C P T | Farming for Blockheads: port the rabbit trap (pack catch list, biome catch tables, tooltip) |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -30,9 +31,9 @@ asks by name; upstream bugs are fixed.
 | Shipping Bin mechanics (sale rule, payout, carriers) | section 3.1 | read from the decompile |
 | Overlap | section 2 | no other shipping bin in the pack; the rest of FfB overlaps Hearth and Harvest, Quark, Incubation, Slice and Dice |
 | Upstream bugs | B1, B2 (section 3.4) | none blocking for the bin |
-| Fold-in (bin only) | section 4 | 12 steps drafted |
-| Decisions | D1 to D9 (section 5) | D1 to D6, D8, D9 ruled 2026-11-23 and 2026-11-24 (5.1); D7 (rabbit trap, fishing barrel, scythe) open |
-| Tests | SHB-01 to SHB-20 (section 8) | drafted |
+| Fold-in (bin and rabbit trap) | section 4 | 13 steps drafted |
+| Decisions | D1 to D11 (section 5) | ruled 2026-11-23 and 2026-11-24 (5.1) except D7b (fishing barrel), D10, D11 (trap details); D7c pinned |
+| Tests | SHB-01 to SHB-27 (section 8) | drafted |
 
 - Jar: the 26.3 jar is the only source of the bin. It is a donor for art (Miner's Delight route, [miners_delight.md](miners_delight.md)
   D2, D12), never a mod in `mods/`. The 1.19.2 Fabric jar cannot load on Forge. A Forge 1.19.2 11.3.x jar exists
@@ -104,7 +105,7 @@ Dynamic Villager Trades changes):
 | Sprinkler (water, lava, honey, slime, snow, sulfur) | Hearth and Harvest sprinkler, Slice and Dice sprinkler, Create Things and Misc sprinkler | fourth sprinkler |
 | Watering can | Hearth and Harvest watering cans (6 tiers) | duplicate |
 | Iron scythe | MCA scythe (a weapon), hoe area harvest ([hoe-harvest-area](agent_notes/hoe-harvest-area.md)) | duplicate area harvest |
-| Fishing barrel (auto-fishing with a rod) | Oceanic Delight fishing net | different mechanic, still auto-fishing |
+| Fishing barrel (auto-fishing with a rod) | fishing rods with the Stardew Fishing minigame; Creative Delight fishing net (hand tool on kelp and sea grass, no fish) | passive rod fishing skips the minigame |
 | Rabbit trap | none found | new, small |
 | Fox note | none | flavor item from the fox event |
 
@@ -127,11 +128,70 @@ except the rabbit trap and the fishing barrel. Those two are left out unless the
 - Right-click a triggered trap: the catch is released in front of it and the trap pops off as an item with 1 damage
   (8 uses, a durability bar on the item). Breaking it also releases the catch.
 - Pack fit: no equivalent (Incubation, Quark and Hearth and Harvest have no live-capture trap; animal pens use leads
-  and Quark's feeding trough). In the pack the tag would read vanilla + modded small animals (Alex's Mobs, Naturalist
-  and the pack's fauna would need a list). The unattended spawning is a new animal source, which bypasses the pack's
-  mob spawn rules ([mob_spawns writeup](agent_notes/mob-spawns-system.md)); armadillo does not exist on 1.19.2.
+  and Quark's feeding trough). Armadillo does not exist on 1.19.2.
 - Port cost: block, block entity, renderer with two animations, entity-tag reads, item durability through NBT (no
-  data components on 1.19.2). Medium.
+  data components on 1.19.2). Medium. **Ruled: port (owner, 2026-11-24, D7).**
+
+#### 2.3.1 Rabbit trap: catch list for the pack (2026-11-24)
+
+The trap only handles `Animal` subclasses (checked in the spawn dump `kubejs/exported/spawns.json`, superclasses
+column). Rule used: a small animal that walks on the ground and could fit a wooden box trap. Proposed tag
+`farmingforblockheads:rabbit_trap_capturable` (via `global.tags`), 18 types:
+
+| Entity | Source | Note |
+|---|---|---|
+| `minecraft:rabbit`, `minecraft:chicken`, `minecraft:frog`, `minecraft:cat` | vanilla (upstream list minus armadillo) | |
+| `cozys-improved-cats:improved_cat` | Cozy's Improved Cats | the pack's cat (subclass of Cat), spawns in 4 biomes |
+| `minecraft:ocelot` | vanilla | wild jungle cat, same size as a cat |
+| `untitledduckmod:duck` | Untitled Duck Mod | |
+| `quark:crab` | Quark | |
+| `alexsmobs:jerboa`, `platypus`, `skunk`, `roadrunner`, `banana_slug`, `rain_frog`, `mudskipper`, `tasmanian_devil`, `raccoon`, `warped_toad` | Alex's Mobs | warped toad only in warped forests (Nether) |
+
+Left out: fox (the trap's own joke: the fox steals the carrot and leaves the Mysterious Note); flying birds (parrot,
+blue jay, hummingbird, sunbird, toucan, seagull, potoo, both crows); geese, emu, anteater, capuchin and larger
+(do not fit); rattlesnake (venomous); axolotl, turtle, tadpole (water); cockroach and flies (insects); bunfungus (not
+an `Animal`); bees (fly). **Tamed or owned animals** (cats, raccoons, mudskippers, warped toads with an owner) are
+not caught (recommendation D10), so players' pets never vanish into a trap.
+
+#### 2.3.2 Rabbit trap: catch tables by biome (2026-11-24)
+
+Unattended catches (nobody within 64 blocks; chance `min(0.95, ticks alone / 24000)`, rolled every 1200 ticks and
+once on chunk reload for the time away) roll an animal from the trap's biome instead of upstream's fixed 5-type
+list. Table: [rabbit_trap_catches.csv](farming_for_blockheads/rabbit_trap_catches.csv), built 2026-11-24 from the
+spawn dump (dumped 2026-11-19, after the pack's spawn tuning): for each biome, every catchable type in its natural
+spawn lists, with the biome's spawn weight and its share. 116 of 169 biomes have catches; the other 53 (oceans,
+caves, most of the Nether, the End, AE2 storage) catch nothing, so only the fox note can come out there. Examples:
+
+| Biome | Catches (share) |
+|---|---|
+| Plains | chicken 42 %, raccoon 42 %, duck 17 % |
+| Forest | chicken, raccoon, Tasmanian devil 24 % each, skunk 17 %, duck 10 % |
+| Desert | jerboa 34 %, rain frog 29 %, roadrunner 26 %, rabbit 11 % |
+| Swamp | chicken 38 %, frog 38 %, duck 23 % |
+| Snowy plains | rabbit 59 %, raccoon 29 %, duck 12 % |
+| Jungle | chicken 77 %, duck 15 %, ocelot 8 % |
+
+At build time a generator (`tools/rabbit_trap_catches.py`, listed in `tools/generators.json`) writes the table as data
+(`data/farmingforblockheads/rabbit_trap/biomes.json` in Creative Delight) from the dump, so it follows spawn tuning
+after each `/dumpall`. Baby chance stays 10 %. One catch per trap until a player releases it, so traps cannot fill
+an area with animals.
+
+#### 2.3.3 Rabbit trap: behavior and tooltip
+
+Behavior (for the writeup and JEI info page):
+- Place it anywhere. While a player is within 64 blocks it lures the nearest catchable animal within 8 blocks and
+  snaps shut when the animal steps in.
+- Left alone, it slowly catches an animal that lives in the biome (higher chance the longer it is left; 95 % after a
+  full day alone).
+- A sprung trap shows the catch. Right-click it to release the animal; the trap pops off as an item and loses one of
+  its 8 uses. Breaking it also releases the catch.
+- Very rarely a fox gets there first and leaves a Mysterious Note.
+
+Tooltip draft (item; Creative Common tooltip helper, [tooltips.md](tooltips.md)):
+- "Catches small animals: rabbits, chickens, frogs, cats, ducks, crabs and more."
+- "Lures animals within 8 blocks while you are near; catches local animals while left alone."
+- "Right-click a sprung trap to release the catch. 8 uses."
+- Shift: the full catch list by name (from the tag, so it stays in sync).
 
 **Fishing barrel** (`farmingforblockheads:fishing_barrel`, 26.3 only). Recipe `PSP / PNP / PRP`: planks, string,
 nautilus shell, redstone. A barrel with a rod slot and 8 storage slots; it faces water.
@@ -140,10 +200,16 @@ nautilus shell, redstone. A barrel with a rod slot and 8 storage slots; it faces
   the vanilla `gameplay/fishing` table with the rod as tool (Luck of the Sea applies), 1 rod durability per catch,
   rod break effect. Catches go to the 8 slots (overflow buffered, fishing stops while full); hoppers can pull them.
   A 36-tick catch animation (bob, splash).
-- Pack fit: overlaps the Creative Delight / Oceanic fishing net (passive net with a cooldown and loot by biome,
-  [ocean_delight.md](ocean_delight.md) dishes/ocean #1), and skips the Stardew Fishing minigame and Fish On The
-  Line, which the pack runs for hand fishing. A rod barrel gives treasure (enchanted books, saddles, name tags)
-  that the net does not. Iron Fishing Rods' rods would need to be in the rod tag. Cozy Cats' GLM on
+- Textures: [fishing_barrel_textures.png](farming_for_blockheads/fishing_barrel_textures.png) (front with the rod
+  hole, side, back, bottom, GUI; 8x and 2x preview from the donor jar, not pack art).
+- Pack fit: little overlap with the fishing net. The net ([ocean_delight.md](ocean_delight.md) 5.1, Creative Delight
+  `FishingNetItem`) is a hand tool, not a passive catcher: right-click a kelp stalk (with kelp above) or sea grass /
+  sea grape / pickerelweed; each search costs 1 of 92 uses with a 2.5 s cooldown and rolls the pack's net tables by
+  biome: clay, kelp, scute everywhere, shrimp in oceans, caviar in rivers, coral in warm oceans, ocean treasure
+  (nautilus shell 2 %, heart of the sea 0.2 %), 5 % junk; kelp searches sometimes break the stalk and spawn a
+  pufferfish. It gives no fish. The barrel is passive rod fishing (fish, treasure, junk from the vanilla table) and
+  skips the Stardew Fishing minigame and Fish On The Line, which the pack runs for hand fishing. A rod barrel gives
+  treasure (enchanted books, saddles, name tags) without the minigame. Iron Fishing Rods' rods would need to be in the rod tag. Cozy Cats' GLM on
   `gameplay/fishing` would apply to it.
 - Port cost: block, block entity, menu and screen, renderer animation. Medium.
 
@@ -158,6 +224,12 @@ tier.
   than an iron hoe's planned area and gives nothing new.
 - Recommendation: no FfB scythe. Its iron scythe art (donor texture `item/iron_scythe`) can serve as the iron tier's
   art for kitchen #16 if the owner wants it (an art source, not a texture edit).
+- **Pinned for later (owner, 2026-11-24, D7c):** the owner wants scythes, but they clash with the hoe area harvest.
+  Owner's idea: take the area harvest off hoes and give it to scythes. Recommendation when it is picked up (needs a
+  ruling then; it changes [crops.md](crops.md) CR-26 to CR-30 and the `hoe_harvest/NxN` tags): hoes keep tilling and a
+  1x1 right-click harvest; scythes (kitchen #16, wood to netherite) take the per-tier areas (the `hoe_harvest/NxN`
+  tags move to the scythes, the Quark mixins read them from the held scythe) and replant; scythes do not till. That
+  gives each tool one job and keeps a single area system. Recorded on kitchen #16; nothing changes until then.
 
 ## 3. New content
 
@@ -219,7 +291,7 @@ texture is drawn or edited ([texture_sources.md](texture_sources.md)).
 - **B2 Falling crate drops nothing** without Pantry for Blockheads, so shooting a balloon only destroys the effect.
   Harmless (the emeralds are already paid).
 
-## 4. Fold-in, in build order (Shipping Bin only)
+## 4. Fold-in, in build order (Shipping Bin and rabbit trap)
 
 0. **Donor jar.** `blockheads_upstream/farmingforblockheads-neoforge-26.3-26.3.0.2.jar` (or the single upstream
    folder once it exists, [upstream-jar-distribution-policy](agent_notes/upstream-jar-distribution-policy.md)), sha1-pinned. The donor
@@ -253,6 +325,11 @@ texture is drawn or edited ([texture_sources.md](texture_sources.md)).
    our config list (D5).
 8. **Block audit:** BlockRunner tier, Item Physic, WTHIT (show stored value / capacity), JEI category "Shipping"
    listing each value row ([jei_coverage.md](jei_coverage.md)); tooltip on the bin item ([tooltips.md](tooltips.md)).
+8a. **Rabbit trap** (ruling D7): block (facing, triggered), block entity (catch NBT, unattended timer, lure every 10
+   ticks), renderer with the set-up and snap animations, item durability 8 through NBT (1.19.2 has no data
+   components; stack size 1 once used), recipe `PP / SCP` via `global.NCH`, catch tag via `global.tags` (2.3.1),
+   biome data from `tools/rabbit_trap_catches.py` (2.3.2), fox note loot table, tooltip and JEI info (2.3.3),
+   donor art `rabbit_trap`, `rabbit_trap_bottom`, `rabbit_trap_front`. Tamed animals skipped (D10).
 9. **Stack size:** 64 (block); no food, can, compost, crop, worldgen, potion or effect step (the bin adds none).
 10. **Release:** player changelog bullet under a new `## Shipping Bin` family, TODO row, README index row, queue rows
     `SQ-SHB-*` / `CQ-SHB-*`.
@@ -272,9 +349,11 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D4 | Drop the Shogi rule fields and the per-chunk sales history (price scaling hook) | Drop: nothing in the shipped data uses them | dropped |
 | D5 | Carriers: balloon + crate + courier (upstream), balloon only, or particles only | All three: they are the feature's look; courier names from a config list | all three |
 | D6 | Code home | Creative Delight `farm/` (farming and food routing; same author family as the CfB compartment); Creative Compat is for fixes only | Creative Delight |
-| D7 | Rabbit trap (section 2.3): port, and if so: unattended spawning on or off, which modded animals in the tags | Port without unattended spawning (catch only animals that are there; no new mob source); tags: vanilla 1.19.2 small animals plus the pack's small fauna by list | not planned |
+| D7 | Rabbit trap (section 2.3) | Ruled 2026-11-24: port, pack catch list, biome tables, tooltip (5.1) | ruled |
 | D7b | Fishing barrel (section 2.3): port, and if so: treasure loot or the fishing-net tables | Not now: overlaps the fishing net and skips the fishing minigame; if wanted, roll vanilla `gameplay/fishing` minus treasure | not planned |
-| D7c | Scythe (section 2.3) | No FfB scythe; build `cooking/kitchen #16`; optionally use the FfB iron scythe texture as its iron-tier art | not ported |
+| D7c | Scythe (section 2.3) | Pinned 2026-11-24 for later: no FfB scythe; kitchen #16 scythes take the area harvest from hoes (2.3) | pinned |
+| D10 | Rabbit trap and tamed animals: catch owned pets or not | Not caught (an owned cat, raccoon, mudskipper or warped toad is skipped) | not caught |
+| D11 | Rabbit trap catch list (2.3.1): the 18 types | As listed | as listed |
 | D8 | Courier Spawn Point art and recipe | Ruled 2026-11-24 (5.1): temporary; final art and recipe are TODO rows | temporary |
 | D9 | Courier Spawn Point reach and walk timeout | Ruled 2026-11-24 (5.1) | ruled |
 
@@ -293,6 +372,9 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D8 | (2026-11-24) Temporary art: the vanilla cartography table look (the block model names `minecraft:block/cartography_table`'s textures; no texture copied or edited). Temporary recipe: a chest surrounded by 8 trapdoors of any kind (`#minecraft:trapdoors`, wooden and iron). Both are marked for update: TODO rows `mod-integration` "Courier Spawn Point: final texture" and "Courier Spawn Point: final recipe". |
 | D9 | (2026-11-24) Spawn point search radius is a config value with a high default spanning several chunks: `courierSpawnSearchRadius` default 96 blocks (6 chunks), range 0 to 256 (0 = spawn points off). Walk timer: `courierWalkTimeoutTicks` (default 1200, 60 s). A courier that has not reached the bin when the timer runs out is teleported to the bin (Enderman teleport sound and portal particles, as upstream's exit). On the way out the same timer applies; when it runs out the courier drinks and despawns where it stands. The timer counts on the bin's block entity in game time, so a courier frozen in an unloaded chunk still times out. |
 | D6 | Code home: Creative Delight (default taken; not asked). |
+| D5c | (2026-11-24) A courier that came from a Courier Spawn Point walks back to that block to drink and despawn, when spawn points are enabled (`courierSpawnSearchRadius` above 0), the block is still there and a path exists; otherwise it walks out to the configured distance (or drinks in place in `at_bin` mode). The walk timer (D9) still applies to the way back. |
+| D7 | (2026-11-24) Port the rabbit trap. Update the catch list for the pack (2.3.1), add an item tooltip that describes the behavior (2.3.3), and catch from per-biome tables when left alone (2.3.2). |
+| D7c | (2026-11-24) Scythe pinned for a later recommendation (2.3); owner leans toward moving the hoe area harvest to scythes. |
 
 ## 6. File map (planned)
 
@@ -332,6 +414,13 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 - [ ] **SHB-18 Walk timeout:** put the spawn point behind a long maze, sell -> after 60 s the courier teleports to the bin with the Enderman sound; set `courierWalkTimeoutTicks` to 200 -> it teleports after 10 s.
 - [ ] **SHB-19 Courier Spawn Point block:** craft a chest surrounded by 8 trapdoors (mix oak, spruce and iron) -> 1 Courier Spawn Point with the cartography table look.
 - [ ] **SHB-20 Credit carried:** after SHB-04's carrots, add carrots until a second sale -> the 2 credit points count toward it.
+- [ ] **SHB-21 Trap lure:** place a rabbit trap in a plains with chickens nearby, stand 10 blocks away -> the nearest chicken walks in, the trap snaps (sound, poof) and shows it.
+- [ ] **SHB-22 Release:** right-click the sprung trap -> the chicken steps out in front, the trap pops off as an item with 7 of 8 uses left; after 8 uses it is gone.
+- [ ] **SHB-23 Catch list:** tame a cat, lead a fox, an untamed ocelot and a duck past a trap -> the duck and the ocelot are caught, the fox and the tamed cat are not.
+- [ ] **SHB-24 Biome table:** place traps in a desert and a snowy plains, leave the area for a full day (or set game time ahead), come back -> desert traps hold jerboas, rain frogs, roadrunners or rabbits; snowy ones rabbits, raccoons or ducks.
+- [ ] **SHB-25 No catches:** a trap in a deep ocean or the End left for a day -> stays empty (rarely a Mysterious Note).
+- [ ] **SHB-26 Tooltip:** hover the trap item -> three behavior lines; with Shift the catch list by name.
+- [ ] **SHB-27 Courier returns to its spawn point:** with a Courier Spawn Point 30 blocks away, sell under a roof -> the courier walks from it, takes the crate, walks back to it and drinks there; break the spawn point while it walks in -> it leaves to the configured distance instead.
 
 ## 9. History
 
@@ -343,3 +432,6 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 - 2026-11-24: rulings D3a (partial sales, credit), D8 (temporary cartography table look, chest + 8 trapdoors
   recipe), D9 (search radius 96, walk timeout teleport); rabbit trap, fishing barrel and scythe investigated (2.3, D7 to
   D7c open).
+- 2026-11-24: rabbit trap ruled in (catch list 2.3.1, biome tables 2.3.2 with the draft CSV, tooltip 2.3.3); courier
+  returns to its spawn point (D5c); fishing barrel textures shown and the fishing net described (2.3); scythe pinned
+  (D7c).
