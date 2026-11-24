@@ -8,6 +8,7 @@ import com.axperty.storagedelight.block.DrawerBooksBlock;
 import com.axperty.storagedelight.block.DrawerDoorBlock;
 import com.axperty.storagedelight.block.GlassCabinetBlock;
 import com.axperty.storagedelight.block.SmallDrawersBlock;
+import com.axperty.storagedelight.block.half.HalfCabinetBlocks;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
@@ -24,24 +25,28 @@ import net.minecraftforge.registries.RegistryObject;
 /**
  * Storage Delight 25.12.09 with the Creative Engineering additions (feature_writeup/storage_delight.md section 5):
  * the Polished Blackstone, Polished Diorite, Stone Bricks and Polished Tuff countertops on the nine woods, and
- * the bamboo set. Table-driven: every block is {@link #ALL} by registry name, grouped by {@link Kind} for the
- * block entity types.
+ * the bamboo set; and a half cabinet after every cabinet (TODO kitchen #41, section 6: "cabinet" in the id becomes
+ * "half_cabinet"). Table-driven: every block is {@link #ALL} by registry name, grouped by {@link Kind} for the block
+ * entity types (a half cabinet shares its full cabinet's kind and type).
  */
 public class BlockRegistry {
     public enum Kind {
-        DRAWER(DrawerBlock::new),
-        DRAWER_DOOR(DrawerDoorBlock::new),
-        DRAWER_BOOKS(DrawerBooksBlock::new),
-        GLASS_CABINET(GlassCabinetBlock::new),
-        CABINET_VARIANT(CabinetVariantBlock::new),
-        BOOKSHELF_DOOR(BookshelfDoorBlock::new),
-        SMALL_DRAWERS(SmallDrawersBlock::new),
-        COUNTERTOP(CabinetCountertopBlock::new);
+        DRAWER(DrawerBlock::new, null),
+        DRAWER_DOOR(DrawerDoorBlock::new, null),
+        DRAWER_BOOKS(DrawerBooksBlock::new, null),
+        GLASS_CABINET(GlassCabinetBlock::new, HalfCabinetBlocks.Glass::new),
+        CABINET_VARIANT(CabinetVariantBlock::new, HalfCabinetBlocks.Variant::new),
+        BOOKSHELF_DOOR(BookshelfDoorBlock::new, null),
+        SMALL_DRAWERS(SmallDrawersBlock::new, null),
+        COUNTERTOP(CabinetCountertopBlock::new, HalfCabinetBlocks.Countertop::new);
 
         final Function<Properties, Block> factory;
+        /** The half cabinet of this kind, or null when the kind is not a cabinet. */
+        final Function<Properties, Block> halfFactory;
 
-        Kind(Function<Properties, Block> factory) {
+        Kind(Function<Properties, Block> factory, Function<Properties, Block> halfFactory) {
             this.factory = factory;
+            this.halfFactory = halfFactory;
         }
     }
 
@@ -53,6 +58,8 @@ public class BlockRegistry {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, "storagedelight");
     public static final Map<String, RegistryObject<Block>> ALL = new LinkedHashMap<>();
     public static final Map<Kind, List<RegistryObject<Block>>> BY_KIND = new EnumMap<>(Kind.class);
+    /** Every half cabinet id, in registration order (each right after its full cabinet). */
+    public static final List<String> HALF_CABINETS = new ArrayList<>();
 
     static {
         for (String wood : WOODS) {
@@ -84,7 +91,21 @@ public class BlockRegistry {
     }
 
     private static void add(Kind kind, String name) {
-        RegistryObject<Block> block = BLOCKS.register(name, () -> kind.factory.apply(Properties.copy(Blocks.OAK_PLANKS)));
+        put(kind, name, kind.factory);
+        if (kind.halfFactory != null) {
+            String half = halfName(name);
+            put(kind, half, kind.halfFactory);
+            HALF_CABINETS.add(half);
+        }
+    }
+
+    /** glass_oak_cabinet -> glass_oak_half_cabinet, oak_cabinet_with_glass_doors -> oak_half_cabinet_with_glass_doors. */
+    public static String halfName(String cabinet) {
+        return cabinet.replaceFirst("cabinet", "half_cabinet");
+    }
+
+    private static void put(Kind kind, String name, Function<Properties, Block> factory) {
+        RegistryObject<Block> block = BLOCKS.register(name, () -> factory.apply(Properties.copy(Blocks.OAK_PLANKS)));
         ALL.put(name, block);
         BY_KIND.computeIfAbsent(kind, k -> new ArrayList<>()).add(block);
     }

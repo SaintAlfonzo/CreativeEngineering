@@ -25,7 +25,12 @@ const jeiStorageKinds = [
 	w => w + '_bookshelf_with_door',
 ]
 const jeiStorageList = []
-jeiStorageWoods.forEach(w => jeiStorageKinds.forEach(k => jeiStorageList.push('storagedelight:' + k(w))))
+// each cabinet's half cabinet right after it (storage_delight.md section 6)
+jeiStorageWoods.forEach(w => jeiStorageKinds.forEach(k => {
+	var id = k(w)
+	jeiStorageList.push('storagedelight:' + id)
+	if (id.indexOf('cabinet') >= 0) jeiStorageList.push('storagedelight:' + id.replace('cabinet', 'half_cabinet'))
+}))
 
 global.jeiOrder.define({
 	types: ['item', 'multiblock', 'fluid', 'effect'],

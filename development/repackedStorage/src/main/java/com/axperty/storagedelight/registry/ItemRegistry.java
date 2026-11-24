@@ -8,7 +8,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
-/** One block item per {@link BlockRegistry#ALL} entry: 300 ticks of fuel, none for the nether woods. */
+/** One block item per {@link BlockRegistry#ALL} entry: 300 ticks of fuel (a half cabinet 150), none for the nether woods. */
 public class ItemRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, "storagedelight");
     /** The creative tab icon (CreativeTabRegistry). */
@@ -22,7 +22,7 @@ public class ItemRegistry {
                 boolean nether = name.contains("crimson") || name.contains("warped");
                 return nether
                         ? new BlockItem(entry.getValue().get(), basicItem())
-                        : new FuelBlockItem(entry.getValue().get(), basicItem(), 300);
+                        : new FuelBlockItem(entry.getValue().get(), basicItem(), BlockRegistry.HALF_CABINETS.contains(name) ? 150 : 300);
             });
             if (name.equals("oak_drawer")) {
                 icon = item;

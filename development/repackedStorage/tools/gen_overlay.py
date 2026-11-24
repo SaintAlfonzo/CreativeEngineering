@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 """Generates the repackedStorage overlay: assets and data of the added Storage Delight blocks, the axe tag, en_us.json.
+Also the half cabinets (TODO kitchen #41, storage_delight.md section 6): one per cabinet, old and new, whose models
+reuse the full cabinet's own textures on a half-depth parent (storagedelight:block/half_cabinet, UV crops; no new
+texture files, plan_ready_now_1123.md R2). Their crafting recipes are the pack's (NCH), not the jar's.
 
 Reads the unpacked 25.12.09 jar (the pinned upstream) and 26.10.05 jar (art donor, MIT) from DecompiledMods/.
 Run from the repo root: python3 development/repackedStorage/tools/gen_overlay.py
@@ -131,6 +134,64 @@ def loot(name):
             'conditions': [{'condition': 'minecraft:survives_explosion'}]}]}
 
 
+def half_name(cabinet):
+    """glass_oak_cabinet -> glass_oak_half_cabinet; must match BlockRegistry.halfName."""
+    return cabinet.replace('cabinet', 'half_cabinet', 1)
+
+
+def cabinets():
+    """Every full cabinet (the kinds BlockRegistry gives a half: glass, glass doors, single door, countertop)."""
+    return [n for n in old_blocks() + new_blocks() if 'cabinet' in n]
+
+
+# Half-depth parent: the back half of the block space, as Hearth and Harvest's half cabinet (the shape and the item
+# display transforms). Front and back show the whole texture; sides, top and bottom crop its middle half.
+HALF_PARENT = {
+    'parent': 'minecraft:block/block',
+    'textures': {'particle': '#north'},
+    'elements': [{'from': [0, 0, 8], 'to': [16, 16, 16], 'faces': {
+        'north': {'uv': [0, 0, 16, 16], 'texture': '#north'},
+        'east': {'uv': [4, 0, 12, 16], 'texture': '#east', 'cullface': 'east'},
+        'south': {'uv': [0, 0, 16, 16], 'texture': '#south', 'cullface': 'south'},
+        'west': {'uv': [4, 0, 12, 16], 'texture': '#west', 'cullface': 'west'},
+        'up': {'uv': [0, 4, 16, 12], 'texture': '#up', 'cullface': 'up'},
+        'down': {'uv': [0, 4, 16, 12], 'texture': '#down', 'cullface': 'down'}}}],
+    'display': {
+        'thirdperson_righthand': {'rotation': [75, 45, 0], 'translation': [0, 2.5, 0], 'scale': [0.375, 0.375, 0.375]},
+        'gui': {'rotation': [30, -135, 0], 'translation': [1.75, -0.75, 0], 'scale': [0.625, 0.625, 0.625]},
+        'fixed': {'scale': [0.5, 0.5, 0.5]}},
+}
+FACES = {'down', 'up', 'north', 'south', 'east', 'west', 'particle'}
+
+
+def full_file(rel):
+    """A full cabinet's file: the overlay's (added blocks) or the upstream jar's."""
+    p = os.path.join(OUT, rel)
+    return rd(p if os.path.exists(p) else os.path.join(OLD, rel))
+
+
+def halves(lang):
+    wr(f'{A}/models/block/half_cabinet.json', HALF_PARENT)
+    out = []
+    for full in cabinets():
+        half = half_name(full)
+        bs = full_file(f'{A}/blockstates/{full}.json')
+        for var in bs['variants'].values():
+            model = var['model'].split('/', 1)[1]
+            assert model in (full, full + '_open'), (full, model)
+            m = full_file(f'{A}/models/block/{model}.json')
+            assert m.get('parent') == 'minecraft:block/cube_bottom_top' and set(m['textures']) == FACES, model
+            wr(f'{A}/models/block/{half_name(model)}.json',
+               {'parent': 'storagedelight:block/half_cabinet', 'textures': m['textures']})
+            var['model'] = 'storagedelight:block/' + half_name(model)
+        wr(f'{A}/blockstates/{half}.json', bs)
+        wr(f'{A}/models/item/{half}.json', {'parent': f'storagedelight:block/{half}'})
+        wr(f'{D}/loot_tables/blocks/{half}.json', loot(half))
+        lang[f'block.storagedelight.{half}'] = lang[f'block.storagedelight.{full}'].replace('Cabinet', 'Half Cabinet', 1)
+        out.append(half)
+    return out
+
+
 def main():
     shutil.rmtree(OUT + '/assets', ignore_errors=True)
     shutil.rmtree(OUT + '/data', ignore_errors=True)
@@ -145,16 +206,18 @@ def main():
         wr(f'{A}/models/item/{n}.json', {'parent': f'storagedelight:block/{n}'})
         wr(f'{D}/recipes/{n}.json', recipe(n, None))
         wr(f'{D}/loot_tables/blocks/{n}.json', loot(n))
-    # axe tag: every block, old and new
-    wr('data/minecraft/tags/blocks/mineable/axe.json', {'replace': False,
-       'values': [f'storagedelight:{n}' for n in old_blocks() + blocks]})
     # en_us.json: the upstream file plus the new names
     lang = rd(os.path.join(OLD, f'{A}/lang/en_us.json'))
     new_lang = rd(os.path.join(NEW, f'{A}/lang/en_us.json'))
     for n in blocks:
         lang[f'block.storagedelight.{n}'] = new_lang[f'block.storagedelight.{n}']
+    half = halves(lang)
+    assert len(half) == 90
     wr(f'{A}/lang/en_us.json', lang)
-    print(len(blocks), 'blocks')
+    # axe tag: every block, old and new, and the half cabinets
+    wr('data/minecraft/tags/blocks/mineable/axe.json', {'replace': False,
+       'values': [f'storagedelight:{n}' for n in old_blocks() + blocks + half]})
+    print(len(blocks), 'blocks,', len(half), 'half cabinets')
 
 
 main()

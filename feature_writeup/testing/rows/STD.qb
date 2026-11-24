@@ -63,3 +63,188 @@ reject \[cdevtest\] verb=\S+ done=0
 reject (?i)(block ?entity|storagedelight).*(exception|error)
 > pbot remove std
 look the three `pbot use` replies (a menu opened = SUCCESS / CONSUME); the stick in slot 26 dropped with each block
+
+@@section 2
+@@title Half cabinets (storage_delight.md section 6, TODO kitchen #41)
+@@jars storagedelight creativecommon
+@@text
+@@text Needs `repackedStorage-25.12.09-1.19-forge-ce-19.2-03.jar` and the Creative Common jar with the dict entries installed; the recipes are the pack script `kubejs/server_scripts/other/storage_delight.js`.
+@@text
+@@table
+## SQ-STD-04 | Half cabinets registered, axe-mineable, 180 conversion recipes
+@group B
+@commands Boot; `cdevtest reg`, `cdevtest tag`, `cdevtest recipes`
+@pass 230 `storagedelight:` blocks, 90 of them half cabinets; the halves in `minecraft:mineable/axe`; 90 split and 90 join recipes
+@fails Depends on: repackedStorage jar -03, Creative Common jar (dict), pack script storage_delight.js
+@reviewed 2026-11-23
+bootexpect Done \(
+bootreject (?i)(ERROR|Exception).*(storagedelight|storage_delight\.js)
+> cdevtest reg block ^storagedelight: max=1
+> cdevtest reg block half_cabinet max=1
+> cdevtest recipes _from_half_cabinets max=1
+> cdevtest recipes half_cabinet_with max=1
+> cdevtest tag block minecraft:mineable/axe
+expect verb=reg kind=block regex=\^storagedelight: n=230$
+expect verb=recipes text=_from_half_cabinets n=90\b
+expect verb=tag kind=block tag=minecraft:mineable/axe .*ids=\S*storagedelight:glass_oak_half_cabinet\b
+reject \[cdevtest\] verb=\S+ done=0
+look `reg block half_cabinet`: 90 storagedelight ids plus the 9 hearthandharvest ones (99); `recipes half_cabinet_with` counts the split recipes of the glass-door and countertop halves (the glass and single door halves end in `half_cabinet_from_cabinet`); a truncated axe tag id list: check the id by hand
+## SQ-STD-05 | Half cabinet, glass: place, 27 slots, drops itself and contents, both recipes (x 120..122; queue group B)
+@group B
+@commands `setblock` `storagedelight:glass_oak_half_cabinet` and `storagedelight:glass_birch_half_cabinet` facing north; a stick in the last slot; open with a player; break with an axe; `rdetail` the split and join recipes
+@pass Each opens as 27 slots (slot 26 takes the stick, slot 27 does not exist), drops itself and the stick; split recipe makes 2 halves from 1 cabinet, join recipe is a 1-wide 2-high column of halves
+@fails Depends on: repackedStorage jar -03, Creative Common jar (dict), pack script storage_delight.js
+@reviewed 2026-11-23
+@absent storagedelight:glass_oak_half_cabinet storagedelight:glass_birch_half_cabinet (new in repackedStorage -03; the block dump predates it until the next /dumpall)
+> forceload add 116 516 128 528
+sleep 3
+> setblock 120 -60 520 storagedelight:glass_oak_half_cabinet[facing=north]
+> setblock 122 -60 520 storagedelight:glass_birch_half_cabinet[facing=north]
+> item replace block 120 -60 520 container.26 with minecraft:stick
+> item replace block 122 -60 520 container.26 with minecraft:stick
+> item replace block 120 -60 520 container.27 with minecraft:stick
+> item replace block 122 -60 520 container.27 with minecraft:stick
+count Replaced a slot at == 2
+count does not have slot == 2
+> pbot spawn std05 121 -60 523 minecraft:overworld survival
+> pbot hold std05 minecraft:air
+> pbot use std05 120 -60 520 south
+> pbot use std05 122 -60 520 south
+> cdevtest break 120 -60 520 held=minecraft:iron_axe
+> cdevtest break 122 -60 520 held=minecraft:iron_axe
+count verb=break who=\S+ broken=true before="?storagedelight:\S+half_cabinet\S* after=minecraft:air == 2
+expect verb=break drops=minecraft:stick:1,storagedelight:glass_oak_half_cabinet:1 stacks=2
+expect verb=break drops=minecraft:stick:1,storagedelight:glass_birch_half_cabinet:1 stacks=2
+> cdevtest rdetail creativeengineering:shapeless/glass_oak_half_cabinet_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/glass_oak_cabinet_from_half_cabinets
+> cdevtest rdetail creativeengineering:shapeless/glass_birch_half_cabinet_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/glass_birch_cabinet_from_half_cabinets
+expect verb=rdetail id=creativeengineering:shapeless/glass_oak_half_cabinet_from_cabinet serializer=\S+ result=storagedelight:glass_oak_half_cabinet\*2\b
+expect verb=rdetail id=creativeengineering:shaped/glass_oak_cabinet_from_half_cabinets serializer=\S+ result=storagedelight:glass_oak_cabinet\*1\b
+expect verb=rdetail id=creativeengineering:shapeless/glass_birch_half_cabinet_from_cabinet serializer=\S+ result=storagedelight:glass_birch_half_cabinet\*2\b
+expect verb=rdetail id=creativeengineering:shaped/glass_birch_cabinet_from_half_cabinets serializer=\S+ result=storagedelight:glass_birch_cabinet\*1\b
+reject \[cdevtest\] verb=\S+ done=0
+reject (?i)(block ?entity|storagedelight).*(exception|error)
+> pbot remove std05
+look the `pbot use` replies (a menu opened = SUCCESS / CONSUME); the shaped recipe pattern is `H` over `H`
+## SQ-STD-06 | Half cabinet, glass doors: place, 27 slots, drops itself and contents, both recipes (x 130..132; queue group B)
+@group B
+@commands `setblock` `storagedelight:spruce_half_cabinet_with_glass_doors` and `storagedelight:bamboo_half_cabinet_with_glass_doors` facing north; a stick in the last slot; open with a player; break with an axe; `rdetail` the split and join recipes
+@pass Each opens as 27 slots (slot 26 takes the stick, slot 27 does not exist), drops itself and the stick; split recipe makes 2 halves from 1 cabinet, join recipe is a 1-wide 2-high column of halves
+@fails Depends on: repackedStorage jar -03, Creative Common jar (dict), pack script storage_delight.js
+@reviewed 2026-11-23
+@absent storagedelight:spruce_half_cabinet_with_glass_doors storagedelight:bamboo_half_cabinet_with_glass_doors (new in repackedStorage -03; the block dump predates it until the next /dumpall)
+> forceload add 126 516 138 528
+sleep 3
+> setblock 130 -60 520 storagedelight:spruce_half_cabinet_with_glass_doors[facing=north]
+> setblock 132 -60 520 storagedelight:bamboo_half_cabinet_with_glass_doors[facing=north]
+> item replace block 130 -60 520 container.26 with minecraft:stick
+> item replace block 132 -60 520 container.26 with minecraft:stick
+> item replace block 130 -60 520 container.27 with minecraft:stick
+> item replace block 132 -60 520 container.27 with minecraft:stick
+count Replaced a slot at == 2
+count does not have slot == 2
+> pbot spawn std06 131 -60 523 minecraft:overworld survival
+> pbot hold std06 minecraft:air
+> pbot use std06 130 -60 520 south
+> pbot use std06 132 -60 520 south
+> cdevtest break 130 -60 520 held=minecraft:iron_axe
+> cdevtest break 132 -60 520 held=minecraft:iron_axe
+count verb=break who=\S+ broken=true before="?storagedelight:\S+half_cabinet\S* after=minecraft:air == 2
+expect verb=break drops=minecraft:stick:1,storagedelight:spruce_half_cabinet_with_glass_doors:1 stacks=2
+expect verb=break drops=minecraft:stick:1,storagedelight:bamboo_half_cabinet_with_glass_doors:1 stacks=2
+> cdevtest rdetail creativeengineering:shapeless/spruce_half_cabinet_with_glass_doors_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/spruce_cabinet_with_glass_doors_from_half_cabinets
+> cdevtest rdetail creativeengineering:shapeless/bamboo_half_cabinet_with_glass_doors_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/bamboo_cabinet_with_glass_doors_from_half_cabinets
+expect verb=rdetail id=creativeengineering:shapeless/spruce_half_cabinet_with_glass_doors_from_cabinet serializer=\S+ result=storagedelight:spruce_half_cabinet_with_glass_doors\*2\b
+expect verb=rdetail id=creativeengineering:shaped/spruce_cabinet_with_glass_doors_from_half_cabinets serializer=\S+ result=storagedelight:spruce_cabinet_with_glass_doors\*1\b
+expect verb=rdetail id=creativeengineering:shapeless/bamboo_half_cabinet_with_glass_doors_from_cabinet serializer=\S+ result=storagedelight:bamboo_half_cabinet_with_glass_doors\*2\b
+expect verb=rdetail id=creativeengineering:shaped/bamboo_cabinet_with_glass_doors_from_half_cabinets serializer=\S+ result=storagedelight:bamboo_cabinet_with_glass_doors\*1\b
+reject \[cdevtest\] verb=\S+ done=0
+reject (?i)(block ?entity|storagedelight).*(exception|error)
+> pbot remove std06
+look the `pbot use` replies (a menu opened = SUCCESS / CONSUME); the shaped recipe pattern is `H` over `H`
+## SQ-STD-07 | Half cabinet, single door: place, 27 slots, drops itself and contents, both recipes (x 140..142; queue group B)
+@group B
+@commands `setblock` `storagedelight:dark_oak_single_door_half_cabinet` and `storagedelight:warped_single_door_half_cabinet` facing north; a stick in the last slot; open with a player; break with an axe; `rdetail` the split and join recipes
+@pass Each opens as 27 slots (slot 26 takes the stick, slot 27 does not exist), drops itself and the stick; split recipe makes 2 halves from 1 cabinet, join recipe is a 1-wide 2-high column of halves
+@fails Depends on: repackedStorage jar -03, Creative Common jar (dict), pack script storage_delight.js
+@reviewed 2026-11-23
+@absent storagedelight:dark_oak_single_door_half_cabinet storagedelight:warped_single_door_half_cabinet (new in repackedStorage -03; the block dump predates it until the next /dumpall)
+> forceload add 136 516 148 528
+sleep 3
+> setblock 140 -60 520 storagedelight:dark_oak_single_door_half_cabinet[facing=north]
+> setblock 142 -60 520 storagedelight:warped_single_door_half_cabinet[facing=north]
+> item replace block 140 -60 520 container.26 with minecraft:stick
+> item replace block 142 -60 520 container.26 with minecraft:stick
+> item replace block 140 -60 520 container.27 with minecraft:stick
+> item replace block 142 -60 520 container.27 with minecraft:stick
+count Replaced a slot at == 2
+count does not have slot == 2
+> pbot spawn std07 141 -60 523 minecraft:overworld survival
+> pbot hold std07 minecraft:air
+> pbot use std07 140 -60 520 south
+> pbot use std07 142 -60 520 south
+> cdevtest break 140 -60 520 held=minecraft:iron_axe
+> cdevtest break 142 -60 520 held=minecraft:iron_axe
+count verb=break who=\S+ broken=true before="?storagedelight:\S+half_cabinet\S* after=minecraft:air == 2
+expect verb=break drops=minecraft:stick:1,storagedelight:dark_oak_single_door_half_cabinet:1 stacks=2
+expect verb=break drops=minecraft:stick:1,storagedelight:warped_single_door_half_cabinet:1 stacks=2
+> cdevtest rdetail creativeengineering:shapeless/dark_oak_single_door_half_cabinet_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/dark_oak_single_door_cabinet_from_half_cabinets
+> cdevtest rdetail creativeengineering:shapeless/warped_single_door_half_cabinet_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/warped_single_door_cabinet_from_half_cabinets
+expect verb=rdetail id=creativeengineering:shapeless/dark_oak_single_door_half_cabinet_from_cabinet serializer=\S+ result=storagedelight:dark_oak_single_door_half_cabinet\*2\b
+expect verb=rdetail id=creativeengineering:shaped/dark_oak_single_door_cabinet_from_half_cabinets serializer=\S+ result=storagedelight:dark_oak_single_door_cabinet\*1\b
+expect verb=rdetail id=creativeengineering:shapeless/warped_single_door_half_cabinet_from_cabinet serializer=\S+ result=storagedelight:warped_single_door_half_cabinet\*2\b
+expect verb=rdetail id=creativeengineering:shaped/warped_single_door_cabinet_from_half_cabinets serializer=\S+ result=storagedelight:warped_single_door_cabinet\*1\b
+reject \[cdevtest\] verb=\S+ done=0
+reject (?i)(block ?entity|storagedelight).*(exception|error)
+> pbot remove std07
+look the `pbot use` replies (a menu opened = SUCCESS / CONSUME); the shaped recipe pattern is `H` over `H`
+## SQ-STD-08 | Half cabinet, countertop: place, 27 slots, drops itself and contents, both recipes (x 150..152; queue group B)
+@group B
+@commands `setblock` `storagedelight:oak_half_cabinet_with_polished_andesite_countertop` and `storagedelight:crimson_half_cabinet_with_polished_tuff_countertop` facing north; a stick in the last slot; open with a player; break with an axe; `rdetail` the split and join recipes
+@pass Each opens as 27 slots (slot 26 takes the stick, slot 27 does not exist), drops itself and the stick; split recipe makes 2 halves from 1 cabinet, join recipe is a 1-wide 2-high column of halves
+@fails Depends on: repackedStorage jar -03, Creative Common jar (dict), pack script storage_delight.js
+@reviewed 2026-11-23
+@absent storagedelight:oak_half_cabinet_with_polished_andesite_countertop storagedelight:crimson_half_cabinet_with_polished_tuff_countertop (new in repackedStorage -03; the block dump predates it until the next /dumpall)
+> forceload add 146 516 158 528
+sleep 3
+> setblock 150 -60 520 storagedelight:oak_half_cabinet_with_polished_andesite_countertop[facing=north]
+> setblock 152 -60 520 storagedelight:crimson_half_cabinet_with_polished_tuff_countertop[facing=north]
+> item replace block 150 -60 520 container.26 with minecraft:stick
+> item replace block 152 -60 520 container.26 with minecraft:stick
+> item replace block 150 -60 520 container.27 with minecraft:stick
+> item replace block 152 -60 520 container.27 with minecraft:stick
+count Replaced a slot at == 2
+count does not have slot == 2
+> pbot spawn std08 151 -60 523 minecraft:overworld survival
+> pbot hold std08 minecraft:air
+> pbot use std08 150 -60 520 south
+> pbot use std08 152 -60 520 south
+> cdevtest break 150 -60 520 held=minecraft:iron_axe
+> cdevtest break 152 -60 520 held=minecraft:iron_axe
+count verb=break who=\S+ broken=true before="?storagedelight:\S+half_cabinet\S* after=minecraft:air == 2
+expect verb=break drops=minecraft:stick:1,storagedelight:oak_half_cabinet_with_polished_andesite_countertop:1 stacks=2
+expect verb=break drops=minecraft:stick:1,storagedelight:crimson_half_cabinet_with_polished_tuff_countertop:1 stacks=2
+> cdevtest rdetail creativeengineering:shapeless/oak_half_cabinet_with_polished_andesite_countertop_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/oak_cabinet_with_polished_andesite_countertop_from_half_cabinets
+> cdevtest rdetail creativeengineering:shapeless/crimson_half_cabinet_with_polished_tuff_countertop_from_cabinet
+> cdevtest rdetail creativeengineering:shaped/crimson_cabinet_with_polished_tuff_countertop_from_half_cabinets
+expect verb=rdetail id=creativeengineering:shapeless/oak_half_cabinet_with_polished_andesite_countertop_from_cabinet serializer=\S+ result=storagedelight:oak_half_cabinet_with_polished_andesite_countertop\*2\b
+expect verb=rdetail id=creativeengineering:shaped/oak_cabinet_with_polished_andesite_countertop_from_half_cabinets serializer=\S+ result=storagedelight:oak_cabinet_with_polished_andesite_countertop\*1\b
+expect verb=rdetail id=creativeengineering:shapeless/crimson_half_cabinet_with_polished_tuff_countertop_from_cabinet serializer=\S+ result=storagedelight:crimson_half_cabinet_with_polished_tuff_countertop\*2\b
+expect verb=rdetail id=creativeengineering:shaped/crimson_cabinet_with_polished_tuff_countertop_from_half_cabinets serializer=\S+ result=storagedelight:crimson_cabinet_with_polished_tuff_countertop\*1\b
+reject \[cdevtest\] verb=\S+ done=0
+reject (?i)(block ?entity|storagedelight).*(exception|error)
+> pbot remove std08
+look the `pbot use` replies (a menu opened = SUCCESS / CONSUME); the shaped recipe pattern is `H` over `H`
+## CQ-STD-02
+@group client
+@commands `/give` one half cabinet of each style (glass, glass doors, single door, two countertops, bamboo and a nether wood among them); place against a wall in four facings, open and close, stack two in a column; craft one split and one join; JEI
+@pass LOOK: each half sits against the block behind it (back half of the space), outline and collision match the model; front shows the whole full-cabinet front (open and closed), sides, top and bottom show the middle of the full cabinet's own textures (no purple, no new art); item icon centered like Hearth and Harvest's half cabinet; "Oak Half Cabinet with Glass Doors" style names; JEI lists each half right after its cabinet
+@fails half_cabinet parent model UVs; HalfCabinetBlocks shape; order.js
+@jars storagedelight
+@draft client row: driver steps (give, use, screen, shot) not written

@@ -5,9 +5,9 @@
 **2026-11-04:** `-02` built, not installed: declares a mandatory `farmersdelight` dependency (`[1.19.2-1.2.4,)`, AFTER), which upstream never did (creative_split.md 7.17). Scratch SQ-DEP-08.
 2026-10-25 against `devmods/checkNewerVersionForContent/storagedelight-26.10.05-26.3-neoforge.jar` (NeoForge, vanilla
 26.3), method in [devmods_evaluation.md](devmods_evaluation.md) section 1. Both jars unpacked in `DecompiledMods/`. Plan
-row: `largecontent/mod-additions #33` in [todo/TODO.md](todo/TODO.md). No config file. The pack's scripts do not touch
-the mod (no recipe, tag or name change); it is listed only in [creative_delight.md](creative_delight.md) as a
-non-member.
+row: `largecontent/mod-additions #33` in [todo/TODO.md](todo/TODO.md). No config file. The pack's scripts touch the
+mod only for the half cabinet conversions (section 6) and the JEI order; it is listed in
+[creative_delight.md](creative_delight.md) as a non-member.
 
 **Licence:** MIT in both jars. Code and art can be reused with the notice kept.
 
@@ -109,8 +109,14 @@ to `development/repackedStorage/jar_archive/displaced/`).
 | STD-05 | Tuff countertops show Quark's polished tuff on top; blackstone, diorite and stone bricks show the vanilla texture; no missing-texture purple on any of the 50 |
 | STD-06 | A world saved before the jar: the original 90 blocks and their contents are intact after loading with it |
 | STD-07 | Wood, bamboo and Oak blocks burn 300 ticks in a furnace; Crimson / Warped ones do not |
+| STD-08 | Half cabinets (section 6): 230 `storagedelight:` blocks, 90 half cabinets, each in `minecraft:mineable/axe`; 90 split and 90 join recipes load |
+| STD-09 | One half cabinet per style (glass, glass doors, single door, countertop): places against the block behind it, opens as 27 slots, keeps its items, drops itself and its contents when broken with an axe |
+| STD-10 | Split: 1 cabinet -> 2 of its half cabinets (shapeless); join: 2 half cabinets in a column -> the cabinet |
+| STD-11 | Models: front shows the whole full-cabinet front (open and closed), sides, top and bottom the middle of the full cabinet's textures; outline and collision match the half-depth model in four facings; item icon centered; JEI lists each half after its cabinet |
+| STD-12 | Half cabinets of overworld woods and bamboo burn 150 ticks; crimson and warped ones do not burn |
 
 Queue: SQ-STD-01, -02 (passed), SQ-STD-03 (STD-07 fuel) and CQ-STD-01 (STD-04, STD-05), the last two added by the deep scan 2026-11-02.
+Half cabinets: SQ-STD-04 (STD-08), SQ-STD-05 to -08 (STD-09, STD-10, one row per style), CQ-STD-02 (STD-11). STD-12 by hand.
 
 
 ## 5. Owner decisions and build plan (2026-10-25)
@@ -135,3 +141,36 @@ as in the installed recipes. The tuff top face uses `quark:block/polished_tuff` 
 Properties and fuel (300 ticks, overworld woods) as the existing blocks; bamboo burns like them.
 
 **Tests:** `STD-`, section 4. 2026-10-26 scratch run: SQ-STD-01 PASSED (no `storagedelight` error, 140 `storagedelight:` blocks, 140 recipes); SQ-STD-02 (place and use) PASSED r1102b 2026-11-02 (`perf/runs/r1102b/s3/judged.md`: 3 `use SUCCESS`, each drops itself and its contents). STD-01 to STD-07 in game open.
+
+## 6. Half cabinets (2026-11-23, TODO `kitchen #41`)
+
+Owner rulings: a half-depth wall cabinet for every Storage Delight cabinet, in the shape of the existing half wall
+cabinets (Hearth and Harvest's); two stacked convert to the full cabinet and back (2026-11-22); the textures are model UV
+crops of the full cabinet's own textures, no new texture files (2026-11-23, plan_ready_now_1123.md R2).
+
+**Blocks: 90**, one per cabinet: 10 woods (the 9 woods and bamboo) x 9 styles (glass cabinet, cabinet with glass doors,
+single door cabinet, 6 countertops). The plan counted 45 (9 woods x 5 upstream styles); the pack's own additions of
+section 5 are cabinets too, so they get halves. Id and name follow Hearth and Harvest's `oak_half_cabinet` / "Oak Half
+Cabinet": the first `cabinet` in the id becomes `half_cabinet` and "Cabinet" in the name becomes "Half Cabinet":
+`glass_oak_half_cabinet` (Glass Oak Half Cabinet), `oak_half_cabinet_with_glass_doors`, `oak_single_door_half_cabinet`,
+`oak_half_cabinet_with_polished_andesite_countertop`.
+
+**Code** (repackedStorage overlay, `-03`): `block/half/HalfCabinetBlocks` subclasses the three upstream cabinet blocks and
+overrides only the shape (Hearth's half cabinet: the back half of the block space, facing the player who placed it) and
+the block entity factory. Everything else is the full cabinet's: block entity type (the half is a valid block of its
+kind's type), 27 slots, open state, contents spilled on break, properties of oak planks. `BlockRegistry`
+registers each half right after its cabinet; fuel 150 ticks (half the cabinet), none for crimson and warped.
+
+**Assets and data** (`tools/gen_overlay.py`): one parent model `storagedelight:block/half_cabinet` (a 16 x 16 x 8 element;
+front and back take the whole texture, sides `[4, 0, 12, 16]`, top and bottom `[0, 4, 16, 12]`, Hearth's item display
+transforms); per half a closed and an open child whose textures are the full cabinet model's six faces. Blockstates as
+the cabinet's, loot tables drop the block (as the cabinets), axe tag, en_us names. No texture file added.
+
+**Recipes and ids:** the pack script `kubejs/server_scripts/other/storage_delight.js` (`global.NCH`, namespace
+`creativeengineering`): `shapeless/<half>_from_cabinet` (1 cabinet -> 2 halves) and `shaped/<cabinet>_from_half_cabinets`
+(a column of 2 halves -> 1 cabinet). The 90 cabinets and 90 halves are in Creative Common's `item_dict.js` under their own
+ids. The other cabinet tags: none; the cabinets carry only `minecraft:mineable/axe` (and the pack's furniture tag by
+`@storagedelight`, which covers the halves).
+
+**Tests:** STD-08 to STD-12 (section 4).
+

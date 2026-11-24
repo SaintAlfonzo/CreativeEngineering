@@ -633,6 +633,7 @@
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
 - **New:** Supplementaries Doormat is crafted from 2 Straw in a row.
+- **New:** Half cabinets for every Storage Delight cabinet; 1 cabinet crafts into 2 half cabinets, and 2 half cabinets stacked in a column craft the cabinet.
 - **New:** Walking in or on dust piles, Sawdust, ash, Powdered Sugar Blocks, Powdered Obsidian, Vinteum Dust Blocks and concrete powder raises dust in the block's color; landing on them raises more.
 - **Changed:** Cast Iron Block is named Cast Iron Plating.
 - **Changed:** Village waystones have Yellow Corundum in their base [Glowstone].
