@@ -43,6 +43,7 @@ public final class CommonConfig {
 	public static final MeltingConfig MELTING;
 	public static final Tooltips TOOLTIPS;
 	public static final Privacy PRIVACY;
+	public static final BrainFreezeConfig BRAIN_FREEZE;
 
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -74,6 +75,8 @@ public final class CommonConfig {
 		TOOLTIPS = new Tooltips(builder);
 		// [privacy]: unsigned chat on a dedicated server (feature_writeup/privacy.md 4.2)
 		PRIVACY = new Privacy(builder);
+		// [brain_freeze]: cold foods eaten close together (effect/BrainFreeze, TODO sweets #9, feature_writeup/smoothies.md 3)
+		BRAIN_FREEZE = new BrainFreezeConfig(builder);
 		// [dragon_gear], [air_brake], [stepstool], [crafting], [armor_enchantability], [shields], [bonemeal_charm],
 		// [bottled_air], [backpackSkins]: creativeequipment-common.toml (Creative Equipment)
 		COMMON_SPEC = builder.build();
@@ -717,6 +720,47 @@ public final class CommonConfig {
 					.define("endNoFire", true);
 
 			b.pop(); // melting
+		}
+	}
+
+	/**
+	 * Brain freeze ({@code effect/BrainFreeze}, TODO sweets #9, feature_writeup/smoothies.md section 3): every cold food
+	 * ({@code #creativecommon:brain_freeze}) eaten within {@code windowSeconds} of the one before rolls; the n-th roll in
+	 * a row hits at n x {@code chanceStep}. A hit gives the Brain Freeze effect for the n-th entry of {@code lengths}
+	 * (the last entry from then on) and resets the count. Read live.
+	 */
+	public static final class BrainFreezeConfig {
+		public final ForgeConfigSpec.BooleanValue enabled;
+		public final ForgeConfigSpec.IntValue windowSeconds;
+		public final ForgeConfigSpec.DoubleValue chanceStep;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> lengths;
+
+		private BrainFreezeConfig(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Brain freeze: cold foods (item tag creativecommon:brain_freeze: smoothies, ice cream, popsicles,",
+					"shaved ice, cold milkshakes, ice cubes) eaten close together can freeze the player: the powdered",
+					"snow overlay and freeze damage while the Brain Freeze effect lasts, and a blue line above the hotbar."
+			).push("brain_freeze");
+
+			enabled = b.comment("Roll for brain freeze at all.").define("enabled", true);
+
+			windowSeconds = b.comment(
+					"A cold food eaten within this many seconds of the previous cold food rolls; a longer gap starts",
+					"the count again."
+			).defineInRange("windowSeconds", 60, 1, 3600);
+
+			chanceStep = b.comment(
+					"Chance of the first roll in a row; each further roll in the window adds this much again",
+					"(0.2: 20%, 40%, 60%, 80%, 100%)."
+			).defineInRange("chanceStep", 0.2, 0.0, 1.0);
+
+			lengths = b.comment(
+					"Brain freeze length in seconds by the number of rolls up to and including the hit: the first",
+					"entry for a hit on the first roll, the second for the second roll, and so on; the last entry",
+					"covers every later roll. A hit resets the count."
+			).defineList("lengths", List.of(5, 8, 11, 14, 20), o -> o instanceof Integer n && n > 0 && n <= 3600);
+
+			b.pop(); // brain_freeze
 		}
 	}
 }

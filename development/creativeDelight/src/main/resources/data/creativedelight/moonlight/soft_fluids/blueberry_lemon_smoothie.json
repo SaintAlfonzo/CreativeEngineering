@@ -1,0 +1,23 @@
+{
+  "color": "#7a6fc0",
+  "containers": [
+    {
+      "filled": [
+        "creativedelight:blueberry_lemon_smoothie"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "equivalent_fluids": [
+    "creativedelight:blueberry_lemon_smoothie"
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "creativedelight:blueberry_lemon_smoothie"
+  },
+  "from_mod": "creativedelight",
+  "still_texture": "moonlight:soft_fluids/potion_still",
+  "translation_key": "item.creativedelight.blueberry_lemon_smoothie"
+}

@@ -15,7 +15,7 @@ the shulker bowl is the only container for the Chorus and Endermite Stew fluids.
 The color is the average of the item texture's pixels that are not the empty container's own colors,
 so the bowl drops out and the soup is left. COLOR_OVERRIDE wins over that. The output folder belongs to
 this tool: a json there that no longer matches a soup is deleted, except the hand-written drink fluids in
-HAND_WRITTEN.
+HAND_WRITTEN and HAND_WRITTEN_GLOBS (the smoothies).
 
 Soups a mod already covers (Supplementaries' and Moonlight's 11) keep the mod's json except the bowl's capacity: an
 override with the pack's bowl value goes to kubejs/data/<ns>/moonlight/soft_fluids/<name>.json (KubeJS data outranks
@@ -24,6 +24,7 @@ the jars), listed in COVERED_OVERRIDES_LIST so a later run removes only its own 
   python3 tools/gen_soup_soft_fluids.py [--dry-run]
 """
 import argparse
+import fnmatch
 import glob
 import io
 import json
@@ -65,6 +66,8 @@ EQUIVALENT = {}
 HAND_WRITTEN = {'nut_milk.json', 'carrot_juice.json', 'dandelion_juice.json', 'turnip_water.json',
 				'fermented_garlic_honey.json',
 				'bayberry_soup.json'}   # Bayberry Juice (a drink since food/drinks #9; keeps its id and Forge fluid)
+# hand-written drink fluids by name pattern: the smoothies (TODO sweets #8, one per smoothie but Mixed Berry)
+HAND_WRITTEN_GLOBS = ('*_smoothie.json',)
 # item id -> '#rrggbb', where the patch picks garnish, shadow or a gold bowl (checked against the textures)
 COLOR_OVERRIDE = {
 	'alexsdelight:acacia_blossom_soup': '#d6cba0',
@@ -269,7 +272,7 @@ def main():
 			path.write_text(text)
 
 	for p in OUT.glob('*.json'):
-		if p.name not in written and p.name not in HAND_WRITTEN:
+		if p.name not in written and p.name not in HAND_WRITTEN and not any(fnmatch.fnmatch(p.name, g) for g in HAND_WRITTEN_GLOBS):
 			print(f'  removed {p.name}')
 			if not a.dry_run:
 				p.unlink()

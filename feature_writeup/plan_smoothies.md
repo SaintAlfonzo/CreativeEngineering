@@ -1,16 +1,16 @@
 # Smoothies and brain freeze (2026-11-17)
 
-<!-- generated:status_index begin open_work sha1=4e57d17a063e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c92a1d961ec6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `sweets #8` | Planned | S P | Smoothie line: 16 fruit smoothies (2 + 1 fruit or slices + bottle), always edible, honey drink sound |
-| `sweets #9` | Planned | S P | Brain freeze: repeated smoothies (and cold treats) can freeze the player for 10 s with a blue action-bar message |
 | `sweets #10` | Planned | C | Smoothie sprites: set up a mass swap from the strawberry banana placeholder to per-flavor sprites |
+| `sweets #8` | Testing | SQ-SMO-01 SQ-SMO-02 SQ-SMO-03 SQ-SMO-04 CQ-SMO-05 | Smoothie line: 16 fruit smoothies (2 + 1 fruit or slices + bottle), always edible, honey drink sound |
+| `sweets #9` | Testing | SQ-SMO-06 SQ-SMO-07 CQ-SMO-08 | Brain freeze: cold foods eaten close together can freeze the player for 5 to 20 s with a blue action-bar message |
 <!-- generated:status_index end open_work -->
 
-Status: **planned, not built.** The parity expansion left open by `baking/sweets #5` (the Neapolitan Strawberry
+Status: built 2026-11-23 (plan_ready_now_1123.md section 9; rows `sweets #8`, `#9`; writeup [smoothies.md](smoothies.md)). The parity expansion left open by `baking/sweets #5` (the Neapolitan Strawberry
 Banana Smoothie was removed 2026-10-29; brief: [briefs/baking_sweets.md](briefs/baking_sweets.md) "sweets #5").
 Status lives in the TODO rows.
 
@@ -41,6 +41,9 @@ Hunger and saturation follow the `drink` family rule (food_families.md) through 
 
 ## 6. Build notes
 
+- Built 2026-11-23: where each part went is [smoothies.md](smoothies.md) section 5. Changed from this list: brain freeze
+  is Creative Common's (an effect, `[brain_freeze]` in creativecommon-common.toml, tag `#creativecommon:brain_freeze`),
+  not Creative Delight's.
 - Items: CD startup, the shared sweets table shape from the brief (`global.sweets`-style entry per smoothie: key, name,
   fruits, effects); ids in `item_dict.js` (Creative Common rebuild). Neapolitan's `strawberry_banana_smoothie` stays
   removed; new ids are Creative Delight's (ids follow the owning mod).

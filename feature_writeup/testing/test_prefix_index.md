@@ -197,6 +197,7 @@ same pass as the renames.
 | `SH-` | [shields.md](../shields.md) |  |  |  |
 | `SHB-` | [farming_for_blockheads.md](../farming_for_blockheads.md) |  |  |  |
 | `SLT-` | [salt.md](../salt.md) | CQ-SLT (2), SQ-SLT (5) |  |  |
+| `SMO-` | [smoothies.md](../smoothies.md) | CQ-SMO (2), SQ-SMO (6) | plan_smoothies.md | new 2026-11-23 (`sweets #8`, `#9`) |
 | `SN-` | [sticky_notes.md](../sticky_notes.md) | SQ-SN (4) |  |  |
 | `SP-` | [plan_1.0.3.md](../plan_1.0.3.md) |  |  | not in the README index yet |
 | `ST-` | [structure_tuning.md](../structure_tuning.md) |  | meat_blocks.md (ST-149), nether_swaps.md (ST-150 to ST-152), briefs/mobs_pillagers.md, briefs/structures_contents.md | ranges handed to other docs stay ST- (one series) |

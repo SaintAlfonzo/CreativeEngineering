@@ -1,0 +1,23 @@
+{
+  "color": "#f2a93b",
+  "containers": [
+    {
+      "filled": [
+        "creativedelight:glowberry_smoothie"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "equivalent_fluids": [
+    "creativedelight:glowberry_smoothie"
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "creativedelight:glowberry_smoothie"
+  },
+  "from_mod": "creativedelight",
+  "still_texture": "moonlight:soft_fluids/potion_still",
+  "translation_key": "item.creativedelight.glowberry_smoothie"
+}

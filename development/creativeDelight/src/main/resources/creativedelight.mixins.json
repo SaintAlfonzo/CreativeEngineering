@@ -49,6 +49,7 @@
     "minecraft.CampfireRainMixin",
     "minecraft.FarmBlockUnderCropsMixin",
     "minecraft.ItemStackCanServingsMixin",
+    "minecraft.ItemStackHoneyDrinkMixin",
     "minecraft.MobCobPipeSlotMixin",
     "minecraft.SaltBlockRandomTickMixin",
     "minecraft.SaltLayerRandomTickMixin",

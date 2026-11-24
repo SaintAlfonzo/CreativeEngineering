@@ -336,6 +336,18 @@
 - **New:** Oatmeal Raisin Cookie: Oat Dough, 2 sweeteners, Raw Oats and a grape bake into 12 on a Baking Sheet.
 - **New:** Baking Dish, glass bakeware crafted from 5 glass in a bowl shape.
 
+## Smoothies <!-- icon: creativedelight:mixed_berry_smoothie -->
+
+- **New:** 16 smoothies: Mixed Berry, Cran Apple, Orange Mango, Kiwi Strawberry, Glowberry, Chorus, Peach Mango, Mango Pineapple, Melon, Cherry Lemon, Blueberry Lemon, Pear, Cherry, Raspberry Peach, Orange Peach, Hawberry. Drinkable when full, honey bottle sound, the bottle comes back, 32 per stack.
+- **New:** Smoothie recipe, shapeless: 2 of the first fruit, 1 of the second and a glass bottle; 3 fruit for Glowberry and Chorus. Lemon, orange, pineapple, melon and cantaloupe go in as slices.
+- **New:** Smoothie effects: the first fruit's jam effect at full length, the second fruit's at half. Pear: Appetizing 5 minutes and Lozenge 30 seconds. Chorus teleports like Chorus Fruit.
+- **New:** Mixed Berry Smoothie: 2 red berries and 1 blue or purple berry; its effects come from the berries used and show in its tooltip.
+- **New:** Smoothie fluids (all but Mixed Berry): a Create mixer turns the recipe's fruits into 250 mB; Spouts fill and Item Drains empty bottles; jars hold them.
+- **New:** Brain Freeze: a cold food eaten within 1 minute of another has a 20% chance to freeze you, +20% per further cold food; a freeze resets the chance.
+- **New:** Brain Freeze lasts 5, 8, 11, 14 or 20 seconds by the number of tries: frost overlay, freeze damage and a blue message above the hotbar.
+- **New:** Cold foods: smoothies, ice cream, popsicles, shaved ice, cold milkshakes, Iced Berry Matcha Latte, Ice Cubes.
+- **Changed:** Vinery's Cherry counts as a cherry in recipes that take any cherry.
+
 ## Food & Cooking
 
 - **New:** Every food that can be eaten when full says so in its tooltip.

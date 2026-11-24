@@ -55,6 +55,14 @@ ef.knockback_resistance = 'alexsmobs:knockback_resistance';
 ef.phantom_bane = 'better_beacons:phantom_bane';
 ef.phasing = 'endersdelight:phasing';
 ef.rage_aura = 'fruitsdelight:rage_aura';
+// Fruits Delight effects of the smoothies (TODO sweets #8, feature_writeup/smoothies.md section 2)
+ef.recovering = 'fruitsdelight:recovering';
+ef.cycling = 'fruitsdelight:cycling';
+ef.heal_aura = 'fruitsdelight:heal_aura';
+ef.brightening = 'fruitsdelight:brightening';
+ef.appetizing = 'fruitsdelight:appetizing';
+// Brain freeze (TODO sweets #9): Creative Common's own, registered in effects/brain_freeze.js
+ef.brain_freeze = 'creativecommon:brain_freeze';
 
 // ############################## Keys added by tools/literal_id_swap.py ##############################
 // Ids used two or more times as literals in scripts (plan_rules_fixes.md section 7).

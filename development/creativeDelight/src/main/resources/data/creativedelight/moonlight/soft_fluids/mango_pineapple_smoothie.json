@@ -1,0 +1,23 @@
+{
+  "color": "#f8c640",
+  "containers": [
+    {
+      "filled": [
+        "creativedelight:mango_pineapple_smoothie"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "equivalent_fluids": [
+    "creativedelight:mango_pineapple_smoothie"
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "creativedelight:mango_pineapple_smoothie"
+  },
+  "from_mod": "creativedelight",
+  "still_texture": "moonlight:soft_fluids/potion_still",
+  "translation_key": "item.creativedelight.mango_pineapple_smoothie"
+}

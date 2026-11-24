@@ -86,6 +86,8 @@ public class CreativeCommon
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.MagicResistanceEffect.class);
 		// Wither Immunity (the MobEffect is KubeJS, effects/wither_immunity.js; TODO food-tuning #47)
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.WitherImmunityEffect.class);
+		// Brain freeze (the MobEffect is KubeJS, effects/brain_freeze.js; [brain_freeze]; TODO sweets #9)
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.BrainFreeze.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.PhantomBaneRules.class);
 		// Raspberry Pie ladder effects (food-tuning #51, #57): Steady's slip immunity, Emptiness's parts
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.effect.SteadyRules.class);

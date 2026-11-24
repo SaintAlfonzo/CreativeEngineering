@@ -1,0 +1,23 @@
+{
+  "color": "#d6cf8a",
+  "containers": [
+    {
+      "filled": [
+        "creativedelight:pear_smoothie"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "equivalent_fluids": [
+    "creativedelight:pear_smoothie"
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "creativedelight:pear_smoothie"
+  },
+  "from_mod": "creativedelight",
+  "still_texture": "moonlight:soft_fluids/potion_still",
+  "translation_key": "item.creativedelight.pear_smoothie"
+}

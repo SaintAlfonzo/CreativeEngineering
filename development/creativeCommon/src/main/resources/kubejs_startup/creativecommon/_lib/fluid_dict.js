@@ -128,6 +128,22 @@ f.t_animal_milk = '#creativedelight:animal_milk';
 f.lemonade = 'creativedelight:lemonade';
 f.blue_lemonade = 'creativedelight:blue_lemonade';
 f.pink_lemonade = 'creativedelight:pink_lemonade';
+// Smoothies (TODO sweets #8): one per smoothie but Mixed Berry (its effects are on the item)
+f.cran_apple_smoothie = 'creativedelight:cran_apple_smoothie';
+f.orange_mango_smoothie = 'creativedelight:orange_mango_smoothie';
+f.kiwi_strawberry_smoothie = 'creativedelight:kiwi_strawberry_smoothie';
+f.glowberry_smoothie = 'creativedelight:glowberry_smoothie';
+f.chorus_smoothie = 'creativedelight:chorus_smoothie';
+f.peach_mango_smoothie = 'creativedelight:peach_mango_smoothie';
+f.mango_pineapple_smoothie = 'creativedelight:mango_pineapple_smoothie';
+f.melon_smoothie = 'creativedelight:melon_smoothie';
+f.cherry_lemon_smoothie = 'creativedelight:cherry_lemon_smoothie';
+f.blueberry_lemon_smoothie = 'creativedelight:blueberry_lemon_smoothie';
+f.pear_smoothie = 'creativedelight:pear_smoothie';
+f.cherry_smoothie = 'creativedelight:cherry_smoothie';
+f.raspberry_peach_smoothie = 'creativedelight:raspberry_peach_smoothie';
+f.orange_peach_smoothie = 'creativedelight:orange_peach_smoothie';
+f.hawberry_smoothie = 'creativedelight:hawberry_smoothie';
 // Drink rules (feature_writeup/creative_delight_drinks.md 6, food/drinks #15): new teas and juices, chorus tea, the
 // sea juices the sea pickle tea brews on (Creative Delight kubejs_startup/creativedelight/drinks.js)
 f.kiwi_tea = 'creativedelight:kiwi_tea';

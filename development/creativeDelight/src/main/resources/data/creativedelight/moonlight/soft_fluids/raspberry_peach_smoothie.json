@@ -1,0 +1,23 @@
+{
+  "color": "#e86f7a",
+  "containers": [
+    {
+      "filled": [
+        "creativedelight:raspberry_peach_smoothie"
+      ],
+      "empty": "minecraft:glass_bottle",
+      "capacity": 1
+    }
+  ],
+  "equivalent_fluids": [
+    "creativedelight:raspberry_peach_smoothie"
+  ],
+  "flowing_texture": "moonlight:soft_fluids/potion_flow",
+  "food": {
+    "divider": 1,
+    "item": "creativedelight:raspberry_peach_smoothie"
+  },
+  "from_mod": "creativedelight",
+  "still_texture": "moonlight:soft_fluids/potion_still",
+  "translation_key": "item.creativedelight.raspberry_peach_smoothie"
+}

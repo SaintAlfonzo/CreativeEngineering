@@ -1,0 +1,195 @@
+# Scratch queue rows SMO (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SMO.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Smoothies, 2026-11-23 ([smoothies.md](../../smoothies.md) section 2, TODO `sweets #8`)
+@@date 2026-11-23
+@@jars creativecommon creativedelight
+@@sources feature_writeup/smoothies.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/smoothies.js kubejs/data/creativedelight/kubejs/creativedelight/smoothies.js kubejs/data/creativedelight/kubejs/creativedelight/smoothie_tags.js
+@@text
+@@text Needs the Creative Common jar (dicts, effect keys) and the Creative Delight jar (items, fluids, recipes, tags, honey drink mixin) built 2026-11-23 or later.
+@@text
+@@table
+## SQ-SMO-01 | 16 smoothies registered at 32 per stack, tags, recipes and fluid routes
+@group A
+@commands `cdevtest item` three smoothies; `cdevtest tag item` the smoothie, honey sound, berry, cherry, drink type and Diet Log exclusion tags; `cdevtest recipes` the smoothie grid, mixing and filling ids
+@pass Items exist with max_stack=32; `#creativedelight:smoothies` and `#creativedelight:honey_drink_sound` 16 each; `#creativedelight:food_type/drink` and `#solraspberrypie:diet_log_excluded` hold the smoothies; `#forge:fruits/cherry` holds `vinery:cherry`; `#creativedelight:berries/red` 6, `/blue_or_purple` 3; 16 grid recipes, 15 mixing and 15 filling recipes (no Mixed Berry fluid)
+@fails Items missing: CD startup `creativedelight/smoothies.js` or a dict key (Common's item_dict.js, fluid_dict.js); tags: CD server `smoothie_tags.js`, food types `creativedelight/food_types.js`; recipes: CD server `smoothies.js` (a recipe whose fruit mod is absent is skipped on purpose)
+@absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+> cdevtest item creativedelight:mixed_berry_smoothie
+> cdevtest item creativedelight:pear_smoothie
+> cdevtest item creativedelight:chorus_smoothie
+> cdevtest tag item creativedelight:smoothies
+> cdevtest tag item creativedelight:honey_drink_sound
+> cdevtest tag item creativedelight:food_type/drink
+> cdevtest tag item solraspberrypie:diet_log_excluded
+> cdevtest tag item forge:fruits/cherry
+> cdevtest tag item creativedelight:berries/red
+> cdevtest tag item creativedelight:berries/blue_or_purple
+> cdevtest recipes creativedelight:shapeless/smoothie/
+> cdevtest recipes creativedelight:createmixing/smoothie/
+> cdevtest recipes creativedelight:createfilling/smoothie/
+waitlog verb=recipes text=creativedelight:createfilling/smoothie/ n= 30
+expect verb=item item=creativedelight:mixed_berry_smoothie .*max_stack=32\b
+expect verb=item item=creativedelight:pear_smoothie .*max_stack=32\b
+expect verb=item item=creativedelight:chorus_smoothie .*max_stack=32\b
+expect verb=tag kind=item tag=creativedelight:smoothies n=16\b
+expect verb=tag kind=item tag=creativedelight:honey_drink_sound n=16\b
+expect verb=tag kind=item tag=creativedelight:food_type/drink .*ids=\S*creativedelight:mixed_berry_smoothie\b
+expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*creativedelight:hawberry_smoothie\b
+expect verb=tag kind=item tag=forge:fruits/cherry .*ids=\S*vinery:cherry\b
+expect verb=tag kind=item tag=creativedelight:berries/red n=6\b
+expect verb=tag kind=item tag=creativedelight:berries/blue_or_purple n=3\b
+expect verb=recipes text=creativedelight:shapeless/smoothie/ n=16\b
+expect verb=recipes text=creativedelight:createmixing/smoothie/ n=15\b
+expect verb=recipes text=creativedelight:createfilling/smoothie/ n=15\b
+reject \[cdevtest\] verb=\S+ .*error=
+reject (?i)(smoothie).*(exception|error)
+## SQ-SMO-02 | Cran Apple Smoothie: drinkable at full hunger, Shrinking 80 s + Absorption 10 s, bottle back
+@group A
+@commands Bot at full hunger drinks `creativedelight:cran_apple_smoothie`; `cdevtest player` the bot
+@pass The drink finishes at full hunger; Shrinking (`fruitsdelight:shrinking`) about 1600 ticks and Absorption about 200; the bot holds a glass bottle afterwards (LOOK: `pbot inv` or the give line)
+@fails Effects: the table in CD startup `smoothies.js` (Fruits Delight absent: its effects are left out); not drinkable when full: `alwaysEdible` in the same file
+@absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+> forceload add 636 636 652 644
+sleep 2
+> pbot spawn smo2 640.5 -60 640.5 minecraft:overworld survival
+sleep 3
+> pbot hunger smo2 20
+> pbot hold smo2 creativedelight:cran_apple_smoothie 1
+> pbot eat smo2
+waitlog verb=pbot.useitem bot=smo2 end=finish item=creativedelight:cran_apple_smoothie 20
+> cdevtest player smo2
+expect verb=player name=smo2 effects=\S*fruitsdelight:shrinking:0:1[56]\d\d\b
+expect verb=player name=smo2 effects=\S*minecraft:absorption:0:(1[89]\d|200)\b
+reject \[cdevtest\] verb=\S+ .*error=
+look the bot's inventory holds a glass bottle after the drink
+> pbot remove smo2
+## SQ-SMO-03 | Pear and Mango Pineapple smoothies: owner lengths and Strength III
+@group A
+@commands Bot drinks `creativedelight:pear_smoothie`, then (effects cleared) `creativedelight:mango_pineapple_smoothie`; `cdevtest player` after each
+@pass Pear: Appetizing about 6000 ticks and Lozenge about 600; Mango Pineapple: Strength amplifier 2 about 400 ticks, Rage Aura about 400, Speed and Sweetening about 200
+@fails The table in CD startup `smoothies.js` (smoothies.md section 2)
+@absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+> forceload add 636 636 652 644
+sleep 2
+> pbot spawn smo3 642.5 -60 640.5 minecraft:overworld survival
+sleep 3
+> pbot hunger smo3 4
+> pbot hold smo3 creativedelight:pear_smoothie 1
+> pbot eat smo3
+waitlog verb=pbot.useitem bot=smo3 end=finish item=creativedelight:pear_smoothie 20
+> cdevtest player smo3
+expect verb=player name=smo3 effects=\S*fruitsdelight:appetizing:0:59\d\d\b
+expect verb=player name=smo3 effects=\S*fruitsdelight:lozenge:0:(5[89]\d|600)\b
+> effect clear smo3
+> pbot hold smo3 creativedelight:mango_pineapple_smoothie 1
+> pbot eat smo3
+waitlog verb=pbot.useitem bot=smo3 end=finish item=creativedelight:mango_pineapple_smoothie 20
+> cdevtest player smo3
+expect verb=player name=smo3 effects=\S*minecraft:strength:2:(3[89]\d|400)\b
+expect verb=player name=smo3 effects=\S*fruitsdelight:rage_aura:0:(3[89]\d|400)\b
+expect verb=player name=smo3 effects=\S*minecraft:speed:0:(1[89]\d|200)\b
+expect verb=player name=smo3 effects=\S*fruitsdelight:sweetening:0:(1[89]\d|200)\b
+reject \[cdevtest\] verb=\S+ .*error=
+> effect clear smo3
+> pbot remove smo3
+## SQ-SMO-04 | Chorus Smoothie teleports like chorus fruit
+@group A
+@commands Bot drinks `creativedelight:chorus_smoothie`; `cdevtest player` before and after
+@pass The drink finishes; the bot's position after differs from before by up to 8 blocks on each axis; no error
+@fails Teleport code in CD startup `smoothies.js` (`teleport`): a Rhino method name (randomTeleport, playSound) in the log
+@absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+> forceload add 636 636 652 644
+sleep 2
+> pbot spawn smo4 644.5 -60 640.5 minecraft:overworld survival
+sleep 3
+> cdevtest player smo4
+> pbot hunger smo4 20
+> pbot hold smo4 creativedelight:chorus_smoothie 1
+> pbot eat smo4
+waitlog verb=pbot.useitem bot=smo4 end=finish item=creativedelight:chorus_smoothie 20
+> cdevtest player smo4
+reject \[cdevtest\] verb=\S+ .*error=
+reject (?i)(smoothie|randomTeleport).*(exception|error)
+look the two `cdevtest player smo4` lines: the position changed (a superflat floor may give the same y)
+> pbot remove smo4
+## CQ-SMO-05 | Mixed Berry craft stores its berries' effects; honey sound; sprites
+@group client
+@commands In a crafting table: 2 cranberry + 1 blueberry + glass bottle; 2 raspberry + 1 mulberry + glass bottle; 1 cranberry + 1 hawberry + 1 bayberry + glass bottle. Hover each result, put them in one slot, drink one; drink any smoothie and listen; look at the smoothies in JEI
+@pass Tooltips: "Shrinking (1:20)", "Night Vision (0:10)", "Brightening (0:10)" / "No effects" / "Shrinking (0:40)", "Appetizing (0:10)", "Leaf Piercing (0:10)"; the three do not stack together; drinking gives the listed effects; every smoothie drinks with the honey bottle sound; every smoothie shows the strawberry banana smoothie sprite
+@fails NBT: the modifyResult in CD server `smoothies.js`; tooltip: CD client `smoothie_tooltip.js`; sound: CD `mixin/minecraft/ItemStackHoneyDrinkMixin` and `#creativedelight:honey_drink_sound`
+@draft client row: crafting grid result and tooltips need a window
+@owner true
+
+@@section 2
+@@title Brain freeze, 2026-11-23 ([smoothies.md](../../smoothies.md) section 3, TODO `sweets #9`)
+@@date 2026-11-23
+@@jars creativecommon creativedelight
+@@sources feature_writeup/smoothies.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/effect/BrainFreeze.java development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/effect/BrainFreezeRoll.java kubejs/data/creativedelight/kubejs/creativedelight/smoothie_tags.js
+@@prep toml creativecommon-common.toml brain_freeze chanceStep 1.0
+@@text
+@@text Needs the Creative Common jar (BrainFreeze, `[brain_freeze]`, the effect) and the Creative Delight jar (the `#creativecommon:brain_freeze` members) built 2026-11-23 or later. The driver sets `[brain_freeze] chanceStep = 1.0`, so the first roll always hits (5 s). The roll ladder itself is the headless `tools/test_brain_freeze.sh`.
+@@text
+@@table
+## SQ-SMO-06 | Brain freeze effect registered; cold-food tag members
+@group A
+@commands `cdevtest tag item creativecommon:brain_freeze`; `effect give` a bot `creativecommon:brain_freeze`
+@pass The tag holds the smoothies, Neapolitan's vanilla ice cream and ice cubes, Farmer's Delight's melon popsicle, Fruits Delight's mango milkshake, Delightful's berry matcha latte; not Hostile Delight's frozen flesh; the effect exists (`effect give` succeeds)
+@fails Tag: CD server `smoothie_tags.js` (the frozen family tag comes from `flavor_tags.js`); effect: Common startup `effects/brain_freeze.js`
+@absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+> forceload add 636 636 652 644
+sleep 2
+> pbot spawn smo6 646.5 -60 640.5 minecraft:overworld survival
+sleep 3
+> cdevtest tag item creativecommon:brain_freeze
+waitlog verb=tag kind=item tag=creativecommon:brain_freeze n= 30
+expect verb=tag kind=item tag=creativecommon:brain_freeze .*ids=\S*creativedelight:melon_smoothie\b
+expect verb=tag kind=item tag=creativecommon:brain_freeze .*ids=\S*neapolitan:vanilla_ice_cream\b
+expect verb=tag kind=item tag=creativecommon:brain_freeze .*ids=\S*neapolitan:ice_cubes\b
+expect verb=tag kind=item tag=creativecommon:brain_freeze .*ids=\S*farmersdelight:melon_popsicle\b
+expect verb=tag kind=item tag=creativecommon:brain_freeze .*ids=\S*fruitsdelight:mango_milkshake\b
+expect verb=tag kind=item tag=creativecommon:brain_freeze .*ids=\S*delightful:berry_matcha_latte\b
+reject verb=tag kind=item tag=creativecommon:brain_freeze .*hostiledelight:frozen_flesh
+> effect give smo6 creativecommon:brain_freeze 3 0
+expect Applied effect Brain Freeze
+> effect clear smo6
+> pbot remove smo6
+## SQ-SMO-07 | Two cold foods in a row: brain freeze 5 s, frozen ticks held at full, count reset
+@group A
+@commands With chanceStep 1.0: bot drinks a smoothie (no roll), `cdevtest player`; eats ice cubes within the minute, `cdevtest player`, `data get entity` the bot `TicksFrozen`; waits 7 s, `TicksFrozen` again
+@pass After the first: no brain freeze; after the second: `creativecommon:brain_freeze` about 100 ticks and TicksFrozen at least 140; 7 s later the effect is gone and TicksFrozen below 140 (thawing)
+@fails Roll: Common `effect/BrainFreeze.onFinish` (tag, config); freezing: `onLivingTick`; the tag members: CD server `smoothie_tags.js`
+@absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+> forceload add 636 636 652 644
+sleep 2
+> pbot spawn smo7 648.5 -60 640.5 minecraft:overworld survival
+sleep 3
+> pbot hunger smo7 4
+> pbot hold smo7 creativedelight:melon_smoothie 1
+> pbot eat smo7
+waitlog verb=pbot.useitem bot=smo7 end=finish item=creativedelight:melon_smoothie 20
+> cdevtest player smo7
+> pbot hold smo7 neapolitan:ice_cubes 1
+> pbot eat smo7
+waitlog verb=pbot.useitem bot=smo7 end=finish item=neapolitan:ice_cubes 20
+> cdevtest player smo7
+> data get entity smo7 TicksFrozen
+expect verb=player name=smo7 effects=\S*creativecommon:brain_freeze:0:(9\d|100)\b
+expect smo7 has the following entity data: (1[4-9]\d|[2-9]\d\d)\b
+sleep 7
+> data get entity smo7 TicksFrozen
+> cdevtest player smo7
+reject \[cdevtest\] verb=\S+ .*error=
+reject (?i)brainfreeze.*(exception|error)
+look the first `cdevtest player smo7` line has no brain_freeze; the last TicksFrozen is under 140 and the last player line has no brain_freeze
+> effect clear smo7
+> pbot remove smo7
+## CQ-SMO-08 | Brain freeze in a client: overlay, damage, blue action-bar line, HUD icon, JEED page
+@group client
+@commands With `[brain_freeze] chanceStep = 1.0`: drink two smoothies in survival; watch the screen 6 s; open the inventory during the freeze; JEI: look up Brain Freeze in the effect list (Just Enough Effect Descriptions)
+@pass Powdered snow frost overlay for about 5 s then fading; freeze damage ticks (half a heart every 2 s, none in leather armor); "Brain freeze!" in blue above the hotbar; the effect in the HUD and inventory with its icon (the Slowness placeholder); the JEED page shows the description
+@fails Overlay or damage: Common `effect/BrainFreeze.onLivingTick`; line: `BrainFreeze.freeze` and the lang key `message.creativecommon.brain_freeze`; JEED text: `effect.creativecommon.brain_freeze.description` in Common's en_us.json
+@draft client row: overlay, action bar and JEED need a window
+@owner true
