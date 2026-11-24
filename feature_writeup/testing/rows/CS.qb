@@ -189,7 +189,11 @@ look rows/SQ-CS-04.shell.txt: spring / summer ratio about 1.25 (1.15 or more pas
 @pass all still grow (off is slower, never stopped); no exception in latest.log
 @fails hook cancels the whole tick wrongly or crashes
 @from batches/r1031/a2_variants.qb
+@reviewed 2026-11-23
 > season set MID_WINTER
+# crops #60, 2026-11-23: hemp needs local light 12 and tobacco 9 with the sky darkening counted (getMaxLocalRawBrightness),
+# so a night-time run stops both whatever the season (r1123cd); the grape bush reads light without the night. Noon.
+> time set noon
 > fill 100 -61 12 112 -61 12 minecraft:farmland[moisture=7]
 > setblock 100 -60 12 immersiveengineering:hemp
 > setblock 102 -60 12 the_dirty_stuff:tobacco_seeds
