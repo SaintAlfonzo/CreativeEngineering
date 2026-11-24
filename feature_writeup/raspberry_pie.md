@@ -732,7 +732,7 @@ Extra rows: CQ-RPI-27 Lava Walker burn (Vinery port), CQ-RPI-28 Shrinking in a 1
 icons, window, double page, health rule, backfill).
 
 12.15 rows (2026-11-23): SQ-RPS-11 (isolated Diet Log recipe loads), CQ-RPS-12 (any-food Diet Log, a dedicated
-server's table on the client, drink list kept between syncs); `tools/test_rp_ladder.sh` ALL 55 OK.
+server's table on the client, drink list kept between syncs), SQ-RPS-13 (pack exclusion tag, R5); `tools/test_rp_ladder.sh` ALL 55 OK.
 
 12.14 rows (2026-11-23): CQ-RPI-83 to -91 (diversity set raise and lower, closed gate, relog, ladder reset, Stimulation, numeral, reached icons, diversity get).
 
@@ -777,7 +777,8 @@ Choices made while building (owner may revisit):
 - **Recipes.** Diet Log: own recipe type `solraspberrypie:diet_book` (shapeless with an excluded tag), book + any
   edible item (ingredient type `solraspberrypie:edible`, since 2026-11-23, 12.15; was the 17-food tag
   `diet_log_foods`) that is not in `#solraspberrypie:diet_log_excluded` (drinks, and carrot: book + carrot stays the
-  Food Dictionary's). JEI cycles every edible item outside that tag. Liquid Diet Log: book + `#solraspberrypie:drinks` (the pack drink
+  Food Dictionary's). JEI cycles every edible item outside that tag. The pack adds drinks, hazard foods and other
+  non-foods to the tag (12.15). Liquid Diet Log: book + `#solraspberrypie:drinks` (the pack drink
   tags, Farmer's Delight and Brewin' drink tags, potions, milk bucket). Apple Pie's book + potato is removed by
   `RecipeManagerMixin` in this jar (12.9; `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js` before 2026-11-21).
 - **Pause list** is kept in world data (`data/solraspberrypie_paused.dat`) so offline paused players are listed.
@@ -1220,8 +1221,13 @@ CQ-RPS-12 (`rows/RPS.qb` section 6). Network version 6 (client and server jars m
 
 - **Diet Log from any food** (PR-RP-12, owner 2026-11-22). The recipe's food slot is the ingredient
   `{"type": "solraspberrypie:edible", "exclude": "solraspberrypie:diet_log_excluded"}` (`recipe/EdibleIngredient`):
-  any item with food properties outside the tag. The `diet_log_foods` tag is gone. In the pack the recipe also takes
-  edible items outside `#creativedelight:food_type` (rotten flesh, spider eye and the like).
+  any item with food properties outside the tag. The `diet_log_foods` tag is gone. In the pack it takes foods only
+  (owner ruling R5, 2026-11-23): `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js` adds
+  `#creativedelight:food_type/drink`, `/hazard` (rotten flesh, spider eye, poisonous potato, pufferfish and the modded
+  hazards), `#solraspberrypie:no_diet`, the lunchboxes, cat food, Everything Copper's copper nugget and Create Central
+  Kitchen's unfinished assembly items to the exclusion tag (row SQ-RPS-13). Edible items with a drinking animation
+  that are in no drink tag (Hot Cocoa, the coffees, Prickly Pear Juice, Strawberry Banana Smoothie, Mulberry Jam
+  Bottle) still count as foods, so the Diet Log takes them.
 - **State sync** (PR-RP-13). `DietEngine.sync` only marks the player; the state goes once at the end of the player's
   tick, so a food, a drink or a slot action sends one packet (a slot action sent two). The drink list rides on a
   state packet only when it changed (`RpData.drinksVersion`; a new player entity sends it once); the client keeps its

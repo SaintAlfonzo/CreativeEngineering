@@ -223,3 +223,27 @@ look the crafting checks are in CQ-RPS-12 (a client is needed to craft without K
 @pass client log: one `Diversity table from the server: 1 values, 0 family members; 0 ids unknown to this client`; bread's tooltip diversity value is 7.25 (the server's), not Apple Pie's own; book + rotten flesh, cooked cod and golden carrot each give a Diet Log; book + carrot stays the Food Dictionary's recipe and book + potion gives the Liquid Diet Log; the Liquid Diet Log lists the drinks newest first, still after the food (the state sync without a drink list keeps the client's list) and with the third drink on top
 @fails `net/S2CDiversity.java`, `logic/Diversity.java` (`load` must not read the client's jars without an integrated server; `applyRemote`), `ServerEvents.datapackSync`; `recipe/EdibleIngredient.java`; `S2CState.hasDrinks` and `ClientState.setState` (drink list kept)
 @draft client steps: dedicated server plus a client join with the capture driver; the fixture goes in the server's jar copy only
+
+@@section 7
+@@title SQ-RPS-13 Raspberry Pie in the pack: Diet Log excludes drinks and non-foods, 2026-11-23 ([raspberry_pie.md](../raspberry_pie.md) section 12.15, TODO `raspberry-pie-publish #10`, owner ruling R5)
+@@date 2026-11-23
+@@jars solraspberrypie creativedelight
+@@sources feature_writeup/raspberry_pie.md kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js
+@@text
+@@text Full pack with the Raspberry Pie jar built 2026-11-23; the pack script `solapplepie/diet_log.js` adds the drink, hazard
+@@text and no-diet tags, lunchboxes, cat food, Everything Copper's copper nugget and Create Central Kitchen's unfinished items to
+@@text the exclusion tag.
+@@text
+@@table
+## SQ-RPS-13 | in the pack: the Diet Log exclusion tag holds drinks, hazards and non-foods (R5)
+@group A
+@commands Pack server. `/cdevtest tag item solraspberrypie:diet_log_excluded` (RPS-13)
+@pass the tag lists `minecraft:carrot`, `minecraft:potion`, `minecraft:rotten_flesh`, `minecraft:spider_eye`, `minecraft:poisonous_potato`, `minecraft:pufferfish`, `solapplepie:lunchbox`, `creativedelight:cat_food` and `create_central_kitchen:incomplete_hamburger`; no KubeJS error from `diet_log.js`
+@fails `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js` (keys in `item_dict.js`, tags `#creativedelight:food_type/hazard`, `/drink`); the jar tag `data/solraspberrypie/tags/items/diet_log_excluded.json`
+> cdevtest tag item solraspberrypie:diet_log_excluded
+expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*minecraft:rotten_flesh
+expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*minecraft:pufferfish
+expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*solapplepie:lunchbox
+expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*create_central_kitchen:incomplete_hamburger
+expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*minecraft:potion
+reject diet_log\.js.*(Error|error)

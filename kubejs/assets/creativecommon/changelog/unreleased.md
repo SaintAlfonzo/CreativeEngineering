@@ -151,7 +151,7 @@
 - **New:** The Diet Log and the Food Dictionary have a one-line description in their tooltips.
 - **New:** New players start with a Diet Log and a Liquid Diet Log.
 - **New:** Food tooltips show the food's diversity, and what it contributes while it counts toward your diet: "Diversity: 1.40 (contributes 0.85)".
-- **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button. It is crafted from a book and any food that is not a drink [book and potato].
+- **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button. It is crafted from a book and any food that is not a drink, a lunchbox or a hazard such as rotten flesh, spider eye, poisonous potato or pufferfish [book and potato].
 - **Changed:** Drinks, potions and milk no longer count toward food diversity or push foods out of your diet.
 - **Changed:** Dying ages every recent food out of your diet and resets the foods-eaten count; bonuses return as you eat [the diet was cleared].
 - **Changed:** Diet bonuses start after 5 different foods eaten [10 foods, repeats counted]. The books show "N more unique foods to activate diet" on one line.
