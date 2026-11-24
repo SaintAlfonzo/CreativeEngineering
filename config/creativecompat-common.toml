@@ -85,16 +85,6 @@
 	#Range: 1 ~ 10
 	buffLevel = 3
 
-#Alex's Mobs giant squid (server side).
-[giant_squid]
-	#A giant squid starts fleeing a cachalot whale within this many blocks (Alex's Mobs: 50).
-	#Range: 1 ~ 64
-	whaleFleeStart = 16
-	#It keeps fleeing while that whale is within this many blocks (Alex's Mobs: 60). Kept at least
-	#whaleFleeStart.
-	#Range: 1 ~ 96
-	whaleFleeStop = 24
-
 #Immersive Paintings: every modded painting variant is offered on its Datapacks page, built from the
 #art in the installed mod jars when the world's data loads (server side). Vanilla paintings come from
 #the pack's own datapack, not from here.

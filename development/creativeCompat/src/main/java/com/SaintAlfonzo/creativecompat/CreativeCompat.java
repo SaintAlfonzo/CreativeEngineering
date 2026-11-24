@@ -116,6 +116,10 @@ public class CreativeCompat {
 		if (FMLEnvironment.dist == Dist.CLIENT && ModList.get().isLoaded("alexsmobs")) {
 			MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, com.SaintAlfonzo.creativecompat.mobs.FleetFootedFov::onFov);
 		}
+		// squid and glow squid flee cachalot whales, the giant squid fights them (wave 1 ruling W17)
+		if (ModList.get().isLoaded("alexsmobs")) {
+			MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.mobs.SquidsAndWhales::onJoin);
+		}
 		// golem farm cooldown (plan_small_fixes_1116.md R2)
 		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.mobs.GolemCooldown::onDeath);
 		BurnBursts.register(ShrapnelSpawner::burst);

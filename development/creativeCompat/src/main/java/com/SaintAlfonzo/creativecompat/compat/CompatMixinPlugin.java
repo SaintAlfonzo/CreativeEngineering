@@ -90,7 +90,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("FishingHookFeatherPullMixin", DOMESTICATION),
 			// Cozy's Improved Cats (cats.CozyCats)
 			Map.entry("CozyMessageGenderMixin", COZY),
-			// Alex's Mobs giant squid flee radius from cachalot whales (CompatConfig.GiantSquid)
+			// Alex's Mobs giant squid never flees cachalot whales (it fights them, mobs/SquidsAndWhales)
 			Map.entry("AmGiantSquidAvoidWhalesMixin", List.of("alexsmobs")),
 			// Alex's Mobs Fleet-Footed fix, from Raspberry Pie (W2-3); also needs its target's members (fleetFootedMatches)
 			Map.entry("FleetFootedMixin", List.of("alexsmobs")),

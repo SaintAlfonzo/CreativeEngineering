@@ -57,7 +57,6 @@ OWNERS = {
 	"creativecompat": {
 		"jar": "creativeCompat",
 		"ids": {
-			f"{OLD}:weathered_cardboard_box": "block+item",
 			f"{OLD}:shrapnel": "entity_type",
 			f"{OLD}:botanist_pot": "block_entity_type",
 		},
@@ -91,7 +90,9 @@ OWNERS = {
 ENGINEERING_TAGS = {"railings", "vertical_planks", "unsmoked_planks", "bulb_glass", "carbon_filament",
 					"fan_processing_catalysts/dragon_breathing"}
 # Engineering's own items the plan's scan had put elsewhere (layered obsidian: made and used by Engineering's machines).
-ENGINEERING_IDS = {"layered_obsidian"}
+# weathered_cardboard_box: moved to Compat, back in Engineering by ruling W16 (reverse swap in Engineering's
+# data/creativeengineering/swaps/compat_return.json, hand-written).
+ENGINEERING_IDS = {"layered_obsidian", "weathered_cardboard_box"}
 # Families Engineering registers in a loop (items/dust_piles.js, items/plate_blocks.js).
 ENGINEERING_SUFFIXES = ("_dust_pile", "_plate_block")
 # Lang keys whose namespace follows the id: item.<ns>.<path>, block.<ns>.<path>, entity.<ns>.<path>.

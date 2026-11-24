@@ -30,7 +30,7 @@ i.amethyst_dust = 'creativeengineering:amethyst_dust';
 i.amethyst_lens = 'creativeengineering:amethyst_lens';
 i.wood_pellets = 'creativeengineering:wood_pellets';
 i.layered_obsidian = 'creativeengineering:layered_obsidian';
-i.weathered_cardboard_box = 'creativecompat:weathered_cardboard_box';
+i.weathered_cardboard_box = 'creativeengineering:weathered_cardboard_box';
 // Oven — FD cooking-pot style baking block. Java: Creative Common oven/ package (block, GUI, JEI, the
 // creativedelight:baking recipe type) | recipes: kubejs/data/creativedelight/kubejs/creativedelight/baking.js (NCH.ceBaking) |
 // bakeware items: Creative Delight kubejs_startup/creativedelight/bakeware.js | feature_writeup/oven.md

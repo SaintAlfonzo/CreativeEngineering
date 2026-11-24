@@ -1,0 +1,8 @@
+{
+  "_comment": "Content back from creativecompat (wave 1 ruling W16, creative-compat-publish #8, 2026-11-24): dev and test worlds saved with the Compat id. Read by Creative Common's SwapLists. Never prune.",
+  "replaces": {
+    "creativeengineering:weathered_cardboard_box": [
+      "creativecompat:weathered_cardboard_box"
+    ]
+  }
+}

@@ -45,7 +45,6 @@
   "creativeengineering:purple_stepstool": "creativeequipment",
   "creativeengineering:red_stepstool": "creativeequipment",
   "creativeengineering:shrapnel": "creativecompat",
-  "creativeengineering:weathered_cardboard_box": "creativecompat",
   "creativeengineering:white_stepstool": "creativeequipment",
   "creativeengineering:yellow_stepstool": "creativeequipment",
   "solapplepie:netherite_lunchbox": "creativedelight"
@@ -63,7 +62,6 @@
   "block/flower_box/glow_lichen_pot": "creativecompat",
   "block/moss_block_tinted": "creativecompat",
   "block/moss_carpet_tinted": "creativecompat",
-  "block/weathered_cardboard_box": "creativecompat",
   "item/copper_shield": "creativeequipment",
   "item/diamond_shield": "creativeequipment",
   "item/dragon_shield": "creativeequipment",
@@ -72,8 +70,7 @@
   "item/felsic_shield": "creativeequipment",
   "item/flint_and_terrasteel": "creativemagic",
   "item/gold_shield": "creativeequipment",
-  "item/netherite_shield": "creativeequipment",
-  "item/weathered_cardboard_box": "creativecompat"
+  "item/netherite_shield": "creativeequipment"
  },
  "tag_prefixes": {
   "bottled_air/": "creativeequipment",
@@ -104,7 +101,6 @@
   "block/dark_fire_0": "creativemagic",
   "block/dark_fire_1": "creativemagic",
   "block/moss_block_tinted": "creativecompat",
-  "block/weathered_cardboard_box": "creativecompat",
   "entity/canned_golem/black": "creativedelight",
   "entity/canned_golem/blue": "creativedelight",
   "entity/canned_golem/brown": "creativedelight",

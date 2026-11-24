@@ -22,6 +22,8 @@ var coilBlocks = ['aluminum', 'brass', 'constantan', 'gold', 'iron', 'lead', 'ni
 
 ServerEvents.tags('block', e => {
 	t.mineable(e, 'pickaxe', 'iron', coilBlocks)
+	// Weathered Cardboard Box (startup items/decor_blocks.js): an axe block
+	t.mineable(e, 'axe', null, i.weathered_cardboard_box)
 	// rose gold counts as gold (recipes/metal #3): the block tag as well as the item tag (metaltags.js)
 	t.addTag(e, 'forge:storage_blocks/gold', i.block_rose_gold)
 	for (var mat in storage) t.storageBlock(e, mat, storage[mat], { level: 'iron' })

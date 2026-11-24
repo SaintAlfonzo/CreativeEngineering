@@ -6,9 +6,6 @@ ServerEvents.tags('block', e => {
 	var b = global.blocks
 	var i = global.item
 
-	// Weathered Cardboard Box (startup decor_blocks.js in this jar): an axe block
-	t.mineable(e, 'axe', null, i.weathered_cardboard_box)
-
 	// Monster box (mob_block_tweaks.md 2.9): mined like obsidian; a contraption must not carry the vault off.
 	t.mineable(e, 'pickaxe', 'diamond', b.monster_box, { exclusive: true })
 	t.add(e, b.t_create_non_movable, b.monster_box)

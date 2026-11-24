@@ -24,7 +24,6 @@ public final class CompatConfig {
 	public static final MonsterBox MONSTER_BOX;
 	public static final TrashSlot TRASH_SLOT;
 	public static final Cats CATS;
-	public static final GiantSquid GIANT_SQUID;
 	public static final FleetFooted FLEET_FOOTED;
 	public static final Golems GOLEMS;
 	public static final BoatFriction BOAT_FRICTION;
@@ -56,7 +55,6 @@ public final class CompatConfig {
 		MONSTER_BOX = new MonsterBox(builder);
 		TRASH_SLOT = new TrashSlot(builder);
 		CATS = new Cats(builder);
-		GIANT_SQUID = new GiantSquid(builder);
 		// Alex's Mobs Fleet-Footed field of view, from Raspberry Pie (plan_wave2_publish.md W2-3)
 		FLEET_FOOTED = new FleetFooted(builder);
 		// golem farm cooldown and boat ice friction (plan_small_fixes_1116.md R2, R3)
@@ -295,40 +293,6 @@ public final class CompatConfig {
 					.defineInRange("buffLevel", 3, 1, 10);
 
 			b.pop(); // cats
-		}
-	}
-
-	/**
-	 * Alex's Mobs giant squid fleeing cachalot whales ({@code mixin/AmGiantSquidAvoidWhalesMixin}, feature_writeup/
-	 * mob_block_tweaks.md section 2.10). Alex's Mobs flees from any whale within 50 blocks and keeps fleeing while
-	 * one is within 60. Server side; read each time the goal checks.
-	 */
-	public static final class GiantSquid {
-		public final ForgeConfigSpec.IntValue whaleFleeStart;
-		public final ForgeConfigSpec.IntValue whaleFleeStop;
-
-		private GiantSquid(ForgeConfigSpec.Builder b) {
-			b.comment("Alex's Mobs giant squid (server side).").push("giant_squid");
-
-			whaleFleeStart = b.comment(
-					"A giant squid starts fleeing a cachalot whale within this many blocks (Alex's Mobs: 50)."
-			).defineInRange("whaleFleeStart", 16, 1, 64);
-			whaleFleeStop = b.comment(
-					"It keeps fleeing while that whale is within this many blocks (Alex's Mobs: 60). Kept at least",
-					"whaleFleeStart."
-			).defineInRange("whaleFleeStop", 24, 1, 96);
-
-			b.pop(); // giant_squid
-		}
-
-		/** The start radius, or Alex's Mobs' 50 before the config loads. */
-		public static float start() {
-			return SPEC.isLoaded() ? GIANT_SQUID.whaleFleeStart.get() : 50.0F;
-		}
-
-		/** The stop radius (never below the start), or Alex's Mobs' 60 before the config loads. */
-		public static float stop() {
-			return SPEC.isLoaded() ? Math.max(GIANT_SQUID.whaleFleeStop.get(), GIANT_SQUID.whaleFleeStart.get()) : 60.0F;
 		}
 	}
 
