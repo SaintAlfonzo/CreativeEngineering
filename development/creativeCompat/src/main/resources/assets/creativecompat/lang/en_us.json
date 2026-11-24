@@ -20,6 +20,7 @@
   "creativeengineering.wthit.run_speed.block_below": "block below",
   "creativeengineering.wthit.run_speed.source.native": "own speed",
   "creativeengineering.wthit.run_speed.source.in_block": "walking through",
+  "container.creativecompat.trash_can": "Trash Can (deleted on close)",
   "creativecompat.wthit.pass_through.walk": "Walk Through: %s",
   "creativecompat.wthit.pass_through.fall": "Fall Through: %s",
   "creativecompat.wthit.pass_through.stopped": "stopped",

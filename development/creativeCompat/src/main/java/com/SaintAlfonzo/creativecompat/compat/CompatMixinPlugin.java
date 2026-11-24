@@ -78,6 +78,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("TrashSlotGuiHandlerMixin", TRASHSLOT),
 			Map.entry("TrashSlotComponentMixin", TRASHSLOT),
 			Map.entry("TrashSlotSaveStateAccessor", TRASHSLOT),
+			// Item Trash Can: 27-slot delete-on-close screen, sneak keeps the filter (compat/TrashCanScreen)
+			Map.entry("TrashCansItemCanUseMixin", List.of("trashcans")),
 			Map.entry("DhCloudHeightMixin", List.of("distanthorizons")),
 			Map.entry("DhNoGenerationMixin", List.of("distanthorizons")),
 			Map.entry("XaeroAtlasColourMixin", List.of("xaeroworldmap")),
@@ -196,6 +198,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("bedspreads", "[6.0.0+1.19.2,6.1)"),
 			Map.entry("customizableelytra", "[1.19.0-1.7.4,1.19.0-1.8)"),
 			Map.entry("trashslot", "[12.1.0,12.2)"),
+			Map.entry("trashcans", "[1.0.18,1.1)"),
 			Map.entry("distanthorizons", "[3.0.2-b,3.1)"),
 			Map.entry("xaeroworldmap", "[1.40.11,1.41)"),
 			Map.entry("simplehats", "[1.19.2-0.3.2,1.19.2-0.4)"),

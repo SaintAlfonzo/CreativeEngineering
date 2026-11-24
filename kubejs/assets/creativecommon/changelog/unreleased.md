@@ -545,6 +545,7 @@
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
 - **Changed:** Little Logistics receiver and transmitter components in an inventory turn into Redstone Links.
 - **Changed:** A Wandering Trader carries about 2 Wares delivery agreements [about 5].
+- **Changed:** Right-clicking the Item Trash Can opens a 27-slot screen whose items are deleted when it closes; sneak and right-click with an empty hand to open its filter [right-click opened the filter].
 - **Fixed:** The Starter Kit deleted any armor or offhand item a player wore on first join; it now gives them back with the rest of the inventory.
 - **Fixed:** TNT shrapnel broke nearby minecarts and armor stands and turned TNT minecarts into items; it now hits only living things.
 - **Fixed:** Rubber trees did not generate in jungles.

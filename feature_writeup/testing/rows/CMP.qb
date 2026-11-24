@@ -530,3 +530,56 @@ look SOLID_VINE_FERTILE_STATE and HOPS_PLACED said; the hops vine line with fert
 @pass the corpse reads "Ancient Corpse" (or "Ancient Remains") in its name; the two cookies share the jar (Creative Delight's `jar_family/` tags still count); the Sample Syringe tab shows the syringe as icon and catalyst
 @fails raw lang key on the corpse: Compat's lang lacks `entity.creativecompat.ancient_corpse`; cookies refused: `JarMixing.addFamilyNamespace` not called; barrier icon: `WorldTab.addTool` not called
 @draft needs a client
+
+@@section 6
+@@title SQ-CMP Item Trash Can screen, 2026-11-23 ([creative_compat.md](../creative_compat.md) 1, TODO `storage-and-item-loss #17`; [plan_ready_now_1123.md](../plan_ready_now_1123.md) 8, R1)
+@@date 2026-11-23
+@@jars creativecompat
+@@sources feature_writeup/creative_compat.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/TrashCansItemCanUseMixin.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/TrashCanScreen.java
+@@text
+@@text Full pack with the 2026-11-23 Compat jar and Trash Cans 1.0.18. Group A, area x 5400 to 5410, z 5200 to 5210. The
+@@text menu half (open, shift-click, close, sneak filter) needs a real client: CQ-CMP-36 and -37.
+@@text
+@@table
+## SQ-CMP-34 | Trash Cans mixin applies; hopper insertion into the Item Trash Can still deletes
+@group A
+@commands `grep TrashCansItemCanUseMixin logs/debug.log`; a hopper holding 5 cobblestone and 3 apples on top of `trashcans:item_trash_can`; wait 3 s; `/cdevtest inv` the hopper and `/cdevtest items` around it
+@pass the mixin applies from creativecompat.mixins.json with no error; after the wait the hopper is empty and no item entity lies near the can
+@fails mixin error: the `interact` target or the BaseBlock superclass changed in a new Trash Cans / Core Lib jar (`CompatMixinPlugin` range `[1.0.18,1.1)`); items left in the hopper: the mixin touched the block entity path (it should only change `interact`)
+> forceload add 5400 5200 5410 5210
+> fill 5400 -61 5200 5410 -61 5210 minecraft:stone
+> fill 5400 -60 5200 5410 -56 5210 minecraft:air
+sleep 2
+shell grep -c "TrashCansItemCanUseMixin" logs/debug.log; true
+> setblock 5403 -60 5203 trashcans:item_trash_can
+> setblock 5403 -59 5203 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:cobblestone",Count:5b},{Slot:1b,id:"minecraft:apple",Count:3b}]}
+sleep 3
+> cdevtest inv 5403 -59 5203
+expect verb=inv via=\S+ slots=5 filled=0
+> cdevtest items 5403 -60 5203 3 keep
+expect verb=items items=-
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|That position is not loaded|Invalid (block state|tag))
+bootreject TrashCansItemCanUseMixin.*(Error|error|failed)
+
+## SQ-CMP-35 | Server boots with Trash Cans absent; the trash can mixin is skipped
+@group A
+@commands `@@prep run rm -f mods/trashcans-*.jar` before the boot (own section run: `--rows SQ-CMP-35` on a fresh OUT); `grep -E "TrashCansItemCanUseMixin|trashcans" logs/latest.log`
+@pass server reaches `Done (`; no mixin error for TrashCansItemCanUseMixin; no ClassNotFound for `com.supermartijn642`
+@fails crash at mixin time: the gate entry `TrashCansItemCanUseMixin` -> `trashcans` missing in `CompatMixinPlugin.NEEDS_MOD`; NoClassDefFoundError: a Compat class other than the mixin names TrashCanScreen at load
+@draft needs a section-level `@@prep run rm -f mods/trashcans-*.jar` on its own boot (the other rows need the jar); the runner splits it into its own section or a reduced modset
+bootexpect Done \(
+bootreject (TrashCansItemCanUseMixin.*(Error|error|failed)|NoClassDefFoundError: com/supermartijn642)
+
+## CQ-CMP-36 | Right-click on the Item Trash Can opens a 27-slot screen; its contents are deleted on close
+@group client
+@commands Client, survival; place `trashcans:item_trash_can`; right-click it with an empty hand and again holding a stack; shift-click a stack and drag a second one in; close; reopen
+@pass a three-row chest screen titled "Trash Can (deleted on close)" opens both times (holding an item does not place it); shift-click moves the stack in; after closing and reopening the 27 slots are empty and the items are gone from the inventory and the ground; a held cursor stack at close goes back to the inventory, not deleted
+@fails the filter screen opens: the mixin was skipped (gate or range) or `isItemTrashCan` misses the id; items back after reopening: `TrashContainer.stopOpen` not called (ChestMenu.removed)
+@draft needs a client
+
+## CQ-CMP-37 | Sneak right-click opens the filter screen; the other three trash cans unchanged
+@group client
+@commands Client; sneak right-click the Item Trash Can with an empty hand; right-click the Ultimate, Liquid and Energy Trash Cans
+@pass sneak opens the mod's own filter screen (one item filter slot, whitelist button); the other three cans open their usual screens with and without sneak
+@fails chest screen on sneak: `isShiftKeyDown` check; another can opens the chest screen: the block id check
+@draft needs a client

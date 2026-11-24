@@ -103,6 +103,7 @@
     "TrashSlotGuiHandlerMixin",
     "TrashSlotComponentMixin",
     "TrashSlotSaveStateAccessor",
+    "TrashCansItemCanUseMixin",
     "DhCloudHeightMixin",
     "SimpleHatsFaceSlotMixin",
     "JetpackItemTooltipMixin",

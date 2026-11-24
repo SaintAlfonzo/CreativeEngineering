@@ -137,6 +137,16 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   owner ruling M2, 2026-11-22). The skeleton is dressed with the cosmetic armor
   over its real armor (`CorpseSectionsClient.withCosmetics`). Curios API calls only in `CorpseCurios` and
   `CorpseCuriosClient`.
+- **Item Trash Can screen (2026-11-23, [plan_ready_now_1123.md](plan_ready_now_1123.md) 8, ruling R1, TODO
+  `storage-and-item-loss #17`):** Trash Cans 1.0.18. A plain right-click on `trashcans:item_trash_can` opens a
+  three-row chest screen ("Trash Can (deleted on close)", `container.creativecompat.trash_can`) over a fresh 27-slot
+  container that is never saved and is cleared when the screen closes, as FTB Essentials' trash can; shift-click from
+  the inventory works (vanilla ChestMenu), a stack still on the cursor at close goes back to the inventory. A sneak
+  right-click with an empty hand opens the mod's own filter screen (vanilla only calls block use while sneaking when
+  both hands are empty). The Liquid, Energy and Ultimate Trash Cans share the block class and are unchanged; hopper and
+  pipe insertion still deletes through the block entity. `TrashCansItemCanUseMixin` (HEAD of Core Lib's
+  `BaseBlock.interact` on `TrashCanBlock`, `remap = false`, gated on `trashcans` in `[1.0.18,1.1)`) and
+  `compat/TrashCanScreen`; compiles against `trashcans` and `supermartijn642corelib` in Creative Common's `libs/`.
 - **Resources in the jar** (some paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
   flower box models, `tags/items/physics/`, 136
   lang keys (counted 2026-11-23: MCA eyes, monster box, pass-through and WTHIT lines, falling layer, ancient corpse names), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
@@ -191,6 +201,9 @@ constructor. `tools/design_rules_audit.py sideways` (DR-C7) checks it.
 Scratch SQ-CMP-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)). In game: CMP-01 open a Supplementaries jar
 with two potions and read the WTHIT line; CMP-02 (campfire) moved to SQ-CFR / CQ-CFR-01 with the code; CMP-03 TrashSlot
 and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors and a Bedspreads / Elytra banner.
+Item Trash Can screen (2026-11-23, queue section 6): SQ-CMP-34 (mixin applies, hopper insertion still deletes), -35
+(boots without Trash Cans), CQ-CMP-36 (27 slots, shift-click, deleted on close), -37 (sneak opens the filter, other cans
+unchanged).
 Naming hooks (2026-11-23, queue section 5): SQ-CMP-27 (`[jei]` carry-over), -28 (vine shearing), -29 (idle tick
 rule), CQ-CMP-30 (JEI pages), -31 (stuck-in-block line), -32 (wine tooltip), -33 (corpse names, jar families, syringe
 tab). Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16; corpse screen sections
@@ -320,6 +333,9 @@ Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
   entries from registrations (section 2); the ancient corpse names moved to Compat's lang; Common's idle tick rule for
   treated-stick tomatoes and its `[effects]` carry-over from Brewing's file moved to those jars; Common's mixin members
   and the campfire rain accessor are `creativecommon$`, its potion log tag `[creativecommon potions]`.
+- 2026-11-23: Item Trash Can screen (plan_ready_now_1123.md 8, R1, TODO `storage-and-item-loss #17`): right-click
+  opens a 27-slot delete-on-close chest screen, sneak keeps the filter (`TrashCansItemCanUseMixin`, `TrashCanScreen`;
+  section 1).
 
 
 
