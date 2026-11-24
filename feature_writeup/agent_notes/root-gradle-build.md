@@ -13,6 +13,8 @@ Set up 2026-10-01.
 - `build-logic/src/main/groovy/ce.forge-mod.gradle` holds the FG setup, runs, mods.toml expansion, manifest (MixinConfigs from mixin_configs), archiveJar, and `installToMods`.
   - `installToMods` is explicit only. It moves old versions and replaces_jars matches to `<mod>/jar_archive/displaced/`, never deletes, then copies the jar to mods/.
 - `ce.forge-mod-refmap.gradle` adds MixinGradle. A plugin that build-logic only depends on can't be applied by id from a mod's build.gradle, which is why it is a separate wrapper.
+  - "<refmap> is not in <jar>" from that check with no code change (seen on `:backportedBrewin:jar`, 2026-11-23): the
+    member's build dir lost the refmap while its compile stayed UP-TO-DATE; `./gradlew :<member>:clean` and rebuild.
   - Since 2026-10-27 it owns the whole refmap setup: `refmap_name` (required) + `refmap_source_sets=<set>:<refmap>,...` (exposure addons) in gradle.properties; no `mixin {}` block in mod build.gradle files. Jar check: refmap_name must be in the jar + every mixin config with mixins must find its refmap. Exposure's expanded/catalog refmaps are never written (no remapped mixins), so only the main one is presence-checked.
 - ce.forge-mod also (2026-10-27): default `flatDir 'libs'` repo for every mod; `disable_target_validator=true` property; upstream-resource guard via `resource_guard_jars` / `resource_guard_own_files` / `resource_guard_name` / `resource_guard_arr` (NOT `upstream_jar`: that name is taken by ce.forge-repack and the port tools; reusing it made backportedDisplay fail). Details: feature_writeup/pack_tooling.md 2.8.
 - Both FG and mixingradle are dependencies of build-logic itself, so they load in one classloader.
