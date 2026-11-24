@@ -358,7 +358,6 @@ global.food = {}
 	f.fish_cooked_crab_leg                         = i.cooked_crab;
 	f.fish_cooked_guardian_tail                    = i.cooked_guardian_tail;
 	f.fish_cooked_guardianfillet                   = i.cookedguardianfillet;
-	f.fish_cooked_kippers                          = i.kippers;
 	f.fish_cooked_lionfish                         = i.cooked_lionfish;
 	f.fish_cooked_lobster_tail                     = i.lobster_tail_cooked;
 	f.fish_cooked_perch                            = i.cooked_perch;

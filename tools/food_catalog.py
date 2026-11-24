@@ -81,6 +81,7 @@ EXCLUDE_PREFIX = {
 EXCLUDE = {
 	'solapplepie:lunchbox': 'food container', 'solapplepie:lunchbag': 'food container',
 	'solapplepie:golden_lunchbox': 'food container',
+	'brewinandchewin:kippers': 'removed (creative-brewing #1)',
 }
 
 # Where the rules below guess wrong. Checked before any rule.
@@ -123,7 +124,6 @@ OVERRIDES = {
 	'buzzier_bees:honey_apple': 'sweet',
 	'brewinandchewin:kimchi': 'cooked/veggie',
 	'creativedelight:pickled_sea_pickle': 'cooked/veggie',
-	'brewinandchewin:kippers': 'cooked/fish',
 	'brewinandchewin:jerky': 'cooked/meat',
 	'pneumaticcraft:chips': 'cooked/veggie',
 	'pneumaticcraft:cod_n_chips': 'handheld',

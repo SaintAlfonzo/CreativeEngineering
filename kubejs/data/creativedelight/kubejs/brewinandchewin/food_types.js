@@ -11,9 +11,6 @@ if (global.CD) global.CD.genPut('food_types', 'brewinandchewin', {
   "cooked/meat": [
    "jerky"
   ],
-  "cooked/fish": [
-   "kippers"
-  ],
   "dairy": [
    "flaxen_cheese_wedge",
    "scarlet_cheese_wedge"
