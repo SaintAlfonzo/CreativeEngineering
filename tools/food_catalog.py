@@ -191,6 +191,10 @@ R_BAKED = re.compile(r'(bread$|_bun$|scones|sourdough|baguette|biscuit|toast$)')
 R_DAIRY = re.compile(r'(cheese_wedge|cheese$)')
 R_INGREDIENT = re.compile(r'((^|_)dough$|batter|raw_pasta|pie_crust|tomato_sauce|cooking_oil|animal_fat|nut_butter_bottle|jelly_bottle|'
 						  r'jam_bottle|sweet_berry_mince|coffee_beans|vanilla_pods|tea_leaf|apple_mash)')
+# Jams and jellies (preserve/jam family) are foods, never drinks, even with a drinking animation (Fruits Delight's
+# jellies; food-tuning #67): new ones go to ingredient, and a placed one in a drink or hazard
+# type is a PROBLEM.
+R_JAM = re.compile(r'((^|_)jam(_jar|_bottle)?$|(^|_)jelly$)')
 R_COOKED = re.compile(r'(^cooked_|_cooked$|^roasted_|^grilled_|^baked_|^fried_|^boiled_|^smoked_|^seared_|^dried_|_patty$|'
 					  r'jerky|kippers|_steak$|sirloin)')
 R_SLICED = re.compile(r'(slice|slices|_cuts$|_chops$|mince|minced|fillet|filet|shank|shanks|drumstick|_rib$|_leaf$|^bacon$|'
@@ -339,7 +343,7 @@ def classify(f, cooked_from, cut_from, feast_servings):
 		return 'meal/feast'
 	if R_ALCOHOL_CLASS.search(cls) or 'vinery:wine' in tags:
 		return 'drink/alcohol'
-	if R_INGREDIENT.search(p):
+	if R_INGREDIENT.search(p) or R_JAM.search(p):
 		return 'ingredient'
 	if R_SOUP.search(p):
 		return 'soup'
@@ -583,6 +587,12 @@ def main():
 		data['types'][t].append(k)
 		placed[k] = t
 		added.append((fid, t))
+
+	# jams stay foods (food-tuning #67): never a drink or hazard type (Alex's Mobs rainbow jelly is special, not a jam)
+	for k, t in placed.items():
+		fid = id_of_key.get(k)
+		if fid and R_JAM.search(fid.split(':', 1)[1]) and (t.split('/')[0] in ('drink', 'hazard')):
+			problems.append(f'{k} -> {fid} is a jam in "{t}"; jams are foods (move it to ingredient)')
 
 	# every placed key still a food in the export?
 	for k, t in placed.items():

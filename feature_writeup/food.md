@@ -283,7 +283,8 @@ Every call into a mod class goes through `guardThrowable`, so one odd item or re
   blocks.
 - **Classifier** (`tools/food_catalog.py`, only for foods in no type yet): exclusions, then a hand override table,
   then fixed lists (hazard, special), then name and class rules in this order: canned, enchanted golden, golden,
-  feast serving (from the feast blocks), alcohol (Booze/DrinkBlock classes, Vinery's wine tag), ingredient, soup,
+  feast serving (from the feast blocks), alcohol (Booze/DrinkBlock classes, Vinery's wine tag), ingredient (jams and
+  jellies included, so a jam with a drinking animation never becomes a drink; `food-tuning #67`, 2026-11-24), soup,
   drink (drink animation or name), salad, sweet, handheld (not when it comes in a bowl), egg, meal (name or a bowl),
   baked, dairy, and last raw/cooked. Cooked means a cooked-sounding name or being the output of a furnace, smoker or
   campfire recipe; the group is fruit, fish, meat (the meat flag or a meat name) or veggie; sliced needs a cut name.
@@ -314,6 +315,8 @@ made. The crushed can -> iron nugget recipes are still there.
 
 `python3 tools/food_catalog.py` (classify new foods, write the JSON, the item_dict block and the catalog) and
 `--check` (writes nothing, exits 1 if a food has no type or key, a key is in two types, or a typed item vanished).
+It also prints a PROBLEM for a jam or jelly (`_jam`, `_jam_jar`, `_jam_bottle`, `_jelly`) placed in a drink or hazard
+type: jams are foods and count in the Diet Log (owner, 2026-11-23, `food-tuning #67`).
 The catalog also writes `kubejs/exported/food/catalog.json` (per food: type, values, flags, effects, code effects,
 current and formula SoL complexity, cans), which the tuning step will start from.
 

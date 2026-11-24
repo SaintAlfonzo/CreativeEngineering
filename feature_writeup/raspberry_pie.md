@@ -1228,9 +1228,13 @@ CQ-RPS-12 (`rows/RPS.qb` section 6). Network version 6 (client and server jars m
   (owner ruling R5, 2026-11-23): `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js` adds
   `#creativedelight:food_type/drink`, `/hazard` (rotten flesh, spider eye, poisonous potato, pufferfish and the modded
   hazards), `#solraspberrypie:no_diet`, the lunchboxes, cat food, Everything Copper's copper nugget and Create Central
-  Kitchen's unfinished assembly items to the exclusion tag (row SQ-RPS-13). Edible items with a drinking animation
-  that are in no drink tag (Hot Cocoa, the coffees, Prickly Pear Juice, Strawberry Banana Smoothie, Mulberry Jam
-  Bottle) still count as foods, so the Diet Log takes them.
+  Kitchen's unfinished assembly items to the exclusion tag (row SQ-RPS-13). Drinks and jams (`food-tuning #66`,
+  `#67`, checked 2026-11-24): Hot Cocoa and Strong Hot Cocoa carry the drink food type since 2026-11-21 (the
+  2026-11-19 dump predates it); Farmer's Respite's coffee, long and strong coffee merge into Rustic Delight's coffee
+  and dark coffee (drinks); Prickly Pear Juice and the Strawberry Banana Smoothie are removed items (the pack's own
+  smoothies are drinks). Every jam family member (Vintage jam jars, Fruits Delight jellies) is a food (ingredient type)
+  in no excluded tag, so the Diet Log takes it; Upgrade Aquatic's Mulberry Jam Bottle merges into the mulberry jam
+  jar. `tools/food_catalog.py` keeps new jams out of the drink type and flags a jam placed in drink or hazard.
 - **State sync** (PR-RP-13). `DietEngine.sync` only marks the player; the state goes once at the end of the player's
   tick, so a food, a drink or a slot action sends one packet (a slot action sent two). The drink list rides on a
   state packet only when it changed (`RpData.drinksVersion`; a new player entity sends it once); the client keeps its

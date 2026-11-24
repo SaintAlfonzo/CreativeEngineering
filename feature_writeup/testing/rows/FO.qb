@@ -1131,3 +1131,32 @@ look the config block lists the five values; the loot JSON has the copy_nbt Oil 
 @from plan_unblocked_batch_1121.md R15 (dairy-fats-and-batter #3)
 @draft client look; the first client runner writes the steps
 @reviewed 2026-11-22
+
+@@section 7
+@@title Drinks and jams in the food types, 2026-11-24 ([food.md](../food.md) 3.2, 3.4, [raspberry_pie.md](../raspberry_pie.md) 12.15, TODO `food-tuning #66`, `#67`, rulings W14, W15)
+@@date 2026-11-24
+@@jars creativedelight solraspberrypie
+@@sources feature_writeup/food.md feature_writeup/raspberry_pie.md kubejs/generation_scripts/food/food_types.json kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js
+@@text
+@@text Full pack, no new jar (data already in the member scripts since 2026-11-21). Farmer's Respite's coffees merge into
+@@text Rustic Delight's coffees; Prickly Pear Juice and the Strawberry Banana Smoothie are removed items; Upgrade Aquatic's
+@@text Mulberry Jam Bottle merges into the mulberry jam jar.
+@@text
+@@table
+## SQ-FO-19 | drinks carry the drink food type; jams are foods outside the Diet Log exclusion tag (#66, #67)
+@group A
+@reviewed 2026-11-24
+@commands `/cdevtest tag item creativedelight:food_type/drink`, `/cdevtest tag item solraspberrypie:diet_log_excluded`, `/cdevtest tag item creativedelight:food_family/preserve/jam` (FO-19)
+@pass the drink type lists `farmersdelight:hot_cocoa`, `farmersrespite:strong_hot_cocoa`, `rusticdelight:coffee`, `rusticdelight:dark_coffee` and `creativedelight:mixed_berry_smoothie`; the exclusion tag holds hot cocoa but no `_jam_jar` and no `fruitsdelight:..._jelly`; the jam family lists `vintagedelight:mulberry_jam_jar` and `fruitsdelight:apple_jelly`
+@fails `kubejs/data/creativedelight/kubejs/farmersdelight/food_types.js`, `farmersrespite/food_types.js` (from `food_types.json`, `tools/food_catalog.py --members`); `solapplepie/diet_log.js`; swap lists `merges_rusticdelight_coffee.json`, `merges_upgrade_aquatic_jams.json`
+> cdevtest tag item creativedelight:food_type/drink
+> cdevtest tag item solraspberrypie:diet_log_excluded
+> cdevtest tag item creativedelight:food_family/preserve/jam
+expect verb=tag kind=item tag=creativedelight:food_type/drink .*ids=\S*farmersdelight:hot_cocoa
+expect verb=tag kind=item tag=creativedelight:food_type/drink .*ids=\S*farmersrespite:strong_hot_cocoa
+expect verb=tag kind=item tag=creativedelight:food_type/drink .*ids=\S*rusticdelight:dark_coffee
+expect verb=tag kind=item tag=creativedelight:food_type/drink .*ids=\S*creativedelight:mixed_berry_smoothie
+expect verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*farmersdelight:hot_cocoa
+reject verb=tag kind=item tag=solraspberrypie:diet_log_excluded .*ids=\S*(_jam_jar|fruitsdelight:[a-z]+_jelly)\b
+expect verb=tag kind=item tag=creativedelight:food_family/preserve/jam .*ids=\S*vintagedelight:mulberry_jam_jar
+expect verb=tag kind=item tag=creativedelight:food_family/preserve/jam .*ids=\S*fruitsdelight:apple_jelly
