@@ -17,7 +17,7 @@ import net.minecraft.world.phys.Vec3;
  * ({@code minecraft:leaves}). Each server tick of such an arrow ({@code mixin/LeafPiercingTrailMixin}) walks the stretch
  * it just flew: a poof of the leaf block's particles where it enters a leaf block, and a thin trail of them while it
  * is inside one. Once it has passed through leaves it keeps trailing the last leaf's particles until it stops moving
- * (stuck in a block, or spent on a hit) or {@link #MAX_TRAIL_TICKS} after it first entered leaves (owner, 2026-11-23).
+ * (stuck in a block, or spent on a hit) or {@link #MAX_TRAIL_TICKS} after it first entered leaves.
  * Particles go out with {@code ServerLevel.sendParticles}, so every nearby client sees them.
  */
 public final class LeafPiercingTrail {

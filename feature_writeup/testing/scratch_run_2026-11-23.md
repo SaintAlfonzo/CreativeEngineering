@@ -882,7 +882,7 @@ Judge judge-3, RES `perf/runs/r1123cd/s40_res` to `s80_res` (drive steps 41 to 8
 | SQ-CS-08 | PASS | 2 checks passed |
 | SQ-CUP-01 | PASS | handler errors: 0; no Unknown item line (judge-3) |
 | SQ-CUP-02 | PASS | 7 checks passed |
-| SQ-CUP-03 | PASS | copper_pot recipe centre ingredient minecraft:water_bucket; pots hold cave_soup / bat_soup in slot 6 with container bowl, CookTimeTotal 160 (judge-3) |
+| SQ-CUP-03 | PASS | copper_pot recipe center ingredient minecraft:water_bucket; pots hold cave_soup / bat_soup in slot 6 with container bowl, CookTimeTotal 160 (judge-3) |
 | SQ-CUP-04 | PASS | use CONSUME; jar fluid creativedelight:cave_soup; bot holds minecraft:bowl (judge-3) |
 | SQ-DCM-01 | PASS | 4 checks passed |
 | SQ-DCM-02 | PASS | Reloaded with no KubeJS errors; 32318 recipes against 32223 in the 2026-11-19 instance dump (+95, later recipes); [absent mods] lines name only absent mods (judge-3) |
@@ -962,7 +962,7 @@ Judge judge-4, RES `perf/runs/r1123cd/s81_res` to `s101_res` (drive steps 82 to 
 | SQ-FCK-11 | PASS | well Amount 4000 -> 3000 after the use, can WaterLevel 12, then well Amount 10000 (refilled); WaterLevel not set without Amount falling (judge-4) |
 | SQ-FCK-12 | PASS | 5 checks passed |
 | SQ-FCK-13 | PASS | dispenser shear: honeycomb:6 at multiplier 2, honeycomb:3 after the toml edit to 1 (read live, both expects passed); the debug.log watcher grep (count 0) is a stale message text, not the value check (judge-4) |
-| SQ-FCK-14 | BATCH-FAULT | reclassified from FAIL: judge-4 2026-11-23: the 3x3 centre is read about 80 ticks after the use and a farmland random tick dropped it 7 -> 6 (the other eight cells read 7/0 as expected); row now accepts 6 or 7 for the centre; rerun queued; no line matches /verb=state pos=1020,-61,1020 state="minecraft:farmland\[moisture=7\]"/ |
+| SQ-FCK-14 | BATCH-FAULT | reclassified from FAIL: judge-4 2026-11-23: the 3x3 center is read about 80 ticks after the use and a farmland random tick dropped it 7 -> 6 (the other eight cells read 7/0 as expected); row now accepts 6 or 7 for the center; rerun queued; no line matches /verb=state pos=1020,-61,1020 state="minecraft:farmland\[moisture=7\]"/ |
 | SQ-FCK-15 | PASS | 8 checks passed |
 | SQ-FCK-16 | PASS | bot use result CONSUME, farmland moisture 0 both reads, water[level=0] appears above after the bucket use (judge-4) |
 | SQ-FCK-17 | PASS | tea_bush[age=2] lower and upper set (no setblock failure); small_tea_bush states read for the 3 younger ones (judge-4) |
@@ -1050,7 +1050,7 @@ Judge judge-4, RES `perf/runs/r1123cd/s81_res` to `s101_res` (drive steps 82 to 
 Counts: PASS 114, BATCH-FAULT 4, FAIL 1
 
 BF-FIX SQ-FCK-09: the legendary and mythical roll medley cans were removed by owner ruling (swaps/removed.json, plan_easy_fixes_1122.md), so their makes lines read n=0 and 19 feast cans have a recipe, not 21; the two counts in FCK.qb are now `>= 19` (the two dead probe steps stay, harmless); rerun queued.
-BF-FIX SQ-FCK-14: the 3x3 centre is read third, about 80 ticks after the bucket use, and a farmland random tick can drop it 7 -> 6 (r1123cd read 6, the other eight cells read 7 / 0); the centre expect is now `moisture=[67]`; rerun queued.
+BF-FIX SQ-FCK-14: the 3x3 center is read third, about 80 ticks after the bucket use, and a farmland random tick can drop it 7 -> 6 (r1123cd read 6, the other eight cells read 7 / 0); the center expect is now `moisture=[67]`; rerun queued.
 BF-FIX SQ-FF-13: tropical pizza slice is 4 / 0.7 since pizza_values.js (plan_food_batch_1119.md R25, slices 0.75x, Food wave 2026-11-22); the log read nutrition=4 modifier=0.7, the row still wanted 5 / 0.75 (also stale in food_catalog.md 914 and vintage_delight.md 1052, not edited here); regex fixed; rerun queued.
 BF-FIX SQ-FDI-01: shell exit 1 came from the trailing `ls mods | grep -i carrot` (no jar name has carrot; the item solcarrot:food_book loaded and the bootreject passed); the line now ends with `; true`; rerun queued.
 
