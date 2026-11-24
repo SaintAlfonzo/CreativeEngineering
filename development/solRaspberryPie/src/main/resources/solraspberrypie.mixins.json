@@ -8,7 +8,6 @@
   "mixins": [
     "BenefitsHandlerMixin",
     "CarrotFoodListMixin",
-    "FleetFootedMixin",
     "FoodInstanceMixin",
     "FoodListAccessor",
     "FoodListMixin",

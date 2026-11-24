@@ -1,6 +1,6 @@
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
-import com.SaintAlfonzo.creativecommon.gravity.LowGravity;
+import com.SaintAlfonzo.creativecompat.gravity.LowGravity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public abstract class LowGravityPullMixin {
 
 	@ModifyConstant(method = "m_8119_", constant = @Constant(doubleValue = -0.04D), remap = false, require = 1)
-	private double creativecommon$lowGravity(double pull) {
+	private double creativecompat$lowGravity(double pull) {
 		return pull * LowGravity.pullScale((Entity) (Object) this);
 	}
 }

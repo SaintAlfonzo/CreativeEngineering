@@ -1,6 +1,6 @@
 // Sneak pickup (TODO items/storage-and-item-loss #12, feature_writeup/storage_audit.md 7): blocks in
-// #creativecommon:sneak_pickup go to the hand with their contents on a sneak right-click with an empty main hand
-// (Creative Common storage/SneakPickup). The block's own loot table must give the block back with its contents;
+// #creativecompat:sneak_pickup go to the hand with their contents on a sneak right-click with an empty main hand
+// (Creative Compat storage/SneakPickup). The block's own loot table must give the block back with its contents;
 // Supplementaries' sack tables (and Supplementaries Squared's dyed sacks) do (set_contents).
 //
 // Wrapped in an IIFE: all server scripts share one top-level scope.

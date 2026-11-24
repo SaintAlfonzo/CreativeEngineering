@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-only
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.SaintAlfonzo.creativecommon.melting.Melting;
+import com.SaintAlfonzo.creativecompat.melting.Melting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class EndFireMixin {
 
 	@Inject(method = "m_6933_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-	private void creativecommon$noFireInEnd(BlockPos pos, BlockState state, int flags, int recursion,
+	private void creativecompat$noFireInEnd(BlockPos pos, BlockState state, int flags, int recursion,
 			CallbackInfoReturnable<Boolean> cir) {
 		if (Melting.refusesFire((Level) (Object) this, state)) cir.setReturnValue(false);
 	}

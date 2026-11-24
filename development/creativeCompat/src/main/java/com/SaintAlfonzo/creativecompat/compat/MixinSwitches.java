@@ -57,6 +57,10 @@ public final class MixinSwitches {
 		put("GuiEffectIconMixin", "HUD effect icons for effects listed in Creative Common's [effects] forceHudIcon (client).");
 		put("SignTextDistanceMixin", "Sign text not drawn far from the camera (client).");
 		put("PassFovMixin", "Field of view ignores block walking speeds (client).");
+		put("MeltingBlockStateMixin", "Melting: salt, fire and lava melt ice and snow ([melting]).");
+		put("BiomeMeltMixin", "Melting: no snow or ice forms near magma ([melting]).");
+		put("VanillaLightMeltMixin", "Melting: vanilla light melting of ice and snow follows [melting] vanillaLightMelting.");
+		put("EndFireMixin", "No ordinary fire in the End ([melting] endNoFire).");
 	}
 
 	private MixinSwitches() {}

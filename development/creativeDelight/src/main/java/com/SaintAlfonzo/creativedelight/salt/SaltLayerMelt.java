@@ -1,6 +1,6 @@
 package com.SaintAlfonzo.creativedelight.salt;
 
-import com.SaintAlfonzo.creativecommon.melting.Melting;
+import com.SaintAlfonzo.creativecompat.melting.Melting;
 import io.github.mortuusars.salt.configuration.Configuration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -22,7 +22,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Salt and Creative Common's melting (plan_post_scratch_1115 B2, B3; feature_writeup/salt.md 7).
+ * Salt and Creative Compat's melting (plan_post_scratch_1115 B2, B3; feature_writeup/salt.md 7).
  * <ul>
  * <li>B3: when a salt layer (a {@link SnowLayerBlock} in the melting salt tag: Vintage Delight's salt layer) melts ice or
  * snow by its random tick, it loses one layer with {@code [salt.Melting] SaltLayerVanishChance} (default 0.05); the last
@@ -48,7 +48,7 @@ public final class SaltLayerMelt {
 	}
 
 	/**
-	 * Hand click: salt dust used on a meltable block (ice, snow) melts it one stage through Common's
+	 * Hand click: salt dust used on a meltable block (ice, snow) melts it one stage through Compat's
 	 * melting system and spends 1 dust; a salt layer is placed (the item's normal placement) only when the block is not
 	 * meltable. The clicked block is checked first, then the block in front of the clicked face, where the layer would go.
 	 */

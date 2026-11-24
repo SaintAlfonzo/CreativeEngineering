@@ -1,6 +1,6 @@
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
-import com.SaintAlfonzo.creativecommon.gravity.LowGravity;
+import com.SaintAlfonzo.creativecompat.gravity.LowGravity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import org.spongepowered.asm.mixin.Mixin;
@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public abstract class LowGravityArrowMixin {
 
 	@ModifyConstant(method = "m_8119_", constant = @Constant(doubleValue = (double) 0.05F), remap = false, require = 1)
-	private double creativecommon$lowGravity(double pull) {
+	private double creativecompat$lowGravity(double pull) {
 		return pull * LowGravity.pullScale((Entity) (Object) this);
 	}
 }

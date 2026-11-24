@@ -68,7 +68,6 @@ public final class RpConfig {
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> unlockIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> flatIcon;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> slotIcon;
-		public final ForgeConfigSpec.DoubleValue fleetFootedFov;
 
 		Client(ForgeConfigSpec.Builder b) {
 			b.push("dietLog");
@@ -121,11 +120,7 @@ public final class RpConfig {
 							"Off: on the shank row, after the shanks.")
 					.define("saturationOwnLine", false);
 			b.pop();
-			b.push("effects");
-			fleetFootedFov = b.comment("Share of the field-of-view widening that Alex's Mobs' Fleet-Footed speed bonus causes while it applies:",
-							"1.0 = unchanged, 0.0 = none. Other speed changes widen the view as usual.")
-					.defineInRange("fleetFootedFov", 0.25, 0.0, 1.0);
-			b.pop();
+			// [effects] fleetFootedFov: Creative Compat's [fleet_footed] fov (plan_wave2_publish.md W2-3), which carries the value over
 			b.push("widget");
 			widgetEnabled = b.comment("Show the diet bonus bar on the survival inventory. When off, diet effects show like any other effect.")
 					.define("enabled", true);

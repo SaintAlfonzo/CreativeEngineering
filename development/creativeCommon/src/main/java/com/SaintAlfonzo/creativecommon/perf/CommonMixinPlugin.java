@@ -64,19 +64,9 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 			Map.entry("WorldEditSkipStateIdInitMixin", List.of("worldedit")),
 			Map.entry("WorldEditBlockStateIdAccessMixin", List.of("worldedit")),
 			Map.entry("QuarkSpiralSpiresTeleportMixin", List.of("quark")),
+			// [perf] dimension limit (W2-4); low gravity and the server start fix are Creative Compat's
 			Map.entry("CreateGravityDimensionMixin", List.of("create_gravity")),
-			Map.entry("CreateGravityConfigAccessor", List.of("create_gravity")),
-			Map.entry("LowGravityPullMixin", List.of("create_gravity")),
-			Map.entry("LowGravitySlowPullMixin", List.of("create_gravity")),
-			Map.entry("LowGravityArrowMixin", List.of("create_gravity")),
-			Map.entry("LowGravityLlamaSpitMixin", List.of("create_gravity")),
-			Map.entry("LowGravityBoatMixin", List.of("create_gravity")),
-			Map.entry("LowGravityThrowableMixin", List.of("create_gravity")),
-			Map.entry("LowGravityItemPhysicMixin", List.of("itemphysic")),
 			Map.entry("NeaWhistleGoalSkipMixin", List.of("nock_enough_arrows")),
-			// no MOD_RANGE row: the jar's mods.toml version is ${file.jarVersion} with no Implementation-Version, and the
-			// redirect is require = 0, so any loaded Rare Ice keeps it (SQ-MELT-09)
-			Map.entry("RareIceLightMeltMixin", List.of("rare_ice")),
 			// effect mixin (plan_cb_polish.md 2); the Create tea pipe icon is Engineering's and the Fruits Delight
 			// remap is Delight's (creative_engineering.md 7.1)
 			Map.entry("PhantomSpawnerBaneSkipMixin", List.of("better_beacons")));
@@ -96,7 +86,6 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 			Map.entry("worldedit", "[7.2.12,7.3)"),
 			Map.entry("quark", "[3.4-418,3.5)"),
 			Map.entry("create_gravity", "[1.2.0,1.3)"),
-			Map.entry("itemphysic", "[1.6.7,1.7)"),
 			Map.entry("nock_enough_arrows", "[1.2.0,1.3)"),
 			Map.entry("better_beacons", "[1.0.2,1.1)"),
 			Map.entry("immersive_portals", "[2.3.7,2.4)"),
@@ -104,13 +93,6 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 
 	public CommonMixinPlugin() {
 		super("[creativecommon]", NEEDS_MOD, MOD_RANGE);
-	}
-
-	/** The ItemPhysic low gravity mixin calls LowGravity, which needs Create Gravity too; the table gate takes any one mod. */
-	@Override
-	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
-		if (mixinClassName.endsWith(".LowGravityItemPhysicMixin") && !modOn("create_gravity")) return false;
-		return super.shouldApplyMixin(targetClassName, mixinClassName);
 	}
 
 	/** Immersive Portals' mixin config; its MixinChunkMap_C overwrites ChunkMap.playerLoadedChunk (m_183760_) as private. */

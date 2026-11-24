@@ -1,6 +1,6 @@
-package com.SaintAlfonzo.creativecommon.melting;
+package com.SaintAlfonzo.creativecompat.melting;
 
-import com.SaintAlfonzo.creativecommon.CommonConfig;
+import com.SaintAlfonzo.creativecompat.CompatConfig;
 import com.electronwill.nightconfig.core.CommentedConfig;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Direction;
@@ -30,9 +30,9 @@ public class MeltingTest {
 
 	public static void main(String[] args) throws Exception {
 		CommentedConfig cfg = CommentedConfig.inMemory();
-		CommonConfig.COMMON_SPEC.correct(cfg);
-		CommonConfig.COMMON_SPEC.setConfig(cfg);
-		CommonConfig.MeltingConfig m = CommonConfig.MELTING;
+		CompatConfig.SPEC.correct(cfg);
+		CompatConfig.SPEC.setConfig(cfg);
+		CompatConfig.MeltingConfig m = CompatConfig.MELTING;
 
 		check(m.snowLayerMeltChance.get() == 0.8, "snowLayerMeltChance default 0.8");
 		check(m.meltTickInterval.get() == 100, "meltTickInterval default 100 (G11)");

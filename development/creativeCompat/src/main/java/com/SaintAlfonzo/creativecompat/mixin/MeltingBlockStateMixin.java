@@ -1,11 +1,11 @@
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.SaintAlfonzo.creativecommon.melting.Melting;
+import com.SaintAlfonzo.creativecompat.melting.Melting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,18 +25,18 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class MeltingBlockStateMixin {
 
 	@Inject(method = "m_222972_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-	private void creativecommon$meltRandomTick(ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
+	private void creativecompat$meltRandomTick(ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
 		if (Melting.onRandomTick((BlockState) (Object) this, level, pos, random)) ci.cancel();
 	}
 
 	/** BlockStateBase.tick ({@code m_222963_}, scheduled ticks): the melt tick a target near a source scheduled. */
 	@Inject(method = "m_222963_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-	private void creativecommon$meltScheduledTick(ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
+	private void creativecompat$meltScheduledTick(ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
 		if (Melting.onScheduledTick((BlockState) (Object) this, level, pos, random)) ci.cancel();
 	}
 
 	@Inject(method = "m_60696_", at = @At("TAIL"), remap = false, require = 1)
-	private void creativecommon$meltOnPlace(Level level, BlockPos pos, BlockState oldState, boolean moving, CallbackInfo ci) {
+	private void creativecompat$meltOnPlace(Level level, BlockPos pos, BlockState oldState, boolean moving, CallbackInfo ci) {
 		Melting.onPlaced((BlockState) (Object) this, level, pos);
 	}
 }

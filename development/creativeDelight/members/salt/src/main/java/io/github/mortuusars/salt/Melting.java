@@ -3,7 +3,7 @@
 // Change against upstream 1.2.4.1 (meltBlock only, feature_writeup/salt.md 6 S8): upstream placed water only in
 // ultra-warm dimensions and air everywhere else (the dimension check was inverted). Now melted ice leaves water
 // outside ultra-warm dimensions (SaltMeltingPlaceWater still switches it off); snow, and anything melted in an
-// ultra-warm dimension (the Nether), leaves air. Since 2026-11-14 tryMeltFromBlock is off: Creative Common's melting
+// ultra-warm dimension (the Nether), leaves air. Since 2026-11-14 tryMeltFromBlock is off: Creative Compat's melting
 // system owns block melting (plan_bugfix_1114 3.8). Since 2026-11-15 (plan_post_scratch_1115 B2, B6) the dispenser
 // behaviour melts a frozen block one stage (1 salt) or places a salt layer on air, for any salt item it is registered
 // on (Creative Delight registers it on Vintage Delight's salt dust too); isMeltTarget / meltOnce serve the Salt Melt.
@@ -36,8 +36,8 @@ public class Melting {
     public static final DispenseItemBehavior SALT_DISPENSER_BEHAVIOR = new SaltItemDispenseBehavior();
 
     /**
-     * Creative Delight: a block salt can melt: Creative Common's Melting.isSaltable (plan_post_scratch_1115 G7.11; isTarget
-     * on an older Common) or, without Common, upstream's tag.
+     * Creative Delight: a block salt can melt: Creative Compat's Melting.isSaltable (plan_post_scratch_1115 G7.11; isTarget
+     * on an older Compat) or, without Compat, upstream's tag.
      */
     public static boolean isMeltTarget(BlockState state) {
         CommonMelting common = CommonMelting.get();
@@ -45,8 +45,8 @@ public class Melting {
     }
 
     /**
-     * Creative Delight: one melt action on a target, no roll: Common's meltStep (packed and blue ice step down a tier,
-     * the rest melts) or, without Common, upstream's meltBlock. False when the block is not a target. Not gated by
+     * Creative Delight: one melt action on a target, no roll: Compat's meltStep (packed and blue ice step down a tier,
+     * the rest melts) or, without Compat, upstream's meltBlock. False when the block is not a target. Not gated by
      * SaltItemMeltingEnabled (the Salt Melt is its own item).
      */
     public static boolean meltOnce(BlockState state, BlockPos pos, ServerLevel level) {
@@ -91,9 +91,9 @@ public class Melting {
     private static final ResourceLocation SALT_BLOCK_ID = new ResourceLocation("salt", "salt_block");
 
     /**
-     * Creative Delight: with Creative Common the click is Common's melting system (plan_bugfix_1114 3.8): its targets
+     * Creative Delight: with Creative Compat the click is Compat's melting system (plan_bugfix_1114 3.8): its targets
      * (Melting.isTarget) and one stage per click (Melting.meltStep: packed and blue ice step down a tier, the rest melts),
-     * no roll. Called by reflection, so this repack does not need Common to compile. Without Common, upstream's rule.
+     * no roll. Called by reflection, so this repack does not need Compat to compile. Without Compat, upstream's rule.
      */
     public static boolean tryMeltFromItem(BlockState targetState, BlockPos targetPos, Level level) {
         if (!Configuration.MELTING_ITEM_ENABLED.get()) return false;
@@ -116,7 +116,7 @@ public class Melting {
     }
 
     /**
-     * Creative Delight: switched off (plan_bugfix_1114 3.8). Salt blocks melting nearby ice and snow is Creative Common's
+     * Creative Delight: switched off (plan_bugfix_1114 3.8). Salt blocks melting nearby ice and snow is Creative Compat's
      * melting system ([melting] in creativecommon-common.toml), so this never fires and nothing melts twice. The
      * SaltBlockMeltingEnabled / Chance keys stay in the config, unused.
      */
@@ -155,7 +155,7 @@ public class Melting {
         }
     }
 
-    /** Creative Common's com.SaintAlfonzo.creativecommon.melting.Melting, looked up once; null without Common. */
+    /** Creative Compat's com.SaintAlfonzo.creativecompat.melting.Melting, looked up once; null without Compat. */
     private static final class CommonMelting {
         private static volatile boolean looked;
         private static CommonMelting instance;
@@ -172,11 +172,11 @@ public class Melting {
                 synchronized (CommonMelting.class) {
                     if (!looked) {
                         try {
-                            Class<?> c = Class.forName("com.SaintAlfonzo.creativecommon.melting.Melting");
+                            Class<?> c = Class.forName("com.SaintAlfonzo.creativecompat.melting.Melting");
                             java.lang.invoke.MethodHandles.Lookup l = java.lang.invoke.MethodHandles.publicLookup();
                             java.lang.invoke.MethodType test = java.lang.invoke.MethodType.methodType(boolean.class, BlockState.class);
-                            // Salt melts only saltable blocks (Common's creativecommon:melting/saltable, G7.11); an
-                            // older Common without isSaltable falls back to every melting target.
+                            // Salt melts only saltable blocks (Compat's creativecompat:melting/saltable, G7.11); an
+                            // older Compat without isSaltable falls back to every melting target.
                             java.lang.invoke.MethodHandle target;
                             try {
                                 target = l.findStatic(c, "isSaltable", test);
@@ -200,7 +200,7 @@ public class Melting {
             try {
                 return (boolean) isTarget.invokeExact(state);
             } catch (Throwable t) {
-                throw new IllegalStateException("Creative Common Melting.isTarget failed", t);
+                throw new IllegalStateException("Creative Compat Melting.isTarget failed", t);
             }
         }
 
@@ -208,7 +208,7 @@ public class Melting {
             try {
                 return (boolean) meltStep.invokeExact(level, pos);
             } catch (Throwable t) {
-                throw new IllegalStateException("Creative Common Melting.meltStep failed", t);
+                throw new IllegalStateException("Creative Compat Melting.meltStep failed", t);
             }
         }
     }

@@ -1,6 +1,6 @@
-package com.SaintAlfonzo.creativecommon.melting;
+package com.SaintAlfonzo.creativecompat.melting;
 
-import com.SaintAlfonzo.creativecommon.CommonConfig;
+import com.SaintAlfonzo.creativecompat.CompatConfig;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -45,7 +45,7 @@ import java.util.function.Predicate;
 /**
  * Melting (feature_writeup/melting.md, plan_bugfix_1114.md 3.8, plan_post_scratch_1115.md G7, G8, G11, E1): salt, fire and lava
  * melt ice and snow. Sources and targets are the {@link MeltTags} block tags, rules and chances {@code [melting]} in
- * creativecommon-common.toml.
+ * creativecompat-common.toml.
  *
  * <p>Sources find, targets schedule (G8). A pair is found from either side: a target's random tick
  * ({@code mixin.MeltingBlockStateMixin}, BlockStateBase.randomTick) rolls its chance, then looks at its 6 neighbors,
@@ -107,7 +107,7 @@ public final class Melting {
 				0, false, false);
 
 		static Values read() {
-			CommonConfig.MeltingConfig c = CommonConfig.MELTING;
+			CompatConfig.MeltingConfig c = CompatConfig.MELTING;
 			return new Values(c.enabled.get(), c.saltRange.get(), c.fireRange.get(), c.lavaRange.get(),
 					c.slowLavaRange.get(), c.slowMagmaRange.get(), c.meltChance.get(), c.slowMeltChance.get(),
 					c.snowLayerMeltChance.get(), c.placeWater.get(), c.vanillaLightMelting.get(),
@@ -137,9 +137,9 @@ public final class Melting {
 
 	private Melting() {}
 
-	/** Mod bus: ModConfigEvent.Loading and Reloading of Common's main config refresh {@link #cfg}. */
+	/** Mod bus: ModConfigEvent.Loading and Reloading of Compat's config refresh {@link #cfg}. */
 	public static void onConfig(ModConfigEvent event) {
-		if (event.getConfig().getSpec() == CommonConfig.COMMON_SPEC && CommonConfig.COMMON_SPEC.isLoaded())
+		if (event.getConfig().getSpec() == CompatConfig.SPEC && CompatConfig.SPEC.isLoaded())
 			reloadConfig();
 	}
 
@@ -160,7 +160,7 @@ public final class Melting {
 			return;
 		}
 		int done = 0;
-		for (String id : CommonConfig.MELTING.extraRandomTickBlocks.get()) {
+		for (String id : CompatConfig.MELTING.extraRandomTickBlocks.get()) {
 			ResourceLocation rl = ResourceLocation.tryParse(id);
 			Block block = rl == null ? null : ForgeRegistries.BLOCKS.getValue(rl);
 			if (block == null || block == Blocks.AIR) continue; // absent mod
@@ -362,7 +362,7 @@ public final class Melting {
 		return (flags.getInt(state.getBlock()) & TARGET) != 0;
 	}
 
-	/** Whether salt can melt the state (tag creativecommon:melting/saltable, G7.11). Drives the "Saltable" tooltip. */
+	/** Whether salt can melt the state (tag creativecompat:melting/saltable, G7.11). Drives the "Saltable" tooltip. */
 	public static boolean isSaltable(BlockState state) {
 		return (flags.getInt(state.getBlock()) & SALTABLE) != 0;
 	}
@@ -769,7 +769,7 @@ public final class Melting {
 	}
 
 	private static Map<Block, BlockState> steps() {
-		List<? extends String> src = CommonConfig.MELTING.slowSteps.get();
+		List<? extends String> src = CompatConfig.MELTING.slowSteps.get();
 		if (src != stepsSource) {
 			steps = parseRows(src);
 			stepsSource = src;
@@ -778,7 +778,7 @@ public final class Melting {
 	}
 
 	private static Map<Block, BlockState> meltProducts() {
-		List<? extends String> src = CommonConfig.MELTING.meltProducts.get();
+		List<? extends String> src = CompatConfig.MELTING.meltProducts.get();
 		if (src != productsSource) {
 			meltProducts = parseRows(src);
 			productsSource = src;
@@ -787,7 +787,7 @@ public final class Melting {
 	}
 
 	private static Map<Block, BlockState> saltProducts() {
-		List<? extends String> src = CommonConfig.MELTING.saltProducts.get();
+		List<? extends String> src = CompatConfig.MELTING.saltProducts.get();
 		if (src != saltSource) {
 			saltProducts = parseRows(src);
 			saltSource = src;

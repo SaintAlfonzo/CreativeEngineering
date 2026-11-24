@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: GPL-3.0-only
-package com.SaintAlfonzo.creativecommon.storage;
+package com.SaintAlfonzo.creativecompat.storage;
 
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -27,8 +27,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
  * Sneak pickup (TODO items/storage-and-item-loss #12; feature_writeup/storage_audit.md 7): sneak right-click with an
- * empty main hand on a block in {@code #creativecommon:sneak_pickup} (Supplementaries' sack and Supplementaries
- * Squared's dyed sacks, filled by {@code kubejs/data/creativecommon/kubejs/tags/sneak_pickup_tags.js}) puts it in the
+ * empty main hand on a block in {@code #creativecompat:sneak_pickup} (Supplementaries' sack and Supplementaries
+ * Squared's dyed sacks, filled by {@code kubejs/data/creativecompat/kubejs/tags/sneak_pickup_tags.js}) puts it in the
  * hand as its normal player-break drop, like a placed Sophisticated Backpack or Creative Delight's cookware pickup.
  * <p>
  * The block keeps its contents through its own loot table: Supplementaries' sack tables already copy the name and
@@ -39,7 +39,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public final class SneakPickup {
 
 	public static final TagKey<Block> SNEAK_PICKUP = TagKey.create(Registry.BLOCK_REGISTRY,
-			new ResourceLocation("creativecommon", "sneak_pickup"));
+			new ResourceLocation("creativecompat", "sneak_pickup"));
 
 	private SneakPickup() {}
 

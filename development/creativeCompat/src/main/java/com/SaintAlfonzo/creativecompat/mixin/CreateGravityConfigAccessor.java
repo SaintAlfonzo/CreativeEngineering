@@ -1,4 +1,4 @@
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
 import de.cadentem.create_gravity.config.ServerConfig;
 import java.util.List;
@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface CreateGravityConfigAccessor {
 
 	@Accessor(value = "BIOME_CONFIGS_INTERNAL", remap = false)
-	static ForgeConfigSpec.ConfigValue<List<? extends String>> creativecommon$biomeConfigs() {
+	static ForgeConfigSpec.ConfigValue<List<? extends String>> creativecompat$biomeConfigs() {
 		throw new AssertionError();
 	}
 }

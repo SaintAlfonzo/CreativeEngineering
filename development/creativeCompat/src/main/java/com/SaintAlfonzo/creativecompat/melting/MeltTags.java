@@ -1,4 +1,4 @@
-package com.SaintAlfonzo.creativecommon.melting;
+package com.SaintAlfonzo.creativecompat.melting;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -8,8 +8,8 @@ import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
 /**
- * The melting block tags ({@link Melting}, feature_writeup/melting.md). Filled by KubeJS: Creative Common's
- * {@code kubejs/data/creativecommon/kubejs/tags/melting_tags.js}, keys {@code b.t_melt_*} / {@code b.t_meltable*} in
+ * The melting block tags ({@link Melting}, feature_writeup/melting.md). Filled by KubeJS: Creative Compat's
+ * {@code kubejs/data/creativecompat/kubejs/tags/melting_tags.js}, keys {@code b.t_melt_*} / {@code b.t_meltable*} in
  * block_dict.js. Any of them may be empty; the system then has nothing to do for that kind.
  */
 public final class MeltTags {
@@ -47,9 +47,9 @@ public final class MeltTags {
 	 * Filled from Creative Calendar's arid and tropical season types. Ultra-warm dimensions (the Nether) count without it.
 	 */
 	public static final TagKey<Biome> HOT_BIOMES = TagKey.create(Registry.BIOME_REGISTRY,
-			new ResourceLocation("creativecommon", "melting/hot"));
+			new ResourceLocation("creativecompat", "melting/hot"));
 
 	private static TagKey<Block> tag(String path) {
-		return BlockTags.create(new ResourceLocation("creativecommon", "melting/" + path));
+		return BlockTags.create(new ResourceLocation("creativecompat", "melting/" + path));
 	}
 }

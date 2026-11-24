@@ -190,6 +190,29 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
+# --- moved from Creative Common and Raspberry Pie (wave 2 carve, plan_wave2_publish.md)
+# low gravity for items, blocks and projectiles, the dedicated server start fix (9 mixins; the ItemPhysic tie needs
+# itemphysic too)
+[[dependencies.creativecompat]]
+modId="create_gravity"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+# Fleet-Footed fix (mixin, gated on its members) and field of view
+[[dependencies.creativecompat]]
+modId="alexsmobs"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
+# melting: Rare Ice's own light melting follows [melting] vanillaLightMelting
+[[dependencies.creativecompat]]
+modId="rare_ice"
+mandatory=false
+versionRange="*"
+ordering="NONE"
+side="BOTH"
 # --- interface mixins and tooltips, --- WTHIT plugins: state lines, holder and pot contents, hives, campfires,
 # coasters, tanks, remainder buffer, silk touch, sheared, operator blocks, block model icons
 [[dependencies.creativecompat]]

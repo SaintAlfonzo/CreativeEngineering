@@ -92,6 +92,22 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("CozyMessageGenderMixin", COZY),
 			// Alex's Mobs giant squid flee radius from cachalot whales (CompatConfig.GiantSquid)
 			Map.entry("AmGiantSquidAvoidWhalesMixin", List.of("alexsmobs")),
+			// Alex's Mobs Fleet-Footed fix, from Raspberry Pie (W2-3); also needs its target's members (fleetFootedMatches)
+			Map.entry("FleetFootedMixin", List.of("alexsmobs")),
+			// Create: Gravity low gravity and the dedicated server start fix, from Creative Common (wave 2 carve, W2-4);
+			// the ItemPhysic tie needs Create: Gravity too (NEEDS_ALL)
+			Map.entry("CreateGravityServerStartMixin", List.of("create_gravity")),
+			Map.entry("CreateGravityConfigAccessor", List.of("create_gravity")),
+			Map.entry("LowGravityPullMixin", List.of("create_gravity")),
+			Map.entry("LowGravitySlowPullMixin", List.of("create_gravity")),
+			Map.entry("LowGravityArrowMixin", List.of("create_gravity")),
+			Map.entry("LowGravityLlamaSpitMixin", List.of("create_gravity")),
+			Map.entry("LowGravityBoatMixin", List.of("create_gravity")),
+			Map.entry("LowGravityThrowableMixin", List.of("create_gravity")),
+			// melting, from Creative Common: Rare Ice's own light melting. No MOD_RANGE row: the jar's mods.toml version
+			// is ${file.jarVersion} with no Implementation-Version, and the redirect is require = 0, so any loaded Rare
+			// Ice keeps it (SQ-MELT-09)
+			Map.entry("RareIceLightMeltMixin", List.of("rare_ice")),
 			// Ore Excavation undo rules (excavation/)
 			Map.entry("OreExcavationBlockHistoryMixin", ORE_EXCAVATION),
 			Map.entry("OreExcavationCommandUndoMixin", ORE_EXCAVATION),
@@ -205,6 +221,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("domesticationinnovation", "[1.6.1,1.7)"),
 			Map.entry("cozys_improved_cats", "[2.1.0,2.2)"),
 			Map.entry("alexsmobs", "[1.21.1,1.22)"),
+			Map.entry("create_gravity", "[1.2.0,1.3)"),
 			Map.entry("oreexcavation", "[1.11.166,1.12)"),
 			Map.entry("blockrunner", "[4.2.2,4.3)"),
 			Map.entry("botania", "[1.19.2-440.2-FORGE,1.19.2-441)"),
@@ -249,7 +266,9 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			// Transfer Items returns curios to their recorded slots (corpse/CorpseCurios, plan_corpses.md 3.6 item 4)
 			Map.entry("CorpseTransferMessageMixin", List.of("corpse", "curios")),
 			// GeckoLib item in the hotbar flushing ImmediatelyFast's HUD item batch (plan_portal_gun.md 2)
-			Map.entry("GeckoItemHudBatchMixin", List.of("geckolib3", "immediatelyfast")));
+			Map.entry("GeckoItemHudBatchMixin", List.of("geckolib3", "immediatelyfast")),
+			// Dropped items follow Create: Gravity's low gravity: ItemPhysic's pull, scaled by gravity.LowGravity (wave 2)
+			Map.entry("LowGravityItemPhysicMixin", List.of("itemphysic", "create_gravity")));
 
 	/** True when {@code modId} is loaded at a version in {@code spec}; a loaded jar at another version logs once. */
 	private static boolean exactOn(String mixin, String modId, String spec) {
@@ -286,6 +305,36 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 		if (exact != null && !exact.entrySet().stream().allMatch(e -> exactOn(name, e.getKey(), e.getValue()))) return false;
 		List<String> all = NEEDS_ALL.get(name);
 		if (all != null) return all.stream().allMatch(this::modOn);
-		return super.shouldApplyMixin(targetClassName, mixinClassName);
+		if (!super.shouldApplyMixin(targetClassName, mixinClassName)) return false;
+		if (name.equals("FleetFootedMixin")) return fleetFootedMatches(targetClassName);
+		return true;
+	}
+
+	private static final String LIVING_INT = "(Lnet/minecraft/world/entity/LivingEntity;I)V";
+
+	/**
+	 * Fleet-Footed fix (from Raspberry Pie, plan_rp_standalone.md P6): EffectFleetFooted (Alex's Mobs 1.21.1, the
+	 * version tested) must have the int field {@code lastDuration} (shadowed; written by its isDurationEffectTick) and
+	 * applyEffectTick(LivingEntity, int) (SRG {@code m_6742_}, the injection point). Anything else, including an
+	 * unreadable class, skips the fix with one warning instead of failing the mixin config.
+	 */
+	private static boolean fleetFootedMatches(String targetClassName) {
+		List<String> missing = new java.util.ArrayList<>();
+		try {
+			org.objectweb.asm.tree.ClassNode node = org.spongepowered.asm.service.MixinService.getService()
+					.getBytecodeProvider().getClassNode(targetClassName);
+			if (node.fields == null || node.fields.stream().noneMatch(f -> f.name.equals("lastDuration") && f.desc.equals("I"))) {
+				missing.add("int field lastDuration");
+			}
+			if (node.methods == null || node.methods.stream().noneMatch(m -> (m.name.equals("m_6742_") || m.name.equals("applyEffectTick")) && m.desc.equals(LIVING_INT))) {
+				missing.add("applyEffectTick(LivingEntity, int) (m_6742_)");
+			}
+		} catch (Throwable t) {
+			missing.add("the class itself (" + t + ")");
+		}
+		if (missing.isEmpty()) return true;
+		LOGGER.warn("[creativecompat] Alex's Mobs {} lacks {}: the Fleet-Footed fix is off (tested with Alex's Mobs 1.21.1)",
+				targetClassName, String.join(", ", missing));
+		return false;
 	}
 }

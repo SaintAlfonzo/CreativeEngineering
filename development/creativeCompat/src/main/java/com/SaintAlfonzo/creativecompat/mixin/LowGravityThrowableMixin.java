@@ -1,6 +1,6 @@
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
-import com.SaintAlfonzo.creativecommon.gravity.LowGravity;
+import com.SaintAlfonzo.creativecompat.gravity.LowGravity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.projectile.ThrowableProjectile;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,7 +21,7 @@ public abstract class LowGravityThrowableMixin {
 
 	@Redirect(method = "m_8119_", remap = false, require = 1,
 			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/projectile/ThrowableProjectile;m_7139_()F", remap = false))
-	private float creativecommon$lowGravity(ThrowableProjectile self) {
+	private float creativecompat$lowGravity(ThrowableProjectile self) {
 		return (float) (this.m_7139_() * LowGravity.pullScale((Entity) (Object) this));
 	}
 }

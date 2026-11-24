@@ -1,13 +1,11 @@
-package com.SaintAlfonzo.creativecommon.gravity;
+package com.SaintAlfonzo.creativecompat.gravity;
 
-import com.SaintAlfonzo.creativecommon.CommonConfig;
-import com.SaintAlfonzo.creativecommon.mixin.CreateGravityConfigAccessor;
+import com.SaintAlfonzo.creativecommon.perf.GravityDimensions;
+import com.SaintAlfonzo.creativecompat.mixin.CreateGravityConfigAccessor;
 import com.mojang.logging.LogUtils;
 import de.cadentem.create_gravity.config.ServerConfig;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
@@ -21,7 +19,7 @@ import org.slf4j.Logger;
  * Create: Gravity's biome gravity factor for any entity, on both sides (creative_engineering.md 7.4).
  *
  * Create: Gravity only lowers the gravity attribute of living entities. Items, falling blocks, TNT, XP orbs, arrows,
- * thrown projectiles, boats and minecarts each add a fixed pull per tick instead; Common's LowGravity* mixins scale that
+ * thrown projectiles, boats and minecarts each add a fixed pull per tick instead; Compat's LowGravity* mixins scale that
  * pull by {@link #pullScale}. They run on the server AND the client: the client predicts these entities' motion itself
  * (and moves a boat its player steers), so when both sides use the same scale no extra motion packets are needed.
  *
@@ -31,8 +29,9 @@ import org.slf4j.Logger;
  * mod: "biome;oxygen;gravity", a leading # marks a biome tag, an empty gravity means -0.8, the first match wins, a
  * factor outside -1..0 is ignored.
  *
- * Dimension limit: with CommonConfig perf.gravityLimitDimensions on, entities outside perf.gravityDimensions skip the
- * lookup (vanilla pull). The client reads its own copy of Common's config; the pack ships the same file to both sides.
+ * Dimension limit: Creative Common's {@code [perf] gravityLimitDimensions} / {@code gravityDimensions}
+ * ({@link GravityDimensions}, which stays in Common, plan_wave2_publish.md W2-4): entities outside those dimensions skip
+ * the lookup (vanilla pull).
  */
 public final class LowGravity {
 
@@ -40,9 +39,6 @@ public final class LowGravity {
 
 	/** Create: Gravity's default gravity factor (ServerConfig.GRAVITY_FACTOR_DEFAULT, private). */
 	private static final double DEFAULT_FACTOR = -0.8;
-
-	private static List<? extends String> dimensionSource;
-	private static Set<ResourceLocation> dimensions = Set.of();
 
 	private static List<? extends String> clientSource;
 	private static List<Entry> clientEntries = List.of();
@@ -56,27 +52,11 @@ public final class LowGravity {
 	 */
 	public static double pullScale(Entity entity) {
 		Level level = entity.getLevel();
-		if (!dimensionAllowed(level)) return 1.0;
+		if (!GravityDimensions.allowed(level)) return 1.0;
 		Holder<Biome> biome = level.getBiome(entity.blockPosition());
 		double factor = level.isClientSide ? clientFactor(biome) : serverFactor(biome);
 		if (factor >= 0.0 || factor < -1.0) return 1.0;
 		return 1.0 + factor;
-	}
-
-	/** False when the dimension limit is on and this level is not in perf.gravityDimensions. */
-	public static boolean dimensionAllowed(Level level) {
-		if (!CommonConfig.PERF.gravityLimitDimensions.get()) return true;
-		List<? extends String> list = CommonConfig.PERF.gravityDimensions.get();
-		if (list != dimensionSource) {
-			Set<ResourceLocation> set = new HashSet<>();
-			for (String id : list) {
-				ResourceLocation rl = ResourceLocation.tryParse(id);
-				if (rl != null) set.add(rl);
-			}
-			dimensions = set;
-			dimensionSource = list;
-		}
-		return dimensions.contains(level.dimension().location());
 	}
 
 	private static double serverFactor(Holder<Biome> biome) {
@@ -85,7 +65,7 @@ public final class LowGravity {
 	}
 
 	private static double clientFactor(Holder<Biome> biome) {
-		List<? extends String> source = CreateGravityConfigAccessor.creativecommon$biomeConfigs().get();
+		List<? extends String> source = CreateGravityConfigAccessor.creativecompat$biomeConfigs().get();
 		if (source != clientSource) {
 			clientEntries = parse(source);
 			clientSource = source;

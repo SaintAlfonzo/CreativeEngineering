@@ -1,6 +1,6 @@
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
-import com.SaintAlfonzo.creativecommon.gravity.LowGravity;
+import com.SaintAlfonzo.creativecompat.gravity.LowGravity;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.Boat;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public abstract class LowGravityBoatMixin {
 
 	@ModifyConstant(method = "m_38395_", constant = @Constant(doubleValue = (double) -0.04F), remap = false, require = 1)
-	private double creativecommon$lowGravity(double pull) {
+	private double creativecompat$lowGravity(double pull) {
 		Entity self = (Entity) (Object) this;
 		if (self.isInWater() || self.isUnderWater()) return pull;
 		return pull * LowGravity.pullScale(self);

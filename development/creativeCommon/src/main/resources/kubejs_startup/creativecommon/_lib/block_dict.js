@@ -33,7 +33,7 @@ b.skillet = 'farmersdelight:skillet';
 b.copper_pot = 'miners_delight:copper_pot';
 b.kettle = 'farmersrespite:kettle';
 b.t_cookware_pickup = '#creativedelight:cookware_pickup';   // CD CookwareHandling: sneak right-click picks up, sneak left-click toggles the handle
-b.t_sneak_pickup = '#creativecommon:sneak_pickup';   // Common storage/SneakPickup: sneak right-click, empty hand, picks up with contents
+b.t_sneak_pickup = '#creativecompat:sneak_pickup';   // Compat storage/SneakPickup: sneak right-click, empty hand, picks up with contents
 b.sack = 'supplementaries:sack';
 b.suppsquared_sacks = 'suppsquared:sack_*';          // Supplementaries Squared's 16 dyed sacks
 b.stone_cutting_boards = ['farmersdelight:granite_cutting_board', 'farmersdelight:andesite_cutting_board', 'farmersdelight:diorite_cutting_board'];  // cooking/kitchen #25
@@ -247,20 +247,20 @@ b.t_fishing_net_kelp = '#creativedelight:fishing_net/kelp';           // Oceanic
 b.t_fishing_net_sea_grass = '#creativedelight:fishing_net/sea_grass'; // OceanicDelightFishingNetMixin: net uses the sea grass table
 b.t_blendable_blocks = '#c:blendable_blocks';       // Rubidium: per-vertex biome tint blending (vanilla grass gets it built in)
 
-// Melting (Creative Common melting/, feature_writeup/melting.md, plan_bugfix_1114.md 3.8). The tags are filled by
-// Creative Common's tags/melting_tags.js; the Java side reads them (melting/MeltTags.java). Mod globs match block ids.
-b.t_melt_salt = '#creativecommon:melting/salt';                 // salt sources: melt adjacent targets
-b.t_melt_fire = '#creativecommon:melting/fire';                 // fire sources; a block with a lit property counts only while lit
-b.t_melt_lava = '#creativecommon:melting/lava';                 // lava sources besides any block holding lava fluid
-b.t_meltable = '#creativecommon:melting/meltable';              // ice and frosted ice -> water (air when ultra-warm), snow -> air
-b.t_meltable_slow = '#creativecommon:melting/meltable_slow';    // packed and blue ice: one tier down, low chance
-b.t_melt_ultrawarm_instant = '#creativecommon:melting/ultrawarm_instant'; // air the moment it is placed in the Nether
-b.t_melt_saltable = '#creativecommon:melting/saltable';        // the only targets salt melts ([melting] saltProducts)
-b.t_melt_keeps_snow = '#creativecommon:melting/keeps_snow';    // snow resting on these ignores heat and light, not salt
-b.t_melt_magma = '#creativecommon:melting/magma';              // melts snow within 2 at once, stops snow and ice forming
-b.t_melt_lava_only = '#creativecommon:melting/lava_only';      // slow targets only touching lava melts (blue ice, IW permafrost; G11)
-b.t_melt_sluggish = '#creativecommon:melting/sluggish';        // melt at [melting] sluggishMeltFactor of their chance (snow bricks; E1)
-b.t_melt_hot_biomes = '#creativecommon:melting/hot';           // BIOME tag: ice and snow melt there with no source (G11)
+// Melting (Creative Compat melting/, feature_writeup/melting.md, plan_bugfix_1114.md 3.8). The tags are filled by
+// Creative Compat's tags/melting_tags.js; the Java side reads them (melting/MeltTags.java). Mod globs match block ids.
+b.t_melt_salt = '#creativecompat:melting/salt';                 // salt sources: melt adjacent targets
+b.t_melt_fire = '#creativecompat:melting/fire';                 // fire sources; a block with a lit property counts only while lit
+b.t_melt_lava = '#creativecompat:melting/lava';                 // lava sources besides any block holding lava fluid
+b.t_meltable = '#creativecompat:melting/meltable';              // ice and frosted ice -> water (air when ultra-warm), snow -> air
+b.t_meltable_slow = '#creativecompat:melting/meltable_slow';    // packed and blue ice: one tier down, low chance
+b.t_melt_ultrawarm_instant = '#creativecompat:melting/ultrawarm_instant'; // air the moment it is placed in the Nether
+b.t_melt_saltable = '#creativecompat:melting/saltable';        // the only targets salt melts ([melting] saltProducts)
+b.t_melt_keeps_snow = '#creativecompat:melting/keeps_snow';    // snow resting on these ignores heat and light, not salt
+b.t_melt_magma = '#creativecompat:melting/magma';              // melts snow within 2 at once, stops snow and ice forming
+b.t_melt_lava_only = '#creativecompat:melting/lava_only';      // slow targets only touching lava melts (blue ice, IW permafrost; G11)
+b.t_melt_sluggish = '#creativecompat:melting/sluggish';        // melt at [melting] sluggishMeltFactor of their chance (snow bricks; E1)
+b.t_melt_hot_biomes = '#creativecompat:melting/hot';           // BIOME tag: ice and snow melt there with no source (G11)
 b.t_biome_seasons_arid = '#creativecalendar:seasons/arid';      // BIOME tag, Creative Calendar sereneseasons/seasontags.js
 b.t_biome_seasons_tropical = '#creativecalendar:seasons/tropical'; // BIOME tag, as above
 b.t_biome_seasons_dry = '#creativecalendar:seasons/dry';            // BIOME tag, as above

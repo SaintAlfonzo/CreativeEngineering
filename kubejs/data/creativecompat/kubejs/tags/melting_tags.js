@@ -1,6 +1,6 @@
-// Creative Common melting tags (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8,
+// Creative Compat melting tags (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8,
 // plan_post_scratch_1115 E1, G11). Sources: salt melts adjacent targets, fire within 3, lava within 4 (ranges in
-// [melting], creativecommon-common.toml). Targets: meltable (ice, snow, frozen decor) and meltable_slow (packed and
+// [melting], creativecompat-common.toml). Targets: meltable (ice, snow, frozen decor) and meltable_slow (packed and
 // blue ice, IW cryosol and permafrost, AP packed ice; one tier down, only lava and magma heat them). Every mod's lines
 // are guarded by global.has, so the tags hold only loaded blocks; the Java side works with any of them empty.
 ServerEvents.tags('block', e => {

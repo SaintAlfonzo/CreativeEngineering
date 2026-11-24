@@ -147,15 +147,10 @@ public class CreativeCommon
 		// shield.ShieldCategory and Creative Brewing's Magic Resistance) + the optional "seen sources" discovery log.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.damage.DamageTagLoader.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.damage.DamageTagLogger.class);
-		// Melting: salt, fire and lava melt ice and snow (melting/, feature_writeup/melting.md)
-		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.melting.Melting.class);
-		modEventBus.addListener(com.SaintAlfonzo.creativecommon.melting.Melting::onConfig);
+		// Melting, the glass shard drops, sack sneak pick-up and Create: Gravity low gravity: Creative Compat (wave 2
+		// carve, plan_wave2_publish.md); Create: Gravity's dimension limit stays here (perf/GravityDimensions, W2-4).
 		// Wood composters, one per species (composter/, farming/composting #3, feature_writeup/composting.md)
 		com.SaintAlfonzo.creativecommon.composter.WoodComposters.register(modEventBus);
-		// Glass drops color shards (loot/GlassShardsModifier, gameplay/misc #22, feature_writeup/glass_shards.md)
-		com.SaintAlfonzo.creativecommon.loot.GlassShardsModifier.register(modEventBus);
-		// Sneak right-click picks up a sack with its contents (storage/SneakPickup, items/storage-and-item-loss #12)
-		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.storage.SneakPickup.class);
 
 		// World generation and fauna (structures, locate, earth and water fill, terrain adaptation, meta structures,
 		// sky islands, bee nests, mob spawns, mooshrooms, named mobs, leaf decay, the biome_tag loot condition, the
@@ -177,8 +172,6 @@ public class CreativeCommon
 
 			// [mod_names]: mod display names in the pack's style, before JEI/WTHIT cache them
 			com.SaintAlfonzo.creativecommon.util.ModDisplayNames.apply();
-			// Before any chunk loads: sections count their random tickers on load
-			event.enqueueWork(com.SaintAlfonzo.creativecommon.melting.Melting::initRandomTicks);
 
 			// The sawmill classes pre-loaded here for SawmillProcessMixin: Creative Engineering.
 

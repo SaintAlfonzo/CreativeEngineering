@@ -1,11 +1,11 @@
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import com.SaintAlfonzo.creativecommon.melting.Melting;
+import com.SaintAlfonzo.creativecompat.melting.Melting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -21,7 +21,7 @@ public abstract class RareIceLightMeltMixin {
 
 	@Redirect(method = "m_213898_", remap = false, require = 0, at = @At(value = "INVOKE", remap = false,
 			target = "Lnet/minecraft/server/level/ServerLevel;m_45517_(Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I"))
-	private int creativecommon$lightMelt(ServerLevel level, LightLayer layer, BlockPos pos) {
+	private int creativecompat$lightMelt(ServerLevel level, LightLayer layer, BlockPos pos) {
 		return Melting.vanillaLight(level, layer, pos);
 	}
 }

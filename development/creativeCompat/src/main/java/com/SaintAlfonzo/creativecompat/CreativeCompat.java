@@ -73,8 +73,10 @@ public class CreativeCompat {
 		// No carry-over from older files: the pack-history migrations (sections from creativeengineering-common.toml and
 		// creativecommon-common.toml, the leaf pile and pass-through table rewrites) were dropped before the first
 		// public release (publish_readiness.md PR-CP-17). The one kept: the four [jei] page switches -> [jei] pagesOff
-		// (PR-CP-11), a key rename inside this file.
+		// (PR-CP-11), a key rename inside this file; and the wave 2 carve (plan_wave2_publish.md W2-8, W2-3): [melting]
+		// from Creative Common's file and Raspberry Pie's fleetFootedFov, copied once (MovedKeys).
 		JeiPageKeys.carryOver(FILE);
+		MovedKeys.carryOver(FILE);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -100,6 +102,20 @@ public class CreativeCompat {
 		ShrapnelEntities.register(modEventBus);
 		MinecraftForge.EVENT_BUS.register(TntShrapnelHandler.class);
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.itemphysic.BurnBlastDamage.class);
+		// Moved from Creative Common in the wave 2 carve (plan_wave2_publish.md): melting (melting/; [melting], mixins
+		// MeltingBlockStateMixin, BiomeMeltMixin, VanillaLightMeltMixin, RareIceLightMeltMixin, EndFireMixin; the Saltable
+		// tooltip is melting/SaltableTooltip), the Quark glass shard drops (loot/GlassShardsModifier, feature_writeup/
+		// glass_shards.md), sack sneak pick-up (storage/SneakPickup) and Create: Gravity low gravity (gravity/LowGravity,
+		// LowGravity* mixins, CreateGravityServerStartMixin). Create: Gravity's dimension limit stays in Common (W2-4).
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.melting.Melting.class);
+		modEventBus.addListener(com.SaintAlfonzo.creativecompat.melting.Melting::onConfig);
+		com.SaintAlfonzo.creativecompat.loot.GlassShardsModifier.register(modEventBus);
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.storage.SneakPickup.class);
+		// Alex's Mobs Fleet-Footed field of view (mobs/FleetFootedFov; the fix is mixin/FleetFootedMixin), from Raspberry
+		// Pie (W2-3)
+		if (FMLEnvironment.dist == Dist.CLIENT && ModList.get().isLoaded("alexsmobs")) {
+			MinecraftForge.EVENT_BUS.addListener(EventPriority.LOW, com.SaintAlfonzo.creativecompat.mobs.FleetFootedFov::onFov);
+		}
 		// golem farm cooldown (plan_small_fixes_1116.md R2)
 		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.mobs.GolemCooldown::onDeath);
 		BurnBursts.register(ShrapnelSpawner::burst);
@@ -228,6 +244,8 @@ public class CreativeCompat {
 	}
 
 	private static void commonSetup(FMLCommonSetupEvent event) {
+		// Before any chunk loads: sections count their random tickers on load (melting)
+		event.enqueueWork(com.SaintAlfonzo.creativecompat.melting.Melting::initRandomTicks);
 		// ItemPhysicServerMixin applies when ItemPhysic first loads its server helper; pre-load the split registry it
 		// references so a late transform can resolve it.
 		if (ModList.get().isLoaded("itemphysic")) {

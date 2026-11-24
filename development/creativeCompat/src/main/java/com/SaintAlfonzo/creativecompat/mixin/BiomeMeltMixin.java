@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-only
-package com.SaintAlfonzo.creativecommon.mixin;
+package com.SaintAlfonzo.creativecompat.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.SaintAlfonzo.creativecommon.melting.Melting;
+import com.SaintAlfonzo.creativecompat.melting.Melting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelReader;
@@ -22,12 +22,12 @@ import net.minecraft.world.level.biome.Biome;
 public abstract class BiomeMeltMixin {
 
 	@Inject(method = "m_47519_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-	private void creativecommon$noSnowNearMagma(LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+	private void creativecompat$noSnowNearMagma(LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
 		if (Melting.magmaBlocksFreezing(level, pos)) cir.setReturnValue(false);
 	}
 
 	@Inject(method = "m_47480_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-	private void creativecommon$noIceNearMagma(LevelReader level, BlockPos pos, boolean mustBeAtEdge,
+	private void creativecompat$noIceNearMagma(LevelReader level, BlockPos pos, boolean mustBeAtEdge,
 			CallbackInfoReturnable<Boolean> cir) {
 		if (Melting.magmaBlocksFreezing(level, pos)) cir.setReturnValue(false);
 	}
