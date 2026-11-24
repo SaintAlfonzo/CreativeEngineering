@@ -218,6 +218,17 @@ public class RpStandaloneTest {
 		double bread = cdJson.getAsJsonObject("values").get("minecraft:bread").getAsDouble();
 		check(Double.valueOf(bread).equals(Diversity.value(Items.BREAD)), "the pack table (Creative Delight) loads on vanilla ids only, modded ids skipped (bread " + bread + ")");
 
+		// PR-RP-17: the server's table round-trips through S2CDiversity and becomes the client's.
+		com.SaintAlfonzo.solraspberrypie.net.S2CDiversity dmsg = com.SaintAlfonzo.solraspberrypie.net.S2CDiversity.current();
+		FriendlyByteBuf dbuf = new FriendlyByteBuf(Unpooled.buffer());
+		com.SaintAlfonzo.solraspberrypie.net.S2CDiversity.encode(dmsg, dbuf);
+		int dBytes = dbuf.readableBytes();
+		com.SaintAlfonzo.solraspberrypie.net.S2CDiversity back = com.SaintAlfonzo.solraspberrypie.net.S2CDiversity.decode(dbuf);
+		Diversity.use(List.of(), ForgeRegistries.ITEMS::containsKey);
+		com.SaintAlfonzo.solraspberrypie.net.S2CDiversity.applyForTest(back);
+		check(Double.valueOf(bread).equals(Diversity.value(Items.BREAD)) && dBytes < 1_000_000,
+				"the table round-trips through S2CDiversity and applies on the client (" + dBytes + " bytes)");
+
 		// P4: the name overrides in the lang file win over Apple Pie's and Carrot's own keys in any merge order.
 		JsonObject lang = JsonParser.parseString(Files.readString(root.resolve(
 				"development/solRaspberryPie/src/main/resources/assets/solraspberrypie/lang/en_us.json"), StandardCharsets.UTF_8)).getAsJsonObject();
@@ -251,6 +262,27 @@ public class RpStandaloneTest {
 		check(memory.get(carrot) >= 32 && memory.get(breadF) >= 32 && memory.get(apple) == 0, "moved foods sit at endDecay or past it " + memory.values());
 		FoodWindow.moveOut(memory, FoodWindow.windowOldestFirst(memory));
 		check(FoodWindow.diversity(memory) == 0.0 && FoodWindow.windowOldestFirst(memory).isEmpty(), "death: the whole window moves out, diversity 0");
+
+		// PR-RP-13: a state sync carries the drink list only when it changed; the client keeps its last list otherwise.
+		com.SaintAlfonzo.solraspberrypie.net.S2CState st = new com.SaintAlfonzo.solraspberrypie.net.S2CState();
+		st.hasDrinks = true;
+		st.drinks.add(new ResourceLocation("minecraft", "potion"));
+		FriendlyByteBuf sbuf = new FriendlyByteBuf(Unpooled.buffer());
+		com.SaintAlfonzo.solraspberrypie.net.S2CState.encode(st, sbuf);
+		com.SaintAlfonzo.solraspberrypie.net.S2CState sb = com.SaintAlfonzo.solraspberrypie.net.S2CState.decode(sbuf);
+		st.hasDrinks = false;
+		st.drinks.clear();
+		com.SaintAlfonzo.solraspberrypie.net.S2CState.encode(st, sbuf);
+		com.SaintAlfonzo.solraspberrypie.net.S2CState sn = com.SaintAlfonzo.solraspberrypie.net.S2CState.decode(sbuf);
+		check(sb.hasDrinks && sb.drinks.size() == 1 && !sn.hasDrinks && sn.drinks.isEmpty() && sbuf.readableBytes() == 0,
+				"a state sync carries the drink list only when it is flagged");
+
+		// PR-RP-12: the Diet Log ingredient takes any edible item and nothing inedible.
+		var edible = new com.SaintAlfonzo.solraspberrypie.recipe.EdibleIngredient(null);
+		check(edible.test(new net.minecraft.world.item.ItemStack(Items.APPLE)) && edible.test(new net.minecraft.world.item.ItemStack(Items.ROTTEN_FLESH))
+				&& !edible.test(new net.minecraft.world.item.ItemStack(Items.BOOK)) && !edible.test(net.minecraft.world.item.ItemStack.EMPTY),
+				"the edible ingredient takes apple and rotten flesh, not a book or nothing");
+		check(edible.getItems().length > 30, "the edible ingredient lists every vanilla food (" + edible.getItems().length + ")");
 
 		System.out.println(fail == 0 ? "ALL " + ok + " OK" : fail + " FAILED");
 	}

@@ -7,6 +7,7 @@ import com.SaintAlfonzo.solraspberrypie.data.RpData;
 import com.SaintAlfonzo.solraspberrypie.ladder.Ladder;
 import com.SaintAlfonzo.solraspberrypie.ladder.LadderLoader;
 import com.SaintAlfonzo.solraspberrypie.net.RpNetwork;
+import com.SaintAlfonzo.solraspberrypie.net.S2CDiversity;
 import com.SaintAlfonzo.solraspberrypie.net.S2CLadder;
 import com.SaintAlfonzo.solraspberrypie.net.S2CMessage;
 import com.tarinoita.solsweetpotato.tracking.CapabilityHandler;
@@ -69,6 +70,14 @@ public final class ServerEvents {
 	@SubscribeEvent
 	public static void commands(RegisterCommandsEvent e) {
 		RpCommands.register(e.getDispatcher());
+	}
+
+	/** PR-RP-17: the server's diversity table to a joining player, or to everyone on /reload. */
+	@SubscribeEvent
+	public static void datapackSync(net.minecraftforge.event.OnDatapackSyncEvent e) {
+		S2CDiversity msg = S2CDiversity.current();
+		if (e.getPlayer() != null) RpNetwork.toPlayer(e.getPlayer(), msg);
+		else for (ServerPlayer p : e.getPlayerList().getPlayers()) RpNetwork.toPlayer(p, msg);
 	}
 
 	@SubscribeEvent
@@ -145,6 +154,7 @@ public final class ServerEvents {
 	@SubscribeEvent
 	public static void tick(TickEvent.PlayerTickEvent e) {
 		if (e.phase != TickEvent.Phase.END || !(e.player instanceof ServerPlayer player)) return;
+		DietEngine.flushSync(player);
 		RpData d = RpData.get(player);
 		if (d.paused || d.applied.isEmpty()) {
 			d.pendingReapply = false;

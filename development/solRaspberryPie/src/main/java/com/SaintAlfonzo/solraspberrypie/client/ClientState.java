@@ -15,6 +15,7 @@ public final class ClientState {
 	}
 
 	public static void setState(S2CState s) {
+		if (!s.hasDrinks && state != null) s.drinks.addAll(state.drinks);
 		state = s;
 		if (Minecraft.getInstance().screen instanceof EffectScreen screen) screen.refresh();
 	}

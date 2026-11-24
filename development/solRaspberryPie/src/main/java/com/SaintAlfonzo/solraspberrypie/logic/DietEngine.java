@@ -304,7 +304,19 @@ public final class DietEngine {
 		return HEALTH_ID.equals(id) || Attributes.MAX_HEALTH == ForgeRegistries.ATTRIBUTES.getValue(id);
 	}
 
+	/**
+	 * Marks the player's state for the client; {@link #flushSync} sends it once at the end of the player's tick, so a
+	 * food, a slot action or a drink that touches the state several times sends one packet (PR-RP-13).
+	 */
 	public static void sync(ServerPlayer player) {
+		RpData.get(player).syncPending = true;
+	}
+
+	/** Sends the state marked by {@link #sync} (end of the player tick). */
+	public static void flushSync(ServerPlayer player) {
+		RpData d = RpData.get(player);
+		if (!d.syncPending) return;
+		d.syncPending = false;
 		RpNetwork.toPlayer(player, S2CState.of(player));
 	}
 

@@ -41,6 +41,8 @@ public final class S2CState {
 	public final Map<ResourceLocation, Integer> flat = new LinkedHashMap<>();
 	/** Effects we applied: effect -> level (what the display filter hides). */
 	public final Map<ResourceLocation, Integer> applied = new LinkedHashMap<>();
+	/** The drink list is in this packet; false = unchanged since the last one, the client keeps its list (PR-RP-13). */
+	public boolean hasDrinks;
 	public final List<ResourceLocation> drinks = new ArrayList<>();
 	/** Toggle effects of the ladder that are switched off for this player (3.3). */
 	public final Set<ResourceLocation> off = new LinkedHashSet<>();
@@ -64,7 +66,11 @@ public final class S2CState {
 		m.slots.addAll(d.slots);
 		m.flat.putAll(s.flat);
 		m.applied.putAll(d.applied);
-		m.drinks.addAll(d.drinksByRecency());
+		if (d.drinksSent != d.drinksVersion) {
+			m.hasDrinks = true;
+			m.drinks.addAll(d.drinksByRecency());
+			d.drinksSent = d.drinksVersion;
+		}
 		var ladder = com.SaintAlfonzo.solraspberrypie.ladder.Ladder.current;
 		for (ResourceLocation id : ladder.toggles.keySet()) if (!d.isOn(ladder, id)) m.off.add(id);
 		return m;
@@ -86,8 +92,11 @@ public final class S2CState {
 		for (SlotChoice c : m.slots) SlotChoice.write(buf, c);
 		writeMap(buf, m.flat);
 		writeMap(buf, m.applied);
-		buf.writeVarInt(m.drinks.size());
-		for (ResourceLocation id : m.drinks) buf.writeResourceLocation(id);
+		buf.writeBoolean(m.hasDrinks);
+		if (m.hasDrinks) {
+			buf.writeVarInt(m.drinks.size());
+			for (ResourceLocation id : m.drinks) buf.writeResourceLocation(id);
+		}
 		buf.writeVarInt(m.off.size());
 		for (ResourceLocation id : m.off) buf.writeResourceLocation(id);
 	}
@@ -109,8 +118,11 @@ public final class S2CState {
 		for (int i = 0; i < n; i++) m.slots.add(SlotChoice.read(buf));
 		readMap(buf, m.flat);
 		readMap(buf, m.applied);
-		int d = buf.readVarInt();
-		for (int i = 0; i < d; i++) m.drinks.add(buf.readResourceLocation());
+		m.hasDrinks = buf.readBoolean();
+		if (m.hasDrinks) {
+			int d = buf.readVarInt();
+			for (int i = 0; i < d; i++) m.drinks.add(buf.readResourceLocation());
+		}
 		int o = buf.readVarInt();
 		for (int i = 0; i < o; i++) m.off.add(buf.readResourceLocation());
 		return m;

@@ -68,6 +68,12 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 	public boolean pendingReapply;
 	public boolean pendingDeathMessage;
 	public float cloneHealth = -1;
+	/** The state changed since the last S2CState; sent at the end of the player tick (PR-RP-13). */
+	public boolean syncPending;
+	/** Bumped on every change of {@link #drinks}; the drink list rides on a state sync only when it moved (PR-RP-13). */
+	public int drinksVersion;
+	/** {@link #drinksVersion} last sent to this player's client; -1 = never (a new entity: login, respawn). */
+	public int drinksSent = -1;
 
 	private final LazyOptional<RpData> self = LazyOptional.of(() -> this);
 
@@ -95,6 +101,12 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 		drinks.put(id, 0);
 		Iterator<Map.Entry<ResourceLocation, Integer>> it = drinks.entrySet().iterator();
 		while (it.hasNext()) if (it.next().getValue() >= DRINK_MEMORY) it.remove();
+		drinksVersion++;
+	}
+
+	public void clearDrinks() {
+		drinks.clear();
+		drinksVersion++;
 	}
 
 	/** Drinks, most recent first. */
@@ -116,6 +128,7 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 		paused = o.paused;
 		booksGiven = o.booksGiven;
 		drinks.clear();
+		drinksVersion++;
 		drinks.putAll(o.drinks);
 		toggles.clear();
 		toggles.putAll(o.toggles);
@@ -174,6 +187,7 @@ public final class RpData implements ICapabilitySerializable<CompoundTag> {
 		paused = t.getBoolean("paused");
 		booksGiven = t.getBoolean("booksGiven");
 		drinks.clear();
+		drinksVersion++;
 		for (Tag el : t.getList("drinks", Tag.TAG_COMPOUND)) {
 			CompoundTag d = (CompoundTag) el;
 			ResourceLocation id = ResourceLocation.tryParse(d.getString("id"));

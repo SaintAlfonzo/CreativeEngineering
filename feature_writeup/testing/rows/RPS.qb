@@ -196,3 +196,30 @@ bootreject Duplicate|duplicate mod|ModFileDuplicate|DuplicateModsFoundException|
 # from jar_archive/displaced/ (@@prep run)
 shell ls mods/; grep -n "Found valid mod file solapplepie" logs/debug.log | cut -c1-220
 look srv/mods holds the loose solapplepie-1.19.2-2.2.0.jar beside the Raspberry Pie jar (ls above); one solapplepie mod loads (one `Diet ladder:` line, no duplicate error)
+
+@@section 6
+@@title SQ-RPS-11 Raspberry Pie standalone: Diet Log recipe on any food, server diversity table on the client, 2026-11-23 ([raspberry_pie.md](../raspberry_pie.md) section 13, TODO `raspberry-pie-publish #10`, `#13`)
+@@date 2026-11-23
+@@jars solraspberrypie
+@@sources feature_writeup/raspberry_pie.md development/solRaspberryPie
+@@modset rps only
+@@text
+@@text The `rps only` set with the Raspberry Pie jar built 2026-11-23 (edible-item Diet Log ingredient, state sync once per tick
+@@text with the drink list only when it changed, the server's diversity table sent to clients; network version 6).
+@@text
+@@table
+## SQ-RPS-11 | isolated: the Diet Log recipe loads with the edible-item ingredient (PR-RP-12)
+@group B
+@commands Boot with `rps only` (vanilla foods only, no `#creativedelight:` tags). `grep -nE "diet_log|solraspberrypie:edible|Parsing error loading recipe" logs/latest.log` (RPS-11)
+@pass `Done (` reached; no `Parsing error loading recipe solraspberrypie:diet_log` and no `Unknown ingredient type` line; no error naming `solraspberrypie:edible`
+@fails `recipe/EdibleIngredient.java` (serializer registered in the recipe serializer `RegisterEvent` in `SolRaspberryPie`); `data/solraspberrypie/recipes/diet_log.json`
+bootexpect Done \(
+bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
+bootreject Parsing error loading recipe solraspberrypie:diet_log|Unknown ingredient type|solraspberrypie:edible
+look the crafting checks are in CQ-RPS-12 (a client is needed to craft without KubeJS or the dev tools)
+## CQ-RPS-12 | isolated client: Diet Log from any food; a dedicated server's table reaches the client (PR-RP-12, PR-RP-17)
+@group client
+@commands Dedicated server with `rps only` whose Raspberry Pie copy carries an extra table (`rps_fixture.py table "mods/solRaspberryPie-*.jar" rps12 '{"values": {"minecraft:bread": 7.25}}'`); the client runs the plain jar (no such table). Join; hover bread; craft book + rotten flesh, book + cooked cod, book + golden carrot, book + carrot, book + potion; open the Liquid Diet Log after drinking two potions, eat a food, drink a third (RPS-12)
+@pass client log: one `Diversity table from the server: 1 values, 0 family members; 0 ids unknown to this client`; bread's tooltip diversity value is 7.25 (the server's), not Apple Pie's own; book + rotten flesh, cooked cod and golden carrot each give a Diet Log; book + carrot stays the Food Dictionary's recipe and book + potion gives the Liquid Diet Log; the Liquid Diet Log lists the drinks newest first, still after the food (the state sync without a drink list keeps the client's list) and with the third drink on top
+@fails `net/S2CDiversity.java`, `logic/Diversity.java` (`load` must not read the client's jars without an integrated server; `applyRemote`), `ServerEvents.datapackSync`; `recipe/EdibleIngredient.java`; `S2CState.hasDrinks` and `ClientState.setState` (drink list kept)
+@draft client steps: dedicated server plus a client join with the capture driver; the fixture goes in the server's jar copy only

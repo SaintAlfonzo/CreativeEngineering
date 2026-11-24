@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /** Raspberry Pie's channel (13.3): ladder, player state, messages and previews to the client; slot actions to the server. */
 public final class RpNetwork {
-	private static final String VERSION = "5"; // bump on any packet layout change (5: ladder replacements)
+	private static final String VERSION = "6"; // bump on any packet layout change (5: ladder replacements; 6: drinks only when changed, diversity table)
 	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
 			new ResourceLocation(SolRaspberryPie.MOD_ID, "main"), () -> VERSION, VERSION::equals, VERSION::equals);
 
@@ -23,6 +23,7 @@ public final class RpNetwork {
 		CHANNEL.registerMessage(id++, S2CMessage.class, S2CMessage::encode, S2CMessage::decode, S2CMessage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		CHANNEL.registerMessage(id++, S2CPreview.class, S2CPreview::encode, S2CPreview::decode, S2CPreview::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 		CHANNEL.registerMessage(id++, C2SAction.class, C2SAction::encode, C2SAction::decode, C2SAction::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+		CHANNEL.registerMessage(id++, S2CDiversity.class, S2CDiversity::encode, S2CDiversity::decode, S2CDiversity::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
 	}
 
 	public static void toPlayer(ServerPlayer player, Object msg) {

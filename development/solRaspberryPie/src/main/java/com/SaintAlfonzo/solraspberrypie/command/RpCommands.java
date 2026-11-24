@@ -101,7 +101,7 @@ public final class RpCommands {
 			data.maxDiversity = 0;
 			data.gateOpened = false;
 			data.slots.clear();
-			data.drinks.clear();
+			data.clearDrinks();
 			data.toggles.clear();
 			data.regenAnchor = -1;
 			data.stamp++;

@@ -52,6 +52,9 @@ public final class SolRaspberryPie {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		ITEMS.register(modBus);
 		SERIALIZERS.register(modBus);
+		modBus.addListener((net.minecraftforge.registries.RegisterEvent e) -> {
+			if (e.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) com.SaintAlfonzo.solraspberrypie.recipe.EdibleIngredient.Serializer.register();
+		});
 		modBus.addListener(this::setup);
 		modBus.addListener((RegisterCapabilitiesEvent e) -> e.register(RpData.class));
 		ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, RpConfig.SERVER_SPEC);
