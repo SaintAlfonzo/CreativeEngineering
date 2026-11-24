@@ -11,14 +11,15 @@ Raspberry Pie low-priority cleanups without a ruling (#12, #14 to #20).
 
 ## 0. Rulings (owner, 2026-11-23, AskUserQuestion)
 
-<!-- generated:status_index begin open_work sha1=dda3ebdcacbc -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=80b487291cd3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 2, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-common-publish #16` | Planned | SQ-CC12-01 SQ-CC12-02 SQ-CMV-02 SQ-CC-03 SQ-CGE-15 SQ-CPP-05 SQ-CCO-12a SQ-CCO-12b SQ-CCO-12c SQ-CCO-12d SQ-CCO-12e SQ-CCO-12f | NCH composter -> vanilla shapeless recipes name modded composters (twisted, ancient, blossom, azalea) when their mods are absent |
 | `kitchen #41` | Planned |  | Storage Delight cabinets as half cabinets (high priority) |
 | `storage-and-item-loss #17` | Planned |  | Trash can inventory slots (high priority) |
+| `creative-common-publish #16` | Testing | SQ-CC12-01 SQ-CC12-02 SQ-CMV-02 SQ-CC-03 SQ-CGE-15 SQ-CPP-05 SQ-CCO-12a SQ-CCO-12b SQ-CCO-12c SQ-CCO-12d SQ-CCO-12e SQ-CCO-12f | NCH composter -> vanilla shapeless recipes name modded composters (twisted, ancient, blossom, azalea) when their mods are absent |
+| `tooling/design-rules #4` | Testing |  | Palette test tooltips off before distribution |
 <!-- generated:status_index end open_work -->
 
 | # | Question | Ruling |
@@ -27,6 +28,7 @@ Raspberry Pie low-priority cleanups without a ruling (#12, #14 to #20).
 | R2 | Half cabinet textures | Model UVs crop the existing Storage Delight full-cabinet textures; no new texture files |
 | R3 | Scope of `publish-readiness #6` | All temporary exemptions in this plan, the Creative Delight package and own-id renames with save swaps included |
 | R4 | Phase order | Fixes, then publish rules, then features (sections 2 to 9 below in that order) |
+| R5 | Diet Log in the pack, now that the pack's override recipe is gone (removed 2026-11-21) and the jar recipe takes any edible item | Exclude non-foods and drinks: the pack adds them to the jar's exclusion tag (owner, 2026-11-23) |
 
 Earlier rulings this plan carries: `kitchen #41`, `storage-and-item-loss #17`, `creative-compat-publish #7`,
 `publish-readiness #6`, `raspberry-pie-publish #10` and `#13` (owner, 2026-11-22 and 2026-11-23, in the rows);

@@ -240,5 +240,5 @@
 [tooltips]
 	#true: White Wool and White Concrete show the color palette test tooltips (every tooltip role and
 	#text color). Default false. Read when the client scripts load: a change applies after a client restart.
-	paletteDemo = true
+	paletteDemo = false
 

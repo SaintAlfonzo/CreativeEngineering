@@ -10,7 +10,7 @@
 (function () {
 var i = global.item
 
-// [composter, slab]; the composters always exist, the Quark and Architect's Palette slabs only with their mods
+// [composter, slab]; the modded composters and their slabs exist only with their mods (Architect's Palette, Quark)
 var species = [
 	[i.composter_spruce, i.slab_spruce],
 	[i.composter_birch, i.slab_birch],
@@ -21,11 +21,11 @@ var species = [
 	[i.composter_crimson, i.slab_crimson],
 	[i.composter_warped, i.slab_warped],
 ]
-var modded = [i.composter_twisted, i.composter_ancient, i.composter_blossom, i.composter_azalea]
 var loaded = species.slice()
 if (global.has('architects_palette')) loaded.push([i.composter_twisted, i.slab_twisted])
 if (global.has('quark')) loaded.push([i.composter_ancient, i.slab_ancient], [i.composter_blossom, i.slab_blossom], [i.composter_azalea, i.slab_azalea])
-var composters = [i.composter].concat(species.map(s => s[0]), modded)
+// only loaded composters: an absent mod's composter would make the NCH shapeless recipe and the tag entries fail
+var composters = [i.composter].concat(loaded.map(s => s[0]))
 
 ServerEvents.recipes(e => {
 	var R = global.NCH.forPack('creativecommon')
