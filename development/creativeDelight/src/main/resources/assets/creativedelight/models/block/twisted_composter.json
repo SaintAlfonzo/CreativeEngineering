@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/composter",
+  "textures": {
+    "particle": "creativedelight:block/twisted_composter_side",
+    "top": "creativedelight:block/twisted_composter_top",
+    "bottom": "creativedelight:block/twisted_composter_bottom",
+    "side": "creativedelight:block/twisted_composter_side",
+    "inside": "creativedelight:block/twisted_composter_bottom"
+  }
+}

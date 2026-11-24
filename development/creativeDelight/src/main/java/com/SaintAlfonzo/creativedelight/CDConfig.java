@@ -84,6 +84,14 @@ public final class CDConfig {
 	public static final String COMPAT_FILE = "creativecompat-common.toml";
 	public static final List<String> COMPAT_SECTIONS = List.of("campfire");
 
+	/**
+	 * Sections that moved here from Creative Common in the wave 2 carve (plan_wave2_publish.md W2-8): carried once from
+	 * {@link #COMMON_FILE} (carry when this file is new, merge when it exists); Creative Common drops them from its own
+	 * file when Forge corrects it.
+	 */
+	public static final String COMMON_FILE = "creativecommon-common.toml";
+	public static final List<String> COMMON_SECTIONS = List.of("bees");
+
 	public static final ForgeConfigSpec SPEC;
 	public static final CropGrowth CROP_GROWTH;
 	public static final CropDrops CROP_DROPS;
@@ -98,6 +106,7 @@ public final class CDConfig {
 	/** {@code [worldgen] wildCropCanopyProofHeightmap} (crops.CanopyProofHeightmap, plan_post_scratch_1115 E2). */
 	public static final ForgeConfigSpec.BooleanValue WILD_CROP_CANOPY_PROOF;
 	public static final Cfb CFB;
+	public static final Bees BEES;
 	public static final Incubation INCUBATION;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> QOL = new LinkedHashMap<>();
@@ -190,6 +199,8 @@ public final class CDConfig {
 		LAMP = new Lamp(b);
 		CFB = new Cfb(b);
 		INCUBATION = new Incubation(b);
+		// [bees]: from creativecommon-common.toml (wave 2 carve, COMMON_SECTIONS)
+		BEES = new Bees(b);
 		SPEC = b.build();
 		com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.bind(SPEC);
 	}
@@ -944,6 +955,20 @@ public final class CDConfig {
 							"Does nothing without Untitled Duck Mod and Vintage Delight.")
 					.defineInRange("goldenEggChance", 1000, 0, 1_000_000);
 			b.pop();
+		}
+	}
+
+	/** {@code mixin/minecraft/BeehiveHoneycombMixin}: honeycomb from shearing a full hive or nest (farming_crops A9). */
+	public static final class Bees {
+		public final ForgeConfigSpec.IntValue honeycombMultiplier;
+
+		private Bees(ForgeConfigSpec.Builder b) {
+			b.comment("Bees.").push("bees");
+			honeycombMultiplier = b.comment(
+					"Multiplies the honeycomb a full hive or nest drops when sheared (by hand or by a dispenser).",
+					"Vanilla drops 3, so 2 gives 6. 1 = vanilla (default). Read live."
+			).defineInRange("honeycombMultiplier", 1, 1, 16);
+			b.pop(); // bees
 		}
 	}
 }

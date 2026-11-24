@@ -7,7 +7,9 @@
 		"defaultRequire": 1
 	},
 	"mixins": [
-		"LootModifierManagerMixin"
+		"LootModifierManagerMixin",
+		"WanderingTraderSpawnerMixin",
+		"WanderingTraderTradesMixin"
 	],
 	"client": [],
 	"server": []

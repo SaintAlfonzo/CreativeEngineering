@@ -149,8 +149,8 @@ public class CreativeCommon
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecommon.damage.DamageTagLogger.class);
 		// Melting, the glass shard drops, sack sneak pick-up and Create: Gravity low gravity: Creative Compat (wave 2
 		// carve, plan_wave2_publish.md); Create: Gravity's dimension limit stays here (perf/GravityDimensions, W2-4).
-		// Wood composters, one per species (composter/, farming/composting #3, feature_writeup/composting.md)
-		com.SaintAlfonzo.creativecommon.composter.WoodComposters.register(modEventBus);
+		// Wood composters and [bees] honeycombMultiplier: Creative Delight; the Wandering Trader spawn wait and offer
+		// counts ([wandering_trader]): Creative Loot (wave 2 carve, plan_wave2_publish.md W2-2, W2-9). Trade Sync stays here.
 
 		// World generation and fauna (structures, locate, earth and water fill, terrain adaptation, meta structures,
 		// sky islands, bee nests, mob spawns, mooshrooms, named mobs, leaf decay, the biome_tag loot condition, the

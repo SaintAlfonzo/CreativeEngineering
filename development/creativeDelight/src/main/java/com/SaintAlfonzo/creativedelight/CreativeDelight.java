@@ -66,6 +66,10 @@ public class CreativeDelight {
 		// endersdelight:, so saves need no swap list.
 		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("enders_additions-common.toml", "endersadditions-common.toml");
 		com.SaintAlfonzo.creativedelight.compat.MemberConfigMove.carryRenamedMemberSwitches();
+		// [bees] moved here from Creative Common (wave 2 carve, plan_wave2_publish.md W2-8): the player's value carried once.
+		// ConfigRename logs a [swaps] line when it copies.
+		if (!com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(CDConfig.COMMON_FILE, CDConfig.FILE, CDConfig.COMMON_SECTIONS))
+			com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(CDConfig.COMMON_FILE, CDConfig.FILE, CDConfig.COMMON_SECTIONS);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CDConfig.SPEC, CDConfig.FILE);
 		// Hooks in Creative Common and Creative Compat (vine shearing, stuck-in-block speeds, jar families, the sample
 		// syringe JEI tab, idle random tick rules)
@@ -91,6 +95,8 @@ public class CreativeDelight {
 		com.SaintAlfonzo.creativedelight.fats.WhaleOilLamp.register(FMLJavaModLoadingContext.get().getModEventBus());
 		// Placeable plain and flavored popcorn boxes (food/seasoning #3), with Corn Delight only
 		com.SaintAlfonzo.creativedelight.food.popcorn.PopcornBoxes.register(FMLJavaModLoadingContext.get().getModEventBus());
+		// Wood composters, one per species (farm/composter/, feature_writeup/composting.md); moved from Creative Common (W2-9)
+		com.SaintAlfonzo.creativedelight.farm.composter.WoodComposters.register(FMLJavaModLoadingContext.get().getModEventBus());
 		registerKitchen(FMLJavaModLoadingContext.get().getModEventBus());
 		registerCompartments(FMLJavaModLoadingContext.get().getModEventBus());
 

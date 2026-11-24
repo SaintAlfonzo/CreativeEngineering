@@ -1,0 +1,41 @@
+{
+  "_comment": "Wood composters moved from creativecommon (wave 2 carve, plan_wave2_publish.md W2-9, creative-common-publish #18, 2026-11-24): saves with the Common ids. Read by Creative Common's SwapLists. Never prune.",
+  "replaces": {
+    "creativedelight:spruce_composter": [
+      "creativecommon:spruce_composter"
+    ],
+    "creativedelight:birch_composter": [
+      "creativecommon:birch_composter"
+    ],
+    "creativedelight:dark_oak_composter": [
+      "creativecommon:dark_oak_composter"
+    ],
+    "creativedelight:jungle_composter": [
+      "creativecommon:jungle_composter"
+    ],
+    "creativedelight:acacia_composter": [
+      "creativecommon:acacia_composter"
+    ],
+    "creativedelight:mangrove_composter": [
+      "creativecommon:mangrove_composter"
+    ],
+    "creativedelight:twisted_composter": [
+      "creativecommon:twisted_composter"
+    ],
+    "creativedelight:ancient_composter": [
+      "creativecommon:ancient_composter"
+    ],
+    "creativedelight:blossom_composter": [
+      "creativecommon:blossom_composter"
+    ],
+    "creativedelight:azalea_composter": [
+      "creativecommon:azalea_composter"
+    ],
+    "creativedelight:crimson_composter": [
+      "creativecommon:crimson_composter"
+    ],
+    "creativedelight:warped_composter": [
+      "creativecommon:warped_composter"
+    ]
+  }
+}

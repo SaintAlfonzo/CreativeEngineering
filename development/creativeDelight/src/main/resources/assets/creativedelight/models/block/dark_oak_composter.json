@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/composter",
+  "textures": {
+    "particle": "creativedelight:block/dark_oak_composter_side",
+    "top": "creativedelight:block/dark_oak_composter_top",
+    "bottom": "creativedelight:block/dark_oak_composter_bottom",
+    "side": "creativedelight:block/dark_oak_composter_side",
+    "inside": "creativedelight:block/dark_oak_composter_bottom"
+  }
+}

@@ -111,7 +111,6 @@ ServerEvents.tags('item', e => {
 		i.any_wooden_pressure_plates, i.t_fence_gates_wooden,
 		i.any_sign, i.t_boats, i.any_banner,
 		i.wooden_chest, i.any_stick,
-		i.t_composters,   // vanilla and the 12 wood composters (crimson and warped float like the nether planks)
 		// plant / organic
 		i.t_saplings, i.t_leaves, i.t_flowers,
 		// textile / fibre / hide
@@ -123,6 +122,9 @@ ServerEvents.tags('item', e => {
 		'#minecraft:fishes',
 	])
 	if (recycle) physicsFromTag(e, 'floats', [i.scrap_wood_small, i.scrap_wood_medium, i.scrap_wood_large])
+	// the 12 wood composters and vanilla's: Creative Delight's tag (crimson and warped float like the nether planks);
+	// vanilla's composter is also listed in (b)
+	if (global.has('creativedelight')) physicsFromTag(e, 'floats', [i.t_composters])
 	// (b) explicit vanilla items with no clean tag of their own
 	add('floats', mc([
 		'mangrove_roots', 'sponge',                                          // (pack originals)

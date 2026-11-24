@@ -93,5 +93,17 @@
   "creativedelight.campfire.unlit": "Requires a spark or flame to light",
   "creativedelight.campfire.unlit_soul": "Requires a spark or soulflame to light",
   "creativedelight.campfire.torch": "A torch lights it",
-  "creativedelight.campfire.torch_soul": "A soul torch lights it"
+  "creativedelight.campfire.torch_soul": "A soul torch lights it",
+  "block.creativedelight.spruce_composter": "Spruce Composter",
+  "block.creativedelight.birch_composter": "Birch Composter",
+  "block.creativedelight.dark_oak_composter": "Dark Oak Composter",
+  "block.creativedelight.jungle_composter": "Jungle Composter",
+  "block.creativedelight.acacia_composter": "Acacia Composter",
+  "block.creativedelight.mangrove_composter": "Mangrove Composter",
+  "block.creativedelight.twisted_composter": "Twisted Composter",
+  "block.creativedelight.ancient_composter": "Ancient Composter",
+  "block.creativedelight.blossom_composter": "Blossom Composter",
+  "block.creativedelight.azalea_composter": "Azalea Composter",
+  "block.creativedelight.crimson_composter": "Crimson Composter",
+  "block.creativedelight.warped_composter": "Warped Composter"
 }

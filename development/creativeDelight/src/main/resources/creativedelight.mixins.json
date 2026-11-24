@@ -19,6 +19,7 @@
     "fruitsdelight.FruitBushPickSoilYieldMixin",
     "nethersdelight.NethersPickSoilYieldMixin",
     "minecraft.SweetBerryPickSoilYieldMixin",
+    "minecraft.BeehiveHoneycombMixin",
     "fruitsdelight.FruitsDelightEffectFuncMixin",
     "farmersdelight.CookingPotRemainderMixin",
     "farmersdelight.CookingPotMenuRemainderMixin",

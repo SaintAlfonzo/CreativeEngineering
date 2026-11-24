@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/composter",
+  "textures": {
+    "particle": "creativedelight:block/acacia_composter_side",
+    "top": "creativedelight:block/acacia_composter_top",
+    "bottom": "creativedelight:block/acacia_composter_bottom",
+    "side": "creativedelight:block/acacia_composter_side",
+    "inside": "creativedelight:block/acacia_composter_bottom"
+  }
+}

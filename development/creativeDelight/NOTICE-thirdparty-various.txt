@@ -8,6 +8,12 @@ Powdered sugar block texture: recoloured from Immersive Weathering's vitrified s
 Keybounce, GNU LGPL v3 (text below). Powdered sugar bucket: recoloured from the Minecraft powder snow bucket (Mojang
 Studios).
 
+Wood composter textures (assets/creativedelight/textures/block/*_composter_*.png): the shape is the vanilla Minecraft
+composter (Mojang Studios); each wood's colors are taken from that wood's planks texture: vanilla for spruce, birch,
+dark oak, jungle, acacia, mangrove, crimson and warped; Quark 3.4-418 by Vazkii and contributors for ancient, blossom
+and azalea; Architect's Palette 1.3.5 by Slomaxonical and contributors for twisted. Only the planks' colors are used;
+no pixels are copied from those mods.
+
 The Cooking for Blockheads rack and fruit basket textures and the Incubation nest, egg and crate textures are not in
 this jar: they are built on the player's client from the installed mods' own art when resources load.
 
