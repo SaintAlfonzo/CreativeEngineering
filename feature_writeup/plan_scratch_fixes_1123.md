@@ -44,9 +44,9 @@ the owner's chat request 2026-11-23. Session role for the build: `impl` (one cod
 | R3 | dragon loot 2 full armor bars, tune helmet to fit | premise | 40 points: helmet 9, chestplate 12 (upgraded chestplate 12), leggings 11, boots 8. Toughness, knockback, durability unchanged. Must actually apply in game. | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | R4 | add a magic resistance jeed description | premise | Text stays. Add a JEED effect provider for Magic Resistance listing the Felsic gear that gives it; SQ-CBO-36 moves to `creativecommon:magic_resistance`. | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | R5 | rewrite the old tests | open | The rows the r1123 judges flagged (section 6), not the whole prescreen-stale list. | 2026-11-23 | AskUserQuestion 2026-11-23 |
-| R6 | guards on the creative loot PC/LC issue | clear | A ban skips its `modLootOn` read when the banned mod is not loaded (one INFO line at most, no WARN). | 2026-11-23 | agent default, unconfirmed |
-| R7 | dragon armor route | clear | Set the values in the Dragon Loot config (`dragon_armor_protection_*`, hand-edited config, copy in `configs_edited/root_config/`) and keep `tune_armor.js` in step with a comment that the Dragon Loot config is authoritative; only if the config route cannot give 12 to both chestplates, fix the tune path instead. | 2026-11-23 | agent default, unconfirmed |
-| R8 | JEED provider home | clear | The Magic Resistance provider lives with the gear rows in Creative Equipment (gear effects are Equipment's since 2026-11-06), guarded on JEED being loaded. | 2026-11-23 | agent default, unconfirmed |
+| R6 | guards on the creative loot PC/LC issue | clear | A ban skips its `modLootOn` read when the banned mod is not loaded (one INFO line at most, no WARN). | 2026-11-23 | agent default, confirmed by the owner (chat 2026-11-23) |
+| R7 | dragon armor route | clear | Set the values in the Dragon Loot config (`dragon_armor_protection_*`, hand-edited config, copy in `configs_edited/root_config/`) and keep `tune_armor.js` in step with a comment that the Dragon Loot config is authoritative; only if the config route cannot give 12 to both chestplates, fix the tune path instead. | 2026-11-23 | agent default, confirmed by the owner (chat 2026-11-23) |
+| R8 | JEED provider home | clear | The Magic Resistance provider lives with the gear rows in Creative Equipment (gear effects are Equipment's since 2026-11-06), guarded on JEED being loaded. | 2026-11-23 | agent default, confirmed by the owner (chat 2026-11-23) |
 
 ## 2. Rows
 
