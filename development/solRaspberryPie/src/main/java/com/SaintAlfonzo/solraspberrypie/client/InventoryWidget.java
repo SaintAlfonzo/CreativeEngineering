@@ -113,7 +113,7 @@ public final class InventoryWidget {
 
 	private static List<Component> tooltip(Cell c) {
 		List<Component> tip = new ArrayList<>();
-		tip.add(DietEngine.effectName(c.effect, c.level));
+		tip.add(DietEngine.effectName(ClientState.ladder, c.effect, c.level));
 		EffectScreen.addTagline(tip, ClientState.ladder, c.effect, c.level);
 		if (c.flat) {
 			double at = 0;

@@ -39,6 +39,6 @@ public class RpJeiPlugin implements IModPlugin {
 
 	@Override
 	public void onRuntimeAvailable(IJeiRuntime runtime) {
-		runtime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, List.of(new ItemStack(SolRaspberryPie.MARKER.get())));
+		runtime.getIngredientManager().removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, List.of(new ItemStack(SolRaspberryPie.MARKER.get()), new ItemStack(SolRaspberryPie.ADJUSTMENT.get())));
 	}
 }

@@ -39,6 +39,12 @@ public final class SolRaspberryPie {
 			() -> new LiquidDietLogItem(new Item.Properties().stacksTo(1).tab(net.minecraft.world.item.CreativeModeTab.TAB_MISC)));
 	/** Curative-item marker on every diet effect instance (9.1). Nothing cures with it; it only identifies ours. */
 	public static final RegistryObject<Item> MARKER = ITEMS.register("diet_marker", () -> new Item(new Item.Properties()));
+	/**
+	 * The "Adjustment" food-window entry of {@code /solrp diversity set}: not edible, no tab, hidden from JEI; its
+	 * diversity value rides on the window entry ({@link com.SaintAlfonzo.solraspberrypie.data.DietAdjustment}).
+	 */
+	public static final RegistryObject<Item> ADJUSTMENT = ITEMS.register("diet_adjustment", () -> new Item(new Item.Properties()));
+	public static final net.minecraft.resources.ResourceLocation ADJUSTMENT_ID = new net.minecraft.resources.ResourceLocation(MOD_ID, "diet_adjustment");
 	public static final RegistryObject<RecipeSerializer<DietBookRecipe>> DIET_BOOK =
 			SERIALIZERS.register("diet_book", DietBookRecipe.Serializer::new);
 

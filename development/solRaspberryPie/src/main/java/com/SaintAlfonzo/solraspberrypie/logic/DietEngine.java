@@ -207,10 +207,20 @@ public final class DietEngine {
 		}
 	}
 
+	/** The effect's name with its level numeral, as named by the server's ladder ({@link Ladder#current}). */
 	public static Component effectName(ResourceLocation id, int level) {
+		return effectName(Ladder.current, id, level);
+	}
+
+	/**
+	 * The effect's name with its level numeral; no numeral at level 0 or below, and none at level 1 when the ladder
+	 * never names a higher level of the effect (a level-1-only effect reads "Night Vision", not "Night Vision I").
+	 */
+	public static Component effectName(Ladder ladder, ResourceLocation id, int level) {
 		MobEffect e = ForgeRegistries.MOB_EFFECTS.getValue(id);
 		Component base = e != null ? e.getDisplayName() : Component.literal(id.toString());
 		if (level <= 0) return base;
+		if (level == 1 && ladder != null && ladder.maxLevel(id) == 1) return base;
 		return Component.empty().append(base).append(" ").append(Component.translatable("enchantment.level." + level));
 	}
 

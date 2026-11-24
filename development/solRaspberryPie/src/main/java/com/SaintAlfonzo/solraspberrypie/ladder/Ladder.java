@@ -127,6 +127,18 @@ public final class Ladder {
 		return Math.min(best, cap);
 	}
 
+	/**
+	 * The highest level this ladder ever names for an effect: its pool cap and every flat and unlock rung of it; 0 when
+	 * the ladder does not name it. An effect whose highest level is 1 shows no level numeral (effectName).
+	 */
+	public int maxLevel(ResourceLocation effect) {
+		int best = pool.getOrDefault(effect, 0);
+		for (Rung r : rungs) {
+			if ((r.kind == Rung.Kind.FLAT || r.kind == Rung.Kind.UNLOCK) && effect.equals(r.id)) best = Math.max(best, r.level);
+		}
+		return best;
+	}
+
 	public double maxThreshold() {
 		return rungs.isEmpty() ? 0 : rungs.get(rungs.size() - 1).threshold;
 	}

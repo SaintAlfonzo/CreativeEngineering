@@ -864,3 +864,79 @@ look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the forme
 @pass tooltip and JEI list Patrol Nullifier and Phantom Bane under "When Applied:"; both are in the effect data with no icon, same time as Emptiness; clearing Emptiness removes both hidden copies (a beacon's own Phantom Bane stays); no phantoms or patrols come while it lasts
 @fails `EmptinessParts`, `CompoundEffects` entry `botania:emptiness`, Better Beacons' patrol and phantom checks
 @draft written with the build 2026-11-23
+
+@@section 7
+@@title RPI owner notes 2026-11-23: diversity and ladder commands, Stimulation, level numeral, reached icons ([raspberry_pie.md](../raspberry_pie.md) 12.14, TODO `food-tuning #63`)
+@@date 2026-11-23
+@@jars solraspberrypie
+@@sources feature_writeup/raspberry_pie.md feature_writeup/plan_rp_standalone.md
+@@text
+@@text `solRaspberryPie-1.0.0.jar` built 2026-11-23 (install state: `python3 tools/jarstamp.py pending`) and the regenerated
+@@text pack ladder (83 rungs, Stimulation unlock at 45). The world must hold that ladder: a fresh world, or `/solrp ladder reset`.
+@@text Commands need permission 2 and an online real player (client rows).
+@@text
+@@table
+
+## CQ-RPI-83 | /solrp diversity set raises current and highest (food-tuning #63)
+@group client
+@commands New world, eat 5 different foods, `/solrp diversity set @s 60`; open the Diet Log meal list and Ladder page
+@pass the meal list shows one "Adjustment" entry; current and highest diversity both read 60; unlocks up to 60 are active; `/solrp diversity get @s` prints current 60 and highest 60
+@fails `SolRpCommands` diversity set, `FoodInstanceMixin`, `FoodListMixin.getComplexity`, item `solraspberrypie:diet_adjustment`
+@draft written with the build 2026-11-23
+
+## CQ-RPI-84 | /solrp diversity set lower drops unlocks and clamps slots (food-tuning #63)
+@group client
+@commands After CQ-RPI-83 with slots filled with unlocks above 20, `/solrp diversity set @s 20`
+@pass highest becomes 20; unlocks above 20 are lost; a slot holding a lost effect drops to the highest still-unlocked level or empty; permanent rungs above 20 are off
+@fails `DietEngine` reevaluation after set, slot clamp
+@draft written with the build 2026-11-23
+
+## CQ-RPI-85 | /solrp diversity set with the unique-food gate closed (food-tuning #63)
+@group client
+@commands New world, eat 2 different foods, `/solrp diversity set @s 50`
+@pass the command reply says how many unique foods are missing; bonuses stay off until the gate opens, then apply at 50
+@fails gate check in the diversity command
+@draft written with the build 2026-11-23
+
+## CQ-RPI-86 | Adjustment entry survives relog and ages out (food-tuning #63)
+@group client
+@commands `/solrp diversity set @s 40`, relog (or restart), open the Diet Log; then eat meals until the window ages it out
+@pass the Adjustment entry and diversity 40 are still there after relog (Apple Pie NBT key `solrp_adjust`); it leaves the window like a meal and diversity falls accordingly; the item is not edible, not in the creative tab or JEI
+@fails `FoodInstanceMixin` save and sync of `solrp_adjust`
+@draft written with the build 2026-11-23
+
+## CQ-RPI-87 | /solrp ladder reset (food-tuning #63)
+@group client
+@commands In a world holding an old ladder copy, `/solrp ladder reset`; read the server log and the world's `serverconfig/solraspberrypie/`; open the Diet Log Milestones
+@pass the old file is renamed `ladder.json.YYYY-MM-DD_HHMM.bak`; a fresh `ladder.json` equals `defaultconfigs/solraspberrypie/ladder.json`; log shows a `Diet ladder: 83 rungs, 5 slots, 39 pool effects` start line; the client shows the new rungs without relog; online players are re-evaluated
+@fails ladder reset command, `LadderLoader`, ladder re-send packet
+@draft written with the build 2026-11-23
+
+## CQ-RPI-88 | Stimulation unlock replaces Refreshing and Sweetening (food-tuning #63)
+@group client
+@commands `/solrp diversity set @s 50`; fill slots with Refreshing and Sweetening, then with Stimulation; read the Ladder page tagline
+@pass Stimulation unlocks at 45 with the tagline "Slowness and Mining Fatigue immunity"; slotting it replaces Refreshing and Sweetening; switching it off leaves no stray effects
+@fails `tools/gen_rp_ladder.py` / `rp_ladder.csv` replace pair, Stimulation expiry procedure
+@draft written with the build 2026-11-23
+
+## CQ-RPI-89 | no numeral on single-level effects (food-tuning #63)
+@group client
+@commands `/solrp diversity set @s 60`; look at Night Vision and Speed in the Ladder bar, Milestones, effect screen, inventory widget, a gain chat line and the confirm panel
+@pass "Night Vision" never carries "I" in any of them; Speed keeps its level numeral
+@fails `Ladder.maxLevel`, `DietEngine.effectName`, client ladder sync
+@draft written with the build 2026-11-23
+
+## CQ-RPI-90 | reached permanent icon is steady (food-tuning #63)
+@group client
+@commands Diet Log Ladder bar and Milestones at a diversity that has reached some permanent buffs and not others
+@pass reached permanent buffs show the effect icon alone in the kind-colored frame, no diamond shard flicker; unreached ones still alternate shard and effect
+@fails `DietLogPages.drawIcon`
+@owner true
+@draft look-check, written with the build 2026-11-23
+
+## CQ-RPI-91 | /solrp diversity get (food-tuning #63)
+@group client
+@commands `/solrp diversity get <other player>` as an operator; as a non-operator
+@pass an operator gets current and highest diversity of that player; a non-operator is refused
+@fails command permission level 2
+@draft written with the build 2026-11-23

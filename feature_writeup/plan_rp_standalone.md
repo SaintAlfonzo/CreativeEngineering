@@ -256,8 +256,8 @@ Built in the jar (raspberry_pie.md 12.12):
   a slot holding one is covered and no longer applied, one yellow chat line names the pair. The pack ladder gets them
   from `rp_ladder.json` `replaces` through `gen_rp_ladder.py`: Clinging replaces Climbing, Recovering replaces Poison
   Immunity and Wither Immunity, Stimulation replaces Refreshing and Sweetening (written
-  only while Stimulation is on the unlock ladder; it is not, per the 2026-11-21 ruling, and the 2026-11-22 scratchpad
-  ruling "Stimulation replaces Refreshing and Sweetening when unlocked" needs Stimulation back in `rp_ladder.csv`: owner).
+  only while Stimulation is on the unlock ladder; the 2026-11-21 ruling dropped it, and the 2026-11-22 scratchpad
+  ruling "Stimulation replaces Refreshing and Sweetening when unlocked" needed Stimulation back in `rp_ladder.csv`: resolved 2026-11-23, Stimulation is back at position 21 and the pair is written; raspberry_pie.md 12.14).
 - **Covered slots (#50).** A slot whose effect is held by an active permanent buff or replaced by an unlock shows grayed
   with "Covered by a permanent buff" or "Replaced by X" and "Changing this slot is free"; its Change ages out no foods.
 - **Fleet-Footed field of view (#55).** Client config `effects.fleetFootedFov` (default 0.25): the share of the view

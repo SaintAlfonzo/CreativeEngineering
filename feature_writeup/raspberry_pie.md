@@ -213,7 +213,7 @@ Not slottable:
 | Nourishment, Comfort, Saturation | remove the reason to eat varied food (Saturation, shown as Satiated, is allowed as a permanent buff only, V10 exception, owner 2026-11-21: the pack ladder's last rung at 100) |
 | Invisibility, Hero of the Village | remove a mechanic (mobs and PvP, villager and Lightman's Currency prices). Fire Resistance was on this row; it is an unlock on both ladders since 2026-11-21 |
 | Dolphin's Grace, Conduit Power | owner rule |
-| Caffeinated, Rest, Stimulation, Ender Phasing, Raging | logic on expiry or removal would fire on every switch-off; check each before allowing |
+| Caffeinated, Rest, Ender Phasing, Raging | logic on expiry or removal would fire on every switch-off; check each before allowing. Stimulation was read 2026-11-23 and is slottable (its expiry only removes Slowness and Mining Fatigue) |
 | Lava Walker (Vinery) | slottable only after a Vinery change: walking on lava burns like a magma block unless the player has Fire Resistance, and dropping into lava burns as usual. Vinery is our port in Creative Brewing (`members/vinery`), so the change is ours to make. **Decided 2026-11-12:** the change goes into the Vinery port (a player-visible behavior change there; note it in that member's writeup and the changelog when built) |
 | Fleet-Footed (Alex's Mobs) | **slottable with a mixin fix (decided 2026-11-12).** +20% move speed only while sprinting and airborne, so a jump-sprint boost. Its timer state lives in fields on the shared effect object, so in multiplayer all players with it share one timer (flicker or a stuck bonus). **Fix:** a mixin moves that state into per-player data (see the Fleet-Footed fix below the table) |
 
@@ -415,7 +415,7 @@ rows marked **duration-dependent** care about our refresh.
 | Lava Vision (Alex's Mobs) | ticks every tick while time is left; no duration logic | none | slottable if wanted (not in the default pool) |
 | Caffeinated (Farmer's Respite) | ticks every tick: rewrites the "time since rest" stat (phantom timer); Creative Delight already patches it | none from the refresh, but it controls phantoms | not slottable |
 | Rest (Create Confectionery) | ticks every tick: removes phantoms within 4 blocks (named "expires" but runs every tick) | none | not slottable (removes a mechanic) |
-| Stimulation (Create Confectionery) | ticks every tick through its "expires" procedure | none | not slottable until its procedure is read |
+| Stimulation (Create Confectionery) | ticks every tick through its "expires" procedure | none | slottable (procedure read 2026-11-23: expiry removes only Slowness and Mining Fatigue, so switching it off is safe) |
 | Ender Phasing (Ender's Delight) | ticks every tick: damages the player in water or rain | none; harmful side | not slottable |
 | Restfulness (Upgrade Aquatic) | instant-style tick | fires on every refresh | not slottable |
 
@@ -696,6 +696,10 @@ Not decisions; effort notes for planning.
    death and on the End exit clone.
 5. Mixins and accessors into Apple Pie private members pin the mod to 2.2.0 exactly.
 
+### 12.3a Diversity and ladder commands (built 2026-11-23)
+
+`/solrp diversity set|get` and `/solrp ladder reset` (permission 2): 12.14.
+
 ## 14. Tests
 
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-RPI-07 PASS (diet reset clears the Apple Pie food list), SQ-RPI-08 PASS (boot WARN about Apple Pie's own benefits; max health 20, only Carrot's modifier).
@@ -726,6 +730,8 @@ Live rows are in [scratch_queue.md](testing/scratch_queue.md) section "SQ-RP" (f
 Extra rows: CQ-RPI-27 Lava Walker burn (Vinery port), CQ-RPI-28 Shrinking in a 1-block gap (9.2). 12.4 rows: SQ-RPI-07
 (reset), SQ-RPI-08 (stale Apple Pie benefits inert), CQ-RPI-29 to -40 (tooltip, Food Dictionary, unique gate, pages,
 icons, window, double page, health rule, backfill).
+
+12.14 rows (2026-11-23): CQ-RPI-83 to -91 (diversity set raise and lower, closed gate, relog, ladder reset, Stimulation, numeral, reached icons, diversity get).
 
 Results: r1112 ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8): SQ-RPI-01 to -06 PASS. The 20:47
 jar did not load (`solapplepie` range `[2.2.0]` against Apple Pie's jar version `1.19.2-2.2.0`); fixed to
@@ -1070,7 +1076,7 @@ takes the tagline of the unlock row with its effect and level. The jar's default
   the D10 falling density (positions in plan_food_diversity_1121.md section 7). A grouped heading (Brightening, Immunity,
   Dig, Water, Lava, Mobs, Spider, Eating) is one position with several unlocks. Five effect slots evenly spaced from the
   first unlock: 3, 22, 42, 61, 80 (agent default; count and start in `rp_ladder.json`). Start line on a pack server:
-  about `Diet ladder: 81 rungs, 5 slots, 37 pool effects`. Stimulation was dropped from position 21 (owner, 2026-11-21: section 4 keeps it unslottable); no vanilla positive effect was left to take its place (all slottable ones are on the ladder, the rest are refused by section 4), so Clarity holds the position alone.
+  about `Diet ladder: 83 rungs, 5 slots, 39 pool effects` (2026-11-23). Stimulation sits at position 21 with Clarity in the Immunity group (owner, 2026-11-23, its recorded scratchpad position; it was dropped 2026-11-21 while unread; 12.14).
 - **Toggles** (defaults ruled by the owner, 2026-11-21). Flat: Night Vision, Phantom Bane, Double Jump on; Invisibility off. Pool:
   Night Vision and Steady (`fruitsdelight:astringent`) on; Glowing, Slow Falling, Magnet off. Phantom Bane is a toggle when slotted too
   (the switch is per effect).
@@ -1159,6 +1165,39 @@ member's); no Raspberry Pie code changed. Names only: every effect and potion id
   "Emptiness a super of patrol nullifier and phantom bane"; Harmony, `#58`, will hold Emptiness). `effect.EmptinessParts`
   adds both hidden for Emptiness's time (skipped when a visible copy lasts as long) and removes the hidden copies when
   Emptiness is removed early; `CompoundEffects` lists them under "When Applied:" and in JEI.
+
+### 12.14 Owner notes 2026-11-23 (built 2026-11-23)
+
+TODO `food-tuning #63`; rows CQ-RPI-83 to -91 (`rows/RP.qb` section 7).
+
+- **Reached permanent icons are steady** (owner, 2026-11-23). A reached permanent buff shows its effect icon alone in
+  the kind-colored frame on the Ladder bar and Milestones; unreached ones still alternate diamond shard and effect
+  (`DietLogPages.drawIcon`). Supersedes the food-tuning #9 round-4 note "permanent buffs cycle reached too".
+- **No numeral on single-level effects.** An effect whose highest level anywhere on the loaded ladder (pool
+  `max_level`, flat and unlock rungs) is 1 shows no numeral ("Night Vision", not "Night Vision I"); Speed I stays.
+  `Ladder.maxLevel` + `DietEngine.effectName(Ladder, id, level)` build every name: ladder bar, Milestones, effect
+  screen, inventory widget, chat lines, confirm panel. Clients use the ladder the server sent.
+- **`/solrp diversity set <players> <value>`** (permission 2). Clears the player's food window and adds one
+  "Adjustment" entry worth exactly that diversity (hidden item `solraspberrypie:diet_adjustment`: not edible, no tab,
+  hidden in JEI, paper model), so current and highest diversity both become the value. Highest can go down: unlocks
+  above are lost and slot choices drop to the highest still-unlocked level or empty. The entry ages out like a meal and
+  shows in the Diet Log meal list. Saved and synced in Apple Pie's FoodList NBT key `solrp_adjust`
+  (`FoodInstanceMixin` carries it and lets Apple Pie decode the non-edible item; `FoodListMixin.getComplexity` returns
+  it). With the unique-food gate closed the reply says how many foods are missing; bonuses wait for the gate.
+- **`/solrp diversity get <player>`** prints current and highest.
+- **`/solrp ladder reset`** moves the world's `serverconfig/solraspberrypie/ladder.json` to
+  `ladder.json.YYYY-MM-DD_HHMM.bak`, seeds a fresh copy from `defaultconfigs` (or the jar default), loads it, re-sends it
+  and re-evaluates every online player (as a login). Addresses PR-RP-18 ([publish_readiness.md](publish_readiness.md))
+  by command, not by auto-update.
+- **Stimulation back on the pack ladder** (owner, 2026-11-23): unlock position 21 in the Immunity group with Clarity
+  (threshold 45), tagline "Slowness and Mining Fatigue immunity"; the replace pair Stimulation -> Refreshing, Sweetening
+  is written. Its expiry procedure (`StimulationEffectExpiresProcedure`, read from the 1.0.9 jar) only removes Slowness
+  and Mining Fatigue, so a switch-off is safe (section 4, 9.2 updated). Ladder now 83 rungs, 5 slots, 39 pool effects;
+  `tools/test_rp_ladder.sh` ALL 51 OK.
+- **Why the recorded ladders never showed** (Workspace world): it ran its 2026-11-12 ladder copy (38 rungs); its copy
+  was replaced from `defaultconfigs` (backup kept in the save, untracked). The Structures world still has the
+  2026-11-22 copy (81 rungs): run `/solrp ladder reset` there. Toggles for single-level effects were already in the
+  pack ladder (12.10).
 
 ## History
 

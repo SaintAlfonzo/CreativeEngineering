@@ -252,7 +252,7 @@ public class EffectScreen extends Screen {
 			flatIds.add(id);
 			if (in(mouseX, mouseY, fx, top + 40, 18, 18)) {
 				List<Component> tip = new ArrayList<>();
-				tip.add(DietEngine.effectName(id, e.getValue()));
+				tip.add(DietEngine.effectName(ClientState.ladder, id, e.getValue()));
 				addTagline(tip, ladder, id, e.getValue());
 				tip.add(Component.translatable("solraspberrypie.screen.flat_tip").withStyle(ChatFormatting.GOLD));
 				if (toggle) addToggleState(tip, off, !s.paused && mode == Mode.SLOTS);
@@ -297,7 +297,7 @@ public class EffectScreen extends Screen {
 				Icons.effect(pose, c.effect(), cx - 9, y + 14);
 				RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			}
-			Component name = c != null ? DietEngine.effectName(c.effect(), c.level()) : Component.translatable("solraspberrypie.screen.empty");
+			Component name = c != null ? DietEngine.effectName(ClientState.ladder, c.effect(), c.level()) : Component.translatable("solraspberrypie.screen.empty");
 			int color = !active || covered ? 0x777777 : off ? 0xAAAAAA : 0xFFFFFF;
 			String shown = font.plainSubstrByWidth(name.getString(), cell - 6);
 			drawString(pose, font, shown, cx - font.width(shown) / 2, y + 37, color);
@@ -305,7 +305,7 @@ public class EffectScreen extends Screen {
 				Rung r = ladder.slots.get(i);
 				ResourceLocation by = covered ? ladder.replacedBy(c.effect(), s.maxDiversity) : null;
 				Component sub = active ? (covered ? (by != null && !s.flat.containsKey(c.effect())
-						? Component.translatable("solraspberrypie.screen.replaced", DietEngine.effectName(by, 0))
+						? Component.translatable("solraspberrypie.screen.replaced", DietEngine.effectName(ClientState.ladder, by, 0))
 						: Component.translatable("solraspberrypie.screen.covered"))
 						: Component.translatable("solraspberrypie.widget.slot", i + 1, Icons.num(r.threshold)))
 						: Component.translatable("solraspberrypie.screen.greyed", i + 1, Icons.num(r.threshold));
@@ -365,7 +365,7 @@ public class EffectScreen extends Screen {
 			hoverTips.add(0, () -> Icons.effect(pose, id, x + 2, y + 2));
 			if (in(mouseX, mouseY, x, y, 22, 22)) {
 				List<Component> tip = new ArrayList<>();
-				tip.add(DietEngine.effectName(id, lvl));
+				tip.add(DietEngine.effectName(ClientState.ladder, id, lvl));
 				addTagline(tip, ladder, id, lvl);
 				if (mode == Mode.PICK_CHANGE && !coveredSlot(pickSlot)) tip.add(Component.translatable("solraspberrypie.screen.change_cost").withStyle(ChatFormatting.RED));
 				else tip.add(Component.translatable("solraspberrypie.screen.free").withStyle(ChatFormatting.GREEN));
@@ -378,7 +378,7 @@ public class EffectScreen extends Screen {
 		if (preview == null) return;
 		int y = slotsTop();
 		Component head = preview.op == C2SAction.Op.PREVIEW_CHANGE
-				? Component.translatable("solraspberrypie.confirm.change", preview.slot + 1, DietEngine.effectName(preview.effect, preview.level))
+				? Component.translatable("solraspberrypie.confirm.change", preview.slot + 1, DietEngine.effectName(ClientState.ladder, preview.effect, preview.level))
 				: Component.translatable("solraspberrypie.confirm.drop", preview.slot + 1);
 		drawString(pose, font, head, left + 8, y, 0xFFFFFF);
 		y += 12;

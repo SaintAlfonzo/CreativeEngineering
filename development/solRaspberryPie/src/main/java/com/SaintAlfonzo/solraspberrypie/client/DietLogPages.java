@@ -216,8 +216,8 @@ public final class DietLogPages {
 			case HEALTH -> SlotActions.hearts(r.amount);
 			case ATTRIBUTE -> SlotActions.attribute(r.id, r.amount);
 			case SLOT -> Component.translatable("solraspberrypie.slot", r.slotIndex + 1);
-			case FLAT -> Component.translatable("solraspberrypie.preview.flat", DietEngine.effectName(r.id, r.level));
-			case UNLOCK -> Component.translatable("solraspberrypie.dietlog.unlock", DietEngine.effectName(r.id, r.level));
+			case FLAT -> Component.translatable("solraspberrypie.preview.flat", DietEngine.effectName(ClientState.ladder, r.id, r.level));
+			case UNLOCK -> Component.translatable("solraspberrypie.dietlog.unlock", DietEngine.effectName(ClientState.ladder, r.id, r.level));
 		};
 	}
 
@@ -261,8 +261,8 @@ public final class DietLogPages {
 	 * The rung's icon at {@code (x, y)}, {@link #ICON} pixels, on the bar and the Milestones list (plan_diet_books.md
 	 * 1.8). A slot rung is the slot item; a locked one-time unlock alternates the lock item and the effect sprite each
 	 * second in a gray frame; an unlocked one shows the effect sprite grayed in the unlock color's frame, whatever the
-	 * current diversity. A permanent buff alternates its diamond shard and the effect the same way, reached or not
-	 * (kind-colored frame when reached, gray and grayed when not).
+	 * current diversity. A permanent buff alternates its diamond shard and the effect the same way until reached (gray
+	 * frame, grayed); once reached it shows the effect alone in the kind-colored frame.
 	 * Every other rung: kind-colored frame, grayed when not reached.
 	 */
 	static void drawIcon(PoseStack pose, Rung r, int x, int y, boolean got) {
@@ -280,7 +280,7 @@ public final class DietLogPages {
 			return;
 		}
 		if (r.kind == Rung.Kind.FLAT && effectLoaded(r.id)) {
-			if ((System.currentTimeMillis() / ALTERNATE_MS) % 2 == 1) Icons.effect(pose, r.id, x, y, ICON);
+			if (got || (System.currentTimeMillis() / ALTERNATE_MS) % 2 == 1) Icons.effect(pose, r.id, x, y, ICON);
 			else kindIcon(pose, RpConfig.CLIENT.flatIcon.get(), r, x, y);
 			Icons.frame(pose, x, y, ICON, got ? color(r) : GREY);
 			if (!got) Icons.dim(pose, x, y, ICON);

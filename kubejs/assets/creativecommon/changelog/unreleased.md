@@ -123,6 +123,10 @@
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 5 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. Hovering Change or Drop shows how many foods age out; a confirm panel shows the full cost first.
 - **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice. Unlocks, and their messages, wait until the diet first activates.
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
+- **New:** Stimulation unlocks at diversity 45 with Clarity and replaces Refreshing and Sweetening once unlocked.
+- **New:** Effects that only have one level on the diet ladder show no numeral (Night Vision, not Night Vision I).
+- **New:** Reached permanent buffs show their effect icon steadily in the Diet Log; unreached ones still alternate with the diamond shard.
+- **New:** Operators get commands to set a player's food diversity (`/solrp diversity set`), read it (`/solrp diversity get`) and back up and reload the world's diet ladder (`/solrp ladder reset`).
 - **New:** Lava Walker burns like a Magma Block when standing on lava without Fire Immunity.
 - **New:** Lava Walker: crouch to sink into the lava.
 - **New:** Steady stops Slippery and Slipping and clears them when gained. Pressure plates and tripwires ignore you and big dripleaf does not tip.

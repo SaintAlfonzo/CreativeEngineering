@@ -45,8 +45,33 @@ public final class LadderLoader {
 	/** V10: a refresh would refill, clamp or re-fire these. Instant effects are refused too. */
 	private static final Set<MobEffect> REFRESH_UNSAFE = Set.of(MobEffects.ABSORPTION, MobEffects.HEALTH_BOOST, MobEffects.SATURATION);
 
+	/** What {@link #reset} did: the ladder now loaded, where the fresh copy came from, the old copy's file name. */
+	public record Reset(Ladder ladder, String source, String backup) {}
+
+	private static Path worldFile(MinecraftServer server) {
+		return server.getWorldPath(LevelResource.ROOT).resolve("serverconfig").resolve(SolRaspberryPie.MOD_ID).resolve("ladder.json");
+	}
+
+	/**
+	 * {@code /solrp ladder reset} (PR-RP-18): moves the world's ladder copy to {@code ladder.json.YYYY-MM-DD_HHMM.bak}
+	 * beside it, then {@link #load} seeds a fresh copy from {@code defaultconfigs} (or the jar default) and reads it.
+	 */
+	public static Reset reset(MinecraftServer server) throws java.io.IOException {
+		Path worldFile = worldFile(server);
+		String backup = "none";
+		if (Files.exists(worldFile)) {
+			String stamp = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm"));
+			Path bak = worldFile.resolveSibling("ladder.json." + stamp + ".bak");
+			for (int i = 2; Files.exists(bak); i++) bak = worldFile.resolveSibling("ladder.json." + stamp + "-" + i + ".bak");
+			Files.move(worldFile, bak);
+			backup = bak.getFileName().toString();
+		}
+		boolean seeded = Files.exists(FMLPaths.GAMEDIR.get().resolve("defaultconfigs").resolve(SolRaspberryPie.MOD_ID).resolve("ladder.json"));
+		return new Reset(load(server), seeded ? "defaultconfigs" : "the built-in default", backup);
+	}
+
 	public static Ladder load(MinecraftServer server) {
-		Path worldFile = server.getWorldPath(LevelResource.ROOT).resolve("serverconfig").resolve(SolRaspberryPie.MOD_ID).resolve("ladder.json");
+		Path worldFile = worldFile(server);
 		try {
 			if (!Files.exists(worldFile)) {
 				Files.createDirectories(worldFile.getParent());

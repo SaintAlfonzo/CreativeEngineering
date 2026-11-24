@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.solraspberrypie.mixin;
 
+import com.SaintAlfonzo.solraspberrypie.SolRaspberryPie;
+import com.SaintAlfonzo.solraspberrypie.data.DietAdjustment;
 import com.SaintAlfonzo.solraspberrypie.data.GateFoods;
 import com.SaintAlfonzo.solraspberrypie.data.MealLog;
 import com.SaintAlfonzo.solraspberrypie.logic.Diversity;
@@ -63,6 +65,10 @@ public abstract class FoodListMixin implements GateFoods, MealLog {
 	@Unique
 	private static final String SOLRP_MEALS = "solrp_meals";
 
+	/** The Adjustment entry's value ({@code /solrp diversity set}), beside Apple Pie's own list. */
+	@Unique
+	private static final String SOLRP_ADJUST = "solrp_adjust";
+
 	@Unique
 	private final Set<ResourceLocation> solrp$gate = new LinkedHashSet<>();
 
@@ -86,6 +92,10 @@ public abstract class FoodListMixin implements GateFoods, MealLog {
 
 	@Inject(method = "getComplexity", at = @At("HEAD"), cancellable = true)
 	private static void solrp$tableValue(FoodInstance food, CallbackInfoReturnable<Double> cir) {
+		if ((Object) food instanceof DietAdjustment a && a.solrp$value() != null) {
+			cir.setReturnValue(a.solrp$value());
+			return;
+		}
 		Double v = food == null ? null : Diversity.value(food.getItem());
 		if (v != null) cir.setReturnValue(v);
 	}
@@ -143,11 +153,15 @@ public abstract class FoodListMixin implements GateFoods, MealLog {
 		ListTag meals = new ListTag();
 		for (ResourceLocation id : solrp$mealLog) meals.add(StringTag.valueOf(id.toString()));
 		cir.getReturnValue().put(SOLRP_MEALS, meals);
+		for (FoodInstance f : uniqueFoods.keySet()) {
+			if ((Object) f instanceof DietAdjustment a && a.solrp$value() != null) cir.getReturnValue().putDouble(SOLRP_ADJUST, a.solrp$value());
+		}
 	}
 
 	@Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
 	private void solrp$load(CompoundTag tag, CallbackInfo ci) {
 		solrp$loadMeals(tag);
+		solrp$loadAdjustment(tag);
 		solrp$gate.clear();
 		if (tag.contains(SOLRP_KEY, Tag.TAG_LIST)) {
 			for (Tag el : tag.getList(SOLRP_KEY, Tag.TAG_STRING)) {
@@ -162,6 +176,17 @@ public abstract class FoodListMixin implements GateFoods, MealLog {
 			ResourceLocation id = ForgeRegistries.ITEMS.getKey(e.getKey().getItem());
 			if (id != null) solrp$gate.add(id);
 		}
+	}
+
+	/** Puts the saved value back on the Adjustment entry; an entry without one (no key) is dropped. */
+	@Unique
+	private void solrp$loadAdjustment(CompoundTag tag) {
+		Item adj = SolRaspberryPie.ADJUSTMENT.get();
+		FoodInstance entry = null;
+		for (FoodInstance f : uniqueFoods.keySet()) if (f.getItem() == adj) entry = f;
+		if (entry == null) return;
+		if (tag.contains(SOLRP_ADJUST, Tag.TAG_ANY_NUMERIC)) ((DietAdjustment) (Object) entry).solrp$setValue(tag.getDouble(SOLRP_ADJUST));
+		else uniqueFoods.remove(entry);
 	}
 
 	@Unique
