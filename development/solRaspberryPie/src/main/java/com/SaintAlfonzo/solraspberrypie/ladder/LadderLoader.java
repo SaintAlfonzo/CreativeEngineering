@@ -17,6 +17,7 @@ import net.minecraft.world.level.storage.LevelResource;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -33,7 +34,8 @@ import java.util.Set;
 
 /**
  * Reads serverconfig/solraspberrypie/ladder.json once at server start (3), seeding it from
- * defaultconfigs/solraspberrypie/ladder.json or the built-in default. Applies the validation table (3.3):
+ * defaultconfigs/solraspberrypie/ladder.json or the built-in default, and replacing an unedited copy when that default
+ * changed (see {@link #load}). Applies the validation table (3.3):
  * unregistered effects and attributes are skipped (one warning listing them), unusable unlocks dropped, levels clamped,
  * refresh-unsafe effects refused, a broken file falls back to the built-in default with a loud error. Optional fields
  * (raspberry_pie.md 3.3): {@code "toggle": "on"|"off"} on a pool entry or a flat rung makes that effect a toggle (on or off
@@ -52,51 +54,98 @@ public final class LadderLoader {
 		return server.getWorldPath(LevelResource.ROOT).resolve("serverconfig").resolve(SolRaspberryPie.MOD_ID).resolve("ladder.json");
 	}
 
+	/** Log names: never an absolute path (PR-RP-22). */
+	private static final String WORLD_NAME = "<world>/serverconfig/" + SolRaspberryPie.MOD_ID + "/ladder.json";
+	private static final String SEED_NAME = "defaultconfigs/" + SolRaspberryPie.MOD_ID + "/ladder.json";
+
 	/**
 	 * {@code /solrp ladder reset} (PR-RP-18): moves the world's ladder copy to {@code ladder.json.YYYY-MM-DD_HHMM.bak}
 	 * beside it, then {@link #load} seeds a fresh copy from {@code defaultconfigs} (or the jar default) and reads it.
 	 */
-	public static Reset reset(MinecraftServer server) throws java.io.IOException {
+	public static Reset reset(MinecraftServer server) throws IOException {
 		Path worldFile = worldFile(server);
-		String backup = "none";
-		if (Files.exists(worldFile)) {
-			String stamp = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm"));
-			Path bak = worldFile.resolveSibling("ladder.json." + stamp + ".bak");
-			for (int i = 2; Files.exists(bak); i++) bak = worldFile.resolveSibling("ladder.json." + stamp + "-" + i + ".bak");
-			Files.move(worldFile, bak);
-			backup = bak.getFileName().toString();
-		}
-		boolean seeded = Files.exists(FMLPaths.GAMEDIR.get().resolve("defaultconfigs").resolve(SolRaspberryPie.MOD_ID).resolve("ladder.json"));
-		return new Reset(load(server), seeded ? "defaultconfigs" : "the built-in default", backup);
+		String backup = Files.exists(worldFile) ? backup(worldFile) : "none";
+		return new Reset(load(server), seedSource(), backup);
 	}
 
+	/** Moves the world's copy to a dated .bak beside it; returns the backup's file name. */
+	private static String backup(Path worldFile) throws IOException {
+		String stamp = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd_HHmm"));
+		Path bak = worldFile.resolveSibling("ladder.json." + stamp + ".bak");
+		for (int i = 2; Files.exists(bak); i++) bak = worldFile.resolveSibling("ladder.json." + stamp + "-" + i + ".bak");
+		Files.move(worldFile, bak);
+		return bak.getFileName().toString();
+	}
+
+	private static Path seedFile() {
+		return FMLPaths.GAMEDIR.get().resolve("defaultconfigs").resolve(SolRaspberryPie.MOD_ID).resolve("ladder.json");
+	}
+
+	private static String seedSource() {
+		return Files.exists(seedFile()) ? SEED_NAME : "the built-in default ladder";
+	}
+
+	/** The ladder a new world gets: defaultconfigs, else the jar default. */
+	private static byte[] seedBytes() throws IOException {
+		if (Files.exists(seedFile())) return Files.readAllBytes(seedFile());
+		try (InputStream in = LadderLoader.class.getResourceAsStream(BUILT_IN)) {
+			if (in == null) throw new IOException("built-in default ladder missing from the jar");
+			return in.readAllBytes();
+		}
+	}
+
+	private static String sha1(byte[] data) {
+		try {
+			return java.util.HexFormat.of().formatHex(java.security.MessageDigest.getInstance("SHA-1").digest(data));
+		} catch (java.security.NoSuchAlgorithmException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+
+	/**
+	 * Seeds or updates the world's copy, then reads it. Beside the copy, {@code ladder.json.seeded} holds the SHA-1 of the
+	 * ladder as it was seeded. At load, a copy that differs from the current default is replaced (old copy kept as a
+	 * dated .bak, one log line) when it still matches that hash, i.e. nobody edited it; an edited copy, or one seeded
+	 * before the hash existed, is kept with a warning ({@code /solrp ladder reset} replaces it). A copy equal to the
+	 * default gets its hash written, so it is tracked from then on (PR-RP-18, owner 2026-11-23).
+	 */
 	public static Ladder load(MinecraftServer server) {
 		Path worldFile = worldFile(server);
+		Path hashFile = worldFile.resolveSibling("ladder.json.seeded");
 		try {
+			byte[] fresh = seedBytes();
+			String freshHash = sha1(fresh);
 			if (!Files.exists(worldFile)) {
 				Files.createDirectories(worldFile.getParent());
-				Path seed = FMLPaths.GAMEDIR.get().resolve("defaultconfigs").resolve(SolRaspberryPie.MOD_ID).resolve("ladder.json");
-				if (Files.exists(seed)) {
-					Files.copy(seed, worldFile);
-					SolRaspberryPie.LOG.info("Seeded {} from {}", worldFile, seed);
+				Files.write(worldFile, fresh);
+				Files.writeString(hashFile, freshHash, StandardCharsets.UTF_8);
+				SolRaspberryPie.LOG.info("Seeded {} from {}", WORLD_NAME, seedSource());
+			} else {
+				String current = sha1(Files.readAllBytes(worldFile));
+				String seeded = Files.exists(hashFile) ? Files.readString(hashFile, StandardCharsets.UTF_8).trim() : null;
+				if (current.equals(freshHash)) {
+					if (!freshHash.equals(seeded)) Files.writeString(hashFile, freshHash, StandardCharsets.UTF_8);
+				} else if (current.equals(seeded)) {
+					String bak = backup(worldFile);
+					Files.write(worldFile, fresh);
+					Files.writeString(hashFile, freshHash, StandardCharsets.UTF_8);
+					SolRaspberryPie.LOG.info("Updated {} from {} (the copy was unedited; old copy saved as {})", WORLD_NAME, seedSource(), bak);
 				} else {
-					try (InputStream in = LadderLoader.class.getResourceAsStream(BUILT_IN)) {
-						Files.copy(in, worldFile);
-					}
-					SolRaspberryPie.LOG.info("Seeded {} from the built-in default ladder", worldFile);
+					SolRaspberryPie.LOG.warn("{} differs from {} and was edited or predates edit tracking; kept. /solrp ladder reset replaces it",
+							WORLD_NAME, seedSource());
 				}
 			}
 		} catch (Exception e) {
-			SolRaspberryPie.LOG.error("Could not seed {}: {}", worldFile, e.toString());
+			SolRaspberryPie.LOG.error("Could not seed or update {}: {}", WORLD_NAME, e.toString());
 		}
 		try (Reader r = Files.newBufferedReader(worldFile, StandardCharsets.UTF_8)) {
-			Ladder ladder = parse(JsonParser.parseReader(r).getAsJsonObject(), worldFile.toString());
+			Ladder ladder = parse(JsonParser.parseReader(r).getAsJsonObject(), WORLD_NAME);
 			SolRaspberryPie.LOG.info("Diet ladder: {} rungs, {} slots, {} pool effects", ladder.rungs.size(), ladder.slotCount(), ladder.pool.size());
 			return ladder;
 		} catch (Exception e) {
 			// V13 (Q-H): fall back to the built-in ladder, loudly.
 			SolRaspberryPie.LOG.error("================================================================");
-			SolRaspberryPie.LOG.error("DIET LADDER FILE IS BROKEN OR MISSING: {}", worldFile);
+			SolRaspberryPie.LOG.error("DIET LADDER FILE IS BROKEN OR MISSING: {}", WORLD_NAME);
 			SolRaspberryPie.LOG.error("  {}", e.toString());
 			SolRaspberryPie.LOG.error("  Using the built-in default ladder until the file is fixed and the server restarted.");
 			SolRaspberryPie.LOG.error("================================================================");

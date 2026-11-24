@@ -1194,6 +1194,13 @@ TODO `food-tuning #63`; rows CQ-RPI-83 to -91 (`rows/RP.qb` section 7).
   is written. Its expiry procedure (`StimulationEffectExpiresProcedure`, read from the 1.0.9 jar) only removes Slowness
   and Mining Fatigue, so a switch-off is safe (section 4, 9.2 updated). Ladder now 83 rungs, 5 slots, 39 pool effects;
   `tools/test_rp_ladder.sh` ALL 51 OK.
+- **Ladder updates reach unedited worlds** (owner, 2026-11-23; PR-RP-18, `raspberry-pie-publish #11`). Beside the
+  world's copy, `ladder.json.seeded` holds the SHA-1 of the ladder as seeded. At world load a copy that differs from the
+  current default is replaced (old copy kept as a dated `.bak`, one log line) when it still matches that hash; an edited
+  copy, or one seeded before the hash existed, is kept with one warning, and `/solrp ladder reset` replaces it. A copy
+  equal to the default gets its hash written, so it is tracked from then on. Row SQ-RPI-92.
+- **Log privacy** (PR-RP-22). Log lines name `<world>/serverconfig/...` and `defaultconfigs/...` instead of absolute
+  paths and say "a player" instead of the player's name.
 - **Why the recorded ladders never showed** (Workspace world): it ran its 2026-11-12 ladder copy (38 rungs); its copy
   was replaced from `defaultconfigs` (backup kept in the save, untracked). The Structures world still has the
   2026-11-22 copy (81 rungs): run `/solrp ladder reset` there. Toggles for single-level effects were already in the

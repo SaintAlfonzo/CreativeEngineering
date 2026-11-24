@@ -912,6 +912,13 @@ look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the forme
 @fails ladder reset command, `LadderLoader`, ladder re-send packet
 @draft written with the build 2026-11-23
 
+## SQ-RPI-92 | Ladder auto-update of unedited world copies (raspberry-pie-publish #11)
+@group server
+@commands Start a world (seeds `ladder.json` and `ladder.json.seeded`); stop; change `defaultconfigs/solraspberrypie/ladder.json` (one threshold); start again; then hand-edit the world copy, change the default once more, start again
+@pass second start: log "Updated <world>/serverconfig/solraspberrypie/ladder.json from defaultconfigs/... (the copy was unedited; old copy saved as ladder.json.<date>.bak)" and the world copy equals the new default; third start: one warning "... was edited or predates edit tracking; kept", the edited copy is unchanged; no log line holds an absolute path or a player name
+@fails `LadderLoader.load` hash check, PR-RP-22 log lines
+@draft written with the build 2026-11-23
+
 ## CQ-RPI-88 | Stimulation unlock replaces Refreshing and Sweetening (food-tuning #63)
 @group client
 @commands `/solrp diversity set @s 50`; fill slots with Refreshing and Sweetening, then with Stimulation; read the Ladder page tagline

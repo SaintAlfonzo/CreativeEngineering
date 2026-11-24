@@ -258,12 +258,12 @@ Phase state against [plan_rp_standalone.md](plan_rp_standalone.md):
 | PR-RP-15 | Medium | standalone | `RP/RpConfig.java:82-84, 111-115` | Client config defaults name pack mods' items | R | Vanilla defaults in the jar, pack values in `defaultconfigs` |
 
 Low (R): optional `#creativedelight:` entries in the jar's tags (PR-RP-16); tables are read separately on client and
-server with no sync (PR-RP-17); a new jar default ladder never reaches existing worlds (PR-RP-18); `refreshInterval`
+server with no sync (PR-RP-17); a new jar default ladder never reaches existing worlds (PR-RP-18) [built 2026-11-23: unedited copies auto-update, `/solrp ladder reset` for edited ones]; `refreshInterval`
 may exceed `effectDuration` (PR-RP-19); a class lock on every complexity lookup, per-frame allocations in three client
 classes (PR-RP-20); `RpData.get` returns a throwaway object when the capability is missing (PR-RP-21); INFO lines with
-player names and the absolute game path (PR-RP-22); `itemIcon` is not a Forge key, no optional rows for AppleSkin and
+player names and the absolute game path (PR-RP-22) [fixed 2026-11-23]; `itemIcon` is not a Forge key, no optional rows for AppleSkin and
 Alex's Mobs (PR-RP-23); key defaults chosen for the pack (PR-RP-24); history comments, SPDX header on 5 of 63 files
-(PR-RP-25, DR-C26); four stale writeup lines and three stale plan lines, `RPI.qb` named for `RP.qb` (PR-RP-26).
+(PR-RP-25, DR-C26); four stale writeup lines and three stale plan lines, `RPI.qb` named for `RP.qb` (PR-RP-26). Rows: `raspberry-pie-publish #11` (18, 22, built), `#12` to `#20` (16, 17, 19, 20, 21, 23 to 26; owner 2026-11-23).
 
 Checked with no finding: server validation of every client action (a client cannot grant itself an effect or level it
 has not unlocked), `/solrp` at permission 2, no advancements, the Liquid Diet Log texture row in `sources.csv`, lang

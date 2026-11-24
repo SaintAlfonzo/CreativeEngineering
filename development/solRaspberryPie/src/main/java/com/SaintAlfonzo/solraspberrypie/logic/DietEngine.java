@@ -125,13 +125,13 @@ public final class DietEngine {
 		d.ensureSlots(ladder.slotCount());
 		while (d.slots.size() > ladder.slotCount()) {
 			SlotChoice gone = d.slots.remove(d.slots.size() - 1);
-			if (gone != null) SolRaspberryPie.LOG.info("V8: {} lost the choice {} of slot {} (the ladder has {} slots now)",
-					player.getGameProfile().getName(), gone.effect(), d.slots.size() + 1, ladder.slotCount());
+			if (gone != null) SolRaspberryPie.LOG.info("V8: a player lost the choice {} of slot {} (the ladder has {} slots now)",
+					gone.effect(), d.slots.size() + 1, ladder.slotCount());
 		}
 		for (int i = 0; i < d.slots.size(); i++) {
 			SlotChoice c = d.slots.get(i);
 			if (c != null && !ForgeRegistries.MOB_EFFECTS.containsKey(c.effect())) {
-				SolRaspberryPie.LOG.info("{}: slot {} held {}, which is not registered; cleared", player.getGameProfile().getName(), i + 1, c.effect());
+				SolRaspberryPie.LOG.info("A player's slot {} held {}, which is not registered; cleared", i + 1, c.effect());
 				d.slots.set(i, null);
 			}
 		}

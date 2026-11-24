@@ -186,7 +186,7 @@ public final class ServerEvents {
 			}
 		}
 		if (removed > 0) {
-			SolRaspberryPie.LOG.info("Removed {} leftover Apple Pie attribute modifiers from {}", removed, player.getGameProfile().getName());
+			SolRaspberryPie.LOG.info("Removed {} leftover Apple Pie attribute modifiers from a player", removed);
 			if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
 		}
 	}
