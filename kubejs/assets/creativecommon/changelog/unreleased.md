@@ -762,3 +762,23 @@
 - **Changed:** Datapacks that use the old Creative Delight recipe types need updating.
 - **Changed:** A world opened on this version loses these items and blocks if opened on an older version.
 - **Fixed:** The old plain Camera Bag disappeared when a world loaded; it becomes a Leather Camera Bag with its contents.
+
+## Dropped Items in Water and Lava <!-- icon: minecraft:oak_leaves -->
+
+- **Changed:** Every item now floats or sinks and burns or survives fire by what it is made of, modded items included [most modded items sank and burned].
+- **New:** Leaves, flowers, seeds, wool, carpets, string, paper, books, feathers, hats, flour, sugar, dyes and bone meal rest on the water surface.
+- **Changed:** Other floating items dip once and rest just below the surface [dove up to 3 blocks and bobbed].
+- **New:** Items that survive lava rest on the lava surface; stone, metal and gem blocks sink.
+- **New:** Items that rest on water or lava also rest on top of snow layers, leaf piles and sand, ash, salt and sawdust layers.
+- **Changed:** Crimson and warped wood floats and survives fire and lava [burned].
+- **Changed:** Ice and snow float and burn [sank, survived fire].
+- **Changed:** Bottles, potions, buckets, jars, cans and bottled drinks sink and survive fire.
+- **Changed:** Coal, charcoal, torches, campfires and redstone lamps sink and burn [campfires floated].
+- **Changed:** Treated wood, crossbows, wooden shields and armor stands sink and burn [crossbows, shields and armor stands floated].
+- **Changed:** Create parts sink and survive fire, wooden ones included; belts float and burn.
+- **Changed:** Tools, weapons and armor follow their material: wood and leather float and burn, metal sinks and survives fire, diamond, netherite and stone survive lava [stone tools survived fire only].
+- **Changed:** Hay bales, sacks and other packed blocks of light items float instead of resting on the surface.
+- **Changed:** Prismarine, sandstone and smooth stone survive fire but not lava [prismarine survived lava]; nether brick and quartz survive lava.
+- **Changed:** Every wooden item leaves ash when it burns, 1 in 4 [planks, logs and wooden building blocks only].
+- **New:** Modded bombs, gunpowder kegs, rockets, fireworks and powder charges explode when they burn, without breaking blocks.
+- **Changed:** Totems of Undying and tridents sink and survive fire [totems floated].

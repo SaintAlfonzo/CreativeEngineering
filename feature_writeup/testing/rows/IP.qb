@@ -81,6 +81,127 @@ look audit header "dump yes", unclassified below 650, minecraft:netherite_scrap 
 @@text
 @@text Results: not run yet.
 
+@@section 3
+@@title SQ-IP Item physics families and surface floating, 2026-11-25 ([item_physics.md](../item_physics.md) 9.7, 10.5, TODO `items/item-physics #2`, `#6`)
+@@date 2026-11-25
+@@jars creativecompat
+@@sources feature_writeup/item_physics.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/itemphysic/ItemSurfaceFloat.java kubejs/data/creativecompat/kubejs/tags/item_physics_tags.js tools/item_physics_audit.py
+@@text
+@@text Creative Compat 1.0.0 build 2026-11-25 12:20 (`ItemSurfaceFloat`, generated `physics/family/*` and `physics/lava_sinks`
+@@text tags, the family mapping in item_physics_tags.js). Group A superflat; a glass basin of water at 300 300 and one of
+@@text lava at 320 300 (surface of each about y -55.11), snow layers at 340 300.
+@@text
+@@table world
+## SQ-IP-17 | family tags load: every family tag non-empty, floats / skims / lavaproof / lava_sinks filled
+@group A
+@commands `/dumptags item`; on the host count `creativecompat:physics/family/*`, `physics/floats`, `physics/skims`, `physics/lavaproof`, `physics/lava_sinks` in `kubejs/exported/tags/item_tags.json`
+@pass 24 family tags present (wood and metal over 4,000 each); `physics/skims` over 1,500; `physics/floats` over 7,000; `physics/lava_sinks` over 2,000; no `item_physics_tags` error in latest.log
+@fails empty families: the jar lacks `data/creativecompat/tags/items/physics/family/` (build.gradle scriptTrees) or a tag JSON is malformed (grep `Couldn't load tag`)
+> dumptags item
+waitlog \[dumptags\] wrote 120
+shell python3 -c "import json; t=json.load(open('kubejs/exported/tags/item_tags.json')); f=sorted(k for k in t if k.startswith('creativecompat:physics/family/')); print(len(f),'families'); [print(k, len(t[k])) for k in f]; [print(k, len(t.get('creativecompat:physics/'+k,[]))) for k in ('floats','skims','fireproof','lavaproof','lava_sinks','sinks')]; exit(0 if len(f)==24 and len(t.get('creativecompat:physics/skims',[]))>1500 else 1)"
+reject (?i)item_physics_tags.*(error|exception)
+reject Couldn't load tag creativecompat:physics
+look per-family counts near item_physics.md 9.7 (dump of 2026-11-19); a mod added since then shows as untagged, not as an error
+
+## SQ-IP-18 | water: leaves skim, planks dip once and rest, cobblestone sinks, no bob after 10 s
+@group A
+@commands build the water basin; summon `oak_leaves`, `oak_planks`, `cobblestone`, `string` items 3 blocks above the water; read each Pos after 5 s and 10 s
+@pass leaves and string rest at about -55.16 (surface less 0.05), planks at about -55.26, cobblestone on the floor (-63); the 5 s and 10 s heights equal (no bob)
+@fails no change from ItemPhysic's dive and bob: `ItemPhysicServerMixin` HEAD inject missing (grep the mixin apply line), `[item_physics] surfaceFloat` off, or the item is not in `physics/skims` (SQ-IP-17)
+> forceload add 288 288 352 320
+> fill 300 -64 300 306 -55 306 minecraft:glass
+> fill 301 -63 301 305 -55 305 minecraft:water
+sleep 3
+> summon minecraft:item 301.5 -52 301.5 {Tags:["ip18l"],PickupDelay:32767,Item:{id:"minecraft:oak_leaves",Count:1b}}
+> summon minecraft:item 303.5 -52 301.5 {Tags:["ip18p"],PickupDelay:32767,Item:{id:"minecraft:oak_planks",Count:1b}}
+> summon minecraft:item 305.5 -52 301.5 {Tags:["ip18c"],PickupDelay:32767,Item:{id:"minecraft:cobblestone",Count:1b}}
+> summon minecraft:item 301.5 -52 304.5 {Tags:["ip18s"],PickupDelay:32767,Item:{id:"minecraft:string",Count:1b}}
+sleep 5
+> data get entity @e[tag=ip18l,limit=1] Pos[1]
+> data get entity @e[tag=ip18p,limit=1] Pos[1]
+> data get entity @e[tag=ip18c,limit=1] Pos[1]
+sleep 5
+> data get entity @e[tag=ip18l,limit=1] Pos[1]
+> data get entity @e[tag=ip18p,limit=1] Pos[1]
+> data get entity @e[tag=ip18s,limit=1] Pos[1]
+> execute as @e[tag=ip18l] if entity @s[y=-55.4,dy=0.35] run say IP18 leaves at the surface
+> execute as @e[tag=ip18c] if entity @s[y=-64,dy=1.5] run say IP18 cobblestone on the floor
+expect IP18 leaves at the surface
+expect IP18 cobblestone on the floor
+look leaves and string about -55.16, planks about -55.26, the two reads of each equal to 2 decimals
+
+## SQ-IP-19 | lava: diamond sword and crimson planks skim and survive, diamond block sinks and survives, oak planks burn to ash
+@group A
+@commands build the lava basin; summon `diamond_sword`, `crimson_planks`, `diamond_block`, `netherite_ingot` and 16 `oak_planks` 2 blocks above the lava; read Pos after 6 s
+@pass sword, ingot and crimson planks rest at about -55.19 (surface less 0.08) and are alive; diamond block lower than -56 and alive; the oak planks gone, some `supplementaries:ash` items near the basin
+@fails sword sinks: `physics/lavaproof` missing it or it is in `physics/lava_sinks` (generator: HEAVY_FAMILIES, block items only); block skims: `lava_sinks` missing it
+> fill 320 -64 300 326 -55 306 minecraft:glass
+> fill 321 -63 301 325 -55 305 minecraft:lava
+sleep 3
+> summon minecraft:item 321.5 -53 301.5 {Tags:["ip19w"],PickupDelay:32767,Item:{id:"minecraft:diamond_sword",Count:1b}}
+> summon minecraft:item 323.5 -53 301.5 {Tags:["ip19n"],PickupDelay:32767,Item:{id:"minecraft:crimson_planks",Count:1b}}
+> summon minecraft:item 325.5 -53 301.5 {Tags:["ip19b"],PickupDelay:32767,Item:{id:"minecraft:diamond_block",Count:1b}}
+> summon minecraft:item 321.5 -53 304.5 {Tags:["ip19i"],PickupDelay:32767,Item:{id:"minecraft:netherite_ingot",Count:1b}}
+> summon minecraft:item 324.5 -53 304.5 {Tags:["ip19o"],PickupDelay:32767,Item:{id:"minecraft:oak_planks",Count:16b}}
+sleep 6
+> data get entity @e[tag=ip19w,limit=1] Pos[1]
+> data get entity @e[tag=ip19n,limit=1] Pos[1]
+> data get entity @e[tag=ip19b,limit=1] Pos[1]
+> data get entity @e[tag=ip19i,limit=1] Pos[1]
+> execute as @e[tag=ip19w] if entity @s[y=-55.5,dy=0.4] run say IP19 sword on the lava
+> execute as @e[tag=ip19n] if entity @s[y=-55.5,dy=0.4] run say IP19 crimson on the lava
+> execute as @e[tag=ip19b] if entity @s[y=-64,dy=7.8] run say IP19 diamond block below the surface
+> execute unless entity @e[tag=ip19o] run say IP19 oak planks burned
+> execute if entity @e[type=item,nbt={Item:{id:"supplementaries:ash"}},x=318,y=-60,z=298,dx=12,dy=12,dz=12] run say IP19 ash left
+expect IP19 sword on the lava
+expect IP19 crimson on the lava
+expect IP19 diamond block below the surface
+expect IP19 oak planks burned
+look about 4 ash from 16 planks (25% each, ash may itself burn later); the block still alive at the bottom
+
+## SQ-IP-20 | skimmers rest on top of snow layers, planks sink into them as before
+@group A
+@commands `setblock 340 -60 300 snow[layers=3]`, same at 342; summon `oak_leaves` over 340 and `oak_planks` over 342 2 blocks up; read Pos after 4 s
+@pass leaves at -59.625 (the layer's top, 3/8); planks at -59.75 (vanilla collision, 2/8); `[item_physics] skimOnLayers = false` puts the leaves at -59.75 too (not driven)
+@fails leaves at -59.75: `ItemSurfaceFloat.sinkable` false for the snow layer, or the leaves are not in `physics/skims`
+> fill 338 -61 298 344 -61 302 minecraft:stone
+> setblock 340 -60 300 minecraft:snow[layers=3]
+> setblock 342 -60 300 minecraft:snow[layers=3]
+> summon minecraft:item 340.5 -58 300.5 {Tags:["ip20l"],PickupDelay:32767,Item:{id:"minecraft:oak_leaves",Count:1b}}
+> summon minecraft:item 342.5 -58 300.5 {Tags:["ip20p"],PickupDelay:32767,Item:{id:"minecraft:oak_planks",Count:1b}}
+sleep 4
+> data get entity @e[tag=ip20l,limit=1] Pos[1]
+> data get entity @e[tag=ip20p,limit=1] Pos[1]
+> execute as @e[tag=ip20l] if entity @s[y=-59.64,dy=0.03] run say IP20 leaves on top
+expect IP20 leaves on top
+look planks about -59.75 (sunk one layer, unchanged)
+
+## SQ-IP-21 | fire: firework rocket pops without block damage, ice burns, iron ingot survives a campfire
+@group A
+@commands campfire at 360 -60 300 on stone; summon `firework_rocket`, `ice`, `iron_ingot` items onto it; wait 5 s
+@pass rocket gone with a small explosion, campfire and stone still there; ice gone (R2 burns); iron ingot alive
+@fails rocket stays: not in `burn/explosive` (family explosive); blocks broken: the explode rule gained block damage
+> fill 358 -61 298 362 -61 302 minecraft:stone
+> setblock 360 -60 300 minecraft:campfire
+> summon minecraft:item 360.5 -59.5 300.5 {Tags:["ip21r"],PickupDelay:32767,Item:{id:"minecraft:firework_rocket",Count:1b}}
+> summon minecraft:item 360.5 -59.5 300.5 {Tags:["ip21i"],PickupDelay:32767,Item:{id:"minecraft:ice",Count:1b}}
+> summon minecraft:item 360.5 -59.5 300.5 {Tags:["ip21m"],PickupDelay:32767,Item:{id:"minecraft:iron_ingot",Count:1b}}
+sleep 6
+> execute unless entity @e[tag=ip21r] run say IP21 rocket gone
+> execute unless entity @e[tag=ip21i] run say IP21 ice burned
+> execute if entity @e[tag=ip21m] run say IP21 iron survives
+> cdevtest state 360 -60 300
+> forceload remove 288 288 352 320
+expect IP21 rocket gone
+expect IP21 ice burned
+expect IP21 iron survives
+expect \[cdevtest\] verb=state pos=360,-60,300 state=minecraft:campfire
+look explosion particles; no crater
+
+@@text
+@@text Results: not run yet.
+
 @@section 2
 @@title SQ-IP Immersive Portals changes: Nether portal failure, Dark Fire, fog, opaque gun portals, despawn, mirrors, 2026-11-07 ([plan_portal_changes.md](../plan_portal_changes.md) 6, TODO `gameplay/tnt-and-portal #17..#24`)
 @@date 2026-11-07

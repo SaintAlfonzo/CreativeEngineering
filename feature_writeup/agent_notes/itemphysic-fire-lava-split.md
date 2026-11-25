@@ -111,3 +111,20 @@ Build/deploy: `cd Creative Common && ./gradlew build --offline` -> copy jar to `
   design and the sim live in item_physics.md section 10.
 - Family classifier + `/dumpphysics`: `tools/item_physics_audit.py` (design: item_physics.md section 9).
 - Alex's Mobs Lava Vision (`EffectLavaVision`) has an empty effect tick: fog only, no movement change.
+
+## Families and surface floating (2026-11-25)
+
+The hand lists above are gone. `tools/item_physics_audit.py` is the generator: every item in one family tag
+`creativecompat:physics/family/<f>` plus `physics/lava_sinks`, written to `kubejs/data/creativecompat/tags/items/physics/`
+(pack folder and Compat jar). item_physics_tags.js only maps families to behavior tags and keeps the forced `sinks`.
+Hand decisions: `tools/item_physics_overrides.csv` (id, `#tag`, `mod:*`, `~regex`; ids first). Writeup 9.5 to 9.7, 10.5.
+
+- Ruling-name rungs beat tags and block material on purpose (e.g. `pie`, `jello`, `coal` unless `ore`); an `unless`
+  token list keeps them off decoration (`coal_ore_bricks`) and containers (`canned_*`).
+- The fire-resistant rung only decides block items; non-block fire-resistant items keep their material family
+  (Simple Hats are all fire resistant).
+- `ItemSurfaceFloat` needs the vertical speed from BEFORE ItemPhysic's change: a HEAD inject on `updatePre` stores it in
+  a ThreadLocal, the TAIL inject replaces `vy`. The fall speed carries into the fluid after the entry look-ahead, so
+  the drag applies twice while still sinking at or below rest (else a skimmer dips 0.21, not 0.14).
+- `ItemPhysicServer.fluid` (public ThreadLocal) is set only while the item is within 0.2 above the fluid in its own
+  block; above that the air branch (gravity -0.04) runs.

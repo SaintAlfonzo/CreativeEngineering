@@ -158,7 +158,7 @@ Spawns by biome,spawns_by_biome.md,,reference,,,"reference, generated from the 2
 Monkeys and apes,monkeys.md,,reference,,,"reference, decision open (TODO `merges/mobs #1`)",reference,audit 2026-11-16: reference document; its TODO rows belong to other features,2026-11-16
 Terrain adaptation scan,terrain_adaptation_scan.md,,reference,,,"reference, regenerate with `python3 tools/terrain_adaptation_scan.py` after adding structure mods",,,
 Engineering,engineering.md,EN-,BUILT,"creativecommon, creativeengineering","CQ-EN, SQ-EN","DEPLOYED (since 1.0.3), EN-01 to EN-18 pending",,,
-Item physics,item_physics.md,IP-,BUILT,creativecompat,,"DEPLOYED (since 1.0.3), IP-01 to IP-14 pending",,,
+Item physics,item_physics.md,IP-,BUILT,creativecompat,SQ-IP,"DEPLOYED (since 1.0.3); families and surface floating BUILT 2026-11-25 (Compat installed), SQ-IP-17 to -21 queued",,,
 Biome tuning,biome_tuning.md,WG-,BUILT,creativeworldgen,,"DEPLOYED (17 edits, new worlds only), WG-01 to WG-08 pending",,,
 Nether blocks in Overworld generation,nether_worldgen.md,NW-,BUILT,"creativeworldgen, kubejs",,scan BUILT 2026-10-19,,,
 Nether worldgen scan,nether_worldgen_scan.md,,reference,,,"reference, regenerate with `python3 tools/nether_worldgen_scan.py`",,,
