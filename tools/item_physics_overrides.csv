@@ -1,0 +1,72 @@
+match,family,reason
+minecraft:end_rod,metal,audit misfile (wood by material): stays fireproof and sinks
+minecraft:trident,metal,R8: sink and fireproof
+minecraft:totem_of_undying,metal,R7: sinks and fireproof
+minecraft:armor_stand,heavy_wood,R7: sinks and burns
+minecraft:sea_lantern,crystal,prismarine family (R6)
+minecraft:target,packed,hay bale with redstone (R13)
+minecraft:end_crystal,refractory,end keepsake: lavaproof as before
+minecraft:ghast_tear,refractory,fire-immune mob drop: lavaproof as before
+minecraft:magma_cream,refractory,fire-immune mob drop: lavaproof as before
+minecraft:shulker_shell,refractory,lavaproof as before (shulker boxes too)
+supplementaries:ash,earth,audit: ash is earth
+supplementaries:ash_brick,masonry,audit: fired ash brick
+immersive_weathering:ash_block,earth,audit misfile (ice by material)
+immersive_weathering:ash_layer_block,earth,audit misfile (ice by material)
+immersive_weathering:soot,earth,audit misfile (ice by material)
+~^minecraft:((red_|chiseled_|cracked_)?nether_brick(s|_slab|_stairs|_wall|_fence)?)$,refractory,R6: nether brick lavaproof
+~^(?!.*certus)[^:]+:.*quartz,refractory,R6: quartz lavaproof (not AE2 certus quartz)
+~sandstone,masonry,R6: sandstone fireproof
+~^minecraft:smooth_stone(_slab)?$,masonry,R6: smooth stone fireproof
+~prismarine,crystal,"R6: prismarine blocks, shards and crystals fireproof"
+minecraft:dragon_breath,container,bottled (name hit dragon)
+minecraft:smoker,machine,stone-material machine: fireproof as before
+minecraft:stonecutter,machine,stone-material machine: fireproof as before
+minecraft:smithing_table,metal,fireproof as before
+minecraft:spyglass,metal,copper tool: fireproof as before
+minecraft:lodestone,refractory,lavaproof as before
+minecraft:compass,refractory,lavaproof as before
+minecraft:recovery_compass,refractory,lavaproof as before
+minecraft:nether_star,refractory,lavaproof as before
+minecraft:wither_skeleton_skull,refractory,lavaproof as before
+minecraft:dragon_egg,refractory,lavaproof as before
+minecraft:heart_of_the_sea,refractory,lavaproof as before
+minecraft:beacon,refractory,lavaproof as before
+minecraft:conduit,refractory,lavaproof as before
+~^minecraft:infested_,refractory,stone (clay material): lavaproof as before
+minecraft:bone_block,organic,packed bone: floats as before
+~^minecraft:purpur_,produce,chorus family: floats as before
+~^minecraft:sculk,earth,sculk: sinks and fireproof as before
+minecraft:dried_kelp_block,produce,packed kelp: floats as before
+minecraft:slime_block,organic,floats as before
+minecraft:honey_block,organic,floats as before
+minecraft:honeycomb_block,organic,floats as before
+minecraft:nether_wart_block,packed,floats as before (R13)
+minecraft:warped_wart_block,packed,floats as before (R13)
+minecraft:shroomlight,packed,floats as before (R13)
+minecraft:moss_block,packed,floats as before (R13)
+minecraft:lead,fibre,rope (name hit lead the metal)
+minecraft:painting,wood,canvas on a wooden frame: floats as before
+minecraft:bundle,organic,leather: floats as before
+minecraft:flint,crystal,fireproof as before
+minecraft:disc_fragment_5,metal,music disc: fireproof as before
+minecraft:clock,metal,gold: fireproof as before
+minecraft:tripwire_hook,machine,redstone component
+minecraft:rabbit_foot,organic,floats as before
+~coral_block$,earth,"coral blocks, dead ones too: sink, fireproof"
+~coral,organic,"coral and coral fans: float, burn"
+minecraft:glowstone,powder,packed glowstone dust (glass material)
+minecraft:end_portal_frame,refractory,end stone frame
+~^minecraft:(.*command_block(_minecart)?|jigsaw|structure_block|light)$,technical,creative-only
+minecraft:firework_star,explosive,gunpowder (R19)
+minecraft:snowball,ice,snow (R2)
+create:builders_tea,container,bottled drink
+supplementaries:sugar_cube,packed,packed sugar (R13)
+supplementaries:flax_block,packed,flax bale (R13)
+farmersdelight:stove,machine,stone-material appliance
+davebuildingmod:fire_charge_passive_generator,machine,generator (name hit fire charge)
+~sand_layer,earth,sand layers (snow material)
+~paraffin_wax_block,organic,wax
+~powdered_sugar_bucket,container,bucket
+~blasting_sail,metal,Create fan sail (name hit blasting)
+cookingforblockheads:ice_unit,metal,appliance (name hit ice)

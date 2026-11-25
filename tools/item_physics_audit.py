@@ -23,6 +23,7 @@ the mod-default rung, or none ('unclassified'), is listed so nothing new slips t
 """
 import argparse
 import collections
+import csv
 import glob
 import json
 import os
@@ -33,6 +34,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EXP = os.path.join(ROOT, 'kubejs', 'exported')
 OUT_MD = os.path.join(ROOT, 'feature_writeup', 'item_physics_audit.md')
 OUT_JSON = os.path.join(ROOT, 'kubejs', 'generation_scripts', 'physics', 'item_physics_families.json')
+OVERRIDES = os.path.join(ROOT, 'tools', 'item_physics_overrides.csv')
+# family tags: in the Compat script tree, copied into the Creative Compat jar (development/creativeCompat/build.gradle);
+# the namespace is the owning jar's (creativecompat), like the four behavior tags ItemPhysicSplit reads
+TAG_DIR = os.path.join(ROOT, 'kubejs', 'data', 'creativecompat', 'tags', 'items', 'physics')
+OUT_LEFTOVERS = os.path.join(ROOT, 'feature_writeup', 'item_physics_leftovers.csv')
 P = 'creativecompat:physics/'
 
 # --------------------------------------------------------------------------------------------------------
@@ -41,32 +47,71 @@ P = 'creativecompat:physics/'
 # Order matters only for the doc; matching order is RUNGS below.
 # --------------------------------------------------------------------------------------------------------
 FAMILIES = collections.OrderedDict([
-	('explosive',  dict(water='sink',  fire='burn',      note='burn transform: explodes')),
-	('refractory', dict(water='sink',  fire='lavaproof', note='stone, deepslate, nether and end stone, obsidian, diamond, netherite, fire-resistant items')),
-	('metal',      dict(water='sink',  fire='fireproof', note='ingots, plates, metal blocks, metal parts and tools')),
-	('machine',    dict(water='sink',  fire='fireproof', note='composite devices: circuits, storage, computers, electronics')),
-	('masonry',    dict(water='sink',  fire='fireproof', note='fired clay, bricks, terracotta, concrete, tiles, plaster')),
-	('earth',      dict(water='sink',  fire='fireproof', note='sand, gravel, dirt, mud, clay, loose mineral')),
-	('crystal',    dict(water='sink',  fire='fireproof', note='gems and crystals other than diamond')),
+	('explosive',  dict(water='sink',  fire='burn',      note='burn transform: explodes, blast 1.0, no block damage (R19, D3)')),
+	('refractory', dict(water='sink',  fire='lavaproof', note='stone, deepslate, nether and end stone, obsidian, diamond, netherite, quartz, nether brick')),
+	('metal',      dict(water='sink',  fire='fireproof', note='ingots, plates, metal blocks, metal parts and tools, Create components (R12)')),
+	('machine',    dict(water='sink',  fire='fireproof', note='composite devices: circuits, storage, computers, electronics, redstone components (R3)')),
+	('masonry',    dict(water='sink',  fire='fireproof', note='fired clay, bricks, terracotta, concrete, tiles, plaster, sandstone, smooth stone (R6)')),
+	('earth',      dict(water='sink',  fire='fireproof', note='sand, gravel, dirt, mud, clay, ash, soot, loose mineral')),
+	('crystal',    dict(water='sink',  fire='fireproof', note='gems and crystals other than diamond, prismarine (R6)')),
 	('glass',      dict(water='sink',  fire='burn',      note='burn transform: dirty glass')),
-	('container',  dict(water='sink',  fire='fireproof', note='bottles, potions, buckets, jars, canned food')),
-	('powder',     dict(water='sink',  fire='fireproof', note='dense powders: redstone, glowstone, metal dusts')),
-	('ice',        dict(water='float', fire='fireproof', note='ice and snow; ice floats in water')),
-	('wood',       dict(water='float', fire='burn',      note='burn transform: ash'),),
-	('nether_wood', dict(water='float', fire='fireproof', note='crimson and warped wood (non-flammable)')),
+	('container',  dict(water='sink',  fire='fireproof', note='bottles, potions, buckets, jars, cans, bottled drinks, empty ones too (R9)')),
+	('powder',     dict(water='sink',  fire='fireproof', note='dense powders: redstone, glowstone, metal dusts (D4)')),
+	('fuel',       dict(water='sink',  fire='burn',      note='coal, charcoal, torches, campfires, redstone lamps (R10)')),
+	('heavy_wood', dict(water='sink',  fire='burn',      note='treated wood (R11, no ash D2), crossbow, wooden shield, armor stand (R7)')),
+	('ice',        dict(water='float', fire='burn',      note='ice and snow (R2)')),
+	('wood',       dict(water='float', fire='burn',      note='burn transform: ash (R18); wooden and leather-free tools (R14)'),),
+	('nether_wood', dict(water='float', fire='lavaproof', note='crimson and warped wood (R1); skims on lava (R17)')),
 	('produce',    dict(water='float', fire='burn',      note='crops, fruit, vegetables, mushrooms, kelp, gourds')),
-	('food',       dict(water='float', fire='burn',      note='prepared food not in a container')),
-	('organic',    dict(water='float', fire='burn',      note='mob drops: bone, flesh, hide, slime, shell, horn')),
+	('food',       dict(water='float', fire='burn',      note='prepared food not in a container: jello, ice cream, feasts, pies (R15)')),
+	('organic',    dict(water='float', fire='burn',      note='mob drops: bone, flesh, hide, leather gear, slime, shell, horn; belts (R12, D1)')),
+	('packed',     dict(water='float', fire='burn',      note='heavy packed forms of skim items: bales, sacks, storage blocks (R13)')),
 	('foliage',    dict(water='skim',  fire='burn',      note='leaves, flowers, petals, seeds, grass, saplings, vines')),
 	('fibre',      dict(water='skim',  fire='burn',      note='wool, cloth, string, paper, books, feathers, hats')),
 	('light_powder', dict(water='skim', fire='burn',     note='flour, sugar, bone meal, sawdust, pollen')),
-	('technical',  dict(water='sink',  fire='burn',      note='spawn eggs, debug and creative-only items (not audited)')),
-	('unclassified', dict(water='sink', fire='burn',     note='no rung matched: needs a decision')),
+	('technical',  dict(water='sink',  fire='burn',      note='spawn eggs, debug and creative-only items')),
+	('unclassified', dict(water='sink', fire='burn',     note='no rung matched: listed for the owner (R20)')),
 ])
+# skim families: the physics/skims tag. Mineral families: a block item in one of these is a heavy block (R17: sinks in
+# lava even when lavaproof; the physics/lava_sinks tag).
+SKIM_FAMILIES = ('foliage', 'fibre', 'light_powder')
+HEAVY_FAMILIES = ('refractory', 'metal', 'machine', 'masonry', 'earth', 'crystal', 'powder', 'glass')
+
+# ---- rung 0: owner rulings by id token (beat tags and block material; item_physics.md 9.6) ---------------
+# (family, words, unless): a whole token of the id path is in words (a trailing s / es is allowed) and no token is in
+# unless. PHRASES: a run of tokens anywhere in the path.
+RULING_RULES = [
+	('explosive', 'tnt dynamite gunpowder explosive bomb grenade nitro rocket blasting', 'lens stand generator'),   # R19
+	('fuel', 'coal charcoal coke torch campfire', 'ore brick tile chiseled pillar slab stair wall generator'),          # R10
+	('machine', 'repeater comparator observer piston dispenser dropper lever daylight', ''),                         # audit misfile
+	('heavy_wood', 'treated', ''),                                                                                      # R11
+	('food', 'jello feast pie', 'cauldron canned can bottle bottled jar'),                                              # R15
+	('packed', 'bale hay', 'rug carpet'),                                                                               # R13
+]
+RULING_PHRASES = [('food', 'ice_cream'), ('explosive', 'fire_charge'), ('explosive', 'powder_charge'),
+				  ('explosive', 'black_powder'), ('fuel', 'redstone_lamp')]
+
+# ---- rung 0b: gear by the material in its name (R7, R8, R14; not block items) ------------------------------------
+GEAR_WORDS = set(('sword pickaxe axe shovel hoe paxel knife dagger hammer mace spear saber sabre sickle scythe club '
+				  'katana cleaver halberd glaive battleaxe excavator helmet chestplate leggings boots bow crossbow '
+				  'shield trident').split())
+# gear with no material word: shields and crossbows are wood bound with iron (R7: sink, burn), a trident sinks (R8)
+GEAR_NO_MATERIAL = {'shield': 'heavy_wood', 'crossbow': 'heavy_wood', 'trident': 'metal', 'bow': 'wood'}
+
+# ---- R12: Create's stone decoration keeps its stone family; every other Create item is a component ---------------
+CREATE_STONE_WORDS = set(('cut polished pillar layered brick bricks slab stairs wall small asurine crimsite ochrum '
+						  'veridium scoria scorchia limestone').split())
+
+# ---- R13: compacted forms of skim items float instead of skimming --------------------------------------------------
+PACKED_WORDS = set('sack bale'.split())                     # any item
+PACKED_BLOCK_WORDS = set('block bag crate bundle compressed packed'.split())   # block items only
 
 # ---- rung 1: tags (first family whose tag the item carries) --------------------------------------------
 TAG_RULES = [
 	('explosive',  ['forge:gunpowder', 'forge:dusts/gunpowder', 'forge:explosives']),
+	('heavy_wood', ['forge:treated_wood']),
+	('fuel',       ['minecraft:coals', 'forge:storage_blocks/coal', 'forge:storage_blocks/charcoal', 'forge:coal_coke',
+					'forge:storage_blocks/coal_coke']),
 	('refractory', ['forge:obsidian', 'forge:end_stones', 'forge:netherrack', 'forge:gems/diamond',
 					'forge:storage_blocks/diamond', 'forge:ingots/netherite', 'forge:storage_blocks/netherite',
 					'forge:nuggets/netherite', 'minecraft:shulker_boxes', 'minecraft:soul_fire_base_blocks',
@@ -77,7 +122,7 @@ TAG_RULES = [
 					'minecraft:wooden_fences', 'minecraft:wooden_doors', 'minecraft:wooden_trapdoors',
 					'minecraft:wooden_buttons', 'minecraft:wooden_pressure_plates', 'forge:fence_gates/wooden',
 					'minecraft:signs', 'minecraft:boats', 'forge:chests/wooden', 'forge:rods/wooden',
-					'forge:barrels/wooden', 'farmersdelight:cabinets', 'forge:treated_wood', 'create:scrap_wood_small']),
+					'forge:barrels/wooden', 'farmersdelight:cabinets', 'create:scrap_wood_small']),
 	('glass',      ['forge:glass', 'forge:glass_panes', 'quark:shards']),
 	('masonry',    ['minecraft:terracotta', 'forge:concrete', 'forge:bricks']),
 	('earth',      ['forge:sand', 'forge:gravel', 'minecraft:dirt', 'forge:concrete_powders', 'forge:clay']),
@@ -88,9 +133,10 @@ TAG_RULES = [
 					'forge:storage_blocks/raw', 'minecraft:rails', 'minecraft:anvil', 'forge:sheetmetals',
 					'forge:rods/all_metal', 'forge:scaffoldings', 'create:casing']),
 	('crystal',    ['forge:gems', 'forge:storage_blocks/amethyst', 'forge:storage_blocks/emerald']),
+	('light_powder', ['forge:dyes', 'forge:flour', 'forge:sugar', 'forge:dusts/sugar', 'forge:dusts/wheat',
+					  'forge:dusts/flour', 'forge:salt']),
 	('powder',     ['forge:dusts']),
 	('metal',      ['minecraft:music_discs']),
-	('light_powder', ['forge:dyes', 'forge:flour', 'forge:sugar', 'forge:dusts/sugar', 'forge:salt']),
 	('foliage',    ['minecraft:leaves', 'minecraft:saplings', 'minecraft:flowers', 'forge:seeds', 'minecraft:small_flowers',
 					'minecraft:tall_flowers']),
 	('fibre',      ['minecraft:wool', 'forge:wool', 'minecraft:wool_carpets', 'minecraft:beds', 'forge:string',
@@ -132,8 +178,9 @@ SOUND_RULES = {
 GEAR_RULES = [
 	(r'netherite|dragon|echo|felsic|obsidian', 'refractory'),
 	(r'diamond', 'refractory'),
-	(r'wood|leather|turtle|bamboo|cloth|wool|straw', 'wood'),
-	(r'iron|gold|copper|steel|chain|bronze|tin|silver|lead|nickel|alumin|brass|zinc|electrum|constantan|rose_gold|'
+	(r'leather|turtle|hide|scale|bone|chitin', 'organic'),
+	(r'wood|bamboo|cloth|wool|straw', 'wood'),
+	(r'gilded|iron|gold|copper|steel|chain|bronze|tin|silver|lead|nickel|alumin|brass|zinc|electrum|constantan|rose_gold|'
 	 r'cast_iron|manasteel|terrasteel|elementium|uranium|invar|metal|osmium', 'metal'),
 	(r'stone|flint|andesite|granite|diorite|blackstone|deepslate', 'refractory'),
 	(r'emerald|amethyst|quartz|ruby|sapphire|crystal|certus|fluix|gem', 'crystal'),
@@ -167,7 +214,7 @@ NAME_RULES = [
 							  'ingot nugget plate gear cog cogwheel shaft casing pipe tank chain rail wire coil bolt '
 							  'screw rivet valve pump gauge coin anvil cannon gun bullet ammo rifle pistol '
 							  'cartridge girder scaffolding bars grate vent mesh catwalk lamp lantern bell sheetmetal '
-							  'track bogey smithing template trim', parts='metal steel')),
+							  'track bogey smithing template trim minecart shears', parts='metal steel')),
 	('machine',    dict(words='circuit processor chip controller terminal monitor computer drive cell storage '
 							  'interface panel cable bus module upgrade card sensor transmitter receiver battery '
 							  'capacitor generator engine motor turbine machine assembler press crusher furnace '
@@ -196,7 +243,7 @@ NAME_RULES = [
 	('organic',    dict(words='bone flesh meat beef pork porkchop chicken mutton venison duck goose fish cod salmon '
 							  'shrimp crab squid tentacle hide leather pelt fur feather slime membrane scale scute '
 							  'shell claw tooth teeth fang horn antler egg eye heart gland sac tongue tail wing beak '
-							  'hoof wax honeycomb silk web coral', parts='')),
+							  'hoof wax honeycomb silk web coral belt saddle elytra skull head', parts='')),
 	('fibre',      dict(words='wool carpet cloth fabric canvas cotton linen string rope thread twine hemp flax jute '
 							  'sail banner flag curtain rug blanket quilt pillow cushion hammock tapestry bedspread '
 							  'sheet hat cap hood scarf bandana paper book scroll map letter note label ticket '
@@ -301,19 +348,134 @@ def current_behaviour(item_id, phys_tags, dump_row):
 	return water, fire
 
 
-def classify(item_id, tags, dump_row, gear_row):
-	"""(family, rung, evidence). Rungs: 1 tag, 2 fire-resistant flag, 3 block material/sound, 4 gear tier,
-    5 name token, 6 mod default, 7 none."""
+def tokens_of(item_id):
+	return [t for t in re.split(r'[_/]', item_id.split(':', 1)[1]) if t]
+
+
+def _word_in(tokens, words):
+	for t in tokens:
+		if t in words or (t.endswith('s') and t[:-1] in words) or (t.endswith('es') and t[:-2] in words):
+			return t
+	return None
+
+
+def ruling_family(item_id):
+	"""Rung 0: the owner's rulings that beat tags and block material (item_physics.md 9.6)."""
+	path = item_id.split(':', 1)[1]
+	toks = tokens_of(item_id)
+	for fam, phrase in RULING_PHRASES:
+		if re.search(r'(^|[_/])%s($|[_/])' % re.escape(phrase), path):
+			return fam, phrase
+	for fam, words, unless in RULING_RULES:
+		hit = _word_in(toks, set(words.split()))
+		if hit and not _word_in(toks, set(unless.split())):
+			return fam, hit
+	return None
+
+
+def gear_name_family(item_id, block):
+	"""Rung 0b: a tool, weapon or armor piece takes the family of the material in its name (R7, R8, R14)."""
+	if block:
+		return None
+	toks = tokens_of(item_id)
+	gear = [t for t in toks if t in GEAR_WORDS]
+	if not gear:
+		return None
+	rest = '_'.join(t for t in toks if t not in GEAR_WORDS)
+	for rx, fam in GEAR_RULES:
+		if rest and re.search(rx, rest):
+			return fam, '%s %s' % (rest, gear[-1])
+	if gear[-1] in GEAR_NO_MATERIAL:
+		return GEAR_NO_MATERIAL[gear[-1]], gear[-1]
+	return None
+
+
+def packed(item_id, tags, block):
+	"""R13: a heavy packed form (bale, sack, storage block) of a skim item."""
+	toks = set(tokens_of(item_id))
+	if toks & PACKED_WORDS:
+		return True
+	if block and (toks & PACKED_BLOCK_WORDS or any(t.startswith('forge:storage_blocks') for t in tags)):
+		return True
+	return False
+
+
+class Overrides:
+	"""tools/item_physics_overrides.csv: match (an item id, '#tag', 'mod:*' or '~regex' on the full id), family,
+    reason. Ids beat tags, tags beat mods and regexes, rows of a kind in file order."""
+
+	def __init__(self, path):
+		self.ids, self.tags, self.mods, self.rx = {}, [], {}, []
+		self.rows = 0
+		if not os.path.exists(path):
+			return
+		with open(path, newline='', encoding='utf-8') as fh:
+			for row in csv.DictReader(fh):
+				m, fam = (row.get('match') or '').strip(), (row.get('family') or '').strip()
+				if not m or m.startswith('//'):
+					continue
+				if fam not in FAMILIES:
+					sys.exit('%s: unknown family %r for %s' % (os.path.relpath(path, ROOT), fam, m))
+				self.rows += 1
+				if m.startswith('#'):
+					self.tags.append((m[1:], fam))
+				elif m.startswith('~'):
+					self.rx.append((re.compile(m[1:]), fam, m))
+				elif m.endswith(':*'):
+					self.mods[m[:-2]] = fam
+				else:
+					self.ids[m] = fam
+
+	def lookup(self, item_id, tags):
+		if item_id in self.ids:
+			return self.ids[item_id], item_id
+		for t, fam in self.tags:
+			if t in tags:
+				return fam, '#' + t
+		mod = item_id.split(':', 1)[0]
+		if mod in self.mods:
+			return self.mods[mod], mod + ':*'
+		for rx, fam, m in self.rx:
+			if rx.search(item_id):
+				return fam, m
+		return None
+
+
+def classify(item_id, tags, dump_row, gear_row, overrides):
+	"""(family, rung, evidence). Rungs: override, ruling (9.6 name rules), gear name, tag, fire-resistant block,
+    block material/sound, gear tier, edible, name token, mod default, none. Then R12 (Create components) and R13
+    (packed skim items)."""
 	mod = item_id.split(':', 1)[0]
+	block = bool((dump_row or {}).get('blockItem'))
+	hit = overrides.lookup(item_id, tags)
+	if hit:
+		return hit[0], 'override', hit[1]
+	fam, rung, ev = _classify(item_id, tags, dump_row, gear_row, block)
+	if mod == 'create' and (FAMILIES[fam]['water'] in ('float', 'skim') and fam not in ('food', 'produce', 'organic')
+							or fam == 'refractory' and rung != 'tag' and not set(tokens_of(item_id)) & CREATE_STONE_WORDS):
+		return 'metal', rung + '+R12', ev               # every Create component sinks and is fireproof (R12)
+	if fam in SKIM_FAMILIES and packed(item_id, tags, block):
+		return 'packed', rung + '+R13', ev
+	return fam, rung, ev
+
+
+def _classify(item_id, tags, dump_row, gear_row, block):
+	mod = item_id.split(':', 1)[0]
+	hit = ruling_family(item_id)
+	if hit:
+		return hit[0], 'ruling', hit[1]
+	hit = gear_name_family(item_id, block)
+	if hit:
+		return hit[0], 'gear_name', hit[1]
 	hit = tag_family(tags)
 	if hit:
 		return hit[0], 'tag', hit[1]
 	fire_res = (dump_row or {}).get('fireResistant')
 	if fire_res is None and gear_row is not None:
 		fire_res = gear_row.get('fireResistant')
-	if fire_res:
+	if fire_res and block:
 		return 'refractory', 'fire_resistant', 'Item#isFireResistant'
-	if dump_row and dump_row.get('blockItem'):
+	if dump_row and block:
 		mat, snd = dump_row.get('material'), dump_row.get('sound')
 		fam = SOUND_RULES.get(snd) if mat in (None, 'STONE', 'DECORATION', 'modded') else None
 		if fam is None:
@@ -341,6 +503,8 @@ def classify(item_id, tags, dump_row, gear_row):
 		return nh[0], 'name', nh[1]
 	if mod in MOD_DEFAULTS:
 		return MOD_DEFAULTS[mod], 'mod_default', mod
+	if fire_res:
+		return 'refractory', 'fire_resistant', 'Item#isFireResistant'
 	if (dump_row or {}).get('burnTime'):
 		return 'wood', 'fuel', 'burn time %s' % dump_row['burnTime']
 	return 'unclassified', 'none', ''
@@ -349,6 +513,7 @@ def classify(item_id, tags, dump_row, gear_row):
 def main():
 	ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
 	ap.add_argument('--check', action='store_true', help='exit 1 when any item is unclassified')
+	ap.add_argument('--report-only', action='store_true', help='write the report and the JSON only, not the family tags')
 	ap.add_argument('--list-limit', type=int, default=25, help='items listed per mod in the gap tables')
 	args = ap.parse_args()
 
@@ -371,14 +536,16 @@ def main():
 		for r in (load(rel, {}) or {}).get('items', []):
 			gear[r['id']] = r
 
+	overrides = Overrides(OVERRIDES)
 	results = {}
 	for iid in sorted(items):
 		tags = tags_of.get(iid, [])
-		fam, rung, ev = classify(iid, tags, dump_rows.get(iid), gear.get(iid))
+		fam, rung, ev = classify(iid, tags, dump_rows.get(iid), gear.get(iid), overrides)
 		cur_w, cur_f = current_behaviour(iid, phys_tags, dump_rows.get(iid))
 		spec = FAMILIES[fam]
 		manual = sorted(k for k, s in phys_tags.items() if iid in s)
 		results[iid] = dict(mod=items[iid], family=fam, rung=rung, evidence=ev, manual=manual,
+							block=bool((dump_rows.get(iid) or {}).get('blockItem')),
 							now=dict(water=cur_w, fire=cur_f),
 							family_behaviour=dict(water=spec['water'], fire=spec['fire']))
 
@@ -398,6 +565,9 @@ def main():
 					'non-gear items such as netherite scrap, ancient debris and modded fire-resistant items)')
 
 	write_json(results, survivors, dump is not None)
+	if not args.report_only:
+		write_tags(results, dump_rows)
+		write_leftovers(results)
 	write_md(results, survivors, surv_src, dump is not None, args.list_limit)
 	n_unc = sum(1 for r in results.values() if r['family'] == 'unclassified')
 	n_def = sum(1 for r in results.values() if r['rung'] == 'mod_default')
@@ -427,6 +597,46 @@ def write_json(results, survivors, have_dump):
 			row = [r['family'], r['rung'], r['evidence'], fmt_beh(r['now']), r['manual']]
 			fh.write('  %s: %s%s\n' % (json.dumps(iid), json.dumps(row), ',' if n < len(ids) - 1 else ''))
 		fh.write(' }\n}\n')
+
+
+def _write_tag(path, ids):
+	os.makedirs(os.path.dirname(path), exist_ok=True)
+	vals = ',\n'.join('  {"id": %s, "required": false}' % json.dumps(i) for i in sorted(ids))
+	with open(path, 'w', encoding='utf-8') as fh:
+		fh.write('{\n "replace": false,\n "values": [\n%s\n ]\n}\n' % vals if ids else '{\n "replace": false,\n "values": []\n}\n')
+
+
+def write_tags(results, dump_rows):
+	"""Generator mode (item_physics.md 9.5): one item tag per family, creativecompat:physics/family/<family>, every
+    item in exactly one; and creativecompat:physics/lava_sinks, the heavy blocks that sink in lava although lavaproof
+    (R17: lavaproof or fire-resistant block items of a mineral family). item_physics_tags.js maps families to
+    behavior."""
+	fams = collections.defaultdict(list)
+	heavy = []
+	for iid, r in results.items():
+		fams[r['family']].append(iid)
+		lavaproof = FAMILIES[r['family']]['fire'] == 'lavaproof' or (dump_rows.get(iid) or {}).get('fireResistant')
+		if r['block'] and r['family'] in HEAVY_FAMILIES and lavaproof:
+			heavy.append(iid)
+	fam_dir = os.path.join(TAG_DIR, 'family')
+	for f in FAMILIES:
+		_write_tag(os.path.join(fam_dir, f + '.json'), fams.get(f, []))
+	for old in glob.glob(os.path.join(fam_dir, '*.json')):
+		if os.path.basename(old)[:-5] not in FAMILIES:
+			os.remove(old)
+	_write_tag(os.path.join(TAG_DIR, 'lava_sinks.json'), heavy)
+	print('family tags: %d families, %d items; lava_sinks %d' % (len(FAMILIES), len(results), len(heavy)))
+
+
+def write_leftovers(results):
+	"""R20: the items the rules could only place by their mod's default or not at all, by mod, for the owner."""
+	rows = sorted((r['mod'], iid, r['family'], r['rung'], r['evidence']) for iid, r in results.items()
+				  if r['rung'] in ('mod_default', 'none', 'fuel'))
+	with open(OUT_LEFTOVERS, 'w', newline='', encoding='utf-8') as fh:
+		w = csv.writer(fh)
+		w.writerow(['mod', 'item', 'family', 'rung', 'evidence', 'owner_family'])
+		for row in rows:
+			w.writerow(list(row) + [''])
 
 
 def fmt_beh(b):

@@ -595,8 +595,8 @@
 			"script": "tools/item_physics_audit.py",
 			"groups": ["reports", "physics"],
 			"dumps": ["dumpitemsbymod", "dumptags", "dumpgear", "dumpphysics"],
-			"outputs": ["feature_writeup/item_physics_audit.md", "kubejs/generation_scripts/physics/item_physics_families.json"],
-			"apply": "report only (families are not applied to the physics tags yet; item_physics.md section 9)"
+			"outputs": ["kubejs/data/creativecompat/tags/items/physics/family/", "kubejs/data/creativecompat/tags/items/physics/lava_sinks.json", "feature_writeup/item_physics_leftovers.csv", "feature_writeup/item_physics_audit.md", "kubejs/generation_scripts/physics/item_physics_families.json"],
+			"apply": "/reload (the family tags are in the pack folder); :creativeCompat: rebuild and install for the jar copy (item_physics.md 9.5, 9.7)"
 		},
 		{
 			"id": "crop_season_audit",

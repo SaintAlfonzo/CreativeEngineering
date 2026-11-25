@@ -3,6 +3,7 @@ package com.SaintAlfonzo.creativecompat.mixin;
 import com.SaintAlfonzo.creativecompat.itemphysic.AllurementItemCurses;
 import com.SaintAlfonzo.creativecompat.itemphysic.ItemBurnTransform;
 import com.SaintAlfonzo.creativecompat.itemphysic.ItemPhysicSplit;
+import com.SaintAlfonzo.creativecompat.itemphysic.ItemSurfaceFloat;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -52,7 +53,14 @@ public class ItemPhysicServerMixin {
 	 */
 	@Inject(method = "updatePre", at = @At("TAIL"), remap = false)
 	private static void creativeengineering$allurementCurses(ItemEntity item, RandomSource rand, CallbackInfo ci) {
+		ItemSurfaceFloat.after(item);
 		AllurementItemCurses.tick(item);
+	}
+
+	/** Surface floating ({@link ItemSurfaceFloat}) needs the vertical speed before ItemPhysic changes it. */
+	@Inject(method = "updatePre", at = @At("HEAD"), remap = false)
+	private static void creativecompat$surfaceFloatBefore(ItemEntity item, RandomSource rand, CallbackInfo ci) {
+		ItemSurfaceFloat.before(item);
 	}
 
 	@Redirect(method = "fireImmune", at = @At(value = "INVOKE", target = CAN_PASS, remap = false), remap = false)

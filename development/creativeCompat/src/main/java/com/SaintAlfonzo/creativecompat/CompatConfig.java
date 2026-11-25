@@ -29,6 +29,7 @@ public final class CompatConfig {
 	public static final BoatFriction BOAT_FRICTION;
 	public static final Paintings PAINTINGS;
 	public static final Shrapnel SHRAPNEL;
+	public static final ItemPhysics ITEM_PHYSICS;
 	public static final Surface SURFACE;
 	public static final VeinUndo VEIN_UNDO;
 	public static final Jei JEI;
@@ -62,6 +63,8 @@ public final class CompatConfig {
 		BOAT_FRICTION = new BoatFriction(builder);
 		PAINTINGS = new Paintings(builder);
 		SHRAPNEL = new Shrapnel(builder);
+		// dropped items on water and lava surfaces (feature_writeup/item_physics.md 10, rulings R4, R16, R17, R23)
+		ITEM_PHYSICS = new ItemPhysics(builder);
 		SURFACE = new Surface(builder);
 		VEIN_UNDO = new VeinUndo(builder);
 		// from creativecommon-common.toml
@@ -333,6 +336,57 @@ public final class CompatConfig {
 
 		public static boolean on() {
 			return SPEC.isLoaded() && GOLEMS.enabled.get();
+		}
+	}
+
+	/**
+	 * Dropped items on water and lava surfaces ({@code itemphysic.ItemSurfaceFloat}, feature_writeup/item_physics.md 10).
+	 * Both sides read it: item motion is simulated on the client too.
+	 */
+	public static final class ItemPhysics {
+		public final ForgeConfigSpec.BooleanValue surfaceFloat;
+		public final ForgeConfigSpec.BooleanValue damping;
+		public final ForgeConfigSpec.BooleanValue skimOnLayers;
+		public final Motion skim;
+		public final Motion floating;
+		public final Motion lava;
+		public final ForgeConfigSpec.DoubleValue maxPush;
+
+		private ItemPhysics(ForgeConfigSpec.Builder b) {
+			b.comment("Dropped items on water and lava surfaces (both sides; needs ItemPhysic). Which items skim, float or sink",
+					"comes from the item tags creativecompat:physics/skims, floats, sinks, lavaproof and lava_sinks.").push("item_physics");
+
+			surfaceFloat = b.comment("Light items (physics/skims) rest on the water surface, and lavaproof items other than heavy",
+					"blocks (physics/lava_sinks) rest on the lava surface, instead of diving and bobbing.").define("surfaceFloat", true);
+			damping = b.comment("Other floating items dip once and then rest at the surface instead of bobbing for good.")
+					.define("damping", true);
+			skimOnLayers = b.comment("Items that skim on water or lava also rest on top of snow layers and the other layers items",
+					"can sink into (pass-through layers, surface layers) instead of sinking in.").define("skimOnLayers", true);
+			skim = new Motion(b, "skim", "Light items on water.", 0.45, 0.12, 0.05);
+			floating = new Motion(b, "float", "Other floating items on water (with damping on).", 0.75, 0.06, 0.15);
+			lava = new Motion(b, "lava", "Lavaproof items on lava.", 0.35, 0.10, 0.08);
+			maxPush = b.comment("Most vertical speed the surface spring adds in one tick (blocks per tick).")
+					.defineInRange("maxPush", 0.06, 0.0, 1.0);
+
+			b.pop(); // item_physics
+		}
+
+		/** One surface spring: vertical speed = speed x drag + (rest height - height) x spring. */
+		public static final class Motion {
+			public final ForgeConfigSpec.DoubleValue drag;
+			public final ForgeConfigSpec.DoubleValue spring;
+			public final ForgeConfigSpec.DoubleValue depth;
+
+			private Motion(ForgeConfigSpec.Builder b, String key, String what, double drag, double spring, double depth) {
+				b.comment(what).push(key);
+				this.drag = b.comment("Share of the vertical speed kept each tick (lower settles faster).")
+						.defineInRange("drag", drag, 0.0, 1.0);
+				this.spring = b.comment("Pull toward the rest height, per block of distance.")
+						.defineInRange("spring", spring, 0.0, 1.0);
+				this.depth = b.comment("How far below the surface the item's bottom rests (blocks).")
+						.defineInRange("depth", depth, 0.0, 1.0);
+				b.pop();
+			}
 		}
 	}
 
