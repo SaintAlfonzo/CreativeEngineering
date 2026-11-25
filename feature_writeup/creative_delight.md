@@ -2414,4 +2414,4 @@ TODO `creative-common-publish #18`, rulings W2-8 and W2-9 ([plan_wave2_publish.m
 - **Honeycomb shearing:** `mixin/minecraft/BeehiveHoneycombMixin`, `CDConfig.BEES` `[bees] honeycombMultiplier` (default
   1, the pack 2). The constructor copies an old `[bees]` from `creativecommon-common.toml` once before registering the
   config (`CDConfig.COMMON_FILE`, `COMMON_SECTIONS`). Mechanics: [bee_nests.md](bee_nests.md) section 4.
-- Tests: CM-16 (SQ-CM-42 old-save swap, SQ-CM-43), SQ-FCK-20 and SQ-FCK-21 (carry-over); SQ-FCK-12, -13 read Delight's file.
+- Tests: CM-16 (SQ-CM-42 old-save swap, SQ-CM-43), SQ-FCK-24 and SQ-FCK-25 (carry-over); SQ-FCK-12, -13 read Delight's file.

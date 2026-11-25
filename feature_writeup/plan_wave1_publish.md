@@ -9,15 +9,15 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 
 ## 0. Owner rulings
 
-<!-- generated:status_index begin open_work sha1=97ace51e0540 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 2, Testing 6), 0 Complete.
+<!-- generated:status_index begin open_work sha1=49d5aea43a13 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Testing 8), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food-tuning #66` | Planned | S | Drinks: hot cocoa, strong hot cocoa, Farmer's Respite coffee, long coffee and strong coffee, prickly pear juice, strawberry banana smoothie (and their families) carry the drink food type, so Raspberry Pie counts them as drinks |
-| `food-tuning #67` | Planned | S | Jams are foods: every jam family member (Vintage jam jars, Fruits Delight jellies, Upgrade Aquatic mulberry jam bottle) stays out of the drink, no-diet and Diet Log excluded tags and counts in the Diet Log; the family stays its own (preserve/jam) |
 | `creative-compat-publish #8` | Testing | S | Weathered Cardboard Box moves from Creative Compat to Creative Engineering before Compat 1.0.0: id creativeengineering:weathered_cardboard_box, Compat ids in saves swapped back, item dict key kept, texture exemption (W2) moves with it |
 | `creative-compat-publish #9` | Testing | S | Squid and whales: squid and glow squid flee Alex's Mobs cachalot whales; the giant squid no longer flees whales and fights back when a whale attacks it or comes close (the flee radius config goes) |
+| `food-tuning #66` | Testing | S | Drinks: hot cocoa, strong hot cocoa, Farmer's Respite coffee, long coffee and strong coffee, prickly pear juice, strawberry banana smoothie (and their families) carry the drink food type, so Raspberry Pie counts them as drinks |
+| `food-tuning #67` | Testing | S | Jams are foods: every jam family member (Vintage jam jars, Fruits Delight jellies, Upgrade Aquatic mulberry jam bottle) stays out of the drink, no-diet and Diet Log excluded tags and counts in the Diet Log; the family stays its own (preserve/jam) |
 | `raspberry-pie-publish #21` | Testing | C | Permanent buff icon keeps cycling diamond and effect while the buff is active: find and fix (rule unchanged: cycle until reached, effect alone while active) |
 | `raspberry-pie-publish #22` | Testing | C | Steady text: Diet Log tagline 'No slipping; does not trigger plates, tripwires or dripleaf'; full effect description lists all three SteadyRules rules |
 | `raspberry-pie-publish #23` | Testing | C | Hover taglines for the 19 ladder effects that have none: agent drafts, owner reviews the list before it is written |
@@ -28,7 +28,7 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 |---|---|---|---|---|---|
 | W1 | PR-CC-12: composter textures recolored with Quark and Architect's Palette plank palettes | open | Accept with credit: NOTICE names the palette sources; no texture change | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W2 | PR-CP-13: weathered cardboard box texture (ad-hoc script, owner-only redo) | open | Superseded by W16 (the box leaves Compat; the exemption follows it to Creative Engineering). Was: ship as is in Compat 1.0.0; dated exemption; stays on art_needed until the owner replaces it | 2026-11-23 | AskUserQuestion 2026-11-23 |
-| W3 | PR-CC-13: loading tips, 532 upstream, pack override removes 319 | open | Common's jar removes only the tips about content missing from 1.19.2; the pack override keeps the rest | 2026-11-23 | AskUserQuestion 2026-11-23 |
+| W3 | PR-CC-13: loading tips, 532 upstream, pack override removes 319 | open | Common's jar removes only the tips about content missing from 1.19.2; the pack override keeps the rest. Widened 2026-11-24 (AskUserQuestion): the 30 tips wrong in 1.19.2 also go in the jar | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W4 | `publish-readiness #3` clean-clone build | open | Before the wave 1 uploads | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W5 | Raspberry Pie low rows `#12`, `#14` to `#20` | open | All in 1.0.0 | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W6 | "permanant effects stop cycling between icon and diamond when enabled" | open | Keep the rule (cycle until reached, effect alone while active); the report is a bug to find (`raspberry-pie-publish #21`) | 2026-11-23 | AskUserQuestion 2026-11-23 |

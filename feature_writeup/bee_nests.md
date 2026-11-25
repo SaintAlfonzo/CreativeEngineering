@@ -162,7 +162,7 @@ Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Built so far: honeycomb shear
   `mixin/minecraft/BeehiveHoneycombMixin` multiplies that constant by `[bees] honeycombMultiplier` in
   creativedelight-common.toml (default 1 = vanilla, the pack sets 2, so 6; 1 to 16; read live). In Creative Common until
   2026-11-24 (wave 2 carve, TODO `creative-common-publish #18`): Delight copies an old `[bees]` from
-  creativecommon-common.toml once (SQ-FCK-20, SQ-FCK-21). Hand shearing and dispenser shearing both go through that method.
+  creativecommon-common.toml once (SQ-FCK-24, SQ-FCK-25). Hand shearing and dispenser shearing both go through that method.
   Hives from other mods with their own drop code are untouched. Test BN-HC-01: shear a full (honey level 5) hive with
   shears -> 6 honeycombs; a dispenser with shears facing a full nest -> 6; set the key to 1 -> 3. See `dishes/ingredients #22`
   for honeycomb as sugar.

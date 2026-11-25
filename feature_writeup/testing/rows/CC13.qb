@@ -91,7 +91,7 @@
 @group A (full pack)
 @commands `/recipe give @s minecraft:stick`; shear a full beehive with `/cdevtest loot`-style shears or a dispenser; grep latest.log for `[jeiRemove]`, `[itemMerges]`, `[removedWoods]`; `/kubejs hand` on a removed item (`create_dd:spirit_planks` or `quark:flax`... any listed id)
 @pass `Unlocked 0 recipes`; 6 honeycomb from a full hive; the `[jeiRemove] N removed items registered (pack list added)` line with N the same order as before (about 360 plus merges); a removed item has no item tags
-@fails pack config `config/creativecommon-common.toml` lost `[recipe_book] unlocks = false`, or `config/creativedelight-common.toml` `honeycombMultiplier = 2` (carried over from Common's file, SQ-FCK-20); `kubejs/startup_scripts/removed/` not loaded or ran before Common's list; `server_scripts/tags/removed_item_tags.js`
+@fails pack config `config/creativecommon-common.toml` lost `[recipe_book] unlocks = false`, or `config/creativedelight-common.toml` `honeycombMultiplier = 2` (carried over from Common's file, SQ-FCK-24); `kubejs/startup_scripts/removed/` not loaded or ran before Common's list; `server_scripts/tags/removed_item_tags.js`
 @draft the item id in the tag check is picked from `startup_scripts/removed/removed_items.js` at run time
 ## SQ-CC13-09 | Wither Immunity: Wither is refused while it lasts, and an existing Wither deals no damage
 @group A (full pack)

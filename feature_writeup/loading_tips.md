@@ -74,7 +74,7 @@ Built-in packs (`resourcepacks/<folder>/` in the Creative Common jar, registered
 
 | Pack | Folder / namespace | Content |
 |---|---|---|
-| Loading Tips | `loading_tips` | the 532 tips of Loading Tips 1.2.1+26.1, verbatim, priority 0 (`tips.json`), and `version_filter.json` (override, priority 1, since 2026-11-24) removing the 106 tips about content newer than 1.19.2 (appendix A "Newer than 1.19.2"), so Common alone shows 426; attribution in its `CREDITS.txt` and pack description |
+| Loading Tips | `loading_tips` | the 532 tips of Loading Tips 1.2.1+26.1, verbatim, priority 0 (`tips.json`), and `version_filter.json` (override, priority 1, since 2026-11-24) removing the 106 tips about content newer than 1.19.2 and the 30 tips wrong in 1.19.2 (appendix A "Newer than 1.19.2" and "Wrong in 1.19.2"), so Common alone shows 396; attribution in its `CREDITS.txt` and pack description |
 | Creative Tips | `creativetips` | override file, priority 10: removes 213 tips (the other appendix A groups, both audits and owner edits; 319 before the jar took the version filter), replaces 210; 213 tips show |
 
 ## 3. What the pack changes
@@ -138,7 +138,7 @@ Built-in packs (`resourcepacks/<folder>/` in the Creative Common jar, registered
 | LTP-08 | client | join a server | tip on the connecting and receiving screens, same tip until the timer rolls it |
 | LTP-09 | client | change dimension; leave a world | tip on the transition screen; no bar on "Saving world" or the screen after it |
 | LTP-10 | client | grep latest.log | `Loading tips: 213 tips from 3 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)` (2 files before 2026-11-24) |
-| LTP-17 | client, Common without the pack's Creative Tips | F3+T, grep latest.log | `426 tips from 2 files (0 replaced, 106 removed, ...)`; with the pack LTP-10's line. Queue CQ-LTP-17 |
+| LTP-17 | client, Common without the pack's Creative Tips | F3+T, grep latest.log | `396 tips from 2 files (0 replaced, 136 removed, ...)`; with the pack LTP-10's line. Queue CQ-LTP-17 |
 | LTP-11 | client, a test pack without `override` that repeats an id | F3+T | the first tip stays, a clash line in the log |
 | LTP-12 | client, a test pack with `override: true` and one same-id tip | F3+T | that tip replaces the same-id tip, no per-tip flag needed |
 | LTP-13 | client, a test pack with a plain-string tip | F3+T | the tip shows; the count rises by one |
@@ -158,12 +158,15 @@ Built-in packs (`resourcepacks/<folder>/` in the Creative Common jar, registered
   about content newer than 1.19.2 moved into Common's jar (`version_filter.json`); the pack keeps 213 (52 duplicates,
   30 wrong in 1.19.2, 4 not tips, 127 from the two pack audits and owner edits). Effective list unchanged (213). LTP-17,
   CQ-LTP-17.
+- 2026-11-24: the 30 tips wrong in 1.19.2 also moved into `version_filter.json` (owner, AskUserQuestion 2026-11-24):
+  Common alone shows 396 tips; Creative Tips keeps 183 removals; effective pack list unchanged (213).
 
 ## Appendix A. Tips dropped from Loading Tips 1.2.1+26.1
 
 Since 2026-11-14 these are `remove` entries in Creative Tips (Loading Tips itself holds all 532). Since 2026-11-24 the
-"Newer than 1.19.2" group is removed by Creative Common's own `version_filter.json` instead (publish_readiness.md
-PR-CC-13, ruling W3: content missing from 1.19.2 only); Creative Tips keeps the other three groups and both audits.
+"Newer than 1.19.2" and "Wrong in 1.19.2" groups are removed by Creative Common's own `version_filter.json` instead
+(publish_readiness.md PR-CC-13, ruling W3, widened by the owner 2026-11-24); Creative Tips keeps the other two groups and
+both audits.
 
 `#` is the index in the upstream `tips` array (0-based).
 
