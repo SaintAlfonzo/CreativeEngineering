@@ -433,19 +433,19 @@ Planned (part B): `SrmScoopMixin.java`, the overlay and look toggle, the WTHIT n
 
 ## 8. In-game test suite (drafted)
 
-- [ ] **SRM-01 Boot** (queue SQ-SRM-01)**:** start the client and a dedicated server with SRM and the fixed Compat -> no crash; `latest.log` has `SereneSeasons detected. Overriding melting behavior.` and no injection failure.
+- [ ] **SRM-01 Boot:** (queue SQ-SRM-01)**:** start the client and a dedicated server with SRM and the fixed Compat -> no crash; `latest.log` has `SereneSeasons detected. Overriding melting behavior.` and no injection failure.
 - [ ] **SRM-02 Light melt off:** 3 snow layers beside a sea lantern and a redstone lamp, wait 5 minutes (`randomTickSpeed` 100) -> they stay; beside a torch -> they lose layers (fire rule).
-- [ ] **SRM-03 Snowy plant melts** (queue SQ-SRM-02)**:** place snow on a poppy (one `snowrealmagic:snow`), put a torch beside it -> the snow melts layer by layer and the poppy is left standing.
-- [ ] **SRM-04 Magma vs SRM snowfall** (queue SQ-SRM-07)**:** a magma block in a snowy plains clearing, `/weather thunder` for 10 minutes at `randomTickSpeed` 100 -> no snow within 3 of it; snow beyond.
+- [ ] **SRM-03 Snowy plant melts:** (queue SQ-SRM-02)**:** place snow on a poppy (one `snowrealmagic:snow`), put a torch beside it -> the snow melts layer by layer and the poppy is left standing.
+- [ ] **SRM-04 Magma vs SRM snowfall:** (queue SQ-SRM-07)**:** a magma block in a snowy plains clearing, `/weather thunder` for 10 minutes at `randomTickSpeed` 100 -> no snow within 3 of it; snow beyond.
 - [ ] **SRM-05 Wading:** walk and sprint through 2, 5 and 7 layers of snow barefoot -> the same speeds as before SRM (BR walk-through values); WTHIT shows "N of 8 layers".
 - [ ] **SRM-06 Standing on top:** the same in leather boots -> Snow tier 0.75, no extra drag (F2 off).
-- [ ] **SRM-07 Wading a snowy plant** (queue CQ-SRM-01, with SRM-17, SRM-24)**:** walk through snow on tall grass and on a sweet berry bush -> walk-through like snow, the bush's 0.36 where it is lower; no SRM 0.8 stuck.
+- [ ] **SRM-07 Wading a snowy plant:** (queue CQ-SRM-01, with SRM-17, SRM-24)**:** walk through snow on tall grass and on a sweet berry bush -> walk-through like snow, the bush's 0.36 where it is lower; no SRM 0.8 stuck.
 - [ ] **SRM-08 Fall into snow:** drop 10 blocks into 7 layers barefoot and in leather boots, and onto bare grass -> the same damage all three times (D2 = full).
 - [ ] **SRM-09 Falling snow (R3):** break the block under 5 layers on a pillar -> one fall as SRM's falling snow, the layers land and merge; no FallingLayers entity for snow; a salt layer on a pillar falls as salt (FallingLayers), never as snow. Queued as SQ-CMP-38 (2026-11-24).
 - [ ] **SRM-10 Replace:** place cobblestone into 3 and 4 layers of snow and into a snowy poppy -> 3 replaced, 4 on top (`replaceMaxLayers` 3).
 - [ ] **SRM-11 Storm cap (R5):** snowy plains, `/weather thunder` 30 minutes at `randomTickSpeed` 100 -> snow piles to 8 layers and stays a layer (no snow block, nothing stacks above it); 8 layers are stood on, 1 to 7 waded.
-- [ ] **SRM-12 Season melt (R6)** (queue SQ-SRM-06)**:** Calendar spring in a temperate biome, 3 layers and ice outdoors -> Serene Seasons melts them as before SRM (its handler runs, throttled); snow beside a sea lantern does not melt; in a frozen-type biome -> they stay.
-- [ ] **SRM-13 IW rain melt on a snowy plant** (queue SQ-SRM-04)**:** rain on a snowy dandelion in a warm biome -> the snow goes, the dandelion stays.
+- [ ] **SRM-12 Season melt (R6):** (queue SQ-SRM-06)**:** Calendar spring in a temperate biome, 3 layers and ice outdoors -> Serene Seasons melts them as before SRM (its handler runs, throttled); snow beside a sea lantern does not melt; in a frozen-type biome -> they stay.
+- [ ] **SRM-13 IW rain melt on a snowy plant:** (queue SQ-SRM-04)**:** rain on a snowy dandelion in a warm biome -> the snow goes, the dandelion stays.
 - [ ] **SRM-14 IW snowy stairs:** IW snowy stone stairs beside snow in a storm -> they stay IW's block (not wrapped by SRM); a torch beside them melts them to stone stairs.
 - [ ] **SRM-15 Salt layers (R10):** right-click a salt layer with a shovel and sneak right-click it with an empty hand -> no snowballs, no layer taken; break the block under a salt layer -> it falls as salt (FallingLayers), lands as salt; place a snow layer item on a salt layer -> no snow added to the salt; fall 10 blocks onto 6 salt layers -> full damage.
 - [ ] **SRM-16 Scoops (R10):** shovel right-click on 5 layers of snow -> 3 layers, 2 snowballs, 1 durability; on 1 layer -> gone, 1 snowball; sneak empty-hand on 3 layers -> 2 layers, 1 snowball in hand; a plain empty-hand click -> nothing.
@@ -454,13 +454,13 @@ Planned (part B): `SrmScoopMixin.java`, the overlay and look toggle, the WTHIT n
 - [ ] **SRM-19 Mob pathing:** a zombie chasing across 6 layers of snow -> it treats the pile as a step up (3.11), as before SRM.
 - [ ] **SRM-20 Worldgen:** new snowy plains chunks -> grass and flowers under snow (`snowrealmagic:snow`), no errors in the log.
 - [ ] **SRM-21 Snowed fence drops:** break a snow-topped oak fence and a snowed poppy -> the fence or poppy plus the snow; pick block gives the fence or poppy.
-- [ ] **SRM-22 Nether snow** (queue SQ-SRM-03)**:** place snow on a plant in the Nether -> it fizzes away (ultra-warm instant), the plant stays.
+- [ ] **SRM-22 Nether snow:** (queue SQ-SRM-03)**:** place snow on a plant in the Nether -> it fizzes away (ultra-warm instant), the plant stays.
 - [ ] **SRM-23 Rubidium render:** client with Rubidium, snowy foliage on and off (`snowVariants`) -> no missing models, no render errors.
 - [ ] **SRM-24 Dedicated server sync:** player on a dedicated server wades 5 layers and stands on a snowy poppy -> no rubber-banding (client and server agree on collision).
 - [ ] **SRM-25 Overlay (R11):** client: a snow layer on stone, on dirt and a snowy poppy -> the block under each shows SRM's snow-drip sides; with Rubidium on too; screenshot for the owner.
 - [ ] **SRM-26 Blizzard (R13):** snowy plains, `/weather rain` 10 minutes -> no falling snow from the sky; `/weather thunder` 10 minutes -> falling-snow chunks of 1 to 2 layers land; `/gamerule snowrealmagic:blizzardStrength` reads 2, frequency 3500 on a new world.
 - [ ] **SRM-27 Snow into water (R13):** drop 20 falling-snow chunks into still water (break their support over a pool) -> about 4 turn the water to ice, the rest add nothing.
-- [ ] **SRM-28 Snowy grass does not spread (R17)** (queue SQ-SRM-05)**:** a grass block with 1 snow layer on it beside dirt, 20 minutes at `randomTickSpeed` 100 -> the dirt stays dirt; the same without snow -> it spreads; grass spreads onto a Vinery dirt slab; grass under 5 layers stays grass.
+- [ ] **SRM-28 Snowy grass does not spread (R17):** (queue SQ-SRM-05)**:** a grass block with 1 snow layer on it beside dirt, 20 minutes at `randomTickSpeed` 100 -> the dirt stays dirt; the same without snow -> it spreads; grass spreads onto a Vinery dirt slab; grass under 5 layers stays grass.
 - [ ] **SRM-29 Salt odds (R18):** Salt Melt on 8 layers -> 4 layers; a salt block beside 8 layers, log 40 melts -> about 55% take 1 layer, 35% 2, 10% 3.
 - [ ] **SRM-30 WTHIT name (R12):** look at a snow-topped oak stair and a snowy poppy -> "Snowy Oak Stairs", "Snowy Poppy".
 - [ ] **SRM-31 Snow look off (R19):** empty-hand right-click a snowy poppy, a snow-topped oak stair, a plain 3-layer snow on stone and IW snowy cobblestone -> each loses its snowy look (no snowy texture, no drip sides; the snow layers stay, walk-through unchanged; the cobblestone becomes plain cobblestone); place one snow layer on each (or let snow fall) -> the look comes back; sneak right-click still scoops 1 layer.

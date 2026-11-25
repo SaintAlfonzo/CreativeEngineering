@@ -90,7 +90,7 @@ public class CalendarMixinPlugin extends GatedMixinPlugin {
 	/**
 	 * Snow! Real Magic's HEAD callback on Serene Seasons' {@code onWorldTick} (merged as {@code handler$...$srm_onWorldTick},
 	 * static, taking the event and the CallbackInfo) cancels the whole melt. Its call becomes POP2 (the two arguments
-	 * dropped), so the CallbackInfo is never cancelled and the handler runs on (snow_real_magic.md ruling R6). SRM's
+	 * dropped), so the CallbackInfo is never canceled and the handler runs on (snow_real_magic.md ruling R6). SRM's
 	 * own work in that callback, the weather frequency, is what the handler does itself.
 	 */
 	private static void dropSrmMeltCancel(ClassNode targetClass) {
