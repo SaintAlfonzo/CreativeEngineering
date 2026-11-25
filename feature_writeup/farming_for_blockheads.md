@@ -14,8 +14,8 @@ asks by name; upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=57082b9d4f62 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=cae4e4d2f083 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 4, Pinned 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -23,7 +23,7 @@ asks by name; upstream bugs are fixed.
 | `mod-integration #8` | Planned | C | Courier Spawn Point: final texture (temporary: vanilla cartography table look) |
 | `mod-integration #9` | Planned | S | Courier Spawn Point: final recipe (temporary: chest surrounded by 8 trapdoors of any kind) |
 | `mod-integration #10` | Planned | S C P T | Farming for Blockheads: port the rabbit trap (pack catch list, biome catch tables, tooltip) |
-| `mod-integration #12` | Planned | S | Rabbit trap: review the biome catch list; add more Alex's Mobs and other catchable mobs by biome |
+| `mod-integration #12` | Pinned | S | Rabbit trap: review the biome catch list; add more Alex's Mobs and other catchable mobs by biome |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -33,7 +33,7 @@ asks by name; upstream bugs are fixed.
 | Overlap | section 2 | no other shipping bin in the pack; the rest of FfB overlaps Hearth and Harvest, Quark, Incubation, Slice and Dice |
 | Upstream bugs | B1, B2 (section 3.4) | none blocking for the bin |
 | Fold-in (bin and rabbit trap) | section 4 | 13 steps drafted |
-| Decisions | D1 to D11 (section 5) | ruled 2026-11-23 and 2026-11-24 (5.1) except D10, D11 (trap details); D7c pinned |
+| Decisions | D1 to D11 (section 5) | ruled 2026-11-23 and 2026-11-24 (5.1); D7c pinned |
 | Tests | SHB-01 to SHB-28 (section 8) | drafted |
 
 - Jar: the 26.3 jar is the only source of the bin. It is a donor for art (Miner's Delight route, [miners_delight.md](miners_delight.md)
@@ -364,8 +364,8 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D7 | Rabbit trap (section 2.3) | Ruled 2026-11-24: port, pack catch list, biome tables, tooltip (5.1) | ruled |
 | D7b | Fishing barrel (section 2.3) | Ruled 2026-11-24: not ported (5.1) | ruled |
 | D7c | Scythe (section 2.3) | Pinned 2026-11-24 for later: no FfB scythe; kitchen #16 scythes take the area harvest from hoes (2.3) | pinned |
-| D10 | Rabbit trap and tamed animals: catch owned pets or not | Not caught (an owned cat, raccoon, mudskipper or warped toad is skipped) | not caught |
-| D11 | Rabbit trap catch list (2.3.1): the 18 types | As listed | as listed |
+| D10 | Rabbit trap and tamed animals: catch owned pets or not | Ruled 2026-11-24 (5.1): not caught (an owned cat, raccoon, mudskipper or warped toad is skipped) | ruled |
+| D11 | Rabbit trap catch list (2.3.1): the 18 types | Ruled 2026-11-24 (5.1): as listed; widening is `mod-integration #12` (pinned) | ruled |
 | D8 | Courier Spawn Point art and recipe | Ruled 2026-11-24 (5.1): temporary; final art and recipe are TODO rows | temporary |
 | D9 | Courier Spawn Point reach and walk timeout | Ruled 2026-11-24 (5.1) | ruled |
 
@@ -389,6 +389,8 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D7b | (2026-11-24) Fishing barrel not ported. |
 | D12 | (2026-11-24) Passive catches are limited by nearby traps: one passive catch per group of traps within `rabbitTrapPassiveSpacing` blocks (default 8, config); the trap checked first after a chunk load is random (2.3.2). |
 | D7c | (2026-11-24) Scythe pinned for a later recommendation (2.3); owner leans toward moving the hoe area harvest to scythes. |
+| D10 | (2026-11-24) Owned pets are not caught: the trap skips tamed animals (an owned cat, raccoon, mudskipper or warped toad). |
+| D11 | (2026-11-24) The catch list is the 18 types in 2.3.1. Expanding it by biome stays pinned as TODO `mod-integration #12`. |
 
 ## 6. File map (planned)
 

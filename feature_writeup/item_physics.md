@@ -2,13 +2,13 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=8d2b7d9b6e31 -->
+<!-- generated:status_index begin open_work sha1=ab01ad6e9ee7 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 2, In Progress 1, Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `items/item-physics #6` | Planned | C P T | Light items skim on water; lavaproof items except heavy blocks skim on lava |
-| `items/item-physics #7` | Planned | S P T | Player speed in lava; Lava Vision gives water-like lava speed |
+| `items/item-physics #7` | Planned | S P T | Player speed in lava; Lava Vision becomes Lava Swimmer and gives water-like lava speed (confirmed, not built with #2 and #6) |
 | `items/item-physics #2` | In Progress | S P | Classify modded items |
 | `items/item-physics #1` | Testing | S P | Fire / lava split, float / sink tags, burn transforms |
 | `items/item-physics #3` | Testing | S P | Allurement curses and item physics |
@@ -350,6 +350,9 @@ marked `open` was asked by AskUserQuestion on 2026-11-24.
 | R18 | Ash | open | Every item in the wood family leaves ash (today's 25%) | 2026-11-24 | AskUserQuestion |
 | R19 | Modded explosives (bombs, shells, rockets, powder charges) | open | Explode when burned, no block damage | 2026-11-24 | AskUserQuestion |
 | R20 | Unclassified and mod-default items | open | Agent adds rules, then gives a per-mod list of the leftovers for the owner to correct | 2026-11-24 | AskUserQuestion |
+| R21 | Scope of this work | open | Builds `items/item-physics #2` and `#6` only | 2026-11-24 | AskUserQuestion |
+| R22 | Player speed in lava (`items/item-physics #7`) | open | A confirmed TODO row, not built now. The effect Lava Vision is renamed "Lava Swimmer" as part of that row | 2026-11-24 | AskUserQuestion |
+| R23 | Skimmers and sinkable surfaces | open | An item that skims (water or lava surface) also does not sink into block surfaces that let items sink into them (the pass-through layers such as snow layers); see 10.4 | 2026-11-24 | AskUserQuestion |
 
 Agent defaults, confirmed by the owner (chat 2026-11-24):
 
@@ -414,7 +417,9 @@ which keeps the dip-and-rise of heavier wood and food but stops the endless bob.
 ### 10.4 Decisions and the player-in-lava note
 
 - **Build it:** ruled 2026-11-24 (9.6 R4, R16, R17). R17 replaces 10.2's "everything in `lavaproof` floats".
-- **Player speed in lava: to investigate (TODO `items/item-physics #7`).** Vanilla already slows a player in lava more
+- **Skim over sinkable surfaces (9.6 R23):** an item that skims also does not sink into block surfaces that let items
+  sink into them (the pass-through and sinkable layers such as snow layers); the skim rule treats them as ground.
+- **Player speed in lava: confirmed TODO `items/item-physics #7`, not built now (9.6 R22); Lava Vision is renamed "Lava Swimmer" there.** Vanilla already slows a player in lava more
   than in water (unverified this session: `LivingEntity#travel` applies ×0.5 drag in lava against ×0.8 in water).
   Lava Vision (`alexsmobs:lava_vision`, also on the full netherite set) only changes fog: its effect tick is empty
   (`EffectLavaVision`, read 2026-10-28). The idea: lower player speed in lava further, and give Lava Vision a
