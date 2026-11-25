@@ -563,9 +563,10 @@ look the shaped lines take 7 slabs of that wood in the composter shape (rdetail 
 
 ## SQ-CM-38 | a Warped Composter uses the shared table: pies always, seeds sometimes, level 7 turns ready, bone meal out
 @group A
-@commands \`creativedelight:warped_composter\`: \`/cdevtest use\` 7 times with a pumpkin pie, \`/cdevtest tickwarp 40\`, \`/cdevtest state\`, \`/cdevtest use\` empty-handed, \`/cdevtest items\`; a second one: 30 clicks with wheat seeds; a vanilla composter the same 30 seeds
-@pass the 7 pies give level 7 (one level each), after the tick level 8; the empty-hand click gives 1 bone meal and level 0; the seeded warped and vanilla composters both end above level 0 and below 8 (about 3 in 10 succeed)
-@fails \`WoodComposters\` blocks not \`ComposterBlock\` subclasses; the shared table (\`ComposterBlock.COMPOSTABLES\`) read by block class somewhere (Common's compost framework, composting.md 3)
+@commands \`creativedelight:warped_composter\`: \`/cdevtest use\` 7 times with a pumpkin pie, \`/cdevtest tickwarp 40\`, \`/cdevtest state\`, \`/cdevtest use\` empty-handed, \`/cdevtest items\`; a second one: 30 clicks with wheat seeds; a vanilla composter the same 30 seeds; a pumpkin pie used sneaking on top of a stone places the Farmer's Delight pie
+@pass the 7 pies give level 7 (one level each), after the tick level 8; the empty-hand click gives 1 bone meal and level 0; the seeded warped and vanilla composters both end above level 0 and below 8 (about 3 in 10 succeed); the sneaking pie use places \`farmersdelight:pumpkin_pie\` on the stone
+@fails all 7 pies PASS with the pie left and level 0 (or the first CONSUME places a pie on top): \`FDBackportEvents.onPlacePumpkinPie\` placed the pie before the block's own use (Creative Delight farmers member, composting #9); sneaking places no pie: that handler skips placement; \`WoodComposters\` blocks not \`ComposterBlock\` subclasses; the shared table (\`ComposterBlock.COMPOSTABLES\`) read by block class somewhere (Common's compost framework, composting.md 3)
+@reviewed 2026-11-24
 @absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter creativedelight:composters (registered or tagged by the Creative Common jar of 2026-11-21, after the last /dumpall)
 > forceload add 5312 5200 5343 5215
 > fill 5312 -61 5200 5343 -61 5215 minecraft:stone
@@ -597,6 +598,11 @@ end
 expect verb=state .*state="?creativedelight:warped_composter\[level=[1-7]\]
 > cdevtest state 5317 -60 5201
 expect verb=state .*state="?minecraft:composter\[level=[1-7]\]
+# 2026-11-24 (composting #9): the composter now takes the pie; sneaking still places it (block use skipped)
+> setblock 5319 -60 5201 minecraft:stone
+> cdevtest use 5319 -60 5201 held=minecraft:pumpkin_pie face=up sneak
+> cdevtest state 5319 -59 5201
+expect verb=state .*state="?farmersdelight:pumpkin_pie
 reject \[cdevtest\] .*done=0
 look the two seeded levels are close (same chance table; 30 seeds at about 0.3 give level 5 to 7 most runs)
 
@@ -666,8 +672,10 @@ sleep 2
 > setblock 5313 -59 5208 minecraft:fire
 > setblock 5319 -60 5208 creativedelight:crimson_composter
 > setblock 5319 -59 5208 minecraft:fire
-> setblock 5313 -60 5212 minecraft:furnace{Items:[{Slot:0b,id:"minecraft:raw_iron",Count:3b},{Slot:1b,id:"creativedelight:acacia_composter",Count:1b}]}
-> setblock 5319 -60 5212 minecraft:furnace{Items:[{Slot:0b,id:"minecraft:raw_copper",Count:3b},{Slot:1b,id:"creativedelight:crimson_composter",Count:1b}]}
+# 2026-11-24 (r1124gate BATCH-FAULT): a setblock furnace has CookTimeTotal 0 and vanilla ends an item only when the
+# progress equals it, so the fuel burned and nothing smelted; 200 is what the furnace sets when the input slot changes
+> setblock 5313 -60 5212 minecraft:furnace{CookTimeTotal:200,Items:[{Slot:0b,id:"minecraft:raw_iron",Count:3b},{Slot:1b,id:"creativedelight:acacia_composter",Count:1b}]}
+> setblock 5319 -60 5212 minecraft:furnace{CookTimeTotal:200,Items:[{Slot:0b,id:"minecraft:raw_copper",Count:3b},{Slot:1b,id:"creativedelight:crimson_composter",Count:1b}]}
 > cdevtest tickwarp 1600
 waitlog verb=tickwarp .*end=done 300
 > cdevtest state 5313 -60 5208

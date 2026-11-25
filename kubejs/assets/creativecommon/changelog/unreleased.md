@@ -393,7 +393,7 @@
 - **Changed:** Granite, Andesite and Diorite Cutting Boards show the polished stone itself [a stone-colored wooden board].
 - **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
 - **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
-- **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
+- **Fixed:** A pumpkin pie used on a Cutting Board, a Composter or any block with its own use (a chest, a furnace) was placed as a pie instead; the block now takes it or opens, and sneaking places the pie.
 - **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
 - **Removed:** Canned Legendary Roll Medley and Canned Mythical Roll Medley. Existing ones in worlds are deleted.
 - **Removed:** Bibimbap, Kebab Wrap and Kebab Sandwich and their recipes. Existing ones in worlds stay.

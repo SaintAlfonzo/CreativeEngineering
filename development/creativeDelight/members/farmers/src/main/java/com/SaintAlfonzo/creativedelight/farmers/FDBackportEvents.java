@@ -42,7 +42,8 @@ public final class FDBackportEvents {
 	 * A vanilla Pumpkin Pie used on a block places the pie block chosen in {@code [pumpkin_pie] placeAs} (1.3.4
 	 * PlacePumpkinPieMixin, here an event so it also decides between Delightful's and Central Kitchen's pies: HIGHEST
 	 * runs before Delightful's NORMAL handler). Same rules as Delightful's: never on a Cutting Board, the block below
-	 * must be solid, and the pie needs room. On a Cutting Board the board's own use runs instead, sneaking or not.
+	 * must be solid, and the pie needs room. On a Cutting Board the board's own use runs instead, sneaking or not; on
+	 * any other block its own use runs first unless the player sneaks, and the pie is placed only when that passes.
 	 */
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onPlacePumpkinPie(PlayerInteractEvent.RightClickBlock event) {
@@ -62,6 +63,16 @@ public final class FDBackportEvents {
 		if (!(ForgeRegistries.BLOCKS.getValue(id) instanceof PieBlock pie)) return;
 		Player player = event.getEntity();
 		if (FDBackportConfig.pieSneakToPlace() && !player.isShiftKeyDown()) return;
+		// The clicked block's own use comes first, as in vanilla (block use, then the item's): a composter takes the
+		// pie, a chest opens. Sneaking with the pie skips it, as vanilla does for a full hand (SQ-CM-38, composting #9)
+		if (!player.isSecondaryUseActive()) {
+			InteractionResult own = target.use(event.getLevel(), player, event.getHand(), event.getHitVec());
+			if (own.consumesAction()) {
+				event.setCancellationResult(own);
+				event.setCanceled(true);
+				return;
+			}
+		}
 
 		event.setUseItem(Event.Result.DENY);
 		event.setUseBlock(Event.Result.DENY);

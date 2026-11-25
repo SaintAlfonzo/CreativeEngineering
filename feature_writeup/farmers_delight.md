@@ -205,7 +205,9 @@ farmer villagers on rich farmland and Fertile Soil (configurable), and the feedb
   r1103 (SQ-FDB-05) showed a live edit is not picked up; the config comment says so since 2026-11-03.
   - `[pumpkin_pie] placeAs = FARMERSDELIGHT | DELIGHTFUL | CREATE_CENTRAL_KITCHEN | OFF`: the "see all three" switch.
     A `RightClickBlock` handler at HIGHEST (Delightful's runs at NORMAL) places `<mod>:pumpkin_pie` with Delightful's
-    rules (not on a Cutting Board, solid block below, room). `OFF` leaves it to the two mods as before (which one won was
+    rules (not on a Cutting Board, solid block below, room). The clicked block's own use runs first unless the player
+    sneaks, as in vanilla, and the pie is placed only when that passes: a Composter takes the pie, a chest opens
+    (2026-11-24, TODO `composting #9`, SQ-CM-38; before it the handler denied every block use). `OFF` leaves it to the two mods as before (which one won was
     never pinned down). `sneakToPlace` (1.3.4's option) default false. A mod that is missing makes the value act as OFF.
   - `[villagers] farmlandBlocks` (default Rich Soil Farmland and `immersive_weathering:mulch_block`): redirect of the
     `secondaryPoi().contains` call in `SecondaryPoiSensor.doTick` for Farmers only. Non-`FarmBlock` entries are dropped
