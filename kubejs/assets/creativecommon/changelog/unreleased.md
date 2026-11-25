@@ -358,6 +358,13 @@
 - **New:** Each load leaves under open sky by balloon, under a roof with a courier who walks in, takes the crate, walks off and drinks an invisibility potion.
 - **New:** Courier Spawn Point: couriers start at and return to the nearest one within 96 blocks of the bin. Recipe: a chest surrounded by 8 trapdoors of any kind.
 
+## Rabbit Trap <!-- icon: farmingforblockheads:rabbit_trap -->
+
+- **New:** Rabbit Trap: lures the nearest small animal within 8 blocks while a player is within 64 blocks and holds it. Catches rabbits, chickens, frogs, cats, ocelots, ducks, crabs and 10 of Alex's Mobs' small animals; tamed animals are never caught.
+- **New:** A trap left alone catches an animal of its biome, more likely the longer it is left (95 % after a full day). Only one trap within 8 blocks of another holds such a catch at a time.
+- **New:** Right-click a sprung trap to release the animal; the trap pops off with one of its 8 uses spent. Breaking it also releases the catch.
+- **New:** Rabbit Trap recipe: planks, planks on top; stick, carrot, planks below.
+
 ## Food & Cooking
 
 - **New:** Every food that can be eaten when full says so in its tooltip.

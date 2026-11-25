@@ -1,6 +1,6 @@
 # Farming for Blockheads: overlap and integration report
 
-Investigation written 2026-11-23. Shipping Bin built 2026-11-25 (phase 1, section 4.1); rabbit trap not built yet. Jars read: Farming for Blockheads `26.3.0.2` (NeoForge, MC 26.3,
+Investigation written 2026-11-23. Shipping Bin built 2026-11-25 (phase 1, section 4.1); rabbit trap built 2026-11-25 (phase 2, section 4.2). Jars read: Farming for Blockheads `26.3.0.2` (NeoForge, MC 26.3,
 `DecompiledMods/farmingforblockheads-neoforge-26.3-26.3.0.2.jar`) and `11.3.5` (Fabric, MC 1.19.2,
 `DecompiledMods/1.19.2-farmingforblockheads-fabric-1.19.2-11.3.5.jar`, read for what the 1.19.2 line has). License:
 All Rights Reserved (BlayTheNinth, both jars; permissions page `https://mods.twelveiterations.com/permissions`). A port
@@ -14,16 +14,16 @@ asks by name; upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=d19ba9d456a7 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 3, Pinned 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c44d3a922eec -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 2, Pinned 1, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `mod-integration #8` | Planned | C | Courier Spawn Point: final texture (temporary: vanilla cartography table look) |
 | `mod-integration #9` | Planned | S | Courier Spawn Point: final recipe (temporary: chest surrounded by 8 trapdoors of any kind) |
-| `mod-integration #10` | Planned | S C P T | Farming for Blockheads: port the rabbit trap (pack catch list, biome catch tables, tooltip) |
 | `mod-integration #12` | Pinned | S | Rabbit trap: review the biome catch list; add more Alex's Mobs and other catchable mobs by biome |
 | `mod-integration #7` | Testing | S C P T | Farming for Blockheads: port the Shipping Bin only (ARR, 26.3 donor art, own code) |
+| `mod-integration #10` | Testing | S C P T | Farming for Blockheads: port the rabbit trap (pack catch list, biome catch tables, tooltip) |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -32,9 +32,9 @@ asks by name; upstream bugs are fixed.
 | Shipping Bin mechanics (sale rule, payout, carriers) | section 3.1 | read from the decompile |
 | Overlap | section 2 | no other shipping bin in the pack; the rest of FfB overlaps Hearth and Harvest, Quark, Incubation, Slice and Dice |
 | Upstream bugs | B1, B2 (section 3.4) | none blocking for the bin |
-| Fold-in (bin and rabbit trap) | section 4 | bin steps 0 to 7, 9 built 2026-11-25 (4.1); rabbit trap (8a) open |
+| Fold-in (bin and rabbit trap) | section 4 | bin steps 0 to 7, 9 built 2026-11-25 (4.1); rabbit trap (8a) built 2026-11-25 (4.2) |
 | Decisions | D1 to D11 (section 5) | ruled 2026-11-23 and 2026-11-24 (5.1); D7c pinned |
-| Tests | SHB-01 to SHB-28 (section 8); queue SQ-SHB-01 to -06, CQ-SHB-01, -02 (bin) | drafted; queue rows written, not run |
+| Tests | SHB-01 to SHB-28 (section 8); queue SQ-SHB-01 to -06, CQ-SHB-01, -02 (bin), SQ-SHB-07 to -11, CQ-SHB-03 (rabbit trap) | drafted; queue rows written, not run |
 
 - Jar: the 26.3 jar is the only source of the bin. It is a donor for art (Miner's Delight route, [miners_delight.md](miners_delight.md)
   D2, D12), never a mod in `mods/`. The 1.19.2 Fabric jar cannot load on Forge. A Forge 1.19.2 11.3.x jar exists
@@ -45,7 +45,8 @@ asks by name; upstream bugs are fixed.
   Balm `4.6.0` for 1.19.2 (Cooking for Blockheads). The port does not need Balm (section 3.1).
 - Pack references: Lightman's Currency 2.2.1.3g has a compat mixin for the FfB market (inactive, FfB not installed).
   Nothing else in `kubejs/`, `development/*/src` or `item_dict.js` names `farmingforblockheads`.
-- Built: the Shipping Bin, its carriers and the Courier Spawn Point in Creative Delight (`farm/shippingbin/`, 4.1).
+- Built: the Shipping Bin, its carriers and the Courier Spawn Point in Creative Delight (`farm/shippingbin/`, 4.1);
+  the rabbit trap (`farm/rabbittrap/`, 4.2).
 
 ## 1. Overview
 
@@ -180,8 +181,8 @@ that distance from every trap that already caught get their own passive catch. W
 first for a passive catch is picked at random (not load order, which would always favor the same trap). Lured
 catches (an animal walking into a trap while a player is near) are not limited.
 
-**Review pending (owner, 2026-11-24, TODO `mod-integration #12`):** review this list and add more Alex's Mobs and
-other catchable mobs by biome before the build.
+**Review pinned (owner, 2026-11-24, TODO `mod-integration #12`):** review this list and add more Alex's Mobs and
+other catchable mobs by biome. Built with the 18 types (D11); the generator follows a widened list.
 
 At build time a generator (`tools/rabbit_trap_catches.py`, listed in `tools/generators.json`) writes the table as data
 (`data/farmingforblockheads/rabbit_trap/biomes.json` in Creative Delight) from the dump, so it follows spawn tuning
@@ -396,6 +397,46 @@ the Lightman's Currency FfB mixin stays inactive). Defaults taken where the ruli
 - **Not done:** storage audit tags (storage_audit.md has no container tag that fits a sell box); MCA courier skin (waits for
   MCA textures, D5).
 
+### 4.2 As built (phase 2, 2026-11-25)
+
+The rabbit trap (TODO `mod-integration #10`, ruling D7) in Creative Delight's main jar, `farm/rabbittrap/`, registering
+`farmingforblockheads:rabbit_trap` (block, item, block entity). Defaults taken where the rulings are silent:
+
+- **Art:** the donor's blockstate, block model and three textures (`rabbit_trap`, `rabbit_trap_bottom`,
+  `rabbit_trap_front`), exposed through the same built-in pack as the bin's (`UpstreamJars`), unchanged; no texture
+  file copied. Our item model points at the block model. The block has no static model: the block entity renderer draws
+  the donor model, a stick and a carrot (our own animation): the box tips up 24 degrees on its back edge over 10 ticks
+  after placing, falls flat in 4 ticks when it snaps, and wiggles 8 ticks every 3 seconds while an animal is inside.
+- **Facing:** toward the player who placed it; a released animal steps out in front (on the trap's spot when the front
+  block is solid).
+- **Lure:** every 10 ticks while a player is within 64 blocks: the nearest catchable animal within 8 blocks (2 up or
+  down) is walked to the trap; one that touches the box (0.25 block margin) is caught (full save, leash dropped, poof,
+  wooden trapdoor sound). Skipped: animals not in the tag, tamed or owned ones (D10), and animals riding or ridden.
+- **Catch tag** `farmingforblockheads:rabbit_trap_capturable` from `rabbit_trap.js` (the 18 types of 2.3.1, D11),
+  entity ids in `entity_dict.js`. Unattended catches also check it, so a type left out of the tag is never rolled.
+- **Unattended catches** (2.3.2): every 1200 ticks with no player within 64 blocks, chance
+  `min(0.95, ticks alone / rabbitTrapFullChanceTicks)` (new config, default 24000, so tests can shorten it). "Alone"
+  counts game time since a player was last within 64 blocks (or since placing), so time in an unloaded chunk counts. On
+  a chunk load the trap queues one roll for the time away. A hit rolls `farmingforblockheads:gameplay/rabbit_trap` first
+  (our table: the fox note, chance 0.0005), else a fresh animal from the biome table (spawned with its natural variant,
+  10 % baby), kept in the trap and not added to the world until released.
+- **Passive spacing** (D12): while a trap holds an unattended catch, no other loaded trap within
+  `rabbitTrapPassiveSpacing` blocks (default 8, per axis: a cube, not a sphere) makes one; lured catches are not limited.
+  Reloaded traps wait in a queue until none has joined for 20 ticks (at most 100), then roll in random order.
+- **Biome tables:** `data/farmingforblockheads/rabbit_trap/biomes.json` in our jar, written by
+  `tools/rabbit_trap_catches.py` (`/cdevgen run rabbit_trap_catches`) from the spawn dump; it also rewrites
+  [rabbit_trap_catches.csv](farming_for_blockheads/rabbit_trap_catches.csv) (same content as the 2026-11-24 draft: 116
+  of 169 biomes). Data packs can add files under `data/<ns>/rabbit_trap/`; a later file replaces a biome's table.
+- **Uses:** 8, counted in the item tag `TrapDamage` (kept on the block, copied back on break), shown as a durability bar
+  and a "Uses left" line once used. A new trap stacks to 64, a used one to 1. Releasing on the 8th use breaks the trap
+  (item break sound). A released animal is made persistent.
+- **Recipe** `PP / SCP` (planks, stick, carrot) via `global.NCH`, id `creativedelight:shaped/rabbit_trap`; axe tag;
+  hardness 1.5. Block drop table ours (the item with its uses, survives explosion).
+- **Tooltip and JEI:** the three lines of 2.3.3, "Hold Shift" then the catch list by name from the tag; JEI info page with
+  the four behavior paragraphs (in the Shipping JEI plugin). No WTHIT line, no BlockRunner tier (furniture).
+- **Lang** in `assets/creativedelight/lang/en_us.json` (our own text; the note's lines say what 2.3 names).
+- **Not done:** a block breaking overlay on the animated box (vanilla draws none for an entity-rendered block).
+
 ## 5. Decisions for the owner
 
 | # | Question | Recommendation | Default if not answered |
@@ -452,7 +493,15 @@ the Lightman's Currency FfB mixin stays inactive). Defaults taken where the ruli
 - `global.NCH.shippingBin(input, value, e)` in `neoCraftHelper.js`; dict keys `shipping_bin`, `courier_spawn`,
   `any_trapdoor` (item) and `shipping_bin`, `courier_spawn` (block); has.js `_modOf` row `farmingforblockheads` ->
   `creativedelight`; recipes and tags in `kubejs/data/creativedelight/kubejs/creativedelight/shipping_bin.js`.
-- Phase 2 (rabbit trap) goes in the same package or a sibling `farm/rabbittrap/`.
+- `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/rabbittrap/`: `RabbitTrap`
+  (registries, reload listener, tick hook), `RabbitTrapBlock`, `RabbitTrapBlockEntity`, `RabbitTrapItem`,
+  `RabbitTrapCatches` (biome tables), `PassiveCatches` (D12 spacing and reload queue); `client/RabbitTrapRenderer`.
+  Config `CDConfig.RabbitTrap` (`[rabbit_trap]`). JEI info in `jei/ShippingJeiPlugin`.
+- Rabbit trap data: `data/farmingforblockheads/loot_tables/{blocks,gameplay}/rabbit_trap.json`,
+  `data/farmingforblockheads/rabbit_trap/biomes.json` (generated); item model `assets/farmingforblockheads/models/item/rabbit_trap.json`.
+- `tools/rabbit_trap_catches.py` (in `tools/generators.json`); recipe and tags in
+  `kubejs/data/creativedelight/kubejs/creativedelight/rabbit_trap.js`; dict keys `rabbit_trap` (item, block), the 16 new
+  entity keys and `t_rabbit_trap_capturable` in `entity_dict.js`.
 
 ## 7. Offline checks (once built)
 
@@ -460,6 +509,8 @@ the Lightman's Currency FfB mixin stays inactive). Defaults taken where the ruli
   adding a donor path on purpose: the build failed on it).
 - Headless: `tools/test_shipping_bin.sh` (sale arithmetic and payout at 127, 128, 255, 256 points, partial sales,
   credit, unsellable slots); PASS 2026-11-25.
+- Rabbit trap: `python3 tools/rabbit_trap_catches.py --check` (tables match the spawn dump); `check_all --fast --changed`
+  PASS 2026-11-25. No headless test of the lure or rolls (game classes); queue SQ-SHB-07 to -11.
 
 ## 8. In-game test suite (drafted)
 
@@ -490,7 +541,7 @@ the Lightman's Currency FfB mixin stays inactive). Defaults taken where the ruli
 - [ ] **SHB-25 No catches:** a trap in a deep ocean or the End left for a day -> stays empty (rarely a Mysterious Note).
 - [ ] **SHB-26 Tooltip:** hover the trap item -> three behavior lines; with Shift the catch list by name.
 - [ ] **SHB-27 Courier returns to its spawn point:** with a Courier Spawn Point 30 blocks away, sell under a roof -> the courier walks from it, takes the crate, walks back to it and drinks there; break the spawn point while it walks in -> it leaves to the configured distance instead.
-- [ ] **SHB-28 Passive spacing:** place 5 traps 3 blocks apart and one 12 blocks away, leave for a full day, return -> exactly one of the 5 close traps holds a catch (a different one over repeated runs) and the far trap can hold its own; set `rabbitTrapPassiveSpacing` to 2 -> each close trap can catch.
+- [ ] **SHB-28 Passive spacing:** place a center trap with 4 traps 3 blocks from it (a plus) and one 12 blocks away, leave for a full day, return -> exactly one of the 5 close traps holds a catch (a different one over repeated runs) and the far trap can hold its own; set `rabbitTrapPassiveSpacing` to 2 -> each close trap can catch.
 
 ## 9. History
 
@@ -509,3 +560,7 @@ the Lightman's Currency FfB mixin stays inactive). Defaults taken where the ruli
 - 2026-11-24: fishing barrel not ported (D7b); biome catch list review noted (`mod-integration #12`).
 - 2026-11-25: phase 1 built: Shipping Bin, carriers, Courier Spawn Point (temporary art and recipe) in Creative Delight
   `farm/shippingbin/`; defaults taken listed in 4.1; queue rows SQ-SHB-01 to -06, CQ-SHB-01, -02.
+- 2026-11-25: phase 2 built: rabbit trap in Creative Delight `farm/rabbittrap/` (lure, catch list of 18, owned pets
+  skipped, biome tables from `tools/rabbit_trap_catches.py`, passive spacing and random reload order, 8 uses, tooltip and
+  JEI page); defaults taken listed in 4.2 (new config `rabbitTrapFullChanceTicks`); queue rows SQ-SHB-07 to -11,
+  CQ-SHB-03; SQ-SHB-01 now expects 3 items.

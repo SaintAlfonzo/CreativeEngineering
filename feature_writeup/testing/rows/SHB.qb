@@ -22,7 +22,7 @@ bootreject Couldn't parse loot table farmingforblockheads
 bootreject (Parsing error|Couldn't parse) .*farmingforblockheads
 kjsreject shippingBin
 > cdevtest reg item ^farmingforblockheads:
-expect verb=reg kind=item regex=\S+ n=2
+expect verb=reg kind=item regex=\S+ n=3
 > cdevtest recipes shipping_bin/
 expect verb=recipes id=creativedelight:shipping_bin/minecraft/wheat
 expect verb=recipes id=creativedelight:shipping_bin/minecraft/sweet_berries
@@ -122,3 +122,118 @@ shot bin
 @client true
 @draft visual check
 shot courier_spawn
+
+@@section 2
+@@title SQ-SHB Rabbit trap (Farming for Blockheads), 2026-11-25 ([farming_for_blockheads.md](../farming_for_blockheads.md) 2.3, 4.2, 5.1 D7, D10 to D12, 8, TODO `mod-integration #10`)
+@@date 2026-11-25
+@@jars creativedelight creativecommon
+@@sources feature_writeup/farming_for_blockheads.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/rabbittrap kubejs/data/creativedelight/kubejs/creativedelight/rabbit_trap.js tools/rabbit_trap_catches.py
+@@text
+@@text Not run. Built 2026-11-25. Same donor jar as section 1. Traps at x 700 to 760, z 610, y -60 on the flat world (plains);
+@@text a bot within 64 blocks makes a trap lure; with no player near, a trap only rolls unattended catches.
+@@table
+## SQ-SHB-07 | Boot: trap id, recipe, catch tag of 18, axe tag, loot tables and catch tables load
+@group A
+@commands Boot; `cdevtest reg item ^farmingforblockheads:rabbit`; `cdevtest recipes shaped/rabbit_trap`; `cdevtest tag entity farmingforblockheads:rabbit_trap_capturable`; `cdevtest tag block minecraft:mineable/axe`
+@pass Item `rabbit_trap`; the shaped recipe; the entity tag holds the 18 types of 2.3.1; the trap in the axe tag; no loot table or rabbit trap catch table error
+@fails Tag empty (entity dict keys or the tag script guard); `Couldn't parse loot table farmingforblockheads:gameplay/rabbit_trap` (1.19.2 set_lore format); `rabbit trap catch table ... skipped`
+@absent farmingforblockheads:rabbit_trap (registered 2026-11-25, after the last /dumpall)
+bootreject (Parsing error|Couldn't parse) .*farmingforblockheads
+bootreject rabbit trap catch table .* skipped
+> cdevtest reg item ^farmingforblockheads:rabbit
+expect verb=reg kind=item regex=\S+ n=1
+> cdevtest recipes shaped/rabbit_trap
+expect verb=recipes id=creativedelight:shaped/rabbit_trap
+> cdevtest tag entity farmingforblockheads:rabbit_trap_capturable
+expect verb=tag kind=entity tag=farmingforblockheads:rabbit_trap_capturable n=18
+expect verb=tag kind=entity .*untitledduckmod:duck
+expect verb=tag kind=entity .*alexsmobs:warped_toad
+> cdevtest tag block minecraft:mineable/axe
+expect verb=tag kind=block tag=minecraft:mineable/axe .*farmingforblockheads:rabbit_trap
+
+## SQ-SHB-08 | Lured catch, then release: the animal walks out, the trap drops with 7 of 8 uses (SHB-21, SHB-22)
+@group A
+@commands Bot 10 blocks off; trap facing north; a chicken 4 blocks from it; 20 s; read the trap; the bot right-clicks it
+@pass The trap is `triggered=true` with `CaughtEntity` `minecraft:chicken` and no chicken left outside; after the use the block is gone, a chicken stands north of it and an item `rabbit_trap` with `TrapDamage: 1` lies there
+@fails Chicken never walks in (navigation target inside the block); caught while the bot is 70 blocks off; the chicken lost on release (UUID clash); the trap drops with no damage or vanishes
+@absent farmingforblockheads:rabbit_trap (registered 2026-11-25, after the last /dumpall)
+> forceload add 690 600 770 620
+> execute unless entity shb7 run pbot spawn shb7 700.5 -60 620.5 minecraft:overworld survival
+sleep 3
+> setblock 700 -60 610 farmingforblockheads:rabbit_trap[facing=north]
+> summon minecraft:chicken 704.5 -60 610.5 {PersistenceRequired:1b}
+sleep 20
+> data get block 700 -60 610
+expect has the following block data: .*CaughtEntity: \{.*id: "minecraft:chicken"
+> execute if block 700 -60 610 farmingforblockheads:rabbit_trap[triggered=true]
+expect Test passed
+> cdevtest use 700 -60 610 as=shb7 face=up
+sleep 1
+> execute if block 700 -60 610 minecraft:air
+expect Test passed
+> execute if entity @e[type=minecraft:chicken,x=700.5,y=-60,z=609.5,distance=..2]
+expect Test passed
+> execute if entity @e[type=minecraft:item,x=700.5,y=-60,z=610.5,distance=..3,nbt={Item:{id:"farmingforblockheads:rabbit_trap",tag:{TrapDamage:1}}}]
+expect Test passed
+> pbot remove shb7
+
+## SQ-SHB-09 | Catch list and owned pets: duck and ocelot caught, fox and tamed cat not (SHB-23, D10)
+@group A
+@commands Bot within 64; four traps 16 blocks apart, each with one animal 3 blocks off: a tamed cat (Owner set), a fox, an ocelot, a duck; 25 s; read each trap
+@pass Ocelot and duck traps `triggered=true` holding them; cat and fox traps empty, both animals still outside
+@fails The tamed cat caught (owner check); the fox caught (tag); ocelot or duck never lured
+@absent farmingforblockheads:rabbit_trap (registered 2026-11-25, after the last /dumpall)
+> forceload add 690 600 770 620
+> execute unless entity shb9 run pbot spawn shb9 730.5 -60 620.5 minecraft:overworld survival
+sleep 3
+> setblock 712 -60 610 farmingforblockheads:rabbit_trap[facing=north]
+> summon minecraft:cat 715.5 -60 610.5 {Owner:[I;1,2,3,4],PersistenceRequired:1b}
+> setblock 728 -60 610 farmingforblockheads:rabbit_trap[facing=north]
+> summon minecraft:fox 731.5 -60 610.5 {PersistenceRequired:1b}
+> setblock 744 -60 610 farmingforblockheads:rabbit_trap[facing=north]
+> summon minecraft:ocelot 747.5 -60 610.5 {PersistenceRequired:1b}
+> setblock 760 -60 610 farmingforblockheads:rabbit_trap[facing=north]
+> summon untitledduckmod:duck 763.5 -60 610.5 {PersistenceRequired:1b}
+sleep 25
+> execute if block 712 -60 610 farmingforblockheads:rabbit_trap[triggered=false]
+expect Test passed
+> execute if block 728 -60 610 farmingforblockheads:rabbit_trap[triggered=false]
+expect Test passed
+> data get block 744 -60 610
+expect has the following block data: .*id: "minecraft:ocelot"
+> data get block 760 -60 610
+expect has the following block data: .*id: "untitledduckmod:duck"
+> pbot remove shb9
+
+## SQ-SHB-10 | Breaking a sprung trap releases the catch and keeps the uses
+@group A
+@commands A trap placed with 3 uses spent holds a chicken (set by data); break it with `setblock ... destroy`
+@pass A chicken next to the spot; the dropped trap item carries `TrapDamage: 3`
+@fails Catch lost on break; dropped item has no damage tag (copy_nbt)
+@absent farmingforblockheads:rabbit_trap (registered 2026-11-25, after the last /dumpall)
+> setblock 700 -60 630 farmingforblockheads:rabbit_trap[facing=north,triggered=true]{TrapDamage:3,CaughtEntity:{id:"minecraft:chicken",PersistenceRequired:1b}}
+sleep 1
+> setblock 700 -60 630 minecraft:air destroy
+sleep 1
+> execute if entity @e[type=minecraft:chicken,x=700.5,y=-60,z=629.5,distance=..2]
+expect Test passed
+> execute if entity @e[type=minecraft:item,x=700.5,y=-60,z=630.5,distance=..3,nbt={Item:{id:"farmingforblockheads:rabbit_trap",tag:{TrapDamage:3}}}]
+expect Test passed
+
+## SQ-SHB-11 | Unattended catches: biome tables, no catch in an empty biome, passive spacing (SHB-24, SHB-25, SHB-28, D12)
+@group A
+@commands `rabbitTrapFullChanceTicks` 1200 in creativedelight-common.toml (restart); no player within 64; traps in a plains, a desert and a deep ocean (`fillbiome` 1.19.3+ is missing: use spots of a normal world or `/cdevplace`); a cluster of 5 traps 3 blocks from a center trap and one 12 blocks off; leave 3 minutes; read them
+@pass Plains traps hold chicken, raccoon or duck; desert jerboa, rain frog, roadrunner or rabbit; ocean empty; of the 5-trap cluster exactly one holds a catch, the far trap may hold its own; with `rabbitTrapPassiveSpacing` 2 every close trap can catch
+@fails Catches with a player near counted as unattended; two traps of the cluster both catch; a reloaded cluster always picks the same trap
+@draft needs biome spots (the flat world is all plains) and the config edit plus restart; positions on the first run
+@absent farmingforblockheads:rabbit_trap (registered 2026-11-25, after the last /dumpall)
+> say draft
+
+## CQ-SHB-03 | Look: trap art, set-up and snap animations, wiggle, tooltip and JEI page (SHB-21, SHB-26)
+@group C
+@commands Client: craft planks, planks / stick, carrot, planks; place it; lure a chicken; hover the item with and without Shift; JEI on the trap
+@pass Donor art (front with the opening, sides, bottom); after placing the box tips up on a stick with a carrot under it; it falls flat when the chicken steps in and wiggles now and then; tooltip: three gray lines, Shift lists the 18 animals; a used trap shows a durability bar and `Uses left`; JEI shows the four-paragraph info page
+@fails Purple-black box (donor paths not exposed); box tips the wrong way or floats; stick or carrot inside the box
+@client true
+@draft visual checks: shots of each step
+shot rabbit_trap
