@@ -732,7 +732,8 @@ CQ-CHK-01 (owner PASS 2026-11-13: close the queue row). Dedicated-server rows st
 Delight, Loot, Compat, Devtools, Calendar, Worldgen, Magic, Labels) require `[1.3.0,)`; `mod_sides.md` names
 `creativecommon-1.3.0.jar`. P2 (textures): every texture added since 1.2.0 has a `sources.csv` row or ledger row;
 the 12 composter rows await the owner look-check. P6 build and install, P7 runs, P8 tag `creativecommon-1.3.0` and upload
-(Common first) are still open. The CurseForge file changelog is
+(Common first) are still open. The CurseForge file changelog (rewritten 2026-11-24 as the changes since 1.2.0, with
+the wave 2 moves listed as moved: it compares the 1.2.0 jar with the `1.3.0+db212e956` jar) is
 [project_pages/creative_common_changelog_1_3_0.md](project_pages/creative_common_changelog_1_3_0.md); the project page is
 [project_pages/creative_common.md](project_pages/creative_common.md). `pack/MODLIST.md` and `pack/manifest.json` follow
 at the next deploy.

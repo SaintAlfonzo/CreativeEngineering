@@ -1,6 +1,6 @@
 # Creative Compat
 
-**Compatibility fixes and tweaks for third-party mods on Forge 1.19.2.** Creative Compat changes how other mods work together: Quark, Supplementaries, Handcrafted, Create, Create: Gravity, Alex's Mobs, Immersive Portals, Polymorph, Sophisticated Backpacks, Corpse, JEI, WTHIT, FTB Quests and about 50 more. A mod's tweaks only switch on when that mod is installed, and only at a version it was tested with. It also holds changes that need no other mod: melting ice and snow with salt, fire and lava, walking through crops, snow and vines, block walking speeds, falling snow layers, an iron golem farm cooldown and boat-only block friction. Each of those has an on/off switch.
+**Compatibility fixes and tweaks for third-party mods on Forge 1.19.2.** Creative Compat changes how other mods work together: Quark, Supplementaries, Handcrafted, Create, Create: Gravity, Alex's Mobs, Immersive Portals, Polymorph, Sophisticated Backpacks, Corpse, JEI, WTHIT, FTB Quests and about 50 more. A mod's tweaks only switch on when that mod is installed, and only at a version it was tested with. It also holds changes that need no other mod: melting ice and snow with salt, fire and lava, walking through crops, snow and vines, block walking speeds, falling snow layers, an iron golem farm cooldown, boat-only block friction and two flower pots in one block. Most of the changes to vanilla behavior have a switch.
 
 ***
 
@@ -24,7 +24,7 @@ Both client and server need it. Client-only parts (tooltips, JEI and WTHIT chang
 
 ## What it does on its own
 
-These features need no other third-party mod. Each feature has a bold name and a dropdown with its description. Each one that changes vanilla behavior has a switch in the `[mixins]` section of `config/creativecompat-common.toml`, or its own section, and all are on by default. A switch in `[mixins]` is read at game start, so restart after changing one.
+These features need no other third-party mod. Each feature has a bold name and a dropdown with its description. Most that change vanilla behavior have a switch in the `[mixins]` section of `config/creativecompat-common.toml`, or their own section, and are on by default. A switch in `[mixins]` is read at game start, so restart after changing one.
 
 ### Walking and movement
 
@@ -42,7 +42,7 @@ These features need no other third-party mod. Each feature has a bold name and a
 
 **Snow layers**
 
-<div class="spoiler"><p>Snow layers can be walked through, fall like sand, and are replaced by a placed block up to a set depth (<code>replaceMaxLayers</code>, default 3). Jumps are weaker inside deep snow and leaf layers, mobs sunk in snow climb out when they walk into a block, and mobs do not path through deep leaf piles.</p></div>
+<div class="spoiler"><p>Snow layers can be walked through, fall like sand (Snow! Real Magic handles falling snow instead when it is installed), and are replaced by a placed block up to a set depth (<code>replaceMaxLayers</code>, default 3). Dust particles puff from soft, dusty blocks walked in or on (<code>[surface.passthrough] dustParticles</code>). Jumps are weaker inside deep snow and leaf layers, mobs sunk in snow climb out when they walk into a block, and mobs do not path through deep leaf piles.</p></div>
 
 **Sinking**
 
@@ -76,6 +76,14 @@ These features need no other third-party mod. Each feature has a bold name and a
 
 <div class="spoiler"><p>Moss blocks and moss carpet take the biome's grass color (client). Section: <code>[moss]</code>.</p></div>
 
+**Two flower pots in one block**
+
+<div class="spoiler"><p>Use a flower pot on a placed vanilla-style flower pot (without sneaking) to put two pots in one block, the second one taller. Each takes its own plant, picked by the half you click, and the block breaks back into the two pots and their plants.</p></div>
+
+**Pottable tooltip**
+
+<div class="spoiler"><p>Items that a flower pot accepts say "Pottable" in their tooltip (client).</p></div>
+
 **Sheared vines**
 
 <div class="spoiler"><p>Shears on the tip of a weeping, twisting or cave vine or on kelp stop it growing, as in 1.20. Section: <code>[vine_shearing]</code>.</p></div>
@@ -92,6 +100,10 @@ These features need no other third-party mod. Each feature has a bold name and a
 
 <div class="spoiler"><p>Falling blocks splash when they enter water (client).</p></div>
 
+**Nether fog color**
+
+<div class="spoiler"><p>Client side. The whole Nether uses one deep red fog color instead of each biome's own. Lava, water, powder snow, Blindness and Darkness are left alone.</p></div>
+
 **Screen and interface details**
 
 <div class="spoiler"><p>Client: a tooltip taller than the screen keeps its top visible (<code>[tooltips]</code>), the world behind screens can be dimmed (<code>[screens]</code>), tutorial and advancement toasts can be hidden (<code>[toasts]</code>), sign text is not drawn far from the camera, and resource pack title plaques stretch to long container titles (<code>[gui_title]</code>).</p></div>
@@ -100,7 +112,7 @@ These features need no other third-party mod. Each feature has a bold name and a
 
 ## Optional pack settings
 
-<div class="spoiler"><p>Out of the box, every tweak is on. Any pack can change these in <code>config/creativecompat-common.toml</code>:</p><table><thead><tr><th>Setting</th><th>What it does</th></tr></thead><tbody><tr><td><code>[mixins]</code></td><td>One on/off key per change that alters vanilla behavior (36 keys); restart to apply</td></tr><tr><td><code>[melting]</code></td><td>Reach, chance and speed of melting by source, the block lists for what melts into what, hot places, and the End rules (<code>endContactOnly</code>, <code>endNoFire</code>)</td></tr><tr><td><code>[surface.speed]</code></td><td>Walk speed per surface tier (0.05 to 4.0)</td></tr><tr><td><code>[surface.passthrough]</code></td><td>Master switch, arrow lifetime (12000 ticks) and one table per plant tier: walk and fall factors, neighbor rule, items and projectiles</td></tr><tr><td><code>[golems]</code></td><td>Deaths (5), window (12000 ticks) and cooldown (24000 ticks) of the golem farm limit</td></tr><tr><td><code>[boat_friction]</code></td><td>Block list for boat friction</td></tr><tr><td><code>[shrapnel]</code></td><td>Count, speed, damage, item and range of TNT shrapnel</td></tr><tr><td><code>[moss]</code>, <code>[vine_shearing]</code>, <code>[gui_title]</code>, <code>[toasts]</code>, <code>[screens]</code>, <code>[tooltips]</code></td><td>Moss color, vine shearing, title plaques, toast filter, screen dimming and tooltip placement</td></tr><tr><td><code>[fleet_footed] fov</code></td><td>With Alex's Mobs (client): how much of the field-of-view widening from Fleet-Footed's speed bonus is kept (0.25; 1.0 = unchanged, 0.0 = none)</td></tr><tr><td><code>[jei] pagesOff</code></td><td>Recipe pages that other Creative mods gather (seasoning, cans, potion buckets, tipped arrows) to leave off; empty by default</td></tr><tr><td><code>[jei] craftableFirst</code>, <code>packOrder</code>, <code>fluidAmountScale</code></td><td>JEI recipe order, ingredient order from the pack's definition (off by default) and how full fluids look in tanks</td></tr><tr><td><code>[corpses]</code></td><td>Decay times and sinking of Corpse mod corpses, and the sectioned corpse screen</td></tr><tr><td><code>[trash_slot]</code>, <code>[monster_box]</code>, <code>[cats]</code>, <code>[vein_undo]</code>, <code>[paintings]</code></td><td>Settings for the matching optional-mod changes below</td></tr><tr><td><code>[wthit]</code></td><td>One switch for each added WTHIT line</td></tr><tr><td><code>[immersive_portals]</code>, <code>[portalgun]</code></td><td>Portal render distances, fog and Portal Gun portal settings</td></tr><tr><td><code>[debug]</code></td><td>Developer switches, all off</td></tr></tbody></table><p>Low gravity has no switch of its own: it follows Create: Gravity's biome settings and Creative Common's <code>[perf] gravityLimitDimensions</code> and <code>gravityDimensions</code>. Sack pick-up and glass shards have no switch either. With Create installed, the file can also be edited in game through Create's config screen.</p></div>
+<div class="spoiler"><p>Out of the box, the tweaks are on unless the table says otherwise. Any pack can change these in <code>config/creativecompat-common.toml</code>:</p><table><thead><tr><th>Setting</th><th>What it does</th></tr></thead><tbody><tr><td><code>[mixins]</code></td><td>One on/off key per change that alters vanilla behavior (36 keys); restart to apply</td></tr><tr><td><code>[melting]</code></td><td>Reach, chance and speed of melting by source, the block lists for what melts into what, hot places, and the End rules (<code>endContactOnly</code>, <code>endNoFire</code>)</td></tr><tr><td><code>[surface.speed]</code></td><td>Walk speed per surface tier (0.05 to 4.0)</td></tr><tr><td><code>[surface.passthrough]</code></td><td>Master switch, arrow lifetime (12000 ticks) and one table per plant tier: walk and fall factors, neighbor rule, items and projectiles</td></tr><tr><td><code>[golems]</code></td><td>Deaths (5), window (12000 ticks) and cooldown (24000 ticks) of the golem farm limit</td></tr><tr><td><code>[boat_friction]</code></td><td>Block list for boat friction</td></tr><tr><td><code>[shrapnel]</code></td><td>Count, speed, damage, item and range of TNT shrapnel</td></tr><tr><td><code>[moss]</code>, <code>[vine_shearing]</code>, <code>[gui_title]</code>, <code>[toasts]</code>, <code>[screens]</code>, <code>[tooltips]</code></td><td>Moss color, vine shearing, title plaques, toast filter, screen dimming and tooltip placement</td></tr><tr><td><code>[fleet_footed] fov</code></td><td>With Alex's Mobs (client): how much of the field-of-view widening from Fleet-Footed's speed bonus is kept (0.25; 1.0 = unchanged, 0.0 = none)</td></tr><tr><td><code>[jei] pagesOff</code></td><td>Recipe pages that other Creative mods gather (seasoning, cans, potion buckets, tipped arrows) to leave off; empty by default</td></tr><tr><td><code>[jei] craftableFirst</code>, <code>packOrder</code>, <code>fluidAmountScale</code></td><td>JEI recipe order, ingredient order from the pack's definition (off by default) and how full fluids look in tanks</td></tr><tr><td><code>[corpses]</code></td><td>Decay times and sinking of Corpse mod corpses, and the sectioned corpse screen</td></tr><tr><td><code>[trash_slot]</code>, <code>[monster_box]</code>, <code>[cats]</code>, <code>[vein_undo]</code>, <code>[paintings]</code></td><td>Settings for the matching optional-mod changes below</td></tr><tr><td><code>[wthit]</code></td><td>One switch for each added WTHIT line</td></tr><tr><td><code>[immersive_portals]</code>, <code>[portalgun]</code></td><td>Portal render distances, fog and Portal Gun portal settings</td></tr><tr><td><code>[debug]</code></td><td>Developer switches, all off</td></tr></tbody></table><p>Low gravity has no switch of its own: it follows Create: Gravity's biome settings and Creative Common's <code>[perf] gravityLimitDimensions</code> and <code>gravityDimensions</code>. Sack pick-up and glass shards have no switch either. With Create installed, the file can also be edited in game through Create's config screen.</p></div>
 
 <!-- screenshot: the WTHIT overlay on a Supplementaries jar or a hive, and the Corpse screen with its curio slots -->
 
@@ -158,11 +170,19 @@ None of these are required. Each change only switches on when that mod is instal
 
 **Jars (Supplementaries 2.4.20)**
 
-<div class="spoiler"><p>Jars show their contents in WTHIT and tooltips, fill and mix, and pipes can fill them.</p></div>
+<div class="spoiler"><p>Jars show their contents in WTHIT and tooltips, fill and mix, and Create pumps and other fluid pipes can fill and drain them (and goblets).</p></div>
 
-**Dyed blocks and flower boxes (Supplementaries 2.4.20)**
+**Dyeing keeps contents (Supplementaries 2.4.20)**
 
-<div class="spoiler"><p>Dyed blocks and flower box plants are fixed or extended.</p></div>
+<div class="spoiler"><p>Supplementaries' dye blocks tweak no longer dyes blocks that hold data (sacks, shulker boxes, banners, beds, signs and the like) in the world, so it cannot delete their contents; the click does the block's own action instead. Plain blocks still dye in the world.</p></div>
+
+**Sacks like bundles (Supplementaries 2.4.20)**
+
+<div class="spoiler"><p>In inventory screens, right-click a filled sack with an empty cursor to take out its first stack, and scroll over it to rotate its contents.</p></div>
+
+**Flower and planter boxes (Supplementaries 2.4.20, Another Furniture 2.1.x)**
+
+<div class="spoiler"><p>Flower boxes and planter boxes take and draw more plants, such as glow berries and glow lichen.</p></div>
 
 **Ash and fodder layers (Supplementaries 2.4.20)**
 
@@ -192,9 +212,25 @@ None of these are required. Each change only switches on when that mod is instal
 
 <div class="spoiler"><p>Double-material blocks order their camo by most recent, for walking speed; flower pots in frames can be unframed.</p></div>
 
-**Botanist workbenches and pots (Beautify 1.4.x, Botany Pots 9.0.x, Twigs 3.0.x)**
+**Botanist workbench as a flower pot (Beautify 1.4.x)**
 
-<div class="spoiler"><p>Botanist workbenches placed by structures start with a flower, Botany Pots grow in the listed dimensions, and Twigs' silt pots take their soil. Bamboo leaves can be walked through.</p></div>
+<div class="spoiler"><p>The botanist workbench takes any plant a flower pot takes. Workbenches placed by structures start with a flower.</p></div>
+
+**Botany Pots growth and crops (Botany Pots 9.0.x)**
+
+<div class="spoiler"><p>Pot crops grow 8 times slower, flowers 2 times slower. Bone meal and other pot fertilizers are removed. Rich soil speeds growth by 1.1 and Fertile Soil (Immersive Weathering) is a new pot soil at 1.2. Glow berry, hanging root and vine pot crops are removed. Pot crops are added for many modded plants, and Nether and End plants only grow in their own dimension.</p></div>
+
+**Silt pots and bamboo leaves (Twigs 3.0.x)**
+
+<div class="spoiler"><p>Twigs' silt pots take their soil. Bamboo leaves can be walked through.</p></div>
+
+**Trash can screen (Trash Cans 1.0.18)**
+
+<div class="spoiler"><p>A right-click on the Item Trash Can opens a 27-slot screen whose contents are deleted when it closes. Sneak and right-click with an empty hand opens the filter. The other trash cans are unchanged.</p></div>
+
+**Flowers and flower tags (Bushier Flowers, Beautify, Floral Enchantment)**
+
+<div class="spoiler"><p>Four loose flowers craft one bushy flower. Beautify's hanging pot recipe takes rich soil, and Floral Enchantment's large pot recipe is removed. Wild plants, flower crowns, azalea flower piles and Botania special flowers leave the vanilla flower tags, so bees ignore them.</p></div>
 
 ### Create and Immersive Engineering
 
@@ -205,6 +241,10 @@ None of these are required. Each change only switches on when that mod is instal
 **Jetpack tooltip (Create: Dreams &amp; Desires 1.2c)**
 
 <div class="spoiler"><p>Jetpack tooltip fixed.</p></div>
+
+**Spout Gun waters farmland (Create: Misc and Things)**
+
+<div class="spoiler"><p>The water Spout Gun soaks the farmland it hits, including farmland under a crop.</p></div>
 
 **Sawdust layers (Immersive Engineering 9.2.4)**
 
@@ -225,6 +265,10 @@ None of these are required. Each change only switches on when that mod is instal
 **Feather on a Stick (Domestication Innovation 1.6.x)**
 
 <div class="spoiler"><p>The Feather on a Stick can hook mobs. Hostile mobs on by default; neutral and passive mobs and players off. Section: <code>[cats]</code>.</p></div>
+
+**Cozy cats (Cozy's Improved Cats 2.1.x)**
+
+<div class="spoiler"><p>With Cozy's gender system off, the leftover gender lines are hidden, and its two fisherman trades are removed. With Domestication Innovation, Cozy's modes replace its follow, wander and stay right-click on Cozy cats.</p></div>
 
 **Cats and feathers (Domestication Innovation with Cozy's Improved Cats 2.1.x)**
 
@@ -252,7 +296,7 @@ None of these are required. Each change only switches on when that mod is instal
 
 **Hats (Simple Hats 0.3.x)**
 
-<div class="spoiler"><p>Hats on the face slot.</p></div>
+<div class="spoiler"><p>Masks, the chalk stick and the smoking pipe can go in the Curios face slot, and the Falconry Glove in a hands slot.</p></div>
 
 ### Corpses
 
@@ -278,9 +322,9 @@ None of these are required. Each change only switches on when that mod is instal
 
 <div class="spoiler"><p>Map block colors fixed.</p></div>
 
-**Clouds and generation (Distant Horizons 3.0.x)**
+**Clouds and the Nether (Distant Horizons 3.0.x)**
 
-<div class="spoiler"><p>Cloud height and generation rules changed.</p></div>
+<div class="spoiler"><p>Distant Horizons' clouds follow the vanilla cloud height. In the Nether it generates no unvisited chunks, draws to 32 chunks and keeps a fog at the edge.</p></div>
 
 **Chakrams (Botania 440)**
 
@@ -290,7 +334,7 @@ None of these are required. Each change only switches on when that mod is instal
 
 **Rendering limits (Immersive Portals 2.3.x)**
 
-<div class="spoiler"><p>Mirror and portal render limits and fog settings. Section: <code>[immersive_portals]</code>.</p></div>
+<div class="spoiler"><p>Mirror and portal render limits and fog settings. Walking out of a wall portal no longer lifts the player a block. Section: <code>[immersive_portals]</code>.</p></div>
 
 **Portal Gun (Portal Gun 5.0.x)**
 

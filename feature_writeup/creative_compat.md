@@ -1,11 +1,13 @@
 # Creative Compat
 
 Written 2026-11-01 (Creative Split wave 3, [creative_split.md](creative_split.md) 7.6; TODO `creativesplit/compat #5`).
-Status: **carved 2026-11-01, installed; scratch SQ-CMP queued, nothing booted.**
+Publishing as 1.0.0: [project page](project_pages/creative_compat.md),
+[file changelog](project_pages/creative_compat_changelog_1_0_0.md), [plan_wave1_publish.md](plan_wave1_publish.md). The
+page was checked against the `1.0.0+db212e956` jar on 2026-11-24.
 
 Written for: the owner and agents working on the split. Own mod `creativecompat` (development/creativeCompat,
-`creativecompat-1.0.0.jar`, side both): the pack's tweaks to third-party mods that have no wider system of their own.
-Every other Creative jar requires it (Common <- Compat <- content jars). Same behavior as before the carve.
+`creativecompat-1.0.0.jar`, side both): the pack's tweaks to third-party mods that have no wider system of their own,
+plus the features moved from Creative Common and Raspberry Pie in wave 2 (section 1).
 
 ## 0. At a glance
 
