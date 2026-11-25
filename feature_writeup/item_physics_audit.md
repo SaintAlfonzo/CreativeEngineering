@@ -7,53 +7,65 @@ resistance come from `/dumpphysics`: present.
 Rungs, first match wins: `tag` (a vanilla/forge/pack tag) > `fire_resistant` (the item's own flag) >
 `material` (block Material, refined by SoundType) > `gear` (tool tier / armor material) > `edible` > `name`
 (a token in the id) > `mod_default` > `none` (unclassified). "Manual" = already in one of the four physics
-tags. "Differs" = the family's behaviour is not what the item does now.
+tags. "Differs" = the family's behavior is not what the item does now.
 
 ## 1. Totals
 
 | Items | In a physics tag now | Differs from family | Mod default only | Unclassified |
 |---|---|---|---|---|
-| 20500 | 2024 | 16701 | 1069 | 328 |
+| 21149 | 2049 | 17480 | 1295 | 321 |
 
 | Rung | Items |
 |---|---|
-| material | 10014 |
-| tag | 3440 |
-| name | 2972 |
-| material+name | 1474 |
-| mod_default | 1069 |
-| fire_resistant | 844 |
-| none | 328 |
-| gear | 194 |
-| edible | 108 |
-| edible+name | 52 |
-| fuel | 5 |
+| material | 9612 |
+| tag | 3424 |
+| name | 3057 |
+| material+name | 1430 |
+| mod_default | 1295 |
+| override | 608 |
+| fire_resistant | 399 |
+| ruling | 360 |
+| none | 321 |
+| gear_name | 268 |
+| material+R13 | 116 |
+| material+R12 | 97 |
+| gear | 57 |
+| edible | 55 |
+| edible+name | 41 |
+| name+R12 | 3 |
+| gear_name+R12 | 2 |
+| fuel | 2 |
+| gear+R12 | 1 |
+| tag+R12 | 1 |
 
 ## 2. Families
 
 | Family | Water | Fire | Items | Note |
 |---|---|---|---|---|
-| explosive | sink | burn | 17 | burn transform: explodes |
-| refractory | sink | lavaproof | 3563 | stone, deepslate, nether and end stone, obsidian, diamond, netherite, fire-resistant items |
-| metal | sink | fireproof | 4242 | ingots, plates, metal blocks, metal parts and tools |
-| machine | sink | fireproof | 1133 | composite devices: circuits, storage, computers, electronics |
-| masonry | sink | fireproof | 1332 | fired clay, bricks, terracotta, concrete, tiles, plaster |
-| earth | sink | fireproof | 504 | sand, gravel, dirt, mud, clay, loose mineral |
-| crystal | sink | fireproof | 217 | gems and crystals other than diamond |
-| glass | sink | burn | 643 | burn transform: dirty glass |
-| container | sink | fireproof | 707 | bottles, potions, buckets, jars, canned food |
-| powder | sink | fireproof | 66 | dense powders: redstone, glowstone, metal dusts |
-| ice | float | fireproof | 48 | ice and snow; ice floats in water |
-| wood | float | burn | 4119 | burn transform: ash |
-| nether_wood | float | fireproof | 156 | crimson and warped wood (non-flammable) |
-| produce | float | burn | 192 | crops, fruit, vegetables, mushrooms, kelp, gourds |
-| food | float | burn | 1202 | prepared food not in a container |
-| organic | float | burn | 258 | mob drops: bone, flesh, hide, slime, shell, horn |
-| foliage | skim | burn | 622 | leaves, flowers, petals, seeds, grass, saplings, vines |
-| fibre | skim | burn | 871 | wool, cloth, string, paper, books, feathers, hats |
+| explosive | sink | burn | 77 | burn transform: explodes, blast 1.0, no block damage (R19, D3) |
+| refractory | sink | lavaproof | 2971 | stone, deepslate, nether and end stone, obsidian, diamond, netherite, quartz, nether brick |
+| metal | sink | fireproof | 4460 | ingots, plates, metal blocks, metal parts and tools, Create components (R12) |
+| machine | sink | fireproof | 1195 | composite devices: circuits, storage, computers, electronics, redstone components (R3) |
+| masonry | sink | fireproof | 1400 | fired clay, bricks, terracotta, concrete, tiles, plaster, sandstone, smooth stone (R6) |
+| earth | sink | fireproof | 494 | sand, gravel, dirt, mud, clay, ash, soot, loose mineral |
+| crystal | sink | fireproof | 246 | gems and crystals other than diamond, prismarine (R6) |
+| glass | sink | burn | 617 | burn transform: dirty glass |
+| container | sink | fireproof | 773 | bottles, potions, buckets, jars, cans, bottled drinks, empty ones too (R9) |
+| powder | sink | fireproof | 59 | dense powders: redstone, glowstone, metal dusts (D4) |
+| fuel | sink | burn | 60 | coal, charcoal, torches, campfires, redstone lamps (R10) |
+| heavy_wood | sink | burn | 36 | treated wood (R11, no ash D2), crossbow, wooden shield, armor stand (R7) |
+| ice | float | burn | 29 | ice and snow (R2) |
+| wood | float | burn | 4225 | burn transform: ash (R18); wooden and leather-free tools (R14) |
+| nether_wood | float | lavaproof | 153 | crimson and warped wood (R1); skims on lava (R17) |
+| produce | float | burn | 194 | crops, fruit, vegetables, mushrooms, kelp, gourds |
+| food | float | burn | 1312 | prepared food not in a container: jello, ice cream, feasts, pies (R15) |
+| organic | float | burn | 489 | mob drops: bone, flesh, hide, leather gear, slime, shell, horn; belts (R12, D1) |
+| packed | float | burn | 128 | heavy packed forms of skim items: bales, sacks, storage blocks (R13) |
+| foliage | skim | burn | 577 | leaves, flowers, petals, seeds, grass, saplings, vines |
+| fibre | skim | burn | 1042 | wool, cloth, string, paper, books, feathers, hats |
 | light_powder | skim | burn | 28 | flour, sugar, bone meal, sawdust, pollen |
-| technical | sink | burn | 252 | spawn eggs, debug and creative-only items (not audited) |
-| unclassified | sink | burn | 328 | no rung matched: needs a decision |
+| technical | sink | burn | 263 | spawn eggs, debug and creative-only items |
+| unclassified | sink | burn | 321 | no rung matched: listed for the owner (R20) |
 
 ## 3. By mod
 
@@ -61,128 +73,132 @@ Sorted by items needing attention (unclassified + mod default + differs).
 
 | Mod | Items | Manual | Unclassified | Mod default | Differs | Top families |
 |---|---|---|---|---|---|---|
-| everycomp | 854 | 31 | 0 | 4 | 793 | wood 786, fibre 33, glass 30 |
-| botania | 846 | 134 | 115 | 0 | 542 | refractory 176, foliage 153, unclassified 115 |
-| quark | 852 | 115 | 8 | 0 | 630 | refractory 284, wood 229, glass 105 |
+| everycomp | 854 | 32 | 0 | 4 | 792 | wood 786, fibre 33, glass 30 |
+| botania | 846 | 134 | 106 | 0 | 558 | refractory 165, foliage 137, unclassified 106 |
+| quark | 852 | 132 | 8 | 0 | 610 | refractory 249, wood 226, glass 105 |
+| lightmanscurrency | 619 | 0 | 0 | 2 | 612 | wood 481, metal 100, refractory 11 |
 | createdeco | 615 | 8 | 0 | 0 | 597 | masonry 416, metal 164, refractory 35 |
+| simplehats | 311 | 0 | 0 | 260 | 310 | fibre 270, organic 15, glass 6 |
 | davebuildingmod | 586 | 0 | 0 | 0 | 548 | metal 419, wood 47, refractory 38 |
-| immersiveengineering | 475 | 49 | 0 | 84 | 418 | metal 329, wood 36, masonry 31 |
-| architects_palette | 510 | 15 | 0 | 3 | 482 | refractory 205, masonry 115, metal 71 |
+| railways | 529 | 0 | 0 | 2 | 528 | metal 484, fibre 32, nether_wood 6 |
+| immersiveengineering | 475 | 49 | 0 | 77 | 408 | metal 324, masonry 31, refractory 21 |
+| architects_palette | 510 | 15 | 0 | 3 | 480 | refractory 197, masonry 122, metal 71 |
+| create_dd | 466 | 18 | 0 | 23 | 446 | refractory 232, wood 63, metal 52 |
 | refinedstorage | 333 | 0 | 0 | 158 | 309 | machine 306, technical 24, refractory 2 |
-| create_dd | 466 | 18 | 0 | 22 | 443 | refractory 235, wood 64, metal 45 |
-| railways | 463 | 0 | 0 | 2 | 462 | metal 418, fibre 32, nether_wood 6 |
-| creativeengineering | 455 | 9 | 29 | 0 | 413 | container 293, metal 73, unclassified 29 |
-| ae2 | 381 | 0 | 0 | 60 | 347 | machine 219, refractory 55, metal 36 |
-| lightmanscurrency | 399 | 0 | 0 | 2 | 391 | wood 261, metal 100, refractory 12 |
-| design_decor | 479 | 84 | 0 | 0 | 392 | metal 224, refractory 142, wood 109 |
-| create | 618 | 216 | 0 | 22 | 369 | refractory 310, metal 181, wood 57 |
-| upgrade_aquatic | 414 | 32 | 0 | 2 | 370 | refractory 219, wood 56, foliage 44 |
+| creativedelight | 447 | 0 | 12 | 0 | 429 | container 327, wood 56, earth 16 |
+| ae2 | 381 | 0 | 0 | 60 | 350 | machine 219, refractory 67, metal 36 |
+| create | 618 | 216 | 0 | 19 | 373 | metal 284, refractory 267, glass 28 |
+| design_decor | 479 | 84 | 0 | 0 | 392 | metal 224, refractory 142, wood 108 |
+| upgrade_aquatic | 414 | 32 | 0 | 2 | 364 | organic 151, refractory 65, wood 56 |
 | pneumaticcraft | 308 | 3 | 0 | 34 | 303 | metal 154, machine 101, container 15 |
 | redeco | 333 | 27 | 0 | 17 | 289 | wood 189, fibre 83, refractory 27 |
-| vintageimprovements | 245 | 2 | 0 | 43 | 237 | metal 184, refractory 32, fibre 9 |
+| vintageimprovements | 245 | 2 | 0 | 39 | 240 | metal 181, refractory 29, fibre 10 |
 | immersive_weathering | 280 | 8 | 1 | 0 | 267 | metal 90, refractory 68, foliage 42 |
-| twigs | 256 | 1 | 0 | 0 | 254 | refractory 172, masonry 46, wood 10 |
-| fruitsdelight | 274 | 24 | 0 | 2 | 250 | food 82, metal 67, earth 44 |
+| twigs | 256 | 0 | 0 | 0 | 255 | refractory 172, masonry 46, wood 10 |
+| fruitsdelight | 274 | 24 | 0 | 2 | 250 | food 104, metal 67, foliage 32 |
 | fantasyfurniture | 294 | 44 | 0 | 0 | 245 | wood 215, fibre 35, metal 13 |
-| oldguns | 197 | 2 | 0 | 50 | 192 | metal 127, refractory 22, wood 18 |
 | handcrafted | 260 | 9 | 0 | 2 | 238 | wood 126, fibre 42, nether_wood 30 |
-| minecraft | 1151 | 966 | 30 | 0 | 207 | refractory 244, wood 169, metal 120 |
-| alexsmobs | 271 | 5 | 0 | 64 | 166 | organic 100, technical 87, container 18 |
-| supplementaries | 247 | 3 | 12 | 0 | 218 | wood 72, metal 55, fibre 38 |
-| displaydelight | 224 | 0 | 0 | 0 | 224 | wood 224 |
+| alexsmobs | 271 | 5 | 0 | 65 | 171 | organic 107, technical 87, container 18 |
+| supplementaries | 247 | 2 | 10 | 0 | 221 | wood 72, metal 53, fibre 37 |
+| oldguns | 197 | 2 | 0 | 50 | 177 | metal 127, refractory 21, explosive 18 |
 | projectred_illumination | 161 | 0 | 0 | 96 | 128 | machine 96, glass 33, metal 32 |
-| kubejs | 193 | 0 | 25 | 0 | 167 | metal 78, refractory 43, unclassified 25 |
-| vintagedelight | 205 | 5 | 0 | 1 | 179 | food 62, metal 31, earth 25 |
+| displaydelight | 223 | 0 | 0 | 0 | 223 | wood 209, food 14 |
+| kubejs | 208 | 0 | 22 | 0 | 184 | metal 74, refractory 42, food 31 |
+| securitycraft | 562 | 42 | 0 | 17 | 179 | refractory 405, machine 41, masonry 36 |
+| vintagedelight | 207 | 5 | 0 | 1 | 180 | food 73, metal 31, glass 21 |
 | clayworks | 173 | 0 | 0 | 0 | 173 | masonry 173 |
-| farmersdelight | 176 | 7 | 0 | 2 | 168 | food 75, wood 45, foliage 14 |
-| delightful | 144 | 1 | 0 | 24 | 143 | food 65, metal 23, produce 14 |
-| securitycraft | 562 | 42 | 0 | 17 | 145 | refractory 443, machine 37, metal 34 |
+| farmersdelight | 176 | 7 | 0 | 1 | 168 | food 76, wood 45, foliage 14 |
+| delightful | 144 | 1 | 0 | 24 | 143 | food 68, metal 23, produce 11 |
 | everythingcopper | 155 | 4 | 0 | 0 | 150 | metal 144, wood 9, food 1 |
 | another_furniture | 145 | 14 | 0 | 0 | 145 | wood 114, fibre 16, nether_wood 14 |
-| rusticdelight | 152 | 7 | 0 | 0 | 145 | food 86, produce 30, wood 12 |
+| rusticdelight | 152 | 7 | 0 | 0 | 145 | food 83, produce 29, wood 12 |
 | storagedelight | 140 | 0 | 0 | 0 | 140 | wood 140 |
-| framedblocks | 139 | 1 | 0 | 0 | 138 | wood 138, refractory 1 |
+| framedblocks | 139 | 1 | 0 | 0 | 135 | wood 134, fuel 3, machine 1 |
+| dramaticdoors | 149 | 6 | 0 | 0 | 131 | wood 81, metal 44, refractory 18 |
+| minecraft | 1151 | 965 | 1 | 0 | 127 | refractory 219, wood 150, metal 122 |
 | floralench | 121 | 0 | 0 | 6 | 121 | foliage 42, refractory 34, masonry 31 |
-| vinery | 151 | 22 | 0 | 0 | 125 | wood 67, container 35, foliage 14 |
+| vinery | 151 | 22 | 0 | 0 | 125 | wood 63, container 35, foliage 14 |
+| hearthandharvest | 132 | 8 | 2 | 0 | 120 | food 33, container 25, wood 19 |
+| powergrid | 119 | 0 | 26 | 0 | 91 | metal 53, unclassified 26, machine 13 |
 | domum_ornamentum | 91 | 0 | 0 | 20 | 91 | wood 30, masonry 23, fibre 18 |
-| dramaticdoors | 127 | 4 | 0 | 0 | 109 | wood 61, metal 44, refractory 18 |
-| dustrial_decor | 106 | 0 | 0 | 12 | 96 | metal 83, glass 10, fibre 5 |
-| create_things_and_misc | 94 | 0 | 0 | 8 | 91 | metal 59, wood 16, refractory 8 |
+| dustrial_decor | 106 | 0 | 0 | 12 | 96 | metal 83, glass 10, masonry 4 |
+| create_things_and_misc | 94 | 0 | 0 | 7 | 93 | metal 58, wood 16, refractory 6 |
 | botanypots | 98 | 0 | 0 | 0 | 98 | earth 98 |
-| engineersdecor | 99 | 1 | 0 | 0 | 97 | metal 42, masonry 23, wood 22 |
-| geode | 96 | 0 | 0 | 1 | 95 | crystal 83, refractory 10, glass 1 |
+| geode | 96 | 0 | 0 | 1 | 95 | crystal 76, refractory 17, glass 1 |
 | storagedrawers | 92 | 0 | 0 | 5 | 90 | wood 70, refractory 9, machine 7 |
-| neapolitan | 94 | 1 | 0 | 2 | 91 | food 36, wood 18, earth 10 |
-| wardrobe | 71 | 0 | 0 | 22 | 71 | wood 29, fibre 28, organic 8 |
+| engineersdecor | 99 | 1 | 0 | 0 | 93 | metal 41, masonry 23, wood 18 |
+| wardrobe | 71 | 0 | 0 | 22 | 71 | wood 28, fibre 25, organic 9 |
+| neapolitan | 94 | 1 | 0 | 1 | 91 | food 41, wood 18, earth 10 |
 | veggiesdelight | 90 | 7 | 0 | 0 | 83 | food 59, foliage 11, produce 10 |
-| projectred_core | 53 | 2 | 0 | 29 | 51 | machine 33, metal 13, crystal 3 |
-| blocky_siege | 97 | 0 | 0 | 0 | 79 | metal 65, glass 18, wood 11 |
+| projectred_core | 53 | 2 | 0 | 29 | 50 | machine 33, metal 13, crystal 3 |
+| creativeengineering | 81 | 4 | 2 | 0 | 75 | metal 67, powder 3, refractory 3 |
 | create_confectionery | 74 | 0 | 0 | 3 | 73 | food 41, masonry 18, container 6 |
 | hostiledelight | 70 | 0 | 0 | 2 | 69 | food 62, container 7, glass 1 |
 | projectred_transmission | 70 | 0 | 0 | 0 | 70 | metal 70 |
-| suppsquared | 70 | 0 | 0 | 0 | 69 | metal 24, wood 23, fibre 16 |
-| ends_delight | 64 | 0 | 0 | 2 | 64 | food 46, refractory 8, container 5 |
+| suppsquared | 70 | 0 | 0 | 0 | 69 | metal 24, wood 23, packed 16 |
+| ends_delight | 64 | 0 | 0 | 2 | 64 | food 45, refractory 8, container 5 |
 | colored_water | 64 | 0 | 0 | 0 | 64 | container 64 |
 | immersive_armors | 40 | 0 | 0 | 24 | 40 | metal 24, organic 8, crystal 4 |
 | alexsabnormalities | 63 | 0 | 0 | 0 | 63 | masonry 35, refractory 21, wood 4 |
-| creativedelight | 62 | 0 | 0 | 0 | 62 | wood 59, earth 3 |
-| projectred_integration | 34 | 0 | 0 | 22 | 34 | machine 33, wood 1 |
-| farmersrespite | 50 | 0 | 0 | 3 | 50 | container 19, food 15, foliage 8 |
+| blocky_siege | 97 | 0 | 0 | 0 | 61 | metal 55, explosive 36, wood 3 |
+| projectred_integration | 34 | 0 | 0 | 20 | 34 | machine 33, wood 1 |
+| farmersrespite | 50 | 0 | 0 | 3 | 50 | container 19, food 16, foliage 8 |
+| abnormals_delight | 49 | 0 | 0 | 3 | 49 | food 26, wood 17, organic 4 |
 | beautify | 53 | 0 | 0 | 0 | 52 | wood 29, metal 19, fibre 2 |
 | immersivepetroleum | 46 | 0 | 0 | 7 | 45 | metal 17, container 16, refractory 4 |
-| abnormals_delight | 49 | 0 | 0 | 2 | 48 | food 25, wood 17, organic 4 |
 | createaddition | 46 | 0 | 0 | 4 | 46 | metal 29, refractory 6, food 4 |
 | mca | 57 | 2 | 18 | 0 | 32 | unclassified 18, fibre 13, refractory 11 |
 | tobacconistmod | 48 | 0 | 0 | 2 | 48 | foliage 29, container 18, fibre 1 |
 | barbequesdelight | 49 | 0 | 2 | 0 | 47 | food 23, wood 14, nether_wood 4 |
 | oceanic_delight | 48 | 0 | 0 | 1 | 48 | food 37, foliage 3, organic 2 |
 | canned_goods | 47 | 0 | 0 | 2 | 46 | container 43, metal 2, technical 1 |
-| fairylights | 29 | 0 | 0 | 19 | 29 | fibre 20, metal 7, foliage 1 |
 | miners_delight | 51 | 3 | 0 | 0 | 48 | food 40, organic 4, wood 3 |
-| sophisticatedbackpacks | 49 | 0 | 1 | 0 | 47 | machine 37, metal 8, refractory 3 |
-| goldenfood | 47 | 0 | 0 | 0 | 47 | food 45, fibre 2 |
+| fairylights | 29 | 0 | 0 | 18 | 29 | fibre 19, metal 7, organic 2 |
 | littlelogistics | 33 | 0 | 0 | 14 | 32 | metal 29, machine 2, wood 1 |
+| sophisticatedbackpacks | 49 | 0 | 1 | 0 | 45 | machine 35, metal 8, refractory 3 |
 | copycats | 45 | 0 | 0 | 0 | 45 | metal 41, wood 4 |
 | brewinandchewin | 44 | 0 | 0 | 0 | 44 | food 22, container 17, wood 3 |
 | exposure_expanded | 32 | 0 | 0 | 14 | 30 | machine 30, glass 2 |
-| endersdelight | 39 | 0 | 0 | 3 | 39 | food 28, foliage 4, wood 2 |
+| endersdelight | 39 | 0 | 0 | 3 | 39 | food 29, foliage 4, wood 2 |
 | decorative_blocks | 46 | 14 | 0 | 1 | 40 | wood 32, nether_wood 8, metal 4 |
+| goldenfood | 41 | 0 | 0 | 0 | 41 | food 39, fibre 2 |
 | prettypipes | 37 | 0 | 0 | 3 | 37 | machine 33, metal 2, refractory 2 |
 | the_dirty_stuff | 38 | 0 | 0 | 0 | 38 | foliage 37, metal 1 |
 | controlengineering | 27 | 0 | 0 | 10 | 27 | machine 14, metal 13 |
-| cookingforblockheads | 36 | 0 | 0 | 2 | 34 | refractory 22, metal 5, fibre 3 |
+| cookingforblockheads | 36 | 0 | 0 | 2 | 34 | refractory 22, metal 6, fibre 3 |
 | interiors | 37 | 1 | 0 | 0 | 36 | wood 37 |
 | bellsandwhistles | 36 | 0 | 0 | 0 | 35 | metal 34, glass 1, refractory 1 |
-| create_central_kitchen | 33 | 0 | 0 | 3 | 32 | food 21, produce 7, ice 2 |
+| create_central_kitchen | 33 | 0 | 0 | 3 | 32 | food 29, technical 1, produce 1 |
 | chalk | 17 | 0 | 0 | 17 | 17 | earth 17 |
 | createframed | 170 | 0 | 0 | 0 | 34 | glass 136, wood 17, metal 17 |
-| simplehats | 311 | 0 | 0 | 17 | 17 | refractory 294, fibre 17 |
-| comforts | 33 | 0 | 0 | 0 | 33 | fibre 33 |
+| comforts | 33 | 0 | 0 | 0 | 33 | fibre 17, packed 16 |
 | compressedcreativity | 33 | 0 | 0 | 0 | 33 | wood 16, metal 10, refractory 4 |
 | moredelight | 33 | 0 | 0 | 0 | 33 | food 29, produce 2, refractory 1 |
-| philipsruins | 34 | 0 | 0 | 0 | 33 | masonry 13, refractory 13, organic 3 |
+| philipsruins | 34 | 0 | 0 | 0 | 33 | masonry 13, refractory 10, crystal 5 |
 | glow_ink_plus | 32 | 0 | 0 | 0 | 32 | fibre 32 |
-| nethersdelight | 34 | 3 | 0 | 1 | 31 | food 17, refractory 7, foliage 5 |
 | scholar | 32 | 0 | 0 | 0 | 32 | fibre 32 |
 | exposure | 19 | 0 | 0 | 13 | 18 | machine 15, wood 2, fibre 1 |
 | itemfilters | 16 | 0 | 0 | 15 | 16 | machine 15, fibre 1 |
+| nethersdelight | 34 | 3 | 0 | 1 | 30 | food 17, refractory 7, foliage 4 |
 | fungidelight | 32 | 0 | 0 | 0 | 30 | wood 10, food 10, produce 8 |
-| create_compressed | 29 | 0 | 0 | 0 | 29 | refractory 14, metal 6, earth 4 |
+| create_compressed | 29 | 0 | 0 | 0 | 29 | refractory 16, metal 6, earth 4 |
 | advancedperipherals | 22 | 0 | 0 | 6 | 22 | metal 13, machine 9 |
 | waystones | 28 | 0 | 1 | 0 | 27 | refractory 22, fibre 3, unclassified 1 |
 | computercraft | 22 | 0 | 0 | 4 | 22 | machine 13, refractory 8, fibre 1 |
-| nock_enough_arrows | 27 | 0 | 1 | 0 | 25 | wood 22, explosive 1, crystal 1 |
 | physics_gun_mod | 23 | 0 | 0 | 3 | 23 | metal 20, machine 3 |
 | cloudstorage | 21 | 0 | 0 | 8 | 17 | machine 8, container 2, earth 2 |
-| domesticationinnovation | 25 | 0 | 3 | 0 | 22 | fibre 17, unclassified 3, wood 2 |
 | buzzier_bees | 28 | 3 | 0 | 0 | 24 | earth 13, foliage 4, container 3 |
-| corn_delight | 24 | 0 | 0 | 0 | 24 | food 17, fibre 2, foliage 2 |
-| gates | 25 | 0 | 1 | 0 | 23 | wood 17, metal 3, refractory 3 |
+| corn_delight | 24 | 0 | 0 | 0 | 24 | food 17, foliage 2, produce 1 |
+| domesticationinnovation | 25 | 0 | 2 | 0 | 22 | fibre 17, unclassified 2, wood 2 |
 | alexsdelight | 23 | 0 | 0 | 0 | 23 | food 23 |
+| gates | 25 | 0 | 1 | 0 | 22 | wood 15, metal 3, machine 2 |
+| nock_enough_arrows | 27 | 0 | 1 | 0 | 22 | wood 20, fuel 3, explosive 1 |
 | oceansdelight | 22 | 0 | 0 | 1 | 22 | food 19, organic 2, metal 1 |
 | create_factory | 21 | 0 | 0 | 0 | 21 | food 21 |
+| creativeequipment | 30 | 5 | 17 | 0 | 4 | unclassified 17, refractory 10, metal 2 |
 | projectred_fabrication | 12 | 0 | 0 | 8 | 12 | machine 8, refractory 4 |
-| creategoggles | 20 | 0 | 0 | 1 | 18 | metal 13, refractory 4, wood 3 |
+| tempad | 21 | 0 | 6 | 0 | 14 | machine 8, unclassified 6, refractory 5 |
+| creategoggles | 20 | 0 | 0 | 1 | 18 | metal 13, refractory 4, organic 3 |
 | immersiveposts | 18 | 0 | 0 | 1 | 18 | metal 18 |
 | yuushya | 20 | 0 | 14 | 0 | 5 | unclassified 14, technical 1, wood 1 |
 | largemeals | 18 | 0 | 0 | 0 | 18 | food 18 |
@@ -191,21 +207,21 @@ Sorted by items needing attention (unclassified + mod default + differs).
 | armor_trims | 17 | 0 | 0 | 0 | 17 | metal 16, refractory 1 |
 | roll_delight | 17 | 0 | 1 | 0 | 16 | food 15, unclassified 1, wood 1 |
 | well | 17 | 0 | 0 | 0 | 17 | masonry 17 |
-| tintedcampfires | 16 | 0 | 0 | 0 | 16 | wood 16 |
 | boatload | 22 | 22 | 0 | 0 | 15 | nether_wood 15, wood 7 |
-| witchmobility | 15 | 0 | 5 | 0 | 10 | unclassified 5, refractory 3, wood 3 |
+| witchmobility | 15 | 0 | 5 | 0 | 10 | unclassified 5, refractory 3, organic 2 |
 | appbot | 14 | 0 | 0 | 1 | 13 | machine 12, technical 1, crystal 1 |
 | createappliedkinetics | 13 | 0 | 0 | 1 | 13 | machine 11, refractory 2 |
 | sootychimneys | 14 | 0 | 0 | 0 | 14 | masonry 6, refractory 4, metal 4 |
 | ppfluids | 11 | 0 | 0 | 1 | 11 | machine 9, container 1, metal 1 |
+| salt | 12 | 0 | 0 | 0 | 12 | earth 7, refractory 5 |
 | cozys-improved-cats | 11 | 0 | 4 | 0 | 7 | unclassified 4, organic 2, food 2 |
 | ftbquests | 13 | 0 | 4 | 0 | 7 | unclassified 4, metal 4, technical 2 |
-| salt | 11 | 0 | 0 | 0 | 11 | earth 6, refractory 5 |
 | sculktransporting | 11 | 0 | 7 | 0 | 4 | unclassified 7, organic 3, wood 1 |
-| etched | 11 | 1 | 4 | 0 | 6 | unclassified 4, wood 4, fibre 2 |
+| etched | 11 | 1 | 3 | 0 | 7 | wood 4, unclassified 3, fibre 2 |
 | more_immersive_wires | 10 | 0 | 0 | 0 | 10 | metal 10 |
 | quarkdelight | 10 | 0 | 0 | 0 | 10 | food 8, wood 1, container 1 |
 | untitledduckmod | 12 | 0 | 0 | 0 | 10 | organic 5, food 4, technical 2 |
+| biomesoplenty | 9 | 0 | 1 | 0 | 8 | organic 6, unclassified 1, container 1 |
 | exposure_polaroid | 5 | 0 | 0 | 4 | 5 | fibre 4, machine 1 |
 | mosaic_masonry | 9 | 0 | 0 | 0 | 9 | refractory 8, crystal 1 |
 | structurize | 9 | 0 | 8 | 0 | 1 | unclassified 8, metal 1 |
@@ -217,27 +233,27 @@ Sorted by items needing attention (unclassified + mod default + differs).
 | ricksportalgun | 6 | 0 | 0 | 1 | 6 | metal 3, container 2, machine 1 |
 | wares | 7 | 0 | 6 | 0 | 1 | unclassified 6, wood 1 |
 | create_deep_dark | 11 | 5 | 0 | 0 | 6 | refractory 8, metal 1, container 1 |
-| hearthandharvest | 8 | 0 | 0 | 0 | 6 | container 4, refractory 2, produce 1 |
-| incubation | 6 | 0 | 0 | 0 | 6 | wood 2, food 2, earth 2 |
+| incubation | 6 | 0 | 0 | 0 | 6 | wood 2, food 2, packed 1 |
 | lootr | 6 | 0 | 0 | 0 | 6 | wood 4, refractory 1, metal 1 |
 | astikorcarts | 4 | 0 | 0 | 1 | 4 | wood 4 |
 | cb_microblock | 5 | 0 | 1 | 0 | 4 | refractory 3, metal 1, unclassified 1 |
 | cccbridge | 5 | 0 | 0 | 0 | 5 | metal 4, refractory 1 |
 | chimes | 6 | 0 | 0 | 0 | 5 | metal 3, wood 2, glass 1 |
 | constructionwand | 6 | 0 | 2 | 0 | 3 | refractory 3, unclassified 2, metal 1 |
+| creategbd | 5 | 0 | 0 | 0 | 5 | machine 4, wood 1 |
 | incubation_additions | 5 | 0 | 1 | 0 | 4 | wood 2, organic 2, unclassified 1 |
 | refinedcooking | 3 | 0 | 0 | 2 | 3 | food 2, machine 1 |
-| solapplepie | 5 | 0 | 0 | 0 | 5 | food 3, fibre 1, refractory 1 |
 | citadel | 5 | 0 | 3 | 0 | 1 | unclassified 3, fibre 1, technical 1 |
-| creategbd | 5 | 0 | 0 | 0 | 4 | machine 4, refractory 1 |
 | enderstorage | 3 | 0 | 0 | 1 | 3 | refractory 2, metal 1 |
 | extendedgears | 4 | 0 | 0 | 0 | 4 | wood 4 |
 | immersive_paintings | 4 | 0 | 4 | 0 | 0 | unclassified 4 |
+| solapplepie | 4 | 0 | 0 | 0 | 4 | food 3, fibre 1 |
 | trashcans | 4 | 0 | 0 | 0 | 4 | metal 4 |
-| create_netherless | 4 | 1 | 1 | 0 | 2 | refractory 2, wood 1, unclassified 1 |
 | creative_labels | 3 | 0 | 1 | 0 | 2 | fibre 2, unclassified 1 |
 | creativebrewing | 3 | 0 | 0 | 0 | 3 | container 3 |
+| creativelabels | 3 | 0 | 1 | 0 | 2 | fibre 2, unclassified 1 |
 | dimpaintings | 3 | 0 | 3 | 0 | 0 | unclassified 3 |
+| exposure_extras | 3 | 0 | 0 | 0 | 3 | metal 1, machine 1, refractory 1 |
 | littlecontraptions | 2 | 0 | 0 | 1 | 2 | metal 2 |
 | myrtrees | 7 | 4 | 0 | 0 | 3 | wood 3, foliage 2, organic 1 |
 | portablewardrobe | 3 | 0 | 0 | 0 | 3 | refractory 1, metal 1, wood 1 |
@@ -247,11 +263,14 @@ Sorted by items needing attention (unclassified + mod default + differs).
 | splash_milk | 3 | 0 | 0 | 0 | 3 | container 3 |
 | breezy | 2 | 0 | 1 | 0 | 1 | metal 1, unclassified 1 |
 | create_crush_everything | 3 | 1 | 0 | 0 | 2 | refractory 2, organic 1 |
-| customizableelytra | 2 | 0 | 1 | 0 | 1 | unclassified 1, organic 1 |
+| create_netherless | 4 | 1 | 1 | 0 | 1 | refractory 2, fuel 1, unclassified 1 |
+| customizableelytra | 2 | 0 | 0 | 0 | 2 | organic 2 |
 | endercrop | 2 | 0 | 0 | 0 | 2 | foliage 1, refractory 1 |
-| exposure_extras | 3 | 0 | 0 | 0 | 2 | metal 1, machine 1, refractory 1 |
+| exposureextras | 3 | 0 | 0 | 0 | 2 | metal 1, machine 1, refractory 1 |
 | fortuneonneterite_i_ig_z | 3 | 0 | 0 | 0 | 2 | refractory 2, metal 1 |
 | portablemobs | 2 | 0 | 0 | 0 | 2 | machine 2 |
+| portalgun | 3 | 0 | 0 | 0 | 2 | metal 1, refractory 1, organic 1 |
+| solraspberrypie | 2 | 0 | 1 | 0 | 1 | unclassified 1, wood 1 |
 | sticky_it | 2 | 0 | 1 | 0 | 1 | unclassified 1, fibre 1 |
 | tmted | 2 | 0 | 0 | 0 | 2 | container 1, light_powder 1 |
 | xpbook | 2 | 0 | 1 | 0 | 1 | fibre 1, unclassified 1 |
@@ -262,12 +281,15 @@ Sorted by items needing attention (unclassified + mod default + differs).
 | create_mechanical_extruder | 1 | 0 | 0 | 0 | 1 | refractory 1 |
 | create_questing | 1 | 0 | 1 | 0 | 0 | unclassified 1 |
 | create_tweaked_controllers | 1 | 0 | 0 | 0 | 1 | machine 1 |
+| creativecompat | 1 | 0 | 0 | 0 | 1 | wood 1 |
+| creativemagic | 1 | 0 | 0 | 0 | 1 | metal 1 |
 | dragonloot | 16 | 15 | 0 | 0 | 1 | refractory 15, metal 1 |
 | dummmmmmy | 1 | 0 | 1 | 0 | 0 | unclassified 1 |
 | endportal | 1 | 0 | 0 | 0 | 1 | organic 1 |
 | explorerscompass | 1 | 0 | 1 | 0 | 0 | unclassified 1 |
 | fireflybushport | 1 | 0 | 0 | 0 | 1 | foliage 1 |
 | heartstone | 1 | 0 | 0 | 0 | 1 | refractory 1 |
+| immersive_portals | 2 | 0 | 0 | 0 | 1 | technical 1, metal 1 |
 | jrftl | 1 | 0 | 0 | 0 | 1 | organic 1 |
 | labels | 1 | 0 | 0 | 0 | 1 | fibre 1 |
 | monobank | 2 | 0 | 1 | 0 | 0 | refractory 1, unclassified 1 |
@@ -278,6 +300,7 @@ Sorted by items needing attention (unclassified + mod default + differs).
 | nocubescreateexp | 1 | 0 | 0 | 0 | 1 | crystal 1 |
 | patchouli | 1 | 0 | 0 | 0 | 1 | fibre 1 |
 | questsadditions | 1 | 0 | 0 | 0 | 1 | wood 1 |
+| solcarrot | 1 | 0 | 0 | 0 | 1 | fibre 1 |
 | takesapillage | 5 | 1 | 0 | 0 | 1 | technical 3, metal 1, organic 1 |
 | bushierflowers | 13 | 13 | 0 | 0 | 0 | foliage 13 |
 | campsite_structures | 1 | 0 | 0 | 0 | 0 | technical 1 |
@@ -285,9 +308,11 @@ Sorted by items needing attention (unclassified + mod default + differs).
 | dreamcatcher | 1 | 0 | 0 | 0 | 0 | refractory 1 |
 | felsic_gear | 11 | 11 | 0 | 0 | 0 | refractory 11 |
 | more_mooblooms | 1 | 0 | 0 | 0 | 0 | technical 1 |
+| moremooblooms | 1 | 0 | 0 | 0 | 0 | technical 1 |
 | netherite_horse_armor | 1 | 0 | 0 | 0 | 0 | refractory 1 |
+| tintedcampfires | 16 | 0 | 0 | 0 | 0 | fuel 16 |
 
-Mods with no mod default (an unmatched item from these goes to unclassified): 92.
+Mods with no mod default (an unmatched item from these goes to unclassified): 105.
 
 ## 4. Lava survivors today
 
@@ -295,71 +320,85 @@ Source: /dumpphysics (live: tags, rules, fire-resistant items, ItemPhysic undest
 
 | Reason | Items |
 |---|---|
-| fire_resistant_item | 834 |
+| fire_resistant_item | 838 |
 | fire_resistant_item + split_lavaproof | 48 |
 | itemphysic_undestroyable + split_lavaproof | 3 |
 | split_lavaproof | 527 |
 
-By mod: securitycraft 438, simplehats 294, minecraft 222, create 208, design_decor 84, dramaticdoors 18, dragonloot 16, botania 14, createdeco 12, creativeengineering 11, felsic_gear 11, quark 11, immersiveengineering 10, alexsmobs 9, vintageimprovements 8, lightmanscurrency 7, create_deep_dark 5, nethersdelight 4, create_dd 3, supplementaries 3, create_things_and_misc 2, creategoggles 2, hearthandharvest 2, pneumaticcraft 2, abnormals_delight 1, architects_palette 1, constructionwand 1, create_crush_everything 1, create_netherless 1, creategbd 1, dreamcatcher 1, exposure_extras 1, farmersdelight 1, fortuneonneterite_i_ig_z 1, hostiledelight 1, monobank 1, netherite_horse_armor 1, sophisticatedbackpacks 1, suppsquared 1, twigs 1.
+By mod: securitycraft 438, simplehats 294, minecraft 222, create 208, design_decor 84, dramaticdoors 18, dragonloot 16, botania 14, createdeco 12, felsic_gear 11, quark 11, immersiveengineering 10, alexsmobs 9, creativeequipment 9, vintageimprovements 8, lightmanscurrency 7, create_deep_dark 5, nethersdelight 4, create_dd 3, hearthandharvest 3, portalgun 3, supplementaries 3, create_things_and_misc 2, creategoggles 2, creativeengineering 2, pneumaticcraft 2, abnormals_delight 1, architects_palette 1, constructionwand 1, create_crush_everything 1, create_netherless 1, creategbd 1, dreamcatcher 1, exposureextras 1, farmersdelight 1, fortuneonneterite_i_ig_z 1, hostiledelight 1, monobank 1, netherite_horse_armor 1, sophisticatedbackpacks 1, suppsquared 1, twigs 1.
 
-Survivors whose family is not `refractory` (check each: an over-broad lavaproof entry, or a family rule to fix): 77.
+Survivors whose family is not `refractory` (check each: an over-broad lavaproof entry, or a family rule to fix): 412.
 
+- `abnormals_delight:necromium_knife` (food, mod_default)
+- `alexsmobs:bone_serpent_tooth` (organic, name)
+- `alexsmobs:emu_feather` (organic, name)
+- `alexsmobs:gazelle_horn` (organic, name)
+- `alexsmobs:straddle_helmet` (organic, mod_default)
+- `alexsmobs:straddle_saddle` (organic, name)
+- `alexsmobs:straddleboard` (organic, mod_default)
+- `alexsmobs:straddlite` (organic, mod_default)
+- `botania:flugel_eye` (organic, name)
+- `botania:infinite_fruit` (produce, name)
+- `botania:terra_axe` (metal, gear)
+- `botania:terra_pick` (metal, gear)
+- `botania:terra_sword` (metal, gear)
+- `botania:terrasteel_boots` (metal, gear_name)
+- `botania:terrasteel_chestplate` (metal, gear_name)
+- `botania:terrasteel_helmet` (metal, gear_name)
+- `botania:terrasteel_leggings` (metal, gear_name)
+- `create:netherite_backtank` (metal, gear+R12)
+- `create:netherite_diving_boots` (metal, gear_name+R12)
+- `create:netherite_diving_helmet` (metal, gear_name+R12)
+- `create_dd:chromatic_compound` (metal, mod_default)
+- `create_dd:refined_radiance` (metal, mod_default)
+- `create_dd:shadow_steel` (metal, name)
+- `create_things_and_misc:empty_card` (machine, name)
+- `create_things_and_misc:empty_ticket` (fibre, name)
+- `creategbd:beam_reactor_helmet` (wood, name)
 - `creativeengineering:netherite_plate_block` (metal, material)
 - `dragonloot:dragon_anvil` (metal, material)
+- `hearthandharvest:dragon_watering_can` (container, name)
+- `hearthandharvest:netherite_watering_can` (container, name)
 - `hostiledelight:blazingale` (container, tag)
-- `minecraft:beacon` (glass, material)
-- `minecraft:chiseled_nether_bricks` (masonry, material+name)
-- `minecraft:compass` (unclassified, none)
-- `minecraft:conduit` (glass, material)
-- `minecraft:cracked_nether_bricks` (masonry, material+name)
-- `minecraft:dark_prismarine` (crystal, material+name)
-- `minecraft:dragon_egg` (organic, material)
-- `minecraft:end_crystal` (crystal, name)
-- `minecraft:ghast_tear` (unclassified, none)
-- `minecraft:heart_of_the_sea` (organic, name)
-- `minecraft:infested_chiseled_stone_bricks` (earth, material)
-- `minecraft:infested_cracked_stone_bricks` (earth, material)
-- `minecraft:infested_mossy_stone_bricks` (earth, material)
-- `minecraft:infested_stone_bricks` (earth, material)
-- `minecraft:lodestone` (metal, material)
-- `minecraft:nether_brick` (metal, tag)
-- `minecraft:nether_brick_fence` (masonry, material+name)
-- `minecraft:nether_brick_slab` (masonry, material+name)
-- `minecraft:nether_brick_stairs` (masonry, material+name)
-- `minecraft:nether_brick_wall` (masonry, material+name)
-- `minecraft:nether_bricks` (masonry, material+name)
-- `minecraft:nether_star` (unclassified, none)
-- `minecraft:prismarine` (crystal, material+name)
-- `minecraft:prismarine_brick_slab` (masonry, material+name)
-- `minecraft:prismarine_brick_stairs` (masonry, material+name)
-- `minecraft:prismarine_bricks` (masonry, material+name)
-- `minecraft:prismarine_crystals` (crystal, tag)
-- `minecraft:prismarine_shard` (powder, tag)
-- `minecraft:prismarine_slab` (crystal, material+name)
-- `minecraft:prismarine_stairs` (crystal, material+name)
-- `minecraft:prismarine_wall` (crystal, material+name)
-- `minecraft:quartz` (crystal, tag)
-- `minecraft:recovery_compass` (unclassified, none)
-- `minecraft:red_nether_brick_slab` (masonry, material+name)
-- `minecraft:red_nether_brick_stairs` (masonry, material+name)
-- `minecraft:red_nether_brick_wall` (masonry, material+name)
-- `minecraft:red_nether_bricks` (masonry, material+name)
-- `minecraft:shulker_shell` (organic, name)
-- `minecraft:wither_skeleton_skull` (unclassified, none)
+- `lightmanscurrency:coin_chocolate_netherite` (food, edible)
+- `minecraft:dark_prismarine` (crystal, override)
+- `minecraft:prismarine` (crystal, override)
+- `minecraft:prismarine_brick_slab` (crystal, override)
+- `minecraft:prismarine_brick_stairs` (crystal, override)
+- `minecraft:prismarine_bricks` (crystal, override)
+- `minecraft:prismarine_crystals` (crystal, override)
+- `minecraft:prismarine_shard` (crystal, override)
+- `minecraft:prismarine_slab` (crystal, override)
+- `minecraft:prismarine_stairs` (crystal, override)
+- `minecraft:prismarine_wall` (crystal, override)
+- `minecraft:smooth_stone_slab` (masonry, override)
 - `nethersdelight:ground_strider` (food, tag)
 - `nethersdelight:strider_slice` (food, tag)
+- `portalgun:portal_gun` (metal, name)
+- `portalgun:portalgun_claw` (organic, name)
 - `securitycraft:reinforced_black_carpet` (fibre, tag)
 - `securitycraft:reinforced_black_terracotta` (masonry, tag)
 - `securitycraft:reinforced_blue_carpet` (fibre, tag)
 - `securitycraft:reinforced_blue_terracotta` (masonry, tag)
 - `securitycraft:reinforced_brown_carpet` (fibre, tag)
 - `securitycraft:reinforced_brown_terracotta` (masonry, tag)
+- `securitycraft:reinforced_chiseled_red_sandstone` (masonry, override)
+- `securitycraft:reinforced_chiseled_sandstone` (masonry, override)
+- `securitycraft:reinforced_coal_block` (fuel, ruling)
+- `securitycraft:reinforced_cut_red_sandstone` (masonry, override)
+- `securitycraft:reinforced_cut_red_sandstone_slab` (masonry, override)
+- `securitycraft:reinforced_cut_sandstone` (masonry, override)
+- `securitycraft:reinforced_cut_sandstone_slab` (masonry, override)
 - `securitycraft:reinforced_cyan_carpet` (fibre, tag)
 - `securitycraft:reinforced_cyan_terracotta` (masonry, tag)
+- `securitycraft:reinforced_dark_prismarine` (crystal, override)
+- `securitycraft:reinforced_dark_prismarine_slab` (crystal, override)
+- `securitycraft:reinforced_dark_prismarine_stairs` (crystal, override)
 - `securitycraft:reinforced_gray_carpet` (fibre, tag)
 - `securitycraft:reinforced_gray_terracotta` (masonry, tag)
 - `securitycraft:reinforced_green_carpet` (fibre, tag)
 - `securitycraft:reinforced_green_terracotta` (masonry, tag)
+- `securitycraft:reinforced_lever` (machine, ruling)
 - `securitycraft:reinforced_light_blue_carpet` (fibre, tag)
 - `securitycraft:reinforced_light_blue_terracotta` (masonry, tag)
 - `securitycraft:reinforced_light_gray_carpet` (fibre, tag)
@@ -368,19 +407,129 @@ Survivors whose family is not `refractory` (check each: an over-broad lavaproof 
 - `securitycraft:reinforced_lime_terracotta` (masonry, tag)
 - `securitycraft:reinforced_magenta_carpet` (fibre, tag)
 - `securitycraft:reinforced_magenta_terracotta` (masonry, tag)
+- `securitycraft:reinforced_observer` (machine, ruling)
 - `securitycraft:reinforced_orange_carpet` (fibre, tag)
 - `securitycraft:reinforced_orange_terracotta` (masonry, tag)
 - `securitycraft:reinforced_pink_carpet` (fibre, tag)
 - `securitycraft:reinforced_pink_terracotta` (masonry, tag)
+- `securitycraft:reinforced_piston` (machine, ruling)
+- `securitycraft:reinforced_prismarine` (crystal, override)
+- `securitycraft:reinforced_prismarine_brick_slab` (crystal, override)
+- `securitycraft:reinforced_prismarine_brick_stairs` (crystal, override)
+- `securitycraft:reinforced_prismarine_bricks` (crystal, override)
+- `securitycraft:reinforced_prismarine_slab` (crystal, override)
+- `securitycraft:reinforced_prismarine_stairs` (crystal, override)
+- `securitycraft:reinforced_prismarine_wall` (crystal, override)
 - `securitycraft:reinforced_purple_carpet` (fibre, tag)
 - `securitycraft:reinforced_purple_terracotta` (masonry, tag)
 - `securitycraft:reinforced_red_carpet` (fibre, tag)
+- `securitycraft:reinforced_red_sandstone` (masonry, override)
+- `securitycraft:reinforced_red_sandstone_slab` (masonry, override)
+- `securitycraft:reinforced_red_sandstone_stairs` (masonry, override)
+- `securitycraft:reinforced_red_sandstone_wall` (masonry, override)
 - `securitycraft:reinforced_red_terracotta` (masonry, tag)
+- `securitycraft:reinforced_redstone_lamp` (fuel, ruling)
+- `securitycraft:reinforced_sandstone` (masonry, override)
+- `securitycraft:reinforced_sandstone_slab` (masonry, override)
+- `securitycraft:reinforced_sandstone_stairs` (masonry, override)
+- `securitycraft:reinforced_sandstone_wall` (masonry, override)
+- `securitycraft:reinforced_smooth_red_sandstone` (masonry, override)
+- `securitycraft:reinforced_smooth_red_sandstone_slab` (masonry, override)
+- `securitycraft:reinforced_smooth_red_sandstone_stairs` (masonry, override)
+- `securitycraft:reinforced_smooth_sandstone` (masonry, override)
+- `securitycraft:reinforced_smooth_sandstone_slab` (masonry, override)
+- `securitycraft:reinforced_smooth_sandstone_stairs` (masonry, override)
+- `securitycraft:reinforced_sticky_piston` (machine, ruling)
 - `securitycraft:reinforced_white_carpet` (fibre, tag)
 - `securitycraft:reinforced_white_terracotta` (masonry, tag)
 - `securitycraft:reinforced_yellow_carpet` (fibre, tag)
 - `securitycraft:reinforced_yellow_terracotta` (masonry, tag)
-- `vintageimprovements:netherite_sheet` (metal, tag)
+- `simplehats:acornhat` (fibre, mod_default)
+- `simplehats:aegishat` (fibre, mod_default)
+- `simplehats:alien_antennae` (fibre, mod_default)
+- `simplehats:alienphil` (fibre, mod_default)
+- `simplehats:amalgalichhat` (fibre, mod_default)
+- `simplehats:angel_and_devil` (fibre, mod_default)
+- `simplehats:angrymask` (fibre, mod_default)
+- `simplehats:antlers` (organic, name)
+- `simplehats:apple` (produce, name)
+- `simplehats:artsy` (fibre, mod_default)
+- `simplehats:artsy_doll` (fibre, mod_default)
+- `simplehats:astronaut` (fibre, mod_default)
+- `simplehats:axolotl_on_head` (organic, name)
+- `simplehats:azumanga_hat` (fibre, name)
+- `simplehats:baby_crewmate` (fibre, mod_default)
+- `simplehats:babydolphin` (fibre, mod_default)
+- `simplehats:babyturtle` (fibre, mod_default)
+- `simplehats:bandana` (fibre, name)
+- `simplehats:bandanargb` (fibre, mod_default)
+- `simplehats:baseballeaster` (fibre, mod_default)
+- `simplehats:baseballhat` (fibre, mod_default)
+- `simplehats:baseballhatfestive` (fibre, mod_default)
+- `simplehats:baseballhatjuly` (fibre, mod_default)
+- `simplehats:baseballhatrgb` (fibre, mod_default)
+- `simplehats:batwinghat` (fibre, mod_default)
+- `simplehats:beanie` (fibre, mod_default)
+- `simplehats:beanieeaster` (fibre, mod_default)
+- `simplehats:beaniefestive` (fibre, mod_default)
+- `simplehats:beaniejuly` (fibre, mod_default)
+- `simplehats:beaniergb` (fibre, mod_default)
+- `simplehats:beaniespooky` (fibre, mod_default)
+- `simplehats:bee_on_head` (organic, name)
+- `simplehats:beehat` (fibre, mod_default)
+- `simplehats:beetle_on_head` (organic, name)
+- `simplehats:beret_ribbon` (fibre, name)
+- `simplehats:bicorne` (fibre, mod_default)
+- `simplehats:bigbrain` (fibre, mod_default)
+- `simplehats:bigcrown` (fibre, mod_default)
+- `simplehats:bigeyes` (fibre, mod_default)
+- `simplehats:bigribbon` (fibre, mod_default)
+- `simplehats:bigstevehead` (fibre, mod_default)
+- `simplehats:binky` (fibre, mod_default)
+- `simplehats:bluefireeye` (fibre, mod_default)
+- `simplehats:bowler` (fibre, mod_default)
+- `simplehats:breadhat` (fibre, mod_default)
+- `simplehats:brownbrick` (masonry, name)
+- `simplehats:bucket` (container, name)
+- `simplehats:bunnyhat` (fibre, mod_default)
+- `simplehats:burgerhat` (fibre, mod_default)
+- `simplehats:burning_m_bison` (fibre, mod_default)
+- `simplehats:caddycap` (fibre, mod_default)
+- `simplehats:camera` (machine, name)
+- `simplehats:camerabeard` (fibre, mod_default)
+- `simplehats:candleonhead` (fibre, mod_default)
+- `simplehats:candycane` (fibre, mod_default)
+- `simplehats:cardboard_box` (fibre, mod_default)
+- `simplehats:carrotonstick` (fibre, mod_default)
+- `simplehats:cartoonegg` (fibre, mod_default)
+- `simplehats:cat_hat` (fibre, name)
+- `simplehats:cat_on_head` (organic, name)
+- `simplehats:caterpillar_on_head` (organic, name)
+- `simplehats:chalk_stick` (wood, name)
+- `simplehats:cheeseslice` (fibre, mod_default)
+- `simplehats:chefshat` (fibre, mod_default)
+- `simplehats:chi_ears` (fibre, mod_default)
+- `simplehats:chickenhead` (fibre, mod_default)
+- `simplehats:chickenonhead` (fibre, mod_default)
+- `simplehats:chocolate_sauced` (food, name)
+- `simplehats:christmascakehat` (fibre, mod_default)
+- `simplehats:christmastree` (fibre, mod_default)
+- `simplehats:circular_glasses` (glass, name)
+- `simplehats:clockface` (fibre, mod_default)
+- `simplehats:cowboy` (fibre, mod_default)
+- `simplehats:cowboyrgb` (fibre, mod_default)
+- `simplehats:crabonhead` (fibre, mod_default)
+- `simplehats:crown` (fibre, mod_default)
+- `simplehats:crystal_horns` (crystal, name)
+- `simplehats:cucumbereyemask` (fibre, mod_default)
+- `simplehats:cuphead` (fibre, mod_default)
+- `simplehats:cyclopseye` (fibre, mod_default)
+- `simplehats:dairyqueen` (fibre, mod_default)
+- `simplehats:dangereqsue` (fibre, mod_default)
+- `simplehats:dangeresquejuly` (fibre, mod_default)
+- `simplehats:dejiko` (fibre, mod_default)
+- `simplehats:demoneyes` (fibre, mod_default)
+- ... 212 more in the JSON
 
 ## 5. Gaps by mod
 
@@ -390,49 +539,53 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `hc/architects_palette/twisted_board` (wood), `hc/create_dd/rubber_board` (wood), `hc/create_dd/spirit_board` (wood), `hc/quark/ancient_board` (wood)
 
-### botania (115)
+### botania (106)
 
-`ancient_will_ahrim`, `ancient_will_dharok`, `ancient_will_guthan`, `ancient_will_karil`, `ancient_will_torag`, `ancient_will_verac`, `animated_torch`, `astrolabe`, `aura_ring`, `aura_ring_greater`, `auto_crafting_halo`, `balance_cloak`, `bauble_box`, `black_hole_talisman`, `black_lotus`, `blacker_lotus`, `blood_pendant`, `cacophonium`, `clip`, `cloud_pendant`, `corporea_spark`, `corporea_spark_master`, `cosmetic_alien_antenna`, `cosmetic_ancient_mask`, `cosmetic_black_bowtie` ...
+`ancient_will_ahrim`, `ancient_will_dharok`, `ancient_will_guthan`, `ancient_will_karil`, `ancient_will_torag`, `ancient_will_verac`, `astrolabe`, `aura_ring`, `aura_ring_greater`, `auto_crafting_halo`, `balance_cloak`, `bauble_box`, `black_hole_talisman`, `black_lotus`, `blacker_lotus`, `blood_pendant`, `cacophonium`, `clip`, `cloud_pendant`, `corporea_spark`, `corporea_spark_master`, `cosmetic_alien_antenna`, `cosmetic_ancient_mask`, `cosmetic_black_bowtie`, `cosmetic_black_tie` ...
 
 ### quark (8)
 
 `abacus`, `ancient_tome`, `echorang`, `hammer`, `pathfinders_quill`, `pickarang`, `soul_bead`, `trowel`
 
-### immersiveengineering (84)
+### lightmanscurrency (2)
 
-`armor_faraday_feet` (metal), `armor_faraday_head` (metal), `armor_faraday_legs` (metal), `armor_piercing` (metal), `bannerpattern_bevels` (metal), `bannerpattern_hammer` (metal), `bannerpattern_ornate` (metal), `bannerpattern_windmill` (metal), `bannerpattern_wolf` (metal), `bannerpattern_wolf_l` (metal), `bannerpattern_wolf_r` (metal), `blueprint` (metal), `buckshot` (metal), `buzzsaw` (metal), `casull` (metal), `chemthrower` (metal), `coal_coke` (metal), `component_electronic` (metal), `component_electronic_adv` (metal), `coresample` (metal), `drill` (metal), `earmuffs` (metal), `electron_tube` (metal), `fake_icon_birthday` (metal), `fake_icon_bttf` (metal) ...
+`portable_atm` (metal), `trading_core` (metal)
 
-### architects_palette (3)
+### simplehats (260)
 
-`algal_blend` (refractory), `entwine_rod` (refractory), `unobtanium` (refractory)
-
-### refinedstorage (158)
-
-`black_crafter` (machine), `black_crafter_manager` (machine), `black_crafting_grid` (machine), `black_disk_manipulator` (machine), `black_fluid_grid` (machine), `black_grid` (machine), `black_pattern_grid` (machine), `black_relay` (machine), `black_security_manager` (machine), `blue_crafter` (machine), `blue_crafter_manager` (machine), `blue_crafting_grid` (machine), `blue_disk_manipulator` (machine), `blue_fluid_grid` (machine), `blue_grid` (machine), `blue_pattern_grid` (machine), `blue_relay` (machine), `blue_security_manager` (machine), `brown_crafter` (machine), `brown_crafter_manager` (machine), `brown_crafting_grid` (machine), `brown_disk_manipulator` (machine), `brown_fluid_grid` (machine), `brown_grid` (machine), `brown_pattern_grid` (machine) ...
-
-### create_dd (22)
-
-`abstruse_mechanism` (metal), `calculation_mechanism` (metal), `clockwork_crossbow` (metal), `deforester_saw` (metal), `excavation_drill` (metal), `handheld_block_zapper` (metal), `handheld_nozzle` (metal), `incomplete_abstruse_mechanism` (metal), `incomplete_calculation_mechanism` (metal), `incomplete_infernal_mechanism` (metal), `incomplete_integrated_mechanism` (metal), `incomplete_kinetic_mechanism` (metal), `incomplete_sealed_mechanism` (metal), `infernal_mechanism` (metal), `integrated_mechanism` (metal), `jetpack` (metal), `kinetic_mechanism` (metal), `raw_rubber` (metal), `rubber` (metal), `sealed_mechanism` (metal), `seething_ablaze_rod` (metal), `visor_helmet` (metal)
+`acornhat` (fibre), `aegishat` (fibre), `alien_antennae` (fibre), `alienphil` (fibre), `amalgalichhat` (fibre), `angel_and_devil` (fibre), `angrymask` (fibre), `artsy` (fibre), `artsy_doll` (fibre), `astronaut` (fibre), `baby_crewmate` (fibre), `babydolphin` (fibre), `babyturtle` (fibre), `bandanargb` (fibre), `baseballeaster` (fibre), `baseballhat` (fibre), `baseballhatfestive` (fibre), `baseballhatjuly` (fibre), `baseballhatrgb` (fibre), `batwinghat` (fibre), `beanie` (fibre), `beanieeaster` (fibre), `beaniefestive` (fibre), `beaniejuly` (fibre), `beaniergb` (fibre) ...
 
 ### railways (2)
 
 `benchcart` (metal), `jukeboxcart` (metal)
 
-### creativeengineering (29)
+### immersiveengineering (77)
 
-`air_brake`, `black_stepstool`, `blue_stepstool`, `brown_stepstool`, `corncob`, `cow_sample_syringe`, `culture_poultry`, `culture_rabbit`, `cyan_stepstool`, `frosting`, `gray_stepstool`, `green_stepstool`, `light_blue_stepstool`, `light_gray_stepstool`, `lime_stepstool`, `magenta_stepstool`, `mortar_and_pestle`, `orange_stepstool`, `pig_sample_syringe`, `pink_stepstool`, `precision_sawblade`, `purple_stepstool`, `rabbit_sample_syringe`, `red_stepstool`, `sample_syringe` ...
+`armor_faraday_feet` (metal), `armor_faraday_legs` (metal), `armor_piercing` (metal), `bannerpattern_bevels` (metal), `bannerpattern_hammer` (metal), `bannerpattern_ornate` (metal), `bannerpattern_windmill` (metal), `bannerpattern_wolf` (metal), `bannerpattern_wolf_l` (metal), `bannerpattern_wolf_r` (metal), `blueprint` (metal), `buckshot` (metal), `buzzsaw` (metal), `casull` (metal), `chemthrower` (metal), `component_electronic` (metal), `component_electronic_adv` (metal), `coresample` (metal), `drill` (metal), `earmuffs` (metal), `electron_tube` (metal), `fake_icon_birthday` (metal), `fake_icon_bttf` (metal), `fake_icon_drillbreak` (metal), `fake_icon_lucky` (metal) ...
+
+### architects_palette (3)
+
+`algal_blend` (refractory), `entwine_rod` (refractory), `unobtanium` (refractory)
+
+### create_dd (23)
+
+`abstruse_mechanism` (metal), `calculation_mechanism` (metal), `chromatic_compound` (metal), `deforester_saw` (metal), `excavation_drill` (metal), `handheld_block_zapper` (metal), `handheld_nozzle` (metal), `incomplete_abstruse_mechanism` (metal), `incomplete_calculation_mechanism` (metal), `incomplete_infernal_mechanism` (metal), `incomplete_integrated_mechanism` (metal), `incomplete_kinetic_mechanism` (metal), `incomplete_sealed_mechanism` (metal), `infernal_mechanism` (metal), `integrated_mechanism` (metal), `jetpack` (metal), `kinetic_mechanism` (metal), `raw_rubber` (metal), `refined_radiance` (metal), `rubber` (metal), `sealed_mechanism` (metal), `seething_ablaze_rod` (metal), `visor_helmet` (metal)
+
+### refinedstorage (158)
+
+`black_crafter` (machine), `black_crafter_manager` (machine), `black_crafting_grid` (machine), `black_disk_manipulator` (machine), `black_fluid_grid` (machine), `black_grid` (machine), `black_pattern_grid` (machine), `black_relay` (machine), `black_security_manager` (machine), `blue_crafter` (machine), `blue_crafter_manager` (machine), `blue_crafting_grid` (machine), `blue_disk_manipulator` (machine), `blue_fluid_grid` (machine), `blue_grid` (machine), `blue_pattern_grid` (machine), `blue_relay` (machine), `blue_security_manager` (machine), `brown_crafter` (machine), `brown_crafter_manager` (machine), `brown_crafting_grid` (machine), `brown_disk_manipulator` (machine), `brown_fluid_grid` (machine), `brown_grid` (machine), `brown_pattern_grid` (machine) ...
+
+### creativedelight (12)
+
+`blubber`, `corncob`, `cow_sample_syringe`, `culture_poultry`, `culture_rabbit`, `frosting`, `mortar_and_pestle`, `pig_sample_syringe`, `rabbit_sample_syringe`, `sample_syringe`, `sheep_sample_syringe`, `whale_oil`
 
 ### ae2 (60)
 
 `annihilation_core` (machine), `annihilation_plane` (machine), `black_lumen_paint_ball` (machine), `black_paint_ball` (machine), `blank_pattern` (machine), `blue_lumen_paint_ball` (machine), `blue_paint_ball` (machine), `brown_lumen_paint_ball` (machine), `brown_paint_ball` (machine), `charged_staff` (machine), `color_applicator` (machine), `crafting_pattern` (machine), `cyan_lumen_paint_ball` (machine), `cyan_paint_ball` (machine), `energy_level_emitter` (machine), `entropy_manipulator` (machine), `facade` (machine), `fe_p2p_tunnel` (machine), `fluid_p2p_tunnel` (machine), `formation_core` (machine), `formation_plane` (machine), `gray_lumen_paint_ball` (machine), `gray_paint_ball` (machine), `green_lumen_paint_ball` (machine), `green_paint_ball` (machine) ...
 
-### lightmanscurrency (2)
+### create (19)
 
-`portable_atm` (metal), `trading_core` (metal)
-
-### create (22)
-
-`builders_tea` (metal), `chromatic_compound` (metal), `crafter_slot_cover` (metal), `crafting_blueprint` (metal), `electron_tube` (metal), `empty_schematic` (metal), `extendo_grip` (metal), `goggles` (metal), `handheld_worldshaper` (metal), `incomplete_precision_mechanism` (metal), `minecart_contraption` (metal), `minecart_coupling` (metal), `precision_mechanism` (metal), `propeller` (metal), `schedule` (metal), `schematic` (metal), `schematic_and_quill` (metal), `super_glue` (metal), `tree_fertilizer` (metal), `wand_of_symmetry` (metal), `whisk` (metal), `wrench` (metal)
+`chromatic_compound` (metal), `crafter_slot_cover` (metal), `crafting_blueprint` (metal), `electron_tube` (metal), `empty_schematic` (metal), `extendo_grip` (metal), `goggles` (metal), `handheld_worldshaper` (metal), `incomplete_precision_mechanism` (metal), `precision_mechanism` (metal), `propeller` (metal), `schedule` (metal), `schematic` (metal), `schematic_and_quill` (metal), `super_glue` (metal), `tree_fertilizer` (metal), `wand_of_symmetry` (metal), `whisk` (metal), `wrench` (metal)
 
 ### upgrade_aquatic (2)
 
@@ -446,9 +599,9 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `black_upholstery` (refractory), `blue_upholstery` (refractory), `brown_upholstery` (refractory), `cyan_upholstery` (refractory), `gray_upholstery` (refractory), `green_upholstery` (refractory), `hammer` (refractory), `light_blue_upholstery` (refractory), `light_gray_upholstery` (refractory), `lime_upholstery` (refractory), `magenta_upholstery` (refractory), `orange_upholstery` (refractory), `pink_upholstery` (refractory), `purple_upholstery` (refractory), `red_upholstery` (refractory), `white_upholstery` (refractory), `yellow_upholstery` (refractory)
 
-### vintageimprovements (43)
+### vintageimprovements (39)
 
-`calorite_rod` (metal), `calorite_spring` (metal), `concave_curving_head` (metal), `convex_curving_head` (metal), `desh_rod` (metal), `desh_spring` (metal), `enderium_rod` (metal), `enderium_spring` (metal), `grinder_belt` (metal), `helve_hammer_slot_cover` (metal), `hepatizon_rod` (metal), `hepatizon_spring` (metal), `laser_item` (metal), `lumium_rod` (metal), `lumium_spring` (metal), `manyullyn_rod` (metal), `manyullyn_spring` (metal), `ostrum_rod` (metal), `ostrum_spring` (metal), `palladium_rod` (metal), `palladium_spring` (metal), `refined_radiance_rod` (metal), `refined_radiance_spring` (metal), `rhodium_rod` (metal), `rhodium_spring` (metal) ...
+`calorite_rod` (metal), `calorite_spring` (metal), `desh_rod` (metal), `desh_spring` (metal), `enderium_rod` (metal), `enderium_spring` (metal), `helve_hammer_slot_cover` (metal), `hepatizon_rod` (metal), `hepatizon_spring` (metal), `laser_item` (metal), `lumium_rod` (metal), `lumium_spring` (metal), `manyullyn_rod` (metal), `manyullyn_spring` (metal), `ostrum_rod` (metal), `ostrum_spring` (metal), `palladium_rod` (metal), `palladium_spring` (metal), `refined_radiance_rod` (metal), `refined_radiance_spring` (metal), `rhodium_rod` (metal), `rhodium_spring` (metal), `signalum_rod` (metal), `signalum_spring` (metal), `small_calorite_spring` (metal) ...
 
 ### immersive_weathering (1)
 
@@ -458,53 +611,61 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `dummy_cauldron` (food), `durian_helmet` (food)
 
-### oldguns (50)
-
-`bombard` (metal), `caplock_arquebus` (metal), `caplock_blunderbuss` (metal), `caplock_caliver` (metal), `caplock_derringer` (metal), `caplock_doublebarrel_blunderbuss` (metal), `caplock_duckfoot_derringer` (metal), `caplock_long_musket` (metal), `caplock_mechanism` (metal), `caplock_musket` (metal), `caplock_musketoon` (metal), `caplock_repair_parts` (metal), `flintlock_arquebus` (metal), `flintlock_blunderbuss` (metal), `flintlock_caliver` (metal), `flintlock_derringer` (metal), `flintlock_doublebarrel_blunderbuss` (metal), `flintlock_duckfoot_derringer` (metal), `flintlock_long_musket` (metal), `flintlock_mechanism` (metal), `flintlock_musket` (metal), `flintlock_musketoon` (metal), `flintlock_repair_parts` (metal), `fuse` (metal), `gunners_quadrant` (metal) ...
-
 ### handcrafted (2)
 
 `fancy_painting` (wood), `hammer` (wood)
 
-### minecraft (30)
-
-`armor_stand`, `bundle`, `clock`, `compass`, `creeper_head`, `disc_fragment_5`, `elytra`, `ender_pearl`, `fire_charge`, `firework_star`, `flint`, `ghast_tear`, `hopper_minecart`, `light`, `minecart`, `nether_star`, `painting`, `player_head`, `rabbit_foot`, `recovery_compass`, `saddle`, `shears`, `shield`, `skeleton_skull`, `snowball` ...
-
-### alexsmobs (64)
+### alexsmobs (65)
 
 `ambergris` (organic), `ancient_dart` (organic), `animal_dictionary` (organic), `blood_sprayer` (organic), `centipede_leg` (organic), `centipede_leggings` (organic), `cockroach_ootheca` (organic), `crocodile_chestplate` (organic), `dimensional_carver` (organic), `dimensional_carver_shard_0` (organic), `dimensional_carver_shard_1` (organic), `dimensional_carver_shard_10` (organic), `dimensional_carver_shard_2` (organic), `dimensional_carver_shard_3` (organic), `dimensional_carver_shard_4` (organic), `dimensional_carver_shard_5` (organic), `dimensional_carver_shard_6` (organic), `dimensional_carver_shard_7` (organic), `dimensional_carver_shard_8` (organic), `dimensional_carver_shard_9` (organic), `echolocator` (organic), `elastic_tendon` (organic), `emu_leggings` (organic), `endolocator` (organic), `falconry_glove` (organic) ...
 
-### supplementaries (12)
+### supplementaries (10)
 
-`altimeter`, `antique_ink`, `bubble_block`, `bubble_blower`, `cartographers_quill`, `dispenser_minecart`, `enderman_head`, `flute`, `key`, `quiver`, `slingshot`, `wrench`
+`altimeter`, `antique_ink`, `bubble_block`, `bubble_blower`, `cartographers_quill`, `flute`, `key`, `quiver`, `slingshot`, `wrench`
+
+### oldguns (50)
+
+`bombard` (metal), `caplock_arquebus` (metal), `caplock_blunderbuss` (metal), `caplock_caliver` (metal), `caplock_derringer` (metal), `caplock_doublebarrel_blunderbuss` (metal), `caplock_duckfoot_derringer` (metal), `caplock_long_musket` (metal), `caplock_mechanism` (metal), `caplock_musket` (metal), `caplock_musketoon` (metal), `caplock_repair_parts` (metal), `flintlock_arquebus` (metal), `flintlock_blunderbuss` (metal), `flintlock_caliver` (metal), `flintlock_derringer` (metal), `flintlock_doublebarrel_blunderbuss` (metal), `flintlock_duckfoot_derringer` (metal), `flintlock_long_musket` (metal), `flintlock_mechanism` (metal), `flintlock_musket` (metal), `flintlock_musketoon` (metal), `flintlock_repair_parts` (metal), `fuse` (metal), `gunners_quadrant` (metal) ...
 
 ### projectred_illumination (96)
 
 `black_cage_light` (machine), `black_fallout_light` (machine), `black_fixture_light` (machine), `black_inverted_cage_light` (machine), `black_inverted_fallout_light` (machine), `black_inverted_fixture_light` (machine), `blue_cage_light` (machine), `blue_fallout_light` (machine), `blue_fixture_light` (machine), `blue_inverted_cage_light` (machine), `blue_inverted_fallout_light` (machine), `blue_inverted_fixture_light` (machine), `brown_cage_light` (machine), `brown_fallout_light` (machine), `brown_fixture_light` (machine), `brown_inverted_cage_light` (machine), `brown_inverted_fallout_light` (machine), `brown_inverted_fixture_light` (machine), `cyan_cage_light` (machine), `cyan_fallout_light` (machine), `cyan_fixture_light` (machine), `cyan_inverted_cage_light` (machine), `cyan_inverted_fallout_light` (machine), `cyan_inverted_fixture_light` (machine), `gray_cage_light` (machine) ...
 
-### kubejs (25)
+### kubejs (22)
 
-`incomplete_air_brake`, `incomplete_ancient_roll`, `incomplete_calamari_roll`, `incomplete_cheeseburger`, `incomplete_comparator`, `incomplete_deluxe_cheeseburger`, `incomplete_fast_repeater`, `incomplete_glowing_calamari_roll`, `incomplete_hamburger`, `incomplete_horror_lasagna`, `incomplete_item`, `incomplete_legendary_roll_medley`, `incomplete_ll_spring`, `incomplete_loaded_hamburger`, `incomplete_mythical_roll_medley`, `incomplete_nether_roll`, `incomplete_omurice`, `incomplete_quiche`, `incomplete_repeater`, `incomplete_simple_hamburger`, `incomplete_slow_repeater`, `incomplete_spool`, `incomplete_stuffed_burrito`, `incomplete_tobiko_roll`, `incomplete_wirecoil_hv`
-
-### vintagedelight (1)
-
-`organic_mash` (food)
-
-### farmersdelight (2)
-
-`flint_knife` (food), `horse_feed` (food)
-
-### delightful (24)
-
-`adamantite_knife` (food), `adamantium_knife` (food), `allthemodium_knife` (food), `blazing_knife` (food), `cloggrum_knife` (food), `deorum_knife` (food), `draco_arcanus_knife` (food), `enderite_knife` (food), `experience_knife` (food), `fiery_knife` (food), `forgotten_knife` (food), `kiwano_knife` (food), `lapis_lazuli_knife` (food), `living_knife` (food), `matcha` (food), `mythril_knife` (food), `necronium_knife` (food), `onyx_knife` (food), `pendorite_knife` (food), `sinisite_knife` (food), `stellium_knife` (food), `thyrium_knife` (food), `utherium_knife` (food), `warden_knife` (food)
+`incomplete_air_brake`, `incomplete_ancient_roll`, `incomplete_calamari_roll`, `incomplete_cheeseburger`, `incomplete_deluxe_cheeseburger`, `incomplete_glowing_calamari_roll`, `incomplete_hamburger`, `incomplete_horror_lasagna`, `incomplete_item`, `incomplete_legendary_roll_medley`, `incomplete_ll_spring`, `incomplete_loaded_hamburger`, `incomplete_mythical_roll_medley`, `incomplete_nether_roll`, `incomplete_omurice`, `incomplete_quiche`, `incomplete_raw_caveskewer`, `incomplete_simple_hamburger`, `incomplete_spool`, `incomplete_stuffed_burrito`, `incomplete_tobiko_roll`, `incomplete_wirecoil_hv`
 
 ### securitycraft (17)
 
 `admin_tool` (machine), `briefcase` (machine), `codebreaker` (machine), `portable_tune_player` (machine), `remote_access_mine` (machine), `remote_access_sentry` (machine), `sc_manual` (machine), `sentry` (machine), `taser` (machine), `taser_powered` (machine), `universal_block_modifier` (machine), `universal_block_reinforcer_lvl1` (machine), `universal_block_reinforcer_lvl2` (machine), `universal_block_reinforcer_lvl3` (machine), `universal_block_remover` (machine), `universal_key_changer` (machine), `universal_owner_changer` (machine)
 
+### vintagedelight (1)
+
+`organic_mash` (food)
+
+### farmersdelight (1)
+
+`horse_feed` (food)
+
+### delightful (24)
+
+`adamantite_knife` (food), `adamantium_knife` (food), `allthemodium_knife` (food), `blazing_knife` (food), `cloggrum_knife` (food), `deorum_knife` (food), `draco_arcanus_knife` (food), `enderite_knife` (food), `experience_knife` (food), `fiery_knife` (food), `forgotten_knife` (food), `kiwano_knife` (food), `lapis_lazuli_knife` (food), `living_knife` (food), `matcha` (food), `mythril_knife` (food), `necronium_knife` (food), `onyx_knife` (food), `pendorite_knife` (food), `sinisite_knife` (food), `stellium_knife` (food), `thyrium_knife` (food), `utherium_knife` (food), `warden_knife` (food)
+
+### minecraft (1)
+
+`ender_pearl`
+
 ### floralench (6)
 
 `black_crown` (foliage), `blue_crown` (foliage), `pink_crown` (foliage), `red_crown` (foliage), `white_crown` (foliage), `yellow_crown` (foliage)
+
+### hearthandharvest (2)
+
+`horseshoe`, `pitchfork`
+
+### powergrid (26)
+
+`barretter_tube`, `bjt_npn`, `bjt_pnp`, `diode`, `electrical_gizmo`, `electrozapper`, `incomplete_bjt_npn`, `incomplete_bjt_pnp`, `incomplete_electrical_gizmo`, `incomplete_transformer_core`, `light_bulb`, `lv_light_bulb`, `magnet`, `multimeter`, `neon_bulb`, `pentode`, `pins`, `potentiometer`, `regulator_tube`, `relay`, `relay_dpdt`, `resistor`, `thyratron`, `triode`, `varistor` ...
 
 ### domum_ornamentum (20)
 
@@ -514,9 +675,9 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `cardboard` (metal), `cardboard_boots` (metal), `cardboard_box` (metal), `cardboard_chestplate` (metal), `cardboard_helmet` (metal), `cardboard_leggings` (metal), `cardboard_scrap` (metal), `folded_cardboard` (metal), `smooth_cardboard` (metal), `smooth_cardboard_slab` (metal), `smooth_cardboard_stairs` (metal), `smooth_cardboard_vertical_slab` (metal)
 
-### create_things_and_misc (8)
+### create_things_and_misc (7)
 
-`glue_packaging` (metal), `incomplete_vibration_mechanism` (metal), `neon_tube` (metal), `portable_whistle` (metal), `radar` (metal), `sprinkler_head` (metal), `sticky_boots_boots` (metal), `vibration_mechanism` (metal)
+`glue_packaging` (metal), `incomplete_vibration_mechanism` (metal), `neon_tube` (metal), `portable_whistle` (metal), `radar` (metal), `sticky_boots_boots` (metal), `vibration_mechanism` (metal)
 
 ### geode (1)
 
@@ -526,17 +687,21 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `keyring` (wood), `keyring_quantify` (wood), `keyring_shroud` (wood), `quantify_key` (wood), `shroud_key` (wood)
 
-### neapolitan (2)
-
-`bananarrow` (food), `chimpanzee_head` (food)
-
 ### wardrobe (22)
 
 `backpack` (wood), `brewing_apron` (wood), `chiton` (wood), `desert_boots` (wood), `desert_chestplate` (wood), `desert_helmet` (wood), `desert_leggings` (wood), `fishing_apron` (wood), `large_backpack` (wood), `ocelot_skin` (wood), `savanna_boots` (wood), `savanna_chestplate` (wood), `savanna_leggings` (wood), `snowy_boots` (wood), `snowy_chestplate` (wood), `snowy_helmet` (wood), `snowy_leggings` (wood), `taiga_boots` (wood), `taiga_chestplate` (wood), `taiga_helmet` (wood), `taiga_leggings` (wood), `travel_backpack` (wood)
 
+### neapolitan (1)
+
+`bananarrow` (food)
+
 ### projectred_core (29)
 
 `anode` (machine), `black_illumar` (machine), `blue_illumar` (machine), `boule` (machine), `brown_illumar` (machine), `cathode` (machine), `cyan_illumar` (machine), `electrotine_silicon` (machine), `electrotine_silicon_comp` (machine), `energized_silicon` (machine), `glow_silicon_comp` (machine), `gray_illumar` (machine), `green_illumar` (machine), `infused_silicon` (machine), `light_blue_illumar` (machine), `light_gray_illumar` (machine), `lime_illumar` (machine), `magenta_illumar` (machine), `multimeter` (machine), `orange_illumar` (machine), `pink_illumar` (machine), `pointer` (machine), `purple_illumar` (machine), `red_illumar` (machine), `red_silicon_comp` (machine) ...
+
+### creativeengineering (2)
+
+`precision_sawblade`, `spool`
 
 ### create_confectionery (3)
 
@@ -554,21 +719,21 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `divine_boots` (metal), `divine_chestplate` (metal), `divine_helmet` (metal), `divine_leggings` (metal), `heavy_boots` (metal), `heavy_chestplate` (metal), `heavy_helmet` (metal), `heavy_leggings` (metal), `robe_boots` (metal), `robe_chestplate` (metal), `robe_helmet` (metal), `robe_leggings` (metal), `steampunk_boots` (metal), `steampunk_chestplate` (metal), `steampunk_helmet` (metal), `steampunk_leggings` (metal), `warrior_boots` (metal), `warrior_chestplate` (metal), `warrior_helmet` (metal), `warrior_leggings` (metal), `wither_boots` (metal), `wither_chestplate` (metal), `wither_helmet` (metal), `wither_leggings` (metal)
 
-### projectred_integration (22)
+### projectred_integration (20)
 
-`and_gate` (machine), `buffer_gate` (machine), `comparator_gate` (machine), `dec_randomizer_gate` (machine), `multiplexer_gate` (machine), `nand_gate` (machine), `nor_gate` (machine), `not_gate` (machine), `or_gate` (machine), `pulse_gate` (machine), `randomizer_gate` (machine), `repeater_gate` (machine), `segment_display_gate` (machine), `sequencer_gate` (machine), `sr_latch_gate` (machine), `stacking_latch_gate` (machine), `synchronizer_gate` (machine), `timer_gate` (machine), `toggle_latch_gate` (machine), `transparent_latch_gate` (machine), `xnor_gate` (machine), `xor_gate` (machine)
+`and_gate` (machine), `buffer_gate` (machine), `dec_randomizer_gate` (machine), `multiplexer_gate` (machine), `nand_gate` (machine), `nor_gate` (machine), `not_gate` (machine), `or_gate` (machine), `pulse_gate` (machine), `randomizer_gate` (machine), `segment_display_gate` (machine), `sequencer_gate` (machine), `sr_latch_gate` (machine), `stacking_latch_gate` (machine), `synchronizer_gate` (machine), `timer_gate` (machine), `toggle_latch_gate` (machine), `transparent_latch_gate` (machine), `xnor_gate` (machine), `xor_gate` (machine)
 
 ### farmersrespite (3)
 
 `gamblers_tea` (food), `long_gamblers_tea` (food), `strong_gamblers_tea` (food)
 
+### abnormals_delight (3)
+
+`necromium_knife` (food), `passion_aloe_nectar` (food), `pickerelweed_juice` (food)
+
 ### immersivepetroleum (7)
 
 `bitumen` (metal), `molotov` (metal), `molotov_lit` (metal), `petcoke` (metal), `projector` (metal), `speedboat` (metal), `survey_result` (metal)
-
-### abnormals_delight (2)
-
-`passion_aloe_nectar` (food), `pickerelweed_juice` (food)
 
 ### createaddition (4)
 
@@ -594,17 +759,17 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `mini_fizz` (container), `mysterious_beanie_helmet` (container)
 
-### fairylights (19)
+### fairylights (18)
 
-`fairy_light` (fibre), `garland` (fibre), `ghost_light` (fibre), `hanging_lights` (fibre), `icicle_lights` (fibre), `incandescent_light` (fibre), `meteor_light` (fibre), `moon_light` (fibre), `pennant_bunting` (fibre), `skull_light` (fibre), `snowflake_light` (fibre), `spearhead_pennant` (fibre), `spider_light` (fibre), `square_pennant` (fibre), `star_light` (fibre), `swallowtail_pennant` (fibre), `tinsel` (fibre), `triangle_pennant` (fibre), `witch_light` (fibre)
-
-### sophisticatedbackpacks (1)
-
-`backpack`
+`fairy_light` (fibre), `garland` (fibre), `ghost_light` (fibre), `hanging_lights` (fibre), `icicle_lights` (fibre), `incandescent_light` (fibre), `meteor_light` (fibre), `moon_light` (fibre), `pennant_bunting` (fibre), `snowflake_light` (fibre), `spearhead_pennant` (fibre), `spider_light` (fibre), `square_pennant` (fibre), `star_light` (fibre), `swallowtail_pennant` (fibre), `tinsel` (fibre), `triangle_pennant` (fibre), `witch_light` (fibre)
 
 ### littlelogistics (14)
 
 `barge` (metal), `conductors_wrench` (metal), `energy_locomotive` (metal), `energy_tug` (metal), `fishing_barge` (metal), `fluid_barge` (metal), `fluid_car` (metal), `locomotive_route` (metal), `seater_barge` (metal), `seater_car` (metal), `spring` (metal), `steam_locomotive` (metal), `tug` (metal), `tug_route` (metal)
+
+### sophisticatedbackpacks (1)
+
+`backpack`
 
 ### exposure_expanded (14)
 
@@ -638,14 +803,6 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `black_chalk` (earth), `blue_chalk` (earth), `brown_chalk` (earth), `chalk_box` (earth), `cyan_chalk` (earth), `gray_chalk` (earth), `green_chalk` (earth), `light_blue_chalk` (earth), `light_gray_chalk` (earth), `lime_chalk` (earth), `magenta_chalk` (earth), `orange_chalk` (earth), `pink_chalk` (earth), `purple_chalk` (earth), `red_chalk` (earth), `white_chalk` (earth), `yellow_chalk` (earth)
 
-### simplehats (17)
-
-`hatbag_common` (fibre), `hatbag_easter` (fibre), `hatbag_epic` (fibre), `hatbag_festive` (fibre), `hatbag_halloween` (fibre), `hatbag_rare` (fibre), `hatbag_summer` (fibre), `hatbag_uncommon` (fibre), `hatdisplay` (fibre), `haticon` (fibre), `hatscraps_common` (fibre), `hatscraps_easter` (fibre), `hatscraps_festive` (fibre), `hatscraps_halloween` (fibre), `hatscraps_rare` (fibre), `hatscraps_summer` (fibre), `hatscraps_uncommon` (fibre)
-
-### nethersdelight (1)
-
-`raw_stuffed_hoglin` (food)
-
 ### exposure (13)
 
 `aged_photograph` (machine), `album` (machine), `black_and_white_film` (machine), `broken_interplanar_projector` (machine), `color_film` (machine), `developed_black_and_white_film` (machine), `developed_color_film` (machine), `high_sensitivity_black_and_white_film` (machine), `high_sensitivity_color_film` (machine), `interplanar_projector` (machine), `photograph` (machine), `signed_album` (machine), `stacked_photographs` (machine)
@@ -653,6 +810,10 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 ### itemfilters (15)
 
 `always_false` (machine), `always_true` (machine), `and` (machine), `block` (machine), `custom` (machine), `damage` (machine), `id_regex` (machine), `item_group` (machine), `max_count` (machine), `mod` (machine), `not` (machine), `or` (machine), `strong_nbt` (machine), `weak_nbt` (machine), `xor` (machine)
+
+### nethersdelight (1)
+
+`raw_stuffed_hoglin` (food)
 
 ### advancedperipherals (6)
 
@@ -666,10 +827,6 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `disk` (machine), `printed_page` (machine), `printed_pages` (machine), `treasure_disk` (machine)
 
-### nock_enough_arrows (1)
-
-`quiver`
-
 ### physics_gun_mod (3)
 
 `energy_pellet` (machine), `no_texture` (machine), `portal_thrower` (machine)
@@ -678,21 +835,33 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `balloon` (machine), `balloon_bit` (machine), `balloon_buddy` (machine), `balloon_buddy_inventory` (machine), `balloon_inventory` (machine), `cloud_blower` (machine), `cloud_blower_inventory` (machine), `music_disc_drift` (machine)
 
-### domesticationinnovation (3)
+### domesticationinnovation (2)
 
-`deed_of_ownership`, `deflection_shield`, `magnet`
+`deed_of_ownership`, `magnet`
 
 ### gates (1)
 
 `frequency_changer`
 
+### nock_enough_arrows (1)
+
+`quiver`
+
 ### oceansdelight (1)
 
 `guardian` (food)
 
+### creativeequipment (17)
+
+`air_brake`, `black_stepstool`, `blue_stepstool`, `brown_stepstool`, `cyan_stepstool`, `gray_stepstool`, `green_stepstool`, `light_blue_stepstool`, `light_gray_stepstool`, `lime_stepstool`, `magenta_stepstool`, `orange_stepstool`, `pink_stepstool`, `purple_stepstool`, `red_stepstool`, `white_stepstool`, `yellow_stepstool`
+
 ### projectred_fabrication (8)
 
 `blank_photomask` (machine), `etched_silicon_wafer` (machine), `fabricated_gate` (machine), `ic_blueprint` (machine), `invalid_die` (machine), `photomask_set` (machine), `rough_silicon_wafer` (machine), `valid_die` (machine)
+
+### tempad (6)
+
+`chronometer`, `knowledge_projector`, `location_broadcaster`, `screening_device`, `tempad`, `time_twister`
 
 ### creategoggles (1)
 
@@ -738,9 +907,13 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `quantity_modifier_tier_1`, `quantity_modifier_tier_2`, `quantity_modifier_tier_3`, `speed_modifier_tier_1`, `speed_modifier_tier_2`, `speed_modifier_tier_3`, `speed_modifier_tier_4`
 
-### etched (4)
+### etched (3)
 
-`album_cover`, `blank_music_disc`, `boombox`, `jukebox_minecart`
+`album_cover`, `blank_music_disc`, `boombox`
+
+### biomesoplenty (1)
+
+`blood`
 
 ### exposure_polaroid (4)
 
@@ -794,11 +967,11 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `glow_graffiti`, `glow_painting`, `graffiti`, `painting`
 
-### create_netherless (1)
-
-`ectoplasm`
-
 ### creative_labels (1)
+
+`eraser`
+
+### creativelabels (1)
 
 `eraser`
 
@@ -818,9 +991,13 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 `hot_air_balloon`
 
-### customizableelytra (1)
+### create_netherless (1)
 
-`customizable_elytra`
+`ectoplasm`
+
+### solraspberrypie (1)
+
+`diet_marker`
 
 ### sticky_it (1)
 
@@ -856,10 +1033,10 @@ Unclassified and mod-default items, at most 25 per mod (all of them in `kubejs/g
 
 ## 6. Differs from family, by mod
 
-Items whose current behaviour (water/fire) is not their family's. Manual tag choices show here too: either
+Items whose current behavior (water/fire) is not their family's. Manual tag choices show here too: either
 the family is wrong for the item or the tag is. At most 25 per mod.
 
-### everycomp (793)
+### everycomp (792)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -888,9 +1065,9 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `af/create_dd/rose_chair` | wood (material) | sink/burn | float/burn |
 | `af/create_dd/rose_drawer` | wood (material) | sink/burn | float/burn |
 | `af/create_dd/rose_planter_box` | wood (material) | sink/burn | float/burn |
-| ... 768 more | | | |
+| ... 767 more | | | |
 
-### botania (542)
+### botania (558)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -919,9 +1096,9 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `azulejo_14` | masonry (material+name) | sink/burn | sink/fireproof |
 | `azulejo_15` | masonry (material+name) | sink/burn | sink/fireproof |
 | `azulejo_2` | masonry (material+name) | sink/burn | sink/fireproof |
-| ... 517 more | | | |
+| ... 533 more | | | |
 
-### quark (630)
+### quark (610)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -950,7 +1127,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `apple_crate` | wood (material) | sink/burn | float/burn |
 | `azalea_boat` | wood (name) | sink/burn | float/burn |
 | `azalea_bookshelf` | wood (material) | sink/burn | float/burn |
-| ... 605 more | | | |
+| ... 585 more | | | |
+
+### lightmanscurrency (612)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `armor_display` | metal (material) | sink/burn | sink/fireproof |
+| `atm` | metal (material) | sink/burn | sink/fireproof |
+| `auction_stand_acacia` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_cherry` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_dead` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_fir` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_hellbark` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_jacaranda` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_magic` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_mahogany` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_palm` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_redwood` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_umbran` | wood (material) | sink/burn | float/burn |
+| `auction_stand_biomesoplenty_willow` | wood (material) | sink/burn | float/burn |
+| `auction_stand_birch` | wood (material) | sink/burn | float/burn |
+| `auction_stand_crimson` | wood (material) | sink/burn | float/burn |
+| `auction_stand_dark_oak` | wood (material) | sink/burn | float/burn |
+| `auction_stand_jungle` | wood (material) | sink/burn | float/burn |
+| `auction_stand_mangrove` | wood (material) | sink/burn | float/burn |
+| `auction_stand_oak` | wood (material) | sink/burn | float/burn |
+| `auction_stand_quark_ancient` | wood (material) | sink/burn | float/burn |
+| `auction_stand_quark_azalea` | wood (material) | sink/burn | float/burn |
+| `auction_stand_quark_bamboo` | wood (material) | sink/burn | float/burn |
+| `auction_stand_quark_blossom` | wood (material) | sink/burn | float/burn |
+| `auction_stand_spruce` | wood (material) | sink/burn | float/burn |
+| ... 587 more | | | |
 
 ### createdeco (597)
 
@@ -983,6 +1191,37 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `blue_bricks_slab_vert` | masonry (material+name) | sink/burn | sink/fireproof |
 | ... 572 more | | | |
 
+### simplehats (310)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `acornhat` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `aegishat` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `alien_antennae` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `alienphil` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `amalgalichhat` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `angel_and_devil` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `angrymask` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `antlers` | organic (name) | sink/lavaproof | float/burn |
+| `apple` | produce (name) | sink/lavaproof | float/burn |
+| `artsy` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `artsy_doll` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `astronaut` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `axolotl_on_head` | organic (name) | sink/lavaproof | float/burn |
+| `azumanga_hat` | fibre (name) | sink/lavaproof | skim/burn |
+| `baby_crewmate` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `babydolphin` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `babyturtle` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `bandana` | fibre (name) | sink/lavaproof | skim/burn |
+| `bandanargb` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `baseballeaster` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `baseballhat` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `baseballhatfestive` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `baseballhatjuly` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `baseballhatrgb` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| `batwinghat` | fibre (mod_default) | sink/lavaproof | skim/burn |
+| ... 285 more | | | |
+
 ### davebuildingmod (548)
 
 | Item | Family (rung) | Now | Family says |
@@ -1014,7 +1253,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `ascii_c` | metal (material) | sink/burn | sink/fireproof |
 | ... 523 more | | | |
 
-### immersiveengineering (418)
+### railways (528)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `benchcart` | metal (mod_default) | sink/burn | sink/fireproof |
+| `big_buffer` | metal (material) | sink/burn | sink/fireproof |
+| `black_brass_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `black_brass_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
+| `black_conductor_cap` | fibre (name) | sink/burn | skim/burn |
+| `black_copper_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `black_copper_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
+| `black_flat_riveted_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `black_flat_slashed_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `black_incomplete_conductor_cap` | fibre (name) | sink/burn | skim/burn |
+| `black_iron_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `black_iron_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
+| `black_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
+| `black_locometal_pillar` | metal (material) | sink/burn | sink/fireproof |
+| `black_locometal_smokebox` | metal (material) | sink/burn | sink/fireproof |
+| `black_plated_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `black_riveted_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `black_slashed_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `blue_brass_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `blue_brass_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
+| `blue_conductor_cap` | fibre (name) | sink/burn | skim/burn |
+| `blue_copper_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `blue_copper_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
+| `blue_flat_riveted_locometal` | metal (material) | sink/burn | sink/fireproof |
+| `blue_flat_slashed_locometal` | metal (material) | sink/burn | sink/fireproof |
+| ... 503 more | | | |
+
+### immersiveengineering (408)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1032,7 +1302,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `arc_furnace` | metal (material) | sink/burn | sink/fireproof |
 | `armor_faraday_chest` | wood (name) | sink/burn | float/burn |
 | `armor_faraday_feet` | metal (mod_default) | sink/burn | sink/fireproof |
-| `armor_faraday_head` | metal (mod_default) | sink/burn | sink/fireproof |
+| `armor_faraday_head` | organic (name) | sink/burn | float/burn |
 | `armor_faraday_legs` | metal (mod_default) | sink/burn | sink/fireproof |
 | `armor_piercing` | metal (mod_default) | sink/burn | sink/fireproof |
 | `armor_steel_chest` | metal (gear) | sink/burn | sink/fireproof |
@@ -1041,11 +1311,11 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `armor_steel_legs` | metal (gear) | sink/burn | sink/fireproof |
 | `assembler` | metal (material) | sink/burn | sink/fireproof |
 | `auto_workbench` | metal (material) | sink/burn | sink/fireproof |
-| `axe_steel` | metal (name) | sink/burn | sink/fireproof |
+| `axe_steel` | metal (gear_name) | sink/burn | sink/fireproof |
 | `balloon` | fibre (material) | sink/burn | skim/burn |
-| ... 393 more | | | |
+| ... 383 more | | | |
 
-### architects_palette (482)
+### architects_palette (480)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1074,7 +1344,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `algal_bricks` | masonry (material+name) | sink/burn | sink/fireproof |
 | `algal_cage_lantern` | metal (material) | sink/burn | sink/fireproof |
 | `ancient_plating` | metal (material) | sink/burn | sink/fireproof |
-| ... 457 more | | | |
+| ... 455 more | | | |
+
+### create_dd (446)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `abstruse_mechanism` | metal (mod_default) | sink/burn | sink/fireproof |
+| `amethyst_block_pillar` | crystal (material) | sink/burn | sink/fireproof |
+| `basalt_pillar` | refractory (material) | sink/burn | sink/lavaproof |
+| `black_asphalt_block` | refractory (material) | sink/burn | sink/lavaproof |
+| `black_blueprint_block` | earth (material) | sink/burn | sink/fireproof |
+| `black_padded_mosaic_rubber` | masonry (material+name) | sink/burn | sink/fireproof |
+| `black_padded_rubber` | refractory (material) | sink/burn | sink/lavaproof |
+| `black_padded_rubber_slab` | refractory (material) | sink/burn | sink/lavaproof |
+| `black_padded_rubber_stairs` | refractory (material) | sink/burn | sink/lavaproof |
+| `black_padded_tiled_rubber` | refractory (material) | sink/burn | sink/lavaproof |
+| `black_velvet_block` | packed (material+R13) | sink/burn | float/burn |
+| `blackstone_pillar` | refractory (material) | sink/burn | sink/lavaproof |
+| `blasting_sail` | metal (override) | sink/burn | sink/fireproof |
+| `blue_asphalt_block` | refractory (material) | sink/burn | sink/lavaproof |
+| `blue_padded_mosaic_rubber` | masonry (material+name) | sink/burn | sink/fireproof |
+| `blue_padded_rubber` | refractory (material) | sink/burn | sink/lavaproof |
+| `blue_padded_rubber_slab` | refractory (material) | sink/burn | sink/lavaproof |
+| `blue_padded_rubber_stairs` | refractory (material) | sink/burn | sink/lavaproof |
+| `blue_padded_tiled_rubber` | refractory (material) | sink/burn | sink/lavaproof |
+| `blue_velvet_block` | packed (material+R13) | sink/burn | float/burn |
+| `blueprint_block` | earth (material) | sink/burn | sink/fireproof |
+| `bore_block` | refractory (material) | sink/burn | sink/lavaproof |
+| `brass_gearbox` | metal (material+name) | sink/burn | sink/fireproof |
+| `breccia` | refractory (material) | sink/burn | sink/lavaproof |
+| `breccia_pillar` | refractory (material) | sink/burn | sink/lavaproof |
+| ... 421 more | | | |
 
 ### refinedstorage (309)
 
@@ -1107,100 +1408,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `advanced_processor` | machine (name) | sink/burn | sink/fireproof |
 | ... 284 more | | | |
 
-### create_dd (443)
+### creativedelight (429)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `abstruse_mechanism` | metal (mod_default) | sink/burn | sink/fireproof |
-| `amethyst_block_pillar` | crystal (material) | sink/burn | sink/fireproof |
-| `basalt_pillar` | refractory (material) | sink/burn | sink/lavaproof |
-| `black_asphalt_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `black_blueprint_block` | earth (material) | sink/burn | sink/fireproof |
-| `black_padded_mosaic_rubber` | masonry (material+name) | sink/burn | sink/fireproof |
-| `black_padded_rubber` | refractory (material) | sink/burn | sink/lavaproof |
-| `black_padded_rubber_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| `black_padded_rubber_stairs` | refractory (material) | sink/burn | sink/lavaproof |
-| `black_padded_tiled_rubber` | refractory (material) | sink/burn | sink/lavaproof |
-| `black_velvet_block` | fibre (material) | sink/burn | skim/burn |
-| `blackstone_pillar` | refractory (material) | sink/burn | sink/lavaproof |
-| `blasting_sail` | wood (material) | sink/burn | float/burn |
-| `blue_asphalt_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `blue_padded_mosaic_rubber` | masonry (material+name) | sink/burn | sink/fireproof |
-| `blue_padded_rubber` | refractory (material) | sink/burn | sink/lavaproof |
-| `blue_padded_rubber_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| `blue_padded_rubber_stairs` | refractory (material) | sink/burn | sink/lavaproof |
-| `blue_padded_tiled_rubber` | refractory (material) | sink/burn | sink/lavaproof |
-| `blue_velvet_block` | fibre (material) | sink/burn | skim/burn |
-| `blueprint_block` | earth (material) | sink/burn | sink/fireproof |
-| `bore_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `brass_gearbox` | metal (material+name) | sink/burn | sink/fireproof |
-| `breccia` | refractory (material) | sink/burn | sink/lavaproof |
-| `breccia_pillar` | refractory (material) | sink/burn | sink/lavaproof |
-| ... 418 more | | | |
-
-### railways (462)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `benchcart` | metal (mod_default) | sink/burn | sink/fireproof |
-| `big_buffer` | metal (material) | sink/burn | sink/fireproof |
-| `black_brass_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `black_brass_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
-| `black_conductor_cap` | fibre (name) | sink/burn | skim/burn |
-| `black_copper_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `black_copper_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
-| `black_flat_riveted_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `black_flat_slashed_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `black_incomplete_conductor_cap` | fibre (name) | sink/burn | skim/burn |
-| `black_iron_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `black_iron_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
-| `black_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
-| `black_locometal_pillar` | metal (material) | sink/burn | sink/fireproof |
-| `black_locometal_smokebox` | metal (material) | sink/burn | sink/fireproof |
-| `black_plated_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `black_riveted_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `black_slashed_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `blue_brass_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `blue_brass_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
-| `blue_conductor_cap` | fibre (name) | sink/burn | skim/burn |
-| `blue_copper_wrapped_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `blue_copper_wrapped_locometal_boiler` | metal (material) | sink/burn | sink/fireproof |
-| `blue_flat_riveted_locometal` | metal (material) | sink/burn | sink/fireproof |
-| `blue_flat_slashed_locometal` | metal (material) | sink/burn | sink/fireproof |
-| ... 437 more | | | |
-
-### creativeengineering (413)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `aluminum_dust_pile` | metal (material) | sink/burn | sink/fireproof |
-| `aluminum_plate_block` | metal (material) | sink/burn | sink/fireproof |
-| `amethyst_dust` | crystal (name) | sink/burn | sink/fireproof |
-| `arrow_fletching` | wood (name) | sink/burn | float/burn |
+| `acacia_fruit_basket` | wood (material) | sink/burn | float/burn |
+| `acacia_spice_rack` | wood (material) | sink/burn | float/burn |
+| `acacia_tool_rack` | wood (material) | sink/burn | float/burn |
+| `ancient_fruit_basket` | wood (material) | sink/burn | float/burn |
+| `ancient_spice_rack` | wood (material) | sink/burn | float/burn |
+| `ancient_tool_rack` | wood (material) | sink/burn | float/burn |
+| `azalea_fruit_basket` | wood (material) | sink/burn | float/burn |
+| `azalea_spice_rack` | wood (material) | sink/burn | float/burn |
+| `azalea_tool_rack` | wood (material) | sink/burn | float/burn |
 | `baking_sheet` | fibre (name) | sink/burn | skim/burn |
+| `bamboo_fruit_basket` | wood (material) | sink/burn | float/burn |
+| `bamboo_spice_rack` | wood (material) | sink/burn | float/burn |
+| `bamboo_tool_rack` | wood (material) | sink/burn | float/burn |
 | `bayberry_tea` | container (tag) | sink/burn | sink/fireproof |
 | `beef_culture_block` | earth (material) | sink/burn | sink/fireproof |
-| `brass_dust_pile` | metal (material) | sink/burn | sink/fireproof |
-| `brass_grit` | powder (name) | sink/burn | sink/fireproof |
-| `brass_wire` | metal (tag) | sink/burn | sink/fireproof |
+| `birch_fruit_basket` | wood (material) | sink/burn | float/burn |
+| `birch_spice_rack` | wood (material) | sink/burn | float/burn |
+| `birch_tool_rack` | wood (material) | sink/burn | float/burn |
 | `cake_pan` | food (name) | sink/burn | float/burn |
 | `canned_acacia_blossom_soup` | container (tag) | sink/burn | sink/fireproof |
 | `canned_adzuki_bun` | container (tag) | sink/burn | sink/fireproof |
 | `canned_adzuki_stew` | container (tag) | sink/burn | sink/fireproof |
+| `canned_amberveil_stew` | container (tag) | sink/burn | sink/fireproof |
 | `canned_ancient_fruit` | container (tag) | sink/burn | sink/fireproof |
 | `canned_apple` | container (tag) | sink/burn | sink/fireproof |
-| `canned_apple_pie_filling` | container (tag) | sink/burn | sink/fireproof |
-| `canned_baked_cod_stew` | container (tag) | sink/burn | sink/fireproof |
-| `canned_baked_durian` | container (tag) | sink/burn | sink/fireproof |
-| `canned_baked_pear` | container (tag) | sink/burn | sink/fireproof |
-| `canned_baked_sweet_potato` | container (tag) | sink/burn | sink/fireproof |
-| `canned_banana` | container (tag) | sink/burn | sink/fireproof |
-| `canned_banana_bread` | container (tag) | sink/burn | sink/fireproof |
-| `canned_bat_soup` | container (tag) | sink/burn | sink/fireproof |
-| `canned_bayberry` | container (tag) | sink/burn | sink/fireproof |
-| ... 388 more | | | |
+| ... 404 more | | | |
 
-### ae2 (347)
+### ae2 (350)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1229,38 +1468,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `blue_smart_dense_cable` | machine (name) | sink/burn | sink/fireproof |
 | `brown_covered_cable` | machine (name) | sink/burn | sink/fireproof |
 | `brown_covered_dense_cable` | machine (name) | sink/burn | sink/fireproof |
-| ... 322 more | | | |
+| ... 325 more | | | |
 
-### lightmanscurrency (391)
+### create (373)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `armor_display` | metal (material) | sink/burn | sink/fireproof |
-| `atm` | metal (material) | sink/burn | sink/fireproof |
-| `auction_stand_acacia` | wood (material) | sink/burn | float/burn |
-| `auction_stand_birch` | wood (material) | sink/burn | float/burn |
-| `auction_stand_crimson` | wood (material) | sink/burn | float/burn |
-| `auction_stand_dark_oak` | wood (material) | sink/burn | float/burn |
-| `auction_stand_jungle` | wood (material) | sink/burn | float/burn |
-| `auction_stand_mangrove` | wood (material) | sink/burn | float/burn |
-| `auction_stand_oak` | wood (material) | sink/burn | float/burn |
-| `auction_stand_quark_ancient` | wood (material) | sink/burn | float/burn |
-| `auction_stand_quark_azalea` | wood (material) | sink/burn | float/burn |
-| `auction_stand_quark_bamboo` | wood (material) | sink/burn | float/burn |
-| `auction_stand_quark_blossom` | wood (material) | sink/burn | float/burn |
-| `auction_stand_spruce` | wood (material) | sink/burn | float/burn |
-| `auction_stand_warped` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_acacia` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_birch` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_crimson` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_dark_oak` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_jungle` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_mangrove` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_oak` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_quark_ancient` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_quark_azalea` | wood (material) | sink/burn | float/burn |
-| `bookshelf_trader_quark_bamboo` | wood (material) | sink/burn | float/burn |
-| ... 366 more | | | |
+| `adjustable_chain_gearshift` | metal (material+name) | sink/burn | sink/fireproof |
+| `analog_lever` | machine (ruling) | sink/burn | sink/fireproof |
+| `andesite_alloy_block` | metal (material+R12) | sink/burn | sink/fireproof |
+| `andesite_bars` | metal (material) | sink/burn | sink/fireproof |
+| `andesite_casing` | metal (tag) | sink/burn | sink/fireproof |
+| `andesite_door` | metal (material+R12) | sink/burn | sink/fireproof |
+| `andesite_encased_cogwheel` | metal (material+R12) | sink/burn | sink/fireproof |
+| `andesite_encased_large_cogwheel` | metal (material+R12) | sink/burn | sink/fireproof |
+| `andesite_encased_shaft` | metal (material+R12) | sink/burn | sink/fireproof |
+| `andesite_funnel` | metal (material+R12) | sink/burn | sink/fireproof |
+| `andesite_ladder` | metal (material) | sink/burn | sink/fireproof |
+| `andesite_scaffolding` | metal (material) | sink/burn | sink/fireproof |
+| `andesite_tunnel` | metal (material+R12) | sink/burn | sink/fireproof |
+| `attribute_filter` | machine (name) | sink/burn | sink/fireproof |
+| `bar_of_chocolate` | food (tag) | sink/burn | float/burn |
+| `basin` | metal (material+R12) | sink/burn | sink/fireproof |
+| `belt_connector` | metal (material+R12) | sink/burn | sink/fireproof |
+| `black_seat` | metal (material+R12) | sink/burn | sink/fireproof |
+| `black_toolbox` | metal (material+R12) | sink/burn | sink/fireproof |
+| `black_valve_handle` | metal (material) | sink/burn | sink/fireproof |
+| `blaze_burner` | metal (material) | sink/burn | sink/fireproof |
+| `blaze_cake` | metal (name+R12) | sink/burn | sink/fireproof |
+| `blaze_cake_base` | metal (name+R12) | sink/burn | sink/fireproof |
+| `blue_seat` | metal (material+R12) | sink/burn | sink/fireproof |
+| `blue_toolbox` | metal (material+R12) | sink/burn | sink/fireproof |
+| ... 348 more | | | |
 
 ### design_decor (392)
 
@@ -1293,49 +1532,18 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `arrow_right_sign` | wood (material) | sink/burn | float/burn |
 | ... 367 more | | | |
 
-### create (369)
+### upgrade_aquatic (364)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `adjustable_chain_gearshift` | metal (material+name) | sink/burn | sink/fireproof |
-| `analog_lever` | wood (material) | sink/burn | float/burn |
-| `andesite_alloy_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `andesite_bars` | metal (material) | sink/burn | sink/fireproof |
-| `andesite_casing` | metal (tag) | sink/burn | sink/fireproof |
-| `andesite_door` | nether_wood (material) | sink/burn | float/fireproof |
-| `andesite_encased_cogwheel` | refractory (material) | sink/burn | sink/lavaproof |
-| `andesite_encased_large_cogwheel` | refractory (material) | sink/burn | sink/lavaproof |
-| `andesite_encased_shaft` | refractory (material) | sink/burn | sink/lavaproof |
-| `andesite_funnel` | refractory (material) | sink/burn | sink/lavaproof |
-| `andesite_ladder` | metal (material) | sink/burn | sink/fireproof |
-| `andesite_scaffolding` | metal (material) | sink/burn | sink/fireproof |
-| `andesite_tunnel` | refractory (material) | sink/burn | sink/lavaproof |
-| `attribute_filter` | machine (name) | sink/burn | sink/fireproof |
-| `bar_of_chocolate` | food (tag) | sink/burn | float/burn |
-| `basin` | refractory (material) | sink/burn | sink/lavaproof |
-| `belt_connector` | fibre (material) | sink/burn | skim/burn |
-| `black_seat` | wood (material) | sink/burn | float/burn |
-| `black_toolbox` | wood (material) | sink/burn | float/burn |
-| `black_valve_handle` | metal (material) | sink/burn | sink/fireproof |
-| `blaze_burner` | metal (material) | sink/burn | sink/fireproof |
-| `blaze_cake` | refractory (name) | sink/burn | sink/lavaproof |
-| `blaze_cake_base` | refractory (name) | sink/burn | sink/lavaproof |
-| `blue_seat` | wood (material) | sink/burn | float/burn |
-| `blue_toolbox` | wood (material) | sink/burn | float/burn |
-| ... 344 more | | | |
-
-### upgrade_aquatic (370)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `acan_coral` | foliage (material) | sink/burn | skim/burn |
-| `acan_coral_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `acan_coral_fan` | foliage (material) | sink/burn | skim/burn |
-| `acan_coralstone` | refractory (material) | sink/burn | sink/lavaproof |
-| `acan_coralstone_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| `acan_coralstone_stairs` | refractory (material) | sink/burn | sink/lavaproof |
-| `acan_coralstone_vertical_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| `acan_coralstone_wall` | refractory (material) | sink/burn | sink/lavaproof |
+| `acan_coral` | organic (override) | sink/burn | float/burn |
+| `acan_coral_block` | earth (override) | sink/burn | sink/fireproof |
+| `acan_coral_fan` | organic (override) | sink/burn | float/burn |
+| `acan_coralstone` | organic (override) | sink/burn | float/burn |
+| `acan_coralstone_slab` | organic (override) | sink/burn | float/burn |
+| `acan_coralstone_stairs` | organic (override) | sink/burn | float/burn |
+| `acan_coralstone_vertical_slab` | organic (override) | sink/burn | float/burn |
+| `acan_coralstone_wall` | organic (override) | sink/burn | float/burn |
 | `beachgrass` | foliage (material) | sink/burn | skim/burn |
 | `beachgrass_thatch` | earth (material) | sink/burn | sink/fireproof |
 | `beachgrass_thatch_slab` | earth (material) | sink/burn | sink/fireproof |
@@ -1344,16 +1552,16 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `bedroll` | fibre (material) | sink/burn | skim/burn |
 | `black_bedroll` | fibre (material) | sink/burn | skim/burn |
 | `blue_bedroll` | fibre (material) | sink/burn | skim/burn |
-| `blue_jelly_torch` | metal (material) | sink/burn | sink/fireproof |
 | `blue_pickerelweed` | foliage (material) | sink/burn | skim/burn |
-| `blue_pickerelweed_block` | foliage (material) | sink/burn | skim/burn |
+| `blue_pickerelweed_block` | packed (material+R13) | sink/burn | float/burn |
 | `boiled_blue_pickerelweed` | food (tag) | sink/burn | float/burn |
-| `boiled_blue_pickerelweed_block` | foliage (material) | sink/burn | skim/burn |
+| `boiled_blue_pickerelweed_block` | packed (material+R13) | sink/burn | float/burn |
 | `boiled_purple_pickerelweed` | food (tag) | sink/burn | float/burn |
-| `boiled_purple_pickerelweed_block` | foliage (material) | sink/burn | skim/burn |
-| `brain_coralstone` | refractory (material) | sink/burn | sink/lavaproof |
-| `brain_coralstone_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| ... 345 more | | | |
+| `boiled_purple_pickerelweed_block` | packed (material+R13) | sink/burn | float/burn |
+| `brain_coralstone` | organic (override) | sink/burn | float/burn |
+| `brain_coralstone_slab` | organic (override) | sink/burn | float/burn |
+| `brain_coralstone_stairs` | organic (override) | sink/burn | float/burn |
+| ... 339 more | | | |
 
 ### pneumaticcraft (303)
 
@@ -1417,7 +1625,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `birch_display_case` | wood (material) | sink/burn | float/burn |
 | ... 264 more | | | |
 
-### vintageimprovements (237)
+### vintageimprovements (240)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1446,7 +1654,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `calorite_wire` | metal (name) | sink/burn | sink/fireproof |
 | `cast_iron_rod` | metal (name) | sink/burn | sink/fireproof |
 | `cast_iron_sheet` | metal (name) | sink/burn | sink/fireproof |
-| ... 212 more | | | |
+| ... 215 more | | | |
 
 ### immersive_weathering (267)
 
@@ -1456,8 +1664,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `acacia_leaf_pile` | foliage (material) | sink/burn | skim/burn |
 | `architects_palette/twisted_bark` | wood (name) | sink/burn | float/burn |
 | `architects_palette/twisted_leaf_pile` | foliage (material) | sink/burn | skim/burn |
-| `ash_block` | ice (material) | sink/burn | float/fireproof |
-| `ash_layer_block` | ice (material) | sink/burn | float/fireproof |
+| `ash_block` | earth (override) | sink/burn | sink/fireproof |
+| `ash_layer_block` | earth (override) | sink/burn | sink/fireproof |
 | `azalea_leaf_pile` | foliage (material) | sink/burn | skim/burn |
 | `birch_bark` | wood (name) | sink/burn | float/burn |
 | `birch_leaf_pile` | foliage (material) | sink/burn | skim/burn |
@@ -1470,7 +1678,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `charred_slab` | refractory (material) | sink/burn | sink/lavaproof |
 | `charred_stairs` | refractory (material) | sink/burn | sink/lavaproof |
 | `charred_vertical_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| `chiseled_prismarine_bricks` | masonry (material+name) | sink/burn | sink/fireproof |
+| `chiseled_prismarine_bricks` | crystal (override) | sink/burn | sink/fireproof |
 | `cracked_brick_slab` | masonry (material+name) | sink/burn | sink/fireproof |
 | `cracked_brick_stairs` | masonry (material+name) | sink/burn | sink/fireproof |
 | `cracked_brick_vertical_slab` | masonry (material+name) | sink/burn | sink/fireproof |
@@ -1479,12 +1687,13 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cracked_deepslate_brick_slab` | refractory (material) | sink/burn | sink/lavaproof |
 | ... 242 more | | | |
 
-### twigs (254)
+### twigs (255)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `acacia_table` | wood (material) | sink/burn | float/burn |
 | `allium_paper_lantern` | earth (material) | sink/burn | sink/fireproof |
+| `azalea_flowers` | foliage (material) | sink/burn | skim/burn |
 | `bamboo_leaves` | foliage (material) | sink/burn | skim/burn |
 | `bamboo_mat` | wood (material) | sink/burn | float/burn |
 | `bamboo_table` | wood (material) | sink/burn | float/burn |
@@ -1507,8 +1716,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `blue_silt_pot` | masonry (material+name) | sink/burn | sink/fireproof |
 | `blue_silt_shingle_slab` | refractory (material) | sink/burn | sink/lavaproof |
 | `blue_silt_shingle_stairs` | refractory (material) | sink/burn | sink/lavaproof |
-| `blue_silt_shingle_wall` | refractory (material) | sink/burn | sink/lavaproof |
-| ... 229 more | | | |
+| ... 230 more | | | |
 
 ### fruitsdelight (250)
 
@@ -1516,8 +1724,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 |---|---|---|---|
 | `apple_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `apple_crate` | wood (material) | sink/burn | float/burn |
-| `apple_jello` | food (tag) | sink/burn | float/burn |
-| `apple_jello_block` | earth (material) | sink/burn | sink/fireproof |
+| `apple_jello` | food (ruling) | sink/burn | float/burn |
+| `apple_jello_block` | food (ruling) | sink/burn | float/burn |
 | `apple_jello_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `apple_jelly` | food (tag) | sink/burn | float/burn |
 | `apple_jelly_block` | earth (material) | sink/burn | sink/fireproof |
@@ -1530,8 +1738,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `bayberry_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `bayberry_cookie` | food (tag) | sink/burn | float/burn |
 | `bayberry_crate` | wood (material) | sink/burn | float/burn |
-| `bayberry_jello` | food (tag) | sink/burn | float/burn |
-| `bayberry_jello_block` | earth (material) | sink/burn | sink/fireproof |
+| `bayberry_jello` | food (ruling) | sink/burn | float/burn |
+| `bayberry_jello_block` | food (ruling) | sink/burn | float/burn |
 | `bayberry_jello_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `bayberry_jelly` | food (tag) | sink/burn | float/burn |
 | `bayberry_jelly_block` | earth (material) | sink/burn | sink/fireproof |
@@ -1572,37 +1780,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `bone/skeleton/wardrobe_top` | wood (material) | sink/burn | float/burn |
 | ... 220 more | | | |
 
-### oldguns (192)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `bark_strands` | wood (name) | sink/burn | float/burn |
-| `blasting_powder` | powder (name) | sink/burn | sink/fireproof |
-| `bombard` | metal (mod_default) | sink/burn | sink/fireproof |
-| `brass_ingot` | metal (tag) | sink/burn | sink/fireproof |
-| `brass_nugget` | metal (tag) | sink/burn | sink/fireproof |
-| `caplock_arquebus` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_blunderbuss` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_blunderbuss_pistol` | metal (name) | sink/burn | sink/fireproof |
-| `caplock_caliver` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_derringer` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_doublebarrel_blunderbuss` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_duckfoot_derringer` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_long_musket` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_mechanism` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_musket` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_musketoon` | metal (mod_default) | sink/burn | sink/fireproof |
-| `caplock_pepperbox_pistol` | metal (name) | sink/burn | sink/fireproof |
-| `caplock_pistol` | metal (name) | sink/burn | sink/fireproof |
-| `caplock_repair_parts` | metal (mod_default) | sink/burn | sink/fireproof |
-| `congreve_rocket_stand` | wood (material) | sink/burn | float/burn |
-| `design_notes` | fibre (name) | sink/burn | skim/burn |
-| `diamond_gear_set` | refractory (name) | sink/burn | sink/lavaproof |
-| `diamond_trigger_assembly` | refractory (name) | sink/burn | sink/lavaproof |
-| `flintlock_arquebus` | metal (mod_default) | sink/burn | sink/fireproof |
-| `flintlock_blunderbuss` | metal (mod_default) | sink/burn | sink/fireproof |
-| ... 167 more | | | |
-
 ### handcrafted (238)
 
 | Item | Family (rung) | Now | Family says |
@@ -1634,38 +1811,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `birch_counter` | wood (material) | sink/burn | float/burn |
 | ... 213 more | | | |
 
-### minecraft (207)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `arrow` | wood (name) | sink/burn | float/burn |
-| `beacon` | glass (material) | sink/lavaproof | sink/burn |
-| `black_glazed_terracotta` | masonry (material+name) | sink/burn | sink/fireproof |
-| `blue_glazed_terracotta` | masonry (material+name) | sink/burn | sink/fireproof |
-| `blue_ice` | ice (material) | sink/fireproof | float/fireproof |
-| `bone_block` | refractory (material) | float/burn | sink/lavaproof |
-| `brain_coral` | foliage (material) | sink/burn | skim/burn |
-| `brain_coral_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `brain_coral_fan` | foliage (material) | sink/burn | skim/burn |
-| `brown_glazed_terracotta` | masonry (material+name) | sink/burn | sink/fireproof |
-| `bubble_coral` | foliage (material) | sink/burn | skim/burn |
-| `bubble_coral_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `bubble_coral_fan` | foliage (material) | sink/burn | skim/burn |
-| `bucket` | container (tag) | float/fireproof | sink/fireproof |
-| `chain_command_block` | metal (material) | sink/burn | sink/fireproof |
-| `charcoal` | wood (fuel) | sink/burn | float/burn |
-| `chest_minecart` | wood (name) | sink/fireproof | float/burn |
-| `chiseled_nether_bricks` | masonry (material+name) | sink/lavaproof | sink/fireproof |
-| `chiseled_red_sandstone` | refractory (material) | sink/fireproof | sink/lavaproof |
-| `chiseled_sandstone` | refractory (material) | sink/fireproof | sink/lavaproof |
-| `coal` | wood (fuel) | sink/burn | float/burn |
-| `coal_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `command_block` | metal (material) | sink/burn | sink/fireproof |
-| `comparator` | wood (material) | sink/fireproof | float/burn |
-| `conduit` | glass (material) | sink/lavaproof | sink/burn |
-| ... 182 more | | | |
-
-### alexsmobs (166)
+### alexsmobs (171)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1685,18 +1831,18 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `bear_fur` | organic (name) | sink/burn | float/burn |
 | `bison_carpet` | fibre (material) | sink/burn | skim/burn |
 | `bison_fur` | organic (name) | sink/burn | float/burn |
-| `bison_fur_block` | fibre (material) | sink/burn | skim/burn |
+| `bison_fur_block` | packed (material+R13) | sink/burn | float/burn |
 | `blobfish_bucket` | container (name) | sink/burn | sink/fireproof |
 | `blood_sac` | organic (name) | sink/burn | float/burn |
 | `blood_sprayer` | organic (mod_default) | sink/burn | float/burn |
 | `boiled_emu_egg` | food (tag) | sink/burn | float/burn |
+| `bone_serpent_tooth` | organic (name) | sink/lavaproof | float/burn |
 | `cachalot_whale_tooth` | organic (name) | sink/burn | float/burn |
 | `centipede_leg` | organic (mod_default) | sink/burn | float/burn |
 | `centipede_leggings` | organic (mod_default) | sink/burn | float/burn |
-| `chorus_on_a_stick` | wood (name) | sink/burn | float/burn |
-| ... 141 more | | | |
+| ... 146 more | | | |
 
-### supplementaries (218)
+### supplementaries (221)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1725,38 +1871,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cage` | metal (material) | sink/burn | sink/fireproof |
 | `candle_holder` | metal (material) | sink/burn | sink/fireproof |
 | `candle_holder_black` | metal (material) | sink/burn | sink/fireproof |
-| ... 193 more | | | |
+| ... 196 more | | | |
 
-### displaydelight (224)
+### oldguns (177)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `abd_duck_noodles` | wood (material) | sink/burn | float/burn |
-| `abd_perch_with_mushrooms` | wood (material) | sink/burn | float/burn |
-| `abd_pickerelweed_juice` | wood (material) | sink/burn | float/burn |
-| `abd_pike_with_beetroot` | wood (material) | sink/burn | float/burn |
-| `abd_plated_cherry_cookie` | wood (material) | sink/burn | float/burn |
-| `abd_plated_escargot` | wood (material) | sink/burn | float/burn |
-| `abd_plated_maple_cookie` | wood (material) | sink/burn | float/burn |
-| `abd_plated_mulberry_cookie` | wood (material) | sink/burn | float/burn |
-| `abd_slabdish` | wood (material) | sink/burn | float/burn |
-| `abd_small_plated_adzuki_cake_slice` | wood (material) | sink/burn | float/burn |
-| `abd_small_plated_banana_cake_slice` | wood (material) | sink/burn | float/burn |
-| `abd_small_plated_chocolate_cake_slice` | wood (material) | sink/burn | float/burn |
-| `abd_small_plated_mint_cake_slice` | wood (material) | sink/burn | float/burn |
-| `abd_small_plated_strawberry_cake_slice` | wood (material) | sink/burn | float/burn |
-| `abd_small_plated_vanilla_cake_slice` | wood (material) | sink/burn | float/burn |
-| `ad_acacia_blossom_soup` | wood (material) | sink/burn | float/burn |
-| `ad_kangaroo_pasta` | wood (material) | sink/burn | float/burn |
-| `ad_kangaroo_stew` | wood (material) | sink/burn | float/burn |
-| `ad_lobster_pasta` | wood (material) | sink/burn | float/burn |
-| `ad_maggot_salad` | wood (material) | sink/burn | float/burn |
-| `ad_plated_bison_burger` | wood (material) | sink/burn | float/burn |
-| `ad_plated_bunfungus_sandwich` | wood (material) | sink/burn | float/burn |
-| `ad_plated_gongylidia_bruschetta` | wood (material) | sink/burn | float/burn |
-| `apple_cider` | wood (material) | sink/burn | float/burn |
-| `bacon_and_eggs` | wood (material) | sink/burn | float/burn |
-| ... 199 more | | | |
+| `bark_strands` | wood (name) | sink/burn | float/burn |
+| `bombard` | metal (mod_default) | sink/burn | sink/fireproof |
+| `brass_ingot` | metal (tag) | sink/burn | sink/fireproof |
+| `brass_nugget` | metal (tag) | sink/burn | sink/fireproof |
+| `caplock_arquebus` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_blunderbuss` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_blunderbuss_pistol` | metal (name) | sink/burn | sink/fireproof |
+| `caplock_caliver` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_derringer` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_doublebarrel_blunderbuss` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_duckfoot_derringer` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_long_musket` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_mechanism` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_musket` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_musketoon` | metal (mod_default) | sink/burn | sink/fireproof |
+| `caplock_pepperbox_pistol` | metal (name) | sink/burn | sink/fireproof |
+| `caplock_pistol` | metal (name) | sink/burn | sink/fireproof |
+| `caplock_repair_parts` | metal (mod_default) | sink/burn | sink/fireproof |
+| `congreve_rocket_stand` | wood (material) | sink/burn | float/burn |
+| `design_notes` | fibre (name) | sink/burn | skim/burn |
+| `diamond_gear_set` | refractory (name) | sink/burn | sink/lavaproof |
+| `diamond_trigger_assembly` | refractory (name) | sink/burn | sink/lavaproof |
+| `flintlock_arquebus` | metal (mod_default) | sink/burn | sink/fireproof |
+| `flintlock_blunderbuss` | metal (mod_default) | sink/burn | sink/fireproof |
+| `flintlock_blunderbuss_pistol` | metal (name) | sink/burn | sink/fireproof |
+| ... 152 more | | | |
 
 ### projectred_illumination (128)
 
@@ -1789,7 +1935,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cyan_cage_light` | machine (mod_default) | sink/burn | sink/fireproof |
 | ... 103 more | | | |
 
-### kubejs (167)
+### displaydelight (223)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `abd_duck_noodles` | wood (material) | sink/burn | float/burn |
+| `abd_perch_with_mushrooms` | wood (material) | sink/burn | float/burn |
+| `abd_pickerelweed_juice` | wood (material) | sink/burn | float/burn |
+| `abd_pike_with_beetroot` | wood (material) | sink/burn | float/burn |
+| `abd_plated_cherry_cookie` | wood (material) | sink/burn | float/burn |
+| `abd_plated_escargot` | wood (material) | sink/burn | float/burn |
+| `abd_plated_maple_cookie` | wood (material) | sink/burn | float/burn |
+| `abd_plated_mulberry_cookie` | wood (material) | sink/burn | float/burn |
+| `abd_slabdish` | wood (material) | sink/burn | float/burn |
+| `abd_small_plated_adzuki_cake_slice` | wood (material) | sink/burn | float/burn |
+| `abd_small_plated_banana_cake_slice` | wood (material) | sink/burn | float/burn |
+| `abd_small_plated_chocolate_cake_slice` | wood (material) | sink/burn | float/burn |
+| `abd_small_plated_mint_cake_slice` | wood (material) | sink/burn | float/burn |
+| `abd_small_plated_strawberry_cake_slice` | wood (material) | sink/burn | float/burn |
+| `abd_small_plated_vanilla_cake_slice` | wood (material) | sink/burn | float/burn |
+| `ad_acacia_blossom_soup` | wood (material) | sink/burn | float/burn |
+| `ad_kangaroo_pasta` | wood (material) | sink/burn | float/burn |
+| `ad_kangaroo_stew` | wood (material) | sink/burn | float/burn |
+| `ad_lobster_pasta` | wood (material) | sink/burn | float/burn |
+| `ad_maggot_salad` | wood (material) | sink/burn | float/burn |
+| `ad_plated_bison_burger` | wood (material) | sink/burn | float/burn |
+| `ad_plated_bunfungus_sandwich` | wood (material) | sink/burn | float/burn |
+| `ad_plated_gongylidia_bruschetta` | wood (material) | sink/burn | float/burn |
+| `apple_cider` | wood (material) | sink/burn | float/burn |
+| `bacon_and_eggs` | wood (material) | sink/burn | float/burn |
+| ... 198 more | | | |
+
+### kubejs (184)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1818,9 +1995,40 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `incomplete_coil_block_aluminum` | metal (name) | sink/burn | sink/fireproof |
 | `incomplete_coil_block_brass` | metal (name) | sink/burn | sink/fireproof |
 | `incomplete_coil_block_constantan` | metal (name) | sink/burn | sink/fireproof |
-| ... 142 more | | | |
+| ... 159 more | | | |
 
-### vintagedelight (179)
+### securitycraft (179)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `admin_tool` | machine (mod_default) | sink/burn | sink/fireproof |
+| `alarm` | metal (material) | sink/burn | sink/fireproof |
+| `blacklist_module` | machine (name) | sink/burn | sink/fireproof |
+| `blast_furnace_mine` | machine (material+name) | sink/burn | sink/fireproof |
+| `block_change_detector` | machine (material+name) | sink/burn | sink/fireproof |
+| `block_pocket_manager` | refractory (material) | sink/burn | sink/lavaproof |
+| `block_pocket_wall` | refractory (material) | sink/burn | sink/lavaproof |
+| `bouncing_betty` | metal (material) | sink/burn | sink/fireproof |
+| `briefcase` | machine (mod_default) | sink/burn | sink/fireproof |
+| `bucket_f_lava` | container (name) | sink/burn | sink/fireproof |
+| `bucket_f_water` | container (name) | sink/burn | sink/fireproof |
+| `cage_trap` | metal (material) | sink/burn | sink/fireproof |
+| `camera_monitor` | machine (name) | sink/burn | sink/fireproof |
+| `chiseled_crystal_quartz` | refractory (override) | sink/burn | sink/lavaproof |
+| `claymore` | metal (material) | sink/burn | sink/fireproof |
+| `cobbled_deepslate_mine` | refractory (material) | sink/burn | sink/lavaproof |
+| `cobblestone_mine` | refractory (material) | sink/burn | sink/lavaproof |
+| `codebreaker` | machine (mod_default) | sink/burn | sink/fireproof |
+| `copper_mine` | metal (material+name) | sink/burn | sink/fireproof |
+| `crystal_quartz` | refractory (override) | sink/burn | sink/lavaproof |
+| `crystal_quartz_bricks` | refractory (override) | sink/burn | sink/lavaproof |
+| `crystal_quartz_item` | refractory (override) | sink/burn | sink/lavaproof |
+| `crystal_quartz_pillar` | refractory (override) | sink/burn | sink/lavaproof |
+| `crystal_quartz_slab` | refractory (override) | sink/burn | sink/lavaproof |
+| `crystal_quartz_stairs` | refractory (override) | sink/burn | sink/lavaproof |
+| ... 154 more | | | |
+
+### vintagedelight (180)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -1828,8 +2036,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `ancient_fruit_jam_block` | earth (material) | sink/burn | sink/fireproof |
 | `ancient_fruit_jam_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `ancient_fruit_jam_jar` | food (tag) | sink/burn | float/burn |
-| `ancient_fruit_jello` | food (tag) | sink/burn | float/burn |
-| `ancient_fruit_jello_block` | earth (material) | sink/burn | sink/fireproof |
+| `ancient_fruit_jello` | food (ruling) | sink/burn | float/burn |
+| `ancient_fruit_jello_block` | food (ruling) | sink/burn | float/burn |
 | `ancient_fruit_jello_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `apple_sauce_bottle` | container (edible+name) | sink/burn | sink/fireproof |
 | `apple_sauce_jar` | food (tag) | sink/burn | float/burn |
@@ -1837,8 +2045,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `banana_jam_block` | earth (material) | sink/burn | sink/fireproof |
 | `banana_jam_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `banana_jam_jar` | food (tag) | sink/burn | float/burn |
-| `banana_jello` | food (tag) | sink/burn | float/burn |
-| `banana_jello_block` | earth (material) | sink/burn | sink/fireproof |
+| `banana_jello` | food (ruling) | sink/burn | float/burn |
+| `banana_jello_block` | food (ruling) | sink/burn | float/burn |
 | `banana_jello_cauldron` | metal (material) | sink/burn | sink/fireproof |
 | `black_chefs_hat` | fibre (name) | sink/burn | skim/burn |
 | `blue_chefs_hat` | fibre (name) | sink/burn | skim/burn |
@@ -1849,7 +2057,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cheese_mold` | metal (material) | sink/burn | sink/fireproof |
 | `cheese_pasta` | food (tag) | sink/burn | float/burn |
 | `cheese_pizza` | food (material) | sink/burn | float/burn |
-| ... 154 more | | | |
+| ... 155 more | | | |
 
 ### clayworks (173)
 
@@ -1890,8 +2098,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `acacia_cutting_board` | wood (material) | sink/burn | float/burn |
 | `andesite_cutting_board` | refractory (material) | sink/burn | sink/lavaproof |
 | `apple_cider` | container (tag) | sink/burn | sink/fireproof |
-| `apple_pie` | food (material) | sink/burn | float/burn |
-| `apple_pie_slice` | food (tag) | sink/burn | float/burn |
+| `apple_pie` | food (ruling) | sink/burn | float/burn |
+| `apple_pie_slice` | food (ruling) | sink/burn | float/burn |
 | `bacon` | food (tag) | sink/burn | float/burn |
 | `bacon_and_eggs` | food (tag) | sink/burn | float/burn |
 | `bacon_sandwich` | food (tag) | sink/burn | float/burn |
@@ -1918,62 +2126,31 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `acorn` | produce (tag) | sink/burn | float/burn |
-| `acorn_sack` | fibre (material) | sink/burn | skim/burn |
+| `acorn_sack` | packed (material+R13) | sink/burn | float/burn |
 | `adamantite_knife` | food (mod_default) | sink/burn | float/burn |
 | `adamantium_knife` | food (mod_default) | sink/burn | float/burn |
 | `alf_knife` | metal (gear) | sink/burn | sink/fireproof |
 | `allthemodium_knife` | food (mod_default) | sink/burn | float/burn |
-| `aluminum_knife` | metal (gear) | sink/burn | sink/fireproof |
-| `amethyst_knife` | crystal (gear) | sink/burn | sink/fireproof |
+| `aluminum_knife` | metal (gear_name) | sink/burn | sink/fireproof |
+| `amethyst_knife` | crystal (gear_name) | sink/burn | sink/fireproof |
 | `animal_fat` | food (tag) | sink/burn | float/burn |
 | `animal_oil_bottle` | container (name) | sink/burn | sink/fireproof |
 | `azalea_tea` | container (tag) | sink/burn | sink/fireproof |
 | `baklava` | food (material) | sink/burn | float/burn |
-| `baklava_slice` | food (edible) | sink/burn | float/burn |
+| `baklava_slice` | food (tag) | sink/burn | float/burn |
 | `baobab_fruit_crate` | wood (material) | sink/burn | float/burn |
 | `basalt_cabinet` | wood (tag) | sink/burn | float/burn |
 | `berry_matcha_latte` | container (tag) | sink/burn | sink/fireproof |
 | `black_opal_knife` | crystal (name) | sink/burn | sink/fireproof |
 | `blazing_knife` | food (mod_default) | sink/burn | float/burn |
-| `blueberry_pie_slice` | food (tag) | sink/burn | float/burn |
-| `blueberry_sack` | fibre (material) | sink/burn | skim/burn |
-| `bone_knife` | organic (name) | sink/burn | float/burn |
-| `brass_knife` | metal (gear) | sink/burn | sink/fireproof |
-| `bronze_knife` | metal (gear) | sink/burn | sink/fireproof |
-| `cactus_chili` | produce (edible+name) | sink/burn | float/burn |
+| `blueberry_pie_slice` | food (ruling) | sink/burn | float/burn |
+| `blueberry_sack` | packed (material+R13) | sink/burn | float/burn |
+| `bone_knife` | organic (gear_name) | sink/burn | float/burn |
+| `brass_knife` | metal (gear_name) | sink/burn | sink/fireproof |
+| `bronze_knife` | metal (gear_name) | sink/burn | sink/fireproof |
+| `cactus_chili` | food (tag) | sink/burn | float/burn |
 | `cactus_flesh` | produce (tag) | sink/burn | float/burn |
 | ... 118 more | | | |
-
-### securitycraft (145)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `admin_tool` | machine (mod_default) | sink/burn | sink/fireproof |
-| `alarm` | metal (material) | sink/burn | sink/fireproof |
-| `blacklist_module` | machine (name) | sink/burn | sink/fireproof |
-| `blast_furnace_mine` | machine (material+name) | sink/burn | sink/fireproof |
-| `block_change_detector` | machine (material+name) | sink/burn | sink/fireproof |
-| `block_pocket_manager` | refractory (material) | sink/burn | sink/lavaproof |
-| `block_pocket_wall` | refractory (material) | sink/burn | sink/lavaproof |
-| `bouncing_betty` | metal (material) | sink/burn | sink/fireproof |
-| `briefcase` | machine (mod_default) | sink/burn | sink/fireproof |
-| `bucket_f_lava` | container (name) | sink/burn | sink/fireproof |
-| `bucket_f_water` | container (name) | sink/burn | sink/fireproof |
-| `cage_trap` | metal (material) | sink/burn | sink/fireproof |
-| `camera_monitor` | machine (name) | sink/burn | sink/fireproof |
-| `chiseled_crystal_quartz` | refractory (material) | sink/burn | sink/lavaproof |
-| `claymore` | metal (material) | sink/burn | sink/fireproof |
-| `coal_mine` | refractory (material) | sink/burn | sink/lavaproof |
-| `cobbled_deepslate_mine` | refractory (material) | sink/burn | sink/lavaproof |
-| `cobblestone_mine` | refractory (material) | sink/burn | sink/lavaproof |
-| `codebreaker` | machine (mod_default) | sink/burn | sink/fireproof |
-| `copper_mine` | metal (material+name) | sink/burn | sink/fireproof |
-| `crystal_quartz` | refractory (material) | sink/burn | sink/lavaproof |
-| `crystal_quartz_bricks` | refractory (material) | sink/burn | sink/lavaproof |
-| `crystal_quartz_item` | refractory (name) | sink/burn | sink/lavaproof |
-| `crystal_quartz_pillar` | refractory (material) | sink/burn | sink/lavaproof |
-| `crystal_quartz_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| ... 120 more | | | |
 
 ### everythingcopper (150)
 
@@ -1985,25 +2162,25 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `chipped_oxidized_copper_anvil` | metal (material) | sink/burn | sink/fireproof |
 | `chipped_weathered_copper_anvil` | metal (material) | sink/burn | sink/fireproof |
 | `chiseled_copper` | metal (material) | sink/burn | sink/fireproof |
-| `copper_axe` | metal (gear) | sink/burn | sink/fireproof |
+| `copper_axe` | metal (gear_name) | sink/burn | sink/fireproof |
 | `copper_bars` | metal (material) | sink/burn | sink/fireproof |
-| `copper_boots` | metal (gear) | sink/burn | sink/fireproof |
+| `copper_boots` | metal (gear_name) | sink/burn | sink/fireproof |
 | `copper_button` | metal (name) | sink/burn | sink/fireproof |
 | `copper_chain` | metal (material) | sink/burn | sink/fireproof |
-| `copper_chestplate` | metal (gear) | sink/burn | sink/fireproof |
+| `copper_chestplate` | metal (gear_name) | sink/burn | sink/fireproof |
 | `copper_door` | metal (material) | sink/burn | sink/fireproof |
 | `copper_grate` | metal (material) | sink/burn | sink/fireproof |
-| `copper_helmet` | metal (gear) | sink/burn | sink/fireproof |
-| `copper_hoe` | metal (gear) | sink/burn | sink/fireproof |
+| `copper_helmet` | metal (gear_name) | sink/burn | sink/fireproof |
+| `copper_hoe` | metal (gear_name) | sink/burn | sink/fireproof |
 | `copper_hopper` | metal (material) | sink/burn | sink/fireproof |
 | `copper_horse_armor` | metal (name) | sink/burn | sink/fireproof |
 | `copper_ladder` | wood (material) | sink/burn | float/burn |
 | `copper_lamp` | metal (material) | sink/burn | sink/fireproof |
 | `copper_lantern` | metal (material) | sink/burn | sink/fireproof |
-| `copper_leggings` | metal (gear) | sink/burn | sink/fireproof |
+| `copper_leggings` | metal (gear_name) | sink/burn | sink/fireproof |
 | `copper_minecart` | metal (name) | sink/burn | sink/fireproof |
 | `copper_nugget` | food (edible) | sink/burn | float/burn |
-| `copper_pickaxe` | metal (gear) | sink/burn | sink/fireproof |
+| `copper_pickaxe` | metal (gear_name) | sink/burn | sink/fireproof |
 | ... 125 more | | | |
 
 ### another_furniture (145)
@@ -2099,7 +2276,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `birch_bookshelf_with_door` | wood (material) | sink/burn | float/burn |
 | ... 115 more | | | |
 
-### framedblocks (138)
+### framedblocks (135)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -2128,7 +2305,69 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `framed_double_slab` | wood (material) | sink/burn | float/burn |
 | `framed_double_slope` | wood (material) | sink/burn | float/burn |
 | `framed_double_slope_panel` | wood (material) | sink/burn | float/burn |
-| ... 113 more | | | |
+| ... 110 more | | | |
+
+### dramaticdoors (131)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `short_acacia_door` | wood (material) | sink/burn | float/burn |
+| `short_andesite_casing_door` | wood (material) | sink/burn | float/burn |
+| `short_andesite_door` | wood (material) | sink/burn | float/burn |
+| `short_birch_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_cherry_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_dead_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_fir_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_hellbark_door` | nether_wood (tag) | float/burn | float/lavaproof |
+| `short_bop_jacaranda_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_magic_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_mahogany_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_palm_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_redwood_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_umbran_door` | wood (material) | sink/burn | float/burn |
+| `short_bop_willow_door` | wood (material) | sink/burn | float/burn |
+| `short_brass_casing_door` | wood (material) | sink/burn | float/burn |
+| `short_brass_door` | wood (material) | sink/burn | float/burn |
+| `short_cardboard_door` | wood (material) | sink/burn | float/burn |
+| `short_cd_copper_door` | wood (material) | sink/burn | float/burn |
+| `short_chain_door` | wood (material) | sink/burn | float/burn |
+| `short_copper_casing_door` | wood (material) | sink/burn | float/burn |
+| `short_crimson_door` | nether_wood (tag) | float/burn | float/lavaproof |
+| `short_dark_oak_door` | wood (material) | sink/burn | float/burn |
+| `short_driftwood_door` | wood (material) | sink/burn | float/burn |
+| `short_ec_copper_door` | metal (material) | sink/burn | sink/fireproof |
+| ... 106 more | | | |
+
+### minecraft (127)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `armor_stand` | heavy_wood (override) | float/burn | sink/burn |
+| `arrow` | wood (name) | sink/burn | float/burn |
+| `black_glazed_terracotta` | masonry (material+name) | sink/burn | sink/fireproof |
+| `blue_glazed_terracotta` | masonry (material+name) | sink/burn | sink/fireproof |
+| `blue_ice` | ice (material) | sink/fireproof | float/burn |
+| `brain_coral` | organic (override) | sink/burn | float/burn |
+| `brain_coral_block` | earth (override) | sink/burn | sink/fireproof |
+| `brain_coral_fan` | organic (override) | sink/burn | float/burn |
+| `brown_glazed_terracotta` | masonry (material+name) | sink/burn | sink/fireproof |
+| `bubble_coral` | organic (override) | sink/burn | float/burn |
+| `bubble_coral_block` | earth (override) | sink/burn | sink/fireproof |
+| `bubble_coral_fan` | organic (override) | sink/burn | float/burn |
+| `campfire` | fuel (ruling) | float/burn | sink/burn |
+| `crimson_button` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_door` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_fence` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_fence_gate` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_hyphae` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_nylium` | refractory (material) | sink/fireproof | sink/lavaproof |
+| `crimson_planks` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_pressure_plate` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_sign` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_slab` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_stairs` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_stem` | nether_wood (tag) | float/burn | float/lavaproof |
+| ... 102 more | | | |
 
 ### floralench (121)
 
@@ -2169,7 +2408,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `acacia_wine_rack_mid` | wood (material) | sink/burn | float/burn |
 | `acacia_wine_rack_small` | wood (material) | sink/burn | float/burn |
 | `aegis_wine` | container (tag) | sink/burn | sink/fireproof |
-| `apple_bag` | fibre (material) | sink/burn | skim/burn |
+| `apple_bag` | packed (material+R13) | sink/burn | float/burn |
 | `apple_cider` | container (tag) | sink/burn | sink/fireproof |
 | `apple_juice` | produce (name) | sink/burn | float/burn |
 | `apple_mash` | food (tag) | sink/burn | float/burn |
@@ -2187,10 +2426,72 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `chair` | wood (material) | sink/burn | float/burn |
 | `chenet_wine` | container (tag) | sink/burn | sink/fireproof |
 | `cherry` | produce (tag) | sink/burn | float/burn |
-| `cherry_bag` | fibre (material) | sink/burn | skim/burn |
+| `cherry_bag` | packed (material+R13) | sink/burn | float/burn |
 | `cherry_barrel` | wood (material) | sink/burn | float/burn |
 | `cherry_beam` | wood (material) | sink/burn | float/burn |
 | ... 100 more | | | |
+
+### hearthandharvest (120)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `acacia_half_cabinet` | wood (material) | sink/burn | float/burn |
+| `baked_apple` | food (tag) | sink/burn | float/burn |
+| `birch_half_cabinet` | wood (material) | sink/burn | float/burn |
+| `biscuits_and_gravy` | food (tag) | sink/burn | float/burn |
+| `blueberry_juice` | container (tag) | sink/burn | sink/fireproof |
+| `blueberry_pips` | foliage (tag) | sink/burn | skim/burn |
+| `blueberry_wine` | container (tag) | sink/burn | sink/fireproof |
+| `brine_bottle` | container (name) | sink/burn | sink/fireproof |
+| `brine_bucket` | container (name) | sink/burn | sink/fireproof |
+| `butter` | food (name) | sink/burn | float/burn |
+| `candy_corn` | food (tag) | sink/burn | float/burn |
+| `charred_marshmallow_stick` | food (tag) | sink/burn | float/burn |
+| `cherry_juice` | container (tag) | sink/burn | sink/fireproof |
+| `chocolate_milk_bottle` | container (tag) | sink/burn | sink/fireproof |
+| `cider_donut` | food (tag) | sink/burn | float/burn |
+| `cooked_sausage` | food (tag) | sink/burn | float/burn |
+| `corn_husk` | produce (name) | sink/burn | float/burn |
+| `corn_husk_bundle` | earth (material) | sink/burn | sink/fireproof |
+| `crate` | wood (material) | sink/burn | float/burn |
+| `crimson_fungus_crate` | wood (material) | sink/burn | float/burn |
+| `crimson_half_cabinet` | wood (material) | sink/burn | float/burn |
+| `croissant` | food (tag) | sink/burn | float/burn |
+| `crow_feather` | fibre (tag) | sink/burn | skim/burn |
+| `dark_oak_half_cabinet` | wood (material) | sink/burn | float/burn |
+| `diamond_cleaver` | refractory (gear_name) | sink/burn | sink/lavaproof |
+| ... 95 more | | | |
+
+### powergrid (91)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `acid_bucket` | container (name) | sink/burn | sink/fireproof |
+| `alarm_bell` | metal (material) | sink/burn | sink/fireproof |
+| `basin_heater` | metal (material) | sink/burn | sink/fireproof |
+| `battery` | metal (material) | sink/burn | sink/fireproof |
+| `capacitor` | machine (name) | sink/burn | sink/fireproof |
+| `carbon_pile_coil` | metal (material) | sink/burn | sink/fireproof |
+| `ceiling_tile` | masonry (material+name) | sink/burn | sink/fireproof |
+| `circuit_board` | machine (material+name) | sink/burn | sink/fireproof |
+| `circuit_design_table` | wood (material) | sink/burn | float/burn |
+| `circuit_schematic` | machine (name) | sink/burn | sink/fireproof |
+| `conductive_casing` | metal (material) | sink/burn | sink/fireproof |
+| `constant_speed_motor` | metal (material) | sink/burn | sink/fireproof |
+| `contactor` | metal (material) | sink/burn | sink/fireproof |
+| `copper_coil` | metal (name) | sink/burn | sink/fireproof |
+| `copper_cord` | metal (name) | sink/burn | sink/fireproof |
+| `copper_plating` | metal (material) | sink/burn | sink/fireproof |
+| `copper_plating_slab` | metal (material) | sink/burn | sink/fireproof |
+| `copper_plating_stairs` | metal (material) | sink/burn | sink/fireproof |
+| `cord_junction` | metal (material) | sink/burn | sink/fireproof |
+| `creative_current_source` | refractory (material) | sink/burn | sink/lavaproof |
+| `creative_resistor` | refractory (material) | sink/burn | sink/lavaproof |
+| `creative_voltage_source` | refractory (material) | sink/burn | sink/lavaproof |
+| `current_gauge` | metal (material) | sink/burn | sink/fireproof |
+| `device_connector` | refractory (material) | sink/burn | sink/lavaproof |
+| `display_module` | machine (name) | sink/burn | sink/fireproof |
+| ... 66 more | | | |
 
 ### domum_ornamentum (91)
 
@@ -2223,37 +2524,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cyan_brick_extra` | masonry (name) | sink/burn | sink/fireproof |
 | ... 66 more | | | |
 
-### dramaticdoors (109)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `short_acacia_door` | wood (material) | sink/burn | float/burn |
-| `short_andesite_casing_door` | wood (material) | sink/burn | float/burn |
-| `short_andesite_door` | wood (material) | sink/burn | float/burn |
-| `short_birch_door` | wood (material) | sink/burn | float/burn |
-| `short_brass_casing_door` | wood (material) | sink/burn | float/burn |
-| `short_brass_door` | wood (material) | sink/burn | float/burn |
-| `short_cardboard_door` | wood (material) | sink/burn | float/burn |
-| `short_cd_copper_door` | wood (material) | sink/burn | float/burn |
-| `short_chain_door` | wood (material) | sink/burn | float/burn |
-| `short_copper_casing_door` | wood (material) | sink/burn | float/burn |
-| `short_crimson_door` | nether_wood (tag) | float/burn | float/fireproof |
-| `short_dark_oak_door` | wood (material) | sink/burn | float/burn |
-| `short_driftwood_door` | wood (material) | sink/burn | float/burn |
-| `short_ec_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_ec_exposed_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_ec_oxidized_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_ec_waxed_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_ec_waxed_exposed_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_ec_waxed_oxidized_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_ec_waxed_weathered_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_ec_weathered_copper_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_exposed_iron_door` | metal (material) | sink/burn | sink/fireproof |
-| `short_glass_door` | wood (material) | sink/burn | float/burn |
-| `short_gold_door` | wood (material) | sink/burn | float/burn |
-| `short_honeycomb_door` | wood (material) | sink/burn | float/burn |
-| ... 84 more | | | |
-
 ### dustrial_decor (96)
 
 | Item | Family (rung) | Now | Family says |
@@ -2285,7 +2555,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `chain_door` | metal (material) | sink/burn | sink/fireproof |
 | ... 71 more | | | |
 
-### create_things_and_misc (91)
+### create_things_and_misc (93)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -2299,7 +2569,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `brass_brick_stairs` | metal (material) | sink/burn | sink/fireproof |
 | `brass_bricks` | metal (material) | sink/burn | sink/fireproof |
 | `brass_casing_trapdoor` | wood (material) | sink/burn | float/burn |
-| `brass_knife` | metal (gear) | sink/burn | sink/fireproof |
+| `brass_knife` | metal (gear_name) | sink/burn | sink/fireproof |
 | `brass_speaker` | metal (material) | sink/burn | sink/fireproof |
 | `brass_sticky_launcher` | metal (material) | sink/burn | sink/fireproof |
 | `brass_tiles` | metal (material) | sink/burn | sink/fireproof |
@@ -2312,9 +2582,9 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cherry_sail` | wood (material) | sink/burn | float/burn |
 | `chorus_sail` | wood (material) | sink/burn | float/burn |
 | `copper_casing_trapdoor` | metal (material) | sink/burn | sink/fireproof |
-| `copper_knife` | metal (gear) | sink/burn | sink/fireproof |
+| `copper_knife` | metal (gear_name) | sink/burn | sink/fireproof |
 | `crimson_sail` | wood (material) | sink/burn | float/burn |
-| ... 66 more | | | |
+| ... 68 more | | | |
 
 ### botanypots (98)
 
@@ -2347,37 +2617,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `gray_concrete_botany_pot` | earth (material) | sink/burn | sink/fireproof |
 | ... 73 more | | | |
 
-### engineersdecor (97)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `clinker_brick_block` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_recessed` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_sastor_corner_block` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_slab` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_stained_block` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_stained_slab` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_stained_stairs` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_stairs` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_vertical_slab_structured` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_vertically_slit` | masonry (material+name) | sink/burn | sink/fireproof |
-| `clinker_brick_wall` | masonry (material+name) | sink/burn | sink/fireproof |
-| `dark_shingle_roof` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_chimney` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_chimneytrunk` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_metallized` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_skylight` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_slab` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_slabslice` | refractory (material) | sink/burn | sink/lavaproof |
-| `dark_shingle_roof_wireconduit` | refractory (material) | sink/burn | sink/lavaproof |
-| `dense_grit_dirt_block` | earth (material) | sink/burn | sink/fireproof |
-| `dense_grit_sand_block` | earth (material) | sink/burn | sink/fireproof |
-| `factory_dropper` | metal (material) | sink/burn | sink/fireproof |
-| `factory_hopper` | metal (material) | sink/burn | sink/fireproof |
-| `factory_placer` | metal (material) | sink/burn | sink/fireproof |
-| ... 72 more | | | |
-
 ### geode (95)
 
 | Item | Family (rung) | Now | Family says |
@@ -2385,11 +2624,11 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `budding_basalt_ancient_debris` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_basalt_glowstone` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_basalt_gold_nugget` | crystal (material) | sink/burn | sink/fireproof |
-| `budding_basalt_quartz` | crystal (material) | sink/burn | sink/fireproof |
+| `budding_basalt_quartz` | refractory (override) | sink/burn | sink/lavaproof |
 | `budding_blackstone_ancient_debris` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_blackstone_glowstone` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_blackstone_gold_nugget` | crystal (material) | sink/burn | sink/fireproof |
-| `budding_blackstone_quartz` | crystal (material) | sink/burn | sink/fireproof |
+| `budding_blackstone_quartz` | refractory (override) | sink/burn | sink/lavaproof |
 | `budding_celestite` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_deepslate_diamond` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_deepslate_emerald` | crystal (material) | sink/burn | sink/fireproof |
@@ -2402,8 +2641,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `budding_nether_ancient_debris` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_nether_glowstone` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_nether_gold_nugget` | crystal (material) | sink/burn | sink/fireproof |
-| `budding_nether_quartz` | crystal (material) | sink/burn | sink/fireproof |
-| `budding_prismarine` | crystal (material) | sink/burn | sink/fireproof |
+| `budding_nether_quartz` | refractory (override) | sink/burn | sink/lavaproof |
+| `budding_prismarine` | crystal (override) | sink/burn | sink/fireproof |
 | `budding_redstone` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_sculk_diamond` | crystal (material) | sink/burn | sink/fireproof |
 | `budding_sculk_emerald` | crystal (material) | sink/burn | sink/fireproof |
@@ -2440,43 +2679,43 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `crimson_trim` | wood (material) | sink/burn | float/burn |
 | ... 65 more | | | |
 
-### neapolitan (91)
+### engineersdecor (93)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `adzuki_beans` | produce (name) | sink/burn | float/burn |
-| `adzuki_bun` | food (tag) | sink/burn | float/burn |
-| `adzuki_cake` | food (material) | sink/burn | float/burn |
-| `adzuki_crate` | wood (material) | sink/burn | float/burn |
-| `adzuki_curry` | food (tag) | sink/burn | float/burn |
-| `adzuki_ice_cream` | food (tag) | sink/burn | float/burn |
-| `adzuki_ice_cream_block` | ice (material) | sink/burn | float/fireproof |
-| `adzuki_milkshake` | container (tag) | sink/burn | sink/fireproof |
-| `adzuki_soil` | earth (material) | sink/burn | sink/fireproof |
-| `adzuki_stew` | food (tag) | sink/burn | float/burn |
-| `banana` | produce (tag) | sink/burn | float/burn |
-| `banana_bread` | food (tag) | sink/burn | float/burn |
-| `banana_bunch` | produce (name) | sink/burn | float/burn |
-| `banana_bundle` | produce (material) | sink/burn | float/burn |
-| `banana_cake` | food (material) | sink/burn | float/burn |
-| `banana_crate` | wood (material) | sink/burn | float/burn |
-| `banana_frond` | foliage (material) | sink/burn | skim/burn |
-| `banana_ice_cream` | food (tag) | sink/burn | float/burn |
-| `banana_ice_cream_block` | ice (material) | sink/burn | float/fireproof |
-| `banana_milkshake` | container (tag) | sink/burn | sink/fireproof |
-| `banana_stalk` | earth (material) | sink/burn | sink/fireproof |
-| `bananarrow` | food (mod_default) | sink/burn | float/burn |
-| `beanstalk` | produce (material) | sink/burn | float/burn |
-| `beanstalk_thorns` | earth (material) | sink/burn | sink/fireproof |
-| `carved_banana_stalk` | earth (material) | sink/burn | sink/fireproof |
-| ... 66 more | | | |
+| `clinker_brick_block` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_recessed` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_sastor_corner_block` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_slab` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_stained_block` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_stained_slab` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_stained_stairs` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_stairs` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_vertical_slab_structured` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_vertically_slit` | masonry (material+name) | sink/burn | sink/fireproof |
+| `clinker_brick_wall` | masonry (material+name) | sink/burn | sink/fireproof |
+| `dark_shingle_roof` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_block` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_chimney` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_chimneytrunk` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_metallized` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_skylight` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_slab` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_slabslice` | refractory (material) | sink/burn | sink/lavaproof |
+| `dark_shingle_roof_wireconduit` | refractory (material) | sink/burn | sink/lavaproof |
+| `dense_grit_dirt_block` | earth (material) | sink/burn | sink/fireproof |
+| `dense_grit_sand_block` | earth (material) | sink/burn | sink/fireproof |
+| `factory_dropper` | machine (ruling) | sink/burn | sink/fireproof |
+| `factory_hopper` | metal (material) | sink/burn | sink/fireproof |
+| `factory_placer` | metal (material) | sink/burn | sink/fireproof |
+| ... 68 more | | | |
 
 ### wardrobe (71)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `backpack` | wood (mod_default) | sink/burn | float/burn |
-| `backpack_block` | fibre (material) | sink/burn | skim/burn |
+| `backpack_block` | packed (material+R13) | sink/burn | float/burn |
 | `black_scarf` | fibre (name) | sink/burn | skim/burn |
 | `blue_scarf` | fibre (name) | sink/burn | skim/burn |
 | `book_hat` | fibre (name) | sink/burn | skim/burn |
@@ -2501,6 +2740,37 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `fox_hat_helmet` | fibre (name) | sink/burn | skim/burn |
 | `fox_hide` | organic (name) | sink/burn | float/burn |
 | ... 46 more | | | |
+
+### neapolitan (91)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `adzuki_beans` | produce (name) | sink/burn | float/burn |
+| `adzuki_bun` | food (tag) | sink/burn | float/burn |
+| `adzuki_cake` | food (material) | sink/burn | float/burn |
+| `adzuki_crate` | wood (material) | sink/burn | float/burn |
+| `adzuki_curry` | food (tag) | sink/burn | float/burn |
+| `adzuki_ice_cream` | food (ruling) | sink/burn | float/burn |
+| `adzuki_ice_cream_block` | food (ruling) | sink/burn | float/burn |
+| `adzuki_milkshake` | container (tag) | sink/burn | sink/fireproof |
+| `adzuki_soil` | earth (material) | sink/burn | sink/fireproof |
+| `adzuki_stew` | food (tag) | sink/burn | float/burn |
+| `banana` | produce (tag) | sink/burn | float/burn |
+| `banana_bread` | food (tag) | sink/burn | float/burn |
+| `banana_bunch` | produce (name) | sink/burn | float/burn |
+| `banana_bundle` | produce (material) | sink/burn | float/burn |
+| `banana_cake` | food (material) | sink/burn | float/burn |
+| `banana_crate` | wood (material) | sink/burn | float/burn |
+| `banana_frond` | foliage (material) | sink/burn | skim/burn |
+| `banana_ice_cream` | food (ruling) | sink/burn | float/burn |
+| `banana_ice_cream_block` | food (ruling) | sink/burn | float/burn |
+| `banana_milkshake` | container (tag) | sink/burn | sink/fireproof |
+| `banana_stalk` | earth (material) | sink/burn | sink/fireproof |
+| `bananarrow` | food (mod_default) | sink/burn | float/burn |
+| `beanstalk` | produce (material) | sink/burn | float/burn |
+| `beanstalk_thorns` | earth (material) | sink/burn | sink/fireproof |
+| `carved_banana_stalk` | earth (material) | sink/burn | sink/fireproof |
+| ... 66 more | | | |
 
 ### veggiesdelight (83)
 
@@ -2533,7 +2803,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `dandelion_juice` | container (tag) | sink/burn | sink/fireproof |
 | ... 58 more | | | |
 
-### projectred_core (51)
+### projectred_core (50)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -2562,38 +2832,38 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `infused_silicon` | machine (mod_default) | sink/burn | sink/fireproof |
 | `iron_coil` | metal (name) | sink/burn | sink/fireproof |
 | `light_blue_illumar` | machine (mod_default) | sink/burn | sink/fireproof |
-| ... 26 more | | | |
+| ... 25 more | | | |
 
-### blocky_siege (79)
+### creativeengineering (75)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `ballista_stand` | metal (material) | sink/burn | sink/fireproof |
-| `barrel_of_gunpowder` | wood (material) | sink/burn | float/burn |
-| `block_of_cast_iron` | metal (material) | sink/burn | sink/fireproof |
-| `block_of_cast_iron_pillar` | metal (material) | sink/burn | sink/fireproof |
-| `block_of_cast_iron_scaffolding` | metal (material) | sink/burn | sink/fireproof |
-| `block_of_cast_iron_slab` | metal (material) | sink/burn | sink/fireproof |
-| `block_of_cast_iron_stairs` | metal (material) | sink/burn | sink/fireproof |
-| `block_of_cast_iron_wall` | metal (material) | sink/burn | sink/fireproof |
-| `brazier_off` | metal (material) | sink/burn | sink/fireproof |
-| `brazier_on` | metal (material) | sink/burn | sink/fireproof |
-| `cannon` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_0` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_1` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_2` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_3` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_4` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_5` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_6` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_ball_7` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_barrel_down_1` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_barrel_down_2` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_barrel_down_3` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_barrel_straight` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_barrel_up_1` | metal (material) | sink/burn | sink/fireproof |
-| `cannon_barrel_up_2` | metal (material) | sink/burn | sink/fireproof |
-| ... 54 more | | | |
+| `aluminum_dust_pile` | metal (material) | sink/burn | sink/fireproof |
+| `aluminum_plate_block` | metal (material) | sink/burn | sink/fireproof |
+| `amethyst_dust` | crystal (name) | sink/burn | sink/fireproof |
+| `brass_dust_pile` | metal (material) | sink/burn | sink/fireproof |
+| `brass_grit` | powder (name) | sink/burn | sink/fireproof |
+| `brass_wire` | metal (tag) | sink/burn | sink/fireproof |
+| `cast_iron_dust_pile` | metal (material) | sink/burn | sink/fireproof |
+| `cast_iron_grit` | powder (name) | sink/burn | sink/fireproof |
+| `cast_iron_plate_block` | metal (material) | sink/burn | sink/fireproof |
+| `coil_aluminum` | metal (material) | sink/burn | sink/fireproof |
+| `coil_brass` | metal (material) | sink/burn | sink/fireproof |
+| `coil_constantan` | metal (material) | sink/burn | sink/fireproof |
+| `coil_gold` | metal (material) | sink/burn | sink/fireproof |
+| `coil_iron` | metal (material) | sink/burn | sink/fireproof |
+| `coil_lead` | metal (material) | sink/burn | sink/fireproof |
+| `coil_nickel` | metal (material) | sink/burn | sink/fireproof |
+| `coil_silver` | metal (material) | sink/burn | sink/fireproof |
+| `coil_steel` | metal (material) | sink/burn | sink/fireproof |
+| `coil_zinc` | metal (material) | sink/burn | sink/fireproof |
+| `component_aluminum` | metal (name) | sink/burn | sink/fireproof |
+| `component_brass` | metal (name) | sink/burn | sink/fireproof |
+| `component_constantan` | metal (name) | sink/burn | sink/fireproof |
+| `component_copper` | metal (name) | sink/burn | sink/fireproof |
+| `component_diamond` | refractory (name) | sink/burn | sink/lavaproof |
+| `component_electrum` | metal (name) | sink/burn | sink/fireproof |
+| ... 50 more | | | |
 
 ### create_confectionery (73)
 
@@ -2726,27 +2996,27 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `assorted_salad` | food (tag) | sink/burn | float/burn |
 | `bubble_tea` | container (tag) | sink/burn | sink/fireproof |
 | `chorus_cookie` | food (tag) | sink/burn | float/burn |
-| `chorus_flower_pie` | food (tag) | sink/burn | float/burn |
+| `chorus_flower_pie` | food (ruling) | sink/burn | float/burn |
 | `chorus_flower_tea` | container (tag) | sink/burn | sink/fireproof |
 | `chorus_fruit_crate` | wood (material) | sink/burn | float/burn |
 | `chorus_fruit_grain` | food (tag) | sink/burn | float/burn |
 | `chorus_fruit_milk_tea` | container (tag) | sink/burn | sink/fireproof |
-| `chorus_fruit_pie` | food (material) | sink/burn | float/burn |
-| `chorus_fruit_pie_slice` | food (tag) | sink/burn | float/burn |
+| `chorus_fruit_pie` | food (ruling) | sink/burn | float/burn |
+| `chorus_fruit_pie_slice` | food (ruling) | sink/burn | float/burn |
 | `chorus_fruit_popsicle` | food (tag) | sink/burn | float/burn |
 | `chorus_fruit_wine` | container (tag) | sink/burn | sink/fireproof |
 | `chorus_sauce` | food (tag) | sink/burn | float/burn |
 | `chorus_succulent` | food (tag) | sink/burn | float/burn |
 | `dragon_breath_and_chorus_soup` | food (tag) | sink/burn | float/burn |
 | `dragon_breath_soda` | container (tag) | sink/burn | sink/fireproof |
-| `dragon_egg_shell_knife` | refractory (name) | sink/burn | sink/lavaproof |
+| `dragon_egg_shell_knife` | refractory (gear_name) | sink/burn | sink/lavaproof |
 | `dragon_leg` | food (tag) | sink/burn | float/burn |
 | `dragon_leg_with_sauce` | food (tag) | sink/burn | float/burn |
 | `dragon_leg_with_sauce_block` | food (material) | sink/burn | float/burn |
 | `dragon_meat_stew` | food (tag) | sink/burn | float/burn |
 | `dragon_meat_stew_block` | organic (material) | sink/burn | float/burn |
 | `dragon_tooth` | refractory (name) | sink/burn | sink/lavaproof |
-| `dragon_tooth_knife` | refractory (name) | sink/burn | sink/lavaproof |
+| `dragon_tooth_knife` | refractory (gear_name) | sink/burn | sink/lavaproof |
 | `dried_chorus_flower` | foliage (name) | sink/burn | skim/burn |
 | ... 39 more | | | |
 
@@ -2785,10 +3055,10 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `bone_boots` | organic (name) | sink/burn | float/burn |
-| `bone_chestplate` | organic (name) | sink/burn | float/burn |
-| `bone_helmet` | organic (name) | sink/burn | float/burn |
-| `bone_leggings` | organic (name) | sink/burn | float/burn |
+| `bone_boots` | organic (gear_name) | sink/burn | float/burn |
+| `bone_chestplate` | organic (gear_name) | sink/burn | float/burn |
+| `bone_helmet` | organic (gear_name) | sink/burn | float/burn |
+| `bone_leggings` | organic (gear_name) | sink/burn | float/burn |
 | `divine_boots` | metal (mod_default) | sink/burn | sink/fireproof |
 | `divine_chestplate` | metal (mod_default) | sink/burn | sink/fireproof |
 | `divine_helmet` | metal (mod_default) | sink/burn | sink/fireproof |
@@ -2797,10 +3067,10 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `heavy_chestplate` | metal (mod_default) | sink/burn | sink/fireproof |
 | `heavy_helmet` | metal (mod_default) | sink/burn | sink/fireproof |
 | `heavy_leggings` | metal (mod_default) | sink/burn | sink/fireproof |
-| `prismarine_boots` | crystal (name) | sink/burn | sink/fireproof |
-| `prismarine_chestplate` | crystal (name) | sink/burn | sink/fireproof |
-| `prismarine_helmet` | crystal (name) | sink/burn | sink/fireproof |
-| `prismarine_leggings` | crystal (name) | sink/burn | sink/fireproof |
+| `prismarine_boots` | crystal (override) | sink/burn | sink/fireproof |
+| `prismarine_chestplate` | crystal (override) | sink/burn | sink/fireproof |
+| `prismarine_helmet` | crystal (override) | sink/burn | sink/fireproof |
+| `prismarine_leggings` | crystal (override) | sink/burn | sink/fireproof |
 | `robe_boots` | metal (mod_default) | sink/burn | sink/fireproof |
 | `robe_chestplate` | metal (mod_default) | sink/burn | sink/fireproof |
 | `robe_helmet` | metal (mod_default) | sink/burn | sink/fireproof |
@@ -2843,36 +3113,36 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `chiseled_bone_serpent_tooth_bricks` | masonry (material+name) | sink/burn | sink/fireproof |
 | ... 38 more | | | |
 
-### creativedelight (62)
+### blocky_siege (61)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `acacia_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `acacia_spice_rack` | wood (material) | sink/burn | float/burn |
-| `acacia_tool_rack` | wood (material) | sink/burn | float/burn |
-| `ancient_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `ancient_spice_rack` | wood (material) | sink/burn | float/burn |
-| `ancient_tool_rack` | wood (material) | sink/burn | float/burn |
-| `bamboo_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `bamboo_spice_rack` | wood (material) | sink/burn | float/burn |
-| `bamboo_tool_rack` | wood (material) | sink/burn | float/burn |
-| `birch_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `birch_spice_rack` | wood (material) | sink/burn | float/burn |
-| `birch_tool_rack` | wood (material) | sink/burn | float/burn |
-| `crimson_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `crimson_spice_rack` | wood (material) | sink/burn | float/burn |
-| `crimson_tool_rack` | wood (material) | sink/burn | float/burn |
-| `dark_oak_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `dark_oak_spice_rack` | wood (material) | sink/burn | float/burn |
-| `dark_oak_tool_rack` | wood (material) | sink/burn | float/burn |
-| `dreamwood_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `dreamwood_spice_rack` | wood (material) | sink/burn | float/burn |
-| `dreamwood_tool_rack` | wood (material) | sink/burn | float/burn |
-| `driftwood_fruit_basket` | wood (material) | sink/burn | float/burn |
-| `driftwood_spice_rack` | wood (material) | sink/burn | float/burn |
-| `driftwood_tool_rack` | wood (material) | sink/burn | float/burn |
-| `duck_egg_crate` | wood (material) | sink/burn | float/burn |
-| ... 37 more | | | |
+| `ballista_stand` | metal (material) | sink/burn | sink/fireproof |
+| `block_of_cast_iron` | metal (material) | sink/burn | sink/fireproof |
+| `block_of_cast_iron_pillar` | metal (material) | sink/burn | sink/fireproof |
+| `block_of_cast_iron_scaffolding` | metal (material) | sink/burn | sink/fireproof |
+| `block_of_cast_iron_slab` | metal (material) | sink/burn | sink/fireproof |
+| `block_of_cast_iron_stairs` | metal (material) | sink/burn | sink/fireproof |
+| `block_of_cast_iron_wall` | metal (material) | sink/burn | sink/fireproof |
+| `brazier_off` | metal (material) | sink/burn | sink/fireproof |
+| `brazier_on` | metal (material) | sink/burn | sink/fireproof |
+| `cannon` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_0` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_1` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_2` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_3` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_4` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_5` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_6` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_ball_7` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_barrel_down_1` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_barrel_down_2` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_barrel_down_3` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_barrel_straight` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_barrel_up_1` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_barrel_up_2` | metal (material) | sink/burn | sink/fireproof |
+| `cannon_barrel_up_3` | metal (material) | sink/burn | sink/fireproof |
+| ... 36 more | | | |
 
 ### projectred_integration (34)
 
@@ -2886,7 +3156,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `bus_input_panel_gate` | machine (name) | sink/burn | sink/fireproof |
 | `bus_randomizer_gate` | machine (name) | sink/burn | sink/fireproof |
 | `bus_transceiver_gate` | machine (name) | sink/burn | sink/fireproof |
-| `comparator_gate` | machine (mod_default) | sink/burn | sink/fireproof |
+| `comparator_gate` | machine (ruling) | sink/burn | sink/fireproof |
 | `counter_gate` | wood (name) | sink/burn | float/burn |
 | `dec_randomizer_gate` | machine (mod_default) | sink/burn | sink/fireproof |
 | `invert_cell_gate` | machine (name) | sink/burn | sink/fireproof |
@@ -2900,7 +3170,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `pulse_gate` | machine (mod_default) | sink/burn | sink/fireproof |
 | `rain_sensor_gate` | machine (name) | sink/burn | sink/fireproof |
 | `randomizer_gate` | machine (mod_default) | sink/burn | sink/fireproof |
-| `repeater_gate` | machine (mod_default) | sink/burn | sink/fireproof |
+| `repeater_gate` | machine (ruling) | sink/burn | sink/fireproof |
 | `segment_display_gate` | machine (mod_default) | sink/burn | sink/fireproof |
 | `sequencer_gate` | machine (mod_default) | sink/burn | sink/fireproof |
 | ... 9 more | | | |
@@ -2912,11 +3182,11 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `black_cod` | food (tag) | sink/burn | float/burn |
 | `black_tea` | container (tag) | sink/burn | sink/fireproof |
 | `black_tea_leaves` | foliage (name) | sink/burn | skim/burn |
-| `black_tea_leaves_sack` | fibre (material) | sink/burn | skim/burn |
+| `black_tea_leaves_sack` | packed (material+R13) | sink/burn | float/burn |
 | `blazing_chili` | food (tag) | sink/burn | float/burn |
 | `coffee` | food (edible) | sink/burn | float/burn |
 | `coffee_beans` | foliage (material) | sink/burn | skim/burn |
-| `coffee_beans_sack` | fibre (material) | sink/burn | skim/burn |
+| `coffee_beans_sack` | packed (material+R13) | sink/burn | float/burn |
 | `coffee_berries` | produce (edible+name) | sink/burn | float/burn |
 | `coffee_cake` | food (material) | sink/burn | float/burn |
 | `coffee_cake_slice` | food (tag) | sink/burn | float/burn |
@@ -2925,7 +3195,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `green_tea` | container (tag) | sink/burn | sink/fireproof |
 | `green_tea_cookie` | food (tag) | sink/burn | float/burn |
 | `green_tea_leaves` | foliage (name) | sink/burn | skim/burn |
-| `green_tea_leaves_sack` | fibre (material) | sink/burn | skim/burn |
+| `green_tea_leaves_sack` | packed (material+R13) | sink/burn | float/burn |
 | `kettle` | metal (material) | sink/burn | sink/fireproof |
 | `long_apple_cider` | container (tag) | sink/burn | sink/fireproof |
 | `long_black_tea` | container (tag) | sink/burn | sink/fireproof |
@@ -2935,6 +3205,37 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `long_green_tea` | container (tag) | sink/burn | sink/fireproof |
 | `long_purulent_tea` | container (tag) | sink/burn | sink/fireproof |
 | ... 25 more | | | |
+
+### abnormals_delight (49)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `adzuki_cake_slice` | food (tag) | sink/burn | float/burn |
+| `aspen_cabinet` | wood (tag) | sink/burn | float/burn |
+| `azalea_cabinet` | wood (tag) | sink/burn | float/burn |
+| `banana_cake_slice` | food (tag) | sink/burn | float/burn |
+| `cherry_cabinet` | wood (tag) | sink/burn | float/burn |
+| `cherry_cookie` | food (tag) | sink/burn | float/burn |
+| `cherry_cream_soda` | wood (name) | sink/burn | float/burn |
+| `chocolate_cake_slice` | food (tag) | sink/burn | float/burn |
+| `cooked_duck_fillet` | food (tag) | sink/burn | float/burn |
+| `cooked_perch_slice` | food (tag) | sink/burn | float/burn |
+| `cooked_pike_slice` | food (tag) | sink/burn | float/burn |
+| `cooked_venison_shanks` | food (edible) | sink/burn | float/burn |
+| `driftwood_cabinet` | wood (tag) | sink/burn | float/burn |
+| `duck_fillet` | food (tag) | sink/burn | float/burn |
+| `duck_noodles` | food (tag) | sink/burn | float/burn |
+| `dune_platter` | food (edible) | sink/burn | float/burn |
+| `escargot` | food (tag) | sink/burn | float/burn |
+| `grimwood_cabinet` | wood (tag) | sink/burn | float/burn |
+| `kousa_cabinet` | wood (tag) | sink/burn | float/burn |
+| `laurel_cabinet` | wood (tag) | sink/burn | float/burn |
+| `maple_cabinet` | wood (tag) | sink/burn | float/burn |
+| `maple_cookie` | food (tag) | sink/burn | float/burn |
+| `maple_glazed_bacon` | food (tag) | sink/burn | float/burn |
+| `mint_cake_slice` | food (tag) | sink/burn | float/burn |
+| `morado_cabinet` | wood (tag) | sink/burn | float/burn |
+| ... 24 more | | | |
 
 ### beautify (52)
 
@@ -2997,37 +3298,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `molotov_lit` | metal (mod_default) | sink/burn | sink/fireproof |
 | `napalm_bucket` | container (name) | sink/burn | sink/fireproof |
 | ... 20 more | | | |
-
-### abnormals_delight (48)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `adzuki_cake_slice` | food (tag) | sink/burn | float/burn |
-| `aspen_cabinet` | wood (tag) | sink/burn | float/burn |
-| `azalea_cabinet` | wood (material) | sink/burn | float/burn |
-| `banana_cake_slice` | food (tag) | sink/burn | float/burn |
-| `cherry_cabinet` | wood (tag) | sink/burn | float/burn |
-| `cherry_cookie` | food (tag) | sink/burn | float/burn |
-| `cherry_cream_soda` | wood (name) | sink/burn | float/burn |
-| `chocolate_cake_slice` | food (tag) | sink/burn | float/burn |
-| `cooked_duck_fillet` | food (tag) | sink/burn | float/burn |
-| `cooked_perch_slice` | food (tag) | sink/burn | float/burn |
-| `cooked_pike_slice` | food (tag) | sink/burn | float/burn |
-| `cooked_venison_shanks` | food (edible) | sink/burn | float/burn |
-| `driftwood_cabinet` | wood (tag) | sink/burn | float/burn |
-| `duck_fillet` | food (tag) | sink/burn | float/burn |
-| `duck_noodles` | food (tag) | sink/burn | float/burn |
-| `dune_platter` | food (edible) | sink/burn | float/burn |
-| `escargot` | food (tag) | sink/burn | float/burn |
-| `grimwood_cabinet` | wood (tag) | sink/burn | float/burn |
-| `kousa_cabinet` | wood (tag) | sink/burn | float/burn |
-| `laurel_cabinet` | wood (tag) | sink/burn | float/burn |
-| `maple_cabinet` | wood (tag) | sink/burn | float/burn |
-| `maple_cookie` | food (tag) | sink/burn | float/burn |
-| `maple_glazed_bacon` | food (tag) | sink/burn | float/burn |
-| `mint_cake_slice` | food (tag) | sink/burn | float/burn |
-| `morado_cabinet` | wood (tag) | sink/burn | float/burn |
-| ... 23 more | | | |
 
 ### createaddition (46)
 
@@ -3134,8 +3404,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `birch_tray` | wood (material) | sink/burn | float/burn |
 | `burnt_skewer` | food (tag) | sink/burn | float/burn |
 | `chili_powder` | powder (name) | sink/burn | sink/fireproof |
-| `crimson_basin` | nether_wood (material) | sink/burn | float/fireproof |
-| `crimson_tray` | nether_wood (material) | sink/burn | float/fireproof |
+| `crimson_basin` | nether_wood (material) | sink/burn | float/lavaproof |
+| `crimson_tray` | nether_wood (material) | sink/burn | float/lavaproof |
 | `cumin_powder` | powder (name) | sink/burn | sink/fireproof |
 | `dark_oak_basin` | wood (material) | sink/burn | float/burn |
 | `dark_oak_tray` | wood (material) | sink/burn | float/burn |
@@ -3215,37 +3485,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `canned_melon_slice` | container (tag) | sink/burn | sink/fireproof |
 | ... 21 more | | | |
 
-### fairylights (29)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `candle_lantern` | metal (name) | sink/burn | sink/fireproof |
-| `candle_lantern_light` | metal (name) | sink/burn | sink/fireproof |
-| `fairy_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `flower_light` | foliage (name) | sink/burn | skim/burn |
-| `garland` | fibre (mod_default) | sink/burn | skim/burn |
-| `ghost_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `hanging_lights` | fibre (mod_default) | sink/burn | skim/burn |
-| `heart_light` | organic (name) | sink/burn | float/burn |
-| `icicle_lights` | fibre (mod_default) | sink/burn | skim/burn |
-| `incandescent_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `jack_o_lantern` | metal (name) | sink/burn | sink/fireproof |
-| `letter_bunting` | fibre (name) | sink/burn | skim/burn |
-| `meteor_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `moon_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `oil_lantern` | metal (name) | sink/burn | sink/fireproof |
-| `oil_lantern_light` | metal (name) | sink/burn | sink/fireproof |
-| `orb_lantern` | metal (name) | sink/burn | sink/fireproof |
-| `paper_lantern` | metal (name) | sink/burn | sink/fireproof |
-| `pennant_bunting` | fibre (mod_default) | sink/burn | skim/burn |
-| `skull_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `snowflake_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `spearhead_pennant` | fibre (mod_default) | sink/burn | skim/burn |
-| `spider_light` | fibre (mod_default) | sink/burn | skim/burn |
-| `square_pennant` | fibre (mod_default) | sink/burn | skim/burn |
-| `star_light` | fibre (mod_default) | sink/burn | skim/burn |
-| ... 4 more | | | |
-
 ### miners_delight (48)
 
 | Item | Family (rung) | Now | Family says |
@@ -3277,67 +3516,36 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `insect_stew` | food (tag) | sink/burn | float/burn |
 | ... 23 more | | | |
 
-### sophisticatedbackpacks (47)
+### fairylights (29)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `advanced_compacting_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_deposit_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_feeding_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_filter_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_magnet_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_pickup_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_pump_upgrade` | metal (name) | sink/burn | sink/fireproof |
-| `advanced_refill_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_restock_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_tool_swapper_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `advanced_void_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `anvil_upgrade` | metal (name) | sink/burn | sink/fireproof |
-| `auto_blasting_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `auto_smelting_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `auto_smoking_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `battery_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `blasting_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `compacting_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `copper_backpack` | metal (name) | sink/burn | sink/fireproof |
-| `crafting_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `deposit_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `diamond_backpack` | refractory (name) | sink/burn | sink/lavaproof |
-| `everlasting_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `feeding_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| `filter_upgrade` | machine (name) | sink/burn | sink/fireproof |
-| ... 22 more | | | |
-
-### goldenfood (47)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `enchanted_golden_baked_potato` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_beetroot` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_beetroot_soup` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_bread` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cake` | fibre (material) | sink/burn | skim/burn |
-| `enchanted_golden_carrot` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_chorus_fruit` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cooked_beef` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cooked_chicken` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cooked_cod` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cooked_mutton` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cooked_porkchop` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cooked_rabbit` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cooked_salmon` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_cookie` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_dried_kelp` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_glow_berries` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_honey_bottle` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_melon_slice` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_milk_bucket` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_mushroom_stew` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_pumpkin_pie` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_rabbit_stew` | food (tag) | sink/burn | float/burn |
-| `enchanted_golden_sweet_berries` | food (tag) | sink/burn | float/burn |
-| `golden_baked_potato` | food (tag) | sink/burn | float/burn |
-| ... 22 more | | | |
+| `candle_lantern` | metal (name) | sink/burn | sink/fireproof |
+| `candle_lantern_light` | metal (name) | sink/burn | sink/fireproof |
+| `fairy_light` | fibre (mod_default) | sink/burn | skim/burn |
+| `flower_light` | foliage (name) | sink/burn | skim/burn |
+| `garland` | fibre (mod_default) | sink/burn | skim/burn |
+| `ghost_light` | fibre (mod_default) | sink/burn | skim/burn |
+| `hanging_lights` | fibre (mod_default) | sink/burn | skim/burn |
+| `heart_light` | organic (name) | sink/burn | float/burn |
+| `icicle_lights` | fibre (mod_default) | sink/burn | skim/burn |
+| `incandescent_light` | fibre (mod_default) | sink/burn | skim/burn |
+| `jack_o_lantern` | metal (name) | sink/burn | sink/fireproof |
+| `letter_bunting` | fibre (name) | sink/burn | skim/burn |
+| `meteor_light` | fibre (mod_default) | sink/burn | skim/burn |
+| `moon_light` | fibre (mod_default) | sink/burn | skim/burn |
+| `oil_lantern` | metal (name) | sink/burn | sink/fireproof |
+| `oil_lantern_light` | metal (name) | sink/burn | sink/fireproof |
+| `orb_lantern` | metal (name) | sink/burn | sink/fireproof |
+| `paper_lantern` | metal (name) | sink/burn | sink/fireproof |
+| `pennant_bunting` | fibre (mod_default) | sink/burn | skim/burn |
+| `skull_light` | organic (name) | sink/burn | float/burn |
+| `snowflake_light` | fibre (mod_default) | sink/burn | skim/burn |
+| `spearhead_pennant` | fibre (mod_default) | sink/burn | skim/burn |
+| `spider_light` | fibre (mod_default) | sink/burn | skim/burn |
+| `square_pennant` | fibre (mod_default) | sink/burn | skim/burn |
+| `star_light` | fibre (mod_default) | sink/burn | skim/burn |
+| ... 4 more | | | |
 
 ### littlelogistics (32)
 
@@ -3369,6 +3577,37 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `steam_locomotive` | metal (mod_default) | sink/burn | sink/fireproof |
 | `switch_rail` | metal (material) | sink/burn | sink/fireproof |
 | ... 7 more | | | |
+
+### sophisticatedbackpacks (45)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `advanced_compacting_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_deposit_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_feeding_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_filter_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_magnet_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_pickup_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_pump_upgrade` | metal (name) | sink/burn | sink/fireproof |
+| `advanced_refill_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_restock_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_tool_swapper_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `advanced_void_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `anvil_upgrade` | metal (name) | sink/burn | sink/fireproof |
+| `auto_smelting_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `auto_smoking_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `battery_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `compacting_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `copper_backpack` | metal (name) | sink/burn | sink/fireproof |
+| `crafting_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `deposit_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `diamond_backpack` | refractory (name) | sink/burn | sink/lavaproof |
+| `everlasting_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `feeding_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `filter_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `gold_backpack` | metal (name) | sink/burn | sink/fireproof |
+| `inception_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| ... 20 more | | | |
 
 ### copycats (45)
 
@@ -3468,13 +3707,13 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `amberveil` | foliage (material) | sink/burn | skim/burn |
-| `amberveil_stew` | food (edible) | sink/burn | float/burn |
-| `amberveiled_curry` | food (edible) | sink/burn | float/burn |
-| `chicken_curry` | organic (edible+name) | sink/burn | float/burn |
+| `amberveil_stew` | food (tag) | sink/burn | float/burn |
+| `amberveiled_curry` | food (tag) | sink/burn | float/burn |
+| `chicken_curry` | food (tag) | sink/burn | float/burn |
 | `chorus_crate` | wood (material) | sink/burn | float/burn |
 | `chorus_juice` | container (tag) | sink/burn | sink/fireproof |
-| `chorus_pie` | food (material) | sink/burn | float/burn |
-| `chorus_pie_slice` | food (tag) | sink/burn | float/burn |
+| `chorus_pie` | food (ruling) | sink/burn | float/burn |
+| `chorus_pie_slice` | food (ruling) | sink/burn | float/burn |
 | `chorus_stew` | food (tag) | sink/burn | float/burn |
 | `chorus_stew_wood` | food (edible) | sink/burn | float/burn |
 | `chorusflame` | foliage (material) | sink/burn | skim/burn |
@@ -3509,10 +3748,10 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `brazier` | metal (material) | sink/burn | sink/fireproof |
 | `chain` | metal (material) | sink/burn | sink/fireproof |
 | `chandelier` | wood (material) | sink/burn | float/burn |
-| `crimson_beam` | nether_wood (tag) | float/burn | float/fireproof |
-| `crimson_palisade` | nether_wood (tag) | float/burn | float/fireproof |
-| `crimson_seat` | nether_wood (tag) | float/burn | float/fireproof |
-| `crimson_support` | nether_wood (tag) | float/burn | float/fireproof |
+| `crimson_beam` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_palisade` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_seat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_support` | nether_wood (tag) | float/burn | float/lavaproof |
 | `dark_oak_palisade` | wood (material) | sink/burn | float/burn |
 | `dark_oak_seat` | wood (material) | sink/burn | float/burn |
 | `dark_oak_support` | wood (material) | sink/burn | float/burn |
@@ -3524,6 +3763,37 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `mangrove_palisade` | wood (material) | sink/burn | float/burn |
 | `mangrove_seat` | wood (material) | sink/burn | float/burn |
 | ... 15 more | | | |
+
+### goldenfood (41)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `enchanted_golden_baked_potato` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_beetroot` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_bread` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cake` | fibre (material) | sink/burn | skim/burn |
+| `enchanted_golden_carrot` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_chorus_fruit` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cooked_beef` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cooked_chicken` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cooked_cod` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cooked_mutton` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cooked_porkchop` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cooked_rabbit` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cooked_salmon` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_cookie` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_dried_kelp` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_glow_berries` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_honey_bottle` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_melon_slice` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_milk_bucket` | food (tag) | sink/burn | float/burn |
+| `enchanted_golden_pumpkin_pie` | food (ruling) | sink/burn | float/burn |
+| `enchanted_golden_sweet_berries` | food (tag) | sink/burn | float/burn |
+| `golden_baked_potato` | food (tag) | sink/burn | float/burn |
+| `golden_beetroot` | food (tag) | sink/burn | float/burn |
+| `golden_bread` | food (tag) | sink/burn | float/burn |
+| `golden_cake` | fibre (material) | sink/burn | skim/burn |
+| ... 16 more | | | |
 
 ### prettypipes (37)
 
@@ -3637,7 +3907,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `green_kitchen_floor` | refractory (material) | sink/burn | sink/lavaproof |
 | `hanging_corner` | refractory (material) | sink/burn | sink/lavaproof |
 | `heating_unit` | metal (mod_default) | sink/burn | sink/fireproof |
-| `ice_unit` | ice (name) | sink/burn | float/fireproof |
+| `ice_unit` | metal (override) | sink/burn | sink/fireproof |
 | `light_blue_kitchen_floor` | refractory (material) | sink/burn | sink/lavaproof |
 | `light_gray_kitchen_floor` | refractory (material) | sink/burn | sink/lavaproof |
 | `lime_kitchen_floor` | refractory (material) | sink/burn | sink/lavaproof |
@@ -3717,28 +3987,28 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 |---|---|---|---|
 | `aloe_cake_slice` | food (tag) | sink/burn | float/burn |
 | `brewing_guide` | food (mod_default) | sink/burn | float/burn |
-| `cherry_pie_slice` | food (tag) | sink/burn | float/burn |
+| `cherry_pie_slice` | food (ruling) | sink/burn | float/burn |
 | `chocolate_cake_slice` | food (tag) | sink/burn | float/burn |
 | `cooking_guide` | food (mod_default) | sink/burn | float/burn |
 | `honey_cake_slice` | food (tag) | sink/burn | float/burn |
-| `incomplete_apple_pie` | produce (edible+name) | sink/burn | float/burn |
+| `incomplete_apple_pie` | food (ruling) | sink/burn | float/burn |
 | `incomplete_bacon_sandwich` | food (edible) | sink/burn | float/burn |
-| `incomplete_cherry_pie` | food (edible) | sink/burn | float/burn |
+| `incomplete_cherry_pie` | food (ruling) | sink/burn | float/burn |
 | `incomplete_chicken_sandwich` | food (edible) | sink/burn | float/burn |
-| `incomplete_chorus_flower_pie` | food (edible) | sink/burn | float/burn |
-| `incomplete_chorus_fruit_pie` | produce (edible+name) | sink/burn | float/burn |
+| `incomplete_chorus_flower_pie` | food (ruling) | sink/burn | float/burn |
+| `incomplete_chorus_fruit_pie` | food (ruling) | sink/burn | float/burn |
 | `incomplete_egg_sandwich` | food (edible) | sink/burn | float/burn |
 | `incomplete_hamburger` | food (edible) | sink/burn | float/burn |
-| `incomplete_mulberry_pie` | produce (edible+name) | sink/burn | float/burn |
+| `incomplete_mulberry_pie` | food (ruling) | sink/burn | float/burn |
 | `incomplete_mutton_wrap` | food (edible) | sink/burn | float/burn |
-| `incomplete_neapolitan_ice_cream_chocolate` | ice (name) | sink/burn | float/fireproof |
-| `incomplete_neapolitan_ice_cream_strawberry` | ice (name) | sink/burn | float/fireproof |
-| `incomplete_pumpkin_pie` | produce (edible+name) | sink/burn | float/burn |
+| `incomplete_neapolitan_ice_cream_chocolate` | food (ruling) | sink/burn | float/burn |
+| `incomplete_neapolitan_ice_cream_strawberry` | food (ruling) | sink/burn | float/burn |
+| `incomplete_pumpkin_pie` | food (ruling) | sink/burn | float/burn |
 | `incomplete_sweet_berry_cheesecake` | produce (edible+name) | sink/burn | float/burn |
-| `incomplete_truffle_pie` | produce (edible+name) | sink/burn | float/burn |
+| `incomplete_truffle_pie` | food (ruling) | sink/burn | float/burn |
 | `miners_cooking_guide` | food (mod_default) | sink/burn | float/burn |
 | `mulberry_jam_bucket` | earth (material) | sink/burn | sink/fireproof |
-| `mulberry_pie_slice` | food (tag) | sink/burn | float/burn |
+| `mulberry_pie_slice` | food (ruling) | sink/burn | float/burn |
 | `passionfruit_cake_slice` | food (tag) | sink/burn | float/burn |
 | ... 7 more | | | |
 
@@ -3795,28 +4065,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `purple_stained_framed_glass_door` | wood (material) | sink/burn | float/burn |
 | ... 9 more | | | |
 
-### simplehats (17)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `hatbag_common` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatbag_easter` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatbag_epic` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatbag_festive` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatbag_halloween` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatbag_rare` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatbag_summer` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatbag_uncommon` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatdisplay` | fibre (mod_default) | sink/burn | skim/burn |
-| `haticon` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatscraps_common` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatscraps_easter` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatscraps_festive` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatscraps_halloween` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatscraps_rare` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatscraps_summer` | fibre (mod_default) | sink/burn | skim/burn |
-| `hatscraps_uncommon` | fibre (mod_default) | sink/burn | skim/burn |
-
 ### comforts (33)
 
 | Item | Family (rung) | Now | Family says |
@@ -3838,14 +4086,14 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `hammock_white` | fibre (material) | sink/burn | skim/burn |
 | `hammock_yellow` | fibre (material) | sink/burn | skim/burn |
 | `rope_and_nail` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_black` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_blue` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_brown` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_cyan` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_gray` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_green` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_light_blue` | fibre (material) | sink/burn | skim/burn |
-| `sleeping_bag_light_gray` | fibre (material) | sink/burn | skim/burn |
+| `sleeping_bag_black` | packed (material+R13) | sink/burn | float/burn |
+| `sleeping_bag_blue` | packed (material+R13) | sink/burn | float/burn |
+| `sleeping_bag_brown` | packed (material+R13) | sink/burn | float/burn |
+| `sleeping_bag_cyan` | packed (material+R13) | sink/burn | float/burn |
+| `sleeping_bag_gray` | packed (material+R13) | sink/burn | float/burn |
+| `sleeping_bag_green` | packed (material+R13) | sink/burn | float/burn |
+| `sleeping_bag_light_blue` | packed (material+R13) | sink/burn | float/burn |
+| `sleeping_bag_light_gray` | packed (material+R13) | sink/burn | float/burn |
 | ... 8 more | | | |
 
 ### compressedcreativity (33)
@@ -3876,7 +4124,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `mesh_empty` | metal (name) | sink/burn | sink/fireproof |
 | `mesh_haunted` | metal (name) | sink/burn | sink/fireproof |
 | `mesh_splashing` | metal (name) | sink/burn | sink/fireproof |
-| `mesh_splashing_frozen` | ice (name) | sink/burn | float/fireproof |
+| `mesh_splashing_frozen` | ice (name) | sink/burn | float/burn |
 | ... 8 more | | | |
 
 ### moredelight (33)
@@ -3907,7 +4155,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `potato_salad` | produce (edible+name) | sink/burn | float/burn |
 | `simple_hamburger` | food (tag) | sink/burn | float/burn |
 | `steak_sandwich` | food (tag) | sink/burn | float/burn |
-| `stone_knife` | refractory (name) | sink/burn | sink/lavaproof |
+| `stone_knife` | refractory (gear_name) | sink/burn | sink/lavaproof |
 | ... 8 more | | | |
 
 ### philipsruins (33)
@@ -3925,11 +4173,11 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cracked_bone` | refractory (material) | sink/burn | sink/lavaproof |
 | `dark_brick` | masonry (material+name) | sink/burn | sink/fireproof |
 | `fractured_bone_bricks` | masonry (material+name) | sink/burn | sink/fireproof |
-| `frozen_dark_prismarine` | refractory (material) | sink/burn | sink/lavaproof |
-| `frozen_prismarine` | refractory (material) | sink/burn | sink/lavaproof |
-| `frozen_prismarine_bricks` | masonry (material+name) | sink/burn | sink/fireproof |
-| `frozen_prismarine_crystals` | ice (name) | sink/burn | float/fireproof |
-| `frozen_prismarine_shard` | ice (name) | sink/burn | float/fireproof |
+| `frozen_dark_prismarine` | crystal (override) | sink/burn | sink/fireproof |
+| `frozen_prismarine` | crystal (override) | sink/burn | sink/fireproof |
+| `frozen_prismarine_bricks` | crystal (override) | sink/burn | sink/fireproof |
+| `frozen_prismarine_crystals` | crystal (override) | sink/burn | sink/fireproof |
+| `frozen_prismarine_shard` | crystal (override) | sink/burn | sink/fireproof |
 | `infested_sculk_bone_bricks` | masonry (material+name) | sink/burn | sink/fireproof |
 | `mossy_dark_brick` | masonry (material+name) | sink/burn | sink/fireproof |
 | `obsidian_brick` | refractory (material) | sink/burn | sink/lavaproof |
@@ -3971,37 +4219,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `glow_pink_wool` | fibre (material) | sink/burn | skim/burn |
 | `glow_purple_carpet` | fibre (material) | sink/burn | skim/burn |
 | ... 7 more | | | |
-
-### nethersdelight (31)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `blackstone_blast_furnace` | refractory (material) | sink/burn | sink/lavaproof |
-| `blackstone_furnace` | refractory (material) | sink/burn | sink/lavaproof |
-| `blackstone_stove` | refractory (material) | sink/burn | sink/lavaproof |
-| `crimson_fungus_colony` | foliage (material) | sink/burn | skim/burn |
-| `diamond_machete` | refractory (gear) | sink/burn | sink/lavaproof |
-| `golden_machete` | metal (gear) | sink/burn | sink/fireproof |
-| `grilled_strider` | food (tag) | sink/burn | float/burn |
-| `ground_strider` | food (tag) | sink/lavaproof | float/burn |
-| `hoglin_ear` | food (tag) | sink/burn | float/burn |
-| `hoglin_hide` | organic (name) | sink/burn | float/burn |
-| `hoglin_loin` | food (tag) | sink/burn | float/burn |
-| `hoglin_mount` | fibre (material) | sink/burn | skim/burn |
-| `hoglin_sirloin` | food (tag) | sink/burn | float/burn |
-| `iron_machete` | metal (gear) | sink/burn | sink/fireproof |
-| `magma_gelatin` | food (tag) | sink/burn | float/burn |
-| `nether_brick_smoker` | masonry (material+name) | sink/burn | sink/fireproof |
-| `nether_skewer` | food (tag) | sink/burn | float/burn |
-| `netherite_machete` | refractory (gear) | sink/burn | sink/lavaproof |
-| `plate_of_stuffed_hoglin_ham` | food (tag) | sink/burn | float/burn |
-| `plate_of_stuffed_hoglin_roast` | food (tag) | sink/burn | float/burn |
-| `plate_of_stuffed_hoglin_snout` | food (tag) | sink/burn | float/burn |
-| `propelpearl` | food (tag) | sink/burn | float/burn |
-| `propelplant_cane` | foliage (material) | sink/burn | skim/burn |
-| `propelplant_torch` | foliage (material) | sink/burn | skim/burn |
-| `raw_nether_skewer` | food (name) | sink/burn | float/burn |
-| ... 6 more | | | |
 
 ### scholar (32)
 
@@ -4078,6 +4295,37 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `weak_nbt` | machine (mod_default) | sink/burn | sink/fireproof |
 | `xor` | machine (mod_default) | sink/burn | sink/fireproof |
 
+### nethersdelight (30)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `blackstone_blast_furnace` | refractory (material) | sink/burn | sink/lavaproof |
+| `blackstone_furnace` | refractory (material) | sink/burn | sink/lavaproof |
+| `blackstone_stove` | refractory (material) | sink/burn | sink/lavaproof |
+| `crimson_fungus_colony` | foliage (material) | sink/burn | skim/burn |
+| `diamond_machete` | refractory (gear) | sink/burn | sink/lavaproof |
+| `golden_machete` | metal (gear) | sink/burn | sink/fireproof |
+| `grilled_strider` | food (tag) | sink/burn | float/burn |
+| `ground_strider` | food (tag) | sink/lavaproof | float/burn |
+| `hoglin_ear` | food (tag) | sink/burn | float/burn |
+| `hoglin_hide` | organic (name) | sink/burn | float/burn |
+| `hoglin_loin` | food (tag) | sink/burn | float/burn |
+| `hoglin_mount` | fibre (material) | sink/burn | skim/burn |
+| `hoglin_sirloin` | food (tag) | sink/burn | float/burn |
+| `iron_machete` | metal (gear) | sink/burn | sink/fireproof |
+| `magma_gelatin` | food (tag) | sink/burn | float/burn |
+| `nether_brick_smoker` | masonry (material+name) | sink/burn | sink/fireproof |
+| `nether_skewer` | food (tag) | sink/burn | float/burn |
+| `netherite_machete` | refractory (gear) | sink/burn | sink/lavaproof |
+| `plate_of_stuffed_hoglin_ham` | food (tag) | sink/burn | float/burn |
+| `plate_of_stuffed_hoglin_roast` | food (tag) | sink/burn | float/burn |
+| `plate_of_stuffed_hoglin_snout` | food (tag) | sink/burn | float/burn |
+| `propelpearl` | food (tag) | sink/burn | float/burn |
+| `propelplant_cane` | foliage (material) | sink/burn | skim/burn |
+| `raw_nether_skewer` | food (name) | sink/burn | float/burn |
+| `raw_stuffed_hoglin` | food (mod_default) | sink/burn | float/burn |
+| ... 5 more | | | |
+
 ### fungidelight (30)
 
 | Item | Family (rung) | Now | Family says |
@@ -4137,7 +4385,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `large_cogwheel_block` | wood (material) | sink/burn | float/burn |
 | `mechanism_block` | metal (material) | sink/burn | sink/fireproof |
 | `powdered_obsidian_pile` | earth (material) | sink/burn | sink/fireproof |
-| `rose_quartz_crystal_block` | crystal (material) | sink/burn | sink/fireproof |
+| `rose_quartz_crystal_block` | refractory (override) | sink/burn | sink/lavaproof |
 | ... 4 more | | | |
 
 ### advancedperipherals (22)
@@ -4225,36 +4473,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `wireless_modem_advanced` | refractory (material) | sink/burn | sink/lavaproof |
 | `wireless_modem_normal` | refractory (material) | sink/burn | sink/lavaproof |
 
-### nock_enough_arrows (25)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `blossom_arrow` | wood (name) | sink/burn | float/burn |
-| `cupid_arrow` | wood (name) | sink/burn | float/burn |
-| `dousing_arrow` | wood (name) | sink/burn | float/burn |
-| `drill_arrow` | wood (name) | sink/burn | float/burn |
-| `echoing_arrow` | wood (name) | sink/burn | float/burn |
-| `ethereal_arrow` | wood (name) | sink/burn | float/burn |
-| `growing_arrow` | wood (name) | sink/burn | float/burn |
-| `hookshot_arrow` | wood (name) | sink/burn | float/burn |
-| `ink_arrow` | wood (name) | sink/burn | float/burn |
-| `luminous_arrow` | wood (name) | sink/burn | float/burn |
-| `message_arrow` | wood (name) | sink/burn | float/burn |
-| `paint_arrow` | wood (name) | sink/burn | float/burn |
-| `party_arrow` | wood (name) | sink/burn | float/burn |
-| `prismarine_arrow` | crystal (name) | sink/burn | sink/fireproof |
-| `pufferfish_arrow` | wood (name) | sink/burn | float/burn |
-| `redstone_torch_arrow` | refractory (name) | sink/burn | sink/lavaproof |
-| `reinforced_arrow` | machine (name) | sink/burn | sink/fireproof |
-| `repulsive_arrow` | wood (name) | sink/burn | float/burn |
-| `seeker_arrow` | wood (name) | sink/burn | float/burn |
-| `slime_arrow` | wood (name) | sink/burn | float/burn |
-| `soul_torch_arrow` | wood (name) | sink/burn | float/burn |
-| `split_arrow` | wood (name) | sink/burn | float/burn |
-| `teleportation_arrow` | wood (name) | sink/burn | float/burn |
-| `torch_arrow` | wood (name) | sink/burn | float/burn |
-| `whistling_arrow` | wood (name) | sink/burn | float/burn |
-
 ### physics_gun_mod (23)
 
 | Item | Family (rung) | Now | Family says |
@@ -4305,33 +4523,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `propeller_hat` | fibre (name) | sink/burn | skim/burn |
 | `static_cloud` | earth (material) | sink/burn | sink/fireproof |
 
-### domesticationinnovation (22)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `collar_tag` | fibre (name) | sink/burn | skim/burn |
-| `drum` | wood (material) | sink/burn | float/burn |
-| `feather_on_a_stick` | wood (name) | sink/burn | float/burn |
-| `pet_bed_black` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_blue` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_brown` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_cyan` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_gray` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_green` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_light_blue` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_light_gray` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_lime` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_magenta` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_orange` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_pink` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_purple` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_red` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_white` | fibre (material) | sink/burn | skim/burn |
-| `pet_bed_yellow` | fibre (material) | sink/burn | skim/burn |
-| `rotten_apple` | food (tag) | sink/burn | float/burn |
-| `sinister_carrot` | food (tag) | sink/burn | float/burn |
-| `wayward_lantern` | metal (material) | sink/burn | sink/fireproof |
-
 ### buzzier_bees (24)
 
 | Item | Family (rung) | Now | Family says |
@@ -4371,7 +4562,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `corn` | produce (tag) | sink/burn | float/burn |
 | `corn_crate` | wood (material) | sink/burn | float/burn |
 | `corn_dog` | food (tag) | sink/burn | float/burn |
-| `corn_kernel_bag` | fibre (material) | sink/burn | skim/burn |
+| `corn_kernel_bag` | packed (material+R13) | sink/burn | float/burn |
 | `corn_seeds` | foliage (tag) | sink/burn | skim/burn |
 | `corn_soup` | food (tag) | sink/burn | float/burn |
 | `cornbread` | food (tag) | sink/burn | float/burn |
@@ -4390,33 +4581,32 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `tortilla_raw` | food (tag) | sink/burn | float/burn |
 | `wild_corn` | foliage (material) | sink/burn | skim/burn |
 
-### gates (23)
+### domesticationinnovation (22)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `advanced_redstone_clock` | wood (material) | sink/burn | float/burn |
-| `and_gate` | wood (material) | sink/burn | float/burn |
-| `fast_repeater` | wood (material) | sink/burn | float/burn |
-| `iron_fence` | metal (material) | sink/burn | sink/fireproof |
-| `iron_fence_gate` | metal (material) | sink/burn | sink/fireproof |
-| `nand_gate` | wood (material) | sink/burn | float/burn |
-| `nor_gate` | wood (material) | sink/burn | float/burn |
-| `not_gate` | wood (material) | sink/burn | float/burn |
-| `or_gate` | wood (material) | sink/burn | float/burn |
-| `portable_redstone_transmitter` | refractory (name) | sink/burn | sink/lavaproof |
-| `rain_detector` | wood (material) | sink/burn | float/burn |
-| `receiver` | wood (material) | sink/burn | float/burn |
-| `redstone_block_off` | metal (material) | sink/burn | sink/fireproof |
-| `redstone_clock` | wood (material) | sink/burn | float/burn |
-| `redstone_torch_pearl` | refractory (name) | sink/burn | sink/lavaproof |
-| `rotary_switch` | wood (material) | sink/burn | float/burn |
-| `rs_flip_flop` | wood (material) | sink/burn | float/burn |
-| `slow_repeater` | wood (material) | sink/burn | float/burn |
-| `thunder_detector` | wood (material) | sink/burn | float/burn |
-| `transmitter` | wood (material) | sink/burn | float/burn |
-| `waxed_redstone_wire` | refractory (name) | sink/burn | sink/lavaproof |
-| `xnor_gate` | wood (material) | sink/burn | float/burn |
-| `xor_gate` | wood (material) | sink/burn | float/burn |
+| `collar_tag` | fibre (name) | sink/burn | skim/burn |
+| `drum` | wood (material) | sink/burn | float/burn |
+| `feather_on_a_stick` | wood (name) | sink/burn | float/burn |
+| `pet_bed_black` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_blue` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_brown` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_cyan` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_gray` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_green` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_light_blue` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_light_gray` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_lime` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_magenta` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_orange` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_pink` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_purple` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_red` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_white` | fibre (material) | sink/burn | skim/burn |
+| `pet_bed_yellow` | fibre (material) | sink/burn | skim/burn |
+| `rotten_apple` | food (tag) | sink/burn | float/burn |
+| `sinister_carrot` | food (tag) | sink/burn | float/burn |
+| `wayward_lantern` | metal (material) | sink/burn | sink/fireproof |
 
 ### alexsdelight (23)
 
@@ -4445,6 +4635,60 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `raw_bunfungus` | food (tag) | sink/burn | float/burn |
 | `raw_bunfungus_drumstick` | food (tag) | sink/burn | float/burn |
 | `raw_catfish_slice` | food (tag) | sink/burn | float/burn |
+
+### gates (22)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `advanced_redstone_clock` | wood (material) | sink/burn | float/burn |
+| `and_gate` | wood (material) | sink/burn | float/burn |
+| `fast_repeater` | machine (ruling) | sink/burn | sink/fireproof |
+| `iron_fence` | metal (material) | sink/burn | sink/fireproof |
+| `iron_fence_gate` | metal (material) | sink/burn | sink/fireproof |
+| `nand_gate` | wood (material) | sink/burn | float/burn |
+| `nor_gate` | wood (material) | sink/burn | float/burn |
+| `not_gate` | wood (material) | sink/burn | float/burn |
+| `or_gate` | wood (material) | sink/burn | float/burn |
+| `portable_redstone_transmitter` | refractory (name) | sink/burn | sink/lavaproof |
+| `rain_detector` | wood (material) | sink/burn | float/burn |
+| `receiver` | wood (material) | sink/burn | float/burn |
+| `redstone_block_off` | metal (material) | sink/burn | sink/fireproof |
+| `redstone_clock` | wood (material) | sink/burn | float/burn |
+| `rotary_switch` | wood (material) | sink/burn | float/burn |
+| `rs_flip_flop` | wood (material) | sink/burn | float/burn |
+| `slow_repeater` | machine (ruling) | sink/burn | sink/fireproof |
+| `thunder_detector` | wood (material) | sink/burn | float/burn |
+| `transmitter` | wood (material) | sink/burn | float/burn |
+| `waxed_redstone_wire` | refractory (name) | sink/burn | sink/lavaproof |
+| `xnor_gate` | wood (material) | sink/burn | float/burn |
+| `xor_gate` | wood (material) | sink/burn | float/burn |
+
+### nock_enough_arrows (22)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `blossom_arrow` | wood (name) | sink/burn | float/burn |
+| `cupid_arrow` | wood (name) | sink/burn | float/burn |
+| `dousing_arrow` | wood (name) | sink/burn | float/burn |
+| `drill_arrow` | wood (name) | sink/burn | float/burn |
+| `echoing_arrow` | wood (name) | sink/burn | float/burn |
+| `ethereal_arrow` | wood (name) | sink/burn | float/burn |
+| `growing_arrow` | wood (name) | sink/burn | float/burn |
+| `hookshot_arrow` | wood (name) | sink/burn | float/burn |
+| `ink_arrow` | wood (name) | sink/burn | float/burn |
+| `luminous_arrow` | wood (name) | sink/burn | float/burn |
+| `message_arrow` | wood (name) | sink/burn | float/burn |
+| `paint_arrow` | wood (name) | sink/burn | float/burn |
+| `party_arrow` | wood (name) | sink/burn | float/burn |
+| `prismarine_arrow` | crystal (override) | sink/burn | sink/fireproof |
+| `pufferfish_arrow` | wood (name) | sink/burn | float/burn |
+| `reinforced_arrow` | machine (name) | sink/burn | sink/fireproof |
+| `repulsive_arrow` | wood (name) | sink/burn | float/burn |
+| `seeker_arrow` | wood (name) | sink/burn | float/burn |
+| `slime_arrow` | wood (name) | sink/burn | float/burn |
+| `split_arrow` | wood (name) | sink/burn | float/burn |
+| `teleportation_arrow` | wood (name) | sink/burn | float/burn |
+| `whistling_arrow` | wood (name) | sink/burn | float/burn |
 
 ### oceansdelight (22)
 
@@ -4499,6 +4743,15 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `white_chocolate_roll` | food (tag) | sink/burn | float/burn |
 | `white_chocolate_waffle` | food (tag) | sink/burn | float/burn |
 
+### creativeequipment (4)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `arrow_fletching` | wood (name) | sink/burn | float/burn |
+| `copper_shield` | metal (gear_name) | sink/burn | sink/fireproof |
+| `diamond_shield` | refractory (gear_name) | sink/burn | sink/lavaproof |
+| `gold_shield` | metal (gear_name) | sink/burn | sink/fireproof |
+
 ### projectred_fabrication (12)
 
 | Item | Family (rung) | Now | Family says |
@@ -4516,6 +4769,25 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `rough_silicon_wafer` | machine (mod_default) | sink/burn | sink/fireproof |
 | `valid_die` | machine (mod_default) | sink/burn | sink/fireproof |
 
+### tempad (14)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `card_wallet` | machine (name) | sink/burn | sink/fireproof |
+| `chronomark` | refractory (material) | sink/burn | sink/lavaproof |
+| `chronon_battery` | machine (name) | sink/burn | sink/fireproof |
+| `chronon_cell` | machine (name) | sink/burn | sink/fireproof |
+| `chronon_generator` | machine (name) | sink/burn | sink/fireproof |
+| `knowledge_repository_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `location_card` | machine (name) | sink/burn | sink/fireproof |
+| `metronome` | refractory (material) | sink/burn | sink/lavaproof |
+| `new_location_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `player_teleport_upgrade` | machine (name) | sink/burn | sink/fireproof |
+| `time_steel` | metal (name) | sink/burn | sink/fireproof |
+| `timedoor_marker` | refractory (material) | sink/burn | sink/lavaproof |
+| `timedoor_projector` | refractory (material) | sink/burn | sink/lavaproof |
+| `workstation` | refractory (material) | sink/burn | sink/lavaproof |
+
 ### creategoggles (18)
 
 | Item | Family (rung) | Now | Family says |
@@ -4524,18 +4796,18 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `chainmail_backtank_placeable` | metal (material) | sink/burn | sink/fireproof |
 | `diamond_backtank` | refractory (gear) | sink/burn | sink/lavaproof |
 | `diamond_backtank_placeable` | metal (material) | sink/burn | sink/fireproof |
-| `goggle_chainmail_helmet` | metal (gear) | sink/burn | sink/fireproof |
-| `goggle_diamond_helmet` | refractory (gear) | sink/burn | sink/lavaproof |
+| `goggle_chainmail_helmet` | metal (gear_name) | sink/burn | sink/fireproof |
+| `goggle_diamond_helmet` | refractory (gear_name) | sink/burn | sink/lavaproof |
 | `goggle_diving_helmet` | metal (gear) | sink/burn | sink/fireproof |
-| `goggle_golden_helmet` | metal (gear) | sink/burn | sink/fireproof |
-| `goggle_iron_helmet` | metal (gear) | sink/burn | sink/fireproof |
-| `goggle_leather_helmet` | wood (gear) | sink/burn | float/burn |
-| `goggle_turtle_helmet` | wood (gear) | sink/burn | float/burn |
+| `goggle_golden_helmet` | metal (gear_name) | sink/burn | sink/fireproof |
+| `goggle_iron_helmet` | metal (gear_name) | sink/burn | sink/fireproof |
+| `goggle_leather_helmet` | organic (gear_name) | sink/burn | float/burn |
+| `goggle_turtle_helmet` | organic (gear_name) | sink/burn | float/burn |
 | `golden_backtank` | metal (gear) | sink/burn | sink/fireproof |
 | `golden_backtank_placeable` | metal (material) | sink/burn | sink/fireproof |
 | `iron_backtank` | metal (gear) | sink/burn | sink/fireproof |
 | `iron_backtank_placeable` | metal (material) | sink/burn | sink/fireproof |
-| `leather_backtank` | wood (gear) | sink/burn | float/burn |
+| `leather_backtank` | organic (gear) | sink/burn | float/burn |
 | `leather_backtank_placeable` | metal (material) | sink/burn | sink/fireproof |
 | `modifier_remover` | metal (mod_default) | sink/burn | sink/fireproof |
 
@@ -4580,8 +4852,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `cod_deluxe` | food (tag) | sink/burn | float/burn |
 | `cooked_mutton_rack` | food (tag) | sink/burn | float/burn |
 | `hearty_lunch` | food (tag) | sink/burn | float/burn |
-| `mushroom_pot_pie` | food (tag) | sink/burn | float/burn |
-| `mushroom_pot_pie_block` | food (material) | sink/burn | float/burn |
+| `mushroom_pot_pie` | food (ruling) | sink/burn | float/burn |
+| `mushroom_pot_pie_block` | food (ruling) | sink/burn | float/burn |
 | `omurice` | food (tag) | sink/burn | float/burn |
 | `omurice_block` | food (material) | sink/burn | float/burn |
 | `pasta_with_mushroom_sauce` | food (tag) | sink/burn | float/burn |
@@ -4706,53 +4978,32 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `white_well` | masonry (material+name) | sink/burn | sink/fireproof |
 | `yellow_well` | masonry (material+name) | sink/burn | sink/fireproof |
 
-### tintedcampfires (16)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `black_campfire` | wood (material) | sink/burn | float/burn |
-| `blue_campfire` | wood (material) | sink/burn | float/burn |
-| `brown_campfire` | wood (material) | sink/burn | float/burn |
-| `cyan_campfire` | wood (material) | sink/burn | float/burn |
-| `gray_campfire` | wood (material) | sink/burn | float/burn |
-| `green_campfire` | wood (material) | sink/burn | float/burn |
-| `light_blue_campfire` | wood (material) | sink/burn | float/burn |
-| `light_gray_campfire` | wood (material) | sink/burn | float/burn |
-| `lime_campfire` | wood (material) | sink/burn | float/burn |
-| `magenta_campfire` | wood (material) | sink/burn | float/burn |
-| `orange_campfire` | wood (material) | sink/burn | float/burn |
-| `pink_campfire` | wood (material) | sink/burn | float/burn |
-| `purple_campfire` | wood (material) | sink/burn | float/burn |
-| `red_campfire` | wood (material) | sink/burn | float/burn |
-| `white_campfire` | wood (material) | sink/burn | float/burn |
-| `yellow_campfire` | wood (material) | sink/burn | float/burn |
-
 ### boatload (15)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
-| `acacia_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `birch_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `crimson_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `crimson_chest_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `crimson_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `dark_oak_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `jungle_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `large_crimson_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `large_warped_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `mangrove_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `oak_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `spruce_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `warped_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `warped_chest_boat` | nether_wood (tag) | float/burn | float/fireproof |
-| `warped_furnace_boat` | nether_wood (tag) | float/burn | float/fireproof |
+| `acacia_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `birch_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_chest_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `crimson_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `dark_oak_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `jungle_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `large_crimson_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `large_warped_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `mangrove_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `oak_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `spruce_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `warped_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `warped_chest_boat` | nether_wood (tag) | float/burn | float/lavaproof |
+| `warped_furnace_boat` | nether_wood (tag) | float/burn | float/lavaproof |
 
 ### witchmobility (10)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `amethyst_witch_hat` | refractory (gear) | sink/burn | sink/lavaproof |
-| `apprentice_witch_hat` | wood (gear) | sink/burn | float/burn |
+| `apprentice_witch_hat` | organic (gear) | sink/burn | float/burn |
 | `blue_bottle_broom_item` | container (name) | sink/burn | sink/fireproof |
 | `diamond_witch_hat` | refractory (gear) | sink/burn | sink/lavaproof |
 | `gold_witch_hat` | metal (gear) | sink/burn | sink/fireproof |
@@ -4833,6 +5084,23 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `medium_fluid_filter_module` | machine (name) | sink/burn | sink/fireproof |
 | `medium_fluid_retrieval_module` | machine (name) | sink/burn | sink/fireproof |
 
+### salt (12)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `deepslate_rock_salt_ore` | refractory (material) | sink/burn | sink/lavaproof |
+| `large_salt_bud` | earth (name) | sink/burn | sink/fireproof |
+| `medium_salt_bud` | earth (name) | sink/burn | sink/fireproof |
+| `raw_rock_salt` | refractory (name) | sink/burn | sink/lavaproof |
+| `raw_rock_salt_block` | refractory (material) | sink/burn | sink/lavaproof |
+| `rock_salt_ore` | refractory (material) | sink/burn | sink/lavaproof |
+| `salt` | earth (name) | sink/burn | sink/fireproof |
+| `salt_block` | earth (material) | sink/burn | sink/fireproof |
+| `salt_cluster` | earth (name) | sink/burn | sink/fireproof |
+| `salt_lamp` | refractory (material) | sink/burn | sink/lavaproof |
+| `salt_melt` | earth (name) | sink/burn | sink/fireproof |
+| `small_salt_bud` | earth (name) | sink/burn | sink/fireproof |
+
 ### cozys-improved-cats (7)
 
 | Item | Family (rung) | Now | Family says |
@@ -4857,22 +5125,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `screen_5` | metal (material) | sink/burn | sink/fireproof |
 | `screen_7` | metal (material) | sink/burn | sink/fireproof |
 
-### salt (11)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `deepslate_rock_salt_ore` | refractory (material) | sink/burn | sink/lavaproof |
-| `large_salt_bud` | earth (name) | sink/burn | sink/fireproof |
-| `medium_salt_bud` | earth (name) | sink/burn | sink/fireproof |
-| `raw_rock_salt` | refractory (name) | sink/burn | sink/lavaproof |
-| `raw_rock_salt_block` | refractory (material) | sink/burn | sink/lavaproof |
-| `rock_salt_ore` | refractory (material) | sink/burn | sink/lavaproof |
-| `salt` | earth (name) | sink/burn | sink/fireproof |
-| `salt_block` | earth (material) | sink/burn | sink/fireproof |
-| `salt_cluster` | earth (name) | sink/burn | sink/fireproof |
-| `salt_lamp` | refractory (material) | sink/burn | sink/lavaproof |
-| `small_salt_bud` | earth (name) | sink/burn | sink/fireproof |
-
 ### sculktransporting (4)
 
 | Item | Family (rung) | Now | Family says |
@@ -4882,13 +5134,14 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `sculk_receiver` | organic (material) | sink/burn | float/burn |
 | `sculk_transmitter` | organic (material) | sink/burn | float/burn |
 
-### etched (6)
+### etched (7)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `album_jukebox` | wood (material) | sink/burn | float/burn |
 | `complex_music_label` | fibre (name) | sink/burn | skim/burn |
 | `etching_table` | wood (material) | sink/burn | float/burn |
+| `jukebox_minecart` | metal (name) | sink/burn | sink/fireproof |
 | `music_label` | fibre (name) | sink/burn | skim/burn |
 | `portal_radio` | wood (material) | sink/burn | float/burn |
 | `radio` | wood (material) | sink/burn | float/burn |
@@ -4938,6 +5191,19 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `raw_duck` | food (tag) | sink/burn | float/burn |
 | `raw_goose` | food (tag) | sink/burn | float/burn |
 
+### biomesoplenty (8)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `blood_bucket` | container (name) | sink/burn | sink/fireproof |
+| `eyebulb` | organic (material) | sink/burn | float/burn |
+| `flesh` | organic (material) | sink/burn | float/burn |
+| `flesh_tendons` | organic (material) | sink/burn | float/burn |
+| `flesh_tendons_strand` | organic (material) | sink/burn | float/burn |
+| `hair` | fibre (material) | sink/burn | skim/burn |
+| `porous_flesh` | organic (material) | sink/burn | float/burn |
+| `pus_bubble` | organic (material) | sink/burn | float/burn |
+
 ### exposure_polaroid (5)
 
 | Item | Family (rung) | Now | Family says |
@@ -4957,8 +5223,8 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `flemish_bond` | refractory (material) | sink/burn | sink/lavaproof |
 | `header_bond` | refractory (material) | sink/burn | sink/lavaproof |
 | `mud_bond` | refractory (material) | sink/burn | sink/lavaproof |
-| `prismarine_bond` | crystal (material+name) | sink/burn | sink/fireproof |
-| `quartz_bond` | refractory (material) | sink/burn | sink/lavaproof |
+| `prismarine_bond` | crystal (override) | sink/burn | sink/fireproof |
+| `quartz_bond` | refractory (override) | sink/burn | sink/lavaproof |
 | `stack_bond` | refractory (material) | sink/burn | sink/lavaproof |
 | `stone_bond` | refractory (material) | sink/burn | sink/lavaproof |
 
@@ -5056,24 +5322,13 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `molten_echo_bucket` | container (name) | sink/burn | sink/fireproof |
 | `sculk_flour` | light_powder (name) | sink/burn | skim/burn |
 
-### hearthandharvest (6)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `diamond_watering_can` | container (name) | sink/burn | sink/fireproof |
-| `golden_watering_can` | container (name) | sink/burn | sink/fireproof |
-| `iron_watering_can` | container (name) | sink/burn | sink/fireproof |
-| `raspberry` | produce (tag) | sink/burn | float/burn |
-| `raspberry_pips` | foliage (tag) | sink/burn | skim/burn |
-| `watering_can` | container (name) | sink/burn | sink/fireproof |
-
 ### incubation (6)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `chicken_egg_crate` | wood (material) | sink/burn | float/burn |
 | `fried_egg` | food (edible) | sink/burn | float/burn |
-| `hay_nest` | earth (material) | sink/burn | sink/fireproof |
+| `hay_nest` | packed (ruling) | sink/burn | float/burn |
 | `scrambled_eggs` | food (tag) | sink/burn | float/burn |
 | `turtle_egg_crate` | wood (material) | sink/burn | float/burn |
 | `twig_nest` | earth (material) | sink/burn | sink/fireproof |
@@ -5135,6 +5390,16 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `iron_wand` | metal (name) | sink/burn | sink/fireproof |
 | `stone_wand` | refractory (name) | sink/burn | sink/lavaproof |
 
+### creategbd (5)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `advanced_laser_turret` | machine (material+name) | sink/burn | sink/fireproof |
+| `basic_laser_turret` | machine (material+name) | sink/burn | sink/fireproof |
+| `beam_reactor_helmet` | wood (name) | sink/lavaproof | float/burn |
+| `elder_guardian_beam_capacitor` | machine (name) | sink/burn | sink/fireproof |
+| `guardian_beam_capacitor` | machine (name) | sink/burn | sink/fireproof |
+
 ### incubation_additions (4)
 
 | Item | Family (rung) | Now | Family says |
@@ -5152,30 +5417,11 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `kitchen_network_card` | machine (name) | sink/burn | sink/fireproof |
 | `kitchen_station` | food (mod_default) | sink/burn | float/burn |
 
-### solapplepie (5)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `food_book` | fibre (name) | sink/burn | skim/burn |
-| `golden_lunchbox` | food (edible) | sink/burn | float/burn |
-| `lunchbag` | food (edible) | sink/burn | float/burn |
-| `lunchbox` | food (edible) | sink/burn | float/burn |
-| `netherite_lunchbox` | refractory (fire_resistant) | sink/burn | sink/lavaproof |
-
 ### citadel (1)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `citadel_book` | fibre (name) | sink/burn | skim/burn |
-
-### creategbd (4)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `advanced_laser_turret` | machine (material+name) | sink/burn | sink/fireproof |
-| `basic_laser_turret` | machine (material+name) | sink/burn | sink/fireproof |
-| `elder_guardian_beam_capacitor` | machine (name) | sink/burn | sink/fireproof |
-| `guardian_beam_capacitor` | machine (name) | sink/burn | sink/fireproof |
 
 ### enderstorage (3)
 
@@ -5194,6 +5440,15 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `large_shaftless_cogwheel` | wood (material) | sink/burn | float/burn |
 | `shaftless_cogwheel` | wood (material) | sink/burn | float/burn |
 
+### solapplepie (4)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `food_book` | fibre (name) | sink/burn | skim/burn |
+| `golden_lunchbox` | food (edible) | sink/burn | float/burn |
+| `lunchbag` | food (edible) | sink/burn | float/burn |
+| `lunchbox` | food (edible) | sink/burn | float/burn |
+
 ### trashcans (4)
 
 | Item | Family (rung) | Now | Family says |
@@ -5202,13 +5457,6 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `item_trash_can` | metal (material) | sink/burn | sink/fireproof |
 | `liquid_trash_can` | metal (material) | sink/burn | sink/fireproof |
 | `ultimate_trash_can` | metal (material) | sink/burn | sink/fireproof |
-
-### create_netherless (2)
-
-| Item | Family (rung) | Now | Family says |
-|---|---|---|---|
-| `coal_rod` | wood (fuel) | sink/burn | float/burn |
-| `incomplete_blaze_rod` | refractory (name) | sink/burn | sink/lavaproof |
 
 ### creative_labels (2)
 
@@ -5224,6 +5472,21 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `lingering_potion_bucket` | container (name) | sink/burn | sink/fireproof |
 | `potion_bucket` | container (name) | sink/burn | sink/fireproof |
 | `splash_potion_bucket` | container (name) | sink/burn | sink/fireproof |
+
+### creativelabels (2)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `label` | fibre (name) | sink/burn | skim/burn |
+| `sticky_note` | fibre (name) | sink/burn | skim/burn |
+
+### exposure_extras (3)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `iron_camera_bag` | metal (name) | sink/burn | sink/fireproof |
+| `leather_camera_bag` | machine (name) | sink/burn | sink/fireproof |
+| `netherite_camera_bag` | refractory (name) | sink/burn | sink/lavaproof |
 
 ### littlecontraptions (2)
 
@@ -5291,10 +5554,17 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `diamond_shard` | refractory (name) | sink/burn | sink/lavaproof |
 | `feather_fluff` | organic (name) | sink/burn | float/burn |
 
-### customizableelytra (1)
+### create_netherless (1)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
+| `incomplete_blaze_rod` | refractory (name) | sink/burn | sink/lavaproof |
+
+### customizableelytra (2)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `customizable_elytra` | organic (name) | sink/burn | float/burn |
 | `elytra_wing` | organic (name) | sink/burn | float/burn |
 
 ### endercrop (2)
@@ -5304,7 +5574,7 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | `ender_seeds` | foliage (tag) | sink/burn | skim/burn |
 | `tilled_end_stone` | refractory (material) | sink/burn | sink/lavaproof |
 
-### exposure_extras (2)
+### exposureextras (2)
 
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
@@ -5324,6 +5594,19 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 |---|---|---|---|
 | `basic_capture_cell` | machine (name) | sink/burn | sink/fireproof |
 | `master_capture_cell` | machine (name) | sink/burn | sink/fireproof |
+
+### portalgun (2)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `portal_gun` | metal (name) | sink/lavaproof | sink/fireproof |
+| `portalgun_claw` | organic (name) | sink/lavaproof | float/burn |
+
+### solraspberrypie (1)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `liquid_diet_log` | wood (name) | sink/burn | float/burn |
 
 ### sticky_it (1)
 
@@ -5380,6 +5663,18 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 |---|---|---|---|
 | `tweaked_linked_controller` | machine (name) | sink/burn | sink/fireproof |
 
+### creativecompat (1)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `weathered_cardboard_box` | wood (material) | sink/burn | float/burn |
+
+### creativemagic (1)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `flint_and_terrasteel` | metal (name) | sink/burn | sink/fireproof |
+
 ### dragonloot (1)
 
 | Item | Family (rung) | Now | Family says |
@@ -5403,6 +5698,12 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `heartstone` | refractory (name) | sink/burn | sink/lavaproof |
+
+### immersive_portals (1)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `portal_helper` | metal (material) | sink/burn | sink/fireproof |
 
 ### jrftl (1)
 
@@ -5445,6 +5746,12 @@ the family is wrong for the item or the tag is. At most 25 per mod.
 | Item | Family (rung) | Now | Family says |
 |---|---|---|---|
 | `lootcrate_block` | wood (material) | sink/burn | float/burn |
+
+### solcarrot (1)
+
+| Item | Family (rung) | Now | Family says |
+|---|---|---|---|
+| `food_book` | fibre (name) | sink/burn | skim/burn |
 
 ### takesapillage (1)
 
