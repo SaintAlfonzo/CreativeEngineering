@@ -291,8 +291,12 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   blocks of the camera that moved sideways in or on one puffs a dust particle at its feet at 1 in 2 ticks, in the
   block's tint or map color; the local player landing on one bursts `min(12, fall x 1.4)`.
 - Exempt (`passthrough_exempt/layers`): rabbits, cats (G7.14); the tag is per tier, so snow layers too. Foxes and bees
-  are exempt on leaf layers only (`passthrough_exempt/leaf_layers`, plan_misc_1117.md 1, 2026-11-18): snow slows them,
-  and a deep leaf pile (`pathBlockLayers`) is `BLOCKED` in their path search (foxes take `DAMAGE_OTHER` at no cost).
+  are exempt on leaf layers only (`passthrough_exempt/leaf_layers`, plan_misc_1117.md 1, 2026-11-18): in snow the
+  light-mob rule decides (G11: a fox stands on top and is not slowed; a bee inside the layers is slowed; owner
+  2026-11-25, SQ-PTH-29), and a deep leaf pile (`pathBlockLayers`) is `DAMAGE_CACTUS` in their path search (foxes take
+  `DAMAGE_OTHER` at no cost). It was `BLOCKED` until 2026-11-25: vanilla makes the open cell above a `BLOCKED` cell
+  walkable, so a fox planned a step up onto the pile and walked through it (no collision; creative-compat-publish #19,
+  SQ-PTH-30); `DAMAGE_CACTUS` carries to the cell above, malus -1.
 - Falling layers (G7.5; `surface/FallingLayers`, `FallingLayerEntity`, tag `creativecompat:falling_layers`): snow,
   salt layers, Twigs bamboo leaves, the full bamboo leaves, IE sawdust and Supplementaries fodder fall when the block
   below is free and stack where they land (capped at the most layers, the rest on top, snow at 8 -> snow block, items

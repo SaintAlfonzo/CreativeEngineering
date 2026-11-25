@@ -562,9 +562,9 @@ look sections_idle: top row 4 armor, 4 cosmetic (gold helmet leftmost, gold boot
 @group client
 @commands Survival client, same kit as CQ-CMP-18 plus a stack of extra items that go to Additional Items (a modded drop, for example a backpack's spill); die; (a) open the corpse, shift-click one curio, drag another into the inventory, press a hotbar number over a cosmetic piece; (b) die again with the full kit, put a different ring in the first ring slot, then open the corpse and press Transfer Items
 @pass (a) each taken item stacks with a fresh copy of the same item (no hidden tags; F3+H shows no `creativecompat:curio` or `Cosmetic*` keys); the section slot empties; Additional Items holds only the extra items; (b) every curio returns to the exact slot type and index it was in at death, the ring whose slot is taken goes to another ring slot or the inventory; cosmetic pieces go back to their cosmetic slots; nothing keeps a section tag
-@fails a curio in the wrong index of its type: the transfer packet hook ran after Corpse Curios Compat; a taken item does not stack: the tag strip missed a path (shift-click is `m_7648_`, hotbar swap is `onTake`); section items also on the Additional Items pages: the filtered view did not replace the container's inventory
+@fails a curio in the wrong index of its type: the transfer packet hook ran after Corpse Curios Compat; a taken item does not stack: the tag strip missed a path (shift-click is `m_7648_`, hotbar swap is `onTake`); section items also on the Additional Items pages: the filtered view did not replace the container's inventory; run alone in a fresh client the corpse opens Additional Items or logs `IndexOutOfBoundsException: Index 90` on content packets: the main-screen redirect in `CorpseGuisMixin` or the `setSlots` trim in `CorpseAdditionalContainerMixin` is missing (creative-compat-publish #20)
 @sources feature_writeup/plan_corpses.md
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 # drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
 # PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
 # Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
@@ -598,6 +598,8 @@ sleep 3
 > tp PerfEval 0.5 101 0.5 0 35
 sleep 2
 do {"target": true, "expect": "entity corpse:corpse"}
+# r1125w1 (2026-11-25): the main inventory is empty here, so the Corpse mod opened Additional Items directly and
+# the second setSlots desynced it (#20); since the fix the sectioned main screen opens. Runs alone in a fresh client.
 do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
 do {"wait": 20}
 do {"slot_item": 84, "expect": "dodge_ring"}

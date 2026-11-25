@@ -216,6 +216,11 @@ to -20). Choices the design left open (confirmed, owner, 2026-11-22, ruling 38):
 - **Labels are tooltips.** A section stack's tooltip says "Curio: <slot type>" (with "(cosmetic)" for Curios' cosmetic
   slots) or "Cosmetic armor"; the screen has no room for text labels above the top row. To revisit at the look-check.
 - **Curio cosmetic slots** (Curios' own cosmetic column) are recorded and returned too (`Cosmetic` in the tag).
+- **Fix 2026-11-25 (creative-compat-publish #20, CQ-CMP-19).** With an empty main inventory the Corpse mod opens
+  Additional Items directly, which hid the sections; `CorpseGuisMixin` now opens the sectioned main screen while a
+  section holds a stack (`CorpseSections.sectionsHold`). The Additional container's second `setSlots(0)` (the filtered
+  view) grew the menu's `lastSlots` and `remoteSlots` to 180, so the open sync sent 180 stacks to the client's 90-slot
+  menu (IndexOutOfBounds 90 on every content packet); `setSlots` HEAD now empties both lists first (page switches too).
 
 Build notes, round 2 (2026-11-19, ruling 35; [creative_compat.md](creative_compat.md) Corpse models; CQ-CMP-21, -22,
 look-checked together with CQ-CMP-18). Choices the design left open (confirmed, owner, 2026-11-22, ruling 38):
@@ -386,3 +391,4 @@ CQ-CMP-20; round 2 CQ-CMP-21, CQ-CMP-22 (look-checks done with CQ-CMP-18).
 - 2026-11-22: rulings 36 to 38 (owner rulings M2): height curve retuned to 80% below y16; Customizable Elytra on
   skeleton corpses built (Compat); every other build choice confirmed.
 - 2026-11-18: built `corpses #8`, `#9`; `#4` round 1 designed (3.6), rulings 31 to 34.
+- 2026-11-25: corpse screen fix (creative-compat-publish #20): sectioned screen opens with an empty main inventory; Additional Items sync desync fixed; build note under 3.6.

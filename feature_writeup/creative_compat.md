@@ -107,7 +107,9 @@ plus the features moved from Creative Common and Raspberry Pie in wave 2 (sectio
   (so a corpse holding only them is not empty) but show in their own slots: 4 cosmetic slots on the top row between the
   real armor and the offhand (helmet leftmost; the offhand slot moves from x 98 to x 152), and the curios in a
   Curios-style panel left of the window, one column of 12, a second column further left past 12, in slot type, cosmetic,
-  index order. The Additional Items pages, their button and their auto-open leave those stacks out. Section slots are
+  index order. The Additional Items pages, their button and their auto-open leave those stacks out. A corpse with an
+  empty main inventory opens on this sectioned screen, not on Additional Items, while a section holds a stack (since
+  2026-11-25, creative-compat-publish #20). Section slots are
   take-only; taking (click, shift-click, hotbar swap, Transfer Items) strips the tags so the item stacks normally.
   Curio origin: a `LivingDropsEvent` listener at HIGHEST snapshots the dead player's curio and cosmetic curio stacks,
   one at LOW tags the matching drops `creativecompat:curio` {`Slot`, `Index`, `Cosmetic`} (Curios drops them at NORMAL,

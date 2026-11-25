@@ -13,7 +13,9 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.ModList;
 import com.mojang.datafixers.util.Pair;
 
@@ -139,6 +141,51 @@ public final class CorpseSections {
 			if (!s.isEmpty() && !l.holds(s)) return false;
 		}
 		return true;
+	}
+
+	/**
+	 * True when a section shows at least one stack of this corpse (server). The Corpse mod opens Additional Items
+	 * directly when the main inventory is empty; with section stacks the sectioned main screen opens instead
+	 * ({@code CorpseGuisMixin}, creative-compat-publish #20).
+	 */
+	public static boolean sectionsHold(CorpseEntity corpse) {
+		int cap = capOf(corpse);
+		if (cap < 0) return false;
+		List<ItemStack> list = corpse.getDeath().getAdditionalItems();
+		Layout l = layout(list, Math.min(cap, MAX_CAP));
+		for (ItemStack s : list) {
+			if (!s.isEmpty() && l.holds(s)) return true;
+		}
+		return false;
+	}
+
+	/** {@code AbstractContainerMenu.lastSlots} ({@code f_38841_}) and {@code remoteSlots} ({@code f_150394_}). */
+	private static final java.lang.reflect.Field[] SYNCED = syncedFields();
+
+	private static java.lang.reflect.Field[] syncedFields() {
+		try {
+			return new java.lang.reflect.Field[]{
+					ObfuscationReflectionHelper.findField(AbstractContainerMenu.class, "f_38841_"),
+					ObfuscationReflectionHelper.findField(AbstractContainerMenu.class, "f_150394_")};
+		} catch (Throwable t) {
+			com.SaintAlfonzo.creativecompat.compat.HookFaults.once("CorpseSections.syncedFields", t);
+			return new java.lang.reflect.Field[0];
+		}
+	}
+
+	/**
+	 * Empties a menu's last-seen and remote stack lists before the Corpse mod rebuilds its slots
+	 * ({@code CorpseAdditionalContainer.setSlots}): the mod clears only {@code slots}, so the two lists kept growing and
+	 * a full sync sent more stacks than the client menu has (creative-compat-publish #20). {@code addSlot} refills them.
+	 */
+	public static void trimSynced(AbstractContainerMenu menu) {
+		for (java.lang.reflect.Field f : SYNCED) {
+			try {
+				((List<?>) f.get(menu)).clear();
+			} catch (Throwable t) {
+				com.SaintAlfonzo.creativecompat.compat.HookFaults.once("CorpseSections.trimSynced", t);
+			}
+		}
 	}
 
 	// ---- synced section tag (CorpseState#creativecompat$sections) ----

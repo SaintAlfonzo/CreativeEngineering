@@ -29,6 +29,20 @@ final class PassFixesTest {
 		breakStall();
 		regionCounts();
 		countCache();
+		leafExemptPathType();
+	}
+
+	/**
+	 * creative-compat-publish #19: a deep leaf pile is DAMAGE_CACTUS for foxes and bees, not BLOCKED (vanilla's
+	 * getBlockPathTypeStatic turns the open cell above a BLOCKED cell WALKABLE; DAMAGE_CACTUS carries up, malus -1).
+	 */
+	static void leafExemptPathType() {
+		var exempt = LeafThorns.pathType(true);
+		var other = LeafThorns.pathType(false);
+		PassThroughTest.check("leaf path: exempt mobs get DAMAGE_CACTUS", exempt == net.minecraft.world.level.pathfinder.BlockPathTypes.DAMAGE_CACTUS);
+		PassThroughTest.check("leaf path: exempt type is not BLOCKED", exempt != net.minecraft.world.level.pathfinder.BlockPathTypes.BLOCKED);
+		PassThroughTest.check("leaf path: exempt type has malus -1", exempt.getMalus() < 0.0F);
+		PassThroughTest.check("leaf path: other mobs keep DAMAGE_OTHER", other == net.minecraft.world.level.pathfinder.BlockPathTypes.DAMAGE_OTHER);
 	}
 
 	static boolean resets(BlockState s) {

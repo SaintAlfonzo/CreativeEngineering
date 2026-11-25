@@ -429,6 +429,7 @@
 - **Changed:** A corpse shows only the armor and held items still inside it.
 - **Changed:** Cosmetic armor goes into the corpse on death and back into the cosmetic slots when the corpse's items are transferred [kept on the player].
 - **Changed:** The corpse screen shows cosmetic armor in 4 slots between the armor and the offhand and curios in a panel left of the window, each item's tooltip naming its slot [on the Additional Items pages]. The offhand slot moved to the end of the top row.
+- **Changed:** A corpse with an empty main inventory opens on the corpse screen while it holds curios or cosmetic armor [on the Additional Items pages].
 - **Changed:** Transferring a corpse's items puts each curio back into the slot it was worn in [any free slot of its type].
 - **Changed:** Skeleton corpses sink in water and lava [floated up]. Corpses still showing the player model float.
 - **Fixed:** A corpse showed the cosmetic armor its player wears now instead of the cosmetic armor inside it.
@@ -479,7 +480,7 @@
 - **Changed:** Falling through snow layers is as slow as through Powder Snow; through leaf piles and Bamboo Leaves, twice as fast as that.
 - **Changed:** Mobs do not walk through leaf piles of 6 or more layers.
 - **Changed:** Rabbits and cats are not slowed by snow layers, leaf piles or Bamboo Leaves, and are not pricked.
-- **Changed:** Foxes and bees are not slowed by leaf piles or Bamboo Leaves but are slowed by snow layers, and never route through leaf piles of 6 or more layers.
+- **Changed:** Foxes and bees are not slowed by leaf piles or Bamboo Leaves and never route through leaf piles of 6 or more layers.
 - **Changed:** Villagers, horses and every mob are slowed by these blocks like players; flying, gliding and swimming are not.
 - **Changed:** Dropped items and experience orbs stop inside any cobweb and hang there until the web is broken [they sank slowly through].
 - **Changed:** Projectiles slow down in cobwebs [no effect]. Guns, turrets and siege munitions are not affected.

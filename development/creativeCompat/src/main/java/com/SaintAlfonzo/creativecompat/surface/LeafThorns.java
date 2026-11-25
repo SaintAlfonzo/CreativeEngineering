@@ -79,7 +79,7 @@ public final class LeafThorns {
 	/**
 	 * Start of a path search ({@code mixin/SnowPathMixin}): foxes and bees walk and fly through leaf piles but must not
 	 * plan through them (plan_misc_1117.md 1). Foxes take {@code DAMAGE_OTHER} at no cost (sweet berry bushes), so for
-	 * them a deep pile is {@code BLOCKED} ({@link #pathType}).
+	 * them a deep pile is {@code DAMAGE_CACTUS} ({@link #pathType}).
 	 */
 	public static void beginPath(@Nullable Mob mob) {
 		LEAF_EXEMPT_PATH.get()[0] = mob != null && mob.getType().is(PassThrough.exemptLeafLayersTag());
@@ -89,9 +89,20 @@ public final class LeafThorns {
 		LEAF_EXEMPT_PATH.get()[0] = false;
 	}
 
-	/** Path type of a deep leaf pile for the mob planning now: {@code BLOCKED} for the leaf-layer exempt mobs. */
+	/**
+	 * Path type of a deep leaf pile for the mob planning now: {@code DAMAGE_CACTUS} (malus -1, foxes and bees keep it)
+	 * for the leaf-layer exempt mobs, else {@code DAMAGE_OTHER}. Not {@code BLOCKED}: vanilla's
+	 * {@code getBlockPathTypeStatic} makes the open cell above a {@code BLOCKED} cell {@code WALKABLE}, so a fox planned
+	 * a step up onto the pile and walked through it (no collision; creative-compat-publish #19). {@code DAMAGE_CACTUS},
+	 * like {@code DAMAGE_OTHER}, carries to the cell above.
+	 */
 	public static BlockPathTypes pathType() {
-		return LEAF_EXEMPT_PATH.get()[0] ? BlockPathTypes.BLOCKED : BlockPathTypes.DAMAGE_OTHER;
+		return pathType(LEAF_EXEMPT_PATH.get()[0]);
+	}
+
+	/** {@link #pathType()} for a given exemption (headless check). */
+	public static BlockPathTypes pathType(boolean leafExempt) {
+		return leafExempt ? BlockPathTypes.DAMAGE_CACTUS : BlockPathTypes.DAMAGE_OTHER;
 	}
 
 	/** A leaf layer block of {@code pathBlockLayers} or more (server values; system and switch on). */
