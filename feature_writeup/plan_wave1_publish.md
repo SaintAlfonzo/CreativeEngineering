@@ -98,5 +98,5 @@ path, push to `agent_staging`.
   jams kept foods, guard in food_catalog.py), W-P1 (tip filter: 106 newer-content plus 30 wrong-in-1.19.2 tips in
   Common's jar, owner 2026-11-24; composter palette credit in Creative Delight's NOTICE since the composters moved),
   W-P5 (clean clone builds every in-tree mod: development/build_jars.csv, tools/build_jars.py), W-P6 (Common
-  1.3.0+ddd126587, Compat 1.0.0+8f883cd64, Raspberry Pie 1.0.0+8f883cd64, clean, checks on, installed). Next: W-P7, the
+  1.3.0+ddd126587, Compat 1.0.0+edd3b66b9 (rebuilt for the Snow! Real Magic boot fix, `creative-compat-publish #11`), Raspberry Pie 1.0.0+8f883cd64, clean, checks on, installed). Next: W-P7, the
   owner starts the scratch run; then W-P8.
