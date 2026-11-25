@@ -120,5 +120,19 @@
   "jei.farmingforblockheads.shipping": "Shipping",
   "jei.farmingforblockheads.shipping.value": "%s points each (load: %s)",
   "creativedelight.wthit.shipping_bin": "Stored",
-  "creativedelight.wthit.shipping_bin.value": "%s / %s points"
+  "creativedelight.wthit.shipping_bin.value": "%s / %s points",
+  "block.farmingforblockheads.rabbit_trap": "Rabbit Trap",
+  "tooltip.farmingforblockheads.rabbit_trap.0": "Catches small animals: rabbits, chickens, frogs, cats, ducks, crabs and more.",
+  "tooltip.farmingforblockheads.rabbit_trap.1": "Lures animals within 8 blocks while you are near; catches local animals while left alone.",
+  "tooltip.farmingforblockheads.rabbit_trap.2": "Right-click a sprung trap to release the catch. 8 uses.",
+  "tooltip.farmingforblockheads.rabbit_trap.uses": "Uses left: %s / %s",
+  "tooltip.farmingforblockheads.rabbit_trap.shift": "Hold Shift for the animals it catches",
+  "tooltip.farmingforblockheads.rabbit_trap.list": "Catches:",
+  "item.farmingforblockheads.fox_note": "Mysterious Note",
+  "item.farmingforblockheads.fox_note.lore.1": "I stole your carrot.",
+  "item.farmingforblockheads.fox_note.lore.2": "- The Fox",
+  "jei.farmingforblockheads.rabbit_trap.0": "Place it anywhere. While a player is within 64 blocks, it lures the nearest catchable animal within 8 blocks and snaps shut when the animal steps in.",
+  "jei.farmingforblockheads.rabbit_trap.1": "Left alone, it slowly catches an animal that lives in its biome: the longer it is left, the higher the chance (95 % after a full day alone). Only one trap within 8 blocks of another holds such a catch at a time. Tamed animals are never caught.",
+  "jei.farmingforblockheads.rabbit_trap.2": "A sprung trap holds its catch. Right-click it to release the animal; the trap pops off as an item and loses one of its 8 uses. Breaking it also releases the catch.",
+  "jei.farmingforblockheads.rabbit_trap.3": "Very rarely a fox gets there first and leaves a Mysterious Note."
 }

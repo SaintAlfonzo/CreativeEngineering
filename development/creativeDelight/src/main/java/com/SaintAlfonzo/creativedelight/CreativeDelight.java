@@ -99,6 +99,7 @@ public class CreativeDelight {
 		com.SaintAlfonzo.creativedelight.farm.composter.WoodComposters.register(FMLJavaModLoadingContext.get().getModEventBus());
 		// Shipping Bin port (farm/shippingbin/, farming_for_blockheads.md; needs blockheads_upstream/)
 		com.SaintAlfonzo.creativedelight.farm.shippingbin.ShippingBin.register(FMLJavaModLoadingContext.get().getModEventBus());
+		com.SaintAlfonzo.creativedelight.farm.rabbittrap.RabbitTrap.register(FMLJavaModLoadingContext.get().getModEventBus());
 		registerKitchen(FMLJavaModLoadingContext.get().getModEventBus());
 		registerCompartments(FMLJavaModLoadingContext.get().getModEventBus());
 

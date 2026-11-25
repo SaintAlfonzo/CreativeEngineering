@@ -622,6 +622,7 @@ i.whale_oil_lamp = 'creativedelight:whale_oil_lamp';   // dairy-fats-and-batter 
 i.shipping_bin = 'farmingforblockheads:shipping_bin';
 i.courier_spawn = 'farmingforblockheads:courier_spawn';         // Courier Spawn Point (ruling D5b)
 i.any_trapdoor = '#minecraft:trapdoors';                         // wooden and iron (Courier Spawn Point recipe, D8)
+i.rabbit_trap = 'farmingforblockheads:rabbit_trap';             // rabbit trap port (mod-integration #10, CD farm/rabbittrap/)
 // Produce (plan_unblocked_batch_1121.md P2; CD kubejs_startup/creativedelight/produce.js)
 i.potato_dough = 'creativedelight:potato_dough';             // dishes/ingredients #27, mirrors Veggies' sweet potato dough
 i.tofu = 'creativedelight:tofu';                             // dishes/ingredients #17

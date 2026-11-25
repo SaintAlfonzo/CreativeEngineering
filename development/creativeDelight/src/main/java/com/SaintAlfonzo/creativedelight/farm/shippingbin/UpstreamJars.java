@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * The unmodified Farming for Blockheads jar the Shipping Bin port reads its art from (feature_writeup/farming_for_blockheads.md
  * 4 step 0). It sits in {@code <game dir>/blockheads_upstream/}, never in {@code mods/} (a NeoForge 26.3 jar). Pinned by
- * sha1. Only the bin's art is exposed ({@link #assets()}); the donor's data (market recipes, advancements, loot) is never
+ * sha1. Only the bin's and the rabbit trap's art is exposed ({@link #assets()}); the donor's data (market recipes, advancements, loot) is never
  * loaded, our jar ships its own.
  */
 public final class UpstreamJars {
@@ -28,7 +28,11 @@ public final class UpstreamJars {
 			"assets/farmingforblockheads/textures/entity/shipping_balloon.png",
 			"assets/farmingforblockheads/textures/entity/merchant.png",
 			"assets/farmingforblockheads/textures/gui/shipping_bin.png",
-			"assets/farmingforblockheads/textures/gui/sprites/container/shipping_bin/");
+			"assets/farmingforblockheads/textures/gui/sprites/container/shipping_bin/",
+			// rabbit trap (mod-integration #10): blockstate, block model, rabbit_trap, rabbit_trap_bottom, rabbit_trap_front
+			"assets/farmingforblockheads/blockstates/rabbit_trap",
+			"assets/farmingforblockheads/models/block/rabbit_trap",
+			"assets/farmingforblockheads/textures/block/rabbit_trap");
 
 	private static Map<String, byte[]> assets;
 

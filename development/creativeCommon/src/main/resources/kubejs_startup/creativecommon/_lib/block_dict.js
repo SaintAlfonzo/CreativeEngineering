@@ -15,6 +15,7 @@ b.emu_egg_nest = 'creativedelight:emu_egg_nest'; // the 1-6 egg state; no item
 b.whale_oil_lamp = 'creativedelight:whale_oil_lamp';   // dairy-fats-and-batter #1, CD fats/WhaleOilLamp.java
 b.shipping_bin = 'farmingforblockheads:shipping_bin';   // mod-integration #7, CD farm/shippingbin/
 b.courier_spawn = 'farmingforblockheads:courier_spawn';
+b.rabbit_trap = 'farmingforblockheads:rabbit_trap';   // mod-integration #10, CD farm/rabbittrap/
 b.boxed_raw_pasta = 'creativedelight:boxed_raw_pasta';   // dishes/ingredients #8, CD new_foods.js
 b.duck_nest = 'creativedelight:duck_nest';         // Creative Delight compat/incubation/nest/WaterfowlNests.java
 b.duck_egg_nest = 'creativedelight:duck_egg_nest'; // the 1-6 egg state; no item

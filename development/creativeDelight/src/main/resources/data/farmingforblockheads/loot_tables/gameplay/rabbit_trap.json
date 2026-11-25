@@ -1,0 +1,45 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.0005
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:paper",
+          "functions": [
+            {
+              "function": "minecraft:set_name",
+              "name": {
+                "translate": "item.farmingforblockheads.fox_note",
+                "italic": false
+              }
+            },
+            {
+              "function": "minecraft:set_lore",
+              "replace": false,
+              "lore": [
+                {
+                  "translate": "item.farmingforblockheads.fox_note.lore.1",
+                  "color": "gray",
+                  "italic": false
+                },
+                {
+                  "translate": "item.farmingforblockheads.fox_note.lore.2",
+                  "color": "dark_gray",
+                  "italic": true
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -170,6 +170,17 @@
 			"apply": "/reload for new spawns (kubejs/data); rebuild and install :creativeWorldgen: so the jar ships the same file"
 		},
 		{
+			"id": "rabbit_trap_catches",
+			"script": "tools/rabbit_trap_catches.py",
+			"groups": ["worldgen", "food"],
+			"dumps": ["dumpspawns"],
+			"outputs": [
+				"development/creativeDelight/src/main/resources/data/farmingforblockheads/rabbit_trap/biomes.json",
+				"feature_writeup/farming_for_blockheads/rabbit_trap_catches.csv"
+			],
+			"apply": "rebuild and install :creativeDelight: (the rabbit trap's unattended catch tables, farming_for_blockheads.md 2.3.2)"
+		},
+		{
 			"id": "bee_nests",
 			"script": "tools/gen_bee_nests.py",
 			"groups": ["worldgen"],

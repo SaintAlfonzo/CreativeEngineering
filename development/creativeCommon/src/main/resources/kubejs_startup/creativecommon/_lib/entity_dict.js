@@ -9,10 +9,13 @@ var en = global.entity;
 
 // ############################## Vanilla ##############################
 en.chicken = 'minecraft:chicken';
+en.cat = 'minecraft:cat';
 en.cod = 'minecraft:cod';
 en.cow = 'minecraft:cow';
 en.dolphin = 'minecraft:dolphin';
+en.frog = 'minecraft:frog';
 en.glow_squid = 'minecraft:glow_squid';
+en.ocelot = 'minecraft:ocelot';
 en.pig = 'minecraft:pig';
 en.rabbit = 'minecraft:rabbit';
 en.salmon = 'minecraft:salmon';
@@ -21,6 +24,16 @@ en.squid = 'minecraft:squid';
 en.turtle = 'minecraft:turtle';
 
 // ############################## Alex's Mobs ##############################
+en.banana_slug = 'alexsmobs:banana_slug';
+en.jerboa = 'alexsmobs:jerboa';
+en.mudskipper = 'alexsmobs:mudskipper';
+en.platypus = 'alexsmobs:platypus';
+en.raccoon = 'alexsmobs:raccoon';
+en.rain_frog = 'alexsmobs:rain_frog';
+en.roadrunner = 'alexsmobs:roadrunner';
+en.skunk = 'alexsmobs:skunk';
+en.tasmanian_devil = 'alexsmobs:tasmanian_devil';
+en.warped_toad = 'alexsmobs:warped_toad';
 en.cachalot_whale = 'alexsmobs:cachalot_whale';
 en.frilled_shark = 'alexsmobs:frilled_shark';
 en.giant_squid = 'alexsmobs:giant_squid';
@@ -29,5 +42,14 @@ en.hammerhead_shark = 'alexsmobs:hammerhead_shark';
 en.orca = 'alexsmobs:orca';
 en.seal = 'alexsmobs:seal';
 
+// ############################## Cozy's Improved Cats, Quark, Untitled Duck Mod ##############################
+en.improved_cat = 'cozys-improved-cats:improved_cat';
+en.crab = 'quark:crab';
+en.duck = 'untitledduckmod:duck';
+
 // ############################## More Mooblooms ##############################
 en.moobloom = 'moremooblooms:moobloom';
+
+// ############################## Entity type tags ##############################
+// Rabbit trap catch list (farming_for_blockheads.md 2.3.1, ruling D11; CD rabbit_trap.js fills it)
+en.t_rabbit_trap_capturable = 'farmingforblockheads:rabbit_trap_capturable';

@@ -26,7 +26,10 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-/** JEI "Shipping": one row per {@code farmingforblockheads:shipping_bin} recipe, the item and its points per item. */
+/**
+ * JEI "Shipping": one row per {@code farmingforblockheads:shipping_bin} recipe, the item and its points per item. Also the
+ * rabbit trap's info page.
+ */
 @JeiPlugin
 public class ShippingJeiPlugin implements IModPlugin {
 	public static final RecipeType<ShippingBinRecipe> TYPE = RecipeType.create(ShippingBin.NAMESPACE, "shipping_bin", ShippingBinRecipe.class);
@@ -43,6 +46,11 @@ public class ShippingJeiPlugin implements IModPlugin {
 
 	@Override
 	public void registerRecipes(IRecipeRegistration registration) {
+		// rabbit trap (mod-integration #10, farming_for_blockheads.md 2.3.3): behavior page
+		registration.addIngredientInfo(new ItemStack(com.SaintAlfonzo.creativedelight.farm.rabbittrap.RabbitTrap.RABBIT_TRAP_ITEM.get()),
+				VanillaTypes.ITEM_STACK, Component.translatable("jei.farmingforblockheads.rabbit_trap.0"),
+				Component.translatable("jei.farmingforblockheads.rabbit_trap.1"), Component.translatable("jei.farmingforblockheads.rabbit_trap.2"),
+				Component.translatable("jei.farmingforblockheads.rabbit_trap.3"));
 		if (Minecraft.getInstance().level == null) return;
 		List<ShippingBinRecipe> recipes = Minecraft.getInstance().level.getRecipeManager()
 				.getAllRecipesFor(ShippingBin.SHIPPING_BIN_RECIPE.get()).stream()

@@ -108,6 +108,7 @@ public final class CDConfig {
 	public static final Cfb CFB;
 	public static final Bees BEES;
 	public static final ShippingBin SHIPPING_BIN;
+	public static final RabbitTrap RABBIT_TRAP;
 	public static final Incubation INCUBATION;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> QOL = new LinkedHashMap<>();
@@ -203,6 +204,7 @@ public final class CDConfig {
 		// [bees]: from creativecommon-common.toml (wave 2 carve, COMMON_SECTIONS)
 		BEES = new Bees(b);
 		SHIPPING_BIN = new ShippingBin(b);
+		RABBIT_TRAP = new RabbitTrap(b);
 		SPEC = b.build();
 		com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.bind(SPEC);
 	}
@@ -1021,5 +1023,26 @@ public final class CDConfig {
 		public int courierSpawnSearchRadius() { return SPEC.isLoaded() ? courierSpawnSearchRadius.get() : 96; }
 		public int courierWalkTimeoutTicks() { return SPEC.isLoaded() ? courierWalkTimeoutTicks.get() : 1200; }
 		public List<? extends String> courierNames() { return SPEC.isLoaded() ? courierNames.get() : List.of(); }
+	}
+
+	/** [rabbit_trap]: the rabbit trap port (farm/rabbittrap/, farming_for_blockheads.md 2.3, rulings D7, D12). */
+	public static final class RabbitTrap {
+		private final ForgeConfigSpec.IntValue passiveSpacing;
+		private final ForgeConfigSpec.IntValue fullChanceTicks;
+
+		private RabbitTrap(ForgeConfigSpec.Builder b) {
+			b.comment("Rabbit trap: lures small animals while a player is near; left alone, catches an animal of its biome.")
+					.push("rabbit_trap");
+			passiveSpacing = b.comment("Blocks between traps that share unattended catches: while a trap holds an unattended",
+					"catch, no other trap within this distance makes one. Lured catches are not limited. 0 = no limit.")
+					.defineInRange("rabbitTrapPassiveSpacing", 8, 0, 64);
+			fullChanceTicks = b.comment("Game ticks a trap must be left alone to reach the highest unattended catch chance (95 %).",
+					"The chance grows evenly up to it, rolled every 1200 ticks and once when the trap's chunk loads again.")
+					.defineInRange("rabbitTrapFullChanceTicks", 24000, 1200, 1_200_000);
+			b.pop();
+		}
+
+		public int passiveSpacing() { return SPEC.isLoaded() ? passiveSpacing.get() : 8; }
+		public int fullChanceTicks() { return SPEC.isLoaded() ? fullChanceTicks.get() : 24000; }
 	}
 }
