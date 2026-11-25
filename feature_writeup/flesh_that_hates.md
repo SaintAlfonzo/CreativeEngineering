@@ -1,12 +1,13 @@
-# Flesh That Hates (flesh_that_hates): overlap and integration report
+# Flesh That Hates and Biomancy in the Visceral Heap: overlap and integration report
 
 Written 2026-11-25; investigation only, nothing built. Jar: `FleshThatHates-forge-1.19.2-1.0.1.jar` (copy in
 `DecompiledMods/`, unpacked and decompiled beside it; also in the launcher's downloads folder, not in `mods/`). Forge
 1.19.2, MCreator, license Academic Free License 3.0: the jar stays untouched, and every change is our own code written
 from its behavior (mixins and data in our jars, as with Biomes O' Plenty for the Visceral Heap). No port needed. Short
-name in this file: **FTH**. Test prefix `FTH-`.
+name in this file: **FTH**. Test prefix `FTH-` (used for both mods). Biomancy 2 (2.3.2.0) is the second mod in this
+report, in section 10 with its own decisions B1 to B12; sections 0 to 8 are FTH.
 
-Goal (owner, 2026-11-25): FTH content appears only in the Visceral Heap (Biomes O' Plenty `biomesoplenty:visceral_heap`,
+Goal (owner, 2026-11-25): FTH content, and Biomancy's blocks and mobs (section 10), appear only in the Visceral Heap (Biomes O' Plenty `biomesoplenty:visceral_heap`,
 the "flesh heap", [visceral_heap.md](visceral_heap.md)), with no spreading mechanics.
 
 Scope rule: integration adds no recipe or mechanic that is not in the mod or defined by a pack rule unless the owner
@@ -14,12 +15,12 @@ asks by name; upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=99be38456f8f -->
+<!-- generated:status_index begin open_work sha1=b0a3bc04f97a -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `mod-integration #30` | Planned | S C P | Flesh That Hates (flesh_that_hates 1.0.1): content in the Visceral Heap only, no spreading |
+| `mod-integration #30` | Planned | S C P | Flesh That Hates (1.0.1) and Biomancy 2 (2.3.2.0): blocks and mobs in the Visceral Heap only, no spreading |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -360,7 +361,201 @@ last.
   Scuttler and Cradle on the upper body (outside the hitbox, section 3.3); block and mob sounds play, roots are
   climbable, Flesh Detector success and fail sounds.
 
-## 9. History
+## 10. Biomancy 2 (Heap extension)
+
+Added 2026-11-25 (owner: extend the report to Biomancy's blocks and mobs; crafting content is not a priority). Same
+goal: Biomancy's world content only in the Visceral Heap, with no spreading. Investigation only, nothing built.
+
+### 10.0 At a glance
+
+| Part | Where | Status |
+|---|---|---|
+| Inventory: 53 blocks, 64 items, 5 mobs (+ 5 projectiles), 7 effects, 2 enchantments, 1 fluid (acid), 351 recipes, 2 global loot modifiers, villager and wandering trader trades | 10.1 | read |
+| Spread paths: 5 (charged malignant veins, Primal Bloom seed shots, Primal Membrane, primordial blob deaths, cradle sacrifices) plus acid erosion | 10.2 | mapped from the code |
+| Overlap: three flesh block families in one biome, two acids, tendons, global trades and cat gifts | 10.3 | 8 rows |
+| Fold-in | 10.5 | 10 steps (crafting deferred) |
+| Decisions | 10.6 | B1 to B12 open |
+| Tests | 10.7 | FTH-17 to FTH-26 drafted |
+
+- Jar: `biomancy-forge-1.19.2-2.3.2.0.jar` (Biomancy 2, Elenterius; copy in `DecompiledMods/`, unpacked and decompiled
+  beside it; also in the launcher's downloads folder, not in `mods/`). 566 classes, 18 common and 5 client mixins.
+- License: code MIT, all art, sounds and models CC BY-NC 4.0 (`LICENSE.txt`). MIT code allows a fork, but our own
+  mixins and data in Creative Worldgen keep the same route as FTH. CC BY-NC: credit on the project page, and the pack
+  must stay non-commercial while it ships the jar (B12).
+- Dependencies: Forge 43.2+, GeckoLib `[3.1.39,4.0)` (the pack has 3.1.40), optional JEI and Create (4 compacting
+  recipes).
+- Worldgen: **none**. No biome modifier, no structure, no natural mob spawn. Everything in the world comes from the
+  Primordial Cradle, which players craft.
+- Config (server): `addTradesToVillagers`, `addTradesToWanderingTrader` (both true),
+  `primalEnergySupplyOfCradle` (`NONE` / `LIMITED` default / `UNLIMITED`), `doBioForgeRecipeProgression` (false).
+- Pack references to `biomancy`: none. Dumps: as for FTH, `/dumpall` after install.
+
+### 10.1 Blocks and mobs
+
+**Primordial ecosystem** (the blocks that matter for the Heap):
+
+| Block | What it does |
+|---|---|
+| Primordial Cradle | Players throw items in as tribute (dropped item entities). When it is full, it either spawns a flesh blob (primordial, legacy or normal by the tribute's numbers) or hits nearby mobs with spikes. In both cases the block under it becomes malignant flesh and it gains primal energy. It owns a virtual "mound" shape around itself, which veins fill over time |
+| Malignant Flesh (block, slab, stairs, wall) | Plain block, no tick; slabs and stairs grow into full blocks when blobs die on them |
+| Malignant Flesh Veins | Multiface vein (like sculk veins). Holds a charge 0 to 15 and random-ticks only while charged. It gets charge by eating meat items dropped on it, or from a cradle's primal energy. Charged veins grow onto neighbor faces, pass charge to nearby veins and turn the blocks they cover into malignant flesh, primal flesh, membranes or blooms |
+| Primal Flesh (block, slab, stairs, wall) | Plain block |
+| Primal Bloom | Plant (4 stages, 32 to 64 px textures). When grown it shoots a Bloomberry up to 8 blocks away; the berry plants a new bloom or malignant flesh where it lands. Right-click when ripe: 1 or 2 Bloomberries, 1 damage |
+| Primal Orifice | Grows, then drips acid blobs that make acid fluid below it; a bucket takes acid from a full one |
+| Primal Membrane | Membrane that only living mobs pass; it is the spreading one: inside a cradle's mound it fills chambers with membrane or malignant flesh (drains primal energy) |
+| Bloom-Lantern, Bloomlight | Light blocks from the primordial set |
+| Tendon Chain, Flesh Spike | Hanging chain; spike that hurts entities |
+
+**Crafted content** (not a priority, owner 2026-11-25): Flesh, Packed, Fibrous, Chiseled, Ornamental, Tubular flesh,
+pillar, doors (normal, wide, iris), ladder, fence and gate, lanterns, membranes by mob type, Fleshkin Chest and
+Pressure Sensor, Storage Sac, Vial Holder; the machines Bio-Forge, Bio-Lab, Decomposer, Digester, Maw Hopper, Tongue.
+Items: 64, mostly mob parts (Sinew, Fang, Claw, Marrow, Glands), components, serums, additives, tools and weapons
+(Ravenous Claws, Despoil Sickle, Bio-Injector), Bloomberry, Nutrient Paste and Bar, 5 spawn eggs; several are marked
+`[WIP]`, `[PH]` or `[Dev Tool]` in their names. Recipes: 184 decomposing, 53 bio-forging, 47 digesting, 14 bio-brewing,
+37 crafting, 12 stonecutting, 4 Create compacting, 1 blasting.
+
+**Block textures** (64 files; the cradle and machines use GeckoLib models with 32 to 64 px UV maps):
+
+![Biomancy block textures](flesh_that_hates/biomancy_block_textures.png)
+
+| Block | Textures |
+|---|---|
+| malignant_flesh, slab, stairs, wall | `malignant_flesh` |
+| malignant_flesh_veins | `malignant_flesh_veins` |
+| primal_flesh, slab, stairs, wall | `primal_flesh` |
+| primal_bloom | `primal_bloom_1` to `_4` (one per age), `primal_flesh` |
+| primal_orifice | `primal_orifice`, `primal_orifice_2`, `primal_orifice_2_full`, `primal_orifice_leaking`, `primal_flesh` |
+| primordial_bio_lantern / bloomlight | `primordial_bio_lantern` / `bloomlight` |
+| tendon_chain / flesh_spike | `tendon_chain` / `flesh_spikes`, `packed_flesh` |
+| the 5 membranes | `membrane_base` + `membrane_overlay` (tinted per type); impermeable: `impermeable_membrane` |
+| flesh, slab, stairs, wall | `flesh` and 6 random variants `flesh_1` to `flesh_6` |
+| packed_flesh set, fibrous, chiseled, ornate, tubular, pillar | one texture each, or side + end (sheet) |
+| doors, iris door, ladder, fence, gate, lanterns, pressure sensor, storage sac, vial holder | as named in the sheet |
+| primordial_cradle, bio_forge, bio_lab, decomposer, digester, maw_hopper, tongue, fleshkin_chest | GeckoLib model + its own texture |
+
+**Primordial Cradle** (offline render of its GeckoLib model, as for the mobs in 3.3):
+
+![Primordial Cradle](flesh_that_hates/biomancy_primordial_cradle.png)
+
+**Mobs.** All five share one model (`geo/entity/flesh_blob.geo.json`, a cube with up to 7 optional tumors) and grow
+by eating food items: size 1 to 10, scale 0.5 + 0.25 per size (0.75 to 3 blocks), health and damage scale with size.
+None spawns naturally; the cradle and spawn eggs are the only sources. Renders: left without tumors (the primordial
+blobs spawn that way), right with all seven (cradle blobs roll tumors from the tribute). Named blobs switch texture
+(Easter eggs: "trololo", "krusty", "beholder").
+
+| Mob | Render (no tumors, all tumors) | Texture | Category, base hp / damage per size | Behavior |
+|---|---|---|---|---|
+| Flesh Blob | ![Flesh Blob](flesh_that_hates/biomancy_flesh_blob.png) | `flesh_blob_neutral` | creature, 10 / 1 | eats food, grows |
+| Hungry Flesh Blob | ![Hungry Flesh Blob](flesh_that_hates/biomancy_hungry_flesh_blob.png) | `flesh_blob_hostile` | creature (but `Enemy`), 10 / 2 | attacks |
+| Legacy Flesh Blob | ![Legacy Flesh Blob](flesh_that_hates/biomancy_legacy_flesh_blob.png) | `flesh_blob_legacy` | creature, 10 / 1 | Biomancy 1 look |
+| Primordial Flesh Blob | ![Primordial Flesh Blob](flesh_that_hates/biomancy_primordial_flesh_blob.png) | `primordial_flesh_blob_neutral` | monster, 15 / 2 | carries tribute to cradles; **places malignant flesh where it dies** (not when burning or freezing) |
+| Primordial Hungry Flesh Blob | ![Primordial Hungry Flesh Blob](flesh_that_hates/biomancy_primordial_hungry_flesh_blob.png) | `primordial_flesh_blob_hostile` | monster, 20 / 4 | attacks; same death placement |
+
+Unused in the jar: `malignant_flesh_blob.geo.json` and its texture, and the Boomling model and class (no entity type
+registered).
+
+Effects: Corrosive Acid, Armor Shred, Fertility, Bleed, Essence Anemia (`[PH]`), Drowsy, Despoil. Enchantments: Despoil
+(extra mob-part drops through the `despoil` loot modifier; needs the enchantment or effect, so it does nothing to
+plain kills), Anesthetic Touch.
+
+### 10.2 Spread paths
+
+| # | Path | Code | Reaches outside a cradle? |
+|---|---|---|---|
+| M1 | Charged malignant veins grow, convert blocks under them (`#biomancy:flesh_replaceable`: dirt, sand, gravel, clay, snow, leaves, natural logs, flowers, moss, vines, melons, pumpkins, plus any replaceable block) and pass charge on | `FleshVeinsBlock.tick` | yes: veins charged by meat dropped on them spread with no cradle |
+| M2 | Primal Bloom shoots Bloomberries up to 8 + 6 blocks away; they plant blooms or malignant flesh | `BloomBlock.randomTick`, `BloomberryProjectile` | yes: self-propagating |
+| M3 | Primal Membrane fills mound chambers | `SpreadingMembraneBlock.tick` | no (needs a cradle's mound and energy) |
+| M4 | Primordial blobs place malignant flesh or veins where they die | `PrimordialEaterFleshBlob.remove` | yes, wherever they die |
+| M5 | Cradle sacrifice turns the block below into malignant flesh and seeds charged veins; its energy feeds M1 and M3 | `PrimordialCradleBlockEntity.onSacrifice` | the cradle can be placed anywhere |
+| A1 | Acid fluid random-ticks: grass -> dirt, cobblestone -> gravel, stone, deepslate, blackstone and nether bricks -> cracked, copper ages; destroys leaves, moss, vines, flowers | `AcidFluid.randomTick` | yes, wherever acid flows; not flesh, but a world-changing effect |
+
+### 10.3 Overlap
+
+| Thing | Overlaps with | Problem | Proposal |
+|---|---|---|---|
+| Malignant, primal and crafted flesh blocks | BOP flesh and porous flesh, FTH flesh set | Three flesh families with three palettes in one biome (BOP brown-red, FTH dark red, Biomancy pink and magenta; sheets in 3.1 and 10.1) | *overlaps w/ BOP and FTH flesh* B2 |
+| Acid fluid and bucket | Power Grid acid ([power_grid.md](power_grid.md), `#82` mixing recipes, acid from flesh in water) | Two acids; Biomancy's erodes blocks | *overlaps w/ Power Grid acid* B8 |
+| Tendon Chain | BOP flesh tendons, FTH flesh roots | Three hanging or climbing flesh strands | keep; different shapes |
+| Malignant veins | FTH flesh veins, vanilla sculk veins | Look only once ticks are off | none |
+| Flesh Bits, mob parts, Bloomberry (foods) | rotten flesh, FTH Flesh, pack meats | More flesh foods | food values later (crafting deferred, B11) |
+| Trades | butcher, cleric, wandering trader | Biomancy items sold everywhere | *overlaps w/ trades* B9 |
+| Cat morning gift | vanilla cat gifts | Biomancy items gifted everywhere | B9 |
+| Flesh blob eating food items | Item physics, hoppers | Blobs eat dropped food | none |
+
+### 10.4 Upstream bugs
+
+None found; the code was read for mechanics, not audited line by line. `[WIP]`, `[PH]` and `[Dev Tool]` items are
+unfinished upstream content: hide them from JEI and creative (B10).
+
+### 10.5 Fold-in, in build order
+
+Same homes as FTH (section 4): Creative Worldgen for containment, worldgen and spawns; Creative Common for effects and
+dicts; crafting content deferred.
+
+1. **Install and dumps**: jar into `mods/` (skill `add-mod`), `mod_sides.md` row (both), `/dumpall`.
+2. **Stop spread M1, M2, M4** (Creative Worldgen mixins, gated on Biomancy 2.3.2.0): veins never random-tick
+   (`isRandomlyTicking` false, or charge forced to 0 on placement and in `entityInside`); bloom grows to ripe and
+   stops (no Bloomberry shot; harvest stays); primordial blob death placement off, or Heap-only (B5).
+3. **Cradle M3, M5** (B4): config `primalEnergySupplyOfCradle = NONE` (copy to `configs_edited/`), and the sacrifice's
+   block conversion and vein seeding Heap-only or off by mixin. Blob spawning from tributes stays.
+4. **Acid A1** (B8): random tick off, or the erosion map emptied; tie to the Power Grid acid decision.
+5. **Tags** (`global.tags`): empty `#biomancy:flesh_replaceable` as a backup for M1; Biomancy blocks into BlockRunner
+   surface tags; BOP flesh into `#biomancy:allow_veins_to_attach` if veins generate on it.
+6. **Heap worldgen** (B2, B3): same pack folder and modifier as FTH step 5, gated on BOP and Biomancy. Candidates:
+   malignant flesh and primal flesh patches, uncharged vein carpets, blooms, orifices on ceilings (acid drips, B8),
+   tendon chains hanging from the ceiling, bloomlights, rare cradle nests (B3).
+7. **Spawns** (B6): `forge:add_spawns` for the two primordial blobs in the Heap only; register spawn placements.
+   Spawned blobs pick a size at spawn (check `finalizeSpawn`).
+8. **Global content** (B9): config trades off; override the `cat_morning_gift` loot modifier with none. Despoil
+   stays (gated by its own enchantment).
+9. **Names, JEI** (B10): hide the `[WIP]`, `[PH]` and `[Dev Tool]` items and the 5 spawn eggs; fix names that keep a
+   placeholder tag. Lang override in Creative Worldgen's `assets/biomancy/lang/`.
+10. **Release**: changelog family `## Biomancy` once built, project page credit (MIT + CC BY-NC 4.0, B12).
+
+Order: 2 to 4 before any world loads Biomancy; 6 and 7 after B2 to B6; crafting (recipes through `global.NCH`, food,
+potions, item physics, stack sizes) is a later phase (B11).
+
+### 10.6 Decisions for the owner
+
+| # | Question | Recommendation | Default if not answered |
+|---|---|---|---|
+| B1 | Biomancy in the pack at all, given its crafting tree (machines, 351 recipes) is global by nature? | Yes: Heap world content now, crafting later | Yes |
+| B2 | Which Biomancy blocks generate in the Heap, and how do three flesh palettes share it? | Primordial set only (malignant, primal, veins, blooms, orifices, tendon chains, bloomlights) in their own patches, apart from FTH patches | Malignant and primal patches, veins, tendon chains |
+| B3 | Natural cradle "nests" in the Heap (a cradle on a small malignant mound)? | Yes, rare; players can still craft one | No |
+| B4 | Cradle outside the Heap: block conversion and vein seeding off? | Off outside the Heap, on inside; primal energy `NONE` everywhere | Off everywhere, energy `NONE` |
+| B5 | Primordial blob death placement (M4) | Heap only | Off |
+| B6 | Natural spawns in the Heap | Primordial Hungry Flesh Blob 6, Primordial Flesh Blob 4 (sizes 1 to 3) | Primordial Hungry Flesh Blob 4 |
+| B7 | Primal Bloom: ripe blooms stop (harvest only) or keep shooting inside the Heap? | Stop everywhere | Stop everywhere |
+| B8 | Biomancy acid: erosion on or off; next to Power Grid acid, keep both fluids? | Erosion off; keep both fluids for now, merge later with the crafting phase | Erosion off |
+| B9 | Trades and cat gifts with Biomancy items | Off (Heap-only goal) | Off |
+| B10 | Hide `[WIP]`, `[PH]`, `[Dev Tool]` items and the spawn eggs | Yes | Yes |
+| B11 | Crafting phase (machines, mob parts, serums, foods) | Later report pass through `global.NCH` and the food rules | Deferred |
+| B12 | CC BY-NC 4.0 art: the pack is non-commercial and credits it | Credit on the project page | Credit only |
+
+### 10.7 In-game tests (drafted)
+
+- [ ] **FTH-17 Boot with Biomancy:** server and client with Biomancy, BOP and FTH -> no mixin errors; config shows
+  `primalEnergySupplyOfCradle = NONE`, trades off.
+- [ ] **FTH-18 Veins stay put:** in the Overworld place malignant veins on dirt and logs, drop 20 raw beef on them, wait
+  10 minutes -> veins do not grow, dirt and logs unchanged.
+- [ ] **FTH-19 Bloom:** place a Primal Bloom with air in front, `/gamerule randomTickSpeed 300`, 5 minutes -> it ripens,
+  never shoots; right-click gives Bloomberries.
+- [ ] **FTH-20 Cradle outside the Heap:** craft and fill a cradle in the Overworld -> a blob spawns (or spikes hit), the
+  block below and around stays as it was (B4).
+- [ ] **FTH-21 Cradle in the Heap:** same in the Heap -> per B4.
+- [ ] **FTH-22 Primordial blob death:** kill a Primordial Flesh Blob in the Overworld and one in the Heap -> malignant
+  flesh only per B5.
+- [ ] **FTH-23 Acid:** pour Biomancy acid next to grass, cobblestone and stone bricks, 10 minutes at
+  randomTickSpeed 300 -> per B8.
+- [ ] **FTH-24 Heap features:** fly 500 blocks in the Heap -> Biomancy blocks per B2 and B3; none in other biomes.
+- [ ] **FTH-25 Heap spawns:** 10 minutes in the Heap -> primordial blobs per B6; none elsewhere.
+- [ ] **FTH-26 Client:** blobs render with tumors and sizes, the cradle animates, blooms show four stages, membranes
+  tint by type; hidden items absent from JEI (B10).
+
+## 11. History
+
+- 2026-11-25: Biomancy 2 (2.3.2.0) added as section 10: blocks, mobs, spread paths, overlap, fold-in, B1 to B12, FTH-17 to
+  FTH-26, block texture sheet and renders of the cradle and the five blobs; crafting content deferred (owner).
 
 - 2026-11-25: block texture sheet, mob renders and size lineup added (section 3.1, 3.3; images in `flesh_that_hates/`).
 - 2026-11-25: investigation written from `FleshThatHates-forge-1.19.2-1.0.1.jar` (decompiled beside the jar in
