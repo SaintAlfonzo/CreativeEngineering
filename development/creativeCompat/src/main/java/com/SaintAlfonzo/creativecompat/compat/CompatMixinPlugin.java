@@ -307,6 +307,12 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 		if (all != null) return all.stream().allMatch(this::modOn);
 		if (!super.shouldApplyMixin(targetClassName, mixinClassName)) return false;
 		if (name.equals("FleetFootedMixin")) return fleetFootedMatches(targetClassName);
+		if (name.equals("VanillaLightMeltMixin") && targetClassName.endsWith(".SnowLayerBlock") && modOn("snowrealmagic")) {
+			// Snow! Real Magic replaces SnowLayerBlock's random tick (no light read left to redirect) and melts snow
+			// layers itself; the ice target keeps the light melt.
+			LOGGER.info("[creativecompat] Snow! Real Magic loaded: snow layers melt by its rules, not [melting]");
+			return false;
+		}
 		return true;
 	}
 

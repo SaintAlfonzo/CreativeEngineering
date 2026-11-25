@@ -137,6 +137,9 @@ melt ticks (about every 5 s), plus its random ticks.
 - Vanilla light melt: `mixin/VanillaLightMeltMixin` redirects the block-light read in `IceBlock` and `SnowLayerBlock`
   randomTick to 0 while the switch is off; `mixin/RareIceLightMeltMixin` (pseudo, Rare Ice's own copy) the same,
   gated on `rare_ice` in `CompatMixinPlugin` (enable key `[mixins]`, `MixinSwitches`) (no class-load error without Rare Ice; SQ-MELT-09, 2026-11-15).
+- With Snow! Real Magic loaded, `CompatMixinPlugin` skips the mixin's `SnowLayerBlock` target (Snow! Real Magic
+  overwrites its random tick and melts snow layers by its own light check); ice keeps the light melt
+  (`creative-compat-publish #11`).
 - Config reads: the tick paths read `Melting.cfg`, a plain copy of the `[melting]` values refreshed on
   ModConfigEvent Loading and Reloading of the Compat config (`Melting.onConfig`, mod bus), not ForgeConfigSpec
   values per call (SQ-MELT-P1, 2026-11-15). Before the first load: melting off, vanilla light melt as vanilla.

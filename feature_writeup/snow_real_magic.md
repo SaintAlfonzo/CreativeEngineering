@@ -218,6 +218,9 @@ Default = SRM's default. Recommendation = this report's proposal for the pack. I
   yet: the game has not booted with SRM (`logs/latest.log` of 2026-11-23 has no `snowrealmagic`). Until step 1 is
   built, `[mixins] vanillaLightMelt = false` in `creativecompat-common.toml` skips the mixin (light melt then comes back
   through SRM's own check).
+  Since 2026-11-24 (`creative-compat-publish #11`) `CompatMixinPlugin` skips the `SnowLayerBlock` target when
+  `snowrealmagic` is loaded (one INFO line; ice keeps the light melt), so the boot no longer stops. Step 1's `@Pseudo`
+  redirect into `Hooks.randomTick` (pack light melt for SRM snow) is still open.
 - **B2 (upstream):** `ShapeCaches.get` logs through `snownee.jade.Jade`. Without Jade an error in a shape lookup
   becomes `NoClassDefFoundError` and hides the real one. Error path only.
 - **B3 (interplay):** salt layers get SRM's snow behavior (2.6): snowballs from salt, a salt layer falling as snow,
