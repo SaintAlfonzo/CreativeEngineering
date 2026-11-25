@@ -84,7 +84,7 @@ fixes its water and fire behavior through the existing four physics tags. Nothin
   2760, `i.totem_of_undying` 2821, `i.trident` 2824.
 
 ### Decisions
-- Ruled 2026-11-24: [item_physics.md](../item_physics.md) 9.6 (R1 to R20, defaults D1 to D4). It replaces the earlier
+- Ruled 2026-11-24: [item_physics.md](../item_physics.md) 9.6 (R1 to R20, defaults D1 to D4, confirmed 2026-11-24). It replaces the earlier
   recommendations and any step above that differs.
 
 ### Gotchas

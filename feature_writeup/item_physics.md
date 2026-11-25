@@ -351,7 +351,7 @@ marked `open` was asked by AskUserQuestion on 2026-11-24.
 | R19 | Modded explosives (bombs, shells, rockets, powder charges) | open | Explode when burned, no block damage | 2026-11-24 | AskUserQuestion |
 | R20 | Unclassified and mod-default items | open | Agent adds rules, then gives a per-mod list of the leftovers for the owner to correct | 2026-11-24 | AskUserQuestion |
 
-Agent defaults, unconfirmed (settle before building the part concerned):
+Agent defaults, confirmed by the owner (chat 2026-11-24):
 
 - D1: belts burn (R12 gives only their water behavior).
 - D2: treated wood leaves no ash; R18 covers the wood family and R11 takes treated wood out of floating, not out of
