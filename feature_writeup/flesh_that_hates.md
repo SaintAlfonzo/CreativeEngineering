@@ -183,6 +183,10 @@ applied. SCP-610-1 and -2 pick one of their textures at spawn, and every variant
 | SCP-610-11 (Stretcher) | ![SCP-610-11](flesh_that_hates/scp_61011.png) | `610-11`, `stretcher`, 1.0 | 0.8 x 3.0, 40 |
 | SCP-610 Spawner | none (invisible, `invisible_texture`) | no model | 2.0 x 5.0, 1 |
 
+All 13 on one sheet (every texture variant shown):
+
+![Flesh That Hates mobs](flesh_that_hates/fth_mobs_sheet.png)
+
 ![Size lineup, 2-block bar for scale](flesh_that_hates/mob_lineup.png)
 
 Some hitboxes are much shorter than the models (measured from the rest pose at renderer scale): Herpad 4.5 blocks
