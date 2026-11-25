@@ -25,8 +25,8 @@
 @@text client must carry the server's mod list, so each row's `@modset` adds those five jars to `rps only` (empty config,
 @@text probe-only kubejs; build OUT with `qmodset.py build OUT LEVEL B SPEC`) and the client drops every other jar:
 @@text `mapfile -t J < <(cd mods && ls *.jar | grep -vE '^(solRaspberryPie|creativecommon|creativedevtools|kubejs-forge|rhino-forge|architectury)-' | sed 's/[][*?]/?/g'); D=(); for j in "${J[@]}"; do D+=(--drop "$j"); done`
-@@text then `qrun.py pair OUT GAME feature_writeup/testing/rows/RPS.qb RES --rows IDS "${D[@]}" --config config/solraspberrypie-client.toml:dietLog:extraWidth=-1`
-@@text (`?` for the glob characters some jar names hold; the extraWidth value is for CQ-RPS-15, corrected to 48 at load).
+@@text then `qrun.py pair OUT GAME feature_writeup/testing/rows/RPS.qb RES --rows IDS "${D[@]}" --config config/solraspberrypie-client.toml:dietLog:extraWidth='"x"'`
+@@text (`?` for the glob characters some jar names hold; the extraWidth value is for CQ-RPS-15: a wrong-typed value is corrected to the jar default 48 at load, whereas an out-of-range int such as -1 is clamped to the range bound 0).
 @@text Commands go to the server console with `@a` (one player); `cli> solrp diversity get @s` replies in the client's chat
 @@text (`[CHAT]` lines) after `op @a`. The client keeps the pack's client tomls (icon lists fall back to their vanilla entries).
 @@text
@@ -60,8 +60,8 @@ srv> effect clear @a
 sleep 2
 srv> recipe give @a solapplepie:food_book
 srv:expect Unknown recipe: solapplepie:food_book
-do {"tooltip_text": "solapplepie:food_book", "expect": "^tooltip_text solapplepie:food_book 0: Diet Log$"}
-do {"tooltip_text": "solcarrot:food_book", "expect": "^tooltip_text solcarrot:food_book 0: Food Dictionary$"}
+do {"tooltip_text": "solapplepie:food_book", "expect": "Diet Log$"}
+do {"tooltip_text": "solcarrot:food_book", "expect": "Food Dictionary$"}
 do {"tooltip_text": "solapplepie:food_book", "reject": "Food Book"}
 srv> clear @a
 srv> item replace entity @a hotbar.0 with minecraft:book
@@ -130,7 +130,10 @@ look book + potato gives the Diet Log through Raspberry Pie's edible-food recipe
 @modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
 # steps written r1124gate 2026-11-24 (runner-4): pair run. Reference values = Apple Pie 2.2.0's own defaults (nested jar,
 # SOLSweetPotatoConfig$Server complexityUnparsed): cooked_porkchop 2, cooked_beef 2, golden_carrot 2, golden_apple 4,
-# enchanted_golden_apple 10, every other food defaultContribution 1.0; the server's config is empty, so these apply.
+# enchanted_golden_apple 10, every other food Apple Pie's q = hunger x (1 + modifier) / 2, complexity q / 5 below q 5
+# (food_diversity_audit.md 1; bread 0.80, apple 0.52); the server's config is empty, so these apply. The driver reads
+# ItemStack tooltip lines, so Apple Pie's own "Food Diversity: X" / "Diversity Contribution: X" lines show (Raspberry Pie's
+# "Diversity: X (contributes Y)" line replaces them only in the rendered tooltip).
 srv:bootexpect No usable diversity table \(solraspberrypie/diversity/\*\.json\) in any mod; Apple Pie's values apply
 srv:bootreject Diversity table: [0-9]+ values|Diversity table .* has the wrong shape
 srv> op @a
@@ -141,12 +144,12 @@ srv> solrp reset @a
 srv> clear @a
 srv> effect clear @a
 sleep 2
-do {"tooltip_text": "minecraft:bread", "expect": "Diversity: 1\\.00$"}
-do {"tooltip_text": "minecraft:apple", "expect": "Diversity: 1\\.00$"}
-do {"tooltip_text": "minecraft:golden_apple", "expect": "Diversity: 4\\.00$"}
-do {"tooltip_text": "minecraft:cooked_beef", "expect": "Diversity: 2\\.00$"}
-do {"tooltip_text": "minecraft:golden_carrot", "expect": "Diversity: 2\\.00$"}
-do {"tooltip_text": "minecraft:enchanted_golden_apple", "expect": "Diversity: 10\\.00$"}
+do {"tooltip_text": "minecraft:bread", "expect": "Food Diversity: 0\\.80$"}
+do {"tooltip_text": "minecraft:apple", "expect": "Food Diversity: 0\\.52$"}
+do {"tooltip_text": "minecraft:golden_apple", "expect": "Food Diversity: 4\\.00$"}
+do {"tooltip_text": "minecraft:cooked_beef", "expect": "Food Diversity: 2\\.00$"}
+do {"tooltip_text": "minecraft:golden_carrot", "expect": "Food Diversity: 2\\.00$"}
+do {"tooltip_text": "minecraft:enchanted_golden_apple", "expect": "Food Diversity: 10\\.00$"}
 do {"tooltip_text": "minecraft:cake"}
 srv> effect give @a minecraft:hunger 3 255
 sleep 4
@@ -158,8 +161,8 @@ sleep 4
 srv> item replace entity @a hotbar.0 with minecraft:golden_apple
 do {"slot": 0}
 do {"walk": 45, "keys": "use"}
-do {"tooltip_text": "minecraft:bread", "expect": "Diversity: 1\\.00 \\(contributes [0-9.]+\\)"}
-do {"tooltip_text": "minecraft:golden_apple", "expect": "Diversity: 4\\.00 \\(contributes [0-9.]+\\)"}
+do {"tooltip_text": "minecraft:bread", "expect": "Diversity Contribution: 0\\.[0-9]+$"}
+do {"tooltip_text": "minecraft:golden_apple", "expect": "Diversity Contribution: 4\\.00$"}
 cli> solrp diversity get @s
 sleep 2
 cli:expect food diversity [0-9.]+, highest
@@ -176,7 +179,7 @@ do {"click_widget": {"class": "PageFlipButton", "n": 1}}
 do {"wait": 5}
 shot diet_log_p3
 do {"screen": "close"}
-look the Diet Log diversity page shows the same total as `solrp diversity get` (bread 1.00 plus golden apple 4.00 at Apple Pie's decay weights) and the meal list shows bread and golden apple; cake has no item tooltip value (a placed block; Apple Pie counts its slices when eaten), so the cake read only shows its lines
+look the Diet Log diversity page shows the same total as `solrp diversity get` (bread 0.80 plus golden apple 4.00 at Apple Pie's decay weights) and the meal list shows bread and golden apple; cake has no item tooltip value (a placed block; Apple Pie counts its slices when eaten), so the cake read only shows its lines
 ## CQ-RPS-05 | Apple Pie defaults: eat, respec, drop, die; ageing-out and gate
 @group client
 @commands Client with `rps only` (Apple Pie settings at their defaults: `queueSize` 32, `minFoodsToActivate` 0). Eat a run of different foods past 32 entries, respec at the ladder screen, drop a food, die (RPS-05)
@@ -965,11 +968,11 @@ look after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; dro
 @fails `RpConfig.UneatenSort`, `client/FoodDictionarySort.uneaten`; `RpConfig` `extraWidth`
 @reviewed 2026-11-24
 @modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
-# steps written r1124gate 2026-11-24 (runner-4): pair run with `--config config/solraspberrypie-client.toml:dietLog:extraWidth=-1`
+# steps written r1124gate 2026-11-24 (runner-4): pair run with `--config config/solraspberrypie-client.toml:dietLog:extraWidth='"x"'` (a string for an int key; -1 was clamped to 0, not the default)
 # on the client (section 1 text): Forge corrects the out-of-range value to the jar default and rewrites the file with the
 # jar's comments, which stands in for a fresh config (serve copies the pack's config/). Sort changes go through Forge's
 # own config watcher (Raspberry Pie is stamped) while the game runs; each edit waits for its reload line (lint W cfgedit).
-cli:bootexpect dietLog\.extraWidth.*-1.*48
+cli:bootexpect dietLog\.extraWidth.*corrected from .*x.* to its default, 48
 srv> op @a
 srv> gamemode survival @a
 srv> difficulty easy

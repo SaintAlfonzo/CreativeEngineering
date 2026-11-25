@@ -193,23 +193,23 @@ look the makes line is the one splashing recipe (from design_decor:cardboard_box
 > setblock 20 103 20 creativeengineering:weathered_cardboard_box
 do {"wait": "jei"}
 do {"tooltip_text": "creativeengineering:weathered_cardboard_box", "expect": "Weathered Cardboard Box", "reject": "block\\.creativeengineering\\."}
-do {"look": {"from": "20.5 103.5 18.2", "at": "20.5 103.5 20.5"}}
+do {"look": {"from": "20 103.5 18", "at": "20 103.5 20"}}
 do {"target": true, "expect": "block creativeengineering:weathered_cardboard_box"}
 shot face_north_wthit
-do {"look": {"from": "20.5 103.5 22.8", "at": "20.5 103.5 20.5"}}
+do {"look": {"from": "20 103.5 22", "at": "20 103.5 20"}}
 shot face_south
-do {"look": {"from": "18.2 103.5 20.5", "at": "20.5 103.5 20.5"}}
+do {"look": {"from": "18 103.5 20", "at": "20 103.5 20"}}
 shot face_west
-do {"look": {"from": "22.8 103.5 20.5", "at": "20.5 103.5 20.5"}}
+do {"look": {"from": "22 103.5 20", "at": "20 103.5 20"}}
 shot face_east
-do {"look": {"from": "20.5 106.0 20.5", "yaw": 0, "pitch": 90}}
+do {"look": {"from": "20 106.0 20", "yaw": 0, "pitch": 90}}
 shot face_top
-do {"look": {"from": "20.5 101.0 20.5", "yaw": 0, "pitch": -90}}
+do {"look": {"from": "20 101.0 20", "yaw": 0, "pitch": -90}}
 shot face_bottom
 > clear @s
 > item replace entity @s hotbar.0 with creativeengineering:weathered_cardboard_box
 do {"slot": 0}
-do {"look": {"from": "20.5 103.5 17.0", "yaw": 0, "pitch": 30}}
+do {"look": {"from": "20 103.5 17", "yaw": 0, "pitch": 30}}
 shot held
 do {"screen": "inventory"}
 shot inventory_icon

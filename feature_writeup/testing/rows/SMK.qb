@@ -910,12 +910,14 @@ reject Unknown or incomplete command
 ## SQ-SMK-56 | Raspberry Pie items and recipes
 @group A
 @commands `/cdevtest reg item ^solraspberrypie:`; `/cdevtest makes solraspberrypie:liquid_diet_log`; `/cdevtest bytype solraspberrypie:diet_book max=1`
-@pass two items (`diet_marker`, `liquid_diet_log`); a recipe makes the liquid diet log; one diet book recipe
+@pass three items (`diet_adjustment`, `diet_marker`, `liquid_diet_log`); a recipe makes the liquid diet log; one diet book recipe
 @fails Items not registered, the diet book serializer missing
 > cdevtest reg item ^solraspberrypie:
 > cdevtest makes solraspberrypie:liquid_diet_log
 > cdevtest bytype solraspberrypie:diet_book max=1
-expect verb=reg kind=item regex=\S+ n=2\b
+# BF-FIX r1124w7: three items since the hidden diet_adjustment entry (raspberry_pie.md 1191)
+expect verb=reg kind=item regex=\S+ n=3\b
+expect verb=reg kind=item id=solraspberrypie:diet_adjustment
 expect verb=reg kind=item id=solraspberrypie:liquid_diet_log
 expect verb=makes item=solraspberrypie:liquid_diet_log n=[1-9]\d*\b
 expect verb=bytype serializer=solraspberrypie:diet_book n=1\b

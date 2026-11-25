@@ -590,6 +590,8 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   nothing else may be up. One-off client steps: `tools/scratch_query/cli_do.py`.
 - `eval_client.py` hard-links the instance `mods/`, so a jar only in build/libs is not in the client. A scratch world goes
   into the client with `sp_world.py` (allowCommands on). `qrun.py client` types chat via xdotool.
+- (r1124w7) 421 jars started fine on 2026-11-25 (`run_captures.py serve`, the 4 unlisted jars dropped): the limit below
+  is not current; count anyway and note it if a launch dies at window creation.
 - 420 or more jars in the client's mods/ kill it natively at window creation (`*** stack smashing detected ***:
   terminated` in launch.out, about 23 s after launch, right after KubeJS "Loaded client.properties"); 419 start. Any jar
   tips it (Packet Fixer alone, Debugify alone, both swapped against Clear Void tested r1114). Count `ls GAME/mods/*.jar
@@ -611,6 +613,13 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - Client speeds: read them from client position steps; server-side motion values for a real player are not the client's
   (r1115 phase 11).
 - `do {"look": {"from": ..., "at": ...}}` takes block coordinates and adds 0.5 to x and z itself (cdevcapture `Steps.Look`): a centered `from "0.5 102.6 -1.5"` lands on the block edge (x 1.0) and the crosshair misses, so `use` uses the item and the screen wait times out. Give whole numbers (CQ-TSL-02, r1123cx 2026-11-23).
+
+- `do {"look": {"from": ...}}` `from` is the eye position: on a floor whose top is y -61 use y -58.38; `-60` puts the
+  feet in the ground and a survival player suffocates. A death screen makes every later `screen` step time out (601
+  ticks), across rows and batches: respawn with `tools/scratch_query/batches/r1124w7/respawn.qb`. Put a survival
+  player on the floor (`tp`) before `gamemode survival`, or fall damage kills it the same way (r1124w7).
+- `--config FILE:SECTION:KEY=-1` on an int key below its range is clamped to the range bound by Forge 43, not reset to
+  the default; a wrong type (`KEY='"x"'`) resets it to the default (r1124w7, CQ-RPS-15).
 
 ## Perf and timing
 

@@ -577,7 +577,7 @@ repeat 7
 > cdevtest use 5313 -60 5201 held=minecraft:pumpkin_pie face=up
 end
 > cdevtest state 5313 -60 5201
-expect verb=state .*state="?creativedelight:warped_composter\[level=7\]
+expect verb=use main=empty off=empty state="?creativedelight:warped_composter\[level=7\]
 > cdevtest tickwarp 40
 waitlog verb=tickwarp .*end=done 60
 > cdevtest state 5313 -60 5201

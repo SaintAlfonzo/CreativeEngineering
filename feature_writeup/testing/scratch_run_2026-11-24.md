@@ -447,3 +447,285 @@ CMP-27 `bootexpect` -> `shell grep logs/qrun_boot1.log`; GSH-11 `waitlog` before
 - New final jars installed: creativecommon 1.3.0+db212e956, creativecompat 1.0.0+db212e956 (Raspberry Pie unchanged, 8f883cd64). Changes: mod descriptions; owner ruling that Snow! Real Magic handles snow fall when loaded (TODO creative-compat-publish #12, new SQ-CMP-38; SQ-CMP-24, SQ-PS15B-13, -14, -19, -22 moved to a `nosrm` mod set).
 - Row fixes in 9d855c389 (SQ-RPS-06/-08 superseded, CQ-CC13-02/-04 jars, SQ-WT-04, SQ-GSH-08/-11/-12, SQ-CGE-17, SQ-MELT-23/-24, CQ-RPS-03, SQ-CM-42, SQ-CMP-16/-23/-27; cmp_mixin_check.py counts per mixin-target pair).
 - Rerun list for the resume (perf/runs/r1124gate/rerun.txt): SQ-CMP-01, -16, -23, -24, -27, SQ-CGE-17, SQ-GSH-11, -12, SQ-CM-42. The resumed drive runs on the db212e956 jars: rerun prescreen and jarstamp first, and re-plan (`qrerun.py`) since the jar stamps changed; the 26 PASSes on ddd126587 / edd3b66b9 stand unless qplan marks them jar-changed.
+
+## 5. r1124w7: W-P7 resumed on the release jars
+
+runner-w7 (scratch-test runner subagent) for the session orchestrating wave 1. Owner authorized the boots (2026-11-24,
+chat). Results `perf/runs/r1124w7/`, perf session r1124w7.
+
+### 5.1 Scope
+
+r1124gate's 148 ids (`perf/runs/r1124gate/ids.txt`) minus the 26 rows that passed there (section 4.5), plus SQ-CMP-38 (new,
+Snow! Real Magic hand-over): `perf/runs/r1124w7/ids.txt`. The 26 PASSes stand: from ddd126587 / edd3b66b9 to db212e956
+Common changed only its version and description, Compat only the snow-fall hand-over (CreativeCompat.java,
+CompatMixinPlugin.java, SnowLayerFallMixin.java, FallingLayers.java), which none of the 26 rows test. Plan
+(`qrerun.py`, `perf/runs/r1124w7/plan.json`): 90 server rows in 40 steps; then client rows. Left out: SQ-RPS-06, -08
+(superseded), CQ-RPI-90, -95 (draft: owner row, two real players), SQ-PS15B-14, -19, -22 (draft, nosrm mod set; not in
+the gate scope, added and dropped).
+
+### 5.2 Jars and preflight
+
+| Jar | Stamp in mods/ (jarstamp.py, 23:00) | sha1 |
+|---|---|---|
+| creativecommon-1.3.0.jar | 1.3.0+db212e956.2611242239 | e267d26763f3e29de1c4bca661d931c5d4f80b0d |
+| creativecompat-1.0.0.jar | 1.0.0+db212e956.2611242239 | ad4746c0c4ef238ff6acb1ae957767fd3d99dd2f |
+| solRaspberryPie-1.0.0.jar | 1.0.0+8f883cd64.2611242037 | cb71f0ccc76834ef24e7b060c272dba62163941f |
+
+All three match the brief and `jar_archive/installed.csv` (22:42, 22:44, 20:38). Creative Delight in mods/ is
+1.1.0+2d9bb69dc (22:49, carries the SQ-CM-38 pumpkin pie fix). `jarstamp.py pending` lists 4 newer build/libs jars
+(Common, Compat, Calendar, Loot at 2d9bb69dc), so the drive runs with `NOSWAP=1` (`perf/runs/r1124w7/env.sh`): the
+installed release jars only. DROPJARS as r1124gate (4 jars without a mod_sides.md row). `check_all.py --fast`: 43 run,
+0 failed. `game_jvms.sh` empty, 16 GB free on /.
+
+Pre-screen (`perf/runs/r1124w7/prescreen.txt`): 1 likely (SQ-MELT-24 End coordinates, the known false positive), 2
+risk (MT), 64 stale: 46 SMK smoke rows and the RPS rows, whose sources are whole jar trees or the removed
+`solRaspberryPie/libs.csv` (no row reads it); left as they are.
+
+### 5.3 Run notes
+
+- 23:05 RUNNER.md claimed (state idle since 22:12, no game JVM).
+- 23:06 perf session r1124w7 open (systemd user scope `r1124w7-perf`); 23:07 drive started as user unit `r1124w7-drive`
+  (`perf/runs/r1124w7/start_drive.sh`, log `drive_main.out`): 40 steps, 90 rows.
+- 23:08 drive restarted (the first unit start failed on a relative script path, nothing ran): 44 steps with the boots, 90
+  rows. Step 1 prep log `swap: off (NOSWAP=1)`.
+- 23:16 BF-FIX SQ-CM-38: the 7 pies took the Warped Composter to level 7 (each use CONSUME, the pie fix works), but the
+  row read the state after `sleep 2`, when vanilla's scheduled tick had already turned 7 into ready 8 -> the level-7
+  check reads the 7th use reply instead (CM.qb). Rerun at the end of the drive (`perf/runs/r1124w7/rerun.txt`).
+  SQ-CM-41 PASS (the CookTimeTotal fix).
+- 23:31 SQ-GSH-11 BATCH-FAULT (second fault after the r1124gate fix, so not rerun in-run): the added `waitlog [GlmMerge]`
+  waits for a line logged at load ([main], before Done), so it timed out; substance passes (191 entries, no
+  glass_shards skip, one stack of blue shards per pane). Row text fixed for the next run (waitlog removed, bootexpect
+  reads the line).
+- 23:58 BF-FIX SQ-PST-08, -11, -11b: spring and winter counts all 0 (no spread at all): forceloaded chunks with no player
+  get no random ticks, the cause r1124fx found for SQ-PST-10c and flagged for these three -> the same bot `s5pl` on the
+  pad for the ticking part (PSU.qb). Queued for the rerun.
+- 00:02 SQ-PTH-29, -30 FAIL on checks, `[zpth] mod ... none found`: the summoned fox, bee and zombie are gone (the known
+  r1124fx/r1124nw batch fault: mobs vanish in 2 to 4 s, section-level spawn props shared; not simple) -> BATCH-FAULT.
+- 00:04 SQ-TI-00 BF-FIX: the `ClassNotFound ... net.minecraft.client` reject matched D&D's dedicated-server event scan
+  (`ClassNotFoundException: net.minecraft.client.particle.TextureSheetParticle`, create_dd on the ERROR line; not ours;
+  no other match in the log) -> excluded in RD.qb; queued. SQ-LE-03 FAIL, repeat of the r1124 finding: the dispensed
+  Swiftness potion bucket makes no cloud (Creative Brewing `PotionBucketDispenser` / `potion_area.js`; not a wave 1 jar).
+- 00:16 SQ-SG-02, -03: the unsheared control patches kept 24 of 24 again with bot `qa` on the pad (vanilla grass,
+  lush grass, grass slab): repeat of TODO `creative-calendar #2` (grass does not spread on the full pack). FAIL, known.
+- 00:3x BF-FIX SQ-SMK-56: 3 Raspberry Pie items, row said 2; the third is the hidden `diet_adjustment` entry documented in
+  raspberry_pie.md -> count 3 and an id check (SMK.qb); queued.
+- 00:5x SQ-TPF-10 FAIL: three 1-health cows killed by lightning (MC-206922 on in the shipped debugify.json), no item
+  within 20 blocks (PASS r1113tpf). Debugify is a third-party jar, not a wave 1 jar; cause not analyzed (fire from the
+  bolt, or the fix). SQ-TPF-18 BATCH-FAULT: the row expects the fix's saved `AABB`, but MC-2025 is off in the shipped
+  debugify.json (thirdparty_fixes.md rule 2: base never reproduced); the row needs a fix-on config for its own boot or
+  a base-only rewrite (not simple: section prep).
+- 01:0x SQ-WT-04 FAIL: offer counts one above the row in both modes (Loot on, 25 + 5: 31 not 30; Loot off: 7 not 6);
+  the loot_alone boot's config checks pass. The constant +1 with Loot off suggests another mod's wandering-trader
+  offer (Forge `WandererTradesEvent`), so the row's count may be stale; not proven from the log (the row stores counts
+  only), so reported, not edited. Creative Loot is a wave 2 jar.
+- 01:1x SQ-MT-04, -05, -06 HARNESS (captures unset): the summoned squid, glow squid and cachalot whale
+  (`PersistenceRequired`, forceloaded deep ocean, group B) answer "No entity was found" 1 s after `Summoned new ...`.
+  Same pattern as SQ-PTH-29, -30 here and SQ-SMK-31 (r1124): summoned mobs disappear on scratch worlds, cause unknown
+  (a join or tick remover). Treated as a finding, not a row fault: FAIL (uncertain), one TODO row for the shared cause.
+- 01:28 drive r1124w7 done, 44/44 steps (01:08 to 01:28 the long rows: SQ-CMP-12 PASS; SQ-PSM-09 INCONCLUSIVE, after
+  tickwarp 12000 only 7 glow squid, no squid or dolphins: too few natural mobs for a rate). judge-1 (scratch-judge) on
+  steps 1 to 42: PASS 69, FAIL 9, BATCH-FAULT 7, HARNESS 3 (SQ-MT-04 to -06: qrun keeps HARNESS while captures are
+  unset; their LOOK is filled FAIL, counted FAIL here). SQ-SMK-31 FAIL: the summoned moobloom is gone (the shared cause).
+- 01:29 rerun drive `r1124w7r` started (user unit, `perf/runs/r1124w7/rerun.plan.json`): SQ-CM-38, SQ-PST-08, -11,
+  -11b, SQ-TI-00, SQ-SMK-56.
+- 01:45 rerun r1124w7r done (01:29 to 01:45, 4 steps): SQ-CM-38, SQ-PST-08, -11, SQ-TI-00, SQ-SMK-56 PASS. SQ-PST-11b
+  FAIL on substance: winter/spring 0.25 (limit 0.35 to 0.85; r1124 0.20, r1120nv 0.88), the repeat of TODO
+  `creative-calendar #1`. Its `no such bot` reject hit is the row's old `pbot remove s5pd` (a bot from SQ-PST-10, not
+  in the selection): left as is.
+- 01:47 client block 1: full-pack capture client (`run_captures.py serve`, the 4 unlisted jars dropped; 421 jars in
+  GAME/mods start fine, so the 420-jar limit in gotchas.md no longer holds), pid 1841986. `qrun.py client` on CC13
+  (CQ-CC13-01 to -04), CMP (CQ-CMP-14, -15, -18 to -22, -26, -30 to -33, -36, -37), CQ-CPP-01, CQ-MELT-02, CQ-CEN-02,
+  CQ-LTP-17 -> `perf/runs/r1124w7/cli_res`.
+- 01:58 client block 1 cascade: CQ-CPP-01's `look from "4 -60 5"` is the eye position, so the feet went into the grass;
+  the player suffocated and the death screen timed out every later `screen` step (CQ-CPP-01, CQ-MELT-02, CQ-CEN-02).
+  Rows before it were not affected. Player respawned (`tools/scratch_query/batches/r1124w7/respawn.qb`); look fixed;
+  the three rerun -> `cli_res2`. judge-2 (scratch-judge) on cli_res / cli_res2: BF-FIX CQ-CMP-30 (salt:salt is merged
+  into vintagedelight:salt_dust, no uses with Seasoning off -> salt_dust), CQ-CMP-33 names (read the kill replies),
+  CQ-CEN-02 (look coordinates `.5` doubled by the driver), CQ-CPP-01 (stand on the open pipe end, x 3; files count 3);
+  rerun -> `cli_res3`: CQ-CMP-30, CQ-CEN-02 LOOK (owner shots); CQ-CMP-33 FAIL (sample syringe JEI page);
+  CQ-CPP-01 haste now arrives (amp 0), but the player died again of fall damage after `gamemode survival` at the
+  previous row's height (second fault: row fixed with a floor `tp`, not rerun); the row stays FAIL on the version_filter
+  reject below.
+- Product finding (Creative Common 1.3.0+db212e956, a wave 1 jar): every client start logs `Loading tips: skipped
+  loading_tips:version_filter: Missing tips, expected to find a JsonArray`. LoadingTips.java applies the file's `remove`
+  list, then reads `tips`, which version_filter.json (W-P1 tip filter) lacks; the removals still apply (213 tips from 3
+  files, 319 removed) but the WARN fires. CQ-LTP-17 and CQ-CPP-01 FAIL on it.
+- 02:18 CQ-RPI-94: own capture client launch with `--config config/solraspberrypie-client.toml:effects:fleetFootedFov=0.5`
+  (fresh config copy): the carry-over to Compat `[fleet_footed] fov = 0.5` and its removal from the Raspberry Pie toml
+  pass; the shots stay for the owner. JFR dumped to `perf/runs/r1124w7/jfr/`. Client stopped 02:19.
+- 02:20 Raspberry Pie isolated pair block (`qrun.py pair`, server `qmodset.py build` with NOSWAP=1: `rps only` +
+  Common, Devtools, KubeJS, Rhino, Architectury; Common 1.3.0+db212e956, Raspberry Pie cb71f0cc; client drops the other
+  419 jars) -> `perf/runs/r1124w7/pair_rps`. judge-3 (scratch-judge): CQ-RPS-02, -03, -15 row faults (tooltip regex
+  anchor; bread 0.80 / apple 0.52 are Apple Pie's own values, q = hunger*(1+modifier)/2 then q/5, the row's 1.00 was
+  stale; `extraWidth=-1` is clamped to 0 by Forge, a string value is reset to the default instead) fixed; CQ-RPS-14
+  BATCH-FAULT (12 foods reach 7.12, only Regeneration I unlocked and already in slot 1, so the change picker is empty
+  and no Confirm exists; needs a rewrite with more foods; the drop half passed). Rerun `pair_rps2` 02:41: CQ-RPS-03,
+  -15 checks pass (`corrected from x to its default, 48`; shots for the owner); CQ-RPS-02 second regex fault (the
+  driver matches the tooltip text without the `tooltip_text ID N:` prefix), substance right (Diet Log, Food
+  Dictionary, Apple Pie's book recipe gone): BATCH-FAULT, expects fixed.
+- 02:5x CQ-RPS-12: server folder `rpsB` with the `rps_fixture.py table` copy of the Raspberry Pie jar (instance jar
+  untouched, sha1 cb71f0cc), re-pinned; pair run -> `perf/runs/r1124w7/pair_rps12`.
+- 03:0x write-back: TODO rows set Complete (all their tests PASS): composting #9, #10, corpses #9, creative-common-publish
+  #18, creative-compat-publish #1 to #6, #11, #12, creativesplit/compat #5, raspberry-pie-publish #4. Not set (their
+  rows files hold another session's uncommitted edits): food-tuning #38, #39, #45 (SQ-RPS-01, -04, -07 PASS) and
+  mod-integration #2 (SQ-TI-00 PASS). New Bug rows: creative-common-publish #21 (version_filter WARN), creative-compat-
+  publish #14 (CQ-CMP-19 mana ring), #15 (CQ-CMP-33 syringe JEI page), #16 (CQ-CMP-37 sneak use), #17 (summoned mobs
+  vanish). Logged: creative-calendar #1, #2, creative-common-publish #19, creative-compat-publish #9, raspberry-pie-
+  publish #24, potions/potion-buckets #5. SQ-TPF-10 (Debugify MC-206922, largecontent/mod-additions #80) not logged.
+- Perf: perf session r1124w7 closed, summary `perf/sessions/r1124w7/summary.md`; the first full-pack client closed without a
+  JFR dump (missed), the CQ-RPI-94 client was dumped.
+
+### 5.4 Verdicts
+
+Latest result per row over `perf/runs/r1124w7/s00_res` to `s43_res`, rerun `perf/runs/r1124w7r/s00_res` to `s03_res`,
+clients `cli_res`, `cli_res2`, `cli_res3`, `cli_rpi94`, pairs `pair_rps`, `pair_rps2`, `pair_rps12` (`qrun.py table`).
+Counts (120 rows): PASS 77, FAIL 17 (SQ-MT-04 to -06 listed HARNESS by qrun: captures unset because the mobs vanished;
+counted FAIL), BATCH-FAULT 4, LOOK 21 (owner shots), INCONCLUSIVE 1. With r1124gate's 26 standing PASSes (4.5): PASS 103.
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CGE-17 | PASS | End listed: zombie and bot 0.016; only overworld listed: 0.08; 9 drop types ratio 1.000 (shell and log lines 53-54, 858-859) |
+| SQ-CM-38 | PASS | runner-w7: Warped and vanilla composters both in 1 to 7 after 30 seeds, no steady bias over two runs (warped 3 / vanilla 1 in r1124w7, 2 / 5 here); 7 pies reach level 7, ready 8 after tickwarp, bone meal out, sneaking places the pie |
+| SQ-CM-41 | PASS | 7 checks passed |
+| SQ-CM-42 | PASS | boot 2 expects all passed: blocks, chest 2 birch (creativedelight), stand 1; swap remap bootexpects and no Missing/unknown composter line |
+| SQ-CMP-01 | PASS | 3 checks passed |
+| SQ-CMP-16 | PASS | PASS: c16a Pos y -60.0 (column floor, sunk); PASS: c16b Pos y -49.28 (water surface, floating) |
+| SQ-CMP-23 | PASS | 36 true keys; skipped by gate 10 (same count as r1123 PASS), all absent-mod or client-only Breezy; no range or Breezy gate line |
+| SQ-CMP-38 | PASS | handover line count 1; row bootexpect passed and the y 116 landing checks passed |
+| SQ-CMP-27 | PASS | boot 1: one carry-over line; file has pagesOff = [seasoning, tipped_arrows] only; restart: 0 lines, same list |
+| SQ-CMP-24 | PASS | 0 ClassCast/NoClassDef lines; SNOW_STAYED said; switched-off line bootexpect passed; no Snow Real Magic jar (0) |
+| SQ-GSH-11 | BATCH-FAULT | reclassified from FAIL: runner-w7 2026-11-25: waitlog [GlmMerge] waits for a load-time line logged before Done; second fault, row text fixed, no rerun; timeout 60 s waiting for /\[GlmMerge\] \d+ entries/; PASS: GlmMerge line present, no glass_shards skip, one stack of blue shards (row batch-fault on waitlog only) |
+| SQ-GSH-12 | PASS | 0 glass_shards lines; pane rolls=20 drops=-; glass drops quark:clear_shard:64 (40..80) |
+| SQ-MELT-22 | PASS | carried-over line expected and matched; Compat toml created; printed keys saltRange = 2, endNoFire = false; Common has no [melting] |
+| SQ-MELT-23 | PASS | bootexpect tag counts (35/40/123/44) and the six expects (salt 40, fire 123, saltable 44, meltable 35, old creativecommon tags n=0) all matched; melt expects passed |
+| SQ-MELT-24 | PASS | all expects matched: true refused setblock, flint, kept soul fire; false placed both fires; sound not judged (hand) |
+| SQ-PS15B-13 | PASS | 6 checks passed |
+| SQ-PST-08 | PASS | 4 checks passed |
+| SQ-PST-11 | PASS | 3 checks passed |
+| SQ-PST-11b | FAIL | shell exit 1: PST11b: spring [71, 62, 53] mean 62.0; winter [10, 28, 8] mean 15.3; winter/spring 0.25 (pass 0.35-0.85); /(Unknown (item/block/block type/entity)/does not (have/accept)/Incorrect argument for command/Unknown or incomplete command/That position is not loaded/No player was found/no such bot/no such item/Invalid (block state/tag)/\[(zq/s5)\] (error/no player)/\[cdevtest\] .*(done=0/error=))/ matched: [25Nov2026 01:41:40.845] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: no such bot; PASS: runner-w7: season set back to mid_spring (row FAIL stands on the 0.25 ratio) |
+| SQ-PTH-29 | FAIL | no line matches /\[zpth\] mod f29l .* mod=none/; no line matches /\[zpth\] mod b29l .* mod=none/; no line matches /\[zpth\] mod z29l .* mod=-/; no line matches /\[zpth\] mod f29s .* mod=-/; no line matches /\[zpth\] mod b29s .* mod=-/; no line matches /\[zpth\] mod z29s .* mod=-/; summoned mobs disappear on scratch worlds (shared cause, see run doc 5.3) |
+| SQ-PTH-30 | FAIL | no line matches /has the following entity data: \[100[0-3]\./ |
+| SQ-LE-03 | FAIL | no line matches /LE03 swiftness cloud/; no line matches /(?i)has the following entity data: .*(swiftness/minecraft:speed/Id: 1b)/ |
+| SQ-TI-00 | PASS | runner-w7: creativecompat-common.toml [moss] tintStrength = 1.0, biomeTint = true |
+| SQ-RFX-35 | PASS | all six counts 1 or more (Mmlib 2) |
+| SQ-RPI-96 | PASS | 7 checks passed |
+| SQ-RPS-01 | PASS | Diet ladder line once in latest.log (grep -c 1), text exact; reject checks clean |
+| SQ-RPS-10 | PASS | 6 checks passed |
+| SQ-RPS-07 | PASS | maxDiversity 11.9666 (fixture bread), summary line 1648 values, 3 ids skipped, no per-id warning for nosuchmod |
+| SQ-RPS-04 | PASS | loose solapplepie-1.19.2-2.2.0.jar and solRaspberryPie-1.0.0.jar in mods; one solapplepie mod file, one Diet ladder line (bootexpect), Done reached |
+| SQ-RPS-11 | PASS | no recipe parse or edible ingredient error; Done and ladder line bootexpects passed; crafting is CQ-RPS-12 (client, deferred) |
+| SQ-RPS-13 | PASS | 6 checks passed |
+| SQ-SG-02 | FAIL | unsheared control kept 24 of 24 (known TODO creative-calendar #2, grass does not spread on the full pack) |
+| SQ-SG-03 | FAIL | count /Successfully filled 24 block/ = 4, wanted == 2; unsheared control kept 24 of 24 (known TODO creative-calendar #2) |
+| SQ-SMK-01 | PASS | 11 checks passed |
+| SQ-SMK-02 | PASS | 4 checks passed |
+| SQ-SMK-03 | PASS | 4 checks passed |
+| SQ-SMK-04 | PASS | 3 checks passed |
+| SQ-SMK-33 | PASS | 11 checks passed |
+| SQ-SMK-34 | PASS | 5 checks passed |
+| SQ-SMK-35 | PASS | 5 checks passed |
+| SQ-SMK-36 | PASS | 3 checks passed |
+| SQ-SMK-37 | PASS | 12 checks passed |
+| SQ-SMK-38 | PASS | 3 checks passed |
+| SQ-SMK-39 | PASS | 3 checks passed |
+| SQ-SMK-40 | PASS | 5 checks passed |
+| SQ-SMK-51 | PASS | 5 checks passed |
+| SQ-SMK-52 | PASS | 4 checks passed |
+| SQ-SMK-53 | PASS | 3 checks passed |
+| SQ-SMK-54 | PASS | 9 checks passed |
+| SQ-SMK-55 | PASS | 2 checks passed |
+| SQ-SMK-56 | PASS | 5 checks passed |
+| SQ-SMK-05 | PASS | 8 checks passed |
+| SQ-SMK-06 | PASS | 3 checks passed |
+| SQ-SMK-07 | PASS | 3 checks passed |
+| SQ-SMK-08 | PASS | 4 checks passed |
+| SQ-SMK-09 | PASS | 9 checks passed |
+| SQ-SMK-10 | PASS | 4 checks passed |
+| SQ-SMK-11 | PASS | 4 checks passed |
+| SQ-SMK-12 | PASS | 8 checks passed |
+| SQ-SMK-13 | PASS | 4 checks passed |
+| SQ-SMK-14 | PASS | 2 checks passed |
+| SQ-SMK-15 | PASS | 6 checks passed |
+| SQ-SMK-16 | PASS | 5 checks passed |
+| SQ-SMK-17 | PASS | 2 checks passed |
+| SQ-SMK-18 | PASS | 10 checks passed |
+| SQ-SMK-19 | PASS | 3 checks passed |
+| SQ-SMK-20 | PASS | 3 checks passed |
+| SQ-SMK-21 | PASS | 8 checks passed |
+| SQ-SMK-22 | PASS | 4 checks passed |
+| SQ-SMK-23 | PASS | 2 checks passed |
+| SQ-SMK-24 | PASS | 7 checks passed |
+| SQ-SMK-25 | PASS | 6 checks passed |
+| SQ-SMK-26 | PASS | 4 checks passed |
+| SQ-SMK-27 | PASS | 3 checks passed |
+| SQ-SMK-28 | PASS | 2 checks passed |
+| SQ-SMK-29 | PASS | 9 checks passed |
+| SQ-SMK-30 | PASS | 3 checks passed |
+| SQ-SMK-31 | FAIL | no line matches /verb=entities n=1\b/ |
+| SQ-SMK-32 | PASS | 2 checks passed |
+| SQ-SNP-06 | PASS | 13 checks passed |
+| SQ-TPF-10 | FAIL | no line matches /Test passed, count: [1-9]/ |
+| SQ-TPF-18 | BATCH-FAULT | reclassified from FAIL: runner-w7 2026-11-25: MC-2025 off in the shipped debugify.json, row expects the fix's AABB; needs fix-on config or base-only rewrite, not simple; no line matches /has the following entity data/; FAIL: batch fault, see reclassify: MC-2025 off in shipped debugify.json |
+| SQ-TPF-19 | PASS | 1 check passed |
+| SQ-WT-03 | PASS | 7 checks passed |
+| SQ-WT-04 | FAIL | no line matches /#a has 30 \[wt4\]/; no line matches /#b has 6 \[wt4\]/; /(Unknown (item/block/block type/entity)/Incorrect argument for command/Unknown or incomplete command/That position is not loaded/Found no elements matching)/ matched: [25Nov2026 01:03:27.627] [KubeJS Recipe Event Worker 0/WARN] [KubeJS Server/]: Error parsing recipe create:milling/compat/biomesoplenty/burning_blossom[create:milling]: {"type":"create:milling","condi |
+| SQ-MT-04 | HARNESS | capture M4SA: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4GA: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4WA: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4SB: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4GB: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4WB: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4SC: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4GC: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4SD: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4GD: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4OR: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4SE: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4GE: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4SF: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M4GF: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; placeholder M4WA1, M4WA2, M4WA3, M4WB1, M4WB2, M4WB3, M4OR1, M4OR2, M4OR3, M4SA1, M4SA2, M4SA3, M4SB1, M4SB2, M4SB3, M4SC1, M4SC2, M4SC3, M4SD1, M4SD2, M4SD3, M4SE1, M4SE2, M4SE3, M4SF1, M4SF2, M4SF3, M4GA1, M4GA2, M4GA3, M4GB1, M4GB2, M4GB3, M4GC1, M4GC2, M4GC3, M4GD1, M4GD2, M4GD3, M4GE1, M4GE2, M4GE3, M4GF1, M4GF2, M4GF3 unset (no capture in this batch, not in RES/vars.json); FAIL: summoned mobs disappear on scratch worlds (shared cause, see run doc 5.3) |
+| SQ-MT-05 | HARNESS | capture M5QA: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M5WA: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M5HA: no line matches /entity data: (-?[\d.]+)f/; capture M5QB: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M5HB: no line matches /entity data: (-?[\d.]+)f/; capture M5WB: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M5QC: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M5QD: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M5HC: no line matches /entity data: (-?[\d.]+)f/; capture M5QE: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M5HD: no line matches /entity data: (-?[\d.]+)f/; capture M5HA, M5HB, M5HB, M5HC, M5HD unset (its row was skipped or failed); placeholder M5WA1, M5WA2, M5WA3, M5WB1, M5WB2, M5WB3, M5QA1, M5QA2, M5QA3, M5QB1, M5QB2, M5QB3, M5QC1, M5QC2, M5QC3, M5QD1, M5QD2, M5QD3, M5QE1, M5QE2, M5QE3 unset (no capture in this batch, not in RES/vars.json); FAIL: summoned mobs disappear on scratch worlds (shared cause, see run doc 5.3) |
+| SQ-MT-06 | HARNESS | capture M6QA: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6WA: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6GA: no line matches /entity data: (-?[\d.]+)f/; capture M6HA: no line matches /entity data: (-?[\d.]+)f/; capture M6QB: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6WB: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6GB: no line matches /entity data: (-?[\d.]+)f/; capture M6HB: no line matches /entity data: (-?[\d.]+)f/; capture M6QC: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6WC: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6GC: no line matches /entity data: (-?[\d.]+)f/; capture M6HC: no line matches /entity data: (-?[\d.]+)f/; capture M6QD: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6WD: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6GD: no line matches /entity data: (-?[\d.]+)f/; capture M6HD: no line matches /entity data: (-?[\d.]+)f/; capture M6QE: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6WE: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6GE: no line matches /entity data: (-?[\d.]+)f/; capture M6HE: no line matches /entity data: (-?[\d.]+)f/; capture M6QF: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6WF: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6GF: no line matches /entity data: (-?[\d.]+)f/; capture M6HF: no line matches /entity data: (-?[\d.]+)f/; capture M6QG: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6WG: no line matches /entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]/; capture M6GG: no line matches /entity data: (-?[\d.]+)f/; capture M6HG: no line matches /entity data: (-?[\d.]+)f/; capture M6GA, M6GB, M6GC, M6GD, M6GE, M6GF, M6GG, M6HA, M6HB, M6HC, M6HD, M6HE, M6HF, M6HG unset (its row was skipped or failed); placeholder M6QA1, M6QA2, M6QA3, M6QB1, M6QB2, M6QB3, M6QC1, M6QC2, M6QC3, M6QD1, M6QD2, M6QD3, M6QE1, M6QE2, M6QE3, M6QF1, M6QF2, M6QF3, M6QG1, M6QG2, M6QG3, M6WA1, M6WA2, M6WA3, M6WB1, M6WB2, M6WB3, M6WC1, M6WC2, M6WC3, M6WD1, M6WD2, M6WD3, M6WE1, M6WE2, M6WE3, M6WF1, M6WF2, M6WF3, M6WG1, M6WG2, M6WG3 unset (no capture in this batch, not in RES/vars.json); FAIL: summoned mobs disappear on scratch worlds (shared cause, see run doc 5.3) |
+| SQ-CMP-12 | PASS | 4 checks passed |
+| SQ-PSM-09 | INCONCLUSIVE | runner-w7: after tickwarp 12000 only 0 squid, 7 glow squid (0 babies), 0 dolphins: too few natural mobs for a rate (needs 60+); no mobcap line read |
+| CQ-CC13-01 | PASS | reload lines 01:48:58 (after the levelCaps edit; luck amp 2 -> 0) and 01:49:05 (after the revert; amp back to 2); the byte-identical rewrite between them logged no reload; count == 2 check passed; no failure lines |
+| CQ-CC13-02 | LOOK | open look 1: ice_tooltip: the gray "Saltable" line under the name; salt and Salt Melt READ lines and shots: what the salt item says about its use (the code has no salt-item tooltip line, only the Saltable line on blocks and the JEI info page; a missing use line is a doc question, not a FAIL) |
+| CQ-CC13-03 | LOOK | open look 1: hud and inventory_effects: Nausea without a level numeral, Speed shows III; potion_tooltip: "Nausea (1:00)" with no numeral; wine and JEI page not captured here (a JEED effect page has no driver screen; owner playtest) |
+| CQ-CC13-04 | LOOK | open look 1: owner: per wood (planks row in front: spruce, birch, dark oak, jungle, acacia, mangrove, twisted, ancient, blossom, azalea, crimson, warped) the empty, filling (level 4) and ready (level 8) composters; the compost gaps take each plank's darkest shades, no missing texture; on approval the `sources.csv` composter rows go from `confirm` to `ok` |
+| CQ-CEN-02 | LOOK | open look 1: shots: no purple-black anywhere; each face one tile of the sheet (taped top, flap bottom, handles on north and south, labels on east and west, as CQ-CMP-09); the WTHIT overlay on face_north_wthit names Weathered Cardboard Box and Creative Engineering; held and inventory icons show the box model; jei_recipe shows the splashing recipe and the box (hover its mod line by hand if JEI's mod name is not in the shot) |
+| CQ-CMP-14 | LOOK | open look 1: armor_before: the corpse wears the iron armor and holds the sword; armor_after: no helmet, no sword, chestplate, leggings and boots still on; wither_corpse: a normal-size skeleton with the dark wither skeleton texture wearing the gold helmet |
+| CQ-CMP-15 | PASS | final player line: botania:dodge_ring in curios:inventory ring Stacks slot 0, not in Inventory; chestplate in armor slot 102; slot_item 46 golden_helmet and slot 6 iron_chestplate checks passed |
+| CQ-CMP-18 | LOOK | open look 1: sections_idle: top row 4 armor, 4 cosmetic (gold helmet leftmost, gold boots at the right end, the middle two show armor silhouettes), offhand at the right end; a Curios-style panel on the window's left edge with one slot per curio (back, belt, necklace, ring, ring); no Additional Items button; curio_hover: the tooltip names "Curio: Ring"; two_columns: 15 curios, a second column further left past 12 |
+| CQ-CMP-19 | FAIL | slot_item: slot_item: no line matches /mana_ring/; open look 1: (a) the slot_item checks show the shift-clicked, dragged and hotbar-swapped items left their section slots and sit in the inventory with no tag (no nbt on the dragged ring and the swapped helmet); the shift-clicked dodge ring is in the first player line. (b) second player line: ring slot 0 holds aura_ring (put there after death), ring slot 1 mana_ring (its own index), dodge_ring in Inventory (its slot was taken), backpack in back, travel belt in belt, cloud pendant in necklace; the cosmetic helmet is back in its cosmetic slot. Hand: the extra Additional Items stack (no real-death source in this kit) |
+| CQ-CMP-20 | LOOK | open look 1: corpse_gold: the corpse wears the gold helmet (its own cosmetic stack), not the leather one; corpse_iron: after the gold helmet was taken it shows the iron helmet; self_third_person: the living player still wears the leather cosmetic helmet and the corpse beyond it the iron one |
+| CQ-CMP-21 | LOOK | open look 1: (with the CQ-CMP-18 shots) model_front / model_side: the corpse's player model shows the belt, the necklace and the elytra on its back over the iron chestplate; *_taken: elytra and belt gone, necklace still shown. Hand: one curio with its render toggled off does not show |
+| CQ-CMP-22 | LOOK | open look 1: (with the CQ-CMP-18 shots) skeleton_dressed: the skeleton wears the gold helmet over the iron one, belt, necklace and the elytra over the chestplate; skeleton_taken: iron helmet shows, elytra gone; wither_dressed: the wither skeleton dressed the same. Hand: the render-toggled curio does not show |
+| CQ-CMP-26 | LOOK | open look 1: (with the CQ-CMP-18 shots) own_wings: the living player's wings, left red, right the banner; skeleton_custom: the skeleton's wings show the same dye and banner; skeleton_vanilla: plain vanilla elytra wings |
+| CQ-CMP-30 | LOOK | open look 1: salt_uses_off: no Seasoning page (salt's seasoning crafts on the Crafting / Mixing pages); tipped_arrow_off: no Tipped Arrows page (Crafting / Spout); canning and potion_buckets open; with the empty list the Seasoning and Tipped Arrows pages open too (a jei_category step that fails = page missing) |
+| CQ-CMP-31 | LOOK | open look 1: the WTHIT run speed line on the powdered sugar block shows the 0.9 stuck multiplier (look_at_block; inside_block if WTHIT shows it from inside) |
+| CQ-CMP-32 | LOOK | open look 1: the parts (Jump Boost and the mid-air jump line) listed under "When Applied:" as before |
+| CQ-CMP-33 | FAIL | screen: timeout after 601 ticks; open look 1: names "Ancient Corpse" / "Ancient Remains" (shots and the entities line); both cookies in one jar (be line); sample_syringe_tab: the world tab shows the syringe as its icon and catalyst, no barrier icon |
+| CQ-CMP-36 | LOOK | open look 1: can_filled: the cobblestone and the apples are in the can's slots; can_reopened: all 27 slots empty; the stick stack held on the cursor at close is back in the inventory (clear line), nothing on the ground; holding the cobblestone did not place it (first use with the stack opened the screen) |
+| CQ-CMP-37 | FAIL | screen_info: screen_info: /deleted on close/ matched: net.minecraft.client.gui.screens.inventory.ContainerScreen title "Trash Can (deleted on close)"; open look 1: item_can_sneak: the mod's own filter screen (one item filter slot, whitelist button); ultimate, liquid and energy cans: their usual screens with and without sneak (the screen_info lines in the row log) |
+| CQ-CPP-01 | FAIL | screen: timeout after 601 ticks; screen: timeout after 601 ticks; boot log: /Loading tips: skipped/Loading tips: built-in pack .* is missing/ matched: [01:47:20] [Render thread/WARN]: Loading tips: skipped loading_tips:version_filter: Missing tips, expected to find a JsonArray; open look 1: jei_apple_cider: owner hovers or reads the cider fluid's tooltip (effect lines under the fluid name; not automated); descriptions (shell): Common and Engineering texts as in their gradle.properties; tips line counts 3 files; tea_pipe_hud: the Haste icon on the HUD while the open pipe spills tea (tank amount falling in `data get`) |
+| CQ-LTP-17 | FAIL | /Loading tips: (skipped/built-in pack .* is missing)/ matched: [02:01:21] [Render thread/WARN]: Loading tips: skipped loading_tips:version_filter: Missing tips, expected to find a JsonArray |
+| CQ-MELT-02 | LOOK | open look 1: the driver steps passed (text "Saltable" on six saltable items, none on blue ice, permafrost, salt block); the shot shows the line gray under the name when hovered |
+| CQ-RPI-94 | LOOK | open look 1: shots: the sprint_jump view is only slightly wider than sprint_ground (fov 0.5 = half the Fleet-Footed shift); the feel is the owner's live check (CQ-RPI-76) |
+| CQ-RPS-02 | BATCH-FAULT | reclassified from FAIL: runner-w7 2026-11-25: second regex fault (the driver matches the tooltip text without the 'tooltip_text ID N:' prefix); substance PASS from the READ lines (Diet Log, Food Dictionary, Unknown recipe solapplepie:food_book); expects now 'Diet Log$' / 'Food Dictionary$'; tooltip_text: tooltip_text: no line matches /tooltip_text solapplepie:food_book 0: Diet Log$/; tooltip_text: tooltip_text: no line matches /tooltip_text solcarrot:food_book 0: Food Dictionary$/; PASS: runner-w7: server reply 'Unknown recipe: solapplepie:food_book'; the potato Diet Log craft passed in pair_rps (judge-3) |
+| CQ-RPS-03 | LOOK | open look 1: the Diet Log diversity page shows the same total as `solrp diversity get` (bread 0.80 plus golden apple 4.00 at Apple Pie's decay weights) and the meal list shows bread and golden apple; cake has no item tooltip value (a placed block; Apple Pie counts its slices when eaten), so the cake read only shows its lines |
+| CQ-RPS-05 | LOOK | open look 1: G1 above 0 and the gate shot shows no "Eat N more foods" line (gate open at the first meal); D1 from 33 meals (the oldest bread out of the 32-meal window); D2 = D1 minus what the 5 oldest window foods gave (respec_confirm lists them; after_respec pages no longer show them); D3 below D2 by the drop cost (drop_confirm); after death diversity 0.00 and the Diet Log pages empty |
+| CQ-RPS-09 | LOOK | open look 1: pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10), Jump Boost I, Luck I (gone from 17.5 up), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength in no picker shot; nothing_eaten pages: the diversity icon is a vanilla seed (or rotten flesh / spider eye); div50 pages (Overview, Diet Ladder, Milestones): unlock icon an awkward potion, permanent-buff icon a diamond, slot icon an item frame |
+| CQ-RPS-14 | BATCH-FAULT | reclassified from FAIL: judge-w7 2026-11-25: change-slot-1 step ran at diversity 7.12 (12 foods); only Regeneration I is unlocked (Jump Boost I at 8.8) and slot 1 already holds it, so the change picker is empty, Button n 0 is Cancel, no confirm panel (shot change1_confirm). Needs more foods or another design (not simple: counts and expected aged-out numbers change). Drop part passed (27.49); click_widget: no widget labeled "Confirm"; open look 1: after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; drop3_confirm lists only slot 3 and its effect as lost; changed pages: the 5 oldest of the 12 foods gone from the Last meals grid and the history, E1 - E2 = what they gave (change1_confirm); death pages: grid and history empty; E3 = apple's full 1.00 (an aged-out food counts in full again) |
+| CQ-RPS-15 | LOOK | open look 1: nothing eaten, so every food is uneaten: hardest pages start with the enchanted golden apple (10), golden apple (4), then the 2s (cooked beef and porkchop before golden carrot: more hunger first), then the 1.0 foods by hunger; easiest pages the reverse by base diversity; diet_log_width: the Diet Log about 25% wider than the plain book (same as before); the grep shows HARDEST after EASIEST in the comment and the allowed values |
+| CQ-RPS-12 | LOOK | open look 1: liquid_log: the drinks newest first with the third drink (potion) on top, milk below it, still listed after the bread was eaten (the state sync without a drink list kept the client's list) |
+
+
+FAIL, one line each:
+- Wave 1 jars: CQ-LTP-17, CQ-CPP-01 (Creative Common: `Loading tips: skipped loading_tips:version_filter` WARN at every
+  client start, creative-common-publish #21; CQ-CPP-01's tea pipe haste itself arrived in cli_res3); CQ-CMP-19 (Compat
+  corpse screen: the cursor-swapped mana ring ends in no slot, #14); CQ-CMP-33 (Sample Syringe JEI uses page does not
+  open, #15); CQ-CMP-37 (sneak use on the Item Trash Can opened the deleted-on-close screen; may be the driver's
+  sneak timing, #16); SQ-MT-04 to -06, SQ-PTH-29, -30, SQ-SMK-31 (summoned mobs vanish within 1 to 4 s, cause unknown,
+  #17; blocks the squid flee check of #9).
+- Other jars, repeats: SQ-SG-02, -03 (grass does not spread, creative-calendar #2); SQ-PST-11b (winter/spring 0.25,
+  creative-calendar #1); SQ-LE-03 (potion bucket dispenser cloud, potions/potion-buckets #5); SQ-TPF-10 (Debugify
+  MC-206922: no drops after lightning); SQ-WT-04 (Creative Loot, wave 2: offer counts +1 in both modes,
+  creative-common-publish #19).
+BATCH-FAULT: SQ-GSH-11 (load-time waitlog; fixed, not rerun), SQ-TPF-18 (MC-2025 off in the shipped debugify.json),
+CQ-RPS-02 (second regex fault; substance right; fixed), CQ-RPS-14 (needs more foods to unlock a second effect).
+INCONCLUSIVE: SQ-PSM-09 (too few natural squid). Not run: CQ-RPI-90, -95 (draft), SQ-PS15B-14, -19, -22 (draft).
+
+Owner shots (LOOK open): CQ-CC13-02, -03, -04, CQ-CEN-02, CQ-CMP-14, -18, -20, -21, -22, -26, -30, -31, -32, -36,
+CQ-MELT-02, CQ-RPI-94, CQ-RPS-03, -05, -09, -12, -15 (`qrun.py judge RES` lists them; shots in
+`test_captures/judgement/qrun_cli_res*`, `qrun_cli_rpi94`, `qrun_pair_rps*`).
+
+Wave 1 for W-P8: not clear. Raspberry Pie has no product FAIL (its open items are owner shots and the CQ-RPS-14
+rewrite). Creative Common has the version_filter WARN (cosmetic, the filter works). Creative Compat has CQ-CMP-19
+(possible item loss in the corpse screen), CQ-CMP-33, the unproven CQ-CMP-37, and the shared mob-vanish cause; per
+W-P7 a product fix sends the jar back to W-P6. Owner ruling needed on which of these block the upload.

@@ -1,0 +1,9 @@
+# r1124w7: respawn the capture client's player after a death screen (CQ-CPP-01 left it in the ground)
+## CQ-W7-RESPAWN | respawn and reset the client player
+do {"click_widget": "Respawn"}
+do {"wait": 40}
+> gamemode creative @s
+> tp @s 0 -60 0
+do {"screen": "inventory"}
+do {"wait": 10}
+do {"screen": "close"}

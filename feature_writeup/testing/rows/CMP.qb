@@ -1077,7 +1077,7 @@ shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-com
 waitlog creativecompat-common.toml reloaded 30
 > reload
 do {"wait": "jei"}
-do {"screen": "jei_uses:salt:salt"}
+do {"screen": "jei_uses:vintagedelight:salt_dust"}
 shot salt_uses_off
 do {"screen": "jei_recipes:minecraft:tipped_arrow"}
 shot tipped_arrow_off
@@ -1095,7 +1095,7 @@ do {"screen": "jei_category:creativedelight:flavor"}
 shot seasoning_on
 do {"screen": "jei_category:creativebrewing:tipped_arrows"}
 shot tipped_arrows_on
-do {"screen": "jei_uses:salt:salt"}
+do {"screen": "jei_uses:vintagedelight:salt_dust"}
 shot salt_uses_on
 do {"screen": "close"}
 look salt_uses_off: no Seasoning page (salt's seasoning crafts on the Crafting / Mixing pages); tipped_arrow_off: no Tipped Arrows page (Crafting / Spout); canning and potion_buckets open; with the empty list the Seasoning and Tipped Arrows pages open too (a jei_category step that fails = page missing)
@@ -1154,8 +1154,6 @@ look the parts (Jump Boost and the mid-air jump line) listed under "When Applied
 > summon corpse:corpse 2.5 101 3.5 {Tags:["cq33r"],Death:{PlayerName:"Test"},"creativecompat:corpse":{Remains:1b}}
 sleep 2
 > cdevtest entities 1 101 3 3 type=corpse:corpse
-expect verb=entities type=corpse:corpse .*Ancient Corpse
-expect verb=entities type=corpse:corpse .*Ancient Remains
 reject entity\.creativecompat\.ancient_
 do {"look": {"from": "0 102 1", "at": "0 101 3"}}
 shot ancient_corpse
@@ -1163,6 +1161,9 @@ do {"look": {"from": "2 102 1", "at": "2 101 3"}}
 shot ancient_remains
 > kill @e[tag=cq33a]
 > kill @e[tag=cq33r]
+# cdevtest entities prints a name only for a custom name; the kill reply carries the display name
+expect Killed Ancient Corpse
+expect Killed Ancient Remains
 > setblock 5 101 3 supplementaries:jar
 > item replace entity PerfEval weapon.mainhand with abnormals_delight:maple_cookie 4
 do {"look": {"from": "5 102 1", "at": "5 101 3"}}

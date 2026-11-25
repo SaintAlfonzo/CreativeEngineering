@@ -570,6 +570,9 @@ sleep 3
 > fill {S5H1+37} {S5H2} {S5H3+57} {S5H1+74} {S5H2+3} {S5H3+94} minecraft:air
 > fill {S5H1+39} {S5H2-1} {S5H3+59} {S5H1+72} {S5H2-1} {S5H3+92} botania:vivid_grass
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} minecraft:dirt
+# BF-FIX r1124w7 (as SQ-PST-10c): forceloaded chunks with no player get no random ticks; spring and winter counts were 0. A bot on the pad
+> pbot spawn s5pl {S5H1+55} {S5H2} {S5H3+75} minecraft:overworld creative
+sleep 2
 > gamerule randomTickSpeed 100
 > season set MID_SPRING
 sleep 2
@@ -588,6 +591,7 @@ sleep 10
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} minecraft:dirt replace botania:vivid_grass
 end
 > gamerule randomTickSpeed 3
+> pbot remove s5pl
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST08 0.35 0.85
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 reject Enum constant must be one of
@@ -816,6 +820,9 @@ sleep 3
 > fill {S5H1+37} {S5H2} {S5H3+57} {S5H1+74} {S5H2+3} {S5H3+94} minecraft:air
 > fill {S5H1+39} {S5H2-1} {S5H3+59} {S5H1+72} {S5H2-1} {S5H3+92} minecraft:grass_block
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} minecraft:rooted_dirt
+# BF-FIX r1124w7 (as SQ-PST-10c): forceloaded chunks with no player get no random ticks; spring and winter counts were 0. A bot on the pad
+> pbot spawn s5pl {S5H1+55} {S5H2} {S5H3+75} minecraft:overworld creative
+sleep 2
 > gamerule randomTickSpeed 100
 > season set MID_SPRING
 sleep 2
@@ -834,6 +841,7 @@ sleep 10
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} minecraft:rooted_dirt replace immersive_weathering:rooted_grass_block
 end
 > gamerule randomTickSpeed 3
+> pbot remove s5pl
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST11a 0.35 0.85
 reject Enum constant must be one of
 
@@ -862,6 +870,9 @@ sleep 3
 > fill {S5H1+37} {S5H2} {S5H3+57} {S5H1+74} {S5H2+3} {S5H3+94} minecraft:air
 > fill {S5H1+39} {S5H2-1} {S5H3+59} {S5H1+72} {S5H2-1} {S5H3+92} minecraft:grass_block
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} minecraft:mycelium
+# BF-FIX r1124w7 (as SQ-PST-10c): forceloaded chunks with no player get no random ticks; spring and winter counts were 0. A bot on the pad
+> pbot spawn s5pl {S5H1+55} {S5H2} {S5H3+75} minecraft:overworld creative
+sleep 2
 > gamerule randomTickSpeed 100
 > season set MID_SPRING
 sleep 2
@@ -884,6 +895,7 @@ sleep 10
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} minecraft:mycelium replace minecraft:grass_block
 end
 > gamerule randomTickSpeed 3
+> pbot remove s5pl
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST11b 0.35 0.85
 > season set MID_SPRING
 > pbot remove s5pd

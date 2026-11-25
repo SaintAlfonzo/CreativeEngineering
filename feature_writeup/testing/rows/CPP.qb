@@ -101,14 +101,14 @@ look no scrap error (the floats tag moved to creativecompat: since the row was w
 ## CQ-CPP-01
 @group client (full pack)
 @commands JEI: hover a drink fluid (apple cider, a Central Kitchen tea) in the ingredient list; Mods screen, Creative Common and Creative Engineering descriptions; load a world (tip bar); `grep "Loading tips:" logs/latest.log`; stand by an open pipe spilling Builder's Tea
-@pass effect lines under the fluid name; new descriptions; tips still include the Creative Tips lines (count as before: 2 files); Haste icon shows
+@pass effect lines under the fluid name; new descriptions; tips still include the Creative Tips lines (3 files since 2026-11-24); Haste icon shows
 @fails DrinkFluidEffects listener / JEI gate, kubejs assets tips
 @reviewed 2026-11-24
 # steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's
 # usual unlisted-jar --drop set). qrerun counted this row as draft only for its `@draft` line (no steps since 2026-11-07).
 # Builder's Tea pipe after SQ-JFP-01's pump build: tank, pump east, cogwheel and creative motor above, an open pipe end at x 3.
 # The JEI fluid hover has no driver step (fluid ingredients are not item tooltips): owner LOOK on a shot.
-bootexpect Loading tips: [0-9]+ tips from 2 files
+bootexpect Loading tips: [0-9]+ tips from 3 files
 bootreject Loading tips: skipped|Loading tips: built-in pack .* is missing
 shell grep "Loading tips:" logs/latest.log | cut -c1-200
 shell for j in mods/creativecommon-*.jar mods/creativeengineering-*.jar; do echo "== $j"; unzip -p "$j" META-INF/mods.toml | grep -A2 "^description" | cut -c1-400; done
@@ -118,6 +118,8 @@ do {"wait": 20}
 shot jei_apple_cider
 do {"screen": "close"}
 > effect clear @s
+# r1124w7: the player arrives from the previous row's height; survival there killed it by fall damage (death screen): stand on the floor first
+> tp @s 3.5 -60 5.5
 > gamemode survival @s
 > fill -1 -60 3 6 -58 7 minecraft:air
 > setblock 0 -60 5 create:fluid_tank
@@ -128,7 +130,9 @@ sleep 2
 > setblock 1 -59 5 create:cogwheel[axis=x]
 > setblock 0 -59 5 create:creative_motor[facing=east]{ScrollValue:64}
 > setblock 1 -60 5 create:mechanical_pump[facing=east]
-do {"look": {"from": "4 -60 5", "yaw": 90, "pitch": 10}}
+# BF-FIX r1124w7: look "from" is the eye position; "4 -60 5" put the feet in the grass (suffocated, death screen blocked every later screen)
+# BF-FIX r1124w7: the open end at x 2 spills into block x 3 (Create OpenEndedPipe AABB = that block plus one down): stand in it, not at x 4
+do {"look": {"from": "3 -58.38 5", "yaw": 90, "pitch": 10}}
 do {"fly": false}
 do {"wait": 200}
 > data get block 0 -60 5 TankContent
@@ -140,4 +144,4 @@ shot tea_pipe_inventory
 do {"screen": "close"}
 > gamemode creative @s
 reject Unknown block type|Invalid block state|Incorrect argument|Unknown or incomplete command
-look jei_apple_cider: owner hovers or reads the cider fluid's tooltip (effect lines under the fluid name; not automated); descriptions (shell): Common and Engineering texts as in their gradle.properties; tips line counts 2 files; tea_pipe_hud: the Haste icon on the HUD while the open pipe spills tea (tank amount falling in `data get`)
+look jei_apple_cider: owner hovers or reads the cider fluid's tooltip (effect lines under the fluid name; not automated); descriptions (shell): Common and Engineering texts as in their gradle.properties; tips line counts 3 files; tea_pipe_hud: the Haste icon on the HUD while the open pipe spills tea (tank amount falling in `data get`)

@@ -209,8 +209,7 @@ look blue shards 20 to 40 from the pane; clear shards 20 to 60 from framed glass
 @modset none
 @reviewed 2026-11-24
 # r1124gate (2026-11-24, runner-4): SQ-GSH-01's boot checks plus one pane: a doubled entry would give 40 to 80 shards.
-# 2026-11-24: the GlmMerge line logs about 5 s after Done (r1124gate BATCH-FAULT): wait for it first
-waitlog \[GlmMerge\] \d+ entries 60
+# 2026-11-24 r1124w7: the GlmMerge line logs at [main] during load, before Done; a row waitlog never sees it, bootexpect reads it
 bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: \d+ files
 bootreject \[GlmMerge\] skipped:.*creativecompat:glass_shards
 bootreject \[GlmMerge\] could not read

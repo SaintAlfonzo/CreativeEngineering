@@ -2101,7 +2101,8 @@ count verb=tagsof id=creativedelight:[a-z_]+dough_block .*item_tags=\S*forge:sto
 bootexpect Done \(
 bootreject (?i)XaeroTimeInfoMixin.*(error|fail|exception)
 # judge-7, 2026-11-21: another mod's optional-mixin WARN ("[mixin/]: Error loading class net/minecraft/client/...", gotchas.md "Not ours") excluded
-bootreject ^(?!.*\[mixin/\]: Error loading class).*(ClassNotFound|NoClassDefFound).*(MossTint|net[./]minecraft[./]client|xaero)
+# BF-FIX r1124w7: D&D's event handler scan logs `ClassNotFoundException: net.minecraft.client.particle.TextureSheetParticle` on a dedicated server (not ours, create_dd named on the ERROR line above it) -> excluded
+bootreject ^(?!.*\[mixin/\]: Error loading class)(?!.*client\.particle\.TextureSheetParticle).*(ClassNotFound|NoClassDefFound).*(MossTint|net[./]minecraft[./]client|xaero)
 shell grep -rn -A3 "^\[moss\]" config/*.toml | head -8; true
 look shell: a [moss] section with biomeTint and tintStrength (creativeengineering-common.toml or the Common config that holds it now)
 ## SQ-TI-01 | pack clock helpers, [time] on and off (toggles the Creative Calendar config, leaves it on)
