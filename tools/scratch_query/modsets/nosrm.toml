@@ -1,0 +1,13 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# 2026-11-24: the full pack with Snow! Real Magic taken out, for rows that test the pack's own snow-layer fall
+# (Creative Compat FallingLayers): with Snow! Real Magic loaded its snowGravity falls snow instead (owner, 2026-11-24).
+# kubejs and config stay the pack's, only srv/mods changes. Row specs:
+#   nosrm
+description = "Full pack without Snow! Real Magic (rows for the pack's own snow-layer fall)"
+source = "pack"
+kubejs = "pack"
+config = "pack"
+default = "nosrm"
+
+[variants.nosrm]
+drop = ["SnowRealMagic-*.jar"]

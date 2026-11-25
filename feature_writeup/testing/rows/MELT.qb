@@ -998,9 +998,10 @@ shell cp config/creativecompat-common.toml config/creativecompat-common.toml.mel
 look carried-over line names [melting]; COMPAT-TOML-CREATED; the printed Compat [melting] keys show saltRange = 2, endNoFire = false
 ## SQ-MELT-23 | melting still works under the new tag namespace
 @group A
-@commands tag dumps `/cdevtest tag block creativecompat:melting/salt`, `/fire`, `/saltable`, `/hot`; salt block beside ice and snow with `gamerule randomTickSpeed 3`; grep latest.log for `[melting] tags:`
-@pass the tag dumps are non-empty with the same counts as before the move (compare SQ-MELT-09 / -16); `[melting] tags:` line present; ice and snow beside salt melt; `/cdevtest tag block creativecommon:melting/salt` is empty or absent; `creativecommon.tooltip.saltable` key unused
+@commands block tag dumps `/cdevtest tag block creativecompat:melting/salt`, `/fire`, `/saltable`, `/meltable` and the biome tag `/cdevtest tag biome creativecompat:melting/hot` (a biome tag, not a block tag); salt block beside ice and snow with `gamerule randomTickSpeed 3`; grep latest.log for `[melting] tags:`
+@pass the block tag dumps are non-empty with the same counts as before the move (compare SQ-MELT-09 / -16), the biome tag non-empty; `[melting] tags:` line present; ice and snow beside salt melt; `/cdevtest tag block creativecommon:melting/salt` is empty or absent; `creativecommon.tooltip.saltable` key unused
 @fails `kubejs/data/creativecompat/kubejs/tags/melting_tags.js` not loaded (data script path), `block_dict.js` `b.t_melt_*` values still naming the old namespace
+@reviewed 2026-11-24
 @absent creativecompat:melting/salt creativecompat:melting/fire creativecompat:melting/saltable creativecompat:melting/hot (tags added 2026-11-24, after the last /dumpall)
 @modset none
 # r1124gate (2026-11-24, runner-4): counts from the 2026-11-19 tag dump (creativecommon:melting/*: salt 40, fire 123,
@@ -1061,11 +1062,12 @@ expect SQ-MELT-23-molten_snow2_air$
 expect SQ-MELT-23-molten_ice3_water$
 > forceload remove 2400 2000 2431 2031
 look tag counts match the pre-move dump (salt 40, fire 123, saltable 44, meltable 35); the old creativecommon tags are empty; salt and Molten Nether Bricks melt as SQ-MELT-01 / -02 (the bootexpect counts may move when a mod adds members: compare with the r1124 boot line)
-## SQ-MELT-24 | End refuses fire with Compat's endFire mixin and endNoFire key
+## SQ-MELT-24 | End refuses fire with Compat's EndFireMixin (enable key `[mixins] endFire`) and `[melting] endNoFire`
 @group A
 @commands in the End place a torch-lit fire block (`setblock ~ ~ ~ minecraft:fire`) and flint-and-steel it with a bot; then `qrun.py toml config/creativecompat-common.toml melting endNoFire false` and repeat
 @pass endNoFire true: no fire in the End and no sound; false: fire is placed; latest.log has no `EndFireMixin` apply error
-@fails `EndFireMixin` is in Compat's `mixin/` with enable key `[mixins] endFire`; `Melting.onScheduledTick` removal of fire already there
+@fails `EndFireMixin` is in Compat's `mixin/`, listed in `MixinSwitches` as `EndFireMixin` (toml key `[mixins] endFire`, `MixinSwitches.key`: the name without `Mixin`, first letter lower case); a false `endFire` skips it; `Melting.onScheduledTick` removal of fire already there
+@reviewed 2026-11-24
 @modset none
 # r1124gate (2026-11-24, runner-4): End void spot x 200 to 215, z 200 to 215, y 64 (clear of the main island); the
 # setblock refusal reads "Could not set the block"; cdevtest use = a fake player of the End with flint and steel.

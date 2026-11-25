@@ -124,7 +124,7 @@ look book + potato gives the Diet Log through Raspberry Pie's edible-food recipe
 ## CQ-RPS-03 | isolated client: no diversity table, Apple Pie food values stand, tooltips and books agree
 @group client
 @commands Client with `rps only`, no diversity file on the classpath. Eat or inspect bread, apple, golden apple, cake; open the Diet Log (RPS-03)
-@pass no table loaded (one INFO line `No diversity table (solraspberrypie/diversity/*.json) in any mod; Apple Pie's values apply`, no warning); each food's tooltip diversity value equals Apple Pie's own value for it; the Diet Log shows the same value after eating
+@pass no table loaded (one INFO line `No usable diversity table (solraspberrypie/diversity/*.json) in any mod; Apple Pie's values apply` (`Diversity.java`), no warning); each food's tooltip diversity value equals Apple Pie's own value for it; the Diet Log shows the same value after eating
 @fails `Diversity` loader (P3): no-file case must not override; the tooltip mixin reading a different source than the book
 @reviewed 2026-11-24
 @modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
@@ -450,6 +450,7 @@ shot after_death_p2
 do {"screen": "close"}
 look G1 above 0 and the gate shot shows no "Eat N more foods" line (gate open at the first meal); D1 from 33 meals (the oldest bread out of the 32-meal window); D2 = D1 minus what the 5 oldest window foods gave (respec_confirm lists them; after_respec pages no longer show them); D3 below D2 by the drop cost (drop_confirm); after death diversity 0.00 and the Diet Log pages empty
 ## SQ-RPS-06 | Alex's Mobs present: Fleet-Footed mixin applies
+@superseded by CQ-RPI-94, CQ-RPI-95 and SQ-RPI-96: the Fleet-Footed fix moved from Raspberry Pie to Creative Compat (6255b4b3e, wave 2 W2-3, 2026-11-24)
 @group B
 @modset rps alex
 @commands Boot with `rps alex` (Alex's Mobs 1.21.1 for 1.19.2 and Citadel beside the Raspberry Pie jar) (RPS-06)
@@ -605,6 +606,7 @@ look pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10),
 @@text
 @@table
 ## SQ-RPS-08 | Alex's Mobs stub missing a field: mixin skipped, one warning, no crash
+@superseded by CQ-RPI-94, CQ-RPI-95 and SQ-RPI-96: the Fleet-Footed fix moved from Raspberry Pie to Creative Compat (6255b4b3e, wave 2 W2-3, 2026-11-24)
 @group B
 @commands Boot with `rps alex` after a stub swap (section `@@prep run`): the server's Alex's Mobs jar is replaced by a copy whose `EffectFleetFooted` lacks the int field `lastDuration` (`tools/scratch_query/rps_fixture.py stub`, renamed over the hard link) (second half of RPS-06; id 08 because the plan's single RPS-06 needs two boots)
 @pass `Done (` reached; exactly one warning `[solraspberrypie] Alex's Mobs com.github.alexthe666.alexsmobs.effect.EffectFleetFooted lacks <member>: the Fleet-Footed fix is off (tested with Alex's Mobs 1.21.1)` (member `int field lastDuration` or `applyEffectTick(LivingEntity, int) (m_6742_)`); no `Fleet-Footed fix failed` line; no crash, no mixin error

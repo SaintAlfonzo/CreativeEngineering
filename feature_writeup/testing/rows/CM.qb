@@ -813,6 +813,7 @@ look recipe from 7 spruce slabs (rdetail line); composters tag 13, the Common ta
 @commands boot 1 with the Creative Common and Creative Delight jars from before the carve (`jar_archive/displaced/`, stamp 16c9e8ace or older): place `creativecommon:spruce_composter[level=4]` and `creativecommon:crimson_composter`, put 2 `creativecommon:birch_composter` in a chest and 1 in a bot's inventory; stop; swap in the current jars; boot 2; read the blocks, the chest and the inventory
 @pass boot 2: the blocks are `creativedelight:spruce_composter[level=4]` and `creativedelight:crimson_composter`; the chest holds 2 `creativedelight:birch_composter`, the bot 1; latest.log has the swap lines for the composter ids and no `Missing` / `unknown` line naming `creativecommon:*_composter`
 @fails `data/creativedelight/swaps/common_composters.json` not read (SwapLists, Delight jar); the remap resolved in the STAGING registry (agent note forge-missing-mappings-staging.md); the save opened once without the new jars
+@reviewed 2026-11-24
 @absent creativedelight:spruce_composter creativedelight:crimson_composter creativedelight:birch_composter (moved 2026-11-24, after the last /dumpall; the dumps still list the creativecommon ids boot 1 places)
 # r1124gate (2026-11-24, runner-4): no pre-carve Common + Delight set is archived (installs keep the jar name, so
 # jar_archive/displaced/ holds none); the old save is written by Creative Common 1.2.0 of 2026-11-21 (a4baff401, the
@@ -857,7 +858,8 @@ expect SQ-CM-42-spruce$
 expect SQ-CM-42-crimson$
 expect SQ-CM-42-chest$
 expect SQ-CM-42-stand$
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
+# 2026-11-24 (r1124gate BATCH-FAULT): the segment holds boot 2, whose KubeJS recipe WARNs name unknown items (create:milling biomesoplenty); only command replies (the MinecraftServer logger) count
+reject \[Server thread/INFO\] \[net\.minecraft\.server\.MinecraftServer/\]: .*(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
 > kill @e[tag=cm42]
 > forceload remove 5312 5216 5327 5231
 look boot 1 placed the Common ids; boot 2 (full pack): both blocks, the chest's 2 and the stand's 1 are Delight's composters; the swap remap lines are there (a bot's player inventory is not covered: no bots under Common 1.2.0)

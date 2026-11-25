@@ -120,6 +120,8 @@ public class CreativeCompat {
 		if (ModList.get().isLoaded("alexsmobs")) {
 			MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.mobs.SquidsAndWhales::onJoin);
 		}
+		// Snow! Real Magic falls snow by its snowGravity; the pack's layer fall keeps salt and the rest (owner, 2026-11-24)
+		com.SaintAlfonzo.creativecompat.surface.FallingLayers.srmLoaded();
 		// golem farm cooldown (plan_small_fixes_1116.md R2)
 		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.mobs.GolemCooldown::onDeath);
 		BurnBursts.register(ShrapnelSpawner::burst);

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-only
-"""SQ-CMP-01 check (2026-11-22): Compat's common mixins on a server, without a hard-coded count.
+"""SQ-CMP-01 check (2026-11-22; per target since 2026-11-24): Compat's common mixins on a server, without a hard-coded count.
 
 Run in a scratch server folder (srv/): cmp_mixin_check.py [REPO]. Reads the "mixins" list of the creativecompat jar in
 mods/, the "Mixing X from creativecompat.mixins.json" lines of logs/debug.log and the gate tables of
 CompatMixinPlugin.java in REPO (default: this script's repo). Exit 0 when
-  - the apply lines name no mixin twice and none that Creative Engineering also applies (no double apply),
+  - the apply lines name no mixin twice for the same target class (one line per target is normal) and none that Creative Engineering also applies (no double apply),
   - every applied mixin is listed in the jar, and
   - every listed mixin that was NOT applied has a gate entry in the plugin (skipped because its mod is absent or out
     of range) instead of failing to apply.
@@ -24,16 +24,17 @@ if not jars:
 with zipfile.ZipFile(jars[-1]) as z:
     listed = [m.split('.')[-1] for m in json.loads(z.read('creativecompat.mixins.json'))['mixins']]
 log = Path('logs/debug.log').read_text(errors='replace')
-mix = re.findall(r'Mixing (\S+) from (creativecompat|creativeengineering)\.mixins\.json', log)
-cmp_all = [n.split('.')[-1] for n, j in mix if j == 'creativecompat']
-ce = {n.split('.')[-1] for n, j in mix if j == 'creativeengineering'}
-applied = set(cmp_all)
+# one apply line per (mixin, target class): a mixin with several targets (LowGravityPullMixin) logs one line per target
+mix = re.findall(r'Mixing (\S+) from (creativecompat|creativeengineering)\.mixins\.json(?: into (\S+))?', log)
+cmp_pairs = [(n.split('.')[-1], t) for n, j, t in mix if j == 'creativecompat']
+ce = {n.split('.')[-1] for n, j, t in mix if j == 'creativeengineering'}
+applied = {n for n, _ in cmp_pairs}
 gates = set(re.findall(r'Map\.entry\("(\w+)"', (repo / 'development/creativeCompat/src/main/java/com/SaintAlfonzo/'
                                                        'creativecompat/compat/CompatMixinPlugin.java').read_text()))
 errs = []
-dup = sorted({n for n in cmp_all if cmp_all.count(n) > 1})
+dup = sorted({'%s -> %s' % p for p in cmp_pairs if cmp_pairs.count(p) > 1})
 if dup:
-    errs.append('applied twice: %s' % dup)
+    errs.append('applied twice to the same target: %s' % dup)
 if applied & ce:
     errs.append('also applied from creativeengineering.mixins.json: %s' % sorted(applied & ce))
 if applied - set(listed):

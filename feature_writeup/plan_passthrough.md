@@ -297,6 +297,9 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   salt layers, Twigs bamboo leaves, the full bamboo leaves, IE sawdust and Supplementaries fodder fall when the block
   below is free and stack where they land (capped at the most layers, the rest on top, snow at 8 -> snow block, items
   when they cannot land). Immersive Weathering's layers and Supplementaries ash fall by their own code. `layersFall`.
+  With Snow! Real Magic loaded, snow (`minecraft:snow` and its `snowrealmagic` blocks) is left to its `snowGravity`
+  (`FallingLayers.falls`, one INFO line at load; owner, 2026-11-24); salt and the other layers keep this fall
+  ([snow_real_magic.md](snow_real_magic.md) R3; SQ-CMP-38, -24).
 - Full bamboo leaves (G7.9; `creativecompat:bamboo_leaves_full`, layers 5 to 8, `surface/FullBambooLeavesBlock`): a 5th
   Twigs bamboo leaves on a pile of 4 makes it; walk-through, falls and stacks like the rest. Grown bamboo with leaves
   drops Twigs bamboo leaves on its free sides (`surface/BambooLeafDrops`, `bambooLeafChance` 0.0005 per random tick and

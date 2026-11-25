@@ -533,8 +533,9 @@ look hand: right-click the boat (xdotool click at the window centre), hold W unt
 ## SQ-CGE-17 | Common without Compat: Create Gravity boots, no low gravity for items or blocks, dimension limit still applies to living entities
 @group A (Common + Create Gravity, no Compat)
 @commands boot; dropall End (y 140) and overworld (y 200); judge `same`; the End living-entity check of SQ-CGE-06
-@pass boots with no `LowGravity` or NoClassDefFoundError line; all 9 types at vanilla speed in both dimensions; zombie in the End still carries the Low Gravity Biome modifier only inside `gravityDimensions`
-@fails Common must not reference `creativecompat.gravity.LowGravity`; `GravityDimensions` in `perf/`
+@pass the set has Common and Create Gravity, no Compat; boots with no `LowGravity` or NoClassDefFoundError line; low gravity is absent: all 9 types at vanilla speed in both dimensions; zombie in the End still carries the Low Gravity Biome modifier only inside `gravityDimensions` (Common's dimension limit, W2-4)
+@fails Common must not reference `creativecompat.gravity.LowGravity`; `GravityDimensions` in `perf/`; "No entity was found" for the zombie after the restart: the difficulty went back to peaceful (set it again after each restart)
+@reviewed 2026-11-24
 @absent forge:entity_gravity (Forge attribute; the registry dump lists no attributes of Forge)
 @modset cc_only full
 # r1124gate (2026-11-24, runner-4): cc_only full = Common + Create Gravity and the other tweaked mods, no Compat (the
@@ -567,6 +568,8 @@ count Entity Gravity for entity .* is 0\.01599 >= 2
 edit cp config/creativecommon-common.toml config/creativecommon-common.toml.cge17bak && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml perf gravityDimensions '["minecraft:overworld"]'
 restart
 shell grep -nE "^[[:space:]]*gravityDimensions = " config/creativecommon-common.toml
+# r1124gate (2026-11-24): the zombie was "No entity was found" after the restart (peaceful from server.properties): difficulty again
+> difficulty normal
 > execute in minecraft:the_end run forceload add 0 0
 > execute unless entity cge17b run pbot spawn cge17b 0 75 0 minecraft:the_end survival
 sleep 3

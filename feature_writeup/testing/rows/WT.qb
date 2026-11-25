@@ -46,9 +46,10 @@ shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-c
 shell ! grep -n '^\[wandering_trader\]' config/creativecommon-common.toml
 ## SQ-WT-04 | trader offer counts and spawn wait read from Loot's config; vanilla defaults without the pack values
 @group A
-@commands full pack: `/summon minecraft:wandering_trader ~ ~ ~`; `/data get entity @e[type=minecraft:wandering_trader,limit=1,sort=nearest] Offers.Recipes` and count; then `qrun.py toml config/creativeloot-common.toml wandering_trader enabled false`, wait for the reload, summon a second trader and count; on `@modset cc_only alone` plus Creative Loot, read the generated `config/creativeloot-common.toml`
+@commands full pack: `/summon minecraft:wandering_trader ~ ~ ~`; `/data get entity @e[type=minecraft:wandering_trader,limit=1,sort=nearest] Offers.Recipes` and count; then `qrun.py toml config/creativeloot-common.toml wandering_trader enabled false`, restart, summon a second trader and count; then switch to `loot_alone` (Creative Loot with only Common, Compat and LootJS, empty config: Loot needs Compat and LootJS, so `cc_only alone` plus Loot cannot boot) and read the generated `config/creativeloot-common.toml`
 @pass pack values: about 25 common + 5 rare offers (fewer only when a pool is smaller); enabled false: 5 + 1; the generated file has enabled = false, 24000 / 5 / 1; latest.log has no mixin apply error naming `WanderingTrader`
 @fails `creativeloot.mixins.json` missing the two mixins; `LootConfig` not registered; Common's old mixins still listed in `creativecommon.mixins.json` (double apply)
+@reviewed 2026-11-24
 @modset none
 edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader enabled true && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader traderIntervalTicks 96000 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader commonTrades 25 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader rareTrades 5
 restart

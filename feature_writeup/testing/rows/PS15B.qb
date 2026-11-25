@@ -777,6 +777,8 @@ look middle `Neighbors: 4 of 4`, corner `2 of 4`; web cube `Neighbors: 6 of 6` w
 @commands Each pile sits on a stone block 4 above the ground (or over a water pool); the stone is removed and the pile falls onto the ground pile below
 @pass the merged states as in the title (one `say` line each); the water case leaves 3 snowballs as an item entity and no snow
 @fails `FallingLayers.holdAndQueue` (updateShape mixins: SnowLayerFallMixin, TwigsBambooLeavesMixin, IeSawdustFallMixin), `FallingLayerEntity.tick` landing, `FallingLayers.land` merge / `withLayers` / `SnowLayers.fullToBlock`, `drop`
+@modset nosrm
+# 2026-11-24 (owner ruling): Snow! Real Magic falls snow when loaded, so the pack's snow fall is tested on the full pack without it (SQ-CMP-38 covers the hand-over)
 > forceload add 1290 1290 1330 1310
 > setblock 1300 -60 1300 minecraft:snow[layers=2]
 > setblock 1300 -57 1300 minecraft:stone
@@ -818,6 +820,8 @@ expect ps15b13 water drop 3 snowballs
 @commands (a) `layersFall = false` (rename + `/cdevreload compat`): a snow 3 over a removed stone breaks as vanilla (no falling entity), fodder 4 stays floating; back to true. (b) a piston pushes a salt layer 4 off a stone ledge over a 3-deep gap: it falls and lands. (c) a floating snow 4 written into an unloaded chunk (`/setblock` then `/forceload remove` and reload) falls on its first random tick (randomTickSpeed 300)
 @pass (a) no `creativecompat:falling_layer` entity, snow gone, fodder still at its height; (b) the salt layer at the gap bottom; (c) the snow on the ground within 20 s
 @fails `FallingLayers.enabled`, `SuppFodderFallMixin`, piston `Block.updateFromNeighbourShapes` path, `SnowLayerFallMixin` randomTick
+@modset nosrm
+# 2026-11-24 (owner ruling): Snow! Real Magic falls snow when loaded, so the pack's snow fall is tested on the full pack without it (SQ-CMP-38 covers the hand-over)
 @draft steps to write at the run (needs the piston fixture and a chunk unload/reload sequence)
 
 ## SQ-PS15B-15 | full bamboo leaves by hand and drops; grown bamboo drops bamboo leaves
@@ -853,6 +857,8 @@ expect ps15b13 water drop 3 snowballs
 @commands A 20 x 10 stone slab 6 above the ground with snow 3 on top, the stone removed in one /fill
 @pass every pile lands (200 merged or placed piles, no snow left floating); mspt during the fall under 50
 @fails `FallingLayers.onLevelTick` queue (512 per tick), entity count
+@modset nosrm
+# 2026-11-24 (owner ruling): Snow! Real Magic falls snow when loaded, so the pack's snow fall is tested on the full pack without it (SQ-CMP-38 covers the hand-over)
 @draft perf row (spark or the perf suite); steps at the run
 
 ## SQ-PS15B-20 | Devtools boots without Compat (second boot of SQ-TX-18)
@@ -886,6 +892,8 @@ look tick_field and tick_web_cube medians under 1000; the two _recount rows pres
 @commands Rename-save `[surface.passthrough.layers] snowJumpLayers 8`, `thornChance 0`, `layersFall false`, then `/cdevreload compat`; restore
 @pass each applies after the command (jump in snow 7 normal; no pricks; a snow layer over a removed stone breaks as vanilla); the client gets the re-sent table (sync format 4)
 @fails `CompatConfigReload.reload`, `PassValues.FORMAT` 4, `LayerMotion` read from the config
+@modset nosrm
+# 2026-11-24 (owner ruling): Snow! Real Magic falls snow when loaded, so the pack's snow fall is tested on the full pack without it (SQ-CMP-38 covers the hand-over)
 @draft steps to write with SQ-PS15B-16 and -17
 
 ## CQ-PS15B-03 | leaf overlay inside a leaf pile; switch off

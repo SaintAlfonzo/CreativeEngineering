@@ -125,10 +125,32 @@ reject \[cdevtest\] .*done=0
 @@table
 ## SQ-GSH-08 | Compat and Quark without Creative Loot: the modifier loads from the Forge list, glass breaks into shards
 @group B (Compat + Quark, no Creative Loot)
-@commands boot `cc_only` with Quark and without Creative Loot; rerun SQ-GSH-04 and SQ-GSH-07
-@pass both rows PASS (blue pane -> blue shards, tinted glass -> dirty shards); no `[GlmMerge]` line (Creative Loot absent)
+@commands boot Common + Compat + Quark without Creative Loot (SQ-GSH-10's set); the checks of SQ-GSH-04 (blue pane) and SQ-GSH-07 (tinted glass, tinted framed pane)
+@pass blue pane -> 20 to 40 blue shards, tinted glass -> 20 to 60 dirty shards, tinted framed pane -> 20 to 40 dirty shards (rolls 20); no `[GlmMerge]` line (Creative Loot absent)
 @fails Forge list `data/forge/loot_modifiers/global_loot_modifiers.json` missing from the jar or `replace` true; codec registration in `CreativeCompat.java`
-@draft modset spec to pick: `cc_only full` minus Creative Loot; the runner chains the two rows
+@modset cpp_chain compat +Quark-3.4-* +AutoRegLib-* +create-1.19.2-* +createframed-*
+@reviewed 2026-11-24
+# rewritten 2026-11-24 (r1124gate ruling): the old `cc_only full` minus Creative Loot had no Compat (cc_only forbids it), so
+# the row tested nothing; now SQ-GSH-10's set (Common + Compat, Quark, Create, no Loot) plus Create Framed for the pane.
+shell ls mods | grep -iE "^(creativeloot|creativecompat|creativecommon|Quark|createframed)" ; ls mods | grep -qi "^creativecompat-" && ! ls mods | grep -qi "^creativeloot-"
+bootreject \[GlmMerge\]
+bootreject ^(?=.*([Mm]issing|[Uu]nknown|[Ff]ailed|ERROR|[Ee]xception)).*creativecompat:glass_shards
+> forceload add 5344 5200 5359 5215
+sleep 3
+> fill 5344 199 5200 5359 199 5215 minecraft:stone
+> fill 5344 200 5200 5359 203 5215 minecraft:air
+> setblock 5351 200 5210 minecraft:blue_stained_glass_pane
+> setblock 5345 200 5210 minecraft:tinted_glass
+> setblock 5347 200 5210 createframed:tinted_framed_glass_pane
+> cdevtest loot 5351 200 5210 rolls=20
+expect verb=loot .*rolls=20 drops=\S*quark:blue_shard:(2\d|3\d|40)\b
+> cdevtest loot 5345 200 5210 rolls=20
+expect verb=loot .*rolls=20 drops=quark:dirty_shard:([2-5]\d|60)(\s|$)
+> cdevtest loot 5347 200 5210 rolls=20
+expect verb=loot .*rolls=20 drops=quark:dirty_shard:(2\d|3\d|40)(\s|$)
+reject \[cdevtest\] .*done=0
+> forceload remove 5344 5200 5359 5215
+look first shell line lists Compat and Quark, no Creative Loot; blue shards 20 to 40; dirty shards 20 to 60 from tinted glass, 20 to 40 from the tinted pane; no GlmMerge line
 ## SQ-GSH-09 | mid-tier chest tables roll glass shards, mostly dirty or clear
 @group A
 @reviewed 2026-11-24
@@ -183,8 +205,11 @@ look blue shards 20 to 40 from the pane; clear shards 20 to 60 from framed glass
 @commands boot the full pack; `[GlmMerge]` line; break a blue pane
 @pass `[GlmMerge]` counts the Compat fragment and no `skipped: creativecompat:glass_shards`; one stack of shards per pane, not two
 @fails `data/creativecompat/glm_entries.json` (fragment); GlmMerge duplicate handling
+@reviewed 2026-11-24
 @modset none
 # r1124gate (2026-11-24, runner-4): SQ-GSH-01's boot checks plus one pane: a doubled entry would give 40 to 80 shards.
+# 2026-11-24: the GlmMerge line logs about 5 s after Done (r1124gate BATCH-FAULT): wait for it first
+waitlog \[GlmMerge\] \d+ entries 60
 bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: \d+ files
 bootreject \[GlmMerge\] skipped:.*creativecompat:glass_shards
 bootreject \[GlmMerge\] could not read
@@ -204,9 +229,12 @@ look the GlmMerge line is there with no glass_shards skip; the pane gave one sta
 ## SQ-GSH-12 | Common alone (no Compat): no glass_shards modifier, no warning
 @group B (Common, no Compat)
 @commands boot Common without Compat; grep latest.log for `glass_shards`
-@pass no `glass_shards` line, no loot modifier error; a glass pane drops what Quark gives
-@fails Common still shipping a Forge list entry or fragment (it must not)
+@pass the set has Common and Quark, no Compat and no Creative Loot; no `glass_shards` line, no loot modifier error; the feature is absent: a stained glass pane drops nothing (vanilla) and glass only Quark's own clear shards
+@fails Common still shipping a Forge list entry or fragment (it must not); Compat or Loot in the set (the cc_only manifest forbids them: a manifest change)
 @modset cc_only full
+@reviewed 2026-11-24
+# 2026-11-24 (r1124gate ruling): cc_only full already holds no Compat or Loot, so the row runs on it unchanged; the pass
+# names the feature-absent results instead of a set "minus Compat".
 # r1124gate (2026-11-24, runner-4): cc_only full has no Compat (its manifest forbids creativecompat-*) and keeps Quark;
 # without the modifier a vanilla pane drops nothing (empty table without Silk Touch) and glass gives Quark's 2 to 4.
 shell ls mods | grep -iE "^(creativecompat|creativeloot|creativecommon|Quark)" ; ! ls mods | grep -qiE "^creative(compat|loot)-"

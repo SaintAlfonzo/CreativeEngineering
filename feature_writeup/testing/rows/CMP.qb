@@ -18,16 +18,17 @@
 ## SQ-CMP-01 | Compat loads, mixins apply once
 @group A
 @commands `grep -E "\[creativecompat\]\|creativecompat.mixins.json" logs/latest.log`; `grep -c "from creativecompat.mixins.json" logs/debug.log`; `python3 $INST/tools/scratch_query/cmp_mixin_check.py` (listed vs applied, no count typed in)
-@pass Compat core line; no mixin apply error; every common mixin in the jar list applies on the server except those its gate skips (mod absent or out of range; `CompatMixinPlugin`); none applied twice or also from Creative Engineering
+@pass Compat core line; no mixin apply error; every common mixin in the jar list applies on the server except those its gate skips (mod absent or out of range; `CompatMixinPlugin`); none applied twice to the same target class (a mixin with several targets logs one line per target) or also from Creative Engineering
 @fails Jar missing, a gate id wrong in `CompatMixinPlugin`, or Creative Common still listing a moved mixin (applied twice)
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-22
+@reviewed 2026-11-24
 bootexpect \[creativecompat\] loaded \(config/
 bootreject creativecompat\.mixins\.json.*(Error|error|failed)
 # r1123cx (2026-11-23): the pathfinding mixins (SnowPathMixin, LeafPilePathMixin) apply when the first mob paths, about 1 s after Done; a mob and a wait first
 > summon minecraft:zombie 0 100 0
 sleep 10
 shell python3 $INST/tools/scratch_query/cmp_mixin_check.py
+# 2026-11-24 (r1124gate BATCH-FAULT): cmp_mixin_check.py counted LowGravityPullMixin's per-target lines as a double apply; it now counts per (mixin, target)
 # 2026-11-22: the typed 27 (and the writeup's 32) is gone: the jar lists 86 common mixins, 76 applied on the full pack, 10 skipped by gate (r1122cc); cmp_mixin_check.py compares the lists
 
 ## SQ-CMP-02 | config sections carried to the Compat file
@@ -293,23 +294,23 @@ reject (Unknown or incomplete command|Incorrect argument for command|No entity w
 
 ## SQ-CMP-16 | Skeleton corpses sink in water, player-model corpses float
 @group A
-@commands `forceload add 16 16`; fill two water columns (`fill 20 -59 20 22 -50 22 minecraft:water`, `fill 26 -59 20 28 -50 22 minecraft:water`); summon a skeleton corpse (`Stage:1b`) at the top of the first and a player-model corpse (`Stage:0b`) at the bottom of the second, both holding a stone; wait 5 s; read both `Pos`
+@commands `forceload add 16 16`; fill two water columns (`fill 20 -59 20 22 -50 22 minecraft:water`, `fill 26 -59 20 28 -50 22 minecraft:water`); summon a skeleton corpse (`Stage:1b`) at the top of the first and a player-model corpse (`Stage:0b`) at the bottom of the second, both holding a stone; wait 15 s; read both `Pos`
 @pass c16a (skeleton) at the bottom of its column (y about -59); c16b (player model) at the water surface (y about -50); `config/creativecompat-common.toml` has `skeletonsSink = true`, `sinkSpeed = 0.1`
 @fails c16a still near the top: the `@ModifyArg` on `m_20334_` in `CorpseEntity.m_8119_` did not apply (look for a mixin warning); c16b sank too: the skeleton check is missing
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
-@reviewed 2026-11-22
+@reviewed 2026-11-24
 > forceload add 16 16
 > fill 20 -59 20 22 -50 22 minecraft:water
 > fill 26 -59 20 28 -50 22 minecraft:water
 > summon corpse:corpse 21 -51 21 {Tags:["c16a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{Stage:1b}}
 > summon corpse:corpse 27 -59 21 {Tags:["c16b"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{Stage:0b}}
-sleep 5
+# 2026-11-24 (r1124gate BATCH-FAULT): after 5 s the player corpse was at -54.5, still rising; 15 s lets both settle (0.1 per tick sink speed, about 9 blocks)
+sleep 15
 > data get entity @e[tag=c16a,limit=1] Pos[1]
 look about -59 (the column floor)
 > data get entity @e[tag=c16b,limit=1] Pos[1]
 look about -50 (the water surface)
 shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
-@reviewed 2026-11-22
 
 ## CQ-CMP-14 | Corpse look: armor follows contents, wither skeleton in the Nether
 @group client
@@ -886,42 +887,55 @@ look (with the CQ-CMP-18 shots) skeleton_dressed: the skeleton wears the gold he
 @@date 2026-11-22
 @@jars creativecommon creativecompat
 @@sources feature_writeup/creative_compat.md feature_writeup/publish_readiness.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/CompatMixinPlugin.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/MixinSwitches.java
-@@prep boot=2: toml creativecompat-common.toml mixins snowLayerFall false
-@@prep boot=2: toml creativecompat-common.toml mixins insideBlocks false
 @@text
-@@text Boot 1 is the full pack with the 2026-11-22 Compat jar (fresh config). Boot 2 switches two `[mixins]` keys off,
-@@text one of them the pass-through duck interface (`insideBlocks`), to show a switched-off mixin is skipped without a crash.
+@@text Boot 1 is the full pack with the 2026-11-22 Compat jar (fresh config). SQ-CMP-24 (two `[mixins]` keys off) moved to
+@@text section 8 on 2026-11-24 for a boot without Snow! Real Magic; SQ-CMP-38 checks the snow hand-over to Snow! Real Magic.
 @@text
 @@table
 ## SQ-CMP-23 | [mixins] keys written, every gated mod in its tested range, exact Breezy gate
 @group A
 @commands Boot 1; read `config/creativecompat-common.toml`; grep the log for range warnings and the Breezy mixin
-@pass `[mixins]` table with 32 keys, all `true`; no `is outside the tested range` and no `is not [` line from `[creativecompat]`; the `SupplementariesBreezyCompatMixin` gate passes (pack has Supplementaries 1.19.2-2.4.20, Breezy 1.0.8: no `is not [` line; the mixin itself applies only on a client, when a wind vane first ticks); `python3 $INST/tools/scratch_query/cmp_mixin_check.py` shows no mixin skipped that applied in r1122cc
+@pass `[mixins]` table with 36 keys (one per `MixinSwitches` entry; 32 before the wave 2 melting switches, 2026-11-24), all `true`; no `is outside the tested range` and no `is not [` line from `[creativecompat]`; the `SupplementariesBreezyCompatMixin` gate passes (pack has Supplementaries 1.19.2-2.4.20, Breezy 1.0.8: no `is not [` line; the mixin itself applies only on a client, when a wind vane first ticks); `python3 $INST/tools/scratch_query/cmp_mixin_check.py` shows no mixin skipped that applied in r1122cc
 @fails a range string wrong for the installed version (the mod's mixins go missing); the config spec missing `[mixins]`
 @boot 1
-@reviewed 2026-11-22
+@reviewed 2026-11-24
 bootexpect \[creativecompat\] loaded \(config/
 bootreject \[creativecompat\].*(outside the tested range|is not \[)
-shell awk '/^\[mixins\]/{m=1;next} /^\[/{m=0} m && /=/' config/creativecompat-common.toml | grep -c "= true"; true
+# 2026-11-24 (r1124gate BATCH-FAULT): 36 keys since the four wave 2 melting switches (MeltingBlockState, BiomeMelt, VanillaLightMelt, EndFire)
+shell n=$(awk '/^\[mixins\]/{m=1;next} /^\[/{m=0} m && /=/' config/creativecompat-common.toml | grep -c "= true"); echo "true keys $n"; test "$n" = 36
 shell grep -c "SupplementariesBreezyCompatMixin" logs/debug.log; python3 $INST/tools/scratch_query/cmp_mixin_check.py | tail -5
 # r1123cx (2026-11-23): BreezyCompatImpl is called only by a ticking wind vane on a client, so on a dedicated server the mixin never applies; the row checks the gate
-look 32 true keys; no Breezy gate warning; cmp_mixin_check skips only absent-mod mixins and the client-only Breezy one
+look 36 true keys; no Breezy gate warning; cmp_mixin_check skips only absent-mod mixins and the client-only Breezy one
 
-## SQ-CMP-24 | A switched-off [mixins] key skips its mixin; pass-through off without a crash
+## SQ-CMP-38 | With Snow! Real Magic loaded its fall handles snow; salt layers keep the pack's fall
 @group A
-@commands Boot 2 (prep: `snowLayerFall = false`, `insideBlocks = false`); grep the log; walk through a cobweb and place a snow layer over air with `/setblock ~ ~3 ~ minecraft:snow`
-@pass log line `mixins switched off in [mixins]: [...SnowLayerFallMixin..., ...InsideBlocksMixin...]`; neither mixin in `logs/debug.log` apply lines for this boot; no exception mentioning `PassHolder`, `PassChunkHolder` or `ClassCastException` after 60 s with a player or bot online; the floating snow layer stays (does not fall)
-@fails ClassCastException from a pass-through cast (a duck cast missed in surface/); the key not read (plugin reads before the file exists only on a first start)
-@boot 2
-@reviewed 2026-11-22
-bootexpect mixins switched off in \[mixins\]
-bootreject ClassCastException.*creativecompat
-> setblock 0 120 0 minecraft:snow
+@commands Boot 1 (full pack, Snow! Real Magic 6.5.4 in it); two stone pillars at y 115 to 116 with a snow 3 and a salt 3 on top; remove the upper stones; read the landed blocks and the log
+@pass log line `Snow! Real Magic loaded: snow falls by its snowGravity` once; the snow lands as `minecraft:snow` at y 116; the salt lands as `vintagedelight:salt[layers=3]` at y 116 (never snow); no `creativecompat:falling_layer` entity for the snow
+@fails no log line or a pack falling entity for snow: `FallingLayers.falls` not gating snow (`srmLoaded`); salt landed as snow: Snow! Real Magic's own tick fell it (its `tick` on every `SnowLayerBlock`, B3; step 11 of snow_real_magic.md); salt gone or floating: the pack hold missed; snow floating: Snow! Real Magic `snowGravity` off in its config
+@boot 1
+@reviewed 2026-11-24
+@absent creativecompat:falling_layer (Compat entity type, missing from the last /dumpall registry dump)
+bootexpect \[creativecompat\] Snow! Real Magic loaded: snow falls by its snowGravity
+> forceload add 0 0
+> setblock 0 115 0 minecraft:stone
+> setblock 0 116 0 minecraft:stone
+> setblock 0 117 0 minecraft:snow[layers=3]
+> setblock 3 115 0 minecraft:stone
+> setblock 3 116 0 minecraft:stone
+> setblock 3 117 0 vintagedelight:salt[layers=3]
+sleep 1
+> setblock 0 116 0 minecraft:air
+> setblock 3 116 0 minecraft:air
+> execute if entity @e[type=creativecompat:falling_layer,x=0,y=116,z=0,distance=..3] run say CMP38_SNOW_PACK_ENTITY
 sleep 5
-> execute if block 0 120 0 minecraft:snow run say SNOW_STAYED
-waitlog SNOW_STAYED 20
-shell grep -cE "ClassCastException|NoClassDefFoundError" logs/latest.log; true
-look no cast errors; snow layer stayed
+> execute if block 0 116 0 minecraft:snow run say CMP38_SNOW_LANDED
+> execute if block 3 116 0 vintagedelight:salt[layers=3] run say CMP38_SALT_LANDED
+waitlog CMP38_SALT_LANDED 20
+expect CMP38_SNOW_LANDED
+reject CMP38_SNOW_PACK_ENTITY
+shell grep -c "Snow! Real Magic loaded: snow falls by its snowGravity" logs/latest.log; true
+look the hand-over line once (logged at mod construction); both layers landed at y 116
+> fill 0 115 0 3 117 0 minecraft:air
 
 ## SQ-CMP-25 | Pack balance runs from the pack folder; crop recipes and dimension tags from the jar
 @group A
@@ -1016,10 +1030,12 @@ look (with the CQ-CMP-18 shots) own_wings: the living player's wings, left red, 
 @commands Boot 1 (prep writes `seasoningCategory = false`, `canCategories = true`, `potionBucketCategory = true`, `tippedArrowCategory = false`); read `config/creativecompat-common.toml`; restart and read again
 @pass log `[jei] page switches carried over to pagesOff = [seasoning, tipped_arrows]` once; the file has `pagesOff = ["seasoning", "tipped_arrows"]` and none of the four old keys; after the restart no second carry-over line and the list is unchanged
 @fails no carry-over line: `JeiPageKeys.carryOver` not called before `registerConfig` in `CreativeCompat`, or the file has no `[jei]` table; old keys still there: Forge read the file before the carry-over
+@reviewed 2026-11-24
 @boot 1
-bootexpect \[jei\] page switches carried over to pagesOff = \[seasoning, tipped_arrows\]
+# 2026-11-24 (r1124gate BATCH-FAULT): a bootexpect reads the boot after the restart; the first boot's line is checked in its kept log
 shell grep -nE "pagesOff|seasoningCategory|canCategories|potionBucketCategory|tippedArrowCategory" config/creativecompat-common.toml
 restart
+shell n=$(cat logs/qrun_boot*.log | grep -c "\[jei\] page switches carried over to pagesOff = \[seasoning, tipped_arrows\]"); echo "first boot carry-over lines $n"; test "$n" = 1
 shell grep -c "page switches carried over" logs/latest.log; grep -n "pagesOff" config/creativecompat-common.toml
 look first boot: one carry-over line, `pagesOff = ["seasoning", "tipped_arrows"]`, no old key; after the restart 0 carry-over lines and the same list
 
@@ -1332,3 +1348,35 @@ bootreject (TrashCansItemCanUseMixin.*(Error|error|failed)|NoClassDefFoundError:
 shell ls mods | grep -c "^trashcans-"; true
 shell grep -cE "TrashCansItemCanUseMixin|com\.supermartijn642\.trashcans" logs/latest.log; true
 look first shell line 0 (no Trash Cans jar), second 0 (no mixin or Trash Cans class named in the log)
+
+@@section 8
+@@title SQ-CMP Switched-off [mixins] keys without Snow! Real Magic, 2026-11-24 ([creative_compat.md](../creative_compat.md) 3, TODO `creative-compat-publish #2`; moved from section 4, [snow_real_magic.md](../snow_real_magic.md) R3)
+@@date 2026-11-24
+@@jars creativecommon creativecompat
+@@sources feature_writeup/creative_compat.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/CompatMixinPlugin.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/FallingLayers.java
+@@modset nosrm
+@@prep toml creativecompat-common.toml mixins snowLayerFall false
+@@prep toml creativecompat-common.toml mixins insideBlocks false
+@@text
+@@text Full pack without Snow! Real Magic (with it loaded its snowGravity falls snow whatever the pack's switches; owner,
+@@text 2026-11-24) and two `[mixins]` keys off before boot 1, one of them the pass-through duck interface (`insideBlocks`),
+@@text to show a switched-off mixin is skipped without a crash.
+@@text
+@@table
+## SQ-CMP-24 | A switched-off [mixins] key skips its mixin; pass-through off without a crash
+@group A
+@commands Boot 1 without Snow! Real Magic (prep: `snowLayerFall = false`, `insideBlocks = false`); grep the log; place a snow layer over air with `/setblock 0 120 0 minecraft:snow`
+@pass log line `mixins switched off in [mixins]: [...SnowLayerFallMixin..., ...InsideBlocksMixin...]`; neither mixin in `logs/debug.log` apply lines for this boot; no exception mentioning `PassHolder`, `PassChunkHolder` or `ClassCastException` after 60 s with a player or bot online; the floating snow layer stays (does not fall)
+@fails ClassCastException from a pass-through cast (a duck cast missed in surface/); the key not read (plugin reads before the file exists only on a first start); the snow fell: Snow! Real Magic in the set (the nosrm mod set did not drop it; with it loaded its snowGravity falls snow, SQ-CMP-38)
+@boot 1
+@reviewed 2026-11-24
+# r1124gate (2026-11-24): FAIL on the full pack: Snow! Real Magic fell the layer; owner ruling 2026-11-24 moves the row to a set without it
+bootexpect mixins switched off in \[mixins\]
+shell ls mods | grep -ci "^snowrealmagic"; true
+bootreject ClassCastException.*creativecompat
+> setblock 0 120 0 minecraft:snow
+sleep 5
+> execute if block 0 120 0 minecraft:snow run say SNOW_STAYED
+waitlog SNOW_STAYED 20
+shell grep -cE "ClassCastException|NoClassDefFoundError" logs/latest.log; true
+look no cast errors; snow layer stayed; first shell line 0 (no Snow! Real Magic jar)

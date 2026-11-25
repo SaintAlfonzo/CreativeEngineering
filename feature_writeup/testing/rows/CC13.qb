@@ -81,8 +81,11 @@ look the first reload line lands about 1 s after the edit (log timestamps agains
 @group client
 @commands Full pack client: hover a salt item, an ice block and a snow block in the inventory
 @pass the saltable tooltip line shows on the blocks salt melts and the salt item names its use; no tooltip line on blocks it does not melt
-@fails saltable tag, tooltip handler, lang keys
+@fails saltable tag, tooltip handler (`SaltableTooltip` in Creative Compat's `melting/`), Compat lang key `creativecompat.tooltip.saltable`
 @reviewed 2026-11-24
+@jars creativecompat
+@sources development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/melting/SaltableTooltip.java
+# retargeted 2026-11-24 (r1124gate ruling): melting and the Saltable tooltip moved to Creative Compat in the wave 2 carve, so the row tests the Compat jar, not the Common 1.3.0 gate
 # steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's usual unlisted-jar --drop set), flat creative world
 do {"tooltip_text": "minecraft:ice", "expect": ": Saltable$"}
 do {"tooltip_text": "minecraft:packed_ice", "expect": ": Saltable$"}
@@ -129,8 +132,11 @@ look hud and inventory_effects: Nausea without a level numeral, Speed shows III;
 @group client
 @commands Full pack client: place the 12 wood composters empty, filling and ready in daylight next to their planks (also covered by CQ-CM-42)
 @pass the compost gaps take each plank's darkest shades; no missing texture; owner approves, then the `sources.csv` composter rows go from `confirm` to `ok`
-@fails the palette choice (rerun the swap with another palette; ask the owner which), model paths
+@fails the palette choice (rerun the swap with another palette; ask the owner which), model paths (Creative Delight `assets/creativedelight/models/block/`)
 @reviewed 2026-11-24
+@jars creativedelight
+@sources development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/composter/WoodComposterBlock.java
+# retargeted 2026-11-24 (r1124gate ruling): the wood composters are Creative Delight's since the wave 2 carve, so the row tests the Delight jar, not the Common 1.3.0 gate
 @absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter (registered by Creative Delight since the wave 2 carve, 2026-11-24, after the last /dumpall; were creativecommon:<wood>_composter)
 # steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's usual unlisted-jar --drop set), flat creative world
 > fill -2 -60 1 26 -56 12 minecraft:air

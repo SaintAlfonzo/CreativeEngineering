@@ -19,7 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * Snow and salt layers fall (plan_post_scratch_1115.md G7.5, {@link FallingLayers}): HEAD of {@code updateShape}
  * ({@code m_7417_}) keeps a tagged layer over a free block instead of breaking it and queues its fall; HEAD of
  * {@code randomTick} ({@code m_213898_}) lets a floating layer (an old save) fall. Salt layers ({@code vintagedelight:salt})
- * are a {@link SnowLayerBlock} and come through here by tag. Vanilla-class target, {@code remap = false}.
+ * are a {@link SnowLayerBlock} and come through here by tag. With Snow! Real Magic loaded, snow is left to its own fall
+ * ({@link FallingLayers#falls}); salt keeps this one. Vanilla-class target, {@code remap = false}.
  */
 @Mixin(value = SnowLayerBlock.class, remap = false)
 public abstract class SnowLayerFallMixin {

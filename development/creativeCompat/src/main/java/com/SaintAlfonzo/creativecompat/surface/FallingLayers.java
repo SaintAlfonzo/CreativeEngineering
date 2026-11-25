@@ -33,6 +33,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -71,6 +72,34 @@ public final class FallingLayers {
 
 	private static final Map<ServerLevel, LongLinkedOpenHashSet> QUEUE = new IdentityHashMap<>();
 
+	/** Snow! Real Magic's mod id: with it loaded, its {@code snowGravity} falls snow (owner, 2026-11-24). */
+	private static final String SRM = "snowrealmagic";
+	private static Boolean srmLoaded;
+
+	/** True when Snow! Real Magic is loaded; logs the hand-over once (first call: the mod constructor). */
+	public static boolean srmLoaded() {
+		if (srmLoaded == null) {
+			srmLoaded = ModList.get() != null && ModList.get().isLoaded(SRM);
+			if (srmLoaded) CreativeCompat.LOGGER.info("[creativecompat] Snow! Real Magic loaded: snow falls by its "
+					+ "snowGravity, not [surface.passthrough.layers] layersFall (salt and other layers keep it)");
+		}
+		return srmLoaded;
+	}
+
+	/**
+	 * True when this block falls by these rules: tagged, and not snow while Snow! Real Magic is loaded (its own fall
+	 * handles {@code minecraft:snow} and its {@code snowrealmagic} blocks; salt layers, which are also a
+	 * {@code SnowLayerBlock}, stay here).
+	 */
+	public static boolean falls(BlockState state) {
+		if (!state.is(TAG)) return false;
+		if (!srmLoaded()) return true;
+		Block b = state.getBlock();
+		if (b == Blocks.SNOW) return false;
+		ResourceLocation id = ForgeRegistries.BLOCKS.getKey(b);
+		return id == null || !SRM.equals(id.getNamespace());
+	}
+
 	/** {@code [surface.passthrough.layers] layersFall}, true before the config loads. */
 	public static boolean enabled() {
 		return !CompatConfig.SPEC.isLoaded() || CompatConfig.SURFACE.passthrough.layersFall.get();
@@ -82,7 +111,7 @@ public final class FallingLayers {
 	 */
 	public static boolean holdAndQueue(BlockState state, LevelAccessor level, BlockPos pos) {
 		if (!(level instanceof ServerLevel sl)) return false;
-		if (!state.is(TAG) || !enabled()) return false;
+		if (!falls(state) || !enabled()) return false;
 		if (pos.getY() <= sl.getMinBuildHeight()) return false;
 		if (!FallingBlock.isFree(sl.getBlockState(pos.below()))) return false;
 		queue(sl, pos);
@@ -91,7 +120,7 @@ public final class FallingLayers {
 
 	/** Random tick of a snow or salt layer: falls now when it floats. True = fell (skip the rest of the tick). */
 	public static boolean randomTick(BlockState state, ServerLevel level, BlockPos pos) {
-		if (!state.is(TAG) || !enabled()) return false;
+		if (!falls(state) || !enabled()) return false;
 		return tryFall(level, pos, state);
 	}
 
@@ -109,7 +138,7 @@ public final class FallingLayers {
 		for (BlockPos pos : now) {
 			if (!level.isLoaded(pos)) continue;
 			BlockState state = level.getBlockState(pos);
-			if (state.is(TAG) && enabled()) tryFall(level, pos, state);
+			if (falls(state) && enabled()) tryFall(level, pos, state);
 		}
 	}
 
