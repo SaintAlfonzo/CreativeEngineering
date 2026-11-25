@@ -1501,6 +1501,8 @@ reject \[cdevtest\] verb=\S+ .*error=
 @@date 2026-11-18
 @@jars creativecommon creativecompat
 @@sources feature_writeup/plan_passthrough.md
+@@prep difficulty=normal spawn-animals=true
+# r1124w7 (2026-11-25): scratch servers default to peaceful, spawn-animals=false; the summoned mobs vanished (TODO creative-compat-publish #17)
 @@table
 ## SQ-PTH-29 | foxes and bees: leaf piles do not slow them, snow layers do; a zombie is slowed by both
 @reviewed 2026-11-20

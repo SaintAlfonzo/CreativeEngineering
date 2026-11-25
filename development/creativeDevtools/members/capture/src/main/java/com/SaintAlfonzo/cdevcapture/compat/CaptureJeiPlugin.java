@@ -42,8 +42,15 @@ public class CaptureJeiPlugin implements IModPlugin {
 
 	public static void showRecipes(ItemStack stack, boolean uses) {
 		IJeiRuntime r = require();
-		r.getRecipesGui().show(r.getJeiHelpers().getFocusFactory().createFocus(
-				uses ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT, VanillaTypes.ITEM_STACK, stack));
+		var ff = r.getJeiHelpers().getFocusFactory();
+		if (uses) {
+			// JEI's own "uses" view: input and catalyst focuses, so a stack that is only a catalyst still shows.
+			r.getRecipesGui().show(List.of(
+					ff.createFocus(RecipeIngredientRole.INPUT, VanillaTypes.ITEM_STACK, stack),
+					ff.createFocus(RecipeIngredientRole.CATALYST, VanillaTypes.ITEM_STACK, stack)));
+		} else {
+			r.getRecipesGui().show(ff.createFocus(RecipeIngredientRole.OUTPUT, VanillaTypes.ITEM_STACK, stack));
+		}
 	}
 
 	public static void showCategory(String uid) {

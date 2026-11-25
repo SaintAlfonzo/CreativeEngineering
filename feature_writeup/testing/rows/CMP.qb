@@ -608,10 +608,14 @@ do {"click_slot": 85}
 do {"click_slot": 41}
 do [{"hover": {"slot": 77}}, {"press": "2"}]
 do {"slot_item": 84, "expect": "empty"}
+do {"slot_item": 85, "expect": "empty"}
 do {"slot_item": 77, "expect": "empty"}
 do {"widgets": true, "reject": "Additional Items"}
 do {"hover": "off"}
 do {"screen": "close"}
+# r1124w7 (2026-11-25): a plain click on 84 then 85 also empties 84 (cursor swap); 85 empty and the dodge ring in
+# hotbar slot 8 prove the shift-click was a quick move (TODO creative-compat-publish #14)
+do {"slot_item": 8, "expect": "dodge_ring", "reject": "creativecompat|Cosmetic"}
 do {"slot_item": 9, "expect": "mana_ring", "reject": "creativecompat|Cosmetic"}
 do {"slot_item": 1, "expect": "golden_helmet", "reject": "creativecompat|Cosmetic"}
 > cdevtest entities 0 101 0 2 type=minecraft:player nbt

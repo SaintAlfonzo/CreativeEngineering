@@ -70,6 +70,8 @@ look sheep: mutton, no wool; golems: iron ingots; stone count below 25
 @@jars creativecompat
 @@phase worldgen
 @@sources feature_writeup/mob_block_tweaks.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mobs/SquidsAndWhales.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/AmGiantSquidAvoidWhalesMixin.java
+@@prep spawn-animals=true
+# r1124w7 (2026-11-25): scratch servers default to peaceful, spawn-animals=false; the summoned mobs vanished (TODO creative-compat-publish #17)
 @@text
 @@text Targets the Creative Compat jar installed 2026-11-24 (commit 0f78d9277). Replaces SQ-PSM-08. Deep ocean, positions
 @@text read with `data get entity ... Pos` and compared by a `shell python3` line as in SQ-PSM-08.

@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativecommon.loadingtips;
 
 import com.SaintAlfonzo.creativecommon.CreativeCommon;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.mojang.logging.LogUtils;
@@ -77,7 +78,8 @@ public final class LoadingTips extends SimpleJsonResourceReloadListener {
 						}
 					}
 				}
-				for (JsonElement t : GsonHelper.getAsJsonArray(o, "tips")) {
+				// A remove-only override has no tips list.
+				for (JsonElement t : GsonHelper.getAsJsonArray(o, "tips", new JsonArray())) {
 					String id, text;
 					if (t.isJsonObject()) {
 						JsonObject to = t.getAsJsonObject();

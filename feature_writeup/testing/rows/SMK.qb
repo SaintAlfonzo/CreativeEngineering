@@ -466,6 +466,8 @@ reject Unknown or incomplete command
 @@reviewed 2026-11-20
 @@sources development/creativeWorldgen
 @@tier T1
+@@prep spawn-animals=true
+# r1124w7 (2026-11-25): scratch servers default to peaceful, spawn-animals=false; the summoned mobs vanished (TODO creative-compat-publish #17)
 @@text Creative Worldgen boots with its data packs and members, its commands answer, Mooblooms summon, and its recipes and biome trims are in place.
 @@text
 @@table

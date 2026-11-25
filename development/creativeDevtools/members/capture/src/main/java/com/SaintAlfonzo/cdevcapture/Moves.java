@@ -26,7 +26,8 @@ import java.util.function.Function;
  * {"fly": true | false}                              creative flight on or off (needs mayfly)
  * </pre>
  * The keys are pressed at the end of the tick the step starts in, so the first logged tick is the first tick of
- * input. Toggle-mode sprint/sneak mappings are pressed once at the start and once at the end.
+ * input. With other keys held, {@code use} and {@code attack} go down {@code ACTION_DELAY} (2) ticks later, so a
+ * sneak-use reaches the server as sneak first. Toggle-mode sprint/sneak mappings are pressed once at the start and once at the end.
  */
 final class Moves {
 
@@ -93,8 +94,17 @@ final class Moves {
 			return hold + after + 20;
 		}
 
+		/** Ticks use / attack wait after the other keys, so a sneak is on the server before the click. */
+		static final int ACTION_DELAY = 2;
+
+		private boolean deferAction() {
+			return hold > ACTION_DELAY && keys.stream().anyMatch(k -> !k.equals("use") && !k.equals("attack"));
+		}
+
 		private void press(Minecraft mc, boolean down, boolean edge) {
+			boolean defer = down && deferAction() && ticks < ACTION_DELAY;
 			for (String k : keys) {
+				if (defer && (k.equals("use") || k.equals("attack"))) continue;
 				KeyMapping km = KEYS.get(k).apply(mc);
 				if (km instanceof ToggleKeyMapping) {
 					// Toggle mode flips on each press: only touch it on the edges.
