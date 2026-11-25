@@ -92,3 +92,11 @@ path, push to `agent_staging`.
   W-P1, W-P3, W-P5 to W-P7 wait for the impl slot.
 - 2026-11-23: scratchpad notes taken in (W13 to W17): rows `food-tuning #66`, `#67`, `creative-compat-publish #8`,
   `#9`; phases W-P3b and W-P3c; W2 superseded by W16; `mobs/tweaks #18` superseded by W17.
+- 2026-11-23 to 2026-11-24: executed with plan_wave2_publish.md by one orchestrating session (phase agents one at a
+  time). Done: W-P3 (Raspberry Pie fixes; `#21` premise false, fixed earlier; `#12` already optional; `#18` closed, the
+  owner keeps the jar defaults), W-P3b (box to Creative Engineering, squid and whales), W-P3c (drink types already right;
+  jams kept foods, guard in food_catalog.py), W-P1 (tip filter: 106 newer-content plus 30 wrong-in-1.19.2 tips in
+  Common's jar, owner 2026-11-24; composter palette credit in Creative Delight's NOTICE since the composters moved),
+  W-P5 (clean clone builds every in-tree mod: development/build_jars.csv, tools/build_jars.py), W-P6 (Common
+  1.3.0+ddd126587, Compat 1.0.0+8f883cd64, Raspberry Pie 1.0.0+8f883cd64, clean, checks on, installed). Next: W-P7, the
+  owner starts the scratch run; then W-P8.

@@ -249,7 +249,7 @@ Default = SRM's default. Recommendation = this report's proposal for the pack. I
    `Hooks.convert` call) that skips the column when `Melting` reports magma within `fireRange`. That is the same
    check `BiomeMeltMixin` makes.
 4. **Seasons.** No code if D7 = accept. Note in [weather_by_biome.md](weather_by_biome.md) and Calendar's perf note that
-   Serene Seasons' melt handler is cancelled by SRM, so `seasonsMeltIntervalTicks` does nothing while SRM is
+   Serene Seasons' melt handler is canceled by SRM, so `seasonsMeltIntervalTicks` does nothing while SRM is
    installed.
 5. **Walk-through for `snowrealmagic:snow`.** Tag it in `passthrough_layers`, `falling_layers` and `replaceable_layers`
    (`passthrough_tags.js`). Compat mixin on `EntitySnowLayerBlock.getCollisionShape` HEAD: for a living entity, our
