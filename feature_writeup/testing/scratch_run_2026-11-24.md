@@ -729,3 +729,81 @@ Wave 1 for W-P8: not clear. Raspberry Pie has no product FAIL (its open items ar
 rewrite). Creative Common has the version_filter WARN (cosmetic, the filter works). Creative Compat has CQ-CMP-19
 (possible item loss in the corpse screen), CQ-CMP-33, the unproven CQ-CMP-37, and the shared mob-vanish cause; per
 W-P7 a product fix sends the jar back to W-P6. Owner ruling needed on which of these block the upload.
+
+## 6. r1125w1: wave 1 rerun of the fixed rows
+
+runner-w1r (scratch-test runner subagent) for the session orchestrating wave 1. Owner authorized the boots (2026-11-24,
+chat). Results `perf/runs/r1125w1/`. Short targeted run: perf capture skipped.
+
+### 6.1 Scope and jars
+
+The 11 rows section 5 failed and commits bb465ade3 / 697abc7d1 fixed (TODO creative-common-publish #21,
+creative-compat-publish #14 to #17): server SQ-MT-04, -05, -06, SQ-PTH-29, -30, SQ-SMK-31 (drive r1125w1, 3 steps,
+`perf/runs/r1125w1/plan.json` from `qrerun.py`); client CQ-LTP-17, CQ-CPP-01, CQ-CMP-19, -33, -37 (one full-pack capture
+client). Cheap extra: CQ-CMP-18 (see 6.2).
+
+| Jar | Stamp in mods/ (jarstamp.py, 10:16) | sha1 |
+|---|---|---|
+| creativecommon-1.3.0.jar | 1.3.0+bb465ade3.2611251007 | 17cf5f571b6ed72732174df1efb34cc07107776f |
+| creativedevtools-1.0.0.jar | 1.0.0+bb465ade3.2611251007 | a60a0926e536587bac15ab9850996096a56eb1d2 |
+| creativecompat-1.0.0.jar | 1.0.0+db212e956.2611242239 | ad4746c0c4ef238ff6acb1ae957767fd3d99dd2f |
+| solRaspberryPie-1.0.0.jar | 1.0.0+8f883cd64.2611242037 | cb71f0ccc76834ef24e7b060c272dba62163941f |
+
+`NOSWAP=1` (`perf/runs/r1125w1/env.sh`; build/libs holds a Compat bb465ade3 build that must not be used), step 1 prep
+log `swap: off (NOSWAP=1)`; DROPJARS as r1124w7. The capture client's GAME/mods: `jarstamp.py diff mods GAME/mods` 0
+own jars differ. `check_all.py --fast` 44 run, 0 failed. Disk: 3.8 GB free on / at the start (below the skill's 10 GB
+line); the run fits (ended 3.1 GB), but pruning old run folders was refused by the permission classifier: `perf/runs/`
+is 101 GB, `r1120nv` alone about 29 GB, 20 GB of it per-step `srv/kubejs` copies. Owner: clear it before the next bulk run.
+
+### 6.2 Run notes
+
+- 10:15 RUNNER.md claimed (idle since 03:15, no game JVM). 10:17 drive r1125w1 (user unit `r1125w1-drive`): 3 steps,
+  6 rows; steps 1 and 2 group A with `@@prep spawn-animals=true` (PTH also `difficulty=normal`), step 3 group B.
+- 10:22 step 1: the summoned mobs stay now (the #17 fix works). SQ-SMK-31 PASS. SQ-PTH-29: only `f29s` fails: the fox in
+  5 snow layers stands on top (pos y -59.375, the layer height) and reads `mod=none`. `SnowLayers.standsOn` makes a light
+  mob stand on top at any layer count, so the row's own hint (rerun at 3 layers) would not change it. The row and
+  plan_passthrough's exempt note ("snow slows them", 2026-11-18) disagree with G11 (light mobs stand on top): FAIL, owner
+  ruling, row not edited (creative-compat-publish #18). SQ-PTH-30 FAIL: the fox ends at x 1008.68, east of the 8-layer
+  pile at x 1004 (also FAIL r1120nv): creative-compat-publish #19.
+- 10:31 drive done. SQ-MT-04, -05, -06 LOOKs judged PASS from the shell lines (6.3). In SQ-MT-06 the whale and the
+  grabbing squid swim together out of the forceloaded square within 10 s (z 200 to 210), so the 20 to 60 s reads are
+  static; the 0 to 10 s window shows the grab (whale 141 -> 89 while the squid took 3).
+- 10:34 capture client up (`run_captures.py serve`, the 4 unlisted jars dropped). game_jvms.sh listed short-lived
+  headless RhinoRun / javac harness JVMs of the concurrent code session (instance cwd, seconds old); not game JVMs.
+- 10:36 `cli_cmp`: CQ-CMP-19 run first in the fresh client: opening the corpse throws `IndexOutOfBoundsException: Index
+  90 out of bounds for length 90` on every ContainerSetContent packet (the client's corpse menu is shorter than the
+  server's), the screen wait times out and the slot reads fail. CQ-CMP-33, -37 LOOK (shots).
+- 10:38 `cli_cmp2`: CQ-CMP-18 then CQ-CMP-19 in the same client (r1124w7's order): no exception, every CQ-CMP-19 check
+  passes (shift-click quick move works). The first-open desync is a finding: creative-compat-publish #20.
+- 10:41 `cli_ltp`: CQ-LTP-17 PASS (213 tips from 3 files, Common alone 396 from 2, back to 213; no `skipped` line).
+  `cli_cpp`: CQ-CPP-01 all checks pass (Haste amp 0 arrives, no version_filter skip), LOOK for its shots.
+- 10:44 client stopped; game_jvms.sh empty.
+
+### 6.3 Verdicts
+
+Latest result per row over `perf/runs/r1125w1/s00_res` to `s02_res`, `cli_cmp`, `cli_cmp2`, `cli_ltp`, `cli_cpp`
+(`qrun.py table`). Counts (12 rows with the extra): PASS 6, FAIL 2, LOOK 4 (owner shots).
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-SMK-31 | PASS | 2 checks passed (the summoned moobloom stays) |
+| SQ-MT-04 | PASS | 30 m: squid 25.4 -> 20.3, glow squid 31.9 -> 27.3 (no drift away); whale at 10: squid 14.7 -> 26.6, glow squid 18.1 -> 23.5 in 8 s; orca at 10 of the squid: 9.3 -> 7.8 (the glow squid was 29.5 off the orca) |
+| SQ-MT-05 | PASS | 30 m: whale health 160 -> 160, squid did not close in (38.2 -> 44.3); after the tp the squid stays on the whale (2.6 -> 3.0 -> 3.1) and whale health 160 -> 117 -> 23 by 20 s |
+| SQ-MT-06 | PASS | `[giant_squid]` grep 0; squid hp 31 -> 28 (whale hit it) while whale hp 141 -> 89 in 10 s; the pair stays together (5.2 -> 9.3) and leaves the forceloaded square, later reads static |
+| SQ-PTH-29 | FAIL | f29s fox on top of 5 snow layers (y -59.375) reads mod=none; rest passes (f29l, b29l none; z29l -0.229; b29s, z29s -0.400). Row vs G11 disagree: creative-compat-publish #18 |
+| SQ-PTH-30 | FAIL | fox at x 1008.68 after 1200 ticks, east of the x 1004 8-layer pile: creative-compat-publish #19 |
+| CQ-LTP-17 | PASS | 9 checks passed |
+| CQ-CPP-01 | LOOK | all checks pass (haste amp 0, 3 tip files, no skip); shots jei_apple_cider, tea_pipe_hud, tea_pipe_inventory in `test_captures/judgement/qrun_cli_cpp/` for the owner |
+| CQ-CMP-19 | PASS | `cli_cmp2` (after CQ-CMP-18): slots 84, 85, 77 empty after take, shift, drag, swap; dodge ring hotbar 8, mana ring 9, helmet with `{Damage:0}` only; no creativecompat:curio / Cosmetic* keys; after Transfer Items ring 0 aura_ring, ring 1 mana_ring, backpack, belt, pendant, dodge ring in the inventory, helmet back in cosmetic slot 46. Alone in a fresh client (`cli_cmp`): FAIL on the menu desync (#20) |
+| CQ-CMP-33 | LOOK | names in the summon replies (Ancient Corpse, Ancient Remains); jar holds maple and cherry cookie; the Sample Syringe tab opens (syringe icon and catalyst, 1/4 pages); shots in `test_captures/judgement/qrun_cli_cmp/` |
+| CQ-CMP-37 | LOOK | sneak use on the Item Trash Can opens the filter screen (Filter row, whitelist button); other cans TrashCanWidgetContainerScreen; shots in `test_captures/judgement/qrun_cli_cmp/` |
+| CQ-CMP-18 | LOOK | cheap extra (setup for CQ-CMP-19); shots in `test_captures/judgement/qrun_cli_cmp2/` |
+
+TODO: creative-common-publish #21, creative-compat-publish #14, #17 Complete; #15, #16 logged (owner shots); new Bug rows
+creative-compat-publish #18 (SQ-PTH-29 ruling), #19 (SQ-PTH-30 fox crosses deep pile), #20 (corpse menu desync on a
+fresh client).
+
+Wave 1 for W-P8: the four section 5 blockers are cleared (version_filter WARN gone; CQ-CMP-19, -33, -37 work; mob vanish
+fixed). Open: owner shots CQ-CPP-01, CQ-CMP-18, -33, -37 (this section) and section 5's LOOKs; owner call on whether
+creative-compat-publish #18 to #20 (Compat pass-through and corpse findings, not regressions of this fix set) block the
+Compat upload.
