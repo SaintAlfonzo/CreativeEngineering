@@ -4,21 +4,16 @@
 
 ***
 
-## Requirements
+## Mods that require Creative Compat
 
-|                        |Version                               |
-| ---------------------- |------------------------------------- |
-| Minecraft              |1.19.2                                |
-| Forge                  |43 or newer                           |
-| Creative Common        |1.3.0 or newer                        |
-| KubeJS                 |1902.6.2-build.73 or newer (1902.6.x), required by Creative Common |
-| Rhino and Architectury |required by KubeJS                    |
-
-Everything else is optional; see "Optional mods: what changes with each" below.
-
-Both client and server need it. Client-only parts (tooltips, JEI and WTHIT changes, rendering) do nothing on a dedicated server, and server-only parts do nothing on the client.
-
-***
+*   **Creative Engineering**: machines and engineering
+*   **Creative Delight**: food, cooking and Farmer's Delight addons
+*   **Creative Brewing**: brewing, alcohol and potions
+*   **Creative Equipment**: armor, tools and gear
+*   **Creative Magic**: magic mod integration
+*   **Creative Loot**: loot, drops and trades
+*   **Creative Worldgen**: world generation and wildlife
+*   **Creative Calendar**: seasons and time
 
 ***
 
@@ -371,6 +366,22 @@ None of these are required. Each change only switches on when that mod is instal
 **Tooltips (FTB Library 1902.4.x, FTB Quests 1902.5.x, Patchouli 77, Applied Energistics 2 12.9.x, Wares 1.2.x, Pretty Pipes 1.13.x, Lightman's Currency 2.2.x, Legendary Tooltips 1.4.x with Iceberg)**
 
 <div class="spoiler"><p>Item tooltips keep their top on screen and use the pack's tooltip lines; Lightman's Currency screens and Legendary Tooltips title breaks are fixed.</p></div>
+
+***
+
+## Requirements
+
+|                        |Version                               |
+| ---------------------- |------------------------------------- |
+| Minecraft              |1.19.2                                |
+| Forge                  |43 or newer                           |
+| Creative Common        |1.3.0 or newer                        |
+| KubeJS                 |1902.6.2-build.73 or newer (1902.6.x), required by Creative Common |
+| Rhino and Architectury |required by KubeJS                    |
+
+Everything else is optional; see "Optional mods: what changes with each" above.
+
+Both client and server need it. Client-only parts (tooltips, JEI and WTHIT changes, rendering) do nothing on a dedicated server, and server-only parts do nothing on the client.
 
 ***
 
