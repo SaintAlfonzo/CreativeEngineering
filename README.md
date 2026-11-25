@@ -119,8 +119,18 @@ in `build-logic/`.
 ```
 
 Creative Delight and Creative Brewing nest their members; build and install them through `:creativeDelight:` and
-`:creativeBrewing:`, not a member's own task. `development/<mod>/libs/` is gitignored and holds compile-time copies of
-mod jars from `mods/`, so populate it before building. Never replace a jar while the game is running.
+`:creativeBrewing:`, not a member's own task. `development/<mod>/libs/` and `development/creativeDelight/upstream/`
+are gitignored and hold the third-party jars the mods compile against; `development/build_jars.csv` lists each one
+(path, version, sha1, download url, page, the projects that need it). On a fresh clone fill them first, each
+sha1-checked, from the official download urls or from another instance:
+
+```
+python3 tools/build_jars.py fetch [--projects creativeCommon,creativeCompat,solRaspberryPie] [--from <other instance>]
+./gradlew :creativeCommon:build --offline   # --offline needs a Gradle cache from one online build
+python3 tools/build_jars.py scan --online   # owner: after a libs/ or upstream/ change, then commit the csv
+```
+
+Never replace a jar while the game is running.
 
 ## After changing mods
 

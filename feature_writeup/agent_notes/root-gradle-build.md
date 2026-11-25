@@ -39,3 +39,11 @@ Set up 2026-10-01.
 
 tools/build_deploy.py uses an `IN_TREE_MODS` list (project, jar prefix, required) for preflight and jar archiving ([deploy-pipeline](deploy-pipeline.md)). Related: [creative-common-coremod](creative-common-coremod.md), [exposure-backport](exposure-backport.md).
 - `shared_sources` / `shared_base` in a mod's gradle.properties (2026-10-27): ce.forge-mod's `sharedSources` Sync task copies `development/shared/<module>/` into `build/generated/sources/shared/`, rewriting the template packages `ce.shared` / `ce.mixin` to `<shared_base>.shared` / `.mixin`. Edit only the templates. Modules: packs, upstream, mixinplugin, itemhidden (feature_writeup/pack_tooling.md 2.8).
+- Clean clone (2026-11-24, publish-readiness #3): `development/build_jars.csv` lists every git-ignored build-time jar
+  (each `libs/`, Creative Delight's `upstream/`, Tempad's `mods/` globs, the port tools' `upstream/donors/` as
+  project `tool`) with sha1, download url and the projects that need it; `tools/build_jars.py fetch` fills them
+  (`--from <instance>` copies, else extracts nested jars from their pack jar, else downloads), `scan --online`
+  rewrites the csv from the tree. The projects column comes from parsing settings.gradle and each build.gradle
+  (`fileTree`, `files(...)`, own `libs/`, `project(':x')`, `bundle_members`, repack `upstream_jar`): a new
+  dependency form there needs a new regex in `direct_needs`. Clone jars differ from the main tree's only in
+  `META-INF/MANIFEST.MF` and `ce-build.json` (the build stamp).
