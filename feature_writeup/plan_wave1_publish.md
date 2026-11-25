@@ -106,3 +106,7 @@ path, push to `agent_staging`.
   creativeloot-common.toml, Fleet-Footed field of view left at its default), checked against the live files after the
   first boot; tools/rp_libs.py keeps only `sources`, its libs.csv removed (build_jars.py fetches the jars). Common and
   Compat mod descriptions updated for the wave 2 carve (scratch gate r1124gate finding); jars rebuilt after the gate.
+- 2026-11-24: r1124gate stopped by the owner after 19 of 54 server steps (37 judged: PASS 26, BATCH-FAULT 8, FAIL 3;
+  scratch_run_2026-11-24.md 4.5). Owner ruling: Snow! Real Magic handles snow falling when loaded, the pack fall
+  otherwise (`creative-compat-publish #12`; salt keeps the pack fall). Row faults fixed. Release jars now: Common
+  1.3.0+db212e956, Compat 1.0.0+db212e956, Raspberry Pie 1.0.0+8f883cd64; W-P7 resumes on them.
