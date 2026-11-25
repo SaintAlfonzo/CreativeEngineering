@@ -201,16 +201,16 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - [ ] **CM-10 Wood composter recipe:** 7 spruce slabs in the composter shape -> Spruce Composter; 7 oak or bamboo slabs
   -> Composter; 7 spruce slabs -> Polymorph button lists Spruce Composter first, then Composter, and either can be
   picked; mixed spruce and birch slabs -> Composter; a Spruce Composter alone in the grid -> Composter. Queue SQ-CM-37
-  (recipes), CQ-CM-37 (Polymorph).
+  (recipes; PASS r1124nw 2026-11-24), CQ-CM-37 (Polymorph).
 - [ ] **CM-11 Same table:** fill a Warped Composter with wheat seeds and a pie -> same chances as CM-02 / CM-04; at level 7
-  it turns ready after a moment; right-click -> 1 bone meal. Queue SQ-CM-38.
+  it turns ready after a moment; right-click -> 1 bone meal. Queue SQ-CM-38 (r1124nw 2026-11-24: FAIL again, a pumpkin pie is accepted but not consumed, TODO `composting #9`).
 - [ ] **CM-12 Hopper and comparator:** hopper on top feeds seeds in; hopper below pulls the bone meal out at level 8;
   comparator output rises with the level. Queue SQ-CM-39.
 - [ ] **CM-13 Drops:** break a Birch Composter at level 8 with an axe -> the composter and 1 bone meal; at level 3 -> only the
   composter. Queue SQ-CM-40.
 - [ ] **CM-14 Look and WTHIT:** each of the 12 shows its wood, the fill and the ready texture; WTHIT shows the level line. Queue CQ-CM-42.
 - [ ] **CM-15 Fire and fuel:** a lit Acacia Composter burns away, a Crimson Composter does not; an Acacia Composter
-  smelts 1.5 items in a furnace, a Crimson Composter is not fuel. Queue SQ-CM-41.
+  smelts 1.5 items in a furnace, a Crimson Composter is not fuel. Queue SQ-CM-41 (r1124nw 2026-11-24: FAIL again, burns as fuel but the furnace smelts nothing, TODO `composting #10`).
 - [ ] **CM-16 Moved to Creative Delight:** an old save's Common composters load as Delight's (placed, chest, inventory); the
   recipes, tags and floats list use the new namespace; Common alone registers none. Queue SQ-CM-42, SQ-CM-43.
 

@@ -169,7 +169,7 @@ Prefix `SMO-`. Queue rows: `feature_writeup/testing/rows/SMO.qb` (SQ-SMO-01 to -
 | ID | Check |
 |---|---|
 | SMO-01 | 16 smoothies at 32 per stack; `#creativedelight:smoothies` and `#creativedelight:honey_drink_sound` 16 each; in `food_type/drink` and the Diet Log exclusion; `#forge:fruits/cherry` holds Vinery's cherry; 16 grid, 15 mixing, 15 filling recipes (SQ-SMO-01) |
-| SMO-02 | Cran Apple drinks at full hunger: Shrinking 80 s, Absorption 10 s, the bottle comes back (SQ-SMO-02) |
+| SMO-02 | Cran Apple drinks at full hunger: Shrinking 80 s, Absorption 10 s, the bottle comes back (SQ-SMO-02; PASS r1124nw 2026-11-24) |
 | SMO-03 | Pear: Appetizing 5 min, Lozenge 30 s; Mango Pineapple: Strength III 20 s, Rage Aura 20 s, Speed and Sweetening 10 s (SQ-SMO-03) |
 | SMO-04 | Chorus Smoothie teleports like chorus fruit (SQ-SMO-04) |
 | SMO-05 | Mixed Berry: the tooltip lists the berries' effects (2 cranberry + blueberry: Shrinking 1:20, Night Vision and Brightening 0:10; 2 raspberry + mulberry: No effects), different mixes do not stack, drinking gives them; honey sound; placeholder sprite (CQ-SMO-05) |

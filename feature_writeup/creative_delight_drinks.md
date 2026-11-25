@@ -250,6 +250,7 @@ and Brightening effects from the brief are not used (R7).
 
 Pending in game: `/dumpfood` -> `tools/food_catalog.py`, `tools/gen_stack_sizes.py`, Display Delight names (`food/placeable #3`).
 Tests: SQ-DRK-09 (recipes), SQ-DRK-10 (Item Drain), SQ-DRK-11 (effects, bottle, stack), CQ-DRK-03 (art, mixer and Kettle by hand).
+Scratch run r1124nw (2026-11-24, [scratch_run_2026-11-24.md](testing/scratch_run_2026-11-24.md) 2): SQ-DRK-09, -11 PASS after row fixes.
 
 ## 10. Any milk (plan_wood_bucket_batch_1121.md R1, R11, built 2026-11-21)
 
@@ -270,9 +271,9 @@ bucket and the wooden cauldron carry it), and the Nut Milk jar soft fluid takes 
 - Recipes that named the vanilla Milk Bucket take `#creativedelight:milk_buckets` (any full milk bucket, iron or
   wooden): Cooking for Blockheads' milk jar, Engineer's Decor's milking machine, Hostile Delight's magical butter,
   Vintage Delight's cheese curds (and its Slice & Dice copy), Canned Powdered Milk (generator row). Splash Milk's
-  bottles take cow milk only (`#forge:buckets/milk`). The Golden Milk Bucket recipes stay vanilla bucket only: the
-  bucket itself becomes the golden bucket.
+  bottles take cow milk only (`#forge:buckets/milk`). The golden milk bucket was removed (owner, 2026-11-22); no
+  recipe takes it.
 - Files: `kubejs/data/creativedelight/kubejs/creativedelight/milk.js` (tags, nut milk bottle pair, bucket swaps).
 
-Tests: SQ-RE-45 (tags, nut milk bottle, Item Drain), SQ-RE-46 (milk recipe inputs, golden milk bucket), SQ-RE-47 (Slice &
+Tests: SQ-RE-45 (tags, nut milk bottle, Item Drain), SQ-RE-46 (milk recipe inputs; the golden milk bucket is rejected), SQ-RE-47 (Slice &
 Dice mixin), CQ-RE-02 (machine and grid runs by hand); jar by pipe SQ-MJ-04.

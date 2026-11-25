@@ -323,10 +323,10 @@ Use JEI (recipe and usage views) and a creative test world with Create, IE and P
 - [ ] **RE-40 Wooden cauldron buckets [scratch]:** craft from 7 spruce planks (cauldron shape); pour a wooden water,
   milk, goat milk, nut milk and honey bucket in turn (scoop out between) -> each shows its fluid at full height and the
   empty wooden bucket comes back; an iron water / milk bucket works the same; a wooden sap bucket and a lava bucket do
-  nothing; a different fluid into a filled cauldron does nothing. Queue SQ-RE-40, look CQ-RE-01.
+  nothing; a different fluid into a filled cauldron does nothing. Queue SQ-RE-40, look CQ-RE-01. r1124nw 2026-11-24: SQ-RE-40 FAIL (the wooden cauldron refuses Hearth and Harvest's goat milk iron bucket; 3 of 4 iron scoops work; TODO `recipes/engineering #10`).
 - [ ] **RE-41 Wooden cauldron rain and pipes [scratch]:** an empty wooden cauldron in rain gains water one level at a
   time; a comparator reads 0 to 3; a Create pipe from a water tank fills it, a pump out drains it; it drops itself when
-  broken with an axe. Queue SQ-RE-41 (pipes: CQ-RE-02).
+  broken with an axe. Queue SQ-RE-41 (pipes: CQ-RE-02; PASS r1124nw 2026-11-24).
 - [ ] **RE-42 Wooden bucket on vanilla cauldron [scratch]:** wooden water bucket on an empty cauldron -> full water
   cauldron, empty wooden bucket in hand; empty wooden bucket on that full cauldron -> wooden water bucket; on a
   level-1 water cauldron -> nothing. Queue SQ-RE-42.
