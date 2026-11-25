@@ -352,6 +352,7 @@ look the reg lines: onion_soup absent, bnc_creamy_onion_soup present
 @commands registry probe; rdetail `potato_dough`; tag probe `forge:dough`
 @pass `creativedelight:potato_dough` registered; shapeless `potato_dough_from_eggs` and `_from_water` give 3 (2 potatoes, wheat flour, egg or water bucket); `gnocchi_from_potato_dough` cutting gives `veggiesdelight:potato_noodle*2`; `#forge:dough` holds it
 @fails `produce.js` (CD startup), `veggiesdelight/recipes.js` Gnocchi section, `veggiesdelight/tags.js`, item_dict `i.potato_dough`
+@reviewed 2026-11-24
 @absent creativedelight:potato_dough (new item, not in the dumps yet)
 > cdevtest reg item creativedelight:potato_dough
 > cdevtest rdetail potato_dough
@@ -368,7 +369,8 @@ reject verb=\S+ .*done=0
 @commands rdetail `tofu` and `vegetarian_burger`; food probe; tag probes `creativedelight:veggie_patty`, `creativedelight:patty`
 @pass pot recipe `creativedelight:farmersdelightcooking/tofu` -> 1 tofu (2 mushroom slots, nut milk bottle or jar); tofu nutrition 6 modifier 0.8; `#creativedelight:veggie_patty` = cooked vegetarian patty + tofu; `#creativedelight:patty` has no tofu; the Vegetarian Burger shaped and assembly recipes list tofu in the patty slot
 @fails `creativedelight/patties.js` tofu block, `veggiesdelight/recipes.js` burger line, `produce.js`
-@absent creativedelight:tofu (new item, not in the dumps yet)
+@reviewed 2026-11-24
+@absent creativedelight:tofu (new item, not in the dumps yet); creativedelight:veggie_patty (tag built at load by patties.js, not a registry id)
 > cdevtest rdetail tofu
 > cdevtest rdetail vegetarian_burger
 > cdevtest food creativedelight:tofu
@@ -387,6 +389,8 @@ reject verb=\S+ .*done=0
 @commands fluid tag probe `creativedelight:animal_milk`; item tag probe `creativedelight:animal_milk_buckets`; rdetail `cheese_from_milk` and `cheese_curds`
 @pass `#creativedelight:animal_milk` = minecraft:milk + hearthandharvest:goat_milk (no creativedelight:nut_milk); `#creativedelight:animal_milk_buckets` has no wooden nut milk bucket; flaxen and scarlet `creativebrewing:*cheese_from_milk` base fluid reads the animal milk tag (no nut milk); no `brewinandchewin:fermenting/*cheese_from_milk`; Vintage cheese curds take an animal milk bucket
 @fails `creativedelight/milk.js`, Creative Brewing `brewinandchewin/alcohol.js`, fluid_dict `f.t_animal_milk`
+@reviewed 2026-11-24
+@absent creativedelight:animal_milk creativedelight:animal_milk_buckets (tags built at load by milk.js, not registry ids)
 > cdevtest tag fluid creativedelight:animal_milk
 > cdevtest tag item creativedelight:animal_milk_buckets
 > cdevtest rdetail cheese_from_milk
@@ -405,6 +409,7 @@ reject verb=\S+ .*done=0
 @commands rdetail `goat_cheese_wheel_from_slices`
 @pass shaped 2x2 of `hearthandharvest:goat_cheese_slice` -> `hearthandharvest:goat_cheese_wheel*1`
 @fails `hearthandharvest/recipes.js`
+@reviewed 2026-11-24
 > cdevtest rdetail goat_cheese_wheel_from_slices
 waitlog verb=rdetail id=\S*goat_cheese_wheel_from_slices 30
 expect verb=rdetail id=\S+goat_cheese_wheel_from_slices serializer=\S+ result=hearthandharvest:goat_cheese_wheel\*1 ingredients=hearthandharvest:goat_cheese_slice,hearthandharvest:goat_cheese_slice,hearthandharvest:goat_cheese_slice,hearthandharvest:goat_cheese_slice
@@ -415,6 +420,8 @@ reject verb=\S+ .*done=0
 @commands tag probe `creativedelight:baked_potatoes`; rdetail of Farmer's beef stew and shepherd's pie, Large Meals potato soup, Rustic potato slices, Farmer's baked potato smelting
 @pass `#creativedelight:baked_potatoes` = baked potato + baked sweet potato; `farmersdelight:cooking/beef_stew` and `creativedelight:farmersdelightcooking/potato_soup` potato slot lists more than the potato (sweet potato in `#forge:vegetables/potato`); the shepherd's pie grid lists the baked sweet potato; `rusticdelight` / `creativedelight` potato slices cutting still takes only minecraft:potato
 @fails `creativedelight/potato_compat.js` (ids, priority -90), script line swaps (farmersdelight, largemeals, rusticdelight, ends_delight, endersdelight, fungidelight, veggiesdelight, hearthandharvest)
+@reviewed 2026-11-24
+@absent creativedelight:baked_potatoes (tag built at load by potato_compat.js, not a registry id)
 > cdevtest tag item creativedelight:baked_potatoes
 > cdevtest rdetail farmersdelight:cooking/beef_stew
 > cdevtest rdetail farmersdelightcooking/potato_soup
@@ -431,6 +438,7 @@ reject verb=\S+ .*done=0
 @commands rdetail `vivibrating/chorus_fruit_from_crate`, `melon_juice`, `cake_base_batter`
 @pass vibrating recipe: chorus crate tag -> `minecraft:chorus_fruit*9`; `creativedelight:createmixing/melon_juice` heated, 2 melon slices + 250 mB water -> 250 mB melon juice (no 3-slice mixing recipe); shapeless `cake_base_batter_manual_only`: 3 batter + 2 sweeteners -> cake base
 @fails `endersdelight/recipes.js`, `farmersdelight/recipes.js` melon juice block, `creativedelight/baking.js`
+@reviewed 2026-11-24
 > cdevtest rdetail vivibrating/chorus_fruit_from_crate
 > cdevtest rdetail melon_juice
 > cdevtest rdetail cake_base_batter
@@ -463,6 +471,7 @@ reject verb=\S+ .*done=0
 @commands rdetail `oatmeal_cookie`, `chorus_cookie`
 @pass oven `creativedelight:baking/oatmeal_cookie` -> 12 from oat dough, 2 sweeteners, 2 raw oats (no cookie dough); oven `creativedelight:baking/chorus_cookie` -> 12 from cookie dough + 2 chorus fruit grain (no uncanny cookie); no other recipe makes either cookie (End's recipe and the 8 uncanny cookies craft gone)
 @fails `creativedelight/baking.js` cookie block (the oatmeal and chorus lines below the COOKIES forEach)
+@reviewed 2026-11-24
 > cdevtest rdetail oatmeal_cookie
 > cdevtest rdetail chorus_cookie
 waitlog verb=rdetail id=\S*chorus_cookie\S* 30
@@ -479,6 +488,8 @@ reject verb=\S+ .*done=0
 @commands rdetail `blueberry_muffin`, `cranberry_muffin`, `sweet_potato_cupcake`; registry probe `kubejs:incomplete_blueberry_muffin`
 @pass each oven muffin recipe's flour slot reads `#creativedelight:flour_or_cornmeal`; `*_muffin_sequenced_assembly` / `sweet_potato_cupcake_sequenced_assembly` exist on paper (flour or cornmeal, egg, sweetener, 2 fruit, 250 mB `#forge:milk`) -> 6 (the oven stays 4); the three incomplete items are registered
 @fails `cd_food.js` muffinBake, `cd_transition_items.js` muffin rows (a missing row throws `no incomplete item registered` at load)
+@reviewed 2026-11-24
+@absent kubejs:incomplete_blueberry_muffin kubejs:incomplete_cranberry_muffin kubejs:incomplete_sweet_potato_cupcake (registered after the last /dumpall)
 > cdevtest reg item kubejs:incomplete_blueberry_muffin
 > cdevtest reg item kubejs:incomplete_cranberry_muffin
 > cdevtest reg item kubejs:incomplete_sweet_potato_cupcake
@@ -486,8 +497,8 @@ reject verb=\S+ .*done=0
 > cdevtest rdetail cranberry_muffin
 > cdevtest rdetail sweet_potato_cupcake
 waitlog verb=rdetail id=\S*sweet_potato_cupcake\S* 30
-expect verb=rdetail id=creativedelight:baking/blueberry_muffin serializer=\S+ result=fruitsdelight:blueberry_muffin\*4 ingredients=.*flour_or_cornmeal
-expect verb=rdetail id=creativedelight:baking/sweet_potato_cupcake serializer=\S+ result=\S+\*4 ingredients=.*flour_or_cornmeal
+expect verb=rdetail id=creativedelight:baking/blueberry_muffin serializer=\S+ result=fruitsdelight:blueberry_muffin\*4 ingredients=.*create:wheat_flour/creativedelight:cornmeal
+expect verb=rdetail id=creativedelight:baking/sweet_potato_cupcake serializer=\S+ result=\S+\*4 ingredients=.*create:wheat_flour/creativedelight:cornmeal
 expect verb=rdetail id=\S+blueberry_muffin_sequenced_assembly serializer=\S+ result=fruitsdelight:blueberry_muffin\*6
 expect verb=rdetail id=\S+cranberry_muffin_sequenced_assembly serializer=\S+ result=fruitsdelight:cranberry_muffin\*6
 expect verb=rdetail id=\S+sweet_potato_cupcake_sequenced_assembly serializer=\S+ result=veggiesdelight:sweet_potato_cupcake\*6
@@ -499,6 +510,7 @@ reject verb=\S+ .*done=0
 @commands rdetail `beetroot_brownie_tray`, `beetroot_brownie`
 @pass oven `creativedelight:baking/beetroot_brownie_tray` -> 1 tray from 2 beetroot, sugar, egg, dough, cocoa beans, cake pan tool; no `veggiesdelight:beetroot_brownie_tray` shapeless; `beetroot_brownie_from_slices` and the knife cutting (4 brownies) stay
 @fails `cd_food.js` brownieBake, `creativedelight/baking.js` Brownies line
+@reviewed 2026-11-24
 > cdevtest rdetail beetroot_brownie_tray
 > cdevtest rdetail beetroot_brownie
 waitlog verb=rdetail id=\S*beetroot_brownie\S* 30
@@ -513,6 +525,7 @@ reject verb=\S+ .*done=0
 @commands rdetail `strawberry_scones`, `adzuki_bun`, `strange_eclair`, `fig_pudding`, `uncooked_waffle`
 @pass oven on the baking sheet: `creativedelight:baking/strawberry_scones` (butter, 2 strawberries, sugar, batter -> 2), `creativedelight:baking/adzuki_bun` (flour, roasted adzuki beans, milk bottle -> 2), `creativedelight:baking/strange_eclair` (ender eye, dough, sugar -> 1), `creativedelight:baking/fig_pudding` (sweet berries, milk bottle, egg, orange jelly, fig, dough -> 1); none of their grid (Neapolitan's adzuki bun craft gone), Central Kitchen or mixing recipes left; uncooked waffle: hammer cutting `uncooked_waffle_hammering` and its shapeless, Create pressing from `#forge:dough`, `create_factory:uncooked_waffle` (cake paste) kept
 @fails `neapolitan/recipes.js`, `endersdelight/recipes.js`, `fruitsdelight/recipes.js`, `create/recipes.js` Waffles block
+@reviewed 2026-11-24
 > cdevtest rdetail strawberry_scones
 > cdevtest rdetail adzuki_bun
 > cdevtest rdetail strange_eclair
@@ -547,6 +560,8 @@ reject verb=\S+ .*done=0
 @commands reg probes for the 17 new items and the block; rdetail `plain_donut`, `blueberry_scone`, `orange_cranberry_muffin`, `carrot_muffin`, `oatmeal_raisin_cookie`, `baking_dish`, `pickled_garlic`, `boxed_raw_pasta`; tag `creativedelight:bakeware`
 @pass items exist; oven `creativedelight:baking/plain_donut` -> 2 (batter, cooking oil, salt, sugar, baking sheet); `baking/blueberry_scone` -> 1 (butter, 2 blueberries, sugar, batter); `baking/orange_cranberry_muffin` -> 4 and its paper assembly -> 6; `baking/carrot_muffin` -> 4; `baking/oatmeal_raisin_cookie` -> 12 (oat dough, 2 sweeteners, raw oats, a grape); shaped `baking_dish` from 5 glass; pickling `pickled_garlic` (5 garlic, salt); `boxed_raw_pasta` 9 <-> 1; `#creativedelight:bakeware` holds `#creativedelight:bakeware/baking_dish`
 @fails CD startup `creativedelight/new_foods.js` (items, block), data `creativedelight/new_foods.js` (recipes), `cd_food.js` muffinBake, `cd_transition_items.js` muffin rows, `creativedelight/tags.js` bakeware, Common item_dict keys
+@reviewed 2026-11-24
+@absent creativedelight:plain_donut creativedelight:peach_scone creativedelight:pumpkin_muffin creativedelight:baking_dish creativedelight:boxed_raw_pasta kubejs:incomplete_orange_cranberry_muffin (registered after the last /dumpall)
 > cdevtest reg item creativedelight:plain_donut
 > cdevtest reg item creativedelight:peach_scone
 > cdevtest reg item creativedelight:pumpkin_muffin
@@ -587,6 +602,8 @@ reject verb=\S+ .*done=0
 @commands food probes on the new foods, the five pizza slices and the Golden Roll and its slice
 @pass Plain Donut 4 / 0.5; scones 6 / 0.3; Orange Cranberry Muffin 5 / 0.4 with Regeneration 200 t and Shrinking 800 t; Lemon Poppy Muffin with Haste and Refreshing 200 t; veggie muffins 6 / 0.5; Oatmeal Raisin Cookie 3 / 0.2 fast; Pickled Garlic 4 / 0.5; cheese pizza slice 3 / 0.75, meat and tropical 4 / 0.7, vegan 4 / 0.47, Supreme 4 / 0.94; Golden Roll and slice always=true
 @fails CD startup `new_foods.js`, `pizza_values.js` (applied by `food_value_copies.js`), roll member `RollItems` foodAlways
+@reviewed 2026-11-24
+@absent creativedelight:plain_donut creativedelight:orange_cranberry_muffin creativedelight:lemon_poppy_muffin creativedelight:oatmeal_raisin_cookie (registered after the last /dumpall)
 > cdevtest food creativedelight:plain_donut
 > cdevtest food creativedelight:orange_cranberry_muffin
 > cdevtest food creativedelight:lemon_poppy_muffin
@@ -610,12 +627,13 @@ reject verb=\S+ .*done=0
 
 ## SQ-FF-28 | Cheesecakes take cheese or milk; gingerbread block; vinegar from apple jelly
 @group A
-@commands rdetail `syrup_cheesecake`, `gingerbread_block`, `vinegar_jar`
+@commands rdetail `syrup_cheesecake`, `gingerbread_block`, `vinegar_from_apple` (rdetail matches recipe ids, not result items)
 @pass oven `creativedelight:baking/syrup_cheesecake` (pie crust, 3 syrup, a sweetener, a slot of cheese / cheese wedge / milk bottle / milk bucket); `gingerbread_block_from_gingerbread` (9 -> 1), `gingerbread_from_gingerbread_block` (1 -> 9), smoking `gingerbread_block_from_gingerdough_block`, oven `baking/gingerbread_block`; no `create_confectionery:gingerbread_block_recipe`; pickling `vinegar_from_apple_jam` (Apple Jelly + mushroom) beside `vinegar_from_apple_mash`
 @fails `cd_food.js` cheesecakeBake, `rusticdelight/recipes.js` CHEESECAKES, `creativedelight/baking.js` Gingerbread block, `vintagedelight/jams.js` Vinegar
+@reviewed 2026-11-24
 > cdevtest rdetail syrup_cheesecake
 > cdevtest rdetail gingerbread_block
-> cdevtest rdetail vinegar_jar
+> cdevtest rdetail vinegar_from_apple
 waitlog verb=rdetail id=\S*vinegar\S* 30
 expect verb=rdetail id=creativedelight:baking/syrup_cheesecake serializer=\S+ result=rusticdelight:syrup_cheesecake\*1 ingredients=.*(milk|cheese)
 expect verb=rdetail id=\S+gingerbread_block_from_gingerbread serializer=\S+ result=create_confectionery:gingerbread_block\*1
@@ -630,6 +648,7 @@ reject verb=\S+ .*done=0
 @commands rdetail `roast_chicken_block`, `honey_glazed_ham_block`, `popcorn_box`, `cheese_pizza`, `meat_pizza`, `tropical_pizza`, `kebab_wrap`, `kebab_sandwich`
 @pass a `*_sequenced_assembly` for each of the six on its base (bowl, bowl, paper, dough x3) and the upstream crafts kept; nothing makes `barbequesdelight:kebab_wrap` or `kebab_sandwich`
 @fails `farmersdelight/recipes.js` Feast assemblies, `corn_delight/recipes.js` Popcorn box, `creativedelight/pizza.js` Pizza assemblies, `cd_transition_items.js` feast rows, `barbequesdelight/recipes.js` Combos
+@reviewed 2026-11-24
 > cdevtest rdetail roast_chicken_block
 > cdevtest rdetail honey_glazed_ham_block
 > cdevtest rdetail popcorn_box
@@ -654,6 +673,7 @@ reject verb=\S+ .*done=0
 @commands tag `creativedelight:flavorable/sugar`, `creativedelight:flavorable/ghost_pepper`, `creativedelight:flavorable/onion`, `creativedelight:flavorable/garlic`, `creativedelight:flavorable/ice`
 @pass sugar and ghost pepper both hold the waffles, every pancake (the Vegetable Pancake too), sweet rolls and `veggiesdelight:beetroot_brownie`, not `beetroot_brownie_tray`; ghost pepper still holds popcorn; sugar, ghost pepper, onion and garlic hold `#barbequesdelight:raw_skewers` and the grilled skewers tag (a raw skewer such as `barbequesdelight:raw_beef_skewer`); ice holds juices and sodas
 @fails CD startup `flavors.js` (sweetPairFamilies, ice), data `creativedelight/flavor_tags.js`, the dessert family tags
+@reviewed 2026-11-24
 > cdevtest tag item creativedelight:flavorable/sugar
 > cdevtest tag item creativedelight:flavorable/ghost_pepper
 > cdevtest tag item creativedelight:flavorable/onion
@@ -675,6 +695,8 @@ reject verb=\S+ .*done=0
 @commands reg probes for the six popcorn boxes and the removed Cream and Onion box; rdetail `cheese_popcorn_box`, `plain_popcorn_box`; recipe probe of the removed Cream and Onion flavor craft
 @pass blocks `creativedelight:{plain,cheese,onion,garlic,ghost_pepper,void_pepper}_popcorn_box` exist (void pepper box recipe only with Ender's Delight Additions), no `cream_and_onion_popcorn_box`; shapeless `cheese_popcorn_box` from 4 popcorn with partial NBT `Flavors` cheese + paper; `plain_popcorn_box` from 4 popcorn + paper; no `creativedelight:shapeless/flavor/cream_and_onion`
 @fails `food/popcorn/PopcornBoxes` VARIANTS, Common item_dict `*_popcorn_box` keys, data `corn_delight/recipes.js`, CD startup `flavors.js`
+@reviewed 2026-11-24
+@absent creativedelight:plain_popcorn_box creativedelight:void_pepper_popcorn_box (registered after the last /dumpall); creativedelight:cream_and_onion_popcorn_box (removed, negative check)
 > cdevtest reg block creativedelight:plain_popcorn_box
 > cdevtest reg block creativedelight:void_pepper_popcorn_box
 > cdevtest reg block creativedelight:cream_and_onion_popcorn_box
@@ -702,6 +724,7 @@ reject verb=\S+ .*done=0
 @commands tag `creativedelight:flavorable/sugar` and `creativedelight:flavorable/ghost_pepper`
 @pass sugar holds `minecraft:cookie`, `hearthandharvest:raspberry_scone`, `hearthandharvest:croissant`, `creativedelight:plain_donut`, `creativedelight:peach_scone`, `creativedelight:oatmeal_raisin_cookie`, and no `canned_*cookie`; ghost pepper holds none of them (it keeps popcorn, waffles, pancakes, sweet rolls, the brownie and skewers)
 @fails CD startup `flavors.js` sugarOnlyFamilies / sugarOnlyAdd / sugarOnlyRemove, data `creativedelight/flavor_tags.js`, the `cookie` and `baked/misc` family tags
+@reviewed 2026-11-24
 > cdevtest tag item creativedelight:flavorable/sugar
 > cdevtest tag item creativedelight:flavorable/ghost_pepper
 waitlog verb=tag kind=item tag=creativedelight:flavorable/ghost_pepper 30

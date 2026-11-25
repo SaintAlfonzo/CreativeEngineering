@@ -152,6 +152,11 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   pattern (`pgrep -f "[q]run.py drive resume RUN"`) (r1123cc).
 ## Driving the server and processes
 
+- A detached drive (`setsid nohup`) stays in the editor's cgroup: systemd-oomd killed the whole editor scope under memory
+  pressure and took the driver, its server and the perf collector with it, no crash report or hs_err (r1124nw, 09:50).
+  Start long drives and the collector as user units: `systemd-run --user --unit=RUN-drive --working-directory=INST -E
+  DROPJARS=... bash -c 'exec python3 tools/scratch_query/qrun.py drive start|resume RUN ...'`; the drive log stays the place
+  to watch. A wait loop that greps `pgrep -f "qrun.py drive"` matches its own `bash -c` line and never ends.
 - Commands go through the stdin fifo (`scratch_server.sh cmd`); console is op, positioned at world spawn. `cmd`/`stop`
   time out after 10 s with "server not reading" when no JVM reads the fifo.
 - Kill by recorded pid only. `pkill -f <text>` / `grep "[x]yz"` on ps also matches your own shell when your command line

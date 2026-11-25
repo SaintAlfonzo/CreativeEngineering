@@ -717,14 +717,15 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## SQ-RPI-14 | pack ladder loads (food-tuning #44)
 @group A
 @commands Fresh world; `grep -n "Diet ladder" logs/latest.log`
-@pass `Diet ladder: 81 rungs, 5 slots, 37 pool effects` (fewer only if a listed mod is missing, then one `skipped N entries` warning naming them); no `toggle:` warning; no V3, V4, V5, V6 or V10 warning (Satiated, `minecraft:saturation`, at 100 is allowed); at diversity 100 Saturation is applied and hunger stays full
+@pass `Diet ladder: 83 rungs, 5 slots, 39 pool effects` (fewer only if a listed mod is missing, then one `skipped N entries` warning naming them); no `toggle:` warning; no V3, V4, V5, V6 or V10 warning (Satiated, `minecraft:saturation`, at 100 is allowed); at diversity 100 Saturation is applied and hunger stays full
 @fails `LadderLoader.parse` (toggle / tagline fields), a mod's effect id renamed (rerun `/dumppotions`, compare with `rp_ladder.csv`)
+@reviewed 2026-11-24
 # steps written r1123rp 2026-11-23 (runner-rp): the boot half; the Saturation-at-100 half needs a player at diversity 100 (client, owner)
 bootexpect Diet ladder: [0-9]+ rungs, 5 slots, [0-9]+ pool effects
 bootreject Diet ladder \(.*\): (toggle|V3|V4|V5|V6|V10)
 bootreject Diet ladder \(.*\): .*toggle
 shell grep -nE "Diet ladder|skipped [0-9]+ entries" logs/latest.log | cut -c1-300
-look the start line reads about `81 rungs, 5 slots, 37 pool effects`; any `skipped N entries` line names only mods not in the pack; the Saturation-at-100 half is not run here (client)
+look the start line reads about `83 rungs, 5 slots, 39 pool effects`; any `skipped N entries` line names only mods not in the pack; the Saturation-at-100 half is not run here (client)
 
 ## SQ-RPI-15 | toggle switch persists (food-tuning #44)
 @group A

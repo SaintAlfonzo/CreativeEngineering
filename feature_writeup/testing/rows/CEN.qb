@@ -152,7 +152,7 @@ look no class-load error for com.SaintAlfonzo.creativecommon.CommonConfig; the i
 @commands Boot; `/cdevtest place` the box by its Engineering id and read the state; `tagsof`; `makes`; try the Compat id
 @pass places as `creativeengineering:weathered_cardboard_box`; block tags hold `minecraft:mineable/axe` and `blockrunner:surface/soft`; made only by Create splashing from Design n' Decor's box; `creativecompat:weathered_cardboard_box` is unknown; no `decor_blocks.js` error in the startup log
 @fails unknown id: `items/decor_blocks.js` not in the Engineering jar (`kubejs_startup/creativeengineering/items/`); axe tag missing: `storageblocktags.js` not copied into the jar; Compat id still registers: an old Compat jar in `mods/`
-@absent creativecompat:weathered_cardboard_box (the old id, gone on purpose)
+@absent creativecompat:weathered_cardboard_box (the old id, gone on purpose); creativeengineering:weathered_cardboard_box (registered after the last /dumpall)
 kjsreject decor_blocks.js
 > forceload add 9000 9000 9100 9100
 > cdevtest place 9032 -60 9010 creativeengineering:weathered_cardboard_box

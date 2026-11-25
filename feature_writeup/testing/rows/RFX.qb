@@ -521,6 +521,7 @@ look the two creativeloot lists are full and the worldgen id has no members
 @commands Boot on the P4 Common, Compat and Delight jars; `/dumpall`; `python3 $INST/tools/dump_diff.py recipes|tags|food $INST/kubejs/exported kubejs/exported`
 @pass no `[block_dict] Missing/invalid` line naming a new pass-through key, no `ReferenceError`, `is not defined` or `Cannot read property` from `neoCraftHelper.js`, `create_salting.js`, `passthrough_tags.js` or a `can_types.js`; `[salt] Create salting: N mixes added, M ... removed` as before; `[cans] registered N generated cans` with no `could not register`; recipe count and ids the same as the pack dump (the Create salting mixes and the Barbeque's skewering and Farmer's Delight axe salvaging recipes among them); every `creativecompat:passthrough*` block tag the same; `FOOD_SAME` for every `canned_` food (effects included)
 @fails a dict key that resolves to nothing: the tag, recipe or effect drops out (an `ONLY_BASE` line or a can with fewer effects); `global.effect` undefined in a `can_types.js`: Creative Delight's startup pack ran before Common's dicts (JarStartupScripts order); `R.AXE` undefined in salvaging recipes: the NCH getter is missing or forPack did not copy it
+@reviewed 2026-11-24
 bootexpect \[cans\] registered \d+ generated cans
 kjsreject (ReferenceError|is not defined|Cannot read property).*(neoCraftHelper|create_salting|passthrough_tags|can_types)
 bootreject \[block_dict\] Missing/invalid block IDs
@@ -529,7 +530,7 @@ waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 shell for k in recipes tags food; do echo "== $k"; python3 "$INST/tools/dump_diff.py" $k "$INST/kubejs/exported" kubejs/exported | tail -30; done; true
 shell ! python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported" kubejs/exported | grep -E '^(CHANGED|ONLY_BASE|ONLY_NEW) [a-z0-9_]+:canned_'
 shell ! python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported" kubejs/exported | grep -E 'creativecompat:passthrough'
-look the recipe and tag diffs: RECIPES_SAME and TAGS_SAME, or every line explained by a jar built after the pack dump (none from this change)
+look the recipe and tag diffs: RECIPES_SAME and TAGS_SAME, or every line explained by a jar built after the pack dump (none from this change). Expected from later commits in the installed jars: the 12 wood composters moved `creativecommon:<wood>_composter` -> `creativedelight:<wood>_composter` (plan_wave2_publish.md W2-9) and `creativecompat:weathered_cardboard_box` -> `creativeengineering:weathered_cardboard_box`; their recipe and tag lines are not this change
 
 @@section 12
 @@title SQ-RFX Publish readiness P5: Creative Delight renames (compartment packages without underscores, `enders_additions` -> `endersadditions`), 2026-11-23 ([plan_ready_now_1123.md](../plan_ready_now_1123.md) 6; [publish_readiness.md](../publish_readiness.md) PR-CM-14; [ends_delight.md](../ends_delight.md) 5.9; TODO `publish-readiness #6`)
@@ -558,9 +559,17 @@ look the two `say` lines, the chest list and the toml values above
 
 ## SQ-RFX-35 | boot: the five renamed compartment packages apply their mixins, no mixin error
 @group A
-@commands Boot on the current Delight jar with Create Central Kitchen, Immersive Weathering, Mysterious Mountain Lib, The Dirty Stuff and Upgrade Aquatic present (the full pack set); `grep -E "creativedelight\.mixins\.json|Mixin.*(creativedelight\.mixin\.)" logs/debug.log logs/latest.log`
-@pass no `Mixin apply failed`, `ClassNotFoundException` or `InvalidMixinException` naming `creativedelight.mixin.`; the nine mixins of the five packages apply (debug.log lines for `MulchBlockCropGrowthMixin`, `DandelionFertileSoilMixin`, `WallRootsVerticalFaceMixin`, `MmlibFoodPropertiesMixin`, `MulberryJamMasonJarMixin`, `TobaccoPlacementMixin`, `CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`) and SQ-POT's wall roots check still passes
+@commands Boot on the current Delight jar (then a tobacco seeds block with a neighbor update: the Tobacco mixin target loads lazily) with Create Central Kitchen, Immersive Weathering, Mysterious Mountain Lib, The Dirty Stuff and Upgrade Aquatic present (the full pack set); `grep -E "creativedelight\.mixins\.json|Mixin.*(creativedelight\.mixin\.)" logs/debug.log logs/latest.log`
+@pass no `Mixin apply failed`, `ClassNotFoundException` or `InvalidMixinException` naming `creativedelight.mixin.`; the six common-side mixins of the five packages apply (a debug.log `Mixing <name> from creativedelight.mixins.json into` line for each of `MulchBlockCropGrowthMixin`, `DandelionFertileSoilMixin`, `WallRootsVerticalFaceMixin`, `MmlibFoodPropertiesMixin`, `MulberryJamMasonJarMixin`, `TobaccoPlacementMixin`) and SQ-POT's wall roots check still passes. The two Create Central Kitchen mixins (`CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`) are in the `client` list of `creativedelight.mixins.json` and never load on a dedicated server; this row does not check them
 @fails a mixin silently skipped: `CDMixinPlugin.PACKAGE_MOD_IDS` lacks the package (its segment is read as the mod id); `ClassNotFoundException`: a stale build (clean-build Creative Delight)
+@reviewed 2026-11-24
 bootreject (Mixin apply failed|InvalidMixinException|ClassNotFoundException).*creativedelight\.mixin\.
-shell grep -hcE "(MulchBlockCropGrowthMixin|DandelionFertileSoilMixin|WallRootsVerticalFaceMixin|MmlibFoodPropertiesMixin|MulberryJamMasonJarMixin|TobaccoPlacementMixin|CckCookingGuideMealTooltipMixin|CckBrewingGuideMealTooltipMixin)" logs/debug.log
-look the count is not 0 and each of the eight class names (WallRoots, Mulch, Dandelion, Mmlib, MulberryJam, Tobacco, two Cck) appears in debug.log
+# TobaccoPlacementMixin targets an MCreator procedure class that loads lazily: a neighbor update on a tobacco seeds block calls canSurvive and loads it
+> forceload add 5300 5300 5301 5301
+sleep 2
+> fill 5300 -61 5300 5300 -61 5300 minecraft:stone
+> setblock 5300 -60 5300 the_dirty_stuff:tobacco_seeds
+> setblock 5300 -61 5300 minecraft:farmland
+sleep 2
+shell miss=0; for m in MulchBlockCropGrowthMixin DandelionFertileSoilMixin WallRootsVerticalFaceMixin MmlibFoodPropertiesMixin MulberryJamMasonJarMixin TobaccoPlacementMixin; do n=$(grep -cE "Mixing (\S+\.)?$m from creativedelight\.mixins\.json" logs/debug.log); echo "$m $n"; [ "$n" -gt 0 ] || miss=1; done; [ "$miss" = 0 ]
+look each of the six class names has a count above 0

@@ -554,6 +554,10 @@ count verb=makes id=creativedelight:\S+ .*result=minecraft:composter\*1 == 12
 expect verb=tag kind=item tag=creativedelight:composters n=13\b
 > cdevtest tag block minecraft:mineable/axe
 expect verb=tag kind=block tag=minecraft:mineable/axe n=\d+ ids=(?=\S*creativedelight:spruce_composter)(?=\S*creativedelight:warped_composter)(?=\S*creativedelight:twisted_composter)(?=\S*creativedelight:azalea_composter)
+> cdevtest rdetail creativedelight:shaped/spruce_slab_to_spruce_composter_by_shaped
+expect verb=rdetail id=creativedelight:shaped/spruce_slab_to_spruce_composter_by_shaped serializer=\S+ result=creativedelight:spruce_composter\*1
+> cdevtest rdetail creativedelight:shapeless/spruce_composter_to_composter_by_shapeless
+expect verb=rdetail id=creativedelight:shapeless/spruce_composter_to_composter_by_shapeless serializer=\S+ result=minecraft:composter\*1
 reject \[cdevtest\] .*done=0
 look the shaped lines take 7 slabs of that wood in the composter shape (rdetail one, e.g. the spruce id); the 12 shapeless ones take one wood composter each
 

@@ -7,6 +7,7 @@
 @@section 1
 @@title SQ-SNP Sneak pickup of Supplementaries sacks, 2026-11-21 ([storage_audit.md](../storage_audit.md) 7, SB-10 to SB-14; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) P2 item 2, D6; TODO `items/storage-and-item-loss #12`)
 @@date 2026-11-21
+@@reviewed 2026-11-24
 @@jars creativecompat
 @@sources feature_writeup/storage_audit.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/storage/SneakPickup.java kubejs/data/creativecompat/kubejs/tags/sneak_pickup_tags.js
 @@text

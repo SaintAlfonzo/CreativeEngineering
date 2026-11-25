@@ -17,6 +17,7 @@
 @commands bot online; `supplementaries:jar`; `/cdevtest use` it 13 times with `corn_delight:corn_soup`, then once with `minecraft:bowl`; `/data get block` the jar; a second jar with 12 + 1 `farmersdelight:pumpkin_soup`
 @pass each of the first 12 clicks leaves an empty bowl in the hand, the 13th leaves the soup; the bowl click gives `corn_delight:corn_soup*1`; the jar NBT `FluidHolder` count 11 after it (12 before); pumpkin soup the same
 @fails `tools/gen_soup_soft_fluids.py` `BOWL_SPACES` / `JAR_UNIT` (rerun `/cdevgen run soup_soft_fluids`, then `/reload`); the override copy `kubejs/data/supplementaries/moonlight/soft_fluids/pumpkin_soup.json` (`capacity` 1); a stale CD jar still holding capacity 2
+@reviewed 2026-11-24
 > forceload add 5296 5200 5311 5215
 > fill 5296 -61 5200 5311 -61 5215 minecraft:stone
 > fill 5296 -60 5200 5311 -56 5215 minecraft:air
@@ -50,6 +51,7 @@ look the three FluidHolder lines: corn soup count 12, then 11 after the bowl; pu
 @commands bot online; the SQ-JFP-01b layout at x 5300 (tank of 4000 mB `creativedelight:nut_milk`, pump, one pipe, jar), creative motor 64 RPM; pump east 40 s, then west 40 s; `/data get block` the jar and the tank after each
 @pass after one direction the jar `FluidHolder` holds nut milk (Vintage Delight's nut milk soft fluid, `equivalent_fluids` names `creativedelight:nut_milk`) and the tank is below 4000 mB
 @fails the soft fluid's `equivalent_fluids` in CD `data/creativedelight/moonlight/soft_fluids/nut_milk.json`; Compat's `JarFluidPipes` (TODO `jars #15`: SQ-JFP-01 to -04 moved no water on r1120nv, plan_scratch_findings_1121 F7). Run after SQ-JFP-01b: if that also moves nothing, this row is blocked, not failed
+@reviewed 2026-11-24
 > forceload add 5296 5200 5311 5215
 > fill 5296 -61 5200 5311 -61 5215 minecraft:stone
 > fill 5299 -60 5204 5305 -58 5206 minecraft:air

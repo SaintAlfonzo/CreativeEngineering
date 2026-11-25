@@ -82,7 +82,7 @@ Perf capture on (session `r1124fx`).
   nothing in any JFP row). Pre-run fixes caused no failure.
   BF-FIX SQ-IWF-04: block_growths=false never set -> toml edit + restart in the row, restored at the end; queued.
   BF-FIX SQ-MCL-04: mobCapForceLevel=2 never set, no qa bot -> edit + restart, bot, restore; queued.
-  BF-FIX SQ-PS15-07, SQ-PS15-01: expectations predate melting.md / salt.md (owner 2026-11-17) -> rewritten from the docs; queued.
+  BF-FIX SQ-PS15-07, SQ-PS15-01: expectations predate melting.md / salt.md (owner, 2026-11-17) -> rewritten from the docs; queued.
   BF-FIX SQ-PS15-14: Power Grid -19 jar not in srv mods (no PGJAR prep) -> `edit cp` of the gate jar + restart; queued.
   BF-FIX SQ-PS15B-01, -10, -12: section 1 server peaceful, summoned zombies discarded -> `difficulty normal`; queued.
   BF-FIX SQ-PST-10c: no player, forceloaded chunks get no random ticks -> bot s5pl spawned in the row; queued.
@@ -147,3 +147,137 @@ Results in `perf/runs/r1124fx/sNN_res` (main drive), `perf/runs/r1124fxr/` (reru
   SQ-WO-04, -06.
 - INCONCLUSIVE: SQ-BLC-01, SQ-CDM2-02, SQ-CEN-05, SQ-CEQ-04, SQ-FGD-14, SQ-HCS-03, SQ-JFP-05, SQ-NEST-02, SQ-RFX-02,
   SQ-SPF-72, SQ-TER-01, SQ-TER-06.
+
+## 2. r1124nw phase 3: newest server rows
+
+Bulk model, scope = this phase. Runner: runner-2 for creativeengineering2-19. Judging by scratch-judge agents. Perf
+capture on (session `r1124nw`). Results in `perf/runs/r1124nw/`.
+
+### 2.1 Scope
+
+- Taken: `perf/runs/r1124nw/plan.json` (from `perf/runs/r1124fx/phase3_ids.txt`, 71 ids: sections dated 2026-11-21 or
+  later, never / failed / jar-changed / stale), 69 rows in 26 drive steps.
+- Not taken: SQ-FO-18, SQ-RFX-34 (draft); gate codes CC13, CMP, RPS, RPI (except SQ-RPI-14 in RP.qb), CPP, SMK and
+  client rows (orchestrator).
+
+### 2.2 Jars and preflight
+
+| jar | `mods/` stamp at preflight (09:20) |
+|---|---|
+| creativecommon | 1.3.0+16c9e8ace.dirty-b5ca75.2611240104 (mid-carve, another session; pinned per step) |
+| creativecompat | 1.0.0+16c9e8ace.2611240057 (mid-carve, another session; pinned per step) |
+| solRaspberryPie | 1.0.0+9af9e36c4.dirty-5e614f.2611240022 (mid-carve, another session; pinned per step) |
+| creativedelight | 1.1.0+16c9e8ace.dirty-078aab.2611240103 |
+| creativebrewing | 1.0.0+ac5d4ff23.2611232324 |
+| creativecalendar | mods/ 1.0.0+2e68d8807.2611230027; build 1.0.0+16c9e8ace.2611240057 swapped in by prep_srv |
+| creativeloot | 1.0.0+16c9e8ace.dirty-68c76a.2611240102 |
+| creativeengineering | 2.0.0+0f78d9277.2611240050 |
+| creativeequipment | 1.0.0+933fe3b20.dirty-0fe1fd.2611231840 |
+| creativeworldgen | 1.0.0+e6004091.2611221216 |
+| creativedevtools | 1.0.0+ac5d4ff23.2611232324 |
+
+- 09:18 RUNNER.md idle -> claimed (r1124nw runner-2); the driver rewrote the `Run:` line at start. `session_role.py
+  test`. `game_jvms.sh` empty; `df -h /` 30 GB free.
+- `check_all.py --fast`: 43 run, 1 FAIL `test_prefix_lint` (SQ-FCK-20, -21 defined twice in FCK.qb, lines 577/627 and
+  1224/1231: another session's uncommitted queue edit; FCK not in this run; not fixed here).
+- `jarstamp.py pending`: creativeCalendar built, not installed (prep_srv swaps it in).
+- Full-pack steps drop the 4 jars without a mod_sides.md row (DROPJARS in `perf/runs/r1124nw/env.sh`, same as r1124fx).
+
+### 2.3 Pre-screen and stale review (before the first boot)
+
+`qprescreen.py --plan-json`: 22 likely on 9 rows, 51 stale. Reviewed by three helper agents (one owner per .qb) and the
+runner; after it 0 likely, 0 stale, lint clean.
+- Dead ids, newer than the dumps (all in the installed jars or tags built at load): `@absent` added in SQ-FF-17, -18,
+  -20, -23, -26, -27, -31 and SQ-CEN-09.
+- SQ-RFX-35: the two Create Central Kitchen tooltip mixins are client-only (`client` list of creativedelight.mixins.json),
+  never applied on a dedicated server; pass now the six common mixins, the `grep -c` step a per-name count loop.
+- SQ-RFX-33: look line names the composter move to `creativedelight:` (W2-9) and the box move to Engineering.
+- SQ-RE-46: golden and gilded milk bucket removed (owner, 2026-11-22): its expect became a reject. Doc finding:
+  `creative_delight_drinks.md` 273, 277 still describe the golden milk bucket.
+- GSH section `@@sources` path follows glm_entries.json to Compat.
+- Reviewed unchanged (`@reviewed 2026-11-24`): the other SQ-FF, SQ-GSH, SQ-SNP, SQ-LOOT-13, SQ-SMO, SQ-MJ, SQ-RE, SQ-FO,
+  SQ-EN-25, SQ-RM-15, SQ-RW-32, SQ-CP-04, SQ-GR-45, SQ-RPI-14 (source changes were namespace moves, literal -> dict key
+  sweeps, comment reflows or generated blocks).
+
+### 2.4 Run notes
+
+- 09:27 perf session r1124nw open; drive started detached (`qrun.py drive start r1124nw --plan-json
+  perf/runs/r1124nw/plan.json --session runner-2`, DROPJARS from env.sh): 26 steps, 69 rows, 0 skipped. ETA 12:17.
+- 09:47 steps 1 to 7 done (19 rows). 09:50 drive died during step 8's boot (FF.qb section 7): driver, server and perf
+  collector gone with no crash report, hs_err or kernel OOM line. Cause (user journal 09:50:52): systemd-oomd killed the
+  whole editor scope the session runs in (13652 processes); the driver, its server and the collector lived in that
+  cgroup (setsid does not leave it). Found 18:55 by the orchestrator.
+- 18:55 step 8's half boot moved to `perf/runs/r1124nw/s07_dead_0950` (discarded). A first `drive resume` (setsid) was
+  stopped by the runner after the cause was found (it marked step 8 failed at prep; its server stopped cleanly);
+  18:57 resumed as systemd user units outside the editor scope: `r1124nw-drive` (`qrun.py drive resume r1124nw`,
+  DROPJARS as before) and `r1124nw-perfcollect` (perf collector, same session dir). Gotcha for gotchas.md: start long
+  drives with `systemd-run --user`, not setsid, so an oomd kill of the editor does not take the run.
+- 18:59 step 8 done on the resumed drive (FF section 7, 7 rows).
+- judge-1 (scratch-judge) steps 1 to 7, 21 rows: PASS 14, FAIL 3, BATCH-FAULT 4.
+  - FAIL SQ-CM-38: pumpkin pie on a Warped Composter accepted, not consumed, level stays 0 (TODO `composting #9`).
+  - FAIL SQ-CM-41: acacia composter burns as fuel but the furnace smelts nothing (TODO `composting #10`).
+  - FAIL SQ-FF-23: the three muffin and cupcake `*_sequenced_assembly` recipes do not exist (cd_food.js `muffinBake`
+    `F.assemble`, runs only when `global.fluid.t_milk` is set); flour regex also corrected; rerun queued.
+  - BF-FIX SQ-CM-37: no rdetail step for the ingredient look -> rdetail of the spruce shaped and shapeless recipes added.
+  - BF-FIX SQ-DRK-09: `makes` regex field order (result before serializer) -> swapped.
+  - BF-FIX SQ-DRK-11: bottle checked in the main hand, drink code gives it to the inventory -> `pbot inv` check for
+    `glass_bottle*3`.
+  - BF-FIX SQ-EN-25: `cdevtest uses` has no `max=` and no result field -> `makes` on the twisted button and pressure plate.
+  - Reruns queued in `perf/runs/r1124nw/rerun.txt`: SQ-CM-37, SQ-DRK-09, SQ-DRK-11, SQ-EN-25, SQ-FF-23.
+- 19:22 step 16 done. judge-2 (scratch-judge) steps 8 to 16, 24 rows: PASS 20, FAIL 1, BATCH-FAULT 1, LOOK 2 (owner,
+  client).
+  - FAIL SQ-FF-26: no orange cranberry muffin (or carrot muffin) `*_sequenced_assembly` recipe, only the baking one;
+    same cause as SQ-FF-23 (cd_food.js `muffinBake`, `F.assemble` behind `t_milk`); TODO `baking/baked-goods #2`, `#30`.
+  - BF-FIX SQ-FF-28: `rdetail vinegar_jar` matches recipe ids, not results -> `rdetail vinegar_from_apple`; rerun queued.
+  - LOOK left for the owner (JEI, client): SQ-CP-04 (dirt slot cycles 8 blocks, podzol craft), SQ-GR-45 (dragon helmet
+    3 loops, echo sword 500 mB); their server checks passed.
+- 19:50 main drive done, 26/26 steps (the driver set RUNNER.md idle). judge-3 (scratch-judge) steps 17 to 26, 24 rows:
+  PASS 15, FAIL 1, BATCH-FAULT 7, INCONCLUSIVE 1.
+  - FAIL SQ-RE-40: the wooden cauldron refuses Hearth and Harvest's goat milk iron bucket (use PASS, level stays 0);
+    3 of 4 iron scoops work. Suspect `WoodenCauldronBlock.java` (`FluidUtil.getFluidHandler`, that bucket has no fluid
+    handler), creativeDelight farm/bucket. No TODO row yet.
+  - BF-FIX SQ-POT-10: NBT printed with escaped quotes -> regex `PlantA:\\*"minecraft:poppy` (and PlantB).
+  - BF-FIX SQ-RE-41: `mean=0.063` failed the non-zero lookahead -> `(?!0(\.0+)?\s)`.
+  - BF-FIX SQ-RE-46: `cdevtest uses` has no `max=` -> removed from its 5 calls.
+  - BF-FIX SQ-RFX-35: debug.log names mixins with a package prefix; the tobacco mixin applies only after a `canSurvive`
+    call -> regex `(\S+\.)?` prefix, a tobacco block with a neighbor update before the count.
+  - BF-FIX SQ-SMO-02: look had no evidence (bottle given to the inventory) -> `data get entity smo2 Inventory` plus an
+    expect for `minecraft:glass_bottle`.
+  - BATCH-FAULT, not simple (section `@@prep` shared): SQ-RE-44 needs `spawn-animals=true` on RE.qb section 2 (the
+    summoned goat and cow were discarded; the drinks passed); SQ-SNP-04 needs `spawn-protection=16` on SNP.qb section 1
+    (the non-op bot could pick the sack up at spawn-protection 0).
+  - INCONCLUSIVE SQ-RFX-33: diffs against a stale `kubejs/exported` baseline (about 2026-11-17); needs a fresh
+    `/dumpall` (TODO `publish-readiness #6`). Boot checks passed.
+  - SQ-RPI-14 PASS at `83 rungs, 5 slots, 39 pool effects`; row text moved from 81/37 per raspberry_pie.md.
+- 19:51 rerun drive r1124nwr started (systemd user unit `r1124nwr-drive`, `perf/runs/r1124nw/rerun_plan.json`, 11 rows
+  in 10 steps: SQ-CM-37, SQ-DRK-09, -11, SQ-EN-25, SQ-FF-23, -28, SQ-POT-10, SQ-RE-41, -46, SQ-RFX-35, SQ-SMO-02).
+- 20:15 rerun steps 1 to 8 done (step 8 rebooted once by the driver for the known Rhino tag-load flake). Pack changed
+  mid-rerun: Creative Common 1.3.0+4fd51289e.dirty-10384c.2611242009 installed 20:12 (another session; steps 7 and 8
+  on), Snow! Real Magic 6.5.4 put in `mods/` 20:14 (integration session, sides row present).
+- 20:26, 20:36 rerun steps 9 (SQ-RFX-35) and 10 (SQ-SMO-02) failed, server not ready in 600 s: boot dies at mixin
+  apply, `Mixin apply failed creativecompat.mixins.json:VanillaLightMeltMixin -> SnowLayerBlock: InvalidInjectionException
+  @At("INVOKE") ... cannot inject` (Snow! Real Magic rewrites SnowLayerBlock). Finding for the Snow! Real Magic
+  integration (Creative Compat `VanillaLightMeltMixin` vs that mod); logs kept in `perf/runs/r1124nwr/s08_srmcrash`,
+  `s09_srmcrash`. Steps 9 and 10 resumed 20:37 on the run's known pack (DROPJARS adds `SnowRealMagic-*.jar`, unit
+  `r1124nwr2-drive`).
+- 20:41 rerun done (steps 9, 10 booted without Snow! Real Magic). judge-4 (scratch-judge) rerun steps 1 to 8 and the
+  runner steps 9, 10: PASS 8 (SQ-CM-37, SQ-DRK-09, -11, SQ-FF-28, SQ-POT-10, SQ-RE-41, SQ-RFX-35, SQ-SMO-02), FAIL 1
+  (SQ-FF-23, as expected), BATCH-FAULT 2 after one fix (not simple, rewrite pass): SQ-EN-25 (IE sawmill `rdetail` prints
+  no `part=fields`, the fields look needs a capture or probe change), SQ-RE-46 (`uses` lines carry `alone=` between id
+  and serializer; regex `id=\S+ alone=\S+ serializer=...`).
+- 20:45 perf session r1124nw closed and reported (`perf/sessions/r1124nw/summary.md`); RUNNER.md released.
+
+### 2.5 Final verdicts
+
+69 rows (main drive, reruns counted once at their latest verdict): PASS 57, FAIL 5, BATCH-FAULT 4, LOOK 2 (owner),
+INCONCLUSIVE 1. Tables: `qrun.py table perf/runs/r1124nw/s*_res` and `perf/runs/r1124nwr/s0*_res`.
+
+- FAIL: SQ-CM-38 (TODO `composting #9`), SQ-CM-41 (`composting #10`), SQ-FF-23 and SQ-FF-26 (muffin sequenced
+  assembly recipes missing; `baking/baked-goods #2`, `#30`), SQ-RE-40 (wooden cauldron refuses the Hearth and Harvest
+  goat milk bucket; no TODO row yet).
+- BATCH-FAULT (rewrite pass): SQ-EN-25, SQ-RE-46 (second fault after a fix), SQ-RE-44 (RE.qb section 2 needs
+  `spawn-animals=true`), SQ-SNP-04 (SNP.qb section 1 needs `spawn-protection=16`).
+- LOOK left for the owner (client JEI): SQ-CP-04, SQ-GR-45.
+- INCONCLUSIVE: SQ-RFX-33 (needs a fresh `/dumpall` baseline, TODO `publish-readiness #6`).
+- Other findings: Creative Compat `VanillaLightMeltMixin` crashes the boot with Snow! Real Magic 6.5.4 (installed 20:14);
+  `creative_delight_drinks.md` 273, 277 still describe the removed golden milk bucket.

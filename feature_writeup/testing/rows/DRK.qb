@@ -494,7 +494,7 @@ expect verb=rdetail id=creativedelight:createemptying/blue_lemonade serializer=c
 > cdevtest rdetail creativedelight:createemptying/pink_lemonade
 expect verb=rdetail id=creativedelight:createemptying/pink_lemonade serializer=create:emptying
 > cdevtest makes fruitsdelight:lemon_juice
-expect verb=makes id=\S+ serializer=farmersrespite:brewing result=fruitsdelight:lemon_juice\*1
+expect verb=makes id=\S+ result=fruitsdelight:lemon_juice\*1 serializer=farmersrespite:brewing
 reject \[cdevtest\] .*done=0
 look mixing part=fields: lemonade 250 lemon juice + 250 water -> 500 lemonade and no heat requirement; blue / pink 500 lemonade + 2 berries -> 500; the Kettle lemonade base is water with one lemon, the blue / pink base is lemonade; the lemon juice Kettle recipe takes two lemons on water
 
@@ -527,7 +527,7 @@ reject \[cdevtest\] .*done=0
 ## SQ-DRK-11 | drinking: Haste 30 s, blue adds Night Vision 20 s, pink adds Jump Boost 20 s; bottle back; stacks to 32
 @group A
 @commands `/cdevtest item` and `/cdevtest food` on the three; bot `drk11` drinks each (`pbot useitem drk11 main 40`), `/cdevtest player drk11` after each, `/effect clear` between
-@pass `max_stack=32` for each; food 1 hunger, always edible; after each drink the main hand holds `minecraft:glass_bottle*1`; lemonade: Haste I about 600 ticks; blue: Haste and Night Vision I about 400 ticks; pink: Haste and Jump Boost I about 400 ticks
+@pass `max_stack=32` for each; food 1 hunger, always edible; after the three drinks the bot's inventory holds `minecraft:glass_bottle*3` (the drink item handler gives the bottle with `player.give`, so it lands in the inventory, not the emptied main hand); lemonade: Haste I about 600 ticks; blue: Haste and Night Vision I about 400 ticks; pink: Haste and Jump Boost I about 400 ticks
 @fails CD startup `creativedelight/drinks.js` effects (R7, D5); stack size from `gen_stack_sizes.py` / the item builder; the bottle remainder in the drink builder
 @absent creativedelight:lemonade creativedelight:blue_lemonade creativedelight:pink_lemonade (registered 2026-11-21, after the last /dumpall)
 > forceload add 5280 5200 5295 5215
@@ -561,7 +561,9 @@ waitlog verb=pbot.useitem bot=drk11 end=finish item=creativedelight:pink_lemonad
 > cdevtest player drk11
 expect verb=player name=drk11 .*effects=\S*minecraft:jump_boost:0:(3[6-9]\d|400)\b
 count verb=player name=drk11 .*effects=\S*minecraft:haste:0:(5[6-9]\d|600)\b >= 3
-count verb=player name=drk11 .*main=minecraft:glass_bottle\*1 >= 3
+> pbot inv drk11 get
+waitlog verb=pbot\.inv bot=drk11 filled= 20
+expect verb=pbot\.inv bot=drk11 slot=\d+ item=minecraft:glass_bottle\*3\b
 > pbot remove drk11
 reject \[cdevtest\] .*done=0
 

@@ -17,6 +17,7 @@
 @pass Items exist with max_stack=32; `#creativedelight:smoothies` and `#creativedelight:honey_drink_sound` 16 each; `#creativedelight:food_type/drink` and `#solraspberrypie:diet_log_excluded` hold the smoothies; `#forge:fruits/cherry` holds `vinery:cherry`; `#creativedelight:berries/red` 6, `/blue_or_purple` 3; 16 grid recipes, 15 mixing and 15 filling recipes (no Mixed Berry fluid)
 @fails Items missing: CD startup `creativedelight/smoothies.js` or a dict key (Common's item_dict.js, fluid_dict.js); tags: CD server `smoothie_tags.js`, food types `creativedelight/food_types.js`; recipes: CD server `smoothies.js` (a recipe whose fruit mod is absent is skipped on purpose)
 @absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+@reviewed 2026-11-24
 > cdevtest item creativedelight:mixed_berry_smoothie
 > cdevtest item creativedelight:pear_smoothie
 > cdevtest item creativedelight:chorus_smoothie
@@ -52,6 +53,7 @@ reject (?i)(smoothie).*(exception|error)
 @pass The drink finishes at full hunger; Shrinking (`fruitsdelight:shrinking`) about 1600 ticks and Absorption about 200; the bot holds a glass bottle afterwards (LOOK: `pbot inv` or the give line)
 @fails Effects: the table in CD startup `smoothies.js` (Fruits Delight absent: its effects are left out); not drinkable when full: `alwaysEdible` in the same file
 @absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 636 636 652 644
 sleep 2
 > pbot spawn smo2 640.5 -60 640.5 minecraft:overworld survival
@@ -63,8 +65,10 @@ waitlog verb=pbot.useitem bot=smo2 end=finish item=creativedelight:cran_apple_sm
 > cdevtest player smo2
 expect verb=player name=smo2 effects=\S*fruitsdelight:shrinking:0:1[56]\d\d\b
 expect verb=player name=smo2 effects=\S*minecraft:absorption:0:(1[89]\d|200)\b
+> data get entity smo2 Inventory
+expect smo2 has the following entity data: .*minecraft:glass_bottle
 reject \[cdevtest\] verb=\S+ .*error=
-look the bot's inventory holds a glass bottle after the drink
+look the Inventory line holds a glass bottle after the drink (the bot's hands are empty; the smoothie script gives the bottle with `p.give`)
 > pbot remove smo2
 ## SQ-SMO-03 | Pear and Mango Pineapple smoothies: owner lengths and Strength III
 @group A
@@ -72,6 +76,7 @@ look the bot's inventory holds a glass bottle after the drink
 @pass Pear: Appetizing about 6000 ticks and Lozenge about 600; Mango Pineapple: Strength amplifier 2 about 400 ticks, Rage Aura about 400, Speed and Sweetening about 200
 @fails The table in CD startup `smoothies.js` (smoothies.md section 2)
 @absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 636 636 652 644
 sleep 2
 > pbot spawn smo3 642.5 -60 640.5 minecraft:overworld survival
@@ -101,6 +106,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass The drink finishes; the bot's position after differs from before by up to 8 blocks on each axis; no error
 @fails Teleport code in CD startup `smoothies.js` (`teleport`): a Rhino method name (randomTeleport, playSound) in the log
 @absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 636 636 652 644
 sleep 2
 > pbot spawn smo4 644.5 -60 640.5 minecraft:overworld survival
@@ -139,6 +145,7 @@ look the two `cdevtest player smo4` lines: the position changed (a superflat flo
 @pass The tag holds the smoothies, Neapolitan's vanilla ice cream and ice cubes, Farmer's Delight's melon popsicle, Fruits Delight's mango milkshake, Delightful's berry matcha latte; not Hostile Delight's frozen flesh; the effect exists (`effect give` succeeds)
 @fails Tag: CD server `smoothie_tags.js` (the frozen family tag comes from `flavor_tags.js`); effect: Common startup `effects/brain_freeze.js`
 @absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 636 636 652 644
 sleep 2
 > pbot spawn smo6 646.5 -60 640.5 minecraft:overworld survival
@@ -162,6 +169,7 @@ expect Applied effect Brain Freeze
 @pass After the first: no brain freeze; after the second: `creativecommon:brain_freeze` about 100 ticks and TicksFrozen at least 140; 7 s later the effect is gone and TicksFrozen below 140 (thawing)
 @fails Roll: Common `effect/BrainFreeze.onFinish` (tag, config); freezing: `onLivingTick`; the tag members: CD server `smoothie_tags.js`
 @absent creativedelight:mixed_berry_smoothie creativedelight:cran_apple_smoothie creativedelight:pear_smoothie creativedelight:mango_pineapple_smoothie creativedelight:chorus_smoothie creativedelight:melon_smoothie creativedelight:smoothies creativedelight:honey_drink_sound creativecommon:brain_freeze (new 2026-11-23, registered after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 636 636 652 644
 sleep 2
 > pbot spawn smo7 648.5 -60 640.5 minecraft:overworld survival

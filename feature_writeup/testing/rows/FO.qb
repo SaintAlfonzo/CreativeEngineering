@@ -1087,7 +1087,7 @@ reject verb=\S+ .*done=0
 @@table
 ## SQ-FO-17 | Whale Oil Lamp: block and item registered, 8 iron nuggets around a whale oil, pickaxe tag
 @group A
-@reviewed 2026-11-22
+@reviewed 2026-11-24
 @commands registry probes for `creativedelight:whale_oil_lamp`; rdetail of `whale_oil_lamp`; block tag probe `minecraft:mineable/pickaxe`
 @pass block and item `creativedelight:whale_oil_lamp` exist; shaped `creativedelight:<type>/whale_oil_lamp` -> 1 from 8 iron nuggets around a Whale Oil; `#minecraft:mineable/pickaxe` holds the lamp
 @fails CD `fats/WhaleOilLamp.java` registration, data `creativedelight/fats.js` (recipe and tag behind whaleOil), Common item_dict / block_dict `whale_oil_lamp`

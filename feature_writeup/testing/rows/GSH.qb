@@ -5,9 +5,9 @@
 @@section 1
 @@title SQ-GSH Every glass block and pane breaks into shards, 2026-11-21 ([glass_shards.md](../glass_shards.md) 7, GSH-01 to GSH-07; [plan_wood_bucket_batch_1121.md](../plan_wood_bucket_batch_1121.md) R3, R19, D1; TODO `gameplay/misc #22`)
 @@date 2026-11-21
-@@reviewed 2026-11-22
+@@reviewed 2026-11-24
 @@jars creativecompat creativeloot
-@@sources feature_writeup/glass_shards.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/loot/GlassShardsModifier.java development/creativeCompat/src/main/resources/data/creativecompat/loot_modifiers/glass_shards.json development/creativeCommon/src/main/resources/data/creativecompat/glm_entries.json
+@@sources feature_writeup/glass_shards.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/loot/GlassShardsModifier.java development/creativeCompat/src/main/resources/data/creativecompat/loot_modifiers/glass_shards.json development/creativeCompat/src/main/resources/data/creativecompat/glm_entries.json
 @@text
 @@text Targets the Creative Compat jar (moved from Common 2026-11-24) (global loot modifier `creativecompat:glass_shards`, read by Creative Loot's GlmMerge) with Quark's Glass Shard module on. `/cdevtest loot X Y Z [tool=ITEM] rolls=20` runs the block's own table (and the loot modifiers) 20 times and sums the drops, so 1 to 3 shards per break reads 20 to 60, 1 to 2 reads 20 to 40, Quark's 2 to 4 reads 40 to 80. Tinted glass gives the dirty shard (R19). Group A, area x 5344 to 5359, z 5200 to 5215.
 @@text
@@ -131,6 +131,7 @@ reject \[cdevtest\] .*done=0
 @draft modset spec to pick: `cc_only full` minus Creative Loot; the runner chains the two rows
 ## SQ-GSH-09 | mid-tier chest tables roll glass shards, mostly dirty or clear
 @group A
+@reviewed 2026-11-24
 @commands `/loot spawn` minecraft:chests/simple_dungeon 40 times at a cleared spot, then `/cdevtest items` there
 @pass `quark:dirty_shard` or `quark:clear_shard` among the items (about 12 of 40 rolls carry 1 to 3 shards); colored shards, if any, fewer than dirty plus clear; `/loottuning` lists the `glass shards` pool add for 12 tables
 @fails no shards: the `L.addPool` block in `07_rules.js` (Quark's dirty shard not registered skips it), or the table list

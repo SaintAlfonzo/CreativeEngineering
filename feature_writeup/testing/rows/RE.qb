@@ -87,6 +87,7 @@ look the ingredient lists (16, 32, 10, 11 entries; 6 vibrating outputs); the bas
 @pass a shaped recipe makes the cauldron; each pour gives `level=3` and the empty bucket in hand, the tank 1000 mB of that fluid; each scoop gives the filled bucket of that fluid and `level=0`; sap, lava and milk-on-water leave the bucket in hand and the level unchanged
 @fails `WoodenCauldronBlock.use` / `WoodenCauldronBlockEntity` (fluid list R10: water, cow, goat, nut milk, Create honey); a fluid id absent from the pack (`fluid_dict.js`); recipe in CD `creativedelight/recipes.js`
 @absent creativedelight:wooden_cauldron creativedelight:wooden_goat_milk_bucket creativedelight:wooden_nut_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 5200 5200 5215 5215
 > fill 5200 -61 5200 5215 -61 5215 minecraft:stone
 > fill 5200 -60 5200 5215 -56 5215 minecraft:air
@@ -153,6 +154,7 @@ look the makes line's recipe is the cauldron shape in 7 spruce planks (`/cdevtes
 @pass rain: mean level above 0 (about 20 levels over the 256 at vanilla's 5 % per precipitation tick, `hist` shows only 0 and 1 mostly); comparator `OutputSignal:3` when full, `0` after the scoop; loot one wooden cauldron
 @fails `WoodenCauldronBlock.handlePrecipitation` (D9; water only, empty or water cauldron); `getAnalogOutputSignal`; loot table `creativedelight:blocks/wooden_cauldron`; a mean of 0 with the bot present = the chunk did not tick (check `/cdevtest chunk 5224 5208`)
 @absent creativedelight:wooden_cauldron (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 5200 5192 5231 5215
 > fill 5216 -61 5200 5231 -61 5215 minecraft:stone
 > fill 5216 -60 5200 5231 -50 5215 minecraft:air
@@ -165,7 +167,7 @@ sleep 3
 waitlog verb=tickwarp .*end=done 600
 > cdevtest ages 5216 -60 5200 5231 -60 5215 creativedelight:wooden_cauldron prop=level
 expect verb=ages .*n=256\b
-expect verb=ages .*mean=(?!0(\.0+)?\b)\d
+expect verb=ages .*mean=(?!0(\.0+)?\s)\d
 > weather clear 1000000
 > pbot remove re41
 # comparator: facing points at its input
@@ -192,6 +194,7 @@ look the ages hist line: levels 1 (and maybe 2) only where rain fell, no level f
 @commands `/cdevtest use` on `minecraft:cauldron`, `water_cauldron[level=1]`, `water_cauldron[level=3]` and `lava_cauldron` with the wooden water and the empty wooden bucket
 @pass wooden water on empty -> `water_cauldron[level=3]`, empty wooden bucket in hand; empty wooden on that full one -> `minecraft:cauldron`, wooden water bucket; wooden water on a level-1 water cauldron -> level 3; empty wooden on level 1 -> nothing; lava cauldron ignores both
 @fails `WoodenBucketBehaviors` cauldron interaction maps (`CauldronInteraction.EMPTY` / `WATER`), registered at common setup
+@reviewed 2026-11-24
 > forceload add 5232 5200 5247 5215
 > fill 5232 -61 5200 5247 -61 5215 minecraft:stone
 > fill 5232 -60 5200 5247 -56 5215 minecraft:air
@@ -218,6 +221,7 @@ reject \[cdevtest\] .*done=0
 @commands dispensers facing east with (a) a wooden water bucket, (b) 3 empty wooden buckets and a water source in front, (c) a wooden milk bucket, (d) an empty wooden bucket and air in front; a redstone block above each fires it; (a) is fired a second time at its own water
 @pass (a) water in front, slot 0 the empty wooden bucket; second fire: front air, slot 0 the wooden water bucket; (b) 2 empty wooden buckets and 1 wooden water bucket inside, front air; (c) and (d) the bucket lies on the ground as an item, the front block unchanged
 @fails `DispenserBlock.registerBehavior` in `WoodenBucketBehaviors` (D4); a stack that cannot fit the filled one drops it (writeup 2.8)
+@reviewed 2026-11-24
 > forceload add 5232 5200 5247 5215
 > fill 5240 -61 5204 5246 -61 5214 minecraft:stone
 > fill 5240 -60 5204 5246 -56 5214 minecraft:air
@@ -275,6 +279,7 @@ reject \[cdevtest\] .*done=0
 @pass goat -> `creativedelight:wooden_goat_milk_bucket`, cow -> `creativedelight:wooden_milk_bucket`; after each drink no Speed effect and the main hand holds `creativedelight:wooden_bucket*1`
 @fails `WoodenBucketMilking` (goat branch, Hearth and Harvest goat milk fluid); the drink use in `WoodenBucketItem` (milk ids R11)
 @absent creativedelight:wooden_goat_milk_bucket creativedelight:wooden_nut_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
+@reviewed 2026-11-24
 > forceload add 5248 5200 5263 5215
 > fill 5248 -61 5200 5263 -61 5215 minecraft:stone
 > fill 5248 -60 5200 5263 -56 5215 minecraft:air
@@ -322,6 +327,7 @@ reject \[cdevtest\] .*done=0
 @pass fluid tag lists `minecraft:milk`, `hearthandharvest:goat_milk`, `creativedelight:nut_milk`; item tag `forge:milk` holds the three wooden milk buckets; `creativedelight:milk_buckets` holds `minecraft:milk_bucket` and the wooden milk buckets; filling and emptying recipes exist; the drain tank holds 250 mB nut milk
 @fails `milk.js` tags and `R.createBottle(i.nut_milk_bottle, ...)` (needs Vintage Delight); the nut milk fluid in CD startup `fluids.js`; `hearthandharvest/tags.js` for goat milk
 @absent creativedelight:milk_buckets (an item tag added 2026-11-21, not a registry id)
+@reviewed 2026-11-24
 > forceload add 5264 5200 5279 5215
 > fill 5264 -61 5200 5279 -61 5215 minecraft:stone
 > fill 5264 -60 5200 5279 -56 5215 minecraft:air
@@ -345,11 +351,12 @@ expect verb=tank tanks=\d+ fluids=0:creativedelight:nut_milk\*250/
 reject \[cdevtest\] .*done=0
 look the emptying recipe's part=fields line shows 250 mB nut milk out of one bottle
 
-## SQ-RE-46 | milk recipes take any milk: heated coffee mixing, Kettle once per milk, wooden buckets in milk recipes, golden milk bucket stays iron only
+## SQ-RE-46 | milk recipes take any milk: heated coffee mixing, Kettle once per milk, wooden buckets in milk recipes, no Golden Milk Bucket recipe
 @group A
-@commands `/cdevtest rdetail creativedelight:createmixing/milk_coffee`; `rdetail` the three hot cocoa Kettle ids (`farmersrespitebrewing/hot_cocoa`, `_goat_milk`, `_nut_milk`); `/cdevtest uses creativedelight:wooden_milk_bucket max=400`, the same for the wooden goat milk bucket; `/cdevtest uses minecraft:milk_bucket max=400`; `rdetail hostiledelight:mbutterrecp`
-@pass milk coffee is a heated `create:mixing` taking `#forge:milk`; three `farmersrespite:brewing` hot cocoa recipes; the wooden milk buckets are used by Farmer's Delight cooking recipes, Hostile Delight's magical butter and Canned Powdered Milk, never by a Golden Milk Bucket recipe; the iron milk bucket still makes the Golden Milk Bucket
-@fails `drinks.js` `milk()` (`R.createFluidTag(f.t_milk, 250)`); `kettle.js` MILKS base list (NCH `frBrewing` base array); `milk.js` `replaceInput` list; the Canned Powdered Milk row in `tools/gen_can_types.py` (rerun the generator); golden.js must keep `i.minecraft_milk_bucket`
+@commands `/cdevtest rdetail creativedelight:createmixing/milk_coffee`; `rdetail` the three hot cocoa Kettle ids (`farmersrespitebrewing/hot_cocoa`, `_goat_milk`, `_nut_milk`); `/cdevtest uses creativedelight:wooden_milk_bucket`, the same for the wooden goat milk bucket; `/cdevtest uses minecraft:milk_bucket`; `rdetail hostiledelight:mbutterrecp`
+@pass milk coffee is a heated `create:mixing` taking `#forge:milk`; three `farmersrespite:brewing` hot cocoa recipes; the wooden milk buckets are used by Farmer's Delight cooking recipes, Hostile Delight's magical butter and Canned Powdered Milk; no recipe uses either milk bucket to make a Golden Milk Bucket (the golden and gilded Milk Bucket were removed 2026-11-22, owner; changelog "Removed: Golden and gilded Honey Bottle and Milk Bucket")
+@fails `drinks.js` `milk()` (`R.createFluidTag(f.t_milk, 250)`); `kettle.js` MILKS base list (NCH `frBrewing` base array); `milk.js` `replaceInput` list; the Canned Powdered Milk row in `tools/gen_can_types.py` (rerun the generator); a `golden_milk_bucket` recipe: a leftover of the removed golden milk set (Creative Delight golden member `GoldenItems`, golden.js)
+@reviewed 2026-11-24
 @absent creativedelight:wooden_goat_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall); hostiledelight:mbutterrecp (a recipe id)
 > cdevtest rdetail creativedelight:createmixing/milk_coffee
 expect verb=rdetail id=creativedelight:createmixing/milk_coffee serializer=create:mixing
@@ -357,15 +364,15 @@ expect verb=rdetail id=creativedelight:createmixing/milk_coffee serializer=creat
 expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa serializer=farmersrespite:brewing result=farmersdelight:hot_cocoa\*1
 expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa_goat_milk serializer=farmersrespite:brewing
 expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa_nut_milk serializer=farmersrespite:brewing
-> cdevtest uses creativedelight:wooden_milk_bucket max=400
+> cdevtest uses creativedelight:wooden_milk_bucket
 expect verb=uses id=\S+ serializer=farmersdelight:cooking
 expect verb=uses id=hostiledelight:mbutterrecp\b
 expect verb=uses id=\S*canned_powdered_milk\b
 reject verb=uses id=\S*golden_milk_bucket
-> cdevtest uses creativedelight:wooden_goat_milk_bucket max=400
+> cdevtest uses creativedelight:wooden_goat_milk_bucket
 expect verb=uses id=\S*canned_powdered_milk\b
-> cdevtest uses minecraft:milk_bucket max=400
-expect verb=uses id=\S*golden_milk_bucket\b
+> cdevtest uses minecraft:milk_bucket
+reject verb=uses id=\S*golden_milk_bucket
 > cdevtest rdetail hostiledelight:mbutterrecp
 reject \[cdevtest\] .*done=0
 look milk_coffee's part=fields (or the ingredients) names the `forge:milk` fluid tag and the heat requirement `heated`; the three hot cocoa recipes differ only in the base fluid (milk, goat milk, nut milk)
@@ -375,6 +382,7 @@ look milk_coffee's part=fields (or the ingredients) names the `forge:milk` fluid
 @commands Boot log; `/cdevtest recipes sliceanddice max=400`
 @pass no mixin error naming `SliceAndDiceMilkTagMixin` in latest.log (it is `require = 0`, so a success prints nothing); Slice & Dice recipes are listed; the JEI check of a hot cocoa mixer copy with goat milk is CQ-RE-02
 @fails `mixin/sliceanddice/SliceAndDiceMilkTagMixin` target `LazyMixingRecipe.resolve` moved in the Slice & Dice jar (the redirect silently not applied: compare the class in the jar)
+@reviewed 2026-11-24
 bootreject (?i)mixin.*SliceAndDiceMilkTagMixin.*(fail|error|exception|not found)
 > cdevtest recipes sliceanddice max=400
 reject \[cdevtest\] .*done=0

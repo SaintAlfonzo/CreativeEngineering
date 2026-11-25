@@ -178,6 +178,7 @@ expect 1b
 @@table
 ## SQ-LOOT-13 | no Lexica Botania in a dungeon chest or the spawn bonus chest
 @group A
+@reviewed 2026-11-24
 @commands `/loot spawn` `minecraft:chests/simple_dungeon` 30 times and `minecraft:chests/spawn_bonus_chest` 10 times at a cleared spot, then `/cdevtest items` there
 @pass items rolled; no `botania:lexicon` among them; the other Botania inject items (mana bottle and the rest) still roll
 @fails a lexicon shows: the jar predates 2026-11-21 (old `loot_config.json`), or the item became post-roll only (check `loot_index.json`)
