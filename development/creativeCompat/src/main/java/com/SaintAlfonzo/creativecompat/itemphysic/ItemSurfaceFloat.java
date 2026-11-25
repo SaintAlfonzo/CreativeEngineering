@@ -35,7 +35,7 @@ import team.creative.itemphysic.server.ItemPhysicServer;
  * </ul>
  * In the fluid: {@code vy = vy0 x drag + clamp((rest - y) x spring, +-maxPush)}, where {@code vy0} is the speed before
  * ItemPhysic's own change this tick (taken by the drag twice while still sinking at or below the rest height) and
- * {@code rest} the surface less the motion's depth. Simulated (2026-11-25): from a 3-block drop a skimmer dips
+ * {@code rest} the surface less the motion's depth. Simulated: from a 3-block drop a skimmer dips
  * about 0.14 below the surface, a damped floater 0.52 (ItemPhysic's float: 2.8, then a 0.35 bob for good); a
  * lavaproof item from 2 blocks onto lava 0.2. None bob once settled. In the air a skimmer about to
  * pass its rest height this tick is stopped there (entry look-ahead), so a fast drop does not overshoot.
