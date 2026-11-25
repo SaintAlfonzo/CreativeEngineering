@@ -209,6 +209,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Glass shards | [glass_shards.md](glass_shards.md) | `GSH-` | BUILT | none | creativecompat installed 2026-11-24, creativeloot pending | built 2026-11-21 (plan_wood_bucket_batch_1121) |
 | Texture Tools | [texture_tools.md](texture_tools.md) | none | reference | none |  | 2026-11-22: P0-P10 built (texturetools/); owner GUI checklists G1 to G3 pending |
 | Farming for Blockheads Shipping Bin port and integration report | [farming_for_blockheads.md](farming_for_blockheads.md) | `SHB-` | planned | none |  | investigation 2026-11-23, bin and rabbit trap port (fishing barrel not ported, scythe pinned) |
+| Snow! Real Magic integration report | [snow_real_magic.md](snow_real_magic.md) | `SRM-` | reference | none |  | integration report 2026-11-24, nothing built |
 <!-- generated:status_index end readme -->
 
 ## Release plans

@@ -186,6 +186,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Item Filters | `itemfilters` | `item-filters-forge-1902.2.9-build.51.jar` | Required by: FTB Quests |
 | both | ItemPhysic | `itemphysic` | `ItemPhysic_FORGE_v1.6.7_mc1.19.2.jar` |  |
 | both | Kiwi | `kiwi` | `Kiwi-1.19.2-forge-8.3.6.jar` | Required by: Per-Dimension Game Rules |
+| both | Snow! Real Magic | `snowrealmagic` | `SnowRealMagic-1.19.2-forge-6.5.4.jar` | Snow layer rework (blocks, entity, worldgen); needs Kiwi. Integration: feature_writeup/snow_real_magic.md |
 | both | kotlinforforge | - | `kotlinforforge-3.12.0-all.jar` | Datapack/library jar with no Forge mod id; matched by file name |
 | both | KubeJS | `kubejs` | `kubejs-forge-1902.6.2-build.73.jar` | Required by: KubeJS + CC: Tweaked, KubeJS Botania, KubeJS CSV, KubeJS Create, KubeJS Immersive Engineering, LootJS (+2 more) |
 | both | KubeJS + CC: Tweaked | `kjscc` | `kjscc-1902-1.0.2-beta.jar` |  |
