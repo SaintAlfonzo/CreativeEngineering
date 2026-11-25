@@ -1,17 +1,18 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Creative Oxidation: copper machine aging and iron rusting (plan)
 
-<!-- generated:status_index begin open_work sha1=4a88626c316c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 6), 0 Complete.
+<!-- generated:status_index begin open_work sha1=0135222cd403 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `jei-ordering #9` | Planned | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
 | `mod-integration #28` | Planned | S C P | Creative Oxidation P0-P2: Creative Engineering bundle member creativeoxidation, port of createoxidized core, properties only on the 45 target ids, random ticks fall through |
 | `mod-integration #31` | Planned | S C | Creative Oxidation P3-P4: staged item drops (keepStageOnBreak), names from stage, honeycomb, axe and steel wool scraping, lightning, Supplementaries soap |
 | `mod-integration #32` | Planned | S C | Creative Oxidation P5: bounded quad cache and stage kept across Create block swaps (B3, B4) after live checks |
 | `mod-integration #33` | Planned | C | Creative Oxidation P6: oxidized art for 32 Create and Create Deco blocks plus Design n' Decor copper blocks (copied dndecor art) |
 | `mod-integration #34` | Planned | S P | Creative Oxidation P7: spout and fan aging for staged blocks, old create_oxidized spout recipes rebuilt and jar removed, copper splashing port moved in, iron rusting by spout and fan |
-| `mod-integration #35` | Planned | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; staged variants hidden from the item list |
+| `mod-integration #35` | Planned | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; subtype interpreter so all 7 variants per block are listed |
 <!-- generated:status_index end open_work -->
 
 Written 2026-11-25 from the owner's notes on [create_oxidized.md](create_oxidized.md) (the integration report of
@@ -96,8 +97,11 @@ Listed so nothing is assumed covered. No art means no oxidation (texture rule: n
 | R10 | Unaffected input matching | clear | agent default, unconfirmed: a member ingredient type `creativeoxidation:staged` {item, stage, waxed}; "unaffected" matches only items with no stage tag, so a plain-item recipe never accepts a staged item | 2026-11-25 | agent |
 | R11 | State limiting method | clear | agent default, unconfirmed: properties only on the exact target ids, read from Registrate's block builder name (P2) | 2026-11-25 | agent |
 | R12 | Config option name | clear | agent default, unconfirmed: `keepStageOnBreak` (true) in `creativeoxidation-common.toml`, replacing `clutterReducer3000` (report D7) | 2026-11-25 | agent |
-| R13 | Staged variants in JEI's item list | clear | agent default, unconfirmed: hidden (the base item stays; variants show in recipes and tabs) | 2026-11-25 | agent |
+| R13 | Staged variants in JEI's item list | conflict | Owner 2026-11-25 overrides the agent default (hidden): every added variant is viewable in JEI, see R16 | 2026-11-25 | chat 2026-11-25 |
 | R14 | WTHIT stage line (report D8) | open | not asked yet; not in this plan | | |
+| R15 | "waxed and oxidized components can be used in crafting recipes just the same" | premise | Staged and waxed items count as the plain item in every crafting and machine recipe that uses it. Checked: plain item ingredients ignore NBT, so this holds by default; the only exceptions are strict-NBT ingredients (`forge:nbt`) and the member's own aging recipes (R10), which match the stage on purpose | 2026-11-25 | chat 2026-11-25 |
+| R16 | "all oxidized added should be viewable in jei" | premise | All 7 variants per block (exposed, weathered, oxidized, and waxed of each stage plus waxed unaffected) are listed in JEI. Checked: JEI merges stacks that differ only in NBT unless a subtype interpreter is registered (jei_ordering.md:235); the member registers one on the stage and wax tags for the 45 items | 2026-11-25 | chat 2026-11-25 |
+| R17 | "jei families: unoxidized unwaxed items sit where that block logically sits, and all oxidized states sit in another family" | premise | The plain item stays at its place in the JEI order tree; every staged or waxed variant goes to a separate family (working name "Oxidized Copper Machines", ordered by block, then stage, then waxed). Checked: the order tree places by item id and NBT variants follow their item (jei_ordering.md:235, 411), so the tree definition needs an NBT-aware entry (item id + stage predicate) | 2026-11-25 | chat 2026-11-25 |
 
 ## 4. Phases (build order)
 
@@ -123,8 +127,8 @@ commit, and its TODO row logged.
     otherwise falls through to the block's own answer (upstream replaced it).
   - Harness test: an `IronBarsBlock`, a `DoorBlock` and `create:andesite_casing` carry no property; `create:fluid_pipe`
     and `createdeco:copper_bars` do.
-- **P3 Items (I9, R3, R8).** Drops keep stage and wax in NBT when `keepStageOnBreak` is on; off drops plain and hides
-  the tab variants. Name from the stage on display ("Waxed Weathered Fluid Pipe"); no `display.Name` written; an
+- **P3 Items (I9, R3, R8, R15).** Staged and waxed items work as the plain item in every crafting and machine recipe (no recipe changes; a check over the recipe dump lists any strict-NBT ingredient that names a target item). Drops keep stage and wax in NBT when `keepStageOnBreak` is on; off drops plain; the
+  variants stay listed in JEI and the creative tab (spout and fan still make them, R16). Name from the stage on display ("Waxed Weathered Fluid Pipe"); no `display.Name` written; an
   anvil rename shows the rename. Placing restores the stage (both door halves).
 - **P4 Interactions (R6, R9).** Honeycomb wax; axe and IW steel wool scrape (wax first, then one stage); lightning
   clean as vanilla; Supplementaries soap: wax and all stages off in one use (mixin on `SoapWashableHelper.tryWash`,
@@ -147,11 +151,16 @@ commit, and its TODO row logged.
     cut_iron_stairs, cut_iron_vertical_slab (Quark), plate_iron, plate_iron_slab, plate_iron_stairs,
     plate_iron_vertical_slab (Quark), and vanilla iron_bars, iron_door, iron_trapdoor: spout 250 mB water and fan
     splashing, one stage each, 33 x 2 = 66 recipes (vertical slabs guarded by `global.has`). Ids in `item_dict.js`.
-- **P8 JEI (I7, I8, R13).** Waxing and Scraping: honeycomb, axe and steel wool rows per staged block (NBT stacks);
-  Lightning Conversion: staged -> unaffected row per block; Soap Washing: staged or waxed -> plain row per block.
-  Source: `WorldJeiToolPairs` gains a `creativeoxidation` section, read by `tab_tools.py` / `tab_weathering.py`;
-  `/dumpworldjei` and `/cdevgen` regenerate. Spout and fan recipes show through Create's own JEI categories. Staged
-  variants hidden from the item list.
+- **P8 JEI (I7, I8, R13, R16, R17).** Waxing and Scraping: honeycomb, axe and steel wool rows per staged block (NBT
+  stacks); Lightning Conversion: staged -> unaffected row per block; Soap Washing: staged or waxed -> plain row per
+  block. Source: `WorldJeiToolPairs` gains a `creativeoxidation` section, read by `tab_tools.py` / `tab_weathering.py`;
+  `/dumpworldjei` and `/cdevgen` regenerate. Spout and fan recipes show through Create's own JEI categories. JEI subtype
+  interpreter on the stage and wax tags so all 7 variants per block are listed (R16).
+- **P8b JEI families (R17; [jei_ordering.md](jei_ordering.md)).** Plain items keep their place in the order tree;
+  every staged or waxed variant sits in a new family (working name "Oxidized Copper Machines": by block in the tree's
+  order, then exposed, weathered, oxidized, then the waxed set). Needs the tree to accept an NBT-aware entry (item id
+  plus a stage predicate), today it places by item id only; built in Creative Compat's ordering helper, family added
+  to the tree.
 - **P9 Docs and release.** Member writeup `creative_oxidation.md` (tests move from create_oxidized.md),
   [creative_engineering.md](creative_engineering.md) member line, `features.csv`, changelog family `## Copper and Iron
   Aging` (Create copper machines age; spout and fan aging; iron rusting by spout and fan; old jar removed),
@@ -183,6 +192,8 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
 | CQ-OXD-02 | names: "Waxed Weathered Fluid Pipe"; anvil rename shows the rename | P3 |
 | CQ-OXD-03 | JEI: Waxing and Scraping, Lightning Conversion, Soap Washing rows for staged blocks; variants hidden in the item list | P8 |
 | SQ-OXD-15 | dedicated server and client join, no state mismatch (OXD-12) | P1 |
+| SQ-OXD-16 | a weathered waxed Fluid Pipe and an oxidized Copper Casing used in their crafting and Create recipes (encased pipe, mechanical crafting) work like plain items (R15) | P3 |
+| CQ-OXD-04 | JEI lists all 7 variants per staged block; plain items at their usual place, variants in the oxidized family in block, stage, waxed order (R16, R17) | P8b |
 
 ## 6. Phase notes
 
@@ -192,3 +203,5 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
 
 - 2026-11-25: plan written from the owner's notes on create_oxidized.md; rulings R1 to R9 asked and recorded,
   R10 to R13 agent defaults, R14 open. Nothing built.
+- 2026-11-25: owner notes added R15 (staged items craft as plain), R16 (all variants viewable in JEI; overrides the
+  R13 default) and R17 (JEI family for oxidized states), phase P8b, rows SQ-OXD-16, CQ-OXD-04.
