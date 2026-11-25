@@ -11,12 +11,17 @@ asks by name; upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=7b31e98e6dfa -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=4a88626c316c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 6), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `mod-integration #28` | Planned | S C P | Create: Oxidized (createoxidized 1.0.0, 1.20.1): port and fold in copper machine oxidation |
+| `mod-integration #28` | Planned | S C P | Creative Oxidation P0-P2: Creative Engineering bundle member creativeoxidation, port of createoxidized core, properties only on the 45 target ids, random ticks fall through |
+| `mod-integration #31` | Planned | S C | Creative Oxidation P3-P4: staged item drops (keepStageOnBreak), names from stage, honeycomb, axe and steel wool scraping, lightning, Supplementaries soap |
+| `mod-integration #32` | Planned | S C | Creative Oxidation P5: bounded quad cache and stage kept across Create block swaps (B3, B4) after live checks |
+| `mod-integration #33` | Planned | C | Creative Oxidation P6: oxidized art for 32 Create and Create Deco blocks plus Design n' Decor copper blocks (copied dndecor art) |
+| `mod-integration #34` | Planned | S P | Creative Oxidation P7: spout and fan aging for staged blocks, old create_oxidized spout recipes rebuilt and jar removed, copper splashing port moved in, iron rusting by spout and fan |
+| `mod-integration #35` | Planned | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; staged variants hidden from the item list |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -207,6 +212,8 @@ is in); 5 after D1/D2; 10 after the jar is installed and `/dumpall` (step 0) has
 
 ## 5. Decisions for the owner
 
+Ruled 2026-11-25 (owner): D1 drop the old jar, D2 its recipes rebuilt in the member, D3 spout and fan for staged blocks, D4 stage kept with a config toggle, D5 soap takes off wax and all stages, D6 Design n' Decor in the first build; D7 agent default (`keepStageOnBreak`); D8 still open. Rulings, the port home (Creative Engineering member `creativeoxidation`) and the build order: [plan_creative_oxidation.md](plan_creative_oxidation.md) section 3.
+
 | # | Question | Recommendation | Default if not answered |
 |---|---|---|---|
 | D1 | Keep old Oxidized (`create_oxidized`, spout aging recipes) next to the port? | Drop the jar; its spout recipes duplicate fan splashing | Keep both; rename the port's display name "Create: Oxidized Machines" |
@@ -266,3 +273,4 @@ is in); 5 after D1/D2; 10 after the jar is installed and `/dumpall` (step 0) has
 ## 9. History
 
 - 2026-11-25: investigation written from `createoxidized-forge-1.20.1-1.0.0.jar`, nothing built.
+- 2026-11-25: owner rulings and plan in [plan_creative_oxidation.md](plan_creative_oxidation.md); the port becomes the Creative Engineering member `creativeoxidation`, with iron rusting recipes added. Section 4 home and namespace superseded by the plan.
