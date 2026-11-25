@@ -123,6 +123,7 @@ same pass as the renames.
 | `FO-` | [food.md](../food.md) | CQ-FO (2), SQ-FO (5) |  |  |
 | `FP-` | [feature_porting.md](../feature_porting.md) |  |  |  |
 | `FR-` | [fruits_delight.md](../fruits_delight.md) | CQ-FR (1), SQ-FR (5) |  |  |
+| `FTH-` | [flesh_that_hates.md](../flesh_that_hates.md) |  |  |  |
 | `FS-` | [testing/fridge_sort/plan.md](../testing/fridge_sort/plan.md) |  |  |  |
 | `FX-` | [fixes_compat.md](../fixes_compat.md) |  | briefs/recipes_magic.md |  |
 | `GLD-` | [golden_food.md](../golden_food.md) | CQ-GLD (3), SQ-GLD (16) |  |  |

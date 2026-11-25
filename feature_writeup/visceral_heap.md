@@ -125,6 +125,10 @@ meal, Bone Chunk -> 1; crushing wheels and the Crusher add 1 bone meal at 25 %. 
 other mod presses bones (jar scan 2026-11-22); a pressed bone gives at most 2.25 bone meal against 3 (Millstone) or 6 (Crusher)
 whole, so no loop. Test SQ-VH-13.
 
+Flesh That Hates (2026-11-25, report only, TODO `mod-integration #30`): its blocks and SCP-610 mobs are planned for the
+Heap only, with every spread path off; Heap features, spawns and the BOP flesh overlap in
+[flesh_that_hates.md](flesh_that_hates.md).
+
 ## 7. Owner notes (scratchpad 2026-11-13)
 
 Executed (section 6, TODO `worldgen/biomes #11`): crush pools, cultivation, blood rendering, spongy and very sticky walk tiers. Plan changes: oil cultivation gives 2 porous + 3 flesh; pus bubble and hair give slimeball and string, no organic waste.
