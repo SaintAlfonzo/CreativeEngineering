@@ -14,12 +14,13 @@ rule unless the owner asks by name, and fixes upstream bugs.
 
 ## 0. How it was read
 
-<!-- generated:status_index begin open_work sha1=8c351d47f5be -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=facaaaf1ecc7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `mod-integration #29` | Planned | S C P | Yuushya Modelling 2.4.1 (1.20.1): backport the new Entity Block options, Item Block, Text Block and primitives to 1.19.2 |
+| `mod-integration #29` | Planned | S C P | Yuushya Modelling 2.4.1 backport phase A: Entity Block options, Item Block, primitives, Color Picker, History List, bugs B1 to B4 |
+| `mod-integration #36` | Planned | S C P | Yuushya Modelling 2.4.1 backport phase B: Text Block (font path rewrite for 1.19.2) |
 <!-- generated:status_index end open_work -->
 
 - `python3 tools/jar_diff.py mods/yuushya-modelling-1.19.2-forge-2.2.0.jar DecompiledMods/yuushya_modelling-1.20.1-2.4.1.jar`:
@@ -84,8 +85,9 @@ Lang has `item.yuushya.cube_12` (Small Pillar) with no item registered; harmless
   `both`).
 - **Command** `/yuushya_reload_model reload all|blocks|items|texts`: rebuilds the model blocks' render data.
 - **Client mixins** (4): `LevelRendererMixin` and `MinecraftMixin` drive an AnvilCraft-derived cached block entity
-  render pipeline (`client/anvilcraft/rendering/`, 5 classes). No renderer in 2.4.1 registers into it, so it is
-  dormant (D4). `GlyphRenderTypesMixin` serves the Text Block. `BlockBehaviourMixin` makes the Item Block's
+  render pipeline (`client/anvilcraft/rendering/`, 5 classes). It is the Item Block's world renderer: the in-world
+  path of `NeoItemBlockModel` registers each placed Item Block in `CustomRenderInstance`, and the pipeline draws it
+  (corrected 2026-11-25; first read as dormant). `GlyphRenderTypesMixin` serves the Text Block. `BlockBehaviourMixin` makes the Item Block's
   `isCollisionShapeFullBlock` follow `full_block` (B3).
 - **Access transformer**: 31 entries, mostly render type, font and glyph internals, several 1.20-only
   (`BakedGlyph.renderTypes`, `Font.filterFishyGlyphs`, the JOML `renderChar`).
@@ -112,7 +114,7 @@ Lang has `item.yuushya.cube_12` (Small Pillar) with no item registered; harmless
   `full_block` on, the client treats the Item Block as a full cube and a dedicated server does not (suffocation,
   `isCollisionShapeFullBlock` users). Plausible desync, from code; fix by moving it to the common list. Live check
   YMB-08.
-- **B4.** `item.yuushya.cube_12` lang key without an item. Leave.
+- **B4.** `item.yuushya.cube_12` lang key without an item. Fix: remove the key (owner 2026-11-25: fix all bugs).
 
 ### 1.6 Backport work (1.20.1 -> 1.19.2)
 
@@ -135,7 +137,7 @@ jar replaces 2.2.0 in `mods/` and `server_mods/` (D1). Main porting work, by siz
    has them). `ModelEvent.ModifyBakingResult`, `IForgeBakedModel.getRenderPasses`, `ModelData` and
    `SimpleChannel` exist in Forge 43.
 5. **Data**: B1 conversion; `pack.mcmeta` to the 1.19.2 format (15 -> 9); recipe JSON without `category`.
-6. **Dormant cache pipeline and its two mixins**: dropped (D4).
+6. **Cached render pipeline and its two mixins**: ported with the Item Block (D4). Dead code dropped: `GetBlockStateItemForge`, `ByteBufferBuilder`, the `distance` property, the `cube_12` key, 3 unused textures.
 
 ### 1.7 Fold-in once built
 
@@ -161,11 +163,13 @@ jar replaces 2.2.0 in `mods/` and `server_mods/` (D1). Main porting work, by siz
 | D1 | Scope of the backport. | Phase A: Entity Block options (1.1), Item Block, primitives, Color Picker, History List, reload command, B1 to B3. Phase B: Text Block (font path rewrite). | Phase A, then B. |
 | D2 | Keep mod id `yuushya_modelling` and namespace `yuushya` in our fork? | Yes: saves, item NBT and pack matches carry over; it replaces upstream rather than adding a mod. | Yes. |
 | D3 | Folder name. | `development/backportedYuushyaModelling` (port skill pattern). | That. |
-| D4 | The AnvilCraft-derived cached render pipeline (unused in 2.4.1). | Drop it and its two mixins; nothing uses it. | Drop. |
+| D4 | The AnvilCraft-derived cached render pipeline. | Keep: it renders Item Blocks (first read as unused, wrong). | Keep. |
 | D5 | Upstream recipes (Item Block 8 from quartz + wheat + kelp, primitives from `cube_0` by stonecutter, Color Picker, History List has none). | Keep as upstream; the gold-tag rule on the Shimmering Pearl recipe stays ([recipes_metal.md](recipes_metal.md)). | Keep. |
 | D6 | New item names carry color codes (`§9` tooltip lines; the existing "§CModelling Chisel" style). | Run the [names.md](names.md) audit on the 36 new items like the 2 existing rows; no renames beyond title case. | Title case only. |
 | D7 | History List keeps a per-player list of broken model blocks with their data. | Keep; check it is not written to disk unbounded during the build. | Keep. |
 | D8 | The 1.21.1 build adds one more item (`shape_item`). | Skip; it is not in the 1.20.1 code. | Skip. |
+
+Rulings 2026-11-25 (owner and agent defaults): [plan_yuushya_backport.md](plan_yuushya_backport.md) section 1, R1 to R11.
 
 ## 3. Tests
 
@@ -203,3 +207,5 @@ Drafted for the build; queue rows (`SQ-YMB-`, `CQ-YMB-`) are written when it is 
 
 - 2026-11-25: investigation written, nothing built. 2.4.1 is 1.20.1/1.21.1 only and its source is not public; MIT,
   backport from the decompiled jar.
+- 2026-11-25: owner asked for a plan for phases A and B, mod id kept, unused parts dropped, all bugs fixed:
+  [plan_yuushya_backport.md](plan_yuushya_backport.md). D4 corrected (the render cache is the Item Block renderer).
