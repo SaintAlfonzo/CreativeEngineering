@@ -350,6 +350,14 @@
 - **New:** Cold foods: smoothies, ice cream, popsicles, shaved ice, cold milkshakes, Iced Berry Matcha Latte, Ice Cubes.
 - **Changed:** Vinery's Cherry counts as a cherry in recipes that take any cherry.
 
+## Shipping Bin <!-- icon: farmingforblockheads:shipping_bin -->
+
+- **New:** Shipping Bin: crops go in, 1 emerald comes out per 128 points. Values per item: wheat 4, carrot 5, potato 5, beetroot 6, pumpkin 8, melon 8, melon slice 2, sugar cane 2, glow berries 6, nether wart 6, kelp 1, sweet berries 1.
+- **New:** A sale takes only the items one or more full loads need; the rest stays in the bin and leftover points count toward the next sale. Items without a value are never taken.
+- **New:** Shipping Bin recipe: an emerald with 4 iron ingots in the corners, logs on three sides and green wool below. Hoppers fill the inputs and empty the outputs.
+- **New:** Each load leaves under open sky by balloon, under a roof with a courier who walks in, takes the crate, walks off and drinks an invisibility potion.
+- **New:** Courier Spawn Point: couriers start at and return to the nearest one within 96 blocks of the bin. Recipe: a chest surrounded by 8 trapdoors of any kind.
+
 ## Food & Cooking
 
 - **New:** Every food that can be eaten when full says so in its tooltip.

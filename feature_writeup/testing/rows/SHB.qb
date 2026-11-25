@@ -1,0 +1,124 @@
+# Scratch queue rows SHB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SHB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-SHB Shipping Bin port (Farming for Blockheads), 2026-11-25 ([farming_for_blockheads.md](../farming_for_blockheads.md) 3.1, 5.1, 8, TODO `mod-integration #7`)
+@@date 2026-11-25
+@@jars creativedelight creativecommon
+@@sources feature_writeup/farming_for_blockheads.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/shippingbin kubejs/data/creativedelight/kubejs/creativedelight/shipping_bin.js
+@@text
+@@text Not run. Built 2026-11-25. Needs `blockheads_upstream/farmingforblockheads-neoforge-26.3-26.3.0.2.jar` linked into srv/
+@@text (every `*_upstream/` folder is). Bins at x 600 to 640, z 600, y -60 on the flat world; a stone roof at y -58 makes a
+@@text bin "under a roof". Payout: 1 emerald per 128 points; values wheat 4, carrot 5 (rows 2.1).
+@@table
+## SQ-SHB-01 | Boot: donor jar verified, ids, recipes, payout table, axe tag
+@group A
+@commands Boot; `cdevtest reg item ^farmingforblockheads:`; `cdevtest recipes shipping_bin`; `cdevtest recipes courier_spawn`; `cdevtest tag block minecraft:mineable/axe`
+@pass No "reads its textures" stop; items `shipping_bin` and `courier_spawn`; 12 `farmingforblockheads:shipping_bin` value rows and the two shaped recipes; no loot table error for `farmingforblockheads:gameplay/shipping_bin`; both blocks in the axe tag
+@fails Donor jar missing or a wrong sha1 (stop with the message); `global.has('farmingforblockheads')` false (NCH skips every row: has.js `_modOf`); loot provider `shipment_value` not registered (table fails to parse)
+bootreject reads its textures, models and recipes from the original Farming for Blockheads jar
+bootreject Couldn't parse loot table farmingforblockheads
+bootreject (Parsing error|Couldn't parse) .*farmingforblockheads
+kjsreject shippingBin
+> cdevtest reg item ^farmingforblockheads:
+expect verb=reg kind=item regex=\S+ n=2
+> cdevtest recipes shipping_bin/
+expect verb=recipes id=creativedelight:shipping_bin/minecraft/wheat
+expect verb=recipes id=creativedelight:shipping_bin/minecraft/sweet_berries
+> cdevtest recipes shaped/courier_spawn
+expect verb=recipes id=creativedelight:shaped/courier_spawn
+> cdevtest tag block minecraft:mineable/axe
+expect verb=tag kind=block tag=minecraft:mineable/axe .*farmingforblockheads:shipping_bin
+expect verb=tag kind=block tag=minecraft:mineable/axe .*farmingforblockheads:courier_spawn
+
+## SQ-SHB-02 | One load, partial sale and credit (SHB-03, SHB-04)
+@group A
+@commands Bin with 31 carrots (155 points) under open sky; 3 s; read the bin
+@pass Slot 0 keeps 5 carrots, slot 6 holds 1 emerald, `Credit: 2`, `Value: 27`
+@fails Every carrot taken (upstream B1 behavior); no emerald (payout table or `shipment_value` provider); credit 0
+@absent farmingforblockheads:shipping_bin farmingforblockheads:courier_spawn farmingforblockheads:shipping_balloon farmingforblockheads:shipping_crate farmingforblockheads:courier (registered 2026-11-25, after the last /dumpall)
+> forceload add 590 590 650 610
+sleep 3
+> setblock 600 -60 600 farmingforblockheads:shipping_bin[facing=north]{Items:[{Slot:0b,id:"minecraft:carrot",Count:31b}]}
+sleep 4
+> data get block 600 -60 600
+expect has the following block data: .*Credit: 2
+expect has the following block data: .*\{Count: 5b, Slot: 0b, id: "minecraft:carrot"\}|\{Slot: 0b, id: "minecraft:carrot", Count: 5b\}
+expect has the following block data: .*minecraft:emerald
+
+## SQ-SHB-03 | Below capacity and unsellable items stay (SHB-02, SHB-05)
+@group A
+@commands Bin with 31 wheat (124) and 8 cobblestone; 3 s; read it. Then add 1 wheat through a hopper above; 3 s; read it
+@pass First read: no emerald, 31 wheat and the cobblestone in place; after the hopper adds 1 wheat: 1 emerald, no wheat left, cobblestone in its slot
+@fails A sale below 128 points; the cobblestone taken; the hopper cannot insert (sided handler)
+@absent farmingforblockheads:shipping_bin farmingforblockheads:courier_spawn farmingforblockheads:shipping_balloon farmingforblockheads:shipping_crate farmingforblockheads:courier (registered 2026-11-25, after the last /dumpall)
+> setblock 604 -60 600 farmingforblockheads:shipping_bin[facing=north]{Items:[{Slot:0b,id:"minecraft:wheat",Count:31b},{Slot:1b,id:"minecraft:cobblestone",Count:8b}]}
+sleep 3
+> data get block 604 -60 600
+reject has the following block data: .*minecraft:emerald
+> setblock 604 -59 600 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:wheat",Count:1b}]}
+sleep 4
+> data get block 604 -60 600
+expect has the following block data: .*minecraft:emerald
+expect has the following block data: .*minecraft:cobblestone
+reject has the following block data: .*minecraft:wheat
+
+## SQ-SHB-04 | Output full: payout buffered, selling waits (SHB-06)
+@group A
+@commands Bin with 32 wheat and all 6 output slots full of 64 emeralds; 3 s; read it; empty slot 6; 7 s; read it
+@pass First read: wheat gone, `Buffer` holds 1 emerald; a second load (another 32 wheat) does not sell while the buffer is full; after slot 6 is emptied the buffer moves in and the next sale runs
+@fails Emerald lost; sale while buffered
+@absent farmingforblockheads:shipping_bin farmingforblockheads:courier_spawn farmingforblockheads:shipping_balloon farmingforblockheads:shipping_crate farmingforblockheads:courier (registered 2026-11-25, after the last /dumpall)
+@draft needs a data modify on the output slot between reads and a second wheat insert; write the steps on the first run
+> setblock 608 -60 600 farmingforblockheads:shipping_bin[facing=north]{Items:[{Slot:0b,id:"minecraft:wheat",Count:32b},{Slot:6b,id:"minecraft:emerald",Count:64b},{Slot:7b,id:"minecraft:emerald",Count:64b},{Slot:8b,id:"minecraft:emerald",Count:64b},{Slot:9b,id:"minecraft:emerald",Count:64b},{Slot:10b,id:"minecraft:emerald",Count:64b},{Slot:11b,id:"minecraft:emerald",Count:64b}]}
+sleep 3
+> data get block 608 -60 600
+expect has the following block data: .*Buffer: \[\{.*minecraft:emerald
+
+## SQ-SHB-05 | Balloon under open sky; courier under a roof (SHB-09, SHB-10)
+@group A
+@commands Bin with 32 wheat under open sky: a balloon; bin with 32 wheat under a stone roof at y -58: a crate on the bin and a courier within 20 blocks; after 60 s neither is left
+@pass `shipping_balloon` 1 at the first bin; `shipping_crate` and `courier` at the second; both gone after the walk (or the timer: 60 s plus the drink)
+@fails No carrier; the courier stays (path or timer); a second courier for the same bin
+@absent farmingforblockheads:shipping_bin farmingforblockheads:courier_spawn farmingforblockheads:shipping_balloon farmingforblockheads:shipping_crate farmingforblockheads:courier (registered 2026-11-25, after the last /dumpall)
+> setblock 612 -60 600 farmingforblockheads:shipping_bin[facing=north]{Items:[{Slot:0b,id:"minecraft:wheat",Count:32b}]}
+sleep 2
+> execute if entity @e[type=farmingforblockheads:shipping_balloon,x=612,y=-60,z=600,distance=..6]
+expect Test passed
+> fill 614 -58 598 618 -58 602 minecraft:stone
+> setblock 616 -60 600 farmingforblockheads:shipping_bin[facing=north]{Items:[{Slot:0b,id:"minecraft:wheat",Count:32b}]}
+sleep 2
+> execute if entity @e[type=farmingforblockheads:shipping_crate,x=616,y=-59,z=600,distance=..2]
+expect Test passed
+> execute if entity @e[type=farmingforblockheads:courier,x=616,y=-60,z=600,distance=..20]
+expect Test passed
+sleep 75
+> execute if entity @e[type=farmingforblockheads:courier,x=616,y=-60,z=600,distance=..40]
+expect Test failed
+
+## SQ-SHB-06 | Courier modes, walk distance, spawn point, no path, timeout (SHB-13 to SHB-18, SHB-27)
+@group A
+@commands `courierMode` walk_out and at_bin; `courierWalkDistance` 4 and 20; a Courier Spawn Point 10, 90 and 100 blocks off; a bin walled in; a maze with `courierWalkTimeoutTicks` 200
+@pass As SHB-13 to SHB-18 and SHB-27 in the writeup: the courier appears beside the bin and walks off / drinks there; its start moves with the distance; it starts on a spawn point in range (not at 100) and walks back to it; walled in: it appears beside the bin; maze: Enderman teleport to the bin after 10 s
+@fails Courier stuck; path to a spawn point out of range; the timer not applied on the way out
+@draft config edits between sales (qrun.py toml + /reload of the COMMON config is not live: courier values are read per sale, so a toml edit on disk needs a restart or the config watcher); positions for the maze and the walls
+> say draft
+
+## CQ-SHB-01 | Look: bin art, GUI, items in the crate, balloon, crate, courier (SHB-01, SHB-09, SHB-10, SHB-12)
+@group C
+@commands Client: place a bin (faces the player), open it, fill it with wheat in steps; sell under the sky and under a roof; hover the bin with WTHIT; JEI on the bin
+@pass Donor art on the block (crate, front, lid); the GUI with the fill bar and sale arrow; items lie in the crate and grow in number with the value; the balloon inflates and rises with ropes and crate; the courier (merchant skin) carries the crate on its head and drinks; WTHIT "Stored: N / 128 points"; JEI Shipping page with 12 rows and the crafting recipe
+@fails Missing textures (donor pack not added on the client); GUI misaligned; balloon upside down
+@client true
+@draft visual checks: shots of each step
+shot bin
+
+## CQ-SHB-02 | Look: Courier Spawn Point and its recipe (SHB-19)
+@group C
+@commands Client: craft a chest in 8 trapdoors (oak, spruce and iron mixed); place it
+@pass 1 Courier Spawn Point with the cartography table look; tooltip names the search radius
+@fails Purple-black block (model path); recipe refuses iron trapdoors
+@client true
+@draft visual check
+shot courier_spawn

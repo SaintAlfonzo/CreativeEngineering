@@ -1,6 +1,6 @@
 # Farming for Blockheads: overlap and integration report
 
-Investigation written 2026-11-23, nothing built. Jars read: Farming for Blockheads `26.3.0.2` (NeoForge, MC 26.3,
+Investigation written 2026-11-23. Shipping Bin built 2026-11-25 (phase 1, section 4.1); rabbit trap not built yet. Jars read: Farming for Blockheads `26.3.0.2` (NeoForge, MC 26.3,
 `DecompiledMods/farmingforblockheads-neoforge-26.3-26.3.0.2.jar`) and `11.3.5` (Fabric, MC 1.19.2,
 `DecompiledMods/1.19.2-farmingforblockheads-fabric-1.19.2-11.3.5.jar`, read for what the 1.19.2 line has). License:
 All Rights Reserved (BlayTheNinth, both jars; permissions page `https://mods.twelveiterations.com/permissions`). A port
@@ -14,16 +14,16 @@ asks by name; upstream bugs are fixed.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=cae4e4d2f083 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 4, Pinned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=d19ba9d456a7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 3, Pinned 1, Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `mod-integration #7` | Planned | S C P T | Farming for Blockheads: port the Shipping Bin only (ARR, 26.3 donor art, own code) |
 | `mod-integration #8` | Planned | C | Courier Spawn Point: final texture (temporary: vanilla cartography table look) |
 | `mod-integration #9` | Planned | S | Courier Spawn Point: final recipe (temporary: chest surrounded by 8 trapdoors of any kind) |
 | `mod-integration #10` | Planned | S C P T | Farming for Blockheads: port the rabbit trap (pack catch list, biome catch tables, tooltip) |
 | `mod-integration #12` | Pinned | S | Rabbit trap: review the biome catch list; add more Alex's Mobs and other catchable mobs by biome |
+| `mod-integration #7` | Testing | S C P T | Farming for Blockheads: port the Shipping Bin only (ARR, 26.3 donor art, own code) |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -32,9 +32,9 @@ asks by name; upstream bugs are fixed.
 | Shipping Bin mechanics (sale rule, payout, carriers) | section 3.1 | read from the decompile |
 | Overlap | section 2 | no other shipping bin in the pack; the rest of FfB overlaps Hearth and Harvest, Quark, Incubation, Slice and Dice |
 | Upstream bugs | B1, B2 (section 3.4) | none blocking for the bin |
-| Fold-in (bin and rabbit trap) | section 4 | 13 steps drafted |
+| Fold-in (bin and rabbit trap) | section 4 | bin steps 0 to 7, 9 built 2026-11-25 (4.1); rabbit trap (8a) open |
 | Decisions | D1 to D11 (section 5) | ruled 2026-11-23 and 2026-11-24 (5.1); D7c pinned |
-| Tests | SHB-01 to SHB-28 (section 8) | drafted |
+| Tests | SHB-01 to SHB-28 (section 8); queue SQ-SHB-01 to -06, CQ-SHB-01, -02 (bin) | drafted; queue rows written, not run |
 
 - Jar: the 26.3 jar is the only source of the bin. It is a donor for art (Miner's Delight route, [miners_delight.md](miners_delight.md)
   D2, D12), never a mod in `mods/`. The 1.19.2 Fabric jar cannot load on Forge. A Forge 1.19.2 11.3.x jar exists
@@ -45,7 +45,7 @@ asks by name; upstream bugs are fixed.
   Balm `4.6.0` for 1.19.2 (Cooking for Blockheads). The port does not need Balm (section 3.1).
 - Pack references: Lightman's Currency 2.2.1.3g has a compat mixin for the FfB market (inactive, FfB not installed).
   Nothing else in `kubejs/`, `development/*/src` or `item_dict.js` names `farmingforblockheads`.
-- Already live: nothing.
+- Built: the Shipping Bin, its carriers and the Courier Spawn Point in Creative Delight (`farm/shippingbin/`, 4.1).
 
 ## 1. Overview
 
@@ -351,6 +351,51 @@ worldgen, trades and chests.
 
 Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 and D3 before 4 and 5.
 
+### 4.1 As built (phase 1, 2026-11-25)
+
+The bin, its carriers and the Courier Spawn Point (TODO `mod-integration #7`; temporary art and recipe of `#8`, `#9`).
+Code in Creative Delight's main jar, `farm/shippingbin/`, registering under `farmingforblockheads` (no mod of that id:
+the Lightman's Currency FfB mixin stays inactive). Defaults taken where the rulings are silent:
+
+- **Donor:** `blockheads_upstream/farmingforblockheads-neoforge-26.3-26.3.0.2.jar` (sha1 `cb9f011d`, `UpstreamJars`),
+  verified at construction (the game stops with a message when missing, as for the members). Exposed as a built-in
+  client pack: the bin's blockstate, block models, block textures, `entity/shipping_balloon`, `entity/merchant`, the GUI
+  and its two sprites, unchanged. The ARR guard (`checkNoArrResources`) now also checks this jar, so no path of it can
+  ship in our jar; our lang lines are in `assets/creativedelight/lang/en_us.json` for that reason.
+- **Capacity** is a config value, `[shipping_bin] capacity` (default 128) in `creativedelight-common.toml`. The payout
+  table pays `floor(value x 1/128)` emeralds (`farmingforblockheads:shipment_value` with `"scale": 0.0078125`): a changed
+  capacity does not rescale the payout (edit the table).
+- **Loot context** (D2): params `farmingforblockheads:shipment_value` (int, points sold, whole loads only) and
+  `farmingforblockheads:sold_stacks`; number provider `shipment_value` (`scale`, `offset`, floored); conditions
+  `shipment_value` (`min`, `max`) and `shipment_contains` (`ingredient`, `count`). Own format, not upstream's
+  level-based value.
+- **Sale arithmetic** (D3a) is `SaleMath` (no game classes), checked offline by `tools/test_shipping_bin.sh`.
+- **One courier per bin at a time:** a sale under a roof while a courier is on its way sends no second crate or courier
+  (the load is paid as usual). Upstream sent a carrier per sale; walking couriers would pile up under automation.
+- **Courier walk distance** default 16 blocks (`courierWalkDistance`, 1 to 64). The point is tried in 8 directions
+  from a random start, on standable ground within 6 blocks up or down of the bin; the first with a path to the bin wins.
+- **Spawn point lookup:** each dimension keeps a list of Courier Spawn Points (saved data, the block adds and removes
+  itself), so the nearest within `courierSpawnSearchRadius` is found without a block scan. The courier stands on top
+  of it.
+- **Paths:** the courier's follow range is the search radius plus 16 and its node budget 4x vanilla; a finished
+  partial path is followed by a new leg every 10 ticks until the bin, the exit or the timer.
+- **Unloaded courier** (D9): the bin checks every second; a courier that is not loaded past its deadline on the way in
+  is replaced by a new one beside the bin (teleport effect), which takes the crate; the frozen one discards itself
+  when it loads. On the way out the bin forgets it; it drinks when it loads.
+- **Drink:** the potion in its crossed arms, the wandering trader's drink sound, 32 ticks, invisibility, gone 12 ticks
+  later with the crate (the crate rides on its head from the pickup on).
+- **Balloon:** rises 0.12 a tick for 172 blocks with a 0.02 drift whose direction follows `gameTime / 6000`; a hit pops it
+  (firework blast, poof) into a falling crate that breaks on landing with no loot (B2 kept). Crate and balloon models
+  are ours, built from the shapes for the donor's balloon texture; the courier is the villager model with the donor
+  `merchant` skin.
+- **Display:** up to 12 input items in the crate, as many as `ceil(12 x value / capacity)`.
+- **Courier Spawn Point** (D8 temporary): model `farmingforblockheads:block/courier_spawn` naming the cartography table
+  textures (no texture file); recipe a chest in 8 `#minecraft:trapdoors`; axe tool; cannot be pushed by pistons.
+- **Tooltip and JEI:** two gray lines on the bin item, one on the spawn point; JEI "Shipping" lists the value rows with
+  the bin as catalyst; WTHIT shows "Stored: N / C points". BlockRunner: no tier (furniture). Stack size 64.
+- **Not done:** storage audit tags (storage_audit.md has no container tag that fits a sell box); MCA courier skin (waits for
+  MCA textures, D5).
+
 ## 5. Decisions for the owner
 
 | # | Question | Recommendation | Default if not answered |
@@ -392,21 +437,29 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
 | D10 | (2026-11-24) Owned pets are not caught: the trap skips tamed animals (an owned cat, raccoon, mudskipper or warped toad). |
 | D11 | (2026-11-24) The catch list is the 18 types in 2.3.1. Expanding it by biome stays pinned as TODO `mod-integration #12`. |
 
-## 6. File map (planned)
+## 6. File map
 
-- `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/shippingbin/` block, block entity,
-  menu, recipe, entities.
-- `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/client/shippingbin/` screen and
-  renderers.
-- `development/creativeDelight/src/main/resources/data/farmingforblockheads/` loot tables (block, gameplay payout).
-- `development/creativeDelight/src/main/resources/assets/farmingforblockheads/lang/en_us.json`, `models/item/shipping_bin.json`.
-- `blockheads_upstream/` donor jar; donor loader filter list.
-- NCH helper extension in `neoCraftHelper.js`; recipe rows in a server script.
+- `development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/shippingbin/`: `ShippingBin`
+  (registries), `UpstreamJars` (donor pin and exposed paths), `ShippingBinBlock`, `ShippingBinBlockEntity`,
+  `ShippingBinMenu`, `ShippingBinRecipe`, `SaleMath`, `ShipmentLoot`, `ShippingBinItem`, the carriers
+  (`ShippingBalloonEntity`, `ShippingCrateEntity`, `FallingShippingCrateEntity`, `CourierEntity`, `CourierDispatch`),
+  the spawn point (`CourierSpawnBlock`, `CourierSpawnItem`, `CourierSpawnPoints`); `client/` screen, renderers, models;
+  `jei/ShippingJeiPlugin`. WTHIT: `compat/wthit/WthitShippingBin`. Config: `CDConfig.ShippingBin` (`[shipping_bin]`).
+- `development/creativeDelight/src/main/resources/data/farmingforblockheads/loot_tables/` (block drops, gameplay payout);
+  `assets/farmingforblockheads/` item models and the spawn point's blockstate and model; lang in
+  `assets/creativedelight/lang/en_us.json`.
+- `blockheads_upstream/` donor jar (not tracked); `tools/build_deploy.py` payload folder and donor pin.
+- `global.NCH.shippingBin(input, value, e)` in `neoCraftHelper.js`; dict keys `shipping_bin`, `courier_spawn`,
+  `any_trapdoor` (item) and `shipping_bin`, `courier_spawn` (block); has.js `_modOf` row `farmingforblockheads` ->
+  `creativedelight`; recipes and tags in `kubejs/data/creativedelight/kubejs/creativedelight/shipping_bin.js`.
+- Phase 2 (rabbit trap) goes in the same package or a sibling `farm/rabbittrap/`.
 
 ## 7. Offline checks (once built)
 
-- `python3 tools/check_all.py --fast --changed`; donor build guard (no donor path in our jar).
-- Headless: recipe JSON parse of the 12 value rows; payout math `floor(value / 128)` for 127, 128, 255, 256.
+- `python3 tools/check_all.py --fast --changed`; donor build guard (no donor path in our jar; checked 2026-11-25 by
+  adding a donor path on purpose: the build failed on it).
+- Headless: `tools/test_shipping_bin.sh` (sale arithmetic and payout at 127, 128, 255, 256 points, partial sales,
+  credit, unsellable slots); PASS 2026-11-25.
 
 ## 8. In-game test suite (drafted)
 
@@ -454,3 +507,5 @@ Ordering: 0 before 1 (art paths); 1 before 2 to 8; 2 before 4 (dict keys); D2 an
   (D7c).
 - 2026-11-24: passive catches limited per group of nearby traps, random check order (D12).
 - 2026-11-24: fishing barrel not ported (D7b); biome catch list review noted (`mod-integration #12`).
+- 2026-11-25: phase 1 built: Shipping Bin, carriers, Courier Spawn Point (temporary art and recipe) in Creative Delight
+  `farm/shippingbin/`; defaults taken listed in 4.1; queue rows SQ-SHB-01 to -06, CQ-SHB-01, -02.
