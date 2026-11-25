@@ -44,7 +44,9 @@ global.has._modOf = {
 	'unwrecked_ships': 'unwrecked_ships_plus',
 	'yuushya': 'yuushya_modelling',
 	'cozys-improved-cats': 'cozys_improved_cats',
-	'rare-ice': 'rare_ice'
+	'rare-ice': 'rare_ice',
+	// Creative Delight's Shipping Bin port registers under Farming for Blockheads' namespace (FfB not installed)
+	'farmingforblockheads': 'creativedelight'
 }
 
 // The bundles' member switches (design rule D17, plan_rules_fixes.md section 12): a nested member of Creative Delight

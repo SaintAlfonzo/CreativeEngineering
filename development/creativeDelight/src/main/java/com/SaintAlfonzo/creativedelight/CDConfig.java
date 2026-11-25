@@ -107,6 +107,7 @@ public final class CDConfig {
 	public static final ForgeConfigSpec.BooleanValue WILD_CROP_CANOPY_PROOF;
 	public static final Cfb CFB;
 	public static final Bees BEES;
+	public static final ShippingBin SHIPPING_BIN;
 	public static final Incubation INCUBATION;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> QOL = new LinkedHashMap<>();
@@ -201,6 +202,7 @@ public final class CDConfig {
 		INCUBATION = new Incubation(b);
 		// [bees]: from creativecommon-common.toml (wave 2 carve, COMMON_SECTIONS)
 		BEES = new Bees(b);
+		SHIPPING_BIN = new ShippingBin(b);
 		SPEC = b.build();
 		com.SaintAlfonzo.creativedelight.compat.SaltConfigBridge.bind(SPEC);
 	}
@@ -970,5 +972,54 @@ public final class CDConfig {
 			).defineInRange("honeycombMultiplier", 1, 1, 16);
 			b.pop(); // bees
 		}
+	}
+
+	/**
+	 * {@code [shipping_bin]}: the Shipping Bin port (farm/shippingbin/, feature_writeup/farming_for_blockheads.md 5.1 D5 to
+	 * D9). Read live.
+	 */
+	public static final class ShippingBin {
+		public static final List<String> MODES = List.of("walk_in_out", "walk_out", "at_bin");
+		private final ForgeConfigSpec.IntValue capacity;
+		private final ForgeConfigSpec.ConfigValue<String> courierMode;
+		private final ForgeConfigSpec.IntValue courierWalkDistance;
+		private final ForgeConfigSpec.IntValue courierSpawnSearchRadius;
+		private final ForgeConfigSpec.IntValue courierWalkTimeoutTicks;
+		private final ForgeConfigSpec.ConfigValue<List<? extends String>> courierNames;
+
+		private ShippingBin(ForgeConfigSpec.Builder b) {
+			b.comment("Shipping Bin: crops in, emeralds out once a full load is in; a balloon (open sky) or a courier (under a",
+					"roof) carries each load away.").push("shipping_bin");
+			capacity = b.comment("Points in one load. A sale pays one payout roll per full load and takes only the items that",
+					"cover it; the rest stays in the bin, a small overshoot is kept as credit for the next sale.")
+					.defineInRange("capacity", 128, 1, 1_000_000);
+			courierMode = b.comment("How the courier comes for a load sold under a roof:",
+					"walk_in_out: arrives on foot from a Courier Spawn Point or from courierWalkDistance away, takes the crate,",
+					"walks back out, drinks an invisibility potion and is gone.",
+					"walk_out: appears beside the bin, takes the crate and walks away.",
+					"at_bin: appears beside the bin, takes the crate and drinks on the spot.")
+					.define("courierMode", "walk_in_out", v -> v instanceof String s && MODES.contains(s));
+			courierWalkDistance = b.comment("Blocks between the bin and the point the courier walks from and to when no Courier Spawn",
+					"Point is in range. With no walkable path there, the courier acts as in at_bin.")
+					.defineInRange("courierWalkDistance", 16, 1, 64);
+			courierSpawnSearchRadius = b.comment("Blocks around the bin searched for the nearest Courier Spawn Point (horizontal and",
+					"vertical). 0 = spawn points are off.")
+					.defineInRange("courierSpawnSearchRadius", 96, 0, 256);
+			courierWalkTimeoutTicks = b.comment("Game ticks a courier may walk. One that has not reached the bin by then teleports",
+					"to it; one that has not reached its exit by then drinks and leaves where it stands.")
+					.defineInRange("courierWalkTimeoutTicks", 1200, 20, 72000);
+			courierNames = b.comment("Names a courier gets, one picked at random. Empty: no name.")
+					.defineListAllowEmpty(List.of("courierNames"), () -> List.of("Abel", "Bettina", "Cosmo", "Dora", "Emeric",
+							"Flora", "Gus", "Hester", "Ivo", "Juniper", "Kasimir", "Lotte", "Milo", "Nell", "Otto", "Pippa"),
+							v -> v instanceof String);
+			b.pop();
+		}
+
+		public int capacity() { return SPEC.isLoaded() ? capacity.get() : 128; }
+		public String courierMode() { return SPEC.isLoaded() ? courierMode.get() : "walk_in_out"; }
+		public int courierWalkDistance() { return SPEC.isLoaded() ? courierWalkDistance.get() : 16; }
+		public int courierSpawnSearchRadius() { return SPEC.isLoaded() ? courierSpawnSearchRadius.get() : 96; }
+		public int courierWalkTimeoutTicks() { return SPEC.isLoaded() ? courierWalkTimeoutTicks.get() : 1200; }
+		public List<? extends String> courierNames() { return SPEC.isLoaded() ? courierNames.get() : List.of(); }
 	}
 }

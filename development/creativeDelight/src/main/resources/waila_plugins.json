@@ -25,5 +25,11 @@
       "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitCookwareToggle"
     },
     "side": "client"
+  },
+  "creativedelight:shipping_bin": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativedelight.compat.wthit.WthitShippingBin"
+    },
+    "side": "client"
   }
 }

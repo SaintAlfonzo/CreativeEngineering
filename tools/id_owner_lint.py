@@ -31,6 +31,9 @@ OWN_PREFIXES = ("creative", "cdev")
 ALLOW = {
 	# JEI category that mirrors the registered recipe type creativedelight:baking (like dragon_breathing).
 	("jei", "creativedelight", "creativedelight:baking"),
+	# JEI category that mirrors the registered recipe type farmingforblockheads:shipping_bin (Shipping Bin port, CD
+	# farm/shippingbin/; the port registers under the upstream namespace, farming_for_blockheads.md 4).
+	("jei", "creativedelight", "farmingforblockheads:shipping_bin"),
 }
 
 STR_CONST = re.compile(r'\b(?:public\s+|private\s+|protected\s+)?static\s+final\s+String\s+(\w+)\s*=\s*([^;]+);')

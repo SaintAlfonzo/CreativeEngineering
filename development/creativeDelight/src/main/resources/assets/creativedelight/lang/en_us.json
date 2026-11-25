@@ -105,5 +105,20 @@
   "block.creativedelight.blossom_composter": "Blossom Composter",
   "block.creativedelight.azalea_composter": "Azalea Composter",
   "block.creativedelight.crimson_composter": "Crimson Composter",
-  "block.creativedelight.warped_composter": "Warped Composter"
+  "block.creativedelight.warped_composter": "Warped Composter",
+  "block.farmingforblockheads.shipping_bin": "Shipping Bin",
+  "block.farmingforblockheads.courier_spawn": "Courier Spawn Point",
+  "container.farmingforblockheads.shipping_bin": "Shipping Bin",
+  "container.farmingforblockheads.shipping_bin.value": "Stored: %s / %s points",
+  "entity.farmingforblockheads.shipping_balloon": "Shipping Balloon",
+  "entity.farmingforblockheads.shipping_crate": "Shipping Crate",
+  "entity.farmingforblockheads.falling_shipping_crate": "Falling Shipping Crate",
+  "entity.farmingforblockheads.courier": "Courier",
+  "tooltip.farmingforblockheads.shipping_bin.0": "Sells crops for emeralds, one load of %s points at a time",
+  "tooltip.farmingforblockheads.shipping_bin.1": "Unsold items and leftover points stay in the bin",
+  "tooltip.farmingforblockheads.courier_spawn": "Couriers for Shipping Bins within %s blocks walk from and back to the nearest one",
+  "jei.farmingforblockheads.shipping": "Shipping",
+  "jei.farmingforblockheads.shipping.value": "%s points each (load: %s)",
+  "creativedelight.wthit.shipping_bin": "Stored",
+  "creativedelight.wthit.shipping_bin.value": "%s / %s points"
 }

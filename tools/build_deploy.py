@@ -237,6 +237,9 @@ CATEGORIES = {
 	# the unmodified Tempad 3.0.4 jar the Tempad port (a bundle member, now in Creative Compat) reads its art and data from (immersive_portals.md
 	# 2.1.1). Never in mods/: it is a NeoForge jar with the port's mod id.
 	'tempad_upstream': (('server', 'client'), 'tempad_upstream'),
+	# the unmodified Farming for Blockheads 26.3.0.2 jar the Creative Delight Shipping Bin port reads its art from
+	# (farming_for_blockheads.md 4 step 0). Never in mods/: it is a NeoForge jar.
+	'blockheads_upstream': (('server', 'client'), 'blockheads_upstream'),
 	'server': (('server',), ''),
 }
 TREES = ('kubejs', 'config', 'defaultconfigs', 'server')
@@ -619,6 +622,8 @@ UPSTREAM_DONORS = {
 						('creativeDelight/members/ends', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
 	'goldenfood_upstream': ('creativedelight', 'Golden Food (Creative Delight)',
 							('creativeDelight/members/golden', 'com', 'SaintAlfonzo', 'creativedelight', 'golden', 'upstream')),
+	'blockheads_upstream': ('creativedelight', 'Shipping Bin (Creative Delight)',
+							('creativeDelight', 'com', 'SaintAlfonzo', 'creativedelight', 'farm', 'shippingbin')),
 	# its own jar
 	'tempad_upstream': ('backportedTempad', 'Tempad',
 						('backportedTempad', 'earth', 'terrarium', 'tempad', 'forge')),
@@ -1726,8 +1731,8 @@ def render_readme(cur, prev, d, dpay, base, payload):
 		rm('server'),
 		("Copy `mods/` into the server's `mods/`" + only_changed + '. Do not copy `client_mods/`.') if has('mods') else
 		'No server jars changed.',
-		f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))} over the server's folders{only_changed}."
-		if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream')) else None,
+		f"Copy {folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream', 'blockheads_upstream'))} over the server's folders{only_changed}."
+		if folders(('kubejs', 'config', 'defaultconfigs', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream', 'blockheads_upstream')) else None,
 		('`vinery_upstream/` goes next to `mods/`, never inside it: the Vinery backport reads those two jars and '
 		 'stops the game with a message if they are missing.') if has('vinery_upstream') else None,
 		("`miners_upstream/` goes next to `mods/`, never inside it: the Miner's Delight backport reads that jar and "
@@ -1742,6 +1747,8 @@ def render_readme(cur, prev, d, dpay, base, payload):
 		   'and stops the game with a message if it is missing.') if has(d) else None
 		  for d, n in (('oceanic_upstream', 'Oceanic Delight'), ('enders_upstream', "End's Delight (Ender's additions)"),
 					   ('goldenfood_upstream', 'Golden Food'))],
+		("`blockheads_upstream/` goes next to `mods/`, never inside it: Creative Delight's Shipping Bin reads its art from that "
+		 'jar and stops the game with a message if it is missing.') if has('blockheads_upstream') else None,
 		("`tempad_upstream/` goes next to `mods/`, never inside it: the Tempad port reads that jar "
 		 'and stops the game with a message if it is missing.') if has('tempad_upstream') else None,
 		('Copy the *contents* of `server/` into the server folder itself (`LaunchServer.sh`/`.bat`, `perf/`); if you '
@@ -1750,7 +1757,7 @@ def render_readme(cur, prev, d, dpay, base, payload):
 	])
 	rp_order = [p[len('file/'):] for p in cur['resourcePackOrder'] if p.startswith('file/')]
 	show_order = rp_order and (not update or (base or {}).get('resourcePackOrder') != cur['resourcePackOrder'])
-	client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream'))
+	client_trees = folders(('kubejs', 'config', 'defaultconfigs', 'resourcepacks', 'shaderpacks', 'vinery_upstream', 'miners_upstream', 'roll_upstream', 'largemeals_upstream', 'farmers_upstream', 'oceanic_upstream', 'enders_upstream', 'goldenfood_upstream', 'tempad_upstream', 'blockheads_upstream'))
 	lines += ['', '## Client', ''] + numbered([
 		'Close the game.',
 		rm('client'),

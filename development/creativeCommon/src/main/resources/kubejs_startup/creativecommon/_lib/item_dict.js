@@ -618,6 +618,10 @@ i.fish_oil = 'alexsmobs:fish_oil';
 i.blubber = 'creativedelight:blubber';
 i.whale_oil = 'creativedelight:whale_oil';
 i.whale_oil_lamp = 'creativedelight:whale_oil_lamp';   // dairy-fats-and-batter #1, CD fats/WhaleOilLamp.java
+// Shipping Bin port (mod-integration #7; CD farm/shippingbin/, under the Farming for Blockheads namespace)
+i.shipping_bin = 'farmingforblockheads:shipping_bin';
+i.courier_spawn = 'farmingforblockheads:courier_spawn';         // Courier Spawn Point (ruling D5b)
+i.any_trapdoor = '#minecraft:trapdoors';                         // wooden and iron (Courier Spawn Point recipe, D8)
 // Produce (plan_unblocked_batch_1121.md P2; CD kubejs_startup/creativedelight/produce.js)
 i.potato_dough = 'creativedelight:potato_dough';             // dishes/ingredients #27, mirrors Veggies' sweet potato dough
 i.tofu = 'creativedelight:tofu';                             // dishes/ingredients #17

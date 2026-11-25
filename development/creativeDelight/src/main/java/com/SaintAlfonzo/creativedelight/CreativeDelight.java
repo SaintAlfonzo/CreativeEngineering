@@ -97,6 +97,8 @@ public class CreativeDelight {
 		com.SaintAlfonzo.creativedelight.food.popcorn.PopcornBoxes.register(FMLJavaModLoadingContext.get().getModEventBus());
 		// Wood composters, one per species (farm/composter/, feature_writeup/composting.md); moved from Creative Common (W2-9)
 		com.SaintAlfonzo.creativedelight.farm.composter.WoodComposters.register(FMLJavaModLoadingContext.get().getModEventBus());
+		// Shipping Bin port (farm/shippingbin/, farming_for_blockheads.md; needs blockheads_upstream/)
+		com.SaintAlfonzo.creativedelight.farm.shippingbin.ShippingBin.register(FMLJavaModLoadingContext.get().getModEventBus());
 		registerKitchen(FMLJavaModLoadingContext.get().getModEventBus());
 		registerCompartments(FMLJavaModLoadingContext.get().getModEventBus());
 

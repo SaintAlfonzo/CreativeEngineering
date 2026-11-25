@@ -1618,6 +1618,25 @@ global.NCH = {
 		e.custom(json).id(`${global.NCH.ns()}:baking/${idSuffix}`)
 	},
 
+	// Shipping Bin value row (Creative Delight farm/shippingbin/, farming_for_blockheads.md): what one item is worth in
+	// the bin, in points; a sale pays per full load (capacity, [shipping_bin] in creativedelight-common.toml) through the
+	// loot table farmingforblockheads:gameplay/shipping_bin. input: item or tag (one ingredient); value: int >= 0.
+	//   R.shippingBin(i.wheat, 4, e)
+	// Recipe id <ns>:shipping_bin/<namespace>/<path> (a tag: shipping_bin/tag/...); the first row (by id) that matches wins.
+	shippingBin(input, value, e, idOverride) {
+		if (!e) throw new Error('shippingBin called without event object!')
+		if (!global.has('farmingforblockheads')) return global.NCH._skip('farmingforblockheads')
+		var idSuffix = idOverride ?? String(Array.isArray(input) ? input[0] : input).replace(/^#/, 'tag/').replace(':', '/')
+		var ctx = 'shippingBin ' + idSuffix
+		if (typeof value !== 'number' || value < 0 || Math.floor(value) !== value)
+			global.NCH._warn(ctx, 'value must be a whole number >= 0, got ' + value)
+		e.custom({
+			type: 'farmingforblockheads:shipping_bin',
+			input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+			value: Math.max(0, Math.floor(value))
+		}).id(`${global.NCH.ns()}:shipping_bin/${idSuffix}`)
+	},
+
 	// ceBaking with counts off: counted inputs -> one slot per item, dropping from the largest repeated
 	// group (ties: first listed) while over the oven's 6 slots.
 	_bakingSlots(inputs, ctx) {
