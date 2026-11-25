@@ -32,8 +32,8 @@ snow tweak integrate with Immersive Weathering, melting and the other mods that 
 | Melting, seasons, Immersive Weathering, grass spread, salt layers | 2.3 to 2.6 | 19 findings |
 | Upstream and interplay bugs B1 to B7 | 3.3 | 1 blocker, 6 others |
 | Fold-in steps | 4 | 15 steps, none built |
-| Decisions D1 to D14 | 5, 5b | answered 2026-11-24 (R1 to R18) |
-| Tests SRM-01 to SRM-30 | 8 | drafted |
+| Decisions D1 to D14 | 5, 5b | answered 2026-11-24 (R1 to R19) |
+| Tests SRM-01 to SRM-32 | 8 | drafted |
 
 - Dependencies: Kiwi 8 (already in `mods/` for Per-Dimension Game Rules), Forge 43.2+. Optional: Jade (not in the pack;
   WTHIT is), Rubidium (in the pack: SRM's two Rubidium renderer mixins apply), Serene Seasons (in the pack: SRM's
@@ -191,7 +191,7 @@ Default = SRM's default. Recommendation = this report's proposal for the pack. I
 | F15 | Shovel scoop | right-click snow with a shovel: one layer off, one snowball, 1 durability | on, no key | pack mixin | keep (snow only, B3) | keep, 2 layers per click (R10) |
 | F16 | Hand scoop | sneak right-click with an empty hand: one layer -> one snowball | on | `sneakSnowball = false` | keep (snow only, B3) | keep, 1 layer per click (R10) |
 | F17 | Plant into snow | placing a plant, fence, slab or stair into a snow layer keeps the snow around it | on (with F6) | `placeSnowInBlock = false` | keep | keep |
-| F18 | Overlay toggle | empty-hand right-click on snow (not over snowy ground) switches how the snow renders | on, no key | pack mixin | D11 | toggle out; overlay always on, every snow layer (R11) |
+| F18 | Overlay toggle (see R19 for the right-click) | empty-hand right-click on snow (not over snowy ground) switches how the snow renders | on, no key | pack mixin | D11 | toggle out; overlay always on, every snow layer (R11) |
 | F19 | Mobs spawn on deep snow | spawns allowed up to 8 layers; foxes, goats, mooshrooms, rabbits, wolves spawn on snowy plants | on | `mobSpawningMaxLayers` | keep | keep, 8 |
 | F20 | Snowy foliage models | some snowed plants render with snow-covered variants | on (client) | `snowVariants = false` (client toml) | keep | keep |
 | F20b | Particles through leaves | snowfall particles pass leaves | on (client) | `particleThroughLeaves` | keep | keep (default, not asked) |
@@ -345,6 +345,7 @@ differ; section 4 is read with these changes. The 3.1 "Owner" column carries the
 | R16 | Every pack-side fix built: magma vs SRM snowfall (step 3), IW rain keeps the plant (step 8), snowed blocks keep the held block's speed (step 7), plus the light-melt boot fix, melting tags, salt guards | as written |
 | R17 | **One pack grass spread tick**, and **grass with snow on top never spreads** | step 9 replaced: a Compat HEAD hook on `SpreadingSnowyDirtBlock.randomTick` applied before SRM's does the whole tick and cancels: covered -> dirt (SRM's snow survival rule, vanilla's water rule kept), Calendar's season check, Neapolitan's block rule (`canBeGrass`), Vinery's slab spread, and no spread at all from a grass block with any snow layer or SRM snow block on it; new grass is snowy under any `#snowrealmagic:bottom_snow`. Boot log confirms the order |
 | R18 | Salt melts snow faster (D13 follow-up): Salt Melt and the salt dispenser **4 layers** per use (was 3); a salt block touching snow removes **1 layer 55%, 2 layers 35%, 3 layers 10%** per melt (was 1) | `[melting] saltMeltSnowLayers = 4`; new `[melting]` odds key for the touching salt block (Compat `Melting`); [melting.md](melting.md) 1 and 4, changelog bullets (salt is a live feature) |
+| R19 | **A plain right-click (no sneak, empty hand) turns off a block's snowy look; the snow itself stays.** Only new snow (a layer placed, snowfall or storm piling adding a layer, falling snow landing) turns the look back on. Applies to snowy plants, snow-topped fences, gates, walls, slabs, stairs, the snow-drip sides under a plain snow layer (R11), and IW snowy stone, cobblestone and bricks. Sneak right-click stays the 1-layer hand scoop (R10). **IW snowy stone, cobblestone and bricks convert from plain much faster once snow falls** | Compat: a per-block "snow look off" flag (SRM blocks: a field in SRM's block entity options, saved; plain snow layers: a chunk capability or a block state of our own, decided at build), cleared by `Hooks.placeLayersOn`, `Hooks.convert` and the vanilla snow placement path. Client: SRM's snowy foliage variant, the drip overlay and the snow cap model skip while the flag is set; the snow layer's own blocks, layers and collision are unchanged. IW snowy stone has no snow layers of its own, so "look off" turns it back into the plain block; IW's growth re-snows it. IW `block_snowcover.json` (builtin `snowy_stones`, tick source `snow`) `growth_chance` 0.1 -> **0.5** (proposed; owner may change), as a pack data override. Open at build: what "snowy look" on a snowy plant hides besides the variant texture and the drip (the snow layer model stays visible, since the snow stays) |
 
 Snow by layer after these rulings: mining with a shovel takes the stack (1 snowball per layer); the shovel scoop 2
 layers per click, the hand scoop 1, both with snowballs; Salt Melt or the dispenser 4 layers; a touching salt block
@@ -404,9 +405,12 @@ Serene Seasons by its own rule outside winter.
 - [ ] **SRM-28 Snowy grass does not spread (R17):** a grass block with 1 snow layer on it beside dirt, 20 minutes at `randomTickSpeed` 100 -> the dirt stays dirt; the same without snow -> it spreads; grass spreads onto a Vinery dirt slab; grass under 5 layers stays grass.
 - [ ] **SRM-29 Salt odds (R18):** Salt Melt on 8 layers -> 4 layers; a salt block beside 8 layers, log 40 melts -> about 55% take 1 layer, 35% 2, 10% 3.
 - [ ] **SRM-30 WTHIT name (R12):** look at a snow-topped oak stair and a snowy poppy -> "Snowy Oak Stairs", "Snowy Poppy".
+- [ ] **SRM-31 Snow look off (R19):** empty-hand right-click a snowy poppy, a snow-topped oak stair, a plain 3-layer snow on stone and IW snowy cobblestone -> each loses its snowy look (no snowy texture, no drip sides; the snow layers stay, walk-through unchanged; the cobblestone becomes plain cobblestone); place one snow layer on each (or let snow fall) -> the look comes back; sneak right-click still scoops 1 layer.
+- [ ] **SRM-32 IW snowy stone rate (R19):** a 9x9 cobblestone floor in a snowy biome, `/weather rain` for 5 minutes at `randomTickSpeed` 3 -> noticeably more snowy cobblestone than with IW's default 0.1 (count both runs).
 
 ## 9. History
 
 - 2026-11-24: investigation written from the 6.5.4 jar and decompiled code, nothing built. B1 found before the first
   boot. Feature catalog F1 to F27 for the owner's marks.
 - 2026-11-24, later: owner rulings R1 to R18 (section 5b); every decision answered, catalog marked. Nothing built.
+- 2026-11-24, later: R19 (right-click turns the snowy look off; IW snowy stone converts 5x faster).
