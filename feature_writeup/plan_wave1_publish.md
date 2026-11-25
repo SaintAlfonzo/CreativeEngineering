@@ -100,3 +100,9 @@ path, push to `agent_staging`.
   W-P5 (clean clone builds every in-tree mod: development/build_jars.csv, tools/build_jars.py), W-P6 (Common
   1.3.0+ddd126587, Compat 1.0.0+edd3b66b9 (rebuilt for the Snow! Real Magic boot fix, `creative-compat-publish #11`), Raspberry Pie 1.0.0+8f883cd64, clean, checks on, installed). Next: W-P7, the
   owner starts the scratch run; then W-P8.
+- 2026-11-24: owner rulings (AskUserQuestion): squid flee distances stay fixed at 16 (flee) / 24 (stop) and the giant
+  squid's attack range at 12 blocks, no config keys (W17); configs_edited copies of the moved sections prepared now
+  ([melting] in creativecompat-common.toml, [bees] in creativedelight-common.toml, [wandering_trader] in a new
+  creativeloot-common.toml, Fleet-Footed field of view left at its default), checked against the live files after the
+  first boot; tools/rp_libs.py keeps only `sources`, its libs.csv removed (build_jars.py fetches the jars). Common and
+  Compat mod descriptions updated for the wave 2 carve (scratch gate r1124gate finding); jars rebuilt after the gate.

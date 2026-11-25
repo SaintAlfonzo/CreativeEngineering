@@ -62,22 +62,6 @@
 #change it. A roll is vanilla's: 25/50/75% chance (rising until a spawn), then 1 in 10, then
 #a free spot near a random player; on average about 14 rolls per spawn.
 #/gamerule doTraderSpawning false stops it and the Winemaker.
-[wandering_trader]
-	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers). Default off; the pack sets true.
-	enabled = true
-	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes
-	#(the pack's value). A change takes effect after the wait already counting down.
-	#Range: 1200 ~ 100000000
-	traderIntervalTicks = 96000
-	#Offers drawn from the common pool. Vanilla: 5 (the pack: 25). Each offer is a different listing; a pool
-	#smaller than this gives every listing once.
-	#Range: 0 ~ 200
-	commonTrades = 25
-	#Offers drawn from the rare pool, all different items. Vanilla: 1 (the pack: 5).
-	#Range: 1 ~ 50
-	rareTrades = 5
-
-#Advancements (vanilla, every mod, every datapack).
 [advancements]
 	#false: none are loaded, so none show, toast or give rewards (the pack's setting). Default true (vanilla).
 	#Read when data loads: a change applies on the next /reload or world start.
@@ -161,111 +145,6 @@
 	negatedEffectTicks = "minecraft:poison, minecraft:wither"
 
 #Bees.
-[bees]
-	#Multiplies the honeycomb a full hive or nest drops when sheared (by hand or by a dispenser).
-	#Vanilla drops 3, so 2 gives 6. 1 = vanilla (default). Read live.
-	#Range: 1 ~ 16
-	honeycombMultiplier = 2
-
-#Melting: salt, fire and lava melt ice and snow (server side). Sources are the block tags
-#creativecommon:melting/salt, /fire (a block with a lit property counts only while lit) and /lava (plus any
-#block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow loses a layer, frozen
-#decor becomes its meltProducts row, the rest air) and /meltable_slow (packed and blue ice, IW cryosol and
-#permafrost, one tier down; only lava and magma heat them, /lava_only ones only by touching lava). Salt melts
-#only /saltable blocks. A pair is found by the target's random tick or by a source's own random tick
-#(magma, lava, salt blocks); the target then gets a melt tick every meltTickInterval while a source stays in
-#reach, rolling its chance each time. Ranges are spheres measured through any blocks: 1 = the 6 touching
-#blocks, 0 = this source never melts that kind. A target looks past its 6 neighbors for fire and lava only
-#when block light reaches it, so a fire behind a sealed wall melts nothing. feature_writeup/melting.md.
-[melting]
-	#Master switch for salt, fire and lava melting. The Salt item click is The Salt's own and not covered.
-	enabled = true
-	#Salt: reach for every target (meltable and meltable_slow). 1 = touching. Above 1 every
-	#target scans a sphere on each roll (salt gives no light to gate it), so keep it at 1 on big glaciers.
-	#Range: 0 ~ 4
-	saltRange = 1
-	#Fire, torches, lanterns, glowstone, magma: reach for meltable targets.
-	#Range: 0 ~ 8
-	fireRange = 3
-	#Lava: reach for meltable targets.
-	#Range: 0 ~ 8
-	lavaRange = 4
-	#Lava: reach for meltable_slow targets (packed ice, cryosol). Blue ice and permafrost
-	#(creativecommon:melting/lava_only) melt only touching lava, whatever this says. Other fire never melts them.
-	#Range: 0 ~ 8
-	slowLavaRange = 2
-	#Magma (creativecommon:melting/magma): reach for meltable_slow targets that are not lava_only.
-	#Range: 0 ~ 8
-	slowMagmaRange = 2
-	#Chance per tick (its random tick and each melt tick) that a meltable target with a source in reach
-	#melts. Snow layers use snowLayerMeltChance.
-	#Range: 0.0 ~ 1.0
-	meltChance = 0.4
-	#The same for meltable_slow targets, one tier per success.
-	#Range: 0.0 ~ 1.0
-	slowMeltChance = 0.05
-	#Melted ice (#minecraft:ice) leaves a water source; false leaves air. Ultra-warm dimensions
-	#(the Nether) always leave air.
-	placeWater = true
-	#Vanilla melts ice above block light 11 and snow layers above 11, from any light (sea lanterns,
-	#shroomlights, redstone lamps). false: only the sources above melt anything (torches, lanterns and
-	#glowstone through the fire rule). true: vanilla's light melting runs as well. Serene Seasons' seasonal
-	#melt and Immersive Weathering's ice melt are their own and not touched by this.
-	vanillaLightMelting = false
-	#Blocks in creativecommon:melting/ultrawarm_instant (snow layers, snow blocks, powder snow) become air the
-	#moment they are placed in an ultra-warm dimension (the Nether): by hand, dispenser, /setblock or a mod.
-	ultraWarmInstantMelt = true
-	#"from=to" block ids: what a meltable_slow target becomes when it melts. A meltable_slow block with no
-	#row here melts fully, like a meltable one.
-	slowSteps = ["minecraft:blue_ice=minecraft:packed_ice", "minecraft:packed_ice=minecraft:ice", "immersive_weathering:permafrost=immersive_weathering:cryosol", "immersive_weathering:cryosol=minecraft:dirt", "architects_palette:polished_packed_ice=minecraft:ice", "architects_palette:chiseled_packed_ice=minecraft:ice", "architects_palette:packed_ice_pillar=minecraft:ice"]
-	#Blocks that get random ticks so they can find a fire or lava by themselves (vanilla gives none to these).
-	#Ice, frosted ice, snow layers and Immersive Weathering's snowy and frosty blocks tick already. A target left
-	#out (packed and blue ice, cryosol, permafrost) is found only by a source's own tick (magma, lava, salt
-	#blocks). Sources listed here (Molten Nether Bricks) scan from their own tick like magma. Read once at
-	#startup: a change needs a restart.
-	extraRandomTickBlocks = ["minecraft:snow_block", "minecraft:powder_snow", "immersive_weathering:thin_ice", "immersive_weathering:snow_bricks", "immersive_weathering:snow_brick_slab", "immersive_weathering:snow_brick_stairs", "immersive_weathering:snow_brick_wall", "immersive_weathering:snow_brick_vertical_slab", "architects_palette:coarse_snow", "architects_palette:molten_nether_bricks"]
-	#Chance per tick that a snow layer with a source in reach loses one layer.
-	#Range: 0.0 ~ 1.0
-	snowLayerMeltChance = 0.8
-	#Ticks between melt ticks of a target with a source in reach (75 to 125 percent of this, vanilla scheduled
-	#ticks saved with the chunk). 100 = 5 s. 0 = off: targets melt only on random ticks, as before 2026-11-17.
-	#Range: 0 ~ 12000
-	meltTickInterval = 100
-	#Snow (layers, blocks, powder snow) within this reach of a block in creativecommon:melting/magma melts at
-	#once: when placed, on magma's own tick, or on its melt tick. 0 = off.
-	#Range: 0 ~ 4
-	magmaInstantRange = 2
-	#No snow forms from snowfall and no water freezes into ice within fireRange of a creativecommon:melting/magma
-	#block (the weather's snow and ice placement, server only; world generation is not checked).
-	magmaStopsFreezing = true
-	#Snow layers one Salt Melt use or one salt dispense removes; a Snow Block counts as 8 layers. A salt block
-	#melting by its tick removes one.
-	#Range: 1 ~ 8
-	saltMeltSnowLayers = 3
-	#"from=to" block ids: what a saltable block becomes when salt melts it (shared properties copied). Not
-	#listed: ice (#minecraft:ice) becomes water as placeWater says, anything else air. Snow loses layers instead.
-	saltProducts = ["minecraft:packed_ice=minecraft:ice", "immersive_weathering:cryosol=minecraft:dirt"]
-	#"from=to" block ids: what a meltable target becomes when heat melts it (and salt, when saltProducts has
-	#no row), every property the two share copied by name (facing, half, slab type, wall sides, waterlogged).
-	#minecraft:water becomes air in ultra-warm dimensions or with placeWater off. Not listed: water for
-	##minecraft:ice, else air. A row whose product is missing (mod not loaded) is skipped.
-	meltProducts = ["immersive_weathering:snowy_stone=minecraft:stone", "immersive_weathering:snowy_stone_slab=minecraft:stone_slab", "immersive_weathering:snowy_stone_stairs=minecraft:stone_stairs", "immersive_weathering:snowy_stone_wall=immersive_weathering:stone_wall", "immersive_weathering:snowy_stone_vertical_slab=quark:stone_vertical_slab", "immersive_weathering:snowy_cobblestone=minecraft:cobblestone", "immersive_weathering:snowy_cobblestone_slab=minecraft:cobblestone_slab", "immersive_weathering:snowy_cobblestone_stairs=minecraft:cobblestone_stairs", "immersive_weathering:snowy_cobblestone_wall=minecraft:cobblestone_wall", "immersive_weathering:snowy_cobblestone_vertical_slab=quark:cobblestone_vertical_slab", "immersive_weathering:snowy_stone_bricks=minecraft:stone_bricks", "immersive_weathering:snowy_stone_brick_slab=minecraft:stone_brick_slab", "immersive_weathering:snowy_stone_brick_stairs=minecraft:stone_brick_stairs", "immersive_weathering:snowy_stone_brick_wall=minecraft:stone_brick_wall", "immersive_weathering:snowy_stone_brick_vertical_slab=quark:stone_brick_vertical_slab", "immersive_weathering:snowy_chiseled_stone_bricks=minecraft:chiseled_stone_bricks", "immersive_weathering:frosty_glass=minecraft:glass", "immersive_weathering:frosty_glass_pane=minecraft:glass_pane", "immersive_weathering:frosty_grass=minecraft:grass", "immersive_weathering:frosty_fern=minecraft:fern", "immersive_weathering:thin_ice=minecraft:water", "architects_palette:coarse_snow=minecraft:gravel"]
-	#Chance multiplier for creativecommon:melting/sluggish targets (snow bricks).
-	#Range: 0.0 ~ 1.0
-	sluggishMeltFactor = 0.25
-	#Hot places: in an ultra-warm dimension (the Nether) every target but the lava_only ones (blue ice,
-	#permafrost), and in a creativecommon:melting/hot biome (arid, dry and tropical) ice, snow and frozen decor, take a
-	#melt tick this often with no source needed, rolling meltChance each time (the slow tier too). 0 = off.
-	#Range: 0 ~ 12000
-	hotMeltTickInterval = 20
-	#The End: every source (salt, fire, magma, lava) melts only the blocks touching it; no reach, no magma
-	#instant zone past the touching blocks.
-	endContactOnly = true
-	#No minecraft:fire in the End: any placement of it is refused (flint and steel, fire charges, lava, End
-	#crystals, commands) and fire already there goes out on its next tick. Soul fire is not affected.
-	endNoFire = true
-
-#Item tooltips (client side).
 [tooltips]
 	#true: White Wool and White Concrete show the color palette test tooltips (every tooltip role and
 	#text color). Default false. Read when the client scripts load: a change applies after a client restart.

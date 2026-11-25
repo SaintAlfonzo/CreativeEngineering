@@ -1001,8 +1001,9 @@ top. Rulings and phase list: [plan_rp_standalone.md](plan_rp_standalone.md); sta
   copy out. The jar carries `solRaspberryPie-LICENSE.txt` (GPL-3.0-only), `solRaspberryPie-LGPL-2.1-solapplepie.txt`,
   `solRaspberryPie-LGPL-2.1-solcarrot.txt` (the upstream `LICENSE.txt` files) and `solRaspberryPie-NOTICE-nested-LGPL.txt` (names,
   authors, versions, sha1, "unmodified", upstream tag / commit links, the Liquid Diet Log art credit). `mods.toml` has
-  `displayURL` and `issueTrackerURL` (the GitHub repo). The compile jars in `libs/` stay git-ignored; `libs.csv` records
-  them and `python3 tools/rp_libs.py fetch` downloads them sha1-checked on a fresh clone (12.12).
+  `displayURL` and `issueTrackerURL` (the GitHub repo). The compile jars in `libs/` stay git-ignored; `development/build_jars.csv`
+  records them and `python3 tools/build_jars.py fetch --projects solRaspberryPie` downloads them sha1-checked on a fresh
+  clone (12.12; the own `libs.csv` went 2026-11-24, owner).
 - **Default ladder (P2; reworked after the owner rulings of 2026-11-21).** `solraspberrypie/default_ladder.json` (used
   when no `defaultconfigs/solraspberrypie/ladder.json` exists, so never in the pack) is Apple Pie 2.2.0's own default
   ladder (`SOLSweetPotatoConfig`) scaled to a top of 50, every threshold halved: with vanilla foods and Apple Pie's
@@ -1138,7 +1139,7 @@ Plan: plan_rp_standalone.md section 10 (rulings P5, P6, P8, P9 of 2026-11-22). R
   leftover modifiers are stripped only when the name starts with the attribute's own id; Change and Drop counts cached
   per player while the window, active slots, ladder and `respecFoods` are unchanged; client icon and diversity-icon
   defaults are vanilla (the pack's values stay in `config/solraspberrypie-client.toml`); NOTICE renamed
-  `NOTICE-nested-LGPL.txt`; `tools/rp_libs.py` (`fetch`, `check`, `sources DIR`).
+  `NOTICE-nested-LGPL.txt`; `tools/rp_libs.py sources DIR` (compile jars: `tools/build_jars.py`).
 - **Existing worlds** keep their `serverconfig/solraspberrypie/ladder.json`: the pack ladder's new `replaces` entries
   reach a world only after its copy is replaced from `defaultconfigs/` (PR-RP-18).
 

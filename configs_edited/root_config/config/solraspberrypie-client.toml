@@ -94,10 +94,3 @@
 	#Food tooltips: AppleSkin's saturation icons on their own line under the shanks (AppleSkin's own layout).
 	#Off: on the shank row, after the shanks.
 	saturationOwnLine = false
-
-[effects]
-	#Share of the field-of-view widening that Alex's Mobs' Fleet-Footed speed bonus causes while it applies:
-	#1.0 = unchanged, 0.0 = none. Other speed changes widen the view as usual.
-	#Range: 0.0 ~ 1.0
-	fleetFootedFov = 0.25
-

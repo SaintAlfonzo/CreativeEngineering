@@ -1,0 +1,16 @@
+[wandering_trader]
+	#Off = vanilla Wandering Trader (24000-tick interval, 5 + 1 offers). Default off; the pack sets true.
+	enabled = true
+	#Ticks between Wandering Trader spawn rolls. Vanilla: 24000 (20 minutes). 96000 = 80 minutes
+	#(the pack's value). A change takes effect after the wait already counting down.
+	#Range: 1200 ~ 100000000
+	traderIntervalTicks = 96000
+	#Offers drawn from the common pool. Vanilla: 5 (the pack: 25). Each offer is a different listing; a pool
+	#smaller than this gives every listing once.
+	#Range: 0 ~ 200
+	commonTrades = 25
+	#Offers drawn from the rare pool, all different items. Vanilla: 1 (the pack: 5).
+	#Range: 1 ~ 50
+	rareTrades = 5
+
+#Advancements (vanilla, every mod, every datapack).
