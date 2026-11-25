@@ -2,6 +2,13 @@ package net.ribs.vintagedelight.block.custom;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -21,6 +28,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.ribs.vintagedelight.block.ModBlocks;
 import net.ribs.vintagedelight.item.ModItems;
@@ -67,6 +75,42 @@ public class SaltLayerBlock extends SnowLayerBlock {
    public static BlockState fullBlock() {
       Block salt = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("salt", "salt_block"));
       return (salt == null || salt == Blocks.AIR ? ModBlocks.SALT_BLOCK.get() : salt).defaultBlockState();
+   }
+
+   // Snow! Real Magic (snow_real_magic.md 4 step 11, bug B3) adds snow behavior to every SnowLayerBlock by mixin; a salt
+   // layer keeps the vanilla block's rules instead. These overrides are plain vanilla code, so they change nothing
+   // without SRM. Its falling-snow check (scheduled tick): none; salt falls by Creative Compat's falling layers.
+   @Override
+   public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+   }
+
+   // SRM: fall cushion by layer count; salt: full fall damage, as any block.
+   @Override
+   public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
+      entity.causeFallDamage(fallDistance, 1.0F, DamageSource.FALL);
+   }
+
+   // SRM: deep-snow drag; salt: none.
+   @Override
+   public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
+   }
+
+   // SRM: the empty-hand overlay toggle and putting plants into snow; salt: no click of its own.
+   @Override
+   public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+                                BlockHitResult hit) {
+      return InteractionResult.PASS;
+   }
+
+   // SRM: a placed layer joins any SnowLayerBlock in place (snow into salt); salt: only onto salt, as vanilla snow.
+   @Override
+   @Nullable
+   public BlockState getStateForPlacement(BlockPlaceContext context) {
+      BlockState here = context.getLevel().getBlockState(context.getClickedPos());
+      if (here.is(this)) {
+         return here.setValue(LAYERS, Math.min(8, here.getValue(LAYERS) + 1));
+      }
+      return this.defaultBlockState();
    }
 
    // Never replaced by another block; salt dust adds layers through its own click.

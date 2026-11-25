@@ -129,3 +129,203 @@ look the two "Successfully filled N block(s)" replies (grass counted as it is sw
 @pass the snowy plant walks through like 3 snow layers; the berry bush in snow slows like a bush (0.36), no Snow! Real Magic 0.8 stuck; WTHIT on the stair shows Wood 1.10x; no rubber-banding
 @fails solid snowy plant: `snowrealmagic:snow` not in `#creativecompat:passthrough_layers` or SrmSnowCollisionMixin off; stair at 1.00x: CamoSpeed not reading the held block
 @draft client row: steps by the next runner (writeup tests SRM-07, SRM-17, SRM-24)
+
+@@section 2
+@@title SQ-SRM Snow! Real Magic fold-in part B: scoops, snowy look off, drip sides, WTHIT names, blizzards, ice chance, salt, 2026-11-25 ([snow_real_magic.md](../snow_real_magic.md) 4c, 5b, 8; TODO `mod-integration #20` to `#25`)
+@@date 2026-11-25
+@@jars creativecompat creativedelight
+@@sources feature_writeup/snow_real_magic.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/SnowRealMagic.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/SnowRealMagicClient.java development/creativeDelight/members/vintage/src/main/java/net/ribs/vintagedelight/block/custom/SaltLayerBlock.java
+@@text
+@@text Same world as section 1 (group A superflat, grass at y -61). The bot clicks with `pbot use`, which runs Snow! Real
+@@text Magic's right-click handler like a player's click.
+@@text
+@@table
+## SQ-SRM-08 | Boot: part B mixins apply; the blizzard gamerules default to 2 and 3500
+@group A
+@commands Boot 1; `gamerule snowrealmagic:blizzardStrength`, `gamerule snowrealmagic:blizzardFrequency`
+@pass the replies read 2 and 3500; no injection failure in the log
+@fails 0 and 10000: SrmGameruleDefaultsMixin not applied (the `<clinit>` arguments of CoreModule changed)
+@absent snowrealmagic:blizzardStrength (Snow! Real Magic 6.5.4 gamerule, added after the last /dumpall dump of 2026-11-13)
+> gamerule snowrealmagic:blizzardStrength
+expect snowrealmagic:blizzardStrength is currently set to: 2
+> gamerule snowrealmagic:blizzardFrequency
+expect snowrealmagic:blizzardFrequency is currently set to: 3500
+
+## SQ-SRM-09 | Shovel scoop takes 2 layers and gives 2 snowballs; on 1 layer it takes the layer and gives 1
+@group A
+@commands Bot holding an iron shovel uses 5 layers of snow, then 1 layer; probe the blocks and the dropped snowballs
+@pass 5 layers -> 3 layers and a stack of 2 snowballs; 1 layer -> air and 1 snowball
+@fails 4 layers: SrmUseMixin not applied (SRM's 1-layer scoop); no snowballs: the drop is skipped for a non-creative bot
+> forceload add 3160 3000 3191 3031
+> execute unless entity m9 run pbot spawn m9 3176 -60 3016 minecraft:overworld survival
+sleep 3
+> setblock 3174 -60 3016 minecraft:snow[layers=5]
+> setblock 3178 -60 3016 minecraft:snow[layers=1]
+> kill @e[type=minecraft:item,x=3160,y=-62,z=3000,dx=31,dy=10,dz=31]
+> pbot hold m9 minecraft:iron_shovel 1
+> pbot use m9 3174 -60 3016 up
+sleep 1
+> execute if block 3174 -60 3016 minecraft:snow[layers=3] run say SRM09_THREE
+> execute if entity @e[type=minecraft:item,x=3172,y=-61,z=3014,dx=4,dy=4,dz=4,nbt={Item:{id:"minecraft:snowball",Count:2b}}] run say SRM09_TWO_BALLS
+> kill @e[type=minecraft:item,x=3160,y=-62,z=3000,dx=31,dy=10,dz=31]
+> pbot use m9 3178 -60 3016 up
+sleep 1
+> execute if block 3178 -60 3016 minecraft:air run say SRM09_GONE
+> execute if entity @e[type=minecraft:item,x=3176,y=-61,z=3014,dx=4,dy=4,dz=4,nbt={Item:{id:"minecraft:snowball",Count:1b}}] run say SRM09_ONE_BALL
+expect SRM09_THREE
+expect SRM09_TWO_BALLS
+expect SRM09_GONE
+expect SRM09_ONE_BALL
+> kill @e[type=minecraft:item,x=3160,y=-62,z=3000,dx=31,dy=10,dz=31]
+> fill 3172 -60 3014 3180 -60 3018 minecraft:air
+
+## SQ-SRM-10 | Salt layers are never scooped; a sneak hand click on snow takes 1 layer
+@group A
+@commands Salt layer (3) on stone: bot uses it with an iron shovel, then sneaks and uses it with an empty hand; snow (3 layers): sneak empty-hand use
+@pass the salt stays 3 layers, no snowball; the snow goes to 2 layers and the bot holds 1 snowball
+@fails salt lost a layer or gave a snowball: the step 11 guard in SnowRealMagic.onUse (notSnowLayer) or SaltLayerBlock.use; snow unchanged: SRM's `sneakSnowball` off
+> forceload add 3200 3000 3231 3031
+> execute unless entity m10 run pbot spawn m10 3216 -60 3016 minecraft:overworld survival
+sleep 3
+> setblock 3214 -61 3016 minecraft:stone
+> setblock 3214 -60 3016 vintagedelight:salt[layers=3]
+> setblock 3218 -60 3016 minecraft:snow[layers=3]
+> kill @e[type=minecraft:item,x=3200,y=-62,z=3000,dx=31,dy=10,dz=31]
+> clear m10
+> pbot hold m10 minecraft:iron_shovel 1
+> pbot use m10 3214 -60 3016 up
+> clear m10
+> pbot sneak m10 on
+> pbot use m10 3214 -60 3016 up
+sleep 1
+> execute if block 3214 -60 3016 vintagedelight:salt[layers=3] run say SRM10_SALT_KEPT
+> execute if entity @e[type=minecraft:item,x=3200,y=-62,z=3000,dx=31,dy=10,dz=31,nbt={Item:{id:"minecraft:snowball"}}] run say SRM10_SALT_SNOWBALL
+> pbot use m10 3218 -60 3016 up
+> pbot sneak m10 off
+sleep 1
+> execute if block 3218 -60 3016 minecraft:snow[layers=2] run say SRM10_SNOW_TWO
+> execute if entity @a[name=m10,nbt={Inventory:[{id:"minecraft:snowball"}]}] run say SRM10_IN_HAND
+expect SRM10_SALT_KEPT
+reject SRM10_SALT_SNOWBALL
+expect SRM10_SNOW_TWO
+expect SRM10_IN_HAND
+> fill 3212 -60 3014 3220 -60 3018 minecraft:air
+> setblock 3214 -61 3016 minecraft:grass_block
+
+## SQ-SRM-11 | A plain empty-hand click turns the snowy look off; a placed layer turns it back on
+@group A
+@commands On stone with an open side: 3 layers of snow, a snowy poppy (2 layers), IW snowy cobblestone; bot empty-hand use on each; then the bot places one snow layer on the plain snow
+@pass plain snow -> `snowrealmagic:snow[layers=3]` with `CreativeCompatLookOff` 1b; the poppy keeps its block with the flag; the snowy cobblestone -> `minecraft:cobblestone`; one placed layer -> `minecraft:snow[layers=4]`
+@fails no change: SrmUseMixin not applied or SRM's toggle ran (RO set instead); the layer added to snowrealmagic:snow: SrmSnowPlaceLookMixin not applied
+@absent snowrealmagic:snow (Snow! Real Magic 6.5.4, added after the last /dumpall dump of 2026-11-13)
+> forceload add 3240 3000 3271 3031
+> execute unless entity m11 run pbot spawn m11 3256 -60 3016 minecraft:overworld survival
+sleep 3
+> fill 3252 -61 3016 3260 -61 3016 minecraft:stone
+> setblock 3252 -60 3016 minecraft:snow[layers=3]
+> setblock 3256 -60 3016 snowrealmagic:snow[layers=2]{Block:"minecraft:poppy"}
+> setblock 3260 -60 3016 immersive_weathering:snowy_cobblestone
+> clear m11
+> pbot use m11 3252 -60 3016 up
+> pbot use m11 3256 -60 3016 up
+> pbot use m11 3260 -60 3016 up
+sleep 1
+> execute if block 3252 -60 3016 snowrealmagic:snow[layers=3]{CreativeCompatLookOff:1b} run say SRM11_PLAIN_OFF
+> execute if block 3256 -60 3016 snowrealmagic:snow{CreativeCompatLookOff:1b} run say SRM11_POPPY_OFF
+> execute if block 3260 -60 3016 minecraft:cobblestone run say SRM11_COBBLE_PLAIN
+> pbot hold m11 minecraft:snow 1
+> pbot use m11 3252 -60 3016 up
+sleep 1
+> execute if block 3252 -60 3016 minecraft:snow[layers=4] run say SRM11_BACK_ON
+expect SRM11_PLAIN_OFF
+expect SRM11_POPPY_OFF
+expect SRM11_COBBLE_PLAIN
+expect SRM11_BACK_ON
+> fill 3252 -60 3016 3260 -60 3016 minecraft:air
+> fill 3252 -61 3016 3260 -61 3016 minecraft:grass_block
+
+## SQ-SRM-12 | Falling snow into water turns it to ice about 1 time in 5
+@group A
+@commands A 10x5 still-water pool 4 deep in glass; summon 50 `snowrealmagic:snow` falling snow entities 20 blocks above, one per water column; wait 10 s; count ice in the pool
+@pass 3 to 20 of the 50 columns turned to ice (20% expected, 10)
+@fails 50 or close: SrmFallingSnowMixin not applied (SRM's every time); 0: `snowMakingIce` false in the Snow! Real Magic toml
+@absent snowrealmagic:snow (Snow! Real Magic 6.5.4, added after the last /dumpall dump of 2026-11-13)
+> forceload add 3280 3000 3311 3031
+> fill 3290 -64 3010 3301 -60 3016 minecraft:glass
+> fill 3291 -63 3011 3300 -60 3015 minecraft:water
+> summon snowrealmagic:snow 3291.5 -40 3011.5
+> summon snowrealmagic:snow 3291.5 -40 3012.5
+> summon snowrealmagic:snow 3291.5 -40 3013.5
+> summon snowrealmagic:snow 3291.5 -40 3014.5
+> summon snowrealmagic:snow 3291.5 -40 3015.5
+> summon snowrealmagic:snow 3292.5 -40 3011.5
+> summon snowrealmagic:snow 3292.5 -40 3012.5
+> summon snowrealmagic:snow 3292.5 -40 3013.5
+> summon snowrealmagic:snow 3292.5 -40 3014.5
+> summon snowrealmagic:snow 3292.5 -40 3015.5
+> summon snowrealmagic:snow 3293.5 -40 3011.5
+> summon snowrealmagic:snow 3293.5 -40 3012.5
+> summon snowrealmagic:snow 3293.5 -40 3013.5
+> summon snowrealmagic:snow 3293.5 -40 3014.5
+> summon snowrealmagic:snow 3293.5 -40 3015.5
+> summon snowrealmagic:snow 3294.5 -40 3011.5
+> summon snowrealmagic:snow 3294.5 -40 3012.5
+> summon snowrealmagic:snow 3294.5 -40 3013.5
+> summon snowrealmagic:snow 3294.5 -40 3014.5
+> summon snowrealmagic:snow 3294.5 -40 3015.5
+> summon snowrealmagic:snow 3295.5 -40 3011.5
+> summon snowrealmagic:snow 3295.5 -40 3012.5
+> summon snowrealmagic:snow 3295.5 -40 3013.5
+> summon snowrealmagic:snow 3295.5 -40 3014.5
+> summon snowrealmagic:snow 3295.5 -40 3015.5
+> summon snowrealmagic:snow 3296.5 -40 3011.5
+> summon snowrealmagic:snow 3296.5 -40 3012.5
+> summon snowrealmagic:snow 3296.5 -40 3013.5
+> summon snowrealmagic:snow 3296.5 -40 3014.5
+> summon snowrealmagic:snow 3296.5 -40 3015.5
+> summon snowrealmagic:snow 3297.5 -40 3011.5
+> summon snowrealmagic:snow 3297.5 -40 3012.5
+> summon snowrealmagic:snow 3297.5 -40 3013.5
+> summon snowrealmagic:snow 3297.5 -40 3014.5
+> summon snowrealmagic:snow 3297.5 -40 3015.5
+> summon snowrealmagic:snow 3298.5 -40 3011.5
+> summon snowrealmagic:snow 3298.5 -40 3012.5
+> summon snowrealmagic:snow 3298.5 -40 3013.5
+> summon snowrealmagic:snow 3298.5 -40 3014.5
+> summon snowrealmagic:snow 3298.5 -40 3015.5
+> summon snowrealmagic:snow 3299.5 -40 3011.5
+> summon snowrealmagic:snow 3299.5 -40 3012.5
+> summon snowrealmagic:snow 3299.5 -40 3013.5
+> summon snowrealmagic:snow 3299.5 -40 3014.5
+> summon snowrealmagic:snow 3299.5 -40 3015.5
+> summon snowrealmagic:snow 3300.5 -40 3011.5
+> summon snowrealmagic:snow 3300.5 -40 3012.5
+> summon snowrealmagic:snow 3300.5 -40 3013.5
+> summon snowrealmagic:snow 3300.5 -40 3014.5
+> summon snowrealmagic:snow 3300.5 -40 3015.5
+sleep 10
+> fill 3291 -63 3011 3300 -60 3015 minecraft:glass replace minecraft:ice
+look "Successfully filled N block(s)": N between 3 and 20
+> fill 3290 -64 3010 3301 -40 3016 minecraft:air
+> fill 3290 -61 3010 3301 -61 3016 minecraft:grass_block
+
+## SQ-SRM-13 | Blizzards only in thunder; none on a column with 8 layers
+@group B
+@commands Snowy plains, randomTickSpeed 100: `/weather rain` 10 minutes, count `snowrealmagic:snow` entities seen; `/weather thunder` 10 minutes, count again
+@pass rain: no falling snow from the sky, snow layers still form (Snow! Real Magic's plain snowfall); thunder: falling snow of 1 to 2 layers lands; a column already at 8 layers gets none
+@fails falling snow in rain: SrmWorldTickMixin's gamerule read not redirected; no snowfall at all in rain: the redirect returns 0 for the plain-snowfall branch too (read the tick)
+@draft needs a snowy biome (normal world, group B) and entity counting; steps by the next runner (writeup test SRM-26)
+
+## SQ-SRM-14 | A salt block melts 1, 2 or 3 snow layers per melt (55/35/10); Salt Melt takes 4
+@group A
+@commands 40 piles of 8 snow layers, each beside a salt block; one melt tick each (meltTickInterval); count layers left per pile; Salt Melt on a fresh 8-layer pile
+@pass about 22 piles at 7, 14 at 6, 4 at 5; the Salt Melt pile at 4
+@fails all at 7: the odds key not read (Melting.Values.saltSourceSnowLayerOdds); Salt Melt pile at 5: saltMeltSnowLayers still 3 (the live toml carried the old value)
+@draft needs one controlled melt per pile (the scheduled tick fires repeatedly); steps by the next runner (writeup test SRM-29)
+
+## CQ-SRM-02 | Drip sides under every snow layer, snowy look off, WTHIT "Snowy" names (client)
+@group client
+@commands Client on a scratch server, with and without Rubidium: snow on stone at a ledge, on dirt, a snowy poppy, a snow-topped oak stair; screenshot; empty-hand click each; screenshot; look at the stair and the poppy with WTHIT
+@pass the block under each snow layer shows Snow! Real Magic's drip sides on its open faces (not under snowy grass); after the click: no drip sides, no snow cap on the stair, the poppy plain, the snow layers still there; WTHIT reads "Snowy Oak Stairs", "Snowy Poppy"; plain snow with its look off reads "Snow"
+@fails no drip sides: SrmRenderMixin not applied or snow not in the cutout-mipped pass (SnowRealMagicClient.setup); snow invisible: the plain-snow render path failed (HookFaults line in the client log)
+@draft client row: steps and shots by the next runner (writeup tests SRM-25, SRM-30, SRM-31)

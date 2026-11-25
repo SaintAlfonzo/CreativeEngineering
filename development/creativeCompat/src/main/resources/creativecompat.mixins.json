@@ -80,6 +80,13 @@
     "SrmWorldTickMixin",
     "SrmSnowCollisionMixin",
     "SrmGrassSpreadMixin",
+    "SrmUseMixin",
+    "SrmHooksMixin",
+    "SrmFallingSnowMixin",
+    "SrmGameruleDefaultsMixin",
+    "SrmSnowPlaceLookMixin",
+    "SrmLookOptionsMixin",
+    "SrmLookSaveMixin",
     "IwSnowMeltSrmMixin",
     "BambooLeafDropMixin",
     "LeafPilePathMixin",
@@ -112,6 +119,7 @@
     "CorpseTransferMessageMixin"
   ],
   "client": [
+    "SrmRenderMixin",
     "GeckoItemHudBatchMixin",
     "AnotherFurniturePlanterRenderMixin",
     "McaCombEyeColourMixin",

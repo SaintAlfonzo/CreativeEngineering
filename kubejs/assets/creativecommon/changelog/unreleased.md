@@ -503,6 +503,15 @@
 - **New:** Snowy plants walk through like snow layers; a snowy berry bush slows you like a berry bush.
 - **New:** Snow-topped stairs, slabs, fences and walls walk at the speed of the block under the snow.
 - **Changed:** Grass with snow on it no longer spreads onto dirt [it spread under one snow layer].
+- **New:** A right-click with a shovel takes 2 snow layers and drops 2 snowballs; a sneaking right-click with an empty hand takes 1 layer as a snowball.
+- **New:** Snow drips down the open sides of the block under every snow layer and snowy plant.
+- **New:** A right-click with an empty hand hides the snowy look of snow, snowy plants, snow-topped blocks and Immersive Weathering's snowy stone, cobblestone and bricks; the snow stays. New snow brings the look back.
+- **New:** WTHIT names snowy blocks after the block under the snow, such as Snowy Oak Stairs.
+- **New:** Thunderstorms in snowy places drop clumps of 1 to 2 snow layers from the sky (new worlds); never onto 8 layers.
+- **New:** Falling snow that lands in water freezes it 1 time in 5.
+- **Changed:** Immersive Weathering's stone, cobblestone and stone bricks turn snowy 5 times as fast in falling snow [a fifth as fast].
+- **Changed:** Salt Melt and salt from a dispenser remove 4 snow layers per use [3].
+- **Changed:** A salt block melts 1 snow layer 55% of the time, 2 layers 35% and 3 layers 10% [1 layer].
 
 ## Falling Layers <!-- icon: minecraft:snow -->
 

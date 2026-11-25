@@ -56,9 +56,9 @@ melt ticks (about every 5 s), plus its random ticks.
 - Salt melts only `#creativecompat:melting/saltable` (ice, frosted ice, Rare Ice, snow, snow block, powder snow,
   packed ice, cryosol, the frozen decor, AP packed ice). Product: a `saltProducts` row (packed ice -> ice, cryosol ->
   dirt), else the heat product (`meltProducts`, `slowSteps`), shared properties copied, else water for ice
-  (`placeWater`), else air; snow loses layers instead. A salt block's tick removes 1 layer; one
-  salt dispense or Salt Melt use (`meltStep`) removes `saltMeltSnowLayers` = 3, a snow block counting as 8 (it
-  becomes 5 layers). Items of saltable blocks show a gray "Saltable" tooltip line.
+  (`placeWater`), else air; snow loses layers instead. A salt block's melt removes 1 layer 55%, 2 layers
+  35%, 3 layers 10% (`saltSourceSnowLayerOdds`, snow_real_magic.md R18; was 1); one salt dispense or Salt Melt use
+  (`meltStep`) removes `saltMeltSnowLayers` = 4 (R18, was 3), a snow block counting as 8 (it becomes 4 layers). Items of saltable blocks show a gray "Saltable" tooltip line.
 - Snow resting on `#creativecompat:melting/keeps_snow` (blue ice, IW permafrost) ignores fire, lava, magma and
   vanilla light melting; salt still melts it (G6 4b).
 - Magma (`#creativecompat:melting/magma`): snow within `magmaInstantRange` = 2 melts at once (on placement, on
@@ -257,7 +257,8 @@ new defaults by hand; mirrored to `configs_edited/root_config/creativecommon-com
 | `meltTickInterval` | 100 (0 = off; G11, was 200) | 0 to 12000 | yes |
 | `magmaInstantRange` | 2 | 0 to 4 | yes |
 | `magmaStopsFreezing` | true | | yes |
-| `saltMeltSnowLayers` | 3 | 1 to 8 | yes |
+| `saltMeltSnowLayers` | 4 (R18, was 3) | 1 to 8 | yes |
+| `saltSourceSnowLayerOdds` | 55, 35, 10 (weights for 1, 2, 3 layers per salt block melt; R18) | each 0 to 1000 | yes |
 | `saltProducts` | packed ice = ice, IW cryosol = dirt | | yes |
 | `meltProducts` | the 22 frozen decor rows (E1) | | yes |
 | `sluggishMeltFactor` | 0.25 | 0 to 1 | yes |

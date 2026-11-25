@@ -1347,9 +1347,12 @@
 	#block (the weather's snow and ice placement, server only; world generation is not checked).
 	magmaStopsFreezing = true
 	#Snow layers one Salt Melt use or one salt dispense removes; a Snow Block counts as 8 layers. A salt block
-	#melting by its tick removes one.
+	#melting by its tick removes as saltSourceSnowLayerOdds says.
 	#Range: 1 ~ 8
-	saltMeltSnowLayers = 3
+	saltMeltSnowLayers = 4
+	#Snow layers one melt by a salt block (or another salt source) removes: weights for 1, 2, 3, ... layers.
+	#Default: 1 layer 55%, 2 layers 35%, 3 layers 10%. An empty list removes 1.
+	saltSourceSnowLayerOdds = [55, 35, 10]
 	#"from=to" block ids: what a saltable block becomes when salt melts it (shared properties copied). Not
 	#listed: ice (#minecraft:ice) becomes water as placeWater says, anything else air. Snow loses layers instead.
 	saltProducts = ["minecraft:packed_ice=minecraft:ice", "immersive_weathering:cryosol=minecraft:dirt"]

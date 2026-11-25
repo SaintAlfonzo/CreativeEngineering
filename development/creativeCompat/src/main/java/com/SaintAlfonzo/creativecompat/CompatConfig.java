@@ -1500,6 +1500,7 @@ public final class CompatConfig {
 		public final ForgeConfigSpec.IntValue magmaInstantRange;
 		public final ForgeConfigSpec.BooleanValue magmaStopsFreezing;
 		public final ForgeConfigSpec.IntValue saltMeltSnowLayers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends Integer>> saltSourceSnowLayerOdds;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> saltProducts;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> meltProducts;
 		public final ForgeConfigSpec.DoubleValue sluggishMeltFactor;
@@ -1600,8 +1601,13 @@ public final class CompatConfig {
 			).define("magmaStopsFreezing", true);
 			saltMeltSnowLayers = b.comment(
 					"Snow layers one Salt Melt use or one salt dispense removes; a Snow Block counts as 8 layers. A salt block",
-					"melting by its tick removes one."
-			).defineInRange("saltMeltSnowLayers", 3, 1, 8);
+					"melting by its tick removes as saltSourceSnowLayerOdds says."
+			).defineInRange("saltMeltSnowLayers", 4, 1, 8);
+			saltSourceSnowLayerOdds = b.comment(
+					"Snow layers one melt by a salt block (or another salt source) removes: weights for 1, 2, 3, ... layers.",
+					"Default: 1 layer 55%, 2 layers 35%, 3 layers 10%. An empty list removes 1."
+			).defineListAllowEmpty(List.of("saltSourceSnowLayerOdds"), () -> List.of(55, 35, 10),
+					o -> o instanceof Integer i && i >= 0 && i <= 1000);
 			saltProducts = b.comment(
 					"\"from=to\" block ids: what a saltable block becomes when salt melts it (shared properties copied). Not",
 					"listed: ice (#minecraft:ice) becomes water as placeWater says, anything else air. Snow loses layers instead."

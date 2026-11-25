@@ -278,6 +278,10 @@ public class CreativeCompat {
 
 		@SubscribeEvent
 		public static void onClientSetup(FMLClientSetupEvent event) {
+			if (ModList.get().isLoaded("snowrealmagic")) {
+				// plain snow also renders in the pass that draws Snow! Real Magic's drip sides (R11)
+				event.enqueueWork(com.SaintAlfonzo.creativecompat.compat.SnowRealMagicClient::setup);
+			}
 			if (ModList.get().isLoaded("trashslot")) {
 				TrashSlotCompat.register();
 			}

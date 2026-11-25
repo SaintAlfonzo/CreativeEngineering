@@ -113,6 +113,16 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("SrmWorldTickMixin", List.of("snowrealmagic")),
 			Map.entry("SrmSnowCollisionMixin", List.of("snowrealmagic")),
 			Map.entry("SrmGrassSpreadMixin", List.of("snowrealmagic")),
+			// part B (snow_real_magic.md 4c, R10 to R13, R18, R19): scoops, look off, salt guards, blizzards, ice chance,
+			// drip sides
+			Map.entry("SrmUseMixin", List.of("snowrealmagic")),
+			Map.entry("SrmHooksMixin", List.of("snowrealmagic")),
+			Map.entry("SrmFallingSnowMixin", List.of("snowrealmagic")),
+			Map.entry("SrmGameruleDefaultsMixin", List.of("snowrealmagic")),
+			Map.entry("SrmSnowPlaceLookMixin", List.of("snowrealmagic")),
+			Map.entry("SrmLookOptionsMixin", List.of("snowrealmagic")),
+			Map.entry("SrmLookSaveMixin", List.of("snowrealmagic")),
+			Map.entry("SrmRenderMixin", List.of("snowrealmagic")),
 			// Ore Excavation undo rules (excavation/)
 			Map.entry("OreExcavationBlockHistoryMixin", ORE_EXCAVATION),
 			Map.entry("OreExcavationCommandUndoMixin", ORE_EXCAVATION),

@@ -103,9 +103,9 @@ public final class Melting {
 			int slowMagmaRange, double meltChance, double slowMeltChance, double snowLayerMeltChance, boolean placeWater,
 			boolean vanillaLightMelting, boolean ultraWarmInstantMelt, int meltTickInterval,
 			int magmaInstantRange, boolean magmaStopsFreezing, int saltMeltSnowLayers, double sluggishMeltFactor,
-			int hotMeltTickInterval, boolean endContactOnly, boolean endNoFire) {
+			int hotMeltTickInterval, boolean endContactOnly, boolean endNoFire, int[] saltSourceOdds) {
 		static final Values UNLOADED = new Values(false, 0, 0, 0, 0, 0, 0, 0, 0, true, true, false, 0, 0, false, 1, 1,
-				0, false, false);
+				0, false, false, new int[0]);
 
 		static Values read() {
 			CompatConfig.MeltingConfig c = CompatConfig.MELTING;
@@ -114,11 +114,30 @@ public final class Melting {
 					c.snowLayerMeltChance.get(), c.placeWater.get(), c.vanillaLightMelting.get(),
 					c.ultraWarmInstantMelt.get(), c.meltTickInterval.get(),
 					c.magmaInstantRange.get(), c.magmaStopsFreezing.get(), c.saltMeltSnowLayers.get(),
-					c.sluggishMeltFactor.get(), c.hotMeltTickInterval.get(), c.endContactOnly.get(), c.endNoFire.get());
+					c.sluggishMeltFactor.get(), c.hotMeltTickInterval.get(), c.endContactOnly.get(), c.endNoFire.get(),
+					c.saltSourceSnowLayerOdds.get().stream().mapToInt(Integer::intValue).toArray());
+		}
+
+		/** Snow layers one melt by a salt source removes, rolled by saltSourceSnowLayerOdds (ruling R18). */
+		int saltSourceLayers(RandomSource random) {
+			return rollLayers(saltSourceOdds, random);
 		}
 	}
 
 	private static volatile Values cfg = Values.UNLOADED;
+
+	/** Weights for 1, 2, 3, ... layers: the layer count rolled; 1 when the weights are empty or all 0. */
+	static int rollLayers(int[] weights, RandomSource random) {
+		int total = 0;
+		for (int w : weights) total += Math.max(0, w);
+		if (total <= 0) return 1;
+		int r = random.nextInt(total);
+		for (int i = 0; i < weights.length; i++) {
+			r -= Math.max(0, weights[i]);
+			if (r < 0) return i + 1;
+		}
+		return 1;
+	}
 
 	/**
 	 * Told when a salt source melts a target by a tick (plan_post_scratch_1115 B3), just before the target changes:
@@ -589,7 +608,8 @@ public final class Melting {
 					// the listener first: it may drop a salt layer resting on the target, which must not lose its
 					// support (and pop as an item) before the vanish roll
 					if (!heatOk) afterMelt(level, pos, state, random);
-					meltTo(level, at, s, heatOk ? meltedState(s, level, slowT) : saltedState(s, level, 1));
+					meltTo(level, at, s, heatOk ? meltedState(s, level, slowT)
+							: saltedState(s, level, c.saltSourceLayers(random)));
 				}
 			}
 		}
@@ -691,7 +711,7 @@ public final class Melting {
 	private static void meltBy(ServerLevel level, BlockPos pos, BlockState state, int f, Hit hit, RandomSource random) {
 		if (hit.kind == BY_SALT) {
 			afterMelt(level, hit.pos, hit.state, random); // before the melt, see sourceTick
-			meltTo(level, pos, state, saltedState(state, level, 1));
+			meltTo(level, pos, state, saltedState(state, level, cfg.saltSourceLayers(random)));
 		} else if (hit.kind == BY_MAGMA_INSTANT) {
 			meltTo(level, pos, state, Blocks.AIR.defaultBlockState());
 		} else {

@@ -106,5 +106,14 @@
       "framedblocks",
       "supplementaries"
     ]
+  },
+  "creativecompat:snowy_name": {
+    "entrypoints": {
+      "client": "com.SaintAlfonzo.creativecompat.compat.WthitSnowy"
+    },
+    "side": "client",
+    "required": [
+      "snowrealmagic"
+    ]
   }
 }

@@ -43,7 +43,8 @@ public class MeltingTest {
 		check(m.meltProducts.get().size() == 22, "meltProducts: 22 frozen decor rows (E1)");
 		check(m.magmaInstantRange.get() == 2, "magmaInstantRange default 2");
 		check(m.magmaStopsFreezing.get(), "magmaStopsFreezing default true");
-		check(m.saltMeltSnowLayers.get() == 3, "saltMeltSnowLayers default 3");
+		check(m.saltMeltSnowLayers.get() == 4, "saltMeltSnowLayers default 4 (snow_real_magic.md R18)");
+		check(m.saltSourceSnowLayerOdds.get().equals(List.of(55, 35, 10)), "saltSourceSnowLayerOdds default 55, 35, 10 (R18)");
 		check(m.extraRandomTickBlocks.get().containsAll(List.of("minecraft:snow_block", "minecraft:powder_snow",
 						"architects_palette:coarse_snow", "architects_palette:molten_nether_bricks"))
 				&& !m.extraRandomTickBlocks.get().contains("minecraft:packed_ice"),
@@ -63,6 +64,12 @@ public class MeltingTest {
 		}
 		check(lo >= 150 && hi <= 250 && hi > lo, "delay for 200 within 150..250 (" + lo + ".." + hi + ")");
 		check(Melting.scheduleDelay(1, r) >= 1, "delay for 1 at least 1");
+
+		int[] counts = new int[4];
+		for (int i = 0; i < 20000; i++) counts[Melting.rollLayers(new int[]{55, 35, 10}, r)]++;
+		check(counts[0] == 0 && Math.abs(counts[1] - 11000) < 500 && Math.abs(counts[2] - 7000) < 500
+				&& Math.abs(counts[3] - 2000) < 300, "salt source odds 55/35/10 (" + counts[1] + "/" + counts[2] + "/" + counts[3] + ")");
+		check(Melting.rollLayers(new int[0], r) == 1 && Melting.rollLayers(new int[]{0, 0}, r) == 1, "empty odds -> 1 layer");
 
 		SharedConstants.tryDetectVersion();
 		Bootstrap.bootStrap();
