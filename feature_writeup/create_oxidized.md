@@ -54,7 +54,7 @@ blocks in the tag `createoxidized:oxidizable_create_blocks` actually age; the ot
 - **Aging**: random ticks, vanilla's chance and neighbor rule (`WeatheringCopper` math copied: 4-block Manhattan
   scan, a younger neighbor blocks aging, vanilla copper blocks count as neighbors), scaled by `speedFactor`.
 - **Waxing**: honeycomb on the block (consumed). **Scraping**: any `AxeItem` removes wax, else steps one stage back
-  (durability 1). Waxed Up's Copper Coating and Oxidiser sprays are supported when that mod is present.
+  (durability 1). Waxed Up's copper coating and oxidizer sprays (`waxedup:copper_coating`, `waxedup:oxidiser`) are supported when that mod is present.
 - **Lightning**: a strike on a lightning rod or copper resets the anchor Create block to unaffected and walks 3 to 5
   random paths of 1 to 8 steps, cleaning one stage per step (vanilla rod behavior).
 - **Items**: broken blocks drop with NBT `CreateOxidizedStage` / `CreateOxidizedWaxed` and a custom name ("Waxed
