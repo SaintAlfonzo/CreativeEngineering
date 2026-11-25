@@ -535,10 +535,81 @@ look hand: right-click the boat (xdotool click at the window centre), hold W unt
 @commands boot; dropall End (y 140) and overworld (y 200); judge `same`; the End living-entity check of SQ-CGE-06
 @pass boots with no `LowGravity` or NoClassDefFoundError line; all 9 types at vanilla speed in both dimensions; zombie in the End still carries the Low Gravity Biome modifier only inside `gravityDimensions`
 @fails Common must not reference `creativecompat.gravity.LowGravity`; `GravityDimensions` in `perf/`
-@draft modset `cc_only full` minus Compat
+@absent forge:entity_gravity (Forge attribute; the registry dump lists no attributes of Forge)
+@modset cc_only full
+# r1124gate (2026-11-24, runner-4): cc_only full = Common + Create Gravity and the other tweaked mods, no Compat (the
+# manifest forbids creativecompat-*). Drops as SQ-CGE-15 judged `same`; living entities as SQ-CGE-06 (0.01599 = 0.08 x 0.2
+# with Create Gravity's End factor -0.8), then gravityDimensions set to the overworld only: the End zombie back to 0.08.
+bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException|NoClassDefFoundError
+bootreject LowGravity|creativecompat\.gravity
+bootexpect Done \(
+shell ls mods | grep -iE "^(creativecommon|creativecompat|create_gravity|create-)"; ! ls mods | grep -qi "^creativecompat-"
+> difficulty normal
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+sleep 5
+> zgv dropall the_end 0 140 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+reject \[zgv\] error
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld same
+> execute in minecraft:the_end run forceload add 0 0
+> execute unless entity cge17 run pbot spawn cge17 0 75 0 minecraft:the_end survival
+sleep 3
+> execute in minecraft:the_end run summon minecraft:zombie 0 75 0 {NoAI:1b,PersistenceRequired:1b,Tags:["cge17"]}
+sleep 6
+> execute in minecraft:the_end run attribute @e[type=zombie,tag=cge17,limit=1] forge:entity_gravity get
+> execute in minecraft:the_end run attribute cge17 forge:entity_gravity get
+count Entity Gravity for entity .* is 0\.01599 >= 2
+> kill @e[tag=cge17]
+> pbot remove cge17
+edit cp config/creativecommon-common.toml config/creativecommon-common.toml.cge17bak && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml perf gravityDimensions '["minecraft:overworld"]'
+restart
+shell grep -nE "^[[:space:]]*gravityDimensions = " config/creativecommon-common.toml
+> execute in minecraft:the_end run forceload add 0 0
+> execute unless entity cge17b run pbot spawn cge17b 0 75 0 minecraft:the_end survival
+sleep 3
+> execute in minecraft:the_end run summon minecraft:zombie 0 75 0 {NoAI:1b,PersistenceRequired:1b,Tags:["cge17b"]}
+sleep 6
+> execute in minecraft:the_end run attribute @e[type=zombie,tag=cge17b,limit=1] forge:entity_gravity get
+> execute in minecraft:the_end run attribute cge17b forge:entity_gravity get
+count Entity Gravity for entity .* is 0\.08\b >= 2
+> kill @e[tag=cge17b]
+> pbot remove cge17b
+shell cp config/creativecommon-common.toml.cge17bak config/creativecommon-common.toml
+look shell.txt: every type the same in the End and the overworld (no Compat, no item/block low gravity); zombie and bot 0.01599 in the End with the End listed, 0.08 with only the overworld listed
 ## SQ-CGE-18 | Compat with Create Gravity: a dropped item falls slowly in the End; dedicated server starts
 @group A (full pack)
 @commands as SQ-CGE-02 (dropall End and overworld) and the SQ-CGE boot on a dedicated server
 @pass End items about 0.2 of vanilla speed, overworld vanilla; the dedicated server reaches `Done (` with no `CreateGravityServerStartMixin` error; `gravityDimensions` still gates it (set to overworld only: End items fall at vanilla speed)
 @fails `LowGravity.dimensionAllowed` asking Common's `GravityDimensions`; `CreateGravityServerStartMixin` target
-@draft reuse SQ-CGE-02 steps; the first runner writes them
+@modset none
+# r1124gate (2026-11-24, runner-4): SQ-CGE-02 with dropall (all 9 types, judged `low`) on the full pack's dedicated
+# server, then gravityDimensions = the overworld only (restart): End drops judged `same` as the overworld.
+bootexpect Done \(
+bootreject (?i)^(?=.*CreateGravityServerStartMixin).*(apply failed|InvalidInjection|exception|error|could not)
+bootreject Mixin apply failed.*(LowGravity|CreateGravity)
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+sleep 5
+> zgv dropall the_end 0 140 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+reject \[zgv\] error
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld low
+edit cp config/creativecommon-common.toml config/creativecommon-common.toml.cge18bak && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-common.toml perf gravityDimensions '["minecraft:overworld"]'
+restart
+shell grep -nE "^[[:space:]]*gravityDimensions = " config/creativecommon-common.toml
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+sleep 5
+> zgv dropall the_end 0 140 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv dropall overworld 0 200 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+reject \[zgv\] error
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld same
+shell cp config/creativecommon-common.toml.cge18bak config/creativecommon-common.toml
+look shell.txt: first judge every type about 0.2 in the End (End 4.9 vs 24.6 at t=40), second judge the same in both dimensions with only the overworld listed

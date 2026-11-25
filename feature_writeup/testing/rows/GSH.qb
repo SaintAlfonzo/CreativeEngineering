@@ -159,16 +159,70 @@ look dirty plus clear shards outnumber the colored ones
 @commands boot Compat + Quark without Creative Loot; break a blue stained glass pane and a Create framed glass block with a bot (`/cdevtest loot ... rolls=20`)
 @pass blue shards from the pane, clear shards from the framed glass; latest.log has no `Missing` line for `creativecompat:glass_shards` and no `[GlmMerge]` line
 @fails Forge list `data/forge/loot_modifiers/global_loot_modifiers.json` in Compat's jar (replace false); serializer registration in `CreativeCompat.java`
-@draft same steps as SQ-GSH-08
+@modset cpp_chain compat +Quark-3.4-* +AutoRegLib-* +create-1.19.2-*
+# r1124gate (2026-11-24, runner-4): Common + Compat (+ Calendar, Serene Seasons) plus Quark and Create, no Creative Loot;
+# drop ranges as SQ-GSH-03 / -04 (1 to 2 per pane, 1 to 3 per glass block, rolls 20). Group B, y 200 over the world.
+shell ls mods | grep -iE "^(creativeloot|creativecompat|creativecommon|Quark|create-)" ; ! ls mods | grep -qi "^creativeloot-"
+bootreject \[GlmMerge\]
+bootreject ^(?=.*([Mm]issing|[Uu]nknown|[Ff]ailed|ERROR|[Ee]xception)).*creativecompat:glass_shards
+> forceload add 5344 5200 5359 5215
+sleep 3
+> fill 5344 199 5200 5359 199 5215 minecraft:stone
+> fill 5344 200 5200 5359 203 5215 minecraft:air
+> setblock 5351 200 5201 minecraft:blue_stained_glass_pane
+> setblock 5347 200 5201 create:framed_glass
+> cdevtest loot 5351 200 5201 rolls=20
+expect verb=loot .*rolls=20 drops=\S*quark:blue_shard:(2\d|3\d|40)\b
+> cdevtest loot 5347 200 5201 rolls=20
+expect verb=loot .*rolls=20 drops=\S*(quark:clear_shard:([2-5]\d|60)\b|create:framed_glass:20\b)
+reject \[cdevtest\] .*done=0
+> forceload remove 5344 5200 5359 5215
+look blue shards 20 to 40 from the pane; clear shards 20 to 60 from framed glass (or framed glass 20 times if it drops itself, as SQ-GSH-03); no GlmMerge line
 ## SQ-GSH-11 | Compat with Creative Loot: one merged entry, shards drop once
 @group B (full pack)
 @commands boot the full pack; `[GlmMerge]` line; break a blue pane
 @pass `[GlmMerge]` counts the Compat fragment and no `skipped: creativecompat:glass_shards`; one stack of shards per pane, not two
 @fails `data/creativecompat/glm_entries.json` (fragment); GlmMerge duplicate handling
-@draft as SQ-GSH-01 with the new id
+@modset none
+# r1124gate (2026-11-24, runner-4): SQ-GSH-01's boot checks plus one pane: a doubled entry would give 40 to 80 shards.
+bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: \d+ files
+bootreject \[GlmMerge\] skipped:.*creativecompat:glass_shards
+bootreject \[GlmMerge\] could not read
+bootreject ^(?=.*([Mm]issing|[Uu]nknown)).*(creativecompat|creativecommon):glass_shards
+shell unzip -p mods/creativecompat-*.jar data/creativecompat/glm_entries.json | grep -q "creativecompat:glass_shards"
+shell unzip -p mods/creativecompat-*.jar data/forge/loot_modifiers/global_loot_modifiers.json | grep -q "creativecompat:glass_shards"
+> forceload add 5344 5200 5359 5215
+sleep 3
+> fill 5344 199 5200 5359 199 5215 minecraft:stone
+> fill 5344 200 5200 5359 203 5215 minecraft:air
+> setblock 5351 200 5204 minecraft:blue_stained_glass_pane
+> cdevtest loot 5351 200 5204 rolls=20
+expect verb=loot .*rolls=20 drops=quark:blue_shard:(2\d|3\d|40)(\s|$)
+reject \[cdevtest\] .*done=0
+> forceload remove 5344 5200 5359 5215
+look the GlmMerge line is there with no glass_shards skip; the pane gave one stack of 20 to 40 blue shards (not 40 to 80)
 ## SQ-GSH-12 | Common alone (no Compat): no glass_shards modifier, no warning
 @group B (Common, no Compat)
 @commands boot Common without Compat; grep latest.log for `glass_shards`
 @pass no `glass_shards` line, no loot modifier error; a glass pane drops what Quark gives
 @fails Common still shipping a Forge list entry or fragment (it must not)
-@draft jar set: `cc_only` minus Compat
+@modset cc_only full
+# r1124gate (2026-11-24, runner-4): cc_only full has no Compat (its manifest forbids creativecompat-*) and keeps Quark;
+# without the modifier a vanilla pane drops nothing (empty table without Silk Touch) and glass gives Quark's 2 to 4.
+shell ls mods | grep -iE "^(creativecompat|creativeloot|creativecommon|Quark)" ; ! ls mods | grep -qiE "^creative(compat|loot)-"
+shell ! unzip -l mods/creativecommon-*.jar | grep -E "glass_shards|glm_entries|data/forge/loot_modifiers"
+bootreject (creativecompat|creativecommon):glass_shards|GlassShards
+bootreject (?i)^(?=.*loot.?modifier).*(error|exception|failed|could not)
+> forceload add 5344 5200 5359 5215
+sleep 3
+> fill 5344 199 5200 5359 199 5215 minecraft:stone
+> fill 5344 200 5200 5359 203 5215 minecraft:air
+> setblock 5351 200 5207 minecraft:blue_stained_glass_pane
+> setblock 5345 200 5207 minecraft:glass
+> cdevtest loot 5351 200 5207 rolls=20
+> cdevtest loot 5345 200 5207 rolls=20
+expect verb=loot state="?minecraft:blue_stained_glass_pane\b.*rolls=20 drops=-
+expect verb=loot state="?minecraft:glass\b.*rolls=20 drops=quark:clear_shard:([4-7]\d|80)(\s|$)
+reject \[cdevtest\] .*done=0
+> forceload remove 5344 5200 5359 5215
+look no glass_shards line in the boot log; the pane dropped nothing, glass only Quark's 40 to 80 clear shards

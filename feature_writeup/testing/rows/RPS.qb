@@ -20,6 +20,16 @@
 @@text (CQ) need a fresh survival world with that jar set. The existing Raspberry Pie rows (SQ-RPI, CQ-RPI in
 @@text [RP.qb](RP.qb) section 2) are rerun against the final jar after these pass (plan section 6, TODO `food-tuning #46`).
 @@text
+@@text Client rows (CQ-RPS-02, -03, -05, -09, -14, -15 and section 9's CQ-RPS-12, steps r1124gate) run as `qrun.py pair`: the
+@@text capture driver needs Creative Devtools and Creative Common (so KubeJS, Rhino, Architectury) on the client, and a joined
+@@text client must carry the server's mod list, so each row's `@modset` adds those five jars to `rps only` (empty config,
+@@text probe-only kubejs; build OUT with `qmodset.py build OUT LEVEL B SPEC`) and the client drops every other jar:
+@@text `mapfile -t J < <(cd mods && ls *.jar | grep -vE '^(solRaspberryPie|creativecommon|creativedevtools|kubejs-forge|rhino-forge|architectury)-' | sed 's/[][*?]/?/g'); D=(); for j in "${J[@]}"; do D+=(--drop "$j"); done`
+@@text then `qrun.py pair OUT GAME feature_writeup/testing/rows/RPS.qb RES --rows IDS "${D[@]}" --config config/solraspberrypie-client.toml:dietLog:extraWidth=-1`
+@@text (`?` for the glob characters some jar names hold; the extraWidth value is for CQ-RPS-15, corrected to 48 at load).
+@@text Commands go to the server console with `@a` (one player); `cli> solrp diversity get @s` replies in the client's chat
+@@text (`[CHAT]` lines) after `op @a`. The client keeps the pack's client tomls (icon lists fall back to their vanilla entries).
+@@text
 @@table
 ## SQ-RPS-01 | isolated boot: ladder loads clean, nested mods found
 @group B
@@ -37,19 +47,408 @@ look the `Diet ladder:` line appears once in the whole log (grep -c); the line r
 @commands Client with `rps only`, new survival world. Inventory, `/recipe`-free: open the crafting table and JEI-free recipe book; craft book + bread, book + apple juice or any drink, book + carrot (RPS-02)
 @pass the book is named Diet Log, the second book Food Dictionary (not Apple Pie's names); Apple Pie's own book recipe and its potato recipe are absent; book + food gives a Diet Log, book + drink a Liquid Diet Log
 @fails Raspberry Pie `assets/solraspberrypie/lang/en_us.json` and `client/LangOverrides.java` (names, P4: the lang file holds `solraspberrypie.override.item.solapplepie.food_book` "Diet Log", `solraspberrypie.override.item.solcarrot.food_book` "Food Dictionary", `solraspberrypie.override.key.solapplepie.open_food_book` "Open Diet Log"; `client.ClientLanguageMixin` copies each `solraspberrypie.override.<key>` onto `<key>` after all lang files merge, so Controls also shows "Open Diet Log"); `RecipeManagerMixin` (recipe removal must run without KubeJS)
-@draft client steps: crafting-table slots, names read by the capture driver
+@reviewed 2026-11-24
+@modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+# steps written r1124gate 2026-11-24 (runner-4): pair run (section 1 text); crafts in the survival inventory's 2x2 grid
+srv> op @a
+srv> gamemode survival @a
+srv> difficulty easy
+srv> time set noon
+srv> solrp reset @a
+srv> clear @a
+srv> effect clear @a
+sleep 2
+srv> recipe give @a solapplepie:food_book
+srv:expect Unknown recipe: solapplepie:food_book
+do {"tooltip_text": "solapplepie:food_book", "expect": "^tooltip_text solapplepie:food_book 0: Diet Log$"}
+do {"tooltip_text": "solcarrot:food_book", "expect": "^tooltip_text solcarrot:food_book 0: Food Dictionary$"}
+do {"tooltip_text": "solapplepie:food_book", "reject": "Food Book"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:bread
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solapplepie:food_book"}
+do {"tooltip_text": {"slot": 0}, "expect": "Diet Log"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:potato
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solapplepie:food_book"}
+do {"tooltip_text": {"slot": 0}, "expect": "Diet Log"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:milk_bucket
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solraspberrypie:liquid_diet_log"}
+do {"tooltip_text": {"slot": 0}, "expect": "Liquid Diet Log"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:carrot
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solcarrot:food_book"}
+do {"tooltip_text": {"slot": 0}, "expect": "Food Dictionary"}
+do {"screen": "close"}
+srv:reject Unknown or incomplete command|Incorrect argument
+look book + potato gives the Diet Log through Raspberry Pie's edible-food recipe (potato is a food), not Apple Pie's own recipe: the `recipe give` reply shows that recipe id is gone; Controls lists "Open Diet Log" (not read here)
 ## CQ-RPS-03 | isolated client: no diversity table, Apple Pie food values stand, tooltips and books agree
 @group client
 @commands Client with `rps only`, no diversity file on the classpath. Eat or inspect bread, apple, golden apple, cake; open the Diet Log (RPS-03)
 @pass no table loaded (one INFO line `No diversity table (solraspberrypie/diversity/*.json) in any mod; Apple Pie's values apply`, no warning); each food's tooltip diversity value equals Apple Pie's own value for it; the Diet Log shows the same value after eating
 @fails `Diversity` loader (P3): no-file case must not override; the tooltip mixin reading a different source than the book
-@draft client steps and the reference values (read Apple Pie's own tooltip values from the nested jar)
+@reviewed 2026-11-24
+@modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+# steps written r1124gate 2026-11-24 (runner-4): pair run. Reference values = Apple Pie 2.2.0's own defaults (nested jar,
+# SOLSweetPotatoConfig$Server complexityUnparsed): cooked_porkchop 2, cooked_beef 2, golden_carrot 2, golden_apple 4,
+# enchanted_golden_apple 10, every other food defaultContribution 1.0; the server's config is empty, so these apply.
+srv:bootexpect No usable diversity table \(solraspberrypie/diversity/\*\.json\) in any mod; Apple Pie's values apply
+srv:bootreject Diversity table: [0-9]+ values|Diversity table .* has the wrong shape
+srv> op @a
+srv> gamemode survival @a
+srv> difficulty easy
+srv> time set noon
+srv> solrp reset @a
+srv> clear @a
+srv> effect clear @a
+sleep 2
+do {"tooltip_text": "minecraft:bread", "expect": "Diversity: 1\\.00$"}
+do {"tooltip_text": "minecraft:apple", "expect": "Diversity: 1\\.00$"}
+do {"tooltip_text": "minecraft:golden_apple", "expect": "Diversity: 4\\.00$"}
+do {"tooltip_text": "minecraft:cooked_beef", "expect": "Diversity: 2\\.00$"}
+do {"tooltip_text": "minecraft:golden_carrot", "expect": "Diversity: 2\\.00$"}
+do {"tooltip_text": "minecraft:enchanted_golden_apple", "expect": "Diversity: 10\\.00$"}
+do {"tooltip_text": "minecraft:cake"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:bread
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:golden_apple
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+do {"tooltip_text": "minecraft:bread", "expect": "Diversity: 1\\.00 \\(contributes [0-9.]+\\)"}
+do {"tooltip_text": "minecraft:golden_apple", "expect": "Diversity: 4\\.00 \\(contributes [0-9.]+\\)"}
+cli> solrp diversity get @s
+sleep 2
+cli:expect food diversity [0-9.]+, highest
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot diet_log_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot diet_log_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot diet_log_p3
+do {"screen": "close"}
+look the Diet Log diversity page shows the same total as `solrp diversity get` (bread 1.00 plus golden apple 4.00 at Apple Pie's decay weights) and the meal list shows bread and golden apple; cake has no item tooltip value (a placed block; Apple Pie counts its slices when eaten), so the cake read only shows its lines
 ## CQ-RPS-05 | Apple Pie defaults: eat, respec, drop, die; ageing-out and gate
 @group client
 @commands Client with `rps only` (Apple Pie settings at their defaults: `queueSize` 32, `minFoodsToActivate` 0). Eat a run of different foods past 32 entries, respec at the ladder screen, drop a food, die (RPS-05)
 @pass eating adds diversity; `minFoodsToActivate` 0 opens the gate at the first meal; a respec removes the oldest window foods from Apple Pie's memory and diversity falls by exactly what they gave (6.1, raspberry-pie-publish #26); death removes the whole window (diversity 0, `resetOnDeath` false); start log has no boxed `APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH` warning and exactly one INFO line from `Raspberry Pie`: `Apple Pie settings: Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off (its ladder replaces it)`
 @fails ageing-out cost and gate in `raspberry_pie.md` 6.1 and the gate code (P5); `logic/ApplePieSettings.java` (P5)
-@draft client steps: eat loop with `/give`, respec command, `/kill`
+@reviewed 2026-11-24
+@modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+# steps written r1124gate 2026-11-24 (runner-4): pair run; server config empty, so Apple Pie runs on its defaults
+# (queueSize 32, minFoodsToActivate 0, resetOnDeath false); 33 different vanilla foods, one past the window
+srv:bootreject APPLE PIE SETTINGS RASPBERRY PIE CANNOT WORK WITH
+srv:bootexpect Apple Pie settings: Apple Pie's own benefit list is not empty; Raspberry Pie keeps it off \(its ladder replaces it\)
+srv:shell grep -c "Apple Pie settings:" logs/latest.log; test "$(grep -c "Apple Pie settings:" logs/latest.log)" = 1
+srv> op @a
+srv> gamemode survival @a
+srv> difficulty easy
+srv> time set noon
+srv> solrp reset @a
+srv> clear @a
+srv> effect clear @a
+sleep 2
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:bread
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+cli> solrp diversity get @s
+sleep 2
+cli:capture G1 food diversity ([0-9.]+), highest
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+shot gate_after_first_meal
+do {"screen": "close"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:apple
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:baked_potato
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:beef
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:beetroot
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:beetroot_soup
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:bread
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:carrot
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:chicken
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cod
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_beef
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_chicken
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_cod
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_mutton
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_porkchop
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_rabbit
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_salmon
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cookie
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:dried_kelp
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:golden_carrot
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:honey_bottle
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:melon_slice
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:mushroom_stew
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:mutton
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:porkchop
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:potato
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:pumpkin_pie
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:rabbit
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:rabbit_stew
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:salmon
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:sweet_berries
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:glow_berries
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:tropical_fish
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:golden_apple
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+cli> solrp diversity get @s
+sleep 2
+cli:capture D1 food diversity ([0-9.]+), highest
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot after33_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot after33_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot after33_p3
+do {"screen": "close"}
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+do {"click_widget": {"class": "Button", "n": 0}}
+do {"wait": 20}
+do {"click_widget": {"class": "TipButton", "n": 0}}
+do {"wait": 5}
+do {"click_widget": {"class": "Button", "n": 0}}
+do {"wait": 20}
+shot respec_confirm
+do {"click_widget": "Confirm"}
+do {"wait": 20}
+do {"screen": "close"}
+cli> solrp diversity get @s
+sleep 2
+cli:capture D2 food diversity ([0-9.]+), highest
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot after_respec_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot after_respec_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot after_respec_p3
+do {"screen": "close"}
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": {"class": "TipButton", "n": 1}}
+do {"wait": 20}
+shot drop_confirm
+do {"click_widget": "Confirm"}
+do {"wait": 20}
+do {"screen": "close"}
+cli> solrp diversity get @s
+sleep 2
+cli:capture D3 food diversity ([0-9.]+), highest
+srv> kill @a
+do {"wait": "screen:DeathScreen"}
+do {"click_widget": "Respawn"}
+do {"wait": 60}
+cli> solrp diversity get @s
+sleep 2
+cli:expect food diversity 0\.00, highest
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot after_death_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot after_death_p2
+do {"screen": "close"}
+look G1 above 0 and the gate shot shows no "Eat N more foods" line (gate open at the first meal); D1 from 33 meals (the oldest bread out of the 32-meal window); D2 = D1 minus what the 5 oldest window foods gave (respec_confirm lists them; after_respec pages no longer show them); D3 below D2 by the drop cost (drop_confirm); after death diversity 0.00 and the Diet Log pages empty
 ## SQ-RPS-06 | Alex's Mobs present: Fleet-Footed mixin applies
 @group B
 @modset rps alex
@@ -65,7 +464,132 @@ look no warning about EffectFleetFooted anywhere in latest.log; the mixin is lis
 @commands Fresh survival world with the rps only set; eat varied vanilla foods to diversity 30 and above; open the effect screen at each slot; open the Diet Log Milestones and Overview pages
 @pass the picker offers Regeneration I from 5 (until the flat Regeneration at 10), Jump Boost I, Luck I (until 17.5), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength never appear in the picker; no `V14` warning in the log; Diet Log icons are vanilla (awkward potion, diamond, item frame) and the diversity icon fallback with nothing eaten is a vanilla seed or rotten flesh / spider eye
 @fails `default_ladder.json`, `LadderLoader` V14, `RpConfig` client defaults
-@draft written with the build 2026-11-22
+@reviewed 2026-11-24
+@modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+# steps written r1124gate 2026-11-24 (runner-4): pair run; diversity raised with `solrp diversity set` (no vanilla diet
+# reaches 30 within Apple Pie's 32-meal window), a picker shot after each of the 10 unlocks (5, 8.8, 12.8, 17.1, 21.5,
+# 26.3, 31.4, 36.9, 43, 50); the Choose button is the lowest empty slot's
+srv:bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
+srv:bootreject \bV14\b
+srv> op @a
+srv> gamemode survival @a
+srv> difficulty easy
+srv> time set noon
+srv> solrp reset @a
+srv> clear @a
+srv> effect clear @a
+sleep 2
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot nothing_eaten_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot nothing_eaten_p2
+do {"screen": "close"}
+srv> solrp diversity set @a 5
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_5
+do {"screen": "close"}
+srv> solrp diversity set @a 9
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_9
+do {"screen": "close"}
+srv> solrp diversity set @a 13
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_13
+do {"screen": "close"}
+srv> solrp diversity set @a 17.5
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_17_5
+do {"screen": "close"}
+srv> solrp diversity set @a 22
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_22
+do {"screen": "close"}
+srv> solrp diversity set @a 27
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_27
+do {"screen": "close"}
+srv> solrp diversity set @a 32
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_32
+do {"screen": "close"}
+srv> solrp diversity set @a 37
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_37
+do {"screen": "close"}
+srv> solrp diversity set @a 43
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_43
+do {"screen": "close"}
+srv> solrp diversity set @a 50
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+shot picker_50
+do {"screen": "close"}
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot div50_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot div50_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot div50_p3
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot div50_p4
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot div50_p5
+do {"screen": "close"}
+cli:reject \bV14\b
+look pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10), Jump Boost I, Luck I (gone from 17.5 up), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength in no picker shot; nothing_eaten pages: the diversity icon is a vanilla seed (or rotten flesh / spider eye); div50 pages (Overview, Diet Ladder, Milestones): unlock icon an awkward potion, permanent-buff icon a diamond, slot icon an item frame
 
 
 @@section 2
@@ -217,12 +741,6 @@ bootexpect Done \(
 bootexpect Diet ladder: 44 rungs, 4 slots, 8 pool effects
 bootreject Parsing error loading recipe solraspberrypie:diet_log|Unknown ingredient type|solraspberrypie:edible
 look the crafting checks are in CQ-RPS-12 (a client is needed to craft without KubeJS or the dev tools)
-## CQ-RPS-12 | isolated client: Diet Log from any food; a dedicated server's table reaches the client (PR-RP-12, PR-RP-17)
-@group client
-@commands Dedicated server with `rps only` whose Raspberry Pie copy carries an extra table (`rps_fixture.py table "mods/solRaspberryPie-*.jar" rps12 '{"values": {"minecraft:bread": 7.25}}'`); the client runs the plain jar (no such table). Join; hover bread; craft book + rotten flesh, book + cooked cod, book + golden carrot, book + carrot, book + potion; open the Liquid Diet Log after drinking two potions, eat a food, drink a third (RPS-12)
-@pass client log: one `Diversity table from the server: 1 values, 0 family members; 0 ids unknown to this client`; bread's tooltip diversity value is 7.25 (the server's), not Apple Pie's own; book + rotten flesh, cooked cod and golden carrot each give a Diet Log; book + carrot stays the Food Dictionary's recipe and book + potion gives the Liquid Diet Log; the Liquid Diet Log lists the drinks newest first, still after the food (the state sync without a drink list keeps the client's list) and with the third drink on top
-@fails `net/S2CDiversity.java`, `logic/Diversity.java` (`load` must not read the client's jars without an integrated server; `applyRemote`), `ServerEvents.datapackSync`; `recipe/EdibleIngredient.java`; `S2CState.hasDrinks` and `ClientState.setState` (drink list kept)
-@draft client steps: dedicated server plus a client join with the capture driver; the fixture goes in the server's jar copy only
 
 @@section 7
 @@title SQ-RPS-13 Raspberry Pie in the pack: Diet Log excludes drinks and non-foods, 2026-11-23 ([raspberry_pie.md](../raspberry_pie.md) section 12.15, TODO `raspberry-pie-publish #10`, owner ruling R5)
@@ -264,10 +782,369 @@ reject diet_log\.js.*(Error|error)
 @commands Client with `rps only`, new survival world, operator. `/solrp diversity set @s 30`; fill slots 1 to 3 (effect screen, P); drop slot 3, confirm; `/solrp diversity get @s`. Then `/solrp reset @s`, eat 12 different vanilla foods, open the Diet Log Overview; change slot 1's effect, confirm; open the Diet Log again; `/kill @s`, respawn, open the Diet Log (RPS-14)
 @pass after the drop slots 1 and 2 stay active with their effects, slot 3 is empty and grayed; diversity reads 27.49 (just under 27.5), not 0; the confirm panel listed only slot 3 and its effect as lost; after the change the 5 oldest foods are gone from the Last meals grid and the Diet Log history, diversity fell by what they gave; after death the grid and history are empty and diversity is 0; eating one of the aged-out foods again counts it in full
 @fails `logic/SlotActions.planDrop` and `lowered` (Adjustment entry), `FoodWindow.ageOut`, `ServerEvents.respawn`; `client/DietLogPages.shownMeals`
-@draft client steps: effect screen clicks and the Diet Log pages through the capture driver
+@reviewed 2026-11-24
+@modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+# steps written r1124gate 2026-11-24 (runner-4): pair run; slots 1 to 3 filled with the first picker effect each; the
+# picker buttons have no label, so they are clicked by class and index (Button n 0 in picker mode, TipButton 2k = Change
+# and 2k+1 = Drop of filled slot k+1)
+srv> op @a
+srv> gamemode survival @a
+srv> difficulty easy
+srv> time set noon
+srv> solrp reset @a
+srv> clear @a
+srv> effect clear @a
+sleep 2
+srv> solrp diversity set @a 30
+sleep 2
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+do {"click_widget": {"class": "Button", "n": 0}}
+do {"wait": 20}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+do {"click_widget": {"class": "Button", "n": 0}}
+do {"wait": 20}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+do {"click_widget": {"class": "Button", "n": 0}}
+do {"wait": 20}
+shot three_slots
+do {"click_widget": {"class": "TipButton", "n": 5}}
+do {"wait": 20}
+shot drop3_confirm
+do {"click_widget": "Confirm"}
+do {"wait": 20}
+shot after_drop3
+do {"screen": "close"}
+cli> solrp diversity get @s
+sleep 2
+cli:expect food diversity 27\.49, highest
+srv> solrp reset @a
+sleep 2
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:apple
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:baked_potato
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:beef
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:beetroot
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:beetroot_soup
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:bread
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:carrot
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:chicken
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cod
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_beef
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_chicken
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_cod
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot twelve_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot twelve_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot twelve_p3
+do {"screen": "close"}
+cli> solrp diversity get @s
+sleep 2
+cli:capture E1 food diversity ([0-9.]+), highest
+do {"press": "key.solraspberrypie.open"}
+do {"wait": "screen:EffectScreen"}
+do {"click_widget": "Choose"}
+do {"wait": 5}
+do {"click_widget": {"class": "Button", "n": 0}}
+do {"wait": 20}
+do {"click_widget": {"class": "TipButton", "n": 0}}
+do {"wait": 5}
+do {"click_widget": {"class": "Button", "n": 0}}
+do {"wait": 20}
+shot change1_confirm
+do {"click_widget": "Confirm"}
+do {"wait": 20}
+do {"screen": "close"}
+cli> solrp diversity get @s
+sleep 2
+cli:capture E2 food diversity ([0-9.]+), highest
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot changed_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot changed_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot changed_p3
+do {"screen": "close"}
+srv> kill @a
+do {"wait": "screen:DeathScreen"}
+do {"click_widget": "Respawn"}
+do {"wait": 60}
+cli> solrp diversity get @s
+sleep 2
+cli:expect food diversity 0\.00, highest
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot death_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot death_p2
+do {"screen": "close"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:apple
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+cli> solrp diversity get @s
+sleep 2
+cli:capture E3 food diversity ([0-9.]+), highest
+look after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; drop3_confirm lists only slot 3 and its effect as lost; changed pages: the 5 oldest of the 12 foods gone from the Last meals grid and the history, E1 - E2 = what they gave (change1_confirm); death pages: grid and history empty; E3 = apple's full 1.00 (an aged-out food counts in full again)
 ## CQ-RPS-15 | Food Dictionary Hardest sort; Diet Log width default 48 (#27, #28)
 @group client
 @commands Client with `rps only`, fresh `config/` (jar defaults). Open the Diet Log; read `config/solraspberrypie-client.toml`; set `[foodDictionary] uneatenSort = "HARDEST"`, reopen the Food Dictionary uneaten pages; set `"EASIEST"`, reopen (RPS-15)
 @pass the generated config has `extraWidth = 48` and lists `HARDEST` after `EASIEST` in the uneatenSort comment and allowed values; Hardest lists the uneaten foods from the highest base diversity down (ties: more hunger first), Easiest the reverse order of base diversity; the Diet Log opens at the same about 25% extra width as before
 @fails `RpConfig.UneatenSort`, `client/FoodDictionarySort.uneaten`; `RpConfig` `extraWidth`
-@draft client steps: config edits between screen opens; read the order from the capture driver's page dump
+@reviewed 2026-11-24
+@modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+# steps written r1124gate 2026-11-24 (runner-4): pair run with `--config config/solraspberrypie-client.toml:dietLog:extraWidth=-1`
+# on the client (section 1 text): Forge corrects the out-of-range value to the jar default and rewrites the file with the
+# jar's comments, which stands in for a fresh config (serve copies the pack's config/). Sort changes go through Forge's
+# own config watcher (Raspberry Pie is stamped) while the game runs; each edit waits for its reload line (lint W cfgedit).
+cli:bootexpect dietLog\.extraWidth.*-1.*48
+srv> op @a
+srv> gamemode survival @a
+srv> difficulty easy
+srv> time set noon
+srv> solrp reset @a
+srv> clear @a
+srv> effect clear @a
+sleep 2
+cli:shell grep -nE "extraWidth|HARDEST|EASIEST|uneatenSort =" config/solraspberrypie-client.toml
+cli:shell grep -q "^[[:space:]]*extraWidth = 48" config/solraspberrypie-client.toml
+cli:shell grep -E "Allowed Values: .*EASIEST, HARDEST" config/solraspberrypie-client.toml
+srv> item replace entity @a hotbar.0 with solapplepie:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot diet_log_width
+do {"screen": "close"}
+cli:shell python3 "$INST/tools/scratch_query/qrun.py" toml config/solraspberrypie-client.toml foodDictionary uneatenSort '"HARDEST"'
+cli:waitlog \[creativecommon\] solraspberrypie-client\.toml reloaded 20
+srv> item replace entity @a hotbar.0 with solcarrot:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot hardest_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot hardest_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot hardest_p3
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot hardest_p4
+do {"screen": "close"}
+cli:shell python3 "$INST/tools/scratch_query/qrun.py" toml config/solraspberrypie-client.toml foodDictionary uneatenSort '"EASIEST"'
+cli:waitlog \[creativecommon\] solraspberrypie-client\.toml reloaded 20
+srv> item replace entity @a hotbar.0 with solcarrot:food_book
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:FoodBookScreen"}
+shot easiest_p1
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot easiest_p2
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot easiest_p3
+do {"click_widget": {"class": "PageFlipButton", "n": 1}}
+do {"wait": 5}
+shot easiest_p4
+do {"screen": "close"}
+look nothing eaten, so every food is uneaten: hardest pages start with the enchanted golden apple (10), golden apple (4), then the 2s (cooked beef and porkchop before golden carrot: more hunger first), then the 1.0 foods by hunger; easiest pages the reverse by base diversity; diet_log_width: the Diet Log about 25% wider than the plain book (same as before); the grep shows HARDEST after EASIEST in the comment and the allowed values
+
+@@section 9
+@@title CQ-RPS-12 Raspberry Pie standalone, paired: the server's diversity table reaches the client, 2026-11-24 ([raspberry_pie.md](../raspberry_pie.md) section 13, TODO `raspberry-pie-publish #10`, `#13`)
+@@date 2026-11-24
+@@jars solraspberrypie
+@@sources feature_writeup/raspberry_pie.md development/solRaspberryPie
+@@modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+@@prep run python3 "$INST/tools/scratch_query/rps_fixture.py" table "mods/solRaspberryPie-*.jar" rps12 '{"values": {"minecraft:bread": 7.25}}'
+@@text
+@@text Moved out of section 6 by r1124gate (the fixture is a section `@@prep`). A `qrun.py pair` run like the client rows of
+@@text section 1 (see its text): the server's Raspberry Pie copy carries `rps12.json`, the client runs the plain jar.
+@@text
+@@table
+## CQ-RPS-12 | isolated client: Diet Log from any food; a dedicated server's table reaches the client (PR-RP-12, PR-RP-17)
+@group client
+@commands Dedicated server with `rps only` whose Raspberry Pie copy carries an extra table (`rps_fixture.py table "mods/solRaspberryPie-*.jar" rps12 '{"values": {"minecraft:bread": 7.25}}'`); the client runs the plain jar (no such table). Join; hover bread; craft book + rotten flesh, book + cooked cod, book + golden carrot, book + carrot, book + potion; open the Liquid Diet Log after drinking two potions, eat a food, drink a third (RPS-12)
+@pass client log: one `Diversity table from the server: 1 values, 0 family members; 0 ids unknown to this client`; bread's tooltip diversity value is 7.25 (the server's), not Apple Pie's own; book + rotten flesh, cooked cod and golden carrot each give a Diet Log; book + carrot stays the Food Dictionary's recipe and book + potion gives the Liquid Diet Log; the Liquid Diet Log lists the drinks newest first, still after the food (the state sync without a drink list keeps the client's list) and with the third drink on top
+@fails `net/S2CDiversity.java`, `logic/Diversity.java` (`load` must not read the client's jars without an integrated server; `applyRemote`), `ServerEvents.datapackSync`; `recipe/EdibleIngredient.java`; `S2CState.hasDrinks` and `ClientState.setState` (drink list kept)
+@reviewed 2026-11-24
+# steps written r1124gate 2026-11-24 (runner-4): pair run; the server copy of the Raspberry Pie jar carries rps12.json
+# (section @@prep, by hand for a pair run: `qrun.py prep`), the client the plain jar
+cli:bootexpect Diversity table from the server: 1 values, 0 family members; 0 ids unknown to this client
+cli:shell grep -c "Diversity table from the server" logs/latest.log; test "$(grep -c "Diversity table from the server" logs/latest.log)" = 1
+srv> op @a
+srv> gamemode survival @a
+srv> difficulty easy
+srv> time set noon
+srv> solrp reset @a
+srv> clear @a
+srv> effect clear @a
+sleep 2
+do {"tooltip_text": "minecraft:bread", "expect": "Diversity: 7\\.25$"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:rotten_flesh
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solapplepie:food_book"}
+do {"tooltip_text": {"slot": 0}, "expect": "Diet Log"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:cooked_cod
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solapplepie:food_book"}
+do {"tooltip_text": {"slot": 0}, "expect": "Diet Log"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:golden_carrot
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solapplepie:food_book"}
+do {"tooltip_text": {"slot": 0}, "expect": "Diet Log"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:carrot
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solcarrot:food_book"}
+do {"tooltip_text": {"slot": 0}, "expect": "Food Dictionary"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:book
+srv> item replace entity @a hotbar.1 with minecraft:potion{Potion:"minecraft:water"}
+sleep 1
+do {"screen": "inventory"}
+do {"wait": "screen:InventoryScreen"}
+do {"click_slot": 36}
+do {"click_slot": 1}
+do {"click_slot": 37}
+do {"click_slot": 2}
+do {"wait": 10}
+do {"slot_item": 0, "expect": "solraspberrypie:liquid_diet_log"}
+do {"tooltip_text": {"slot": 0}, "expect": "Liquid Diet Log"}
+do {"screen": "close"}
+srv> clear @a
+srv> item replace entity @a hotbar.0 with minecraft:potion{Potion:"minecraft:water"}
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> item replace entity @a hotbar.0 with minecraft:milk_bucket
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:bread
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> item replace entity @a hotbar.0 with minecraft:potion{Potion:"minecraft:awkward"}
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> item replace entity @a hotbar.0 with solraspberrypie:liquid_diet_log
+sleep 1
+do {"slot": 0}
+do {"use": "item"}
+do {"wait": "screen:LiquidDietLogScreen"}
+shot liquid_log
+do {"screen": "close"}
+look liquid_log: the drinks newest first with the third drink (potion) on top, milk below it, still listed after the bread was eaten (the state sync without a drink list kept the client's list)

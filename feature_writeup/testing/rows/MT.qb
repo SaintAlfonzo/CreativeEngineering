@@ -80,21 +80,190 @@ look sheep: mutton, no wool; golems: iron ingots; stone count below 25
 @commands deep ocean: a squid and a glow squid (tagged), a cachalot whale `{NoAI:1b}` 30 blocks off; Pos at 0 s and 10 s; tp the whale 10 blocks from them, Pos at 0 s and 8 s; then the same with an orca `{NoAI:1b}` at 10 blocks
 @pass at 30 both wander (no steady drift from the whale); after the tp both are farther from the whale by 8 s (about 14 blocks or more off); the orca at 10: no steady flight
 @fails no flight: `SquidsAndWhales` not registered (Alex's Mobs check in `CreativeCompat`) or the goal not added on join; flight from the orca: the goal matches more than `EntityCachalotWhale`
-@draft steps follow SQ-PSM-08's pattern (locate deep_ocean, forceload, summon, Pos captures, distance print); the first runner writes them here once
 @reviewed 2026-11-24
+> locate biome minecraft:deep_ocean
+waitlog (The nearest minecraft:deep_ocean is at|Could not find) 600
+capture M4O The nearest minecraft:deep_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M4O1-48} {M4O3-48} {M4O1+48} {M4O3+48}
+sleep 10
+> summon minecraft:squid {M4O1} 50 {M4O3} {PersistenceRequired:1b,Tags:["m4sq"]}
+> summon minecraft:glow_squid {M4O1} 50 {M4O3+2} {PersistenceRequired:1b,Tags:["m4gs"]}
+> summon alexsmobs:cachalot_whale {M4O1+30} 50 {M4O3} {NoAI:1b,PersistenceRequired:1b,Tags:["m4wh"]}
+sleep 1
+> data get entity @e[tag=m4sq,limit=1] Pos
+capture M4SA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4gs,limit=1] Pos
+capture M4GA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4wh,limit=1] Pos
+capture M4WA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+sleep 10
+> data get entity @e[tag=m4sq,limit=1] Pos
+capture M4SB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4gs,limit=1] Pos
+capture M4GB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> execute as @e[tag=m4wh] at @e[tag=m4sq,limit=1] run tp @s ~10 ~ ~
+sleep 1
+> data get entity @e[tag=m4wh,limit=1] Pos
+capture M4WB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4sq,limit=1] Pos
+capture M4SC entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4gs,limit=1] Pos
+capture M4GC entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+sleep 8
+> data get entity @e[tag=m4sq,limit=1] Pos
+capture M4SD entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4gs,limit=1] Pos
+capture M4GD entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> kill @e[tag=m4wh]
+sleep 3
+> execute at @e[tag=m4sq,limit=1] run summon alexsmobs:orca ~10 ~ ~ {NoAI:1b,PersistenceRequired:1b,Tags:["m4or"]}
+sleep 1
+> data get entity @e[tag=m4or,limit=1] Pos
+capture M4OR entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4sq,limit=1] Pos
+capture M4SE entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4gs,limit=1] Pos
+capture M4GE entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+sleep 8
+> data get entity @e[tag=m4sq,limit=1] Pos
+capture M4SF entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m4gs,limit=1] Pos
+capture M4GF entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+shell python3 -c "import math; d=math.dist; w=({M4WA1},{M4WA2},{M4WA3}); w2=({M4WB1},{M4WB2},{M4WB3}); o=({M4OR1},{M4OR2},{M4OR3}); S=[({M4SA1},{M4SA2},{M4SA3}),({M4SB1},{M4SB2},{M4SB3}),({M4SC1},{M4SC2},{M4SC3}),({M4SD1},{M4SD2},{M4SD3}),({M4SE1},{M4SE2},{M4SE3}),({M4SF1},{M4SF2},{M4SF3})]; G=[({M4GA1},{M4GA2},{M4GA3}),({M4GB1},{M4GB2},{M4GB3}),({M4GC1},{M4GC2},{M4GC3}),({M4GD1},{M4GD2},{M4GD3}),({M4GE1},{M4GE2},{M4GE3}),({M4GF1},{M4GF2},{M4GF3})]; [print(n, '30 m: moved', round(d(q[0],q[1]),1), 'whale dist', round(d(q[0],w),1), '->', round(d(q[1],w),1), '| whale at 10: dist', round(d(q[2],w2),1), '-> 8 s', round(d(q[3],w2),1), '| orca at 10: dist', round(d(q[4],o),1), '-> 8 s', round(d(q[5],o),1)) for n,q in (('squid',S),('glow_squid',G))]"
+> kill @e[tag=m4sq]
+> kill @e[tag=m4gs]
+> kill @e[tag=m4or]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|Invalid (block state|tag)|Found no elements matching)
+look rows/SQ-MT-04.shell.txt: per squid, the 30 m line shows no steady drift away from the whale; after the 10-block tp the distance grows to about 14 or more (flee runs to 24); with the orca at 10 the distance does not grow steadily
 
 ## SQ-MT-05 | the giant squid does not flee a whale and attacks one within 12 blocks
 @group B
 @commands deep ocean: a giant squid and a cachalot whale `{NoAI:1b}` 30 blocks apart; Pos and the whale's Health at 0 s and 10 s; tp the whale 10 blocks from the squid; Pos and Health at 5 s and 20 s
 @pass at 30 the squid neither flees nor closes in; after the tp it swims to the whale and the whale's Health drops (grab damage 3 to 7 a second); the boot log applies `AmGiantSquidAvoidWhalesMixin` with no error
 @fails it swims away: the mixin did not apply (`m_8036_` in `EntityGiantSquid$AIAvoidWhales`); no attack: the target goal not added
-@draft steps follow SQ-PSM-08's pattern; the first runner writes them here once
 @reviewed 2026-11-24
+> locate biome minecraft:deep_ocean
+waitlog (The nearest minecraft:deep_ocean is at|Could not find) 600
+capture M5O The nearest minecraft:deep_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M5O1-48} {M5O3-48} {M5O1+48} {M5O3+48}
+sleep 10
+bootreject (?i)AmGiantSquidAvoidWhalesMixin.*(error|fail|exception|could not)
+> summon alexsmobs:giant_squid {M5O1} 50 {M5O3} {PersistenceRequired:1b,Tags:["m5gs"]}
+> summon alexsmobs:cachalot_whale {M5O1+30} 50 {M5O3} {NoAI:1b,PersistenceRequired:1b,Tags:["m5wh"]}
+sleep 1
+> data get entity @e[tag=m5gs,limit=1] Pos
+capture M5QA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m5wh,limit=1] Pos
+capture M5WA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m5wh,limit=1] Health
+capture M5HA entity data: (-?[\d.]+)f
+sleep 10
+> data get entity @e[tag=m5gs,limit=1] Pos
+capture M5QB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m5wh,limit=1] Health
+capture M5HB entity data: (-?[\d.]+)f
+> execute as @e[tag=m5wh] at @e[tag=m5gs,limit=1] run tp @s ~10 ~ ~
+sleep 1
+> data get entity @e[tag=m5wh,limit=1] Pos
+capture M5WB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m5gs,limit=1] Pos
+capture M5QC entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+sleep 4
+> data get entity @e[tag=m5gs,limit=1] Pos
+capture M5QD entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m5wh,limit=1] Health
+capture M5HC entity data: (-?[\d.]+)f
+sleep 15
+> data get entity @e[tag=m5gs,limit=1] Pos
+capture M5QE entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m5wh,limit=1] Health
+capture M5HD entity data: (-?[\d.]+)f
+shell python3 -c "import math; d=math.dist; w=({M5WA1},{M5WA2},{M5WA3}); w2=({M5WB1},{M5WB2},{M5WB3}); q=[({M5QA1},{M5QA2},{M5QA3}),({M5QB1},{M5QB2},{M5QB3}),({M5QC1},{M5QC2},{M5QC3}),({M5QD1},{M5QD2},{M5QD3}),({M5QE1},{M5QE2},{M5QE3})]; print('30 m: whale dist', round(d(q[0],w),1), '-> 10 s', round(d(q[1],w),1), 'health', {M5HA}, '->', {M5HB}); print('10 m: dist at tp', round(d(q[2],w2),1), '-> 5 s', round(d(q[3],w2),1), '-> 20 s', round(d(q[4],w2),1), 'health', {M5HB}, '->', {M5HC}, '->', {M5HD})"
+> kill @e[tag=m5gs]
+> kill @e[tag=m5wh]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|Invalid (block state|tag)|Found no elements matching)
+look rows/SQ-MT-05.shell.txt: at 30 the distance stays near 30 and health is unchanged; after the 10-block tp the distance shrinks (no flight) and the whale's health falls by 20 s
 
 ## SQ-MT-06 | the giant squid fights back against a hunting whale; no [giant_squid] config
 @group B
 @commands deep ocean: a giant squid and a cachalot whale with AI 25 blocks apart (the whale hunts giant squid); watch 60 s (Pos, both Health every 10 s); grep `config/creativecompat-common.toml`
 @pass the squid never moves away from the whale; once the whale hits it, it grabs the whale (the whale's Health drops); the config file has no `[giant_squid]` table
 @fails the squid flees: SQ-MT-05 fails too; a `[giant_squid]` table: an old config copied in (Forge drops the unknown table on the next write)
-@draft the whale only hunts when hungry and not sleeping (Alex's Mobs); the first runner sets the steps and the wait
 @reviewed 2026-11-24
+> locate biome minecraft:deep_ocean
+waitlog (The nearest minecraft:deep_ocean is at|Could not find) 600
+capture M6O The nearest minecraft:deep_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M6O1-48} {M6O3-48} {M6O1+48} {M6O3+48}
+sleep 10
+shell grep -c '^\[giant_squid\]' config/creativecompat-common.toml; echo exit=$?
+> time set 1000
+> summon alexsmobs:giant_squid {M6O1} 50 {M6O3} {PersistenceRequired:1b,Tags:["m6gs"]}
+> summon alexsmobs:cachalot_whale {M6O1+25} 50 {M6O3} {PersistenceRequired:1b,Tags:["m6wh"]}
+sleep 1
+> data get entity @e[tag=m6gs,limit=1] Pos
+capture M6QA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6wh,limit=1] Pos
+capture M6WA entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6gs,limit=1] Health
+capture M6GA entity data: (-?[\d.]+)f
+> data get entity @e[tag=m6wh,limit=1] Health
+capture M6HA entity data: (-?[\d.]+)f
+sleep 10
+> data get entity @e[tag=m6gs,limit=1] Pos
+capture M6QB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6wh,limit=1] Pos
+capture M6WB entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6gs,limit=1] Health
+capture M6GB entity data: (-?[\d.]+)f
+> data get entity @e[tag=m6wh,limit=1] Health
+capture M6HB entity data: (-?[\d.]+)f
+sleep 10
+> data get entity @e[tag=m6gs,limit=1] Pos
+capture M6QC entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6wh,limit=1] Pos
+capture M6WC entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6gs,limit=1] Health
+capture M6GC entity data: (-?[\d.]+)f
+> data get entity @e[tag=m6wh,limit=1] Health
+capture M6HC entity data: (-?[\d.]+)f
+sleep 10
+> data get entity @e[tag=m6gs,limit=1] Pos
+capture M6QD entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6wh,limit=1] Pos
+capture M6WD entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6gs,limit=1] Health
+capture M6GD entity data: (-?[\d.]+)f
+> data get entity @e[tag=m6wh,limit=1] Health
+capture M6HD entity data: (-?[\d.]+)f
+sleep 10
+> data get entity @e[tag=m6gs,limit=1] Pos
+capture M6QE entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6wh,limit=1] Pos
+capture M6WE entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6gs,limit=1] Health
+capture M6GE entity data: (-?[\d.]+)f
+> data get entity @e[tag=m6wh,limit=1] Health
+capture M6HE entity data: (-?[\d.]+)f
+sleep 10
+> data get entity @e[tag=m6gs,limit=1] Pos
+capture M6QF entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6wh,limit=1] Pos
+capture M6WF entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6gs,limit=1] Health
+capture M6GF entity data: (-?[\d.]+)f
+> data get entity @e[tag=m6wh,limit=1] Health
+capture M6HF entity data: (-?[\d.]+)f
+sleep 10
+> data get entity @e[tag=m6gs,limit=1] Pos
+capture M6QG entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6wh,limit=1] Pos
+capture M6WG entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
+> data get entity @e[tag=m6gs,limit=1] Health
+capture M6GG entity data: (-?[\d.]+)f
+> data get entity @e[tag=m6wh,limit=1] Health
+capture M6HG entity data: (-?[\d.]+)f
+shell python3 -c "import math; d=math.dist; Q=[({M6QA1},{M6QA2},{M6QA3}),({M6QB1},{M6QB2},{M6QB3}),({M6QC1},{M6QC2},{M6QC3}),({M6QD1},{M6QD2},{M6QD3}),({M6QE1},{M6QE2},{M6QE3}),({M6QF1},{M6QF2},{M6QF3}),({M6QG1},{M6QG2},{M6QG3})]; W=[({M6WA1},{M6WA2},{M6WA3}),({M6WB1},{M6WB2},{M6WB3}),({M6WC1},{M6WC2},{M6WC3}),({M6WD1},{M6WD2},{M6WD3}),({M6WE1},{M6WE2},{M6WE3}),({M6WF1},{M6WF2},{M6WF3}),({M6WG1},{M6WG2},{M6WG3})]; G=[{M6GA},{M6GB},{M6GC},{M6GD},{M6GE},{M6GF},{M6GG}]; H=[{M6HA},{M6HB},{M6HC},{M6HD},{M6HE},{M6HF},{M6HG}]; [print(i*10, 's: dist', round(d(Q[i],W[i]),1), 'squid moved', round(d(Q[i],Q[0]),1), 'squid hp', G[i], 'whale hp', H[i]) for i in range(7)]"
+> kill @e[tag=m6gs]
+> kill @e[tag=m6wh]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|Invalid (block state|tag)|Found no elements matching)
+look rows/SQ-MT-06.shell.txt: the grep count is 0 ([giant_squid] absent); the distance never grows while the whale closes in; once the squid's hp drops (the whale hit it) the whale's hp drops too. No whale hit in 60 s (squid hp unchanged): inconclusive, rerun (the whale hunts only when hungry and awake)

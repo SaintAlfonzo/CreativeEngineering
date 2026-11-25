@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# SQ-WT-04 second half (creative-common-publish #19): Creative Loot on its hard dependencies only (Creative Common,
+# Creative Compat, LootJS) with the cc_only base (KubeJS libraries, Creative Devtools, perfBot). config/ empty, so Loot
+# writes its own defaults; kubejs/ = probes. Row spec: `loot_alone` (one variant, alone).
+extends = "cc_only"
+description = "Creative Loot with only Common, Compat and LootJS (empty config: Loot's own defaults)"
+default = "alone"
+forbid = ["(?i)^creative(calendar|engineering|equipment|magic|delight|brewing|worldgen|labels)-"]
+require = ["creativeloot-*", "creativecompat-*", "lootjs-forge-*", "creativecommon-*"]
+
+[groups]
+loot = ["creativeloot-*", "creativecompat-*", "lootjs-forge-*"]
+
+[variants.alone]
+keep = ["@base", "@loot"]

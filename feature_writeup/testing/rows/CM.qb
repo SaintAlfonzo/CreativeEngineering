@@ -762,18 +762,102 @@ look shots: 12 distinct woods next to vanilla's, fill at level 4 and the ready t
 @@sources feature_writeup/composting.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/composter development/creativeDelight/src/main/resources/data/creativedelight/swaps/common_composters.json kubejs/data/creativedelight/kubejs/creativedelight/composters.js
 @@text The 12 wood composters are `creativedelight:<wood>_composter` since 2026-11-24; Delight's swap list `common_composters.json` maps each old `creativecommon:` id. An old-id save must be made fresh with the jars from before the carve (agent note forge-missing-mappings-staging.md: a world opened once without the remap loses the old ids from level.dat).
 @@table
-## SQ-CM-42 | old save: composters placed, in a chest and in an inventory with the Common ids come back as Delight's
-@group B (old-id save fixture)
-@commands boot 1 with the Creative Common and Creative Delight jars from before the carve (`jar_archive/displaced/`, stamp 16c9e8ace or older): place `creativecommon:spruce_composter[level=4]` and `creativecommon:crimson_composter`, put 2 `creativecommon:birch_composter` in a chest and 1 in a bot's inventory; stop; swap in the current jars; boot 2; read the blocks, the chest and the inventory
-@pass boot 2: the blocks are `creativedelight:spruce_composter[level=4]` and `creativedelight:crimson_composter`; the chest holds 2 `creativedelight:birch_composter`, the bot 1; latest.log has the swap lines for the composter ids and no `Missing` / `unknown` line naming `creativecommon:*_composter`
-@fails `data/creativedelight/swaps/common_composters.json` not read (SwapLists, Delight jar); the remap resolved in the STAGING registry (agent note forge-missing-mappings-staging.md); the save opened once without the new jars
-@draft the runner writes the two-boot jar swap as `@@prep boot=2: run` lines (old jars from `jar_archive/displaced/`)
-@modset none
 ## SQ-CM-43 | composters and their recipes, tags and loot under Delight's namespace; no Common composter left
 @group A
 @commands `/cdevtest makes creativedelight:spruce_composter`; `/cdevtest tag item creativedelight:composters`; `/cdevtest tag item creativecommon:composters`; `/cdevtest tag item creativecompat:floats` (or the item physics floats tag the Compat script fills); `/give @s creativecommon:spruce_composter`; grep latest.log for `composter`
 @pass the recipe is from 7 spruce slabs; `creativedelight:composters` has 13 entries; `creativecommon:composters` is empty or absent; the floats tag holds the 12 wood composters; the Common id is an unknown item; no ERROR line naming a composter id or `#creativedelight:composters`
 @fails `kubejs/data/creativedelight/kubejs/creativedelight/composters.js` not in the Delight jar; `item_dict.js` keys still naming `creativecommon:`; Compat's `item_physics_tags.js` guard (`global.has('creativedelight')`)
-@draft steps from SQ-CM-37 with the new namespace; the floats tag name is read from `item_physics_tags.js` `PHYSICS_TAG`
-@absent creativedelight:spruce_composter creativedelight:composters (moved 2026-11-24, after the last /dumpall)
+@absent creativedelight:spruce_composter creativedelight:composters creativecommon:composters creativecompat:physics/floats (moved 2026-11-24, after the last /dumpall; the Common tag must be empty)
 @modset none
+# r1124gate (2026-11-24, runner-4): recipe lines as SQ-CM-37 (spruce); floats tag = PHYSICS_TAG.floats in Compat's
+# item_physics_tags.js (creativecompat:physics/floats, nests #creativedelight:composters). Area x 5312 to 5327, z 5216 to 5231.
+bootreject ^(?=.*/ERROR\]).*(\w+_composter\b|creativedelight:composters)
+> cdevtest makes creativedelight:spruce_composter
+expect verb=makes id=\S+ .*result=creativedelight:spruce_composter\*1
+> cdevtest rdetail creativedelight:shaped/spruce_slab_to_spruce_composter_by_shaped
+expect verb=rdetail id=creativedelight:shaped/spruce_slab_to_spruce_composter_by_shaped serializer=\S+ result=creativedelight:spruce_composter\*1
+> cdevtest tag item creativedelight:composters
+expect verb=tag kind=item tag=creativedelight:composters n=13\b
+> cdevtest tag item creativecommon:composters
+expect verb=tag kind=item tag=creativecommon:composters n=0 ids=-
+> cdevtest tag item creativecompat:physics/floats
+expect verb=tag kind=item tag=creativecompat:physics/floats n=\d+ ids=(?=\S*creativedelight:spruce_composter\b)(?=\S*creativedelight:crimson_composter\b)(?=\S*creativedelight:warped_composter\b)(?=\S*creativedelight:twisted_composter\b)
+> cdevtest reg item creativecommon:.*_composter
+expect verb=reg kind=item regex=\S+ n=0\b
+> cdevtest reg block creativecommon:.*_composter
+expect verb=reg kind=block regex=\S+ n=0\b
+> cdevtest reg item creativedelight:.*_composter
+expect verb=reg kind=item regex=\S+ n=12\b
+> forceload add 5312 5216 5327 5231
+sleep 3
+> setblock 5315 -60 5220 creativedelight:spruce_composter
+> cdevtest loot 5315 -60 5220 rolls=20
+expect verb=loot .*rolls=20 drops=creativedelight:spruce_composter:20(\s|$)
+> setblock 5315 -60 5220 minecraft:air
+> forceload remove 5312 5216 5327 5231
+reject \[cdevtest\] .*done=0
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+look recipe from 7 spruce slabs (rdetail line); composters tag 13, the Common tag empty, no creativecommon composter registered; floats holds the wood composters; an empty spruce composter drops itself
+
+@@section 7
+@@title SQ-CM old-id composter save: Common 1.2.0 writes it, the full pack reads it, 2026-11-24 ([composting.md](../composting.md) 3; [plan_wave2_publish.md](../plan_wave2_publish.md) W2-9; TODO `creative-common-publish #18`)
+@@date 2026-11-24
+@@jars creativecommon creativecompat creativedelight
+@@sources feature_writeup/composting.md development/creativeDelight/src/main/resources/data/creativedelight/swaps/common_composters.json
+@@modset cc_only alone -creativedevtools-*
+@@prep run rm -f mods/creativecommon-*.jar && cp "$INST/development/creativeCommon/build/libs/creativecommon-1.2.0.jar" mods/ && unzip -p mods/creativecommon-1.2.0.jar META-INF/MANIFEST.MF | grep Implementation-Version
+@@text Split from section 6 (r1124gate, 2026-11-24): boot 1 is Creative Common 1.2.0 of 2026-11-21 alone (it still registers the 12 wood composters under `creativecommon:`), then the row switches the same folder and world to the full pack. Group B.
+@@table
+## SQ-CM-42 | old save: composters placed, in a chest and in an inventory with the Common ids come back as Delight's
+@group B (old-id save fixture)
+@commands boot 1 with the Creative Common and Creative Delight jars from before the carve (`jar_archive/displaced/`, stamp 16c9e8ace or older): place `creativecommon:spruce_composter[level=4]` and `creativecommon:crimson_composter`, put 2 `creativecommon:birch_composter` in a chest and 1 in a bot's inventory; stop; swap in the current jars; boot 2; read the blocks, the chest and the inventory
+@pass boot 2: the blocks are `creativedelight:spruce_composter[level=4]` and `creativedelight:crimson_composter`; the chest holds 2 `creativedelight:birch_composter`, the bot 1; latest.log has the swap lines for the composter ids and no `Missing` / `unknown` line naming `creativecommon:*_composter`
+@fails `data/creativedelight/swaps/common_composters.json` not read (SwapLists, Delight jar); the remap resolved in the STAGING registry (agent note forge-missing-mappings-staging.md); the save opened once without the new jars
+@absent creativedelight:spruce_composter creativedelight:crimson_composter creativedelight:birch_composter (moved 2026-11-24, after the last /dumpall; the dumps still list the creativecommon ids boot 1 places)
+# r1124gate (2026-11-24, runner-4): no pre-carve Common + Delight set is archived (installs keep the jar name, so
+# jar_archive/displaced/ holds none); the old save is written by Creative Common 1.2.0 of 2026-11-21 (a4baff401, the
+# local build in development/creativeCommon/build/libs/, which registers the 12 composters) ALONE: section prep swaps it
+# into cc_only alone, minus Creative Devtools (it needs Common 1.3.0, so no bots and no /cdevtest in boot 1). The bot
+# inventory is stood in for by an armor stand's hand (entity item NBT, same id lookup). Then the row switches the folder
+# to the full pack (qmodset.py switch, world kept) and boots it.
+> forceload add 5312 5216 5327 5231
+sleep 3
+> fill 5312 199 5216 5327 199 5231 minecraft:stone
+> fill 5312 200 5216 5327 203 5231 minecraft:air
+> setblock 5315 200 5220 creativecommon:spruce_composter[level=4]
+> setblock 5317 200 5220 creativecommon:crimson_composter
+> setblock 5319 200 5220 minecraft:chest{Items:[{Slot:0b,id:"creativecommon:birch_composter",Count:2b}]}
+> summon minecraft:armor_stand 5321.5 200 5220.5 {NoGravity:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["cm42"],HandItems:[{id:"creativecommon:birch_composter",Count:1b},{}]}
+sleep 2
+> execute if block 5315 200 5220 creativecommon:spruce_composter[level=4] run say SQ-CM-42-b1-spruce
+> execute if block 5317 200 5220 creativecommon:crimson_composter run say SQ-CM-42-b1-crimson
+> execute if data block 5319 200 5220 Items[{id:"creativecommon:birch_composter",Count:2b}] run say SQ-CM-42-b1-chest
+> execute if entity @e[tag=cm42,nbt={HandItems:[{id:"creativecommon:birch_composter",Count:1b}]}] run say SQ-CM-42-b1-stand
+expect SQ-CM-42-b1-spruce$
+expect SQ-CM-42-b1-crimson$
+expect SQ-CM-42-b1-chest$
+expect SQ-CM-42-b1-stand$
+> save-all flush
+sleep 3
+edit python3 "$INST/tools/scratch_query/qmodset.py" switch "$OUT" pack && ls mods | grep -E "^creative(common|delight)-"
+restart 900
+bootexpect \[swaps\] minecraft:block: \d+ id\(s\) remapped to their survivors
+bootexpect \[swaps\] minecraft:item: \d+ id\(s\) remapped to their survivors
+bootreject \[swaps\] minecraft:(block|item): \d+ listed id\(s\) had no survivor
+bootreject ^(?=.*([Mm]issing|[Uu]nknown)).*creativecommon:\w+_composter
+> forceload add 5312 5216 5327 5231
+sleep 5
+> execute if block 5315 200 5220 creativedelight:spruce_composter[level=4] run say SQ-CM-42-spruce
+> execute if block 5317 200 5220 creativedelight:crimson_composter run say SQ-CM-42-crimson
+> execute if data block 5319 200 5220 Items[{id:"creativedelight:birch_composter",Count:2b}] run say SQ-CM-42-chest
+> execute if entity @e[tag=cm42,nbt={HandItems:[{id:"creativedelight:birch_composter",Count:1b}]}] run say SQ-CM-42-stand
+> data get block 5319 200 5220 Items
+> execute as @e[tag=cm42,limit=1] run data get entity @s HandItems
+expect SQ-CM-42-spruce$
+expect SQ-CM-42-crimson$
+expect SQ-CM-42-chest$
+expect SQ-CM-42-stand$
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
+> kill @e[tag=cm42]
+> forceload remove 5312 5216 5327 5231
+look boot 1 placed the Common ids; boot 2 (full pack): both blocks, the chest's 2 and the stand's 1 are Delight's composters; the swap remap lines are there (a bot's player inventory is not covered: no bots under Common 1.2.0)

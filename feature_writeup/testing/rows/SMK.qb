@@ -326,6 +326,7 @@ reject /ERROR\].*\bcreativecompat\b
 @commands `forceload add 9000 9000 9100 9100`; `/cdevtest tag item creativecompat:burn/to_ash`; `/cdevtest place 9030 -60 9010 creativeengineering:weathered_cardboard_box`; `/cdevtest state 9030 -60 9010`
 @pass the burn tag holds 400 or more items (535 on 2026-11-15); the box places and reads back as `creativeengineering:weathered_cardboard_box`
 @fails Server tag scripts not in the jar (`data/creativecompat/kubejs/tags/`), `decor_blocks.js` not run
+@absent creativeengineering:weathered_cardboard_box (moved to Engineering 2026-11-24, after the last /dumpall)
 > forceload add 9000 9000 9100 9100
 sleep 5
 > cdevtest tag item creativecompat:burn/to_ash

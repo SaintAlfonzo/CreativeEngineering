@@ -961,19 +961,46 @@ look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the forme
 @commands put `tools/scratch_query/fixtures/wave2_carry/old_solraspberrypie-client.toml` (fleetFootedFov 0.5) as `config/solraspberrypie-client.toml` with no `[fleet_footed]` in `config/creativecompat-common.toml`; start the client; read both files and the log; then give Fleet-Footed and sprint-jump
 @pass Compat's toml has `[fleet_footed]` `fov = 0.5`; Raspberry Pie's file no longer has `fleetFootedFov`; log has `[swaps] config [effects] fleetFootedFov = 0.5 carried over`; the view shift matches 0.5
 @fails `MovedKeys` (Compat) and `FleetFootedFov` reading `[fleet_footed] fov`
-@draft needs a client
 @reviewed 2026-11-24
+# launch: run_captures.py serve --config solraspberrypie-client.toml:effects:fleetFootedFov=0.5 on a game dir whose
+# config/ is a fresh copy of the instance's (no [fleet_footed] in creativecompat-common.toml, 2026-11-24); a reused game dir
+# where Compat already wrote [fleet_footed] skips the carry (the bootexpect fails: re-run setup)
+bootexpect \[swaps\] config \[effects\] fleetFootedFov = 0\.5 carried over from solraspberrypie-client\.toml to creativecompat-common\.toml \[fleet_footed\] fov
+bootreject \[creativecompat\] (could not carry fleetFootedFov|config/\S+ still has \[effects\] fleetFootedFov)
+shell awk '/^\[fleet_footed\]/{f=1;next} /^\[/{f=0} f' config/creativecompat-common.toml | grep -E '^\s*fov = 0\.5\s*$'
+shell ! grep -n 'fleetFootedFov' config/solraspberrypie-client.toml
+> gamemode survival
+> time set noon
+> fill -4 99 -4 4 99 40 minecraft:stone
+> fill -4 100 -4 4 104 40 minecraft:air
+> effect give @s alexsmobs:fleet_footed 120 0 true
+do {"look": {"from": "0.5 101.62 0.5", "yaw": 0, "pitch": 0}}
+do {"fly": false}
+do {"effects": true, "expect": "alexsmobs:fleet_footed"}
+do {"walk": 6, "keys": "forward sprint", "after": 0}
+shot sprint_ground
+do {"walk": 8, "keys": "forward sprint jump", "after": 0}
+shot sprint_jump
+reject (Unknown (item|block|block type|effect)|Incorrect argument for command|Unknown or incomplete command)
+look shots: the sprint_jump view is only slightly wider than sprint_ground (fov 0.5 = half the Fleet-Footed shift); the feel is the owner's live check (CQ-RPI-76)
 ## CQ-RPI-95 | Fleet-Footed fix with two players and the FOV, now Compat's (food-tuning #43, #55; raspberry-pie-publish #25)
 @group client
 @commands rerun CQ-RPI-26 and CQ-RPI-76 with Creative Compat installed; the FOV key is `[fleet_footed] fov` in `config/creativecompat-common.toml`
 @pass as CQ-RPI-26 and CQ-RPI-76 (no walker modifier while the other jumps; fov 1.0 = vanilla shift)
 @fails `FleetFootedMixin` and `FleetFootedFov` in `creativecompat/mobs/`, gate in `CompatMixinPlugin` (alexsmobs [1.21.1,1.22) plus the member check)
-@draft needs two clients
+@draft needs two real players (the walker modifier appears on one player while the other jumps): run_captures.py serve drives one client; a second client or a client-side bot is not in the tooling (2026-11-24). The FOV half is CQ-RPI-94
 @reviewed 2026-11-24
 ## SQ-RPI-96 | Raspberry Pie alone without Compat: boots clean, no Fleet-Footed fix (W2-3 accepted)
 @group A (Raspberry Pie + Alex's Mobs, no Compat)
 @commands boot Raspberry Pie with Alex's Mobs and without Creative Compat; grep latest.log for `FleetFooted` and mixin errors
 @pass boots to `Done (`; no `FleetFootedMixin` error or warning from Raspberry Pie; no Fleet-Footed fix applied (accepted loss)
 @fails a leftover Raspberry Pie reference to `FleetFootedMixin` or `fleetFootedFov`
-@draft modset: Raspberry Pie standalone plus Alex's Mobs
+@modset rps alex
 @reviewed 2026-11-24
+bootexpect Done \(
+bootreject InvalidInjectionException|MixinApplyError|Mixin apply.*solraspberrypie.*failed|Fleet-Footed fix (is off|failed)
+bootreject (?i)(FleetFootedMixin|fleetFootedFov|EffectFleetFooted)
+shell ! ls mods | grep -iE '^creativecompat-'
+shell ls mods | grep -iE '^alexsmobs-'
+shell n=$(unzip -l mods/solRaspberryPie-*.jar | grep -ci 'fleetfooted'); echo fleetfooted_entries=$n; [ "$n" = 0 ]
+shell grep -n -i 'fleet' config/solraspberrypie-*.toml; true

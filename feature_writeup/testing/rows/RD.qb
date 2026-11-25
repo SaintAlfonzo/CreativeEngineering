@@ -1735,6 +1735,11 @@ look counts against the user's 2026-10-31 log (58 mixes, 2295 bottling recipes, 
 @fails `potion_area.js` NBT test (`getOrCreateTag().contains`)
 @jars creativecommon
 @from batches/r1102b/s1_A.qb
+# BF-FIX r1124gate: own home capture (the H capture rows are not in this run selection)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > kill @e[type=minecraft:area_effect_cloud]
 > setblock {H1+30} {H2} {H3-10} minecraft:dispenser[facing=north]{Items:[{Slot:0b,id:"creativebrewing:potion_bucket",Count:1b,tag:{Potion:"minecraft:swiftness"}}]}
 > setblock {H1+30} {H2} {H3-9} minecraft:redstone_block

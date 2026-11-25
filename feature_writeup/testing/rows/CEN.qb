@@ -185,5 +185,37 @@ look the makes line is the one splashing recipe (from design_decor:cardboard_box
 @commands Creative client: JEI search `@creativeengineering` for the box; place it, look at all six faces, hold it, check the inventory icon and the WTHIT mod line
 @pass LOOK: listed under Creative Engineering with its name; each face one tile of the sheet (taped top, flap bottom, handles north and south, labels east and west), as in CQ-CMP-09; WTHIT names Creative Engineering
 @fails purple-black: model or texture path under `assets/creativecompat/` still; whole sheet on every face: the blockstate from `decor_blocks.js` not taken
-@draft needs a client
+@absent creativeengineering:weathered_cardboard_box (registered after the last /dumpall)
 @reviewed 2026-11-24
+> gamemode creative
+> time set noon
+> fill 15 99 15 26 109 26 minecraft:air
+> setblock 20 103 20 creativeengineering:weathered_cardboard_box
+do {"wait": "jei"}
+do {"tooltip_text": "creativeengineering:weathered_cardboard_box", "expect": "Weathered Cardboard Box", "reject": "block\\.creativeengineering\\."}
+do {"look": {"from": "20.5 103.5 18.2", "at": "20.5 103.5 20.5"}}
+do {"target": true, "expect": "block creativeengineering:weathered_cardboard_box"}
+shot face_north_wthit
+do {"look": {"from": "20.5 103.5 22.8", "at": "20.5 103.5 20.5"}}
+shot face_south
+do {"look": {"from": "18.2 103.5 20.5", "at": "20.5 103.5 20.5"}}
+shot face_west
+do {"look": {"from": "22.8 103.5 20.5", "at": "20.5 103.5 20.5"}}
+shot face_east
+do {"look": {"from": "20.5 106.0 20.5", "yaw": 0, "pitch": 90}}
+shot face_top
+do {"look": {"from": "20.5 101.0 20.5", "yaw": 0, "pitch": -90}}
+shot face_bottom
+> clear @s
+> item replace entity @s hotbar.0 with creativeengineering:weathered_cardboard_box
+do {"slot": 0}
+do {"look": {"from": "20.5 103.5 17.0", "yaw": 0, "pitch": 30}}
+shot held
+do {"screen": "inventory"}
+shot inventory_icon
+do {"screen": "close"}
+do {"screen": "jei_recipes:creativeengineering:weathered_cardboard_box"}
+shot jei_recipe
+do {"screen": "close"}
+reject (Unknown (item|block|block type)|Incorrect argument for command|Unknown or incomplete command)
+look shots: no purple-black anywhere; each face one tile of the sheet (taped top, flap bottom, handles on north and south, labels on east and west, as CQ-CMP-09); the WTHIT overlay on face_north_wthit names Weathered Cardboard Box and Creative Engineering; held and inventory icons show the box model; jei_recipe shows the splashing recipe and the box (hover its mod line by hand if JEI's mod name is not in the shot)

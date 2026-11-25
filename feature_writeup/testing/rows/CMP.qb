@@ -196,7 +196,6 @@ expect Changed the block
 bootreject CorpseDecayMixin.*(Error|error|failed)
 shell grep -nE "^\s*\[corpses\]|skeletonTime|emptyDespawnTime|netherWitherTime|noDecayDimensions" config/creativecompat-common.toml
 look the [corpses] section with the default values
-@draft no batch holds this row yet
 @reviewed 2026-11-22
 
 ## SQ-CMP-11 | A full corpse turns skeleton 7 days after death, caught up on load
@@ -310,7 +309,6 @@ look about -59 (the column floor)
 > data get entity @e[tag=c16b,limit=1] Pos[1]
 look about -50 (the water surface)
 shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
-@draft no batch holds this row yet
 @reviewed 2026-11-22
 
 ## CQ-CMP-14 | Corpse look: armor follows contents, wither skeleton in the Nether
@@ -318,7 +316,70 @@ shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 @commands Survival client: die in the overworld wearing iron armor and holding a sword; open the corpse, take the helmet and the sword; close. Then summon the c13b corpse of SQ-CMP-13 in the Nether next to you with `ArmorInventory:[{Slot:3b,id:"minecraft:golden_helmet",Count:1b}]` in its `Death`
 @pass LOOK: within a second the corpse no longer wears the helmet or holds the sword, the rest of the armor stays; the Nether corpse is a normal-size skeleton with the dark wither skeleton texture, wearing the gold helmet
 @fails armor still shown: `followContents` off or the renderer still caches its dummy; wither corpse big: drawn with the wither skeleton renderer instead of the skeleton model
-@draft no batch holds this row yet; needs a client
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> item replace entity PerfEval armor.head with minecraft:iron_helmet
+> item replace entity PerfEval armor.chest with minecraft:iron_chestplate
+> item replace entity PerfEval armor.legs with minecraft:iron_leggings
+> item replace entity PerfEval armor.feet with minecraft:iron_boots
+> item replace entity PerfEval hotbar.0 with minecraft:iron_sword
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> cdevtest entities 0 101 2 3 type=corpse:corpse nbt
+expect verb=entities type=corpse:corpse .*minecraft:iron_helmet
+expect verb=entities type=corpse:corpse .*minecraft:iron_sword
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot armor_before
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"slot_item": 0, "expect": "iron_helmet"}
+do {"slot_item": 32, "expect": "iron_sword"}
+do {"click_slot": 0, "shift": true}
+do {"click_slot": 32, "shift": true}
+do {"slot_item": 0, "expect": "empty"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot armor_after
+> kill @e[type=corpse:corpse]
+> gamemode creative PerfEval
+> execute in minecraft:the_nether run forceload add -3 -3 4 7
+> execute in minecraft:the_nether run fill -3 100 -3 4 100 7 minecraft:stone
+> execute in minecraft:the_nether run fill -3 101 -3 4 105 7 minecraft:air
+> execute in minecraft:the_nether run summon corpse:corpse 0.5 101 3.5 {Tags:["cq14w"],Death:{PlayerName:"Test",ArmorInventory:[{Slot:3b,id:"minecraft:golden_helmet",Count:1b}],MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{Stage:2b}}
+> execute in minecraft:the_nether run tp PerfEval 0.5 101 6.5 180 25
+sleep 5
+> cdevtest entities 0 101 3 3 type=corpse:corpse nbt dim=minecraft:the_nether
+expect verb=entities type=corpse:corpse .*Stage:2b
+shot wither_corpse
+> execute in minecraft:the_nether run kill @e[tag=cq14w]
+> execute in minecraft:the_nether run forceload remove -3 -3 4 7
+> execute in minecraft:overworld run tp PerfEval 0.5 101 0.5 0 35
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look armor_before: the corpse wears the iron armor and holds the sword; armor_after: no helmet, no sword, chestplate, leggings and boots still on; wither_corpse: a normal-size skeleton with the dark wither skeleton texture wearing the gold helmet
 @reviewed 2026-11-22
 
 ## CQ-CMP-15 | Cosmetic armor goes into the corpse and back
@@ -327,7 +388,64 @@ shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 @pass the cosmetic helmet is not on the respawned player; the corpse holds it; after Transfer Items it is back in the cosmetic helmet slot, the chestplate in the armor slot; with Corpse Curios Compat, a curio worn at death returns to its curio slot the same way
 @fails the helmet stays on the player: `CosArmorKeepThroughDeath` still true (config not copied to the client or server folder); it lands in the inventory, not the cosmetic slot: Cosmetic Armor x Corpse Compat missing
 @sources feature_writeup/plan_corpses.md config/cosmeticarmorreworked-common.toml
-@draft no batch holds this row yet; needs a client and a real death
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+# Cosmetic Armor Reworked menu (ContainerCosArmor): 5-8 armor helmet first, 36-44 hotbar, 46-49 cosmetic helmet to boots
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> item replace entity PerfEval armor.chest with minecraft:iron_chestplate
+> item replace entity PerfEval hotbar.0 with minecraft:golden_helmet
+> curios replace ring 0 PerfEval with botania:dodge_ring
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> cdevtest entities 0 101 2 3 type=corpse:corpse nbt
+expect verb=entities type=corpse:corpse .*minecraft:golden_helmet.{0,80}CosmeticArmorItem
+expect verb=entities type=corpse:corpse .*minecraft:iron_chestplate
+expect verb=entities type=corpse:corpse .*botania:dodge_ring
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"slot_item": 46, "expect": "empty"}
+do {"slot_item": 6, "expect": "empty"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"click_widget": "Transfer Items"}
+do {"wait": 20}
+do {"screen": "close"}
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"slot_item": 6, "expect": "iron_chestplate"}
+do {"screen": "close"}
+> cdevtest entities 0 101 0 2 type=minecraft:player nbt
+expect verb=entities type=minecraft:player .*botania:dodge_ring
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look the player line in the row log: botania:dodge_ring sits in the Curios ring handler (ForgeCaps curios:inventory, Identifier ring, slot 0), not in Inventory; the slot_item checks above already show the cosmetic helmet back in its slot and the chestplate in the armor slot
 @reviewed 2026-11-22
 
 ## SQ-CMP-17 | Corpse sections: mixins apply, config keys, a corpse holding only section items is not empty
@@ -345,8 +463,6 @@ look sectionedScreen = true and curioCap = 24
 sleep 40
 > data get entity @e[tag=c17,limit=1] "creativecompat:corpse"
 look Stage: 0b and EmptiedAt: -1L
-@reviewed 2026-11-22
-@draft no batch holds this row yet
 
 ## CQ-CMP-18 | Corpse screen sections look-check (screenshot)
 @group client
@@ -355,7 +471,91 @@ look Stage: 0b and EmptiedAt: -1L
 @fails offhand still at x 98 with a gap at the end: the `<init>` TAIL hook did not run; slots drawn but empty: the client cap differs from the server's (synced section tag missing); curio slots without the panel: `curios:textures/gui/inventory.png` moved; an Additional Items button that opens empty pages: the button flag redirect in `Guis` did not apply
 @sources feature_writeup/plan_corpses.md
 @reviewed 2026-11-22
-@draft no batch holds this row yet; needs a client and a real death
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> curios replace back 0 PerfEval with sophisticatedbackpacks:backpack
+> curios replace belt 0 PerfEval with botania:travel_belt
+> curios replace necklace 0 PerfEval with botania:cloud_pendant
+> curios replace ring 0 PerfEval with botania:dodge_ring
+> curios replace ring 1 PerfEval with botania:mana_ring
+> item replace entity PerfEval hotbar.0 with minecraft:golden_helmet
+> item replace entity PerfEval hotbar.1 with minecraft:golden_boots
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"click_slot": 37}
+do {"click_slot": 49}
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"slot_item": 49, "expect": "golden_boots"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> cdevtest entities 0 101 2 3 type=corpse:corpse nbt
+expect verb=entities type=corpse:corpse .*botania:dodge_ring.{0,200}creativecompat:curio
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+shot sections_idle
+do {"widgets": true, "reject": "Additional Items"}
+do {"tooltip_text": {"slot": 84}, "expect": "Curio: Ring"}
+do {"tooltip_text": {"slot": 77}, "expect": "Cosmetic armor"}
+do {"slot_item": 81, "expect": "backpack"}
+do {"hover": {"slot": 84}}
+shot curio_hover
+do {"hover": "off"}
+do {"screen": "close"}
+> kill @e[type=corpse:corpse]
+> curios add ring PerfEval 10
+> curios replace back 0 PerfEval with sophisticatedbackpacks:backpack
+> curios replace belt 0 PerfEval with botania:travel_belt
+> curios replace necklace 0 PerfEval with botania:cloud_pendant
+> curios replace ring 0 PerfEval with botania:aura_ring
+> curios replace ring 1 PerfEval with botania:aura_ring_greater
+> curios replace ring 2 PerfEval with botania:dodge_ring
+> curios replace ring 3 PerfEval with botania:magnet_ring
+> curios replace ring 4 PerfEval with botania:magnet_ring_greater
+> curios replace ring 5 PerfEval with botania:mana_ring
+> curios replace ring 6 PerfEval with botania:mana_ring_greater
+> curios replace ring 7 PerfEval with botania:mining_ring
+> curios replace ring 8 PerfEval with botania:pixie_ring
+> curios replace ring 9 PerfEval with botania:reach_ring
+> curios replace ring 10 PerfEval with botania:swap_ring
+> curios replace ring 11 PerfEval with botania:water_ring
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"tooltip_text": {"slot": 95}, "expect": "Curio: Ring"}
+shot two_columns
+do {"screen": "close"}
+> curios reset PerfEval
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look sections_idle: top row 4 armor, 4 cosmetic (gold helmet leftmost, gold boots at the right end, the middle two show armor silhouettes), offhand at the right end; a Curios-style panel on the window's left edge with one slot per curio (back, belt, necklace, ring, ring); no Additional Items button; curio_hover: the tooltip names "Curio: Ring"; two_columns: 15 curios, a second column further left past 12
 
 ## CQ-CMP-19 | Corpse sections: take, shift-click and Transfer Items put each item back where it was
 @group client
@@ -364,7 +564,98 @@ look Stage: 0b and EmptiedAt: -1L
 @fails a curio in the wrong index of its type: the transfer packet hook ran after Corpse Curios Compat; a taken item does not stack: the tag strip missed a path (shift-click is `m_7648_`, hotbar swap is `onTake`); section items also on the Additional Items pages: the filtered view did not replace the container's inventory
 @sources feature_writeup/plan_corpses.md
 @reviewed 2026-11-22
-@draft no batch holds this row yet; needs a client and a real death
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> curios replace back 0 PerfEval with sophisticatedbackpacks:backpack
+> curios replace belt 0 PerfEval with botania:travel_belt
+> curios replace necklace 0 PerfEval with botania:cloud_pendant
+> curios replace ring 0 PerfEval with botania:dodge_ring
+> curios replace ring 1 PerfEval with botania:mana_ring
+> item replace entity PerfEval hotbar.0 with minecraft:golden_helmet
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"slot_item": 84, "expect": "dodge_ring"}
+do {"slot_item": 85, "expect": "mana_ring"}
+do {"slot_item": 77, "expect": "golden_helmet"}
+do {"click_slot": 84, "shift": true}
+do {"click_slot": 85}
+do {"click_slot": 41}
+do [{"hover": {"slot": 77}}, {"press": "2"}]
+do {"slot_item": 84, "expect": "empty"}
+do {"slot_item": 77, "expect": "empty"}
+do {"widgets": true, "reject": "Additional Items"}
+do {"hover": "off"}
+do {"screen": "close"}
+do {"slot_item": 9, "expect": "mana_ring", "reject": "creativecompat|Cosmetic"}
+do {"slot_item": 1, "expect": "golden_helmet", "reject": "creativecompat|Cosmetic"}
+> cdevtest entities 0 101 0 2 type=minecraft:player nbt
+expect verb=entities type=minecraft:player .*botania:dodge_ring
+count ^(?!.*corpse:corpse).*verb=entities type=minecraft:player .*(creativecompat:curio|CosmeticSlotIndex|CosmeticArmorItem) == 0
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> curios replace back 0 PerfEval with sophisticatedbackpacks:backpack
+> curios replace belt 0 PerfEval with botania:travel_belt
+> curios replace necklace 0 PerfEval with botania:cloud_pendant
+> curios replace ring 0 PerfEval with botania:dodge_ring
+> curios replace ring 1 PerfEval with botania:mana_ring
+> item replace entity PerfEval hotbar.0 with minecraft:golden_helmet
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> curios replace ring 0 PerfEval with botania:aura_ring
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"click_widget": "Transfer Items"}
+do {"wait": 20}
+do {"screen": "close"}
+> cdevtest entities 0 101 0 2 type=minecraft:player nbt
+expect verb=entities type=minecraft:player .*botania:mana_ring
+count ^(?!.*corpse:corpse).*verb=entities type=minecraft:player .*(creativecompat:curio|CosmeticSlotIndex|CosmeticArmorItem) == 0
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"slot_item": 46, "expect": "golden_helmet", "reject": "creativecompat|Cosmetic"}
+do {"screen": "close"}
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look (a) the slot_item checks show the shift-clicked, dragged and hotbar-swapped items left their section slots and sit in the inventory with no tag (no nbt on the dragged ring and the swapped helmet); the shift-clicked dodge ring is in the first player line. (b) second player line: ring slot 0 holds aura_ring (put there after death), ring slot 1 mana_ring (its own index), dodge_ring in Inventory (its slot was taken), backpack in back, travel belt in belt, cloud pendant in necklace; the cosmetic helmet is back in its cosmetic slot. Hand: the extra Additional Items stack (no real-death source in this kit)
 
 ## CQ-CMP-20 | The corpse model wears its own cosmetic armor, not the player's current one
 @group client
@@ -373,7 +664,64 @@ look Stage: 0b and EmptiedAt: -1L
 @fails the corpse shows the leather helmet: Cosmetic Armor Reworked's UUID swap still wins (the NORMAL `RenderPlayerEvent.Pre` listener did not run or ran first); the living player shows the corpse's helmet: the Post restore missed
 @sources feature_writeup/plan_corpses.md
 @reviewed 2026-11-22
-@draft no batch holds this row yet; needs a client and a real death
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> item replace entity PerfEval armor.head with minecraft:iron_helmet
+> item replace entity PerfEval hotbar.0 with minecraft:golden_helmet
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> item replace entity PerfEval hotbar.0 with minecraft:leather_helmet
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"slot_item": 46, "expect": "leather_helmet"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot corpse_gold
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"slot_item": 77, "expect": "golden_helmet"}
+do {"click_slot": 77, "shift": true}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot corpse_iron
+do {"press": "key.togglePerspective"}
+do {"wait": 10}
+shot self_third_person
+do {"press": "key.togglePerspective"}
+do {"press": "key.togglePerspective"}
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look corpse_gold: the corpse wears the gold helmet (its own cosmetic stack), not the leather one; corpse_iron: after the gold helmet was taken it shows the iron helmet; self_third_person: the living player still wears the leather cosmetic helmet and the corpse beyond it the iron one
 
 ## CQ-CMP-21 | Corpse player model wears the corpse's curios and an Elytra Slot elytra (look-check with CQ-CMP-18)
 @group client
@@ -382,16 +730,156 @@ look Stage: 0b and EmptiedAt: -1L
 @fails no curios on the model: the dummy player's curios handler was not filled (no `Curios` list in the synced section tag, or the `RenderPlayerEvent.Pre` listener did not reach `CorpseCuriosClient.fill`); the elytra missing while curios show: Elytra Slot's layer reads another source; the toggled curio shows: the `Hidden` flag was not recorded at death; taken items still show: the fill is not redone on a resync
 @sources feature_writeup/plan_corpses.md
 @reviewed 2026-11-22
-@draft no batch holds this row yet; needs a client and a real death
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+# The render-toggled curio (Curios' eye button) has no command: that part stays a hand check
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> curios replace back 0 PerfEval with minecraft:elytra
+> curios replace belt 0 PerfEval with botania:travel_belt
+> curios replace necklace 0 PerfEval with botania:cloud_pendant
+> curios replace ring 0 PerfEval with botania:dodge_ring
+> curios replace ring 1 PerfEval with botania:mana_ring
+> item replace entity PerfEval armor.chest with minecraft:iron_chestplate
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> cdevtest entities 0 101 2 3 type=corpse:corpse nbt
+expect verb=entities type=corpse:corpse .*minecraft:elytra.{0,200}creativecompat:curio
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot model_front
+> tp PerfEval 3.5 101 2.5 90 25
+sleep 2
+shot model_side
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"slot_item": 81, "expect": "elytra"}
+do {"slot_item": 82, "expect": "travel_belt"}
+do {"click_slot": 81, "shift": true}
+do {"click_slot": 82, "shift": true}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot model_front_taken
+> tp PerfEval 3.5 101 2.5 90 25
+sleep 2
+shot model_side_taken
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look (with the CQ-CMP-18 shots) model_front / model_side: the corpse's player model shows the belt, the necklace and the elytra on its back over the iron chestplate; *_taken: elytra and belt gone, necklace still shown. Hand: one curio with its render toggled off does not show
 
 ## CQ-CMP-22 | Corpse skeleton wears its curios, an Elytra Slot elytra and its cosmetic armor (look-check with CQ-CMP-18)
 @group client
 @commands Survival client, the CQ-CMP-21 kit plus a cosmetic gold helmet over an iron helmet; die; set `[corpses] skeletonTime = 200` in `config/creativecompat-common.toml` before the death (or wait 7 days) so the corpse turns skeleton; look at it, screenshot (F2); take the gold cosmetic helmet and the elytra out, look again; repeat once in the Nether so the corpse turns wither skeleton
 @pass LOOK (screenshot to the owner with CQ-CMP-18): the skeleton wears the gold helmet (cosmetic over real), the visible curios and the elytra on its back; the render-toggled curio does not show; after taking, the iron helmet shows and the elytra is gone within a second; the wither skeleton shows the same; no warning `curio renderer for ... failed on a corpse skeleton` in `logs/latest.log` (if one is there, name the item: its renderer is player-only and is skipped)
 @fails nothing on the skeleton: `CorpseSkeletonLayer` not added (the AddLayers listener on the mod bus did not run) or the corpse pointer is not set while the skeleton draws; the real helmet shows: `withCosmetics` not applied; the wither skeleton bare while the plain one is dressed: the layer was not added to the wither look
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 @sources feature_writeup/plan_corpses.md
 @reviewed 2026-11-22
-@draft no batch holds this row yet; needs a client and a real death
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+# The skeleton stage is set on the corpse (`data modify`, Stage 1b / 2b; a stage only goes up) instead of skeletonTime 200
+# and a 10 s wait; Stage 2b is the wither look in any dimension (CorpseDecayMixin FLAG_WITHERED). Render toggle: hand check
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> curios replace back 0 PerfEval with minecraft:elytra
+> curios replace belt 0 PerfEval with botania:travel_belt
+> curios replace necklace 0 PerfEval with botania:cloud_pendant
+> curios replace ring 0 PerfEval with botania:dodge_ring
+> curios replace ring 1 PerfEval with botania:mana_ring
+> item replace entity PerfEval armor.head with minecraft:iron_helmet
+> item replace entity PerfEval armor.chest with minecraft:iron_chestplate
+> item replace entity PerfEval hotbar.0 with minecraft:golden_helmet
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> data modify entity @e[type=corpse:corpse,limit=1] "creativecompat:corpse".Stage set value 1b
+sleep 2
+> cdevtest entities 0 101 2 3 type=corpse:corpse nbt
+expect verb=entities type=corpse:corpse .*Stage:1b
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot skeleton_dressed
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+do {"target": true, "expect": "entity corpse:corpse"}
+do [{"walk": 3, "keys": "use"}, {"wait": "screen:CorpseInventoryScreen"}]
+do {"wait": 20}
+do {"slot_item": 77, "expect": "golden_helmet"}
+do {"slot_item": 81, "expect": "elytra"}
+do {"click_slot": 77, "shift": true}
+do {"click_slot": 81, "shift": true}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot skeleton_taken
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> curios replace back 0 PerfEval with minecraft:elytra
+> curios replace belt 0 PerfEval with botania:travel_belt
+> curios replace necklace 0 PerfEval with botania:cloud_pendant
+> curios replace ring 0 PerfEval with botania:dodge_ring
+> curios replace ring 1 PerfEval with botania:mana_ring
+> item replace entity PerfEval armor.head with minecraft:iron_helmet
+> item replace entity PerfEval armor.chest with minecraft:iron_chestplate
+> item replace entity PerfEval hotbar.0 with minecraft:golden_helmet
+do {"screen": "inventory"}
+do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
+do {"click_slot": 36}
+do {"click_slot": 46}
+do {"slot_item": 46, "expect": "golden_helmet"}
+do {"screen": "close"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> data modify entity @e[type=corpse:corpse,limit=1] "creativecompat:corpse".Stage set value 2b
+sleep 2
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot wither_dressed
+reject curio renderer for .* failed on a corpse skeleton
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look (with the CQ-CMP-18 shots) skeleton_dressed: the skeleton wears the gold helmet over the iron one, belt, necklace and the elytra over the chestplate; skeleton_taken: iron helmet shows, elytra gone; wither_dressed: the wither skeleton dressed the same. Hand: the render-toggled curio does not show
 
 @@section 4
 @@title SQ-CMP Compat publish pass, 2026-11-22 ([publish_readiness.md](../publish_readiness.md) 4, TODO `creative-compat-publish #1` to `#6`; [plan_corpses.md](../plan_corpses.md) rulings 36 to 38)
@@ -453,8 +941,61 @@ look 4 script lines; jar crop recipes = pack folder count, 2 tags
 @commands Survival client; craft a Customizable Elytra elytra dyed one color with a banner on the other wing (split wings) and wear it in the Elytra Slot back slot; set `[corpses] skeletonTime = 200`; die; wait for the skeleton; screenshot (F2) from behind; then repeat with a plain vanilla elytra
 @pass LOOK (screenshot to the owner with CQ-CMP-18): the skeleton's wings show the dye color and the banner pattern as the player's did; the vanilla elytra shows the vanilla wings; no `CorpseSkeletonLayer custom elytra failed` line in `logs/latest.log`
 @fails vanilla wings for the customized elytra: `CorpseCustomElytra` not used (Customizable Elytra not detected, or the layer failed and fell back: read the log line)
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 @sources feature_writeup/plan_corpses.md
-@draft no batch holds this row yet; needs a client and a real death
+# drafted r1124gate (2026-11-24): single-player client (`qrun.py client`) or `qrun.py pair`; every command names
+# PerfEval (the capture client's player), none uses @s, so `>` runs as the player or on the server console alike.
+# Corpse menu indices (Corpse 1.0.17 + Compat): 0-3 armor helmet first, 4 offhand, 5-31 main, 32-40 hotbar,
+# 41-76 player inventory, 77-80 cosmetic helmet to boots, 81+ curios sorted by slot id (back, belt, necklace, ring).
+# Customizable Elytra NBT (read from the 1.7.4 jar: WingInfo.left / right, display.color, BlockEntityTag Base + Patterns):
+# left wing dyed red, right wing a white banner with a black cross; if own_wings shows plain wings, craft the elytra by hand
+> gamerule keepInventory false
+> gamerule doImmediateRespawn true
+> fill -4 100 -4 6 100 8 minecraft:stone
+> fill -4 101 -4 6 104 8 minecraft:air
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> spawnpoint PerfEval 0 101 0
+> gamemode survival PerfEval
+> tp PerfEval 0.5 101 0.5 0 35
+sleep 2
+> curios replace back 0 PerfEval with customizableelytra:customizable_elytra{WingInfo:{left:{display:{color:11546150}},right:{BlockEntityTag:{Base:0,Patterns:[{Pattern:"cr",Color:15}]}}}}
+> item replace entity PerfEval armor.chest with minecraft:iron_chestplate
+> tp PerfEval 0.5 101 0.5 180 10
+do {"press": "key.togglePerspective"}
+do {"wait": 10}
+shot own_wings
+do {"press": "key.togglePerspective"}
+do {"press": "key.togglePerspective"}
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> data modify entity @e[type=corpse:corpse,limit=1] "creativecompat:corpse".Stage set value 1b
+sleep 2
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot skeleton_custom
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> curios replace back 0 PerfEval with minecraft:elytra
+> item replace entity PerfEval armor.chest with minecraft:iron_chestplate
+> tp PerfEval 0.5 101 2.5 0 0
+> kill PerfEval
+sleep 3
+> data modify entity @e[type=corpse:corpse,limit=1] "creativecompat:corpse".Stage set value 1b
+sleep 2
+> tp PerfEval 0.5 101 6.5 180 25
+sleep 2
+shot skeleton_vanilla
+reject CorpseSkeletonLayer custom elytra failed
+> kill @e[type=corpse:corpse]
+> clear PerfEval
+> curios clear PerfEval
+> gamerule doImmediateRespawn false
+> gamemode creative PerfEval
+look (with the CQ-CMP-18 shots) own_wings: the living player's wings, left red, right the banner; skeleton_custom: the skeleton's wings show the same dye and banner; skeleton_vanilla: plain vanilla elytra wings
 @reviewed 2026-11-22
 
 @@section 5
@@ -511,28 +1052,119 @@ look SOLID_VINE_FERTILE_STATE and HOPS_PLACED said; the hops vine line with fert
 @commands Client on the SQ-CMP-27 config (`pagesOff = ["seasoning", "tipped_arrows"]`); open JEI on salt, an empty can, a potion bucket and a tipped arrow; then set `pagesOff = []` and `/reload`
 @pass with the list: no Seasoning or Tipped Arrows page (their recipes on Crafting / Mixing / Spout pages), Canning, Using Cans and Potion Buckets pages shown; with the empty list all six pages shown
 @fails a page shown while listed: its plugin still reads an old key, or the id is spelled differently from `CompatConfig.Jei.pageOn` callers (`FlavorJEI`, `CanPagesJEI`, `PotionPagesJEI`)
-@draft needs a client
+@reviewed 2026-11-24
+# drafted r1124gate (2026-11-24): single-player client; the config is the client game dir's own Compat file (shared by
+# the integrated server); Common's own watcher reloads it, /reload restarts JEI. Hidden pages are judged from the shots
+> fill -2 100 0 4 100 4 minecraft:stone
+> tp PerfEval 0.5 101 0.5 0 0
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml jei pagesOff '["seasoning", "tipped_arrows"]'
+waitlog creativecompat-common.toml reloaded 30
+> reload
+do {"wait": "jei"}
+do {"screen": "jei_uses:salt:salt"}
+shot salt_uses_off
+do {"screen": "jei_recipes:minecraft:tipped_arrow"}
+shot tipped_arrow_off
+do {"screen": "jei_category:creativedelight:canning"}
+shot canning
+do {"screen": "jei_category:creativedelight:can_uses"}
+do {"screen": "jei_category:creativebrewing:potion_buckets"}
+shot potion_buckets
+do {"screen": "close"}
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml jei pagesOff '[]'
+waitlog creativecompat-common.toml reloaded 30
+> reload
+do {"wait": "jei"}
+do {"screen": "jei_category:creativedelight:flavor"}
+shot seasoning_on
+do {"screen": "jei_category:creativebrewing:tipped_arrows"}
+shot tipped_arrows_on
+do {"screen": "jei_uses:salt:salt"}
+shot salt_uses_on
+do {"screen": "close"}
+look salt_uses_off: no Seasoning page (salt's seasoning crafts on the Crafting / Mixing pages); tipped_arrow_off: no Tipped Arrows page (Crafting / Spout); canning and potion_buckets open; with the empty list the Seasoning and Tipped Arrows pages open too (a jei_category step that fails = page missing)
 
 ## CQ-CMP-31 | Powdered sugar block still shows its slowdown in the WTHIT speed line
 @group client
 @commands Client; stand inside a placed powdered sugar block (`creativedelight:powdered_sugar_block`) and look at it with WTHIT
 @pass the run speed line shows the 0.9 stuck multiplier as before (StuckInBlock rule registered by Creative Delight)
 @fails no line: `StuckInBlock.register` not called, or the class name changed
-@draft needs a client
+@reviewed 2026-11-24
+# drafted r1124gate (2026-11-24): single-player client or pair
+> fill -2 100 0 4 100 4 minecraft:stone
+> fill -2 101 0 4 103 4 minecraft:air
+> setblock 0 101 2 creativedelight:powdered_sugar_block
+> gamemode creative PerfEval
+> tp PerfEval 0.5 101 0.5 0 45
+sleep 2
+do {"target": true, "expect": "powdered_sugar_block"}
+shot look_at_block
+> tp PerfEval 0.5 101 2.5 0 60
+sleep 2
+shot inside_block
+> setblock 0 101 2 minecraft:air
+look the WTHIT run speed line on the powdered sugar block shows the 0.9 stuck multiplier (look_at_block; inside_block if WTHIT shows it from inside)
 
 ## CQ-CMP-32 | A wine still lists its compound effect's parts under When Applied
 @group client
 @commands Client; hover a Vinery wine whose effect is a compound effect (see Creative Common `CompoundEffects`)
 @pass the effect's parts are listed under "When Applied:" as before (Creative Brewing registers `WineTooltipEffects` with `CompoundEffectTooltip.addEffectSource`)
 @fails no parts: the source was not registered on the client, or the Vinery `WineEffects` class moved
-@draft needs a client and a wine id with a compound effect
+@reviewed 2026-11-24
+# drafted r1124gate (2026-11-24): single-player client or pair. vinery:clark_wine carries vinery:double_jump
+# (WineEffects), a compound effect (CompoundEffects: Jump Boost part plus the mid-air jump text)
+do {"tooltip_text": "vinery:clark_wine", "expect": "When Applied"}
+do {"tooltip_text": "vinery:clark_wine", "expect": "Jump Boost"}
+do {"tooltip": "vinery:clark_wine"}
+shot clark_wine
+do {"tooltip": "vinery:clark_wine", "shift": true}
+shot clark_wine_shift
+do {"screen": "close"}
+look the parts (Jump Boost and the mid-air jump line) listed under "When Applied:" as before
 
 ## CQ-CMP-33 | Ancient corpses keep their names; mixed jars and the Sample Syringe tab unchanged
 @group client
 @commands Client; look at an ancient corpse (`/locate` or SQ-LOOT-07's setup); put two cookie-family items in one Supplementaries jar; open the JEI world tab Sample Syringe
 @pass the corpse reads "Ancient Corpse" (or "Ancient Remains") in its name; the two cookies share the jar (Creative Delight's `jar_family/` tags still count); the Sample Syringe tab shows the syringe as icon and catalyst
 @fails raw lang key on the corpse: Compat's lang lacks `entity.creativecompat.ancient_corpse`; cookies refused: `JarMixing.addFamilyNamespace` not called; barrier icon: `WorldTab.addTool` not called
-@draft needs a client
+@reviewed 2026-11-24
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+# drafted r1124gate (2026-11-24): single-player client (the cdevtest name is resolved by the integrated server's
+# language; on a dedicated server it is the raw key either way). Jar family: creativedelight:jar_family/cookies
+> fill -2 100 0 6 100 6 minecraft:stone
+> fill -2 101 0 6 104 6 minecraft:air
+> gamemode creative PerfEval
+> summon corpse:corpse 0.5 101 3.5 {Tags:["cq33a"],Death:{PlayerName:"Test"},"creativecompat:corpse":{Ancient:1b}}
+> summon corpse:corpse 2.5 101 3.5 {Tags:["cq33r"],Death:{PlayerName:"Test"},"creativecompat:corpse":{Remains:1b}}
+sleep 2
+> cdevtest entities 1 101 3 3 type=corpse:corpse
+expect verb=entities type=corpse:corpse .*Ancient Corpse
+expect verb=entities type=corpse:corpse .*Ancient Remains
+reject entity\.creativecompat\.ancient_
+do {"look": {"from": "0 102 1", "at": "0 101 3"}}
+shot ancient_corpse
+do {"look": {"from": "2 102 1", "at": "2 101 3"}}
+shot ancient_remains
+> kill @e[tag=cq33a]
+> kill @e[tag=cq33r]
+> setblock 5 101 3 supplementaries:jar
+> item replace entity PerfEval weapon.mainhand with abnormals_delight:maple_cookie 4
+do {"look": {"from": "5 102 1", "at": "5 101 3"}}
+do {"target": true, "expect": "supplementaries:jar"}
+do {"use": "block"}
+> item replace entity PerfEval weapon.mainhand with abnormals_delight:cherry_cookie 4
+do {"use": "block"}
+> cdevtest be 5 101 3
+expect verb=be .*abnormals_delight:maple_cookie
+expect verb=be .*abnormals_delight:cherry_cookie
+shot mixed_jar
+> setblock 5 101 3 minecraft:air
+> item replace entity PerfEval weapon.mainhand with minecraft:air
+do {"wait": "jei"}
+do {"screen": "jei_uses:creativedelight:sample_syringe"}
+shot sample_syringe_tab
+do {"screen": "close"}
+look names "Ancient Corpse" / "Ancient Remains" (shots and the entities line); both cookies in one jar (be line); sample_syringe_tab: the world tab shows the syringe as its icon and catalyst, no barrier icon
 
 @@section 6
 @@title SQ-CMP Item Trash Can screen, 2026-11-23 ([creative_compat.md](../creative_compat.md) 1, TODO `storage-and-item-loss #17`; [plan_ready_now_1123.md](../plan_ready_now_1123.md) 8, R1)
@@ -564,25 +1196,139 @@ expect verb=items items=-
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|That position is not loaded|Invalid (block state|tag))
 bootreject TrashCansItemCanUseMixin.*(Error|error|failed)
 
-## SQ-CMP-35 | Server boots with Trash Cans absent; the trash can mixin is skipped
-@group A
-@commands `@@prep run rm -f mods/trashcans-*.jar` before the boot (own section run: `--rows SQ-CMP-35` on a fresh OUT); `grep -E "TrashCansItemCanUseMixin|trashcans" logs/latest.log`
-@pass server reaches `Done (`; no mixin error for TrashCansItemCanUseMixin; no ClassNotFound for `com.supermartijn642`
-@fails crash at mixin time: the gate entry `TrashCansItemCanUseMixin` -> `trashcans` missing in `CompatMixinPlugin.NEEDS_MOD`; NoClassDefFoundError: a Compat class other than the mixin names TrashCanScreen at load
-@draft needs a section-level `@@prep run rm -f mods/trashcans-*.jar` on its own boot (the other rows need the jar); the runner splits it into its own section or a reduced modset
-bootexpect Done \(
-bootreject (TrashCansItemCanUseMixin.*(Error|error|failed)|NoClassDefFoundError: com/supermartijn642)
-
 ## CQ-CMP-36 | Right-click on the Item Trash Can opens a 27-slot screen; its contents are deleted on close
 @group client
 @commands Client, survival; place `trashcans:item_trash_can`; right-click it with an empty hand and again holding a stack; shift-click a stack and drag a second one in; close; reopen
 @pass a three-row chest screen titled "Trash Can (deleted on close)" opens both times (holding an item does not place it); shift-click moves the stack in; after closing and reopening the 27 slots are empty and the items are gone from the inventory and the ground; a held cursor stack at close goes back to the inventory, not deleted
 @fails the filter screen opens: the mixin was skipped (gate or range) or `isItemTrashCan` misses the id; items back after reopening: `TrashContainer.stopOpen` not called (ChestMenu.removed)
-@draft needs a client
+@reviewed 2026-11-24
+# drafted r1124gate (2026-11-24): single-player client or pair. Chest menu: 0-26 the can, 27-53 player main, 54-62 hotbar
+> gamemode creative PerfEval
+> forceload add 5398 5198 5412 5212
+> tp PerfEval 5403.5 102 5201.5 0 35
+sleep 3
+> fill 5398 100 5198 5412 100 5212 minecraft:stone
+> fill 5398 101 5198 5412 104 5212 minecraft:air
+> setblock 5403 101 5203 trashcans:item_trash_can
+> clear PerfEval
+> gamemode survival PerfEval
+> tp PerfEval 5403.5 101 5201.5 0 35
+sleep 3
+do {"target": true, "expect": "trashcans:item_trash_can"}
+do {"use": "block"}
+do {"wait": 10}
+do {"screen_info": true, "expect": "Trash Can \\(deleted on close\\)"}
+do {"screen": "close"}
+> item replace entity PerfEval hotbar.0 with minecraft:cobblestone 64
+> item replace entity PerfEval hotbar.1 with minecraft:apple 16
+> item replace entity PerfEval hotbar.2 with minecraft:stick 8
+do {"slot": 0}
+do {"use": "block"}
+do {"wait": 10}
+do {"screen_info": true, "expect": "deleted on close"}
+do {"slot_item": 0, "expect": "empty"}
+do {"click_slot": 54, "shift": true}
+do {"click_slot": 55}
+do {"click_slot": 5}
+do {"slot_item": 5, "expect": "apple"}
+do {"click_slot": 56}
+shot can_filled
+do {"screen": "close"}
+do {"wait": 10}
+do {"use": "block"}
+do {"wait": 10}
+do {"screen_info": true, "expect": "deleted on close"}
+do {"slot_item": 5, "expect": "empty"}
+shot can_reopened
+do {"screen": "close"}
+> clear PerfEval minecraft:stick 0
+expect (/clear PerfEval minecraft:stick 0 -> 8|Found 8 matching item)
+> cdevtest items 5403 101 5203 4 keep
+expect verb=items items=-
+> clear PerfEval
+> gamemode creative PerfEval
+> forceload remove 5398 5198 5412 5212
+look can_filled: the cobblestone and the apples are in the can's slots; can_reopened: all 27 slots empty; the stick stack held on the cursor at close is back in the inventory (clear line), nothing on the ground; holding the cobblestone did not place it (first use with the stack opened the screen)
 
 ## CQ-CMP-37 | Sneak right-click opens the filter screen; the other three trash cans unchanged
 @group client
 @commands Client; sneak right-click the Item Trash Can with an empty hand; right-click the Ultimate, Liquid and Energy Trash Cans
 @pass sneak opens the mod's own filter screen (one item filter slot, whitelist button); the other three cans open their usual screens with and without sneak
 @fails chest screen on sneak: `isShiftKeyDown` check; another can opens the chest screen: the block id check
-@draft needs a client
+@reviewed 2026-11-24
+# drafted r1124gate (2026-11-24): single-player client or pair; sneak + right click = walk with sneak and use held
+> gamemode creative PerfEval
+> forceload add 5398 5198 5412 5212
+> tp PerfEval 5403.5 102 5201.5 0 35
+sleep 3
+> fill 5398 100 5198 5412 100 5212 minecraft:stone
+> fill 5398 101 5198 5412 104 5212 minecraft:air
+> setblock 5403 101 5203 trashcans:item_trash_can
+> setblock 5405 101 5203 trashcans:ultimate_trash_can
+> setblock 5407 101 5203 trashcans:liquid_trash_can
+> setblock 5409 101 5203 trashcans:energy_trash_can
+> clear PerfEval
+> gamemode survival PerfEval
+> tp PerfEval 5403.5 101 5201.5 0 35
+sleep 3
+do {"target": true, "expect": "trashcans:item_trash_can"}
+do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
+do {"screen_info": true, "reject": "deleted on close"}
+shot item_can_sneak
+do {"screen": "close"}
+> tp PerfEval 5405.5 101 5201.5 0 35
+sleep 2
+do {"target": true, "expect": "trashcans:ultimate_trash_can"}
+do [{"use": "block"}, {"wait": 10}]
+do {"screen_info": true, "reject": "deleted on close"}
+shot ultimate_can
+do {"screen": "close"}
+do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
+do {"screen_info": true, "reject": "deleted on close"}
+do {"screen": "close"}
+> tp PerfEval 5407.5 101 5201.5 0 35
+sleep 2
+do {"target": true, "expect": "trashcans:liquid_trash_can"}
+do [{"use": "block"}, {"wait": 10}]
+do {"screen_info": true, "reject": "deleted on close"}
+shot liquid_can
+do {"screen": "close"}
+do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
+do {"screen_info": true, "reject": "deleted on close"}
+do {"screen": "close"}
+> tp PerfEval 5409.5 101 5201.5 0 35
+sleep 2
+do {"target": true, "expect": "trashcans:energy_trash_can"}
+do [{"use": "block"}, {"wait": 10}]
+do {"screen_info": true, "reject": "deleted on close"}
+shot energy_can
+do {"screen": "close"}
+do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
+do {"screen_info": true, "reject": "deleted on close"}
+do {"screen": "close"}
+> gamemode creative PerfEval
+> forceload remove 5398 5198 5412 5212
+look item_can_sneak: the mod's own filter screen (one item filter slot, whitelist button); ultimate, liquid and energy cans: their usual screens with and without sneak (the screen_info lines in the row log)
+
+@@section 7
+@@title SQ-CMP Trash Cans absent, 2026-11-23 ([creative_compat.md](../creative_compat.md) 1, TODO `storage-and-item-loss #17`; split from section 6 on 2026-11-24 for its own boot)
+@@date 2026-11-23
+@@jars creativecompat
+@@sources feature_writeup/creative_compat.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/TrashCansItemCanUseMixin.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/TrashCanScreen.java
+@@prep run rm -f mods/trashcans-*.jar
+@@text
+@@text Full pack with the 2026-11-23 Compat jar and the Trash Cans jar removed before the boot (Core Lib stays).
+@@text
+@@table
+## SQ-CMP-35 | Server boots with Trash Cans absent; the trash can mixin is skipped
+@group A
+@commands Own boot without the Trash Cans jar (section prep removes it); `grep -E "TrashCansItemCanUseMixin|trashcans" logs/latest.log`
+@pass server reaches `Done (`; no mixin error for TrashCansItemCanUseMixin; no ClassNotFound for `com.supermartijn642`
+@fails crash at mixin time: the gate entry `TrashCansItemCanUseMixin` -> `trashcans` missing in `CompatMixinPlugin.NEEDS_MOD`; NoClassDefFoundError: a Compat class other than the mixin names TrashCanScreen at load
+@reviewed 2026-11-24
+# drafted r1124gate (2026-11-24): own section and boot so the other section 6 rows keep the jar
+bootexpect Done \(
+bootreject (TrashCansItemCanUseMixin.*(Error|error|failed)|NoClassDefFoundError: com/supermartijn642)
+shell ls mods | grep -c "^trashcans-"; true
+shell grep -cE "TrashCansItemCanUseMixin|com\.supermartijn642\.trashcans" logs/latest.log; true
+look first shell line 0 (no Trash Cans jar), second 0 (no mixin or Trash Cans class named in the log)

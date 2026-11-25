@@ -27,6 +27,8 @@ look the shell line: agreements 16 in pool_1, 0 in pool_2
 @@date 2026-11-24
 @@jars creativecommon creativeloot
 @@sources feature_writeup/wandering_trader.md development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/CreativeLoot.java development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/LootConfig.java development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/trader/WanderingTraderTweaks.java
+@@prep copy tools/scratch_query/fixtures/wave2_carry/old_common_bees_trader.toml config/creativecommon-common.toml
+@@prep rm config/creativeloot-common.toml
 @@text `[wandering_trader]` lives in `config/creativeloot-common.toml` (Creative Loot's first config file) since 2026-11-24, with `WanderingTraderSpawnerMixin` and `WanderingTraderTradesMixin`; Trade Sync and the trade helper stay in Common. Loot's constructor copies an old `[wandering_trader]` from `creativecommon-common.toml` once. Fixture: `tools/scratch_query/fixtures/wave2_carry/old_common_bees_trader.toml`.
 @@table
 ## SQ-WT-03 | carry-over: Common's [wandering_trader] becomes Loot's new config file
@@ -34,12 +36,47 @@ look the shell line: agreements 16 in pool_1, 0 in pool_2
 @commands before boot put `old_common_bees_trader.toml` as `config/creativecommon-common.toml`, no `creativeloot-common.toml`; boot; read both files and the log
 @pass `config/creativeloot-common.toml` has `[wandering_trader]` enabled = true, traderIntervalTicks = 48000, commonTrades = 12, rareTrades = 3; Common's file has no `[wandering_trader]` after the boot; latest.log has `[swaps] config sections [wandering_trader] carried over from creativecommon-common.toml to creativeloot-common.toml`
 @fails the carry in `CreativeLoot` constructor (before `registerConfig`); Common still declaring the section
-@draft fixture copy as a section `@@prep run`; first runner writes the steps
 @modset none
+bootexpect \[swaps\] config sections \[wandering_trader\] carried over from creativecommon-common\.toml to creativeloot-common\.toml
+bootreject \[swaps\] could not (carry|merge) config sections .*wandering_trader
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*enabled = true\s*$'
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*traderIntervalTicks = 48000\s*$'
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*commonTrades = 12\s*$'
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*rareTrades = 3\s*$'
+shell ! grep -n '^\[wandering_trader\]' config/creativecommon-common.toml
 ## SQ-WT-04 | trader offer counts and spawn wait read from Loot's config; vanilla defaults without the pack values
 @group A
 @commands full pack: `/summon minecraft:wandering_trader ~ ~ ~`; `/data get entity @e[type=minecraft:wandering_trader,limit=1,sort=nearest] Offers.Recipes` and count; then `qrun.py toml config/creativeloot-common.toml wandering_trader enabled false`, wait for the reload, summon a second trader and count; on `@modset cc_only alone` plus Creative Loot, read the generated `config/creativeloot-common.toml`
 @pass pack values: about 25 common + 5 rare offers (fewer only when a pool is smaller); enabled false: 5 + 1; the generated file has enabled = false, 24000 / 5 / 1; latest.log has no mixin apply error naming `WanderingTrader`
 @fails `creativeloot.mixins.json` missing the two mixins; `LootConfig` not registered; Common's old mixins still listed in `creativecommon.mixins.json` (double apply)
-@draft the second half needs a Loot-plus-Common modset (no manifest yet; `qmodset.py` can add one)
 @modset none
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader enabled true && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader traderIntervalTicks 96000 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader commonTrades 25 && python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader rareTrades 5
+restart
+bootreject (?i)(WanderingTrader(Spawner|Trades)Mixin|mixin.*WanderingTrader).*(error|fail|exception|could not)
+> forceload add 0 0 15 15
+> scoreboard objectives add wt4 dummy
+> summon minecraft:wandering_trader 4 -60 4 {NoAI:1b,PersistenceRequired:1b,Tags:["wt4a"]}
+sleep 1
+> execute store result score #a wt4 run data get entity @e[tag=wt4a,limit=1] Offers.Recipes
+> scoreboard players get #a wt4
+expect #a has 30 \[wt4\]
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeloot-common.toml wandering_trader enabled false
+restart
+> forceload add 0 0 15 15
+> summon minecraft:wandering_trader 8 -60 8 {NoAI:1b,PersistenceRequired:1b,Tags:["wt4b"]}
+sleep 1
+> execute store result score #b wt4 run data get entity @e[tag=wt4b,limit=1] Offers.Recipes
+> scoreboard players get #b wt4
+expect #b has 6 \[wt4\]
+> kill @e[tag=wt4a]
+> kill @e[tag=wt4b]
+> scoreboard objectives remove wt4
+edit python3 "$INST/tools/scratch_query/qmodset.py" switch "$OUT" loot_alone
+restart
+bootreject (?i)(WanderingTrader(Spawner|Trades)Mixin|mixin.*WanderingTrader).*(error|fail|exception|could not)
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*enabled = false\s*$'
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*traderIntervalTicks = 24000\s*$'
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*commonTrades = 5\s*$'
+shell awk '/^\[wandering_trader\]/{f=1;next} /^\[/{f=0} f' config/creativeloot-common.toml | grep -E '^\s*rareTrades = 1\s*$'
+shell ls mods | grep -ciE '^creative(delight|worldgen|brewing|engineering)-' | grep -qx 0
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|Found no elements matching)

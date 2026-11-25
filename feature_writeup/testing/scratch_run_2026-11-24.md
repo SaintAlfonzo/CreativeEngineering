@@ -328,3 +328,45 @@ session `r1124p4` (not opened yet). Results in `perf/runs/r1124p4/`.
   (`r1124p4-drive`), perf collector likewise (`perf_session.sh start r1124p4`); DROPJARS = the 4 jars of
   `perf/runs/r1124nw/env.sh` only (the Snow! Real Magic workaround is dropped: Compat 1.0.0+edd3b66b9 carries the fix).
   Rerun `qprescreen.py` first if rows changed meanwhile; recheck `jarstamp.py pending` and record the stamps.
+
+## 4. r1124gate: W-P7 publish gate (Wave 1 and 2)
+
+runner-4 for creativeengineering2-19. Owner request: the W-P7 gate of [plan_wave1_publish.md](../plan_wave1_publish.md)
+and [plan_wave2_publish.md](../plan_wave2_publish.md) on the final jars. Results `perf/runs/r1124gate/`, perf session
+r1124gate.
+
+### 4.1 Scope
+
+148 ids (`perf/runs/r1124gate/ids.txt`): CC13, CMP, CPP, RPS, SMK (T1) rows, the wave carve ids and held failed rows.
+Not taken (wave session ruling): SQ-CEN-10, SQ-CMP-09s, CQ-CMP-09, SQ-PSM-08, SQ-CGE-15. CQ-RPI-90 is an owner row
+(playtest list only). Snow! Real Magic stays in the pack (SQ-RFX-35 tests its boot fix).
+
+### 4.2 Jars and preflight
+
+| Jar | Stamp in mods/ (jarstamp.py, 21:10) |
+|---|---|
+| creativecommon-1.3.0.jar | 1.3.0+ddd126587.2611242032 |
+| creativecompat-1.0.0.jar | 1.0.0+edd3b66b9.2611242047 |
+| solRaspberryPie-1.0.0.jar | 1.0.0+8f883cd64.2611242037 |
+
+All three match the brief. `check_all.py --fast`: first pass 1 FAIL (`test_queue_rows`, rendered queue behind the new
+draft steps) -> `status_index.py` -> 43 run, 0 failed. `game_jvms.sh` empty, 21 GB free on /. DROPJARS as r1124nw
+(`perf/runs/r1124gate/env.sh`: four new jars without a mod_sides.md row).
+
+### 4.3 Drafts and pre-screen
+
+- 21:00 to 21:10: four drafting agents wrote steps for 55 of 56 draft rows (MELT, GSH, SNP, CGE, CM; MT, FCK, WT, RP,
+  CEN, LT; CMP; RPS, CC13, CPP), lint 0 E. Left draft: CQ-RPI-95 (needs two real players), CQ-RPI-90 (owner row). New
+  modset `tools/scratch_query/modsets/loot_alone.toml` (SQ-WT-04). New sections: CM.qb 7 (SQ-CM-42 jar swap), CMP.qb 7
+  (SQ-CMP-35 without trashcans), RPS.qb 9 (CQ-RPS-12 fixture).
+- Plan `perf/runs/r1124gate/plan.json` (qrerun.py): 116 server rows in 45 sections; 31 client rows run after.
+- qprescreen: 4 likely. Fixed before boot: SQ-LE-03 (unset {H} capture -> own home-marker capture in the row);
+  SQ-TPF-10 (strike points unloaded -> forceload in the row); SQ-SMK-20 (`@absent` for the weathered cardboard box,
+  an Engineering id since 2026-11-24, after the last /dumpall). Left: SQ-MELT-24 (End coordinates, the lint ignores
+  `dim=`, false positive).
+
+### 4.4 Run notes
+
+- 21:11 RUNNER.md claimed (r1124p4 paused idle at 20:53, no game JVM).
+- 21:13 perf session r1124gate open (systemd user scope `r1124gate-perf`); 21:14 drive started as user unit
+  `r1124gate-drive` (`perf/runs/r1124gate/start_drive.sh`, log `drive_main.out`): 54 steps, 116 rows.

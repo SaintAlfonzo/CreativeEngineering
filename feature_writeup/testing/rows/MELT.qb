@@ -960,33 +960,171 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @commands before boot put `old_creativecommon-common.toml` (saltRange 2, endNoFire false) as `config/creativecommon-common.toml` and `compat_without_melting.toml` as `config/creativecompat-common.toml`; boot; read both files and the log
 @pass `config/creativecompat-common.toml` `[melting]` has saltRange = 2 and endNoFire = false; `config/creativecommon-common.toml` has no `[melting]` after the boot; latest.log has `[swaps] config sections [melting] merged`; no WARN naming `[melting]`; no `Missing`, `missing registry` or `unknown` line naming `creativecommon:glass_shards` or `creativecommon:melting`
 @fails `MovedKeys.mergeSections` in Compat (runs before the config registers); Common still declaring `[melting]` (should have dropped it); a loot modifier id left in a saved list
-@draft verify the fixture copy runs as a section `@@prep run` and the toml read with qrun.py toml; first runner writes the steps
 @modset none
+# r1124gate (2026-11-24, runner-4): self-contained; the pack copies are kept as *.melt21bak and put back at the end
+# (Common's config watcher reloads them on the running server). Fixtures: tools/scratch_query/fixtures/wave2_carry/.
+edit cp config/creativecommon-common.toml config/creativecommon-common.toml.melt21bak; cp config/creativecompat-common.toml config/creativecompat-common.toml.melt21bak; cp "$INST/tools/scratch_query/fixtures/wave2_carry/old_creativecommon-common.toml" config/creativecommon-common.toml && cp "$INST/tools/scratch_query/fixtures/wave2_carry/compat_without_melting.toml" config/creativecompat-common.toml && ! grep -qE "^[[:space:]]*\[melting" config/creativecompat-common.toml
+restart
+bootexpect \[swaps\] config sections \[melting\] merged from creativecommon-common\.toml into creativecompat-common\.toml
+bootreject \[swaps\] config sections \[melting\] carried over
+bootreject still has sections that moved|could not (merge|carry) config sections
+bootreject WARN\].*\[melting\]
+bootreject ^(?=.*([Mm]issing|[Uu]nknown)).*creativecommon:(glass_shards|melting)
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[melting\][[:space:]]*$/' config/creativecompat-common.toml | grep -E "^[[:space:]]*(saltRange|fireRange|meltChance|endNoFire|enabled) ="
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[melting\][[:space:]]*$/' config/creativecompat-common.toml | grep -qE "^[[:space:]]*saltRange = 2[[:space:]]*$"
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[melting\][[:space:]]*$/' config/creativecompat-common.toml | grep -qE "^[[:space:]]*endNoFire = false[[:space:]]*$"
+shell ! grep -nE "^[[:space:]]*\[melting" config/creativecommon-common.toml
+shell cp config/creativecompat-common.toml config/creativecompat-common.toml.melt21 && cp config/creativecommon-common.toml config/creativecommon-common.toml.melt21 && cp config/creativecommon-common.toml.melt21bak config/creativecommon-common.toml && cp config/creativecompat-common.toml.melt21bak config/creativecompat-common.toml
+look merged line names [melting]; the Compat [melting] keys printed show saltRange = 2, endNoFire = false (the carried files are kept as *.melt21)
 ## SQ-MELT-22 | carry-over, new file: no Compat toml, Common's [melting] carried whole
 @group A (full pack, fixture tomls)
 @commands as SQ-MELT-21 but only `old_creativecommon-common.toml` is put in `config/` (no `creativecompat-common.toml`)
 @pass Compat's new toml has `[melting]` with saltRange = 2 and endNoFire = false; Common's file has no `[melting]`; latest.log has `[swaps] config sections [melting] carried over`; no `Missing` / `missing registry` line naming `creativecommon:glass_shards`
 @fails `MovedKeys.carrySections` (new-file path)
-@draft as SQ-MELT-21
 @modset none
+# r1124gate (2026-11-24, runner-4): as SQ-MELT-21, Compat's toml removed before the boot (backups *.melt22bak)
+edit cp config/creativecommon-common.toml config/creativecommon-common.toml.melt22bak; cp config/creativecompat-common.toml config/creativecompat-common.toml.melt22bak; cp "$INST/tools/scratch_query/fixtures/wave2_carry/old_creativecommon-common.toml" config/creativecommon-common.toml && rm -f config/creativecompat-common.toml
+restart
+bootexpect \[swaps\] config sections \[melting\] carried over from creativecommon-common\.toml to creativecompat-common\.toml
+bootreject \[swaps\] config sections \[melting\] merged
+bootreject still has sections that moved|could not (merge|carry) config sections
+bootreject ^(?=.*([Mm]issing|[Uu]nknown)).*creativecommon:glass_shards
+shell test -f config/creativecompat-common.toml && echo COMPAT-TOML-CREATED
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[melting\][[:space:]]*$/' config/creativecompat-common.toml | grep -E "^[[:space:]]*(saltRange|fireRange|meltChance|endNoFire|enabled) ="
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[melting\][[:space:]]*$/' config/creativecompat-common.toml | grep -qE "^[[:space:]]*saltRange = 2[[:space:]]*$"
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[melting\][[:space:]]*$/' config/creativecompat-common.toml | grep -qE "^[[:space:]]*endNoFire = false[[:space:]]*$"
+shell ! grep -nE "^[[:space:]]*\[melting" config/creativecommon-common.toml
+shell cp config/creativecompat-common.toml config/creativecompat-common.toml.melt22 && cp config/creativecommon-common.toml config/creativecommon-common.toml.melt22 && cp config/creativecommon-common.toml.melt22bak config/creativecommon-common.toml && cp config/creativecompat-common.toml.melt22bak config/creativecompat-common.toml
+look carried-over line names [melting]; COMPAT-TOML-CREATED; the printed Compat [melting] keys show saltRange = 2, endNoFire = false
 ## SQ-MELT-23 | melting still works under the new tag namespace
 @group A
 @commands tag dumps `/cdevtest tag block creativecompat:melting/salt`, `/fire`, `/saltable`, `/hot`; salt block beside ice and snow with `gamerule randomTickSpeed 3`; grep latest.log for `[melting] tags:`
 @pass the tag dumps are non-empty with the same counts as before the move (compare SQ-MELT-09 / -16); `[melting] tags:` line present; ice and snow beside salt melt; `/cdevtest tag block creativecommon:melting/salt` is empty or absent; `creativecommon.tooltip.saltable` key unused
 @fails `kubejs/data/creativecompat/kubejs/tags/melting_tags.js` not loaded (data script path), `block_dict.js` `b.t_melt_*` values still naming the old namespace
-@draft steps from SQ-MELT-02 and -16 with the new tag names
 @absent creativecompat:melting/salt creativecompat:melting/fire creativecompat:melting/saltable creativecompat:melting/hot (tags added 2026-11-24, after the last /dumpall)
 @modset none
+# r1124gate (2026-11-24, runner-4): counts from the 2026-11-19 tag dump (creativecommon:melting/*: salt 40, fire 123,
+# saltable 44, meltable 35) and the r1124 boot line; melting/hot is a BIOME tag (block_dict t_melt_hot_biomes), read as kind biome.
+# Area x 2400 to 2431, z 2000 to 2031 (clear of the other MELT rows); bot m23 keeps it random-ticking.
+bootexpect \[melting\] tags: 35 meltable, 11 slow, 40 salt, 123 fire, 1 lava, 8 ultra-warm instant, 44 saltable, 2 keeps snow, 2 magma
+> cdevtest tag block creativecompat:melting/salt
+> cdevtest tag block creativecompat:melting/fire
+> cdevtest tag block creativecompat:melting/saltable
+> cdevtest tag block creativecompat:melting/meltable
+> cdevtest tag biome creativecompat:melting/hot
+> cdevtest tag block creativecommon:melting/salt
+> cdevtest tag block creativecommon:melting/fire
+waitlog verb=tag kind=block tag=creativecommon:melting/fire n= 20
+expect verb=tag kind=block tag=creativecompat:melting/salt n=40 ids=\S*salt:salt_block
+expect verb=tag kind=block tag=creativecompat:melting/fire n=123 ids=\S*architects_palette:molten_nether_bricks
+expect verb=tag kind=block tag=creativecompat:melting/saltable n=44 ids=\S*minecraft:ice\b
+expect verb=tag kind=block tag=creativecompat:melting/meltable n=35 ids=
+expect verb=tag kind=biome tag=creativecompat:melting/hot n=[1-9]\d* ids=
+expect verb=tag kind=block tag=creativecommon:melting/salt n=0 ids=-
+expect verb=tag kind=block tag=creativecommon:melting/fire n=0 ids=-
+shell ! unzip -p mods/creativecommon-*.jar assets/creativecommon/lang/en_us.json | grep -n "tooltip.saltable"
+shell unzip -p mods/creativecompat-*.jar assets/creativecompat/lang/en_us.json | grep -q "creativecompat.tooltip.saltable"
+> forceload add 2400 2000 2431 2031
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m23 run pbot spawn m23 2416 -60 2026 minecraft:overworld survival
+sleep 3
+> setblock 2405 -61 2005 salt:salt_block
+> setblock 2406 -61 2005 minecraft:ice
+> setblock 2404 -61 2005 minecraft:snow_block
+> setblock 2405 -61 2006 minecraft:snow[layers=3]
+> setblock 2420 -62 2005 minecraft:stone
+> setblock 2420 -61 2005 architects_palette:molten_nether_bricks
+> setblock 2422 -61 2005 minecraft:snow[layers=2]
+> setblock 2420 -61 2008 minecraft:ice
+sleep 1
+reject ^(?!.*Error parsing recipe).*(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
+> execute if block 2406 -61 2005 minecraft:water[level=0] run say SQ-MELT-23-salt_ice_water
+> execute if block 2404 -61 2005 minecraft:air run say SQ-MELT-23-salt_snowblock_air
+> execute if block 2405 -61 2006 minecraft:air run say SQ-MELT-23-salt_layer_air
+> execute if block 2405 -61 2005 salt:salt_block run say SQ-MELT-23-salt_kept
+> execute if block 2422 -61 2005 minecraft:air run say SQ-MELT-23-molten_snow2_air
+> execute if block 2420 -61 2008 minecraft:water run say SQ-MELT-23-molten_ice3_water
+expect SQ-MELT-23-salt_ice_water$
+expect SQ-MELT-23-salt_snowblock_air$
+expect SQ-MELT-23-salt_layer_air$
+expect SQ-MELT-23-salt_kept$
+expect SQ-MELT-23-molten_snow2_air$
+expect SQ-MELT-23-molten_ice3_water$
+> forceload remove 2400 2000 2431 2031
+look tag counts match the pre-move dump (salt 40, fire 123, saltable 44, meltable 35); the old creativecommon tags are empty; salt and Molten Nether Bricks melt as SQ-MELT-01 / -02 (the bootexpect counts may move when a mod adds members: compare with the r1124 boot line)
 ## SQ-MELT-24 | End refuses fire with Compat's endFire mixin and endNoFire key
 @group A
 @commands in the End place a torch-lit fire block (`setblock ~ ~ ~ minecraft:fire`) and flint-and-steel it with a bot; then `qrun.py toml config/creativecompat-common.toml melting endNoFire false` and repeat
 @pass endNoFire true: no fire in the End and no sound; false: fire is placed; latest.log has no `EndFireMixin` apply error
 @fails `EndFireMixin` is in Compat's `mixin/` with enable key `[mixins] endFire`; `Melting.onScheduledTick` removal of fire already there
-@draft steps from SQ-MELT-11 to -13 (End no fire)
 @modset none
+# r1124gate (2026-11-24, runner-4): End void spot x 200 to 215, z 200 to 215, y 64 (clear of the main island); the
+# setblock refusal reads "Could not set the block"; cdevtest use = a fake player of the End with flint and steel.
+# endNoFire is set by a restart each way so the row does not depend on SQ-MELT-21/-22's carried values.
+bootreject (?i)^(?=.*EndFireMixin).*(apply failed|InvalidInjection|exception|could not)
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml melting endNoFire true
+restart
+> execute in minecraft:the_end run forceload add 200 200 215 215
+sleep 5
+> execute in minecraft:the_end run fill 200 63 200 215 63 215 minecraft:end_stone
+> execute in minecraft:the_end run setblock 210 63 210 minecraft:soul_soil
+> execute in minecraft:the_end run setblock 204 64 204 minecraft:fire
+> execute in minecraft:the_end run setblock 210 64 210 minecraft:soul_fire
+> cdevtest use 206 63 206 held=minecraft:flint_and_steel face=up dim=minecraft:the_end
+sleep 3
+> execute in minecraft:the_end if block 204 64 204 minecraft:air run say SQ-MELT-24-on_setblock_refused
+> execute in minecraft:the_end if block 206 64 206 minecraft:air run say SQ-MELT-24-on_flint_refused
+> execute in minecraft:the_end if block 210 64 210 minecraft:soul_fire run say SQ-MELT-24-on_soulfire_kept
+expect Could not set the block
+expect SQ-MELT-24-on_setblock_refused$
+expect SQ-MELT-24-on_flint_refused$
+expect SQ-MELT-24-on_soulfire_kept$
+> execute in minecraft:the_end run forceload remove 200 200 215 215
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml melting endNoFire false
+restart
+shell grep -nE "^[[:space:]]*endNoFire = false" config/creativecompat-common.toml
+> execute in minecraft:the_end run forceload add 200 200 215 215
+sleep 5
+> execute in minecraft:the_end run gamerule doFireTick false
+> execute in minecraft:the_end run setblock 204 64 204 minecraft:fire
+> cdevtest use 208 63 206 held=minecraft:flint_and_steel face=up dim=minecraft:the_end
+sleep 3
+> execute in minecraft:the_end if block 204 64 204 minecraft:fire run say SQ-MELT-24-off_setblock_fire
+> execute in minecraft:the_end if block 208 64 206 minecraft:fire run say SQ-MELT-24-off_flint_fire
+expect SQ-MELT-24-off_setblock_fire$
+expect SQ-MELT-24-off_flint_fire$
+> execute in minecraft:the_end run fill 200 64 200 215 64 215 minecraft:air
+> execute in minecraft:the_end run forceload remove 200 200 215 215
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml melting endNoFire true
+restart
+look endNoFire true: setblock refused, flint and steel placed nothing, soul fire kept; false: both fires placed; sound by hand only (not judged here)
 ## CQ-MELT-02 | Saltable tooltip under the Compat lang key
 @group client
 @commands hover salt blocks and ice items with Compat installed
 @pass the gray "Saltable" line shows on saltable items (text, not the raw key `creativecompat.tooltip.saltable`)
 @fails `SaltableTooltip` in `creativecompat/melting/`; lang key in Compat's en_us.json
-@draft same hover as CQ-MELT-01
+@sources development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/melting/SaltableTooltip.java development/creativeCompat/src/main/resources/assets/creativecompat/lang/en_us.json
+# r1124gate (2026-11-24, runner-4): capture driver (client_capture.md 2.11), single player or joined; items from the
+# saltable tag (2026-11-19 dump); blue ice, permafrost and the salt block itself are not saltable.
+do {"tooltip_text": "minecraft:ice", "expect": "Saltable", "reject": "creativecompat\\.tooltip"}
+do {"tooltip_text": "minecraft:packed_ice", "expect": "Saltable", "reject": "creativecompat\\.tooltip"}
+do {"tooltip_text": "minecraft:snow_block", "expect": "Saltable", "reject": "creativecompat\\.tooltip"}
+do {"tooltip_text": "immersive_weathering:snowy_stone_bricks", "expect": "Saltable", "reject": "creativecompat\\.tooltip"}
+do {"tooltip_text": "immersive_weathering:frosty_glass", "expect": "Saltable", "reject": "creativecompat\\.tooltip"}
+do {"tooltip_text": "architects_palette:polished_packed_ice", "expect": "Saltable", "reject": "creativecompat\\.tooltip"}
+do {"tooltip_text": "minecraft:blue_ice", "reject": "Saltable|creativecompat\\.tooltip"}
+do {"tooltip_text": "immersive_weathering:permafrost", "reject": "Saltable|creativecompat\\.tooltip"}
+do {"tooltip_text": "salt:salt_block", "reject": "Saltable|creativecompat\\.tooltip"}
+> give @s minecraft:ice
+do {"screen": "inventory"}
+shot saltable_ice_inventory
+look the driver steps passed (text "Saltable" on six saltable items, none on blue ice, permafrost, salt block); the shot shows the line gray under the name when hovered

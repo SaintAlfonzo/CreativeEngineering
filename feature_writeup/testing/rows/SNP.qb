@@ -183,5 +183,45 @@ reject \[cdevtest\] .*done=0
 @commands boot Compat with Supplementaries and the sacks; `/cdevtest tag block creativecompat:sneak_pickup`; rerun SQ-SNP-01
 @pass the tag lists `supplementaries:sack`; sneak right-click with an empty hand gives the sack with its contents; `creativecommon:sneak_pickup` does not exist
 @fails `kubejs/data/creativecompat/kubejs/tags/sneak_pickup_tags.js` not loaded; `SneakPickup` registration in `CreativeCompat.java`
-@draft as SQ-SNP-01 with the new tag
-@absent creativecompat:sneak_pickup (tag added 2026-11-24)
+@absent creativecompat:sneak_pickup creativecommon:sneak_pickup (tag added 2026-11-24; the old one must be empty)
+@modset cpp_chain compat +supplementaries-* +moonlight-* +suppsquared-*
+# r1124gate (2026-11-24, runner-4): Common + Compat (+ Calendar, Serene Seasons) plus Supplementaries and Squared; the
+# set's kubejs/ holds only the probes, so the tag can come only from the script in Compat's jar
+# (data/creativecompat/kubejs/tags/sneak_pickup_tags.js). SQ-SNP-01 moved to group B, y 200 over the world.
+shell ls kubejs/server_scripts; ! grep -rl "sneak_pickup" kubejs/server_scripts
+shell unzip -l mods/creativecompat-*.jar | grep "kubejs/tags/sneak_pickup_tags.js"
+> forceload add 5360 5200 5375 5215
+sleep 3
+> fill 5360 199 5200 5375 199 5215 minecraft:stone
+> fill 5360 200 5200 5375 204 5215 minecraft:air
+sleep 2
+> cdevtest tag block creativecompat:sneak_pickup
+expect verb=tag kind=block tag=creativecompat:sneak_pickup n=\d+ ids=(?=\S*supplementaries:sack\b)(?=\S*suppsquared:sack_red\b)
+> cdevtest tag block creativecommon:sneak_pickup
+expect verb=tag kind=block tag=creativecommon:sneak_pickup n=0 ids=-
+> kill @e[type=minecraft:item,x=5363,y=200,z=5203,distance=..8]
+> setblock 5363 200 5203 supplementaries:sack{Items:[{Slot:0b,id:"minecraft:apple",Count:3b},{Slot:1b,id:"minecraft:stick",Count:5b},{Slot:2b,id:"minecraft:cobblestone",Count:7b}]}
+> pbot spawn snp6 5363.5 200 5205.5 minecraft:overworld survival
+sleep 2
+> pbot inv snp6 clear
+> pbot sneak snp6 on
+expect \[cdevtest\] verb=pbot\.sneak bot=snp6 shift=true
+> pbot use snp6 5363 200 5203 up
+sleep 1
+> execute if block 5363 200 5203 minecraft:air run say SNP06 sack picked up
+expect SNP06 sack picked up
+> data get entity snp6 SelectedItem
+expect snp6 has the following entity data: \{.*id: "supplementaries:sack"(?=.*minecraft:apple)(?=.*minecraft:stick)(?=.*minecraft:cobblestone)
+> cdevtest items 5363 200 5203 2 keep
+expect verb=items items=-
+> pbot sneak snp6 off
+> pbot use snp6 5363 199 5207 up
+sleep 1
+> cdevtest inv 5363 200 5207
+expect verb=inv slot=\d+ item=minecraft:apple\*3\b
+expect verb=inv slot=\d+ item=minecraft:stick\*5\b
+expect verb=inv slot=\d+ item=minecraft:cobblestone\*7\b
+> pbot remove snp6
+> forceload remove 5360 5200 5375 5215
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|Invalid (block state|tag))
+reject \[cdevtest\] .*done=0

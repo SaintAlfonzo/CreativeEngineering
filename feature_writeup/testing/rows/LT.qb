@@ -130,4 +130,17 @@ look the grep prints both lines; any spyglass or bell tip seen in the bar matche
 @commands full pack client: F3+T; grep latest.log for `Loading tips:`; then a client with Creative Common and no pack folder tips (no `kubejs/assets/creativetips`): F3+T, same grep
 @pass full pack: `Loading tips: 213 tips from 3 files (210 replaced, 319 removed, 0 id clashes, 0 unmatched ids)`; Common alone: `396 tips from 2 files (0 replaced, 136 removed, 0 id clashes, 0 unmatched ids)`; no Mace, Trial Chamber or Breeze tip in either
 @fails `version_filter.json` missing from the jar (`resourcepacks/loading_tips/`), or a Creative Tips `remove` id that the filter already dropped (logged as unmatched)
-@draft the Common-alone half needs a client without the pack's kubejs assets
+# the Common-alone half: Creative Tips' file moved aside in GAME (a copy of the instance's kubejs/), so the reload sees
+# only the jar's two files; put back at the end. If KubeJS does not rescan its assets folder on F3+T, the 396 wait fails.
+key F3+t
+waitlog Loading tips: \d+ tips from \d+ files 120
+expect Loading tips: 213 tips from 3 files \(210 replaced, 319 removed, 0 id clashes, 0 unmatched ids\)
+shell mv kubejs/assets/creativetips/loading_tips/tips.json kubejs/assets/creativetips/loading_tips/tips.json.cqltp17
+key F3+t
+waitlog Loading tips: 396 tips from 2 files 120
+expect Loading tips: 396 tips from 2 files \(0 replaced, 136 removed, 0 id clashes, 0 unmatched ids\)
+shell mv kubejs/assets/creativetips/loading_tips/tips.json.cqltp17 kubejs/assets/creativetips/loading_tips/tips.json
+key F3+t
+waitlog Loading tips: 213 tips from 3 files 120
+shell python3 -c "import json,zipfile,glob,re,os; z=zipfile.ZipFile(sorted(glob.glob('mods/creativecommon-*.jar'))[-1]); b='resourcepacks/loading_tips/assets/loading_tips/loading_tips/'; base={t['id']:t['text'] for t in json.loads(z.read(b+'tips.json'))['tips']}; f=set(json.loads(z.read(b+'version_filter.json'))['remove']); alone={k:v for k,v in base.items() if k not in f}; c=json.load(open('kubejs/assets/creativetips/loading_tips/tips.json')); full={k:v for k,v in alone.items() if k not in set(c['remove'])}; full.update({t['id']:t['text'] for t in c['tips']}); bad=re.compile(r'\b(Maces?|Trial Chambers?|Breezes?)\b'); hits=[k for k,v in list(alone.items())+list(full.items()) if bad.search(v)]; print('alone', len(alone), 'full', len(full), 'newer-version hits', hits); assert len(alone)==396 and len(full)==213 and not hits"
+reject Loading tips: (skipped|built-in pack .* is missing)

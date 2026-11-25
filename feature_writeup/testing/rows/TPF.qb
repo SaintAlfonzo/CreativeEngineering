@@ -61,6 +61,9 @@ look Enabled line recorded; diff empty (the post-stop diff is in the run notes);
 @fails base shows items: ItemPhysic or another mod already keeps them, fix stays off; fix shows none: 4.5 export check of `mc206922.ItemEntityMixin`
 @from batches/r1113tpf/s1_fix.qb passed
 # NoAI: a cow that wandered off the strike point survived (r1114)
+# BF-FIX r1124gate: forceload the strike points (unloaded when run alone)
+> forceload add 1296 992 1328 1008
+sleep 3
 > summon minecraft:cow 1300 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
 > summon minecraft:cow 1310 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
 > summon minecraft:cow 1320 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}

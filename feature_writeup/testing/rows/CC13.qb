@@ -55,25 +55,146 @@
 @commands Full pack client in a world: open `config/creativecommon-common.toml`, change a value with a visible effect (for example an `[effects] levelCaps` entry or `[melting] meltTickInterval`), save; read `logs/latest.log`
 @pass log shows the watcher noticing the file and the Forge reload path running once after the 1 s debounce; the new value is in effect without a restart; saving unchanged content does not reload
 @fails `OwnConfigLogic` file filter, debounce, content guard
-@draft no steps yet: the owner reads the log and the in-game effect
+@reviewed 2026-11-24
+# steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's usual unlisted-jar --drop set), flat creative world
+bootexpect \[creativecommon\] config watcher on: [0-9]+ own config file
+bootreject config watcher could not start
+> effect clear @s
+> effect give @s minecraft:luck 60 2
+do {"effects": true, "expect": "minecraft:luck amp 2"}
+shell sed -i 's/^\([[:space:]]*levelCaps = \[\)/\1"minecraft:luck=1", /' config/creativecommon-common.toml; test "$(grep -c '"minecraft:luck=1"' config/creativecommon-common.toml)" = 1
+waitlog \[creativecommon\] creativecommon-common\.toml reloaded 20
+> effect clear @s
+> effect give @s minecraft:luck 60 2
+do {"effects": true, "expect": "minecraft:luck amp 0"}
+shell python3 -c "p='config/creativecommon-common.toml'; d=open(p,'rb').read(); open(p,'wb').write(d)"
+sleep 5
+shell sed -i 's/"minecraft:luck=1", //' config/creativecommon-common.toml
+waitlog \[creativecommon\] creativecommon-common\.toml reloaded 20
+> effect clear @s
+> effect give @s minecraft:luck 60 2
+do {"effects": true, "expect": "minecraft:luck amp 2"}
+count \[creativecommon\] creativecommon-common\.toml reloaded == 2
+reject reloading creativecommon-common\.toml failed|config watcher pass failed
+look the first reload line lands about 1 s after the edit (log timestamps against the shell step); the unchanged rewrite gave no reload (count 2: the edit and the revert)
 ## CQ-CC13-02 | melt and salt tooltip: salt and saltable blocks show the melting hint
 @group client
 @commands Full pack client: hover a salt item, an ice block and a snow block in the inventory
 @pass the saltable tooltip line shows on the blocks salt melts and the salt item names its use; no tooltip line on blocks it does not melt
 @fails saltable tag, tooltip handler, lang keys
-@draft no steps yet: the owner reads the tooltips
+@reviewed 2026-11-24
+# steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's usual unlisted-jar --drop set), flat creative world
+do {"tooltip_text": "minecraft:ice", "expect": ": Saltable$"}
+do {"tooltip_text": "minecraft:packed_ice", "expect": ": Saltable$"}
+do {"tooltip_text": "minecraft:snow", "expect": ": Saltable$"}
+do {"tooltip_text": "minecraft:snow_block", "expect": ": Saltable$"}
+do {"tooltip_text": "minecraft:blue_ice", "reject": ": Saltable$"}
+do {"tooltip_text": "minecraft:stone", "reject": ": Saltable$"}
+do {"tooltip_text": "minecraft:dirt", "reject": ": Saltable$"}
+do {"tooltip_text": "salt:salt"}
+do {"tooltip_text": "salt:salt_melt"}
+do {"tooltip": "minecraft:ice"}
+shot ice_tooltip
+do {"tooltip": "salt:salt"}
+shot salt_tooltip
+do {"tooltip": "salt:salt_melt"}
+shot salt_melt_tooltip
+do {"screen": "close"}
+look ice_tooltip: the gray "Saltable" line under the name; salt and Salt Melt READ lines and shots: what the salt item says about its use (the code has no salt-item tooltip line, only the Saltable line on blocks and the JEI info page; a missing use line is a doc question, not a FAIL)
 ## CQ-CC13-03 | level-capped effect tooltip: a capped effect shows level I everywhere
 @group client
 @commands Full pack client: apply a capped effect at level III (`/effect give @s <capped effect> 60 2`), look at the HUD, the inventory effect list, a potion item or wine tooltip and the JEI page
 @pass the effect shows level I (no level numeral) in every place; an uncapped effect keeps its level
 @fails `[effects] levelCaps` (getAmplifier, tooltip mixins); one display path not capped
-@draft no steps yet: the owner looks
+@reviewed 2026-11-24
+# steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's usual unlisted-jar --drop set), flat creative world
+> effect clear @s
+> effect give @s minecraft:nausea 60 2
+> effect give @s minecraft:speed 60 2
+do {"effects": true, "expect": "minecraft:nausea amp 0"}
+do {"effects": true, "expect": "minecraft:speed amp 2"}
+do {"tooltip_text": "minecraft:potion", "nbt": "{CustomPotionEffects:[{Id:9b,Amplifier:2b,Duration:1200}]}", "expect": "Nausea \\(", "reject": "Nausea I"}
+do {"tooltip_text": "minecraft:potion", "nbt": "{CustomPotionEffects:[{Id:1b,Amplifier:2b,Duration:1200}]}", "expect": "Speed III"}
+do {"screen": "close"}
+shot hud
+do {"screen": "inventory"}
+do {"wait": 10}
+shot inventory_effects
+do {"screen": "close"}
+do {"tooltip": "minecraft:potion", "nbt": "{CustomPotionEffects:[{Id:9b,Amplifier:2b,Duration:1200}]}"}
+shot potion_tooltip
+do {"screen": "close"}
+look hud and inventory_effects: Nausea without a level numeral, Speed shows III; potion_tooltip: "Nausea (1:00)" with no numeral; wine and JEI page not captured here (a JEED effect page has no driver screen; owner playtest)
 ## CQ-CC13-04 | wooden composters look right in the world (side texture palette)
 @group client
 @commands Full pack client: place the 12 wood composters empty, filling and ready in daylight next to their planks (also covered by CQ-CM-42)
 @pass the compost gaps take each plank's darkest shades; no missing texture; owner approves, then the `sources.csv` composter rows go from `confirm` to `ok`
 @fails the palette choice (rerun the swap with another palette; ask the owner which), model paths
-@draft no steps yet: the owner judges the look
+@reviewed 2026-11-24
+@absent creativedelight:spruce_composter creativedelight:birch_composter creativedelight:dark_oak_composter creativedelight:jungle_composter creativedelight:acacia_composter creativedelight:mangrove_composter creativedelight:twisted_composter creativedelight:ancient_composter creativedelight:blossom_composter creativedelight:azalea_composter creativedelight:crimson_composter creativedelight:warped_composter (registered by Creative Delight since the wave 2 carve, 2026-11-24, after the last /dumpall; were creativecommon:<wood>_composter)
+# steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's usual unlisted-jar --drop set), flat creative world
+> fill -2 -60 1 26 -56 12 minecraft:air
+> setblock 0 -60 3 minecraft:spruce_planks
+> setblock 0 -60 5 creativedelight:spruce_composter[level=0]
+> setblock 0 -60 7 creativedelight:spruce_composter[level=4]
+> setblock 0 -60 9 creativedelight:spruce_composter[level=8]
+> setblock 2 -60 3 minecraft:birch_planks
+> setblock 2 -60 5 creativedelight:birch_composter[level=0]
+> setblock 2 -60 7 creativedelight:birch_composter[level=4]
+> setblock 2 -60 9 creativedelight:birch_composter[level=8]
+> setblock 4 -60 3 minecraft:dark_oak_planks
+> setblock 4 -60 5 creativedelight:dark_oak_composter[level=0]
+> setblock 4 -60 7 creativedelight:dark_oak_composter[level=4]
+> setblock 4 -60 9 creativedelight:dark_oak_composter[level=8]
+> setblock 6 -60 3 minecraft:jungle_planks
+> setblock 6 -60 5 creativedelight:jungle_composter[level=0]
+> setblock 6 -60 7 creativedelight:jungle_composter[level=4]
+> setblock 6 -60 9 creativedelight:jungle_composter[level=8]
+> setblock 8 -60 3 minecraft:acacia_planks
+> setblock 8 -60 5 creativedelight:acacia_composter[level=0]
+> setblock 8 -60 7 creativedelight:acacia_composter[level=4]
+> setblock 8 -60 9 creativedelight:acacia_composter[level=8]
+> setblock 10 -60 3 minecraft:mangrove_planks
+> setblock 10 -60 5 creativedelight:mangrove_composter[level=0]
+> setblock 10 -60 7 creativedelight:mangrove_composter[level=4]
+> setblock 10 -60 9 creativedelight:mangrove_composter[level=8]
+> setblock 12 -60 3 architects_palette:twisted_planks
+> setblock 12 -60 5 creativedelight:twisted_composter[level=0]
+> setblock 12 -60 7 creativedelight:twisted_composter[level=4]
+> setblock 12 -60 9 creativedelight:twisted_composter[level=8]
+> setblock 14 -60 3 quark:ancient_planks
+> setblock 14 -60 5 creativedelight:ancient_composter[level=0]
+> setblock 14 -60 7 creativedelight:ancient_composter[level=4]
+> setblock 14 -60 9 creativedelight:ancient_composter[level=8]
+> setblock 16 -60 3 quark:blossom_planks
+> setblock 16 -60 5 creativedelight:blossom_composter[level=0]
+> setblock 16 -60 7 creativedelight:blossom_composter[level=4]
+> setblock 16 -60 9 creativedelight:blossom_composter[level=8]
+> setblock 18 -60 3 quark:azalea_planks
+> setblock 18 -60 5 creativedelight:azalea_composter[level=0]
+> setblock 18 -60 7 creativedelight:azalea_composter[level=4]
+> setblock 18 -60 9 creativedelight:azalea_composter[level=8]
+> setblock 20 -60 3 minecraft:crimson_planks
+> setblock 20 -60 5 creativedelight:crimson_composter[level=0]
+> setblock 20 -60 7 creativedelight:crimson_composter[level=4]
+> setblock 20 -60 9 creativedelight:crimson_composter[level=8]
+> setblock 22 -60 3 minecraft:warped_planks
+> setblock 22 -60 5 creativedelight:warped_composter[level=0]
+> setblock 22 -60 7 creativedelight:warped_composter[level=4]
+> setblock 22 -60 9 creativedelight:warped_composter[level=8]
+> time set noon
+do {"wait": "chunks"}
+do {"look": {"from": "5 -56 0", "at": "5 -60 6"}}
+do {"wait": 10}
+shot left_half
+do {"look": {"from": "17 -56 0", "at": "17 -60 6"}}
+do {"wait": 10}
+shot right_half
+do {"look": {"from": "11 -57 14", "at": "11 -60 6"}}
+do {"wait": 10}
+shot from_behind
+reject Unknown block type|Invalid block state|Incorrect argument
+look owner: per wood (planks row in front: spruce, birch, dark oak, jungle, acacia, mangrove, twisted, ancient, blossom, azalea, crimson, warped) the empty, filling (level 4) and ready (level 8) composters; the compost gaps take each plank's darkest shades, no missing texture; on approval the `sources.csv` composter rows go from `confirm` to `ok`
 
 @@section 2
 @@title SQ-CC13 publish fixes on the 1.3.0 jar, 2026-11-22 ([publish_readiness.md](../publish_readiness.md) PR-CC-01, -02, -04, -05, -08, -10, ruling P7; TODO `creative-common-publish #10` to `#15`, `food-tuning #47`)
