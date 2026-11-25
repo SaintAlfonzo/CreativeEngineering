@@ -21,7 +21,7 @@
 @commands boot; `grep -E "Mixin apply failed\|InvalidMixinException\|outside the tested range\|ClassNotFoundException.*(creativecommon\|creativeengineering)" logs/latest.log`; `grep -c "Failed to load tag\|Couldn't load tag" logs/latest.log`; `/zq itemtag creativecommon:metal_dusts`, `creativecommon:bark` (KubeJS 1902 has no `/kubejs dump_tag`); `grep -n "removed\|overrides" config/creativecommon-common.toml \| cut -c1-80`
 @pass no mixin errors; no tag load failures except creategoggles' Mekanism reference (third party); metal_dusts lists the IE dusts and zinc grit, bark lists the Immersive Weathering barks (as the old `creativeengineering:bark`; no FD tree bark); the config still holds the removed effects (3 plus `alexsmobs:fear`, N22) and the name list
 @fails mixin or tag file moves, config defaults
-@reviewed 2026-11-16
+@reviewed 2026-11-25
 @from batches/r1108cge/b1_full.qb
 bootreject ClassNotFoundException.*(creativecommon|creativeengineering)
 > cdevtest tag item creativecommon:metal_dusts
@@ -41,6 +41,7 @@ look metal_dusts lists IE dusts and zinc grit; bark lists IW barks; no tag load 
 @pass result keeps enchantments and name; the potion recipes load (input shows the potion fluid with `{Bottle, Potion}`)
 @fails Engineering mixin gating (create range)
 @from batches/r1108cge/b1_full.qb
+@reviewed 2026-11-25
 > zsa creativeequipment:createsequencedassembly/echo_shovel_sequenced_assembly
 waitlog \[zsa\] done 20
 > zsa selftest
@@ -53,6 +54,7 @@ look result keeps Unbreaking III and the name; selftest 0 fail
 @pass a swiftness potion comes out; lingering potion fluid comes out
 @fails `FluidTagInputMixin` in Engineering, exact NBT in Brewing
 @from batches/r1108cge/b1_full.qb
+@reviewed 2026-11-25
 > zsa bottle minecraft:swiftness
 waitlog \[zsa\] done 20
 > zsa refine minecraft:swiftness
@@ -64,7 +66,7 @@ look bottling REGULAR swiftness -> creativebrewing:iebottling/create_potion/mine
 @commands Common + Compat + Delight + Brewing (no Engineering), with Create, IE, Fruits Delight; boot; `grep -E "Error parsing recipe\|iebottling\|lingerification" logs/latest.log \| head`; repeat SQ-CPP-03's bottling
 @pass boots; Brewing's IE potion recipes load and work without Engineering
 @fails Brewing still relies on the subset match
-@reviewed 2026-11-16
+@reviewed 2026-11-25
 @from batches/r1108cge/b6_chain.qb
 @modset cpp_chain chain
 bootreject Mixin apply failed|InvalidMixinException
@@ -84,7 +86,7 @@ look 0 parse errors naming creativebrewing; swiftness bottles; KubeJS ERRORs = r
 @commands Common alone plus Compat, without Create Recycle (`create_crush_everything`): boot; `grep -E "scrap_wood\|scrap_copper\|floats\|to_ash" logs/latest.log logs/kubejs/server.log \| grep -iE "error\|missing" \| head`
 @pass the physics tags load; no error naming `create:scrap_*`
 @fails Compat guard in `item_physics_tags.js`
-@reviewed 2026-11-16
+@reviewed 2026-11-25
 @from batches/r1108cge/b7_compat.qb
 @modset cpp_chain compat
 bootreject Mixin apply failed|InvalidMixinException
@@ -96,7 +98,7 @@ shell grep -E "\[ERROR\]" logs/kubejs/server.log logs/kubejs/startup.log | grep 
 > cdevtest tag item creativecompat:physics/floats
 expect verb=tag kind=item tag=creativecompat:physics/floats n=[1-9]
 reject \[cdevtest\] .*done=0
-look no scrap error (the floats tag moved to creativecompat: since the row was written, SQ-CGE-12); 0 KubeJS errors apart from the scratch-only zz_cl_probe; startup order creativecommon, creativecompat, startup_scripts
+look no scrap error (the floats tag moved to creativecompat: since the row was written, SQ-CGE-12); 0 KubeJS errors apart from the scratch-only zz_cl_probe; startup order creativecommon, creativecompat_helpers, startup_scripts, creativecompat, ...
 
 ## CQ-CPP-01
 @group client (full pack)

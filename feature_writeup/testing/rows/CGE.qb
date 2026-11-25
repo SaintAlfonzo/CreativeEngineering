@@ -535,7 +535,7 @@ look hand: right-click the boat (xdotool click at the window centre), hold W unt
 @commands boot; dropall End (y 140) and overworld (y 200); judge `same`; the End living-entity check of SQ-CGE-06
 @pass the set has Common and Create Gravity, no Compat; boots with no `LowGravity` or NoClassDefFoundError line; low gravity is absent: all 9 types at vanilla speed in both dimensions; zombie in the End still carries the Low Gravity Biome modifier only inside `gravityDimensions` (Common's dimension limit, W2-4)
 @fails Common must not reference `creativecompat.gravity.LowGravity`; `GravityDimensions` in `perf/`; "No entity was found" for the zombie after the restart: the difficulty went back to peaceful (set it again after each restart)
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 @absent forge:entity_gravity (Forge attribute; the registry dump lists no attributes of Forge)
 @modset cc_only full
 # r1124gate (2026-11-24, runner-4): cc_only full = Common + Create Gravity and the other tweaked mods, no Compat (the
@@ -588,6 +588,7 @@ look shell.txt: every type the same in the End and the overworld (no Compat, no 
 @pass End items about 0.2 of vanilla speed, overworld vanilla; the dedicated server reaches `Done (` with no `CreateGravityServerStartMixin` error; `gravityDimensions` still gates it (set to overworld only: End items fall at vanilla speed)
 @fails `LowGravity.dimensionAllowed` asking Common's `GravityDimensions`; `CreateGravityServerStartMixin` target
 @modset none
+@reviewed 2026-11-25
 # r1124gate (2026-11-24, runner-4): SQ-CGE-02 with dropall (all 9 types, judged `low`) on the full pack's dedicated
 # server, then gravityDimensions = the overworld only (restart): End drops judged `same` as the overworld.
 bootexpect Done \(

@@ -961,6 +961,7 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @pass `config/creativecompat-common.toml` `[melting]` has saltRange = 2 and endNoFire = false; `config/creativecommon-common.toml` has no `[melting]` after the boot; latest.log has `[swaps] config sections [melting] merged`; no WARN naming `[melting]`; no `Missing`, `missing registry` or `unknown` line naming `creativecommon:glass_shards` or `creativecommon:melting`
 @fails `MovedKeys.mergeSections` in Compat (runs before the config registers); Common still declaring `[melting]` (should have dropped it); a loot modifier id left in a saved list
 @modset none
+@reviewed 2026-11-25
 # r1124gate (2026-11-24, runner-4): self-contained; the pack copies are kept as *.melt21bak and put back at the end
 # (Common's config watcher reloads them on the running server). Fixtures: tools/scratch_query/fixtures/wave2_carry/.
 edit cp config/creativecommon-common.toml config/creativecommon-common.toml.melt21bak; cp config/creativecompat-common.toml config/creativecompat-common.toml.melt21bak; cp "$INST/tools/scratch_query/fixtures/wave2_carry/old_creativecommon-common.toml" config/creativecommon-common.toml && cp "$INST/tools/scratch_query/fixtures/wave2_carry/compat_without_melting.toml" config/creativecompat-common.toml && ! grep -qE "^[[:space:]]*\[melting" config/creativecompat-common.toml
@@ -982,6 +983,7 @@ look merged line names [melting]; the Compat [melting] keys printed show saltRan
 @pass Compat's new toml has `[melting]` with saltRange = 2 and endNoFire = false; Common's file has no `[melting]`; latest.log has `[swaps] config sections [melting] carried over`; no `Missing` / `missing registry` line naming `creativecommon:glass_shards`
 @fails `MovedKeys.carrySections` (new-file path)
 @modset none
+@reviewed 2026-11-25
 # r1124gate (2026-11-24, runner-4): as SQ-MELT-21, Compat's toml removed before the boot (backups *.melt22bak)
 edit cp config/creativecommon-common.toml config/creativecommon-common.toml.melt22bak; cp config/creativecompat-common.toml config/creativecompat-common.toml.melt22bak; cp "$INST/tools/scratch_query/fixtures/wave2_carry/old_creativecommon-common.toml" config/creativecommon-common.toml && rm -f config/creativecompat-common.toml
 restart
@@ -1001,13 +1003,14 @@ look carried-over line names [melting]; COMPAT-TOML-CREATED; the printed Compat 
 @commands block tag dumps `/cdevtest tag block creativecompat:melting/salt`, `/fire`, `/saltable`, `/meltable` and the biome tag `/cdevtest tag biome creativecompat:melting/hot` (a biome tag, not a block tag); salt block beside ice and snow with `gamerule randomTickSpeed 3`; grep latest.log for `[melting] tags:`
 @pass the block tag dumps are non-empty with the same counts as before the move (compare SQ-MELT-09 / -16), the biome tag non-empty; `[melting] tags:` line present; ice and snow beside salt melt; `/cdevtest tag block creativecommon:melting/salt` is empty or absent; `creativecommon.tooltip.saltable` key unused
 @fails `kubejs/data/creativecompat/kubejs/tags/melting_tags.js` not loaded (data script path), `block_dict.js` `b.t_melt_*` values still naming the old namespace
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 @absent creativecompat:melting/salt creativecompat:melting/fire creativecompat:melting/saltable creativecompat:melting/hot (tags added 2026-11-24, after the last /dumpall)
 @modset none
 # r1124gate (2026-11-24, runner-4): counts from the 2026-11-19 tag dump (creativecommon:melting/*: salt 40, fire 123,
 # saltable 44, meltable 35) and the r1124 boot line; melting/hot is a BIOME tag (block_dict t_melt_hot_biomes), read as kind biome.
 # Area x 2400 to 2431, z 2000 to 2031 (clear of the other MELT rows); bot m23 keeps it random-ticking.
-bootexpect \[melting\] tags: 35 meltable, 11 slow, 40 salt, 123 fire, 1 lava, 8 ultra-warm instant, 44 saltable, 2 keeps snow, 2 magma
+# r1125pub BF-FIX (2026-11-25): +7 meltable, saltable and ultra-warm instant since the Snow! Real Magic fold-in (melting_tags.js adds its 7 snowy blocks when the mod is loaded)
+bootexpect \[melting\] tags: 42 meltable, 11 slow, 40 salt, 123 fire, 1 lava, 15 ultra-warm instant, 51 saltable, 2 keeps snow, 2 magma
 > cdevtest tag block creativecompat:melting/salt
 > cdevtest tag block creativecompat:melting/fire
 > cdevtest tag block creativecompat:melting/saltable
@@ -1018,8 +1021,8 @@ bootexpect \[melting\] tags: 35 meltable, 11 slow, 40 salt, 123 fire, 1 lava, 8 
 waitlog verb=tag kind=block tag=creativecommon:melting/fire n= 20
 expect verb=tag kind=block tag=creativecompat:melting/salt n=40 ids=\S*salt:salt_block
 expect verb=tag kind=block tag=creativecompat:melting/fire n=123 ids=\S*architects_palette:molten_nether_bricks
-expect verb=tag kind=block tag=creativecompat:melting/saltable n=44 ids=\S*minecraft:ice\b
-expect verb=tag kind=block tag=creativecompat:melting/meltable n=35 ids=
+expect verb=tag kind=block tag=creativecompat:melting/saltable n=51 ids=\S*minecraft:ice\b
+expect verb=tag kind=block tag=creativecompat:melting/meltable n=42 ids=
 expect verb=tag kind=biome tag=creativecompat:melting/hot n=[1-9]\d* ids=
 expect verb=tag kind=block tag=creativecommon:melting/salt n=0 ids=-
 expect verb=tag kind=block tag=creativecommon:melting/fire n=0 ids=-
@@ -1067,7 +1070,7 @@ look tag counts match the pre-move dump (salt 40, fire 123, saltable 44, meltabl
 @commands in the End place a torch-lit fire block (`setblock ~ ~ ~ minecraft:fire`) and flint-and-steel it with a bot; then `qrun.py toml config/creativecompat-common.toml melting endNoFire false` and repeat
 @pass endNoFire true: no fire in the End and no sound; false: fire is placed; latest.log has no `EndFireMixin` apply error
 @fails `EndFireMixin` is in Compat's `mixin/`, listed in `MixinSwitches` as `EndFireMixin` (toml key `[mixins] endFire`, `MixinSwitches.key`: the name without `Mixin`, first letter lower case); a false `endFire` skips it; `Melting.onScheduledTick` removal of fire already there
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 @modset none
 # r1124gate (2026-11-24, runner-4): End void spot x 200 to 215, z 200 to 215, y 64 (clear of the main island); the
 # setblock refusal reads "Could not set the block"; cdevtest use = a fake player of the End with flint and steel.

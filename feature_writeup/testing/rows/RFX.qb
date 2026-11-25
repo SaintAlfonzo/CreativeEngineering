@@ -563,7 +563,7 @@ look the two `say` lines, the chest list and the toml values above
 @commands Boot on the current Delight jar (then a tobacco seeds block with a neighbor update: the Tobacco mixin target loads lazily) with Create Central Kitchen, Immersive Weathering, Mysterious Mountain Lib, The Dirty Stuff and Upgrade Aquatic present (the full pack set); `grep -E "creativedelight\.mixins\.json|Mixin.*(creativedelight\.mixin\.)" logs/debug.log logs/latest.log`
 @pass no `Mixin apply failed`, `ClassNotFoundException` or `InvalidMixinException` naming `creativedelight.mixin.`; the six common-side mixins of the five packages apply (a debug.log `Mixing <name> from creativedelight.mixins.json into` line for each of `MulchBlockCropGrowthMixin`, `DandelionFertileSoilMixin`, `WallRootsVerticalFaceMixin`, `MmlibFoodPropertiesMixin`, `MulberryJamMasonJarMixin`, `TobaccoPlacementMixin`) and SQ-POT's wall roots check still passes. The two Create Central Kitchen mixins (`CckCookingGuideMealTooltipMixin`, `CckBrewingGuideMealTooltipMixin`) are in the `client` list of `creativedelight.mixins.json` and never load on a dedicated server; this row does not check them
 @fails a mixin silently skipped: `CDMixinPlugin.PACKAGE_MOD_IDS` lacks the package (its segment is read as the mod id); `ClassNotFoundException`: a stale build (clean-build Creative Delight)
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 bootreject (Mixin apply failed|InvalidMixinException|ClassNotFoundException).*creativedelight\.mixin\.
 # TobaccoPlacementMixin targets an MCreator procedure class that loads lazily: a neighbor update on a tobacco seeds block calls canSurvive and loads it
 > forceload add 5300 5300 5301 5301

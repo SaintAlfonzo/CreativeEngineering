@@ -807,3 +807,311 @@ Wave 1 for W-P8: the four section 5 blockers are cleared (version_filter WARN go
 fixed). Open: owner shots CQ-CPP-01, CQ-CMP-18, -33, -37 (this section) and section 5's LOOKs; owner call on whether
 creative-compat-publish #18 to #20 (Compat pass-through and corpse findings, not regressions of this fix set) block the
 Compat upload.
+
+## 7. r1125pub: wave 1 publish gate on the release jars
+
+runner-pub (scratch-test runner subagent) for the session orchestrating the wave 1 publish (Creative Common 1.3.0,
+Creative Compat 1.0.0, Raspberry Pie 1.0.0; W-P8 in [plan_wave1_publish.md](../plan_wave1_publish.md)). Owner authorized
+the boots (2026-11-25, chat). Results `perf/runs/r1125pub/`, perf session r1125pub (bulk run, capture on).
+
+### 7.1 Scope
+
+`perf/runs/r1125pub/ids.txt`, 170 ids: r1124gate's 148 plus the Compat rows added since (SQ-SRM-*, SQ-IP-15 to -21,
+SQ-PTH-11). Server plan (`qrerun.py`, `perf/runs/r1125pub/plan.json`): 132 rows, 58 drive steps with the boots. Client
+rows after the server drive: the 32 CQ-* ids, CQ-CMP-19 first and alone in a fresh client (creative-compat-publish #20
+fix, bfe2cde04). Key fixes verified: SQ-PTH-29 (fox on top of snow, G11), SQ-PTH-30 (fox does not cross the 8-layer
+leaf pile), CQ-CMP-19.
+
+### 7.2 Jars and preflight
+
+| Jar | Stamp in mods/ (jarstamp.py, 12:47) | sha1 |
+|---|---|---|
+| creativecommon-1.3.0.jar | 1.3.0+527c190ee.2611251243 | 267de525164405536ba13f08e765ddafb46d5455 |
+| creativecompat-1.0.0.jar | 1.0.0+527c190ee.2611251243 | c9da160950c426e94593f43687d7a590d819fecd |
+| creativedevtools-1.0.0.jar | 1.0.0+527c190ee.2611251243 | 9f6042c10d1789fa82698210bdbedc23708ad7ce |
+| solRaspberryPie-1.0.0.jar | 1.0.0+8f883cd64 (unchanged) | cb71f0ccc76834ef24e7b060c272dba62163941f |
+
+`jarstamp.py pending`: Calendar and Loot have newer bfe2cde04 builds in build/libs. `NOSWAP=1`
+(`perf/runs/r1125pub/env.sh`), as r1125w1 (6.1): Calendar has no source change since the installed 5729e53f7 build;
+Loot is a wave 2 jar and the installed 16c9e8ace build is the one r1124w7 and r1125w1 ran. DROPJARS as r1124w7 (4
+jars without a mod_sides.md row). `check_all.py --fast`: 44 run, 0 failed. `game_jvms.sh` empty, 86 GB free on /.
+
+Pre-screen (`perf/runs/r1125pub/prescreen.txt`): 3 likely. SQ-SRM-03 fixed (its Nether `forceload add 0 0` did not
+cover the `fill -1 100 -1 ...` corner in chunk -1: `forceload add -1 -1 1 1`). SQ-MELT-24 (End coordinates) and
+SQ-PTH-11 (`zpth watchnew ... 100 1 1091.5 ...` read as a coordinate: ticks, interval, x) are false positives. 96 stale:
+44 rows outside SMK and RPS (`perf/runs/r1125pub/stale_reviewed.txt`) set `@reviewed 2026-11-25` after the source
+diffs since db212e956 were read: today's Compat changes are Snow! Real Magic parts A and B (new gated Srm mixins, an SRM
+branch in `Melting`, salt source layer odds), item physics surface floating and families, the corpse screen and fox
+leaf-pile fixes, and doc lines; none changes what those rows check (MixinSwitches unchanged: SQ-CMP-23 still 36 keys).
+SMK (46, whole jar trees as sources) and RPS (6, the removed libs.csv) left as r1124w7 did. `prescreen2.txt` after: 2
+likely (the false positives), 53 stale.
+
+### 7.3 Run notes
+
+- 12:47 RUNNER.md claimed (idle since 10:47, no game JVM).
+- 12:51 perf session r1125pub open (systemd user scope `r1125pub-perf`); drive started as user unit `r1125pub-drive`
+  (`perf/runs/r1125pub/start_drive.sh`, log `drive_main.out`): 58 steps, 132 rows. Driver ETA 20:22.
+- 12:55 to 13:04 steps 1, 3, 4 (full pack) failed at boot: `Failed to load datapacks` (debug.log only; the driver reads it
+  in latest.log as "not ready"), cause `NullPointerException ... Gson.getAdapter ... "p_13781_" is null` in
+  `SimpleJsonResourceReloadListener.prepare`. Step 2 (cc_only set, no Creative Delight) booted. One jstack (step 4,
+  `perf/runs/r1125pub/s03_jstack.txt`): main thread already returned. Cause: Creative Delight 1.1.0+bfe2cde04.dirty-0f95d5
+  (installed 11:58, rabbit trap port): `RabbitTrapCatches` builds its static `INSTANCE` before the static `GSON`, so the
+  listener's Gson is null; every full-pack boot fails, a client opening a world too. Product bug in a non-publish jar:
+  TODO `mod-integration #27` (high), not fixed in-run. The `Couldn't read tag list creativecompat:physics/family/...`
+  errors after it are a consequence (packs closed after the failure).
+- 13:05 environment workaround (run default 2: jar set of the scratch srv): new `OVERRIDEJARS` option in
+  `tools/scratch_query/prep_srv.sh` (copies a named jar over the srv/mods jar of the same name before the pin);
+  `perf/runs/r1125pub/env.sh` sets it to the last good Creative Delight build, 1.1.0+cd71f1db5.dirty-624770 (sha1
+  bf4c57f5, r1125w1's pinned copy kept as `perf/runs/r1125pub/jars/creativedelight-1.1.0.jar`; it carries the shipping
+  bin, no rabbit trap and no Snow! Real Magic part B `SaltLayerBlock` overrides). SQ-SRM-10 (salt layers never scooped:
+  the part B override is in that Creative Delight class) skipped (`drive/skip.txt`), deferred to a run on a fixed
+  Creative Delight jar. SQ-CEN-09 (step 1) queued in `rerun.txt` before the cause was known; it reruns on the resume.
+- 13:06 drive resumed (user unit `r1125pub-drive2`, `resume_drive.sh`); step 1 prep log `override: creativedelight-1.1.0.jar`,
+  `Done (10.278s)` at 13:08.
+- 13:19 SQ-CM-43 FAIL (product, Compat 527c190ee): `creativecompat:physics/floats` (n 7604) holds `minecraft:composter`
+  but none of the 12 `creativedelight:*_composter`; item physics #2 (656eee24c) replaced the explicit composters floats
+  line in `item_physics_tags.js` with generated families built from the 2026-11-19 dump, before the composters moved
+  to Creative Delight. TODO `item-physics #8`. Rest of the row passes.
+- 13:34 step 9 (CMP section 4: SQ-CMP-23, -25) boot crashed at mod construction: `ConcurrentModificationException` in Create: Dreams & Desires `DesiresCreate` init (the known third-party registration race, gotchas.md Boot and shutdown); the driver waits out its 600 s cap (wait_ready does not read crash-reports), so the step fails about 13:44. Rerun by `drive resume` at the end.
+- 14:13 step 21 (IP section 1, new item physics rows): BF-FIX SQ-IP-18, -19: the height checks used `execute as @e[tag=X]
+  if entity @s[y=..,dy=..]`, whose box sits at the command source (spawn) x/z, not the item, and the heights were one
+  block low (the basin tops are y -55 blocks, so the surface is -54.11 = -55 + 8/9). The read values match the
+  documented springs exactly: leaves and string -54.16 (skim depth 0.05), planks -54.26 (float 0.15), cobblestone -63;
+  lava sword, crimson planks, netherite -54.19 (lava 0.08), diamond block -63, oak planks burned. Fix: `at @s` and the
+  -54.x boxes (IP.qb); queued in `rerun.txt`. SQ-IP-20 FAIL (substance): leaves and planks both at -59.875 on a 3-layer
+  snow (doc: leaves -59.625, planks -59.75), TODO `item-physics #9`; selector fixed too. SQ-IP-21 FAIL: rocket and ice
+  still there after 6 s on a lit campfire, TODO `item-physics #10` (row placement not ruled out). SQ-IP-17 LOOK.
+- 13:50 qdrive.py (scratch tooling, for the reruns and later drives; the running driver keeps its loaded copy):
+  `wait_ready` returns at a `Crash report saved to` line instead of waiting out 600 s, and the one-reboot retry also
+  covers the construction-time `ConcurrentModificationException` (`Failed to create mod instance`) flake.
+- 14:2x BF-FIX SQ-MELT-23: boot line and tag counts stale since the Snow! Real Magic fold-in (+7 meltable, saltable, ultra-warm instant: 42 / 51 / 15); my preflight stale review marked it reviewed without checking the counts. Counts fixed (MELT.qb), queued.
+- 14:37 SQ-PST-08, -11 PASS; SQ-PST-11b FAIL, winter/spring 0.30 (limit 0.35 to 0.85; r1124w7 0.25): repeat of TODO `creative-calendar #1` (the reject hit is the row's old `pbot remove s5pd`, as r1124w7).
+- 14:46 SQ-LE-03 FAIL: repeat of TODO `potions/potion-buckets #5` (dispensed Swiftness potion bucket, no cloud; Creative Brewing, not a wave 1 jar).
+- 15:00 SQ-SG-03 FAIL: the unsheared control patches kept 24 of 24 again (no spread on the full pack), repeat of TODO `creative-calendar #2`; SQ-SG-02 LOOK.
+- 15:40 BF-FIX SQ-SRM-09: 5 -> 3 layers passes; no item left after the first scoop (the kill found none) while the far 1-layer scoop dropped its snowball: the survival bot 1.5 blocks from the pile picked the 2 snowballs up. `pbot pickup m9 off` added (SRM.qb), queued. SRM section 1: SQ-SRM-02, -03 (forceload fix), -04 PASS; -01, -05 LOOK. Section 2: SQ-SRM-08, -11 PASS.
+- 15:4x SQ-TPF-10 FAIL: repeat of r1124w7 (lightning-killed cows drop nothing; Debugify MC-206922, `largecontent/mod-additions #80`; third-party, not wave 1).
+- 15:59 SQ-WT-03 PASS; SQ-WT-04 FAIL as r1124w7: offers one above the row in both modes (Loot on 31 not 30, off 7 not 6), reject hit on the KubeJS recipe parse lines; tracked on TODO `creative-common-publish #19` (Creative Loot, wave 2). SQ-TPF-19 PASS; SQ-TPF-18 BATCH-FAULT as r1124w7 (MC-2025 off in the shipped Debugify config; not simple).
+- 16:02 SQ-IP-15 FAIL (long-standing, r1102b, r1103w, r1106spf): Ascension sword stays on the ground at y -60; Fleeting pushed the golem (40.5,40.5 -> 44.6,37.4). Logged on TODO `items/item-physics #3`. Its 'plain on the ground' check has the same missing `at @s` as SQ-IP-18 (not fixed: second issue on a failing row). SQ-IP-16 LOOK.
+- 16:26 drive r1125pub done 57/58; resumed 16:27 for step 9 (CMP-23, -25 booted clean, both LOOK); 16:28 58/58. Rerun drive `r1125pubr` (`rerun.plan.json`: SQ-IP-18, -19, SQ-MELT-23, SQ-SRM-09) started 16:29.
+- 16:39 rerun r1125pubr done (3 steps): SQ-SRM-09 PASS (pickup off confirms the bot pickup cause); SQ-IP-18, -19, SQ-MELT-23 LOOK with every check passing.
+- 16:41 client: a first `run_captures.py serve` started as a systemd service died with it (serve returns after the launch, the unit stopped and took the client): relaunched 16:44 in a user scope (`r1125pub-client2`), pid 3992220; GAME/mods = mods/ with the 4 unlisted jars dropped and the same Creative Delight override (`--jar`; `jarstamp.py diff`: only creativedelight differs). 16:46 `cli_cmp19`: CQ-CMP-19 first and alone in the fresh client: all 45 checks pass, no corpse IndexOutOfBounds (the #20 fix works); LOOK for shots.
+- 16:53 owner-requested row change (relayed by the orchestrator): in CMP.qb every `> kill @e[type=corpse:corpse]` (21 lines) is followed by `sleep 1` and `> kill @e[type=item]` (a killed full corpse drops its inventory, the items piled up across the CQ-CMP rows). Rows touched: CQ-CMP-14 (3 kills), -15 (2), -18 (3), -19 (3), -20 (2), -21 (2), -22 (3), -26 (3). None skipped: no row reads item entities after a kill, and the client world has nothing else whose items a row checks, so the world-wide selector is safe. `qrun.py lint` 0 E (26 W, as before). These 8 rows had already run in `cli_cmp19` / `cli_cmp`: rerun after client block 1 -> `cli_cmp_r`.
+- 16:47 to 16:59 client block 1 (`cli_block1.sh`): `cli_cmp` (13 CQ-CMP rows), `cli_cc13` (4), `cli_ltp`, `cli_melt`, `cli_cen`,
+  `cli_cpp`: every check passes; CQ-LTP-17 PASS, the rest LOOK (shots for the owner and judges).
+- 17:00 `cli_cmp_r` (the 8 rows with the owner's item cleanup): CQ-CMP-14, -15, -18, -20, -21, -22, -26 LOOK, every check
+  passes. CQ-CMP-19 FAIL: in part (b) the corpse opens as `CorpseInventoryScreen` with no widgets, so `click_widget
+  Transfer Items` fails and the golden helmet does not return to cosmetic slot 46. Rerun alone 17:03 (`cli_cmp19b`): same.
+  With the cleanup the player dies with only section items (empty main inventory); before it, part (a)'s dropped items
+  were most likely picked back up, so the 16:46 fresh run (and r1125w1) passed. Product finding in a publish jar (the
+  creative-compat-publish #20 empty-main path): TODO `creative-compat-publish #21` (high). The 16:46 fresh-client result
+  (no IndexOutOfBounds desync) still stands for #20's desync half.
+- 17:06 CQ-RPI-94: own client launch (`--config config/solraspberrypie-client.toml:effects:fleetFootedFov=0.5`, fresh config copy, same jar set) -> `cli_rpi94`: 10 checks pass, LOOK (view shift shots). JFR dumped for both clients (`perf/runs/r1125pub/jfr/`).
+- 17:08 to 17:35 Raspberry Pie isolated pair block (`qrun.py pair`, server `qmodset.py build` with NOSWAP=1: `rps only` +
+  Common, Devtools, KubeJS, Rhino, Architectury in `perf/runs/r1125pub/rpsA`, Raspberry Pie cb71f0cc, Common 527c190ee;
+  the client drops the other 419 jars, `rps_drops.txt`; three names with `[...]` turned into `?` globs after the first
+  try aborted on them). `pair_rps`: CQ-RPS-02, -03, -05, -09 LOOK (every check passes); CQ-RPS-14 BATCH-FAULT as r1124w7
+  (empty change picker, no Confirm; needs the rewrite); CQ-RPS-15 launched without its `--config extraWidth="x"` (runner
+  error) -> `pair_rps15` with it: LOOK, every check passes. CQ-RPS-12: server `rpsB` with the `rps_fixture.py table`
+  rps12 copy (srv copy sha1 689e2fbe, instance jar cb71f0cc untouched, re-pinned) -> `pair_rps12`: LOOK, 65 checks pass.
+- SQ-IP-21 third check (campfire intact) was a regex fault too: the `state` value is quoted (`state="minecraft:campfire[...]"`);
+  regex fixed in IP.qb, the campfire was intact. The row stays FAIL on the rocket and the ice.
+- Perf: session r1125pub stopped 17:3x; `report` run (summary `perf/sessions/r1125pub/summary.md`). Client JFR dumps in
+  `perf/runs/r1125pub/jfr/` (block 1 client and the CQ-RPI-94 client; the pair clients were stopped by `qrun.py pair`
+  without a dump).
+- 17:4x three scratch-judge agents judged all open LOOKs of the server rows (judge-r1125-a and the others). BF-FIX SQ-CMP-03, -06, -07 (CMP.qb) by the judges.
+- 17:45 to 17:48 rerun drive `r1125pubr2` (same `env.sh`: NOSWAP, OVERRIDEJARS Creative Delight cd71f1db5): SQ-CMP-03 and -07 PASS; SQ-CMP-06 BATCH-FAULT (second fault: the server's copied `kubejs/exported` tag dump returns `{}` for item and block tags alike; the row needs a live tag read, not simple).
+- 2026-11-25 write-back: SQ-SRM-05 FAIL (snowed pad 1 reports 81 grass, want 1; snow may have melted at randomTickSpeed 1000, not probed) logged as TODO `mod-integration #37`. SQ-MT-06 and SQ-PSM-09 stay INCONCLUSIVE (note only: a hungry whale hunt and mob counts too small). SQ-CPP-05 look text corrected (startup order is creativecommon, creativecompat_helpers, startup_scripts, creativecompat, ...); SQ-MELT-23 reclassify cause text corrected (MELT.qb, not RES.qb).
+
+### 7.4 Verdicts
+
+Latest result per row over `perf/runs/r1125pub/s00_res` to `s57_res`, `cli_cc13`, `cli_cen`, `cli_cpp`, `cli_ltp`, `cli_melt`,
+`cli_rpi94`, `cli_cmp19`, `cli_cmp19b`, `cli_cmp`, `cli_cmp_r` (supersedes `cli_cmp` for CQ-CMP-14, -15, -18, -20 to -22, -26; with
+`cli_cmp19b` for CQ-CMP-19), pairs `pair_rps`, `pair_rps15`, `pair_rps12`, reruns `perf/runs/r1125pubr/s00_res` to `s02_res` and
+`perf/runs/r1125pubr2/s00_res` (`qrun.py table`, regenerated 2026-11-25 after judging). Counts (161 rows): PASS 118, LOOK 24, FAIL 12, BATCH-FAULT 4, INCONCLUSIVE 2, OWNER 1. The 24 LOOK rows are
+client rows whose checks pass; they wait for the owner's screenshots (`test_captures/judgement/` folders `qrun_cli_cc13`,
+`qrun_cli_cen`, `qrun_cli_cmp_r`, `qrun_cli_cmp`, `qrun_cli_cpp`, `qrun_cli_melt`, `qrun_cli_rpi94`, `qrun_pair_rps`,
+`qrun_pair_rps15`, `qrun_pair_rps12`). Not run: SQ-SRM-10 (needs a fixed Creative Delight jar, 7.3), CQ-RPI-90, -95 (draft: owner
+row, two real players).
+
+**Wave 1 verdict.** Creative Compat is blocked: `creative-compat-publish #21` (CQ-CMP-19), `item-physics #8`, `#9`, `#10`
+(SQ-CM-43, SQ-IP-20, SQ-IP-21) and `items/item-physics #3` (SQ-IP-15, long-standing). Disagreement for the owner, not resolved here:
+the TODO row `items/item-physics #3` and `item_physics.md` line 28 say it is fixed (forced `isNoGravity` cause), while SQ-IP-15 still fails
+this run (Ascension sword stays at y -60). Creative Common and Raspberry Pie: no new FAILs; owner screenshot LOOKs remain (folders
+above). New FAIL without an earlier row: SQ-SRM-05 (`mod-integration #37`). Separate: the Creative Delight bfe2cde04 boot blocker
+(`mod-integration #27`), worked around in this run by the cd71f1db5 override.
+
+FAILs and faults, one line each:
+
+- SQ-CM-43: Creative Delight composters missing from `creativecompat:physics/floats`: `item-physics #8`.
+- SQ-IP-20: skimmers sink into snow layers like planks: `item-physics #9`. SQ-IP-21: rocket and ice on a lit campfire neither pop nor burn: `item-physics #10`.
+- SQ-IP-15: Curse of Ascension item does not rise (long-standing): `items/item-physics #3`.
+- CQ-CMP-19: empty-main corpse opens without Transfer Items: `creative-compat-publish #21`.
+- SQ-SRM-05: `mod-integration #37`.
+- SQ-PST-11b (`creative-calendar #1`), SQ-SG-02, -03 (`creative-calendar #2`), SQ-LE-03 (`potions/potion-buckets #5`), SQ-TPF-10 (`largecontent/mod-additions #80`), SQ-WT-04 (`creative-common-publish #19`): repeats, not wave 1 jars.
+- BATCH-FAULT: SQ-CMP-06 (live tag read needed), SQ-PTH-11 (stale expectations vs the 2026-11-15 ruling), SQ-TPF-18 (MC-2025 off), CQ-RPS-14 (empty picker). INCONCLUSIVE: SQ-MT-06, SQ-PSM-09. OWNER: SQ-IP-19 (ash count not probed).
+
+Boot blocker found and worked around: `mod-integration #27` (Creative Delight rabbit trap, every full-pack boot).
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CEN-09 | PASS | one makes line: creativecompat:createsplashing/cardboard_box_to_weathered_cardboard_box_by_splashing, serializer create:splashing, result creativeengineering:weathered_cardboard_box*1; old Compat id unknown (judge-r1125-a) |
+| SQ-CGE-17 | PASS | shell.txt: judge same PASS 9 types ratio 1.000; zombie and bot 0.016 in the End with End listed, 0.08 after gravityDimensions=overworld (judge-r1125-a) |
+| SQ-CGE-18 | PASS | shell.txt: first judge low PASS 9 types ratio 0.200 (item 4.914 vs 24.570); second judge same PASS 9 types ratio 1.000 with overworld-only list (judge-r1125-a) |
+| SQ-CM-38 | PASS | warped composter level 6, vanilla composter level 5 after 30 seeds; sneaking pie places farmersdelight:pumpkin_pie (judge-r1125-a) |
+| SQ-CM-41 | PASS | 7 checks passed |
+| SQ-CM-43 | FAIL | no line matches /verb=tag kind=item tag=creativecompat:physics/floats n=\d+ ids=(?=\S*creativedelight:spruce_composter\b)(?=\S*creativedelight:crimson_composter\b)(?=\S*creativedelight:warped_composter\b)(?=\S*creativedelight:twisted_composter\b)/; open look 1: recipe from 7 spruce slabs (rdetail line); composters tag 13, the Common tag empty, no creativecommon composter registered; floats holds the wood composters; an empty spruce composter drops itself |
+| SQ-CM-42 | PASS | boot2 expects spruce/crimson/chest/stand matched; chest data creativedelight:birch_composter x2, stand hand x1; swaps 12 block + 12 item ids remapped; 0 Missing/unknown creativecommon composter lines (judge-r1125-a) |
+| SQ-CMP-01 | PASS | 3 checks passed |
+| SQ-CMP-03 | PASS | creativecompat 2 of 2 files loaded, helpers run, [item_physics] canonical tags line printed (item_physics.js#159) |
+| SQ-CMP-04 | PASS | dumpphysics ran: 20659 items, 3464 survive lava, ItemPhysicSplit class loaded (judge-r1125-a) |
+| SQ-CMP-05 | PASS | expects: CMP tnt item burned and CMP fireproof item survived both matched (judge-r1125-a) |
+| SQ-CMP-06 | BATCH-FAULT | orchestrator 2026-11-25: block placed and creativeengineering:weathered_cardboard_box given; the tag read is from the server's copied kubejs/exported dump, which returns {} for item and block tags alike (second fault after the judge's fix): needs a live tag read (/cdevtest tag verb) instead of the dump; not simple |
+| SQ-CMP-07 | PASS | [paintings] 445 of 445 modded painting variants built from 416 sources, no immersive_paintings load error |
+| SQ-CMP-08 | PASS | 0 Error occurred while handling event / ReferenceError in server.log; compat scripts loaded (judge-r1125-a) |
+| SQ-CMP-10 | PASS | shell: [corpses] at line 441, skeletonTime 168000, emptyDespawnTime 6000, netherWitherTime 24000, noDecayDimensions the_end (judge-r1125-a) |
+| SQ-CMP-11 | PASS | c11a Stage 1b, c11b Stage 0b, c11b DeathTime 541L at game time 460 (judge-r1125-a) |
+| SQ-CMP-13 | PASS | game time 2210; Stage lines in order 1b, 2b, 0b (judge-r1125-a) |
+| SQ-CMP-16 | PASS | PASS: c16a Pos y -60.0 (column floor) (judge-r1125-a); PASS: c16b Pos y -49.28 (water surface); skeletonsSink = true, sinkSpeed = 0.1 (judge-r1125-a) |
+| SQ-CMP-17 | PASS | PASS: shell: sectionedScreen = true, curioCap = 24 (judge-r1125-a); PASS: c17 {Remains: 0b, DeathTime: 3384L, Ancient: 0b, Stage: 0b, EmptiedAt: -1L} (judge-r1125-a) |
+| SQ-CMP-23 | PASS | true keys 36; cmp_mixin_check listed 112 applied 99 skipped by gate 13, all absent-mod mixins (Copycat, Cozy, MCA, OreExcavation, Quark, SRM) plus client-only CorpseGuisMixin and Breezy; no FAIL line (judge-r1125-a) |
+| SQ-CMP-25 | PASS | 4 script lines; pack 39 jar 39 tags 2 (judge-r1125-a) |
+| SQ-CMP-27 | PASS | first boot carry-over lines 1; pagesOff = [seasoning, tipped_arrows], no old keys; latest.log after restart 0 carry-over lines (judge-r1125-a) |
+| SQ-CMP-28 | PASS | SOLID_VINE_FERTILE_STATE and HOPS_PLACED said; hops_vine does not have property fertile (judge-r1125-a) |
+| SQ-CMP-34 | PASS | 5 checks passed |
+| SQ-CMP-35 | PASS | trashcans jar count 0; trash can mixin or class mentions in log 0 (judge-r1125-a) |
+| SQ-CMP-24 | PASS | snowrealmagic jar count 0; ClassCastException/NoClassDefFoundError count 0; row expects (snow stayed) passed (judge-r1125-a) |
+| SQ-CPP-01 | PASS | metal_dusts n=15 with IE dusts and zinc_grit, bark n=20 IW barks; tag load failures 2 as in r1123/r1124 (creategoggles mekanism); removed list present (judge-r1125-a) |
+| SQ-CPP-02 | PASS | [zsa] result echo_shovel enchantments=true name=true; selftests all fail 0 (judge-r1125-a) |
+| SQ-CPP-03 | PASS | bottle recipe iebottling/create_potion/minecraft_swiftness_regular -> swiftness potion; refinery -> LINGERING swiftness (276 lingerification recipes) (judge-r1125-a) |
+| SQ-CPP-04 | PASS | 0 Error parsing recipe, 0 KubeJS [ERROR]; swiftness bottle recipe found (judge-r1125-a) |
+| SQ-CPP-05 | PASS | physics/floats n=489; 0 scrap errors; 0 KubeJS ERROR in server and startup logs (startup order text in look is stale: real order is creativecommon, creativecompat_helpers, startup_scripts, creativecompat) (judge-r1125-a) |
+| SQ-FCK-24 | PASS | 7 checks passed |
+| SQ-FCK-25 | PASS | 7 checks passed |
+| SQ-GSH-10 | PASS | pane 27 blue shards (20-40), framed glass 40 clear shards (20-60), no GlmMerge line |
+| SQ-GSH-11 | PASS | GlmMerge line 191 entries, no glass_shards skip; pane 27 blue shards |
+| SQ-GSH-12 | PASS | no glass_shards line; pane drops nothing, glass 64 clear shards (Quark 40-80) |
+| SQ-IP-17 | PASS | 24 families, no tag error; counts same order as 9.7 (fewer items in scratch set) |
+| SQ-IP-18 | PASS | leaves/string -54.16, planks -54.26, 5 s and 10 s equal, cobblestone -63; both IP18 says printed |
+| SQ-IP-19 | OWNER | sword/crimson -54.19, diamond block -63, planks burned; no ash line ('IP19 ash left' absent, ash count not probed) |
+| SQ-IP-20 | FAIL | no line matches /IP20 leaves on top/; leaves and planks both rest at -59.875 (want leaves -59.625, planks -59.75); not a probe fault |
+| SQ-IP-21 | FAIL | no line matches /IP21 rocket gone/; no line matches /IP21 ice burned/; no line matches /\[cdevtest\] verb=state pos=360,-60,300 state=minecraft:campfire/; rocket not gone, ice not burned after 6 s (only iron survives); campfire-state regex also needed quoting (fixed in qb) |
+| SQ-MELT-21 | PASS | merged line names [melting]; saltRange=2 endNoFire=false printed; old toml has no [melting] |
+| SQ-MELT-22 | PASS | carried-over line names [melting]; COMPAT-TOML-CREATED; saltRange=2 endNoFire=false |
+| SQ-MELT-23 | PASS | salt 40 fire 123 as dump; saltable 51 meltable 42 (boot line 42/51, moved by added mods per row note); old creativecommon tags 0; melts say OK |
+| SQ-MELT-24 | PASS | true: setblock refused, flint refused, soul fire kept; false: both fires placed |
+| SQ-PST-08 | PASS | 4 checks passed |
+| SQ-PST-11 | PASS | 3 checks passed |
+| SQ-PST-11b | FAIL | shell exit 1: PST11b: spring [84, 82, 77] mean 81.0; winter [26, 27, 19] mean 24.0; winter/spring 0.30 (pass 0.35-0.85); /(Unknown (item/block/block type/entity)/does not (have/accept)/Incorrect argument for command/Unknown or incomplete command/That position is not loaded/No player was found/no such bot/no such item/Invalid (block state/tag)/\[(zq/s5)\] (error/no player)/\[cdevtest\] .*(done=0/error=))/ matched: [25Nov2026 14:35:31.900] [Server thread/INFO] [net.minecraft.server.MinecraftServer/]: no such bot; open look 1: season left at mid_spring for the rest of the boot (SQ-PST rows end here) |
+| SQ-PTH-11 | BATCH-FAULT | stale row: snowball/pearl from z 995.5 break in edge cell z 1000.7 (ruling plan_passthrough 2026-11-15), P ends at y -60 not in cube; q11 watch 300 t ends at y -56.94 before leaving; fb11 watch n=0. Not simple (expectations vs ruling) |
+| SQ-PTH-29 | PASS | 6 checks passed |
+| SQ-PTH-30 | PASS | 2 checks passed |
+| SQ-LE-03 | FAIL | no line matches /LE03 swiftness cloud/; no line matches /(?i)has the following entity data: .*(swiftness/minecraft:speed/Id: 1b)/ |
+| SQ-TI-00 | PASS | [moss] section present in creativecompat-common.toml (biomeTint, tintStrength in the same generated section; shell head cut the keys) |
+| SQ-RFX-35 | PASS | all six class names count >0 (MmlibFoodPropertiesMixin 2) |
+| SQ-RPI-96 | PASS | 7 checks passed |
+| SQ-RPS-01 | PASS | one Diet ladder line in latest.log (grep -c 1), exact text |
+| SQ-RPS-10 | PASS | 6 checks passed |
+| SQ-RPS-07 | PASS | maxDiversity 11.9666; Diversity table summary: 3 ids skipped (mod not loaded); nosuchmod:thing not named |
+| SQ-RPS-04 | PASS | loose solapplepie-1.19.2-2.2.0.jar beside solRaspberryPie-1.0.0.jar; one Diet ladder line; no duplicate error |
+| SQ-RPS-11 | PASS | server checks pass (Done, ladder line, no recipe parse error); crafting is CQ-RPS-12 |
+| SQ-RPS-13 | PASS | 6 checks passed |
+| SQ-SG-02 | FAIL | unsheared patch also 24 of 24 (no spread; known TODO creative-calendar #2) |
+| SQ-SG-03 | FAIL | count /Successfully filled 24 block/ = 4, wanted == 2; all four fills 24 (unsheared controls did not spread; known TODO creative-calendar #2) |
+| SQ-SMK-01 | PASS | 11 checks passed |
+| SQ-SMK-02 | PASS | 4 checks passed |
+| SQ-SMK-03 | PASS | 4 checks passed |
+| SQ-SMK-04 | PASS | 3 checks passed |
+| SQ-SMK-33 | PASS | 11 checks passed |
+| SQ-SMK-34 | PASS | 5 checks passed |
+| SQ-SMK-35 | PASS | 5 checks passed |
+| SQ-SMK-36 | PASS | 3 checks passed |
+| SQ-SMK-37 | PASS | 12 checks passed |
+| SQ-SMK-38 | PASS | 3 checks passed |
+| SQ-SMK-39 | PASS | 3 checks passed |
+| SQ-SMK-40 | PASS | 5 checks passed |
+| SQ-SMK-51 | PASS | 5 checks passed |
+| SQ-SMK-52 | PASS | 4 checks passed |
+| SQ-SMK-53 | PASS | 3 checks passed |
+| SQ-SMK-54 | PASS | 9 checks passed |
+| SQ-SMK-55 | PASS | 2 checks passed |
+| SQ-SMK-56 | PASS | 5 checks passed |
+| SQ-SMK-05 | PASS | 8 checks passed |
+| SQ-SMK-06 | PASS | 3 checks passed |
+| SQ-SMK-07 | PASS | 3 checks passed |
+| SQ-SMK-08 | PASS | 4 checks passed |
+| SQ-SMK-09 | PASS | 9 checks passed |
+| SQ-SMK-10 | PASS | 4 checks passed |
+| SQ-SMK-11 | PASS | 4 checks passed |
+| SQ-SMK-12 | PASS | 8 checks passed |
+| SQ-SMK-13 | PASS | 4 checks passed |
+| SQ-SMK-14 | PASS | 2 checks passed |
+| SQ-SMK-15 | PASS | 6 checks passed |
+| SQ-SMK-16 | PASS | 5 checks passed |
+| SQ-SMK-17 | PASS | 2 checks passed |
+| SQ-SMK-18 | PASS | 10 checks passed |
+| SQ-SMK-19 | PASS | 3 checks passed |
+| SQ-SMK-20 | PASS | 3 checks passed |
+| SQ-SMK-21 | PASS | 8 checks passed |
+| SQ-SMK-22 | PASS | 4 checks passed |
+| SQ-SMK-23 | PASS | 2 checks passed |
+| SQ-SMK-24 | PASS | 7 checks passed |
+| SQ-SMK-25 | PASS | 6 checks passed |
+| SQ-SMK-26 | PASS | 4 checks passed |
+| SQ-SMK-27 | PASS | 3 checks passed |
+| SQ-SMK-28 | PASS | 2 checks passed |
+| SQ-SMK-29 | PASS | 9 checks passed |
+| SQ-SMK-30 | PASS | 3 checks passed |
+| SQ-SMK-31 | PASS | 2 checks passed |
+| SQ-SMK-32 | PASS | 2 checks passed |
+| SQ-SNP-06 | PASS | 13 checks passed |
+| SQ-SRM-01 | PASS | [creativecalendar] SRM line once (the shell grep of 3 also counts 2 creativecompat lines); no injection failure |
+| SQ-SRM-02 | PASS | 2 checks passed |
+| SQ-SRM-03 | PASS | 1 check passed |
+| SQ-SRM-04 | PASS | 2 checks passed |
+| SQ-SRM-05 | FAIL | pad 1 (snowed) replace fill reports 81 grass (want 1); pad 2 81. Snow may have melted at rts 1000 (not probed) |
+| SQ-SRM-08 | PASS | 2 checks passed |
+| SQ-SRM-09 | PASS | 4 checks passed |
+| SQ-SRM-11 | PASS | 4 checks passed |
+| SQ-SRM-12 | PASS | 7 ice blocks of 50 columns (3 to 20) |
+| SQ-TPF-10 | FAIL | no line matches /Test passed, count: [1-9]/ |
+| SQ-TPF-18 | BATCH-FAULT | reclassified from FAIL: runner-pub, 2026-11-25: as r1124w7: the row expects the MC-2025 fix's saved AABB, but MC-2025 is off in the shipped debugify.json (thirdparty_fixes.md rule 2); needs a fix-on boot or a base-only rewrite (section prep, not simple); no line matches /has the following entity data/; open look 1: no "p2025-out" line in fix (an escape = MC-2025); base: any "p2025-out" = bug reproduced; a total below 25 with no "out" line is a death (r1114: cramming, suffocation), not the bug; the 12 "unloaded" checks print Test failed |
+| SQ-TPF-19 | PASS | 1 check passed |
+| SQ-WT-03 | PASS | 7 checks passed |
+| SQ-WT-04 | FAIL | no line matches /#a has 30 \[wt4\]/; no line matches /#b has 6 \[wt4\]/; /(Unknown (item/block/block type/entity)/Incorrect argument for command/Unknown or incomplete command/That position is not loaded/Found no elements matching)/ matched: [25Nov2026 15:58:49.514] [KubeJS Recipe Event Worker 0/WARN] [KubeJS Server/]: Error parsing recipe create:milling/compat/biomesoplenty/burning_blossom[create:milling]: {"type":"create:milling","condi |
+| SQ-IP-15 | FAIL | no line matches /IP15 ascension above start/; no line matches /IP15 plain on the ground/; Ascension sword stays at y -60 (not risen); Fleeting pushed golem 40.5/40.5 -> 44.6/37.4; plain/ascension says missing (volume selector without at @s); TODO items/item-physics #3 |
+| SQ-IP-16 | PASS | dump yes, unclassified 366 (<650), netherite_scrap fire_resistant_item, block-item rows carry material/sound |
+| SQ-MT-04 | PASS | squid 30 m 32.0->30.3; 10 m tp 15.3->31.8; orca at 10 stays 14.2->15.8; glow squid same pattern |
+| SQ-MT-05 | PASS | 30 m: health 160 unchanged; 10 m: dist 6.0->5.5 no flight, whale hp 160->130->49 |
+| SQ-MT-06 | INCONCLUSIVE | [giant_squid] absent (0); squid and whale hp unchanged in 60 s, whale swam off (76,57,-39 -> 112,58,-37) so no hunt; row says inconclusive, rerun when whale hungry |
+| SQ-CMP-12 | PASS | 4 checks passed |
+| SQ-PSM-09 | INCONCLUSIVE | counts too small: squid 0, glow squid 6 (1 baby), dolphin 0; no mobcap line recorded |
+| CQ-CC13-01 | PASS | text: config reload logged at 16:53:40 after the levelCaps edit (luck amp 2 -> 0), none for the unchanged rewrite, one at 16:53:47 for the revert (luck amp 2); 2 reloads total |
+| CQ-CC13-02 | LOOK | open look 1: ice_tooltip: the gray "Saltable" line under the name; salt and Salt Melt READ lines and shots: what the salt item says about its use (the code has no salt-item tooltip line, only the Saltable line on blocks and the JEI info page; a missing use line is a doc question, not a FAIL) |
+| CQ-CC13-03 | LOOK | open look 1: hud and inventory_effects: Nausea without a level numeral, Speed shows III; potion_tooltip: "Nausea (1:00)" with no numeral; wine and JEI page not captured here (a JEED effect page has no driver screen; owner playtest) |
+| CQ-CC13-04 | LOOK | open look 1: owner: per wood (planks row in front: spruce, birch, dark oak, jungle, acacia, mangrove, twisted, ancient, blossom, azalea, crimson, warped) the empty, filling (level 4) and ready (level 8) composters; the compost gaps take each plank's darkest shades, no missing texture; on approval the `sources.csv` composter rows go from `confirm` to `ok` |
+| CQ-CEN-02 | LOOK | open look 1: shots: no purple-black anywhere; each face one tile of the sheet (taped top, flap bottom, handles on north and south, labels on east and west, as CQ-CMP-09); the WTHIT overlay on face_north_wthit names Weathered Cardboard Box and Creative Engineering; held and inventory icons show the box model; jei_recipe shows the splashing recipe and the box (hover its mod line by hand if JEI's mod name is not in the shot) |
+| CQ-CPP-01 | LOOK | open look 1: jei_apple_cider: owner hovers or reads the cider fluid's tooltip (effect lines under the fluid name; not automated); descriptions (shell): Common and Engineering texts as in their gradle.properties; tips line counts 3 files; tea_pipe_hud: the Haste icon on the HUD while the open pipe spills tea (tank amount falling in `data get`) |
+| CQ-LTP-17 | PASS | 9 checks passed |
+| CQ-MELT-02 | LOOK | open look 1: the driver steps passed (text "Saltable" on six saltable items, none on blue ice, permafrost, salt block); the shot shows the line gray under the name when hovered |
+| CQ-RPI-94 | LOOK | open look 1: shots: the sprint_jump view is only slightly wider than sprint_ground (fov 0.5 = half the Fleet-Footed shift); the feel is the owner's live check (CQ-RPI-76) |
+| CQ-RPS-02 | PASS | text: 'Unknown recipe: solapplepie:food_book' (Apple Pie recipe gone); book + food tooltips read Diet Log; drink gave solraspberrypie:liquid_diet_log; Controls entry not read here |
+| CQ-RPS-03 | LOOK | open look 1: the Diet Log diversity page shows the same total as `solrp diversity get` (bread 0.80 plus golden apple 4.00 at Apple Pie's decay weights) and the meal list shows bread and golden apple; cake has no item tooltip value (a placed block; Apple Pie counts its slices when eaten), so the cake read only shows its lines |
+| CQ-RPS-05 | LOOK | open look 1: G1 above 0 and the gate shot shows no "Eat N more foods" line (gate open at the first meal); D1 from 33 meals (the oldest bread out of the 32-meal window); D2 = D1 minus what the 5 oldest window foods gave (respec_confirm lists them; after_respec pages no longer show them); D3 below D2 by the drop cost (drop_confirm); after death diversity 0.00 and the Diet Log pages empty |
+| CQ-RPS-09 | LOOK | open look 1: pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10), Jump Boost I, Luck I (gone from 17.5 up), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength in no picker shot; nothing_eaten pages: the diversity icon is a vanilla seed (or rotten flesh / spider eye); div50 pages (Overview, Diet Ladder, Milestones): unlock icon an awkward potion, permanent-buff icon a diamond, slot icon an item frame |
+| CQ-RPS-14 | BATCH-FAULT | reclassified from FAIL: runner-pub, 2026-11-25: as r1124w7 (BATCH-FAULT): the change picker is empty (only Regeneration I unlocked, already in slot 1), so no Confirm exists; needs a rewrite with more foods (not simple); click_widget: no widget labeled "Confirm"; open look 1: after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; drop3_confirm lists only slot 3 and its effect as lost; changed pages: the 5 oldest of the 12 foods gone from the Last meals grid and the history, E1 - E2 = what they gave (change1_confirm); death pages: grid and history empty; E3 = apple's full 1.00 (an aged-out food counts in full again) |
+| CQ-RPS-15 | LOOK | open look 1: nothing eaten, so every food is uneaten: hardest pages start with the enchanted golden apple (10), golden apple (4), then the 2s (cooked beef and porkchop before golden carrot: more hunger first), then the 1.0 foods by hunger; easiest pages the reverse by base diversity; diet_log_width: the Diet Log about 25% wider than the plain book (same as before); the grep shows HARDEST after EASIEST in the comment and the allowed values |
+| CQ-RPS-12 | LOOK | open look 1: liquid_log: the drinks newest first with the third drink (potion) on top, milk below it, still listed after the bread was eaten (the state sync without a drink list kept the client's list) |
+| CQ-CMP-14 | LOOK | open look 1: armor_before: the corpse wears the iron armor and holds the sword; armor_after: no helmet, no sword, chestplate, leggings and boots still on; wither_corpse: a normal-size skeleton with the dark wither skeleton texture wearing the gold helmet |
+| CQ-CMP-15 | PASS | text: player nbt curios:inventory ring StacksHandler Stacks Slot 0 botania:dodge_ring, absent from Inventory (only iron_chestplate Slot 102); slot_item 46 golden_helmet ok earlier |
+| CQ-CMP-18 | LOOK | open look 1: sections_idle: top row 4 armor, 4 cosmetic (gold helmet leftmost, gold boots at the right end, the middle two show armor silhouettes), offhand at the right end; a Curios-style panel on the window's left edge with one slot per curio (back, belt, necklace, ring, ring); no Additional Items button; curio_hover: the tooltip names "Curio: Ring"; two_columns: 15 curios, a second column further left past 12 |
+| CQ-CMP-20 | LOOK | open look 1: corpse_gold: the corpse wears the gold helmet (its own cosmetic stack), not the leather one; corpse_iron: after the gold helmet was taken it shows the iron helmet; self_third_person: the living player still wears the leather cosmetic helmet and the corpse beyond it the iron one |
+| CQ-CMP-21 | LOOK | open look 1: (with the CQ-CMP-18 shots) model_front / model_side: the corpse's player model shows the belt, the necklace and the elytra on its back over the iron chestplate; *_taken: elytra and belt gone, necklace still shown. Hand: one curio with its render toggled off does not show |
+| CQ-CMP-22 | LOOK | open look 1: (with the CQ-CMP-18 shots) skeleton_dressed: the skeleton wears the gold helmet over the iron one, belt, necklace and the elytra over the chestplate; skeleton_taken: iron helmet shows, elytra gone; wither_dressed: the wither skeleton dressed the same. Hand: the render-toggled curio does not show |
+| CQ-CMP-26 | LOOK | open look 1: (with the CQ-CMP-18 shots) own_wings: the living player's wings, left red, right the banner; skeleton_custom: the skeleton's wings show the same dye and banner; skeleton_vanilla: plain vanilla elytra wings |
+| CQ-CMP-30 | LOOK | open look 1: salt_uses_off: no Seasoning page (salt's seasoning crafts on the Crafting / Mixing pages); tipped_arrow_off: no Tipped Arrows page (Crafting / Spout); canning and potion_buckets open; with the empty list the Seasoning and Tipped Arrows pages open too (a jei_category step that fails = page missing) |
+| CQ-CMP-31 | LOOK | open look 1: the WTHIT run speed line on the powdered sugar block shows the 0.9 stuck multiplier (look_at_block; inside_block if WTHIT shows it from inside) |
+| CQ-CMP-32 | LOOK | open look 1: the parts (Jump Boost and the mid-air jump line) listed under "When Applied:" as before |
+| CQ-CMP-33 | LOOK | open look 1: names "Ancient Corpse" / "Ancient Remains" (shots and the entities line); both cookies in one jar (be line); sample_syringe_tab: the world tab shows the syringe as its icon and catalyst, no barrier icon |
+| CQ-CMP-36 | LOOK | open look 1: can_filled: the cobblestone and the apples are in the can's slots; can_reopened: all 27 slots empty; the stick stack held on the cursor at close is back in the inventory (clear line), nothing on the ground; holding the cobblestone did not place it (first use with the stack opened the screen) |
+| CQ-CMP-37 | LOOK | open look 1: item_can_sneak: the mod's own filter screen (one item filter slot, whitelist button); ultimate, liquid and energy cans: their usual screens with and without sneak (the screen_info lines in the row log) |
+| CQ-CMP-19 | FAIL | click_widget: no widgets (screen CorpseInventoryScreen); slot_item: slot_item: no line matches /golden_helmet/; open look 1: (a) the slot_item checks show the shift-clicked, dragged and hotbar-swapped items left their section slots and sit in the inventory with no tag (no nbt on the dragged ring and the swapped helmet); the shift-clicked dodge ring is in the first player line. (b) second player line: ring slot 0 holds aura_ring (put there after death), ring slot 1 mana_ring (its own index), dodge_ring in Inventory (its slot was taken), backpack in back, travel belt in belt, cloud pendant in necklace; the cosmetic helmet is back in its cosmetic slot. Hand: the extra Additional Items stack (no real-death source in this kit) |

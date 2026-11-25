@@ -9,6 +9,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 [scratch_queue.md](../../../feature_writeup/testing/scratch_queue.md) under "World groups"; read both.
 
 ## Server prep, jars and mod sets
+- A non-target own jar whose installed build breaks every boot (r1125pub: Creative Delight's rabbit trap, `Failed to load datapacks`, logged only in debug.log as an NPE in `SimpleJsonResourceReloadListener.prepare`): `OVERRIDEJARS="path"` in the drive's env makes prep_srv.sh copy the last good build over it; `run_captures.py serve --jar PATH` does the same for a client. Keep the jar in the run folder, report the bug, defer the rows that need the new build (r1125pub).
 
 - Enforced: own jars hard-linked or symlinked, own jars changed after prep, jars in srv/mods with no mod_sides.md row:
   `qpin.py` (prep_srv.sh pins real copies and writes OUT/pinned.json; `qrun.py run` refuses on `qpin.py verify`).
@@ -91,6 +92,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - A stub class fixture that must fail a ClassNode member check: rename the member's CONSTANT_Utf8 (declaration and every Fieldref follow) instead of dropping the declaration; a constructor that writes the dropped field throws `NoSuchFieldError` at registry time and the boot dies (`rps_fixture.py stub`, SQ-RPS-08, r1123rp).
 
 ## Boot and shutdown
+- `run_captures.py serve` returns once the client is up: start it in a `systemd-run --user --scope`, never a service unit, or the unit stops and kills the client with it (r1125pub). A mod-construction crash (`Crash report saved to`) used to hold a drive step for its 600 s cap; qdrive.py now returns at that line and reboots once on the construction-time `ConcurrentModificationException` flake (r1125pub).
 
 - A multi-boot section runs its boots only under the driver (`qrun.py drive`, `@boot N` + `@@prep boot=N:`): a plain
   `qrun.py run` on the file runs every row on the one boot it is given, boot-2 rows included; run it per boot with
@@ -220,6 +222,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   instance's filled `creativedelight-common.toml`, so strip the target sections before a carry test (r1113).
 
 ## Batches: rows, captures and selection
+- A volume selector (`dy=` without `x`/`z`) inside `execute as @e[tag=X] if entity @s[y=..,dy=..]` boxes the command source's x/z (spawn), not the entity: add `at @s` (r1125pub SQ-IP-18 to -20). A water or lava source block's surface is its y + 8/9 (r1125pub). `/cdevtest state` quotes the state value (`state="minecraft:campfire[...]"`). A survival bot within about 1.3 blocks picks up drops: `pbot pickup NAME off` when a row counts dropped items (SQ-SRM-09). `qrun.py pair --drop` takes globs: a jar name with `[...]` must be written with `?` (r1125pub).
 
 - Enforced: `grep -c` in a shell step without `; true` (0 matches exits 1 = false FAIL; r1106spfx, r1113, r1114):
   `qrun.py lint` E grepc, and `qrun.py run` marks a row HARNESS when a shell exit code is its only failure while its log

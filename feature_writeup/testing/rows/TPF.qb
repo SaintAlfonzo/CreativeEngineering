@@ -60,6 +60,7 @@ look Enabled line recorded; diff empty (the post-stop diff is in the run notes);
 @pass base: cows dead, no item; fix: at least 1 item
 @fails base shows items: ItemPhysic or another mod already keeps them, fix stays off; fix shows none: 4.5 export check of `mc206922.ItemEntityMixin`
 @from batches/r1113tpf/s1_fix.qb passed
+@reviewed 2026-11-25
 # NoAI: a cow that wandered off the strike point survived (r1114)
 # BF-FIX r1124gate: forceload the strike points (unloaded when run alone)
 > forceload add 1296 992 1328 1008
@@ -181,6 +182,7 @@ expect has the following entity data
 @pass fix: `AABB` saved and the inside count stays 25 every cycle; base: `AABB` absent, any cycle below 25 = bug reproduced (LOOK at the counts)
 @fails base never below 25 in 12 cycles: not reproduced with this setup; record and keep the fix only if the owner wants it on evidence of the saved `AABB` alone
 @from batches/r1113tpf/s1_fix.qb
+@reviewed 2026-11-25
 > forceload add 1990 1990 2010 2010
 sleep 4
 # 25 cows in 25 blocks die of cramming (maxEntityCramming 24) after a reload: the r1114 losses were deaths (beef and
@@ -214,6 +216,7 @@ expect has the following entity data
 @pass base: `proto=0` (partial chunks lost at shutdown); fix: `proto` above 0
 @fails base proto above 0: the chunks were saved on unload during the wait, shorten the sleep; fix 0: 4.5 export check of `mc224729.ThreadedAnvilChunkStorageMixin`
 @from batches/r1113tpf/s19.qb passed
+@reviewed 2026-11-25
 > forceload add 3000 3000
 sleep 40
 > forceload query 3000 3000

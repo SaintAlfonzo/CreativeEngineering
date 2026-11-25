@@ -553,7 +553,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails `BotaniaGrassSeasonMixin` (HEAD of `m_213897_`) missing: boot fails with an injection error since require = 1; or the block is untyped
 @jars creativecommon
 @from batches/r1102b/s5_R_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-25
 # own home (r1120fix 2026-11-20): the s5home marker at spawn, captured here because rows run alone
 > execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
 sleep 2
@@ -803,7 +803,7 @@ reject Enum constant must be one of
 @fails `IWGrassSpreadSeasonMixin` (light check in `ModGrassBlock.m_213898_`) missing; vanilla dirt spread is SQ-PST-03
 @jars creativecommon
 @from batches/r1102b/s5_R_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-25
 # own home (r1120fix 2026-11-20): the s5home marker at spawn, captured here because rows run alone
 > execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
 sleep 2
@@ -852,7 +852,7 @@ reject Enum constant must be one of
 @fails `IWGrassSpreadSeasonMixin` missing; a depleted pad (rebuild it)
 @jars creativecommon
 @from batches/r1102b/s5_R_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-25
 # ring and pad rebuilt before each counted run (first run: the pad depleted, 43 to 0)
 # own home (r1120fix 2026-11-20): the s5home marker at spawn, captured here because rows run alone
 > execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
@@ -1898,7 +1898,7 @@ look rows/SQ-PSM-08.shell.txt: at 30 the squid's movement is ordinary wandering;
 @fails 0 babies among 60+: natural path differs from SQ-OM-13 (check `MobBabyMixin` in the class dump); few squid at all: water_creature cap held by Alex's Mobs (record counts for the owner)
 @jars creativecommon
 @from batches/r1102b/s5_B.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-25
 # own capture (r1120fix 2026-11-20): {S5O} came from SQ-PSM-08; rows run alone
 > locate biome minecraft:deep_ocean
 waitlog (The nearest minecraft:deep_ocean is at|Could not find a biome of type "?minecraft:deep_ocean) 600

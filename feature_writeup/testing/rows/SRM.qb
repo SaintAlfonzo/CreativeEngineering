@@ -55,7 +55,7 @@ reject SRM02_AIR
 @pass the block is `minecraft:poppy`
 @fails air: `Melting.onPlaced` did not defer to the next tick for a Snow! Real Magic block (the held block is filled in after onPlace); still snow: `#creativecompat:melting/ultrawarm_instant` lacks it
 @absent snowrealmagic:snow (Snow! Real Magic 6.5.4, added after the last /dumpall dump of 2026-11-13)
-> execute in minecraft:the_nether run forceload add 0 0
+> execute in minecraft:the_nether run forceload add -1 -1 1 1
 > execute in minecraft:the_nether run fill -1 100 -1 1 102 1 minecraft:air
 > execute in minecraft:the_nether run setblock 0 100 0 minecraft:grass_block
 > execute in minecraft:the_nether run setblock 0 101 0 snowrealmagic:snow[layers=2]{Block:"minecraft:poppy"}
@@ -159,6 +159,9 @@ expect snowrealmagic:blizzardFrequency is currently set to: 3500
 > forceload add 3160 3000 3191 3031
 > execute unless entity m9 run pbot spawn m9 3176 -60 3016 minecraft:overworld survival
 sleep 3
+# r1125pub BF-FIX (2026-11-25): the bot stands 1.5 blocks from the 5-layer pile and picked up the 2 snowballs (no item
+# left after the first scoop, the far 1-layer case passed): pickup off
+> pbot pickup m9 off
 > setblock 3174 -60 3016 minecraft:snow[layers=5]
 > setblock 3178 -60 3016 minecraft:snow[layers=1]
 > kill @e[type=minecraft:item,x=3160,y=-62,z=3000,dx=31,dy=10,dz=31]

@@ -1229,6 +1229,7 @@ look the two randomtick lines come in command order: the first (stopped row) mus
 @pass `config/creativedelight-common.toml` `[bees] honeycombMultiplier = 3`; `config/creativecommon-common.toml` has no `[bees]` after the boot; latest.log has `[swaps] config sections [bees] merged from creativecommon-common.toml`; the hive drops 9 honeycomb
 @fails the carry in `CreativeDelight` constructor (must run before `registerConfig`); Common still declaring `[bees]`; `BeehiveHoneycombMixin` not in `creativedelight.mixins.json`
 @modset none
+@reviewed 2026-11-25
 bootexpect \[swaps\] config sections \[bees\] merged from creativecommon-common\.toml into creativedelight-common\.toml
 bootreject \[swaps\] could not (carry|merge) config sections .*bees
 shell awk '/^\[bees\]/{f=1;next} /^\[/{f=0} f' config/creativedelight-common.toml | grep -E '^\s*honeycombMultiplier = 3\s*$'
@@ -1250,6 +1251,7 @@ reject \[cdevtest\] .*done=0
 @pass Delight's new toml has `[bees] honeycombMultiplier = 3` and every other Delight section at its default; latest.log has `[swaps] config sections [bees] carried over` (or merged, when an earlier carry in the same constructor wrote the file first)
 @fails `ConfigRename.carrySections` new-file path; the earlier Delight carries (campfire, creativeengineering sections) wrote the file first, then the merge path is the one taken
 @modset none
+@reviewed 2026-11-25
 edit rm -f config/creativedelight-common.toml && cp "$INST/tools/scratch_query/fixtures/wave2_carry/old_common_bees_trader.toml" config/creativecommon-common.toml
 restart
 bootexpect \[swaps\] config sections (\[bees\]|\[[^]]*\bbees\b[^]]*\]) (carried over from creativecommon-common\.toml to|merged from creativecommon-common\.toml into) creativedelight-common\.toml

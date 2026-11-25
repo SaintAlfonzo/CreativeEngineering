@@ -21,7 +21,7 @@
 @pass Compat core line; no mixin apply error; every common mixin in the jar list applies on the server except those its gate skips (mod absent or out of range; `CompatMixinPlugin`); none applied twice to the same target class (a mixin with several targets logs one line per target) or also from Creative Engineering
 @fails Jar missing, a gate id wrong in `CompatMixinPlugin`, or Creative Common still listing a moved mixin (applied twice)
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 bootexpect \[creativecompat\] loaded \(config/
 bootreject creativecompat\.mixins\.json.*(Error|error|failed)
 # r1123cx (2026-11-23): the pathfinding mixins (SnowPathMixin, LeafPilePathMixin) apply when the first mob paths, about 1 s after Done; a mob and a wait first
@@ -49,8 +49,8 @@ look Compat file rainOutTicks = 200; CE file lost the six sections (restart half
 @pass Pack `creativecompat` loads; no `[creativecompat] global.itemPhysics missing` error; item physics rules load (count line as before)
 @fails Startup tree not in the jar, or the ItemPhysic class names in `item_physics.js` wrong
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-22
-shell grep -E "startup script packs in order|creativecompat|item_physics" logs/kubejs/startup.log | cut -c1-220 | head -8
+@reviewed 2026-11-25
+shell grep -E "startup script packs in order|jar-startup\] creativecompat|item_physics\.js#[0-9]+: \[item_physics\]" logs/kubejs/startup.log | cut -c1-220 | head -12
 kjsreject global\.itemPhysics missing|ItemPhysicSplit not on classpath
 look pack creativecompat loads; [item_physics] summary line as before
 
@@ -60,7 +60,7 @@ look pack creativecompat loads; [item_physics] summary line as before
 @pass Runs and lists rules (it loads `com.SaintAlfonzo.creativecompat.itemphysic.ItemPhysicSplit`)
 @fails dump_physics.js class name
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 > dumpphysics
 sleep 5
 reject Unknown or incomplete command
@@ -73,7 +73,7 @@ look rules listed
 @pass Blast plus shrapnel as before; fireproof item survives
 @fails `BurnBursts` handler not registered by the shrapnel side
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 # self-contained since r1118 (judge-5, 2026-11-18): the {H} home marker came from a lost setup row; fixed superflat spot
 > forceload add 200 200 232 232
 > execute unless entity @e[type=minecraft:marker,tag=cmphome] run summon minecraft:marker 200 -60 200 {Tags:["cmphome"]}
@@ -105,7 +105,7 @@ look the blast itself is not visible on a console; the TNT item is consumed and 
 @pass Block and item exist (`creativeengineering:weathered_cardboard_box`); loot table resolves; physics tags present
 @fails Startup `decor_blocks.js` or jar data paths
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 @absent creativeengineering:weathered_cardboard_box (registered by Engineering since 2026-11-24, after the last /dumpall)
 # self-contained since r1118 (judge-5, 2026-11-18; ids creativecompat: since the 2026-11-09 move): the {H} home marker came from a lost setup row; fixed superflat spot
 > forceload add 200 200 232 232
@@ -123,7 +123,7 @@ expect CMP box placed
 reject Unknown (block|item)|Unknown loot table
 > dumptags
 waitlog (dumptags|tags).*(done|written|wrote) 300
-shell python3 -c "import json;d=json.load(open('kubejs/exported/tags/item_tags_by_item.json'));print({k:len(v) for k,v in d.items() if 'cardboard' in k})" 2>&1 | cut -c1-300; ls kubejs/exported/tags/ | head
+shell python3 -c "import json;d=json.load(open('kubejs/exported/tags/block_tags_by_block.json'));print({k:v for k,v in d.items() if 'weathered_cardboard' in k})" 2>&1 | cut -c1-300; ls kubejs/exported/tags/ | head
 look block, item and loot resolve; physics tags present
 
 ## SQ-CMP-07 | paintings
@@ -131,9 +131,9 @@ look block, item and loot resolve; physics tags present
 @commands Same boot: `grep -ciE "paintings" logs/latest.log`; Immersive Paintings painting list count (445 variants built, immersive_paintings.md)
 @pass 445 of 445 painting variants built (2026-11-23); no painting load error
 @fails Paintings not loaded from a mod jar datapack (move them back to the pack folder)
-@reviewed 2026-11-23
+@reviewed 2026-11-25
 @from batches/r1101/cs2_boot2.qb
-shell grep -ciE "paintings" logs/latest.log; grep -iE "immersive_?paintings" logs/latest.log | grep -iE "error|fail|load" | head -3 | cut -c1-200; ls kubejs/data | head -40 | tr '\n' ' '
+shell grep -ciE "paintings" logs/latest.log; grep -E "\[paintings\] [0-9]+ of [0-9]+" logs/latest.log | cut -c1-160; grep -iE "immersive_?paintings" logs/latest.log | grep -iE "error|fail|load" | head -3 | cut -c1-200; ls kubejs/data | head -40 | tr '\n' ' '
 look 445 of 445 painting variants built, no load error
 
 ## SQ-CMP-08 | moved server scripts, /reload
@@ -142,7 +142,7 @@ look 445 of 445 painting variants built, no load error
 @pass No script error from the Compat server files (flowers, Botany Pots, tag rows; since 2026-11-22 coin, starter kit, feature ports and misc mods run from the pack folder, SQ-CMP-25); `/reload` clean
 @fails A moved script reading a top-level name from the pack's scope
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 shell grep -E "Error occurred while handling event|creativecompat" logs/kubejs/server.log | head -6 | cut -c1-220; grep -c "Error occurred while handling event" logs/latest.log; true
 kjsreject Error occurred while handling event
 > reload
@@ -193,7 +193,7 @@ expect Changed the block
 @commands Any boot with Corpse and the current Compat jar; read `config/creativecompat-common.toml`
 @pass `CorpseDecayMixin` applies (no mixin error); the file has `[corpses]` with `skeletonTime = 168000`, `emptySkeletonTime = 600`, `emptyDespawnTime = 6000`, the four Nether times and both dimension lists
 @fails a target name in `CorpseDecayMixin` (m_8119_, m_7380_, m_7378_, m_8097_, m_5446_) no longer matches the Corpse jar
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 bootreject CorpseDecayMixin.*(Error|error|failed)
 shell grep -nE "^\s*\[corpses\]|skeletonTime|emptyDespawnTime|netherWitherTime|noDecayDimensions" config/creativecompat-common.toml
 look the [corpses] section with the default values
@@ -204,7 +204,7 @@ look the [corpses] section with the default values
 @commands Shortened `[corpses] skeletonTime = 200` and a restart (stands in for 7 days); `forceload add 0 0`; advance the clock 300 ticks; `summon corpse:corpse 2 -60 2 {Tags:["c11a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:1L}}` and a second with `Tags:["c11b"]` and no `creativecompat:corpse`; wait 3 s; read each `Stage`
 @pass c11a: `Stage: 1b` (skeleton; its death was more than skeletonTime ticks of game time ago); c11b: `Stage: 0b` with a `DeathTime` near the current game time
 @fails c11a stays 0: the decay check does not run (tick redirect or config gate); c11b turns skeleton at once: DeathTime defaulted to 0
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 # r1120fix (2026-11-20): a negative DeathTime is the mixin's "unset" sentinel (CorpseDecayMixin: deathTime < 0 -> now - age),
 # so the r1120nv fixture read as just died. Now: skeletonTime 200 ticks (restart), the clock moved past 300 ticks, and a
@@ -236,7 +236,7 @@ reject (Unknown or incomplete command|Incorrect argument for command|No entity w
 @commands `summon corpse:corpse 6 -60 2 {Tags:["c12"],Death:{PlayerName:"Test"}}`; read `Stage` at 10 s and 35 s; check the entity at 4 min 50 s and 5 min 10 s
 @pass Stage 0b at 10 s, 1b at 35 s; still there at 4 min 50 s; gone at 5 min 10 s (no item drops: it was empty)
 @fails gone after 30 s: the Corpse mod's own despawn still runs (redirect of m_146870_ in tick); never gone: emptiedAt never set
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 > forceload add 0 0
 sleep 3
 > summon corpse:corpse 6 -60 2 {Tags:["c12"],Death:{PlayerName:"Test"}}
@@ -259,7 +259,7 @@ expect Test failed
 @commands Shortened Nether times (`netherSkeletonTime = 200`, `netherWitherTime = 1000`: wither 1000 ticks after the skeleton) and a restart; advance the clock 1200 ticks; in the Nether a corpse holding stone (`c13a`) with `DeathTime` 300 ticks ago, a second (`c13b`) with `DeathTime:1L`; in the End a third (`c13c`) with `DeathTime:1L`; forceload each spot; wait 3 s; read each `Stage`
 @pass c13a 1b, c13b 2b, c13c 0b
 @fails c13b 1b: the Nether list does not match the dimension id; c13c 1b: the End is not in `noDecayDimensions`
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 # r1120fix (2026-11-20): a negative DeathTime is the mixin's "unset" sentinel (CorpseDecayMixin: deathTime < 0 -> now - age),
 # so the r1120nv fixture read as just died. Now: Nether skeleton at 200 ticks, wither 200 ticks later (stand in for 1 + 1 days;
@@ -298,7 +298,7 @@ reject (Unknown or incomplete command|Incorrect argument for command|No entity w
 @pass c16a (skeleton) at the bottom of its column (y about -59); c16b (player model) at the water surface (y about -50); `config/creativecompat-common.toml` has `skeletonsSink = true`, `sinkSpeed = 0.1`
 @fails c16a still near the top: the `@ModifyArg` on `m_20334_` in `CorpseEntity.m_8119_` did not apply (look for a mixin warning); c16b sank too: the skeleton check is missing
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 > forceload add 16 16
 > fill 20 -59 20 22 -50 22 minecraft:water
 > fill 26 -59 20 28 -50 22 minecraft:water
@@ -327,6 +327,8 @@ shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -362,6 +364,8 @@ do {"screen": "close"}
 sleep 2
 shot armor_after
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > gamemode creative PerfEval
 > execute in minecraft:the_nether run forceload add -3 -3 4 7
 > execute in minecraft:the_nether run fill -3 100 -3 4 100 7 minecraft:stone
@@ -376,6 +380,8 @@ shot wither_corpse
 > execute in minecraft:the_nether run forceload remove -3 -3 4 7
 > execute in minecraft:overworld run tp PerfEval 0.5 101 0.5 0 35
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -399,6 +405,8 @@ look armor_before: the corpse wears the iron armor and holds the sword; armor_af
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -442,6 +450,8 @@ do {"screen": "close"}
 > cdevtest entities 0 101 0 2 type=minecraft:player nbt
 expect verb=entities type=minecraft:player .*botania:dodge_ring
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -455,7 +465,7 @@ look the player line in the row log: botania:dodge_ring sits in the Curios ring 
 @pass the five common section mixins apply (no mixin error); `[corpses]` has `sectionedScreen = true`, `curioCap = 24`; c17: `Stage: 0b`, `EmptiedAt: -1L` (it holds items, so neither the empty skeleton nor the 5 min rule runs)
 @fails Stage 1b: section stacks were left out of the empty check (only the Additional Items checks may skip them); a mixin error naming `lambda$openCorpseGUI$1`, `m_38946_`, `transferItems`, `m_7648_` or `executeServerSide`: the Corpse jar changed
 @absent creativecompat:corpse creativecompat:curio (NBT keys on the corpse and on stacks, not registry ids)
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 bootreject Corpse(InventoryContainer|ContainerBase|AdditionalContainer|Guis|TransferMessage)Mixin.*(Error|error|failed)
 shell grep -nE "sectionedScreen|curioCap" config/creativecompat-common.toml
 look sectionedScreen = true and curioCap = 24
@@ -481,6 +491,8 @@ look Stage: 0b and EmptiedAt: -1L
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -523,6 +535,8 @@ shot curio_hover
 do {"hover": "off"}
 do {"screen": "close"}
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > curios add ring PerfEval 10
 > curios replace back 0 PerfEval with sophisticatedbackpacks:backpack
 > curios replace belt 0 PerfEval with botania:travel_belt
@@ -552,6 +566,8 @@ shot two_columns
 do {"screen": "close"}
 > curios reset PerfEval
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -574,6 +590,8 @@ look sections_idle: top row 4 armor, 4 cosmetic (gold helmet leftmost, gold boot
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -624,6 +642,8 @@ do {"slot_item": 1, "expect": "golden_helmet", "reject": "creativecompat|Cosmeti
 expect verb=entities type=minecraft:player .*botania:dodge_ring
 count ^(?!.*corpse:corpse).*verb=entities type=minecraft:player .*(creativecompat:curio|CosmeticSlotIndex|CosmeticArmorItem) == 0
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > curios replace back 0 PerfEval with sophisticatedbackpacks:backpack
@@ -658,6 +678,8 @@ do [{"click_widget": "CosmeticArmor"}, {"wait": "screen:GuiCosArmorInventory"}]
 do {"slot_item": 46, "expect": "golden_helmet", "reject": "creativecompat|Cosmetic"}
 do {"screen": "close"}
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -680,6 +702,8 @@ look (a) the slot_item checks show the shift-clicked, dragged and hotbar-swapped
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -724,6 +748,8 @@ shot self_third_person
 do {"press": "key.togglePerspective"}
 do {"press": "key.togglePerspective"}
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -747,6 +773,8 @@ look corpse_gold: the corpse wears the gold helmet (its own cosmetic stack), not
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -787,6 +815,8 @@ shot model_front_taken
 sleep 2
 shot model_side_taken
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -812,6 +842,8 @@ look (with the CQ-CMP-18 shots) model_front / model_side: the corpse's player mo
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -856,6 +888,8 @@ do {"screen": "close"}
 sleep 2
 shot skeleton_taken
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > curios replace back 0 PerfEval with minecraft:elytra
@@ -882,6 +916,8 @@ sleep 2
 shot wither_dressed
 reject curio renderer for .* failed on a corpse skeleton
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -904,7 +940,7 @@ look (with the CQ-CMP-18 shots) skeleton_dressed: the skeleton wears the gold he
 @pass `[mixins]` table with 36 keys (one per `MixinSwitches` entry; 32 before the wave 2 melting switches, 2026-11-24), all `true`; no `is outside the tested range` and no `is not [` line from `[creativecompat]`; the `SupplementariesBreezyCompatMixin` gate passes (pack has Supplementaries 1.19.2-2.4.20, Breezy 1.0.8: no `is not [` line; the mixin itself applies only on a client, when a wind vane first ticks); `python3 $INST/tools/scratch_query/cmp_mixin_check.py` shows no mixin skipped that applied in r1122cc
 @fails a range string wrong for the installed version (the mod's mixins go missing); the config spec missing `[mixins]`
 @boot 1
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 bootexpect \[creativecompat\] loaded \(config/
 bootreject \[creativecompat\].*(outside the tested range|is not \[)
 # 2026-11-24 (r1124gate BATCH-FAULT): 36 keys since the four wave 2 melting switches (MeltingBlockState, BiomeMelt, VanillaLightMelt, EndFire)
@@ -949,7 +985,7 @@ look the hand-over line once (logged at mod construction); both layers landed at
 @pass `misc mods starting`, `feature ports (tier 1) starting`, `dead recipe removal starting`, `Coin starting` each once (from `server_scripts`, not the jar); no script error; recipe `creativecompat:` AE2 cable recipes still listed (`/kubejs` dump or JEI count unchanged); the jar lists `data/creativecompat/recipes/botanypots/crop/` (every file of the pack folder's crop tree, 39 on 2026-11-23) and both `tags/items/botany_pots/` tags
 @fails a moved script read a name from Compat's script scope; the build no longer copies the recipe tree
 @boot 1
-@reviewed 2026-11-22
+@reviewed 2026-11-25
 kjsreject Error occurred while handling event
 shell grep -cE "misc mods starting|feature ports \(tier 1\) starting|dead recipe removal starting|Coin starting" logs/kubejs/server.log; true
 # r1123cx (2026-11-23): the typed 41 came from the PR-CP-10 audit; gen_botany_crops.py now writes 39, so the jar is compared with the pack folder
@@ -974,6 +1010,8 @@ look 4 script lines; jar crop recipes = pack folder count, 2 tags
 > fill -4 100 -4 6 100 8 minecraft:stone
 > fill -4 101 -4 6 104 8 minecraft:air
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > spawnpoint PerfEval 0 101 0
@@ -997,6 +1035,8 @@ sleep 2
 sleep 2
 shot skeleton_custom
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > curios replace back 0 PerfEval with minecraft:elytra
@@ -1011,6 +1051,8 @@ sleep 2
 shot skeleton_vanilla
 reject CorpseSkeletonLayer custom elytra failed
 > kill @e[type=corpse:corpse]
+sleep 1
+> kill @e[type=item]
 > clear PerfEval
 > curios clear PerfEval
 > gamerule doImmediateRespawn false
@@ -1036,7 +1078,7 @@ look (with the CQ-CMP-18 shots) own_wings: the living player's wings, left red, 
 @commands Boot 1 (prep writes `seasoningCategory = false`, `canCategories = true`, `potionBucketCategory = true`, `tippedArrowCategory = false`); read `config/creativecompat-common.toml`; restart and read again
 @pass log `[jei] page switches carried over to pagesOff = [seasoning, tipped_arrows]` once; the file has `pagesOff = ["seasoning", "tipped_arrows"]` and none of the four old keys; after the restart no second carry-over line and the list is unchanged
 @fails no carry-over line: `JeiPageKeys.carryOver` not called before `registerConfig` in `CreativeCompat`, or the file has no `[jei]` table; old keys still there: Forge read the file before the carry-over
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 @boot 1
 # 2026-11-24 (r1124gate BATCH-FAULT): a bootexpect reads the boot after the restart; the first boot's line is checked in its kept log
 shell grep -nE "pagesOff|seasoningCategory|canCategories|potionBucketCategory|tippedArrowCategory" config/creativecompat-common.toml
@@ -1051,6 +1093,7 @@ look first boot: one carry-over line, `pagesOff = ["seasoning", "tipped_arrows"]
 @pass the Botania vine is placed with `fertile=false`; the hops vine command fails with an unknown-property error naming `fertile` and the plain hops vine places (Creative Delight registers the hops vine with `VineShearing.keepOwnHandling`)
 @fails the hops vine has `fertile`: Creative Delight's `CompatRegistrations.register` ran after the blocks were built, or the class name changed; Botania without it: `VineBlockShearMixin` not applied
 @boot 1
+@reviewed 2026-11-25
 > setblock 0 120 0 botania:solid_vine[fertile=false]
 > setblock 2 120 0 hearthandharvest:hops_vine[fertile=false]
 > setblock 2 120 0 hearthandharvest:hops_vine
@@ -1204,6 +1247,7 @@ look names "Ancient Corpse" / "Ancient Remains" (shots and the entities line); b
 @commands `grep TrashCansItemCanUseMixin logs/debug.log`; a hopper holding 5 cobblestone and 3 apples on top of `trashcans:item_trash_can`; wait 3 s; `/cdevtest inv` the hopper and `/cdevtest items` around it
 @pass the mixin applies from creativecompat.mixins.json with no error; after the wait the hopper is empty and no item entity lies near the can
 @fails mixin error: the `interact` target or the BaseBlock superclass changed in a new Trash Cans / Core Lib jar (`CompatMixinPlugin` range `[1.0.18,1.1)`); items left in the hopper: the mixin touched the block entity path (it should only change `interact`)
+@reviewed 2026-11-25
 > forceload add 5400 5200 5410 5210
 > fill 5400 -61 5200 5410 -61 5210 minecraft:stone
 > fill 5400 -60 5200 5410 -56 5210 minecraft:air
@@ -1348,7 +1392,7 @@ look item_can_sneak: the mod's own filter screen (one item filter slot, whitelis
 @commands Own boot without the Trash Cans jar (section prep removes it); `grep -E "TrashCansItemCanUseMixin|trashcans" logs/latest.log`
 @pass server reaches `Done (`; no mixin error for TrashCansItemCanUseMixin; no ClassNotFound for `com.supermartijn642`
 @fails crash at mixin time: the gate entry `TrashCansItemCanUseMixin` -> `trashcans` missing in `CompatMixinPlugin.NEEDS_MOD`; NoClassDefFoundError: a Compat class other than the mixin names TrashCanScreen at load
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 # drafted r1124gate (2026-11-24): own section and boot so the other section 6 rows keep the jar
 bootexpect Done \(
 bootreject (TrashCansItemCanUseMixin.*(Error|error|failed)|NoClassDefFoundError: com/supermartijn642)
@@ -1376,7 +1420,7 @@ look first shell line 0 (no Trash Cans jar), second 0 (no mixin or Trash Cans cl
 @pass log line `mixins switched off in [mixins]: [...SnowLayerFallMixin..., ...InsideBlocksMixin...]`; neither mixin in `logs/debug.log` apply lines for this boot; no exception mentioning `PassHolder`, `PassChunkHolder` or `ClassCastException` after 60 s with a player or bot online; the floating snow layer stays (does not fall)
 @fails ClassCastException from a pass-through cast (a duck cast missed in surface/); the key not read (plugin reads before the file exists only on a first start); the snow fell: Snow! Real Magic in the set (the nosrm mod set did not drop it; with it loaded its snowGravity falls snow, SQ-CMP-38)
 @boot 1
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 # r1124gate (2026-11-24): FAIL on the full pack: Snow! Real Magic fell the layer; owner ruling 2026-11-24 moves the row to a set without it
 bootexpect mixins switched off in \[mixins\]
 shell ls mods | grep -ci "^snowrealmagic"; true

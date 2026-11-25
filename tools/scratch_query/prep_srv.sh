@@ -16,6 +16,8 @@
 #     still rewriting
 #   - COPYDEV=1: swapped dev jars are COPIED, not hard-linked (use while other sessions run Gradle builds)
 #   - DROPJARS="glob ...": remove matching jars from srv/mods before the pin (unlisted jars another session added)
+#   - OVERRIDEJARS="path ...": copy each jar into srv/mods over the jar of the same file name (after the swaps), e.g. the
+#     last good build of a non-target own jar whose installed build breaks the boot (r1125pub: Creative Delight)
 #   - PGJAR=<path>: also copy that Power Grid jar (never in mods/; the orchestrator names it in jar_archive/pwg_gate/);
 #     PGJAR=1 takes the newest development/backportedPowerGrid build jar instead
 # Refuses while any game JVM is up (one game JVM at a time).
@@ -113,6 +115,13 @@ for kv in "$@"; do setprop "${kv%%=*}" "${kv#*=}"; done
 # DROPJARS="glob ...": drop these jars from srv/mods (r1123cc: jars the owner put in mods/ that night, no mod_sides.md
 # row yet, kept the publish run on the known pack instead of adding rows from a runner)
 for g in ${DROPJARS:-}; do for j in mods/$g; do [ -e "$j" ] && { rm -f "$j"; echo "dropjars: removed ${j#mods/}"; }; done; done
+# OVERRIDEJARS="path ...": a named jar replaces the srv/mods jar of the same file name (r1125pub: the installed Creative
+# Delight build failed every full-pack boot, so the run used the last good one). rm first: srv/mods names are hard links
+for o in ${OVERRIDEJARS:-}; do
+  case "$o" in /*) ;; *) o="$INST/$o" ;; esac
+  if [ -f "$o" ]; then rm -f "mods/$(basename "$o")"; cp -p "$o" mods/; echo "override: $(basename "$o") from $o (sha1 $(sha1sum "$o" | cut -c1-12))"
+  else echo "override: NOT FOUND: $o"; fi
+done
 # pin (plan_process_overhaul.md P2.4): own jars become real copies, OUT/pinned.json records their stamps; qrun.py run
 # refuses to start when they change, turn into links again, or an unlisted jar is in mods/
 python3 "$INST/tools/scratch_query/qpin.py" pin "$OUT"

@@ -30,6 +30,7 @@ bootreject (?i)(missing|exception).*(vintagedelight:lush_grass_block|vinery:gras
 @pass Sheared patch: 24 dirt left, center still `fertile=false` (`/execute if block ... minecraft:grass_block[fertile=false]`); other patch: fewer than 24
 @fails IW behavior changed: re-read `ModGrassBlock#isRandomlyTicking`
 @from batches/r1031/a1_world.qb
+@reviewed 2026-11-25
 # self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
 > execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
 sleep 3
@@ -63,6 +64,7 @@ look the second fill (unsheared patch) reports fewer than 24
 @pass Sheared patches: 24 left; unsheared: fewer
 @fails Check the port's `isRandomlyTicking` override is in the jar (`javap`, `m_6724_`)
 @from batches/r1031/a1_world.qb
+@reviewed 2026-11-25
 > fill -24 -56 30 -20 -56 34 minecraft:coarse_dirt replace farmersdelight:rich_soil
 > fill -18 -56 30 -14 -56 34 minecraft:coarse_dirt replace farmersdelight:rich_soil
 > fill -40 -56 22 -36 -56 26 minecraft:coarse_dirt replace vinery:dirt_slab

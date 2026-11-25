@@ -107,7 +107,7 @@ look per-family counts near item_physics.md 9.7 (dump of 2026-11-19); a mod adde
 ## SQ-IP-18 | water: leaves skim, planks dip once and rest, cobblestone sinks, no bob after 10 s
 @group A
 @commands build the water basin; summon `oak_leaves`, `oak_planks`, `cobblestone`, `string` items 3 blocks above the water; read each Pos after 5 s and 10 s
-@pass leaves and string rest at about -55.16 (surface less 0.05), planks at about -55.26, cobblestone on the floor (-63); the 5 s and 10 s heights equal (no bob)
+@pass leaves and string rest at about -54.16 (surface -54.11, the source block's fluid height 8/9, less 0.05), planks at about -54.26, cobblestone on the floor (-63); the 5 s and 10 s heights equal (no bob)
 @fails no change from ItemPhysic's dive and bob: `ItemPhysicServerMixin` HEAD inject missing (grep the mixin apply line), `[item_physics] surfaceFloat` off, or the item is not in `physics/skims` (SQ-IP-17)
 > forceload add 288 288 352 320
 > fill 300 -64 300 306 -55 306 minecraft:glass
@@ -125,16 +125,18 @@ sleep 5
 > data get entity @e[tag=ip18l,limit=1] Pos[1]
 > data get entity @e[tag=ip18p,limit=1] Pos[1]
 > data get entity @e[tag=ip18s,limit=1] Pos[1]
-> execute as @e[tag=ip18l] if entity @s[y=-55.4,dy=0.35] run say IP18 leaves at the surface
-> execute as @e[tag=ip18c] if entity @s[y=-64,dy=1.5] run say IP18 cobblestone on the floor
+# r1125pub BF-FIX (2026-11-25): a volume selector (y/dy) without `at @s` boxes the source position (spawn), not the
+# item; heights off by one (the water and lava tops are -55 blocks: surface -54.11)
+> execute as @e[tag=ip18l] at @s if entity @s[y=-54.4,dy=0.35] run say IP18 leaves at the surface
+> execute as @e[tag=ip18c] at @s if entity @s[y=-64,dy=1.5] run say IP18 cobblestone on the floor
 expect IP18 leaves at the surface
 expect IP18 cobblestone on the floor
-look leaves and string about -55.16, planks about -55.26, the two reads of each equal to 2 decimals
+look leaves and string about -54.16, planks about -54.26, the two reads of each equal to 2 decimals
 
 ## SQ-IP-19 | lava: diamond sword and crimson planks skim and survive, diamond block sinks and survives, oak planks burn to ash
 @group A
 @commands build the lava basin; summon `diamond_sword`, `crimson_planks`, `diamond_block`, `netherite_ingot` and 16 `oak_planks` 2 blocks above the lava; read Pos after 6 s
-@pass sword, ingot and crimson planks rest at about -55.19 (surface less 0.08) and are alive; diamond block lower than -56 and alive; the oak planks gone, some `supplementaries:ash` items near the basin
+@pass sword, ingot and crimson planks rest at about -54.19 (surface -54.11 less 0.08) and are alive; diamond block lower than -56 and alive; the oak planks gone, some `supplementaries:ash` items near the basin
 @fails sword sinks: `physics/lavaproof` missing it or it is in `physics/lava_sinks` (generator: HEAVY_FAMILIES, block items only); block skims: `lava_sinks` missing it
 > fill 320 -64 300 326 -55 306 minecraft:glass
 > fill 321 -63 301 325 -55 305 minecraft:lava
@@ -149,9 +151,9 @@ sleep 6
 > data get entity @e[tag=ip19n,limit=1] Pos[1]
 > data get entity @e[tag=ip19b,limit=1] Pos[1]
 > data get entity @e[tag=ip19i,limit=1] Pos[1]
-> execute as @e[tag=ip19w] if entity @s[y=-55.5,dy=0.4] run say IP19 sword on the lava
-> execute as @e[tag=ip19n] if entity @s[y=-55.5,dy=0.4] run say IP19 crimson on the lava
-> execute as @e[tag=ip19b] if entity @s[y=-64,dy=7.8] run say IP19 diamond block below the surface
+> execute as @e[tag=ip19w] at @s if entity @s[y=-54.5,dy=0.4] run say IP19 sword on the lava
+> execute as @e[tag=ip19n] at @s if entity @s[y=-54.5,dy=0.4] run say IP19 crimson on the lava
+> execute as @e[tag=ip19b] at @s if entity @s[y=-64,dy=7.8] run say IP19 diamond block below the surface
 > execute unless entity @e[tag=ip19o] run say IP19 oak planks burned
 > execute if entity @e[type=item,nbt={Item:{id:"supplementaries:ash"}},x=318,y=-60,z=298,dx=12,dy=12,dz=12] run say IP19 ash left
 expect IP19 sword on the lava
@@ -173,7 +175,7 @@ look about 4 ash from 16 planks (25% each, ash may itself burn later); the block
 sleep 4
 > data get entity @e[tag=ip20l,limit=1] Pos[1]
 > data get entity @e[tag=ip20p,limit=1] Pos[1]
-> execute as @e[tag=ip20l] if entity @s[y=-59.64,dy=0.03] run say IP20 leaves on top
+> execute as @e[tag=ip20l] at @s if entity @s[y=-59.64,dy=0.03] run say IP20 leaves on top
 expect IP20 leaves on top
 look planks about -59.75 (sunk one layer, unchanged)
 
@@ -196,7 +198,7 @@ sleep 6
 expect IP21 rocket gone
 expect IP21 ice burned
 expect IP21 iron survives
-expect \[cdevtest\] verb=state pos=360,-60,300 state=minecraft:campfire
+expect \[cdevtest\] verb=state pos=360,-60,300 state="?minecraft:campfire
 look explosion particles; no crater
 
 @@text

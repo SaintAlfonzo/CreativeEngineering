@@ -342,6 +342,10 @@ def wait_ready(out, secs=600):
 			if 'Failed to load datapacks' in t:   # the JVM sits idle after this; no point waiting out the cap (r1121)
 				time.sleep(5)
 				return False
+			# a mod-loading crash: the JVM writes its report and idles (r1125pub step 9 waited out the cap)
+			if 'Crash report saved to' in t:
+				time.sleep(5)
+				return False
 		except OSError:
 			pass
 		time.sleep(3)
@@ -356,7 +360,10 @@ def rhino_flake(out):
 		t = (Path(out) / 'srv/logs/latest.log').read_text(errors='replace')
 	except OSError:
 		return False
-	return 'Failed to load datapacks' in t and 'getSourcePositionFromStack' in t and 'TagLoaderKJS' in t
+	if 'Failed to load datapacks' in t and 'getSourcePositionFromStack' in t and 'TagLoaderKJS' in t:
+		return True
+	# Create addon registration race at construction (gotchas.md, Boot and shutdown; r1125pub D&D DesiresCreate)
+	return 'Failed to create mod instance' in t and 'ConcurrentModificationException' in t
 
 
 def kill_own_jvm(d, out, wait=60):

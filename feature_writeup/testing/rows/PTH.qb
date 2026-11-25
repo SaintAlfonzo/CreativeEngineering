@@ -337,7 +337,7 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 @pass snowball and pearl break in the middle (player ends in the center, hanging); potion sinks down the center line and splashes below the cube; firework holds still and explodes at its flight time; fireball explodes in the center
 @fails `PassProjectiles.breakIn` (`ProjectilePassMixin`), `settle`, `FireworkPassMixin` / `fireworkTail`
 @from batches/r1115/pth_a2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-25
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
 > forceload add 992 976 1231 1215
 > execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
