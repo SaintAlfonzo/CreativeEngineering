@@ -232,6 +232,7 @@ same pass as the renames.
 | `WL-` | [wthit_lines.md](../wthit_lines.md) |  |  |  |
 | `WO-` | [wise_oak.md](../wise_oak.md) | CQ-WO (7), SQ-WO (37) |  |  |
 | `WT-` | [wandering_trader.md](../wandering_trader.md) | CQ-WT (4), SQ-WT (1) | briefs/loot_trader.md |  |
+| `YMB-` | [yuushya_modelling.md](../yuushya_modelling.md) |  |  |  |
 ## 4. Queue prefixes with no writeup prefix of their own
 
 Queue series named after a batch, a run or a sub-feature rather than a writeup prefix. Owner = the doc that quotes the
