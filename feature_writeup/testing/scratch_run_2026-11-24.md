@@ -370,3 +370,62 @@ draft steps) -> `status_index.py` -> 43 run, 0 failed. `game_jvms.sh` empty, 21 
 - 21:11 RUNNER.md claimed (r1124p4 paused idle at 20:53, no game JVM).
 - 21:13 perf session r1124gate open (systemd user scope `r1124gate-perf`); 21:14 drive started as user unit
   `r1124gate-drive` (`perf/runs/r1124gate/start_drive.sh`, log `drive_main.out`): 54 steps, 116 rows.
+
+### 4.5 Verdicts (judged 2026-11-24, scratch-judge; rows of steps 1 to 19 and the finished part of step 20)
+
+Counts: PASS 26, BATCH-FAULT 8, FAIL 3 (37 rows; 20 RES dirs `perf/runs/r1124gate/s00_res` to `s19_res`). No LOOK left open.
+Rulings applied from `perf/runs/r1124gate/judge_rulings.txt`: SQ-CGE-17 and SQ-GSH-12 BATCH-FAULT (wrong modset). SQ-RPS-06/-08,
+SQ-WT-04, SQ-GSH-08, SQ-MELT-23/-24 and CQ-RPS-03 are in unrun steps, so nothing to judge yet.
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CEN-09 | PASS | makes line is the splashing recipe createsplashing/cardboard_box_to_weathered_cardboard_box (compat); trailing unknown-block-type line is a stray command |
+| SQ-CGE-17 | BATCH-FAULT | reclassified from FAIL: modset wrong (Compat in the set), per wave 1/2 ruling |
+| SQ-CGE-18 | PASS | judge low: 9 types ratio 0.200 End vs overworld; same with only overworld listed: ratio 1.000 |
+| SQ-CM-38 | FAIL | 7 pies on a warped composter: use returns PASS, level stays 0; seeds reach only level 1 or 2 (known, TODO composting #9) |
+| SQ-CM-41 | FAIL | furnace with acacia composter as fuel kept raw_iron*3 and the composter after tickwarp 1600 (known, TODO composting #10) |
+| SQ-CM-43 | PASS | shaped recipe from 7 spruce slabs; creativedelight:composters n=13; creativecommon:composters n=0; reg creativecommon composters 0, creativedelight 12; empty spruce composter drops itself x20 |
+| SQ-CM-42 | BATCH-FAULT | checks pass; closing reject regex matches boot-2 KubeJS recipe WARN noise (create:milling biomesoplenty Unknown item); anchor it to command replies |
+| SQ-CMP-01 | BATCH-FAULT | shell exit only: cmp_mixin_check.py reports "applied twice" for the Low gravity mixins (one mixin, several target classes); tool false positive |
+| SQ-CMP-03 | PASS | creativecompat jar-startup packs load, item_physics.js starts and loads ItemPhysicSplit |
+| SQ-CMP-04 | PASS | dumpphysics ran: 20657 items, 1416 survive lava, ItemPhysicSplit loaded |
+| SQ-CMP-05 | PASS | tnt item burned, fireproof netherite item survived (CMP lines) |
+| SQ-CMP-06 | PASS | weathered cardboard box placed, no Unknown block/item/loot table; creativecompat:sinking block tag (CEN-09) and physics/floats item tag n=1089 (CM-43) |
+| SQ-CMP-07 | PASS | 11 paintings log lines, no immersive paintings error (445-of-445 line not in the row log) |
+| SQ-CMP-08 | PASS | 0 Error occurred while handling event; moved Compat scripts load |
+| SQ-CMP-10 | PASS | [corpses] present: skeletonTime 168000, emptyDespawnTime 6000, netherWitherTime 24000, noDecayDimensions the_end |
+| SQ-CMP-11 | PASS | c11a 1b, c11b 0b, DeathTime 563 at game time ~482 |
+| SQ-CMP-13 | PASS | c13a 1b, c13b 2b, c13c 0b |
+| SQ-CMP-16 | BATCH-FAULT | skeleton at -60 (PASS); player corpse at -54.5 after 5 s, still rising to -50: wait too short |
+| SQ-CMP-17 | PASS | PASS: sectionedScreen = true, curioCap = 24; PASS: Stage 0b, EmptiedAt -1L |
+| SQ-CMP-23 | BATCH-FAULT | 36 [mixins] keys, row says 32 (wave 2 added 4 melting switches; row text stale); cmp_mixin_check false positive as CMP-01 |
+| SQ-CMP-24 | FAIL | both mixins switched off, 0 cast errors, but the floating snow layer at 0 120 0 did not stay (PASS r1123); Snow Real Magic 6.5.4 is in the set and may fall unsupported snow: product or stale row, owner to rule |
+| SQ-CMP-25 | PASS | 4 script lines; jar crop recipes 39 = pack folder 39; 2 tags |
+| SQ-CMP-27 | BATCH-FAULT | substance PASS (one carry-over line in qrun_boot1.log, pagesOff right, none after restart); bootexpect after restart reads boot 2 |
+| SQ-CMP-28 | PASS | Botania vine fertile=false placed (SOLID_VINE_FERTILE_STATE), hops vine fertile -> unknown property error, HOPS_PLACED |
+| SQ-CMP-34 | PASS | 5 checks passed |
+| SQ-CMP-35 | PASS | no trashcans jar: 0, 0 mentions in log; boots to Done |
+| SQ-CPP-01 | PASS | metal_dusts n=15 with IE dusts and zinc grit; bark n=20 IW barks; only tag errors are mekanism:mekasuit_helmet (creategoggles); removed = 3 + alexsmobs:fear |
+| SQ-CPP-02 | PASS | zsa result echo_shovel enchantments=true name=true; selftest 0 fail |
+| SQ-CPP-03 | PASS | bottle recipe swiftness regular -> Potion swiftness; refinery -> lingering swiftness |
+| SQ-CPP-04 | PASS | 0 Error parsing recipe, 0 KubeJS ERROR lines, bottling recipe present |
+| SQ-CPP-05 | PASS | 0 scrap errors, 0 KubeJS ERROR (apart from none), startup order ok |
+| SQ-FCK-24 | PASS | 7 checks passed |
+| SQ-FCK-25 | PASS | 7 checks passed |
+| SQ-GSH-10 | PASS | pane gave 28 blue shards, framed glass 38 clear shards, no GlmMerge |
+| SQ-GSH-11 | BATCH-FAULT | substance PASS (GlmMerge 191 entries, no glass_shards skip, pane 28 blue shards); expect ran before the loot line appeared (5 s late) |
+| SQ-GSH-12 | BATCH-FAULT | reclassified from PASS: modset wrong (cc_only full, no Compat), per wave 1/2 ruling; log looked fine (no glass_shards line, glass 63 clear shards) |
+| SQ-MELT-21 | PASS | merged line names [melting]; Compat saltRange = 2, endNoFire = false |
+
+FAIL: SQ-CM-38 (known, composting #9), SQ-CM-41 (known, composting #10), SQ-CMP-24 (snow layer did not stay; suspected Snow Real Magic falling
+unsupported snow, or a stale row: owner to rule; docs say it stays, the SRM rulings say it falls).
+BATCH-FAULT causes, not fixed in-run because testing was stopped (rerun with the next drive): CGE-17 and GSH-12 modset; CM-42 reject regex too broad;
+CMP-01 and CMP-23 `cmp_mixin_check.py` double-count (a tool change, not simple) and CMP-23 count 32 -> 36; CMP-16 wait 5 s -> about 12 s;
+CMP-27 `bootexpect` -> `shell grep logs/qrun_boot1.log`; GSH-11 `waitlog` before the expect.
+
+### 4.6 Stop note
+
+- 22:12 owner: "gently stop testing". The drive was stopped at a row boundary after 19 of 54 steps; step 20 stopped mid-step and its
+  unfinished rows are discarded (not judged). 34 server steps and all 31 client rows were not run.
+- Resume: `qrun.py drive resume r1124gate` under systemd-run (as `perf/runs/r1124gate/start_drive.sh`). Perf summary:
+  `perf/sessions/r1124gate/summary.md`.
