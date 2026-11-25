@@ -111,6 +111,32 @@ Batch: no other mod is being integrated with it. No other installed mod adds an 
 | Living wood | log (axis), wood, leaves (plain `Block`, no decay), planks, stair, slab, door, trapdoor, fence, gate, button, pressure_plate | as above | any |
 | Rotting | the same 19 minus veins_default | regrow to living with an incubator in range (3 %), break without one (10 %), turn to fire next to fire (1 %); the rotting tooth bush pricks and infects like the living one | as living |
 
+**Textures.** 28 block textures, all 16 x 16, no animation; every living texture has a rotting twin (the rotting one
+is browner and duller). The sheet shows the upstream files at 4x (doc image only). Blocks to textures (from the
+blockstates and models; the `rotting_` blocks use the same models with the `rotting_` texture):
+
+![Block textures, living and rotting](flesh_that_hates/block_textures.png)
+
+| Block (and its rotting twin) | Textures | Model |
+|---|---|---|
+| flesh_block | `flesh_block` | cube_all |
+| flesh_dirt | `flesh_dirt` | cube_all |
+| flesh_sand | `flesh_sand` | cube_all |
+| flesh_log | `flesh_log` (side), `flesh_log_top` | cube (axis) |
+| flesh_wood | `flesh_log` on all six sides | cube_all |
+| flesh_leaves | `flesh_leaves` | cube_all |
+| flesh_planks, stair, slab, fence, gate, button, pressure_plate | `flesh_planks` | vanilla shapes |
+| flesh_door | `flesh_door_bottom`, `flesh_door_top` (item icon `textures/items/flesh_door`) | vanilla door |
+| flesh_trapdoor | `flesh_trapdoor` | vanilla orientable trapdoor |
+| flesh_grass | `flesh_grass` (item icon `items/flesh_grass`) | cross |
+| flesh_roots | `flesh_root` (item icon `items/flesh_root`) | cross |
+| flesh_veins, flesh_veins_default | `flesh_veins` (both use it; no `rotting_flesh_veins_default`) | own flat model `flesh_veins` (rotting: `flesh_veins_rot`) |
+| tooth_bush | `tooth_bush` (item icon `items/tooth_bush`) | cross |
+
+Item textures: `flesh`, `cooked_flesh`, `flesh_detector` (animated, `.mcmeta`), plus the door, grass, root and tooth
+bush icons of both sets. Any recolor would go through the owner's tools with a `texture_sources/sources.csv` row
+([texture_sources.md](texture_sources.md)).
+
 ### 3.2 Spread paths (what "no spreading" has to stop)
 
 | # | Path | Code | Gated by `enableFleshGrow` |
@@ -132,6 +158,35 @@ biome modifier. The other 13 types appear only from conversions (S5, S6), incuba
 composition from the SCP-610 Spawner: rolls between 0.2 and 0.7 for SCP-610-1, -3, -7, -9, -11 (most common), -8,
 -10, -4, -5, -2. Big incubators give nearby SCP mobs Strength II. Small incubators become big only with a debug stick
 (dev path). Mobs burn: fire damage kills incubators fast and blocks S7.
+
+**Renders.** Offline previews made from each mob's GeckoLib model (`geo/*.geo.json`) and texture in the jar, in the
+rest pose (no animation), seen from the front left. These are doc images only and are not used in the game.
+Each picture is scaled to fit its frame; the lineup below shows true relative size, with the renderer scale
+applied. SCP-610-1 and -2 pick one of their textures at spawn, and every variant is shown. The jar also ships
+`scp-457.geo.json`, which no entity uses.
+
+| Mob | Render | Model, texture, renderer scale | Hitbox (w x h), hp |
+|---|---|---|---|
+| Infected Pillager | ![Infected Pillager](flesh_that_hates/infected_pillager.png) | `infected_pillager`, `infected_pillager`, 1.0 | 0.6 x 1.8, 20 |
+| SCP-610-1 (Infected Humanoid) | ![SCP-610-1](flesh_that_hates/scp_6101.png) | `610-1`, `humanoid1` to `humanoid4`, 0.8 | 0.6 x 1.8, 20 |
+| SCP-610-2 (Infected Animal) | ![SCP-610-2](flesh_that_hates/scp_6102.png) | `610-2`, `animal1`, `animal2`, 1.0 | 0.8 x 1.7, 20 |
+| SCP-610-3 (Pincher) | ![SCP-610-3](flesh_that_hates/scp_6103.png) | `610-3`, `pincher`, 1.0 | 0.7 x 0.8, 15 |
+| SCP-610-4 (Bulwark) | ![SCP-610-4](flesh_that_hates/scp_6104.png) | `610-4`, `bulwark`, 1.0 | 1.6 x 4.1, 70 |
+| SCP-610-5 (Snatcher) | ![SCP-610-5](flesh_that_hates/scp_6105.png) | `610-5`, `snatcher`, 1.0 | 0.7 x 1.8, 15 |
+| SCP-610-6 (Small Incubator) | ![Small Incubator](flesh_that_hates/small_scp_6106.png) | `incubator_small`, `small_incubator`, 1.0 | 0.9 x 0.9, 40 |
+| SCP-610-6 (Big Incubator) | ![Big Incubator](flesh_that_hates/big_scp_6106.png) | `incubator_big`, `big_incubator`, 2.0 | 2.8 x 7.0, 100 |
+| SCP-610-7 (Drifter) | ![SCP-610-7](flesh_that_hates/scp_6107.png) | `610-7`, `drifter`, 1.0 | 0.5 x 0.9, 20 |
+| SCP-610-8 (Herpad) | ![SCP-610-8](flesh_that_hates/scp_6108.png) | `610-8`, `herpad`, 1.6 | 1.2 x 2.3, 50 |
+| SCP-610-9 (Scuttler) | ![SCP-610-9](flesh_that_hates/scp_6109.png) | `610-9`, `scuttler`, 1.5 | 0.8 x 1.8, 30 |
+| SCP-610-10 (Cradle) | ![SCP-610-10](flesh_that_hates/scp_61010.png) | `610-10`, `cradle`, 1.4 | 0.8 x 1.8, 30 |
+| SCP-610-11 (Stretcher) | ![SCP-610-11](flesh_that_hates/scp_61011.png) | `610-11`, `stretcher`, 1.0 | 0.8 x 3.0, 40 |
+| SCP-610 Spawner | none (invisible, `invisible_texture`) | no model | 2.0 x 5.0, 1 |
+
+![Size lineup, 2-block bar for scale](flesh_that_hates/mob_lineup.png)
+
+Some hitboxes are much shorter than the models (measured from the rest pose at renderer scale): Herpad 4.5 blocks
+tall against a 2.3 hitbox, Scuttler 3.3 against 1.8, Cradle 2.9 against 1.8, Bulwark 5.0 against 4.1, Big Incubator 8.4
+against 7.0. Their upper bodies cannot be hit. Upstream look, no fix proposed; FTH-16 checks it on the client.
 
 ### 3.4 Effects and potion
 
@@ -301,10 +356,12 @@ last.
   axe on a flesh log per D11.
 - [ ] **FTH-15 Server cost:** 10 minutes in a Heap area with generated FTH blocks, `/perf` or the perf suite -> MSPT
   within 1 ms of the same spot without FTH (B3).
-- [ ] **FTH-16 Client:** SCP mobs render and animate (GeckoLib), block and mob sounds play, roots are climbable, Flesh
-  Detector success and fail sounds.
+- [ ] **FTH-16 Client:** SCP mobs render and animate (GeckoLib) and match the section 3.3 renders; hit a Herpad,
+  Scuttler and Cradle on the upper body (outside the hitbox, section 3.3); block and mob sounds play, roots are
+  climbable, Flesh Detector success and fail sounds.
 
 ## 9. History
 
+- 2026-11-25: block texture sheet, mob renders and size lineup added (section 3.1, 3.3; images in `flesh_that_hates/`).
 - 2026-11-25: investigation written from `FleshThatHates-forge-1.19.2-1.0.1.jar` (decompiled beside the jar in
   `DecompiledMods/`), nothing built.
