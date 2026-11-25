@@ -19,6 +19,7 @@
 @commands boot; `/dumptrades`; search every profession in `kubejs/exported/villager_trades.json` for `minecraft:enchanted_book` and `quark:ancient_tome`; `logs/kubejs/server.log` (or `latest.log`) for the trades.js count line
 @pass 0 hits for both ids in `professions`; the log has `[trades] enchanted book listings removed: N` with N at least 6 (librarian levels 1 to 5 plus the animal tamer); paper, bookshelf, compass, clock still in the librarian table
 @fails `trades.js` removal block (class names: `VillagerTrades$EnchantBookForEmeralds`, DI `SellingEnchantedBook`); LC hits: `config/trades/lightmanscurrency/*.json` reset by the mod (compare with `configs_edited/root_config/trades/`); tome hit: `quark-common.toml` "Librarians Exchange Ancient Tomes"
+@reviewed 2026-11-24
 > dumptrades
 sleep 5
 shell grep -hoE "\[trades\] enchanted book listings removed: [0-9]+" logs/kubejs/server.log logs/latest.log | tail -1
@@ -30,6 +31,7 @@ look the shell line: hits [] and the librarian keeps its four items
 @commands summon a librarian with a lectern (NoAI), step `VillagerData.level` 1 to 5 with offers reset; read `Offers`
 @pass no offer at any level has `minecraft:enchanted_book` as its result or cost; at level 5 no `quark:ancient_tome` offer
 @fails Dynamic Villager Trades builds librarian books from the vanilla listing (brief enchanting #1 Now): the removal in `trades.js` did not reach `VillagerTrades.TRADES`, or DVT cached offers (restart)
+@reviewed 2026-11-24
 > forceload add -16 -16 16 16
 > setblock 2 100 2 minecraft:lectern
 > setblock 2 99 3 minecraft:stone

@@ -94,6 +94,7 @@ sleep 3
 @@section 2
 @@title Food batch 2026-11-19 wave A: cheese, stuffed pumpkin, fruit cuts, quiche ([plan_food_batch_1119.md](../plan_food_batch_1119.md) wave A, TODO `dishes/meals #45`, `#44`, `#60`, `fruit #3`, `baking/baked-goods #19`, `#21`, `food/types-and-tuning #6`, `dishes/ingredients #33`)
 @@date 2026-11-19
+@@reviewed 2026-11-24
 @@jars creativecommon creativedelight
 @@sources feature_writeup/plan_food_batch_1119.md kubejs/data/creativedelight/kubejs/creativedelight/cheese_for_milk.js kubejs/data/creativedelight/kubejs/creativedelight/fruit_cuts.js kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js
 @@text
@@ -127,7 +128,7 @@ reject verb=\S+ .*done=0
 @commands `cdevtest food` for each dish
 @pass broccoli soup 13 / 0.7, pasta with broccoli 15 / 0.8, stuffed potato 13 / 0.7, truffle pasta 15 / 0.8, both creamy pastas 15 / 0.8, nachos 13 / 1.0, lasagna slice 15 / 0.75, fiery fondue 15 / 0.75
 @fails CD startup `creativedelight/cheese_values.js` (CD jar not rebuilt, or the row loaded after `food_value_copies.js` read the list); `[food values]` warnings in latest.log
-@reviewed 2026-11-21
+@reviewed 2026-11-24
 # r1121b fix (2026-11-21, judge-2): cdevtest prints modifier=1 for 1.0; nachos regex takes both
 > cdevtest food veggiesdelight:broccoli_soup
 > cdevtest food veggiesdelight:pasta_with_broccoli
@@ -217,6 +218,7 @@ reject verb=\S+ .*done=0
 @@section 3
 @@title Food batch 2026-11-19 wave B: names, edible seeds, warm drinks ([plan_food_batch_1119.md](../plan_food_batch_1119.md) wave B, TODO `dishes/ingredients #33`, `#40`, `baking/baked-goods #21`, `food/drinks #14`)
 @@date 2026-11-19
+@@reviewed 2026-11-24
 @@jars creativecommon creativedelight
 @@sources feature_writeup/plan_food_batch_1119.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/edible_seeds.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/drinks.js kubejs/assets/creativedelight/kubejs/creativedelight/names.js
 @@text
@@ -271,6 +273,7 @@ reject verb=\S+ .*done=0
 @@section 4
 @@title Food batch 2026-11-19 wave C: pizza slices, Tropical Pizza, Display Delight onion soup ([plan_food_batch_1119.md](../plan_food_batch_1119.md) wave C, TODO `dishes/meals #5`, `#27`, `#54`)
 @@date 2026-11-19
+@@reviewed 2026-11-24
 @@jars creativecommon creativedelight creativebrewing
 @@sources feature_writeup/plan_food_batch_1119.md kubejs/data/creativedelight/kubejs/creativedelight/pizza.js development/creativeDelight/members/vintage/src/main/java/net/ribs/vintagedelight/block/custom/PizzaBlock.java development/creativeDelight/members/veggies/src/main/java/net/mehdinoui/veggiesdelight/common/block/PizzaBlock.java development/creativeBrewing/members/brewin/src/main/java/umpaz/brewinandchewin/common/block/PizzaBlock.java development/creativeDelight/members/display/src/main/java/com/jkvin114/displaydelight/init/DisplayFoods.java
 @@text
@@ -304,7 +307,7 @@ reject verb=\S+ .*done=0
 ## SQ-FF-13 | Tropical Pizza: registered, recipe, slice values
 @group A
 @commands `cdevtest makes vintagedelight:tropical_pizza`; `cdevtest food vintagedelight:tropical_pizza_slice`
-@pass shaped `vintagedelight:tropical_pizza`: pineapple slice, cooked bacon, pineapple slice / 3 cheese / dough, tomato sauce, dough; slice nutrition 5 modifier 0.75, Nourishment
+@pass shaped `vintagedelight:tropical_pizza`: pineapple slice, cooked bacon, pineapple slice / 3 cheese / dough, tomato sauce, dough; slice nutrition 4 modifier 0.7 (pizza_values.js, plan_food_batch_1119.md R25: slices at 0.75x), Nourishment
 @fails Vintage member `ModBlocks` / `ModItems` / `ModFoods` TROPICAL_PIZZA; `data/vintagedelight/recipes/tropical_pizza.json` (Fruits Delight condition)
 @absent vintagedelight:tropical_pizza vintagedelight:tropical_pizza_slice (new items, not in the dumps yet)
 > cdevtest makes vintagedelight:tropical_pizza

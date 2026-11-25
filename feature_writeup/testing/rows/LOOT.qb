@@ -16,7 +16,7 @@
 @commands Boot on the installed jars; read startup.log, the KubeJS server log and latest.log
 @pass `[creativeloot] core finished` once in startup.log; `[creativeloot] loaded` in latest.log; `global.LOOT ready`; the `[loot-tuning] N rules -> rewrote M tables (...)` line equals the baseline log's line; no `global.LOOT missing`, no `could not read`, no `queued loot rules failed`, no mixin error on LootModifierManagerMixin
 @fails Line differs: a rule file did not load from the new pack (`// requires: creativeloot`), or the CD `loot.js` queue never ran (`global.LOOT.rules` vs the CD jar copy). `global.LOOT missing`: the startup script is not in the jar. Mixin error: SRG name `m_5787_`
-@reviewed 2026-11-21
+@reviewed 2026-11-24
 shell test "$(grep -c '\[creativeloot\] core finished' logs/kubejs/startup.log)" = 1
 bootexpect \[creativeloot\] loaded
 bootreject LootModifierManagerMixin.*(InvalidInjectionException|could not find|failed)
@@ -30,6 +30,7 @@ shell a=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' logs/kubejs/serve
 @commands Same boot: grep latest.log for `[GlmMerge]`; `/reload`; grep again
 @pass One `[GlmMerge] N entries (lists: ..., fragments: ...)` line after boot and one more after the reload, same N; N = Forge read + added; no `could not read` line. Since P3c (2026-11-17) the members ship fragments only: `fragments: 9 files, 56 entries` and `added` about 50 or more (SQ-RFX-16)
 @fails No line: mixin not applied (SQ-LOOT-01). `added` above 0: a `replace: true` list dropped entries before the merge, the `[GlmMerge] skipped` and list lines name them (section 5: a "Fixed" changelog bullet if those modifiers now load and did not before)
+@reviewed 2026-11-24
 bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: \d+ files
 bootreject \[GlmMerge\] could not read
 shell grep -hE '\[GlmMerge\]' logs/latest.log | tail -5
@@ -42,6 +43,7 @@ look the N of both lines is the same; `added` and the skipped list (if any) reco
 @commands `/dumpall`; diff `kubejs/exported/loot_tables/` and `loot_runtime_additions.json` against the baseline folder
 @pass Both diffs empty, except the two tables added 2026-11-18 under `creativeloot/corpse/` (cave, ocean: "Only in" lines, plan_corpses.md)
 @fails A table differs: compare its file; a mod update since 2026-11-15 also shows here (check `mods/` dates before blaming the split)
+@reviewed 2026-11-24
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 shell diff -rq "$INST/kubejs/exported/baseline_loot_split_2026-11-17/loot_tables" kubejs/exported/loot_tables | grep -v "corpse" ; echo LOOT_TABLES_CHECKED
@@ -51,6 +53,7 @@ shell diff -q "$INST/kubejs/exported/baseline_loot_split_2026-11-17/loot_runtime
 @commands `/loottuning`; `/loot spawn` a village house and a dungeon table 10 times each at a cleared spot, then `/cdevtest items` there
 @pass `Loot tuning: active`; items rolled; no PneumaticCraft item and no Lightman's Currency coin (both banned); crates (`farmersdelight:*_crate`, `quark:*_sack`) may show where loose food was packed
 @fails No items: the table id; banned item present: `07_rules.js` bans did not apply (rule count in SQ-LOOT-01)
+@reviewed 2026-11-24
 > loottuning
 sleep 2
 expect Loot tuning: active
@@ -72,6 +75,7 @@ look the item list looks like village house and dungeon loot; crate or sack entr
 @commands Same boot as SQ-LOOT-01: `/loottuning`; read the KubeJS log for the CD crate pairs
 @pass `loot_config.json` settings equal the baseline (`enabled`, `slack`, `log_tables`; the file moved unchanged, Worldgen had no `[loot]` toml section to carry); `/loottuning` lists the Veggies, Vintage, Rustic and Miner's rules as before
 @fails CD crate pairs missing: the CD `loot.js` in the pack folder still calls `global.CWG.lootRules` (the jar copy is older until the CD rebuild in P3, the pack folder copy wins in dev)
+@reviewed 2026-11-24
 shell python3 -c "import json,sys; a=json.load(open('kubejs/data/creativeloot/kubejs/loot/loot_config.json'))['settings']; print(a)"
 > loottuning
 sleep 2
@@ -112,7 +116,7 @@ kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
 @pass `Stage: 1b`, `Ancient: 1b`, `EmptiedAt: -1L` after 40 s (it holds the boots); the cave table spawns torches (and sometimes bread)
 @fails `EmptiedAt` set: Compat counts the armor slots as empty; the loot command fails: the tables are not in the jar
 @absent creativecompat:corpse creativeloot:corpse_loot (NBT keys, not registry ids)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 > forceload add 0 0
 > summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave"}}
 sleep 40
@@ -136,7 +140,7 @@ expect Dropped
 @pass still there after 6 min with `Stage: 1b` (not withered, not removed)
 @fails removed after 5 min: Compat applies the empty rules to remains; Stage 2b: the Nether wither rule reached remains
 @absent creativecompat:corpse creativeloot:corpse_remains (NBT keys, not registry ids)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 > execute in minecraft:the_nether run forceload add 0 0
 > execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["l09"],NoGravity:1b,Death:{PlayerName:""},"creativecompat:corpse":{Remains:1b,Stage:1b},ForgeData:{"creativeloot:corpse_remains":1b}}
 sleep 360

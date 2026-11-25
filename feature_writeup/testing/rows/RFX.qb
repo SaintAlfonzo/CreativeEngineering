@@ -16,7 +16,7 @@
 @commands Boot on the installed jars; read the KubeJS server log and latest.log
 @pass `Dragon breathing starting` and `done`, `creative labels starting` and `done` in the server log; `[itemMerges] pack: N merges` with N two more than before (Little Logistics receiver and transmitter components into the Redstone Link); no `forPack: invalid`, no `ReferenceError`, no `is not defined` from a moved file (`dragon_breathing.js`, `creative_labels.js`, `botany_pots.js`, `wthittags.js`, `build_grid.js`, `equipmenttags.js`, `trades.js`)
 @fails A moved file missing: its jar did not copy the tree (Labels: `build.gradle` script copy step; `jar` task checks it). `ReferenceError`: a dict alias used outside the callback that binds it (literal_id_swap.py places keys by the file's binding)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 kjsexpect Dragon breathing done
 kjsexpect creative labels done
 # r1120fix, 2026-11-20: item_merges.js is a startup script: its lines go to startup.log and latest.log, not server.log (r1120nv s03)
@@ -42,18 +42,18 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 @commands Same `/dumpall` as SQ-RFX-02; `python3 $INST/tools/dump_diff.py tags $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/`
 @pass `TAGS_SAME`: the mining tags of Layered Obsidian, the Weathered Cardboard Box and the 10 coil blocks (from the builders' `tagBlock` to the tag scripts, V-32), the Creative Compat BlockRunner hook tags, `creativeequipment:bottled_air/fire_sources` and the WTHIT Silk Touch tags (into their jars, V-41) and the 611 swapped literals change nothing
 @fails The listed tag shows the missing or extra member: `t.mineable` call in `server_scripts/tags/blocktags.js`, Compat's `tags/blocktags.js` or Engineering's `tags/storageblocktags.js`; a WTHIT tag empty: Common's jar has no `data/creativecommon/kubejs/tags/wthittags.js`. Tilled end stone differences are P2 (SQ-DRK-08)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -40
 # r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the 2026-11-19 pack dump already differs from it in
 # 120 tag lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
 shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" tags "$B" "$1" --rename creativeworldgen:loot/=creativeloot:loot/ | grep -E '^  ' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "tag lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
-look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected
+look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected; moved or new ids of the wave 2 carve, the Weathered Cardboard Box return and the 2026-11-22 to 2026-11-24 food and storage waves count (composters, box, smoothies, half cabinets)
 ## SQ-RFX-04 | villager trades: the pack-folder trades unchanged through global.trades.villager
 @group A
 @commands Same `/dumpall` (it runs `/dumptrades`); `python3 $INST/tools/dump_diff.py trades $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported dynamicvillage:mechanical_engineer dynamicvillage:hydraulic_engineer chefsdelight:delightchef minecraft:cleric`
 @pass `TRADES_SAME`; no `global.trades.villager:` warning in the server log
 @fails A profession differs: the converted row in `server_scripts/economy/trades.js` (count, uses, xp, price multiplier) or a rejected item (`global.trades.villager: ... is not an item_dict key`, `_validItem`)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 shell python3 "$INST/tools/dump_diff.py" trades "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported dynamicvillage:mechanical_engineer dynamicvillage:hydraulic_engineer chefsdelight:delightchef minecraft:cleric
 kjsreject global\.trades\.villager:
 ## SQ-RFX-05 | LootJS names: CL/ for Creative Loot, CCM/ for the item merges
@@ -61,7 +61,7 @@ kjsreject global\.trades\.villager:
 @commands Uncomment `event.enableLogging()` in the server's `kubejs/data/creativeloot/kubejs/loot/99_debug.js`, `/reload`, roll a village plains house chest 3 times; read latest.log
 @pass `[LootJS]` lines name `CL/tuning`, `CL/removals/village_botania_cc` and `CCM/item_merges/pack`; none name `CE/loot/` or `CE/item_merges/`
 @fails Old names: the pack-folder copy of `05_tuning.js` / `10_removals.js` or Common's `item_merges.js` is older than 2026-11-17; no `[LootJS]` lines: logging not on (the edit did not reach the script the server loads)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 shell sed -i 's#^\(\s*\)// event.enableLogging()#\1event.enableLogging()#' kubejs/data/creativeloot/kubejs/loot/99_debug.js 2>/dev/null; grep -c 'event.enableLogging()' kubejs/data/creativeloot/kubejs/loot/99_debug.js || true
 > reload
 waitlog Reloaded|reload 180
@@ -144,7 +144,7 @@ look each shot matches the before shot line by line in color and weight
 @commands Boot on the installed jars; read the KubeJS startup and server logs and latest.log
 @pass `[creativedelight] core finished` in the startup log; the only `[reg] ... registered from the ... pack (override` line names `jrftl:prepared_flesh`; `[itemMerges] creativedelight: N merges` one more than the last run (the Engineer's Delight flour); no `forPack: invalid`, `ReferenceError`, `is not defined` or `Cannot find function` from a Delight script; latest.log has no mixin error naming `VintageLushGrassSeasonMixin` (it is gone) and `[salt] N Vintage salt blocks random tick` is present
 @fails `[reg]` lines for creativedelight or creativeengineering ids: a registration id outside its pack (`namespace_lint.py -v`); `ReferenceError`: a dict alias swapped in a scope that does not bind it (`literal_id_swap.py` binds by file)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 # r1120fix, 2026-11-20: startup-script lines (cd_core.js, item_merges.js) go to startup.log and latest.log, not server.log (r1120nv s03)
 bootexpect \[creativedelight\] core finished
 bootexpect \[itemMerges\] creativedelight: \d+ merges
@@ -155,9 +155,9 @@ shell grep -hE '\[reg\] ' logs/kubejs/startup.log | sort -u | head -5
 ## SQ-RFX-08 | recipe ids: Delight recipes unchanged
 @group A
 @commands `/dumpall`; `python3 $INST/tools/dump_diff.py recipes $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels`
-@pass `RECIPES_SAME`; no `ONLY_` line in the `creativedelight:` namespace (Delight's ids were already bound by `global.CD.recipes`); `tmted:crusher/wheat_flour` and `wheat_flour_from_bale` absent from `recipes/all.csv` as before (now `R.remove` in `create/recipes.js`, was a `forge:false` override); no recipe names `tmted:wheat_flour`
+@pass `RECIPES_SAME`; no `ONLY_` line in the `creativedelight:` namespace apart from content added since 2026-11-17 (wood composters moved from Common, smoothies, new bakes and assemblies; Delight's old ids were already bound by `global.CD.recipes`); `tmted:crusher/wheat_flour` and `wheat_flour_from_bale` absent from `recipes/all.csv` as before (now `R.remove` in `create/recipes.js`, was a `forge:false` override); no recipe names `tmted:wheat_flour`
 @fails A `creativedelight:` id only on one side: a `forPack` alias that changed a namespace, or a recipe-id literal swapped to an item key (`literal_id_swap.py` reviewed list in the P3b report); the crusher recipes present: the removal ran before IE's recipes loaded (check the IE recipe serializer key)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(RECIPES|ONLY_.*creativedelight|moved)' | head -20
@@ -166,13 +166,13 @@ look RECIPES_SAME or every ONLY_ line explained by P2 to P3a (SQ-RFX-02); the gr
 # r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the instance's 2026-11-19 pack dump already differs from it
 # by 221 recipe ONLY_ lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
 shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" recipes "$B" "$1" --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | grep -E '^(ONLY_|moved)' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "recipe lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
-look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected
+look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected; moved or new ids of the wave 2 carve, the Weathered Cardboard Box return and the 2026-11-22 to 2026-11-24 food and storage waves count (composters, box, smoothies, half cabinets)
 ## SQ-RFX-09 | food values: the absolute rows give the same foods
 @group A
 @commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py food $INST/kubejs/exported/baseline_rules_p3b_2026-11-17 kubejs/exported`
 @pass `FOOD_SAME`: Delightful's 17 foods (3.8.1 hunger and saturation), the Bellini Cocktail (one Heal Aura 10 s) and Ghost Charcoal (0 hunger, always edible, Wither 5 s, Fire Resistance 3 min) as before
 @fails `CHANGED <id>: <fields>`: the absolute row (`delightful_foods.js`, `fruits_foods.js`, `vintage_items.js`) or the applier (`food_value_copies.js`); effects in a new order or missing: `keepEffects` / `dedupeEffects`
-@reviewed 2026-11-21
+@reviewed 2026-11-24
 # r1120fix, 2026-11-20: expect reads the log, never shell output, so "expect FOOD_SAME" could not pass; and the 2026-11-15 baseline predates
 # 52 intended food changes (2026-11-19 pack dump). The shell exit checks the row's own foods: Delightful, Bellini, Ghost Charcoal
 # r1121b judge-3, 2026-11-21: `sol` (Spice of Life diversity values) is reworked on purpose by food diversity rounds 1 to 3 (2026-11-21), so sol-only CHANGED lines are ignored too
@@ -182,7 +182,7 @@ shell python3 "$INST/tools/dump_diff.py" food "$INST/kubejs/exported/baseline_ru
 @commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py trades $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported minecraft:farmer minecraft:butcher beautify:botanist`
 @pass `TRADES_SAME` (the farmer's Veggies, Hearth and Harvest and Corn Delight rows, the butcher's salt and the Barbeque's seasonings and sauces, the botanist's mums); no `global.trades.villager:` warning
 @fails A profession differs: a converted row's count, uses, xp or price multiplier, or an item the helper rejected (`is not an item_dict key`)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 shell python3 "$INST/tools/dump_diff.py" trades "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported minecraft:farmer minecraft:butcher beautify:botanist
 # r1120fix, 2026-11-20: "expect TRADES_SAME" removed (expect reads the log, not shell output); dump_diff exits 1 on TRADES_DIFFER and
 # now ignores the volatile "listing" identity that made farmer and botanist always DIFFER
@@ -192,12 +192,12 @@ kjsreject global\.trades\.villager:
 @commands After SQ-RFX-08's `/dumpall`: `python3 $INST/tools/dump_diff.py tags $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/`
 @pass `TAGS_SAME` (Hearth and Harvest crow, salt lick, butchering and pitchfork tags, the patty and bread tags, Display Delight mineable tags)
 @fails A tag lost or gained members: a swapped literal resolves to a different dict value, or an entity-type tag got an item key (the P3b swap reverted those by hand)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | tail -20
 # r1120fix, 2026-11-20: the 2026-11-15 baseline predates later intended changes (the 2026-11-19 pack dump already differs from it in
 # 120 tag lines): this diff shows only the lines the scratch server adds or lacks against that pack diff
 shell B="$INST/kubejs/exported/baseline_rules_p3a_2026-11-17"; d() { python3 "$INST/tools/dump_diff.py" tags "$B" "$1" --rename creativeworldgen:loot/=creativeloot:loot/ | grep -E '^  ' | sort; }; diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | head -40; echo "tag lines beyond the pack dump diff: $(diff <(d "$INST/kubejs/exported") <(d kubejs/exported) | grep -c '^[<>]')"; true
-look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected
+look only the lines of the pack-dump comparison (< pack dump only, > scratch server only) need an explanation; a few from jars built after 2026-11-19 are expected; moved or new ids of the wave 2 carve, the Weathered Cardboard Box return and the 2026-11-22 to 2026-11-24 food and storage waves count (composters, box, smoothies, half cabinets)
 ## SQ-RFX-12 | member switch off: Salt's block ticks and JEI salting pages go, boot clean
 @group A
 @commands Separate boot with `config/creativedelight-common.toml` `[members] salt = false`; read latest.log; then set it back
@@ -209,7 +209,7 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 @commands Fake player holding 5 `tmted:wheat_flour`; wait a second; read the player's inventory
 @pass the stack becomes 5 `create:wheat_flour`; `tmted:wheat_flour` stays hidden in JEI (removed items); recipes that took or made it take or make Create's flour (SQ-RFX-08 grep 0)
 @fails the stack stays: `merges_tmted.json` not read (`requires` tmted and create, both loaded?) or the `creativedelight` merge group's inventory half not running
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 > pbot spawn wfl1 0 -60 0 minecraft:overworld survival
 sleep 2
 > give wfl1 tmted:wheat_flour 5
@@ -259,11 +259,12 @@ look Fertile Soil's villager line green like Rich Farmland's; the rest as before
 @commands Boot on the installed jars; read latest.log and the KubeJS logs
 @pass `[GlmMerge] N entries (lists: ..., fragments: 9 files, 56 entries, 0 gated off; ...)`; `added` at least 50 (the member entries Forge no longer reads; a third-party list may hold some); no `skipped` entry in our namespaces (hearthandharvest, veggiesdelight, rusticdelight, ends_delight, vintagedelight, brewinandchewin, exposure, exposure_expanded); `[loot-drops] 26 drop pools and 2 shared entries` and `[loot-drops] 3 swaps and N table rewrites`; `[loot-drops] 2 only-drop rules`; `[alcohol] food values set on 44 of 44 drinks` (or the count the mod set allows, as before); no `forPack: invalid`, `ReferenceError`, `queued loot rules failed`
 @fails `fragments: 0 files`: the member jars still ship the old list or the fragment path is wrong; `gated off` above 0 with every switch on: a gate answers false (`CDConfig.member`, `CBConfig.member`); `[alcohol] ... 0 of 44`: the absolute rows did not apply (Delight's `food_value_copies.js` older than 2026-11-17 has no `global.foodValueCopies.absolute`)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 # r1120fix, 2026-11-20: current values from r1120nv s03 (2026-11-20): fragments 55 entries (56 on 2026-11-17; 635c0777 End's knife drop off,
 # 1c879d09 Display Delight onion soup removed), 27 drop pools (26), [alcohol] 51 of 51 drinks (44; Hearth and Harvest wines),
 # the [alcohol] line is a startup-script line: startup.log and latest.log, not server.log
-bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: 9 files, 55 entries, 0 gated off
+# r1124p4 stale review, 2026-11-24: fragment files and entries are not pinned (latest.log 2026-11-23 shows 10 files, 56 entries after the Compat glass shard fragment); the check is 0 gated off
+bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: \d+ files, \d+ entries, 0 gated off
 bootreject \[GlmMerge\] could not read
 kjsexpect \[loot-drops\] 27 drop pools and 2 shared entries in \d+ tables
 kjsexpect \[loot-drops\] 3 swaps and \d+ table rewrites
@@ -289,7 +290,7 @@ shell grep -hE '\[loot-drops\]|\[alcohol\] food values' logs/kubejs/server.log l
 @commands `/dumpall`; `dump_diff.py recipes`, `tags` (as SQ-RFX-08, -11) and `food` (as SQ-RFX-09) against the baselines
 @pass `RECIPES_SAME` with the P3a moves only; `TAGS_SAME` apart from the P3a renames (the `creativecompat:jei/*` tags are filled from Compat's pack now, same members); `FOOD_SAME` (the 44 alcoholic drinks through absolute rows: hunger 1, saturation 0, always edible, Intoxication hidden, Nausea unless Tipsy)
 @fails a recipe id `creativeengineering:` to `creativebrewing:`: a Brewing file outside `global.CB.recipes`; a drink with a second Nausea or no Intoxication: the `dropEffects` / `unlessHas` fields of the applier
-@reviewed 2026-11-21
+@reviewed 2026-11-24
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
 shell python3 "$INST/tools/dump_diff.py" recipes "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --move creativeengineering=creativecompat --move creativeengineering=creativemagic --move creativeengineering=creativelabels | tail -15
@@ -334,7 +335,7 @@ look only the lines of the pack-dump comparison (< pack dump only, > scratch ser
 @commands `[time.wine] clock = SUN`; `/wine time`; `/ccaltime date add 10 days`; `/ccaltime date set 1 early_spring 1 6:00 am`; `/wine time`
 @pass the date command's output ends with `wine clock moved back` (not `no wine clock registered`); the second `/wine time` shows the clock moved back by the same days
 @fails `no wine clock registered`: the Vinery port's `PackTime.registerDateMoves` did not run (Creative Brewing older than 2026-11-17)
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 > wine time
 > ccaltime date add 10 day
 > ccaltime date set 1 early_spring 1 6:00 am

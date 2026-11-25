@@ -944,7 +944,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-09 | whale oil: mixer, pot, bottle and fluid, lubricant tag
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 @commands rdetail of `whale_oil`; fluid tag probe `forge:lubricant`
 @pass heated mixer 1 blubber -> 250 mB `creativedelight:whale_oil`; Cooking Pot 2 blubber + bottle -> 1 Whale Oil (`whale_oil_manual_only`, no Slice & Dice copy); Spout and Item Drain pair at 250 mB; `#forge:lubricant` (fluid) holds whale oil
 @fails data `creativedelight/fats.js` whaleOil block; Common fluid_dict `f.whale_oil`, `f.t_lubricant`
@@ -957,7 +957,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-10 | cooking oil from animal fat, seeds and seed oil; fish oil counts and cooks from raw fish
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 @commands rdetail of `cooking_oil_from_animal_fat`, `cooking_oil_from_seed_oil`, `fish_oil_from_raw_fish`; tag probes `rusticdelight:cooking_oil`, `rusticdelight:cooking_oil_ingredients`; recipes probe `delightful:cooking/animal_oil_bottle`
 @pass 2 animal fat + bottle -> 1 Cooking Oil (pot); the animal oil bottle recipe is gone and `delightful:animal_oil_bottle` is merged into Cooking Oil; `cooking_oil_ingredients` holds `#forge:seeds` (wheat seeds match); Spout bottle + 250 mB seed oil -> Cooking Oil; `#rusticdelight:cooking_oil` holds `alexsmobs:fish_oil`; 2 raw fish + bottle -> 1 fish oil (pot); fried eggs, cultured meats, cider donut and hops salad take the oil tag
 @fails data `creativedelight/fats.js`; CD swaps `merges_delightful_oil.json`; the `i.t_cooking_oil` slots in `cultivated_meat.js`, `hearthandharvest/recipes.js`, `rusticdelight/recipes.js`
@@ -993,6 +993,7 @@ reject verb=\S+ .*done=0
 @@table
 ## SQ-FO-12 | flavor crafts: type, ids, tags; no seasoning leftovers
 @group A
+@reviewed 2026-11-24
 @commands `cdevtest bytype creativedelight:flavor`; `cdevtest recipes shapeless/season/`; tag probe `creativedelight:flavorable/onion`; grep latest.log for `[flavor] defined` and `[flavor] pair`
 @pass flavor crafts exist with ids `creativedelight:shapeless/flavor/...` (cheese, onion, garlic, ghost_pepper, void_pepper, onion_garlic, the six BBQ ones and the four new sauces); no `shapeless/season/` recipe; `creativedelight:flavorable/onion` holds popcorn; latest.log lists 17 `[flavor] defined` and 3 `[flavor] pair` lines, no `[flavor] bad definition`
 @fails CD `food/FlavorRecipe` (serializer `flavor`), Common NCH `flavor()`, data `flavor.js`, `flavor_tags.js`; startup `flavors.js`
@@ -1018,6 +1019,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-14 | milled powders
 @group A
+@reviewed 2026-11-24
 @commands `cdevtest reg item` for the three powders; rdetail `onion_powder`, `garlic_powder`, `ghost_pepper_powder`
 @pass the three items exist; Create crushing, millstone and mortar recipes give 2 powder from one onion, garlic and ghost pepper; the onion and garlic flavors take the powders as well as the crops; the ghost pepper flavor takes ghost pepper powder
 @fails startup `flavors.js` (registration, flavor items), data `flavor.js` (`R.foodGrinding`); Common item_dict powder keys
@@ -1061,6 +1063,7 @@ reject verb=\S+ .*done=0
 @@table
 ## SQ-FO-16 | chicken, duck and goose eggs fry; parrot, turtle and reptile eggs do not
 @group A
+@reviewed 2026-11-24
 @commands `cdevtest tag item creativedelight:eggs/fryable`; `cdevtest tag item rusticdelight:raw_cooked_eggs`; rdetail `fried_egg_from_eggs` and `fried_eggs_from_cooking_oil`
 @pass fryable holds exactly `minecraft:egg`, `untitledduckmod:duck_egg`, `untitledduckmod:goose_egg`; raw_cooked_eggs holds those three and the `#forge:cooked_eggs` members, no turtle, parrot, crocodile, terrapin or emu egg; smoker and campfire fried egg recipes take `#creativedelight:eggs/fryable`; the oil batch takes the tag three times; Fried Turtle Egg still cooks from the turtle egg
 @fails `i.t_eggs_fryable` missing (Common jar older than G2a's dict edit: recipes on `minecraft:egg`); `wipeTag` left the upstream `#forge:eggs` reference

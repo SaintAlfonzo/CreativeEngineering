@@ -12335,7 +12335,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @commands `/cdevtest rdetail syrup`
 @pass no `rusticdelight:syrup` cooking recipe (nor a Slice and Dice copy); `creativedelight:createmixing/syrup_from_sap` still there; JEI information pages on Syrup and the Sap Bucket are the client half (dishes/ingredients #41)
 @fails `hearthandharvest/recipes.js` remove line
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 > cdevtest rdetail syrup
 reject id=rusticdelight:syrup\b
 reject id=sliceanddice:cooking/rusticdelight/syrup\b

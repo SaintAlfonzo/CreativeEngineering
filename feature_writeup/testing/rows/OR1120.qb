@@ -9,7 +9,7 @@
 @@sources feature_writeup/jei_coverage.md feature_writeup/pack_tooling.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/OrphanTabs.java development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/ItemOrphanTabMixin.java kubejs/data/creativecommon/kubejs/_lib/dict_tag_check.js kubejs/data/creativedevtools/kubejs/dump/dump_notab.js development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js
 @@text
 @@text Targets the Creative Common and Creative Devtools jars installed 2026-11-20 (phase G1). Full pack, group A
-@@text superflat. SQ-NCH-02's pass changes once G2 swaps the Creative Delight dough results (see the row).
+@@text superflat.
 @@text
 @@table
 ## SQ-JC-01 | /dumpnotab writes the orphan list; the 5 Abnormals Delight foods are listed with a tab, escargot and maple cookie hidden
@@ -17,6 +17,7 @@
 @commands boot; `/dumpnotab`; read `kubejs/exported/items/no_tab.json`; then on the instance: `python3 tools/no_tab_report.py`
 @pass chat "Dumped N hidden and 5 listed"; `abnormals_delight:maple_glazed_bacon`, `cherry_cookie`, `duck_fillet`, `cooked_duck_fillet`, `duck_noodles` have `listed` true and `tab` `farmersdelight` (or the tab most Abnormals Delight items use); `escargot` and `maple_cookie` have `tab` null; no `ItemOrphanTabMixin` apply error
 @fails `ItemOrphanTabMixin` (`Item.m_41471_`) not applied; `[creative_menu] orphanTabItems` missing from `config/creativecommon-common.toml` (config spec); Rhino cannot call `getRecipeFolderName`
+@reviewed 2026-11-24
 bootreject (Mixin apply.*failed|InvalidInjectionException).*ItemOrphanTabMixin
 > dumpnotab
 sleep 3
@@ -27,8 +28,9 @@ look the five listed with a tab, escargot and maple_cookie with tab null
 ## SQ-TL-10 | dict tag check runs after start and names only real problems
 @group A
 @commands boot; grep `logs/kubejs/server.log` (and `latest.log`) for `[dict_tag_check]`
-@pass one summary line `[dict_tag_check] N dict and NCH tags checked, M empty or unknown` with N about 80 or more; every problem line names a tag that is really empty or unknown (until G2 builds Creative Delight's bone broth fluid, `fluid_dict t_bone_broth -> #forge:fluid/bone_broth` is expected); no script error from `dict_tag_check.js`; the startup log no longer has `fluid tag ... is not validated`
+@pass one summary line `[dict_tag_check] N dict and NCH tags checked, M empty or unknown` with N about 80 or more; every problem line names a tag that is really empty or unknown (G2b built Creative Delight's bone broth fluid and its tag, so `t_bone_broth` is no longer expected as a problem); no script error from `dict_tag_check.js`; the startup log no longer has `fluid tag ... is not validated`
 @fails `Registry.BIOME_REGISTRY` / `registryOrThrow` through Rhino; a block dict biome tag reported as unknown (the block -> biome -> item fallback); NCH `_fluidTagsSeen` empty (recipes ran in another script pack scope: check `global.NCH`)
+@reviewed 2026-11-24
 waitlog \[dict_tag_check\] \d+ dict and NCH tags checked 120
 shell grep -h 'dict_tag_check' logs/latest.log logs/kubejs/server.log 2>/dev/null | head -40
 shell grep -c 'is not validated (tag support' logs/kubejs/startup.log; true
@@ -37,8 +39,9 @@ look the summary line, and each problem line is a real empty or unknown tag
 ## SQ-NCH-02 | a tag in a result slot is refused with a log line, not written as an item
 @group A
 @commands boot; grep `logs/kubejs/startup.log` for `in a result slot`
-@pass before G2: exactly one line, `[NCH] ieBottling failed and was skipped: ieBottling ... result ...: tag "#forge:dough/wheat" in a result slot` (Creative Delight's IE bottling dough); after G2 (dough results swapped to `create:dough`): no such line; no `Unknown item '#` recipe parse error in latest.log
+@pass G2 is done (dough results are items): no `in a result slot` line (count 0); no `Unknown item '#` recipe parse error in latest.log
 @fails `_itemJson` guard (neoCraftHelper.js); a new script passing a bare tag as a result (fix the script: pass the item key)
+@reviewed 2026-11-24
 shell grep -c 'in a result slot' logs/kubejs/startup.log; true
 shell grep -h 'in a result slot' logs/kubejs/startup.log | head -5
 shell grep -c "Unknown item '#" logs/latest.log; true
@@ -100,6 +103,7 @@ look each of the six food lines: poison amp 1, 100 ticks, chance 0.2; hazard tag
 @commands rdetail `suspiciousbaconandaggs_sequenced_assembly`; `cdevtest reg item kubejs:incomplete_suspiciousbaconandaggs`
 @pass a Create sequenced assembly from a bowl: deploy Cooked Rotten Ham, deploy Fried Turtle Egg, 2 loops, result `hostiledelight:suspiciousbaconandaggs`; the incomplete item exists; Hostile's shapeless `susbanderecp` still loads
 @fails `incomplete('suspiciousbaconandaggs') not registered` (cd_transition_items.js row); F.assemble skipped without Create
+@absent kubejs:incomplete_suspiciousbaconandaggs (registered at load by Creative Delight cd_transition_items.js, newer than the dumps)
 > cdevtest reg item kubejs:incomplete_suspiciousbaconandaggs
 > cdevtest rdetail suspiciousbaconandaggs
 waitlog verb=rdetail text=suspiciousbaconandaggs n= 30
@@ -170,6 +174,8 @@ reject verb=\S+ .*done=0
 @commands `cdevtest tag item forge:mulch/waste`, `cdevtest tag item creativedelight:compost_dirt`; rdetail the two Vintage Delight mash compost ids and the tree fertilizer
 @pass `forge:mulch/waste` holds rotten flesh, spider eye, poisonous potato, `farmersdelight:rotten_tomato`, `vinery:rotten_cherry`, `vintagedelight:organic_mash` (6); `creativedelight:compost_dirt` holds dirt, coarse dirt, rooted dirt, podzol, moss block, mud, `immersive_weathering:humus`, `twigs:silt` (8), no grass block or mycelium; `vintagedelight:organic_compost_from_rotten_flesh_mash` and `..._from_tree_bark_mash` gone; `vintagedelight:organic_compost_tree_fertilizer` stays
 @fails `i.rotten_cherry` unresolved (Creative Brewing not loaded); the removals not inside `global.CD.recipes`
+@reviewed 2026-11-24
+@absent creativedelight:compost_dirt (item tag built at load, compost_tags.js; not a registry id)
 > cdevtest tag item forge:mulch/waste
 > cdevtest tag item creativedelight:compost_dirt
 > cdevtest rdetail organic_compost_from_rotten_flesh_mash
@@ -190,6 +196,7 @@ reject verb=\S+ .*done=0
 @commands `/dumpcompost`; read `kubejs/exported/compost/compost.json` `now` for `vintagedelight:organic_mash`
 @pass `vintagedelight:organic_mash` in `now` at 0.5 (category plant_matter, from a value); no `[compost]` warning naming it in `logs/kubejs/startup.log`
 @fails `[qol] compost` off in the Creative Delight config (the row is skipped); `i.organic_mash` unresolved
+@reviewed 2026-11-24
 > dumpcompost
 sleep 3
 shell grep -A3 '"vintagedelight:organic_mash"' kubejs/exported/compost/compost.json | head -12
@@ -201,6 +208,8 @@ look organic_mash at 0.5 in `now`, no warning line
 @commands `cdevtest tag item creativedelight:food_family/baked/misc`, `.../bread/loaf`; rdetail `gingerbread_1`, `gingerbread_3`, `gingerbread_6`
 @pass `food_family/baked/misc` holds the 10: croissant, raspberry scone, strawberry scones, adzuki bun, cider donut, honey bread, mulberry bread, glow bread, strange eclair, Hearth and Harvest waffle; `food_family/baked` holds the same; `food_family/bread/loaf` holds `create_confectionery:gingerbread`; `creativedelight:baking/gingerbread_1`, `_3`, `_6` exist, gingerdough x1 / x3 / x6 -> gingerbread x1 / x3 / x6 on the baking sheet; the upstream smelting and smoking recipes stay
 @fails `kubejs/generation_scripts/food/food_families.json` stale in the jar; `create_confectionery` not loaded
+@reviewed 2026-11-24
+@absent create_confectionery:gingerbread_recipe (recipe id, in exported/recipes, not a registry id)
 > cdevtest tag item creativedelight:food_family/baked/misc
 > cdevtest tag item creativedelight:food_family/bread/loaf
 > cdevtest rdetail creativedelight:baking/gingerbread_1
@@ -221,6 +230,8 @@ reject verb=\S+ .*done=0
 @commands `cdevtest reg fluid ^creativedelight:bone_broth`; `cdevtest tag fluid forge:fluid/bone_broth`; rdetail the spout, drain and two basin soups; grep the dict tag check
 @pass fluid `creativedelight:bone_broth` registered (no bucket item, no block); `forge:fluid/bone_broth` holds it; `creativedelight:createfilling/bone_broth` bowl + 250 mB -> Bone Broth and `createemptying/bone_broth` Bone Broth -> bowl + 250 mB; `creativedelight:createmixing/beef_stew_bone_broth_mixing` and `..._chicken_soup_bone_broth_mixing`: 250 mB `#forge:fluid/bone_broth` + bowl + the grid's ingredients, no heat; `[dict_tag_check]` no longer lists `t_bone_broth`
 @fails `f.bone_broth` missing from the installed Creative Common's fluid dict (the fluid is skipped); Moonlight soft fluid sprite missing from the block atlas (client: CQ-CDFL-02)
+@reviewed 2026-11-24
+@absent creativedelight:bone_broth creativedelight:bone_broth_bucket (fluid registered at load by fluids.js, newer than the dumps; the bucket is a negative check)
 > cdevtest reg fluid ^creativedelight:bone_broth
 > cdevtest reg item ^creativedelight:bone_broth_bucket$
 > cdevtest tag fluid forge:fluid/bone_broth

@@ -6,7 +6,7 @@
 @@section 1
 @@title SQ-UPG 1.2.02 upgrade: a world built on the 1.2.02 release, booted on the current jars, 2026-11-18 ([plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 4, owner ruling 1; TODO `generators-and-tests #23`)
 @@date 2026-11-18
-@@reviewed 2026-11-20
+@@reviewed 2026-11-24
 @@jars creativecommon creativecompat creativedelight creativeequipment creativemagic creativelabels creativeworldgen
 @@sources feature_writeup/plan_rowfix_r1118.md feature_writeup/namespace_move.md
 @@tier T3

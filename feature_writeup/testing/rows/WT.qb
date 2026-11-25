@@ -16,6 +16,7 @@
 @commands `/dumptrades`; count `wares:sealed_delivery_agreement` listings in `wandering_trader.pool_1` of `kubejs/exported/villager_trades.json`
 @pass 16 agreement listings in pool_1 (8 per price), none in pool_2; pool_1 about 196 entries
 @fails `t.move` weight in `kubejs/server_scripts/economy/wandering_trades.js` (Wares section); a stale dump (dump time)
+@reviewed 2026-11-24
 > dumptrades
 sleep 5
 shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/villager_trades.json'))['wandering_trader'];n1=json.dumps(d['pool_1']).count('sealed_delivery_agreement');n2=json.dumps(d['pool_2']).count('sealed_delivery_agreement');print('pool_1',len(d['pool_1']),'agreements',n1,'pool_2 agreements',n2);sys.exit(0 if n1==16 and n2==0 else 1)"

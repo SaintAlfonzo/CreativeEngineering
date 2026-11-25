@@ -46,6 +46,7 @@
 @pass `potion=creativebrewing:phantom_bane` (not `minecraft:empty`); the chest keeps the potion (its id resolves to Phantom Bane) and the bread, the three removed items are gone; no `Unknown` / missing-registry warning naming any of the five ids. The effect `vinery:jellie` only shows in an old world's registry snapshot (not testable here)
 @fails potion=minecraft:empty: the `replaces` entry missing from `better_beacons_potions.json`, or `PotionByNameRemapMixin` not reading it; a warning: the `removed` entry missing from that jar's removed.json
 @absent creativeengineering:strong_phantom_bane rusticdelight:fruit_beignet kubejs:incomplete_quiche_bacon kubejs:incomplete_quiche_mushroom vinery:jellie (old or removed ids written on purpose)
+@reviewed 2026-11-24
 # r1118 (2026-11-18): the SQ-EX-01 pattern (old ids in item NBT on a world of its own)
 > forceload add 320 192 335 207
 sleep 3

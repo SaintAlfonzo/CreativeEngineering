@@ -281,3 +281,50 @@ INCONCLUSIVE 1. Tables: `qrun.py table perf/runs/r1124nw/s*_res` and `perf/runs/
 - INCONCLUSIVE: SQ-RFX-33 (needs a fresh `/dumpall` baseline, TODO `publish-readiness #6`).
 - Other findings: Creative Compat `VanillaLightMeltMixin` crashes the boot with Snow! Real Magic 6.5.4 (installed 20:14);
   `creative_delight_drinks.md` 273, 277 still describe the removed golden milk bucket.
+
+## 3. r1124p4 phase 4: next-newest server rows
+
+Bulk model, scope = this phase. Runner: runner-3 for creativeengineering2-19. Judging by scratch-judge agents. Perf
+session `r1124p4` (not opened yet). Results in `perf/runs/r1124p4/`.
+
+### 3.1 Scope
+
+- Taken: `perf/runs/r1124p4/plan.json` (from `perf/runs/r1124fx/phase4_ids.txt`, 91 ids: sections dated 2026-11-17 to
+  2026-11-20, never / failed / jar-changed / stale; gate codes and client rows excluded), 87 rows in 31 drive steps.
+- Not taken: SQ-BBQ2-08, SQ-LOOT-05, SQ-TN-11, SQ-TN-12 (draft).
+
+### 3.2 Preflight
+
+- 20:48 RUNNER.md idle -> claimed (r1124p4 runner-3). `session_role.py test`. `df -h /` 21 GB free.
+- `check_all.py --fast`: 43 run, 0 failed (the SQ-FCK-20/-21 duplicate is fixed at HEAD), WARN dirty_tree only.
+- `jarstamp.py pending` 20:52: creativeCalendar (built 1.0.0+16c9e8ace.2611240057, installed 1.0.0+2e68d8807.2611230027) and
+  creativeCommon (built 1.3.0+edd3b66b9.2611242047, installed 1.3.0+ddd126587.2611242032) built, not installed.
+  Creative Compat reinstalled 20:47 with the Snow! Real Magic fix (1.0.0+edd3b66b9, per the orchestrator).
+
+### 3.3 Pre-screen and stale review (before the first boot)
+
+`qprescreen.py --plan-json`: 6 likely on 5 rows, 2 risk, 69 stale. After it: 1 likely (accepted), 2 risk (accepted),
+0 stale; lint 0 E on every touched file.
+- Dead ids, false positives: `@absent` added in OR1120.qb on SQ-HTD-02 (incomplete item registered at load), SQ-CP-02
+  (tag built at load), SQ-FF-15 (recipe id), SQ-CDFL-05 (fluid registered at load; the bucket is a negative check).
+- SQ-UPG-13 "unloaded 3000 64 3000": the step is a `locate biome`, which works on unloaded chunks; left.
+- SQ-PS15B-26, -27 cfgedit risk: the live config edit is what the rows test (Creative Common's own watcher); left.
+- Rewritten by the stale helpers (three doc-pass agents, one owner per .qb): SQ-RFX-03, -08, -11 (look lines list the
+  composter move to `creativedelight:`, the Cardboard Box move to Engineering, smoothie / half cabinet / bake additions;
+  RFX-08 no longer claims zero `creativedelight:` ONLY_ lines); SQ-RFX-16 (fragments regex `\d+ files, \d+ entries, 0 gated
+  off`; the log shows 10 files, 56 entries); SQ-FF-13 pass text slice nutrition 4 / 0.7 (pizza_values.js, plan R25);
+  SQ-TL-10 (`t_bone_broth` line no longer expected after G2b); SQ-NCH-02 (no `in a result slot` line after G2).
+- Reviewed unchanged (`@reviewed 2026-11-24`): the other RFX, FF, UPG (section 1), OR1120, FO, LOOT, EFX, ENC, PS15B,
+  AV, DRK, EX, HH-1617, SWL, WT rows.
+- Doc finding: `creative_loot.md` 71 to 76 says the fragments are "9 files, 56 entries"; the 2026-11-23 log shows 10 files
+  (Compat glass shard fragment, wave 2 carve).
+
+### 3.4 Run notes
+
+- 20:52 PAUSED before the first boot, step 0 of 31, for the W-P7 publish gate (orchestrator message). No drive, no
+  server, no perf session started; a game JVM at the instance root (pid 1174112, not this runner's) was up at 20:52.
+  RUNNER.md released.
+- Resume: `qrun.py drive start r1124p4 --plan-json perf/runs/r1124p4/plan.json --session runner-3` as a systemd user unit
+  (`r1124p4-drive`), perf collector likewise (`perf_session.sh start r1124p4`); DROPJARS = the 4 jars of
+  `perf/runs/r1124nw/env.sh` only (the Snow! Real Magic workaround is dropped: Compat 1.0.0+edd3b66b9 carries the fix).
+  Rerun `qprescreen.py` first if rows changed meanwhile; recheck `jarstamp.py pending` and record the stamps.

@@ -16,7 +16,7 @@
 @commands Fake player: `/recipe give rbk1 *`, then `/recipe give rbk1 minecraft:stick`, then `/recipe take rbk1 *`
 @pass both gives answer "No new recipes were learned"; the take answers "No recipes could be forgotten" (nothing was added); boot log has no mixin error naming NoRecipeUnlockMixin
 @fails mixin not applied (`bootexpect` on creativecommon.mixins.json, the SRG names m_7281_ / m_7902_), or Common older than 2026-11-17
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 > pbot spawn rbk1 0 -60 0 minecraft:overworld survival
 sleep 2
 > recipe give rbk1 *

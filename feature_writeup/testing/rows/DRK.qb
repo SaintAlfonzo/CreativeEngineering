@@ -443,6 +443,7 @@ look the inventory shot: 14 sprites (mug teas, bottle juices), none purple-black
 @commands `/cdevtest tag item creativedelight:sea_pickles`; `/cdevtest uses minecraft:sea_pickle`; `/cdevtest rdetail creativedelight:createmixing/sea_pickle_tea_on_sea_grape`
 @pass the tag holds the sea pickle (and Oceanic's sea pickle slices when that member is on); `uses` lists the sea pickle tea Kettle, mixing and pot recipes; rdetail shows the tag as the pickle ingredient
 @fails a script still reading `#forge:sea_pickles` (grep), or Common older than the dict edit
+@reviewed 2026-11-24
 > cdevtest tag item creativedelight:sea_pickles
 waitlog \[cdevtest\] verb=tag kind=item tag=creativedelight:sea_pickles n= 30
 expect verb=tag kind=item tag=creativedelight:sea_pickles n=[1-9]\d* ids=.*minecraft:sea_pickle

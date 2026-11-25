@@ -307,12 +307,14 @@ look the dragon-set Fire Resistance ShowIcon:0b half is SQ-EFX-04's read (worn a
 @commands Boot; grep latest.log for `MobEffectInstanceLevelCapMixin` and `Mixin apply`
 @pass `Done (`; no apply error
 @fails SRG names (`m_19564_` getAmplifier, `m_19558_` update, `f_19504_` amplifier)
+@reviewed 2026-11-24
 bootreject (Mixin apply failed|InvalidInjectionException).*MobEffectInstanceLevelCapMixin
 ## SQ-EFX-16 | capped effect stored at level I; uncapped one keeps its level
 @group A
 @commands `/effect give <bot> minecraft:fire_resistance 30 2`; `/effect give <bot> minecraft:speed 30 2`; `/data get entity <bot> ActiveEffects`
 @pass Fire Resistance (Id 12) at Amplifier 0b; Speed (Id 1) at Amplifier 2b
 @fails `LivingEntityEffectRemapMixin` cap line, or `levelCaps` not read (config not loaded)
+@reviewed 2026-11-24
 > execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
 sleep 3
 > effect clear qe
@@ -327,6 +329,7 @@ expect Id: 1, Amplifier: 2b
 @commands `/effect give <bot> minecraft:fire_resistance 60 0`, then `/effect give <bot> minecraft:fire_resistance 5 2`; `/data get entity <bot> ActiveEffects`
 @pass Fire Resistance Amplifier 0b with Duration above 1000 (the 60 s one kept)
 @fails `update()` cap missing: Duration near 100 means the level III replaced the longer level I
+@reviewed 2026-11-24
 > execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
 sleep 3
 > effect clear qe

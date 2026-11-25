@@ -945,7 +945,7 @@ look tick_field and tick_web_cube medians under 1000; the two _recount rows pres
 @commands Boot line `config watcher on`; Compat `[debug.passthrough] timing` true by an in-place save (truncate + write, count 2: Forge missed it), then false by `sed -i` (rename); one appended blank line to Common's toml (a single write: Forge's own watcher would also have fired)
 @pass boot: `[creativecommon] config watcher on: N own config file(s)`; each save gives exactly one `[creativecommon] <file> reloaded` line within 3 s; `[passthrough-timing]` lines start after the first save and stop after the second; one line (not two) for Common's append
 @fails `OwnConfigWatcher.start` (FileWatcher.removeWatch, register MODIFY + CREATE), `OwnConfigLogic.Debounce`, `ConfigReload.reload` dispatch to the owning mod
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 bootexpect \[creativecommon\] config watcher on: [0-9]+ own config file
 shell cp config/creativecompat-common.toml .ps15b26_compat.toml
 shell cp config/creativecommon-common.toml .ps15b26_common.toml
@@ -974,7 +974,7 @@ look `[passthrough-timing]` lines appear during the 400-tick warp and none after
 @commands `touch` Compat's toml; then a wrong value `timing = "maybe"` saved in place (Forge-style correction: backup, fix to the default, save); then one appended blank line to a third-party toml (JEI's or Quark's, whichever exists in config/)
 @pass touch: no reload line within 4 s; bad value: exactly one `[creativecommon] creativecompat-common.toml reloaded (1 value(s) corrected)` line and no second line within 5 s (the correction save is not reloaded again), the file reads `timing = false` and a `.bak` copy exists; third-party save: no `[creativecommon]` line for that file
 @fails `OwnConfigLogic.ContentGuard` (`OwnConfigWatcher.noteApplied` after the save), `OwnConfigLogic.isOwn`
-@reviewed 2026-11-20
+@reviewed 2026-11-24
 shell cp config/creativecompat-common.toml .ps15b27_compat.toml
 shell touch config/creativecompat-common.toml
 sleep 4

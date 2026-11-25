@@ -17,6 +17,7 @@
 @pass the chest holds `exposureextras:iron_camera_bag` and `exposureextras:leather_camera_bag` with their `CameraBag` tags; the give works; no `[exposureextras]` remap line; no missing-registry warning for any `camera_bag`
 @fails the bag gone: the `creativeengineering:` / `exposure_extras:` entries are missing from Exposure's swap list (Creative Common reads `data/exposureextras/swaps/`)
 @absent creativeengineering:iron_camera_bag exposure_extras:leather_camera_bag (old ids written into the chest on purpose)
+@reviewed 2026-11-24
 # r1118 R3 (2026-11-18): rewritten without an old save (plan_rowfix_r1118 section 4, owner ruling 1): a chest written with the
 # old id in its NBT reads back the new id; placed blocks, entities and player data stay in the 1.2.02 upgrade section
 > forceload add 16 -16 47 15
