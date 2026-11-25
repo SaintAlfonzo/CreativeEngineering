@@ -84,9 +84,8 @@ fixes its water and fire behavior through the existing four physics tags. Nothin
   2760, `i.totem_of_undying` 2821, `i.trident` 2824.
 
 ### Decisions
-- The five in 9.6: recommendations stand (yes, yes, fireproof, skim for foliage / fibre / light powder, keep stone).
-- **Ids or nested tags in the family files:** recommend ids (generated, so size is not a cost; no ordering risk).
-- **Ship families before #6?** Recommend yes: skim families simply float until #6 lands.
+- Ruled 2026-11-24: [item_physics.md](../item_physics.md) 9.6 (R1 to R20, defaults D1 to D4). It replaces the earlier
+  recommendations and any step above that differs.
 
 ### Gotchas
 - Rhino: no spread in array literals; build lists with `.concat()` (the file notes it).
@@ -146,10 +145,8 @@ other floaters settle without bobbing forever; items that survive lava float on 
   `CommonPhysic.getFluid(ItemEntity, boolean)`.
 
 ### Decisions
-- **Damped float for the other floaters:** recommend on (it ends the endless bob; heavier floaters still dip and rise).
-- **Lava float for every lavaproof item:** recommend yes (lava is dense; the refractory family is the lavaproof set).
-- **Skim on currents:** keep ItemPhysic's 0.3 inflate in `updateFluidHeightAndDoFluidPushing`, so currents still push
-  skimmers (10.3). Recommend keep.
+- Ruled 2026-11-24 ([item_physics.md](../item_physics.md) 9.6): build it (R4); damping of ordinary floaters is a config
+  switch, default on (R16); on lava, lavaproof items skim except heavy mineral blocks, which sink (R17).
 
 ### Gotchas
 - The inject runs on both sides (item ticks are simulated on the client and tags are synced): keep it deterministic,

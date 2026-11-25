@@ -2,12 +2,12 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=fe472fc14205 -->
+<!-- generated:status_index begin open_work sha1=8d2b7d9b6e31 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 2, In Progress 1, Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `items/item-physics #6` | Planned | C P T | Light items skim on water; lavaproof items float on lava |
+| `items/item-physics #6` | Planned | C P T | Light items skim on water; lavaproof items except heavy blocks skim on lava |
 | `items/item-physics #7` | Planned | S P T | Player speed in lava; Lava Vision gives water-like lava speed |
 | `items/item-physics #2` | In Progress | S P | Classify modded items |
 | `items/item-physics #1` | Testing | S P | Fire / lava split, float / sink tags, burn transforms |
@@ -233,6 +233,8 @@ Drop items with Q into the hazard.
 - 2026-10-19: F2 fixed (item_physics.js and item_physics_tags.js headers).
 - 2026-10-24: planned from the scratchpad: golden egg physics (`items/item-physics #5`). No code changed.
 - 2026-10-27: Allurement's Ascension/Fleeting hook sits in the gravity branch that ItemPhysic's `isNoGravity -> true` redirect skips; `ItemPhysicServerMixin` now calls them at the tail of `updatePre` (`AllurementItemCurses`, reflection, optional). Built and installed in Creative Common 1.1.03; IP-15 not run.
+- 2026-11-24: owner rulings R1 to R20 recorded (9.6). Audit rerun into a scratch folder on the 2026-11-19 dump: 21,149
+  items, 2,049 tagged, 369 unclassified. No code changed.
 - 2026-10-28: analysis of the integration; F4 measured, F5 resolved from ItemPhysic's source, F7 to F9 added.
   Built the `/dumpphysics` dump and `tools/item_physics_audit.py` (report only). Designed the material families
   (section 9) and surface / lava floating (section 10). No game code changed.
@@ -311,7 +313,7 @@ in one table, and each maps to a material a player would recognise.
 
 ### 9.5 Applying it (not built)
 
-1. Run `/dumpphysics` and the audit, and settle the decisions (9.6).
+1. Run `/dumpphysics` and the audit; apply the rulings (9.6) to the family table and the classifier rules.
 2. Move the classifier's tables into a generator mode of the same script that writes one item tag per family,
    `creativecompat:physics/family/<family>`, as JSON under `kubejs/data/creativeengineering/tags/items/physics/family/`.
    It reads the manual-override list too, so every item lands in exactly one family tag.
@@ -320,15 +322,46 @@ in one table, and each maps to a material a player would recognise.
 4. New mods: `/dumpall`, `/cdevgen run item_physics_audit`; unclassified items or a mod with no default show in the
    report; add a tag rule, a name token, a mod default or an override, then rerun.
 
-### 9.6 Decisions
+### 9.6 Owner rulings (2026-11-24)
 
-- **Nether wood fireproof?** Recommended yes (matches vanilla, where crimson and warped don't burn).
-- **Ice floats?** Recommended yes.
-- **Machines fireproof?** Electronics are plausible either way. Recommended fireproof, so a dropped AE2 drive
-  isn't lost to a campfire.
-- **Light items skim** (needs section 10) or just float. Recommended skim for foliage, fibre and light powder.
-- **Stone family:** keep all natural stone lavaproof (the pack's existing choice) or reserve lavaproof for the
-  volcanic / deep stones. Recommended keep.
+Recorded, nothing built. These replace the earlier recommendations, and where they differ from the family table (9.2),
+the audit (9.3) or the tag script's header, the ruling wins. Class and Source follow the `intake` skill; every row
+marked `open` was asked by AskUserQuestion on 2026-11-24.
+
+| # | Item | Class | Ruling | Date | Source |
+|---|---|---|---|---|---|
+| R1 | Nether wood fire behavior | open | Crimson and warped wood: float in water and **lavaproof** | 2026-11-24 | AskUserQuestion |
+| R2 | Ice and snow | open | Float, and burn (loses today's fireproof) | 2026-11-24 | AskUserQuestion |
+| R3 | Machines and electronics | open | Sink, fireproof | 2026-11-24 | AskUserQuestion |
+| R4 | Skim | open | Build it with this work (section 10; foliage, fibre, light powder; sugar is a light powder) | 2026-11-24 | AskUserQuestion |
+| R5 | Stone scope | open | All natural stone stays lavaproof, extended to modded stone | 2026-11-24 | AskUserQuestion |
+| R6 | Gray areas | open | Lavaproof: nether brick, quartz. Fireproof: prismarine (blocks, shards, crystals; lavaproof today), sandstone and smooth stone | 2026-11-24 | AskUserQuestion |
+| R7 | Totem, crossbow, armor stand, shields (script note; all float today) | premise | Sink, modded shields included. Fire by material: totem fireproof; wooden shield, crossbow and armor stand burn; metal and diamond shields follow their material | 2026-11-24 | AskUserQuestion |
+| R8 | Trident | open | Sink, fireproof | 2026-11-24 | AskUserQuestion |
+| R9 | Bottles, potions, buckets, jars, cans, bottled drinks | open | Sink, fireproof, empty ones too | 2026-11-24 | AskUserQuestion |
+| R10 | Coal, charcoal, torches, campfires, redstone torches and lamps, modded equivalents | conflict (audit says wood) | Sink, burn | 2026-11-24 | AskUserQuestion |
+| R11 | Treated wood | open | Sink, burn | 2026-11-24 | AskUserQuestion |
+| R12 | Create components | open | Every component sinks and is fireproof, wooden ones included; belts float | 2026-11-24 | AskUserQuestion |
+| R13 | Compacted forms (blocks, bales, bags, crates, sacks) | open | Behavior follows the contents; heavy packed forms of skim items only float | 2026-11-24 | AskUserQuestion |
+| R14 | Tools, weapons, armor, knives | open | By material: wood and leather float and burn; metal sinks, fireproof; diamond and netherite lavaproof | 2026-11-24 | AskUserQuestion |
+| R15 | Prepared food, including jello, ice cream blocks, feasts, pies (bottled and canned excluded) | open | Float, burn | 2026-11-24 | AskUserQuestion |
+| R16 | Damping for ordinary floating items | open | Config switch, default on (damped: one dip, then rest) | 2026-11-24 | AskUserQuestion |
+| R17 | Lava motion for lavaproof items | open | They skim on lava, except heavy blocks (stone, metal, gem and other mineral blocks), which sink. Nether wood blocks skim | 2026-11-24 | AskUserQuestion |
+| R18 | Ash | open | Every item in the wood family leaves ash (today's 25%) | 2026-11-24 | AskUserQuestion |
+| R19 | Modded explosives (bombs, shells, rockets, powder charges) | open | Explode when burned, no block damage | 2026-11-24 | AskUserQuestion |
+| R20 | Unclassified and mod-default items | open | Agent adds rules, then gives a per-mod list of the leftovers for the owner to correct | 2026-11-24 | AskUserQuestion |
+
+Agent defaults, unconfirmed (settle before building the part concerned):
+
+- D1: belts burn (R12 gives only their water behavior).
+- D2: treated wood leaves no ash; R18 covers the wood family and R11 takes treated wood out of floating, not out of
+  burning, so this is the narrower reading.
+- D3: modded explosives use blast power 1.0, as gunpowder does.
+- D4: gunpowder, redstone, glowstone and blaze powder stay in `sinks`.
+
+Audit misfiles to fix before generating (seen in samples on the 2026-11-19 dump): Delightful knives (food / organic),
+jello blocks (earth), ice cream blocks, soot and ash block (ice), gilded rose tools (foliage), end rod and redstone
+components (wood).
 
 ## 10. Surface floating and lava floating (investigation, 2026-10-28)
 
@@ -380,7 +413,7 @@ which keeps the dip-and-rise of heavier wood and food but stops the endless bob.
 
 ### 10.4 Decisions and the player-in-lava note
 
-- **Build it?** Small (one query, one inject, three config values) once 9.6 is settled.
+- **Build it:** ruled 2026-11-24 (9.6 R4, R16, R17). R17 replaces 10.2's "everything in `lavaproof` floats".
 - **Player speed in lava: to investigate (TODO `items/item-physics #7`).** Vanilla already slows a player in lava more
   than in water (unverified this session: `LivingEntity#travel` applies ×0.5 drag in lava against ×0.8 in water).
   Lava Vision (`alexsmobs:lava_vision`, also on the full netherite set) only changes fog: its effect tick is empty
