@@ -72,7 +72,7 @@ public final class FallingLayers {
 
 	private static final Map<ServerLevel, LongLinkedOpenHashSet> QUEUE = new IdentityHashMap<>();
 
-	/** Snow! Real Magic's mod id: with it loaded, its {@code snowGravity} falls snow (owner, 2026-11-24). */
+	/** Snow! Real Magic's mod id: with it loaded, its {@code snowGravity} falls snow (snow_real_magic.md R3). */
 	private static final String SRM = "snowrealmagic";
 	private static Boolean srmLoaded;
 
