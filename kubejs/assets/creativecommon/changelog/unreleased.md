@@ -474,7 +474,6 @@
 - **Changed:** Leather boots stand on top of snow layers at the snow walking speed; sneak to sink in [snow layers were solid for everyone].
 - **Changed:** Small mobs (rabbits, foxes, chickens, cats, spiders, birds, most baby animals) stand on top of snow layers; bigger mobs sink in and climb out when they walk into a block.
 - **Changed:** Mobs path over the top of snow layers, or through them once sunk in.
-- **Changed:** A snow layer that reaches 8 layers becomes a Snow Block.
 - **Changed:** Leaf piles and Bamboo Leaves slow walking by height at every height, down to 0.60x at full height [leaf piles 0.45x from 4 layers, Bamboo Leaves about 0.35x from 3]; Bamboo Leaves now slow ocelots, pandas and parrots too.
 - **Changed:** Jumping from inside 6 or more snow layers is as weak as in Powder Snow; from inside 5 or more leaf layers it is a little weaker but still reaches a block beside the pile.
 - **Changed:** Falling through snow layers is as slow as through Powder Snow; through leaf piles and Bamboo Leaves, twice as fast as that.
@@ -494,10 +493,20 @@
 - **Changed:** Walking through these blocks does not change the field of view.
 - **Fixed:** Falling into a single cobweb or a short stack of cobwebs canceled all fall damage.
 
+## Snow <!-- icon: minecraft:snowball -->
+
+- **New:** Snow settles inside flowers, grass, saplings, mushrooms and bushes and on top of fences, gates, walls, bottom slabs and bottom stairs, placed by hand or by snowfall (Snow! Real Magic).
+- **New:** Snowy plants, fences, gates, walls, slabs and stairs melt back into the plant or block under the snow from heat, salt or the seasons; a snowy plant loses one layer at a time.
+- **New:** Snow placed on a plant in the Nether melts at once and leaves the plant.
+- **New:** Rain that melts the snow off a plant leaves the plant.
+- **New:** Snowy plants walk through like snow layers; a snowy berry bush slows you like a berry bush.
+- **New:** Snow-topped stairs, slabs, fences and walls walk at the speed of the block under the snow.
+- **Changed:** Grass with snow on it no longer spreads onto dirt [it spread under one snow layer].
+
 ## Falling Layers <!-- icon: minecraft:snow -->
 
 - **New:** Snow layers, salt layers, Bamboo Leaves, Sawdust and Fodder fall when the block below is removed, like sand.
-- **New:** A falling layer stacks onto the same layer where it lands, up to a full block; the rest lands on top. Snow that reaches 8 layers becomes a Snow Block.
+- **New:** A falling layer stacks onto the same layer where it lands, up to a full block; the rest lands on top.
 - **New:** A falling layer that cannot land drops as items.
 - **New:** Bamboo Leaves stack past 4 layers up to 8; walking slows steadily over all 8 layers.
 - **New:** Grown bamboo drops Bamboo Leaves beside it now and then, like trees drop leaf piles.

@@ -75,6 +75,12 @@ ServerEvents.tags('block', e => {
 		t.addMatching(e, [b.t_meltable_slow, b.t_melt_saltable], b.melt_ap_packed_ice)
 	}
 
+	// Snow! Real Magic (snow_real_magic.md 4 step 2): snowy plants and snow-topped fences, gates, walls, slabs and stairs
+	// melt to the block they hold (Melting.meltTo), a snowy plant one layer at a time; in the Nether the snow fizzes away
+	// and the held block stays
+	if (global.has('snowrealmagic')) t.add(e, [b.t_meltable, b.t_melt_saltable, b.t_melt_ultrawarm_instant],
+		[b.srm_snow, b.srm_fence, b.srm_fence2, b.srm_fence_gate, b.srm_wall, b.srm_slab, b.srm_stairs])
+
 	// Salt melts only these (G7.11; the "Saltable" tooltip reads it). Not saltable: blue ice, IW permafrost.
 	t.add(e, b.t_melt_saltable, [b.ice, b.frosted_ice, b.snow, b.snow_block, b.powder_snow, b.packed_ice])
 	if (global.has(b.rare_ice)) t.add(e, b.t_melt_saltable, b.rare_ice)

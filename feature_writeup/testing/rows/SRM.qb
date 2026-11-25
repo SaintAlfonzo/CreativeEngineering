@@ -1,0 +1,131 @@
+# Scratch queue rows SRM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SRM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-SRM Snow! Real Magic fold-in part A: melting, magma, walk-through, Immersive Weathering, grass, seasons, 2026-11-25 ([snow_real_magic.md](../snow_real_magic.md) 4, 5b, 8; TODO `mod-integration #14` to `#19`, `#26`)
+@@date 2026-11-25
+@@jars creativecommon creativecompat creativecalendar
+@@sources feature_writeup/snow_real_magic.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/SnowRealMagic.java kubejs/data/creativecompat/kubejs/tags/melting_tags.js kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js
+@@text
+@@text Full pack with Snow! Real Magic 6.5.4 (Kiwi 8.3.6). Group A superflat (grass at y -61), each case 12 or more blocks
+@@text from the others; a bot keeps the area random-ticking. Snowy plants are placed with block entity data:
+@@text `snowrealmagic:snow[layers=N]{Block:"minecraft:poppy"}`. Snow! Real Magic's own config is written on the first boot:
+@@text the rows that need the pack's values (writeup 4 step 10) set them with `qrun.py toml` before boot 1.
+@@text
+@@table
+## SQ-SRM-01 | Boot with Snow! Real Magic: the fold-in mixins apply, Serene Seasons keeps its melt
+@group A
+@commands Boot 1; grep the boot log
+@pass no `Critical injection failure`, no `InvalidInjectionException`; `[creativecalendar] Snow! Real Magic loaded: Serene Seasons still melts snow and ice` once; no `[creativecompat] snowrealmagic ... is outside the tested range`; `[melting] tags:` line present
+@fails the Calendar line missing: Snow! Real Magic's merged callback renamed (CalendarMixinPlugin.dropSrmMeltCancel); a Compat mixin failing: a changed Snow! Real Magic target (SrmWorldTickMixin, SrmSnowCollisionMixin are require = 0, SrmGrassSpreadMixin and IwSnowMeltSrmMixin are not)
+@boot 1
+bootexpect \[creativecalendar\] Snow! Real Magic loaded: Serene Seasons still melts snow and ice
+bootreject Critical injection failure|InvalidInjectionException
+bootreject \[creativecompat\] snowrealmagic .*outside the tested range
+shell grep -c "Snow! Real Magic loaded" logs/latest.log; true
+look the Calendar line once; no injection failure
+
+## SQ-SRM-02 | A torch melts a snowy poppy layer by layer and leaves the poppy
+@group A
+@commands Snowy poppy (3 layers) on grass, torch on the block beside it; randomTickSpeed 1000, 60 s; probe the block
+@pass the poppy stands where the snow was (`minecraft:poppy`); no air
+@fails air: `Melting.meltTo` not reading the held block (compat/SnowRealMagic.held); still snow: `snowrealmagic:snow` missing from `#creativecompat:melting/meltable` (melting_tags.js, `global.has('snowrealmagic')`)
+@absent snowrealmagic:snow (Snow! Real Magic 6.5.4, added after the last /dumpall dump of 2026-11-13)
+> forceload add 3000 3000 3031 3031
+> gamerule doDaylightCycle false
+> time set 6000
+> weather clear 1000000
+> execute unless entity m3 run pbot spawn m3 3016 -60 3016 minecraft:overworld survival
+sleep 3
+> setblock 3004 -60 3004 snowrealmagic:snow[layers=3]{Block:"minecraft:poppy"}
+> setblock 3005 -60 3004 minecraft:torch
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 3004 -60 3004 minecraft:poppy run say SRM02_POPPY
+> execute if block 3004 -60 3004 minecraft:air run say SRM02_AIR
+expect SRM02_POPPY
+reject SRM02_AIR
+> fill 3004 -60 3004 3005 -60 3004 minecraft:air
+
+## SQ-SRM-03 | A snowy poppy placed in the Nether: the snow fizzes away, the poppy stays
+@group A
+@commands In the Nether on a placed grass block: `setblock` a snowy poppy; wait 2 s; probe
+@pass the block is `minecraft:poppy`
+@fails air: `Melting.onPlaced` did not defer to the next tick for a Snow! Real Magic block (the held block is filled in after onPlace); still snow: `#creativecompat:melting/ultrawarm_instant` lacks it
+@absent snowrealmagic:snow (Snow! Real Magic 6.5.4, added after the last /dumpall dump of 2026-11-13)
+> execute in minecraft:the_nether run forceload add 0 0
+> execute in minecraft:the_nether run fill -1 100 -1 1 102 1 minecraft:air
+> execute in minecraft:the_nether run setblock 0 100 0 minecraft:grass_block
+> execute in minecraft:the_nether run setblock 0 101 0 snowrealmagic:snow[layers=2]{Block:"minecraft:poppy"}
+sleep 2
+> execute in minecraft:the_nether if block 0 101 0 minecraft:poppy run say SRM03_POPPY
+expect SRM03_POPPY
+> execute in minecraft:the_nether run fill -1 100 -1 1 102 1 minecraft:air
+
+## SQ-SRM-04 | Immersive Weathering's rain melt on a snowy dandelion keeps the dandelion
+@group A
+@commands Snowy dandelion (1 layer) on open grass; `/weather rain`; randomTickSpeed 1000, 60 s; probe
+@pass `minecraft:dandelion` stands there; never air
+@fails air: IwSnowMeltSrmMixin not ahead of Immersive Weathering's HEAD callback (priority 900 vs 1000), or gated off (needs both mods)
+@absent snowrealmagic:snow (Snow! Real Magic 6.5.4, added after the last /dumpall dump of 2026-11-13)
+> forceload add 3040 3000 3071 3031
+> execute unless entity m4 run pbot spawn m4 3056 -60 3016 minecraft:overworld survival
+sleep 3
+> setblock 3044 -60 3004 snowrealmagic:snow[layers=1]{Block:"minecraft:dandelion"}
+> weather rain 1000000
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> weather clear 1000000
+> execute if block 3044 -60 3004 minecraft:dandelion run say SRM04_DANDELION
+> execute if block 3044 -60 3004 minecraft:air run say SRM04_AIR
+expect SRM04_DANDELION
+reject SRM04_AIR
+> setblock 3044 -60 3004 minecraft:air
+
+## SQ-SRM-05 | Grass with snow on it never spreads; the same grass without snow does
+@group A
+@commands Two 9x9 dirt pads ringed by stone, a grass block in each center; snow 1 layer on the first center only; day, randomTickSpeed 1000, 60 s; count grass on each pad
+@pass pad 1 (snowed): no grass besides the center; pad 2: 3 or more grass blocks; both centers still grass
+@fails pad 1 grew grass: SrmGrassSpreadMixin not first (priority 900 vs Snow! Real Magic's 1000) or snowOnTop missed the layer; pad 2 no spread: the tick cancels too early (light, area loaded)
+> forceload add 3080 3000 3131 3031
+> execute unless entity m5 run pbot spawn m5 3100 -60 3016 minecraft:overworld survival
+sleep 3
+> fill 3083 -61 3003 3093 -61 3013 minecraft:stone
+> fill 3084 -61 3004 3092 -61 3012 minecraft:dirt
+> setblock 3088 -61 3008 minecraft:grass_block
+> setblock 3088 -60 3008 minecraft:snow[layers=1]
+> fill 3103 -61 3003 3113 -61 3013 minecraft:stone
+> fill 3104 -61 3004 3112 -61 3012 minecraft:dirt
+> setblock 3108 -61 3008 minecraft:grass_block
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> fill 3084 -61 3004 3092 -61 3012 minecraft:moss_block replace minecraft:grass_block
+> fill 3104 -61 3004 3112 -61 3012 minecraft:moss_block replace minecraft:grass_block
+look the two "Successfully filled N block(s)" replies (grass counted as it is swapped for moss): pad 1 = 1, pad 2 >= 3
+> fill 3083 -60 3003 3113 -60 3013 minecraft:air
+> fill 3083 -61 3003 3113 -61 3013 minecraft:grass_block
+
+## SQ-SRM-06 | Snow! Real Magic's ice melt is off; Serene Seasons melts snow and ice outside winter
+@group A
+@commands Calendar season set to mid spring; open ice in a temperate biome and a snowy poppy; randomTickSpeed 3, 10 minutes with a bot near; probe
+@pass the snowy poppy turns into the poppy (Serene Seasons' melt, SereneSeasonsSrmMeltMixin), the ice turns to water by Serene Seasons' rule; a snowy poppy beside a sea lantern does not melt in winter
+@fails nothing melts: the Calendar postApply did not drop Snow! Real Magic's cancel (no boot line, SQ-SRM-01)
+@draft needs the Calendar season command and a temperate seasonal biome; the next runner writes the steps (writeup test SRM-12)
+
+## SQ-SRM-07 | Magma stops Snow! Real Magic's snowfall within fireRange
+@group B
+@commands Snowy plains clearing, magma block at the surface; `/weather thunder` 10 minutes; count snow within 3 of the magma and 5 to 8 out
+@pass no snow layer within 3 of the magma; snow beyond
+@fails snow beside the magma: SrmWorldTickMixin not applied (the convert redirect), or `[melting] magmaStopsFreezing` off
+@draft needs a snowy biome (normal world, group B) and a long thunderstorm; steps to be written by the next runner (writeup test SRM-04)
+
+## CQ-SRM-01 | Wading a snowy plant and a snowy berry bush; a snow-topped oak stair walks like wood
+@group client
+@commands Client on a scratch server: walk through a snowy tall grass and a snowy sweet berry bush (3 layers), read WTHIT; walk on a snow-topped oak stair (`setblock ~ ~ ~ snowrealmagic:stairs[facing=north]{Block:"minecraft:oak_stairs"}`), read WTHIT Run Speed
+@pass the snowy plant walks through like 3 snow layers; the berry bush in snow slows like a bush (0.36), no Snow! Real Magic 0.8 stuck; WTHIT on the stair shows Wood 1.10x; no rubber-banding
+@fails solid snowy plant: `snowrealmagic:snow` not in `#creativecompat:passthrough_layers` or SrmSnowCollisionMixin off; stair at 1.00x: CamoSpeed not reading the held block
+@draft client row: steps by the next runner (writeup tests SRM-07, SRM-17, SRM-24)

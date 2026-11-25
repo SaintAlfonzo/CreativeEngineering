@@ -276,6 +276,16 @@ b.melt_iw_snow_bricks = 'immersive_weathering:snow_brick*';     // snow bricks, 
 b.melt_ap_packed_ice = 'architects_palette:*packed_ice*';       // polished (block, slab, stairs, wall, vertical slab), chiseled, pillar
 b.ap_coarse_snow = 'architects_palette:coarse_snow';            // -> gravel
 b.ap_molten_nether_bricks = 'architects_palette:molten_nether_bricks'; // magma-like (light 3): fire and magma tags (G11)
+// Snow! Real Magic (snow_real_magic.md 4): its seven blocks hold another block (no items). Melting, walk-through and
+// BlockRunner read the held block (Creative Compat compat/SnowRealMagic).
+b.srm_snow = 'snowrealmagic:snow';                              // a snow layer holding a plant (snowy plant)
+b.srm_fence = 'snowrealmagic:fence';                            // snow-topped wooden fence
+b.srm_fence2 = 'snowrealmagic:fence2';                          // snow-topped other fence
+b.srm_fence_gate = 'snowrealmagic:fence_gate';
+b.srm_wall = 'snowrealmagic:wall';
+b.srm_slab = 'snowrealmagic:slab';                              // bottom slab
+b.srm_stairs = 'snowrealmagic:stairs';                          // bottom stairs
+b.t_srm_not_containables = '#snowrealmagic:not_containables';  // blocks SRM never snows in place (by hand or snowfall)
 b.t_salt_meltables = '#salt:meltables';                         // The Salt's own melt tag (item click, no-Common fallback); Creative Delight salt/block_tags.js follows melting/saltable
 b.t_fire = '#minecraft:fire';                                   // fire, soul fire, modded fires
 b.t_campfires = '#minecraft:campfires';

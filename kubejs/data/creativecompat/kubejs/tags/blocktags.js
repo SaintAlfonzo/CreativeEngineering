@@ -68,6 +68,13 @@ ServerEvents.tags('block', e => {
 	// Layers a placed block replaces like grass, up to [surface.passthrough.layers] replaceMaxLayers (surface/SurfaceLayers):
 	// the walk-through layers (snow, leaf piles, bamboo leaves). Every other layer is never replaced.
 	t.add(e, 'creativecompat:replaceable_layers', '#creativecompat:passthrough_layers')
+	// Snow! Real Magic never snows Immersive Weathering's snowy and frosty blocks, nor the stone, cobblestone and stone
+	// brick slabs, stairs and walls IW snows itself (snow_real_magic.md ruling R8)
+	if (global.has('snowrealmagic') && global.has('immersive_weathering')) {
+		t.addMatching(e, b.t_srm_not_containables, [b.melt_iw_snowy, b.melt_iw_frosty])
+		t.add(e, b.t_srm_not_containables, [i.stone_slab, i.stone_stairs, i.cobblestone_slab, i.cobblestone_stairs,
+			i.cobblestone_wall, i.stone_brick_slab, i.stone_brick_stairs, i.stone_brick_wall])
+	}
 	// Honey's wall slide on blocks that aren't honey (surface/WallSlide; honey and Fruits Delight jelly blocks already
 	// slide, they extend HoneyBlock)
 	t.add(e, 'creativecompat:wall_slide', [b.porous_flesh, i.banana_slug_slime_block])

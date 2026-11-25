@@ -19,8 +19,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * ({@code creativecalendar:crop_seasons/grass}, the json is the switch) and its season is off, the tick is skipped
  * with {@code offPenalty}'s chance. A grass block that can no longer be grass (covered) always runs its tick, so
  * turning back to dirt is not slowed. Mycelium and nylium share the class and are untyped: unchanged.
+ * Priority 800: its HEAD callback runs before Snow! Real Magic's (1000), which cancels the tick, and before Creative
+ * Compat's whole-tick replacement under SRM (900; snow_real_magic.md ruling R17).
  */
-@Mixin(value = SpreadingSnowyDirtBlock.class, remap = false)
+@Mixin(value = SpreadingSnowyDirtBlock.class, remap = false, priority = 800)
 public abstract class GrassSpreadSeasonMixin {
 
 	// m_56823_ = SpreadingSnowyDirtBlock.canBeGrass(BlockState, LevelReader, BlockPos)

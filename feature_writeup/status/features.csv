@@ -191,4 +191,4 @@ Unassigned queue sections,status/features_audit_2026-11-16.md,,reference,,"CQ-AZ
 Glass shards,glass_shards.md,GSH-,BUILT,"creativecompat, creativeloot",SQ-GSH,built 2026-11-21 (plan_wood_bucket_batch_1121),,,
 Texture Tools,texture_tools.md,,reference,,,2026-11-22: P0-P10 built (texturetools/); owner GUI checklists G1 to G3 pending,,,
 Farming for Blockheads Shipping Bin port and integration report,farming_for_blockheads.md,SHB-,BUILT,"creativedelight, creativecommon","CQ-SHB, SQ-SHB","Shipping Bin built 2026-11-25 (phase 1); rabbit trap built 2026-11-25 (phase 2); fishing barrel not ported, scythe pinned",,,
-Snow! Real Magic integration report,snow_real_magic.md,SRM-,reference,,,"integration report 2026-11-24, nothing built",,,
+Snow! Real Magic integration report,snow_real_magic.md,SRM-,BUILT,"creativecommon, creativecompat, creativecalendar","SQ-SRM, CQ-SRM",part A built 2026-11-25 (4b); part B open,,,

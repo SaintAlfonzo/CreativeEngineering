@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativecompat.surface;
 
 import com.SaintAlfonzo.creativecompat.CompatConfig;
 import com.SaintAlfonzo.creativecompat.CreativeCompat;
+import com.SaintAlfonzo.creativecompat.compat.SnowRealMagic;
 
 import fuzs.blockrunner.data.BlockSpeedManager;
 import net.minecraft.core.BlockPos;
@@ -17,6 +18,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.ModList;
@@ -74,6 +76,12 @@ public final class CamoSpeed {
 	 * {@link RunSpeed} so the WTHIT line always agrees with movement.
 	 */
 	static BlockState speedCamo(Level level, BlockPos pos, BlockState state) {
+		if (SnowRealMagic.LOADED && !(state.getBlock() instanceof SnowLayerBlock)) {
+			// Snow! Real Magic's snow-topped fence, gate, wall, slab or stairs walks like the block it holds
+			// (snow_real_magic.md 4 step 7: a snowed oak stair stays Wood); not tied to copyCamo
+			BlockState held = SnowRealMagic.held(level, pos, state);
+			if (held != null) return held;
+		}
 		if (!CompatConfig.SURFACE.camouflage.copyCamo.get() || !state.is(TAG)) {
 			return null;
 		}

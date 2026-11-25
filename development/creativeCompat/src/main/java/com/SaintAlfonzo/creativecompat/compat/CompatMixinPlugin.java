@@ -108,6 +108,11 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			// is ${file.jarVersion} with no Implementation-Version, and the redirect is require = 0, so any loaded Rare
 			// Ice keeps it (SQ-MELT-09)
 			Map.entry("RareIceLightMeltMixin", List.of("rare_ice")),
+			// Snow! Real Magic fold-in (snow_real_magic.md 4, rulings R6, R16, R17): magma vs its snowfall and no SRM ice
+			// melt, walk-through for its snowy plant, one pack grass spread tick
+			Map.entry("SrmWorldTickMixin", List.of("snowrealmagic")),
+			Map.entry("SrmSnowCollisionMixin", List.of("snowrealmagic")),
+			Map.entry("SrmGrassSpreadMixin", List.of("snowrealmagic")),
 			// Ore Excavation undo rules (excavation/)
 			Map.entry("OreExcavationBlockHistoryMixin", ORE_EXCAVATION),
 			Map.entry("OreExcavationCommandUndoMixin", ORE_EXCAVATION),
@@ -234,7 +239,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("polymorph", "[0.46.6+1.19.2,0.47)"),
 			Map.entry("sophisticatedcore", "[1.19.2-0.6.4.730,1.19.2-0.7)"),
 			Map.entry("geckolib3", "[3.1.40,3.2)"),
-			Map.entry("immediatelyfast", "[1.4.0+1.19.2,1.5)"));
+			Map.entry("immediatelyfast", "[1.4.0+1.19.2,1.5)"),
+			Map.entry("snowrealmagic", "[6.5.4,6.6)"));
 
 	/**
 	 * Fix mixins written against one exact jar: applied only at these versions, since a newer jar may carry the upstream
@@ -265,6 +271,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("IwAzaleaFlowersPlaceMixin", List.of("immersive_weathering", "twigs")),
 			// Transfer Items returns curios to their recorded slots (corpse/CorpseCurios, plan_corpses.md 3.6 item 4)
 			Map.entry("CorpseTransferMessageMixin", List.of("corpse", "curios")),
+			// Immersive Weathering's rain melt on Snow! Real Magic's snowy plant keeps the plant (snow_real_magic.md B5)
+			Map.entry("IwSnowMeltSrmMixin", List.of("immersive_weathering", "snowrealmagic")),
 			// GeckoLib item in the hotbar flushing ImmediatelyFast's HUD item batch (plan_portal_gun.md 2)
 			Map.entry("GeckoItemHudBatchMixin", List.of("geckolib3", "immediatelyfast")),
 			// Dropped items follow Create: Gravity's low gravity: ItemPhysic's pull, scaled by gravity.LowGravity (wave 2)

@@ -1,6 +1,6 @@
 # Snow! Real Magic: overlap and integration report
 
-Investigation written 2026-11-24; **nothing built**. Jar `mods/SnowRealMagic-1.19.2-forge-6.5.4.jar` (added by the
+Investigation written 2026-11-24; fold-in part A built 2026-11-25 (section 4b), part B open. Jar `mods/SnowRealMagic-1.19.2-forge-6.5.4.jar` (added by the
 owner 2026-11-24, not booted yet), mod id `snowrealmagic`, by Snownee, minzhi and WZD, license **MIT** (a fork or
 copied code is allowed; this report proposes pack-side mixins and config only). Native Forge 1.19.2 build: no port
 needed. Short name in this file: **SRM**. Test prefix `SRM-`. Code read from
@@ -18,8 +18,24 @@ snow tweak integrate with Immersive Weathering, melting and the other mods that 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=ba133888da4a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
+<!-- generated:status_index begin open_work sha1=541b88fdb862 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Planned 6, Testing 7), 0 Complete.
+
+| Id | Status | Tests | Change |
+|---|---|---|---|
+| `mod-integration #20` | Planned | S C | Snow! Real Magic: hand scoop 1 layer, shovel scoop 2 layers |
+| `mod-integration #21` | Planned | S C | Snow! Real Magic: snow overlay on every snow layer |
+| `mod-integration #22` | Planned | S C | Snow! Real Magic: WTHIT names snowed blocks Snowy <Block> |
+| `mod-integration #23` | Planned | S C | Snow! Real Magic: thunder-only blizzards and ice from snow in water |
+| `mod-integration #24` | Planned | S C | Snow! Real Magic: salt melts snow faster; salt layers do not fall or give snowballs |
+| `mod-integration #25` | Planned | S C | Snow! Real Magic: right-click turns off a block's snowy look |
+| `mod-integration #14` | Testing | S C | Snow! Real Magic: melting tags and products for the 7 SRM blocks; light-melt hook dropped |
+| `mod-integration #15` | Testing | S C | Snow! Real Magic: magma within fireRange stops SRM snowfall |
+| `mod-integration #16` | Testing | S C | Snow! Real Magic: walk-through, falling and held-block speed |
+| `mod-integration #17` | Testing | S C | Snow! Real Magic: Immersive Weathering guard |
+| `mod-integration #18` | Testing | S C | Snow! Real Magic: one pack grass spread tick; no spread from snowed grass |
+| `mod-integration #19` | Testing | S C | Snow! Real Magic: Serene Seasons melt kept while SRM melting is off |
+| `mod-integration #26` | Testing | S C | Snow! Real Magic: config and first-boot steps |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -31,7 +47,7 @@ snow tweak integrate with Immersive Weathering, melting and the other mods that 
 | Running and falling into snow | 2.2 | 5 findings, D2 to D4 |
 | Melting, seasons, Immersive Weathering, grass spread, salt layers | 2.3 to 2.6 | 19 findings |
 | Upstream and interplay bugs B1 to B7 | 3.3 | 1 blocker, 6 others |
-| Fold-in steps | 4 | 15 steps, none built |
+| Fold-in steps | 4, 4b | part A built 2026-11-25 (steps 1 to 9, 13; config step 10 written as a plan until the first boot); part B (scoops, overlay, WTHIT name, blizzards, salt, look toggle) open |
 | Decisions D1 to D14 | 5, 5b | answered 2026-11-24 (R1 to R19) |
 | Tests SRM-01 to SRM-32 | 8 | drafted |
 
@@ -229,12 +245,12 @@ Default = SRM's default. Recommendation = this report's proposal for the pack. I
   `SnowLayerBlock`; to confirm in game, SRM-15).
 - **B4 (interplay):** `snowrealmagic:snow` keeps SRM's `Hooks.canSnowSurvive` and, with `snowGravity = false`,
   `updateShape` no longer breaks unsupported snow at all. FallingLayers must hold or drop it (step 6).
-- **B5 (interplay):** IW's rain melt calls `removeBlock` on `snowrealmagic:snow` and deletes the plant inside it.
+- **B5 (interplay):** IW's rain melt calls `removeBlock` on `snowrealmagic:snow` and deletes the plant inside it. Fixed 2026-11-25 (`IwSnowMeltSrmMixin`, 4b step 8).
 - **B6 (interplay):** HEAD-cancel order on `SpreadingSnowyDirtBlock.randomTick` (SRM vs Calendar's crop-season
-  grass check) is not fixed by priority. If SRM's runs first, grass spreads out of season.
+  grass check) is not fixed by priority. If SRM's runs first, grass spreads out of season. Fixed 2026-11-25 (Calendar at priority 800, Compat's grass tick at 900, 4b step 9).
 - **B7 (upstream, gated):** SRM's collision cache keys on state and layer count, not the entity. A walk-through rule
   that depends on the entity (ours) must bypass it for `snowrealmagic:snow` (step 5), or a cached shape serves the
-  wrong entity.
+  wrong entity. Fixed 2026-11-25 (`SrmSnowCollisionMixin`, 4b step 5).
 
 ## 4. Fold-in, in build order
 
@@ -301,6 +317,42 @@ Ordering: step 1 (or the `vanillaLightMelt = false` stopgap) before the first bo
 need the dump). Step 10 (config) before testing 2.2. Steps 2, 5 and 7 need the `block_dict.js` keys (Common rebuild).
 Step 11 is independent (CD).
 
+## 4b. Built 2026-11-25 (part A: `mod-integration #14` to `#19`, `#26`)
+
+Rows `mod-integration #14` to `#19` and `#26`, read with the rulings in 5b. Jars: Creative Compat (most of it),
+Creative Calendar (seasons, grass order), Creative Common (`block_dict.js` keys). Mixins on SRM classes are `@Pseudo`
+and gated on `snowrealmagic` in `CompatMixinPlugin` (range `[6.5.4,6.6)`); SRM types are touched only in
+`compat/SnowRealMagic` (an inner class loaded when SRM is).
+
+| Step | Row | Built |
+|---|---|---|
+| 1 Light melt | #14 | dropped by R6: SRM's light melt is off with `snowNeverMelt = true`; the B1 boot fix stands |
+| 2 Melting | #14 | the 7 SRM blocks in `meltable`, `saltable`, `ultrawarm_instant` (melting_tags.js, `global.has`); `Melting.meltTo` swaps a product that is not the same block for the held block, so a snowy plant loses layers one at a time and then leaves the plant, a snow-topped fence melts back to the fence; salt the same. Placement: `onPlaced` schedules a 1-tick check for SRM blocks (SRM fills the block entity after `onPlace`), and the scheduled tick applies the ultra-warm rule (SRM-22) |
+| 3 Magma | #15 | `SrmWorldTickMixin`: both `Hooks.convert` calls in `WorldTickHandler.tick` skipped where `Melting.magmaBlocksFreezing`; ice forming already went through `Biome.shouldFreeze` |
+| 4 Seasons | #19 | R6: Calendar `SereneSeasonsSrmMeltMixin` (priority 1100) plus `CalendarMixinPlugin.postApply`: SRM's merged `srm_onWorldTick` call in Serene Seasons' `onWorldTick` becomes POP2 (boot line `Snow! Real Magic loaded: Serene Seasons still melts snow and ice`); Calendar's throttle unchanged; `meltInChunk` treats SRM's snowy plant as snow and leaves the plant. SRM's own ice melt off (`SrmWorldTickMixin`, `snowAndIceMeltInWarmBiomes` redirect to false) |
+| 5 Walk-through | #16 | `snowrealmagic:snow` in `passthrough_layers` (so in `replaceable_layers`, which takes that tag) and `falling_layers` (pack fall still leaves snow to SRM, R3), not in `passthrough_layers_open`; `SrmSnowCollisionMixin` HEAD of `EntitySnowLayerBlock.getCollisionShape` answers our walk-through shape (joined with the held plant's collision) before SRM's per-state cache (B7); WTHIT's layer line works as for snow (no code) |
+| 6 Falling | - | R3, built 2026-11-24 (SQ-CMP-38); salt half is step 11 (part B) |
+| 7 Held block speed | #16 | `PassThrough.evaluate`: a snowy plant adds its plant's tier at the same cell (lowest walk wins; neighbor count taken directly); SRM's 0.8 berry stuck is canceled by the existing stuck hook because the snowy plant is now tiered. `CamoSpeed.speedCamo`: a snow-topped fence, gate, wall, slab or stairs walks like its held block (not tied to `copyCamo`); WTHIT Run Speed reads the same seam |
+| 8 Immersive Weathering | #17 | `#snowrealmagic:not_containables` += IW `snowy_*`, `frosty_*` and the vanilla stone, cobblestone and stone brick slabs, stairs and walls IW snows (Compat blocktags.js); `IwSnowMeltSrmMixin` (SnowLayerBlock randomTick HEAD, priority 900, needs both mods): rain on a snowy plant sets the plant back before IW removes the block (B5) |
+| 9 Grass | #18 | R17: `SrmGrassSpreadMixin` (SpreadingSnowyDirtBlock randomTick HEAD, priority 900, before SRM's 1000) runs the whole tick: `canBeGrass` (SRM's snow rule) -> dirt; snow on top (`#minecraft:snow`, `#snowrealmagic:bottom_snow`) -> no spread; vanilla spread with Vinery's `trySpread` at each try and `canPropagate` (Neapolitan); new grass snowy under `bottom_snow`. Calendar's `GrassSpreadSeasonMixin` moved to priority 800 so its season check runs first (B6) |
+| 10 Config | #26 | `config/snowrealmagic-common.toml` does not exist yet (first boot writes it): values below, to set and copy after that boot. Compat `[surface.passthrough.layers] snowFullBecomesBlock = false` (R5) set in `config/creativecompat-common.toml` and its `configs_edited/root_config/config/` copy |
+| 13 Pathing | #26 | nothing to build with `thinnerBoundingBox = false` |
+
+Config plan for `config/snowrealmagic-common.toml` (step 10; Kiwi writes the file on the first boot, then set these
+and copy it to `configs_edited/root_config/config/snowrealmagic-common.toml`): `thinnerBoundingBox = false` (R1),
+`snowReduceFallDamage = false` (R2), `snowGravity = true` (R3, default), `snowAlwaysReplaceable = false` (R4),
+`snowAccumulationMaxLayers = 8` (R5, default), `snowNeverMelt = true` (R6), `mobSpawningMaxLayers = 8` (R14, default),
+`placeSnowInBlock = true`, `placeSnowInBlockNaturally = true`, `replaceWorldFeature = true`,
+`sustainGrassIfLayerMoreThanOne = true`, `sneakSnowball = true` (defaults kept, R7, R10, R15); `snowMakingIce` and the
+blizzard gamerules are part B (R13). Client toml: defaults (`snowVariants`, `particleThroughLeaves` on).
+
+Defaults taken where the rulings are silent: the grass rule applies only while SRM is loaded (without it vanilla's
+spread with Calendar's and Vinery's hooks runs as before); "snow on top" counts any `#minecraft:snow` block, so a
+salt layer does not stop spread; the plant inside a snowy plant takes no baked neighbor count; Serene Seasons melts
+the snowy plant whole (its rule removes all layers of plain snow at once) but not SRM's snow-topped fences and stairs
+(it melts only snow layers); SRM's snowfall storm piling is not magma-checked (magma's 2-block instant melt covers it).
+`tools/blockrunner_scan.py --audit` waits for the first `/dumpall` with SRM (step 0).
+
 ## 5. Decisions for the owner
 
 | # | Question | Recommendation | Default if not answered |
@@ -345,26 +397,32 @@ differ; section 4 is read with these changes. The 3.1 "Owner" column carries the
 | R16 | Every pack-side fix built: magma vs SRM snowfall (step 3), IW rain keeps the plant (step 8), snowed blocks keep the held block's speed (step 7), plus the light-melt boot fix, melting tags, salt guards | as written |
 | R17 | **One pack grass spread tick**, and **grass with snow on top never spreads** | step 9 replaced: a Compat HEAD hook on `SpreadingSnowyDirtBlock.randomTick` applied before SRM's does the whole tick and cancels: covered -> dirt (SRM's snow survival rule, vanilla's water rule kept), Calendar's season check, Neapolitan's block rule (`canBeGrass`), Vinery's slab spread, and no spread at all from a grass block with any snow layer or SRM snow block on it; new grass is snowy under any `#snowrealmagic:bottom_snow`. Boot log confirms the order |
 | R18 | Salt melts snow faster (D13 follow-up): Salt Melt and the salt dispenser **4 layers** per use (was 3); a salt block touching snow removes **1 layer 55%, 2 layers 35%, 3 layers 10%** per melt (was 1) | `[melting] saltMeltSnowLayers = 4`; new `[melting]` odds key for the touching salt block (Compat `Melting`); [melting.md](melting.md) 1 and 4, changelog bullets (salt is a live feature) |
-| R19 | **A plain right-click (no sneak, empty hand) turns off a block's snowy look; the snow itself stays.** Only new snow (a layer placed, snowfall or storm piling adding a layer, falling snow landing) turns the look back on. Applies to snowy plants, snow-topped fences, gates, walls, slabs, stairs, the snow-drip sides under a plain snow layer (R11), and IW snowy stone, cobblestone and bricks. Sneak right-click stays the 1-layer hand scoop (R10). **IW snowy stone, cobblestone and bricks convert from plain much faster once snow falls** | Compat: a per-block "snow look off" flag (SRM blocks: a field in SRM's block entity options, saved; plain snow layers: a chunk capability or a block state of our own, decided at build), cleared by `Hooks.placeLayersOn`, `Hooks.convert` and the vanilla snow placement path. Client: SRM's snowy foliage variant, the drip overlay and the snow cap model skip while the flag is set; the snow layer's own blocks, layers and collision are unchanged. IW snowy stone has no snow layers of its own, so "look off" turns it back into the plain block; IW's growth re-snows it. IW `block_snowcover.json` (builtin `snowy_stones`, tick source `snow`) `growth_chance` 0.1 -> **0.5** (proposed; owner may change), as a pack data override. Open at build: what "snowy look" on a snowy plant hides besides the variant texture and the drip (the snow layer model stays visible, since the snow stays) |
+| R19 | **A plain right-click (no sneak, empty hand) turns off a block's snowy look; the snow itself stays.** Only new snow (a layer placed, snowfall or storm piling adding a layer, falling snow landing) turns the look back on. Applies to snowy plants, snow-topped fences, gates, walls, slabs, stairs, the snow-drip sides under a plain snow layer (R11), and IW snowy stone, cobblestone and bricks. Sneak right-click stays the 1-layer hand scoop (R10). **IW snowy stone, cobblestone and bricks convert from plain much faster once snow falls** | Compat: a per-block "snow look off" flag (SRM blocks: a field in SRM's block entity options, saved; plain snow layers: a block state property of our own, owner 2026-11-24 "blockstate is default"), cleared by `Hooks.placeLayersOn`, `Hooks.convert` and the vanilla snow placement path. Client: SRM's snowy foliage variant, the drip overlay and the snow cap model skip while the flag is set; the snow layer's own blocks, layers and collision are unchanged. IW snowy stone has no snow layers of its own, so "look off" turns it back into the plain block; IW's growth re-snows it. IW `block_snowcover.json` (builtin `snowy_stones`, tick source `snow`) `growth_chance` 0.1 -> **0.5** (confirmed, owner 2026-11-24), as a pack data override. Open at build (assumption stands): what "snowy look" on a snowy plant hides besides the variant texture and the drip (the snow layer model stays visible, since the snow stays) |
 
 Snow by layer after these rulings: mining with a shovel takes the stack (1 snowball per layer); the shovel scoop 2
 layers per click, the hand scoop 1, both with snowballs; Salt Melt or the dispenser 4 layers; a touching salt block
 1.55 layers per melt on average; fire and lava 1 layer per melt; magma within 2 all at once; IW rain the whole stack;
 Serene Seasons by its own rule outside winter.
 
-## 6. File map (planned)
+## 6. File map
 
-- `development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/VanillaLightMeltMixin.java` (require),
-  new `SrmLightMeltMixin.java`, `SrmSnowfallMagmaMixin.java`, `SrmSnowCollisionMixin.java`, `IwSnowMeltSrmMixin.java`,
-  `SrmScoopMixin.java` (`@Pseudo`, gated on `snowrealmagic` in `compat/CompatMixinPlugin.java` and `MixinSwitches`).
-- `.../creativecompat/melting/Melting.java` (SRM products), `surface/SnowLayers.java`, `surface/FallingLayers.java`,
-  `surface/PassThrough.java` (held block tier), BlockRunner tier read in `BlockRunnerBlockStateMixin`.
-- `kubejs/data/creativecompat/kubejs/tags/melting_tags.js`, `passthrough_tags.js`; SRM `not_containables` in
-  `kubejs/server_scripts/tags/blocktags.js` via `global.tags`.
-- Creative Common `kubejs_startup/creativecommon/_lib/block_dict.js` (7 SRM keys).
-- `development/creativeDelight/members/vintage/.../block/custom/SaltLayerBlock.java`.
-- `development/creativeCalendar/.../mixin/GrassSpreadSeasonMixin.java` (priority).
-- `config/snowrealmagic-common.toml`, `snowrealmagic-client.toml` + `configs_edited/root_config/config/` copies.
+Built (part A, 2026-11-25), under `development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/`:
+
+- `compat/SnowRealMagic.java`: `LOADED`, `isVariant`, `isSnowLayer`, `held` (the held block), `snowOnTop`, Vinery's
+  slab spread handle; `compat/CompatMixinPlugin.java` (gates, range `[6.5.4,6.6)`).
+- `mixin/SrmWorldTickMixin.java` (magma, SRM ice melt off), `mixin/SrmSnowCollisionMixin.java` (walk-through before
+  SRM's cache), `mixin/SrmGrassSpreadMixin.java` (the grass tick), `mixin/IwSnowMeltSrmMixin.java` (IW rain keeps the
+  plant); `resources/creativecompat.mixins.json`.
+- `melting/Melting.java` (`meltTo` held block, deferred placement check), `surface/PassThrough.java` (`heldPlant`),
+  `surface/CamoSpeed.java` (SRM held block speed).
+- `kubejs/data/creativecompat/kubejs/tags/melting_tags.js`, `passthrough_tags.js`, `blocktags.js` (`not_containables`).
+- Creative Common `kubejs_startup/creativecommon/_lib/block_dict.js` (`b.srm_*`, `b.t_srm_not_containables`).
+- Creative Calendar `mixin/SereneSeasonsSrmMeltMixin.java`, `compat/CalendarMixinPlugin.java` (`dropSrmMeltCancel`,
+  needs Serene Seasons too), `mixin/GrassSpreadSeasonMixin.java` (priority 800), `build.gradle` (SRM compileOnly).
+- `config/creativecompat-common.toml` (`snowFullBecomesBlock = false`) and its `configs_edited/root_config/config/` copy.
+
+Planned (part B): `SrmScoopMixin.java`, the overlay and look toggle, the WTHIT name, blizzards, Vintage
+`SaltLayerBlock.java`; `config/snowrealmagic-common.toml` and `-client.toml` after the first boot.
 
 ## 7. Offline checks (once built)
 
@@ -375,19 +433,19 @@ Serene Seasons by its own rule outside winter.
 
 ## 8. In-game test suite (drafted)
 
-- [ ] **SRM-01 Boot:** start the client and a dedicated server with SRM and the fixed Compat -> no crash; `latest.log` has `SereneSeasons detected. Overriding melting behavior.` and no injection failure.
+- [ ] **SRM-01 Boot** (queue SQ-SRM-01)**:** start the client and a dedicated server with SRM and the fixed Compat -> no crash; `latest.log` has `SereneSeasons detected. Overriding melting behavior.` and no injection failure.
 - [ ] **SRM-02 Light melt off:** 3 snow layers beside a sea lantern and a redstone lamp, wait 5 minutes (`randomTickSpeed` 100) -> they stay; beside a torch -> they lose layers (fire rule).
-- [ ] **SRM-03 Snowy plant melts:** place snow on a poppy (one `snowrealmagic:snow`), put a torch beside it -> the snow melts layer by layer and the poppy is left standing.
-- [ ] **SRM-04 Magma vs SRM snowfall:** a magma block in a snowy plains clearing, `/weather thunder` for 10 minutes at `randomTickSpeed` 100 -> no snow within 3 of it; snow beyond.
+- [ ] **SRM-03 Snowy plant melts** (queue SQ-SRM-02)**:** place snow on a poppy (one `snowrealmagic:snow`), put a torch beside it -> the snow melts layer by layer and the poppy is left standing.
+- [ ] **SRM-04 Magma vs SRM snowfall** (queue SQ-SRM-07)**:** a magma block in a snowy plains clearing, `/weather thunder` for 10 minutes at `randomTickSpeed` 100 -> no snow within 3 of it; snow beyond.
 - [ ] **SRM-05 Wading:** walk and sprint through 2, 5 and 7 layers of snow barefoot -> the same speeds as before SRM (BR walk-through values); WTHIT shows "N of 8 layers".
 - [ ] **SRM-06 Standing on top:** the same in leather boots -> Snow tier 0.75, no extra drag (F2 off).
-- [ ] **SRM-07 Wading a snowy plant:** walk through snow on tall grass and on a sweet berry bush -> walk-through like snow, the bush's 0.36 where it is lower; no SRM 0.8 stuck.
+- [ ] **SRM-07 Wading a snowy plant** (queue CQ-SRM-01, with SRM-17, SRM-24)**:** walk through snow on tall grass and on a sweet berry bush -> walk-through like snow, the bush's 0.36 where it is lower; no SRM 0.8 stuck.
 - [ ] **SRM-08 Fall into snow:** drop 10 blocks into 7 layers barefoot and in leather boots, and onto bare grass -> the same damage all three times (D2 = full).
 - [ ] **SRM-09 Falling snow (R3):** break the block under 5 layers on a pillar -> one fall as SRM's falling snow, the layers land and merge; no FallingLayers entity for snow; a salt layer on a pillar falls as salt (FallingLayers), never as snow. Queued as SQ-CMP-38 (2026-11-24).
 - [ ] **SRM-10 Replace:** place cobblestone into 3 and 4 layers of snow and into a snowy poppy -> 3 replaced, 4 on top (`replaceMaxLayers` 3).
 - [ ] **SRM-11 Storm cap (R5):** snowy plains, `/weather thunder` 30 minutes at `randomTickSpeed` 100 -> snow piles to 8 layers and stays a layer (no snow block, nothing stacks above it); 8 layers are stood on, 1 to 7 waded.
-- [ ] **SRM-12 Season melt (R6):** Calendar spring in a temperate biome, 3 layers and ice outdoors -> Serene Seasons melts them as before SRM (its handler runs, throttled); snow beside a sea lantern does not melt; in a frozen-type biome -> they stay.
-- [ ] **SRM-13 IW rain melt on a snowy plant:** rain on a snowy dandelion in a warm biome -> the snow goes, the dandelion stays.
+- [ ] **SRM-12 Season melt (R6)** (queue SQ-SRM-06)**:** Calendar spring in a temperate biome, 3 layers and ice outdoors -> Serene Seasons melts them as before SRM (its handler runs, throttled); snow beside a sea lantern does not melt; in a frozen-type biome -> they stay.
+- [ ] **SRM-13 IW rain melt on a snowy plant** (queue SQ-SRM-04)**:** rain on a snowy dandelion in a warm biome -> the snow goes, the dandelion stays.
 - [ ] **SRM-14 IW snowy stairs:** IW snowy stone stairs beside snow in a storm -> they stay IW's block (not wrapped by SRM); a torch beside them melts them to stone stairs.
 - [ ] **SRM-15 Salt layers (R10):** right-click a salt layer with a shovel and sneak right-click it with an empty hand -> no snowballs, no layer taken; break the block under a salt layer -> it falls as salt (FallingLayers), lands as salt; place a snow layer item on a salt layer -> no snow added to the salt; fall 10 blocks onto 6 salt layers -> full damage.
 - [ ] **SRM-16 Scoops (R10):** shovel right-click on 5 layers of snow -> 3 layers, 2 snowballs, 1 durability; on 1 layer -> gone, 1 snowball; sneak empty-hand on 3 layers -> 2 layers, 1 snowball in hand; a plain empty-hand click -> nothing.
@@ -396,13 +454,13 @@ Serene Seasons by its own rule outside winter.
 - [ ] **SRM-19 Mob pathing:** a zombie chasing across 6 layers of snow -> it treats the pile as a step up (3.11), as before SRM.
 - [ ] **SRM-20 Worldgen:** new snowy plains chunks -> grass and flowers under snow (`snowrealmagic:snow`), no errors in the log.
 - [ ] **SRM-21 Snowed fence drops:** break a snow-topped oak fence and a snowed poppy -> the fence or poppy plus the snow; pick block gives the fence or poppy.
-- [ ] **SRM-22 Nether snow:** place snow on a plant in the Nether -> it fizzes away (ultra-warm instant), the plant stays.
+- [ ] **SRM-22 Nether snow** (queue SQ-SRM-03)**:** place snow on a plant in the Nether -> it fizzes away (ultra-warm instant), the plant stays.
 - [ ] **SRM-23 Rubidium render:** client with Rubidium, snowy foliage on and off (`snowVariants`) -> no missing models, no render errors.
 - [ ] **SRM-24 Dedicated server sync:** player on a dedicated server wades 5 layers and stands on a snowy poppy -> no rubber-banding (client and server agree on collision).
 - [ ] **SRM-25 Overlay (R11):** client: a snow layer on stone, on dirt and a snowy poppy -> the block under each shows SRM's snow-drip sides; with Rubidium on too; screenshot for the owner.
 - [ ] **SRM-26 Blizzard (R13):** snowy plains, `/weather rain` 10 minutes -> no falling snow from the sky; `/weather thunder` 10 minutes -> falling-snow chunks of 1 to 2 layers land; `/gamerule snowrealmagic:blizzardStrength` reads 2, frequency 3500 on a new world.
 - [ ] **SRM-27 Snow into water (R13):** drop 20 falling-snow chunks into still water (break their support over a pool) -> about 4 turn the water to ice, the rest add nothing.
-- [ ] **SRM-28 Snowy grass does not spread (R17):** a grass block with 1 snow layer on it beside dirt, 20 minutes at `randomTickSpeed` 100 -> the dirt stays dirt; the same without snow -> it spreads; grass spreads onto a Vinery dirt slab; grass under 5 layers stays grass.
+- [ ] **SRM-28 Snowy grass does not spread (R17)** (queue SQ-SRM-05)**:** a grass block with 1 snow layer on it beside dirt, 20 minutes at `randomTickSpeed` 100 -> the dirt stays dirt; the same without snow -> it spreads; grass spreads onto a Vinery dirt slab; grass under 5 layers stays grass.
 - [ ] **SRM-29 Salt odds (R18):** Salt Melt on 8 layers -> 4 layers; a salt block beside 8 layers, log 40 melts -> about 55% take 1 layer, 35% 2, 10% 3.
 - [ ] **SRM-30 WTHIT name (R12):** look at a snow-topped oak stair and a snowy poppy -> "Snowy Oak Stairs", "Snowy Poppy".
 - [ ] **SRM-31 Snow look off (R19):** empty-hand right-click a snowy poppy, a snow-topped oak stair, a plain 3-layer snow on stone and IW snowy cobblestone -> each loses its snowy look (no snowy texture, no drip sides; the snow layers stay, walk-through unchanged; the cobblestone becomes plain cobblestone); place one snow layer on each (or let snow fall) -> the look comes back; sneak right-click still scoops 1 layer.
@@ -414,8 +472,13 @@ Serene Seasons by its own rule outside winter.
   boot. Feature catalog F1 to F27 for the owner's marks.
 - 2026-11-24, later: owner rulings R1 to R18 (section 5b); every decision answered, catalog marked. Nothing built.
 - 2026-11-24, later: R19 (right-click turns the snowy look off; IW snowy stone converts 5x faster).
+- 2026-11-24, later: confirmed R19 rate 0.5 and block state flag, R11 overlay as ruled, SRM default particles; fall damage reduction pinned as `blockrunner #21`.
 - 2026-11-24, later: R3's snow half built (owner: "snow falling should be handled by SRM now, use pack feature if not
   downloaded"): Compat's `FallingLayers.falls` leaves snow to SRM when it is loaded, logs `Snow! Real Magic loaded: snow
   falls by its snowGravity` once; `SnowLayerFallMixin` still applies (its HEAD inject holds salt over a free block, so
   SRM's `updateShape` body never schedules a fall for it). Left for step 11: SRM's added `tick` and `onPlace` still run on
   salt, so a fall check SRM scheduled before the support went could still drop a salt layer as snow (rare; SQ-CMP-38).
+- 2026-11-25: fold-in part A built (section 4b; `mod-integration #14` to `#19`, `#26`): melting to the held block,
+  magma vs SRM snowfall, walk-through and held-block speed, IW guard, one grass tick, Serene Seasons' melt kept;
+  `snowFullBecomesBlock = false`; SRM config values written as a plan (its toml appears on the first boot). Queue rows
+  SQ-SRM-01 to -07, CQ-SRM-01.

@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.creativecompat.melting;
 
 import com.SaintAlfonzo.creativecompat.CompatConfig;
+import com.SaintAlfonzo.creativecompat.compat.SnowRealMagic;
 import com.mojang.logging.LogUtils;
 import it.unimi.dsi.fastutil.objects.Reference2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
@@ -283,8 +284,15 @@ public final class Melting {
 			return true;
 		}
 		int f = flags.getInt(state.getBlock());
-		if ((f & TARGET) == 0) return false;
 		Values c = cfg;
+		if ((f & INSTANT) != 0 && level.dimensionType().ultraWarm() && c.ultraWarmInstantMelt()
+				&& SnowRealMagic.isVariant(state)) {
+			// a Snow! Real Magic block placed in an ultra-warm dimension (onPlaced scheduled this tick): its snow goes
+			meltTo(level, pos, state, Blocks.AIR.defaultBlockState());
+			level.levelEvent(1501, pos, 0);
+			return true;
+		}
+		if ((f & TARGET) == 0) return false;
 		if (!c.enabled() || state.getBlock() instanceof FrostedIceBlock) return false; // frosted ice runs its own ticks
 		if (isHot(state, f, level, pos, c)) return hotTick(state, f, level, pos, random, c);
 		Hit hit = new Hit();
@@ -309,6 +317,11 @@ public final class Melting {
 		int f = flags.getInt(state.getBlock());
 		if ((f & (INSTANT | TARGET)) == 0) return;
 		Values c = cfg;
+		if (SnowRealMagic.isVariant(state) && level instanceof ServerLevel sl) {
+			// Snow! Real Magic fills the held block in after this runs: look again on the next tick
+			sl.scheduleTick(pos, state.getBlock(), 1);
+			return;
+		}
 		if (level.dimensionType().ultraWarm() && (f & INSTANT) != 0 && c.ultraWarmInstantMelt()) {
 			if (level.getBlockState(pos) != state) return; // already replaced by the block's own onPlace
 			level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
@@ -764,6 +777,11 @@ public final class Melting {
 	}
 
 	private static void meltTo(ServerLevel level, BlockPos pos, BlockState state, BlockState to) {
+		if (to.getBlock() != state.getBlock()) {
+			// Snow! Real Magic: a snowy plant, fence, wall, slab or stairs melts to the block it holds
+			BlockState held = SnowRealMagic.held(level, pos, state);
+			if (held != null) to = held;
+		}
 		level.setBlockAndUpdate(pos, to);
 		level.levelEvent(2001, pos, Block.getId(state)); // the block's break particles and sound
 	}

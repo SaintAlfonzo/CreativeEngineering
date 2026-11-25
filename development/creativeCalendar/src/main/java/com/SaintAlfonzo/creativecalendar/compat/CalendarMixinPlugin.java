@@ -4,6 +4,7 @@ import com.SaintAlfonzo.creativecalendar.shared.GatedMixinPlugin;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.InsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.slf4j.Logger;
@@ -52,7 +53,9 @@ public class CalendarMixinPlugin extends GatedMixinPlugin {
 			Map.entry("SeasonHudHelperMixin", List.of("seasonhud")),
 			Map.entry("SeasonHudCurrentSeasonMixin", List.of("seasonhud")),
 			Map.entry("PrettyRainSeasonMixin", List.of("particlerain")),
-			Map.entry("CoolRainSeasonMixin", List.of("coolrain")));
+			Map.entry("CoolRainSeasonMixin", List.of("coolrain")),
+			// Serene Seasons' melt kept under Snow! Real Magic (snow_real_magic.md R6); needs both, see shouldApplyMixin
+			Map.entry("SereneSeasonsSrmMeltMixin", List.of("snowrealmagic")));
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CalendarMixinPlugin.class);
 
@@ -71,8 +74,38 @@ public class CalendarMixinPlugin extends GatedMixinPlugin {
 	}
 
 	@Override
+	public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
+		if (mixinClassName.endsWith(".SereneSeasonsSrmMeltMixin") && !modOn("sereneseasons")) return false;
+		return super.shouldApplyMixin(targetClassName, mixinClassName);
+	}
+
+	@Override
 	public void postApply(String targetClassName, ClassNode targetClass, String mixinClassName, IMixinInfo mixinInfo) {
 		if (mixinClassName.endsWith(".CoolRainSeasonMixin")) patchCoolRainHandler(targetClass);
+		if (mixinClassName.endsWith(".SereneSeasonsSrmMeltMixin")) dropSrmMeltCancel(targetClass);
+	}
+
+	private static final String SS_WORLD_TICK_DESC = "(Lnet/minecraftforge/event/TickEvent$LevelTickEvent;)V";
+
+	/**
+	 * Snow! Real Magic's HEAD callback on Serene Seasons' {@code onWorldTick} (merged as {@code handler$...$srm_onWorldTick},
+	 * static, taking the event and the CallbackInfo) cancels the whole melt. Its call becomes POP2 (the two arguments
+	 * dropped), so the CallbackInfo is never cancelled and the handler runs on (snow_real_magic.md ruling R6). SRM's
+	 * own work in that callback, the weather frequency, is what the handler does itself.
+	 */
+	private static void dropSrmMeltCancel(ClassNode targetClass) {
+		for (MethodNode method : targetClass.methods) {
+			if (!"onWorldTick".equals(method.name) || !SS_WORLD_TICK_DESC.equals(method.desc)) continue;
+			for (AbstractInsnNode insn = method.instructions.getFirst(); insn != null; insn = insn.getNext()) {
+				if (!(insn instanceof MethodInsnNode call) || call.getOpcode() != Opcodes.INVOKESTATIC) continue;
+				if (!targetClass.name.equals(call.owner) || !call.name.endsWith("srm_onWorldTick")) continue;
+				method.instructions.set(call, new InsnNode(Opcodes.POP2));
+				LOGGER.info("[creativecalendar] Snow! Real Magic loaded: Serene Seasons still melts snow and ice ({} skipped)", call.name);
+				return;
+			}
+			LOGGER.warn("[creativecalendar] Snow! Real Magic's Serene Seasons callback not found: its snow and ice melt stays off");
+			return;
+		}
 	}
 
 	private static void patchCoolRainHandler(ClassNode targetClass) {

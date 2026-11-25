@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativecompat.surface;
 
+import com.SaintAlfonzo.creativecompat.compat.SnowRealMagic;
+
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.UUID;
@@ -428,6 +430,7 @@ public final class PassThrough {
 						walkCounts = climbing == 0;
 					}
 					c.add(pos.asLong(), tier, v, walkCounts, layerWalk);
+					if (tier.layered() && SnowRealMagic.LOADED) heldPlant(level, pos, state, e, values, c);
 				}
 			}
 		}
@@ -441,6 +444,26 @@ public final class PassThrough {
 		}
 		c.clearRefs();
 		return out;
+	}
+
+	/**
+	 * Snow! Real Magic's snowy plant (snow_real_magic.md 4 step 7): the snow counts as a snow layer (above) and the plant
+	 * inside counts with its own tier at the same cell, so the lower walk of the two wins (a sweet berry bush in snow walks
+	 * like a bush). The plant's neighbor count is taken directly, not baked (the cell is baked for the snow).
+	 */
+	private static void heldPlant(Level level, BlockPos pos, BlockState state, Entity e, PassValues values, Cand c) {
+		if (!SnowRealMagic.isSnowLayer(state)) return;
+		BlockState held = SnowRealMagic.held(level, pos, state);
+		if (held == null) return;
+		PassTier tier = tierOf(held);
+		if (tier == null || tier.layered()) return;
+		PassTier.Values v = values.tier(tier);
+		if (v.inert() || exempt(e, tier, v) || !grown(level, pos, held, tier, v)) return;
+		boolean walkCounts = true;
+		if (v.walkOnlyMoving()) walkCounts = e.getDeltaMovement().horizontalDistanceSqr() > MOVING_SQR;
+		if (walkCounts && tier.noWalkWhileClimbing()) walkCounts = !climbing(e);
+		c.add(pos.asLong(), tier, v, walkCounts, Double.NaN);
+		if (PassRule.needsCount(v)) c.count[c.n - 1] = neighbours(level, pos.immutable(), tier, v.neighbours());
 	}
 
 	/** The counted blocks of one {@link #evaluate} before their rule is built. One per thread. */

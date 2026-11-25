@@ -231,6 +231,7 @@ the call just before (`MutableBlockPos.set` in renderSnowAndRain, `getHeightmapP
 | `SeasonColorUtilMixin` | client | `SeasonColorUtil` | no tint for arid/frozen/permanent winter; permanent spring/summer/autumn tinted as their own sub-season |
 | `SeasonHudHelperMixin` | client | SeasonHUD `ForgeSeasonHelper` | adaptive biome; arid/frozen season, day of year, year length; permanent seasons: season, Early/Mid/Late part, day and length |
 | `SeasonHudCurrentSeasonMixin` | client | SeasonHUD `CurrentSeason.getTranslation(boolean)` | "Arid" / "Frozen" name (lang `desc.seasonhud.season.arid/.frozen`) |
+| `SereneSeasonsSrmMeltMixin` | server | Serene Seasons `RandomUpdateHandler` (@Pseudo, priority 1100) | with Snow! Real Magic loaded: `CalendarMixinPlugin.postApply` drops Snow! Real Magic's HEAD cancel of `onWorldTick` (call -> POP2), so Serene Seasons' snow and ice melt runs as before, `perf.seasonsMeltIntervalTicks` throttle included; its `meltInChunk` melts Snow! Real Magic's snowy plant to the plant ([snow_real_magic.md](snow_real_magic.md) R6, 2026-11-25) |
 | `PrettyRainSeasonMixin` | client | Pretty Rain `WeatherParticleSpawner` spawnParticle / getBiomeSound (@Pseudo) | both `getPrecipitation` reads answer from `SeasonTypes.precipitationAt`: adaptive column, season rule, rain or snow by seasonal temperature |
 
 ### 3.4 Snow line, cold, permanent seasons, snow seasons, rain and cloud height (2026-10-11)
@@ -628,3 +629,6 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 - 2026-10-14: ships in pack **1.0.6** (DEPLOYED 2026-10-14, update from 1.0.4; 1.0.5 was never deployed): the season types
   and Pretty Rain mixin from 1.0.5 plus the 2026-10-11 snow line, snow seasons, cold type, permanent skylands seasons
   and `DhCloudHeightMixin`, all in Creative Common 1.0.6. Not run in game (WE-26 to WE-36). [plan_1.0.6.md](plan_1.0.6.md).
+- 2026-11-25: Snow! Real Magic fold-in (`mod-integration #19`): Serene Seasons' melt kept under Snow! Real Magic, which
+  cancels it (`SereneSeasonsSrmMeltMixin`, 3.3); Snow! Real Magic's own season melt off by its config (`snowNeverMelt`)
+  and its ice melt by `SrmWorldTickMixin` (Compat), so snow and ice melt by the same rules as before it was added.

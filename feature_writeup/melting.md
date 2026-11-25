@@ -139,7 +139,13 @@ melt ticks (about every 5 s), plus its random ticks.
   gated on `rare_ice` in `CompatMixinPlugin` (enable key `[mixins]`, `MixinSwitches`) (no class-load error without Rare Ice; SQ-MELT-09, 2026-11-15).
 - With Snow! Real Magic loaded, `CompatMixinPlugin` skips the mixin's `SnowLayerBlock` target (Snow! Real Magic
   overwrites its random tick and melts snow layers by its own light check); ice keeps the light melt
-  (`creative-compat-publish #11`).
+  (`creative-compat-publish #11`). Snow! Real Magic's own light and season melt is off by its config
+  (`snowNeverMelt = true`, [snow_real_magic.md](snow_real_magic.md) R6), so no light hook into its code is needed.
+- Snow! Real Magic blocks (since 2026-11-25, `mod-integration #14`): its seven blocks (a snowy plant, snow-topped
+  fences, gates, walls, slabs, stairs) are `meltable`, `saltable` and `ultrawarm_instant`. `meltTo` swaps any product
+  that is not the same block for the block they hold (`compat/SnowRealMagic.held`), so they melt back to the plant or
+  block; the snowy plant loses one layer at a time first. Placed ones are checked on the next tick (`onPlaced`
+  schedules one; Snow! Real Magic fills the held block in after `onPlace`), where the ultra-warm rule leaves the plant.
 - Config reads: the tick paths read `Melting.cfg`, a plain copy of the `[melting]` values refreshed on
   ModConfigEvent Loading and Reloading of the Compat config (`Melting.onConfig`, mod bus), not ForgeConfigSpec
   values per call (SQ-MELT-P1, 2026-11-15). Before the first load: melting off, vanilla light melt as vanilla.
@@ -164,6 +170,8 @@ Block tags under `creativecompat:melting/`, filled by Creative Compat's
 `global.has`. Ids and globs are `block_dict.js` keys (`b.t_melt_*`, `b.melt_fire_*`, ...). The Java side
 (`melting/MeltTags.java`) works with any tag empty, so Compat runs without The Salt or Vintage Delight.
 
+- Snow! Real Magic's seven blocks (`b.srm_*`) in `meltable`, `saltable` and `ultrawarm_instant`, guarded by
+  `global.has('snowrealmagic')` (2026-11-25).
 - `salt`: `salt:salt_block`, `salt:raw_rock_salt_block`; Vintage Delight's salt family (`vintagedelight:*salt*`, the
   Evaporator); the Hearth and Harvest licked and waxed salt lick stages (`hearthandharvest:*licked_salt_block`,
   `waxed_salt_block`).
@@ -301,7 +309,10 @@ Traced 2026-11-14 for "why did Nether ice melt in r1113":
   also, by day, ice in a biome warm enough melts. This is what melted the r1113 Nether ice (no salt involved). Left on:
   it agrees with the Nether rule here. Its growth chance is IW's (`growth_chance` default).
 - Immersive Weathering's snow layer melt in rain (`SnowLayerBlockMixin`, randomTick HEAD).
-- Serene Seasons' seasonal melt (its own random update handler).
+- Serene Seasons' seasonal melt (its own random update handler). Snow! Real Magic cancels the handler; Creative
+  Calendar's `SereneSeasonsSrmMeltMixin` takes that cancel out and lets it melt Snow! Real Magic's snowy plant to the
+  plant (2026-11-25, [snow_real_magic.md](snow_real_magic.md) R6).
+- Snow! Real Magic's ice melt in seasonal biomes: off (`SrmWorldTickMixin`, R6).
 - The salt dispenser and the Salt Melt (salt member, through `meltStep`; [salt.md](salt.md) 7).
 
 ## 7. Tests

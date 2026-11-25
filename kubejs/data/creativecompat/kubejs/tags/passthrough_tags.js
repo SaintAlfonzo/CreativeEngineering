@@ -59,11 +59,16 @@ ServerEvents.tags('block', e => {
 		b.bamboo_leaves_full])  // full bamboo leaves: Twigs bamboo leaves past 4 layers (G7.9)
 	// Leaf layers: walk-through at every height, leafMaxSlow at full. Snow layers: walk-through 1 to 7 (a full layer
 	// becomes a snow block), snowMaxSlow at 7.
-	t.addMatching(e, 'creativecompat:passthrough_layers_open', ['#' + PASS.layers], { except: [b.snow] })
+	// Snow! Real Magic's snowy plant is a snow layer too (snow_real_magic.md 4 step 5); the plant inside adds its own
+	// tier's walk (surface/PassThrough, lowest walk wins)
+	if (global.has('snowrealmagic')) t.add(e, PASS.layers, b.srm_snow)
+	t.addMatching(e, 'creativecompat:passthrough_layers_open', ['#' + PASS.layers], { except: global.has('snowrealmagic') ? [b.snow, b.srm_snow] : [b.snow] })
 	// Layers that fall and stack (plan_post_scratch_1115.md G7.5, surface/FallingLayers): the layer blocks with no gravity
 	// of their own. Immersive Weathering's layers and Supplementaries ash already fall by their own code.
 	t.add(e, 'creativecompat:falling_layers', [b.snow, i.vintagedelight_salt, i.bamboo_leaves,
 		b.bamboo_leaves_full, i.immersiveengineering_sawdust, i.fodder])
+	// Snow! Real Magic's snowy plant: listed for the pack fall, which leaves snow to SRM while it is loaded (R3)
+	if (global.has('snowrealmagic')) t.add(e, 'creativecompat:falling_layers', b.srm_snow)
 
 	// Vines: vanilla, Vinery jungle grape vines, Hearth hops, Floral Enchantment, Quark, Botania, Immersive Weathering
 	// ivy, Upgrade Aquatic mulberry, Neapolitan vanilla, Biomes O' Plenty strands (flesh tendons, and hanging cobweb,

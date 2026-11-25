@@ -797,7 +797,7 @@
 			#Off: vanilla snow collision.
 			snowWalkThrough = true
 			#A snow layer that reaches 8 layers (placed, or found on a random tick) becomes a snow block.
-			snowFullBecomesBlock = true
+			snowFullBecomesBlock = false
 			#From this many snow layers up, jumping from inside the snow is as weak as in powder snow.
 			#Range: 1 ~ 8
 			snowJumpLayers = 6
