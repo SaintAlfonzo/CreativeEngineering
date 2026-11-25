@@ -429,3 +429,21 @@ CMP-27 `bootexpect` -> `shell grep logs/qrun_boot1.log`; GSH-11 `waitlog` before
   unfinished rows are discarded (not judged). 34 server steps and all 31 client rows were not run.
 - Resume: `qrun.py drive resume r1124gate` under systemd-run (as `perf/runs/r1124gate/start_drive.sh`). Perf summary:
   `perf/sessions/r1124gate/summary.md`.
+
+### 4.7 Fixes after the stop (2026-11-24, findings session)
+
+- BATCH-FAULT row fixes for SQ-CGE-17, SQ-CM-42, SQ-CMP-01 (`cmp_mixin_check.py` counts per mixin and target), -16, -23,
+  -24 (moved to CMP.qb section 8, mod set `nosrm`; new SQ-CMP-38 for the Snow! Real Magic hand-over), -27, SQ-GSH-08,
+  -12: written by another session (uncommitted at 22:40). SQ-GSH-11: `waitlog verb=loot` before the expect.
+- SQ-CM-41 reclassified as a test fault: the row's `setblock` furnaces had no `CookTimeTotal` (0), and vanilla finishes an
+  item only when the progress equals it, so the composter burned and nothing smelted. Row sets `CookTimeTotal:200`.
+- SQ-CM-38 product cause: Creative Delight farmers member `FDBackportEvents.onPlacePumpkinPie` denied the block's use
+  and placed the pie on top (the first use CONSUME at level 0, the rest PASS). Fixed (block use first unless sneaking),
+  TODO `composting #9`; the row gained a sneaking placement check. Needs the Creative Delight rebuild in `mods/`.
+- Rerun: SQ-CM-38, -41, -42, SQ-CGE-17, SQ-CMP-01, -16, -23, -24, -27, -38, SQ-GSH-08, -11, -12.
+
+#### 4.7 After the stop (wave 1/2 session, 2026-11-24)
+
+- New final jars installed: creativecommon 1.3.0+db212e956, creativecompat 1.0.0+db212e956 (Raspberry Pie unchanged, 8f883cd64). Changes: mod descriptions; owner ruling that Snow! Real Magic handles snow fall when loaded (TODO creative-compat-publish #12, new SQ-CMP-38; SQ-CMP-24, SQ-PS15B-13, -14, -19, -22 moved to a `nosrm` mod set).
+- Row fixes in 9d855c389 (SQ-RPS-06/-08 superseded, CQ-CC13-02/-04 jars, SQ-WT-04, SQ-GSH-08/-11/-12, SQ-CGE-17, SQ-MELT-23/-24, CQ-RPS-03, SQ-CM-42, SQ-CMP-16/-23/-27; cmp_mixin_check.py counts per mixin-target pair).
+- Rerun list for the resume (perf/runs/r1124gate/rerun.txt): SQ-CMP-01, -16, -23, -24, -27, SQ-CGE-17, SQ-GSH-11, -12, SQ-CM-42. The resumed drive runs on the db212e956 jars: rerun prescreen and jarstamp first, and re-plan (`qrerun.py`) since the jar stamps changed; the 26 PASSes on ddd126587 / edd3b66b9 stand unless qplan marks them jar-changed.
