@@ -9,13 +9,18 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 
 ## 0. Owner rulings
 
-<!-- generated:status_index begin open_work sha1=49d5aea43a13 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Testing 8), 0 Complete.
+<!-- generated:status_index begin open_work sha1=7eb2244a0732 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Testing 13), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `creative-common-publish #21` | Testing | CQ-LTP-17 CQ-CPP-01 | Every client start logs 'Loading tips: skipped loading_tips:version_filter: Missing tips, expected to find a JsonArray' |
 | `creative-compat-publish #8` | Testing | S | Weathered Cardboard Box moves from Creative Compat to Creative Engineering before Compat 1.0.0: id creativeengineering:weathered_cardboard_box, Compat ids in saves swapped back, item dict key kept, texture exemption (W2) moves with it |
 | `creative-compat-publish #9` | Testing | S | Squid and whales: squid and glow squid flee Alex's Mobs cachalot whales; the giant squid no longer flees whales and fights back when a whale attacks it or comes close (the flee radius config goes) |
+| `creative-compat-publish #14` | Testing | CQ-CMP-19 | CQ-CMP-19 failed: the Devtools driver's shift-click on the corpse screen was a plain click, so the mana ring swap left it on the cursor |
+| `creative-compat-publish #15` | Testing | CQ-CMP-33 | JEI uses page for the Sample Syringe does not open (world tab catalyst) |
+| `creative-compat-publish #16` | Testing | CQ-CMP-37 | Sneak right-click on the Item Trash Can opened the deleted-on-close screen, not the filter screen |
+| `creative-compat-publish #17` | Testing | SQ-MT-04 SQ-MT-05 SQ-MT-06 SQ-PTH-29 SQ-PTH-30 SQ-SMK-31 | Summoned mobs disappeared within 1 to 4 s on scratch servers: peaceful and spawn-animals=false in the rows' server setup |
 | `food-tuning #66` | Testing | S | Drinks: hot cocoa, strong hot cocoa, Farmer's Respite coffee, long coffee and strong coffee, prickly pear juice, strawberry banana smoothie (and their families) carry the drink food type, so Raspberry Pie counts them as drinks |
 | `food-tuning #67` | Testing | S | Jams are foods: every jam family member (Vintage jam jars, Fruits Delight jellies, Upgrade Aquatic mulberry jam bottle) stays out of the drink, no-diet and Diet Log excluded tags and counts in the Diet Log; the family stays its own (preserve/jam) |
 | `raspberry-pie-publish #21` | Testing | C | Permanent buff icon keeps cycling diamond and effect while the buff is active: find and fix (rule unchanged: cycle until reached, effect alone while active) |
@@ -110,3 +115,10 @@ path, push to `agent_staging`.
   scratch_run_2026-11-24.md 4.5). Owner ruling: Snow! Real Magic handles snow falling when loaded, the pack fall
   otherwise (`creative-compat-publish #12`; salt keeps the pack fall). Row faults fixed. Release jars now: Common
   1.3.0+db212e956, Compat 1.0.0+db212e956, Raspberry Pie 1.0.0+8f883cd64; W-P7 resumes on them.
+- 2026-11-25: W-P7 run r1124w7 (scratch_run_2026-11-24.md section 5) failed on four items, all ruled blockers by the
+  owner. Fixed: Common reads a remove-only loading tips file (`creative-common-publish #21`); the other three CQ-CMP
+  failures were the Devtools capture driver, not Compat (shift-click sent as a plain click `#14`, JEI uses opened
+  without the catalyst focus `#15`, sneak and use pressed the same tick `#16`); the vanishing mobs were the scratch
+  servers' peaceful, no-animals setup, fixed in the rows (`#17`). Release jars now: Common 1.3.0+bb465ade3 (clean,
+  checks on, installed), Compat 1.0.0+db212e956 (unchanged), Raspberry Pie 1.0.0+8f883cd64; Devtools
+  1.0.0+bb465ade3 (test driver, installed). Next: the W-P7 rerun of the failed rows, then W-P8.
