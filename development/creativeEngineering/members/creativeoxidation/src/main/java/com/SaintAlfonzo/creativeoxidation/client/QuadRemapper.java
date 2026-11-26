@@ -100,7 +100,8 @@ public final class QuadRemapper {
 		return true;
 	}
 
-	private static BakedQuad remapQuad(BakedQuad quad, ResourceLocation source, OxidationStage stage) {
+	/** The staged copy of a listed sprite: {@code creativeoxidation:<block|item>/<stage>/[compat/<namespace>/]<path>}, or null. */
+	static ResourceLocation stagedLocation(ResourceLocation source, OxidationStage stage) {
 		String path = source.getPath();
 		String textureRoot;
 		if (path.startsWith("block/")) {
@@ -110,11 +111,34 @@ public final class QuadRemapper {
 			path = path.substring("item/".length());
 			textureRoot = "item/";
 		} else {
-			return quad;
+			return null;
 		}
 		String namespacePath = source.getNamespace().equals("create") ? "" : "compat/" + source.getNamespace() + "/";
-		ResourceLocation targetLocation = new ResourceLocation(CreativeOxidation.MOD_ID,
-				textureRoot + stage.getSerializedName() + "/" + namespacePath + path);
+		return new ResourceLocation(CreativeOxidation.MOD_ID, textureRoot + stage.getSerializedName() + "/" + namespacePath + path);
+	}
+
+	/**
+	 * Every staged sprite whose PNG is in this jar. Minecraft 1.19.2 stitches only the textures models name (1.20's
+	 * atlas sources took the whole folder upstream), so the client adds these to the block atlas before stitching.
+	 */
+	static List<ResourceLocation> stagedSprites() {
+		List<ResourceLocation> sprites = new ArrayList<>();
+		for (ResourceLocation source : OXIDIZABLE_LOCATIONS) {
+			if (source == null) continue;
+			for (OxidationStage stage : OxidationStage.values()) {
+				if (stage == OxidationStage.UNAFFECTED) continue;
+				ResourceLocation staged = stagedLocation(source, stage);
+				if (staged != null && QuadRemapper.class.getResource("/assets/" + staged.getNamespace() + "/textures/" + staged.getPath() + ".png") != null) {
+					sprites.add(staged);
+				}
+			}
+		}
+		return sprites;
+	}
+
+	private static BakedQuad remapQuad(BakedQuad quad, ResourceLocation source, OxidationStage stage) {
+		ResourceLocation targetLocation = stagedLocation(source, stage);
+		if (targetLocation == null) return quad;
 		Function<ResourceLocation, TextureAtlasSprite> atlas = blockAtlas();
 		TextureAtlasSprite target = atlas.apply(targetLocation);
 		if (!target.getName().equals(targetLocation)) return quad;

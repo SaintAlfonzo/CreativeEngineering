@@ -130,55 +130,11 @@
       "required": false
     },
     {
-      "id": "design_decor:copper_boiler",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_boiler_large",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_boiler_structure",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_bolt",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_catwalk",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_floodlight",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_floor",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_gas_tank",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_lamp",
-      "required": false
-    },
-    {
       "id": "design_decor:copper_large_chain",
       "required": false
     },
     {
       "id": "design_decor:copper_light",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_railing",
-      "required": false
-    },
-    {
-      "id": "design_decor:copper_screw",
       "required": false
     }
   ]

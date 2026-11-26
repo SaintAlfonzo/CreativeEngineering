@@ -6,7 +6,6 @@
 // ids under creativecompat:<kind>/<name>. The jars are in disabledmods/.
 //
 //   Name Tag Crafting Recipe       1 shaped recipe
-//   Create: Copper Splashing        33 create:splashing recipes (copper weathering, 11 shapes x 3 stages)
 //   Furnace Recycle                 26 smelting recipes (iron / gold blocks and tools back to ingots or nuggets)
 //   AE2 QoL Recipes                 311 cable recipes (16 colors x 5 cable kinds + 7 fluix), generated from the
 //                                   mod's 19 templates; its two tags are in tags/feature_port_tags.js
@@ -16,6 +15,8 @@
 // Copper Drops is a loot-table override: kubejs/data/minecraft/loot_tables/blocks/{copper_ore,deepslate_copper_ore}.json.
 // Create: Generators is NOT rebuilt here: the pack had already replaced 5 of its 6 recipes with heat-tiered ones in
 // engineering/resource_blocks.js, and its one live recipe (heated obsidian) moved there with them.
+// Create: Copper Splashing lives in Creative Oxidation (kubejs/data/creativeengineering/kubejs/creativeoxidation/aging.js,
+// ids creativeoxidation:createsplashing/).
 // Starter Kit: other/starter_kit.js. Book Fishing stays a jar (enchanted-book loot rebalance, feature_porting.md 1.1).
 
 ServerEvents.recipes(e => {
@@ -30,23 +31,6 @@ ServerEvents.recipes(e => {
 	// Name Tag Crafting Recipe (mr_name_tagcraftingrecipemod)
 	// ============================================================
 	R.shaped(Item.of(i.name_tag), ['#P', 'SS'], { '#': i.leather, P: i.paper, S: i.string }, e, 'name_tag'); count++
-
-	// ============================================================
-	// Create: Copper Splashing (create_copper_splashing)
-	// Each copper shape weathers one stage in a fan's splashing stream: plain -> exposed -> weathered -> oxidized.
-	// ============================================================
-	var copperShapes = ['copper_shingle_slab', 'copper_shingle_stairs', 'copper_shingles', 'copper_tile_slab', 'copper_tile_stairs',
-		'copper_tiles', 'cut_copper', 'cut_copper_slab', 'cut_copper_stairs', 'cut_copper_vertical_slab']
-	var splashing = [[Item.of(i.exposed_copper), i.block_copper, e, 'copper_block_exposed'],
-		[Item.of(i.weathered_copper), i.exposed_copper, e, 'copper_block_weathered'],
-		[Item.of(i.oxidized_copper), i.weathered_copper, e, 'copper_block_oxidized']]
-	// cut_copper_vertical_slab is Quark's: the dict drops it when Quark is absent
-	copperShapes.filter(shape => global.has(i[shape], i['exposed_' + shape], i['weathered_' + shape], i['oxidized_' + shape])).forEach(shape => {
-		splashing.push([Item.of(i['exposed_' + shape]), i[shape], e, shape + '_exposed'])
-		splashing.push([Item.of(i['weathered_' + shape]), i['exposed_' + shape], e, shape + '_weathered'])
-		splashing.push([Item.of(i['oxidized_' + shape]), i['weathered_' + shape], e, shape + '_oxidized'])
-	})
-	bulk('createSplashing', splashing)
 
 	// ============================================================
 	// Furnace Recycle (furnacerecycle): 0.1 xp, 200 ticks, as the mod
@@ -108,6 +92,6 @@ ServerEvents.recipes(e => {
 		bulk('shapeless', shapeless)
 	}
 
-	console.log('[feature-ports] tier 1: ' + count + ' recipes (1 name tag, ' + splashing.length + ' splashing, ' + smelting.length +
+	console.log('[feature-ports] tier 1: ' + count + ' recipes (1 name tag, ' + smelting.length +
 		' recycle smelting, ' + (shaped.length + shapeless.length) + ' AE2 cable)')
 })

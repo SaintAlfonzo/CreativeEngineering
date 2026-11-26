@@ -107,7 +107,6 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Gravity | `create_gravity` | `create_gravity-1.19.2-1.2.0-all.jar` |  |
 | both | Create: Interiors | `interiors` | `interiors-0.5.6+forge-mc1.19.2-build.105.jar` |  |
 | both | Create: Netherless | `create_netherless` | `create_netherless-1.19.2-1.3.jar` |  |
-| both | Create: Oxidized | `create_oxidized` | `create_oxidized-1.19.2-0.1.1.jar` |  |
 | both | Create: Power Loader | `create_power_loader` | `create_power_loader-1.5.0-mc1.19.2.jar` |  |
 | both | Create: Steam 'n' Rails | `railways` | `Steam_Rails-1.6.6+forge-mc1.19.2.jar` |  |
 | both | create: things and misc | `create_things_and_misc` | `create_misc_and_things_ 1.19.2_4.0A.jar` |  |

@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 
 /**
- * Headless checks of Creative Oxidation (plan_creative_oxidation.md P1, P2): the 45 target ids, the B1 decision that
+ * Headless checks of Creative Oxidation (plan_creative_oxidation.md P1, P2, P6): the 34 target ids, the staged art, the B1 decision that
  * StateDefinitionBuilderMixin asks (properties only while Registrate builds a target id; vanilla iron bars and doors,
  * built outside Registrate, and create:andesite_casing get none), the B2 random tick decisions, the aging chances, the
  * item NBT round trip and the creativeoxidation:staged matching rule (R10).
@@ -48,17 +48,42 @@ public class CreativeOxidationTest {
 
 		// target list (plan 2.1 + 2.2)
 		List<String> ids = OxidationTargets.ORDERED_BLOCK_IDS;
-		check(ids.size() == 45, "45 target ids (" + ids.size() + ")");
+		check(ids.size() == 34, "34 target ids (" + ids.size() + ")");
 		check(new HashSet<>(ids).size() == ids.size(), "no duplicate target id");
 		check(ids.stream().filter(i -> i.startsWith("create:")).count() == 18, "18 Create ids");
 		check(ids.stream().filter(i -> i.startsWith("createdeco:")).count() == 14, "14 Create Deco ids");
-		check(ids.stream().filter(i -> i.startsWith("design_decor:")).count() == 13, "13 Design n' Decor ids");
+		check(ids.stream().filter(i -> i.startsWith("design_decor:")).count() == 2, "2 Design n' Decor ids (the 11 without fitting upstream art left out)");
 		String tag = java.nio.file.Files.readString(java.nio.file.Path.of(
 				"development/creativeEngineering/members/creativeoxidation/src/main/resources/data/creativeoxidation/tags/blocks/oxidizable_blocks.json"));
 		check(ids.stream().allMatch(i -> tag.contains("\"" + i + "\"")) && tag.split("\"(create|createdeco|design_decor):").length - 1 == ids.size(),
 				"oxidizable_blocks tag lists exactly the target ids");
 		check(!OxidationTargets.isTarget("create:copper_table_cloth") && !OxidationTargets.isTarget("dndecor:copper_boiler"),
 				"absent upstream ids dropped");
+
+		// P6 art: every manifest sprite has its three staged copies; every staged partial model is present
+		String res = "development/creativeEngineering/members/creativeoxidation/src/main/resources/assets/creativeoxidation/";
+		List<String> manifest = java.nio.file.Files.readAllLines(java.nio.file.Path.of(res + "oxidizable_textures.txt")).stream()
+				.map(String::trim).filter(l -> !l.isEmpty() && !l.startsWith("#")).toList();
+		List<String> missingArt = new java.util.ArrayList<>();
+		for (String entry : manifest) {
+			String ns = entry.substring(0, entry.indexOf(':'));
+			String path = entry.substring(entry.indexOf(':') + 1);
+			String root = path.substring(0, path.indexOf('/'));
+			String rest = path.substring(path.indexOf('/') + 1);
+			for (String stage : List.of("exposed", "weathered", "oxidized")) {
+				String file = res + "textures/" + root + "/" + stage + "/" + (ns.equals("create") ? "" : "compat/" + ns + "/") + rest + ".png";
+				if (!java.nio.file.Files.exists(java.nio.file.Path.of(file))) missingArt.add(file);
+			}
+		}
+		check(manifest.size() == 62 && missingArt.isEmpty(), "62 manifest sprites, each with 3 staged PNGs (missing " + missingArt + ")");
+		long partials = 0;
+		for (String stage : List.of("exposed", "weathered", "oxidized")) {
+			for (String part : List.of("steam_engine/gauge", "steam_engine/gauge_dial", "portable_fluid_interface/block_top",
+					"portable_fluid_interface/block_middle", "portable_fluid_interface/block_middle_powered", "fluid_valve/pointer")) {
+				if (java.nio.file.Files.exists(java.nio.file.Path.of(res + "models/block/" + stage + "/" + part + ".json"))) partials++;
+			}
+		}
+		check(partials == 18, "18 staged partial models (" + partials + ")");
 
 		// B1: properties only while Registrate builds a target id
 		check(!build(null, Blocks.IRON_BARS), "vanilla IronBarsBlock (not built by Registrate): no properties");
@@ -70,7 +95,8 @@ public class CreativeOxidationTest {
 		check(build("create:fluid_pipe", Blocks.IRON_BARS), "create:fluid_pipe: properties");
 		check(build("createdeco:copper_bars", Blocks.IRON_BARS), "createdeco:copper_bars: properties");
 		check(build("create:copper_door", Blocks.OAK_DOOR), "create:copper_door: properties");
-		check(build("design_decor:copper_screw", Blocks.IRON_BARS), "design_decor:copper_screw: properties");
+		check(build("design_decor:copper_light", Blocks.IRON_BARS), "design_decor:copper_light: properties");
+		check(!build("design_decor:copper_screw", Blocks.IRON_BARS), "design_decor:copper_screw (no fitting art): no properties");
 
 		OxidationTargets.beginBuild("create:fluid_pipe");
 		check(!OxidationTargets.takeForStateDefinition(((Object) Fluids.WATER) instanceof net.minecraft.world.level.block.Block),

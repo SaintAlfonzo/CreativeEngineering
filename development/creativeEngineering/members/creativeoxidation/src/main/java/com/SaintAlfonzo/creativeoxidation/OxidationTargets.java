@@ -8,7 +8,7 @@ import java.util.Set;
 
 /**
  * The block ids that carry the stage and waxed properties (plan_creative_oxidation.md 2.1 and 2.2: 32 Create and Create
- * Deco blocks with upstream art, 13 Design n' Decor blocks), and the B1 fix: upstream added the properties to every
+ * Deco blocks with upstream art, the 2 Design n' Decor blocks upstream's dndecor art fits), and the B1 fix: upstream added the properties to every
  * block of 48 classes (all iron bars, doors, panes, casings, windows, pillars). Here a mixin on Registrate's
  * BlockBuilder.createEntry names the block being built ({@link #beginBuild}), and StateDefinition.Builder.create adds
  * the properties only when that pending id is a target ({@link #takeForStateDefinition}). Create, Create Deco and
@@ -52,19 +52,8 @@ public final class OxidationTargets {
 		"createdeco:locked_copper_door",
 		"createdeco:red_copper_lamp",
 		"createdeco:yellow_copper_lamp",
-		"design_decor:copper_boiler",
-		"design_decor:copper_boiler_large",
-		"design_decor:copper_boiler_structure",
-		"design_decor:copper_bolt",
-		"design_decor:copper_catwalk",
-		"design_decor:copper_floodlight",
-		"design_decor:copper_floor",
-		"design_decor:copper_gas_tank",
-		"design_decor:copper_lamp",
 		"design_decor:copper_large_chain",
-		"design_decor:copper_light",
-		"design_decor:copper_railing",
-		"design_decor:copper_screw"
+		"design_decor:copper_light"
 	);
 	public static final Set<String> BLOCK_IDS = Set.copyOf(ORDERED_BLOCK_IDS);
 

@@ -220,7 +220,6 @@ Usable with credit and the license notice.
 | Create: Framed | createframed-1.19.2-1.4.5.1.jar | MIT |
 | Create: Gravity | create_gravity-1.19.2-1.2.0-all.jar | MIT License |
 | Create: Netherless | create_netherless-1.19.2-1.3.jar | Academic Free License v3.0 |
-| Create: Oxidized | create_oxidized-1.19.2-0.1.1.jar | MIT License |
 | Create: Power Loader | create_power_loader-1.5.0-mc1.19.2.jar | MIT |
 | Create: Steam  | Steam_Rails-1.6.6+forge-mc1.19.2.jar | MIT |
 | create: things and misc | create_misc_and_things_ 1.19.2_4.0A.jar | Academic Free License v3.0 |

@@ -14,6 +14,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Registry;
@@ -24,6 +25,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.event.ModelEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -41,6 +43,13 @@ public final class OxidationClient {
 	public static void init(IEventBus modBus) {
 		OxidizedPartialModels.init();
 		modBus.addListener(EventPriority.LOWEST, OxidationClient::onBakingCompleted);
+		modBus.addListener(OxidationClient::onTextureStitch);
+	}
+
+	/** The staged copies are named by no model, so they are added to the block atlas here (1.19.2 has no atlas sources). */
+	private static void onTextureStitch(TextureStitchEvent.Pre event) {
+		if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) return;
+		for (ResourceLocation sprite : QuadRemapper.stagedSprites()) event.addSprite(sprite);
 	}
 
 	private static void onBakingCompleted(ModelEvent.BakingCompleted event) {

@@ -1906,10 +1906,47 @@ global.NCH = {
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "splashing")
 		var ctx = 'createSplashing ' + idSuffix
 
+		if (global.NCH._createNbtRoute('create:splashing', output, input, e, `${global.NCH.ns()}:createsplashing/${idSuffix}`, ctx)) return
 		global.NCH._validateAny(output, ctx + ' output')
 		global.NCH._validateAny(input, ctx + ' input')
 
 		e.recipes.create.splashing(output,input).id(`${global.NCH.ns()}:createsplashing/${idSuffix}`)
+	},
+
+	// True for an item value that kubejs-create cannot write: a raw ingredient object with a type
+	// ({ type: 'creativeoxidation:staged', item, stage, waxed }), the { item, nbt } shorthand, or a stack carrying NBT
+	// (Item.of(id, '{...}')).
+	_createNbtItem(v) {
+		if (v == null || typeof v !== 'object' || Array.isArray(v) || global.NCH._isFluidLike(v)) return false
+		if (typeof v.getItem !== 'function') return typeof v.type === 'string' || typeof v.nbt === 'string'
+		try { var t = v.nbt; return t != null && String(t) !== '{}' } catch (err) { return false }
+	},
+
+	// Create processing recipes (filling, splashing) whose item input or result needs JSON (_createNbtItem): written
+	// through e.custom. Create 0.5.1 reads item ingredients through Forge's Ingredient.fromJson (custom ingredient
+	// types work) and results with an "nbt" field (ProcessingOutput.deserialize). Returns false when no value needs it,
+	// and the caller goes on with e.recipes.create. Used by Creative Oxidation's staged aging recipes
+	// (plan_creative_oxidation.md P7c).
+	_createNbtRoute(type, outputs, inputs, e, id, ctx) {
+		var outArr = Array.isArray(outputs) ? outputs : [outputs]
+		var inArr = Array.isArray(inputs) ? inputs : [inputs]
+		if (!outArr.some(global.NCH._createNbtItem) && !inArr.some(global.NCH._createNbtItem)) return false
+		var itemJson = (v, role, c) => {
+			if (typeof v.getItem !== 'function' && typeof v.item === 'string') global.NCH._checkItem(v.item, c)
+			return global.NCH._nbtItemJson(v, { role: role, countMode: 'flat', allowTag: role !== 'result', context: c })
+		}
+		var fluidJson = (v, c) => {
+			var j = global.NCH._fluidJson(v, { nbtString: true, context: c })
+			if (j.tag !== undefined) { j.fluidTag = j.tag; delete j.tag } // Create's FluidIngredient key
+			return j
+		}
+		e.custom({
+			type: type,
+			ingredients: inArr.map((v, idx) => global.NCH._isFluidLike(v) ? fluidJson(v, ctx + ' input[' + idx + ']')
+				: itemJson(v, 'input', ctx + ' input[' + idx + ']')),
+			results: outArr.map((v, idx) => itemJson(v, 'result', ctx + ' output[' + idx + ']'))
+		}).id(id)
+		return true
 	},
 
 	// Create sandpaper polishing (create:sandpaper_polishing: hold sandpaper in the off hand and use it, or a Deployer
@@ -2558,7 +2595,11 @@ global.NCH = {
 		.id(`${global.NCH.ns()}:createmechanicalcrafting/${idSuffix}`)
 	},
 
- createFilling(output, input, e, idOverride) {
+	// Create Spout: [item, Fluid.of(fluid, mb)] -> output. A raw ingredient object or an NBT result goes through
+	// _createNbtRoute, e.g. Creative Oxidation's staged aging (pass an idOverride: objects give toId no name):
+	//   R.createFilling({ item: id, nbt: '{CreativeOxidationStage:"exposed"}' },
+	//     [{ type: 'creativeoxidation:staged', item: id, stage: 'unaffected', waxed: false }, Fluid.of(f.water, 250)], e, 'x')
+	createFilling(output, input, e, idOverride) {
 		if (!e) throw new Error('createFilling called without event object!')
 		var inputArr = Array.isArray(input) ? input : [input]
 		const itemInput = inputArr.find((i) => typeof i === 'string')
@@ -2568,6 +2609,7 @@ global.NCH = {
 		var idSuffix = idOverride ?? id
 		var ctx = 'createFilling ' + idSuffix
 
+		if (global.NCH._createNbtRoute('create:filling', output, input, e, `${global.NCH.ns()}:createfilling/${idSuffix}`, ctx)) return
 		global.NCH._validateAny(output, ctx + ' output')
 		global.NCH._validateAny(input, ctx + ' input')
 

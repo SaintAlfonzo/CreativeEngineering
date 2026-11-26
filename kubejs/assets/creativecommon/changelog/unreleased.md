@@ -648,6 +648,12 @@
 - **Fixed:** With hand feeding switched off, wild crows still ate crow food and fell in love.
 - **Removed:** Alex's Mobs' Crows no longer spawn; their spawn egg is removed.
 
+## Copper and Iron Aging <!-- icon: create:fluid_pipe -->
+
+- **New:** A Spout with 250 mB of water or a fan's washing stream ages Create, Create Deco and Design n' Decor copper blocks one stage. Waxed ones do not age.
+- **New:** A Spout with 250 mB of water or a fan's washing stream rusts Immersive Weathering cut iron, plate iron, iron bars, iron doors and iron trapdoors one stage.
+- **Removed:** Create: Oxidized 0.1.1. Its Spout recipes for copper blocks, cut copper, shingles and tiles are kept.
+
 ## Engineering Recipes <!-- icon: immersiveengineering:workbench -->
 
 - **New:** The Create saw cuts twisted planks into twisted buttons and twisted pressure plates.

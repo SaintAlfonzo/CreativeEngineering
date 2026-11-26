@@ -1,18 +1,18 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Creative Oxidation: copper machine aging and iron rusting (plan)
 
-<!-- generated:status_index begin open_work sha1=c5594740061b -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 5, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=50cc75699a5f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `jei-ordering #9` | Planned | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
 | `mod-integration #32` | Planned | S C | Creative Oxidation P5: bounded quad cache and stage kept across Create block swaps (B3, B4) after live checks |
-| `mod-integration #33` | Planned | C | Creative Oxidation P6: oxidized art for 32 Create and Create Deco blocks plus Design n' Decor copper blocks (copied dndecor art) |
-| `mod-integration #34` | Planned | S P | Creative Oxidation P7: spout and fan aging for staged blocks, old create_oxidized spout recipes rebuilt and jar removed, copper splashing port moved in, iron rusting by spout and fan |
 | `mod-integration #35` | Planned | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; subtype interpreter so all 7 variants per block are listed |
 | `mod-integration #28` | Testing | S C P | Creative Oxidation P0-P2: Creative Engineering bundle member creativeoxidation, port of createoxidized core, properties only on the 45 target ids, random ticks fall through |
 | `mod-integration #31` | Testing | S C | Creative Oxidation P3-P4: staged item drops (keepStageOnBreak), names from stage, honeycomb, axe and steel wool scraping, lightning, Supplementaries soap |
+| `mod-integration #33` | Testing | C | Creative Oxidation P6: oxidized art for 32 Create and Create Deco blocks plus Design n' Decor copper blocks (copied dndecor art) |
+| `mod-integration #34` | Testing | S P | Creative Oxidation P7: spout and fan aging for staged blocks, old create_oxidized spout recipes rebuilt and jar removed, copper splashing port moved in, iron rusting by spout and fan |
 <!-- generated:status_index end open_work -->
 
 Written 2026-11-25 from the owner's notes on [create_oxidized.md](create_oxidized.md) (the integration report of
@@ -240,6 +240,27 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
   were scanned, plus the KubeJS scripts: no strict-NBT ingredient (`forge:nbt` 22, `forge:partial_nbt` 13, other
   NBT-keyed ingredients 407 in the pack) names a target item; recipes built at runtime by other mods' code are not
   covered. Harness 75 checks. Rows SQ-OXD-02 to -06, -16, CQ-OXD-02 (draft) in `rows/OXD.qb` section 2.
+- 2026-11-25 P6-P7 built and installed (`creativeoxidation-1.0.0-ce-19.2-03` in `creativeengineering-2.0.0.jar`,
+  Creative Common 1.3.0 for the NCH change; TODO `mod-integration #33`, `#34` Testing). P6: 186 upstream PNGs copied
+  unchanged (3 stages x 62 sprites) under `assets/creativeoxidation/textures/<block|item>/<stage>/[compat/<ns>/]`; the
+  manifest `oxidizable_textures.txt` lists the 60 upstream Create and Create Deco sprites present in Create 0.5.1 /
+  Create Deco 1.3.3 plus 2 Design n' Decor ones. Design n' Decor mapping (2.2): only `copper_light` (from dndecor
+  `lamps/copper_lit`, same 16x16 layout) and `copper_large_chain` (from `large_chains/copper`, link pattern 2 px lower,
+  periodic) fit; boilers, bolt, screw, catwalk, floodlight, floor, gas tank, lamp, railing and boiler structure have
+  other layouts, so those 11 left the target list (34 targets, tag and harness follow). Deviation: 1.19.2 stitches only
+  sprites a model names (1.20's atlas sources took the folder), so `OxidationClient` adds every staged PNG on
+  `TextureStitchEvent.Pre`. 18 staged partial models written for Create 0.5.1's texture keys (upstream's keys are
+  Create 6's). sources.csv rows (copy). P7: `kubejs/data/creativeengineering/kubejs/creativeoxidation/aging.js` (the
+  bundle's server script tree, one folder per member as Creative Brewing's; copied into the Creative Engineering jar),
+  321 recipes: a 30 old-jar spout, b 33 Copper Splashing (ids now `creativeoxidation:createsplashing/`, were
+  `creativecompat:`), c 192 staged (32 items: glass and encased fluid pipes have no item, the coin stack block uses the
+  coin item; ids `staged/<namespace>/<path>_<stage>` since Create and Create Deco both have `copper_bars`), d 66 iron
+  (dict keys existed). Create 0.5.1 checked in the jar: ingredients go through Forge's `Ingredient.fromJson` (custom
+  types), results read `nbt` (object or SNBT string); kubejs-create takes neither, so `NCH.createFilling` and
+  `createSplashing` route a raw ingredient object or an NBT result through `e.custom` (`_createNbtRoute`). Old jar
+  moved to `jar_archive/displaced/`, `mod_sides.md` and `pack_art.md` rows dropped. Headless: Rhino run of aging.js on
+  the real NCH (`tools/test_nch_blueprint.sh`, 17 checks), harness 78 checks. Rows SQ-OXD-12 to -14, CQ-OXD-01 (draft).
+  Needs game: `/dumpall` (recipe dumps still list `create_oxidized:`), `pack/manifest.json` regeneration left to the owner.
 
 ## 7. History
 

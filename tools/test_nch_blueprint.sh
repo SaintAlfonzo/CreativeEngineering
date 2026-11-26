@@ -15,5 +15,9 @@ OUT="$(java -cp "$T:$RHINO:$GSON" NchRun "$ROOT" tools/nch_test/prelude.js "$C/f
 # creativebrewing/publish #25: a tag in a result slot is refused (fresh scope, same stubs)
 OUT="$OUT
 $(java -cp "$T:$RHINO:$GSON" NchRun "$ROOT" tools/nch_test/prelude.js "$C/func/has.js" "$C/_lib/item_dict.js" "$C/_lib/fluid_dict.js" "$C/func/neoCraftHelper.js" tools/nch_test/result_tag_test.js)"
+# Creative Oxidation P7: the real aging script (kubejs/data/creativeengineering/kubejs/creativeoxidation/aging.js): counts
+# and the staged JSON route of createFilling / createSplashing (extra stubs in tools/nch_test/oxidation_prelude.js)
+OUT="$OUT
+$(java -cp "$T:$RHINO:$GSON" NchRun "$ROOT" tools/nch_test/prelude.js tools/nch_test/oxidation_prelude.js "$C/func/has.js" "$C/_lib/item_dict.js" "$C/_lib/fluid_dict.js" "$C/func/neoCraftHelper.js" kubejs/data/creativeengineering/kubejs/creativeoxidation/aging.js tools/nch_test/oxidation_aging_test.js)"
 echo "$OUT"
 case "$OUT" in *FAIL*) exit 1;; esac
