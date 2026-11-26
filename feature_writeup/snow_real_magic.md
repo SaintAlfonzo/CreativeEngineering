@@ -18,11 +18,12 @@ snow tweak integrate with Immersive Weathering, melting and the other mods that 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=541e600d906e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Testing 13), 0 Complete.
+<!-- generated:status_index begin open_work sha1=6768f928edf6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 1, Testing 13), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `mod-integration #37` | Planned | S C | Bug: Snow! Real Magic snowed grass pad reports 81 grass after the replace fill (want 1), SQ-SRM-05 |
 | `mod-integration #14` | Testing | S C | Snow! Real Magic: melting tags and products for the 7 SRM blocks; light-melt hook dropped |
 | `mod-integration #15` | Testing | S C | Snow! Real Magic: magma within fireRange stops SRM snowfall |
 | `mod-integration #16` | Testing | S C | Snow! Real Magic: walk-through, falling and held-block speed |
@@ -419,7 +420,7 @@ differ; section 4 is read with these changes. The 3.1 "Owner" column carries the
 | R8 | IW's snow for IW's snowy shapes (D9) | step 8 as written |
 | R9 | Snow on leaves kept (D10) | none |
 | R10 | Both scoops kept (D13): **hand scoop 1 layer, shovel scoop 2 layers** per click (one snowball per layer); salt never scooped | Compat `@Pseudo` mixin on `snownee.snow.GameEvents.onItemUse`: shovel path takes 2 layers (2 snowballs, 1 durability per click; a 1-layer pile gives 1), hand path 1; non-snow blocks pass (step 11) |
-| R11 | **Overlay always on for every snow layer** (vanilla and SRM's); the empty-hand toggle click is dropped (D11 differs) | Compat client: SRM blocks draw the overlay by default (mixin on `SnowBlockEntity` options or `SnowClient` render check); a render hook draws SRM's `block/overlay` model (the author's `snow_overlay.png`, no new texture) on the four sides of the block under every vanilla snow layer, Rubidium path included; the empty-hand click does nothing on snow (sneak scoop still works). Screenshot check CQ row when built |
+| R11 | **Overlay always on for every snow layer** (vanilla and SRM's); the empty-hand toggle click is dropped (D11 differs) | Compat client: SRM blocks draw the overlay by default (mixin on `SnowBlockEntity` options or `SnowClient` render check); a render hook draws SRM's `block/overlay` model (the author's `snow_overlay.png`, no new texture) on the four sides of the block under every vanilla snow layer, Rubidium path included; the empty-hand click does nothing on snow (sneak scoop still works). Confirmed good, owner 2026-11-24 |
 | R12 | WTHIT names the snowed block as "Snowy <Block>" (for example "Snowy Oak Stairs") (D12) | Compat WTHIT plugin: the block name line for SRM's blocks; lang key `creativecompat.wthit.snowy` = "Snowy %s" |
 | R13 | **Blizzards on, thunder only, strength 2, frequency 3500; snow falling into water turns it to ice with a 20% chance** | pack default gamerules `snowrealmagic:blizzardStrength 2`, `blizzardFrequency 3500` (where the pack sets default gamerules); Compat `@Pseudo` HEAD hook on `WorldTickHandler.doBlizzard`: only while thundering; `snowMakingIce = true` with a Compat redirect in `FallingSnowEntity.tick` that rolls 20% |
 | R14 | Mobs spawn on snow up to 8 layers (D14) | none |

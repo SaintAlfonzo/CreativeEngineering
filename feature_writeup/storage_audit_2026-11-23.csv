@@ -1,0 +1,40 @@
+group,item,mod,existing_storage,storage_id,notes
+stalk_water,minecraft:sugar_cane,minecraft,yes,quark:sugar_cane_block,"Quark compressed block; shaped 3x3 in, shapeless uncompress out (recipe ids from dump, ingredients not dumped); both ways present"
+stalk_water,minecraft:bamboo,minecraft,yes,quark:bamboo_block,shaped in present; no uncompress recipe id in dump (check). stripped_bamboo_block is a variant
+stalk_water,minecraft:cactus,minecraft,yes,quark:cactus_block,"Quark compressed block; shaped 3x3 in, shapeless uncompress out (recipe ids from dump, ingredients not dumped); both ways present"
+stalk_water,minecraft:kelp,minecraft,partial,upgrade_aquatic:kelp_block,"Upgrade Aquatic kelp block (shaped in; no uncompress recipe id in dump); ochre, polar, thorny, tongue are variants; no crate/sack for vanilla kelp itself"
+stalk_water,minecraft:dried_kelp,minecraft,yes,minecraft:dried_kelp_block,"vanilla: shaped 9 dried kelp in, shapeless dried_kelp out (stores dried kelp, not raw kelp)"
+mushroom_colony,minecraft:brown_mushroom,minecraft,yes,fungidelight:brown_mushroom_crate,"Fungi crate: shaped in, brown_mushrooms_from_crate shapeless out"
+mushroom_colony,minecraft:red_mushroom,minecraft,yes,fungidelight:red_mushroom_crate,"Fungi crate: shaped in, shapeless out"
+mushroom_colony,fungidelight:inky_cap_mushroom,creativedelight fungi,yes,fungidelight:inky_cap_mushroom_crate,crate shaped in
+mushroom_colony,fungidelight:morel_mushroom,creativedelight fungi,yes,fungidelight:morel_mushroom_crate,crate shaped in
+mushroom_colony,fungidelight:truffle,creativedelight fungi,yes,fungidelight:truffle_crate,"shaped in, truffles_from_crate shapeless out"
+mushroom_colony,farmersdelight:brown_mushroom_colony,farmersdelight,no,,"grown block, no craft in; FD/S&D cutting gives mushrooms; Botany Pots crop"
+mushroom_colony,farmersdelight:red_mushroom_colony,farmersdelight,no,,same as brown colony
+mushroom_colony,fungidelight:inky_cap_mushroom_colony / morel_mushroom_colony,creativedelight fungi,no,,grown blocks; cutting (and Create milling for inky cap) only
+mushroom_colony,nethersdelight:crimson_fungus_colony / warped_fungus_colony,nethersdelight,partial,hearthandharvest:crimson_fungus_crate / warped_fungus_crate,crates hold the fungus items; colonies are grown blocks
+mushroom_colony,minecraft:brown_mushroom_block / red_mushroom_block,minecraft,no,,"giant mushroom building blocks, not storage"
+nuts,delightful:acorn,creativedelight delightful,yes,delightful:acorn_sack,sack exists
+nuts,vintagedelight:peanut,creativedelight vintage,yes,vintagedelight:peanut_crate,"crate shaped in, peanut_crate_deconstruct shapeless out"
+nuts,vintagedelight:wild_peanuts / roasted_peanut / honey_roasted_peanut / magic_peanut,creativedelight vintage,no,,"processed forms, no storage"
+nuts,delightful:honey_glazed_walnut,creativedelight delightful,no,,walnut only as a food; no raw walnut item in dump
+nuts,alexsmobs / Rustic / Veggies / Hearth / Vinery nuts,various,no,,"no chestnut, hazelnut, almond, pecan, cashew, pistachio or pine nut item found in item dumps (Hearth only peanut-butter foods); dumps may be stale"
+nuts,"coconut_curry, nut_milk, nut_mash, nut_dough, nut_butter",delightful/vintage,no,,"prepared foods, not raw nuts"
+berries,minecraft:sweet_berries,minecraft,yes,quark:berry_sack,also berry_good:sweet_berry_basket (two storages)
+berries,minecraft:glow_berries,minecraft,yes,quark:glowberry_sack,also berry_good:glow_berry_basket (two storages)
+berries,fruitsdelight:bayberry,fruitsdelight,yes,fruitsdelight:bayberry_crate,
+berries,fruitsdelight:blueberry,fruitsdelight,yes,fruitsdelight:blueberry_crate,delightful:blueberry_sack also exists: two blueberry storages
+berries,fruitsdelight:cranberry,fruitsdelight,yes,fruitsdelight:cranberry_crate,
+berries,fruitsdelight:hawberry,fruitsdelight,yes,fruitsdelight:hawberry_crate,
+berries,delightful:salmonberries,creativedelight delightful,yes,delightful:salmonberry_sack,
+berries,delightful:crimson_berry,creativedelight delightful,yes,delightful:crimson_berry_sack,"item not in item dump grep, verify id"
+berries,delightful:nightshade_berry,creativedelight delightful,yes,delightful:nightshade_berry_sack,"item not in item dump grep, verify id"
+berries,neapolitan:strawberries,neapolitan,yes,neapolitan:strawberry_basket,
+berries,neapolitan:white_strawberries,neapolitan,yes,neapolitan:white_strawberry_basket,
+berries,hearthandharvest:raspberry,creativedelight hearth,no,,owner wants a crate
+berries,upgrade_aquatic:mulberry,upgrade_aquatic,no,,no storage
+berries,farmersrespite:coffee_berries,farmersrespite,no,,no storage; coffee_beans_sack holds beans
+berries,oceanic_delight:sea_grape,oceanic_delight,yes,oceanic_delight:sea_grape_crate,grape-like sea plant; crate exists
+berries,vinery:red_grape / white_grape (+ variants),vinery,yes,vinery:*_grape_bag,excluded per ask; bags exist
+berries,goldenfood golden / enchanted golden sweet and glow berries,goldenfood,no,,"gold variants, no storage"
+berries,berry_good other berries,berry_good,no,,Berry Good adds only sweet and glow berry baskets

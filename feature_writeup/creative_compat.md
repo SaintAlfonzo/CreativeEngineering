@@ -11,14 +11,13 @@ plus the features moved from Creative Common and Raspberry Pie in wave 2 (sectio
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=9b6031705ee1 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Testing 6), 0 Complete.
+<!-- generated:status_index begin open_work sha1=16feadc8531e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Testing 5), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creative-common-publish #17` | Testing | S | Wave 2 carve to Creative Compat: melting (with End no-fire and the Saltable tooltip), Quark glass shard drops, sack sneak pick-up, Create: Gravity low gravity, server-start fix and ItemPhysic tie; [perf] gravityLimitDimensions stays in Common (W2-4); one-time config carry-over (W2-8) |
 | `creativecompat/publish #1` | Testing | C S | Compat crashes at load without the Tempad upstream jar |
-| `creativesplit/compat #5` | Testing | S C | Carve Creative Compat |
 | `licence/compat #1` | Testing | C | Paintings out of the Compat jar |
 | `licence/compat #2` | Testing | C | Banner-derived textures and MineColonies leftovers |
 | `licence/compat #3` | Testing | C | Compat: cardboard notice, moss texture, TrashSlot overwrite |
@@ -210,6 +209,7 @@ constructor. `tools/design_rules_audit.py sideways` (DR-C7) checks it.
   built-in pack is set up.
 - TrinketCaseRules, its 4 mixins and `[botania]` (Creative Magic, wave 6); salt (Creative Delight, wave 4);
   `layered_obsidian` (Engineering); Botania tooltips; the Vinery flower box tooltip (Creative Brewing).
+- Open question: the archery arrow tooltip list moved with Misc Mods; it may belong to Equipment.
 - Pack tuning moved out of the jar (2026-11-25, `creative-compat-publish #13`, owner ruling 2026-11-25): Botany Pots
   growth x8 / flowers x2, fertilizer removal, Rich and Fertile soil speeds and the removed vine and root crops
   (`kubejs/server_scripts/other/botany_pots.js`); Bushier Flowers bushes, the Rich Hanging Pot recipe and the removed
@@ -223,7 +223,6 @@ constructor. `tools/design_rules_audit.py sideways` (DR-C7) checks it.
   white-only blackboard and the cleared CB Microblocks tags; the 36 `[mixins]` keys and other sections, all on by
   default (a publish-neutral default would flip player-visible behavior unless the pack config sets each). Distant
   Horizons' cloud height follows vanilla's and carries no pack value, so it stays.
-- Open question: the archery arrow tooltip list moved with Misc Mods; it may belong to Equipment.
 
 ## 4. Tests
 
@@ -243,19 +242,19 @@ Scratch run r1123cx (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run
 Box move and squid (2026-11-24, `creative-compat-publish #8`, `#9`): SQ-CMP-09s and CQ-CMP-09 superseded by SQ-CEN-09 and
 CQ-CEN-02 (the box is Creative Engineering's, [creative_engineering.md](creative_engineering.md) 4.2); squid and whales
 SQ-MT-04 to -06 ([mob_block_tweaks.md](mob_block_tweaks.md) 2.10; SQ-PSM-08 superseded).
+
 Neutral jar and mixin helper (2026-11-25, queue section 9, `creative-compat-publish #13`, `#25`): SQ-CMP-39 (moved
 scripts still apply), -40 (no mixin-package helper class, `[nether_fog]` written), CQ-CMP-41 (fog on and off), -42
 (Additional Items opens).
 
-
 Wave 2 carve (2026-11-24, queue): SQ-MELT-21 and -22 (carry-over, merge and new file), -23 (new tag namespace), -24 (End no fire), CQ-MELT-02 (tooltip); SQ-GSH-10 to -12; SQ-SNP-06; SQ-CGE-17, -18; CQ-RPI-94 (fov carry-over), CQ-RPI-95 (Fleet-Footed fix and fov), SQ-RPI-96 (Raspberry Pie alone). Headless: `tools/test_melting.sh` 34/34.
 
 ## 5. History
+
 - 2026-11-25: `CorpseAdditionalContainerMixin$Loose` (a nested class in the mixin package, IllegalClassLoadError on the
   first Additional Items menu) moved to `corpse/LooseAdditionalItems`; the other mixins hold no nested or anonymous class
   (`creative-compat-publish #25`). Pack tuning to the pack folder and the `[nether_fog]` switch (`#13`, section 3);
   mods.toml description and URLs.
-
 - 2026-11-01: carved (wave 3). Creative Common 1.1.06 loses the classes, mixins, sections and resources; Calendar,
   Devtools, Creative Delight and Creative Brewing require `creativecompat`. Added ModList gates that were missing for
   the spout gun farmland, nightstands, sack scroll, banner atlas and monster box listeners.
@@ -384,6 +383,11 @@ Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
 - 2026-11-23: Item Trash Can screen (plan_ready_now_1123.md 8, R1, TODO `storage-and-item-loss #17`): right-click
   opens a 27-slot delete-on-close chest screen, sneak keeps the filter (`TrashCansItemCanUseMixin`, `TrashCanScreen`;
   section 1).
+
+Lines moved out of code comments (2026-11-25, plan_rules_fixes.md section 17):
+
+- 2026-11-25: Simulated (2026-11-25): from a 3-block drop a skimmer dips about 0.14 below the surface, a damped floater 0.52 (ItemPhysic's float: 2.8, then a 0.35 bob for good); a lavaproof item from 2 blocks onto lava 0.2 (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/itemphysic/ItemSurfaceFloat.java)
+
 
 
 

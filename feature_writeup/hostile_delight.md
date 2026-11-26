@@ -23,8 +23,8 @@ This file has three parts, as asked:
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=b8cc0be53d6e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 5, In Progress 1, Testing 4), 0 Complete.
+<!-- generated:status_index begin open_work sha1=58e0af829a9c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 11 open TODO rows (Planned 5, Pinned 1, In Progress 1, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -33,6 +33,7 @@ This file has three parts, as asked:
 | `largecontent/mod-additions #45` | Planned | S C P | Hostile Delight: Blazing Apple, Blazing Sauce, Blazing Cookie |
 | `largecontent/mod-additions #50` | Planned | S P | Hostile Delight: guardian dishes |
 | `largecontent/mod-additions #51` | Planned | S P | Hostile Delight: Spiked Tartare, Slime Syrup, Candied Salad |
+| `hostile-delight #1` | Pinned | none | Endermite meats: pick which raw and which cooked item survive |
 | `largecontent/mod-additions #6` | In Progress | S C P T | Integrate Hostile Delight |
 | `largecontent/mod-additions #46` | Testing | S P | Hostile Delight: Magma and Slime Brownies |
 | `largecontent/mod-additions #47` | Testing | S P | Hostile Delight: rotten ham tags |
@@ -537,6 +538,36 @@ Notes, as rows:
   2026-11-04, `dishes/meals #50`), merge with Miner's Delight (`dishes/meals #58`); guardian shell, soup and fugu notes in
   [ocean_delight.md](ocean_delight.md) 9. Hostile's guardian table now drops the Guardian Shell in place of its fillets, and
   Ocean's guardian tail merged onto Hostile's guardian fillet (built 2026-11-20, ocean_delight.md 9).
+
+### 5.2 Owner rulings (2026-11-25)
+
+Where these differ from 5.1, these apply. Nothing here is built.
+
+| # | Item | Class | Ruling | Date | Source |
+|---|---|---|---|---|---|
+| H1 | Guardian Ratty: removal list or new recipe | conflict | "drop guardian ratty, use the guardian fillet in any recipes the ratty is currently used for" | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| H2 | D2, which endermite item survives | open | Not ruled: "do an audit of the recipes that use each, then present me with the textures for each ender mite food and their uses" ([sheet](endermite_foods_sheet.png)); pinned as TODO `hostile-delight #1` | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| H3 | Ender Substance after its ingredients' removal | premise | "keep magic butter and call it ender cream, use ender cream in ender substance, and dragon breath instead of tonic" (Magical Butter leaves the removal list; Dragon Tonic stays on it) | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| H4 | Guardian vanilla cod and fish drops | open | Leave as is: not restored | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| H5 | Spiked Tartare without Guardian Ratty | open | 2 guardian fillets | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| H6 | D6, Ender Cream XP | open | "keep a flat xp value gain on the cream, break down current crafting recipe" (amount not yet ruled) | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| H7 | Magical Butter Cookie | open | Not ruled: "break down all end cookies, crafting recipes, and textures" ([sheet](end_cookies_sheet.png), local and untracked) | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| H8 | D8, D16, Ender Substance damage and stack | open | Keep both: 8 void damage, stack 1, with the tooltip and JEI warning | 2026-11-25 | AskUserQuestion 2026-11-25 |
+
+### 5.3 Endermite items and their uses (2026-11-25, for TODO `hostile-delight #1`)
+
+[Texture sheet](endermite_foods_sheet.png) (a local review image, untracked: some sprites on it are Ender's Delight 1.2.2
+art, all rights reserved). Read from the installed jars' recipes and the pack scripts; canned versions left out.
+
+| Item | Source | Used in |
+|---|---|---|
+| Raw Endermite (Hostile) | always 1, any kill | Cooked Endermite, Aurora Soup, Glimmering Chowder, Mitey Meal, Ender Cream (Magical Butter), Crawling Cookie (on the removal list) |
+| Cooked Endermite (Hostile) | smelting, smoking, campfire | Carrotmite, Ender Substance |
+| Raw Endermite Meat (End's) | knife or machete kill | Dried Endermite Meat |
+| Dried Endermite Meat (End's) | cooking, or a knife kill while burning | Ender Congee, Ender Noodle |
+| Mite Crust (Ender's) | knife kill | Endermite Stew, Crawling Sandwich, Crispy Skewer, Uncanny Cookie |
+
+All three raw items are cabbage roll ingredients. The pack's End barbecue stick takes no endermite meat.
 
 ## 6. File map (planned)
 

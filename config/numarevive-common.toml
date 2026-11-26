@@ -1,0 +1,48 @@
+
+#General settings
+[general]
+	#Enable self reviving
+	self_revive = true
+	#Enable reviving other players reviving
+	revive = true
+	#Enable damage while in critical state
+	damage = false
+
+#Advanced settings
+[advanced]
+	#Time before player`s death in seconds
+	#Range: 1 ~ 256
+	death_time = 30
+	#Bonus for hit in mini game in ticks
+	#Range: 0 ~ 256
+	bonus = 15
+	#Penalty for miss in mini game in ticks
+	#Range: 0 ~ 256
+	penalty = 30
+	#The trigger`s speed counts according to the formula:Base modifier + Successful hits amount * Hard modifier
+	#Range: 1 ~ 25
+	base_modifier = 1
+	#Range: 1 ~ 10
+	hard_modifier = 2
+	#Modifier for chance(e.g. 10 means 10 hits of 10 gives you 100% chance of revive, 5 - 50%, etc)
+	#Range: 1 ~ 15
+	chance_modifier = 8
+	#Scale of mini game bar, in result being multiplied by 2
+	#Range: 1 ~ 256
+	bar_scale = 100
+	#Scale of mini game target, in result being multiplied by 2(MUST be less than bar scale)
+	#Range: 8 ~ 255
+	target_scale = 25
+	#Duration of second wind effect in seconds
+	#Range: 1 ~ 3600
+	effect_duration = 300
+	#Duration of mini-game cooldown in ticks
+	#Range: 2 ~ 256
+	cooldown_duration = 20
+	#Distance of bleed indicator visibility.
+	#Range: 3 ~ 32
+	visibility_distance = 10
+	#Distance needed to revive/kill player
+	#Range: 2.0 ~ 256.0
+	reach_distance = 2.0
+

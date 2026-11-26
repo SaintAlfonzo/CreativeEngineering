@@ -1140,3 +1140,76 @@ Verdicts recorded with `qrun.py judge ... --by owner` (RES dirs `cli_cc13`, `cli
 - Not covered, stays LOOK: CQ-CMP-26 (wings).
 
 Follow-ups: TODO rows and row fixes are logged in the TODO rows citing "owner screenshot review 2026-11-25".
+
+## 8. r1125blk: wave 1 blocker reruns
+
+Owner request (chat 2026-11-25): run the rows left before the wave 1 publish: CQ-CMP-19 (`creative-compat-publish #21`),
+the Compat client boot (`#25`, covered by the CQ-CMP-19 client launch), SQ-CM-43 (`item-physics #8`), SQ-IP-20 (`#9`),
+SQ-IP-21 (`#10`), and the Raspberry Pie isolation rows (`raspberry-pie-publish #1`: SQ-RPS-01, -04, -10, -11 server;
+CQ-RPS-02, -03, -09, -12 isolated pair; SQ-RPS-08 superseded). Targeted run, perf capture skipped.
+
+### 8.1 Jars and preflight
+
+- Installed jars (NOSWAP=1, `perf/runs/r1125blk/env.sh`): Common 1.3.0+ce5a48182.dirty-f76642, Compat
+  1.0.0+5f9fb5197.dirty-94c18b, Raspberry Pie 1.0.0+ce5a48182.dirty-99714f, Devtools 1.0.0+8321c7e04.dirty-9c6649. These are
+  the fix builds, not release jars (W-P6 rebuild from a clean commit still to do).
+- Creative Delight: installed 1.1.0+bfe2cde04.dirty-0f95d5 still fails every full-pack boot (`mod-integration #27`);
+  OVERRIDEJARS = r1125pub's cd71f1db5 copy, as in section 7.
+- `check_all.py --fast`: 1 FAIL, tab_indent in two scratch tools (`cmp_mixin_check.py`, `shot_sheet.py`), fixed with
+  `tab_indent.py --apply` (run default 2).
+- Pre-screen: BF-FIX SQ-IP-20, -21: their pads lay outside every forceload when run without SQ-IP-18 (the section's
+  forceload line is there; SQ-IP-21's x 358 to 362 is outside it even then): each row now forceloads its own pad and
+  removes it (IP.qb); lint clean. SQ-RPS-01, -04, -10, -11 stale only on client `DietLogPages.java`: run as written.
+
+### 8.2 Run notes
+
+- 22:32 server drive `r1125blk` started (user unit `r1125blk-drive`, 6 steps, 7 rows).
+- 22:41 drive done 6/6 (22:32 to 22:41). Every check passed; LOOKs judged from text by the runner: SQ-CM-43 PASS (floats
+  n 7616 holds all 12 Creative Delight wood composters), SQ-IP-20 PASS (leaves -59.625, planks -59.875), SQ-IP-21 PASS
+  (rocket popped, ice burned, iron kept, campfire intact), SQ-RPS-01, -04, -10, -11 PASS.
+- 22:41 full-pack capture client launched (`start_client.sh`, user scope `r1125blk-client`; 4 unlisted jars dropped,
+  Creative Delight cd71f1db5 override) for CQ-CMP-19; its start also checks `creative-compat-publish #25`.
+- 22:47 CQ-CMP-19 FAIL (product, Compat 5f9fb5197.dirty-94c18b): no widgets on the sectioned CorpseInventoryScreen. Cause: the Corpse mod's updateButtons runs every containerTick and its all-empty branch clears widgets without nulling takeItems; CorpseInventoryScreenMixin gates on takeItems != null, so it adds the button on the first tick only. TODO creative-compat-publish #21 back to Bug. Client start: no IllegalClassLoadError or mixin failure in the client log (creative-compat-publish #25 OK). Client stopped. rpsA, rpsB built (NOSWAP, no CD override needed), rps12 table in the rpsB copy, re-pinned; client drops 418 jars.
+- 22:47 to 22:54 Raspberry Pie isolated pair (`pair_rps.sh`): `pair_rps` CQ-RPS-02, -03, -09 and `pair_rps12` CQ-RPS-12 (rpsB): every check passes (205). CQ-RPS-02 PASS from text; -03, -09, -12 LOOK on shots (`test_captures/judgement/qrun_pair_rps*`, owner). Both JVMs stopped by qrun pair; game_jvms.sh empty.
+
+### 8.3 Verdicts
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CM-43 | PASS | rdetail: 7 spruce slabs -> spruce composter; creativedelight:composters n=13, creativecommon:composters n=0, no creativecommon composter item or block; physics/floats n=7616 holds all 12 creativedelight wood composters; empty spruce composter drops itself 20/20 (runner-blk) |
+| SQ-IP-20 | PASS | leaves -59.625, planks -59.875 exactly as documented (runner-blk) |
+| SQ-IP-21 | PASS | rocket gone, ice burned, iron survives; campfire still lit at 360 -60 300 after the pop, no block damage (runner-blk) |
+| SQ-RPS-01 | PASS | grep -c 'Diet ladder:' = 1; line reads 'Diet ladder: 44 rungs, 4 slots, 8 pool effects' (runner-blk) |
+| SQ-RPS-10 | PASS | 6 checks passed |
+| SQ-RPS-04 | PASS | srv/mods has solapplepie-1.19.2-2.2.0.jar beside solRaspberryPie-1.0.0.jar; one 'Diet ladder:' line, Done, no duplicate error (runner-blk) |
+| SQ-RPS-11 | PASS | recipe loads clean (no parse or ingredient error); crafting covered by CQ-RPS-12 in this run (runner-blk) |
+| CQ-CMP-19 | FAIL | click_widget: no widgets (screen CorpseInventoryScreen); slot_item: slot_item: no line matches /golden_helmet/; open look 1: (a) the slot_item checks show the shift-clicked, dragged and hotbar-swapped items left their section slots and sit in the inventory with no tag (no nbt on the dragged ring and the swapped helmet); the shift-clicked dodge ring is in the first player line. (b) second player line: ring slot 0 holds aura_ring (put there after death), ring slot 1 mana_ring (its own index), dodge_ring in Inventory (its slot was taken), backpack in back, travel belt in belt, cloud pendant in necklace; the cosmetic helmet is back in its cosmetic slot. Hand: the extra Additional Items stack (no real-death source in this kit) |
+| CQ-RPS-02 | PASS | 45 checks pass; 'Unknown recipe: solapplepie:food_book' (Apple Pie's book recipe gone); book + potato crafted the Diet Log, book + potion the Liquid Diet Log with its tooltip; Controls entry not read (runner-blk) |
+| CQ-RPS-03 | LOOK | open look 1: the Diet Log diversity page shows the same total as `solrp diversity get` (bread 0.80 plus golden apple 4.00 at Apple Pie's decay weights) and the meal list shows bread and golden apple; cake has no item tooltip value (a placed block; Apple Pie counts its slices when eaten), so the cake read only shows its lines |
+| CQ-RPS-09 | LOOK | open look 1: pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10), Jump Boost I, Luck I (gone from 17.5 up), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength in no picker shot; nothing_eaten pages: the diversity icon is a vanilla seed (or rotten flesh / spider eye); div50 pages (Overview, Diet Ladder, Milestones): unlock icon an awkward potion, permanent-buff icon a diamond, slot icon an item frame; owner by hand on the div50 Overview page: hovering the Adjustment meal reads "This meal: 50" (its Full meal line the entry's own value), the same as the current diversity (raspberry-pie-publish #35, fixed 2026-11-25) |
+| CQ-RPS-12 | LOOK | open look 1: liquid_log: the drinks newest first with the third drink (potion) on top, milk below it, still listed after the bread was eaten (the state sync without a drink list kept the client's list) |
+
+Counts: PASS 8, LOOK 3, FAIL 1
+
+Wave 1 state after r1125blk: item-physics #8 to #10 and the Raspberry Pie isolation rows are clear (owner shots left on CQ-RPS-03, -09, -12); creative-compat-publish #21 is a Bug again (cause above) and blocks Compat 1.0.0; #25 boot clean.
+
+## 9. r1125blk2: fix check for creative-compat-publish #21 and mod-integration #27
+
+Owner request (chat 2026-11-25): run the tests for the two fixes built after section 8 (commit c432549b2): Compat
+1.0.0+ce1c1a033.dirty-d93d5b (`CorpseInventoryScreenMixin` gates on the corpse), Creative Delight
+1.1.0+ce1c1a033.dirty-99c878 (`RabbitTrapCatches` GSON before INSTANCE). Installed jars, NOSWAP=1, no Creative Delight
+override. Owner judged the section 8 Raspberry Pie shots (CQ-RPS-03, -09, -12) good: PASS by owner.
+
+- 23:32 to 23:35 drive `r1125blk2` (SQ-CM-43, full pack group A): boot `Done (10.504s)`, no `Failed to load datapacks`;
+  SQ-CM-43 PASS (12 checks).
+- 23:37 full-pack capture client (`start_client.sh`, 4 unlisted jars dropped, no `--jar` override), `cli_cmp19`:
+  CQ-CMP-19 PASS (45 checks; Transfer Items on the sectioned screen, cosmetic helmet back in slot 46). Client stopped,
+  game_jvms.sh empty. Perf capture skipped.
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CM-43 | PASS | 12 checks on Creative Delight ce1c1a033 without the override; full-pack boot Done |
+| CQ-CMP-19 | PASS | 45 checks; Transfer Items clicked, helmet in cosmetic slot 46, curios back in their slots |
+| CQ-RPS-03 | PASS | owner shots (section 8 run) |
+| CQ-RPS-09 | PASS | owner shots (section 8 run) |
+| CQ-RPS-12 | PASS | owner shots (section 8 run) |

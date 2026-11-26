@@ -23,7 +23,6 @@
     "creativedelight:incubation/alexsmobs",
     "creativedelight:cookingforblockheads",
     "creativecompat_banner_patterns",
-    "creative_labels_donor_art",
     "vinery_upstream_assets",
     "vanilla",
     "mod_resources",
@@ -210,12 +209,19 @@
     },
     {
       "file": "BiomesOPlenty-1.19.2-17.1.2.544.jar",
-      "name": "BiomesOPlenty-1.19.2-17.1.2.544",
-      "version": "",
+      "name": "Biomes O' Plenty",
+      "version": "Biomes O' Plenty 1.19.2-17.1.2.544",
       "sha1": "2e1fbc6a5961d7ff196cf80a569d4341d2913680",
       "modId": "biomesoplenty",
       "side": "both",
-      "source": "local"
+      "source": {
+        "curseforge": {
+          "projectId": 220318,
+          "fileId": 4473556,
+          "slug": "biomes-o-plenty",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/biomes-o-plenty/files/4473556"
+        }
+      }
     },
     {
       "file": "BlockRunner-v4.2.2-1.19.2-Forge.jar",
@@ -2257,6 +2263,29 @@
       }
     },
     {
+      "file": "SnowRealMagic-1.19.2-forge-6.5.4.jar",
+      "name": "Snow! Real Magic! ⛄ (Neo/Forge)",
+      "version": "6.5.4",
+      "sha1": "841c992201463b1d7cb677be26ce4ee395dd05da",
+      "modId": "snowrealmagic",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 308663,
+          "fileId": 4779691,
+          "slug": "snow-real-magic",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/snow-real-magic/files/4779691"
+        },
+        "modrinth": {
+          "projectId": "iJNje1E8",
+          "versionId": "BywGg9xj",
+          "slug": "snow-real-magic",
+          "url": "https://modrinth.com/mod/snow-real-magic/version/BywGg9xj",
+          "download": "https://cdn.modrinth.com/data/iJNje1E8/versions/BywGg9xj/SnowRealMagic-1.19.2-forge-6.5.4.jar"
+        }
+      }
+    },
+    {
       "file": "Steam_Rails-1.6.6+forge-mc1.19.2.jar",
       "name": "Create: Steam 'n' Rails",
       "version": "1.6.6+forge-mc1.19.2",
@@ -3050,10 +3079,19 @@
       }
     },
     {
+      "file": "backportedPowerGrid-0.6.2-ce-19.2-20.jar",
+      "name": "backportedPowerGrid-0.6.2-ce-19.2-20",
+      "version": "",
+      "sha1": "cdd764165a4d279f39ba715017263ba0741c5de7",
+      "modId": "powergrid",
+      "side": "both",
+      "source": "local"
+    },
+    {
       "file": "backportedTempad-3.0.4-ce-19.2-01.jar",
       "name": "backportedTempad-3.0.4-ce-19.2-01.jar",
       "version": "Unknown",
-      "sha1": "043a41e5f48a9af1fe3d53fb75d2f91f6dc068be",
+      "sha1": "e6b477ec629fbf255dfe457e7c9c7089856c6bc8",
       "modId": "tempad",
       "side": "both",
       "source": "local"
@@ -3627,6 +3665,22 @@
           "fileId": 4500351,
           "slug": "cherished-worlds",
           "url": "https://www.curseforge.com/minecraft/mc-mods/cherished-worlds/files/4500351"
+        }
+      }
+    },
+    {
+      "file": "chestbubblesrevived-forge-1.19.2-1.0.4.jar",
+      "name": "Chest Bubbles Revived",
+      "version": "chestbubblesrevived-forge-1.19.2-1.0.4",
+      "sha1": "152c90fc516abb77c9cc7c14dde52d54d6e7ebf1",
+      "modId": "chestbubbles",
+      "side": null,
+      "source": {
+        "curseforge": {
+          "projectId": 857559,
+          "fileId": 4521726,
+          "slug": "chest-bubbles-revived",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/chest-bubbles-revived/files/4521726"
         }
       }
     },
@@ -4286,29 +4340,6 @@
       }
     },
     {
-      "file": "create_oxidized-1.19.2-0.1.1.jar",
-      "name": "Create: Oxidized",
-      "version": "0.1.1",
-      "sha1": "89e2870ac9a35026d3b353616bce897cf6455575",
-      "modId": "create_oxidized",
-      "side": "both",
-      "source": {
-        "curseforge": {
-          "projectId": 953729,
-          "fileId": 4986562,
-          "slug": "create-oxidized",
-          "url": "https://www.curseforge.com/minecraft/mc-mods/create-oxidized/files/4986562"
-        },
-        "modrinth": {
-          "projectId": "X9kjRZeX",
-          "versionId": "JHaJEgyv",
-          "slug": "create_oxidized",
-          "url": "https://modrinth.com/mod/create_oxidized/version/JHaJEgyv",
-          "download": "https://cdn.modrinth.com/data/X9kjRZeX/versions/JHaJEgyv/create_oxidized-1.19.2-0.1.1.jar"
-        }
-      }
-    },
-    {
       "file": "create_power_loader-1.5.0-mc1.19.2.jar",
       "name": "Create: Power Loader",
       "version": "1.5.0-mc1.19.2",
@@ -4521,34 +4552,48 @@
       "file": "creativeLabels-1.0.1.jar",
       "name": "creativeLabels-1.0.1.jar",
       "version": "Unknown",
-      "sha1": "97576d1d7a152e517cdc31f3e6264e5525e84e43",
+      "sha1": "34395c35afc2b3c00d0a4ea07291ea1f944ff4d0",
       "modId": "creativelabels",
-      "side": null,
+      "side": "both",
       "source": "local"
     },
     {
       "file": "creativebrewing-1.0.0.jar",
       "name": "creativebrewing-1.0.0.jar",
       "version": "Unknown",
-      "sha1": "e21019af18ab08b3580bf65c944d78c63e9bdec9",
+      "sha1": "894a75d145a9255b7c618e1586f9a6d27327c0b1",
       "modId": "creativebrewing",
       "side": "both",
-      "source": "local"
+      "source": "local",
+      "nested": [
+        {
+          "file": "backportedVinery-1.5.5-ce-19.2-09.jar",
+          "modId": "vinery",
+          "version": "1.5.5-ce-19.2-09",
+          "sha1": "2a05588bf657589e5ca9d2ac9b764dd5584e0b7e"
+        },
+        {
+          "file": "backportedBrewin-4.5.0-ce-19.2-05.jar",
+          "modId": "brewinandchewin",
+          "version": "4.5.0-ce-19.2-05",
+          "sha1": "f5f3bacbcb82e09a30a2ce3af59a7dcd42eed1d6"
+        }
+      ]
     },
     {
       "file": "creativecalendar-1.0.0.jar",
       "name": "creativecalendar-1.0.0.jar",
       "version": "Unknown",
-      "sha1": "23c5b20ed51d351b939290553e326377c7100d2c",
+      "sha1": "d1b805ab803623ff68ae7bc638ad0700c699ad1e",
       "modId": "creativecalendar",
       "side": "both",
       "source": "local"
     },
     {
-      "file": "creativecommon-1.1.0.jar",
-      "name": "creativecommon-1.1.0.jar",
-      "version": "Unknown",
-      "sha1": "2fa4219ee176d5402edea67f9d3752e9c608923f",
+      "file": "creativecommon-1.3.0.jar",
+      "name": "creativecommon-1.3.0",
+      "version": "",
+      "sha1": "267de525164405536ba13f08e765ddafb46d5455",
       "modId": "creativecommon",
       "side": "both",
       "source": "local"
@@ -4557,7 +4602,7 @@
       "file": "creativecompat-1.0.0.jar",
       "name": "creativecompat-1.0.0.jar",
       "version": "Unknown",
-      "sha1": "91dbb32f5f66a71bdcd7b32a2fbe1037533b1e92",
+      "sha1": "c9da160950c426e94593f43687d7a590d819fecd",
       "modId": "creativecompat",
       "side": "both",
       "source": "local"
@@ -4566,26 +4611,165 @@
       "file": "creativedelight-1.1.0.jar",
       "name": "creativedelight-1.1.0.jar",
       "version": "Unknown",
-      "sha1": "3bb8016c1e062ff34a9625ade94746887baffa74",
+      "sha1": "33f8741be11704f1eb297559e9ce2075cee0de83",
       "modId": "creativedelight",
       "side": "both",
-      "source": "local"
+      "source": "local",
+      "nested": [
+        {
+          "file": "repackedFarmers-1.19.2-1.2.4-ce-19.2-04.jar",
+          "modId": "farmersdelight",
+          "version": "1.19.2-1.2.4-ce-19.2-04",
+          "sha1": "2178e5e4d981229041b55d66809ec375a0fa625d"
+        },
+        {
+          "file": "repackedOceans-1.0.2-1.19.2-ce-19.2-02.jar",
+          "modId": "oceansdelight",
+          "version": "1.0.2-1.19.2-ce-19.2-02",
+          "sha1": "809ff9cdc4075159121ed30accd245163db81895"
+        },
+        {
+          "file": "portedOceanic-1.0.1-ce-19.2-02.jar",
+          "modId": "oceanic_delight",
+          "version": "1.0.1-ce-19.2-02",
+          "sha1": "75053d3596b5771596ff194f9ce54c56a7231f0b"
+        },
+        {
+          "file": "repackedEnds-1.19.2-2.1-ce-19.2-04.jar",
+          "modId": "ends_delight",
+          "version": "1.19.2-2.1-ce-19.2-04",
+          "sha1": "d41734b3d1c3739e87f0c8279bf61e973819cb99"
+        },
+        {
+          "file": "repackedNethers-1.19-3.1-ce-19.2-01.jar",
+          "modId": "nethersdelight",
+          "version": "1.19-3.1-ce-19.2-01",
+          "sha1": "b8dc97db9bdf24574adbbf60f7c2bcb8847d375b"
+        },
+        {
+          "file": "backportedRustic-1.7.0-ce-19.2-02.jar",
+          "modId": "rusticdelight",
+          "version": "1.7.0-ce-19.2-02",
+          "sha1": "b0af5ce35719c6fcf43d1eb2235d3d038cb445d1"
+        },
+        {
+          "file": "repackedDelightful-3.4.1-ce-19.2-01.jar",
+          "modId": "delightful",
+          "version": "3.4.1-ce-19.2-01",
+          "sha1": "ad871e0c6310b7a38909b2f83fb1d98f9f4350ef"
+        },
+        {
+          "file": "backportedHearth-1.4.1-ce-19.2-04.jar",
+          "modId": "hearthandharvest",
+          "version": "1.4.1-ce-19.2-04",
+          "sha1": "59a94100858d47170c6097e63241392bb6958672"
+        },
+        {
+          "file": "backportedRoll-1.3.1-ce-19.2-01.jar",
+          "modId": "roll_delight",
+          "version": "1.3.1-ce-19.2-01",
+          "sha1": "343e065448f37592cb77af2afcb2b8b675cb1197"
+        },
+        {
+          "file": "backportedLargeMeals-1.3.0-ce-19.2-01.jar",
+          "modId": "largemeals",
+          "version": "1.3.0-ce-19.2-01",
+          "sha1": "365271c822a5e13c2ea9c47b3408f2045de66b33"
+        },
+        {
+          "file": "backportedBarbeques-1.3.0-ce-19.2-01.jar",
+          "modId": "barbequesdelight",
+          "version": "1.3.0-ce-19.2-01",
+          "sha1": "2120a1abcaedf415498758ab7a0d88ba2fc5890b"
+        },
+        {
+          "file": "backportedVeggies-1.9.2-ce-19.2-05.jar",
+          "modId": "veggiesdelight",
+          "version": "1.9.2-ce-19.2-05",
+          "sha1": "3236e436ca8ae46cef8be3fd14b68ed750dc6f07"
+        },
+        {
+          "file": "backportedVintage-0.1.6-ce-19.2-18.jar",
+          "modId": "vintagedelight",
+          "version": "0.1.6-ce-19.2-18",
+          "sha1": "cfacab81f9f0f54b5c617124ede5fd88e2ba4745"
+        },
+        {
+          "file": "backportedFungi-1.3-ce-19.2-02.jar",
+          "modId": "fungidelight",
+          "version": "1.3-ce-19.2-02",
+          "sha1": "46d00f12207dcbdb2dcfd945db7bca54a21657a4"
+        },
+        {
+          "file": "backportedMiners-1.4.5-ce-19.2-06.jar",
+          "modId": "miners_delight",
+          "version": "1.4.5-ce-19.2-06",
+          "sha1": "d0ac5aebc7aa6d010faf1978e4cb05f7d1e91aa4"
+        },
+        {
+          "file": "backportedDisplay-1.7.0-ce-19.2-03.jar",
+          "modId": "displaydelight",
+          "version": "1.7.0-ce-19.2-03",
+          "sha1": "04e385811a60642fe932832005570fe4d9d22f01"
+        },
+        {
+          "file": "repackedSalt-1.2.4.1-ce-19.2-04.jar",
+          "modId": "salt",
+          "version": "1.2.4.1-ce-19.2-04",
+          "sha1": "afac4ae6a0ee222d6ed9c93c5897d373e78b99d1"
+        },
+        {
+          "file": "repackedCreateSalt-1.19.2-1.1.0-ce-19.2-01.jar",
+          "modId": "create__the_salt",
+          "version": "1.19.2-1.1.0-ce-19.2-01",
+          "sha1": "99868a2bd532292b3b0af8cc39b32e3480bd61a8"
+        },
+        {
+          "file": "repackedCannedGoods-1.19.2-3-ce-19.2-01.jar",
+          "modId": "canned_goods",
+          "version": "1.19.2-3-ce-19.2-01",
+          "sha1": "e69b943ad397231e6e56a694d9f48ae8cc02e437"
+        },
+        {
+          "file": "portedGolden-2.0.0-ce-19.2-02.jar",
+          "modId": "goldenfood",
+          "version": "2.0.0-ce-19.2-02",
+          "sha1": "a9da97998952e02c521875e2fa161711de0d89b8"
+        }
+      ]
     },
     {
       "file": "creativeengineering-2.0.0.jar",
       "name": "creativeengineering-2.0.0.jar",
       "version": "Unknown",
-      "sha1": "9fa60157c878ae9fb503c60835a4dfe9a47ee983",
+      "sha1": "122891f172875307c6da8041e9b8f530a3aafdf2",
       "modId": "creativeengineering",
       "side": "both",
-      "source": "local"
+      "source": "local",
+      "nested": [
+        {
+          "file": "creativeoxidation-1.0.0-ce-19.2-02.jar",
+          "modId": "creativeoxidation",
+          "version": "1.0.0-ce-19.2-02",
+          "sha1": "66c7fe0d083c611f80f23332bbe6ef4d8b104580"
+        }
+      ]
     },
     {
       "file": "creativeequipment-1.0.0.jar",
       "name": "creativeequipment-1.0.0.jar",
       "version": "Unknown",
-      "sha1": "a42356317ea249c04f16228a5589f17d8ad18e8f",
+      "sha1": "485d9902838b8cc66af92db349ad5646a4ffbc3c",
       "modId": "creativeequipment",
+      "side": "both",
+      "source": "local"
+    },
+    {
+      "file": "creativeloot-1.0.0.jar",
+      "name": "creativeloot-1.0.0",
+      "version": "",
+      "sha1": "7eecf2e9cf6bf5a9bc141d15b41508f9072bf13d",
+      "modId": "creativeloot",
       "side": "both",
       "source": "local"
     },
@@ -4593,7 +4777,7 @@
       "file": "creativemagic-1.0.0.jar",
       "name": "creativemagic-1.0.0.jar",
       "version": "Unknown",
-      "sha1": "8b80228c9e6c8b998084cccdbceb1fa097020fe3",
+      "sha1": "6fd62fcb573ac9d6f1c9404ee6e79ab67adbeecb",
       "modId": "creativemagic",
       "side": "both",
       "source": "local"
@@ -4602,10 +4786,30 @@
       "file": "creativeworldgen-1.0.0.jar",
       "name": "creativeworldgen-1.0.0.jar",
       "version": "Unknown",
-      "sha1": "9d2ec5aa271c773f48a31ef03664b433b41ec463",
+      "sha1": "ff8d7ef26a2f4f23b82526fd3086dd90a2e1e0f3",
       "modId": "creativeworldgen",
       "side": "both",
-      "source": "local"
+      "source": "local",
+      "nested": [
+        {
+          "file": "moreMooblooms-1.1.0.jar",
+          "modId": "moremooblooms",
+          "version": "1.1.0",
+          "sha1": "f5918062175756a29044bfc48ba3caf40c1d1c8f"
+        },
+        {
+          "file": "babyMobs-1.1.0.jar",
+          "modId": "babymobs",
+          "version": "1.1.0",
+          "sha1": "531ba803773462413f3ab85d1e60cb6952431eba"
+        },
+        {
+          "file": "terrablenderStub-2.0.1.128.jar",
+          "modId": "terrablender",
+          "version": "2.0.1.128",
+          "sha1": "6afff67cc31bbb43e1817f3f101986375be9e54e"
+        }
+      ]
     },
     {
       "file": "curios-forge-1.19.2-5.1.6.4.jar",
@@ -4682,6 +4886,22 @@
           "fileId": 4841878,
           "slug": "daves-building-extended",
           "url": "https://www.curseforge.com/minecraft/mc-mods/daves-building-extended/files/4841878"
+        }
+      }
+    },
+    {
+      "file": "debugify-1.1.0-forge-1.19.2.jar",
+      "name": "Debugify Reforged",
+      "version": "[Forge 1.19.2] 1.1.0",
+      "sha1": "401c56dc7b4f3d8d91c2c25588af956825beeba0",
+      "modId": "debugify",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 666041,
+          "fileId": 4705473,
+          "slug": "debugify-reforged",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/debugify-reforged/files/4705473"
         }
       }
     },
@@ -5132,7 +5352,7 @@
       "file": "exposureBackport-1.9.19-ce-19.2-04.jar",
       "name": "exposureBackport-1.9.19-ce-19.2-04.jar",
       "version": "Unknown",
-      "sha1": "bc6030c3225966233ce0f0735a41eb2751826dc7",
+      "sha1": "d6789a5c6cac2cb53f8a29128bcbce199cff530e",
       "modId": "exposure",
       "side": "both",
       "source": "local"
@@ -5967,6 +6187,22 @@
           "slug": "kubejs+cc-tweaked",
           "url": "https://modrinth.com/mod/kubejs+cc-tweaked/version/i08cYORa",
           "download": "https://cdn.modrinth.com/data/h43V4ydX/versions/i08cYORa/kjscc-1902-1.0.2-beta.jar"
+        }
+      }
+    },
+    {
+      "file": "kleeslabs-forge-1.19.2-12.3.0.jar",
+      "name": "KleeSlabs",
+      "version": "kleeslabs-forge-1.19.2-12.3.0.jar",
+      "sha1": "6b01513bbfd46c5505b6e00318df30d7bb2cee72",
+      "modId": "kleeslabs",
+      "side": null,
+      "source": {
+        "curseforge": {
+          "projectId": 241895,
+          "fileId": 4510538,
+          "slug": "kleeslabs",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/kleeslabs/files/4510538"
         }
       }
     },
@@ -6853,6 +7089,29 @@
       }
     },
     {
+      "file": "numarevive-1.19-1.2-RELEASE.jar",
+      "name": "NC's Revive",
+      "version": "1.19-1.2-RELEASE",
+      "sha1": "26570d1eb36c46be3057afabef9d3f0205d75a77",
+      "modId": "numarevive",
+      "side": null,
+      "source": {
+        "curseforge": {
+          "projectId": 1220174,
+          "fileId": 7019195,
+          "slug": "numacrystals-revive",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/numacrystals-revive/files/7019195"
+        },
+        "modrinth": {
+          "projectId": "zsAOJC9Q",
+          "versionId": "dF1MxlGS",
+          "slug": "numarevive",
+          "url": "https://modrinth.com/mod/numarevive/version/dF1MxlGS",
+          "download": "https://cdn.modrinth.com/data/zsAOJC9Q/versions/dF1MxlGS/numarevive-1.19-1.2-RELEASE.jar"
+        }
+      }
+    },
+    {
       "file": "old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar",
       "name": "Old fisherman swamp house",
       "version": "old_swamp_fisherman_house-1.0.2-forge-1.19.2.jar",
@@ -6881,6 +7140,29 @@
           "fileId": 5173882,
           "slug": "old-guns-mod",
           "url": "https://www.curseforge.com/minecraft/mc-mods/old-guns-mod/files/5173882"
+        }
+      }
+    },
+    {
+      "file": "packetfixer-3.3.2-1.18-1.20.4-merged.jar",
+      "name": "Packet Fixer",
+      "version": "3.3.2",
+      "sha1": "79ebc5e66a5ee3ce92afb340e693d506e97361a0",
+      "modId": "packetfixer",
+      "side": "both",
+      "source": {
+        "curseforge": {
+          "projectId": 689467,
+          "fileId": 7872374,
+          "slug": "packet-fixer",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/packet-fixer/files/7872374"
+        },
+        "modrinth": {
+          "projectId": "c7m1mi73",
+          "versionId": "9F4NGhGR",
+          "slug": "packet-fixer",
+          "url": "https://modrinth.com/mod/packet-fixer/version/9F4NGhGR",
+          "download": "https://cdn.modrinth.com/data/c7m1mi73/versions/9F4NGhGR/packetfixer-3.3.2-1.18-1.20.4-merged.jar"
         }
       }
     },
@@ -7105,6 +7387,22 @@
       }
     },
     {
+      "file": "prettybeaches-forge-1.19-8.0.0.jar",
+      "name": "Pretty Beaches",
+      "version": "prettybeaches-forge-1.19-8.0.0.jar",
+      "sha1": "ade5c619fdeb4ab9ba02c52ade874fe3ecb3300b",
+      "modId": "prettybeaches",
+      "side": null,
+      "source": {
+        "curseforge": {
+          "projectId": 290659,
+          "fileId": 3833445,
+          "slug": "pretty-beaches",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/pretty-beaches/files/3833445"
+        }
+      }
+    },
+    {
       "file": "quark_delight_1.0.0_forge_1.19.2.jar",
       "name": "Quark Delight",
       "version": "quark_delight_1.0.0_forge_1.19.2.jar",
@@ -7183,10 +7481,10 @@
       }
     },
     {
-      "file": "repackedStorage-25.12.09-1.19-forge-ce-19.2-02.jar",
-      "name": "repackedStorage-25.12.09-1.19-forge-ce-19.2-02",
+      "file": "repackedStorage-25.12.09-1.19-forge-ce-19.2-03.jar",
+      "name": "repackedStorage-25.12.09-1.19-forge-ce-19.2-03",
       "version": "",
-      "sha1": "6ec884c2713b78c2a72c03d65e251e4bb6834b5b",
+      "sha1": "98f97f737452b68b78490c7e0f2927d92d475066",
       "modId": "storagedelight",
       "side": "both",
       "source": "local"
@@ -7618,7 +7916,7 @@
       "file": "solRaspberryPie-1.0.0.jar",
       "name": "solRaspberryPie-1.0.0.jar",
       "version": "Unknown",
-      "sha1": "af3ec66ff01fd2e46cc5eb17414114eed722fbbc",
+      "sha1": "cb71f0ccc76834ef24e7b060c272dba62163941f",
       "modId": "solraspberrypie",
       "side": "both",
       "source": "local",
@@ -8526,6 +8824,28 @@
           "fileId": 4393695,
           "slug": "ctm",
           "url": "https://www.curseforge.com/minecraft/mc-mods/ctm/files/4393695"
+        }
+      }
+    },
+    {
+      "file": "ColdSweat-2.4.5.jar",
+      "name": "Cold Sweat",
+      "version": "2.4.5",
+      "sha1": "7770d448b35dd327742d3e75fbd6e6696d62b5a9",
+      "modId": "cold_sweat",
+      "source": {
+        "curseforge": {
+          "projectId": 506194,
+          "fileId": 9391561,
+          "slug": "cold-sweat",
+          "url": "https://www.curseforge.com/minecraft/mc-mods/cold-sweat/files/9391561"
+        },
+        "modrinth": {
+          "projectId": "uXhSmPjd",
+          "versionId": "5easv7vz",
+          "slug": "cold-sweat",
+          "url": "https://modrinth.com/mod/cold-sweat/version/5easv7vz",
+          "download": "https://cdn.modrinth.com/data/uXhSmPjd/versions/5easv7vz/ColdSweat-2.4.5.jar"
         }
       }
     },
@@ -9457,7 +9777,7 @@
       "version": "Unknown",
       "sha1": "1fa70b09b66dd113b68f20c5966f60c96dbd6e05",
       "enabled": true,
-      "loadOrder": 24,
+      "loadOrder": 23,
       "flaggedIncompatible": false,
       "source": "local"
     },
@@ -9482,9 +9802,9 @@
       "file": "Copycat Framed Block.zip",
       "name": "Copycat Framed Blocks",
       "version": "Copycat Framed Block.zip",
-      "sha1": "2e300fb05d0edc238dd96d4356798ca2964ba4ad",
+      "sha1": "fcd00b376cd85489fdb3bff50d7cef7f48c34628",
       "enabled": true,
-      "loadOrder": 25,
+      "loadOrder": 24,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9501,7 +9821,7 @@
       "version": "1.2.1",
       "sha1": "2f7e22eb0ca0a3ab7382c290b49995df66bba97e",
       "enabled": true,
-      "loadOrder": 26,
+      "loadOrder": 25,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9525,7 +9845,7 @@
       "version": "Create Tweaks Compats v17.zip",
       "sha1": "a52384c905017e4ba35a3cfa315a0876f5c3ee4c",
       "enabled": true,
-      "loadOrder": 27,
+      "loadOrder": 26,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9542,7 +9862,7 @@
       "version": "1.1.2",
       "sha1": "37230d133003a3574a2380326bfd6faf8a1c3124",
       "enabled": true,
-      "loadOrder": 28,
+      "loadOrder": 27,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9590,7 +9910,7 @@
       "version": "1.0",
       "sha1": "6d5ac607061fa5aedea571ec0c3ae842327dbf7c",
       "enabled": true,
-      "loadOrder": 29,
+      "loadOrder": 28,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9614,7 +9934,7 @@
       "version": "1.3.0",
       "sha1": "e960b4770f08761c294dd67530f94232acadc68e",
       "enabled": true,
-      "loadOrder": 30,
+      "loadOrder": 29,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9638,7 +9958,7 @@
       "version": " \tEngineers_GUIs_1.18.2_v.01.0",
       "sha1": "cdb59cac42a434bb74359f5b1bfa90c44733d9e0",
       "enabled": true,
-      "loadOrder": 31,
+      "loadOrder": 30,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9655,7 +9975,7 @@
       "version": "1.2",
       "sha1": "b7b75543839378884e4e86aa8c0d445f8cf354e4",
       "enabled": true,
-      "loadOrder": 46,
+      "loadOrder": 45,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9703,7 +10023,7 @@
       "version": "Golden crit.zip",
       "sha1": "2780c0d9711aeca8073ed10d441a7d0c78789fc9",
       "enabled": true,
-      "loadOrder": 32,
+      "loadOrder": 31,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9720,7 +10040,7 @@
       "version": "IE Breaker Switch Sound.zip",
       "sha1": "64b43eeeddee345082edce2f7ac7dfeb2ea5d546",
       "enabled": true,
-      "loadOrder": 44,
+      "loadOrder": 43,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9771,7 +10091,7 @@
       "version": "LootrChestRetexture_v1.1_1.19.zip",
       "sha1": "89baa371773d4783c5b2a21ada4aa0a032e289ff",
       "enabled": true,
-      "loadOrder": 33,
+      "loadOrder": 32,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9788,7 +10108,7 @@
       "version": "26.2",
       "sha1": "96932a034fff4cd0cad08ba12db730450c4772da",
       "enabled": true,
-      "loadOrder": 34,
+      "loadOrder": 33,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9812,7 +10132,7 @@
       "version": "Lower Shield.zip",
       "sha1": "b9f51386e4bcac7f402c15ea9fd4194c05b6dfc3",
       "enabled": true,
-      "loadOrder": 35,
+      "loadOrder": 34,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9863,7 +10183,7 @@
       "version": "v1",
       "sha1": "ee536a8763d6475231dce48b080eed8b20cefc3b",
       "enabled": true,
-      "loadOrder": 43,
+      "loadOrder": 42,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9904,7 +10224,7 @@
       "version": "SquirmingSilverfish [1.13 - 26.3]   (v2).zip",
       "sha1": "f0b0ff9fef3f5e5371ce926a7ab1bbea67d31abf",
       "enabled": true,
-      "loadOrder": 45,
+      "loadOrder": 44,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {
@@ -9921,7 +10241,7 @@
       "version": "Updated_Engineering_v1.7.zip",
       "sha1": "63c38fd48f109d949ddcb0359073c2a16fe8d558",
       "enabled": true,
-      "loadOrder": 42,
+      "loadOrder": 41,
       "flaggedIncompatible": false,
       "source": {
         "curseforge": {
@@ -9962,7 +10282,7 @@
       "version": "create_style_pretty_fluid_pipes-1.0.0",
       "sha1": "2c61693b522ffcab036cb850ec9e973fa2de54cf",
       "enabled": true,
-      "loadOrder": 41,
+      "loadOrder": 40,
       "flaggedIncompatible": true,
       "source": {
         "curseforge": {

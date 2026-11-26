@@ -322,7 +322,7 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - [ ] **POT-19 wall-hung Rich Hanging Pot (owner):** (3.3, CQ-POT-03) in a fresh Flower Test world, the column after the
   Rich Hanging Pot holds a wall lantern on glass with the same plant in every row that took one; the owner rules keep
   (a wall placement for the pot) or remove.
-- [ ] **POT-20 two flower pots in one block:** (3.4, SQ-POT-10, CQ-POT-04) place a flower pot with a poppy, use a
+- [ ] **POT-20 two flower pots in one block:** (3.4, SQ-POT-10 PASS r1124nw 2026-11-24, CQ-POT-04) place a flower pot with a poppy, use a
   flower pot on it -> one block with two pots, the poppy in the short pot, the second pot 2 px taller and empty; one
   pot item used; click the taller half with a dandelion and the short half with a fern -> each goes in its own pot
   (fern green); empty hand on each half takes that plant back; a third flower pot places beside the block instead;

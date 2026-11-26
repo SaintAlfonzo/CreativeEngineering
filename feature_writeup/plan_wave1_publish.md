@@ -9,24 +9,29 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 
 ## 0. Owner rulings
 
-<!-- generated:status_index begin open_work sha1=7eb2244a0732 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 13 open TODO rows (Testing 13), 0 Complete.
+<!-- generated:status_index begin open_work sha1=184764cd62d0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 1, Testing 17), 5 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-common-publish #21` | Testing | CQ-LTP-17 CQ-CPP-01 | Every client start logs 'Loading tips: skipped loading_tips:version_filter: Missing tips, expected to find a JsonArray' |
+| `generators-and-tests #30` | Planned | CQ-MELT-02 CQ-CMP-21 CQ-RPS-15 | Row fixes from the owner screenshot review: CQ-MELT-02 capture shows no tooltip; CQ-CMP-21 belt and elytra not judgeable; CQ-RPS-15 food dict shots inconclusive |
+| `creative-common-publish #22` | Testing | CQ-CC13-02 | Salt Melt and the standard salt dust lack a 'usable on ice and snow' tooltip line |
 | `creative-compat-publish #8` | Testing | S | Weathered Cardboard Box moves from Creative Compat to Creative Engineering before Compat 1.0.0: id creativeengineering:weathered_cardboard_box, Compat ids in saves swapped back, item dict key kept, texture exemption (W2) moves with it |
 | `creative-compat-publish #9` | Testing | S | Squid and whales: squid and glow squid flee Alex's Mobs cachalot whales; the giant squid no longer flees whales and fights back when a whale attacks it or comes close (the flee radius config goes) |
-| `creative-compat-publish #14` | Testing | CQ-CMP-19 | CQ-CMP-19 failed: the Devtools driver's shift-click on the corpse screen was a plain click, so the mana ring swap left it on the cursor |
 | `creative-compat-publish #15` | Testing | CQ-CMP-33 | JEI uses page for the Sample Syringe does not open (world tab catalyst) |
 | `creative-compat-publish #16` | Testing | CQ-CMP-37 | Sneak right-click on the Item Trash Can opened the deleted-on-close screen, not the filter screen |
-| `creative-compat-publish #17` | Testing | SQ-MT-04 SQ-MT-05 SQ-MT-06 SQ-PTH-29 SQ-PTH-30 SQ-SMK-31 | Summoned mobs disappeared within 1 to 4 s on scratch servers: peaceful and spawn-animals=false in the rows' server setup |
+| `creative-compat-publish #18` | Testing | SQ-PTH-29 | SQ-PTH-29: a fox in 5 snow layers stands on top (light mob, G11) and gets no pass-through slowdown; the row and plan_passthrough's exempt note (snow slows foxes) expect one |
+| `creative-compat-publish #19` | Testing | SQ-PTH-30 | SQ-PTH-30: a fox crossed an 8-layer oak leaf pile wall (deeper than pathBlockLayers 6) in 1200 ticks |
+| `creative-compat-publish #20` | Testing | CQ-CMP-19 | Corpse screen in a fresh client: ContainerSetContent IndexOutOfBounds 90 of 90, the corpse menu is shorter on the client than on the server |
+| `creative-compat-publish #22` | Testing | CQ-CMP-33 | Ancient corpses are both named Corpse, not Ancient Corpse / Ancient Remains |
+| `creative-compat-publish #23` | Testing | CQ-CMP-36 | Item Trash Can: remove '(deleted on close)' from its label |
 | `food-tuning #66` | Testing | S | Drinks: hot cocoa, strong hot cocoa, Farmer's Respite coffee, long coffee and strong coffee, prickly pear juice, strawberry banana smoothie (and their families) carry the drink food type, so Raspberry Pie counts them as drinks |
 | `food-tuning #67` | Testing | S | Jams are foods: every jam family member (Vintage jam jars, Fruits Delight jellies, Upgrade Aquatic mulberry jam bottle) stays out of the drink, no-diet and Diet Log excluded tags and counts in the Diet Log; the family stays its own (preserve/jam) |
 | `raspberry-pie-publish #21` | Testing | C | Permanent buff icon keeps cycling diamond and effect while the buff is active: find and fix (rule unchanged: cycle until reached, effect alone while active) |
 | `raspberry-pie-publish #22` | Testing | C | Steady text: Diet Log tagline 'No slipping; does not trigger plates, tripwires or dripleaf'; full effect description lists all three SteadyRules rules |
 | `raspberry-pie-publish #23` | Testing | C | Hover taglines for the 19 ladder effects that have none: agent drafts, owner reviews the list before it is written |
 | `raspberry-pie-publish #24` | Testing | S C | Dropping the top effect slot drops every slot: find and fix (a drop should lose only the highest active slot) |
+| `raspberry-pie-publish #35` | Testing | CQ-RPS-09 | Food adjustment hover does not match the diversity it applies |
 <!-- generated:status_index end open_work -->
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |
@@ -122,3 +127,4 @@ path, push to `agent_staging`.
   servers' peaceful, no-animals setup, fixed in the rows (`#17`). Release jars now: Common 1.3.0+bb465ade3 (clean,
   checks on, installed), Compat 1.0.0+db212e956 (unchanged), Raspberry Pie 1.0.0+8f883cd64; Devtools
   1.0.0+bb465ade3 (test driver, installed). Next: the W-P7 rerun of the failed rows, then W-P8.
+- 2026-11-25: run r1125pub results (scratch_run_2026-11-24.md 7) and the owner screenshot review: none of its findings blocks the wave 1 publish (rows `creative-common-publish #22`, `#23`, `creative-compat-publish #22` to `#24`, `raspberry-pie-publish #35`, `generators-and-tests #30`); Creative Compat blockers remain (`creative-compat-publish #21`, `item-physics #8` to `#10`).

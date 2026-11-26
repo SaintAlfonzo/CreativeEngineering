@@ -148,15 +148,17 @@ bush icons of both sets. Any recolor would go through the owner's tools with a `
 | S4 | Snatcher converts the block under it (0.08 % per tick) | `SCP6105OnEntityTickUpdateProcedure` | yes |
 | S5 | An SCP mob or Infected Pillager kills a villager, player, animal, zombie, piglin, illager, Enderman, spider, Warden and others -> an SCP mob appears | `SCP6101`, `InfectedPillagerThisEntityKillsAnotherOneProcedure` | no |
 | S6 | Any entity with Flesh Infection dies -> SCP-610-1 (players, humanoids) or SCP-610-2 (animals) | `MobDiesWithInfectionProcedure` (Forge `LivingDeathEvent`) | no |
-| S7 | Deaths of most SCP mobs and the Pillager hatch a small incubator (4 % on a player kill, 20 % otherwise; only with a player within 150 blocks; never when burning); small incubators grow into big ones after 40 minutes | the `*EntityDiesProcedure` classes, `SmallSCP6106OnEntityTickUpdateProcedure` | no |
+| S7 | SCP-610-1 death hatches a small incubator (4 % near a player, 20 % when not killed by a player, never when burning) | `SCP6101EntityDiesProcedure` | no |
 
 Flesh Infection itself (from hits, raw Flesh, the potion) is a personal effect; it only spreads through S6.
 
 ### 3.3 Mobs
 
 Only the Infected Pillager has a spawn rule (`SpawnPlacements`, Overworld only, from day 3, night or light 0) and a
-biome modifier. The other 13 types appear only from conversions (S5, S6), evolution, incubator packs (S3), incubator
-calls and spawn eggs. Per-mob behavior, spawn sources, stats and drops are in 3.3.1.
+biome modifier. The other 13 types appear only from conversions (S5, S6), incubator packs (S3) and spawn eggs. Pack
+composition from the SCP-610 Spawner: rolls between 0.2 and 0.7 for SCP-610-1, -3, -7, -9, -11 (most common), -8,
+-10, -4, -5, -2. Big incubators give nearby SCP mobs Strength II. Small incubators become big only with a debug stick
+(dev path). Mobs burn: fire damage kills incubators fast and blocks S7.
 
 **Renders.** Offline previews made from each mob's GeckoLib model (`geo/*.geo.json`) and texture in the jar, in the
 rest pose (no animation), seen from the front left. These are doc images only and are not used in the game.
@@ -190,57 +192,6 @@ All 13 on one sheet (every texture variant shown):
 Some hitboxes are much shorter than the models (measured from the rest pose at renderer scale): Herpad 4.5 blocks
 tall against a 2.3 hitbox, Scuttler 3.3 against 1.8, Cradle 2.9 against 1.8, Bulwark 5.0 against 4.1, Big Incubator 8.4
 against 7.0. Their upper bodies cannot be hit. Upstream look, no fix proposed; FTH-16 checks it on the client.
-
-### 3.3.1 Per-mob breakdown
-
-Read from the entity classes (attributes, AI goals, `hurt` overrides) and their procedures (tick, first spawn, kill,
-death) and from `MobAngerProcedure` (Forge `LivingChangeTargetEvent`: it runs whenever a mob picks a new target, so
-its abilities trigger in fights, not on a timer).
-
-**Shared by all except the Spawner.**
-- Monsters with mob type `UNDEFINED` (not undead: Smite, Healing and Harming work as on any living mob).
-- Every one except the Snatcher targets the same list: players, villagers, wandering traders, golems, all animals,
-  zombies of every kind, piglins and brutes, hoglins and zoglins, skeletons, strays and wither skeletons, spiders,
-  Endermen, endermites, silverfish, all illagers, witches, slimes, magma cubes, blazes, ravagers and the Warden. They
-  also fight back when hit. Some walking mobs open doors and others break them (column "AI").
-- **Fire is their weakness.** While burning, and above 4 health (3 for incubators), they take 3 extra damage every
-  tick: 5 for the Bulwark, Herpad, Scuttler, Cradle and Stretcher. That is 60 to 100 damage a second, so any fire kills
-  them almost at once. Burning incubators blow up instead and drop nothing. A burning death never hatches an incubator.
-- They dismount anything they ride, every tick.
-- They despawn like other monsters, except the two incubators, which are persistent.
-- **Drops are procedure code, not loot tables**, and only Flesh. They need `doMobLoot` and a player kill, and most mobs
-  also need a player within 150 blocks. Looting does not apply.
-  - Rolls are 70 %. A "then" roll only happens if the roll before it succeeded.
-  - On death, with a player within 150 blocks: a 4 % small incubator when a player made the kill, a 20 % small
-    incubator otherwise (corrected S7 below), and a 10 % chance of 10 s of Call of the Hive on the killer.
-- **Kills convert** (S5).
-  - Humanoid victims (players, villagers, traders, zombies of every kind, piglins, Endermen, illagers, witches)
-    become SCP-610-1 and animal-like ones (animals, hoglins, zoglins, ravagers, spiders, the Warden) become SCP-610-2.
-  - A victim that already has Flesh Infection is left to S6, so it is not converted twice.
-  - SCP-610-1 and -2 use their own kill code, which also **evolves** them (see their rows).
-
-| Mob | Health, armor, knockback res. | Melee damage, speed | AI | Abilities and behavior | Spawns from | Drops (player kill) | XP |
-|---|---|---|---|---|---|---|---|
-| Infected Pillager | 20, 3, 0.2 | 7, 0.25 | opens doors | crimson spore particles; kills convert (shared) | natural: Overworld only, from day 3 (72000 ticks), at night under open sky or in light 0; a first-spawn check removes it when no player is within 5 blocks and the spot has light above 4 or a light-emitting block, or when any incubator is loaded, or before day 3; also biome modifier weight 15 in every biome (B2) | Flesh 70 %, then 70 % (0 to 2) | 5 |
-| SCP-610-1 Infected Humanoid | 20, 2, 0 | 4, 0.25 | opens doors | texture humanoid1 to 4 at spawn (25 % 4, then 50 % 3, 75 % 2, rest 1); **evolution**: each kill converts the victim and adds 1 to its kill count; on the 4th kill it disappears and an advanced form appears in its place: Snatcher 20 %, Bulwark 32 %, Scuttler 28.8 %, Stretcher 15.4 %, Herpad 3.8 % | conversions (S5, S6), Spawner packs (3 at a time), Big Incubator calls | Flesh 70 %, then 70 % (0 to 2) | 3 |
-| SCP-610-2 Infected Animal | 20, 5, 0.1 | 5, 0.25 | breaks doors | texture animal1 or 2 (50 %); same kill code and evolution as SCP-610-1 | conversions of animals, packs (1), calls | Flesh 70 %, then two 70 % (0 to 3) | 5 |
-| SCP-610-3 Pincher | 15, 0, 0 | 4, 0.27 | breaks doors, leaps at targets | small and fast; on a new target with a player within 2.5 blocks (0.9 %): Slowness, then Weakness and a throw (2.6 blocks of push) | packs (4), Herpad and Small Incubator calls | Flesh 70 % (0 or 1) | 3 |
-| SCP-610-4 Bulwark | 70, 13, 0.5 | 10, 0.25, knockback 1.5 | breaks doors | on a new target (5 %, `mobGriefing`): removes glass, panes, logs, planks, leaves, wooden doors, trapdoors, fences, gates, slabs and stairs in a 3 x 5 x 4 area in front of it | packs (1), evolution (32 %) | Flesh 70 %, plus two pairs of 70 % then 70 % (0 to 5) | 10 |
-| SCP-610-5 Snatcher | 15, 2, immovable | 1 (reach 1 block), does not move | none | stands still and only targets players; **pulls survival players within 4 blocks toward itself** (stronger in the air); touching it gives 2 s of Call of the Hive; converts the block under it (S4); spawns with 4 s of Resistance and Slowness while it rises out of the ground; immune to fall damage | packs (1), evolution (20 %) | Flesh 70 %, then 70 % (0 to 2); 30 % Call of the Hive; no incubator chance | 3 |
-| SCP-610-6 Small Incubator | 40, 3, immovable | 0, does not move | none | persistent. Converts the block under it on hatching. Every tick there is a 0.2 % chance of a Spawner pack when it has flesh within 8 blocks, `doMobSpawning` is on and no SCP mob is within 15 blocks (S3). It keeps flesh alive within 70 blocks (S2). On a new target it gives survival players within 4 blocks 10 s of Call of the Hive, and at 0.1 % calls a Pincher. **Grows into a Big Incubator 40 minutes after hatching** if no player is within 12 blocks then; the timer is in memory and a server restart loses it | deaths of most SCP mobs (4 % or 20 %), spawn egg | not burning: Flesh 70 %, then 70 % (0 to 2); 40 % Call of the Hive | 5 |
-| SCP-610-6 Big Incubator | 100, 5, immovable | 0, does not move | none | persistent. **On arrival it clears a 3 x 7 x 3 space with `/fill ... air destroy`**, so the blocks drop. Shake on players within 16 blocks; Strength II on SCP mobs within 50 blocks. Every tick there is a 1 % chance of a pack, on the same conditions as the small one. It keeps flesh alive within 210 blocks. On a new target it gives survival players within 10 blocks Call of the Hive, and at 0.3 % (with no SCP mob within 10 blocks) calls one SCP mob: Bulwark 10 %, Cradle 18 %, Herpad 21.6 %, SCP-610-1 20.2 %, SCP-610-2 15.1 %, Stretcher 9.1 %, Scuttler 4.2 %, Drifter 1.5 %, Pincher 0.4 % | small incubator growth, spawn egg; debug stick on a small one | not burning: Call of the Hive on the killer; three pairs of 70 % then 70 % (0 to 6) | 10 |
-| SCP-610-7 Drifter | 20, 2, 0.3 | 4 (reach 2 blocks), flies 0.3 | wanders, flies | flies with no gravity; on the ground it lands and hops forward (40 %); Slowness on landing; immune to fall damage | packs (3), Big Incubator calls, Cradle births | Flesh 70 %, then 70 % (0 to 2); 10 % Call of the Hive; no incubator chance | 4 |
-| SCP-610-8 Herpad | 50, 8, 0.5 | 8, 0.25, knockback 1.5 | breaks doors | on a new target (1 %, `mobGriefing`): removes wood and glass in a 5 x 6 x 5 area. **Summons** at 0.7 % when a player is within 16 blocks and no Pincher within 15: Slowness and Weakness on near players, Shake within 12 blocks, Pinchers appear around it | packs (2), evolution (3.8 %), Big Incubator calls | Flesh: two pairs of 70 % then 70 % (0 to 4) | 10 |
-| SCP-610-9 Scuttler | 30, 6, 0.5 | 7, 0.25 | breaks doors | wood and glass removal as the Herpad (1 %); shares the Herpad's tick and death code | packs (3), evolution (28.8 %), Big Incubator calls | as Herpad (0 to 4) | 5 |
-| SCP-610-10 Cradle | 30, 3, 0.5 | 0 (no melee damage), 0.22 | breaks doors | **grabs and births**. On a new target with a player within 3 blocks (50 %): Slowness hold. With a victim within 3 blocks (players, animals, villagers, traders, golems or monsters): Shake, and new SCP-610-1, -2, Pincher or Drifter appear (35 to 60 % each step). Shares the Herpad's tick and death code | packs (2), Big Incubator calls | as Herpad (0 to 4) | 5 |
-| SCP-610-11 Stretcher | 40, 8, 0.3 | 8 (reach 2 blocks), 0.25, knockback 2 | breaks doors | wood and glass removal as the Herpad (1 %) | packs (3), evolution (15.4 %), Big Incubator calls | Flesh 70 %, then 70 %, plus 70 % (0 to 3) | 5 |
-| SCP-610 Spawner | 1, 0, immovable | none | floats | invisible. On spawn, if no player is within 5 blocks, it places **one group**: SCP-610-1 x3 20 %, -2 x1 16 %, Pincher x4 19.2 %, Bulwark x1 20.2 %, Snatcher x1 11.1 %, Drifter x3 8.1 %, Herpad x2 2.4 %, Scuttler x3 1.5 %, Cradle x2 1.0 %, Stretcher x3 0.4 %. It removes itself after 3 s. Immune to arrows, player hits, potions, fall, cactus, drowning, lightning, dragon breath, wither, anvils and tridents | incubator ticks (S3) | none | 0 |
-
-Corrections to earlier text (2026-11-25, from this read):
-- Small Incubators grow into Big ones on their own; the debug stick is only a shortcut.
-- The S7 hatch chances apply to the deaths of the Pillager and of SCP-610-1, -2, -3, -4, -8, -9, -10 and -11, not
-  only SCP-610-1. All of them need a player within 150 blocks.
-- Big Incubators give Strength II within 50 blocks.
 
 ### 3.4 Effects and potion
 
@@ -607,7 +558,6 @@ potions, item physics, stack sizes) is a later phase (B11).
 
 ## 11. History
 
-- 2026-11-25: per-mob breakdown (3.3.1: behavior, abilities, spawn sources, stats, drops, XP); S7 and incubator growth corrected.
 - 2026-11-25: Biomancy 2 (2.3.2.0) added as section 10: blocks, mobs, spread paths, overlap, fold-in, B1 to B12, FTH-17 to
   FTH-26, block texture sheet and renders of the cradle and the five blobs; crafting content deferred (owner).
 

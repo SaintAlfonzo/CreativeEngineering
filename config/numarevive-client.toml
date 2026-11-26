@@ -1,0 +1,14 @@
+
+#General settings
+[general]
+	#Enable camera shake
+	camera_shake = true
+	#Enable vignette visibility
+	show_vignette = true
+	#Bleed icon type
+	#2 - Textured icon
+	#1 - Texted indicator
+	#0 - Disabled
+	#Range: 0 ~ 2
+	icon_type = 1
+

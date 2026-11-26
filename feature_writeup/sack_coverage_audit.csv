@@ -1,0 +1,152 @@
+item,kind seed/produce,mod,has_sack,sack_id,notes
+minecraft:wheat_seeds,seed,minecraft,no,,
+minecraft:beetroot_seeds,seed,minecraft,no,,
+minecraft:melon_seeds,seed,minecraft,no,,
+minecraft:pumpkin_seeds,seed,minecraft,no,,
+farmersdelight:cabbage_seeds,seed,farmersdelight,no,,
+farmersdelight:tomato_seeds,seed,farmersdelight,no,,
+corn_delight:corn_seeds,seed,corn_delight,no,,
+veggiesdelight:broccoli_seeds,seed,creativedelight veggies,no,,
+veggiesdelight:cauliflower_seeds,seed,creativedelight veggies,no,,
+veggiesdelight:turnip_seeds,seed,creativedelight veggies,no,,
+veggiesdelight:zucchini_seeds,seed,creativedelight veggies,no,,
+vintagedelight:cucumber_seeds,seed,creativedelight vintage,no,,
+vintagedelight:ghost_pepper_seeds,seed,creativedelight vintage,no,,
+vintagedelight:mixed_seeds,seed,creativedelight vintage,no,,
+delightful:cantaloupe_seeds,seed,creativedelight delightful,no,,
+fruitsdelight:hamimelon_seeds,seed,fruitsdelight,no,,
+fruitsdelight:lemon_seeds,seed,fruitsdelight,no,,
+hearthandharvest:sunflower_seeds,seed,creativedelight hearth,no,,
+farmersrespite:tea_seeds,seed,farmersrespite,no,,
+supplementaries:flax_seeds,seed,supplementaries,no,,
+the_dirty_stuff:tobacco_seeds,seed,the_dirty_stuff,no,,
+tobacconistmod:tobacco_seeds_burley,seed,tobacconistmod,no,,
+tobacconistmod:tobacco_seeds_dokha,seed,tobacconistmod,no,,
+tobacconistmod:tobacco_seeds_oriental,seed,tobacconistmod,no,,
+tobacconistmod:tobacco_seeds_shade,seed,tobacconistmod,no,,
+tobacconistmod:tobacco_seeds_virginia,seed,tobacconistmod,no,,
+tobacconistmod:tobacco_seeds_wild,seed,tobacconistmod,no,,
+endercrop:ender_seeds,seed,endercrop,no,,
+immersiveengineering:seed,seed,immersiveengineering,no,,
+vinery:red_grape_seeds,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+vinery:white_grape_seeds,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+vinery:jungle_grape_seeds_red,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+vinery:jungle_grape_seeds_white,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+vinery:savanna_grape_seeds_red,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+vinery:savanna_grape_seeds_white,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+vinery:taiga_grape_seeds_red,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+vinery:taiga_grape_seeds_white,seed,creativebrewing vinery,no,,grapes have bags; seeds do not
+rusticdelight:bell_pepper_seeds,seed,creativedelight rustic,yes,rusticdelight:bell_pepper_seeds_bag,
+rusticdelight:dark_bell_pepper_seeds,seed,creativedelight rustic,yes,rusticdelight:dark_bell_pepper_seeds_bag,
+rusticdelight:pale_bell_pepper_seeds,seed,creativedelight rustic,yes,rusticdelight:pale_bell_pepper_seeds_bag,
+rusticdelight:cotton_seeds,seed,creativedelight rustic,yes,rusticdelight:cotton_seeds_bag,
+vintagedelight:oat_seeds,seed,creativedelight vintage,yes,vintagedelight:oat_bag,oat_bag/oat_bale are the grain storage; confirm oat_bag holds seeds
+corn_delight:corn_kernels,seed,corn_delight,yes,corn_delight:corn_kernel_bag,kernels bag; kernels double as seed
+farmersdelight:rice,seed,farmersdelight,yes,farmersdelight:rice_bag,rice item is the seed and the grain; also rice_bale
+minecraft:wheat,produce,minecraft,no,,"only straw bale (farmersdelight:straw_bale), no wheat sack"
+minecraft:carrot,produce,minecraft,yes,farmersdelight:carrot_crate,also quark:carrot_crate
+minecraft:potato,produce,minecraft,yes,farmersdelight:potato_crate,also quark:potato_crate
+minecraft:beetroot,produce,minecraft,yes,farmersdelight:beetroot_crate,also quark:beetroot_crate
+minecraft:apple,produce,minecraft,yes,quark:apple_crate,"also vinery:apple_bag, fruitsdelight:apple_crate"
+minecraft:golden_apple,produce,minecraft,yes,quark:golden_apple_crate,
+minecraft:golden_carrot,produce,minecraft,yes,quark:golden_carrot_crate,
+minecraft:sweet_berries,produce,minecraft,yes,quark:berry_sack,also berry_good:sweet_berry_basket
+minecraft:glow_berries,produce,minecraft,yes,quark:glowberry_sack,also berry_good:glow_berry_basket
+minecraft:cocoa_beans,produce,minecraft,yes,quark:cocoa_beans_sack,
+minecraft:nether_wart,produce,minecraft,yes,quark:nether_wart_sack,
+minecraft:brown_mushroom,produce,minecraft,yes,fungidelight:brown_mushroom_crate,
+minecraft:red_mushroom,produce,minecraft,yes,fungidelight:red_mushroom_crate,
+minecraft:chorus_fruit,produce,minecraft,yes,endersdelight:chorus_crate,ends_delight:chorus_fruit_crate also listed in dumps
+minecraft:sea_pickle,produce,minecraft,yes,oceanic_delight:sea_pickle_crate,
+minecraft:glistering_melon_slice,produce,minecraft,yes,hearthandharvest:glistering_melon_crate,
+minecraft:melon_slice,produce,minecraft,no,,melons: no sack or crate
+minecraft:melon,produce,minecraft,no,,no sack
+minecraft:pumpkin,produce,minecraft,no,,no sack
+minecraft:sugar_cane,produce,minecraft,no,,no sack
+minecraft:bamboo,produce,minecraft,no,,no sack
+minecraft:kelp,produce,minecraft,no,,no sack
+minecraft:cactus,produce,minecraft,no,,no sack
+farmersdelight:cabbage,produce,farmersdelight,yes,farmersdelight:cabbage_crate,
+farmersdelight:onion,produce,farmersdelight,yes,farmersdelight:onion_crate,
+farmersdelight:tomato,produce,farmersdelight,yes,farmersdelight:tomato_crate,
+farmersdelight:brown_mushroom_colony,produce,farmersdelight,no,,"colony block, not an item crop"
+fruitsdelight:apple,produce,fruitsdelight,yes,fruitsdelight:apple_crate,
+fruitsdelight:bayberry,produce,fruitsdelight,yes,fruitsdelight:bayberry_crate,
+fruitsdelight:blueberry,produce,fruitsdelight,yes,fruitsdelight:blueberry_crate,
+fruitsdelight:cranberry,produce,fruitsdelight,yes,fruitsdelight:cranberry_crate,
+fruitsdelight:fig,produce,fruitsdelight,yes,fruitsdelight:fig_crate,
+fruitsdelight:hawberry,produce,fruitsdelight,yes,fruitsdelight:hawberry_crate,
+fruitsdelight:kiwi,produce,fruitsdelight,yes,fruitsdelight:kiwi_crate,
+fruitsdelight:lemon,produce,fruitsdelight,yes,fruitsdelight:lemon_crate,
+fruitsdelight:lychee,produce,fruitsdelight,yes,fruitsdelight:lychee_crate,
+fruitsdelight:mango,produce,fruitsdelight,yes,fruitsdelight:mango_crate,
+fruitsdelight:mangosteen,produce,fruitsdelight,yes,fruitsdelight:mangosteen_crate,
+fruitsdelight:orange,produce,fruitsdelight,yes,fruitsdelight:orange_crate,
+fruitsdelight:peach,produce,fruitsdelight,yes,fruitsdelight:peach_crate,
+fruitsdelight:pear,produce,fruitsdelight,yes,fruitsdelight:pear_crate,
+fruitsdelight:persimmon,produce,fruitsdelight,yes,fruitsdelight:persimmon_crate,
+fruitsdelight:pineapple,produce,fruitsdelight,yes,fruitsdelight:pineapple_crate,
+fruitsdelight:durian,produce,fruitsdelight,no,,no crate
+fruitsdelight:hamimelon,produce,fruitsdelight,no,,no crate
+veggiesdelight:broccoli,produce,creativedelight veggies,yes,veggiesdelight:broccoli_crate,
+veggiesdelight:cauliflower,produce,creativedelight veggies,yes,veggiesdelight:cauliflower_crate,
+veggiesdelight:garlic,produce,creativedelight veggies,yes,veggiesdelight:garlic_crate,
+veggiesdelight:sweet_potato,produce,creativedelight veggies,yes,veggiesdelight:sweet_potato_crate,
+veggiesdelight:turnip,produce,creativedelight veggies,yes,veggiesdelight:turnip_crate,
+veggiesdelight:zucchini,produce,creativedelight veggies,yes,veggiesdelight:zucchini_crate,
+vintagedelight:cucumber,produce,creativedelight vintage,yes,vintagedelight:cucumber_crate,
+vintagedelight:ghost_pepper,produce,creativedelight vintage,yes,vintagedelight:ghost_pepper_crate,
+vintagedelight:peanut,produce,creativedelight vintage,yes,vintagedelight:peanut_crate,
+vintagedelight:oat,produce,creativedelight vintage,yes,vintagedelight:oat_bag,also oat_bale
+corn_delight:corn,produce,corn_delight,yes,corn_delight:corn_crate,
+rusticdelight:black_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_black_crate,dark/pale variants not checked individually
+rusticdelight:blue_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_blue_crate,
+rusticdelight:green_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_green_crate,
+rusticdelight:orange_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_orange_crate,
+rusticdelight:pink_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_pink_crate,
+rusticdelight:purple_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_purple_crate,
+rusticdelight:red_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_red_crate,
+rusticdelight:white_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_white_crate,
+rusticdelight:yellow_bell_pepper,produce,creativedelight rustic,yes,rusticdelight:bell_pepper_yellow_crate,
+rusticdelight:cotton_boll,produce,creativedelight rustic,yes,rusticdelight:cotton_boll_crate,
+rusticdelight:coffee_beans,produce,creativedelight rustic,yes,rusticdelight:coffee_beans_bag,also roasted_coffee_beans_bag; farmersrespite:coffee_beans_sack
+farmersrespite:black_tea_leaves,produce,farmersrespite,yes,farmersrespite:black_tea_leaves_sack,
+farmersrespite:green_tea_leaves,produce,farmersrespite,yes,farmersrespite:green_tea_leaves_sack,
+farmersrespite:yellow_tea_leaves,produce,farmersrespite,yes,farmersrespite:yellow_tea_leaves_sack,
+farmersrespite:coffee_beans,produce,farmersrespite,yes,farmersrespite:coffee_beans_sack,
+delightful:acorn,produce,creativedelight delightful,yes,delightful:acorn_sack,nut
+delightful:blueberry,produce,creativedelight delightful,yes,delightful:blueberry_sack,
+delightful:crimson_berry,produce,creativedelight delightful,yes,delightful:crimson_berry_sack,
+delightful:nightshade_berry,produce,creativedelight delightful,yes,delightful:nightshade_berry_sack,
+delightful:salmonberry,produce,creativedelight delightful,yes,delightful:salmonberry_sack,
+delightful:baobab_fruit,produce,creativedelight delightful,yes,delightful:baobab_fruit_crate,
+delightful:green_apple,produce,creativedelight delightful,yes,delightful:green_apple_crate,
+delightful:joshua_fruit,produce,creativedelight delightful,yes,delightful:joshua_fruit_crate,
+delightful:cantaloupe,produce,creativedelight delightful,no,,no crate
+hearthandharvest:hops,produce,creativedelight hearth,yes,hearthandharvest:hops_bag,
+hearthandharvest:rotten_tomato,produce,creativedelight hearth,yes,hearthandharvest:rotten_tomato_crate,
+hearthandharvest:poisonous_potato,produce,creativedelight hearth,yes,hearthandharvest:poisonous_potato_crate,
+hearthandharvest:crimson_fungus,produce,creativedelight hearth,yes,hearthandharvest:crimson_fungus_crate,
+hearthandharvest:warped_fungus,produce,creativedelight hearth,yes,hearthandharvest:warped_fungus_crate,
+hearthandharvest:raspberry,produce,creativedelight hearth,no,,no crate or basket
+hearthandharvest:sunflower,produce,creativedelight hearth,no,,no crate
+vinery:red_grapes (and 3 biome red variants),produce,creativebrewing vinery,yes,vinery:red_grape_bag,also red_jungle/savanna/taiga_grape_bag
+vinery:white_grapes (and 3 biome white variants),produce,creativebrewing vinery,yes,vinery:white_grape_bag,also white_jungle/savanna/taiga_grape_bag
+vinery:cherry,produce,creativebrewing vinery,yes,vinery:cherry_bag,
+neapolitan:adzuki,produce,neapolitan,yes,neapolitan:adzuki_crate,
+neapolitan:roasted_adzuki,produce,neapolitan,yes,neapolitan:roasted_adzuki_crate,
+neapolitan:banana,produce,neapolitan,yes,neapolitan:banana_crate,
+neapolitan:strawberries,produce,neapolitan,yes,neapolitan:strawberry_basket,
+neapolitan:white_strawberries,produce,neapolitan,yes,neapolitan:white_strawberry_basket,
+neapolitan:mint,produce,neapolitan,yes,neapolitan:mint_basket,
+miners_delight:cave_carrot,produce,creativedelight miners,yes,miners_delight:cave_carrot_crate,
+oceanic_delight:sea_grapes,produce,creativedelight oceanic,yes,oceanic_delight:sea_grape_crate,
+quarkdelight:ancient_fruit,produce,quark_delight,yes,quarkdelight:ancient_fruit_crate,also creativedelight:*_fruit_basket decor baskets
+berry_good:other berries,produce,berry_good,no,,only sweet and glow berry baskets
+endercrop:ender_crop produce,produce,endercrop,no,,no sack
+supplementaries:flax,produce,supplementaries,no,,no sack
+immersiveengineering:hemp_fiber,produce,immersiveengineering,no,,no sack
+"alexsmobs/other nuts (chestnut, etc.)",produce,none,no,,no other nut has a sack beyond acorn and peanut
+"floralench flowers (allium, azure bluet, blue orchid, cornflower, dandelion, lily of the valley, tulips, oxeye, poppy, wither rose)",produce,floralench,yes,floralench:<flower>_basket,"14 flower baskets; no basket for lilac, peony, rose bush, sunflower"
+botania flowers (all),produce,botania,yes,botania:flower_bag,one generic flower bag
+generic storage (all seeds and produce),generic,supplementaries/suppsquared/quark,yes,supplementaries:sack,"also suppsquared:sack_<16 dyes>, quark:crate, quark:seed_pouch (seeds), vinery:basket, farmersdelight:basket; creates no per-item sack; Create has none"

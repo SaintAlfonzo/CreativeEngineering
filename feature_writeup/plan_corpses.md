@@ -1,7 +1,7 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=93559adcdc3c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Pinned 1, Testing 8), 0 Complete.
+<!-- generated:status_index begin open_work sha1=85146f0d14c3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Pinned 1, Testing 7), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -13,7 +13,6 @@
 | `corpses #6` | Testing | S C | Nether corpses wither (skeleton then wither skeleton corpse), End corpses keep the player model (Creative Compat) |
 | `corpses #7` | Testing | S C | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and a skeleton skull 25% of the time |
 | `corpses #8` | Testing | S C | Ancient corpse held items: wood, stone, copper or iron sword or pickaxe in the main hand (45%) and offhand (20%, half torches or bread), worn, rarely enchanted, copper oxidized or waxed; a corpse that rolls nothing gets a main hand tool (Creative Loot) |
-| `corpses #9` | Testing | S | Skeleton corpses sink in water instead of floating; ocean corpses keep gravity (Creative Compat, Creative Loot) |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, rulings in** (section 4); loot contents still to work out (section 5). Status lives in the TODO rows (section 6).

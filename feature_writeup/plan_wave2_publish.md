@@ -10,13 +10,12 @@ its own. Raspberry Pie gets four fixes. Pages: [project_pages/](project_pages/);
 
 ## 0. Intake (owner's words, 2026-11-23)
 
-<!-- generated:status_index begin open_work sha1=7a5476e33310 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Testing 10), 0 Complete.
+<!-- generated:status_index begin open_work sha1=dfe1b5ba1436 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Testing 9), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creative-common-publish #17` | Testing | S | Wave 2 carve to Creative Compat: melting (with End no-fire and the Saltable tooltip), Quark glass shard drops, sack sneak pick-up, Create: Gravity low gravity, server-start fix and ItemPhysic tie; [perf] gravityLimitDimensions stays in Common (W2-4); one-time config carry-over (W2-8) |
-| `creative-common-publish #18` | Testing | S | Wave 2 carve to Creative Delight: the 12 wooden composters (ids to Delight's namespace, old ids swapped, W2-9) and [bees] honeycombMultiplier |
 | `creative-common-publish #19` | Testing | S | Wave 2 carve to Creative Loot: [wandering_trader] spawn and offers with both mixins; Trade Sync and the trade helper stay in Common (W2-2) |
 | `creative-common-publish #20` | Testing | D | Common project page in the W2-6 layout (family headers, a bold name and a spoiler per feature) after the wave 2 carve; moved features removed |
 | `creative-compat-publish #10` | Testing | D | Compat project page in the W2-6 layout, with the features moved from Common and Raspberry Pie (melting, glass shards, sack pick-up, low gravity, Fleet-Footed) |
