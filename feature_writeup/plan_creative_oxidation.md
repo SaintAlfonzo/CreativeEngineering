@@ -39,6 +39,8 @@ create_oxidized.md until the member's writeup exists; the tests move there when 
 
 ## 2. Block breakdown
 
+Note 2026-11-25: the 45-target count in this plan (32 plus 13 Design n' Decor) became 34 blocks (32 plus 2): see the P6-P7 phase note in section 6.
+
 Upstream targets 72 block ids. In this pack: 32 present and covered, 40 absent; Design n' Decor adds 13 (R4).
 
 ### 2.1 Covered: present, with upstream oxidized art (32)
@@ -278,6 +280,13 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
   7 soap, 3 lightning rows). Rows CQ-OXD-03, -04 (draft) in `rows/OXD.qb` section 4. Needs game: `/dumpworldjei`, then
   `/cdevgen jei_world` (generated.json for waxing, soaping, lightning), then a client restart.
 
+- 2026-11-25 P9 docs: member writeup [creative_oxidation.md](creative_oxidation.md) (tests OXD-01 to OXD-15 moved there from
+  create_oxidized.md section 8, which now points to it; `OXD-` prefix index and `features.csv` file column point to it),
+  member line in [creative_engineering.md](creative_engineering.md), changelog family `## Copper and Iron Aging` (7
+  bullets, lint 0 errors). Not built: P8c WTHIT line (CQ-OXD-05 not yet drafted), P5 (TODO `mod-integration #32`).
+  Open owner item: the R4 deviation (Design n' Decor cut to copper light and copper large chain, 11 blocks left out
+  for lack of matching upstream art); see History.
+
 ## 7. History
 
 - 2026-11-25: plan written from the owner's notes on create_oxidized.md; rulings R1 to R9 asked and recorded,
@@ -285,3 +294,4 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
 - 2026-11-25: owner notes added R15 (staged items craft as plain), R16 (all variants viewable in JEI; overrides the
   R13 default) and R17 (JEI family for oxidized states), phase P8b, rows SQ-OXD-16, CQ-OXD-04.
 - 2026-11-25: owner confirmed R10 to R12, ruled R14 (WTHIT shows stage and wax), and named the JEI family "Oxidized Copper"; it will eventually hold all oxidized copper, not only these machines.
+- 2026-11-25: open for the owner: confirm the R4 deviation (Design n' Decor in the first build shipped with 2 of 13 blocks, because the other 11 have no upstream sprite with a matching layout and the texture rule forbids new art). Until answered, R4 stays as ruled and the cut stands.

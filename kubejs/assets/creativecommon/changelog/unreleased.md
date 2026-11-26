@@ -650,10 +650,14 @@
 
 ## Copper and Iron Aging <!-- icon: create:fluid_pipe -->
 
-- **New:** A Spout with 250 mB of water or a fan's washing stream ages Create, Create Deco and Design n' Decor copper blocks one stage. Waxed ones do not age.
+- **New:** Create and Create Deco copper machines, Design n' Decor Copper Light and Copper Large Chain age: exposed, weathered, oxidized. Waxed ones do not.
+- **New:** Honeycomb waxes aging copper blocks. An axe or Steel Wool removes wax, then steps one stage back. Soap removes wax and all oxidation.
+- **New:** Lightning on a lightning rod resets nearby aged copper blocks.
+- **New:** Broken aged blocks drop as items that keep their stage and wax and place back the same.
+- **New:** A Spout with 250 mB of water or a fan's washing stream ages these copper blocks one stage. Waxed ones do not age.
 - **New:** A Spout with 250 mB of water or a fan's washing stream rusts Immersive Weathering cut iron, plate iron, iron bars, iron doors and iron trapdoors one stage.
 - **New:** JEI lists every aged and waxed stage of these copper blocks in an Oxidized Copper group; the plain blocks keep their places.
-- **New:** JEI shows honeycomb, axe, steel wool, lightning and soap on the aged and waxed copper blocks.
+- **New:** JEI shows honeycomb, axe, Steel Wool, lightning and Soap on the aged and waxed copper blocks.
 - **Removed:** Create: Oxidized 0.1.1. Its Spout recipes for copper blocks, cut copper, shingles and tiles are kept.
 
 ## Engineering Recipes <!-- icon: immersiveengineering:workbench -->

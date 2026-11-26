@@ -161,7 +161,7 @@ same pass as the renames.
 | `NM-` | [names.md](../names.md) | SQ-NM (3) |  |  |
 | `NP-` | [nether_portal.md](../nether_portal.md) |  | creative_magic.md |  |
 | `NS-` | [furniture_storage.md](../furniture_storage.md) | CQ-NS (1), SQ-NS (1) |  |  |
-| `OXD-` | [create_oxidized.md](../create_oxidized.md) |  |  |  |
+| `OXD-` | [creative_oxidation.md](../creative_oxidation.md) |  |  |  |
 | `NW-` | [nether_worldgen.md](../nether_worldgen.md) |  | briefs/structures_netherblockswap.md, briefs/worldgen_biomes_netherblocks.md |  |
 | `OV-` | [oven.md](../oven.md) |  |  |  |
 | `PA-` | [immersive_paintings.md](../immersive_paintings.md) | CQ-PA (2), SQ-PA (4) |  |  |

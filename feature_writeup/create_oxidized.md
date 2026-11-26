@@ -244,34 +244,10 @@ Ruled 2026-11-25 (owner): D1 drop the old jar, D2 its recipes rebuilt in the mem
   `createoxidized_*` property; `create:fluid_pipe` does).
 - `python3 tools/privacy_lint.py`, `python3 tools/test_prefix_lint.py`.
 
-## 8. In-game test suite (drafted)
+## 8. In-game test suite
 
-Queue rows ([rows/OXD.qb](testing/rows/OXD.qb)): P1-P2 SQ-OXD-01, -07, -08, -11, -15; P3-P4 SQ-OXD-02 to -06,
--16, CQ-OXD-02.
-
-- [ ] **OXD-01 Aging:** place a Fluid Pipe and Copper Casing in the open, `speedFactor` 100, wait ~2 minutes -> both
-  step through exposed, weathered, oxidized; textures change each stage.
-- [ ] **OXD-02 Waxing:** right-click an exposed Fluid Tank with a honeycomb -> one honeycomb used, wax particles; with
-  `speedFactor` 100 it stays exposed.
-- [ ] **OXD-03 Scraping:** right-click a waxed weathered Spout with an axe -> wax off (sound), again -> exposed; axe
-  loses 1 durability each time.
-- [ ] **OXD-04 Lightning:** summon lightning on a lightning rod on top of an oxidized pipe line -> the pipe under the
-  rod is unaffected, a few nearby pipes step back.
-- [ ] **OXD-05 Item stage:** break a waxed weathered Mechanical Pump -> drop named "Waxed Weathered Mechanical Pump";
-  place it -> same stage and wax.
-- [ ] **OXD-06 Door halves:** place an oxidized Copper Door item -> both halves oxidized.
-- [ ] **OXD-07 Partial models:** oxidized Steam Engine on a boiler, Fluid Valve, Copper Valve Handle, Portable Fluid
-  Interface -> gauge, pointer, handle and PSI parts all show the oxidized texture.
-- [ ] **OXD-08 Unrelated blocks:** a glass pane, iron bars, an oak door and an Andesite Casing -> F3 shows no
-  `createoxidized_*` property (B1); a mod door that random-ticks still does (B2).
-- [ ] **OXD-09 Quad cache:** fly over a 32x32 copper casing and tank build for 5 minutes with F3 memory -> heap
-  settles (B3).
-- [ ] **OXD-10 Conversions:** wrench an oxidized Fluid Pipe to glass and back, encase it with a casing, make a
-  weathered tank into a boiler -> the stage is kept (B4).
-- [ ] **OXD-11 Contraption and schematic:** move a weathered Fluid Tank on a contraption, and print a schematic of
-  waxed pipes -> stages kept.
-- [ ] **OXD-12 Server and client:** dedicated server plus client join -> no state-id mismatch kick, staged blocks
-  render on the client.
+Moved 2026-11-25 to the member's writeup: [creative_oxidation.md](creative_oxidation.md) section 6 (OXD-01 to OXD-15;
+queue rows in [rows/OXD.qb](testing/rows/OXD.qb)).
 
 ## 9. History
 

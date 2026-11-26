@@ -95,6 +95,11 @@ from `creativeengineering-common.toml` for a pack that skips releases: that file
 `configs_edited/root_config/` holds both files, split the same way (backup of the pre-split file in the session
 scratchpad only). The live `config/` file is left for the first boot to split (SQ-CEN-02).
 
+### 2.1b Bundle members
+
+- **Creative Oxidation** (`creativeoxidation`, `members/creativeoxidation`, since 2026-11-25): Create copper machines
+  age and iron rusts by spout and fan; port of Create: Oxidized. Writeup: [creative_oxidation.md](creative_oxidation.md).
+
 ### 2.2 What every other jar changed
 
 - `mods.toml`: the mandatory `creativeengineering [1.1.09,)` dependency is `creativecommon [1.0.0,)` (Compat, Calendar,
