@@ -9,21 +9,19 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 
 ## 0. Owner rulings
 
-<!-- generated:status_index begin open_work sha1=922e0e4c00f7 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 1, Testing 9), 13 Complete.
+<!-- generated:status_index begin open_work sha1=1068acd67abc -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 1, Testing 7), 15 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `generators-and-tests #30` | Planned | CQ-MELT-02 CQ-CMP-21 CQ-RPS-15 | Row fixes from the owner screenshot review: CQ-MELT-02 capture shows no tooltip; CQ-CMP-21 belt and elytra not judgeable; CQ-RPS-15 food dict shots inconclusive |
 | `creative-common-publish #22` | Testing | CQ-CC13-02 | Salt Melt and the standard salt dust lack a 'usable on ice and snow' tooltip line |
 | `creative-compat-publish #8` | Testing | S | Weathered Cardboard Box moves from Creative Compat to Creative Engineering before Compat 1.0.0: id creativeengineering:weathered_cardboard_box, Compat ids in saves swapped back, item dict key kept, texture exemption (W2) moves with it |
-| `creative-compat-publish #16` | Testing | CQ-CMP-37 | Sneak right-click on the Item Trash Can opened the deleted-on-close screen, not the filter screen |
 | `creative-compat-publish #22` | Testing | CQ-CMP-33 | Ancient corpses are both named Corpse, not Ancient Corpse / Ancient Remains |
 | `creative-compat-publish #23` | Testing | CQ-CMP-36 | Item Trash Can: remove '(deleted on close)' from its label |
 | `raspberry-pie-publish #21` | Testing | C | Permanent buff icon keeps cycling diamond and effect while the buff is active: find and fix (rule unchanged: cycle until reached, effect alone while active) |
 | `raspberry-pie-publish #22` | Testing | C | Steady text: Diet Log tagline 'No slipping; does not trigger plates, tripwires or dripleaf'; full effect description lists all three SteadyRules rules |
 | `raspberry-pie-publish #23` | Testing | C | Hover taglines for the 19 ladder effects that have none: agent drafts, owner reviews the list before it is written |
-| `raspberry-pie-publish #24` | Testing | S C | Dropping the top effect slot drops every slot: find and fix (a drop should lose only the highest active slot) |
 <!-- generated:status_index end open_work -->
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |

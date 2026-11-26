@@ -10,14 +10,13 @@ its own. Raspberry Pie gets four fixes. Pages: [project_pages/](project_pages/);
 
 ## 0. Intake (owner's words, 2026-11-23)
 
-<!-- generated:status_index begin open_work sha1=503d566aba69 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Testing 5), 5 Complete.
+<!-- generated:status_index begin open_work sha1=032e191d5d64 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Testing 4), 6 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creative-common-publish #19` | Testing | S | Wave 2 carve to Creative Loot: [wandering_trader] spawn and offers with both mixins; Trade Sync and the trade helper stay in Common (W2-2) |
 | `raspberry-pie-publish #25` | Testing | S C | Fleet-Footed fix and fleetFootedFov move from Raspberry Pie to Creative Compat (W2-3); config value carried over; Raspberry Pie page and writeup drop them |
-| `raspberry-pie-publish #26` | Testing | S | Death and paid slot actions (effect change, slot drop) remove the aged-out foods from Apple Pie's memory instead of keeping them past the decay window |
 | `raspberry-pie-publish #27` | Testing | C | Food Dictionary: add a Hardest sort (complexity descending) next to Easiest |
 | `raspberry-pie-publish #28` | Testing | C | Diet Log extraWidth default 48 [47] |
 <!-- generated:status_index end open_work -->
