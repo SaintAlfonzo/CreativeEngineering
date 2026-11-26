@@ -1,17 +1,17 @@
 # Flesh That Hates in the Visceral Heap: integration plan (2026-11-25)
 
-<!-- generated:status_index begin open_work sha1=963e45182fc0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 7), 0 Complete.
+<!-- generated:status_index begin open_work sha1=cc9ebdeebae0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 6, Pinned 1), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `mod-integration #30` | Planned | S C P | Flesh That Hates (1.0.1) in the Visceral Heap: flesh mobs only (no FTH blocks), incubator lifeforce system; Biomancy 2 (2.3.2.0) blocks and mobs |
 | `mod-integration #38` | Planned | S C | Flesh That Hates P1: leave out every FTH block, the Bulwark, the Spawner, both effects, the potion and the Flesh Detector; no griefing, no /fill, no evolution, no incubator growth; flesh names without SCP; upstream bug fixes |
-| `mod-integration #39` | Planned | S C | Flesh That Hates P2: flesh mob type, Smite against it, fire and lava x3, mobs avoid fire and lava, drops from loot tables (BOP Flesh and Porous Flesh) |
+| `mod-integration #39` | Planned | S C | Flesh That Hates P2: flesh mob type, Smite against it, fire and lava x3, mobs avoid fire and lava; flesh mob loot tables with the drop review, Elastic Tendon from flesh mobs instead of the Murmur; Entrails (Architects Palette) as a Visceral Heap block with Porous Flesh's properties, veins, globs and recipes |
 | `mod-integration #40` | Planned | S C | Flesh That Hates P3: conversions in the Visceral Heap (standing on flesh: pillagers, villagers, witches; killed by flesh mobs: humanoids, animals by size, players beside their corpse) with the red cloud and falling chunks |
 | `mod-integration #41` | Planned | S C | Flesh That Hates P4: incubators hold lifeforce, claim chunks, take subs, spawn flesh mobs from flesh walls and floors for a cost, buff flesh mobs, promote a floating Big Incubator |
 | `mod-integration #42` | Planned | S C | Flesh That Hates P5: natural flesh spawns in unclaimed Visceral Heap chunks, own solo-oriented pool (owner designs it) |
-| `mod-integration #43` | Planned | S C | Flesh That Hates P6: drop review: final flesh mob loot, fate of FTH Flesh and Cooked Flesh |
+| `creative-delight-members #5` | Pinned | S C | Sausage Casing: cut from Entrails, required by sausage recipes (which of Hearth and Harvest raw sausage, Barbeque's Delight skewers, End's Delight ender sausage; casing art source) |
 <!-- generated:status_index end open_work -->
 
 Owner notes of 2026-11-25 (chat) turned into a plan. Nothing built. Investigation and upstream facts:
@@ -87,6 +87,15 @@ not part of these notes; its decisions B1 to B12 stay open.
 | R8 | FTH Flesh and Cooked Flesh (lose their only source under R2) | open | Pinned with the drop review | 2026-11-25 | AskUserQuestion 2026-11-25 |
 | R9 | Which victims count as humanoid (was A1) | open | Player, villager, wandering trader, witch, pillager, plus zombies and their humanoid forms (zombie, husk, drowned, zombie villager) and piglins with theirs (piglin, piglin brute, zombified piglin). Zombified piglins are the Heap's main spawn (weight 100), so flesh-mob kills of them are expected to be the main flesh source | 2026-11-26 | chat 2026-11-26 |
 | R10 | Standing conversion when the mob steps off flesh (was A2) | open | Leaving flesh (or the Heap) cancels the conversion; standing on flesh again starts a new 10 s | 2026-11-26 | chat 2026-11-26 |
+| R11 | "entrails should have the same block properties as porus flesh" | open | The whole Architects Palette Entrails set (block, slab, stairs, vertical slab) takes Porous Flesh's values; the drip stays, as BOP blood drips instead of water | 2026-11-26 | AskUserQuestion 2026-11-26 |
+| R12 | "spawn as long thin veins accross the flesh landscape like calcite lines on mountains and in large globs replacing flesh where not exposed to the air" | open | Veins on every flesh surface: floors, ceilings and cave walls | 2026-11-26 | AskUserQuestion 2026-11-26 |
+| R13 | "a source from porus flesh" | open | A cultivation mixing recipe that consumes Porous Flesh; its ingredient set must not overlap the Porous Flesh and Flesh Tendons recipes | 2026-11-26 | AskUserQuestion 2026-11-26 |
+| R14 | "most likely a weaker blood mixing" | open | Heated mixing: Entrails -> 100 mB blood | 2026-11-26 | AskUserQuestion 2026-11-26 |
+| R15 | "sausage casing cutting?" | open | A Sausage Casing cut from Entrails, required by sausage recipes; pinned as a Creative Delight TODO (which sausage families, the casing art) | 2026-11-26 | AskUserQuestion 2026-11-26 |
+| R16 | "removing the elastic tendon from the murmur and moving it to flesh mob loot" | clear | Murmur drops no Elastic Tendon; which flesh mobs drop it is decided with the loot (R17) | 2026-11-26 | chat 2026-11-26 |
+| R17 | "determinging flesh mob loot, as a plan for phase 2 to be implemented at the same time" | open | The drop review (old P6, R2, R8) moves into P2 and is built with it; the table itself is still pinned (proposal in 3.6) | 2026-11-26 | AskUserQuestion 2026-11-26 |
+| A6 | Entrails cultivation recipe | agent default, unconfirmed | Porous Flesh + Flesh Tendons + 250 mB blood -> 2 Entrails, unheated (3.7) |
+| A7 | Entrails veins and globs: density and size | agent default, owner evaluates | Values in 3.7; tuned in the eval like A4 |
 | A3 | Lifeforce from flesh mob deaths | agent default, confirmed 2026-11-26 (chat) | A killed flesh mob gives 50 % of its spawn cost to the claimer of the chunk; a despawn returns 100 % to its own incubator |
 | A4 | Every number in section 6 | agent default, owner evaluates (chat 2026-11-26) | Config values; first guesses to tune in the eval instance |
 | A5 | How FTH content is removed | agent default, confirmed 2026-11-26 (chat) | Registry allowlist (the `HeapDeferredRegisterMixin` pattern): left-out ids are never registered, so they cannot appear in saves, JEI or commands. Each upstream procedure that names a left-out id is canceled first |
@@ -151,6 +160,81 @@ not part of these notes; its decisions B1 to B12 stay open.
   Big Incubator 0-6), Porous Flesh 0-1 on the large mobs and incubators. Pinned: the drop review sets the final table and
   decides FTH Flesh and Cooked Flesh (R8).
 - XP unchanged (report 3.3.1).
+
+### 3.6 Loot and Elastic Tendon (phase 2, table pinned)
+
+Built with phase 2 (R17); the table waits for the owner. Proposal (player kill, Looting +1 per level on every count):
+
+| Mob | Flesh | Porous Flesh | Entrails |
+|---|---|---|---|
+| Pincher, Drifter | 0-1 | | |
+| Flesh Humanoid, Flesh Pillager, Flesh Animal | 0-2 | | 10 %, 1 |
+| Snatcher, Scuttler | 0-2 | 0-1 | 15 %, 1 |
+| Herpad, Stretcher, Cradle | 1-3 | 0-1 | 25 %, 1 |
+| Small Incubator | 1-2 | 1-2 | 0-1 |
+| Big Incubator | 2-4 | 2-3 | 1-2 |
+
+- Elastic Tendon (R16): the Alex's Mobs Murmur pool `murmur_tendon` is removed through the pack loot rules
+  ([loot.md](loot.md)); the Murmur keeps its clothing and wool pools. Proposed carriers: Stretcher 0-2 and Snatcher 0-1,
+  Looting +1 (the Murmur gave 0-2). It stays the Tendon Whip's only ingredient source.
+- Open within the review: FTH Flesh and Cooked Flesh (R8), extras (Flesh Tendons, Eyebulb, Hair, Pus Bubble).
+
+### 3.7 Entrails as a Heap material (phase 2)
+
+Architects Palette (ARR jar, untouched; changes are runtime property edits, tags, mixins and data in our jars).
+
+Block properties (R11), for `entrails`, `entrails_slab`, `entrails_stairs`, `entrails_vertical_slab`:
+
+| Property | Architects Palette now | After (= Porous Flesh) | Where |
+|---|---|---|---|
+| Strength | copied from a vanilla block | 0.4 | `block_properties.js` (BlockEvents.modification) |
+| Sounds | copied | BOP flesh sounds: coral block sounds at pitch 0.5 | same; the SoundType built like BOP's |
+| Map color | copied | red terracotta | same |
+| Jump factor | 1.0 | 0.5 (honey, as Porous Flesh) | same |
+| Walk tier | BlockRunner `spongy` | `very_sticky` | `blocktags.js` (out of the spongy pattern, into very_sticky) |
+| Slowdown on step | none | x0.95 horizontal (BOP `FleshBlock.stepOn`) | mixin on `DrippyBlock`, `DrippySlabBlock`, `DrippyVerticalSlabBlock` and the stairs class, in Creative Worldgen |
+| Wall slide | no | yes | `creativecompat:wall_slide` tag |
+| Cave carving | no | `#minecraft:nether_carver_replaceables` | `visceral_heap.js` tags |
+| Tool | axe (Architects Palette) | none, as Porous Flesh (hand-breakable at 0.4) | `global.tags` remove from `mineable/axe` |
+| Drip | vanilla dripping water from the underside | BOP `dripping_blood` | mixin on `DrippyBlock.doParticleEffect` |
+| Item Physic family | `produce` | `organic` (with Porous Flesh) | `physics/family` tags |
+
+Worldgen (R12, A7; Creative Worldgen data, on only with BOP and Architects Palette loaded):
+
+- Veins on floors and ceilings: a narrow noise band in the Heap's surface rule, the way vanilla stony peaks paint calcite
+  (`tools/gen_visceral_heap.py` emits it before the flesh rules): a dedicated noise, band width about 0.02 so lines are
+  1 to 2 blocks wide and long, 1 to 3 blocks deep; about 3 % of the floor and ceiling surface.
+- Veins on cave walls: the surface rule does not reach walls, so a placed feature (Heap only, every chunk) walks the same
+  noise across exposed flesh wall faces and swaps the face block and 1 to 2 behind it to Entrails, giving the lines on
+  walls that continue the floor and ceiling bands.
+- Globs: an ore feature, target `biomesoplenty:flesh` and `porous_flesh`, size 48, `discard_chance_on_air_exposure`
+  1.0 (never touches air), 3 per chunk over the Heap's height range.
+- Locate and the Heap's tests: SQ-VH-06 (all-flesh interior) learns Entrails as a Heap block.
+
+Recipes (Visceral Heap recipes, `kubejs/data/creativeworldgen/kubejs/recipes/visceral_heap.js`, values in
+[plan_flesh_recipes.md](plan_flesh_recipes.md)):
+
+| Recipe | Ingredients | Result |
+|---|---|---|
+| Entrails cultivation (R13, A6) | Porous Flesh + Flesh Tendons + 250 mB blood, mixing, unheated | 2 Entrails (the Porous Flesh is consumed) |
+| Entrails blood (R14) | Entrails, heated mixing | 100 mB blood |
+| Warping (Architects Palette) | Rotten Flesh Block through a Nether portal | Entrails (kept) |
+| Entrails set | slab, stairs, vertical slab (Architects Palette) | kept |
+
+Overlap check for the mixer (a basin runs the first recipe whose ingredients it holds; no recipe's ingredient set may be
+contained in another's):
+
+| Recipe | Items | Fluid | Contained in another? |
+|---|---|---|---|
+| Flesh cultivation | 2 Porous Flesh, 2 Flesh | 1000 mB plant oil | no (only one with oil) |
+| Porous Flesh cultivation | 2 Flesh Tendons, 1 Flesh | 250 mB blood | no (Entrails cultivation has no Flesh) |
+| Entrails cultivation | 1 Porous Flesh, 1 Flesh Tendons | 250 mB blood | no (Porous Flesh cultivation has no Porous Flesh) |
+| Blood recipes (heated) | 1 of Flesh, Porous Flesh, Flesh Tendons or Entrails | none | single-item heated recipes: a heated basin holding a cultivation set may melt one item first; same as today with Flesh |
+
+No loop gains blood: 1 Porous Flesh (500 mB) + 1 Flesh Tendons (250 mB) + 250 mB -> 2 Entrails (200 mB).
+
+Sausage Casing (R15): cutting Entrails into casings that sausage recipes need is the pinned Creative Delight row
+`creative-delight-members #5`, not part of this plan's build.
 
 ## 4. Conversions
 
@@ -347,11 +431,11 @@ ingredient.
 |---|---|---|
 | P0 | Eval instance: owner plays the unedited mods (section 10) | `mod-integration #30` log |
 | P1 | Registry allowlist and procedure cancels: blocks, Bulwark, Spawner, effects, potion, detector out; no griefing, no `/fill`, no evolution, no growth; names and lang; upstream bug fixes | `mod-integration #38` |
-| P2 | Flesh mob type, Smite, fire x3, hazard AI, loot tables (R2 interim) | `mod-integration #39` |
+| P2 | Flesh mob type, Smite, fire x3, hazard AI; loot tables with the drop review (3.6, R17), Elastic Tendon off the Murmur (R16); Entrails as a Heap material (3.7: properties, veins and globs, recipes) | `mod-integration #39` |
 | P3 | Conversions: standing (4.1), death (4.2), effect (4.3) | `mod-integration #40` |
 | P4 | Incubators: claims, subs, tank, spawning and emergence, buffs, promotion, floating, particles | `mod-integration #41` |
 | P5 | Natural spawns in unclaimed chunks: own skewed solo pool (R5, owner designs later) | `mod-integration #42` |
-| P6 | Drop review: final tables, FTH Flesh and Cooked Flesh (R2, R8) | `mod-integration #43` |
+| P6 | (merged into P2 on 2026-11-26, R17) | `mod-integration #43` |
 
 Order: P1 before everything (removed ids crash procedures that still run); P2 before P3 (conversions need the type
 tag); P4 after P3 (deaths feed tanks). Each phase adds its scratch rows to `rows/FTH.qb` when built.
@@ -405,9 +489,16 @@ The ATLauncher instance `CEPortTesting` (Forge 43.3.9) now loads the unedited Fl
 - [ ] **FTH-46 Particles:** main and sub incubators of both sizes -> pulse and drips on all, chunk drips on big ones, the ring only on mains
 - [ ] **FTH-47 Natural spawns:** claimed chunk vs unclaimed chunk over 20 minutes -> no natural flesh spawn in the claimed one
 - [ ] **FTH-48 Loot:** kill each mob with Looting III -> only BOP Flesh and Porous Flesh, counts in the loot table's range
+- [ ] **FTH-49 Murmur:** kill 50 Murmurs with Looting III -> no Elastic Tendon; clothing and wool drop as before
+- [ ] **FTH-50 Entrails properties:** break, walk, jump and wall-slide on Entrails and its slab next to Porous Flesh -> same break time by hand, same sounds, same jump height and slowdown, wall slide works; the underside drips blood
+- [ ] **FTH-51 Entrails veins:** fly 500 blocks through a Heap -> thin long Entrails lines on floors, ceilings and cave walls, about 3 % of the surface
+- [ ] **FTH-52 Entrails globs:** probe 100 Heap chunks -> Entrails globs inside flesh, none touching air
+- [ ] **FTH-53 Entrails recipes:** mixer with Porous Flesh, Flesh Tendons, 250 mB blood -> 2 Entrails; with 2 Flesh Tendons, Flesh, 250 mB blood -> Porous Flesh (no Entrails); heated basin with Entrails -> 100 mB blood
 
 ## 12. History
 
+- 2026-11-26: Entrails as a Heap material and the drop review planned into P2 (R11 to R17, A6, A7; sections 3.6, 3.7);
+  Sausage Casing pinned to Creative Delight.
 - 2026-11-26: R9 (zombies and piglins on the humanoid list), R10 (leaving flesh cancels the standing conversion); A3,
   A5 confirmed, A4 to the eval; section 7.1 (Entrails and Elastic Tendon uses, 2x2x2 render).
 - 2026-11-25: owner notes taken in (45 items, rulings R1 to R8 by AskUserQuestion, agent defaults A1 to A5); eval instance
