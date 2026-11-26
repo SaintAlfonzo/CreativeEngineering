@@ -18,8 +18,13 @@ import mezz.jei.gui.ingredients.IListElement;
 import mezz.jei.gui.ingredients.IngredientFilter;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NumericTag;
+import net.minecraft.nbt.StringTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
@@ -57,6 +62,11 @@ import java.util.function.Consumer;
  * the leaf's sort chain ({@code list}, {@code mod}, {@code name}, {@code creative}), then JEI's own order. Unplaced
  * ingredients keep JEI's own order (its {@code IngredientSortStages}), after every placed one of their type.
  *
+ * <p>NBT variants follow their item, except where a node's {@code nbt} entries name them: an item stack whose tag
+ * holds every key and value of an entry sits at that node (the entry with the most keys wins; on a tie the first in
+ * definition order). Inside the node: by the plain item's own place in the pack order, then the entry's position.
+ * Creative Oxidation's staged copper items use it (jei_ordering.md 12.7).
+ *
  * <p>Sorted (by {@code mixin.JeiStarterMixin} / {@code JeiIngredientFilterMixin}) when JEI has finished starting,
  * which is after KubeJS's runtime adds and hides, and again when a mod adds ingredients later; JEI's own sort runs
  * first in both cases and stays as the fallback order. Off: {@code CommonConfig [jei] packOrder}.
@@ -76,6 +86,8 @@ public final class PackIngredientOrder {
 	/** JEI's own position of each element before the pack sort (the fallback order). */
 	private static final Map<IListElement<?>, Integer> jeiIndex = new IdentityHashMap<>();
 	private static final Map<IListElement<?>, Key> keys = new IdentityHashMap<>();
+	/** Item -> its NBT-less element, for placing NBT variants by their plain item (only while sorting). */
+	private static final Map<net.minecraft.world.item.Item, IListElement<?>> plainItems = new IdentityHashMap<>();
 	@Nullable private static Placements placements;
 	private static boolean starting;
 	/** The filter was built during the current start (JEI bails out early when there is no level). */
@@ -162,6 +174,14 @@ public final class PackIngredientOrder {
 			IIngredientManager manager = accessor(target).creativecommon$getIngredientManager();
 			Placements placed = placements();
 			List<IListElement<?>> elements = new ArrayList<>(allElements(target));
+			plainItems.clear();
+			if (!placed.nbtRules.isEmpty()) {
+				for (IListElement<?> element : elements) {
+					if (element.getTypedIngredient().getIngredient() instanceof ItemStack stack && !stack.hasTag()) {
+						plainItems.putIfAbsent(stack.getItem(), element);
+					}
+				}
+			}
 			for (IListElement<?> element : elements) {
 				keys.computeIfAbsent(element, e -> keyOf(e, manager, placed));
 			}
@@ -209,6 +229,25 @@ public final class PackIngredientOrder {
 		long fallback = jei != null ? jei : (long) Integer.MAX_VALUE + element.getCreatedIndex();
 
 		ResourceLocation id = safeId(helper, ingredient);
+		if (ingredient instanceof ItemStack stack && stack.getTag() != null && !placed.nbtRules.isEmpty()) {
+			NbtRule rule = placed.nbtRuleFor(stack.getTag());
+			if (rule != null) {
+				IListElement<?> plain = plainItems.get(stack.getItem());
+				Key base = plain != null && plain != element ? keys.get(plain) : null;
+				if (base == null && plain != null && plain != element) {
+					base = keyOf(plain, manager, placed); // plain items never match a rule, so no recursion
+					keys.put(plain, base);
+				}
+				if (base == null) base = idKey(element, typeRank, fallback, helper, ingredient, id, placed, typeKey);
+				return new Key(typeRank, rule.placement.ranks, rule.placement.names, new Object[]{base, rule.index}, fallback);
+			}
+		}
+		return idKey(element, typeRank, fallback, helper, ingredient, id, placed, typeKey);
+	}
+
+	/** The key from the ingredient's id alone (jei tags, then lists); NBT variants share it. */
+	private static <V> Key idKey(IListElement<V> element, int typeRank, long fallback, IIngredientHelper<V> helper,
+								 V ingredient, @Nullable ResourceLocation id, Placements placed, String typeKey) {
 		Placement placement = id == null ? null : placed.get(typeKey, id);
 		if (placement == null) return new Key(typeRank, null, null, NO_LEAF, fallback);
 
@@ -304,7 +343,9 @@ public final class PackIngredientOrder {
 			if (c != 0) return c;
 			int leafLen = Math.min(leaf.length, o.leaf.length);
 			for (int i = 0; i < leafLen; i++) {
-				c = ((Comparable) leaf[i]).compareTo(o.leaf[i]);
+				// a node mixing nbt entries with id members: different leaf shapes, kept apart by class
+				c = leaf[i].getClass() == o.leaf[i].getClass() ? ((Comparable) leaf[i]).compareTo(o.leaf[i])
+						: leaf[i].getClass().getName().compareTo(o.leaf[i].getClass().getName());
 				if (c != 0) return c;
 			}
 			return Long.compare(fallback, o.fallback);
@@ -322,6 +363,8 @@ public final class PackIngredientOrder {
 		@Nullable final List<String> sort;
 		@Nullable final List<String> modOrder;
 		final Map<ResourceLocation, Integer> listIndex = new LinkedHashMap<>();
+		/** {@code nbt} entries: key -> wanted value (JSON string, number or boolean), in definition order. */
+		final List<Map<String, JsonElement>> nbt = new ArrayList<>();
 		final Map<String, Node> children = new LinkedHashMap<>();
 
 		Node(String type, List<String> path, @Nullable List<String> sort, @Nullable List<String> modOrder) {
@@ -412,6 +455,14 @@ public final class PackIngredientOrder {
 					ResourceLocation rl = ResourceLocation.tryParse(entry);
 					if (rl != null) node.listIndex.putIfAbsent(rl, node.listIndex.size());
 				}
+				if (o.has("nbt") && o.get("nbt").isJsonArray()) {
+					for (JsonElement entry : o.getAsJsonArray("nbt")) {
+						if (!entry.isJsonObject() || entry.getAsJsonObject().size() == 0) continue;
+						Map<String, JsonElement> match = new LinkedHashMap<>();
+						entry.getAsJsonObject().entrySet().forEach(kv -> match.put(kv.getKey(), kv.getValue()));
+						node.nbt.add(match);
+					}
+				}
 				if (parent.children.putIfAbsent(id, node) != null) {
 					LOGGER.warn("[jei order] duplicate node {}/{}, the first one is kept", parent.type, node.pathString());
 					continue;
@@ -463,6 +514,18 @@ public final class PackIngredientOrder {
 		final Map<String, Map<ResourceLocation, Placement>> byType = new HashMap<>();
 		final List<String[]> conflicts = new ArrayList<>();          // type, id, kept path, other path
 		final Set<String> undefinedPaths = new LinkedHashSet<>(); // "type:path" of tags/lists the definition lacks
+		/** Item nodes' {@code nbt} entries, in definition order. */
+		final List<NbtRule> nbtRules = new ArrayList<>();
+
+		/** The entry with the most keys that this tag holds (first on a tie), or null. */
+		@Nullable
+		NbtRule nbtRuleFor(CompoundTag tag) {
+			NbtRule best = null;
+			for (NbtRule rule : nbtRules) {
+				if ((best == null || rule.match.size() > best.match.size()) && rule.matches(tag)) best = rule;
+			}
+			return best;
+		}
 
 		@Nullable
 		Placement get(String typeKey, ResourceLocation id) {
@@ -476,6 +539,12 @@ public final class PackIngredientOrder {
 			p.scanTags("fluid", Registry.FLUID, def);
 			p.scanTags("effect", Registry.MOB_EFFECT, def);
 			// list entries place the ids no jei tag placed (multiblocks always come this way)
+			Node items = def.roots.get("item");
+			if (items != null) items.forEach(node -> {
+				for (int i = 0; i < node.nbt.size(); i++) {
+					p.nbtRules.add(new NbtRule(node.nbt.get(i), i, p.placementFor(def, "item", node.path, "nbt")));
+				}
+			});
 			def.roots.values().forEach(root -> root.forEach(node -> {
 				for (ResourceLocation id : node.listIndex.keySet()) {
 					Placement existing = p.get(node.type, id);
@@ -540,6 +609,35 @@ public final class PackIngredientOrder {
 				if (c != 0) return c;
 			}
 			return Integer.compare(a.ranks.length, b.ranks.length);
+		}
+	}
+
+	/** One {@code nbt} entry of an item node: the tag must hold each key with that value. */
+	static final class NbtRule {
+		final Map<String, JsonElement> match;
+		final int index;
+		final Placement placement;
+
+		NbtRule(Map<String, JsonElement> match, int index, Placement placement) {
+			this.match = match;
+			this.index = index;
+			this.placement = placement;
+		}
+
+		boolean matches(CompoundTag tag) {
+			for (Map.Entry<String, JsonElement> e : match.entrySet()) {
+				if (!valueMatches(tag.get(e.getKey()), e.getValue())) return false;
+			}
+			return true;
+		}
+
+		/** Booleans match a numeric tag's 0 / non-0 (NBT booleans are bytes), numbers by value, strings by text. */
+		static boolean valueMatches(@Nullable Tag tag, JsonElement want) {
+			if (tag == null || !want.isJsonPrimitive()) return false;
+			var p = want.getAsJsonPrimitive();
+			if (p.isBoolean()) return tag instanceof NumericTag n && (n.getAsByte() != 0) == p.getAsBoolean();
+			if (p.isNumber()) return tag instanceof NumericTag n && n.getAsDouble() == p.getAsDouble();
+			return tag instanceof StringTag ? tag.getAsString().equals(p.getAsString()) : false;
 		}
 	}
 }

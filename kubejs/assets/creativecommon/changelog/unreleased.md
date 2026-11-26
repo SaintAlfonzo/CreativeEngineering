@@ -652,6 +652,8 @@
 
 - **New:** A Spout with 250 mB of water or a fan's washing stream ages Create, Create Deco and Design n' Decor copper blocks one stage. Waxed ones do not age.
 - **New:** A Spout with 250 mB of water or a fan's washing stream rusts Immersive Weathering cut iron, plate iron, iron bars, iron doors and iron trapdoors one stage.
+- **New:** JEI lists every aged and waxed stage of these copper blocks in an Oxidized Copper group; the plain blocks keep their places.
+- **New:** JEI shows honeycomb, axe, steel wool, lightning and soap on the aged and waxed copper blocks.
 - **Removed:** Create: Oxidized 0.1.1. Its Spout recipes for copper blocks, cut copper, shingles and tiles are kept.
 
 ## Engineering Recipes <!-- icon: immersiveengineering:workbench -->

@@ -94,6 +94,30 @@ def blocks(ids, **extra):
 	return {'blocks': list(ids), **extra}
 
 
+def nbt_stacks(ids, nbt=None, **extra):
+	"""One slot cycling `ids`, every stack with the same item NBT (SNBT; None: the plain item)."""
+	return {'stacks': [{'item': i, 'nbt': nbt} if nbt else {'item': i} for i in ids], **extra}
+
+
+def oxidation_section(dump):
+	"""tool_pairs.json `creativeoxidation` (Creative Oxidation's OxidationJeiData): (items, transitions by change),
+	or ([], {}) when the member is missing or disabled."""
+	ox = (dump or {}).get('creativeoxidation') or {}
+	if not ox.get('enabled', True) or not ox.get('items'):
+		return [], {}
+	by_change = {}
+	for t in ox.get('transitions', []):
+		by_change.setdefault(t['change'], []).append(t)
+	return list(ox['items']), by_change
+
+
+def oxidation_row(items, t, action, notes, requires=None):
+	"""A linked row: every target item in the from-state -> the same item in the to-state. Items of a missing mod
+	drop out of the slot on the client, so only Creative Oxidation (plus `requires`) gates the row."""
+	return row([nbt_stacks(items, t['from'].get('nbt'))], [nbt_stacks(items, t['to'].get('nbt'))],
+			   action=action, notes=notes, linked=True, requires=['creativeoxidation'] + list(requires or []))
+
+
 def block_tag(tag_id, **extra):
 	return {'block_tag': tag_id.lstrip('#'), **extra}
 

@@ -32,6 +32,11 @@
 //     except:   [global.item.x, 'mod:*_part'],              // taken back out of `from` (ids, wildcards, '#tags'), e.g.
 //                                                             //   ids another node lists, so they don't conflict
 //     modOrder: [...],                                        // per-node override of the shared modOrder
+//     nbt:      [{ Key: 'value', Flag: true }, ...],          // item nodes: NBT variants placed here. An item stack
+//                                                             //   whose tag holds every key and value of an entry sits
+//                                                             //   at this node (most keys wins, then the first entry);
+//                                                             //   order: the plain item's own place, then entry order.
+//                                                             //   Values: string, number, boolean (a byte 0/1 tag)
 //   }
 // A node holds its own members before its children's. Multiblocks have no registry: their nodes place by `list`
 // only. An ingredient's deepest creativecompat:jei/... tag is its place; see the writeup for conflicts.
@@ -120,6 +125,23 @@ global.jeiOrder = {
 			if (node.list) {
 				out.list = this._strings(node.list)
 				out.list.forEach(e => { if (/^[#@\/]|[*?]/.test(e)) console.warn('global.jeiOrder: ' + type + ' node "' + path + '" list entry "' + e + '" is not an exact id (put patterns in `from`)') })
+			}
+			if (node.nbt) {
+				if (type !== 'item') console.warn('global.jeiOrder: ' + type + ' node "' + path + '" has `nbt`, only item nodes place NBT variants')
+				out.nbt = []
+				;(Array.isArray(node.nbt) ? node.nbt : [node.nbt]).forEach((entry, idx) => {
+					const plain = {}
+					let n = 0
+					Object.keys(entry || {}).forEach(k => {
+						const v = entry[k]
+						if (typeof v === 'boolean' || typeof v === 'number') plain[String(k)] = v
+						else if (v != null) plain[String(k)] = String(v)
+						else return
+						n++
+					})
+					if (n === 0) console.warn('global.jeiOrder: ' + type + ' node "' + path + '" nbt entry ' + idx + ' is empty')
+					else out.nbt.push(plain)
+				})
 			}
 			if (node.from) out.from = this._strings(node.from)
 			if (node.except) out.except = this._strings(node.except)

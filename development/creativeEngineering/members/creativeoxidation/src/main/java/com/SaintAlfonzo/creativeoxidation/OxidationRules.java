@@ -67,6 +67,51 @@ public final class OxidationRules {
 		return waxed || stage != OxidationStage.UNAFFECTED;
 	}
 
+	/** Lightning (P4): an unwaxed aged block goes back to unaffected; waxed blocks keep their stage. */
+	public static boolean lightningCleans(boolean waxed, OxidationStage stage) {
+		return !waxed && stage != OxidationStage.UNAFFECTED;
+	}
+
+	/** What a JEI world row shows (P8): honeycomb, scraper (axe and steel wool), lightning or soap. */
+	public enum Change {
+		HONEYCOMB,
+		SCRAPE,
+		LIGHTNING,
+		SOAP
+	}
+
+	/** One state change of a staged block, for the JEI world rows (P8). */
+	public record Transition(Change change, OxidationStage fromStage, boolean fromWaxed, OxidationStage toStage,
+							 boolean toWaxed) {
+	}
+
+	/**
+	 * Every state change the hand tools, lightning and soap make, from the same decisions the events and
+	 * OxidationManager use: honeycomb waxes at the same stage; a scraper takes wax off first, else one stage back;
+	 * lightning sends an unwaxed aged block to unaffected (the struck block; the random walks clean one stage per
+	 * step); soap takes wax and every stage off. Order: by change, then from-state (unaffected to oxidized, unwaxed
+	 * before waxed).
+	 */
+	public static java.util.List<Transition> transitions() {
+		java.util.List<Transition> out = new java.util.ArrayList<>();
+		for (Change change : Change.values()) {
+			for (boolean waxed : new boolean[]{false, true}) {
+				for (OxidationStage stage : OxidationStage.values()) {
+					Transition t = switch (change) {
+						case HONEYCOMB -> toolApplies(Tool.HONEYCOMB, waxed, stage) ? new Transition(change, stage, waxed, stage, true) : null;
+						case SCRAPE -> !toolApplies(Tool.SCRAPER, waxed, stage) ? null
+								: waxed ? new Transition(change, stage, true, stage, false)
+								: new Transition(change, stage, false, stage.previous(), false);
+						case LIGHTNING -> lightningCleans(waxed, stage) ? new Transition(change, stage, false, OxidationStage.UNAFFECTED, false) : null;
+						case SOAP -> soapWashes(waxed, stage) ? new Transition(change, stage, waxed, OxidationStage.UNAFFECTED, false) : null;
+					};
+					if (t != null) out.add(t);
+				}
+			}
+		}
+		return out;
+	}
+
 	/**
 	 * Breaking a staged or waxed block (P3, R8): the drops keep the stage when {@code keepStageOnBreak} is on and the
 	 * state is not plain; only drops that are a target's own item ({@link OxidationTargets#isTargetItem}) get it.

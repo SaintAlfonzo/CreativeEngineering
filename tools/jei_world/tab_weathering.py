@@ -6,7 +6,9 @@ Sources (jar data with kubejs/data on top, so datapack overrides count):
   - IW "builtin" growths whose pairs come from block tags (sandy / snowy stones, sand pile seeping, leaf piles,
     lightning vitrify / crack) and the builtin burn_moss fluid generator; pairs from kubejs/exported/tags.
 Hardcoded behavior with no pairing data (soot, icicles, ice melting, vanilla / Create / DnD lava, copper and
-lightning, IE concrete, Salt) is in each tab's manual.json.
+lightning, IE concrete, Salt) is in each tab's manual.json. Creative Oxidation's staged Create copper blocks (item NBT)
+come from kubejs/exported/world_jei/tool_pairs.json `creativeoxidation` (run /dumpworldjei): one linked lightning row
+per aged stage, unwaxed only.
 
 Semantics read from the IW 1.2.10 jar (javap, 2026-10-22):
   - ConfigurableBlockGrowth: growth_chance per tick; weighted face (growth_for_face[].weight, default 1; a face
@@ -25,7 +27,7 @@ Semantics read from the IW 1.2.10 jar (javap, 2026-10-22):
 import json
 import re
 
-from .common import block, block_tag, blocks, fluid, item, row
+from .common import block, block_tag, blocks, fluid, item, oxidation_row, oxidation_section, row
 
 REQ = ['immersive_weathering']
 ALL_DIRS = ['down', 'up', 'north', 'south', 'west', 'east']
@@ -532,4 +534,15 @@ def build(ctx):
 		out[tab] += rows
 	for key, d in ctx.data_files('fluid_generators').items():
 		out['lava_generation'] += _gen_rows(ctx, names, key, d)
+	out['lightning'] += _oxidation_lightning(ctx)
 	return out
+
+
+def _oxidation_lightning(ctx):
+	"""Creative Oxidation: the struck block (or the one under a struck lightning rod) back to unaffected."""
+	dump = ctx.exported('world_jei/tool_pairs.json')
+	items, by_change = oxidation_section(dump)
+	return [oxidation_row(items, t, LIGHTNING,
+						  ['Struck, or under a struck lightning rod: back to unaffected.',
+						   'Nearby copper loses one stage per step.', 'Waxed blocks keep their stage.'])
+			for t in by_change.get('lightning', [])] if items else []

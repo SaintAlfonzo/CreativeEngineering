@@ -62,7 +62,8 @@ import net.minecraftforge.common.util.FakePlayerFactory;
  * <p>Output: {@code strip/scrape/wax_off/honeycomb: [{from, to, age?, bark?}]}, {@code color_sets: {key: {colors:
  * {dye: id}, base: id?}}}, {@code dye_blocked: [id]} (block entity or {@code #creativeengineering:no_world_dye}, see
  * SupplementariesDyeBlocksMixin), {@code soap: [{from, to, how}]}, {@code soap_washable: [id]} (blocks with their own
- * soap behavior), {@code config: {...}} (live Supplementaries / Immersive Weathering switches).
+ * soap behavior), {@code config: {...}} (live Supplementaries / Immersive Weathering switches),
+ * {@code creativeoxidation: {...}} (staged copper items and their state changes, when Creative Oxidation is loaded).
  */
 final class WorldJeiToolPairs {
 	private static final Logger LOGGER = LogUtils.getLogger();
@@ -158,7 +159,21 @@ final class WorldJeiToolPairs {
 
 		supplementaries(out, config);
 		immersiveWeathering(config);
+		creativeOxidation(out);
 		return out;
+	}
+
+	// Creative Oxidation (staged Create copper blocks, item NBT) ---------------------------------------------------
+
+	/**
+	 * {@code creativeoxidation}: the member's own description of its honeycomb, scraper, lightning and soap changes
+	 * on the staged items (OxidationJeiData#dump, by reflection so devtools needs no compile dependency).
+	 */
+	private static void creativeOxidation(JsonObject out) {
+		Method dump = method(classOrNull("com.SaintAlfonzo.creativeoxidation.OxidationJeiData"), "dump");
+		if (dump == null) return;
+		if (invokeQuiet(dump) instanceof JsonElement section) out.add("creativeoxidation", section);
+		else LOGGER.warn("[dumpworldjei] Creative Oxidation's OxidationJeiData.dump() failed, no creativeoxidation rows");
 	}
 
 	// Supplementaries dye / soap -------------------------------------------------------------------------------

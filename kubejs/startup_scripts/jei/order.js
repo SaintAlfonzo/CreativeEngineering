@@ -6,7 +6,8 @@
 //
 // Items: Equipment first (writeup 12.5): one node per material family (tools, then armor, then that material's
 // copies of misc gear), then misc (vanilla, modded, knives, arrows, guns, then the tech / magic / hats
-// catch-alls). Also the IE multiblocks, vanilla fluids, vanilla beneficial effects. Everything else is unplaced
+// catch-alls), Storage Delight, then the Oxidized Copper family (NBT variants). Also the IE multiblocks,
+// vanilla fluids, vanilla beneficial effects. Everything else is unplaced
 // and keeps JEI's own order after the placed entries of its type, until it gets a node.
 const jeiI = global.item
 const jeiF = global.fluid
@@ -24,6 +25,12 @@ const jeiStorageKinds = [
 	w => w + '_cabinet_with_stone_bricks_countertop', w => w + '_cabinet_with_polished_tuff_countertop',
 	w => w + '_bookshelf_with_door',
 ]
+// Creative Oxidation item NBT (OxidationItemData): stage string + waxed byte, both written on every staged stack
+const jeiOxidizedVariants = []
+;[false, true].forEach(waxed => ['unaffected', 'exposed', 'weathered', 'oxidized'].forEach(stage => {
+	if (stage !== 'unaffected' || waxed) jeiOxidizedVariants.push({ CreativeOxidationStage: stage, CreativeOxidationWaxed: waxed })
+}))
+
 const jeiStorageList = []
 // each cabinet's half cabinet right after it (storage_delight.md section 6)
 jeiStorageWoods.forEach(w => jeiStorageKinds.forEach(k => {
@@ -289,6 +296,11 @@ global.jeiOrder.define({
 				] },
 			] },
 			{ id: 'storage_delight', sort: ['list', 'mod', 'creative'], list: jeiStorageList },
+			// Oxidized Copper (plan_creative_oxidation.md R17, writeup 12.7): Creative Oxidation's staged and waxed
+			// variants (item NBT on the plain ids); the plain items stay where they are. By block in the plain items'
+			// order, then exposed, weathered, oxidized, then waxed unaffected to waxed oxidized. No ids listed: any
+			// item carrying the stage keys lands here, so the target list can grow in the member alone.
+			{ id: 'oxidized_copper', nbt: jeiOxidizedVariants },
 		],
 
 		multiblock: [

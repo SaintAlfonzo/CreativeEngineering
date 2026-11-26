@@ -1,18 +1,18 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Creative Oxidation: copper machine aging and iron rusting (plan)
 
-<!-- generated:status_index begin open_work sha1=50cc75699a5f -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, Testing 4), 0 Complete.
+<!-- generated:status_index begin open_work sha1=a6c95491e08f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 1, Testing 6), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `jei-ordering #9` | Planned | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
 | `mod-integration #32` | Planned | S C | Creative Oxidation P5: bounded quad cache and stage kept across Create block swaps (B3, B4) after live checks |
-| `mod-integration #35` | Planned | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; subtype interpreter so all 7 variants per block are listed |
+| `jei-ordering #9` | Testing | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
 | `mod-integration #28` | Testing | S C P | Creative Oxidation P0-P2: Creative Engineering bundle member creativeoxidation, port of createoxidized core, properties only on the 45 target ids, random ticks fall through |
 | `mod-integration #31` | Testing | S C | Creative Oxidation P3-P4: staged item drops (keepStageOnBreak), names from stage, honeycomb, axe and steel wool scraping, lightning, Supplementaries soap |
 | `mod-integration #33` | Testing | C | Creative Oxidation P6: oxidized art for 32 Create and Create Deco blocks plus Design n' Decor copper blocks (copied dndecor art) |
 | `mod-integration #34` | Testing | S P | Creative Oxidation P7: spout and fan aging for staged blocks, old create_oxidized spout recipes rebuilt and jar removed, copper splashing port moved in, iron rusting by spout and fan |
+| `mod-integration #35` | Testing | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; subtype interpreter so all 7 variants per block are listed |
 <!-- generated:status_index end open_work -->
 
 Written 2026-11-25 from the owner's notes on [create_oxidized.md](create_oxidized.md) (the integration report of
@@ -261,6 +261,22 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
   moved to `jar_archive/displaced/`, `mod_sides.md` and `pack_art.md` rows dropped. Headless: Rhino run of aging.js on
   the real NCH (`tools/test_nch_blueprint.sh`, 17 checks), harness 78 checks. Rows SQ-OXD-12 to -14, CQ-OXD-01 (draft).
   Needs game: `/dumpall` (recipe dumps still list `create_oxidized:`), `pack/manifest.json` regeneration left to the owner.
+- 2026-11-25 P8-P8b built (`creativeoxidation-1.0.0-ce-19.2-04` in `creativeengineering-2.0.0.jar`, Creative Compat
+  and Creative Devtools rebuilt; TODO `mod-integration #35`, `jei-ordering #9`). P8: `compat/jei/OxidationJEI`
+  (@JeiPlugin, JEI optional) registers a subtype interpreter (stage and wax, none for plain) on every target item;
+  the target item list is `OxidationCreativeTab.targetItems()` (OxidationTargets order, a block's own item or its
+  `PLACER_ITEMS` item, so it grows with the target list; the tab uses it too). State changes come from one place:
+  `OxidationRules.transitions()` (honeycomb 4, scrape 7, lightning 3, soap 7, from the same decisions the events use;
+  new `lightningCleans`), written by `OxidationJeiData.dump()` with the stage keys and each state's SNBT; Creative
+  Devtools' `WorldJeiToolPairs` adds it as `creativeoxidation` by reflection (no compile dependency). Generators:
+  `tools/jei_world/common.py` `nbt_stacks` / `oxidation_section` / `oxidation_row` (one linked row per state change,
+  the slot cycling every target item with that NBT), `tab_tools.py` honeycomb, axe and steel wool rows (Waxing and
+  Scraping; steel wool gated on Immersive Weathering only, as the event checks the id) and soap rows, `tab_weathering.py`
+  lightning rows. Deviation: rows are per state change across all items, not per block (28 rows instead of about 900).
+  P8b: NBT-aware `nbt` entries in the order tree and the `oxidized_copper` family ([jei_ordering.md](jei_ordering.md)
+  12.7). Harness 88 checks (transitions, SNBT, subtype strings); generator dry run on a fixture section (18 waxing,
+  7 soap, 3 lightning rows). Rows CQ-OXD-03, -04 (draft) in `rows/OXD.qb` section 4. Needs game: `/dumpworldjei`, then
+  `/cdevgen jei_world` (generated.json for waxing, soaping, lightning), then a client restart.
 
 ## 7. History
 

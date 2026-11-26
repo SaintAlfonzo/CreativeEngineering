@@ -14,13 +14,18 @@ Mod behavior this follows, read from the jars:
   #creativecompat:no_world_dye. Soap (SoapWashableHelper) first uses a block's own wash, then turns a colored
   block back to its plain one (not beds, not [functional.soap] clean_blacklist), then a sticky piston into a piston,
   then strips wax and all oxidation at once. Each wash uses one soap.
+- Creative Oxidation (tool_pairs.json `creativeoxidation`, the member's own rules): its target Create copper blocks
+  keep their id and carry the stage and wax as item NBT, so its rows are item stacks with NBT, one linked row per state
+  change cycling every target item. Honeycomb waxes; an axe (anything that can scrape) or steel wool takes the wax off
+  first, else one stage back (steel wool by item id, whatever Immersive Weathering's axe_rusting says); soap takes wax
+  and every stage off. Lightning rows are in tab_weathering.
 - Create sails, seats and valve handles dye through their own code (manual rows), so their color sets are left out of
   the generated dye rows.
 """
 import re
 from collections import OrderedDict
 
-from .common import ROOT, block, blocks, item, mod_of, row, tag
+from .common import ROOT, block, blocks, item, mod_of, oxidation_row, oxidation_section, row, tag
 
 AXE = tag('forge:tools/axes')
 HONEYCOMB = item('minecraft:honeycomb')
@@ -122,6 +127,24 @@ def _waxing(dump, tags, iw_scraping):
 	return rows + wool_rows
 
 
+def _oxidation(dump, soap_on):
+	"""Creative Oxidation's staged items: {'waxing': rows, 'soaping': rows}."""
+	items, by_change = oxidation_section(dump)
+	if not items:
+		return {}
+	waxing = [oxidation_row(items, t, HONEYCOMB, ['Right-click the placed block.', 'Stops oxidation.'])
+			  for t in by_change.get('honeycomb', [])]
+	for tool, req in ((AXE, []), (STEEL_WOOL, ['immersive_weathering'])):
+		for t in by_change.get('scrape', []):
+			note = 'Right-click: scrapes the wax off.' if t['from']['waxed'] else 'Right-click: scrapes off one oxidation stage.'
+			waxing.append(oxidation_row(items, t, tool, [note], requires=req))
+	soaping = []
+	if soap_on:
+		soaping = [oxidation_row(items, t, SOAP, ['Right-click: takes off wax and all oxidation.', 'Uses one soap.'],
+								 requires=['supplementaries']) for t in by_change.get('soap', [])]
+	return {'waxing': waxing, 'soaping': soaping}
+
+
 def _dyeing(dump):
 	rows = []
 	blocked = set(dump.get('dye_blocked', []))
@@ -176,9 +199,10 @@ def build(ctx):
 	dye_on = cfg.get('dye_blocks', _toml_bool('supplementaries-common.toml', 'tweaks.dye_blocks', 'enabled'))
 	soap_on = cfg.get('soap', _toml_bool('supplementaries-common.toml', 'functional.soap', 'enabled'))
 
+	ox = _oxidation(dump, soap_on)
 	return {
 		'stripping': _stripping(dump, iw_strip_bark),
-		'waxing': _waxing(dump, tags, iw_scraping),
+		'waxing': _waxing(dump, tags, iw_scraping) + ox.get('waxing', []),
 		'dyeing': _dyeing(dump) if dye_on else [],
-		'soaping': _soaping(dump) if soap_on else [],
+		'soaping': (_soaping(dump) if soap_on else []) + ox.get('soaping', []),
 	}

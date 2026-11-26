@@ -7,14 +7,14 @@ investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Mult
 
 ## 0. Status
 
-<!-- generated:status_index begin open_work sha1=d0711eb281f9 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, In Progress 2, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=f0ce295fea48 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (In Progress 2, Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `jei-ordering #9` | Planned | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
 | `jei/jei-ordering #2` | In Progress | C | Fill the tree |
 | `jei/jei-ordering #6` | In Progress | C | Equipment family: sort order and unlisted equipment |
+| `jei-ordering #9` | Testing | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
 | `jei/jei-ordering #1` | Testing | C P | Pack ingredient order steps 1 to 3 |
 | `jei/jei-ordering #5` | Testing | C~ P | Pack JEI order never reaches Creative Common |
 <!-- generated:status_index end open_work -->
@@ -584,11 +584,27 @@ then IE), and everything listed below.
   right_hand_hat, sleepeyemask, strawberry_hat, udder_hat, worm_hat, plus more the scan missed); fruitsdelight
   durian_helmet; botania cosmetic_* (above)
 
-### 12.7 Planned: oxidized copper family (2026-11-25)
+### 12.7 Oxidized copper family (2026-11-25)
 
 Owner note 2026-11-25 ([plan_creative_oxidation.md](plan_creative_oxidation.md) R17, P8b): Creative Oxidation's
 staged Create copper blocks (exposed, weathered, oxidized, and waxed of each) are NBT variants of the plain items. The
 plain, unwaxed item stays where the block logically sits in the tree; every oxidized or waxed state goes to a
-separate family (name "Oxidized Copper", by block, then stage, then waxed). The tree places by item
-id today (section 9, NBT variants follow their item), so it needs an NBT-aware entry (item id plus a stage
-predicate). Not built.
+separate family (name "Oxidized Copper", by block, then stage, then waxed). The tree placed by item
+id only (section 9, NBT variants follow their item), so it needed an NBT-aware entry.
+
+Built 2026-11-25 (`jei-ordering #9`; Creative Compat `PackIngredientOrder`, `func/jei_order.js`, `jei/order.js`):
+
+- A node takes `nbt: [{key: value, ...}, ...]` (item nodes only; values string, number or boolean, a boolean matching
+  a byte tag's 0 / non-0). An item stack whose tag holds every key and value of an entry sits at that node; the entry
+  with the most keys wins, a tie goes to the first in definition order. No item id is named, so any item carrying the
+  keys lands there. Inside the node: by the plain (NBT-less) element of the same item's own sort key (its place in
+  the tree, or JEI's order when it is unplaced), then the entry's position. Stacks with NBT no entry matches follow
+  their item as before. Entries make no tag; the report still lists ids only (variants under their item's path).
+- `item` tree: `oxidized_copper` after `storage_delight`, entries `CreativeOxidationStage` + `CreativeOxidationWaxed`
+  in the order exposed, weathered, oxidized, waxed unaffected, waxed exposed, waxed weathered, waxed oxidized. The
+  plain Create copper items are unplaced, so they keep JEI's own order and the family follows it block by block.
+- Every variant is listed because Creative Oxidation registers a JEI subtype interpreter on its target items
+  (`compat/jei/OxidationJEI`, stage and wax as the subtype; the plain item has none).
+- Checked off-game: the definition through Node with the helper (no warnings, the 7 entries); the Java rule match on
+  the parsed JSON (each of the 7 states picks its own entry, a waxed state never the unwaxed one, other NBT none).
+  In game: CQ-OXD-04.

@@ -205,6 +205,36 @@ public class CreativeOxidationTest {
 				&& OxidationRules.soapWashes(true, OxidationStage.UNAFFECTED), "soap washes waxed or aged");
 		check(!OxidationRules.soapWashes(false, OxidationStage.UNAFFECTED), "soap on a plain block: no use");
 
+		// P8: JEI world rows (state changes) and subtypes
+		java.util.List<OxidationRules.Transition> tr = OxidationRules.transitions();
+		java.util.Map<OxidationRules.Change, Integer> perChange = new java.util.EnumMap<>(OxidationRules.Change.class);
+		for (OxidationRules.Transition x : tr) perChange.merge(x.change(), 1, Integer::sum);
+		check(perChange.getOrDefault(OxidationRules.Change.HONEYCOMB, 0) == 4 && perChange.getOrDefault(OxidationRules.Change.SCRAPE, 0) == 7
+				&& perChange.getOrDefault(OxidationRules.Change.LIGHTNING, 0) == 3 && perChange.getOrDefault(OxidationRules.Change.SOAP, 0) == 7,
+				"JEI transitions: 4 honeycomb, 7 scrape, 3 lightning, 7 soap (" + perChange + ")");
+		check(tr.stream().noneMatch(x -> x.fromStage() == x.toStage() && x.fromWaxed() == x.toWaxed()), "JEI transitions all change the state");
+		check(tr.stream().filter(x -> x.change() == OxidationRules.Change.HONEYCOMB).allMatch(x -> !x.fromWaxed() && x.toWaxed() && x.fromStage() == x.toStage()),
+				"honeycomb rows: same stage, waxed");
+		check(tr.stream().filter(x -> x.change() == OxidationRules.Change.SCRAPE && x.fromWaxed()).allMatch(x -> !x.toWaxed() && x.fromStage() == x.toStage())
+				&& tr.stream().filter(x -> x.change() == OxidationRules.Change.SCRAPE && !x.fromWaxed()).allMatch(x -> x.toStage() == x.fromStage().previous() && x.fromStage() != OxidationStage.UNAFFECTED),
+				"scrape rows: wax off first, else one stage back");
+		check(tr.stream().filter(x -> x.change() == OxidationRules.Change.LIGHTNING).allMatch(x -> !x.fromWaxed() && x.toStage() == OxidationStage.UNAFFECTED && !x.toWaxed()),
+				"lightning rows: unwaxed aged -> unaffected");
+		check(tr.stream().filter(x -> x.change() == OxidationRules.Change.SOAP).allMatch(x -> x.toStage() == OxidationStage.UNAFFECTED && !x.toWaxed()),
+				"soap rows: -> plain");
+		check(!OxidationRules.lightningCleans(true, OxidationStage.OXIDIZED) && !OxidationRules.lightningCleans(false, OxidationStage.UNAFFECTED)
+				&& OxidationRules.lightningCleans(false, OxidationStage.WEATHERED), "lightning cleans unwaxed aged only");
+
+		check(!OxidationJeiData.state(OxidationStage.UNAFFECTED, false).has("nbt"), "JEI data: plain state has no NBT");
+		String snbt = OxidationJeiData.state(OxidationStage.WEATHERED, true).get("nbt").getAsString();
+		check(snbt.contains("CreativeOxidationStage:\"weathered\"") && snbt.contains("CreativeOxidationWaxed:1b"), "JEI data: SNBT " + snbt);
+		var interp = com.SaintAlfonzo.creativeoxidation.compat.jei.OxidationJEI.INTERPRETER;
+		var ctxIng = mezz.jei.api.ingredients.subtypes.UidContext.Ingredient;
+		check("".equals(interp.apply(plain, ctxIng)) && "waxed_weathered".equals(interp.apply(weatheredWaxed, ctxIng))
+				&& "exposed".equals(interp.apply(exposedStack, ctxIng))
+				&& "waxed_unaffected".equals(interp.apply(OxidationItemData.staged(plain, OxidationStage.UNAFFECTED, true), ctxIng)),
+				"JEI subtype: none for plain, stage and wax for the 7 variants");
+
 		System.out.println(fails == 0 ? "ALL " + checks + " OK" : fails + " FAILED of " + checks);
 		System.exit(fails == 0 ? 0 : 1);
 	}
