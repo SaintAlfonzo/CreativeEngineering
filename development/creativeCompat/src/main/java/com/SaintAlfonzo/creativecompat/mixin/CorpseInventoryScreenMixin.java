@@ -20,9 +20,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * The sectioned corpse screen, button half (feature_writeup/plan_corpses.md 3.6; creative-compat-publish #21). The
  * Corpse mod's {@code updateButtons} shows Transfer Items only while the main inventory holds a stack, so a corpse
  * whose only stacks sit in the cosmetic or curio sections (opened as the main screen by CorpseGuisMixin) had no
- * Transfer Items button. At its TAIL, when no Transfer Items button was added and a section slot holds a stack, the
+ * Transfer Items button. At its TAIL, when the main inventory is empty and a section slot holds a stack, the
  * buttons are rebuilt with Transfer Items (left of Additional Items when loose additional items remain, else
- * centered). The server's transfer already takes the whole additional list. Applied only with the Corpse mod
+ * centered). The gate reads the corpse, not the {@code takeItems} field: updateButtons runs every container tick and
+ * its all-empty branch clears the widgets without clearing {@code takeItems}, so a field check saw the previous
+ * tick's button and left the screen without buttons from the second tick on (scratch r1125blk). The server's transfer already takes the whole additional list. Applied only with the Corpse mod
  * (CompatMixinPlugin). remap = false.
  */
 @Mixin(value = CorpseInventoryScreen.class, remap = false)
@@ -41,7 +43,11 @@ public abstract class CorpseInventoryScreenMixin extends ScreenBase<CorpseInvent
 
 	@Inject(method = "updateButtons", at = @At("TAIL"), remap = false)
 	private void creativecompat$sectionTransfer(CallbackInfo ci) {
-		if (this.takeItems != null || !creativecompat$sectionsHold()) return;
+		if (!this.menu.getCorpse().isMainInventoryEmpty()) return;
+		if (!creativecompat$sectionsHold()) {
+			if (this.menu.getCorpse().isAdditionalInventoryEmpty()) this.takeItems = null;
+			return;
+		}
 		this.clearWidgets();
 		if (!this.menu.getCorpse().isAdditionalInventoryEmpty()) {
 			this.takeItems = addLeftButton(CorpseInventoryScreen.TRANSFER_ITEMS, CorpseInventoryScreen.PRESS_TRANSFER_ITEMS);

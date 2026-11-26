@@ -29,8 +29,9 @@ import java.util.Map;
  * the {@link RabbitTrap#CAPTURABLE} tag or not registered are never rolled.
  */
 public final class RabbitTrapCatches extends SimpleJsonResourceReloadListener {
-	public static final RabbitTrapCatches INSTANCE = new RabbitTrapCatches();
+	// GSON first: static fields initialize in order, and the constructor hands GSON to the listener
 	private static final Gson GSON = new GsonBuilder().create();
+	public static final RabbitTrapCatches INSTANCE = new RabbitTrapCatches();
 
 	private Map<ResourceLocation, Map<ResourceLocation, Integer>> tables = Map.of();
 
