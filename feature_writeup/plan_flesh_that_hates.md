@@ -85,11 +85,11 @@ not part of these notes; its decisions B1 to B12 stay open.
 | R6 | "large incubators, assuming they float" | premise | Big Incubators float (no gravity), hover 1 to 3 blocks over the floor away from walls, legs dangle; up to 1 block nudge on chunk load and unload when the path is clear | 2026-11-25 | AskUserQuestion 2026-11-25 |
 | R7 | "give recommendations for the small incubator" | open | Small: a red-dust pulse every ~2 s (heartbeat) and rare BOP dripping blood under it; large incubators get the same on top of their blood and chunk drips. Main marker: a slow ring of dark-red dust at mid height | 2026-11-25 | AskUserQuestion 2026-11-25 |
 | R8 | FTH Flesh and Cooked Flesh (lose their only source under R2) | open | Pinned with the drop review | 2026-11-25 | AskUserQuestion 2026-11-25 |
-| A1 | Which victims count as humanoid | agent default, unconfirmed | Player, villager, wandering trader, witch, pillager (owner's list plus the trader). Upstream also converts zombies, piglins, zombified piglins, illagers, endermen; those give lifeforce instead. Zombified piglins are the Heap's main spawn (weight 100), so adding them would make them the main flesh source |
-| A2 | Standing conversion when the mob steps off flesh | agent default, unconfirmed | The timer keeps running once started, like zombie villager curing; leaving the Heap cancels it |
-| A3 | Lifeforce from flesh mob deaths | agent default, unconfirmed | A killed flesh mob gives 50 % of its spawn cost to the claimer of the chunk; a despawn returns 100 % to its own incubator |
-| A4 | Every number in section 6 | agent default, unconfirmed | Config values; first guesses to tune in the eval instance |
-| A5 | How FTH content is removed | agent default, unconfirmed | Registry allowlist (the `HeapDeferredRegisterMixin` pattern): left-out ids are never registered, so they cannot appear in saves, JEI or commands. Each upstream procedure that names a left-out id is canceled first |
+| R9 | Which victims count as humanoid (was A1) | open | Player, villager, wandering trader, witch, pillager, plus zombies and their humanoid forms (zombie, husk, drowned, zombie villager) and piglins with theirs (piglin, piglin brute, zombified piglin). Zombified piglins are the Heap's main spawn (weight 100), so flesh-mob kills of them are expected to be the main flesh source | 2026-11-26 | chat 2026-11-26 |
+| R10 | Standing conversion when the mob steps off flesh (was A2) | open | Leaving flesh (or the Heap) cancels the conversion; standing on flesh again starts a new 10 s | 2026-11-26 | chat 2026-11-26 |
+| A3 | Lifeforce from flesh mob deaths | agent default, confirmed 2026-11-26 (chat) | A killed flesh mob gives 50 % of its spawn cost to the claimer of the chunk; a despawn returns 100 % to its own incubator |
+| A4 | Every number in section 6 | agent default, owner evaluates (chat 2026-11-26) | Config values; first guesses to tune in the eval instance |
+| A5 | How FTH content is removed | agent default, confirmed 2026-11-26 (chat) | Registry allowlist (the `HeapDeferredRegisterMixin` pattern): left-out ids are never registered, so they cannot appear in saves, JEI or commands. Each upstream procedure that names a left-out id is canceled first |
 
 ## 3. Flesh mobs
 
@@ -156,18 +156,20 @@ not part of these notes; its decisions B1 to B12 stay open.
 
 ### 4.1 Standing conversion (living things on flesh)
 
-- Who: Pillager -> Flesh Pillager; Villager, Witch -> Flesh Humanoid (random model). Wandering trader with them (A1).
+- Who: Pillager -> Flesh Pillager; Villager, Witch, Wandering Trader -> Flesh Humanoid (random model). Zombies and piglins
+  are not on this list (they convert only on death, 4.2).
 - When: in the Heap, standing on BOP Flesh or Porous Flesh. Checked every 20 ticks.
 - Then: a `converting` flag (synced) makes the mob shake like a curing zombie villager (client render mixin reads the
-  flag), for `standConvertTicks` 200 (10 s, config). The timer continues off flesh (A2), stops if the mob leaves the
-  Heap. At 0: conversion (4.3).
+  flag), for `standConvertTicks` 200 (10 s, config). Stepping off flesh or leaving the Heap cancels it (R10);
+  standing on flesh again restarts the full time. At 0: conversion (4.3).
 - Lifeforce: none (the converted mob belongs to the claim's incubator for despawn refunds only if it later spawns
   from one; standing conversions are owned by no incubator).
 
 ### 4.2 Death conversion
 
 - Only when the killer is a flesh mob and the victim dies inside the Heap (R1); never while the victim burns.
-- Humanoids (A1) -> Flesh Humanoid, random model; Pillager -> Flesh Pillager.
+- Humanoids (R9: players, villagers, wandering traders, witches, zombies, husks, drowned, zombie villagers, piglins,
+  piglin brutes, zombified piglins) -> Flesh Humanoid, random model; Pillager -> Flesh Pillager.
 - Animals (`Animal` subclasses): hitbox width 0.9 or more -> Flesh Animal, random model; below -> Pincher (R3). Override
   tags `#creativeworldgen:flesh_converts/large` and `/small`.
 - Players: the Corpse mod makes its corpse as usual (items, [plan_corpses.md](plan_corpses.md)); a Flesh Humanoid spawns
@@ -305,11 +307,24 @@ flesh-death share, spawn interval and range, weights and costs, buff radius and 
 | Biomancy Flesh Bits, Living Flesh, Sinew, Bone Fragments, Elastic and Tough Fibers, Biotic Matter | Biomancy mob loot and decomposing | Biomancy crafting | Outside these notes (report section 10); Flesh Bits is the nearest twin of FTH Flesh |
 | Rotten Flesh | zombies | Food, Prepared Flesh | none |
 | Prepared Flesh (`jrftl:`), Prepared Flesh Block | crafted from Rotten Flesh | Leather line | none |
-| Rotten Flesh Block, Entrails (Architects Palette) | crafted; Entrails only by Architects Palette "warping" (a Rotten Flesh Block through a Nether portal) | Building | Entrails is the look-alike of BOP Flesh; none |
-| Elastic Tendon (Alex's Mobs) | Murmur drop only (underground caves, 0-2, Looting +1) | Tendon Whip | Look-alike of BOP Flesh Tendons; none |
+| Rotten Flesh Block, Entrails (Architects Palette) | crafted; Entrails only by Architects Palette "warping" (a Rotten Flesh Block through a Nether portal) | Building (7.1) | Entrails is the look-alike of BOP Flesh; none |
+| Elastic Tendon (Alex's Mobs) | Murmur drop only (underground caves, 0-2, Looting +1) | Tendon Whip (7.1) | Look-alike of BOP Flesh Tendons; none |
 
 No item merge is proposed until the drop review: the only real duplicate is FTH Flesh against Biomancy Flesh Bits, and
 both may leave.
+
+### 7.1 Entrails and Elastic Tendon
+
+![Entrails and BOP Flesh, 2x2x2](flesh_that_hates/entrails_cube.png)
+
+| Item | How it is made | What uses it | Other behavior |
+|---|---|---|---|
+| Rotten Flesh Block (Architects Palette) | 9 Rotten Flesh, shapeless | Warping into Entrails | BlockRunner spongy tier |
+| Entrails (Architects Palette, block) | Only warping: a Rotten Flesh Block thrown into a Nether portal (`architects_palette:warping`, Nether as target) | Its own building set: Entrails Slab (3 -> 6), Stairs (6 -> 4), Vertical Slab (3 slabs -> 3, back to a slab); no other recipe, no loot | Drips (vanilla dripping-water particles) from its bottom face when the block below is open; BlockRunner spongy tier; Item Physic `produce` family |
+| Elastic Tendon (Alex's Mobs) | Murmur drop only, 0 to 2, Looting +1; no recipe | Tendon Whip only (2 Elastic Tendon, 3 Dropbear Claw, 1 wooden rod); no other recipe, trade or loot use | Animated item texture; Item Physic `organic` family |
+
+Neither is used by any pack script or recipe of ours. Entrails is a decoration end-product; Elastic Tendon is a single-use
+ingredient.
 
 ## 8. What this changes in the report
 
@@ -376,8 +391,8 @@ The ATLauncher instance `CEPortTesting` (Forge 43.3.9) now loads the unedited Fl
 - [ ] **FTH-32 Removed content:** registry dump -> no FTH block, no Bulwark, no Spawner, no Flesh Infection, Call of the Hive, potion or Flesh Detector; JEI shows none
 - [ ] **FTH-33 Names:** every FTH name, egg and death message -> no "SCP", "610" or "Infected"
 - [ ] **FTH-34 No griefing:** Herpad, Scuttler, Stretcher target a player behind oak and glass for 5 minutes; Big Incubator egg in a 3-high room -> no block removed
-- [ ] **FTH-35 Standing conversion:** villager, witch, pillager on BOP Flesh in the Heap -> shake, convert after 10 s with the red cloud and falling chunks; on netherrack -> nothing
-- [ ] **FTH-36 Death conversion:** Pincher kills a villager, a cow, a chicken in the Heap -> Flesh Humanoid, Flesh Animal, Pincher; same kills outside the Heap or by a player -> no conversion
+- [ ] **FTH-35 Standing conversion:** villager, witch, pillager on BOP Flesh in the Heap -> shake, convert after 10 s with the red cloud and falling chunks; on netherrack -> nothing; pushed off flesh at 5 s -> shaking stops, no conversion; back on flesh -> a new full 10 s
+- [ ] **FTH-36 Death conversion:** Pincher kills a villager, a zombified piglin, a husk, a cow, a chicken in the Heap -> Flesh Humanoid (x3), Flesh Animal, Pincher; same kills outside the Heap or by a player -> no conversion
 - [ ] **FTH-37 Player death:** a flesh mob kills a player in the Heap -> Corpse mod corpse with the items and a Flesh Humanoid beside it
 - [ ] **FTH-38 Humanoid models:** 400 Flesh Humanoids from eggs -> each of the 4 models near 25 %
 - [ ] **FTH-39 Claims and subs:** small incubator, then 4 more in its 3 x 3 -> one main, 2 counted subs, 2 uncounted; capacity 400
@@ -393,5 +408,7 @@ The ATLauncher instance `CEPortTesting` (Forge 43.3.9) now loads the unedited Fl
 
 ## 12. History
 
+- 2026-11-26: R9 (zombies and piglins on the humanoid list), R10 (leaving flesh cancels the standing conversion); A3,
+  A5 confirmed, A4 to the eval; section 7.1 (Entrails and Elastic Tendon uses, 2x2x2 render).
 - 2026-11-25: owner notes taken in (45 items, rulings R1 to R8 by AskUserQuestion, agent defaults A1 to A5); eval instance
   CEPortTesting set up (section 10); flesh item sheet (section 7). Nothing built.
