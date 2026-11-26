@@ -11,12 +11,11 @@ plus the features moved from Creative Common and Raspberry Pie in wave 2 (sectio
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=16feadc8531e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Testing 5), 1 Complete.
+<!-- generated:status_index begin open_work sha1=2d5dbd5e8cba -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Testing 4), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-common-publish #17` | Testing | S | Wave 2 carve to Creative Compat: melting (with End no-fire and the Saltable tooltip), Quark glass shard drops, sack sneak pick-up, Create: Gravity low gravity, server-start fix and ItemPhysic tie; [perf] gravityLimitDimensions stays in Common (W2-4); one-time config carry-over (W2-8) |
 | `creativecompat/publish #1` | Testing | C S | Compat crashes at load without the Tempad upstream jar |
 | `licence/compat #1` | Testing | C | Paintings out of the Compat jar |
 | `licence/compat #2` | Testing | C | Banner-derived textures and MineColonies leftovers |

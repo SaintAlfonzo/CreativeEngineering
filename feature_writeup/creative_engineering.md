@@ -22,15 +22,12 @@ changelog and JEI world trees, the JFR events and the mixin member prefix.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=db076fe5bff6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, Testing 5), 8 Complete.
+<!-- generated:status_index begin open_work sha1=8f9573c5b270 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 1, Testing 3), 11 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-common-publish #8` | Planned | S C | P7 tests: CC13 run block (solo, optional-mod, full pack sets) and new client rows |
 | `creative-common-publish #9` | Planned |  | P8 release: tag creativecommon-1.3.0, upload Common first, then the dependents |
-| `creative-common-publish #5` | Testing |  | P4 writeups: creative_engineering.md 7.6 Update to 1.3.0, 7.5 closed, touched writeups, project page |
-| `creative-common-publish #6` | Testing |  | P5 changelogs: CurseForge file changelog for Common, pack bullets, changelog_lint |
 | `creativecommon/publish #1` | Testing | S+ C | Creative Common publish readiness: mixin version gates, `mods.toml`, dependency list |
 | `creativecommon/publish #2` | Testing | S C | Neutral defaults for wide distribution |
 | `creativesplit/engineering #10` | Testing | none | Carve Creative Engineering with the Computers rows, then the id swap |

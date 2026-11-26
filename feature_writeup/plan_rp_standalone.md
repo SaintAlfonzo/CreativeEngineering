@@ -1,7 +1,7 @@
 # Plan: Raspberry Pie as a standalone mod, shipped from the GitHub repo (2026-11-21)
 
-<!-- generated:status_index begin open_work sha1=92f615f905b0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Planned 2, Testing 22), 1 Complete.
+<!-- generated:status_index begin open_work sha1=b97c185a0283 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Planned 2, Testing 21), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -28,7 +28,6 @@
 | `food-tuning #57` | Testing | S C | Emptiness holds Patrol Nullifier and Phantom Bane as sub-effects |
 | `food-tuning #63` | Testing | CQ-RPI-83 to CQ-RPI-91 | Raspberry Pie tweaks 2026-11-23: steady reached permanent icons, no level numeral on single-level effects, /solrp diversity and ladder commands, Stimulation back on the ladder |
 | `food-tuning #65` | Testing | CQ-RPI-93 | Fleet-Footed holds Feather Feet as a sub-effect (applied hidden, listed in tooltips, JEI and JEED) |
-| `raspberry-pie-publish #10` | Testing | SQ-RPS-11, CQ-RPS-12, SQ-RPS-13 | Standalone Diet Log recipe takes any edible item that is not excluded; state sync stops resending every drink id |
 <!-- generated:status_index end open_work -->
 
 Source: owner chat 2026-11-21 (after the publish-readiness review in the same session). Design of the mod itself:

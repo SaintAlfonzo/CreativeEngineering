@@ -10,20 +10,16 @@ its own. Raspberry Pie gets four fixes. Pages: [project_pages/](project_pages/);
 
 ## 0. Intake (owner's words, 2026-11-23)
 
-<!-- generated:status_index begin open_work sha1=dfe1b5ba1436 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Testing 9), 1 Complete.
+<!-- generated:status_index begin open_work sha1=503d566aba69 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Testing 5), 5 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creative-common-publish #17` | Testing | S | Wave 2 carve to Creative Compat: melting (with End no-fire and the Saltable tooltip), Quark glass shard drops, sack sneak pick-up, Create: Gravity low gravity, server-start fix and ItemPhysic tie; [perf] gravityLimitDimensions stays in Common (W2-4); one-time config carry-over (W2-8) |
 | `creative-common-publish #19` | Testing | S | Wave 2 carve to Creative Loot: [wandering_trader] spawn and offers with both mixins; Trade Sync and the trade helper stay in Common (W2-2) |
-| `creative-common-publish #20` | Testing | D | Common project page in the W2-6 layout (family headers, a bold name and a spoiler per feature) after the wave 2 carve; moved features removed |
-| `creative-compat-publish #10` | Testing | D | Compat project page in the W2-6 layout, with the features moved from Common and Raspberry Pie (melting, glass shards, sack pick-up, low gravity, Fleet-Footed) |
 | `raspberry-pie-publish #25` | Testing | S C | Fleet-Footed fix and fleetFootedFov move from Raspberry Pie to Creative Compat (W2-3); config value carried over; Raspberry Pie page and writeup drop them |
 | `raspberry-pie-publish #26` | Testing | S | Death and paid slot actions (effect change, slot drop) remove the aged-out foods from Apple Pie's memory instead of keeping them past the decay window |
 | `raspberry-pie-publish #27` | Testing | C | Food Dictionary: add a Hardest sort (complexity descending) next to Easiest |
 | `raspberry-pie-publish #28` | Testing | C | Diet Log extraWidth default 48 [47] |
-| `raspberry-pie-publish #29` | Testing | D | Project page: command arguments in square brackets, no &lt; escapes (W2-7) |
 <!-- generated:status_index end open_work -->
 
 | # | Item (owner's words) | Class | Found |
