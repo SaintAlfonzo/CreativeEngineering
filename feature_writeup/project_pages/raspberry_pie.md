@@ -94,4 +94,5 @@ Both client and server need it, and their versions must match.
 
 *   Source code and issue tracker: [github.com/SaintAlfonzo/CreativeEngineering](https://github.com/SaintAlfonzo/CreativeEngineering)
 *   License: GNU GPL v3 for Raspberry Pie's own code. It is an add-on that mixes into Apple Pie at runtime and copies none of its code. The bundled Spice of Life: Apple Pie Edition by tarinoita (forked from Spice of Life: Potato Edition by Kevun1 and the Carrot Edition team) and Spice of Life: Carrot Edition by Cazsius, Talonos and juliand665 are unmodified and under LGPL v2.1; their source is attached to every release. The Liquid Diet Log texture is an unmodified copy of Apple Pie's Food Book texture. The full notices are in the jar.
+*   Logo: the graph is adapted from the logo of Spice of Life: Apple Pie Edition by tarinoita (LGPL v2.1; pie removed, colors changed). The pie is the Raspberry Pie texture from [Hearth and Harvest](https://www.curseforge.com/minecraft/mc-mods/hearth-and-harvest) by AlabasterLeking (MIT License, copyright AlabasterLeking), with an edited crust.
 *   Free to include in modpacks.

@@ -339,6 +339,10 @@
 - **New:** Oatmeal Raisin Cookie: Oat Dough, 2 sweeteners, Raw Oats and a grape bake into 12 on a Baking Sheet.
 - **New:** Baking Dish, glass bakeware crafted from 5 glass in a bowl shape.
 
+## Pies <!-- icon: hearthandharvest:raspberry_pie -->
+
+- **Changed:** Raspberry, Grape and Rotten Pie items have an adjusted crust.
+
 ## Smoothies <!-- icon: creativedelight:mixed_berry_smoothie -->
 
 - **New:** 16 smoothies: Mixed Berry, Cran Apple, Orange Mango, Kiwi Strawberry, Glowberry, Chorus, Peach Mango, Mango Pineapple, Melon, Cherry Lemon, Blueberry Lemon, Pear, Cherry, Raspberry Peach, Orange Peach, Hawberry. Drinkable when full, honey bottle sound, the bottle comes back, 32 per stack.

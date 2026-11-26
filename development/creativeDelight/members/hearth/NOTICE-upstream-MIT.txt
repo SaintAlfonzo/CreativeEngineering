@@ -12,6 +12,7 @@ texture (used by every watering can tier for now) and the watering can tooltip a
 watering can Java is adapted from 1.4.1's WateringCanItem (MIT); the item models are plain generated models.
 The Java code is our own, written for Forge 1.19.2 from the 1.4.1 behaviour, and is GNU GPL3 like the rest of the
 pack's code.
+Modified: the raspberry_pie and grape_pie item textures have a crust edit by SaintAlfonzo (2026-11-26).
 
 MIT License
 

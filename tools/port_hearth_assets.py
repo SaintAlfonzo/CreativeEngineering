@@ -46,6 +46,9 @@ RENAMES = {
 }
 LEMON_WINE_NAME = 'Lemon Wine'
 
+# Edited by the owner after porting (texture_sources/sources.csv): never overwritten by a rerun.
+OWN_ART = {'item/raspberry_pie', 'item/grape_pie'}
+
 copied = set()
 
 
@@ -63,6 +66,8 @@ def texture(ref):
 	if path.startswith('#') or path in copied:
 		return
 	copied.add(path)
+	if path in OWN_ART and os.path.exists(f'{OA}/textures/{path}.png'):
+		return
 	src = f'{UA}/textures/{path}.png'
 	if not os.path.exists(src):
 		print('MISSING texture', ref)
