@@ -82,13 +82,13 @@ path, push to `agent_staging`.
 - File the GitHub Support request for the 15 pull request refs and cached views (W12, `publish-readiness #2`): pinned
   by the owner 2026-11-26, high priority, starts on or after 2027-01-01; does not hold the uploads.
 - Review the drafted taglines (W-P4): done 2026-11-23.
-- W-P8 release, in order (jars: the installed clean builds stamped `2f752e3a5`, rebuilt 2026-11-26 for the Raspberry Pie
-  logo; since the tested `f16c9ef00` builds the inputs differ only by that logo, its mods.toml lines and NOTICE section,
+- W-P8 release, in order (jars: the installed clean builds stamped `ca3a3fa7b`, rebuilt 2026-11-26 for the Raspberry Pie
+  logo and Edition name; since the tested `f16c9ef00` builds the inputs differ only by that logo, its mods.toml lines and NOTICE section,
   and Common's bundled unreleased changelog; `python3 tools/jarstamp.py` shows them):
-  1. Tags at `2f752e3a5`, annotated like the earlier Common tags, then pushed:
-     `git tag -a creativecommon-1.3.0 2f752e3a5 -m "Creative Common 1.3.0"`,
-     `git tag -a creativecompat-1.0.0 2f752e3a5 -m "Creative Compat 1.0.0"`,
-     `git tag -a solraspberrypie-1.0.0 2f752e3a5 -m "Spice of Life: Raspberry Pie Edition 1.0.0"`,
+  1. Tags at `ca3a3fa7b` (the pushed `2f752e3a5` tags have to be moved), annotated like the earlier Common tags, then pushed:
+     `git tag -a creativecommon-1.3.0 ca3a3fa7b -m "Creative Common 1.3.0"`,
+     `git tag -a creativecompat-1.0.0 ca3a3fa7b -m "Creative Compat 1.0.0"`,
+     `git tag -a solraspberrypie-1.0.0 ca3a3fa7b -m "Spice of Life: Raspberry Pie Edition 1.0.0"`,
      `git push origin creativecommon-1.3.0 creativecompat-1.0.0 solraspberrypie-1.0.0` (owner; the agent push was
      refused by the permission check 2026-11-26).
   2. Upload Common, then Compat, then Raspberry Pie. Description: `project_pages/<mod>.md` (layout page_format.md);
