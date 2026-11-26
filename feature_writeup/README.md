@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=cfa7f1037071 -->
+<!-- generated:status_index begin readme sha1=fe7024c4ddf4 -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-PTH r1125w1 2026-11-25: 2 FAIL; SQ-BRA r1124fx 2026-11-24: 2 PASS, 2 FAIL; CQ-PTH r1116 2026-11-16: 1 DEFERRED | creativecompat installed 2026-11-25, creativedevtools installed 2026-11-25, creativedelight installed 2026-11-25 | DEPLOYED, in-game test pending |
@@ -112,7 +112,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Unusual Delight overlap survey | [unusual_delight.md](unusual_delight.md) | `UD-` | BUILT | none |  | survey 2026-10-30, nothing built |
 | Create: Oxidized (createoxidized) integration report | [creative_oxidation.md](creative_oxidation.md) | `OXD-` | BUILT | none | creativecommon installed 2026-11-25, creativecompat installed 2026-11-25, creativedevtools installed 2026-11-25, creativeengineering installed 2026-11-25 | report 2026-11-25; port Creative Oxidation (creativeoxidation, Creative Engineering member, plan_creative_oxidation.md) P0-P4, P6-P8b built 2026-11-25, writeup P9 2026-11-25 |
 | Yuushya Modelling 2.4.1 backport report | [yuushya_modelling.md](yuushya_modelling.md) | `YMB-` | planned | none | yuushya_modelling in mods/ | report 2026-11-25; phase A built 2026-11-25 (plan_yuushya_backport.md), replaces the 2.2.0 jar; queue rows after the look-check A11 |
-| Flesh That Hates (flesh_that_hates) integration report | [flesh_that_hates.md](flesh_that_hates.md) | `FTH-` | planned | none |  | report 2026-11-25, nothing built; Visceral Heap only, no spreading |
+| Flesh That Hates (flesh_that_hates) integration report | [flesh_that_hates.md](flesh_that_hates.md) | `FTH-` | planned | none |  | report and plan 2026-11-25 (plan_flesh_that_hates.md), nothing built; flesh mobs only in the Visceral Heap, incubator lifeforce |
 | Hearth and Harvest plan | [hearth_and_harvest.md](hearth_and_harvest.md), [plan_hearth_crow_swap.md](plan_hearth_crow_swap.md) | `HNH-` | BUILT | SQ-HOP r1124fx 2026-11-24: 2 PASS, 1 BATCH-FAULT; SQ-HCS r1124fx 2026-11-24: 1 INCONCLUSIVE; SQ-WCT r1123cd 2026-11-23: 3 PASS; +8 codes | creativedelight installed 2026-11-25 | Crow swap built 2026-11-10, not installed (4.7: H&H crow replaces AM's, nests make crows, tree-top and roof ... |
 | Create: Power Grid overlap, port and integration report | [power_grid.md](power_grid.md) | `PWG-` | BUILT | SQ-PWG r1124fxr 2026-11-24: 1 PASS; CQ-PWG r1115 2026-11-15: 1 INCONCLUSIVE | powergrid in mods/ | in progress: port phases P0 to P10 built 2026-11-13 (`development/backportedPowerGrid`, solver core with ... |
 | Energy basic mode | [energy_basic.md](energy_basic.md) | none | reference | none |  | reference (2026-11-12) |
