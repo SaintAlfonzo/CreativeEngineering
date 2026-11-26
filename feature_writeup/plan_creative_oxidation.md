@@ -287,6 +287,11 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
   Open owner item: the R4 deviation (Design n' Decor cut to copper light and copper large chain, 11 blocks left out
   for lack of matching upstream art); see History.
 
+- 2026-11-25 P9b crash fix: the client look-check crashed at startup with `IllegalClassLoadError` on
+  `BlockItemMixin$Frame` (helper class inside the mixin package). Moved to `PlaceFrame` in the member root; no other
+  nested or helper classes in `mixin/` or `mixin/client/`, `OxidationMixinPlugin` is outside it. Member 1.0.0-ce-19.2-05,
+  88 harness checks OK, reinstalled. Note: [mixin-package-helpers](agent_notes/mixin-package-helpers.md).
+
 ## 7. History
 
 - 2026-11-25: plan written from the owner's notes on create_oxidized.md; rulings R1 to R9 asked and recorded,
