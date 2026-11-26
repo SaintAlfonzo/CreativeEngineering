@@ -1,0 +1,8 @@
+{
+  "parent": "create:block/fluid_valve/pointer",
+  "textures": {
+    "2": "creativeoxidation:block/oxidized/fluid_valve",
+    "4": "creativeoxidation:block/oxidized/pump",
+    "particle": "creativeoxidation:block/oxidized/fluid_valve"
+  }
+}

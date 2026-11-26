@@ -1,0 +1,6 @@
+{
+  "parent": "create:block/steam_engine/gauge_dial",
+  "textures": {
+    "2": "creativeoxidation:block/weathered/boiler_gauge"
+  }
+}
