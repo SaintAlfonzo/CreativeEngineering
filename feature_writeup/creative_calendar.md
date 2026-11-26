@@ -239,3 +239,5 @@ own code" holds against the built jar. Summary row in [creative_brewing.md](crea
   `[seasons]`, `[crop_seasons]`, `[time]`, `[perf]` and `[wthit]` from `creativeengineering-common.toml` through Common's
   `ConfigRename.carrySections` (Forge's correction drops the other `[perf]` and `[wthit]` keys). The old file is no longer
   stripped and an existing Calendar file is no longer patched.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-CAL-02 PASS (calendar toml sections present, no calendar sections in the CE common toml); SQ-CAL-03 PASS (pack order lists creativecalendar before creativedelight and creativebrewing).

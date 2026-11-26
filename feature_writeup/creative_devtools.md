@@ -261,3 +261,5 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-17: The [debug] and [worldgen.mass_place] config sections moved whole from creativeengineering-common.toml into the Devtools config, same keys and paths (DevtoolsConfig.java)
 - 2026-11-17: IE arc-recycling diagnostics moved from Creative Common's CreativeEngineering.onServerStarted into IeRecyclingDiagnostics (IeRecyclingDiagnostics.java)
 - 2026-11-17: The /zq data verbs (recipes, rdetail, bytype, uses, makes, food, item, attrs, reg, potion, tag, tagsof, states; owner decision D4) and the judge verbs season, floating, under, nbt moved into /cdevtest; the /zq probe is retired (TestData.java, TestJudges.java)
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-CDV-04 PASS (30 createmechanicalcrafting recipes plus the sequenced assembly test).

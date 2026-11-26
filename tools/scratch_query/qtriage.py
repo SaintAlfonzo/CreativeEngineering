@@ -22,7 +22,9 @@ up to 5 per jar, 15 in all, 2 points each) + commits touching its sources after 
 + days since the last PASS (1 point per 2 days, cap 20).
 
     qtriage.py [--client] [--json OUT] [--top N]    prints bucket counts and the top N jar-changed rows (default 30)
-    qtriage.py --ids BUCKET[,BUCKET] [--top N]      prints the ids of those buckets (jar_changed in risk order)
+    qtriage.py --ids BUCKET[,BUCKET] [--top N] [--phase P,..|--not-phase P,..] [--min-risk R]
+        prints the ids of those buckets, comma separated (jar_changed in risk order, cut to --top, default 30);
+        --phase / --not-phase filter on the row phase (server, worldgen, long, longwait, priority)
 """
 import collections
 import json
@@ -154,6 +156,15 @@ def main(argv):
 	if '--ids' in argv:
 		want = opt('--ids').split(',')
 		sel = [e for e in rows if e['bucket'] in want]
+		if '--phase' in argv:
+			ph = opt('--phase').split(',')
+			sel = [e for e in sel if e['phase'] in ph]
+		if '--not-phase' in argv:
+			ph = opt('--not-phase').split(',')
+			sel = [e for e in sel if e['phase'] not in ph]
+		if '--min-risk' in argv:
+			mr = int(opt('--min-risk'))
+			sel = [e for e in sel if e['bucket'] != 'jar_changed' or e['risk'] >= mr]
 		if 'jar_changed' in want:
 			sel = [e for e in sel if e['bucket'] != 'jar_changed'] + [e for e in sel if e['bucket'] == 'jar_changed'][:top]
 		print(','.join(e['id'] for e in sel))

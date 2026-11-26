@@ -31,7 +31,8 @@ look the five listed with a tab, escargot and maple_cookie with tab null
 @pass one summary line `[dict_tag_check] N dict and NCH tags checked, M empty or unknown` with N about 80 or more; every problem line names a tag that is really empty or unknown (G2b built Creative Delight's bone broth fluid and its tag, so `t_bone_broth` is no longer expected as a problem); no script error from `dict_tag_check.js`; the startup log no longer has `fluid tag ... is not validated`
 @fails `Registry.BIOME_REGISTRY` / `registryOrThrow` through Rhino; a block dict biome tag reported as unknown (the block -> biome -> item fallback); NCH `_fluidTagsSeen` empty (recipes ran in another script pack scope: check `global.NCH`)
 @reviewed 2026-11-24
-waitlog \[dict_tag_check\] \d+ dict and NCH tags checked 120
+# r1126q BF-FIX (2026-11-26): the summary is logged at server start, before the row begins; waitlog saw only new lines
+bootexpect \[dict_tag_check\] \d+ dict and NCH tags checked
 shell grep -h 'dict_tag_check' logs/latest.log logs/kubejs/server.log 2>/dev/null | head -40
 shell grep -c 'is not validated (tag support' logs/kubejs/startup.log; true
 look the summary line, and each problem line is a real empty or unknown tag
@@ -107,7 +108,10 @@ look each of the six food lines: poison amp 1, 100 ticks, chance 0.2; hazard tag
 > cdevtest reg item kubejs:incomplete_suspiciousbaconandaggs
 > cdevtest rdetail suspiciousbaconandaggs
 waitlog verb=rdetail text=suspiciousbaconandaggs n= 30
-expect verb=rdetail id=creativedelight:sequenced_assembly/suspiciousbaconandaggs_sequenced_assembly
+# r1126q BF-FIX (2026-11-26): the text filter did not match susbanderecp; its own rdetail
+> cdevtest rdetail susbanderecp
+waitlog verb=rdetail text=susbanderecp n= 30
+expect verb=rdetail id=creativedelight:createsequencedassembly/suspiciousbaconandaggs_sequenced_assembly
 expect verb=rdetail id=hostiledelight:susbanderecp
 reject verb=\S+ .*done=0
 
@@ -136,7 +140,7 @@ look item entities: only oceansdelight:guardian (count 1), prismarine shards and
 ## SQ-DA-02 | Guardian Shell cuts into 1-3 fillets and a 30% shard; the tail merged onto the fillet
 @group A
 @commands rdetail `guardianfillet_from_guardian_shell`; `cdevtest reg item oceansdelight:guardian_tail`; give a guardian tail and a cooked guardian tail to a bot, reopen the inventory
-@pass cutting board recipe: knife, results guardianfillet 1, guardianfillet 1 at 0.5, guardianfillet 1 at 0.5, prismarine_shard 1 at 0.3; `oceansdelight:cutting/guardian` gone; Ocean's three cooked tail recipes gone; the boot log names the merges `guardian_tail -> guardianfillet` and `cooked_guardian_tail -> cookedguardianfillet`; given tails turn into fillets
+@pass cutting board recipe: knife, results guardianfillet 1, guardianfillet 1 at 0.5, guardianfillet 1 at 0.5, prismarine_shard 1 at 0.3; `oceansdelight:cutting/guardian` gone; Ocean's three cooked tail recipes gone; the boot log's `[itemMerges] creativedelight` count reads 49 (the code logs counts, not ids; the merges are `guardian_tail -> guardianfillet` and `cooked_guardian_tail -> cookedguardianfillet`; given tails turn into fillets)
 @fails `merges_oceansdelight.json` not read (SwapLists: requires `oceansdelight`, `hostiledelight`); merge recipe swap left a duplicate smelting recipe for the fillet
 > cdevtest rdetail guardianfillet_from_guardian_shell
 > cdevtest rdetail cooked_guardian_tail
@@ -144,7 +148,8 @@ waitlog verb=rdetail text=cooked_guardian_tail n= 30
 expect verb=rdetail id=creativedelight:farmersdelightcutting/guardianfillet_from_guardian_shell
 reject verb=rdetail id=oceansdelight:cooked_guardian_tail
 reject verb=rdetail id=oceansdelight:cutting/guardian\b
-shell grep -hE 'guardian_tail' logs/latest.log | grep -i merge | head -5
+# r1126q BF-FIX (2026-11-26): the code logs only the merge count per group, never ids (item_merges.md 2.24, baseline 49)
+shell grep -h '\[itemMerges\] creativedelight' logs/latest.log | head -2
 look the cutting line's four results and chances; the merge log line for both tails
 
 ## SQ-DA-03 | Guardian Soup from the shell, 2 fillets, tomato, onion and an Elder Guardian Eye

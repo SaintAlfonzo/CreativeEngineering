@@ -530,6 +530,32 @@ def prep_boot1(d, i, s, out, level):
 	if prep['actions']:
 		with open(d.dir / ('s%02d_prep.txt' % i), 'a') as f:
 			f.write('\n'.join(prep_actions(out, prep)) + '\n')
+	copied = preinstall_probes(out, s)
+	if copied:
+		with open(d.dir / ('s%02d_prep.txt' % i), 'a') as f:
+			f.write('probes copied before boot: %s\n' % ', '.join(copied))
+
+
+def preinstall_probes(out, s):
+	"""Copy the KubeJS probes the step's rows need into srv/kubejs/server_scripts before the boot, so qrun.py's
+	install_probes finds them in place and skips its /reload. That /reload drops Chunky's commands for the rest of the
+	boot ("Unknown or incomplete command" on every `chunky ...`; r1126q step 38, SQ-FGD-12m / -15c)."""
+	import shutil
+	sys.path.insert(0, str(HERE))
+	import qrun
+	ids = set(s['rows'])
+	rows = [r for r in qrun.parse(str(INST / s['file']), errors=[]) if r['id'] in ids]
+	need, _ = qrun.probes_needed(rows)
+	sdir = Path(out) / 'srv/kubejs/server_scripts'
+	copied = []
+	if not sdir.is_dir():
+		return copied
+	for f in sorted(need):
+		dst = sdir / ('zz_' + os.path.basename(f))
+		if not dst.exists():
+			shutil.copyfile(f, dst)
+			copied.append(os.path.basename(f))
+	return copied
 
 
 def boot_and_run(d, i, s, out, res, todo, boot=None, retry=1, keep=False):

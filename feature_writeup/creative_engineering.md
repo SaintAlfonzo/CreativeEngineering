@@ -173,6 +173,8 @@ Common with only its optional mods (no Compat, Calendar or other Creative jar): 
 In game: the 37 KubeJS blocks (dust piles, plate blocks, coil blocks) show textures; CQ-CEN-01 (WTHIT Run Speed, leaf piles, camo, sinking, JEI dragon breathing, names), pinned with the other
 client rows (creative_split.md 7.8).
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-CMV-02 PASS (clean shutdown, all dimensions saved, no exception).
+
 **Install** (game closed; all at once, the jars only work together): `./gradlew :creativeCommon:installToMods
 :creativeEngineering:installToMods :creativeCompat:installToMods :creativeCalendar:installToMods
 :creativeDevtools:installToMods :creativeDelight:installToMods :creativeBrewing:installToMods

@@ -488,3 +488,5 @@ Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to
 
 - The dragon hoe does not consume tree fertilizer either: `gear/tuning #15`.
 - 2026-10-31: scratchpad notes translated into TODO rows (`gear/tuning #19`). No code changed.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-GR-45 LOOK (owner JEI check: dragon helmet 3 loops, echo sword 500 mB lava).

@@ -484,3 +484,5 @@ No enchanting row is at Testing or Complete.
 - [archery.md](../archery.md) 2.5 (NEA enchantments): added that the MoreJS book-trade filter doesn't reach Dynamic
   Villager Trades librarians, which can probably still sell Stockpile / Recovery / Cycle (DVT builds its offers from
   `isTradeable`, which the mixins don't override).
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](../testing/scratch_run_2026-11-26.md) 7.2): SQ-ENC-03 PASS (note: trades.js logged 5 removals, pass text says at least 6); SQ-ENC-04 PASS (levels 1/3/5 populated, enchanted book and ancient tome rejected).

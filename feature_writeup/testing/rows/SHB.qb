@@ -56,13 +56,12 @@ expect has the following block data: .*minecraft:emerald
 > setblock 604 -60 600 farmingforblockheads:shipping_bin[facing=north]{Items:[{Slot:0b,id:"minecraft:wheat",Count:31b},{Slot:1b,id:"minecraft:cobblestone",Count:8b}]}
 sleep 3
 > data get block 604 -60 600
-reject has the following block data: .*minecraft:emerald
+# r1126q BF-FIX (2026-11-26): expect/reject read the whole row log, so the first read is pinned by its exact Items list (31 wheat, 8 cobblestone, no emerald) and the second by its own
+expect has the following block data: .*Items: \[\{Slot: 0b, id: "minecraft:wheat", Count: 31b\}, \{Slot: 1b, id: "minecraft:cobblestone", Count: 8b\}\]
 > setblock 604 -59 600 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:wheat",Count:1b}]}
 sleep 4
 > data get block 604 -60 600
-expect has the following block data: .*minecraft:emerald
-expect has the following block data: .*minecraft:cobblestone
-reject has the following block data: .*minecraft:wheat
+expect has the following block data: .*Items: \[\{Slot: 1b, id: "minecraft:cobblestone", Count: 8b\}, \{Slot: \d+b, id: "minecraft:emerald", Count: 1b\}\]
 
 ## SQ-SHB-04 | Output full: payout buffered, selling waits (SHB-06)
 @group A
@@ -211,6 +210,9 @@ expect has the following block data: .*id: "untitledduckmod:duck"
 @pass A chicken next to the spot; the dropped trap item carries `TrapDamage: 3`
 @fails Catch lost on break; dropped item has no damage tag (copy_nbt)
 @absent farmingforblockheads:rabbit_trap (registered 2026-11-25, after the last /dumpall)
+# r1126q BF-FIX (2026-11-26): z 630 was outside section 2's forceload (z to 620); the row loads its spot
+> forceload add 696 626 704 634
+sleep 2
 > setblock 700 -60 630 farmingforblockheads:rabbit_trap[facing=north,triggered=true]{TrapDamage:3,CaughtEntity:{id:"minecraft:chicken",PersistenceRequired:1b}}
 sleep 1
 > setblock 700 -60 630 minecraft:air destroy

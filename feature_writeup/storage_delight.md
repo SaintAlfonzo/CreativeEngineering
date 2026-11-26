@@ -174,3 +174,4 @@ ids. The other cabinet tags: none; the cabinets carry only `minecraft:mineable/a
 
 **Tests:** STD-08 to STD-12 (section 4).
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-STD-04 PASS (half_cabinet n=99, join n=90); SQ-STD-05 to -08 BATCH-FAULT (not judged: rdetail ids used creativeengineering: instead of storagedelight:, renamed, rerun queued).

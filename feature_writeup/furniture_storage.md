@@ -42,3 +42,5 @@ Not done: comparator output.
 | NS-03 | Sheet in hand lays the sheet; sneak with an empty hand takes it off; a lantern on the top face places; storage unaffected |
 | NS-04 | Break a filled nightstand: every item drops; an old nightstand with a sheet keeps the sheet after the update |
 | NS-05 | Hopper above fills it, hopper below empties it |
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-NS-01 FAIL, known (nightstand and hoppers stay empty, as r1123cx; TODO decor-and-framed-blocks #3).

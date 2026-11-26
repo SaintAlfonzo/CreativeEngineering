@@ -138,6 +138,9 @@ look leaves and string about -54.16, planks about -54.26, the two reads of each 
 @commands build the lava basin; summon `diamond_sword`, `crimson_planks`, `diamond_block`, `netherite_ingot` and 16 `oak_planks` 2 blocks above the lava; read Pos after 6 s
 @pass sword, ingot and crimson planks rest at about -54.19 (surface -54.11 less 0.08) and are alive; diamond block lower than -56 and alive; the oak planks gone, some `supplementaries:ash` items near the basin
 @fails sword sinks: `physics/lavaproof` missing it or it is in `physics/lava_sinks` (generator: HEAVY_FAMILIES, block items only); block skims: `lava_sinks` missing it
+# r1126q BF-FIX (2026-11-26): the basin was loaded only by SQ-IP-18's forceload; the row loads it itself
+> forceload add 288 288 352 320
+sleep 2
 > fill 320 -64 300 326 -55 306 minecraft:glass
 > fill 321 -63 301 325 -55 305 minecraft:lava
 sleep 3

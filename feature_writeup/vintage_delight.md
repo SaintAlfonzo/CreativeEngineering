@@ -1053,3 +1053,4 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
   Nourishment, the cheese pizza's art copied; shaped recipe JSON, Fruits Delight condition; tooltip in
   `assets/creativedelight/kubejs/vintagedelight/client.js`). Tests SQ-FF-11 to SQ-FF-13, CQ-FF-03.
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-MXS-03 PASS (chests 21 mixed seeds in 40 rolls, grass 5 of 300, shears 0).

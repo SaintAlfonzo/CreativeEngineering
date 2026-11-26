@@ -564,3 +564,5 @@ The rabbit trap (TODO `mod-integration #10`, ruling D7) in Creative Delight's ma
   skipped, biome tables from `tools/rabbit_trap_catches.py`, passive spacing and random reload order, 8 uses, tooltip and
   JEI page); defaults taken listed in 4.2 (new config `rabbitTrapFullChanceTicks`); queue rows SQ-SHB-07 to -11,
   CQ-SHB-03; SQ-SHB-01 now expects 3 items.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-SHB-01, -02, -05, -07, -10 PASS; SQ-SHB-03 BATCH-FAULT (not judged, reads pinned to exact Items lists, rerun queued); SQ-SHB-08 and -09 FAIL, new (rabbit trap never catches, ocelot and duck traps empty; TODO mod-integration #44).

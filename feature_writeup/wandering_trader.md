@@ -290,3 +290,5 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 - 2026-11-24: wave 2 carve (ruling W2-2, TODO `creative-common-publish #19`): `WanderingTraderTweaks`, both mixins and
   `[wandering_trader]` moved from Creative Common to Creative Loot (`config/creativeloot-common.toml`, its first config file;
   values carried over once). Trade Sync and the trade helper stay in Common. WT-18, SQ-WT-03, SQ-WT-04.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-WT-02 PASS (pool_1 196 entries, 16 agreements, pool_2 0); SQ-WT-04 FAIL (trader offers 31 with the pack values, row wants 30; 7 with `enabled = false`, row wants 6: one extra offer in both cases, cause not analyzed; logged on TODO `creative-common-publish #19`; the row's whole-log reject also matched a boot-time KubeJS recipe line).

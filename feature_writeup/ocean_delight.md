@@ -423,3 +423,5 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
 - 2026-11-02: Comfort / Nourishment are not applied here: the pack's Comfort / Nourishment rule sets them on the bowls' food properties (tools/gen_comfort_nourishment.py, comfort_nourishment.md 10; dishes/ocean #8, 2026-11-02) (development/creativeDelight/members/oceanic/src/main/java/com/SaintAlfonzo/creativedelight/oceanic/registry/OceanicItems.java)
 - 2026-11-17: the second section 3 ("Integration work common to all five") is now 2.1; 5.5 moved before 5.6 (numbers unchanged; plan_rules_fixes.md V-53).
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-DA-01 PASS (bot-kill half not driven), SQ-DA-02 PASS, SQ-DA-03 PASS (DA-01 to DA-03).

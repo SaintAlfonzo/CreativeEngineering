@@ -586,3 +586,5 @@ which keeps the dip-and-rise of heavier wood and food but stops the endless bob.
   (`EffectLavaVision`, read 2026-10-28). The idea: lower player speed in lava further, and give Lava Vision a
   water-like speed in lava. Open questions: Forge's `SWIM_SPEED` attribute or a `travel` mixin; how it interacts
   with Fire Resistance; mobs too or players only.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-IP-19 PASS, SQ-IP-20 PASS, SQ-IP-21 PASS (IP-24 to IP-26).

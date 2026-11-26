@@ -280,6 +280,8 @@ water".
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CFS-02b PASS (furnace stove lights from a hopper's coal), SQ-CBW-02 PASS (wood boards cut beef and drop themselves).
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-CBW-02 PASS (boards empty after knife use, 4 breaks drop own board); SQ-CBW-03 PASS (pie in board inventory, air above); SQ-CFS-03 PASS for the skillet half (cooked and ejected, oven unlit at end), keg half not judged (client WTHIT).
+
 - `farmersdelight:{oak,birch,jungle,acacia,dark_oak,mangrove,crimson,warped}_cutting_board`: FD's `CuttingBoardBlock`
   registered by the repackedFarmers member (`FDBackportRegistry.WOOD_CUTTING_BOARDS`), properties copied from the
   wood's planks (map color; crimson and warped not flammable) with FD's strength 2.0 and wood sound. Common setup

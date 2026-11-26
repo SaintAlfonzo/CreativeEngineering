@@ -633,3 +633,5 @@ Lines moved out of code comments (2026-11-22, plan_rules_fixes.md section 17):
 - 2026-11-10: ================================================================ fluids (SQ-VP-06: soft fluids) the 6 goldenfood stews left the soup list 2026-11-10 (they are no longer soft fluids): 18 old + 8 new = 26 (tools/vintage_probe/vintage_probe.js)
 - 2026-11-21: Other mods' non-food cups, bowls, tankards and bottles that go on a coaster (owner, 2026-11-21, ruling R2 of plan_unblocked_batch_1121.md, TODO food/placeable #6) (tools/placeable_catalog.py)
 - 2026-11-21: palette_swap() as of 2026-11-21, frozen for the parity check (tools/test_palette_swap.sh)
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-NCH-02 PASS; SQ-TL-09 BATCH-FAULT (not judged: scratch server lacked tools/generators.json, copy step added, rerun queued); SQ-TL-10 BATCH-FAULT (not judged: summary logged at boot, now bootexpect, rerun queued; 2 flagged tags to check: any_bricks, no_world_dye empty on purpose).

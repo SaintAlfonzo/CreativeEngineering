@@ -627,6 +627,8 @@ None.
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PJL-04 PASS (one Creative Delight filling and emptying recipe per jam jar and jello).
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-CDFL-05 PASS (no bone_broth dict_tag_check line).
+
 ## 8. History
 
 - By 2026-09-27 (initial git commit): the folder, first on `global.CE`, then on `global.NCH`; shipped with 1.0.3.

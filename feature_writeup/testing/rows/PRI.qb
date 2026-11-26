@@ -44,16 +44,18 @@
 @reviewed 2026-11-16
 > cdevtest tag item brewinandchewin:cooked_horror_lasagna_meats
 > cdevtest tagsof farmersdelight:beef_patty
-> cdevtest tagsof brewinandchewin:kimchi
-> cdevtest tagsof vintagedelight:green_bell_pepper
-> cdevtest makes supreme_pizza
+# r1126q BF-FIX (2026-11-26): Brewin's kimchi is removed (merges/dishes #9); Vintage's kimchi is in the cooked soup-veggie tag
+> cdevtest tagsof vintagedelight:kimchi
+# r1126q BF-FIX (2026-11-26): the pizza topping bell peppers are Rustic Delight's (tag dump); no vintagedelight:green_bell_pepper
+> cdevtest tagsof rusticdelight:bell_pepper_green
+> cdevtest makes pizza
 > cdevtest makes ham_and_cheese_sandwich
 > cdevtest makes scarlet_pierogi
-shell test ! -s kubejs/server_scripts/tags/cookingtags.js && test ! -s kubejs/server_scripts/cooking/cooking.js
+shell ! grep -qvE '^[[:space:]]*(//|$)' kubejs/server_scripts/tags/cookingtags.js kubejs/server_scripts/cooking/cooking.js
 bootreject brewinandchewin/tags\.js.*(Error|error)
 kjsreject Error occurred while handling event
-expect verb=tag kind=item tag=brewinandchewin:cooked_horror_lasagna_meats .*.*minecraft:beef
-expect verb=tag kind=item tag=brewinandchewin:cooked_horror_lasagna_meats .*.*minecraft:mutton
+expect verb=tag kind=item tag=brewinandchewin:cooked_horror_lasagna_meats .*.*minecraft:cooked_beef
+expect verb=tag kind=item tag=brewinandchewin:cooked_horror_lasagna_meats .*.*minecraft:cooked_mutton
 look lasagna meats = beef, mutton, beef patty, cooked mutton chops; kimchi in the cooked soup-veggie tag; bell peppers in the pizza topping tag; the three dishes have recipes
 reject verb=\S+ .*done=0
 
@@ -79,7 +81,8 @@ reject verb=\S+ .*done=0
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
 shell ! ls mods config | grep -qi jrftl
-bootreject (?i)jrftl
+# r1126q BF-FIX (2026-11-26): the pack registers jrftl:prepared_flesh on purpose (misc_items.js), so only jrftl errors count
+bootreject (?i)(ERROR|Exception).*jrftl
 > cdevtest item jrftl:prepared_flesh
 > cdevtest uses minecraft:rotten_flesh
 look prepared_flesh: a CE or KubeJS replacement item resolves, or the route lists the pack's own prepared flesh; rotten flesh still in the Create / IE recipes

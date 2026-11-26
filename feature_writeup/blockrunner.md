@@ -1062,3 +1062,5 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
 - **2026-11-18:** layer blocks (3.11): surface layers (sand, ash, salt, sawdust, fodder) stand on their visible top, sink visually and walk at their tier at every layer count; salt joins dust; audit table. BR-89..91, CQ-SINK-04..06.
 
 Scratchpad 2026-11-13: jello blocks are in the very sticky tier; they still bounce (SlimeBlock). Honey's jump factor for them is TODO `gameplay/blockrunner #9`.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-BRA-02 PASS (asphalt tier 1.5, soul_sand speedFactor 0.4, carpet collisionTop 0.0625, errors 0); SQ-BRA-03 FAIL, known (346 walkable blocks untiered in 11 mods; TODO blockrunner #20); SQ-BRA-07 FAIL, known (common and English bond "has no modifier"; TODO blockrunner #19).

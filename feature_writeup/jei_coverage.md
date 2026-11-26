@@ -674,3 +674,5 @@ The covered/uncovered split comes from bytecode, not a running JEI. A few looks 
 - 2026-11-20: items with no creative tab (section 5.4, `jei/jei-coverage #29`, owner ruling R12): Creative Common
   `ItemOrphanTabMixin` + `util/OrphanTabs` with the `[creative_menu] orphanTabItems` allow list (5 Abnormals Delight
   foods), `/dumpnotab` (Creative Devtools) and `tools/no_tab_report.py`. JC-33, JC-34.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-JC-01 PASS (5 listed with the abnormals_delight tab, escargot and maple cookie listed false).

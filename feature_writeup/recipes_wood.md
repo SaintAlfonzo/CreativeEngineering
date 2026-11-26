@@ -323,3 +323,5 @@ None.
   into oak stay oak (owner Q11). RW-29 rewritten; not run in game.
 - 2026-11-07: 3 Rich Soil craft 1 Fertile Soil, shapeless, hand only (`sawdust.js`, `farming/crops #41`, plan_farming_cooking_batch A7). RW-31.
 - 2026-11-21: F4 fixed: IE's 7 vanilla stripped-log sawmill recipes removed, twisted cutting-board comment corrected (`bark.js`); Organic Compost dirt slot = `#creativedelight:compost_dirt` (`sawdust.js`, `farming/composting #5`). plan_owner_rows_1120.md G3. RW-32.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-RW-24 PASS.

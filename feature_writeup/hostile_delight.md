@@ -641,3 +641,5 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-01: The family calls (CD.FOOD values, 2026-11-01) replace Hostile's smoker and furnace recipes (1 xp) with all three (kubejs/data/creativedelight/kubejs/hostiledelight/recipes.js)
 - 2026-11-02: Prepared Sea Pickle is a removed item since 2026-11-02 (TODO dishes/pickles-and-ferments #12, CD startup hostiledelight/hostile_items.js): no recipe makes it (kubejs/data/creativedelight/kubejs/hostiledelight/recipes.js)
 - 2026-11-04: Rotten meat (TODO largecontent/mod-additions #47, owner 2026-11-04): one item tag for everything rotten and meaty (kubejs/data/creativedelight/kubejs/hostiledelight/tags.js)
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-HTD-01 PASS (six foods poison, hazard tag complete); SQ-HTD-02 BATCH-FAULT (not judged, recipe ids and rdetail fixed, rerun queued).

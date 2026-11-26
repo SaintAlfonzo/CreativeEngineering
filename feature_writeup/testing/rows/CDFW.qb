@@ -113,6 +113,11 @@ look each item: three creativedelight: smelting / smoking / campfirecooking line
 > cdevtest uses minecraft:salmon
 > cdevtest uses minecraft:cod
 > cdevtest tag item forge:raw_duck
+# r1126q BF-FIX (2026-11-26): `uses` prints no results, so the yields were not in the log; rdetail prints them
+> cdevtest rdetail farmersdelightcutting/raw_catfish_slice_from_raw_catfish
+> cdevtest rdetail farmersdelightcutting/salmon_slice_from_salmon
+> cdevtest rdetail farmersdelightcutting/cod_slice_from_cod
+> cdevtest rdetail raw_duck
 reject verb=uses id=alexsdelight:cutting/raw_catfish_slice\b
 reject verb=uses id=farmersdelight:cutting/salmon alone=
 reject verb=uses id=farmersdelight:cutting/cod alone=

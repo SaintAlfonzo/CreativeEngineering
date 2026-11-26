@@ -580,3 +580,5 @@ potions, item physics, stack sizes) is a later phase (B11).
 - 2026-11-25: block texture sheet, mob renders and size lineup added (section 3.1, 3.3; images in `flesh_that_hates/`).
 - 2026-11-25: investigation written from `FleshThatHates-forge-1.19.2-1.0.1.jar` (decompiled beside the jar in
   `DecompiledMods/`), nothing built.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-PRI-03 BATCH-FAULT (not judged: bootreject matched the deliberate jrftl:prepared_flesh line, narrowed to errors; the look itself passes; rerun queued).

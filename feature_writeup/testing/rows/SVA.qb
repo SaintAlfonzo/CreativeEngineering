@@ -29,7 +29,8 @@ bootreject (?i)(error|failed).*skyvillages
 @fails swap table entry for that block (`tools/skyvillage_addon_remap.json`), rerun the tool
 @from batches/r1031/a1_world.qb
 @reviewed 2026-11-16
-> forceload add 100 100 400 220
+# r1126q BF-FIX (2026-11-26): the keg and press counts read to x 420; forceload widened from x 400
+> forceload add 100 100 420 220
 sleep 8
 > place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_0 100 -40 100
 > place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_1 140 -40 100

@@ -77,8 +77,8 @@ reject \[cdevtest\] verb=\S+ done=0
 > give cb miners_delight:cave_carrot 4
 > cdevtest rdetail veggie_patty_from
 waitlog \[cdevtest\] verb=rdetail text=veggie_patty_from n=\d+ 30
-expect \[cdevtest\] verb=rdetail id=\S*raw_veggie_patty_from_cave_carrot .*veggie_patty\*2\b
-expect \[cdevtest\] verb=rdetail id=\S*cooked_veggie_patty_from_baked_cave_carrot .*veggie_patty\*2\b
+expect \[cdevtest\] verb=rdetail id=\S*raw_veggie_patty_from_cave_carrot .*raw_vegetarian_patty\*2\b
+expect \[cdevtest\] verb=rdetail id=\S*cooked_veggie_patty_from_baked_cave_carrot .*cooked_vegetarian_patty\*2\b
 reject \[cdevtest\] verb=rdetail id=\S*veggie_patty_from\S* .*(minecraft:air|result=empty|\*0\b)
 expect \[cdevtest\] verb=rdetail text=veggie_patty_from n=4
 look 4 recipes (2 cutting, 2 S&D copies): results 2 raw / 2 cooked veggie patties, inputs cave carrot / baked cave carrot, never air
@@ -92,9 +92,15 @@ reject \[cdevtest\] verb=\S+ done=0
 @from batches/r1111/bw.qb
 @reviewed 2026-11-16
 > cdevtest uses corn_delight:corn
-> cdevtest uses corn_delight:corn_cob
+# r1126q BF-FIX (2026-11-26): the cob is creativedelight:corncob (dumps); corn_delight:corn_cob never existed
+> cdevtest uses creativedelight:corncob
 > cdevtest uses corn_delight:wild_corn
 waitlog \[cdevtest\] verb=uses item=corn_delight:wild_corn alone= 20
+# r1126q BF-FIX (2026-11-26): the row only listed recipe ids (uses); rdetail adds the outputs the look needs
+> cdevtest rdetail corn_kernels
+> cdevtest rdetail corncob_kernels
+> cdevtest rdetail wild_corn
+waitlog \[cdevtest\] verb=rdetail text=wild_corn n=\d+ 30
 look verb=uses id= lines (then cdevtest rdetail on the ids for the outputs): cut corn and wild corn 6 kernels, 75% cob, 75% husk; cob milling and crusher 3 kernels; wild corn crusher 2 cornmeal, 50% kernel, 10% cob
 reject \[cdevtest\] verb=\S+ done=0
 
@@ -260,6 +266,9 @@ reject Unknown item
 > cdevtest makes hearthandharvest:tree_tapper
 > cdevtest rdetail tree_tapper
 > cdevtest makes creativedelight:wooden_bucket
+# r1126q BF-FIX (2026-11-26): makes lists only the recipe id; rdetail shows its ingredients (planks)
+> cdevtest rdetail shaped/wooden_bucket
+waitlog \[cdevtest\] verb=rdetail text=shaped/wooden_bucket n=\d+ 30
 bootreject \[creativedelight\].*(Exception|ERROR)
 shell grep -cE "ERROR.*creativedelight|creativedelight.*Exception" logs/latest.log; true
 expect \[cdevtest\] verb=reg kind=item regex=\S+ n=([5-9]|\d\d+)$

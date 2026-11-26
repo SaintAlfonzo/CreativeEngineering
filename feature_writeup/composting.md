@@ -237,3 +237,5 @@ Use a composter and watch its level; or read `/dumpcompost`.
 - 2026-11-24: wave 2 carve (TODO `creative-common-publish #18`, ruling W2-9): the 12 composters moved to Creative Delight
   with Delight's namespace (blocks, items, assets, loot, lang, recipes, tags, dict values); old ids swapped by
   `swaps/common_composters.json`; texture credit in Delight's NOTICE. CM-16, SQ-CM-42, SQ-CM-43.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-CP-02 PASS, SQ-CP-03 PASS; SQ-CP-04 LOOK (owner JEI check: dirt slot cycles the 8 blocks).

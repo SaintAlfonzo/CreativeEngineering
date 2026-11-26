@@ -184,6 +184,10 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - Tick stalls: a srv-only tick timer script + `jstack <scratch pid>` shows what the server thread waits on.
 - `set -o pipefail` with `| grep -q`: grep exits at the first match, the writer dies on SIGPIPE, the pipeline reads as
   "not found". Capture the output first (r1108cge2) (partly checked: qlint W pipefail, batch shell steps only).
+- A step wait without a stall check (`drive_wait.sh` until a step number) sat 90 minutes on a step whose server had
+  stopped writing (r1126q step 38). Wait with `tools/scratch_query/drive_stallwait.sh RUN [UNTIL] [MIN]`: it also returns
+  when neither the step server's latest.log nor a RES row log was written for MIN minutes (default 10), which is the
+  skill's B3 check interval.
 - `qrun.py drive stop` during a boot ends the step "failed: server not ready in 600 s" (the stop shuts the booting
   server down); `drive resume` resets failed and incomplete steps to pending and reruns them first. A driver code change
   needs a stop and resume to load; qrun changes reach the next step without one (r1120nv).
@@ -209,6 +213,10 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - `/reload` does NOT reload WorldgenConfig or other toml values (restart); it re-solves biome_config and scripts but not
   worldgen registries, and drops Chunky's commands (so to load a fixed probe, fix it in tools/ and rerun its rows at the
   next boot; r1103w).
+- qrun's probe install (`zz_` copy, then one `/reload` after Done) dropped Chunky's commands for a whole drive step: every
+  `chunky ...` answered "Unknown or incomplete command" and each `Task finished` wait ran out its 5400 s cap
+  (r1126q step 38, SQ-FGD-12m). Fixed in qdrive.py (not a check): `preinstall_probes` copies the step's probes before
+  the boot, so no reload is sent. A hand `qrun.py run` on a booted server still reloads: copy probes before the boot.
 - `/reload` truncates `logs/kubejs/server.log`: read probe results from `logs/latest.log`, and put `kjsexpect` rows
   before any `/reload` (partly checked: qlint W kjs). A manual `/reload` spoils any "as booted" check of that boot
   (r1108cge).

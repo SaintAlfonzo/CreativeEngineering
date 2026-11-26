@@ -133,15 +133,17 @@ look bark sides textured (no purple-black checker) on the log and the filled log
 ## SQ-TL-09 | /cegen lists the generators
 @group A
 @commands `/cdevgen` (op, console)
-@pass lists 50 generators from `tools/generators.json` with their groups (`stacks` among them) and the last run; no `[cdevgen]` error in `latest.log`
+@pass lists 63 generators from `tools/generators.json` with their groups (`stacks` among them) and the last run; no `[cdevgen]` error in `latest.log`
 @fails pack_tooling.md TL-09, TODO `tooling/generators-and-tests #1`
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
+# srv/ has no tools/ (GeneratorRunner reads tools/generators.json from the server root): copy the manifest in, r1126q s12
+shell mkdir -p tools && cp "$INST/tools/generators.json" tools/ && echo copied
 > cdevgen
 sleep 3
 reject \[(cegen|cdevgen)\].*(Error|error|failed)
 reject Unknown or incomplete command
-look lists the generators from tools/generators.json with groups (stacks among them)
+look the chat line `63 generators in tools/generators.json` and one line per generator with its groups (stacks among them)
 
 ## SQ-JRFTL-01 (r1101 PASS)
 @group A

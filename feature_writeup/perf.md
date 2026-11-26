@@ -1456,3 +1456,4 @@ work) cut the "via portals" share, fog color sampling most of all.
   far fog follow. The biome fog sample (Rubidium's `FastCubicSampler`, 19.2) still runs; skipping it would need a second
   redirect on a call Rubidium already redirects. Owner request 2026-11-07. Test CQ-PNE-09.
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-HT-02 BATCH-FAULT (not judged: scratch server spawn-animals=false discards summoned horses; needs @@prep spawn-animals=true on HT.qb section 1, rerun in R2); SQ-IPO-01 BATCH-FAULT (not judged, stale 770,959 baseline in the shell guard, now the 2^20 ceiling, rerun queued); SQ-IPO-02 BATCH-FAULT (not judged: no truss formed at 2706 -57, needs Immersive Posts truss mechanics, rewrite pass).

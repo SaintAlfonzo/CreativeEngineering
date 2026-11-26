@@ -279,3 +279,4 @@ r1120nv (2026-11-21): SQ-JFP-01 to -04 moved no water either way with the pump t
 defect (capability attached, pump turning). Diagnostic rows SQ-JFP-01b (a pipe segment between pump and jar) and
 SQ-JFP-01c (the same layout tank to tank) come first (plan_scratch_findings_1121 F7, TODO `jars #15`).
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-JFP-01 to -04 FAIL, known (jar pump moves no fluid: jar empty, tank stays 4000; TODO jars #15); SQ-JFP-05 PASS but vacuous until the pump is fixed.

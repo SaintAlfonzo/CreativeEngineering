@@ -276,3 +276,5 @@ replacement or a hidden item.
 - 2026-11-16: `NCH.ieBlueprint` merges repeated inputs into one counted ingredient (`tooling/conventions #7`); 9 recipes
   become craftable (spectral and split arrows, dropper, observer, piston, thunder detector, note block, jukebox). Headless
   test `tools/test_nch_blueprint.sh`; AR-19 added; queue SQ-AR-01, CQ-AR-01 (plan_small_fixes_1116.md).
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-AR-01 BATCH-FAULT (not judged: IE blueprint rdetail prints ingredients=-, needs a new probe or a headless NCH check; rewrite pass).

@@ -357,3 +357,5 @@ crafts; Large Meals Chicken Curry has no recipe at all: `creativedelight:farmers
 - 2026-11-01: dragon eggs kept out of `#forge:eggs`; Q2 and Q3 accepted.
 - 2026-10-30: investigation written (jar inventory, decompiled code, FD 1.19.2 API and pot container checked with
   `javap`, overlap against the 2026-10-24 item dump), nothing built.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-LGM-07 FAIL, known (a full omurice block drops block and bowl, 2 stacks, row wants 1; TODO mod-updates #1).

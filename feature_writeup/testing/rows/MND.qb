@@ -23,6 +23,10 @@
 sleep 1
 > execute if entity @e[type=item,nbt={Item:{id:"minecraft:flower_pot"}},x=4,y=101,z=4,distance=..3]
 > execute if entity @e[type=item,nbt={Item:{id:"miners_delight:gossypium"}},x=4,y=101,z=4,distance=..3]
+# r1126q diagnostic (2026-11-26): both checks failed with one item killed after; show what the drop was
+> data get entity @e[type=item,limit=1,sort=nearest,x=4,y=101,z=4] Item
+> data get entity @e[type=item,limit=1,sort=furthest,x=4,y=101,z=4] Item
+> data get entity @e[type=item,limit=1,sort=nearest,x=4,y=101,z=4] Pos
 reject Couldn't parse loot table.*potted_gossypium
 reject Test failed
 look both execute lines "Test passed"

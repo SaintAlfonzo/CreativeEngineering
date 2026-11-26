@@ -1445,6 +1445,8 @@ Rustic crops in village farms until the new CD jar is in.
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-CDW-01b, -01c, -03, -03c PASS; SQ-CDW-01 FAIL: instance `kubejs/data` still holds ungated `wild/rubber_tree` copies (TODO `creativedelight/framework #16`); SQ-CDW-03b FAIL minor: 16 fruitsdelight rules without `requires` (`#17`); SQ-CDW-02 FAIL: the pack rubber tree never places in jungles (`farming/wild-crops #8`). SQ-MIN-01, -06, -07 PASS; SQ-MIN-03 FAIL: `placed_corn_popsicle` loot table not gated on Corn Delight (`creativedelight/members #58`).
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-CDFW-07 LOOK, rows fixed (4 rdetail steps added), rerun queued; SQ-PRI-01 BATCH-FAULT (not judged, tag expects now use cooked beef and mutton, Brewin' kimchi removed, rerun queued).
+
 Seen in CEPortTesting (no Myrtrees): `Unknown registry key in minecraft:worldgen/trunk_placer_type:
 myrtrees:rubber_trunk_placer` from `wild/rubber_tree.json`, and the whole datapack failed on world select. Forge 1.19.2-43.3.9
 has no conditions for worldgen registries, so a file may only ship where every id it names exists.

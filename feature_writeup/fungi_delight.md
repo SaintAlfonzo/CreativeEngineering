@@ -621,3 +621,5 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-10-25: Fungi Delight item tags (Creative Delight members #4, moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/fungidelight/tags.js)
 - 2026-10-25: Fungi Delight grid-meal moves and heatless routes: Creative Delight QoL-5 (creative_delight.md 8; moved from the pack's server_scripts/cooking/cooking.js 2026-10-25, rows unchanged) (kubejs/data/creativedelight/kubejs/fungidelight/cooking.js)
 - 2026-11-02: A Creative Delight member (folder moved here 2026-11-02): build and install through `:creativeDelight:` only (development/creativeDelight/members/fungi/build.gradle)
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-FGD-12m BATCH-FAULT (not judged: environment fault, qrun probe /reload dropped Chunky's commands; fixed in qdrive.py, rerun queued).

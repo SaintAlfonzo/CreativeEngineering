@@ -107,3 +107,5 @@ Queue: SQ-GSH-01 to SQ-GSH-12 (-10 Compat alone, -11 with Creative Loot, -12 Com
 - 2026-11-21: built (plan_wood_bucket_batch_1121.md P2 item 3), Creative Common jar.
 - 2026-11-24: moved to Creative Compat with the serializer id, definition, Forge list and fragment (wave 2 carve, TODO `creative-common-publish #17`); Common ships none. Old saves hold no id of it (loot modifiers are data).
 - 2026-11-22: Forge list entry in Common and the mid-tier chest pool in Creative Loot (publish_readiness.md PR-CC-03, ruling P1).
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-GSH-08 PASS (loads without Creative Loot, shard loot expects matched, no GlmMerge).

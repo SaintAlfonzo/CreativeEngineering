@@ -978,6 +978,8 @@ Scratch run r1124fx (2026-11-24, [scratch_run_2026-11-24.md](testing/scratch_run
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-HH-328 PASS with a finding: the corn maze generates (corn 350, Lootr center chest) but was found only after 424 s with a 600 s deadline, 10612 blocks from spawn; with the shipped 120 s a player's locate fails (TODO `locate #6`).
 
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-OB-03, -04, -07, -08 PASS; SQ-OB-05, -06, -10 BATCH-FAULT (not judged, row regex and rdetail steps fixed, rerun queued).
+
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-SGF-01, -02, SQ-WCT-06, -07, -08.
 
 | ID | Test | Pass |

@@ -739,3 +739,5 @@ TI-27 cover what the build added (3.8).
   `gameplay/time #7`): a `/ccaltime date` jump was counted twice on the client and stuck with `doDaylightCycle false`
   (3.11). Compiles (`:creativeCalendar:compileJava`); SQ-PST row queued. `gameplay/time #4` (bed clock) rechecked: still
   no in-game evidence (TI-31 / CQ-NEW-01 not run yet), no change.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-TD-04 PASS (+8.0 days then -8.0 days, wine clock follows, no WARN).

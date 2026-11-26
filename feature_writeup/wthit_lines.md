@@ -584,3 +584,5 @@ Line-specific tests elsewhere: BR-44 to BR-47 ([blockrunner.md](blockrunner.md))
 ## Owner notes (scratchpad 2026-11-07)
 
 - Config option to show the current season growth effect (faster / slower) in the crop WTHIT line. Row `ui/wthit #16`.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-SG-02 PASS, SQ-SG-03 PASS.

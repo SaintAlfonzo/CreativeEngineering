@@ -552,3 +552,5 @@ whole cup to go. Now:
 
 D9 (onion soup cup from Creamy Onion Soup) and P9 are retired. MND-12, MND-13, MND-15, MND-17 and the cup half of
 MND-02 / MND-10 no longer apply.
+
+Scratch run r1126q (2026-11-26, [scratch_run_2026-11-26.md](testing/scratch_run_2026-11-26.md) 7.2): SQ-MND-18 FAIL (both potted-gossypium checks, one gossypium item killed after; cause unproven, diagnostic added, rerun queued before a verdict).
