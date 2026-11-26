@@ -121,10 +121,10 @@ public final class TransformComponent {
       this.editBox = new EditBox(font, this.sliderButton.x, this.sliderButton.y, this.sliderButton.getWidth(), 20, this.editBoxComponent());
       this.editBox.setMaxLength(15);
       this.setEditBoxInitial();
-      this.cancelButton = ButtonUtils.builder(Component.literal("×"), btn -> this.setEditBoxInitial())
+      this.cancelButton = ButtonUtils.builder(Component.literal("\u00d7"), btn -> this.setEditBoxInitial())
          .bounds(this.sliderButton.x - 10, this.sliderButton.y, 10, 20)
          .build();
-      this.finishButton = ButtonUtils.builder(Component.literal("√"), btn -> this.saveEditBoxValue())
+      this.finishButton = ButtonUtils.builder(Component.literal("\u221a"), btn -> this.saveEditBoxValue())
          .bounds(this.sliderButton.x + this.sliderButton.getWidth(), this.sliderButton.y, 10, 20)
          .build();
       this.triggerVisible(true);

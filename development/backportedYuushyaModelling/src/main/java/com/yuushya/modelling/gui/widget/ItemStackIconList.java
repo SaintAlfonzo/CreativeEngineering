@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiComponent;
 import com.yuushya.modelling.gui.compat.GuiGraphics;
 import com.mojang.blaze3d.platform.Lighting;
 import net.minecraft.client.gui.components.ObjectSelectionList;
@@ -88,6 +89,18 @@ public class ItemStackIconList extends ObjectSelectionList<ItemStackIconList.Ent
 
    public int getRowWidth() {
       return this.itemWidth;
+   }
+
+   // 1.20's AbstractSelectionList clips its entries to the list bounds; 1.19.2's does not, so an entry's name ran into
+   // the selected layer's property lines drawn right of the list (A11 look-check). Same clip as 1.20.
+   @Override
+   public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTick) {
+      GuiComponent.enableScissor(this.x0, this.y0, this.x1, this.y1);
+      try {
+         super.render(poseStack, mouseX, mouseY, partialTick);
+      } finally {
+         GuiComponent.disableScissor();
+      }
    }
 
    protected int getScrollbarPosition() {

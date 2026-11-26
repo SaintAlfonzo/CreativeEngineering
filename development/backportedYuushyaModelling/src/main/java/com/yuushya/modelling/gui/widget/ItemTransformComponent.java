@@ -65,12 +65,12 @@ public final class ItemTransformComponent {
       this.editBox = new EditBox(font, this.sliderButton.x, this.sliderButton.y, this.sliderButton.getWidth(), 20, Component.empty());
       this.editBox.setMaxLength(15);
       this.editBox.visible = false;
-      this.cancelButton = ButtonUtils.builder(Component.literal("×").withStyle(ChatFormatting.RED), btn -> {
+      this.cancelButton = ButtonUtils.builder(Component.literal("\u00d7").withStyle(ChatFormatting.RED), btn -> {
          this.editBox.setValue(String.valueOf(this.sliderButton.getValidatedValue()));
          this.triggerVisible(true);
       }).bounds(this.sliderButton.x - 10, this.sliderButton.y, 10, 20).build();
       this.cancelButton.visible = false;
-      this.finishButton = ButtonUtils.builder(Component.literal("✓").withStyle(ChatFormatting.GREEN), btn -> {
+      this.finishButton = ButtonUtils.builder(Component.literal("\u2713").withStyle(ChatFormatting.GREEN), btn -> {
          this.saveEditBoxValue();
          this.triggerVisible(true);
       }).bounds(this.sliderButton.x + this.sliderButton.getWidth(), this.sliderButton.y, 10, 20).build();

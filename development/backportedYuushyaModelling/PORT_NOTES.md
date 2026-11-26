@@ -118,6 +118,31 @@ font and glyph entries.
   render thread wrote. Here each map is a synchronized access-order map capped at 256 entries
   (`HistoryItem.HISTORY_LIMIT`), and `HistoryMenu` reads a copy (`HistoryItem.snapshot`).
 
+- Share codes (A11 fix, build 02): upstream's `ShareUtils` share types (`ShareBlockInformation`, `ShareItemInformation`
+  and their nested `ShareData` / `ShareBlockState` / `ItemShareData` / `ShareItemStack`) are Java records, which Gson
+  2.10 (1.20.1) handles and Gson 2.8.9 (1.19.2) does not: `fromJson` dies on setting a final field, as an
+  `AssertionError` that the callers' `catch (Exception)` misses. It crashed the client on every Entity Block or Item
+  Block removal (`setRemoved` feeds the History List, which includes chunk unloads), and would have on applying a
+  share code, saving a work and loading Chisel works. Here they are plain final classes with the same field names and
+  order, non-final private fields, a private no-arg constructor for Gson and record-style accessors, so the JSON
+  (UPPER_CAMEL_CASE keys) is byte-identical to upstream's. `ShareData.transfer` pads copies of the lists (as
+  upstream's item form does) instead of the share object's own lists. No other record goes through Gson.
+  `tools/test_yuushya_share.sh` (`tools/yuushya_share_test/`, in `check_all.py`) writes the upstream format with
+  upstream's records under Gson 2.10.1 and reads and writes it with `ShareUtils` under Gson 2.8.9; it fails on the
+  record version with the crash's exception. It compiles `ShareUtils.java` fresh against `build/classes`, so build
+  the project once first.
+- Button labels (A11 fix): upstream labels five buttons with emoji outside the Basic Multilingual Plane (sunglasses
+  and eyes for shown/hidden, outbox, inbox, floppy disk, bar chart). 1.19.2's font ends at U+FFFF
+  (`glyph_sizes.bin` is 65536 bytes, `legacy_unicode` pages only), so they drew as boxes. Replaced with glyphs of
+  the 1.19.2 bitmap fonts: shown/hidden U+2611 / U+2610 (ballot box with check / empty), copy share code U+2191
+  (up arrow), apply share code U+2193 (down arrow), save work U+270E (pencil), face count U+03A3 (sigma); the
+  tooltips are unchanged. Every non-ASCII character in `src/main/java` is a `\u` escape (none outside string
+  literals); all of them are in the 1.19.2 font.
+- Icon lists (A11 fix): 1.20's `AbstractSelectionList` clips entries to the list bounds; 1.19.2's does not, so a
+  layer name in the Entity Block list ran into the selected layer's property lines drawn right of the list.
+  `BlockStateIconList` and `ItemStackIconList` wrap `render` in `GuiComponent.enableScissor(x0, y0, x1, y1)` (the
+  1.20 clip; 2.2.0 had the same overlap).
+
 ## 4. Text Block (phase B)
 
 Not registered in phase A: no `textblock` block, item or block entity, no text packets, no `texts` reload literal, no
@@ -156,5 +181,12 @@ Status lives in the TODO rows (`mod-integration #29`, `#36`); this section only 
   `loot_tables/` (B1), checked by `tools/yuushya_data_check.py`. Template models (Chisel works such as `paimon`)
   reference textures of the optional Yuushya content mod, as in 2.2.0 and upstream; not in the pack, so they show
   missing textures in the Chisel preview, unchanged.
+- A11 fixes (2026-11-25, build `2.4.1-ce-19.2-02`): share-code classes, button labels, icon-list clipping (section 3).
+  Look-check findings that are upstream behavior, unchanged: toggling AO or full block in the Item Block screen
+  reverts an unsent color preview (report B7); Item Block layers are not biome-tinted (upstream's `CachedRegion`
+  colors quads with the layer color only); the screen mode resets to Incremental (`Mode.SLIDER`) whenever the screen
+  is re-initialized, such as after the Save dialog (upstream's `init` builds the mode button with that initial
+  value); a Grass Block layer lists `age` first because Immersive Weathering's replacement grass block has `age`,
+  `fertile` and `snowy`.
 - Not in the source set yet: Text Block screens and widgets (`gui/textblock/`, `TextIconList`, `TextTransformComponent`,
   `FontList`, `StyledMultiLineEditBox`, `StyledMultilineTextField`; phase B), and their resources.

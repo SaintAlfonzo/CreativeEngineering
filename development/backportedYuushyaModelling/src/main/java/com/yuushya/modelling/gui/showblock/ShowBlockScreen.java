@@ -181,11 +181,11 @@ public class ShowBlockScreen extends Screen {
                this.updateStateButtonVisible(true);
             }
          }).tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.display.add"))).bounds(2, 10, 20, 20).build();
-         Button removeStateButton = ButtonUtils.builder(Component.literal("×"), btn -> {
+         Button removeStateButton = ButtonUtils.builder(Component.literal("\u00d7"), btn -> {
             this.updateTransformData(TransformType.REMOVE, 0.0);
             this.updateStateButtonVisible(true);
          }).tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.display.remove"))).bounds(22, 10, 20, 20).build();
-         Button replaceButton = ButtonUtils.builder(Component.literal("⇄"), btn -> {
+         Button replaceButton = ButtonUtils.builder(Component.literal("\u21c4"), btn -> {
             int chosen = this.blockStateList.getChosenOne();
             if (chosen != -1 && chosen != this.slot) {
                this.updateTransformData(TransformType.BLOCK_STATE, (double)Block.getId(this.blockEntity.getTransformData(chosen).blockState));
@@ -195,7 +195,9 @@ public class ShowBlockScreen extends Screen {
                this.updateStateButtonVisible(true);
             }
          }).tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.display.replace"))).bounds(42, 10, 20, 20).build();
-         this.shownStateButton = CycleButton.booleanBuilder(Component.literal("\ud83d\udd76"), Component.literal("\ud83d\udc40"))
+         // Labels: upstream used emoji outside the Basic Multilingual Plane (sunglasses/eyes, outbox, inbox, floppy disk,
+         // bar chart), which the 1.19.2 font cannot draw (boxes); these are glyphs of its bitmap fonts (PORT_NOTES.md).
+         this.shownStateButton = CycleButton.booleanBuilder(Component.literal("\u2611"), Component.literal("\u2610"))
             .displayOnlyValue()
             .withInitialValue(true)
             .withTooltip(
@@ -203,7 +205,7 @@ public class ShowBlockScreen extends Screen {
             )
             .create(62, 10, 20, 20, Component.empty(), (btn, bl) -> this.updateTransformData(TransformType.SHOWN, bl ? 1.0 : 0.0));
          Button copyButton = ButtonUtils.builder(
-               Component.literal("\ud83d\udce4").withStyle(ChatFormatting.BOLD),
+               Component.literal("\u2191").withStyle(ChatFormatting.BOLD),
                btn -> {
                   String res = ShareUtils.transfer(this.blockEntity.getTransformData());
                   this.setClipboard(res);
@@ -223,7 +225,7 @@ public class ShowBlockScreen extends Screen {
             .bounds(102, 10, 20, 20)
             .build();
          Button parseButton = ButtonUtils.builder(
-               Component.literal("\ud83d\udce5").withStyle(ChatFormatting.BOLD),
+               Component.literal("\u2193").withStyle(ChatFormatting.BOLD),
                btn -> {
                   String string = this.getClipboard();
 
@@ -267,7 +269,7 @@ public class ShowBlockScreen extends Screen {
             .bounds(122, 10, 20, 20)
             .build();
          Button saveButton = ButtonUtils.builder(
-               Component.literal("\ud83d\udcbe").withStyle(ChatFormatting.BOLD),
+               Component.literal("\u270e").withStyle(ChatFormatting.BOLD),
                btn -> this.minecraft
                      .setScreen(
                         new EditScreen(
@@ -317,7 +319,7 @@ public class ShowBlockScreen extends Screen {
             .build();
          this.blockStateList = new BlockStateIconList(this.minecraft, 40, 137, 2, 35, 40, 45, this.blockEntity.getTransformData(), this);
          this.blockStateList.setRenderTopAndBottom(false);
-         Button statisticButton = ButtonUtils.builder(Component.literal("\ud83d\udcca"), btn -> this.faceCount = calculateFaces(this.blockEntity))
+         Button statisticButton = ButtonUtils.builder(Component.literal("\u03a3"), btn -> this.faceCount = calculateFaces(this.blockEntity))
             .tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.calculate")))
             .bounds(182, 10, 20, 20)
             .build();

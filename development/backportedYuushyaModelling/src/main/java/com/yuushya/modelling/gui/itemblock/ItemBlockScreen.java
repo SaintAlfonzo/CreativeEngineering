@@ -223,7 +223,7 @@ public class ItemBlockScreen extends AbstractColorScreen {
                this.updateStateButton();
             }
          }).tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.display.add"))).bounds(2, 10, 20, 20).build();
-         Button copyItemButton = ButtonUtils.builder(Component.literal("⧉"), btn -> {
+         Button copyItemButton = ButtonUtils.builder(Component.literal("\u29c9"), btn -> {
             ItemStackIconList.Entry selected = (ItemStackIconList.Entry)this.itemStackList.getSelected();
             if (selected != null) {
                this.itemStackList.addSlot();
@@ -231,11 +231,11 @@ public class ItemBlockScreen extends AbstractColorScreen {
                this.itemStackList.setSelectedSlot(this.slot);
             }
          }).tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.display.copy"))).bounds(22, 10, 20, 20).build();
-         Button removeItemButton = ButtonUtils.builder(Component.literal("×"), btn -> this.updateTransformDataClient(ItemTransformType.REMOVE, 0.0))
+         Button removeItemButton = ButtonUtils.builder(Component.literal("\u00d7"), btn -> this.updateTransformDataClient(ItemTransformType.REMOVE, 0.0))
             .tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.display.remove")))
             .bounds(42, 10, 20, 20)
             .build();
-         Button replaceButton = ButtonUtils.builder(Component.literal("⇄"), btn -> {
+         Button replaceButton = ButtonUtils.builder(Component.literal("\u21c4"), btn -> {
             int chosen = this.itemStackList.getChosenOne();
             if (chosen != -1 && chosen != this.slot) {
                ItemStack item = this.blockEntity.getTransformData(chosen).itemStack;
@@ -256,7 +256,9 @@ public class ItemBlockScreen extends AbstractColorScreen {
                this.updateItemStack(this.newItemStack);
             }
          }).tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.display.replace"))).bounds(62, 10, 20, 20).build();
-         this.shownStateButton = CycleButton.booleanBuilder(Component.literal("\ud83d\udd76"), Component.literal("\ud83d\udc40"))
+         // Labels: upstream used emoji outside the Basic Multilingual Plane (sunglasses/eyes, outbox, inbox, floppy disk,
+         // bar chart), which the 1.19.2 font cannot draw (boxes); these are glyphs of its bitmap fonts (PORT_NOTES.md).
+         this.shownStateButton = CycleButton.booleanBuilder(Component.literal("\u2611"), Component.literal("\u2610"))
             .displayOnlyValue()
             .withInitialValue(true)
             .withTooltip(
@@ -264,7 +266,7 @@ public class ItemBlockScreen extends AbstractColorScreen {
             )
             .create(82, 10, 20, 20, Component.empty(), (btn, bl) -> this.updateTransformDataClient(ItemTransformType.SHOWN, bl ? 1.0 : 0.0));
          Button copyButton = ButtonUtils.builder(
-               Component.literal("\ud83d\udce4").withStyle(ChatFormatting.BOLD),
+               Component.literal("\u2191").withStyle(ChatFormatting.BOLD),
                btn -> {
                   String res = ShareUtils.transferItems(this.blockEntity.getTransformData());
                   ClientMethod.setClipboard(res);
@@ -284,7 +286,7 @@ public class ItemBlockScreen extends AbstractColorScreen {
             .bounds(122, 10, 20, 20)
             .build();
          Button parseButton = ButtonUtils.builder(
-               Component.literal("\ud83d\udce5").withStyle(ChatFormatting.BOLD),
+               Component.literal("\u2193").withStyle(ChatFormatting.BOLD),
                btn -> {
                   String string = ClientMethod.getClipboard();
 
@@ -327,7 +329,7 @@ public class ItemBlockScreen extends AbstractColorScreen {
             .bounds(142, 10, 20, 20)
             .build();
          Button saveButton = ButtonUtils.builder(
-               Component.literal("\ud83d\udcbe").withStyle(ChatFormatting.BOLD),
+               Component.literal("\u270e").withStyle(ChatFormatting.BOLD),
                btn -> this.minecraft
                      .setScreen(
                         new EditScreen(
@@ -375,7 +377,7 @@ public class ItemBlockScreen extends AbstractColorScreen {
             .tooltip(Tooltip.create(Component.translatable("gui.showBlockScreen.workshop.save")))
             .bounds(162, 10, 20, 20)
             .build();
-         CycleButton<Boolean> ambientOcclusionButton = CycleButton.booleanBuilder(Component.literal("●"), Component.literal("☀"))
+         CycleButton<Boolean> ambientOcclusionButton = CycleButton.booleanBuilder(Component.literal("\u25cf"), Component.literal("\u2600"))
             .displayOnlyValue()
             .withInitialValue((Boolean)this.blockEntity.getBlockState().getValue(AbstractTransformBlock.ENABLE_AO))
             .withTooltip(
@@ -398,7 +400,7 @@ public class ItemBlockScreen extends AbstractColorScreen {
                   }
                }
             );
-         CycleButton<Boolean> fullBlockButton = CycleButton.booleanBuilder(Component.literal("■"), Component.literal("□"))
+         CycleButton<Boolean> fullBlockButton = CycleButton.booleanBuilder(Component.literal("\u25a0"), Component.literal("\u25a1"))
             .displayOnlyValue()
             .withInitialValue((Boolean)this.blockEntity.getBlockState().getValue(AbstractTransformBlock.FULL_BLOCK))
             .withTooltip(
@@ -729,7 +731,7 @@ public class ItemBlockScreen extends AbstractColorScreen {
             this.font, this.leftColumnX() - 5, top(6, 30), this.leftColumnWidth(), 20, Component.translatable("gui.yuushya.itemBlockScreen.color_text")
          );
          this.colorEditBox.setMaxLength(7);
-         this.colorFinishButton = ButtonUtils.builder(Component.literal("√").withStyle(ChatFormatting.GREEN), button -> {
+         this.colorFinishButton = ButtonUtils.builder(Component.literal("\u221a").withStyle(ChatFormatting.GREEN), button -> {
             String text = this.colorEditBox.getValue();
             if (text.startsWith("#")) {
                try {

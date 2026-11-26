@@ -123,6 +123,28 @@ Lang has `item.yuushya.cube_12` (Small Pillar) with no item registered; harmless
   Blocks and their items. Found in A4; fixed with static handlers, as in 2.2.0.
 - **B6. Missing lang key.** The Entity Block and Item Block screens show `gui.showBlockScreen.workshop.save_error`
   when saving a work fails; no lang file has it (raw key in the toast). Found in A8; en_us key added.
+- **B7. AO and full-block toggles drop the unsent color.** The Item Block screen keeps edits (color included) on the
+  client until the screen closes or the layer changes, but the AO and full-block buttons send the block state to the
+  server at once; the server's block update carries its block entity data, so the layer shows its old color (white)
+  again while the screen is open. The kept edit is still sent on close, so the color comes back then. Same code in
+  2.4.1 (A11 look-check, shot `i05`). Not fixed (upstream behavior; a fix would send the pending edits before the AO
+  packet). Upstream behavior seen in the same look-check, not bugs: Item Block layers are not biome-tinted (the
+  render cache colors quads with the layer color only, so grass and leaves show gray until colored); the screen mode
+  resets to Incremental each time the screen re-initializes (after the Save dialog); a Grass Block layer lists `age`
+  first (Immersive Weathering's replacement grass block has `age`, `fertile`, `snowy`).
+
+### 1.5b Port faults (found in the A11 look-check, fixed in build 02)
+
+- **P1. Share codes crashed the client.** Upstream's share types are Java records; Gson 2.8.9 (1.19.2) cannot fill
+  records (1.20.1's Gson 2.10 can), and the `AssertionError` it throws escapes `catch (Exception)`. Every Entity
+  Block or Item Block removal (including chunk unloads, which feed the History List) crashed the client; applying a
+  share code, saving a work and loading Chisel works took the same path. Fix: plain classes with the same fields, so
+  share codes and saved works stay byte-identical with 2.4.1; headless test `tools/test_yuushya_share.sh`.
+- **P2. Five button labels drawn as boxes.** Upstream's emoji labels (shown/hidden, copy and apply share code, save
+  work, face count) are outside the Basic Multilingual Plane, which the 1.19.2 font does not cover; replaced with
+  1.19.2 font symbols (checked box, empty box, up and down arrows, pencil, sigma), tooltips unchanged.
+- **P3. Layer names overlapped the property lines** in the Entity Block screen: 1.19.2 lists do not clip their
+  entries (1.20 lists do); both icon lists clip now.
 
 ### 1.6 Backport work (1.20.1 -> 1.19.2)
 
@@ -225,3 +247,5 @@ Drafted for the build; queue rows (`SQ-YMB-`, `CQ-YMB-`) are written when it is 
 - 2026-11-25: phase A resources, data and install (plan A8 to A10): 2.4.1 assets without the three R4 textures and the
   Text Block and guidebook assets, data converted to 1.19.2 (B1), bugs B5 and B6 added, `tools/yuushya_data_check.py`
   (run by `tools/test_yuushya_data.sh` in `check_all.py`). The primitive count is 32, not 34.
+- 2026-11-25: A11 look-check: port faults P1 to P3 fixed in build 02 (section 1.5b), upstream bug B7 and three
+  upstream behaviors recorded (section 1.5).

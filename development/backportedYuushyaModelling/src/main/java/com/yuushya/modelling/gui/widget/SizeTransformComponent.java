@@ -68,12 +68,12 @@ public final class SizeTransformComponent {
       );
       this.editBox.setMaxLength(10);
       this.editBox.visible = false;
-      this.cancelButton = ButtonUtils.builder(Component.literal("×").withStyle(ChatFormatting.RED), btn -> {
+      this.cancelButton = ButtonUtils.builder(Component.literal("\u00d7").withStyle(ChatFormatting.RED), btn -> {
          this.editBox.setValue(String.valueOf(this.sliderButton.getValidatedValue()));
          this.triggerVisible(true);
       }).bounds(this.sliderButton.x - 10, this.sliderButton.y + 20, 10, 20).build();
       this.cancelButton.visible = false;
-      this.finishButton = ButtonUtils.builder(Component.literal("✓").withStyle(ChatFormatting.GREEN), btn -> {
+      this.finishButton = ButtonUtils.builder(Component.literal("\u2713").withStyle(ChatFormatting.GREEN), btn -> {
          this.saveEditBoxValue();
          this.triggerVisible(true);
       }).bounds(this.sliderButton.x + this.sliderButton.getWidth(), this.sliderButton.y + 20, 10, 20).build();

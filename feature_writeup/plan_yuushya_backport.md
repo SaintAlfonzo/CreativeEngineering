@@ -178,3 +178,11 @@ the look-checks.
   `tools/scratch_query/` tab-indent files), 2.2.0 moved to the project's `jar_archive/displaced/`, the `server_mods/`
   copy replaced by hand (`dump_server_mods.py` stops on four owner jars without mod_sides rows). `IN_TREE_MODS` row
   required. `/dumpall` and the generators wait for the game.
+- 2026-11-25: A11 look-check fixes, build `2.4.1-ce-19.2-02` installed (`-PskipChecks`: the gate failed only on the
+  two `tools/scratch_query/` tab-indent files; `server_mods/` copy replaced by hand). Port faults (report 1.5b): P1
+  share-code records crashed the client under Gson 2.8.9 on every Entity or Item Block removal (plain classes, same
+  JSON; headless `tools/test_yuushya_share.sh` round-trips the 2.4.1 format written by upstream's records under Gson
+  2.10.1), P2 five emoji button labels outside the 1.19.2 font (font symbols; every non-ASCII char in the sources is
+  a `\u` escape), P3 icon lists not clipped (scissor as 1.20). Upstream behavior, unchanged: B7 (AO toggle drops the
+  unsent color preview until close), Item Block layers untinted, mode reset after the Save dialog; the Grass Block
+  `age` property is Immersive Weathering's.

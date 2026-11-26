@@ -71,7 +71,30 @@ public class ShareUtils {
       return result.result().orElse(new CompoundTag());
    }
 
-   public static record ShareBlockInformation(Set<String> mods, List<ShareUtils.ShareBlockInformation.ShareData> blocks) {
+   // Upstream's share types are Java records. Gson 2.8.9 (Minecraft 1.19.2) cannot set a record's final fields (an
+   // AssertionError around IllegalAccessException, which catch (Exception) misses), so they are plain classes here
+   // with the same field names (the JSON keys, UPPER_CAMEL_CASE as upstream) and record-style accessors. Gson leaves a
+   // missing key null (0 / false for primitives), as upstream's Gson 2.10 did.
+   public static final class ShareBlockInformation {
+      private Set<String> mods;
+      private List<ShareUtils.ShareBlockInformation.ShareData> blocks;
+
+      private ShareBlockInformation() {
+      }
+
+      public ShareBlockInformation(Set<String> mods, List<ShareUtils.ShareBlockInformation.ShareData> blocks) {
+         this.mods = mods;
+         this.blocks = blocks;
+      }
+
+      public Set<String> mods() {
+         return this.mods;
+      }
+
+      public List<ShareUtils.ShareBlockInformation.ShareData> blocks() {
+         return this.blocks;
+      }
+
       public static ShareUtils.ShareBlockInformation from(List<TransformBlockData> transformDataList) {
          Set<String> modIds = new HashSet<>();
          List<ShareUtils.ShareBlockInformation.ShareData> shareDataList = new ArrayList<>();
@@ -98,9 +121,46 @@ public class ShareUtils {
          }
       }
 
-      public static record ShareData(
-         List<Double> pos, List<Float> rot, List<Float> scales, ShareUtils.ShareBlockInformation.ShareData.ShareBlockState blockState, boolean isShown
-      ) {
+      public static final class ShareData {
+         private List<Double> pos;
+         private List<Float> rot;
+         private List<Float> scales;
+         private ShareUtils.ShareBlockInformation.ShareData.ShareBlockState blockState;
+         private boolean isShown;
+
+         private ShareData() {
+         }
+
+         public ShareData(
+            List<Double> pos, List<Float> rot, List<Float> scales, ShareUtils.ShareBlockInformation.ShareData.ShareBlockState blockState, boolean isShown
+         ) {
+            this.pos = pos;
+            this.rot = rot;
+            this.scales = scales;
+            this.blockState = blockState;
+            this.isShown = isShown;
+         }
+
+         public List<Double> pos() {
+            return this.pos;
+         }
+
+         public List<Float> rot() {
+            return this.rot;
+         }
+
+         public List<Float> scales() {
+            return this.scales;
+         }
+
+         public ShareUtils.ShareBlockInformation.ShareData.ShareBlockState blockState() {
+            return this.blockState;
+         }
+
+         public boolean isShown() {
+            return this.isShown;
+         }
+
          public static ShareUtils.ShareBlockInformation.ShareData from(TransformBlockData data) {
             return new ShareUtils.ShareBlockInformation.ShareData(
                List.of(data.pos.x, data.pos.y, data.pos.z),
@@ -112,25 +172,50 @@ public class ShareUtils {
          }
 
          public TransformBlockData transfer() {
-            this.pos.add(0.0);
-            this.pos.add(0.0);
-            this.pos.add(0.0);
-            this.rot.add(0.0F);
-            this.rot.add(0.0F);
-            this.rot.add(0.0F);
-            this.scales.add(1.0F);
-            this.scales.add(1.0F);
-            this.scales.add(1.0F);
+            // Copies, as upstream's item form does: upstream padded the share object's own lists, so a second transfer
+            // of one object (History List, Chisel results) kept growing them, and a ShareData built by
+            // from(TransformBlockData) (immutable List.of lists) threw.
+            List<Double> posList = this.pos == null ? new ArrayList<>() : new ArrayList<>(this.pos);
+            List<Float> rotList = this.rot == null ? new ArrayList<>() : new ArrayList<>(this.rot);
+            List<Float> scalesList = this.scales == null ? new ArrayList<>() : new ArrayList<>(this.scales);
+            posList.add(0.0);
+            posList.add(0.0);
+            posList.add(0.0);
+            rotList.add(0.0F);
+            rotList.add(0.0F);
+            rotList.add(0.0F);
+            scalesList.add(1.0F);
+            scalesList.add(1.0F);
+            scalesList.add(1.0F);
             return new TransformBlockData(
-               new Vector3d(this.pos.get(0), this.pos.get(1), this.pos.get(2)),
-               new Vector3f(this.rot.get(0), this.rot.get(1), this.rot.get(2)),
-               new Vector3f(this.scales.get(0), this.scales.get(1), this.scales.get(2)),
+               new Vector3d(posList.get(0), posList.get(1), posList.get(2)),
+               new Vector3f(rotList.get(0), rotList.get(1), rotList.get(2)),
+               new Vector3f(scalesList.get(0), scalesList.get(1), scalesList.get(2)),
                this.blockState.transfer(),
                this.isShown
             );
          }
 
-         public static record ShareBlockState(String name, Map<String, String> properties) {
+         public static final class ShareBlockState {
+            private String name;
+            private Map<String, String> properties;
+
+            private ShareBlockState() {
+            }
+
+            public ShareBlockState(String name, Map<String, String> properties) {
+               this.name = name;
+               this.properties = properties;
+            }
+
+            public String name() {
+               return this.name;
+            }
+
+            public Map<String, String> properties() {
+               return this.properties;
+            }
+
             public static ShareUtils.ShareBlockInformation.ShareData.ShareBlockState from(BlockState state) {
                String name = Registry.BLOCK.getKey(state.getBlock()).toString();
                Map<Property<?>, Comparable<?>> map = state.getValues();
@@ -171,7 +256,26 @@ public class ShareUtils {
       }
    }
 
-   public static record ShareItemInformation(Set<String> mods, List<ShareUtils.ShareItemInformation.ItemShareData> items) {
+   public static final class ShareItemInformation {
+      private Set<String> mods;
+      private List<ShareUtils.ShareItemInformation.ItemShareData> items;
+
+      private ShareItemInformation() {
+      }
+
+      public ShareItemInformation(Set<String> mods, List<ShareUtils.ShareItemInformation.ItemShareData> items) {
+         this.mods = mods;
+         this.items = items;
+      }
+
+      public Set<String> mods() {
+         return this.mods;
+      }
+
+      public List<ShareUtils.ShareItemInformation.ItemShareData> items() {
+         return this.items;
+      }
+
       public static ShareUtils.ShareItemInformation from(List<TransformItemData> transformDataList) {
          Set<String> modIds = new HashSet<>();
          List<ShareUtils.ShareItemInformation.ItemShareData> shareDataList = new ArrayList<>();
@@ -198,15 +302,64 @@ public class ShareUtils {
          }
       }
 
-      public static record ItemShareData(
-         List<Double> pos,
-         List<Float> rot,
-         List<Float> scales,
-         ShareUtils.ShareItemInformation.ItemShareData.ShareItemStack itemStack,
-         int color,
-         boolean isShown,
-         boolean enableBlock
-      ) {
+      public static final class ItemShareData {
+         private List<Double> pos;
+         private List<Float> rot;
+         private List<Float> scales;
+         private ShareUtils.ShareItemInformation.ItemShareData.ShareItemStack itemStack;
+         private int color;
+         private boolean isShown;
+         private boolean enableBlock;
+
+         private ItemShareData() {
+         }
+
+         public ItemShareData(
+            List<Double> pos,
+            List<Float> rot,
+            List<Float> scales,
+            ShareUtils.ShareItemInformation.ItemShareData.ShareItemStack itemStack,
+            int color,
+            boolean isShown,
+            boolean enableBlock
+         ) {
+            this.pos = pos;
+            this.rot = rot;
+            this.scales = scales;
+            this.itemStack = itemStack;
+            this.color = color;
+            this.isShown = isShown;
+            this.enableBlock = enableBlock;
+         }
+
+         public List<Double> pos() {
+            return this.pos;
+         }
+
+         public List<Float> rot() {
+            return this.rot;
+         }
+
+         public List<Float> scales() {
+            return this.scales;
+         }
+
+         public ShareUtils.ShareItemInformation.ItemShareData.ShareItemStack itemStack() {
+            return this.itemStack;
+         }
+
+         public int color() {
+            return this.color;
+         }
+
+         public boolean isShown() {
+            return this.isShown;
+         }
+
+         public boolean enableBlock() {
+            return this.enableBlock;
+         }
+
          public static ShareUtils.ShareItemInformation.ItemShareData from(TransformItemData data) {
             return new ShareUtils.ShareItemInformation.ItemShareData(
                List.of(data.pos.x, data.pos.y, data.pos.z),
@@ -243,7 +396,26 @@ public class ShareUtils {
             );
          }
 
-         public static record ShareItemStack(String name, JsonElement jsonElement) {
+         public static final class ShareItemStack {
+            private String name;
+            private JsonElement jsonElement;
+
+            private ShareItemStack() {
+            }
+
+            public ShareItemStack(String name, JsonElement jsonElement) {
+               this.name = name;
+               this.jsonElement = jsonElement;
+            }
+
+            public String name() {
+               return this.name;
+            }
+
+            public JsonElement jsonElement() {
+               return this.jsonElement;
+            }
+
             public static ShareUtils.ShareItemInformation.ItemShareData.ShareItemStack from(ItemStack stack) {
                ResourceLocation itemId = Registry.ITEM.getKey(stack.getItem());
                CompoundTag tag = stack.save(new CompoundTag());
@@ -268,7 +440,8 @@ public class ShareUtils {
       }
    }
 
-   // PHASE-B: record SharedTextInformation (Text Block share format) returns with the Text Block.
+   // PHASE-B: SharedTextInformation (Text Block share format) returns with the Text Block, as a plain class (a record
+   // upstream; see ShareBlockInformation).
 
    public static class StringSerialization {
       public static CompoundTag transfer(String string) throws CommandSyntaxException {
