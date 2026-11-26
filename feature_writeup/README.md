@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=1386f27ab579 -->
+<!-- generated:status_index begin readme sha1=2058ab4ba69e -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-PTH r1125w1 2026-11-25: 2 FAIL; SQ-BRA r1124fx 2026-11-24: 2 PASS, 2 FAIL; CQ-PTH r1116 2026-11-16: 1 DEFERRED | creativecompat pending, creativedevtools installed 2026-11-25, creativedelight installed 2026-11-26 | DEPLOYED, in-game test pending |
@@ -123,7 +123,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | Storage audit | [storage_audit.md](storage_audit.md) | none | BUILT | SQ-SNP r1125pub 2026-11-25: 1 PASS | creativecompat pending | audit 2026-10-19, decisions open |
 | Backpack skins | [backpack_skins.md](backpack_skins.md) | `BP-` | BUILT | none | creativeequipment installed 2026-11-23 | DEPLOYED with 1.1.01, untested in game |
 | Lunchboxes | [lunchboxes.md](lunchboxes.md) | `LB-` | BUILT | CQ-LB r1101 2026-11-01: 1 PASS; SQ-LB r1031 2026-10-31: 3 PASS | creativedelight installed 2026-11-26 |  |
-| Raspberry Pie | [raspberry_pie.md](raspberry_pie.md) | `RPI-` | BUILT | CQ-RPS r1126gp 2026-11-26: 1 PASS; SQ-RPS r1125pub 2026-11-25: 6 PASS; SQ-RPI r1125pub 2026-11-25: 1 PASS; +1 codes | creativecommon pending, creativedelight installed 2026-11-26, creativebrewing installed 2026-11-23, solraspberrypie installed 2026-11-25, creativecompat pending | 12.6 diet books polish BUILT 2026-11-19 (plan_diet_books.md, look-check pending); 12.4 owner notes BUILT 2026-11-13 (unique-food gate, reset command, windowed bar with icons, double page, ... |
+| Raspberry Pie | [raspberry_pie.md](raspberry_pie.md) | `RPI-` | BUILT | CQ-RPS r1126gp 2026-11-26: 1 PASS; SQ-RPS r1125pub 2026-11-25: 6 PASS; SQ-RPI r1125pub 2026-11-25: 1 PASS; +1 codes | creativecommon pending, creativedelight installed 2026-11-26, creativebrewing installed 2026-11-23, solraspberrypie installed 2026-11-26, creativecompat pending | 12.6 diet books polish BUILT 2026-11-19 (plan_diet_books.md, look-check pending); 12.4 owner notes BUILT 2026-11-13 (unique-food gate, reset command, windowed bar with icons, double page, ... |
 | Unused textures | [unused_textures.md](unused_textures.md) | none | reference | none |  | audit 2026-10-22, nothing added yet |
 | Crops | [crops.md](crops.md) | `CR-` | BUILT | SQ-CS r1124fxr 2026-11-24: 1 BATCH-FAULT; SQ-PSD r1124fx 2026-11-24: 1 PASS; SQ-PSF r1121b 2026-11-21: 2 PASS, 1 FAIL | creativedelight installed 2026-11-26, creativecalendar pending | reference + tobacco parity, per-hoe areas and wild-crop placement DEPLOYED with 1.0.4 |
 | Crop yields | [crop_yields.md](crop_yields.md), [plan_crop_yields_wave2.md](plan_crop_yields_wave2.md) | `SY-` | BUILT | SQ-SY r1120nv 2026-11-21: 6 PASS; CQ-SY r1115 2026-11-15: 1 PASS | creativedelight installed 2026-11-26 | BUILT 2026-10-28, reworked 2026-11-03 (installed) |
