@@ -19,18 +19,17 @@ lifeforce system. Its section 8 lists which decisions below it replaces (D1 to D
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=963e45182fc0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 7), 0 Complete.
+<!-- generated:status_index begin open_work sha1=a3a516e66ac3 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Planned 6), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `mod-integration #30` | Planned | S C P | Flesh That Hates (1.0.1) in the Visceral Heap: flesh mobs only (no FTH blocks), incubator lifeforce system; Biomancy 2 (2.3.2.0) blocks and mobs |
 | `mod-integration #38` | Planned | S C | Flesh That Hates P1: leave out every FTH block, the Bulwark, the Spawner, both effects, the potion and the Flesh Detector; no griefing, no /fill, no evolution, no incubator growth; flesh names without SCP; upstream bug fixes |
-| `mod-integration #39` | Planned | S C | Flesh That Hates P2: flesh mob type, Smite against it, fire and lava x3, mobs avoid fire and lava, drops from loot tables (BOP Flesh and Porous Flesh) |
+| `mod-integration #39` | Planned | S C | Flesh That Hates P2: flesh mob type, Smite against it, fire and lava x3, mobs avoid fire and lava; flesh mob loot tables with the drop review, Elastic Tendon from flesh mobs instead of the Murmur; Entrails (Architects Palette) as a Visceral Heap block with Porous Flesh's properties, veins, globs and recipes |
 | `mod-integration #40` | Planned | S C | Flesh That Hates P3: conversions in the Visceral Heap (standing on flesh: pillagers, villagers, witches; killed by flesh mobs: humanoids, animals by size, players beside their corpse) with the red cloud and falling chunks |
 | `mod-integration #41` | Planned | S C | Flesh That Hates P4: incubators hold lifeforce, claim chunks, take subs, spawn flesh mobs from flesh walls and floors for a cost, buff flesh mobs, promote a floating Big Incubator |
 | `mod-integration #42` | Planned | S C | Flesh That Hates P5: natural flesh spawns in unclaimed Visceral Heap chunks, own solo-oriented pool (owner designs it) |
-| `mod-integration #43` | Planned | S C | Flesh That Hates P6: drop review: final flesh mob loot, fate of FTH Flesh and Cooked Flesh |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
