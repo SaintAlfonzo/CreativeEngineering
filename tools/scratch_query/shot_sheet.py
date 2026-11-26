@@ -18,43 +18,43 @@ ROW = re.compile(r"^((?:CQ|SQ)-[A-Z0-9]+-\d+[a-z]?)_(.+)\.png$")
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("out")
-    ap.add_argument("dirs", nargs="+")
-    ap.add_argument("--rows", default="")
-    ap.add_argument("--width", type=int, default=640)
-    ap.add_argument("--cols", type=int, default=2)
-    a = ap.parse_args()
-    want = {r for r in a.rows.split(",") if r}
-    rows = {}
-    for d in a.dirs:
-        found = {}
-        for p in sorted(Path(d).glob("*.png")):
-            m = ROW.match(p.name)
-            if m and (not want or m.group(1) in want):
-                found.setdefault(m.group(1), []).append((m.group(2), p))
-        rows.update(found)
-    out = Path(a.out)
-    out.mkdir(parents=True, exist_ok=True)
-    cap = 22
-    for row, shots in sorted(rows.items()):
-        tiles = []
-        for name, p in shots:
-            im = Image.open(p).convert("RGB")
-            h = round(im.height * a.width / im.width)
-            tiles.append((name, im.resize((a.width, h), Image.LANCZOS)))
-        cols = min(a.cols, len(tiles))
-        th = max(t.height for _, t in tiles) + cap
-        nrows = (len(tiles) + cols - 1) // cols
-        sheet = Image.new("RGB", (cols * a.width + (cols - 1) * 6, nrows * th + (nrows - 1) * 6), (32, 32, 32))
-        dr = ImageDraw.Draw(sheet)
-        for i, (name, t) in enumerate(tiles):
-            x, y = (i % cols) * (a.width + 6), (i // cols) * (th + 6)
-            dr.text((x + 6, y + 5), f"{row}  {name}", fill=(235, 235, 235))
-            sheet.paste(t, (x, y + cap))
-        sheet.save(out / f"{row}.png", optimize=True)
-        print(f"{row}: {len(tiles)} shots -> {out / (row + '.png')}")
+	ap = argparse.ArgumentParser()
+	ap.add_argument("out")
+	ap.add_argument("dirs", nargs="+")
+	ap.add_argument("--rows", default="")
+	ap.add_argument("--width", type=int, default=640)
+	ap.add_argument("--cols", type=int, default=2)
+	a = ap.parse_args()
+	want = {r for r in a.rows.split(",") if r}
+	rows = {}
+	for d in a.dirs:
+		found = {}
+		for p in sorted(Path(d).glob("*.png")):
+			m = ROW.match(p.name)
+			if m and (not want or m.group(1) in want):
+				found.setdefault(m.group(1), []).append((m.group(2), p))
+		rows.update(found)
+	out = Path(a.out)
+	out.mkdir(parents=True, exist_ok=True)
+	cap = 22
+	for row, shots in sorted(rows.items()):
+		tiles = []
+		for name, p in shots:
+			im = Image.open(p).convert("RGB")
+			h = round(im.height * a.width / im.width)
+			tiles.append((name, im.resize((a.width, h), Image.LANCZOS)))
+		cols = min(a.cols, len(tiles))
+		th = max(t.height for _, t in tiles) + cap
+		nrows = (len(tiles) + cols - 1) // cols
+		sheet = Image.new("RGB", (cols * a.width + (cols - 1) * 6, nrows * th + (nrows - 1) * 6), (32, 32, 32))
+		dr = ImageDraw.Draw(sheet)
+		for i, (name, t) in enumerate(tiles):
+			x, y = (i % cols) * (a.width + 6), (i // cols) * (th + 6)
+			dr.text((x + 6, y + 5), f"{row}  {name}", fill=(235, 235, 235))
+			sheet.paste(t, (x, y + cap))
+		sheet.save(out / f"{row}.png", optimize=True)
+		print(f"{row}: {len(tiles)} shots -> {out / (row + '.png')}")
 
 
 if __name__ == "__main__":
-    main()
+	main()
