@@ -29,3 +29,37 @@ Raspberry Pie release on GitHub (https://github.com/SaintAlfonzo/CreativeEnginee
 Art: the Liquid Diet Log texture (assets/solraspberrypie/textures/item/liquid_diet_log.png) is an unmodified copy of
 Apple Pie's Food Book texture (assets/solapplepie/textures/items/food_book.png at tag 2.2.0), LGPL-2.1, from the
 Apple Pie source above.
+
+----
+
+Mod logo (raspberry_pie_logo.png)
+
+This adapted image is not covered by the GPL-3.0-only license of Raspberry Pie's own code.
+
+Graph: adapted from the logo of Spice of Life: Apple Pie Edition 2.2.0 by tarinoita, GNU LGPL v2.1
+(text: solRaspberryPie-LGPL-2.1-solapplepie.txt in this jar). Modified 2026-11-26: pie removed, colors
+changed, redrawn on a 34x34 grid and enlarged.
+
+Pie: Hearth and Harvest 1.4.1 item/raspberry_pie.png by AlabasterLeking, MIT License below, with an edited crust.
+
+MIT License
+
+Copyright (c) AlabasterLeking
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

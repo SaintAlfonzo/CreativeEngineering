@@ -13,6 +13,9 @@ authors="${mod_authors}"
 displayURL="https://github.com/SaintAlfonzo/CreativeEngineering"
 credits="Spice of Life: Apple Pie Edition by tarinoita, forked from the Potato Edition (Kevun1) and the Carrot Edition team. Apple Pie and Carrot Edition (LGPL-2.1) are nested unmodified (see solRaspberryPie-NOTICE-nested-LGPL.txt in the jar); no code of theirs is copied."
 description='''${mod_description}'''
+# Pixel art, adapted: credits in NOTICE-nested-LGPL.txt (in the jar).
+logoFile="raspberry_pie_logo.png"
+logoBlur=false
 
 # Mod list icon for Catalogue (Forge 1.19.2 itself has no item icon key).
 [modproperties.${mod_id}]

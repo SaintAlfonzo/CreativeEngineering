@@ -91,7 +91,7 @@ mixes into Apple Pie, not a fork: no Apple Pie code is copied in.
 | Tree | `development/solRaspberryPie` (root `settings.gradle`, `build-logic/`) |
 | Sides | both (screens, widget, overlay messages on the client; all rules on the server) |
 | Depends on | `solapplepie` 2.2.0 exactly (mixins and accessors on its private members); nested in the jar since 2026-11-21 with Carrot Edition 1.14.0 (optional), section 12.9 |
-| License | own code GPL-3.0-only; Apple Pie and Carrot are LGPL-2.1 (checked at the source, plan_rp_standalone.md P0) and ship nested unmodified with their license texts and a `NOTICE`; credit Apple Pie and its forks |
+| License | own code GPL-3.0-only; Apple Pie and Carrot are LGPL-2.1 (checked at the source, plan_rp_standalone.md P0) and ship nested unmodified with their license texts and a `NOTICE`; credit Apple Pie and its forks. The jar logo (`raspberry_pie_logo.png`) is adapted art (Apple Pie logo graph, LGPL-2.1; Hearth and Harvest pie, MIT), outside the GPL and credited in the NOTICE |
 | `mod_sides.md` | row `solraspberrypie` (both); the nested ids take its side |
 
 Carrot Edition: the GitHub text the owner found is the GTNH 1.7.10 fork (LGPL-3.0, original code public domain). Our
