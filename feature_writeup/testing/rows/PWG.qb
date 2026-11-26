@@ -274,7 +274,7 @@ look shell output: clientMirror = true with a comment above; solverBackend = "JA
 
 ## SQ-PWG-11 | Power Grid solver runs in game (EJML from jar-in-jar)
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @commands after SQ-PWG-09 on the `-02` jar, with `tools/scratch_query/pg_solver_probe.js` copied to `OUT/srv/kubejs/server_scripts/zz_pg_solver_probe.js`: `pgsolve` (console)
 @pass log `[pgsolve] divider V=5.0... I=-5... converged=true` (V within 1e-6 of 5,
 @fails I
@@ -560,10 +560,53 @@ look first ohm about 120 A; wire count drops; last ohm I=0 or lower
 
 ## SQ-PWG-18
 @group A
-@commands D4 Overheated Component: `zpwgg loop 1000 -60 1030 12 18 powergrid:iron_wire` (about 60 A through the current gauge, rated 35 W; iron wire is rated 160 A); first set `overheatedDropChance` to 0 explicitly (`qrun.py toml OUT/srv/<level>/serverconfig/powergrid-server.toml electricity overheatedDropChance 0.0`, restart; the default is 0.25, owner decision pending) and run the chance-0 half at Z 1040 first; then this loop: wait 400 ticks; `zpwgg overheated 1003 -60 1030 1`; then set `overheatedDropChance` to 1 (`qrun.py toml OUT/srv/<level>/serverconfig/powergrid-server.toml electricity overheatedDropChance 1.0`, then restart and `forceload add 990 990 1060 1040` again), `setblock 1003 -60 1030 air destroy`, `zpwgg items 1003 -60 1030 2`
-@pass `[zpwgg] overheated at 1003 -60 1030 original=Block{powergrid:current_gauge} data=[...]` with `Temperature` among the data keys; no explosion, the block is not air before the setblock; after the destroy: `item ... current_gauge x1`; with chance 0 (the loop at Z 1040, run first): `items 0`; the wires attached to the overheated gauge drop as items (kept: upstream's explode also broke the block and its wires; PORT_NOTES 11) (fix 2026-11-13, P2 run r1113: rerun on `-04`); `give @p powergrid:overheated_component` fails (no item)
+@reviewed 2026-11-26
+@commands D4 Overheated Component: `zpwgg loop 1000 -60 1030 12 18 powergrid:iron_wire` (about 60 A through the current gauge, rated 35 W; iron wire is rated 160 A). The row sets `overheatedDropChance` to 0 (`qrun.py toml <level>/serverconfig/powergrid-server.toml electricity overheatedDropChance 0.0`, restart), runs the loop at Z 1040, waits 400 ticks, `zpwgg overheated`, `setblock ... air destroy`, `zpwgg items`; then chance 1.0 (restart, `forceload add 990 990 1060 1040` again) and the same at Z 1030
+@pass `[zpwgg] overheated at 1003 -60 1030 original=Block{powergrid:current_gauge} data=[...]` with `Temperature` among the data keys; no explosion, the block is not air before the setblock; after the destroy: `item ... current_gauge x1`; with chance 0 (the loop at Z 1040, run first): `items 0`; the wires attached to the overheated gauge drop as items (kept: upstream's explode also broke the block and its wires; PORT_NOTES 11); `powergrid:overheated_component` is not an item
 @fails `electricity/overheated/*`, `ThermalBehaviour.explode` / `overheatBlock`; the gauge did not overheat: the creative resistor index (18 = 0.1 ohm) or `CThermal.maxPower` of the current gauge; a crash in `getShape`: the original state's shape needs its block entity
-@draft two boots with different `overheatedDropChance` (powergrid-server.toml is read at world load; qrun has no restart step and a shell edit under a running server is missed): run as two drive sections, chance 0 then chance 1, each with its own toml set before the boot; steps then: `zpwgg loop`, `cdevtest tickwarp 400` + waitlog `end=done`, `zpwgg overheated`, `setblock ... destroy`, `cdevtest items 1003 -60 1030 2`
+@from batches/r1113/pwg3.qb
+# r1126q (2026-11-26): the two boots are two restarts inside the row (`edit` + `restart`: powergrid-server.toml is read at world load); the chance-0 half first (the default is 0.25, owner decision pending)
+edit L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 "$INST/tools/scratch_query/qrun.py" toml "$L/serverconfig/powergrid-server.toml" electricity overheatedDropChance 0.0
+restart
+bootexpect Done \(
+> forceload add 990 990 1060 1050
+sleep 3
+> zpwgg loop 1000 -60 1040 12 18 powergrid:iron_wire
+waitlog \[zpwgg\] done 30
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done 120
+> zpwgg overheated 1003 -60 1040 1
+waitlog \[zpwgg\] done 30
+> setblock 1003 -60 1040 minecraft:air destroy
+sleep 1
+> zpwgg items 1003 -60 1040 2
+waitlog \[zpwgg\] items \d+ 30
+expect \[zpwgg\] overheated at 1003 -60 1040 original=Block\{powergrid:current_gauge\} data=\[.*Temperature
+expect \[zpwgg\] items 0$
+edit L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 "$INST/tools/scratch_query/qrun.py" toml "$L/serverconfig/powergrid-server.toml" electricity overheatedDropChance 1.0
+restart
+bootexpect Done \(
+> forceload add 990 990 1060 1050
+sleep 3
+> zpwgg loop 1000 -60 1030 12 18 powergrid:iron_wire
+waitlog \[zpwgg\] done 30
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done 120
+> zpwgg overheated 1003 -60 1030 1
+waitlog \[zpwgg\] done 30
+> setblock 1003 -60 1030 minecraft:air destroy
+sleep 1
+> zpwgg items 1003 -60 1030 2
+waitlog \[zpwgg\] items \d+ 30
+> cdevtest reg item overheated_component
+expect \[zpwgg\] overheated at 1003 -60 1030 original=Block\{powergrid:current_gauge\} data=\[.*Temperature
+expect \[zpwgg\] item powergrid:current_gauge x1
+expect verb=reg kind=item regex=overheated_component n=0
+reject \[zpwgg\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look chance 1.0 half: the gauge item and the attached wires dropped as items (the items line count above 1); no explosion; the block was not air before the setblock (the overheated line printed first)
+edit L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 "$INST/tools/scratch_query/qrun.py" toml "$L/serverconfig/powergrid-server.toml" electricity overheatedDropChance 0.25
+restart
 ## SQ-PWG-19 | insulated copper and golden wire loops read like copper
 @group A
 @commands `zpwgg loop 1000 -60 1050 12 36 powergrid:insulated_copper_wire`; wait 40 ticks; `zpwgg read 1000 -60 1050`; then one loop with `powergrid:golden_wire` at Z 1060
@@ -1537,7 +1580,7 @@ look first current ~10/5001 A; after the copper fill current rises and test rod 
 @@table
 ## SQ-PWG-35 | P4 jar loads: registries, wire types, stress provider, display source, redstone converter, damage source
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @commands copy the `-05` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-04.jar` and older there) and the four probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js`, `pwg_p4_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; boot; `zpwg ns powergrid`; `zpwg mods powergrid`; `zpwg4 check`; `give @p powergrid:electric_motor`
 @pass (on the pinned -20 jar only the probe checks run; version, phase and counts: SQ-PWG-90) `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-05`; log `Power grid starting, prepare to be electrocuted (1.19.2 port, phase 4)`; `[zpwg] ns powergrid block: 49`, `item: 58`, `entity_type: 3`, `block_entity_type: 40`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`, `fluid: 0`; log `Loaded 5 wire types` (6 since -17, so on -20: `Loaded 6 wire types`; `[zpwg4] stress electric_motor capacity=64.0 ... rpm=0..256`, `constant_speed_motor` the same, `servo capacity=32.0 ... rpm=0..32`, `generator_clutch ... impact=32.0`, `generator_induction_rotor impact=32.0`, `generator_large_induction_rotor impact=128.0`, both commutators `impact=8.0`, `variac` and `rheostat` `impact=0.0 hasImpact=true`, `hv_switch impact=2.0 rpm=none`; `display clutch=true sources on generator_clutch=1`; `redstone converter clutch=true`; `damage spinning_rotor msgId=spinning_rotor bypassArmor=false`; no line matching `Mixin apply failed\|Mixin.*powergrid.*(error\|failed)\|InvalidInjectionException\|InvalidMixinException\|powergrid.mixins.json` at WARN or ERROR (`KineticBlockEntityAccessor` targets Create's `KineticBlockEntity.flickerTally`, `remap = false`); no `Couldn't load tag`, `Failed to load`, `Couldn't parse`, `Unknown item`, `Unknown tag`, loot table error or `Exception loading blockstate definition` naming `powergrid`; no `Parsing error loading recipe powergrid:`
 @fails mixin: field name on Create 0.5.1.i (`mixin/KineticBlockEntityAccessor`); counts off: `collections/ModdedBlocks` / `ModdedBlockEntities` P4 entries or `phases.json`; `rpm=none` on the motors: `CStress.setGeneratorSpeed` / the provider's `getGeneratedRPM` in `ModdedConfigs.register`; display or redstone entries: `ModdedDisplaySources.CLUTCH`, `RedstoneConverterRegistry.init`
@@ -3158,7 +3201,7 @@ look panel A noon terminals about 18 to 21 V across 7 ohm (pwg10 60 W), sky 15; 
 @@table
 ## SQ-PWG-55 | P7 glue on -10 (P7 part only; counts, version and phase in SQ-PWG-62): P7 recipes, movement behavior, zap source, Capacity, drill mixin, config
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @commands copy the `-09` jar into `OUT/srv/mods/` (remove `backportedPowerGrid-*-08.jar` and older there) and the seven probes (`pwg_probe.js`, `pwg_grid_probe.js`, `pwg_p3_probe.js` to `pwg_p6_probe.js`, `pwg_p7_probe.js` as `zz_*`) into `OUT/srv/kubejs/server_scripts/`; the ponder datapack as in SQ-PWG-46 but from the `-09` jar; boot; `forceload add 1095 1525 1115 1590`; `zpwg mods powergrid`; `zpwg ns powergrid`; `zpwg3 recipes powergrid`; `zpwg6 check`; `zpwg7 check`; `grep -n -E 'powergrid\.mixins\.json|org\.patryk3211\.powergrid\.mixin|Mixin apply failed' logs/latest.log`
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-09`; log `(1.19.2 port, phase 7)`; `[zpwg] ns powergrid block: 59`, `item: 77`, `entity_type: 4`, `block_entity_type: 49`, `menu: 2`, `recipe_type: 1`, `recipe_serializer: 1`; `[zpwg3] recipes 61`, the 5 new ones among them (`crafting/portable_battery`, `mechanical_crafting/electrobaton`, `mechanical_crafting/electrozapper`, `mechanical_crafting/portable_drill`, `mechanical_crafting/portable_saw`) (on -09 still no `crafting/heating_coil`, `crafting/light_fixture`, `crafting/solar_panel_bearing`; on the pinned -20 they ship, P10); `zpwg6 check` as in SQ-PWG-46; `zpwg7 check`: the 6 items, the block, block entity and `zap_projectile` `registered=true`; `lightning_rod movement behaviour=org.patryk3211.powergrid.equipment.thunder.LightningRodMovementBehaviour`; `damage source zap msgId=zap`; `canEnchant(portable_battery)=true` (Create's Capacity, `max level=3`); `battery maxCharge level0=20000 level1=40000 level3=80000`; `fake player PlayerDrillExtensions=true` (`PlayerDrillMixin` merged into `Player`); config defaults `drillEnergyPerUse=25 drillMineSpeedBase=6 drillMineSpeedBulk=16 sawEnergyPerUse=100 sawMineSpeed=6 batonEnergy=250 zapperEnergy=500 batteryBase=20000 batteryEnchant=20000`, `forgeEnergyPerVolt=2`; the grep shows no `Mixin apply failed` and no error naming `SheepMixin`, `PlayerDrillMixin` or `DrillBreakActionMixin` (the fake player of `zpwg7 check` loads `ServerPlayerGameMode`); no ERROR with `powergrid`
 @fails wrong counts: the jar is not `-09` or `port_phase` is not 7; movement behavior `none` or another class: `PowerGridImpl.commonSetup` (phase 7 `enqueueWork`) or a pack mod registering its own lightning rod behavior after ours (record which); `PlayerDrillExtensions=false`: the mixin config; a mixin error: target names (refmap `powergrid.refmap.json`; `getDigSpeed` is a Forge method, `remap = false`)
@@ -6851,10 +6894,69 @@ look solar output non-zero at noon; one controlled entity; record controller= (p
 @@table
 ## SQ-PWG-98 | B39 arm on a belt: no part goes on the belt before the circuit; the board reaches the end depot (SQ-PS15-14 rerun on -20)
 @group A
+@reviewed 2026-11-26
 @commands Arm belt refusal (B39, `ArmInteractionPointMixin.powerGrid$handleBelt`), jar -20. Rerun SQ-PS15-14 (= SQ-PWG-82 as written, Z 1906, parts x8 in the depots before the circuit arrives); also `zpwg9c show 1146 -60 1908` (the arm) after the 20-tick wait and before `feed`, then `zpwg9c show 1152 -60 1906` (the end depot) at the end
 @pass before `feed`: the arm is empty (`HeldItem` empty) and no loose part is on the belt; after the circuit arrives the arm takes 1 part per grab, Assembly goes 1/3 to 3/3; at the end the end depot holds only `powergrid:circuit_board x1 Schematic components=3` (no `wire_connector` or `resistor`); the two part depots together lose exactly the 3 parts that went into the board; stone x64; no loose part on the belt
 @fails a loose part on the belt or in the end depot: B39 not in the jar (wrong jar) or the item has no `ComponentRegistry` id (record which item); arm holds a part and the circuit rides past unlocked: lock window (SQ-PWG-82 failure column); the arm idles with a part while a circuit sits in the window: the window check (`handleCenteredProcessingOnAllItems(0.05)`) missed it
-@draft no batch holds this row yet; build it from batches/r1116/ps15_pwg.qb (SQ-PS15-14) with the -20 jar
+@from batches/r1116/ps15_pwg.qb passed
+# r1126q (2026-11-26): steps of SQ-PS15-14 (r1116) with the setup of SQ-PWG-82 (forceload, source board) and the arm / end-depot reads of this row
+> forceload add 1136 1850 1160 1915
+sleep 3
+> zpwg9 board 1140 -60 1858 resistor
+waitlog \[zpwg9\] done 20
+> zpwg9c line 1142 -60 1906 plain
+waitlog \[zpwg9c\] done 20
+sleep 0.5
+> zpwg9c lineck 1142 -60 1906
+sleep 1
+> zpwg9c lineck 1142 -60 1906
+> zpwg9c depot 1145 -60 1910 powergrid:wire_connector 8
+> zpwg9c depot 1147 -60 1910 powergrid:resistor 8
+> zpwg9c depot 1148 -60 1909 minecraft:stone 64
+> zpwg9c arm2 1146 -60 1908 1148 -60 1909 1146 -60 1906 1145 -60 1910 1147 -60 1910
+sleep 1
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+> zpwg9c feed 1142 -60 1906 inc 1140 -60 1858
+sleep 0.5
+> zpwg9c show 1146 -60 1908
+sleep 1
+> zpwg9c show 1146 -60 1908
+sleep 1
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 3
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 5
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 10
+> zpwg9c show 1146 -60 1906
+> zpwg9c show 1152 -60 1906
+> zpwg9c same 1152 -60 1906 1140 -60 1858
+> zpwg9c show 1148 -60 1909
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1145 -60 1910
+> zpwg9c show 1147 -60 1910
+> cdevtest items 1149 -60 1906 4 keep
+sleep 1
+expect \[zpwg9c\] line plain belt Block\{create:belt\}
+count \[zpwg9c\] lineck belt facing=east speed=-?[1-9] >= 1
+expect \[zpwg9c\] arm at 1146 -60 1908 points=4$
+count \[zpwg9c\] arm point .*Mode:"TAKE" == 2
+count \[zpwg9c\] arm point .*Mode:"DEPOSIT" == 2
+expect \[zpwg9c\] feed powergrid:incomplete_circuit x1 Schematic components=3 inserted on the belt at 1142 -60 1906
+expect \[zpwg9c\] belt facing=\S+ speed=\S+ items .*powergrid:incomplete_circuit x1 Schematic components=3 .*lockedExternally
+expect \[zpwg9c\] items 0:powergrid:circuit_board x1 Schematic components=3$
+expect \[zpwg9c\] same powergrid:circuit_board x1 Schematic components=3 design=true$
+expect \[zpwg9c\] items 0:minecraft:stone x64$
+reject \[zpwg9c\] arm .*held(Item)?=?\S* x([2-9]|\d\d)
+reject \[zpwg9c\] arm: no interaction point
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look the first two show lines (before feed): the arm holds nothing and the belt carries no part; then HeldItem never more than 1 part, the circuit locked about @4.5, Assembly 1/3 -> 3/3; the end depot holds only the circuit_board (no wire_connector or resistor); part depots: 8 minus what went into the board; stone x64; the items line at the end counts no loose part
 
 @@section 5
 @@title CQ-PWG Power Grid client on a server without it, 2026-11-18 ([plan_bugfix_1117.md](../plan_bugfix_1117.md) A1; TODO `largecontent/mod-additions #90`)

@@ -363,10 +363,11 @@ look RECORD: locate answer and distance from 3000 3000; flesh present in the new
 @group A
 @commands `/cdnsfix blocks vanilla allids entities bots pack pack2 manifest`; `save-all flush`; `cdns_probe.py scan` of the save into `OUT/upg_cdns_b1.json`
 @pass every `[cdnsfix]` step OK (MISSING lines name ids the 1.2.02 jars lack, recorded); the scan writes the baseline
-@fails a step failing: `tools/scratch_query/cdns_fixture.js` against the 1.2.02 jars
+@fails Storage Delight absent on boot 1 (the drawer setblock fails: the 1.2.02 repackedStorage jar must be in the boot-1 jar set, see the section modset / server.installed.sha1); a step failing: `tools/scratch_query/cdns_fixture.js` against the 1.2.02 jars
 @absent creativeengineering:wooden_bucket creativeengineering:wooden_water_bucket (1.2.02 ids the fixture places on purpose)
+@reviewed 2026-11-26
 > gamerule doMobSpawning false
-> forceload add 0 0 127 127
+# r1126q: the fixture's blocks() forceloads the 64 chunks itself; the row's own forceload made that CMDFAIL (r1120nv)
 sleep 10
 > cdnsfix blocks
 > cdnsfix vanilla

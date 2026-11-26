@@ -7,6 +7,7 @@
 @@date 2026-11-06
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @@sources feature_writeup/creative_split.md
+@@prep B: spawn-animals=true
 @@text
 @@text Not run. Targets the builds of 2026-11-06 18:51-18:54 (Common 1.1.0, Compat, Calendar, Magic, Equipment, Engineering
 @@text 2.0.0, Worldgen, Delight 1.1.0, Brewing 1.0.0; `prep_srv.sh` swaps them in), Devtools `creativedevtools-1.0.0` of 2026-11-05
@@ -488,8 +489,9 @@ look every creative pack listed and enabled; each locate finds a structure withi
 @pass named cows as SQ-NM; mooblooms and baby mobs spawn; calf type follows the parents' rules
 @fails member mod ids changed; `moobloom_spawns/` not copied at build
 @from batches/r1106spf/b2.qb
-# self-contained (judge-4, 2026-11-24): bot qa and the plains capture came from SQ-SPF-70 and SQ-NM-01, not in this step (execute at qa ran on nothing)
-> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): r1124fxr printed nothing for the census and the Age reads: the bot was a creative flier 20 blocks above the ground (the mooshrooms fell out of the 5 block selectors) and the server prep had spawn-animals=false (every Animal discarded). The bot is now a survival bot that falls to the ground, section 1 carries `@@prep B: spawn-animals=true`, the census and the calf read use /cdevtest entities around the located plains, and 1200 ticks run with tickwarp
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld survival
 sleep 3
 > execute positioned 3000 70 3000 run locate biome minecraft:plains
 waitlog nearest minecraft:plains is at 300
@@ -499,15 +501,22 @@ capture PL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 sleep 40
 > tp qa {PL1} 90 {PL3}
 sleep 20
-> execute at qa run kill @e[type=minecraft:item,distance=..200]
-> execute at qa if entity @e[type=#zq:villagers,distance=..1]
-> execute at qa as @e[distance=..128,type=!minecraft:player] run data get entity @s id
-> execute at qa run summon minecraft:mooshroom ~2 ~ ~ {Age:0}
-> execute at qa run summon minecraft:mooshroom ~3 ~ ~ {Age:0}
-> execute at qa as @e[type=minecraft:mooshroom,distance=..5] run data merge entity @s {InLove:600}
-sleep 8
-> execute at qa as @e[type=minecraft:mooshroom,distance=..6] run data get entity @s Age
-look entity ids include moremooblooms: and baby mob types; a calf (Age negative) from the bred pair
+> cdevtest player qa
+> cdevtest tickwarp 1200
+waitlog verb=tickwarp end=done 300
+> cdevtest entities {PL1} 80 {PL3} 64
+waitlog verb=entities n=\d+ by_type= 60
+> execute at qa run summon minecraft:mooshroom ~2 ~ ~ {Age:0,Tags:["spf71"]}
+> execute at qa run summon minecraft:mooshroom ~3 ~ ~ {Age:0,Tags:["spf71"]}
+> execute as @e[tag=spf71] run data merge entity @s {InLove:600}
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=done 120
+> cdevtest entities {PL1} 80 {PL3} 64 type=minecraft:mooshroom nbt
+waitlog verb=entities n=\d+ by_type= 60
+expect verb=entities .*type=minecraft:mooshroom .*Age:-\d{4,5}
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+look the first census (by_type) lists mooblooms (`moremooblooms:moobloom`) and baby mob types when they spawned in the 1200 ticks (a chance event, recorded, not judged); the calf line (Age negative) belongs to the bred pair, its variant follows the parents (red x red = red)
+> execute as @e[tag=spf71] run kill @s
 
 ## SQ-SPF-72 | Worldgen: leaf decay, Forgiving Void, biome-tagged loot
 @phase worldgen

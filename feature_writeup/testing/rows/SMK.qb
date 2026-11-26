@@ -537,6 +537,7 @@ expect verb=reg kind=biome regex=\S+ n=1\b
 @@table
 ## SQ-SMK-33 | Delight boots: members, script pack, server scripts, mixins
 @group A
+@reviewed 2026-11-26
 @commands Boot; grep `logs/latest.log` for `[creativedelight]`; count `from creativedelight.mixins.json` and `from farmersdelight.ce.mixins.json` in `logs/debug.log`
 @pass `[creativedelight] members: [farmersdelight, ...]` with no `NOT loaded`; `N of M files loaded from its jar` (a file whose member mod is absent is skipped); `server scripts ready, members on:`; `village farm crops added to N pool elements`; jar found; mixins applied from both configs; no member loaded from another jar; no ERROR line or mixin failure naming `creativedelight`
 @fails A member jar not nested or shadowed by a loose upstream jar, a mixin target renamed, a member script throwing
@@ -554,6 +555,7 @@ shell for c in creativedelight farmersdelight.ce; do n=$(grep -c "from $c.mixins
 
 ## SQ-SMK-34 | Delight items and recipes registered
 @group A
+@reviewed 2026-11-26
 @commands `/cdevtest reg item ^creativedelight: max=1`; `/cdevtest recipes creativedelight: max=1`; `/cdevtest bytype farmersdelight:cooking max=1`; `/cdevtest bytype creativedelight:baking max=1`; `/cdevtest makes creativedelight:cheese_toast`
 @pass 380 or more items (441 on 2026-11-15); 2000 or more `creativedelight` recipes (2465); 300 or more cooking pot recipes (375); 80 or more baking recipes (97); a recipe makes cheese toast
 @fails Startup or server scripts not in the jar, a member's recipe serializer not registered
@@ -570,6 +572,7 @@ expect verb=makes item=creativedelight:cheese_toast n=[1-9]\d*\b
 
 ## SQ-SMK-35 | the cooking pot and a fruit basket place as blocks
 @group A
+@reviewed 2026-11-26
 @commands `forceload add 9000 9000 9100 9100`; `/cdevtest place 9054 -60 9010 farmersdelight:cooking_pot`; `/cdevtest state`; `/cdevtest inv`; `/cdevtest place 9054 -60 9012 creativedelight:acacia_fruit_basket`; `/cdevtest state`
 @pass the pot places with block entity `farmersdelight:cooking_pot` and an item handler with slots; the basket places as `creativedelight:acacia_fruit_basket`
 @fails Farmer's Delight member not loaded, block entity type missing, basket block not registered
@@ -601,7 +604,7 @@ expect verb=food item=farmersdelight:tomato_sauce\*1 food=true nutrition=[1-9]
 @@section 11
 @@title SQ-SMK Creative Brewing smoke rows, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2)
 @@date 2026-11-16
-@@reviewed 2026-11-20
+@@reviewed 2026-11-26
 @@sources development/creativeBrewing
 @@tier T1
 @@text Creative Brewing boots with Vinery and Brewin' from its own jar, brews its potions, carries its recipes, and the keg, wines and potion buckets work.
@@ -886,6 +889,7 @@ expect verb=inv slot=0 item=minecraft:apple\*3
 @@table
 ## SQ-SMK-54 | Raspberry Pie boots: diet ladder, mixins
 @group A
+@reviewed 2026-11-26
 @commands Boot; grep `logs/latest.log` for `Diet ladder`; count `from solraspberrypie.mixins.json` in `logs/debug.log`
 @pass `Diet ladder: N rungs, N slots, N pool effects`; no `DIET LADDER FILE IS BROKEN OR MISSING`; jar found; at least one mixin applied; no Apple Pie benefit or reset warning; no ERROR line or mixin failure naming `solraspberrypie`
 @fails Jar missing, `ladder.json` unreadable (built-in ladder used), Apple Pie mixin target renamed
@@ -901,6 +905,7 @@ shell echo "mixins $(grep -c 'from solraspberrypie.mixins.json' logs/debug.log)"
 
 ## SQ-SMK-55 | /solrp pause list answers
 @group A
+@reviewed 2026-11-26
 @commands `/solrp pause list`
 @pass `No player has paused diet bonuses` or `N paused: ...`; no unknown command
 @fails `RpCommands` not registered
@@ -911,6 +916,7 @@ reject Unknown or incomplete command
 
 ## SQ-SMK-56 | Raspberry Pie items and recipes
 @group A
+@reviewed 2026-11-26
 @commands `/cdevtest reg item ^solraspberrypie:`; `/cdevtest makes solraspberrypie:liquid_diet_log`; `/cdevtest bytype solraspberrypie:diet_book max=1`
 @pass three items (`diet_adjustment`, `diet_marker`, `liquid_diet_log`); a recipe makes the liquid diet log; one diet book recipe
 @fails Items not registered, the diet book serializer missing

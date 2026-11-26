@@ -15,6 +15,7 @@
 @@text
 @@table
 ## SQ-PS15B-01 | 20-block drops (100 hp zombies, base speed 0): plain, lone web ground, lone web 5 up, 3 stacked, 3-face web, ripe berry bush; per-tick fall watch
+@reviewed 2026-11-26
 @group A
 @commands SQ-PTH-03 rerun, same drop heights (100 hp zombies, 20-block drops, per-tick fallDistance watch): plain, lone web at ground level, lone web 5 up, 3 stacked webs, a web with webs on 3 of its 6 faces (2 sides and below), a ripe sweet berry bush
 @pass lone web: fall distance 14.55 -> about 12.4 on entering, damage about x0.85; 3 stacked: about x0.61; 3-face web: fall distance 0 inside, no damage (dense reset); bush: full plain damage
@@ -23,6 +24,9 @@
 # forceload added (r1124fx runner-1, 2026-11-24): prescreen found the row coordinates outside every forceload
 # BF-FIX judge-3 r1124fx: the section's server is peaceful (prep_srv default), which discards the summoned zombies (probe: none found); difficulty normal for the row (gotchas: Difficulty, spawning and mobs; PTH.qb preps it)
 > difficulty normal
+# r1126q (2026-11-26): r1124fxr judge-6: normal difficulty burned the zombies in daylight (hp 74 -> 61) and the watch started after the 2 s paced summons (every zombie had landed): night, fire resistance, pace 0.05 for the six summons so the watch starts before the drops end
+> time set night
+> gamerule doDaylightCycle false
 > forceload add 992 976 1231 1215
 sleep 3
 > setblock 1004 -60 1090 minecraft:cobweb
@@ -33,13 +37,15 @@ sleep 3
 > setblock 1017 -59 1090 minecraft:cobweb
 > setblock 1016 -60 1090 minecraft:cobweb
 > setblock 1020 -60 1090 minecraft:sweet_berry_bush[age=3]
-> summon minecraft:zombie 1000.5 -40 1090.5 {Tags:["z01p","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
-> summon minecraft:zombie 1004.5 -40 1090.5 {Tags:["z01w","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
-> summon minecraft:zombie 1008.5 -40 1090.5 {Tags:["z01u","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
-> summon minecraft:zombie 1012.5 -40 1090.5 {Tags:["z01s","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
-> summon minecraft:zombie 1016.5 -40 1090.5 {Tags:["z01f","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
-> summon minecraft:zombie 1020.5 -40 1090.5 {Tags:["z01b","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+pace 0.05
+> summon minecraft:zombie 1000.5 -40 1090.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z01p","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1004.5 -40 1090.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z01w","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1008.5 -40 1090.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z01u","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1012.5 -40 1090.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z01s","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1016.5 -40 1090.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z01f","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1020.5 -40 1090.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z01b","pth","pth01"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > zpth watch pth01 70 1
+pace 2
 sleep 10
 > zpth mod z01p
 > zpth mod z01w
@@ -48,6 +54,8 @@ sleep 10
 > zpth mod z01f
 > zpth mod z01b
 look hp (100 - hp = damage): plain about 16; lone web about x0.85; 3 stacked about x0.61; 3-face web 0 (fall 0 inside); bush full plain damage (plus thorns); watch: z01u (x 1008) fall about 14.55 -> about 12.4 on entering y -55, never about 1
+> gamerule doDaylightCycle true
+> time set noon
 
 ## SQ-PS15B-02 | elevated cube: snowball from z 994.5 / 995.5 / 996.2, pearl from 995.5 (breakStallTicks 3)
 @group A
@@ -348,117 +356,120 @@ look shell: SIDES >= 1, FACES >= 1, RING/CUBE 0, denseFrom 3 in every table, sur
 @commands Layered blocks with a zombie (speed 0) in each height (setblock with `layers=`): snow 1 to 8, IW oak leaf pile 1 to 8, Twigs bamboo leaves 1 to 4, `creativecompat:bamboo_leaves_full` 5 to 8, IW sand layer, Supplementaries ash and fodder 1 to 8, IE sawdust 1 to 9; zombie y; then a random-tick burst on a lone 8-layer snow
 @pass snow modifier none, -0.1, -0.2 ... -0.6 for 1 to 7, the zombie stands at y -60 (inside, no collision), 8 none; leaf pile none at 1, -0.057 ... -0.4 at 8; bamboo (Twigs 1 to 4, then full 5 to 8) as the leaf pile: none at 1, -0.057, -0.114, -0.171, then -0.229, -0.286, -0.343, -0.4 (one rising scale, no step back at 5); sand, ash, fodder, sawdust: none at every height (not walk-through); the 8-layer snow becomes a snow block
 @fails `PassRule.layerWalk` (H = max for leaf layers, max - 1 for snow), tags `creativecompat:passthrough_layers` / `_open` (passthrough_tags.js), `SnowLayers.collision` / `SnowLayerPassMixin`
-@reviewed 2026-11-17
+@reviewed 2026-11-26
 # written 2026-11-17 for plan_post_scratch_1115.md G7.4 (replaces the r1116 D2 version); superflat group A, stand at -60
 # BF-FIX judge-3 r1124fx: the section's server is peaceful (prep_srv default), which discards the summoned zombies (probe: none found); difficulty normal for the row (gotchas: Difficulty, spawning and mobs; PTH.qb preps it)
 > difficulty normal
+# r1126q (2026-11-26): r1124fxr judge-6: the speed-0 zombies burned to death in daylight during the paced summons (every mod line 'none found'): night, fire resistance on each zombie
+> time set night
+> gamerule doDaylightCycle false
 > forceload add 1095 1095 1135 1125
 > setblock 1103 -60 1100 minecraft:snow[layers=1]
-> summon minecraft:zombie 1103.5 -58.5 1100.5 {Tags:["z10snow1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1103.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1106 -60 1100 minecraft:snow[layers=2]
-> summon minecraft:zombie 1106.5 -58.5 1100.5 {Tags:["z10snow2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1106.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1109 -60 1100 minecraft:snow[layers=3]
-> summon minecraft:zombie 1109.5 -58.5 1100.5 {Tags:["z10snow3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1109.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1112 -60 1100 minecraft:snow[layers=4]
-> summon minecraft:zombie 1112.5 -58.5 1100.5 {Tags:["z10snow4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1112.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1115 -60 1100 minecraft:snow[layers=5]
-> summon minecraft:zombie 1115.5 -58.5 1100.5 {Tags:["z10snow5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1115.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1118 -60 1100 minecraft:snow[layers=6]
-> summon minecraft:zombie 1118.5 -58.5 1100.5 {Tags:["z10snow6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1118.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1121 -60 1100 minecraft:snow[layers=7]
-> summon minecraft:zombie 1121.5 -58.5 1100.5 {Tags:["z10snow7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1121.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1124 -60 1100 minecraft:snow[layers=8]
-> summon minecraft:zombie 1124.5 -58.5 1100.5 {Tags:["z10snow8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1124.5 -58.5 1100.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10snow8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1103 -60 1103 immersive_weathering:oak_leaf_pile[layers=1]
-> summon minecraft:zombie 1103.5 -58.5 1103.5 {Tags:["z10leaf1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1103.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1106 -60 1103 immersive_weathering:oak_leaf_pile[layers=2]
-> summon minecraft:zombie 1106.5 -58.5 1103.5 {Tags:["z10leaf2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1106.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1109 -60 1103 immersive_weathering:oak_leaf_pile[layers=3]
-> summon minecraft:zombie 1109.5 -58.5 1103.5 {Tags:["z10leaf3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1109.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1112 -60 1103 immersive_weathering:oak_leaf_pile[layers=4]
-> summon minecraft:zombie 1112.5 -58.5 1103.5 {Tags:["z10leaf4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1112.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1115 -60 1103 immersive_weathering:oak_leaf_pile[layers=5]
-> summon minecraft:zombie 1115.5 -58.5 1103.5 {Tags:["z10leaf5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1115.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1118 -60 1103 immersive_weathering:oak_leaf_pile[layers=6]
-> summon minecraft:zombie 1118.5 -58.5 1103.5 {Tags:["z10leaf6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1118.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1121 -60 1103 immersive_weathering:oak_leaf_pile[layers=7]
-> summon minecraft:zombie 1121.5 -58.5 1103.5 {Tags:["z10leaf7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1121.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1124 -60 1103 immersive_weathering:oak_leaf_pile[layers=8]
-> summon minecraft:zombie 1124.5 -58.5 1103.5 {Tags:["z10leaf8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1124.5 -58.5 1103.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10leaf8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1103 -60 1115 twigs:bamboo_leaves[layers=1]
-> summon minecraft:zombie 1103.5 -58.5 1115.5 {Tags:["z10bamboo1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1103.5 -58.5 1115.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10bamboo1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1106 -60 1115 twigs:bamboo_leaves[layers=2]
-> summon minecraft:zombie 1106.5 -58.5 1115.5 {Tags:["z10bamboo2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1106.5 -58.5 1115.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10bamboo2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1109 -60 1115 twigs:bamboo_leaves[layers=3]
-> summon minecraft:zombie 1109.5 -58.5 1115.5 {Tags:["z10bamboo3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1109.5 -58.5 1115.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10bamboo3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1112 -60 1115 twigs:bamboo_leaves[layers=4]
-> summon minecraft:zombie 1112.5 -58.5 1115.5 {Tags:["z10bamboo4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1112.5 -58.5 1115.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10bamboo4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1103 -60 1106 immersive_weathering:sand_layer_block[layers=1]
-> summon minecraft:zombie 1103.5 -58.5 1106.5 {Tags:["z10sand1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1103.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1106 -60 1106 immersive_weathering:sand_layer_block[layers=2]
-> summon minecraft:zombie 1106.5 -58.5 1106.5 {Tags:["z10sand2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1106.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1109 -60 1106 immersive_weathering:sand_layer_block[layers=3]
-> summon minecraft:zombie 1109.5 -58.5 1106.5 {Tags:["z10sand3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1109.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1112 -60 1106 immersive_weathering:sand_layer_block[layers=4]
-> summon minecraft:zombie 1112.5 -58.5 1106.5 {Tags:["z10sand4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1112.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1115 -60 1106 immersive_weathering:sand_layer_block[layers=5]
-> summon minecraft:zombie 1115.5 -58.5 1106.5 {Tags:["z10sand5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1115.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1118 -60 1106 immersive_weathering:sand_layer_block[layers=6]
-> summon minecraft:zombie 1118.5 -58.5 1106.5 {Tags:["z10sand6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1118.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1121 -60 1106 immersive_weathering:sand_layer_block[layers=7]
-> summon minecraft:zombie 1121.5 -58.5 1106.5 {Tags:["z10sand7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1121.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1124 -60 1106 immersive_weathering:sand_layer_block[layers=8]
-> summon minecraft:zombie 1124.5 -58.5 1106.5 {Tags:["z10sand8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1124.5 -58.5 1106.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sand8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1103 -60 1109 supplementaries:ash[layers=1]
-> summon minecraft:zombie 1103.5 -58.5 1109.5 {Tags:["z10ash1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1103.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1106 -60 1109 supplementaries:ash[layers=2]
-> summon minecraft:zombie 1106.5 -58.5 1109.5 {Tags:["z10ash2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1106.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1109 -60 1109 supplementaries:ash[layers=3]
-> summon minecraft:zombie 1109.5 -58.5 1109.5 {Tags:["z10ash3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1109.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1112 -60 1109 supplementaries:ash[layers=4]
-> summon minecraft:zombie 1112.5 -58.5 1109.5 {Tags:["z10ash4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1112.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1115 -60 1109 supplementaries:ash[layers=5]
-> summon minecraft:zombie 1115.5 -58.5 1109.5 {Tags:["z10ash5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1115.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1118 -60 1109 supplementaries:ash[layers=6]
-> summon minecraft:zombie 1118.5 -58.5 1109.5 {Tags:["z10ash6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1118.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1121 -60 1109 supplementaries:ash[layers=7]
-> summon minecraft:zombie 1121.5 -58.5 1109.5 {Tags:["z10ash7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1121.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1124 -60 1109 supplementaries:ash[layers=8]
-> summon minecraft:zombie 1124.5 -58.5 1109.5 {Tags:["z10ash8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1124.5 -58.5 1109.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10ash8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1103 -60 1112 supplementaries:fodder[layers=1]
-> summon minecraft:zombie 1103.5 -58.5 1112.5 {Tags:["z10fodder1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1103.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1106 -60 1112 supplementaries:fodder[layers=2]
-> summon minecraft:zombie 1106.5 -58.5 1112.5 {Tags:["z10fodder2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1106.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1109 -60 1112 supplementaries:fodder[layers=3]
-> summon minecraft:zombie 1109.5 -58.5 1112.5 {Tags:["z10fodder3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1109.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1112 -60 1112 supplementaries:fodder[layers=4]
-> summon minecraft:zombie 1112.5 -58.5 1112.5 {Tags:["z10fodder4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1112.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1115 -60 1112 supplementaries:fodder[layers=5]
-> summon minecraft:zombie 1115.5 -58.5 1112.5 {Tags:["z10fodder5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1115.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1118 -60 1112 supplementaries:fodder[layers=6]
-> summon minecraft:zombie 1118.5 -58.5 1112.5 {Tags:["z10fodder6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1118.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1121 -60 1112 supplementaries:fodder[layers=7]
-> summon minecraft:zombie 1121.5 -58.5 1112.5 {Tags:["z10fodder7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1121.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1124 -60 1112 supplementaries:fodder[layers=8]
-> summon minecraft:zombie 1124.5 -58.5 1112.5 {Tags:["z10fodder8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1124.5 -58.5 1112.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10fodder8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1103 -60 1118 immersiveengineering:sawdust[layers=1]
-> summon minecraft:zombie 1103.5 -58.5 1118.5 {Tags:["z10sawdust1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1103.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust1","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1106 -60 1118 immersiveengineering:sawdust[layers=2]
-> summon minecraft:zombie 1106.5 -58.5 1118.5 {Tags:["z10sawdust2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1106.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust2","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1109 -60 1118 immersiveengineering:sawdust[layers=3]
-> summon minecraft:zombie 1109.5 -58.5 1118.5 {Tags:["z10sawdust3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1109.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust3","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1112 -60 1118 immersiveengineering:sawdust[layers=4]
-> summon minecraft:zombie 1112.5 -58.5 1118.5 {Tags:["z10sawdust4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1112.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust4","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1115 -60 1118 immersiveengineering:sawdust[layers=5]
-> summon minecraft:zombie 1115.5 -58.5 1118.5 {Tags:["z10sawdust5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1115.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust5","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1118 -60 1118 immersiveengineering:sawdust[layers=6]
-> summon minecraft:zombie 1118.5 -58.5 1118.5 {Tags:["z10sawdust6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1118.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust6","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1121 -60 1118 immersiveengineering:sawdust[layers=7]
-> summon minecraft:zombie 1121.5 -58.5 1118.5 {Tags:["z10sawdust7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1121.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust7","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1124 -60 1118 immersiveengineering:sawdust[layers=8]
-> summon minecraft:zombie 1124.5 -58.5 1118.5 {Tags:["z10sawdust8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1124.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust8","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 > setblock 1127 -60 1118 immersiveengineering:sawdust[layers=9]
-> summon minecraft:zombie 1127.5 -58.5 1118.5 {Tags:["z10sawdust9","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> summon minecraft:zombie 1127.5 -58.5 1118.5 {ActiveEffects:[{Id:12,Amplifier:0,Duration:20000,ShowParticles:0b}],Tags:["z10sawdust9","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
 sleep 4
 > zpth mod z10snow1
 > zpth mod z10snow2
@@ -576,6 +587,8 @@ sleep 2
 > execute if block 1130 -60 1124 minecraft:snow_block run say ps15b10 snow8 became a snow block
 expect ps15b10 snow8 became a snow block
 > kill @e[tag=pth,type=minecraft:zombie]
+> gamerule doDaylightCycle true
+> time set noon
 > fill 1100 -60 1100 1131 -60 1124 minecraft:air
 > forceload remove 1095 1095 1135 1125
 reject \[cdevtest\] .*done=0
@@ -863,10 +876,24 @@ expect ps15b13 water drop 3 snowballs
 
 ## SQ-PS15B-20 | Devtools boots without Compat (second boot of SQ-TX-18)
 @group A
-@commands A boot with Creative Compat and every jar that requires it (Engineering, Calendar, Equipment, Delight, Brewing, Loot, Magic, Worldgen) removed from `OUT/srv/mods/`, Devtools and Common kept: `cdevreload compat`, `cdevbench passthrough`, `dumpsurface`, `cdevtest help`
+@reviewed 2026-11-26
+@commands A boot with Creative Compat and every jar that requires it removed (`@modset cc_only alone`: Common, Devtools, perfBot and KubeJS libraries only): `cdevreload compat`, `cdevbench passthrough`, `dumpsurface`, `cdevtest help`
 @pass the server starts; no ERROR or NoClassDefFoundError naming `creativecompat`; the three Compat commands are `Unknown or incomplete command`; `cdevtest help` works
 @fails Devtools mods.toml `creativecompat mandatory=false`, the `ModList.isLoaded("creativecompat")` guards in CreativeDevtools, SurfaceAudit, WthitIconDump
-@draft a boot with a cut-down mod set; the qrun boot profile has no jar-removal step yet
+@modset cc_only alone
+# r1126q (2026-11-26): the cc_only manifest's `alone` variant keeps Common + Devtools + perfBot and forbids every Creative jar (Compat included): the cut-down set this row needs
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException).*creativecompat
+bootreject (ERROR|FATAL).*creativecompat
+shell test "$(ls mods | grep -ci '^creativecompat')" = 0
+> cdevreload compat
+> cdevbench passthrough
+> dumpsurface
+> cdevtest help
+sleep 2
+count Unknown or incomplete command >= 3
+expect \[cdevtest\] verb=help
+reject \[cdevtest\] verb=help .*done=0
 
 ## SQ-PS15B-21 | /cdevbench passthrough, 14 cases: first in its cells on saved counts, recount cases unbudgeted
 @reviewed 2026-11-20
@@ -917,10 +944,65 @@ look tick_field and tick_web_cube medians under 1000; the two _recount rows pres
 @@table
 ## SQ-PS15B-23 | light mobs stand on snow layers 5, heavy mobs sink: rabbit, fox, chicken, cat, baby cow on top; cow, zombie, wolf, Alex's Mobs tiger in
 @group A
-@commands A 9 x 3 pen of snow layers 5 (x 1100 to 1108, z 1160 to 1162, fenced), one each of rabbit, fox, chicken, cat, baby cow (`{Age:-24000}`), cow, zombie (`{NoAI:0b}`, daylight-proof helmet), wolf, `alexsmobs:tiger`, all `{PersistenceRequired:1b}`; after 5 s read each mob's Y
-@pass rabbit, fox, chicken, cat, baby cow: Y -59.375 (on top of 5 layers); cow, zombie, wolf, tiger: Y -60 (sunk to the ground); a zombie in leather boots (`armor.feet`) stands on top
-@fails `SnowLayers.standsOn` / `light` (`snowLightVolume`, tag `creativecompat:snow_layer_light`, boots `canWalkOnPowderedSnow`), `SnowLayers.collision`; a tiger on top = `#minecraft:powder_snow_walkable_mobs` still read
-@draft per-mob Y readback (`data get entity @e[type=...,limit=1] Pos[1]`) to write at the run
+@reviewed 2026-11-26
+@commands A 10 x 3 pen of snow layers 5 (x 1100 to 1109, z 1160 to 1162, walled), one each of rabbit, fox, chicken, cat, baby cow (`{Age:-24000}`), cow, zombie (iron helmet), wolf, `alexsmobs:tiger`, a zombie in leather boots, all `{PersistenceRequired:1b}`; after 5 s read each mob's Y with `/cdevtest entities`
+@pass rabbit, fox, chicken, cat, baby cow: Y -59.375 (on top of 5 layers); cow, zombie, wolf, tiger: Y -60 (sunk to the ground); a zombie in leather boots stands on top
+@fails `PassThrough` light-mob collision (`creativecompat:passthrough_exempt/layers` and the layer collision for living entities, plan_passthrough.md); a mob not found: it was discarded (the row restarts with spawn-animals=true) or walked more than 1 block from its spawn x
+# r1126q (2026-11-26): prep servers run spawn-animals=false and discard every Animal (gotchas, Difficulty, spawning and mobs), so the row restarts once with spawn-animals=true and spawn-npcs=true and puts them back at the end; night + difficulty normal so the zombies live
+edit sed -i -e 's/^spawn-animals=.*/spawn-animals=true/' -e 's/^spawn-npcs=.*/spawn-npcs=true/' server.properties
+restart
+bootexpect Done \(
+> forceload add 1096 1156 1112 1166
+sleep 3
+> difficulty normal
+> time set night
+> gamerule doDaylightCycle false
+> gamerule doMobSpawning false
+> fill 1099 -60 1159 1110 -57 1163 minecraft:stone hollow
+> fill 1100 -60 1160 1109 -60 1162 minecraft:snow[layers=5]
+> kill @e[tag=ps23]
+> summon minecraft:rabbit 1100.5 -58 1161.5 {Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:fox 1101.5 -58 1161.5 {Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:chicken 1102.5 -58 1161.5 {Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:cat 1103.5 -58 1161.5 {Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:cow 1104.5 -58 1161.5 {Age:-24000,Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:cow 1105.5 -58 1161.5 {Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:zombie 1106.5 -58 1161.5 {ArmorItems:[{},{},{},{id:"minecraft:iron_helmet",Count:1b}],Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:wolf 1107.5 -58 1161.5 {Tags:["ps23"],PersistenceRequired:1b}
+> summon alexsmobs:tiger 1108.5 -58 1161.5 {Tags:["ps23"],PersistenceRequired:1b}
+> summon minecraft:zombie 1109.5 -58 1161.5 {ArmorItems:[{id:"minecraft:leather_boots",Count:1b},{},{},{id:"minecraft:iron_helmet",Count:1b}],Tags:["ps23"],PersistenceRequired:1b}
+sleep 5
+> cdevtest entities 1100.5 -60 1161 1.2 type=minecraft:rabbit
+> cdevtest entities 1101.5 -60 1161 1.2 type=minecraft:fox
+> cdevtest entities 1102.5 -60 1161 1.2 type=minecraft:chicken
+> cdevtest entities 1103.5 -60 1161 1.2 type=minecraft:cat
+> cdevtest entities 1104.5 -60 1161 1.2 type=minecraft:cow
+> cdevtest entities 1105.5 -60 1161 1.2 type=minecraft:cow
+> cdevtest entities 1106.5 -60 1161 1.2 type=minecraft:zombie
+> cdevtest entities 1107.5 -60 1161 1.2 type=minecraft:wolf
+> cdevtest entities 1108.5 -60 1161 1.2 type=alexsmobs:tiger
+> cdevtest entities 1109.5 -60 1161 1.2 type=minecraft:zombie
+expect verb=entities type=minecraft:rabbit uuid=\S+ x=1\d+(\.\d+)? y=-59\.37\d* z=
+expect verb=entities type=minecraft:fox uuid=\S+ x=1\d+(\.\d+)? y=-59\.37\d* z=
+expect verb=entities type=minecraft:chicken uuid=\S+ x=1\d+(\.\d+)? y=-59\.37\d* z=
+expect verb=entities type=minecraft:cat uuid=\S+ x=1\d+(\.\d+)? y=-59\.37\d* z=
+expect verb=entities type=minecraft:cow uuid=\S+ x=1\d+(\.\d+)? y=-59\.37\d* z=
+expect verb=entities type=minecraft:cow uuid=\S+ x=1\d+(\.\d+)? y=-60(\.0+)? z=
+expect verb=entities type=minecraft:zombie uuid=\S+ x=1\d+(\.\d+)? y=-60(\.0+)? z=
+expect verb=entities type=minecraft:wolf uuid=\S+ x=1\d+(\.\d+)? y=-60(\.0+)? z=
+expect verb=entities type=alexsmobs:tiger uuid=\S+ x=1\d+(\.\d+)? y=-60(\.0+)? z=
+expect verb=entities type=minecraft:zombie uuid=\S+ x=1\d+(\.\d+)? y=-59\.37\d* z=
+reject \[cdevtest\] verb=entities .*done=0
+count verb=entities done=1 == 10
+look each of the ten lines names its mob type and a y of -59.375 (light mobs, the leather-booted zombie) or -60 (cow, zombie, wolf, tiger); a missing line = the mob moved off its spawn or was discarded
+> kill @e[tag=ps23]
+> fill 1099 -60 1159 1110 -57 1163 minecraft:air
+> gamerule doDaylightCycle true
+> gamerule doMobSpawning true
+> time set noon
+> forceload remove 1096 1156 1112 1166
+edit sed -i -e 's/^spawn-animals=.*/spawn-animals=false/' -e 's/^spawn-npcs=.*/spawn-npcs=false/' server.properties
+restart
 
 ## SQ-PS15B-24 | a sunk mob climbs out of snow layers 7 onto a 1-block step and a snow block
 @group A

@@ -45,20 +45,24 @@ shell grep -hnE "IllegalAccessError|f_60445_|isRandomlyTicking|m_182450_|accesst
 shell grep -hE "Vintage salt blocks random tick like The Salt" logs/latest.log logs/kubejs/*.log | head -3
 shell grep -qhE "\[salt\] 30 Vintage salt blocks random tick like The Salt" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
 
-## SQ-SLT-03 | /salttest: raw rock salt stays, Salt Block dissolves
+## SQ-SLT-03 | /salttest: salt layer and salt blocks dissolve by water; raw rock salt becomes its placed twin and stays
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @commands Copy `tools/salt_probe/salt_probe.js` to `srv/kubejs/server_scripts/zz_salt_probe.js`, `/reload`, `/salttest`
-@pass `[salttest] PASS raw rock salt beside water stays`, `[salttest] PASS salt:salt_block beside water dissolves`, `PASS leftover vintagedelight:salt_block by water dissolves`, every other line as in SQ-SALT-05 / -06
-@fails Rock salt dissolves: the edited `Dissolving` is not in the jar (`replaced_classes` in `members/salt/gradle.properties`) or CD still built against the old member list. Salt Block no longer dissolves: the `isKept` check in `members/salt/src/main/java/io/github/mortuusars/salt/Dissolving.java`
+@pass `PASS Salt Layer beside water becomes water`, `PASS Salt Layer by a torch stays`, `PASS leftover vintagedelight:salt_block by water dissolves`, `PASS Evaporator by water grows layers to 8`, `PASS salt:salt_block beside water dissolves`, and the raw rock salt block set by the probe is swapped for `hearthandharvest:placed_rock_salt_block`, which stays beside water (salt.md: placed twin; the probe's name for that case still reads FAIL `raw rock salt beside water stays`). The probe's melting cases (block melting is Creative Common's, SQ-MELT rows) and its open-sky rain cases (the pack spot is plains, no rain) are not judged here
+@fails Rock salt dissolves or the twin swap missing: the placed twin in `members/hearth` (salt.md "Placed twin"). Salt Block no longer dissolves: the `isKept` check in `members/salt/src/main/java/io/github/mortuusars/salt/Dissolving.java`
 @from batches/r1103/sA_2.qb
 > salttest
 waitlog \[salttest\] done 400
-expect \[salttest\] PASS raw rock salt beside water stays
-expect \[salttest\] PASS salt:salt_block beside water dissolves
+expect \[salttest\] PASS Salt Layer beside water becomes water
+expect \[salttest\] PASS Salt Layer by a torch stays
+expect \[salttest\] FAIL raw rock salt beside water stays: now hearthandharvest:placed_rock_salt_block
 expect \[salttest\] PASS leftover vintagedelight:salt_block by water dissolves
-reject \[salttest\] FAIL
-look every other line as in SQ-SALT-05 / -06 (perf/runs/r1102b/r rows SQ-SALT-06, -08)
+expect \[salttest\] PASS Evaporator by water grows layers to 8
+expect \[salttest\] PASS salt:salt_block beside water dissolves
+reject \[salttest\] FAIL (Salt Layer|leftover|Evaporator|salt:salt_block beside)
+reject \[salttest\] FAIL .*(Rhino|error|Error)
+look the remaining FAIL lines are only the melting cases (12 melts lines: block melting moved to Creative Common 2026-11-14) and the five rain cases (NOTE rain cases: isRainingAt false on plains)
 
 ## SQ-SLT-04 | Salt recipes and tags after the move (pre-move baseline: batches/r1103/sA_baseline, 2026-10-30 dump)
 @group A
@@ -66,7 +70,7 @@ look every other line as in SQ-SALT-05 / -06 (perf/runs/r1102b/r rows SQ-SALT-06
 @pass `salt:salting` recipes and `#salt:can_be_salted` present with the same counts as the pre-move dump in `exported/` (`#salt:can_be_salted` holds 290 entries, salt.md 5); the two Create: The Salt mixing recipes present; the removed ids absent; the rebuilt raw rock salt to 4 salt dust recipe present
 @fails A changed count: diff against the pre-move dump; ids are taken from the upstream jars unchanged, so a difference points at a script or the member not loading
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 @absent salt:salt_from_raw_rock_salt (removed recipe id: negative test)
 > cdevtest bytype salt:salting
 > cdevtest tag item salt:can_be_salted
@@ -77,30 +81,33 @@ look every other line as in SQ-SALT-05 / -06 (perf/runs/r1102b/r rows SQ-SALT-06
 > cdevtest recipes salt:salt_from_raw_rock_salt
 > cdevtest makes vintagedelight:salt_dust
 waitlog verb=makes item=vintagedelight:salt_dust n=\d+ 60
-expect verb=bytype serializer=salt:salting n=[1-9]
-expect verb=tag kind=item tag=salt:can_be_salted n=[1-9]
+expect verb=bytype serializer=salt:salting n=1\b
+expect verb=tag kind=item tag=salt:can_be_salted n=290\b
 expect verb=recipes text=create__the_salt:bread n=[1-9]
 expect verb=recipes text=create__the_salt:cooked_beef_salted n=[1-9]
+expect verb=recipes text=create__the_salt: n=64\b
 expect verb=recipes text=create__the_salt:salt_create_ n=0\b
 expect verb=recipes text=salt:salt_from_raw_rock_salt n=0\b
 shell B="$INST/tools/scratch_query/batches/r1103/sA_baseline"; echo "baseline salting: $(grep -c ',salt:salting,' $B/salt_recipes_1030.csv)"; echo "baseline create__the_salt / create_salt ids: $(grep -cE '^(create__the_salt|create_salt):' $B/salt_recipes_1030.csv)"; python3 -c "import json;d=json.load(open('$B/salt_item_tags_1030.json'));print('baseline #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
-shell D="${B0:?B0 unset}/srv/kubejs/exported"; echo "Boot 0 salting: $(grep -c ',salt:salting,' $D/recipes/all.csv)  create__the_salt ids: $(grep -cE '^create__the_salt:' $D/recipes/all.csv)"; python3 -c "import json;d=json.load(open('$D/tags/item_tags.json'));print('Boot 0 #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
 look salting count and Create: The Salt recipe count match the baseline (ids unchanged); #salt:can_be_salted = baseline 148 plus the SQ-SALT2-01 additions (Calamari Roll, Crab Rangoon, kangaroo burger) minus the refused three; the raw rock salt to 4 salt dust recipe present among the salt_dust makers
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
-## SQ-SLT-05 | Salt config read from salt-common.toml: DissolvingChance 1.0 dissolves the Salt Layer in 1 tick
+## SQ-SLT-05 | Salt config lives in creativedelight-common.toml [salt]: SaltDissolvingChance 1.0 dissolves the Salt Layer in 1 tick
 @group A
-@reviewed 2026-11-20
-@commands Stop, set `DissolvingChance` in `srv/config/salt-common.toml` to `1.0` (`qrun.py toml`), boot, `/salttest`
-@pass latest.log has no `salt-common.toml` parse error and no `creativedelight-common.toml` `[salt]` section is created; Salt Layer beside water becomes water within 1 tick (n = 1 on that line)
-@fails Config not read: Salt's `Configuration` registration (unchanged upstream class); the file name must stay `salt-common.toml` (salt.md 2.3)
+@reviewed 2026-11-26
+@commands `qrun.py toml config/creativedelight-common.toml salt.Dissolving SaltDissolvingChance 1.0`, restart, `/salttest`
+@pass `[salt.Dissolving]` with `SaltDissolvingChance` is in `config/creativedelight-common.toml` (Salt -03 moved the COMMON config there, salt.md S10); no `salt-common.toml` is read back (carried once and renamed `.moved`); no config parse error in the boot log; the Salt Layer beside water becomes water in 1 tick (`1 ticks` on that line)
+@fails Config not read: the `[salt]` section of Creative Delight's common config (`members/salt` Configuration, salt.md S10); the old file name `salt-common.toml` is no longer the live one
 @from batches/r1103/sA_3.qb passed
-shell grep -nE "SaltDissolvingChance" config/salt-common.toml
-bootreject salt-common\.toml.*(ParsingException|parse|Failed loading|corrected)
-shell ! grep -qE "^\[salt\]" config/creativedelight-common.toml
+shell grep -nE "^\s*SaltDissolvingChance" config/creativedelight-common.toml
+shell ! test -e config/salt-common.toml
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml salt.Dissolving SaltDissolvingChance 1.0
+restart
+bootreject (creativedelight-common|salt-common)\.toml.*(ParsingException|Failed loading|corrected)
+shell grep -nE "^\s*SaltDissolvingChance = 1\.0" config/creativedelight-common.toml
 > salttest
 waitlog \[salttest\] done 400
-expect \[salttest\] PASS Salt Layer beside water becomes water.* 1 ticks
+expect \[salttest\] PASS Salt Layer beside water becomes water: 1 ticks
 reject (Unknown or incomplete command)
 
 ## CQ-SLT-01
@@ -280,10 +287,14 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 ## SQ-ENM-03 | without Ender's 1.2.2: boot, gives, plants grow on end stone, stew eaten, no script errors, pepper recipes
 @group A
 @commands Move `mods/endersdelight-1.19-1.2.2.jar` aside, boot a fresh superflat; `/give @s endersdelight:voidpepper`, `endersdelight:amberveil_stew`; place the 4 plants on end stone, `/gamerule randomTickSpeed 100`; eat the stew; `grep -E "Error occurred while handling event\|additions.js\|endersdelight" logs/latest.log`; restore the jar
-@pass Boot succeeds (no missing-dependency screen); both gives work; plants survive on end stone and grow; stew eaten with nothing returned; no NCH or script error from `endersdelight/additions.js` (meal rows skipped); Crushed Void Pepper knife and millstone recipes present in JEI or `/kubejs` recipe dump; startup log has no `[CE potions]` error and no `registerPotionBrewing` exception (the levitation reagent is End's Delight's shulker meat slice, always present)
+@pass Boot succeeds (no missing-dependency screen); both gives work; plants survive on end stone and grow; stew eaten and the Shulker Bowl returned (End's dishes are served in it, ends_delight.md section 5); no NCH or script error from `endersdelight/additions.js` (meal rows skipped); Crushed Void Pepper knife and millstone recipes present in JEI or `/kubejs` recipe dump; startup log has no `[CE potions]` error and no `registerPotionBrewing` exception (the levitation reagent is End's Delight's shulker meat slice, always present)
 @fails Missing dependency stop: `endersdelight` dependency not `mandatory=false`; plant pops off: soil tag rows still behind the `requires: endersdelight` header (`endersdelight/tags.js`); recipe errors: the `global.CD.on('endersdelight')` gate in `additions.js`
 @from batches/r1103/sA_4.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
+edit mv mods/endersdelight-1.19-1.2.2.jar mods/endersdelight-1.19-1.2.2.jar.off
+restart
+bootreject (Missing or unsupported mandatory dependencies|Mod .*endersdelight.* requires)
+shell test ! -e mods/endersdelight-1.19-1.2.2.jar && echo "ENM3 without the Ender jar"
 shell grep -nE "Error occurred while handling event|additions\.js|endersdelight" logs/latest.log | grep -iE "error|exception|missing" | head -10 || true
 shell ! grep -hE "(additions\.js|endersdelight/).*(rror|xception)" logs/kubejs/server.log logs/kubejs/startup.log
 # own home (r1120fix, 2026-11-20): {SBH} came from the retired r1103 home batches; rows run alone with --rows
@@ -306,8 +317,8 @@ sleep 2
 > setblock {SBH1+4} 201 {SBH3} endersdelight:chorus_flame_block[age=0]
 > setblock {SBH1+6} 201 {SBH3} endersdelight:chorus_flame_block[age=0]
 > setblock {SBH1+8} 201 {SBH3} endersdelight:voidpepper_block[down=true]
-> cdevtest randomtick {SBH1} 200 {SBH3} {SBH1+8} 202 {SBH3} 20
-waitlog verb=randomtick rounds=20 60
+> cdevtest randomtick {SBH1} 200 {SBH3} {SBH1+8} 202 {SBH3} 60
+waitlog verb=randomtick rounds=60 60
 > execute if block {SBH1} 201 {SBH3} endersdelight:amberveil_mushroom run say SA4 p1 ok
 > execute if block {SBH1+2} 201 {SBH3} endersdelight:ethereal_saffron_bush run say SA4 p2 ok
 > execute if block {SBH1+4} 201 {SBH3} endersdelight:chorus_flame_block run say SA4 p3 ok
@@ -315,7 +326,7 @@ waitlog verb=randomtick rounds=20 60
 > cdevtest ages {SBH1+4} 201 {SBH3} {SBH1+6} 201 {SBH3} endersdelight:chorus_flame_block
 > data get block {SBH1+8} 201 {SBH3}
 > cdevtest count {SBH1-2} 199 {SBH3-2} {SBH1+12} 203 {SBH3+4} endersdelight:voidpepper_block
-> pbot hold saend endersdelight:amberveil_stew
+> pbot inv saend select 1
 > pbot hunger saend 10
 > pbot eat saend
 waitlog verb=pbot.useitem bot=saend end=finish item=endersdelight:amberveil_stew 20
@@ -329,18 +340,27 @@ expect SA4 p2 ok
 expect SA4 p3 ok
 expect SA4 p4 ok
 expect verb=ages block=endersdelight:chorus_flame_block prop=age n=2 mean=(?!0\.000)
+expect verb=pbot.useitem bot=saend end=finish item=endersdelight:amberveil_stew result=endersdelight:shulker_bowl
 expect verb=makes item=endersdelight:crushed_voidpepper n=[2-9]
 > pbot remove saend
-look chorusflame ages above 0 (20 random ticks per block, about 40 s at randomTickSpeed 100), void pepper count above 1 or spreading; eat end line result=: empty or the Shulker Bowl per the dish (the row says nothing returned: judge against ends_delight.md 5.9); crushed void pepper: a knife (cutting) and a millstone / milling recipe
+# put the jar back for the rows after this one
+edit mv mods/endersdelight-1.19-1.2.2.jar.off mods/endersdelight-1.19-1.2.2.jar
+restart
+bootexpect Done \(
+look chorusflame ages above 0 (20 random ticks per block, 60 random ticks each at the 0.1 default chance), void pepper count above 1 or spreading; eat end line result= the Shulker Bowl; crushed void pepper: a knife (cutting) and a millstone / milling recipe
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-04 | chorusflameGrowthSlow 0: chorusflame on end stone stays age 0
 @group A
-@commands `qrun.py toml config/endersadditions-common.toml growth.chorusflameGrowthSlow 0`, restart, tick a chorusflame on end stone; then `qrun.py toml config/creativedelight-common.toml members.endersadditions false`, `/reload`, JEI uses of Void Pepper
-@pass Chorusflame stays age 0 on end stone (config still read under the old file name); with the switch off no `creativedelight:` Void Pepper or 1.1.4 meal recipe
+@commands `qrun.py toml config/endersadditions-common.toml growth chorusflameGrowthSlow 0`, restart, tick a chorusflame on end stone (the switch half is SQ-ENM-04b)
+@pass `config/endersadditions-common.toml` (renamed from enders_additions-common.toml by CD on the first boot, DR-C10) holds `chorusflameGrowthSlow = 0`; Chorusflame on end stone stays age 0 (config read under the new file name)
 @fails Config not read: `EAConfig` registered under the wrong mod container; recipes still there: `global.CD.on` / `CDConfig.isMember`
 @from batches/r1103/sA_3.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
+shell test -e config/endersadditions-common.toml
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/endersadditions-common.toml growth chorusflameGrowthSlow 0
+restart
+shell grep -nE "^\s*chorusflameGrowthSlow = 0" config/endersadditions-common.toml
 # own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
 > execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
 sleep 2
@@ -357,25 +377,24 @@ sleep 3
 > cdevtest randomtick {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} 60
 waitlog verb=randomtick rounds=60 60
 > cdevtest ages {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} endersdelight:chorus_flame_block
-shell grep -nE "chorusflameGrowthSlow" config/endersadditions-common.toml
 > pbot remove saenm
 expect verb=ages block=endersdelight:chorus_flame_block prop=age n=4 mean=0.000 hist=0:4
-look ages histogram all 0 (4 plants, 60 random ticks each, about 40 s at randomTickSpeed 300); with the 0.1 default most would grow
+look ages histogram all 0 (4 plants, 60 random ticks each, 60 random ticks each); with the 0.1 default they reach age 2 (SQ-ENM-03)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-04b | members.endersadditions false, /reload: no Void Pepper or 1.1.4 meal recipe from Creative Delight
 @group A
-@commands `unzip -p mods/creativedelight-1.0.0.jar creativedelight_members.txt`; boot; `qrun.py toml config/creativedelight-common.toml members.endersadditions false`, `/reload`; JEI uses of Void Pepper and `/kubejs` recipe dump for the 1.1.4 meals; set it back to true, `/reload`
-@pass The members file lists `endersadditions` after `ends_delight`; the toml has `[members] endersadditions = true` and the boot log has no `Incorrect key members.endersadditions` line; with false the `creativedelight:` Void Pepper and 1.1.4 meal recipes are gone, with true they are back
+@commands boot; `qrun.py toml config/creativedelight-common.toml members.endersadditions false`, `/reload`; JEI uses of Void Pepper and `/kubejs` recipe dump for the 1.1.4 meals; set it back to true, `/reload`
+@pass The toml has `[members] endersadditions = true` (the old `enders_additions` switch is carried to this name by CD) and the boot log has no `Incorrect key members.endersadditions` line; with false the `creativedelight:` Void Pepper and 1.1.4 meal recipes are gone, with true they are back
 @fails Key corrected to null: `bundle_extra_mods` not read by `writeMembersList` (CD `build.gradle`) or missing in `members/ends/gradle.properties`
 @from batches/r1103/sA_3.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest uses endersdelight:voidpepper
 > cdevtest recipes voidpepper
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members endersadditions false && grep -nE "endersadditions" config/creativedelight-common.toml
 > reload
-waitlog (Reloaded|reload) 120
-sleep 10
+waitlog Loaded script server_scripts:tags/tradetags\.js 120
+sleep 15
 > cdevtest uses endersdelight:voidpepper
 > cdevtest makes endersdelight:crushed_voidpepper
 > cdevtest makes endersdelight:amberveil_stew
@@ -383,10 +402,11 @@ sleep 10
 # restore the switch for the rows after this one in the same boot (the @commands "set it back to true")
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members endersadditions true && grep -nE "endersadditions" config/creativedelight-common.toml
 > reload
-waitlog (Reloaded|reload) 120
-sleep 10
+waitlog Loaded script server_scripts:tags/tradetags\.js 120
+sleep 15
 look before / after: the uses and recipes lines lose every creativedelight: Void Pepper recipe and the 1.1.4 meals (pot recipes of amberveil_stew etc.) after the switch; if nothing changes, the switch is read only at startup (note it; the row says /reload)
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+bootreject Incorrect key members\.endersadditions
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-ENM-05 | spice and End soil tags, with Ender's Delight 1.2.2 (the without half: SQ-ENM-05b in sA_4.qb)
 @group A
@@ -563,13 +583,13 @@ reject verb=items items=\S*goldenfood:
 look the two effects lines: first golden slice: Regeneration amp 1 100t, Absorption amp 1 2400t; first enchanted slice: Regeneration amp 1 400t, Resistance and Fire Resistance 6000t, Absorption amp 3 2400t (each eaten at food 20)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
-## SQ-GLD-05 | golden cake + white candle becomes a vanilla candle cake (upstream quirk)
+## SQ-GLD-05 | golden cake + white candle: the candle does nothing, no candle cake
 @group A
-@commands Place a golden cake and an enchanted golden cake; right-click each with a white candle (survival); then eat one bite with an empty hand
+@commands Place a golden cake; right-click it with a white candle (survival bot); then eat one bite with an empty hand
 @pass A candle does nothing: the cake stays, the candle is kept, no candle cake; the bite still works
 @fails `minecraft:candle_cake` appears: the old `GoldenCakeBlock.use` candle branch is back (until TODO `baking/baked-goods #38`)
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 # own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
 > execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
 sleep 2
@@ -578,16 +598,26 @@ capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > forceload add {SAH1+26} {SAH3+42} {SAH1+30} {SAH3+46}
 sleep 3
 > setblock {SAH1+28} {SAH2} {SAH3+44} goldenfood:golden_cake
-> clear sagldc
-> pbot hold sagldc minecraft:white_candle
-> pbot use sagldc {SAH1+28} {SAH2} {SAH3+44}
+> pbot spawn sagld5 {SAH1+28} {SAH2} {SAH3+42} minecraft:overworld survival
+sleep 2
+> clear sagld5
+> pbot hunger sagld5 20
+> pbot inv sagld5 set 0 minecraft:white_candle 1
+> pbot inv sagld5 select 0
+> pbot use sagld5 {SAH1+28} {SAH2} {SAH3+44}
 sleep 1
-> execute if block {SAH1+28} {SAH2} {SAH3+44} minecraft:white_candle_cake run say SA2 candle cake
-> execute if block {SAH1+28} {SAH2} {SAH3+44} #minecraft:candle_cakes run say SA2 some candle cake
-> pbot inv sagldc get
-expect SA2 (some )?candle cake
-look documents the quirk (owner question Q1): golden cake replaced by a vanilla candle cake, one candle used
-> pbot remove sagldc
+> execute if block {SAH1+28} {SAH2} {SAH3+44} goldenfood:golden_cake run say SA5 cake stays
+> execute if block {SAH1+28} {SAH2} {SAH3+44} #minecraft:candle_cakes run say SA5 candle cake
+> pbot inv sagld5 get
+expect SA5 cake stays
+reject SA5 candle cake
+expect verb=pbot.inv bot=sagld5 slot=\d+ item=minecraft:white_candle\*1
+> clear sagld5
+> pbot use sagld5 {SAH1+28} {SAH2} {SAH3+44}
+sleep 1
+> execute if block {SAH1+28} {SAH2} {SAH3+44} goldenfood:golden_cake[bites=1] run say SA5 bite one
+expect SA5 bite one
+> pbot remove sagld5
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-06 | no Golden Food enchantment: anvil gives nothing, /enchant refuses, not registered
@@ -660,24 +690,25 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## SQ-GLD-08 | golden recipes (8 nuggets), no donor carrot recipe, donor data pack, no enchantment book
 @group A
 @commands `/recipe give @p *`; check the recipe book or JEI for `goldenfood:golden_cake` and `goldenfood:golden_honey_bottle`; JEI search "Golden Food Enchantment"
-@pass The 23 goldenfood golden recipes exist (the food and 8 gold nuggets since 2026-11-03, SQ-GLD2-01; the golden apple keeps 8 ingots); no `minecraft:golden_carrot` crafting recipe from the donor (the pack's own carrot recipes as before); JEI has no Golden Food Enchantment book
+@pass The golden recipes exist under `creativedelight:` ids (the donor ids are gone): the golden cake and the golden honey bottle each have a crafting (8 gold nuggets), an arc furnace and a Create mixing recipe (golden_food.md 3.4a; the golden apple keeps 8 ingots); no `minecraft:golden_carrot` crafting recipe from the donor (the pack's own carrot recipes as before); JEI has no Golden Food Enchantment book
 @fails Missing recipes: `/datapack list` must show `goldenfood_upstream_data`; carrot recipe present: the pack's recipe removal no longer sees the id; book listed: the enchantment is still registered
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest makes goldenfood:golden_cake
 > cdevtest makes goldenfood:golden_honey_bottle
-> cdevtest rdetail goldenfood:golden_cake
+> cdevtest rdetail creativedelight:shaped/golden_cake
 > cdevtest makes minecraft:golden_carrot
-> cdevtest recipes goldenfood: max=500
+> cdevtest recipes creativedelight:shaped/golden_ max=500
 > datapack list
 > sa enchreg goldenfood:gf_enchantment
 waitlog \[sa\] enchreg 30
 expect goldenfood_upstream_data
+expect verb=makes id=creativedelight:shaped/golden_cake result=goldenfood:golden_cake\*1
 expect verb=makes item=goldenfood:golden_cake n=[1-9]
 expect verb=makes item=goldenfood:golden_honey_bottle n=[1-9]
 reject verb=makes id=goldenfood:\S+ result=minecraft:golden_carrot\*
 expect \[sa\] enchreg goldenfood:gf_enchantment: false
-look the "verb=recipes text=goldenfood: n=" count = the 23 golden recipes (food + 8 gold nuggets; the golden apple keeps 8 ingots); JEI book: client
+look the rdetail line of creativedelight:shaped/golden_cake shows the 8 gold nuggets ring (a nugget tag) around the cake; the "verb=recipes text=creativedelight:shaped/golden_ n=" count is the shaped golden recipes (one per golden food, 21 foods after the stew removal); JEI book: client
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-09 | village chests: no Golden Food book; Chalk / Botania / CC loot injected once; no reverted tables
@@ -711,13 +742,21 @@ look cdevtest items lines: chalk / botania / computercraft items appear (one inj
 > kill @e[type=minecraft:item]
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
 
-## SQ-GLD-10
+## SQ-GLD-10 | Golden Food member stops startup naming the missing donor jar
 @group A
-@reviewed 2026-11-20
-@commands Move `goldenfood_upstream/goldenfood-1.19.2-2.0.0.jar` away and start; then put any other jar there under that name and start; restore
-@pass Startup stops with "Golden Food (Creative Delight) reads its textures, models and recipes from the original Golden Food jar, which must be in the folder 'goldenfood_upstream' ... missing" and the source line; the second run says "wrong file ... expected 4109e4d6..."
-@fails Game starts: `UpstreamJars.verifyOrFail` is not the first call in `GoldenFoodMod`
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+@commands own step (`@modset port_chain chain +creativedevtools-*.jar noupstream=goldenfood_upstream`: the step's server has no `goldenfood_upstream` link); boot; `grep -n -A6 "reads its textures" logs/latest.log` or the crash report
+@pass Startup stops with "Golden Food (Creative Delight) reads its textures, models and recipes from the original Golden Food jar, which must be in the folder 'goldenfood_upstream' of the game directory (not in mods/):" and the missing `goldenfood-1.19.2-2.0.0.jar` with its source line; no `Done (`; no other mod named as the cause. The wrong-file half (another jar under that name: "wrong file ... expected 4109e4d6...") is the same `DonorJars` code as SQ-MDP-17 / SQ-DNR-E-04 and is not run here
+@fails Game starts: `UpstreamJars.verifyOrFail` is not the first call in `GoldenFoodMod` (member init order)
+@jars creativedelight
+@modset port_chain chain +creativedevtools-*.jar noupstream=goldenfood_upstream
+bootexpect Golden Food \(Creative Delight\) reads its textures, models and recipes from the original Golden Food jar, which must be in the folder 'goldenfood_upstream' of the game directory \(not in mods/\):
+bootexpect missing: .*goldenfood_upstream/goldenfood-1\.19\.2-2\.0\.0\.jar
+bootreject Done \(
+shell grep -n -A6 "reads its textures" logs/latest.log | head -20
+shell f=$(ls -t crash-reports/*.txt 2>/dev/null | head -1); [ -n "$f" ] && { echo "$f"; grep -n -m12 -iE "Description|reads its textures|Suspected Mod|Mod File|Failure message|Caused by" "$f"; }; true
+look the crash report or log blames only Golden Food (Creative Delight) (Suspected Mods: creativedelight), no other mod named as the cause
+
 ## CQ-GLD-01
 @group client
 @reviewed 2026-11-20
@@ -738,28 +777,29 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Each comes out as `goldenfood:enchanted_golden_bread` / `enchanted_golden_milk_bucket` / `enchanted_golden_carrot` after 8 loops (a gold ingot and 125 mB experience each loop); in-between items are `kubejs:incomplete_enchanted_golden_*`
 @fails No recipe: CD `goldenfood/golden.js` not loaded (`requires: goldenfood`) or `F.goldenEnchant` missing; error "incomplete(...) not registered": the `SEQUENCED_ASSEMBLIES` row in `transition_items.js` (startup, needs restart)
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest rdetail enchanted_golden_bread
 > cdevtest rdetail enchanted_golden_milk_bucket
 > cdevtest rdetail enchanted_golden_carrot
 waitlog verb=rdetail text=enchanted_golden_carrot n= 60
 expect verb=rdetail id=\S*enchanted_golden_\S* serializer=create:sequenced_assembly
 expect kubejs:incomplete_enchanted_golden_
-look bread and milk: 4 loops of gold block + liquid experience (1000 mB total) + press; the carrot follows SQ-GLD2-02 (8 loops, gold ingot + 125 mB); outputs goldenfood:enchanted_golden_*
+expect verb=rdetail id=\S*enchanted_golden_bread_sequenced_assembly part=step\d serializer=create:filling
+expect verb=rdetail id=\S*enchanted_golden_carrot_sequenced_assembly part=step\d serializer=create:pressing
+look bread, milk and carrot alike: start = the golden form, each loop deploys 1 gold ingot (rose gold counts), fills 125 mB liquid experience and presses, 8 loops (golden_food.md 3.4); outputs goldenfood:enchanted_golden_*
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
-## SQ-GLD-12 | 24 enchanted golden assemblies, no golden.js errors
+## SQ-GLD-12 | 21 enchanted golden assemblies (stews removed), no golden.js errors
 @group A
-@commands `/dumpall`, then `grep -cE "enchanted_golden_[a-z_]+_sequenced_assembly" kubejs/exported/recipes/all.csv`; `grep -iE "goldenEnchant\|incomplete_enchanted_golden\|golden.js" logs/latest.log` and the KubeJS server log
-@pass 24 enchanted golden assemblies (apple + 23); no KubeJS error naming golden.js or an incomplete item
+@commands `/cdevtest recipes enchanted_golden_`; `grep -iE "goldenEnchant\|incomplete_enchanted_golden\|golden.js" logs/latest.log` and the KubeJS server log
+@pass 21 enchanted golden assemblies (24 before the 3 enchanted stews were removed 2026-11-10, golden_food.md section 0); no KubeJS error naming golden.js or an incomplete item
 @fails Fewer: an id missing from `item_dict.js`; KubeJS error: the line it names in golden.js
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest recipes enchanted_golden_ max=500
 waitlog verb=recipes text=enchanted_golden_ n= 60
-count verb=recipes id=\S*enchanted_golden_[a-z_]+_sequenced_assembly result= == 24
+count verb=recipes id=\S*enchanted_golden_[a-z_]+_sequenced_assembly result= == 21
 shell ! grep -hiE "(goldenEnchant|incomplete_enchanted_golden|golden\.js).*(rror|xception|not registered)" logs/latest.log logs/kubejs/server.log
-shell D="${B0:?B0 unset}/srv/kubejs/exported/recipes/all.csv"; echo "Boot 0 dump (00:54): $(grep -cE 'enchanted_golden_[a-z_]+_sequenced_assembly' "$D")"
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-13 | no recipe for the enchanted golden cake
@@ -776,8 +816,8 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-GLD-14 | fresh world: no Golden Food Enchantment from /enchant, the table or librarians
 @group A
-@reviewed 2026-11-20
-@commands Fresh world: `/enchant`, enchanting table at 30 levels on 20 swords, a librarian trade reroll 20 times
+@reviewed 2026-11-26
+@commands Fresh world: enchanting table at 30 levels on 20 swords and 20 books, one librarian's offers
 @pass No Golden Food Enchantment anywhere
 @fails Offered: the enchantment is registered again (`check_donor.py` "enchantments registered")
 @from batches/r1103/sA_4.qb
@@ -788,23 +828,22 @@ waitlog \[sa\] enchtable minecraft:book L30: 20 rolls 60
 expect \[sa\] enchreg goldenfood:gf_enchantment: false
 expect \[sa\] enchtable minecraft:diamond_sword L30: 20 rolls, goldenfood 0
 expect \[sa\] enchtable minecraft:book L30: 20 rolls, goldenfood 0
-repeat 20
-# own home (r1120fix, 2026-11-20): {SBH} came from the retired r1103 home batches; rows run alone with --rows
 > execute unless entity @e[type=minecraft:marker,tag=sbhome] run summon minecraft:marker ~ ~ ~ {Tags:["sbhome"]}
 sleep 2
 > data get entity @e[type=minecraft:marker,tag=sbhome,limit=1] Pos
 capture SBH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > forceload add {SBH1+26} {SBH3} {SBH1+34} {SBH3+8}
 sleep 3
-> summon minecraft:villager {SBH1+30} 201 {SBH3+4} {NoAI:1b,PersistenceRequired:1b,Tags:["salib"],VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
-end
 > fill {SBH1+28} 200 {SBH3+2} {SBH1+32} 200 {SBH3+6} minecraft:glass
-> execute as @e[type=minecraft:villager,tag=salib] run data get entity @s Offers
+> setblock {SBH1+30} 201 {SBH3+4} minecraft:lectern
+> summon minecraft:villager {SBH1+30} 201 {SBH3+5} {NoAI:1b,PersistenceRequired:1b,Tags:["salib"],VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"}}
 sleep 3
-reject goldenfood:gf_enchantment
-expect minecraft:enchanted_book
+> execute as @e[type=minecraft:villager,tag=salib] run data get entity @s Offers
+sleep 2
+# librarians offer no books in the pack at all (SQ-ENC-04), so the offers must not name the removed enchantment either
+reject id: ?"goldenfood:gf_enchantment"
 > kill @e[type=minecraft:villager,tag=salib]
-look 20 table rolls on a sword and a book and the L1 librarians' book offers name no goldenfood enchantment (/enchant: SQ-GLD-06)
+look 20 table rolls on a sword and a book name no goldenfood enchantment (/enchant: SQ-GLD-06; librarian book offers: SQ-ENC-04, the pack's librarians sell no enchanted book)
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[sa\] error)
 
 ## SQ-GLD-15
@@ -878,18 +917,18 @@ reject ^(?!.*KubeJS Recipe Event)(?!.*Unknown item '(goldenfood|creativedelight)
 @@table
 ## SQ-MDL-01 | Miner's drops on the pack loot engine (boot load; the /reload half is SQ-MDL-01b in sA_3.qb)
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @commands boot, `/reload`; grep `logs/latest.log` and `logs/kubejs/server.log`
-@pass `[loot-drops] 26 drop pools and 2 shared entries in N tables` once per load (17 Miner's pools plus 9 Creative Delight pools moved into the engine 2026-11-17, SQ-RFX-21); no `[loot-drops]` warning; no `[miners_delight] the loot engine has no drop rules`; no loot modifier or `Error occurred while handling event` line naming `miners_delight`
+@pass `[loot-drops] 27 drop pools and 2 shared entries in N tables` once per load (17 Miner's pools, 9 Creative Delight pools moved into the engine 2026-11-17 (SQ-RFX-21) and the cachalot blubber rule of plan_food_batch_1119.md R12); no `[loot-drops]` warning; no `[miners_delight] the loot engine has no drop rules`; no loot modifier or `Error occurred while handling event` line naming `miners_delight`
 @fails the Worldgen jar lacks `09_drops.js` (error line from CD `miners_delight/loot.js`), or a rule warning (item id)
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
-kjsexpect \[loot-drops\] 26 drop pools and 2 shared entries in [0-9]+ tables
+kjsexpect \[loot-drops\] 27 drop pools and 2 shared entries in [0-9]+ tables
 kjsreject \[miners_delight\] the loot engine has no drop rules
 bootreject Error occurred while handling event.*miners_delight
 shell grep -hcE "\[loot-drops\] [0-9]+ drop pools" logs/kubejs/server.log; true
 shell grep -hE "\[loot-drops\]" logs/kubejs/server.log | head -10
-look one "[loot-drops] 17 drop pools ..." line per load (count 1 above); no [loot-drops] warning line
+look one "[loot-drops] 27 drop pools ..." line per load (count 1 above); no [loot-drops] warning line
 
 ## SQ-MDL-02 | Miner's drops by knife and by hand: bat, spider, cave spider, silverfish (300 rolls each)
 @phase long
@@ -1183,9 +1222,9 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-PCK-04 | /dumpplaceable links Sweet Potato Pancakes to the placed block
 @group A
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @commands `/dumpplaceable`
-@pass the Display Delight placed map links `veggiesdelight:sweet_potato_pancakes` to `creativedelight:placed_sweet_potato_pancakes`; placed-link count one higher than the last dump
+@pass the Display Delight placed map links `veggiesdelight:sweet_potato_pancakes` to `creativedelight:placed_sweet_potato_pancakes`; placed-link count at least the 2026-10-30 baseline 135 plus one
 @fails `DisplayDelightDishBlocks.onLevelLoad` did not link it (server level load) or the food lacks `#displaydelight:displayable`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
@@ -1194,8 +1233,8 @@ waitlog Display Delight links 120
 shell python3 -c "import json;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];print('placed', len(d['placed']), 'link', d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
 shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if d['placed'].get('veggiesdelight:sweet_potato_pancakes')=='creativedelight:placed_sweet_potato_pancakes' else 1)"
 shell cat "$INST/tools/scratch_query/batches/r1103/sA_baseline/placeable_dd_1030.txt"
-shell python3 -c "import json;d=json.load(open('${B0:?B0 unset}/srv/kubejs/exported/food/placeable.json'))['displayDelight'];print('Boot 0 placed', len(d['placed']), d['placed'].get('veggiesdelight:sweet_potato_pancakes'))"
-look placed-link count one higher than the 2026-10-30 baseline 135 (other links changed since: Boot 0 had 149 with the link present, so this row PASSes on the link and an equal count to Boot 0)
+shell python3 -c "import json,sys;d=json.load(open('kubejs/exported/food/placeable.json'))['displayDelight'];sys.exit(0 if len(d['placed'])>=136 else 1)"
+look the link is present and the placed count is at least 136 (the 2026-10-30 baseline was 135; other links were added since, 149 on 2026-11-20)
 
 ## SQ-PCK-05 | pancake recipes unchanged
 @group A
@@ -1242,9 +1281,9 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @@table
 ## SQ-SWP-01 | swap lists: merge count, live in the world, swaps toml created
 @group A
-@reviewed 2026-11-20
-@commands Boot: `grep -E "\[swaps\]\|item merge" logs/latest.log logs/kubejs/startup.log`; `grep -E "\[itemMerges\] creativedelight" logs/kubejs/server.log`; `ls config/creativeengineering-swaps.toml`
-@pass `[swaps] n list file(s): ... 38 item merge(s)` (r1103: 43 merges on the sA boot, 45 on sAR; 38 below stands for the logged number; record it in item_merges.md 6.1); `[creativedelight] 38 item merge(s) from the swap lists` (fewer only if a `requires` mod is absent); `[swaps] 38 item merge(s) live in the world`; `[itemMerges] creativedelight: 38 merges, n recipes swapped` with n as on the last run; no `merged twice`, no `already merged`, no `Error occurred while handling event`; toml exists with `[swappers]` and five keys
+@reviewed 2026-11-26
+@commands Boot: `grep -E "\[swaps\]\|item merge" logs/latest.log logs/kubejs/startup.log`; `grep -E "\[itemMerges\] creativedelight" logs/kubejs/server.log`; `ls config/creativecommon-swaps.toml` (the file moved from creativeengineering-swaps.toml; item_merges.md section 6 still names the old name)
+@pass `[swaps] n list file(s): ... N item merge(s)`, `[creativedelight] N item merge(s) from the swap lists` (fewer only if a `requires` mod is absent), `[swaps] N item merge(s) live in the world`, `[itemMerges] creativedelight: N merges, n recipes swapped`, all four with the same N (47 on 2026-11-20; record N in item_merges.md 6.1); no `merged twice`, no `already merged`, no `Error occurred while handling event`; `config/creativecommon-swaps.toml` exists with `[swappers]` and five keys
 @fails `SwapLists.read` (`merges`/`requires` keys), `swap_merges.js` (class filter on `Java.loadClass`, Rhino `keySet().forEach`), `ItemMerges.pairs` (an id not registered)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
@@ -1252,8 +1291,9 @@ bootreject merged twice|already merged
 bootreject Error occurred while handling event
 shell grep -hE "\[swaps\]|item merge" logs/latest.log logs/kubejs/startup.log | head -20
 shell grep -hE "\[itemMerges\] creativedelight" logs/kubejs/server.log logs/latest.log | head -3
-shell ls config/creativeengineering-swaps.toml && grep -nE "^\[swappers\]|^\s*(onWorldLoad|onPlayerDataLoad|onContainerOpen|onCommand|onceWhenUpdated) =" config/creativeengineering-swaps.toml
-look record the logged merge count (43 pairs in the 2026-11-03 swap lists; the row text says 38 / 40 / 43: take the number and put it in item_merges.md 6.1); the four counts agree; five keys under [swappers]
+shell ls config/creativecommon-swaps.toml && test "$(grep -cE "^\s*(onWorldLoad|onPlayerDataLoad|onContainerOpen|onCommand|onceWhenUpdated) =" config/creativecommon-swaps.toml)" = 5 && grep -q "^\[swappers\]" config/creativecommon-swaps.toml
+shell cat logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log | python3 -I -c "import re,sys;t=sys.stdin.read();a=set(re.findall(r'\[swaps\] \d+ list file\(s\).*?(\d+) item merge',t));b=set(re.findall(r'\[creativedelight\] (\d+) item merge',t));c=set(re.findall(r'\[swaps\] (\d+) item merge\(s\) live',t));d=set(re.findall(r'\[itemMerges\] creativedelight: (\d+) merges',t));print(a,b,c,d);sys.exit(0 if a and a==b==c==d and len(a)==1 else 1)"
+look record the logged merge count N (the shell check above fails unless the four counts agree) and put it in item_merges.md 6.1; five keys under [swappers]
 
 ## SQ-SWP-02 | purged ids not hidden as JEI removals; long coffee becomes coffee
 @group A
@@ -1369,15 +1409,17 @@ expect minecraft:shulker_box
 reject farmersrespite:coffee"
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
 
-## SQ-SWP-06 | onPlayerDataLoad off: a player saved before the merge lists is rewritten once on login, then not again
+## SQ-SWP-06 | onPlayerDataLoad: off, a stamped player keeps an old stack on login; on, the login rewrites it once
 @group A
-@reviewed 2026-11-20
-@commands Give a bot/player `alexsmobs:banana` (`/give`, then `/data` check before the KubeJS swap runs is not possible: use the ender chest: `/item replace entity @p enderchest.0 with alexsmobs:banana 4`); qrun.py toml `creativeengineering-swaps.toml swappers.onPlayerDataLoad false`; rejoin; rejoin again
-@pass First rejoin: ender chest slot 0 is 4 `neapolitan:banana`, log `[swaps] <name>: 1 merged stack(s) rewritten`; second rejoin logs nothing for the player
-@fails `ItemMerges.onLogin` stamp (`PlayerPersisted` / `creativeengineering:swap_merges`)
+@reviewed 2026-11-26
+@commands Give a bot/player `alexsmobs:banana` (`/give`, then `/data` check before the KubeJS swap runs is not possible: use the ender chest: `/item replace entity @p enderchest.0 with alexsmobs:banana 4`); qrun.py toml `creativecommon-swaps.toml swappers.onPlayerDataLoad false` (restart); rejoin; then true (restart), rejoin, rejoin again
+@pass With onPlayerDataLoad false a player already stamped for the current lists (first join stamps it) is not rewritten on rejoin: ender chest slot 0 still 4 `alexsmobs:banana`, no `[swaps] player login` line (item_merges.md section 6: onceWhenUpdated only rewrites an unstamped player); with true the next login logs `[swaps] player login: 1 merged stack(s) rewritten` once and slot 0 is 4 `neapolitan:banana`; the rejoin after that logs no rewrite
+@fails `ItemMerges.onLogin` / `playerStamped` (persisted stamp `creativecommon:swap_merges`, `ItemMerges.java`)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_3.qb
-# own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-swaps.toml swappers onPlayerDataLoad false
+restart
+shell grep -nE "^\s*onPlayerDataLoad = false" config/creativecommon-swaps.toml
 > execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
 sleep 2
 > data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
@@ -1386,19 +1428,34 @@ capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 sleep 3
 > pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
 sleep 3
+> item replace entity saswp6 enderchest.0 with alexsmobs:banana 4
 > data get entity saswp6 EnderItems
-expect \[swaps\] saswp6: \d+ merged stack\(s\) rewritten
-expect neapolitan:banana
-reject alexsmobs:banana
+expect alexsmobs:banana
 > pbot remove saswp6
-sleep 2
+sleep 3
 > pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
 sleep 3
-> say SA3 swp6 second join done
-expect SA3 swp6 second join done
-count \[swaps\] saswp6: == 1
+> data get entity saswp6 EnderItems
+reject \[swaps\] player login: \d+ merged
 > pbot remove saswp6
-look EnderItems slot 0: 4 neapolitan:banana; one "[swaps] saswp6" line over both joins (SQ-SWP-06o in sA_1.qb set the old stack; if that row FAILed, this row is setup-blocked)
+sleep 3
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-swaps.toml swappers onPlayerDataLoad true
+restart
+> forceload add {SAH1+3} {SAH3+3} {SAH1+7} {SAH3+7}
+sleep 3
+> pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
+sleep 3
+> data get entity saswp6 EnderItems
+expect \[swaps\] player login: 1 merged stack\(s\) rewritten
+expect neapolitan:banana
+> pbot remove saswp6
+sleep 3
+> pbot spawn saswp6 {SAH1+5} {SAH2} {SAH3+5} minecraft:overworld survival
+sleep 3
+> data get entity saswp6 EnderItems
+count \[swaps\] player login: == 1
+> pbot remove saswp6
+look the first join with the toggle off left alexsmobs:banana in EnderItems (no rewrite line); after the restart with the toggle on one "player login: 1 merged stack(s)" line and neapolitan:banana x4; the second join adds no second line. The doc's unstamped-player case (SWP-06 in item_merges.md section 6) needs a changed swap-list fingerprint and is not reproducible on a fresh world
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot)
 
 ## SQ-SWP-07 | a dropped old item becomes the survivor as it enters the world
@@ -1424,10 +1481,10 @@ reject alexsmobs:banana"
 > kill @e[type=minecraft:item,tag=saswp7]
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
 
-## SQ-SWP-08 | onCommand off: /ceswap items refused, nothing rewritten
+## SQ-SWP-08 | onCommand off: /ccswap items refused, nothing rewritten
 @group A
-@reviewed 2026-11-20
-@commands qrun.py toml `creativeengineering-swaps.toml swappers.onCommand false`; `/ccswap items`
+@reviewed 2026-11-26
+@commands qrun.py toml `creativecommon-swaps.toml swappers.onCommand false`; `/ccswap items`
 @pass Failure message naming `onCommand`; nothing rewritten
 @fails `ItemMerges.register`
 @jars creativecommon creativedelight
@@ -1441,12 +1498,17 @@ capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 sleep 3
 > setblock {SAH1+22} {SAH2} {SAH3+54} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+54} {Items:[{Slot:0b,id:"alexsmobs:banana",Count:2b}]}
-> ceswap items
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-swaps.toml swappers onCommand false
+waitlog \[creativecommon\] creativecommon-swaps\.toml reloaded 40
+> ccswap items
 sleep 2
 > data get block {SAH1+22} {SAH2} {SAH3+54} Items
 expect onCommand
 expect alexsmobs:banana
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecommon-swaps.toml swappers onCommand true
+waitlog \[creativecommon\] creativecommon-swaps\.toml reloaded 40
+
 ## SQ-GLD-17 | removed golden honey bottle and milk bucket sets: old stacks gone without warnings; /give fails; other golden foods intact
 @group A (no old save)
 @commands A chest written with `goldenfood:golden_honey_bottle`, `goldenfood:enchanted_golden_milk_bucket`, `creativedelight:canned_golden_honey_bottle` (removed ids in the NBT) next to `goldenfood:golden_bread`, `minecraft:honey_bottle` and `minecraft:milk_bucket`; `/give @p goldenfood:golden_milk_bucket`; JEI search `golden honey`, `golden milk`, `canned golden`

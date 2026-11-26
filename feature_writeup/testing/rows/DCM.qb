@@ -96,7 +96,7 @@ look no absent-mods line names alexsmobs; the others name mods the chain lacks
 @commands own step (`@modset port_chain chain +creativedevtools-*.jar`: the chain has no Cooking for Blockheads, Balm or Incubation; a drive step without `@modset` boots the full pack and tested nothing, r1123cd); boot
 @pass boots; no CfB / Incubation class load error, no recipe, tag or loot error naming `cookingforblockheads` or the nests in `latest.log`
 @fails a compartment class referenced outside its `init`
-@reviewed 2026-11-23
+@reviewed 2026-11-26
 @from batches/r1113/c3_ch1.qb
 @modset port_chain chain +creativedevtools-*.jar
 shell test "$(ls mods | grep -ciE "cookingforblockheads|balm|incubation")" = 0
@@ -115,7 +115,7 @@ look both compartment items absent (error line) or inert (class AirItem, or regi
 @commands own step (`@modset port_chain chain +creativedevtools-*.jar +cookingforblockheads-*.jar +balm-forge-*.jar`: CfB and Balm present, Incubation absent; a drive step without `@modset` boots the full pack and tested nothing, r1123cd); boot
 @pass boots; only the rack half loads (rack item registered, nest item absent or inert). Dropped from this row 2026-11-23, no steps ever ran them: Incubation without Alex's Mobs and Untitled Duck Mod, and CfB with `[compartments] cookingforblockheads = false` (a separate boot with its own `@@prep`, to be written when wanted)
 @fails built-in pack mod list, mixin gate, `Compartments` switch
-@reviewed 2026-11-23
+@reviewed 2026-11-26
 @from batches/r1113/c3_ch2.qb
 @modset port_chain chain +creativedevtools-*.jar +cookingforblockheads-*.jar +balm-forge-*.jar
 bootexpect Done \(

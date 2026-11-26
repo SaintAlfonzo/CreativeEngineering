@@ -71,10 +71,10 @@ reject \[zlbs\] FAIL
 ## SQ-LBS-04 | host set to air: label and written note drop, cell air (zlbs refit, after -01 and -03)
 @group A
 @commands `/zlbs refit` after -01 and -03 (hosts set to air with `setBlockAndUpdate`, flag 3); first line is a control: a wall torch on a stone host that goes to air; last line (10 ticks later) a piston pushing a noted stone host. By hand once: a labelled stone broken in survival
-@pass control: a torch drops; every host: the label (blank) and the note (with its Text) drop as item entities at the cell, the cell is air (20 of 20); piston line PASS (note dropped with Text, cell air); survival break drops the label
+@pass control: a torch drops; every host: the label (blank) and the note (with its Text) drop as item entities at the cell, the cell is air (20 of 20: 12 label hosts and 8 note hosts; with the control and the piston line `[zlbs] PASS refit` appears 22 times); piston line PASS (note dropped with Text, cell air); survival break drops the label
 @fails control drops nothing too: every block drop is skipped (Creative Worldgen `FirstTickWater` flag; needs the 2026-11-03 Worldgen jar, which clears it each level tick); control drops but paper does not: `FacePaperInteractions.hostChanged` / `refit`
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-21
+@reviewed 2026-11-26
 # probe hosts at x 300..348, z 20..44 (zlbs_probe.js); forceload added r1120fix 2026-11-20
 > forceload add 296 16 351 47
 sleep 3
@@ -85,7 +85,7 @@ waitlog \[zlbs\] DONE labels 60
 waitlog \[zlbs\] DONE centre 60
 > zlbs refit
 waitlog \[zlbs\] DONE refit 60
-count \[zlbs\] PASS refit == 20
+count \[zlbs\] PASS refit == 22
 reject \[zlbs\] FAIL
 look the label drops are blank (no NBT), the note drops carry their Text
 

@@ -104,7 +104,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails `PAIRS` skipped (mod id)
 @jars creativedelight
 @from batches/r1113/fix_c2a1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
 sleep 3
 > gamerule naturalRegeneration false
@@ -222,7 +222,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass shaped + assembly (wrap, sandwich), shapeless `_cooked_manual_only` (bibimbap), no `barbequesdelight:combine`; +10 / +16 / +16 hunger, no skewer effects (BBQ-38)
 @fails incomplete item missing (transition_items.js)
 @from batches/r1113/fix_c2a1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
 sleep 3
 > gamerule naturalRegeneration false

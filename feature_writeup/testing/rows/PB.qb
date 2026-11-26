@@ -59,7 +59,7 @@ look first verb=ages line (bot beside the field) grew, second (no player) stayed
 @commands `pbot path bot1 <x+500> 200 <z> 1.5`; after 20 s grep `perf/bot/ticks-*.csv` for `path_done:bot1`; status lines' chunk column; `pbot census t`
 @pass `path_done` after about 334 ticks; loaded chunks follow; `perf/bot/census-t.json` written
 @fails Chunks don't follow: `ServerChunkCache.move` not reached
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # the path is 500 blocks at 1.5 b/t (about 334 ticks): a 400-tick warp replaces the 20 s
 # bot1 spawned here too so the row reruns alone (judge-7, r1120nv, 2026-11-21)
 > execute unless entity bot1 run pbot spawn bot1 3000 -60 3000 minecraft:overworld survival

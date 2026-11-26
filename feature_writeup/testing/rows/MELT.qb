@@ -526,8 +526,34 @@ reject \[cdevtest\] .*done=0
 @commands Right-click stone with `vintagedelight:salt_dust` (layer placed on top), then right-click `minecraft:snow` and `minecraft:ice` (melts one stage, no layer)
 @pass stone: `vintagedelight:salt` layer above it, 1 dust spent; ice and snow: melt step, no layer
 @fails the hand click listener (`SaltLayerMelt.onUseSalt`) cancels non-targets, or lets the layer place on ice
-@reviewed 2026-11-17
-@draft no steps written yet: the next runner writes them (survival bot with salt dust on stone, snow, ice; r1118 R2 note, 2026-11-18)
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): as SQ-MELT-08's bot setup; the layer is the `vintagedelight:salt` block above the clicked face, one dust per click on stone, snow and ice (melting.md 1; salt.md hand click)
+> forceload add 1984 1984 2143 2143
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+> setblock 2048 -61 2090 minecraft:stone
+> setblock 2052 -61 2090 minecraft:snow
+> setblock 2056 -61 2090 minecraft:ice
+> clear m3
+> pbot hold m3 vintagedelight:salt_dust 6
+> pbot use m3 2048 -61 2090 up
+> execute if block 2048 -60 2090 vintagedelight:salt run say SQ-MELT-08b-stone_layer
+> pbot use m3 2052 -61 2090 up
+> execute if block 2052 -61 2090 minecraft:air run say SQ-MELT-08b-snow_melted
+> execute unless block 2052 -60 2090 vintagedelight:salt run say SQ-MELT-08b-snow_nolayer
+> pbot use m3 2056 -61 2090 up
+> execute if block 2056 -61 2090 minecraft:water run say SQ-MELT-08b-ice_melted
+> execute unless block 2056 -60 2090 vintagedelight:salt run say SQ-MELT-08b-ice_nolayer
+> pbot inv m3 get
+waitlog \[cdevtest\] verb=pbot\.inv bot=m3 filled= 20
+expect SQ-MELT-08b-stone_layer$
+expect SQ-MELT-08b-snow_melted$
+expect SQ-MELT-08b-snow_nolayer$
+expect SQ-MELT-08b-ice_melted$
+expect SQ-MELT-08b-ice_nolayer$
+expect verb=pbot\.inv bot=m3 slot=\d+ item=vintagedelight:salt_dust\*3\b
+reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 
 ## SQ-MELT-08 | salt item click (survival bot) steps packed ice one tier per click: packed -> ice -> water (blue ice is not saltable)
 @group A
@@ -886,13 +912,181 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @commands Boot log: `[melting] tags:` line (lava only 2). On stone, one spot each: `minecraft:packed_ice` and `immersive_weathering:cryosol` with lava 2 away (a gap block of stone between), with magma 2 away, with a torch touching; `minecraft:blue_ice` and `immersive_weathering:permafrost` with lava touching, with lava 2 away, with magma touching; a `salt:salt_block` touching packed ice, cryosol, blue ice, permafrost. Probe each spot with `cdevtest state` every 60 s for 15 minutes
 @pass lava and magma at 2: packed ice -> `minecraft:ice` (then water), cryosol -> `minecraft:dirt`; torch spots unchanged; blue ice touching lava -> `minecraft:packed_ice`, permafrost touching lava -> `immersive_weathering:cryosol`; blue ice and permafrost with lava at 2 or magma touching unchanged; salt: packed ice -> ice, cryosol -> dirt, blue ice and permafrost unchanged
 @fails torch melts packed ice: findSource fire radius for the slow tier not 0; blue ice at 2 melts: lava_only tag empty (boot line) or reach not 1; nothing melts at all: the slow blocks do not random tick, so only the lava's or magma's own tick finds them (lava must random tick: check `sources scan on their own tick` count)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build; end state read once after 6000 ticks at randomTickSpeed 1000 (slow chance 0.05 per tier per melt tick, packed ice beside lava steps in about 100 s: melting.md 1)
+> forceload add 2192 2192 2300 2230
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m11 run pbot spawn m11 2245 -60 2206 minecraft:overworld survival
+sleep 3
+pace 0.2
+> setblock 2200 -61 2200 minecraft:packed_ice
+> setblock 2200 -60 2200 minecraft:glass
+> setblock 2201 -61 2200 minecraft:stone
+> setblock 2202 -61 2200 minecraft:lava
+> setblock 2202 -61 2199 minecraft:glass
+> setblock 2202 -61 2201 minecraft:glass
+> setblock 2203 -61 2200 minecraft:glass
+> setblock 2212 -61 2200 minecraft:packed_ice
+> setblock 2212 -60 2200 minecraft:glass
+> setblock 2213 -61 2200 minecraft:stone
+> setblock 2214 -61 2200 minecraft:magma_block
+> setblock 2224 -61 2200 minecraft:packed_ice
+> setblock 2224 -60 2200 minecraft:glass
+> setblock 2225 -61 2200 minecraft:torch
+> setblock 2236 -61 2200 immersive_weathering:cryosol
+> setblock 2236 -60 2200 minecraft:glass
+> setblock 2237 -61 2200 minecraft:stone
+> setblock 2238 -61 2200 minecraft:lava
+> setblock 2238 -61 2199 minecraft:glass
+> setblock 2238 -61 2201 minecraft:glass
+> setblock 2239 -61 2200 minecraft:glass
+> setblock 2248 -61 2200 immersive_weathering:cryosol
+> setblock 2248 -60 2200 minecraft:glass
+> setblock 2249 -61 2200 minecraft:stone
+> setblock 2250 -61 2200 minecraft:magma_block
+> setblock 2260 -61 2200 immersive_weathering:cryosol
+> setblock 2260 -60 2200 minecraft:glass
+> setblock 2261 -61 2200 minecraft:torch
+> setblock 2272 -61 2200 minecraft:blue_ice
+> setblock 2272 -60 2200 minecraft:glass
+> setblock 2273 -61 2200 minecraft:lava
+> setblock 2273 -61 2199 minecraft:glass
+> setblock 2273 -61 2201 minecraft:glass
+> setblock 2274 -61 2200 minecraft:glass
+> setblock 2284 -61 2200 immersive_weathering:permafrost
+> setblock 2284 -60 2200 minecraft:glass
+> setblock 2285 -61 2200 minecraft:lava
+> setblock 2285 -61 2199 minecraft:glass
+> setblock 2285 -61 2201 minecraft:glass
+> setblock 2286 -61 2200 minecraft:glass
+> setblock 2200 -61 2212 minecraft:blue_ice
+> setblock 2200 -60 2212 minecraft:glass
+> setblock 2201 -61 2212 minecraft:stone
+> setblock 2202 -61 2212 minecraft:lava
+> setblock 2202 -61 2211 minecraft:glass
+> setblock 2202 -61 2213 minecraft:glass
+> setblock 2203 -61 2212 minecraft:glass
+> setblock 2212 -61 2212 minecraft:blue_ice
+> setblock 2212 -60 2212 minecraft:glass
+> setblock 2213 -61 2212 minecraft:magma_block
+> setblock 2224 -61 2212 immersive_weathering:permafrost
+> setblock 2224 -60 2212 minecraft:glass
+> setblock 2225 -61 2212 minecraft:stone
+> setblock 2226 -61 2212 minecraft:lava
+> setblock 2226 -61 2211 minecraft:glass
+> setblock 2226 -61 2213 minecraft:glass
+> setblock 2227 -61 2212 minecraft:glass
+> setblock 2236 -61 2212 immersive_weathering:permafrost
+> setblock 2236 -60 2212 minecraft:glass
+> setblock 2237 -61 2212 minecraft:magma_block
+> setblock 2248 -61 2212 minecraft:packed_ice
+> setblock 2248 -60 2212 minecraft:glass
+> setblock 2249 -61 2212 salt:salt_block
+> setblock 2260 -61 2212 immersive_weathering:cryosol
+> setblock 2260 -60 2212 minecraft:glass
+> setblock 2261 -61 2212 salt:salt_block
+> setblock 2272 -61 2212 minecraft:blue_ice
+> setblock 2272 -60 2212 minecraft:glass
+> setblock 2273 -61 2212 salt:salt_block
+> setblock 2284 -61 2212 immersive_weathering:permafrost
+> setblock 2284 -60 2212 minecraft:glass
+> setblock 2285 -61 2212 salt:salt_block
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+> cdevtest tickwarp 6000
+waitlog verb=tickwarp end=done 600
+> gamerule randomTickSpeed 3
+> execute if block 2200 -61 2200 minecraft:ice run say SQ-MELT-11-pk_lava2
+> execute if block 2200 -61 2200 minecraft:water run say SQ-MELT-11-pk_lava2
+> execute if block 2212 -61 2200 minecraft:ice run say SQ-MELT-11-pk_magma2
+> execute if block 2212 -61 2200 minecraft:water run say SQ-MELT-11-pk_magma2
+> execute if block 2224 -61 2200 minecraft:packed_ice run say SQ-MELT-11-pk_torch1
+> execute if block 2236 -61 2200 minecraft:dirt run say SQ-MELT-11-cry_lava2
+> execute if block 2248 -61 2200 minecraft:dirt run say SQ-MELT-11-cry_magma2
+> execute if block 2260 -61 2200 immersive_weathering:cryosol run say SQ-MELT-11-cry_torch1
+> execute unless block 2272 -61 2200 minecraft:blue_ice unless block 2272 -61 2200 minecraft:air run say SQ-MELT-11-bl_lava1
+> execute unless block 2284 -61 2200 immersive_weathering:permafrost unless block 2284 -61 2200 minecraft:air run say SQ-MELT-11-pf_lava1
+> execute if block 2200 -61 2212 minecraft:blue_ice run say SQ-MELT-11-bl_lava2
+> execute if block 2212 -61 2212 minecraft:blue_ice run say SQ-MELT-11-bl_magma1
+> execute if block 2224 -61 2212 immersive_weathering:permafrost run say SQ-MELT-11-pf_lava2
+> execute if block 2236 -61 2212 immersive_weathering:permafrost run say SQ-MELT-11-pf_magma1
+> execute if block 2248 -61 2212 minecraft:ice run say SQ-MELT-11-salt_pk
+> execute if block 2248 -61 2212 minecraft:water run say SQ-MELT-11-salt_pk
+> execute if block 2260 -61 2212 minecraft:dirt run say SQ-MELT-11-salt_cry
+> execute if block 2272 -61 2212 minecraft:blue_ice run say SQ-MELT-11-salt_bl
+> execute if block 2284 -61 2212 immersive_weathering:permafrost run say SQ-MELT-11-salt_pf
+expect SQ-MELT-11-pk_lava2$
+expect SQ-MELT-11-pk_magma2$
+expect SQ-MELT-11-pk_torch1$
+expect SQ-MELT-11-cry_lava2$
+expect SQ-MELT-11-cry_magma2$
+expect SQ-MELT-11-cry_torch1$
+expect SQ-MELT-11-bl_lava1$
+expect SQ-MELT-11-pf_lava1$
+expect SQ-MELT-11-bl_lava2$
+expect SQ-MELT-11-bl_magma1$
+expect SQ-MELT-11-pf_lava2$
+expect SQ-MELT-11-pf_magma1$
+expect SQ-MELT-11-salt_pk$
+expect SQ-MELT-11-salt_cry$
+expect SQ-MELT-11-salt_bl$
+expect SQ-MELT-11-salt_pf$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m11
+
 ## SQ-MELT-12 | Nether (G11): packed ice, cryosol, ice and snow melt on their own with no source; blue ice and permafrost only beside lava
 @group A
 @commands In the Nether on netherrack, far from lava (16+ blocks, no lava above or below): `setblock` `minecraft:packed_ice`, `immersive_weathering:cryosol`, `minecraft:ice`, `minecraft:blue_ice`, `immersive_weathering:permafrost`; a second `minecraft:blue_ice` with a lava source touching it. Probe every 20 s for 5 minutes
 @pass ice -> air within about 1 minute (melt tick every 15 to 25 ticks, chance 0.4); packed ice -> ice -> air, cryosol -> dirt, each step within about 1 minute (chance 0.4 per tick, the slow tier too, owner 2026-11-17); the lone blue ice and permafrost unchanged; the blue ice touching lava -> packed ice (then melts on as packed ice)
 @fails nothing melts: `onPlaced` hot path (packed ice has no random tick, it needs the placement schedule) or `hotMeltTickInterval 0`; lone blue ice melts: lava_only flag skipped in `isHot`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build; Nether platform at the roof as SQ-MELT-05; the hot path needs no random tick
+> execute in minecraft:the_nether run forceload add 0 0 47 31
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 3
+> execute in minecraft:the_nether run fill 0 128 0 47 128 31 minecraft:stone
+> execute in minecraft:the_nether run fill 0 129 0 47 133 31 minecraft:air
+sleep 3
+> execute unless entity m12 run pbot spawn m12 8 129 24 minecraft:the_nether survival
+sleep 3
+pace 0.2
+> execute in minecraft:the_nether run setblock 2 129 4 minecraft:packed_ice
+> execute in minecraft:the_nether run setblock 6 129 4 immersive_weathering:cryosol
+> execute in minecraft:the_nether run setblock 10 129 4 minecraft:ice
+> execute in minecraft:the_nether run setblock 14 129 4 minecraft:blue_ice
+> execute in minecraft:the_nether run setblock 18 129 4 immersive_weathering:permafrost
+> execute in minecraft:the_nether run setblock 24 129 4 minecraft:blue_ice
+> execute in minecraft:the_nether run setblock 25 129 4 minecraft:lava
+> execute in minecraft:the_nether run setblock 25 129 3 minecraft:stone
+> execute in minecraft:the_nether run setblock 25 129 5 minecraft:stone
+> execute in minecraft:the_nether run setblock 26 129 4 minecraft:stone
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 600
+> execute in minecraft:the_nether unless block 2 129 4 minecraft:packed_ice run say SQ-MELT-12-packed
+> execute in minecraft:the_nether if block 6 129 4 minecraft:dirt run say SQ-MELT-12-cryosol
+> execute in minecraft:the_nether if block 10 129 4 minecraft:air run say SQ-MELT-12-ice
+> execute in minecraft:the_nether if block 14 129 4 minecraft:blue_ice run say SQ-MELT-12-blue_lone
+> execute in minecraft:the_nether if block 18 129 4 immersive_weathering:permafrost run say SQ-MELT-12-perma_lone
+> execute in minecraft:the_nether unless block 24 129 4 minecraft:blue_ice run say SQ-MELT-12-blue_lava
+expect SQ-MELT-12-packed$
+expect SQ-MELT-12-cryosol$
+expect SQ-MELT-12-ice$
+expect SQ-MELT-12-blue_lone$
+expect SQ-MELT-12-perma_lone$
+expect SQ-MELT-12-blue_lava$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m12
+
 ## SQ-MELT-13 | arid, dry and tropical biomes (G11; dry added 2026-11-17): ice and snow melt with no source; packed ice and snow on blue ice stay
 @group B
 @commands Fresh normal world; find a desert (`locate biome minecraft:desert`), a savanna and a jungle; at each, away from any light source: `minecraft:ice`, `minecraft:snow[layers=8]`, `minecraft:snow_block`, `minecraft:packed_ice`, and `minecraft:snow[layers=8]` on `minecraft:blue_ice`. Control: the same set in a plains biome. Probe every 20 s for 4 minutes. Boot: Creative Calendar loaded (the hot tag reads its season tags)
@@ -904,43 +1098,519 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @commands In the End on end stone (forceload): `minecraft:ice` with a torch 2 away (lit), the same with a torch touching; `minecraft:snow[layers=8]` with magma 2 away and another with magma touching; `minecraft:ice` with a `salt:salt_block` touching; `minecraft:packed_ice` with lava 2 away and another with lava touching. Probe every 20 s for 5 minutes
 @pass the ice with the torch at 2 and the snow with magma at 2 unchanged; the torch-touching ice -> water; the magma-touching snow gone at once on placement; the salted ice -> water; packed ice with lava at 2 unchanged, touching -> ice
 @fails reach in the End: `endContact` not read (`level.dimension() == Level.END`) or `endContactOnly` false
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build; End platform of end stone at y 100 (the End has no seasons, no roof needed)
+> execute in minecraft:the_end run forceload add 0 0 63 47
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 3
+> execute in minecraft:the_end run fill 0 100 0 63 100 47 minecraft:end_stone
+> execute in minecraft:the_end run fill 0 101 0 63 106 47 minecraft:air
+sleep 3
+> execute unless entity m14 run pbot spawn m14 30 101 40 minecraft:the_end survival
+sleep 3
+pace 0.2
+> execute in minecraft:the_end run setblock 4 101 4 minecraft:ice
+> execute in minecraft:the_end run setblock 5 101 4 minecraft:stone
+> execute in minecraft:the_end run setblock 6 101 4 minecraft:torch
+> execute in minecraft:the_end run setblock 4 101 12 minecraft:ice
+> execute in minecraft:the_end run setblock 5 101 12 minecraft:torch
+> execute in minecraft:the_end run setblock 4 101 20 minecraft:snow[layers=8]
+> execute in minecraft:the_end run setblock 5 101 20 minecraft:stone
+> execute in minecraft:the_end run setblock 6 101 20 minecraft:magma_block
+> execute in minecraft:the_end run setblock 4 101 28 minecraft:snow[layers=8]
+> execute in minecraft:the_end run setblock 5 101 28 minecraft:magma_block
+> execute in minecraft:the_end run setblock 24 101 4 minecraft:ice
+> execute in minecraft:the_end run setblock 25 101 4 salt:salt_block
+> execute in minecraft:the_end run setblock 24 101 12 minecraft:packed_ice
+> execute in minecraft:the_end run setblock 25 101 12 minecraft:stone
+> execute in minecraft:the_end run setblock 26 101 12 minecraft:lava
+> execute in minecraft:the_end run setblock 26 101 11 minecraft:stone
+> execute in minecraft:the_end run setblock 26 101 13 minecraft:stone
+> execute in minecraft:the_end run setblock 27 101 12 minecraft:stone
+> execute in minecraft:the_end run setblock 24 101 20 minecraft:packed_ice
+> execute in minecraft:the_end run setblock 25 101 20 minecraft:lava
+> execute in minecraft:the_end run setblock 25 101 19 minecraft:stone
+> execute in minecraft:the_end run setblock 25 101 21 minecraft:stone
+> execute in minecraft:the_end run setblock 26 101 20 minecraft:stone
+pace 2
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+> cdevtest tickwarp 4800
+waitlog verb=tickwarp end=done 600
+> gamerule randomTickSpeed 3
+> execute in minecraft:the_end if block 4 101 4 minecraft:ice run say SQ-MELT-14-torch2_ice
+> execute in minecraft:the_end unless block 4 101 12 minecraft:ice run say SQ-MELT-14-torch1_melted
+> execute in minecraft:the_end if block 4 101 20 minecraft:snow[layers=8] run say SQ-MELT-14-magma2_snow
+> execute in minecraft:the_end unless block 4 101 28 minecraft:snow run say SQ-MELT-14-magma1_snow_gone
+> execute in minecraft:the_end unless block 24 101 4 minecraft:ice run say SQ-MELT-14-salt_ice_melted
+> execute in minecraft:the_end if block 24 101 12 minecraft:packed_ice run say SQ-MELT-14-lava2_packed
+> execute in minecraft:the_end unless block 24 101 20 minecraft:packed_ice run say SQ-MELT-14-lava1_packed_stepped
+expect SQ-MELT-14-torch2_ice$
+expect SQ-MELT-14-torch1_melted$
+expect SQ-MELT-14-magma2_snow$
+expect SQ-MELT-14-magma1_snow_gone$
+expect SQ-MELT-14-salt_ice_melted$
+expect SQ-MELT-14-lava2_packed$
+expect SQ-MELT-14-lava1_packed_stepped$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m14
+
 ## SQ-MELT-15 | no ordinary fire in the End (G11): flint and steel, fire charge, setblock, lava spread refused; soul fire allowed; old fire goes out
 @group A
 @commands In the End (forceload), a survival bot or `execute as` a player: flint and steel on end stone; a fire charge from a dispenser at end stone; `setblock ~ ~1 ~ minecraft:fire` on netherrack placed there; a lava source beside planks for 5 minutes at `randomTickSpeed 100`; `setblock` `minecraft:soul_fire` on soul sand. Then `[melting] endNoFire = false` (restart), `setblock minecraft:fire` on netherrack, `endNoFire = true` again (restart), probe that block for 30 s. Overworld control: flint and steel on netherrack
 @pass End: no `minecraft:fire` block ever appears (`execute if block` false after each), the planks never burn; soul fire stays; the old fire is air within 2 s of the restart's first tick; Overworld fire lights; no ERR naming `EndFireMixin` and no mixin apply failure in latest.log
 @fails fire appears: `EndFireMixin` not applied (SRG `m_6933_`) or `refusesFire` dimension check; soul fire refused: the check reads a tag instead of `Blocks.FIRE`; old fire stays: the scheduled tick check in `Melting.onScheduledTick`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): the End half of melting.md 1 (no minecraft:fire in the End, endNoFire in Compat's toml since the wave 2 carve): `setblock`, flint and steel, a fire charge dispenser and lava beside planks refused, soul fire stays; then `endNoFire = false` (restart) lets a placed fire stand, `true` again (restart) clears it. The Overworld control is a fake player's flint and steel on netherrack at 2400 -61 2400. The old fire is checked on the first tick after the restart (the End chunk is forceloaded)
+> execute in minecraft:the_end run forceload add 0 0 63 47
+> gamerule doFireTick true
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 100
+> execute in minecraft:the_end run fill 0 100 0 63 100 47 minecraft:end_stone
+> execute in minecraft:the_end run fill 0 101 0 63 106 47 minecraft:air
+> forceload add 2400 2400 2415 2415
+sleep 3
+> execute unless entity m15 run pbot spawn m15 30 101 40 minecraft:the_end survival
+sleep 3
+> execute in minecraft:the_end run setblock 4 101 4 minecraft:fire
+> execute in minecraft:the_end run setblock 8 100 4 minecraft:soul_sand
+> execute in minecraft:the_end run setblock 8 101 4 minecraft:soul_fire
+> clear m15
+> pbot hold m15 minecraft:flint_and_steel 1
+> pbot use m15 12 100 4 up
+> execute in minecraft:the_end run setblock 16 101 4 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"minecraft:fire_charge",Count:3b}]}
+> execute in minecraft:the_end run setblock 16 102 4 minecraft:redstone_block
+> execute in minecraft:the_end run setblock 20 101 4 minecraft:oak_planks
+> execute in minecraft:the_end run setblock 21 101 4 minecraft:lava
+> execute in minecraft:the_end run setblock 21 101 3 minecraft:glass
+> execute in minecraft:the_end run setblock 21 101 5 minecraft:glass
+> execute in minecraft:the_end run setblock 22 101 4 minecraft:glass
+> execute in minecraft:the_end run setblock 30 100 4 minecraft:netherrack
+sleep 2
+> execute in minecraft:the_end if block 4 101 4 minecraft:air run say SQ-MELT-15-setblock_refused
+> execute in minecraft:the_end if block 8 101 4 minecraft:soul_fire run say SQ-MELT-15-soul_fire_stays
+> execute in minecraft:the_end if block 12 101 4 minecraft:air run say SQ-MELT-15-flint_refused
+> execute in minecraft:the_end if block 17 101 4 minecraft:air run say SQ-MELT-15-charge_refused
+> cdevtest tickwarp 6000
+waitlog verb=tickwarp end=done 600
+> execute in minecraft:the_end if block 20 101 4 minecraft:oak_planks run say SQ-MELT-15-planks_stay
+> setblock 2400 -61 2400 minecraft:netherrack
+> cdevtest use 2400 -61 2400 held=minecraft:flint_and_steel face=up
+> cdevtest state 2400 -60 2400
+waitlog verb=state .*done=1 30
+expect SQ-MELT-15-setblock_refused$
+expect SQ-MELT-15-soul_fire_stays$
+expect SQ-MELT-15-flint_refused$
+expect SQ-MELT-15-charge_refused$
+expect SQ-MELT-15-planks_stay$
+expect verb=state pos=2400,-60,2400 state="?minecraft:fire
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml melting endNoFire false
+restart
+sleep 10
+> execute in minecraft:the_end run forceload add 0 0 63 47
+sleep 3
+> execute in minecraft:the_end run setblock 30 101 4 minecraft:fire
+sleep 2
+> execute in minecraft:the_end if block 30 101 4 minecraft:fire run say SQ-MELT-15-fire_allowed_when_off
+expect SQ-MELT-15-fire_allowed_when_off$
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml melting endNoFire true
+restart
+sleep 10
+> execute in minecraft:the_end run forceload add 0 0 63 47
+sleep 3
+> execute in minecraft:the_end if block 30 101 4 minecraft:air run say SQ-MELT-15-old_fire_gone
+expect SQ-MELT-15-old_fire_gone$
+bootreject EndFireMixin.*(error|failed|exception)|Mixin apply failed
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> execute in minecraft:the_end run fill 0 100 0 63 106 47 minecraft:air
+
 ## SQ-MELT-16 | magma-like blocks (G11): Molten Nether Bricks melt snow like magma
 @group A
 @commands Boot log: `[melting] random ticks on for N extra blocks` (10 with Immersive Weathering and Architect's Palette) and `[melting] tags:` (magma 2). `architects_palette:molten_nether_bricks` on stone; `minecraft:snow[layers=4]` placed 2 away; `minecraft:snow[layers=8]` 3 away; `minecraft:packed_ice` 2 away. Probe every 20 s for 5 minutes
 @pass the snow at 2 is air at once; the snow at 3 loses layers one at a time; the packed ice -> ice within about 10 minutes (slow chance, slowMagmaRange 2); the source-driven fire line of the boot log names the bricks (light 3)
 @fails snow at 2 kept: the bricks are not in the magma tag (`architects_palette` guard) or not random ticking (`extraRandomTickBlocks` in the instance toml is the old list)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build; snow 2 away goes at once, so it is read after 1200 ticks
+> forceload add 2192 2192 2300 2230
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m16 run pbot spawn m16 2210 -60 2206 minecraft:overworld survival
+sleep 3
+pace 0.2
+> setblock 2200 -61 2200 architects_palette:molten_nether_bricks
+> setblock 2202 -61 2200 minecraft:snow[layers=4]
+> setblock 2202 -60 2200 minecraft:glass
+> setblock 2197 -61 2200 minecraft:snow[layers=8]
+> setblock 2197 -60 2200 minecraft:glass
+> setblock 2200 -61 2202 minecraft:packed_ice
+> setblock 2200 -60 2202 minecraft:glass
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+> cdevtest tickwarp 1200
+waitlog verb=tickwarp end=done 600
+> execute if block 2202 -61 2200 minecraft:air run say SQ-MELT-16-snow2_air
+> cdevtest tickwarp 9000
+waitlog verb=tickwarp end=done 600
+> gamerule randomTickSpeed 3
+> execute unless block 2197 -61 2200 minecraft:snow[layers=8] run say SQ-MELT-16-snow3_melting
+> execute unless block 2200 -61 2202 minecraft:packed_ice run say SQ-MELT-16-packed_stepped
+expect SQ-MELT-16-snow2_air$
+expect SQ-MELT-16-snow3_melting$
+expect SQ-MELT-16-packed_stepped$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m16
+
 ## SQ-MELT-17 | frozen decor (E1): snowy stone blocks melt into the plain block, same shape and facing
 @group A
 @commands A torch 2 from each, lit room: `immersive_weathering:snowy_stone_stairs[facing=east,half=top]`, `immersive_weathering:snowy_cobblestone_slab[type=top]`, `immersive_weathering:snowy_stone_brick_wall` between two stone brick walls, `immersive_weathering:snowy_stone_vertical_slab` (any type but the default), `immersive_weathering:snowy_chiseled_stone_bricks`. Probe each with `cdevtest state` every 20 s for 3 minutes
 @pass `minecraft:stone_stairs[facing=east,half=top]`, `minecraft:cobblestone_slab[type=top]`, `minecraft:stone_brick_wall` keeping its side connections, `quark:stone_vertical_slab` with the same type, `minecraft:chiseled_stone_bricks`; none becomes air or a full block
 @fails full stone where the stairs were: the stairs passed their random tick to the base state (`onRandomTick` same-state check); air: `meltProducts` row missing in the instance toml (old list) or the product mod absent; default facing: `withShared`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build
+> forceload add 2192 2192 2300 2230
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m17 run pbot spawn m17 2230 -60 2206 minecraft:overworld survival
+sleep 3
+pace 0.2
+> setblock 2200 -61 2200 immersive_weathering:snowy_stone_stairs[facing=east,half=top]
+> setblock 2202 -61 2200 minecraft:torch
+> setblock 2212 -61 2200 immersive_weathering:snowy_cobblestone_slab[type=top]
+> setblock 2214 -61 2200 minecraft:torch
+> setblock 2224 -61 2200 immersive_weathering:snowy_stone_vertical_slab[type=east]
+> setblock 2226 -61 2200 minecraft:torch
+> setblock 2236 -61 2200 immersive_weathering:snowy_chiseled_stone_bricks
+> setblock 2238 -61 2200 minecraft:torch
+> setblock 2247 -61 2200 minecraft:stone_brick_wall
+> setblock 2249 -61 2200 minecraft:stone_brick_wall
+> setblock 2248 -61 2200 immersive_weathering:snowy_stone_brick_wall
+> setblock 2248 -61 2202 minecraft:torch
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+> cdevtest tickwarp 4000
+waitlog verb=tickwarp end=done 600
+> gamerule randomTickSpeed 3
+> execute if block 2200 -61 2200 minecraft:stone_stairs[facing=east,half=top] run say SQ-MELT-17-stairs
+> execute if block 2212 -61 2200 minecraft:cobblestone_slab[type=top] run say SQ-MELT-17-cobslab
+> execute if block 2224 -61 2200 quark:stone_vertical_slab[type=east] run say SQ-MELT-17-vslab
+> execute if block 2236 -61 2200 minecraft:chiseled_stone_bricks run say SQ-MELT-17-chiseled
+> execute if block 2248 -61 2200 minecraft:stone_brick_wall[east=low,west=low] run say SQ-MELT-17-wall
+expect SQ-MELT-17-stairs$
+expect SQ-MELT-17-cobslab$
+expect SQ-MELT-17-vslab$
+expect SQ-MELT-17-chiseled$
+expect SQ-MELT-17-wall$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m17
+
 ## SQ-MELT-18 | frozen decor (E1): frosty glass, pane, grass, fern, frost, thin ice, icicle
 @group A
 @commands A torch 2 from each: `immersive_weathering:frosty_glass`, `immersive_weathering:frosty_glass_pane` between two glass blocks, `immersive_weathering:frosty_grass` and `frosty_fern` on grass blocks, `immersive_weathering:frost` on a stone wall face, `immersive_weathering:thin_ice` on water, `immersive_weathering:icicle` hanging from stone. In the Nether: `immersive_weathering:thin_ice` on netherrack, no source. Probe every 20 s for 4 minutes
 @pass `minecraft:glass`, `minecraft:glass_pane` (connected east and west), `minecraft:grass`, `minecraft:fern`, frost -> air, thin ice -> `minecraft:water[level=0]`, icicle -> air; Nether thin ice -> air
 @fails a block unchanged: it does not random tick and no source tick found it (frost and icicle: check `isRandomlyTicking`; add to `extraRandomTickBlocks`); thin ice -> air in the Overworld: water rule in `productOf`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build; thin ice sits on a water block, the Nether control has no source
+> forceload add 2192 2192 2300 2230
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m18 run pbot spawn m18 2230 -60 2206 minecraft:overworld survival
+sleep 3
+pace 0.2
+> setblock 2200 -61 2200 immersive_weathering:frosty_glass
+> setblock 2202 -61 2200 minecraft:torch
+> setblock 2211 -61 2200 minecraft:glass
+> setblock 2213 -61 2200 minecraft:glass
+> setblock 2212 -61 2200 immersive_weathering:frosty_glass_pane
+> setblock 2212 -61 2202 minecraft:torch
+> setblock 2224 -62 2200 minecraft:grass_block
+> setblock 2224 -61 2200 immersive_weathering:frosty_grass
+> setblock 2226 -61 2200 minecraft:torch
+> setblock 2236 -62 2200 minecraft:grass_block
+> setblock 2236 -61 2200 immersive_weathering:frosty_fern
+> setblock 2238 -61 2200 minecraft:torch
+> setblock 2200 -61 2211 minecraft:stone
+> setblock 2200 -61 2212 immersive_weathering:frost[north=true]
+> setblock 2202 -61 2212 minecraft:torch
+> setblock 2212 -62 2212 minecraft:water
+> setblock 2212 -61 2212 immersive_weathering:thin_ice
+> setblock 2214 -61 2212 minecraft:torch
+> setblock 2224 -60 2212 minecraft:stone
+> setblock 2224 -61 2212 immersive_weathering:icicle[thickness=tip,vertical_direction=down]
+> setblock 2226 -61 2212 minecraft:torch
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+> cdevtest tickwarp 4800
+waitlog verb=tickwarp end=done 600
+> gamerule randomTickSpeed 3
+> execute if block 2200 -61 2200 minecraft:glass run say SQ-MELT-18-glass
+> execute if block 2212 -61 2200 minecraft:glass_pane[east=true,west=true] run say SQ-MELT-18-pane
+> execute if block 2224 -61 2200 minecraft:grass run say SQ-MELT-18-grass
+> execute if block 2236 -61 2200 minecraft:fern run say SQ-MELT-18-fern
+> execute if block 2200 -61 2212 minecraft:air run say SQ-MELT-18-frost
+> execute if block 2212 -61 2212 minecraft:water[level=0] run say SQ-MELT-18-thin_ice
+> execute if block 2224 -61 2212 minecraft:air run say SQ-MELT-18-icicle
+> execute in minecraft:the_nether run forceload add 0 0 31 31
+> execute in minecraft:the_nether run fill 0 128 0 31 128 31 minecraft:stone
+> execute in minecraft:the_nether run fill 0 129 0 31 133 31 minecraft:air
+> execute unless entity m18n run pbot spawn m18n 8 129 24 minecraft:the_nether survival
+sleep 3
+> execute in minecraft:the_nether run setblock 4 129 4 immersive_weathering:thin_ice
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 600
+> execute in minecraft:the_nether if block 4 129 4 minecraft:air run say SQ-MELT-18-nether_thin_ice
+expect SQ-MELT-18-glass$
+expect SQ-MELT-18-pane$
+expect SQ-MELT-18-grass$
+expect SQ-MELT-18-fern$
+expect SQ-MELT-18-frost$
+expect SQ-MELT-18-thin_ice$
+expect SQ-MELT-18-icicle$
+expect SQ-MELT-18-nether_thin_ice$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m18
+> pbot remove m18n
+
 ## SQ-MELT-19 | frozen decor (E1): snow bricks melt at a quarter of snow's pace and vanish in the Nether; coarse snow melts into gravel
 @group A
 @commands 8 `immersive_weathering:snow_bricks` and 8 `minecraft:snow_block` in two rows, each block with its own torch 2 away; 4 `architects_palette:coarse_snow` with torches 2 away. Count the remaining snow bricks and snow blocks every 30 s for 10 minutes. In the Nether: place a snow brick slab and a coarse snow block by `setblock`
 @pass snow blocks gone well before the snow bricks (mean time about 4x: bricks roll 0.1, blocks 0.4 per melt tick); snow bricks -> air; coarse snow -> `minecraft:gravel`; Nether snow brick slab air at once (fizz), Nether coarse snow -> gravel within about 1 minute
 @fails bricks as fast as blocks: `sluggish` tag empty; coarse snow -> air: `meltProducts` row missing
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build; sluggish check at 600 ticks (blocks roll 0.4, bricks 0.1 per melt tick: sixteen would be a bigger sample, eight give a margin of 3), then the end state at 12000
+> forceload add 2192 2192 2300 2340
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m19 run pbot spawn m19 2224 -60 2220 minecraft:overworld survival
+sleep 3
+pace 0.2
+> setblock 2200 -61 2300 immersive_weathering:snow_bricks
+> setblock 2200 -60 2300 minecraft:glass
+> setblock 2202 -61 2300 minecraft:torch
+> setblock 2200 -61 2312 minecraft:snow_block
+> setblock 2200 -60 2312 minecraft:glass
+> setblock 2202 -61 2312 minecraft:torch
+> setblock 2206 -61 2300 immersive_weathering:snow_bricks
+> setblock 2206 -60 2300 minecraft:glass
+> setblock 2208 -61 2300 minecraft:torch
+> setblock 2206 -61 2312 minecraft:snow_block
+> setblock 2206 -60 2312 minecraft:glass
+> setblock 2208 -61 2312 minecraft:torch
+> setblock 2212 -61 2300 immersive_weathering:snow_bricks
+> setblock 2212 -60 2300 minecraft:glass
+> setblock 2214 -61 2300 minecraft:torch
+> setblock 2212 -61 2312 minecraft:snow_block
+> setblock 2212 -60 2312 minecraft:glass
+> setblock 2214 -61 2312 minecraft:torch
+> setblock 2218 -61 2300 immersive_weathering:snow_bricks
+> setblock 2218 -60 2300 minecraft:glass
+> setblock 2220 -61 2300 minecraft:torch
+> setblock 2218 -61 2312 minecraft:snow_block
+> setblock 2218 -60 2312 minecraft:glass
+> setblock 2220 -61 2312 minecraft:torch
+> setblock 2224 -61 2300 immersive_weathering:snow_bricks
+> setblock 2224 -60 2300 minecraft:glass
+> setblock 2226 -61 2300 minecraft:torch
+> setblock 2224 -61 2312 minecraft:snow_block
+> setblock 2224 -60 2312 minecraft:glass
+> setblock 2226 -61 2312 minecraft:torch
+> setblock 2230 -61 2300 immersive_weathering:snow_bricks
+> setblock 2230 -60 2300 minecraft:glass
+> setblock 2232 -61 2300 minecraft:torch
+> setblock 2230 -61 2312 minecraft:snow_block
+> setblock 2230 -60 2312 minecraft:glass
+> setblock 2232 -61 2312 minecraft:torch
+> setblock 2236 -61 2300 immersive_weathering:snow_bricks
+> setblock 2236 -60 2300 minecraft:glass
+> setblock 2238 -61 2300 minecraft:torch
+> setblock 2236 -61 2312 minecraft:snow_block
+> setblock 2236 -60 2312 minecraft:glass
+> setblock 2238 -61 2312 minecraft:torch
+> setblock 2242 -61 2300 immersive_weathering:snow_bricks
+> setblock 2242 -60 2300 minecraft:glass
+> setblock 2244 -61 2300 minecraft:torch
+> setblock 2242 -61 2312 minecraft:snow_block
+> setblock 2242 -60 2312 minecraft:glass
+> setblock 2244 -61 2312 minecraft:torch
+> setblock 2200 -61 2324 architects_palette:coarse_snow
+> setblock 2200 -60 2324 minecraft:glass
+> setblock 2202 -61 2324 minecraft:torch
+> setblock 2206 -61 2324 architects_palette:coarse_snow
+> setblock 2206 -60 2324 minecraft:glass
+> setblock 2208 -61 2324 minecraft:torch
+> setblock 2212 -61 2324 architects_palette:coarse_snow
+> setblock 2212 -60 2324 minecraft:glass
+> setblock 2214 -61 2324 minecraft:torch
+> setblock 2218 -61 2324 architects_palette:coarse_snow
+> setblock 2218 -60 2324 minecraft:glass
+> setblock 2220 -61 2324 minecraft:torch
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done 600
+> cdevtest count 2198 -61 2300 2250 -61 2300 immersive_weathering:snow_bricks
+waitlog verb=count block=immersive_weathering:snow_bricks n=\d+ 30
+capture BR1 verb=count block=immersive_weathering:snow_bricks n=(\d+)
+> cdevtest count 2198 -61 2312 2250 -61 2312 minecraft:snow_block
+waitlog verb=count block=minecraft:snow_block n=\d+ 30
+capture BL1 verb=count block=minecraft:snow_block n=(\d+)
+shell python3 -c "import sys; print('after 600 ticks bricks', {BR1}, 'blocks', {BL1}); sys.exit(0 if {BR1} >= {BL1} + 3 else 1)"
+> cdevtest tickwarp 11400
+waitlog verb=tickwarp end=done 600
+> gamerule randomTickSpeed 3
+> cdevtest count 2198 -61 2300 2250 -61 2300 immersive_weathering:snow_bricks
+waitlog verb=count block=immersive_weathering:snow_bricks n=\d+ 30
+capture BR2 verb=count block=immersive_weathering:snow_bricks n=(\d+)
+> cdevtest count 2198 -61 2324 2250 -61 2324 minecraft:gravel
+waitlog verb=count block=minecraft:gravel n=\d+ 30
+capture GR verb=count block=minecraft:gravel n=(\d+)
+> cdevtest count 2198 -61 2324 2250 -61 2324 architects_palette:coarse_snow
+waitlog verb=count block=architects_palette:coarse_snow n=\d+ 30
+capture CS verb=count block=architects_palette:coarse_snow n=(\d+)
+shell python3 -c "import sys; print('after 12000 ticks bricks', {BR2}, 'gravel', {GR}, 'coarse snow left', {CS}); sys.exit(0 if {BR2} == 0 and {GR} >= 4 and {CS} == 0 else 1)"
+> execute in minecraft:the_nether run forceload add 0 0 31 31
+> execute in minecraft:the_nether run fill 0 128 0 31 128 31 minecraft:stone
+> execute in minecraft:the_nether run fill 0 129 0 31 133 31 minecraft:air
+> execute unless entity m19n run pbot spawn m19n 8 129 24 minecraft:the_nether survival
+sleep 3
+> execute in minecraft:the_nether run setblock 4 129 4 immersive_weathering:snow_brick_slab
+> execute in minecraft:the_nether run setblock 8 129 4 architects_palette:coarse_snow
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 600
+> execute in minecraft:the_nether if block 4 129 4 minecraft:air run say SQ-MELT-19-nether_slab_air
+> execute in minecraft:the_nether if block 8 129 4 minecraft:gravel run say SQ-MELT-19-nether_coarse_gravel
+expect SQ-MELT-19-nether_slab_air$
+expect SQ-MELT-19-nether_coarse_gravel$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m19
+> pbot remove m19n
+
 ## SQ-MELT-20 | Architect's Palette packed ice (E1): full blocks -> ice, shaped -> air, from lava, magma and salt only; frozen prismarine never melts
 @group A
 @commands Lava 2 away from each (stone gap): `architects_palette:polished_packed_ice`, `chiseled_packed_ice`, `packed_ice_pillar[axis=x]`, `polished_packed_ice_slab`, `polished_packed_ice_stairs`, `polished_packed_ice_wall`, `polished_packed_ice_vertical_slab`; a torch touching a second polished packed ice; a salt dispenser facing a third polished packed ice and one facing a polished packed ice slab; Philips Ruins frozen prismarine (if loaded) with lava touching. Probe every 60 s for 15 minutes
 @pass the three full blocks -> `minecraft:ice`; the four shaped blocks -> air (or water if waterlogged was kept, not expected); torch spot unchanged; dispenser: full block -> ice at once, slab -> air at once; frozen prismarine unchanged
 @fails shaped blocks -> ice: they matched a `slowSteps` row; nothing changes: the `*packed_ice*` glob missed (`[melting] tags` slow count should be 11 with IW and AP)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): bot m* keeps the area random-ticking (no player near, no random ticks); `tickwarp` replaces the real-time waits; a glass block over every ice, snow and decor target keeps Serene Seasons' open-sky melt out (gotchas.md); `/setblock` cells 12 blocks apart; pace 0.2 for the build; dispenser items are salt dust (the standard salt)
+> forceload add 2192 2192 2300 2230
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m20 run pbot spawn m20 2230 -60 2206 minecraft:overworld survival
+sleep 3
+pace 0.2
+> setblock 2200 -61 2200 architects_palette:polished_packed_ice
+> setblock 2201 -61 2200 minecraft:stone
+> setblock 2202 -61 2200 minecraft:lava
+> setblock 2202 -61 2199 minecraft:glass
+> setblock 2202 -61 2201 minecraft:glass
+> setblock 2203 -61 2200 minecraft:glass
+> setblock 2212 -61 2200 architects_palette:chiseled_packed_ice
+> setblock 2213 -61 2200 minecraft:stone
+> setblock 2214 -61 2200 minecraft:lava
+> setblock 2214 -61 2199 minecraft:glass
+> setblock 2214 -61 2201 minecraft:glass
+> setblock 2215 -61 2200 minecraft:glass
+> setblock 2224 -61 2200 architects_palette:packed_ice_pillar[axis=x]
+> setblock 2225 -61 2200 minecraft:stone
+> setblock 2226 -61 2200 minecraft:lava
+> setblock 2226 -61 2199 minecraft:glass
+> setblock 2226 -61 2201 minecraft:glass
+> setblock 2227 -61 2200 minecraft:glass
+> setblock 2236 -61 2200 architects_palette:polished_packed_ice_slab
+> setblock 2237 -61 2200 minecraft:stone
+> setblock 2238 -61 2200 minecraft:lava
+> setblock 2238 -61 2199 minecraft:glass
+> setblock 2238 -61 2201 minecraft:glass
+> setblock 2239 -61 2200 minecraft:glass
+> setblock 2248 -61 2200 architects_palette:polished_packed_ice_stairs
+> setblock 2249 -61 2200 minecraft:stone
+> setblock 2250 -61 2200 minecraft:lava
+> setblock 2250 -61 2199 minecraft:glass
+> setblock 2250 -61 2201 minecraft:glass
+> setblock 2251 -61 2200 minecraft:glass
+> setblock 2260 -61 2200 architects_palette:polished_packed_ice_wall
+> setblock 2261 -61 2200 minecraft:stone
+> setblock 2262 -61 2200 minecraft:lava
+> setblock 2262 -61 2199 minecraft:glass
+> setblock 2262 -61 2201 minecraft:glass
+> setblock 2263 -61 2200 minecraft:glass
+> setblock 2272 -61 2200 architects_palette:polished_packed_ice_vertical_slab
+> setblock 2273 -61 2200 minecraft:stone
+> setblock 2274 -61 2200 minecraft:lava
+> setblock 2274 -61 2199 minecraft:glass
+> setblock 2274 -61 2201 minecraft:glass
+> setblock 2275 -61 2200 minecraft:glass
+> setblock 2200 -61 2212 architects_palette:polished_packed_ice
+> setblock 2201 -61 2212 minecraft:torch
+> setblock 2212 -61 2212 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 2213 -61 2212 architects_palette:polished_packed_ice
+> setblock 2224 -61 2212 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 2225 -61 2212 architects_palette:polished_packed_ice_slab
+pace 2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> setblock 2212 -60 2212 minecraft:redstone_block
+> setblock 2224 -60 2212 minecraft:redstone_block
+sleep 3
+> execute if block 2213 -61 2212 minecraft:ice run say SQ-MELT-20-dispenser_full_ice
+> execute if block 2225 -61 2212 minecraft:air run say SQ-MELT-20-dispenser_slab_air
+> gamerule randomTickSpeed 1000
+> cdevtest tickwarp 9000
+waitlog verb=tickwarp end=done 600
+> gamerule randomTickSpeed 3
+> execute if block 2200 -61 2200 minecraft:ice run say SQ-MELT-20-polished
+> execute if block 2200 -61 2200 minecraft:water run say SQ-MELT-20-polished
+> execute if block 2212 -61 2200 minecraft:ice run say SQ-MELT-20-chiseled
+> execute if block 2212 -61 2200 minecraft:water run say SQ-MELT-20-chiseled
+> execute if block 2224 -61 2200 minecraft:ice run say SQ-MELT-20-pillar
+> execute if block 2224 -61 2200 minecraft:water run say SQ-MELT-20-pillar
+> execute if block 2236 -61 2200 minecraft:air run say SQ-MELT-20-slab
+> execute if block 2248 -61 2200 minecraft:air run say SQ-MELT-20-stairs
+> execute if block 2260 -61 2200 minecraft:air run say SQ-MELT-20-wall
+> execute if block 2272 -61 2200 minecraft:air run say SQ-MELT-20-vslab
+> execute if block 2200 -61 2212 architects_palette:polished_packed_ice run say SQ-MELT-20-torch_unchanged
+expect SQ-MELT-20-dispenser_full_ice$
+expect SQ-MELT-20-dispenser_slab_air$
+expect SQ-MELT-20-polished$
+expect SQ-MELT-20-chiseled$
+expect SQ-MELT-20-pillar$
+expect SQ-MELT-20-slab$
+expect SQ-MELT-20-stairs$
+expect SQ-MELT-20-wall$
+expect SQ-MELT-20-vslab$
+expect SQ-MELT-20-torch_unchanged$
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove m20
+
 ## CQ-MELT-01 | "Saltable" tooltip on frozen decor
 @group client
 @commands Join the scratch server; hover Snowy Stone Bricks, Frosty Glass, Snow Bricks, Coarse Snow, Polished Packed Ice, Thin Ice, Blue Ice, Permafrost
@@ -952,7 +1622,7 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @@title SQ-MELT / CQ-MELT wave 2 carve: melting moved to Creative Compat, config and tag carry-over, 2026-11-24 ([melting.md](../melting.md) 4; [plan_wave2_publish.md](../plan_wave2_publish.md) W2-8; TODO `creative-common-publish #17`)
 @@date 2026-11-24
 @@jars creativecommon creativecompat creativedelight
-@@sources feature_writeup/melting.md feature_writeup/plan_wave2_publish.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/melting/Melting.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/config/MovedKeys.java kubejs/data/creativecompat/kubejs/tags/melting_tags.js
+@@sources feature_writeup/melting.md feature_writeup/plan_wave2_publish.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/melting/Melting.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/MovedKeys.java kubejs/data/creativecompat/kubejs/tags/melting_tags.js
 @@text Creative Common and Creative Compat built 2026-11-24 (wave 2 carve). `[melting]` now lives in `config/creativecompat-common.toml`; tags are `#creativecompat:melting/*`; Compat's `MovedKeys` copies an old `[melting]` from `creativecommon-common.toml` at construction. Fixtures: `tools/scratch_query/fixtures/wave2_carry/`. Group A superflat.
 @@table
 ## SQ-MELT-21 | carry-over, merge: old Common [melting] copied into an existing Compat toml without [melting]

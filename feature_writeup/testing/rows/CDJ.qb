@@ -97,6 +97,7 @@ waitlog Saved the game 120
 look shell: five "is loaded from ... backported" member lines (Display, Fungi, Miner's, Veggies, Vintage); 12 blocks placed at home+offsets (README.txt)
 
 ## SQ-CDJ-09 | CD jar nests 20 members; five port items exist
+@reviewed 2026-11-26
 @group A (Boot 1)
 @commands Boot; `grep -nE "\[creativedelight\] members:\|NOT loaded\|not from the Creative Delight jar\|not nested" logs/latest.log`; `grep -ciE "error\|exception" logs/latest.log` against the last r1101 boot; `ls OUT/srv/mods \| grep -i backported` (must be empty); `/give @p` one item each: `veggiesdelight:cauliflower`, `vintagedelight:cheese_slice`, `fungidelight:inky_cap_mushroom`, `miners_delight:cave_carrot`, `displaydelight:abd_duck_noodles`; after `/dumpall` count `OUT/srv/kubejs/exported/items_by_mod/<ns>.json` items
 @pass `Done (`; `members:` line lists 20 ids with no `(NOT loaded: ...)`; no not-nested line; no `backported*` jar in the srv `mods/`; all five `/give` work; item counts at least the 2026-10-24 dump: displaydelight 212, fungidelight 32, miners_delight 69, veggiesdelight 89, vintagedelight 134 (higher is fine: later port builds added items)
@@ -137,7 +138,7 @@ look item counts per namespace (displaydelight 212, fungidelight 32, miners_deli
 @pass `Done (`; no error or warning naming displaydelight or a CD script; Display blocks still place and drop (the switch has no CD rows to gate, plan A7); the `members:` line still lists 20
 @fails An error: a CD script that should be gated on `[members] displaydelight` (the switch is generated from `bundle_members`)
 @from batches/r1102/b2_switches.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 # BF-FIX judge-3 r1123cd: the drive boots with displaydelight = true (the run plan's "Boot 2" toml edit is manual); the row sets it and restarts,
 # and restores true at its end so later rows of the step see the default
 edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members displaydelight false
@@ -237,49 +238,51 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 look the cdevtest state after the takeAll-true sneak: the plate stays (an empty plate block or plate state), not air
 
 
-## SQ-VTD8-01 | Vintage config carried; remainderBuffer = false drops the bottles on the jar
+## SQ-VTD8-01 | Vintage pickling jar: remainderBuffer = false drops the bottles on the jar
 @group A (Boot 1)
-@commands Before boot: srv `vintagedelight-common.toml` `[pickling_jar] remainderBuffer = false`; boot; `ls OUT/srv/config \| grep vintagedelight`; `grep -n "vintagedelight-common.toml carried" logs/latest.log`; `grep -n -A8 "^\[vintage" OUT/srv/config/creativedelight-common.toml`; place a Pickling Jar, insert 3 batches of garlic + honey bottle (fermented garlic honey) from the top, `/time add` past the recipe time; read slot 9 and the item entities on top of the jar
-@pass `[vintage.pickling_jar] remainderBuffer = false` (and `stallWhenFull`, `[vintage.worldgen] magicVineConvertsDirtToLushGrass` carried); `vintagedelight-common.toml.moved`, no `vintagedelight-common.toml`; the "carried into" line once; the jar finishes the batches, slot 9 empty, the glass bottles lie as items on top of the jar
-@fails Bottles in slot 9: the switch is read from the wrong key (`vintage.pickling_jar.remainderBuffer` in `VintageDelightCommonConfig`); no move: as SQ-DDP-06
+@commands CD `[vintage.pickling_jar] remainderBuffer = false` (set in the row, restart); place a Pickling Jar, merge 3 batches of garlic + honey bottle (fermented garlic honey) into its slots, tick warp the recipe times; `/data get block`; `/cdevtest items`
+@pass the jar finishes three batches: 3 fermented garlic honey in slot 7, slot 9 empty, the 3 glass bottles lie as items on top of the jar
+@fails Bottles in slot 9: the switch is read from the wrong key (`vintage.pickling_jar.remainderBuffer` in CD's config); nothing finishes: the jar is not in a ticking chunk (forceload) or `FermentingRecipe.assignSlots` does not fit the batch
 @jars creativedelight
 @from batches/r1102/b1_main.qb
-@reviewed 2026-11-16
-# home capture moved into the row (r1124fx runner-1, 2026-11-24): the rows that captured it are not in the selection
-> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
-sleep 2
-> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
-capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
-shell ls config | grep -i vintagedelight
-shell test -f config/vintagedelight-common.toml.moved && test ! -f config/vintagedelight-common.toml
-shell test "$(grep -c 'config/vintagedelight-common.toml carried into' logs/latest.log)" = 1
-bootreject could not carry|could not rename
-shell awk '/^[[:space:]]*\[/{s=$0} s ~ /\[vintage/' config/creativedelight-common.toml
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the config-carry half (vintagedelight-common.toml moved into CD's file) is the legacy migration, shipped 1.2.00 and already ran
+# (SQ-DDP-06 superseded, owner 2026-11-18); the row sets the key in CD's own file and restarts. r1124fx had no pre-boot prep for it and warped only 2000
+# ticks: three batches of 600 ticks need 1800 plus the first start, so the warp is 2400 and the jar chunk is forceloaded
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml vintage.pickling_jar remainderBuffer false
+restart
+bootexpect Done \(
 shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.pickling_jar\][[:space:]]*$/ && /^[[:space:]]*remainderBuffer[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
-shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.pickling_jar\][[:space:]]*$/ && /^[[:space:]]*stallWhenFull[[:space:]]*=/{f=1} END{exit !f}' config/creativedelight-common.toml
-shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.worldgen\][[:space:]]*$/ && /^[[:space:]]*magicVineConvertsDirtToLushGrass[[:space:]]*=/{f=1} END{exit !f}' config/creativedelight-common.toml
+> execute unless entity @e[type=minecraft:marker,tag=v8home] run summon minecraft:marker ~ ~ ~ {Tags:["v8home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=v8home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1} {H3+8} {H1+8} {H3+24}
+sleep 2
 > cdevtest rdetail fermented_garlic
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+16} vintagedelight:fermenting_jar
-# 3 batches of 4 garlic cloves + 1 honey bottle (veggiesdelight compat fermenting recipe, 600 ticks each); put in by
-# NBT instead of from the top: a hopper above the jar would pick up the bottles the row looks for
+# 3 batches of 4 garlic cloves + 1 honey bottle (600 ticks each); put in by NBT instead of from the top: a hopper above the jar would pick up the bottles the row looks for
 > data merge block {H1} {H2} {H3+16} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:2b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:3b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:4b,id:"minecraft:honey_bottle",Count:3b}]}}
-> cdevtest tickwarp 2000
-waitlog verb=tickwarp end=done 120
-> data get block {H1} {H2} {H3+16} inventory
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 300
+> cdevtest inv {H1} {H2} {H3+16}
 > cdevtest items {H1} {H2+1} {H3+16} 1
-expect \{(?=[^{}]*Slot: 7b?[,}])(?=[^{}]*"veggiesdelight:fermented_garlic_honey")(?=[^{}]*Count: 3b)[^{}]*\}
-reject has the following block data: .*Slot: 9b?[,}]
-expect verb=items items=\S*minecraft:glass_bottle:
+expect verb=inv slot=7 item=veggiesdelight:fermented_garlic_honey\*3\b
+reject verb=inv slot=9 item=
+expect verb=items items=\S*minecraft:glass_bottle:3\b
 reject \[cdevtest\] verb=\S+ .*error=
-look the rdetail line shows the 4 cloves + honey bottle recipe (else the batch's inputs are wrong: BATCH-FAULT); 3 glass bottles in total lie on the jar (items line, summed)
+look the rdetail line shows the 4 cloves + honey bottle recipe (else the batch inputs are wrong: BATCH-FAULT); the inv lines list slot 7 only (slots 0-4 and 9 empty); 3 glass bottles in total lie on the jar (items line, summed)
+> forceload remove {H1} {H3+8} {H1+8} {H3+24}
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml vintage.pickling_jar remainderBuffer true
+restart
 
 ## SQ-MDP-17 | Miner's member stops startup naming both missing donor jars
 @group A (Boot 3)
 @commands own step (`@modset port_chain chain +creativedevtools-*.jar noupstream=miners_upstream`: the step's server has no `miners_upstream` symlink; a drive step keeps it and reaches `Done`, r1123cd); boot; `grep -n -A6 "reads its textures" logs/latest.log` or the crash report
 @pass Startup stops with `Miner's Delight (Creative Delight) reads its textures, models and recipes from the original Miner's Delight jar, which must be in the folder 'miners_upstream' of the game directory (not in mods/):` followed by both missing jars with their links (MND-04); no other mod named as the cause
 @fails Old wording "(Backport)": the nested Miner's jar is older than `-03`; no stop: `UpstreamJars.verifyOrFail` not reached (member init order)
-@reviewed 2026-11-23
+@reviewed 2026-11-26
 @jars creativedelight creativeworldgen
 @modset port_chain chain +creativedevtools-*.jar noupstream=miners_upstream
 @from batches/r1102/b3_nodonor.qb
@@ -337,29 +340,28 @@ look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id a
 ## SQ-CDJ-12 (I8)
 @group A
 @commands boot; `grep -nE "\[creativedelight\] members:\|NOT loaded\|not nested" logs/latest.log`; `unzip -l mods/creativedelight-1.0.0.jar \| grep jarjar/backported`
-@pass 20 members, none `NOT loaded`; nested `backportedVeggies-1.9.2-ce-19.2-05`, `backportedVintage-0.1.6-ce-19.2-12`, `backportedFungi-1.3-ce-19.2-02`, `backportedMiners-1.4.5-ce-19.2-04`, `backportedDisplay-1.7.0-ce-19.2-03`; error count not above the r1102 Boot 1
+@pass 21 members (the line ends with 20 commas), none `NOT loaded`; nested `backportedVeggies-1.9.2-ce-19.2-`, `backportedVintage-0.1.6-ce-19.2-`, `backportedFungi-1.3-ce-19.2-`, `backportedMiners-1.4.5-ce-19.2-`, `backportedDisplay-1.7.0-ce-19.2-` (any build number: 2026-11-20 had Veggies -05, Vintage -18, Fungi -02, Miner's -06, Display -03); error count not above the r1102 Boot 1
 @fails a member missing: root `settings.gradle` CD member map (the four ports were moved there 2026-11-02)
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 bootexpect \[creativedelight\] members: \[([a-z_]+, ){20}[a-z_]+\]$
 bootreject NOT loaded|not nested
 shell grep -nE "\[creativedelight\] members:|NOT loaded|not nested" logs/latest.log | head -5
 shell unzip -l $(ls mods/creativedelight-*.jar | head -1) | grep jarjar/backported
-shell J=$(ls mods/creativedelight-*.jar | head -1); for m in backportedVeggies-1.9.2-ce-19.2-05 backportedVintage-0.1.6-ce-19.2-12 backportedFungi-1.3-ce-19.2-02 backportedMiners-1.4.5-ce-19.2-04 backportedDisplay-1.7.0-ce-19.2-03; do unzip -l $J | grep -q "$m" || { echo "missing $m"; exit 1; }; done
+shell J=$(ls mods/creativedelight-*.jar | head -1); for m in backportedVeggies-1.9.2-ce-19.2- backportedVintage-0.1.6-ce-19.2- backportedFungi-1.3-ce-19.2- backportedMiners-1.4.5-ce-19.2- backportedDisplay-1.7.0-ce-19.2-; do unzip -l $J | grep -q "$m" || { echo "missing $m"; exit 1; }; done
 shell echo "errors: $(grep -c ERROR logs/latest.log)"; true
 look error count not above the r1102 Boot 1 (run doc); a newer nested member build than the pass cell names is fine (note it)
 
 ## SQ-CDJ-05 / SQ-DDP-01 rerun (I1)
-@group A, the SQ-CDJ-11 Boot 0 world
+@group A, any world (the removed-id drop lines need the SQ-CDJ-11 Boot 0 world)
 @commands as SQ-CDJ-05 (patcherMod 13:04 in `OUT/srv/mods/`); `grep -nE "\[swaps\]\|Unidentified\|od_plated_baked_tentacle" logs/latest.log`
-@pass `[swaps] 3 list file(s): ... 1 removed id(s)` (CD `creative_split.json`, `removed.json`, CB `creative_split.json`); `[swaps] minecraft:block: 1 removed id(s) dropped` and the same for `minecraft:item`; no `Unidentified mapping` and no missing-registry screen line; the rest of SQ-CDJ-05 as before (blocks, contents, region diff empty apart from the one plate)
+@pass the `[swaps] N list file(s): ... M removed id(s)` summary line is logged (the swap lists have grown since 2026-11-02: 37 files, 26 removed ids on 2026-11-20); no `Unidentified mapping`; on the SQ-CDJ-11 Boot 0 world also `[swaps] minecraft:block: N removed id(s) dropped` and the same for `minecraft:item` (a fresh world drops none: no such line); the rest of SQ-CDJ-05 as before (blocks, contents, region diff empty apart from the one plate)
 @fails swap line missing: the server runs the old Creative Common (no `removed` key; the line would end at "single id(s)")
-@reviewed 2026-11-16
-bootexpect \[swaps\] 3 list file\(s\): .*1 removed id\(s\)
-bootexpect \[swaps\] minecraft:block: 1 removed id\(s\) dropped
-bootexpect \[swaps\] minecraft:item: 1 removed id\(s\) dropped
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the 2026-11-02 counts (3 files, 1 removed id) are long outdated and the dropped lines exist only when the world holds removed ids; r1120nv judge-3
+bootexpect \[swaps\] \d+ list file\(s\): .*\d+ removed id\(s\)
 bootreject Unidentified mapping
 shell grep -nE "\[swaps\]|Unidentified|od_plated_baked_tentacle" logs/latest.log | head -20
-look the rest of SQ-CDJ-05 as before (blocks, contents, region diff empty apart from the one plate): rerun SQ-CDJ-05's steps on the Boot 0 world
+look on a fresh world no "removed id(s) dropped" line is expected; on the SQ-CDJ-11 Boot 0 world one per minecraft:block and minecraft:item; the rest of SQ-CDJ-05 as before: rerun SQ-CDJ-05's steps on the Boot 0 world
 
 ## SQ-MDP-13 rerun (I3)
 @group A
@@ -430,18 +432,91 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-VTD8-01 (rewritten, I2)
 @group A
-@commands `[vintage.pickling_jar] remainderBuffer = true`, `stallWhenFull = true`; place a jar; `/data merge block` slots 0-3 with 3 garlic cloves each (`Count:3b`; fermented garlic honey is 4 cloves + 1 honey bottle) and slot 4 with 3 honey bottles; wait 3 recipe times; `/data get block` after each
+@commands CD `[vintage.pickling_jar] remainderBuffer = true`, `stallWhenFull = true` (the defaults); place a jar; `/data merge block` slots 0-3 with 3 garlic cloves each (`Count:3b`; fermented garlic honey is 4 cloves + 1 honey bottle) and slot 4 with 3 honey bottles; tick warp one recipe time (600) at a time; `/data get block` after each
 @pass three batches finish: 3 fermented garlic honey in slot 7; slots 0-3 lose exactly 1 each per batch (3, 2, 1, 0); slot 4 loses 1 honey per batch; 3 glass bottles in slot 9
 @fails stalls after one batch: `FermentingRecipe.assignSlots` / the jar's `craftItem(recipe, slots)`
 @jars creativedelight
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+# r1126q (2026-11-26): defaults need no config edit; each stage warps 650 ticks (recipe 600 plus the start tick) and reads the inventory
+> execute unless entity @e[type=minecraft:marker,tag=v8home] run summon minecraft:marker ~ ~ ~ {Tags:["v8home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=v8home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1} {H3+32} {H1+8} {H3+48}
+sleep 2
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+40} vintagedelight:fermenting_jar
+> data merge block {H1} {H2} {H3+40} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:2b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:3b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:4b,id:"minecraft:honey_bottle",Count:3b}]}}
+> cdevtest tickwarp 650
+waitlog verb=tickwarp end=done ticks=650 120
+> cdevtest inv {H1} {H2} {H3+40}
+expect verb=inv slot=0 item=veggiesdelight:garlic_clove\*2\b
+expect verb=inv slot=4 item=minecraft:honey_bottle\*2\b
+expect verb=inv slot=7 item=veggiesdelight:fermented_garlic_honey\*1\b
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done ticks=600 120
+> cdevtest inv {H1} {H2} {H3+40}
+expect verb=inv slot=3 item=veggiesdelight:garlic_clove\*1\b
+expect verb=inv slot=7 item=veggiesdelight:fermented_garlic_honey\*2\b
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done ticks=600 120
+> cdevtest inv {H1} {H2} {H3+40}
+expect verb=inv slot=7 item=veggiesdelight:fermented_garlic_honey\*3\b
+expect verb=inv slot=9 item=minecraft:glass_bottle\*3\b
+reject \[cdevtest\] verb=\S+ .*error=
+look the three inv lines: stage 1 slots 0-3 hold 2 each and slot 4 holds 2; stage 2 hold 1 each; stage 3 slots 0-4 are gone, slot 7 holds 3 and slot 9 3 glass bottles
+> forceload remove {H1} {H3+32} {H1+8} {H3+48}
 ## SQ-VTD8-02 (new, I2)
 @group A
-@commands (b) slot 0 = 4 cloves, slot 1 = 1 honey; then slots 0-1 = 2 cloves each, slot 2 = 1 honey; one batch each. (c) slot 9 pre-filled with 16 glass bottles (full), `stallWhenFull = false`, 3 batches with one honey bottle each; count item entities of `minecraft:glass_bottle` on top of the jar at +0 and +20 ticks after each batch, and slot 9; then `remainderBuffer = false`, 3 more batches
-@pass (b) (flipped 2026-11-04, strict per slot) neither starts: progress stays 0 for 2 recipe times, slots unchanged; (c) slot 9 stays 16; no bottle entity at +0, exactly 1 per batch at +20 (3 in total); with the buffer off exactly 3 bottles ejected, none in slot 9, none doubled; `overflowEjectDelayTicks = 0` throws them at once
-@fails duplicate bottle: note where it came from (slot 9 count vs entities); delay ignored: CD `[vintage.pickling_jar] overflowEjectDelayTicks` not read (`CdSettings.number`)
+@commands (b) one jar with slot 0 = 4 cloves and slot 1 = 1 honey, one with slots 0-1 = 2 cloves each and slot 2 = 1 honey; tick warp two recipe times. (c) slot 9 pre-filled with 16 glass bottles (full), `stallWhenFull = false` (set in the row, restart), 3 batches with one honey bottle each
+@pass (b) (strict per slot, flipped 2026-11-04) neither starts: both inventories unchanged after 1300 ticks; (c) slot 9 stays 16 and 3 more bottles lie as items on top of the jar after 2400 ticks (none doubled)
+@fails duplicate or lost bottle: note where it came from (slot 9 count vs entities); (c) does not run: `stallWhenFull = false` not read (`vintage.pickling_jar.stallWhenFull`)
 @jars creativedelight
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the per-tick timing of the ejection (+0 and +20 ticks, overflowEjectDelayTicks) is not read here: tickwarp runs whole ticks back to back and the
+# row reads the end state; the delay itself stays a look in a client run
+> execute unless entity @e[type=minecraft:marker,tag=v8home] run summon minecraft:marker ~ ~ ~ {Tags:["v8home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=v8home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1} {H3+56} {H1+12} {H3+72}
+sleep 2
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+60} vintagedelight:fermenting_jar
+> data merge block {H1} {H2} {H3+60} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:4b},{Slot:1b,id:"minecraft:honey_bottle",Count:1b}]}}
+> setblock {H1+4} {H2} {H3+60} vintagedelight:fermenting_jar
+> data merge block {H1+4} {H2} {H3+60} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:2b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:2b},{Slot:2b,id:"minecraft:honey_bottle",Count:1b}]}}
+> cdevtest tickwarp 1300
+waitlog verb=tickwarp end=done ticks=1300 120
+> cdevtest inv {H1} {H2} {H3+60}
+> cdevtest inv {H1+4} {H2} {H3+60}
+expect verb=inv slot=0 item=veggiesdelight:garlic_clove\*4\b
+expect verb=inv slot=2 item=minecraft:honey_bottle\*1\b
+look (b) the two inv lines are the merged inventories unchanged (4 cloves + 1 honey; 2 + 2 cloves + 1 honey), nothing in slot 7
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml vintage.pickling_jar stallWhenFull false
+restart
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=v8home] run summon minecraft:marker ~ ~ ~ {Tags:["v8home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=v8home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1} {H3+76} {H1+8} {H3+92}
+sleep 2
+> kill @e[type=minecraft:item]
+> setblock {H1} {H2} {H3+80} vintagedelight:fermenting_jar
+> data merge block {H1} {H2} {H3+80} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:2b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:3b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:4b,id:"minecraft:honey_bottle",Count:3b},{Slot:9b,id:"minecraft:glass_bottle",Count:16b}]}}
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 300
+> cdevtest inv {H1} {H2} {H3+80}
+> cdevtest items {H1} {H2+1} {H3+80} 1
+expect verb=inv slot=7 item=veggiesdelight:fermented_garlic_honey\*3\b
+expect verb=inv slot=9 item=minecraft:glass_bottle\*16\b
+expect verb=items items=\S*minecraft:glass_bottle:3\b
+reject \[cdevtest\] verb=\S+ .*error=
+look (c) slot 7 holds 3 fermented garlic honey, slot 9 stays 16 glass bottles, exactly 3 glass bottles lie on the jar
+> forceload remove {H1} {H3+76} {H1+8} {H3+92}
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml vintage.pickling_jar stallWhenFull true
+restart
 ## SQ-VTD8-03 (Vintage -18, strict per slot)
 @group A
 @commands place a jar; (a) `/data merge block` slots 0-4 with 1 cucumber each and slot 5 with 1 salt (pickle: 5 cucumbers + salt); (b) slots 0-2 with 2 cucumbers each, slot 3 with 1 salt (6 cucumbers in 3 slots); (c) slots 0-4 with 3 cucumbers each, slot 5 with 3 salt; wait the recipe time + 20 t after each, `/data get block`

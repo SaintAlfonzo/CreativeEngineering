@@ -185,7 +185,7 @@ look preset `[worldgen.debug] testOverrides = true` and a new world; the ACTIVE 
 @commands first world (switch off, density 1): `/zcfg` or the toml shows `searchTimeoutSeconds = 300`; `/locate structure creativeworldgen:meta/fortified_camps` from 0 0 and from 2448 -624, then `meta/fortified_ruins` from 0 0
 @pass each answers, or ends with a clean `[locate] ... timed out after 300 s` line (no stall, server keeps ticking; LO-05 style); record the time and load count of each (ST-223)
 @fails timeout still 120: Forge kept the old toml value; a stall: `LocateStats.expired` path
-@draft superseded in practice by SQ-WGE-02b (same locates at the 120 s timeout set 2026-11-02); kept for the 300 s history only
+@superseded SQ-WGE-02b (WGE.qb: the same locates at the 120 s timeout set 2026-11-02; this row only held the 300 s history)
 @@text
 @@text ### E. Water share 0, metas off coasts, Nullscape biomes (TODO `structures/earthfill #2`, `structures/metas #5`, `worldgen/biomes #8`)
 @@text

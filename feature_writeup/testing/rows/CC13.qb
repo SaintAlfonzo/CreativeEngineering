@@ -216,22 +216,95 @@ look owner: per wood (planks row in front: spruce, birch, dark oak, jungle, acac
 @commands `cc_only alone`, fresh config; `/recipe give @s minecraft:stick`; read the written `config/creativecommon-common.toml`; grep latest.log for `[jeiRemove]` and `[itemMerges]`; `/give @s creativecommon:spruce_composter`
 @pass the recipe is given (`Unlocked 1 recipes`); the toml has `[recipe_book] unlocks = true`, `remap = []`, `categoryOverrides = []` and no `[bees]` or `[wandering_trader]`; no `[jeiRemove]` pack line; `creativecommon:spruce_composter` is an unknown item (the composters, `[bees]` and `[wandering_trader]` left Common in the wave 2 carve, 2026-11-24; Delight's composters: SQ-CM-43)
 @fails `CommonConfig` defaults; `NoRecipeUnlockMixin` gate; a composter or `[bees]` / `[wandering_trader]` left in Common
-@draft the runner needs a fresh-config boot of the `cc_only alone` set
+@reviewed 2026-11-26
+@modset cc_only alone
+# written 2026-11-26 (r1126q writer-5): cc_only alone has the perfBot dev jar only (qmodset dev_keep), so the bot gives the recipe
+> pbot spawn cc7 0 -60 0 minecraft:overworld survival
+sleep 2
+> recipe give cc7 minecraft:stick
+waitlog Unlocked 1 recipes? for 20
+shell grep -qE "^\s*unlocks = true" config/creativecommon-common.toml
+shell grep -qE "^\s*remap = \[\]" config/creativecommon-common.toml
+shell grep -qE "^\s*categoryOverrides = \[\]" config/creativecommon-common.toml
+shell ! grep -qE "^\[(bees|wandering_trader)\]" config/creativecommon-common.toml
+> give cc7 creativecommon:spruce_composter
+waitlog Unknown item 20
+bootreject \[jeiRemove\] [0-9]+ removed items registered
+reject No new recipes were learned
 ## SQ-CC13-08 | full pack: pack values still apply (no recipe unlocks, honeycomb x2, swaps), removed items hidden and tag-stripped from the pack list
 @group A (full pack)
 @commands `/recipe give @s minecraft:stick`; shear a full beehive with `/cdevtest loot`-style shears or a dispenser; grep latest.log for `[jeiRemove]`, `[itemMerges]`, `[removedWoods]`; `/kubejs hand` on a removed item (`create_dd:spirit_planks` or `quark:flax`... any listed id)
 @pass `Unlocked 0 recipes`; 6 honeycomb from a full hive; the `[jeiRemove] N removed items registered (pack list added)` line with N the same order as before (about 360 plus merges); a removed item has no item tags
 @fails pack config `config/creativecommon-common.toml` lost `[recipe_book] unlocks = false`, or `config/creativedelight-common.toml` `honeycombMultiplier = 2` (carried over from Common's file, SQ-FCK-24); `kubejs/startup_scripts/removed/` not loaded or ran before Common's list; `server_scripts/tags/removed_item_tags.js`
-@draft the item id in the tag check is picked from `startup_scripts/removed/removed_items.js` at run time
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): recipe half as SQ-AV-01, honeycomb half as SQ-FCK-12, tag half by /cdevtest tagsof
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
+shell grep -qE "^\s*unlocks = false" config/creativecommon-common.toml
+> recipe give G minecraft:stick
+waitlog No new recipes were learned 20
+> setblock 1040 -60 1080 minecraft:beehive[honey_level=5,facing=north]
+> pbot hold G minecraft:shears 1
+> pbot use G 1040 -60 1080 north
+> cdevtest tickwarp 20
+waitlog verb=tickwarp end=done 30
+> cdevtest items 1040 -60 1080 3
+> cdevtest tagsof create_things_and_misc:zinc_knife
+expect verb=items items=(\S*,)?minecraft:honeycomb:6\b
+expect verb=tagsof id=create_things_and_misc:zinc_knife item_tags=-( |$)
+reject Unlocked \d+ recipes? for
+reject \[cdevtest\] .*done=0
+bootexpect \[jeiRemove\] [3-9][0-9]{2} removed items registered \(pack list added\)
+bootreject \[itemMerges\] .*(unknown group|already merged)
 ## SQ-CC13-09 | Wither Immunity: Wither is refused while it lasts, and an existing Wither deals no damage
 @group A (full pack)
 @commands bot in survival: `/effect give BOT minecraft:wither 20 1`, wait 2 s, `/effect give BOT creativecommon:wither_immunity 30`, read health over 5 s; `/effect clear BOT minecraft:wither`, `/effect give BOT minecraft:wither 10`; `/data get entity BOT ActiveEffects`
 @pass health stops falling once the immunity is on; the second Wither give fails (`Unable to apply this effect`) and no Wither is in ActiveEffects; JEI and JEED show the name Wither Immunity and its description
 @fails `effect/WitherImmunityEffect` not registered on the event bus; `effects/wither_immunity.js` (the effect id missing)
-@draft steps follow SQ-EFX rows' bot pattern
+@reviewed 2026-11-26
+@absent creativecommon:wither_immunity (effect registered by KubeJS startup script, not in the last /dumpall)
+# written 2026-11-26 (r1126q writer-5): bots are invulnerable (Bots.java), so a NoAI pillager "qp" on Normal takes the Wither (as SQ-EFX-02); Wither ticks are DamageSource.WITHER, canceled while the immunity is on
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
+> difficulty normal
+> execute as @e[type=minecraft:pillager] run kill @s
+> summon minecraft:pillager -46 -60 -46 {NoAI:1b,PersistenceRequired:1b,Tags:["qp"]}
+sleep 1
+> cdevtest reg effect creativecommon:wither_immunity
+> effect give @e[tag=qp,limit=1] minecraft:wither 20 1
+sleep 2
+> data get entity @e[tag=qp,limit=1] Health
+capture H1 has the following entity data: ([0-9.]+)f
+> effect give @e[tag=qp,limit=1] creativecommon:wither_immunity 30
+> data get entity @e[tag=qp,limit=1] Health
+capture H2 has the following entity data: ([0-9.]+)f
+sleep 5
+> data get entity @e[tag=qp,limit=1] Health
+capture H3 has the following entity data: ([0-9.]+)f
+shell python3 -c "import sys; print('wither health', {H1}, {H2}, {H3}); sys.exit(0 if {H1} < 24 and {H3} == {H2} else 1)"
+> effect clear @e[tag=qp,limit=1] minecraft:wither
+> effect give @e[tag=qp,limit=1] minecraft:wither 10
+waitlog Unable to apply this effect 10
+> execute unless entity @e[tag=qp,nbt={ActiveEffects:[{Id:20b}]}] run say CC13-09 no wither on the target
+expect CC13-09 no wither on the target
+expect verb=reg kind=effect .*creativecommon:wither_immunity
+reject \[cdevtest\] .*done=0
+> execute as @e[tag=qp] run kill @s
 ## SQ-CC13-10 | own config watcher: only stamped jars are taken over from Forge
 @group A (full pack)
 @commands boot; grep latest.log for the config watcher start line; edit `config/creativecompat-common.toml` and a third-party config (`config/quark-common.toml`) while running
 @pass the Creative config reloads once after about 1 s (Common's watcher); the third-party file follows Forge's own watcher; no `config watcher could not start`
 @fails `OwnConfigWatcher.stamped` (the `META-INF/ce-build.json` lookup) for nested or bundled jars
-@draft log line names to be read from the run
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): the log line is the one CQ-CC13-01 reads; a comment appended to a toml is a content change (the watcher's loop guard compares content)
+bootexpect \[creativecommon\] config watcher on: [0-9]+ own config file
+bootreject config watcher could not start
+shell test -f config/creativecompat-common.toml && test -f config/quark-common.toml
+shell printf '\n# cc13-10 watcher probe\n' >> config/creativecompat-common.toml
+waitlog \[creativecommon\] creativecompat-common\.toml reloaded 20
+shell printf '\n# cc13-10 watcher probe\n' >> config/quark-common.toml
+sleep 6
+count \[creativecommon\] creativecompat-common\.toml reloaded == 1
+reject \[creativecommon\] quark-common\.toml reloaded
+reject reloading creativecompat-common\.toml failed|config watcher pass failed

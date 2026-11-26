@@ -17,13 +17,17 @@
 @commands `/cdevtest rdetail golden_carrot_arc_gilding`; `/cdevtest rdetail golden_apple_arc_gilding`; `/cdevtest rdetail golden_melon_slice_arc_gilding`; `/cdevtest bytype immersiveengineering:arc_furnace max=400`
 @pass each recipe present (`serializer=immersiveengineering:arc_furnace`); its ingredients are the food and 4 gold entries (nuggets for the carrot and melon slice, ingots for the apple), not 5; about 25 `_arc_gilding` ids in the bytype list
 @fails `cd_food.js` `gold.arc` (should be 4); `goldenGild` loop; IE arc recipe ingredient order
+@reviewed 2026-11-26
 > cdevtest rdetail golden_carrot_arc_gilding
 > cdevtest rdetail golden_apple_arc_gilding
 > cdevtest rdetail golden_melon_slice_arc_gilding
 > cdevtest bytype immersiveengineering:arc_furnace max=400
 expect verb=rdetail id=\S*golden_carrot_arc_gilding serializer=immersiveengineering:arc_furnace result=minecraft:golden_carrot\*1
 expect verb=rdetail id=\S*golden_apple_arc_gilding serializer=immersiveengineering:arc_furnace result=minecraft:golden_apple\*1
-look the ingredients= list of each: the food then four gold entries (count them; five = old value); if the arc furnace recipe prints no additives, read the recipe JSON with /cdevtest rdetail ... part=fields
+expect verb=rdetail id=\S*golden_melon_slice_arc_gilding serializer=immersiveengineering:arc_furnace result=\S+\*1
+count verb=bytype id=\S+_arc_gilding result= >= 20
+shell grep -qE "^\s*gold: \{ mixer: 6, arc: 4 \}," "$INST/development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js"
+look r1126q writer-5: `rdetail` prints `ingredients=-` for IE arc furnace recipes (the additives are not read; r1120nv), so the 4-gold count is checked at its source (the `gold.arc` value the recipe loop adds from, shell step above); a live read of the additives needs a Devtools verb
 
 ## SQ-RC-02 | mason jar and glass bottle crafts give 4; vanilla glass bottle recipe gone
 @group A

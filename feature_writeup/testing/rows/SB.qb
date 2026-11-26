@@ -32,17 +32,19 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 
 ## SQ-SB-02 | no pillager spawners in the templates
 @group B
-@commands `/cdevplace` `illager_siege_weapons:catapult`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `blocky_siege:pillager_ship`, `mysticrift_pillagers_towers_aris:end_pillager_tower` (in the End)
+@reviewed 2026-11-26
+@commands `/cdevplace structures` `illager_siege_weapons:catapult`, `mysticrift_pillagers_towers_aris:oak_wood_pillager_tower`, `blocky_siege:pillager_ship`, `mysticrift_pillagers_towers_aris:end_pillager_tower` (in the End)
 @pass no spawner block in any; a `[spawner-filter] ... removed` line per template, the End tower's with `plus 2 with no mob` (ST-320)
 @fails spawner left: its NBT shape (not `SpawnData.entity.id`), `TemplateSpawnerFilter.entities`
 @from batches/r1031/w2_metas_spawns.qb
-> execute positioned 3000 100 3000 run ceplace structures illager_siege_weapons:catapult mysticrift_pillagers_towers_aris:oak_wood_pillager_tower blocky_siege:pillager_ship
-> execute in minecraft:the_end run ceplace structures mysticrift_pillagers_towers_aris:end_pillager_tower
-waitlog \[ceplace\] done 600
-reject \[ceplace\] done.* [1-9]\d* failed
+> execute positioned 3000 100 3000 run cdevplace structures illager_siege_weapons:catapult mysticrift_pillagers_towers_aris:oak_wood_pillager_tower blocky_siege:pillager_ship
+waitlog \[cdevplace\] done: \d+ of \d+ placed 600
+> execute in minecraft:the_end run cdevplace structures mysticrift_pillagers_towers_aris:end_pillager_tower
+waitlog \[cdevplace\] done: \d+ of \d+ placed 600
+reject \[cdevplace\] done: .*, [1-9]\d* failed
 expect \[spawner-filter\].*removed
 expect \[spawner-filter\].*plus 2 with no mob
-look no spawner block in any (cdevtest count around the logged placements for minecraft:spawner: n=0); /ceplace syntax per memory worldgen-config-ceplace if the command is rejected
+look no spawner block in any (cdevtest count around the logged placements for minecraft:spawner: n=0); the command was /ceplace until 2026-11-18 (renamed /cdevplace, `[cdevplace] done: N of M placed` line)
 
 ## SQ-SB-03 | lone large pillager tower: illager mix at night, pillagers only by day
 @group B

@@ -44,7 +44,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass `creativedelight:fdcooking/{ancient_fruit,banana,mulberry,strawberry}_jam_jar`; no `upgrade_aquatic:mulberry_jam_*` or Central Kitchen bottle / mixing ids; given items become `vintagedelight:mulberry_jam_jar` / `mulberry_jam_block`
 @fails CD `vintagedelight/jams.js` "Pack jam line"; swaps `merges_upgrade_aquatic_jams.json`
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-21
+@reviewed 2026-11-26
 @absent upgrade_aquatic:mulberry_jam (recipe id text searched for n=0 on purpose)
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
 > forceload add 296 290 360 380
@@ -143,7 +143,7 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass `fdcooking/nut_milk_jar`, `nut_milk_jar_from_bottle`, `nut_milk_bottle_from_jar`; nut milk jar in `#forge:milk`; new jars in `#forge:jams`, new jellos in `#fruitsdelight:jello`; every soft fluid container `capacity` 1
 @fails `jams.js`, `port_resources.py` `convert_soft_fluid`
 @from batches/r1113/c2_a1.qb
-@reviewed 2026-11-21
+@reviewed 2026-11-26
 > cdevtest recipes nut_milk
 > cdevtest tagsof vintagedelight:nut_milk_jar
 > cdevtest tag item forge:jams

@@ -523,12 +523,19 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @@text CQ-RPI-53 supersedes CQ-RPI-46 (slot rungs no longer show the chosen effect).
 @@text
 @@table
-## SQ-RPI-09 | 30-meal window and respec 5 in a fresh world, Carrot mixins applied
+## SQ-RPI-09 | 32-meal window and respec 5 in a fresh world, Carrot mixins applied
 @group A
-@commands Fresh world: `grep -n "endDecay\|respecFoods" world/serverconfig/solapplepie-server.toml world/serverconfig/solraspberrypie-server.toml`; `grep -nE "solraspberrypie|Mixin.*(Carrot|FoodList)" logs/latest.log | grep -iE "error|skip|fail"`
-@pass `endDecay = 30`, `respecFoods = 5`; no mixin errors and no "skipped" line for CarrotFoodListMixin, CarrotFoodDataMixin, CarrotBookScreenMixin
+@commands Fresh world: the world's `serverconfig/solapplepie-server.toml` and `solraspberrypie-server.toml` read by shell; `grep` the boot log for mixin errors or skipped Carrot mixins
+@pass `endDecay = 32` and `respecFoods = 5` in the world copies; no mixin error and no skipped line for CarrotFoodListMixin, CarrotFoodDataMixin, CarrotBookScreenMixin
 @fails defaultconfigs/solapplepie-server.toml; RpConfig respecFoods default; RpMixinPlugin solcarrot range `[1.19.2-1.14.0]`
-@draft written before the look-check (plan_diet_books.md 3); refresh after it
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): the window is 32 meals again (food-tuning #20, raspberry_pie.md: endDecay 30 -> 32), so the row reads `endDecay = 32`; the title said 30. The Carrot mixin names are the ones Raspberry Pie's mixin plugin applies
+bootexpect Done \(
+shell L=$(sed -n "s/^level-name=//p" server.properties); F="$L/serverconfig/solraspberrypie/ladder.json"; for k in "$L/serverconfig/solapplepie-server.toml:endDecay *= *32" "$L/serverconfig/solraspberrypie-server.toml:respecFoods *= *5"; do f="${k%%:*}"; p="${k#*:}"; grep -nE "^\s*$p" "$f" || { echo "MISSING $p in $f"; exit 1; }; done
+bootreject (?i)(Mixin apply failed|InvalidInjectionException).*(solraspberrypie|solcarrot|solapplepie)
+bootreject (?i)solraspberrypie.*(skipped|skipping).*(CarrotFoodListMixin|CarrotFoodDataMixin|CarrotBookScreenMixin)
+bootreject (?i)(CarrotFoodListMixin|CarrotFoodDataMixin|CarrotBookScreenMixin).*(error|skip|fail)
+bootexpect Diet ladder: [0-9]+ rungs, 5 slots
 
 ## CQ-RPI-47
 @group client
@@ -662,31 +669,168 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 
 ## SQ-RPI-10 | diversity table loads; tier values (plan_food_diversity_1121.md, food-tuning #32 #33)
 @group A
-@commands Boot; `grep -n "Diversity table" logs/latest.log`; eat an enchanted golden apple, a cooked beef and a cake slice, reading the diversity after each (`/solrp` status or the Diet Log)
-@pass log line "Diversity table: 1658 values, ... family members" (no "No /solraspberrypie/diversity.json"); each food adds its diversity.json value (enchanted golden apple 5.67, cooked beef 2.20, cake slice 0.66, shown rounded down), not Apple Pie's config values (10, 2, 4)
-@fails `Diversity.load` (path, JSON), `FoodListMixin.solrp$tableValue` (static inject on getComplexity), defaultconfigs complexityUnparsed not cleared
-@draft written with the build 2026-11-21
+@commands Boot; `grep -n "Diversity table" logs/latest.log`; a bot eats an enchanted golden apple, a cooked beef and a cake slice, `/solrp diversity get <bot>` after each
+@pass log line `Diversity table: N values, M family members from K file(s)` (no "No usable diversity table"); the first food gives its table value (enchanted golden apple 4.57, not Apple Pie's 10); each later food adds its table value (cooked beef 2.20, cake slice 0.67) less the decay of the older entries (at most 0.35 here), never Apple Pie's config values (2, 4)
+@fails `Diversity.load` (path `solraspberrypie/diversity/*.json` in a mod jar, JSON shape), `FoodListMixin.solrp$tableValue` (static inject on getComplexity), defaultconfigs complexityUnparsed not cleared
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): values come from the table file Creative Delight ships (the old 5.67 and 0.66 were the 2026-11-21 table; the 2026-11-26 file holds 4.5724, 2.2049, 0.6667); the check reads the file, so a retuned table keeps the row valid; the decay allowance is the 32-meal window's first step
+bootexpect Diversity table: [0-9]+ values, [0-9]+ family members from [0-9]+ file
+bootreject No usable diversity table|Could not list the diversity tables|Diversity table .* is unreadable|Diversity table .* wrong shape
+> forceload add 0 990 40 1010
+> pbot spawn rp10 10 -60 1000 minecraft:overworld survival
+sleep 3
+> pbot hunger rp10 2
+> pbot inv rp10 set 0 minecraft:enchanted_golden_apple 1
+> pbot inv rp10 select 0
+> pbot eat rp10
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp10 end=finish item=minecraft:enchanted_golden_apple 30
+> solrp diversity get rp10
+waitlog rp10: food diversity [0-9.]+, highest 20
+capture D1 rp10: food diversity ([0-9.]+), highest
+> pbot hunger rp10 2
+> pbot inv rp10 set 0 minecraft:cooked_beef 1
+> pbot inv rp10 select 0
+> pbot eat rp10
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp10 end=finish item=minecraft:cooked_beef 30
+> solrp diversity get rp10
+waitlog rp10: food diversity [0-9.]+, highest 20
+capture D2 rp10: food diversity ([0-9.]+), highest
+> pbot hunger rp10 2
+> pbot inv rp10 set 0 farmersdelight:cake_slice 1
+> pbot inv rp10 select 0
+> pbot eat rp10
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp10 end=finish item=farmersdelight:cake_slice 30
+> solrp diversity get rp10
+waitlog rp10: food diversity [0-9.]+, highest 20
+capture D3 rp10: food diversity ([0-9.]+), highest
+shell python3 -I -c "import json, sys; v = json.load(open(sys.argv[1]))['values']; a, b, c = v['minecraft:enchanted_golden_apple'], v['minecraft:cooked_beef'], v['farmersdelight:cake_slice']; d1, d2, d3 = {D1}, {D2}, {D3}; print('table', a, b, c, 'read', d1, d2, d3); ok = abs(d1 - a) < 0.02 and b - 0.35 < d2 - d1 < b + 0.02 and c - 0.35 < d3 - d2 < c + 0.02 and d1 < 6; sys.exit(0 if ok else 1)" "$INST/development/creativeDelight/src/main/resources/solraspberrypie/diversity/creativedelight.json"
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove rp10
 
 ## SQ-RPI-11 | families share one diet entry (food-tuning #34)
 @group A
-@commands Eat a red stuffed bell pepper, then a green one, then a white one; eat a chocolate apple then a ruby chocolate apple, then a caramel apple
-@pass green after red counts as a repeat (diversity unchanged, the family entry renewed); white counts as a new food; ruby after chocolate is a repeat; caramel is new
+@commands Bot eats `rusticdelight:stuffed_bell_pepper_red`, `_green`, `_white`, then `create_factory:chocolate_apple`, `ruby_chocolate_apple`, `caramel_apple`; `/solrp diversity get <bot>` after each
+@pass green after red counts as a repeat (diversity unchanged within 0.02, the family entry renewed); white (another family) counts as new (adds about its table value, 3.18); ruby after chocolate is a repeat; caramel is new
 @fails `Diversity.head` (families in diversity.json), `FoodListMixin.solrp$familyAdd` ModifyVariable on addFood(Item)
-@draft written with the build 2026-11-21
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): table families (`stuffed_bell_pepper_red_yellow_green`, `chocolate_apple` with chocolate, dark, ruby, white; caramel is its own entry) from the Creative Delight diversity file
+> forceload add 0 990 40 1010
+> pbot spawn rp11 10 -60 1000 minecraft:overworld survival
+sleep 3
+> pbot hunger rp11 2
+> pbot inv rp11 set 0 rusticdelight:stuffed_bell_pepper_red 1
+> pbot inv rp11 select 0
+> pbot eat rp11
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp11 end=finish item=rusticdelight:stuffed_bell_pepper_red 30
+> solrp diversity get rp11
+waitlog rp11: food diversity [0-9.]+, highest 20
+capture E1 rp11: food diversity ([0-9.]+), highest
+> pbot hunger rp11 2
+> pbot inv rp11 set 0 rusticdelight:stuffed_bell_pepper_green 1
+> pbot inv rp11 select 0
+> pbot eat rp11
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp11 end=finish item=rusticdelight:stuffed_bell_pepper_green 30
+> solrp diversity get rp11
+waitlog rp11: food diversity [0-9.]+, highest 20
+capture E2 rp11: food diversity ([0-9.]+), highest
+> pbot hunger rp11 2
+> pbot inv rp11 set 0 rusticdelight:stuffed_bell_pepper_white 1
+> pbot inv rp11 select 0
+> pbot eat rp11
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp11 end=finish item=rusticdelight:stuffed_bell_pepper_white 30
+> solrp diversity get rp11
+waitlog rp11: food diversity [0-9.]+, highest 20
+capture E3 rp11: food diversity ([0-9.]+), highest
+> pbot hunger rp11 2
+> pbot inv rp11 set 0 create_factory:chocolate_apple 1
+> pbot inv rp11 select 0
+> pbot eat rp11
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp11 end=finish item=create_factory:chocolate_apple 30
+> solrp diversity get rp11
+waitlog rp11: food diversity [0-9.]+, highest 20
+capture F1 rp11: food diversity ([0-9.]+), highest
+> pbot hunger rp11 2
+> pbot inv rp11 set 0 create_factory:ruby_chocolate_apple 1
+> pbot inv rp11 select 0
+> pbot eat rp11
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp11 end=finish item=create_factory:ruby_chocolate_apple 30
+> solrp diversity get rp11
+waitlog rp11: food diversity [0-9.]+, highest 20
+capture F2 rp11: food diversity ([0-9.]+), highest
+> pbot hunger rp11 2
+> pbot inv rp11 set 0 create_factory:caramel_apple 1
+> pbot inv rp11 select 0
+> pbot eat rp11
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp11 end=finish item=create_factory:caramel_apple 30
+> solrp diversity get rp11
+waitlog rp11: food diversity [0-9.]+, highest 20
+capture F3 rp11: food diversity ([0-9.]+), highest
+shell python3 -I -c "import json, sys; v = json.load(open(sys.argv[1]))['values']; e1, e2, e3, f1, f2, f3 = {E1}, {E2}, {E3}, {F1}, {F2}, {F3}; w = v['rusticdelight:stuffed_bell_pepper_white']; c = v['create_factory:caramel_apple']; print('peppers', e1, e2, e3, 'apples', f1, f2, f3); ok = abs(e2 - e1) < 0.02 and e3 - e2 > w - 0.4 and abs(f2 - f1) < 0.02 and f3 - f2 > c - 0.4; sys.exit(0 if ok else 1)" "$INST/development/creativeDelight/src/main/resources/solraspberrypie/diversity/creativedelight.json"
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+> pbot remove rp11
 
 ## SQ-RPI-12 | chocolate coins out of the diet; hot cocoa and coffee are drinks (food-tuning #35)
 @group A
-@commands `/give @s lightmanscurrency:coin_chocolate_gold`, eat it; drink hot cocoa and Farmer's Respite coffee; `/kubejs reload server_scripts` not needed (tags load at boot)
-@pass the coin changes nothing in the Diet Log (no meal, diversity and counter unchanged) and is not in the Liquid Diet Log; hot cocoa and coffee land in the Liquid Diet Log, not the Diet Log
+@commands `/cdevtest tag item solraspberrypie:no_diet` and `...:drinks`; a bot eats an apple, a Lightman's chocolate coin and drinks hot cocoa, `/solrp diversity get <bot>` after each; `/data get entity <bot> ForgeCaps`
+@pass the coin is in `#solraspberrypie:no_diet` and changes nothing (diversity unchanged); hot cocoa and Farmer's Respite coffee are in `#solraspberrypie:drinks`, hot cocoa leaves the diversity unchanged and lands in the Liquid Diet Log, not the Diet Log
 @fails `#solraspberrypie:no_diet` (kubejs solapplepie/no_diet.js), `Drinks.isOutOfDiet`, food_types drink list (hot_cocoa, strong_hot_cocoa, farmersrespite_coffee)
-@draft written with the build 2026-11-21
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): the coffee is checked through the tag only (one drink eaten live, the hot cocoa)
+> cdevtest tag item solraspberrypie:no_diet
+> cdevtest tag item solraspberrypie:drinks
+expect verb=tag kind=item tag=solraspberrypie:no_diet n=[1-9]\d* ids=\S*lightmanscurrency:coin_chocolate_gold\b
+expect verb=tag kind=item tag=solraspberrypie:drinks n=[1-9]\d* ids=\S*farmersdelight:hot_cocoa\b
+expect verb=tag kind=item tag=solraspberrypie:drinks .*ids=\S*farmersrespite:coffee\b
+> forceload add 0 990 40 1010
+> pbot spawn rp12 10 -60 1000 minecraft:overworld survival
+sleep 3
+> pbot hunger rp12 2
+> pbot inv rp12 set 0 minecraft:apple 1
+> pbot inv rp12 select 0
+> pbot eat rp12
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp12 end=finish item=minecraft:apple 30
+> solrp diversity get rp12
+waitlog rp12: food diversity [0-9.]+, highest 20
+capture G1 rp12: food diversity ([0-9.]+), highest
+> pbot hunger rp12 2
+> pbot inv rp12 set 0 lightmanscurrency:coin_chocolate_gold 1
+> pbot inv rp12 select 0
+> pbot eat rp12
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp12 end=finish item=lightmanscurrency:coin_chocolate_gold 30
+> solrp diversity get rp12
+waitlog rp12: food diversity [0-9.]+, highest 20
+capture G2 rp12: food diversity ([0-9.]+), highest
+> pbot hunger rp12 2
+> pbot inv rp12 set 0 farmersdelight:hot_cocoa 1
+> pbot inv rp12 select 0
+> pbot eat rp12
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp12 end=finish item=farmersdelight:hot_cocoa 30
+> solrp diversity get rp12
+waitlog rp12: food diversity [0-9.]+, highest 20
+capture G3 rp12: food diversity ([0-9.]+), highest
+shell python3 -I -c "import sys; g1, g2, g3 = {G1}, {G2}, {G3}; print('diversity', g1, g2, g3); sys.exit(0 if g1 > 0 and abs(g2 - g1) < 0.005 and abs(g3 - g1) < 0.005 else 1)"
+> data get entity rp12 ForgeCaps
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+look the ForgeCaps text: the Liquid Diet Log (`drinks`) holds the hot cocoa and not the coin; the Diet Log holds the apple only
+> pbot remove rp12
 
 ## SQ-RPI-13 | Cooking Pot coating recipes (food-tuning #36)
 @group A
-@commands `grep -c "farmersdelightcooking/pot_mirror" ` on a `/kubejs export` or check JEI on the client: Cooking Pot recipes for chocolate apple, caramel waffle, honey roll, chocolate_candy_1, glazed porkchop; cook 2 apples + 3 chocolate bars
-@pass 2 apples + 3 bars of chocolate make 2 chocolate apples; 44 pot_mirror recipes with Create Factory, Create Confectionery and Buzzier Bees loaded; no "Error occurred while handling event" for create/filling_pot_mirrors.js
+@commands `/cdevtest recipes pot_mirror`; `/cdevtest rdetail creativedelight:farmersdelightcooking/pot_mirror/chocolate_apple` and the glazed porkchop; `grep` the KubeJS log for filling_pot_mirrors errors
+@pass about 44 to 46 `pot_mirror` recipes with Create Factory, Create Confectionery and Buzzier Bees loaded (44 counted 2026-11-21: skipped when an item is absent); the chocolate apple recipe makes 2 chocolate apples from 2 apples and 3 bars; no error for create/filling_pot_mirrors.js
 @fails `create/filling_pot_mirrors.js` rows, `NCH.fdCooking` (Item.of count)
-@draft written with the build 2026-11-21
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): recipe reads; ids are `pot_mirror/<result name>` (`kubejs/data/creativedelight/kubejs/create/filling_pot_mirrors.js`); the live pot craft stays an owner look
+> cdevtest recipes pot_mirror max=100
+> cdevtest rdetail creativedelight:farmersdelightcooking/pot_mirror/chocolate_apple
+waitlog verb=recipes text=pot_mirror n=[0-9]+ 30
+expect verb=recipes text=pot_mirror n=(4[0-9]|5[0-9])\b
+expect verb=rdetail id=creativedelight:farmersdelightcooking/pot_mirror/chocolate_apple serializer=farmersdelight:cooking result=create_factory:chocolate_apple\*2 ingredients=\S*minecraft:apple\S*
+expect verb=rdetail id=creativedelight:farmersdelightcooking/pot_mirror/glazed_porkchop .*result=\S*glazed_porkchop\*2
+kjsreject (?i)filling_pot_mirrors.*error
+bootreject Error occurred while handling event.*filling_pot_mirrors
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+look the chocolate apple pot recipe takes 2 apples and 3 chocolate bars (the part lines of rdetail); the live pot run is an owner check
 
 ## CQ-RPI-64 | tooltips and books show the table's diversity
 @group client
@@ -914,11 +1058,30 @@ look shell output: `non-whole []`; `has` lists 18, 19, 26, 27, 49, 50 (the forme
 @draft written with the build 2026-11-23
 
 ## SQ-RPI-92 | Ladder auto-update of unedited world copies (raspberry-pie-publish #11)
-@group server
+@group A
 @commands Start a world (seeds `ladder.json` and `ladder.json.seeded`); stop; change `defaultconfigs/solraspberrypie/ladder.json` (one threshold); start again; then hand-edit the world copy, change the default once more, start again
 @pass second start: log "Updated <world>/serverconfig/solraspberrypie/ladder.json from defaultconfigs/... (the copy was unedited; old copy saved as ladder.json.<date>.bak)" and the world copy equals the new default; third start: one warning "... was edited or predates edit tracking; kept", the edited copy is unchanged; no log line holds an absolute path or a player name
 @fails `LadderLoader.load` hash check, PR-RP-22 log lines
-@draft written with the build 2026-11-23
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): the scratch server's defaultconfigs is a copy (scratch_server.sh), so the default edits never touch the instance; the 'one threshold' edit is a change of the file's `_comment` (any content change moves the SHA-1 the loader compares); the hand edit is one appended space (still valid JSON)
+bootexpect Seeded .*ladder\.json from .*defaultconfigs
+shell L=$(sed -n "s/^level-name=//p" server.properties); W="$L/serverconfig/solraspberrypie"; D=defaultconfigs/solraspberrypie/ladder.json; test -f "$W/ladder.json" && test -f "$W/ladder.json.seeded" && diff -q "$W/ladder.json" "$D" && echo SEEDED
+edit python3 -c 'import json, sys; p = sys.argv[1]; d = json.load(open(p)); d["_comment"] = d.get("_comment", "") + sys.argv[2]; json.dump(d, open(p, "w"), indent=1)' defaultconfigs/solraspberrypie/ladder.json " [RPI92 default A]"
+restart
+bootexpect Updated .*ladder\.json from .*\(the copy was unedited; old copy saved as .*\.bak\)
+bootreject Could not seed or update
+bootreject Updated .*(/home/|/Users/|[A-Za-z]:\\)
+shell L=$(sed -n "s/^level-name=//p" server.properties); W="$L/serverconfig/solraspberrypie"; D=defaultconfigs/solraspberrypie/ladder.json; diff -q "$W/ladder.json" "$D" && ls "$W" | grep -E "ladder\.json\..*\.bak" && echo UPDATED
+shell L=$(sed -n "s/^level-name=//p" server.properties); W="$L/serverconfig/solraspberrypie"; D=defaultconfigs/solraspberrypie/ladder.json; sha1sum "$W/ladder.json" | cut -d" " -f1 > ../rpi92_before.txt; cat ../rpi92_before.txt
+edit L=$(sed -n "s/^level-name=//p" server.properties); W="$L/serverconfig/solraspberrypie"; D=defaultconfigs/solraspberrypie/ladder.json; python3 -c 'import sys; p = sys.argv[1]; open(p, "a").write(" ")' "$W/ladder.json"
+edit python3 -c 'import json, sys; p = sys.argv[1]; d = json.load(open(p)); d["_comment"] = d.get("_comment", "") + sys.argv[2]; json.dump(d, open(p, "w"), indent=1)' defaultconfigs/solraspberrypie/ladder.json " [RPI92 default B]"
+restart
+bootexpect differs from .*and was edited or predates edit tracking; kept
+bootreject Updated .*ladder\.json from
+bootreject Could not seed or update
+shell L=$(sed -n "s/^level-name=//p" server.properties); W="$L/serverconfig/solraspberrypie"; D=defaultconfigs/solraspberrypie/ladder.json; test "$(sha1sum "$W/ladder.json" | cut -d" " -f1)" != "$(sha1sum "$D" | cut -d" " -f1)" && test "$(grep -c 'RPI92 default B' "$W/ladder.json")" = 0 && echo EDITED-KEPT
+bootexpect Diet ladder: [0-9]+ rungs, 5 slots
+look the Updated line, then the one "was edited or predates edit tracking; kept" warning; no line names a player
 
 ## CQ-RPI-93 | Fleet-Footed holds Feather Feet (food-tuning #65)
 @group client

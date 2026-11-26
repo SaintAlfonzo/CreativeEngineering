@@ -17,31 +17,110 @@
 @commands Boot a server; read `logs/latest.log`
 @pass One `[farmers-donor] N files from Farmer's Structures 1.0.6 {...}` line; no `Could not translate`; the counts list `blocks mapped minecraft:pink_petals`, no `blocks to air` for a block you expect to exist (rope fence, gleaming salad, hanging canvas sign, basket)
 @fails Depends on: donor jar
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+bootexpect \[farmers-donor\] [0-9]+ files from Farmer's Structures 1\.0\.6
+bootreject Could not translate
+bootexpect blocks mapped minecraft:pink_petals=[0-9]+
+bootreject blocks to air \S*(rope_fence|gleaming|hanging_canvas|basket)
+shell grep -hE "\[farmers-donor\]" logs/latest.log | cut -c1-300 | head -3
 ## SQ-FSD-03
 @group B
 @commands `/place structure farmers_structures:aquacultures_cod` a few times (different spots)
 @pass Pond places; fish are cod in some, with pike and perch in others; no empty pond
 @fails Depends on: Upgrade Aquatic
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+@absent farmers_structures:aquacultures_cod (structures the Farmer's Structures donor pack adds at load, registered after the last /dumpall)
+> forceload add 2000 2000 2320 2060
+sleep 60
+> place structure farmers_structures:aquacultures_cod 2040 70 2030
+waitlog Generated structure "farmers_structures:aquacultures_cod" 90
+> place structure farmers_structures:aquacultures_cod 2160 70 2030
+waitlog Generated structure "farmers_structures:aquacultures_cod" 90
+> place structure farmers_structures:aquacultures_cod 2280 70 2030
+waitlog Generated structure "farmers_structures:aquacultures_cod" 90
+count Generated structure "farmers_structures:aquacultures_cod" == 3
+> cdevtest entities 2040 70 2030 40
+> cdevtest entities 2160 70 2030 40
+> cdevtest entities 2280 70 2030 40
+sleep 3
+reject Failed to place structure
+reject \[cdevtest\] .*done=0
+look the three entities lines: cod in some ponds, pike and perch (Upgrade Aquatic) in others, none empty; no "Empty or non-existent pool" for farmers_structures
 ## SQ-FSD-04
 @group B
 @commands `/place structure` each of `cacaos` (jungle), `fishs_stew`, `ratatouilles`, `squids`, `shepherd_farms`
 @pass All place; chests, item frames and cooking pots hold items; the cacao basement piece attaches; ratatouilles and squids sit below ground; the stew hut fish include salmon and pike / perch
 @fails
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+@absent farmers_structures:cacaos farmers_structures:fishs_stew farmers_structures:ratatouilles farmers_structures:squids farmers_structures:shepherd_farms (structures the Farmer's Structures donor pack adds at load, registered after the last /dumpall)
+> forceload add 2000 2200 2400 2260
+sleep 60
+> place structure farmers_structures:cacaos 2040 70 2230
+waitlog Generated structure "farmers_structures:cacaos" 90
+> cdevtest entities 2040 70 2230 40
+> place structure farmers_structures:fishs_stew 2120 70 2230
+waitlog Generated structure "farmers_structures:fishs_stew" 90
+> cdevtest entities 2120 70 2230 40
+> place structure farmers_structures:ratatouilles 2200 70 2230
+waitlog Generated structure "farmers_structures:ratatouilles" 90
+> cdevtest entities 2200 70 2230 40
+> place structure farmers_structures:squids 2280 70 2230
+waitlog Generated structure "farmers_structures:squids" 90
+> cdevtest entities 2280 70 2230 40
+> place structure farmers_structures:shepherd_farms 2360 70 2230
+waitlog Generated structure "farmers_structures:shepherd_farms" 90
+> cdevtest entities 2360 70 2230 40
+sleep 3
+reject Failed to place structure
+reject Empty or non-existent pool.*farmers_structures
+reject \[cdevtest\] .*done=0
+look all five placed; chests, item frames and cooking pots hold items (/data get block on a chest of each); the cacao basement piece attaches; ratatouilles and squids sit below ground; the stew hut fish include salmon and pike / perch
 ## SQ-FSD-05
 @group B
 @commands `/place structure farmers_structures:cooks` 10 times
 @pass More varied houses than before; rope fences and gates present; azalea flower piles where pink petals were; Vinery cherry leaves; no air holes in walls
 @fails
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+@absent farmers_structures:cooks (structures the Farmer's Structures donor pack adds at load, registered after the last /dumpall)
+> forceload add 2000 2400 2800 2430
+sleep 90
+> place structure farmers_structures:cooks 2040 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2120 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2200 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2280 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2360 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2440 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2520 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2600 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2680 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+> place structure farmers_structures:cooks 2760 70 2415
+waitlog Generated structure "farmers_structures:cooks" 90
+count Generated structure "farmers_structures:cooks" == 10
+reject Failed to place structure
+look 10 cook houses placed, more varied than before: rope fences and gates present, azalea flower piles where pink petals were, Vinery cherry leaves, no air holes in walls (the 4 expansion connectors naming minecraft:cook_*_pool log "Empty or non-existent pool", known upstream gap, TODO largecontent/mod-additions #30)
 ## SQ-FSD-06
 @group B
 @commands `/locate structure farmers_structures:aquacultures_carp`
 @pass Not found (no carp set); `farmers_structures:squids` etc. are locatable in their biomes
 @fails
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+@absent farmers_structures:aquacultures_carp farmers_structures:squids (structures the Farmer's Structures donor pack adds at load, registered after the last /dumpall)
+> locate structure farmers_structures:aquacultures_carp
+waitlog (The nearest farmers_structures:aquacultures_carp|Could not find) 900
+expect Could not find
+reject The nearest farmers_structures:aquacultures_carp
+> locate structure farmers_structures:squids
+waitlog (The nearest farmers_structures:squids|Could not find) 900
+expect The nearest farmers_structures:squids is at
 ## SQ-FSD-07 | structure groups: Farmer's sets in group remote, no carp (queue group B: registry only)
 @group B
 @commands Dump with `/dumpall`; look at `structure_set` for `farmers_structures:*`

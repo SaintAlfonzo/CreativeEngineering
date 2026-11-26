@@ -15,7 +15,8 @@
 @pass mod loads, no parse errors; item named Food Dictionary
 @fails check `defaultconfigs/solcarrot-server.toml` parses (milestones list)
 @from batches/r1113/c4_a.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
+# r1126q writer-5 (2026-11-26): r1123cd's fault was the old `ls mods | grep -i carrot` exiting 1 (the jar is solRaspberryPie-*.jar, nesting Carrot and Apple Pie); the shell step now filters carrot|raspberry and ends in true. The nested Carrot still registers solcarrot:food_book (items_by_mod dump); the 2026-11-26 rename of the display name does not change ids
 bootexpect Done \(
 bootreject (?i)Failed to parse.*solcarrot|solcarrot.*(exception|could not)
 shell grep -nE "solcarrot|Failed to parse" logs/latest.log | cut -c1-250 | head -20; ls mods | grep -iE "carrot|raspberry"; true

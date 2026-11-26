@@ -120,7 +120,7 @@ look shell: none still under creativeengineering; the creativedelight count near
 @commands FULL BUILD. Static part: `tools/scratch_query/batches/r1110/cdns_10_11.qb`. Hand crafting goes with CQ-CDNS-01. Oven baking, seasoning, lunchbox recipes, a KubeJS recipe with `can_serving`, fishing net loot with `biome_tag`, block loot of each moved block, tag-driven recipes (`food_type`, `bakeware`, `cans/servings`); `/kubejs dump_recipes`
 @pass All load and work; no `minecraft:air` input or output in Creative Delight recipes
 @fails A reference left on the old namespace (plan D4)
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 # static part of r1110/cdns_10_11.qb on /cdevtest; hand crafting goes with CQ-CDNS-01
 bootreject (?i)(unknown|invalid) recipe.*creativeengineering:(baking|seasoning|lunchbox_)
 bootreject creativeengineering:(baking|seasoning|lunchbox_\w+|can_serving|biome_tag)
@@ -141,8 +141,8 @@ expect verb=bytype serializer=creativedelight:lunchbox_upgrade n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_skin n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_dye n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_soap n=[1-9]
-# judge-e2 r1123cc (2026-11-23): the seasoning craft is now the flavor serializer (seasonings.md 7, renamed 2026-11-19), a CustomRecipe (result depends on the food in the grid), so its 16 ids list result=empty by design
-reject verb=bytype id=creativedelight:(?!shapeless/(season|flavor)/)\S+ result=(empty|minecraft:air)
+# special recipes whose output is computed list result=empty by design: the 16 flavor crafts (seasonings.md 7, renamed 2026-11-19; the result depends on the food in the grid) and the lunchbox dye and soap crafts (r1123ccr second fault)
+reject verb=bytype id=creativedelight:(?!shapeless/(season|flavor)/|lunchbox/lunchbox_(dye|soap)\b)\S+ result=(empty|minecraft:air)
 > forceload add 0 0
 sleep 2
 > setblock 0 150 0 creativedelight:oven

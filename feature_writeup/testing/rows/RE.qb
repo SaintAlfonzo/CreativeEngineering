@@ -77,6 +77,7 @@ look the ingredient lists (16, 32, 10, 11 entries; 6 vibrating outputs); the bas
 @@date 2026-11-21
 @@jars creativecommon creativedelight
 @@sources feature_writeup/recipes_engineering.md development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/farm/bucket kubejs/data/creativedelight/kubejs/creativedelight/recipes.js
+@@prep spawn-animals=true
 @@text
 @@text Targets the Creative Delight jar of 2026-11-21 (`farm/bucket/`: `WoodenCauldronBlock`, `WoodenBucketBehaviors`, goat and nut milk buckets) with the Creative Common jar of the same day (dicts). Group A (superflat), area x 5200 to 5260, z 5200 to 5215, forceloaded by each row. The fake player of `/cdevtest use` holds the `held=` item; the `main=` field is what the hand holds after the click.
 @@text
@@ -279,7 +280,8 @@ reject \[cdevtest\] .*done=0
 @pass goat -> `creativedelight:wooden_goat_milk_bucket`, cow -> `creativedelight:wooden_milk_bucket`; after each drink no Speed effect and the main hand holds `creativedelight:wooden_bucket*1`
 @fails `WoodenBucketMilking` (goat branch, Hearth and Harvest goat milk fluid); the drink use in `WoodenBucketItem` (milk ids R11)
 @absent creativedelight:wooden_goat_milk_bucket creativedelight:wooden_nut_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall)
-@reviewed 2026-11-24
+@reviewed 2026-11-26
+# 2026-11-26 (r1126q writer-5): r1124nw answered "No entity was found" to both interacts: the default scratch server has spawn-animals=false and vanilla discards every Animal (goat, cow) on its first tick (gotchas.md; section 2 now carries `@@prep spawn-animals=true`)
 > forceload add 5248 5200 5263 5215
 > fill 5248 -61 5200 5263 -61 5215 minecraft:stone
 > fill 5248 -60 5200 5263 -56 5215 minecraft:air
@@ -356,8 +358,8 @@ look the emptying recipe's part=fields line shows 250 mB nut milk out of one bot
 @commands `/cdevtest rdetail creativedelight:createmixing/milk_coffee`; `rdetail` the three hot cocoa Kettle ids (`farmersrespitebrewing/hot_cocoa`, `_goat_milk`, `_nut_milk`); `/cdevtest uses creativedelight:wooden_milk_bucket`, the same for the wooden goat milk bucket; `/cdevtest uses minecraft:milk_bucket`; `rdetail hostiledelight:mbutterrecp`
 @pass milk coffee is a heated `create:mixing` taking `#forge:milk`; three `farmersrespite:brewing` hot cocoa recipes; the wooden milk buckets are used by Farmer's Delight cooking recipes, Hostile Delight's magical butter and Canned Powdered Milk; no recipe uses either milk bucket to make a Golden Milk Bucket (the golden and gilded Milk Bucket were removed 2026-11-22, owner; changelog "Removed: Golden and gilded Honey Bottle and Milk Bucket")
 @fails `drinks.js` `milk()` (`R.createFluidTag(f.t_milk, 250)`); `kettle.js` MILKS base list (NCH `frBrewing` base array); `milk.js` `replaceInput` list; the Canned Powdered Milk row in `tools/gen_can_types.py` (rerun the generator); a `golden_milk_bucket` recipe: a leftover of the removed golden milk set (Creative Delight golden member `GoldenItems`, golden.js)
-@reviewed 2026-11-24
 @absent creativedelight:wooden_goat_milk_bucket (registered by the Creative Delight jar of 2026-11-21, after the last /dumpall); hostiledelight:mbutterrecp (a recipe id)
+@reviewed 2026-11-26
 > cdevtest rdetail creativedelight:createmixing/milk_coffee
 expect verb=rdetail id=creativedelight:createmixing/milk_coffee serializer=create:mixing
 > cdevtest rdetail creativedelight:farmersrespitebrewing/hot_cocoa
@@ -365,7 +367,8 @@ expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa serialize
 expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa_goat_milk serializer=farmersrespite:brewing
 expect verb=rdetail id=creativedelight:farmersrespitebrewing/hot_cocoa_nut_milk serializer=farmersrespite:brewing
 > cdevtest uses creativedelight:wooden_milk_bucket
-expect verb=uses id=\S+ serializer=farmersdelight:cooking
+# 2026-11-26 (r1126q writer-5): the uses lines read `id=X alone=false serializer=Y` (r1124nwr: 150 farmersdelight:cooking lines, none matched the old pattern)
+expect verb=uses id=\S+ alone=\S+ serializer=farmersdelight:cooking
 expect verb=uses id=hostiledelight:mbutterrecp\b
 expect verb=uses id=\S*canned_powdered_milk\b
 reject verb=uses id=\S*golden_milk_bucket

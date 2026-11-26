@@ -107,19 +107,37 @@ look 2-4 craters in a sand desert; a sky stone sphere in or by the monument (ST-
 
 ## SQ-META31-07 | witch coven: witch respawns in the hut, not on the wagons
 @group B
-@commands `/locate` `meta/witch_coven`; night, kill the hut's witch, wait
-@pass circle + hut + 1-2 wagons; a witch respawns in the hut, none on the wagons (ST-317)
-@fails no respawn: Creative Common older than 2026-10-30 17:55 (per-part lookup)
+@reviewed 2026-11-26
+@absent eugene:witch_wagon (structure id from spawn_boxes.json witch_huts_full; the structure dumps do not list it)
+@commands `/locate` `meta/witch_coven`; the nearest swamp hut and witch wagon from it; `difficulty normal`, night; kill the witches around it, wait, `/cdevtest entities` at the hut and at the wagon
+@pass circle + hut + 1-2 wagons; a witch respawns in the hut, none at the wagon (ST-317)
+@fails no respawn: Creative Common older than 2026-10-30 17:55 (per-part lookup); a witch at the wagon: `spawn_boxes.json` boxes `eugene:witch_wagon` in `witch_huts_full` and parts in a meta keep their box (structure_tuning.md ST-317 spec conflict)
 @from batches/r1031/w2_metas_spawns.qb
+# r1126q (2026-11-26): r1031 judged the check wrong (the look read every witch's Pos, no bot existed, peaceful servers remove witches); self-contained: own bot, difficulty normal, night, and the hut and wagon found by locate so the two counts are read where the pass names them
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
 > locate structure creativeworldgen:meta/witch_coven
 waitlog nearest creativeworldgen:meta/witch_coven is at|type "?creativeworldgen:meta/witch_coven|creativeworldgen:meta/witch_coven.*timed out 330
 capture WC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WC1-48} {WC3-48} {WC1+48} {WC3+48}
 > tp qa {WC1} 90 {WC3}
-sleep 30
-> execute positioned {WC1} 70 {WC3} run kill @e[type=minecraft:witch,distance=..64]
+> difficulty normal
+> gamerule doDaylightCycle false
+> time set night
+sleep 20
+> execute at qa run locate structure minecraft:swamp_hut
+waitlog nearest minecraft:swamp_hut is at|minecraft:swamp_hut.*timed out 120
+capture HUT minecraft:swamp_hut is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute at qa run locate structure eugene:witch_wagon
+waitlog nearest eugene:witch_wagon is at|eugene:witch_wagon.*timed out 120
+capture WAG eugene:witch_wagon is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute positioned {WC1} 70 {WC3} run kill @e[type=minecraft:witch,distance=..96]
 sleep 240
-> execute positioned {WC1} 70 {WC3} as @e[type=minecraft:witch,distance=..64] run data get entity @s Pos
-look a witch respawned and its Pos is in the hut, none on the wagons (ST-317); no witch = patcherMod older than 2026-10-30 17:55
+> cdevtest entities {HUT1} 70 {HUT3} 20 type=minecraft:witch
+> cdevtest entities {WAG1} 70 {WAG3} 20 type=minecraft:witch
+> forceload remove {WC1-48} {WC3-48} {WC1+48} {WC3+48}
+> gamerule doDaylightCycle true
+look the first entities line (at the hut) lists at least one witch with its pos inside the hut; the second (at the wagon) lists none (ST-317). If the hut and wagon found are not the coven's (a different hut within 20 of the wagon), judge by the distance to the circle
 
 ## SQ-META31-09 | struck monument: guardians in the monument only
 @group B

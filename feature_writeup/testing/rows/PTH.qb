@@ -331,13 +331,14 @@ expect PTH10-centre-intact$
 look arrows stop near 1081.5 -58.x 1001.5 (vel 0) the tick they reach the centre; explosive no blast; P inventory: tipped_arrow Potion slowness; no-pickup arrow stays; after the break the rest fall
 reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
-## SQ-PTH-11 | elevated cube: snowball and pearl break in the middle (bot to the center), splash potion sinks and splashes below, firework holds then explodes, fireball explodes in the center
+## SQ-PTH-11 | elevated cube: snowball and pearl break at the first stalled web, splash potion sinks and splashes below, firework holds then explodes, fireball explodes in the cube
 @group A
 @commands Cube: throw a snowball, an ender pearl (the player is teleported), a splash potion of slowness, fire a firework from a crossbow with a star; separately a fireball (`/summon fireball ... {power:[0d,-0.1d,0d]}`)
-@pass snowball and pearl break in the middle (player ends in the center, hanging); potion sinks down the center line and splashes below the cube; firework holds still and explodes at its flight time; fireball explodes in the center
+@pass snowball and pearl thrown from the front break where they stall in the cube's front web (the stall rule, `breakStallTicks`, plan_passthrough.md: the impact runs where the projectile stopped, z about 1000.7; an ender pearl teleports the player there); potion settles, sinks down the cell and is gone below the cube; firework holds still and explodes at its flight time; fireball explodes in the cube
 @fails `PassProjectiles.breakIn` (`ProjectilePassMixin`), `settle`, `FireworkPassMixin` / `fireworkTail`
 @from batches/r1115/pth_a2.qb
-@reviewed 2026-11-25
+@reviewed 2026-11-26
+# r1126q (2026-11-26): r1125pub judged the old expectations stale (the pass said the middle, the stall rule breaks at the first stalled web z 1000.7), the potion watch ended at y -56.94 before it left the cube, and `watch fb11` ran before the fireball had its tag (n=0): watchnew
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
 > forceload add 992 976 1231 1215
 > execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
@@ -361,20 +362,20 @@ sleep 2
 > zpth player P
 > tp P 1091.5 -57 995.5
 > pbot look P 0 0
-> zpth watchnew minecraft:potion q11 300 2 1091.5 -57 999 8
+> zpth watchnew minecraft:potion q11 400 2 1091.5 -57 999 8
 > item replace entity P weapon.mainhand with minecraft:splash_potion{Potion:"minecraft:slowness"}
 > pbot useitem P main
-sleep 8
+sleep 22
 > zpth watchnew minecraft:firework_rocket f11 200 2 1091.5 -56 999 7
 > item replace entity P weapon.mainhand with minecraft:crossbow{Charged:1b,ChargedProjectiles:[{id:"minecraft:firework_rocket",Count:1b,tag:{Fireworks:{Flight:1b,Explosions:[{Type:0b,Colors:[I;16711680]}]}}}]}
 > pbot useitem P main
 sleep 6
 > tp P 1086.5 -60 990.5
-> summon minecraft:fireball 1091.5 -50 1001.5 {power:[0d,-0.1d,0d],Tags:["fb11"]}
-> zpth watch fb11 200 2
+> zpth watchnew minecraft:fireball fb11 200 2 1091.5 -50 1001.5 7
+> summon minecraft:fireball 1091.5 -50 1001.5 {power:[0d,-0.1d,0d]}
 sleep 6
 > execute if block 1091 -56 1001 minecraft:cobweb run say PTH11-centre-still-web
-look s11 gone near z 1001.5; P after the pearl inside the cube (about 1091.5 -56 1001.5) and hanging; q11 stops in the cube, sinks to y < -57 and is gone below; f11 holds still in the cube then gone at its flight time; fb11 gone at y about -56 (explosion)
+look s11 and p11 gone near z 1000.7 (the front web, stall break); P after the pearl at about z 1000.7; q11 stops in the cube, sinks to y < -57 within 400 ticks and is gone below; f11 holds still in the cube then gone at its flight time; fb11 gone in the cube (explosion)
 reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
 ## SQ-PTH-12 | lone webs: fishing bobber stops and reels in; pickarang held past its timeout, picked up whole; broken web drops it; thorn chakram the same

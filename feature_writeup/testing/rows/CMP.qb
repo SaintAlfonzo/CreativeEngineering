@@ -49,7 +49,7 @@ look Compat file rainOutTicks = 200; CE file lost the six sections (restart half
 @pass Pack `creativecompat` loads; no `[creativecompat] global.itemPhysics missing` error; item physics rules load (count line as before)
 @fails Startup tree not in the jar, or the ItemPhysic class names in `item_physics.js` wrong
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-25
+@reviewed 2026-11-26
 shell grep -E "startup script packs in order|jar-startup\] creativecompat|item_physics\.js#[0-9]+: \[item_physics\]" logs/kubejs/startup.log | cut -c1-220 | head -12
 kjsreject global\.itemPhysics missing|ItemPhysicSplit not on classpath
 look pack creativecompat loads; [item_physics] summary line as before
@@ -105,8 +105,8 @@ look the blast itself is not visible on a console; the TNT item is consumed and 
 @pass Block and item exist (`creativeengineering:weathered_cardboard_box`); loot table resolves; physics tags present
 @fails Startup `decor_blocks.js` or jar data paths
 @from batches/r1101/cs2_boot2.qb
-@reviewed 2026-11-25
 @absent creativeengineering:weathered_cardboard_box (registered by Engineering since 2026-11-24, after the last /dumpall)
+@reviewed 2026-11-26
 # self-contained since r1118 (judge-5, 2026-11-18; ids creativecompat: since the 2026-11-09 move): the {H} home marker came from a lost setup row; fixed superflat spot
 > forceload add 200 200 232 232
 > execute unless entity @e[type=minecraft:marker,tag=cmphome] run summon minecraft:marker 200 -60 200 {Tags:["cmphome"]}
@@ -121,18 +121,21 @@ sleep 3
 > loot give qa loot creativecompat:misc/monster_box_reward
 expect CMP box placed
 reject Unknown (block|item)|Unknown loot table
-> dumptags
-waitlog (dumptags|tags).*(done|written|wrote) 300
-shell python3 -c "import json;d=json.load(open('kubejs/exported/tags/block_tags_by_block.json'));print({k:v for k,v in d.items() if 'weathered_cardboard' in k})" 2>&1 | cut -c1-300; ls kubejs/exported/tags/ | head
-look block, item and loot resolve; physics tags present
+# 2026-11-26 (writer-3, r1125pubr2): the exported-dump read printed {} twice (the server's kubejs/exported has no tag dumps); the tags are read live
+> cdevtest tagsof creativeengineering:weathered_cardboard_box
+sleep 3
+expect verb=tagsof id=creativeengineering:weathered_cardboard_box block_tags=\S*blockrunner:surface/soft
+expect verb=tagsof id=creativeengineering:weathered_cardboard_box block_tags=\S*minecraft:mineable/axe
+reject \[cdevtest\] .*done=0
+look block, item and loot resolve; the block carries the BlockRunner soft surface tag and mineable/axe (the physics item tags of the box are not asserted: the family file names a creativecompat id that does not exist)
 
 ## SQ-CMP-07 | paintings
 @group A
 @commands Same boot: `grep -ciE "paintings" logs/latest.log`; Immersive Paintings painting list count (445 variants built, immersive_paintings.md)
 @pass 445 of 445 painting variants built (2026-11-23); no painting load error
 @fails Paintings not loaded from a mod jar datapack (move them back to the pack folder)
-@reviewed 2026-11-25
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-26
 shell grep -ciE "paintings" logs/latest.log; grep -E "\[paintings\] [0-9]+ of [0-9]+" logs/latest.log | cut -c1-160; grep -iE "immersive_?paintings" logs/latest.log | grep -iE "error|fail|load" | head -3 | cut -c1-200; ls kubejs/data | head -40 | tr '\n' ' '
 look 445 of 445 painting variants built, no load error
 
@@ -1109,8 +1112,23 @@ look SOLID_VINE_FERTILE_STATE and HOPS_PLACED said; the hops vine line with fert
 @commands Same boot: grep the log for idle random tick rule warnings; place a grown treated-stick tomato and a rope above it with the server running
 @pass no `[perf] idleRandomTickRules: skipped` line for `creativedelight:treated_stick_tomatoes`; the grown vine still climbs a stick placed above it (wake_above) as before
 @fails the rule is missing: `IdleTickRules.addModRule` not called from Creative Delight's constructor, or `IdleRandomTicks` built before it
+@reviewed 2026-11-26
 @boot 1
-@draft the climb check needs the treated-stick block id and its grown state written in; a runner fills them from the CD block list
+# 2026-11-26 (writer-3): the treated stick is placed above a grown FD vine (TomatoClimbTreatedStickMixin / TreatedSticks.tryClimb); the vine
+# climbs on a block tick as in SQ-FCK-21 (30% per try, 12 tries miss about 1 run in 70: a stick still there is a rerun)
+bootreject idleRandomTickRules: skipped.*treated_stick_tomatoes
+> time set noon
+> forceload add 1290 1196 1302 1204
+sleep 3
+> setblock 1294 -61 1200 minecraft:farmland[moisture=7]
+> setblock 1294 -60 1200 farmersdelight:tomatoes[age=3]
+> setblock 1294 -59 1200 creativedelight:treated_stick
+repeat 12
+> cdevtest blocktick 1294 -60 1200
+end
+> cdevtest state 1294 -59 1200
+expect verb=state pos=1294,-59,1200 state="?creativedelight:treated_stick_tomatoes
+reject \[cdevtest\] .*done=0
 
 ## CQ-CMP-30 | JEI grouped pages follow [jei] pagesOff
 @group client

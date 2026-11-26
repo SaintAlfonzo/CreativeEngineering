@@ -12,6 +12,7 @@
 @@text
 @@table
 ## SQ-NSM-01 | seasonings after the move (static half; crafting, overlay, eat bonus and JEI page are client)
+@reviewed 2026-11-26
 @group A (no old save)
 @commands Season a food with each of the 5 seasonings (crafting), hover, eat; JEI Seasoning page (client); the server half reads the seasoning recipes and the seasonable tags
 @pass Tooltip lines, the overlay on the icon, the eat bonus and the JEI page all work; `/data get entity @s SelectedItem` shows `creativedelight:<seasoning>` in `Seasonings`; the server half: seasoning recipes and the pepper, chili and cheese seasonable tags are non-empty. An old seasoned stack losing its lines is an accepted loss (no row)

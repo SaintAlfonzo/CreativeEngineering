@@ -121,7 +121,7 @@ reject verb=\S+ .*done=0
 @pass nest item exists (Incubation Additions content, now CD compartments)
 @fails Member not nested or its mixin config missing in the nested jar
 @from batches/r1101/cs4_boot3.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # 2026-11-20 (r1120fix): the {H} home was never captured and qa never spawned; the squid half duplicated SQ-CDJ4-08b, so this row keeps the nest item only
 # r1124fx judge-2 (2026-11-24): id is creativedelight:emu_nest since the compartments carve (swaps/compartments.json maps the old incubation_additions id)
 > forceload add 0 0 16 16
@@ -129,7 +129,7 @@ reject verb=\S+ .*done=0
 sleep 3
 > give qa creativedelight:emu_nest
 reject Unknown item|No player was found
-expect Gave 1 \[.*\] to qa
+expect Gave 1\s+\[.*\] to qa
 > clear qa creativedelight:emu_nest
 
 ## SQ-CDJ4-08b | baby squid keeps its age (spawn-animals=true; water at 130)

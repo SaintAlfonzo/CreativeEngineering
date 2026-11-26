@@ -17,17 +17,19 @@
 ## SQ-FFB-02 | sponge cake: one baking recipe, nothing else makes it, no can takes it
 @group A
 @commands recipe probe (RecipeManager dump or `/zq`) for every recipe with output `oceanic_delight:sponge_cake`
-@pass exactly one: a `creativeengineering:baking` recipe (`creativedelight:baking/sponge_cake`) with pie crust, `minecraft:sponge`, `minecraft:prismarine_shard`, 2 sweeteners, pie tin as tool; no crafting, Cooking Pot or can recipe outputs it; no can takes it
+@pass two makers, no more: the `creativedelight:baking` recipe (`creativedelight:baking/sponge_cake`) with pie crust, `minecraft:sponge`, `minecraft:prismarine_shard`, 2 sweeteners, pie tin as tool, and Oceanic Delight's shaped `sponge_cake_from_slices` (4 slices back into a cake, kept for sliced cakes, SQ-RCO-02); no Cooking Pot or can recipe outputs it; no can takes it
 @fails `baking.js` lines 152-155 (`F._sweep`, `R.ceBaking`)
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest makes oceanic_delight:sponge_cake
 > cdevtest rdetail sponge_cake
 > cdevtest uses oceanic_delight:sponge_cake
 waitlog verb=uses item=oceanic_delight:sponge_cake alone= 30
-expect verb=makes item=oceanic_delight:sponge_cake n=1$
+expect verb=makes item=oceanic_delight:sponge_cake n=2$
+expect verb=makes id=oceanic_delight:sponge_cake_from_slices result=oceanic_delight:sponge_cake\*1 serializer=minecraft:crafting_shaped
+expect verb=makes id=creativedelight:baking/sponge_cake result=oceanic_delight:sponge_cake\*1 serializer=creativedelight:baking
 expect id=creativedelight:baking/sponge_cake result=oceanic_delight:sponge_cake\*
-expect verb=rdetail id=creativedelight:baking/sponge_cake serializer=creativeengineering:baking
+expect verb=rdetail id=creativedelight:baking/sponge_cake serializer=creativedelight:baking
 reject verb=uses id=\S*canned
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|\[(zsb|zlbs)\] (error|unknown)|verb=\S+ .*done=0)
 look the rdetail line: pie crust, minecraft:sponge, minecraft:prismarine_shard, 2 sweeteners, pie tin (tool)
@@ -192,13 +194,14 @@ reject verb=\S+ .*done=0
 ## SQ-FO-01 | food types line, no food_types warning, no new item_dict Missing for a food key
 @group A
 @commands boot; `grep -nE "\[food types\]" logs/latest.log logs/kubejs/server.log \| head`; `grep -n "\[item_dict\] Missing" logs/kubejs/startup.log \| grep -vE "catfish_slice\|jei_bucket_\|tmted_\|rs_" \| head`
-@pass `[food types] N foods in 32 types, M canned sources` (32 includes `sweet/pancake`) with N about 1484 and M about 324 (r1103); no `[food types]` warning (`no item_dict key`, `is in both`); no new item_dict Missing line for a food key
+@pass `[food types] N foods in 32 types, M canned sources` (32 includes `sweet/pancake`) with N and M near the 2026-11-20 run (1647 foods, 368 canned sources; the counts grow with every food mod); no `[food types]` warning (`no item_dict key`, `is in both`); no new item_dict Missing line for a food key
 @fails `food_types.json` / CD `food_types.js` not regenerated: `python3 tools/food_catalog.py --members`
 @from batches/r1103/sB_2.qb
-bootexpect \[food types\] \d+ foods in 31 types, \d+ canned sources
+@reviewed 2026-11-26
+bootexpect \[food types\] \d+ foods in 32 types, \d+ canned sources
 bootreject \[food types\].*(no item_dict key|is in both)
 shell grep -hoE "\[food types\] [0-9]+ foods in [0-9]+ types, [0-9]+ canned sources" logs/latest.log | head -3; grep -n "\[item_dict\] Missing" logs/kubejs/startup.log | grep -vE "catfish_slice|jei_bucket_|tmted_|rs_" | head; true
-look N about 1016 or more and M about 252 in the [food types] line; any item_dict Missing line printed is not a food key
+look N 1647 or more and M 368 or more in the [food types] line (food.md still says 31 types: stale, 32 with sweet/pancake); any item_dict Missing line printed is not a food key
 
 ## SQ-FO-02 | nested food_type tags, canned_source
 @group A
@@ -280,15 +283,17 @@ look the stack_sizes count is about 1391 (1341 earlier: items were added since)
 @@text Targets `configs_edited/server_config/solapplepie-server.toml` (equal to the instance's `defaultconfigs/`, shipped 1.1.05).
 @@text
 @@table
-## SQ-CF-02 | Spice of Life world config from defaultconfigs: movement speed attribute (A, new level)
+## SQ-CF-02 | Spice of Life world config from defaultconfigs: no benefits, 5 foods to activate, no reset on death (A, new level)
 @group A (new level)
-@commands copy `configs_edited/server_config/solapplepie-server.toml` into `OUT/srv/defaultconfigs/` before the first boot; boot; `grep -oE "generic\.(movement_)?speed,[0-9.]+" OUT/srv/world/serverconfig/solapplepie-server.toml`; `grep -nE "minFoodsToActivate\|resetOnDeath\|queueSize" OUT/srv/world/serverconfig/solapplepie-server.toml`; `grep -niE "solapplepie" logs/latest.log \| grep -iE "warn\|error" \| head`
-@pass world copy has `generic.movement_speed,0.01` and no `generic.speed,2`; 10 / true / 256; no attribute warning (only the 4 known `largemeals` complexity warnings)
+@commands copy `configs_edited/server_config/solapplepie-server.toml` into `OUT/srv/defaultconfigs/` before the first boot; boot; `grep -nE "minFoodsToActivate\|resetOnDeath\|queueSize" OUT/srv/world/serverconfig/solapplepie-server.toml`; `grep -niE "solapplepie" logs/latest.log \| grep -iE "warn\|error" \| head`
+@pass world copy has `benefitsUnparsed = []` and no `generic.*` benefit (plan_diet_books_r2, 2026-11-20); `minFoodsToActivate = 5`, `resetOnDeath = false`, `queueSize = 256`; no attribute warning
 @fails defaultconfigs not copied (scratch setup or `build_deploy.py`); attribute name
 @from batches/r1103/sB_2.qb
+@reviewed 2026-11-26
 bootexpect Done \(
-shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); f="$L/serverconfig/solapplepie-server.toml"; ls -l defaultconfigs/solapplepie-server.toml "$f"; grep -oE "generic\.(movement_)?speed,[0-9.]+" "$f"; grep -nE "minFoodsToActivate|resetOnDeath|queueSize" "$f"; grep -niE "solapplepie" logs/latest.log | grep -iE "warn|error" | head; grep -q "generic.movement_speed,0.01" "$f" && ! grep -q "generic.speed,2" "$f"
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); f="$L/serverconfig/solapplepie-server.toml"; ls -l defaultconfigs/solapplepie-server.toml "$f"; grep -nE "minFoodsToActivate|resetOnDeath|queueSize" "$f"; grep -niE "solapplepie" logs/latest.log | grep -iE "warn|error" | head; grep -qE "^[[:space:]]*benefitsUnparsed = \[\]" "$f" && grep -qE "^[[:space:]]*minFoodsToActivate = 5" "$f" && grep -qE "^[[:space:]]*resetOnDeath = false" "$f" && grep -qE "^[[:space:]]*queueSize = 256" "$f"
 bootreject (?i)solapplepie.*(attribute|unknown).*(warn|error|invalid)
+# r1126q (2026-11-26): the old checks (generic.movement_speed,0.01; 10 / true / 256) are obsolete since plan_diet_books_r2 emptied the benefits; values from configs_edited/server_config/solapplepie-server.toml
 # areas for the whole batch; 30 s before any block tick
 > gamerule doMobSpawning false
 > gamerule doDaylightCycle false
@@ -298,7 +303,7 @@ bootreject (?i)solapplepie.*(attribute|unknown).*(warn|error|invalid)
 > forceload add 296 16 364 40
 > forceload add 96 496 212 512
 sleep 30
-look rows/SQ-CF-02.shell.txt: generic.movement_speed,0.01 and no generic.speed,2; minFoodsToActivate 10, resetOnDeath true, queueSize 256; no attribute warning (the 4 known largemeals complexity warnings are fine)
+look rows/SQ-CF-02.shell.txt: benefitsUnparsed empty, minFoodsToActivate 5, resetOnDeath false, queueSize 256; no attribute warning (complexity warnings for large meals, if any, are fine)
 
 @@text
 @@text ### SQ-CNS Comfort / Nourishment on cans, 2026-11-02 ([comfort_nourishment.md](../comfort_nourishment.md) section 7 CNS-08, TODO `food/types-and-tuning #15`)
@@ -912,17 +917,17 @@ look makes lines: the fried egg and the omelette still have a smoking and a camp
 @@title Fats and oils, 2026-11-19 ([food.md](../food.md) 3.22, TODO `dishes/ingredients #10`, plan_food_batch_1119.md wave D)
 @@date 2026-11-19
 @@jars creativecommon creativedelight
-@@sources feature_writeup/food.md kubejs/data/creativedelight/kubejs/creativedelight/fats.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fats.js kubejs/data/creativecompat/kubejs/other/misc_mods.js
+@@sources feature_writeup/food.md kubejs/data/creativedelight/kubejs/creativedelight/fats.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fats.js kubejs/server_scripts/other/misc_mods.js
 @@text
 @@text Needs the Creative Common and Creative Delight jars of 2026-11-19 (wave D) and a restart; all `[fats]` switches on (default). Group A.
 @@text
 @@table
 ## SQ-FO-08 | blubber: registered, cachalot drop, knife cut, animal fat tag, soap
 @group A
-@reviewed 2026-11-22
+@reviewed 2026-11-26
 @commands `cdevtest reg item creativedelight:blubber`; loot of `alexsmobs:entities/cachalot_whale`; rdetail of the blubber cut and the soap recipes; tag probe `forge:animal_fat`
 @pass the item exists (Delightful's animal fat sprite); a cachalot kill drops 3-6 blubber; knife cut gives 2 `delightful:animal_fat`; `#forge:animal_fat` holds blubber; `supplementaries:soap` and `creativecompat:createmixing/soap_heated_mixing` take blubber and whale oil
-@fails CD startup `creativedelight/fats.js`; data `creativedelight/fats.js` (tag, cut, `global.LOOT.rules`); Compat `other/misc_mods.js` SOAP_FAT
+@fails CD startup `creativedelight/fats.js`; data `creativedelight/fats.js` (tag, cut, `global.LOOT.rules`); pack `kubejs/server_scripts/other/misc_mods.js` SOAP_FAT
 @absent creativedelight:blubber creativedelight:whale_oil (new items, not in the dumps yet)
 > cdevtest reg item creativedelight:blubber
 > cdevtest rdetail animal_fat_from_blubber
@@ -944,7 +949,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-09 | whale oil: mixer, pot, bottle and fluid, lubricant tag
 @group A
-@reviewed 2026-11-24
+@reviewed 2026-11-26
 @commands rdetail of `whale_oil`; fluid tag probe `forge:lubricant`
 @pass heated mixer 1 blubber -> 250 mB `creativedelight:whale_oil`; Cooking Pot 2 blubber + bottle -> 1 Whale Oil (`whale_oil_manual_only`, no Slice & Dice copy); Spout and Item Drain pair at 250 mB; `#forge:lubricant` (fluid) holds whale oil
 @fails data `creativedelight/fats.js` whaleOil block; Common fluid_dict `f.whale_oil`, `f.t_lubricant`
@@ -957,7 +962,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-10 | cooking oil from animal fat, seeds and seed oil; fish oil counts and cooks from raw fish
 @group A
-@reviewed 2026-11-24
+@reviewed 2026-11-26
 @commands rdetail of `cooking_oil_from_animal_fat`, `cooking_oil_from_seed_oil`, `fish_oil_from_raw_fish`; tag probes `rusticdelight:cooking_oil`, `rusticdelight:cooking_oil_ingredients`; recipes probe `delightful:cooking/animal_oil_bottle`
 @pass 2 animal fat + bottle -> 1 Cooking Oil (pot); the animal oil bottle recipe is gone and `delightful:animal_oil_bottle` is merged into Cooking Oil; `cooking_oil_ingredients` holds `#forge:seeds` (wheat seeds match); Spout bottle + 250 mB seed oil -> Cooking Oil; `#rusticdelight:cooking_oil` holds `alexsmobs:fish_oil`; 2 raw fish + bottle -> 1 fish oil (pot); fried eggs, cultured meats, cider donut and hops salad take the oil tag
 @fails data `creativedelight/fats.js`; CD swaps `merges_delightful_oil.json`; the `i.t_cooking_oil` slots in `cultivated_meat.js`, `hearthandharvest/recipes.js`, `rusticdelight/recipes.js`
@@ -976,11 +981,40 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-11 | [fats] switches off: parts drop out
 @group A
-@reviewed 2026-11-20
-@commands `qrun.py toml config/creativedelight-common.toml fats.blubber=false fats.whaleOil=false fats.animalFatOil=false fats.seedOil=false fats.fishOil=false`, `/reload`, the probes of SQ-FO-08 to -10
-@pass none of the new recipes, tag entries or the cachalot drop; the items stay registered
+@reviewed 2026-11-26
+@commands `qrun.py toml config/creativedelight-common.toml fats <key> false` for blubber, whaleOil, animalFatOil, seedOil, fishOil, restart, the probes of SQ-FO-08 to -10 (recipes by id text, tag, cachalot kill); switches back on at the end
+@pass none of the new recipes (`animal_fat_from_blubber`, whale oil, `cooking_oil_from_animal_fat`, `cooking_oil_from_seed_oil`, `fish_oil_from_raw_fish`), no blubber in `#forge:animal_fat`, no blubber from a cachalot kill; the blubber item stays registered
 @fails `CDConfig` [fats] section; `global.CD.fats` in cd_core.js
-@draft needs the toml edit and a /reload inside the row; the first runner writes the steps
+@from batches/r1121b (FO-08 to -10 probes)
+# r1126q (2026-11-26): the switches are read when the server scripts load, so the row writes the toml and restarts (the own config watcher needs a /reload too); restores at the end
+edit F=config/creativedelight-common.toml; for k in blubber whaleOil animalFatOil seedOil fishOil; do python3 "$INST/tools/scratch_query/qrun.py" toml $F fats $k false || exit 1; done
+restart
+bootexpect Done \(
+shell for k in blubber whaleOil animalFatOil seedOil; do grep -qE "^[[:space:]]*$k = false" config/creativedelight-common.toml || { echo "not off: $k"; exit 1; }; done
+> cdevtest reg item creativedelight:blubber
+> cdevtest recipes animal_fat_from_blubber
+> cdevtest recipes whale_oil
+> cdevtest recipes cooking_oil_from_animal_fat
+> cdevtest recipes cooking_oil_from_seed_oil
+> cdevtest recipes fish_oil_from_raw_fish
+> cdevtest tag item forge:animal_fat
+> forceload add 96 96
+> cdevtest kill 104 -60 104 alexsmobs:cachalot_whale n=3
+waitlog verb=kill type=alexsmobs:cachalot_whale 30
+> forceload remove 96 96
+expect verb=reg kind=item regex=creativedelight:blubber n=1
+expect verb=recipes text=animal_fat_from_blubber n=0
+expect verb=recipes text=whale_oil n=0
+expect verb=recipes text=cooking_oil_from_animal_fat n=0
+expect verb=recipes text=cooking_oil_from_seed_oil n=0
+expect verb=recipes text=fish_oil_from_raw_fish n=0
+expect verb=tag kind=item tag=forge:animal_fat n=\d+
+reject verb=tag kind=item tag=forge:animal_fat n=\d+ ids=.*creativedelight:blubber
+expect verb=kill type=alexsmobs:cachalot_whale n=3 killed=3 who=
+reject verb=kill drops=\S*creativedelight:blubber
+reject verb=\S+ .*done=0
+edit F=config/creativedelight-common.toml; for k in blubber whaleOil animalFatOil seedOil fishOil; do python3 "$INST/tools/scratch_query/qrun.py" toml $F fats $k true || exit 1; done
+restart
 
 @@section 4
 @@title Flavor (seasonings renamed), 2026-11-19 ([seasonings.md](../seasonings.md) section 7, TODO `food/seasoning #3`, `#25` to `#28`, plan_food_batch_1119.md wave E)
@@ -1010,12 +1044,51 @@ shell test "$(grep -c "\[flavor\] pair" logs/latest.log)" -ge 3
 shell ! grep -q "\[flavor\] bad definition" logs/latest.log
 reject verb=\S+ .*done=0
 
-## SQ-FO-13 | flavor values: +2 saturation each, pairs +1, Grilled slots
+## SQ-FO-13 | flavor values: +2 saturation each, pairs +1, Speed from garlic
 @group A
-@commands as a bot: craft popcorn + onion + garlic (or give `corn_delight:popcorn{Flavors:["creativedelight:garlic","creativedelight:onion"]}`), set food 10 / saturation 0, eat; then a plain flavored popcorn; give a grilled skewer with Grilled and 4 flavors and check it holds them
-@pass onion + garlic popcorn: saturation rises by popcorn's own + 5 (2 + 2 + 1 pair), Speed 10 s; one flavor: +2; nutrition only the popcorn's; a food with Grilled takes up to 4 flavors (maxFlavors 2 + grilledFlavorSlots 2), without Grilled 2
+@reviewed 2026-11-26
+@commands as a bot: set food 10 / saturation 0 and eat plain popcorn, then popcorn with the garlic flavor, then with garlic and onion (`/item replace` with `Flavors:[...]`, `/pbot eat`), `/cdevtest player` after each
+@pass nutrition (food rise) the same for all three; saturation of the garlic popcorn is the plain value + 2, of the garlic + onion popcorn the plain value + 5 (2 + 2 + 1 pair); Speed (10 s) on both flavored ones, not on the plain one. The Grilled slots (4 flavors on a grilled food) are a crafting limit, not read here
 @fails `Flavors.applyEaten` / `pairSaturation` / `cap`; CDConfig `[food] maxFlavors`, `grilledFlavorSlots`
-@draft needs a bot eat with set food and saturation reads (/pbot eat, data get entity); the first runner writes the steps
+@from batches/r1121b (SQ-RD-22 bot eat)
+# r1126q (2026-11-26): the flavor bonus is absolute saturation points added on eating (Flavors.applyEaten, seasonings.md Values); three eats from the same start, the saturation deltas are read from the player lines
+> execute unless entity @e[type=minecraft:marker,tag=ff13home] run summon minecraft:marker ~ ~ ~ {Tags:["ff13home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=ff13home,limit=1] Pos
+capture F entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {F1} {F3} {F1+15} {F3+15}
+sleep 3
+> pbot spawn sard {F1+4} {F2} {F3+4} minecraft:overworld survival
+sleep 2
+> clear sard
+> effect clear sard
+> pbot hunger sard 10 0
+> item replace entity sard hotbar.0 with corn_delight:popcorn
+> pbot inv sard select 0
+> pbot eat sard
+sleep 3
+> cdevtest player sard
+> effect clear sard
+> pbot hunger sard 10 0
+> item replace entity sard hotbar.0 with corn_delight:popcorn{Flavors:["creativedelight:garlic"]}
+> pbot inv sard select 0
+> pbot eat sard
+sleep 3
+> cdevtest player sard
+> effect clear sard
+> pbot hunger sard 10 0
+> item replace entity sard hotbar.0 with corn_delight:popcorn{Flavors:["creativedelight:garlic","creativedelight:onion"]}
+> pbot inv sard select 0
+> pbot eat sard
+sleep 3
+> cdevtest player sard
+> pbot remove sard
+count verb=pbot.useitem bot=sard end=finish == 3
+shell grep -h "verb=player name=sard " logs/latest.log | tail -3 | sed -E 's/.* food=([0-9.]+) sat=([0-9.]+) .*/\1 \2/'
+shell grep -h "verb=player name=sard " logs/latest.log | tail -3 | sed -E 's/.* food=([0-9.]+) sat=([0-9.]+) .*/\1 \2/' | awk 'NR==1{pf=$1;p=$2} NR==2{gf=$1;g=$2} NR==3{bf=$1;b=$2} END{exit !(NR==3 && pf==gf && pf==bf && g-p>1.95 && g-p<2.05 && b-p>4.95 && b-p<5.05)}'
+shell grep -h "verb=player name=sard " logs/latest.log | tail -3 | awk 'NR==1{if ($0 ~ /minecraft:speed/) bad=1} NR>1{if ($0 !~ /minecraft:speed/) bad=1} END{exit bad}'
+reject verb=\S+ .*done=0
+> forceload remove {F1} {F3} {F1+15} {F3+15}
 
 ## SQ-FO-14 | milled powders
 @group A
@@ -1038,10 +1111,41 @@ reject verb=\S+ .*done=0
 
 ## SQ-FO-15 | old Seasonings NBT is dropped silently
 @group A
-@commands give `corn_delight:popcorn{Seasonings:["creativedelight:garlic"]}`, eat as a bot
-@pass no flavor tooltip line, no Speed, no error in latest.log; the stack is plain popcorn plus an unused tag (R4)
+@reviewed 2026-11-26
+@commands as a bot: set food 10 / saturation 0, eat plain popcorn, then popcorn with the old `Seasonings:["creativedelight:garlic"]` tag; `/cdevtest player` after each
+@pass the old-tag popcorn gives the plain saturation and food, no Speed, no error in latest.log; the stack is plain popcorn plus an unused tag (R4)
 @fails `Flavors.of` reads only the `Flavors` key
-@draft needs a bot eat; the first runner writes the steps
+@from batches/r1121b (SQ-RD-22 bot eat)
+> execute unless entity @e[type=minecraft:marker,tag=ff13home] run summon minecraft:marker ~ ~ ~ {Tags:["ff13home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=ff13home,limit=1] Pos
+capture F entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {F1} {F3} {F1+15} {F3+15}
+sleep 3
+> pbot spawn sard {F1+4} {F2} {F3+4} minecraft:overworld survival
+sleep 2
+> clear sard
+> effect clear sard
+> pbot hunger sard 10 0
+> item replace entity sard hotbar.0 with corn_delight:popcorn
+> pbot inv sard select 0
+> pbot eat sard
+sleep 3
+> cdevtest player sard
+> effect clear sard
+> pbot hunger sard 10 0
+> item replace entity sard hotbar.0 with corn_delight:popcorn{Seasonings:["creativedelight:garlic"]}
+> pbot inv sard select 0
+> pbot eat sard
+sleep 3
+> cdevtest player sard
+> pbot remove sard
+count verb=pbot.useitem bot=sard end=finish == 2
+shell grep -h "verb=player name=sard " logs/latest.log | tail -2 | sed -E 's/.* food=([0-9.]+) sat=([0-9.]+) .*/\1 \2/' | awk 'NR==1{pf=$1;p=$2} NR==2{gf=$1;g=$2} END{exit !(NR==2 && pf==gf && g-p>-0.01 && g-p<0.01)}'
+reject verb=player name=sard .*effects=\S*minecraft:speed
+reject (?i)(error|exception).*(flavor|seasoning)
+reject verb=\S+ .*done=0
+> forceload remove {F1} {F3} {F1+15} {F3+15}
 
 ## CQ-FO-62 | Flavor tooltip, JEI page and powder art
 @group client

@@ -28,24 +28,43 @@ waitlog (nearest minecraft:mushroom_fields|Could not find) 300
 look under 2 s between the biome_overrides.js line and the next KubeJS line; the locate finds a rare biome as before
 ## SQ-BLC-02
 @group A
-@commands Delete `biome_layout_cache.json.gz`, boot; then `/reload`
+@commands Put a cache file with another key in the server copy (a valid gzip of `{"format":1,"key":"stale"}`), restart; then `/reload`
 @pass Boot: the `override` lines (a solve, about 10 s) and the file written again, byte-identical to the instance's copy (`cmp`); `/reload`: `(memory)`
 @fails File not written: look for `could not write` in the messages; differs: the solve is not deterministic
-@reviewed 2026-11-20
-# r1120fix (2026-11-20): it shared SQ-BLC-01's boot (cache in place, so no solve): the row deletes the server copy's
-# cache file and restarts itself
-edit rm -f kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz && test ! -e kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz
+@reviewed 2026-11-26
+# 2026-11-26 (writer-3, r1120nv judge-9): deleting the server copy no longer forces a solve: WorldgenFiles.existing falls back to the
+# creativeworldgen jar's copy of the file ("reusing the last solve (disk)"), and the write is skipped when the text equals the jar's
+# copy. A cache file with another key is read as "other key: solve" (BiomeLayoutTuner.readDiskCache) and is rewritten (its text differs).
+edit mkdir -p kubejs/generation_scripts/worldgen && printf '{"format":1,"key":"stale"}' | gzip -n > kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz && test -s kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz
 restart
 bootexpect \[biome-tuning\] override minecraft:overworld
+bootreject \[biome-tuning\] inputs unchanged, reusing the last solve \(disk\)
+bootreject could not write
 shell test -s kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz && cmp kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz "$INST/kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz" && echo "cache rewritten, identical"
 > reload
 waitlog \[biome-tuning\] inputs unchanged, reusing the last solve \(memory\) 120
-look the in-row restart with srv/kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz deleted: the override lines (a solve, about 10 s) on the boot
+look the solve on the boot took about 10 s (override lines), the rewritten file is byte-identical to the shipped one
+
 ## SQ-BLC-03
 @group A
-@commands Change one biome multiplier in `biome_config.json`, boot
-@pass A solve with the new value and the file rewritten with a new key; restore the value, boot: solve again (the file holds one key), then `(disk)` on the boot after
+@commands Change one biome multiplier in `biome_config.json` (badlands 1 -> 1.5), boot; restore it, boot; boot again
+@pass A solve with the new value and the file rewritten with a new key; restore the value, boot: solve again (the file holds the shipped key again), then `(disk)` on the boot after
 @fails `(disk)` right after the edit: the key misses the config
-@draft three boots with a biome_config.json edit and its restore between them (solve with the new key, solve again after the restore, then disk): a runner loop; per boot bootexpect the solve / (disk) line and a zcat key check of the cache file
+@reviewed 2026-11-26
+# 2026-11-26 (writer-3): three boots in one row; the edits run in OUT/srv while the server is down. The config is copied from the
+# instance first so the edit has a file to change (the pack's kubejs may not be in srv).
+edit mkdir -p kubejs/generation_scripts/worldgen && cp -f "$INST/kubejs/generation_scripts/worldgen/biome_config.json" kubejs/generation_scripts/worldgen/biome_config.json && python3 -c "import json,sys; p='kubejs/generation_scripts/worldgen/biome_config.json'; d=json.load(open(p)); d['dimensions']['minecraft:overworld']['biomes']['minecraft:badlands']['multiplier']=1.5; json.dump(d,open(p,'w'),indent=2)"
+restart
+bootexpect \[biome-tuning\] override minecraft:overworld
+bootreject \[biome-tuning\] inputs unchanged, reusing the last solve \(disk\)
+shell zcat kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz | python3 -c "import json,sys; print(json.load(sys.stdin)['key'])" > .blc3_key1 && test -s .blc3_key1
+edit cp -f "$INST/kubejs/generation_scripts/worldgen/biome_config.json" kubejs/generation_scripts/worldgen/biome_config.json
+restart
+bootexpect \[biome-tuning\] override minecraft:overworld
+bootreject \[biome-tuning\] inputs unchanged, reusing the last solve \(disk\)
+shell zcat kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz | python3 -c "import json,sys; print(json.load(sys.stdin)['key'])" > .blc3_key2 && test -s .blc3_key2 && ! cmp -s .blc3_key1 .blc3_key2 && zcat "$INST/kubejs/generation_scripts/worldgen/biome_layout_cache.json.gz" | python3 -c "import json,sys; print(json.load(sys.stdin)['key'])" | cmp .blc3_key2 - && echo "key changed with the edit, back to the shipped key after the restore"
+restart
+bootexpect \[biome-tuning\] inputs unchanged, reusing the last solve \(disk\)
+bootreject \[biome-tuning\] override minecraft:overworld
 @@text
 @@text Results 2026-10-27 night: SQ-BLC-01 PASS (`(disk)` on every boot with the shipped file, 1.4 s; `/reload` `(memory)`); tuned-biome locate not run. SQ-BLC-02 PASS: file deleted -> solve (14.7 s) and the rewritten file byte-identical to the instance copy. SQ-BLC-03 PASS: badlands multiplier 1 -> 1.5 solved (13.6 s) and rewrote the file; restoring it solved again (combined with -02).

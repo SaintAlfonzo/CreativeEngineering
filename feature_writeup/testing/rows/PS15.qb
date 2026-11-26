@@ -36,9 +36,9 @@
 @fails owner decides: clamp the heap feature to its biome
 @draft whether the spill reads as a natural border is the owner's taste
 @owner true
-## SQ-PS15-01 | salt dust click on ice, packed ice, snow layer (1 and 3): a salt layer on top, target not melted; then the layer melts it
+## SQ-PS15-01 | salt dust click on ice, packed ice, snow layer (1 and 3): the click melts one stage, no salt layer
 @group A
-# BF-FIX judge-3 r1124fx: expectations predate salt.md 208 (owner 2026-11-17: the click melts one stage, no layer on saltable blocks)
+@reviewed 2026-11-26
 @commands Salt dust click on ice, packed ice, snow layer (CD 1.1.0 with Salt -04, Common 1.2.0 of 2026-11-15)
 @pass a click on a saltable block melts it one stage and spends 1 dust, no layer (salt.md 208; a layer only on a non-saltable block)
 @fails route the click through the layer place only
@@ -70,7 +70,8 @@ sleep 1
 count \[cdevtest\] verb=use who=fake hand=main action=block result=(CONSUME|SUCCESS) == 4
 count \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?minecraft:water == 1
 count \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?minecraft:ice\b == 1
-count \[cdevtest\] verb=state pos=(30[03],-60|30[69],-59),300 state=minecraft:air == 4
+# air above the clicked blocks: the state reads of 300,-60 and 303,-60 after the click and again after the random ticks, 306,-59 and 309,-59 after the click
+count \[cdevtest\] verb=state pos=(30[03],-60|30[69],-59),300 state=minecraft:air == 6
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
 look after the click (salt.md 208, owner 2026-11-17): ice -> water, packed ice -> ice, snow 1 and 3 -> air, no layer above any of them, dust 4 -> 3 per click; after the ticks nothing else changes
 
@@ -432,20 +433,21 @@ sleep 1
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
 look zmelt changes in order: layer 2 -> 1 -> air while the lick stays salt:salt_block, then the lick -> lightly_licked; stack: use 1 removes the 1-layer block (state -58 air), use 2 makes -59 layers=7, lick stays salt:salt_block
 
-## SQ-PS15-06 | salt dust onto worn licks (hand, dispenser, layer above), waxed by dispenser, full lick by hand and by dispenser
+## SQ-PS15-06 | worn licks refill with Rock Salt only (hand, dispenser, waxed); salt dust and salt layers do not; a full lick takes nothing
 @group A
-@commands Salt dust onto a worn lick: by hand, by dispenser, as a layer above (`/setblock` a layer of 2 on heavily licked); waxed heavily licked by dispenser; then onto a full lick by hand and by dispenser
-@pass worn: one stage per salt in all three (layer of 2: two stages, layer gone); waxed: waxed well licked; full: a salt layer on top (dispenser: dust -1)
-@fails `SaltLick.refill`, `addLayerOnTop`
+@reviewed 2026-11-26
+@commands Rock Salt (`salt:raw_rock_salt`) onto a heavily licked block by hand and by dispenser, onto a waxed heavily licked block by dispenser; salt dust onto a heavily licked block by hand; a salt layer of 2 above a heavily licked block; Rock Salt onto a full lick (`hearthandharvest:placed_rock_salt_block`) by hand and by dispenser
+@pass salt.md section 8 (2026-11-17, Refill): Rock Salt restores one stage of a worn lick by hand or dispenser, waxed or not (heavily -> well licked, waxed heavily -> waxed well licked, the stack drops 4 -> 3); salt dust does nothing to a worn lick (stays heavily licked, dust 4); a salt layer above a lick does not refill it (the layer of 2 stays, the lick stays heavily licked); a full lick takes nothing by hand or dispenser (Rock Salt stays 4, no layer on top)
+@fails `SaltLick.isSalt` / `refill` still accepting dust or layers, or `SaltEvents` (dispenser on Rock Salt only) putting a layer on a full lick (hearth member)
 @from batches/r1116/ps15_a.qb
-# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+# rewritten 2026-11-26 to salt.md section 8 (Rock Salt refill; section 7 B7 refill by dust and layers is superseded)
 > forceload add 280 280 380 420
 sleep 2
 > setblock 300 -60 360 hearthandharvest:heavily_licked_salt_block
-> cdevtest use 300 -60 360 held=vintagedelight:salt_dust*4 face=up
+> cdevtest use 300 -60 360 held=salt:raw_rock_salt*4 face=up
 > setblock 304 -60 360 hearthandharvest:heavily_licked_salt_block
 > setblock 304 -60 361 minecraft:dispenser[facing=north]
-> data merge block 304 -60 361 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> data merge block 304 -60 361 {Items:[{Slot:0b,id:"salt:raw_rock_salt",Count:4b}]}
 > setblock 304 -59 361 minecraft:redstone_block
 sleep 1
 > cdevtest state 304 -60 360
@@ -457,34 +459,38 @@ sleep 1
 > cdevtest state 308 -59 360
 > setblock 312 -60 360 hearthandharvest:waxed_heavily_licked_salt_block
 > setblock 312 -60 361 minecraft:dispenser[facing=north]
-> data merge block 312 -60 361 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> data merge block 312 -60 361 {Items:[{Slot:0b,id:"salt:raw_rock_salt",Count:4b}]}
 > setblock 312 -59 361 minecraft:redstone_block
 sleep 1
 > cdevtest state 312 -60 360
 > cdevtest inv 312 -60 361
-> setblock 316 -60 360 salt:salt_block
+> setblock 316 -60 360 hearthandharvest:heavily_licked_salt_block
 > cdevtest use 316 -60 360 held=vintagedelight:salt_dust*4 face=up
-> cdevtest state 316 -59 360
-> setblock 320 -60 360 salt:salt_block
-> setblock 320 -60 361 minecraft:dispenser[facing=north]
-> data merge block 320 -60 361 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
-> setblock 320 -59 361 minecraft:redstone_block
-sleep 1
-> cdevtest state 320 -60 360
+> setblock 320 -60 360 hearthandharvest:placed_rock_salt_block
+> cdevtest use 320 -60 360 held=salt:raw_rock_salt*4 face=up
 > cdevtest state 320 -59 360
-> cdevtest inv 320 -60 361
-> cdevtest items 310 -60 360 14
-expect \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?hearthandharvest:well_licked_salt_block
+> setblock 324 -60 360 hearthandharvest:placed_rock_salt_block
+> setblock 324 -60 361 minecraft:dispenser[facing=north]
+> data merge block 324 -60 361 {Items:[{Slot:0b,id:"salt:raw_rock_salt",Count:4b}]}
+> setblock 324 -59 361 minecraft:redstone_block
+sleep 1
+> cdevtest state 324 -60 360
+> cdevtest state 324 -59 360
+> cdevtest inv 324 -60 361
+> cdevtest items 310 -60 360 16
+expect \[cdevtest\] verb=use main=salt:raw_rock_salt\*3 off=empty state="?hearthandharvest:well_licked_salt_block
 expect \[cdevtest\] verb=state pos=304,-60,360 state="?hearthandharvest:well_licked_salt_block
-expect \[cdevtest\] verb=state pos=308,-60,360 state="?hearthandharvest:lightly_licked_salt_block
-expect \[cdevtest\] verb=state pos=308,-59,360 state="?minecraft:air
+expect \[cdevtest\] verb=state pos=308,-60,360 state="?hearthandharvest:heavily_licked_salt_block
+expect \[cdevtest\] verb=state pos=308,-59,360 state="vintagedelight:salt\[layers=2\]"
 expect \[cdevtest\] verb=state pos=312,-60,360 state="?hearthandharvest:waxed_well_licked_salt_block
-expect \[cdevtest\] verb=state pos=316,-59,360 state="vintagedelight:salt\[layers=1\]"
-expect \[cdevtest\] verb=state pos=320,-60,360 state="?salt:salt_block
-expect \[cdevtest\] verb=state pos=320,-59,360 state="vintagedelight:salt\[layers=1\]"
-count \[cdevtest\] verb=inv .*vintagedelight:salt_dust\*3 == 3
+expect \[cdevtest\] verb=use main=vintagedelight:salt_dust\*4 off=empty state="?hearthandharvest:heavily_licked_salt_block
+expect \[cdevtest\] verb=use main=salt:raw_rock_salt\*4 off=empty state="?hearthandharvest:placed_rock_salt_block
+expect \[cdevtest\] verb=state pos=320,-59,360 state="?minecraft:air
+expect \[cdevtest\] verb=state pos=324,-59,360 state="?minecraft:air
+count \[cdevtest\] verb=inv .*salt:raw_rock_salt\*3 == 2
+count \[cdevtest\] verb=inv .*salt:raw_rock_salt\*4 == 1
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
-look all three refills one stage per salt (layer of 2: two stages, layer gone); waxed -> waxed well licked; full lick: layer on top by hand and by dispenser (dust 4 -> 3); no item entities
+look refills are one stage per Rock Salt (heavily -> well licked, waxed stays waxed); dust and a layer of 2 do not refill; the full lick takes no Rock Salt by hand or dispenser and gets no layer on top; no item entities from the full-lick dispenser
 
 ## SQ-PS15-07 | Salt Melt: recipe, melts ice, packed, blue, snow block, powder snow; stone nothing; 64 uses; dispenser on ice and on stone
 @group A
@@ -708,16 +714,21 @@ look pie, apple pie and stick: notInserted=1 and the box empty; cooked beef insi
 
 ## SQ-PS15-14 | SQ-PWG-82 rerun on -19 (D3): the arm takes 1 circuit component per grab; circuit locks, 1/3 -> 3/3, board at the end depot; part depots lose only what went in; stone x64
 @group A
+@reviewed 2026-11-26
 @commands Power Grid arm takes 1 circuit component per grab (D3, `ArmBlockEntityMixin` `getDistributableAmount` cap, jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar`). Rerun SQ-PWG-82 as written (Z 1906; parts x8 in the depots before the circuit arrives); then `zpwg9c show 1146 -60 1908` (the arm) and the two part depots
 @pass the arm's held item is never more than 1 part (`HeldItem` count 1 or empty); the circuit locks, Assembly goes 1/3 to 3/3 and the end depot holds `powergrid:circuit_board x1 Schematic components=3`; part depots lose only what went into the board or onto the belt one at a time (record how many loose single parts rode to the end depot before the circuit arrived: upstream fallback to the belt insert); stone depot x64 unchanged
 @fails arm holds x7 again: the cap did not apply (wrong jar, or `getDistributableAmount` signature on Create 0.5.1.i); stall at 1/3 with the arm empty: belt lock window (SQ-PWG-82 failure column)
 @from batches/r1116/ps15_pwg.qb
-# BF-FIX judge-3 r1124fx: the row names jar -19 but section 1 has no PGJAR prep, so mods/ had no Power Grid jar (probe: CircuitBoardBlockEntity class could not be found); it copies the jar and restarts
+# the row names jar -19 but section 1 has no PGJAR prep, so mods/ has no Power Grid jar: the row copies it and restarts
 edit cp "$INST/jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar" mods/
 restart
 # forceload added (r1124fx runner-1, 2026-11-24): prescreen found the row coordinates outside every forceload
 > forceload add 1136 1850 1160 1915
 sleep 3
+# the feed below reads a source circuit board at 1140 -60 1858 (SQ-PWG-76 builds it in the Power Grid batch, not in this world): build it here
+> zpwg9 board 1140 -60 1858 resistor
+waitlog \[zpwg9\] done 20
+expect \[zpwg9\] board at 1140 -60 1858 .*components=3 terminals=2
 > zpwg9c line 1142 -60 1906 plain
 waitlog \[zpwg9c\] done 20
 sleep 0.5
@@ -777,11 +788,12 @@ reject \[zpwg\w*\] (error|unknown subcommand)
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
 look arm show lines: HeldItem never more than 1 part; circuit locked about @4.5, Assembly 1/3 -> 3/3; end depot circuit_board, design same; part depots: 8 minus what went in or onto the belt (count loose single parts at the end: items line); stone x64
 
-## SQ-PS15-15 | acid in water (D4): unheated basin, water first, rotten flesh + spider eye -> 250 mB acid; heated basin water first (SQ-PWG-80b) recorded; both acid recipes listed
+## SQ-PS15-15 | acid recipe: one heated recipe only (redstone, blaze powder, rotten flesh, 250 mB water); no in-water variant; unheated nothing; water first no longer becomes salt
 @group A
-@commands Acid in water (D4, `kubejs/server_scripts/other/power_grid.js` `powergrid_acid_in_water`: rotten flesh + spider eye + 250 mB water, no heat -> 250 mB acid; `/reload` is enough). Rerun SQ-PWG-80b with an unheated basin: `zpwg9c basin 1150 -60 1894` and remove the blaze burner under it (or a basin on plain ground with a mixer above); `zpwg9c bfill 1150 -60 1894 minecraft:water 1000`; wait 5; `zpwg9c put 1150 -60 1894 minecraft:rotten_flesh 1`; `zpwg9c put 1150 -60 1894 minecraft:spider_eye 1`; wait 200; `zpwg9c show 1150 -60 1894`. Then the same in a heated basin (SQ-PWG-80b setup, water first) and record. `zpwg3 recipes powergrid` / JEI: both acid recipes listed
-@pass unheated: `tanks minecraft:water 750` and `powergrid:acid 250`, no items left, no salt; heated, water first: record (expected: Creative Delight `water_salt` still takes the 1000 mB first, as SQ-PWG-80b; then the flesh and eye stay, no acid; not a FAIL); no ERROR
-@fails no acid unheated: script error (`power grid recipes done` missing) or another unheated mixing took the flesh (record its id)
+@reviewed 2026-11-26
+@commands `/cdevtest recipes powergrid_acid`, `/cdevtest recipes powergrid_acid_in_water`, `/cdevtest makes powergrid:acid_bucket`; heated basin (`zpwg9c basin 1142 -60 1894`, SQ-PWG-80b setup): `zpwg9c bfill 1142 -60 1894 minecraft:water 1000` first, then `zpwg9c put` redstone, blaze powder, rotten flesh, wait, `zpwg9c show`; an unheated basin on stone (`zpwg9c basin 1150 -60 1894`, stone at y -61) with the same fill and items
+@pass Salt.md section 8 and `kubejs/server_scripts/other/power_grid.js`: only the heated recipe `powergrid_acid` exists (redstone + blaze powder + rotten flesh + 250 mB water -> 250 mB acid); `powergrid_acid_in_water` is gone (0 recipes); heated, water first: `minecraft:water 750` and `powergrid:acid 250`, items consumed, no salt (the heated water to salt mixing needs a Rock Salt Block in the basin); unheated: no acid, the three items stay in the basin; no ERROR
+@fails Acid in water still listed: `power_grid.js` not loaded or an old recipe copy (`power grid recipes done` missing); water becomes salt before the items land: Creative Delight `rock_salt_water_salt` lost its Rock Salt Block ingredient (`creativedelight/salt.js`); acid without heat: another unheated mixing took the items (record its id)
 @from batches/r1116/ps15_pwg.qb
 # self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_pwg (the Power Grid jar is still needed: chain mod set)
 > forceload add 1135 1855 1200 1915
@@ -789,17 +801,18 @@ sleep 2
 > zpwg3 recipes powergrid
 waitlog \[zpwg3\] recipes \d+ 30
 > cdevtest recipes powergrid_acid
+> cdevtest recipes powergrid_acid_in_water
 > cdevtest makes powergrid:acid_bucket
 > zpwg9c basin 1150 -60 1894
 waitlog \[zpwg9c\] done 20
 > setblock 1150 -61 1894 minecraft:stone
 sleep 0.5
-> zpwg9c show 1150 -61 1894
 > cdevtest state 1150 -61 1894
 > zpwg9c bfill 1150 -60 1894 minecraft:water 1000
 sleep 0.25
+> zpwg9c put 1150 -60 1894 minecraft:redstone 1
+> zpwg9c put 1150 -60 1894 minecraft:blaze_powder 1
 > zpwg9c put 1150 -60 1894 minecraft:rotten_flesh 1
-> zpwg9c put 1150 -60 1894 minecraft:spider_eye 1
 sleep 10
 > zpwg9c show 1150 -60 1894
 > zpwg9c show 1150 -58 1894
@@ -808,19 +821,21 @@ sleep 10
 waitlog \[zpwg9c\] done 20
 > zpwg9c bfill 1142 -60 1894 minecraft:water 1000
 sleep 0.25
+> zpwg9c put 1142 -60 1894 minecraft:redstone 1
+> zpwg9c put 1142 -60 1894 minecraft:blaze_powder 1
 > zpwg9c put 1142 -60 1894 minecraft:rotten_flesh 1
-> zpwg9c put 1142 -60 1894 minecraft:spider_eye 1
 sleep 10
 > zpwg9c show 1142 -60 1894
 > zpwg9c show 1142 -58 1894
 sleep 1
 kjsexpect power grid recipes done
+expect \[cdevtest\] verb=recipes text=powergrid_acid_in_water n=0\b
 expect \[zpwg9c\] fill minecraft:water 1000/1000 at 1150 -60 1894
 expect \[cdevtest\] verb=state pos=1150,-61,1894 state="?minecraft:stone
 reject \[zpwg\w*\] (error|unknown subcommand)
 reject An unexpected error occurred trying to execute that command
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
-look unheated 1150: tanks water 750 + powergrid:acid 250, no items left, no salt; heated 1142 (water first): record what ran (expected salt from water_salt, flesh and eye left, no acid; not a FAIL); recipes list both acid recipes; mixer speed non-zero
+look recipes powergrid_acid: exactly the one heated recipe (id contains powergrid_acid, no _in_water); heated basin 1142: tanks water 750 + powergrid:acid 250, no items left, no salt; unheated basin 1150: no acid, redstone, blaze powder and rotten flesh still in the basin; mixer speed non-zero
 
 ## SQ-PS15-16 | boot 1 (full pack): upgrade_aquatic in the on list; /place feature upgrade_aquatic:river_tree: oak trunk, mulberry leaves
 @phase worldgen
@@ -859,22 +874,114 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @@table
 ## SQ-PS15-17 | snow melts one layer at a time beside a torch, at a steady pace; ice beside a torch still melts to water
 @group A
+@reviewed 2026-11-26
 @commands `setblock X -60 Z minecraft:snow[layers=8]` on stone, a `minecraft:torch` 2 blocks away (lit room); a second spot: `minecraft:ice` 2 from a torch. Probe the layer count with `cdevtest state` every 20 s for 4 minutes
 @pass the layer count falls one at a time (8, 7, 6, ...; never a jump from several layers to air), first drop within about 70 s (target random tick or melt tick), then about one layer per 5 to 8 s; air within 2 minutes; the ice becomes `minecraft:water[level=0]` within 2 minutes
 @fails whole stack gone at once: `meltedState` layer path; no change after the first drop: melt tick not scheduled (`hasScheduledTick`, mixin `m_222963_` not applied: grep latest.log for `MeltingBlockStateMixin`)
-@draft runnable steps not written yet; the next runner writes them from @commands
+> forceload add 400 500 440 540
+> gamerule randomTickSpeed 3
+> gamerule doFireTick false
+> fill 400 -61 500 440 -61 540 minecraft:stone
+> fill 400 -60 500 440 -50 540 minecraft:air
+> execute unless entity ps17 run pbot spawn ps17 420 -60 520 minecraft:overworld survival
+sleep 2
+> setblock 402 -60 502 minecraft:snow[layers=8]
+> setblock 404 -60 502 minecraft:torch
+> setblock 410 -60 502 minecraft:ice
+> setblock 412 -60 502 minecraft:torch
+# one find per target (a random tick schedules the melt tick), then the pace is the melt tick's
+> cdevtest randomtick 402 -60 502 402 -60 502 30
+> cdevtest randomtick 410 -60 502 410 -60 502 30
+repeat 6
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=\S+ ticks=400 90
+> cdevtest state 402 -60 502
+> cdevtest state 410 -60 502
+end
+expect \[cdevtest\] verb=state pos=402,-60,502 state="?minecraft:air
+expect \[cdevtest\] verb=state pos=410,-60,502 state="?minecraft:water\[level=0\]
+> pbot remove ps17
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found|no such bot)
+look the six snow state lines (every 20 s of game time): layers fall one at a time (8, 7, 6 ... never several at once), first drop within about 70 s, air within 2 minutes (the last lines); the ice line turns minecraft:water[level=0] within 2 minutes
+
 ## SQ-PS15-18 | a scheduled melt tick survives save and restart
 @group A
+@reviewed 2026-11-26
 @commands Snow `[layers=8]` 2 from a torch; wait for the first layer to go (SQ-PS15-17); `save-all`, `stop`, boot again on the same world, forceload the spot; probe the layer count every 20 s for 2 minutes
 @pass layers keep falling after the restart without any random tick roll first (first drop within about 8 s of the chunk loading); no ERR at load naming block_ticks
 @fails nothing for a minute, then a drop: the tick was not saved (only random ticks restarted it)
-@draft runnable steps not written yet; the next runner writes them from @commands
+> forceload add 400 560 440 600
+> gamerule randomTickSpeed 3
+> gamerule doFireTick false
+> fill 400 -61 560 440 -61 600 minecraft:stone
+> fill 400 -60 560 440 -50 600 minecraft:air
+> execute unless entity ps18 run pbot spawn ps18 420 -60 580 minecraft:overworld survival
+sleep 2
+> setblock 402 -60 562 minecraft:snow[layers=8]
+> setblock 404 -60 562 minecraft:torch
+> cdevtest randomtick 402 -60 562 402 -60 562 30
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=\S+ ticks=200 60
+> cdevtest state 402 -60 562
+capture L0 \[cdevtest\] verb=state pos=402,-60,562 state="?minecraft:snow\[layers=(\d)
+> pbot remove ps18
+sleep 1
+> save-all flush
+waitlog Saved the game 60
+restart
+> forceload add 400 560 440 600
+sleep 2
+> cdevtest tickwarp 300
+waitlog verb=tickwarp end=\S+ ticks=300 60
+> execute if block 402 -60 562 minecraft:snow[layers={L0}] run say PS18 unchanged after restart
+> cdevtest state 402 -60 562
+reject PS18 unchanged after restart
+bootreject (ERR|ERROR).*block_ticks
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found|no such bot)
+look the layer count after the restart is below the one before it (no layer left standing as the snapshot value): the saved scheduled melt tick ran within 15 s of game time of the chunk loading, without a random tick roll first
+
 ## SQ-PS15-19 | magma: snow within 2 melts at once (placed and existing); snow at 3 melts by layer
 @group A
+@reviewed 2026-11-26
 @commands `minecraft:magma_block` on stone. (1) `setblock` `minecraft:snow[layers=4]` 1 above it and 2 to the side (distance 2); (2) a `minecraft:snow_block` and `minecraft:powder_snow` at distance 2; (3) `minecraft:snow[layers=8]` at distance 3. Wait 3 minutes
-@pass (1) and (2) are air at once on placement (fizz); (3) loses layers one at a time and is gone within about 4 minutes; no snow ever stays at distance 2
+@pass (1) and (2) are air at once on placement (fizz); (3) starts at 8 layers, loses layers one at a time and is gone within about 4 minutes; no snow ever stays at distance 2 (melting.md section 1: magma instant range 2, fire range 3)
 @fails (1) stays: `onPlaced` magma path (`[melting] tags` line: magma count 1 or more); (3) gone at once: instant range read as fireRange
-@draft runnable steps not written yet; the next runner writes them from @commands
+> forceload add 400 620 440 660
+> gamerule randomTickSpeed 3
+> fill 400 -61 620 440 -61 660 minecraft:stone
+> fill 400 -60 620 440 -50 660 minecraft:air
+> execute unless entity ps19 run pbot spawn ps19 420 -60 640 minecraft:overworld survival
+sleep 2
+> setblock 402 -60 622 minecraft:magma_block
+# (1) snow layer stack above and at distance 2; (2) snow block and powder snow at distance 2; placed after the magma: gone at once
+> setblock 402 -59 622 minecraft:snow[layers=4]
+> setblock 404 -60 622 minecraft:snow[layers=4]
+> setblock 402 -60 624 minecraft:snow_block
+> setblock 400 -60 622 minecraft:powder_snow
+# (3) distance 3: by layer
+> setblock 405 -60 622 minecraft:snow[layers=8]
+sleep 1
+> cdevtest state 402 -59 622
+> cdevtest state 404 -60 622
+> cdevtest state 402 -60 624
+> cdevtest state 400 -60 622
+> cdevtest state 405 -60 622
+> cdevtest randomtick 405 -60 622 405 -60 622 30
+repeat 6
+> cdevtest tickwarp 500
+waitlog verb=tickwarp end=\S+ ticks=500 90
+> cdevtest state 405 -60 622
+end
+expect \[cdevtest\] verb=state pos=402,-59,622 state="?minecraft:air
+expect \[cdevtest\] verb=state pos=404,-60,622 state="?minecraft:air
+expect \[cdevtest\] verb=state pos=402,-60,624 state="?minecraft:air
+expect \[cdevtest\] verb=state pos=400,-60,622 state="?minecraft:air
+count \[cdevtest\] verb=state pos=405,-60,622 state="?minecraft:snow\[layers=8 >= 1
+expect \[cdevtest\] verb=state pos=405,-60,622 state="?minecraft:air
+> pbot remove ps19
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found|no such bot)
+look the four distance-2 and above-the-magma snows are air straight after placement (the first four state lines); the distance-3 stack starts at 8 layers (placement does not remove it), then loses layers one at a time and the last state line is air within about 4 minutes of game time
+
 ## SQ-PS15-20 | magma: no snowfall and no freezing within 3; snow and ice form outside
 @group B
 @commands Snowy plains (or `/fillbiome` snowy_plains on a superflat area): a 16x16 stone floor with one magma block in the middle at floor level, a 5x5 water pool 1 block deep with magma under its center; `weather thunder 6000`; wait 10 minutes (snowfall is per chunk, not random tick speed)
@@ -883,10 +990,54 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## SQ-PS15-21 | snow on blue ice or IW permafrost ignores fire, lava and magma; salt still melts it
 @group A
+@reviewed 2026-11-26
 @commands `minecraft:snow[layers=8]` on `minecraft:blue_ice`, a torch 2 away and lava 3 away; the same on `immersive_weathering:permafrost`; the same on `minecraft:magma_block`-adjacent blue ice (magma 2 below the snow's side); a fourth stack on blue ice with a `salt:salt_block` touching it; wait 4 minutes
 @pass the first three stacks still 8 layers (magma's instant melt skipped too); the salted stack loses layers (one per melt) and is gone within about 4 minutes
 @fails heat melts the kept stacks: `keeps_snow` tag empty (`[melting] tags` line) or the check reads the wrong block; salted stack kept: salt path should ignore the rule
-@draft runnable steps not written yet; the next runner writes them from @commands
+> forceload add 400 680 440 720
+> gamerule randomTickSpeed 3
+> gamerule doFireTick false
+> fill 400 -61 680 440 -61 720 minecraft:stone
+> fill 400 -60 680 440 -50 720 minecraft:air
+> execute unless entity ps21 run pbot spawn ps21 420 -60 700 minecraft:overworld survival
+sleep 2
+# stack A: blue ice, torch 2 away, lava 3 away
+> setblock 402 -61 682 minecraft:blue_ice
+> setblock 402 -60 682 minecraft:snow[layers=8]
+> setblock 404 -60 682 minecraft:torch
+> setblock 405 -61 682 minecraft:lava
+# stack B: IW permafrost, the same
+> setblock 402 -61 686 immersive_weathering:permafrost
+> setblock 402 -60 686 minecraft:snow[layers=8]
+> setblock 404 -60 686 minecraft:torch
+> setblock 405 -61 686 minecraft:lava
+# stack C: blue ice with magma 2 away
+> setblock 402 -61 690 minecraft:blue_ice
+> setblock 402 -60 690 minecraft:snow[layers=8]
+> setblock 404 -61 690 minecraft:magma_block
+# stack D: blue ice with a Salt Dust Block touching the snow
+> setblock 402 -61 694 minecraft:blue_ice
+> setblock 402 -60 694 minecraft:snow[layers=8]
+> setblock 403 -60 694 salt:salt_block
+> cdevtest randomtick 402 -60 682 402 -60 694 30
+> cdevtest randomtick 403 -60 694 403 -60 694 60
+repeat 6
+> cdevtest tickwarp 800
+waitlog verb=tickwarp end=\S+ ticks=800 120
+> cdevtest randomtick 402 -60 694 403 -60 694 20
+end
+> cdevtest state 402 -60 682
+> cdevtest state 402 -60 686
+> cdevtest state 402 -60 690
+> cdevtest state 402 -60 694
+expect \[cdevtest\] verb=state pos=402,-60,682 state="?minecraft:snow\[layers=8
+expect \[cdevtest\] verb=state pos=402,-60,686 state="?minecraft:snow\[layers=8
+expect \[cdevtest\] verb=state pos=402,-60,690 state="?minecraft:snow\[layers=8
+reject \[cdevtest\] verb=state pos=402,-60,694 state="?minecraft:snow\[layers=8
+> pbot remove ps21
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found|no such bot)
+look stacks A to C (blue ice, permafrost, blue ice beside magma) still 8 layers after 4 minutes of game time; stack D (Salt Dust Block touching) lost layers or is air (melting.md section 1: snow on keeps_snow ignores fire, lava and magma, salt still melts it)
+
 ## SQ-PS15-22 | packed ice, blue ice, cryosol, permafrost: no melting from fire, lava or magma; salt steps packed ice and cryosol only
 @group A
 @commands Boot log `[melting] random ticks on for 2 extra blocks`. Each block on stone with a torch, lava and magma touching it (one spot per block per source); a second set with a `salt:salt_block` touching each; wait 10 minutes
@@ -895,10 +1046,44 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @superseded SQ-MELT-11 (G11, 2026-11-17: lava and magma melt the slow tier again; `slowHeatMelting` removed)
 ## SQ-PS15-23 | salt dispenser removes 3 snow layers; a snow block becomes 5 layers; blue ice refused
 @group A
-@commands Dispenser with salt dust facing `minecraft:snow[layers=8]`; fire once, probe; fire again; then facing `minecraft:snow_block`, fire once; then facing `minecraft:blue_ice`, fire once
-@pass 8 -> 5 -> 2 layers; snow block -> `minecraft:snow[layers=5]`; blue ice unchanged and the dispenser places a salt layer or drops the dust (Creative Delight's choice), no melt
+@reviewed 2026-11-26
+@commands Dispensers with salt dust facing `minecraft:snow[layers=8]` (fired twice), `minecraft:snow_block` and `minecraft:blue_ice` (once each), fired by a redstone block
+@pass 8 -> 4 -> air layers (melting.md: `saltMeltSnowLayers` 4, a snow block counts as 8 and becomes 4 layers); blue ice unchanged, no melt
 @fails whole stack gone: `saltMeltSnowLayers` not used (Creative Delight calling an old path); blue ice melted: not saltable check
-@draft runnable steps not written yet; the next runner writes them from @commands
+> forceload add 400 740 440 780
+> fill 400 -61 740 440 -61 780 minecraft:stone
+> fill 400 -60 740 440 -50 780 minecraft:air
+> setblock 402 -60 742 minecraft:snow[layers=8]
+> setblock 402 -60 743 minecraft:dispenser[facing=north]
+> data merge block 402 -60 743 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:8b}]}
+> setblock 404 -60 742 minecraft:snow_block
+> setblock 404 -60 743 minecraft:dispenser[facing=north]
+> data merge block 404 -60 743 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:8b}]}
+> setblock 406 -60 742 minecraft:blue_ice
+> setblock 406 -60 743 minecraft:dispenser[facing=north]
+> data merge block 406 -60 743 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:8b}]}
+sleep 1
+# fire each dispenser once (a redstone block above), read, fire the snow one again
+> setblock 402 -59 743 minecraft:redstone_block
+> setblock 404 -59 743 minecraft:redstone_block
+> setblock 406 -59 743 minecraft:redstone_block
+sleep 1
+> cdevtest state 402 -60 742
+> cdevtest state 404 -60 742
+> cdevtest state 406 -60 742
+> setblock 402 -59 743 minecraft:air
+sleep 0.5
+> setblock 402 -59 743 minecraft:redstone_block
+sleep 1
+> cdevtest state 402 -60 742
+> cdevtest inv 402 -60 743
+> cdevtest inv 406 -60 743
+> cdevtest items 404 -60 745 8
+expect \[cdevtest\] verb=state pos=404,-60,742 state="?minecraft:snow\[layers=4
+expect \[cdevtest\] verb=state pos=406,-60,742 state="?minecraft:blue_ice
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found|no such bot)
+look the layer stack: 8 -> 4 after the first fire (saltMeltSnowLayers 4, melting.md section 1; the 2026-11-17 text said 3) -> air after the second; the snow block -> snow[layers=4]; blue ice unchanged (not saltable: the dispenser drops the dust, salt.md B2; the dust count in its inventory and any dropped item are only recorded); dust 8 -> 6 in the snow dispenser
+
 ## CQ-PS15-04 | "Saltable" tooltip line on saltable blocks only
 @group client
 @commands Join the scratch server with a client; hover Ice, Packed Ice, Snow, Snow Block, Powder Snow Bucket, Immersive Weathering Cryosol, Blue Ice, IW Permafrost
@@ -917,28 +1102,126 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @@table
 ## SQ-PS15-24 | a torch lights an unlit campfire and is used up; a soul torch only a soul campfire
 @group A
+@reviewed 2026-11-26
 @commands Survival player with 2 torches and 2 soul torches. Under a roof: place a campfire and a soul campfire (both unlit, Unlit Campfire). Right click the campfire with a soul torch; then with a torch. Right click the soul campfire with a torch; then with a soul torch. A third campfire waterlogged: right click with a torch
 @pass soul torch on the campfire: nothing, nothing used; torch: campfire lit, 1 torch used; torch on the soul campfire: nothing; soul torch: lit, 1 used; waterlogged campfire stays unlit, nothing used
 @fails lit by the wrong torch: `soulflameRule` off or `isSoul` path check; torch kept: `torchConsumed` off or creative mode
-@draft runnable steps not written yet; the next runner writes them from @commands
+> forceload add 400 800 420 820
+> weather clear 1000000
+> fill 400 -61 800 420 -61 820 minecraft:stone
+> fill 400 -60 800 420 -50 820 minecraft:air
+> setblock 402 -60 802 minecraft:campfire[lit=false]
+> setblock 406 -60 802 minecraft:soul_campfire[lit=false]
+> setblock 410 -60 802 minecraft:campfire[lit=false,waterlogged=true]
+> cdevtest use 402 -60 802 held=minecraft:soul_torch*2
+> cdevtest use 402 -60 802 held=minecraft:torch*2
+> cdevtest use 406 -60 802 held=minecraft:torch*2
+> cdevtest use 406 -60 802 held=minecraft:soul_torch*2
+> cdevtest use 410 -60 802 held=minecraft:torch*2
+expect \[cdevtest\] verb=use main=minecraft:soul_torch\*2 off=empty state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=use main=minecraft:torch\*1 off=empty state="?minecraft:campfire\[.*lit=true
+expect \[cdevtest\] verb=use main=minecraft:torch\*2 off=empty state="?minecraft:soul_campfire\[.*lit=false
+expect \[cdevtest\] verb=use main=minecraft:soul_torch\*1 off=empty state="?minecraft:soul_campfire\[.*lit=true
+expect \[cdevtest\] verb=use main=minecraft:torch\*2 off=empty state="?minecraft:campfire\[.*lit=false.*waterlogged=true|minecraft:campfire\[.*waterlogged=true.*lit=false
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found)
+reject \[cdevtest\] verb=\S+ .*error=
+look no extra torch consumed and no lit state outside the rows above; the waterlogged campfire stays unlit
+
 ## SQ-PS15-25 | in open rain a torch is refused with the extinguish sound and kept; on a coal block it lights
 @group A
+@reviewed 2026-11-26
 @commands `weather rain`; an unlit campfire on stone under open sky, a second on `minecraft:coal_block` under open sky, an unlit soul campfire under open sky; right click each with a torch (the soul one with a soul torch); then `[campfire] torchRainRefuses = false` and retry the first
 @pass first: stays unlit, extinguish (fizz) sound, torch kept; coal block one: lit, torch used; soul campfire: lit (rain never douses it); with the switch off: lit (then goes out after `rainOutTicks`)
-@fails lit in rain: rule does not read `CampfireRain` tags; torch used though refused: order in `CampfireTorch`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@fails lit in rain: the rule does not read `CampfireRain` tags (`CampfireTorch`); torch used though refused: order in `CampfireTorch`; the second use not lit: the `[campfire]` reload not applied (`creativedelight-common.toml reloaded` missing)
+> forceload add 400 830 420 850
+> weather rain 1000000
+> fill 400 -61 830 420 -61 850 minecraft:stone
+> fill 400 -60 830 420 -50 850 minecraft:air
+> setblock 402 -60 832 minecraft:campfire[lit=false]
+> setblock 406 -61 832 minecraft:coal_block
+> setblock 406 -60 832 minecraft:campfire[lit=false]
+> setblock 410 -60 832 minecraft:soul_campfire[lit=false]
+sleep 2
+> cdevtest use 402 -60 832 held=minecraft:torch*2
+> cdevtest use 406 -60 832 held=minecraft:torch*2
+> cdevtest use 410 -60 832 held=minecraft:soul_torch*2
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire torchRainRefuses false
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+> cdevtest use 402 -60 832 held=minecraft:torch*2
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire torchRainRefuses true
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+> weather clear 1000000
+expect \[cdevtest\] verb=use main=minecraft:torch\*2 off=empty state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=use main=minecraft:torch\*1 off=empty state="?minecraft:campfire\[.*lit=true
+expect \[cdevtest\] verb=use main=minecraft:soul_torch\*1 off=empty state="?minecraft:soul_campfire\[.*lit=true
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found)
+reject \[cdevtest\] verb=\S+ .*error=
+look the first use: campfire still unlit and the torch kept (2 stay 2), extinguish (fizz) sound; the coal-block campfire lit with the torch used; the soul campfire lit; with torchRainRefuses off the first campfire lights (and goes out after rainOutTicks, rain putting it out is campfire rain, not this row)
+
 ## SQ-PS15-26 | config switches: torch lighting off, torch kept on
 @group A
-@commands `[campfire] torchLights = false`, restart or config reload; torch on an unlit campfire; then `torchLights = true`, `torchConsumed = false`; torch again
+@reviewed 2026-11-26
+@commands `[campfire] torchLights = false` (`qrun.py toml`, the config watcher reloads it), torch on an unlit campfire; then `torchLights = true`, `torchConsumed = false`; torch on a second one; defaults restored
 @pass off: nothing happens to the campfire; on and not consumed: lit, torch count unchanged
 @fails lit while off: switch not read at click time
-@draft runnable steps not written yet; the next runner writes them from @commands
-## SQ-PS15-27 | dragon armor 8/13/11/8; Rare Ice takes no items
+> forceload add 400 860 420 880
+> weather clear 1000000
+> fill 400 -61 860 420 -61 880 minecraft:stone
+> fill 400 -60 860 420 -50 880 minecraft:air
+> setblock 402 -60 862 minecraft:campfire[lit=false]
+> setblock 406 -60 862 minecraft:campfire[lit=false]
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire torchLights false
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+> cdevtest use 402 -60 862 held=minecraft:torch*2
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire torchLights true
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire torchConsumed false
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+> cdevtest use 406 -60 862 held=minecraft:torch*2
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire torchConsumed true
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+expect \[cdevtest\] verb=use main=minecraft:torch\*2 off=empty state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=use main=minecraft:torch\*2 off=empty state="?minecraft:campfire\[.*lit=true
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found)
+reject \[cdevtest\] verb=\S+ .*error=
+look off: the first campfire stays unlit and the torch count stays 2; on with torchConsumed false: the second campfire lit and the torch count still 2 (the defaults are restored at the end of the row)
+
+## SQ-PS15-27 | dragon armor 9/12/11/8 = 40; Rare Ice takes no items
 @group A
-@commands Equip dragon helmet, chestplate, leggings, boots one at a time and read `/attribute @p minecraft:generic.armor get`; then the upgraded dragon chestplate; then right click `minecraft:ice` with a stick
-@pass 8, 13, 11, 8 (40 in a full set), upgraded chestplate 13; the stick stays in hand and the ice stays ice (no Rare Ice)
+@reviewed 2026-11-26
+@commands A bot with the dragon armor pieces in the armor slots one at a time: `attribute <bot> minecraft:generic.armor get`; then the upgraded dragon chestplate; then a stick on `minecraft:ice`
+@pass helmet 9, chestplate 12 (upgraded 12), leggings 11, boots 8 = 40 for a full set (`config/dragonloot-common.toml`, `tune_armor.js`; the 8/13/11/8 of the 2026-11-17 plan became 9/12/11/8 in gear-tuning #2); the stick stays in hand and the ice stays ice (no Rare Ice)
 @fails old values: `config/dragonloot-common.toml` not the one read; Rare Ice made: `allowInsertingItemsToIce` still true
-@draft runnable steps not written yet; the next runner writes them from @commands
+> forceload add 400 890 420 910
+> fill 400 -61 890 420 -61 910 minecraft:stone
+> fill 400 -60 890 420 -50 910 minecraft:air
+> execute unless entity ps27 run pbot spawn ps27 410 -60 900 minecraft:overworld survival
+sleep 2
+> pbot inv ps27 clear
+> pbot inv ps27 set 39 dragonloot:dragon_helmet 1
+> attribute ps27 minecraft:generic.armor get
+> pbot inv ps27 set 38 dragonloot:dragon_chestplate 1
+> attribute ps27 minecraft:generic.armor get
+> pbot inv ps27 set 37 dragonloot:dragon_leggings 1
+> attribute ps27 minecraft:generic.armor get
+> pbot inv ps27 set 36 dragonloot:dragon_boots 1
+> attribute ps27 minecraft:generic.armor get
+> pbot inv ps27 set 38 dragonloot:upgraded_dragon_chestplate 1
+> attribute ps27 minecraft:generic.armor get
+> pbot inv ps27 clear
+> pbot remove ps27
+# Rare Ice: a stick on plain ice does nothing
+> setblock 402 -61 892 minecraft:ice
+> cdevtest use 402 -61 892 held=minecraft:stick face=up
+expect has a value of 9\.0
+expect has a value of 21\.0
+expect has a value of 32\.0
+count has a value of 40\.0 == 2
+expect \[cdevtest\] verb=use main=minecraft:stick\*1 off=empty state="?minecraft:ice
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found)
+reject \[cdevtest\] verb=\S+ .*error=
+look the five armor lines read 9, 21, 32, 40 (full set) and 40 with the upgraded chestplate (9 / 12 / 11 / 8; upgraded chestplate 12); the stick stays in hand and the ice stays minecraft:ice (no Rare Ice)
+
 ## SQ-PS15-28 | canopy-proof switch off: wild crop features place as before (MOTION_BLOCKING)
 @group B
 @commands Seed 8675309, `[worldgen] wildCropCanopyProofHeightmap = false`; repeat SQ-PS15-12b's point placement under the canopy (forest site 2: `/place feature farmersdelight:patch_wild_carrots`; jungle -1380 -2724: `rusticdelight:wild_bell_peppers_placed`) at 10 points each, placing from one block above the leaves; latest.log: no mixin error for `HeightmapPlacementCanopyMixin`
@@ -953,16 +1236,76 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @draft fresh group B world census, as SQ-PS15-12b
 ## SQ-PS15-30 | the End: campfires cannot be lit by torch, flint and steel or fire charge; soul campfires can
 @group A
+@reviewed 2026-11-26
 @commands `/execute in minecraft:the_end run tp @p 100 50 0` onto a platform; survival player with torch, flint and steel (note durability), fire charge, soul torch. Place an unlit campfire and an unlit soul campfire; right click the campfire with each of torch, flint and steel, fire charge; then the soul campfire with flint and steel, then a second soul campfire with a soul torch
 @pass campfire: stays unlit each time, extinguish (fizz) sound, torch and fire charge kept, flint and steel durability unchanged; soul campfires light (flint and steel used, soul torch used)
 @fails campfire lights: `CampfireEnd` not registered or `endUnlightable` off; flint and steel durability lost: event not canceled before the item use; soul campfire refused: `isSoul` path check
-@draft runnable steps not written yet; the next runner writes them from @commands
+> execute in minecraft:the_end run forceload add 100 0 120 20
+> execute in minecraft:the_end run fill 100 59 0 120 59 20 minecraft:stone
+> execute in minecraft:the_end run fill 100 60 0 120 70 20 minecraft:air
+> execute in minecraft:the_end run setblock 102 60 2 minecraft:campfire[lit=false]
+> execute in minecraft:the_end run setblock 106 60 2 minecraft:campfire[lit=false]
+> execute in minecraft:the_end run setblock 110 60 2 minecraft:campfire[lit=false]
+> execute in minecraft:the_end run setblock 114 60 2 minecraft:soul_campfire[lit=false]
+> execute in minecraft:the_end run setblock 118 60 2 minecraft:soul_campfire[lit=false]
+sleep 1
+> cdevtest use 102 60 2 dim=minecraft:the_end held=minecraft:torch*2 face=up
+> cdevtest use 106 60 2 dim=minecraft:the_end held=minecraft:flint_and_steel face=up
+> cdevtest use 110 60 2 dim=minecraft:the_end held=minecraft:fire_charge*2 face=up
+> cdevtest use 114 60 2 dim=minecraft:the_end held=minecraft:flint_and_steel face=up
+> cdevtest use 118 60 2 dim=minecraft:the_end held=minecraft:soul_torch*2 face=up
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found)
+reject \[cdevtest\] verb=\S+ .*error=
+expect \[cdevtest\] verb=use main=minecraft:torch\*2 off=empty state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=use main=minecraft:fire_charge\*2 off=empty state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=use main=minecraft:soul_torch\*1 off=empty state="?minecraft:soul_campfire\[.*lit=true
+count \[cdevtest\] verb=use main=minecraft:flint_and_steel .*state="?minecraft:campfire\[.*lit=false == 1
+count \[cdevtest\] verb=use main=minecraft:flint_and_steel .*state="?minecraft:soul_campfire\[.*lit=true == 1
+look the three plain campfires stay unlit (torch and fire charge kept: 2 stay 2; the flint and steel line shows the campfire unlit and, if the line prints the stack, the same Damage as before); extinguish (fizz) sound each time; both soul campfires light (flint and steel used, soul torch 2 -> 1)
+
 ## SQ-PS15-31 | the End: a campfire lit any other way goes out at once; switch off restores lighting
 @group A
+@reviewed 2026-11-26
 @commands In the End: `/setblock ~ ~ ~ minecraft:campfire[lit=true]`; a dispenser with flint and steel facing an unlit campfire, powered; a dispenser with a fire charge facing one; a flame-enchanted bow shot at one; in creative, place a campfire with Unlit Campfire removed or `/give` a lit-state item if available. Then `[campfire] endUnlightable = false`, config reload, flint and steel on an unlit campfire; back in the Overworld flint and steel on a campfire
 @pass every End campfire is unlit within a tick of being lit, with the fizz sound and smoke; food on its grill stays; with the switch off it lights and stays lit; the Overworld campfire lights as before
 @fails stays lit: `CampfireRainMixin` does not call `CampfireEnd.tick` (cookTick SRG `m_155306_`); Overworld refused: dimension check
-@draft runnable steps not written yet; the next runner writes them from @commands
+> execute in minecraft:the_end run forceload add 100 30 120 50
+> execute in minecraft:the_end run fill 100 59 30 120 59 50 minecraft:stone
+> execute in minecraft:the_end run fill 100 60 30 120 70 50 minecraft:air
+# (1) set lit; (2) dispenser with flint and steel facing an unlit campfire; (3) dispenser with a fire charge
+> execute in minecraft:the_end run setblock 102 60 32 minecraft:campfire[lit=true]
+> execute in minecraft:the_end run setblock 106 60 32 minecraft:campfire[lit=false]
+> execute in minecraft:the_end run setblock 106 60 33 minecraft:dispenser[facing=north]
+> execute in minecraft:the_end run data merge block 106 60 33 {Items:[{Slot:0b,id:"minecraft:flint_and_steel",Count:1b}]}
+> execute in minecraft:the_end run setblock 110 60 32 minecraft:campfire[lit=false]
+> execute in minecraft:the_end run setblock 110 60 33 minecraft:dispenser[facing=north]
+> execute in minecraft:the_end run data merge block 110 60 33 {Items:[{Slot:0b,id:"minecraft:fire_charge",Count:2b}]}
+> execute in minecraft:the_end run setblock 106 61 33 minecraft:redstone_block
+> execute in minecraft:the_end run setblock 110 61 33 minecraft:redstone_block
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=\S+ ticks=40 60
+> cdevtest state 102 60 32 dim=minecraft:the_end
+> cdevtest state 106 60 32 dim=minecraft:the_end
+> cdevtest state 110 60 32 dim=minecraft:the_end
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire endUnlightable false
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+> cdevtest use 106 60 32 dim=minecraft:the_end held=minecraft:flint_and_steel face=up
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml campfire endUnlightable true
+waitlog \[creativecommon\] creativedelight-common\.toml reloaded 40
+# the Overworld control
+> forceload add 400 920 420 940
+> fill 400 -61 920 420 -61 940 minecraft:stone
+> fill 400 -60 920 420 -50 940 minecraft:air
+> setblock 402 -60 922 minecraft:campfire[lit=false]
+> cdevtest use 402 -60 922 held=minecraft:flint_and_steel face=up
+expect \[cdevtest\] verb=state pos=102,60,32 state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=state pos=106,60,32 state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=state pos=110,60,32 state="?minecraft:campfire\[.*lit=false
+expect \[cdevtest\] verb=use main=minecraft:flint_and_steel\*1 .*state="?minecraft:campfire\[.*lit=true
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property|No player was found)
+reject \[cdevtest\] verb=\S+ .*error=
+look the three End campfires are unlit within a tick (fizz sound and smoke); with endUnlightable off flint and steel lights the End campfire (the first use line shows lit=true) and the Overworld control lights as before (the second lit=true line); the flame-enchanted bow and creative placements of the old text are not run
+
 ## CQ-PS15-05 | campfire tooltips
 @group client
 @commands Hover a Campfire and a Soul Campfire in the inventory (and a Tinted Campfire if present); then `[campfire] torchLights = false` on the client copy and hover again; then `unlitTooltip = false`

@@ -32,7 +32,7 @@ look shell: the [itemMerges] creativedelight line reads 49 merges (a changed cou
 @group same
 @commands Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing
 @pass Existing test: MG-41
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest makes fruitsdelight:hamimelon_seeds
 > cdevtest uses delightful:cantaloupe_slice
 > cdevtest recipes mini_cantaloupe
@@ -260,7 +260,7 @@ reject verb=\S+ .*done=0
 @pass `creativedelight:shapeless/cucumber_dough` takes `#creativedelight:veggie_noodle_veg` (6 items); `vintagedelight:cucumber_dough` gone
 @fails RC-162
 @from batches/r1031/a1_data.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest rdetail cucumber_dough
 > cdevtest tag item creativedelight:veggie_noodle_veg
 expect creativedelight:shapeless/cucumber_dough

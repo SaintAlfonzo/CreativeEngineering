@@ -15,7 +15,7 @@
 @commands End: `/execute in minecraft:the_end run tp` an armor stand to 300016 100 300016 (ST-232); then a pearl onto Myalite at a spire viaduct
 @pass The tp takes milliseconds, no "ticks behind", no region file at the target; the viaduct warp still works
 @fails
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # the region at 300016 / 300016 is r.585.585 in DIM1; the viaduct pearl half needs a located spire viaduct (look)
 # r1120lr batch fault: the tp selector found no armor stand ('No entity was found': summoned before the forceloaded chunk was in) and the "Can't keep up" line was the post-boot backlog, before the tp. The row now waits for the chunk, checks the stand, tps it as itself, and judges only lag lines after the tp
 sleep 20

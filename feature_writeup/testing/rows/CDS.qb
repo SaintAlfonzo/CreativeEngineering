@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-CDS Creative Delight script moves (wave 4), 2026-11-01 ([creative_split.md](../creative_split.md) 7.6, TODO `creativesplit/cdcb #7`)
 @@date 2026-11-01
+@@reviewed 2026-11-26
 @@sources feature_writeup/creative_split.md
 @@text
 @@text Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CDS-01 (server half) to -04 PASS (tags compared with `tools/scratch_query/tag_diff.py`). Client rows open.
@@ -15,56 +16,88 @@
 @@table
 ## SQ-CDS-01 | sample syringe
 @group A
-@commands `grep -E "sample_syringe\|Error" logs/kubejs/startup.log \| head`; `/give @p creativeengineering:cow_sample_syringe`; right-click a cow with `creativeengineering:sample_syringe`
-@pass Syringe items exist; sampling fills it
-@fails `global.sampleSyringe` not set before the item callback
-@from batches/r1101/cs4_boot3.qb
-shell grep -E "sample_syringe|Error" logs/kubejs/startup.log | head -5 | cut -c1-200
-# self-contained since r1118 (judge-4, 2026-11-18): ids follow the owning mod since 2026-11-09 (creativeengineering: -> creativedelight:), bot qa spawned here (r1101 p1_server position)
+@commands `grep -E "sample_syringe|Error" logs/kubejs/startup.log | head`; `/give <bot> creativedelight:cow_sample_syringe` and `creativedelight:sample_syringe`; `/cdevtest item`; sampling a cow is the Delight syringe rows' check
+@pass Both syringe items exist (the scripts moved to Creative Delight, `sample_syringe.js` and `sample_syringe_items.js`); no startup error naming sample_syringe
+@fails `global.sampleSyringe` not set before the item callback (Creative Delight `kubejs_startup/creativedelight/sample_syringe.js` load order)
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): the sampling itself (right click on a cow) is the sample syringe section's row; this row keeps the carve check: items exist, scripts load, no error
+shell test "$(grep -c "sample_syringe.*\(error\|Error\)" logs/kubejs/startup.log)" = 0
 > forceload add 0 0 16 16
 > execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
 sleep 3
 > give qa creativedelight:cow_sample_syringe
 > give qa creativedelight:sample_syringe
+> cdevtest item creativedelight:sample_syringe
 count Gave 1 +\[ == 2
+expect verb=item .*creativedelight:sample_syringe
 reject Unknown item|No player was found
-look both syringes exist (sampling a cow is a client / bot-use check)
+reject \[cdevtest\] .*done=0
+kjsreject sample_syringe.*(?i:error)
 
-## SQ-CDS-02 | CD kitchen tags (dumptags of SQ-CBM-05)
+## SQ-CDS-02 | CD kitchen tags
 @group A
-@commands Same boot: `/dumptags` block `creativeengineering:oven_heat_sources`, `farmersdelight:heat_sources` (has the oven), `minecraft:mineable/shovel` (the six dough blocks), `creativeengineering:crops/farmland_soils`; item `creativeengineering:hoe_harvest/5x5`, `forge:storage_blocks/sourdough`
-@pass Same contents as before the move
-@fails CD tag script not loaded
-@from batches/r1101/cs4_boot3.qb
-# r1118 R5 (2026-11-18): a fresh dump first: the srv copy of kubejs/exported is the instance's (older than the 2026-11-09 renames)
-> dumptags
-waitlog \[dumptags\] wrote 120
-shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:oven_heat_sources block:farmersdelight:heat_sources block:minecraft:mineable/shovel block:creativeengineering:crops/farmland_soils item:creativeengineering:hoe_harvest/5x5 item:forge:storage_blocks/sourdough
-look same contents as boot 2 (heat_sources has the oven only after wave 4 if the oven moved: judge the diff)
+@commands `/cdevtest tag block creativedelight:oven_heat_sources`, `block farmersdelight:heat_sources` (has the oven), `block minecraft:mineable/shovel` (the six dough blocks), `block creativedelight:crops/farmland_soils`; `item creativedelight:hoe_harvest/5x5`, `item forge:storage_blocks/sourdough`
+@pass oven_heat_sources lists campfires, fire and lava; farmersdelight:heat_sources lists `creativedelight:oven`; the shovel tag lists the six Creative Delight dough blocks; farmland_soils has farmland, rich soil farmland and mulch; the 5x5 hoe tag is not empty; the sourdough storage tag holds `creativedelight:sourdough_block` (Creative Delight's tag scripts loaded)
+@fails CD tag script not loaded (`creativedelight` `kubejs_startup` tag scripts), or a pack tag script naming the old `creativeengineering:` tag ids
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): the old boot-2 baseline dumps (perf/runs/rcs234) are gone and the ids moved to creativedelight: on 2026-11-09, so the row reads the live tags with /cdevtest tag instead of diffing dumps
+> cdevtest tag block creativedelight:oven_heat_sources
+> cdevtest tag block farmersdelight:heat_sources
+> cdevtest tag block minecraft:mineable/shovel
+> cdevtest tag block creativedelight:crops/farmland_soils
+> cdevtest tag item creativedelight:hoe_harvest/5x5
+> cdevtest tag item forge:storage_blocks/sourdough
+expect verb=tag kind=block tag=creativedelight:oven_heat_sources n=\d+ .*ids=\S*minecraft:campfire\b
+expect verb=tag kind=block tag=creativedelight:oven_heat_sources .*ids=\S*minecraft:lava\b
+expect verb=tag kind=block tag=farmersdelight:heat_sources .*ids=\S*creativedelight:oven\b
+expect verb=tag kind=block tag=minecraft:mineable/shovel .*ids=\S*creativedelight:oat_dough_block\b
+expect verb=tag kind=block tag=minecraft:mineable/shovel .*ids=\S*creativedelight:sourdough_block\b
+expect verb=tag kind=block tag=minecraft:mineable/shovel .*ids=\S*creativedelight:cookie_dough_block\b
+expect verb=tag kind=block tag=minecraft:mineable/shovel .*ids=\S*creativedelight:gingerdough_block\b
+expect verb=tag kind=block tag=minecraft:mineable/shovel .*ids=\S*creativedelight:cucumber_dough_block\b
+expect verb=tag kind=block tag=minecraft:mineable/shovel .*ids=\S*creativedelight:sweet_potato_dough_block\b
+expect verb=tag kind=block tag=creativedelight:crops/farmland_soils .*ids=\S*minecraft:farmland\b
+expect verb=tag kind=block tag=creativedelight:crops/farmland_soils .*ids=\S*farmersdelight:rich_soil_farmland\b
+expect verb=tag kind=item tag=creativedelight:hoe_harvest/5x5 n=[1-9]
+expect verb=tag kind=item tag=forge:storage_blocks/sourdough .*ids=\S*creativedelight:sourdough_block\b
+reject \[cdevtest\] .*done=0
 
 ## SQ-CDS-03 | CD fluid and fishing tags
 @group A
-@commands Same boot: `/dumptags` fluid `forge:fluid/tea`, `forge:fluid/honey`; biome `creativeengineering:fishing_net/ocean`; block `creativeengineering:fishing_net/kelp`
-@pass Same contents as before
-@fails CD tag script not loaded, or Oceanic member off
-@from batches/r1101/cs4_boot3.qb
-# r1118 R5 (2026-11-18): a fresh dump first: the srv copy of kubejs/exported is the instance's (older than the 2026-11-09 renames)
-> dumptags
-waitlog \[dumptags\] wrote 120
-shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags fluid:forge:fluid/tea fluid:forge:fluid/honey block:creativeengineering:fishing_net/kelp
-look same contents as boot 2
+@commands `/cdevtest tag fluid forge:fluid/tea`, `fluid forge:fluid/honey`; `block creativedelight:fishing_net/kelp`, `item creativedelight:fishing_net/coral`
+@pass Tea and honey fluid tags hold the Create fluids; the kelp tag holds vanilla kelp and its plant; the coral tag is not empty
+@fails CD tag script not loaded, or Upgrade Aquatic / Oceanic member off (the kelp variants come from Upgrade Aquatic)
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): live tag reads instead of a diff against the removed rcs234 dumps; fishing_net/ocean was a biome tag no longer in the dumps, the kelp and coral item tags stand in
+> cdevtest tag fluid forge:fluid/tea
+> cdevtest tag fluid forge:fluid/honey
+> cdevtest tag block creativedelight:fishing_net/kelp
+> cdevtest tag item creativedelight:fishing_net/coral
+expect verb=tag kind=fluid tag=forge:fluid/tea .*ids=\S*create:tea\b
+expect verb=tag kind=fluid tag=forge:fluid/honey .*ids=\S*create:honey\b
+expect verb=tag kind=block tag=creativedelight:fishing_net/kelp .*ids=\S*minecraft:kelp\b
+expect verb=tag kind=block tag=creativedelight:fishing_net/kelp .*ids=\S*minecraft:kelp_plant\b
+expect verb=tag kind=item tag=creativedelight:fishing_net/coral n=[1-9]
+reject \[cdevtest\] .*done=0
 
-## SQ-CDS-04 | mining tiers (harvest.js now in CD)
+## SQ-CDS-04 | mining tiers (harvest.js is Creative Equipment's)
 @group A
-@commands Same boot: `/dumptags` block `creativeengineering:needs_copper_tool`, `minecraft:needs_iron_tool` on `creativeengineering:plate_block_iron` and the copper dust pile
-@pass One tier and one tool per listed block, as before (harvest.js now in CD)
-@fails Exclusive mineable ran before a pack add
-@from batches/r1101/cs4_boot3.qb
-# r1118 R5 (2026-11-18): a fresh dump first: the srv copy of kubejs/exported is the instance's (older than the 2026-11-09 renames)
-> dumptags
-waitlog \[dumptags\] wrote 120
-shell python3 $INST/tools/scratch_query/tag_diff.py $INST/perf/runs/rcs234/boot2_tags kubejs/exported/tags block:creativeengineering:needs_copper_tool block:minecraft:needs_iron_tool block:minecraft:needs_stone_tool block:minecraft:needs_diamond_tool
-look same contents as boot 2
+@commands `/cdevtest tagsof creativeengineering:copper_dust_pile` (stone tier, shovel), `creativeengineering:iron_dust_pile` and `create_compressed:iron_sheet_block` (copper tier); `/cdevtest tag block creativeequipment:needs_copper_tool`
+@pass One tier and one tool per listed block: the copper dust pile is in `minecraft:needs_stone_tool` and `minecraft:mineable/shovel` and in no other tier; the iron dust pile and iron sheet block are in `creativeequipment:needs_copper_tool` and in no vanilla tier tag; the copper tier tag holds both
+@fails Exclusive mineable ran before a pack add (Creative Equipment `kubejs/data/creativeequipment/kubejs/other/harvest.js`, moved from Delight; the 7.6 row says Equipment owns tool progression)
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): harvest.js lives in Creative Equipment (the old text said CD); the copper tier tag is creativeequipment:needs_copper_tool
+> cdevtest tagsof creativeengineering:copper_dust_pile
+> cdevtest tagsof creativeengineering:iron_dust_pile
+> cdevtest tagsof create_compressed:iron_sheet_block
+> cdevtest tag block creativeequipment:needs_copper_tool
+expect ^(?!.*needs_(iron|diamond|wood|wooden)_tool).*id=creativeengineering:copper_dust_pile .*block_tags=\S*minecraft:needs_stone_tool
+expect id=creativeengineering:copper_dust_pile .*block_tags=\S*minecraft:mineable/shovel
+expect ^(?!.*minecraft:needs_(stone|iron|diamond)_tool).*id=creativeengineering:iron_dust_pile .*block_tags=\S*creativeequipment:needs_copper_tool
+expect ^(?!.*minecraft:needs_(stone|iron|diamond)_tool).*id=create_compressed:iron_sheet_block .*block_tags=\S*creativeequipment:needs_copper_tool
+expect verb=tag kind=block tag=creativeequipment:needs_copper_tool .*ids=\S*creativeengineering:iron_dust_pile\b
+expect verb=tag kind=block tag=creativeequipment:needs_copper_tool .*ids=\S*create_compressed:iron_sheet_block\b
+reject \[cdevtest\] .*done=0
 
 @@text
 @@text In game (client): CDS-C1 names "Caviar Roll", "Cantaloupe", "Mini Cantaloupe", "Netherite Lunchbox", Ender's Delight

@@ -56,7 +56,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass 18 raw (10 Barbeque's Delight + 8 pack raws) + 10 grilled skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers in handheld, kebab wrap, kebab sandwich and bibimbap in no food type (dropped, plan_meals_rolls_bbq.md ruling 4, owner 2026-11-22), burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
 @fails `tags.js` not loaded (`global.CD.on`). Ids from the 2026-11-19 tag dump (food_type tags under `creativedelight:`, rain_douses under `creativecommon:`, raw_skewers 18); r1120lr batch fault: old namespaces
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-21
+@reviewed 2026-11-26
 bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
 > cdevtest tag item barbequesdelight:raw_skewers
 > cdevtest tag item barbequesdelight:grilled_skewers
@@ -151,7 +151,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass flip allowed at 160; Cooked Beef Skewer at 320; the unflipped one becomes Burnt Skewer at 640; the burnt entry's Time keeps counting between reads (after the B1 fix) and no block update spam
 @fails tick order; entry time not saved
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
 > forceload add 208 496 232 506
 sleep 3
@@ -161,8 +161,12 @@ sleep 3
 > pbot use bbq6 220 -60 500 up
 > pbot hold bbq6 minecraft:flint_and_steel
 > pbot use bbq6 220 -60 500 up
+# 2026-11-26 (writer-3, r1121b judge-1): pbot use hits the face centre (y+1.0), outside the grill's slot box (y 0.8125 to 0.99), so no slot
+# was hit; cdevtest use takes a hit point inside the box (x 0.5 = the middle slot line)
 > pbot hold bbq6 barbequesdelight:raw_beef_skewer
-> pbot use bbq6 220 -60 500 up
+> cdevtest use 220 -60 500 as=bbq6 face=up hit=0.5,0.9,0.5
+> data get block 220 -60 500
+expect has the following block data: .*barbequesdelight:raw_beef_skewer
 > data get block 220 -60 500
 sleep 36
 > data get block 220 -60 500
@@ -178,7 +182,7 @@ look the two last reads (20 ticks apart) are the same burnt entry; no block-upda
 @pass right-click seasoning does nothing on the grill or the cutting board (use retired, BBQ-28), seasonings stack to 64; the shapeless craft gives the "Chili Flavored" skewer and the grilled one keeps the prefix
 @fails shapeless season recipes missing (seasoning framework fold, barbeques_delight.md 4.5); member `GrillBlock` still handling the click
 @from batches/r1102b/s3_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
 > forceload add 208 496 232 506
 sleep 3
@@ -186,13 +190,16 @@ sleep 3
 > pbot spawn bbq7 227 -60 503 minecraft:overworld survival
 > pbot hold bbq7 barbequesdelight:grill
 > pbot use bbq7 226 -60 500 up
+# 2026-11-26 (writer-3, r1121b judge-1): the skewer is placed with cdevtest use at a hit point inside the grill's slot box (pbot use hits y+1.0, outside it)
 > pbot hold bbq7 barbequesdelight:raw_beef_skewer
-> pbot use bbq7 226 -60 500 up
+> cdevtest use 226 -60 500 as=bbq7 face=up hit=0.5,0.9,0.5
+> data get block 226 -60 500
+expect has the following block data: .*barbequesdelight:raw_beef_skewer
 > pbot hold bbq7 barbequesdelight:barbeque_sauce
-> pbot use bbq7 226 -60 500 up
+> cdevtest use 226 -60 500 as=bbq7 face=up hit=0.5,0.9,0.5
 > data get block 226 -60 500
 > pbot hold bbq7 barbequesdelight:chili_powder
-> pbot use bbq7 226 -60 500 up
+> cdevtest use 226 -60 500 as=bbq7 face=up hit=0.5,0.9,0.5
 > data get block 226 -60 500
 > setblock 229 -60 500 farmersdelight:cutting_board
 > pbot hold bbq7 barbequesdelight:grilled_beef_skewer
@@ -202,6 +209,7 @@ sleep 3
 > data get entity bbq7 SelectedItem
 > data get block 229 -60 500
 > pbot remove bbq7
+reject has the following block data: .*BBQSeasoning
 look right-click seasoning is retired (BBQ-28): no BBQSeasoning in either grill read; board: the cooked skewer gets no sauce and the sauce stack is unchanged; the shapeless seasoning craft half is not automated
 
 ## SQ-BBQ-08
@@ -218,7 +226,7 @@ look right-click seasoning is retired (BBQ-28): no BBQSeasoning in either grill 
 @pass 18 `creativedelight:createsequencedassembly/raw_*_sequenced_assembly` recipes (10 Barbeque's Delight lines + 8 pack skewers, `raw_barbecue_stick` and `raw_caveskewer` included); beef deploys beef, cabbage, beef, cabbage; lamb 4 mutton; nether on a blaze rod; result the raw skewer x1; no `incomplete('raw_...') not registered` (barbeques_delight.md 4.5, dishes/meals #57)
 @fails `cd_transition_items.js` row missing (KubeJS error `incomplete(...) not registered`, the whole skewers.js block stops); CD jar old
 @jars creativedelight
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @draft no batch holds this row yet
 > cdevtest recipes raw_ max=500
 > cdevtest rdetail raw_beef_skewer_sequenced_assembly
@@ -247,19 +255,58 @@ look beef steps: deploy beef tag, cabbage tag, beef, cabbage; nether base blaze 
 @commands `cdevtest rdetail creativedelight:shaped/raw_caveskewer`; `cdevtest rdetail creativedelight:shaped/caveskewer_from_cooked_manual_only`; `cdevtest rdetail caveskewer`; `cdevtest rdetail improvised_barbecue_stick`
 @pass raw craft: glow berries, `miners_delight:spider_leg`, rotten flesh, stick -> 1 `hostiledelight:raw_caveskewer` (no spider eye); heatless: glow berries, `miners_delight:baked_spider_leg`, rotten flesh, stick -> 1 `hostiledelight:caveskewer`; grill / furnace / smoker / campfire cook the raw one; Miner's Improvised Barbecue Stick recipes unchanged; `hostiledelight:caveskewerrecp` absent
 @fails spider eye in the raw craft: `on('miners_delight')` false (member id); no heatless craft: `cookedInputs` missing
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+@absent hostiledelight:caveskewerrecp (upstream recipe id the pack removes: the row proves it is gone)
+> cdevtest rdetail creativedelight:shaped/raw_caveskewer
+> cdevtest rdetail creativedelight:shaped/caveskewer_from_cooked_manual_only
+> cdevtest rdetail caveskewer max=40
+> cdevtest rdetail hostiledelight:caveskewerrecp
+> cdevtest rdetail improvised_barbecue_stick max=20
+sleep 3
+expect verb=rdetail id=creativedelight:shaped/raw_caveskewer serializer=\S+ result=hostiledelight:raw_caveskewer\*1 ingredients=\S*glow_berries\S*miners_delight:spider_leg\S*rotten_flesh
+reject verb=rdetail id=creativedelight:shaped/raw_caveskewer .*spider_eye
+expect verb=rdetail id=creativedelight:shaped/caveskewer_from_cooked_manual_only serializer=\S+ result=hostiledelight:caveskewer\*1 ingredients=\S*glow_berries\S*miners_delight:baked_spider_leg\S*rotten_flesh
+expect verb=rdetail id=creativedelight:grilling/caveskewer
+expect verb=rdetail id=creativedelight:smelting/caveskewer_from_smelting
+expect verb=rdetail id=creativedelight:smoking/caveskewer_from_smoking
+expect verb=rdetail id=creativedelight:campfirecooking/caveskewer_from_campfire
+expect verb=rdetail text=hostiledelight:caveskewerrecp n=0
+look the Improvised Barbecue Stick lines are Miner's Delight's own (miners_delight ids, none rewritten to the Cave Skewer)
+reject \[cdevtest\] .*done=0
 ## SQ-BBQ-11 | Nether's Delight: Strider Moss Stew pot takes nether wart for the 2nd warped fungus; Warped Moldy Meat takes Cooked Nether Wart for the bowl
 @group any
 @commands `cdevtest rdetail creativedelight:farmersdelightcooking/strider_moss_stew`; `cdevtest rdetail creativedelight:shapeless/warped_moldy_meat`; `cdevtest rdetail nethersdelight:cooking/strider_moss_stew`; `cdevtest rdetail nethersdelight:warped_moldy_meat`
 @pass pot: warped fungus, crimson fungus, crimson roots, `#forge:crops/nether_wart`, `#nethersdelight:raw_strider`, container bowl, 200 ticks -> Strider Moss Stew; shapeless: 2 warped roots, hoglin sirloin, `roll_delight:cooked_nether_wart` (no bowl) -> Warped Moldy Meat; both upstream ids absent
 @fails upstream ids still there: `nethersdelight/recipes.js` did not run (`CD.on('nethersdelight')`)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+> cdevtest rdetail creativedelight:farmersdelightcooking/strider_moss_stew
+> cdevtest rdetail creativedelight:shapeless/warped_moldy_meat
+> cdevtest rdetail nethersdelight:cooking/strider_moss_stew
+> cdevtest rdetail nethersdelight:warped_moldy_meat
+sleep 3
+expect verb=rdetail id=creativedelight:farmersdelightcooking/strider_moss_stew serializer=farmersdelight:cooking result=nethersdelight:strider_moss_stew\*1 ingredients=.*warped_fungus.*crimson_fungus.*crimson_roots.*nether_wart
+expect verb=rdetail id=creativedelight:shapeless/warped_moldy_meat serializer=\S+ result=nethersdelight:warped_moldy_meat\*1 ingredients=\S*warped_roots,\S*warped_roots,\S*hoglin_sirloin,\S*roll_delight:cooked_nether_wart
+reject verb=rdetail id=creativedelight:shapeless/warped_moldy_meat .*bowl
+expect verb=rdetail text=nethersdelight:cooking/strider_moss_stew n=0
+expect verb=rdetail text=nethersdelight:warped_moldy_meat n=0
+look the pot recipe: 200 ticks, bowl container (rdetail part=fields if the line lacks it: cdevtest rdetail creativedelight:farmersdelightcooking/strider_moss_stew part=fields)
+reject \[cdevtest\] .*done=0
 ## SQ-BBQ-12 | heatless Strider Moss Stew from Cooked Nether Wart; Nether Skewer unchanged
 @group any
 @commands `cdevtest rdetail strider_moss_stew_cooked_manual_only`; `cdevtest rdetail raw_nether_skewer`; live: craft the heatless stew in a grid
 @pass shapeless: Cooked Nether Wart, warped fungus, crimson fungus, crimson roots, 2 raw strider -> 1 Strider Moss Stew, id ends `_manual_only` (no basin copy); Nether Skewer recipes as before this change; the grid gives no bowl back (the bowl is carried into the stew, G11)
 @fails no recipe: `F.mealCraft` line skipped (`CD.on('roll_delight')`); bowl handed back: `consumeIngredient` missing (an older Creative Delight jar whose `mealCraft` returns nothing)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+> cdevtest rdetail strider_moss_stew_cooked_manual_only
+> cdevtest rdetail raw_nether_skewer max=20
+sleep 3
+expect verb=rdetail id=creativedelight:shapeless/strider_moss_stew_cooked_manual_only serializer=\S+ result=nethersdelight:strider_moss_stew\*1 ingredients=\S*roll_delight:cooked_nether_wart,\S*warped_fungus
+count verb=rdetail id=\S*strider_moss_stew_cooked_manual_only == 1
+reject verb=rdetail id=\S*(basin|farmersdelightcooking)\S*cooked_manual_only
+expect verb=rdetail id=creativedelight:shaped/raw_nether_skewer
+expect verb=rdetail id=creativedelight:grilling/nether_skewer
+look the bowl handed back is covered live by SQ-BBQ-13 (a crafting grid needs a client); here only the recipe shape: one Cooked Nether Wart, no bowl ingredient (the bowl is carried into the stew)
+reject \[cdevtest\] .*done=0
 ## SQ-BBQ-13 | Warped Moldy Meat from Cooked Nether Wart gives no bowl back
 @group any
 @commands Survival player, empty inventory except 2 warped roots, 1 hoglin sirloin, 1 Cooked Nether Wart; craft Warped Moldy Meat in a crafting table grid; then the same with 2 sets and shift-click

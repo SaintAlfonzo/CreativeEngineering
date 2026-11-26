@@ -176,13 +176,13 @@ sleep 1
 > data get entity @e[tag=m121903,limit=1] LastExecuted
 expect has the following entity data
 
-## SQ-TPF-18 | MC-2025 25 cows in a fenced pen through 12 chunk unload and reload cycles: none outside (fixed)
+## SQ-TPF-18 | MC-2025 25 cows in a fenced pen through 12 chunk unload and reload cycles: none outside (shipped config: fix off, base behavior)
 @group A
 @commands batch row (MC-2025): 25 cows in a 5x5 oak fence pen, 12 forceload remove / add cycles
-@pass fix: `AABB` saved and the inside count stays 25 every cycle; base: `AABB` absent, any cycle below 25 = bug reproduced (LOOK at the counts)
+@pass shipped `debugify.json` has MC-2025 off (thirdparty_fixes.md): `AABB` is not saved (no such data), the pen counts are read for the record; a cycle below 25 with a "p2025-out" line = the bug reproduced (expected on base); the fix-on case needs `@s1` (MC-2025 on) and is not this row
 @fails base never below 25 in 12 cycles: not reproduced with this setup; record and keep the fix only if the owner wants it on evidence of the saved `AABB` alone
 @from batches/r1113tpf/s1_fix.qb
-@reviewed 2026-11-25
+@reviewed 2026-11-26
 > forceload add 1990 1990 2010 2010
 sleep 4
 # 25 cows in 25 blocks die of cramming (maxEntityCramming 24) after a reload: the r1114 losses were deaths (beef and
@@ -207,8 +207,8 @@ sleep 10
 end
 > execute if entity @e[tag=p2025]
 > gamerule maxEntityCramming 24
-look no "p2025-out" line in fix (an escape = MC-2025); base: any "p2025-out" = bug reproduced; a total below 25 with no "out" line is a death (r1114: cramming, suffocation), not the bug; the 12 "unloaded" checks print Test failed
-expect has the following entity data
+look base (MC-2025 off): any "p2025-out" = bug reproduced, none = not reproduced this time (record, not a FAIL); a total below 25 with no "out" line is a death (r1114: cramming, suffocation), not the bug; the 12 "unloaded" checks print Test failed
+expect Found no elements matching AABB|No entity was found
 
 ## SQ-TPF-19 | MC-224729 partially generated chunks are saved at shutdown (fixed) or lost (bug)
 @group B (two fresh levels)

@@ -18,7 +18,7 @@
 @commands Any small server batch of the run: `qrun.py lint BATCH` then `qrun.py run OUT BATCH RES`
 @pass lint prints `lint: ... E, ... W`; the run prints the same E lines first; `RES/verdicts/<ID>.json` per row with `checks` (one per expect / waitlog / shell ...), `looks`, `verdict`; `qrun.py table RES` matches `results.md`
 @fails `qverdict.write`, `run_row` `chk()`
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 shell python3 $INST/tools/scratch_query/qrun.py lint $INST/feature_writeup/testing/rows/TX.qb | tail -1 | grep -E "^lint: [0-9]+ batch\(es\), [0-9]+ error\(s\), [0-9]+ warning\(s\)"
 look after the run: RES/verdicts/<ID>.json for every row with `checks` (one per expect / waitlog / shell), `looks`, `verdict`; the run printed the batch's E lines first; `qrun.py table RES` matches results.md
 ## SQ-TXQ-02 | say then a long sleep; JVM killed during the sleep

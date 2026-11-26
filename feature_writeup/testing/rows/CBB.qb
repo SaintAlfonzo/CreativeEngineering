@@ -93,6 +93,7 @@ look no kippers recipe (n=0); record whether #forge:raw_fishes holds miners_deli
 reject \[cdevtest\] .*done=0
 
 ## SQ-CBB-06 | cooking boot: SQ-CBA-01 to -03 checks
+@reviewed 2026-11-26
 @group A (cooking)
 @commands `port_chain.sh server OUT cbb6 A cooking`; boot; the SQ-CBA-01 to -03 checks
 @pass `[creativebrewing] members:` line; no `Missing or unsupported`; no script error; `lava_vision.js` still skipped (Alex's Mobs is IN the cooking set: expect it loaded now, so no skip line)

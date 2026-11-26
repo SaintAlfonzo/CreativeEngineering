@@ -846,6 +846,7 @@ look the macro reply lines; the pinned id in the settings reply
 @@text
 @@table
 ## SQ-TP-42 | two chronometers charge the Tempad: the first one found charges, the second is ignored (A4)
+@reviewed 2026-11-26
 @group A
 @commands Bot `t42` with a Tempad at 0 chronons in hotbar 0 and two chronometers at 0 in hotbar 1 and 2; `cdevtest tickwarp 2400`; `/ztp chr t42`
 @pass the Tempad has chronons after the warp (it was 0 with two chronometers before the fix); the hotbar 2 chronometer still holds 0 (ignored, and `auto_charge_blacklist` keeps it from being charged)

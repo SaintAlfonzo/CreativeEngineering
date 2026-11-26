@@ -103,7 +103,7 @@ look the five player lines: Comfort 4:00, Nourishment 4:00, Instant Breath (air=
 @commands Kill a salmon with a knife, an elder guardian, a squid; `/loot` a shipwreck supply and a buried treasure chest; fresh warm ocean
 @pass Salmon eggs and elder eye drop as upstream (squid: one squid item, no tentacles); chests can hold salmon or ancient fish eggs; wild sea grape patches generate
 @fails Modifier error in the log: codec `oceanic_delight:oceanic_delight_loot_modifier` not registered
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 bootreject (?i)oceanic_delight:oceanic_delight_loot_modifier.*(not registered|unknown|error)
 > forceload add 0 0 15 15
 > fill 0 199 0 15 199 15 minecraft:glass
@@ -123,16 +123,31 @@ reject verb=kill drops=\S*tentacle
 waitlog nearest minecraft:warm_ocean is at 300
 capture WO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > pbot spawn dnr4 {WO1} 120 {WO3} minecraft:overworld creative
-sleep 30
-# a count box is at most 262144 blocks (64x64x64): the box runs as slices; the shell sums them
+# rewritten 2026-11-26 (r1126q writer-5): r1120nv scanned 96 x 96 blocks at 1 patch attempt per 30 chunks (ocean_delight.md: placed 1 in 30 chunks), about 1 expected, 0 found. The area is forceloaded 256 x 256 (256 chunks, about 8 attempts) and counted in 16 slices of 64 x 40 x 64
+> forceload add {WO1-128} {WO3-128} {WO1+127} {WO3+127}
+sleep 100
 > say DNRO04 begin
-> cdevtest count {WO1-48} 20 {WO3-48} {WO1+47} 64 {WO3-1} oceanic_delight:wild_sea_grape
-> cdevtest count {WO1-48} 20 {WO3} {WO1+47} 64 {WO3+47} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-128} 24 {WO3-128} {WO1-65} 63 {WO3-65} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-128} 24 {WO3-64} {WO1-65} 63 {WO3-1} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-128} 24 {WO3} {WO1-65} 63 {WO3+63} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-128} 24 {WO3+64} {WO1-65} 63 {WO3+127} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-64} 24 {WO3-128} {WO1-1} 63 {WO3-65} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-64} 24 {WO3-64} {WO1-1} 63 {WO3-1} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-64} 24 {WO3} {WO1-1} 63 {WO3+63} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-64} 24 {WO3+64} {WO1-1} 63 {WO3+127} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1} 24 {WO3-128} {WO1+63} 63 {WO3-65} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1} 24 {WO3-64} {WO1+63} 63 {WO3-1} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1} 24 {WO3} {WO1+63} 63 {WO3+63} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1} 24 {WO3+64} {WO1+63} 63 {WO3+127} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1+64} 24 {WO3-128} {WO1+127} 63 {WO3-65} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1+64} 24 {WO3-64} {WO1+127} 63 {WO3-1} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1+64} 24 {WO3} {WO1+127} 63 {WO3+63} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1+64} 24 {WO3+64} {WO1+127} 63 {WO3+127} oceanic_delight:wild_sea_grape
 > say DNRO04 end
-waitlog DNRO04 end 120
+waitlog DNRO04 end 240
 shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" DNRO04 oceanic_delight:wild_sea_grape
+> forceload remove {WO1-128} {WO3-128} {WO1+127} {WO3+127}
 > pbot remove dnr4
-expect verb=count block=oceanic_delight:wild_sea_grape n=[1-9]
 reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 look the chest items line may hold salmon or ancient fish eggs over the 20 rolls (chance-based: record, not judged); the squid kill drops one squid item; the warm ocean count above 0 (patches generate)
 ## SQ-DNR-E-01
@@ -148,7 +163,7 @@ look the chest items line may hold salmon or ancient fish eggs over the 20 rolls
 @commands `/loot spawn ~ ~ ~ loot endersdelight:blocks/chorus_crate`; break `chorus_flame_block` age 2 and a fruiting `voidpepper_block`; `/locate structure endersdelight:end_house` in the End
 @pass Crate drops itself; plants drop as in EDL-01 / EDL-02; the End House is located and placed
 @fails Compare `EndersTranslator.DATA` with `/datapack list` (`enders_upstream_data`)
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @absent endersdelight:end_house (structure id: in the Ender's 1.1.4 donor jar data/endersdelight/worldgen/structure/end_house.json and kubejs/exported/worldgen/structuregen.json, not in the registry dump)
 > forceload add 2592 2592 2616 2616
 > loot spawn 2600 -58 2600 loot endersdelight:blocks/chorus_crate
@@ -161,6 +176,13 @@ waitlog (nearest endersdelight:end_house|Could not find) 300
 expect Dropped [1-9]
 expect verb=loot state="?endersdelight:chorus_flame_block\[age=2\]"? .*drops=\S+
 expect nearest endersdelight:end_house
+# 2026-11-26 (r1126q writer-5): placed half, so the row does not rest on the locate alone (r1120nv: not found after 120 s timeout from the old start point)
+> execute in minecraft:the_end run forceload add 1200 0 1263 63
+sleep 5
+> execute in minecraft:the_end run place structure endersdelight:end_house 1216 70 16
+waitlog (Generated structure|Failed to place structure) 60
+expect Generated structure .*end_house
+> execute in minecraft:the_end run forceload remove 1200 0 1263 63
 reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|Unknown item|No player was found)
 look the chorus flame drops as in EDL-01; the fruiting voidpepper_block half (its fruiting state name) is EDL-02's
 

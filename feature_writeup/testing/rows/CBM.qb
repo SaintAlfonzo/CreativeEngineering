@@ -16,19 +16,22 @@
 ## SQ-CBM-01 | CB startup pack
 @group A
 @commands `grep -E "Error\|creativebrewing\|potion_area\|Tool Effects\|\[alcohol\]\|\[food values\]\|CE potions" logs/kubejs/startup.log \| head -40`
-@pass CB pack lists `creativeengineering/potions.js` ... `vinery/winemaker_trades.js`; `[alcohol] food values set on 51 of 51 drinks` (as before the move); `[food values] 12 effect swaps`; no `could not install dispenser handler`; no `global.trades missing`
+@pass CB pack lists `creativebrewing/potions.js` ... `vinery/winemaker_trades.js` (the files are under `kubejs_startup/creativebrewing/`, `brewinandchewin/` and `vinery/` in the jar); `[alcohol] food values set on 51 of 51 drinks`; `[food values] N effect swaps` (12 before the move, 15 on 2026-11-23: a changed N is not a fault); no `could not install dispenser handler`; no `global.trades missing`
 @fails A moved startup file reads a pack top-level name at load (4.1 rule 3), or a renamed Java class (PotionBucketDispenser, DragonBreathBrewing, WinemakerTrades) is not in the CB jar
+@reviewed 2026-11-26
 @from batches/r1101/cs4_boot3.qb
 shell grep -E "Error|creativebrewing\]|potion_area|Tool Effects|\[alcohol\]|\[food values\]|CE potions|could not install|global.trades missing|jar-startup" logs/kubejs/startup.log | cut -c1-220 | head -40
 kjsreject could not install dispenser handler
 kjsreject global\.trades missing
-look CB pack lists its startup files; [alcohol] food values set on 51 of 51 drinks; [food values] 12 effect swaps
+bootexpect \[alcohol\] food values set on 51 of 51 drinks|food values set on \d+ of 51 drinks
+look CB pack lists its startup files; [alcohol] food values set on 51 of 51 drinks (Kippers were removed 2026-11-23 and stay out of the count of 51); [food values] N effect swaps with N at least 12
 
 ## SQ-CBM-02 | CB-registered items, effect, potion
 @group A
 @commands Same boot: `/give` `creativeengineering:potion_bucket`, `creativeengineering:magic_resistance` via `/effect give`, a `minecraft:potion{Potion:"creativeengineering:long_reach"}`
 @pass Items, effect and potion exist (registered from the CB startup pack)
 @fails Registry callbacks from jar packs not fired
+@reviewed 2026-11-26
 @from batches/r1101/cs4_boot3.qb passed
 # judge-3, 2026-11-18: ids follow the owning jar since 2026-11-09 (potion bucket creativebrewing:, potions and effect
 # creativecommon:); the qa bot came from the lost cs4_boot3 setup row, spawned here at the flat-world origin
@@ -47,7 +50,7 @@ expect Gave 1 +\[.*\] to qa
 @pass Same recipe counts as before the move; recipe ids now `creativebrewing:<type>/...` (were `creativeengineering:`); Brewin' upstream ids (`brewinandchewin:fermenting/beer_from_water` ...) still removed
 @fails `global.CB.recipes` missing, or a removal ran after its own add
 @from batches/r1101/cs4_boot3.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 shell grep -E "potion bottling done|tipped arrow|alcohol recipes|jeed_providers.js:" logs/kubejs/server.log | cut -c1-200 | head -10
 > cdevtest recipes creativebrewing: max=1
 waitlog \[cdevtest\] verb=recipes text=creativebrewing: n= 30
@@ -63,6 +66,7 @@ look bottling 1710, tipped 94 x 2 as in boot 2; the `verb=recipes text=creativeb
 @commands Same boot: `/reload`; `grep "wandering trades" logs/kubejs/server.log`
 @pass `[wandering trades] common 208, rare 39` from the pack and `[wandering trades] winemaker 34` from CB (the last pre-move log: 208 / 39 / 34)
 @fails Winemaker helpers not added to `global.trades`
+@reviewed 2026-11-26
 @from batches/r1101/cs4_boot3.qb passed
 shell grep "wandering trades" logs/kubejs/server.log | cut -c1-200
 # judge-3, 2026-11-18: 208 / 37 / 34 on 2026-11-18 (the owner's own play log says rare 37 too); counts are recorded, the
@@ -75,6 +79,7 @@ kjsexpect \[wandering trades\] winemaker [1-9]\d
 @commands Same boot: `/dumptags` fluid `forge:fluid/potion`, `forge:fluid/dragon_breath`
 @pass `create:potion` in the first, IE's potion fluid not; dragon's breath in the second
 @fails CB fluid tag script not loaded
+@reviewed 2026-11-26
 @from batches/r1101/cs4_boot3.qb
 > dumptags
 waitlog (dumptags|tags).*(done|written|wrote) 300

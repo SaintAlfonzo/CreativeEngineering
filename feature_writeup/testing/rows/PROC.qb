@@ -15,7 +15,12 @@
 @commands Boot the scratch server; `grep "\[creativecommon\] builds:" logs/latest.log`; `python3 tools/jarstamp.py <srv>/mods`
 @pass one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.csv` row of that jar
 @fails `creativecommon.util.BuildStamps` (ModList mod files, `findResource("META-INF","ce-build.json")`); no line at all: Common jar older than the stamp build
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): the log line is parsed (mod id, stamp) and compared with jarstamp.folder_stamps of the server's mods folder, the stamps prep_srv.sh pinned
+bootexpect \[creativecommon\] builds: [a-z]
+bootreject \[creativecommon\] builds: could not list mod files
+shell python3 -I -c "import sys; sys.path.insert(0, sys.argv[1] + '/tools'); import jarstamp; L = [l for l in open('logs/latest.log', errors='replace') if '[creativecommon] builds:' in l]; logged = dict(p.strip().split(' ', 1) for p in L[-1].split('builds:', 1)[1].split(',')) if L else {}; st = jarstamp.folder_stamps('mods'); bad = [k for k, (n, s, m) in st.items() if s and logged.get(k) != s]; print('own jars', len(st), 'logged', len(logged), 'mismatch', bad); sys.exit(1 if bad or not L or not logged else 0)" "$INST"
+look the shell line: every stamped own jar of srv/mods has its stamp in the builds line (the installed.csv half is the run doc's check for jars installed from mods/)
 
 @@section 2
 @@title SQ-PROC Tiered scratch queue, live checks, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.1 to P2.4; TODO `tooling/process #5`)
@@ -27,31 +32,31 @@
 @@text
 @@table
 ## SQ-PROC-10 | prep_srv.sh pins the own jars: copies, not links; pinned.json verifies
-@reviewed 2026-11-20
 @group A
 @commands After `prep_srv.sh OUT LEVEL A`: `python3 tools/scratch_query/qpin.py verify OUT`; `python3 tools/scratch_query/qpin.py show OUT`
 @pass verify prints `qpin: OK`; `pinned.json` lists every own jar of `srv/mods` (Creative jars, exposure, power grid only with PGJAR) with its stamp, or `sha1:` for a jar built before stamping; no own jar in `srv/mods` has a link count above 1
 @fails a link left: the pin step in prep_srv.sh did not run (prep output has no `pin:` line); an unlisted jar: a jar in mods/ with no mod_sides.md row (remove it or add the row)
+@reviewed 2026-11-26
 shell python3 "$INST/tools/scratch_query/qpin.py" verify ..
 shell python3 "$INST/tools/scratch_query/qpin.py" show ..
 
 ## SQ-PROC-11 | the boot builds line names the pinned stamps
-@reviewed 2026-11-20
 @group A
 @commands Boot; `grep "\[creativecommon\] builds:" logs/latest.log`; compare with `qpin.py show OUT`
 @pass every stamped own jar in the builds line has the stamp pinned.json holds for it
 @fails a different stamp: a jar changed between prep and boot (qrun would refuse the next run: `qpin.py verify`)
+@reviewed 2026-11-26
 bootexpect \[creativecommon\] builds:
 shell grep -m1 "\[creativecommon\] builds:" logs/latest.log
 shell python3 "$INST/tools/scratch_query/qpin.py" show ..
 look the stamps in the builds line (shell output) equal the pinned ids of the same jars
 
 ## SQ-PROC-12 | verdict files carry the pinned stamps
-@reviewed 2026-11-20
 @group A
 @commands Any row run by `qrun.py run` on this server, then read `RES/verdicts/<ID>.json`
 @pass the verdict file has `stamps` equal to `pinned.json` `jars` ids; `qrun.py states --code PROC` shows the row `current` while mods/ holds the same jars
 @fails `stamps` null: qrun ran without the pin check (target without `srv/`) or an old qrun.py
+@reviewed 2026-11-26
 > say SQ-PROC-12 marker
 expect SQ-PROC-12 marker
 look after the run: RES/verdicts/SQ-PROC-12.json has stamps equal to OUT/pinned.json jars ids

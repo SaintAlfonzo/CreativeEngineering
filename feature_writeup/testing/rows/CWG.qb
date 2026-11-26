@@ -8,7 +8,7 @@
 @@date 2026-11-02
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/creative_worldgen.md
-@@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309
+@@prep A: level-type=minecraft:normal generate-structures=true level-seed=8675309 spawn-animals=true
 @@text
 @@text Not run. One save carried across: boot 1 on the installed jars (Creative Common 1.1.07, standalone `moreMooblooms-1.1.0.jar`,
 @@text Baby Mobs inside Creative Delight), generate a world, `/save-all`; boot 2 on Creative Common 1.1.08, `creativeworldgen-1.0.0.jar`,
@@ -57,7 +57,7 @@ look named_mobs chance 0.02 carried (edited before this boot); [perf] in the Wor
 @pass Pack `creativeworldgen` loads; no `global.CWG missing`, no `no ... section in any registered config`, no `[loot-tuning] could not read`; structure, bee nest, wild flower, mushroom and mob spawn reports rewritten
 @fails `cwg_core.js` not in the jar, `registerConfig` class name, or a moved script reading a pack-scope name
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/latest.log | head -3
 shell grep -hE "startup script packs in order" logs/kubejs/startup.log logs/latest.log | grep -q creativeworldgen
 shell ! grep -hE "global\.CWG missing|section in any registered config|\[loot-tuning\] could not read" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
@@ -104,8 +104,8 @@ look the "N rules" number equals SQ-CWG-04's /loottuning in sA_2.qb (rows/SQ-CWG
 @pass Locates resolve; no `[meta-structures] ... unknown field "punch"` or `not a loaded structure` line; the meta structure places its punch shaft; earth fill and ground match log as before; custom dimensions load (`/execute in` each)
 @fails `punch` missing from `META_PART_KEYS` in the Worldgen jar's `structure_overrides.js` (fixed 2026-11-03, rebuild Creative Worldgen), registration not moved to `CreativeWorldgen`, or the `meta_punch` piece type id changed
 @from batches/r1103/sA_4.qb
-@reviewed 2026-11-20
 @absent minecraft:pillager_outpost minecraft:village_plains (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+@reviewed 2026-11-26
 > locate structure minecraft:pillager_outpost
 waitlog The nearest minecraft:pillager_outpost 600
 > locate structure minecraft:village_plains
@@ -165,8 +165,8 @@ look every listed tag has members; the bubble_column_immune entity tag present
 @pass both mooshrooms present; the village placed; clone counts recorded for SQ-CWG-08 (boot 2)
 @fails `place structure` refused (pool or template), a summon refused
 @from batches/r1103/sA_1.qb
-@reviewed 2026-11-18
 @absent minecraft:village_plains (structure id: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+@reviewed 2026-11-26
 # r1118 R4 A1 (2026-11-18): boot 1 of SQ-CWG-08 on the current jars (the old 1.1.06 world half is dropped, plan_rowfix_r1118
 # section 4: that migration shipped in 1.2.00); SQ-CWG-08 is @boot 2 on the same world
 bootexpect Done \(
@@ -209,7 +209,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass Forgiving Void pulls the player back; End illager in diving gear, upgrade_aquatic flares refused; the donor line reads `[farmers-donor] N files from Farmer's Structures 1.0.6`
 @fails `forgivingvoid` gate, `end_divers.js`, or `shared_sources=packs` in the Worldgen build
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # r1120fix (2026-11-20): the illager summon spot -30 75 30 gets its own forceload; the donor line is
 # `[farmers-donor] N files from Farmer's Structures 1.0.6 {...}` (logger creativeworldgen/farmers-donor), the old
 # "Farmer's Structures donor" / "FarmersDonor" words are not in it
@@ -217,9 +217,16 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 > execute in minecraft:the_end run forceload add -48 16 -16 47
 sleep 10
 > pbot spawn safv 210 5 16 minecraft:the_end survival
-sleep 20
+# 2026-11-26 (writer-3, r1120nv judge-9): r1120nv showed the bot falling to y -110 five times with no lift while triggerAtDistanceBelow = 32
+# (End min y 0, so the pull is due below y -32) and `safv fell out of the world`; the half is now a hard check: a sample every second
+# must catch the player high above the island after the fall (fallingHeight 500), and the player must not die
+repeat 12
+sleep 1
 > data get entity safv Pos
+end
 > data get entity safv Dimension
+count entity data: \[-?\d+\.\d+d, [1-5]\d\d\.\d+d, -?\d+\.\d+d\] >= 1
+reject safv fell out of the world
 # judge-9 (2026-11-21): difficulty is peaceful on the scratch server, which removes the summoned pillager and witch
 > difficulty easy
 > execute in minecraft:the_end run summon minecraft:pillager -30 75 30 {PersistenceRequired:1b,Tags:["saendp"]}
@@ -253,8 +260,8 @@ look no error on the Farmer's donor pin or check_climate_reader; the Worldgen sc
 @pass Saved structures and mobs intact; mooshroom breeding as before; leaf decay cascade; raiders glow; the three Devtools commands run
 @fails A listener that did not move, or Devtools' `ModList` guard
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-18
 @boot 2
+@reviewed 2026-11-26
 # r1118 R4 A1 (2026-11-18): boot 2 of SQ-CWG-08a (same world, current jars); SAH captured again; old names ceperf / ceplace -> cdevperf / cdevplace
 > data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
 capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]

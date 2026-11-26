@@ -127,14 +127,37 @@ expect HOP05-still-age1$
 expect HOP05-unsterilized$
 reject \[cdevtest\] verb=\S+ done=0
 
-## SQ-HOP-06 | judged from SQ-HH-304's countsets: hops vine chunks at least 1 and at most a quarter of the wild carrot chunks
+## SQ-HOP-06 | hops vine chunks over two forest sites: at least 1 and at most a quarter of the wild carrot chunks
 @phase worldgen
-@group B (fresh world, with SQ-HH-304)
-@commands As SQ-HH-304 (two located forests, 256 chunks each) counting `hearthandharvest:hops_vine`; also the typical crop: same boxes, `/zhh2 countset ... farmersdelight:wild_carrots`
-@pass hops vine count at least 1 over the two sites and below the wild carrot patch count (rarity 96 vs 120, but one tree per hit, several vine blocks per tree; compare hits: vine clusters at most a quarter of the carrot patches)
-@fails `worldgen/placed_feature/wild/wild_hops.json` (rarity 96, `MOTION_BLOCKING_NO_LEAVES`), `TrunkVineFeature` (trunk search: a log with a non-log below within origin y-6..+10)
+@group B (fresh world)
+@commands As SQ-HH-304 (two located forests, 256 chunks each): `/zhh2 countset` of `hearthandharvest:hops_vine` and `farmersdelight:wild_carrots` per site; the chunk counts of both sites are summed in a shell check
+@pass hops vine chunk count at least 1 over the two sites and at most a quarter of the wild carrot chunk count (rarity 96 vs 120, but one tree per hit, several vine blocks per tree; compare chunks with a hit, not blocks); `columns skipped: 0`
+@fails `worldgen/placed_feature/wild/wild_hops.json` (rarity 96, `MOTION_BLOCKING_NO_LEAVES`), `TrunkVineFeature` (trunk search: a log with a non-log below within origin y-6..+10); zero vines at both sites with carrots present: the feature is not placed (Brewing jar out)
 @from batches/r1115/p5_b1.qb
-look hops_vine "in K chunks" over the two sites at least 1 and at most a quarter of wild_carrots' chunk count
+@jars creativedelight powergrid
+@reviewed 2026-11-26
+# self-contained since 2026-11-26 (r1126q, BATCH-FAULT in r1124fx: the row had no steps and was judged from another step's lines); steps of SQ-HH-304 plus the compare
+> locate biome minecraft:forest
+waitlog (minecraft:forest is at \[|Could not find) 300
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {P1-128} {P3-128} {P1+127} {P3+127}
+sleep 90
+> zhh2 countset {P1-128} 40 {P3-128} {P1+127} 120 {P3+127} hearthandharvest:hops_vine,farmersdelight:wild_carrots
+waitlog countset farmersdelight:wild_carrots: \d+ 120
+capture HV1 countset hearthandharvest:hops_vine: \d+ \(in (\d+) chunks\)
+capture WC1 countset farmersdelight:wild_carrots: \d+ \(in (\d+) chunks\)
+> execute positioned 2144 70 -2592 run locate biome minecraft:forest
+waitlog (minecraft:forest is at \[(?!{P1}, )|Could not find) 300
+capture Q is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}
+sleep 90
+> zhh2 countset {Q1-128} 40 {Q3-128} {Q1+127} 120 {Q3+127} hearthandharvest:hops_vine,farmersdelight:wild_carrots
+waitlog countset farmersdelight:wild_carrots: \d+ 120
+capture HV2 countset hearthandharvest:hops_vine: \d+ \(in (\d+) chunks\)
+capture WC2 countset farmersdelight:wild_carrots: \d+ \(in (\d+) chunks\)
+count \[zhh2\] countset columns skipped: 0$ == 2
+shell python3 -c "import sys; h=int('{HV1}')+int('{HV2}'); w=int('{WC1}')+int('{WC2}'); print('hops chunks',h,'carrot chunks',w); sys.exit(0 if h>=1 and w>0 and h*4<=w else 1)"
+reject \[zhh2\] .*(error|Error)
 
 ## SQ-HOP-15 | judged from SQ-HH-304's countsets: wild carrots and adzuki sprouts found in the forest boxes (chance 60, rarity 64)
 @phase worldgen
@@ -347,7 +370,7 @@ look sum of the two `countset hearthandharvest:hops_vine` lines at least 1 (vine
 @pass loot gives end stone; id in the mineable tag; "Test passed"
 @fails `hearthandharvest/tags.js` (`b.tilled_end_stone`, endercrop guard)
 @jars creativedelight powergrid
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > forceload add 608 512 639 527
 # bot G spawned in the row since r1120nv (judge-7, 2026-11-21): the rewritten row ran with no G
 > execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
@@ -423,7 +446,7 @@ look first countset (diamond, enchanted): end_stone 9, tilled 0; second (netheri
 @pass the fill/empty part as before; basin slots stay empty after the bucket, the dirt and the hopper (bot still holds them, hopper keeps them)
 @fails `StompingInputs.accepts`, `StompingBasinBlockEntity.insert` and `Items.isItemValid`
 @jars creativedelight powergrid
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
 > forceload add 160 192 335 223
 > execute unless entity hb1 run pbot spawn hb1 178 -60 204 minecraft:overworld survival

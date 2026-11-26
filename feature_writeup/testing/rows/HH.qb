@@ -3088,11 +3088,14 @@ expect has the following entity data: (29\d|2[0-8]\d)\.\d+f
 @pass log matches `fx pfb8: none`; log matches `has the following entity data: (29\d\|2[0-8]\d)\.\d+f`
 @fails `entity/ThrownPitchfork.java`, `ThrownTool`: no Pinned, but the hit lands (health under 300). A flying or swimming mob must be exempt by class or navigator
 @from batches/r1108hh/t12_a.qb
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): r1120nv left the squid on dry ground, where it ignores hits (health stayed 300); the squid now swims in a 3 x 3 x 3 water pool at its spot
 > forceload add 3288 3192
 > pbot spawn bot1 3288 -60 3192 minecraft:overworld survival
 > effect clear bot1
 > clear bot1
 sleep 3
+> fill 3287 -61 3195 3289 -59 3197 minecraft:water
 > summon minecraft:squid 3288 -59 3196 {NoAI:1b,PersistenceRequired:1b,Tags:["pfb8"],Attributes:[{Name:"generic.max_health",Base:300.0d}],Health:300f}
 sleep 1
 > tp bot1 3288 -60 3192 0 0
@@ -3882,19 +3885,19 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass log matches `has the following block data: \{Amount: 1000\b.*hearthandharvest:sap`; log matches `has the following entity data: \{Count: 1b, id: "minecraft:bucket"\}`
 @fails `HHFluids.SAP` bucket capability (FluidBucketWrapper); Create fluid tank `use`
 @from batches/r1108hh/t12_a.qb
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): r1120nv's `pbot use` with the held bucket answered PASS but the tank stayed empty (a bot use is no block use with that stack); /cdevtest use is the real right click per hand, /cdevtest tank reads the fluid
 > forceload add 3288 3384
 > pbot spawn bot1 3288 -60 3384 minecraft:overworld survival
 > effect clear bot1
 > clear bot1
 sleep 3
 > setblock 3288 -60 3386 create:fluid_tank
-> pbot hold bot1 hearthandharvest:sap_bucket
-> pbot use bot1 3288 -60 3386
-sleep 1
-> data get block 3288 -60 3386 TankContent
-> data get entity bot1 SelectedItem
-expect has the following block data: (?=.*Amount: 1000\b)(?=.*hearthandharvest:sap)
-expect has the following entity data: \{(Count: 1b, id: "minecraft:bucket"|id: "minecraft:bucket", Count: 1b)\}
+> cdevtest use 3288 -60 3386 as=bot1 held=hearthandharvest:sap_bucket hand=main
+> cdevtest tank 3288 -60 3386
+expect verb=use main=minecraft:bucket\*1
+expect verb=tank tanks=\d+ fluids=0:hearthandharvest:sap\*1000/
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1308 | log matches `finish bot1 hearthandharvest:goat_milk_bucket -> minecraf
 @group A
@@ -6079,40 +6082,54 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-303 | `[Pp]laced feature` in the command output; `countset hearthandharvest:
 @phase worldgen
 @group A
-@commands Plot 4160 32. `/place feature creativedelight:wild/wild_hops 4160 -60 32`; `/zhh2 countset 4144 -60 16 4176 -58 48 hearthandharvest:wild_hops,minecraft:grass`
-@pass `[Pp]laced feature` in the command output; `countset hearthandharvest:wild_hops: [1-9]` (the configured feature parses and the wild crop places, J24)
-@fails `kubejs/data/creativedelight/worldgen/configured_feature/wild/wild_hops.json`; a `Failed to place` on flat grass = the `farmersdelight:wild_crop` predicate
+@commands Plot 4160 32. Five oak logs at 4160 -60..-56 32; `/place feature creativedelight:wild/wild_hops 4164 -60 32` (4 blocks from the trunk); `/zhh2 countset 4150 -60 22 4170 -50 42 hearthandharvest:hops_vine,minecraft:oak_log`
+@pass `Placed feature` in the command output; `countset hearthandharvest:hops_vine: [2-9]` (a vine 2 to 5 blocks long hangs on the trunk, J24 as superseded 2026-11-14), the trunk's 5 logs still stand
+@fails `kubejs/data/creativedelight/worldgen/configured_feature/wild/wild_hops.json` (type `hearthandharvest:trunk_vine`, block `hearthandharvest:hops_vine`); `TrunkVineFeature` (a trunk needs 3 logs and a free side, the origin within 8 blocks); a `Failed to place` = no trunk found or Vinery not loaded (the vine block is gated on it)
 @from batches/r1111/hh_wga.qb
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): the feature no longer places the wild_hops plant (J24 superseded 2026-11-14: a hops vine on a tree trunk), so flat grass is not a target (r1120nv: Failed to place, wild_hops 0); the row builds a trunk and counts the vine
 > forceload add 4144 16 4176 48
 sleep 3
-> place feature creativedelight:wild/wild_hops 4160 -60 32
-> zhh2 countset 4144 -60 16 4176 -58 48 hearthandharvest:wild_hops,minecraft:grass
-look `[Pp]laced feature` in the command output; `countset hearthandharvest:wild_hops: [1-9]` (the configured feature parses and the wild crop places, J24)
+> fill 4150 -60 22 4170 -50 42 minecraft:air
+> fill 4160 -60 32 4160 -56 32 minecraft:oak_log
+> place feature creativedelight:wild/wild_hops 4164 -60 32
+> zhh2 countset 4150 -60 22 4170 -50 42 hearthandharvest:hops_vine,minecraft:oak_log
+waitlog countset columns skipped 30
+expect Placed feature
+expect countset hearthandharvest:hops_vine: [2-9]
+expect countset minecraft:oak_log: 5
+reject Failed to place
 
 ## SQ-HH-304 | sum of the two `countset hearthandharvest:wild_hops` lines at least 1
 @phase worldgen
 @group B
-@commands Fresh world, new level-name, seed 8675309 (worldgen registry rows; a world made before tranche 3 has none of this). `prep_srv.sh OUT hhwb B`; copy the probe; boot. `/locate biome minecraft:forest`, qrun `capture P is at \[(-?\d+), (~\|-?\d+), (-?\d+)\]` ({P1} = x, {P3} = z; same form for every capture below); `forceload add {P1-128} {P3-128} {P1+127} {P3+127}` (256 chunks); after it finishes `/zhh2 countset {P1-120} 40 {P3-120} {P1+119} 120 {P3+119} hearthandharvest:wild_hops`; second site: `execute positioned 2144 70 -2592 run locate biome minecraft:forest` capture Q; `forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}`; `/zhh2 countset {Q1-120} 40 {Q3-120} {Q1+119} 120 {Q3+119} hearthandharvest:wild_hops`
-@pass sum of the two `countset hearthandharvest:wild_hops` lines at least 1 (`countset ... [1-9]` on one of them: rate 1 in 120 chunks, two 256-chunk sites give about 4 patches, HNH-04 hops half, J24). `columns skipped: 0` on each
-@fails `placed_feature/wild/wild_hops.json` rarity, the wild crop biome modifier `creativedelight:forge/biome_modifier/wild_crops/wild_hops`; 0 with nothing skipped twice is under 2 % by chance, look at the feature json
+@commands Fresh world, new level-name, seed 8675309 (worldgen registry rows; a world made before tranche 3 has none of this). `prep_srv.sh OUT hhwb B`; copy the probe; boot. `/locate biome minecraft:forest`, qrun `capture P is at \[(-?\d+), (~\|-?\d+), (-?\d+)\]` ({P1} = x, {P3} = z; same form for every capture below); `forceload add {P1-120} {P3-120} {P1+119} {P3+119}` (240 x 240 blocks, 225 chunks); after it finishes `/zhh2 countset {P1-120} 40 {P3-120} {P1+119} 120 {P3+119} hearthandharvest:hops_vine`; second site: `execute positioned 2144 70 -2592 run locate biome minecraft:forest` capture Q, the same forceload and count
+@pass sum of the two `countset hearthandharvest:hops_vine` lines at least 1 (the wild hops are hops vines on a trunk since 2026-11-14, 1 in 96 chunks, J24; HNH-04 hops half). `columns skipped: 0` on each
+@fails `placed_feature/wild/wild_hops.json` rarity (96), the wild crop biome modifier `creativedelight:forge/biome_modifier/wild_crops/wild_hops`, `TrunkVineFeature` (needs a trunk 3 logs high within 8 blocks of the origin); 0 with nothing skipped twice is under 1 % by chance, look at the feature json
 @from batches/r1111/hh_wgb.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): r1124fxr2 counted `hearthandharvest:wild_hops` (0 in 0 chunks at both sites), but J24 (superseded 2026-11-14) turned the wild hops into hops vines hung on trunks (TrunkVineFeature), so the plant block is never placed; the row counts the vine and sums the two sites with a shell check
 # setup/shell: prep_srv.sh OUT hhwb B
 > locate biome minecraft:forest
 waitlog (nearest minecraft:forest is at \[|Could not find a biome of type "?minecraft:forest) 300
 capture P nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {P1-120} {P3-120} {P1+119} {P3+119}
 sleep 90
-> zhh2 countset {P1-120} 40 {P3-120} {P1+119} 120 {P3+119} hearthandharvest:wild_hops
+> zhh2 countset {P1-120} 40 {P3-120} {P1+119} 120 {P3+119} hearthandharvest:hops_vine
 waitlog \[zhh2\] done 300
+capture HA countset hearthandharvest:hops_vine: (\d+)
+capture SA countset columns skipped: (\d+)
 > execute positioned 2144 70 -2592 run locate biome minecraft:forest
 waitlog (nearest minecraft:forest is at \[|Could not find a biome of type "?minecraft:forest) 300
 capture Q nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {Q1-120} {Q3-120} {Q1+119} {Q3+119}
 sleep 90
-> zhh2 countset {Q1-120} 40 {Q3-120} {Q1+119} 120 {Q3+119} hearthandharvest:wild_hops
+> zhh2 countset {Q1-120} 40 {Q3-120} {Q1+119} 120 {Q3+119} hearthandharvest:hops_vine
 waitlog \[zhh2\] done 300
-look sum of the two `countset hearthandharvest:wild_hops` lines at least 1 (`countset ... [1-9]` on one of them: rate 1 in 120 chunks, two 256-chunk sites give about 4 patches, HNH-04 hops half, J24). `columns skipped: 0` on each
+capture HB countset hearthandharvest:hops_vine: (\d+)
+capture SB countset columns skipped: (\d+)
+shell python3 -c "import sys; print('hops_vine', {HA}, {HB}, 'skipped', {SA}, {SB}); sys.exit(0 if {HA} + {HB} >= 1 and {SA} == 0 and {SB} == 0 else 1)"
+look the sum of the two counts is at least 1 (rate 1 in 96 chunks, two 256-chunk sites give about 5 trees; 0 with nothing skipped is under 1 % by chance: then read the placed feature json and the biome modifier, `wild_crops.json` wild_hops)
 
 ## SQ-HH-305 | `\(10\):` with `minecraft:plains`, `minecraft:sunflower_plains`, `mine
 @group A
@@ -6345,14 +6362,26 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltCaveFeature` (`canPlace` needs 70 % solid shell: the stone box passes it; `carve`, `decorate`, `pickWallBlock`)
 @from batches/r1111/hh_m2.qb
 @absent hearthandharvest:salt_cave (worldgen configured/placed feature, data/hearthandharvest/worldgen/; the registry dump lists no features)
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): the countset list already holds the placed twin (added 2026-11-21 after r1120nv read raw 0); the checks are now numbers from the log, not a look. The saltCaveRarity / MinY / MaxY values are boot 2's config (SQ-HH-274), not a step here
 > forceload add 4464 80 4496 112
 sleep 3
 > fill 4464 -16 80 4496 0 112 minecraft:stone
 > fill 4464 1 80 4496 16 112 minecraft:stone
 > place feature hearthandharvest:salt_cave 4480 0 96
 > zhh2 countset 4464 -16 80 4496 16 112 salt:raw_rock_salt_block,hearthandharvest:placed_rock_salt_block,minecraft:calcite,minecraft:tuff,minecraft:cave_air,salt:salt_cluster,salt:large_salt_bud,salt:medium_salt_bud,salt:small_salt_bud,minecraft:water
-look UNPARSED CMD: saltCaveRarity 1 ;; saltCaveMinY 0 ;; saltCaveMaxY 0
-look `[Pp]laced feature`; `raw_rock_salt_block` plus `hearthandharvest:placed_rock_salt_block` (the placed twin a loaded chunk swaps it to) above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
+waitlog countset columns skipped 30
+capture RAW countset salt:raw_rock_salt_block: (\d+)
+capture PLC countset hearthandharvest:placed_rock_salt_block: (\d+)
+capture CAL countset minecraft:calcite: (\d+)
+capture TUF countset minecraft:tuff: (\d+)
+capture AIR countset minecraft:cave_air: (\d+)
+capture CLU countset salt:salt_cluster: (\d+)
+capture LBU countset salt:large_salt_bud: (\d+)
+capture MBU countset salt:medium_salt_bud: (\d+)
+capture SBU countset salt:small_salt_bud: (\d+)
+shell python3 -c "import sys; r={RAW}+{PLC}; ct={CAL}+{TUF}; print('rock', r, 'calcite+tuff', ct, 'air', {AIR}); sys.exit(0 if r > 200 and ct > 0 and r / ct >= 1.8 and {AIR} > 1000 and {CAL} > 20 and {TUF} > 20 and {CLU}+{LBU}+{MBU}+{SBU} > 0 else 1)"
+expect Placed feature
 
 ## SQ-HH-319 | salt cave origin pulled into saltCaveMinY..MaxY (0..0), stone box and forceload
 @phase worldgen
@@ -6466,16 +6495,26 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-325 | maze chests over a wider box (batch fault rerun)
 @group A
-@commands Same maze as SQ-HH-323. `/zhh2 chests 4286 -60 158 4324 -56 196`; qrun `capture C chest (-?\d+) (-?\d+) (-?\d+) table hearthandharvest:chests/corn_maze_center`; `/zhh2 unpack {C1} {C2} {C3}`
-@pass one `chest ... table hearthandharvest:chests/corn_maze_center`; other chests (when any) `table hearthandharvest:chests/corn_maze`; `unpack items: [1-9]`, no `unpack item .*minecraft:air` (J41)
-@fails `CornMazePiece.placeChest`, `LOOT` / `LOOT_CENTER`
+@commands Same maze as SQ-HH-323. `/zhh2 chests 4100 -62 100 4260 -50 260`; qrun `capture C chest (-?\d+) (-?\d+) (-?\d+) table hearthandharvest:chests/corn_maze_center`; then the center table rolled six times with `/loot spawn` above the chest and the items read with `/cdevtest items`
+@pass one `chest ... table hearthandharvest:chests/corn_maze_center`; other chests (when any) `table hearthandharvest:chests/corn_maze`; the center table rolled six times drops at least one stack and no `minecraft:air` (J41)
+@fails `CornMazePiece.placeChest`, `LOOT` / `LOOT_CENTER`; the table file `data/hearthandharvest/loot_tables/chests/corn_maze_center.json`
 @from batches/r1111/hh_wga_fix.qb
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): the maze chests are Lootr chests (per-player loot), so `/zhh2 unpack` read 0 items (r1120nv); the row reads the chest's table name from `/zhh2 chests` and the table's content from `/loot spawn` rolls (the table roll itself is SQ-HH-326's)
 > forceload add 4100 100 4260 260
 sleep 3
 > zhh2 chests 4100 -62 100 4260 -50 260
 capture C chest (-?\d+) (-?\d+) (-?\d+) table hearthandharvest:chests/corn_maze_center
-> zhh2 unpack {C1} {C2} {C3}
-look one center chest; unpack items [1-9]
+count chest -?\d+ -?\d+ -?\d+ table hearthandharvest:chests/corn_maze_center == 1
+expect chest -?\d+ -?\d+ -?\d+ table hearthandharvest:chests/corn_maze\b
+> setblock {C1} {C2+2} {C3} minecraft:air
+repeat 6
+> loot spawn {C1} {C2+2} {C3} loot hearthandharvest:chests/corn_maze_center
+end
+> cdevtest items {C1} {C2+2} {C3} 3
+expect verb=items items=\S+
+reject unpack item .*minecraft:air|verb=items items=-
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-326 | boot `reject Couldn't parse element.*corn_maze`; both `lootroll ... id
 @group A
@@ -7771,13 +7810,15 @@ expect \[zhh3\] tally crows=40 tamed=(?:[1-9]|1[0-4])\b
 @pass `expect \[zhh3\] tally crows=30 tamed=(?:[3-9]\|1\d\|20)\b`; `waitlog \[zhh3\] invcount b439 minecraft:diamond {T} 10` (qrun only substitutes captures into commands and waitlog patterns, not expect); `expect \[zhh3\] tally crows=30 .*carrying=[1-9]`
 @fails `CrowSeekShinyGoal.chaseThrown` (`tryTame(.., 3)`, `placeItemBackInInventory`, else `holdLoot`), thrower lookup. Returned diamonds equal the tamed count; carried diamonds are not returned. 3 to 20 of 30 holds 99 %.
 @from batches/r1111/hh_crow_d.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): r1120nv read 13 diamonds back against 7 tamed (carrying 2): the creative bot's default item pickup took the thrown diamonds that no crow had reached, on top of the returned ones. `pbot pickup off` leaves only what a crow gives back; the inventory count is now a shell check
 > forceload add 14267 -13 14293 13
 sleep 3
 > fill 14267 -61 -13 14293 -47 13 minecraft:glass hollow
 > pbot spawn b439 14280 -60 12 minecraft:overworld creative
 sleep 2
 > clear b439
+> pbot pickup b439 off
 > zhh3 spawn crow 30 14280 -59 0 9
 sleep 2
 > zhh3 throw b439 14280 -60 0 minecraft:diamond 30 9
@@ -7786,12 +7827,13 @@ waitlog verb=tickwarp end=done 120
 > zhh3 tally 14280 -55 0 14
 capture T \[zhh3\] tally crows=\d+ tamed=(\d+)
 > pbot inv b439 get
+capture D verb=pbot\.inv bot=b439 slot=\d+ item=minecraft:diamond\*(\d+)
 > pbot remove b439
 > kill @e[type=hearthandharvest:crow,x=14267,y=-61,z=-13,dx=26,dy=14,dz=26]
 > forceload remove 14267 -13 14293 13
 expect \[zhh3\] tally crows=30 tamed=(?:[3-9]|1\d|20)\b
 expect \[zhh3\] tally crows=30 .*carrying=[1-9]
-look the `verb=pbot.inv bot=b439` diamond lines add up to the tamed count {T} from the tally capture (the old `invcount b439 minecraft:diamond {T}` wait)
+shell python3 -c "import sys; print('diamonds in the thrower inventory', {D}, 'tamed', {T}); sys.exit(0 if {D} == {T} else 1)"
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-440 | rerun: two tame crows fed corn go in love and breed (a baby within 40 s)
@@ -8825,8 +8867,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `expect verb=state pos=16563,-60,3 state="?hearthandharvest:waxed_lightly_licked_salt_block\b`; the dispenser keeps 1 Rock Salt (`Count: 1b`)
 @fails `SaltEvents.registerDispenser` (Rock Salt behavior), `SaltLick.refill` (waxed stays waxed)
 @from batches/r1111/hh_crow_f.qb passed
-@reviewed 2026-11-20
 @boot 2
+@reviewed 2026-11-26
 > forceload add 16560 0 16576 16
 sleep 3
 > setblock 16563 -60 3 hearthandharvest:waxed_well_licked_salt_block
@@ -9301,8 +9343,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `expect \[zhh3\] seen a CrowSeekShinyGoal no`; `expect \[zhh3\] inv .*0:minecraft:diamond x1;.*1:minecraft:gold_ingot x1;.*2:minecraft:netherite_ingot x1;.*3:minecraft:iron_pickaxe x1`; `expect \[zhh3\] log hearthandharvest:crow .*carry=false`
 @fails `CrowSeekShinyGoal.stealable` (`hasTag`, `is(SHINY_ITEMS)`), `crow_shiny_items` exclusions.
 @from batches/r1111/hh_crow_f.qb passed
-@reviewed 2026-11-20
 @boot 2
+@reviewed 2026-11-26
 > forceload add 17567 -13 17593 13
 sleep 3
 > fill 17567 -61 -13 17593 -47 13 minecraft:glass hollow
@@ -9524,8 +9566,8 @@ expect \[zhh3\] log hearthandharvest:crow .*carry=false/0 .*main=empty
 @pass `expect minecraft:gold_ingot`; `expect has the following block data: 1b`; `reject verb=pbot\.inv bot=b501 slot=\d+ item=minecraft:gold_ingot\*4\b`
 @fails `CrowSeekShinyGoal` carry + nest path (carry starts from the theft), `#creativedelight:nests`.
 @from batches/r1113/rerun_a.qb
-@reviewed 2026-11-20
 @boot 2
+@reviewed 2026-11-26
 # bugfix_1117 A2 (2026-11-18): nest search +-8 vertically and again every 20 ticks while fleeing; with carryTicks 200 the crow now stashes (was the r1113 FAIL)
 > forceload add 30987 29987 31013 30013
 sleep 3
@@ -9912,19 +9954,22 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass first "Test passed" (ringer lit the touching lamp), second "Test passed" (lamp went out)
 @fails `ThrownHorseshoe.onHitBlock`; `scheduleTick` delay
 @from batches/r1112/hh_gear.qb
-@reviewed 2026-11-21
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): the lamp stays lit 20 ticks after the hit (ThrownHorseshoe.onHitBlock schedules the tick at 20), and the run's default pace (2 s) put the first read 40 ticks after the summon, the `cdevtest watch` variant held the command queue (r1121b, r1121br: lit=false at every watch line). The read now follows the summon within 0.25 s, then waits out the 20 ticks
 > forceload add 470 470 620 620
 sleep 3
 > setblock 496 -60 476 minecraft:oak_fence
 > setblock 497 -60 476 minecraft:redstone_lamp
 sleep 1
-# judge-6, 2026-11-21: r1121b ran the summon only after the 40-tick watch ended (the watch holds the command queue); summon first, then watch
+pace 0.25
 > summon hearthandharvest:thrown_horseshoe 496.5 -58.3 476.5 {Motion:[0.0,-1.0,0.0],HorseshoeItem:{id:"hearthandharvest:horseshoe",Count:1b}}
-> cdevtest watch 497 -60 476 40 2
+> execute if block 497 -60 476 minecraft:redstone_lamp[lit=true] run say HH1511 lit
+pace 2
 sleep 3
-> execute if block 497 -60 476 minecraft:redstone_lamp[lit=false]
-expect verb=watch .*state=\S*redstone_lamp\[lit=true\]
-expect Test passed
+> execute if block 497 -60 476 minecraft:redstone_lamp[lit=false] run say HH1511 out
+expect HH1511 lit
+expect HH1511 out
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## CQ-HH-501
 @group client
@@ -12160,7 +12205,9 @@ bootreject creativedelight:mods/vinery\b
 @pass no `Couldn't parse loot table creativedelight:blocks/placed_corn_popsicle`; no `placed_corn_popsicle` block registered
 @fails `DisplayDelightDishes.read` `requires`; `packs/mods/corn_delight`
 @jars creativecommon creativedelight
-@reviewed 2026-11-20
+@modset port_chain chain +creativedevtools-*.jar
+@reviewed 2026-11-26
+# rewritten 2026-11-26 (r1126q writer-5): r1120nv ran this on the full pack (Corn Delight present: placed_corn_popsicle n=1); the row now carries its own set, the Creative Brewing chain without any cooking jar (port_chain chain), plus Devtools for /cdevtest
 bootexpect Done \(
 bootreject Couldn't parse loot table creativedelight:blocks/placed_corn_popsicle
 > cdevtest reg block placed_corn_popsicle
@@ -12307,28 +12354,67 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @@table
 ## SQ-HH-1613 | Cooking Pot: 1 Rustic Delight Syrup -> 8 sugar, the bottle returned; heated mixer copy; hand craft still 4
 @group A
-@commands `cdevtest rdetail creativedelight:farmersdelightcooking/sugar_from_syrup`; `cdevtest rdetail creativedelight:shapeless/sugar_from_syrup`; live: a lit Cooking Pot with 1 syrup, wait 10 s, take out; a heated basin under a mixer with 1 syrup
+@commands `cdevtest rdetail creativedelight:farmersdelightcooking/sugar_from_syrup`; `cdevtest rdetail creativedelight:shapeless/sugar_from_syrup`
 @pass pot recipe: ingredients `rusticdelight:syrup`, result `minecraft:sugar*8`, no container; the shapeless stays at 4; live pot: 8 sugar out, 1 glass bottle in the pot's leftover slot; heated mixer: 8 sugar and 1 glass bottle in the basin; unheated basin: only the 4-sugar shapeless runs (or nothing)
 @fails 4 sugar from the pot: fdCooking line missing in `hearthandharvest/recipes.js`; no bottle: syrup remainder lost
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): recipe reads only; the live pot and mixer half stays an owner look
+> cdevtest rdetail creativedelight:farmersdelightcooking/sugar_from_syrup
+> cdevtest rdetail creativedelight:shapeless/sugar_from_syrup
+expect verb=rdetail id=creativedelight:farmersdelightcooking/sugar_from_syrup serializer=\S+ result=minecraft:sugar\*8 ingredients=\S*rusticdelight:syrup
+expect verb=rdetail id=creativedelight:shapeless/sugar_from_syrup serializer=\S+ result=minecraft:sugar\*4 ingredients=\S*rusticdelight:syrup
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+look the Cooking Pot recipe's extra lines (part=fields) name the glass bottle as the container; the live pot and heated-mixer crafts are an owner check (no driver step takes a pot's output slot)
+
 ## SQ-HH-1614 | syrup fluid registered with Hearth and Harvest's syrup textures and tagged
 @group any
-@commands `cdevtest tag fluid forge:fluid/syrup`; grep startup.log for `creativedelight:syrup`; `/kubejs dump_registry minecraft:fluid` or a probe for `creativedelight:syrup`
+@commands `cdevtest tag fluid forge:fluid/syrup`; `cdevtest reg fluid creativedelight:syrup`; `cdevtest reg item syrup_bucket` (no bucket)
 @pass the fluid `creativedelight:syrup` exists (no bucket, no block); `forge:fluid/syrup` holds it; no texture warning for `hearthandharvest:block/fluid/syrup_still` / `_flow`
 @fails fluid absent: Creative Common fluid dict lacks `f.syrup`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): the fluid's textures are a client load, so the server row only rejects a texture warning in the boot log
+> cdevtest tag fluid forge:fluid/syrup
+> cdevtest reg fluid creativedelight:syrup
+> cdevtest reg item syrup_bucket
+expect verb=tag kind=fluid tag=forge:fluid/syrup n=[1-9]\d* .*ids=\S*creativedelight:syrup\b
+expect verb=reg kind=fluid regex=creativedelight:syrup n=[1-9]
+expect verb=reg kind=item regex=syrup_bucket n=0\b
+bootreject (?i)(missing|could not|unable|failed).*hearthandharvest:block/fluid/syrup
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+
 ## SQ-HH-1615 | heated mixing: 1000 mB sap -> 250 mB syrup fluid; 250 mB syrup fluid -> 8 sugar
 @group A
-@commands `cdevtest rdetail creativedelight:createmixing/syrup_fluid_from_sap`; `cdevtest rdetail creativedelight:createmixing/sugar_from_syrup_fluid`; live: heated basin with 1000 mB sap, mixer running; then 250 mB syrup fluid alone
+@commands `cdevtest rdetail creativedelight:createmixing/syrup_fluid_from_sap`; `cdevtest rdetail creativedelight:createmixing/sugar_from_syrup_fluid`
 @pass both recipes heated; sap -> 250 mB `creativedelight:syrup`; syrup fluid -> 8 sugar; unheated: nothing
 @fails missing recipes: `f.syrup` guard skipped them (Common dict)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): recipe reads (fluids part carries the amounts); the live heated-basin run is an owner look
+> cdevtest rdetail creativedelight:createmixing/syrup_fluid_from_sap
+> cdevtest rdetail creativedelight:createmixing/sugar_from_syrup_fluid
+expect verb=rdetail id=creativedelight:createmixing/syrup_fluid_from_sap serializer=create:mixing result=\S*
+expect verb=rdetail id=creativedelight:createmixing/syrup_fluid_from_sap .*ingredients=\S*
+expect id=creativedelight:createmixing/syrup_fluid_from_sap part=fluids value=\S*hearthandharvest:sap\S*1000
+expect id=creativedelight:createmixing/syrup_fluid_from_sap part=fluids value=\S*creativedelight:syrup\S*250
+expect verb=rdetail id=creativedelight:createmixing/sugar_from_syrup_fluid serializer=create:mixing result=minecraft:sugar\*8
+expect id=creativedelight:createmixing/sugar_from_syrup_fluid part=fluids value=\S*creativedelight:syrup\S*250
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+look the fields lines of both recipes show the heated requirement (an unheated basin runs nothing); the live mixer run is an owner check
+
 ## SQ-HH-1616 | Spout fills a glass bottle with 250 mB syrup fluid; Item Drain empties a syrup bottle to 250 mB
 @group A
-@commands `cdevtest rdetail syrup` (createfilling / createemptying ids `creativedelight:.../syrup`); live: Spout over a depot with a glass bottle, 250 mB syrup fluid; Item Drain with 1 `rusticdelight:syrup`
+@commands `cdevtest recipes syrup`; `cdevtest rdetail creativedelight:createfilling/syrup`; `cdevtest rdetail creativedelight:createemptying/syrup` (R.createBottle ids); the live Spout and Item Drain runs are an owner check
 @pass filling gives 1 `rusticdelight:syrup`; draining gives 250 mB `creativedelight:syrup` and a glass bottle
 @fails no route: `R.createBottle` line skipped (`f.syrup` missing)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): recipe reads. The ids come from R.createBottle(i.syrup, f.syrup, e, 'syrup'); the first `recipes syrup` call lists the real ids when a path differs
+> cdevtest recipes syrup
+> cdevtest rdetail creativedelight:createfilling/syrup
+> cdevtest rdetail creativedelight:createemptying/syrup
+expect verb=rdetail id=creativedelight:createfilling/syrup .*result=rusticdelight:syrup\*1
+expect id=creativedelight:createfilling/syrup part=fluids value=\S*creativedelight:syrup\S*250
+expect verb=rdetail id=creativedelight:createemptying/syrup .*ingredients=\S*rusticdelight:syrup
+expect id=creativedelight:createemptying/syrup part=fluids value=\S*creativedelight:syrup\S*250
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1617 | syrup only from sap: no rusticdelight:syrup pot recipe
 @group A

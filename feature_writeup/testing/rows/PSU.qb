@@ -1149,6 +1149,7 @@ look 120 s at randomTickSpeed 20 (= 16 x the row's 2400 ticks at 3); counts in r
 
 ## SQ-PSD-04 | azalea trees have oak trunks; a given azalea log becomes an oak log
 @phase worldgen
+@superseded azalea wood was restored (farming/trees #7, plan_farming_cooking_batch.md Part B, reverses #5): azalea trees grow quark:azalea_log and its recipes exist again; covered by SQ-AZW-01 and SQ-AZW-02 (FCK.qb)
 @group A
 @commands `/place feature minecraft:azalea_tree` x3; `/give @p quark:azalea_log`; grep `latest.log` for `[removedWoods]` and `[itemMerges]`
 @pass trunks are `minecraft:oak_log`; the given azalea log becomes an oak log in the inventory; log says `5 woods merged into oak`, no `already merged` / `unknown` errors for azalea ids
@@ -1193,6 +1194,7 @@ reject Failed to place
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSD-05 | no recipe outputs a Quark azalea wood item
+@superseded azalea wood was restored (farming/trees #7, plan_farming_cooking_batch.md Part B, reverses #5): azalea trees grow quark:azalea_log and its recipes exist again; covered by SQ-AZW-01 and SQ-AZW-02 (FCK.qb)
 @group A
 @commands `/recipescan` (or grep the recipe log) for any recipe outputting `quark:azalea_` / `everycomp:*/quark/azalea_` / `lightmanscurrency:*quark_azalea*` / `cookingforblockheads:azalea_*`
 @pass none
@@ -1788,12 +1790,12 @@ look the ship line: box unwrecked_pillager_ships (boat pool) for a pillager-crew
 
 ## SQ-PSM-06 | struck monument after a restart: 3 elder guardians, rooms, spawn_overrides box
 @group B
-@commands `/locate structure creativeworldgen:meta/struck_monument` (do not tp), `save-all`, `stop`, boot, tp to the monument centre at y 60, wait 20 s; count `@e[type=minecraft:elder_guardian,distance=..48]`; `/cwgspawnbox` inside; grep log for `could not be rebuilt`. Control: same steps with `minecraft:monument`
+@commands `/locate structure creativeworldgen:meta/struck_monument` (do not tp), `save-all`, `stop`, boot, tp to the monument centre at y 60, run 500 ticks (`/cdevtest tickwarp`); count `@e[type=minecraft:elder_guardian,distance=..48]`; `/cwgspawnbox` inside; grep log for `could not be rebuilt`. Control: same steps with `minecraft:monument`
 @pass struck: elder guardians count 3, interior rooms present, probe `box spawn_overrides of creativeworldgen:meta/struck_monument, part minecraft:monument -> [minecraft:guardian 1 (2-4)]`, no `could not be rebuilt` line; lone: 3 elders, probe `no box ... -> vanilla [minecraft:guardian 1 (2-4)]`
 @fails 0 elders, hollow monument: `StructureStartMetaMonumentMixin` not applied or `repairMonumentsAfterLoad` skipped (warning line says why)
 @jars creativecommon
 @from batches/r1102b/s5_B2.qb
-@reviewed 2026-11-21
+@reviewed 2026-11-26
 # the restart puts boot lines in the row log: KubeJS "does not have required mod" plugin WARN excluded (judge-7, r1120nv, 2026-11-21)
 # own capture (r1120fix 2026-11-20; was s5_B.qb's SQ-PSM-06a before a separate boot): locate, no tp, then restart
 > locate structure creativeworldgen:meta/struck_monument
@@ -1805,7 +1807,9 @@ restart 900
 > scoreboard objectives add s5n dummy
 > forceload add {S5SM1-48} {S5SM3-48} {S5SM1+48} {S5SM3+48}
 > pbot spawn s5mstruck {S5SM1} 60 {S5SM3} minecraft:overworld survival
-sleep 20
+# the restart leaves the server behind on ticks (r1121br: 578 ticks, count ran the instant the bot joined): full ticks, not wall seconds
+> cdevtest tickwarp 500
+waitlog verb=tickwarp end=\S+ ticks=500 180
 > execute store result score #struck_elders s5n positioned {S5SM1} 50 {S5SM3} if entity @e[type=minecraft:elder_guardian,distance=..48]
 > scoreboard players get #struck_elders s5n
 > cwgspawnbox {S5SM1} 50 {S5SM3}
@@ -2377,11 +2381,11 @@ look per-minute ages (rows/SQ-PSF-08.log, S5F8 lines; elapsed times in the shell
 ## SQ-PSF-09 | watering can drains 1000 mB from a Just a Well tank
 @group A
 @commands Recheck SQ-WCT-03 note: `well:well` in a chunk with no other well; `/data merge block <lower half> {Tank:{FluidName:"minecraft:water",Amount:50000}}` (field names from `data get block` first); in one RCON batch: bot uses an emptied `iron_watering_can` on the well, then `data get block <lower half>`
-@pass can `WaterLevel` 12; tank `Amount` 49000 (or 49000 plus one fill step if a fill tick landed between)
+@pass can `WaterLevel` 12; tank `Amount` 49000 right after the use (the well refills 1000 mB per fill tick, so the merge, the use and the read run at pace 0.1 s: a fill step landing between them reads 50000, which is also the undrained value 50000: rerun then)
 @fails tank unchanged at 50000: the drain did not reach the well's tank (check the handler side)
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # own home (r1120fix 2026-11-20): the s5home marker at spawn, captured here because rows run alone
 > execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
 sleep 2
@@ -2399,15 +2403,18 @@ sleep 3
 sleep 2
 > data get block {S5H1+52} {S5H2} {S5H3+40}
 # judge-7c 2026-11-21: the well keeps FluidName and Amount at the top level of its block entity (no Tank compound; r1120nv data get)
-> data merge block {S5H1+52} {S5H2} {S5H3+40} {FluidName:"minecraft:water",Amount:50000}
-> data get block {S5H1+52} {S5H2} {S5H3+40}
 > pbot spawn s5wc {S5H1+50} {S5H2} {S5H3+40} minecraft:overworld survival
 > item replace entity s5wc weapon.mainhand with hearthandharvest:iron_watering_can{WaterLevel:0}
+sleep 1
+# the well refills 1000 mB per fill tick (r1121b: 51000 read after the use): merge, use and read at 0.1 s pace
+pace 0.1
+> data merge block {S5H1+52} {S5H2} {S5H3+40} {FluidName:"minecraft:water",Amount:50000}
 > pbot use s5wc {S5H1+52} {S5H2} {S5H3+40} up
 > data get entity s5wc SelectedItem
 > data get block {S5H1+52} {S5H2} {S5H3+40}
+pace 2
 expect s5wc has the following entity data: \{.*iron_watering_can.*WaterLevel: 12
-expect has the following block data: .*Amount: 49\d\d\d\b
+expect has the following block data: .*Amount: 49000\b
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the first data get shows the well's real tank keys; if they are not Tank/FluidName/Amount the merge did nothing (BATCH-FAULT, fix the merge)
 

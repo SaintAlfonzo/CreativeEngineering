@@ -411,7 +411,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @commands Grid recipes
 @pass Golden beef = cooked beef + 8 nuggets; the golden cake too; golden apple still 8 ingots
 @fails `creativedelight/kubejs/goldenfood/golden.js`, `minecraft/golden.js`; TODO `food/types-and-tuning #22`
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 @from batches/r1103/sA_2.qb
 > cdevtest rdetail golden_cooked_beef
 > cdevtest rdetail shaped/golden_cake
@@ -443,15 +443,16 @@ reject verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_
 look loops 8 and 125 mB are not in the rdetail lines: JEI page in game (CQ-GLD2-04) or golden.js `global.CD.FOOD.gilded`; part=start names the golden apple / golden carrot
 reject (Unknown or incomplete command|\[cdevtest\] verb=rdetail .*done=0)
 
-## SQ-GLD2-03 | golden values: 41 set, golden and gilded beef hunger
+## SQ-GLD2-03 | golden values: golden and gilded beef hunger
 @group A
 @commands Log + `/dumpfood`
-@pass `[golden values] 41` (18 goldenfood pairs, golden / gilded apple and carrot, Golden Roll); golden beef 16 hunger at the input modifier, gilded beef 20
+@pass `[golden values] N golden and gilded foods queued` line present (count per golden_food.md after the honey and milk removal; 39 in code, docs say 41); golden beef 16 hunger at the input modifier, gilded beef 20
 @fails CD `kubejs_startup/goldenfood/golden_values.js`; TODO `#3`
-@reviewed 2026-11-22
+@reviewed 2026-11-26
 @from batches/r1103/sA_2.qb
 shell grep -hE "\[golden values\]" logs/kubejs/startup.log logs/latest.log | head -3
-shell grep -qhE "\[golden values\] 46" logs/kubejs/startup.log logs/latest.log
+# r1126q (2026-11-26): the startup line is now "[golden values] N golden and gilded foods queued" (39 after the 2026-11-22 honey bottle and milk bucket removal; golden_food.md sec 186 still says 41, sec 3.6 46: docs stale, owner rules the count); the row checks the line, not a number
+shell grep -qhE "\[golden values\] [0-9]+ golden and gilded foods queued" logs/kubejs/startup.log logs/latest.log
 > cdevtest food goldenfood:golden_cooked_beef
 > cdevtest food goldenfood:enchanted_golden_cooked_beef
 look golden beef nutrition 16 (at the input modifier: modifier as cooked beef), gilded (enchanted) beef 20; /dumpfood half: Boot 0's kubejs/exported/food (sA_setup.md)
@@ -669,11 +670,14 @@ look carried line says 19 values; ls shows salt-client.toml and salt-common.toml
 @commands `/place feature creativedelight:nest_duck` (and `nest_goose`, `nest_emu`) on grass
 @pass Nest with 2 to 4 eggs and birds
 @fails CD Incubation compartment `packs/incubation/<bird mod>/data/creativedelight/worldgen/`; TODO `mobs/nests #3`
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @absent creativedelight:nest_duck creativedelight:nest_goose creativedelight:nest_emu (configured features in the CD jar packs/incubation/<bird mod>/data/creativedelight/worldgen/; no feature dump)
 @from batches/r1103/sA_2.qb
 # r1120fix (2026-11-20): the nests moved into Creative Delight (nests.md 1, M8 2026-11-04): ids creativedelight:nest_* (features),
 # creativedelight:*_egg_nest (blocks); the incubation_additions: ids are only swap-list aliases now
+# r1126q (2026-11-26): the section runs spawn-animals=false (Animal entities are discarded), so the birds never stood; this row boots once with spawn-animals=true and puts the property back at the end
+edit sed -i 's/^spawn-animals=.*/spawn-animals=true/' server.properties
+restart
 # own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
 > execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
 sleep 2
@@ -697,6 +701,8 @@ expect verb=entities n=\d+ by_type=\S*untitledduckmod:goose:
 expect verb=entities n=\d+ by_type=\S*alexsmobs:emu:
 look eggs 2 to 4 per nest: the count lines give the nests; read the eggs state with "cdevtest state" at a nest if the row needs it
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[cdevtest\] .*done=0)
+edit sed -i 's/^spawn-animals=.*/spawn-animals=false/' server.properties
+restart
 
 ## SQ-NEST-02 | swamp, river, savanna: nests here and there, no worldgen or biome-tag errors
 @phase worldgen
@@ -752,7 +758,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @commands Eat Calamari Soup
 @pass Comfort 4:00, no Nourishment (the rule, not a generator gap)
 @fails `comfort_nourishment.json` rule; TODO `creativedelight/members #43`
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # own home (r1120fix, 2026-11-20): {SAH} came from the retired r1103 home batches; rows run alone with --rows
 > execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
 sleep 2
@@ -780,7 +786,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Exits 0
 @fails `/dumpcompost` output stale or missing; TODO `creativedelight/members #44`
 @jars creativecommon creativedelight
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > dumpcompost
 sleep 5
 # r1120fix (2026-11-20): the shell exit code is the check (its echo lands in the shell output, not the server log)
@@ -790,7 +796,7 @@ shell test -s kubejs/exported/compost/compost.json && python3 "$INST/tools/gen_c
 @commands As SQ-VP-06; then fill a jar with pepper jam and one with relish and bottle each
 @pass SQ-VP-06 pass text; both fill a glass bottle (the stale pack copies of `pepper_jam.json` and `relish.json` are gone, the member copies are served)
 @fails Pack `kubejs/data/vintagedelight/moonlight/soft_fluids/` copies back (moved to `moved_code_backup/2026-11-02-vintage/`); TODO `ports/vintageport #1`
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > vtdtest fluids
 waitlog \[vtdtest\] done fluids 120
 expect \[vtdtest\] done fluids: \d+ pass, 0 fail

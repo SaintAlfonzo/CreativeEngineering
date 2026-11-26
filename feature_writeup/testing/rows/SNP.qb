@@ -9,6 +9,7 @@
 @@date 2026-11-21
 @@reviewed 2026-11-24
 @@jars creativecompat
+@@prep A: spawn-protection=16
 @@sources feature_writeup/storage_audit.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/storage/SneakPickup.java kubejs/data/creativecompat/kubejs/tags/sneak_pickup_tags.js
 @@text
 @@text Targets the Creative Compat jar (moved from Common 2026-11-24; `storage/SneakPickup`, tag `#creativecompat:sneak_pickup` from Compat's server script `tags/sneak_pickup_tags.js`). Supplementaries and Supplementaries Squared from the pack. Group A, area x 5360 to 5375, z 5200 to 5215; SQ-SNP-04 works at spawn (spawn protection 16, an op online). `data get entity BOT SelectedItem` prints the held stack with its `BlockEntityTag`.
@@ -108,7 +109,8 @@ look the cobblestone click: a cobblestone block on the sack (cleared after), or 
 @group A
 @commands home marker at spawn; an op bot online (vanilla protection is active only with an op); non-op bot `snp4` sneaking, empty hand, `pbot use` on a sack 2 blocks from spawn
 @pass the sack stays and the bot's hand is empty
-@fails `SneakPickup` posts `BlockEvent.BreakEvent` and stops when it is canceled; the FTB Chunks claim case is the hand half of CQ-SNP-01
+@fails server.properties `spawn-protection=0` (the scratch default) lets a non-op interact at spawn: the section @@prep sets 16; `SneakPickup` posts `BlockEvent.BreakEvent` and stops when it is canceled; the FTB Chunks claim case is the hand half of CQ-SNP-01
+@reviewed 2026-11-26
 > execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
 sleep 2
 > data get entity @e[type=minecraft:marker,tag=s5home,limit=1] Pos

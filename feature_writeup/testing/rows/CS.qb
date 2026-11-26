@@ -133,7 +133,7 @@ look verb=ages means (open x 92..108 first, glass x 120..136 second; n about 285
 @pass spring mean age about 5/4 of the summer mean (`fertileBonus = 0.25`; noise on each mean about 0.09 at n=320, so 1.15 or more passes)
 @fails fertile bonus not queued / extra tick not run
 @from batches/r1031/a2_variants.qb
-@reviewed 2026-11-18
+@reviewed 2026-11-26
 # r1118 R6 (2026-11-18): n=80 gave 1.07 against 1.25 with noise about 0.18 (judge-6), so four fields measured as one box
 # (n=320); self-contained (its own fields at x 100..108, z 0..68; it used CS-03's field); randomtick replaces 2 min at
 # randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block); the tick warp runs queued season extra ticks
@@ -189,9 +189,14 @@ look rows/SQ-CS-04.shell.txt: spring / summer ratio about 1.25 (1.15 or more pas
 @pass all still grow (off is slower, never stopped); no exception in latest.log
 @fails hook cancels the whole tick wrongly or crashes
 @from batches/r1031/a2_variants.qb
-@reviewed 2026-11-23
+@reviewed 2026-11-26
 > forceload add 96 8 111 16
 # r1124fx judge-2 (2026-11-24): the row relied on SQ-CS-03/04's forceload; alone in its step the field chunks were unloaded and nothing grew
+# r1126q (2026-11-26): forceloaded chunks get random ticks only with a player near (gotchas, World chunks and ticking): a bot stands beside the fields
+> execute unless entity qa run pbot spawn qa 100 -60 10 minecraft:overworld survival
+sleep 2
+> tp qa 100 -60 10
+sleep 2
 > season set MID_WINTER
 # crops #60, 2026-11-23: hemp needs local light 12 and tobacco 9 with the sky darkening counted (getMaxLocalRawBrightness),
 # so a night-time run stops both whatever the season (r1123cd); the grape bush reads light without the night. Noon.
@@ -223,6 +228,7 @@ sleep 120
 reject (?i)exception
 count Test failed >= 4
 look every "Test failed" = grew past age 0; an "Unknown block" or property error = a guessed id (Ender crop id from endersdelight, CD endersAdditions); fix the id and rerun the row
+> pbot remove qa
 > season set MID_SPRING
 > fill 105 -61 11 109 -57 13 minecraft:air
 > fill 100 -61 12 112 -61 12 minecraft:grass_block

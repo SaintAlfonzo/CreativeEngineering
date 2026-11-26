@@ -15,19 +15,31 @@
 @@table
 ## SQ-CSN-01 | Creative Common damage tags load from creativecommon (no #creativeengineering: reference)
 @group A
+@reviewed 2026-11-26
 @commands Boot 2: `grep -iE "damage tag\|damage_tags\|creativeengineering:(fire\|magic\|burn_tick)" logs/latest.log`; with `[damage_tags]` logging on, set the bot on fire and hit it with an Instant Damage potion, read the `DamageTagLogger` lines
 @pass Damage tags load from `creativecommon` (32 plus CD's `creativedelight:stoves`), no unknown `#creativeengineering:` reference; the fire hit is tagged `fire`/`burn_tick`, the magic hit `magic`
 @fails A file still naming `#creativeengineering:`: grep `development/*/src/main/resources/data/*/damage_tags`
 @from batches/r1102b/s1_A.qb
-@draft Common namespace check (creative_split.md 7.14): no steps yet. The steps this row carried belonged to the Comfort / Nourishment rows SQ-CSN-01 to -03 (RD.qb, FO.qb), where they now live
+bootreject (?i)(unknown|couldn.t|failed).*damage.?tag
+bootreject #creativeengineering:
+shell ! grep -rlE "creativeengineering:|#creativeengineering" "$INST"/development/creativeCommon/src/main/resources/data/creativecommon/damage_tags "$INST"/development/creativeDelight/src/main/resources/data/creativedelight/damage_tags
+shell grep -iE "damage.?tag" logs/latest.log | head -5; true
+shell test "$(ls "$INST"/development/creativeCommon/src/main/resources/data/creativecommon/damage_tags | wc -l)" -ge 32
+look the boot log names no unknown damage tag and no `#creativeengineering:` reference; the Common damage tag folder holds at least 32 files, none naming the old namespace (the fire / magic tagging by a live hit is covered by the effect rows, not here)
 
 ## SQ-CSN-02 | WTHIT and JEI order tag scripts load; glass matches wthit/needs_silk_touch
 @group A
+@reviewed 2026-11-26
 @commands Same boot: `/execute if block <glass> #creativecommon:wthit/needs_silk_touch` on a placed glass block; `grep -iE "jei_order_tags\|wthittags" logs/kubejs/server.log`
 @pass Glass matches; both scripts load with no error
 @fails `wthittags.js` TAG strings, `jei_order.js` TAG_ROOT
 @from batches/r1102b/s1_R.qb
-@draft Common namespace check (creative_split.md 7.14): no steps yet. The steps this row carried belonged to the Comfort / Nourishment rows SQ-CSN-01 to -03 (RD.qb, FO.qb), where they now live
+> setblock 0 150 0 minecraft:glass
+> execute if block 0 150 0 #creativecommon:wthit/needs_silk_touch run say CSN2 glass matches wthit needs_silk_touch
+expect CSN2 glass matches wthit needs_silk_touch
+kjsreject (jei_order_tags|wthittags)\.js.*(rror|xception)
+shell ! grep -hiE "(jei_order|wthittags).*(rror|xception)" logs/kubejs/server.log logs/kubejs/startup.log
+> setblock 0 150 0 minecraft:air
 
 ## SQ-CSN-03 | item merge rewrite runs once (boot 2), skipped on boot 3
 @group A

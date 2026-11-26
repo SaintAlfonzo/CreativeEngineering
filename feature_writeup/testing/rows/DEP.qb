@@ -179,7 +179,9 @@ look the 20 corn maze rolls hold Corn Delight items, cider or caramel apples; th
 @commands As SQ-DEP-02 (boot without `creativebrewing-*.jar`), plus `grep -nE "$ERR" logs/latest.log \| grep -iE "brewinandchewin\|vinery"`; `/setblock ~ ~ ~ creativedelight:placed_vegetable_omelet`; `/loot spawn ~ ~ ~ loot hearthandharvest:chests/corn_maze` x5; `grep -nE "vinery:[a-z_]*grape_bush" logs/latest.log`
 @pass `Done (`; no ERR line; the setblock fails (no such block); the chest still gives items (an `Unknown loot table called hearthandharvest:mod_items/vinery/apple_cider` WARN is fine); record any grape bush line for TODO `creativesplit/deps #27` (pack files, not a FAIL)
 @fails `displaydelight_dishes.json` `requires`; `packs/mods/brewinandchewin/`
-@reviewed 2026-11-16
+@reviewed 2026-11-26
+@modset port_chain cooking +creativedevtools-*.jar -creativebrewing-*.jar
+# r1126q (2026-11-26): r1120nv booted the full pack (no @modset), so Brewing was present; the set below is the CD chain with the cooking mods and no creativebrewing jar (as SQ-CDFL)
 bootexpect Done \(
 bootreject Missing or unsupported mandatory
 shell test "$(ls mods | grep -c '^creativebrewing')" = 0 && echo "brewing jar gone"

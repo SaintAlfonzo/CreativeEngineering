@@ -18,7 +18,7 @@
 @pass First case: slot 6 holds the plated meal, slots 5 and 7 empty, no item entity near the pot. Second (rule of 2026-11-03, remainder_buffer.md 3.8): recycled bowls stack in slot 5 up to 64, slot 7 holds only non-bowl leftovers; every bowl accounted for (bowls before = slot 5 + slot 7 + meals plated)
 @fails `CopperPotBlockEntity.recycleRoom` / `storeOrThrowLeftover`; `getContainer()` empty because `mealContainerStack` was not set before the leftovers
 @from batches/r1102b/s5_R_A.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # self-contained since r1120fix (2026-11-20): own s5home marker and S5H capture (was the r1102b boot's S5H, never captured when the row runs alone)
 > execute unless entity @e[type=minecraft:marker,tag=s5home] run summon minecraft:marker ~ ~ ~ {Tags:["s5home"]}
 sleep 2

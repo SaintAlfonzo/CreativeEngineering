@@ -99,7 +99,21 @@ look any timeout line names 120 s (300 = toml not updated); previous answers wer
 @commands set `searchTimeoutSeconds = 5` in the scratch toml, reboot, `/locate structure minecraft:mansion` from 0 0 (rare, long), then `/locate structure creativeworldgen:meta/fortified_ruins`; restore 120
 @pass the mansion search ends as not found with a `[locate] ... timed out after 5 s` line and its counters; the tick time stays under 100 ms during it; fortified ruins either answers or times out the same way; thread free for the next search
 @fails no timeout line: `LocateStats.expired` path or the value is not read per search
-@draft needs its own boot with searchTimeoutSeconds = 5 preset (qrun.py toml before the boot; a row cannot reboot the server), then mansion and fortified_ruins locates expecting `timed out after 5 s`; restore 120 after
+@reviewed 2026-11-26
+@absent minecraft:mansion (structure id: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+# 2026-11-26 (writer-3): the value is "applies to new searches immediately" (CWGConfig), the boot makes the edit certain; restored at the end
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.locate searchTimeoutSeconds 5
+restart
+> locate structure minecraft:mansion
+waitlog (The nearest minecraft:mansion|Could not find) 120
+expect \[locate\] .*timed out after 5 s
+> locate structure creativeworldgen:meta/fortified_ruins
+waitlog (The nearest creativeworldgen:meta/fortified_ruins|Could not find) 120
+reject Can't keep up|ticks behind
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml worldgen.locate searchTimeoutSeconds 120
+restart
+look the mansion search ended as not found with the [locate] timed out after 5 s line and its counters; fortified ruins either answered or timed out the same way (a timeout line again is fine); no lag line during the search
+
 ## SQ-WGE-03a (A3)
 @group B
 @commands `python3 -c` over `structure_tags.json`: `eugene:undead_castle` in `land/plains` and `land/taiga`, not in `land/highlands`; boot; `grep -i 'earth.fill.*override\|undead_castle' OUT/srv/logs/latest.log`
@@ -354,13 +368,47 @@ look the Retuned pools list holds only the vinery / beautify / tech pools (the 9
 @commands edit one duplicate by hand (`current` of a `#2` piece, say 7), reboot; then change nothing and reboot again
 @pass first reboot keeps 7 with no warning (original unchanged); to force reorder, set its stored `original` to a different number and reboot: a `piece order changed under an edited duplicate` warning appears in the log and the report, value kept at 7
 @fails warning missing: `mergeCurrent` branch for edited entries
-@draft needs two reboots with hand edits of pool_config.json between them (a row cannot reboot the server): run as three short boots, each with a bootreject/bootexpect for `piece order changed`
+@reviewed 2026-11-26
+# 2026-11-26 (writer-3): three boots; the edited duplicate is the second "empty" piece of the bastion small treasure extension pool (original 1);
+# the config is copied from the instance first so the edit has a file
+edit mkdir -p kubejs/generation_scripts/worldgen && cp -f "$INST/kubejs/generation_scripts/worldgen/pool_config.json" kubejs/generation_scripts/worldgen/pool_config.json && python3 -c 'import json; p="kubejs/generation_scripts/worldgen/pool_config.json"; d=json.load(open(p)); e=d["pools"]["minecraft:bastion/treasure/extensions/small_pool"]["elements"]["minecraft:bastion/treasure/extensions/empty #2"]; e["current"]=7; json.dump(d,open(p,"w"),indent=2)'
+restart
+bootreject piece order changed under an edited duplicate
+shell python3 -c 'import json; d=json.load(open("kubejs/generation_scripts/worldgen/pool_config.json")); e=d["pools"]["minecraft:bastion/treasure/extensions/small_pool"]["elements"]["minecraft:bastion/treasure/extensions/empty #2"]; print(e)' | tee .wge06c_a && grep -q "'current': 7" .wge06c_a
+edit python3 -c 'import json; p="kubejs/generation_scripts/worldgen/pool_config.json"; d=json.load(open(p)); e=d["pools"]["minecraft:bastion/treasure/extensions/small_pool"]["elements"]["minecraft:bastion/treasure/extensions/empty #2"]; e["original"]=3; json.dump(d,open(p,"w"),indent=2)'
+restart
+bootexpect piece order changed under an edited duplicate
+shell python3 -c 'import json; d=json.load(open("kubejs/generation_scripts/worldgen/pool_config.json")); e=d["pools"]["minecraft:bastion/treasure/extensions/small_pool"]["elements"]["minecraft:bastion/treasure/extensions/empty #2"]; print(e)' | tee .wge06c_b && grep -q "'current': 7" .wge06c_b
+edit cp -f "$INST/kubejs/generation_scripts/worldgen/pool_config.json" kubejs/generation_scripts/worldgen/pool_config.json
+restart
+bootreject piece order changed under an edited duplicate
+
 ## SQ-WGE-06d (B1)
 @group B
 @commands ST-191: boot a normal world, `/locate structure minecraft:village_plains` and note 3 village coordinates plus a pillager outpost; stop, boot again with the same world and seed, repeat; then generate a fresh area (`/cdevplace` or `forceload`) and compare the first 5 village layouts (piece list) across two restarts
 @pass same coordinates and same layouts across restarts (canonical order is on); no `Element ... is not valid` errors on save
 @fails layouts differ per start: `canonicalOrder` off in the toml, or the sort tie-break
-@draft needs a stop and a reboot of the same world between the two locate passes (a row cannot reboot), and the layout compare is a piece-list judgement; run as two boots with the same seed, locate steps in each
+@reviewed 2026-11-26
+@absent minecraft:village_plains minecraft:pillager_outpost (structure ids: listed in kubejs/exported/structures.json worldgen, not in the registry dump)
+# 2026-11-26 (writer-3): the two locate passes run in one row with a restart between them on the same world and seed; the piece-list compare
+# of fresh layouts is a look, the coordinates are compared by shell
+> locate structure minecraft:village_plains
+waitlog The nearest minecraft:village_plains 600
+capture VA The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure minecraft:pillager_outpost
+waitlog The nearest minecraft:pillager_outpost 600
+capture OA The nearest minecraft:pillager_outpost is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+restart
+> locate structure minecraft:village_plains
+waitlog The nearest minecraft:village_plains 600
+capture VB The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure minecraft:pillager_outpost
+waitlog The nearest minecraft:pillager_outpost 600
+capture OB The nearest minecraft:pillager_outpost is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell test "{VA1} {VA3}" = "{VB1} {VB3}" && test "{OA1} {OA3}" = "{OB1} {OB3}" && echo "same village and outpost coordinates after the restart"
+reject Element .* is not valid
+look the first five village layouts (piece lists) of a fresh area match across two restarts of the same seed (canonicalOrder on); not automated
+
 ## CQ-WGE-07a (B5)
 @group client
 @commands WE-25: Cool Rain 1.0.2 and Serene Seasons loaded; `grep -i 'CoolRainSeasonMixin\|coolrain' logs/latest.log` after the title screen

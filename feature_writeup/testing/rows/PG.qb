@@ -73,7 +73,7 @@ look the pg pair at x 1290-1310 z 1040 shows the same adjust values as the last 
 @pass `CustomPortalColors.blue` set; `.orange` set; both set; the average (orange-ish), not either dye; a mix with the old color, not pure white; name and other NBT kept; no output for the last three
 @fails `PortalGunDyeRecipe` (column rule or `mix`); missing output on every case: the recipe JSON did not load (`portal_gun_dye` in the log)
 @from batches/r1113/c3_a1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # zc3 craft needs a player G; the row never spawned one (judge-7, r1120nv, 2026-11-21)
 > forceload add 0 0
 > execute unless entity G run pbot spawn G 0 -60 0 minecraft:overworld survival

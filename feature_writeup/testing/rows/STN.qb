@@ -135,7 +135,7 @@ look (1) rdetail: pickle_from_fermenting inputs are 5 cucumbers + salt_dust (if 
 @pass First `BrewTimeTotal` 600 and the tea appears at about 600 ticks; after the change 300. The FD pot and the oven still read their own recipe times (an FD pot recipe's `CookTimeTotal` equals the recipe's `cookingtime`)
 @fails `KettleRecipeSerializerMixin.ce$cookingTime` fallback; NCH `frBrewing` must not write `cookingtime` (check a dumped recipe json)
 @from batches/r1106spf/b1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # judge-8 2026-11-21: the 1.19 kettle holds water in its water_level blockstate (no tank NBT); forceload so it ticks
 > forceload add 80 -60 80 -60
 sleep 3
@@ -145,6 +145,23 @@ sleep 3
 sleep 1
 > data get block 80 -59 -60
 look BrewTimeTotal 600 (kettleBrewTicks default)
+expect has the following block data: .*BrewTimeTotal: 600\b
+# r1126q (2026-11-26): the second half of the pass (config 300 after /reload) had no steps; the config is "read when recipes load: /reload to apply" (farmers_respite.md, CDConfig)
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml cooking kettleBrewTicks 300
+sleep 5
+> reload
+sleep 15
+> setblock 82 -60 -60 minecraft:campfire[lit=true]
+> setblock 82 -59 -60 farmersrespite:kettle[water_level=4]
+> data merge block 82 -59 -60 {Inventory:{Items:[{Slot:0b,id:"farmersrespite:black_tea_leaves",Count:1b},{Slot:1b,id:"farmersrespite:black_tea_leaves",Count:1b}]}}
+sleep 1
+> data get block 82 -59 -60
+expect 82, -59, -60 has the following block data: .*BrewTimeTotal: 300\b
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml cooking kettleBrewTicks 600
+sleep 5
+> reload
+sleep 10
+reject (Unknown (item|block|block type)|Incorrect argument for command|Unknown or incomplete command)
 
 ## SQ-STN-06 | FD pot plates from the remainder buffer: one bowl, five bowls, a bottle that never moves
 @group A

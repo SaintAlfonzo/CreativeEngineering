@@ -191,13 +191,10 @@ expect Test passed, count: 2
 @pass First touch rolls loot (or nothing: about half the tree nests are empty); `LootTable` gone after; the same nest gives no new items on reopen; breaking drops the rolled items; roof nests can hold seeds, bread, a book or a lead
 @fails Loot rolled twice: `NestBlockEntity.unpackLoot` not clearing the table first
 @from batches/r1113/c4_ar.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > forceload add 39990 39990 40040 40020
 sleep 3
-# the feature nest placed in c4_a (40005 -55 40005, generated=true) is still there: is it on leaves?
-> execute if block 40005 -55 40005 hearthandharvest:nest run say HCS7 feature nest present
-> execute if block 40005 -56 40005 #minecraft:leaves run say HCS7 feature nest on leaves
-> execute if block 40005 -54 40005 #minecraft:leaves run say HCS7 feature nest under leaves
+# the generated tree nest of the old c4_a world is not in a fresh world (r1120nv BATCH-FAULT): the row places its own generated nests below
 > fill 40018 -60 39998 40032 -58 40004 minecraft:air
 > kill @e[type=minecraft:item,x=40015,y=-62,z=39995,dx=20,dy=6,dz=12]
 > setblock 40020 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:11L}
@@ -244,8 +241,7 @@ sleep 2
 > cdevtest items 40026 -60 40000 2
 > cdevtest items 40030 -60 40000 2
 > pbot remove n8
-expect HCS7 feature nest present
-look the first sneak-use moved the 40020 roll to n8 (pbot inv lines: seeds, bread, book, lead, nuggets or shiny items; c4_a showed iron ingot + constantan nugget for seed 11) and its Inventory is empty after; LootTable gone after the first touch; the reopen added nothing (second inv empty); 40022 / 40024 gave their rolls (or nothing); the broken village nest dropped its rolled items plus the nest, the tree-table nest at 40030 its roll or only the nest; "feature nest on leaves" or "under leaves" says where the oak feature put it
+look the first sneak-use moved the 40020 roll to n8 (pbot inv lines: seeds, bread, book, lead, nuggets or shiny items; any items from the village nest table) and its Inventory is empty after; LootTable gone after the first touch; the reopen added nothing (second inv empty); 40022 / 40024 gave their rolls (or nothing); the broken village nest dropped its rolled items plus the nest, the tree-table nest at 40030 its roll or only the nest
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-HCS-08 | no natural Alex's Mobs crow; summon works

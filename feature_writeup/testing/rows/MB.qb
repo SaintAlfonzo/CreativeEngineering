@@ -107,7 +107,9 @@ look hardness 25 per the changelog (queue row says 50): check with WTHIT in the 
 @pass box still there
 @fails Create mixin not applied
 @from batches/r1106spf/b1.qb
-@reviewed 2026-11-21
+@reviewed 2026-11-26
+> forceload add 20 -20 22 -20
+> setblock 20 -60 -20 quark:monster_box
 > setblock 22 -60 -20 create:creative_motor[facing=west]
 > setblock 21 -60 -20 create:mechanical_drill[facing=west]
 sleep 30

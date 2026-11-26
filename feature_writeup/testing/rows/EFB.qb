@@ -758,21 +758,22 @@ shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --
 look the judge lists: badlands bases terracotta or red sand, volcanic bases stone or basalt family, snowy bases snow or dirt (base_earth against ring per start)
 ## SQ-EFB-10 (earth, the beard band)
 @group B
-@commands on 3 kept villages from 02, 05 and 08: `/cdevtest count <x1> <y-8> <z1> <x2> <y-1> <z2>` for `minecraft:stone`, `minecraft:dirt`, `minecraft:sand`, the box being the start box 8 layers down from its bottom
+@commands on 3 kept villages (a plains, a taiga and a desert village, each located by id): `/cdevtest count <x1> <y-8> <z1> <x2> <y-1> <z2>` for `minecraft:stone`, `minecraft:dirt`, `minecraft:sand`, the box being the start box 8 layers down from its bottom
 @pass the fill under the houses is native ground (dirt / grass in plains, sand / sandstone in desert); exposed beard sides are not bare stone walls; LOOK at one desert village edge from below the sea level
 @fails stone walls at the beard edge: vanilla Beardifier surface rule, not ours; record and do not fix in this plan
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 @absent #minecraft:village (structure tag: villages in kubejs/exported/structures.json worldgen; the tag dump lists no structure tags)
+# rewritten 2026-11-26 (r1126q writer-5): r1120nv located #minecraft:village from each biome spot; the river spot found the plains village again and the desert spot a savanna village, so no pair to judge. Each square now locates its own village type by id (plains, taiga on the river square's slopes, desert) and the three are different structures
 # r1120fix (2026-11-20): the row runs in the worldgen step, before (and without) the long rows SQ-EFB-02 to -09, so it
 # locates its own square instead of reusing their captures
 shell grep -cE "nearest minecraft:plains is at|Could not find" logs/latest.log > ../efb_loc_pl.n || true
 > execute positioned 0 70 0 run locate biome minecraft:plains
 shell n=$(cat ../efb_loc_pl.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:plains is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:plains is at|Could not find/ in 600 s"; exit 1
 capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-shell grep -cE "nearest #minecraft:village" logs/latest.log > ../efb_vl_vpl.n || true
-> execute positioned {PL1} 70 {PL3} run locate structure #minecraft:village
-shell n=$(cat ../efb_vl_vpl.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest #minecraft:village" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest #minecraft:village/ in 600 s"; exit 1
-capture VPL nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -cE "nearest minecraft:village_plains" logs/latest.log > ../efb_vl_vpl.n || true
+> execute positioned {PL1} 70 {PL3} run locate structure minecraft:village_plains
+shell n=$(cat ../efb_vl_vpl.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:village_plains" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:village_plains/ in 600 s"; exit 1
+capture VPL nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {VPL1-64} {VPL3-64} {VPL1+64} {VPL3+64}
 sleep 15
 # judge-9 (2026-11-21): the capture ran before the probe printed (the forceload held the server thread); wait for done= first
@@ -789,10 +790,10 @@ shell grep -cE "nearest minecraft:river is at|Could not find" logs/latest.log > 
 > execute positioned 0 70 0 run locate biome minecraft:river
 shell n=$(cat ../efb_loc_rv.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:river is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:river is at|Could not find/ in 600 s"; exit 1
 capture RV nearest minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-shell grep -cE "nearest #minecraft:village" logs/latest.log > ../efb_vl_vrv.n || true
-> execute positioned {RV1} 70 {RV3} run locate structure #minecraft:village
-shell n=$(cat ../efb_vl_vrv.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest #minecraft:village" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest #minecraft:village/ in 600 s"; exit 1
-capture VRV nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -cE "nearest minecraft:village_taiga" logs/latest.log > ../efb_vl_vrv.n || true
+> execute positioned {RV1} 70 {RV3} run locate structure minecraft:village_taiga
+shell n=$(cat ../efb_vl_vrv.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:village_taiga" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:village_taiga/ in 600 s"; exit 1
+capture VRV nearest minecraft:village_taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {VRV1-64} {VRV3-64} {VRV1+64} {VRV3+64}
 sleep 15
 > cdevtest under {VRV1} {VRV3} 2 village
@@ -808,10 +809,10 @@ shell grep -cE "nearest minecraft:desert is at|Could not find" logs/latest.log >
 > execute positioned 0 70 0 run locate biome minecraft:desert
 shell n=$(cat ../efb_loc_ds.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:desert is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:desert is at|Could not find/ in 600 s"; exit 1
 capture DS nearest minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-shell grep -cE "nearest #minecraft:village" logs/latest.log > ../efb_vl_vds.n || true
-> execute positioned {DS1} 70 {DS3} run locate structure #minecraft:village
-shell n=$(cat ../efb_vl_vds.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest #minecraft:village" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest #minecraft:village/ in 600 s"; exit 1
-capture VDS nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -cE "nearest minecraft:village_desert" logs/latest.log > ../efb_vl_vds.n || true
+> execute positioned {DS1} 70 {DS3} run locate structure minecraft:village_desert
+shell n=$(cat ../efb_vl_vds.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:village_desert" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:village_desert/ in 600 s"; exit 1
+capture VDS nearest minecraft:village_desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {VDS1-64} {VDS3-64} {VDS1+64} {VDS3+64}
 sleep 15
 > cdevtest under {VDS1} {VDS3} 2 village

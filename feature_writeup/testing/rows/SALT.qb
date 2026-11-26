@@ -1273,7 +1273,9 @@ look the raw rock salt count after the 300 random-tick rounds (second count line
 @group same
 @commands latest.log: `[salt] 30 Vintage salt blocks random tick`, no mixin error for `SaltBlockRandomTickMixin` / `SaltLayerRandomTickMixin` / `SaltRockNoDissolveMixin`. The block melt half (`/salttest` melts snow and ice) moved to Creative Common's melting system (salt.md 2026-11-14, melting.md 2): SQ-MELT-01 (salt sources), SQ-MELT-05 (Nether), SQ-MELT-04 (blue ice)
 @pass Existing test: MG-36 (log half); melt half: SQ-MELT-01
-@reviewed 2026-11-20
+@reviewed 2026-11-26
+# r1126q (2026-11-26): rechecked against SaltBlockTicks (log line, count 30 in r1119 logs) and the three mixins; item_merges.md
+# changed 2026-11-24 without touching salt.
 # r1120fix (2026-11-20): the 12 "/salttest ... melts" cases are dropped (owner request 2026-11-20: melt cases moved to SQ-MELT):
 # since 2026-11-17 a salt source's tick only schedules the target's melt tick (melting.md 2), so direct randomTicks cannot melt
 bootexpect \[salt\] 30 Vintage salt blocks random tick
@@ -1349,82 +1351,379 @@ expect \[salttest\] NOTE rain cases: .*isRainingAt true
 @@table
 ## SQ-SALT2-10 | a placed Rock Salt Block is the lick: a cow walks to it and wears it; Salt Dust Block is not licked
 @group A
-@commands Fenced 9x9 pasture, 2 cows; a player (bot) places a Rock Salt Block (`salt:raw_rock_salt_block` item) at one end, `salt:salt_block` at the other; `/gamerule randomTickSpeed 3`; watch 10 minutes (or until the rock salt block wears a stage)
-@pass the placed block reads `hearthandharvest:placed_rock_salt_block` and becomes `hearthandharvest:lightly_licked_salt_block` (then well, heavily); the Salt Dust Block never changes; latest.log has no "salt lick POI clash" line
-@fails no wear: POI not built on the placed block (`HHSaltRegistry.PLACED_ROCK_SALT`); placed block stays `salt:raw_rock_salt_block`: `SaltEvents.onPlace` not registered; Salt Dust Block worn: old root
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands Fenced 9x9 pasture with a survival bot inside and 2 cows; the bot places a Rock Salt Block (`salt:raw_rock_salt_block`) at one end and a Salt Dust Block (`salt:salt_block`) at the other; `time set 1000`, `/cdevtest tickwarp 12000` (10 minutes), state of both blocks
+@pass the placed block reads `hearthandharvest:placed_rock_salt_block` right after placing; after the warp it is `lightly_licked`, `well_licked` or `heavily_licked` (a cow wore it); the Salt Dust Block is still `salt:salt_block`; latest.log has no "Salt lick POI clash" line
+@fails no wear: POI not built on the placed block (`HHSaltRegistry.PLACED_ROCK_SALT`) or no cow reached it (record the cow positions from `cdevtest entities`); placed block stays `salt:raw_rock_salt_block`: `SaltEvents.afterPlace` / `BlockPlaceLickMixin` not applied; Salt Dust Block worn: old lick root
+@reviewed 2026-11-26
+# r1126q: steps written from salt.md 8 and 8.1. The bot stands inside the fence so the pasture chunks tick entities; the
+# wear is the cows' own StayNearSaltGoal, nothing is forced
+> forceload add 5190 5190 5222 5222
+sleep 3
+> time set 1000
+> gamerule doDaylightCycle false
+> fill 5200 -60 5200 5212 -60 5212 minecraft:oak_fence hollow
+> pbot spawn lk10 5206 -60 5206 minecraft:overworld survival
+sleep 3
+> pbot inv lk10 clear
+> pbot hold lk10 salt:raw_rock_salt_block 1
+> pbot use lk10 5204 -61 5206 up
+sleep 1
+> pbot hold lk10 salt:salt_block 1
+> pbot use lk10 5208 -61 5206 up
+sleep 1
+> cdevtest state 5204 -60 5206
+> cdevtest state 5208 -60 5206
+> summon minecraft:cow 5206 -60 5203
+> summon minecraft:cow 5206 -60 5209
+> cdevtest tickwarp 12000
+waitlog verb=tickwarp end=done ticks=12000 900
+> cdevtest state 5204 -60 5206
+> cdevtest state 5208 -60 5206
+> cdevtest entities 5206 -60 5206 8 type=minecraft:cow
+> pbot remove lk10
+> gamerule doDaylightCycle true
+expect verb=state pos=5204,-60,5206 state="?hearthandharvest:placed_rock_salt_block
+expect verb=state pos=5208,-60,5206 state="?salt:salt_block
+expect verb=state pos=5204,-60,5206 state="?hearthandharvest:(lightly|well|heavily)_licked_salt_block
+count verb=state pos=5208,-60,5206 state="?salt:salt_block == 2
+reject Salt lick POI clash
+reject verb=pbot\.\S+ .*error=
+reject \[cdevtest\] .*done=0
+look if the second state of 5204 is still the placed block after 12000 ticks, judge from the cow positions (n=2 expected inside the fence): cows alive and within 8 blocks is a FAIL of the wear, cows gone is a BATCH-FAULT
+
 ## SQ-SALT2-11 | Rock Salt refills one stage by hand and by dispenser; salt dust and salt layers do not
 @group A
-@commands A `heavily_licked_salt_block`: right click with salt dust, then with `vintagedelight:salt` (layer item), then with `salt:raw_rock_salt`; a dispenser with salt dust then rock salt facing a `well_licked_salt_block`; a `waxed_heavily_licked_salt_block` + rock salt by hand; a full Rock Salt Block + rock salt by hand
-@pass salt dust and the layer item do not change the lick (the layer item places a layer on top, which stays); rock salt: heavily -> well, 1 rock salt used; dispenser: salt dust leaves the lick unchanged (dropped or melts nothing), rock salt well -> lightly; waxed heavily -> waxed well; full block: nothing used
-@fails salt dust refills: `SaltLick.isSalt` still on `#forge:salt`; layer merged into the lick: `LickableSaltBlock.neighborChanged` still present
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands A `heavily_licked_salt_block`: right click with salt dust, then with `vintagedelight:salt` (layer item); another heavily licked: Rock Salt (`salt:raw_rock_salt`) three times; a dispenser with salt dust and one with Rock Salt facing a `well_licked_salt_block`; a `waxed_heavily_licked_salt_block` + Rock Salt by hand; a placed Rock Salt Block (full) + Rock Salt by hand
+@pass salt dust leaves the lick `heavily_licked`; the layer item puts `vintagedelight:salt[layers=1]` on top and the lick stays; Rock Salt: heavily -> well -> lightly -> `placed_rock_salt_block`, 1 used each; dispenser with salt dust: lick stays well; dispenser with Rock Salt: well -> lightly; waxed heavily -> `waxed_well_licked_salt_block`; full block: state unchanged and the Rock Salt count unchanged
+@fails salt dust refills: `SaltLick.isSalt` still on `#forge:salt`; layer merged into the lick: `LickableSaltBlock.neighborChanged` still present; full block uses a Rock Salt: `SaltLick.restored` null check
+@reviewed 2026-11-26
+# r1126q: steps written from salt.md 8 (Refill). Probes: /cdevtest use (fake player, right click per hand) and dispensers
+# powered by a redstone block above, as SQ-PS15-06 (whose dust refill cases predate salt.md 8)
+> forceload add 5290 5290 5330 5330
+sleep 3
+> setblock 5300 -60 5300 hearthandharvest:heavily_licked_salt_block
+> cdevtest use 5300 -60 5300 held=vintagedelight:salt_dust*4 face=north
+> cdevtest state 5300 -60 5300
+> setblock 5304 -60 5300 hearthandharvest:heavily_licked_salt_block
+> cdevtest use 5304 -60 5300 held=vintagedelight:salt*2 face=up stand=5304,-60,5297
+> cdevtest state 5304 -60 5300
+> cdevtest state 5304 -59 5300
+> setblock 5308 -60 5300 hearthandharvest:heavily_licked_salt_block
+> cdevtest use 5308 -60 5300 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5308 -60 5300
+> cdevtest use 5308 -60 5300 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5308 -60 5300
+> cdevtest use 5308 -60 5300 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5308 -60 5300
+> setblock 5312 -60 5300 hearthandharvest:well_licked_salt_block
+> setblock 5312 -60 5301 minecraft:dispenser[facing=north]
+> data merge block 5312 -60 5301 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 5312 -59 5301 minecraft:redstone_block
+sleep 1
+> cdevtest state 5312 -60 5300
+> setblock 5316 -60 5300 hearthandharvest:well_licked_salt_block
+> setblock 5316 -60 5301 minecraft:dispenser[facing=north]
+> data merge block 5316 -60 5301 {Items:[{Slot:0b,id:"salt:raw_rock_salt",Count:4b}]}
+> setblock 5316 -59 5301 minecraft:redstone_block
+sleep 1
+> cdevtest state 5316 -60 5300
+> setblock 5320 -60 5300 hearthandharvest:waxed_heavily_licked_salt_block
+> cdevtest use 5320 -60 5300 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5320 -60 5300
+> setblock 5324 -60 5300 hearthandharvest:placed_rock_salt_block
+> cdevtest use 5324 -60 5300 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5324 -60 5300
+expect verb=state pos=5300,-60,5300 state="?hearthandharvest:heavily_licked_salt_block
+expect verb=state pos=5304,-60,5300 state="?hearthandharvest:heavily_licked_salt_block
+expect verb=state pos=5304,-59,5300 state="?vintagedelight:salt\[layers=1\]
+expect verb=state pos=5308,-60,5300 state="?hearthandharvest:well_licked_salt_block
+expect verb=state pos=5308,-60,5300 state="?hearthandharvest:lightly_licked_salt_block
+expect verb=state pos=5308,-60,5300 state="?hearthandharvest:placed_rock_salt_block
+expect verb=state pos=5312,-60,5300 state="?hearthandharvest:well_licked_salt_block
+expect verb=state pos=5316,-60,5300 state="?hearthandharvest:lightly_licked_salt_block
+expect verb=state pos=5320,-60,5300 state="?hearthandharvest:waxed_well_licked_salt_block
+expect verb=use main=salt:raw_rock_salt\*4 off=empty state="?hearthandharvest:placed_rock_salt_block
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|vintagedelight)
+reject \[cdevtest\] .*done=0
+look the use lines for the three Rock Salt clicks show main=salt:raw_rock_salt*3, *2, *1 after each (1 used per click) when the click was consumed; the full block line keeps *4
+
 ## SQ-SALT2-12 | licking with a salt layer on top wears the lick, not the layer; last wear drops 1 salt dust
 @group A
-@commands `hearthandharvest:heavily_licked_salt_block` with `vintagedelight:salt[layers=3]` on top; empty both hands, right click it until it wears (`[hearthandharvest] playerLickChance` permitting)
-@pass the lick is removed (the layer above drops as dust from lost support) and 1 `vintagedelight:salt_dust` pops from the lick; the layer never shrinks from licking
-@fails layer shrinks first: B5 path still in `SaltLick.wear`; `salt:salt` drops: old drop id
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands `hearthandharvest:heavily_licked_salt_block` with `vintagedelight:salt[layers=3]` on top; empty both hands, right click it 150 times (`saltPlayerLickChance` default 0.05, so a wear is near certain); then the lick position and the items around it
+@pass during the clicks the layer is never `layers=1` or `layers=2` (it never shrinks from licking); the lick position ends as air; at least 1 `vintagedelight:salt_dust` lies near it (1 from the last wear, the layer above drops its own dust from lost support)
+@fails layer shrinks first: B5 path still in `SaltLick.wear`; `salt:salt` drops: old drop id; no wear in 150 clicks: `saltPlayerLicking` config off or the chance lowered in `config/hearthandharvest-common.toml`
+@reviewed 2026-11-26
+# r1126q: steps written from salt.md 8 (Last wear). 150 clicks at 0.05: the chance of no wear is 0.05 % (0.95^150 = 0.0005)
+> forceload add 5390 5390 5420 5420
+sleep 3
+> setblock 5400 -60 5400 hearthandharvest:heavily_licked_salt_block
+> setblock 5400 -59 5400 vintagedelight:salt[layers=3]
+repeat 150
+> cdevtest use 5400 -60 5400 held=none face=north
+end
+> cdevtest state 5400 -60 5400
+> cdevtest state 5400 -59 5400
+> cdevtest items 5400 -60 5400 4
+expect verb=state pos=5400,-60,5400 state="?minecraft:air
+expect verb=items items=\S*vintagedelight:salt_dust:[1-9]
+reject verb=state pos=5400,-59,5400 state="?vintagedelight:salt\[layers=[12]\]
+reject verb=items items=(\S*,)?salt:salt:\d
+reject \[cdevtest\] .*done=0
+
 ## SQ-SALT2-13 | recipes: Rock Salt Block 4 <-> 4, heated basin water over a Rock Salt Block, Large Salt Lamp, no water_salt
 @group any
-@commands `/kubejs dump_recipes` or JEI-free check: `creativedelight:shaped/rock_salt_block`, `creativedelight:shapeless/rock_salt_from_block`, `creativedelight:createmixing/rock_salt_water_salt`, `creativedelight:shaped/large_salt_lamp`; `salt:raw_rock_salt`, `salt:raw_rock_salt_block` and `creativedelight:createmixing/water_salt` absent. Live: heated basin, 1000 mB water first, wait 10 s; then a Rock Salt Block in, wait
-@pass ids as listed (salt lamp: 7 rock salt, glowstone, `#minecraft:wooden_slabs`); water alone stays water; with the block: 2 salt dust out, the block stays in the basin, 1000 mB used
-@fails water turns to salt alone: old `water_salt` still loaded
-@draft runnable steps not written yet; the next runner writes them from @commands
-## SQ-SALT2-14 | Power Grid acid in water is heated; flesh in a heated basin with water makes acid, not salt
+@commands `/cdevtest rdetail` for `creativedelight:shaped/rock_salt_block`, `creativedelight:shapeless/rock_salt_from_block`, `creativedelight:createmixing/rock_salt_water_salt`, `creativedelight:shaped/large_salt_lamp`; `recipes` text checks for the removed `salt:raw_rock_salt`, `salt:raw_rock_salt_block` and `creativedelight:createmixing/water_salt`. The live heated basin (Create mixer, blaze burner, kinetics) is not driven: the mixing is checked at recipe level and by a LOOK
+@pass Rock Salt Block = 4 Rock Salt (2x2); the block back to 4 Rock Salt; the mixing takes the block and 1000 mB water and gives the block back plus 2 salt dust; Large Salt Lamp = 7 Rock Salt, glowstone block, wooden slab; no `water_salt` recipe and no upstream `salt:raw_rock_salt*` recipe
+@fails water turns to salt alone: old `water_salt` still loaded; upstream recipes not removed: `creativedelight/salt.js` (R.remove ids)
+@reviewed 2026-11-26
+# r1126q: ids checked against kubejs/exported/recipes (2026-11-19 dump); the mixing's heat is not printed by rdetail
+> cdevtest rdetail creativedelight:shaped/rock_salt_block
+> cdevtest rdetail creativedelight:shapeless/rock_salt_from_block
+> cdevtest rdetail creativedelight:createmixing/rock_salt_water_salt
+> cdevtest rdetail creativedelight:shaped/large_salt_lamp
+> cdevtest recipes createmixing/water_salt
+> cdevtest recipes salt:raw_rock_salt
+expect verb=rdetail id=creativedelight:shaped/rock_salt_block serializer=\S+ result=salt:raw_rock_salt_block\*1
+expect verb=rdetail id=creativedelight:shapeless/rock_salt_from_block serializer=\S+ result=salt:raw_rock_salt\*4
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt serializer=create:mixing\b
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt part=fluids value=in:\S*minecraft:water\S*@1000mB
+expect verb=rdetail id=creativedelight:createmixing/rock_salt_water_salt part=results value=\S*vintagedelight:salt_dust\*2@1
+expect verb=rdetail id=creativedelight:shaped/large_salt_lamp serializer=\S+ result=\S+salt_lamp\S*\*1
+expect verb=recipes text=createmixing/water_salt n=0
+reject verb=recipes id=salt:raw_rock_salt(_block)?\s
+reject \[cdevtest\] verb=rdetail .*done=0
+look rdetail of the lamp lists 7 Rock Salt, 1 glowstone block and a wooden slab in its stepN or fields lines; the mixing result keeps the block (first output) and adds 2 salt dust; heat needs JEI (heated) or the owner
+
+## SQ-SALT2-14 | Power Grid acid needs a heated basin and rotten flesh; the in-water variant is gone
 @group any
-@commands Heated basin: 250 mB water, 1 rotten flesh, 1 spider eye; then the same in an unheated basin
-@pass heated: 250 mB `powergrid:acid`; unheated: nothing happens
-@fails unheated makes acid: the `heated` argument missing in power_grid.js
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands `/cdevtest rdetail creativeengineering:createmixing/powergrid_acid`; `/cdevtest recipes powergrid_acid_in_water`; `/cdevtest recipes powergrid:mixing/acid` (upstream, removed)
+@pass the acid mixing is a Create mixing with redstone, blaze powder, rotten flesh and 250 mB water in, 250 mB `powergrid:acid` out; no `powergrid_acid_in_water` recipe and no upstream `powergrid:mixing/acid` recipe (salt.md 8 Acid, owner 2026-11-17: water first no longer becomes salt, so one heated acid recipe is enough)
+@fails the in-water recipe still loaded: `kubejs/server_scripts/other/power_grid.js` stale or the old script copy in a scratch pack; upstream acid still loaded: the `R.remove` for `powergrid:mixing/acid`
+@reviewed 2026-11-26
+# r1126q: rewritten from the 2026-11-17 text (spider eye, unheated basin): that variant was dropped (power_grid.js header;
+# salt.md 8 Acid), so the old steps tested a removed recipe. Needs the Power Grid jar (full pack)
+> cdevtest rdetail creativeengineering:createmixing/powergrid_acid
+> cdevtest recipes powergrid_acid_in_water
+> cdevtest recipes powergrid:mixing/acid
+expect verb=rdetail id=creativeengineering:createmixing/powergrid_acid serializer=create:mixing\b
+expect verb=rdetail id=creativeengineering:createmixing/powergrid_acid part=fluids value=.*powergrid:acid.*@250mB
+expect verb=rdetail id=creativeengineering:createmixing/powergrid_acid part=fluids value=.*in:\S*minecraft:water\S*@250mB
+expect verb=recipes text=powergrid_acid_in_water n=0
+expect verb=recipes text=powergrid:mixing/acid n=0
+reject \[cdevtest\] verb=rdetail .*done=0
+look rdetail lists rotten flesh, redstone and blaze powder as the item inputs (fields or stepN lines)
+
 ## SQ-SALT2-15 | Salt Melt stacks to 16 unused; a use from a stack splits one off
 @group A
-@commands `/give @p salt:salt_melt 20`; right click `minecraft:ice` once with the 16 stack; check the inventory; put a damaged Salt Melt and an unused one in a crafting grid slot drag test (try to stack them)
-@pass the 20 arrive as 16 + 4; after the use: 15 unused in hand and 1 Salt Melt with 63/64 elsewhere in the inventory; the ice is water; damaged and unused never stack
-@fails 20 stacks of 1: `getMaxStackSize(ItemStack)` not called; whole stack damaged: split missing
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands `/cdevtest item salt:salt_melt`; a survival bot gets 20 Salt Melts (`give`), right clicks `minecraft:ice` once with the 16 stack, then the inventory; `give` the bot 2 damaged (`{Damage:1}`) and 1 unused Salt Melt after clearing
+@pass max_stack=16; the 20 arrive as 16 + 4; after the use the held stack is 15 and one Salt Melt with `Damage:1` is elsewhere in the inventory; the ice is water; damaged ones take one slot each and never stack with the unused
+@fails 20 stacks of 1: `getMaxStackSize(ItemStack)` not called; whole stack damaged: split missing (`SaltMeltItem.useOn`)
+@reviewed 2026-11-26
+# r1126q: "63/64" of the old text is Damage:1 of 64 uses
+> forceload add 5490 5490 5520 5520
+sleep 3
+> cdevtest item salt:salt_melt
+> pbot spawn sm15 5500.5 -60 5506.5 minecraft:overworld survival
+sleep 3
+> pbot inv sm15 clear
+> give sm15 salt:salt_melt 20
+> pbot inv sm15 get
+> pbot inv sm15 select 0
+> setblock 5500 -61 5500 minecraft:ice
+> cdevtest use 5500 -61 5500 as=sm15 face=up
+> cdevtest state 5500 -61 5500
+> pbot inv sm15 get
+> pbot inv sm15 clear
+> give sm15 salt:salt_melt{Damage:1} 2
+> give sm15 salt:salt_melt 1
+> pbot inv sm15 get
+> pbot remove sm15
+expect verb=item item=salt:salt_melt .*max_stack=16\b
+expect verb=pbot.inv bot=sm15 slot=\d+ item=salt:salt_melt\*16
+expect verb=pbot.inv bot=sm15 slot=\d+ item=salt:salt_melt\*4
+expect verb=use main=salt:salt_melt\*15\b.*state="?minecraft:water
+expect verb=pbot.inv bot=sm15 slot=\d+ item=salt:salt_melt\*15
+expect verb=pbot.inv bot=sm15 slot=\d+ item=salt:salt_melt\*1\{Damage:1\}
+count verb=pbot.inv bot=sm15 slot=\d+ item=salt:salt_melt\*1\{Damage:1\} == 3
+reject verb=pbot.inv bot=sm15 slot=\d+ item=salt:salt_melt\*2\{Damage
+reject verb=pbot\.\S+ .*error=
+reject \[cdevtest\] .*done=0
+
 ## SQ-SALT2-16 | Salt Melt in a dispenser: a stack of 4 melts and keeps the used one in the dispenser
 @group A
-@commands Dispenser with 4 unused Salt Melts facing `minecraft:snow[layers=8]`; power once; open the dispenser
-@pass snow 8 -> 5 layers; the dispenser holds 3 unused and 1 at 63/64 in another slot (if no slot was free, that one lies in front)
-@fails 4 at 63: split missing in `SaltMeltItem.Dispense`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands Dispenser with 4 unused Salt Melts facing down onto `minecraft:snow[layers=8]`; power once; `/cdevtest inv` of the dispenser
+@pass snow 8 -> 5 layers (3 of 8 layers melt per use, `saltMeltSnowLayers`); the dispenser holds 3 unused and 1 with `Damage:1` in another slot; no item entity near it
+@fails 4 at Damage 1: split missing in `SaltMeltItem.Dispense`; snow stays: `isSaltable` gate on snow layers
+@reviewed 2026-11-26
+# r1126q: the dispenser as SQ-PS15-07 (facing down onto the block below)
+> forceload add 5530 5530 5560 5560
+sleep 3
+> setblock 5540 -61 5540 minecraft:snow[layers=8]
+> setblock 5540 -60 5540 minecraft:dispenser[facing=down]
+> data merge block 5540 -60 5540 {Items:[{Slot:0b,id:"salt:salt_melt",Count:4b,tag:{Damage:0}}]}
+> setblock 5540 -59 5540 minecraft:redstone_block
+sleep 1
+> cdevtest state 5540 -61 5540
+> cdevtest inv 5540 -60 5540
+> cdevtest items 5540 -60 5540 5
+expect verb=state pos=5540,-61,5540 state="?minecraft:snow\[layers=5\]
+expect verb=inv .*item=salt:salt_melt\*3
+expect verb=inv .*item=salt:salt_melt\*1\{Damage:1\}
+reject verb=items items=\S*salt:salt_melt
+reject \[cdevtest\] .*done=0
+
 ## SQ-SALT2-17 | Salt Melt and salt dust act on plain ice with Rare Ice installed (1115b #12)
 @group A
-@commands `grep allowInsertingItemsToIce config/rare-ice.properties`; right click `minecraft:ice` with salt dust, then with a Salt Melt; on Blue Ice with a Salt Melt
-@pass the config line says false; salt dust places a salt layer on the ice (no Rare Ice block); the Salt Melt turns the ice into water and loses 1 use; Blue Ice: nothing happens, no use spent
-@fails Rare Ice block appears: config not read; blue ice melted: `salt:meltables` or `isSaltable` gate missing
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands `grep allowInsertingItemsToIce config/rare-ice.properties` (and the `configs_edited/` copy); fake player right click on `minecraft:ice` with salt dust, then with a Salt Melt; on `minecraft:blue_ice` with a Salt Melt
+@pass the config line is `allowInsertingItemsToIce=false`; salt dust on ice melts it one stage to water, spends 1 dust and leaves no Rare Ice block (salt.md 8 Hand click: a layer is placed only on a block that is not saltable); the Salt Melt turns ice into water and takes 1 use; blue ice: unchanged, Salt Melt undamaged
+@fails Rare Ice block appears: config not read; blue ice melted: `salt:meltables` or `isSaltable` gate missing; dust leaves a layer on ice: `SaltLayerMelt.onUseSalt` not melting first (the old row text expected a layer: stale since 2026-11-17)
+@reviewed 2026-11-26
+# r1126q: rewritten from the pre-2026-11-17 text (salt dust placing a layer on ice) to salt.md 8 Hand click
+shell grep -q "^allowInsertingItemsToIce=false" config/rare-ice.properties
+shell grep -q "^allowInsertingItemsToIce=false" $INST/configs_edited/root_config/rare-ice.properties
+> forceload add 5570 5570 5600 5600
+sleep 3
+> setblock 5580 -61 5580 minecraft:ice
+> cdevtest use 5580 -61 5580 held=vintagedelight:salt_dust*4 face=up
+> cdevtest state 5580 -61 5580
+> cdevtest state 5580 -60 5580
+> setblock 5584 -61 5580 minecraft:ice
+> cdevtest use 5584 -61 5580 held=salt:salt_melt face=up
+> cdevtest state 5584 -61 5580
+> setblock 5588 -61 5580 minecraft:blue_ice
+> cdevtest use 5588 -61 5580 held=salt:salt_melt face=up
+> cdevtest state 5588 -61 5580
+expect verb=use main=vintagedelight:salt_dust\*3 off=empty state="?minecraft:water
+expect verb=state pos=5580,-61,5580 state="?minecraft:water
+reject verb=state pos=5580,-60,5580 state="?\S*rare_ice
+expect verb=use main=salt:salt_melt\*1\{Damage:1\} off=empty state="?minecraft:water
+expect verb=use main=salt:salt_melt\*1 off=empty state="?minecraft:blue_ice
+reject verb=use main=salt:salt_melt\*1\{Damage:[1-9]\} off=empty state="?minecraft:blue_ice
+reject \[cdevtest\] .*done=0
+look no block with rare_ice in its id appears on the ice (state lines above show water)
+
 ## SQ-SALT2-18 | `#salt:meltables` follows the saltable tag
 @group any
-@commands latest.log after load: no `t_salt_meltables` warning (needs the Creative Common block_dict key); `/kubejs dump_tags block` or a tag probe for `salt:meltables`
-@pass `salt:meltables` holds the saltable tag's blocks; no `minecraft:blue_ice`, no `securitycraft:reinforced_snow_block`
-@fails the warning line: block_dict key missing (Creative Common); blue ice listed: script did not run
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands boot log after load: no `t_salt_meltables` warning (needs the Creative Common block_dict key); `/cdevtest tag block salt:meltables` and `creativecompat:melting/saltable`
+@pass `salt:meltables` is non-empty, holds `minecraft:ice` and `minecraft:snow_block` like the saltable tag, and holds no `minecraft:blue_ice` and no `securitycraft:reinforced_snow_block`; no warning line
+@fails the warning line: block_dict key missing (Creative Common); blue ice listed: `salt/block_tags.js` did not run (tag wipe)
+@reviewed 2026-11-26
+# r1126q: the saltable tag is creativecompat:melting/saltable since the Wave 2 carve (block_dict b.t_melt_saltable), not creativecommon:
+bootreject creativedelight salt/block_tags.js: block_dict has no t_salt_meltables
+> cdevtest tag block salt:meltables
+> cdevtest tag block creativecompat:melting/saltable
+expect verb=tag kind=block tag=salt:meltables n=[1-9]\d* ids=\S*minecraft:ice
+expect verb=tag kind=block tag=salt:meltables n=[1-9]\d* ids=\S*minecraft:snow_block
+reject verb=tag kind=block tag=salt:meltables .*ids=(\S*,)?minecraft:blue_ice(,|$)
+reject verb=tag kind=block tag=salt:meltables .*ids=(\S*,)?securitycraft:reinforced_snow_block(,|$)
+expect verb=tag kind=block tag=creativecompat:melting/saltable n=[1-9]\d*
+reject \[cdevtest\] .*done=0
+
 ## SQ-SALT2-19 | generated Rock Salt Blocks are never licks; any later placement (/setblock included) is one
+@phase worldgen
 @group B
-@commands Group B seed with a salt cave or beach patch: `/locate` or walk to one, fence 2 cows next to it, `/gamerule randomTickSpeed 3`, watch 10 minutes; empty both hands and right click a generated block 20 times; honeycomb on it. Then a piston pushes one generated block one step. Then `/setblock ~ ~ ~ salt:raw_rock_salt_block` next to the cows
-@pass generated blocks stay `salt:raw_rock_salt_block`: cows do not gather, player clicks neither lick nor wear, honeycomb stays in hand; the pushed block stays `salt:raw_rock_salt_block`; the /setblock block becomes `hearthandharvest:placed_rock_salt_block` and cows gather at it
-@fails generated block worn or waxed: The Salt's block still in the lick chain (`SaltLick` plain[0]) or the POI type (`HHSaltRegistry.createPoi`); pushed block turned into a lick: the moving-piston check in `SaltEvents.afterPlace`; /setblock block not a lick: `BlockPlaceLickMixin` not applied (latest.log mixin errors, SRG `m_6807_`)
-@draft runnable steps not written yet; the next runner writes them from @commands
-## SQ-SALT2-20 | the placed lick: drops, pick block, waxed and unwaxed, refilled back to the placed block
+@commands Group B seed: `locate biome minecraft:beach`, forceload the 65x65 block area around it (chunks generate with the world), count `hearthandharvest:placed_rock_salt_block` (must be 0) and `salt:raw_rock_salt_block` (recorded); then above the beach at y 150: `/setblock salt:raw_rock_salt_block`, a `/fill` of 3, a piston pushing one placed block one step
+@pass no placed twin in untouched generated terrain; the `/setblock` and `/fill` blocks read `hearthandharvest:placed_rock_salt_block`; the pushed block is still `placed_rock_salt_block` one step on (a piston push is not a placement; a pushed generated block is not reachable by command, only by worldgen)
+@fails generated blocks already twins: the swap hooks a path world generation takes (`BlockPlaceLickMixin` on the wrong method); /setblock block not a lick: mixin not applied (latest.log mixin errors, SRG `m_6807_`); pushed block lost: moving-piston check in `SaltEvents.afterPlace`
+@reviewed 2026-11-26
+# r1126q: the cow and player-click halves of the old text cannot start from a generated block without a located salt cave, so
+# they are covered on placed blocks in SQ-SALT2-10 and -12; this row judges the generated / placed split itself
+> locate biome minecraft:beach
+waitlog The nearest minecraft:beach is at \[-?\d+, [~\d-]+, -?\d+\] 600
+capture SB The nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SB1-32} {SB3-32} {SB1+32} {SB3+32}
+sleep 10
+> cdevtest count {SB1-32} 30 {SB3-32} {SB1+32} 100 {SB3+32} hearthandharvest:placed_rock_salt_block
+> cdevtest count {SB1-32} 30 {SB3-32} {SB1+32} 100 {SB3+32} salt:raw_rock_salt_block
+> setblock {SB1} 150 {SB3} salt:raw_rock_salt_block
+> cdevtest state {SB1} 150 {SB3}
+> fill {SB1+2} 150 {SB3} {SB1+4} 150 {SB3} salt:raw_rock_salt_block
+> cdevtest count {SB1+2} 150 {SB3} {SB1+4} 150 {SB3} hearthandharvest:placed_rock_salt_block
+> setblock {SB1+8} 150 {SB3} minecraft:piston[facing=east]
+> setblock {SB1+9} 150 {SB3} salt:raw_rock_salt_block
+> setblock {SB1+8} 151 {SB3} minecraft:redstone_block
+sleep 2
+> cdevtest state {SB1+9} 150 {SB3}
+> cdevtest count {SB1+10} 150 {SB3} {SB1+10} 150 {SB3} hearthandharvest:placed_rock_salt_block
+> forceload remove {SB1-32} {SB3-32} {SB1+32} {SB3+32}
+expect verb=count block=hearthandharvest:placed_rock_salt_block n=0( |$)
+expect verb=state pos=\S+ state="?hearthandharvest:placed_rock_salt_block
+expect verb=count block=hearthandharvest:placed_rock_salt_block n=3
+expect verb=state pos=\S+ state="?minecraft:piston_head
+expect verb=count block=hearthandharvest:placed_rock_salt_block n=1
+reject \[cdevtest\] .*done=0
+look the raw rock salt count of the generated area is recorded (0 means no salt in the area: the first count then proves only that nothing was converted); the piston head sits at x+9 and the placed block moved to x+10 (count n=1 there)
+
+## SQ-SALT2-20 | the placed lick: drops, wax and unwax, refilled back to the placed block
 @group A
-@commands Bot places a Rock Salt Block (it becomes the placed lick); middle click it in creative; mine it with a pickaxe (survival); place another, wax it with honeycomb, then take the wax off with an axe; place a `hearthandharvest:heavily_licked_salt_block`, right click with `salt:raw_rock_salt` 3 times; a Deployer holding a Rock Salt Block places one
-@pass pick block gives `salt:raw_rock_salt_block`; mining drops 1 `salt:raw_rock_salt_block` (no item named Placed); honeycomb -> `waxed_salt_block`, axe -> `placed_rock_salt_block`; refills step heavily -> well -> lightly -> `placed_rock_salt_block`; the Deployer's block is `placed_rock_salt_block`; the Rock Salt Block tooltip shows "Animals lick this"
+@commands Fake player and bot place a Rock Salt Block (it becomes the placed lick); `/cdevtest loot` and a survival break with a pickaxe; honeycomb on a placed block, then an axe on the waxed one; a `hearthandharvest:heavily_licked_salt_block` with `salt:raw_rock_salt` three times. Pick block (client) and the tooltip are CQ checks, not driven
+@pass loot and break drop `salt:raw_rock_salt_block` and nothing named placed; honeycomb -> `waxed_salt_block`, axe -> `placed_rock_salt_block`; refills step heavily -> well -> lightly -> `placed_rock_salt_block`; a Rock Salt Block placed by the fake player (Deployer's actor) is `placed_rock_salt_block`
 @fails drops nothing: loot table `hearthandharvest:blocks/placed_rock_salt_block` missing; unwax gives `salt:raw_rock_salt_block`: WAX map still on `saltBlock()`
-@draft runnable steps not written yet; the next runner writes them from @commands
+@reviewed 2026-11-26
+# r1126q: Create's Deployer itself needs kinetics; its actor is a Forge fake player, which /cdevtest use stands in for
+> forceload add 5690 5690 5720 5720
+sleep 3
+> cdevtest use 5700 -61 5700 held=salt:raw_rock_salt_block face=up stand=5698,-60,5700
+> cdevtest state 5700 -60 5700
+> cdevtest loot 5700 -60 5700 tool=minecraft:iron_pickaxe rolls=1
+> cdevtest use 5700 -60 5700 held=minecraft:honeycomb face=north
+> cdevtest state 5700 -60 5700
+> cdevtest use 5700 -60 5700 held=minecraft:iron_axe face=north
+> cdevtest state 5700 -60 5700
+> cdevtest break 5700 -60 5700 held=minecraft:iron_pickaxe
+> cdevtest state 5700 -60 5700
+> setblock 5704 -60 5700 hearthandharvest:heavily_licked_salt_block
+> cdevtest use 5704 -60 5700 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5704 -60 5700
+> cdevtest use 5704 -60 5700 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5704 -60 5700
+> cdevtest use 5704 -60 5700 held=salt:raw_rock_salt*4 face=north
+> cdevtest state 5704 -60 5700
+expect verb=state pos=5700,-60,5700 state="?hearthandharvest:placed_rock_salt_block
+expect verb=loot .*drops=\S*salt:raw_rock_salt_block:1\b
+reject verb=loot .*drops=\S*placed_rock_salt_block
+expect verb=state pos=5700,-60,5700 state="?hearthandharvest:waxed_salt_block
+expect verb=break .*broken=true
+expect verb=break drops=\S*salt:raw_rock_salt_block:1\b
+reject verb=break .*drops=\S*placed_rock_salt_block
+expect verb=state pos=5704,-60,5700 state="?hearthandharvest:well_licked_salt_block
+expect verb=state pos=5704,-60,5700 state="?hearthandharvest:lightly_licked_salt_block
+count verb=state pos=5704,-60,5700 state="?hearthandharvest:placed_rock_salt_block == 1
+count verb=state pos=5700,-60,5700 state="?hearthandharvest:placed_rock_salt_block == 2
+reject \[cdevtest\] .*done=0
+
 ## SQ-SALT2-21 | save safety: a 2026-11-16 save keeps its worn licks working and loads without errors
 @group A
 @commands A save from before this change (instance save or scratch world made with the older Creative Delight jar) holding a lightly licked stage, a waxed heavily licked stage and a Salt Dust Block in a pasture with cows; load it with the new jar; watch 10 minutes; unwax the waxed stage
 @pass no missing-block or POI errors in latest.log; cows still visit and wear the lightly licked stage; unwaxed stage keeps its stage; the Salt Dust Block is not licked; no `salt:raw_rock_salt_block` turns into a lick by itself
 @fails animals walk to an old POI record on a non-lick block: the block check in `StayNearSaltGoal.findSalt` missing
 @draft runnable steps not written yet; the next runner writes them from @commands
-## SQ-SALT2-22 | every placement after world generation makes a lick: dispenser, Deployer, Schematicannon
+## SQ-SALT2-22 | every placement after world generation makes a lick: dispenser, fake player (Deployer), /fill, /place
 @group A
-@commands Dispenser holding Rock Salt Blocks facing air, powered once; Create Deployer holding one, placing on stone; a schematic with 3 Rock Salt Blocks printed by a Schematicannon; a Create contraption (mechanical piston) carrying one placed lick and one `/setblock` block, moved and stopped; `/data get block` or F3 on each result
-@pass the dispenser, Deployer and Schematicannon blocks are `hearthandharvest:placed_rock_salt_block`; the contraption puts back the blocks it carried unchanged; latest.log has no error from `BlockPlaceLickMixin`
-@fails dispenser block stays The Salt's: BlockItem dispense skipped `onPlace` (check the block class overrides `m_6807_` without super); schematicannon stays The Salt's: Create placed it with the moving flag
-@draft runnable steps not written yet; the next runner writes them from @commands
+@commands Dispenser holding Rock Salt Blocks facing air, powered once; a Forge fake player (`/cdevtest use`, the Deployer's actor) placing one on stone; `/fill`; `/place` is not driven (needs a template). Create's Deployer with kinetics, the Schematicannon and a contraption carrying a lick are not driven here
+@pass every block set after generation is `hearthandharvest:placed_rock_salt_block`; latest.log has no error from `BlockPlaceLickMixin`
+@fails dispenser block stays The Salt's: BlockItem dispense skipped `onPlace` (the block class overrides `m_6807_` without super); fake player block stays The Salt's: the Forge place path skipped `onPlace`
+@reviewed 2026-11-26
+# r1126q: Deployer, Schematicannon and contraption halves of the old text need Create kinetics or a schematic file and stay
+# owner or later rows
+> forceload add 5790 5790 5820 5820
+sleep 3
+> setblock 5800 -60 5800 minecraft:dispenser[facing=east]
+> data merge block 5800 -60 5800 {Items:[{Slot:0b,id:"salt:raw_rock_salt_block",Count:3b}]}
+> setblock 5800 -59 5800 minecraft:redstone_block
+sleep 1
+> cdevtest state 5801 -60 5800
+> cdevtest use 5806 -61 5806 held=salt:raw_rock_salt_block face=up stand=5804,-60,5806
+> cdevtest state 5806 -60 5806
+> fill 5810 -60 5810 5812 -60 5810 salt:raw_rock_salt_block
+> cdevtest count 5810 -60 5810 5812 -60 5810 hearthandharvest:placed_rock_salt_block
+> cdevtest count 5810 -60 5810 5812 -60 5810 salt:raw_rock_salt_block
+expect verb=state pos=5801,-60,5800 state="?hearthandharvest:placed_rock_salt_block
+expect verb=state pos=5806,-60,5806 state="?hearthandharvest:placed_rock_salt_block
+expect verb=count block=hearthandharvest:placed_rock_salt_block n=3
+expect verb=count block=salt:raw_rock_salt_block n=0
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(BlockPlaceLick|SaltEvents)
+reject \[cdevtest\] .*done=0
 ## CQ-SALT2-01 | names and the Water Evaporation page
 @group client
 @commands Hover Rock Salt, Rock Salt Block, Salt Dust Block, Rock Salt Vein, Deepslate Rock Salt Vein, the licked stages, Smooth Salt Block, Salt Bricks; JEI: open Salt's uses (U), the Water Evaporation page

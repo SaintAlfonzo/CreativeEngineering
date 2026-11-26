@@ -134,6 +134,7 @@ look seconds between the CCO07 start and arrived lines (vanilla /tp does not wai
 > tp s5pb1 0 70 0
 
 ## SQ-CCO-08 | Create Gravity per-entity logic runs in the End only (gravityLimitDimensions = true)
+@reviewed 2026-11-26
 @group -
 @commands Create Gravity: `grep -iE "gravity" logs/latest.log \| head -5`; falling block or item entity in the overworld vs the End (`/execute in minecraft:the_end run summon minecraft:falling_block ~ 120 ~ {BlockState:{Name:"minecraft:sand"}}`)
 @pass no mixin error; the overworld entity is not ticked by Gravity's per-entity logic, the End entity is (`[perf] gravityLimitDimensions = true`); with `qrun.py toml srv/config/creativecommon-common.toml perf gravityLimitDimensions false` and a reboot both dimensions are ticked
@@ -400,11 +401,22 @@ look KubeJS startup ERROR count 0 (or only absent-mod notes); [CE potions] skip 
 
 ## SQ-CCO-13
 @group `alone`, B (fresh)
+@reviewed 2026-11-26
 @commands `@modset cc_only alone` (was `cc_only_srv.sh cco2 cco2 alone`), boot, `/reload`, stop
-@pass boots with only Common and the KubeJS stack; no class or script error; config written; no optional-mod mixin applied (`grep "Mixin" logs/latest.log` lists only vanilla and Forge targets)
+@pass boots with only Common and the KubeJS stack; no class or script error; config written; no optional-mod mixin applied (no mixin line in `logs/latest.log` names an optional mod of the full set)
 @fails Java or KubeJS reaching an optional mod without a load check (extends SQ-CC-03 without Compat and Calendar)
-@draft no batch holds this row yet
 @modset cc_only alone
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException)
+bootreject (?i)(ERROR|FATAL).*(creativecommon|creativecompat)
+shell ls mods | grep -ciE "quark|immersive_weathering|armortrims|worldedit|create_gravity|nock_enough|CerbonsBetterBeacons|immersive-portals|heartstone|SereneSeasons"; true
+shell test -f config/creativecommon-common.toml
+shell test "$(grep -ciE "mixin.*(quark|immersive_weathering|armortrims|worldedit|create_gravity|nock_enough|cerbon|immersive_portals|heartstone|serene)" logs/latest.log)" = 0
+> reload
+sleep 10
+kjsreject (?i)(ReferenceError|TypeError|EvaluatorException|Error occurred while handling event)
+reject (?i)Error occurred while handling event
+look the first shell line counts 0 optional jars; the config file exists; no mixin line names an optional mod
 ## SQ-CCO-14 | old potion id with Brewing absent: left untouched, no crash (emulated: no save from before the carve)
 @group `full`, old save
 @commands keep cco1's level, swap to a copy of the world saved before the carve if one exists (SQ-CC-09 setup) else skip; chest holding a `creativecommon:long_reach` potion
@@ -446,6 +458,7 @@ look startup line says creativecommon N of N files loaded; both tags list items 
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-CCO-16 | trader offers and advancements on Common's defaults
+@reviewed 2026-11-26
 @group `full`
 @commands effect, trader and advancement rules on defaults: `/summon minecraft:wandering_trader`; `/data get entity @e[type=wandering_trader,limit=1] Offers.Recipes`; `/advancement grant @p only minecraft:story/root`; `qrun.py toml srv/config/creativecommon-common.toml effects removed '["minecraft:slowness"]'`, reboot, `/effect give <bot> minecraft:slowness 30 0`
 @pass trader offers are vanilla-default and advancements work on defaults; with the list set Slowness is refused and Speed applies

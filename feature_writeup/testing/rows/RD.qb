@@ -439,38 +439,86 @@ look entity census (rows/SQ-FGD-15.shell.txt): dark forest about 50 % brown, mus
 @@text Client-only halves are in round 2 (CQ-VP).
 @@text
 @@table
-## SQ-VP-00
+## SQ-VP-00 | Vintage and Veggies boot clean: no registry or script error
 @group A
-@commands boot
-@pass `Done (`; no `Error loading registry data` / `Not a JSON object` (1.1.02 died here: Vintage placed features used `tag` for FD's `biome_tag`, fixed in -03); no `Error occurred while handling event` from `cooking.js`, `baking.js`, `compost_values.js`, `item_merges.js`, `blocktags.js`; no missing-registry or `Unknown item`/`Unknown tag` line naming `vintagedelight`, `veggiesdelight`; no `dehydrated` anywhere; `[cans] registered 252` (228 + the 24 Veggies cans; the vinegar additive adds recipes, not cans); startup.log shows 134 vintage items, 68 blocks
-@fails Port: `development/backportedVintage` (README.md lists changes); data: `tools/port_resources.py` unknown-item report; Rhino: `item_dict.js` keys (134 + 89)
-@draft no batch holds this row yet
-## SQ-VP-01
+@commands boot, grep `latest.log` and `logs/kubejs/*.log`
+@pass `Done (`; no `Error loading registry data` / `Not a JSON object` (1.1.02 died here: Vintage placed features used `tag` for FD's `biome_tag`, fixed in -03); no `Error occurred while handling event` from `cooking.js`, `baking.js`, `compost_values.js`, `item_merges.js`, `blocktags.js`; no missing-registry or `Unknown item`/`Unknown tag` line naming `vintagedelight`, `veggiesdelight`; no `dehydrated` anywhere
+@fails Port: `development/backportedVintage` (README.md lists changes); data: `tools/port_resources.py` unknown-item report; Rhino: `item_dict.js` keys
+@jars creativedelight
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the `[cans] registered 252` and the 134 items / 68 blocks counts are not asserted (the can set was merged and regenerated since; counts live in the dumps); a look prints the cans line
+bootexpect Done \(
+bootreject (?i)Error loading registry data|Not a JSON object
+bootreject Error occurred while handling event.*(cooking|baking|compost_values|item_merges|blocktags)
+bootreject (?i)(Unknown item|Unknown tag|Missing registry|missing mapping).*(vintagedelight|veggiesdelight)
+bootreject (?i)dehydrated
+kjsreject Error occurred while handling event
+shell grep -h "\[cans\] registered" logs/kubejs/startup.log logs/latest.log | tail -2; true
+look the `[cans] registered N` line prints the current can count (no fixed number asserted)
+
+## SQ-VP-01 | Vintage and Veggies boot: NCH, mortar, item merge and wild crop lines; chef hat bag weight
 @group A
-@commands boot, grep `latest.log`
-@pass No `[NCH]` warning for a missing item/tag in `cooking.js` Meals and `baking.js`; `[mortar]`, `[itemMerges]` and `[wild-crops]` lines unchanged from the 2026-10-22 run except the new rules (9 Veggies + Vintage rules loaded; the 5 Terralith cave biome warning is expected); `[advancements] N left out` counts the two ports' files; `simplehats.json` has chef hat bag weight 0 and equals `configs_edited/root_config/config/simplehats.json` (VTD-33, VTD-34)
+@commands boot, grep `latest.log` and the KubeJS logs
+@pass No `[NCH]` warning for a missing item or tag in `cooking.js` Meals and `baking.js`; `[mortar]`, `[itemMerges]` and `[wild-crops]` lines present with the Veggies and Vintage rules loaded; `simplehats.json` has chef hat bag weight 0 and equals `configs_edited/root_config/simplehats.json` (VTD-33, VTD-34)
 @fails `removed_items.js`; grep the key in `OUT/srv/config/` before relying on the copy
-@draft no batch holds this row yet
-## SQ-VP-02
+@jars creativedelight
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the `[advancements] N left out` count is not asserted (advancements are dropped wholesale since 2026-11-09); the 5 Terralith cave biome warning is expected
+bootexpect Done \(
+kjsreject (?i)\[NCH\].*(missing|not found|unknown).*(cooking|baking)
+shell grep -h "\[mortar\]\|\[itemMerges\]\|\[wild-crops\]" logs/kubejs/*.log | head -12; true
+shell cmp config/simplehats.json "$INST/configs_edited/root_config/simplehats.json"
+look the `[mortar]`, `[itemMerges]` and `[wild-crops]` lines list the Veggies and Vintage rules; the chef hat bag weight in `config/simplehats.json` is 0
+
+## SQ-VP-02 | Veggies cans: manual-only pot ids and the vinegar additive recipe on every can
 @group A
-@commands `/vtdtest recipes` (Vintage), `/ofprobe` (existing, still 214 / 0 first)
-@pass Veggies cans CP-27, CP-28, CP-29 recipe level: `Canned Broccoli`, Cauliflower (with florets), Sweet Potato, Turnip, Zucchini (with slices), Baked Sweet Potato, Roasted Zucchini / Cauliflower, 2 pastas, 3 breads, 4 salads, 5 soups, sweet potato pie filling (4 slices, and 2 baked sweet potatoes + 2 sugar in the Cooking Pot) load with `_manual_only` ids; `_vinegar` additive recipe present on all 66 cans of CP-30 (count by id suffix) and takes `i.vinegar`; Vintage cans are NOT present yet (`AWAIT_DUMP`, they wait for CQ-DUMP)
+@commands `/cdevtest recipes` for `_manual_only` and `_vinegar`, and for a few named cans (CP-27 to CP-30)
+@pass Veggies can and dish recipes load with `_manual_only` ids (canned broccoli, cauliflower, sweet potato, turnip, zucchini, the baked and roasted dishes, pastas, breads, salads, soups, sweet potato pie filling); a `_vinegar` additive recipe exists for the cans (81 on the 2026-11-26 dump; CP-30 counted 66 before Vintage cans merged in) and takes the pack vinegar (`vintagedelight:vinegar_jar`, item_dict `i.vinegar`), never `vinegar_bottle`
 @fails `gen_can_types.py` section configs; `can_types.json`; NCH `cans` guard
-@reviewed 2026-11-16
-> vtdtest recipes
-waitlog \[vtdtest\] done recipes 120
-reject \[vtdtest\] FAIL
-look the vtdtest recipes lines: the Veggies can recipes (CP-27 to CP-29) load with _manual_only ids and the _vinegar additive recipe on the 66 cans of CP-30; Vintage cans not present yet (AWAIT_DUMP). /ofprobe (214 / 0) is not run here
-## SQ-VP-03 | /vtdtest cooking
+@reviewed 2026-11-26
+# r1126q (2026-11-26): rewritten from the vintage_probe.js `/vtdtest recipes` (BATCH-FAULT in r1120nv: it checked vintagedelight:vinegar_bottle, the pack vinegar is vintagedelight:vinegar_jar, and removed cans canned_hamimelon / canned_mhadjeb) to /cdevtest recipes; AWAIT_DUMP is over (Vintage cans are in the dump)
+> cdevtest recipes _vinegar max=300
+> cdevtest recipes _manual_only max=300
+> cdevtest recipes canned_broccoli max=50
+> cdevtest recipes canned_zucchini max=50
+> cdevtest recipes canned_sweet_potato max=50
+expect verb=recipes text=_vinegar n=(6[6-9]|[7-9]\d|\d{3,})\b
+expect verb=recipes text=_manual_only n=[1-9]\d*
+expect verb=recipes id=\S*canned_broccoli
+expect verb=recipes id=\S*canned_zucchini
+expect verb=recipes id=\S*canned_sweet_potato
+reject verb=recipes id=\S*canned_(hamimelon|mhadjeb)
+reject \[cdevtest\] verb=\S+ .*error=
+look one `_vinegar` line via `/cdevtest rdetail <id>`: it names vintagedelight:vinegar_jar; no vinegar_bottle anywhere; the can recipe ids carry the `_manual_only` suffix where the pot route is blocked
+
+## SQ-VP-03 | cooking recipes: burgers, burrito, pasta, pad thai, pickle soup, oatmeal cookie routes
 @group A
-@commands `/vtdtest cooking`
-@pass VTD-48 to VTD-52, recipe level: cheese burger shaped on `vintagedelight` cheese slice with beef or vegetarian patty, deluxe burger shaped, one sequenced assembly each, none in `createmixing`/`createcrafting`; stuffed burrito on `#forge:tortilla`, no bread recipe, one assembly; PB & J and cucumber salad `_manual_only` ids; cheese pasta, pad thai, pickle soup grid routes exist and none in the unheated mixer; oat dough has no smelting/smoking recipe, 3 raw oats -> bread kept; oatmeal cookie only in `creativeengineering:baking`, no grid recipe; Cesar salad takes garlic or cheese, zucchini boat milk or cheese; fajitas wrap has no dough recipe (VD-20, VD-24)
-@fails `cooking.js` Meals, `baking.js`; Rhino: `getStacks()`, never `getType()` on all recipes
+@commands `/cdevtest recipes` for each dish (ids below); the salting mixes are separate pack-wide recipes (salt.md S5)
+@pass VTD-48 to VTD-52, recipe level: cheese burger and deluxe burger shaped `_manual_only` plus one sequenced assembly each (`createsequencedassembly/<dish>_sequenced_assembly`), none in `createmixing/` outside `createmixing/salting/` and none in `createcrafting/`; stuffed burrito one sequenced assembly; cheese pasta and pad thai `shapeless/<dish>_cooked_manual_only`, pickle soup `farmersdelightcooking/pickle_soup` and its `_cooked_manual_only`; oatmeal cookie `creativedelight:baking/oatmeal_cookie` only (no grid recipe)
+@fails `cooking.js` Meals, `baking.js`; a mixing or crafting recipe for a dish (not the salting ones)
 @from batches/r1102b/s1_A.qb
-> vtdtest cooking
-waitlog \[vtdtest\] done cooking 120
-expect \[vtdtest\] done cooking: \d+ pass, 0 fail
-reject \[vtdtest\] FAIL
+@reviewed 2026-11-26
+# r1126q (2026-11-26): rewritten from the vintage_probe.js `/vtdtest cooking` (BATCH-FAULT in r1124fx: its machineRoutes check counted the pack's own Create salting mixes createmixing/salting/vintagedelight_*, which are intended) to /cdevtest recipes with the salting path excluded
+> cdevtest recipes cheese_burger max=100
+> cdevtest recipes deluxe_burger max=100
+> cdevtest recipes stuffed_burrito max=100
+> cdevtest recipes cheese_pasta max=100
+> cdevtest recipes pad_thai max=100
+> cdevtest recipes pickle_soup max=100
+> cdevtest recipes oatmeal_cookie max=100
+expect verb=recipes id=creativedelight:createsequencedassembly/cheese_burger_sequenced_assembly\b
+expect verb=recipes id=creativedelight:createsequencedassembly/deluxe_burger_sequenced_assembly\b
+expect verb=recipes id=creativedelight:createsequencedassembly/stuffed_burrito_sequenced_assembly\b
+expect verb=recipes id=creativedelight:shaped/cheese_burger_manual_only\b
+expect verb=recipes id=creativedelight:shaped/deluxe_burger_manual_only\b
+expect verb=recipes id=creativedelight:shapeless/cheese_pasta_cooked_manual_only\b
+expect verb=recipes id=creativedelight:shapeless/pad_thai_cooked_manual_only\b
+expect verb=recipes id=creativedelight:shapeless/pickle_soup_cooked_manual_only\b
+expect verb=recipes id=creativedelight:farmersdelightcooking/pickle_soup\b
+expect verb=recipes id=creativedelight:baking/oatmeal_cookie\b
+reject verb=recipes id=\S*(createmixing|createcrafting)/(?!salting/)\S*(cheese_burger|deluxe_burger|stuffed_burrito|cheese_pasta|pad_thai|pickle_soup|oatmeal_cookie)
+reject \[cdevtest\] verb=\S+ .*error=
+look the oatmeal cookie lines: only the baking recipe (a canned_oatmeal_cookie shapeless line is the can, not a grid recipe of the cookie); createmixing/salting/vintagedelight_* lines are the pack's salting mixes, expected
 
 ## SQ-VP-04 | /vtdtest tags
 @group A
@@ -529,16 +577,42 @@ waitlog \[vtdtest\] done fluids 120
 expect \[vtdtest\] done fluids: \d+ pass, 0 fail
 reject \[vtdtest\] FAIL
 
-## SQ-VP-07 | /vtdtest fluidsrun
+## SQ-VP-07 | the three Vintage fluids: registered, tagged, mixing / filling / emptying / bottling recipes, manual-only pot route
 @group A
-@commands `/vtdtest fluidsrun`
-@pass Chorus-style check for the three new fluids: `creativeengineering:carrot_juice`, `dandelion_juice`, `turnip_water` registered and `#forge:fluid/*` tagged; recipes `createmixing`, `createfilling`, `createemptying`, one `iebottling` per fluid at 250 mB, pot route `_manual_only` with VD's inputs (VD-14)
-@fails `fluids.js`, `fluid_dict.js`, `fluidtags.js`
+@commands `/cdevtest reg fluid`, `/cdevtest tag fluid` and `/cdevtest recipes` for `carrot_juice`, `dandelion_juice`, `turnip_water` (ids follow the owning mod: `creativedelight:`, 2026-11-09)
+@pass The three fluids `creativedelight:carrot_juice`, `dandelion_juice`, `turnip_water` are registered and tagged `#forge:fluid/<name>`; recipes `createmixing/`, `createfilling/`, `createemptying/` per fluid, one `iebottling/glass_bottle_to_<name>_by_iebottling` per fluid, pot route `farmersdelightcooking/<name>_manual_only` for carrot and dandelion juice (VD-14); no error line
+@fails `fluids.js`, `fluid_dict.js`, `fluid_tags.js` (creativedelight namespace); a recipe id missing: `drinks.js` NCH calls
+@jars creativecommon creativedelight
 @from batches/r1102b/s1_R.qb passed
-> vtdtest fluidsrun
-waitlog \[vtdtest\] done fluidsrun 120
-expect \[vtdtest\] done fluidsrun: \d+ pass, 0 fail
-reject \[vtdtest\] FAIL
+@reviewed 2026-11-26
+# r1126q (2026-11-26): rewritten from the vintage_probe.js `/vtdtest fluidsrun` (BATCH-FAULT in r1120nv: the probe looked for creativeengineering: fluid ids) to /cdevtest verbs on the creativedelight ids
+> cdevtest reg fluid ^creativedelight:(carrot_juice|dandelion_juice|turnip_water)$
+> cdevtest tag fluid forge:fluid/carrot_juice
+> cdevtest tag fluid forge:fluid/dandelion_juice
+> cdevtest tag fluid forge:fluid/turnip_water
+> cdevtest recipes carrot_juice max=100
+> cdevtest recipes dandelion_juice max=100
+> cdevtest recipes turnip_water max=100
+expect verb=reg kind=fluid regex=\S+ n=3\b
+expect verb=tag kind=fluid tag=forge:fluid/carrot_juice n=[1-9]\d* ids=\S*creativedelight:carrot_juice
+expect verb=tag kind=fluid tag=forge:fluid/dandelion_juice n=[1-9]\d* ids=\S*creativedelight:dandelion_juice
+expect verb=tag kind=fluid tag=forge:fluid/turnip_water n=[1-9]\d* ids=\S*creativedelight:turnip_water
+expect verb=recipes id=creativedelight:createmixing/carrot_juice\b
+expect verb=recipes id=creativedelight:createmixing/dandelion_juice\b
+expect verb=recipes id=creativedelight:createmixing/turnip_water\b
+expect verb=recipes id=creativedelight:createfilling/carrot_juice\b
+expect verb=recipes id=creativedelight:createfilling/dandelion_juice\b
+expect verb=recipes id=creativedelight:createfilling/turnip_water\b
+expect verb=recipes id=creativedelight:createemptying/carrot_juice\b
+expect verb=recipes id=creativedelight:createemptying/dandelion_juice\b
+expect verb=recipes id=creativedelight:createemptying/turnip_water\b
+expect verb=recipes id=creativedelight:iebottling/glass_bottle_to_carrot_juice_by_iebottling\b
+expect verb=recipes id=creativedelight:iebottling/glass_bottle_to_dandelion_juice_by_iebottling\b
+expect verb=recipes id=creativedelight:iebottling/glass_bottle_to_turnip_water_by_iebottling\b
+expect verb=recipes id=creativedelight:farmersdelightcooking/carrot_juice_manual_only\b
+expect verb=recipes id=creativedelight:farmersdelightcooking/dandelion_juice_manual_only\b
+reject \[cdevtest\] verb=\S+ .*error=
+look the iebottling recipes take 250 mB (rdetail part=fluids / fields of one of them); turnip_water has no pot route line (its drink is not cooked in the pot)
 
 ## SQ-VP-08
 @group A
@@ -1215,21 +1289,140 @@ look Hostile Delight's grollrecp / grolllrecp parse error is the known upstream 
 bootexpect Done \(
 bootreject (?i)OceanicDelightFishingNetMixin.*(error|fail|exception)
 bootreject (?i)(Couldn't parse|Failed to (load|parse)|Invalid|Unknown).*(biome_tag|fishing_net)
-## SQ-FN-02
+## SQ-FN-02 | fishing net kelp and sea grass tables by biome: shrimp, caviar, coral, nautilus shell, heart of the sea
 @phase worldgen
-@group A (needs the biomes: B or `/execute in` a worldgen world)
-@commands tp to a warm ocean, a lukewarm ocean, a plain ocean, a frozen/cold ocean and a river; 500 x `/loot spawn ~ ~ ~ loot oceanic_delight:gameplay/fishing_net_on_kelp` in each, then 500 x `..._on_sea_grass`
-@pass Kelp table: shrimp about 14 % in warm oceans (4 of 28), shrimp in the plain ocean, none in the cold ocean or river; caviar (`salmon_eggs`) only in rivers, about 13 % (3 of 24); coral or coral fan only in warm and lukewarm oceans; nautilus shell about 2 % and heart of the sea about 0.2 % in every ocean, never in the river. Sea grass table: caviar about 27-30 % in rivers, shrimp only in non-cold oceans; scute rare. Changelog numbers (shrimp 14 %, caviar 30 % / 13 %) must match
+@group B
+@commands 500 x `/loot spawn` of `oceanic_delight:gameplay/fishing_net_on_kelp` and `..._on_sea_grass` above a located warm ocean, lukewarm ocean, plain ocean, cold ocean and river (a glass box catches the items; `/zcount` after each table)
+@pass Kelp table: shrimp about 14 % in warm oceans (4 of 28), shrimp in the plain ocean, none in the cold ocean or river; caviar (`salmon_eggs`) only in rivers, about 13 % (3 of 24); coral or coral fan only in warm and lukewarm oceans; nautilus shell about 2 % and heart of the sea about 0.2 % in every ocean, never in the river. Sea grass table: caviar about 27-30 % in rivers, shrimp only in non-cold oceans; scute rare. Changelog numbers (shrimp 14 %, caviar 30 % / 13 %) must match. Ten zcount lines (5 biomes x 2 tables) print
 @fails biome tags empty (`/dumptags`), or the condition reads no origin; weights in `fishing_net_on_*.json`
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+# r1126q (2026-11-26): written from the FN-03 pattern (locate, glass box, repeat 500 loot spawn, zcount); the percentages are judged by look from the merged stacks (add the xN counts); `say FN02 <biome> <table>` marks each zcount line
+> execute positioned 0 70 0 run locate biome minecraft:warm_ocean
+waitlog (The nearest minecraft:warm_ocean|Could not find) 300
+capture W nearest minecraft:warm_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {W1-3} {W3-3} {W1+3} {W3+3}
+sleep 5
+> fill {W1-3} 119 {W3-3} {W1+3} 123 {W3+3} minecraft:glass hollow
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {W1} 121 {W3} loot oceanic_delight:gameplay/fishing_net_on_kelp
+end
+sleep 3
+> say FN02 warm_ocean fishing_net_on_kelp
+> zcount {W1-2} 120 {W3-2} {W1+2} 122 {W3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {W1} 121 {W3} loot oceanic_delight:gameplay/fishing_net_on_sea_grass
+end
+sleep 3
+> say FN02 warm_ocean fishing_net_on_sea_grass
+> zcount {W1-2} 120 {W3-2} {W1+2} 122 {W3+2}
+sleep 2
+> execute positioned 0 70 0 run locate biome minecraft:lukewarm_ocean
+waitlog (The nearest minecraft:lukewarm_ocean|Could not find) 300
+capture L nearest minecraft:lukewarm_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {L1-3} {L3-3} {L1+3} {L3+3}
+sleep 5
+> fill {L1-3} 119 {L3-3} {L1+3} 123 {L3+3} minecraft:glass hollow
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {L1} 121 {L3} loot oceanic_delight:gameplay/fishing_net_on_kelp
+end
+sleep 3
+> say FN02 lukewarm_ocean fishing_net_on_kelp
+> zcount {L1-2} 120 {L3-2} {L1+2} 122 {L3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {L1} 121 {L3} loot oceanic_delight:gameplay/fishing_net_on_sea_grass
+end
+sleep 3
+> say FN02 lukewarm_ocean fishing_net_on_sea_grass
+> zcount {L1-2} 120 {L3-2} {L1+2} 122 {L3+2}
+sleep 2
+> execute positioned 0 70 0 run locate biome minecraft:ocean
+waitlog (The nearest minecraft:ocean|Could not find) 300
+capture P nearest minecraft:ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {P1-3} {P3-3} {P1+3} {P3+3}
+sleep 5
+> fill {P1-3} 119 {P3-3} {P1+3} 123 {P3+3} minecraft:glass hollow
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {P1} 121 {P3} loot oceanic_delight:gameplay/fishing_net_on_kelp
+end
+sleep 3
+> say FN02 ocean fishing_net_on_kelp
+> zcount {P1-2} 120 {P3-2} {P1+2} 122 {P3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {P1} 121 {P3} loot oceanic_delight:gameplay/fishing_net_on_sea_grass
+end
+sleep 3
+> say FN02 ocean fishing_net_on_sea_grass
+> zcount {P1-2} 120 {P3-2} {P1+2} 122 {P3+2}
+sleep 2
+> execute positioned 0 70 0 run locate biome minecraft:cold_ocean
+waitlog (The nearest minecraft:cold_ocean|Could not find) 300
+capture C nearest minecraft:cold_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {C1-3} {C3-3} {C1+3} {C3+3}
+sleep 5
+> fill {C1-3} 119 {C3-3} {C1+3} 123 {C3+3} minecraft:glass hollow
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {C1} 121 {C3} loot oceanic_delight:gameplay/fishing_net_on_kelp
+end
+sleep 3
+> say FN02 cold_ocean fishing_net_on_kelp
+> zcount {C1-2} 120 {C3-2} {C1+2} 122 {C3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {C1} 121 {C3} loot oceanic_delight:gameplay/fishing_net_on_sea_grass
+end
+sleep 3
+> say FN02 cold_ocean fishing_net_on_sea_grass
+> zcount {C1-2} 120 {C3-2} {C1+2} 122 {C3+2}
+sleep 2
+> execute positioned 0 70 0 run locate biome minecraft:river
+waitlog (The nearest minecraft:river|Could not find) 300
+capture R nearest minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {R1-3} {R3-3} {R1+3} {R3+3}
+sleep 5
+> fill {R1-3} 119 {R3-3} {R1+3} 123 {R3+3} minecraft:glass hollow
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {R1} 121 {R3} loot oceanic_delight:gameplay/fishing_net_on_kelp
+end
+sleep 3
+> say FN02 river fishing_net_on_kelp
+> zcount {R1-2} 120 {R3-2} {R1+2} 122 {R3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+repeat 500
+> loot spawn {R1} 121 {R3} loot oceanic_delight:gameplay/fishing_net_on_sea_grass
+end
+sleep 3
+> say FN02 river fishing_net_on_sea_grass
+> zcount {R1-2} 120 {R3-2} {R1+2} 122 {R3+2}
+sleep 2
+> kill @e[type=minecraft:item]
+count \[zcount\] entities == 10
+reject Unknown loot table|No such loot table
+reject (?i)\[zcount\] entities .*item:minecraft:(lily_pad|potion|fishing_rod|ink_sac) x
+look read each zcount line under its `FN02 <biome> <table>` marker and compare with the pass cell: shrimp (oceanic_delight:shrimp) warm about 70 of 500 kelp rolls, plain ocean some, cold and river none; salmon_eggs only in the river lines; coral only in warm / lukewarm; nautilus shell about 10 and heart of the sea about 1 per 500 in every ocean line, none in river lines
+
 ## SQ-FN-03 | fishing net junk about 5 % in both tables, river and ocean
-@phase long
-@group A
+@phase worldgen
+@group B
 @commands 400 x `/loot spawn ~ ~ ~ loot oceanic_delight:gameplay/fishing_net_on_sea_grass` and the same on kelp, in a river and an ocean
 @pass Junk about 5 % of rolls (about 20 of 400) in both tables and both biomes, every junk item one of Leather Boots, Leather, Bone, Bowl, Tripwire Hook, Rotten Flesh, String, Stick, Driftwood Log; no lily pad / water bottle / rod / ink sac
 @fails `fishing_net/junk.json`, the `random_chance` 0.05 pool
 @jars creativecommon creativedelight
+@reviewed 2026-11-26
+# r1126q: group B (normal world): the group A superflat has no river or ocean to locate (r1120nv: Could not find, captures unset)
 @from batches/r1102b/s1_B.qb
 bootexpect Done \(
 > locate biome minecraft:river
@@ -1438,20 +1631,33 @@ look skbot gets no kit on either rejoin (tag kept in its playerdata); the new bo
 @@text (new CEConfig key) is in `mods/`.
 @@text
 @@table
-## SQ-RS-01
+## SQ-RS-01 | removed-item recipe scan: silent by default, /recipescan on demand, runAtLoad scans once per session
 @group A
-@commands boot with default config; then `/recipescan`; then set `[debug.recipe_scan] runAtLoad = true` in the scratch copy of `creativeengineering-common.toml`, restart, `/reload` once
-@pass Default boot: no `[recipe_scan]` or `[jeiRemove]` line. `/recipescan`: chat line with the counts, `[recipe_scan] Scan complete. ... N recipes read, U unreadable` in `logs/kubejs/server.log`, entries end in `(input)` / `(output)`, no merged id (`global.itemMerges` first column) listed. Config on: exactly one scan after `Done (`, none after `/reload`. Note the scan time from log timestamps and N, U
+@commands boot with default config; `/recipescan`; then `[debug.recipe_scan] runAtLoad = true` in the scratch `creativedevtools-common.toml`, restart, `/reload` once
+@pass Default boot: no `[recipe_scan]` or `[jeiRemove]` line. `/recipescan`: `[recipe_scan] Scan complete. ... N recipes read, U unreadable` in `logs/kubejs/server.log`, `[jeiRemove] <id> -> N recipe(s):` entries, no merged id (`global.itemMerges` first column) listed. Config on: exactly one scan after `Done (`, none after `/reload`. Note the scan time from log timestamps and N, U
 @fails `ServerEvents.loaded` not firing (try the command alone); `stack.id` on Rhino; a large U means `getIngredients` throws for a whole recipe class: log the class
-@draft two boots (default config, then [debug.recipe_scan] runAtLoad = true): a separate boot batch per config
-@@text
-@@text #### SQ-NM: named mobs (added 2026-10-30)
-@@text
-@@text Feature: [../mob_block_tweaks.md](../mob_block_tweaks.md) 2.6; TODO `mobs/tweaks #6`. Needs Creative Common 1.1.04 of
-@@text 2026-10-30 21:12 or later (in `mods/`). Set `[named_mobs] chance = 1.0` in `OUT/srv/config/creativeengineering-common.toml`
-@@text before boot (the key may be absent until the first boot, see setup notes).
-@@text
-@@table
+@jars creativedevtools
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the setting moved from creativeengineering-common.toml to Creative Devtools (creativedevtools-common.toml [debug.recipe_scan], kubejs/data/creativedevtools/kubejs/dump/recipe_scan.js)
+kjsreject \[recipe_scan\]|\[jeiRemove\]
+> recipescan
+waitlog \[recipe_scan\] Scan complete 300
+kjsexpect \[recipe_scan\] Scan complete. .*recipes? read
+shell grep -h "\[recipe_scan\] Scan complete" logs/kubejs/server.log | tail -1; true
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedevtools-common.toml debug.recipe_scan runAtLoad true
+restart
+bootexpect Done \(
+sleep 30
+shell [ "$(grep -c '\[recipe_scan\] Scan complete' logs/kubejs/server.log)" = 1 ]
+> reload
+sleep 20
+# /reload truncates logs/kubejs/server.log: a scan after the reload would leave one line, so 0 means none
+shell [ "$(grep -c '\[recipe_scan\] Scan complete' logs/kubejs/server.log)" = 0 ]
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedevtools-common.toml debug.recipe_scan runAtLoad false
+restart
+bootexpect Done \(
+look the scan time (log timestamps between the command and `Scan complete`) and the N / U counts; the first shell line printed the default-boot scan; a large U names a recipe class whose ingredients are unreadable
+
 ## SQ-NM-01 | naturally spawned cows, sheep, pigs get names (chance 1.0)
 @phase worldgen
 @group B
@@ -1721,13 +1927,43 @@ bootexpect tipped arrow tipping done
 shell grep -oE "\[CE potions\] added [0-9]+ item-agnostic potion mixes|potion bottling done \([0-9]+ recipes\)|tipped arrow tipping done.*|removeByPotion.*" logs/latest.log | sort | uniq -c
 look counts against the user's 2026-10-31 log (58 mixes, 2295 bottling recipes, 127 potions x 2 tipping); the luck rows are SQ-LE-04
 
-## SQ-LE-02
+## SQ-LE-02 | Recipe cleanups: present and absent ids (crab bars, FD dishes, rustic beignet, bedrolls, driftwood cutting, quark sawmill stairs)
 @group A
-@commands recipe probe (`/recipescan`, or a KubeJS `RecipeManager` id dump)
-@pass Present: `creativeengineering:farmersdelightcooking/orange_jam_from_slices`, `creativeengineering:createmixing/orange_jam_from_slices`, `farmersdelight:{grilled_salmon,bacon_and_eggs,salmon_roll,cod_roll}`, `creativeengineering:shapeless/crab_bars_manual_only`, driftwood fdCutting / createSaw recipes with `immersive_weathering:upgrade_aquatic/driftwood_bark`. Absent: `rusticdelight:cooking/fruit_beignet` and its Slice & Dice copy, every `upgrade_aquatic:*bedroll` recipe, `design_decor:mechanical_crafting/enchanted_golden_apple`, `abnormals_delight:upgrade_aquatic/cutting/driftwood{,_log}`, `create:cutting/compat/upgrade_aquatic/driftwood{,_log}`, `quarkengineering:sawmill/*/*_stairs`, `creativeengineering:shapeless/{grilled_salmon,bacon_and_eggs,salmon_roll,cod_roll}`, every bucket / arrow recipe for `minecraft_water`, `_awkward`, `_thick`, `_mundane`
-@fails the named script
-@jars creativecommon
-@draft no batch holds this row yet
+@commands `/cdevtest recipes` for each id text
+@pass Present: `creativedelight:shapeless/crab_bars_manual_only`, `farmersdelight:{grilled_salmon,bacon_and_eggs,cod_roll}`. Absent (n=0): `fruit_beignet`, any `bedroll`, `design_decor:mechanical_crafting/enchanted_golden_apple`, `abnormals_delight:upgrade_aquatic/cutting/driftwood`, `create:cutting/compat/upgrade_aquatic/driftwood`, `quarkengineering:sawmill/` stairs, the pack-namespace `shapeless/{grilled_salmon,bacon_and_eggs,cod_roll}` crafts
+@fails the named script of the removed recipe
+@jars creativecommon creativedelight
+@reviewed 2026-11-26
+# r1126q (2026-11-26): ids moved to the creativedelight namespace (ids follow the owning mod, 2026-11-09); orange jam and the driftwood bark cutting are not in the 2026-11-19 dump and are not asserted
+> cdevtest recipes crab_bars_manual_only max=10
+> cdevtest recipes farmersdelight:grilled_salmon max=10
+> cdevtest recipes farmersdelight:bacon_and_eggs max=10
+> cdevtest recipes farmersdelight:cod_roll max=10
+> cdevtest recipes fruit_beignet max=10
+> cdevtest recipes bedroll max=10
+> cdevtest recipes design_decor:mechanical_crafting/enchanted_golden_apple max=10
+> cdevtest recipes abnormals_delight:upgrade_aquatic/cutting/driftwood max=10
+> cdevtest recipes create:cutting/compat/upgrade_aquatic/driftwood max=10
+> cdevtest recipes creativedelight:shapeless/grilled_salmon max=10
+> cdevtest recipes creativedelight:shapeless/bacon_and_eggs max=10
+> cdevtest recipes creativedelight:shapeless/cod_roll max=10
+expect verb=recipes id=creativedelight:shapeless/crab_bars_manual_only\b
+expect verb=recipes id=farmersdelight:grilled_salmon\b
+expect verb=recipes id=farmersdelight:bacon_and_eggs\b
+expect verb=recipes id=farmersdelight:cod_roll\b
+expect verb=recipes text=fruit_beignet n=0\b
+expect verb=recipes text=bedroll n=0\b
+expect verb=recipes text=design_decor:mechanical_crafting/enchanted_golden_apple n=0\b
+expect verb=recipes text=abnormals_delight:upgrade_aquatic/cutting/driftwood n=0\b
+expect verb=recipes text=create:cutting/compat/upgrade_aquatic/driftwood n=0\b
+expect verb=recipes text=creativedelight:shapeless/grilled_salmon n=0\b
+expect verb=recipes text=creativedelight:shapeless/bacon_and_eggs n=0\b
+expect verb=recipes text=creativedelight:shapeless/cod_roll n=0\b
+reject \[cdevtest\] verb=\S+ .*error=
+look the quarkengineering sawmill lines (`/cdevtest recipes quarkengineering:sawmill/ max=40`) list no `_stairs` id (11 sawmill recipes in the 2026-11-19 dump, none stairs)
+> cdevtest recipes quarkengineering:sawmill/ max=40
+reject verb=recipes id=quarkengineering:sawmill/\S*_stairs
+
 ## SQ-LE-03 | potion bucket from a dispenser: Swiftness bucket gives a Swiftness cloud
 @group A
 @commands `/give` an awkward potion bucket, a Swiftness bucket and a blank bucket to a fake player or run `global.potionArea.spawn` from a probe on each stack
@@ -1833,14 +2069,14 @@ look shell: spacing 32, separation 20 and the four members (YUNG's temple, vanil
 @pass `latest.log` has `[seasoning] defined creativeengineering:cheese`, `...:onion`, `...:garlic` and no `[seasoning] bad definition`; `server.log` has `seasoning done`, no `[NCH] season` warning; no `Parsing error loading recipe creativeengineering:shapeless/season/`
 @fails `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/seasonings.js` load order (needs `global.item`, `global.effect`) or `NCH.season` JSON
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@superseded seasoning framework renamed Flavor 2026-11-19 (seasonings.md): `seasonings.js` and the `creativeengineering:seasoning` recipe type are gone; replaced by SQ-FO-12 (flavor crafts: type, ids, tags) and SQ-BBQF-01
 ## SQ-SN-01
 @group A
 @commands recipe probe (RecipeManager id dump)
 @pass Present, type `creativeengineering:seasoning`: `creativeengineering:shapeless/season/{cheese,onion,garlic,garlic_onion}_on_corn_delight_popcorn`
 @fails serializer registration (`SeasoningRecipe.register`)
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@superseded seasoning recipes are Flavor crafts since 2026-11-19; replaced by SQ-FO-12 and SQ-FO-13
 @@text
 @@text #### SQ-SNF: seasonings by food family (added 2026-10-26)
 @@text
@@ -1854,7 +2090,7 @@ look shell: spacing 32, separation 20 and the four members (YUNG's temple, vanil
 @pass `creativeengineering:seasonable/cheese`, `/onion`, `/garlic`, `/void_pepper` each hold exactly `corn_delight:popcorn`; no `seasonable/sugar` tag; `creativeengineering:food_family/snack` holds popcorn and tortilla chip, `food_family/fruit` holds `food_family/fruit/whole`'s members; no `[food families] could not read` or `[seasoning] ... has no members` line
 @fails `seasoning_tags.js`, `generation_scripts/food/food_families.json` present
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@superseded seasonable tags are the flavorable / flavor tags of Flavor since 2026-11-19; replaced by SQ-FO-12 and SQ-BBQF-03
 ## SQ-SNF-02 | (recheck after the namespace move) the five season recipes, type creativedelight:flavor
 @group A
 @commands recipe probe (RecipeManager id dump)
@@ -1882,7 +2118,7 @@ look already PASS 2026-10-26 (queue Run log): this only rechecks it on the curre
 @pass popcorn + flaxen cheese wedge matches; tortilla chip + cheese wedge and waffle + onion don't; garlic popcorn + onion matches
 @fails `Seasonings.accepts`, tag bound on the server
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@superseded `SeasoningRecipe.matches` is FlavorRecipe since 2026-11-19; the grid matches (popcorn + cheese, tortilla chip + cheese) are covered by SQ-FO-12 and SQ-FO-13
 @@text
 @@text #### SQ-CNS: Comfort / Nourishment split (added 2026-10-27)
 @@text
@@ -1949,20 +2185,46 @@ reject verb=food .*food=false|verb=food done=0
 @@text jar built 2026-10-25 (not in `mods/`; `food/PowderedSugarRegistry`, NCH `viVacuumizing`) + startup / server scripts.
 @@text
 @@table
-## SQ-PS-00
+## SQ-PS-00 | powdered sugar registered: block, bucket and powder items; no registry or helper warning at boot
 @group A
-@commands boot
-@pass `latest.log` has `[seasoning] defined creativeengineering:sugar`, no registry error for `creativeengineering:powdered_sugar_block` / `_bucket`; `server.log` has `powdered_sugar done`, `seasoning done`, no `[NCH] viVacuumizing` / `foodGrinding` warning
+@commands boot, `/cdevtest reg`, grep `latest.log` and `logs/kubejs/server.log`
+@pass `powdered_sugar` block and bucket registered (`reg` n at least 1 each); no `[NCH] viVacuumizing` / `foodGrinding` warning; no registry error naming `powdered_sugar`
 @fails registry (`PowderedSugarRegistry.register` in the mod constructor) or item_dict keys
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
-## SQ-PS-01
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the old `[seasoning] defined creativeengineering:sugar` line is the Flavor system now (SQ-FO-12); this row keeps the registry and warning half
+bootexpect Done \(
+bootreject (?i)(registry|Missing|Unknown|Failed).*powdered_sugar
+kjsreject (?i)\[NCH\].*(viVacuumizing|foodGrinding)
+> cdevtest reg block powdered_sugar
+> cdevtest reg item powdered_sugar
+expect verb=reg kind=block regex=powdered_sugar n=[1-9]
+expect verb=reg kind=item regex=powdered_sugar n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
+
+## SQ-PS-01 | powdered sugar recipes: vacuumizing bucket, crushing, milling, mortar, bucket and back (creativedelight ids)
 @group A
-@commands recipe probe (RecipeManager id dump)
-@pass Present: `creativeengineering:vivacuumizing/powdered_sugar_bucket` (type `vintageimprovements:vacuumizing`, 4 ingredients: bucket + 3 sugar), `creativeengineering:shapeless/season/sugar_on_create_factory_waffle`, the `sugar_powdered_sugar` crushing / milling / mortar ids, `powdered_sugar_from_bucket`; `corn_delight:caramel_popcorn` still present
+@commands `/cdevtest recipes powdered_sugar` and `rdetail` of the vacuumizing recipe
+@pass `creativedelight:vivacuumizing/powdered_sugar_bucket` (type `vintageimprovements:vacuumizing`, bucket + 3 sugar), `createcrushing/sugar_powdered_sugar`, `createmilling/sugar_powdered_sugar`, `mortar/sugar_powdered_sugar`, `shapeless/powdered_sugar_from_bucket`, `shapeless/powdered_sugar_bucket_from_powder`; `corn_delight:caramel_popcorn` still present; no `season/` ids (the sugar seasoning craft is the Flavor system now, SQ-FO-12)
 @fails `NCH.viVacuumizing` JSON
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+# r1126q (2026-11-26): ids moved from creativeengineering: to creativedelight: (2026-11-09); the waffle seasoning craft is the Flavor system since the 2026-11-19 rename (seasonings.md)
+> cdevtest recipes powdered_sugar max=30
+> cdevtest rdetail creativedelight:vivacuumizing/powdered_sugar_bucket
+> cdevtest recipes corn_delight:caramel_popcorn max=10
+expect verb=recipes id=creativedelight:vivacuumizing/powdered_sugar_bucket\b
+expect verb=recipes id=creativedelight:createcrushing/sugar_powdered_sugar\b
+expect verb=recipes id=creativedelight:createmilling/sugar_powdered_sugar\b
+expect verb=recipes id=creativedelight:mortar/sugar_powdered_sugar\b
+expect verb=recipes id=creativedelight:shapeless/powdered_sugar_from_bucket\b
+expect verb=recipes id=creativedelight:shapeless/powdered_sugar_bucket_from_powder\b
+expect verb=rdetail id=creativedelight:vivacuumizing/powdered_sugar_bucket serializer=vintageimprovements:vacuumizing
+expect verb=recipes id=corn_delight:caramel_popcorn\b
+reject verb=recipes id=\S*:shapeless/season/
+reject \[cdevtest\] verb=\S+ .*error=
+look the vacuumizing rdetail ingredients: a bucket and three sugar
+
 ## SQ-PS-02 | (recheck) powdered sugar is in #forge:sugar
 @group A
 @commands `/kubejs tags item creativeengineering:powdered_sugar` (or tag dump)
@@ -2521,7 +2783,7 @@ look server log says `members on: vinery` after the first reload; set back to tr
 @pass Every `twin of creativedelight:...` PASS (same type, result, ingredients as the pack's recipe); `twins made` PASS; NOTE lists about 30 helpers
 @fails A twin differs: that helper builds something from the namespace besides the id; a twin missing: the call threw inside the CD block (grep `[NCH] ... failed`)
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@superseded the cooking mirror is frozen (creative_delight_test README, 2026-10-25): the helper calls it twinned moved into the CD tree, so there is nothing left to compare; kept as the record of the 57/57 pass
 ## SQ-CDT-06
 @group A
 @commands `/reload`, then `/cdtest all`
@@ -2590,11 +2852,15 @@ look global.food.veggie_slice_cooked_potato = rusticdelight:baked_potato_slices 
 @pass 4 slices (wheel: `vintagedelight:cheese_slice`, pizzas: their own slice), 2 slices at `bites=2`; the TNT blast may drop some of the slices (loot table `minecraft:survives_explosion`, owner 2026-11-02: fine), r1102 got 4
 @fails Nothing at all: the CD jar does not nest Vintage `-05` or later (now `-11`), or `port_resources.py` was not rerun before the build
 @from batches/r1102/b1_main.qb
+@reviewed 2026-11-26
 # home capture moved into the row (r1124fx runner-1, 2026-11-24): the rows that captured it are not in the selection
 > execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
 sleep 2
 > data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+# r1126q: chunks forceloaded (entities and the TNT fuse tick only in loaded chunks; r1124fxr had none and the TNT never exploded)
+> forceload add {H1-2} {H3+10} {H1+40} {H3+26}
+sleep 3
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+18} vintagedelight:cheese_wheel
 > setblock {H1+3} {H2} {H3+18} vintagedelight:cheese_pizza
@@ -2619,10 +2885,12 @@ expect \[zcount\] entities item:vintagedelight:cheese_slice x2=1$
 > summon minecraft:tnt {H1+31} {H2} {H3+18} {Fuse:0s}
 sleep 4
 > execute if block {H1+30} {H2} {H3+18} vintagedelight:cheese_wheel run say VTD5 wheel survived the blast
-> zcount {H1+25} {H2-3} {H3+13} {H1+35} {H2+3} {H3+23}
+> cdevtest items {H1+30} {H2} {H3+18} 6
 reject VTD5 wheel survived the blast
-reject \[zcount\] entities .*item:vintagedelight:cheese_slice
-look a fifth entities line with grass / dirt only (blast); 4 slices x 3 breaks and 2 at bites 2 in the first four lines
+expect verb=items .*done=1
+reject verb=items .*vintagedelight:cheese_slice
+# the lane lines above are zcount lines; the blast lane is read with the items verb so the cheese_slice reject cannot match a lane line
+look the items line of the blast lane has no cheese_slice (a wheel destroyed by an explosion drops none); lane lines: 4 slices from the whole wheel, 8 from each whole pizza, 2 at bites 2
 
 @@text
 @@text #### SQ-VTD6: Vintage port -06 ghost pepper soil, Quark own-pick crops (added 2026-10-25)
@@ -2755,12 +3023,32 @@ look fruit counts: one use each, so about 1 to 3 of each fruit; "use" replies PA
 shell grep -h "jar-startup" logs/kubejs/startup.log | head -5
 shell ! grep -niE "vintage_items\.js.*(error|exception)" logs/kubejs/startup.log
 look shell: the creativedelight jar-startup line counts N of N files with vintagedelight/vintage_items.js among them; no errors from the CD files
-## SQ-VTD4-02
+## SQ-VTD4-02 | Vintage member recipes under creativedelight: pickling, ghost pepper crushing and milling, slime block mix; the upstream ids are gone
 @group A
-@commands `/kubejs recipes` probe or the dumps: recipe ids under `creativedelight:`
-@pass `pickling/berserks_brew`, `pickling/leather_from_fermenting` (both with `#forge:salt`), `createcrushing/wild_ghost_pepper`, a milling twin (2 seeds + cyan dye), `iecrushing/wild_ghost_pepper` (3 seeds), `createmixing/slime_block_from_dough_block` (heated); gone: `vintagedelight:fermenting/slime_block_from_fermenting`, `.../berserks_brew`, `.../leather_from_fermenting`, `vintagedelight:salted_cod`, `salted_salmon`, the two upstream wild ghost pepper ids (VTD-65, -66, -71, -72, KT-18)
+@commands `/cdevtest recipes` for each id text
+@pass `creativedelight:pickling/berserks_brew` and `pickling/leather_from_fermenting` (type `vintagedelight:fermenting`), `createcrushing/wild_ghost_pepper`, a `createmilling/wild_ghost_peppers_to_2_ghost_pepper_seeds_by_createmilling` twin, `iecrushing/wild_ghost_pepper`, `createmixing/slime_block_from_dough_block` exist; gone: `vintagedelight:fermenting/*` ids of berserks_brew, leather_from_fermenting, slime_block_from_fermenting, `vintagedelight:salted_cod` / `salted_salmon` (VTD-65, -66, -71, -72, KT-18)
 @fails No `creativedelight:` ids at all: the member files returned early (`global.CD` missing or `[members] vintagedelight = false`)
-@draft no batch holds this row yet
+@jars creativedelight
+@reviewed 2026-11-26
+# r1126q (2026-11-26): ids checked against the 2026-11-19 recipe dump; the milling twin id is the NCH-generated name
+> cdevtest recipes berserks_brew max=20
+> cdevtest recipes leather_from_fermenting max=20
+> cdevtest recipes wild_ghost_pepper max=20
+> cdevtest recipes slime_block_from_dough_block max=20
+> cdevtest recipes slime_block_from_fermenting max=20
+> cdevtest recipes vintagedelight:salted_
+expect verb=recipes id=creativedelight:pickling/berserks_brew\b
+expect verb=recipes id=creativedelight:pickling/leather_from_fermenting\b
+expect verb=recipes id=creativedelight:createcrushing/wild_ghost_pepper\b
+expect verb=recipes id=creativedelight:createmilling/wild_ghost_peppers_to_2_ghost_pepper_seeds_by_createmilling\b
+expect verb=recipes id=creativedelight:iecrushing/wild_ghost_pepper\b
+expect verb=recipes id=creativedelight:createmixing/slime_block_from_dough_block\b
+reject verb=recipes id=vintagedelight:fermenting/(berserks_brew|leather_from_fermenting|slime_block_from_fermenting)
+expect verb=recipes text=slime_block_from_fermenting n=0\b
+expect verb=recipes text=vintagedelight:salted_ n=0\b
+reject \[cdevtest\] verb=\S+ .*error=
+look the iecrushing ghost pepper recipe gives 3 seeds and the milling twin 2 seeds (cyan dye second output): `/cdevtest rdetail creativedelight:iecrushing/wild_ghost_pepper`; the two upstream wild ghost pepper ids are not listed (only creativedelight:, sliceanddice: and vintagedelight:cutting/ lines remain)
+
 ## SQ-VTD4-03 | Ghost Charcoal is a food (Wither 100 t, Fire Resistance 3600 t)
 @group A
 @commands Fake player eats `vintagedelight:ghost_charcoal` (or check `getFoodProperties()` in a probe)
@@ -2821,13 +3109,16 @@ look jar A: the bottle and the garlic honey left through the bottom (hopper or c
 
 ## SQ-VTD4-05 | 1.1.02 Pickling Jar (9 slots) loads in the nested Vintage with its 9 items and a 10th slot
 @group A
-@commands Load a world saved with port `-03` that holds a filled jar
+@commands A Pickling Jar placed with a 9-slot inventory tag (what a world saved with port `-03` holds), then read its block data
 @pass Jar keeps its 9 items, gets the 10th slot, no error in `latest.log`
 @fails Handler shrunk: the `Size` widening in `load`
 @from batches/r1102b/s1_A.qb
+@reviewed 2026-11-26
 bootexpect Done \(
 bootreject (?i)mixin apply failed.*(vintagedelight|vinery|brewinandchewin|farmersdelight)
 shell ls mods | grep -i backported; true
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
 > data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > forceload add {H1-32} {H3-56} {H1+96} {H3+48}
@@ -2837,6 +3128,9 @@ sleep 5
 > weather clear 100000
 > gamerule doDaylightCycle false
 > time set 2000
+# r1126q (2026-11-26): no old save exists in a fresh world (r1120nv: not a block entity); the 9-slot save is rebuilt as a /setblock with a 9-slot inventory tag, which runs the same load() path (FermentingJarBlockEntity.load widens Size 9 to 10)
+> setblock {H1-28} {H2} {H3} vintagedelight:fermenting_jar{inventory:{Size:9,Items:[{Slot:0,id:"minecraft:stick",Count:1b},{Slot:1,id:"minecraft:stick",Count:2b},{Slot:2,id:"minecraft:stick",Count:3b},{Slot:3,id:"minecraft:stick",Count:4b},{Slot:4,id:"minecraft:stick",Count:5b},{Slot:5,id:"minecraft:stick",Count:6b},{Slot:6,id:"minecraft:stick",Count:7b},{Slot:7,id:"minecraft:stick",Count:8b},{Slot:8,id:"minecraft:stick",Count:9b}]}}
+sleep 1
 > data get block {H1-28} {H2} {H3}
 expect has the following block data: .*Size: 10
 expect has the following block data: .*Count: 9b
@@ -3139,10 +3433,21 @@ look golem Pos lines: one golem over each soil (x .5, y = H2); if the control is
 @pass The MCA farmer plants and harvests on both modded farmlands in the Overworld, not in the Nether (plain farmland only there); the vanilla farmer gets the listed blocks as `secondary_job_site` and none with `[]`
 @fails MCA farmer ignores them: `McaHarvestAnyFarmlandMixin` (CD `mixin/mca`) not applied, check the boot log; vanilla half empty: `VillagersTargetFarmlandMixin`
 @from batches/r1103/p2_R.qb
+@reviewed 2026-11-26
 # MCA replaces the summoned villager (run 1: mca:female_villager, tag lost), so the villager is selected by tag or
 # else by MCA type near the lane; run 1's villager is killed first
+# r1126q (2026-11-26): the vanilla-villager half is what this row judges: MCA replaced the summoned villager in r1120nv (no vanilla secondary_job_site to read), so
+# the row restarts with MCA `overwriteOriginalVillagers` false and restores true at its end; the MCA half (harvesting chore) has no command to start it, so it stays a look
+edit sed -i 's/"overwriteOriginalVillagers": true/"overwriteOriginalVillagers": false/' config/mca.json
+restart
+bootexpect Done \(
+shell grep -q '"overwriteOriginalVillagers": false' config/mca.json
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
 > data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1+64} {H3-32} {H1+90} {H3-4}
+sleep 3
 > execute positioned {H1+76} {H2} {H3-18} run kill @e[type=minecraft:villager,distance=..30]
 > execute positioned {H1+76} {H2} {H3-18} run kill @e[type=mca:female_villager,distance=..30]
 > execute positioned {H1+76} {H2} {H3-18} run kill @e[type=mca:male_villager,distance=..30]
@@ -3173,6 +3478,9 @@ sleep 60
 > execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:female_villager,distance=..30,sort=nearest,limit=1] Brain.memories
 > execute positioned {H1+76} {H2} {H3-18} run data get entity @e[type=mca:male_villager,distance=..30,sort=nearest,limit=1] Brain.memories
 shell python3 $INST/tools/scratch_query/qrun.py toml config/farmersdelight-ce-common.toml villagers farmlandBlocks '["farmersdelight:rich_soil_farmland", "immersive_weathering:mulch_block"]'; sleep 4; grep -c "farmersdelight-ce-common.toml" logs/debug.log; true
+edit sed -i 's/"overwriteOriginalVillagers": false/"overwriteOriginalVillagers": true/' config/mca.json
+restart
+bootexpect Done \(
 look first zcount: which entity type the summon became; memories after "list on": secondary_job_site lists rich farmland / mulch positions (x 76..80), VillagerData still farmer; second zcount: wheat planted there; after "list empty": secondary_job_site empty or absent. No secondary_job_site at all on an MCA villager = FD's villager hook does not reach MCA brains (memory mca-villager-pathing): needs a boot with MCA overwriteOriginalVillagers false
 
 ## SQ-FDB-08
@@ -3233,9 +3541,10 @@ expect verb=tag kind=block tag=farmersdelight:mineable/knife n=\d+ ids=\S*farmer
 ## SQ-FDB-11 | onion from zombie kills with Looting III, knife on pumpkins
 @group A
 @commands Kill 300 zombies as a fake player with Looting III (or `/loot spawn ~ ~ ~ kill @e[type=zombie,limit=1]` repeatedly with a player killer); break a pumpkin with an iron knife, then with a Silk Touch knife
-@pass About 5% of zombie kills drop an Onion (2% + 3x1%); no onion from a non-player kill; knife: 4 Pumpkin Slices, no pumpkin; Silk Touch knife: the pumpkin
+@pass About 5% of zombie kills drop an Onion (2% + 3x1%); no onion from a non-player kill; knife: 8 Pumpkin Slices [4], no pumpkin; Silk Touch knife: the pumpkin
 @fails Runs without CD too (loot.js needs only FD and LootJS)
 @from batches/r1103/p2_R.qb
+@reviewed 2026-11-26
 # /loot kill gave no onion in 300 tries in run 1 (the LootJS modifier needs a real kill), so the bot kills real
 # zombies: 1-health zombies under a leather helmet (no sun burn), an arrow owned by the bot dropped on each one.
 # Then 100 kills by ownerless arrows (no player) as the control, then the knife through execute as the bot.
@@ -3244,6 +3553,8 @@ expect verb=tag kind=block tag=farmersdelight:mineable/knife n=\d+ ids=\S*farmer
 sleep 2
 > data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
 capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+# r1126q: the scratch server runs peaceful, which discards summoned zombies (r1124fxr: no rotten flesh, no onion)
+> difficulty normal
 > kill @e[type=minecraft:zombie,tag=fdb11]
 > fill {H1+42} {H2} {H3-32} {H1+52} {H2+4} {H3-26} minecraft:air
 > pbot remove fdb11
@@ -3295,6 +3606,7 @@ expect \[zcount\] entities .*item:farmersdelight:pumpkin_slice x8
 expect \[zcount\] entities .*item:minecraft:pumpkin x1
 > kill @e[type=minecraft:item]
 > pbot remove fdb11
+> difficulty peaceful
 look after "player kills counted": onions about 10 of 200 (2 % + 3 x 1 %); after "control (no player)": no onion; first knife zcount: 8 pumpkin_slice, no pumpkin; second (Silk Touch): minecraft:pumpkin
 
 ## SQ-FDB-12
@@ -3496,10 +3808,13 @@ look fig_pudding egg ingredient lists several eggs (the #forge:eggs tag, not min
 
 ## SQ-FR-05 | Creative Delight loads without Fruits Delight
 @group A
+@modset nosrm -fruitsdelight-*.jar
+# r1126q (2026-11-26): own jar set (the full pack without Fruits Delight; nosrm also drops Snow! Real Magic, irrelevant here): r1120nv ran it with the jar present and the 5 fruitsdelight scripts loaded
 @commands Same jars with `fruitsdelight-0.5.11.jar` (and the mods that need it) moved out; boot
 @pass CD loads; no mixin error or `ClassNotFoundException` for `dev.xkmc.fruitsdelight`; the three Fruits Delight scripts skipped (`requires`)
 @fails A compartment class referenced from the main path, or the plugin gate
 @from batches/r1102b/s2_N.qb
+@reviewed 2026-11-26
 bootexpect Done \(
 bootreject (?i)mixin apply failed|InvalidInjectionException
 bootreject ClassNotFoundException.*dev\.xkmc\.fruitsdelight|NoClassDefFoundError.*dev/xkmc/fruitsdelight
@@ -3533,12 +3848,19 @@ reject \[cdevtest\] .*done=0
 @@text needs). Not run yet (owner: queue only).
 @@text
 @@table
-## SQ-RD-01
+## SQ-RD-01 | Rustic Delight boot: no parse error for a rusticdelight recipe, loot table, tag or loot modifier
 @group A
-@commands (From -02 the `Rustic Delight upstream assets/data` line is gone: use SQ-RDB-01.) Boot; `grep -i "rustic\|Error occurred while handling event\|Couldn't parse\|Failed to load" logs/latest.log`
-@pass `Rustic Delight upstream assets/data: N files (M dropped ...)`; no parse error for a `rusticdelight:` recipe, loot table, tag or loot modifier; `Done (`
+@commands boot; grep `logs/latest.log` and the KubeJS logs for `rustic`, `Error occurred while handling event`, `Couldn't parse`, `Failed to load`
+@pass `Done (`; no parse error for a `rusticdelight:` recipe, loot table, tag or loot modifier (the old `Rustic Delight upstream assets/data` count line is gone since port -02: SQ-RDB-01)
 @fails A parse error names the 1.20 field RusticTranslator misses; game stops: `rustic_upstream/` jar missing or sha1 differs
-@draft no batch holds this row yet
+@jars creativedelight
+@reviewed 2026-11-26
+bootexpect Done \(
+bootreject (?i)(Couldn't parse|Failed to (load|parse)|Parsing error).*rusticdelight
+bootreject (?i)rusticdelight.*(Couldn't parse|Failed to (load|parse)|Parsing error)
+bootreject Error occurred while handling event.*rustic
+kjsreject (?i)error.*rusticdelight
+
 ## SQ-RD-02 | Rustic member stops startup naming the missing donor jar
 @group A
 @commands **Obsolete from `backportedRustic` -02 (2026-11-10 bake): replaced by SQ-RDB-01, -06.** Same boot with `rustic_upstream/` renamed
@@ -4766,6 +5088,12 @@ look the glass bottle is in the pot's block data (container slot 7 or the buffer
 @fails the gate is `RemainderBufferQol` (pot, kettle) and Creative Common `[cooking] remainderBuffer` (oven)
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_Coff.qb
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the row ran with the default true (r1120nv); it now sets [qol] remainderBuffer = false in the scratch config, restarts, and restores true with a second restart at the end so later rows of the batch see the default
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml qol remainderBuffer false
+restart
+bootexpect Done \(
+shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[qol\][[:space:]]*$/ && /^[[:space:]]*remainderBuffer[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
 > execute unless entity @e[type=minecraft:marker,tag=s2chome] run summon minecraft:marker ~ 201 ~ {Tags:["s2chome"]}
 sleep 2
 > data get entity @e[type=minecraft:marker,tag=s2chome,limit=1] Pos
@@ -4783,6 +5111,10 @@ sleep 25
 waitlog \[zcount\] entities 30
 expect farmersdelight:glow_berry_custard
 expect item:minecraft:glass_bottle
+> kill @e[type=minecraft:item]
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml qol remainderBuffer true
+restart
+bootexpect Done \(
 look the glass bottle came out as an item entity beside the pot (thrown); the oven half (keeps its leftover, gate CD [cooking] remainderBuffer) is not run: no oven milk-bottle recipe is pinned down for a scripted bake
 
 ## SQ-CDQ-03 | Creative Delight loads without Farmer's Respite; pot buffer still works
@@ -4791,7 +5123,10 @@ look the glass bottle came out as an item entity beside the pot (thrown); the ov
 @pass `Done (`; no mixin error for `farmersrespite.*`; pot buffer still works
 @fails `CDMixinPlugin` compartment check
 @jars creativecommon creativedelight
+@modset nosrm -FarmersRespite-*.jar
+# r1126q (2026-11-26): own jar set (the full pack without Farmer's Respite; nosrm also drops Snow! Real Magic, irrelevant here): group A has the jar in mods/, so the guard below exited 1 in r1120nv
 @from batches/r1102b/s2_N.qb
+@reviewed 2026-11-26
 bootreject (?i)farmersrespite.*creativedelight\.mixins\.json|creativedelight\.mixins\.json.*farmersrespite
 bootreject /(ERROR|FATAL)\].*ClassNotFoundException.*umpaz\.farmersrespite
 shell ! ls mods | grep -qi farmersrespite
@@ -5931,23 +6266,33 @@ bootreject RespitePottedTeaBush.*(WARN|could not|failed)
 expect verb=food item=farmersrespite:coffee_cake_slice\*1 food=true nutrition=\d+ modifier=[\d.]+ .*effects=farmersrespite:caffeinated:0:600:1\.0$
 expect verb=food item=farmersrespite:rose_hip_pie_slice\*1 food=true nutrition=\d+ modifier=[\d.]+ .*effects=minecraft:regeneration:0:400:1\.0$
 
-## SQ-RSP-14 | a Kettle saved at water_level=3 loads at 3 and brews
+## SQ-RSP-14 | a Kettle placed at water_level=3 (an old save's value) keeps 3 and brews: 2 green tea leaves -> Green Tea, level 2
 @group A
-@commands a world saved with a 2.0 Kettle at `water_level=3`: load it
-@pass Kettle still at 3 water, brews normally
-@fails blockstate property range
+@commands A kettle set to `water_level=3` over a lit campfire (a placed block stands in for a world saved with a 2.0 Kettle: the blockstate loads the same way); 2 green tea leaves in slots 0 and 1, a glass bottle in slot 3; wait; `/data get`
+@pass Kettle still at 3 before the brew; Green Tea brewed, level 2 after (the recipe takes 2 leaves, 1 level), `Container` glass bottle consumed
+@fails blockstate property range (`water_level` 0 to 4); the pack's brew time (SQ-RSP-06 brews black tea within 35 s on the same setup)
 @jars creativecommon creativedelight
 @from batches/r1102b/s2_A.qb
-> execute if block {H1+2} {H2+1} {H3+6} farmersrespite:kettle[water_level=3] run say RSP14 kettle still 3
+@reviewed 2026-11-26
+# r1126q (2026-11-26): r1120nv had no kettle placed (nothing created one), 1 leaf where the recipe takes 2 and a 15 s wait; now placed here with the SQ-RSP-06 setup
+> forceload add 1000 1000
+sleep 2
+> execute unless entity @e[type=minecraft:marker,tag=rhome] run summon minecraft:marker 1000 -60 1000 {Tags:["rhome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=rhome,limit=1] Pos
+capture R entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {R1+18} {R3+106}
+> setblock {R1+18} {R2} {R3+106} minecraft:campfire[lit=true]
+> setblock {R1+18} {R2+1} {R3+106} farmersrespite:kettle[water_level=3]
+> execute if block {R1+18} {R2+1} {R3+106} farmersrespite:kettle[water_level=3] run say RSP14 kettle still 3
 expect RSP14 kettle still 3
-> item replace block {H1+2} {H2+1} {H3+6} container.0 with farmersrespite:green_tea_leaves 1
-> item replace block {H1+2} {H2+1} {H3+6} container.3 with minecraft:glass_bottle 1
-sleep 15
-> data get block {H1+2} {H2+1} {H3+6}
-> execute if block {H1+2} {H2+1} {H3+6} farmersrespite:kettle[water_level=2] run say RSP14 brewed one
+> data merge block {R1+18} {R2+1} {R3+106} {Inventory:{Size:5,Items:[{Slot:0,id:"farmersrespite:green_tea_leaves",Count:1b},{Slot:1,id:"farmersrespite:green_tea_leaves",Count:1b},{Slot:3,id:"minecraft:glass_bottle",Count:1b}]}}
+sleep 35
+> data get block {R1+18} {R2+1} {R3+106}
+> execute if block {R1+18} {R2+1} {R3+106} farmersrespite:kettle[water_level=2] run say RSP14 brewed one
 expect farmersrespite:green_tea
 expect RSP14 brewed one
-look the data get line shows the brewed Green Tea in slot 4 (or 2 waiting); if Green Tea needs 2 leaves the level stays 3: judge from the recipe line of SQ-RSP-02
+look the data get line shows the brewed Green Tea in the output slot (4) and the glass bottle gone; if the tea is not done after 35 s compare with SQ-RSP-06 (black tea on the same setup) before judging the level
 
 ## SQ-RSP-15 | BrewTimeTotal 600; no tea at 8 s, one by 32 s
 @group A
@@ -5979,12 +6324,19 @@ expect farmersrespite:black_tea"
 @@text The `/dumpworldjei` command is a server command (`WorldJeiDump`).
 @@text
 @@table
-## SQ-INV-01
+## SQ-INV-01 | boot log inventory: time push, seasons follow the sun, missing registry lines only for removed ids
 @group A
-@commands grep `latest.log` after boot for `[time]`, `seasons now follow the sun`, `[advancements]`, `vinery:mead`, `king_danis_wine`, `calendar`, `Missing registry`
-@pass TODO `pack/release #3`: `[time]` push line, "seasons now follow the sun" once per dimension, `[advancements] N left out`, missing-registry lines only for the removed ids. Close the row
+@commands boot, grep `latest.log` for `[time]`, `seasons now follow the sun`, `vinery:mead`, `king_danis_wine`, `calendar`, `Missing registry`
+@pass `[time]` push line, "seasons now follow the sun" once per dimension; missing-registry lines only for the removed ids (record any other in the row); TODO `pack/release #3`
 @fails an unexpected id missing from the registry: note it in the row
-@draft no batch holds this row yet
+@jars creativecommon creativecalendar
+@reviewed 2026-11-26
+# r1126q (2026-11-26): the `[advancements] N left out` line is no longer produced (all advancements are dropped at load); greps print, the judge reads them
+bootexpect Done \(
+shell grep -h "\[time\]\|seasons now follow the sun" logs/latest.log | head -12; true
+shell grep -h "Missing registry\|missing registry\|vinery:mead\|king_danis_wine" logs/latest.log | head -20; true
+look `[time]` push line present; "seasons now follow the sun" once per dimension (overworld, nether, end); every missing-registry id is a removed id (vinery:mead, king_danis_wine and other deliberate removals)
+
 ## SQ-INV-02 | item_dict tag check lines
 @group A
 @commands grep `latest.log` for `item_dict` / `TL-01` tag check lines
@@ -6056,7 +6408,7 @@ look a muffin recipe exists (oven baking since the move, serializer= on the line
 @commands `/dumpall`, `/dumptags`, `/dumpfood`, `/dumpstacks`, `/dumpplaceable`, `/dumppotions`, `/dumpworldjei` (the `/dumpall` set runs `/dumpfood`; `/dumpnames` is single-player only)
 @pass all write to `kubejs/exported/` without error; `/dumpservermods` needs every jar in `mod_sides.md`
 @fails a missing `mod_sides.md` row: add it, rerun
-@draft no batch holds this row yet
+@superseded covered by SQ-CDV-03 (`/dumpall`, all 22 dumps done, no ReferenceError); `/dumpservermods` needs every jar in mod_sides.md, checked by tools/check_all.py
 ## SQ-INV-09
 @group A
 @commands after 08: `python3 tools/food_catalog.py`, `gen_stack_sizes.py`, `gen_can_types.py` (empty `AWAIT_DUMP` for `fungidelight` and `vintagedelight`), `effect_audit.py`, `placeable_catalog.py`, `gen_compost_values.py --merge`; follow note [dumpall-refresh-workflow](../agent_notes/dumpall-refresh-workflow.md) for order and hand steps
@@ -6171,49 +6523,49 @@ look offers: stockpile / recovery / cycle books are printed as minecraft:enchant
 @pass `latest.log`: `[soil-yield] no crop switched on`; no `Error occurred` for `soil_yield.js`; a ripe wheat on Rich Farmland drops 1 wheat, 1 to 4 seeds
 @fails Error: script order or `CEConfig.CROP_DROPS.SOIL_YIELD` missing (old Creative Common)
 @jars creativecommon
-@draft needs its own boot with every soil-yield crop switched off in the config before start (qrun cannot restart mid-batch): write it as a separate boot batch with qrun.py toml
+@superseded soil yield reworked 2026-11-03 (crop_yields.md): per-soil bonus shares replace the 2-of-0.35 pools and the all-crops-off boot; replaced by SQ-SY-09 to SQ-SY-13 and wave 2 SQ-SY-14 to SQ-SY-20
 ## SQ-SY-02
 @group A
 @commands `wheat = true`, `carrots = true`, restart; 30 ripe wheat each on farmland, Rich Farmland, Fertile Soil
 @pass Log line lists `wheat, carrots` and `rich farmland 2 x 0.35, fertile soil 2 x 0.25, rich soil 2 x 0.35`; wheat per plant averages about 1.0 / 1.7 / 1.5, never above 3; seeds unchanged
 @fails Same on every soil: `location_check` offset or block predicate not read
 @jars creativecommon
-@draft needs its own boot with wheat and carrots switched on in the config before start (qrun cannot restart mid-batch): write it as a separate boot batch with qrun.py toml, then cdevtest loot on ripe wheat over each soil
+@superseded soil yield reworked 2026-11-03: wheat is SQ-SY-09 (1.00 / 1.33 / 1.66 per plant)
 ## SQ-SY-03
 @group A
 @commands Same for carrots
 @pass About 3.7 / 4.4 / 4.2 per plant; unripe carrots drop 1 on every soil
 @fails Unripe gets extra: ripe condition missing
 @jars creativecommon
-@draft same boot as SQ-SY-02 (config switched before start); cdevtest loot on ripe and unripe carrots over each soil once that boot batch exists
+@superseded soil yield reworked 2026-11-03: carrots are SQ-SY-10
 ## SQ-SY-04
 @group A
 @commands `rice = true`: rice in water on Rich Soil and on dirt, ripe panicles; harvest by hand and with a knife
 @pass Rich Soil gives extra panicles (by hand) or extra rice (knife), dirt none
 @fails No extra: offset -2 wrong
 @jars creativecommon
-@draft needs its own boot with rice switched on in the config before start; knife and hand harvest of rice in water (cdevtest break held=) once that boot batch exists
+@superseded soil yield reworked 2026-11-03: rice and adzuki on Rich Soil are SQ-SY-11 and the wave-2 rows
 ## SQ-SY-05
 @group A
 @commands `corn`, `hemp`, `flax` true: ripe plants on Rich Farmland; break the top, then the bottom
 @pass Corn: extra only once per plant; hemp: extra fibre from the top; flax: extra flax from the lower half
 @fails Double extra on corn: `upper=false` condition dropped
 @jars creativecommon
-@draft needs its own boot with corn, hemp and flax switched on before start; two-block break order (cdevtest break top then bottom) once that boot batch exists
+@superseded soil yield reworked 2026-11-03: the wave-2 rows SQ-SY-14 to SQ-SY-20 cover the other crops and own picks
 ## SQ-SY-06
 @group A
 @commands `bell_peppers = true`, ripe peppers on Rich Farmland
 @pass Colors still roll about 1:1:1; log has the `[crop-drops] bell peppers` line as before
 @fails Bell pepper rewrite skipped (`table shape changed`): pools mistaken
 @jars creativecommon
-@draft needs its own boot with bell_peppers switched on before start; colour ratio from cdevtest loot rolls=300 once that boot batch exists
+@superseded soil yield reworked 2026-11-03: bell peppers are on the soil list as a normal crop (crop_yields.md); wave-2 rows
 ## SQ-SY-07
 @group A
 @commands Set `richFarmlandTries = 0`, restart
 @pass Log no longer lists rich farmland; Rich Farmland drops as farmland
 @fails Pool still added: soil filter
 @jars creativecommon
-@draft needs its own boot with richFarmlandTries = 0 before start (qrun cannot restart mid-batch): a separate boot batch
+@superseded `richFarmlandTries` no longer exists (the config has `richFarmlandBonus`); replaced by SQ-SY-09 (bonus per soil)
 @@text
 @@text SQ-SY-01 to -07 test the old tries x chance values (keys removed 2026-11-03). Rework of 2026-11-03 (per-soil bonus,
 @@text crop_yields.md 2.4): the config is now `OUT/srv/config/creativedelight-common.toml`, keys `farmlandBonus`,

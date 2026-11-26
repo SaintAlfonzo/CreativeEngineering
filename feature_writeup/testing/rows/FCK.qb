@@ -223,8 +223,8 @@ look desert totals from the shell line (15x15 chunks: the row's 25x25 is over th
 @commands Recipe probe for each of the 21 new feast cans (`canned_pizza` ... `canned_stuffed_bell_peppers`); `[cans] registered N generated cans` in the startup log
 @pass each has one recipe: its feast block item + an empty can; N up by 36 from the last run (21 feasts + 15 catch-up cans) (CN-10)
 @fails item_dict not rebuilt in Common; feast block key wrong in `gen_can_types.py`
-@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
+@reviewed 2026-11-26
 shell grep -h "\[cans\] registered" logs/kubejs/startup.log | cut -c1-200
 > cdevtest makes creativedelight:canned_pizza
 > cdevtest rdetail creativedelight:shapeless/canned_pizza
@@ -390,8 +390,8 @@ look the debug.log count is >= 1 (the watcher saw the edit); honeycomb:6 again w
 @commands 5x5 `farmland[moisture=0]`, no water; fake player (not sneaking) uses a water bucket on the top of the centre; check moisture of the 3x3 and the ring; held item; repeat on `rich_soil_farmland` and `mulch_block[moisture=0]`
 @pass 3x3 at 7, ring at 0, holds `minecraft:bucket` (CR-105)
 @fails `WaterOnSoil` not registered; event canceled too late
-@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb passed
+@reviewed 2026-11-26
 # self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
 > forceload add 1000 1000 1480 1080
 > execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
@@ -577,14 +577,16 @@ reject \[cdevtest\] .*done=0
 ## SQ-FCK-20 | idle random ticks: grown or finished states claim no random ticks; their growing states still do
 @group A
 @commands Row z 1200 (stopped): tomato vines age 3 (FD, Supplementaries rope and stick, treated stick), rice age 3 with panicles above, the six colonies age 3, hemp `growth=top0`, strawberry bush age 6, adzuki age 6, waxed stone lantern, fully mossed deepslate lantern, poppy and wither rose bushes; row z 1203 (growing): tomato age 2, rice without panicles, brown colony age 2, hemp `bottom4`, strawberry age 5, adzuki age 5, bare stone lantern; `cdevtest randomtick` once over each row; grep latest.log `[perf] idle random ticks`
-@pass stopped row `block_ticks=0`, growing row `block_ticks=7`; one `[perf] idle random ticks: 35 rules on 33 blocks` line, no `idleRandomTickRules: skipped` (random_tick_audit.md rows 1-7, 9, 11, 12)
+@pass stopped row `block_ticks=0`, growing row `block_ticks=7`; one `[perf] idle random ticks: 35 rules on 33 blocks` line (34 on 32 plus Delight's own `1 rules ... creativedelight=1` line once the treated-stick rule is Delight's), no `idleRandomTickRules: skipped` (random_tick_audit.md rows 1-7, 9, 11, 12)
 @fails stopped row ticks: Common jar without `IdleRandomTickMixin` or `[perf] idleRandomTicks` off; fewer than 35 rules: a block id or property renamed (the skipped line names it); growing row below 7: one of them never random-ticked (the audit's unconfirmed "flag" rows), note which in random_tick_audit.md
 @jars creativecommon
 @draft no batch holds this row yet
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 shell grep -h "\[perf\] idle random ticks\|idleRandomTickRules: skipped" logs/latest.log | cut -c1-300
 # 35 rules on 33 blocks: redeco stone_lantern and deepslate_lantern carry two rules each (IdleTickRules defaults, rule 11)
-shell grep -q "\[perf\] idle random ticks: 35 rules on 33 blocks" logs/latest.log
+# 2026-11-26 (writer-3): the treated-stick rule is Creative Delight's (addModRule, own log line "1 rules ... creativedelight=1") since
+# 2026-11-25; Common's config-lines line counts 34 or 35 rules on 32 or 33 blocks depending on the config's lines
+shell grep -Eq "\[perf\] idle random ticks: 3[45] rules on 3[23] blocks" logs/latest.log
 shell test "$(grep -c "idleRandomTickRules: skipped" logs/latest.log)" = 0
 # forceload (r1120fix, 2026-11-20): r1120nv batch fault, the row area was not loaded
 > forceload add 1196 1196 1240 1208
@@ -631,7 +633,7 @@ look the two randomtick lines come in command order: the first (stopped row) mus
 @fails rope stays: the +wake_above line missing from `idleRandomTickRules` or the updateShape hook not applied; picked vine `block_ticks=0`: the rule matches below age 3 (`age=max` lost)
 @jars creativecommon
 @draft no batch holds this row yet
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > time set noon
 # forceload (r1120fix, 2026-11-20): r1120nv batch fault, the row area was not loaded
 > forceload add 1246 1196 1258 1204
@@ -947,7 +949,7 @@ expect part=numbers value=\S*getGrowthTicks=11200\b
 expect verb=tag kind=item tag=creativecompat:botany_pots/nether_only n=8\b
 > cdevtest tag item creativecompat:botany_pots/end_only
 expect verb=tag kind=item tag=creativecompat:botany_pots/end_only n=4\b
-shell grep -c "creativecompat:botanypots" logs/latest.log
+shell grep -c "creativecompat:botanypots" logs/latest.log; true
 look the shell count is 0 (no parse or condition error names a generated crop)
 
 ## SQ-BOT-07 | Nether and End pot crops grow only in their dimension (BotanyPotDimensionMixin)
@@ -959,7 +961,7 @@ look the shell count is 0 (no parse or condition error names a generated crop)
 @from plan_owner_rows_1120.md G5 (farming/crops #36, R11)
 @draft the pot's NBT field names (Bookshelf InventoryBlockEntity) and the fill commands are fixed at the first run; no batch holds this row yet
 @reviewed 2026-11-21
-shell grep -c "BotanyPotDimensionMixin" logs/latest.log
+shell grep -c "BotanyPotDimensionMixin" logs/latest.log; true
 look no line says the mixin failed to apply; record the pot NBT keys for the growth time
 
 ## CQ-BOT-01 | generated pot crops render and harvest: one seed, one produce, one colony, one End plant
@@ -1192,7 +1194,7 @@ look uses lines name recipe ids (the old probe printed results): a recipe whose 
 @fails stopped row ticks: Creative Brewing jar without the `isRandomlyTicking` override in PaleStemBlock / LegacyLatticeStemBlock; growing row below 3: the override matches below age 4 or with grape none
 @jars creativebrewing
 @draft no batch holds this row yet
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 # forceload (r1120fix, 2026-11-20): r1120nv batch fault, the row area was not loaded
 > forceload add 1254 1236 1270 1248
 sleep 3

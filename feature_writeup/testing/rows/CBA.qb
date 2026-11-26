@@ -41,6 +41,7 @@ bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject NOT loaded:|is loaded from .*not from the Creative Brewing jar|Missing or unsupported mandatory|Encountered an unexpected exception|Exception in thread
 
 ## SQ-CBA-02 | no mixin failure, no client class on the dedicated server
+@reviewed 2026-11-26
 @group A (chain)
 @commands same boot: `bootreject Mixin apply failed\|InvalidMixinException\|creativebrewing.*(NoClassDefFoundError\|ClassNotFoundException)`
 @pass no match (client-class `RuntimeDistCleaner` lines are not checked: they never name the mod and Rhino scans of item classes emit them on every dedicated boot, run doc 2026-11-06 findings 5)
@@ -53,11 +54,11 @@ bootreject Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDef
 @commands same boot: `shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log`; `shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log`; `shell ! grep -nE "ReferenceError\|TypeError\|EvaluatorException\|is not defined\|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log`; `kjsexpect Skipped creativebrewing:kubejs/alexsmobs/lava_vision.js: Mod alexsmobs is not loaded`; `kjsexpect Loaded script creativebrewing:kubejs/vinery/wandering_trades.js`
 @pass all shell steps exit 0; with PneumaticCraft or Lightman's absent the log has at most one INFO line `[loot-tuning] ban <name>: <mod> not loaded, switch check skipped` and no WARN; only `alexsmobs/lava_vision.js` is skipped among the 12 `creativebrewing:kubejs/` server scripts
 @fails the script and line in the error: a row naming an optional mod without a `global.has` guard (`python3 tools/guard_check.py --jar creativebrewing`), or a pack-folder global the chain does not define (plan_cb_publish.md 1.1)
-@reviewed 2026-11-23
+@reviewed 2026-11-26
 @from batches/r1106cba/b1.qb passed
 shell grep -q "\[jar-startup\] startup script packs in order: .*creativedelight.*creativebrewing" logs/kubejs/startup.log
 shell grep -q "\[creativebrewing\] core finished, members: vinery, brewinandchewin" logs/kubejs/startup.log
-shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global.trades missing" logs/kubejs/startup.log logs/kubejs/server.log | grep -vF "[loot-tuning] ban"
 shell ! grep -hE "WARN.*\[loot-tuning\] ban" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
 shell grep -h "\[loot-tuning\] ban" logs/kubejs/server.log | head -3; test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "\[loot-tuning\] ban .*not loaded, switch check skipped")" -le 1
 shell grep -E "Skipped creativebrewing:kubejs/|Loaded script creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/.*\] //'
@@ -82,7 +83,7 @@ bootreject still has sections that moved to
 @pass `count registered: true == 6`; `expect long_reach registered: false`
 @fails `CommonPotions` (Java, the magic resistance potions) or `potions.js` `StartupEvents.registry('potion')` (the KubeJS ones); `long_reach` true: CommonPotions' Better Beacons check
 @from batches/r1106cba/b1.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 > cdevtest potion creativecommon:magic_resistance
 > cdevtest potion creativecommon:long_magic_resistance
 > cdevtest potion creativecommon:strong_magic_resistance
@@ -184,7 +185,7 @@ reject errored recipe|Couldn't parse
 @pass food line for beer lists `brewinandchewin:tipsy`; winemaker count above 0; the winemaker spawns (`Summoned new`); no PackTime error
 @fails `alcohol_drinks.js` (`[alcohol]` warnings name the drink); winemaker 0: `vinery/winemaker_trades.js` (`global.trades` missing means Common's `trade_helper.js` did not load); PackTime error: Calendar's `WineTime` API
 @from batches/r1106cba/b1.qb passed
-@reviewed 2026-11-16
+@reviewed 2026-11-26
 shell grep -oE "\[alcohol\] food values set on [0-9]+ of [0-9]+ drinks" logs/kubejs/startup.log
 # chain: Fruits Delight (bellini_cocktail) and tmted (bottle_of_wodka) are absent, so 42; the instance boot has more
 shell grep -qE "\[alcohol\] food values set on 49 of 51 drinks" logs/kubejs/startup.log

@@ -299,10 +299,55 @@ reject verb=\S+ .*done=0
 
 ## SQ-FF-12 | a placed pizza gives 2 slices a bite, by hand or knife; break loot 8/6/4/2
 @group A
+@reviewed 2026-11-26
 @commands place `vintagedelight:cheese_pizza`, `veggiesdelight:vegan_pizza`, `brewinandchewin:pizza`; a bot uses each once empty-handed and once with a knife; break a fresh and a twice-used cheese pizza and vegan pizza (vegan with a knife), and a Supreme with a knife
 @pass each use takes one bite (Supreme: one serving) and drops or hands 2 slice items; the bot's food level does not change on an empty-hand use; the 4th bite removes the block; break loot: fresh cheese 8, after 2 bites 4; vegan with a knife 8 / 4; Supreme with a knife 8; Apple Pie and the Food Dictionary record nothing for a hand use (`creativedelight:serves_slices` block tag)
 @fails Vintage / Veggies `PizzaBlock.cutSlice` / `consumeBite` (CD member Java); Brewin' `PizzaBlock.takeServing` and `BnCSlicingModifier` (Creative Brewing); loot tables `vintagedelight/loot_tables/blocks/*_pizza.json`, `veggiesdelight/loot_tables/blocks/vegan_pizza.json`; `PlacedFoodSol.afterUse`
-@draft needs bot use / break steps with a knife in hand; the first runner writes them with the /pbot verbs
+> forceload add 400 960 420 980
+> fill 400 -61 960 420 -61 980 minecraft:stone
+> fill 400 -60 960 420 -50 980 minecraft:air
+> execute unless entity ff12 run pbot spawn ff12 410 -60 970 minecraft:overworld survival
+sleep 2
+> pbot inv ff12 clear
+> pbot hunger ff12 10
+# cheese pizza: break loot fresh with a knife, then four empty-hand bites
+> setblock 402 -60 962 vintagedelight:cheese_pizza
+> cdevtest loot 402 -60 962 tool=farmersdelight:iron_knife rolls=1
+> pbot use ff12 402 -60 962 up
+sleep 1
+> pbot inv ff12 get
+> cdevtest items 402 -60 962 4 keep
+> cdevtest player ff12
+> pbot use ff12 402 -60 962 up
+sleep 1
+> cdevtest loot 402 -60 962 tool=farmersdelight:iron_knife rolls=1
+> pbot use ff12 402 -60 962 up
+sleep 1
+> pbot use ff12 402 -60 962 up
+sleep 1
+> execute if block 402 -60 962 minecraft:air run say FF12 cheese pizza gone after four bites
+# vegan pizza with a knife in hand: one bite, then the loot
+> setblock 406 -60 962 veggiesdelight:vegan_pizza
+> pbot inv ff12 set 0 farmersdelight:iron_knife 1
+> pbot inv ff12 select 0
+> cdevtest loot 406 -60 962 tool=farmersdelight:iron_knife rolls=1
+> pbot use ff12 406 -60 962 up
+sleep 1
+> cdevtest loot 406 -60 962 tool=farmersdelight:iron_knife rolls=1
+# Supreme (Brewin') with a knife: loot fresh
+> setblock 410 -60 962 brewinandchewin:pizza
+> cdevtest loot 410 -60 962 tool=farmersdelight:iron_knife rolls=1
+> pbot inv ff12 clear
+> pbot remove ff12
+expect FF12 cheese pizza gone after four bites
+expect verb=loot state=\S*vintagedelight:cheese_pizza\S* tool=\S+ rolls=1 drops=\S*vintagedelight:cheese_pizza_slice:8
+count (verb=pbot.inv bot=ff12 slot=\d+ item=vintagedelight:cheese_pizza_slice\*2|verb=items items=\S*vintagedelight:cheese_pizza_slice:2) >= 1
+expect verb=player .*food=10\b
+expect verb=loot state=\S*veggiesdelight:vegan_pizza\S* tool=\S+ rolls=1 drops=\S*veggiesdelight:vegan_pizza_slice:8
+expect verb=loot state=\S*brewinandchewin:pizza\S* tool=\S+ rolls=1 drops=\S*brewinandchewin:pizza_slice:8
+reject verb=\S+ .*(done=0|error=)
+look a hand use took one bite and gave 2 slices (inventory or dropped), food stayed 10; the loot after two cheese bites (the second cheese loot line) reads 4 slices, the vegan one after one bite 6, fresh 8 for all three (8/6/4/2 by bites, plan_food_batch_1119.md C1); the fourth bite removed the block
+
 
 ## SQ-FF-13 | Tropical Pizza: registered, recipe, slice values
 @group A

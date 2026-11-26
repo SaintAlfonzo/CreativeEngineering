@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-CS2 Creative Split wave 2: CD and CB rename, swap lists, prep, 2026-11-01 ([creative_split.md](../creative_split.md) 7.7, TODO `creativesplit/prep #3`, `creativedelight/swappers #1`)
 @@date 2026-11-01
-@@sources feature_writeup/creative_split.md
+@@sources feature_writeup/creative_split.md development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js development/creativeCommon/src/main/resources/creativecommon.mixins.json
 @@text
 @@text Run 2026-11-01 (rcs234 / rcs234r, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CS2-01, -04 to -08 PASS (-07 server half); -02 / -03 FAILED on 1.1.06 (`SwapRemapper` looked in Forge's staging registry), fixed in 1.1.07, PASS on rcs234r. The old CD had no items, only the two stick blocks and the processor type: the item parts of -01 / -03 do not apply.
 @@text
@@ -112,6 +112,7 @@ look creativedelight file has placeableTooltips = false; underscore files gone; 
 @pass Packs `creativecalendar`, `creativedelight`, `creativebrewing` load; CD and CB core lines present; no `creative_delight` anywhere in either log; no recipe names an unknown `creative_delight:` id; wild crop features place (no `Unknown feature creative_delight:wild/...` in latest.log)
 @fails A script tree or a datapack id still on the old namespace
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-26
 shell grep -E "startup script packs in order|\[creativedelight\]|\[creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-220 | head -12; echo "old ns in kjs logs: $(grep -c creative_delight logs/kubejs/startup.log logs/kubejs/server.log | tr '\n' ' ')"; grep -c "Unknown feature creative_delight" logs/latest.log; true
 kjsreject creative_delight
 bootreject Unknown feature creative_delight
@@ -122,12 +123,14 @@ look packs creativecalendar, creativedelight, creativebrewing load with core lin
 ## SQ-CS2-07 | NCH.cfg lookup and the can action
 @group A
 @commands Same boot: `grep -E "NCH.cfg\|IngredientActions\|can_serving" logs/kubejs/server.log \| head`; craft a recipe that uses part of a can (a can-serving recipe)
-@pass No `no ... section in any registered config` WARN; no `IngredientActions not available` / `no creativeengineering:can_serving` WARN; the can comes back with one serving fewer
+@pass No `no ... section in any registered config` WARN; no `IngredientActions not available` / `no creativedelight:can_serving` WARN; the can comes back with one serving fewer
 @fails NCH.cfg lookup or the action registry broken
 @from batches/r1101/cs2_boot2.qb
+@reviewed 2026-11-26
+# 2026-11-26 (writer-3): the action id is creativedelight:can_serving (neoCraftHelper.js), the old creativeengineering id never matched
 shell grep -E "NCH.cfg|IngredientActions|can_serving" logs/kubejs/server.log | head -8 | cut -c1-220
 kjsreject section in any registered config
-kjsreject IngredientActions not available|no creativeengineering:can_serving
+kjsreject IngredientActions not available|no creativedelight:can_serving
 look no NCH.cfg / IngredientActions WARN (the craft half is a client check)
 
 ## SQ-CS2-08 | CE mixin plugin gate, IW fast path
@@ -136,5 +139,7 @@ look no NCH.cfg / IngredientActions WARN (the craft half is a client check)
 @pass IwServerLevelTickMixin applied and the `[perf]` IW fast path log line as before; no mixin config error
 @fails `CommonMixinPlugin` gate or shared plugin source missing
 @from batches/r1101/cs2_boot2.qb
-shell grep -E "creativeengineering.mixins.json" logs/debug.log | grep -iE "error|fail" | head -3; grep -c "IwServerLevelTick" logs/debug.log; grep -E "IwServerLevelTick" logs/debug.log | head -2 | cut -c1-200; grep -iE "\[perf\].*(immersive|IW)" logs/latest.log | head -2 | cut -c1-200
+@reviewed 2026-11-26
+# 2026-11-26 (writer-3): patcherMod is Creative Common since 2026-11-04, its mixin config is creativecommon.mixins.json
+shell grep -E "creativecommon.mixins.json" logs/debug.log | grep -iE "error|fail" | head -3; grep -c "IwServerLevelTick" logs/debug.log; grep -E "IwServerLevelTick" logs/debug.log | head -2 | cut -c1-200; grep -iE "\[perf\].*(immersive|IW)" logs/latest.log | head -2 | cut -c1-200
 look IwServerLevelTickMixin applied, IW fast path line, no mixin config error

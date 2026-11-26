@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-BREED Animal breeding and bee flower audit, 2026-11-10 ([breeding_audit.md](../breeding_audit.md) section 7; TODO `mobs/tweaks #14`, `mobs/bees #1`)
 @@date 2026-11-10
-@@sources feature_writeup/breeding_audit.md
+@@sources feature_writeup/breeding_audit.md kubejs/server_scripts/tags/flower_tags.js kubejs/server_scripts/tags/animal_tags.js
 @@text
 @@table
 ## SQ-BREED-01 | breeding dump: Animal.isFood x every item, flower blocks and the F-B7 candidates by class
@@ -14,6 +14,7 @@
 @pass maned wolf, duck, goose, Crab, Toretoise rows filled; F-B7 candidates (shiny flowers, Creeper's Crush, firefly bush, Floral Enchantment bushes, Buzzier Bees four-leaf clover) classed by block class
 @fails edit the section 3 and 4 rows of the report
 @from batches/r1115/p9_a1t.qb
+@reviewed 2026-11-26
 > zp9 breed
 waitlog \[zp9\] breed done 900
 shell ls -l kubejs/exported/breeding_dump.json; python3 -c "import json;d=json.load(open('kubejs/exported/breeding_dump.json'));print('animals',len(d['animals']),'flowers',len(d['flowers']),'cands',len(d['candidates']))"
@@ -23,9 +24,9 @@ look rows in breeding_audit.md 3 and 4 (maned wolf, duck, goose, crab, toretoise
 @group A+client
 @commands after the Creative Compat and Creative Delight jars are installed: `/reload`, then `/dumptags item,block`; JEI, Just Enough Breeding pages
 @pass `#minecraft:flowers` items have no `wild_` item, no `botania:special_flowers` member, no flower crown or leaf pile; block flowers hold `wild_onions`, `wild_carrots`, `wild_potatoes` and no other `wild_`; `blueprint:pig_food` 3 items, `cat_food` and `ocelot_food` 2; no `alexmobs:bison_breedables`; JEI shows breeding pages for duck, goose, BB grizzly bear, both Fungi cows and the Cozy cat; latest.log has `[jei] Just Enough Breeding: 6 extra breeding page(s)`
-@fails wild list: `animal_tags.js` regex; page missing: entity id in `BreedingPagesJEI`
-@reviewed 2026-11-16
+@fails wild list: `flower_tags.js` / `animal_tags.js` regex; page missing: entity id in `BreedingPagesJEI`
 @from batches/r1113/c4_a.qb
+@reviewed 2026-11-26
 > cdevtest tag item minecraft:flowers
 > cdevtest tag block minecraft:flowers
 > cdevtest tag item blueprint:pig_food
@@ -53,6 +54,7 @@ reject \[cdevtest\] .*done=0
 @pass pig, cat, ocelot breed; the bee refuses the wild carrot and accepts the poppy; bees pollinate the wild carrot and ignore the wild rice
 @fails tags above
 @from batches/r1113/c4_ar2.qb
+@reviewed 2026-11-26
 # group A since r1118 (judge-2, 2026-11-18): the fixture sits at y -60, the flat surface of the c4_a boot A world; in the
 # group B normal world that is deep underground (the air fill opened into caves) and no bee was found in either reading.
 > forceload add 40705 39985 40750 40015
@@ -104,7 +106,8 @@ look bee positions change between the readings (the bees move); a carrot-hive be
 @group A
 @commands `/cdevtest tag item minecraft:flowers`; `/cdevtest tag item creativecompat:physics/floats`; `/cdevtest tag item another_furniture:planter_box_placeables`; `/cdevtest tag item creativecompat:flower_box_plants`; `/cdevtest tag block creativeworldgen:ground_match/plants`; `/cdevtest tag block creativeworldgen:template_trim/plants`; `/cdevtest tag block chalk:chalk_cannot_draw_on`
 @pass `minecraft:flowers` items: no `wild_` id, no flower crown or leaf pile; physics/floats: wild plants, `botania:` special flowers, the flower crown and both azalea leaf piles; planter_box_placeables and flower_box_plants: the small-flower wild plants (for example `rusticdelight:wild_cotton` if it was a small flower); ground_match/plants, template_trim/plants and chalk_cannot_draw_on: the wild crop blocks (Farmer's Delight, Corn, Delightful, Miner's, Rustic)
-@fails `animal_tags.js` `keep(...)` runs after `t.remove` or a tag owner script replaces the tag later (priority)
+@fails `flower_tags.js` (item tags) or `animal_tags.js` (block tags) `keep(...)` runs after `t.remove`, or a tag owner script replaces the tag later (priority)
+@reviewed 2026-11-26
 > cdevtest tag item minecraft:flowers
 > cdevtest tag item creativecompat:physics/floats
 > cdevtest tag item another_furniture:planter_box_placeables

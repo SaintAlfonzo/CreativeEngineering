@@ -90,8 +90,19 @@ look at least one neapolitan:banana among the item ids or hands; banana_stalk co
 sleep 3
 
 ## SQ-MG-20
-@group client
-@commands JEI: search chimpanzee
-@pass Banner pattern only; no spawn egg, no head
+@group A (the JEI search is an owner look)
+@commands Server half: `/cdevtest tagsof neapolitan:chimpanzee_spawn_egg` and `..._head` (a removed item has no item tags), `/cdevtest item neapolitan:chimpanzee_banner_pattern` (still registered). Client half: JEI, search chimpanzee
+@pass spawn egg and head have no item tags (on the removed list, `removed_items.js`), the banner pattern exists; JEI shows the banner pattern only (client look)
 @fails removed items list not reloaded (full restart)
-@draft no batch holds this row yet
+@reviewed 2026-11-26
+# written 2026-11-26 (r1126q writer-5): the removed list hides items in JEI and strips their tags (removed_item_tags.js), so a server run reads the tags; the JEI list itself is the look
+> cdevtest tagsof neapolitan:chimpanzee_spawn_egg
+> cdevtest tagsof neapolitan:chimpanzee_head
+> cdevtest item neapolitan:chimpanzee_banner_pattern
+expect verb=tagsof id=neapolitan:chimpanzee_spawn_egg item_tags=-( |$)
+expect verb=tagsof id=neapolitan:chimpanzee_head item_tags=-( |$)
+expect verb=item item=neapolitan:chimpanzee_banner_pattern class=
+bootexpect \[jeiRemove\] [0-9]+ removed items registered
+reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+look JEI search "chimpanzee" (owner client): the banner pattern only, no spawn egg and no head
+

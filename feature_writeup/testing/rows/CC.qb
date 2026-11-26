@@ -148,7 +148,20 @@ reject (Unknown or incomplete command|Incorrect argument for command|No player w
 @commands before the swap: a chest holding a `creativecommon:long_reach` potion; after: `/zsa potionat <chest>` (`cc_seqasm_probe.js`); `/ccswap items` rewrites item merges only, so the NBT keeps the old string by design (`PotionByNameRemapMixin` maps it on every read)
 @pass the stack reads `creativebrewing:long_reach` with Better Beacons Long Reach; no exception
 @fails swap list `better_beacons_potions.json`, `/ccswap`
-@draft needs a world saved on the 2026-11-06 builds with a creativecommon:long_reach potion in a chest (an old-build boot first, then the swap); a fresh scratch world cannot hold the old string
+@reviewed 2026-11-26
+# 2026-11-26: no old-build world needed: the old string is written straight into a chest's item NBT (the mixin reads any unregistered name a swap list renames; better_beacons_potions.json maps creativecommon:long_reach to creativebrewing:long_reach)
+> forceload add 2384 2384 2416 2416
+> setblock 2400 -59 2412 minecraft:chest{Items:[{Slot:0b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativecommon:long_reach"}},{Slot:1b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativeengineering:long_reach"}},{Slot:2b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativebrewing:long_reach"}}]}
+sleep 1
+> zsa potionat 2400 -59 2412
+waitlog potionat slot 2 30
+expect potionat slot 0 minecraft:potion nbt .*creativecommon:long_reach.* reads creativebrewing:long_reach
+expect potionat slot 1 minecraft:potion nbt .*creativeengineering:long_reach.* reads creativebrewing:long_reach
+expect potionat slot 2 minecraft:potion nbt .*creativebrewing:long_reach.* reads creativebrewing:long_reach
+reject potionat .* reads minecraft:empty
+reject (?i)\[zsa\].*error
+reject (?i)exception.*potion
+> setblock 2400 -59 2412 minecraft:air
 ## SQ-CC-10
 @group A (full pack)
 @commands Magic Resistance (bots are invulnerable FakePlayers: use NoAI cows; MCA replaces summoned villagers): `/effect give <mob> creativeengineering:magic_resistance 60 0` then `minecraft:poison 10 1` and `minecraft:wither 10 1`; compare damage taken with and without (the Better Beacons phantom half is SQ-CCO-10)

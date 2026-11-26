@@ -145,7 +145,7 @@ expect \[cbetest\] PASS anvil dragon tooth knife repairs with a dragon tooth
 @commands boot logs; `/cdevtest bytype immersiveengineering:sawmill max=1000`; `/cdevtest rdetail` on `sawmill/oak_log-oak_planks`, `crimson_stem-crimson_planks`, `ancient_planks-ancient_planks_slab`, `twisted_planks-twisted_button`, `oak_planks-oak_vertical_slab`; `/cdevtest makes architects_palette:twisted_button` and `twisted_pressure_plate`; `/reload`; `bytype` again
 @pass KubeJS server log has `[wood] 211 IE sawmill recipes written`, no `[NCH]` error naming `sawmillRaw`; at least 211 `creativeengineering:sawmill/` recipes before and after the reload; the five named ones exist (fields: oak log -> 6 oak planks, bark and sawdust secondaries, stripped oak log stage; crimson stem -> crimson scales and crimson roots; ancient planks -> 2 slabs; twisted planks -> twisted button with the button blade; oak planks -> 2 oak vertical slabs with the vertical slab blade); Create cutting makes the twisted button and pressure plate from twisted planks
 @fails NCH `sawmillRaw` (`neoCraftHelper.js`, needs the event with `e.add`); `wood_types.js` species rows (`sawBlades`, `sawCounts`, `sawSecondary`); kubejs-immersive-engineering dropping a raw JSON field (blade, secondaries, stripped); the Create saw rows in the same script
-@reviewed 2026-11-24
+@reviewed 2026-11-26
 @absent creativeengineering:sawmill/oak_log-oak_planks creativeengineering:sawmill/crimson_stem-crimson_planks creativeengineering:sawmill/ancient_planks-ancient_planks_slab creativeengineering:sawmill/twisted_planks-twisted_button creativeengineering:sawmill/oak_planks-oak_vertical_slab (recipe ids)
 kjsexpect \[wood\] 211 IE sawmill recipes written
 kjsreject \[NCH\].*sawmillRaw
@@ -153,14 +153,19 @@ bootreject \[NCH\].*sawmillRaw
 > cdevtest bytype immersiveengineering:sawmill max=1000
 count verb=bytype id=creativeengineering:sawmill/ >= 211
 > cdevtest rdetail creativeengineering:sawmill/oak_log-oak_planks
+expect verb=rdetail id=creativeengineering:sawmill/oak_log-oak_planks serializer=immersiveengineering:sawmill result=minecraft:oak_planks\*6 ingredients=input:minecraft:oak_log
 expect verb=rdetail text=creativeengineering:sawmill/oak_log-oak_planks n=1
 > cdevtest rdetail creativeengineering:sawmill/crimson_stem-crimson_planks
+expect verb=rdetail id=creativeengineering:sawmill/crimson_stem-crimson_planks serializer=immersiveengineering:sawmill result=minecraft:crimson_planks\*6 ingredients=input:minecraft:crimson_stem
 expect verb=rdetail text=creativeengineering:sawmill/crimson_stem-crimson_planks n=1
 > cdevtest rdetail creativeengineering:sawmill/ancient_planks-ancient_planks_slab
+expect verb=rdetail id=creativeengineering:sawmill/ancient_planks-ancient_planks_slab serializer=immersiveengineering:sawmill result=quark:ancient_planks_slab\*2 ingredients=input:quark:ancient_planks
 expect verb=rdetail text=creativeengineering:sawmill/ancient_planks-ancient_planks_slab n=1
 > cdevtest rdetail creativeengineering:sawmill/twisted_planks-twisted_button
+expect verb=rdetail id=creativeengineering:sawmill/twisted_planks-twisted_button serializer=immersiveengineering:sawmill result=architects_palette:twisted_button\*1 ingredients=input:architects_palette:twisted_planks
 expect verb=rdetail text=creativeengineering:sawmill/twisted_planks-twisted_button n=1
 > cdevtest rdetail creativeengineering:sawmill/oak_planks-oak_vertical_slab
+expect verb=rdetail id=creativeengineering:sawmill/oak_planks-oak_vertical_slab serializer=immersiveengineering:sawmill result=\S*oak_vertical_slab\*2 ingredients=input:minecraft:oak_planks
 expect verb=rdetail text=creativeengineering:sawmill/oak_planks-oak_vertical_slab n=1
 > cdevtest makes architects_palette:twisted_button
 expect verb=makes id=\S+ result=architects_palette:twisted_button\*\d+ serializer=create:cutting
@@ -173,8 +178,7 @@ sleep 5
 waitlog verb=bytype 60
 count verb=bytype id=creativeengineering:sawmill/ >= 422
 reject \[cdevtest\] .*done=0
-look the rdetail part=fields lines (or a /dumprecipes JSON): oak log result 6 oak planks, secondaries immersive_weathering:oak_bark (stripping) and immersiveengineering:sawdust, stripped minecraft:stripped_oak_log; crimson stem secondaries immersive_weathering:crimson_scales and crimson roots; slab count 2; the button and vertical_slab blades named; if bytype prints result=empty for IE recipes, read the fields
-
+look the five results and inputs above are hard-checked (oak log -> 6 oak planks, crimson stem -> 6 crimson planks, ancient planks -> 2 slabs, twisted planks -> the button, oak planks -> 2 oak vertical slabs). The IE sawmill fields (bark and sawdust secondaries, stripped stage, crimson scales and roots, the button and vertical slab blades) are not printed by any /cdevtest verb (rdetail reads only the input and the result of an IE sawmill recipe, r1124nwr): they are not judged by this row; read them from `kubejs/data/creativeengineering/kubejs/wood/wood_types.js` or extend rdetail (Java, not done here)
 @@section 3
 @@title CQ-EN Sawmill client half, 2026-11-21 (same section)
 @@date 2026-11-21
