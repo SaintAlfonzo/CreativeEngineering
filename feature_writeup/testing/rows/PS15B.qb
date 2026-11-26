@@ -63,6 +63,8 @@ look hp (100 - hp = damage): plain about 16; lone web about x0.85; 3 stacked abo
 @pass 995.5: snowball and pearl stop in the edge web and break about 3 ticks later where they stopped; the pearl teleports the bot there and is gone; 994.5 and 996.2 as SQ-PTH-11; with 0 the edge-cell snowball hangs (no break)
 @fails `PassProjectiles.stallBreaks`, `PassState.stallTicks`, `breakIn(.., false)`
 @from batches/r1116/ps15b_a.qb
+# forceload added (r1126q R2 prescreen, 2026-11-26): the batch boots without SQ-PS15B-01, whose forceload covered this
+> forceload add 1070 980 1110 1020
 > fill 1090 -57 1000 1092 -55 1002 minecraft:cobweb
 > fill 1091 -58 994 1091 -58 996 minecraft:stone
 > zpth watchnew minecraft:snowball s02 300 1 1091.5 -56 999 7

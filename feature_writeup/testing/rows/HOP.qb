@@ -406,6 +406,7 @@ look HH1546b-ender-tes line in SQ-HOP-11
 @fails `TillingEvents.onToolModification` (HIGHEST, cancels Ender Crop's `BlockToolModificationEvent` path), `netheriteOrBetter`, area `till`
 @jars creativedelight powergrid
 @from batches/r1115/p5_a1.qb
+@absent hearthandharvest:tilling (enchantment id; the registry dump lists no enchantments)
 @reviewed 2026-11-16
 > setblock 632 -61 520 minecraft:end_stone
 > setblock 634 -61 520 minecraft:end_stone

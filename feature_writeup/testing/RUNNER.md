@@ -7,11 +7,11 @@ sessions read this file for status instead of messaging every session.
 Format while running:
 
 ```
-State: idle
-Updated: 2026-11-26 10:25
-ETA: -
-Phase: done
-Run: r1126q R1 stopped 2026-11-26 10:19 (owner wind-down), 37/51 steps; resumable `qrun.py drive resume r1126q` (scratch_run_2026-11-26.md 7)
+State: running
+Updated: 2026-11-26 13:20
+ETA: R2a driver estimate 2026-11-28 22:48 (R1 ran about 6x faster than its estimate); R2b after
+Phase: R1 + rerun judged; R2a drive r1126q2a (425 rows, 121 steps) running; then R2b (318 rows, 67 steps)
+Run: r1126q2a (qrun.py drive, state perf/runs/r1126q2a/drive/state.json)
 Previous: r1126gp finished 2026-11-26 01:07: SQ-CMP-39, -40, SQ-IP-15, CQ-RPS-14, CQ-CMP-37, -41 PASS (scratch_run_2026-11-24.md 10)
 ```
 

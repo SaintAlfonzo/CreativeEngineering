@@ -169,6 +169,10 @@ look tp to one: its dry part stands, no piece over the water (ST-297); a broken-
 @pass `[earth-fill] ... pruned` line names the anchor or satellite id and the meta builds; a `dropped K of N parts` line only for a part still over its limits (ST-298)
 @fails meta `CANCELLED` with no pruned line: `EarthFill.filterParts` / `prunes`
 @from batches/r1031/w1_earthfill.qb
+# {RV} was captured in SQ-EF-09, which the r1126q plan skips (prescreen r2a, 2026-11-26): capture it here
+> execute positioned 2144 70 -2592 run locate biome minecraft:river
+waitlog nearest minecraft:river is at 300
+capture RV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > execute positioned {RV1} 80 {RV3} run place structure creativeworldgen:meta/farmers_camp
 > execute positioned {RV1+40} 80 {RV3} run place structure creativeworldgen:meta/farmers_camp
 expect \[earth-fill\].*pruned

@@ -50,6 +50,7 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 # r1103 p2: at pace 2 the "5 s" reads came about 25 s after the summons, and the baby zombie burned to death in the
 # sun (onFire from 02:53:24, gone by 02:53:46): the cleanup kills are execute-as so an empty box prints no "No entity was found" (r1121br batch fault); now night, a helmet on the zombie, pace 0.2 for the summons. The cat
 # vanished within 1 s twice (r1102b, r1103): a cdevtest entities read right after its summon shows what took its place
+> forceload add 140 495 150 515
 > time set 18000
 > execute as @e[x=140,y=-61,z=495,dx=10,dy=5,dz=18] run kill @s
 > summon minecraft:cow 145 -60 500 {Age:-24000,NoAI:1b,Tags:["bm02"]}

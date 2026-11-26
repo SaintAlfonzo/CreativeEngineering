@@ -97,6 +97,7 @@ look End t=40 drop 0 (no fall) for all three; the overworld drop stays vanilla 2
 @pass the zombie, villager and survivor each carry `forge:entity_gravity` with a modifier named "Low Gravity Biome" (-0.8) while IN_END prints; falling blocks as SQ-CGE-02. If the modifier is missing while IN_END prints: record the `biome_configs` the set wrote, `cache_time`, and `grep -i "gravity" logs/latest.log` (the finding for TODO `creativecommon/publish #3`; Common is not at fault unless it also fails with the mixin config switched off)
 @fails Create Gravity `ServerConfig.reloadConfig` timing (server started before tags), the entity's `fallFlying` / blacklist tag, then Common's gate
 @from batches/r1108cge/b5_cco.qb
+@absent forge:entity_gravity (Forge attribute; the registry dump lists no attributes of Forge)
 @modset cc_only full
 > difficulty normal
 > execute in minecraft:the_end run forceload add 0 0
@@ -254,6 +255,7 @@ look with the leather backtank Air climbs back (2-3 digits, positive) and the ba
 @pass Air 300, gravity 0.08
 @fails dimension limit
 @from batches/r1108cge2/b1_full.qb passed
+@absent forge:entity_gravity (Forge attribute; the registry dump lists no attributes of Forge)
 > pbot spawn cge11 0 -60 0 minecraft:overworld survival
 sleep 6
 > data get entity cge11 Air
@@ -314,6 +316,7 @@ shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end o
 @pass cfg factor -0.8 printed, yet every Nether drop = overworld; villager 0.08
 @fails `LowGravity.dimensionAllowed`, `CreateGravityDimensionMixin`
 @from batches/r1108cge2/b2_factor_nether.qb
+@absent forge:entity_gravity (Forge attribute; the registry dump lists no attributes of Forge)
 @boot 2
 # clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
 > execute in minecraft:the_nether run forceload add -3 -3 9 21
@@ -337,6 +340,7 @@ look Nether drops = overworld (vanilla) and the Nether villager 0.08, although t
 @pass about 0.2 for every type; villager 0.016
 @fails as 09a
 @from batches/r1108cge2/b3_nether_allowed.qb passed
+@absent forge:entity_gravity (Forge attribute; the registry dump lists no attributes of Forge)
 @boot 3
 # clear from x -3: the boat is 1.375 wide, at x 0 it overlaps column -1 and wedges in the netherrack (drop 0.000)
 > execute in minecraft:the_nether run forceload add -3 -3 9 21

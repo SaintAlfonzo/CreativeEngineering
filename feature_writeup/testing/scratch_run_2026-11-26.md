@@ -215,6 +215,71 @@ log, writeups, TODO rows) after R2.
   (SQ-SCAT-08). Then the rerun list: `qrerun.py perf/runs/r1126q/rerun.txt` -> `qrun.py drive start r1126qr
   --plan-json perf/runs/r1126q/rerun.plan.json` (17 ids).
 
+### 7.3 R1 resume, reruns and R2 (main session as orchestrator, from 2026-11-26 10:50)
+
+Owner request (chat 2026-11-26 10:50): execute this run doc, R1 rest + rerun list + R2 (R2 cancellation lifted),
+subagents for judging, spread over up to 72 h. Jars: Calendar and Loot 235159e21 installed first (owner); Common and
+Compat rebuilt as 235159e21 by the same Gradle call but with no source change since ca3a3fa7b, not installed.
+
+- 10:50 `installToMods` refused on check_all FAIL spelling_docs (this doc, `armoured` fixed) and test_prefix_lint (29
+  ids in `project_pages/screenshots.md`, known since 7.1, no boot risk); installed with `-PskipChecks` (logged).
+  creativecalendar 1.0.0+235159e21.2611261028, creativeloot 1.0.0+235159e21.2611261028.
+- 10:52 RUNNER.md claimed. game_jvms.sh empty; 60 GB free. Pre-screen of the 14 remaining steps: 12 likely, the same
+  rows R1 preflight read as false positives (Chunky / tp / locate-loaded coordinates); VH dead ids left to the judge.
+- 10:54 perf session r1126q2 open (user unit `r1126q2-perf`); 10:55 drive resumed as user unit `r1126q-drive3`
+  (`--same-dir`; the first try without it exited 127), step 38 FGD 1 B; driver ETA 19:32.
+- 12:21 drive done, steps 38 to 51 (51/51), 38 rows: raw PASS 5, FAIL 6, LOOK 26, BATCH-FAULT 1 (old FGD-12m mark).
+  Step 38 (FGD) took about 10 min against up to 90 min per Chunky square: checked by judge-A. game_jvms.sh empty.
+- 12:25 judges A (s37 to s39: FGD, FTW, TIE), B (s40 to s47, s50: IP, OB, RING, SCAT, ST, SVA, TER, UC) and C (s48,
+  s49: VH) started; .qb owners as listed.
+- judge-C done (VH, s48/s49): PASS 11, BATCH-FAULT 2, FAIL 1. BF-FIX SQ-VH-07: forceload over the 256-chunk cap and
+  count boxes over 262144 blocks -> forceload split in two halves, counts narrowed to H +/-22; rerun queued. BF-FIX
+  SQ-VH-13: `uses` has no `max=` -> removed; rerun queued (iecrushing secondary not printed by rdetail, may stay LOOK).
+  SQ-VH-06c FAIL: flesh in crimson_forest 1204 / warped_forest 1905 (interior 0 / 254), the known Heap spill
+  (visceral_heap.md r1115 note).
+- judge-B done (s40 to s47, s50): PASS 8, FAIL 1, BATCH-FAULT 3, LOOK 5 owner (SQ-SVA-02 fly-by part, -04, SQ-TER-02,
+  -03, -04). BF-FIX SQ-SVA-03: y bands 40 high = 262440 blocks over the cap -> bands 39 high; rerun queued. BF-FIX
+  SQ-UC-02: bot `qa` never spawned in the step -> `pbot spawn qa` added as in SQ-UC-03; rerun queued. SQ-TIE-01
+  BATCH-FAULT, not simple: baseline perf/wgp/wgp_new (2026-10-27) predates the creativeworldgen namespace move, needs a
+  fresh baseline (real checks passed). SQ-TER-07 FAIL: `[absent mods] skipped 63 tag entry rows for absent
+  forest_ruins` (also illager_siege_weapons 84, eugene 59), the worldgen-tag keep path (`global.has.datapack`,
+  tag_helper.js) does not fire on the installed Common.
+- judge-A done (s37 to s39): PASS 5 (SQ-FTW-01, -02, -04, -05, -06), BATCH-FAULT 2. Chunky ran (3 "Task finished", 0
+  unknown command): the preinstall_probes fix works. The resumed step 38 ran only SQ-FGD-15c (SQ-FGD-12m kept its
+  first-attempt result; it is in rerun.txt). SQ-FGD-15c BATCH-FAULT, not simple: "Could not spread 24 entities", only
+  24 of 60 summoned cows tagged, so the `@e[tag=fgd15mf]` select missed the mooshrooms (FGD.qb summon/tag steps);
+  product half unjudged. SQ-TIE-01 (judged by A and B alike) BATCH-FAULT: stale wgp_new baseline. SQ-FTW-02 PASS with a
+  note: moss carpet 26 and glow berries 13 exceed the literal "each under 10" (perf.md 10.9 accepted 14).
+- 12:25 rerun r1126qr: rerun.txt 21 ids + SQ-VH-04 (captures {H1} for SQ-VH-07, pre-screen `likely var`) = 22 rows in
+  14 steps (`perf/runs/r1126q/rerun.plan.json`), pre-screen 5 likely = the known false-positive kinds; drive started
+  as user unit `r1126qr-drive` (`perf/runs/r1126q/start_rerun.sh`, env.sh), driver ETA 14:42.
+- 13:10 r1126qr done (15 steps, 22 rows); judge-R: PASS 15, FAIL 1, BATCH-FAULT 6 (all second faults after a BF-FIX,
+  not simple, no further fix). PASS: SQ-PRI-01, -03, SQ-CDFW-07, SQ-TL-09, -10, SQ-IPO-01, SQ-HTD-02, SQ-OB-05, -06,
+  SQ-STD-05 to -08, SQ-VH-04, -13. Second faults: SQ-OB-10 (no bot ob8 on the fresh boot), SQ-SHB-03 (604 600 not
+  loaded), SQ-VH-07 (bone_block 0 in the narrowed box; shell grep matches boot recipe-parse WARNs), SQ-SVA-03 (village 1
+  counts 0, villages 2 to 5 only located), SQ-UC-02 (randomtick block_ticks=0), SQ-FGD-12m (Chunky fix works, 441
+  chunks in 42 s; the group B seed has only a speck of mushroom_fields, row needs its own seed). SQ-MND-18 FAIL
+  (unproven): the potted gossypium break dropped the plant but no flower_pot (only item entity in the world); suspect
+  kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json, or the 1-block pillar row geometry.
+- 13:15 R2 planned: r2a 425 rows / 121 steps (drafts SQ-WGP-01, -02 left out), r2b 317 rows / 67 steps (drafts
+  SQ-SALT-02, -04 left out), no client rows. Pre-screen (`perf/runs/r1126q/prescreen_r2a.txt`, `prescreen_r2b.txt`):
+  r2a 38 likely on 29 rows, r2b 27 likely on 25 rows, 266 stale rows in r2b.
+- 13:20 to 13:30 R2 pre-screen fixes (fixer-P1 on WGE, PTH, SPF, SB, HH, ENGM, CC, CCO, BBQ2; fixer-P2 on the other
+  files), 12 real of 73 likely, the rest false positives (bot / tp / locate-loaded coordinates, structure and feature
+  ids outside the registry dump, prose ids, awk `{exit}`, tags set by `zpth mod`):
+  - PRE-FIX SQ-MOB-N5: {PL1}/{PL3} captured in another batch -> row locates plains and captures PL itself.
+  - PRE-FIX SQ-MOB-N6: captures PO01.. read as PO0 by qlint -> renamed POA/POB/POC.
+  - PRE-FIX SQ-MOB-N8: {S1}/{S3} from another batch -> forceload -8 -8 8 8, summon at 0 120 0.
+  - PRE-FIX SQ-HH-466: marker r465 from SQ-HH-465 (boot 1) -> SQ-HH-465 added to r2b (318 rows).
+  - PRE-FIX SQ-BM-02: forceload only in SQ-BM-01 (not planned) -> row forceloads 140 495 150 515.
+  - PRE-FIX SQ-EF-10: {RV} from SQ-EF-09 (not planned) -> row does the river locate and capture itself.
+  - PRE-FIX SQ-PS15B-02: forceload in SQ-PS15B-01 (r2a) while -02 is in r2b -> own forceload.
+  - PRE-FIX SQ-CGE-06, -11, -09a, -09b: forge:entity_gravity (attribute, not dumped) -> `@absent`.
+  - PRE-FIX SQ-HH-1546c: hearthandharvest:tilling (enchantment, not dumped) -> `@absent`.
+  - PRE-FIX SQ-MDP-10: copper cup steps for an item removed 2026-11-02 (owner) -> steps deleted; the row's
+    @commands/@pass text still names the cup (row text pass for later).
+  Re-screen: r2a 25 likely, r2b 21 likely, all of the false-positive kinds above.
+
 ## 8. Final verdicts (R1, judged 2026-11-26 10:25)
 
 R1 wound down by the owner at drive step 38 of 51 (37 steps done). Judges 1 to 4 (scratch-judge) and runner-1.
@@ -241,7 +306,7 @@ SQ-MND-18 FAIL is unproven (diagnostics added, rerun queued); SQ-FGD-15c has no 
 | SQ-ENC-04 | PASS | offers at levels 1/3/5 populated (paper, bookshelf, emerald sells), reject enchanted_book and ancient_tome both no match |
 | SQ-TL-09 | BATCH-FAULT | reclassified from LOOK: judge r1126q 2026-11-26: scratch srv has no tools/generators.json (GeneratorRunner reads it from server root); fixed by a shell copy step in GF31.qb, rerun; open look 1: lists the generators from tools/generators.json with groups (stacks among them) |
 | SQ-GSH-08 | PASS | shell lists creativecommon, creativecompat, Quark, createframed, no creativeloot; blue pane, tinted glass, tinted framed pane loot expects matched; no GlmMerge |
-| SQ-HT-02 | BATCH-FAULT | reclassified from FAIL: judge r1126q 2026-11-26: scratch srv spawn-animals=false discards summoned horses (No entity was found at item replace and both data get); HT.qb section 1 has no @@prep A: spawn-animals=true (gotchas Difficulty, spawning and mobs); section prep shared by HT-01/-03, not simple by rule 11; no line matches /has the following entity data: (?=.*Id: 10b?\b)(?=.*Amplifier: 0b)/; no line matches /Found no elements matching ActiveEffects/; open look 1: the armoured horse (first data get) has Regeneration (Id 10) amplifier 0; the second horse and the bot have none |
+| SQ-HT-02 | BATCH-FAULT | reclassified from FAIL: judge r1126q 2026-11-26: scratch srv spawn-animals=false discards summoned horses (No entity was found at item replace and both data get); HT.qb section 1 has no @@prep A: spawn-animals=true (gotchas Difficulty, spawning and mobs); section prep shared by HT-01/-03, not simple by rule 11; no line matches /has the following entity data: (?=.*Id: 10b?\b)(?=.*Amplifier: 0b)/; no line matches /Found no elements matching ActiveEffects/; open look 1: the armored horse (first data get) has Regeneration (Id 10) amplifier 0; the second horse and the bot have none |
 | SQ-IP-19 | PASS | sword/crimson on lava at -54.19, diamond block -63.0, oak planks gone; ash items not seen in the box (may burn later) |
 | SQ-IP-20 | PASS | leaves -59.625, planks -59.875 |
 | SQ-IP-21 | PASS | rocket gone, ice burned, iron survives, campfire kept |

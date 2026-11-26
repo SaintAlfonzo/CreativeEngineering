@@ -571,6 +571,9 @@ look the `on` value of each count line (the waystone stands on ground blocks, no
 sleep 10
 shell python3 -c "import json; d=json.load(open('kubejs/exported/spawns.json')); b=d['biomes']; [print(k, [s for s in b[k]['spawners'].get('creature', []) if 'villager' in s['type']]) for k in ('minecraft:plains', 'minecraft:meadow')]; t=json.dumps(d.get('tuning', {})); print('lone_villagers' in t, t[t.find('lone_villagers'):t.find('lone_villagers')+160])"
 shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/spawns.json'))['biomes']; ok=any(s['type']=='minecraft:villager' and s['weight']==1 for s in d['minecraft:plains']['spawners'].get('creature', [])); print('plains villager 1:', ok); sys.exit(0 if ok else 1)"
+> execute positioned 0 70 0 run locate biome minecraft:plains
+waitlog (nearest minecraft:plains is at|Could not find|There is no) 300
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 shell python3 -I $INST/tools/scratch_query/region_blocks.py entities @ 'villager' --box {PL1-400} {PL3-400} {PL1+400} {PL3+400} | head -12
 look villagers in the plains square outside villages (by_biome lines), none in caves; MCA conversion (MS-27, MS-28)
 
@@ -588,18 +591,18 @@ capture GROVE nearest terralith:moonlight_grove.* is at \[(-?\d+), (~|-?\d+), (-
 sleep 60
 > execute positioned 0 70 0 run locate structure minecraft:pillager_outpost
 waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find|There is no) 300
-capture PO0 nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> forceload add {PO01-48} {PO03-48} {PO01+48} {PO03+48}
+capture POA nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {POA1-48} {POA3-48} {POA1+48} {POA3+48}
 sleep 20
 > execute positioned 3000 70 0 run locate structure minecraft:pillager_outpost
 waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find|There is no) 300
-capture PO1 nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> forceload add {PO11-48} {PO13-48} {PO11+48} {PO13+48}
+capture POB nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {POB1-48} {POB3-48} {POB1+48} {POB3+48}
 sleep 20
 > execute positioned 0 70 -3000 run locate structure minecraft:pillager_outpost
 waitlog (nearest minecraft:pillager_outpost.* is at|type "?minecraft:pillager_outpost|minecraft:pillager_outpost.*timed out|Could not find|There is no) 300
-capture PO2 nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> forceload add {PO21-48} {PO23-48} {PO21+48} {PO23+48}
+capture POC nearest minecraft:pillager_outpost.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {POC1-48} {POC3-48} {POC1+48} {POC3+48}
 sleep 20
 > locate structure ancient_enchantment_temple:temple
 waitlog (nearest ancient_enchantment_temple:temple.* is at|type "?ancient_enchantment_temple:temple|ancient_enchantment_temple:temple.*timed out|Could not find|There is no) 600
@@ -618,13 +621,13 @@ expect allay_temples
 > save-all flush
 waitlog Saved the game 300
 shell python3 -I $INST/tools/scratch_query/region_blocks.py entities @ 'allay' --box {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119} | head -4
-shell for v in "{PO01} {PO03}" "{PO11} {PO13}" "{PO21} {PO23}"; do set -- $v; echo "outpost $1 $2"; python3 -I $INST/tools/scratch_query/region_blocks.py entities @ 'allay' --box $(($1-48)) $(($2-48)) $(($1+48)) $(($2+48)) | head -2; done
+shell for v in "{POA1} {POA3}" "{POB1} {POB3}" "{POC1} {POC3}"; do set -- $v; echo "outpost $1 $2"; python3 -I $INST/tools/scratch_query/region_blocks.py entities @ 'allay' --box $(($1-48)) $(($2-48)) $(($1+48)) $(($2+48)) | head -2; done
 reject first wins
 look grove creature list has minecraft:allay 3 (1-2); allays counted in the grove; an allay in at least 1 of 3 outposts; allays appear in the temple (5 min wait needs a player: client)
 > forceload remove {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119}
-> forceload remove {PO01-48} {PO03-48} {PO01+48} {PO03+48}
-> forceload remove {PO11-48} {PO13-48} {PO11+48} {PO13+48}
-> forceload remove {PO21-48} {PO23-48} {PO21+48} {PO23+48}
+> forceload remove {POA1-48} {POA3-48} {POA1+48} {POA3+48}
+> forceload remove {POB1-48} {POB3-48} {POB1+48} {POB3+48}
+> forceload remove {POC1-48} {POC3-48} {POC1+48} {POC3+48}
 > forceload remove {AT1-32} {AT3-32} {AT1+32} {AT3+32}
 
 ## SQ-MOB-N8 | End pillagers wear the copper diving gear, Overworld ones do not
@@ -640,8 +643,8 @@ sleep 2
 > execute in minecraft:the_end run data get entity @e[tag=w12end,limit=1] ArmorItems
 expect has the following entity data: \[.*copper_diving_boots.*copper_diving_helmet
 > execute in minecraft:the_end run data get entity @e[tag=w12end,limit=1] ArmorDropChances
-> forceload add {S1-8} {S3-8} {S1+8} {S3+8}
-> summon minecraft:pillager {S1} 120 {S3} {NoAI:1b,PersistenceRequired:1b,Tags:["w12ow"]}
+> forceload add -8 -8 8 8
+> summon minecraft:pillager 0 120 0 {NoAI:1b,PersistenceRequired:1b,Tags:["w12ow"]}
 sleep 2
 > data get entity @e[tag=w12ow,limit=1] ArmorItems
 reject w12ow.*copper_diving
@@ -650,7 +653,7 @@ reject w12ow.*copper_diving
 shell grep -aiE 'end_divers|getDimension' logs/latest.log | grep -iE 'error|overload' | head -3; ! grep -aiE 'end_divers' logs/latest.log | grep -qiE 'error'
 look End drop chances 0 for the three pieces; Overworld pillager ArmorItems all empty; End tower box (MS-34, MS-35) needs a player wait: client
 > execute in minecraft:the_end run forceload remove 1488 -16 1519 15
-> forceload remove {S1-8} {S3-8} {S1+8} {S3+8}
+> forceload remove -8 -8 8 8
 
 ## SQ-WGE-16 (N9)
 @group B

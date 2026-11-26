@@ -161,15 +161,17 @@ look each biome's blocks line keeps its vanilla blocks (netherrack / nylium / so
 @fails `HeapFleshTendonFeatureMixin`; a throw at `lambda$new$0` is row 8
 @from batches/r1111/bw.qb
 @reviewed 2026-11-16
-> execute in minecraft:the_nether run forceload add {H1-128} {H3-128} {H1+127} {H3+127}
+> execute in minecraft:the_nether run forceload add {H1-128} {H3-128} {H1-1} {H3+127}
+> execute in minecraft:the_nether run forceload add {H1} {H3-128} {H1+127} {H3+127}
 sleep 90
 shell grep -E "Feature placement|FleshTendon|Exception" logs/latest.log | grep -iE "bio|flesh" | head -5 | cut -c1-300; true
-> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:flesh_tendons dim=minecraft:the_nether
-> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:eyebulb dim=minecraft:the_nether
-> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:hair dim=minecraft:the_nether
-> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:blood dim=minecraft:the_nether
-> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} minecraft:bone_block dim=minecraft:the_nether
-> execute in minecraft:the_nether run forceload remove {H1-128} {H3-128} {H1+127} {H3+127}
+> cdevtest count {H1-22} 1 {H3-22} {H1+21} 126 {H3+21} biomesoplenty:flesh_tendons dim=minecraft:the_nether
+> cdevtest count {H1-22} 1 {H3-22} {H1+21} 126 {H3+21} biomesoplenty:eyebulb dim=minecraft:the_nether
+> cdevtest count {H1-22} 1 {H3-22} {H1+21} 126 {H3+21} biomesoplenty:hair dim=minecraft:the_nether
+> cdevtest count {H1-22} 1 {H3-22} {H1+21} 126 {H3+21} biomesoplenty:blood dim=minecraft:the_nether
+> cdevtest count {H1-22} 1 {H3-22} {H1+21} 126 {H3+21} minecraft:bone_block dim=minecraft:the_nether
+> execute in minecraft:the_nether run forceload remove {H1-128} {H3-128} {H1-1} {H3+127}
+> execute in minecraft:the_nether run forceload remove {H1} {H3-128} {H1+127} {H3+127}
 count verb=count block=\S+ n=[1-9] == 5
 reject \[cdevtest\] verb=\S+ done=0
 look grep empty; all five counts above 0 (checked); skipped_columns 0 on each (else the 90 s wait was short)
@@ -269,7 +271,7 @@ look boots; biomesoplenty under off; is_nether holds the 5 vanilla biomes only
 > cdevtest rdetail creativeworldgen:createcrushing/bones/
 > cdevtest rdetail creativeworldgen:iecrushing/bones/
 > cdevtest rdetail creativeworldgen:createpressing/bones/bone
-> cdevtest uses minecraft:bone max=200
+> cdevtest uses minecraft:bone
 expect verb=rdetail text=creativeworldgen:createmilling/bones/ n=2\b
 expect verb=rdetail text=creativeworldgen:createcrushing/bones/ n=2\b
 expect verb=rdetail text=creativeworldgen:iecrushing/bones/ n=2\b

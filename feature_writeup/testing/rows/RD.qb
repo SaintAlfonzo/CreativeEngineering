@@ -1041,14 +1041,7 @@ sleep 10
 > data get block {H1} {H2+1} {H3+34}
 > data get block {H1} {H2} {H3+34}
 expect has the following block data: \{(?=.*id: "minecraft:hopper")(?=.*minecraft:apple)
-# copper cup on a water source: the bot stands east of it looking west, 60 degrees down (the ray meets the water top inside the source block); /cdevtest useair as=cup is the air use
-> setblock {H1+3} {H2-1} {H3+37} minecraft:water
-> pbot spawn cup {H1+4} {H2} {H3+37} minecraft:overworld survival
-> tp cup {H1+4} {H2} {H3+37} 90 60
-> pbot hold cup miners_delight:copper_cup
-> cdevtest useair as=cup hand=both
-> data get entity cup SelectedItem
-expect id: "miners_delight:water_cup"
+# copper cup part removed (r1126q R2 prescreen, 2026-11-26): Miner's cups were dropped on 2026-11-02 (owner), so miners_delight:copper_cup does not exist
 look feasts: 4 servings each into the right container (bowl / plate ids above; a "needs a X" refusal means the container is not a bowl: BATCH-FAULT, rerun with that item), the meatloaf block left as its leftover state in the first zcount line, its break drops only the leftover; sticky basket: apples in the hopper below (the basket collected them; the hopper pulls them within about 1 s, so the basket line may already be empty); copper cup on a cow (milk cup) and on a fish (nothing) need an entity use: CQ-MND-01
 
 ## SQ-MDP-11 | Miner's haste / mining fatigue brews

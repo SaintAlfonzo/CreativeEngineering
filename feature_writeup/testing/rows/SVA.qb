@@ -78,19 +78,20 @@ waitlog nearest skyvillages:skyvillage is at|type "?skyvillages:skyvillage 330
 capture SVL nearest skyvillages:skyvillage is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {SVL1} 200 {SVL3}
 sleep 25
-# 81 x 81 around the village in four y bands (the box limit is 262144 blocks)
-> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 139 {SVL3+40} brewinandchewin:keg
-> cdevtest count {SVL1-40} 140 {SVL3-40} {SVL1+40} 179 {SVL3+40} brewinandchewin:keg
-> cdevtest count {SVL1-40} 180 {SVL3-40} {SVL1+40} 219 {SVL3+40} brewinandchewin:keg
-> cdevtest count {SVL1-40} 220 {SVL3-40} {SVL1+40} 250 {SVL3+40} brewinandchewin:keg
-> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 139 {SVL3+40} vinery:wine_press
-> cdevtest count {SVL1-40} 140 {SVL3-40} {SVL1+40} 179 {SVL3+40} vinery:wine_press
-> cdevtest count {SVL1-40} 180 {SVL3-40} {SVL1+40} 219 {SVL3+40} vinery:wine_press
-> cdevtest count {SVL1-40} 220 {SVL3-40} {SVL1+40} 250 {SVL3+40} vinery:wine_press
-> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 139 {SVL3+40} farmersdelight:rich_soil_farmland
-> cdevtest count {SVL1-40} 140 {SVL3-40} {SVL1+40} 179 {SVL3+40} farmersdelight:rich_soil_farmland
-> cdevtest count {SVL1-40} 180 {SVL3-40} {SVL1+40} 219 {SVL3+40} farmersdelight:rich_soil_farmland
-> cdevtest count {SVL1-40} 220 {SVL3-40} {SVL1+40} 250 {SVL3+40} farmersdelight:rich_soil_farmland
+# 81 x 81 around the village in four y bands (the box limit is 262144 blocks: 81 x 81 x 39 = 255879)
+# r1126q BF-FIX (2026-11-26): bands were 40 high (262440 blocks, over the limit); now 39 high
+> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 138 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 139 {SVL3-40} {SVL1+40} 177 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 178 {SVL3-40} {SVL1+40} 216 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 217 {SVL3-40} {SVL1+40} 250 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 138 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 139 {SVL3-40} {SVL1+40} 177 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 178 {SVL3-40} {SVL1+40} 216 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 217 {SVL3-40} {SVL1+40} 250 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 138 {SVL3+40} farmersdelight:rich_soil_farmland
+> cdevtest count {SVL1-40} 139 {SVL3-40} {SVL1+40} 177 {SVL3+40} farmersdelight:rich_soil_farmland
+> cdevtest count {SVL1-40} 178 {SVL3-40} {SVL1+40} 216 {SVL3+40} farmersdelight:rich_soil_farmland
+> cdevtest count {SVL1-40} 217 {SVL3-40} {SVL1+40} 250 {SVL3+40} farmersdelight:rich_soil_farmland
 reject verb=\S+ .*done=0
 > execute positioned 3000 100 3000 run locate structure skyvillages:skyvillage
 > execute positioned -3000 100 3000 run locate structure skyvillages:skyvillage

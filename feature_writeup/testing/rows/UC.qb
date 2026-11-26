@@ -31,6 +31,9 @@ look the "Loaded N block growths" count is 11 higher than a pre-10-28 boot (perf
 @fails Nothing grows: run `/reload` and repeat; still nothing: check the IW fast path (SQ-IWF-01) and `block_growth_blacklist`
 @from batches/r1031/b1_gameplay.qb
 @reviewed 2026-11-16
+# r1126q BF-FIX (2026-11-26): own bot spawn (the tp named qa, which no earlier row of the step spawned: "No entity was found", box unloaded, block_ticks=0); same lines as SQ-UC-03
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
 > execute positioned 0 70 0 run locate biome minecraft:warm_ocean
 waitlog nearest minecraft:warm_ocean is at 300
 capture WO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
