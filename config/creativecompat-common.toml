@@ -10,6 +10,13 @@
 	#Range: 0.0 ~ 1.0
 	tintStrength = 1.0
 
+#Nether fog color (client only; the server ignores this section).
+[nether_fog]
+	#On: one deep red fog and sky color (#3F0905) in every Nether biome, also in Distant Horizons'
+	#far fog. Not in lava, water or powder snow, nor with Blindness or Darkness.
+	#Off: vanilla, each Nether biome's own fog color. Takes effect at once.
+	enabled = true
+
 #Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,
 #as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave
 #vine or kelp stop it growing longer (1.20's behavior).

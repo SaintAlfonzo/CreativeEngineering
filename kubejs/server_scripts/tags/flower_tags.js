@@ -1,10 +1,10 @@
 // requires: creativecompat
-// Creative Compat: the flower tags' item side. Wild plants, Botania special flowers, the flower crown and the azalea
+// Pack script: moved out of Creative Compat (creative-compat-publish #13). The flower tags' item side. Wild plants, Botania special flowers, the flower crown and the azalea
 // leaf piles leave #minecraft:flowers, #minecraft:small_flowers and #minecraft:tall_flowers (bees and hummingbirds,
 // feature_writeup/breeding_audit.md). Tags that nest a flower tag for another reason (floating items, planter boxes,
 // flower boxes) keep what leaves, added to them straight. The members are read and the removal made in this one
-// handler, so the order is inside this file. The block side stays in kubejs/server_scripts/tags/animal_tags.js
-// (Creative Worldgen's ground match and chalk tags).
+// handler, so the order is inside this file. The block side is in animal_tags.js (Creative Worldgen's ground match
+// and chalk tags).
 
 ServerEvents.tags('item', e => {
 	var t = global.tags

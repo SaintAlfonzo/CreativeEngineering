@@ -54,8 +54,9 @@ plus the features moved from Creative Common and Raspberry Pie in wave 2 (sectio
   migration and the pass-through table rewrite were dropped before the first public release (PR-CP-17; owner,
   2026-11-22). The one carry-over left (2026-11-23, PR-CP-11): the four old `[jei]` page switches
   (`seasoningCategory`, `canCategories`, `potionBucketCategory`, `tippedArrowCategory`) are read once into `[jei]
-  pagesOff` and removed (`JeiPageKeys`, before the config is registered). Top-level tables in the spec (23, from
-  `CompatConfig` 2026-11-24; `[giant_squid]` removed, ruling W17): `[moss]`, `[vine_shearing]`, `[monster_box]`, `[trash_slot]`, `[cats]`,
+  pagesOff` and removed (`JeiPageKeys`, before the config is registered). Top-level tables in the spec (24, from
+  `CompatConfig` 2026-11-25; `[giant_squid]` removed, ruling W17): `[moss]`, `[nether_fog]` (`enabled`, default false =
+  vanilla; the pack sets true), `[vine_shearing]`, `[monster_box]`, `[trash_slot]`, `[cats]`,
   `[golems]`, `[boat_friction]`, `[paintings]`, `[shrapnel]`, `[surface]` (subtables `speed`, `sticky`, `camouflage`,
   `sinking`, `passthrough`, `wthit`), `[vein_undo]`, `[jei]`, `[gui_title]`, `[toasts]`, `[screens]`, `[tooltips]`,
   `[coaster]`, `[wthit]` (`state_lines`), `[immersive_portals]` (`fog`), `[portalgun]`, `[corpses]`, `[debug]`
@@ -159,8 +160,9 @@ plus the features moved from Creative Common and Raspberry Pie in wave 2 (sectio
   is built at load from the installed jars, `paintings/PaintingPack`, 6.2), the monster box reward loot table. The
   weathered cardboard box left for Creative Engineering on 2026-11-24 (ruling W16, `creative-compat-publish #8`;
   [creative_engineering.md](creative_engineering.md) 4.2).
-- **Scripts:** startup `kubejs_startup/creativecompat/` (`item_physics.js`); server `kubejs/data/creativecompat/kubejs/` (flowers, Botany Pots, physics tags, and the Compat rows of curios, block
-  and misc tags). The pack balance (Starter Kit, feature ports, misc mods, dead recipe removal, coin, feature-port tags)
+- **Scripts:** startup `kubejs_startup/creativecompat/` (`item_physics.js`); server `kubejs/data/creativecompat/kubejs/` (physics tags, and the Compat rows of curios, block
+  and misc tags). Botany Pots growth (`botany_pots.js`), the flower recipes (`flowers.js`) and the flower tags' item side
+  (`flower_tags.js`) moved to the pack's `kubejs/server_scripts/` on 2026-11-25 (`creative-compat-publish #13`). The pack balance (Starter Kit, feature ports, misc mods, dead recipe removal, coin, feature-port tags)
   moved to the pack's `kubejs/server_scripts/` on 2026-11-22 (publish_readiness.md D1: Compat publishes compatibility
   fixes only); recipe ids keep the `creativecompat` namespace. The Botany Pots crop recipes and the two dimension tags
   (`kubejs/data/creativecompat/recipes/`, `tags/`, written by `tools/gen_botany_crops.py`) are copied into the jar since
@@ -208,6 +210,19 @@ constructor. `tools/design_rules_audit.py sideways` (DR-C7) checks it.
   built-in pack is set up.
 - TrinketCaseRules, its 4 mixins and `[botania]` (Creative Magic, wave 6); salt (Creative Delight, wave 4);
   `layered_obsidian` (Engineering); Botania tooltips; the Vinery flower box tooltip (Creative Brewing).
+- Pack tuning moved out of the jar (2026-11-25, `creative-compat-publish #13`, owner ruling 2026-11-25): Botany Pots
+  growth x8 / flowers x2, fertilizer removal, Rich and Fertile soil speeds and the removed vine and root crops
+  (`kubejs/server_scripts/other/botany_pots.js`); Bushier Flowers bushes, the Rich Hanging Pot recipe and the removed
+  Floral Enchantment large pot (`other/flowers.js`); wild plants, Botania special flowers, the flower crown and azalea
+  piles out of the flower tags (`tags/flower_tags.js`, next to `animal_tags.js`). Recipe ids keep the `creativecompat`
+  namespace. The Nether fog color stays Java behind `[nether_fog] enabled` (default false); the pack config and its
+  `configs_edited/` copy set it true. Pack behavior unchanged.
+- Audit leftovers for the owner (not moved, `#13`): Distant Horizons Nether rules (no generation, 32-chunk LOD radius and
+  edge fog; `compat/DhDimensions`, hard-coded, no switch); the Curios hands and face slot tags (`tags/curiostags.js`:
+  the slots are Creative Common's IMC, so the tags may belong with the jars); `misctags.js` chalk out of the dye tags,
+  white-only blackboard and the cleared CB Microblocks tags; the 36 `[mixins]` keys and other sections, all on by
+  default (a publish-neutral default would flip player-visible behavior unless the pack config sets each). Distant
+  Horizons' cloud height follows vanilla's and carries no pack value, so it stays.
 - Open question: the archery arrow tooltip list moved with Misc Mods; it may belong to Equipment.
 
 ## 4. Tests
@@ -228,10 +243,18 @@ Scratch run r1123cx (2026-11-23, [scratch_run_2026-11-23.md](testing/scratch_run
 Box move and squid (2026-11-24, `creative-compat-publish #8`, `#9`): SQ-CMP-09s and CQ-CMP-09 superseded by SQ-CEN-09 and
 CQ-CEN-02 (the box is Creative Engineering's, [creative_engineering.md](creative_engineering.md) 4.2); squid and whales
 SQ-MT-04 to -06 ([mob_block_tweaks.md](mob_block_tweaks.md) 2.10; SQ-PSM-08 superseded).
+Neutral jar and mixin helper (2026-11-25, queue section 9, `creative-compat-publish #13`, `#25`): SQ-CMP-39 (moved
+scripts still apply), -40 (no mixin-package helper class, `[nether_fog]` written), CQ-CMP-41 (fog on and off), -42
+(Additional Items opens).
+
 
 Wave 2 carve (2026-11-24, queue): SQ-MELT-21 and -22 (carry-over, merge and new file), -23 (new tag namespace), -24 (End no fire), CQ-MELT-02 (tooltip); SQ-GSH-10 to -12; SQ-SNP-06; SQ-CGE-17, -18; CQ-RPI-94 (fov carry-over), CQ-RPI-95 (Fleet-Footed fix and fov), SQ-RPI-96 (Raspberry Pie alone). Headless: `tools/test_melting.sh` 34/34.
 
 ## 5. History
+- 2026-11-25: `CorpseAdditionalContainerMixin$Loose` (a nested class in the mixin package, IllegalClassLoadError on the
+  first Additional Items menu) moved to `corpse/LooseAdditionalItems`; the other mixins hold no nested or anonymous class
+  (`creative-compat-publish #25`). Pack tuning to the pack folder and the `[nether_fog]` switch (`#13`, section 3);
+  mods.toml description and URLs.
 
 - 2026-11-01: carved (wave 3). Creative Common 1.1.06 loses the classes, mixins, sections and resources; Calendar,
   Devtools, Creative Delight and Creative Brewing require `creativecompat`. Added ModList gates that were missing for

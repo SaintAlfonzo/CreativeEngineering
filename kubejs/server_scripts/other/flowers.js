@@ -1,5 +1,7 @@
 // requires: creativecompat
-// Creative Compat.
+// Pack script: moved out of Creative Compat (creative-compat-publish #13: pack tuning lives in the pack folder).
+// Recipe ids keep the creativecompat namespace (forPack) so nothing already saved changes.
+// Bushier Flowers bushes from loose flowers, the Rich Hanging Pot recipe, Floral Enchantment's large pot removed.
 ServerEvents.recipes(e => {
 	console.log('flowers starting')
 

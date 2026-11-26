@@ -1,5 +1,7 @@
 // requires: creativecompat
 // requires: botanypots
+// Pack script: moved out of Creative Compat (creative-compat-publish #13: pack tuning lives in the pack folder).
+// Recipe ids keep the creativecompat namespace (forPack) so nothing already saved changes.
 // Botany Pots growth (feature_writeup/botany_pots.md; plan_farming_cooking_batch.md A15 / C5, owner Q15 to Q17).
 // Every pot crop grows BOTANY_GROWTH_MULT times slower, flowers (seed in #minecraft:flowers, wild crops excluded)
 // BOTANY_FLOWER_MULT times slower. Soils are untouched, so their growthModifier still stacks on top. Pot fertilizers (bone meal is the

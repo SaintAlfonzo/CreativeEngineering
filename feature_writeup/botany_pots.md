@@ -16,7 +16,7 @@ owner decisions Q15 to Q17 and Q24. TODO rows `largecontent/mod-additions #35`, 
 
 | Part | Status | Files | Knobs |
 |---|---|---|---|
-| Growth x8 crops, x2 flowers, fertilizers removed | BUILT 2026-11-07, not tested | `kubejs/data/creativecompat/kubejs/other/botany_pots.js`, `global.NCH.scaleRecipeInt`, `i.t_wild_crops` (Creative Common) | `global.BOTANY_GROWTH_MULT` (8), `global.BOTANY_FLOWER_MULT` (2), top of the script |
+| Growth x8 crops, x2 flowers, fertilizers removed | BUILT 2026-11-07, not tested | `kubejs/server_scripts/other/botany_pots.js`, `global.NCH.scaleRecipeInt`, `i.t_wild_crops` (Creative Common) | `global.BOTANY_GROWTH_MULT` (8), `global.BOTANY_FLOWER_MULT` (2), top of the script |
 | Lemon tree shows the lower half | BUILT 2026-11-07, not tested | `kubejs/data/fruitsdelight/recipes/botanypots/lemon.json` | none |
 | Pot tooltip | BUILT 2026-11-07, not tested | `kubejs/client_scripts/tooltips.js` ([tooltips.md](tooltips.md) TT-43) | none |
 | Better soils: Rich Soil and Rich Farmland x1.10, Fertile Soil x1.20, no yield; soil tooltips | BUILT 2026-11-14, Creative Common jar built not installed; SQ-SY-21, CQ-SY-22 | `botany_pots.js`, `NCH.setRecipeNumber` / `NCH.botanySoil` (Creative Common), `tooltips.js` (TT-44) | `global.BOTANY_SOIL_SPEED` |
@@ -104,7 +104,7 @@ jars are covered and JEI shows the new times.
 
 ## 5. File map
 
-- [botany_pots.js](../kubejs/data/creativecompat/kubejs/other/botany_pots.js)
+- [botany_pots.js](../kubejs/server_scripts/other/botany_pots.js)
 - [lemon.json](../kubejs/data/fruitsdelight/recipes/botanypots/lemon.json)
 - `scaleRecipeInt` in [neoCraftHelper.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js)
 - tooltip line in [tooltips.js](../kubejs/client_scripts/tooltips.js)
@@ -113,7 +113,7 @@ jars are covered and JEI shows the new times.
 
 ## 6. Offline checks
 
-- `node --check kubejs/data/creativecompat/kubejs/other/botany_pots.js`
+- `node --check kubejs/server_scripts/other/botany_pots.js`
 - Pot crop count: `grep -c ',botanypots:crop,' kubejs/exported/recipes/all.csv` (after `/dumpall`); 214 expected after the 41.
 - `python3 tools/gen_botany_crops.py --check` (stale outputs, invalid rows, schema against the loaded crops) and
   `--report` (plantables still without a pot crop; 5 water plants on 2026-11-21).

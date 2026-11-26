@@ -1431,3 +1431,60 @@ sleep 5
 waitlog SNOW_STAYED 20
 shell grep -cE "ClassCastException|NoClassDefFoundError" logs/latest.log; true
 look no cast errors; snow layer stayed; first shell line 0 (no Snow! Real Magic jar)
+
+@@section 9
+@@title SQ-CMP Neutral jar: pack tuning in the pack folder, Nether fog switch, mixin helper moved, 2026-11-25 ([creative_compat.md](../creative_compat.md) 3, TODO `creative-compat-publish #13`, `#25`)
+@@date 2026-11-25
+@@jars creativecommon creativecompat
+@@sources feature_writeup/creative_compat.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/compat/NetherFogColour.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/corpse/LooseAdditionalItems.java kubejs/server_scripts/other/botany_pots.js kubejs/server_scripts/other/flowers.js kubejs/server_scripts/tags/flower_tags.js
+@@text
+@@text Full pack with the 2026-11-25 Compat jar (build 94c18b). Botany Pots growth, the flowers.js recipes and the flower
+@@text tag item side run from the pack's `kubejs/server_scripts/` now; the pack's results must be the same as before. The
+@@text pack config has `[nether_fog] enabled = true`; the jar default is false (vanilla).
+@@text
+@@table
+## SQ-CMP-39 | Moved pack tuning still applies: pot growth, flower recipes, flower tags
+@group A
+@commands Boot 1; grep the KubeJS server log for the moved scripts; read the moved recipes and the flower tags; list the jar
+@pass `[botany_pots] growthTicks scaled on` and `[botany_pots] 3 soils set` once each (Immersive Weathering in the pack), `flowers done` once; no script error; `creativecompat:shapeless/grown_allium` and `creativecompat:botany_soil/fertile_soil` present; no recipe makes `floralench:large_pot`; `minecraft:flowers` holds no `wild_` item, no flower crown and no leaf pile; the jar has no `data/creativecompat/kubejs/other/` and no `tags/flower_tags.js`
+@fails a log line twice: the old jar is still in mods/ next to the pack scripts; a log line missing: a moved script read a name from Compat's script scope; wild plants in the flower tag: flower_tags.js did not run from the pack folder
+@boot 1
+kjsreject Error occurred while handling event
+shell grep -cE "\[botany_pots\] growthTicks scaled on|\[botany_pots\] [0-9]+ soils set|flowers done" logs/kubejs/server.log; true
+> cdevtest rdetail creativecompat:shapeless/grown_allium
+expect verb=rdetail id=creativecompat:shapeless/grown_allium serializer=
+> cdevtest rdetail creativecompat:botany_soil/fertile_soil
+expect verb=rdetail id=creativecompat:botany_soil/fertile_soil serializer=
+> cdevtest makes floralench:large_pot
+expect verb=makes item=floralench:large_pot n=0\b
+> cdevtest tag item minecraft:flowers
+expect verb=tag kind=item tag=minecraft:flowers n=\d+
+reject verb=tag kind=item tag=minecraft:flowers n=\d+ ids=.*\b[a-z_]+:wild_
+reject verb=tag kind=item tag=minecraft:flowers n=\d+ ids=.*(flower_crown|leaf_pile)
+shell unzip -Z1 mods/creativecompat-1.0.0.jar | grep -cE "data/creativecompat/kubejs/other/|tags/flower_tags\.js"; true
+look 3 script lines (one each); the jar line prints 0
+
+## SQ-CMP-40 | No mixin-package helper class; the Nether fog key is written
+@group A
+@commands Boot 1; list the jar's mixin package; read `[nether_fog]` in `config/creativecompat-common.toml`
+@pass no `mixin/...$...` class in the jar; `com/SaintAlfonzo/creativecompat/corpse/LooseAdditionalItems.class` present; `[nether_fog] enabled = true` (the pack's value); no `IllegalClassLoadError` in the log
+@fails a nested or anonymous class back in a mixin (agent note mixin-package-helpers); `enabled = false`: the pack config lost its value
+@boot 1
+shell unzip -Z1 mods/creativecompat-1.0.0.jar | grep -c 'mixin/.*\$'; unzip -Z1 mods/creativecompat-1.0.0.jar | grep -c "corpse/LooseAdditionalItems.class"; true
+shell awk '/^\[nether_fog\]/{m=1;next} /^\[/{m=0} m && /enabled/' config/creativecompat-common.toml
+bootreject IllegalClassLoadError
+look first line 0, second 1; `enabled = true`
+
+## CQ-CMP-41 | Nether fog: one red color with the pack's setting on, each biome's own with it off
+@group client
+@commands Creative client, pack config; `/execute in minecraft:the_nether run tp @s 0 70 0`, then a warped forest (`/locate biome minecraft:warped_forest`, tp there); screenshot each; set `[nether_fog] enabled = false` in `config/creativecompat-common.toml` (Forge reloads the file; restart the client if it does not), screenshot the warped forest again
+@pass LOOK: with it on, both places have the same deep red fog and sky (#3F0905); with it off the warped forest shows its own teal-blue fog, as vanilla
+@fails warped forest red with it off: the switch is not read (`CompatConfig.NETHER_FOG`); teal with it on: the pack config lacks `[nether_fog] enabled = true`
+@draft no batch holds this row yet; needs a client
+
+## CQ-CMP-42 | Corpse Additional Items opens without IllegalClassLoadError
+@group client
+@commands Survival client with Corpse and Curios; carry more items than the corpse sections hold plus a modded drop that goes to Additional Items; die; open the corpse and go to the Additional Items page; take one item; close
+@pass the page opens and shows only the items the sections do not show; no `IllegalClassLoadError` or `LooseAdditionalItems` error in `logs/latest.log` (client and the integrated server)
+@fails `IllegalClassLoadError ... CorpseAdditionalContainerMixin$Loose`: an old jar in mods/; the page shows section items: the filtered view was not swapped in
+@draft no batch holds this row yet; needs a client

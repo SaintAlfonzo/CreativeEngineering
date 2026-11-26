@@ -20,6 +20,7 @@ public final class CompatConfig {
 
 	public static final ForgeConfigSpec SPEC;
 	public static final Moss MOSS;
+	public static final NetherFog NETHER_FOG;
 	public static final VineShearing VINE_SHEARING;
 	public static final MonsterBox MONSTER_BOX;
 	public static final TrashSlot TRASH_SLOT;
@@ -52,6 +53,8 @@ public final class CompatConfig {
 	static {
 		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 		MOSS = new Moss(builder);
+		// one Nether fog color (compat/NetherFogColour; creative-compat-publish #13: vanilla by default)
+		NETHER_FOG = new NetherFog(builder);
 		VINE_SHEARING = new VineShearing(builder);
 		MONSTER_BOX = new MonsterBox(builder);
 		TRASH_SLOT = new TrashSlot(builder);
@@ -111,6 +114,23 @@ public final class CompatConfig {
 			).defineInRange("tintStrength", 1.0, 0.0, 1.0);
 
 			b.pop(); // moss
+		}
+	}
+
+	/** One fog color for the whole Nether ({@code compat.NetherFogColour}). Client side only; off = vanilla. */
+	public static final class NetherFog {
+		public final ForgeConfigSpec.BooleanValue enabled;
+
+		private NetherFog(ForgeConfigSpec.Builder b) {
+			b.comment("Nether fog color (client only; the server ignores this section).").push("nether_fog");
+
+			enabled = b.comment(
+					"On: one deep red fog and sky color (#3F0905) in every Nether biome, also in Distant Horizons'",
+					"far fog. Not in lava, water or powder snow, nor with Blindness or Darkness.",
+					"Off: vanilla, each Nether biome's own fog color. Takes effect at once."
+			).define("enabled", false);
+
+			b.pop(); // nether_fog
 		}
 	}
 

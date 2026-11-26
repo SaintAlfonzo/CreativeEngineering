@@ -3,7 +3,7 @@
 // Bees breed with items in #minecraft:flowers and pollinate blocks in the block tag #minecraft:flowers; the
 // hummingbird eats the item tag. Rules here:
 //  - no wild plant breeds bees or feeds hummingbirds (every item whose path starts with wild_ leaves the item tags;
-//    that item step is Creative Compat's flower_tags.js);
+//    that item step is flower_tags.js);
 //  - only wild onions, carrots and potatoes stay pollinable (block tag); every other wild plant block leaves it;
 //  - Botania special flowers (functional flowers, chibis) do not breed bees; Botania's own mixin still lets bees
 //    pollinate them; shiny flowers were never in a tag and stay out;
@@ -28,7 +28,7 @@
 
 	// Block tags that nest a flower tag for another reason (ground match, chalk) keep the removed entries, added to
 	// them straight. The item side of this (the removal from the flower item tags, the floating, planter box and
-	// flower box tags) is Creative Compat's kubejs/data/creativecompat/kubejs/tags/flower_tags.js.
+	// flower box tags) is flower_tags.js, next to this file.
 	function keep(e, pairs) {
 		pairs.forEach(function (p) { if (global.has(p[0]) && p[1].length) t.add(e, p[0], p[1]) })
 	}
