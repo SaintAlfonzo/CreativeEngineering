@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "yuushya:cube_0"
+  },
+  "result": "yuushya:cube_7",
+  "count": 1
+}

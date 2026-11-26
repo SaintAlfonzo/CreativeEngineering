@@ -38,7 +38,7 @@ overlay inside model blocks).
 | R3 | "drop anything unused" (render cache) | premise | Keep the cache (it renders Item Blocks); drop only code, properties and keys nothing references. | 2026-11-25 | AskUserQuestion 2026-11-25 |
 | R4 | "drop anything unused" (3 unused textures) | clear after preview | Drop `blueprint`, `pos_trans_tool`, `tool_bundle`; update unused_textures.md when the fork is installed. | 2026-11-25 | AskUserQuestion 2026-11-25 (sheet shown) |
 | R5 | Upstream recipes (report D5) | open | Keep upstream: Item Block x8, Color Picker, `cube_0`, 31 stonecutter primitives, converted to 1.19.2. | 2026-11-25 | AskUserQuestion 2026-11-25 |
-| R6 | Primitives (chibi and anatomy parts) | open | Port all 34. | 2026-11-25 | AskUserQuestion 2026-11-25 |
+| R6 | Primitives (chibi and anatomy parts) | open | Port all of them (32 in the 2.4.1 registry; first counted as 34). | 2026-11-25 | AskUserQuestion 2026-11-25 |
 | R7 | "fix all the upstream bugs" | clear | B1 to B4 fixed (section 3). | 2026-11-25 | chat 2026-11-25 |
 | R8 | Folder and jar name (report D3) | clear | `development/backportedYuushyaModelling`, jar `backportedYuushyaModelling-2.4.1-ce-19.2-NN.jar`. | 2026-11-25 | agent default, unconfirmed |
 | R9 | New item names (report D6) | clear | Title case through the names.md audit only, like the 2 existing Yuushya rows. | 2026-11-25 | agent default, unconfirmed |
@@ -73,7 +73,7 @@ out of the source set until B).
 | A2 | Network: `SimpleChannel` `yuushya_modelling:main`, block and item packets, `UpdateAOPacket`, `ReloadModelPacket`; text packets wait for B. Protocol version string bumped from 2.2's so a 2.2 client is refused cleanly. | `network/` |
 | A3 | Math: JOML -> `com.mojang.math` (`Vector3f`, `Vector4f`, `Quaternion`, `Matrix4f`, `Vector3f.YP.rotationDegrees`); `Vector3d` -> `com.mojang.math.Vector3d` as in 2.2's `TransformData`. NBT layout unchanged (`ShowPos`, `ShowRotation`, `ShowScales`, `BlockState`, `isShown`, `ControlSlot`). | 24 files, mostly `utils/YuushyaUtils`, models, renderers |
 | A4 | Models and rendering: `ShowBlockModel` / `NeoShowBlockModel`, `ItemBlockModel` / `NeoItemBlockModel` (`UnbakedModel` 1.19.2 signatures from 2.2), `ModelEvent.ModifyBakingResult` wrapping, `getRenderPasses` for items, BE renderers, `CustomRenderInstance` and the cached pipeline (`client/anvilcraft/rendering/`, `LevelRendererMixin`, `MinecraftMixin`: 1.19.2 `renderLevel` and `updateLevelInEngines` targets). Drop `ByteBufferBuilder`. **B2 fix** here. | `client/`, `blockentity/*/…Render`, `mixin/` |
-| A5 | Items: tools (unchanged behavior), `ColorPickerItem`, `HistoryItem` + `HistoryMenu`, 34 primitives (stack 16, rare), `GetBlockStateItem`, `YuushyaDebugStickItem`, Destroy item also on Item Blocks. R10 check of the history list. | `item/`, `gui/history/` |
+| A5 | Items: tools (unchanged behavior), `ColorPickerItem`, `HistoryItem` + `HistoryMenu`, 32 primitives (stack 16, rare), `GetBlockStateItem`, `YuushyaDebugStickItem`, Destroy item also on Item Blocks. R10 check of the history list. | `item/`, `gui/history/` |
 | A6 | Screens (the bulk, about 7k lines): `GuiGraphics` -> `PoseStack` + `GuiComponent`; `Button.builder` / `Tooltip` -> 1.19.2 `Button` with `OnTooltip`; `AbstractEngraveScreen` / `EngraveScreen`, `ShowBlockScreen` (shape cycle, Fine Tune and Input modes, face count, copy), `ItemBlockScreen` (color, brightness, AO, full-block AO, mirror, custom size, pre-apply), `HistoryScreen`, widgets (`ColorWidget`, sliders, icon lists, transform components). | `gui/` (not `gui/textblock/`, not text widgets) |
 | A7 | Commands and events: `/yuushya_reload_model reload all\|blocks\|items` (texts in B), `ClientEvent`, `GuiOverlayEvent`, `RenderInsideEvent`. | `command/`, `event/` |
 | A8 | Resources: assets from the 2.4.1 jar minus the 3 dropped textures (R4) and minus Text Block assets; lang without `cube_12` (B4); `pack.mcmeta` format 9; access transformer rebuilt for 1.19.2 (only entries phase A uses); mixin config with `BlockBehaviourMixin` in the common list (**B3 fix**). | `src/main/resources/` |
@@ -89,7 +89,9 @@ out of the source set until B).
 | B1 1.21 data in the 1.20.1 jar | A9 conversion | YMB-10 |
 | B2 item model cache keyed by `ItemStack` identity, never cleared | Key by the transform-data tag's string form (or its hash plus equality on the tag), LRU-bound (256 entries), clear on resource reload (`RegisterClientReloadListenersEvent`); `HashMap` -> concurrent map in `NeoShowBlockModel` | YMB-07 |
 | B3 full-block flag client-only | `BlockBehaviourMixin` to the common mixin list; collision and suffocation agree on a dedicated server | YMB-08 |
-| B4 `cube_12` lang key without an item | Removed from all 4 lang files | none (lang lint) |
+| B4 `cube_12` lang key without an item | Removed from all 4 lang files, with the 2.2 leftovers `modelframe` and `mixedblock` (block keys, no block) | `tools/yuushya_data_check.py` |
+| B5 block and item color handlers never registered (instance methods in an `@EventBusSubscriber` class): tinted blocks untinted in Entity Blocks (found in A4) | Static handlers, as in 2.2.0 | YMB-01 (grass or leaves layer shows its tint) |
+| B6 `gui.showBlockScreen.workshop.save_error` used by the Entity and Item Block screens, in no lang file (found in A8) | en_us key added | `tools/yuushya_data_check.py` |
 
 ## 4. Phase B: Text Block
 
@@ -160,5 +162,19 @@ the look-checks.
   hovered recipe's item tooltip and scrolls (upstream's four-argument `mouseScrolled` overrode nothing);
   CycleButton and slider tooltips drawn by the screens (1.19.2 draws `TooltipAccessor` tooltips only in options
   screens); mirror rotation uses `Quaternion.fromXYZ` and JOML's XYZ Euler formula. Check fix: `spelling_docs` on
-  yuushya_modelling.md: the upstream item names "Modelling Chisel" / "Modelling GUI Terminal" added to
+  yuushya_modelling.md: the upstream names of the Chisel and the GUI Terminal items added to
   `us_spelling.py` PROTECT and the doc line reflowed so the name is not split across lines.
+- 2026-11-25: A8 to A10 built and A12 docs (queue rows wait for the look-check A11). A8: 2.4.1 assets copied (one
+  `sources.csv` row, plain upstream copies) without `blueprint`, `pos_trans_tool`, `tool_bundle` (R4), the Text Block
+  blockstate, item model and `abandon_textblock` sprite, and the guidebook model and sprite (no item since 2.4 dropped
+  the Patchouli book: unused, same rule as R4); `pack.png` as the mod logo. Lang: `cube_12` (B4) and the 2.2
+  leftovers `modelframe` / `mixedblock` removed, Text Block keys out until B5 except `gui.textBlockScreen.block` /
+  `.item` (the Item Block screen uses them), missing `workshop.save_error` added (B6); B5 is A4's color handler fix.
+  A9: 52 recipes to `recipes/` (results `{"item": ...}`, stonecutting `"result"` + `"count"`), 2 loot tables to
+  `loot_tables/blocks/` (`"type": "minecraft:block"` added). Gold rule: Shimmering Pearl keeps `minecraft:gold_block`
+  and Cube (Full Block) `minecraft:gold_nugget`, both caught by `rose_gold_interchange.js` (not gold-only outputs).
+  A10: `tools/yuushya_data_check.py` via `tools/test_yuushya_data.sh` (check_all picks it up), build passes,
+  `installToMods` (`-PskipChecks`: the gate failed only on the other track's `feature_ports.js` dated comment and two
+  `tools/scratch_query/` tab-indent files), 2.2.0 moved to the project's `jar_archive/displaced/`, the `server_mods/`
+  copy replaced by hand (`dump_server_mods.py` stops on four owner jars without mod_sides rows). `IN_TREE_MODS` row
+  required. `/dumpall` and the generators wait for the game.

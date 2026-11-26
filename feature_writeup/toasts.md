@@ -54,7 +54,7 @@ Found 2026-10-19 by scanning vanilla 1.19.2 and every jar in `mods/` for classes
 | `ClientAdvancements$LexiconToast` | Patchouli | Book entry unlocked by an advancement | **hidden** (`advancement`); also dead without advancements |
 | `RecipeToast` | vanilla | Recipe unlocked | shown, but effectively never fires: unlocks come from advancements |
 | `SystemToast` | vanilla | Narrator toggled (Ctrl+B), world backup, world-gen settings import, pack load / copy failure, world access failure, insecure server, chat preview, periodic notifications | shown |
-| `SystemToast` | Advanced Peripherals, MCA, Quests Additions, Quark (automatic recipe unlock), WTHIT (config / theme screens), Yuushya (show block screen), Do a Barrel Roll (config), Item Filters | Short notices from their screens and modules | shown |
+| `SystemToast` | Advanced Peripherals, MCA, Quests Additions, Quark (automatic recipe unlock), WTHIT (config / theme screens), Yuushya Modelling (Entity Block and Item Block screens: share code copied or applied, work saved or not), Do a Barrel Roll (config), Item Filters | Short notices from their screens and modules | shown |
 | `FinishedJobToast` | AE2 | A long autocrafting job finished (`config/ae2/client.json` `notifyForFinishedCraftingJobs = true`) | shown |
 | `ItemToast` | CC: Tweaked | Computer screen notices (e.g. a file uploaded) | shown |
 | `RewardToast`, `CustomToast`, `ToastQuestObject` | FTB Quests | Task / quest complete, reward received, quest-defined toasts | shown |

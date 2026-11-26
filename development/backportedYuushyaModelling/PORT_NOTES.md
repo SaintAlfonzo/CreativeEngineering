@@ -147,6 +147,14 @@ Status lives in the TODO rows (`mod-integration #29`, `#36`); this section only 
   menu screens registered, screens opened from `ClientMethod`, `ColorTexture` created at client setup. No `TODO(A`
   stub left. Commands reviewed (`texts` literal stays out until phase B). Dead-override check rerun: only the known
   generic bridge false positives.
+- A8 to A10 (2026-11-25): resources and data. Assets are the 2.4.1 jar's minus `textures/item/{blueprint,pos_trans_tool,
+  tool_bundle}` (R4), the Text Block's `blockstates/textblock.json`, `models/item/textblock.json`,
+  `textures/item/abandon_textblock.png` (phase B puts them back) and `yuushya_guidebook` model and sprite (no item since
+  2.4). Lang: no `item.yuushya.cube_12` (B4), no `block.yuushya.modelframe` / `mixedblock` (+ `.line1`; 2.2
+  leftovers, no block), no Text Block keys except `gui.textBlockScreen.block` / `.item` (used by the Item Block
+  screen); `gui.showBlockScreen.workshop.save_error` added to en_us (B6, missing upstream). Data: `recipes/` and
+  `loot_tables/` (B1), checked by `tools/yuushya_data_check.py`. Template models (Chisel works such as `paimon`)
+  reference textures of the optional Yuushya content mod, as in 2.2.0 and upstream; not in the pack, so they show
+  missing textures in the Chisel preview, unchanged.
 - Not in the source set yet: Text Block screens and widgets (`gui/textblock/`, `TextIconList`, `TextTransformComponent`,
-  `FontList`, `StyledMultiLineEditBox`, `StyledMultilineTextField`; phase B), resources (A8) and data (A9). The jar is
-  not playable until A8.
+  `FontList`, `StyledMultiLineEditBox`, `StyledMultilineTextField`; phase B), and their resources.

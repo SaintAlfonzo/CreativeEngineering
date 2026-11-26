@@ -308,7 +308,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | YUNG's Better Strongholds | `betterstrongholds` | `YungsBetterStrongholds-1.19.2-Forge-3.2.0.jar` |  |
 | both | YUNG's Better Witch Huts | `betterwitchhuts` | `YungsBetterWitchHuts-1.19.2-Forge-2.1.0.jar` |  |
 | both | YUNG's Extras | `yungsextras` | `YungsExtras-1.19.2-Forge-3.1.0.jar` |  |
-| both | Yuushya Modeling | `yuushya_modelling` | `yuushya-modelling-1.19.2-forge-2.2.0.jar` |  |
+| both | Yuushya Modeling | `yuushya_modelling` | `backportedYuushyaModelling-2.4.1-ce-19.2-01.jar` | This pack's backport of Yuushya Modelling 2.4.1 (development/backportedYuushyaModelling; plan_yuushya_backport.md): blocks, block entities, packets and menus on both sides, mixins split common and client. Replaced yuushya-modelling-1.19.2-forge-2.2.0.jar 2026-11-25 (same mod id); no Architectury dependency since 2.4 |
 | both | Async Locator | `asynclocator` | `async-locator-forge-1.19.2-1.3.0.jar` | Off-thread /locate, explorer maps, dolphins, eyes of ender (IGNORE_SERVER_VERSION) |
 | both | Block Runner | `blockrunner` | `BlockRunner-v4.2.2-1.19.2-Forge.jar` | Server-side walk-speed logic |
 | both | CherishedItems | `cherisheditems` | `CherishedItems-Forge-1.19.2-1.0.2.jar` | Item despawn rules |

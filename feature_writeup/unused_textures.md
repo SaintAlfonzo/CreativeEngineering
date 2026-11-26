@@ -92,7 +92,7 @@ suit a cantaloupe block or a cut-melon block.
 | `blocky_siege:items/cannon_ball` | black ball | cannonball or shot | AFL 3.0 |
 | `storagedrawers:items/upgrade_{buffer,lock,sorting}` | drawer upgrades | upgrade icons | MIT |
 | `lightmanscurrency:item/upgrade_smithing_template` | template | 1.20-style smithing template stand-in | ARR |
-| `yuushya:item/tool_bundle` | green screen device | handheld terminal or tablet | see mod |
+| `yuushya:item/tool_bundle` | green screen device | handheld terminal or tablet | MIT; not in the pack's Yuushya Modelling 2.4.1 backport (dropped as unused, plan_yuushya_backport.md R4, 2026-11-25): copy from the 2.4.1 or 2.2.0 jar if reused |
 | `create_enchantment_industry:item/printing_template` | printed plate | printing plate or stencil | MIT |
 | `davebuildingmod:items/{green,red}_circuit_*`, `vocalcard` | green and red circuit cards, many variants | circuit card set (empty card plus a dozen stamped variants per color) | MIT |
 | `oldguns:item/*` parts (see below) | gunsmith parts | mechanical parts | AGPL-3.0 |
@@ -102,7 +102,7 @@ engineering items: `breech_block`, `flint_wheel`, `{steel,diamond,titanium}_rifl
 `stone_gear_set`, `tether_ropes`, `powder_charge`, `{small,medium,large}_musket_ball_mold`,
 `*_iron_artillery_parts`, `*_revolving_cylinder`, `*_iron_rifled_barrel`, `*_cannonball`, `wall_mount`.
 
-Not usable: `littlelogistics:item/cutter` (red X placeholder), `yuushya:item/blueprint` (blank page),
+Not usable: `littlelogistics:item/cutter` (red X placeholder), `yuushya:item/blueprint` (blank page; dropped with `pos_trans_tool` from the 2.4.1 backport, R4),
 `cb_microblock:item/saw` and `immersiveengineering:item/buzzsaw_diesel` (model UV maps),
 `immersiveengineering:item/fluorescent_tube_rod` (one model part).
 

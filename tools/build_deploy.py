@@ -156,8 +156,8 @@ IN_TREE_MODS = [
 	# until energy_advanced.md stage 5 (the basic/advanced energy switch). Not required: collect() skips it.
 	('backportedPowerGrid', 'backportedPowerGrid', False),
 	# Yuushya Modelling 2.4.1 backport (feature_writeup/plan_yuushya_backport.md): replaces the stock 2.2.0 jar (same mod
-	# id). Not required until plan step A10 installs it (then True); until then collect() skips it.
-	('backportedYuushyaModelling', 'backportedYuushyaModelling', False),
+	# id); installed by plan step A10, so a release needs its jar.
+	('backportedYuushyaModelling', 'backportedYuushyaModelling', True),
 	# Creative Loot: the loot engine (chest tuning, drop rules, the LootJS layer) and the global loot modifier merge
 	# (feature_writeup/creative_loot.md). Worldgen, Delight and Brewing require it.
 	('creativeLoot', 'creativeloot', True),

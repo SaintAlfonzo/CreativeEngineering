@@ -665,6 +665,18 @@
 - **Fixed:** Carrying two or more chronometers stopped all of them from charging; the first one charges and the rest are ignored.
 - **Fixed:** The Timedoor Marker screen showed empty name and color boxes until clicked, and the color box did not show the color picked.
 
+## Yuushya Modelling <!-- icon: yuushya:itemblock -->
+
+- **Changed:** Yuushya Modelling updated to 2.4.1 [2.2.0].
+- **New:** Item Block, 8 from Quartz, Wheat and Kelp: like the Entity Block, but its layers are items. Each layer has its own position, rotation, scale, color, brightness and mirror; ambient occlusion and full block ambient occlusion are switched per block.
+- **New:** 32 modeling primitives (cubes, prisms, slab, pillar, triangles, cylinders, circles, chibi figure parts) for Item Block layers, in their own creative tab. Cube (Full Block): 8 from a Gold Nugget, Wheat and Kelp; the stonecutter cuts the other 31 from it.
+- **New:** Color Picker, from The Encyclopedia and a Cauldron: right click a block to store its color and copy it to the clipboard; left click copies the stored color.
+- **New:** History List (creative menu): lists the Entity Blocks and Item Blocks broken recently and gives them back.
+- **New:** Entity Block screen: a collision button (No Collision, Fence, Bottom Half, Top Half, Block; new blocks have No Collision), a Fine Tune mode without step limits, Calculate Face Count, and a button that copies the selected layer's block or blockstate.
+- **Changed:** A configured Entity Block item shows its layers in the hand and the inventory [plain icon].
+- **Changed:** The Silk Touch Hammer and the Modelling GUI Terminal also work on Item Blocks.
+- **New:** `/yuushya_reload_model reload all`, `blocks` or `items` rebuilds the look of placed model blocks.
+
 ## Portals <!-- icon: portalgun:portal_gun -->
 
 - **Fixed:** The Immersive Portals portal block had no name.

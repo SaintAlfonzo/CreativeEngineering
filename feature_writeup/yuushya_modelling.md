@@ -1,6 +1,7 @@
 # Yuushya Modelling 2.4.1: jar upgrade and backport report
 
-Written 2026-11-25; investigation only, nothing built. Installed: `yuushya-modelling-1.19.2-forge-2.2.0.jar` (mod id
+Written 2026-11-25 as an investigation; phase A of the backport is built since then ([plan_yuushya_backport.md](plan_yuushya_backport.md),
+status in `mod-integration #29`; the fork replaces the 2.2.0 jar). Before it: `yuushya-modelling-1.19.2-forge-2.2.0.jar` (mod id
 `yuushya_modelling`, item namespace `yuushya`, in `mods/` and `server_mods/`). Newer jar:
 `DecompiledMods/yuushya_modelling-1.20.1-2.4.1.jar` (Forge 47, 1.20.1, built 2026-04-23); a NeoForge 1.21.1 build of
 2.4.1 sits in the launcher downloads folder and was read for comparison only. License MIT (both jars). Modrinth lists
@@ -74,7 +75,7 @@ Modelling Chisel templates).
 |---|---|---|
 | `yuushya:color_picker_item` | Color Picker | Right click a block: color to clipboard and stored; left click: stored color to clipboard. Recipe: The Encyclopedia + cauldron. |
 | `yuushya:history_item` | History List | Opens a list of model blocks the player broke recently (menu `yuushya:history`); off hand picks Entity or Item Block list. |
-| 34 primitives | `cube_0` to `cube_11`, `cylinder_0/1`, `circle_0/1`, `circle_hollow_0/1`, `triangle_0/1`, `chibi_0` to `chibi_6`, `chibi_0_alt`, `anatomy_0` to `anatomy_2`, `anatomy_0_alt` | Model shapes for Item Block layers (cubes, prisms, slab, pillar, cylinders, circles, triangles, chibi figure parts). Stack 16, rare. New creative tab "Yuushya - Modeling Primitive". `cube_0` has a recipe; 31 stonecutting recipes cut the rest from `cube_0`. |
+| 32 primitives | `cube_0` to `cube_11`, `cylinder_0/1`, `circle_0/1`, `circle_hollow_0/1`, `triangle_0/1`, `chibi_0` to `chibi_6`, `chibi_0_alt`, `anatomy_0` to `anatomy_2`, `anatomy_0_alt` | Model shapes for Item Block layers (cubes, prisms, slab, pillar, cylinders, circles, triangles, chibi figure parts). Stack 16, rare. New creative tab "Yuushya - Modeling Primitive". `cube_0` has a recipe; 31 stonecutting recipes cut the rest from `cube_0`. |
 
 Lang has `item.yuushya.cube_12` (Small Pillar) with no item registered; harmless (B4).
 
@@ -115,6 +116,13 @@ Lang has `item.yuushya.cube_12` (Small Pillar) with no item registered; harmless
   `isCollisionShapeFullBlock` users). Plausible desync, from code; fix by moving it to the common list. Live check
   YMB-08.
 - **B4.** `item.yuushya.cube_12` lang key without an item. Fix: remove the key (owner 2026-11-25: fix all bugs).
+  The 2.2 leftovers `block.yuushya.modelframe` and `block.yuushya.mixedblock` (with their `.line1` keys; no such
+  block in either version) went with it.
+- **B5. Color handlers never registered.** The block and item color handlers were instance methods in an
+  `@EventBusSubscriber` class, which Forge never calls: tinted blocks (grass, leaves) showed untinted inside Entity
+  Blocks and their items. Found in A4; fixed with static handlers, as in 2.2.0.
+- **B6. Missing lang key.** The Entity Block and Item Block screens show `gui.showBlockScreen.workshop.save_error`
+  when saving a work fails; no lang file has it (raw key in the toast). Found in A8; en_us key added.
 
 ### 1.6 Backport work (1.20.1 -> 1.19.2)
 
@@ -141,6 +149,11 @@ jar replaces 2.2.0 in `mods/` and `server_mods/` (D1). Main porting work, by siz
 
 ### 1.7 Fold-in once built
 
+Done in A8 to A12 (2026-11-25): 1, 2 (mod_sides row; Architectury stays for its other users, its abbreviated Required-by list unchanged), 3, 4 (tag
+unchanged), 5 (census row waits for `/dumploot`), 6 (names and stack catalogs wait for the dumps; toasts.md row
+updated), 7 (changelog family; queue rows after the look-check A11).
+
+
 1. Install the fork in `mods/` and `server_mods/` (2.2.0 to `jar_archive/displaced/` via `installToMods`), then
    `/dumpall` ([dumpall-refresh-workflow](agent_notes/dumpall-refresh-workflow.md)); the generators below read it.
 2. [mod_sides.md](../mod_sides.md): row stays `both`, jar name and source change; drop Yuushya from Architectury's
@@ -150,7 +163,7 @@ jar replaces 2.2.0 in `mods/` and `server_mods/` (D1). Main porting work, by siz
    mineable tag upstream (2.2 had none either), so check break speed with a pickaxe in YMB-08.
 5. Recipes: upstream data in the jar (B1 converted); no `global.NCH` changes (D5). Loot census row
    (`kubejs/data/creativeloot/kubejs/loot/loot_census.md`) gains `blocks/itemblock`.
-6. [names.md](names.md) audit of the 36 new items (D6); [stack_sizes.md](stack_sizes.md) catalog (primitives 16);
+6. [names.md](names.md) audit of the 35 new phase A items (D6; 36 with the Text Block); [stack_sizes.md](stack_sizes.md) catalog (primitives 16);
    [item_physics.md](item_physics.md) family tags for the new items (generator rerun); JEI coverage
    ([jei_coverage.md](jei_coverage.md)); [toasts.md](toasts.md) for the new screens' toasts.
 7. Release: changelog family "Yuushya Modelling" (new blocks, items, editing options, B1 to B3 fixes), TODO row,
@@ -165,7 +178,7 @@ jar replaces 2.2.0 in `mods/` and `server_mods/` (D1). Main porting work, by siz
 | D3 | Folder name. | `development/backportedYuushyaModelling` (port skill pattern). | That. |
 | D4 | The AnvilCraft-derived cached render pipeline. | Keep: it renders Item Blocks (first read as unused, wrong). | Keep. |
 | D5 | Upstream recipes (Item Block 8 from quartz + wheat + kelp, primitives from `cube_0` by stonecutter, Color Picker, History List has none). | Keep as upstream; the gold-tag rule on the Shimmering Pearl recipe stays ([recipes_metal.md](recipes_metal.md)). | Keep. |
-| D6 | New item names carry color codes (`§9` tooltip lines; the existing "§CModelling Chisel" style). | Run the [names.md](names.md) audit on the 36 new items like the 2 existing rows; no renames beyond title case. | Title case only. |
+| D6 | New item names carry color codes (`§9` tooltip lines; the existing "§CModelling Chisel" style). | Run the [names.md](names.md) audit on the 36 new items (35 in phase A) like the 2 existing rows; no renames beyond title case. | Title case only. |
 | D7 | History List keeps a per-player list of broken model blocks with their data. | Keep; check it is not written to disk unbounded during the build. | Keep. |
 | D8 | The 1.21.1 build adds one more item (`shape_item`). | Skip; it is not in the 1.20.1 code. | Skip. |
 
@@ -192,7 +205,7 @@ Drafted for the build; queue rows (`SQ-YMB-`, `CQ-YMB-`) are written when it is 
   AO, mirror; relog; break with the Destroy item -> everything kept; with full-block AO on, standing inside does
   suffocate on a dedicated server the same as in single player (B3).
 - [ ] **YMB-09 Primitives:** stonecutter on `cube_0` -> 31 options; primitives place into an Item Block and render;
-  JEI lists the 34 items and the Modeling Primitive tab.
+  JEI lists the 32 items and the Modeling Primitive tab.
 - [ ] **YMB-10 Recipes and loot (B1):** JEI shows all 52 Yuushya recipes; mining an Entity Block and an Item Block by
   hand drops the block.
 - [ ] **YMB-11 Color Picker and History List:** right click a block with the Color Picker, left click -> clipboard
@@ -209,3 +222,6 @@ Drafted for the build; queue rows (`SQ-YMB-`, `CQ-YMB-`) are written when it is 
   backport from the decompiled jar.
 - 2026-11-25: owner asked for a plan for phases A and B, mod id kept, unused parts dropped, all bugs fixed:
   [plan_yuushya_backport.md](plan_yuushya_backport.md). D4 corrected (the render cache is the Item Block renderer).
+- 2026-11-25: phase A resources, data and install (plan A8 to A10): 2.4.1 assets without the three R4 textures and the
+  Text Block and guidebook assets, data converted to 1.19.2 (B1), bugs B5 and B6 added, `tools/yuushya_data_check.py`
+  (run by `tools/test_yuushya_data.sh` in `check_all.py`). The primitive count is 32, not 34.
