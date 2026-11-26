@@ -72,6 +72,13 @@ project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
 	project(":${name}").projectDir = file("development/creativeWorldgen/members/${dir}")
 }
 
+// Creative Engineering's members (the bundle itself is in the list at the top), under
+// development/creativeEngineering/members/: Creative Oxidation (plan_creative_oxidation.md).
+['creativeOxidation': 'creativeoxidation'].each { name, dir ->
+	include name
+	project(":${name}").projectDir = file("development/creativeEngineering/members/${dir}")
+}
+
 // Tempad 3.0.4 port: its own jar (planned to fold into Creative Computing).
 include 'backportedTempad'
 project(':backportedTempad').projectDir = file('development/backportedTempad')

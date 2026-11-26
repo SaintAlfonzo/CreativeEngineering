@@ -1,0 +1,80 @@
+# Scratch queue rows OXD (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/OXD.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-OXD Creative Oxidation P1-P2: core port, state properties, random ticks, 2026-11-25 ([plan_creative_oxidation.md](../plan_creative_oxidation.md) sections 4 and 5, [create_oxidized.md](../create_oxidized.md) OXD-01, OXD-08, OXD-11, OXD-12; TODO `mod-integration #28`)
+@@date 2026-11-25
+@@jars creativeengineering
+@@sources development/creativeEngineering/members/creativeoxidation/src
+@@prep toml creativeoxidation-common.toml oxidation speedFactor 100.0
+@@text
+@@text Creative Engineering 2.0.0 of 2026-11-25 or later (a bundle since then: nests Creative Oxidation, `creativeoxidation`). Fresh worlds only: P2 changes the block state ids of the 45 target blocks. Staged textures come in P6, so these rows read block states, not looks. `speedFactor` 100 in `config/creativeoxidation-common.toml`.
+@@table
+## SQ-OXD-07 | state properties only on the 45 targets (B1)
+@group A
+@commands Place iron bars, a glass pane, an oak door, an Andesite Casing, a Fluid Pipe and Create Deco copper bars; test each with `execute if block` on `creativeoxidation_stage`
+@pass Boot log has no mixin or tag error naming `creativeoxidation`; Fluid Pipe and Create Deco copper bars match `[creativeoxidation_stage=unaffected,creativeoxidation_waxed=false]`; the other four have no such property (the command errors, no `say` line)
+@fails Properties on a non-target: the Registrate pending id leaks (OxidationTargets.takeForStateDefinition); none on the targets: RegistrateBlockBuilderMixin did not apply; a mixin apply error at boot: `createEntry()Lnet/minecraft/world/level/block/Block;` not found (Registrate version) or the refmap missing from the nested jar
+bootreject (Mixin apply failed|InvalidInjectionException|InjectionError).*creativeoxidation
+bootreject Couldn't load tag creativeoxidation:oxidizable_blocks
+> forceload add 0 0 48 16
+> setblock 0 100 0 minecraft:iron_bars
+> setblock 2 100 0 minecraft:glass_pane
+> setblock 4 100 0 minecraft:oak_door[half=lower]
+> setblock 6 100 0 create:andesite_casing
+> setblock 8 100 0 create:fluid_pipe
+> setblock 10 100 0 createdeco:copper_bars
+> execute if block 0 100 0 minecraft:iron_bars[creativeoxidation_stage=unaffected] run say oxd07-bad-bars
+> execute if block 2 100 0 minecraft:glass_pane[creativeoxidation_stage=unaffected] run say oxd07-bad-pane
+> execute if block 4 100 0 minecraft:oak_door[creativeoxidation_stage=unaffected] run say oxd07-bad-door
+> execute if block 6 100 0 create:andesite_casing[creativeoxidation_stage=unaffected] run say oxd07-bad-casing
+> execute if block 8 100 0 create:fluid_pipe[creativeoxidation_stage=unaffected,creativeoxidation_waxed=false] run say oxd07-pipe-ok
+> execute if block 10 100 0 createdeco:copper_bars[creativeoxidation_stage=unaffected,creativeoxidation_waxed=false] run say oxd07-decobars-ok
+waitlog oxd07-decobars-ok 20
+expect oxd07-pipe-ok
+reject oxd07-bad-
+## SQ-OXD-01 | aging at speedFactor 100: pipe and casing reach oxidized (OXD-01)
+@group A
+@commands Fluid Pipe and Copper Casing 12 blocks apart in a force-loaded chunk; `randomTickSpeed` 4096 for 30 s
+@pass both report `creativeoxidation_stage=oxidized`
+@fails still unaffected: `BlockStateBaseMixin.isRandomlyTicking` not forcing true, the tag not bound, or `enabled` false; partly aged: raise the wait
+> forceload add 0 32 16 48
+> setblock 0 100 40 create:fluid_pipe
+> setblock 12 100 40 create:copper_casing
+> gamerule randomTickSpeed 4096
+sleep 30
+> execute if block 0 100 40 create:fluid_pipe[creativeoxidation_stage=oxidized] run say oxd01-pipe-oxidized
+> execute if block 12 100 40 create:copper_casing[creativeoxidation_stage=oxidized] run say oxd01-casing-oxidized
+waitlog oxd01-casing-oxidized 20
+expect oxd01-pipe-oxidized
+> gamerule randomTickSpeed 3
+## SQ-OXD-08 | random ticks: waxed and non-targets unchanged, a ticking door still ticks (B2)
+@group A
+@commands As SQ-OXD-01 with a waxed Fluid Pipe and a plain Mechanical Pump next to an aging pipe; a mod door or pane that random ticks on its own
+@pass waxed pipe stays `unaffected,waxed=true`; the aging pipe moves on; a block that random ticks by itself keeps doing so
+@fails waxed pipe aged: `OxidationRules.isAging` ignores wax; the self-ticking block stopped: isRandomlyTicking forced false (B2 not fixed)
+> forceload add 0 64 16 80
+> setblock 0 100 72 create:fluid_pipe[creativeoxidation_waxed=true]
+> setblock 12 100 72 create:fluid_pipe
+> gamerule randomTickSpeed 4096
+sleep 30
+> execute if block 0 100 72 create:fluid_pipe[creativeoxidation_stage=unaffected,creativeoxidation_waxed=true] run say oxd08-waxed-unchanged
+> execute if block 12 100 72 create:fluid_pipe[creativeoxidation_stage=oxidized] run say oxd08-aging-oxidized
+waitlog oxd08-aging-oxidized 20
+expect oxd08-waxed-unchanged
+> gamerule randomTickSpeed 3
+look a block that random ticks on its own and carries the properties: none among the 45 targets is known; check that no target lost behavior it had (copper door, ladder, scaffolding)
+## SQ-OXD-11 | contraption and schematic keep stages (OXD-11)
+@group A
+@commands A weathered Fluid Tank moved on a contraption; a schematic of waxed pipes printed by a Schematicannon
+@pass the stage and wax are kept after assembly, disassembly and printing
+@fails stage lost: Create copies only the block state it reads; to P5 with the B4 conversions
+@draft contraption assembly and Schematicannon printing need a client or a scripted structure; owner LOOK until a driver step exists
+## SQ-OXD-15 | dedicated server and client join, no state mismatch (OXD-12)
+@group A
+@commands Dedicated server with the bundle, client joins, places a Fluid Pipe and ages it with the debug stick
+@pass no disconnect for a block state mismatch; the client shows the pipe; F3 shows the two properties on the client
+@fails disconnect: client jar differs from the server's (both must carry the member)
+@client true
+@draft needs a client join on the scratch server

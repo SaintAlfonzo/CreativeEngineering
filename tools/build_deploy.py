@@ -192,7 +192,8 @@ IN_TREE_EXTRA_SRC = {
 	'creativeMagic': ['kubejs/data/creativemagic/kubejs', 'kubejs/assets/creativemagic/kubejs', 'development/shared'],
 	'creativeEquipment': ['kubejs/data/creativeequipment/kubejs', 'kubejs/assets/creativeequipment/kubejs',
 						  'development/shared'],
-	'creativeEngineering': ['kubejs/data/creativeengineering/kubejs', 'development/shared'],
+	'creativeEngineering': ['development/creativeEngineering/members', 'kubejs/data/creativeengineering/kubejs',
+							'development/shared'],
 }
 # Third-party jars that Creative Common fixes target by version (deploy.md "Mod updates"): (jar file prefix, the file the
 # fixes were written against). A different file under the same prefix means the mod was updated: rerun the checklist.

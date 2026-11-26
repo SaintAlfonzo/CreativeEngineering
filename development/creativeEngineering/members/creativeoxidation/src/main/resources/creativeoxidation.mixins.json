@@ -1,0 +1,22 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.SaintAlfonzo.creativeoxidation.mixin",
+  "refmap": "creativeoxidation.refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "BlockMixin",
+    "BlockStateBaseMixin",
+    "RegistrateBlockBuilderMixin",
+    "StateDefinitionBuilderMixin"
+  ],
+  "client": [
+    "client.FluidTankRendererMixin",
+    "client.FluidValveInstanceMixin",
+    "client.FluidValveRendererMixin",
+    "client.PortableStorageInterfaceRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

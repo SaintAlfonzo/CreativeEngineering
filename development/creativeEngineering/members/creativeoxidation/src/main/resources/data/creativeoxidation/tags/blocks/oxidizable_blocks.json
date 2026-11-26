@@ -1,0 +1,185 @@
+{
+  "replace": false,
+  "values": [
+    {
+      "id": "create:copper_casing",
+      "required": false
+    },
+    {
+      "id": "create:fluid_pipe",
+      "required": false
+    },
+    {
+      "id": "create:encased_fluid_pipe",
+      "required": false
+    },
+    {
+      "id": "create:glass_fluid_pipe",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_pump",
+      "required": false
+    },
+    {
+      "id": "create:smart_fluid_pipe",
+      "required": false
+    },
+    {
+      "id": "create:fluid_valve",
+      "required": false
+    },
+    {
+      "id": "create:copper_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:fluid_tank",
+      "required": false
+    },
+    {
+      "id": "create:hose_pulley",
+      "required": false
+    },
+    {
+      "id": "create:item_drain",
+      "required": false
+    },
+    {
+      "id": "create:spout",
+      "required": false
+    },
+    {
+      "id": "create:portable_fluid_interface",
+      "required": false
+    },
+    {
+      "id": "create:steam_engine",
+      "required": false
+    },
+    {
+      "id": "create:copper_ladder",
+      "required": false
+    },
+    {
+      "id": "create:copper_bars",
+      "required": false
+    },
+    {
+      "id": "create:copper_scaffolding",
+      "required": false
+    },
+    {
+      "id": "create:copper_door",
+      "required": false
+    },
+    {
+      "id": "createdeco:blue_copper_lamp",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_bars",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_bars_overlay",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_catwalk",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_catwalk_stairs",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_coinstack_block",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_hull",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_mesh_fence",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_sheet_metal",
+      "required": false
+    },
+    {
+      "id": "createdeco:copper_support",
+      "required": false
+    },
+    {
+      "id": "createdeco:green_copper_lamp",
+      "required": false
+    },
+    {
+      "id": "createdeco:locked_copper_door",
+      "required": false
+    },
+    {
+      "id": "createdeco:red_copper_lamp",
+      "required": false
+    },
+    {
+      "id": "createdeco:yellow_copper_lamp",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_boiler",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_boiler_large",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_boiler_structure",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_bolt",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_catwalk",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_floodlight",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_floor",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_gas_tank",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_lamp",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_large_chain",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_light",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_railing",
+      "required": false
+    },
+    {
+      "id": "design_decor:copper_screw",
+      "required": false
+    }
+  ]
+}

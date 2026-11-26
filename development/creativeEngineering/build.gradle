@@ -1,5 +1,6 @@
 // creativeEngineering: Creative Engineering (mod id creativeengineering, feature_writeup/creative_engineering.md).
-// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-bundle.gradle (ce.forge-mod plus the members
+// nested under META-INF/jarjar/: members/creativeoxidation, Creative Oxidation). This file adds what is specific to
 // Engineering, the same way creativeEquipment/build.gradle does:
 //   - the Engineering script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up
 //     without a rebuild, copied into the jar at the same resource path:
@@ -11,7 +12,7 @@
 //   ServerEvents.highPriorityData); no generated recipe JSONs ship.
 // Build: ./gradlew :creativeEngineering:build --offline   Install: ./gradlew :creativeEngineering:installToMods
 plugins {
-	id 'ce.forge-mod'
+	id 'ce.forge-bundle'
 }
 
 dependencies {

@@ -1,0 +1,16 @@
+// creativeOxidation: Creative Oxidation (mod id creativeoxidation), a port of Create: Oxidized 1.0.0 (createoxidized,
+// Mr.Mulle, MIT) to Forge 1.19.2 / Create 0.5.1, nested in the Creative Engineering jar (feature_writeup/
+// plan_creative_oxidation.md). Create's copper machines age like vanilla copper through two block state properties
+// added only to the target block ids.
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
+// Build from the instance root (`./gradlew :creativeOxidation:build`); it ships nested in Creative Engineering
+// (`./gradlew :creativeEngineering:installToMods`).
+plugins {
+	id 'ce.forge-mod-refmap'
+}
+
+dependencies {
+	// Create 0.5.1 (and its Registrate and Flywheel 0.6.11) for the mixin targets: the pack's jars, shared with
+	// Creative Common (git-ignored libs/, SRG-named).
+	compileOnly fileTree(dir: rootProject.file('development/creativeCommon/libs'), include: '*.jar')
+}

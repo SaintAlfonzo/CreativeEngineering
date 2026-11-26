@@ -1,0 +1,13 @@
+{
+  "creativeoxidation.config.oxidationEnabled": "Enable oxidation",
+  "creativeoxidation.config.oxidationSpeedFactor": "Oxidation speed factor",
+  "creativeoxidation.config.keepStageOnBreak": "Broken blocks keep their stage",
+  "itemGroup.creativeoxidation": "Creative Oxidation",
+  "item.creativeoxidation.variant.exposed": "Exposed %s",
+  "item.creativeoxidation.variant.weathered": "Weathered %s",
+  "item.creativeoxidation.variant.oxidized": "Oxidized %s",
+  "item.creativeoxidation.variant.waxed.unaffected": "Waxed %s",
+  "item.creativeoxidation.variant.waxed.exposed": "Waxed Exposed %s",
+  "item.creativeoxidation.variant.waxed.weathered": "Waxed Weathered %s",
+  "item.creativeoxidation.variant.waxed.oxidized": "Waxed Oxidized %s"
+}

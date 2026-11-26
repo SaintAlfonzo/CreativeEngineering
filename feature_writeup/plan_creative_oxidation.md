@@ -1,18 +1,18 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Creative Oxidation: copper machine aging and iron rusting (plan)
 
-<!-- generated:status_index begin open_work sha1=0135222cd403 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 7), 0 Complete.
+<!-- generated:status_index begin open_work sha1=d6dea116f884 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 6, Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `jei-ordering #9` | Planned | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
-| `mod-integration #28` | Planned | S C P | Creative Oxidation P0-P2: Creative Engineering bundle member creativeoxidation, port of createoxidized core, properties only on the 45 target ids, random ticks fall through |
 | `mod-integration #31` | Planned | S C | Creative Oxidation P3-P4: staged item drops (keepStageOnBreak), names from stage, honeycomb, axe and steel wool scraping, lightning, Supplementaries soap |
 | `mod-integration #32` | Planned | S C | Creative Oxidation P5: bounded quad cache and stage kept across Create block swaps (B3, B4) after live checks |
 | `mod-integration #33` | Planned | C | Creative Oxidation P6: oxidized art for 32 Create and Create Deco blocks plus Design n' Decor copper blocks (copied dndecor art) |
 | `mod-integration #34` | Planned | S P | Creative Oxidation P7: spout and fan aging for staged blocks, old create_oxidized spout recipes rebuilt and jar removed, copper splashing port moved in, iron rusting by spout and fan |
 | `mod-integration #35` | Planned | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; subtype interpreter so all 7 variants per block are listed |
+| `mod-integration #28` | Testing | S C P | Creative Oxidation P0-P2: Creative Engineering bundle member creativeoxidation, port of createoxidized core, properties only on the 45 target ids, random ticks fall through |
 <!-- generated:status_index end open_work -->
 
 Written 2026-11-25 from the owner's notes on [create_oxidized.md](create_oxidized.md) (the integration report of
@@ -199,7 +199,26 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
 
 ## 6. Phase notes
 
-(empty until building starts)
+- 2026-11-25 P0-P2 built and installed (`creativeengineering-2.0.0.jar`, TODO `mod-integration #28` Testing).
+  Creative Engineering uses `ce.forge-bundle` with member project `:creativeOxidation`
+  (`development/creativeEngineering/members/creativeoxidation`, `creativeoxidation-1.0.0-ce-19.2-01.jar` nested;
+  refmap plugin, Mojang names on Minecraft targets, `remap = false` on Create, Flywheel and Registrate). Package
+  `com.SaintAlfonzo.creativeoxidation`. Upstream notice `NOTICE-upstream-MIT.txt` (not `LICENSE-upstream-...`: only
+  `LICENSE*` / `NOTICE*` names ship in the jar). Deviations: the Create Deco coin stack target is
+  `createdeco:copper_coinstack_block` (1.3.3 block id; `copper_coinstack` is its item, so 2.4's "coinstack_block, no
+  art" was this block); every tag entry is `required: false` (optional_ref_audit). Upstream's valve handle partial and
+  `ValveHandleVisualMixin` are dropped: Create 0.5.1 renders the handle from the block model, which the wrapper
+  already remaps. Staged partial models register only when their JSON is in the jar (P6 adds them). The baked model
+  wrapper also covers each target's item id (coin stack). Random ticks (B2): an aging state forces true, others ask
+  the block; the block's own randomTick runs only when it ticks by itself and did not just age (else Minecraft's
+  default randomTick would call the block's scheduled `tick()`). R10 ingredient `creativeoxidation:staged` is in
+  (`StagedIngredient`, registered with CraftingHelper). Item NBT keys `CreativeOxidationStage` (string) and
+  `CreativeOxidationWaxed` (boolean); a plain item has neither and no empty tag; no custom name stored. Not in P1
+  (left for P3/P4): drop NBT (`Block.getDrops` mixin), placement restore (`BlockItem.place`), display name, honeycomb /
+  axe / steel wool hooks, the `LightningBolt` mixin (`OxidationManager.wax`, `scrape`, `oxidize`, `lightningStrike`
+  are ported and ready). Harness `tools/test_creative_oxidation.sh` (57 checks: the B1 decision in the mixins' begin /
+  take / end order with vanilla owners, B2 decisions, chances, NBT, ingredient, tag = target list); the mixins
+  themselves are checked live (SQ-OXD-07, -08). Rows SQ-OXD-01, -07, -08, -11 (draft), -15 (draft) in `rows/OXD.qb`.
 
 ## 7. History
 
