@@ -7296,8 +7296,8 @@ Client only (keyboard events); no server half. **CQ-CHK-01 PASS 2026-11-13 (owne
 | CQ-CHK-01 | client | Press `/` 30 times to open chat (Escape between), normal and fast tapping; then T 30 times; in an open chat type `/` and hold `/`; rebind Command to `.` and open with `.` | LOOK: always a single `/` (T: empty box); a typed `/` in an open chat appears; holding repeats; `.` opens with `/` and no `.`; no error naming `ChatOpen` in `latest.log` | `ChatOpenKeyGuard.shouldDrop` (250 ms window, key-held check, `glfwGetKeyName` match); mixin SRG names `m_91326_`, `m_90893_`, `m_90889_` |
 <!-- generated:status_index end rows_CHK_1 -->
 
-<!-- generated:status_index begin rows_RP_2 sha1=5e0f19251170 -->
-## SQ-RP Spice of Life: Raspberry Pie Addition, 2026-11-12 ([raspberry_pie.md](../raspberry_pie.md) section 14, TODO `food/types-and-tuning #21`)
+<!-- generated:status_index begin rows_RP_2 sha1=d785906621a6 -->
+## SQ-RP Spice of Life: Raspberry Pie Edition, 2026-11-12 ([raspberry_pie.md](../raspberry_pie.md) section 14, TODO `food/types-and-tuning #21`)
 
 Targets `solRaspberryPie-1.0.0.jar` of 2026-11-12 20:47 (installed in `mods/`) with Apple Pie 2.2.0, the edited
 `defaultconfigs/solapplepie-server.toml` (benefits empty, `resetOnDeath = false`, drink blacklist) and
