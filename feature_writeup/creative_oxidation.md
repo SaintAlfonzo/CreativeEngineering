@@ -146,8 +146,8 @@ tests.
 
 ## 7. Known limits and open items
 
-- **Owner confirmation open:** R4 (Design n' Decor in the first build) shipped cut to copper light and copper large
-  chain, because the other 11 blocks have no upstream sprite with a matching layout (no new art, texture rule).
+- **Design n' Decor:** only copper light and copper large chain age (owner ruling R18, 2026-11-25); the other 11
+  blocks have no upstream sprite with a matching layout and stay plain (no new art, texture rule).
 - Coin stack: adding a coin resets the stack to the held coin's stage (Create Deco rebuilds the state).
 - Large chain art is offset 2 px (upstream's link pattern sits 2 px lower; periodic, so it tiles).
 - P5 open (TODO `mod-integration #32`): B3 bounded quad cache and B4 stage kept across Create block swaps, after the

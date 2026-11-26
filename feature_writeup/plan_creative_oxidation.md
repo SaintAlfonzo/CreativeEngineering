@@ -104,6 +104,7 @@ Listed so nothing is assumed covered. No art means no oxidation (texture rule: n
 | R15 | "waxed and oxidized components can be used in crafting recipes just the same" | premise | Staged and waxed items count as the plain item in every crafting and machine recipe that uses it. Checked: plain item ingredients ignore NBT, so this holds by default; the only exceptions are strict-NBT ingredients (`forge:nbt`) and the member's own aging recipes (R10), which match the stage on purpose | 2026-11-25 | chat 2026-11-25 |
 | R16 | "all oxidized added should be viewable in jei" | premise | All 7 variants per block (exposed, weathered, oxidized, and waxed of each stage plus waxed unaffected) are listed in JEI. Checked: JEI merges stacks that differ only in NBT unless a subtype interpreter is registered (jei_ordering.md:235); the member registers one on the stage and wax tags for the 45 items | 2026-11-25 | chat 2026-11-25 |
 | R17 | "jei families: unoxidized unwaxed items sit where that block logically sits, and all oxidized states sit in another family" | premise | The plain item stays at its place in the JEI order tree; every staged or waxed variant goes to a separate family (name "Oxidized Copper", ordered by block, then stage, then waxed). Checked: the order tree places by item id and NBT variants follow their item (jei_ordering.md:235, 411), so the tree definition needs an NBT-aware entry (item id + stage predicate) | 2026-11-25 | chat 2026-11-25 |
+| R18 | "drop the unmatched oxidized textures" (after the comparison sheets `dndecor_oxidation_compare*.png`) | clear | R4 narrowed: Design n' Decor gets oxidation only on Copper Light and Large Copper Chain, the two blocks whose upstream dndecor art matches the layout; the other 11 (boilers, boiler structure, bolt, screw, catwalk, railing, floodlight, floor, gas tank, lamp) stay plain. Nothing unmatched was shipped, so no file changes | 2026-11-25 | chat 2026-11-25 |
 
 ## 4. Phases (build order)
 
@@ -284,8 +285,8 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
   create_oxidized.md section 8, which now points to it; `OXD-` prefix index and `features.csv` file column point to it),
   member line in [creative_engineering.md](creative_engineering.md), changelog family `## Copper and Iron Aging` (7
   bullets, lint 0 errors). Not built: P8c WTHIT line (CQ-OXD-05 not yet drafted), P5 (TODO `mod-integration #32`).
-  Open owner item: the R4 deviation (Design n' Decor cut to copper light and copper large chain, 11 blocks left out
-  for lack of matching upstream art); see History.
+  The R4 deviation (Design n' Decor cut to copper light and copper large chain, 11 blocks left out for lack of
+  matching upstream art) was confirmed by the owner as R18.
 
 - 2026-11-25 P9b crash fix: the client look-check crashed at startup with `IllegalClassLoadError` on
   `BlockItemMixin$Frame` (helper class inside the mixin package). Moved to `PlaceFrame` in the member root; no other
@@ -300,3 +301,4 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
   R13 default) and R17 (JEI family for oxidized states), phase P8b, rows SQ-OXD-16, CQ-OXD-04.
 - 2026-11-25: owner confirmed R10 to R12, ruled R14 (WTHIT shows stage and wax), and named the JEI family "Oxidized Copper"; it will eventually hold all oxidized copper, not only these machines.
 - 2026-11-25: open for the owner: confirm the R4 deviation (Design n' Decor in the first build shipped with 2 of 13 blocks, because the other 11 have no upstream sprite with a matching layout and the texture rule forbids new art). Until answered, R4 stays as ruled and the cut stands.
+- 2026-11-25: owner reviewed the per-block comparison sheets and ruled R18: drop the unmatched textures; the cut to 2 Design n' Decor blocks is final.
