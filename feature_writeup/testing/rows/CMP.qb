@@ -1152,9 +1152,9 @@ look salt_uses_off: no Seasoning page (salt's seasoning crafts on the Crafting /
 ## CQ-CMP-31 | Powdered sugar block still shows its slowdown in the WTHIT speed line
 @group client
 @commands Client; stand inside a placed powdered sugar block (`creativedelight:powdered_sugar_block`) and look at it with WTHIT
-@pass the run speed line shows the 0.9 stuck multiplier as before (StuckInBlock rule registered by Creative Delight)
+@pass the run speed line shows the 0.43x stuck multiplier (owner, 2026-11-25: 0.43x is correct) as before (StuckInBlock rule registered by Creative Delight)
 @fails no line: `StuckInBlock.register` not called, or the class name changed
-@reviewed 2026-11-24
+@reviewed 2026-11-25
 # drafted r1124gate (2026-11-24): single-player client or pair
 > fill -2 100 0 4 100 4 minecraft:stone
 > fill -2 101 0 4 103 4 minecraft:air
@@ -1168,7 +1168,7 @@ shot look_at_block
 sleep 2
 shot inside_block
 > setblock 0 101 2 minecraft:air
-look the WTHIT run speed line on the powdered sugar block shows the 0.9 stuck multiplier (look_at_block; inside_block if WTHIT shows it from inside)
+look the WTHIT run speed line on the powdered sugar block shows the 0.43x stuck multiplier (owner, 2026-11-25) (look_at_block; inside_block if WTHIT shows it from inside)
 
 ## CQ-CMP-32 | A wine still lists its compound effect's parts under When Applied
 @group client

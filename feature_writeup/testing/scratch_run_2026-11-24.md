@@ -927,17 +927,15 @@ likely (the false positives), 53 stale.
 Latest result per row over `perf/runs/r1125pub/s00_res` to `s57_res`, `cli_cc13`, `cli_cen`, `cli_cpp`, `cli_ltp`, `cli_melt`,
 `cli_rpi94`, `cli_cmp19`, `cli_cmp19b`, `cli_cmp`, `cli_cmp_r` (supersedes `cli_cmp` for CQ-CMP-14, -15, -18, -20 to -22, -26; with
 `cli_cmp19b` for CQ-CMP-19), pairs `pair_rps`, `pair_rps15`, `pair_rps12`, reruns `perf/runs/r1125pubr/s00_res` to `s02_res` and
-`perf/runs/r1125pubr2/s00_res` (`qrun.py table`, regenerated 2026-11-25 after judging). Counts (161 rows): PASS 118, LOOK 24, FAIL 12, BATCH-FAULT 4, INCONCLUSIVE 2, OWNER 1. The 24 LOOK rows are
-client rows whose checks pass; they wait for the owner's screenshots (`test_captures/judgement/` folders `qrun_cli_cc13`,
+`perf/runs/r1125pubr2/s00_res` (`qrun.py table`, regenerated 2026-11-25 after the owner screenshot review, 7.5). Counts (165 rows): PASS 134, FAIL 16, INCONCLUSIVE 5, BATCH-FAULT 4, OWNER 1, LOOK 1. The owner's screenshot review is done (7.5); its judged rows are in the table; only CQ-CMP-26 stays LOOK. Folders reviewed (`test_captures/judgement/` folders `qrun_cli_cc13`,
 `qrun_cli_cen`, `qrun_cli_cmp_r`, `qrun_cli_cmp`, `qrun_cli_cpp`, `qrun_cli_melt`, `qrun_cli_rpi94`, `qrun_pair_rps`,
-`qrun_pair_rps15`, `qrun_pair_rps12`). Not run: SQ-SRM-10 (needs a fixed Creative Delight jar, 7.3), CQ-RPI-90, -95 (draft: owner
+`qrun_pair_rps15`, `qrun_pair_rps12`. Not run: SQ-SRM-10 (needs a fixed Creative Delight jar, 7.3), CQ-RPI-90, -95 (draft: owner
 row, two real players).
 
-**Wave 1 verdict.** Creative Compat is blocked: `creative-compat-publish #21` (CQ-CMP-19), `item-physics #8`, `#9`, `#10`
+**Wave 1 verdict.** Creative Compat is still blocked only by the earlier server and client findings: `creative-compat-publish #21` (CQ-CMP-19), `item-physics #8`, `#9`, `#10`
 (SQ-CM-43, SQ-IP-20, SQ-IP-21) and `items/item-physics #3` (SQ-IP-15, long-standing). Disagreement for the owner, not resolved here:
 the TODO row `items/item-physics #3` and `item_physics.md` line 28 say it is fixed (forced `isNoGravity` cause), while SQ-IP-15 still fails
-this run (Ascension sword stays at y -60). Creative Common and Raspberry Pie: no new FAILs; owner screenshot LOOKs remain (folders
-above). New FAIL without an earlier row: SQ-SRM-05 (`mod-integration #37`). Separate: the Creative Delight bfe2cde04 boot blocker
+this run (Ascension sword stays at y -60). Creative Common and Raspberry Pie: screenshot review done (7.5, owner, 2026-11-25), no blockers; its findings (salt tooltips, corpse names, trash can sneak menu, food adjustment hover) are non-blocking TODO rows. New FAIL without an earlier row: SQ-SRM-05 (`mod-integration #37`). Separate: the Creative Delight bfe2cde04 boot blocker
 (`mod-integration #27`), worked around in this run by the cd71f1db5 override.
 
 FAILs and faults, one line each:
@@ -1086,32 +1084,59 @@ Boot blocker found and worked around: `mod-integration #27` (Creative Delight ra
 | SQ-CMP-12 | PASS | 4 checks passed |
 | SQ-PSM-09 | INCONCLUSIVE | counts too small: squid 0, glow squid 6 (1 baby), dolphin 0; no mobcap line recorded |
 | CQ-CC13-01 | PASS | text: config reload logged at 16:53:40 after the levelCaps edit (luck amp 2 -> 0), none for the unchanged rewrite, one at 16:53:47 for the revert (luck amp 2); 2 reloads total |
-| CQ-CC13-02 | LOOK | open look 1: ice_tooltip: the gray "Saltable" line under the name; salt and Salt Melt READ lines and shots: what the salt item says about its use (the code has no salt-item tooltip line, only the Saltable line on blocks and the JEI info page; a missing use line is a doc question, not a FAIL) |
-| CQ-CC13-03 | LOOK | open look 1: hud and inventory_effects: Nausea without a level numeral, Speed shows III; potion_tooltip: "Nausea (1:00)" with no numeral; wine and JEI page not captured here (a JEED effect page has no driver screen; owner playtest) |
-| CQ-CC13-04 | LOOK | open look 1: owner: per wood (planks row in front: spruce, birch, dark oak, jungle, acacia, mangrove, twisted, ancient, blossom, azalea, crimson, warped) the empty, filling (level 4) and ready (level 8) composters; the compost gaps take each plank's darkest shades, no missing texture; on approval the `sources.csv` composter rows go from `confirm` to `ok` |
-| CQ-CEN-02 | LOOK | open look 1: shots: no purple-black anywhere; each face one tile of the sheet (taped top, flap bottom, handles on north and south, labels on east and west, as CQ-CMP-09); the WTHIT overlay on face_north_wthit names Weathered Cardboard Box and Creative Engineering; held and inventory icons show the box model; jei_recipe shows the splashing recipe and the box (hover its mod line by hand if JEI's mod name is not in the shot) |
-| CQ-CPP-01 | LOOK | open look 1: jei_apple_cider: owner hovers or reads the cider fluid's tooltip (effect lines under the fluid name; not automated); descriptions (shell): Common and Engineering texts as in their gradle.properties; tips line counts 3 files; tea_pipe_hud: the Haste icon on the HUD while the open pipe spills tea (tank amount falling in `data get`) |
+| CQ-CC13-02 | FAIL | owner screenshot review 2026-11-25, non-blocking for wave 1: ice shows Saltable (ok); Salt Melt lacks a 'usable on ice and snow' line, the standard salt dust should have it too; the salt dust item shows the removed-item tooltip (owner) |
+| CQ-CC13-03 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: Nausea shows no level (owner) |
+| CQ-CC13-04 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: composters look good (owner) |
+| CQ-CEN-02 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: weathered cardboard box looks good (owner) |
+| CQ-CPP-01 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: Haste applies from the pumped tank and shows on the in-world UI (owner) |
 | CQ-LTP-17 | PASS | 9 checks passed |
-| CQ-MELT-02 | LOOK | open look 1: the driver steps passed (text "Saltable" on six saltable items, none on blue ice, permafrost, salt block); the shot shows the line gray under the name when hovered |
-| CQ-RPI-94 | LOOK | open look 1: shots: the sprint_jump view is only slightly wider than sprint_ground (fov 0.5 = half the Fleet-Footed shift); the feel is the owner's live check (CQ-RPI-76) |
-| CQ-RPS-02 | PASS | text: 'Unknown recipe: solapplepie:food_book' (Apple Pie recipe gone); book + food tooltips read Diet Log; drink gave solraspberrypie:liquid_diet_log; Controls entry not read here |
-| CQ-RPS-03 | LOOK | open look 1: the Diet Log diversity page shows the same total as `solrp diversity get` (bread 0.80 plus golden apple 4.00 at Apple Pie's decay weights) and the meal list shows bread and golden apple; cake has no item tooltip value (a placed block; Apple Pie counts its slices when eaten), so the cake read only shows its lines |
-| CQ-RPS-05 | LOOK | open look 1: G1 above 0 and the gate shot shows no "Eat N more foods" line (gate open at the first meal); D1 from 33 meals (the oldest bread out of the 32-meal window); D2 = D1 minus what the 5 oldest window foods gave (respec_confirm lists them; after_respec pages no longer show them); D3 below D2 by the drop cost (drop_confirm); after death diversity 0.00 and the Diet Log pages empty |
-| CQ-RPS-09 | LOOK | open look 1: pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10), Jump Boost I, Luck I (gone from 17.5 up), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength in no picker shot; nothing_eaten pages: the diversity icon is a vanilla seed (or rotten flesh / spider eye); div50 pages (Overview, Diet Ladder, Milestones): unlock icon an awkward potion, permanent-buff icon a diamond, slot icon an item frame |
-| CQ-RPS-14 | BATCH-FAULT | reclassified from FAIL: runner-pub, 2026-11-25: as r1124w7 (BATCH-FAULT): the change picker is empty (only Regeneration I unlocked, already in slot 1), so no Confirm exists; needs a rewrite with more foods (not simple); click_widget: no widget labeled "Confirm"; open look 1: after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; drop3_confirm lists only slot 3 and its effect as lost; changed pages: the 5 oldest of the 12 foods gone from the Last meals grid and the history, E1 - E2 = what they gave (change1_confirm); death pages: grid and history empty; E3 = apple's full 1.00 (an aged-out food counts in full again) |
-| CQ-RPS-15 | LOOK | open look 1: nothing eaten, so every food is uneaten: hardest pages start with the enchanted golden apple (10), golden apple (4), then the 2s (cooked beef and porkchop before golden carrot: more hunger first), then the 1.0 foods by hunger; easiest pages the reverse by base diversity; diet_log_width: the Diet Log about 25% wider than the plain book (same as before); the grep shows HARDEST after EASIEST in the comment and the allowed values |
-| CQ-RPS-12 | LOOK | open look 1: liquid_log: the drinks newest first with the third drink (potion) on top, milk below it, still listed after the bread was eaten (the state sync without a drink list kept the client's list) |
-| CQ-CMP-14 | LOOK | open look 1: armor_before: the corpse wears the iron armor and holds the sword; armor_after: no helmet, no sword, chestplate, leggings and boots still on; wither_corpse: a normal-size skeleton with the dark wither skeleton texture wearing the gold helmet |
-| CQ-CMP-15 | PASS | text: player nbt curios:inventory ring StacksHandler Stacks Slot 0 botania:dodge_ring, absent from Inventory (only iron_chestplate Slot 102); slot_item 46 golden_helmet ok earlier |
-| CQ-CMP-18 | LOOK | open look 1: sections_idle: top row 4 armor, 4 cosmetic (gold helmet leftmost, gold boots at the right end, the middle two show armor silhouettes), offhand at the right end; a Curios-style panel on the window's left edge with one slot per curio (back, belt, necklace, ring, ring); no Additional Items button; curio_hover: the tooltip names "Curio: Ring"; two_columns: 15 curios, a second column further left past 12 |
-| CQ-CMP-20 | LOOK | open look 1: corpse_gold: the corpse wears the gold helmet (its own cosmetic stack), not the leather one; corpse_iron: after the gold helmet was taken it shows the iron helmet; self_third_person: the living player still wears the leather cosmetic helmet and the corpse beyond it the iron one |
-| CQ-CMP-21 | LOOK | open look 1: (with the CQ-CMP-18 shots) model_front / model_side: the corpse's player model shows the belt, the necklace and the elytra on its back over the iron chestplate; *_taken: elytra and belt gone, necklace still shown. Hand: one curio with its render toggled off does not show |
-| CQ-CMP-22 | LOOK | open look 1: (with the CQ-CMP-18 shots) skeleton_dressed: the skeleton wears the gold helmet over the iron one, belt, necklace and the elytra over the chestplate; skeleton_taken: iron helmet shows, elytra gone; wither_dressed: the wither skeleton dressed the same. Hand: the render-toggled curio does not show |
-| CQ-CMP-26 | LOOK | open look 1: (with the CQ-CMP-18 shots) own_wings: the living player's wings, left red, right the banner; skeleton_custom: the skeleton's wings show the same dye and banner; skeleton_vanilla: plain vanilla elytra wings |
-| CQ-CMP-30 | LOOK | open look 1: salt_uses_off: no Seasoning page (salt's seasoning crafts on the Crafting / Mixing pages); tipped_arrow_off: no Tipped Arrows page (Crafting / Spout); canning and potion_buckets open; with the empty list the Seasoning and Tipped Arrows pages open too (a jei_category step that fails = page missing) |
-| CQ-CMP-31 | LOOK | open look 1: the WTHIT run speed line on the powdered sugar block shows the 0.9 stuck multiplier (look_at_block; inside_block if WTHIT shows it from inside) |
-| CQ-CMP-32 | LOOK | open look 1: the parts (Jump Boost and the mid-air jump line) listed under "When Applied:" as before |
-| CQ-CMP-33 | LOOK | open look 1: names "Ancient Corpse" / "Ancient Remains" (shots and the entities line); both cookies in one jar (be line); sample_syringe_tab: the world tab shows the syringe as its icon and catalyst, no barrier icon |
-| CQ-CMP-36 | LOOK | open look 1: can_filled: the cobblestone and the apples are in the can's slots; can_reopened: all 27 slots empty; the stick stack held on the cursor at close is back in the inventory (clear line), nothing on the ground; holding the cobblestone did not place it (first use with the stack opened the screen) |
-| CQ-CMP-37 | LOOK | open look 1: item_can_sneak: the mod's own filter screen (one item filter slot, whitelist button); ultimate, liquid and energy cans: their usual screens with and without sneak (the screen_info lines in the row log) |
+| CQ-MELT-02 | INCONCLUSIVE | owner screenshot review 2026-11-25, non-blocking for wave 1: the shot shows nothing (no tooltip captured) (owner) |
+| CQ-RPI-94 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: screenshot looks good; Fleet-Footed still needs the in-game feel check (CQ-RPI-76) (owner) |
 | CQ-CMP-19 | FAIL | click_widget: no widgets (screen CorpseInventoryScreen); slot_item: slot_item: no line matches /golden_helmet/; open look 1: (a) the slot_item checks show the shift-clicked, dragged and hotbar-swapped items left their section slots and sit in the inventory with no tag (no nbt on the dragged ring and the swapped helmet); the shift-clicked dodge ring is in the first player line. (b) second player line: ring slot 0 holds aura_ring (put there after death), ring slot 1 mana_ring (its own index), dodge_ring in Inventory (its slot was taken), backpack in back, travel belt in belt, cloud pendant in necklace; the cosmetic helmet is back in its cosmetic slot. Hand: the extra Additional Items stack (no real-death source in this kit) |
+| CQ-CMP-14 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: corpses render correctly (owner) |
+| CQ-CMP-15 | PASS | text: player nbt curios:inventory ring StacksHandler Stacks Slot 0 botania:dodge_ring, absent from Inventory (only iron_chestplate Slot 102); slot_item 46 golden_helmet ok earlier |
+| CQ-CMP-18 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: all curios and cosmetic armor show in the corpse (owner) |
+| CQ-CMP-20 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: the corpse's iron helmet shows once the gold helmet is removed (owner) |
+| CQ-CMP-21 | INCONCLUSIVE | owner screenshot review 2026-11-25, non-blocking for wave 1: necklace renders on the corpse; belt and elytra inconclusive (owner) |
+| CQ-CMP-22 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: skeleton wears armor correctly (owner) |
+| CQ-CMP-26 | LOOK | open look 1: (with the CQ-CMP-18 shots) own_wings: the living player's wings, left red, right the banner; skeleton_custom: the skeleton's wings show the same dye and banner; skeleton_vanilla: plain vanilla elytra wings |
+| CQ-CMP-30 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: recipe page on/off works (owner) |
+| CQ-CMP-31 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: WTHIT shows 0.43x walking through powdered sugar, which is correct (the row's 0.9 expectation is stale) (owner) |
+| CQ-CMP-32 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: Clark wine tooltip looks good (owner) |
+| CQ-CMP-33 | FAIL | owner screenshot review 2026-11-25, non-blocking for wave 1: mixed cookie jars and the Sample Syringe tab look good; both corpses are named Corpse, not Ancient Corpse / Ancient Remains (owner) |
+| CQ-CMP-36 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: trash can works; owner: remove '(deleted on close)' from the label (owner) |
+| CQ-CMP-37 | FAIL | owner screenshot review 2026-11-25, non-blocking for wave 1: sneaking on the trash can opens the old menu (owner) |
+| CQ-RPS-02 | PASS | text: 'Unknown recipe: solapplepie:food_book' (Apple Pie recipe gone); book + food tooltips read Diet Log; drink gave solraspberrypie:liquid_diet_log; Controls entry not read here |
+| CQ-RPS-03 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: Sol book (Diet Log) looks good (owner) |
+| CQ-RPS-05 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: respec drops correctly; the vanilla ladder does not need 5 foods to activate (fine) (owner) |
+| CQ-RPS-09 | FAIL | owner screenshot review 2026-11-25, non-blocking for wave 1: the food adjustment hover does not match the diversity it applies (owner) |
+| CQ-RPS-14 | BATCH-FAULT | reclassified from FAIL: runner-pub, 2026-11-25: as r1124w7 (BATCH-FAULT): the change picker is empty (only Regeneration I unlocked, already in slot 1), so no Confirm exists; needs a rewrite with more foods (not simple); click_widget: no widget labeled "Confirm"; open look 1: after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; drop3_confirm lists only slot 3 and its effect as lost; changed pages: the 5 oldest of the 12 foods gone from the Last meals grid and the history, E1 - E2 = what they gave (change1_confirm); death pages: grid and history empty; E3 = apple's full 1.00 (an aged-out food counts in full again) |
+| CQ-RPS-15 | INCONCLUSIVE | owner screenshot review 2026-11-25, non-blocking for wave 1: food dict inconclusive (owner) |
+| CQ-RPS-12 | PASS | owner screenshot review 2026-11-25, non-blocking for wave 1: liquid Diet Log looks good (owner) |
+
+### 7.5 Owner screenshot review (2026-11-25)
+
+The owner reviewed the client screenshots (`test_captures/judgement/` folders listed in 7.4) on 2026-11-25. Output of the
+review, in the owner's words: "ice has saltable, looks good. salt melt should have 'usable on ice and snow' tooltip, as well as
+the standard salt dust (the 'the salt' salt dust item is shows the removed item tooltip. nausea doesnt show a lvl. composters look
+good. CQ-MELT-02 shows nothing. haste applies from the pumped tank, and shows on the in world ui. weathered cardboard box looks
+good. corpses render correctly. all curios and cosmetic armor show in the cropse. the corpses iron helmet shows once the gold helmet
+is removed. necklace renders on corpse, belt and elytra inconclusive. skeleton wears armor correctly. recipe page on/off works.
+wthit powdered sugar shows .43x walking through, which is correct. clark wine tooltip looks good. mixed cookie jars look good,
+sample syringe looks good, both corpses are named corpse. trash can works correctly, but remove (deleted on close) from label.
+sneaking on trashcan opens old menu. fleetfooted needs in game eval still but screenshot looks good. sol book looks good. respec
+drops correctly, and vanilla ladder doesnt need 5 foods to activate (thats fine). food adjustment hover doesnt match the diversity
+it applies. liquid diet log looks good. food dict is inconclusive."
+
+Ruling (owner, 2026-11-25): none of these findings blocks the wave 1 publish.
+
+Verdicts recorded with `qrun.py judge ... --by owner` (RES dirs `cli_cc13`, `cli_cen`, `cli_cmp`, `cli_cmp_r`, `cli_cpp`, `cli_melt`,
+`cli_rpi94`, `pair_rps`, `pair_rps12`, `pair_rps15`):
+
+- PASS: CQ-CC13-03, -04, CQ-CPP-01, CQ-CEN-02, CQ-CMP-14, -18, -20, -22, -30, -31, -32, -36, CQ-RPI-94, CQ-RPS-03, -05, -12.
+- FAIL (non-blocking): CQ-CC13-02 (salt tooltips), CQ-CMP-33 (corpse names), CQ-CMP-37 (sneak opens the old menu), CQ-RPS-09
+  (food adjustment hover vs applied diversity).
+- INCONCLUSIVE: CQ-MELT-02 (empty shot), CQ-CMP-21 (belt and elytra), CQ-RPS-15 (food dict).
+- Not covered, stays LOOK: CQ-CMP-26 (wings).
+
+Follow-ups: TODO rows and row fixes are logged in the TODO rows citing "owner screenshot review 2026-11-25".
