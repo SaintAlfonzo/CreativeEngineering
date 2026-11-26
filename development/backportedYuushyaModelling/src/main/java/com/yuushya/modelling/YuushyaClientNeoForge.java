@@ -4,6 +4,7 @@
 // Forge 43 has no ModifyBakingResult; color handlers static; item model cache cleared on resource reload, B2).
 package com.yuushya.modelling;
 
+import com.yuushya.modelling.gui.widget.ColorTexture;
 import com.yuushya.modelling.client.ItemModelCache;
 import com.yuushya.modelling.client.NeoItemBlockModel;
 import com.yuushya.modelling.client.NeoShowBlockModel;
@@ -34,7 +35,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class YuushyaClientNeoForge {
    @SubscribeEvent
    public static void onInitializeClient(FMLClientSetupEvent event) {
-      // TODO(A6): event.enqueueWork(() -> new ColorTexture()); (gui/widget/ColorTexture comes with the screens)
+      event.enqueueWork(() -> new ColorTexture());
    }
 
    @SubscribeEvent

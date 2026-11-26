@@ -69,7 +69,7 @@ DOUBLE_L = {'travelled': 'traveled', 'travelling': 'traveling', 'traveller': 'tr
 PROTECT = re.compile(r"Colourful Azaleas|Colorful Azaleas|Better Armour|Armourer'?s Workshop|Armour ?Bar|Grey Goo|"
 					 r"Greyhound|Colour ?Wheel|Licence to|Centre Pompidou|Mouldy|Defence Tower|Colourful Mobs|"
 					 r"Neighbourhood|grey_|Grey Elf|cdevplace catalogue|\[catalogue\]|Structure Catalogue|neighbours keys?|"
-					 r"Yuushya[ -]Modelling|backportedYuushyaModelling", re.I)
+					 r"Yuushya[ -]Modelling|backportedYuushyaModelling|Modelling (?:Chisel|GUI Terminal)", re.I)
 
 TOKEN_SKIP = re.compile(r'[A-Za-z0-9]*[_./:#\\][\w./:#\\-]*|[a-z]+[A-Z]\w*|[A-Z][a-z]+[A-Z]\w*')
 

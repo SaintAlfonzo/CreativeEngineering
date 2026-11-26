@@ -5,6 +5,8 @@ package com.yuushya.modelling.utils;
 
 import com.yuushya.modelling.blockentity.itemblock.ItemBlockEntity;
 import com.yuushya.modelling.blockentity.showblock.ShowBlockEntity;
+import com.yuushya.modelling.gui.itemblock.ItemBlockScreen;
+import com.yuushya.modelling.gui.showblock.ShowBlockScreen;
 import com.yuushya.modelling.item.showblocktool.GetBlockStateItem;
 import java.nio.file.Path;
 import net.minecraft.client.Minecraft;
@@ -42,9 +44,9 @@ public class ClientMethod {
       }
 
       if (blockEntity instanceof ShowBlockEntity showBlockEntity) {
-         // TODO(A6): Minecraft.getInstance().setScreen(new ShowBlockScreen(showBlockEntity, newBlockState));
+         Minecraft.getInstance().setScreen(new ShowBlockScreen(showBlockEntity, newBlockState));
       } else if (blockEntity instanceof ItemBlockEntity itemBlockEntity) {
-         // TODO(A6): Minecraft.getInstance().setScreen(new ItemBlockScreen(itemBlockEntity, newItemStack));
+         Minecraft.getInstance().setScreen(new ItemBlockScreen(itemBlockEntity, newItemStack));
       }
       // PHASE-B: else if TextBlockEntity -> new TextBlockScreen(textBlockEntity, new ArrayList<>()).
    }

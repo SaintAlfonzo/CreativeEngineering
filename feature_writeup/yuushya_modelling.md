@@ -65,8 +65,8 @@ startup-time note, not a blocker.
 | `yuushya:itemblock` | Item Block | Like the Entity Block but its layers are item models: per-layer position, rotation, scale, color (RGB picker), brightness, AO and full-block AO, mirror; Incremental, Fine Tune, Input, Color and Custom Size modes; "pre-apply" to all layers. Recipe: quartz + wheat + kelp -> 8. Drops itself. |
 | `yuushya:textblock` | Text Block | Renders text lines in the world: font list (every loaded font), color, mirror, cull face, block/item backdrop, per-line transform. Own text shader and glyph render types (mixin on `GlyphRenderTypes`). |
 
-Both keep the Entity Block's tools (Shifter, Rotator, Sizer, Layer-Switcher, GUI Terminal, Destroy item, Modelling
-Chisel templates).
+Both keep the Entity Block's tools (Shifter, Rotator, Sizer, Layer-Switcher, GUI Terminal, Destroy item,
+Modelling Chisel templates).
 
 ### 1.3 New items
 

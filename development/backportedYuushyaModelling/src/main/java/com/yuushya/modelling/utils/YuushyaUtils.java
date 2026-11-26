@@ -111,6 +111,20 @@ public class YuushyaUtils {
       }
    }
 
+   // 1.19.2 stand-in for JOML Quaternionf.getEulerAnglesXYZ (JOML 1.10, radians; the inverse of Quaternion.fromXYZ,
+   // which matches JOML's rotateXYZ). Mojang's own Quaternion.toXYZ uses a different (and wrong) formula.
+   public static Vector3f eulerAnglesXYZ(Quaternion q) {
+      float x = q.i();
+      float y = q.j();
+      float z = q.k();
+      float w = q.r();
+      float ex = (float)Math.atan2((double)(x * w - y * z), (double)(0.5F - x * x - y * y));
+      float sy = 2.0F * (x * z + y * w);
+      float ey = (float)(sy <= -1.0F ? -Math.PI / 2 : (sy >= 1.0F ? Math.PI / 2 : Math.asin((double)sy)));
+      float ez = (float)Math.atan2((double)(z * w - x * y), (double)(0.5F - y * y - z * z));
+      return new Vector3f(ex, ey, ez);
+   }
+
    public static double normalizeAngle(double degrees) {
       degrees %= 360.0;
       if (degrees < 0.0) {

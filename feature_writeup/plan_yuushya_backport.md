@@ -149,3 +149,16 @@ the look-checks.
   memory only, but upstream grew it for the whole session from every client chunk unload; capped at 256 per map and
   synchronized. The render cache is AnvilCraft-derived (LGPL-3.0-or-later), recorded in the NOTICE; compatible with the
   GPL-3.0 jar. Details: the project's PORT_NOTES.md section 3.
+- 2026-11-25: A6 and A7 built (`./gradlew :backportedYuushyaModelling:build --offline` passes; not installed). All
+  phase A screens and widgets (Chisel and History List screens, Entity Block screen and its edit screen, Item Block
+  screen, sliders, color widget and texture, icon lists, transform components, `gui/validate/`), `GuiOverlayEvent`
+  (Color Picker HUD), `RenderInsideEvent`; menu screens registered, screens opened, `ColorTexture` created; no `TODO(A`
+  stub left; commands reviewed (`texts` stays out until B). Approach: `gui/compat/GuiGraphics` (the 1.20 method names
+  over a 1.19.2 `PoseStack`), `ButtonUtils` (2.2.0's builder) and `Tooltip` keep upstream's drawing code; every
+  override rewritten with `@Override`, dead-override check clean. Deviations: the Chisel screen uses the 1.19.2
+  `stonecutter.png` regions (the decompiled code draws 1.20.2 GUI sprites), draws its own background, shows the
+  hovered recipe's item tooltip and scrolls (upstream's four-argument `mouseScrolled` overrode nothing);
+  CycleButton and slider tooltips drawn by the screens (1.19.2 draws `TooltipAccessor` tooltips only in options
+  screens); mirror rotation uses `Quaternion.fromXYZ` and JOML's XYZ Euler formula. Check fix: `spelling_docs` on
+  yuushya_modelling.md: the upstream item names "Modelling Chisel" / "Modelling GUI Terminal" added to
+  `us_spelling.py` PROTECT and the doc line reflowed so the name is not split across lines.

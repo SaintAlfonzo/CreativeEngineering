@@ -6,6 +6,10 @@ package com.yuushya.modelling.event;
 import com.yuushya.modelling.blockentity.itemblock.ItemBlockEntityRender;
 import com.yuushya.modelling.blockentity.showblock.ShowBlockEntityRender;
 import com.yuushya.modelling.gui.engrave.EngraveBlockResultLoader;
+import com.yuushya.modelling.gui.engrave.EngraveScreen;
+import com.yuushya.modelling.gui.history.HistoryScreen;
+import com.yuushya.modelling.registries.MenuRegistry;
+import net.minecraft.client.gui.screens.MenuScreens;
 import com.yuushya.modelling.registries.BlockEntityRegistry;
 import com.yuushya.modelling.gui.engrave.EngraveItemResultLoader;
 import com.yuushya.modelling.registries.ItemRegistry;
@@ -30,8 +34,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 )
 public class ClientEvent {
    private static void registerScreens() {
-      // TODO(A6): MenuScreens.register(MenuRegistry.EngraveMenu.get(), EngraveScreen::new);
-      // TODO(A6): MenuScreens.register(MenuRegistry.HistoryMenu.get(), HistoryScreen::new);
+      MenuScreens.register(MenuRegistry.EngraveMenu.get(), EngraveScreen::new);
+      MenuScreens.register(MenuRegistry.HistoryMenu.get(), HistoryScreen::new);
    }
 
    @SubscribeEvent

@@ -47,6 +47,16 @@ A12, B0 to B6). Report: [yuushya_modelling.md](../../feature_writeup/yuushya_mod
 | `Quaternionf().rotationYXZ(-yRot, xRot, 0)` for billboard text | `camera.rotation()` (the same rotation) |
 | `BufferUploader.drawWithShader(builder.end())` for axis lines | `RenderSystem.disableTexture()` + `tesselator.end()` (2.2.0 form) |
 | AT on `RenderType.mode` / `format()` / `affectsCrumbling` | public `mode()` / `format()` / `affectsCrumbling()` in 1.19.2; AT only for `sortOnUpload` |
+| `GuiGraphics` (1.20) | `gui/compat/GuiGraphics`: a thin wrapper of the 1.19.2 `PoseStack` with the same method names (`fill`, `hLine`, `vLine`, `drawString`, `drawCenteredString`, `blit`, `renderItem`, `renderItemDecorations`, `pose`, `bufferSource`, `guiWidth`/`guiHeight`, plus `flush`), built in each `render(PoseStack, ...)` override, so upstream's drawing code stays as written |
+| `render(GuiGraphics, ...)` (`m_88315_`), `renderWidget` (`m_87963_`), `renderBackground(GuiGraphics)` (`m_280273_`), `AbstractContainerScreen.renderTooltip(GuiGraphics, x, y)` (`m_280072_`), `updateWidgetNarration` (`m_168797_`), list `Entry.render(GuiGraphics, ...)` | `render(PoseStack, ...)`, `renderButton(PoseStack, ...)`, `renderBackground(PoseStack)`, `renderTooltip(PoseStack, x, y)`, `updateNarration`, `Entry.render(PoseStack, ...)`, all with `@Override` |
+| `AbstractWidget.getX()` / `getY()` (`m_252754_` / `m_252907_`) | public fields `x` / `y` |
+| `Button.builder(...).bounds(...).tooltip(Tooltip.create(c)).build()` (`m_253074_`, `m_252987_`, `m_257505_`, `m_257550_`, `m_253136_`) | `gui/compat/ButtonUtils.builder` (2.2.0's helper) and `gui/compat/Tooltip.create(c)` returning a `Button.OnTooltip` drawn by the open screen |
+| `CycleButton.Builder.withTooltip(v -> Tooltip.create(c))`, `AbstractWidget.setTooltip` (`m_257544_`) | `withTooltip(v -> Tooltip.lines(c))` (1.19.2 `TooltipSupplier` returns lines); `SliderButton` implements `TooltipAccessor`; 1.19.2 draws `TooltipAccessor` tooltips only in options screens, so the Entity Block and Item Block screens call `Tooltip.renderHovered` at the end of `render` |
+| `GuiGraphics.renderItem` (pose-aware) | `ItemRenderer.renderAndDecorateFakeItem` inside the model-view stack multiplied by the pose (1.19.2 GUI items ignore the `PoseStack`) |
+| `ItemRenderer.render(..., ItemDisplayContext.GUI, ..., guiGraphics.bufferSource(), ...)` | `TransformType.GUI`, then `flush()` (end the batch) and flat-item lighting around it (1.20's `GuiGraphics` did both) |
+| `RenderType.TRANSLUCENT` (field) | `RenderType.translucent()` |
+| `Quaternionf().rotateXYZ(x, y, z)` / `getEulerAnglesXYZ` | `Quaternion.fromXYZ(x, y, z)` (same order) / `YuushyaUtils.eulerAnglesXYZ` (JOML 1.10's formula; mojang `toXYZ` differs) |
+| `RenderGuiOverlayEvent.Pre.getGuiGraphics()` | `new GuiGraphics(event.getPoseStack())` |
 
 Decompiled 1.20 code has no `@Override`: a 1.20 override whose 1.19.2 signature differs would compile as a dead new
 method. Every ported class was checked by reflection against the 1.19.2 supertypes (no such case in A0 to A3); later
@@ -94,6 +104,14 @@ font and glyph entries.
   in `client/ColorPickerClient`, reached through `DistExecutor` only when `level.isClientSide`. Unchanged upstream
   behavior: the picked color is written to the client's copy of the stack only (no packet), so the tooltip and HUD
   show it until the server next syncs that slot; the clipboard keeps it.
+- Chisel and History List screens (`AbstractEngraveScreen`): the decompiled code draws 1.20.2 GUI sprites
+  (`container/stonecutter/scroller`, `recipe_selected`, ...) that 1.19.2 does not have; the 1.19.2 form (2.2.0, as the
+  vanilla stonecutter) blits the same regions of `stonecutter.png`. The screen draws its dimmed background itself
+  (1.19.2 `Screen.render` does not). The hovered recipe shows its item tooltip (upstream's call there is the 1.20 item
+  tooltip). `mouseScrolled` takes 1.19.2's three arguments (upstream's four-argument form overrides nothing on 1.20.1
+  either, so scrolling the recipe list did nothing there).
+- `ColorButton` (unused upstream): constructor without the 1.19.3 `CreateNarration` argument.
+- Edit boxes are not ticked (as upstream), so their cursor shows without blinking on 1.19.2.
 - History List (plan R10): held in memory only, never written to disk. Upstream fills it on the client whenever an
   Entity Block or Item Block is removed, which includes every client chunk unload, keyed by `<dimension>/<x, y, z>`,
   in plain static `HashMap`s that grew for the whole game session and that the integrated server thread read while the
@@ -122,6 +140,13 @@ Status lives in the TODO rows (`mod-integration #29`, `#36`); this section only 
   `client/ColorPickerClient`, the History List maps; items reviewed (primitives 32, all stack 16 and rare; Destroy item
   and GUI Terminal act on Item Blocks through the shared `AbstractTransformBlock` / `AbstractTransformBlockEntity`
   types, no change needed).
-- Not in the source set yet: all screens and widgets (`gui/**` except the menus, loaders and results, incl.
-  `gui/widget/ColorTexture`), `gui/validate/`, `event/GuiOverlayEvent`, `event/RenderInsideEvent` (A6, A7),
-  resources (A8) and data (A9). The jar is not playable until A8.
+- A6 and A7 (2026-11-25): every screen and widget except Text Block ones (`gui/AbstractEngraveScreen`,
+  `gui/engrave/EngraveScreen`, `gui/history/HistoryScreen`, `gui/showblock/` (Entity Block screen, `EditScreen`),
+  `gui/itemblock/ItemBlockScreen`, `gui/widget/` (sliders, color widget and texture, icon lists, transform
+  components), `gui/validate/`), the `gui/compat/` helpers, `GuiOverlayEvent` (Color Picker HUD), `RenderInsideEvent`;
+  menu screens registered, screens opened from `ClientMethod`, `ColorTexture` created at client setup. No `TODO(A`
+  stub left. Commands reviewed (`texts` literal stays out until phase B). Dead-override check rerun: only the known
+  generic bridge false positives.
+- Not in the source set yet: Text Block screens and widgets (`gui/textblock/`, `TextIconList`, `TextTransformComponent`,
+  `FontList`, `StyledMultiLineEditBox`, `StyledMultilineTextField`; phase B), resources (A8) and data (A9). The jar is
+  not playable until A8.
