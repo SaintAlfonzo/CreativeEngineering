@@ -1,4 +1,4 @@
-// solRaspberryPie: Spice of Life: Raspberry Pie Addition (mod id solraspberrypie), feature_writeup/raspberry_pie.md.
+// solRaspberryPie: Spice of Life: Raspberry Pie Edition (mod id solraspberrypie), feature_writeup/raspberry_pie.md.
 // Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle); the
 // shipped jar is ce.forge-bundle's bundleJar, which nests Apple Pie and Carrot unmodified (bundle_external_jars in
 // gradle.properties, sha1-pinned; plan_rp_standalone.md P1). The own jar alone is the `-own` classifier.

@@ -1,4 +1,4 @@
-Third-party notices for Spice of Life: Raspberry Pie Addition (solraspberrypie). Raspberry Pie's own code is
+Third-party notices for Spice of Life: Raspberry Pie Edition (solraspberrypie). Raspberry Pie's own code is
 GPL-3.0-only (solRaspberryPie-LICENSE.txt); this file covers only the third-party works below.
 
 This jar also contains two third-party mods, nested UNMODIFIED as separate jars under META-INF/jarjar/ (Forge

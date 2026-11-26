@@ -88,7 +88,7 @@ project(':backportedTempad').projectDir = file('development/backportedTempad')
 include 'backportedYuushyaModelling'
 project(':backportedYuushyaModelling').projectDir = file('development/backportedYuushyaModelling')
 
-// Spice of Life: Raspberry Pie Addition (feature_writeup/raspberry_pie.md): selectable diet bonuses on top of Apple Pie.
+// Spice of Life: Raspberry Pie Edition (feature_writeup/raspberry_pie.md): selectable diet bonuses on top of Apple Pie.
 include 'solRaspberryPie'
 project(':solRaspberryPie').projectDir = file('development/solRaspberryPie')
 

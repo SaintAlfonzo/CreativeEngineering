@@ -1,4 +1,4 @@
-# Spice of Life: Raspberry Pie Addition
+# Spice of Life: Raspberry Pie Edition
 
 **Choosable diet bonuses on top of Spice of Life: Apple Pie Edition.** Raspberry Pie turns food variety into a bonus ladder: extra hearts, armor toughness, knockback resistance, always-on effects, effect slots you fill yourself, and one-time effect unlocks. Eating many different and high value foods climbs the ladder; repeating the same and low value food does not. Drinks are kept out of the food diet and have their own book, the Liquid Diet Log. It works with only Minecraft Forge and its own jar: Apple Pie and Spice of Life: Carrot Edition come bundled inside it.
 

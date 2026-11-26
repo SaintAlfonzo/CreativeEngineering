@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-only
-"""Food diversity table for Spice of Life: Raspberry Pie Addition (plan_food_diversity_1121.md section 3).
+"""Food diversity table for Spice of Life: Raspberry Pie Edition (plan_food_diversity_1121.md section 3).
 
 Reads the /dumpfood export (kubejs/exported/food/foods.json, recipes.json), the food types
 (kubejs/generation_scripts/food/food_types.json, canned sources) and the rules

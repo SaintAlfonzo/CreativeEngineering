@@ -1,4 +1,4 @@
-# Spice of Life: Raspberry Pie Addition. The dollar-brace values come from gradle.properties (mod_*) and the root
+# Spice of Life: Raspberry Pie Edition. The dollar-brace values come from gradle.properties (mod_*) and the root
 # gradle.properties (versions), expanded by build-logic's ce.forge-mod.
 modLoader="javafml"
 loaderVersion="${loader_version_range}"

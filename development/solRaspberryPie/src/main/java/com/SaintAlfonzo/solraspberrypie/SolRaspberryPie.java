@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Spice of Life: Raspberry Pie Addition. Selectable diet bonuses on top of Spice of Life: Apple Pie Edition
+ * Spice of Life: Raspberry Pie Edition. Selectable diet bonuses on top of Spice of Life: Apple Pie Edition
  * (feature_writeup/raspberry_pie.md). Apple Pie keeps every diversity calculation and the food memory; this mod owns the
  * bonus ladder, slot choices, respecs, the drink split and the Liquid Diet Log.
  */

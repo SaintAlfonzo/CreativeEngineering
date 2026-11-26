@@ -1,4 +1,4 @@
-textureswapper/packart/solraspberry/raspberry_pie_logo.png: Spice of Life: Raspberry Pie Addition project logo.
+textureswapper/packart/solraspberry/raspberry_pie_logo.png: Spice of Life: Raspberry Pie Edition project logo.
 
 Graph: adapted from the logo of Spice of Life: Apple Pie Edition 2.2.0 by tarinoita, GNU LGPL v2.1
 (text: development/solRaspberryPie/licenses/LGPL-2.1-solapplepie.txt). Modified 2026-11-26: pie removed, colors

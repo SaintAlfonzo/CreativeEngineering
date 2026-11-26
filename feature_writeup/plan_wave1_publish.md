@@ -88,7 +88,7 @@ path, push to `agent_staging`.
   1. Tags at `2f752e3a5`, annotated like the earlier Common tags, then pushed:
      `git tag -a creativecommon-1.3.0 2f752e3a5 -m "Creative Common 1.3.0"`,
      `git tag -a creativecompat-1.0.0 2f752e3a5 -m "Creative Compat 1.0.0"`,
-     `git tag -a solraspberrypie-1.0.0 2f752e3a5 -m "Spice of Life: Raspberry Pie Addition 1.0.0"`,
+     `git tag -a solraspberrypie-1.0.0 2f752e3a5 -m "Spice of Life: Raspberry Pie Edition 1.0.0"`,
      `git push origin creativecommon-1.3.0 creativecompat-1.0.0 solraspberrypie-1.0.0` (owner; the agent push was
      refused by the permission check 2026-11-26).
   2. Upload Common, then Compat, then Raspberry Pie. Description: `project_pages/<mod>.md` (layout page_format.md);

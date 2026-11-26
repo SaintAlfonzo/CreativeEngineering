@@ -1,4 +1,4 @@
-# Spice of Life: Raspberry Pie Addition (design)
+# Spice of Life: Raspberry Pie Edition (design)
 
 Status: generated (feature_writeup/README.md index, the TODO rows above; install state `python3 tools/jarstamp.py`);
 queue sections SQ-RP, RPI and RPS (section 14). Design decisions: owner 2026-11-10, two rounds on 2026-11-11 and two on 2026-11-12 (chat). TODO
@@ -86,7 +86,7 @@ mixes into Apple Pie, not a fork: no Apple Pie code is copied in.
 
 | | |
 |---|---|
-| Display name | Spice of Life: Raspberry Pie Addition |
+| Display name | Spice of Life: Raspberry Pie Edition |
 | Mod id | `solraspberrypie` (permanent; the display name may change, the id may not) |
 | Tree | `development/solRaspberryPie` (root `settings.gradle`, `build-logic/`) |
 | Sides | both (screens, widget, overlay messages on the client; all rules on the server) |

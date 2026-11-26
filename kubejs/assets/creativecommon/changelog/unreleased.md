@@ -105,7 +105,7 @@
 
 ## Diet Bonuses <!-- icon: solapplepie:food_book -->
 
-- **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor, 12 permanent buffs, 5 effect slots and 49 effect unlocks [fixed Apple Pie bonuses]. Applies to new worlds.
+- **New:** Spice of Life: Raspberry Pie Edition. Food diversity climbs a ladder of hearts, armor, 12 permanent buffs, 5 effect slots and 49 effect unlocks [fixed Apple Pie bonuses]. Applies to new worlds.
   - Hearts: 10 extra, one every 9.1 diversity (20 hearts at 90.9)
   - Armor: +1 armor toughness and +10% knockback resistance at diversity 16.7, 50 and 83.3
   - Effect slots at diversity 2.5, 22, 41.5, 61 and 80.5

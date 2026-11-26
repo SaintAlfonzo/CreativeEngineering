@@ -1,4 +1,4 @@
-# Spice of Life: Raspberry Pie Addition 1.0.0 (CurseForge file changelog)
+# Spice of Life: Raspberry Pie Edition 1.0.0 (CurseForge file changelog)
 
 First release.
 
