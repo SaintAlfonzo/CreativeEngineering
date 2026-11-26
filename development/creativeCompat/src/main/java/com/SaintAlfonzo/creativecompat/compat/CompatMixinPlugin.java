@@ -46,6 +46,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			// Moonlight's ItemDisplayTile, used by the jar mixin
 			Map.entry("ItemDisplayTileAccessor", List.of("moonlight")),
 			Map.entry("ItemPhysicServerMixin", List.of("itemphysic")),
+			Map.entry("CampfireItemBurnMixin", List.of("itemphysic")),
 			Map.entry("BotanistWorkbenchPotMixin", List.of("beautify")),
 			// Nether / End crops grow only in their dimension (BotanyPotDimensionMixin, botany_pots.md 3)
 			Map.entry("BotanyPotDimensionMixin", List.of("botanypots")),
@@ -154,6 +155,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("IPPortalFogMixin", IMM_PTL),
 			// Corpse decay, wither look and live equipment (corpse/, plan_corpses.md 3.1)
 			Map.entry("CorpseDecayMixin", List.of("corpse")),
+			Map.entry("CorpseNameMixin", List.of("corpse")),
 			Map.entry("CorpseRendererMixin", List.of("corpse")),
 			// Corpse screen sections: cosmetic armor and curio slots, Additional Items without them (plan_corpses.md 3.6)
 			Map.entry("CorpseInventoryContainerMixin", List.of("corpse")),
@@ -161,6 +163,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("CorpseAdditionalContainerMixin", List.of("corpse")),
 			Map.entry("CorpseGuisMixin", List.of("corpse")),
 			Map.entry("CorpseScreenMixin", List.of("corpse")),
+			Map.entry("CorpseInventoryScreenMixin", List.of("corpse")),
 			// interface mixins (JEI, tooltips, GUI titles, toasts, effect icons)
 			Map.entry("SubMenuConfigScreenMixin", List.of("create")),
 			Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),

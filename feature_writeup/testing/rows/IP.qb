@@ -165,8 +165,8 @@ look about 4 ash from 16 planks (25% each, ash may itself burn later); the block
 ## SQ-IP-20 | skimmers rest on top of snow layers, planks sink into them as before
 @group A
 @commands `setblock 340 -60 300 snow[layers=3]`, same at 342; summon `oak_leaves` over 340 and `oak_planks` over 342 2 blocks up; read Pos after 4 s
-@pass leaves at -59.625 (the layer's top, 3/8); planks at -59.75 (vanilla collision, 2/8); `[item_physics] skimOnLayers = false` puts the leaves at -59.75 too (not driven)
-@fails leaves at -59.75: `ItemSurfaceFloat.sinkable` false for the snow layer, or the leaves are not in `physics/skims`
+@pass leaves at -59.625 (the layer's outline top, 3/8); planks at -59.875 (Snow! Real Magic's thinner collision, 1/8 for 3 layers; -59.75 without Snow! Real Magic); `[item_physics] skimOnLayers = false` puts the leaves with the planks (not driven)
+@fails leaves with the planks: `ItemSurfaceFloat.after` not reached in the air (the updatePre inject must be RETURN, not TAIL; item-physics #9), `sinkable` false for the snow layer, or the leaves are not in `physics/skims`
 > fill 338 -61 298 344 -61 302 minecraft:stone
 > setblock 340 -60 300 minecraft:snow[layers=3]
 > setblock 342 -60 300 minecraft:snow[layers=3]
@@ -176,14 +176,16 @@ sleep 4
 > data get entity @e[tag=ip20l,limit=1] Pos[1]
 > data get entity @e[tag=ip20p,limit=1] Pos[1]
 > execute as @e[tag=ip20l] at @s if entity @s[y=-59.64,dy=0.03] run say IP20 leaves on top
+> execute as @e[tag=ip20p] at @s if entity @s[y=-59.89,dy=0.03] run say IP20 planks in the snow
 expect IP20 leaves on top
-look planks about -59.75 (sunk one layer, unchanged)
+expect IP20 planks in the snow
+look planks about -59.875 (Snow! Real Magic collision; -59.75 without it)
 
 ## SQ-IP-21 | fire: firework rocket pops without block damage, ice burns, iron ingot survives a campfire
 @group A
 @commands campfire at 360 -60 300 on stone; summon `firework_rocket`, `ice`, `iron_ingot` items onto it; wait 5 s
 @pass rocket gone with a small explosion, campfire and stone still there; ice gone (R2 burns); iron ingot alive
-@fails rocket stays: not in `burn/explosive` (family explosive); blocks broken: the explode rule gained block damage
+@fails rocket and ice stay: `CampfireItemBurnMixin` not applied (vanilla campfires hurt only living entities; item-physics #10), or the rocket is not in `burn/explosive` (family explosive); blocks broken: the explode rule gained block damage
 > fill 358 -61 298 362 -61 302 minecraft:stone
 > setblock 360 -60 300 minecraft:campfire
 > summon minecraft:item 360.5 -59.5 300.5 {Tags:["ip21r"],PickupDelay:32767,Item:{id:"minecraft:firework_rocket",Count:1b}}

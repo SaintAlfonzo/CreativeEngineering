@@ -1190,8 +1190,8 @@ look the parts (Jump Boost and the mid-air jump line) listed under "When Applied
 ## CQ-CMP-33 | Ancient corpses keep their names; mixed jars and the Sample Syringe tab unchanged
 @group client
 @commands Client; look at an ancient corpse (`/locate` or SQ-LOOT-07's setup); put two cookie-family items in one Supplementaries jar; open the JEI world tab Sample Syringe
-@pass the corpse reads "Ancient Corpse" (or "Ancient Remains") in its name; the two cookies share the jar (Creative Delight's `jar_family/` tags still count); the Sample Syringe tab shows the syringe as icon and catalyst
-@fails raw lang key on the corpse: Compat's lang lacks `entity.creativecompat.ancient_corpse`; cookies refused: `JarMixing.addFamilyNamespace` not called; barrier icon: `WorldTab.addTool` not called
+@pass the corpse reads "Ancient Corpse" (or "Ancient Remains") in the kill reply and in the WTHIT tooltip name (shots); the two cookies share the jar (Creative Delight's `jar_family/` tags still count); the Sample Syringe tab shows the syringe as icon and catalyst
+@fails raw lang key on the corpse: Compat's lang lacks `entity.creativecompat.ancient_corpse`; WTHIT reads "Corpse": `CorpseNameMixin` (getName) not applied (creative-compat-publish #22); cookies refused: `JarMixing.addFamilyNamespace` not called; barrier icon: `WorldTab.addTool` not called
 @reviewed 2026-11-24
 @absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
 # drafted r1124gate (2026-11-24): single-player client (the cdevtest name is resolved by the integrated server's
@@ -1266,7 +1266,7 @@ bootreject TrashCansItemCanUseMixin.*(Error|error|failed)
 ## CQ-CMP-36 | Right-click on the Item Trash Can opens a 27-slot screen; its contents are deleted on close
 @group client
 @commands Client, survival; place `trashcans:item_trash_can`; right-click it with an empty hand and again holding a stack; shift-click a stack and drag a second one in; close; reopen
-@pass a three-row chest screen titled "Trash Can (deleted on close)" opens both times (holding an item does not place it); shift-click moves the stack in; after closing and reopening the 27 slots are empty and the items are gone from the inventory and the ground; a held cursor stack at close goes back to the inventory, not deleted
+@pass a three-row chest screen titled "Trash Can" opens both times (holding an item does not place it); shift-click moves the stack in; after closing and reopening the 27 slots are empty and the items are gone from the inventory and the ground; a held cursor stack at close goes back to the inventory, not deleted
 @fails the filter screen opens: the mixin was skipped (gate or range) or `isItemTrashCan` misses the id; items back after reopening: `TrashContainer.stopOpen` not called (ChestMenu.removed)
 @reviewed 2026-11-24
 # drafted r1124gate (2026-11-24): single-player client or pair. Chest menu: 0-26 the can, 27-53 player main, 54-62 hotbar
@@ -1284,7 +1284,7 @@ sleep 3
 do {"target": true, "expect": "trashcans:item_trash_can"}
 do {"use": "block"}
 do {"wait": 10}
-do {"screen_info": true, "expect": "Trash Can \\(deleted on close\\)"}
+do {"screen_info": true, "expect": "ContainerScreen title \"Trash Can\""}
 do {"screen": "close"}
 > item replace entity PerfEval hotbar.0 with minecraft:cobblestone 64
 > item replace entity PerfEval hotbar.1 with minecraft:apple 16
@@ -1292,7 +1292,7 @@ do {"screen": "close"}
 do {"slot": 0}
 do {"use": "block"}
 do {"wait": 10}
-do {"screen_info": true, "expect": "deleted on close"}
+do {"screen_info": true, "expect": "ContainerScreen title \"Trash Can\""}
 do {"slot_item": 0, "expect": "empty"}
 do {"click_slot": 54, "shift": true}
 do {"click_slot": 55}
@@ -1304,7 +1304,7 @@ do {"screen": "close"}
 do {"wait": 10}
 do {"use": "block"}
 do {"wait": 10}
-do {"screen_info": true, "expect": "deleted on close"}
+do {"screen_info": true, "expect": "ContainerScreen title \"Trash Can\""}
 do {"slot_item": 5, "expect": "empty"}
 shot can_reopened
 do {"screen": "close"}
@@ -1340,38 +1340,38 @@ sleep 3
 sleep 3
 do {"target": true, "expect": "trashcans:item_trash_can"}
 do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
-do {"screen_info": true, "reject": "deleted on close"}
+do {"screen_info": true, "reject": "ContainerScreen title \"Trash Can\""}
 shot item_can_sneak
 do {"screen": "close"}
 > tp PerfEval 5405.5 101 5201.5 0 35
 sleep 2
 do {"target": true, "expect": "trashcans:ultimate_trash_can"}
 do [{"use": "block"}, {"wait": 10}]
-do {"screen_info": true, "reject": "deleted on close"}
+do {"screen_info": true, "reject": "ContainerScreen title \"Trash Can\""}
 shot ultimate_can
 do {"screen": "close"}
 do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
-do {"screen_info": true, "reject": "deleted on close"}
+do {"screen_info": true, "reject": "ContainerScreen title \"Trash Can\""}
 do {"screen": "close"}
 > tp PerfEval 5407.5 101 5201.5 0 35
 sleep 2
 do {"target": true, "expect": "trashcans:liquid_trash_can"}
 do [{"use": "block"}, {"wait": 10}]
-do {"screen_info": true, "reject": "deleted on close"}
+do {"screen_info": true, "reject": "ContainerScreen title \"Trash Can\""}
 shot liquid_can
 do {"screen": "close"}
 do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
-do {"screen_info": true, "reject": "deleted on close"}
+do {"screen_info": true, "reject": "ContainerScreen title \"Trash Can\""}
 do {"screen": "close"}
 > tp PerfEval 5409.5 101 5201.5 0 35
 sleep 2
 do {"target": true, "expect": "trashcans:energy_trash_can"}
 do [{"use": "block"}, {"wait": 10}]
-do {"screen_info": true, "reject": "deleted on close"}
+do {"screen_info": true, "reject": "ContainerScreen title \"Trash Can\""}
 shot energy_can
 do {"screen": "close"}
 do [{"walk": 3, "keys": "sneak use"}, {"wait": 10}]
-do {"screen_info": true, "reject": "deleted on close"}
+do {"screen_info": true, "reject": "ContainerScreen title \"Trash Can\""}
 do {"screen": "close"}
 > gamemode creative PerfEval
 > forceload remove 5398 5198 5412 5212

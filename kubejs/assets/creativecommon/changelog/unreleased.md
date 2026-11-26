@@ -429,7 +429,7 @@
 - **Changed:** A corpse shows only the armor and held items still inside it.
 - **Changed:** Cosmetic armor goes into the corpse on death and back into the cosmetic slots when the corpse's items are transferred [kept on the player].
 - **Changed:** The corpse screen shows cosmetic armor in 4 slots between the armor and the offhand and curios in a panel left of the window, each item's tooltip naming its slot [on the Additional Items pages]. The offhand slot moved to the end of the top row.
-- **Changed:** A corpse with an empty main inventory opens on the corpse screen while it holds curios or cosmetic armor [on the Additional Items pages].
+- **Changed:** A corpse with an empty main inventory opens on the corpse screen, with its Transfer Items button, while it holds curios or cosmetic armor [on the Additional Items pages].
 - **Changed:** Transferring a corpse's items puts each curio back into the slot it was worn in [any free slot of its type].
 - **Changed:** Skeleton corpses sink in water and lava [floated up]. Corpses still showing the player model float.
 - **Fixed:** A corpse showed the cosmetic armor its player wears now instead of the cosmetic armor inside it.
@@ -805,4 +805,6 @@
 - **Changed:** Prismarine, sandstone and smooth stone survive fire but not lava [prismarine survived lava]; nether brick and quartz survive lava.
 - **Changed:** Every wooden item leaves ash when it burns, 1 in 4 [planks, logs and wooden building blocks only].
 - **New:** Modded bombs, gunpowder kegs, rockets, fireworks and powder charges explode when they burn, without breaking blocks.
+- **New:** Dropped items burn on a lit campfire as in fire; items that survive fire are kept.
+- **Fixed:** Dropped items with Curse of Ascension did not rise, and ones with Curse of Fleeting did not push mobs and players away.
 - **Changed:** Totems of Undying and tridents sink and survive fire [totems floated].

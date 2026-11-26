@@ -70,3 +70,5 @@ davebuildingmod:fire_charge_passive_generator,machine,generator (name hit fire c
 ~powdered_sugar_bucket,container,bucket
 ~blasting_sail,metal,Create fan sail (name hit blasting)
 cookingforblockheads:ice_unit,metal,appliance (name hit ice)
+~^creativedelight:(crimson|warped)_composter$,nether_wood,item-physics #8: nether wood composters float and are lavaproof like their planks (also in item_physics_tags.js)
+~^creativedelight:[a-z_]+_composter$,wood,item-physics #8: wood composters float and burn to ash (also in item_physics_tags.js)

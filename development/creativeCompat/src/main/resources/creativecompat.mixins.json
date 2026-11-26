@@ -39,6 +39,7 @@
     "IECraftingTablePolymorphMixin",
     "PrettyPipesCraftingTerminalPolymorphMixin",
     "ItemPhysicServerMixin",
+    "CampfireItemBurnMixin",
     "BlockItemOwnStackFillMixin",
     "StructureTemplateBotanistPotMixin",
     "BotanistWorkbenchPotMixin",
@@ -116,6 +117,7 @@
     "CorpseContainerBaseMixin",
     "CorpseAdditionalContainerMixin",
     "CorpseGuisMixin",
+    "CorpseNameMixin",
     "CorpseTransferMessageMixin"
   ],
   "client": [
@@ -182,7 +184,8 @@
     "PassFovMixin",
     "BlockRunnerFovMixin",
     "CorpseRendererMixin",
-    "CorpseScreenMixin"
+    "CorpseScreenMixin",
+    "CorpseInventoryScreenMixin"
   ],
   "server": []
 }

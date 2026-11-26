@@ -49,9 +49,12 @@ public class ItemPhysicServerMixin {
 
 	/**
 	 * Allurement's Curse of Ascension / Fleeting hook sits in the vanilla gravity branch that
-	 * ItemPhysic bypasses; run them after ItemPhysic's own gravity instead.
+	 * ItemPhysic bypasses; run them after ItemPhysic's own gravity instead. RETURN, not TAIL:
+	 * updatePre's no-fluid branch has its own return, so TAIL (the last return only) ran for items
+	 * in a fluid and never for items in the air (item-physics #9: skimmers on snow layers, the
+	 * entry look-ahead and both curses).
 	 */
-	@Inject(method = "updatePre", at = @At("TAIL"), remap = false)
+	@Inject(method = "updatePre", at = @At("RETURN"), remap = false)
 	private static void creativeengineering$allurementCurses(ItemEntity item, RandomSource rand, CallbackInfo ci) {
 		ItemSurfaceFloat.after(item);
 		AllurementItemCurses.tick(item);

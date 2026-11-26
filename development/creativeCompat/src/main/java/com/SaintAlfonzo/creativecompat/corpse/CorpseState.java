@@ -24,4 +24,14 @@ public interface CorpseState {
 	default boolean creativecompat$has(byte flag) {
 		return (creativecompat$corpseFlags() & flag) != 0;
 	}
+
+	/**
+	 * "Ancient Remains" / "Ancient Corpse" for a corpse with the Remains / Ancient flag, else null. Used for both the
+	 * display name (kill replies, chat) and the plain name (WTHIT and other tooltips; creative-compat-publish #22).
+	 */
+	default net.minecraft.network.chat.Component creativecompat$ancientName() {
+		if (creativecompat$has(FLAG_REMAINS)) return net.minecraft.network.chat.Component.translatable("entity.creativecompat.ancient_remains");
+		if (creativecompat$has(FLAG_ANCIENT)) return net.minecraft.network.chat.Component.translatable("entity.creativecompat.ancient_corpse");
+		return null;
+	}
 }

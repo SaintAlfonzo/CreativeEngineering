@@ -144,7 +144,7 @@ plus the features moved from Creative Common and Raspberry Pie in wave 2 (sectio
   `CorpseCuriosClient`.
 - **Item Trash Can screen (2026-11-23, [plan_ready_now_1123.md](plan_ready_now_1123.md) 8, ruling R1, TODO
   `storage-and-item-loss #17`):** Trash Cans 1.0.18. A plain right-click on `trashcans:item_trash_can` opens a
-  three-row chest screen ("Trash Can (deleted on close)", `container.creativecompat.trash_can`) over a fresh 27-slot
+  three-row chest screen ("Trash Can", `container.creativecompat.trash_can`; "(deleted on close)" dropped from the title 2026-11-25, creative-compat-publish #23) over a fresh 27-slot
   container that is never saved and is cleared when the screen closes, as FTB Essentials' trash can; shift-click from
   the inventory works (vanilla ChestMenu), a stack still on the cursor at close goes back to the inventory. A sneak
   right-click with an empty hand opens the mod's own filter screen (vanilla only calls block use while sneaking when

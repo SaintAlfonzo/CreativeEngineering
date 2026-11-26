@@ -35,6 +35,15 @@ const PHYSICS_FAMILIES = {
 ServerEvents.tags('item', e => {
 	const t = global.tags
 	const i = global.item
+	// Creative Delight's wood composters: kept here so they float even when the generator's dump predates them
+	// (item-physics #8); tools/item_physics_overrides.csv puts the same ids in the same families
+	if (global.has('creativedelight')) {
+		t.add(e, 'creativecompat:physics/family/nether_wood', [i.composter_crimson, i.composter_warped])
+		t.add(e, 'creativecompat:physics/family/wood', [
+			i.composter_spruce, i.composter_birch, i.composter_dark_oak, i.composter_jungle, i.composter_acacia,
+			i.composter_mangrove, i.composter_twisted, i.composter_ancient, i.composter_blossom, i.composter_azalea,
+		])
+	}
 	Object.keys(PHYSICS_FAMILIES).forEach(target => {
 		t.add(e, target, PHYSICS_FAMILIES[target].map(f => '#creativecompat:physics/family/' + f))
 	})

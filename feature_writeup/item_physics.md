@@ -256,10 +256,10 @@ Drop items with Q into the hazard.
   blocks -> leaves and string rest on the surface, planks dip once and rest just below it, cobblestone sinks; none bob.
 - [ ] **IP-24 Lava surface (SQ-IP-19):** a diamond sword, a netherite ingot and crimson planks into lava -> rest on
   top and survive; a diamond block sinks slowly and survives; oak planks burn, about a quarter leave ash.
-- [ ] **IP-25 Snow layers (SQ-IP-20, R23):** oak leaves dropped on a 3-layer snow -> rest on its top; oak planks sink
-  in one layer as before.
-- [ ] **IP-26 Fire (SQ-IP-21):** a firework rocket on a campfire -> pops, no block damage; ice burns; an iron ingot
-  survives.
+- [ ] **IP-25 Snow layers (SQ-IP-20, R23):** oak leaves dropped on a 3-layer snow -> rest on its outline top; oak planks
+  sink in to Snow! Real Magic's collision height (1/8 for 3 layers; vanilla 2/8 without it).
+- [ ] **IP-26 Fire (SQ-IP-21):** a firework rocket on a lit campfire -> pops, no block damage; ice burns; an iron ingot
+  survives (lit campfires burn items since 2026-11-25, `CampfireItemBurnMixin`).
 - [ ] **IP-27 Look (client):** drop a stack of seeds and a stack of planks into a river -> the seeds ride the surface
   with the current, the planks bob once and drift; a crimson sign thrown into lava floats on it.
 
@@ -269,6 +269,14 @@ Drop items with Q into the hazard.
   (rulings R1 to R23 and the 2026-11-24 misfiles applied, overrides CSV, 24 families incl. new `fuel`, `heavy_wood`
   and `packed`), item_physics_tags.js maps families to behavior, `ItemSurfaceFloat` (skim, damped float, lava skim,
   sinkable layers) with `[item_physics]` config. Dump used: 2026-11-19. Leftovers listed for the owner (9.7).
+- 2026-11-25: scratch fixes (r1125pub). `item-physics #9`: the `updatePre` hook was `@At("TAIL")`, which is only the
+  last return; ItemPhysic's no-fluid branch returns early, so `ItemSurfaceFloat.after` (layers, entry look-ahead) and
+  the Allurement curses never ran for items in the air. Now `@At("RETURN")`. Owner ruling: R23 holds with Snow! Real
+  Magic (skimmers on the outline top, other items at its collision height). `item-physics #10`: vanilla lit campfires
+  hurt only living entities, so no item burned on one; `CampfireItemBurnMixin` gives a dropped item the campfire's
+  `IN_FIRE` damage and ItemPhysic's burn rules decide. `item-physics #8`: the 12 Creative Delight wood composters
+  joined no family (the 2026-11-19 dump predates them); item_physics_tags.js adds them to `wood` (crimson and warped
+  to `nether_wood`) and two override rows keep the generator in step.
 
 - 2026-09-08 to 2026-09-09: fire/lava split, float control, burn transforms; two crashes (a wrong `@Redirect` signature,
   fixed; the `$1` switch class, not fixed).
@@ -561,7 +569,8 @@ which keeps the dip-and-rise of heavier wood and food but stops the endless bob.
   fall). The surface is the top fluid block of the column (up to 8 blocks up) plus its fluid height.
 - **In the air:** a skimmer that would pass its rest height this tick stops there (entry look-ahead); and a skimmer
   (water or lava) over a sinkable layer (D12) lands on the layer's outline top instead of its lower collision, with
-  ground friction 0.6, and is lifted back on top when a layer grows around it (R23).
+  ground friction 0.6, and is lifted back on top when a layer grows around it (R23). Other items rest at the layer's
+  collision height, which is Snow! Real Magic's (one layer lower than vanilla) when it is installed.
 - `[item_physics]` in creativecompat-common.toml: `surfaceFloat`, `damping`, `skimOnLayers` (all true), `skim`
   0.45 / 0.12 / 0.05, `float` 0.75 / 0.06 / 0.15, `lava` 0.35 / 0.10 / 0.08 (drag / spring / depth), `maxPush` 0.06.
 - Currents still push floaters (the 0.3 fluid-push inflate for `swimmingItems` stays, and skimmers are in `floats`).

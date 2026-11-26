@@ -43,7 +43,7 @@ import team.creative.itemphysic.server.ItemPhysicServer;
  * <p><b>Sinkable layers (R23):</b> a skimmer (water or lava) also rests on top of snow layers, the pass-through layer
  * tier and the surface layers, whose collision lets items sink into them; the outline top counts as the ground.
  *
- * <p>Called from {@code mixin/ItemPhysicServerMixin} at the HEAD (records the speed) and TAIL of
+ * <p>Called from {@code mixin/ItemPhysicServerMixin} at the HEAD (records the speed) and every RETURN of
  * {@code ItemPhysicServer.updatePre}, on both sides: item motion is simulated on the client too and the tags are synced.
  */
 public final class ItemSurfaceFloat {
@@ -62,7 +62,7 @@ public final class ItemSurfaceFloat {
 		VY_BEFORE.get()[0] = item.getDeltaMovement().y;
 	}
 
-	/** TAIL of {@code updatePre}. */
+	/** Every RETURN of {@code updatePre} (the no-fluid branch returns early). */
 	public static void after(ItemEntity item) {
 		if (!CompatConfig.SPEC.isLoaded() || item.isNoGravity()) return;   // NoGravity: held in a web, or a mod's
 		ItemStack stack = item.getItem();

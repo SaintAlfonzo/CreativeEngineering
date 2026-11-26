@@ -221,6 +221,15 @@ to -20). Choices the design left open (confirmed, owner, 2026-11-22, ruling 38):
   section holds a stack (`CorpseSections.sectionsHold`). The Additional container's second `setSlots(0)` (the filtered
   view) grew the menu's `lastSlots` and `remoteSlots` to 180, so the open sync sent 180 stacks to the client's 90-slot
   menu (IndexOutOfBounds 90 on every content packet); `setSlots` HEAD now empties both lists first (page switches too).
+- **Fix 2026-11-25 (creative-compat-publish #21, CQ-CMP-19 part b).** That sectioned screen had no buttons: the Corpse
+  mod's `CorpseInventoryScreen.updateButtons` adds Transfer Items only while the main inventory holds a stack, and
+  Additional Items only while a loose additional stack is left. `CorpseInventoryScreenMixin` (client, TAIL of
+  `updateButtons`) adds Transfer Items when a section slot holds a stack (left of Additional Items when loose stacks
+  remain, else centered); the server's transfer already takes the whole additional list, curios first.
+- **Fix 2026-11-25 (creative-compat-publish #22, CQ-CMP-33).** Ancient corpses read "Corpse" in WTHIT: the Corpse mod
+  overrides only `getDisplayName`, which Compat already renamed; WTHIT reads `Entity.getName`, the entity type's name.
+  `CorpseNameMixin` adds a `getName` override with the same Ancient Corpse / Ancient Remains names
+  (`CorpseState.creativecompat$ancientName`).
 
 Build notes, round 2 (2026-11-19, ruling 35; [creative_compat.md](creative_compat.md) Corpse models; CQ-CMP-21, -22,
 look-checked together with CQ-CMP-18). Choices the design left open (confirmed, owner, 2026-11-22, ruling 38):

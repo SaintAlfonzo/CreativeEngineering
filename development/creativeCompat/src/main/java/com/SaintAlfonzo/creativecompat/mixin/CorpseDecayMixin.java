@@ -189,10 +189,13 @@ public abstract class CorpseDecayMixin implements CorpseState {
 		creativecompat$checked = false;
 	}
 
-	/** "Ancient Corpse" / "Ancient Remains" instead of "Corpse" for a corpse saved with the Ancient / Remains flag. */
+	/**
+	 * "Ancient Corpse" / "Ancient Remains" instead of "Corpse" for a corpse saved with the Ancient / Remains flag. The
+	 * plain name ({@code getName}, read by WTHIT) is CorpseNameMixin.
+	 */
 	@Inject(method = "m_5446_", at = @At("HEAD"), cancellable = true, remap = false)
 	private void creativecompat$ancientName(CallbackInfoReturnable<Component> cir) {
-		if (creativecompat$has(FLAG_REMAINS)) cir.setReturnValue(Component.translatable("entity.creativecompat.ancient_remains"));
-		else if (creativecompat$has(FLAG_ANCIENT)) cir.setReturnValue(Component.translatable("entity.creativecompat.ancient_corpse"));
+		Component name = creativecompat$ancientName();
+		if (name != null) cir.setReturnValue(name);
 	}
 }
