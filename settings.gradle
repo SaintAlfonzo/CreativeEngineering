@@ -76,6 +76,11 @@ project(':creativeWorldgen').projectDir = file('development/creativeWorldgen')
 include 'backportedTempad'
 project(':backportedTempad').projectDir = file('development/backportedTempad')
 
+// Yuushya Modelling 2.4.1 backport (feature_writeup/plan_yuushya_backport.md): its own jar, mod id yuushya_modelling;
+// replaces yuushya-modelling-1.19.2-forge-2.2.0.jar.
+include 'backportedYuushyaModelling'
+project(':backportedYuushyaModelling').projectDir = file('development/backportedYuushyaModelling')
+
 // Spice of Life: Raspberry Pie Addition (feature_writeup/raspberry_pie.md): selectable diet bonuses on top of Apple Pie.
 include 'solRaspberryPie'
 project(':solRaspberryPie').projectDir = file('development/solRaspberryPie')

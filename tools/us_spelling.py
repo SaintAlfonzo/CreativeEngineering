@@ -68,7 +68,8 @@ DOUBLE_L = {'travelled': 'traveled', 'travelling': 'traveling', 'traveller': 'tr
 # Proper names that keep their spelling (upstream mods, items and people's names as the game or the author writes them)
 PROTECT = re.compile(r"Colourful Azaleas|Colorful Azaleas|Better Armour|Armourer'?s Workshop|Armour ?Bar|Grey Goo|"
 					 r"Greyhound|Colour ?Wheel|Licence to|Centre Pompidou|Mouldy|Defence Tower|Colourful Mobs|"
-					 r"Neighbourhood|grey_|Grey Elf|cdevplace catalogue|\[catalogue\]|Structure Catalogue|neighbours keys?", re.I)
+					 r"Neighbourhood|grey_|Grey Elf|cdevplace catalogue|\[catalogue\]|Structure Catalogue|neighbours keys?|"
+					 r"Yuushya[ -]Modelling|backportedYuushyaModelling", re.I)
 
 TOKEN_SKIP = re.compile(r'[A-Za-z0-9]*[_./:#\\][\w./:#\\-]*|[a-z]+[A-Z]\w*|[A-Z][a-z]+[A-Z]\w*')
 

@@ -1,0 +1,29 @@
+# Yuushya Modelling 2.4.1 backported to Forge 1.19.2 (feature_writeup/plan_yuushya_backport.md). Keeps the upstream
+# mod id; no Architectury and no optional yuushya content-mod dependency (2.4 dropped both).
+modLoader="javafml"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
+issueTrackerURL="https://github.com/SaintAlfonzo/CreativeEngineering/issues"
+
+[[mods]]
+modId="yuushya_modelling"
+version="${mod_version}"
+displayName="${mod_name}"
+displayURL="https://yuushya.com/townscape/"
+authors="${mod_authors}"
+credits="Solid support from the team and the community! (upstream credits line)"
+description='''${mod_description}'''
+
+[[dependencies.yuushya_modelling]]
+modId="forge"
+mandatory=true
+versionRange="${forge_version_range}"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.yuushya_modelling]]
+modId="minecraft"
+mandatory=true
+versionRange="${minecraft_version_range}"
+ordering="NONE"
+side="BOTH"

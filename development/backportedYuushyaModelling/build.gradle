@@ -1,0 +1,16 @@
+// backportedYuushyaModelling: Yuushya Modelling 2.4.1 (Forge 1.20.1) backported to Forge 1.19.2 (mod id
+// yuushya_modelling, item namespace yuushya, all ids as upstream). Plan: feature_writeup/plan_yuushya_backport.md;
+// report: feature_writeup/yuushya_modelling.md. Upstream is MIT (code and assets), so the jar carries its own code,
+// art and data (no runtime donor); NOTICE-upstream-MIT.txt keeps upstream's notice.
+// Replaces yuushya-modelling-1.19.2-forge-2.2.0.jar (replaces_jars in gradle.properties).
+// Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle (+ ce.forge-mod-refmap.gradle).
+// Build from the instance root: ./gradlew :backportedYuushyaModelling:build --offline
+// SPDX-License-Identifier: GPL-3.0-only
+plugins {
+	id 'ce.forge-mod-refmap'
+}
+
+// Port in progress: report every compile error, not javac's default first 100.
+tasks.named('compileJava', JavaCompile).configure {
+	options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
+}

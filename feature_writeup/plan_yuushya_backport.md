@@ -132,3 +132,10 @@ the look-checks.
 
 - 2026-11-25: plan written; rulings R1 to R7 from chat and AskUserQuestion, R8 to R11 agent defaults. The report's D4
   (render cache unused) corrected: the cache is the Item Block renderer and stays.
+- 2026-11-25: A0 to A3 built (`./gradlew :backportedYuushyaModelling:build --offline` passes; not installed). Skeleton,
+  settings include, `IN_TREE_MODS` row (required=False until A10), `replaces_jars=yuushya-modelling-*.jar`; registries,
+  blocks, block entities, transform data, utils, network (protocol `2.4.1-ce-1`), JOML -> `com.mojang.math` in those
+  classes. Deviations: the item classes, engrave/history menus and loaders, the reload command and `ClientEvent` (item
+  properties only) came in early so the registries compile (A5/A7 review them); `BlockBehaviourMixin` came in with the
+  mixin config now (B3, common list); `GetBlockStateItem.renderByItem` dropped with `GetBlockStateItemForge`. The
+  plan's "34 primitives" are 32 in the 2.4.1 registry. API map, stubs and phase state: the project's PORT_NOTES.md.

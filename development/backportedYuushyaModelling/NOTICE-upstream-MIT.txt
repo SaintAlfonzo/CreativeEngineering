@@ -1,0 +1,39 @@
+backportedYuushyaModelling is licensed under the GNU General Public License v3 (see LICENSE).
+
+It is a backport of Yuushya Modelling 2.4.1 (Forge, Minecraft 1.20.1) by the Yuushya team (Coco, Xiao2 or XiLaiTL,
+SQwatermark, XieZai, Hikari, LD_Anvil, Little Panda, Crystal1921, ZhuRuoLing) to Forge 1.19.2. Upstream:
+https://modrinth.com/mod/yuushya-modelling (jar yuushya_modelling-1.20.1-2.4.1.jar). The public source repository
+(https://github.com/XiLaiTL/Yuushya-Modelling) stops at 2.2.0, so the 2.4.1 code was recovered by decompiling the
+released jar.
+
+Which parts are ours: every Java file in this jar is either a backport of an upstream class (each names its upstream
+class in its header; the backport is a derivative of MIT-licensed code, see below) or written for the port. Our own
+work and our changes are GPLv3; the upstream MIT notice below covers the upstream parts, including the textures,
+models, blockstates, lang files and data carried over from the upstream jar. Every deviation from 2.4.1 is listed in
+PORT_NOTES.md.
+
+Upstream's licence (LICENSE in the 2.2.0 jar and repository; 2.4.1 is published under the same MIT licence), verbatim:
+
+-------------------------------------------------------------------------------------------------------
+MIT License
+
+Copyright (c) 2023 GeometryCoco XiLaiTL SQWatermark Hikari
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-------------------------------------------------------------------------------------------------------
