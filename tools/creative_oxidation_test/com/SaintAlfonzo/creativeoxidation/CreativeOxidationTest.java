@@ -141,6 +141,44 @@ public class CreativeOxidationTest {
 		check(parsed.item() == Items.IRON_BARS && parsed.stage() == OxidationStage.EXPOSED && !parsed.waxed(), "JSON round trip");
 		check(net.minecraft.world.item.crafting.Ingredient.of(Items.IRON_BARS).test(exposedStack), "a plain item ingredient still takes a staged item (R15)");
 
+		// P3 drops, placer items, display name
+		check(OxidationRules.dropKeepsStage(true, false, OxidationStage.WEATHERED) && OxidationRules.dropKeepsStage(true, true, OxidationStage.UNAFFECTED),
+				"keepStageOnBreak on: staged or waxed drops keep the stage");
+		check(!OxidationRules.dropKeepsStage(false, true, OxidationStage.OXIDIZED), "keepStageOnBreak off: drops plain");
+		check(!OxidationRules.dropKeepsStage(true, false, OxidationStage.UNAFFECTED), "plain block: nothing written");
+		check(OxidationTargets.isTargetItem("create:fluid_pipe", "create:fluid_pipe"), "fluid pipe item takes the stage");
+		check(OxidationTargets.isTargetItem("createdeco:copper_coinstack", null), "coin stack item (not a BlockItem) takes the stage");
+		check(!OxidationTargets.isTargetItem("minecraft:copper_ingot", null) && !OxidationTargets.isTargetItem("create:andesite_casing", "create:andesite_casing"),
+				"other drops stay plain");
+		check("createdeco:copper_coinstack_block".equals(OxidationTargets.placedBlockOf("createdeco:copper_coinstack"))
+				&& OxidationTargets.placedBlockOf("create:fluid_pipe") == null, "placer item map");
+		check(OxidationTargets.isTarget(OxidationTargets.PLACER_ITEMS.get("createdeco:copper_coinstack")), "placer item places a target");
+		net.minecraft.network.chat.Component base = net.minecraft.network.chat.Component.literal("Fluid Pipe");
+		net.minecraft.network.chat.Component named = OxidationItemData.displayName(weatheredWaxed, base);
+		check(named.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents tc
+				&& "item.creativeoxidation.variant.waxed.weathered".equals(tc.getKey()) && tc.getArgs().length == 1 && tc.getArgs()[0] == base,
+				"display name: Waxed Weathered %s around the item name");
+		check(OxidationItemData.displayName(plain, base) == base, "plain item keeps its name");
+		java.util.Map<String, String> lang = new com.google.gson.Gson().fromJson(java.nio.file.Files.readString(java.nio.file.Path.of(
+				"development/creativeEngineering/members/creativeoxidation/src/main/resources/assets/creativeoxidation/lang/en_us.json")),
+				new com.google.gson.reflect.TypeToken<java.util.Map<String, String>>() {}.getType());
+		boolean allKeys = true;
+		for (OxidationStage st : OxidationStage.values()) for (boolean w : new boolean[]{false, true}) {
+			OxidationItemData.StoredState ss = new OxidationItemData.StoredState(st, w);
+			if (!ss.isPlain() && !lang.containsKey(OxidationItemData.variantKey(ss))) allKeys = false;
+		}
+		check(allKeys, "every variant name key is in en_us.json");
+
+		// P4 honeycomb, scrapers, soap
+		check(OxidationRules.toolApplies(OxidationRules.Tool.HONEYCOMB, false, OxidationStage.OXIDIZED), "honeycomb waxes an unwaxed block");
+		check(!OxidationRules.toolApplies(OxidationRules.Tool.HONEYCOMB, true, OxidationStage.EXPOSED), "honeycomb on a waxed block: no use");
+		check(OxidationRules.toolApplies(OxidationRules.Tool.SCRAPER, true, OxidationStage.UNAFFECTED), "scraper takes wax off a waxed plain block");
+		check(OxidationRules.toolApplies(OxidationRules.Tool.SCRAPER, false, OxidationStage.EXPOSED), "scraper scrapes an aged block");
+		check(!OxidationRules.toolApplies(OxidationRules.Tool.SCRAPER, false, OxidationStage.UNAFFECTED), "scraper on a plain block: no use");
+		check(OxidationRules.soapWashes(true, OxidationStage.OXIDIZED) && OxidationRules.soapWashes(false, OxidationStage.EXPOSED)
+				&& OxidationRules.soapWashes(true, OxidationStage.UNAFFECTED), "soap washes waxed or aged");
+		check(!OxidationRules.soapWashes(false, OxidationStage.UNAFFECTED), "soap on a plain block: no use");
+
 		System.out.println(fails == 0 ? "ALL " + checks + " OK" : fails + " FAILED of " + checks);
 		System.exit(fails == 0 ? 0 : 1);
 	}

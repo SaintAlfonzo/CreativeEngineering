@@ -92,6 +92,7 @@ Sky Village addon houses,sky_village_addons.md,SVA-,BUILT,kubejs,"CQ-SVA, SQ-SVA
 devmods evaluation,devmods_evaluation.md,,BUILT,creativedelight,,plan 2026-10-25,,,
 Hostile Delight integration plan,hostile_delight.md,HTD-,BUILT,creativedelight,"CQ-HTD, SQ-HTD",planned (2026-10-23),,,
 Unusual Delight overlap survey,unusual_delight.md,UD-,BUILT,,,"survey 2026-10-30, nothing built",,,
+Create: Oxidized (createoxidized) integration report,create_oxidized.md,OXD-,BUILT,creativeengineering,"CQ-OXD, SQ-OXD","report 2026-11-25; port Creative Oxidation (creativeoxidation, Creative Engineering member, plan_creative_oxidation.md) P0-P4 built 2026-11-25",,,
 Yuushya Modelling 2.4.1 backport report,yuushya_modelling.md,YMB-,planned,,,"report 2026-11-25, nothing built; backport 1.20.1 -> 1.19.2 needed (no 1.19.2 build after 2.2.0)",,,
 Flesh That Hates (flesh_that_hates) integration report,flesh_that_hates.md,FTH-,planned,,,"report 2026-11-25, nothing built; Visceral Heap only, no spreading",,,
 Hearth and Harvest plan,"hearth_and_harvest.md, plan_hearth_crow_swap.md",HNH-,BUILT,creativedelight,"CQ-HCS, CQ-HH, CQ-HOP, CQ-HR, CQ-SLK, CQ-WC, SQ-HCS, SQ-HOP, SQ-HR, SQ-HSC, SQ-SLK, SQ-WC, SQ-WCT","Crow swap built 2026-11-10, not installed (4.7: H&H crow replaces AM's, nests make crows, tree-top and roof ...",,,

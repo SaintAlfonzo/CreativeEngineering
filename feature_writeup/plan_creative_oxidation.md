@@ -1,18 +1,18 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Creative Oxidation: copper machine aging and iron rusting (plan)
 
-<!-- generated:status_index begin open_work sha1=d6dea116f884 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 6, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=c5594740061b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 5, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `jei-ordering #9` | Planned | C | Oxidized copper family: plain Create copper items stay in place, every oxidized or waxed state in its own family (NBT-aware tree entry) |
-| `mod-integration #31` | Planned | S C | Creative Oxidation P3-P4: staged item drops (keepStageOnBreak), names from stage, honeycomb, axe and steel wool scraping, lightning, Supplementaries soap |
 | `mod-integration #32` | Planned | S C | Creative Oxidation P5: bounded quad cache and stage kept across Create block swaps (B3, B4) after live checks |
 | `mod-integration #33` | Planned | C | Creative Oxidation P6: oxidized art for 32 Create and Create Deco blocks plus Design n' Decor copper blocks (copied dndecor art) |
 | `mod-integration #34` | Planned | S P | Creative Oxidation P7: spout and fan aging for staged blocks, old create_oxidized spout recipes rebuilt and jar removed, copper splashing port moved in, iron rusting by spout and fan |
 | `mod-integration #35` | Planned | C | Creative Oxidation P8: JEI Waxing and Scraping, Lightning Conversion and Soap Washing rows for staged blocks; subtype interpreter so all 7 variants per block are listed |
 | `mod-integration #28` | Testing | S C P | Creative Oxidation P0-P2: Creative Engineering bundle member creativeoxidation, port of createoxidized core, properties only on the 45 target ids, random ticks fall through |
+| `mod-integration #31` | Testing | S C | Creative Oxidation P3-P4: staged item drops (keepStageOnBreak), names from stage, honeycomb, axe and steel wool scraping, lightning, Supplementaries soap |
 <!-- generated:status_index end open_work -->
 
 Written 2026-11-25 from the owner's notes on [create_oxidized.md](create_oxidized.md) (the integration report of
@@ -219,6 +219,27 @@ P7 (P7c needs P1's ingredient type, P7a with the jar removal in one install) -> 
   are ported and ready). Harness `tools/test_creative_oxidation.sh` (57 checks: the B1 decision in the mixins' begin /
   take / end order with vanilla owners, B2 decisions, chances, NBT, ingredient, tag = target list); the mixins
   themselves are checked live (SQ-OXD-07, -08). Rows SQ-OXD-01, -07, -08, -11 (draft), -15 (draft) in `rows/OXD.qb`.
+- 2026-11-25 P3-P4 built and installed (`creativeoxidation-1.0.0-ce-19.2-02` in `creativeengineering-2.0.0.jar`,
+  TODO `mod-integration #31` Testing). Drops: the stage is written in `BlockStateBase.getDrops(LootContext.Builder)`
+  (deviation from upstream's `Block.getDrops` entity overload: one hook covers player and tool breaks, Create drills,
+  saws and wrench pickup, explosions and pistons); a drop takes it when it is a target's own item
+  (`OxidationTargets.isTargetItem`: a BlockItem of a target, or `PLACER_ITEMS` `createdeco:copper_coinstack` -> the coin
+  stack block; glass and encased fluid pipes drop the fluid pipe item, which takes the stage). Placing:
+  `BlockItemMixin` (one frame per `place` call, position from the `placeBlock` context, so scaffolding and Create's
+  nested fluid tank places work), both door halves (`OxidationManager.restorePlaced`); the coin stack item is not a
+  BlockItem, so `OxidationEvents.onBlockPlaced` (EntityPlaceEvent) restores it. Adding a coin to an existing stack
+  resets the stack to the held coin's stage (Create Deco rebuilds the state from the default). Name: `ItemStackMixin`
+  on `getHoverName`, only without a custom name. Interactions (`OxidationEvents`, Forge RightClickBlock, also fired by
+  deployers): honeycomb; axe = any item that can `ToolActions.AXE_SCRAPE`; steel wool by id
+  `immersive_weathering:steel_wool`; the client cancels too, so no other use runs. Lightning: `LightningBoltMixin`
+  TAIL. Soap: deviation from "mixin on `tryWash`": the hook is HEAD of `tryWashWithInterface` (private static, the first
+  check `tryWash` makes in Supplementaries 1.19.2-2.4.20), so a washed staged block gets Supplementaries' own bubble
+  packet; `@Pseudo`, gated by `OxidationMixinPlugin` (shared `GatedMixinPlugin`, `supplementaries`
+  `[1.19.2-2.4.20,1.19.2-2.5)`). Waxed Up dropped. Recipe check (R15): the dumps in `kubejs/exported/recipes/` hold
+  ids and types only, so the 27,876 recipe JSONs in `mods/` jars (nested jars included), `kubejs/data` and `data/`
+  were scanned, plus the KubeJS scripts: no strict-NBT ingredient (`forge:nbt` 22, `forge:partial_nbt` 13, other
+  NBT-keyed ingredients 407 in the pack) names a target item; recipes built at runtime by other mods' code are not
+  covered. Harness 75 checks. Rows SQ-OXD-02 to -06, -16, CQ-OXD-02 (draft) in `rows/OXD.qb` section 2.
 
 ## 7. History
 

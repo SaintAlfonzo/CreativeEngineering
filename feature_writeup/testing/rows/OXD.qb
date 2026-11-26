@@ -78,3 +78,146 @@ look a block that random ticks on its own and carries the properties: none among
 @fails disconnect: client jar differs from the server's (both must carry the member)
 @client true
 @draft needs a client join on the scratch server
+
+@@section 2
+@@title SQ-OXD Creative Oxidation P3-P4: staged items, drops, placing, names, waxing, scraping, lightning, soap, 2026-11-25 ([plan_creative_oxidation.md](../plan_creative_oxidation.md) sections 4 and 5, [create_oxidized.md](../create_oxidized.md) OXD-02 to OXD-06; TODO `mod-integration #31`)
+@@date 2026-11-25
+@@jars creativeengineering
+@@sources development/creativeEngineering/members/creativeoxidation/src
+@@text
+@@text Creative Engineering 2.0.0 of 2026-11-25 or later with Creative Oxidation P3-P4 (`creativeoxidation` 1.0.0-ce-19.2-02 nested). Fresh worlds only (P2 state ids). Staged textures come in P6, so these rows read block states and item NBT (`CreativeOxidationStage`, `CreativeOxidationWaxed`), not looks. Default `config/creativeoxidation-common.toml` (`keepStageOnBreak` true) unless a row edits it.
+@@table
+## SQ-OXD-02 | honeycomb wax; waxed block does not age (OXD-02)
+@group A
+@commands Fluid Pipe; `cdevtest use` with 2 honeycomb; a second use on the waxed pipe; `randomTickSpeed` 4096 for 30 s next to an unwaxed control pipe
+@pass first use: `waxed=true`, one honeycomb left; second use: not consumed, still one honeycomb; after 30 s the waxed pipe is still `unaffected,waxed=true` and the control pipe is `oxidized`
+@fails not waxed: OxidationEvents.onRightClickBlock not registered (CreativeOxidation constructor) or the tag not bound; honeycomb not used up: `instabuild` read wrong; waxed pipe aged: OxidationRules.isAging ignores wax
+> forceload add 0 96 16 112
+> setblock 0 100 100 create:fluid_pipe
+> setblock 12 100 100 create:fluid_pipe
+> cdevtest use 0 100 100 held=minecraft:honeycomb*2
+> execute if block 0 100 100 create:fluid_pipe[creativeoxidation_stage=unaffected,creativeoxidation_waxed=true] run say oxd02-waxed
+waitlog oxd02-waxed 10
+expect verb=use .*main=minecraft:honeycomb\*1\b
+> cdevtest use 0 100 100 held=minecraft:honeycomb*1
+expect verb=use who=fake hand=main action=block result=PASS
+> gamerule randomTickSpeed 4096
+sleep 30
+> gamerule randomTickSpeed 3
+> execute if block 0 100 100 create:fluid_pipe[creativeoxidation_stage=unaffected,creativeoxidation_waxed=true] run say oxd02-waxed-unchanged
+> execute if block 12 100 100 create:fluid_pipe[creativeoxidation_stage=oxidized] run say oxd02-control-oxidized
+waitlog oxd02-control-oxidized 20
+expect oxd02-waxed-unchanged
+## SQ-OXD-03 | axe and steel wool scrape: wax off, then one stage; durability (OXD-03)
+@group A
+@commands Waxed weathered Fluid Pipe: `cdevtest use` twice with an iron axe; oxidized Fluid Pipe: once with Immersive Weathering steel wool; a plain pipe with the axe
+@pass axe 1: `weathered,waxed=false`, axe `Damage:1`; axe 2: `exposed`, `Damage:2`; steel wool: `oxidized` -> `weathered`, wool `Damage:1`; plain pipe: result PASS, axe undamaged
+@fails nothing scraped: OxidationEvents.toolOf (axe by ToolActions.AXE_SCRAPE, steel wool by id `immersive_weathering:steel_wool`); two steps in one click: wax and stage both taken (OxidationManager.scrape); no damage: hurtAndBreak skipped
+> forceload add 0 96 16 112
+> setblock 0 100 104 create:fluid_pipe[creativeoxidation_stage=weathered,creativeoxidation_waxed=true]
+> cdevtest use 0 100 104 held=minecraft:iron_axe
+expect verb=use .*main=minecraft:iron_axe\*1\{Damage:1\}
+> execute if block 0 100 104 create:fluid_pipe[creativeoxidation_stage=weathered,creativeoxidation_waxed=false] run say oxd03-wax-off
+waitlog oxd03-wax-off 10
+> cdevtest use 0 100 104 held=minecraft:iron_axe{Damage:1}
+expect verb=use .*main=minecraft:iron_axe\*1\{Damage:2\}
+> execute if block 0 100 104 create:fluid_pipe[creativeoxidation_stage=exposed,creativeoxidation_waxed=false] run say oxd03-axe-scraped
+waitlog oxd03-axe-scraped 10
+> setblock 4 100 104 create:fluid_pipe[creativeoxidation_stage=oxidized,creativeoxidation_waxed=false]
+> cdevtest use 4 100 104 held=immersive_weathering:steel_wool
+expect verb=use .*main=immersive_weathering:steel_wool\*1\{Damage:1\}
+> execute if block 4 100 104 create:fluid_pipe[creativeoxidation_stage=weathered,creativeoxidation_waxed=false] run say oxd03-wool-scraped
+waitlog oxd03-wool-scraped 10
+> setblock 8 100 104 create:fluid_pipe
+> cdevtest use 8 100 104 held=minecraft:iron_axe
+expect verb=use .*main=minecraft:iron_axe\*1 off=empty state=create:fluid_pipe\[creativeoxidation_stage=unaffected,creativeoxidation_waxed=false
+## SQ-OXD-04 | lightning on a rod over oxidized pipes (OXD-04)
+@group A
+@commands A row of 5 oxidized Fluid Pipes, a lightning rod on the middle one, a waxed oxidized pipe under a second rod; `summon minecraft:lightning_bolt` on each rod; `doFireTick` false
+@pass the pipe under the first rod is `unaffected` (the random walks may clean its neighbors a stage or more); the waxed pipe under the second rod stays `oxidized,waxed=true`
+@fails nothing cleaned: LightningBoltMixin did not apply (`clearCopperOnLightningStrike` refmap name `m_147150_`) or the bolt struck beside the rod (summon at the rod's top + 1)
+> forceload add 0 112 16 128
+> gamerule doFireTick false
+> fill 0 100 116 4 100 116 create:fluid_pipe[creativeoxidation_stage=oxidized,creativeoxidation_waxed=false,east=true,west=true]
+> setblock 2 101 116 minecraft:lightning_rod[facing=up]
+> setblock 10 100 116 create:fluid_pipe[creativeoxidation_stage=oxidized,creativeoxidation_waxed=true]
+> setblock 10 101 116 minecraft:lightning_rod[facing=up]
+> summon minecraft:lightning_bolt 2.5 102 116.5
+> summon minecraft:lightning_bolt 10.5 102 116.5
+sleep 3
+> execute if block 2 100 116 create:fluid_pipe[creativeoxidation_stage=unaffected] run say oxd04-anchor-clean
+> execute if block 10 100 116 create:fluid_pipe[creativeoxidation_stage=oxidized,creativeoxidation_waxed=true] run say oxd04-waxed-kept
+waitlog oxd04-waxed-kept 10
+expect oxd04-anchor-clean
+> gamerule doFireTick true
+## SQ-OXD-05 | soap on a waxed oxidized tank -> plain, one soap (R9)
+@group A
+@commands Waxed oxidized Fluid Tank; `cdevtest use` with one Supplementaries soap
+@pass tank `unaffected,waxed=false` after one use; the click is consumed; no error naming `SoapWashableHelperMixin` at boot
+@fails tank unchanged: SoapWashableHelperMixin not applied (OxidationMixinPlugin gate: Supplementaries version outside `[1.19.2-2.4.20,1.19.2-2.5)`, or `tryWashWithInterface` renamed); only the wax or one stage off: OxidationManager.wash
+bootreject (Mixin apply failed|InvalidInjectionException).*SoapWashableHelperMixin
+> forceload add 0 112 16 128
+> setblock 0 100 124 create:fluid_tank[creativeoxidation_stage=oxidized,creativeoxidation_waxed=true]
+> cdevtest use 0 100 124 held=supplementaries:soap
+expect verb=use who=fake hand=main action=block result=(SUCCESS|CONSUME)
+> execute if block 0 100 124 create:fluid_tank[creativeoxidation_stage=unaffected,creativeoxidation_waxed=false] run say oxd05-washed
+waitlog oxd05-washed 10
+## SQ-OXD-06 | break keeps the stage (keepStageOnBreak on and off); place restores; door halves; coin stack (OXD-05, OXD-06)
+@group A
+@commands Break a weathered waxed Fluid Pipe with an iron pickaxe, read the dropped item's NBT; place a staged pipe, Copper Door and coin stack from NBT stacks; then `keepStageOnBreak` false, restart, break a weathered pipe
+@pass drop NBT `CreativeOxidationStage:"weathered"`, `CreativeOxidationWaxed:1b`; placed pipe `exposed,waxed=true`; both door halves `oxidized`; coin stack block `weathered`; with the option off the drop carries no `CreativeOxidation` key
+@fails no NBT on the drop: the BlockStateBase.getDrops mixin did not apply or OxidationTargets.isTargetItem missed the item; placed plain: BlockItemMixin (place / placeBlock refmap); only the lower door half: OxidationManager.restorePlaced half lookup; coin stack plain: OxidationEvents.onBlockPlaced (EntityPlaceEvent not fired for CoinStackItem)
+> forceload add 0 128 16 144
+> setblock 0 100 130 create:fluid_pipe[creativeoxidation_stage=weathered,creativeoxidation_waxed=true]
+> cdevtest break 0 100 130 held=minecraft:iron_pickaxe keep
+expect verb=break who=fake broken=true
+> cdevtest entities 0 100 130 3 type=minecraft:item nbt
+expect verb=entities .*create:fluid_pipe.*CreativeOxidationStage:\W*weathered
+expect verb=entities .*CreativeOxidationWaxed:1b
+> kill @e[type=minecraft:item,x=0,y=100,z=130,distance=..4]
+> setblock 4 99 130 minecraft:stone
+> cdevtest use 4 99 130 held=create:fluid_pipe{CreativeOxidationStage:'exposed',CreativeOxidationWaxed:1b} face=up stand=6,100,130
+> execute if block 4 100 130 create:fluid_pipe[creativeoxidation_stage=exposed,creativeoxidation_waxed=true] run say oxd06-pipe-placed
+waitlog oxd06-pipe-placed 10
+> setblock 8 99 130 minecraft:stone
+> cdevtest use 8 99 130 held=create:copper_door{CreativeOxidationStage:'oxidized',CreativeOxidationWaxed:0b} face=up stand=10,100,130
+> execute if block 8 100 130 create:copper_door[half=lower,creativeoxidation_stage=oxidized] run say oxd06-door-lower
+> execute if block 8 101 130 create:copper_door[half=upper,creativeoxidation_stage=oxidized] run say oxd06-door-upper
+waitlog oxd06-door-upper 10
+expect oxd06-door-lower
+> setblock 12 99 130 minecraft:stone
+> cdevtest use 12 99 130 held=createdeco:copper_coinstack{CreativeOxidationStage:'weathered',CreativeOxidationWaxed:0b} face=up stand=14,100,130
+> execute if block 12 100 130 createdeco:copper_coinstack_block[creativeoxidation_stage=weathered] run say oxd06-coins-placed
+waitlog oxd06-coins-placed 10
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeoxidation-common.toml - keepStageOnBreak false
+restart
+> forceload add 0 128 16 144
+> setblock 0 100 136 create:fluid_pipe[creativeoxidation_stage=weathered,creativeoxidation_waxed=false]
+> cdevtest break 0 100 136 held=minecraft:iron_pickaxe keep
+expect verb=break who=fake broken=true
+> cdevtest entities 0 100 136 3 type=minecraft:item nbt
+expect verb=entities .*create:fluid_pipe
+reject verb=entities .*CreativeOxidation
+> kill @e[type=minecraft:item,x=0,y=100,z=136,distance=..4]
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeoxidation-common.toml - keepStageOnBreak true
+restart
+## SQ-OXD-16 | staged and waxed items work as the plain item in recipes (R15)
+@group A
+@commands Encase a Fluid Pipe by `cdevtest use` with an oxidized Copper Casing stack; `cdevtest uses create:fluid_pipe` lists its recipes; LOOK: craft a Mechanical Pump from a weathered waxed Fluid Pipe and a cogwheel at a crafting table, and a Mechanical Crafter recipe with an oxidized Copper Casing
+@pass the pipe becomes `create:encased_fluid_pipe` and the casing is used up; crafting and mechanical crafting accept the staged items (LOOK)
+@fails casing refused: Create's encasing compares the stack with NBT (not expected in 0.5.1); a recipe refuses a staged item: a strict-NBT ingredient names it (the P3 recipe check found none, plan section 6)
+> forceload add 0 144 16 160
+> setblock 0 100 148 create:fluid_pipe[creativeoxidation_stage=weathered,creativeoxidation_waxed=true]
+> cdevtest use 0 100 148 held=create:copper_casing{CreativeOxidationStage:'oxidized',CreativeOxidationWaxed:0b} face=north stand=0,100,146
+expect verb=use who=fake hand=main action=block result=(SUCCESS|CONSUME)
+> execute if block 0 100 148 create:encased_fluid_pipe run say oxd16-encased
+waitlog oxd16-encased 10
+> cdevtest uses create:fluid_pipe
+expect verb=uses item=create:fluid_pipe
+look craft a Mechanical Pump from a weathered waxed Fluid Pipe (`/give @p create:fluid_pipe{CreativeOxidationStage:"weathered",CreativeOxidationWaxed:1b}`) and a cogwheel at a crafting table; feed an oxidized Copper Casing to a Mechanical Crafter recipe that takes Copper Casing: both craft as with plain items
+## CQ-OXD-02 | names: "Waxed Weathered Fluid Pipe"; anvil rename shows the rename (R3)
+@group client
+@commands `/give @p create:fluid_pipe{CreativeOxidationStage:"weathered",CreativeOxidationWaxed:1b}` and `create:copper_casing{CreativeOxidationStage:"exposed"}`; hover each; rename the pipe "Line A" in an anvil; hover; take a plain Fluid Pipe
+@pass tooltips read "Waxed Weathered Fluid Pipe" and "Exposed Copper Casing", not italic; the renamed pipe reads "Line A" (italic, as any rename); the plain pipe reads "Fluid Pipe"; the item NBT has no `display.Name` before the rename
+@fails plain name on the staged items: ItemStackMixin (getHoverName, `m_41786_`) not applied or the lang keys missing from the nested jar; rename ignored: the mixin overrides custom names (hasCustomHoverName check)
+@draft needs a client: give, hover screenshots and an anvil rename by the client driver

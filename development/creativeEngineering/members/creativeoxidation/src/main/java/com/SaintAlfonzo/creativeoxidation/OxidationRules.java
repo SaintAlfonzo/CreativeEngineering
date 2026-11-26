@@ -49,4 +49,29 @@ public final class OxidationRules {
 		float ageModifier = current == OxidationStage.UNAFFECTED ? 0.75F : 1.0F;
 		return ageModifier * ratio * ratio;
 	}
+
+	/** Hand tools on a staged block (P4): honeycomb waxes, axe and steel wool scrape (R6). */
+	public enum Tool {
+		HONEYCOMB,
+		SCRAPER
+	}
+
+	/** True when the tool changes this state: honeycomb on an unwaxed one; a scraper on a waxed or aged one. */
+	public static boolean toolApplies(Tool tool, boolean waxed, OxidationStage stage) {
+		if (tool == Tool.HONEYCOMB) return !waxed;
+		return waxed || stage != OxidationStage.UNAFFECTED;
+	}
+
+	/** Supplementaries soap (R9): one use takes wax and every stage off, so anything but plain washes. */
+	public static boolean soapWashes(boolean waxed, OxidationStage stage) {
+		return waxed || stage != OxidationStage.UNAFFECTED;
+	}
+
+	/**
+	 * Breaking a staged or waxed block (P3, R8): the drops keep the stage when {@code keepStageOnBreak} is on and the
+	 * state is not plain; only drops that are a target's own item ({@link OxidationTargets#isTargetItem}) get it.
+	 */
+	public static boolean dropKeepsStage(boolean keepStageOnBreak, boolean waxed, OxidationStage stage) {
+		return keepStageOnBreak && (waxed || stage != OxidationStage.UNAFFECTED);
+	}
 }

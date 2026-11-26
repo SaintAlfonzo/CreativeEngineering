@@ -12,11 +12,14 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LightningRodBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DoubleBlockHalf;
 
 /**
- * Aging, waxing, scraping and lightning cleaning on block states that carry the properties. Random ticks call
- * {@link #randomTick} (BlockStateBaseMixin); the interaction and lightning hooks that call {@link #wax}, {@link #scrape}
- * and {@link #lightningStrike} come in P4 (plan_creative_oxidation.md).
+ * Aging, waxing, scraping, washing and lightning cleaning on block states that carry the properties. Random ticks call
+ * {@link #randomTick} (BlockStateBaseMixin); honeycomb, axe and steel wool call {@link #wax} and {@link #scrape}
+ * (OxidationEvents); LightningBoltMixin calls {@link #lightningStrike}; Supplementaries soap calls {@link #wash}
+ * (SoapWashableHelperMixin); placing a staged item calls {@link #restorePlaced} (BlockItemMixin, OxidationEvents).
  */
 public final class OxidationManager {
 	/** Block update + client update + is-moving: the block entity stays, Create's onRemove logic does not run. */
@@ -96,6 +99,36 @@ public final class OxidationManager {
 		level.levelEvent(3005, pos, 0);
 		level.playSound(null, pos, scrapeSound(ScrapeResult.SCRAPED), SoundSource.BLOCKS, 1.0F, 1.0F);
 		return ScrapeResult.SCRAPED;
+	}
+
+	/** Supplementaries soap (R9): wax and every stage off in one use. The client only answers (the server changes it). */
+	public static boolean wash(Level level, BlockPos pos, BlockState state) {
+		if (!OxidationConfig.enabled() || !OxidationProperties.isOxidizable(state)) return false;
+		if (!OxidationRules.soapWashes(state.getValue(OxidationProperties.WAXED), state.getValue(OxidationProperties.STAGE))) return false;
+		if (!level.isClientSide) {
+			setState(level, pos, state.setValue(OxidationProperties.STAGE, OxidationStage.UNAFFECTED).setValue(OxidationProperties.WAXED, false));
+		}
+		return true;
+	}
+
+	/**
+	 * A staged item was placed at {@code pos} (P3): the block takes the item's stage and wax, and so does the other half
+	 * of a door. Server side only; works whatever {@code keepStageOnBreak} says (it only decides what drops carry).
+	 */
+	public static void restorePlaced(Level level, BlockPos pos, OxidationItemData.StoredState stored) {
+		if (level.isClientSide) return;
+		BlockState placed = level.getBlockState(pos);
+		if (!OxidationProperties.isOxidizable(placed)) return;
+		setStored(level, pos, placed, stored);
+		if (placed.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF)) {
+			BlockPos otherPos = placed.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.LOWER ? pos.above() : pos.below();
+			BlockState other = level.getBlockState(otherPos);
+			if (other.is(placed.getBlock()) && OxidationProperties.isOxidizable(other)) setStored(level, otherPos, other, stored);
+		}
+	}
+
+	private static void setStored(Level level, BlockPos pos, BlockState state, OxidationItemData.StoredState stored) {
+		setState(level, pos, state.setValue(OxidationProperties.STAGE, stored.stage()).setValue(OxidationProperties.WAXED, stored.waxed()));
 	}
 
 	public static SoundEvent scrapeSound(ScrapeResult result) {

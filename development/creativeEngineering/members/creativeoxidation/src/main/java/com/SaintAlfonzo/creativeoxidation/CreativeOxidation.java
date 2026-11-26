@@ -35,6 +35,7 @@ public final class CreativeOxidation {
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, OxidationConfig.SPEC);
 		TAB = new OxidationCreativeTab();
 		modBus.addListener(CreativeOxidation::onRegister);
+		OxidationEvents.register();
 		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> OxidationClient.init(modBus));
 	}
 

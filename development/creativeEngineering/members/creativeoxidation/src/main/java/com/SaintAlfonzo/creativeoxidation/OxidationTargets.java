@@ -3,6 +3,7 @@
 package com.SaintAlfonzo.creativeoxidation;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -67,6 +68,12 @@ public final class OxidationTargets {
 	);
 	public static final Set<String> BLOCK_IDS = Set.copyOf(ORDERED_BLOCK_IDS);
 
+	/**
+	 * Target blocks whose item is not a BlockItem of the block: item id -> block id. Create Deco 1.3.3's coin stack block
+	 * drops and is placed by the plain item createdeco:copper_coinstack (CoinStackItem).
+	 */
+	public static final Map<String, String> PLACER_ITEMS = Map.of("createdeco:copper_coinstack", "createdeco:copper_coinstack_block");
+
 	/** The id of the block Registrate is constructing on this thread, or null. */
 	private static final ThreadLocal<String> PENDING = new ThreadLocal<>();
 
@@ -79,6 +86,20 @@ public final class OxidationTargets {
 
 	public static boolean isTarget(String namespace, String path) {
 		return isTarget(namespace + ":" + path);
+	}
+
+	/**
+	 * An item that carries a target's stage (drops, P3): a BlockItem of a target block ({@code blockItemBlockId}, null
+	 * for other items), or one of {@link #PLACER_ITEMS}. A glass or encased fluid pipe drops the plain fluid pipe item,
+	 * which takes the stage too.
+	 */
+	public static boolean isTargetItem(String itemId, String blockItemBlockId) {
+		return isTarget(blockItemBlockId) || PLACER_ITEMS.containsKey(itemId);
+	}
+
+	/** The target block a non-BlockItem places ({@link #PLACER_ITEMS}), or null. */
+	public static String placedBlockOf(String itemId) {
+		return itemId == null ? null : PLACER_ITEMS.get(itemId);
 	}
 
 	/** Registrate is about to construct the block {@code modid:name} on this thread. */
