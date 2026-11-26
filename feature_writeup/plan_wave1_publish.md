@@ -9,29 +9,21 @@ Raspberry Pie items below, a clean-clone build, one test run on final jars, and 
 
 ## 0. Owner rulings
 
-<!-- generated:status_index begin open_work sha1=184764cd62d0 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 18 open TODO rows (Planned 1, Testing 17), 5 Complete.
+<!-- generated:status_index begin open_work sha1=922e0e4c00f7 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 1, Testing 9), 13 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `generators-and-tests #30` | Planned | CQ-MELT-02 CQ-CMP-21 CQ-RPS-15 | Row fixes from the owner screenshot review: CQ-MELT-02 capture shows no tooltip; CQ-CMP-21 belt and elytra not judgeable; CQ-RPS-15 food dict shots inconclusive |
 | `creative-common-publish #22` | Testing | CQ-CC13-02 | Salt Melt and the standard salt dust lack a 'usable on ice and snow' tooltip line |
 | `creative-compat-publish #8` | Testing | S | Weathered Cardboard Box moves from Creative Compat to Creative Engineering before Compat 1.0.0: id creativeengineering:weathered_cardboard_box, Compat ids in saves swapped back, item dict key kept, texture exemption (W2) moves with it |
-| `creative-compat-publish #9` | Testing | S | Squid and whales: squid and glow squid flee Alex's Mobs cachalot whales; the giant squid no longer flees whales and fights back when a whale attacks it or comes close (the flee radius config goes) |
-| `creative-compat-publish #15` | Testing | CQ-CMP-33 | JEI uses page for the Sample Syringe does not open (world tab catalyst) |
 | `creative-compat-publish #16` | Testing | CQ-CMP-37 | Sneak right-click on the Item Trash Can opened the deleted-on-close screen, not the filter screen |
-| `creative-compat-publish #18` | Testing | SQ-PTH-29 | SQ-PTH-29: a fox in 5 snow layers stands on top (light mob, G11) and gets no pass-through slowdown; the row and plan_passthrough's exempt note (snow slows foxes) expect one |
-| `creative-compat-publish #19` | Testing | SQ-PTH-30 | SQ-PTH-30: a fox crossed an 8-layer oak leaf pile wall (deeper than pathBlockLayers 6) in 1200 ticks |
-| `creative-compat-publish #20` | Testing | CQ-CMP-19 | Corpse screen in a fresh client: ContainerSetContent IndexOutOfBounds 90 of 90, the corpse menu is shorter on the client than on the server |
 | `creative-compat-publish #22` | Testing | CQ-CMP-33 | Ancient corpses are both named Corpse, not Ancient Corpse / Ancient Remains |
 | `creative-compat-publish #23` | Testing | CQ-CMP-36 | Item Trash Can: remove '(deleted on close)' from its label |
-| `food-tuning #66` | Testing | S | Drinks: hot cocoa, strong hot cocoa, Farmer's Respite coffee, long coffee and strong coffee, prickly pear juice, strawberry banana smoothie (and their families) carry the drink food type, so Raspberry Pie counts them as drinks |
-| `food-tuning #67` | Testing | S | Jams are foods: every jam family member (Vintage jam jars, Fruits Delight jellies, Upgrade Aquatic mulberry jam bottle) stays out of the drink, no-diet and Diet Log excluded tags and counts in the Diet Log; the family stays its own (preserve/jam) |
 | `raspberry-pie-publish #21` | Testing | C | Permanent buff icon keeps cycling diamond and effect while the buff is active: find and fix (rule unchanged: cycle until reached, effect alone while active) |
 | `raspberry-pie-publish #22` | Testing | C | Steady text: Diet Log tagline 'No slipping; does not trigger plates, tripwires or dripleaf'; full effect description lists all three SteadyRules rules |
 | `raspberry-pie-publish #23` | Testing | C | Hover taglines for the 19 ladder effects that have none: agent drafts, owner reviews the list before it is written |
 | `raspberry-pie-publish #24` | Testing | S C | Dropping the top effect slot drops every slot: find and fix (a drop should lose only the highest active slot) |
-| `raspberry-pie-publish #35` | Testing | CQ-RPS-09 | Food adjustment hover does not match the diversity it applies |
 <!-- generated:status_index end open_work -->
 
 | # | Item (owner's words) | Class | Ruling | Date | Source |
@@ -89,9 +81,22 @@ path, push to `agent_staging`.
 
 ## 3. Owner actions
 
-- File the GitHub Support request for the 15 pull request refs and cached views (W12, `publish-readiness #2`).
+- File the GitHub Support request for the 15 pull request refs and cached views (W12, `publish-readiness #2`): pinned
+  by the owner 2026-11-26, high priority, starts on or after 2027-01-01; does not hold the uploads.
 - Review the drafted taglines (W-P4): done 2026-11-23.
-- Upload the jars in W-P8.
+- W-P8 release, in order (jars: the installed clean builds stamped `f16c9ef00`; `python3 tools/jarstamp.py` shows them):
+  1. Tags at `f16c9ef00`, annotated like the earlier Common tags, then pushed:
+     `git tag -a creativecommon-1.3.0 f16c9ef00 -m "Creative Common 1.3.0"`,
+     `git tag -a creativecompat-1.0.0 f16c9ef00 -m "Creative Compat 1.0.0"`,
+     `git tag -a solraspberrypie-1.0.0 f16c9ef00 -m "Spice of Life: Raspberry Pie Addition 1.0.0"`,
+     `git push origin creativecommon-1.3.0 creativecompat-1.0.0 solraspberrypie-1.0.0` (owner; the agent push was
+     refused by the permission check 2026-11-26).
+  2. Upload Common, then Compat, then Raspberry Pie. Description: `project_pages/<mod>.md` (layout page_format.md);
+     file changelog: `project_pages/creative_common_changelog_1_3_0.md`, `creative_compat_changelog_1_0_0.md`,
+     `raspberry_pie_changelog_1_0_0.md`.
+  3. Raspberry Pie GitHub release on its tag with the LGPL source zips attached: `python3 tools/rp_libs.py sources DIR`
+     (PR-RP-08, plan_rp_standalone.md).
+  4. Ledger rows with each uploaded jar's sha1; rows `creative-common-publish #9`, `raspberry-pie-publish #7` closed.
 - Later, not blocking: the weathered cardboard box texture (W2).
 
 ## 4. History
@@ -128,3 +133,9 @@ path, push to `agent_staging`.
   checks on, installed), Compat 1.0.0+db212e956 (unchanged), Raspberry Pie 1.0.0+8f883cd64; Devtools
   1.0.0+bb465ade3 (test driver, installed). Next: the W-P7 rerun of the failed rows, then W-P8.
 - 2026-11-25: run r1125pub results (scratch_run_2026-11-24.md 7) and the owner screenshot review: none of its findings blocks the wave 1 publish (rows `creative-common-publish #22`, `#23`, `creative-compat-publish #22` to `#24`, `raspberry-pie-publish #35`, `generators-and-tests #30`); Creative Compat blockers remain (`creative-compat-publish #21`, `item-physics #8` to `#10`).
+- 2026-11-26: bookkeeping before the upload: `creative-common-publish #8` closed (W-P7 runs), Raspberry Pie `#9` and
+  `#30` to `#33` closed (built or duplicates), `publish-readiness #2` pinned to 2027-01-01, Testing rows checked against
+  the run verdicts (21 closed; still open with tests never run or not rerun: Compat `#13` neutral-ship rows SQ-CMP-39,
+  -40, CQ-CMP-41, `#16` CQ-CMP-37, Raspberry Pie `#24`, `#26` CQ-RPS-14 batch fault, `item-physics #3` SQ-IP-15 FAIL
+  not rerun after its fix, and cosmetic or old-save rows); Raspberry Pie 1.0.0 file changelog written, Compat's gains the End fire line, Common's checked
+  against the 1.2.0 tag (unchanged). Release steps in section 3; tags are the owner's.
