@@ -13,14 +13,24 @@ the "flesh heap", [visceral_heap.md](visceral_heap.md)), with no spreading mecha
 Scope rule: integration adds no recipe or mechanic that is not in the mod or defined by a pack rule unless the owner
 asks by name; upstream bugs are fixed.
 
+**Plan (owner notes 2026-11-25):** [plan_flesh_that_hates.md](plan_flesh_that_hates.md) takes FTH further than this
+report: no FTH blocks at all, a flesh mob type, conversions only on flesh-mob kills in the Heap, and an incubator
+lifeforce system. Its section 8 lists which decisions below it replaces (D1 to D16); where they differ, the plan wins.
+
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=b0a3bc04f97a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=963e45182fc0 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `mod-integration #30` | Planned | S C P | Flesh That Hates (1.0.1) and Biomancy 2 (2.3.2.0): blocks and mobs in the Visceral Heap only, no spreading |
+| `mod-integration #30` | Planned | S C P | Flesh That Hates (1.0.1) in the Visceral Heap: flesh mobs only (no FTH blocks), incubator lifeforce system; Biomancy 2 (2.3.2.0) blocks and mobs |
+| `mod-integration #38` | Planned | S C | Flesh That Hates P1: leave out every FTH block, the Bulwark, the Spawner, both effects, the potion and the Flesh Detector; no griefing, no /fill, no evolution, no incubator growth; flesh names without SCP; upstream bug fixes |
+| `mod-integration #39` | Planned | S C | Flesh That Hates P2: flesh mob type, Smite against it, fire and lava x3, mobs avoid fire and lava, drops from loot tables (BOP Flesh and Porous Flesh) |
+| `mod-integration #40` | Planned | S C | Flesh That Hates P3: conversions in the Visceral Heap (standing on flesh: pillagers, villagers, witches; killed by flesh mobs: humanoids, animals by size, players beside their corpse) with the red cloud and falling chunks |
+| `mod-integration #41` | Planned | S C | Flesh That Hates P4: incubators hold lifeforce, claim chunks, take subs, spawn flesh mobs from flesh walls and floors for a cost, buff flesh mobs, promote a floating Big Incubator |
+| `mod-integration #42` | Planned | S C | Flesh That Hates P5: natural flesh spawns in unclaimed Visceral Heap chunks, own solo-oriented pool (owner designs it) |
+| `mod-integration #43` | Planned | S C | Flesh That Hates P6: drop review: final flesh mob loot, fate of FTH Flesh and Cooked Flesh |
 <!-- generated:status_index end open_work -->
 
 | Part | Where | Status |
@@ -98,6 +108,11 @@ Hive** draws SCP mobs within 40 blocks to the player. **Shake** is the big incub
 | Flesh wood set (2 sets of 12) | vanilla and modded woods, [recipes_wood.md](recipes_wood.md) | Planks are in `#minecraft:planks`, logs only in the block tag `#minecraft:logs`, not the item tags (no charcoal, no vanilla campfire) | *overlaps w/ wood rules* step 6 |
 | Heap mobs | the Heap's spawn list (Ghast 50, Zombified Piglin 100, Bone Serpent, Crimson Mosquito, Farseer, Strider, Laviathan; `kubejs/exported/spawns.json`) | Zombified piglins are on FTH's conversion list: an SCP kill turns them into SCP mobs | *overlaps w/ Heap spawns* D6, D7 |
 | Bone corpses | [plan_corpses.md](plan_corpses.md) item 23 (Heap skeletons, open Q21) | Both decorate the Heap; no clash | cross-link only |
+
+Flesh items side by side (FTH, Biomancy, the Heap's BOP items, flesh items already in the pack), for the merge
+study in [plan_flesh_that_hates.md](plan_flesh_that_hates.md) section 7:
+
+![Flesh items](flesh_that_hates/flesh_items.png)
 
 Batch: no other mod is being integrated with it. No other installed mod adds an infection or spread mechanic.
 
@@ -558,6 +573,8 @@ potions, item physics, stack sizes) is a later phase (B11).
 
 ## 11. History
 
+- 2026-11-25: owner notes taken in as [plan_flesh_that_hates.md](plan_flesh_that_hates.md) (replaces D1 to D16 where
+  they differ); flesh item sheet added to section 2.
 - 2026-11-25: Biomancy 2 (2.3.2.0) added as section 10: blocks, mobs, spread paths, overlap, fold-in, B1 to B12, FTH-17 to
   FTH-26, block texture sheet and renders of the cradle and the five blobs; crafting content deferred (owner).
 
