@@ -98,7 +98,7 @@ Fluids and effects get their own small category trees (e.g. fluids: water/lava, 
 potions, fuels/oils, food fluids, ...; effects: beneficial, harmful, neutral), defined the same way.
 Multiblocks can be one flat list or grouped by mod/machine family.
 
-## 5. Sorting inside a leaf
+| R14 | WTHIT stage line (report D8) | clear | Owner: WTHIT shows the oxidation stage and wax state of a looked-at staged block (a line in Creative Common's WTHIT plugin; wired in the tooltip phase) | 2026-11-25 | chat 2026-11-25 |
 
 Each leaf (the lowest level that holds ingredients) picks a sort mode in the ordering definition.
 Modes:
@@ -589,6 +589,6 @@ then IE), and everything listed below.
 Owner note 2026-11-25 ([plan_creative_oxidation.md](plan_creative_oxidation.md) R17, P8b): Creative Oxidation's
 staged Create copper blocks (exposed, weathered, oxidized, and waxed of each) are NBT variants of the plain items. The
 plain, unwaxed item stays where the block logically sits in the tree; every oxidized or waxed state goes to a
-separate family (working name "Oxidized Copper Machines", by block, then stage, then waxed). The tree places by item
+separate family (name "Oxidized Copper", by block, then stage, then waxed). The tree places by item
 id today (section 9, NBT variants follow their item), so it needs an NBT-aware entry (item id plus a stage
 predicate). Not built.
