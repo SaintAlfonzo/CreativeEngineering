@@ -9,7 +9,10 @@ import com.yuushya.modelling.gui.engrave.EngraveBlockResult;
 import com.yuushya.modelling.gui.engrave.EngraveItemResult;
 import com.yuushya.modelling.gui.history.HistoryMenu;
 import com.yuushya.modelling.item.AbstractMultiPurposeToolItem;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
@@ -28,9 +31,30 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class HistoryItem extends AbstractMultiPurposeToolItem {
-   public static final Map<String, EngraveBlockResult> HISTORY_SHOWBLOCK_MAP = new HashMap<>();
-   public static final Map<String, EngraveItemResult> HISTORY_ITEMBLOCK_ITEM_MAP = new HashMap<>();
-   // PHASE-B: public static final Map<String, EngraveTextResult> HISTORY_TEXTBLOCK_TEXT_MAP = new HashMap<>();
+   // History List (plan R10): held in memory only (never written to disk), filled on the client when an Entity Block or
+   // Item Block is removed, which includes client chunk unloads, keyed by "<dimension>/<x, y, z>". Port: upstream used
+   // plain HashMaps that grew for the whole game session and were read by the integrated server thread while the
+   // render thread wrote them; here each map is synchronized and keeps the HISTORY_LIMIT most recent entries.
+   public static final int HISTORY_LIMIT = 256;
+   public static final Map<String, EngraveBlockResult> HISTORY_SHOWBLOCK_MAP = boundedHistory();
+   public static final Map<String, EngraveItemResult> HISTORY_ITEMBLOCK_ITEM_MAP = boundedHistory();
+   // PHASE-B: public static final Map<String, EngraveTextResult> HISTORY_TEXTBLOCK_TEXT_MAP = boundedHistory();
+
+   private static <V> Map<String, V> boundedHistory() {
+      return Collections.synchronizedMap(new LinkedHashMap<>(16, 0.75F, true) {
+         @Override
+         protected boolean removeEldestEntry(Map.Entry<String, V> eldest) {
+            return this.size() > HISTORY_LIMIT;
+         }
+      });
+   }
+
+   /** A copy of a history map's values, oldest first (iteration of a synchronized map must hold its lock). */
+   public static <V> List<V> snapshot(Map<String, V> history) {
+      synchronized (history) {
+         return new ArrayList<>(history.values());
+      }
+   }
 
    public HistoryItem(Properties properties, Integer tipLines) {
       super(properties, tipLines);

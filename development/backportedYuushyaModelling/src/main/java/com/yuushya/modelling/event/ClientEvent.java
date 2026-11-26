@@ -3,7 +3,10 @@
 // deviations from 2.4.1 are listed in PORT_NOTES.md.
 package com.yuushya.modelling.event;
 
+import com.yuushya.modelling.blockentity.itemblock.ItemBlockEntityRender;
+import com.yuushya.modelling.blockentity.showblock.ShowBlockEntityRender;
 import com.yuushya.modelling.gui.engrave.EngraveBlockResultLoader;
+import com.yuushya.modelling.registries.BlockEntityRegistry;
 import com.yuushya.modelling.gui.engrave.EngraveItemResultLoader;
 import com.yuushya.modelling.registries.ItemRegistry;
 import com.yuushya.modelling.utils.YuushyaDataTags;
@@ -33,8 +36,8 @@ public class ClientEvent {
 
    @SubscribeEvent
    public static void registerRenderers(RegisterRenderers event) {
-      // TODO(A4): event.registerBlockEntityRenderer(BlockEntityRegistry.SHOW_BLOCK_ENTITY.get(), ShowBlockEntityRender::new);
-      // TODO(A4): event.registerBlockEntityRenderer(BlockEntityRegistry.ITEM_BLOCK_ENTITY.get(), ItemBlockEntityRender::new);
+      event.registerBlockEntityRenderer(BlockEntityRegistry.SHOW_BLOCK_ENTITY.get(), ShowBlockEntityRender::new);
+      event.registerBlockEntityRenderer(BlockEntityRegistry.ITEM_BLOCK_ENTITY.get(), ItemBlockEntityRender::new);
       // PHASE-B: event.registerBlockEntityRenderer(BlockEntityRegistry.TEXT_BLOCK_ENTITY.get(), TextBlockEntityRender::new);
    }
 

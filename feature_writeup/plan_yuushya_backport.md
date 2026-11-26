@@ -139,3 +139,13 @@ the look-checks.
   properties only) came in early so the registries compile (A5/A7 review them); `BlockBehaviourMixin` came in with the
   mixin config now (B3, common list); `GetBlockStateItem.renderByItem` dropped with `GetBlockStateItemForge`. The
   plan's "34 primitives" are 32 in the 2.4.1 registry. API map, stubs and phase state: the project's PORT_NOTES.md.
+- 2026-11-25: A4 and A5 built (`./gradlew :backportedYuushyaModelling:build --offline` passes; not installed). Models,
+  block entity renderers, model wrapping, the Item Block render cache with `LevelRendererMixin` / `MinecraftMixin`
+  (the 1.19.2 targets fit; the plan's fallback was not needed), access transformer (`tools/accesstransformer.official.cfg`
+  -> `tools/gen_at.py`), B2 fix (`client/ItemModelCache`: tag-string key, LRU 256, synchronized, cleared on resource
+  reload). Deviations: Forge 43 has no `ModifyBakingResult`, so models are wrapped on `BakingCompleted` (as 2.2.0);
+  upstream's color handlers were never registered (instance methods in an `@EventBusSubscriber` class), now static;
+  Color Picker client half moved to `client/ColorPickerClient` (dedicated server safe); R10: the History List is in
+  memory only, but upstream grew it for the whole session from every client chunk unload; capped at 256 per map and
+  synchronized. The render cache is AnvilCraft-derived (LGPL-3.0-or-later), recorded in the NOTICE; compatible with the
+  GPL-3.0 jar. Details: the project's PORT_NOTES.md section 3.

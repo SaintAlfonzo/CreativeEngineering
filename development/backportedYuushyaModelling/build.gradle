@@ -14,3 +14,8 @@ plugins {
 tasks.named('compileJava', JavaCompile).configure {
 	options.compilerArgs += ['-Xmaxerrs', '100000', '-Xmaxwarns', '0']
 }
+
+// Access transformer (SRG names, generated from tools/accesstransformer.official.cfg by tools/gen_at.py).
+minecraft {
+	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+}

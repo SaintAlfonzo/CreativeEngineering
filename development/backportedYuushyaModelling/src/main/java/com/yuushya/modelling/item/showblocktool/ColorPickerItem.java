@@ -3,16 +3,12 @@
 // deviations from 2.4.1 are listed in PORT_NOTES.md.
 package com.yuushya.modelling.item.showblocktool;
 
-import com.mojang.blaze3d.platform.Window;
+import com.yuushya.modelling.client.ColorPickerClient;
 import com.yuushya.modelling.item.AbstractToolItem;
-import com.yuushya.modelling.utils.ClientMethod;
 import com.yuushya.modelling.utils.YuushyaDataTags;
 import java.awt.Color;
-import java.nio.ByteBuffer;
 import java.util.List;
 import javax.annotation.Nullable;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -23,33 +19,20 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 public class ColorPickerItem extends AbstractToolItem {
    public ColorPickerItem(Properties properties, Integer tipLines) {
       super(properties, tipLines);
    }
 
-   // TODO(A5): side safety. `level instanceof ClientLevel` and ClientMethod.setClipboard (inMainHandLeftClickOnBlock) run
-   // in common code; on a dedicated server ClientLevel/Minecraft do not exist (NoClassDefFoundError). Move the client
-   // part behind level.isClientSide + a client-only helper class.
+   // Port: upstream ran this behind `level instanceof ClientLevel` in common code (a dedicated server has no
+   // ClientLevel class); the client half lives in client/ColorPickerClient, reached only on the logical client.
    private static void pickColor(Level level, ItemStack handItemStack) {
-      if (level instanceof ClientLevel) {
-         Window window = Minecraft.getInstance().getWindow();
-         int width = window.getScreenWidth();
-         int height = window.getScreenHeight();
-         int centerX = width / 2;
-         int centerY = height / 2;
-         ByteBuffer buffer = BufferUtils.createByteBuffer(4);
-         GL11.glReadPixels(centerX, centerY, 1, 1, 6408, 5121, buffer);
-         int r = 255 - buffer.get(0) & 0xFF;
-         int g = 255 - buffer.get(1) & 0xFF;
-         int b = 255 - buffer.get(2) & 0xFF;
-         int color = 0xFF000000 | r << 16 | g << 8 | b;
-         YuushyaDataTags.setColorData(handItemStack, color);
-         ClientMethod.setClipboard(String.format("#%06X", color));
+      if (level.isClientSide) {
+         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ColorPickerClient.pickColor(handItemStack));
       }
    }
 
@@ -67,9 +50,10 @@ public class ColorPickerItem extends AbstractToolItem {
 
    @Override
    public InteractionResult inMainHandLeftClickOnBlock(Player player, BlockState blockState, Level level, BlockPos blockPos, ItemStack handItemStack) {
-      if (YuushyaDataTags.hasColorData(handItemStack)) {
+      // Port: canAttackBlock also runs on the server; the clipboard is the client's only.
+      if (level.isClientSide && YuushyaDataTags.hasColorData(handItemStack)) {
          int color = YuushyaDataTags.getColorData(handItemStack);
-         ClientMethod.setClipboard(String.format("#%06X", color));
+         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ColorPickerClient.copyColor(color));
       }
 
       return InteractionResult.PASS;

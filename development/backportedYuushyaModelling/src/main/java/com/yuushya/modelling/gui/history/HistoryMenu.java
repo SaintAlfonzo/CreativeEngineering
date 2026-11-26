@@ -26,17 +26,18 @@ public class HistoryMenu extends AbstractEngraveMenu {
 
    @Override
    protected List<EngraveBlockResult> getShowBlockRecipes() {
-      return HistoryItem.HISTORY_SHOWBLOCK_MAP.values().stream().toList();
+      return HistoryItem.snapshot(HistoryItem.HISTORY_SHOWBLOCK_MAP);
    }
 
    @Override
    protected List<EngraveItemResult> getItemBlockRecipes() {
-      return HistoryItem.HISTORY_ITEMBLOCK_ITEM_MAP.values().stream().toList();
+      return HistoryItem.snapshot(HistoryItem.HISTORY_ITEMBLOCK_ITEM_MAP);
    }
 
-   // PHASE-B: getTextBlockRecipes() -> HistoryItem.HISTORY_TEXTBLOCK_TEXT_MAP.
+   // PHASE-B: getTextBlockRecipes() -> HistoryItem.snapshot(HistoryItem.HISTORY_TEXTBLOCK_TEXT_MAP).
 
    @NotNull
+   @Override
    public MenuType<?> getType() {
       return MenuRegistry.HistoryMenu.get();
    }

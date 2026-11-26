@@ -12,6 +12,13 @@ work and our changes are GPLv3; the upstream MIT notice below covers the upstrea
 models, blockstates, lang files and data carried over from the upstream jar. Every deviation from 2.4.1 is listed in
 PORT_NOTES.md.
 
+AnvilCraft-derived files: upstream's Item Block render cache, package com.yuushya.modelling.client.anvilcraft.rendering
+(CacheableBERenderingPipeline, CachedModeClient, CachedRegion, FullyBufferedBufferSource), was adapted by upstream
+from AnvilCraft by Anvil-Dev (https://github.com/Anvil-Dev/AnvilCraft), licensed under the GNU Lesser General Public
+License version 3 or (at your option) any later version. The upstream jar carries no notice for it; the package name
+is the attribution. The LGPL-3.0 is the GPL-3.0 plus additional permissions, so these files are conveyed here under
+the GPL-3.0 with the rest of this jar (the full GPL-3.0 text is in LICENSE).
+
 Upstream's licence (LICENSE in the 2.2.0 jar and repository; 2.4.1 is published under the same MIT licence), verbatim:
 
 -------------------------------------------------------------------------------------------------------

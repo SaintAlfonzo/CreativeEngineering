@@ -36,11 +36,28 @@ A12, B0 to B6). Report: [yuushya_modelling.md](../../feature_writeup/yuushya_mod
 | `serverPlayer.level() instanceof ServerLevel sl` | `ServerPlayer.getLevel()` already returns `ServerLevel`; kept as `(Object)... instanceof ServerLevel sl` |
 | `HolderLookup.Provider` parameter of `ITransformDataInventory.saveAdditionalWithoutAir` (unused, never called) | parameter removed |
 | `lombok.Generated` annotations (decompiler output) | removed |
+| `ModelEvent.ModifyBakingResult` (not in Forge 43) | `ModelEvent.BakingCompleted` (`getModels()` is mutable; 2.2.0 used it) |
+| `UnbakedModel.getMaterials(Function)` (void) / `bake(ModelBaker, ...)` | `getMaterials(Function, Set<Pair<String,String>>)` returning `Collection<Material>` / `bake(ModelBakery, ...)` |
+| `QuadTransformers.toABGR` / `applyingColor` (Forge 47) | local copies `NeoItemBlockModel.toABGR` / `applyColor` |
+| `Vector4f.transform` via `Matrix4f.transform(v)` (`m_252922_`) | `vector4f.transform(stack.last().pose())` |
+| `PoseStack.translate(float...)` (`m_252880_`) | `PoseStack.translate(double...)` |
+| `new VertexBuffer(Usage.STATIC)`, `drawWithShader` (`m_253207_`) | `new VertexBuffer()`, `drawWithShader` |
+| `ItemDisplayContext.NONE` | `ItemTransforms.TransformType.NONE` |
+| `Font.drawInBatch(..., DisplayMode.SEE_THROUGH, ...)` (`m_272077_`) | `Font.drawInBatch(..., true, ...)` (seeThrough flag) |
+| `Quaternionf().rotationYXZ(-yRot, xRot, 0)` for billboard text | `camera.rotation()` (the same rotation) |
+| `BufferUploader.drawWithShader(builder.end())` for axis lines | `RenderSystem.disableTexture()` + `tesselator.end()` (2.2.0 form) |
+| AT on `RenderType.mode` / `format()` / `affectsCrumbling` | public `mode()` / `format()` / `affectsCrumbling()` in 1.19.2; AT only for `sortOnUpload` |
 
 Decompiled 1.20 code has no `@Override`: a 1.20 override whose 1.19.2 signature differs would compile as a dead new
 method. Every ported class was checked by reflection against the 1.19.2 supertypes (no such case in A0 to A3); later
 steps should rerun the same check on their classes (a small `OverrideCheck` over `build/classes`, compile classpath
-from Gradle).
+from Gradle). Rerun after A4 and A5: no dead override (the only hits are generic bridge false positives and the two
+upstream `getQuads` helper overloads); every override written in A4/A5 carries `@Override`.
+
+Access transformer: `tools/accesstransformer.official.cfg` (Mojang names, readable) -> `tools/gen_at.py` (copied from
+exposureBackport) -> `src/main/resources/META-INF/accesstransformer.cfg` (SRG names, read by Forge at runtime and by
+`minecraft { accessTransformer }` in build.gradle at compile time). Only entries the ported code uses; phase B adds its
+font and glyph entries.
 
 ## 3. Deviations from 2.4.1
 
@@ -56,6 +73,32 @@ from Gradle).
   side is refused at login. Packet ids keep upstream's order; the two Text Block packets' ids (2, 3) are skipped
   until phase B registers them.
 - Creative tabs: see the API map. Item order in both tabs is upstream's.
+- Item model cache (bug B2): `client/ItemModelCache` replaces both `Map<ItemStack, ...> itemModelCache` fields
+  (keyed by stack identity, never cleared, a plain `HashMap` in `NeoShowBlockModel`): keyed by the transform-data
+  tag's string form, LRU 256 entries, synchronized (nested render passes reach it from chunk build threads), cleared by
+  a client reload listener (`RegisterClientReloadListenersEvent`) on every resource reload.
+- Item Block render cache (`client/anvilcraft/rendering`, `LevelRendererMixin`, `MinecraftMixin`): ported, not the
+  plan's fallback. The 1.19.2 targets fit: `LevelRenderer.renderLevel` has the same parameters (mojang `Matrix4f`) and
+  the same `compileChunks(Camera)` and first `BufferSource.endLastBatch()` calls; `Minecraft.updateLevelInEngines`
+  exists. Both mixins are in the `client` list. Changes: null checks on `CacheableBERenderingPipeline.getInstance()`
+  (upstream would throw if a frame rendered before the first level was set) and on the local player in the rebuild
+  task; `updateLevel` also clears `CachedModeClient` and `CustomRenderInstance` (upstream kept the old level's
+  Item Block positions across worlds and dimensions); upstream's Text Block skip in the rebuild task waits for phase B
+  (`PHASE-B:`). License: upstream adapted this package from AnvilCraft (LGPL-3.0-or-later); recorded in
+  `NOTICE-upstream-MIT.txt`, conveyed under GPL-3.0 (LGPL-3.0 is GPL-3.0 plus permissions, so compatible).
+- `YuushyaClientNeoForge`: upstream's block and item color handlers were instance methods in an
+  `@EventBusSubscriber` class, which Forge never calls (tinted blocks such as grass and leaves rendered untinted in
+  Entity Blocks and their items); static here, as in 2.2.0. `ColorTexture` setup waits for A6 (`TODO(A6)`).
+- Color Picker: upstream checked `level instanceof ClientLevel` and called the clipboard from common item code
+  (`canAttackBlock` runs on the server too), which a dedicated server cannot load. The pixel read and clipboard live
+  in `client/ColorPickerClient`, reached through `DistExecutor` only when `level.isClientSide`. Unchanged upstream
+  behavior: the picked color is written to the client's copy of the stack only (no packet), so the tooltip and HUD
+  show it until the server next syncs that slot; the clipboard keeps it.
+- History List (plan R10): held in memory only, never written to disk. Upstream fills it on the client whenever an
+  Entity Block or Item Block is removed, which includes every client chunk unload, keyed by `<dimension>/<x, y, z>`,
+  in plain static `HashMap`s that grew for the whole game session and that the integrated server thread read while the
+  render thread wrote. Here each map is a synchronized access-order map capped at 256 entries
+  (`HistoryItem.HISTORY_LIMIT`), and `HistoryMenu` reads a copy (`HistoryItem.snapshot`).
 
 ## 4. Text Block (phase B)
 
@@ -72,7 +115,13 @@ Status lives in the TODO rows (`mod-integration #29`, `#36`); this section only 
   registry compiles; A5 reviews them), engrave and history menus and result loaders, network, the reload command,
   `ClientEvent` (item properties and loaders only), `BlockBehaviourMixin`. Stubs left for later steps are marked
   `// TODO(A4)`, `// TODO(A5)`, `// TODO(A6)` (`grep -rn "TODO(A" src`).
-- Not in the source set yet: `client/` (models, render cache, font utils), `*Render` and `*Model` classes, all
-  screens and widgets (`gui/**` except the menus, loaders and results), `gui/validate/`, `event/GuiOverlayEvent`,
-  `event/RenderInsideEvent`, `LevelRendererMixin`, `MinecraftMixin`, `YuushyaClientNeoForge`, resources (A8) and data
-  (A9). The jar is not playable until A8.
+- A4 and A5 (2026-11-25): models (`ShowBlockModel`, `ItemBlockModel`, `client/NeoShowBlockModel`,
+  `client/NeoItemBlockModel`, `client/ItemModelCache`), block entity renderers (`AbstractTransformBlockEntityRender`,
+  `ShowBlockEntityRender`, `ItemBlockEntityRender`, registered in `ClientEvent`), `YuushyaClientNeoForge` (model
+  wrapping, color handlers, reload listener), the Item Block render cache and its two mixins, the access transformer,
+  `client/ColorPickerClient`, the History List maps; items reviewed (primitives 32, all stack 16 and rare; Destroy item
+  and GUI Terminal act on Item Blocks through the shared `AbstractTransformBlock` / `AbstractTransformBlockEntity`
+  types, no change needed).
+- Not in the source set yet: all screens and widgets (`gui/**` except the menus, loaders and results, incl.
+  `gui/widget/ColorTexture`), `gui/validate/`, `event/GuiOverlayEvent`, `event/RenderInsideEvent` (A6, A7),
+  resources (A8) and data (A9). The jar is not playable until A8.
