@@ -53,7 +53,7 @@ its own. Raspberry Pie gets four fixes. Pages: [project_pages/](project_pages/);
 | W2-3 | I5 Fleet-Footed | premise | The Fleet-Footed fix and its field-of-view scale move from Raspberry Pie to Creative Compat. Raspberry Pie keeps only diet features; standalone Raspberry Pie users without Compat get Alex's Mobs' bug back | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W2-4 | I6 Create: Gravity | conflict | Split: low gravity for items, blocks and projectiles, the server-start loading fix and the ItemPhysic tie move to Compat. The per-dimension limit on its entity ticks (`[perf] gravityLimitDimensions`) stays in Common under Performance and stability | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W2-5 | I11 | clear | Performance and stability, bug fixes, swap lists, KubeJS helpers and every effect stay in Common | 2026-11-23 | chat 2026-11-23 |
-| W2-6 | I1 page layout | open | Family as a `###` header; each feature or tweak is a bold name line followed by its own spoiler holding the whole description. Applies to Common and Compat | 2026-11-23 | AskUserQuestion 2026-11-23 |
+| W2-6 | I1 page layout | open | Family as a `###` header; each feature or tweak is a bold name line followed by its own spoiler holding the whole description. Applies to Common and Compat. Superseded 2026-11-25 by the default layout in project_pages/page_format.md (bold underlined family headers, 3 to 8 subfamilies, one spoiler each) | 2026-11-25 | AskUserQuestion 2026-11-25 |
 | W2-7 | I14 command notation | open | Command arguments in square brackets: `/solrp reset [players]` | 2026-11-23 | AskUserQuestion 2026-11-23 |
 | W2-8 | I2, I3, I4, I7 | clear | Moved config keys keep the player's values: a one-time carry-over from `creativecommon-common.toml` into the new jar's file, as in PR-CC-27 | 2026-11-23 | AskUserQuestion 2026-11-23 (agent default confirmed) |
 | W2-9 | I9 composter ids | clear | The 12 composters take Creative Delight's namespace (ids follow the owning mod); old Common ids swapped in saves | 2026-11-23 | AskUserQuestion 2026-11-23 (agent default confirmed) |
@@ -83,3 +83,5 @@ wandering trader there removes them from a standalone Common.
   (`#19`; first creativeloot-common.toml, carried over); Raspberry Pie `#26` to `#29`; pages `#20`, `creative-compat-publish
   #10`. Release jars in plan_wave1_publish.md W-P6. configs_edited still holds [melting], [bees] and [wandering_trader]
   under Common's file until the first boot moves the live sections; copy them to the new files' backups then.
+- 2026-11-25: owner ruled a new default page format (project_pages/page_format.md), superseding W2-6; Common, Compat and
+  Raspberry Pie pages rebuilt in it (`creative-common-publish #20`, `creative-compat-publish #10`, `raspberry-pie-publish #29`).
