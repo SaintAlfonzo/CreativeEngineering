@@ -13,6 +13,8 @@ feature_writeup/snow_real_magic.md
 feature_writeup/plan_yuushya_backport.md
 feature_writeup/plan_creative_oxidation.md
 
+feature_writeup/plan_flesh_that_hates.md
+
 ## Prompt scratchpad, dont touch
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
