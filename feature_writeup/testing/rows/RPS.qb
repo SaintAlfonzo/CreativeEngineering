@@ -784,11 +784,12 @@ reject diet_log\.js.*(Error|error)
 @@table
 ## CQ-RPS-14 | drop after diversity set keeps the lower slots; respec, drop and death remove aged-out foods (#24, #26)
 @group client
-@commands Client with `rps only`, new survival world, operator. `/solrp diversity set @s 30`; fill slots 1 to 3 (effect screen, P); drop slot 3, confirm; `/solrp diversity get @s`. Then `/solrp reset @s`, eat 12 different vanilla foods, open the Diet Log Overview; change slot 1's effect, confirm; open the Diet Log again; `/kill @s`, respawn, open the Diet Log (RPS-14)
+@commands Client with `rps only`, new survival world, operator. `/solrp diversity set @s 30`; fill slots 1 to 3 (effect screen, P); drop slot 3, confirm; `/solrp diversity get @s`. Then `/solrp reset @s`, eat 17 different vanilla foods (reach Jump Boost I at 8.8, so the change picker has a second effect), open the Diet Log Overview; change slot 1's effect, confirm; open the Diet Log again; `/kill @s`, respawn, open the Diet Log (RPS-14)
 @pass after the drop slots 1 and 2 stay active with their effects, slot 3 is empty and grayed; diversity reads 27.49 (just under 27.5), not 0; the confirm panel listed only slot 3 and its effect as lost; after the change the 5 oldest foods are gone from the Last meals grid and the Diet Log history, diversity fell by what they gave; after death the grid and history are empty and diversity is 0; eating one of the aged-out foods again counts it in full
 @fails `logic/SlotActions.planDrop` and `lowered` (Adjustment entry), `FoodWindow.ageOut`, `ServerEvents.respawn`; `client/DietLogPages.shownMeals`
-@reviewed 2026-11-24
+@reviewed 2026-11-26
 @modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
+# r1126gp 2026-11-26: 5 foods added (12 vanilla foods gave 7.12, only Regeneration I unlocked, change picker empty)
 # steps written r1124gate 2026-11-24 (runner-4): pair run; slots 1 to 3 filled with the first picker effect each; the
 # picker buttons have no label, so they are clicked by class and index (Button n 0 in picker mode, TipButton 2k = Change
 # and 2k+1 = Drop of filled slot k+1)
@@ -889,6 +890,31 @@ sleep 4
 srv> item replace entity @a hotbar.0 with minecraft:cooked_cod
 do {"slot": 0}
 do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_porkchop
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:cooked_mutton
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:golden_carrot
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:pumpkin_pie
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
+srv> effect give @a minecraft:hunger 3 255
+sleep 4
+srv> item replace entity @a hotbar.0 with minecraft:rabbit_stew
+do {"slot": 0}
+do {"walk": 45, "keys": "use"}
 srv> item replace entity @a hotbar.0 with solapplepie:food_book
 sleep 1
 do {"slot": 0}
@@ -960,7 +986,7 @@ do {"walk": 45, "keys": "use"}
 cli> solrp diversity get @s
 sleep 2
 cli:capture E3 food diversity ([0-9.]+), highest
-look after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; drop3_confirm lists only slot 3 and its effect as lost; changed pages: the 5 oldest of the 12 foods gone from the Last meals grid and the history, E1 - E2 = what they gave (change1_confirm); death pages: grid and history empty; E3 = apple's full 1.00 (an aged-out food counts in full again)
+look after_drop3: slots 1 and 2 keep their effects, slot 3 empty and grayed; drop3_confirm lists only slot 3 and its effect as lost; changed pages: the 5 oldest of the 17 foods gone from the Last meals grid and the history, E1 - E2 = what they gave (change1_confirm); death pages: grid and history empty; E3 = apple's full value (0.51; Apple Pie's own 0.52 shown rounded down) (an aged-out food counts in full again)
 ## CQ-RPS-15 | Food Dictionary Hardest sort; Diet Log width default 48 (#27, #28)
 @group client
 @commands Client with `rps only`, fresh `config/` (jar defaults). Open the Diet Log; read `config/solraspberrypie-client.toml`; set `[foodDictionary] uneatenSort = "HARDEST"`, reopen the Food Dictionary uneaten pages; set `"EASIEST"`, reopen (RPS-15)

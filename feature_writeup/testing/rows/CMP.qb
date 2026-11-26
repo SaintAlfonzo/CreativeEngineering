@@ -1322,7 +1322,7 @@ look can_filled: the cobblestone and the apples are in the can's slots; can_reop
 @commands Client; sneak right-click the Item Trash Can with an empty hand; right-click the Ultimate, Liquid and Energy Trash Cans
 @pass sneak opens the mod's own filter screen (one item filter slot, whitelist button); the other three cans open their usual screens with and without sneak
 @fails chest screen on sneak: `isShiftKeyDown` check; another can opens the chest screen: the block id check
-@reviewed 2026-11-24
+@reviewed 2026-11-26
 # drafted r1124gate (2026-11-24): single-player client or pair; sneak + right click = walk with sneak and use held
 > gamemode creative PerfEval
 > forceload add 5398 5198 5412 5212
@@ -1478,9 +1478,29 @@ look first line 0, second 1; `enabled = true`
 ## CQ-CMP-41 | Nether fog: one red color with the pack's setting on, each biome's own with it off
 @group client
 @commands Creative client, pack config; `/execute in minecraft:the_nether run tp @s 0 70 0`, then a warped forest (`/locate biome minecraft:warped_forest`, tp there); screenshot each; set `[nether_fog] enabled = false` in `config/creativecompat-common.toml` (Forge reloads the file; restart the client if it does not), screenshot the warped forest again
-@pass LOOK: with it on, both places have the same deep red fog and sky (#3F0905); with it off the warped forest shows its own teal-blue fog, as vanilla
-@fails warped forest red with it off: the switch is not read (`CompatConfig.NETHER_FOG`); teal with it on: the pack config lacks `[nether_fog] enabled = true`
-@draft no batch holds this row yet; needs a client
+@pass LOOK: with it on, both places have the same deep red fog and sky (#3F0905); with it off the warped forest shows its own dark purple fog (vanilla 0x1A051A)
+@fails warped forest red with it off: the switch is not read (`CompatConfig.NETHER_FOG`); red missing with it on: the pack config lacks `[nether_fog] enabled = true`
+@reviewed 2026-11-26
+# steps written r1126gp 2026-11-26: capture client (run_captures.py serve, full pack); the switch is toggled in the
+# capture game's own config copy (GAME/config, not the instance's), "takes effect at once" per the config comment
+> gamemode spectator PerfEval
+> execute in minecraft:the_nether run tp PerfEval 0 70 0 0 0
+sleep 12
+shot fog_on_start
+> execute in minecraft:the_nether run locate biome minecraft:warped_forest
+waitlog The nearest minecraft:warped_forest 300
+capture WF The nearest minecraft:warped_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run tp PerfEval {WF1} 70 {WF3} 0 0
+sleep 15
+shot fog_on_warped
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml nether_fog enabled false
+sleep 8
+shot fog_off_warped
+shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativecompat-common.toml nether_fog enabled true
+sleep 8
+shot fog_on_again
+> gamemode creative PerfEval
+look fog_on_start and fog_on_warped: the same deep red fog and sky (#3F0905); fog_off_warped: the warped forest's own dark purple fog (vanilla 0x1A051A); fog_on_again: red again
 
 ## CQ-CMP-42 | Corpse Additional Items opens without IllegalClassLoadError
 @group client

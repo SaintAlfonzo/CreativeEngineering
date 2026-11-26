@@ -49,8 +49,8 @@ sleep 3
 > summon minecraft:iron_golem 40.5 -60 40.5 {Tags:["ip15g"]}
 > summon minecraft:item 40.5 -59 41.5 {Tags:["ip15f"],PickupDelay:32767,Item:{id:"minecraft:iron_sword",Count:1b,tag:{Enchantments:[{id:"allurement:fleeting_curse",lvl:1s}]}}}
 sleep 6
-> execute as @e[tag=ip15a,y=-54,dy=300] run say IP15 ascension above start
-> execute as @e[tag=ip15n,y=-62,dy=4] run say IP15 plain on the ground
+> execute as @e[tag=ip15a] at @s if entity @s[y=-54,dy=300] run say IP15 ascension above start
+> execute as @e[tag=ip15n] at @s if entity @s[y=-62,dy=4] run say IP15 plain on the ground
 > data get entity @e[tag=ip15a,limit=1] Pos
 > data get entity @e[tag=ip15g,limit=1] Pos
 > data get entity @e[tag=ip15g,limit=1] Motion

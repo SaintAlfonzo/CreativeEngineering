@@ -1213,3 +1213,54 @@ override. Owner judged the section 8 Raspberry Pie shots (CQ-RPS-03, -09, -12) g
 | CQ-RPS-03 | PASS | owner shots (section 8 run) |
 | CQ-RPS-09 | PASS | owner shots (section 8 run) |
 | CQ-RPS-12 | PASS | owner shots (section 8 run) |
+
+## 10. r1126gp: untested gameplay fixes before the wave 1 upload
+
+Owner request (chat 2026-11-26): run the Testing rows whose gameplay fix had no passing test: SQ-CMP-39, -40, CQ-CMP-41
+(`creative-compat-publish #13`), CQ-CMP-37 (`#16`), CQ-RPS-14 (`raspberry-pie-publish #24`, `#26`), SQ-IP-15
+(`items/item-physics #3`). Targeted run, perf capture skipped.
+
+### 10.1 Jars and preflight
+
+- Installed release jars, NOSWAP=1 (`perf/runs/r1126gp/env.sh`): Common 1.3.0+f16c9ef00, Compat 1.0.0+f16c9ef00,
+  Raspberry Pie 1.0.0+f16c9ef00 (clean, the wave 1 upload jars). DROPJARS: the 4 unlisted jars as r1125blk.
+- `check_all.py --fast`: 1 FAIL, test_queue_rows (rows edited before status_index re-rendered them); fixed by
+  `status_index.py`, `--fast --changed` clean.
+- Row fixes before the run (run default 11 and owner request): BF-FIX SQ-IP-15: the two volume selectors had no
+  `at @s` (r1125pub note), now `execute as @e[tag=..] at @s if entity @s[y=..,dy=..]`. CQ-RPS-14 rewritten: 12 vanilla
+  foods gave 7.12 diversity, only Regeneration I unlocked, so the change picker was empty; 5 more foods (cooked
+  porkchop, cooked mutton, golden carrot, pumpkin pie, rabbit stew) to pass Jump Boost I at 8.8. CQ-CMP-41 steps written
+  (was draft): capture client, Nether start and warped forest shots with the switch on, off and on again in the capture
+  game's own config copy. CQ-CMP-37, CQ-RPS-14 stale only on doc and hover-fix sources: `@reviewed 2026-11-26`.
+- Pre-screen: 2 steps, 0 findings.
+
+### 10.2 Run notes
+
+- 00:42 server drive r1126gp started (user unit r1126gp-drive, 2 steps, 3 rows).
+- 00:47 server drive done 2/2 (00:42 to 00:47): SQ-CMP-39, -40, SQ-IP-15 every check passed, LOOKs judged PASS from text. 00:47 Raspberry Pie isolated pair for CQ-RPS-14 (`qmodset.py build` rps only, `pair_rps.sh`, 418 client drops as r1125blk).
+- 00:57 CQ-RPS-14 pair done: every check passed, PASS (text plus runner-read shots). A `run_captures.py serve --help` launched a client by mistake (pid 1463980, no drops, no row run); it exited when its shell was stopped. 00:57 full-pack capture client (`start_client.sh`, user scope r1126gp-client, 4 unlisted jars dropped).
+- 00:58 client up (pid 1468957, Compat 1.0.0+f16c9ef00 in GAME/mods). `cli_cmp`: CQ-CMP-37 LOOK (every check passed).
+  01:00:33 CQ-CMP-41 ABORT: the client died natively on its first step, `/execute in minecraft:the_nether run tp`:
+  SIGSEGV in libc from `GL11C.nglDrawElements` <- `BufferUploader` <- `RenderTarget` blit <- `LevelRenderer`, during the
+  dimension change while Distant Horizons 3.0.2 shut its overworld render state down. Same stack as the DH End-entry
+  crash (resource pack bench; archived `pack/server #33`, "not reproduced") and `gameplay/tnt-and-portal #38`
+  (Immersive Portals). Evidence: `perf/runs/r1126gp/crash_cmp41/` (hs_err, client log). Treated as an environment fault
+  for the fog row: client relaunched with `--drop "DistantHorizons-*.jar"`, CQ-CMP-41 rerun alone. Finding for the owner.
+- 01:05 client relaunched without Distant Horizons (pid 1482985): `cli_cmp41` CQ-CMP-41 every check passed, the
+  Nether teleport worked; the switch applied live from the capture game's config copy. Client stopped 01:07,
+  game_jvms.sh empty. Row text fixes: CQ-CMP-41 "teal-blue" -> the warped forest's dark purple fog (vanilla 0x1A051A);
+  CQ-RPS-14 E3 is the apple's own value (0.51), not 1.00.
+
+### 10.3 Verdicts
+
+| ID | Result | Evidence |
+|---|---|---|
+| SQ-CMP-39 | PASS | the three moved script lines once each; moved recipes present; no flower tag strays; 0 moved script paths in the jar |
+| SQ-CMP-40 | PASS | no `mixin/...$` class, `corpse/LooseAdditionalItems.class` present, `[nether_fog] enabled = true` |
+| SQ-IP-15 | PASS | Ascension sword rose from y -55 to -30.71; Fleeting pushed the golem 40.5/40.5 -> 42.58/40.26; no mixin errors |
+| CQ-RPS-14 | PASS | 27.49 after the slot 3 drop, slots 1 and 2 kept; change to Luck I ages out the 5 oldest foods (15.56 -> 13.96); death 0.00; apple counts in full again |
+| CQ-CMP-37 | PASS | sneak on the Item Trash Can opens the mod's filter screen; the other three cans their usual screens, with and without sneak |
+| CQ-CMP-41 | PASS | red (#3F0905) in Nether Wastes and the warped forest with the switch on, the biome's own fog with it off, red again; client without Distant Horizons |
+
+Counts: PASS 6, FAIL 0. Finding: Distant Horizons 3.0.2 crashed the full-pack client on a `/tp` into the Nether
+(TODO row below). Wave 1: every row with an untested gameplay fix now passes.
