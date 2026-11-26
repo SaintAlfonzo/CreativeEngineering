@@ -934,7 +934,9 @@ Plan and rulings: [plan_diet_books_r2.md](plan_diet_books_r2.md) (intake of the 
   food's base diversity, Apple Pie complexity); "Food total: X" only when it
   differs from this meal (compared as printed); "This meal: Y", struck through when the total line is there. Drawn
   as a plain text tooltip (no item stack): with the stack it went through the item tooltip handlers (Legendary
-  Tooltips, AppleSkin, Raspberry Pie's food rows) and was not drawn at all on the Overview page.
+  Tooltips, AppleSkin, Raspberry Pie's food rows) and was not drawn at all on the Overview page. The lines price the
+  window's own entry (`DietLogPages.entry`), so the `/solrp diversity set` Adjustment meal shows the value it carries
+  and applies (since 2026-11-25, `raspberry-pie-publish #35`; a fresh FoodInstance priced it as a plain item).
 - **Width and first page:** `[dietLog] extraWidth` default 47 (a quarter of Apple Pie's 186 px book; the pack's client
   config set to 47, was 93, before that 40). Ladder and Milestones content (titles, bar, key, rows) keeps 17.5% of the
   page width free on each side (`DietLogPages.SIDE_INSET`), so it stays off the book's edges. "Current Food Diversity" and the gate lines ("N more unique foods" / "to activate diet") are

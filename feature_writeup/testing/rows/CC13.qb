@@ -80,11 +80,12 @@ look the first reload line lands about 1 s after the edit (log timestamps agains
 ## CQ-CC13-02 | melt and salt tooltip: salt and saltable blocks show the melting hint
 @group client
 @commands Full pack client: hover a salt item, an ice block and a snow block in the inventory
-@pass the saltable tooltip line shows on the blocks salt melts and the salt item names its use; no tooltip line on blocks it does not melt
-@fails saltable tag, tooltip handler (`SaltableTooltip` in Creative Compat's `melting/`), Compat lang key `creativecompat.tooltip.saltable`
+@pass the saltable tooltip line shows on the blocks salt melts; Salt (the salt dust) and Salt Melt show a gray "Usable on ice and snow" line; no tooltip line on blocks it does not melt; The Salt's merged salt (`salt:salt`) shows the removed-item line (it merges into the salt dust, item_merges.md 2.9)
+@fails saltable tag, item tag `creativecompat:melting/salt_items` (`melting_tags.js`, key `i.t_melt_salt_items` in Common's item_dict.js), tooltip handler (`SaltableTooltip` in Creative Compat's `melting/`), Compat lang keys `creativecompat.tooltip.saltable`, `creativecompat.tooltip.salt_use`
 @reviewed 2026-11-24
-@jars creativecompat
+@jars creativecompat creativecommon
 @sources development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/melting/SaltableTooltip.java
+# 2026-11-25 (creative-common-publish #22, #23): salt items get the "Usable on ice and snow" line; the standard salt is `vintagedelight:salt_dust`, `salt:salt` is the merged duplicate (removed-item line expected)
 # retargeted 2026-11-24 (r1124gate ruling): melting and the Saltable tooltip moved to Creative Compat in the wave 2 carve, so the row tests the Compat jar, not the Common 1.3.0 gate
 # steps written r1124gate 2026-11-24 (runner-4): single-player full-pack capture client (`run_captures.py serve`, the run's usual unlisted-jar --drop set), flat creative world
 do {"tooltip_text": "minecraft:ice", "expect": ": Saltable$"}
@@ -94,16 +95,18 @@ do {"tooltip_text": "minecraft:snow_block", "expect": ": Saltable$"}
 do {"tooltip_text": "minecraft:blue_ice", "reject": ": Saltable$"}
 do {"tooltip_text": "minecraft:stone", "reject": ": Saltable$"}
 do {"tooltip_text": "minecraft:dirt", "reject": ": Saltable$"}
+do {"tooltip_text": "vintagedelight:salt_dust", "expect": "Usable on ice and snow$"}
+do {"tooltip_text": "salt:salt_melt", "expect": "Usable on ice and snow$"}
+do {"tooltip_text": "minecraft:ice", "reject": "Usable on ice and snow$"}
 do {"tooltip_text": "salt:salt"}
-do {"tooltip_text": "salt:salt_melt"}
 do {"tooltip": "minecraft:ice"}
 shot ice_tooltip
-do {"tooltip": "salt:salt"}
+do {"tooltip": "vintagedelight:salt_dust"}
 shot salt_tooltip
 do {"tooltip": "salt:salt_melt"}
 shot salt_melt_tooltip
 do {"screen": "close"}
-look ice_tooltip: the gray "Saltable" line under the name; salt and Salt Melt READ lines and shots: what the salt item says about its use (the code has no salt-item tooltip line, only the Saltable line on blocks and the JEI info page; a missing use line is a doc question, not a FAIL)
+look ice_tooltip: the gray "Saltable" line under the name; salt_tooltip and salt_melt_tooltip: a gray "Usable on ice and snow" line under the name, no removed-item line on the salt dust
 ## CQ-CC13-03 | level-capped effect tooltip: a capped effect shows level I everywhere
 @group client
 @commands Full pack client: apply a capped effect at level III (`/effect give @s <capped effect> 60 2`), look at the HUD, the inventory effect list, a potion item or wine tooltip and the JEI page

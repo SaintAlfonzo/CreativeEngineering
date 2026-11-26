@@ -466,8 +466,8 @@ look no warning about EffectFleetFooted anywhere in latest.log; the mixin is lis
 ## CQ-RPS-09 | isolated client: default unlocks all slottable, vanilla icons (PR-RP-11, PR-RP-15)
 @group client
 @commands Fresh survival world with the rps only set; eat varied vanilla foods to diversity 30 and above; open the effect screen at each slot; open the Diet Log Milestones and Overview pages
-@pass the picker offers Regeneration I from 5 (until the flat Regeneration at 10), Jump Boost I, Luck I (until 17.5), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength never appear in the picker; no `V14` warning in the log; Diet Log icons are vanilla (awkward potion, diamond, item frame) and the diversity icon fallback with nothing eaten is a vanilla seed or rotten flesh / spider eye
-@fails `default_ladder.json`, `LadderLoader` V14, `RpConfig` client defaults
+@pass the picker offers Regeneration I from 5 (until the flat Regeneration at 10), Jump Boost I, Luck I (until 17.5), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength never appear in the picker; no `V14` warning in the log; Diet Log icons are vanilla (awkward potion, diamond, item frame) and the diversity icon fallback with nothing eaten is a vanilla seed or rotten flesh / spider eye; the Adjustment meal's hover on the Overview page shows the diversity it gives (its "This meal" value equals the current diversity)
+@fails `default_ladder.json`, `LadderLoader` V14, `RpConfig` client defaults; Adjustment meal hover: `client/DietLogPages` `entry` (the window's own entry, not a fresh FoodInstance)
 @reviewed 2026-11-24
 @modset rps only +"creativecommon-*" +"creativedevtools-*" +"kubejs-forge-*" +"rhino-forge-*" +"architectury-*"
 # steps written r1124gate 2026-11-24 (runner-4): pair run; diversity raised with `solrp diversity set` (no vanilla diet
@@ -593,7 +593,7 @@ do {"wait": 5}
 shot div50_p5
 do {"screen": "close"}
 cli:reject \bV14\b
-look pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10), Jump Boost I, Luck I (gone from 17.5 up), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength in no picker shot; nothing_eaten pages: the diversity icon is a vanilla seed (or rotten flesh / spider eye); div50 pages (Overview, Diet Ladder, Milestones): unlock icon an awkward potion, permanent-buff icon a diamond, slot icon an item frame
+look pickers: Regeneration I at 5 and 9 (gone from 13, flat Regeneration at 10), Jump Boost I, Luck I (gone from 17.5 up), Night Vision, Water Breathing, Fire Resistance, Jump Boost II as they unlock; Speed, Haste and Strength in no picker shot; nothing_eaten pages: the diversity icon is a vanilla seed (or rotten flesh / spider eye); div50 pages (Overview, Diet Ladder, Milestones): unlock icon an awkward potion, permanent-buff icon a diamond, slot icon an item frame; owner by hand on the div50 Overview page: hovering the Adjustment meal reads "This meal: 50" (its Full meal line the entry's own value), the same as the current diversity (raspberry-pie-publish #35, fixed 2026-11-25)
 
 
 @@section 2

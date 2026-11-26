@@ -128,6 +128,7 @@
 - **New:** Effects that only have one level on the diet ladder show no numeral (Night Vision, not Night Vision I).
 - **New:** Reached permanent buffs show their effect icon steadily in the Diet Log; unreached ones still alternate with the diamond shard.
 - **New:** Operators get commands to set a player's food diversity (`/solrp diversity set`), read it (`/solrp diversity get`) and back up and reload the world's diet ladder (`/solrp ladder reset`).
+- **Fixed:** Hovering the Adjustment meal that setting a player's diversity adds to the Diet Log showed a different diversity than it gives.
 - **New:** Lava Walker burns like a Magma Block when standing on lava without Fire Immunity.
 - **New:** Lava Walker: crouch to sink into the lava.
 - **New:** Steady stops Slippery and Slipping and clears them when gained. Pressure plates and tripwires ignore you and big dripleaf does not tip.
@@ -543,6 +544,7 @@
 - **Changed:** Light alone no longer melts ice or snow: sea lanterns, shroomlights, redstone torches and lamps and other lights without a flame leave them [any light level 12 or more].
 - **Fixed:** The Salt Dust Block and the Rock Salt Block melted no ice or snow.
 - **Fixed:** Using Salt on ice or snow melts it one stage and uses 1 Salt; it places a salt layer only on blocks it cannot melt [placed a layer on the ice].
+- **New:** Salt and Salt Melt say "Usable on ice and snow" in their tooltip.
 
 ## Farms and Exploits <!-- icon: minecraft:iron_ingot -->
 

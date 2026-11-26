@@ -587,9 +587,22 @@ public final class DietLogPages {
 		}
 	}
 
-	private static double contribution(Item item, int age) {
+	/**
+	 * The window's own entry for the item, else a fresh one. The Adjustment entry of {@code /solrp diversity set} carries
+	 * its value on the entry (DietAdjustment), so a fresh FoodInstance would price it as a plain item and the hover would
+	 * not match the diversity it applies (raspberry-pie-publish #35).
+	 */
+	private static FoodInstance entry(Map<FoodInstance, Integer> memory, Item item) {
+		FoodInstance probe = new FoodInstance(item);
+		if (memory != null) {
+			for (FoodInstance f : memory.keySet()) if (f.equals(probe)) return f;
+		}
+		return probe;
+	}
+
+	private static double contribution(FoodInstance food, int age) {
 		try {
-			return FoodList.calculateDiversityContribution(new FoodInstance(item), age);
+			return FoodList.calculateDiversityContribution(food, age);
 		} catch (RuntimeException e) {
 			return 0;
 		}
@@ -610,15 +623,16 @@ public final class DietLogPages {
 			for (int n = 0; n < meals.size(); n++) {
 				Meal m = meals.get(n);
 				ItemStack stack = new ItemStack(m.item());
-				double mine = contribution(m.item(), m.age());
-				Integer k = memory == null ? null : memory.get(new FoodInstance(m.item()));
-				double total = k == null ? mine : contribution(m.item(), k);
+				FoodInstance food = entry(memory, m.item());
+				double mine = contribution(food, m.age());
+				Integer k = memory == null ? null : memory.get(food);
+				double total = k == null ? mine : contribution(food, k);
 				// plan_diet_books_r2.md A2: the food total only when it differs from this meal, then this meal
 				// (struck through when the total is there).
 				boolean differs = !Icons.diversity(mine).equals(Icons.diversity(total));
 				List<Component> lines = new ArrayList<>();
 				lines.add(Component.translatable("solraspberrypie.dietlog.meal", n + 1, stack.getHoverName()));
-				double full = complexity(m.item());
+				double full = complexity(food);
 				if (full >= 0) lines.add(Component.translatable("solraspberrypie.dietlog.meal_full", Icons.diversity(full)).withStyle(ChatFormatting.GRAY));
 				if (differs) lines.add(Component.translatable("solraspberrypie.dietlog.meal_total", Icons.diversity(total)).withStyle(ChatFormatting.GRAY));
 				MutableComponent self = Component.translatable("solraspberrypie.dietlog.meal_this", Icons.diversity(mine)).withStyle(ChatFormatting.GRAY);
@@ -750,8 +764,12 @@ public final class DietLogPages {
 	}
 
 	private static double complexity(Item item) {
+		return complexity(new FoodInstance(item));
+	}
+
+	private static double complexity(FoodInstance food) {
 		try {
-			return FoodList.getComplexity(new FoodInstance(item));
+			return FoodList.getComplexity(food);
 		} catch (RuntimeException e) {
 			return -1;
 		}

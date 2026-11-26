@@ -3,7 +3,9 @@ package com.SaintAlfonzo.creativecompat.melting;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
@@ -48,6 +50,9 @@ public final class MeltTags {
 	 */
 	public static final TagKey<Biome> HOT_BIOMES = TagKey.create(Registry.BIOME_REGISTRY,
 			new ResourceLocation("creativecompat", "melting/hot"));
+
+	/** Items that melt ice and snow (salt dust, placed as a salt layer; Salt Melt): the "Usable on ice and snow" tooltip. */
+	public static final TagKey<Item> SALT_ITEMS = ItemTags.create(new ResourceLocation("creativecompat", "melting/salt_items"));
 
 	private static TagKey<Block> tag(String path) {
 		return BlockTags.create(new ResourceLocation("creativecompat", "melting/" + path));

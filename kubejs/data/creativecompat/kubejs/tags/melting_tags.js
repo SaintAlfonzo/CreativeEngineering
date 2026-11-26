@@ -101,3 +101,11 @@ ServerEvents.tags('worldgen/biome', e => {
 	if (!global.has('creativecalendar')) return
 	global.tags.add(e, global.blocks.t_melt_hot_biomes, [global.blocks.t_biome_seasons_arid, global.blocks.t_biome_seasons_dry, global.blocks.t_biome_seasons_tropical])
 })
+
+// Salt items (melting.md): the salt dust (placed as a salt layer) and the Salt Melt. Their tooltip says "Usable on ice and
+// snow" (melting/SaltableTooltip).
+ServerEvents.tags('item', e => {
+	var i = global.item
+	if (global.has(i.salt_dust)) global.tags.add(e, i.t_melt_salt_items, i.salt_dust)
+	if (global.has(i.salt_melt)) global.tags.add(e, i.t_melt_salt_items, i.salt_melt)
+})

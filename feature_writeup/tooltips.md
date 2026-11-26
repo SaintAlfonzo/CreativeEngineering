@@ -157,7 +157,9 @@ the shank row; client config `[tooltips] saturationOwnLine` for AppleSkin's own 
 - **"Saltable" (2026-11-17):** a gray line (`col.norm` role) on every block item whose block is in
   `#creativecommon:melting/saltable` (ice, frosted ice, packed ice, snow, snow block, Rare Ice, IW cryosol). Creative
   Common `melting/SaltableTooltip` (client `ItemTooltipEvent`, reads the synced block tag); lang
-  `creativecommon.tooltip.saltable`. [melting.md](melting.md) 1; test CQ-PS15-04.
+  `creativecommon.tooltip.saltable`. [melting.md](melting.md) 1; test CQ-PS15-04. Since the wave 2 carve in Creative
+  Compat (`creativecompat.tooltip.saltable`); since 2026-11-25 the same handler adds "Usable on ice and snow" to the
+  item tag `creativecompat:melting/salt_items` (Salt, Salt Melt; `creativecompat.tooltip.salt_use`); test CQ-CC13-02.
 
 **Rewritten**
 - **BlockRunner's line on framed/copycat blocks:** Creative Common `CamoSpeedTooltip` swaps it for

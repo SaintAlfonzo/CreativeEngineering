@@ -2509,6 +2509,7 @@ i.t_bread_loaf = '#creativedelight:bread_loaves';
 i.t_tortilla = '#forge:tortilla';
 i.t_can_be_salted = '#salt:can_be_salted';  // The Salt's Salting craft takes any food in it (food/seasoning #1)
 i.t_salts = '#forge:salts';  // The Salt's salt tag (Salting craft, Create: The Salt mixes); salt dust only since the merge
+i.t_melt_salt_items = '#creativecompat:melting/salt_items';  // items that melt ice and snow (salt dust, Salt Melt): the "Usable on ice and snow" tooltip
 // frying (TODO dishes/meals #7): Rustic Delight's oil tag; sliced potatoes = Rustic's slices + More Delight's diced
 i.t_cooking_oil = '#rusticdelight:cooking_oil';
 i.t_sliced_potato = '#forge:sliced_potato';

@@ -58,7 +58,7 @@ melt ticks (about every 5 s), plus its random ticks.
   dirt), else the heat product (`meltProducts`, `slowSteps`), shared properties copied, else water for ice
   (`placeWater`), else air; snow loses layers instead. A salt block's melt removes 1 layer 55%, 2 layers
   35%, 3 layers 10% (`saltSourceSnowLayerOdds`, snow_real_magic.md R18; was 1); one salt dispense or Salt Melt use
-  (`meltStep`) removes `saltMeltSnowLayers` = 4 (R18, was 3), a snow block counting as 8 (it becomes 4 layers). Items of saltable blocks show a gray "Saltable" tooltip line.
+  (`meltStep`) removes `saltMeltSnowLayers` = 4 (R18, was 3), a snow block counting as 8 (it becomes 4 layers). Items of saltable blocks show a gray "Saltable" tooltip line; Salt and Salt Melt show "Usable on ice and snow".
 - Snow resting on `#creativecompat:melting/keeps_snow` (blue ice, IW permafrost) ignores fire, lava, magma and
   vanilla light melting; salt still melts it (G6 4b).
 - Magma (`#creativecompat:melting/magma`): snow within `magmaInstantRange` = 2 melts at once (on placement, on
@@ -134,6 +134,11 @@ melt ticks (about every 5 s), plus its random ticks.
   `Biome.shouldFreeze(LevelReader, BlockPos, boolean)` (`m_47480_`), HEAD, false on a `ServerLevel` with magma within
   `fireRange` (palette check first). Serene Seasons' patch inside `shouldFreeze` runs after it.
 - Saltable tooltip: `melting/SaltableTooltip` (client, `ItemTooltipEvent`), lang `creativecompat.tooltip.saltable`.
+  The same handler adds a gray "Usable on ice and snow" line (lang `creativecompat.tooltip.salt_use`) to items in the
+  item tag `creativecompat:melting/salt_items` (`MeltTags.SALT_ITEMS`, dict key `i.t_melt_salt_items`; filled in
+  `melting_tags.js`): the salt dust `vintagedelight:salt_dust` ("Salt") and Salt Melt (2026-11-25,
+  `creative-common-publish #22`). The Salt's own `salt:salt` is the merged duplicate ([item_merges.md](item_merges.md)
+  2.9) and keeps the removed-item line (`#23`).
 - Vanilla light melt: `mixin/VanillaLightMeltMixin` redirects the block-light read in `IceBlock` and `SnowLayerBlock`
   randomTick to 0 while the switch is off; `mixin/RareIceLightMeltMixin` (pseudo, Rare Ice's own copy) the same,
   gated on `rare_ice` in `CompatMixinPlugin` (enable key `[mixins]`, `MixinSwitches`) (no class-load error without Rare Ice; SQ-MELT-09, 2026-11-15).
