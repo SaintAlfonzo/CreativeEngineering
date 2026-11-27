@@ -138,6 +138,11 @@ look verb=ages means (open x 92..108 first, glass x 120..136 second; n about 285
 # (n=320); self-contained (its own fields at x 100..108, z 0..68; it used CS-03's field); randomtick replaces 2 min at
 # randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block); the tick warp runs queued season extra ticks
 > forceload add 96 -4 112 72
+# BF-FIX judge-2a3 r1126q2a: no player near the fields, so the forceloaded chunks got no random ticks (both means 0.000); a bot stands between the fields (gotchas: forceloaded chunks get random ticks only with a player near)
+> execute unless entity qa run pbot spawn qa 104 -60 34 minecraft:overworld survival
+sleep 2
+> tp qa 104 -60 34
+sleep 2
 > fill 96 -61 -4 112 -61 72 minecraft:grass_block
 > fill 96 -60 -4 112 -55 72 minecraft:air
 > fill 100 -61 0 108 -61 8 minecraft:farmland[moisture=7]

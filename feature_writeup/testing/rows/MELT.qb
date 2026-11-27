@@ -1470,7 +1470,7 @@ pace 0.2
 > setblock 2220 -61 2324 minecraft:torch
 pace 2
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
-> gamerule randomTickSpeed 1000
+# BF-FIX judge-2a3 r1126q2a: at randomTickSpeed 1000 the random ticks (about 146 per block in 600 ticks) also roll the melt, so both bricks and blocks read 0 (melting.md: melt ticks about every 5 s plus random ticks); the 600-tick window runs at the default speed (about 6 melt ticks: blocks 0.4 per tick, bricks 0.1) and the speed goes up for the long warp
 > cdevtest tickwarp 600
 waitlog verb=tickwarp end=done 600
 > cdevtest count 2198 -61 2300 2250 -61 2300 immersive_weathering:snow_bricks
@@ -1480,6 +1480,7 @@ capture BR1 verb=count block=immersive_weathering:snow_bricks n=(\d+)
 waitlog verb=count block=minecraft:snow_block n=\d+ 30
 capture BL1 verb=count block=minecraft:snow_block n=(\d+)
 shell python3 -c "import sys; print('after 600 ticks bricks', {BR1}, 'blocks', {BL1}); sys.exit(0 if {BR1} >= {BL1} + 3 else 1)"
+> gamerule randomTickSpeed 1000
 > cdevtest tickwarp 11400
 waitlog verb=tickwarp end=done 600
 > gamerule randomTickSpeed 3

@@ -52,6 +52,8 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 # vanished within 1 s twice (r1102b, r1103): a cdevtest entities read right after its summon shows what took its place
 > forceload add 140 495 150 515
 > time set 18000
+# r1126q2a batch fault (judge-2a1): the pack server is peaceful and peaceful discards the baby zombie (gotchas: Peaceful removes summoned hostiles); the cat is replaced by an improved cat that moves 2 blocks (NoAI not applied), so the 1x1 box missed it
+> difficulty easy
 > execute as @e[x=140,y=-61,z=495,dx=10,dy=5,dz=18] run kill @s
 > summon minecraft:cow 145 -60 500 {Age:-24000,NoAI:1b,Tags:["bm02"]}
 > summon minecraft:pig 145 -60 501 {Age:-24000,NoAI:1b,Tags:["bm02"]}
@@ -64,7 +66,7 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 > summon minecraft:zombie 145 -60 508 {IsBaby:1b,NoAI:1b,PersistenceRequired:1b,Tags:["bm02"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
 > cdevtest entities 145 -59 505 1
 sleep 1
-> execute if entity @e[type=cozys-improved-cats:improved_cat,x=145,y=-61,z=505,dx=1,dy=2,dz=1,limit=1] run say BM02 cat present at 1 s
+> execute if entity @e[type=cozys-improved-cats:improved_cat,x=141,y=-61,z=501,dx=5,dy=3,dz=5,limit=1] run say BM02 cat present at 1 s
 > cdevtest entities 145 -59 505 2
 sleep 4
 > data get entity @e[type=minecraft:cow,tag=bm02,limit=1] Age
@@ -75,9 +77,10 @@ sleep 4
 > data get entity @e[type=minecraft:horse,tag=bm02,limit=1] Age
 > data get entity @e[type=#zq:villagers,tag=bm02,limit=1] Age
 > data get entity @e[type=minecraft:zombie,tag=bm02,limit=1] IsBaby
-> execute unless entity @e[type=cozys-improved-cats:improved_cat,x=145,y=-61,z=505,dx=1,dy=2,dz=1,limit=1] run say BM02 cat gone at 5 s
-> data get entity @e[type=cozys-improved-cats:improved_cat,x=145,y=-61,z=505,dx=1,dy=2,dz=1,limit=1] Age
+> execute unless entity @e[type=cozys-improved-cats:improved_cat,x=141,y=-61,z=501,dx=5,dy=3,dz=5,limit=1] run say BM02 cat gone at 5 s
+> data get entity @e[type=cozys-improved-cats:improved_cat,x=141,y=-61,z=501,dx=5,dy=3,dz=5,limit=1] Age
 > execute as @e[tag=bm02] run say BM02 alive
+> difficulty peaceful
 count has the following entity data: -2\d{4}$ == 8
 expect has the following entity data: 1b$
 reject No entity was found

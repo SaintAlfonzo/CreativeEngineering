@@ -154,7 +154,9 @@ reject \[cdevtest\] verb=\S+ .*error=
 @reviewed 2026-11-26
 # r1120lr batch fault: lane z 500 was not loaded; the row loads its own chunks
 > forceload add 208 496 232 506
-sleep 3
+# r1126q2a (judge-2a1): the skewer entry fell back to Time 0 after the 2nd read (a cold grill erases progress, B5b): rain on a fresh world douses the grill (gotchas: fresh world can start in rain); clear it and wait
+> weather clear 100000
+sleep 20
 > setblock 220 -60 500 minecraft:campfire[lit=true]
 > pbot spawn bbq6 220 -60 503 minecraft:overworld survival
 > pbot hold bbq6 barbequesdelight:grill
@@ -168,8 +170,10 @@ sleep 3
 > data get block 220 -60 500
 expect has the following block data: .*barbequesdelight:raw_beef_skewer
 > data get block 220 -60 500
+> cdevtest state 220 -60 500
 sleep 36
 > data get block 220 -60 500
+> cdevtest state 220 -60 500
 sleep 1
 > data get block 220 -60 500
 expect has the following block data: .*barbequesdelight:burnt_skewer
@@ -299,6 +303,8 @@ reject \[cdevtest\] .*done=0
 @reviewed 2026-11-26
 > cdevtest rdetail strider_moss_stew_cooked_manual_only
 > cdevtest rdetail raw_nether_skewer max=20
+# r1126q2a batch fault (judge-2a1): text=raw_nether_skewer does not match the grilling recipe id grilling/nether_skewer
+> cdevtest rdetail grilling/nether_skewer
 sleep 3
 expect verb=rdetail id=creativedelight:shapeless/strider_moss_stew_cooked_manual_only serializer=\S+ result=nethersdelight:strider_moss_stew\*1 ingredients=\S*roll_delight:cooked_nether_wart,\S*warped_fungus
 count verb=rdetail id=\S*strider_moss_stew_cooked_manual_only == 1

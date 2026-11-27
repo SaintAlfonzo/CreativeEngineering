@@ -206,11 +206,11 @@ sleep 3
 sleep 2
 > clear d11
 > pbot sneak d11 on
-> pbot hold d11 brewinandchewin:vegetable_omelet
+> pbot hold d11 fungidelight:inky_cap_scrambled_eggs
 > pbot use d11 40500 -61 40000 up
 sleep 1
 > cdevtest state 40500 -60 40000
-expect verb=state pos=40500,-60,40000 state="?creativedelight:placed_vegetable_omelet
+expect verb=state pos=40500,-60,40000 state="?creativedelight:placed_inky_cap_scrambled_eggs
 > cdevtest tagsof creativedelight:canned_corn
 waitlog verb=tagsof done=1 20
 expect verb=tagsof id=creativedelight:canned_corn .*item_tags=.*creativedelight:food_type/

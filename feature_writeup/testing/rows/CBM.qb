@@ -64,14 +64,15 @@ look bottling 1710, tipped 94 x 2 as in boot 2; the `verb=recipes text=creativeb
 ## SQ-CBM-04 | wandering trades after /reload
 @group A
 @commands Same boot: `/reload`; `grep "wandering trades" logs/kubejs/server.log`
-@pass `[wandering trades] common 208, rare 39` from the pack and `[wandering trades] winemaker 34` from CB (the last pre-move log: 208 / 39 / 34)
+@pass `[wandering trades] common 184, rare 37` from the pack and `[wandering trades] winemaker 34` from CB (2026-11-26 boot: 184 / 37 / 34; 208 / 39 / 34 before the 2026-11-20 enchanted-book removal)
 @fails Winemaker helpers not added to `global.trades`
 @reviewed 2026-11-26
 @from batches/r1101/cs4_boot3.qb passed
 shell grep "wandering trades" logs/kubejs/server.log | cut -c1-200
 # judge-3, 2026-11-18: 208 / 37 / 34 on 2026-11-18 (the owner's own play log says rare 37 too); counts are recorded, the
 # check is that every pool still fills
-kjsexpect \[wandering trades\] common 2\d\d, rare [1-9]\d
+# r1126q2a batch fault (judge-2a1): 184 / 37 since the 2026-11-20 enchanted-book trade removal (the owner's own log reads 184 too)
+kjsexpect \[wandering trades\] common [1-9]\d\d, rare [1-9]\d
 kjsexpect \[wandering trades\] winemaker [1-9]\d
 
 ## SQ-CBM-05 | CB fluid tags

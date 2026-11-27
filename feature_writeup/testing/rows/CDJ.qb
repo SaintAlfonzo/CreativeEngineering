@@ -210,6 +210,8 @@ sleep 3
 > execute if block 3046 -60 3012 displaydelight:plated_cookie[stacks=3] run say DDP07 plate holds 3
 > pbot use ddp7 3046 -60 3012 up
 > execute if block 3046 -60 3012 displaydelight:plated_cookie[stacks=2] run say DDP07 two left
+# the plain use left the taken cookie in the bot's hand; a sneaking use with it would put it back on the plate
+> clear ddp7
 > pbot sneak ddp7 on
 > pbot use ddp7 3046 -60 3012 up
 > pbot sneak ddp7 off
@@ -217,7 +219,7 @@ sleep 3
 > pbot inv ddp7 get
 expect DDP07 plate holds 3
 expect DDP07 two left
-expect verb=pbot.inv bot=ddp7 slot=\d+ item=minecraft:cookie\*3$
+expect verb=pbot.inv bot=ddp7 slot=\d+ item=minecraft:cookie\*2$
 shell python3 $INST/tools/scratch_query/qrun.py toml config/creativedelight-common.toml display takeAll false
 waitlog \[creativecommon\] .*creativedelight-common\.toml reloaded 20
 > clear ddp7

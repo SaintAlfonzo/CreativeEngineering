@@ -208,13 +208,13 @@ look the reg line names the Mini Cantaloupe block; if it is not fruitsdelight:ha
 @fails food.md 3.13, 3.15 (`dishes/ingredients #23`, `#24`)
 @from batches/r1031/a1_data.qb
 @reviewed 2026-11-16
-> cdevtest makes creativeengineering:powdered_sugar_bucket
-> cdevtest makes creativeengineering:powdered_sugar
+> cdevtest makes creativedelight:powdered_sugar_bucket
+> cdevtest makes creativedelight:powdered_sugar
 > cdevtest rdetail batter
-expect id=\S*vivacuumizing/powdered_sugar_bucket result=creativeengineering:powdered_sugar_bucket\*
-expect id=\S*powdered_sugar_bucket_from_powder result=creativeengineering:powdered_sugar_bucket\*
-expect id=\S*powdered_sugar_from_bucket result=creativeengineering:powdered_sugar\*
-expect id=\S*mortar/sugar_powdered_sugar result=creativeengineering:powdered_sugar\*
+expect id=\S*vivacuumizing/powdered_sugar_bucket result=creativedelight:powdered_sugar_bucket\*
+expect id=\S*powdered_sugar_bucket_from_powder result=creativedelight:powdered_sugar_bucket\*
+expect id=\S*powdered_sugar_from_bucket result=creativedelight:powdered_sugar\*
+expect id=\S*mortar/sugar_powdered_sugar result=creativedelight:powdered_sugar\*
 expect createmilling/sugar_powdered_sugar
 expect createcrushing/sugar_powdered_sugar
 reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
@@ -437,10 +437,10 @@ reject verb=\S+ .*done=0
 look each takes #forge:raw_fishes/calamari (seafood_skewer, squid_and_pickles: #forge:cooked_fishes/calamari); rdetail lists the tag's first items, so a calamari item there = PASS, a tentacle = FAIL
 reject verb=\S+ .*done=0
 
-## SQ-CM-33 | (server half) no tag error naming the Storage Delight JEI tag; the tag holds the 140 blocks
+## SQ-CM-33 | (server half) no tag error naming the Storage Delight JEI tag; the tag holds the 230 blocks (140 + 90 half cabinets)
 @group A
 @commands boot; JEI item list (client)
-@pass the 140 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativecommon:jei/storage_delight`
+@pass the 230 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativecommon:jei/storage_delight`
 @fails `creativedelight/members #23`
 @from batches/r1113/c1_a1.qb
 @reviewed 2026-11-16
@@ -448,7 +448,7 @@ reject verb=\S+ .*done=0
 bootreject (?i)(error|fail|unknown|invalid|missing).*(creativecompat|creativecommon|creativeengineering):jei/storage_delight
 > cdevtest tag item creativecompat:jei/storage_delight
 waitlog verb=tag kind=item tag=creativecompat:jei/storage_delight n= 30
-expect verb=tag kind=item tag=creativecompat:jei/storage_delight n=140
+expect verb=tag kind=item tag=creativecompat:jei/storage_delight n=230
 look client half (JEI item list in wood order) stays open: CQ row / client run
 reject verb=\S+ .*done=0
 

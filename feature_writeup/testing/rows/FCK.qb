@@ -405,11 +405,12 @@ sleep 3
 > cdevtest state 1020 -61 1020
 > cdevtest state 1018 -61 1018
 > cdevtest state 1022 -61 1020
-expect verb=state pos=1019,-61,1019 state="minecraft:farmland\[moisture=7\]"
-expect verb=state pos=1021,-61,1021 state="minecraft:farmland\[moisture=7\]"
+# BF-FIX judge-2a3 r1126q2a: any 3x3 cell may drop 7 -> 6 by a random tick before it is read (same cause as the centre, judge-4), and an unsoaked dry ring cell may revert to dirt by a random tick; the row checks soaked vs not soaked
+expect verb=state pos=1019,-61,1019 state="minecraft:farmland\[moisture=[67]\]"
+expect verb=state pos=1021,-61,1021 state="minecraft:farmland\[moisture=[67]\]"
 expect verb=state pos=1020,-61,1020 state="minecraft:farmland\[moisture=[67]\]"
-expect verb=state pos=1018,-61,1018 state="minecraft:farmland\[moisture=0\]"
-expect verb=state pos=1022,-61,1020 state="minecraft:farmland\[moisture=0\]"
+expect verb=state pos=1018,-61,1018 state=("minecraft:farmland\[moisture=0\]"|minecraft:dirt)
+expect verb=state pos=1022,-61,1020 state=("minecraft:farmland\[moisture=0\]"|minecraft:dirt)
 > cdevtest player G
 expect verb=player name=G .* main=minecraft:bucket\*1\b
 > fill 1028 -61 1018 1032 -61 1022 farmersdelight:rich_soil_farmland[moisture=0]

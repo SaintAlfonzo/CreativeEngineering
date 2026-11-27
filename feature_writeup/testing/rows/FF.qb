@@ -309,6 +309,8 @@ reject verb=\S+ .*done=0
 > execute unless entity ff12 run pbot spawn ff12 410 -60 970 minecraft:overworld survival
 sleep 2
 > pbot inv ff12 clear
+# BF-FIX judge-2a3 r1126q2a: peaceful refills food (gotchas, difficulty); the bot read food=20 after `pbot hunger 10`; natural regeneration is off for the row and back on after
+> gamerule naturalRegeneration false
 > pbot hunger ff12 10
 # cheese pizza: break loot fresh with a knife, then four empty-hand bites
 > setblock 402 -60 962 vintagedelight:cheese_pizza
@@ -339,6 +341,7 @@ sleep 1
 > cdevtest loot 410 -60 962 tool=farmersdelight:iron_knife rolls=1
 > pbot inv ff12 clear
 > pbot remove ff12
+> gamerule naturalRegeneration true
 expect FF12 cheese pizza gone after four bites
 expect verb=loot state=\S*vintagedelight:cheese_pizza\S* tool=\S+ rolls=1 drops=\S*vintagedelight:cheese_pizza_slice:8
 count (verb=pbot.inv bot=ff12 slot=\d+ item=vintagedelight:cheese_pizza_slice\*2|verb=items items=\S*vintagedelight:cheese_pizza_slice:2) >= 1

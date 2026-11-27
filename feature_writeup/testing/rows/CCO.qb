@@ -140,7 +140,7 @@ look seconds between the CCO07 start and arrived lines (vanilla /tp does not wai
 @pass no mixin error; the overworld entity is not ticked by Gravity's per-entity logic, the End entity is (`[perf] gravityLimitDimensions = true`); with `qrun.py toml srv/config/creativecommon-common.toml perf gravityLimitDimensions false` and a reboot both dimensions are ticked
 @fails `CreateGravityDimensionMixin`, config key
 @from batches/r1107cco/b2_console.qb
-# Gravity adds its low-gravity modifier only while the entity falls (removed on landing): read it mid-fall from y 200.
+# Gravity adds its low-gravity modifier only while the entity falls (removed on landing): read it mid-fall: both zombies start at y 1900 (r1126q2a: from y 200 both had landed before the reads, 2 s per command, so no modifier was left to read).
 # NoAI mobs do not move at all in 1.19, so these zombies have AI
 # judge-c r1123cc: Invulnerable on both, the overworld zombie died of fall damage before its Pos read ("No entity was found")
 bootreject (?i)CreateGravityDimensionMixin.*(error|fail)
@@ -149,14 +149,16 @@ shell s=$(ls */serverconfig/create_gravity-server.toml | head -1); grep -E "biom
 > difficulty normal
 > kill @e[tag=cco08]
 > execute in minecraft:the_end run forceload add 0 0
-> execute in minecraft:the_end run summon minecraft:zombie 0 200 0 {Silent:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
-> execute in minecraft:overworld run summon minecraft:zombie 3 200 3 {Silent:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
+> execute in minecraft:the_end run summon minecraft:zombie 0 1900 0 {Silent:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["cco08","cco08e"]}
+> execute in minecraft:overworld run summon minecraft:zombie 3 1900 3 {Silent:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["cco08","cco08o"]}
 sleep 2
 > execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Pos[1]
 > data get entity @e[tag=cco08o,limit=1] Pos[1]
+> execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Motion[1]
+> data get entity @e[tag=cco08o,limit=1] Motion[1]
 > execute in minecraft:the_end run data get entity @e[tag=cco08e,limit=1] Attributes
 > data get entity @e[tag=cco08o,limit=1] Attributes
-look End zombie is higher after the same time (slower fall) and carries the Low Gravity Biome modifier on forge:entity_gravity ([I;2020721635,269896998,-1235373740,-1522950634]); the overworld zombie falls at vanilla speed with no modifier
+look End zombie Motion[1] is less negative than the overworld one (slower fall; Pos reads are 2 s apart and only show that both are still falling) and carries the Low Gravity Biome modifier on forge:entity_gravity ([I;2020721635,269896998,-1235373740,-1522950634]); the overworld zombie falls at vanilla speed with no modifier
 > kill @e[tag=cco08]
 > difficulty peaceful
 

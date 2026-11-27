@@ -100,7 +100,8 @@ sleep 3
 > cdevtest tagsof neapolitan:chimpanzee_head
 > cdevtest item neapolitan:chimpanzee_banner_pattern
 expect verb=tagsof id=neapolitan:chimpanzee_spawn_egg item_tags=-( |$)
-expect verb=tagsof id=neapolitan:chimpanzee_head item_tags=-( |$)
+# BF-FIX judge-2a3 r1126q2a: a block item's tagsof line also carries block_tags= before item_tags=; both must be empty
+expect verb=tagsof id=neapolitan:chimpanzee_head block_tags=- item_tags=-( |$)
 expect verb=item item=neapolitan:chimpanzee_banner_pattern class=
 bootexpect \[jeiRemove\] [0-9]+ removed items registered
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)

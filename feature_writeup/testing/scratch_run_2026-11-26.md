@@ -279,6 +279,65 @@ Compat rebuilt as 235159e21 by the same Gradle call but with no source change si
   - PRE-FIX SQ-MDP-10: copper cup steps for an item removed 2026-11-02 (owner) -> steps deleted; the row's
     @commands/@pass text still names the cup (row text pass for later).
   Re-screen: r2a 25 likely, r2b 21 likely, all of the false-positive kinds above.
+- 13:17 R2a drive r1126q2a started (user unit `r1126q2a-drive`, `perf/runs/r1126q/start_r2a.sh`), driver ETA
+  2026-11-28 22:48; perf session r1126q2 still open. 14:13 step 32 of 121.
+- judge-2a1 (steps 1 to 31, 60 rows): PASS 49, BATCH-FAULT 10, LOOK 1 (SQ-BBQ2-04 crafting half, client), product
+  FAIL 0, no environment fault. BF-FIX (reruns in `perf/runs/r1126q/rerun2.txt`):
+  - SQ-BBQ-06: grill progress reset to 0 (rain likely, fresh world) -> `weather clear`, state reads.
+  - SQ-BBQ-12: rdetail text never matches -> `rdetail grilling/nether_skewer`.
+  - SQ-ROLL-11: roll eaten at food 20 with Nourishment active -> `effect clear` first; if it still eats, product FAIL
+    (food.md 3.10 "every golden food always edible" vs roll_delight.md ROLL-25 "refused at full": docs disagree).
+  - SQ-BM-02: peaceful discards the baby zombie, cat moved out of a 1x1 box -> difficulty easy, wider boxes.
+  - SQ-BREED-03: bees discarded with spawn-animals=false -> `@@prep A: spawn-animals=true` on BREED.qb section 1
+    (a section-level prep, outside rule 11's simple list; accepted by the orchestrator, as HT.qb in 7.2).
+  - SQ-CBA-03, SQ-CBO-32: two absent mods give two ban INFO lines -> `-le 2` (CBO-32 applied after the CBO steps).
+  - SQ-CBB-10: Better Jungle Temples now installed; Corn Delight GLM WARN -> gate regex and reject narrowed.
+  - SQ-CBB-11: log tag is `[structure-tuning]` -> grep fixed.
+  - SQ-CBM-04: pool 184 / 37 since the 2026-11-20 book trade removal -> regex `common [1-9]\d\d, rare [1-9]\d`.
+- 15:19 step 61 of 121; SQ-CBO-32 fix applied by the orchestrator (`-le 2`, @pass "per absent mod").
+- judge-2a2 (steps 32 to 60, 42 rows): PASS 33, BATCH-FAULT 6, LOOK 2 left (SQ-CEN-05 carried-chest half needs a
+  carried save; SQ-CEQ-04 filling fluid mB not printed by rdetail), product FAIL 0. BF-FIX (rerun2.txt, 16 ids):
+  - SQ-DDP-07: cookie stayed in the bot's hand -> `clear` before the sneak half.
+  - SQ-CDNS-11: placed state was displaydelight:bnc_vegetable_omelet -> row now holds the inky cap scrambled eggs.
+    Orchestrator note: the swap avoids, not explains, Display Delight's own omelet shadowing the Brewin' omelet; check
+    at write-back whether that overlap is intended (possible finding).
+  - SQ-PS-05: powdered sugar ids moved to creativedelight:. SQ-CM-33: tag 230 (140 + 90 half cabinets).
+  - SQ-CSN-02: glass is in silk_touch_differs -> glass_pane. SQ-CCO-08: zombies landed before the reads -> y 1900.
+  - Notes: SQ-CBP-01 look text refreshed (other mods' loot ships with the mod since 2026-11-14); SQ-CBP-07 srv
+    `[effects] levelCaps` missing from configs_edited/root_config/creativecommon-common.toml (backup drift?);
+    SQ-CCO-16 creativeloot toml absent from the srv set, offers vanilla (check at write-back).
+- 20:31 step 91 of 121; judge-2a3 (steps 61 to 90, the big HH sections): after its pass PASS 347, LOOK 169 open,
+  BATCH-FAULT 26, FAIL 15, HARNESS 1; the 169 LOOKs (HH 15xx / 2xx text rows) went to judge-2a4.
+  - Known FAILs: SQ-HH-227, -228, -262, -1232 (TODO hearth-and-harvest #2), SQ-HH-1273 (known), SQ-FF-23, -26 (TODO
+    baking/baked-goods #2: no muffin sequenced-assembly ids).
+  - New FAILs: SQ-HH-1300 (cow 10.47 from the bot under Tempting, may have wandered), SQ-HH-1307 (sap bucket use on a
+    Create tank: tank empty), SQ-HH-1603 (watering can WaterLevel 5 -> 4 on grown wheat; doc: nothing spent),
+    SQ-HH-448 (unguarded wheat not pecked by crows), SQ-MELT-11 (cryosol by lava, packed ice by salt unchanged),
+    SQ-MELT-17, -18, -20 (one decor variant each); SQ-HH-439 HARNESS (log checks passed, shell count differs).
+  - BF-FIX (19 rows, rerun2.txt now 35 ids): SQ-CS-04 (bot for random ticks), SQ-EDL-04 and SQ-NDM-05 (forceload),
+    SQ-FCK-14, SQ-FF-12, SQ-FO-13, -15 (`naturalRegeneration false`: peaceful refilled food), SQ-ENM-03, -04, SQ-SWP-06
+    (reject skips `create:milling/compat/`; ENM-03 expects air without Ender 1.2.2), SQ-GLD-08, -12 (counts after the
+    2026-11-22 removals), SQ-HH-1289, -1292 (sleep before the read), SQ-HH-1311 (cdevtest randomtick), SQ-HH-303, -318
+    (1.19.2 `Placed "<id>" at`), SQ-MELT-19, SQ-MG-20.
+  - BATCH-FAULT, not simple: SQ-SLT-04 (tag 285 vs 290 after removals; no doc count), SQ-LOOT-01, -03 (baseline
+    `baseline_loot_split_2026-11-17` stale), SQ-MG-19 (needs a new setup), SQ-OXD-01, -07, -08 (OXD.qb locked by the
+    drive; OXD-07 reject matches its own echo, OXD-01/08 probably no bot).
+  - Environment faults across rows (fix in tools/ after R2a, before R2b): (1) 11 boot WARNs `Error parsing recipe
+    create:milling/compat/biomesoplenty/...: Unknown item` fall into restarting rows' segments and hit the generic
+    Unknown-item reject; (2) peaceful food refill breaks hunger rows without `naturalRegeneration false`; (3) random-tick
+    reads with no player near; (4) SQ-BOT-06 shell grep counts the probe's own lines.
+- judge-2a4 (open LOOKs of steps 61 to 90, 201 filled): PASS 174, FAIL 1, BATCH-FAULT 22, INCONCLUSIVE 3 (SQ-CDFO-03,
+  SQ-BOT-08, SQ-FCK-09), OWNER 1 (SQ-MG-20 JEI search).
+  - FAIL SQ-HH-323: `/place structure corn_maze` places 0 chests (twice, also r1120nv); suspect CornMazePiece.java
+    `placeChest`, or the row's count box misses the centre.
+  - BF-FIX (HH.qb, rerun2.txt now 43 ids): SQ-HH-1502 (sleep before the read), -1563 (season MID_SUMMER), -1104 (toml
+    keys `litterMaxExtra`, `truffleLitterBoost`, `truffleLitterBonus`; nested -04 jar), -1117 (51 drinks, alcohol.md),
+    -235 (water window), -266 (3 dirt, writeup 3.10), -1613, -1615 (look text limited to what rdetail prints; the
+    container and heated parts left as owner checks: review at write-back). SQ-HH-401 vacuous look line removed, PASS.
+  - Not simple: SQ-HH-301 (reads the boot-2 toml SQ-HH-274 edited; needs a reorder), SQ-FO-01 (358 canned sources vs
+    368, no doc count), SQ-GLD-11 (milk removed 2026-11-22), SQ-SLT-03 (zz_salt_probe.js expects raw rock salt to stay
+    raw; placed-twin swap documented in salt.md).
+  - Doc drift: hearth_and_harvest.md still names `litterChance` and the -03 jar.
 
 ## 8. Final verdicts (R1, judged 2026-11-26 10:25)
 

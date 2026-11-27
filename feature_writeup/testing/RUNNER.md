@@ -8,9 +8,9 @@ Format while running:
 
 ```
 State: running
-Updated: 2026-11-26 13:20
-ETA: R2a driver estimate 2026-11-28 22:48 (R1 ran about 6x faster than its estimate); R2b after
-Phase: R1 + rerun judged; R2a drive r1126q2a (425 rows, 121 steps) running; then R2b (318 rows, 67 steps)
+Updated: 2026-11-26 20:57
+ETA: 14:12 (about 2477 min left)
+Phase: R2a drive r1126q2a step 99 running, steps 1 to 90 judged; then tools fix, R2b, rerun r1126q2r
 Run: r1126q2a (qrun.py drive, state perf/runs/r1126q2a/drive/state.json)
 Previous: r1126gp finished 2026-11-26 01:07: SQ-CMP-39, -40, SQ-IP-15, CQ-RPS-14, CQ-CMP-37, -41 PASS (scratch_run_2026-11-24.md 10)
 ```

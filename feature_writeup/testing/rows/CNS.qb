@@ -27,16 +27,16 @@ shell grep -iE "damage.?tag" logs/latest.log | head -5; true
 shell test "$(ls "$INST"/development/creativeCommon/src/main/resources/data/creativecommon/damage_tags | wc -l)" -ge 32
 look the boot log names no unknown damage tag and no `#creativeengineering:` reference; the Common damage tag folder holds at least 32 files, none naming the old namespace (the fire / magic tagging by a live hit is covered by the effect rows, not here)
 
-## SQ-CSN-02 | WTHIT and JEI order tag scripts load; glass matches wthit/needs_silk_touch
+## SQ-CSN-02 | WTHIT and JEI order tag scripts load; glass pane matches wthit/needs_silk_touch
 @group A
 @reviewed 2026-11-26
-@commands Same boot: `/execute if block <glass> #creativecommon:wthit/needs_silk_touch` on a placed glass block; `grep -iE "jei_order_tags\|wthittags" logs/kubejs/server.log`
-@pass Glass matches; both scripts load with no error
+@commands Same boot: `/execute if block <glass pane> #creativecommon:wthit/needs_silk_touch` on a placed glass pane (plain glass is in `silk_touch_differs`); `grep -iE "jei_order_tags\|wthittags" logs/kubejs/server.log`
+@pass Glass pane matches; both scripts load with no error
 @fails `wthittags.js` TAG strings, `jei_order.js` TAG_ROOT
 @from batches/r1102b/s1_R.qb
-> setblock 0 150 0 minecraft:glass
-> execute if block 0 150 0 #creativecommon:wthit/needs_silk_touch run say CSN2 glass matches wthit needs_silk_touch
-expect CSN2 glass matches wthit needs_silk_touch
+> setblock 0 150 0 minecraft:glass_pane
+> execute if block 0 150 0 #creativecommon:wthit/needs_silk_touch run say CSN2 glass pane matches wthit needs_silk_touch
+expect CSN2 glass pane matches wthit needs_silk_touch
 kjsreject (jei_order_tags|wthittags)\.js.*(rror|xception)
 shell ! grep -hiE "(jei_order|wthittags).*(rror|xception)" logs/kubejs/server.log logs/kubejs/startup.log
 > setblock 0 150 0 minecraft:air

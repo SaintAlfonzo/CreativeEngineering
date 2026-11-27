@@ -1061,6 +1061,8 @@ sleep 3
 > pbot spawn sard {F1+4} {F2} {F3+4} minecraft:overworld survival
 sleep 2
 > clear sard
+# BF-FIX judge-2a3 r1126q2a: peaceful refills food (gotchas, difficulty), so the bot was at food 20 when `pbot eat` ran (result=FAIL, count 0); natural regeneration is off for the row and back on after
+> gamerule naturalRegeneration false
 > effect clear sard
 > pbot hunger sard 10 0
 > item replace entity sard hotbar.0 with corn_delight:popcorn
@@ -1083,6 +1085,7 @@ sleep 3
 sleep 3
 > cdevtest player sard
 > pbot remove sard
+> gamerule naturalRegeneration true
 count verb=pbot.useitem bot=sard end=finish == 3
 shell grep -h "verb=player name=sard " logs/latest.log | tail -3 | sed -E 's/.* food=([0-9.]+) sat=([0-9.]+) .*/\1 \2/'
 shell grep -h "verb=player name=sard " logs/latest.log | tail -3 | sed -E 's/.* food=([0-9.]+) sat=([0-9.]+) .*/\1 \2/' | awk 'NR==1{pf=$1;p=$2} NR==2{gf=$1;g=$2} NR==3{bf=$1;b=$2} END{exit !(NR==3 && pf==gf && pf==bf && g-p>1.95 && g-p<2.05 && b-p>4.95 && b-p<5.05)}'
@@ -1125,6 +1128,8 @@ sleep 3
 > pbot spawn sard {F1+4} {F2} {F3+4} minecraft:overworld survival
 sleep 2
 > clear sard
+# BF-FIX judge-2a3 r1126q2a: peaceful refills food (gotchas, difficulty), so the bot was at food 20 when `pbot eat` ran (result=FAIL, count 0); natural regeneration is off for the row and back on after
+> gamerule naturalRegeneration false
 > effect clear sard
 > pbot hunger sard 10 0
 > item replace entity sard hotbar.0 with corn_delight:popcorn
@@ -1140,6 +1145,7 @@ sleep 3
 sleep 3
 > cdevtest player sard
 > pbot remove sard
+> gamerule naturalRegeneration true
 count verb=pbot.useitem bot=sard end=finish == 2
 shell grep -h "verb=player name=sard " logs/latest.log | tail -2 | sed -E 's/.* food=([0-9.]+) sat=([0-9.]+) .*/\1 \2/' | awk 'NR==1{pf=$1;p=$2} NR==2{gf=$1;g=$2} END{exit !(NR==2 && pf==gf && g-p>-0.01 && g-p<0.01)}'
 reject verb=player name=sard .*effects=\S*minecraft:speed

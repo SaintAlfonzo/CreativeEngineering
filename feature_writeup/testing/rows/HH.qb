@@ -545,18 +545,18 @@ expect ids sound hearthandharvest:entities\.fart true
 > give @p hearthandharvest:cheese_wheel
 look each of the four lines: `Unknown item` (console, no player needed for the parse error)
 
-## SQ-HH-1104 | toml lists all 8 keys (defaults `litterChance = 0.3333` / `truffleLitt
+## SQ-HH-1104 | toml lists all 9 keys (`litterMaxExtra = 2`, `truffleLitterBoost`, `truffleLitterBonus`), jar -04, mixin json in the nested jar
 @group A
-@commands shell: `grep -E "bottleMilking\|chickenPlucking\|litters =\|litterChance\|truffleLitterChance\|manureFromFedAnimals\|tapperChance\|cornHuskHarvestChance" config/hearthandharvest-common.toml`; `unzip -l mods/creativedelight-*.jar \| grep backportedHearth`; `unzip -l mods/creativedelight-*.jar \| grep -c hearthandharvest.ce.mixins`; `grep -n "SheepAteMixin\|hearthandharvest.ce.mixins" logs/latest.log \| head`
-@pass toml lists all 8 keys (defaults `litterChance = 0.3333` / `truffleLitterChance = 0.6666` to 4 places, `tapperChance = 0.5`, `cornHuskHarvestChance = 0.25`, the switches `true`); jar has `backportedHearth-1.4.1-ce-19.2-` (the writeup J23 says -03; the build in `mods/` is -04 per J89); mixin json counted once in the nested jar; no line matching `Mixin apply.*SheepAte\|failed.*SheepAte`
+@commands shell: `grep -E "bottleMilking\|chickenPlucking\|litters =\|litterMaxExtra\|truffleLitterBoost\|truffleLitterBonus\|manureFromFedAnimals\|tapperChance\|cornHuskHarvestChance" config/hearthandharvest-common.toml`; `unzip -l mods/creativedelight-*.jar \| grep backportedHearth`; a python zipfile count of `hearthandharvest.ce.mixins` inside the nested backportedHearth jar; `grep -n "SheepAteMixin\|hearthandharvest.ce.mixins" logs/latest.log \| head`
+@pass toml lists all 9 keys (`litterMaxExtra = 2`, `truffleLitterBoost = true`, `truffleLitterBonus = 1` since the 2026-11-21 litter rework, `tapperChance = 0.5`, `cornHuskHarvestChance = 0.25`, the switches `true`); jar has `backportedHearth-1.4.1-ce-19.2-` (the writeup J23 says -03; the build in `mods/` is -04 per J89); mixin json counted once in the nested jar; no line matching `Mixin apply.*SheepAte\|failed.*SheepAte`
 @fails `HHConfig`; `development/creativeDelight/members/hearth/gradle.properties`; a missing mixin apply: target `m_8035_` in `SheepAteMixin`. Note: J22 "not yet copied" is stale: `configs_edited/root_config/hearthandharvest-common.toml` exists
 @from batches/r1108hh/t12_a.qb
-@reviewed 2026-11-20
-shell grep -E "bottleMilking|chickenPlucking|litters =|litterChance|truffleLitterChance|manureFromFedAnimals|tapperChance|cornHuskHarvestChance" config/hearthandharvest-common.toml
+@reviewed 2026-11-26
+shell grep -E "bottleMilking|chickenPlucking|litters =|litterMaxExtra|truffleLitterBoost|truffleLitterBonus|manureFromFedAnimals|tapperChance|cornHuskHarvestChance" config/hearthandharvest-common.toml
 shell unzip -l mods/creativedelight-*.jar | grep backportedHearth
-shell unzip -l mods/creativedelight-*.jar | grep -c hearthandharvest.ce.mixins; true
+shell python3 -c 'import zipfile,glob,io;z=zipfile.ZipFile(glob.glob("mods/creativedelight-*.jar")[0]);n=zipfile.ZipFile(io.BytesIO(z.read("META-INF/jarjar/backportedHearth-1.4.1-ce-19.2-04.jar")));print(sum("hearthandharvest.ce.mixins" in x for x in n.namelist()))'
 shell grep -n "SheepAteMixin|hearthandharvest.ce.mixins" logs/latest.log | head
-look toml lists all 8 keys (defaults `litterChance = 0.3333` / `truffleLitterChance = 0.6666` to 4 places, `tapperChance = 0.5`, `cornHuskHarvestChance = 0.25`, the switches `true`); jar has `backportedHearth-1.4.1-ce-19.2-` (the writeup J23 says -03; the build in `mods/` is -04 per J89); mixin json counted once in the nested jar; no line matching `Mixin apply.*SheepAte|failed.*SheepAte`
+look toml lists all 9 keys (`litterMaxExtra = 2`, `truffleLitterBoost = true`, `truffleLitterBonus = 1` since the 2026-11-21 litter rework, `tapperChance = 0.5`, `cornHuskHarvestChance = 0.25`, the switches `true`); jar has `backportedHearth-1.4.1-ce-19.2-` (the writeup J23 says -03; the build in `mods/` is -04 per J89); mixin json counted once in the nested jar; no line matching `Mixin apply.*SheepAte|failed.*SheepAte`
 
 ## SQ-HH-1105 | log matches `food hearthandharvest:raisins: nutrition 2, modifier 0\.(
 @group A
@@ -750,14 +750,15 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 expect verb=food item=hearthandharvest:moonshine\*1\S* food=true nutrition=1 modifier=0 .*effects=minecraft:strength:1:1200:1\.0,minecraft:slowness:1:1200:1\.0,brewinandchewin:intoxication:0:1800:1\.0,minecraft:nausea:0:100:1\.0$
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-1117 | output has `food values set on 49 of 49 drinks` (the list length in `a
+## SQ-HH-1117 | output has `food values set on \d+ of 51 drinks` (the list length in `a
 @group A
 @commands shell: `grep -h "alcohol" logs/kubejs/startup.log`
-@pass output has `food values set on 49 of 49 drinks` (the list length in `alcohol_drinks.js`, with the 7 H&H wines); no `has no item_dict key`, no `could not set food`
+@pass output has `food values set on \d+ of 51 drinks` (the list length in `alcohol_drinks.js`: 51 since Hearth and Harvest D16, alcohol.md; 49 of 51 when the Bellini and Wodka mods are absent); no `has no item_dict key`, no `could not set food`
 @fails `alcohol_drinks.js`; item dict keys of the seven drinks
 @from batches/r1108hh/t12_a.qb
+@reviewed 2026-11-26
 shell grep -h "alcohol" logs/kubejs/startup.log
-look output has `food values set on 49 of 49 drinks` (the list length in `alcohol_drinks.js`, with the 7 H&H wines); no `has no item_dict key`, no `could not set food`
+look output has `food values set on \d+ of 51 drinks` (the list length in `alcohol_drinks.js`: 51 since Hearth and Harvest D16, alcohol.md; 49 of 51 when the Bellini and Wodka mods are absent); no `has no item_dict key`, no `could not set food`
 
 ## SQ-HH-1118 | log matches `item hearthandharvest:brine_bottle: class Item, max damag
 @group A
@@ -3537,7 +3538,8 @@ sleep 3
 > summon minecraft:zombie 3384 -60 3288 {NoAI:1b,PersistenceRequired:1b,Tags:["ep1"]}
 sleep 1
 > effect give bot1 hearthandharvest:prickly 60 0
-sleep 3
+# BF-FIX judge-2a3 r1126q2a: the drive's command gap adds about 2 s to the sleep, so the read came 5 s after the effect (about 10 hits of 1 every 10 ticks, hearth_and_harvest.md Prickly: zombie read 9.66); sleep 1 reads at about 3 s (about 6 hits)
+sleep 1
 > data get entity @e[tag=ep1,limit=1] Health
 expect has the following entity data: 1\d\.\d+f
 
@@ -3592,7 +3594,8 @@ sleep 3
 > summon minecraft:wolf 3048 -60 3336 {NoAI:1b,PersistenceRequired:1b,Tags:["ep4"],Health:8f}
 sleep 1
 > effect give bot1 hearthandharvest:prickly 60 0
-sleep 3
+# BF-FIX judge-2a3 r1126q2a: the drive's command gap adds about 2 s to the sleep, so the read came 5 s after the effect (about 10 hits of 1 every 10 ticks, hearth_and_harvest.md Prickly: wolf (8 HP) was already dead: No entity was found); sleep 1 reads at about 3 s (about 6 hits)
+sleep 1
 > data get entity @e[tag=ep4,limit=1] Health
 expect has the following entity data: [1-7]\.\d+f
 
@@ -3980,10 +3983,10 @@ expect Test passed
 > clear bot1
 sleep 3
 > setblock 3000 -60 3434 hearthandharvest:unripe_goat_cheese_wheel[age=0]
-> gamerule randomTickSpeed 3000
-sleep 5
+# BF-FIX judge-2a3 r1126q2a: randomTickSpeed 3000 under 'Can't keep up!' lag gave too few ticks in 5 s (2 stages at 10 % each, UnripeCheeseWheelBlock.randomTick); `randomtick` gives the block 300 random ticks without a player (run default 8)
+> cdevtest randomtick 3000 -60 3434 3000 -60 3434 300
+waitlog verb=randomtick rounds=300 60
 > execute if block 3000 -60 3434 hearthandharvest:goat_cheese_wheel[servings=3]
-> gamerule randomTickSpeed 3
 expect Test passed
 
 ## SQ-HH-1312 | log matches `has the following entity data: \{Count: 1b, id: "minecraf
@@ -5181,10 +5184,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-235 | first `empty 0 / 10000` (no water, no rain, no neighbor source); seco
 @group A
 @commands Plot 144 112. `/setblock 144 -60 112 hearthandharvest:sprinkler`; `sleep 5`; `/cdevtest tank 144 -60 112`; `weather rain 600`; `sleep 8`; `/cdevtest tank 144 -60 112`; `weather clear 600`
-@pass first `empty 0 / 10000` (no water, no rain, no neighbor source); second `: minecraft:water (140\|160\|180) / 10000` (20 mB per s, rounded to the 20-tick timer). If rain never arrives, compare `/cdevtest season minecraft:plains` before reading it as a sprinkler bug
+@pass first `empty 0 / 10000` (no water, no rain, no neighbor source); second `: minecraft:water (1[4-9]\|2[0-4])0 / 10000` (20 mB per s, rounded to the 20-tick timer; 140 to 240 for the step gaps around the 8 s sleep). If rain never arrives, compare `/cdevtest season minecraft:plains` before reading it as a sprinkler bug
 @fails `refill` rain branch, `isRainingAt`, Creative Calendar weather
 @from batches/r1111/hh_mach.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > setblock 144 -60 112 hearthandharvest:sprinkler
 sleep 5
 > cdevtest tank 144 -60 112
@@ -5192,7 +5195,7 @@ sleep 5
 sleep 8
 > cdevtest tank 144 -60 112
 > weather clear 600
-look first `empty 0 / 10000` (no water, no rain, no neighbour source); second `: minecraft:water (140|160|180) / 10000` (20 mB per s, rounded to the 20-tick timer). If rain never arrives, compare `/cdevtest season minecraft:plains` before reading it as a sprinkler bug
+look first `empty 0 / 10000` (no water, no rain, no neighbour source); second `: minecraft:water (1[4-9]|2[0-4])0 / 10000` (20 mB per s, rounded to the 20-tick timer; 140 to 240 for the step gaps around the 8 s sleep). If rain never arrives, compare `/cdevtest season minecraft:plains` before reading it as a sprinkler bug
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-236 | three `Test passed` (radius 7 wetted, radius 8 left dry); tank value u
@@ -5817,7 +5820,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass hand is the `hearthandharvest:blueberry_juice_bucket` (`hearthandharvest:blueberry_juice_bucket`); tank `empty 0 / 8000`. Juices have no bucket item: run it with water (`minecraft:water_bucket`), as r1112 did
 @fails `MachineFluids.useOnTank` bucket branch
 @from batches/r1115/p5_a1.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > clear hb1
 > tp hb1 178.5 -59 206.5 0 60
 > setblock 176 -60 208 hearthandharvest:stomping_basin[facing=north]
@@ -5839,7 +5842,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 sleep 3
 > zhh2 basin 176 -60 208
 > data get block 176 -59 208 Items
-look fill 1000; first bucket use: hand water_bucket, tank empty; empty basin: hand still bucket, then hand still 4 dirt; basin slots empty after hand and hopper; hopper still holds 4 dirt and the bucket
+look fill 1000; first bucket use: hand water_bucket, tank empty; empty basin: hand still bucket, then hand 3 dirt (one placed as a block on top: the basin passes a non-ingredient to the item's own use, writeup 3.10); basin slots empty after hand and hopper; hopper still holds 4 dirt and the bucket
 expect verb=tank tanks=1 fluids=0:minecraft:water\*1000/8000\b
 expect verb=tank tanks=1 fluids=0:empty/8000\b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -6095,7 +6098,8 @@ sleep 3
 > place feature creativedelight:wild/wild_hops 4164 -60 32
 > zhh2 countset 4150 -60 22 4170 -50 42 hearthandharvest:hops_vine,minecraft:oak_log
 waitlog countset columns skipped 30
-expect Placed feature
+# BF-FIX judge-2a3 r1126q2a: the 1.19.2 /place feature reply is `Placed "<id>" at x, y, z`, not "Placed feature"
+expect Placed "creativedelight:wild/wild_hops" at
 expect countset hearthandharvest:hops_vine: [2-9]
 expect countset minecraft:oak_log: 5
 reject Failed to place
@@ -6381,7 +6385,8 @@ capture LBU countset salt:large_salt_bud: (\d+)
 capture MBU countset salt:medium_salt_bud: (\d+)
 capture SBU countset salt:small_salt_bud: (\d+)
 shell python3 -c "import sys; r={RAW}+{PLC}; ct={CAL}+{TUF}; print('rock', r, 'calcite+tuff', ct, 'air', {AIR}); sys.exit(0 if r > 200 and ct > 0 and r / ct >= 1.8 and {AIR} > 1000 and {CAL} > 20 and {TUF} > 20 and {CLU}+{LBU}+{MBU}+{SBU} > 0 else 1)"
-expect Placed feature
+# BF-FIX judge-2a3 r1126q2a: the 1.19.2 /place feature reply is `Placed "<id>" at x, y, z`, not "Placed feature"
+expect Placed "hearthandharvest:salt_cave" at
 
 ## SQ-HH-319 | salt cave origin pulled into saltCaveMinY..MaxY (0..0), stone box and forceload
 @phase worldgen
@@ -6831,7 +6836,6 @@ expect \[zhh3\] isFood corn_delight:corn_seeds true wild=true
 expect \[zhh3\] isFood minecraft:wheat_seeds true
 expect \[zhh3\] isFood minecraft:dirt false
 reject \[zhh3\] error:
-look UNPARSED CMD: hearthandharvest:crow ;; config/hearthandharvest-common.toml
 
 ## SQ-HH-402 | `expect \[zq\] item hearthandharvest:lightly_licked_salt_block: class
 @group A
@@ -9757,11 +9761,12 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `shod=true`; `speed` = `speedBase` x 1.25 (+/- 0.0001); mods holds `Horseshoe=0.25`; `effects` holds `effect.minecraft.fire_resistance`; hand empty (HNH-20)
 @fails `HorseshoeItem.interactLivingEntity`; `isTamed`; `HorseshoeEvents.onLivingTick` (a NoAI horse still ticks)
 @from batches/r1111/hh_boot4.qb
-@reviewed 2026-11-20
+@reviewed 2026-11-26
 > forceload add 470 470 620 620
 > summon minecraft:horse 480 -60 480 {Tame:1b,NoAI:1b,Tags:["zh1"]}
 > pbot hold G hearthandharvest:horseshoe 1
 > zhh5 interact G zh1
+sleep 3
 > zhh5 horse zh1
 > cdevtest player G
 look `shod=true`; `speed` = `speedBase` x 1.25 (+/- 0.0001); mods holds `Horseshoe=0.25`; `effects` holds `effect.minecraft.fire_resistance`; hand empty (HNH-20)
@@ -10783,7 +10788,9 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass both "Test passed" (HNH-76; farmland may dry to dirt: both are valid ground). In-season date needed (`warm_dry`, J row)
 @fails `SunflowerStemBlock.grow`; `placeAt`
 @from batches/r1111/hh_gear_b.qb
+@reviewed 2026-11-26
 > time set noon
+> season set MID_SUMMER
 > setblock 504 -61 530 minecraft:farmland
 > setblock 504 -60 530 hearthandharvest:sunflower_stem[age=0]
 > gamerule randomTickSpeed 3000
@@ -12364,7 +12371,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 expect verb=rdetail id=creativedelight:farmersdelightcooking/sugar_from_syrup serializer=\S+ result=minecraft:sugar\*8 ingredients=\S*rusticdelight:syrup
 expect verb=rdetail id=creativedelight:shapeless/sugar_from_syrup serializer=\S+ result=minecraft:sugar\*4 ingredients=\S*rusticdelight:syrup
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
-look the Cooking Pot recipe's extra lines (part=fields) name the glass bottle as the container; the live pot and heated-mixer crafts are an owner check (no driver step takes a pot's output slot)
+look the Cooking Pot recipe prints no `part=fields` container line (the glass bottle is the syrup's crafting remainder, recipes.js `sugar_from_syrup`; rdetail fields list only public ingredient and tool fields); the live pot and heated-mixer crafts are an owner check (no driver step takes a pot's output slot)
 
 ## SQ-HH-1614 | syrup fluid registered with Hearth and Harvest's syrup textures and tagged
 @group any
@@ -12398,7 +12405,7 @@ expect id=creativedelight:createmixing/syrup_fluid_from_sap part=fluids value=\S
 expect verb=rdetail id=creativedelight:createmixing/sugar_from_syrup_fluid serializer=create:mixing result=minecraft:sugar\*8
 expect id=creativedelight:createmixing/sugar_from_syrup_fluid part=fluids value=\S*creativedelight:syrup\S*250
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
-look the fields lines of both recipes show the heated requirement (an unheated basin runs nothing); the live mixer run is an owner check
+look the two recipes print `part=fluids` lines (`in:hearthandharvest:sap@1000mB,out:creativedelight:syrup@250mB`; `in:creativedelight:syrup@250mB` with 8 sugar); rdetail does not print the heated requirement, so heated and unheated basin runs (an unheated basin runs nothing) are an owner check; the live mixer run is an owner check
 
 ## SQ-HH-1616 | Spout fills a glass bottle with 250 mB syrup fluid; Item Drain empties a syrup bottle to 250 mB
 @group A

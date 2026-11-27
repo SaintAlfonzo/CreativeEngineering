@@ -340,7 +340,8 @@ expect SA4 p2 ok
 expect SA4 p3 ok
 expect SA4 p4 ok
 expect verb=ages block=endersdelight:chorus_flame_block prop=age n=2 mean=(?!0\.000)
-expect verb=pbot.useitem bot=saend end=finish item=endersdelight:amberveil_stew result=endersdelight:shulker_bowl
+# BF-FIX judge-2a3 r1126q2a: this boot has no Ender's 1.2.2 jar; ends_delight.md 5.9: without it the dishes return nothing (the Shulker Bowl is 1.2.2's)
+expect verb=pbot.useitem bot=saend end=finish item=endersdelight:amberveil_stew result=minecraft:air
 expect verb=makes item=endersdelight:crushed_voidpepper n=[2-9]
 > pbot remove saend
 # put the jar back for the rows after this one
@@ -348,7 +349,8 @@ edit mv mods/endersdelight-1.19-1.2.2.jar.off mods/endersdelight-1.19-1.2.2.jar
 restart
 bootexpect Done \(
 look chorusflame ages above 0 (20 random ticks per block, 60 random ticks each at the 0.1 default chance), void pepper count above 1 or spreading; eat end line result= the Shulker Bowl; crushed void pepper: a knife (cutting) and a millstone / milling recipe
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+# BF-FIX judge-2a3 r1126q2a: every full-pack boot logs 11 `Error parsing recipe create:milling/compat/...: Unknown item` WARN lines (Create compat recipes for absent mods; KubeJS ignores their mod_loaded condition); the restart put them in this row's log segment and the generic reject matched them
+reject ^(?!.*create:milling/compat/)(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-04 | chorusflameGrowthSlow 0: chorusflame on end stone stays age 0
 @group A
@@ -380,7 +382,8 @@ waitlog verb=randomtick rounds=60 60
 > pbot remove saenm
 expect verb=ages block=endersdelight:chorus_flame_block prop=age n=4 mean=0.000 hist=0:4
 look ages histogram all 0 (4 plants, 60 random ticks each, 60 random ticks each); with the 0.1 default they reach age 2 (SQ-ENM-03)
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+# BF-FIX judge-2a3 r1126q2a: every full-pack boot logs 11 `Error parsing recipe create:milling/compat/...: Unknown item` WARN lines (Create compat recipes for absent mods; KubeJS ignores their mod_loaded condition); the restart put them in this row's log segment and the generic reject matched them
+reject ^(?!.*create:milling/compat/)(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-04b | members.endersadditions false, /reload: no Void Pepper or 1.1.4 meal recipe from Creative Delight
 @group A
@@ -690,7 +693,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 ## SQ-GLD-08 | golden recipes (8 nuggets), no donor carrot recipe, donor data pack, no enchantment book
 @group A
 @commands `/recipe give @p *`; check the recipe book or JEI for `goldenfood:golden_cake` and `goldenfood:golden_honey_bottle`; JEI search "Golden Food Enchantment"
-@pass The golden recipes exist under `creativedelight:` ids (the donor ids are gone): the golden cake and the golden honey bottle each have a crafting (8 gold nuggets), an arc furnace and a Create mixing recipe (golden_food.md 3.4a; the golden apple keeps 8 ingots); no `minecraft:golden_carrot` crafting recipe from the donor (the pack's own carrot recipes as before); JEI has no Golden Food Enchantment book
+@pass The golden recipes exist under `creativedelight:` ids (the donor ids are gone): the golden cake has a crafting (8 gold nuggets), an arc furnace and a Create mixing recipe, and the golden honey bottle has no recipe (removed 2026-11-22) (golden_food.md 3.4a; the golden apple keeps 8 ingots); no `minecraft:golden_carrot` crafting recipe from the donor (the pack's own carrot recipes as before); JEI has no Golden Food Enchantment book
 @fails Missing recipes: `/datapack list` must show `goldenfood_upstream_data`; carrot recipe present: the pack's recipe removal no longer sees the id; book listed: the enchantment is still registered
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-26
@@ -705,7 +708,8 @@ waitlog \[sa\] enchreg 30
 expect goldenfood_upstream_data
 expect verb=makes id=creativedelight:shaped/golden_cake result=goldenfood:golden_cake\*1
 expect verb=makes item=goldenfood:golden_cake n=[1-9]
-expect verb=makes item=goldenfood:golden_honey_bottle n=[1-9]
+# BF-FIX judge-2a3 r1126q2a: the golden honey bottle and milk bucket were removed 2026-11-22 (golden_food.md section 0, SQ-GLD-17), so its recipe count is 0
+expect verb=makes item=goldenfood:golden_honey_bottle n=0
 reject verb=makes id=goldenfood:\S+ result=minecraft:golden_carrot\*
 expect \[sa\] enchreg goldenfood:gf_enchantment: false
 look the rdetail line of creativedelight:shaped/golden_cake shows the 8 gold nuggets ring (a nugget tag) around the cake; the "verb=recipes text=creativedelight:shaped/golden_ n=" count is the shaped golden recipes (one per golden food, 21 foods after the stew removal); JEI book: client
@@ -789,16 +793,17 @@ expect verb=rdetail id=\S*enchanted_golden_carrot_sequenced_assembly part=step\d
 look bread, milk and carrot alike: start = the golden form, each loop deploys 1 gold ingot (rose gold counts), fills 125 mB liquid experience and presses, 8 loops (golden_food.md 3.4); outputs goldenfood:enchanted_golden_*
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
-## SQ-GLD-12 | 21 enchanted golden assemblies (stews removed), no golden.js errors
+## SQ-GLD-12 | 19 enchanted golden assemblies (stews, honey bottle and milk bucket removed), no golden.js errors
 @group A
 @commands `/cdevtest recipes enchanted_golden_`; `grep -iE "goldenEnchant\|incomplete_enchanted_golden\|golden.js" logs/latest.log` and the KubeJS server log
-@pass 21 enchanted golden assemblies (24 before the 3 enchanted stews were removed 2026-11-10, golden_food.md section 0); no KubeJS error naming golden.js or an incomplete item
+@pass 19 enchanted golden assemblies (24 before the 3 enchanted stews were removed 2026-11-10 and the honey bottle and milk bucket 2026-11-22, golden_food.md section 0); no KubeJS error naming golden.js or an incomplete item
 @fails Fewer: an id missing from `item_dict.js`; KubeJS error: the line it names in golden.js
 @from batches/r1103/sA_2.qb
 @reviewed 2026-11-26
 > cdevtest recipes enchanted_golden_ max=500
 waitlog verb=recipes text=enchanted_golden_ n= 60
-count verb=recipes id=\S*enchanted_golden_[a-z_]+_sequenced_assembly result= == 21
+# BF-FIX judge-2a3 r1126q2a: 24 before the 3 stews (2026-11-10), 21 after, 19 after the enchanted honey bottle and milk bucket were removed 2026-11-22 (golden_food.md section 0)
+count verb=recipes id=\S*enchanted_golden_[a-z_]+_sequenced_assembly result= == 19
 shell ! grep -hiE "(goldenEnchant|incomplete_enchanted_golden|golden\.js).*(rror|xception|not registered)" logs/latest.log logs/kubejs/server.log
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
@@ -1456,7 +1461,8 @@ sleep 3
 count \[swaps\] player login: == 1
 > pbot remove saswp6
 look the first join with the toggle off left alexsmobs:banana in EnderItems (no rewrite line); after the restart with the toggle on one "player login: 1 merged stack(s)" line and neapolitan:banana x4; the second join adds no second line. The doc's unstamped-player case (SWP-06 in item_merges.md section 6) needs a changed swap-list fingerprint and is not reproducible on a fresh world
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot)
+# BF-FIX judge-2a3 r1126q2a: every full-pack boot logs 11 `Error parsing recipe create:milling/compat/...: Unknown item` WARN lines (Create compat recipes for absent mods; KubeJS ignores their mod_loaded condition); the restart put them in this row's log segment and the generic reject matched them
+reject ^(?!.*create:milling/compat/)(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot)
 
 ## SQ-SWP-07 | a dropped old item becomes the survivor as it enters the world
 @group A

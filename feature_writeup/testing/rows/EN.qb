@@ -86,6 +86,9 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass 5-7 meat, 2 legs, 1-2 teeth; +2 meat +1 tooth with knife or machete
 @fails
 @from batches/r1102b/s3_A.qb passed
+# BF-FIX judge-2a3 r1126q2a: the probe spawns and kills at 400 -60 400 and needs that chunk loaded (probe header: forceload add 400 400); unloaded, the dragon dropped nothing (meat 0, legs 0, teeth 0)
+> forceload add 400 400
+sleep 10
 > cbetest dragon
 waitlog \[cbetest\] done dragon 300
 expect \[cbetest\] PASS dragon dragon bare: 5-7 meat, 2 legs, 1-2 teeth per kill

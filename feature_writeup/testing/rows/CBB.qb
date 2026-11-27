@@ -157,8 +157,10 @@ shell grep -qE "re-added [1-9][0-9]* dragon-breath fluid brews" logs/kubejs/star
 @fails `StructurePresence` (reflection on `DataPackEventJS.wrappedManager`: a WARN says it failed) or a structure set the gate missed (the key in the error)
 @from batches/r1106cbb/c3.qb
 @modset port_chain instance +creativedevtools-*.jar
-bootexpect structure gate: [0-9]+ set\(s\) and [0-9]+ structure\(s\) left out.*betterjungletemples
-bootreject Failed to load datapacks|Unknown registry key
+# r1126q2a batch fault (judge-2a1): Yung's Better Jungle Temples is in mods/ now, so it is no longer left out of the gate line; the Corn Delight
+# GlobalLootModifier WARN (mmlib:add_loot_table not registered) is known and skipped by GlmMerge, it is not a datapack failure
+bootexpect structure gate: [0-9]+ set\(s\) and [0-9]+ structure\(s\) left out
+bootreject Failed to load datapacks|Unknown registry key(?!.*forge:global_loot_modifier_serializers)
 bootexpect Done \(
 shell grep -h "structure gate" logs/latest.log logs/kubejs/server.log | head -5
 shell grep -h "meta_structures.*left out" logs/latest.log | head -10
@@ -172,7 +174,8 @@ shell grep -h "meta_structures.*left out" logs/latest.log | head -10
 @modset port_chain instance +creativedevtools-*.jar
 shell grep -h "\[structures\]\|structure tuning\|nothing applied" logs/latest.log logs/kubejs/server.log | head -20
 bootreject nothing applied
-shell grep -qh "structure tuning" logs/latest.log logs/kubejs/server.log
+# r1126q2a batch fault (judge-2a1): the log tag is "[structure-tuning]" and the summary reads "N groups, M structure_sets written"
+shell grep -qhE "\[structure-tuning\] [0-9]+ groups" logs/latest.log logs/kubejs/server.log
 
 ## SQ-CBB-12 | full pack: removed count, no gate line, no refused remove
 @group B (full pack)

@@ -6,6 +6,7 @@
 @@title SQ-BREED Animal breeding and bee flower audit, 2026-11-10 ([breeding_audit.md](../breeding_audit.md) section 7; TODO `mobs/tweaks #14`, `mobs/bees #1`)
 @@date 2026-11-10
 @@sources feature_writeup/breeding_audit.md kubejs/server_scripts/tags/flower_tags.js kubejs/server_scripts/tags/animal_tags.js
+@@prep A: spawn-animals=true
 @@text
 @@table
 ## SQ-BREED-01 | breeding dump: Animal.isFood x every item, flower blocks and the F-B7 candidates by class

@@ -124,6 +124,8 @@ waitlog verb=pbot.useitem bot=c2b end=finish item=roll_delight:golden_roll_slice
 > pbot eat c2b
 waitlog verb=pbot.useitem bot=c2b end=finish item=roll_delight:golden_roll 20
 > cdevtest player c2b
+# r1126q2a (judge-2a1): the useair ate at full hunger with Nourishment (2392 t) still active from the roll eaten before; clear it so the refusal is read without the effect
+> effect clear c2b
 > pbot hunger c2b 20
 > pbot hold c2b roll_delight:golden_roll 1
 > cdevtest useair as=c2b hand=both

@@ -28,7 +28,7 @@ bootexpect \[absent mods\] loot tables: .* left out by forge:conditions
 kjsexpect \[absent mods\] (skipped [0-9]+ .* rows for absent|none skipped)
 shell n=$(grep -cE "Couldn't parse loot table|Can't find block" logs/latest.log); echo "loot errors=$n"; test "$n" = 0
 shell grep -E "Couldn't parse loot table" logs/latest.log | grep -oE "loot table [a-z_:/.0-9]+" | sort | uniq | head -40
-look the loot-table line names fruitsdelight, moredelight, supplementaries, upgrade_aquatic, endersdelight among others
+look the loot-table line prints (r1126q2a: "4 left out by forge:conditions, item entries dropped {endersdelight=2}"; the other mods' loot tables ship only with their mod since 2026-11-14)
 
 ## SQ-CBP-02 | cooking: no Empty array?, IE empty-output prune line, failures under 40
 @group B (cooking set)
